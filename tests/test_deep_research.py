@@ -33,6 +33,8 @@ from decision_kernel.research import (
     Scenario,
 )
 from decision_kernel.research_contract_v1 import (
+    ResearchContractV1Payload,
+    ResearchContractV1ScenarioDetail,
     ResearchContractV1Status,
     assess_research_contract_v1,
 )
@@ -219,17 +221,12 @@ def _components():
         provenance_artifact_ids=(first.id,),
     )
 
-    def scenario(name: str, probability: str, terminal: str, margin: str) -> Scenario:
+    def scenario(name: str, probability: str, terminal: str) -> Scenario:
         return Scenario(
             id=uuid4(),
             research_snapshot_id=snapshot_id,
             name=name,
             probability=probability,
-            description=name,
-            assumptions={"competition": "bounded"},
-            financial_driver_values={"margin": margin},
-            normalized_earnings="1.0",
-            valuation_method=basis.valuation_method,
             terminal_equity_value_per_share=terminal,
             valuation_basis_id=basis.id,
         )
@@ -258,8 +255,8 @@ def _components():
         research_origin=f"DISCOVERY_INPUT:{discovery.discovery_id}",
         valuation_bases=(basis,),
         scenarios=(
-            scenario("up", "0.6", "15", "0.12"),
-            scenario("down", "0.4", "8", "0.06"),
+            scenario("up", "0.6", "15"),
+            scenario("down", "0.4", "8"),
         ),
         evidence_links=(
             EvidenceArtifactLink(
@@ -284,21 +281,6 @@ def _components():
                 relevance="preserves market context",
             ),
         ),
-        # Decision OS Research Contract v1 method payload.
-        variant_perception="margin durability may be mispriced",
-        market_expectation_map={"margin": "flat"},
-        normalized_earnings_notes="normalized earnings use scenario drivers",
-        valuation_framework="scenario equity value",
-        fundamental_clock_assessment={"state": "improving"},
-        expectation_clock_assessment={"state": "lagging"},
-        liquidity_clock_assessment={"state": "neutral"},
-        monitoring_plan={
-            "indicators": list(monitoring),
-            "falsifiers": list(falsifiers),
-        },
-        valuation_stress_spec={"margin_downside": "included"},
-        doctrine_version_reference="doctrine-v1",
-        research_contract_version=DEEP_RESEARCH_CONTRACT_VERSION,
     )
     return discovery, pre, quick, deep, evidence, snapshot
 
@@ -323,6 +305,35 @@ def _package() -> DeepResearchPackage:
         evidence_artifacts=evidence,
         research_snapshot=snapshot,
         proposed_committed_at=COMMIT_AT,
+    )
+
+
+def _contract_payload(package: DeepResearchPackage) -> ResearchContractV1Payload:
+    margins = {"up": "0.12", "down": "0.06"}
+    return ResearchContractV1Payload(
+        research_snapshot_id=package.research_snapshot.id,
+        contract_version=DEEP_RESEARCH_CONTRACT_VERSION,
+        doctrine_version_reference="doctrine-v1",
+        variant_perception="margin durability may be mispriced",
+        market_expectation_map={"margin": "flat"},
+        normalized_earnings_notes="normalized earnings use scenario drivers",
+        valuation_framework="scenario equity value",
+        fundamental_clock_assessment={"state": "improving"},
+        expectation_clock_assessment={"state": "lagging"},
+        liquidity_clock_assessment={"state": "neutral"},
+        monitoring_indicators=package.research_snapshot.monitoring_triggers,
+        monitoring_falsifiers=package.deep_research.explicit_falsifiers,
+        valuation_stress_spec={"margin_downside": "included"},
+        scenario_details=tuple(
+            ResearchContractV1ScenarioDetail(
+                scenario_id=scenario.id,
+                description=scenario.name,
+                assumptions={"competition": "bounded"},
+                financial_driver_values={"margin": margins.get(scenario.name, "0.10")},
+                normalized_earnings="1.0",
+            )
+            for scenario in package.research_snapshot.scenarios
+        ),
     )
 
 
@@ -365,15 +376,25 @@ def _acceptance_codes(package: DeepResearchPackage) -> set[str]:
     return {issue.code for issue in assess_deep_research_acceptance(package).issues}
 
 
-def _contract_codes(package: DeepResearchPackage) -> set[str]:
-    return {issue.code for issue in assess_research_contract_v1(package).issues}
+def _contract_codes(
+    package: DeepResearchPackage,
+    payload: ResearchContractV1Payload | None = None,
+) -> set[str]:
+    return {
+        issue.code
+        for issue in assess_research_contract_v1(
+            package,
+            payload or _contract_payload(package),
+        ).issues
+    }
 
 
 def test_kernel_accepted_package_commits_and_v1_contract_conforms() -> None:
     package = _package()
+    payload = _contract_payload(package)
 
     acceptance = assess_deep_research_acceptance(package)
-    contract = assess_research_contract_v1(package)
+    contract = assess_research_contract_v1(package, payload)
     result = commit_deep_research_package(package)
 
     assert acceptance.status is ResearchAcceptanceStatus.ACCEPTED
@@ -383,9 +404,8 @@ def test_kernel_accepted_package_commits_and_v1_contract_conforms() -> None:
     assert package.research_snapshot.status is ResearchStatus.DRAFT
     assert result.research_snapshot.status is ResearchStatus.COMMITTED
     assert result.research_snapshot.committed_at == COMMIT_AT
-    assert (
-        result.research_snapshot.information_bundle_hash
-        == package.research_snapshot.information_bundle_hash
+    assert result.research_snapshot.information_bundle_hash == (
+        package.research_snapshot.information_bundle_hash
     )
 
 
@@ -480,13 +500,12 @@ def test_contradiction_and_market_context_lineage_remain_kernel_invariants() -> 
     assert "MARKET_CONTEXT_RELATIONSHIP_MISSING" in _acceptance_codes(changed_context)
 
 
-def test_liquidity_clock_is_contract_v1_policy_not_kernel_invariant() -> None:
+def test_liquidity_clock_exists_only_in_contract_payload() -> None:
     package = _package()
-    snapshot = package.research_snapshot.model_copy(update={"liquidity_clock_assessment": {}})
-    changed = _rehash(package, research_snapshot=snapshot)
+    payload = _contract_payload(package).model_copy(update={"liquidity_clock_assessment": {}})
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
-    assert "METHOD_STRUCTURE_MISSING" in _contract_codes(changed)
+    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    assert "METHOD_STRUCTURE_MISSING" in _contract_codes(package, payload)
 
 
 def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() -> None:
@@ -514,27 +533,22 @@ def test_scenario_probability_completeness_remains_kernel_invariant() -> None:
         commit_deep_research_package(changed)
 
 
-def test_monitoring_count_and_scenario_driver_richness_are_contract_policy() -> None:
+def test_monitoring_and_scenario_driver_richness_are_contract_payload_policy() -> None:
     package = _package()
-    damaged = package.research_snapshot.model_copy(
+    payload = _contract_payload(package)
+    first_detail = payload.scenario_details[0].model_copy(
+        update={"financial_driver_values": {}}
+    )
+    payload = payload.model_copy(
         update={
-            "monitoring_plan": {
-                "indicators": ["only one"],
-                "falsifiers": list(package.deep_research.explicit_falsifiers),
-            },
+            "monitoring_indicators": ("only one",),
             "market_expectation_map": {},
-            "scenarios": (
-                package.research_snapshot.scenarios[0].model_copy(
-                    update={"financial_driver_values": {}}
-                ),
-                package.research_snapshot.scenarios[1],
-            ),
+            "scenario_details": (first_detail, *payload.scenario_details[1:]),
         }
     )
-    changed = _rehash(package, research_snapshot=damaged)
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
-    codes = _contract_codes(changed)
+    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    codes = _contract_codes(package, payload)
     assert "MONITORING_INDICATORS_INVALID" in codes
     assert "METHOD_STRUCTURE_MISSING" in codes
     assert "SCENARIO_DRIVER_STRUCTURE_MISSING" in codes
