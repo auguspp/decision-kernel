@@ -20,7 +20,7 @@ from decision_kernel.research_funnel import (
     ResearchClaim,
     ResearchClaimKind,
 )
-from decision_kernel.workflow import (
+from decision_kernel.research_workflow_v1 import (
     ResearchFunnelStage,
     ResearchFunnelTerminalState,
     run_research_funnel,
