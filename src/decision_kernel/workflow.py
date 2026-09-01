@@ -6,6 +6,11 @@ from uuid import UUID
 from pydantic import model_validator
 
 from .authority import InvestmentAuthority, NO_INVESTMENT_AUTHORITY
+from .deep_research import (
+    DeepResearchCommitResult,
+    DeepResearchPackage,
+    commit_deep_research_package,
+)
 from .evidence import EvidenceArtifact
 from .human_surface import (
     HumanResearchSurface,
@@ -210,4 +215,54 @@ def run_decision_spine(
         odds=odds,
         rehearsal=rehearsal,
         human_surface=human_surface,
+    )
+
+
+class DeepenedDecisionResult(KernelModel):
+    research_commit: DeepResearchCommitResult
+    decision: DecisionSpineResult
+    investment_authority: InvestmentAuthority = NO_INVESTMENT_AUTHORITY
+
+    @model_validator(mode="after")
+    def validate_exact_handoff(self) -> "DeepenedDecisionResult":
+        snapshot = self.research_commit.research_snapshot
+        odds = self.decision.odds.artifact
+        if odds.research_snapshot_id != snapshot.id:
+            raise ValueError("Decision Spine must use the committed Deep Research snapshot")
+        if odds.research_information_bundle_hash != snapshot.information_bundle_hash:
+            raise ValueError("Decision Spine must preserve the committed research information hash")
+        if self.investment_authority != NO_INVESTMENT_AUTHORITY:
+            raise ValueError("Deepened decision workflow cannot gain investment authority")
+        return self
+
+
+def run_deepened_decision_path(
+    *,
+    deep_research_package: DeepResearchPackage,
+    observed_market: ObservedMarket,
+    odds_policy: OddsResearchPolicy,
+    odds_artifact_id: UUID,
+    odds_created_at: AwareDateTime,
+    rehearsal_artifact_id: UUID,
+    rehearsal_created_at: AwareDateTime,
+    framing: NonAuthoritativeRehearsalFraming,
+    odds_context: OddsContext | None = None,
+) -> DeepenedDecisionResult:
+    """Compose accepted Deep Research into the existing Decision Spine."""
+
+    research_commit = commit_deep_research_package(deep_research_package)
+    decision = run_decision_spine(
+        research_snapshot=research_commit.research_snapshot,
+        observed_market=observed_market,
+        odds_policy=odds_policy,
+        odds_artifact_id=odds_artifact_id,
+        odds_created_at=odds_created_at,
+        rehearsal_artifact_id=rehearsal_artifact_id,
+        rehearsal_created_at=rehearsal_created_at,
+        framing=framing,
+        odds_context=odds_context,
+    )
+    return DeepenedDecisionResult(
+        research_commit=research_commit,
+        decision=decision,
     )
