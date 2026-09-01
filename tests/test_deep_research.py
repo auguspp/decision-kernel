@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal
 from uuid import UUID, uuid4
 
 import pytest
@@ -490,7 +491,9 @@ def test_liquidity_clock_is_contract_v1_policy_not_kernel_invariant() -> None:
 
 def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() -> None:
     package = _package()
-    one = package.research_snapshot.scenarios[0].model_copy(update={"probability": "1"})
+    one = package.research_snapshot.scenarios[0].model_copy(
+        update={"probability": Decimal("1")}
+    )
     snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
     changed = _rehash(package, research_snapshot=snapshot)
 
@@ -500,7 +503,9 @@ def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() ->
 
 def test_scenario_probability_completeness_remains_kernel_invariant() -> None:
     package = _package()
-    one = package.research_snapshot.scenarios[0].model_copy(update={"probability": "0.6"})
+    one = package.research_snapshot.scenarios[0].model_copy(
+        update={"probability": Decimal("0.6")}
+    )
     snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
     changed = _rehash(package, research_snapshot=snapshot)
 
