@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from decision_kernel.deep_research import (
-    ResearchAcceptanceStatus,
-    assess_deep_research_acceptance,
+    ResearchMethodV1AcceptanceStatus,
+    assess_research_method_v1_acceptance,
 )
 from decision_kernel.research_contract_v1 import assess_research_contract_v1
 from decision_kernel.research_funnel import ResearchClaimKind
@@ -25,7 +25,10 @@ def test_contract_version_is_metadata_policy_not_kernel_constitution() -> None:
         update={"contract_version": "different-method-v2"}
     )
 
-    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(package).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     assert "CONTRACT_VERSION_UNSUPPORTED" in _contract_codes(package, payload)
 
 
@@ -39,7 +42,10 @@ def test_claim_class_recipe_is_research_method_policy() -> None:
     deep = package.deep_research.model_copy(update={"material_claims": facts})
     changed = _rehash(package, deep_research=deep)
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(changed).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     assert "CLAIM_CLASS_SET_INCOMPLETE" in _contract_codes(changed)
 
 
@@ -50,7 +56,10 @@ def test_empty_open_questions_and_monitoring_are_not_kernel_commit_blockers() ->
     )
     changed = _rehash(package, research_snapshot=snapshot)
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(changed).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     codes = _contract_codes(changed)
     assert "OPEN_QUESTIONS_MISSING" in codes
     assert "MONITORING_INDICATORS_INVALID" in codes
@@ -62,5 +71,8 @@ def test_method_payload_must_bind_to_exact_kernel_snapshot() -> None:
         update={"research_snapshot_id": package.research_snapshot.id.__class__(int=1)}
     )
 
-    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(package).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     assert "SNAPSHOT_ID_MISMATCH" in _contract_codes(package, payload)
