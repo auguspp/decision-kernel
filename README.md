@@ -46,38 +46,49 @@ Examples:
 
 Those v1 rules can remain excellent research discipline without becoming permanent Kernel law.
 
-## Current shape
+## Research method vs Decision Spine
+
+The current Decision OS research recipe is a replaceable upstream method. The Decision Spine starts only from a frozen `ResearchSnapshot`.
 
 ```text
-external sensing
-      |
-      v
-Discovery -> Pre Research -> Quick Research
-      |             |
-      |             +-> WAIT / DROP
-      v
-DEEPEN_REQUIRED
-      |
-external Deep Research capability
-      |
-      v
-Research Contract v1 (method policy, when selected)
-      |
-      v
-DeepResearchPackage
-      |
-kernel acceptance + commit
-      |
-      v
-ResearchSnapshot + HiThink ObservedMarket
-      |
-      v
-Odds -> Decision Rehearsal -> Human Surface
-                              |
-                         quiet / wake Human
+Research Method v1 (replaceable policy)
+    Discovery
+       |
+       v
+    Pre Research -----> WAIT / DROP
+       |
+       v
+    Quick Research ---> WAIT / DROP
+       |
+       v
+    Deep Research
+       |
+       +--> Research Contract v1 / future quality contracts
+       |
+       v
+    frozen ResearchSnapshot
+       |
+       |  method boundary
+       v
+Decision Spine (method-agnostic)
+    ResearchSnapshot + ObservedMarket
+       |
+       v
+    Odds
+       |
+       v
+    Decision Rehearsal
+       |
+       v
+    HumanResearchSurface
+       |
+       +--> quiet
+       +--> wake Human
 ```
 
-Authority and lineage constrain the whole chain. HiThink transport is an outer runtime concern; `adapters/hithink.py` only qualifies provider payloads and translates them into `ObservedMarket`.
+`research_workflow_v1.py` owns the current Discovery / Pre / Quick / Deep orchestration. `workflow.py` must not know those method stages; it composes only `ResearchSnapshot -> Odds -> Decision Rehearsal -> HumanResearchSurface`.
+
+A future Research Method v2 should be able to produce the same frozen `ResearchSnapshot` and enter the same Decision Spine without changing `workflow.py`.
 
 ## Minimal live command
 
@@ -107,7 +118,8 @@ adapters/hithink.py
 ObservedMarket
              |
              v
-Decision Kernel core/workflow
+workflow.py
+    method-agnostic Decision Spine
 ```
 
 Do not add by default:

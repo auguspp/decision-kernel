@@ -9,8 +9,8 @@ from typing import TextIO
 
 from .deep_research import DeepResearchPackage
 from .live import run_live_deep_research_package
+from .research_workflow_v1 import DeepenedDecisionResult
 from .runtime import hithink_http
-from .workflow import DeepenedDecisionResult
 
 
 def build_parser() -> argparse.ArgumentParser:

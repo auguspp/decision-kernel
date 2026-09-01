@@ -10,10 +10,8 @@ from decision_kernel.odds import OddsResearchPolicy
 from decision_kernel.primitives import DomainValidationError
 from decision_kernel.rehearsal import NonAuthoritativeRehearsalFraming
 from decision_kernel.research import ResearchStatus
-from decision_kernel.workflow import (
-    DecisionSpineTerminalState,
-    run_deepened_decision_path,
-)
+from decision_kernel.research_workflow_v1 import run_deepened_decision_path
+from decision_kernel.workflow import DecisionSpineTerminalState
 from test_deep_research import AS_OF, _package
 
 
