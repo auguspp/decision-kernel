@@ -8,25 +8,35 @@ from pathlib import Path
 from typing import TextIO
 
 from .deep_research import DeepResearchPackage
-from .live import run_live_deep_research_package
-from .research_workflow_v1 import DeepenedDecisionResult
+from .live import run_live_deep_research_package, run_live_research_commit_package
+from .research_commit import ResearchCommitPackage
 from .runtime import hithink_http
+from .workflow import DecisionSpineResult
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="decision-kernel",
-        description="Run one accepted Deep Research package through live Odds and Human gating.",
+        description="Run reviewed research through live Odds and Human gating.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     run = subparsers.add_parser(
         "run",
-        help="Run a DeepResearchPackage with the latest qualified HiThink completed close.",
+        help="Run a Decision OS Research Method v1 DeepResearchPackage.",
     )
     run.add_argument(
         "package",
         type=Path,
         help="Path to one DeepResearchPackage JSON file.",
+    )
+    generic = subparsers.add_parser(
+        "run-research",
+        help="Run a method-agnostic ResearchCommitPackage.",
+    )
+    generic.add_argument(
+        "package",
+        type=Path,
+        help="Path to one ResearchCommitPackage JSON file.",
     )
     return parser
 
@@ -41,13 +51,7 @@ def main(
     stderr = stderr or sys.stderr
     args = build_parser().parse_args(argv)
 
-    if args.command != "run":
-        raise AssertionError(f"unsupported command: {args.command}")
-
     try:
-        package = DeepResearchPackage.model_validate_json(
-            args.package.read_text(encoding="utf-8")
-        )
         api_key = os.environ.get(hithink_http.HITHINK_API_KEY_ENV)
 
         def fetch_market(*, thscode: str, observed_at):
@@ -57,20 +61,30 @@ def main(
                 api_key=api_key,
             )
 
-        result = run_live_deep_research_package(
-            package=package,
-            fetch_market=fetch_market,
-        )
+        raw_package = args.package.read_text(encoding="utf-8")
+        if args.command == "run":
+            package = DeepResearchPackage.model_validate_json(raw_package)
+            decision = run_live_deep_research_package(
+                package=package,
+                fetch_market=fetch_market,
+            ).decision
+        elif args.command == "run-research":
+            package = ResearchCommitPackage.model_validate_json(raw_package)
+            decision = run_live_research_commit_package(
+                package=package,
+                fetch_market=fetch_market,
+            ).decision
+        else:
+            raise AssertionError(f"unsupported command: {args.command}")
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"ERROR: {exc}", file=stderr)
         return 2
 
-    _print_result(result, stdout=stdout)
+    _print_decision(decision, stdout=stdout)
     return 0
 
 
-def _print_result(result: DeepenedDecisionResult, *, stdout: TextIO) -> None:
-    decision = result.decision
+def _print_decision(decision: DecisionSpineResult, *, stdout: TextIO) -> None:
     surface = decision.human_surface
     brief = surface.brief
     market = decision.odds.artifact.observed_market
