@@ -53,7 +53,7 @@ def test_empty_open_questions_and_monitoring_are_not_kernel_commit_blockers() ->
     assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
     codes = _contract_codes(changed)
     assert "OPEN_QUESTIONS_MISSING" in codes
-    assert "MONITORING_PROJECTION_MISMATCH" in codes
+    assert "MONITORING_INDICATORS_INVALID" in codes
 
 
 def test_method_payload_must_bind_to_exact_kernel_snapshot() -> None:
