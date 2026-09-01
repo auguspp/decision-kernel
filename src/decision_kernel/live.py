@@ -9,7 +9,7 @@ from .deep_research import DeepResearchPackage
 from .market import ObservedMarket
 from .policy import load_live_odds_v0_1
 from .rehearsal import NonAuthoritativeRehearsalFraming
-from .workflow import DeepenedDecisionResult, run_deepened_decision_path
+from .research_workflow_v1 import DeepenedDecisionResult, run_deepened_decision_path
 
 
 MarketFetcher = Callable[..., ObservedMarket]
@@ -21,7 +21,7 @@ def run_live_deep_research_package(
     fetch_market: MarketFetcher,
     observed_at: datetime | None = None,
 ) -> DeepenedDecisionResult:
-    """Compose one accepted Deep Research package with a live market input capability."""
+    """Compose Research Method v1 output with a live market input capability."""
 
     if observed_at is None:
         observed_at = datetime.now(timezone.utc)
