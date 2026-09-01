@@ -6,13 +6,14 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
+import decision_kernel.adapters.hithink as hithink
 from decision_kernel.adapters.hithink import (
     HITHINK_MARKET_SOURCE,
     HITHINK_PRICE_CONVENTION,
     HithinkAdapterError,
-    fetch_hithink_observed_market,
     latest_completed_a_share_session,
     normalize_hithink_calendar,
+    normalize_hithink_latest_completed_price,
     observed_market_from_hithink_response,
     require_hithink_data,
 )
@@ -75,6 +76,12 @@ def _history_envelope(
     }
 
 
+def test_adapter_exposes_no_transport_or_credential_api() -> None:
+    assert not hasattr(hithink, "fetch_hithink_observed_market")
+    assert not hasattr(hithink, "HITHINK_BASE_URL")
+    assert not hasattr(hithink, "HITHINK_API_KEY_ENV")
+
+
 def test_completed_session_gate_never_uses_an_unfinished_live_day() -> None:
     sessions = _sessions()
     live_session = sessions[-1]
@@ -114,7 +121,7 @@ def test_latest_completed_raw_close_maps_to_kernel_observed_market() -> None:
 
     market = observed_market_from_hithink_response(
         _history_envelope(sessions),
-        thscode="002384.SZ",
+        thscode="002384.sz",
         sessions=sessions,
         observed_at=observed_at,
     )
@@ -126,22 +133,31 @@ def test_latest_completed_raw_close_maps_to_kernel_observed_market() -> None:
     assert market.market_utc_offset_minutes == 480
     assert market.currency == "CNY"
     assert market.price_convention == HITHINK_PRICE_CONVENTION
-    assert HITHINK_MARKET_SOURCE in market.market_data_source
-    assert "002384.SZ" in market.market_data_source
-    assert f"session={sessions[-1].isoformat()}" in market.market_data_source
+    assert market.market_data_source == f"{HITHINK_MARKET_SOURCE} | 002384.SZ"
 
 
-def test_stale_completed_history_is_not_fed_to_odds_as_current_market() -> None:
+def test_older_provider_history_preserves_its_actual_price_clock() -> None:
     sessions = _sessions()
     observed_at = datetime.combine(sessions[-1], time(16), tzinfo=SHANGHAI)
+    older = sessions[:-1]
 
-    with pytest.raises(HithinkAdapterError, match="not the latest completed"):
-        observed_market_from_hithink_response(
-            _history_envelope(sessions[:-1]),
-            thscode="002384.SZ",
-            sessions=sessions,
-            observed_at=observed_at,
-        )
+    qualified = normalize_hithink_latest_completed_price(
+        _history_envelope(older),
+        thscode="002384.SZ",
+        sessions=sessions,
+        observed_at=observed_at,
+    )
+    market = observed_market_from_hithink_response(
+        _history_envelope(older),
+        thscode="002384.SZ",
+        sessions=sessions,
+        observed_at=observed_at,
+    )
+
+    assert qualified.expected_latest_session == sessions[-1]
+    assert qualified.as_of.date() == sessions[-2]
+    assert market.market_timestamp.date() == sessions[-2]
+    assert market.market_price == Decimal("13")
 
 
 def test_before_close_response_cannot_leak_the_unfinished_session() -> None:
@@ -163,7 +179,7 @@ def test_raw_history_metadata_and_values_fail_closed() -> None:
 
     adjusted = _history_envelope(sessions)
     adjusted["data"]["adjust"] = "forward"
-    with pytest.raises(HithinkAdapterError, match="raw-close request"):
+    with pytest.raises(HithinkAdapterError, match="raw-close contract"):
         observed_market_from_hithink_response(
             adjusted,
             thscode="002384.SZ",
@@ -192,53 +208,31 @@ def test_raw_history_metadata_and_values_fail_closed() -> None:
         )
 
 
-def test_fetch_adapter_uses_only_calendar_and_raw_daily_history() -> None:
+def test_raw_history_rejects_future_off_calendar_and_duplicate_rows() -> None:
     sessions = _sessions()
     observed_at = datetime.combine(sessions[-1], time(16), tzinfo=SHANGHAI)
-    calls: list[tuple[str, dict[str, str]]] = []
 
-    def request_json(path: str, params: dict[str, str]):
-        calls.append((path, dict(params)))
-        if path == "/api/a-share/calendar/trading-days":
-            return _calendar_envelope(sessions)
-        if path == "/api/a-share/prices/historical":
-            return _history_envelope(sessions)
-        raise AssertionError(f"unexpected path: {path}")
-
-    market = fetch_hithink_observed_market(
-        thscode="002384.sz",
-        observed_at=observed_at,
-        api_key="fixture-secret",
-        request_json=request_json,
-    )
-
-    assert market.market_price == Decimal("14")
-    assert [path for path, _ in calls] == [
-        "/api/a-share/calendar/trading-days",
-        "/api/a-share/prices/historical",
-    ]
-    history_params = calls[1][1]
-    assert history_params["thscode"] == "002384.SZ"
-    assert history_params["interval"] == "1d"
-    assert history_params["adjust"] == "none"
-    assert int(history_params["start"]) < int(history_params["end"])
-
-
-def test_fetch_adapter_requires_explicit_credentials_and_a_share_identity() -> None:
-    observed_at = datetime(2026, 9, 1, 16, tzinfo=SHANGHAI)
-
-    with pytest.raises(HithinkAdapterError, match="credentials"):
-        fetch_hithink_observed_market(
+    off_calendar = _history_envelope(sessions)
+    weekend = sessions[-1] + timedelta(days=1)
+    while weekend.weekday() < 5:
+        weekend += timedelta(days=1)
+    off_calendar["data"]["item"][-1]["date_ms"] = _date_ms(weekend)
+    off_calendar["data"]["timestamp"] = _date_ms(weekend)
+    with pytest.raises(HithinkAdapterError, match="future-dated|off-calendar"):
+        observed_market_from_hithink_response(
+            off_calendar,
             thscode="002384.SZ",
+            sessions=sessions,
             observed_at=observed_at,
-            api_key=None,
-            request_json=lambda path, params: {},
         )
 
-    with pytest.raises(HithinkAdapterError, match="A-share thscode"):
-        fetch_hithink_observed_market(
-            thscode="AAPL",
+    duplicate = _history_envelope(sessions)
+    duplicate["data"]["item"][-1]["date_ms"] = duplicate["data"]["item"][-2]["date_ms"]
+    duplicate["data"]["timestamp"] = duplicate["data"]["item"][-2]["date_ms"]
+    with pytest.raises(HithinkAdapterError, match="duplicate dates"):
+        observed_market_from_hithink_response(
+            duplicate,
+            thscode="002384.SZ",
+            sessions=sessions,
             observed_at=observed_at,
-            api_key="fixture-secret",
-            request_json=lambda path, params: {},
         )
