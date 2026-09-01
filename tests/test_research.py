@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
-from decimal import Decimal
 from uuid import UUID, uuid4
 
 import pytest
@@ -55,8 +54,6 @@ def _scenario(
         "research_snapshot_id": snapshot_id,
         "name": "base",
         "probability": probability,
-        "description": "base case",
-        "valuation_method": basis.valuation_method,
         "terminal_equity_value_per_share": "12.5",
         "valuation_basis_id": basis.id,
         "expected_cash_flows": (
@@ -107,15 +104,11 @@ def _snapshot(
         "status": status,
         "core_thesis": "earnings can exceed current expectations",
         "market_expectations_narrative": "market expects flat earnings",
-        "monitoring_plan": {
-            "indicators": ["earnings release"],
-            "falsifiers": ["margin collapse"],
-        },
+        "thesis_invalidation": ("margin collapse",),
+        "monitoring_triggers": ("earnings release",),
         "open_questions": ("pricing power?",),
         "created_by": "research",
         "information_bundle_hash": information_bundle_hash,
-        "doctrine_version_reference": "doctrine-v1",
-        "research_contract_version": "research-v1",
         "valuation_bases": (basis,),
         "scenarios": scenarios,
     }
@@ -155,7 +148,7 @@ def test_research_children_must_belong_to_exact_snapshot() -> None:
         )
 
 
-def test_scenario_must_reference_snapshot_valuation_basis_and_method() -> None:
+def test_scenario_must_reference_snapshot_valuation_basis() -> None:
     snapshot_id = uuid4()
     basis = _basis(snapshot_id)
     scenario = _scenario(snapshot_id, basis)
@@ -165,13 +158,6 @@ def test_scenario_must_reference_snapshot_valuation_basis_and_method() -> None:
             id=snapshot_id,
             valuation_bases=(basis,),
             scenarios=(scenario.model_copy(update={"valuation_basis_id": uuid4()}),),
-        )
-
-    with pytest.raises(ValidationError, match="valuation_method must match"):
-        _snapshot(
-            id=snapshot_id,
-            valuation_bases=(basis,),
-            scenarios=(scenario.model_copy(update={"valuation_method": "other"}),),
         )
 
 
@@ -236,4 +222,4 @@ def test_commit_freezes_explicit_commit_time() -> None:
 
 def test_authoritative_research_rejects_binary_float_inputs() -> None:
     with pytest.raises(ValidationError, match="binary float"):
-        _snapshot(market_expectation_map={"margin": 0.25})
+        _snapshot(open_questions=(0.25,))
