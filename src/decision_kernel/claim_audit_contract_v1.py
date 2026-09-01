@@ -70,15 +70,19 @@ class ClaimAuditV1NumericalCheck(KernelModel):
 class ClaimAuditV1ClaimReview(KernelModel):
     claim: ResearchClaim
     accepted: bool
-    verified_checks: frozenset[ClaimAuditV1Check] = frozenset()
-    failed_checks: frozenset[ClaimAuditV1Check] = frozenset()
+    verified_checks: tuple[ClaimAuditV1Check, ...] = ()
+    failed_checks: tuple[ClaimAuditV1Check, ...] = ()
     numerical_assertions: tuple[Decimal, ...] = ()
     numerical_checks: tuple[ClaimAuditV1NumericalCheck, ...] = ()
     resolution: str = Field(min_length=1)
 
     @model_validator(mode="after")
     def validate_review_shape(self) -> "ClaimAuditV1ClaimReview":
-        if self.verified_checks & self.failed_checks:
+        if len(set(self.verified_checks)) != len(self.verified_checks):
+            raise ValueError("verified audit checks must be unique")
+        if len(set(self.failed_checks)) != len(self.failed_checks):
+            raise ValueError("failed audit checks must be unique")
+        if set(self.verified_checks) & set(self.failed_checks):
             raise ValueError("an audit check cannot be both verified and failed")
         checked_results = tuple(check.claimed_result for check in self.numerical_checks)
         if Counter(checked_results) != Counter(self.numerical_assertions):
@@ -230,7 +234,7 @@ def _assess_review(
             ClaimAuditV1Check.SOURCE_LOCATION,
             ClaimAuditV1Check.EVIDENCE_SUPPORT,
         }
-        if not required.issubset(review.verified_checks):
+        if not required.issubset(set(review.verified_checks)):
             _issue(issues, "EVIDENCE_AUDIT_INCOMPLETE", location)
         if not set(claim.evidence_artifact_ids).issubset(evidence):
             _issue(issues, "EVIDENCE_MISSING", location)
