@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from enum import StrEnum
 from typing import Literal
 from uuid import UUID
@@ -10,6 +11,7 @@ from .evidence import EvidenceArtifact, EvidenceRelationship
 from .identity import canonical_hash
 from .primitives import AwareDateTime, DomainValidationError, KernelModel
 from .research import (
+    PROBABILITY_TOLERANCE,
     ResearchSnapshot,
     ResearchStatus,
     commit_snapshot,
@@ -26,6 +28,8 @@ from .research_funnel import (
 )
 
 
+# Historical method identity retained for the versioned Research Contract v1 layer.
+# Kernel acceptance does not require or interpret this value.
 DEEP_RESEARCH_CONTRACT_VERSION = "research-odds-rehearsal-v1"
 
 
@@ -43,62 +47,57 @@ class AdversarialFinding(KernelModel):
 
 
 class DeepResearchSupplement(KernelModel):
-    """Executor-agnostic Deep Research result bound to one exact Quick Research state."""
+    """Executor-agnostic research output bound to one exact Quick Research state.
+
+    The kernel freezes lineage and PIT here. Method-specific requirements such as a particular
+    mixture of FACT/INFERENCE/ASSUMPTION claims or adversarial-review shape belong to a versioned
+    Research Contract, not this constitutional model.
+    """
 
     discovery_id: str = Field(min_length=1, max_length=255)
     quick_research_hash: str = Field(min_length=64, max_length=64)
     as_of: AwareDateTime
     material_claims: tuple[ResearchClaim, ...] = Field(min_length=1)
-    explicit_falsifiers: tuple[str, ...] = Field(min_length=1)
-    adversarial_findings: tuple[AdversarialFinding, ...] = Field(min_length=1)
+    explicit_falsifiers: tuple[str, ...] = ()
+    adversarial_findings: tuple[AdversarialFinding, ...] = ()
     schema_version: Literal[1] = 1
 
     @model_validator(mode="after")
-    def validate_claim_classes(self) -> "DeepResearchSupplement":
-        kinds = {claim.kind for claim in self.material_claims}
-        required = {
-            ResearchClaimKind.FACT,
-            ResearchClaimKind.INFERENCE,
-            ResearchClaimKind.ASSUMPTION,
-        }
-        if not required.issubset(kinds):
-            raise ValueError(
-                "Deep Research requires classified FACT, INFERENCE, and ASSUMPTION claims"
-            )
+    def validate_text(self) -> "DeepResearchSupplement":
         if any(not item.strip() for item in self.explicit_falsifiers):
             raise ValueError("Deep Research falsifiers cannot be blank")
         return self
 
 
-class ResearchReadinessStatus(StrEnum):
-    NOT_READY = "NOT_READY"
-    DECISION_READY = "DECISION_READY"
+class ResearchAcceptanceStatus(StrEnum):
+    REJECTED = "REJECTED"
+    ACCEPTED = "ACCEPTED"
 
 
-class ResearchReadinessIssue(KernelModel):
+class ResearchAcceptanceIssue(KernelModel):
     code: str = Field(min_length=1, max_length=128)
     location: str = Field(min_length=1, max_length=255)
     message: str = Field(min_length=1)
 
 
-class ResearchReadinessAssessment(KernelModel):
-    status: ResearchReadinessStatus
-    issues: tuple[ResearchReadinessIssue, ...]
+class ResearchAcceptanceAssessment(KernelModel):
+    status: ResearchAcceptanceStatus
+    issues: tuple[ResearchAcceptanceIssue, ...]
 
     @model_validator(mode="after")
-    def validate_status(self) -> "ResearchReadinessAssessment":
+    def validate_status(self) -> "ResearchAcceptanceAssessment":
         expected = (
-            ResearchReadinessStatus.DECISION_READY
+            ResearchAcceptanceStatus.ACCEPTED
             if not self.issues
-            else ResearchReadinessStatus.NOT_READY
+            else ResearchAcceptanceStatus.REJECTED
         )
         if self.status is not expected:
-            raise ValueError("Research readiness status must match its issue set")
+            raise ValueError("Research acceptance status must match its issue set")
         return self
 
 
 class DeepResearchPackage(KernelModel):
-    """Pure acceptance package; execution, persistence and model calls live outside."""
+    """Pure research acceptance package; execution and method policy live outside."""
 
     label: str = Field(min_length=1, max_length=255)
     discovery: DiscoveryInput
@@ -186,10 +185,12 @@ def deep_research_package_hash(package: DeepResearchPackage) -> str:
     return canonical_hash(package)
 
 
-def assess_deep_research_readiness(
+def assess_deep_research_acceptance(
     package: DeepResearchPackage,
-) -> ResearchReadinessAssessment:
-    issues: list[ResearchReadinessIssue] = []
+) -> ResearchAcceptanceAssessment:
+    """Check only invariants required to freeze research for Odds and Human accountability."""
+
+    issues: list[ResearchAcceptanceIssue] = []
     discovery = package.discovery
     pre = package.pre_research
     quick = package.quick_research
@@ -231,8 +232,8 @@ def assess_deep_research_readiness(
             "Deep Research must share the Discovery PIT cutoff",
         )
 
-    _validate_snapshot_contract(issues, discovery, deep, snapshot)
-    _validate_evidence_contract(issues, package)
+    _validate_snapshot_invariants(issues, discovery, deep, snapshot)
+    _validate_evidence_invariants(issues, package)
 
     expected_hash = deep_research_information_bundle_hash(
         discovery=discovery,
@@ -259,11 +260,11 @@ def assess_deep_research_readiness(
             "ResearchSnapshot commit cannot precede its PIT cutoff or creation time",
         )
 
-    return ResearchReadinessAssessment(
+    return ResearchAcceptanceAssessment(
         status=(
-            ResearchReadinessStatus.DECISION_READY
+            ResearchAcceptanceStatus.ACCEPTED
             if not issues
-            else ResearchReadinessStatus.NOT_READY
+            else ResearchAcceptanceStatus.REJECTED
         ),
         issues=tuple(issues),
     )
@@ -272,11 +273,11 @@ def assess_deep_research_readiness(
 def freeze_deep_research_package(
     package: DeepResearchPackage,
 ) -> FrozenDeepResearchPackage:
-    assessment = assess_deep_research_readiness(package)
-    if assessment.status is not ResearchReadinessStatus.DECISION_READY:
+    assessment = assess_deep_research_acceptance(package)
+    if assessment.status is not ResearchAcceptanceStatus.ACCEPTED:
         codes = ", ".join(issue.code for issue in assessment.issues)
         raise DomainValidationError(
-            f"Deep Research package is not decision-ready: {codes}"
+            f"Deep Research package violates kernel acceptance: {codes}"
         )
     return FrozenDeepResearchPackage(
         research_snapshot_id=package.research_snapshot.id,
@@ -290,7 +291,7 @@ def freeze_deep_research_package(
 def commit_deep_research_package(
     package: DeepResearchPackage,
 ) -> DeepResearchCommitResult:
-    """Pure state transition from accepted DRAFT package to COMMITTED ResearchSnapshot."""
+    """Pure state transition from kernel-accepted DRAFT package to COMMITTED snapshot."""
 
     artifact = freeze_deep_research_package(package)
     reviewed = submit_for_review(package.research_snapshot)
@@ -301,8 +302,8 @@ def commit_deep_research_package(
     )
 
 
-def _validate_snapshot_contract(
-    issues: list[ResearchReadinessIssue],
+def _validate_snapshot_invariants(
+    issues: list[ResearchAcceptanceIssue],
     discovery: DiscoveryInput,
     deep: DeepResearchSupplement,
     snapshot: ResearchSnapshot,
@@ -341,101 +342,52 @@ def _validate_snapshot_contract(
             "research_snapshot.research_origin",
             "ResearchSnapshot origin must exactly identify its Discovery Input",
         )
-    if snapshot.research_contract_version != DEEP_RESEARCH_CONTRACT_VERSION:
-        _issue(
-            issues,
-            "CONTRACT_VERSION_UNSUPPORTED",
-            "research_snapshot.research_contract_version",
-            "Deep Research commit requires the research-odds-rehearsal-v1 contract",
-        )
 
-    required_text = {
+    required_accountability_text = {
         "core_thesis": snapshot.core_thesis,
-        "variant_perception": snapshot.variant_perception,
         "market_expectations_narrative": snapshot.market_expectations_narrative,
-        "normalized_earnings_notes": snapshot.normalized_earnings_notes,
-        "valuation_framework": snapshot.valuation_framework,
         "model_risk_notes": snapshot.model_risk_notes,
     }
-    for field, value in required_text.items():
+    for field, value in required_accountability_text.items():
         if value is None or not value.strip():
             _issue(
                 issues,
-                "REQUIRED_RESEARCH_FIELD_MISSING",
+                "CORE_ACCOUNTABILITY_FIELD_MISSING",
                 f"research_snapshot.{field}",
-                f"decision-ready Deep Research requires {field}",
+                f"kernel decision path requires {field}",
             )
 
-    required_structures = {
-        "market_expectation_map": snapshot.market_expectation_map,
-        "fundamental_clock_assessment": snapshot.fundamental_clock_assessment,
-        "expectation_clock_assessment": snapshot.expectation_clock_assessment,
-        "liquidity_clock_assessment": snapshot.liquidity_clock_assessment,
-        "valuation_stress_spec": snapshot.valuation_stress_spec,
-    }
-    for field, value in required_structures.items():
-        if not value:
-            _issue(
-                issues,
-                "REQUIRED_RESEARCH_STRUCTURE_MISSING",
-                f"research_snapshot.{field}",
-                f"decision-ready Deep Research requires {field}",
-            )
-
-    if not snapshot.open_questions:
+    if not snapshot.thesis_invalidation:
         _issue(
             issues,
-            "OPEN_QUESTIONS_MISSING",
-            "research_snapshot.open_questions",
-            "decision-ready research must preserve unresolved questions",
+            "THESIS_INVALIDATION_MISSING",
+            "research_snapshot.thesis_invalidation",
+            "Human accountability requires explicit thesis invalidation conditions",
         )
-
-    indicators = snapshot.monitoring_plan.get("indicators")
-    falsifiers = snapshot.monitoring_plan.get("falsifiers")
-    if not isinstance(indicators, (list, tuple)) or not 3 <= len(indicators) <= 5:
-        _issue(
-            issues,
-            "MONITORING_INDICATORS_INVALID",
-            "research_snapshot.monitoring_plan.indicators",
-            "decision-ready research requires three to five monitoring indicators",
-        )
-    if tuple(falsifiers or ()) != deep.explicit_falsifiers:
-        _issue(
-            issues,
-            "FALSIFIERS_NOT_FROZEN",
-            "research_snapshot.monitoring_plan.falsifiers",
-            "ResearchSnapshot monitoring must freeze Deep Research falsifiers",
-        )
-    if any(
-        finding.severity is AdversarialSeverity.BLOCK
-        for finding in deep.adversarial_findings
+    if deep.explicit_falsifiers and tuple(snapshot.thesis_invalidation) != tuple(
+        deep.explicit_falsifiers
     ):
         _issue(
             issues,
-            "ADVERSARIAL_BLOCK_UNRESOLVED",
-            "deep_research.adversarial_findings",
-            "an adversarial BLOCK requires later re-research before commit",
+            "FALSIFIER_LINEAGE_MISMATCH",
+            "research_snapshot.thesis_invalidation",
+            "when Deep Research declares falsifiers, the snapshot must preserve them exactly",
         )
 
-    if not 2 <= len(snapshot.scenarios) <= 5:
+    probability_sum = sum(
+        (scenario.probability for scenario in snapshot.scenarios), Decimal("0")
+    )
+    if not snapshot.scenarios or abs(probability_sum - Decimal("1")) > PROBABILITY_TOLERANCE:
         _issue(
             issues,
-            "SCENARIO_SET_NOT_SMALL",
+            "SCENARIO_DISTRIBUTION_INCOMPLETE",
             "research_snapshot.scenarios",
-            "Deep Research v1 requires a small two-to-five-scenario distribution",
+            "Odds requires at least one complete Scenario probability distribution",
         )
-    for scenario in snapshot.scenarios:
-        if not scenario.assumptions or not scenario.financial_driver_values:
-            _issue(
-                issues,
-                "SCENARIO_DRIVER_STRUCTURE_MISSING",
-                f"research_snapshot.scenarios.{scenario.name}",
-                "every scenario requires explicit assumptions and financial drivers",
-            )
 
 
-def _validate_evidence_contract(
-    issues: list[ResearchReadinessIssue],
+def _validate_evidence_invariants(
+    issues: list[ResearchAcceptanceIssue],
     package: DeepResearchPackage,
 ) -> None:
     discovery = package.discovery
@@ -488,8 +440,7 @@ def _validate_evidence_contract(
     )
     referenced_ids = semantic_ids | link_ids
 
-    missing = referenced_ids - package_ids
-    for artifact_id in sorted(missing, key=str):
+    for artifact_id in sorted(referenced_ids - package_ids, key=str):
         _issue(
             issues,
             "EVIDENCE_MISSING",
@@ -497,8 +448,7 @@ def _validate_evidence_contract(
             "referenced Research evidence is absent from the accepted package",
         )
 
-    extra = package_ids - referenced_ids
-    for artifact_id in sorted(extra, key=str):
+    for artifact_id in sorted(package_ids - referenced_ids, key=str):
         _issue(
             issues,
             "EVIDENCE_NOT_REFERENCED",
@@ -506,13 +456,12 @@ def _validate_evidence_contract(
             "accepted Deep Research package cannot contain unreferenced evidence",
         )
 
-    missing_snapshot_lineage = semantic_ids - link_ids
-    for artifact_id in sorted(missing_snapshot_lineage, key=str):
+    for artifact_id in sorted(semantic_ids - link_ids, key=str):
         _issue(
             issues,
             "SNAPSHOT_EVIDENCE_LINEAGE_MISSING",
             f"research_snapshot.evidence_links.{artifact_id}",
-            "all funnel and Deep Research evidence must reach ResearchSnapshot lineage",
+            "all semantic evidence must reach ResearchSnapshot lineage",
         )
 
     relationships: dict[UUID, set[EvidenceRelationship]] = {}
@@ -570,11 +519,11 @@ def _claim_evidence_ids(claims: tuple[ResearchClaim, ...]) -> set[UUID]:
 
 
 def _issue(
-    issues: list[ResearchReadinessIssue],
+    issues: list[ResearchAcceptanceIssue],
     code: str,
     location: str,
     message: str,
 ) -> None:
     issues.append(
-        ResearchReadinessIssue(code=code, location=location, message=message)
+        ResearchAcceptanceIssue(code=code, location=location, message=message)
     )
