@@ -2,58 +2,15 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from enum import StrEnum
-from typing import Annotated, Any
+from typing import Any
 from uuid import UUID
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
+from pydantic import Field, model_validator
+
+from .primitives import AwareDateTime, DomainValidationError, KernelModel
 
 
-class EvidenceValidationError(ValueError):
-    """Raised when evidence would violate an epistemic/PIT invariant."""
-
-
-def _aware(value: datetime) -> datetime:
-    if value.tzinfo is None or value.utcoffset() is None:
-        raise ValueError("datetime must be timezone-aware")
-    return value
-
-
-AwareDateTime = Annotated[datetime, AfterValidator(_aware)]
-
-
-def _validate_authoritative_value(value: Any) -> None:
-    """Keep authoritative evidence inputs deterministic without a shared framework."""
-
-    if isinstance(value, float):
-        raise EvidenceValidationError(
-            "binary float is not allowed in authoritative evidence inputs"
-        )
-    if isinstance(value, BaseModel):
-        _validate_authoritative_value(value.model_dump(mode="python"))
-    elif isinstance(value, dict):
-        if any(not isinstance(key, str) for key in value):
-            raise EvidenceValidationError(
-                "authoritative evidence input keys must be strings"
-            )
-        for item in value.values():
-            _validate_authoritative_value(item)
-    elif isinstance(value, (set, frozenset)):
-        raise EvidenceValidationError(
-            "unordered containers are not allowed in authoritative evidence inputs"
-        )
-    elif isinstance(value, (list, tuple)):
-        for item in value:
-            _validate_authoritative_value(item)
-
-
-class _EvidenceModel(BaseModel):
-    model_config = ConfigDict(frozen=True, extra="forbid", allow_inf_nan=False)
-
-    @model_validator(mode="before")
-    @classmethod
-    def validate_authoritative_inputs(cls, value: Any) -> Any:
-        _validate_authoritative_value(value)
-        return value
+EvidenceValidationError = DomainValidationError
 
 
 class RetentionMode(StrEnum):
@@ -74,7 +31,7 @@ class EvidenceRelationship(StrEnum):
     CONTEXT = "CONTEXT"
 
 
-class EvidenceArtifact(_EvidenceModel):
+class EvidenceArtifact(KernelModel):
     """A PIT-aware evidence record, independent of fetching or storage implementation."""
 
     id: UUID
@@ -139,7 +96,7 @@ class EvidenceArtifact(_EvidenceModel):
         return self.available_at <= as_of
 
 
-class EvidenceArtifactLink(_EvidenceModel):
+class EvidenceArtifactLink(KernelModel):
     """A semantic relationship between a research state and an evidence artifact."""
 
     id: UUID
