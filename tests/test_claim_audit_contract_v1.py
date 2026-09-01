@@ -27,14 +27,12 @@ from decision_kernel.research_funnel import ResearchClaim, ResearchClaimKind
 from test_deep_research import _package, _rehash
 
 
-EVIDENCE_CHECKS = frozenset(
-    {
-        ClaimAuditV1Check.IDENTITY,
-        ClaimAuditV1Check.PERIOD_OR_DATE,
-        ClaimAuditV1Check.UNITS,
-        ClaimAuditV1Check.SOURCE_LOCATION,
-        ClaimAuditV1Check.EVIDENCE_SUPPORT,
-    }
+EVIDENCE_CHECKS = (
+    ClaimAuditV1Check.IDENTITY,
+    ClaimAuditV1Check.PERIOD_OR_DATE,
+    ClaimAuditV1Check.UNITS,
+    ClaimAuditV1Check.SOURCE_LOCATION,
+    ClaimAuditV1Check.EVIDENCE_SUPPORT,
 )
 
 
@@ -48,13 +46,13 @@ def _claims(package: DeepResearchPackage) -> tuple[ResearchClaim, ...]:
 
 
 def _review(claim: ResearchClaim) -> ClaimAuditV1ClaimReview:
-    verified = {ClaimAuditV1Check.CLASSIFICATION}
+    verified = (ClaimAuditV1Check.CLASSIFICATION,)
     if claim.kind in {ResearchClaimKind.FACT, ResearchClaimKind.MARKET_CONTEXT}:
-        verified.update(EVIDENCE_CHECKS)
+        verified = (*verified, *EVIDENCE_CHECKS)
     return ClaimAuditV1ClaimReview(
         claim=claim,
         accepted=True,
-        verified_checks=frozenset(verified),
+        verified_checks=verified,
         resolution="independent audit accepted the exact material claim",
     )
 
@@ -113,9 +111,15 @@ def test_rejected_or_incompletely_verified_fact_is_nonconforming() -> None:
     assert "CLAIM_REJECTED" in _codes(package, rejected)
 
     reviews = list(_payload(package).reviews)
-    weakened = set(reviews[0].verified_checks)
-    weakened.remove(ClaimAuditV1Check.SOURCE_LOCATION)
-    reviews[0] = reviews[0].model_copy(update={"verified_checks": frozenset(weakened)})
+    reviews[0] = reviews[0].model_copy(
+        update={
+            "verified_checks": tuple(
+                check
+                for check in reviews[0].verified_checks
+                if check is not ClaimAuditV1Check.SOURCE_LOCATION
+            )
+        }
+    )
     incomplete = _payload(package, reviews=tuple(reviews))
     assert "EVIDENCE_AUDIT_INCOMPLETE" in _codes(package, incomplete)
 
@@ -160,8 +164,10 @@ def test_explicit_numeric_fact_binds_to_exact_structured_evidence_value() -> Non
     )
     reviews[index] = reviews[index].model_copy(
         update={
-            "verified_checks": reviews[index].verified_checks
-            | {ClaimAuditV1Check.NUMERICAL_RECALCULATION},
+            "verified_checks": (
+                *reviews[index].verified_checks,
+                ClaimAuditV1Check.NUMERICAL_RECALCULATION,
+            ),
             "numerical_assertions": (Decimal("100"),),
             "numerical_checks": (numerical_check,),
         }
