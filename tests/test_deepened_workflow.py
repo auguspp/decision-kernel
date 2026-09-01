@@ -87,5 +87,5 @@ def test_deepened_workflow_fails_closed_before_decision_spine_on_tampered_resear
         }
     )
 
-    with pytest.raises(DomainValidationError, match="not decision-ready"):
+    with pytest.raises(DomainValidationError, match="kernel acceptance"):
         _run(tampered)

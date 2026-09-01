@@ -98,10 +98,10 @@ class DecisionRehearsalArtifact(KernelModel):
     odds: RehearsalOddsSummary
     participation_condition: RehearsalParticipationCondition
     odds_improvement_condition: OddsImprovementCondition
-    open_questions: tuple[str, ...] = Field(min_length=1)
+    open_questions: tuple[str, ...] = ()
     thesis_invalidation: tuple[str, ...] = Field(min_length=1)
     what_would_destroy_case: tuple[str, ...] = Field(min_length=1)
-    monitoring_triggers: tuple[str, ...] = Field(min_length=1)
+    monitoring_triggers: tuple[str, ...] = ()
     system_status: Literal["DECISION_REHEARSAL_ONLY"] = "DECISION_REHEARSAL_ONLY"
     human_status: Literal["HUMAN_DECISION_REQUIRED"] = "HUMAN_DECISION_REQUIRED"
     investment_authority: InvestmentAuthority = NO_INVESTMENT_AUTHORITY
@@ -207,17 +207,17 @@ def build_decision_rehearsal(
             "Decision Rehearsal requires explicit thesis and market expectations"
         )
 
-    open_questions = _required_string_tuple(
+    open_questions = _string_tuple(
         research_snapshot.open_questions,
         field="open_questions",
     )
-    indicators = _required_string_tuple(
-        research_snapshot.monitoring_plan.get("indicators"),
-        field="monitoring_plan.indicators",
+    monitoring_triggers = _string_tuple(
+        research_snapshot.monitoring_triggers,
+        field="monitoring_triggers",
     )
     falsifiers = _required_string_tuple(
-        research_snapshot.monitoring_plan.get("falsifiers"),
-        field="monitoring_plan.falsifiers",
+        research_snapshot.thesis_invalidation,
+        field="thesis_invalidation",
     )
     threshold_zone, required_return, required_probability = _threshold_for_zone(odds)
     improvement_zone, improvement_return, improvement_probability = _improvement_for_zone(
@@ -268,7 +268,7 @@ def build_decision_rehearsal(
         open_questions=open_questions,
         thesis_invalidation=falsifiers,
         what_would_destroy_case=falsifiers,
-        monitoring_triggers=indicators,
+        monitoring_triggers=monitoring_triggers,
         limitations=DECISION_REHEARSAL_LIMITATIONS,
     )
     return freeze_decision_rehearsal(artifact)
@@ -380,12 +380,19 @@ def _nonnegative_difference(required: Decimal, current: Decimal) -> Decimal:
     return difference.normalize()
 
 
-def _required_string_tuple(value: object, *, field: str) -> tuple[str, ...]:
+def _string_tuple(value: object, *, field: str) -> tuple[str, ...]:
     if not isinstance(value, (list, tuple)):
-        raise DomainValidationError(f"Decision Rehearsal requires {field}")
+        raise DomainValidationError(f"Decision Rehearsal requires tuple-like {field}")
     material = tuple(item.strip() for item in value if isinstance(item, str))
-    if len(material) != len(value) or not material or any(not item for item in material):
+    if len(material) != len(value) or any(not item for item in material):
         raise DomainValidationError(
-            f"Decision Rehearsal requires non-empty {field}"
+            f"Decision Rehearsal requires valid string values for {field}"
         )
+    return material
+
+
+def _required_string_tuple(value: object, *, field: str) -> tuple[str, ...]:
+    material = _string_tuple(value, field=field)
+    if not material:
+        raise DomainValidationError(f"Decision Rehearsal requires non-empty {field}")
     return material
