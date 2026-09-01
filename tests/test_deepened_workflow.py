@@ -75,7 +75,7 @@ def test_deep_research_commit_flows_into_exact_decision_spine_and_human_gate() -
     assert result.investment_authority == "NONE"
 
 
-def test_deepened_workflow_fails_closed_before_decision_spine_on_tampered_research() -> None:
+def test_deepened_workflow_fails_closed_on_tampered_method_v1_package() -> None:
     package = _package()
     tampered = package.model_copy(
         update={
@@ -85,5 +85,5 @@ def test_deepened_workflow_fails_closed_before_decision_spine_on_tampered_resear
         }
     )
 
-    with pytest.raises(DomainValidationError, match="kernel acceptance"):
+    with pytest.raises(DomainValidationError, match="Research Method v1 acceptance"):
         _run(tampered)

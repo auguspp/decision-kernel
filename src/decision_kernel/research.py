@@ -214,6 +214,11 @@ def commit_snapshot(
     committed_at: AwareDateTime,
 ) -> ResearchSnapshot:
     snapshot.assert_commit_ready()
+    earliest_commit = max(snapshot.as_of_datetime, snapshot.created_at)
+    if committed_at < earliest_commit:
+        raise DomainValidationError(
+            "ResearchSnapshot commit cannot precede its PIT cutoff or creation time"
+        )
     return ResearchSnapshot.model_validate(
         {
             **snapshot.model_dump(mode="python"),

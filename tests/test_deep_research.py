@@ -12,8 +12,8 @@ from decision_kernel.deep_research import (
     AdversarialSeverity,
     DeepResearchPackage,
     DeepResearchSupplement,
-    ResearchAcceptanceStatus,
-    assess_deep_research_acceptance,
+    ResearchMethodV1AcceptanceStatus,
+    assess_research_method_v1_acceptance,
     commit_deep_research_package,
     deep_research_information_bundle_hash,
 )
@@ -373,7 +373,10 @@ def _rehash(
 
 
 def _acceptance_codes(package: DeepResearchPackage) -> set[str]:
-    return {issue.code for issue in assess_deep_research_acceptance(package).issues}
+    return {
+        issue.code
+        for issue in assess_research_method_v1_acceptance(package).issues
+    }
 
 
 def _contract_codes(
@@ -389,15 +392,15 @@ def _contract_codes(
     }
 
 
-def test_kernel_accepted_package_commits_and_v1_contract_conforms() -> None:
+def test_research_method_v1_accepted_package_commits_and_contract_conforms() -> None:
     package = _package()
     payload = _contract_payload(package)
 
-    acceptance = assess_deep_research_acceptance(package)
+    acceptance = assess_research_method_v1_acceptance(package)
     contract = assess_research_contract_v1(package, payload)
     result = commit_deep_research_package(package)
 
-    assert acceptance.status is ResearchAcceptanceStatus.ACCEPTED
+    assert acceptance.status is ResearchMethodV1AcceptanceStatus.ACCEPTED
     assert acceptance.issues == ()
     assert contract.status is ResearchContractV1Status.CONFORMING
     assert contract.issues == ()
@@ -409,7 +412,7 @@ def test_kernel_accepted_package_commits_and_v1_contract_conforms() -> None:
     )
 
 
-def test_kernel_acceptance_requires_explicit_deepen_and_exact_quick_state() -> None:
+def test_research_method_v1_requires_explicit_deepen_and_exact_quick_state() -> None:
     package = _package()
     waiting = package.quick_research.model_copy(
         update={"route": QuickResearchRoute.WAIT_FOR_TRIGGER}
@@ -425,7 +428,7 @@ def test_kernel_acceptance_requires_explicit_deepen_and_exact_quick_state() -> N
     assert "DEEP_QUICK_HASH_MISMATCH" in _acceptance_codes(changed_hash)
 
 
-def test_adversarial_block_is_method_policy_not_kernel_constitution() -> None:
+def test_adversarial_block_is_method_contract_policy_not_kernel_constitution() -> None:
     package = _package()
     blocked = package.deep_research.model_copy(
         update={
@@ -441,12 +444,15 @@ def test_adversarial_block_is_method_policy_not_kernel_constitution() -> None:
     )
     changed = _rehash(package, deep_research=blocked)
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(changed).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     assert "ADVERSARIAL_BLOCK_UNRESOLVED" in _contract_codes(changed)
     assert commit_deep_research_package(changed).research_snapshot.status is ResearchStatus.COMMITTED
 
 
-def test_future_and_unreferenced_evidence_remain_kernel_violations() -> None:
+def test_method_v1_package_rejects_future_and_unreferenced_evidence() -> None:
     package = _package()
     future = package.evidence_artifacts[1].model_copy(
         update={
@@ -473,7 +479,7 @@ def test_future_and_unreferenced_evidence_remain_kernel_violations() -> None:
     assert "EVIDENCE_NOT_REFERENCED" in _acceptance_codes(changed_extra)
 
 
-def test_contradiction_and_market_context_lineage_remain_kernel_invariants() -> None:
+def test_contradiction_and_market_context_are_method_v1_projection_rules() -> None:
     package = _package()
     without_opposes = package.research_snapshot.model_copy(
         update={
@@ -504,11 +510,14 @@ def test_liquidity_clock_exists_only_in_contract_payload() -> None:
     package = _package()
     payload = _contract_payload(package).model_copy(update={"liquidity_clock_assessment": {}})
 
-    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(package).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     assert "METHOD_STRUCTURE_MISSING" in _contract_codes(package, payload)
 
 
-def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() -> None:
+def test_one_complete_scenario_is_kernel_valid_but_not_contract_v1_conforming() -> None:
     package = _package()
     one = package.research_snapshot.scenarios[0].model_copy(
         update={"probability": Decimal("1")}
@@ -516,11 +525,15 @@ def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() ->
     snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
     changed = _rehash(package, research_snapshot=snapshot)
 
-    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(changed).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
+    assert commit_deep_research_package(changed).research_snapshot.status is ResearchStatus.COMMITTED
     assert "SCENARIO_SET_NOT_SMALL" in _contract_codes(changed)
 
 
-def test_scenario_probability_completeness_remains_kernel_invariant() -> None:
+def test_incomplete_scenario_distribution_is_kernel_commit_invariant_not_method_v1() -> None:
     package = _package()
     one = package.research_snapshot.scenarios[0].model_copy(
         update={"probability": Decimal("0.6")}
@@ -528,8 +541,11 @@ def test_scenario_probability_completeness_remains_kernel_invariant() -> None:
     snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
     changed = _rehash(package, research_snapshot=snapshot)
 
-    assert "SCENARIO_DISTRIBUTION_INCOMPLETE" in _acceptance_codes(changed)
-    with pytest.raises(DomainValidationError, match="kernel acceptance"):
+    assert (
+        assess_research_method_v1_acceptance(changed).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
+    with pytest.raises(DomainValidationError, match="probabilities must sum to one"):
         commit_deep_research_package(changed)
 
 
@@ -547,14 +563,17 @@ def test_monitoring_and_scenario_driver_richness_are_contract_payload_policy() -
         }
     )
 
-    assert assess_deep_research_acceptance(package).status is ResearchAcceptanceStatus.ACCEPTED
+    assert (
+        assess_research_method_v1_acceptance(package).status
+        is ResearchMethodV1AcceptanceStatus.ACCEPTED
+    )
     codes = _contract_codes(package, payload)
     assert "MONITORING_INDICATORS_INVALID" in codes
     assert "METHOD_STRUCTURE_MISSING" in codes
     assert "SCENARIO_DRIVER_STRUCTURE_MISSING" in codes
 
 
-def test_falsifier_projection_is_human_accountability_invariant() -> None:
+def test_falsifier_projection_is_research_method_v1_lineage_rule() -> None:
     package = _package()
     snapshot = package.research_snapshot.model_copy(
         update={"thesis_invalidation": ("different invalidation",)}

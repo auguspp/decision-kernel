@@ -230,6 +230,12 @@ def test_commit_requires_only_decision_spine_accountability_not_method_template(
     assert committed.monitoring_triggers == ()
 
 
+def test_commit_cannot_precede_pit_or_snapshot_creation() -> None:
+    review = submit_for_review(_snapshot())
+    with pytest.raises(DomainValidationError, match="cannot precede"):
+        commit_snapshot(review, AS_OF - timedelta(seconds=1))
+
+
 def test_review_can_return_to_draft_without_creating_a_commit() -> None:
     review = submit_for_review(_snapshot())
     assert review.status is ResearchStatus.REVIEW
