@@ -79,10 +79,8 @@ def _committed_snapshot() -> ResearchSnapshot:
         version=1,
         core_thesis="earnings can exceed expectations",
         market_expectations_narrative="market expects flat earnings",
-        monitoring_plan={
-            "indicators": ["earnings release"],
-            "falsifiers": ["margin collapse"],
-        },
+        thesis_invalidation=("margin collapse",),
+        monitoring_triggers=("earnings release",),
         model_risk_level=ModelRiskLevel.LOW,
         model_risk_notes="terminal value uncertainty",
         open_questions=("pricing power?", "capex discipline?"),
