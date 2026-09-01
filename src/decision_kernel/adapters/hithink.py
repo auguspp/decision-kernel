@@ -16,6 +16,8 @@ HITHINK_PRICE_CONVENTION = "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE"
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 A_SHARE_CLOSE = time(15, 0)
 _A_SHARE_TICKER = re.compile(r"^\d{6}\.(?:SH|SZ|BJ)$")
+_PLAIN_A_SHARE_TICKER = re.compile(r"^\d{6}$")
+_EXCHANGE_SUFFIX = {"SSE": "SH", "SZSE": "SZ", "BSE": "BJ"}
 
 
 class HithinkAdapterError(ValueError):
@@ -30,6 +32,29 @@ class HithinkCompletedSessionPrice:
     close: Decimal
     as_of: datetime
     expected_latest_session: date
+
+
+def to_hithink_thscode(*, ticker: str, exchange: str) -> str:
+    """Map explicit kernel A-share identity to the provider identifier."""
+
+    normalized_ticker = ticker.strip().upper()
+    normalized_exchange = exchange.strip().upper()
+    suffix = _EXCHANGE_SUFFIX.get(normalized_exchange)
+    if suffix is None:
+        raise HithinkAdapterError(
+            "HiThink supports explicit SSE, SZSE, or BSE exchange identity"
+        )
+    if _PLAIN_A_SHARE_TICKER.fullmatch(normalized_ticker):
+        return f"{normalized_ticker}.{suffix}"
+    if _A_SHARE_TICKER.fullmatch(normalized_ticker):
+        if not normalized_ticker.endswith(f".{suffix}"):
+            raise HithinkAdapterError(
+                "ResearchSnapshot ticker suffix disagrees with its exchange"
+            )
+        return normalized_ticker
+    raise HithinkAdapterError(
+        "ResearchSnapshot ticker is not a qualified six-digit A-share identity"
+    )
 
 
 def require_hithink_data(
@@ -155,6 +180,21 @@ def normalize_hithink_latest_completed_price(
     )
 
 
+def observed_market_from_completed_price(
+    price: HithinkCompletedSessionPrice,
+) -> ObservedMarket:
+    """Translate one qualified provider price into the kernel market contract."""
+
+    return ObservedMarket(
+        market_price=price.close,
+        market_timestamp=price.as_of,
+        market_utc_offset_minutes=480,
+        market_data_source=f"{HITHINK_MARKET_SOURCE} | {price.thscode}",
+        price_convention=HITHINK_PRICE_CONVENTION,
+        currency="CNY",
+    )
+
+
 def observed_market_from_hithink_response(
     envelope: Mapping[str, Any],
     *,
@@ -164,19 +204,13 @@ def observed_market_from_hithink_response(
 ) -> ObservedMarket:
     """Translate a qualified raw HiThink close into the kernel market contract."""
 
-    price = normalize_hithink_latest_completed_price(
-        envelope,
-        thscode=thscode,
-        sessions=sessions,
-        observed_at=observed_at,
-    )
-    return ObservedMarket(
-        market_price=price.close,
-        market_timestamp=price.as_of,
-        market_utc_offset_minutes=480,
-        market_data_source=f"{HITHINK_MARKET_SOURCE} | {price.thscode}",
-        price_convention=HITHINK_PRICE_CONVENTION,
-        currency="CNY",
+    return observed_market_from_completed_price(
+        normalize_hithink_latest_completed_price(
+            envelope,
+            thscode=thscode,
+            sessions=sessions,
+            observed_at=observed_at,
+        )
     )
 
 
