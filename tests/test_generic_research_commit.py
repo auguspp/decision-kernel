@@ -17,6 +17,7 @@ from decision_kernel.research_commit import (
     ResearchCommitPackage,
     commit_research_package,
     research_commit_information_bundle_hash,
+    research_commit_package_hash,
 )
 from decision_kernel.runtime import hithink_http
 from decision_kernel.workflow import DecisionSpineTerminalState
@@ -108,6 +109,22 @@ def test_generic_research_package_commits_without_research_method_v1() -> None:
     assert (
         result.research_snapshot.information_bundle_hash
         == package.research_snapshot.information_bundle_hash
+    )
+
+
+def test_generic_research_identity_ignores_incidental_evidence_order() -> None:
+    package = _generic_package()
+    reversed_package = package.model_copy(
+        update={"evidence_artifacts": tuple(reversed(package.evidence_artifacts))}
+    )
+
+    assert research_commit_package_hash(reversed_package) == research_commit_package_hash(package)
+    assert research_commit_information_bundle_hash(
+        research_snapshot=package.research_snapshot,
+        evidence_artifacts=reversed_package.evidence_artifacts,
+    ) == research_commit_information_bundle_hash(
+        research_snapshot=package.research_snapshot,
+        evidence_artifacts=package.evidence_artifacts,
     )
 
 
