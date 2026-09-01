@@ -134,6 +134,7 @@ def _committed_snapshot(
         version=1,
         core_thesis="earnings can exceed expectations",
         market_expectations_narrative="market expects flat earnings",
+        thesis_invalidation=("margin collapse",),
         model_risk_level=model_risk_level,
         model_risk_notes=model_risk_notes,
         open_questions=("pricing power?",),
@@ -348,12 +349,15 @@ def test_odds_context_cannot_look_past_market_price_clock() -> None:
         )
 
 
-def test_odds_requires_explicit_model_risk_source() -> None:
+def test_odds_defensively_rejects_missing_model_risk_source() -> None:
+    committed = _committed_snapshot()
+    tampered = committed.model_copy(update={"model_risk_notes": None})
+
     with pytest.raises(DomainValidationError, match="model-risk source"):
         build_odds_research(
             artifact_id=uuid4(),
             created_at=CREATED_AT,
-            research_snapshot=_committed_snapshot(model_risk_notes=None),
+            research_snapshot=tampered,
             observed_market=_market(),
             policy=_policy(),
         )
