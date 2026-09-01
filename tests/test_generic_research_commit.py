@@ -128,6 +128,31 @@ def test_generic_research_identity_ignores_incidental_evidence_order() -> None:
     )
 
 
+def test_rehearsal_framing_is_not_part_of_research_information_identity() -> None:
+    package = _generic_package()
+    alternate = package.model_copy(
+        update={
+            "framing": NonAuthoritativeRehearsalFraming(
+                why_now="a different executable reason to review the same research",
+                current_expression="a different non-authoritative presentation",
+            )
+        }
+    )
+
+    original_identity = research_commit_information_bundle_hash(
+        research_snapshot=package.research_snapshot,
+        evidence_artifacts=package.evidence_artifacts,
+    )
+    alternate_identity = research_commit_information_bundle_hash(
+        research_snapshot=alternate.research_snapshot,
+        evidence_artifacts=alternate.evidence_artifacts,
+    )
+
+    assert alternate_identity == original_identity
+    assert alternate.research_snapshot.information_bundle_hash == original_identity
+    assert research_commit_package_hash(alternate) != research_commit_package_hash(package)
+
+
 def test_generic_commit_rejects_future_missing_and_unreferenced_evidence() -> None:
     package = _generic_package()
 
