@@ -86,25 +86,51 @@ class Scenario(KernelModel):
 
 
 class ResearchSnapshot(KernelModel):
-    """Frozen research state that may be reviewed and explicitly committed."""
+    """Frozen research aggregate required for PIT, Odds, lineage and Human accountability.
+
+    Some Decision OS v1 method fields remain temporarily for extraction compatibility. They are
+    intentionally *not* kernel commit invariants; versioned research contracts own their shape and
+    requiredness until they can be moved out of this aggregate cleanly.
+    """
 
     id: UUID
     ticker: str = Field(min_length=1, max_length=32)
     company_name: str = Field(min_length=1, max_length=255)
     exchange: str = Field(min_length=1, max_length=32)
     currency: CurrencyCode
-    sector: str | None = Field(default=None, max_length=128)
-    industry: str | None = Field(default=None, max_length=128)
     created_at: AwareDateTime
     as_of_datetime: AwareDateTime
     valuation_horizon_date: date
     version: int = Field(ge=1)
     status: ResearchStatus = ResearchStatus.DRAFT
     supersedes_snapshot_id: UUID | None = None
-    research_mode: str = Field(default="FULL", min_length=1, max_length=64)
+
+    # Minimal decision-accountability state consumed downstream.
     core_thesis: str = ""
-    variant_perception: str | None = None
     market_expectations_narrative: str | None = None
+    model_risk_level: ModelRiskLevel = ModelRiskLevel.MEDIUM
+    model_risk_notes: str | None = None
+    open_questions: tuple[str, ...] = ()
+    thesis_invalidation: tuple[str, ...] = ()
+    monitoring_triggers: tuple[str, ...] = ()
+
+    # Proven Odds inputs and exact lineage.
+    valuation_bases: tuple[ValuationBasis, ...] = ()
+    scenarios: tuple[Scenario, ...] = ()
+    evidence_links: tuple[EvidenceArtifactLink, ...] = ()
+    created_by: str = Field(min_length=1, max_length=128)
+    committed_at: AwareDateTime | None = None
+    research_engine_version: str = Field(default="manual-v1", min_length=1, max_length=64)
+    information_bundle_hash: str | None = Field(default=None, max_length=128)
+    research_origin: str | None = Field(default=None, max_length=128)
+    schema_version: int = Field(default=1, ge=1)
+
+    # Decision OS Research Contract v1 compatibility payload. These fields are method policy,
+    # not kernel constitution. They will be movable/removable without changing kernel invariants.
+    research_mode: str = Field(default="FULL", min_length=1, max_length=64)
+    sector: str | None = Field(default=None, max_length=128)
+    industry: str | None = Field(default=None, max_length=128)
+    variant_perception: str | None = None
     market_expectation_map: dict[str, Any] = Field(default_factory=dict)
     normalized_earnings_notes: str | None = None
     valuation_framework: str | None = None
@@ -113,20 +139,8 @@ class ResearchSnapshot(KernelModel):
     liquidity_clock_assessment: dict[str, Any] = Field(default_factory=dict)
     monitoring_plan: dict[str, Any] = Field(default_factory=dict)
     valuation_stress_spec: dict[str, Any] = Field(default_factory=dict)
-    model_risk_level: ModelRiskLevel = ModelRiskLevel.MEDIUM
-    model_risk_notes: str | None = None
-    open_questions: tuple[str, ...] = ()
-    created_by: str = Field(min_length=1, max_length=128)
-    committed_at: AwareDateTime | None = None
-    research_engine_version: str = Field(default="manual-v1", min_length=1, max_length=64)
-    information_bundle_hash: str | None = Field(default=None, max_length=128)
-    doctrine_version_reference: str = Field(min_length=1, max_length=128)
-    research_contract_version: str = Field(min_length=1, max_length=64)
-    research_origin: str | None = Field(default=None, max_length=128)
-    schema_version: int = Field(default=1, ge=1)
-    valuation_bases: tuple[ValuationBasis, ...] = ()
-    scenarios: tuple[Scenario, ...] = ()
-    evidence_links: tuple[EvidenceArtifactLink, ...] = ()
+    doctrine_version_reference: str = Field(default="UNSPECIFIED", min_length=1, max_length=128)
+    research_contract_version: str = Field(default="UNSPECIFIED", min_length=1, max_length=64)
 
     @model_validator(mode="after")
     def validate_aggregate_references(self) -> "ResearchSnapshot":
@@ -144,6 +158,12 @@ class ResearchSnapshot(KernelModel):
             raise ValueError("committed snapshot requires committed_at")
         if self.status is not ResearchStatus.COMMITTED and self.committed_at is not None:
             raise ValueError("only committed snapshots may have committed_at")
+        if any(not item.strip() for item in self.thesis_invalidation):
+            raise ValueError("thesis invalidation conditions cannot be blank")
+        if any(not item.strip() for item in self.monitoring_triggers):
+            raise ValueError("monitoring triggers cannot be blank")
+        if any(not item.strip() for item in self.open_questions):
+            raise ValueError("open questions cannot be blank")
 
         basis_ids = {basis.id for basis in self.valuation_bases}
         if len(basis_ids) != len(self.valuation_bases):
