@@ -10,7 +10,14 @@ from .research import ResearchSnapshot, ResearchStatus, commit_snapshot
 
 
 class ResearchCommitPackage(KernelModel):
-    """Method-agnostic handoff into Kernel commit authority."""
+    """Method-agnostic handoff into Kernel commit authority.
+
+    `framing` is an executable one-file convenience for the current CLI path.
+    It is deliberately excluded from Research `information_bundle_hash` and has
+    no role in Research validity or commit authority. If a second consumer does
+    not need rehearsal framing, split that run context instead of expanding this
+    convenience into Research semantics.
+    """
 
     research_snapshot: ResearchSnapshot
     evidence_artifacts: tuple[EvidenceArtifact, ...] = ()
