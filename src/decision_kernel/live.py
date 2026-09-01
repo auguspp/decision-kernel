@@ -20,7 +20,7 @@ def run_live_deep_research_package(
     package: DeepResearchPackage,
     api_key: str | None,
     observed_at: datetime | None = None,
-    fetch_market: _MarketFetcher = fetch_hithink_observed_market,
+    fetch_market: _MarketFetcher | None = None,
 ) -> DeepenedDecisionResult:
     """Run one accepted Deep Research package through live price and the Decision Spine."""
 
@@ -28,6 +28,8 @@ def run_live_deep_research_package(
         observed_at = datetime.now(timezone.utc)
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
         raise ValueError("live observed_at must be timezone-aware")
+    if fetch_market is None:
+        fetch_market = fetch_hithink_observed_market
 
     snapshot = package.research_snapshot
     thscode = to_hithink_thscode(ticker=snapshot.ticker, exchange=snapshot.exchange)
