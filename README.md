@@ -42,6 +42,36 @@ quiet / wake Human
 Authority + Lineage constrain the whole chain.
 ```
 
+## First live entry
+
+The first executable path is deliberately narrower than the eventual natural workflow. It consumes one already-produced `DeepResearchPackage`, fetches the latest qualified completed-session A-share close from HiThink, loads the preserved `decision-os-live-odds-v0.1` policy, and runs the package through the Decision Spine to either quiet or Human attention.
+
+```text
+DeepResearchPackage
+        |
+        v
+HiThink completed close
+        |
+        v
+Research commit -> Odds -> Rehearsal -> Human Surface
+        |
+        +-> QUIET_INSUFFICIENT_ODDS
+        |
+        +-> HUMAN_ATTENTION_REQUIRED
+```
+
+Install the project, provide the HiThink key through the existing environment-variable boundary, and run one package:
+
+```powershell
+python -m pip install -e ".[dev]"
+$env:HITHINK_FINANCE_API_KEY = "<configured locally>"
+decision-kernel run path\to\deep-research-package.json
+```
+
+The key is never placed in the package or source tree. The command prints a compact Human-facing result rather than dumping internal artifacts. Domain, PIT, lineage, stale-price, and readiness violations fail visibly with a non-zero exit code.
+
+This command does **not** discover securities or perform Deep Research. The upstream `DEEPEN_REQUIRED -> DeepResearchPackage` execution capability remains a separate boundary.
+
 ## Initial extraction order
 
 The repository starts deliberately small.
