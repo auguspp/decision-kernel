@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import date
 from decimal import Decimal
 from enum import StrEnum
-from typing import Any
 from uuid import UUID
 
 from pydantic import Field, model_validator
@@ -55,24 +54,19 @@ class ExpectedCashFlow(KernelModel):
     currency: CurrencyCode
     cash_flow_type: CashFlowType
     provenance_artifact_ids: tuple[UUID, ...] = Field(min_length=1)
-    assumption_notes: str | None = None
     schema_version: int = Field(default=1, ge=1)
 
 
 class Scenario(KernelModel):
+    """Minimal scenario state required by deterministic Odds."""
+
     id: UUID
     research_snapshot_id: UUID
     name: str = Field(min_length=1, max_length=64)
     probability: Decimal = Field(ge=Decimal("0"), le=Decimal("1"))
-    description: str
-    assumptions: dict[str, Any] = Field(default_factory=dict)
-    financial_driver_values: dict[str, Any] = Field(default_factory=dict)
-    normalized_earnings: Decimal | None = None
-    valuation_method: str = Field(min_length=1, max_length=64)
     terminal_equity_value_per_share: Decimal
     valuation_basis_id: UUID
     expected_cash_flows: tuple[ExpectedCashFlow, ...] = ()
-    notes: str | None = None
 
     @model_validator(mode="after")
     def validate_children(self) -> "Scenario":
@@ -86,12 +80,7 @@ class Scenario(KernelModel):
 
 
 class ResearchSnapshot(KernelModel):
-    """Frozen research aggregate required for PIT, Odds, lineage and Human accountability.
-
-    Some Decision OS v1 method fields remain temporarily for extraction compatibility. They are
-    intentionally *not* kernel commit invariants; versioned research contracts own their shape and
-    requiredness until they can be moved out of this aggregate cleanly.
-    """
+    """Frozen kernel aggregate for PIT, Belief, Odds, lineage and Human accountability."""
 
     id: UUID
     ticker: str = Field(min_length=1, max_length=32)
@@ -105,7 +94,7 @@ class ResearchSnapshot(KernelModel):
     status: ResearchStatus = ResearchStatus.DRAFT
     supersedes_snapshot_id: UUID | None = None
 
-    # Minimal decision-accountability state consumed downstream.
+    # Belief + Human accountability.
     core_thesis: str = ""
     market_expectations_narrative: str | None = None
     model_risk_level: ModelRiskLevel = ModelRiskLevel.MEDIUM
@@ -114,7 +103,7 @@ class ResearchSnapshot(KernelModel):
     thesis_invalidation: tuple[str, ...] = ()
     monitoring_triggers: tuple[str, ...] = ()
 
-    # Proven Odds inputs and exact lineage.
+    # Odds + exact lineage.
     valuation_bases: tuple[ValuationBasis, ...] = ()
     scenarios: tuple[Scenario, ...] = ()
     evidence_links: tuple[EvidenceArtifactLink, ...] = ()
@@ -124,23 +113,6 @@ class ResearchSnapshot(KernelModel):
     information_bundle_hash: str | None = Field(default=None, max_length=128)
     research_origin: str | None = Field(default=None, max_length=128)
     schema_version: int = Field(default=1, ge=1)
-
-    # Decision OS Research Contract v1 compatibility payload. These fields are method policy,
-    # not kernel constitution. They will be movable/removable without changing kernel invariants.
-    research_mode: str = Field(default="FULL", min_length=1, max_length=64)
-    sector: str | None = Field(default=None, max_length=128)
-    industry: str | None = Field(default=None, max_length=128)
-    variant_perception: str | None = None
-    market_expectation_map: dict[str, Any] = Field(default_factory=dict)
-    normalized_earnings_notes: str | None = None
-    valuation_framework: str | None = None
-    fundamental_clock_assessment: dict[str, Any] = Field(default_factory=dict)
-    expectation_clock_assessment: dict[str, Any] = Field(default_factory=dict)
-    liquidity_clock_assessment: dict[str, Any] = Field(default_factory=dict)
-    monitoring_plan: dict[str, Any] = Field(default_factory=dict)
-    valuation_stress_spec: dict[str, Any] = Field(default_factory=dict)
-    doctrine_version_reference: str = Field(default="UNSPECIFIED", min_length=1, max_length=128)
-    research_contract_version: str = Field(default="UNSPECIFIED", min_length=1, max_length=64)
 
     @model_validator(mode="after")
     def validate_aggregate_references(self) -> "ResearchSnapshot":
@@ -181,13 +153,6 @@ class ResearchSnapshot(KernelModel):
                 raise ValueError("Scenario must belong to its ResearchSnapshot")
             if scenario.valuation_basis_id not in basis_ids:
                 raise ValueError("Scenario must reference a ValuationBasis in the snapshot")
-            basis = next(
-                item for item in self.valuation_bases if item.id == scenario.valuation_basis_id
-            )
-            if scenario.valuation_method != basis.valuation_method:
-                raise ValueError(
-                    "Scenario valuation_method must match its ValuationBasis"
-                )
             for flow in scenario.expected_cash_flows:
                 if flow.cash_flow_date < self.as_of_datetime.date():
                     raise ValueError("expected cash flow cannot precede snapshot as-of date")

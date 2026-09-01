@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 
@@ -75,8 +75,6 @@ def _snapshot(*, committed: bool = True) -> ResearchSnapshot:
             research_snapshot_id=snapshot_id,
             name=name,
             probability=probability,
-            description=name,
-            valuation_method=basis.valuation_method,
             terminal_equity_value_per_share=terminal,
             valuation_basis_id=basis.id,
             expected_cash_flows=flows,
@@ -101,8 +99,6 @@ def _snapshot(*, committed: bool = True) -> ResearchSnapshot:
         open_questions=("pricing power?",),
         created_by="research",
         information_bundle_hash="a" * 64,
-        doctrine_version_reference="doctrine-v1",
-        research_contract_version="research-v1",
         valuation_bases=(basis,),
         scenarios=(
             scenario(name="up", probability="0.6", terminal="15", distribution="0.5"),

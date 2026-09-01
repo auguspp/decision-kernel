@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 from pydantic import ValidationError
@@ -62,8 +62,6 @@ def _committed_snapshot() -> ResearchSnapshot:
         research_snapshot_id=snapshot_id,
         name="base",
         probability="1",
-        description="base case",
-        valuation_method=basis.valuation_method,
         terminal_equity_value_per_share="12",
         valuation_basis_id=basis.id,
     )
@@ -86,8 +84,6 @@ def _committed_snapshot() -> ResearchSnapshot:
         open_questions=("pricing power?", "capex discipline?"),
         created_by="research",
         information_bundle_hash="a" * 64,
-        doctrine_version_reference="doctrine-v1",
-        research_contract_version="research-v1",
         valuation_bases=(basis,),
         scenarios=(scenario,),
     )
