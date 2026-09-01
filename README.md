@@ -7,7 +7,7 @@ It is **not** Decision OS v2 and it is **not** a new platform build.
 ## Operating principles
 
 1. **Own only investment cognition invariants.** PIT, exact lineage, frozen state identity, deterministic Odds inputs, Human accountability, authority boundaries, and Human-surface eligibility belong here when changing them would break the decision system itself.
-2. **Research method is versioned policy, not constitution.** A useful research recipe can be strict without becoming a permanent Kernel invariant. `research_contract_v1.py` preserves the current Decision OS method separately from Kernel commit authority.
+2. **Research method is versioned policy, not constitution.** A useful research recipe can be strict without becoming a permanent Kernel invariant. `research_contract_v1.py` and `claim_audit_contract_v1.py` preserve current research-quality policy separately from Kernel commit authority.
 3. **Reuse commodity infrastructure.** Market-data transport, news aggregation, HTTP, retries, scheduling, process supervision, logging, storage plumbing, and UI stay outside the core and should use mature tools/services with thin boundaries.
 4. **Modular monolith, thin workflow.** Modules stay independently understandable; a small application workflow connects them. No plugin platform, event bus, provider framework, or orchestration framework by default.
 5. **Quiet stop is a product outcome.** A workflow may deepen, wait, drop, stop quietly, or wake the Human. It does not need to run every stage.
@@ -21,7 +21,7 @@ Use one hard test before adding or requiring a Research field:
 
 > If this field disappears, does PIT, Belief, Odds, exact lineage, or Human accountability become invalid?
 
-If yes, it may belong to the Kernel. If no, it belongs to a versioned research method or presentation layer until proven otherwise.
+If yes, it may belong to the Kernel. If no, it belongs to a versioned research method, quality contract, or presentation layer until proven otherwise.
 
 Examples:
 
@@ -45,7 +45,17 @@ Examples:
 - require explicit scenario assumptions and financial drivers
 - require bounded adversarial review
 
-Those v1 rules can remain excellent research discipline without becoming permanent Kernel law.
+**Claim Audit Contract v1 policy**
+
+- independently cover every exact material claim once
+- verify FACT / MARKET_CONTEXT identity, period/date, units, source location, and evidence support
+- require explicitly declared numerical assertions to be deterministically recalculated
+- bind numerical Evidence inputs to exact structured EvidenceArtifact values
+- require every numerical operand to have explicit provenance from Evidence or a declared literal with a reason
+
+Claim Audit v1 deliberately does **not** infer authority from provider/source-name prefixes, parse prose with a numeric regex, or maintain a whitelist of magic calculation constants. Those are method/implementation choices, not Kernel law.
+
+These research-quality rules can remain strict without gaining Kernel commit authority.
 
 ## Research method vs Decision Spine
 
@@ -65,7 +75,9 @@ Research Method v1 (replaceable policy)
     Deep Research
        |
        +--> Research Method v1 acceptance
-       +--> Research Contract v1 / future quality contracts
+       +--> Research Contract v1
+       +--> Claim Audit Contract v1
+       |      (quality assessments; no Kernel authority)
        |
        v
     ResearchSnapshot
@@ -94,7 +106,7 @@ Decision Spine (method-agnostic)
 
 `research_workflow_v1.py` owns the current Discovery / Pre / Quick / Deep orchestration. `workflow.py` must not know those method stages; it composes only `ResearchSnapshot -> Odds -> Decision Rehearsal -> HumanResearchSurface`.
 
-Research Method v1 acceptance validates only the current method's funnel, exact projection, evidence mapping, and package identity. It does not decide whether a `ResearchSnapshot` is commit-ready. That authority stays in `ResearchSnapshot` / `commit_snapshot()`.
+Research Method v1 acceptance validates only the current method's funnel, exact projection, evidence mapping, and package identity. Research Contract v1 and Claim Audit Contract v1 assess method quality. None of them decides whether a `ResearchSnapshot` is commit-ready. That authority stays in `ResearchSnapshot` / `commit_snapshot()`.
 
 A future Research Method v2 should be able to produce the same frozen `ResearchSnapshot` and enter the same Decision Spine without changing `workflow.py`.
 
