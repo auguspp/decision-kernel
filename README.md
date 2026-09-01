@@ -121,6 +121,20 @@ Research Method v1 acceptance validates only the current method's funnel, exact 
 
 A future Research Method v2 can therefore produce a valid `ResearchCommitPackage` and enter the same Decision Spine without changing `workflow.py` or pretending to be Research Method v1.
 
+## Architecture watchpoints
+
+Two current conveniences are intentional, but they do not gain semantic authority merely because they are convenient.
+
+**`ResearchCommitPackage.framing`**
+
+`framing` exists so one JSON file can run from reviewed research through Decision Rehearsal and the Human surface. It is executable context, not Research identity: `research_commit_information_bundle_hash()` excludes it. If a second ResearchCommitPackage consumer does not need rehearsal framing, prefer splitting the run context (or simply passing framing as a function argument) rather than turning this convenience into Research semantics.
+
+**`live.py`**
+
+`live.py` is the default executable composition root. It may wire security-id mapping, the default Odds policy, a supplied market fetch capability, and the Decision Spine. It must not accumulate provider fallback, retry/backoff, scheduling, case persistence, research routing, Radar logic, notification policy, or similar operating-system responsibilities. Those concerns belong in replaceable Harness code outside this composition root.
+
+Architecture tests intentionally guard both boundaries. Adding a new local dependency to `research_commit.py` or `live.py` should require an explicit architecture decision rather than happening accidentally.
+
 ## Minimal live commands
 
 Install once and provide the already-verified HiThink market-data credential:

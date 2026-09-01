@@ -1,3 +1,12 @@
+"""Default executable composition root for the current live path.
+
+This module may wire existing capabilities: security-id mapping, the default
+Odds policy, a supplied market fetch capability, and the Decision Spine. It
+must not become an operating system. Provider fallback, retry/backoff,
+scheduling, persistence, research routing, Radar logic, notifications, and
+similar runtime policy belong outside this composition root.
+"""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -56,7 +65,7 @@ def run_live_research_commit_package(
     fetch_market: MarketFetcher,
     observed_at: datetime | None = None,
 ) -> LiveResearchDecisionResult:
-    """Run a method-agnostic reviewed research package through the live Decision Spine."""
+    """Wire a generic reviewed research handoff into the live Decision Spine."""
 
     observed_at = _resolve_observed_at(observed_at)
     research_commit = commit_research_package(package)
@@ -89,7 +98,7 @@ def run_live_deep_research_package(
     fetch_market: MarketFetcher,
     observed_at: datetime | None = None,
 ) -> DeepenedDecisionResult:
-    """Compose Research Method v1 output with a live market input capability."""
+    """Wire Research Method v1 output into the live Decision Spine."""
 
     observed_at = _resolve_observed_at(observed_at)
     snapshot = package.research_snapshot
