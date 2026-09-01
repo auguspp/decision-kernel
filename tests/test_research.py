@@ -104,6 +104,7 @@ def _snapshot(
         "status": status,
         "core_thesis": "earnings can exceed current expectations",
         "market_expectations_narrative": "market expects flat earnings",
+        "model_risk_notes": "terminal value uncertainty",
         "thesis_invalidation": ("margin collapse",),
         "monitoring_triggers": ("earnings release",),
         "open_questions": ("pricing power?",),
@@ -200,6 +201,33 @@ def test_commit_requires_review_complete_probability_and_lineage() -> None:
     no_lineage = submit_for_review(_snapshot(information_bundle_hash=None))
     with pytest.raises(DomainValidationError, match="information_bundle_hash"):
         commit_snapshot(no_lineage, AS_OF + timedelta(hours=1))
+
+
+def test_commit_requires_only_decision_spine_accountability_not_method_template() -> None:
+    missing_core_thesis = submit_for_review(_snapshot(core_thesis=""))
+    with pytest.raises(DomainValidationError, match="core_thesis"):
+        commit_snapshot(missing_core_thesis, AS_OF + timedelta(hours=1))
+
+    missing_market_expectation = submit_for_review(
+        _snapshot(market_expectations_narrative=None)
+    )
+    with pytest.raises(DomainValidationError, match="market_expectations_narrative"):
+        commit_snapshot(missing_market_expectation, AS_OF + timedelta(hours=1))
+
+    missing_model_risk_source = submit_for_review(_snapshot(model_risk_notes=None))
+    with pytest.raises(DomainValidationError, match="model_risk_notes"):
+        commit_snapshot(missing_model_risk_source, AS_OF + timedelta(hours=1))
+
+    missing_invalidation = submit_for_review(_snapshot(thesis_invalidation=()))
+    with pytest.raises(DomainValidationError, match="thesis_invalidation"):
+        commit_snapshot(missing_invalidation, AS_OF + timedelta(hours=1))
+
+    sparse_method_payload = submit_for_review(
+        _snapshot(open_questions=(), monitoring_triggers=())
+    )
+    committed = commit_snapshot(sparse_method_payload, AS_OF + timedelta(hours=1))
+    assert committed.open_questions == ()
+    assert committed.monitoring_triggers == ()
 
 
 def test_review_can_return_to_draft_without_creating_a_commit() -> None:
