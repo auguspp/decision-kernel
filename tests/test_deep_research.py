@@ -11,8 +11,8 @@ from decision_kernel.deep_research import (
     AdversarialSeverity,
     DeepResearchPackage,
     DeepResearchSupplement,
-    ResearchReadinessStatus,
-    assess_deep_research_readiness,
+    ResearchAcceptanceStatus,
+    assess_deep_research_acceptance,
     commit_deep_research_package,
     deep_research_information_bundle_hash,
 )
@@ -30,6 +30,10 @@ from decision_kernel.research import (
     ResearchSnapshot,
     ResearchStatus,
     Scenario,
+)
+from decision_kernel.research_contract_v1 import (
+    ResearchContractV1Status,
+    assess_research_contract_v1,
 )
 from decision_kernel.research_funnel import (
     DiscoveryInput,
@@ -229,6 +233,7 @@ def _components():
             valuation_basis_id=basis.id,
         )
 
+    monitoring = ("volume", "margin", "pricing")
     snapshot = ResearchSnapshot(
         id=snapshot_id,
         ticker="600000",
@@ -240,27 +245,15 @@ def _components():
         valuation_horizon_date=HORIZON,
         version=1,
         core_thesis="earnings can exceed current expectations",
-        variant_perception="margin durability may be mispriced",
         market_expectations_narrative="market expects flat margins",
-        market_expectation_map={"margin": "flat"},
-        normalized_earnings_notes="normalized earnings use scenario drivers",
-        valuation_framework="scenario equity value",
-        fundamental_clock_assessment={"state": "improving"},
-        expectation_clock_assessment={"state": "lagging"},
-        liquidity_clock_assessment={"state": "neutral"},
-        monitoring_plan={
-            "indicators": ["volume", "margin", "pricing"],
-            "falsifiers": list(falsifiers),
-        },
-        valuation_stress_spec={"margin_downside": "included"},
         model_risk_level=ModelRiskLevel.MEDIUM,
         model_risk_notes="terminal value and margin durability",
         open_questions=("can margins hold?",),
+        thesis_invalidation=falsifiers,
+        monitoring_triggers=monitoring,
         created_by="deep-research-test",
         research_engine_version="replaceable-executor-v7",
         information_bundle_hash="0" * 64,
-        doctrine_version_reference="doctrine-v1",
-        research_contract_version=DEEP_RESEARCH_CONTRACT_VERSION,
         research_origin=f"DISCOVERY_INPUT:{discovery.discovery_id}",
         valuation_bases=(basis,),
         scenarios=(
@@ -290,6 +283,21 @@ def _components():
                 relevance="preserves market context",
             ),
         ),
+        # Decision OS Research Contract v1 method payload.
+        variant_perception="margin durability may be mispriced",
+        market_expectation_map={"margin": "flat"},
+        normalized_earnings_notes="normalized earnings use scenario drivers",
+        valuation_framework="scenario equity value",
+        fundamental_clock_assessment={"state": "improving"},
+        expectation_clock_assessment={"state": "lagging"},
+        liquidity_clock_assessment={"state": "neutral"},
+        monitoring_plan={
+            "indicators": list(monitoring),
+            "falsifiers": list(falsifiers),
+        },
+        valuation_stress_spec={"margin_downside": "included"},
+        doctrine_version_reference="doctrine-v1",
+        research_contract_version=DEEP_RESEARCH_CONTRACT_VERSION,
     )
     return discovery, pre, quick, deep, evidence, snapshot
 
@@ -306,7 +314,7 @@ def _package() -> DeepResearchPackage:
     )
     snapshot = snapshot.model_copy(update={"information_bundle_hash": information_hash})
     return DeepResearchPackage(
-        label="Deep Research readiness fixture",
+        label="Deep Research fixture",
         discovery=discovery,
         pre_research=pre,
         quick_research=quick,
@@ -352,30 +360,35 @@ def _rehash(
     )
 
 
-def _codes(package: DeepResearchPackage) -> set[str]:
-    return {issue.code for issue in assess_deep_research_readiness(package).issues}
+def _acceptance_codes(package: DeepResearchPackage) -> set[str]:
+    return {issue.code for issue in assess_deep_research_acceptance(package).issues}
 
 
-def test_decision_ready_package_commits_without_persistence_or_executor_identity_lock() -> None:
+def _contract_codes(package: DeepResearchPackage) -> set[str]:
+    return {issue.code for issue in assess_research_contract_v1(package).issues}
+
+
+def test_kernel_accepted_package_commits_and_v1_contract_conforms() -> None:
     package = _package()
 
-    assessment = assess_deep_research_readiness(package)
+    acceptance = assess_deep_research_acceptance(package)
+    contract = assess_research_contract_v1(package)
     result = commit_deep_research_package(package)
 
-    assert assessment.status is ResearchReadinessStatus.DECISION_READY
-    assert assessment.issues == ()
+    assert acceptance.status is ResearchAcceptanceStatus.ACCEPTED
+    assert acceptance.issues == ()
+    assert contract.status is ResearchContractV1Status.CONFORMING
+    assert contract.issues == ()
     assert package.research_snapshot.status is ResearchStatus.DRAFT
-    assert package.research_snapshot.research_engine_version == "replaceable-executor-v7"
     assert result.research_snapshot.status is ResearchStatus.COMMITTED
     assert result.research_snapshot.committed_at == COMMIT_AT
     assert (
         result.research_snapshot.information_bundle_hash
         == package.research_snapshot.information_bundle_hash
     )
-    assert result.package_artifact.package.research_snapshot.status is ResearchStatus.DRAFT
 
 
-def test_readiness_requires_explicit_deepen_and_exact_quick_state() -> None:
+def test_kernel_acceptance_requires_explicit_deepen_and_exact_quick_state() -> None:
     package = _package()
     waiting = package.quick_research.model_copy(
         update={"route": QuickResearchRoute.WAIT_FOR_TRIGGER}
@@ -384,15 +397,14 @@ def test_readiness_requires_explicit_deepen_and_exact_quick_state() -> None:
         update={"quick_research_hash": canonical_hash(waiting)}
     )
     changed = _rehash(package, quick_research=waiting, deep_research=deep)
-
-    assert "QUICK_NOT_DEEPENED" in _codes(changed)
+    assert "QUICK_NOT_DEEPENED" in _acceptance_codes(changed)
 
     wrong_hash = package.deep_research.model_copy(update={"quick_research_hash": "f" * 64})
     changed_hash = _rehash(package, deep_research=wrong_hash)
-    assert "DEEP_QUICK_HASH_MISMATCH" in _codes(changed_hash)
+    assert "DEEP_QUICK_HASH_MISMATCH" in _acceptance_codes(changed_hash)
 
 
-def test_adversarial_block_prevents_commit() -> None:
+def test_adversarial_block_is_method_policy_not_kernel_constitution() -> None:
     package = _package()
     blocked = package.deep_research.model_copy(
         update={
@@ -408,12 +420,12 @@ def test_adversarial_block_prevents_commit() -> None:
     )
     changed = _rehash(package, deep_research=blocked)
 
-    assert "ADVERSARIAL_BLOCK_UNRESOLVED" in _codes(changed)
-    with pytest.raises(DomainValidationError, match="not decision-ready"):
-        commit_deep_research_package(changed)
+    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert "ADVERSARIAL_BLOCK_UNRESOLVED" in _contract_codes(changed)
+    assert commit_deep_research_package(changed).research_snapshot.status is ResearchStatus.COMMITTED
 
 
-def test_future_and_unreferenced_evidence_are_rejected_even_if_hash_is_recomputed() -> None:
+def test_future_and_unreferenced_evidence_remain_kernel_violations() -> None:
     package = _package()
     future = package.evidence_artifacts[1].model_copy(
         update={
@@ -426,7 +438,7 @@ def test_future_and_unreferenced_evidence_are_rejected_even_if_hash_is_recompute
         package,
         evidence_artifacts=(package.evidence_artifacts[0], future),
     )
-    assert "EVIDENCE_AFTER_PIT" in _codes(changed)
+    assert "EVIDENCE_AFTER_PIT" in _acceptance_codes(changed)
 
     extra = _evidence(
         UUID("50000000-0000-0000-0000-000000000099"),
@@ -437,10 +449,10 @@ def test_future_and_unreferenced_evidence_are_rejected_even_if_hash_is_recompute
         package,
         evidence_artifacts=(*package.evidence_artifacts, extra),
     )
-    assert "EVIDENCE_NOT_REFERENCED" in _codes(changed_extra)
+    assert "EVIDENCE_NOT_REFERENCED" in _acceptance_codes(changed_extra)
 
 
-def test_contradiction_and_market_context_must_survive_in_snapshot_lineage() -> None:
+def test_contradiction_and_market_context_lineage_remain_kernel_invariants() -> None:
     package = _package()
     without_opposes = package.research_snapshot.model_copy(
         update={
@@ -452,7 +464,7 @@ def test_contradiction_and_market_context_must_survive_in_snapshot_lineage() -> 
         }
     )
     changed = _rehash(package, research_snapshot=without_opposes)
-    assert "CONTRADICTORY_EVIDENCE_MISSING" in _codes(changed)
+    assert "CONTRADICTORY_EVIDENCE_MISSING" in _acceptance_codes(changed)
 
     without_context = package.research_snapshot.model_copy(
         update={
@@ -464,16 +476,46 @@ def test_contradiction_and_market_context_must_survive_in_snapshot_lineage() -> 
         }
     )
     changed_context = _rehash(package, research_snapshot=without_context)
-    assert "MARKET_CONTEXT_RELATIONSHIP_MISSING" in _codes(changed_context)
+    assert "MARKET_CONTEXT_RELATIONSHIP_MISSING" in _acceptance_codes(changed_context)
 
 
-def test_snapshot_must_preserve_falsifiers_research_structure_and_scenario_drivers() -> None:
+def test_liquidity_clock_is_contract_v1_policy_not_kernel_invariant() -> None:
+    package = _package()
+    snapshot = package.research_snapshot.model_copy(update={"liquidity_clock_assessment": {}})
+    changed = _rehash(package, research_snapshot=snapshot)
+
+    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert "METHOD_STRUCTURE_MISSING" in _contract_codes(changed)
+
+
+def test_one_complete_scenario_is_odds_valid_but_not_contract_v1_conforming() -> None:
+    package = _package()
+    one = package.research_snapshot.scenarios[0].model_copy(update={"probability": "1"})
+    snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
+    changed = _rehash(package, research_snapshot=snapshot)
+
+    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    assert "SCENARIO_SET_NOT_SMALL" in _contract_codes(changed)
+
+
+def test_scenario_probability_completeness_remains_kernel_invariant() -> None:
+    package = _package()
+    one = package.research_snapshot.scenarios[0].model_copy(update={"probability": "0.6"})
+    snapshot = package.research_snapshot.model_copy(update={"scenarios": (one,)})
+    changed = _rehash(package, research_snapshot=snapshot)
+
+    assert "SCENARIO_DISTRIBUTION_INCOMPLETE" in _acceptance_codes(changed)
+    with pytest.raises(DomainValidationError, match="kernel acceptance"):
+        commit_deep_research_package(changed)
+
+
+def test_monitoring_count_and_scenario_driver_richness_are_contract_policy() -> None:
     package = _package()
     damaged = package.research_snapshot.model_copy(
         update={
             "monitoring_plan": {
                 "indicators": ["only one"],
-                "falsifiers": ["different falsifier"],
+                "falsifiers": list(package.deep_research.explicit_falsifiers),
             },
             "market_expectation_map": {},
             "scenarios": (
@@ -485,12 +527,22 @@ def test_snapshot_must_preserve_falsifiers_research_structure_and_scenario_drive
         }
     )
     changed = _rehash(package, research_snapshot=damaged)
-    codes = _codes(changed)
 
+    assert assess_deep_research_acceptance(changed).status is ResearchAcceptanceStatus.ACCEPTED
+    codes = _contract_codes(changed)
     assert "MONITORING_INDICATORS_INVALID" in codes
-    assert "FALSIFIERS_NOT_FROZEN" in codes
-    assert "REQUIRED_RESEARCH_STRUCTURE_MISSING" in codes
+    assert "METHOD_STRUCTURE_MISSING" in codes
     assert "SCENARIO_DRIVER_STRUCTURE_MISSING" in codes
+
+
+def test_falsifier_projection_is_human_accountability_invariant() -> None:
+    package = _package()
+    snapshot = package.research_snapshot.model_copy(
+        update={"thesis_invalidation": ("different invalidation",)}
+    )
+    changed = _rehash(package, research_snapshot=snapshot)
+
+    assert "FALSIFIER_LINEAGE_MISMATCH" in _acceptance_codes(changed)
 
 
 def test_information_bundle_hash_detects_silent_research_body_change() -> None:
@@ -503,4 +555,4 @@ def test_information_bundle_hash_detects_silent_research_body_change() -> None:
         }
     )
 
-    assert "INFORMATION_BUNDLE_HASH_MISMATCH" in _codes(tampered)
+    assert "INFORMATION_BUNDLE_HASH_MISMATCH" in _acceptance_codes(tampered)
