@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from enum import StrEnum
+from typing import Any
+from uuid import UUID
 
 from pydantic import Field, model_validator
 
@@ -11,6 +14,52 @@ from .deep_research import (
 )
 from .primitives import KernelModel
 from .research_funnel import ResearchClaimKind
+
+
+class ResearchContractV1ScenarioDetail(KernelModel):
+    """Method-specific scenario explanation keyed to one kernel Scenario."""
+
+    scenario_id: UUID
+    description: str = Field(min_length=1)
+    assumptions: dict[str, Any] = Field(default_factory=dict)
+    financial_driver_values: dict[str, Any] = Field(default_factory=dict)
+    normalized_earnings: Decimal | None = None
+    notes: str | None = None
+
+
+class ResearchContractV1Payload(KernelModel):
+    """Decision OS research method payload kept outside ResearchSnapshot constitution."""
+
+    research_snapshot_id: UUID
+    contract_version: str = Field(min_length=1, max_length=64)
+    doctrine_version_reference: str = Field(min_length=1, max_length=128)
+    research_mode: str = Field(default="FULL", min_length=1, max_length=64)
+    sector: str | None = Field(default=None, max_length=128)
+    industry: str | None = Field(default=None, max_length=128)
+    variant_perception: str | None = None
+    market_expectation_map: dict[str, Any] = Field(default_factory=dict)
+    normalized_earnings_notes: str | None = None
+    valuation_framework: str | None = None
+    fundamental_clock_assessment: dict[str, Any] = Field(default_factory=dict)
+    expectation_clock_assessment: dict[str, Any] = Field(default_factory=dict)
+    liquidity_clock_assessment: dict[str, Any] = Field(default_factory=dict)
+    monitoring_indicators: tuple[str, ...] = ()
+    monitoring_falsifiers: tuple[str, ...] = ()
+    valuation_stress_spec: dict[str, Any] = Field(default_factory=dict)
+    scenario_details: tuple[ResearchContractV1ScenarioDetail, ...] = ()
+    schema_version: int = Field(default=1, ge=1)
+
+    @model_validator(mode="after")
+    def validate_method_payload(self) -> "ResearchContractV1Payload":
+        if any(not item.strip() for item in self.monitoring_indicators):
+            raise ValueError("monitoring indicators cannot be blank")
+        if any(not item.strip() for item in self.monitoring_falsifiers):
+            raise ValueError("monitoring falsifiers cannot be blank")
+        if len({item.scenario_id for item in self.scenario_details}) != len(
+            self.scenario_details
+        ):
+            raise ValueError("Research Contract v1 scenario details must be unique")
+        return self
 
 
 class ResearchContractV1Status(StrEnum):
@@ -42,6 +91,7 @@ class ResearchContractV1Assessment(KernelModel):
 
 def assess_research_contract_v1(
     package: DeepResearchPackage,
+    payload: ResearchContractV1Payload,
 ) -> ResearchContractV1Assessment:
     """Assess the preserved Decision OS research method without making it kernel law."""
 
@@ -49,11 +99,18 @@ def assess_research_contract_v1(
     deep = package.deep_research
     snapshot = package.research_snapshot
 
-    if snapshot.research_contract_version != DEEP_RESEARCH_CONTRACT_VERSION:
+    if payload.research_snapshot_id != snapshot.id:
+        _issue(
+            issues,
+            "SNAPSHOT_ID_MISMATCH",
+            "payload.research_snapshot_id",
+            "Research Contract v1 payload must bind to the exact kernel ResearchSnapshot",
+        )
+    if payload.contract_version != DEEP_RESEARCH_CONTRACT_VERSION:
         _issue(
             issues,
             "CONTRACT_VERSION_UNSUPPORTED",
-            "research_snapshot.research_contract_version",
+            "payload.contract_version",
             "Research Contract v1 requires research-odds-rehearsal-v1",
         )
 
@@ -71,32 +128,32 @@ def assess_research_contract_v1(
         )
 
     required_text = {
-        "variant_perception": snapshot.variant_perception,
-        "normalized_earnings_notes": snapshot.normalized_earnings_notes,
-        "valuation_framework": snapshot.valuation_framework,
+        "variant_perception": payload.variant_perception,
+        "normalized_earnings_notes": payload.normalized_earnings_notes,
+        "valuation_framework": payload.valuation_framework,
     }
     for field, value in required_text.items():
         if value is None or not value.strip():
             _issue(
                 issues,
                 "METHOD_FIELD_MISSING",
-                f"research_snapshot.{field}",
+                f"payload.{field}",
                 f"Research Contract v1 requires {field}",
             )
 
     required_structures = {
-        "market_expectation_map": snapshot.market_expectation_map,
-        "fundamental_clock_assessment": snapshot.fundamental_clock_assessment,
-        "expectation_clock_assessment": snapshot.expectation_clock_assessment,
-        "liquidity_clock_assessment": snapshot.liquidity_clock_assessment,
-        "valuation_stress_spec": snapshot.valuation_stress_spec,
+        "market_expectation_map": payload.market_expectation_map,
+        "fundamental_clock_assessment": payload.fundamental_clock_assessment,
+        "expectation_clock_assessment": payload.expectation_clock_assessment,
+        "liquidity_clock_assessment": payload.liquidity_clock_assessment,
+        "valuation_stress_spec": payload.valuation_stress_spec,
     }
     for field, value in required_structures.items():
         if not value:
             _issue(
                 issues,
                 "METHOD_STRUCTURE_MISSING",
-                f"research_snapshot.{field}",
+                f"payload.{field}",
                 f"Research Contract v1 requires {field}",
             )
 
@@ -108,16 +165,15 @@ def assess_research_contract_v1(
             "Research Contract v1 requires unresolved questions to remain explicit",
         )
 
-    indicators = snapshot.monitoring_plan.get("indicators")
-    falsifiers = snapshot.monitoring_plan.get("falsifiers")
-    if not isinstance(indicators, (list, tuple)) or not 3 <= len(indicators) <= 5:
+    indicators = payload.monitoring_indicators
+    if not 3 <= len(indicators) <= 5:
         _issue(
             issues,
             "MONITORING_INDICATORS_INVALID",
-            "research_snapshot.monitoring_plan.indicators",
+            "payload.monitoring_indicators",
             "Research Contract v1 requires three to five monitoring indicators",
         )
-    elif tuple(indicators) != snapshot.monitoring_triggers:
+    elif indicators != snapshot.monitoring_triggers:
         _issue(
             issues,
             "MONITORING_PROJECTION_MISMATCH",
@@ -132,12 +188,12 @@ def assess_research_contract_v1(
             "deep_research.explicit_falsifiers",
             "Research Contract v1 requires explicit falsifiers",
         )
-    if tuple(falsifiers or ()) != deep.explicit_falsifiers:
+    if payload.monitoring_falsifiers != deep.explicit_falsifiers:
         _issue(
             issues,
             "FALSIFIERS_NOT_FROZEN",
-            "research_snapshot.monitoring_plan.falsifiers",
-            "Research Contract v1 monitoring plan must freeze Deep Research falsifiers",
+            "payload.monitoring_falsifiers",
+            "Research Contract v1 payload must freeze Deep Research falsifiers",
         )
     if tuple(snapshot.thesis_invalidation) != tuple(deep.explicit_falsifiers):
         _issue(
@@ -172,12 +228,25 @@ def assess_research_contract_v1(
             "research_snapshot.scenarios",
             "Research Contract v1 uses a small two-to-five-scenario distribution",
         )
+
+    kernel_scenario_ids = {scenario.id for scenario in snapshot.scenarios}
+    detail_by_id = {detail.scenario_id: detail for detail in payload.scenario_details}
+    if set(detail_by_id) != kernel_scenario_ids:
+        _issue(
+            issues,
+            "SCENARIO_DETAIL_COVERAGE_MISMATCH",
+            "payload.scenario_details",
+            "Research Contract v1 must explain every exact kernel Scenario once",
+        )
     for scenario in snapshot.scenarios:
-        if not scenario.assumptions or not scenario.financial_driver_values:
+        detail = detail_by_id.get(scenario.id)
+        if detail is None:
+            continue
+        if not detail.assumptions or not detail.financial_driver_values:
             _issue(
                 issues,
                 "SCENARIO_DRIVER_STRUCTURE_MISSING",
-                f"research_snapshot.scenarios.{scenario.name}",
+                f"payload.scenario_details.{scenario.name}",
                 "Research Contract v1 requires explicit assumptions and financial drivers",
             )
 
