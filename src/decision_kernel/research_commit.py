@@ -34,6 +34,12 @@ class ResearchCommitResult(KernelModel):
         return self
 
 
+def _ordered_evidence(
+    evidence_artifacts: tuple[EvidenceArtifact, ...],
+) -> tuple[EvidenceArtifact, ...]:
+    return tuple(sorted(evidence_artifacts, key=lambda item: str(item.id)))
+
+
 def research_commit_information_bundle_hash(
     *,
     research_snapshot: ResearchSnapshot,
@@ -49,15 +55,15 @@ def research_commit_information_bundle_hash(
         {
             "schema_version": 1,
             "research_snapshot": snapshot_payload,
-            "evidence_artifacts": tuple(
-                sorted(evidence_artifacts, key=lambda item: str(item.id))
-            ),
+            "evidence_artifacts": _ordered_evidence(evidence_artifacts),
         }
     )
 
 
 def research_commit_package_hash(package: ResearchCommitPackage) -> str:
-    return canonical_hash(package)
+    payload = package.model_dump(mode="python", exclude={"evidence_artifacts"})
+    payload["evidence_artifacts"] = _ordered_evidence(package.evidence_artifacts)
+    return canonical_hash(payload)
 
 
 def referenced_research_evidence_ids(snapshot: ResearchSnapshot) -> set:
@@ -113,7 +119,10 @@ def validate_research_commit_package(package: ResearchCommitPackage) -> None:
         if not artifact.is_available_at(snapshot.as_of_datetime)
     )
     if future:
-        ids = ", ".join(str(item.id) for item in sorted(future, key=lambda item: str(item.id)))
+        ids = ", ".join(
+            str(item.id)
+            for item in sorted(future, key=lambda item: str(item.id))
+        )
         raise DomainValidationError(
             f"ResearchCommitPackage contains evidence unavailable at the PIT cutoff: {ids}"
         )
