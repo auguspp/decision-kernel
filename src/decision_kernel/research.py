@@ -163,18 +163,38 @@ class ResearchSnapshot(KernelModel):
             raise ValueError("EvidenceArtifactLink must belong to its ResearchSnapshot")
         return self
 
-    def assert_commit_ready(self) -> None:
-        if self.status is not ResearchStatus.REVIEW:
-            raise DomainValidationError("only REVIEW snapshots can be committed")
+    def assert_decision_spine_ready(self) -> None:
+        """Require only method-agnostic state consumed by Odds or Human accountability."""
+
+        if not self.core_thesis.strip():
+            raise DomainValidationError("Decision Spine requires core_thesis")
+        if (
+            self.market_expectations_narrative is None
+            or not self.market_expectations_narrative.strip()
+        ):
+            raise DomainValidationError(
+                "Decision Spine requires market_expectations_narrative"
+            )
+        if self.model_risk_notes is None or not self.model_risk_notes.strip():
+            raise DomainValidationError("Decision Spine requires model_risk_notes")
+        if not self.thesis_invalidation:
+            raise DomainValidationError("Human accountability requires thesis_invalidation")
         if not self.scenarios:
-            raise DomainValidationError("commit requires at least one Scenario")
+            raise DomainValidationError("Decision Spine requires at least one Scenario")
         probability_sum = sum(
             (scenario.probability for scenario in self.scenarios), Decimal("0")
         )
         if abs(probability_sum - Decimal("1")) > PROBABILITY_TOLERANCE:
             raise DomainValidationError("scenario probabilities must sum to one")
         if not self.information_bundle_hash:
-            raise DomainValidationError("commit requires information_bundle_hash")
+            raise DomainValidationError(
+                "Decision Spine requires information_bundle_hash"
+            )
+
+    def assert_commit_ready(self) -> None:
+        if self.status is not ResearchStatus.REVIEW:
+            raise DomainValidationError("only REVIEW snapshots can be committed")
+        self.assert_decision_spine_ready()
 
 
 def submit_for_review(snapshot: ResearchSnapshot) -> ResearchSnapshot:
