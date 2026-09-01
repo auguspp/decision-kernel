@@ -1,36 +1,31 @@
 from __future__ import annotations
 
-import json
 import re
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time
 from decimal import Decimal, InvalidOperation
 from typing import Any
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 from ..market import ObservedMarket
 
 
-HITHINK_API_KEY_ENV = "HITHINK_FINANCE_API_KEY"
-HITHINK_BASE_URL = "https://fuyao.aicubes.cn"
 HITHINK_MARKET_SOURCE = "HiThink Financial-API raw daily close"
-HITHINK_PRICE_CONVENTION = "RAW_UNADJUSTED_LATEST_COMPLETED_A_SHARE_CLOSE"
+HITHINK_PRICE_CONVENTION = "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE"
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 A_SHARE_CLOSE = time(15, 0)
 _A_SHARE_TICKER = re.compile(r"^\d{6}\.(?:SH|SZ|BJ)$")
-_RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
 class HithinkAdapterError(ValueError):
-    """HiThink data cannot satisfy the qualified completed-session contract."""
+    """HiThink payload data cannot satisfy the qualified completed-session contract."""
 
 
 @dataclass(frozen=True)
 class HithinkCompletedSessionPrice:
+    """Provider-specific raw close plus the completed-session clock it actually represents."""
+
     thscode: str
     close: Decimal
     as_of: datetime
@@ -42,6 +37,8 @@ def require_hithink_data(
     *,
     endpoint: str,
 ) -> Mapping[str, Any]:
+    """Require provider business success; HTTP success alone is not sufficient."""
+
     code = envelope.get("code")
     if code != 0:
         request_id = envelope.get("request_id")
@@ -57,6 +54,8 @@ def require_hithink_data(
 def normalize_hithink_calendar(
     envelope: Mapping[str, Any],
 ) -> tuple[date, ...]:
+    """Normalize the A-share trading calendar without inferring missing sessions."""
+
     data = require_hithink_data(
         envelope,
         endpoint="/api/a-share/calendar/trading-days",
@@ -72,12 +71,11 @@ def normalize_hithink_calendar(
                 "A-share trading calendar contains a malformed row"
             )
         try:
-            session = datetime.strptime(item["date"], "%Y%m%d").date()
+            sessions.append(datetime.strptime(item["date"], "%Y%m%d").date())
         except ValueError as exc:
             raise HithinkAdapterError(
                 "A-share trading calendar has an invalid date"
             ) from exc
-        sessions.append(session)
 
     if sessions != sorted(set(sessions)):
         raise HithinkAdapterError(
@@ -91,6 +89,8 @@ def latest_completed_a_share_session(
     *,
     observed_at: datetime,
 ) -> date:
+    """Return the latest exchange session completed by the observation clock."""
+
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
         raise HithinkAdapterError("observed_at must be timezone-aware")
 
@@ -162,7 +162,7 @@ def observed_market_from_hithink_response(
     sessions: Sequence[date],
     observed_at: datetime,
 ) -> ObservedMarket:
-    """Map the exact latest completed raw A-share close into the kernel market contract."""
+    """Translate a qualified raw HiThink close into the kernel market contract."""
 
     price = normalize_hithink_latest_completed_price(
         envelope,
@@ -170,109 +170,14 @@ def observed_market_from_hithink_response(
         sessions=sessions,
         observed_at=observed_at,
     )
-    if price.as_of.date() != price.expected_latest_session:
-        raise HithinkAdapterError(
-            "Odds ObservedMarket is not the latest completed A-share session"
-        )
-
     return ObservedMarket(
         market_price=price.close,
         market_timestamp=price.as_of,
         market_utc_offset_minutes=480,
-        market_data_source=(
-            f"{HITHINK_MARKET_SOURCE} | {price.thscode} | "
-            f"session={price.expected_latest_session.isoformat()}"
-        ),
+        market_data_source=f"{HITHINK_MARKET_SOURCE} | {price.thscode}",
         price_convention=HITHINK_PRICE_CONVENTION,
         currency="CNY",
     )
-
-
-def fetch_hithink_observed_market(
-    *,
-    thscode: str,
-    observed_at: datetime,
-    api_key: str | None,
-    request_json: _RequestJSON | None = None,
-    timeout_seconds: float = 10.0,
-) -> ObservedMarket:
-    """Fetch only the calendar and raw daily history needed for one Odds price input."""
-
-    if observed_at.tzinfo is None or observed_at.utcoffset() is None:
-        raise HithinkAdapterError("observed_at must be timezone-aware")
-    normalized_thscode = _normalize_thscode(thscode)
-    if not api_key:
-        raise HithinkAdapterError(
-            "HiThink credentials are required for ObservedMarket"
-        )
-
-    if request_json is None:
-        request_json = lambda path, params: _request_hithink_json(
-            api_key=api_key,
-            path=path,
-            params=params,
-            timeout_seconds=timeout_seconds,
-        )
-
-    calendar = normalize_hithink_calendar(
-        request_json("/api/a-share/calendar/trading-days", {})
-    )
-    expected_latest = latest_completed_a_share_session(
-        calendar,
-        observed_at=observed_at,
-    )
-    end_at = datetime.combine(
-        expected_latest + timedelta(days=1),
-        datetime.min.time(),
-        tzinfo=SHANGHAI_TZ,
-    )
-    start_at = end_at - timedelta(days=45)
-    envelope = request_json(
-        "/api/a-share/prices/historical",
-        {
-            "thscode": normalized_thscode,
-            "interval": "1d",
-            "start": str(int(start_at.timestamp() * 1000)),
-            "end": str(int(end_at.timestamp() * 1000)),
-            "adjust": "none",
-        },
-    )
-    return observed_market_from_hithink_response(
-        envelope,
-        thscode=normalized_thscode,
-        sessions=calendar,
-        observed_at=observed_at,
-    )
-
-
-def _request_hithink_json(
-    *,
-    api_key: str,
-    path: str,
-    params: Mapping[str, str],
-    timeout_seconds: float,
-) -> Mapping[str, Any]:
-    query = urlencode(params)
-    url = f"{HITHINK_BASE_URL}{path}{'?' if query else ''}{query}"
-    request = Request(
-        url,
-        headers={"Accept": "application/json", "X-api-key": api_key},
-        method="GET",
-    )
-    try:
-        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-            payload = json.loads(response.read().decode("utf-8"))
-    except HTTPError as exc:
-        raise HithinkAdapterError(
-            f"HiThink HTTP request failed with status {exc.code}"
-        ) from exc
-    except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
-        raise HithinkAdapterError(
-            "HiThink request or response decoding failed"
-        ) from exc
-    if not isinstance(payload, Mapping):
-        raise HithinkAdapterError("HiThink response is not a JSON object")
-    return payload
 
 
 def _normalize_thscode(thscode: str) -> str:
@@ -303,7 +208,7 @@ def _normalize_raw_history_bars(
         raise HithinkAdapterError("A-share history is not daily")
     if data.get("adjust") != "none":
         raise HithinkAdapterError(
-            "A-share history adjustment disagrees with the raw-close request"
+            "A-share history adjustment disagrees with the raw-close contract"
         )
 
     items = data.get("item")
