@@ -174,35 +174,27 @@ def referenced_evidence_ids(
     )
 
 
-def validate_funnel_transition(
+def validate_pre_research_transition(
     discovery: DiscoveryInput,
     pre_research: PreResearchResult,
-    quick_research: QuickResearchResult,
     evidence_artifacts: tuple[EvidenceArtifact, ...],
 ) -> None:
-    """Fail closed unless Quick Research continues the exact PIT-frozen Pre state."""
+    """Bind every Pre-Research route to the exact Discovery PIT and evidence set."""
 
-    if pre_research.route is not PreResearchRoute.CONTINUE_TO_QUICK:
-        raise DomainValidationError(
-            "Quick Research requires a CONTINUE_TO_QUICK Pre-Research route"
-        )
-    if pre_research.discovery_id != discovery.discovery_id:
-        raise DomainValidationError("Pre-Research must reference its Discovery Input")
-    if quick_research.discovery_id != discovery.discovery_id:
-        raise DomainValidationError("Quick Research must reference its Discovery Input")
-    if pre_research.as_of != discovery.as_of or quick_research.as_of != discovery.as_of:
-        raise DomainValidationError("Research funnel stages must share the Discovery PIT cutoff")
-    if quick_research.pre_research_hash != canonical_hash(pre_research):
-        raise DomainValidationError("Quick Research must reference the exact Pre-Research state")
+    if pre_research.discovery_id != discovery.discovery_id or pre_research.as_of != discovery.as_of:
+        raise DomainValidationError("Pre-Research changed Discovery identity or PIT cutoff")
 
     artifacts_by_id = {artifact.id: artifact for artifact in evidence_artifacts}
     if len(artifacts_by_id) != len(evidence_artifacts):
         raise DomainValidationError("Research funnel evidence ids must be unique")
-    discovery_ids = {
-        source.evidence_artifact_id for source in discovery.source_lineage
+
+    discovery_ids = {source.evidence_artifact_id for source in discovery.source_lineage}
+    pre_ids = {
+        artifact_id
+        for claim in pre_research.material_claims
+        for artifact_id in claim.evidence_artifact_ids
     }
-    referenced_ids = referenced_evidence_ids(pre_research, quick_research)
-    missing_ids = (discovery_ids | referenced_ids) - artifacts_by_id.keys()
+    missing_ids = (discovery_ids | pre_ids) - artifacts_by_id.keys()
     if missing_ids:
         missing = ", ".join(sorted(str(item) for item in missing_ids))
         raise DomainValidationError(f"Research funnel references missing evidence: {missing}")
@@ -220,7 +212,49 @@ def validate_funnel_transition(
     future_ids = sorted(
         (
             artifact_id
-            for artifact_id in discovery_ids | referenced_ids
+            for artifact_id in discovery_ids | pre_ids
+            if artifacts_by_id[artifact_id].available_at > discovery.as_of
+        ),
+        key=str,
+    )
+    if future_ids:
+        raise DomainValidationError(
+            "Research funnel evidence was not available at the Discovery PIT cutoff: "
+            + ", ".join(str(item) for item in future_ids)
+        )
+
+
+def validate_funnel_transition(
+    discovery: DiscoveryInput,
+    pre_research: PreResearchResult,
+    quick_research: QuickResearchResult,
+    evidence_artifacts: tuple[EvidenceArtifact, ...],
+) -> None:
+    """Fail closed unless Quick Research continues the exact PIT-frozen Pre state."""
+
+    validate_pre_research_transition(discovery, pre_research, evidence_artifacts)
+    if pre_research.route is not PreResearchRoute.CONTINUE_TO_QUICK:
+        raise DomainValidationError(
+            "Quick Research requires a CONTINUE_TO_QUICK Pre-Research route"
+        )
+    if quick_research.discovery_id != discovery.discovery_id:
+        raise DomainValidationError("Quick Research must reference its Discovery Input")
+    if quick_research.as_of != discovery.as_of:
+        raise DomainValidationError("Research funnel stages must share the Discovery PIT cutoff")
+    if quick_research.pre_research_hash != canonical_hash(pre_research):
+        raise DomainValidationError("Quick Research must reference the exact Pre-Research state")
+
+    artifacts_by_id = {artifact.id: artifact for artifact in evidence_artifacts}
+    referenced_ids = referenced_evidence_ids(pre_research, quick_research)
+    missing_ids = referenced_ids - artifacts_by_id.keys()
+    if missing_ids:
+        missing = ", ".join(sorted(str(item) for item in missing_ids))
+        raise DomainValidationError(f"Research funnel references missing evidence: {missing}")
+
+    future_ids = sorted(
+        (
+            artifact_id
+            for artifact_id in referenced_ids
             if artifacts_by_id[artifact_id].available_at > discovery.as_of
         ),
         key=str,
