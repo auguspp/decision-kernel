@@ -7,7 +7,7 @@ It is **not** Decision OS v2 and it is **not** a new platform build.
 ## Operating principles
 
 1. **Own only investment cognition invariants.** PIT, exact lineage, frozen state identity, deterministic Odds inputs, Human accountability, authority boundaries, and Human-surface eligibility belong here when changing them would break the decision system itself.
-2. **Research method is versioned policy, not constitution.** A useful research recipe can be strict without becoming a permanent Kernel invariant. `research_contract_v1.py` preserves the current Decision OS method separately from kernel acceptance.
+2. **Research method is versioned policy, not constitution.** A useful research recipe can be strict without becoming a permanent Kernel invariant. `research_contract_v1.py` preserves the current Decision OS method separately from Kernel commit authority.
 3. **Reuse commodity infrastructure.** Market-data transport, news aggregation, HTTP, retries, scheduling, process supervision, logging, storage plumbing, and UI stay outside the core and should use mature tools/services with thin boundaries.
 4. **Modular monolith, thin workflow.** Modules stay independently understandable; a small application workflow connects them. No plugin platform, event bus, provider framework, or orchestration framework by default.
 5. **Quiet stop is a product outcome.** A workflow may deepen, wait, drop, stop quietly, or wake the Human. It does not need to run every stage.
@@ -32,6 +32,7 @@ Examples:
 - a Scenario distribution used by Odds must be complete and probabilities must sum to one
 - Odds must use the exact committed ResearchSnapshot and exact market observation
 - belief / market expectation / invalidation required by the Human decision surface remain explicit
+- a ResearchSnapshot cannot be committed before its PIT cutoff or creation time
 - investment authority remains `NONE`
 
 **Decision OS Research Contract v1 policy**
@@ -63,10 +64,15 @@ Research Method v1 (replaceable policy)
        v
     Deep Research
        |
+       +--> Research Method v1 acceptance
        +--> Research Contract v1 / future quality contracts
        |
        v
-    frozen ResearchSnapshot
+    ResearchSnapshot
+       |
+       |  Kernel commit authority
+       v
+    COMMITTED ResearchSnapshot
        |
        |  method boundary
        v
@@ -87,6 +93,8 @@ Decision Spine (method-agnostic)
 ```
 
 `research_workflow_v1.py` owns the current Discovery / Pre / Quick / Deep orchestration. `workflow.py` must not know those method stages; it composes only `ResearchSnapshot -> Odds -> Decision Rehearsal -> HumanResearchSurface`.
+
+Research Method v1 acceptance validates only the current method's funnel, exact projection, evidence mapping, and package identity. It does not decide whether a `ResearchSnapshot` is commit-ready. That authority stays in `ResearchSnapshot` / `commit_snapshot()`.
 
 A future Research Method v2 should be able to produce the same frozen `ResearchSnapshot` and enter the same Decision Spine without changing `workflow.py`.
 
