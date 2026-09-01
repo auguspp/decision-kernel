@@ -59,7 +59,7 @@ These research-quality rules can remain strict without gaining Kernel commit aut
 
 ## Research method vs Decision Spine
 
-The current Decision OS research recipe is a replaceable upstream method. The Decision Spine starts only from a frozen `ResearchSnapshot`.
+The current Decision OS research recipe is one replaceable upstream method. Kernel commit authority also accepts a method-agnostic `ResearchCommitPackage` containing a REVIEW `ResearchSnapshot`, its exact `EvidenceArtifact`s, non-authoritative rehearsal framing, and a proposed commit time.
 
 ```text
 Research Method v1 (replaceable policy)
@@ -82,12 +82,21 @@ Research Method v1 (replaceable policy)
        v
     ResearchSnapshot
        |
-       |  Kernel commit authority
-       v
-    COMMITTED ResearchSnapshot
-       |
-       |  method boundary
-       v
+       +-----------------------------+
+                                     |
+Future / external research method    |
+    REVIEW ResearchSnapshot          |
+    + exact EvidenceArtifacts        |
+    + non-authoritative framing      |
+             |                       |
+             v                       v
+          ResearchCommitPackage / v1 package
+                         |
+                         |  Kernel commit authority
+                         v
+              COMMITTED ResearchSnapshot
+                         |
+                         v
 Decision Spine (method-agnostic)
     ResearchSnapshot + ObservedMarket
        |
@@ -108,25 +117,47 @@ Decision Spine (method-agnostic)
 
 Research Method v1 acceptance validates only the current method's funnel, exact projection, evidence mapping, and package identity. Research Contract v1 and Claim Audit Contract v1 assess method quality. None of them decides whether a `ResearchSnapshot` is commit-ready. That authority stays in `ResearchSnapshot` / `commit_snapshot()`.
 
-A future Research Method v2 should be able to produce the same frozen `ResearchSnapshot` and enter the same Decision Spine without changing `workflow.py`.
+`research_commit.py` is the method-agnostic handoff. It requires the package Evidence set to match every Evidence/provenance reference in the ResearchSnapshot exactly, rejects Evidence unavailable at the snapshot PIT cutoff, and freezes the exact Kernel-visible research state into `information_bundle_hash` before commit.
 
-## Minimal live command
+A future Research Method v2 can therefore produce a valid `ResearchCommitPackage` and enter the same Decision Spine without changing `workflow.py` or pretending to be Research Method v1.
 
-The first executable seam intentionally starts from an already-produced `DeepResearchPackage` JSON. It does not yet execute upstream Deep Research itself.
+## Minimal live commands
+
+Install once and provide the already-verified HiThink market-data credential:
 
 ```powershell
 python -m pip install -e .
 $env:HITHINK_FINANCE_API_KEY = "<your key>"
+```
+
+Run the preserved Decision OS Research Method v1 package:
+
+```powershell
 decision-kernel run .\path\to\deep-research-package.json
 ```
 
-The command fetches only the HiThink trading calendar and raw daily history needed for the security, requires the raw history to reach the latest completed A-share session, applies the preserved `decision-os-live-odds-v0.1` policy, and prints a compact Human-facing result.
+Or run any method-agnostic reviewed research handoff:
+
+```powershell
+decision-kernel run-research .\path\to\research-commit-package.json
+```
+
+Both commands fetch only the HiThink trading calendar and raw daily history needed for the security, require the raw history to reach the latest completed A-share session, apply the preserved `decision-os-live-odds-v0.1` policy, and print the same compact Human-facing result.
 
 A normal quiet result is valid. `INSUFFICIENT_ODDS` does not wake the Human. Only `HumanResearchSurface.status + attention_eligible` controls Human attention. Investment authority remains `NONE`.
 
 ## Boundaries
 
 ```text
+research method / external research
+             |
+             v
+ResearchCommitPackage
+    PIT + exact Evidence + identity
+             |
+             v
+COMMITTED ResearchSnapshot
+             |
 runtime/hithink_http.py
     HTTP + API key + request construction
              |
