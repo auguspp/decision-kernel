@@ -28,3 +28,42 @@ def test_research_method_v1_depends_on_decision_spine_not_reverse() -> None:
     imports = _relative_imports(method_workflow)
 
     assert "workflow" in imports
+
+
+def test_research_commit_stays_method_agnostic_and_runtime_free() -> None:
+    research_commit = Path("src/decision_kernel/research_commit.py")
+    imports = _relative_imports(research_commit)
+
+    # `rehearsal` is currently allowed only because framing is a one-file CLI
+    # convenience. Research identity and commit authority must not depend on
+    # executable composition, providers, market data, or default policy.
+    allowed = {
+        "evidence",
+        "identity",
+        "primitives",
+        "rehearsal",
+        "research",
+    }
+    assert imports <= allowed
+
+
+def test_live_remains_an_explicit_composition_root() -> None:
+    live = Path("src/decision_kernel/live.py")
+    imports = _relative_imports(live)
+
+    # Adding a new local dependency here should be an explicit architecture
+    # decision. `live.py` may wire existing capabilities; it must not quietly
+    # grow scheduler, persistence, retry/fallback, Radar, or notification logic.
+    allowed = {
+        "adapters.hithink",
+        "authority",
+        "deep_research",
+        "market",
+        "policy",
+        "primitives",
+        "rehearsal",
+        "research_commit",
+        "research_workflow_v1",
+        "workflow",
+    }
+    assert imports <= allowed
