@@ -22,6 +22,8 @@ HITHINK_PRICE_CONVENTION = "RAW_UNADJUSTED_LATEST_COMPLETED_A_SHARE_CLOSE"
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 A_SHARE_CLOSE = time(15, 0)
 _A_SHARE_TICKER = re.compile(r"^\d{6}\.(?:SH|SZ|BJ)$")
+_PLAIN_A_SHARE_TICKER = re.compile(r"^\d{6}$")
+_EXCHANGE_SUFFIX = {"SSE": "SH", "SZSE": "SZ", "BSE": "BJ"}
 _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
@@ -35,6 +37,30 @@ class HithinkCompletedSessionPrice:
     close: Decimal
     as_of: datetime
     expected_latest_session: date
+
+
+def to_hithink_thscode(*, ticker: str, exchange: str) -> str:
+    """Map the kernel's explicit A-share identity to one qualified HiThink thscode."""
+
+    normalized_ticker = ticker.strip().upper()
+    normalized_exchange = exchange.strip().upper()
+    suffix = _EXCHANGE_SUFFIX.get(normalized_exchange)
+    if suffix is None:
+        raise HithinkAdapterError(
+            "HiThink live runner supports explicit SSE, SZSE, or BSE exchange identity"
+        )
+
+    if _PLAIN_A_SHARE_TICKER.fullmatch(normalized_ticker):
+        return f"{normalized_ticker}.{suffix}"
+    if _A_SHARE_TICKER.fullmatch(normalized_ticker):
+        if not normalized_ticker.endswith(f".{suffix}"):
+            raise HithinkAdapterError(
+                "ResearchSnapshot ticker suffix disagrees with its exchange"
+            )
+        return normalized_ticker
+    raise HithinkAdapterError(
+        "ResearchSnapshot ticker is not a qualified six-digit A-share identity"
+    )
 
 
 def require_hithink_data(
