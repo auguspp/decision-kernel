@@ -9,10 +9,10 @@ from pydantic import ValidationError
 from decision_kernel.claim_audit_contract_v1 import (
     ClaimAuditContractV1Payload,
     ClaimAuditContractV1Status,
-    ClaimAuditV1CheckStatus,
+    ClaimAuditV1Check,
     ClaimAuditV1ClaimReview,
-    ClaimAuditV1EvidenceNumericalInput,
-    ClaimAuditV1LiteralOperand,
+    ClaimAuditV1EvidenceInput,
+    ClaimAuditV1LiteralInput,
     ClaimAuditV1NumericalCheck,
     ClaimAuditV1NumericalOperation,
     assess_claim_audit_contract_v1,
@@ -27,6 +27,17 @@ from decision_kernel.research_funnel import ResearchClaim, ResearchClaimKind
 from test_deep_research import _package, _rehash
 
 
+EVIDENCE_CHECKS = frozenset(
+    {
+        ClaimAuditV1Check.IDENTITY,
+        ClaimAuditV1Check.PERIOD_OR_DATE,
+        ClaimAuditV1Check.UNITS,
+        ClaimAuditV1Check.SOURCE_LOCATION,
+        ClaimAuditV1Check.EVIDENCE_SUPPORT,
+    }
+)
+
+
 def _claims(package: DeepResearchPackage) -> tuple[ResearchClaim, ...]:
     return (
         *package.pre_research.material_claims,
@@ -37,25 +48,13 @@ def _claims(package: DeepResearchPackage) -> tuple[ResearchClaim, ...]:
 
 
 def _review(claim: ResearchClaim) -> ClaimAuditV1ClaimReview:
-    evidenced = claim.kind in {
-        ResearchClaimKind.FACT,
-        ResearchClaimKind.MARKET_CONTEXT,
-    }
-    status = (
-        ClaimAuditV1CheckStatus.VERIFIED
-        if evidenced
-        else ClaimAuditV1CheckStatus.NOT_APPLICABLE
-    )
+    verified = {ClaimAuditV1Check.CLASSIFICATION}
+    if claim.kind in {ResearchClaimKind.FACT, ResearchClaimKind.MARKET_CONTEXT}:
+        verified.update(EVIDENCE_CHECKS)
     return ClaimAuditV1ClaimReview(
         claim=claim,
         accepted=True,
-        identity=status,
-        period_or_date=status,
-        units=status,
-        source_location=status,
-        evidence_support=status,
-        classification=ClaimAuditV1CheckStatus.VERIFIED,
-        numerical_recalculation=ClaimAuditV1CheckStatus.NOT_APPLICABLE,
+        verified_checks=frozenset(verified),
         resolution="independent audit accepted the exact material claim",
     )
 
@@ -68,7 +67,11 @@ def _payload(
     return ClaimAuditContractV1Payload(
         research_snapshot_id=package.research_snapshot.id,
         research_package_hash=deep_research_package_hash(package),
-        reviews=reviews or tuple(_review(claim) for claim in _claims(package)),
+        reviews=(
+            reviews
+            if reviews is not None
+            else tuple(_review(claim) for claim in _claims(package))
+        ),
     )
 
 
@@ -110,22 +113,22 @@ def test_rejected_or_incompletely_verified_fact_is_nonconforming() -> None:
     assert "CLAIM_REJECTED" in _codes(package, rejected)
 
     reviews = list(_payload(package).reviews)
-    reviews[0] = reviews[0].model_copy(
-        update={"source_location": ClaimAuditV1CheckStatus.NOT_APPLICABLE}
-    )
+    weakened = set(reviews[0].verified_checks)
+    weakened.remove(ClaimAuditV1Check.SOURCE_LOCATION)
+    reviews[0] = reviews[0].model_copy(update={"verified_checks": frozenset(weakened)})
     incomplete = _payload(package, reviews=tuple(reviews))
     assert "EVIDENCE_AUDIT_INCOMPLETE" in _codes(package, incomplete)
 
 
 def test_explicit_numeric_fact_binds_to_exact_structured_evidence_value() -> None:
     package = _package()
-    first_claim = package.deep_research.material_claims[0].model_copy(
+    numeric_claim = package.deep_research.material_claims[0].model_copy(
         update={"statement": "Reported revenue was CNY 100 million."}
     )
     deep = package.deep_research.model_copy(
         update={
             "material_claims": (
-                first_claim,
+                numeric_claim,
                 *package.deep_research.material_claims[1:],
             )
         }
@@ -140,14 +143,14 @@ def test_explicit_numeric_fact_binds_to_exact_structured_evidence_value() -> Non
     )
 
     reviews = list(_payload(changed).reviews)
-    index = next(i for i, review in enumerate(reviews) if review.claim == first_claim)
+    index = next(i for i, review in enumerate(reviews) if review.claim == numeric_claim)
     numerical_check = ClaimAuditV1NumericalCheck(
         operation=ClaimAuditV1NumericalOperation.IDENTITY,
         operands=("100",),
         claimed_result="100",
         unit="CNY million",
         evidence_inputs=(
-            ClaimAuditV1EvidenceNumericalInput(
+            ClaimAuditV1EvidenceInput(
                 evidence_artifact_id=first_evidence.id,
                 field_name="revenue",
                 value="100",
@@ -157,7 +160,8 @@ def test_explicit_numeric_fact_binds_to_exact_structured_evidence_value() -> Non
     )
     reviews[index] = reviews[index].model_copy(
         update={
-            "numerical_recalculation": ClaimAuditV1CheckStatus.VERIFIED,
+            "verified_checks": reviews[index].verified_checks
+            | {ClaimAuditV1Check.NUMERICAL_RECALCULATION},
             "numerical_assertions": (Decimal("100"),),
             "numerical_checks": (numerical_check,),
         }
@@ -198,7 +202,7 @@ def test_every_numerical_operand_requires_explicit_provenance() -> None:
             claimed_result="100",
             unit="units",
             evidence_inputs=(
-                ClaimAuditV1EvidenceNumericalInput(
+                ClaimAuditV1EvidenceInput(
                     evidence_artifact_id=evidence_id,
                     field_name="value",
                     value="50",
@@ -208,7 +212,7 @@ def test_every_numerical_operand_requires_explicit_provenance() -> None:
         )
 
 
-def test_explicit_literal_operand_replaces_fixed_constant_whitelist() -> None:
+def test_explicit_literal_replaces_fixed_constant_whitelist() -> None:
     package = _package()
     evidence_id = package.evidence_artifacts[0].id
 
@@ -218,15 +222,15 @@ def test_explicit_literal_operand_replaces_fixed_constant_whitelist() -> None:
         claimed_result="100",
         unit="units",
         evidence_inputs=(
-            ClaimAuditV1EvidenceNumericalInput(
+            ClaimAuditV1EvidenceInput(
                 evidence_artifact_id=evidence_id,
                 field_name="value",
                 value="50",
                 unit="units",
             ),
         ),
-        literal_operands=(
-            ClaimAuditV1LiteralOperand(
+        literal_inputs=(
+            ClaimAuditV1LiteralInput(
                 value="2",
                 reason="explicit conversion factor declared by the independent audit",
             ),
