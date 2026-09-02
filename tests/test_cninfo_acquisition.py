@@ -66,6 +66,24 @@ def test_cninfo_page_preserves_official_identity_and_locator() -> None:
     assert announcement.published_at.utcoffset() is not None
 
 
+def test_cninfo_page_accepts_live_null_announcements_only_for_zero_total() -> None:
+    page = normalize_cninfo_announcement_page(
+        {"totalAnnouncement": 0, "announcements": None},
+        stock_code="601318",
+        org_id="9900002221",
+    )
+
+    assert page.total_announcement_count == 0
+    assert page.announcements == ()
+
+    with pytest.raises(CninfoAdapterError, match="not a list"):
+        normalize_cninfo_announcement_page(
+            {"totalAnnouncement": 1, "announcements": None},
+            stock_code="601318",
+            org_id="9900002221",
+        )
+
+
 def test_cninfo_page_rejects_cross_security_or_external_locator() -> None:
     with pytest.raises(CninfoAdapterError, match="another security"):
         normalize_cninfo_announcement_page(
@@ -150,7 +168,7 @@ def test_fetch_cninfo_disclosures_allows_a_truthful_empty_window() -> None:
         get_json=lambda _url: ORG_MAP,
         post_json=lambda _url, _form: {
             "totalAnnouncement": 0,
-            "announcements": [],
+            "announcements": None,
         },
     )
     assert batch.announcements == ()
