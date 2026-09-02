@@ -217,11 +217,50 @@ def test_record_disclosure_assessment_rejects_date_before_research_without_netwo
     assert "assessment date precedes frozen Research for 300750" in stderr.getvalue()
 
 
-def test_record_disclosure_assessment_rejects_research_covered_batch() -> None:
-    snapshot = ResearchCommitPackage.model_validate_json(
-        PACKAGE_PATH.read_text(encoding="utf-8")
-    ).research_snapshot
-    assert snapshot.as_of_datetime.astimezone(SHANGHAI).date() == date(2026, 7, 27)
+def test_record_disclosure_assessment_rejects_research_covered_batch(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    calls = 0
+    covered = _announcement(
+        "COVERED",
+        published_at=datetime(2026, 7, 27, 7, 0, tzinfo=SHANGHAI),
+    )
+
+    def fake_fetch(*, stock_code: str, start_date: date, end_date: date, **_kwargs):
+        nonlocal calls
+        calls += 1
+        return CninfoDisclosureBatch(
+            stock_code=stock_code,
+            org_id="gssz0000300750",
+            start_date=start_date,
+            end_date=end_date,
+            announcements=(covered,),
+        )
+
+    monkeypatch.setattr(cninfo_http, "fetch_cninfo_disclosures", fake_fetch)
+    stdout = StringIO()
+    stderr = StringIO()
+
+    exit_code = main(
+        [
+            "record-disclosure-assessment",
+            str(PACKAGE_PATH),
+            "--publication-date",
+            "2026-07-27",
+            "--result",
+            "DROP_FOR_NOW",
+            "--receipts",
+            str(tmp_path / "receipts.json"),
+        ],
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert exit_code == 2
+    assert calls == 1
+    assert stdout.getvalue() == ""
+    assert "requires exactly one research-uncovered official batch" in stderr.getvalue()
 
 
 def test_record_disclosure_assessment_parser_excludes_deepen_required_receipts() -> None:
