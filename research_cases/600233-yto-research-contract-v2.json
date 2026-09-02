@@ -1,1 +1,216 @@
-{"research_snapshot_id":"75aca83d-2ee1-5fd1-a6fe-bb1c635208b0","contract_version":"research-odds-rehearsal-v1","doctrine_version_reference":"decision-os-research-doctrine-v1-extracted","research_mode":"FULL","sector":"Industrials","industry":"Express logistics / franchised parcel networks","variant_perception":"Street earnings expectations were already elevated after the profit prealert; the formal-report selloff looks more like durability/multiple repricing. Owner-economics probabilities remain evidence-driven, not price-driven.","market_expectation_map":{"as_of":"2026-09-02","pre_formal_report_after_prealert_sample":{"scope":"sampled sell-side, not broad consensus","2027_cicc":"7306000000","2027_huachuang":"7500000000","sample_mean":"7403000000"},"post_formal_report_fresh":{"n":"10","2027_min":"7010000000","2027_median":"7300500000","2027_mean":"7266500000","2027_max":"7542000000"},"post_formal_report_valuation_example":{"huatai_2027_np":"7542000000","huatai_old_2026_pe":"16.3","huatai_new_2026_pe":"13.3","huatai_old_target":"27.74","huatai_new_target":"24.51"}},"normalized_earnings_notes":"2027 worlds: CNY5.209/6.094/7.285/8.066/8.782bn; probability-weighted CNY6.9069bn.","valuation_framework":"2027 NP / rounded 3.42402bn shares x 9/10/12/14/15x P/E. Broad-market regime excluded from Fundamental Belief.","fundamental_clock_assessment":{"state":"UNIT_ECONOMICS_INFLECTION","risk":"durability unproven"},"expectation_clock_assessment":{"state":"PREALERT_PRICED_THEN_FORMAL_PRINT_DERATED","implication":"Headline earnings were largely known before 8/19; post-print earnings forecasts stayed broadly intact while at least one applied multiple compressed."},"liquidity_clock_assessment":{"state":"CASH_CONVERSION_IMPROVING","implication":"H1 OCF > capex; 2025 OCF < capex"},"monitoring_indicators":["volume/share and unit revenue","express unit profit and core unit costs","franchise/service/regulator signals","rolling OCF/capex/utilization","aviation/international margin and returns"],"monitoring_falsifiers":["Express unit profit stays materially below CNY0.18 for two quarters without a structural cost reset.","YTO-specific evidence shows material franchise or network deterioration despite HQ margin gains.","Rolling cash capex stays at/above OCF while unit economics and utilization fail to improve.","2027 company earnings evidence moves materially below CNY6.0bn on weaker core economics.","Aviation/international keep absorbing material capital without credible positive incremental returns."],"valuation_stress_spec":{"downside_pe":"9","upside_pe":"15","market_regime":"excluded","optionality_credit":"0 central worlds","production_odds":"blocked until HiThink ObservedMarket"},"scenario_details":[{"scenario_id":"687c3e20-e8e6-5dd5-8e61-25eab91254c3","description":"renewed price war","assumptions":{"volume_yi":"355","express_unit_np":"0.158"},"financial_driver_values":{"np_yi":"52.09","pe":"9","value":"13.69"},"normalized_earnings":"5209000000.00","notes":"Fundamental only; market regime excluded."},{"scenario_id":"a7ddfc2a-4f35-5eb1-81e7-4754eedb7923","description":"partial normalization","assumptions":{"volume_yi":"362","express_unit_np":"0.178"},"financial_driver_values":{"np_yi":"60.94","pe":"10","value":"17.80"},"normalized_earnings":"6094000000.00","notes":"Fundamental only; market regime excluded."},{"scenario_id":"ac64db7b-ba22-542a-9fe5-a8dc6039f161","description":"street center","assumptions":{"volume_yi":"370","express_unit_np":"0.205"},"financial_driver_values":{"np_yi":"72.85","pe":"12","value":"25.53"},"normalized_earnings":"7285000000.00","notes":"Fundamental only; market regime excluded."},{"scenario_id":"374f80f6-6ec5-589d-9eaf-c2ea8354bd0a","description":"durable discipline","assumptions":{"volume_yi":"378","express_unit_np":"0.220"},"financial_driver_values":{"np_yi":"80.66","pe":"14","value":"32.98"},"normalized_earnings":"8066000000.00","notes":"Fundamental only; market regime excluded."},{"scenario_id":"05afa4eb-dd58-5864-8c39-f0b6473b8a4f","description":"network compounder","assumptions":{"volume_yi":"385","express_unit_np":"0.232"},"financial_driver_values":{"np_yi":"87.82","pe":"15","value":"38.47"},"normalized_earnings":"8782000000.00","notes":"Fundamental only; market regime excluded."}],"schema_version":2,"source_policy_version":"research-source-admissibility-v2","reality_map":{"2026_h1_parent_np":"3175000000","2026_h1_preannounced_parent_np_range":["3100000000","3400000000"],"2026_h1_volume_yi":"162.78","2026_h1_unit_revenue":"2.17","2026_h1_unit_cost":"1.90","2026_h1_ocf":"3958827124.74","2026_h1_capex":"3482399714.60"},"our_belief_map":{"2027_probability_weighted_parent_np":"6906900000.00","scenario_probabilities":{"renewed_price_war":"0.15","partial_normalization":"0.25","street_center":"0.35","durable_discipline":"0.20","network_compounder":"0.05"},"probability_change_from_v1":"NONE","reason":"The event bridge changes our understanding of market expectations, not realized owner-economics evidence. Price action alone does not change probabilities."},"expectation_event_bridges":[{"event_id":"YTO-2026-H1-FORMAL-PRINT","event_date":"2026-08-20","pre_event_expectation":{"known_company_h1_parent_np_range":["3100000000","3400000000"],"sampled_2027_sellside_np":["7306000000","7500000000"],"2026-08-18_close":"19.25","2026-08-19_close":"18.68"},"actual_event":{"formal_h1_parent_np":"3175000000","position_through_preannounced_range":"0.25","interpretation":"strong YoY but near the low quartile of the already-known range"},"post_event_expectation":{"fresh_2027_np_mean":"7266500000","fresh_2027_np_median":"7300500000","huatai_2027_np":"7542000000","huatai_2026_pe_change":"16.3x -> 13.3x"},"market_reaction":{"2026-08-20_close":"17.50","one_day_return_pct":"-6.32","volume_shares":"51440000"},"interpretation":"The formal print did not reset earnings expectations downward by an amount comparable with the share-price move. The evidence is more consistent with a durability/multiple repricing debate than a large earnings-level reset.","probability_effect":"UNCHANGED","probability_effect_reason":"No new realized owner-economics evidence in this bridge justifies changing the frozen 15/25/35/20/5 scenario probabilities; evidence changes probability, price changes Odds.","evidence_artifact_ids":["9635bc18-8666-5b12-a645-aca24ba91112","9c61c135-5ea3-5e11-89f7-bc62f1245059","e92884f4-5c52-51a0-968a-241c1d5c4e47","047e2546-389b-5274-a8dc-e4a0ce3931f4","dbf7e565-b79f-5f2e-beea-fbe26ac655af","b9278ac8-35dd-55a0-a778-39c23a705503","bd55ebb2-5b44-5752-bd67-4c65397f8cf8"]}]}
+{
+  "research_snapshot_id": "75aca83d-2ee1-5fd1-a6fe-bb1c635208b0",
+  "contract_version": "research-odds-rehearsal-v1",
+  "doctrine_version_reference": "decision-os-research-doctrine-v1-extracted",
+  "research_mode": "FULL",
+  "sector": "Industrials",
+  "industry": "Express logistics / franchised parcel networks",
+  "variant_perception": "Street earnings expectations were already elevated after the profit prealert; the formal-report selloff looks more like durability/multiple repricing. Owner-economics probabilities remain evidence-driven, not price-driven.",
+  "market_expectation_map": {
+    "as_of": "2026-09-02",
+    "pre_formal_report_after_prealert_sample": {
+      "scope": "sampled sell-side, not broad consensus",
+      "2027_cicc": "7306000000",
+      "2027_huachuang": "7500000000",
+      "sample_mean": "7403000000"
+    },
+    "post_formal_report_fresh": {
+      "n": "10",
+      "2027_min": "7010000000",
+      "2027_median": "7300500000",
+      "2027_mean": "7266500000",
+      "2027_max": "7542000000"
+    },
+    "post_formal_report_valuation_example": {
+      "huatai_2027_np": "7542000000",
+      "huatai_old_2026_pe": "16.3",
+      "huatai_new_2026_pe": "13.3",
+      "huatai_old_target": "27.74",
+      "huatai_new_target": "24.51"
+    }
+  },
+  "normalized_earnings_notes": "2027 worlds: CNY5.209/6.094/7.285/8.066/8.782bn; probability-weighted CNY6.9069bn.",
+  "valuation_framework": "2027 NP / rounded 3.42402bn shares x 9/10/12/14/15x P/E. Broad-market regime excluded from Fundamental Belief.",
+  "fundamental_clock_assessment": {
+    "state": "UNIT_ECONOMICS_INFLECTION",
+    "risk": "durability unproven"
+  },
+  "expectation_clock_assessment": {
+    "state": "PREALERT_PRICED_THEN_FORMAL_PRINT_DERATED",
+    "implication": "Headline earnings were largely known before 8/19; post-print earnings forecasts stayed broadly intact while at least one applied multiple compressed."
+  },
+  "liquidity_clock_assessment": {
+    "state": "CASH_CONVERSION_IMPROVING",
+    "implication": "H1 OCF > capex; 2025 OCF < capex"
+  },
+  "monitoring_indicators": [
+    "volume/share and unit revenue",
+    "express unit profit and core unit costs",
+    "franchise/service/regulator signals",
+    "rolling OCF/capex/utilization",
+    "aviation/international margin and returns"
+  ],
+  "monitoring_falsifiers": [
+    "Express unit profit stays materially below CNY0.18 for two quarters without a structural cost reset.",
+    "YTO-specific evidence shows material franchise or network deterioration despite HQ margin gains.",
+    "Rolling cash capex stays at/above OCF while unit economics and utilization fail to improve.",
+    "2027 company earnings evidence moves materially below CNY6.0bn on weaker core economics.",
+    "Aviation/international keep absorbing material capital without credible positive incremental returns."
+  ],
+  "valuation_stress_spec": {
+    "downside_pe": "9",
+    "upside_pe": "15",
+    "market_regime": "excluded",
+    "optionality_credit": "0 central worlds",
+    "production_odds": "blocked until HiThink ObservedMarket"
+  },
+  "scenario_details": [
+    {
+      "scenario_id": "687c3e20-e8e6-5dd5-8e61-25eab91254c3",
+      "description": "renewed price war",
+      "assumptions": {
+        "volume_yi": "355",
+        "express_unit_np": "0.158"
+      },
+      "financial_driver_values": {
+        "np_yi": "52.09",
+        "pe": "9",
+        "value": "13.69"
+      },
+      "normalized_earnings": "5209000000.00",
+      "notes": "Fundamental only; market regime excluded."
+    },
+    {
+      "scenario_id": "a7ddfc2a-4f35-5eb1-81e7-4754eedb7923",
+      "description": "partial normalization",
+      "assumptions": {
+        "volume_yi": "362",
+        "express_unit_np": "0.178"
+      },
+      "financial_driver_values": {
+        "np_yi": "60.94",
+        "pe": "10",
+        "value": "17.80"
+      },
+      "normalized_earnings": "6094000000.00",
+      "notes": "Fundamental only; market regime excluded."
+    },
+    {
+      "scenario_id": "ac64db7b-ba22-542a-9fe5-a8dc6039f161",
+      "description": "street center",
+      "assumptions": {
+        "volume_yi": "370",
+        "express_unit_np": "0.205"
+      },
+      "financial_driver_values": {
+        "np_yi": "72.85",
+        "pe": "12",
+        "value": "25.53"
+      },
+      "normalized_earnings": "7285000000.00",
+      "notes": "Fundamental only; market regime excluded."
+    },
+    {
+      "scenario_id": "374f80f6-6ec5-589d-9eaf-c2ea8354bd0a",
+      "description": "durable discipline",
+      "assumptions": {
+        "volume_yi": "378",
+        "express_unit_np": "0.220"
+      },
+      "financial_driver_values": {
+        "np_yi": "80.66",
+        "pe": "14",
+        "value": "32.98"
+      },
+      "normalized_earnings": "8066000000.00",
+      "notes": "Fundamental only; market regime excluded."
+    },
+    {
+      "scenario_id": "05afa4eb-dd58-5864-8c39-f0b6473b8a4f",
+      "description": "network compounder",
+      "assumptions": {
+        "volume_yi": "385",
+        "express_unit_np": "0.232"
+      },
+      "financial_driver_values": {
+        "np_yi": "87.82",
+        "pe": "15",
+        "value": "38.47"
+      },
+      "normalized_earnings": "8782000000.00",
+      "notes": "Fundamental only; market regime excluded."
+    }
+  ],
+  "schema_version": 2,
+  "source_policy_version": "research-source-admissibility-v2",
+  "reality_map": {
+    "2026_h1_parent_np": "3175000000",
+    "2026_h1_preannounced_parent_np_range": [
+      "3100000000",
+      "3400000000"
+    ],
+    "2026_h1_volume_yi": "162.78",
+    "2026_h1_unit_revenue": "2.17",
+    "2026_h1_unit_cost": "1.90",
+    "2026_h1_ocf": "3958827124.74",
+    "2026_h1_capex": "3482399714.60"
+  },
+  "our_belief_map": {
+    "2027_probability_weighted_parent_np": "6906900000.00",
+    "scenario_probabilities": {
+      "renewed_price_war": "0.15",
+      "partial_normalization": "0.25",
+      "street_center": "0.35",
+      "durable_discipline": "0.20",
+      "network_compounder": "0.05"
+    },
+    "probability_change_from_v1": "NONE",
+    "reason": "The event bridge changes our understanding of market expectations, not realized owner-economics evidence. Price action alone does not change probabilities."
+  },
+  "expectation_event_bridges": [
+    {
+      "event_id": "YTO-2026-H1-FORMAL-PRINT",
+      "event_date": "2026-08-20",
+      "pre_event_expectation": {
+        "known_company_h1_parent_np_range": [
+          "3100000000",
+          "3400000000"
+        ],
+        "sampled_2027_sellside_np": [
+          "7306000000",
+          "7500000000"
+        ],
+        "2026-08-18_close": "19.25",
+        "2026-08-19_close": "18.68"
+      },
+      "actual_event": {
+        "formal_h1_parent_np": "3175000000",
+        "position_through_preannounced_range": "0.25",
+        "interpretation": "strong YoY but near the low quartile of the already-known range"
+      },
+      "post_event_expectation": {
+        "fresh_2027_np_mean": "7266500000",
+        "fresh_2027_np_median": "7300500000",
+        "huatai_2027_np": "7542000000",
+        "huatai_2026_pe_change": "16.3x -> 13.3x"
+      },
+      "market_reaction": {
+        "2026-08-20_close": "17.50",
+        "one_day_return_pct": "-6.32",
+        "volume_shares": "51440000"
+      },
+      "interpretation": "The formal print did not reset earnings expectations downward by an amount comparable with the share-price move. The evidence is more consistent with a durability/multiple repricing debate than a large earnings-level reset.",
+      "probability_effect": "UNCHANGED",
+      "probability_effect_reason": "No new realized owner-economics evidence in this bridge justifies changing the frozen 15/25/35/20/5 scenario probabilities; evidence changes probability, price changes Odds.",
+      "evidence_artifact_ids": [
+        "9635bc18-8666-5b12-a645-aca24ba91112",
+        "9c61c135-5ea3-5e11-89f7-bc62f1245059",
+        "e92884f4-5c52-51a0-968a-241c1d5c4e47",
+        "047e2546-389b-5274-a8dc-e4a0ce3931f4",
+        "dbf7e565-b79f-5f2e-beea-fbe26ac655af",
+        "b9278ac8-35dd-55a0-a778-39c23a705503",
+        "bd55ebb2-5b44-5752-bd67-4c65397f8cf8"
+      ]
+    }
+  ]
+}
