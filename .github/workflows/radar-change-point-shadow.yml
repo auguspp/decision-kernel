@@ -30,16 +30,12 @@ jobs:
           import math
           import os
           import time
-          from datetime import datetime
+          from datetime import date, datetime
           from zoneinfo import ZoneInfo
 
           import numpy as np
           import ruptures as rpt
 
-          from decision_kernel.adapters.hithink import (
-              latest_completed_a_share_session,
-              normalize_hithink_calendar,
-          )
           from decision_kernel.runtime.hithink_http import _request_hithink_json
 
           api_key = os.environ.get('HITHINK_FINANCE_API_KEY')
@@ -47,78 +43,30 @@ jobs:
               raise SystemExit('HITHINK_FINANCE_API_KEY is required')
 
           tz = ZoneInfo('Asia/Shanghai')
-          now = datetime.now(tz)
+          # Freeze the experiment to the already-completed session observed in the first live run.
+          pit_session = date(2026, 9, 1)
+          start_date = date(2025, 12, 1)
+          start_ms = int(datetime.combine(start_date, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
+          end_ms = int(datetime.combine(pit_session, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
           request_count = 0
 
-          def get(path: str, params: dict[str, str]):
+          def history(thscode: str):
               global request_count
               if request_count:
-                  # Experiment-local fixed pacing only; this is not a retry/runtime policy.
-                  time.sleep(3.0)
-              payload = _request_hithink_json(
+                  # Experiment-local pacing only. No retry or production rate-limit policy.
+                  time.sleep(20.0)
+              envelope = _request_hithink_json(
                   api_key=api_key,
-                  path=path,
-                  params=params,
-                  timeout_seconds=20.0,
-              )
-              request_count += 1
-              return payload
-
-          calendar = normalize_hithink_calendar(
-              get('/api/a-share/calendar/trading-days', {})
-          )
-          latest = latest_completed_a_share_session(calendar, observed_at=now)
-          completed = [session for session in calendar if session <= latest]
-          sessions = completed[-180:]
-          if len(sessions) < 120:
-              raise SystemExit('not enough completed sessions for shadow experiment')
-
-          start_ms = int(
-              datetime.combine(sessions[0], datetime.min.time(), tzinfo=tz).timestamp() * 1000
-          )
-          end_ms = int(
-              datetime.combine(latest, datetime.min.time(), tzinfo=tz).timestamp() * 1000
-          )
-
-          def catalog(tag: str):
-              envelope = get('/api/a-share-index/catalog/ths-index-list', {'tag': tag})
-              if envelope.get('code') != 0:
-                  raise RuntimeError(f'catalog {tag} business failure: {envelope.get("code")}')
-              rows = envelope.get('data', {}).get('item')
-              if not isinstance(rows, list):
-                  raise RuntimeError(f'catalog {tag} has no item list')
-              return {
-                  str(row.get('thscode') or '').strip().upper(): str(row.get('name') or '').strip()
-                  for row in rows
-              }
-
-          industry = catalog('industry')
-          concept = catalog('cn_concept')
-          targets = (
-              ('INDUSTRY', '881105.TI', '煤炭开采加工'),
-              ('INDUSTRY', '881101.TI', '种植业与林业'),
-              ('CONCEPT', '885927.TI', 'CRO概念'),
-          )
-          for kind, thscode, expected_name in targets:
-              actual = industry.get(thscode) if kind == 'INDUSTRY' else concept.get(thscode)
-              if actual != expected_name:
-                  raise RuntimeError(
-                      f'HiThink board identity changed for {thscode}: expected={expected_name!r} actual={actual!r}'
-                  )
-
-          print(f'LATEST_COMPLETED_SESSION={latest}')
-          print(f'EXACT_TARGETS={targets}')
-
-          def history(thscode: str):
-              envelope = get(
-                  '/api/a-share-index/prices/historical',
-                  {
+                  path='/api/a-share-index/prices/historical',
+                  params={
                       'thscode': thscode,
                       'interval': '1d',
                       'start': str(start_ms),
                       'end': str(end_ms),
                   },
+                  timeout_seconds=20.0,
               )
+              request_count += 1
               if envelope.get('code') != 0:
                   raise RuntimeError(f'history {thscode} business failure: {envelope.get("code")}')
               data = envelope.get('data')
@@ -127,19 +75,30 @@ jobs:
                   raise RuntimeError(f'history {thscode} is empty')
               parsed = {}
               for row in rows:
-                  ms = int(row['date_ms'])
-                  session = datetime.fromtimestamp(ms / 1000, tz=tz).date()
-                  parsed[session] = float(row['close_price'])
+                  session = datetime.fromtimestamp(int(row['date_ms']) / 1000, tz=tz).date()
+                  if session <= pit_session:
+                      parsed[session] = float(row['close_price'])
               return parsed
 
+          targets = (
+              ('INDUSTRY', '881105.TI', '煤炭开采加工'),
+              ('INDUSTRY', '881101.TI', '种植业与林业'),
+              ('CONCEPT', '885927.TI', 'CRO概念'),
+          )
+          print(f'FROZEN_PIT_SESSION={pit_session}')
+          print(f'EXACT_TARGETS={targets}')
+
           benchmark = history('000001.SH')
-          target_sessions = [session for session in sessions if session in benchmark]
+          if pit_session not in benchmark:
+              raise RuntimeError('benchmark history does not reach frozen PIT session')
 
           def analyze(kind: str, thscode: str, name: str):
               board = history(thscode)
-              common = [session for session in target_sessions if session in board]
-              if len(common) < 120:
-                  raise RuntimeError(f'{name} {thscode} has only {len(common)} common sessions')
+              common = sorted(set(benchmark) & set(board))
+              if len(common) < 120 or common[-1] != pit_session:
+                  raise RuntimeError(
+                      f'{name} {thscode} has incoherent history: n={len(common)} last={common[-1] if common else None}'
+                  )
 
               board_close = np.array([board[session] for session in common], dtype=float)
               market_close = np.array([benchmark[session] for session in common], dtype=float)
@@ -164,8 +123,7 @@ jobs:
                   )
                   internal = [index for index in breaks if index < n]
                   dated = [dates[index - 1].isoformat() for index in internal]
-                  latest_index = internal[-1] if internal else None
-                  latest_breaks.append(latest_index)
+                  latest_breaks.append(internal[-1] if internal else None)
                   print(f'  PELT pen={penalty:.3f} breaks={dated}')
 
               stable = [index for index in latest_breaks if index is not None]
