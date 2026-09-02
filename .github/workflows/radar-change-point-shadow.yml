@@ -43,7 +43,6 @@ jobs:
               raise SystemExit('HITHINK_FINANCE_API_KEY is required')
 
           tz = ZoneInfo('Asia/Shanghai')
-          # Freeze the experiment to the already-completed session observed in the first live run.
           pit_session = date(2026, 9, 1)
           start_date = date(2025, 12, 1)
           start_ms = int(datetime.combine(start_date, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
@@ -92,14 +91,9 @@ jobs:
           if pit_session not in benchmark:
               raise RuntimeError('benchmark history does not reach frozen PIT session')
 
-          def analyze(kind: str, thscode: str, name: str):
-              board = history(thscode)
-              common = sorted(set(benchmark) & set(board))
-              if len(common) < 120 or common[-1] != pit_session:
-                  raise RuntimeError(
-                      f'{name} {thscode} has incoherent history: n={len(common)} last={common[-1] if common else None}'
-                  )
-
+          def detect_stable_latest(common, board, *, verbose=False):
+              if len(common) < 80:
+                  return None
               board_close = np.array([board[session] for session in common], dtype=float)
               market_close = np.array([benchmark[session] for session in common], dtype=float)
               relative_daily = np.diff(np.log(board_close)) - np.diff(np.log(market_close))
@@ -107,14 +101,13 @@ jobs:
               dates = common[5:]
               std = float(np.std(rolling))
               if not math.isfinite(std) or std <= 0:
-                  raise RuntimeError(f'{name} {thscode} has a degenerate relative-return signal')
+                  return None
 
               standardized = ((rolling - float(np.mean(rolling))) / std).reshape(-1, 1)
               n = len(standardized)
               penalties = (2.0 * math.log(n), 3.0 * math.log(n), 4.0 * math.log(n))
-              print(f'\nBOARD {kind} {name} {thscode} n={n} rolling_std={std:.6f}')
-
               latest_breaks = []
+              dated_by_penalty = []
               for penalty in penalties:
                   breaks = (
                       rpt.Pelt(model='l2', min_size=10, jump=1)
@@ -122,22 +115,99 @@ jobs:
                       .predict(pen=penalty)
                   )
                   internal = [index for index in breaks if index < n]
-                  dated = [dates[index - 1].isoformat() for index in internal]
+                  dated = [dates[index - 1] for index in internal]
+                  dated_by_penalty.append((penalty, dated))
                   latest_breaks.append(internal[-1] if internal else None)
-                  print(f'  PELT pen={penalty:.3f} breaks={dated}')
 
               stable = [index for index in latest_breaks if index is not None]
-              if len(stable) == len(penalties) and max(stable) - min(stable) <= 5:
-                  split = round(sum(stable) / len(stable))
-                  before = standardized[max(0, split - 20):split, 0]
-                  after = standardized[split:min(n, split + 20), 0]
-                  shift = float(np.mean(after) - np.mean(before))
+              if len(stable) != len(penalties) or max(stable) - min(stable) > 5:
+                  if verbose:
+                      for penalty, dated in dated_by_penalty:
+                          print(
+                              f'  PELT pen={penalty:.3f} '
+                              f'breaks={[item.isoformat() for item in dated]}'
+                          )
+                      print('  STABLE_LATEST_BREAK=NO')
+                  return None
+
+              split = round(sum(stable) / len(stable))
+              before = standardized[max(0, split - 20):split, 0]
+              after = standardized[split:min(n, split + 20), 0]
+              shift = float(np.mean(after) - np.mean(before))
+              if verbose:
+                  for penalty, dated in dated_by_penalty:
+                      print(
+                          f'  PELT pen={penalty:.3f} '
+                          f'breaks={[item.isoformat() for item in dated]}'
+                      )
                   print(
                       f'  STABLE_LATEST_BREAK≈{dates[split - 1].isoformat()} '
                       f'local_standardized_mean_shift={shift:+.3f}'
                   )
+              return dates[split - 1], shift
+
+          def rolling_pit_confirmations(common, board):
+              position = {session: index for index, session in enumerate(common)}
+              confirmations = []
+              run = []
+              last_candidate = None
+              for end in range(80, len(common) + 1):
+                  prefix = common[:end]
+                  result = detect_stable_latest(prefix, board)
+                  candidate = result[0] if result is not None else None
+                  if candidate is None:
+                      run = []
+                      last_candidate = None
+                      continue
+                  if (
+                      last_candidate is not None
+                      and abs(position[candidate] - position[last_candidate]) <= 5
+                  ):
+                      run.append(candidate)
+                  else:
+                      run = [candidate]
+                  last_candidate = candidate
+                  if len(run) == 5:
+                      ordered = sorted(run, key=position.__getitem__)
+                      representative = ordered[len(ordered) // 2]
+                      confirmations.append((prefix[-1], representative))
+              return confirmations
+
+          def analyze(kind: str, thscode: str, name: str):
+              board = history(thscode)
+              common = sorted(set(benchmark) & set(board))
+              if len(common) < 120 or common[-1] != pit_session:
+                  raise RuntimeError(
+                      f'{name} {thscode} has incoherent history: '
+                      f'n={len(common)} last={common[-1] if common else None}'
+                  )
+
+              relative_daily = np.diff(
+                  np.log(np.array([board[session] for session in common], dtype=float))
+              ) - np.diff(
+                  np.log(np.array([benchmark[session] for session in common], dtype=float))
+              )
+              rolling_std = float(np.std(np.convolve(relative_daily, np.ones(5) / 5.0, mode='valid')))
+              print(f'\nBOARD {kind} {name} {thscode} sessions={len(common)} rolling_std={rolling_std:.6f}')
+              detect_stable_latest(common, board, verbose=True)
+
+              confirmations = rolling_pit_confirmations(common, board)
+              print('  ROLLING_PIT_5_RUN_CONFIRMATIONS:')
+              if not confirmations:
+                  print('    NONE')
               else:
-                  print('  STABLE_LATEST_BREAK=NO')
+                  for as_of, candidate in confirmations[:10]:
+                      lag = position_distance(common, candidate, as_of)
+                      print(
+                          f'    as_of={as_of.isoformat()} candidate≈{candidate.isoformat()} '
+                          f'detection_lag_sessions={lag}'
+                      )
+                  if len(confirmations) > 10:
+                      print(f'    ... {len(confirmations) - 10} more confirmations omitted')
+
+          def position_distance(sessions, start, end):
+              positions = {session: index for index, session in enumerate(sessions)}
+              return positions[end] - positions[start]
 
           for target in targets:
               analyze(*target)
