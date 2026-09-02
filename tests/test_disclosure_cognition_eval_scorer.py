@@ -101,15 +101,22 @@ def _pre(packet, discovery: DiscoveryInput, route: PreResearchRoute) -> PreResea
     )
 
 
-def _quick(packet, discovery: DiscoveryInput, pre: PreResearchResult, route: QuickResearchRoute):
-    primary = packet.evidence[0].evidence_artifact
+def _quick(
+    packet,
+    discovery: DiscoveryInput,
+    pre: PreResearchResult,
+    route: QuickResearchRoute,
+    *,
+    support_artifact=None,
+):
+    primary = support_artifact or packet.evidence[0].evidence_artifact
     support = ResearchClaim(
-        statement="the official filing is the primary bounded evidence for this candidate pass",
+        statement="the cited official filing is the primary bounded evidence for this candidate pass",
         kind=ResearchClaimKind.FACT,
         evidence_artifact_ids=(primary.id,),
     )
     contradictory = ResearchClaim(
-        statement="the same filing leaves a material uncertainty unresolved",
+        statement="the same cited filing leaves a material uncertainty unresolved",
         kind=ResearchClaimKind.MARKET_CONTEXT,
         evidence_artifact_ids=(primary.id,),
     )
@@ -139,7 +146,12 @@ def _quick(packet, discovery: DiscoveryInput, pre: PreResearchResult, route: Qui
     )
 
 
-def _assessment_for(case: dict, *, force_deepen: bool = False) -> DisclosureResearchAssessment:
+def _assessment_for(
+    case: dict,
+    *,
+    force_deepen: bool = False,
+    force_no_text_reference: bool = False,
+) -> DisclosureResearchAssessment:
     packet = _packet(case)
     discovery = _discovery(packet)
 
@@ -148,7 +160,20 @@ def _assessment_for(case: dict, *, force_deepen: bool = False) -> DisclosureRese
         quick = _quick(packet, discovery, pre, QuickResearchRoute.DEEPEN)
     elif case["gold_terminal_stage"] == "QUICK_RESEARCH":
         pre = _pre(packet, discovery, PreResearchRoute.CONTINUE_TO_QUICK)
-        quick = _quick(packet, discovery, pre, QuickResearchRoute.WAIT_FOR_TRIGGER)
+        support_artifact = None
+        if force_no_text_reference:
+            support_artifact = next(
+                item.evidence_artifact
+                for item in packet.evidence
+                if item.text_status.value == "NO_TEXT"
+            )
+        quick = _quick(
+            packet,
+            discovery,
+            pre,
+            QuickResearchRoute.WAIT_FOR_TRIGGER,
+            support_artifact=support_artifact,
+        )
     elif case["gold_terminal_state"] == "DROP_FOR_NOW":
         pre = _pre(packet, discovery, PreResearchRoute.STOP)
         quick = None
@@ -164,13 +189,20 @@ def _assessment_for(case: dict, *, force_deepen: bool = False) -> DisclosureRese
     )
 
 
-def _write_run(tmp_path: Path, *, deepen_case_id: str | None = None, corrupt_case_id: str | None = None) -> Path:
+def _write_run(
+    tmp_path: Path,
+    *,
+    deepen_case_id: str | None = None,
+    corrupt_case_id: str | None = None,
+    no_text_case_id: str | None = None,
+) -> Path:
     corpus = _corpus()
     run_cases = []
     for case in corpus["cases"]:
         assessment = _assessment_for(
             case,
             force_deepen=case["case_id"] == deepen_case_id,
+            force_no_text_reference=case["case_id"] == no_text_case_id,
         )
         payload = assessment.model_dump(mode="json")
         if case["case_id"] == corrupt_case_id:
@@ -232,6 +264,11 @@ def test_candidate_scorer_reports_exact_route_and_stage_matches(tmp_path: Path) 
         "candidate_deepen_cases": 0,
         "gold_deepen_cases": 0,
         "deepen_overcalls": 0,
+        "candidate_claims": 7,
+        "evidenced_claims": 7,
+        "no_text_reference_claims": 0,
+        "no_text_only_claims": 0,
+        "gold_no_claim_reference_claims": 0,
     }
     assert SCORER.report_exit_code(report) == 0
     assert all(case["investment_authority"] == "NONE" for case in report["cases"])
@@ -255,6 +292,29 @@ def test_candidate_scorer_measures_deepen_bias_without_failing_the_run(tmp_path:
     assert summary["candidate_deepen_cases"] == 1
     assert summary["deepen_overcalls"] == 1
     assert report["terminal_confusion"]["WAIT_FOR_TRIGGER->DEEPEN_REQUIRED"] == 1
+    assert SCORER.report_exit_code(report) == 0
+
+
+def test_candidate_scorer_flags_claims_citing_no_text_official_evidence(tmp_path: Path) -> None:
+    report = SCORER.score_candidate_run(
+        _write_run(tmp_path, no_text_case_id="300750-2026-08-12")
+    )
+    summary = report["summary"]
+
+    assert summary["valid_cases"] == 6
+    assert summary["terminal_matches"] == 6
+    assert summary["stage_matches"] == 6
+    assert summary["no_text_reference_claims"] == 1
+    assert summary["no_text_only_claims"] == 1
+    assert summary["gold_no_claim_reference_claims"] == 1
+    case = next(
+        item for item in report["cases"] if item["case_id"] == "300750-2026-08-12"
+    )
+    signals = case["claim_reference_signals"]
+    assert signals["no_text_reference_claims"][0]["announcement_ids"] == ["1225470689"]
+    assert signals["gold_no_claim_reference_claims"][0]["announcement_ids"] == [
+        "1225470689"
+    ]
     assert SCORER.report_exit_code(report) == 0
 
 
