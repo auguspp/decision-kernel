@@ -1,0 +1,127 @@
+name: disclosure-receipt-live-smoke
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/disclosure-receipt-live-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo
+        run: python -m pip install -e '.[dev]'
+      - name: Run live scan before receipt
+        run: |
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through 2026-09-02 | tee first-scan.txt
+      - name: Build exact receipt for previously assessed CATL batch
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import date, datetime, timezone
+          from pathlib import Path
+
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.runtime.cninfo_http import fetch_cninfo_disclosures
+          from decision_kernel.runtime.disclosure_radar import (
+              filter_research_uncovered_disclosure_batches,
+              group_disclosures_by_publication_date,
+          )
+          from decision_kernel.runtime.disclosure_receipts import disclosure_batch_announcement_ids
+
+          package = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          )
+          snapshot = package.research_snapshot
+          raw = fetch_cninfo_disclosures(
+              stock_code='300750',
+              start_date=date(2026, 8, 27),
+              end_date=date(2026, 8, 27),
+              timeout_seconds=20.0,
+          )
+          batches = group_disclosures_by_publication_date(raw.announcements)
+          uncovered = filter_research_uncovered_disclosure_batches(
+              batches,
+              research_as_of_by_stock={'300750': snapshot.as_of_datetime},
+          )
+          target = next(
+              batch
+              for batch in uncovered
+              if '1225519101' in disclosure_batch_announcement_ids(batch)
+          )
+          receipt = {
+              'source_lane': 'CNINFO',
+              'stock_code': target.stock_code,
+              'announcement_ids': list(disclosure_batch_announcement_ids(target)),
+              'research_snapshot_id': str(snapshot.id),
+              'research_as_of': snapshot.as_of_datetime.isoformat(),
+              'assessment_result': 'WAIT_FOR_TRIGGER',
+              'assessed_at': datetime.now(timezone.utc).isoformat(),
+          }
+          Path('receipt.json').write_text(
+              json.dumps([receipt], ensure_ascii=False, indent=2),
+              encoding='utf-8',
+          )
+          print('RECEIPT_ANNOUNCEMENTS=' + ','.join(receipt['announcement_ids']))
+          PY
+      - name: Run live scan with receipt
+        run: |
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through 2026-09-02 \
+            --receipts receipt.json | tee second-scan.txt
+      - name: Verify exact seen suppression without hiding other live changes
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          pattern = re.compile(
+              r'OFFICIAL DISCLOSURE SCAN: '
+              r'(\d+) unassessed / '
+              r'(\d+) seen-suppressed / '
+              r'(\d+) research-uncovered / '
+              r'(\d+) dated batches / '
+              r'(\d+) announcements / '
+              r'(\d+) research cases'
+          )
+
+          first_text = Path('first-scan.txt').read_text(encoding='utf-8')
+          second_text = Path('second-scan.txt').read_text(encoding='utf-8')
+          first = tuple(map(int, pattern.search(first_text).groups()))
+          second = tuple(map(int, pattern.search(second_text).groups()))
+
+          first_unassessed, first_seen, first_uncovered, first_batches, first_raw, first_cases = first
+          second_unassessed, second_seen, second_uncovered, second_batches, second_raw, second_cases = second
+
+          assert first_seen == 0
+          assert first_unassessed >= 1
+          assert second_seen == 1
+          assert second_unassessed == first_unassessed - 1
+          assert second_uncovered == first_uncovered
+          assert second_batches == first_batches
+          assert second_raw == first_raw
+          assert second_cases == first_cases == 5
+          assert '1225519101' in first_text
+          assert '1225519101' not in second_text
+
+          print('FIRST_METRICS=' + '/'.join(map(str, first)))
+          print('SECOND_METRICS=' + '/'.join(map(str, second)))
+          PY
