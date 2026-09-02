@@ -1,0 +1,119 @@
+name: live-disclosure-now-20260902
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/live-disclosure-now-20260902.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install with official PDF text extraction
+        run: python -m pip install -e '.[documents]'
+      - name: Materialize already-validated CATL quiet receipt baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p experiment-state
+          cat > experiment-state/disclosure-receipts.json <<'JSON'
+          [
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225448968"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "DROP_FOR_NOW",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225456175"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "WAIT_FOR_TRIGGER",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225462006"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "DROP_FOR_NOW",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225464975"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "DROP_FOR_NOW",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225470687", "1225470688", "1225470689"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "WAIT_FOR_TRIGGER",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225502236"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "DROP_FOR_NOW",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            },
+            {
+              "source_lane": "CNINFO",
+              "stock_code": "300750",
+              "announcement_ids": ["1225519101"],
+              "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+              "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_result": "WAIT_FOR_TRIGGER",
+              "assessed_at": "2026-09-02T00:00:00Z"
+            }
+          ]
+          JSON
+      - name: Scan live official disclosures through 2026-09-02
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through 2026-09-02 \
+            --receipts experiment-state/disclosure-receipts.json \
+            --packet-dir live-disclosure-packets \
+            --packet-limit 10 | tee live-disclosure-scan.txt
+      - name: Upload one-shot live scan
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-disclosure-now-20260902
+          path: |
+            live-disclosure-scan.txt
+            live-disclosure-packets/
+          if-no-files-found: warn
+          retention-days: 7
