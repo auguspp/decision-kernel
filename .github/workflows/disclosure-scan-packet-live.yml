@@ -1,0 +1,69 @@
+name: disclosure-scan-packet-live
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/disclosure-scan-packet-live.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with document parser
+        run: python -m pip install -e '.[documents]'
+      - name: Run integrated one-shot scan with packet output
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision-kernel scan-disclosures \
+            dogfood/300750-catl.json \
+            --through 2026-08-27 \
+            --packet-dir packet-output \
+            --packet-limit 1 | tee scan.txt
+
+          expected_hash='deeeeecd4c76ead88b23a62e274d7c9dfa66c30c118f1c38cad14686601704d8'
+          grep -q "1 unassessed / 0 seen-suppressed / 1 research-uncovered" scan.txt
+          grep -q "ASSESSMENT PACKETS: 1 prepared" scan.txt
+          grep -q "input_hash=${expected_hash}" scan.txt
+
+          packet="packet-output/300750-2026-08-27-${expected_hash:0:16}.json"
+          test -f "$packet"
+          python - "$packet" "$expected_hash" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          path = Path(sys.argv[1])
+          expected_hash = sys.argv[2]
+          payload = json.loads(path.read_text(encoding='utf-8'))
+          assert payload['assessment_input_hash'] == expected_hash
+          assert payload['announcement_ids'] == ['1225519101']
+          assert payload['disclosure_assessment_status'] == 'UNASSESSED'
+          assert 'research_status' not in payload
+          assert payload['investment_authority'] == 'NONE'
+          assert payload['evidence'][0]['pdf_sha256'] == '2affbff8b1c59521a341c35bf7885ad8e09da45053064c4623eb22ff3e655d79'
+          assert payload['evidence'][0]['text_sha256'] == 'bbe718e43d998e1a078889c4539e75036c4d037708023d65cc907be6d04ffb23'
+          assert payload['evidence'][0]['page_count'] == 3
+          assert payload['evidence'][0]['extracted_char_count'] == 1305
+          print(f'PACKET={path}')
+          print(f'ASSESSMENT_INPUT_HASH={expected_hash}')
+          print('DISCLOSURE_ASSESSMENT_STATUS=UNASSESSED')
+          print('INVESTMENT_AUTHORITY=NONE')
+          PY
+      - name: Upload integrated smoke snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: disclosure-scan-packet-live
+          path: |
+            scan.txt
+            packet-output/
+          retention-days: 3
