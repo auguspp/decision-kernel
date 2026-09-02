@@ -68,6 +68,7 @@ def is_source_use_admissible(
 
     if claim_kind is ResearchClaimKind.MARKET_CONTEXT:
         return (source_role, assertion_scope) in {
+            (SourceEpistemicRole.PRIMARY_REALIZED, AssertionScope.REALIZED_OUTCOME),
             (SourceEpistemicRole.MARKET_EXPECTATION, AssertionScope.MARKET_EXPECTATION),
             (SourceEpistemicRole.ANALYST_MODEL, AssertionScope.MODEL_FORECAST),
             (SourceEpistemicRole.ANALYST_OPINION, AssertionScope.OPINION),
