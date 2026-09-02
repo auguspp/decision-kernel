@@ -233,15 +233,41 @@ def test_calculation_fails_closed_on_non_committed_research() -> None:
     )
 
 
-def test_calculation_fails_closed_on_pit_chronology_violation() -> None:
+def test_calculation_allows_market_event_before_research_commit() -> None:
+    market_at = AS_OF + timedelta(minutes=30)
     result = calculate_research_economics(
         _committed_snapshot(),
-        _market(market_timestamp=AS_OF + timedelta(minutes=30)),
+        _market(market_timestamp=market_at),
+        created_at=CREATED_AT,
+    )
+    assert market_at < COMMITTED_AT
+    assert result.status is CalculationStatus.CALCULATED
+
+
+def test_calculation_fails_closed_on_market_before_research_as_of() -> None:
+    result = calculate_research_economics(
+        _committed_snapshot(),
+        _market(market_timestamp=AS_OF - timedelta(minutes=1)),
         created_at=CREATED_AT,
     )
     assert result.status is CalculationStatus.NO_CALCULATION
     assert any(
         failure.code is CalculationFailureCode.PIT_VIOLATION
+        and failure.location == "calculation_chronology"
+        for failure in result.failures
+    )
+
+
+def test_calculation_fails_closed_when_calculation_precedes_commit() -> None:
+    result = calculate_research_economics(
+        _committed_snapshot(),
+        _market(market_timestamp=AS_OF + timedelta(minutes=30)),
+        created_at=COMMITTED_AT - timedelta(minutes=1),
+    )
+    assert result.status is CalculationStatus.NO_CALCULATION
+    assert any(
+        failure.code is CalculationFailureCode.PIT_VIOLATION
+        and failure.location == "calculation_chronology"
         for failure in result.failures
     )
 
