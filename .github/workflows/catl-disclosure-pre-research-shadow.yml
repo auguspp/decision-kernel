@@ -1,0 +1,184 @@
+name: catl-disclosure-pre-research-shadow
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/catl-disclosure-pre-research-shadow.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with document parser
+        run: python -m pip install -e '.[documents]'
+      - name: Run one new official disclosure through existing Research Method v1
+        run: |
+          python - <<'PY'
+          from datetime import date, datetime, timezone
+          import json
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from uuid import NAMESPACE_URL, uuid5
+
+          from decision_kernel.adapters.pdf_text import MAX_PDF_BYTES, extract_pdf_text
+          from decision_kernel.evidence import EvidenceArtifact, ReplayabilityLevel, RetentionMode
+          from decision_kernel.research_funnel import (
+              DiscoveryInput,
+              DiscoveryObservation,
+              DiscoverySource,
+              PreResearchResult,
+              PreResearchRoute,
+              ResearchClaim,
+              ResearchClaimKind,
+          )
+          from decision_kernel.research_workflow_v1 import run_research_funnel
+          from decision_kernel.runtime.cninfo_http import fetch_cninfo_disclosures
+
+          package = json.loads(Path('dogfood/300750-catl.json').read_text(encoding='utf-8'))
+          snapshot = package['research_snapshot']
+          research_as_of = datetime.fromisoformat(snapshot['as_of_datetime'].replace('Z', '+00:00'))
+
+          disclosure_batch = fetch_cninfo_disclosures(
+              stock_code='300750',
+              start_date=date(2026, 8, 27),
+              end_date=date(2026, 8, 27),
+              timeout_seconds=20.0,
+          )
+          announcement = next(
+              item for item in disclosure_batch.announcements
+              if item.announcement_id == '1225519101'
+          )
+          assert announcement.published_at is not None
+          assert announcement.published_at > research_as_of
+
+          request = Request(
+              announcement.source_locator,
+              headers={
+                  'Accept': 'application/pdf,*/*;q=0.8',
+                  'User-Agent': 'Mozilla/5.0',
+                  'Referer': 'https://www.cninfo.com.cn/',
+              },
+          )
+          with urlopen(request, timeout=20.0) as response:  # noqa: S310
+              pdf_bytes = response.read(MAX_PDF_BYTES + 1)
+          if len(pdf_bytes) > MAX_PDF_BYTES:
+              raise RuntimeError('official PDF exceeded parser byte bound')
+
+          extracted = extract_pdf_text(pdf_bytes)
+          retrieved_at = datetime.now(timezone.utc)
+          evidence_id = uuid5(NAMESPACE_URL, announcement.source_locator)
+          evidence = EvidenceArtifact(
+              id=evidence_id,
+              source_type='OFFICIAL_DISCLOSURE',
+              source_identifier=f'CNINFO:300750:ANNOUNCEMENT:{announcement.announcement_id}',
+              source_locator=announcement.source_locator,
+              published_at=announcement.published_at,
+              available_at=announcement.published_at,
+              retrieved_at=retrieved_at,
+              content_hash=extracted.pdf_sha256,
+              idempotency_key=f'CNINFO:300750:ANNOUNCEMENT:{announcement.announcement_id}',
+              retention_mode=RetentionMode.METADATA_ONLY,
+              replayability_level=ReplayabilityLevel.REFERENCE_ONLY,
+              source_location=announcement.title,
+              license_terms_note='Reference-only shadow; raw official PDF is not retained.',
+          )
+
+          discovery_id = 'cninfo-refresh-300750-1225519101'
+          discovery = DiscoveryInput(
+              discovery_id=discovery_id,
+              source_lane='OFFICIAL_DISCLOSURE_REFRESH_SHADOW',
+              ticker='300750',
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              as_of=retrieved_at,
+              factual_observations=(
+                  DiscoveryObservation(
+                      statement=(
+                          '宁德时代完成2026年度第六期绿色科技创新债券发行，'
+                          '本期合计70亿元；该融资事件发生在当前Research as-of之后。'
+                      ),
+                      evidence_artifact_ids=(evidence_id,),
+                  ),
+              ),
+              source_lineage=(
+                  DiscoverySource(
+                      evidence_artifact_id=evidence_id,
+                      source_locator=evidence.source_locator,
+                      available_at=evidence.available_at,
+                  ),
+              ),
+              why_now='This official financing disclosure is newer than the frozen CATL Research snapshot.',
+              contradiction_or_mapping_warning=(
+                  'New low-cost financing changes funding context but does not itself prove better '
+                  'free-cash-flow conversion, utilization, storage margins, or overseas returns.'
+              ),
+              next_discriminating_search=(
+                  'Check use of proceeds, cumulative new debt, capex progression, operating cash '
+                  'flow, utilization, and whether financing changes per-share capital returns.'
+              ),
+              known_stop_or_downgrade_condition=(
+                  'Wait if the issuance only changes funding mix and does not alter the snapshot’s '
+                  'operating or capital-return evidence.'
+              ),
+          )
+          pre = PreResearchResult(
+              discovery_id=discovery_id,
+              as_of=retrieved_at,
+              what_is_this=(
+                  'A completed financing event under a previously approved bond-registration '
+                  'program, not a new operating result.'
+              ),
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              why_surfaced_now='It is the only official disclosure batch in the shadow window not covered by frozen Research.',
+              basic_business_role='Financing supports the balance sheet and investment program; it does not directly evidence battery demand or margins.',
+              potential_fundamental_driver='Lower-cost funding can ease financing friction for expansion, but value depends on returns earned on deployed capital.',
+              current_market_expectation_hypothesis='The existing snapshot already assumes strong growth alongside heavy capital investment and return uncertainty.',
+              material_claims=(
+                  ResearchClaim(
+                      statement='The company completed a RMB70bn sixth green sci-tech innovation bond issuance after the frozen Research cutoff.',
+                      kind=ResearchClaimKind.FACT,
+                      evidence_artifact_ids=(evidence_id,),
+                  ),
+              ),
+              obvious_contradiction=(
+                  'Financing availability is supportive, while the snapshot’s key concern is '
+                  'whether cash conversion and capital returns keep pace with expansion.'
+              ),
+              largest_unknown='Whether the new funding materially changes capex intensity, cash conversion, utilization, or return on incremental capital.',
+              next_discriminating_search=(
+                  'Wait for proceeds deployment and subsequent cash-flow/utilization evidence; '
+                  'refresh sooner only if debt-funded expansion materially changes the capital-return case.'
+              ),
+              route=PreResearchRoute.WAIT_FOR_TRIGGER,
+              route_reason=(
+                  'The disclosure is genuinely new, but by itself it does not answer or invalidate '
+                  'the frozen snapshot’s key operating and capital-return questions.'
+              ),
+          )
+
+          result = run_research_funnel(
+              discovery=discovery,
+              pre_research=pre,
+              evidence_artifacts=(evidence,),
+          )
+
+          text_preview = '\n'.join(page.text for page in extracted.pages)[:1200]
+          print(f'RESEARCH_AS_OF={research_as_of.isoformat()}')
+          print(f'ANNOUNCEMENT={announcement.announcement_id} {announcement.title}')
+          print(f'PUBLISHED_AT={announcement.published_at.isoformat()}')
+          print(f'SOURCE={announcement.source_locator}')
+          print(f'PDF_SHA256={extracted.pdf_sha256}')
+          print(f'PDF_PAGES={extracted.page_count} CHARS={extracted.extracted_char_count}')
+          print(f'PRE_ROUTE={pre.route.value}')
+          print(f'TERMINAL_STATE={result.terminal_state.value}')
+          print(f'INVESTMENT_AUTHORITY={result.investment_authority.value}')
+          print('TEXT_PREVIEW_START')
+          print(text_preview)
+          print('TEXT_PREVIEW_END')
+          PY
