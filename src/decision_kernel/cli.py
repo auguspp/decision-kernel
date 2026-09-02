@@ -16,6 +16,7 @@ from .research_commit import ResearchCommitPackage
 from .research_workflow_v1 import ResearchFunnelTerminalState
 from .runtime import cninfo_http, hithink_http
 from .runtime.disclosure_assessment import (
+    parse_disclosure_assessment_packet,
     prepare_disclosure_assessment_packet,
     serialize_disclosure_assessment_packet,
 )
@@ -25,11 +26,16 @@ from .runtime.disclosure_radar import (
 )
 from .runtime.disclosure_receipts import (
     DisclosureAssessmentReceipt,
+    disclosure_assessment_receipt_identity,
     disclosure_batch_announcement_ids,
     filter_unassessed_disclosure_batches,
     merge_disclosure_assessment_receipts,
     parse_disclosure_assessment_receipts,
     write_disclosure_assessment_receipts,
+)
+from .runtime.disclosure_research import (
+    DisclosureResearchAssessment,
+    run_disclosure_research_assessment,
 )
 from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
@@ -130,6 +136,35 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Maximum unassessed batches to prepare when --packet-dir is used; fail closed rather "
             f"than silently truncate. Default: {DEFAULT_DISCLOSURE_PACKET_LIMIT}."
+        ),
+    )
+    apply_disclosure = subparsers.add_parser(
+        "apply-disclosure-assessment",
+        help=(
+            "Validate one external semantic disclosure assessment against its exact packet and "
+            "record only quiet Research Funnel outcomes."
+        ),
+    )
+    apply_disclosure.add_argument(
+        "packet",
+        type=Path,
+        help="Self-validating DisclosureAssessmentPacket JSON produced by scan-disclosures.",
+    )
+    apply_disclosure.add_argument(
+        "assessment",
+        type=Path,
+        help=(
+            "External DisclosureResearchAssessment JSON containing existing Discovery / Pre / "
+            "optional Quick Research objects."
+        ),
+    )
+    apply_disclosure.add_argument(
+        "--receipts",
+        type=Path,
+        required=True,
+        help=(
+            "Explicit receipt memory file. WAIT_FOR_TRIGGER / DROP_FOR_NOW are recorded; "
+            "DEEPEN_REQUIRED remains actionable and unreceipted."
         ),
     )
     record_disclosure = subparsers.add_parser(
@@ -252,6 +287,96 @@ def main(
             )
             print(f"HTML: {args.output}", file=stdout)
             print(f"SUMMARY: {args.summary}", file=stdout)
+            return 0
+
+        if args.command == "apply-disclosure-assessment":
+            packet = parse_disclosure_assessment_packet(
+                args.packet.read_text(encoding="utf-8")
+            )
+            assessment = DisclosureResearchAssessment.model_validate_json(
+                args.assessment.read_text(encoding="utf-8")
+            )
+            result = run_disclosure_research_assessment(
+                packet=packet,
+                assessment=assessment,
+            )
+
+            existing_receipts = ()
+            if args.receipts.exists():
+                existing_receipts = parse_disclosure_assessment_receipts(
+                    args.receipts.read_text(encoding="utf-8")
+                )
+
+            if result.terminal_state in {
+                ResearchFunnelTerminalState.WAIT_FOR_TRIGGER,
+                ResearchFunnelTerminalState.DROP_FOR_NOW,
+            }:
+                receipt = DisclosureAssessmentReceipt(
+                    source_lane=packet.source_lane,
+                    stock_code=packet.stock_code,
+                    announcement_ids=packet.announcement_ids,
+                    research_snapshot_id=packet.research_snapshot_id,
+                    research_as_of=packet.research_as_of,
+                    assessment_semantics_id=packet.assessment_semantics_id,
+                    assessment_result=result.terminal_state,
+                    assessed_at=datetime.now(timezone.utc),
+                )
+                merged = merge_disclosure_assessment_receipts(
+                    existing_receipts,
+                    (receipt,),
+                )
+                changed = len(merged) != len(existing_receipts)
+                write_disclosure_assessment_receipts(args.receipts, merged)
+                disposition = "QUIET"
+                receipt_status = "RECORDED" if changed else "UNCHANGED"
+                receipt_detail = f"{args.receipts} ({len(merged)} total)"
+            elif result.terminal_state is ResearchFunnelTerminalState.DEEPEN_REQUIRED:
+                exact_identity = (
+                    packet.stock_code,
+                    packet.announcement_ids,
+                    packet.research_snapshot_id,
+                    packet.research_as_of,
+                    packet.assessment_semantics_id,
+                )
+                previous = next(
+                    (
+                        receipt
+                        for receipt in existing_receipts
+                        if disclosure_assessment_receipt_identity(receipt) == exact_identity
+                    ),
+                    None,
+                )
+                if previous is not None:
+                    raise ValueError(
+                        "DEEPEN_REQUIRED disclosure assessment conflicts with an existing quiet "
+                        "receipt for the same exact batch, frozen Research, and assessment "
+                        f"semantics: {previous.assessment_result.value}"
+                    )
+                disposition = "ACTIONABLE"
+                receipt_status = "NOT WRITTEN"
+                receipt_detail = (
+                    f"{args.receipts} (DEEPEN_REQUIRED remains actionable and unreceipted)"
+                )
+            else:  # pragma: no cover - exhaustive ResearchFunnelTerminalState guard
+                raise AssertionError(
+                    f"unsupported disclosure Research result: {result.terminal_state.value}"
+                )
+
+            print(
+                f"DISCLOSURE RESEARCH RESULT: {result.terminal_state.value}",
+                file=stdout,
+            )
+            print(f"TERMINAL STAGE: {result.terminal_stage.value}", file=stdout)
+            print(f"ASSESSMENT DISPOSITION: {disposition}", file=stdout)
+            print(f"REASON: {result.terminal_reason}", file=stdout)
+            print(
+                f"RECEIPT: {receipt_status} | {receipt_detail}",
+                file=stdout,
+            )
+            print(
+                f"INVESTMENT AUTHORITY: {result.investment_authority}",
+                file=stdout,
+            )
             return 0
 
         if args.command == "record-disclosure-assessment":
