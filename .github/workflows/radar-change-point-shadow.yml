@@ -29,7 +29,8 @@ jobs:
 
           import math
           import os
-          from datetime import datetime, timedelta
+          import time
+          from datetime import datetime
           from zoneinfo import ZoneInfo
 
           import numpy as np
@@ -47,14 +48,21 @@ jobs:
 
           tz = ZoneInfo('Asia/Shanghai')
           now = datetime.now(tz)
+          request_count = 0
 
           def get(path: str, params: dict[str, str]):
-              return _request_hithink_json(
+              global request_count
+              if request_count:
+                  # Experiment-local fixed pacing only; this is not a retry/runtime policy.
+                  time.sleep(3.0)
+              payload = _request_hithink_json(
                   api_key=api_key,
                   path=path,
                   params=params,
                   timeout_seconds=20.0,
               )
+              request_count += 1
+              return payload
 
           calendar = normalize_hithink_calendar(
               get('/api/a-share/calendar/trading-days', {})
@@ -65,9 +73,12 @@ jobs:
           if len(sessions) < 120:
               raise SystemExit('not enough completed sessions for shadow experiment')
 
-          start_ms = int(datetime.combine(sessions[0], datetime.min.time(), tzinfo=tz).timestamp() * 1000)
-          # Old proven Market Slow path uses end at the latest session midnight.
-          end_ms = int(datetime.combine(latest, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
+          start_ms = int(
+              datetime.combine(sessions[0], datetime.min.time(), tzinfo=tz).timestamp() * 1000
+          )
+          end_ms = int(
+              datetime.combine(latest, datetime.min.time(), tzinfo=tz).timestamp() * 1000
+          )
 
           def catalog(tag: str):
               envelope = get('/api/a-share-index/catalog/ths-index-list', {'tag': tag})
@@ -76,23 +87,27 @@ jobs:
               rows = envelope.get('data', {}).get('item')
               if not isinstance(rows, list):
                   raise RuntimeError(f'catalog {tag} has no item list')
-              return rows
+              return {
+                  str(row.get('thscode') or '').strip().upper(): str(row.get('name') or '').strip()
+                  for row in rows
+              }
 
-          keywords = ('煤', '农', '养殖', '种植', 'CRO', 'CXO', '医药研发', '创新药')
-          candidates = []
-          for kind, tag in (('INDUSTRY', 'industry'), ('CONCEPT', 'cn_concept')):
-              for row in catalog(tag):
-                  name = str(row.get('name') or '').strip()
-                  thscode = str(row.get('thscode') or '').strip().upper()
-                  if name and thscode and any(keyword.casefold() in name.casefold() for keyword in keywords):
-                      candidates.append((kind, thscode, name))
+          industry = catalog('industry')
+          concept = catalog('cn_concept')
+          targets = (
+              ('INDUSTRY', '881105.TI', '煤炭开采加工'),
+              ('INDUSTRY', '881101.TI', '种植业与林业'),
+              ('CONCEPT', '885927.TI', 'CRO概念'),
+          )
+          for kind, thscode, expected_name in targets:
+              actual = industry.get(thscode) if kind == 'INDUSTRY' else concept.get(thscode)
+              if actual != expected_name:
+                  raise RuntimeError(
+                      f'HiThink board identity changed for {thscode}: expected={expected_name!r} actual={actual!r}'
+                  )
 
           print(f'LATEST_COMPLETED_SESSION={latest}')
-          print('MATCHED_BOARDS:')
-          for item in candidates:
-              print('  ', item)
-          if not candidates:
-              raise SystemExit('no matching industry/concept boards found')
+          print(f'EXACT_TARGETS={targets}')
 
           def history(thscode: str):
               envelope = get(
@@ -118,60 +133,56 @@ jobs:
               return parsed
 
           benchmark = history('000001.SH')
-          target_sessions = [s for s in sessions if s in benchmark]
-          benchmark_close = np.array([benchmark[s] for s in target_sessions], dtype=float)
+          target_sessions = [session for session in sessions if session in benchmark]
 
           def analyze(kind: str, thscode: str, name: str):
               board = history(thscode)
-              common = [s for s in target_sessions if s in board]
+              common = [session for session in target_sessions if session in board]
               if len(common) < 120:
-                  print(f'SKIP {name} {thscode}: only {len(common)} common sessions')
-                  return
-              b = np.array([board[s] for s in common], dtype=float)
-              m = np.array([benchmark[s] for s in common], dtype=float)
-              rel_daily = np.diff(np.log(b)) - np.diff(np.log(m))
-              # Five-session mean relative return is a smoother observation, not Fundamental evidence.
-              rolling = np.convolve(rel_daily, np.ones(5) / 5.0, mode='valid')
+                  raise RuntimeError(f'{name} {thscode} has only {len(common)} common sessions')
+
+              board_close = np.array([board[session] for session in common], dtype=float)
+              market_close = np.array([benchmark[session] for session in common], dtype=float)
+              relative_daily = np.diff(np.log(board_close)) - np.diff(np.log(market_close))
+              rolling = np.convolve(relative_daily, np.ones(5) / 5.0, mode='valid')
               dates = common[5:]
               std = float(np.std(rolling))
               if not math.isfinite(std) or std <= 0:
-                  print(f'SKIP {name} {thscode}: degenerate signal')
-                  return
+                  raise RuntimeError(f'{name} {thscode} has a degenerate relative-return signal')
+
               standardized = ((rolling - float(np.mean(rolling))) / std).reshape(-1, 1)
               n = len(standardized)
               penalties = (2.0 * math.log(n), 3.0 * math.log(n), 4.0 * math.log(n))
               print(f'\nBOARD {kind} {name} {thscode} n={n} rolling_std={std:.6f}')
-              latest_by_penalty = []
+
+              latest_breaks = []
               for penalty in penalties:
-                  breaks = rpt.Pelt(model='l2', min_size=10, jump=1).fit(standardized).predict(pen=penalty)
+                  breaks = (
+                      rpt.Pelt(model='l2', min_size=10, jump=1)
+                      .fit(standardized)
+                      .predict(pen=penalty)
+                  )
                   internal = [index for index in breaks if index < n]
                   dated = [dates[index - 1].isoformat() for index in internal]
                   latest_index = internal[-1] if internal else None
-                  latest_date = dates[latest_index - 1].isoformat() if latest_index else 'NONE'
-                  latest_by_penalty.append(latest_index)
-                  print(f'  PELT pen={penalty:.3f} breaks={dated} latest={latest_date}')
+                  latest_breaks.append(latest_index)
+                  print(f'  PELT pen={penalty:.3f} breaks={dated}')
 
-              stable = [index for index in latest_by_penalty if index is not None]
-              if stable and max(stable) - min(stable) <= 5:
-                  center = round(sum(stable) / len(stable))
-                  split = max(10, min(n - 10, center))
+              stable = [index for index in latest_breaks if index is not None]
+              if len(stable) == len(penalties) and max(stable) - min(stable) <= 5:
+                  split = round(sum(stable) / len(stable))
                   before = standardized[max(0, split - 20):split, 0]
                   after = standardized[split:min(n, split + 20), 0]
                   shift = float(np.mean(after) - np.mean(before))
-                  print(f'  STABLE_LATEST_BREAK≈{dates[split - 1]} local_standardized_mean_shift={shift:+.3f}')
+                  print(
+                      f'  STABLE_LATEST_BREAK≈{dates[split - 1].isoformat()} '
+                      f'local_standardized_mean_shift={shift:+.3f}'
+                  )
               else:
                   print('  STABLE_LATEST_BREAK=NO')
 
-          # Keep the live request bounded: prioritize exact blind-spot keywords and cap at 12 boards.
-          ordered = sorted(
-              candidates,
-              key=lambda item: (
-                  0 if item[2] in {'煤炭', '农林牧渔'} else 1,
-                  0 if any(k in item[2].upper() for k in ('CRO', 'CXO')) else 1,
-                  item[0],
-                  item[2],
-              ),
-          )[:12]
-          for item in ordered:
-              analyze(*item)
+          for target in targets:
+              analyze(*target)
+
+          print(f'\nTOTAL_HITHINK_REQUESTS={request_count}')
           PY
