@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "corpus_id": "cninfo-catl-disclosure-cognition-v0",
+  "storage_classification": "GIT_DURABLE_EPISTEMIC_EVAL_FIXTURE",
+  "purpose": "Regression evaluation for replaceable semantic Research producers over exact official disclosure packets.",
+  "research_context": {
+    "package_path": "dogfood/300750-catl.json",
+    "stock_code": "300750",
+    "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+    "research_as_of": "2026-07-27T00:00:00Z",
+    "research_information_bundle_hash": "9e054a28d1aacb78560ae71f8e53f6141d0cc1ef5e4aa60250aaaef77da1d242"
+  },
+  "packet_freeze_provenance": {
+    "prepared_at": "2026-09-02T07:00:00Z",
+    "source_experiment_pr": 65,
+    "source_workflow_run_id": 33602610093,
+    "source_artifact_sha256": "902959ea55fe8d4cbb1d77c7752b7b262c0ae29fcb4ffd758b8db4d5951e2dc1",
+    "packet_builder": "decision_kernel.runtime.disclosure_assessment.prepare_disclosure_assessment_packet"
+  },
+  "gold_provenance": {
+    "source_experiment_pr": 44,
+    "source_head_sha": "528d380b2f0477631bdcd82b0ad1f345bba4cc83",
+    "assessment_semantics_id": "research-funnel-v1",
+    "note": "Reviewed baseline judgments from the natural CATL backlog experiment using the existing Research Method v1 funnel."
+  },
+  "cases": [
+    {
+      "case_id": "300750-2026-07-30",
+      "publication_date": "2026-07-30",
+      "announcement_ids": ["1225448968"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-07-30-ba2ebf17c1f338f0.json",
+      "assessment_input_hash": "ba2ebf17c1f338f044ff0c82ed63fc66843b46321cab0252e2490e9ab494cfca",
+      "official_pdf_sha256": {
+        "1225448968": "146accc3aa92e9c3583ac339ba6bb0525068cb71a232eae5f0c3fab6b66d0427"
+      },
+      "gold_terminal_state": "DROP_FOR_NOW",
+      "gold_terminal_stage": "PRE_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "The filing contains required top-shareholder lists around the A-share repurchase process and no repurchase execution data.",
+          "evidence_announcement_ids": ["1225448968"]
+        }
+      ],
+      "gold_largest_unknown": "Whether the proposed repurchase is approved and actually executed at a meaningful scale.",
+      "gold_next_evidence": ["Shareholder approval and later repurchase execution disclosures."],
+      "gold_reason_summary": "Procedural ownership disclosure does not independently change the frozen Research decision context."
+    },
+    {
+      "case_id": "300750-2026-08-04",
+      "publication_date": "2026-08-04",
+      "announcement_ids": ["1225456175"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-08-04-9076b90d4b7b5c36.json",
+      "assessment_input_hash": "9076b90d4b7b5c36084a6e975e4c46508de0d0d8e618af3d3ed286d9746fa4a8",
+      "official_pdf_sha256": {
+        "1225456175": "42196742c9fc92cceeb9ec23246c2cd7855189235e801908ee89b3a08cc94c59"
+      },
+      "gold_terminal_state": "WAIT_FOR_TRIGGER",
+      "gold_terminal_stage": "PRE_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "The implemented A-share interim dividend totals RMB6.180bn, or RMB1.411 per participating share.",
+          "evidence_announcement_ids": ["1225456175"]
+        }
+      ],
+      "gold_largest_unknown": "Whether future operating cash flow after capex can sustain dividends and repurchases without weakening return on incremental capital.",
+      "gold_next_evidence": ["Next-quarter operating cash flow and capex.", "Actual repurchase cash deployment."],
+      "gold_reason_summary": "The cash payout is real capital-return evidence but mostly implements a pre-cutoff plan and does not yet change the frozen thesis."
+    },
+    {
+      "case_id": "300750-2026-08-06",
+      "publication_date": "2026-08-06",
+      "announcement_ids": ["1225462006"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-08-06-68580c9ddba657bc.json",
+      "assessment_input_hash": "68580c9ddba657bc02083a6e7208f9388a431815598afc265dc5ffafcbfd5998",
+      "official_pdf_sha256": {
+        "1225462006": "8f7377f61ce4c92bc9fe75c0249ed2187d9db6b94e83b6313866ec153e2b1f63"
+      },
+      "gold_terminal_state": "DROP_FOR_NOW",
+      "gold_terminal_stage": "PRE_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "H shares were unchanged and A shares increased by 4,058 from option exercises during July 2026.",
+          "evidence_announcement_ids": ["1225462006"]
+        }
+      ],
+      "gold_largest_unknown": "None material to the current Research questions.",
+      "gold_next_evidence": ["No follow-up unless future securities changes become economically material."],
+      "gold_reason_summary": "The tiny share-count change is economically immaterial to the frozen Research context."
+    },
+    {
+      "case_id": "300750-2026-08-07",
+      "publication_date": "2026-08-07",
+      "announcement_ids": ["1225464975"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-08-07-d22eaa83781cca36.json",
+      "assessment_input_hash": "d22eaa83781cca36d00456eff766053577495050c9ef4ba5334636ca5d9c37f5",
+      "official_pdf_sha256": {
+        "1225464975": "0602d38760557c43d9b89619e35cd8469dc4a208f8942aedba343231f87b5b1f"
+      },
+      "gold_terminal_state": "DROP_FOR_NOW",
+      "gold_terminal_stage": "PRE_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "The filing contains shareholder lists for the repurchase shareholder-meeting record date and no execution evidence.",
+          "evidence_announcement_ids": ["1225464975"]
+        }
+      ],
+      "gold_largest_unknown": "Whether the repurchase is approved and how much cash is actually deployed.",
+      "gold_next_evidence": ["Shareholder-meeting resolution.", "Subsequent repurchase progress filings."],
+      "gold_reason_summary": "The second shareholder-list filing is procedural and does not update the decision context."
+    },
+    {
+      "case_id": "300750-2026-08-12",
+      "publication_date": "2026-08-12",
+      "announcement_ids": ["1225470687", "1225470688", "1225470689"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-08-12-d5c110be0932b634.json",
+      "assessment_input_hash": "d5c110be0932b634b250fa4908095dcbbb7c208f100803155b415e7e6e200df6",
+      "official_pdf_sha256": {
+        "1225470687": "2e931ed9e335904750fb3335fd9770037af77459763c15026b1a683579658c50",
+        "1225470688": "e8a3fa46e9c946c7e9239f17cb4f8f1c9e21cfd62add751701e568f8d631a792",
+        "1225470689": "679240888b8136a28f04a58a3fb92b782ff5393a59f0c1b4d312bd5a9d9d0283"
+      },
+      "gold_terminal_state": "WAIT_FOR_TRIGGER",
+      "gold_terminal_stage": "QUICK_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "Shareholders approved an A-share repurchase program sized at RMB20–40bn for cancellation and registered-capital reduction.",
+          "evidence_announcement_ids": ["1225470688"]
+        },
+        {
+          "statement": "CATL committed RMB2.475bn of own funds for 49.5% of an 8-year Hainan green-industry fund.",
+          "evidence_announcement_ids": ["1225470687"]
+        }
+      ],
+      "gold_largest_unknown": "How much of the RMB20–40bn repurchase will actually be executed, over what period and funding mix, and how that cash use interacts with capex and future operating cash flow.",
+      "gold_next_evidence": ["Official repurchase progress or completion filings.", "Next-quarter operating cash flow and capex or capacity-utilization evidence.", "Fund capital-call and deployment evidence if economically material."],
+      "gold_reason_summary": "The batch merits one bounded Quick Research pass because it directly intersects capital allocation, but approval and commitment are not actual cash deployment and do not justify Deep Research yet.",
+      "gold_no_claim_from_announcement_ids": ["1225470689"]
+    },
+    {
+      "case_id": "300750-2026-08-25",
+      "publication_date": "2026-08-25",
+      "announcement_ids": ["1225502236"],
+      "packet_path": "eval/disclosure_cognition/packets/300750-2026-08-25-97ce9a01b90840b4.json",
+      "assessment_input_hash": "97ce9a01b90840b47edfb585d9b68e2128412f0abbebac2eae281a16a2794656",
+      "official_pdf_sha256": {
+        "1225502236": "91295c64ce6534e2cfdebe712fa4a1a676064d5d8922df6cb6a87e165946ae93"
+      },
+      "gold_terminal_state": "DROP_FOR_NOW",
+      "gold_terminal_stage": "PRE_RESEARCH",
+      "gold_claims": [
+        {
+          "statement": "The filing changes CATL's principal place of business in Hong Kong effective 2026-08-25.",
+          "evidence_announcement_ids": ["1225502236"]
+        }
+      ],
+      "gold_largest_unknown": "None material to the current Research questions.",
+      "gold_next_evidence": ["No follow-up unless a later filing links the change to a substantive corporate event."],
+      "gold_reason_summary": "The address change is administrative and has no decision-context impact."
+    }
+  ]
+}
