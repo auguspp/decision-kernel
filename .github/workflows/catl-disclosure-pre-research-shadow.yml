@@ -177,7 +177,7 @@ jobs:
           print(f'PDF_PAGES={extracted.page_count} CHARS={extracted.extracted_char_count}')
           print(f'PRE_ROUTE={pre.route.value}')
           print(f'TERMINAL_STATE={result.terminal_state.value}')
-          print(f'INVESTMENT_AUTHORITY={result.investment_authority.value}')
+          print(f'INVESTMENT_AUTHORITY={result.investment_authority}')
           print('TEXT_PREVIEW_START')
           print(text_preview)
           print('TEXT_PREVIEW_END')
