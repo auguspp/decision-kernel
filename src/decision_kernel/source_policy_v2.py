@@ -44,6 +44,34 @@ class ClaimSourceUseV2(KernelModel):
     role_basis: str = Field(min_length=1)
 
 
+def is_source_role_compatible_with_artifact(
+    *,
+    source_type: str,
+    source_role: SourceEpistemicRole,
+) -> bool:
+    """Fail closed when an EvidenceArtifact type is promoted to an invalid role."""
+
+    allowed = {
+        "OFFICIAL_FILING": {
+            SourceEpistemicRole.PRIMARY_REALIZED,
+            SourceEpistemicRole.PRIMARY_STATEMENT,
+        },
+        "INVESTOR_RELATIONS": {SourceEpistemicRole.PRIMARY_STATEMENT},
+        "REGULATOR": {
+            SourceEpistemicRole.PRIMARY_REALIZED,
+            SourceEpistemicRole.PRIMARY_STATEMENT,
+        },
+        "MARKET_CONSENSUS": {SourceEpistemicRole.MARKET_EXPECTATION},
+        "SELL_SIDE_RESEARCH": {
+            SourceEpistemicRole.ANALYST_MODEL,
+            SourceEpistemicRole.ANALYST_OPINION,
+            SourceEpistemicRole.SECONDARY_OBSERVATION,
+        },
+        "PUBLIC_MARKET_CONTEXT": {SourceEpistemicRole.SECONDARY_OBSERVATION},
+    }
+    return source_role in allowed.get(source_type.strip().upper(), set())
+
+
 def is_source_use_admissible(
     *,
     claim_kind: ResearchClaimKind,
