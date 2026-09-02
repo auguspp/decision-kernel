@@ -52,3 +52,81 @@ jobs:
           name: decision-inbox
           path: decision-inbox/
           retention-days: 14
+
+  disclosures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    concurrency:
+      group: disclosure-receipt-memory
+      cancel-in-progress: false
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Restore best-effort disclosure receipt memory
+        id: disclosure-memory
+        uses: actions/cache/restore@v4
+        with:
+          path: decision-state/disclosure-receipts.json
+          key: disclosure-receipts-scan-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            disclosure-receipts-state-
+      - name: Scan official disclosures
+        shell: bash
+        run: |
+          set -euo pipefail
+          through="$(date +%F)"
+          receipt_args=()
+          memory_status="EMPTY_SAFE_REASSESSMENT"
+          if [ -f decision-state/disclosure-receipts.json ]; then
+            receipt_args=(--receipts decision-state/disclosure-receipts.json)
+            memory_status="RESTORED_BEST_EFFORT"
+          fi
+          printf 'MEMORY_STATUS=%s\n' "$memory_status" > disclosure-scan-meta.txt
+          printf 'THROUGH=%s\n' "$through" >> disclosure-scan-meta.txt
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through "$through" \
+            "${receipt_args[@]}" | tee disclosure-scan.txt
+      - name: Publish disclosure summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Official disclosure scan"
+            echo
+            if [ -f disclosure-scan-meta.txt ]; then
+              source disclosure-scan-meta.txt
+              echo "Receipt memory: \`$MEMORY_STATUS\`"
+              echo
+              echo "Through: \`$THROUGH\` (Asia/Shanghai)"
+              echo
+            fi
+            if [ -f disclosure-scan.txt ]; then
+              echo '```text'
+              cat disclosure-scan.txt
+              echo '```'
+            else
+              echo "The disclosure scan failed before a result was produced."
+            fi
+            echo
+            echo "Receipt memory is only a Harness attention optimization. Cache loss intentionally causes reassessment rather than silent suppression."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload disclosure scan snapshot
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-disclosure-scan
+          path: |
+            disclosure-scan.txt
+            disclosure-scan-meta.txt
+          retention-days: 14
