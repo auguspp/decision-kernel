@@ -1,0 +1,76 @@
+name: disclosure-actions-memory-smoke
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Restore isolated experiment receipt memory
+        uses: actions/cache/restore@v4
+        with:
+          path: experiment-state/disclosure-receipts.json
+          key: experiment-disclosure-receipts-restore-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            experiment-disclosure-receipts-state-
+      - name: Report cache state before record
+        shell: bash
+        run: |
+          if [ -f experiment-state/disclosure-receipts.json ]; then
+            echo "CACHE_BEFORE=RESTORED" | tee cache-state.txt
+          else
+            echo "CACHE_BEFORE=EMPTY" | tee cache-state.txt
+          fi
+      - name: Record known quiet CATL batch through production CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p experiment-state
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-27 \
+            --result WAIT_FOR_TRIGGER \
+            --receipts experiment-state/disclosure-receipts.json | tee record.txt
+      - name: Save isolated experiment receipt memory
+        uses: actions/cache/save@v4
+        with:
+          path: experiment-state/disclosure-receipts.json
+          key: experiment-disclosure-receipts-state-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Verify restored or newly written receipt suppresses exact batch
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision-kernel scan-disclosures dogfood/300750-catl.json \
+            --through 2026-08-27 \
+            --receipts experiment-state/disclosure-receipts.json | tee scan.txt
+          grep -Eq '[1-9][0-9]* seen-suppressed' scan.txt
+          grep -q '1225519101' record.txt
+          if grep -q '1225519101' scan.txt; then
+            echo "recorded batch leaked back into unassessed output" >&2
+            exit 1
+          fi
+      - name: Publish smoke summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Disclosure Actions memory smoke"
+            echo
+            [ -f cache-state.txt ] && cat cache-state.txt
+            echo
+            [ -f record.txt ] && cat record.txt
+            echo
+            [ -f scan.txt ] && cat scan.txt
+          } >> "$GITHUB_STEP_SUMMARY"
