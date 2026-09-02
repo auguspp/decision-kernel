@@ -56,27 +56,63 @@ These labels are evaluation gold for this corpus version. They do not create inv
 
 ## Candidate-run provenance
 
-A future LLM runner should record operational provenance alongside each candidate output:
+A candidate run is a small JSON manifest. It names the corpus and records producer-level provenance plus one assessment file per case:
 
-- model/provider identifier;
-- prompt or producer version;
-- invocation time;
-- exact packet `assessment_input_hash`;
-- raw response SHA256;
-- parsed `DisclosureResearchAssessment` SHA256 or canonical hash;
-- parser/validation errors, if any.
+```json
+{
+  "schema_version": 1,
+  "run_id": "gpt-x-prompt-v2-2026-09-02",
+  "corpus_id": "cninfo-catl-disclosure-cognition-v0",
+  "producer": {
+    "provider": "example-provider",
+    "model": "example-model",
+    "producer_version": "research-producer-v2",
+    "prompt_version": "disclosure-prompt-v2"
+  },
+  "cases": [
+    {
+      "case_id": "300750-2026-07-30",
+      "assessment_path": "outputs/300750-2026-07-30.json",
+      "raw_response_path": "raw/300750-2026-07-30.txt",
+      "invoked_at": "2026-09-02T08:00:00Z"
+    }
+  ]
+}
+```
 
-That provenance is for audit and comparison. It must not automatically enter Kernel constitution or disclosure-receipt identity.
+`raw_response_path` may equal `assessment_path` when the provider already returns strict structured JSON. The scorer hashes both raw response bytes and parsed assessment state; model/provider identity, prompt/producer version, and invocation time remain operational provenance only.
 
-## What to score
+Run the deterministic scorer from the repository root:
 
-The first useful regression metrics are deliberately semantic rather than agentic:
+```bash
+python eval/disclosure_cognition/score_candidate_run.py candidate-run.json \
+  --output candidate-score.json
+```
 
-1. **Input binding failures** — changed ticker, PIT cutoff, source lane, packet hash, or official Evidence lineage.
-2. **Unsupported claims** — claims that cannot be traced to Evidence in the frozen packet or explicitly supplied supplemental Evidence.
+A complete, structurally valid run exits `0` even when its semantic routes drift from the reviewed gold. Missing cases, unexpected cases, malformed output, or exact packet/PIT/Evidence binding failures exit non-zero because the run is not auditable. This avoids silently turning the gold labels into Kernel authority.
+
+## What v0 scores automatically
+
+The deterministic scorer measures only things the system can know without inventing another semantic judge:
+
+1. **Input binding failures** — changed assessment input, ticker, PIT cutoff, source lane, or official Evidence lineage fail through the existing production validator.
+2. **Evidence-reference integrity** — referenced Evidence must exist in the exact packet or explicitly supplied supplemental Evidence. V0 does not pretend that an existing citation semantically entails a prose claim.
 3. **Route drift** — DROP / WAIT / DEEPEN differences versus the reviewed baseline.
-4. **Stage inflation** — especially a tendency to turn routine disclosures into Quick/Deep Research without discriminating evidence.
-5. **Unknown quality** — whether unresolved questions remain decision-relevant rather than generic.
-6. **Next-evidence quality** — whether the producer asks for evidence that could actually discriminate the frozen thesis.
+4. **Stage drift** — Pre versus Quick differences, including stage inflation.
+5. **DEEPEN overcall** — candidate DEEPEN decisions where the reviewed case remained quiet.
+6. **Structural unknown / next-evidence presence** — counts are reported for audit, but prose quality is not scored by string heuristics.
+
+The scorer records a terminal confusion table plus per-case raw-response SHA256, assessment JSON SHA256, parsed assessment canonical hash, routes, terminal state/stage, supplemental Evidence count, and investment authority. It never writes a disclosure receipt and never invokes the Human surface.
+
+## What still requires semantic review
+
+These questions remain deliberately outside deterministic v0 scoring:
+
+- whether a prose claim is actually entailed by the cited page text;
+- whether an unknown is economically important rather than generic;
+- whether proposed next Evidence would genuinely discriminate the frozen thesis;
+- whether a route drift is an improvement, a regression, or a defensible alternative interpretation.
+
+A future Human or model-judge layer can evaluate those questions against the same frozen packets, but that judge is itself replaceable evaluation policy, not Kernel law.
 
 The corpus should grow only from real cases encountered in dogfood or operation. Do not manufacture breadth just to make the benchmark look larger.
