@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
+from uuid import UUID
 
 from pydantic import Field
 
@@ -37,7 +38,7 @@ class AssertionScope(StrEnum):
 
 
 class ClaimSourceUseV2(KernelModel):
-    evidence_artifact_id: str = Field(min_length=1, max_length=64)
+    evidence_artifact_id: UUID
     source_role: SourceEpistemicRole
     assertion_scope: AssertionScope
     role_basis: str = Field(min_length=1)
