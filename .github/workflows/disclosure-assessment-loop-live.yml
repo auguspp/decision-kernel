@@ -1,0 +1,244 @@
+name: disclosure-assessment-loop-live
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/disclosure-assessment-loop-live.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with document parser
+        run: python -m pip install -e '.[documents]'
+      - name: Seed only previously proven quiet CATL receipt history
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
+          from decision_kernel.runtime.disclosure_receipts import (
+              DisclosureAssessmentReceipt,
+              write_disclosure_assessment_receipts,
+          )
+
+          snapshot = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          ).research_snapshot
+          assessed_at = datetime(2026, 9, 2, 5, 0, tzinfo=timezone.utc)
+          quiet = [
+              (('1225448968',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225456175',), ResearchFunnelTerminalState.WAIT_FOR_TRIGGER),
+              (('1225462006',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225464975',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225470687', '1225470688', '1225470689'), ResearchFunnelTerminalState.WAIT_FOR_TRIGGER),
+              (('1225502236',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+          ]
+          receipts = tuple(
+              DisclosureAssessmentReceipt(
+                  stock_code='300750',
+                  announcement_ids=announcement_ids,
+                  research_snapshot_id=snapshot.id,
+                  research_as_of=snapshot.as_of_datetime,
+                  assessment_result=result,
+                  assessed_at=assessed_at,
+              )
+              for announcement_ids, result in quiet
+          )
+          write_disclosure_assessment_receipts(Path('receipts.json'), receipts)
+          PY
+      - name: Scan to one exact unassessed packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision-kernel scan-disclosures \
+            dogfood/300750-catl.json \
+            --through 2026-08-27 \
+            --receipts receipts.json \
+            --packet-dir packet-output \
+            --packet-limit 1 | tee before.txt
+
+          expected_hash='deeeeecd4c76ead88b23a62e274d7c9dfa66c30c118f1c38cad14686601704d8'
+          grep -q "1 unassessed / 6 seen-suppressed / 7 research-uncovered" before.txt
+          grep -q "ASSESSMENT PACKETS: 1 prepared" before.txt
+          grep -q "input_hash=${expected_hash}" before.txt
+          packet="packet-output/300750-2026-08-27-${expected_hash:0:16}.json"
+          test -f "$packet"
+          printf '%s\n' "$packet" > packet-path.txt
+      - name: Rebind previously validated CATL WAIT assessment to exact packet
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          from decision_kernel.research_funnel import (
+              DiscoveryInput,
+              DiscoveryObservation,
+              DiscoverySource,
+              PreResearchResult,
+              PreResearchRoute,
+              ResearchClaim,
+              ResearchClaimKind,
+          )
+          from decision_kernel.runtime.disclosure_assessment import parse_disclosure_assessment_packet
+          from decision_kernel.runtime.disclosure_research import DisclosureResearchAssessment
+
+          packet_path = Path(Path('packet-path.txt').read_text(encoding='utf-8').strip())
+          packet = parse_disclosure_assessment_packet(packet_path.read_text(encoding='utf-8'))
+          assert packet.assessment_input_hash == 'deeeeecd4c76ead88b23a62e274d7c9dfa66c30c118f1c38cad14686601704d8'
+          assert packet.announcement_ids == ('1225519101',)
+          official = packet.evidence[0].evidence_artifact
+
+          discovery_id = 'cninfo-refresh-300750-1225519101'
+          discovery = DiscoveryInput(
+              discovery_id=discovery_id,
+              source_lane=packet.source_lane,
+              ticker=packet.stock_code,
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              as_of=packet.prepared_at,
+              factual_observations=(
+                  DiscoveryObservation(
+                      statement=(
+                          '宁德时代完成2026年度第六期绿色科技创新债券发行，'
+                          '本期合计70亿元；该融资事件发生在当前Research as-of之后。'
+                      ),
+                      evidence_artifact_ids=(official.id,),
+                  ),
+              ),
+              source_lineage=(
+                  DiscoverySource(
+                      evidence_artifact_id=official.id,
+                      source_locator=official.source_locator,
+                      available_at=official.available_at,
+                  ),
+              ),
+              why_now='This official financing disclosure is newer than the frozen CATL Research snapshot.',
+              contradiction_or_mapping_warning=(
+                  'New low-cost financing changes funding context but does not itself prove better '
+                  'free-cash-flow conversion, utilization, storage margins, or overseas returns.'
+              ),
+              next_discriminating_search=(
+                  'Check use of proceeds, cumulative new debt, capex progression, operating cash '
+                  'flow, utilization, and whether financing changes per-share capital returns.'
+              ),
+              known_stop_or_downgrade_condition=(
+                  'Wait if the issuance only changes funding mix and does not alter the snapshot’s '
+                  'operating or capital-return evidence.'
+              ),
+          )
+          pre = PreResearchResult(
+              discovery_id=discovery_id,
+              as_of=packet.prepared_at,
+              what_is_this=(
+                  'A completed financing event under a previously approved bond-registration '
+                  'program, not a new operating result.'
+              ),
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              why_surfaced_now=(
+                  'It is the official disclosure batch after frozen Research that remains '
+                  'unassessed after exact receipt suppression.'
+              ),
+              basic_business_role=(
+                  'Financing supports the balance sheet and investment program; it does not '
+                  'directly evidence battery demand or margins.'
+              ),
+              potential_fundamental_driver=(
+                  'Lower-cost funding can ease financing friction for expansion, but value depends '
+                  'on returns earned on deployed capital.'
+              ),
+              current_market_expectation_hypothesis=(
+                  'The existing snapshot already assumes strong growth alongside heavy capital '
+                  'investment and return uncertainty.'
+              ),
+              material_claims=(
+                  ResearchClaim(
+                      statement=(
+                          'The company completed a RMB70bn sixth green sci-tech innovation bond '
+                          'issuance after the frozen Research cutoff.'
+                      ),
+                      kind=ResearchClaimKind.FACT,
+                      evidence_artifact_ids=(official.id,),
+                  ),
+              ),
+              obvious_contradiction=(
+                  'Financing availability is supportive, while the snapshot’s key concern is '
+                  'whether cash conversion and capital returns keep pace with expansion.'
+              ),
+              largest_unknown=(
+                  'Whether the new funding materially changes capex intensity, cash conversion, '
+                  'utilization, or return on incremental capital.'
+              ),
+              next_discriminating_search=(
+                  'Wait for proceeds deployment and subsequent cash-flow/utilization evidence; '
+                  'refresh sooner only if debt-funded expansion materially changes the '
+                  'capital-return case.'
+              ),
+              route=PreResearchRoute.WAIT_FOR_TRIGGER,
+              route_reason=(
+                  'The disclosure is genuinely new, but by itself it does not answer or invalidate '
+                  'the frozen snapshot’s key operating and capital-return questions.'
+              ),
+          )
+          assessment = DisclosureResearchAssessment(
+              assessment_input_hash=packet.assessment_input_hash,
+              discovery=discovery,
+              pre_research=pre,
+          )
+          Path('assessment.json').write_text(
+              assessment.model_dump_json(indent=2),
+              encoding='utf-8',
+          )
+          PY
+      - name: Apply assessment and record quiet memory
+        shell: bash
+        run: |
+          set -euo pipefail
+          packet="$(cat packet-path.txt)"
+          decision-kernel apply-disclosure-assessment \
+            "$packet" assessment.json \
+            --receipts receipts.json | tee apply.txt
+
+          grep -q "DISCLOSURE RESEARCH RESULT: WAIT_FOR_TRIGGER" apply.txt
+          grep -q "ASSESSMENT DISPOSITION: QUIET" apply.txt
+          grep -q "RECEIPT: RECORDED" apply.txt
+          grep -q "INVESTMENT AUTHORITY: NONE" apply.txt
+          ! grep -q "HUMAN ATTENTION" apply.txt
+
+          python - <<'PY'
+          from pathlib import Path
+          from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
+          from decision_kernel.runtime.disclosure_receipts import parse_disclosure_assessment_receipts
+
+          receipts = parse_disclosure_assessment_receipts(
+              Path('receipts.json').read_text(encoding='utf-8')
+          )
+          assert len(receipts) == 7
+          final = next(item for item in receipts if item.announcement_ids == ('1225519101',))
+          assert final.assessment_result is ResearchFunnelTerminalState.WAIT_FOR_TRIGGER
+          assert final.assessment_semantics_id == 'research-funnel-v1'
+          print('RECEIPTS_TOTAL=7')
+          print('NEW_RECEIPT=1225519101:WAIT_FOR_TRIGGER')
+          PY
+      - name: Re-scan and prove the new batch is quiet
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision-kernel scan-disclosures \
+            dogfood/300750-catl.json \
+            --through 2026-08-27 \
+            --receipts receipts.json | tee after.txt
+
+          grep -q "0 unassessed / 7 seen-suppressed / 7 research-uncovered" after.txt
+          grep -q "NO UNASSESSED RESEARCH-UNCOVERED OFFICIAL DISCLOSURES" after.txt
+          grep -q "DISCLOSURE ASSESSMENT STATUS: QUIET" after.txt
+          grep -q "INVESTMENT AUTHORITY: NONE" after.txt
+          printf '%s\n' 'LOOP_METRIC=7 uncovered -> 6 prior-seen -> 1 assessed WAIT -> 7 seen-suppressed -> 0 unassessed -> 0 Human Surface calls'
