@@ -12,7 +12,15 @@ from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
 from .disclosure_radar import DisclosureBatch
 
 
-ReceiptIdentity = tuple[str, tuple[str, ...], UUID, datetime]
+CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID = "research-funnel-v1"
+LEGACY_UNVERSIONED_DISCLOSURE_ASSESSMENT_SEMANTICS_ID = "legacy-unversioned"
+ReceiptIdentity = tuple[str, tuple[str, ...], UUID, datetime, str]
+
+
+def _validate_assessment_semantics_id(value: str) -> str:
+    if not value or value != value.strip():
+        raise ValueError("disclosure assessment semantics id must be non-empty and trimmed")
+    return value
 
 
 @dataclass(frozen=True)
@@ -21,7 +29,8 @@ class DisclosureAssessmentReceipt:
 
     This is deliberately not a Kernel event, recommendation, queue record, or persistence model.
     It only carries enough identity to avoid re-assessing the same official disclosure batch
-    against the same frozen Research state on a later Harness run.
+    against the same frozen Research state under the same assessment semantics on a later Harness
+    run.
     """
 
     stock_code: str
@@ -30,6 +39,7 @@ class DisclosureAssessmentReceipt:
     research_as_of: datetime
     assessment_result: ResearchFunnelTerminalState
     assessed_at: datetime
+    assessment_semantics_id: str = CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID
     source_lane: str = "CNINFO"
 
     def __post_init__(self) -> None:
@@ -49,6 +59,7 @@ class DisclosureAssessmentReceipt:
             raise ValueError("disclosure assessment receipt assessed_at must be timezone-aware")
         if self.assessed_at < self.research_as_of:
             raise ValueError("disclosure assessment receipt cannot precede frozen Research")
+        _validate_assessment_semantics_id(self.assessment_semantics_id)
 
 
 def disclosure_assessment_receipt_identity(
@@ -61,6 +72,7 @@ def disclosure_assessment_receipt_identity(
         receipt.announcement_ids,
         receipt.research_snapshot_id,
         receipt.research_as_of,
+        receipt.assessment_semantics_id,
     )
 
 
@@ -76,16 +88,21 @@ def _validate_unique_receipts(
             continue
         if previous.assessment_result is not receipt.assessment_result:
             raise ValueError(
-                "conflicting disclosure assessment receipts for the same exact batch and frozen Research"
+                "conflicting disclosure assessment receipts for the same exact batch, frozen Research, and assessment semantics"
             )
         raise ValueError(
-            "duplicate disclosure assessment receipt for the same exact batch and frozen Research"
+            "duplicate disclosure assessment receipt for the same exact batch, frozen Research, and assessment semantics"
         )
     return tuple(receipts)
 
 
 def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureAssessmentReceipt, ...]:
-    """Parse one explicit JSON receipt file and fail closed on malformed memory state."""
+    """Parse one explicit JSON receipt file and fail closed on malformed memory state.
+
+    Legacy receipt files without an assessment-semantics field remain readable, but they are marked
+    ``legacy-unversioned``. They therefore cannot silently suppress work under the current explicit
+    semantics id.
+    """
 
     try:
         payload = json.loads(raw_receipts)
@@ -104,6 +121,7 @@ def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureA
         "assessment_result",
         "assessed_at",
     }
+    optional_fields = {"assessment_semantics_id"}
     receipts: list[DisclosureAssessmentReceipt] = []
 
     for index, item in enumerate(payload):
@@ -111,7 +129,7 @@ def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureA
             raise ValueError(f"disclosure receipt {index} must be a JSON object")
         fields = set(item)
         missing = required_fields - fields
-        unknown = fields - required_fields
+        unknown = fields - required_fields - optional_fields
         if missing:
             raise ValueError(
                 f"disclosure receipt {index} missing fields: {', '.join(sorted(missing))}"
@@ -121,14 +139,16 @@ def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureA
                 f"disclosure receipt {index} has unknown fields: {', '.join(sorted(unknown))}"
             )
 
-        string_fields = (
+        string_fields = [
             "source_lane",
             "stock_code",
             "research_snapshot_id",
             "research_as_of",
             "assessment_result",
             "assessed_at",
-        )
+        ]
+        if "assessment_semantics_id" in item:
+            string_fields.append("assessment_semantics_id")
         if any(not isinstance(item[field], str) for field in string_fields):
             raise ValueError(f"disclosure receipt {index} scalar fields must be strings")
 
@@ -147,6 +167,10 @@ def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureA
                 research_as_of=datetime.fromisoformat(item["research_as_of"]),
                 assessment_result=ResearchFunnelTerminalState(item["assessment_result"]),
                 assessed_at=datetime.fromisoformat(item["assessed_at"]),
+                assessment_semantics_id=item.get(
+                    "assessment_semantics_id",
+                    LEGACY_UNVERSIONED_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
+                ),
             )
         except (TypeError, ValueError) as exc:
             raise ValueError(f"disclosure receipt {index} is invalid: {exc}") from exc
@@ -160,6 +184,7 @@ def _receipt_sort_key(receipt: DisclosureAssessmentReceipt) -> tuple:
         receipt.stock_code,
         receipt.research_as_of,
         str(receipt.research_snapshot_id),
+        receipt.assessment_semantics_id,
         receipt.announcement_ids,
     )
 
@@ -171,9 +196,9 @@ def merge_disclosure_assessment_receipts(
     """Idempotently merge exact Harness receipts without silently changing an assessment.
 
     Re-recording the same exact identity with the same terminal assessment is a no-op and keeps the
-    original ``assessed_at`` clock. A different terminal assessment for the same exact identity
-    fails closed; reassessment should instead happen against a new Research context or future
-    explicit assessment-semantics identity when that need is proven.
+    original ``assessed_at`` clock. A different terminal assessment under the same exact semantics
+    fails closed. The same batch and frozen Research may be reassessed under a new explicit
+    assessment-semantics id without overwriting historical memory.
     """
 
     _validate_unique_receipts(existing)
@@ -189,7 +214,7 @@ def merge_disclosure_assessment_receipts(
             continue
         if previous.assessment_result is not receipt.assessment_result:
             raise ValueError(
-                "conflicting disclosure assessment receipt for the same exact batch and frozen Research"
+                "conflicting disclosure assessment receipt for the same exact batch, frozen Research, and assessment semantics"
             )
         # Same exact identity and same terminal assessment is intentionally idempotent. Preserve
         # the first assessment clock rather than making memory look newer on every write.
@@ -211,6 +236,7 @@ def serialize_disclosure_assessment_receipts(
             "announcement_ids": list(receipt.announcement_ids),
             "research_snapshot_id": str(receipt.research_snapshot_id),
             "research_as_of": receipt.research_as_of.isoformat(),
+            "assessment_semantics_id": receipt.assessment_semantics_id,
             "assessment_result": receipt.assessment_result.value,
             "assessed_at": receipt.assessed_at.isoformat(),
         }
@@ -251,15 +277,18 @@ def filter_unassessed_disclosure_batches(
     *,
     research_identity_by_stock: Mapping[str, tuple[UUID, datetime]],
     receipts: Sequence[DisclosureAssessmentReceipt],
+    assessment_semantics_id: str = CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
 ) -> tuple[DisclosureBatch, ...]:
-    """Suppress only exact batches already assessed against the same frozen Research.
+    """Suppress only exact batches assessed under the same Research and assessment semantics.
 
     A same-day batch with a changed underlying announcement set remains unassessed. A receipt from
-    another ResearchSnapshot also does not suppress the batch. The function carries no materiality,
-    Research priority, Human wake, or investment-authority semantics.
+    another ResearchSnapshot or another assessment-semantics id also does not suppress the batch.
+    The function carries no materiality, Research priority, Human wake, or investment-authority
+    semantics.
     """
 
     _validate_unique_receipts(receipts)
+    assessment_semantics_id = _validate_assessment_semantics_id(assessment_semantics_id)
     seen = {
         disclosure_assessment_receipt_identity(receipt)
         for receipt in receipts
@@ -280,6 +309,7 @@ def filter_unassessed_disclosure_batches(
             disclosure_batch_announcement_ids(batch),
             research_snapshot_id,
             research_as_of,
+            assessment_semantics_id,
         )
         if identity not in seen:
             unassessed.append(batch)
