@@ -1,0 +1,83 @@
+name: yto-v2-odds-once
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/yto-v2-odds-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  run-yto-v2-odds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Check HiThink secret
+        shell: bash
+        run: |
+          if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
+            echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
+            exit 1
+          fi
+      - name: Run YTO v2 live Odds once
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from decision_kernel.deep_research import DeepResearchPackage
+          from decision_kernel.live import run_live_deep_research_package
+          from decision_kernel.runtime import hithink_http
+
+          package = DeepResearchPackage.model_validate_json(
+              Path("research_cases/600233-yto-deep-research-v2.json").read_text(encoding="utf-8")
+          )
+          api_key = os.environ.get(hithink_http.HITHINK_API_KEY_ENV)
+
+          def fetch_market(*, thscode: str, observed_at):
+              return hithink_http.fetch_latest_hithink_observed_market(
+                  thscode=thscode,
+                  observed_at=observed_at,
+                  api_key=api_key,
+              )
+
+          result = run_live_deep_research_package(
+              package=package,
+              fetch_market=fetch_market,
+              observed_at=datetime.now(timezone.utc),
+          )
+          odds = result.decision.odds.artifact
+          thresholds = odds.adjusted_thresholds
+          print("YTO_V2_ODDS")
+          print(f"snapshot_id={odds.research_snapshot_id}")
+          print(f"research_information_bundle_hash={odds.research_information_bundle_hash}")
+          print(f"price={odds.observed_market.market_price}")
+          print(f"market_timestamp={odds.observed_market.market_timestamp.isoformat()}")
+          print(f"market_source={odds.observed_market.market_data_source}")
+          print(f"holding_period_days={odds.holding_period_days}")
+          print(f"expected_return={odds.expected_holding_period_return}")
+          print(f"positive_probability={odds.positive_return_probability}")
+          print(f"min_scenario_return={odds.minimum_scenario_return}")
+          print(f"max_scenario_return={odds.maximum_scenario_return}")
+          print(f"zone={odds.participation_zone.value}")
+          print(f"model_risk={odds.model_risk_level.value}")
+          print(f"model_risk_addon={thresholds.model_risk_addon}")
+          print(f"context_addon={thresholds.odds_context_addon}")
+          print(f"acceptable_required_return={thresholds.acceptable_required_return}")
+          print(f"attractive_required_return={thresholds.attractive_required_return}")
+          print(f"exceptional_required_return={thresholds.exceptional_required_return}")
+          print(f"positive_probability_hurdles={thresholds.acceptable_min_positive_probability}/{thresholds.attractive_min_positive_probability}/{thresholds.exceptional_min_positive_probability}")
+          print(f"attention_eligible={result.decision.human_surface.attention_eligible}")
+          print(f"investment_authority={result.decision.human_surface.investment_authority}")
+          PY
