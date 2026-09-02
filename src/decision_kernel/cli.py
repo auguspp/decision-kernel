@@ -13,20 +13,29 @@ from zoneinfo import ZoneInfo
 from .deep_research import DeepResearchPackage
 from .live import run_live_deep_research_package, run_live_research_commit_package
 from .research_commit import ResearchCommitPackage
+from .research_workflow_v1 import ResearchFunnelTerminalState
 from .runtime import cninfo_http, hithink_http
 from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
     group_disclosures_by_publication_date,
 )
 from .runtime.disclosure_receipts import (
+    DisclosureAssessmentReceipt,
+    disclosure_batch_announcement_ids,
     filter_unassessed_disclosure_batches,
+    merge_disclosure_assessment_receipts,
     parse_disclosure_assessment_receipts,
+    write_disclosure_assessment_receipts,
 )
 from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
 
 
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
+QUIET_DISCLOSURE_ASSESSMENT_RESULTS = (
+    ResearchFunnelTerminalState.WAIT_FOR_TRIGGER.value,
+    ResearchFunnelTerminalState.DROP_FOR_NOW.value,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -101,6 +110,38 @@ def build_parser() -> argparse.ArgumentParser:
             "against the same frozen Research."
         ),
     )
+    record_disclosure = subparsers.add_parser(
+        "record-disclosure-assessment",
+        help=(
+            "Record one already-reviewed quiet CNINFO disclosure batch against frozen Research."
+        ),
+    )
+    record_disclosure.add_argument(
+        "package",
+        type=Path,
+        help="Current ResearchCommitPackage or DeepResearchPackage for the security.",
+    )
+    record_disclosure.add_argument(
+        "--publication-date",
+        type=date.fromisoformat,
+        required=True,
+        help="Exact CNINFO publication date in YYYY-MM-DD form.",
+    )
+    record_disclosure.add_argument(
+        "--result",
+        choices=QUIET_DISCLOSURE_ASSESSMENT_RESULTS,
+        required=True,
+        help=(
+            "Existing Research Funnel terminal result. Only quiet terminal states can become "
+            "seen receipts; DEEPEN_REQUIRED must remain actionable."
+        ),
+    )
+    record_disclosure.add_argument(
+        "--receipts",
+        type=Path,
+        required=True,
+        help="Explicit JSON receipt memory file to create or update.",
+    )
     return parser
 
 
@@ -133,7 +174,7 @@ def _run_inbox_package(
 def _research_snapshot_from_raw_package(raw_package: str):
     payload = json.loads(raw_package)
     if not isinstance(payload, dict):
-        raise ValueError("disclosure scan research package must be a JSON object")
+        raise ValueError("disclosure research package must be a JSON object")
     if "deep_research" in payload and "discovery" in payload:
         return DeepResearchPackage.model_validate(payload).research_snapshot
     return ResearchCommitPackage.model_validate(payload).research_snapshot
@@ -189,6 +230,66 @@ def main(
             )
             print(f"HTML: {args.output}", file=stdout)
             print(f"SUMMARY: {args.summary}", file=stdout)
+            return 0
+
+        if args.command == "record-disclosure-assessment":
+            snapshot = _research_snapshot_from_raw_package(
+                args.package.read_text(encoding="utf-8")
+            )
+            ticker = snapshot.ticker.strip()
+            research_start_date = snapshot.as_of_datetime.astimezone(SHANGHAI_TZ).date()
+            if args.publication_date < research_start_date:
+                raise ValueError(
+                    f"disclosure assessment date precedes frozen Research for {ticker}"
+                )
+
+            existing_receipts = ()
+            if args.receipts.exists():
+                existing_receipts = parse_disclosure_assessment_receipts(
+                    args.receipts.read_text(encoding="utf-8")
+                )
+
+            raw = cninfo_http.fetch_cninfo_disclosures(
+                stock_code=ticker,
+                start_date=args.publication_date,
+                end_date=args.publication_date,
+            )
+            batches = group_disclosures_by_publication_date(raw.announcements)
+            uncovered = filter_research_uncovered_disclosure_batches(
+                batches,
+                research_as_of_by_stock={ticker: snapshot.as_of_datetime},
+            )
+            if len(uncovered) != 1:
+                raise ValueError(
+                    "record disclosure assessment requires exactly one research-uncovered "
+                    f"official batch for {ticker} on {args.publication_date.isoformat()}"
+                )
+            batch = uncovered[0]
+            receipt = DisclosureAssessmentReceipt(
+                stock_code=ticker,
+                announcement_ids=disclosure_batch_announcement_ids(batch),
+                research_snapshot_id=snapshot.id,
+                research_as_of=snapshot.as_of_datetime,
+                assessment_result=ResearchFunnelTerminalState(args.result),
+                assessed_at=datetime.now(timezone.utc),
+            )
+            merged = merge_disclosure_assessment_receipts(
+                existing_receipts,
+                (receipt,),
+            )
+            changed = len(merged) != len(existing_receipts)
+            write_disclosure_assessment_receipts(args.receipts, merged)
+
+            print(
+                "DISCLOSURE ASSESSMENT "
+                + ("RECORDED" if changed else "UNCHANGED")
+                + f": {ticker} {args.publication_date.isoformat()} | "
+                + f"announcements={','.join(receipt.announcement_ids)} | "
+                + f"result={receipt.assessment_result.value}",
+                file=stdout,
+            )
+            print(f"RECEIPTS: {args.receipts} ({len(merged)} total)", file=stdout)
+            print("INVESTMENT AUTHORITY: NONE", file=stdout)
             return 0
 
         if args.command == "scan-disclosures":
