@@ -292,18 +292,18 @@ def _validate_calculation_inputs(
             )
         )
     elif creation_time_is_aware:
-        chronology = (
-            snapshot.as_of_datetime,
-            snapshot.committed_at,
-            observed_market.market_timestamp,
-            created_at,
+        chronology_is_valid = (
+            snapshot.as_of_datetime <= snapshot.committed_at <= created_at
+            and snapshot.as_of_datetime
+            <= observed_market.market_timestamp
+            <= created_at
         )
-        if chronology != tuple(sorted(chronology)):
+        if not chronology_is_valid:
             failures.append(
                 _failure(
                     CalculationFailureCode.PIT_VIOLATION,
                     "calculation_chronology",
-                    "required chronology is research as-of <= committed <= market <= calculation",
+                    "required chronology is research as-of <= committed <= calculation and research as-of <= market <= calculation",
                 )
             )
 
