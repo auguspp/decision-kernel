@@ -2,13 +2,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from decision_kernel.adapters.cninfo import CninfoAnnouncement
 
 
 class DisclosureBatchError(ValueError):
     """Official disclosures cannot be grouped into one trustworthy dated batch set."""
+
+
+class DisclosureResearchFreshnessError(ValueError):
+    """Disclosure freshness cannot be compared against frozen Research clocks."""
 
 
 @dataclass(frozen=True)
@@ -77,3 +81,45 @@ def group_disclosures_by_publication_date(
             ),
         )
     )
+
+
+def filter_research_uncovered_disclosure_batches(
+    batches: Sequence[DisclosureBatch],
+    *,
+    research_as_of_by_stock: Mapping[str, datetime],
+) -> tuple[DisclosureBatch, ...]:
+    """Keep batches containing at least one disclosure newer than frozen Research.
+
+    Research ``as_of`` is inclusive: a batch whose last underlying announcement was published at
+    or before the frozen Research clock is already covered. If a batch straddles the Research
+    clock, the whole auditable batch remains eligible because at least one underlying disclosure is
+    new; this function does not claim that every announcement in that batch is new or material.
+
+    This is a Harness freshness relation only. It does not infer materiality, route Research,
+    trigger Human attention, or carry investment authority.
+    """
+
+    uncovered: list[DisclosureBatch] = []
+    for batch in batches:
+        research_as_of = research_as_of_by_stock.get(batch.stock_code)
+        if research_as_of is None:
+            raise DisclosureResearchFreshnessError(
+                f"missing frozen Research as-of for {batch.stock_code}"
+            )
+        if research_as_of.utcoffset() is None:
+            raise DisclosureResearchFreshnessError(
+                f"frozen Research as-of for {batch.stock_code} must be timezone-aware"
+            )
+        if (
+            batch.first_published_at.utcoffset() is None
+            or batch.last_published_at.utcoffset() is None
+            or batch.first_published_at > batch.last_published_at
+        ):
+            raise DisclosureResearchFreshnessError(
+                f"disclosure batch timestamps for {batch.stock_code} are invalid"
+            )
+
+        if batch.last_published_at > research_as_of:
+            uncovered.append(batch)
+
+    return tuple(uncovered)
