@@ -1,0 +1,117 @@
+name: disclosure-memory-loop-live-smoke
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/disclosure-memory-loop-live-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo
+        run: python -m pip install -e '.[dev]'
+      - name: Scan before recording quiet assessments
+        run: |
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through 2026-09-02 | tee before.txt
+      - name: Record seven naturally assessed CATL quiet batches through production CLI
+        run: |
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-07-30 --result DROP_FOR_NOW --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-04 --result WAIT_FOR_TRIGGER --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-06 --result DROP_FOR_NOW --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-07 --result DROP_FOR_NOW --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-12 --result WAIT_FOR_TRIGGER --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-25 --result DROP_FOR_NOW --receipts receipts.json
+          decision-kernel record-disclosure-assessment dogfood/300750-catl.json \
+            --publication-date 2026-08-27 --result WAIT_FOR_TRIGGER --receipts receipts.json
+          python - <<'PY'
+          from pathlib import Path
+          from decision_kernel.runtime.disclosure_receipts import parse_disclosure_assessment_receipts
+
+          receipts = parse_disclosure_assessment_receipts(Path('receipts.json').read_text(encoding='utf-8'))
+          assert len(receipts) == 7
+          print('RECORDED_RECEIPTS=7')
+          PY
+      - name: Scan after recording quiet assessments
+        run: |
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v1.json \
+            --through 2026-09-02 \
+            --receipts receipts.json | tee after.txt
+      - name: Verify full memory-loop suppression relation
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          pattern = re.compile(
+              r'OFFICIAL DISCLOSURE SCAN: '
+              r'(\d+) unassessed / '
+              r'(\d+) seen-suppressed / '
+              r'(\d+) research-uncovered / '
+              r'(\d+) dated batches / '
+              r'(\d+) announcements / '
+              r'(\d+) research cases'
+          )
+          before_text = Path('before.txt').read_text(encoding='utf-8')
+          after_text = Path('after.txt').read_text(encoding='utf-8')
+          before_match = pattern.search(before_text)
+          after_match = pattern.search(after_text)
+          assert before_match is not None
+          assert after_match is not None
+          before = tuple(map(int, before_match.groups()))
+          after = tuple(map(int, after_match.groups()))
+
+          before_unassessed, before_seen, before_uncovered, before_batches, before_raw, before_cases = before
+          after_unassessed, after_seen, after_uncovered, after_batches, after_raw, after_cases = after
+
+          assert before_seen == 0
+          assert before_unassessed >= 7
+          assert after_seen == 7
+          assert after_unassessed == before_unassessed - 7
+          assert after_uncovered == before_uncovered
+          assert after_batches == before_batches
+          assert after_raw == before_raw
+          assert after_cases == before_cases == 5
+
+          expected_ids = {
+              '1225448968',
+              '1225456175',
+              '1225462006',
+              '1225464975',
+              '1225470687',
+              '1225470688',
+              '1225470689',
+              '1225502236',
+              '1225519101',
+          }
+          for announcement_id in expected_ids:
+              assert announcement_id in before_text
+              assert announcement_id not in after_text
+
+          print('BEFORE_METRICS=' + '/'.join(map(str, before)))
+          print('AFTER_METRICS=' + '/'.join(map(str, after)))
+          PY
