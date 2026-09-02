@@ -66,8 +66,8 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Install
-        run: python -m pip install -e .
+      - name: Install with official PDF text extraction
+        run: python -m pip install -e '.[documents]'
       - name: Restore best-effort disclosure receipt memory
         id: disclosure-memory
         uses: actions/cache/restore@v4
@@ -76,7 +76,7 @@ jobs:
           key: disclosure-receipts-scan-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             disclosure-receipts-state-
-      - name: Scan official disclosures
+      - name: Scan official disclosures and prepare Research handoffs
         shell: bash
         run: |
           set -euo pipefail
@@ -96,6 +96,8 @@ jobs:
             dogfood/601088-shenhua.json \
             research_cases/603986-gigadevice-deep-research-v1.json \
             --through "$through" \
+            --packet-dir disclosure-assessment-packets \
+            --packet-limit 10 \
             "${receipt_args[@]}" | tee disclosure-scan.txt
       - name: Publish disclosure summary
         if: always()
@@ -119,9 +121,11 @@ jobs:
               echo "The disclosure scan failed before a result was produced."
             fi
             echo
+            echo "Assessment packets are auditable Research-producer inputs only; they do not create a Recommendation, Human wake, or investment authority."
+            echo
             echo "Receipt memory is only a Harness attention optimization. Cache loss intentionally causes reassessment rather than silent suppression."
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload disclosure scan snapshot
+      - name: Upload disclosure scan and assessment handoffs
         if: success()
         uses: actions/upload-artifact@v4
         with:
@@ -129,4 +133,5 @@ jobs:
           path: |
             disclosure-scan.txt
             disclosure-scan-meta.txt
+            disclosure-assessment-packets/
           retention-days: 14
