@@ -13,12 +13,11 @@ from zoneinfo import ZoneInfo
 from .deep_research import DeepResearchPackage
 from .live import run_live_deep_research_package, run_live_research_commit_package
 from .research_commit import ResearchCommitPackage
-from .runtime import hithink_http
+from .runtime import cninfo_http, hithink_http
 from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
     group_disclosures_by_publication_date,
 )
-from .runtime import cninfo_http
 from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
 
@@ -183,7 +182,7 @@ def main(
         if args.command == "scan-disclosures":
             research_as_of_by_stock: dict[str, datetime] = {}
             company_by_stock: dict[str, str] = {}
-            announcements = []
+            scan_inputs: list[tuple[str, date]] = []
 
             for package_path in args.packages:
                 snapshot = _research_snapshot_from_raw_package(
@@ -202,6 +201,10 @@ def main(
 
                 research_as_of_by_stock[ticker] = snapshot.as_of_datetime
                 company_by_stock[ticker] = snapshot.company_name
+                scan_inputs.append((ticker, start_date))
+
+            announcements = []
+            for ticker, start_date in scan_inputs:
                 batch = cninfo_http.fetch_cninfo_disclosures(
                     stock_code=ticker,
                     start_date=start_date,
