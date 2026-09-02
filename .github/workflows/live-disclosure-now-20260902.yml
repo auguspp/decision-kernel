@@ -34,6 +34,7 @@ jobs:
               "announcement_ids": ["1225448968"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "DROP_FOR_NOW",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -43,6 +44,7 @@ jobs:
               "announcement_ids": ["1225456175"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "WAIT_FOR_TRIGGER",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -52,6 +54,7 @@ jobs:
               "announcement_ids": ["1225462006"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "DROP_FOR_NOW",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -61,6 +64,7 @@ jobs:
               "announcement_ids": ["1225464975"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "DROP_FOR_NOW",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -70,6 +74,7 @@ jobs:
               "announcement_ids": ["1225470687", "1225470688", "1225470689"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "WAIT_FOR_TRIGGER",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -79,6 +84,7 @@ jobs:
               "announcement_ids": ["1225502236"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "DROP_FOR_NOW",
               "assessed_at": "2026-09-02T00:00:00Z"
             },
@@ -88,6 +94,7 @@ jobs:
               "announcement_ids": ["1225519101"],
               "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
               "research_as_of": "2026-07-27T00:00:00Z",
+              "assessment_semantics_id": "research-funnel-v1",
               "assessment_result": "WAIT_FOR_TRIGGER",
               "assessed_at": "2026-09-02T00:00:00Z"
             }
