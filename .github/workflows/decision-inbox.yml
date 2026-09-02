@@ -34,7 +34,8 @@ jobs:
           decision-kernel build-inbox \
             dogfood/*.json \
             research_cases/603986-gigadevice-deep-research-v2.json \
-            research_cases/002050-sanhua-deep-research-v1.json
+            research_cases/002050-sanhua-deep-research-v1.json \
+            research_cases/600233-yto-deep-research-v1.json
       - name: Publish Human summary
         if: always()
         shell: bash
@@ -97,6 +98,7 @@ jobs:
             dogfood/601088-shenhua.json \
             research_cases/603986-gigadevice-deep-research-v2.json \
             research_cases/002050-sanhua-deep-research-v1.json \
+            research_cases/600233-yto-deep-research-v1.json \
             --through "$through" \
             --packet-dir disclosure-assessment-packets \
             --packet-limit 10 \
