@@ -1,0 +1,433 @@
+name: catl-backlog-research-funnel
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/catl-backlog-research-funnel.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  assess:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with documents
+        run: python -m pip install -e '.[documents]'
+      - name: Route six CATL backlog batches through existing Research Method v1
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          from datetime import date, datetime, timezone
+          from pathlib import Path
+          from uuid import NAMESPACE_URL, uuid5
+
+          from decision_kernel.adapters.cninfo import reference_evidence_from_cninfo_announcement
+          from decision_kernel.adapters.pdf_text import extract_pdf_text
+          from decision_kernel.identity import canonical_hash
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.research_funnel import (
+              DiscoveryInput,
+              DiscoveryObservation,
+              DiscoverySource,
+              PreResearchResult,
+              PreResearchRoute,
+              QuickResearchResult,
+              QuickResearchRoute,
+              ResearchClaim,
+              ResearchClaimKind,
+          )
+          from decision_kernel.research_workflow_v1 import (
+              ResearchFunnelStage,
+              ResearchFunnelTerminalState,
+              run_research_funnel,
+          )
+          from decision_kernel.runtime.cninfo_http import (
+              fetch_cninfo_disclosures,
+              fetch_cninfo_pdf_bytes,
+          )
+          from decision_kernel.runtime.disclosure_radar import group_disclosures_by_publication_date
+          from decision_kernel.runtime.disclosure_receipts import (
+              DisclosureAssessmentReceipt,
+              disclosure_batch_announcement_ids,
+              filter_unassessed_disclosure_batches,
+          )
+
+          package = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          )
+          snapshot = package.research_snapshot
+
+          expected = {
+              date(2026, 7, 30): ('1225448968',),
+              date(2026, 8, 4): ('1225456175',),
+              date(2026, 8, 6): ('1225462006',),
+              date(2026, 8, 7): ('1225464975',),
+              date(2026, 8, 12): ('1225470687', '1225470688', '1225470689'),
+              date(2026, 8, 25): ('1225502236',),
+          }
+
+          batches = {}
+          evidence_by_date = {}
+          for publication_date, expected_ids in expected.items():
+              raw = fetch_cninfo_disclosures(
+                  stock_code='300750',
+                  start_date=publication_date,
+                  end_date=publication_date,
+                  timeout_seconds=20.0,
+              )
+              by_id = {item.announcement_id: item for item in raw.announcements}
+              missing = set(expected_ids) - set(by_id)
+              if missing:
+                  raise RuntimeError(f'missing expected announcements: {sorted(missing)}')
+
+              selected = tuple(by_id[item_id] for item_id in expected_ids)
+              batch = group_disclosures_by_publication_date(selected)[0]
+              assert disclosure_batch_announcement_ids(batch) == tuple(sorted(expected_ids))
+              batches[publication_date] = batch
+
+              evidence = []
+              for announcement in selected:
+                  pdf_bytes = fetch_cninfo_pdf_bytes(
+                      source_locator=announcement.source_locator,
+                      timeout_seconds=20.0,
+                  )
+                  extracted = extract_pdf_text(pdf_bytes)
+                  retrieved_at = datetime.now(timezone.utc)
+                  evidence.append(
+                      reference_evidence_from_cninfo_announcement(
+                          announcement,
+                          artifact_id=uuid5(NAMESPACE_URL, announcement.source_locator),
+                          pdf_sha256=extracted.pdf_sha256,
+                          retrieved_at=retrieved_at,
+                      )
+                  )
+              evidence_by_date[publication_date] = tuple(evidence)
+
+          def make_discovery(publication_date, *, direction, observations, why_now, warning, next_search, stop_condition):
+              evidence = evidence_by_date[publication_date]
+              as_of = datetime.now(timezone.utc)
+              return DiscoveryInput(
+                  discovery_id=f'cninfo-refresh-300750-{publication_date.isoformat()}',
+                  source_lane='OFFICIAL_DISCLOSURE_REFRESH_SHADOW',
+                  ticker='300750',
+                  economic_direction=direction,
+                  as_of=as_of,
+                  factual_observations=tuple(
+                      DiscoveryObservation(
+                          statement=statement,
+                          evidence_artifact_ids=tuple(evidence[index].id for index in indexes),
+                      )
+                      for statement, indexes in observations
+                  ),
+                  source_lineage=tuple(
+                      DiscoverySource(
+                          evidence_artifact_id=item.id,
+                          source_locator=item.source_locator,
+                          available_at=item.available_at,
+                      )
+                      for item in evidence
+                  ),
+                  why_now=why_now,
+                  contradiction_or_mapping_warning=warning,
+                  next_discriminating_search=next_search,
+                  known_stop_or_downgrade_condition=stop_condition,
+              )
+
+          def pre(discovery, *, what, direction, role, driver, expectation, claims, contradiction, unknown, next_search, route, reason):
+              return PreResearchResult(
+                  discovery_id=discovery.discovery_id,
+                  as_of=discovery.as_of,
+                  what_is_this=what,
+                  economic_direction=direction,
+                  why_surfaced_now=discovery.why_now,
+                  basic_business_role=role,
+                  potential_fundamental_driver=driver,
+                  current_market_expectation_hypothesis=expectation,
+                  material_claims=claims,
+                  obvious_contradiction=contradiction,
+                  largest_unknown=unknown,
+                  next_discriminating_search=next_search,
+                  route=route,
+                  route_reason=reason,
+              )
+
+          results = {}
+
+          # 2026-07-30 — procedural shareholder list around a pre-cutoff repurchase proposal.
+          d = make_discovery(
+              date(2026, 7, 30),
+              direction='capital-return administration',
+              observations=((
+                  'The filing publishes the top shareholder lists required around the A-share repurchase proposal; it does not report repurchase execution or operating performance.',
+                  (0,),
+              ),),
+              why_now='The procedural shareholder-list filing was published after the frozen Research cutoff.',
+              warning='The underlying RMB20–40bn repurchase proposal was approved by the board on 2026-07-24, before the frozen Research cutoff; this filing mainly satisfies disclosure procedure.',
+              next_search='Use later filings to verify shareholder approval and actual repurchase execution rather than infer economics from the shareholder list.',
+              stop_condition='Drop this filing if it adds no execution, cash deployment, operating or capital-return evidence beyond the pre-cutoff proposal.',
+          )
+          e = evidence_by_date[date(2026, 7, 30)]
+          p = pre(
+              d,
+              what='A procedural top-shareholder disclosure attached to an already-announced repurchase proposal.',
+              direction='capital-return administration',
+              role='It documents ownership around the repurchase process, not battery operations or cash generation.',
+              driver='None independently; economic relevance resides in later approval/execution of the repurchase itself.',
+              expectation='The frozen Research already focuses on whether growth converts into cash and capital returns; shareholder-list composition does not update that expectation.',
+              claims=(ResearchClaim(statement='The 2026-07-30 filing contains required top-shareholder lists around the A-share repurchase process and no repurchase execution data.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),),
+              contradiction='No contradiction to the frozen operating thesis is established.',
+              unknown='Whether the proposed repurchase is approved and actually executed at a meaningful scale.',
+              next_search='Wait for shareholder approval and execution disclosures.',
+              route=PreResearchRoute.STOP,
+              reason='This filing is procedural and does not independently change the frozen Research decision context.',
+          )
+          results[date(2026, 7, 30)] = run_research_funnel(discovery=d, pre_research=p, evidence_artifacts=e)
+
+          # 2026-08-04 — cash dividend execution is real capital return but mostly mechanical.
+          d = make_discovery(
+              date(2026, 8, 4),
+              direction='cash distribution and capital returns',
+              observations=((
+                  'CATL implemented an A-share interim cash dividend of RMB1.411 per participating share, totaling RMB6,180,230,196.33 on 4,380,035,575 participating A shares.',
+                  (0,),
+              ),),
+              why_now='The actual A-share dividend implementation was published after the frozen Research cutoff.',
+              warning='The distribution plan had already been approved by the board on 2026-07-24; the new fact is implementation, not a newly chosen payout policy.',
+              next_search='Observe subsequent operating cash flow, capex and aggregate capital-return execution before changing the cash-conversion thesis.',
+              stop_condition='Do not deepen if the dividend only executes the previously announced plan and later cash-flow evidence remains unchanged.',
+          )
+          e = evidence_by_date[date(2026, 8, 4)]
+          p = pre(
+              d,
+              what='Implementation of the previously approved 2026 interim A-share cash dividend.',
+              direction='cash distribution and capital returns',
+              role='Cash dividends are direct shareholder capital return and use corporate liquidity, but do not by themselves evidence battery demand, margins or utilization.',
+              driver='Sustained capital returns matter only if operating cash conversion remains sufficient after capex and other investments.',
+              expectation='The frozen Research questions whether profit growth converts into cash strongly enough to support capital intensity and shareholder returns.',
+              claims=(ResearchClaim(statement='The implemented A-share interim dividend totals RMB6.180bn, or RMB1.411 per participating share.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),),
+              contradiction='The payout is supportive evidence of willingness to return cash, while it does not resolve whether future free-cash-flow conversion can sustain such returns.',
+              unknown='Whether future operating cash flow after capex can sustain dividends and repurchases without weakening return on incremental capital.',
+              next_search='Compare next-quarter operating cash flow, capex and actual repurchase cash deployment.',
+              route=PreResearchRoute.WAIT_FOR_TRIGGER,
+              reason='The cash payout is a genuine capital-return fact but is mostly implementation of a pre-cutoff plan and does not yet change the frozen thesis.',
+          )
+          results[date(2026, 8, 4)] = run_research_funnel(discovery=d, pre_research=p, evidence_artifacts=e)
+
+          # 2026-08-06 — tiny option-exercise share change.
+          d = make_discovery(
+              date(2026, 8, 6),
+              direction='immaterial share-count administration',
+              observations=((
+                  'The July HK monthly securities return shows H shares unchanged at 218,300,300 and A shares increasing by only 4,058 from option exercises, with RMB1,248,971 exercise proceeds.',
+                  (0,),
+              ),),
+              why_now='The monthly securities return was filed after the frozen Research cutoff.',
+              warning='The scale is immaterial relative to CATL share count, cash flow and valuation uncertainty.',
+              next_search='No follow-up unless future share issuance, treasury-share use or dilution becomes economically material.',
+              stop_condition='Drop when share-count movement remains immaterial and unrelated to the frozen thesis.',
+          )
+          e = evidence_by_date[date(2026, 8, 6)]
+          p = pre(
+              d,
+              what='A routine HK monthly securities return with tiny A-share option exercises and no H-share change.',
+              direction='immaterial share-count administration',
+              role='Administrative share-count reporting.',
+              driver='Only material dilution or capital raising would affect per-share economics; this filing does not.',
+              expectation='Market expectations around growth, cash conversion and capital intensity are unaffected by a 4,058-share change.',
+              claims=(ResearchClaim(statement='H shares were unchanged and A shares increased by 4,058 from option exercises during July 2026.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),),
+              contradiction='No contradiction or meaningful support for the frozen thesis.',
+              unknown='None material for the current Research questions.',
+              next_search='No further search unless future securities changes become material.',
+              route=PreResearchRoute.STOP,
+              reason='The securities change is economically immaterial to the frozen Research context.',
+          )
+          results[date(2026, 8, 6)] = run_research_funnel(discovery=d, pre_research=p, evidence_artifacts=e)
+
+          # 2026-08-07 — second procedural shareholder list.
+          d = make_discovery(
+              date(2026, 8, 7),
+              direction='capital-return administration',
+              observations=((
+                  'The filing republishes top shareholder positions as of the extraordinary shareholder-meeting record date for the repurchase process; it contains no repurchase execution or operating result.',
+                  (0,),
+              ),),
+              why_now='The meeting-record-date shareholder list was filed after the frozen Research cutoff.',
+              warning='Ownership disclosure is procedural; the economically relevant question is approval and execution of the repurchase.',
+              next_search='Use the shareholder-meeting resolution and later repurchase progress filings.',
+              stop_condition='Drop if the filing adds no capital deployment or operating evidence.',
+          )
+          e = evidence_by_date[date(2026, 8, 7)]
+          p = pre(
+              d,
+              what='A second procedural top-shareholder disclosure for the repurchase shareholder-meeting process.',
+              direction='capital-return administration',
+              role='It documents ownership for governance procedure, not operating or capital-return execution.',
+              driver='None independently.',
+              expectation='No change to the frozen market-expectation hypothesis.',
+              claims=(ResearchClaim(statement='The 2026-08-07 filing contains shareholder lists for the repurchase shareholder-meeting record date and no execution evidence.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),),
+              contradiction='No contradiction to the frozen thesis.',
+              unknown='Whether the repurchase is approved and how much cash is actually deployed.',
+              next_search='Read the shareholder-meeting resolution and subsequent repurchase progress.',
+              route=PreResearchRoute.STOP,
+              reason='The filing is procedural and does not update the decision context.',
+          )
+          results[date(2026, 8, 7)] = run_research_funnel(discovery=d, pre_research=p, evidence_artifacts=e)
+
+          # 2026-08-12 — formal repurchase approval plus a new RMB2.475bn green fund commitment.
+          d = make_discovery(
+              date(2026, 8, 12),
+              direction='capital allocation, shareholder return and external investment',
+              observations=(
+                  ('Shareholders formally approved the RMB20–40bn A-share repurchase proposal for cancellation and capital reduction.', (1,)),
+                  ('CATL committed RMB2.475bn of own funds for 49.5% of a proposed RMB5bn, 8-year Hainan green-industry equity fund focused on green and zero-carbon industries.', (0,)),
+              ),
+              why_now='Formal repurchase approval and a new external fund commitment occurred after the frozen Research cutoff and directly touch capital allocation.',
+              warning='Approval and commitment do not equal completed cash deployment; actual timing, funding source, repurchase price and investment returns remain unknown.',
+              next_search='Quantify actual repurchase execution and funding, compare it with operating cash flow/capex, and monitor fund capital calls and investment deployment.',
+              stop_condition='Wait rather than deepen if no meaningful repurchase cash is deployed and subsequent cash-flow/capex evidence remains consistent with the frozen thesis.',
+          )
+          e = evidence_by_date[date(2026, 8, 12)]
+          p = pre(
+              d,
+              what='A capital-allocation batch combining formal approval of a large A-share repurchase with a new external green-industry fund commitment.',
+              direction='capital allocation, shareholder return and external investment',
+              role='The repurchase can return capital and reduce share count; the fund commitment deploys cash into long-duration external green-industry equity investments.',
+              driver='The balance between operating cash generation, capex, buybacks, dividends and external investments can change per-share capital returns.',
+              expectation='The frozen Research assumes strong growth but questions whether cash conversion and returns keep pace with capital deployment.',
+              claims=(
+                  ResearchClaim(statement='Shareholders approved an A-share repurchase program sized at RMB20–40bn for cancellation and registered-capital reduction.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[1].id,)),
+                  ResearchClaim(statement='CATL committed RMB2.475bn of own funds for 49.5% of an 8-year Hainan green-industry fund.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),
+              ),
+              contradiction='A large approved repurchase supports shareholder-return intent, while simultaneous capital commitments reinforce the need to test whether cash conversion can fund both growth and returns.',
+              unknown='How much of the RMB20–40bn repurchase will actually be executed, over what period and funding mix, and how that cash use interacts with capex and future operating cash flow.',
+              next_search='Compare approved capital-return/investment amounts with H1 operating cash flow and then wait for actual repurchase progress plus next-quarter cash-flow/capex data.',
+              route=PreResearchRoute.CONTINUE_TO_QUICK,
+              reason='The batch directly intersects the frozen cash-conversion/capital-return question and is large enough to justify one bounded Quick Research pass.',
+          )
+          q = QuickResearchResult(
+              discovery_id=d.discovery_id,
+              pre_research_hash=canonical_hash(p),
+              as_of=d.as_of,
+              business_model='Global power- and energy-storage-battery manufacturer with very high capital intensity and a growing overseas footprint.',
+              segment_mix='Frozen Research emphasizes power and storage batteries; this disclosure batch concerns capital allocation rather than new segment operating data.',
+              economic_role='The company must fund capacity and ecosystem expansion while converting accounting profit into cash and returning capital per share.',
+              major_profit_drivers=('battery shipment growth', 'pricing and gross margin', 'capacity utilization', 'overseas economics'),
+              industry_supply_demand_variables=('EV and storage demand', 'battery capacity additions', 'price competition', 'raw-material costs'),
+              value_chain_position='Scaled global battery leader with significant bargaining power but large reinvestment requirements.',
+              current_industry_state='No new industry-state evidence is established by these capital-allocation filings.',
+              market_expectation_hypothesis='The market likely already rewards CATL scale/growth while discounting capital intensity; sustainable re-rating requires profit and shareholder returns to outpace capital consumed.',
+              supporting_claims=(
+                  ResearchClaim(statement='The approved repurchase size of RMB20–40bn is roughly one-third to two-thirds of the frozen H1 operating-cash-flow baseline of about RMB60.2bn, before considering timing, capex or funding mix.', kind=ResearchClaimKind.INFERENCE, evidence_artifact_ids=(e[1].id,)),
+                  ResearchClaim(statement='The RMB2.475bn fund commitment is meaningful but much smaller than the approved repurchase range and is funded with company own funds.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),
+              ),
+              contradictory_claims=(),
+              evidence_authority_assessment='Both capital-allocation facts come from official CNINFO filings, but neither provides actual repurchase cash deployment or updated operating cash flow/capex.',
+              variant_perception='Capital-return intent may be stronger than the frozen snapshot makes explicit, but execution and cash sustainability are not yet proven.',
+              unresolved_questions=(
+                  'Actual repurchase amount, pace, average price and funding source.',
+                  'Whether next-quarter operating cash flow improves relative to profit and capex.',
+                  'Whether external investments and capacity expansion dilute per-share capital returns.',
+              ),
+              next_discriminating_evidence=(
+                  'Official repurchase progress/completion filings.',
+                  'Next quarterly operating cash flow and capex/capacity-utilization evidence.',
+              ),
+              route=QuickResearchRoute.WAIT_FOR_TRIGGER,
+              route_reason='Quick Research confirms material capital-allocation intent but lacks actual cash deployment and updated cash-flow/capex evidence, so Deep Research is not yet justified.',
+          )
+          results[date(2026, 8, 12)] = run_research_funnel(discovery=d, pre_research=p, quick_research=q, evidence_artifacts=e)
+
+          # 2026-08-25 — administrative address change.
+          d = make_discovery(
+              date(2026, 8, 25),
+              direction='administrative corporate information',
+              observations=((
+                  'The H-share filing changes the company principal place of business in Hong Kong effective 2026-08-25.',
+                  (0,),
+              ),),
+              why_now='The Hong Kong address-change filing was published after the frozen Research cutoff.',
+              warning='Administrative address changes do not establish operating, cash-flow, valuation or capital-return changes.',
+              next_search='No follow-up unless a later filing links the change to a substantive corporate event.',
+              stop_condition='Drop when the change remains purely administrative.',
+          )
+          e = evidence_by_date[date(2026, 8, 25)]
+          p = pre(
+              d,
+              what='An administrative H-share principal-business-address change.',
+              direction='administrative corporate information',
+              role='Corporate administration only.',
+              driver='None for the frozen investment thesis.',
+              expectation='No effect on market expectations for battery growth, margins, cash conversion or overseas returns.',
+              claims=(ResearchClaim(statement='The filing changes CATL’s principal place of business in Hong Kong effective 2026-08-25.', kind=ResearchClaimKind.FACT, evidence_artifact_ids=(e[0].id,)),),
+              contradiction='No contradiction or support for the frozen thesis.',
+              unknown='None material to the current Research questions.',
+              next_search='No further search required.',
+              route=PreResearchRoute.STOP,
+              reason='This is an administrative change with no decision-context impact.',
+          )
+          results[date(2026, 8, 25)] = run_research_funnel(discovery=d, pre_research=p, evidence_artifacts=e)
+
+          expected_terminals = {
+              date(2026, 7, 30): (ResearchFunnelTerminalState.DROP_FOR_NOW, ResearchFunnelStage.PRE_RESEARCH),
+              date(2026, 8, 4): (ResearchFunnelTerminalState.WAIT_FOR_TRIGGER, ResearchFunnelStage.PRE_RESEARCH),
+              date(2026, 8, 6): (ResearchFunnelTerminalState.DROP_FOR_NOW, ResearchFunnelStage.PRE_RESEARCH),
+              date(2026, 8, 7): (ResearchFunnelTerminalState.DROP_FOR_NOW, ResearchFunnelStage.PRE_RESEARCH),
+              date(2026, 8, 12): (ResearchFunnelTerminalState.WAIT_FOR_TRIGGER, ResearchFunnelStage.QUICK_RESEARCH),
+              date(2026, 8, 25): (ResearchFunnelTerminalState.DROP_FOR_NOW, ResearchFunnelStage.PRE_RESEARCH),
+          }
+
+          receipts = []
+          for publication_date in expected:
+              result = results[publication_date]
+              expected_state, expected_stage = expected_terminals[publication_date]
+              assert result.terminal_state is expected_state
+              assert result.terminal_stage is expected_stage
+              assert str(result.investment_authority) == 'NONE'
+              batch = batches[publication_date]
+              receipt = DisclosureAssessmentReceipt(
+                  stock_code='300750',
+                  announcement_ids=disclosure_batch_announcement_ids(batch),
+                  research_snapshot_id=snapshot.id,
+                  research_as_of=snapshot.as_of_datetime,
+                  assessment_result=result.terminal_state,
+                  assessed_at=result.discovery.as_of,
+              )
+              receipts.append(receipt)
+              print(
+                  f'ASSESSMENT {publication_date.isoformat()} '
+                  f'ids={",".join(receipt.announcement_ids)} '
+                  f'stage={result.terminal_stage.value} '
+                  f'terminal={result.terminal_state.value} '
+                  f'authority={result.investment_authority}'
+              )
+
+          remaining = filter_unassessed_disclosure_batches(
+              tuple(batches[publication_date] for publication_date in expected),
+              research_identity_by_stock={'300750': (snapshot.id, snapshot.as_of_datetime)},
+              receipts=tuple(receipts),
+          )
+          assert remaining == ()
+
+          print('RECEIPTS_JSON_START')
+          print(json.dumps([
+              {
+                  'source_lane': receipt.source_lane,
+                  'stock_code': receipt.stock_code,
+                  'announcement_ids': list(receipt.announcement_ids),
+                  'research_snapshot_id': str(receipt.research_snapshot_id),
+                  'research_as_of': receipt.research_as_of.isoformat(),
+                  'assessment_result': receipt.assessment_result.value,
+                  'assessed_at': receipt.assessed_at.isoformat(),
+              }
+              for receipt in receipts
+          ], ensure_ascii=False, indent=2))
+          print('RECEIPTS_JSON_END')
+          print('SUMMARY=6 assessed / 4 DROP_FOR_NOW / 2 WAIT_FOR_TRIGGER / 1 Quick Research / 0 DEEPEN_REQUIRED / 0 investment authority')
+          PY
