@@ -14,7 +14,7 @@ Prices are the 2026-09-02 HiThink close from Decision Inbox run `33611493578`. G
 | 中国神华 601088 | -6.5% | 25.0% | `INSUFFICIENT_ODDS` | `INSUFFICIENT_ODDS` | `INSUFFICIENT_ODDS` |
 | 兆易创新 603986 v2 | 12.3% | 70.0% | `INSUFFICIENT_ODDS` | `INSUFFICIENT_ODDS` | `INSUFFICIENT_ODDS` |
 
-The immediate noise delta is therefore concrete: a straight rollback from the current policy to the old operational calibration would add **贵州茅台** to the Human wake set and would label all three waking names `ATTRACTIVE_ODDS`, not merely first-participation candidates.
+A straight rollback would add 贵州茅台 to the current Human wake set and would label CATL/CMB/Moutai `ATTRACTIVE_ODDS`. This is a useful behavior delta, but **not clean false-positive evidence**: Moutai is explicitly a generic dogfood Research package with simple scenario EPS/P-E assumptions, so it is not a Human-reviewed policy-calibration gold case.
 
 ## ACCEPTABLE_ODDS price boundary
 
@@ -28,25 +28,63 @@ The probability boundary is exclusive when it binds because zero-return scenario
 | 中国神华 601088 | 362 | ¥39.07 | ¥35.37 | ¥39.11 |
 | 兆易创新 603986 v2 | 365 | ¥369.93 | ¥330.70 | ¥369.93 |
 
-## Historical operational reference — 东山精密 002384
+## Historical Human semantics — 东山精密 002384
 
-The preserved `decision-os` operational proof uses five Human-reviewed scenario worlds with probability-weighted payoff **¥194.85**, model risk `HIGH`, market date `2026-08-24`, and valuation horizon `2027-12-31` (**494 days**).
+The preserved Human-reviewed Price / Odds PIT on 2026-08-23 explicitly approved these case-specific bands, conditional on Belief remaining intact:
 
-At the historical observed price **¥193.60**, all three challengers remain `INSUFFICIENT_ODDS`; the useful comparison is the first `ACCEPTABLE_ODDS` boundary:
+```text
+> ¥185       = NO ACTIVE PARTICIPATION / WATCH
+¥170-185     = NEAR / IMPROVING ODDS, NOT PREFERRED ENTRY
+¥165-170     = FIRST-PARTICIPATION CANDIDATE ZONE
+¥150-160     = ATTRACTIVE / HIGH-ODDS PARTICIPATION ZONE
+¥145-150     = STRONG ODDS IF BELIEF IS UNCHANGED
+```
 
-- Legacy cumulative: **¥169.43**
-- Current live calibration: **¥153.43**
-- Legacy horizon-aware: **¥161.27**
+The same Human-reviewed record also froze a supplemental annualized hurdle map from the ¥194.85 weighted payoff over roughly 495 days:
 
-That isolates two effects. The current live calibration materially moved the first acceptable boundary downward. But horizon normalization alone does **not** restore the historical operational boundary: because Dongshan's horizon is longer than one year, annualizing the same legacy hurdle makes it stricter, not looser.
+```text
+10% annualized hurdle -> ~¥171.22
+15% annualized hurdle -> ~¥161.21
+20% annualized hurdle -> ~¥152.17
+```
+
+Those values were explanatory, not canonical engine output, but they establish that the Human-approved bands were horizon-aware in meaning.
+
+The later operational proof used the same five Human-reviewed scenarios, model risk `HIGH`, market date 2026-08-24, and valuation horizon 2027-12-31 (494 days). Its legacy `ACCEPTABLE_ODDS` hurdle was 15% cumulative + 50% positive-return probability, giving an effective price boundary of **¥169.43**.
+
+That is not merely close to the Human-approved first-participation band; it lands directly inside it.
+
+By contrast, today's live calibration for the exact same historical state gives:
+
+- current `ACCEPTABLE_ODDS`: **¥153.43** — inside the Human-approved **ATTRACTIVE / HIGH-ODDS** band;
+- current `ATTRACTIVE_ODDS`: roughly **¥137.22** — below the Human-approved Strong Odds band;
+- current `EXCEPTIONAL_ODDS`: roughly **¥120.28** — far below the approved Strong Odds band.
+
+For the 494-day horizon, the effective expected-return hurdles are approximately:
+
+| Policy tier | Legacy cumulative | Annualized equivalent | Current cumulative | Annualized equivalent |
+| --- | ---: | ---: | ---: | ---: |
+| ACCEPTABLE | 15% | 10.9% | 27% | 19.3% |
+| ATTRACTIVE | 25% | 17.9% | 42% | 29.6% |
+| EXCEPTIONAL | 40% | 28.2% | 62% | 42.8% |
+
+This is direct evidence of **semantic calibration drift**: current `ACCEPTABLE_ODDS` behaves much more like the historical Human meaning of High Odds than First Participation.
+
+## Independent horizon lesson — 中际旭创 300308
+
+A separate Human challenge on Zhongji Innolight rejected a decision process that treated a nominal upside percentage as decision-useful without a stated horizon. The subsequent Odds remediation explicitly falsified the assumption that nominal upside is meaningful without time, established a 12-month primary observation convention, and showed 18/24-month annualized-hurdle sensitivities.
+
+This is not a second numerical calibration gold case because the Human did not approve one required-return hurdle or a probability-weighted distribution. It **is** independent evidence that horizon semantics should not be ignored.
 
 ## Readout
 
-1. **Do not roll production back to `10/20/35` unchanged.** On today's real five-name dogfood it wakes an extra weak/generic Research case (Moutai) and upgrades CATL/CMB/Moutai to `ATTRACTIVE_ODDS`.
-2. **Do not pretend annualization is the whole fix.** It is conceptually cleaner across variable horizons, but the 494-day Dongshan reference moves from ¥169.43 to ¥161.27 under horizon-aware legacy calibration.
-3. **GigaDevice v2 is still not a first-participation candidate at ¥388.86.** The Research correction lifts expected return to about 12.3% with 70% positive-scenario probability, but even the legacy acceptable boundary is only about ¥369.93.
-4. **The current `ACCEPTABLE_ODDS` threshold is doing useful noise suppression, but its semantic label is stronger than the old first-participation meaning.** The next challenger should target that semantic/calibration gap without adding a second Human wake gate.
+1. **The old Dongshan operational `ACCEPTABLE_ODDS` was genuinely calibrated to Human-approved first-participation semantics.** Its ¥169.43 boundary lands inside the approved ¥165-170 band.
+2. **The current live `ACCEPTABLE_ODDS` is semantically one tier too strong for that historical Human case.** Its ¥153.43 boundary lands in the approved ¥150-160 High-Odds band.
+3. **Do not mechanically roll production back to `10/20/35`.** The current five-name comparison is mostly generic dogfood rather than Human-reviewed policy gold; it can show behavioral deltas but cannot adjudicate false positives.
+4. **Do not treat annualization as a magic patch.** Horizon-explicit semantics are supported by both Dongshan and Zhongji, but applying the old cumulative hurdle as an annualized hurdle moves Dongshan's ACCEPTABLE boundary to ¥161.27 and no longer reproduces the approved first-participation band.
+5. **GigaDevice v2 is still not a first-participation candidate at ¥388.86 under any tested candidate.** The Research correction raises expected return to about 12.3% with 70% positive-scenario probability; the legacy acceptable boundary is about ¥369.93.
+6. **Production should not gain a second wake gate.** Any future correction belongs in the existing Odds policy/semantics and must preserve `HumanResearchSurface` as the sole attention gate.
 
-No production policy change is justified by this experiment alone.
+The experiment supports a production policy review, but does not by itself authorize a guessed replacement threshold set.
 
 `Research ≠ Recommendation · Investment Authority = NONE`
