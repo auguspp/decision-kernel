@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 from collections.abc import Sequence
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import TextIO
 
@@ -11,6 +12,7 @@ from .deep_research import DeepResearchPackage
 from .live import run_live_deep_research_package, run_live_research_commit_package
 from .research_commit import ResearchCommitPackage
 from .runtime import hithink_http
+from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
 
 
@@ -38,6 +40,28 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to one ResearchCommitPackage JSON file.",
     )
+    inbox = subparsers.add_parser(
+        "build-inbox",
+        help="Run multiple ResearchCommitPackages and render one Human Decision Inbox.",
+    )
+    inbox.add_argument(
+        "packages",
+        nargs="+",
+        type=Path,
+        help="ResearchCommitPackage JSON files to include in the inbox.",
+    )
+    inbox.add_argument(
+        "--output",
+        type=Path,
+        default=Path("decision-inbox/index.html"),
+        help="HTML output path.",
+    )
+    inbox.add_argument(
+        "--summary",
+        type=Path,
+        default=Path("decision-inbox/summary.md"),
+        help="Markdown summary output path.",
+    )
     return parser
 
 
@@ -60,6 +84,42 @@ def main(
                 observed_at=observed_at,
                 api_key=api_key,
             )
+
+        if args.command == "build-inbox":
+            generated_at = datetime.now(timezone.utc)
+            decisions: list[DecisionSpineResult] = []
+            for package_path in args.packages:
+                package = ResearchCommitPackage.model_validate_json(
+                    package_path.read_text(encoding="utf-8")
+                )
+                decisions.append(
+                    run_live_research_commit_package(
+                        package=package,
+                        fetch_market=fetch_market,
+                        observed_at=generated_at,
+                    ).decision
+                )
+
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.summary.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(
+                render_decision_inbox_html(decisions, generated_at=generated_at),
+                encoding="utf-8",
+            )
+            args.summary.write_text(
+                render_decision_inbox_markdown(decisions, generated_at=generated_at),
+                encoding="utf-8",
+            )
+            attention = sum(
+                decision.human_surface.attention_eligible for decision in decisions
+            )
+            print(
+                f"DECISION INBOX: {attention} attention / {len(decisions)} total",
+                file=stdout,
+            )
+            print(f"HTML: {args.output}", file=stdout)
+            print(f"SUMMARY: {args.summary}", file=stdout)
+            return 0
 
         raw_package = args.package.read_text(encoding="utf-8")
         if args.command == "run":
