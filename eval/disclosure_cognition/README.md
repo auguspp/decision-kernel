@@ -97,18 +97,19 @@ The deterministic scorer measures only things the system can know without invent
 
 1. **Input binding failures** — changed assessment input, ticker, PIT cutoff, source lane, or official Evidence lineage fail through the existing production validator.
 2. **Evidence-reference integrity** — referenced Evidence must exist in the exact packet or explicitly supplied supplemental Evidence. V0 does not pretend that an existing citation semantically entails a prose claim.
-3. **Route drift** — DROP / WAIT / DEEPEN differences versus the reviewed baseline.
-4. **Stage drift** — Pre versus Quick differences, including stage inflation.
-5. **DEEPEN overcall** — candidate DEEPEN decisions where the reviewed case remained quiet.
-6. **Structural unknown / next-evidence presence** — counts are reported for audit, but prose quality is not scored by string heuristics.
+3. **No-text claim-reference signals** — a candidate claim that cites official packet Evidence whose PDF extraction status is `NO_TEXT` is reported, including claims that rely only on no-text Evidence. Corpus cases may also name announcement ids from which the reviewed baseline intentionally made no claim; references to those are surfaced separately. These are regression signals, not automatic semantic convictions.
+4. **Route drift** — DROP / WAIT / DEEPEN differences versus the reviewed baseline.
+5. **Stage drift** — Pre versus Quick differences, including stage inflation.
+6. **DEEPEN overcall** — candidate DEEPEN decisions where the reviewed case remained quiet.
+7. **Structural unknown / next-evidence presence** — counts are reported for audit, but prose quality is not scored by string heuristics.
 
-The scorer records a terminal confusion table plus per-case raw-response SHA256, assessment JSON SHA256, parsed assessment canonical hash, routes, terminal state/stage, supplemental Evidence count, and investment authority. It never writes a disclosure receipt and never invokes the Human surface.
+The scorer records a terminal confusion table plus per-case raw-response SHA256, assessment JSON SHA256, parsed assessment canonical hash, routes, terminal state/stage, supplemental Evidence count, claim-reference signals, and investment authority. It never writes a disclosure receipt and never invokes the Human surface.
 
 ## What still requires semantic review
 
 These questions remain deliberately outside deterministic v0 scoring:
 
-- whether a prose claim is actually entailed by the cited page text;
+- whether a prose claim is actually entailed by cited page text when text exists;
 - whether an unknown is economically important rather than generic;
 - whether proposed next Evidence would genuinely discriminate the frozen thesis;
 - whether a route drift is an improvement, a regression, or a defensible alternative interpretation.

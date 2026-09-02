@@ -106,6 +106,88 @@ def _candidate_structure_counts(assessment: DisclosureResearchAssessment) -> tup
     return unknown_count, next_evidence_count
 
 
+def _candidate_claims(assessment: DisclosureResearchAssessment):
+    for claim in assessment.pre_research.material_claims:
+        yield "PRE_RESEARCH", "material", claim
+    if assessment.quick_research is None:
+        return
+    for claim in assessment.quick_research.supporting_claims:
+        yield "QUICK_RESEARCH", "supporting", claim
+    for claim in assessment.quick_research.contradictory_claims:
+        yield "QUICK_RESEARCH", "contradictory", claim
+
+
+def _claim_reference_signals(packet, assessment: DisclosureResearchAssessment, gold_case: dict[str, Any]):
+    """Report deterministic suspicious-reference signals without claiming semantic entailment."""
+
+    official_by_evidence_id = {
+        item.evidence_artifact.id: item
+        for item in packet.evidence
+    }
+    no_text_evidence_ids = {
+        evidence_id
+        for evidence_id, item in official_by_evidence_id.items()
+        if item.text_status.value == "NO_TEXT"
+    }
+    gold_no_claim_announcement_ids = set(
+        gold_case.get("gold_no_claim_from_announcement_ids", ())
+    )
+
+    total_claims = 0
+    evidenced_claims = 0
+    no_text_reference_claims: list[dict[str, Any]] = []
+    no_text_only_claims = 0
+    gold_no_claim_reference_claims: list[dict[str, Any]] = []
+
+    for stage, group, claim in _candidate_claims(assessment):
+        total_claims += 1
+        refs = set(claim.evidence_artifact_ids)
+        if refs:
+            evidenced_claims += 1
+        official_refs = refs & official_by_evidence_id.keys()
+        no_text_refs = official_refs & no_text_evidence_ids
+        no_text_announcements = sorted(
+            official_by_evidence_id[evidence_id].announcement_id
+            for evidence_id in no_text_refs
+        )
+        gold_no_claim_refs = sorted(
+            official_by_evidence_id[evidence_id].announcement_id
+            for evidence_id in official_refs
+            if official_by_evidence_id[evidence_id].announcement_id
+            in gold_no_claim_announcement_ids
+        )
+        claim_identity = {
+            "stage": stage,
+            "group": group,
+            "kind": claim.kind.value,
+            "statement_sha256": _sha256_bytes(claim.statement.encode("utf-8")),
+        }
+        if no_text_announcements:
+            no_text_reference_claims.append(
+                {
+                    **claim_identity,
+                    "announcement_ids": no_text_announcements,
+                }
+            )
+            if refs and refs <= no_text_evidence_ids:
+                no_text_only_claims += 1
+        if gold_no_claim_refs:
+            gold_no_claim_reference_claims.append(
+                {
+                    **claim_identity,
+                    "announcement_ids": gold_no_claim_refs,
+                }
+            )
+
+    return {
+        "candidate_claims": total_claims,
+        "evidenced_claims": evidenced_claims,
+        "no_text_reference_claims": no_text_reference_claims,
+        "no_text_only_claims": no_text_only_claims,
+        "gold_no_claim_reference_claims": gold_no_claim_reference_claims,
+    }
+
+
 def score_candidate_run(
     run_manifest_path: Path,
     *,
@@ -114,8 +196,9 @@ def score_candidate_run(
     """Score one candidate run against frozen inputs without making the gold Kernel law.
 
     Deterministic checks cover schema/input binding, exact Evidence lineage, Research Funnel
-    terminal/stage drift, and cognitive-budget inflation. Semantic entailment quality of prose,
-    unknowns, and next-evidence requests is intentionally not guessed by string heuristics.
+    terminal/stage drift, cognitive-budget inflation, and suspicious references to packet Evidence
+    with no extracted text. Semantic entailment quality of prose, unknowns, and next-evidence
+    requests is intentionally not guessed by string heuristics.
     """
 
     run_manifest_path = run_manifest_path.resolve()
@@ -159,6 +242,11 @@ def score_candidate_run(
     stage_deflations = 0
     candidate_deepen_cases = 0
     deepen_overcalls = 0
+    candidate_claims = 0
+    evidenced_claims = 0
+    no_text_reference_claims = 0
+    no_text_only_claims = 0
+    gold_no_claim_reference_claims = 0
 
     for case_id, gold_case in gold_by_id.items():
         gold_terminal = ResearchFunnelTerminalState(gold_case["gold_terminal_state"]).value
@@ -217,6 +305,7 @@ def score_candidate_run(
                 and gold_terminal != ResearchFunnelTerminalState.DEEPEN_REQUIRED.value
             )
             unknown_count, next_evidence_count = _candidate_structure_counts(assessment)
+            claim_signals = _claim_reference_signals(packet, assessment, gold_case)
 
             valid_cases += 1
             terminal_matches += int(terminal_match)
@@ -227,6 +316,13 @@ def score_candidate_run(
                 candidate_terminal == ResearchFunnelTerminalState.DEEPEN_REQUIRED.value
             )
             deepen_overcalls += int(deepen_overcall)
+            candidate_claims += claim_signals["candidate_claims"]
+            evidenced_claims += claim_signals["evidenced_claims"]
+            no_text_reference_claims += len(claim_signals["no_text_reference_claims"])
+            no_text_only_claims += claim_signals["no_text_only_claims"]
+            gold_no_claim_reference_claims += len(
+                claim_signals["gold_no_claim_reference_claims"]
+            )
             terminal_confusion[f"{gold_terminal}->{candidate_terminal}"] += 1
 
             report.update(
@@ -254,6 +350,7 @@ def score_candidate_run(
                     "deepen_overcall": deepen_overcall,
                     "unknown_structure_count": unknown_count,
                     "next_evidence_structure_count": next_evidence_count,
+                    "claim_reference_signals": claim_signals,
                     "investment_authority": result.investment_authority,
                 }
             )
@@ -283,6 +380,11 @@ def score_candidate_run(
             for case in gold_by_id.values()
         ),
         "deepen_overcalls": deepen_overcalls,
+        "candidate_claims": candidate_claims,
+        "evidenced_claims": evidenced_claims,
+        "no_text_reference_claims": no_text_reference_claims,
+        "no_text_only_claims": no_text_only_claims,
+        "gold_no_claim_reference_claims": gold_no_claim_reference_claims,
     }
 
     return {
@@ -299,9 +401,10 @@ def score_candidate_run(
         "terminal_confusion": dict(sorted(terminal_confusion.items())),
         "cases": case_reports,
         "semantic_quality_note": (
-            "Unknown quality, next-evidence quality, and claim-to-text entailment are not "
-            "automatically scored in v0; deterministic validation covers identity, lineage, "
-            "schema, and Research Funnel behavior only."
+            "V0 flags structurally invalid Evidence references and suspicious claims citing "
+            "official packet Evidence with NO_TEXT extraction, but it does not infer prose "
+            "entailment. Unknown quality, next-evidence quality, and whether a valid citation "
+            "actually supports a claim remain semantic review questions."
         ),
         "investment_authority": "NONE",
     }
@@ -330,6 +433,7 @@ def _print_summary(report: dict[str, Any], *, stdout: TextIO) -> None:
         f"stage {summary['stage_matches']}/{summary['valid_cases']} match | "
         f"stage-inflation={summary['stage_inflations']} | "
         f"deepen-overcalls={summary['deepen_overcalls']} | "
+        f"no-text-claim-refs={summary['no_text_reference_claims']} | "
         f"invalid={summary['invalid_cases']} | missing={summary['missing_cases']}",
         file=stdout,
     )
