@@ -30,7 +30,10 @@ jobs:
           fi
       - name: Build Decision Inbox
         shell: bash
-        run: decision-kernel build-inbox dogfood/*.json
+        run: |
+          decision-kernel build-inbox \
+            dogfood/*.json \
+            research_cases/*-deep-research-v1.json
       - name: Publish Human summary
         if: always()
         shell: bash
