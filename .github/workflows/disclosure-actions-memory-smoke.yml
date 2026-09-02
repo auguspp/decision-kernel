@@ -1,4 +1,5 @@
 name: disclosure-actions-memory-smoke
+# second-run trigger: verify restore from prior PR run
 
 on:
   pull_request:
