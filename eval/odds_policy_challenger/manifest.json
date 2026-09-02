@@ -1,0 +1,72 @@
+{
+  "experiment_id": "odds-policy-challenger-v0-20260902",
+  "purpose": "Compare historical operational Odds calibration, current live calibration, and horizon-normalized historical calibration without changing production policy or Human wake semantics.",
+  "current_close_source": {
+    "decision_kernel_workflow_run_id": 33611493578,
+    "market_date": "2026-09-02",
+    "note": "HiThink close prices from the latest successful Decision Inbox before this experiment. GigaDevice price is reused only as the same-day ObservedMarket price; its Research input is v2 below."
+  },
+  "current_cases": [
+    {
+      "path": "dogfood/300750-catl.json",
+      "market_date": "2026-09-02",
+      "observed_price_cny": "348.29"
+    },
+    {
+      "path": "dogfood/600036-cmb.json",
+      "market_date": "2026-09-02",
+      "observed_price_cny": "40.87"
+    },
+    {
+      "path": "dogfood/600519-moutai.json",
+      "market_date": "2026-09-02",
+      "observed_price_cny": "1297.50"
+    },
+    {
+      "path": "dogfood/601088-shenhua.json",
+      "market_date": "2026-09-02",
+      "observed_price_cny": "48.05"
+    },
+    {
+      "path": "research_cases/603986-gigadevice-deep-research-v2.json",
+      "market_date": "2026-09-02",
+      "observed_price_cny": "388.86"
+    }
+  ],
+  "historical_references": [
+    {
+      "ticker": "002384",
+      "company_name": "东山精密",
+      "model_risk_level": "HIGH",
+      "market_date": "2026-08-24",
+      "observed_price_cny": "193.60",
+      "valuation_horizon_date": "2027-12-31",
+      "source_repo": "auguspp/decision-os",
+      "source_commit": "a5e15a2e8449e8e46f75eac4bbee6e6cac33b378",
+      "source_policy_version": "dongshan-train-b-proof-v1",
+      "scenarios": [
+        {"name": "S1_LT120", "probability": "0.15", "payoff_cny_per_share": "82"},
+        {"name": "S2_120_160", "probability": "0.25", "payoff_cny_per_share": "138"},
+        {"name": "S3_160_220", "probability": "0.35", "payoff_cny_per_share": "207"},
+        {"name": "S4_220_260", "probability": "0.20", "payoff_cny_per_share": "288"},
+        {"name": "S5_GT260", "probability": "0.05", "payoff_cny_per_share": "360"}
+      ]
+    }
+  ],
+  "legacy_policy": {
+    "policy_version": "dongshan-train-b-proof-v1-calibration",
+    "acceptable_min_expected_return": "0.10",
+    "attractive_min_expected_return": "0.20",
+    "exceptional_min_expected_return": "0.35",
+    "acceptable_min_positive_probability": "0.50",
+    "attractive_min_positive_probability": "0.60",
+    "exceptional_min_positive_probability": "0.75",
+    "low_model_risk_addon": "0",
+    "medium_model_risk_addon": "0.02",
+    "high_model_risk_addon": "0.05",
+    "very_high_model_risk_addon": "0.08"
+  },
+  "production_policy_path": "src/decision_kernel/policy_data/live_odds_v0_1.json",
+  "authority": "NONE",
+  "production_change": false
+}
