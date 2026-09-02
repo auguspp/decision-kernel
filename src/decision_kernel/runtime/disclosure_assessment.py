@@ -5,7 +5,6 @@ import json
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date, datetime
-from enum import StrEnum
 from uuid import NAMESPACE_URL, UUID, uuid5
 
 from ..adapters.cninfo import reference_evidence_from_cninfo_announcement
@@ -225,7 +224,7 @@ def serialize_disclosure_assessment_packet(packet: DisclosureAssessmentPacket) -
             }
             for item in packet.evidence
         ],
-        "research_status": "UNASSESSED",
+        "disclosure_assessment_status": "UNASSESSED",
         "investment_authority": "NONE",
     }
     return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
