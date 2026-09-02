@@ -1,0 +1,77 @@
+{
+  "announcement_ids": [
+    "1225502236"
+  ],
+  "assessment_input_hash": "97ce9a01b90840b47edfb585d9b68e2128412f0abbebac2eae281a16a2794656",
+  "assessment_semantics_id": "research-funnel-v1",
+  "disclosure_assessment_status": "UNASSESSED",
+  "evidence": [
+    {
+      "announcement_id": "1225502236",
+      "evidence_artifact": {
+        "available_at": "2026-08-25T17:02:27+08:00",
+        "content_hash": "91295c64ce6534e2cfdebe712fa4a1a676064d5d8922df6cb6a87e165946ae93",
+        "extracted_structured_values": null,
+        "id": "6ddb8a0e-a84b-5b61-b153-7956d5a33ce1",
+        "idempotency_key": "CNINFO:300750:ANNOUNCEMENT:1225502236",
+        "license_terms_note": "Reference-only official disclosure; raw PDF is not retained by this adapter.",
+        "permitted_excerpt": null,
+        "published_at": "2026-08-25T17:02:27+08:00",
+        "raw_storage_ref": null,
+        "replayability_level": "REFERENCE_ONLY",
+        "report_period_end": null,
+        "retention_mode": "METADATA_ONLY",
+        "retrieved_at": "2026-09-02T07:00:00Z",
+        "schema_version": 1,
+        "source_identifier": "CNINFO:300750:ANNOUNCEMENT:1225502236",
+        "source_location": "CNINFO announcement 1225502236",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-25/1225502236.PDF",
+        "source_type": "OFFICIAL_DISCLOSURE"
+      },
+      "extracted_char_count": 220,
+      "page_count": 1,
+      "pages": [
+        {
+          "page_number": 1,
+          "text": "׌\n፠\nዄ΂Оப΂f\nContemporary Amperex Technology Co., Limited\nʮ̡\nʮ̡\n΅˾໮j3750\nᐄุήѧ\nʮ̡  ͉ʮ̡ ໨ ԫ ໨ԫ ึ ໨ԫึ ᔫ\nಥʕᐑଭ͂൑ 20 ໮ึᅃᔮɽข 5\nᅽdІ 2026 ϋ8˜25f\n໨ԫึն\nʮ̡\nᐼ຾ଣ\nಀ๎໊΋͛\nʕ਷•ྐྵᅃd2026 ϋ8˜25 ˚\nੂБ໨ԫಀ๎໊΋͛iੂБ໨ԫᆙ਄΋\nੂБ໨ԫюԃ\nʃඪ΋͛ʿႻႍ௹ɻf"
+        }
+      ],
+      "pdf_sha256": "91295c64ce6534e2cfdebe712fa4a1a676064d5d8922df6cb6a87e165946ae93",
+      "published_at": "2026-08-25T17:02:27+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-25/1225502236.PDF",
+      "text_sha256": "e46360e0baf6f4dfa0a3c6b20252002da807f2c64101d0224e4082cc97aa3951",
+      "text_status": "EXTRACTED",
+      "title": "H股公告（变更香港的主要营业地址）"
+    }
+  ],
+  "investment_authority": "NONE",
+  "prepared_at": "2026-09-02T07:00:00+00:00",
+  "publication_date": "2026-08-25",
+  "research_context": {
+    "core_thesis": "宁德时代在动力与储能电池的规模、技术和全球客户覆盖可能继续支撑高于行业的增长，但高资本开支、价格竞争与估值久期使兑现路径仍具有较高不确定性。",
+    "market_expectations_narrative": "工作假设：市场已经计入全球电池需求高增长和龙头份额优势，同时也在折价反映扩产、竞争与回报率波动；进一步重估需要盈利增长持续快于资本投入扩张。",
+    "model_risk_level": "VERY_HIGH",
+    "model_risk_notes": "2026 H1 revenue and profit grew rapidly, but operating cash flow grew only 2.61%; forward EPS and P/E scenarios are deliberately simple dogfood assumptions, not consensus estimates.",
+    "monitoring_triggers": [
+      "下一季度收入、归母净利润与经营现金流同比",
+      "动力与储能销量及收入结构",
+      "产能利用率与在建产能进度",
+      "境外收入与盈利能力"
+    ],
+    "open_questions": [
+      "在大规模扩产下，自由现金流转化能否跟上利润增长？",
+      "储能高增长能否在竞争加剧时维持合理毛利率？",
+      "海外产能与客户扩张能否维持较高资本回报？"
+    ],
+    "research_as_of": "2026-07-27T00:00:00+00:00",
+    "research_information_bundle_hash": "9e054a28d1aacb78560ae71f8e53f6141d0cc1ef5e4aa60250aaaef77da1d242",
+    "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+    "thesis_invalidation": [
+      "利润增长连续两个报告期显著落后于收入且现金转化继续恶化。",
+      "产能利用率明显下滑且新增产能仍快速扩张。",
+      "动力或储能核心市场份额出现持续、显著下降。"
+    ]
+  },
+  "source_lane": "CNINFO",
+  "stock_code": "300750"
+}

@@ -1,0 +1,117 @@
+{
+  "announcement_ids": [
+    "1225462006"
+  ],
+  "assessment_input_hash": "68580c9ddba657bc02083a6e7208f9388a431815598afc265dc5ffafcbfd5998",
+  "assessment_semantics_id": "research-funnel-v1",
+  "disclosure_assessment_status": "UNASSESSED",
+  "evidence": [
+    {
+      "announcement_id": "1225462006",
+      "evidence_artifact": {
+        "available_at": "2026-08-06T19:40:30+08:00",
+        "content_hash": "8f7377f61ce4c92bc9fe75c0249ed2187d9db6b94e83b6313866ec153e2b1f63",
+        "extracted_structured_values": null,
+        "id": "fcf666a1-7f70-5eae-934b-56ab085e0969",
+        "idempotency_key": "CNINFO:300750:ANNOUNCEMENT:1225462006",
+        "license_terms_note": "Reference-only official disclosure; raw PDF is not retained by this adapter.",
+        "permitted_excerpt": null,
+        "published_at": "2026-08-06T19:40:30+08:00",
+        "raw_storage_ref": null,
+        "replayability_level": "REFERENCE_ONLY",
+        "report_period_end": null,
+        "retention_mode": "METADATA_ONLY",
+        "retrieved_at": "2026-09-02T07:00:00Z",
+        "schema_version": 1,
+        "source_identifier": "CNINFO:300750:ANNOUNCEMENT:1225462006",
+        "source_location": "CNINFO announcement 1225462006",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-06/1225462006.PDF",
+        "source_type": "OFFICIAL_DISCLOSURE"
+      },
+      "extracted_char_count": 1582,
+      "page_count": 11,
+      "pages": [
+        {
+          "page_number": 1,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n⊈ಊṉọᄅḸі\u0001\n\u001bٺ୍\u0018ᄅ\u0014\u0012ರ ⊯Ⅲ\u001bࢌ\nඳ\nඳ଀Ẁ\u001bඳxĎ\nರ௹\u001b \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0017ರ\nЧṉọ\n ٳٺܢܢ⦁ )෮ഈ൧\u0001\t䩏\u0012\n ൞\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0011\u0014\u0018\u0016\u0011 䪌ૼ\nଢ ૫ᆴЧ\n᾵թ \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011 3.# \u0012 3.# \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011\n㦆ഒ\u0001\t\u000e\n 3.#\n᾵թ \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011 3.# \u0012 3.# \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011\n ٳٺܢܢ⦁ \"෮ഈ൧\u0001\t䩏\u0012\nڎ\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0014\u0011\u0011\u0018\u0016\u0011 䪌ૼၞ෮ഈ൧\nଢ ૫ᆴЧ\n᾵թ \u0015\n\u0015\u0011\u0019\n\u0014\u0016\u0011\n\u0016\u0017\u0012 3.# \u0012 3.# \u0015\n\u0015\u0011\u0019\n\u0014\u0016\u0011\n\u0016\u0017\u0012\n㦆ഒ\u0001\t\u000e\n \u0015\n\u0011\u0016\u0019 3.# \u0015\n\u0011\u0016\u0019\n᾵թ \u0015\n\u0015\u0011\u0019\n\u0014\u0016\u0015\n\u0017\u0012\u001a 3.# \u0012 3.# \u0015\n\u0015\u0011\u0019\n\u0014\u0016\u0015\n\u0017\u0012\u001a\nЧ⊺ỡğ 3.# \u0015\n\u0017\u0013\u0017\n\u0017\u0016\u0015\n\u001a\u0012\u001a\nḾ䩏ğ"
+        },
+        {
+          "page_number": 2,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\nඳb"
+        },
+        {
+          "page_number": 3,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n⃾⃷֥\n ٳٺܢ\u0001\u000f\u0012ܢ⦁ )෮ഈ൧\u0001\t䩏\u0012\n ൞\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0011\u0014\u0018\u0016\u0011 䪌ૼ\nĎ⅂ଢଢ⊺⅂\n᾵թ \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011 \u0011 \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011\n㦆ഒ\u0001\t\u000e\n᾵թ \u0013\u0012\u0019\n\u0014\u0011\u0011\n\u0014\u0011\u0011 \u0011 218,300,300\n䩏\u0015\n\u001bָ\nĎ✔\nĎ\nਈေ౰㬪ğ\u0001\nਈ⁽ᾒб\nб\u0001\u0006\u0016\u0018\u000f\u0015\u0001֥\nٺܢ\n\u0001\nჭ\u0001\u0012\u0014\u001a\n\u0016\u001a\u0014\n\u0015\u0014\u0017\n\u0017\u0014\u0017\u000f\u0019\u0011`\nỡຓྐ༏\n ٳٺܢܢ⦁ \"෮ഈ൧\u0001\t䩏\u0012\nڎ\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0014\u0011\u0011\u0018\u0016\u0011 䪌ૼၞ෮ഈ൧\nĎ⅂ଢଢ⊺⅂\n᾵թ \u0015\n\u0014\u0019\u0011\n\u0011\u0014\u0012\n\u0016\u0012\u0018 \u0013\u0019\n\u0014\u0012\u001a\n\u0011\u0015\u0015 \u0015\n\u0015\u0011\u0019\n\u0014\u0016\u0011\n\u0016\u0017\u0012\n㦆ഒ\u0001\t\u000e\n \u0015\n\u0011\u0016\u0019\n᾵թ \u0015\n\u0014\u0019\u0011\n\u0011\u0014\u0016\n\u0016\u0018\u0016 \u0013\u0019\n\u0014\u0012\u001a\n\u0011\u0015\u0015 4,408,354,619"
+        },
+        {
+          "page_number": 4,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\nṉọ⇈౦\n௹⃴ί὏Ď\n ٳٺܢܢ⦁ \"෮ഈ൧\u0001\t䩏\u0012\nڎ\n⊈ಊսὂ\tೂഈ൧\n \u0014\u0011\u0011\u0018\u0016\u0011 䪌ૼၞ෮ഈ൧\n௹⃴ί὏⇈౦௹⃴⅂\nଢ Чᄅ⤨ṉọ௹⃴⅂\nଢ\n⅂ܢ\nଢ\u0001\t\"\u0012\n֥\nଢ\u0001\t\"\u0013\nሱ\nଢ\nῌί὏\n௹⃴Ⴭၛྛ൐\nܢ֥\n⊺⅂\n\u0012\n\u000f ᧄ\u0013\u0011\u0013\u0012୍\u0012\u0012ᄅ\u0012\u0013ರ஻ሙ㍇ₑ\nࠗ\nί὏\n\u0012\u0018\u0015\n\u0014\u0012\u0017ܢ\u0019\u0016\u0011\n\u0014\u000e \u0019\u0016\u0013\n\u0012\u0018\u0012\u0019\u0016\u0011\n\u0014 \u0019\u0016\u0013\n\u0012\u0018\u0012\u0019\u0016\u0013\n\u0012\u0018\u0012\nỌն὜๙Ἶರ௹\u0001\tೂℳႨ\n\u0013\n\u000f֥\n‑ࠗ\nί὏\n\u0018\u0013\u001a\n\u0015\u0013\u0018ܢ\u0011\u0011\u0011\n\u0012\u000e \u0018\u0013\u0015\n\u0019\u0013\u0018\u0011\u0011\u0011\n\u0012 \u0014\u001a\u0011\n\u0017\u0019\u0013\u0018\u0013\u0015\n\u0019\u0013\u0018\nỌն὜๙Ἶರ௹\u0001\tೂℳႨ\nĎ\u001b\n\u0012\"\"\t\u0001\"\u0001ܢ\n\u001bٺܢ\n\u0013\"\"\t\u0001\"\u0001ܢ\n⊺ỡğ 3.# \u0012\n\u0013\u0015\u0019\n\u001a\u0018\u0012\nḾ䩏ğ\nௐ௹⃴∻ཋ⚧\nί὏൱ԛἨ\nb"
+        },
+        {
+          "page_number": 5,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n⊈ ҂ℳႨ"
+        },
+        {
+          "page_number": 6,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\nĎ ҂ℳႨ"
+        },
+        {
+          "page_number": 7,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n௹⃴\n ٳٺܢܢ⦁ \"෮ഈ൧\u0001\t䩏\u0012\nڎ\n⊈ಊսὂ\tೂഈ൧\n \u0014\u0011\u0011\u0018\u0016\u0011 䪌ૼၞ෮ഈ൧\n䪌ૼỌն὜๙Ἶರ௹\u0001\n\tೂℳႨ\nଢ\u0001\t%\u0012\nଢ\u0001\n\t%\u0013\nܢ֥\nଢ\n\u0012\n\u000fί὏xĎ\u0001\n\u0001\nỌ὜๙Ἶb\n\u0013\u0011\u0013\u0017୍\u0015ᄅ\u0014ರ \u0011 \u0013\u0011\u0016\n\u0011\u0017\u0017\nĎ\u001b\n\u0012%%\t\u0001\"\u0001ܢ\n\u001bٺܢ\n\u0013%%\t\u0001\"\u0001ܢ\nḾ䩏ğ\nാིb"
+        },
+        {
+          "page_number": 8,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\nః෰ṉọ ҂ℳႨ\n\u001b\u0001\nބ\"\u0001ܢ\n\u001b\u0001\nބ\"\u0001ܢ"
+        },
+        {
+          "page_number": 9,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n⊷ਘ ҂ℳႨ"
+        },
+        {
+          "page_number": 10,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n7\u000f\u0001⃷⃾\nῌ\n౦㣐༯ğ\u0001\n\u0001\nč䩏\u0016Ď\u0001\nಆ҆ॻ⇊Ġ\u0001\n\u0001\nၘಆ҆੫ྛĠ\u0001\n\u0001\nčೂႵĎၘჍ੫ྛĠ\u0001\n\u0001\n૫नℾཌྷ๝č䩏\u0017ĎĠ\u0001\n\u0001\nၧၘಆ҆቎ྛĠ\u0001\n\u0001\nῂၘứෂ\u0010⇀ᆞ⊵Ḿứෂ\u0010ᆞᄝ⊵Ḿᇏ❣ᾞ὜ứෂĠ\u0001\n\u0001\n\u0001ࠣ\n\u0001\nĎb\nᆀğ ᾠ৘\n⊊↼ğඳ૝ℼ\nದ≇"
+        },
+        {
+          "page_number": 11,
+          "text": "FF301\n∉ \u0012\u000f\u0013\u000f\u0012\n䩏\n1.ඳb\n2.w䩏⇍ರ௹xb\u0001\nರ௹xb\n3.ܢ֥\nଢb\n4.֥\nb\n5.\u0010\u0001ⅵ\"\u0016\u0013\u000f\u0014\u0012ֻ\nḸіᇏቔԛႵἬ⃷⃾đ≣҂ླေᧄՎḸіᄜቔ⃷⃾b\n6. ᄝՎwཌྷ๝xᆷğ\nॻၧཌྷ๝Ġ\nࠣ\nၭb"
+        }
+      ],
+      "pdf_sha256": "8f7377f61ce4c92bc9fe75c0249ed2187d9db6b94e83b6313866ec153e2b1f63",
+      "published_at": "2026-08-06T19:40:30+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-06/1225462006.PDF",
+      "text_sha256": "b7728886bbebcfb828030d588cca5270bf2dfcce4185600a55603019fbd6d9fa",
+      "text_status": "EXTRACTED",
+      "title": "H股公告（截至2026年7月31日止股份发行人的证券变动月报表）"
+    }
+  ],
+  "investment_authority": "NONE",
+  "prepared_at": "2026-09-02T07:00:00+00:00",
+  "publication_date": "2026-08-06",
+  "research_context": {
+    "core_thesis": "宁德时代在动力与储能电池的规模、技术和全球客户覆盖可能继续支撑高于行业的增长，但高资本开支、价格竞争与估值久期使兑现路径仍具有较高不确定性。",
+    "market_expectations_narrative": "工作假设：市场已经计入全球电池需求高增长和龙头份额优势，同时也在折价反映扩产、竞争与回报率波动；进一步重估需要盈利增长持续快于资本投入扩张。",
+    "model_risk_level": "VERY_HIGH",
+    "model_risk_notes": "2026 H1 revenue and profit grew rapidly, but operating cash flow grew only 2.61%; forward EPS and P/E scenarios are deliberately simple dogfood assumptions, not consensus estimates.",
+    "monitoring_triggers": [
+      "下一季度收入、归母净利润与经营现金流同比",
+      "动力与储能销量及收入结构",
+      "产能利用率与在建产能进度",
+      "境外收入与盈利能力"
+    ],
+    "open_questions": [
+      "在大规模扩产下，自由现金流转化能否跟上利润增长？",
+      "储能高增长能否在竞争加剧时维持合理毛利率？",
+      "海外产能与客户扩张能否维持较高资本回报？"
+    ],
+    "research_as_of": "2026-07-27T00:00:00+00:00",
+    "research_information_bundle_hash": "9e054a28d1aacb78560ae71f8e53f6141d0cc1ef5e4aa60250aaaef77da1d242",
+    "research_snapshot_id": "a8827208-0f5b-5e04-bf70-28c49a23d6cd",
+    "thesis_invalidation": [
+      "利润增长连续两个报告期显著落后于收入且现金转化继续恶化。",
+      "产能利用率明显下滑且新增产能仍快速扩张。",
+      "动力或储能核心市场份额出现持续、显著下降。"
+    ]
+  },
+  "source_lane": "CNINFO",
+  "stock_code": "300750"
+}
