@@ -105,7 +105,8 @@ def test_packet_binds_exact_frozen_research_and_official_evidence() -> None:
 
     serialized = serialize_disclosure_assessment_packet(packet)
     assert '"assessment_input_hash"' in serialized
-    assert '"research_status": "UNASSESSED"' in serialized
+    assert '"disclosure_assessment_status": "UNASSESSED"' in serialized
+    assert '"research_status"' not in serialized
     assert '"investment_authority": "NONE"' in serialized
     assert "第一页正文" in serialized
 
