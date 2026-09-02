@@ -1,6 +1,10 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from io import StringIO
 from types import SimpleNamespace
 
+from decision_kernel.cli import main
+from decision_kernel.market import ObservedMarket
+from decision_kernel.runtime import hithink_http
 from decision_kernel.runtime.inbox import (
     render_decision_inbox_html,
     render_decision_inbox_markdown,
@@ -94,3 +98,64 @@ def test_inbox_escapes_research_text_and_does_not_invent_attention() -> None:
     assert "<script>alert(1)</script>" not in html
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
     assert "需要关注：0" in html
+
+
+def test_build_inbox_cli_uses_real_checked_in_research_package(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    class FrozenDateTime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 9, 2, 1, 0, tzinfo=timezone.utc)
+
+    def fake_market(*, thscode: str, observed_at, api_key: str | None):
+        assert thscode == "600036.SH"
+        assert api_key == "fixture-secret"
+        return ObservedMarket(
+            market_price="40.86",
+            market_timestamp=datetime(
+                2026,
+                9,
+                1,
+                15,
+                0,
+                tzinfo=timezone(timedelta(hours=8)),
+            ),
+            market_utc_offset_minutes=480,
+            market_data_source="HiThink fixture",
+            price_convention="RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+            currency="CNY",
+        )
+
+    output = tmp_path / "index.html"
+    summary = tmp_path / "summary.md"
+    monkeypatch.setenv(hithink_http.HITHINK_API_KEY_ENV, "fixture-secret")
+    monkeypatch.setattr("decision_kernel.cli.datetime", FrozenDateTime)
+    monkeypatch.setattr(
+        hithink_http,
+        "fetch_latest_hithink_observed_market",
+        fake_market,
+    )
+    stdout = StringIO()
+    stderr = StringIO()
+
+    exit_code = main(
+        [
+            "build-inbox",
+            "dogfood/600036-cmb.json",
+            "--output",
+            str(output),
+            "--summary",
+            str(summary),
+        ],
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert exit_code == 0
+    assert stderr.getvalue() == ""
+    assert "1 attention / 1 total" in stdout.getvalue()
+    assert "招商银行" in output.read_text(encoding="utf-8")
+    assert "ACCEPTABLE_ODDS" in output.read_text(encoding="utf-8")
+    assert "## 招商银行 600036" in summary.read_text(encoding="utf-8")
