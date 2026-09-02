@@ -4,7 +4,10 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Mapping
+from uuid import UUID
 from zoneinfo import ZoneInfo
+
+from ..evidence import EvidenceArtifact, ReplayabilityLevel, RetentionMode
 
 
 CNINFO_STOCK_MAP_SOURCE = "CNINFO official stock organization mapping"
@@ -12,6 +15,7 @@ CNINFO_ANNOUNCEMENT_SOURCE = "CNINFO official announcement search"
 CNINFO_STATIC_BASE_URL = "https://static.cninfo.com.cn"
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 _STOCK_CODE = re.compile(r"^\d{6}$")
+_SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
 
 
 class CninfoAdapterError(ValueError):
@@ -135,6 +139,66 @@ def normalize_cninfo_announcement_page(
     return CninfoAnnouncementPage(
         total_announcement_count=total,
         announcements=tuple(announcements),
+    )
+
+
+def reference_evidence_from_cninfo_announcement(
+    announcement: CninfoAnnouncement,
+    *,
+    artifact_id: UUID,
+    pdf_sha256: str,
+    retrieved_at: datetime,
+) -> EvidenceArtifact:
+    """Map one qualified official announcement to reference-only Evidence.
+
+    The raw PDF is intentionally not retained here. Fetching, text extraction, storage and
+    Research interpretation remain separate Harness concerns. ``content_hash`` identifies the
+    exact official PDF bytes that were inspected by the caller.
+    """
+
+    normalized_code = _normalize_stock_code(announcement.stock_code)
+    published_at = announcement.published_at
+    if published_at is None or published_at.utcoffset() is None:
+        raise CninfoAdapterError(
+            "CNINFO reference Evidence requires an aware announcement publication timestamp"
+        )
+    if retrieved_at.tzinfo is None or retrieved_at.utcoffset() is None:
+        raise CninfoAdapterError("CNINFO reference Evidence retrieved_at must be timezone-aware")
+    if retrieved_at < published_at:
+        raise CninfoAdapterError(
+            "CNINFO reference Evidence cannot be retrieved before publication"
+        )
+
+    source_locator = announcement.source_locator.strip()
+    if not source_locator.startswith(f"{CNINFO_STATIC_BASE_URL}/"):
+        raise CninfoAdapterError(
+            "CNINFO reference Evidence source must use the official static host"
+        )
+    if not _SHA256.fullmatch(pdf_sha256.strip()):
+        raise CninfoAdapterError("CNINFO reference Evidence requires a SHA256 PDF hash")
+
+    source_identifier = (
+        f"CNINFO:{normalized_code}:ANNOUNCEMENT:{announcement.announcement_id.strip()}"
+    )
+    if not announcement.announcement_id.strip():
+        raise CninfoAdapterError("CNINFO reference Evidence requires an announcement id")
+
+    return EvidenceArtifact(
+        id=artifact_id,
+        source_type="OFFICIAL_DISCLOSURE",
+        source_identifier=source_identifier,
+        source_locator=source_locator,
+        published_at=published_at,
+        available_at=published_at,
+        retrieved_at=retrieved_at,
+        content_hash=pdf_sha256.strip().lower(),
+        idempotency_key=source_identifier,
+        retention_mode=RetentionMode.METADATA_ONLY,
+        replayability_level=ReplayabilityLevel.REFERENCE_ONLY,
+        source_location=f"CNINFO announcement {announcement.announcement_id.strip()}",
+        license_terms_note=(
+            "Reference-only official disclosure; raw PDF is not retained by this adapter."
+        ),
     )
 
 
