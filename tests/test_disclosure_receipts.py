@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from uuid import UUID
 from zoneinfo import ZoneInfo
@@ -11,6 +12,7 @@ from decision_kernel.runtime.disclosure_receipts import (
     DisclosureAssessmentReceipt,
     disclosure_batch_announcement_ids,
     filter_unassessed_disclosure_batches,
+    parse_disclosure_assessment_receipts,
 )
 
 
@@ -97,3 +99,57 @@ def test_receipt_requires_sorted_exact_announcement_identity() -> None:
         assert "unique and sorted" in str(exc)
     else:
         raise AssertionError("unsorted receipt identity must fail closed")
+
+
+def test_receipt_json_parser_preserves_exact_assessment_identity() -> None:
+    payload = json.dumps(
+        [
+            {
+                "source_lane": "CNINFO",
+                "stock_code": "300750",
+                "announcement_ids": ["1225519101"],
+                "research_snapshot_id": str(SNAPSHOT_A),
+                "research_as_of": RESEARCH_AS_OF.isoformat(),
+                "assessment_result": "WAIT_FOR_TRIGGER",
+                "assessed_at": ASSESSED_AT.isoformat(),
+            }
+        ]
+    )
+
+    receipts = parse_disclosure_assessment_receipts(payload)
+
+    assert receipts == (
+        DisclosureAssessmentReceipt(
+            source_lane="CNINFO",
+            stock_code="300750",
+            announcement_ids=("1225519101",),
+            research_snapshot_id=SNAPSHOT_A,
+            research_as_of=RESEARCH_AS_OF,
+            assessment_result=ResearchFunnelTerminalState.WAIT_FOR_TRIGGER,
+            assessed_at=ASSESSED_AT,
+        ),
+    )
+
+
+def test_receipt_json_parser_rejects_unknown_semantics_fields() -> None:
+    payload = json.dumps(
+        [
+            {
+                "source_lane": "CNINFO",
+                "stock_code": "300750",
+                "announcement_ids": ["1225519101"],
+                "research_snapshot_id": str(SNAPSHOT_A),
+                "research_as_of": RESEARCH_AS_OF.isoformat(),
+                "assessment_result": "WAIT_FOR_TRIGGER",
+                "assessed_at": ASSESSED_AT.isoformat(),
+                "assessment_method": "future-version",
+            }
+        ]
+    )
+
+    try:
+        parse_disclosure_assessment_receipts(payload)
+    except ValueError as exc:
+        assert "unknown fields" in str(exc)
+    else:
+        raise AssertionError("unknown receipt semantics must fail closed")
