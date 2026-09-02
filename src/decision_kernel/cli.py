@@ -376,7 +376,11 @@ def main(
                         f"- {item.announcement_id} | {item.title} | {item.source_locator}",
                         file=stdout,
                     )
-            print("RESEARCH STATUS: UNASSESSED", file=stdout)
+            assessment_status = "UNASSESSED" if unassessed else "QUIET"
+            print(
+                f"DISCLOSURE ASSESSMENT STATUS: {assessment_status}",
+                file=stdout,
+            )
             print("INVESTMENT AUTHORITY: NONE", file=stdout)
             return 0
 

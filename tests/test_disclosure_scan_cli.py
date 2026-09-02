@@ -89,7 +89,8 @@ def test_scan_disclosures_reuses_frozen_research_clocks_for_generic_and_deep_pac
     assert "UNASSESSED: 600036 招商银行" in output
     assert "NEW | 官方公告 NEW" in output
     assert "COVERED |" not in output
-    assert "RESEARCH STATUS: UNASSESSED" in output
+    assert "DISCLOSURE ASSESSMENT STATUS: UNASSESSED" in output
+    assert "RESEARCH STATUS:" not in output
     assert "INVESTMENT AUTHORITY: NONE" in output
 
 
@@ -156,6 +157,45 @@ def test_scan_disclosures_suppresses_exact_receipt_for_same_frozen_research(
     assert stderr.getvalue() == ""
     assert "0 unassessed / 1 seen-suppressed / 1 research-uncovered" in output
     assert "NO UNASSESSED RESEARCH-UNCOVERED OFFICIAL DISCLOSURES" in output
+    assert "UNASSESSED:" not in output
+    assert "DISCLOSURE ASSESSMENT STATUS: QUIET" in output
+    assert "RESEARCH STATUS:" not in output
+    assert "INVESTMENT AUTHORITY: NONE" in output
+
+
+def test_scan_disclosures_is_quiet_when_there_are_no_research_uncovered_batches(
+    monkeypatch,
+) -> None:
+    def fake_fetch(*, stock_code: str, start_date: date, end_date: date, **_kwargs):
+        return CninfoDisclosureBatch(
+            stock_code=stock_code,
+            org_id=f"ORG:{stock_code}",
+            start_date=start_date,
+            end_date=end_date,
+            announcements=(),
+        )
+
+    monkeypatch.setattr(cninfo_http, "fetch_cninfo_disclosures", fake_fetch)
+    stdout = StringIO()
+    stderr = StringIO()
+
+    exit_code = main(
+        [
+            "scan-disclosures",
+            "dogfood/600036-cmb.json",
+            "--through",
+            "2026-09-02",
+        ],
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    output = stdout.getvalue()
+    assert exit_code == 0
+    assert stderr.getvalue() == ""
+    assert "0 unassessed / 0 seen-suppressed / 0 research-uncovered" in output
+    assert "NO RESEARCH-UNCOVERED OFFICIAL DISCLOSURES" in output
+    assert "DISCLOSURE ASSESSMENT STATUS: QUIET" in output
     assert "UNASSESSED:" not in output
     assert "INVESTMENT AUTHORITY: NONE" in output
 
