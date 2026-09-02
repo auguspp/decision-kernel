@@ -15,6 +15,10 @@ from .live import run_live_deep_research_package, run_live_research_commit_packa
 from .research_commit import ResearchCommitPackage
 from .research_workflow_v1 import ResearchFunnelTerminalState
 from .runtime import cninfo_http, hithink_http
+from .runtime.disclosure_assessment import (
+    prepare_disclosure_assessment_packet,
+    serialize_disclosure_assessment_packet,
+)
 from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
     group_disclosures_by_publication_date,
@@ -32,6 +36,7 @@ from .workflow import DecisionSpineResult
 
 
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
+DEFAULT_DISCLOSURE_PACKET_LIMIT = 20
 QUIET_DISCLOSURE_ASSESSMENT_RESULTS = (
     ResearchFunnelTerminalState.WAIT_FOR_TRIGGER.value,
     ResearchFunnelTerminalState.DROP_FOR_NOW.value,
@@ -108,6 +113,23 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "Optional explicit JSON receipt file used to suppress exact batches already assessed "
             "against the same frozen Research."
+        ),
+    )
+    disclosure_scan.add_argument(
+        "--packet-dir",
+        type=Path,
+        help=(
+            "Optional directory for auditable assessment packets for still-unassessed batches. "
+            "Requires the documents extra for PDF text extraction."
+        ),
+    )
+    disclosure_scan.add_argument(
+        "--packet-limit",
+        type=int,
+        default=DEFAULT_DISCLOSURE_PACKET_LIMIT,
+        help=(
+            "Maximum unassessed batches to prepare when --packet-dir is used; fail closed rather "
+            f"than silently truncate. Default: {DEFAULT_DISCLOSURE_PACKET_LIMIT}."
         ),
     )
     record_disclosure = subparsers.add_parser(
@@ -293,8 +315,12 @@ def main(
             return 0
 
         if args.command == "scan-disclosures":
+            if args.packet_dir is not None and args.packet_limit <= 0:
+                raise ValueError("disclosure assessment packet limit must be positive")
+
             research_as_of_by_stock: dict[str, datetime] = {}
             research_identity_by_stock = {}
+            research_snapshot_by_stock = {}
             company_by_stock: dict[str, str] = {}
             scan_inputs: list[tuple[str, date]] = []
 
@@ -315,6 +341,7 @@ def main(
 
                 research_as_of_by_stock[ticker] = snapshot.as_of_datetime
                 research_identity_by_stock[ticker] = (snapshot.id, snapshot.as_of_datetime)
+                research_snapshot_by_stock[ticker] = snapshot
                 company_by_stock[ticker] = snapshot.company_name
                 scan_inputs.append((ticker, start_date))
 
@@ -345,6 +372,37 @@ def main(
             )
             seen_suppressed = len(uncovered) - len(unassessed)
 
+            packet_outputs: list[tuple[Path, str, str]] = []
+            if args.packet_dir is not None:
+                if len(unassessed) > args.packet_limit:
+                    raise ValueError(
+                        "disclosure assessment packet limit exceeded: "
+                        f"{len(unassessed)} unassessed > {args.packet_limit}; no packets written"
+                    )
+                prepared_at = datetime.now(timezone.utc)
+                for batch in unassessed:
+                    packet = prepare_disclosure_assessment_packet(
+                        research_snapshot=research_snapshot_by_stock[batch.stock_code],
+                        batch=batch,
+                        prepared_at=prepared_at,
+                    )
+                    packet_path = args.packet_dir / (
+                        f"{batch.stock_code}-{batch.publication_date.isoformat()}-"
+                        f"{packet.assessment_input_hash[:16]}.json"
+                    )
+                    packet_outputs.append(
+                        (
+                            packet_path,
+                            serialize_disclosure_assessment_packet(packet),
+                            packet.assessment_input_hash,
+                        )
+                    )
+
+                if packet_outputs:
+                    args.packet_dir.mkdir(parents=True, exist_ok=True)
+                    for packet_path, serialized, _input_hash in packet_outputs:
+                        packet_path.write_text(serialized, encoding="utf-8")
+
             print(
                 "OFFICIAL DISCLOSURE SCAN: "
                 f"{len(unassessed)} unassessed / "
@@ -355,6 +413,16 @@ def main(
                 f"{len(research_as_of_by_stock)} research cases",
                 file=stdout,
             )
+            if args.packet_dir is not None:
+                print(
+                    f"ASSESSMENT PACKETS: {len(packet_outputs)} prepared | dir={args.packet_dir}",
+                    file=stdout,
+                )
+                for packet_path, _serialized, input_hash in packet_outputs:
+                    print(
+                        f"PACKET: {packet_path} | input_hash={input_hash}",
+                        file=stdout,
+                    )
             if not uncovered:
                 print("NO RESEARCH-UNCOVERED OFFICIAL DISCLOSURES", file=stdout)
             elif not unassessed:
