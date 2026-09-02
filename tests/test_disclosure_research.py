@@ -156,7 +156,7 @@ def _supplemental(*, available_at: datetime | None = None) -> EvidenceArtifact:
         retrieved_at=max(PREPARED_AT, available),
         content_hash="e" * 64,
         idempotency_key=str(evidence_id),
-        retention_mode=RetentionMode.REFERENCE_ONLY,
+        retention_mode=RetentionMode.METADATA_ONLY,
         replayability_level=ReplayabilityLevel.REFERENCE_ONLY,
         raw_storage_ref=None,
     )
