@@ -18,6 +18,10 @@ from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
     group_disclosures_by_publication_date,
 )
+from .runtime.disclosure_receipts import (
+    filter_unassessed_disclosure_batches,
+    parse_disclosure_assessment_receipts,
+)
 from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
 
@@ -88,6 +92,14 @@ def build_parser() -> argparse.ArgumentParser:
         type=date.fromisoformat,
         required=True,
         help="Inclusive CNINFO scan end date in YYYY-MM-DD form.",
+    )
+    disclosure_scan.add_argument(
+        "--receipts",
+        type=Path,
+        help=(
+            "Optional explicit JSON receipt file used to suppress exact batches already assessed "
+            "against the same frozen Research."
+        ),
     )
     return parser
 
@@ -181,6 +193,7 @@ def main(
 
         if args.command == "scan-disclosures":
             research_as_of_by_stock: dict[str, datetime] = {}
+            research_identity_by_stock = {}
             company_by_stock: dict[str, str] = {}
             scan_inputs: list[tuple[str, date]] = []
 
@@ -200,8 +213,15 @@ def main(
                     )
 
                 research_as_of_by_stock[ticker] = snapshot.as_of_datetime
+                research_identity_by_stock[ticker] = (snapshot.id, snapshot.as_of_datetime)
                 company_by_stock[ticker] = snapshot.company_name
                 scan_inputs.append((ticker, start_date))
+
+            receipts = ()
+            if args.receipts is not None:
+                receipts = parse_disclosure_assessment_receipts(
+                    args.receipts.read_text(encoding="utf-8")
+                )
 
             announcements = []
             for ticker, start_date in scan_inputs:
@@ -217,9 +237,17 @@ def main(
                 batches,
                 research_as_of_by_stock=research_as_of_by_stock,
             )
+            unassessed = filter_unassessed_disclosure_batches(
+                uncovered,
+                research_identity_by_stock=research_identity_by_stock,
+                receipts=receipts,
+            )
+            seen_suppressed = len(uncovered) - len(unassessed)
 
             print(
                 "OFFICIAL DISCLOSURE SCAN: "
+                f"{len(unassessed)} unassessed / "
+                f"{seen_suppressed} seen-suppressed / "
                 f"{len(uncovered)} research-uncovered / "
                 f"{len(batches)} dated batches / "
                 f"{len(announcements)} announcements / "
@@ -228,9 +256,14 @@ def main(
             )
             if not uncovered:
                 print("NO RESEARCH-UNCOVERED OFFICIAL DISCLOSURES", file=stdout)
-            for batch in uncovered:
+            elif not unassessed:
                 print(
-                    "UNCOVERED: "
+                    "NO UNASSESSED RESEARCH-UNCOVERED OFFICIAL DISCLOSURES",
+                    file=stdout,
+                )
+            for batch in unassessed:
+                print(
+                    "UNASSESSED: "
                     f"{batch.stock_code} {company_by_stock[batch.stock_code]} | "
                     f"research_as_of={research_as_of_by_stock[batch.stock_code].isoformat()} | "
                     f"publication_date={batch.publication_date.isoformat()} | "

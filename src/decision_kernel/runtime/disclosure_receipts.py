@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Mapping, Sequence
@@ -44,6 +45,77 @@ class DisclosureAssessmentReceipt:
             raise ValueError("disclosure assessment receipt assessed_at must be timezone-aware")
         if self.assessed_at < self.research_as_of:
             raise ValueError("disclosure assessment receipt cannot precede frozen Research")
+
+
+def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureAssessmentReceipt, ...]:
+    """Parse one explicit JSON receipt file and fail closed on malformed memory state."""
+
+    try:
+        payload = json.loads(raw_receipts)
+    except json.JSONDecodeError as exc:
+        raise ValueError("disclosure receipt file must contain valid JSON") from exc
+
+    if not isinstance(payload, list):
+        raise ValueError("disclosure receipt file must be a JSON array")
+
+    required_fields = {
+        "source_lane",
+        "stock_code",
+        "announcement_ids",
+        "research_snapshot_id",
+        "research_as_of",
+        "assessment_result",
+        "assessed_at",
+    }
+    receipts: list[DisclosureAssessmentReceipt] = []
+
+    for index, item in enumerate(payload):
+        if not isinstance(item, dict):
+            raise ValueError(f"disclosure receipt {index} must be a JSON object")
+        fields = set(item)
+        missing = required_fields - fields
+        unknown = fields - required_fields
+        if missing:
+            raise ValueError(
+                f"disclosure receipt {index} missing fields: {', '.join(sorted(missing))}"
+            )
+        if unknown:
+            raise ValueError(
+                f"disclosure receipt {index} has unknown fields: {', '.join(sorted(unknown))}"
+            )
+
+        string_fields = (
+            "source_lane",
+            "stock_code",
+            "research_snapshot_id",
+            "research_as_of",
+            "assessment_result",
+            "assessed_at",
+        )
+        if any(not isinstance(item[field], str) for field in string_fields):
+            raise ValueError(f"disclosure receipt {index} scalar fields must be strings")
+
+        announcement_ids = item["announcement_ids"]
+        if not isinstance(announcement_ids, list) or not all(
+            isinstance(identifier, str) for identifier in announcement_ids
+        ):
+            raise ValueError(f"disclosure receipt {index} announcement_ids must be a string array")
+
+        try:
+            receipt = DisclosureAssessmentReceipt(
+                source_lane=item["source_lane"],
+                stock_code=item["stock_code"],
+                announcement_ids=tuple(announcement_ids),
+                research_snapshot_id=UUID(item["research_snapshot_id"]),
+                research_as_of=datetime.fromisoformat(item["research_as_of"]),
+                assessment_result=ResearchFunnelTerminalState(item["assessment_result"]),
+                assessed_at=datetime.fromisoformat(item["assessed_at"]),
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"disclosure receipt {index} is invalid: {exc}") from exc
+        receipts.append(receipt)
+
+    return tuple(receipts)
 
 
 def disclosure_batch_announcement_ids(batch: DisclosureBatch) -> tuple[str, ...]:
