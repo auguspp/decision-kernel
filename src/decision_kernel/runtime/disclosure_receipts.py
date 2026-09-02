@@ -3,12 +3,16 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 from typing import Mapping, Sequence
 from uuid import UUID
 
 from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
 
 from .disclosure_radar import DisclosureBatch
+
+
+ReceiptIdentity = tuple[str, tuple[str, ...], UUID, datetime]
 
 
 @dataclass(frozen=True)
@@ -45,6 +49,39 @@ class DisclosureAssessmentReceipt:
             raise ValueError("disclosure assessment receipt assessed_at must be timezone-aware")
         if self.assessed_at < self.research_as_of:
             raise ValueError("disclosure assessment receipt cannot precede frozen Research")
+
+
+def disclosure_assessment_receipt_identity(
+    receipt: DisclosureAssessmentReceipt,
+) -> ReceiptIdentity:
+    """Return the exact Harness seen identity, excluding result and observation clock."""
+
+    return (
+        receipt.stock_code,
+        receipt.announcement_ids,
+        receipt.research_snapshot_id,
+        receipt.research_as_of,
+    )
+
+
+def _validate_unique_receipts(
+    receipts: Sequence[DisclosureAssessmentReceipt],
+) -> tuple[DisclosureAssessmentReceipt, ...]:
+    by_identity: dict[ReceiptIdentity, DisclosureAssessmentReceipt] = {}
+    for receipt in receipts:
+        identity = disclosure_assessment_receipt_identity(receipt)
+        previous = by_identity.get(identity)
+        if previous is None:
+            by_identity[identity] = receipt
+            continue
+        if previous.assessment_result is not receipt.assessment_result:
+            raise ValueError(
+                "conflicting disclosure assessment receipts for the same exact batch and frozen Research"
+            )
+        raise ValueError(
+            "duplicate disclosure assessment receipt for the same exact batch and frozen Research"
+        )
+    return tuple(receipts)
 
 
 def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureAssessmentReceipt, ...]:
@@ -115,7 +152,92 @@ def parse_disclosure_assessment_receipts(raw_receipts: str) -> tuple[DisclosureA
             raise ValueError(f"disclosure receipt {index} is invalid: {exc}") from exc
         receipts.append(receipt)
 
-    return tuple(receipts)
+    return _validate_unique_receipts(receipts)
+
+
+def _receipt_sort_key(receipt: DisclosureAssessmentReceipt) -> tuple:
+    return (
+        receipt.stock_code,
+        receipt.research_as_of,
+        str(receipt.research_snapshot_id),
+        receipt.announcement_ids,
+    )
+
+
+def merge_disclosure_assessment_receipts(
+    existing: Sequence[DisclosureAssessmentReceipt],
+    incoming: Sequence[DisclosureAssessmentReceipt],
+) -> tuple[DisclosureAssessmentReceipt, ...]:
+    """Idempotently merge exact Harness receipts without silently changing an assessment.
+
+    Re-recording the same exact identity with the same terminal assessment is a no-op and keeps the
+    original ``assessed_at`` clock. A different terminal assessment for the same exact identity
+    fails closed; reassessment should instead happen against a new Research context or future
+    explicit assessment-semantics identity when that need is proven.
+    """
+
+    _validate_unique_receipts(existing)
+    _validate_unique_receipts(incoming)
+    merged = {
+        disclosure_assessment_receipt_identity(receipt): receipt for receipt in existing
+    }
+    for receipt in incoming:
+        identity = disclosure_assessment_receipt_identity(receipt)
+        previous = merged.get(identity)
+        if previous is None:
+            merged[identity] = receipt
+            continue
+        if previous.assessment_result is not receipt.assessment_result:
+            raise ValueError(
+                "conflicting disclosure assessment receipt for the same exact batch and frozen Research"
+            )
+        # Same exact identity and same terminal assessment is intentionally idempotent. Preserve
+        # the first assessment clock rather than making memory look newer on every write.
+
+    return tuple(sorted(merged.values(), key=_receipt_sort_key))
+
+
+def serialize_disclosure_assessment_receipts(
+    receipts: Sequence[DisclosureAssessmentReceipt],
+) -> str:
+    """Serialize validated receipt memory deterministically as one small JSON array."""
+
+    validated = _validate_unique_receipts(receipts)
+    ordered = sorted(validated, key=_receipt_sort_key)
+    payload = [
+        {
+            "source_lane": receipt.source_lane,
+            "stock_code": receipt.stock_code,
+            "announcement_ids": list(receipt.announcement_ids),
+            "research_snapshot_id": str(receipt.research_snapshot_id),
+            "research_as_of": receipt.research_as_of.isoformat(),
+            "assessment_result": receipt.assessment_result.value,
+            "assessed_at": receipt.assessed_at.isoformat(),
+        }
+        for receipt in ordered
+    ]
+    return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+
+
+def write_disclosure_assessment_receipts(
+    path: Path,
+    receipts: Sequence[DisclosureAssessmentReceipt],
+) -> None:
+    """Atomically replace one explicit Harness receipt JSON file.
+
+    The caller owns the path and lifecycle. This is deliberately a file write, not a repository,
+    database, event store, locking service, or scheduler abstraction.
+    """
+
+    serialized = serialize_disclosure_assessment_receipts(receipts)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    try:
+        temporary.write_text(serialized, encoding="utf-8")
+        temporary.replace(path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
 
 
 def disclosure_batch_announcement_ids(batch: DisclosureBatch) -> tuple[str, ...]:
@@ -137,13 +259,9 @@ def filter_unassessed_disclosure_batches(
     Research priority, Human wake, or investment-authority semantics.
     """
 
+    _validate_unique_receipts(receipts)
     seen = {
-        (
-            receipt.stock_code,
-            receipt.announcement_ids,
-            receipt.research_snapshot_id,
-            receipt.research_as_of,
-        )
+        disclosure_assessment_receipt_identity(receipt)
         for receipt in receipts
         if receipt.source_lane == "CNINFO"
     }
