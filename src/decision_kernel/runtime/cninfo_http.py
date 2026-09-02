@@ -93,7 +93,7 @@ def fetch_cninfo_disclosures(
             stock_code=stock_code,
             org_id=org_id,
             start_date=start_date,
-            end_date=end,
+            end_date=end_date,
             page_size=page_size,
             page_number=page_number,
         )
