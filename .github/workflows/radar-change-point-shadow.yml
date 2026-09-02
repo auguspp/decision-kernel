@@ -1,0 +1,177 @@
+name: radar-change-point-shadow
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/radar-change-point-shadow.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install experiment wheel
+        run: |
+          python -m pip install -e .
+          python -m pip install 'ruptures==1.1.10'
+      - name: Run sector/theme change-point shadow
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+
+          import math
+          import os
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
+
+          import numpy as np
+          import ruptures as rpt
+
+          from decision_kernel.adapters.hithink import (
+              latest_completed_a_share_session,
+              normalize_hithink_calendar,
+          )
+          from decision_kernel.runtime.hithink_http import _request_hithink_json
+
+          api_key = os.environ.get('HITHINK_FINANCE_API_KEY')
+          if not api_key:
+              raise SystemExit('HITHINK_FINANCE_API_KEY is required')
+
+          tz = ZoneInfo('Asia/Shanghai')
+          now = datetime.now(tz)
+
+          def get(path: str, params: dict[str, str]):
+              return _request_hithink_json(
+                  api_key=api_key,
+                  path=path,
+                  params=params,
+                  timeout_seconds=20.0,
+              )
+
+          calendar = normalize_hithink_calendar(
+              get('/api/a-share/calendar/trading-days', {})
+          )
+          latest = latest_completed_a_share_session(calendar, observed_at=now)
+          completed = [session for session in calendar if session <= latest]
+          sessions = completed[-180:]
+          if len(sessions) < 120:
+              raise SystemExit('not enough completed sessions for shadow experiment')
+
+          start_ms = int(datetime.combine(sessions[0], datetime.min.time(), tzinfo=tz).timestamp() * 1000)
+          # Old proven Market Slow path uses end at the latest session midnight.
+          end_ms = int(datetime.combine(latest, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
+
+          def catalog(tag: str):
+              envelope = get('/api/a-share-index/catalog/ths-index-list', {'tag': tag})
+              if envelope.get('code') != 0:
+                  raise RuntimeError(f'catalog {tag} business failure: {envelope.get("code")}')
+              rows = envelope.get('data', {}).get('item')
+              if not isinstance(rows, list):
+                  raise RuntimeError(f'catalog {tag} has no item list')
+              return rows
+
+          keywords = ('煤', '农', '养殖', '种植', 'CRO', 'CXO', '医药研发', '创新药')
+          candidates = []
+          for kind, tag in (('INDUSTRY', 'industry'), ('CONCEPT', 'cn_concept')):
+              for row in catalog(tag):
+                  name = str(row.get('name') or '').strip()
+                  thscode = str(row.get('thscode') or '').strip().upper()
+                  if name and thscode and any(keyword.casefold() in name.casefold() for keyword in keywords):
+                      candidates.append((kind, thscode, name))
+
+          print(f'LATEST_COMPLETED_SESSION={latest}')
+          print('MATCHED_BOARDS:')
+          for item in candidates:
+              print('  ', item)
+          if not candidates:
+              raise SystemExit('no matching industry/concept boards found')
+
+          def history(thscode: str):
+              envelope = get(
+                  '/api/a-share-index/prices/historical',
+                  {
+                      'thscode': thscode,
+                      'interval': '1d',
+                      'start': str(start_ms),
+                      'end': str(end_ms),
+                  },
+              )
+              if envelope.get('code') != 0:
+                  raise RuntimeError(f'history {thscode} business failure: {envelope.get("code")}')
+              data = envelope.get('data')
+              rows = data.get('item') if isinstance(data, dict) else None
+              if not isinstance(rows, list) or not rows:
+                  raise RuntimeError(f'history {thscode} is empty')
+              parsed = {}
+              for row in rows:
+                  ms = int(row['date_ms'])
+                  session = datetime.fromtimestamp(ms / 1000, tz=tz).date()
+                  parsed[session] = float(row['close_price'])
+              return parsed
+
+          benchmark = history('000001.SH')
+          target_sessions = [s for s in sessions if s in benchmark]
+          benchmark_close = np.array([benchmark[s] for s in target_sessions], dtype=float)
+
+          def analyze(kind: str, thscode: str, name: str):
+              board = history(thscode)
+              common = [s for s in target_sessions if s in board]
+              if len(common) < 120:
+                  print(f'SKIP {name} {thscode}: only {len(common)} common sessions')
+                  return
+              b = np.array([board[s] for s in common], dtype=float)
+              m = np.array([benchmark[s] for s in common], dtype=float)
+              rel_daily = np.diff(np.log(b)) - np.diff(np.log(m))
+              # Five-session mean relative return is a smoother observation, not Fundamental evidence.
+              rolling = np.convolve(rel_daily, np.ones(5) / 5.0, mode='valid')
+              dates = common[5:]
+              std = float(np.std(rolling))
+              if not math.isfinite(std) or std <= 0:
+                  print(f'SKIP {name} {thscode}: degenerate signal')
+                  return
+              standardized = ((rolling - float(np.mean(rolling))) / std).reshape(-1, 1)
+              n = len(standardized)
+              penalties = (2.0 * math.log(n), 3.0 * math.log(n), 4.0 * math.log(n))
+              print(f'\nBOARD {kind} {name} {thscode} n={n} rolling_std={std:.6f}')
+              latest_by_penalty = []
+              for penalty in penalties:
+                  breaks = rpt.Pelt(model='l2', min_size=10, jump=1).fit(standardized).predict(pen=penalty)
+                  internal = [index for index in breaks if index < n]
+                  dated = [dates[index - 1].isoformat() for index in internal]
+                  latest_index = internal[-1] if internal else None
+                  latest_date = dates[latest_index - 1].isoformat() if latest_index else 'NONE'
+                  latest_by_penalty.append(latest_index)
+                  print(f'  PELT pen={penalty:.3f} breaks={dated} latest={latest_date}')
+
+              stable = [index for index in latest_by_penalty if index is not None]
+              if stable and max(stable) - min(stable) <= 5:
+                  center = round(sum(stable) / len(stable))
+                  split = max(10, min(n - 10, center))
+                  before = standardized[max(0, split - 20):split, 0]
+                  after = standardized[split:min(n, split + 20), 0]
+                  shift = float(np.mean(after) - np.mean(before))
+                  print(f'  STABLE_LATEST_BREAK≈{dates[split - 1]} local_standardized_mean_shift={shift:+.3f}')
+              else:
+                  print('  STABLE_LATEST_BREAK=NO')
+
+          # Keep the live request bounded: prioritize exact blind-spot keywords and cap at 12 boards.
+          ordered = sorted(
+              candidates,
+              key=lambda item: (
+                  0 if item[2] in {'煤炭', '农林牧渔'} else 1,
+                  0 if any(k in item[2].upper() for k in ('CRO', 'CXO')) else 1,
+                  item[0],
+                  item[2],
+              ),
+          )[:12]
+          for item in ordered:
+              analyze(*item)
+          PY
