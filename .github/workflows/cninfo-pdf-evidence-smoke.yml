@@ -1,0 +1,137 @@
+name: cninfo-pdf-evidence-smoke
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/cninfo-pdf-evidence-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with documents extra
+        run: python -m pip install -e '.[documents]'
+      - name: Exercise official PDF -> Evidence -> existing Pre Research
+        run: |
+          python - <<'PY'
+          from datetime import date, datetime, timezone
+          import json
+          from pathlib import Path
+          from uuid import NAMESPACE_URL, uuid5
+
+          from decision_kernel.adapters.cninfo import reference_evidence_from_cninfo_announcement
+          from decision_kernel.adapters.pdf_text import extract_pdf_text
+          from decision_kernel.research_funnel import (
+              DiscoveryInput,
+              DiscoveryObservation,
+              DiscoverySource,
+              PreResearchResult,
+              PreResearchRoute,
+              ResearchClaim,
+              ResearchClaimKind,
+          )
+          from decision_kernel.research_workflow_v1 import run_research_funnel
+          from decision_kernel.runtime.cninfo_http import (
+              fetch_cninfo_disclosures,
+              fetch_cninfo_pdf_bytes,
+          )
+
+          package = json.loads(Path('dogfood/300750-catl.json').read_text(encoding='utf-8'))
+          snapshot = package['research_snapshot']
+          research_as_of = datetime.fromisoformat(snapshot['as_of_datetime'].replace('Z', '+00:00'))
+
+          disclosures = fetch_cninfo_disclosures(
+              stock_code='300750',
+              start_date=date(2026, 8, 27),
+              end_date=date(2026, 8, 27),
+              timeout_seconds=20.0,
+          )
+          announcement = next(
+              item for item in disclosures.announcements
+              if item.announcement_id == '1225519101'
+          )
+          assert announcement.published_at is not None
+          assert announcement.published_at > research_as_of
+
+          pdf_bytes = fetch_cninfo_pdf_bytes(
+              source_locator=announcement.source_locator,
+              timeout_seconds=20.0,
+          )
+          extracted = extract_pdf_text(pdf_bytes)
+          assert extracted.pdf_sha256 == '2affbff8b1c59521a341c35bf7885ad8e09da45053064c4623eb22ff3e655d79'
+
+          retrieved_at = datetime.now(timezone.utc)
+          evidence_id = uuid5(NAMESPACE_URL, announcement.source_locator)
+          evidence = reference_evidence_from_cninfo_announcement(
+              announcement,
+              artifact_id=evidence_id,
+              pdf_sha256=extracted.pdf_sha256,
+              retrieved_at=retrieved_at,
+          )
+
+          discovery_id = 'cninfo-refresh-300750-1225519101'
+          discovery = DiscoveryInput(
+              discovery_id=discovery_id,
+              source_lane='OFFICIAL_DISCLOSURE_REFRESH_SMOKE',
+              ticker='300750',
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              as_of=retrieved_at,
+              factual_observations=(
+                  DiscoveryObservation(
+                      statement='宁德时代完成2026年度第六期绿色科技创新债券发行；该事件发生在当前Research as-of之后。',
+                      evidence_artifact_ids=(evidence_id,),
+                  ),
+              ),
+              source_lineage=(
+                  DiscoverySource(
+                      evidence_artifact_id=evidence_id,
+                      source_locator=evidence.source_locator,
+                      available_at=evidence.available_at,
+                  ),
+              ),
+              why_now='This official financing disclosure is newer than frozen Research.',
+              contradiction_or_mapping_warning='Financing context changed, but operating and capital-return questions remain unresolved.',
+              next_discriminating_search='Check later cash-flow, capex, utilization and capital-return evidence.',
+              known_stop_or_downgrade_condition='Wait if the disclosure changes funding mix without changing the operating thesis.',
+          )
+          pre = PreResearchResult(
+              discovery_id=discovery_id,
+              as_of=retrieved_at,
+              what_is_this='A completed financing event, not a new operating result.',
+              economic_direction='expansion financing versus cash conversion and capital returns',
+              why_surfaced_now='It is newer than the frozen Research snapshot.',
+              basic_business_role='Financing supports the investment program but does not itself evidence demand, margins or utilization.',
+              potential_fundamental_driver='Funding can ease financing friction; value still depends on incremental capital returns.',
+              current_market_expectation_hypothesis='The frozen snapshot already assumes strong growth alongside heavy capital investment and return uncertainty.',
+              material_claims=(
+                  ResearchClaim(
+                      statement='The sixth green sci-tech innovation bond issuance completed after the frozen Research cutoff.',
+                      kind=ResearchClaimKind.FACT,
+                      evidence_artifact_ids=(evidence_id,),
+                  ),
+              ),
+              obvious_contradiction='Funding availability is supportive while cash conversion and capital returns remain the key uncertainty.',
+              largest_unknown='Whether subsequent deployment changes capex intensity, utilization, cash conversion or incremental returns.',
+              next_discriminating_search='Wait for deployment and operating/cash-flow evidence.',
+              route=PreResearchRoute.WAIT_FOR_TRIGGER,
+              route_reason='The disclosure is new but does not by itself answer or invalidate the frozen operating thesis.',
+          )
+          result = run_research_funnel(
+              discovery=discovery,
+              pre_research=pre,
+              evidence_artifacts=(evidence,),
+          )
+
+          print(f'PDF_SHA256={extracted.pdf_sha256}')
+          print(f'PDF_PAGES={extracted.page_count} CHARS={extracted.extracted_char_count}')
+          print(f'EVIDENCE={evidence.source_identifier} {evidence.retention_mode.value}/{evidence.replayability_level.value}')
+          print(f'TERMINAL_STATE={result.terminal_state.value}')
+          print(f'INVESTMENT_AUTHORITY={result.investment_authority}')
+          PY
