@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 from collections.abc import Sequence
@@ -42,13 +43,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     inbox = subparsers.add_parser(
         "build-inbox",
-        help="Run multiple ResearchCommitPackages and render one Human Decision Inbox.",
+        help="Run reviewed research packages and render one Human Decision Inbox.",
     )
     inbox.add_argument(
         "packages",
         nargs="+",
         type=Path,
-        help="ResearchCommitPackage JSON files to include in the inbox.",
+        help="ResearchCommitPackage or DeepResearchPackage JSON files to include.",
     )
     inbox.add_argument(
         "--output",
@@ -63,6 +64,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="Markdown summary output path.",
     )
     return parser
+
+
+def _run_inbox_package(
+    raw_package: str,
+    *,
+    fetch_market,
+    observed_at: datetime,
+) -> DecisionSpineResult:
+    payload = json.loads(raw_package)
+    if not isinstance(payload, dict):
+        raise ValueError("inbox research package must be a JSON object")
+
+    if "deep_research" in payload and "discovery" in payload:
+        package = DeepResearchPackage.model_validate(payload)
+        return run_live_deep_research_package(
+            package=package,
+            fetch_market=fetch_market,
+            observed_at=observed_at,
+        ).decision
+
+    package = ResearchCommitPackage.model_validate(payload)
+    return run_live_research_commit_package(
+        package=package,
+        fetch_market=fetch_market,
+        observed_at=observed_at,
+    ).decision
 
 
 def main(
@@ -87,18 +114,14 @@ def main(
 
         if args.command == "build-inbox":
             generated_at = datetime.now(timezone.utc)
-            decisions: list[DecisionSpineResult] = []
-            for package_path in args.packages:
-                package = ResearchCommitPackage.model_validate_json(
-                    package_path.read_text(encoding="utf-8")
+            decisions = [
+                _run_inbox_package(
+                    package_path.read_text(encoding="utf-8"),
+                    fetch_market=fetch_market,
+                    observed_at=generated_at,
                 )
-                decisions.append(
-                    run_live_research_commit_package(
-                        package=package,
-                        fetch_market=fetch_market,
-                        observed_at=generated_at,
-                    ).decision
-                )
+                for package_path in args.packages
+            ]
 
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.summary.parent.mkdir(parents=True, exist_ok=True)
