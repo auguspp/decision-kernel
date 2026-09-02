@@ -92,7 +92,9 @@ def normalize_cninfo_announcement_page(
     if isinstance(total, bool) or not isinstance(total, int) or total < 0:
         raise CninfoAdapterError("CNINFO announcement total is invalid")
     rows = payload.get("announcements")
-    if not isinstance(rows, list):
+    if rows is None and total == 0:
+        rows = []
+    elif not isinstance(rows, list):
         raise CninfoAdapterError("CNINFO announcements are not a list")
 
     announcements: list[CninfoAnnouncement] = []
