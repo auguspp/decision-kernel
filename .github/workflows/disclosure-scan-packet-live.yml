@@ -19,6 +19,45 @@ jobs:
           python-version: '3.12'
       - name: Install current repo with document parser
         run: python -m pip install -e '.[documents]'
+      - name: Seed only previously proven quiet CATL receipt history
+        shell: bash
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
+          from decision_kernel.runtime.disclosure_receipts import (
+              DisclosureAssessmentReceipt,
+              write_disclosure_assessment_receipts,
+          )
+
+          snapshot = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          ).research_snapshot
+          assessed_at = datetime(2026, 9, 2, 5, 0, tzinfo=timezone.utc)
+          quiet = [
+              (('1225448968',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225456175',), ResearchFunnelTerminalState.WAIT_FOR_TRIGGER),
+              (('1225462006',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225464975',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+              (('1225470687', '1225470688', '1225470689'), ResearchFunnelTerminalState.WAIT_FOR_TRIGGER),
+              (('1225502236',), ResearchFunnelTerminalState.DROP_FOR_NOW),
+          ]
+          receipts = tuple(
+              DisclosureAssessmentReceipt(
+                  stock_code='300750',
+                  announcement_ids=announcement_ids,
+                  research_snapshot_id=snapshot.id,
+                  research_as_of=snapshot.as_of_datetime,
+                  assessment_result=result,
+                  assessed_at=assessed_at,
+              )
+              for announcement_ids, result in quiet
+          )
+          write_disclosure_assessment_receipts(Path('receipts.json'), receipts)
+          PY
       - name: Run integrated one-shot scan with packet output
         shell: bash
         run: |
@@ -26,11 +65,12 @@ jobs:
           decision-kernel scan-disclosures \
             dogfood/300750-catl.json \
             --through 2026-08-27 \
+            --receipts receipts.json \
             --packet-dir packet-output \
             --packet-limit 1 | tee scan.txt
 
           expected_hash='deeeeecd4c76ead88b23a62e274d7c9dfa66c30c118f1c38cad14686601704d8'
-          grep -q "1 unassessed / 0 seen-suppressed / 1 research-uncovered" scan.txt
+          grep -q "1 unassessed / 6 seen-suppressed / 7 research-uncovered" scan.txt
           grep -q "ASSESSMENT PACKETS: 1 prepared" scan.txt
           grep -q "input_hash=${expected_hash}" scan.txt
 
@@ -65,5 +105,6 @@ jobs:
           name: disclosure-scan-packet-live
           path: |
             scan.txt
+            receipts.json
             packet-output/
           retention-days: 3
