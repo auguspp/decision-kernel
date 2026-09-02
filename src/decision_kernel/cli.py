@@ -27,7 +27,6 @@ from .runtime.disclosure_radar import (
 from .runtime.disclosure_receipts import (
     DisclosureAssessmentReceipt,
     disclosure_assessment_receipt_identity,
-    disclosure_batch_announcement_ids,
     filter_unassessed_disclosure_batches,
     merge_disclosure_assessment_receipts,
     parse_disclosure_assessment_receipts,
@@ -43,10 +42,6 @@ from .workflow import DecisionSpineResult
 
 SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 DEFAULT_DISCLOSURE_PACKET_LIMIT = 20
-QUIET_DISCLOSURE_ASSESSMENT_RESULTS = (
-    ResearchFunnelTerminalState.WAIT_FOR_TRIGGER.value,
-    ResearchFunnelTerminalState.DROP_FOR_NOW.value,
-)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -166,38 +161,6 @@ def build_parser() -> argparse.ArgumentParser:
             "Explicit receipt memory file. WAIT_FOR_TRIGGER / DROP_FOR_NOW are recorded; "
             "DEEPEN_REQUIRED remains actionable and unreceipted."
         ),
-    )
-    record_disclosure = subparsers.add_parser(
-        "record-disclosure-assessment",
-        help=(
-            "Record one already-reviewed quiet CNINFO disclosure batch against frozen Research."
-        ),
-    )
-    record_disclosure.add_argument(
-        "package",
-        type=Path,
-        help="Current ResearchCommitPackage or DeepResearchPackage for the security.",
-    )
-    record_disclosure.add_argument(
-        "--publication-date",
-        type=date.fromisoformat,
-        required=True,
-        help="Exact CNINFO publication date in YYYY-MM-DD form.",
-    )
-    record_disclosure.add_argument(
-        "--result",
-        choices=QUIET_DISCLOSURE_ASSESSMENT_RESULTS,
-        required=True,
-        help=(
-            "Existing Research Funnel terminal result. Only quiet terminal states can become "
-            "seen receipts; DEEPEN_REQUIRED must remain actionable."
-        ),
-    )
-    record_disclosure.add_argument(
-        "--receipts",
-        type=Path,
-        required=True,
-        help="Explicit JSON receipt memory file to create or update.",
     )
     return parser
 
@@ -377,66 +340,6 @@ def main(
                 f"INVESTMENT AUTHORITY: {result.investment_authority}",
                 file=stdout,
             )
-            return 0
-
-        if args.command == "record-disclosure-assessment":
-            snapshot = _research_snapshot_from_raw_package(
-                args.package.read_text(encoding="utf-8")
-            )
-            ticker = snapshot.ticker.strip()
-            research_start_date = snapshot.as_of_datetime.astimezone(SHANGHAI_TZ).date()
-            if args.publication_date < research_start_date:
-                raise ValueError(
-                    f"disclosure assessment date precedes frozen Research for {ticker}"
-                )
-
-            existing_receipts = ()
-            if args.receipts.exists():
-                existing_receipts = parse_disclosure_assessment_receipts(
-                    args.receipts.read_text(encoding="utf-8")
-                )
-
-            raw = cninfo_http.fetch_cninfo_disclosures(
-                stock_code=ticker,
-                start_date=args.publication_date,
-                end_date=args.publication_date,
-            )
-            batches = group_disclosures_by_publication_date(raw.announcements)
-            uncovered = filter_research_uncovered_disclosure_batches(
-                batches,
-                research_as_of_by_stock={ticker: snapshot.as_of_datetime},
-            )
-            if len(uncovered) != 1:
-                raise ValueError(
-                    "record disclosure assessment requires exactly one research-uncovered "
-                    f"official batch for {ticker} on {args.publication_date.isoformat()}"
-                )
-            batch = uncovered[0]
-            receipt = DisclosureAssessmentReceipt(
-                stock_code=ticker,
-                announcement_ids=disclosure_batch_announcement_ids(batch),
-                research_snapshot_id=snapshot.id,
-                research_as_of=snapshot.as_of_datetime,
-                assessment_result=ResearchFunnelTerminalState(args.result),
-                assessed_at=datetime.now(timezone.utc),
-            )
-            merged = merge_disclosure_assessment_receipts(
-                existing_receipts,
-                (receipt,),
-            )
-            changed = len(merged) != len(existing_receipts)
-            write_disclosure_assessment_receipts(args.receipts, merged)
-
-            print(
-                "DISCLOSURE ASSESSMENT "
-                + ("RECORDED" if changed else "UNCHANGED")
-                + f": {ticker} {args.publication_date.isoformat()} | "
-                + f"announcements={','.join(receipt.announcement_ids)} | "
-                + f"result={receipt.assessment_result.value}",
-                file=stdout,
-            )
-            print(f"RECEIPTS: {args.receipts} ({len(merged)} total)", file=stdout)
-            print("INVESTMENT AUTHORITY: NONE", file=stdout)
             return 0
 
         if args.command == "scan-disclosures":
