@@ -1,0 +1,114 @@
+name: freeze-catl-cognition-packets
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/freeze-catl-cognition-packets.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install with documents
+        run: python -m pip install -e '.[documents]'
+      - name: Build deterministic CATL eval packets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from datetime import date, datetime, timezone
+          from pathlib import Path
+
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.runtime.cninfo_http import fetch_cninfo_disclosures
+          from decision_kernel.runtime.disclosure_assessment import (
+              prepare_disclosure_assessment_packet,
+              serialize_disclosure_assessment_packet,
+          )
+          from decision_kernel.runtime.disclosure_radar import group_disclosures_by_publication_date
+
+          package = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          )
+          snapshot = package.research_snapshot
+          prepared_at = datetime(2026, 9, 2, 7, 0, tzinfo=timezone.utc)
+
+          cases = {
+              date(2026, 7, 30): {
+                  'ids': ('1225448968',),
+                  'pdf': {'1225448968': '146accc3aa92e9c3583ac339ba6bb0525068cb71a232eae5f0c3fab6b66d0427'},
+              },
+              date(2026, 8, 4): {
+                  'ids': ('1225456175',),
+                  'pdf': {'1225456175': '42196742c9fc92cceeb9ec23246c2cd7855189235e801908ee89b3a08cc94c59'},
+              },
+              date(2026, 8, 6): {
+                  'ids': ('1225462006',),
+                  'pdf': {'1225462006': '8f7377f61ce4c92bc9fe75c0249ed2187d9db6b94e83b6313866ec153e2b1f63'},
+              },
+              date(2026, 8, 7): {
+                  'ids': ('1225464975',),
+                  'pdf': {'1225464975': '0602d38760557c43d9b89619e35cd8469dc4a208f8942aedba343231f87b5b1f'},
+              },
+              date(2026, 8, 12): {
+                  'ids': ('1225470687', '1225470688', '1225470689'),
+                  'pdf': {
+                      '1225470687': '2e931ed9e335904750fb3335fd9770037af77459763c15026b1a683579658c50',
+                      '1225470688': 'e8a3fa46e9c946c7e9239f17cb4f8f1c9e21cfd62add751701e568f8d631a792',
+                      '1225470689': '679240888b8136a28f04a58a3fb92b782ff5393a59f0c1b4d312bd5a9d9d0283',
+                  },
+              },
+              date(2026, 8, 25): {
+                  'ids': ('1225502236',),
+                  'pdf': {'1225502236': '91295c64ce6534e2cfdebe712fa4a1a676064d5d8922df6cb6a87e165946ae93'},
+              },
+          }
+
+          out = Path('frozen-cognition-packets')
+          out.mkdir()
+          for publication_date, expected in cases.items():
+              raw = fetch_cninfo_disclosures(
+                  stock_code='300750',
+                  start_date=publication_date,
+                  end_date=publication_date,
+                  timeout_seconds=20.0,
+              )
+              by_id = {item.announcement_id: item for item in raw.announcements}
+              selected = tuple(by_id[item_id] for item_id in expected['ids'])
+              batch = group_disclosures_by_publication_date(selected)[0]
+              packet = prepare_disclosure_assessment_packet(
+                  research_snapshot=snapshot,
+                  batch=batch,
+                  prepared_at=prepared_at,
+              )
+              assert packet.announcement_ids == tuple(sorted(expected['ids']))
+              assert packet.research_snapshot_id == snapshot.id
+              assert packet.research_information_bundle_hash == snapshot.information_bundle_hash
+              assert packet.prepared_at == prepared_at
+              for item in packet.evidence:
+                  assert item.pdf_sha256 == expected['pdf'][item.announcement_id], (
+                      item.announcement_id,
+                      item.pdf_sha256,
+                      expected['pdf'][item.announcement_id],
+                  )
+              path = out / f"300750-{publication_date.isoformat()}-{packet.assessment_input_hash[:16]}.json"
+              path.write_text(serialize_disclosure_assessment_packet(packet), encoding='utf-8')
+              print(
+                  f"FROZEN {publication_date.isoformat()} ids={','.join(packet.announcement_ids)} "
+                  f"input_hash={packet.assessment_input_hash} evidence={len(packet.evidence)}"
+              )
+          PY
+      - name: Upload frozen packet fixtures
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-catl-cognition-packets
+          path: frozen-cognition-packets/
+          retention-days: 7
