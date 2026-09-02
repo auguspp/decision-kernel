@@ -7,6 +7,7 @@ on:
       - "src/decision_kernel/claim_audit_contract_v2.py"
       - "src/decision_kernel/research_contract_v2.py"
       - "scripts/generate_yto_v2_tmp.py"
+      - "scripts/run_yto_v2_tmp.py"
       - ".github/workflows/yto-v2-generate-tmp.yml"
 
 permissions:
@@ -24,7 +25,7 @@ jobs:
       - name: Install
         run: python -m pip install -e '.[dev]'
       - name: Generate YTO v2
-        run: python scripts/generate_yto_v2_tmp.py
+        run: python scripts/run_yto_v2_tmp.py
       - name: Upload generated research
         uses: actions/upload-artifact@v6
         with:
