@@ -1,0 +1,84 @@
+name: disclosure-assessment-packet-live
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/disclosure-assessment-packet-live.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current repo with document parser
+        run: python -m pip install -e '.[documents]'
+      - name: Prepare one real CATL assessment packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY' | tee packet-smoke.txt
+          from datetime import date, datetime, timezone
+          from pathlib import Path
+
+          from decision_kernel.research_commit import ResearchCommitPackage
+          from decision_kernel.runtime.cninfo_http import fetch_cninfo_disclosures
+          from decision_kernel.runtime.disclosure_assessment import (
+              prepare_disclosure_assessment_packet,
+              serialize_disclosure_assessment_packet,
+          )
+          from decision_kernel.runtime.disclosure_radar import (
+              filter_research_uncovered_disclosure_batches,
+              group_disclosures_by_publication_date,
+          )
+
+          package = ResearchCommitPackage.model_validate_json(
+              Path('dogfood/300750-catl.json').read_text(encoding='utf-8')
+          )
+          snapshot = package.research_snapshot
+          raw = fetch_cninfo_disclosures(
+              stock_code='300750',
+              start_date=date(2026, 8, 27),
+              end_date=date(2026, 8, 27),
+          )
+          batches = group_disclosures_by_publication_date(raw.announcements)
+          uncovered = filter_research_uncovered_disclosure_batches(
+              batches,
+              research_as_of_by_stock={'300750': snapshot.as_of_datetime},
+          )
+          assert len(uncovered) == 1
+          packet = prepare_disclosure_assessment_packet(
+              research_snapshot=snapshot,
+              batch=uncovered[0],
+              prepared_at=datetime.now(timezone.utc),
+          )
+          assert packet.announcement_ids == ('1225519101',)
+          assert packet.evidence[0].pdf_sha256 == '2affbff8b1c59521a341c35bf7885ad8e09da45053064c4623eb22ff3e655d79'
+          assert packet.evidence[0].page_count == 3
+          assert packet.evidence[0].extracted_char_count == 1305
+          serialized = serialize_disclosure_assessment_packet(packet)
+          Path('assessment-packet.json').write_text(serialized, encoding='utf-8')
+          print(f'ANNOUNCEMENTS={len(packet.announcement_ids)}')
+          print(f'PDF_SHA256={packet.evidence[0].pdf_sha256}')
+          print(f'TEXT_SHA256={packet.evidence[0].text_sha256}')
+          print(f'PAGES={packet.evidence[0].page_count}')
+          print(f'CHARS={packet.evidence[0].extracted_char_count}')
+          print(f'ASSESSMENT_INPUT_HASH={packet.assessment_input_hash}')
+          print(f'OPEN_QUESTIONS={len(packet.open_questions)}')
+          print('RESEARCH_STATUS=UNASSESSED')
+          print('INVESTMENT_AUTHORITY=NONE')
+          PY
+      - name: Upload packet for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: catl-disclosure-assessment-packet
+          path: |
+            assessment-packet.json
+            packet-smoke.txt
+          retention-days: 3
