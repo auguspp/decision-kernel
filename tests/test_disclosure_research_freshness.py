@@ -48,7 +48,6 @@ def test_freshness_keeps_only_batches_not_fully_covered_by_research() -> None:
     )
 
     assert len(result) == 1
-    assert result[0].announcement_ids if False else True
     assert [item.announcement_id for item in result[0].announcements] == ["A2"]
 
 
