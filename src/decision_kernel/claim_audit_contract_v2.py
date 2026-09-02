@@ -19,6 +19,7 @@ from .research_funnel import ResearchClaimKind
 from .source_policy_v2 import (
     SOURCE_POLICY_V2_VERSION,
     ClaimSourceUseV2,
+    is_source_role_compatible_with_artifact,
     is_source_use_admissible,
 )
 
@@ -115,6 +116,7 @@ def assess_claim_audit_contract_v2(
     if claim_counts != review_counts:
         _issue(issues, "CLAIM_COVERAGE_MISMATCH", "payload.reviews")
 
+    evidence = {item.id: item for item in package.evidence_artifacts}
     for index, item in enumerate(payload.reviews):
         claim = item.review.claim
         location = f"payload.reviews.{index}"
@@ -129,16 +131,22 @@ def assess_claim_audit_contract_v2(
                     f"{location}.source_uses",
                 )
             for use_index, use in enumerate(item.source_uses):
+                use_location = f"{location}.source_uses.{use_index}"
+                artifact = evidence.get(use.evidence_artifact_id)
+                if artifact is None:
+                    _issue(issues, "SOURCE_USE_EVIDENCE_MISSING", use_location)
+                    continue
+                if not is_source_role_compatible_with_artifact(
+                    source_type=artifact.source_type,
+                    source_role=use.source_role,
+                ):
+                    _issue(issues, "SOURCE_ROLE_ARTIFACT_MISMATCH", use_location)
                 if not is_source_use_admissible(
                     claim_kind=claim.kind,
                     source_role=use.source_role,
                     assertion_scope=use.assertion_scope,
                 ):
-                    _issue(
-                        issues,
-                        "SOURCE_ADMISSIBILITY_FAILED",
-                        f"{location}.source_uses.{use_index}",
-                    )
+                    _issue(issues, "SOURCE_ADMISSIBILITY_FAILED", use_location)
         elif item.source_uses:
             # Research-owned INFERENCE/ASSUMPTION may cite inputs, but v2 does not
             # pretend those sources make the cognition factual. Keep any declared
