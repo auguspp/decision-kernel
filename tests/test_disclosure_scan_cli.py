@@ -11,6 +11,9 @@ from decision_kernel.cli import main
 from decision_kernel.research_commit import ResearchCommitPackage
 from decision_kernel.runtime import cninfo_http
 from decision_kernel.runtime.cninfo_http import CninfoDisclosureBatch
+from decision_kernel.runtime.disclosure_receipts import (
+    CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
+)
 
 
 SHANGHAI = ZoneInfo("Asia/Shanghai")
@@ -122,6 +125,7 @@ def test_scan_disclosures_suppresses_exact_receipt_for_same_frozen_research(
                     "announcement_ids": ["NEW"],
                     "research_snapshot_id": str(snapshot.id),
                     "research_as_of": snapshot.as_of_datetime.isoformat(),
+                    "assessment_semantics_id": CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
                     "assessment_result": "WAIT_FOR_TRIGGER",
                     "assessed_at": datetime(2026, 9, 2, 9, 0, tzinfo=SHANGHAI).isoformat(),
                 }

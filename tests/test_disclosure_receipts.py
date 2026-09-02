@@ -9,6 +9,8 @@ from decision_kernel.adapters.cninfo import CninfoAnnouncement
 from decision_kernel.research_workflow_v1 import ResearchFunnelTerminalState
 from decision_kernel.runtime.disclosure_radar import group_disclosures_by_publication_date
 from decision_kernel.runtime.disclosure_receipts import (
+    CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
+    LEGACY_UNVERSIONED_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
     DisclosureAssessmentReceipt,
     disclosure_batch_announcement_ids,
     filter_unassessed_disclosure_batches,
@@ -44,6 +46,7 @@ def _receipt(
     snapshot_id: UUID = SNAPSHOT_A,
     result: ResearchFunnelTerminalState = ResearchFunnelTerminalState.WAIT_FOR_TRIGGER,
     assessed_at: datetime = ASSESSED_AT,
+    assessment_semantics_id: str = CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
 ) -> DisclosureAssessmentReceipt:
     return DisclosureAssessmentReceipt(
         stock_code=batch.stock_code,
@@ -52,6 +55,7 @@ def _receipt(
         research_as_of=RESEARCH_AS_OF,
         assessment_result=result,
         assessed_at=assessed_at,
+        assessment_semantics_id=assessment_semantics_id,
     )
 
 
@@ -94,6 +98,20 @@ def test_receipt_from_other_research_snapshot_does_not_suppress_batch() -> None:
     assert unassessed == (batch,)
 
 
+def test_receipt_from_other_assessment_semantics_does_not_suppress_batch() -> None:
+    batch = group_disclosures_by_publication_date((_announcement("1225519101"),))[0]
+    receipt = _receipt(batch, assessment_semantics_id="research-funnel-v1")
+
+    unassessed = filter_unassessed_disclosure_batches(
+        (batch,),
+        research_identity_by_stock={"300750": (SNAPSHOT_A, RESEARCH_AS_OF)},
+        receipts=(receipt,),
+        assessment_semantics_id="research-funnel-v2",
+    )
+
+    assert unassessed == (batch,)
+
+
 def test_receipt_requires_sorted_exact_announcement_identity() -> None:
     try:
         DisclosureAssessmentReceipt(
@@ -119,6 +137,7 @@ def test_receipt_json_parser_preserves_exact_assessment_identity() -> None:
                 "announcement_ids": ["1225519101"],
                 "research_snapshot_id": str(SNAPSHOT_A),
                 "research_as_of": RESEARCH_AS_OF.isoformat(),
+                "assessment_semantics_id": CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
                 "assessment_result": "WAIT_FOR_TRIGGER",
                 "assessed_at": ASSESSED_AT.isoformat(),
             }
@@ -134,10 +153,38 @@ def test_receipt_json_parser_preserves_exact_assessment_identity() -> None:
             announcement_ids=("1225519101",),
             research_snapshot_id=SNAPSHOT_A,
             research_as_of=RESEARCH_AS_OF,
+            assessment_semantics_id=CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
             assessment_result=ResearchFunnelTerminalState.WAIT_FOR_TRIGGER,
             assessed_at=ASSESSED_AT,
         ),
     )
+
+
+def test_legacy_unversioned_receipt_remains_readable_but_does_not_suppress_current_semantics() -> None:
+    batch = group_disclosures_by_publication_date((_announcement("1225519101"),))[0]
+    payload = json.dumps(
+        [
+            {
+                "source_lane": "CNINFO",
+                "stock_code": "300750",
+                "announcement_ids": ["1225519101"],
+                "research_snapshot_id": str(SNAPSHOT_A),
+                "research_as_of": RESEARCH_AS_OF.isoformat(),
+                "assessment_result": "WAIT_FOR_TRIGGER",
+                "assessed_at": ASSESSED_AT.isoformat(),
+            }
+        ]
+    )
+
+    receipts = parse_disclosure_assessment_receipts(payload)
+    unassessed = filter_unassessed_disclosure_batches(
+        (batch,),
+        research_identity_by_stock={"300750": (SNAPSHOT_A, RESEARCH_AS_OF)},
+        receipts=receipts,
+    )
+
+    assert receipts[0].assessment_semantics_id == LEGACY_UNVERSIONED_DISCLOSURE_ASSESSMENT_SEMANTICS_ID
+    assert unassessed == (batch,)
 
 
 def test_receipt_json_parser_rejects_unknown_semantics_fields() -> None:
@@ -149,6 +196,7 @@ def test_receipt_json_parser_rejects_unknown_semantics_fields() -> None:
                 "announcement_ids": ["1225519101"],
                 "research_snapshot_id": str(SNAPSHOT_A),
                 "research_as_of": RESEARCH_AS_OF.isoformat(),
+                "assessment_semantics_id": CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID,
                 "assessment_result": "WAIT_FOR_TRIGGER",
                 "assessed_at": ASSESSED_AT.isoformat(),
                 "assessment_method": "future-version",
@@ -206,6 +254,25 @@ def test_receipt_merge_rejects_conflicting_terminal_assessment_for_same_identity
         raise AssertionError("conflicting receipt assessments must fail closed")
 
 
+def test_receipt_merge_allows_reassessment_under_new_semantics_without_overwrite() -> None:
+    batch = group_disclosures_by_publication_date((_announcement("1225519101"),))[0]
+    old = _receipt(
+        batch,
+        assessment_semantics_id="research-funnel-v1",
+        result=ResearchFunnelTerminalState.WAIT_FOR_TRIGGER,
+    )
+    reassessed = _receipt(
+        batch,
+        assessment_semantics_id="research-funnel-v2",
+        result=ResearchFunnelTerminalState.DROP_FOR_NOW,
+        assessed_at=ASSESSED_AT + timedelta(days=1),
+    )
+
+    merged = merge_disclosure_assessment_receipts((old,), (reassessed,))
+
+    assert set(merged) == {old, reassessed}
+
+
 def test_receipt_serialization_is_deterministic_and_round_trips() -> None:
     later_batch = group_disclosures_by_publication_date((_announcement("B", hour=18),))[0]
     earlier_batch = group_disclosures_by_publication_date((_announcement("A", hour=17),))[0]
@@ -216,6 +283,7 @@ def test_receipt_serialization_is_deterministic_and_round_trips() -> None:
 
     assert serialized.endswith("\n")
     assert serialized.index('"A"') < serialized.index('"B"')
+    assert f'"assessment_semantics_id": "{CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID}"' in serialized
     assert parse_disclosure_assessment_receipts(serialized) == (earlier, later)
     assert serialize_disclosure_assessment_receipts((earlier, later)) == serialized
 
