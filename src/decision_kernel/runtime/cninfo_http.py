@@ -10,11 +10,13 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from ..adapters.cninfo import (
+    CNINFO_STATIC_BASE_URL,
     CninfoAdapterError,
     CninfoAnnouncement,
     normalize_cninfo_announcement_page,
     resolve_cninfo_org_id,
 )
+from ..adapters.pdf_text import MAX_PDF_BYTES
 
 
 CNINFO_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/data/szse_stock.json"
@@ -23,6 +25,7 @@ DEFAULT_PAGE_SIZE = 30
 _MAX_PAGE_SIZE = 30
 _GetJSON = Callable[[str], Mapping[str, Any]]
 _PostJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
+_GetBytes = Callable[[str], bytes]
 
 
 class CninfoRuntimeError(RuntimeError):
@@ -90,7 +93,7 @@ def fetch_cninfo_disclosures(
             stock_code=stock_code,
             org_id=org_id,
             start_date=start_date,
-            end_date=end_date,
+            end_date=end,
             page_size=page_size,
             page_number=page_number,
         )
@@ -154,6 +157,43 @@ def fetch_cninfo_disclosures(
     )
 
 
+def fetch_cninfo_pdf_bytes(
+    *,
+    source_locator: str,
+    max_bytes: int = MAX_PDF_BYTES,
+    get_bytes: _GetBytes | None = None,
+    timeout_seconds: float = 15.0,
+) -> bytes:
+    """Fetch one bounded PDF from CNINFO's official static host only.
+
+    This owns transport qualification only. PDF parsing, text extraction, persistence, OCR,
+    caching, retry/fallback and Research interpretation stay outside this runtime seam.
+    """
+
+    locator = source_locator.strip()
+    if not locator.startswith(f"{CNINFO_STATIC_BASE_URL}/"):
+        raise CninfoRuntimeError("CNINFO PDF source must use the official static host")
+    if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes <= 0:
+        raise CninfoRuntimeError("CNINFO PDF max_bytes must be a positive integer")
+
+    if get_bytes is None:
+        payload = _request_pdf_bytes(
+            url=locator,
+            max_bytes=max_bytes,
+            timeout_seconds=timeout_seconds,
+        )
+    else:
+        payload = get_bytes(locator)
+
+    if not isinstance(payload, bytes):
+        raise CninfoRuntimeError("CNINFO PDF fetcher did not return bytes")
+    if len(payload) > max_bytes:
+        raise CninfoRuntimeError(f"CNINFO PDF exceeds the {max_bytes}-byte acquisition limit")
+    if not payload.startswith(b"%PDF-"):
+        raise CninfoRuntimeError("CNINFO PDF response does not start with a PDF header")
+    return payload
+
+
 def _announcement_query_form(
     *,
     stock_code: str,
@@ -210,3 +250,24 @@ def _request_json(
     if not isinstance(payload, Mapping):
         raise CninfoRuntimeError("CNINFO response is not a JSON object")
     return payload
+
+
+def _request_pdf_bytes(*, url: str, max_bytes: int, timeout_seconds: float) -> bytes:
+    request = Request(
+        url,
+        headers={
+            "Accept": "application/pdf,*/*;q=0.8",
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://www.cninfo.com.cn/",
+        },
+        method="GET",
+    )
+    try:
+        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+            return response.read(max_bytes + 1)
+    except HTTPError as exc:
+        raise CninfoRuntimeError(
+            f"CNINFO PDF request failed with status {exc.code}"
+        ) from exc
+    except (URLError, TimeoutError) as exc:
+        raise CninfoRuntimeError("CNINFO PDF request failed") from exc
