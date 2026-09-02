@@ -5,16 +5,24 @@ import json
 import os
 import sys
 from collections.abc import Sequence
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import TextIO
+from zoneinfo import ZoneInfo
 
 from .deep_research import DeepResearchPackage
 from .live import run_live_deep_research_package, run_live_research_commit_package
 from .research_commit import ResearchCommitPackage
-from .runtime import hithink_http
+from .runtime import cninfo_http, hithink_http
+from .runtime.disclosure_radar import (
+    filter_research_uncovered_disclosure_batches,
+    group_disclosures_by_publication_date,
+)
 from .runtime.inbox import render_decision_inbox_html, render_decision_inbox_markdown
 from .workflow import DecisionSpineResult
+
+
+SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -63,6 +71,24 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("decision-inbox/summary.md"),
         help="Markdown summary output path.",
     )
+    disclosure_scan = subparsers.add_parser(
+        "scan-disclosures",
+        help=(
+            "One-shot scan for official CNINFO disclosure batches newer than frozen Research."
+        ),
+    )
+    disclosure_scan.add_argument(
+        "packages",
+        nargs="+",
+        type=Path,
+        help="One current ResearchCommitPackage or DeepResearchPackage per A-share security.",
+    )
+    disclosure_scan.add_argument(
+        "--through",
+        type=date.fromisoformat,
+        required=True,
+        help="Inclusive CNINFO scan end date in YYYY-MM-DD form.",
+    )
     return parser
 
 
@@ -90,6 +116,15 @@ def _run_inbox_package(
         fetch_market=fetch_market,
         observed_at=observed_at,
     ).decision
+
+
+def _research_snapshot_from_raw_package(raw_package: str):
+    payload = json.loads(raw_package)
+    if not isinstance(payload, dict):
+        raise ValueError("disclosure scan research package must be a JSON object")
+    if "deep_research" in payload and "discovery" in payload:
+        return DeepResearchPackage.model_validate(payload).research_snapshot
+    return ResearchCommitPackage.model_validate(payload).research_snapshot
 
 
 def main(
@@ -142,6 +177,73 @@ def main(
             )
             print(f"HTML: {args.output}", file=stdout)
             print(f"SUMMARY: {args.summary}", file=stdout)
+            return 0
+
+        if args.command == "scan-disclosures":
+            research_as_of_by_stock: dict[str, datetime] = {}
+            company_by_stock: dict[str, str] = {}
+            scan_inputs: list[tuple[str, date]] = []
+
+            for package_path in args.packages:
+                snapshot = _research_snapshot_from_raw_package(
+                    package_path.read_text(encoding="utf-8")
+                )
+                ticker = snapshot.ticker.strip()
+                if ticker in research_as_of_by_stock:
+                    raise ValueError(
+                        f"disclosure scan received more than one current Research package for {ticker}"
+                    )
+                start_date = snapshot.as_of_datetime.astimezone(SHANGHAI_TZ).date()
+                if start_date > args.through:
+                    raise ValueError(
+                        f"disclosure scan end date precedes frozen Research for {ticker}"
+                    )
+
+                research_as_of_by_stock[ticker] = snapshot.as_of_datetime
+                company_by_stock[ticker] = snapshot.company_name
+                scan_inputs.append((ticker, start_date))
+
+            announcements = []
+            for ticker, start_date in scan_inputs:
+                batch = cninfo_http.fetch_cninfo_disclosures(
+                    stock_code=ticker,
+                    start_date=start_date,
+                    end_date=args.through,
+                )
+                announcements.extend(batch.announcements)
+
+            batches = group_disclosures_by_publication_date(announcements)
+            uncovered = filter_research_uncovered_disclosure_batches(
+                batches,
+                research_as_of_by_stock=research_as_of_by_stock,
+            )
+
+            print(
+                "OFFICIAL DISCLOSURE SCAN: "
+                f"{len(uncovered)} research-uncovered / "
+                f"{len(batches)} dated batches / "
+                f"{len(announcements)} announcements / "
+                f"{len(research_as_of_by_stock)} research cases",
+                file=stdout,
+            )
+            if not uncovered:
+                print("NO RESEARCH-UNCOVERED OFFICIAL DISCLOSURES", file=stdout)
+            for batch in uncovered:
+                print(
+                    "UNCOVERED: "
+                    f"{batch.stock_code} {company_by_stock[batch.stock_code]} | "
+                    f"research_as_of={research_as_of_by_stock[batch.stock_code].isoformat()} | "
+                    f"publication_date={batch.publication_date.isoformat()} | "
+                    f"announcements={len(batch.announcements)}",
+                    file=stdout,
+                )
+                for item in batch.announcements:
+                    print(
+                        f"- {item.announcement_id} | {item.title} | {item.source_locator}",
+                        file=stdout,
+                    )
+            print("RESEARCH STATUS: UNASSESSED", file=stdout)
+            print("INVESTMENT AUTHORITY: NONE", file=stdout)
             return 0
 
         raw_package = args.package.read_text(encoding="utf-8")
