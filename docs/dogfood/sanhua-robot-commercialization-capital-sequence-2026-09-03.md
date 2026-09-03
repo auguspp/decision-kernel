@@ -4,6 +4,7 @@ Status: **RESEARCH CHALLENGER SUPPORT / CASE-SPECIFIC / CAPITAL-SEQUENCE PASS / 
 Security: **三花智控 / 002050.SZ / 02050.HK**  
 Parent challenger: `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md`  
 Sibling proof table: `docs/dogfood/sanhua-robot-35bn-proof-table-2026-09-03.md`  
+Sibling realized-capital note: `docs/dogfood/sanhua-robot-realized-capital-attribution-challenger-2026-09-03.md`  
 Prepared against main: `9fb517c9592d4c5969907bdb7b7219f78097cdb5`  
 Investment Authority: **NONE**
 
@@ -219,14 +220,42 @@ bionic-robot components
 
 and contains land, buildings, equipment, contingency and initial working capital.
 
-Therefore:
+Its disclosed planned capital stack is:
+
+```text
+land                    CNY70.89m
+building                CNY421.60m
+equipment               CNY115.74m
+contingency             CNY26.35m
+initial working capital CNY65.42m
+total                   CNY700.00m
+```
+
+By 2025 year-end this project had **CNY138.97m** of construction-in-progress, equal to **19.85%** of its budget, with project progress reported at **25%**.
+
+By 2026H1 its construction-in-progress balance had risen to **CNY194.75m**, equal to **32.01%** of budget, with project progress reported at **60%**.
+
+The project is therefore no longer merely planned capital: **realized mixed capital deployment is FACT**.
+
+But the same scope problem remains:
 
 ```text
 CNY3.8bn != robot-only invested capital
 CNY700m != robot-only invested capital
+CNY194.75m realized mixed-center CIP != robot-only invested capital
 ```
 
-**NOT ESTABLISHED** — robot-specific production PP&E / tooling actually deployed.
+No public filing reviewed here allocates the shared center's factory area, equipment or initial working capital between robot and thermal-management products.
+
+Therefore:
+
+```text
+REALIZED MIXED PRODUCTION CAPITAL = FACT
+ROBOT ATTRIBUTION OF MIXED PRODUCTION CAPITAL = NOT ESTABLISHED
+ROBOT-SPECIFIC PRODUCTION PP&E / TOOLING = NOT ESTABLISHED
+```
+
+See `docs/dogfood/sanhua-robot-realized-capital-attribution-challenger-2026-09-03.md` for the detailed attribution pass.
 
 ### Layer D — ramp losses / underutilized fixed cost
 
@@ -364,6 +393,8 @@ The GDR R&D blueprint demonstrates that dedicated development capital was contem
 
 The mixed CNY3.8bn and CNY700m projects demonstrate that subsequent production expansion is capital-consuming but not publicly separable into robot-only assets.
 
+The CNY700m center further establishes that actual mixed capital has already been deployed, including a budgeted equipment and initial-working-capital layer, even though robot attribution remains unavailable.
+
 The prospectus explicitly warns that robot-actuator expansion requires substantial production capital and qualified personnel and creates depreciation / raw-material / financing / labor costs.
 
 **INFERENCE** — The correct question is not:
@@ -372,9 +403,9 @@ The prospectus explicitly warns that robot-actuator expansion requires substanti
 
 It is:
 
-> What cumulative incremental capital — development, pilot, PP&E, working capital and ongoing reinvestment — must Sanhua commit to produce the durable NOPAT underlying that 35亿元 scenario?
+> What cumulative incremental capital — development, pilot, attributable shared infrastructure, dedicated PP&E, working capital and ongoing reinvestment — must Sanhua commit to produce the durable NOPAT underlying that 35亿元 scenario?
 
-That cumulative number is still `NOT ESTABLISHED`.
+That cumulative robot-specific number is still `NOT ESTABLISHED`.
 
 ---
 
@@ -389,7 +420,7 @@ The next Research upgrade should prioritize evidence capable of assigning capita
 5. customer allocation evidence capable of linking required capacity to economic share;
 6. realized utilization / yield / margin disclosure once the current line ramp matures.
 
-If those data remain unavailable, the correct Research state is not to invent a capital range. It is to preserve the missing denominator explicitly.
+If those data remain unavailable, the correct Research state is not to invent a capital range. It is to preserve the missing attribution explicitly.
 
 ---
 
@@ -413,15 +444,15 @@ If those data remain unavailable, the correct Research state is not to invent a 
 - 2025 Hong Kong prospectus — 180+ robot R&D team by end-2024; customer co-development; prototype refinement before scalable commercialization; significant-capital-investment risk for production expansion:  
   https://www.hkexnews.hk/listedco/listconews/sehk/2025/0613/2025061300017.pdf
 
-- 2025 annual report — customer R&D / trial production / iteration / sampling:  
-  https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401430.pdf
+- 2025 annual report — customer R&D / trial production / iteration / sampling; intelligent-drive-center 2025 CIP:  
+  https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032301606_c.pdf
 
 ### Current commercialization state
 
 - August 27, 2026 investor-relations record — batch delivery / production-line ramp:  
   https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
 
-- 2026H1 report:  
+- 2026H1 report — intelligent-drive-center CIP CNY194.75m / 32.01% budget / 60% reported progress:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
 
 ### Mixed production-capital disclosures
@@ -430,7 +461,7 @@ If those data remain unavailable, the correct Research state is not to invent a 
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=9763716&stockid=002050
 
 - Intelligent-drive future-industry-center project — CNY700m mixed thermal-management + robot-component project including land / buildings / equipment / initial working capital:  
-  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=11214247&stockid=002050
+  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0730/2025073001653_c.pdf
 
 ---
 
@@ -453,14 +484,14 @@ development capital
 → maintenance + growth reinvestment
 ```
 
-Sanhua has demonstrably progressed from R&D toward batch delivery and line ramp, but the robot-specific cumulative capital required to turn that commercialization into durable owner cash remains unknown.
+Sanhua has demonstrably progressed from R&D toward batch delivery and line ramp. Actual mixed capital is now observable in the intelligent-drive center, but robot attribution inside that mixed capital remains unavailable.
 
 Therefore the 35亿元 state should continue to be treated as:
 
 ```text
 PROFIT SUCCESS-STATE REFERENCE
 /
-CAPITAL DENOMINATOR NOT YET CLOSED
+ROBOT-SPECIFIC CAPITAL ATTRIBUTION NOT YET CLOSED
 /
 INCREMENTAL ROIC NOT ESTABLISHED
 /
