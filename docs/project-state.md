@@ -123,7 +123,7 @@ Frozen artifacts own the details. This table is navigation only.
 
 For broader live-case navigation, use `docs/live-decision-book.md`; do not copy its full content here.
 
-Sanhua's current mutable Research is in **PR #136** on branch `research/sanhua-robot-operating-economics-challenger`. The current pass is stopped at the public-evidence boundary. It is **not authoritative over frozen lineage until accepted / merged**. The branch has now been re-read and reconciled to the latest mutable `docs/project-state.md`; `kernel-tests` passed; the PR is **mergeable and ready for review**. No Research conclusion changed during that reconciliation. Do not add more Sanhua Research unless one of the five explicit reopen evidence buckets materially changes.
+Sanhua's current mutable Research is in **PR #136** on branch `research/sanhua-robot-operating-economics-challenger`. The current pass is stopped at the public-evidence boundary. It is **not authoritative over frozen lineage until accepted / merged**. The branch has been re-read and reconciled to the latest mutable `docs/project-state.md`; `kernel-tests` passed; the PR is **mergeable and ready for review**. No Research conclusion changed during reconciliation. Do not add more Sanhua Research unless one of the five explicit reopen evidence buckets materially changes.
 
 ---
 
@@ -156,21 +156,52 @@ Current state:
 qualified HiThink history input = available
 short-lived shadow sampling = available
 first real scheduled six-window batch = reviewed mechanically
-human triage labels = NOT YET
+first Human-labeled positive control = EARNED / 603986 GigaDevice
+negative control = NOT YET EARNED
+false-negative candidate = NOT YET EARNED
 anomaly detector = NOT YET PROMOTED
 ```
 
-The first real scheduled shadow batch came from `decision-inbox` run `33757562673` and contained six qualified windows through 2026-09-03. Mechanical review found:
+The first real scheduled shadow batch came from `decision-inbox` run `33757562673` and contained six qualified windows through 2026-09-03.
+
+Mechanical review found GigaDevice to be the strongest dislocation candidate:
 
 ```text
-603986 / GigaDevice = strongest UNLABELED dislocation candidate
-300750 / CATL = sustained-repricing candidate
-control-label promotion = NO
+2026-07-21 close = CNY475.53
+2026-08-03 close = CNY340.74
+window max drawdown = -28.3%
+largest down day = -10.0%
+2026-09-03 close = CNY383.20
 ```
 
-A compact review is preserved in **draft PR #137** (`radar/first-real-shadow-review`) so the short-lived artifact can expire without losing the existence and mechanical shape of the batch. The review intentionally does **not** infer that price caused later Research, does not assign a positive / negative / false-negative control label, and does not promote a detector threshold.
+Contemporaneous Research context already supported a valid question without turning price into belief: headline H1 earnings had been substantially preannounced, at least one matched sell-side earnings framework remained broadly stable, and the material repricing created a legitimate duration / valuation / positioning question.
 
-Detector sophistication should wait for naturally labeled windows: useful anomaly, irrelevant large move, and a meaningful false-negative candidate.
+The Human has now explicitly labeled the counterfactual Radar usefulness question:
+
+```text
+A = worth alerting me; should trigger Research triage
+```
+
+Therefore:
+
+```text
+603986 / GigaDevice
+= FIRST HUMAN-LABELED SURPRISE RADAR POSITIVE CONTROL
+= RESEARCH TRIAGE WORTHY
+```
+
+This label means the observation would have earned scarce Research attention. It does **not** mean the price move revealed hidden fundamentals, caused the later Research, implied a trade, or defines a detector threshold.
+
+PR #137 (`radar/first-real-shadow-review`) now preserves both the pre-label mechanical review and the separate Human-labeled positive-control checkpoint. It is **mergeable, ready for review, and latest `kernel-tests` passed**. It remains non-authoritative until accepted / merged.
+
+CATL remains a sustained-repricing candidate for Surprise Radar but is still unlabeled. Its existing Commitment Radar role remains a separate disclosure-lineage experiment.
+
+Detector sophistication must still wait for a minimally balanced naturally labeled corpus:
+
+1. one positive control — **now earned: GigaDevice**;
+2. one mechanically meaningful large move that the Human judges should remain `IGNORE`;
+3. one quieter path where later decision-relevant evidence suggests a plausible false negative;
+4. another naturally scheduled batch for cross-case persistence / reversal comparison.
 
 ### Authority boundary
 
@@ -199,14 +230,16 @@ Decision Inbox attention is not the same thing as a Surprise Radar alert.
 
 ## 6. Next work
 
-1. **Attention Radar** — continue Commitment Radar use and Surprise Radar observation without creating a second attention authority.
-2. **Accumulate another real scheduled shadow batch before detector design** — compare persistence / reversal / resolution across naturally observed windows rather than tuning a threshold on the first batch.
-3. **Earn Human triage labels before durable control promotion** — GigaDevice is the strongest current dislocation candidate, but it is not a positive control until the Human explicitly judges the anomaly would have been worth Research triage at the time.
-4. **Radar-assisted heterogeneous prospective cases** — let real surprises, commitment resolutions, and method mismatches select the next case; do not fill imagined company categories.
-5. **Prefer prospective events to framework work** — real disclosure / resolution / price observation relevant to Odds / Human Decision / Action / Outcome outranks another conceptual framework.
-6. **Freeze longitudinal evidence promptly** — when a Human Decision, confirmed Action, Outcome, falsifier, or resolution event occurs, preserve the appropriate immutable lineage before retrospective interpretation can rewrite it.
-7. **Research strengthening remains available under case pressure** — operating-economics depth, outside-view calibration, incremental ROIC, and accounting contradiction work should be earned by live cases rather than promoted into a generic Research v2 program by default.
-8. **Sanhua robot Research Challenger = STOP / REOPEN** — do not keep searching to make the report look complete. Reopen PR #136 only when primary evidence can change one of the five explicit evidence buckets above. Do not treat the sell-side CNY3.5bn state as Research truth; do not assign a cardinal success probability; do not promote the case-specific failure into generic method unless another real case independently reproduces it.
+1. **Earn a Surprise Radar negative control from a real large move** — do not label quiet windows as negatives merely because nothing happened. The Human must judge a mechanically meaningful observation as `IGNORE`.
+2. **Find a plausible false-negative candidate** — a quieter price path followed by genuinely decision-relevant evidence is more useful than tuning sensitivity on GigaDevice.
+3. **Accumulate another real scheduled shadow batch before detector design** — compare persistence / reversal / resolution across naturally observed windows.
+4. **Do not tune a detector to the first positive control** — GigaDevice is evidence that a signal can be useful, not evidence for a specific threshold, z-score, drawdown cutoff or scoring function.
+5. **Attention Radar** — continue Commitment Radar use and Surprise Radar observation without creating a second attention authority.
+6. **Radar-assisted heterogeneous prospective cases** — let real surprises, commitment resolutions, and method mismatches select the next case; do not fill imagined company categories.
+7. **Prefer prospective events to framework work** — real disclosure / resolution / price observation relevant to Odds / Human Decision / Action / Outcome outranks another conceptual framework.
+8. **Freeze longitudinal evidence promptly** — when a Human Decision, confirmed Action, Outcome, falsifier, or resolution event occurs, preserve the appropriate immutable lineage before retrospective interpretation can rewrite it.
+9. **Research strengthening remains available under case pressure** — operating-economics depth, outside-view calibration, incremental ROIC, and accounting contradiction work should be earned by live cases rather than promoted into a generic Research v2 program by default.
+10. **Sanhua robot Research Challenger = STOP / REOPEN** — do not keep searching to make the report look complete. Reopen PR #136 only when primary evidence can change one of the five explicit evidence buckets above. Do not treat the sell-side CNY3.5bn state as Research truth; do not assign a cardinal success probability; do not promote the case-specific failure into generic method unless another real case independently reproduces it.
 
 ---
 
@@ -223,6 +256,7 @@ no heuristic Decision ↔ Action linking
 no price → Fundamental Belief shortcut
 no forced cardinal probabilities
 no new conceptual framework without real case pressure
+no Surprise Radar threshold tuned to one positive example
 ```
 
 Also do not infer historical Human intent from trades or price paths, and do not use market movement alone as Outcome attribution.
@@ -246,7 +280,8 @@ Use the smallest necessary set. Follow case-specific frozen pointers only when t
 - `docs/case-coverage-checkpoint-2026-09-03.md` — current phase, heterogeneous coverage, Attention Acquisition priority, longitudinal gaps.
 - `docs/dogfood/commitment-radar-v0-2026-09-03.md` — Commitment Radar lineage boundary.
 - `docs/dogfood/surprise-radar-v0-qualified-history-foundation-2026-09-03.md` and `docs/dogfood/surprise-radar-v0-shadow-sampling-2026-09-03.md` — Surprise Radar current input / observation foundation.
-- draft PR #137 / `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — first real scheduled shadow-batch mechanical review; **not authoritative until accepted / merged**.
+- PR #137 / `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — first real scheduled shadow-batch mechanical review; **not authoritative until accepted / merged**.
+- PR #137 / `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — first Human-labeled Surprise Radar positive control; **not authoritative until accepted / merged**.
 - `docs/dogfood/odds-semantic-replay-cmb-v0-2026-09-03.md` — current Odds semantic / horizon pressure.
 - `docs/prospective-decision-outcome-capture-protocol-2026-09-03.md` — prospective longitudinal capture discipline.
 
@@ -256,9 +291,9 @@ Historical handoffs remain available for lineage investigation only; they are no
 
 ## 9. Recent state delta
 
-- **NEW — PR #136 has been reconciled to the latest mutable project state, `kernel-tests` passed, and the PR is now mergeable + ready for review.** The Sanhua Research conclusion remains STOP / REOPEN; no new Research was added during reconciliation.
-- **NEW — first real scheduled Surprise Radar shadow batch reviewed mechanically.** `decision-inbox` run `33757562673` produced six qualified HiThink windows through 2026-09-03. GigaDevice is the strongest unlabeled price-dislocation candidate; CATL is a sustained-repricing candidate. No causal attribution or control label has been promoted.
-- **NEW — draft PR #137 preserves the first real shadow-batch review before the 14-day artifact expires.** It adds no detector, score, Research route, Human wake rule, Fundamental Belief change, schema, or investment authority.
+- **NEW — first Human-labeled Surprise Radar positive control earned.** For GigaDevice's mechanically distinct 2026-07-21 → 2026-08-03 repricing window, the Human explicitly selected `A = worth alerting me; should trigger Research triage`. This upgrades 603986 from unlabeled candidate to positive control for triage usefulness only.
+- **NEW — PR #137 now freezes the Human label separately from the pre-label mechanical review.** The PR is mergeable, ready for review, and latest `kernel-tests` passed. No detector, score, auto-route, Human wake change, Fundamental Belief change, schema change, or investment authority is introduced.
+- **CHANGED — Surprise Radar evidence gap is now asymmetric rather than empty.** Positive control = GigaDevice; negative control = missing; false-negative candidate = missing. Detector design remains premature.
+- **UNCHANGED — PR #136 Sanhua Research remains STOP / REOPEN, mergeable + ready for review, with no new Research after reconciliation.**
 - **UNCHANGED — Commitment Radar promotion threshold remains unmet.** CATL's latest buyback-progress disclosure is another CATL capital-allocation variant rather than a different natural case.
-- **UNCHANGED — Sanhua public-evidence boundary:** batch delivery + line ramp = `FACT`; Thailand BOI THB1.8bn humanoid-actuator planned capital inside listed-company consolidation = `FACT`; current-stage external harmonic-reducer validation / small-batch supply into Sanhua = `FACT`; large-robot-order rumor = formally denied. Robot revenue / GM, rated capacity, realized robot-only invested capital, mature allocation / make-buy, incremental ROIC and owner cash remain `NOT ESTABLISHED`.
 - **UNCHANGED — project-level Attention Radar priority, frozen lineage authority, Human investment authority, Constitution / schema freeze, Evidence→Belief and Price→Odds doctrine remain intact.**
