@@ -1,139 +1,89 @@
-# Surprise Radar v0 — GigaDevice First Human-Labeled Positive Control
+# Surprise Radar v0 — GigaDevice Counterfactual Human Triage Checkpoint
 
-Status: **FROZEN HUMAN TRIAGE LABEL / SURPRISE RADAR EVALUATION CONTROL / NO DETECTOR / NO HUMAN-WAKE CHANGE / NO INVESTMENT AUTHORITY**  
+Status: **HUMAN COUNTERFACTUAL TRIAGE / CONTROL PROMOTION RETRACTED / PRE-RESEARCH WINDOW / NO DETECTOR / NO HUMAN-WAKE CHANGE / NO INVESTMENT AUTHORITY**  
 Date: **2026-09-04**  
 Security: **兆易创新 / GigaDevice / 603986.SH**
 
-## Purpose
+## Correction
 
-Freeze the first Human-earned Surprise Radar triage label on top of a naturally scheduled, qualified HiThink price-history observation.
+This checkpoint originally promoted GigaDevice's 2026-07-21 → 2026-08-03 price dislocation as the first Human-labeled Surprise Radar positive control.
 
-This checkpoint does not infer Fundamental Belief from price and does not claim that the price path caused later Research. It records only the Human's answer to the counterfactual triage question:
+That promotion was methodologically invalid for the current Surprise Radar v0 semantics.
 
-> If the Radar had surfaced this price-path anomaly at the time, would it have been worth alerting the Human and triggering Research triage?
+The current shadow design binds each observation to an exact frozen `ResearchSnapshot` id / as-of / information-bundle hash. Therefore a historical window can qualify as a Radar evaluation control only if the relevant frozen Research already existed **before the anomaly being evaluated**.
 
-## Source observation lineage
-
-Parent mechanical review:
-
-`docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md`
-
-GitHub Actions source:
+Repository history shows:
 
 ```text
-workflow = decision-inbox
-run_id = 33757562673
-market-history-shadow artifact_id = 9894080655
-artifact_digest = sha256:1ff066f5560982f84af004aa482af0c29be857fa85fbeb300a7bd04b463ddf16
-qualified history through = 2026-09-03
+GigaDevice first Full Research package commit
+= 1174a0b22e3aa4322db7451fc0862905b9662a08
+= 2026-09-02 09:37:02 +08:00
+
+candidate anomaly window
+= 2026-07-21 → 2026-08-03
 ```
 
-Mechanical GigaDevice path retained by that review:
+Therefore:
+
+```text
+PRE-ANOMALY FROZEN RESEARCH = NO
+SURPRISE RADAR v0 POSITIVE CONTROL = INVALID / RETRACTED
+```
+
+## What remains valid
+
+The mechanical history remains a useful retrospective price-path example:
 
 ```text
 2026-07-21 close = CNY475.53
 2026-08-03 close = CNY340.74
-window max drawdown = -28.3%
-largest down day = -10.0%
+window max drawdown ~= -28.3%
+largest down day ~= -10.0%
 2026-09-03 close = CNY383.20
 ```
 
-The same review also established that no new GigaDevice official-disclosure packet appeared in that scheduled scan.
-
-## Contemporaneous Research context
-
-Existing frozen Research later reconstructed the relevant information boundary:
-
-- headline H1 earnings had already been substantially preannounced on 2026-07-09;
-- at least one matched sell-side house kept its earnings framework broadly unchanged while the stock repriced materially;
-- the valid Research question was duration / valuation / positioning rather than a price-implies-fundamentals shortcut.
-
-The repository's prior conclusion was deliberately limited:
+The Human was asked the counterfactual question:
 
 ```text
-material price repricing
-+ headline earnings already substantially known
-+ at least one broadly stable matched earnings framework
-→ valid duration / valuation / positioning Research question
-
-but
-
-price action itself
-!= answer to that Research question
-```
-
-## Human triage checkpoint
-
-The Human was shown the historical anomaly in this form:
-
-```text
-GigaDevice fell from about CNY475.53 on 2026-07-21
- to about CNY340.74 on 2026-08-03
-≈ -28%
-while headline H1 earnings had already been preannounced.
-```
-
-The Human was asked to choose:
-
-```text
-A = worth alerting me; should trigger Research triage
-B = not worth alerting me; large move only / IGNORE
-C = insufficient information to judge
+If Radar had surfaced this anomaly at the time,
+would it have been worth alerting me and triggering Research triage?
 ```
 
 Human response:
 
 ```text
-A
+A = worth alerting me; should trigger Research triage
 ```
 
-Normalized label:
+That answer is preserved as a **counterfactual Human usefulness judgment**.
+
+It does not qualify the window as a Surprise Radar v0 control because the required pre-anomaly Research state did not exist.
+
+## Correct current corpus state
 
 ```text
-HUMAN TRIAGE = DEEPEN / RESEARCH TRIAGE WORTHY
-SURPRISE RADAR POSITIVE CONTROL = YES
+VALID POSITIVE CONTROL = NOT YET EARNED
+VALID NEGATIVE CONTROL = NOT YET EARNED
+VALID FALSE-NEGATIVE CANDIDATE = NOT YET EARNED
+GIGADEVICE HISTORICAL COUNTERFACTUAL = A / TRIAGE-WORTHY IF PRIOR RESEARCH HAD EXISTED
+DETECTOR DESIGN = WAIT
 ```
 
-This is a Human usefulness label, not a claim that buying or selling on the anomaly would have produced returns.
+## Eligibility rule clarified
 
-## What the positive label means
-
-It means the mechanical observation would have been useful enough to earn scarce Research attention at the time.
-
-It does **not** mean:
-
-- the decline was caused by hidden negative fundamentals;
-- the later GigaDevice thesis was caused by the Radar observation;
-- the anomaly should automatically wake the Human in production;
-- a 28% drawdown is the correct detector threshold;
-- the largest one-day move should become a trigger;
-- every comparable drawdown is Research-relevant;
-- price changes Fundamental Belief;
-- a trade, Recommendation, Odds change, or Action is authorized.
-
-## Evaluation consequence
-
-The Surprise Radar evaluation corpus now has its first earned positive example:
+For current Surprise Radar v0 evaluation, a candidate control must satisfy:
 
 ```text
-POSITIVE CONTROL = 603986 / GigaDevice / YES
-NEGATIVE CONTROL = NOT YET EARNED
-FALSE-NEGATIVE CANDIDATE = NOT YET EARNED
+frozen ResearchSnapshot exists before candidate anomaly
++ anomaly is observed after that freeze
++ Human judges whether the anomaly should trigger Research triage
 ```
 
-One positive control is still insufficient for detector design.
-
-Before testing even a simple explainable shadow rule, the project still needs at minimum:
-
-1. a mechanically meaningful large move that the Human judges should remain `IGNORE`;
-2. a quieter price path where later decision-relevant evidence suggests a plausible false negative;
-3. another naturally scheduled batch so persistence, reversal and cross-case behavior can be compared without tuning to GigaDevice.
+Without the first condition, the example belongs to a different possible experiment: **cold-start anomaly discovery**. That is not the current Surprise Radar v0 experiment and should not be silently mixed into its corpus.
 
 ## Authority boundary
 
 ```text
-OBSERVATION AUTHORITY = SHADOW ONLY
-HUMAN TRIAGE LABEL = YES / POSITIVE CONTROL
 FUNDAMENTAL BELIEF CHANGE FROM PRICE = NO
 RADAR SCORE = NO
 DETECTOR THRESHOLD = NO
@@ -145,9 +95,7 @@ INVESTMENT AUTHORITY = NONE
 ## Disposition
 
 ```text
-FIRST HUMAN-LABELED SURPRISE RADAR POSITIVE CONTROL = EARNED
-CASE = 603986 / GigaDevice
-LABEL = RESEARCH TRIAGE WORTHY
-PROMOTE DETECTOR = NO
-NEXT = EARN NEGATIVE + FALSE-NEGATIVE CONTROLS FROM NATURAL WINDOWS
+GIGADEVICE POSITIVE-CONTROL PROMOTION = RETRACTED
+HUMAN RESPONSE A = PRESERVED AS COUNTERFACTUAL ONLY
+NEXT = ACCUMULATE POST-RESEARCH NATURAL WINDOWS
 ```
