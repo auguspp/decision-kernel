@@ -7,6 +7,7 @@ import pytest
 from decision_kernel.primitives import DomainValidationError
 from decision_kernel.xiaohongshu_harness import (
     DraftParagraphKind,
+    PublicationClaim,
     PublicationClaimKind,
     ValidationStatus,
     XiaohongshuDraft,
@@ -141,10 +142,16 @@ def test_structured_draft_passes_when_it_preserves_authority_boundary() -> None:
     assert not [issue for issue in report.issues if issue.severity.value == "BLOCK"]
 
 
-def test_fact_paragraph_cannot_upgrade_non_fact_research_claim() -> None:
+def test_fact_paragraph_cannot_upgrade_inference_to_fact() -> None:
     brief = _brief()
-    non_fact = next(
-        claim for claim in brief.selected_claims if claim.kind is not PublicationClaimKind.FACT
+    synthetic_inference = PublicationClaim(
+        claim_id="test.inference",
+        kind=PublicationClaimKind.INFERENCE,
+        text="测试用研究推断。",
+        origin="test",
+    )
+    brief = brief.model_copy(
+        update={"selected_claims": (*brief.selected_claims, synthetic_inference)}
     )
     draft = _seven_card_draft()
     cards = list(draft.cards)
@@ -153,9 +160,9 @@ def test_fact_paragraph_cannot_upgrade_non_fact_research_claim() -> None:
         heading="错误升级",
         paragraphs=(
             XiaohongshuDraftParagraph(
-                text="把非事实研究判断写成了事实。",
+                text="把研究推断写成了公司事实。",
                 kind=DraftParagraphKind.FACT,
-                claim_ids=(non_fact.claim_id,),
+                claim_ids=(synthetic_inference.claim_id,),
             ),
         ),
     )
