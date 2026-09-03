@@ -123,7 +123,7 @@ Frozen artifacts own the details. This table is navigation only.
 
 For broader live-case navigation, use `docs/live-decision-book.md`; do not copy its full content here.
 
-Sanhua's current mutable Research is in **draft PR #136** on branch `research/sanhua-robot-operating-economics-challenger`. The current pass is stopped at the public-evidence boundary. It is **not authoritative over frozen lineage until accepted / merged**.
+Sanhua's current mutable Research is in **draft PR #136** on branch `research/sanhua-robot-operating-economics-challenger`. The current pass is stopped at the public-evidence boundary. It is **not authoritative over frozen lineage until accepted / merged**. The branch was prepared against the pre-sync main and is now behind the mutable state-index commits; before any further edits or merge attempt, re-read / reconcile latest `main` first.
 
 ---
 
@@ -243,4 +243,5 @@ Historical handoffs remain available for lineage investigation only; they are no
 - **NEW — Sanhua evidence upgrades:** batch delivery + line ramp = `FACT`; Thailand BOI THB1.8bn humanoid-actuator planned capital inside listed-company consolidation = `FACT`; current-stage external harmonic-reducer validation / small-batch supply into Sanhua = `FACT`; large-robot-order rumor = formally denied. Robot revenue / GM, rated capacity, realized robot-only invested capital, mature allocation / make-buy, incremental ROIC and owner cash remain `NOT ESTABLISHED`.
 - **NEW — corporate-perimeter boundary is load-bearing.** The hollow-cup-motor JV discussed at group level is not owned by listed Sanhua; group capability cannot be silently counted as listed-company manufacturing economics.
 - **CHANGED — Sanhua next state is STOP / REOPEN, not continuous research.** Reopen only on one of five explicit primary-evidence buckets; otherwise preserve the boundary rather than filling unknowns.
+- **CHANGED — PR #136 branch is behind the mutable state-index commits on `main`.** Before further Research edits or merge preparation, re-read / reconcile latest `main`; no Research conclusion is superseded by those state-only commits.
 - **UNCHANGED** — project-level Attention Radar priority, frozen lineage authority, Human investment authority, Constitution / schema freeze, Evidence→Belief and Price→Odds doctrine remain intact.
