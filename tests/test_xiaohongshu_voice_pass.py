@@ -85,6 +85,27 @@ def test_voice_lint_catches_repeated_template_transitions() -> None:
     assert any(issue.code == "REPEATED_TEMPLATE_TRANSITIONS" for issue in report.issues)
 
 
+def test_voice_lint_catches_repeated_not_but_scaffolding() -> None:
+    brief = _brief()
+    report = voice_lint(
+        _draft(
+            brief,
+            text="不是机器人空间有多大，而是现在付了多少钱。不是故事真不真，而是利润何时出现。",
+        )
+    )
+
+    assert report.status == "REVISE"
+    assert any(issue.code == "REPEATED_NOT_BUT_CONTRAST" for issue in report.issues)
+
+
+def test_voice_lint_catches_invented_author_backstory() -> None:
+    brief = _brief()
+    report = voice_lint(_draft(brief, text="我最近重新看三花，和以前不太一样。"))
+
+    assert report.status == "REVISE"
+    assert any(issue.code == "INVENTED_AUTHOR_BACKSTORY" for issue in report.issues)
+
+
 def test_voice_rewrite_prompt_uses_real_sentence_anchors_and_preserves_authority() -> None:
     brief = _brief()
     draft = _draft(brief, text="这一页只推进同一个问题。")
@@ -95,4 +116,7 @@ def test_voice_rewrite_prompt_uses_real_sentence_anchors_and_preserves_authority
     assert "产品目录只能证明" in prompt
     assert "Keep every paragraph's `kind` and `claim_ids` exactly unchanged" in prompt
     assert "Do not force every idea into balanced A/B symmetry" in prompt
+    assert "First-person memory is evidence too" in prompt
+    assert "Treat “不是A，而是B” as a high-cost rhetorical device" in prompt
+    assert "30倍可能不应该被当成常态估值" in prompt
     assert "Do not turn the ending into a generic lesson about investing" in normalized
