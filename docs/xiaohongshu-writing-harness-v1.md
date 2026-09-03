@@ -82,6 +82,49 @@ Facts and market-context claims preserve Evidence lineage. A derived number must
 
 Human Decision / Action / position / cost basis are always omitted. A current market price may be injected as an explicit market anchor with its own observation time and source reference; it does not mutate the frozen Research PIT.
 
+## Writing is also an adversarial compression test
+
+Publication is downstream, but it is not epistemically useless to Research.
+
+A good note compresses a large research package into one reader tension, usually forcing explicit answers to questions such as:
+
+- what does the current price actually require;
+- what is already proven versus merely plausible;
+- whether a consensus earnings number already contains the optionality being discussed;
+- whether the same narrative is being rewarded in both earnings and the valuation multiple;
+- which one assumption carries the optimistic case.
+
+That compression can reveal a defect that was easy to miss inside a long research package.
+
+The correct loop is:
+
+```text
+Frozen Research
+→ Writing / price reverse-engineering
+→ unsupported bridge exposed
+→ Research Challenge
+→ re-underwrite Research
+→ freeze new Research if earned
+→ rebuild the publication brief
+```
+
+The wrong loop is:
+
+```text
+Frozen Research
+→ draft is hard to make coherent
+→ invent a cleaner number / bridge in prose
+→ silently upgrade Research
+```
+
+**If the note cannot answer its headline question without smuggling in a guessed earnings scope, valuation input, probability, or causal bridge, stop polishing. The writing run has found a Research gap.**
+
+Typical challenge signals are defined in `docs/full-research-review-gate-v1.md`, including ambiguous core earnings, underwritten valuation inputs, optionality double counting, market-expression mixing, proof-ladder gaps, and false precision.
+
+A writing-originated challenge is an attention signal only. Publishing still cannot mutate Belief, Odds, Human Decision, or Action.
+
+This is a deliberate purpose of the harness: publication should make the research easier to audit, not merely easier to read.
+
 ## Provider-agnostic workflow
 
 Build a brief and planner prompt:
@@ -144,7 +187,8 @@ The LM judge evaluates what is genuinely semantic:
 - proof-ladder discipline;
 - scenario discipline;
 - treatment of counter-evidence;
-- voice and pacing.
+- voice and pacing;
+- whether the draft is papering over a Research gap that should be challenged instead of polished.
 
 This split is intentional: semantic style judgment can be soft, but Research identity and publication authority stay hard.
 
