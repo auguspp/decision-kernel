@@ -1,0 +1,30 @@
+{
+  "source_research_snapshot_id": "1d890f85-1bf1-5ca8-b54b-dedf338783ff",
+  "reader_tension": "三花的基本面没有明显坏掉，但36.3元到底还要求机器人和液冷兑现多少利润？",
+  "headline_question": "跌跌不休的三花智控，36.3元贵不贵？",
+  "opening_contradiction": "股价持续回落，但核心经营和现金流仍有韧性，新业务也已经进入商业化阶段。跌了很多，不等于价格已经把未来预期清空。",
+  "selected_claims": [
+    "H1 revenue was about CNY16.9bn, deducted profit CNY2.15bn and OCF CNY2.50bn.",
+    "Post-H1 2027 forecasts cluster around CNY5.26-5.77bn.",
+    "Robot actuators were progressing through batch delivery/ramp; liquid-cooling products had some global customer supply.",
+    "Core growth is not hypergrowth and new-business economics remain unquantified.",
+    "CICC cut 2027 profit to CNY5.422bn for slower automotive growth; A/H 2027 PE context was about 28x/17x."
+  ],
+  "evidence_clearance": {
+    "c767343a-8a9c-5841-ac58-eb1fe26f56b7": "PUBLIC_SAFE",
+    "c016f87b-0042-532d-a29f-9749967a58eb": "PUBLIC_SAFE",
+    "f9b963f6-a536-5aa1-aea3-8f52abb9de99": "PUBLIC_SAFE",
+    "42091f91-7352-52d3-abf7-65c90f89fba4": "PUBLIC_SAFE"
+  },
+  "strongest_counterpoint": "如果三花核心业务本身就值得长期高估值，那么当前价格未必需要机器人贡献大量利润才能成立；新业务可以只是右侧期权。",
+  "editorial_verdict": "不要用跌幅判断便宜。36.3元是否有吸引力，取决于核心业务应该值多少，以及市场已经为尚未量化的机器人和液冷提前付了多少。",
+  "price_anchor": "CNY 36.3 — Human-provided publication anchor; verify against live market before publishing.",
+  "style_sample_ids": [
+    "hengtong_58",
+    "gigadevice_48_5",
+    "shengyi_3213"
+  ],
+  "target_cards": 9,
+  "human_state_policy": "OMIT",
+  "schema_version": 1
+}
