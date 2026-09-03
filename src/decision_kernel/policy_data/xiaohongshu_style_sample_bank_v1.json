@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "profile_id": "xiaohongshu-investment-v1",
+  "samples": [
+    {
+      "sample_id": "hengtong-expectation-repricing",
+      "company": "亨通光电",
+      "performance_label": "HIGH_READ",
+      "archetype": "EXPECTATION_REPRICING",
+      "title_pattern": "业绩翻倍，股价却腰斩：58元的亨通光电贵不贵？",
+      "reusable_lessons": [
+        "用业绩改善与股价腰斩的冲突开场，读者一开始就知道要解决哪个问题",
+        "先重建125元时市场买的身份重构，再讨论58元还剩哪些预期",
+        "把产品涨价、需求增长、高端业务分别拆开，明确哪些是周期、哪些可能长期",
+        "用情景利润和PE反推当前价格要求，而不是最后才补一个估值章节",
+        "结尾落在‘翅膀能否在周期后继续承重’，保留最难验证的部分"
+      ],
+      "failure_modes": [
+        "把业绩增长直接等同于身份重构完成",
+        "把产品目录或扩产当成已经兑现的高利润"
+      ]
+    },
+    {
+      "sample_id": "yunnan-germanium-industry-odds",
+      "company": "云南锗业",
+      "performance_label": "HUMAN_REFERENCE",
+      "archetype": "INDUSTRY_ODDS",
+      "title_pattern": null,
+      "reusable_lessons": [
+        "真正风险不是扩产能不能做成，而是高价和短缺能维持多久",
+        "用供给恢复速度与存储行业做对比，解释为什么同样的短缺叙事持续性不同",
+        "把资本开支和盈利看成对行业周期持续时间的押注",
+        "主观概率只在完整情景建立后出现，且明确不是确定性结论"
+      ],
+      "failure_modes": [
+        "只讲稀缺性和扩产，不讨论供给弹性",
+        "把当前高价默认成长期价格"
+      ]
+    },
+    {
+      "sample_id": "gigadevice-normalized-earnings",
+      "company": "兆易创新",
+      "performance_label": "HUMAN_REFERENCE",
+      "archetype": "NORMALIZED_EARNINGS",
+      "title_pattern": "扣非48.5亿，兆易创新暴跌后，真实价值到底在哪？",
+      "reusable_lessons": [
+        "先反推暴跌前市场大概交易了多少全年利润，再看半年业绩改变了什么",
+        "把Q2的快速提价、低成本库存和上游成本滞后拆开，避免把峰值利润年化",
+        "乐观情景必须列出同时成立的条件，不能把‘价格继续涨’当成‘利润继续跳’",
+        "价值区间来自利润性质和持续时间，而不是单一PE",
+        "最后把市场从‘150亿几乎确定’修正为‘150亿仍需验证’的认知变化说清楚"
+      ],
+      "failure_modes": [
+        "直接用强Q2线性外推全年",
+        "把周期峰值利润配长期成长估值"
+      ]
+    },
+    {
+      "sample_id": "dongshan-earnings-path-reunderwrite",
+      "company": "东山精密",
+      "performance_label": "HUMAN_REFERENCE",
+      "archetype": "IMPLIED_EARNINGS",
+      "title_pattern": "中报后再看东山精密，201元贵不贵？",
+      "reusable_lessons": [
+        "明确承认上一版判断哪里错了：不是PE给低，而是把未来盈利空间估低",
+        "中报真正的新信息不是‘半年赚30亿’，而是高毛利新业务正在改变利润结构",
+        "把2027和2028利润路径拆成普通、较强、极乐观三条，讨论当前价格对应哪条",
+        "同一个201元，因更高盈利路径的可信度变化而得到不同判断",
+        "风险集中在高毛利模块放量后毛利率能否守住，而不是泛泛罗列风险"
+      ],
+      "failure_modes": [
+        "因为价格没变就机械维持旧估值结论",
+        "把扩产计划本身当成利润已经实现"
+      ]
+    },
+    {
+      "sample_id": "shengyi-sotp-implied-earnings",
+      "company": "生益科技",
+      "performance_label": "HUMAN_REFERENCE",
+      "archetype": "IMPLIED_EARNINGS",
+      "title_pattern": "半年预赚33亿，跌停后的生益科技3213亿市值贵不贵？",
+      "reusable_lessons": [
+        "先把已上市子公司持股市值拆掉，再看其余业务隐含估值，避免集团口径混淆",
+        "用其余业务40到45亿年化利润对照2600亿隐含价值，直接暴露市场买的是未来利润中枢",
+        "高端CCL产品、扩产和认证分别属于不同证据层级，不能一步跳到订单和长期份额",
+        "趋势与假设分开：高端产品占比上升可有证据，整体利润率永久抬升仍是假设",
+        "悲观、基准、乐观情景把利润与估值倍数同时写清楚，避免只给一个目标值"
+      ],
+      "failure_modes": [
+        "把市场传闻认证当成已确认订单",
+        "在SOTP里重复计算已拆出的资产价值"
+      ]
+    },
+    {
+      "sample_id": "demingli-overloaded-negative",
+      "company": "德明利",
+      "performance_label": "LOW_READ",
+      "archetype": "NORMALIZED_EARNINGS",
+      "title_pattern": null,
+      "reusable_lessons": [
+        "研究问题本身可以很多，但发布时必须压成一个核心定价矛盾"
+      ],
+      "failure_modes": [
+        "峰值利润、库存收益、周期正常化、现金流、估值等多个问题并列为同级主线",
+        "文章像研究目录展开，读者需要自己拼出为什么继续读"
+      ]
+    }
+  ]
+}
