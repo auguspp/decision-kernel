@@ -3,6 +3,7 @@
 Status: **RESEARCH CHALLENGER SUPPORT / CASE-SPECIFIC / NO CARDINAL SUCCESS PROBABILITY / NO RECOMMENDATION**  
 Security: **三花智控 / 002050.SZ / 02050.HK**  
 Parent challenger: `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md`  
+Capital-sequence support: `docs/dogfood/sanhua-robot-commercialization-capital-sequence-2026-09-03.md`  
 Prepared against main: `9fb517c9592d4c5969907bdb7b7219f78097cdb5`  
 Investment Authority: **NONE**
 
@@ -35,7 +36,7 @@ This remains a Research challenger. It does not modify frozen Research, Human De
 | Load-bearing condition | Current status | What public evidence supports | What is still missing | Implication for 35亿元 |
 | --- | --- | --- | --- | --- |
 | **Downstream robot scale reaches ~1m annual units** | `MARKET_CONTEXT`, not Sanhua shipment fact | Tesla's 2025 annual update says Optimus Gen 3 is the first design intended for mass production, start of production is planned before end-2026, and the first line has **eventual planned capacity of 1m robots/year**. Tesla Q1/Q2 2026 materials still describe first-generation line installation / ramp rather than realized 1m output. | Realized annual production, sell-through / internal deployment, timing of ramp, and whether the sell-side Sanhua scenario maps to the same customer / architecture. | `1m` is no longer merely an arbitrary TAM number if used as a downstream **planned capacity reference**, but `1m realized annual output` remains unproven. |
-| **Sanhua is a qualified robot actuator supplier** | `FACT` | Sanhua 2026H1 IR says bionic-robot electromechanical actuator core products are progressing through **batch delivery and production-line ramp**. | Customer names, exact programs, product split, shipment count, allocation, mature production status. | Commercialization is real, but proof ladder remains below mature mass production. |
+| **Sanhua has reached batch delivery / production-line ramp** | `FACT` | Sanhua 2026H1 IR says bionic-robot electromechanical actuator core products are progressing through **batch delivery and production-line ramp**. Earlier primary evidence shows a progression from no designated customer in 2024 to key-customer co-development / prototype refinement in 2025. | Customer names, formal customer-specific qualified-source status, exact programs, product split, shipment count, allocation, mature production status. | Commercialization is real, but public evidence does **not** yet establish customer-specific qualification or durable mass-production allocation. |
 | **CNY50k value per robot is the mature billable content** | `ASSUMPTION / MARKET_CONTEXT` | Dongwu's Sanhua deep-dive describes actuator-system value at **CNY200k+ in early ramp**, declining to roughly **CNY50k at large scale**. | Company / customer price schedule, component-level ASPs, redesign effects, number of actuators per robot, customer-supplied content. | CNY50k is a **mature-price state**, not current disclosed ASP. |
 | **Price-down can be absorbed without destroying economics** | `NOT ESTABLISHED` | Tesla says it continuously negotiates supplier cost reductions, looks for lower-cost sources and redesigns parts to make them cheaper. Leaderdrive's own precision-transmission project modeled annual ASP decline of **3% for harmonic reducers and 5% for mechatronic products**. | Sanhua robot cost-down curve, automation savings, material savings, yield improvement, redesign / content-loss, annual customer price-down. | Price-down is structurally expected; margin cannot be held flat without an explicit cost-down bridge. |
 | **70% is Sanhua's durable mass-production allocation** | `ASSUMPTION` | The same Dongwu work that uses ~70% in the headline scenario also says Sanhua share **may gradually decline toward ~50% after large-scale production**. Tesla's company-wide procurement policy says it qualifies multiple suppliers for key components where sensible to reduce production risk. | Optimus-specific / customer-specific second-source policy, supplier qualification list, allocation by actuator type, contractual share, evidence that 70% persists after scale-up. | `CNY50k mature ASP × 70% share` mixes a mature-price state with a higher-share state unless separately justified. |
@@ -46,10 +47,11 @@ This remains a Research challenger. It does not modify frozen Research, Human De
 | **10% net margin is durable** | `ASSUMPTION` | Sell-side success-state input. Adjacent precision-component businesses can post 20s-30s gross margins, but ramp economics are volatile. | Robot-specific R&D, SG&A, depreciation, tax, warranty, financing, customer concentration, normalized utilization. | Net margin remains one of the main unsupported load-bearing assumptions. |
 | **Ramp utilization reaches a healthy steady state quickly** | `NOT ESTABLISHED` for Sanhua; `OUTSIDE-VIEW CONTRA` | Leaderdrive's theoretical harmonic-reducer utilization was **42.67% in 2024 and 67.76% in 2025**; it delayed its newer expansion project by two years partly because existing capacity utilization had been low. Nabtesco disclosed Tsu precision-reducer utilization of **65%** at 2024Q4 while China was at 100%. | Sanhua robot design capacity, current output, yield, shift pattern, uptime, utilization by line. | Installed capacity cannot be treated as shipped volume or mature margin. |
 | **Manufacturing scale automatically improves margin** | `INFERENCE: CONDITIONAL` | Harmonic Drive Systems' FY2025/26 operating profit recovered with higher factory utilization, price revisions and cost improvement. Nabtesco similarly identifies utilization as a major margin driver. | Sanhua-specific fixed-cost curve and price-down offsets. | Scale helps only if utilization and yield improve faster than ASP / content pressure. |
+| **Dedicated robot development capital is zero / immaterial** | `INFERENCE: NO`; realized amount `NOT ESTABLISHED` | Sanhua's 2023 GDR plan separately budgeted **CNY201.8m** for a robot electromechanical-actuator **R&D project**, including CNY51.8m R&D equipment and CNY142.65m project-development / other R&D inputs; the filing explicitly said the project added no production capacity and generated no direct economic benefit. | Actual robot-specific spending from own funds before / after the proposed fundraising; accounting treatment and cumulative realized development capital. | The later GDR plan was terminated, so CNY201.8m is a **planned development-capital blueprint, not realized invested capital**. But it demonstrates that the capital denominator begins before production PP&E. |
 | **Robot capacity is known from Sanhua's CNY3.8bn project** | `NOT ESTABLISHED` | Sanhua's 2024 agreement says at least **CNY3.8bn** for a combined **robot electromechanical actuator + domain-controller R&D and production base**; amount and progress were investment targets and uncertain. | Robot-only capital allocation, equipment list, rated capacity, project implementation details. | The CNY3.8bn headline cannot be assigned wholly to robot invested capital or divided by guessed robot capacity. |
-| **Robot capacity is known from the CNY700m intelligent-drive project** | `NOT ESTABLISHED` | The CNY700m project is explicitly a **mixed new-energy thermal-management + bionic-robot-component** facility. It includes land, buildings, equipment and working capital. 2026H1 report shows cumulative construction progress but not robot-only economics. | Robot share of buildings / equipment / WC and robot-specific rated output. | Useful evidence that new capacity requires real capital, but not a robot-only denominator. |
-| **Robot production is asset-light** | `OUTSIDE-VIEW CONTRA` | Leaderdrive's new precision-transmission project totals **CNY2.030bn**: 79.25% equipment purchase / installation and 14.96% initial working capital, for planned capacity of 1m new harmonic reducers + 0.2m mechatronic products. | Sanhua outsourcing vs in-house choice, equipment reuse, automation architecture, supplier-owned tooling. | Precision-actuation scale-up can be highly equipment- and working-capital-intensive. Do not assume capital-light economics. |
-| **Incremental invested capital required for 35亿元 is known** | `NOT ESTABLISHED` | No public robot-only Sanhua bridge closes fixed assets + WC + development capital. | Robot-only PP&E, capacity, utilization, working capital, capitalized / expensed development burden, maintenance capex. | `INCREMENTAL ROIC` cannot yet be computed honestly. |
+| **Robot capacity is known from Sanhua's CNY700m intelligent-drive project** | `NOT ESTABLISHED` | The CNY700m project is explicitly a **mixed new-energy thermal-management + bionic-robot-component** facility. It includes land, buildings, equipment and working capital. 2026H1 report shows cumulative construction progress but not robot-only economics. | Robot share of buildings / equipment / WC and robot-specific rated output. | Useful evidence that new capacity requires real capital, but not a robot-only denominator. |
+| **Robot production is asset-light** | `OUTSIDE-VIEW CONTRA` | Leaderdrive's new precision-transmission project totals **CNY2.030bn**: 79.25% equipment purchase / installation and 14.96% initial working capital, for planned capacity of 1m new harmonic reducers + 0.2m mechatronic products. Sanhua's own Hong Kong prospectus warns that robot-actuator expansion requires significant new production-facility investment and qualified personnel and creates depreciation, material, finance and labor costs. | Sanhua outsourcing vs in-house choice, equipment reuse, automation architecture, supplier-owned tooling. | Precision-actuation scale-up can be equipment-, people- and working-capital-intensive. Do not assume capital-light economics. |
+| **Incremental invested capital required for 35亿元 is known** | `NOT ESTABLISHED` | Public evidence now identifies separate development, mixed production-PP&E and working-capital layers, but no robot-only bridge closes them. | Realized robot development capital, pilot / test / tooling capital, robot-only PP&E, capacity, utilization, working capital and maintenance capex. | `INCREMENTAL ROIC` cannot yet be computed honestly. |
 | **CNY3.5bn accounting profit converts to owner cash** | `NOT ESTABLISHED` | No robot-specific cash-flow disclosure. | NOPAT, change in WC, growth capex, maintenance capex, R&D burden, cash taxes. | `OWNER ECONOMICS` remains unresolved even if net profit were achieved. |
 
 ---
@@ -247,6 +249,7 @@ This is `MARKET_CONTEXT` for the likely downstream procurement environment, **no
 
 ```text
 customer-specific supplier list
+formal customer-specific qualified-source status
 mandatory second source by actuator type
 Sanhua vs Tuopu allocation
 rotary vs linear split
@@ -281,12 +284,12 @@ robot revenue
 
 then:
 
-robot receivables
+realized robot development capital
++ pilot / validation / test / tooling capital
++ robot receivables
 + robot inventory
 - robot payables
 + robot PP&E
-+ tooling / test equipment
-+ development capital not already expensed
 = incremental invested capital
 
 incremental NOPAT
@@ -306,6 +309,7 @@ Current public evidence cannot fill this bridge with defensible Sanhua-specific 
 Therefore:
 
 ```text
+ROBOT REALIZED DEVELOPMENT CAPITAL = NOT ESTABLISHED
 ROBOT-SPECIFIC CAPACITY = NOT ESTABLISHED
 ROBOT YIELD = NOT ESTABLISHED
 ROBOT UTILIZATION = NOT ESTABLISHED
@@ -344,9 +348,9 @@ Highest-value next evidence, in order:
    - utilization / actual shipments.
 
 4. **Robot-specific capital evidence**
+   - realized development / R&D cash burden after the terminated GDR plan;
    - fixed assets / tooling / equipment assigned to robot;
    - working capital;
-   - R&D / development burden;
    - maintenance capex.
 
 5. **Realized margin evidence**
@@ -364,12 +368,20 @@ Until these are available, a tighter-looking numerical model would mostly hide u
 
 - 2026-08-27 investor-relations record — batch delivery / production-line ramp:  
   https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
+- 2024 exchange inquiry response — product architecture / no designated customer at that stage:  
+  https://static.cninfo.com.cn/finalpage/2024-09-26/1221289654.PDF
+- 2023 GDR fundraising feasibility analysis — planned CNY201.8m robot actuator R&D project / budget composition / no added capacity:  
+  https://static.cninfo.com.cn/finalpage/2023-06-21/1217108276.PDF
+- 2024 GDR termination announcement — planned fundraising route terminated:  
+  https://static.cninfo.com.cn/finalpage/2024-10-31/1221570947.PDF
+- 2025 Hong Kong prospectus — 180+ R&D team / key-customer co-development / prototype refinement before scalable commercialization / capital-risk language:  
+  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0613/2025061300017.pdf
 - 2024 future-industry-center agreement — CNY3.8bn robot actuator + domain controller mixed project:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=9763716&stockid=002050
 - Intelligent-drive future-industry-center project — mixed thermal-management + robot components; investment breakdown:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=11214247&stockid=002050
-- 2026H1 report — construction progress / mixed project evidence:  
-  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+- 2026H1 report — current commercialization / construction evidence:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
 - Sanhua / Leaderdrive strategic framework:  
   https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=8990501
 
@@ -430,6 +442,9 @@ The strongest current challenge is:
 1m downstream planned capacity
 != 1m realized robot output
 
+batch delivery / line ramp
+!= customer-specific durable allocation
+
 CNY50k mature billable content
 != CNY50k Sanhua value added
 
@@ -438,6 +453,9 @@ CNY50k mature billable content
 
 10% net margin scenario
 != 10% realized owner margin
+
+planned development budget
+!= realized robot invested capital
 
 35亿元 accounting profit
 != 35亿元 owner cash
