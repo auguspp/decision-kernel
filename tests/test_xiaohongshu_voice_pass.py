@@ -89,9 +89,10 @@ def test_voice_rewrite_prompt_uses_real_sentence_anchors_and_preserves_authority
     brief = _brief()
     draft = _draft(brief, text="这一页只推进同一个问题。")
     prompt = render_voice_rewrite_prompt(brief, _plan(brief), draft)
+    normalized = " ".join(prompt.split())
 
     assert "真正的问题，不是能不能暴利。而是能暴利多久" in prompt
     assert "产品目录只能证明" in prompt
     assert "Keep every paragraph's `kind` and `claim_ids` exactly unchanged" in prompt
     assert "Do not force every idea into balanced A/B symmetry" in prompt
-    assert "Do not turn the ending into a generic lesson about investing" in prompt
+    assert "Do not turn the ending into a generic lesson about investing" in normalized
