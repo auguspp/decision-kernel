@@ -173,6 +173,18 @@ Historical bars before Research creation remain useful context but are not actua
 
 The first real scheduled six-window batch has been reviewed mechanically. GigaDevice's 2026-07-21 → 2026-08-03 drawdown and Sanhua's 2026-08-19 `-7.10%` day both predate their Research creation and remain historical counterfactual probes, not actual current-v0 Radar observations.
 
+The same retained batch has now also been sliced by actual `ResearchSnapshot.created_at` to establish the first true prospective baseline:
+
+```text
+eligible post-Research daily observations = 10
+securities represented = 6
+largest absolute eligible daily move = 2.74% / CATL / 2026-09-02
+qualified price-anomaly label = NOT YET EARNED
+false-negative candidate = NOT YET EARNED
+```
+
+These ten observations are valid prospective Radar evidence, but they do **not** establish a detector threshold or prove that ±2.74% is ordinary noise. The useful result is narrower: the valid prospective corpus is no longer empty, and its first natural baseline is mechanically quiet relative to the larger pre-Research historical paths.
+
 The Human has frozen a broader alert preference:
 
 ```text
@@ -230,13 +242,14 @@ qualified HiThink history input = available
 short-lived shadow sampling = available
 research creation-time lineage = FIX PROPOSED / PR #138 / TESTS PASS
 first real scheduled batch = mechanically reviewed
+eligible post-Research baseline = 10 daily observations / 6 securities
 Human alert preference = frozen
 valid post-Research anomaly example = NOT YET EARNED
 false-negative candidate = NOT YET EARNED
 anomaly detector = NOT YET PROMOTED
 ```
 
-PR #137 (`radar/first-real-shadow-review`) preserves the first batch, eligibility correction, GigaDevice counterfactual probe, and Human alert-policy checkpoint. It remains non-authoritative until accepted / merged.
+PR #137 (`radar/first-real-shadow-review`) preserves the first batch, eligibility correction, GigaDevice counterfactual probe, Human alert-policy checkpoint, and the first 10-observation post-Research baseline. Latest `kernel-tests` passed; it remains non-authoritative until accepted / merged.
 
 ### Radar authority boundary
 
@@ -249,8 +262,8 @@ Radar may NOT create Fundamental Belief, Probability, Odds, Human Decision, Acti
 
 ## 6. Next work
 
-1. **Accumulate natural post-Research price windows** using `ResearchSnapshot.created_at` as the mechanical left boundary; do not substitute `as_of_datetime`.
-2. **Calibrate `qualified price anomaly` vs ordinary noise** from real cross-case windows; do not tune to GigaDevice or Sanhua historical examples.
+1. **Append natural post-Research price windows** to the existing 10-observation baseline using `ResearchSnapshot.created_at` as the mechanical left boundary; do not substitute `as_of_datetime`.
+2. **Calibrate `qualified price anomaly` vs ordinary noise** from real cross-case windows; do not turn the current 2.74% maximum into a threshold and do not tune to GigaDevice or Sanhua historical examples.
 3. **Look for false-negative candidates**: quieter post-Research paths followed by genuinely decision-relevant evidence.
 4. **Use the Human alert preference as delivery policy**, not as detector logic: followed + researched + qualified anomaly may alert; explicit no-longer-following suppresses.
 5. **Do not build the detector yet**; real post-Research evidence is still too thin.
@@ -300,6 +313,7 @@ For Sanhua specifically, do not upgrade unnamed-customer/exclusive-supply/alloca
 - `docs/dogfood/commitment-radar-v0-2026-09-03.md` — Commitment Radar lineage boundary.
 - `docs/dogfood/surprise-radar-v0-qualified-history-foundation-2026-09-03.md` and `docs/dogfood/surprise-radar-v0-shadow-sampling-2026-09-03.md` — Surprise Radar input / observation foundation.
 - PR #137 / `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — first real shadow-batch review + eligibility / alert-policy correction.
+- PR #137 / `docs/dogfood/surprise-radar-v0-first-post-research-baseline-2026-09-04.md` — first true prospective baseline: 10 eligible daily observations across six securities; no anomaly threshold promoted.
 - PR #137 / `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — frozen Human alert preference.
 - PR #137 / `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — retained filename; corrected GigaDevice counterfactual policy probe, **not a valid positive control**.
 - PR #138 / `src/decision_kernel/runtime/market_history_shadow.py` + `tests/test_market_history_shadow.py` — minimal Research creation-time lineage fix; **not authoritative until accepted / merged**.
@@ -312,11 +326,12 @@ Historical handoffs remain lineage only.
 
 ## 9. Recent state delta
 
+- **NEW — first true post-Research Surprise Radar baseline established.** The retained 2026-09-03 shadow batch yields 10 eligible daily observations across six securities after slicing by `ResearchSnapshot.created_at`; largest absolute move is CATL `-2.74%` on 2026-09-02. This is a baseline, not a threshold or anomaly label.
 - **NEW — real Surprise Radar lineage bug found from the first shadow review.** `ResearchSnapshot.as_of_datetime` is a PIT information cutoff, not the time Research came into existence; using it as the eligibility boundary can create false prospective history.
 - **NEW — PR #138 adds existing `ResearchSnapshot.created_at` to shadow `research_identity`.** No Research schema change; latest `kernel-tests` passed; PR is mergeable and ready for review.
 - **NEW — Human Surprise Radar alert preference frozen.** For a case with pre-existing Research that remains followed, a qualified price anomaly may alert by default; suppression requires an explicit Human statement that the case is no longer followed / no longer of interest.
 - **CHANGED — per-anomaly Human A/B alert labeling is no longer the primary Surprise Radar experiment.** The earlier “positive control / large-move Human IGNORE negative control” framing is retired for active followed researched cases.
-- **CHANGED — Surprise Radar experiment now targets signal quality.** Need real post-Research evidence to distinguish qualified anomalies from ordinary noise and to find false-negative candidates.
+- **CHANGED — Surprise Radar experiment now targets signal quality.** Need more real post-Research evidence to distinguish qualified anomalies from ordinary noise and to find false-negative candidates.
 - **UNCHANGED — GigaDevice July/August and Sanhua 2026-08-19 historical moves predate Research creation and cannot be promoted into current-v0 Radar evidence.**
 - **UNCHANGED — detector / score / automatic Research route / schema / investment authority remain unpromoted.**
 - **UNCHANGED — Sanhua Research remains STOP / REOPEN and PR #136 remains ready for review.**
