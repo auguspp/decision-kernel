@@ -148,21 +148,35 @@ The latest CATL buyback-progress disclosure remains another CATL capital-allocat
 
 Purpose: discover **post-Research price anomalies** in already-researched cases so the Human can allocate attention.
 
-Eligibility is Research-first:
+Eligibility is Research-first and uses the Research creation timestamp, not the PIT information cutoff:
 
 ```text
-frozen ResearchSnapshot exists before candidate anomaly
-+ anomaly occurs after Research freeze
+ResearchSnapshot.created_at exists before candidate anomaly
++ anomaly occurs after Research creation
 ```
 
-Historical bars before Research freeze remain useful context but are not actual current-v0 Radar observations.
+`ResearchSnapshot.as_of_datetime` is only the information-set cutoff used by that Research. It may be materially earlier than when the Research was actually created and must **not** be used as proof that Research already existed at the time of a historical price move.
 
-The first real scheduled six-window batch has been reviewed mechanically. GigaDevice's 2026-07-21 → 2026-08-03 drawdown and Sanhua's 2026-08-19 `-7.10%` day both predate their first Full Research packages, so neither is eligible as an actual current-v0 observation/control.
+This distinction was exposed by the first real shadow review. CATL, for example, has an older PIT `as_of_datetime` but a 2026-09-02 `created_at`. The original `market-history-shadow` retained snapshot id / as-of / hash but omitted `created_at`, so a retrospective review could mistake old price bars for prospective post-Research observations.
 
-The Human has now frozen a broader alert preference:
+PR #138 (`radar/shadow-research-created-at`) is the minimal lineage fix:
 
 ```text
-CASE HAS PRE-EXISTING FROZEN RESEARCH = YES
+shadow research_identity += research_created_at
+ResearchSnapshot schema change = NO
+kernel authority change = NO
+latest kernel-tests = SUCCESS
+PR = mergeable / ready for review
+```
+
+Historical bars before Research creation remain useful context but are not actual current-v0 Radar observations.
+
+The first real scheduled six-window batch has been reviewed mechanically. GigaDevice's 2026-07-21 → 2026-08-03 drawdown and Sanhua's 2026-08-19 `-7.10%` day both predate their Research creation and remain historical counterfactual probes, not actual current-v0 Radar observations.
+
+The Human has frozen a broader alert preference:
+
+```text
+CASE HAS PRE-EXISTING RESEARCH = YES
 CASE REMAINS FOLLOWED = YES
 QUALIFIED PRICE ANOMALY = YES
 → MAY ALERT BY DEFAULT
@@ -214,6 +228,7 @@ Current state:
 ```text
 qualified HiThink history input = available
 short-lived shadow sampling = available
+research creation-time lineage = FIX PROPOSED / PR #138 / TESTS PASS
 first real scheduled batch = mechanically reviewed
 Human alert preference = frozen
 valid post-Research anomaly example = NOT YET EARNED
@@ -234,7 +249,7 @@ Radar may NOT create Fundamental Belief, Probability, Odds, Human Decision, Acti
 
 ## 6. Next work
 
-1. **Accumulate natural post-Research price windows** using each exact ResearchSnapshot freeze time as the left boundary.
+1. **Accumulate natural post-Research price windows** using `ResearchSnapshot.created_at` as the mechanical left boundary; do not substitute `as_of_datetime`.
 2. **Calibrate `qualified price anomaly` vs ordinary noise** from real cross-case windows; do not tune to GigaDevice or Sanhua historical examples.
 3. **Look for false-negative candidates**: quieter post-Research paths followed by genuinely decision-relevant evidence.
 4. **Use the Human alert preference as delivery policy**, not as detector logic: followed + researched + qualified anomaly may alert; explicit no-longer-following suppresses.
@@ -262,6 +277,7 @@ no forced cardinal probabilities
 no conceptual framework without real case pressure
 no Surprise Radar threshold tuned to one historical example
 no pre-Research price window promoted as current Radar evidence
+no as_of_datetime used as Research-existence timestamp
 no per-anomaly Human alert permission loop for actively followed researched cases
 ```
 
@@ -286,6 +302,7 @@ For Sanhua specifically, do not upgrade unnamed-customer/exclusive-supply/alloca
 - PR #137 / `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — first real shadow-batch review + eligibility / alert-policy correction.
 - PR #137 / `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — frozen Human alert preference.
 - PR #137 / `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — retained filename; corrected GigaDevice counterfactual policy probe, **not a valid positive control**.
+- PR #138 / `src/decision_kernel/runtime/market_history_shadow.py` + `tests/test_market_history_shadow.py` — minimal Research creation-time lineage fix; **not authoritative until accepted / merged**.
 - `docs/dogfood/odds-semantic-replay-cmb-v0-2026-09-03.md` — Odds semantic / horizon pressure.
 - `docs/prospective-decision-outcome-capture-protocol-2026-09-03.md` — prospective longitudinal capture discipline.
 
@@ -295,9 +312,11 @@ Historical handoffs remain lineage only.
 
 ## 9. Recent state delta
 
-- **NEW — Human Surprise Radar alert preference frozen.** For a case with pre-existing frozen Research that remains followed, a qualified price anomaly may alert by default; suppression requires an explicit Human statement that the case is no longer followed / no longer of interest.
+- **NEW — real Surprise Radar lineage bug found from the first shadow review.** `ResearchSnapshot.as_of_datetime` is a PIT information cutoff, not the time Research came into existence; using it as the eligibility boundary can create false prospective history.
+- **NEW — PR #138 adds existing `ResearchSnapshot.created_at` to shadow `research_identity`.** No Research schema change; latest `kernel-tests` passed; PR is mergeable and ready for review.
+- **NEW — Human Surprise Radar alert preference frozen.** For a case with pre-existing Research that remains followed, a qualified price anomaly may alert by default; suppression requires an explicit Human statement that the case is no longer followed / no longer of interest.
 - **CHANGED — per-anomaly Human A/B alert labeling is no longer the primary Surprise Radar experiment.** The earlier “positive control / large-move Human IGNORE negative control” framing is retired for active followed researched cases.
 - **CHANGED — Surprise Radar experiment now targets signal quality.** Need real post-Research evidence to distinguish qualified anomalies from ordinary noise and to find false-negative candidates.
-- **UNCHANGED — eligibility remains Research-first.** GigaDevice July/August and Sanhua 2026-08-19 historical moves predate their ResearchSnapshots and cannot be promoted into current-v0 Radar evidence.
+- **UNCHANGED — GigaDevice July/August and Sanhua 2026-08-19 historical moves predate Research creation and cannot be promoted into current-v0 Radar evidence.**
 - **UNCHANGED — detector / score / automatic Research route / schema / investment authority remain unpromoted.**
 - **UNCHANGED — Sanhua Research remains STOP / REOPEN and PR #136 remains ready for review.**
