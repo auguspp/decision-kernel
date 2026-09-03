@@ -173,7 +173,7 @@ def test_real_catl_capital_allocation_batch_can_bind_to_exact_prior_commitment()
     assert lineage.target_text in snapshot.open_questions
     assert lineage.evidence_artifact_ids == (
         "7827cfaf-96d6-5649-8bee-73683d07db39",
-        "0d9ab86b-4f2a-54cb-a405-431ff0c8a681",
+        "97ab96be-ff9a-5769-9266-e952c7cc4e0e",
     )
 
 
