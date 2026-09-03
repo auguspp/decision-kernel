@@ -1,7 +1,7 @@
 # Decision Kernel — Current Project State
 
 Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW SCHEMA**  
-Updated: **2026-09-03**  
+Updated: **2026-09-04**  
 Repository: `auguspp/decision-kernel`
 
 ## Operating rule
@@ -115,13 +115,15 @@ Frozen artifacts own the details. This table is navigation only.
 | Case | Current state | Human Decision / Action | Next hinge | Authoritative pointer |
 | --- | --- | --- | --- | --- |
 | **GigaDevice / 603986.SH** | Cycle-amplified fabless platform; longer specialty-memory duration + higher post-cycle earnings floor remain the live thesis. Probability knowledge is partial / ordinal; full cardinal distribution not established. | **CONDITIONAL BUY**: ~CNY350 re-underwrite; CNY320–335 first-entry band only if thesis survives. **Action: NOT EXECUTED.** | Duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory, 2030 earnings floor. | `docs/decisions/603986-gigadevice-human-decision-2026-09-03.md` |
-| **Sanhua / 002050.SZ** | Qualified thermal-management franchise with auditable observable base; robot / liquid-cooling future economics remain materially less mature. Current price is not “cheap base + free optionality.” | **CONDITIONAL BUY**: first tranche around CNY30. **Action: NOT EXECUTED.** | Core revenue / margin / cash conversion / capex-ROIC must remain intact; new-business volume, margin, capital intensity and owner economics must become measurable before optionality earns stronger Base treatment. | `docs/decisions/002050-sanhua-human-decision-2026-09-03.md` |
+| **Sanhua / 002050.SZ** | Observable thermal-management base remains auditable. Robot operating-economics challenger in draft PR #136 has reached a **reasonable public-evidence boundary / stop state**. `FACT`: batch delivery + production-line ramp; Thailand BOI **THB1.8bn humanoid-actuator planned capital** at a 100%-consolidated listed-company subsidiary; current-stage external harmonic-reducer validation / small-batch supply into Sanhua; the specific market rumor of a **large robot order was formally denied**. Group-level hollow-cup-motor JV capability is not listed Sanhua equity. Robot revenue / GM, rated capacity, realized robot-only capital, mature allocation, mature make-buy, incremental ROIC and owner cash remain `NOT ESTABLISHED`. | **CONDITIONAL BUY**: first tranche around CNY30. **Action: NOT EXECUTED.** | **STOP by default. REOPEN only** on real new evidence in five buckets: (1) named customer / allocation / second source / realized volume; (2) mature robot architecture / module quotation / price-down; (3) robot-specific rated capacity / shipments / yield / utilization; (4) listed-company make-buy / related-party product identity / transfer-pricing economics; (5) robot-specific revenue / margin / PP&E / tooling / working capital / maintenance capex. | `docs/decisions/002050-sanhua-human-decision-2026-09-03.md` |
 | **YTO / 600233.SH** | Research complete enough to stop current loop; franchise / network economics and reinvestment remain load-bearing. Cardinal probability not established; price remains `QUIET` for Fundamental Belief. | **No Human investment decision. Action: NONE.** | Frozen `QUIET / REOPEN / FRAME CHANGE` evidence triggers; reopen only on discriminating operating / network / owner-cash evidence. | `docs/dogfood/yto-evidence-trigger-design-2026-09-03.md` |
 | **Micron / MU** | SCA / AI-memory may improve cycle economics; company-wide structural rebase remains unproven. | **WAIT / DO NOT BUY FOR NOW** under current Human U.S.-equity constraint. **Action: NO_ACTION.** | **2026-09-30 FY2026/FQ4 earnings**: SCA floor, HBM, FY27 GM, capex / depreciation, normalized FCF, incremental ROIC. | `docs/decisions/MU-micron-human-wait-validation-2026-09-03.md` |
 | **Midea / 000333.SZ** | Mature high-ROE global consumer-industrial franchise; owner-return model is better expressed through retention × incremental ROIC than narrative-frame proliferation. | **No Human investment decision. Action: NONE.** | Smart Home durability, overseas OBM economics, B2B incremental ROIC, normalized owner cash, true net share shrinkage. | `docs/dogfood/midea-compounder-decision-hygiene-zero-schema-2026-09-03.md` |
 | **Xiamen Tungsten / 600549.SH** | Historical Reference-Frame failure negative control; corrected resource / integrated-cycle frame remains the process guard. | **Not a current action candidate. Action: NONE.** | Reopen only if new evidence can map tungsten price + self-sufficiency + ownership / quota / capex into attributable through-cycle owner cash. | `docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md` |
 
 For broader live-case navigation, use `docs/live-decision-book.md`; do not copy its full content here.
+
+Sanhua's current mutable Research is in **draft PR #136** on branch `research/sanhua-robot-operating-economics-challenger`. The current pass is stopped at the public-evidence boundary. It is **not authoritative over frozen lineage until accepted / merged**. The branch was prepared against the pre-sync main and is now behind the mutable state-index commits; before any further edits or merge attempt, re-read / reconcile latest `main` first.
 
 ---
 
@@ -188,6 +190,7 @@ Decision Inbox attention is not the same thing as a Surprise Radar alert.
 3. **Prefer prospective events to framework work** — real disclosure / resolution / price observation relevant to Odds / Human Decision / Action / Outcome outranks another conceptual framework.
 4. **Freeze longitudinal evidence promptly** — when a Human Decision, confirmed Action, Outcome, falsifier, or resolution event occurs, preserve the appropriate immutable lineage before retrospective interpretation can rewrite it.
 5. **Research strengthening remains available under case pressure** — operating-economics depth, outside-view calibration, incremental ROIC, and accounting contradiction work should be earned by live cases rather than promoted into a generic Research v2 program by default.
+6. **Sanhua robot Research Challenger = STOP / REOPEN** — do not keep searching to make the report look complete. Reopen PR #136 only when primary evidence can change one of the five explicit evidence buckets above. Do not treat the sell-side CNY3.5bn state as Research truth; do not assign a cardinal success probability; do not promote the case-specific failure into generic method unless another real case independently reproduces it.
 
 ---
 
@@ -207,6 +210,13 @@ no new conceptual framework without real case pressure
 ```
 
 Also do not infer historical Human intent from trades or price paths, and do not use market movement alone as Outcome attribution.
+
+For Sanhua specifically:
+
+- do not upgrade unnamed-customer / exclusive-supply / allocation / volume claims from secondary supply-chain reporting when issuer, customer, exchange or supplier filings do not establish them;
+- existing customer relationships in another product category do not prove robot-component supply;
+- group-level manufacturing capability does not equal listed-company value capture when the relevant JV / entity sits outside listed Sanhua's equity perimeter;
+- capacity ambition, project investment and factory readiness do not equal realized robot output, utilization or owner return.
 
 ---
 
@@ -229,6 +239,9 @@ Historical handoffs remain available for lineage investigation only; they are no
 
 ## 9. Recent state delta
 
-- **NEW** — `docs/project-state.md` becomes the single default cross-conversation current-state index; per-chat long handoffs leave the normal recovery path.
-- **CHANGED** — project-level priority is Attention Radar + Radar-assisted heterogeneous prospective cases + real longitudinal evidence; further Research Method / schema expansion is de-prioritized unless a real case earns it.
-- **UNCHANGED** — frozen lineage authority, Human investment authority, Constitution / schema freeze, Evidence→Belief and Price→Odds doctrine remain intact.
+- **NEW — Sanhua robot operating-economics challenger in draft PR #136 has reached the current public-evidence boundary.** Research now explains the industrial proof obligations behind the sell-side CNY3.5bn state without replacing them with guessed numbers.
+- **NEW — Sanhua evidence upgrades:** batch delivery + line ramp = `FACT`; Thailand BOI THB1.8bn humanoid-actuator planned capital inside listed-company consolidation = `FACT`; current-stage external harmonic-reducer validation / small-batch supply into Sanhua = `FACT`; large-robot-order rumor = formally denied. Robot revenue / GM, rated capacity, realized robot-only invested capital, mature allocation / make-buy, incremental ROIC and owner cash remain `NOT ESTABLISHED`.
+- **NEW — corporate-perimeter boundary is load-bearing.** The hollow-cup-motor JV discussed at group level is not owned by listed Sanhua; group capability cannot be silently counted as listed-company manufacturing economics.
+- **CHANGED — Sanhua next state is STOP / REOPEN, not continuous research.** Reopen only on one of five explicit primary-evidence buckets; otherwise preserve the boundary rather than filling unknowns.
+- **CHANGED — PR #136 branch is behind the mutable state-index commits on `main`.** Before further Research edits or merge preparation, re-read / reconcile latest `main`; no Research conclusion is superseded by those state-only commits.
+- **UNCHANGED** — project-level Attention Radar priority, frozen lineage authority, Human investment authority, Constitution / schema freeze, Evidence→Belief and Price→Odds doctrine remain intact.
