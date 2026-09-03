@@ -36,7 +36,7 @@ Investment Authority remains `NONE`.
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
 | --- | --- | --- | --- | --- |
 | **三花智控 / 002050.SZ** | Qualified thermal-management franchise; core is relatively auditable; robot / liquid cooling remain upside until measurable economics exist. | **CONDITIONAL BUY** — first tranche around **CNY30**; intended evaluation window **~3–6 months after actual execution**. | **NOT YET EXECUTED** | Price may satisfy the condition only if core revenue / margin, cash conversion and capex / ROIC remain intact; optionality must not become necessary Base. |
-| **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**. | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** first-entry band only if thesis survives. | **NOT YET EXECUTED** | At ~350 re-underwrite duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory and 2030 earnings floor. |
+| **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**. Analysis-divergence dogfood retains only **partial / ordinal** probability knowledge; full cardinal probability remains unqualified. | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** first-entry band only if thesis survives. | **NOT YET EXECUTED** | At ~350 re-underwrite duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory and 2030 earnings floor. |
 | **Micron / MU / NASDAQ** | Memory oligopoly potentially transitioning toward contracted strategic AI-memory economics; SCA trough cushioning supported, company-wide earnings rebase unproven. | **WAIT / DO NOT BUY FOR NOW** because Human is temporarily not buying U.S. equities; this is not bearish Micron Belief. | **NO_ACTION** | **2026-09-30 FY2026/FQ4 earnings**: SCA coverage / floor, HBM, FY27 GM, capex / depreciation, normalized FCF and incremental ROIC. |
 | **圆通速递 / 600233.SH** | Scaled franchised network with improving efficiency; durable low-reinvestment compounder transition possible but unproven; franchise economics load-bearing. | **NO HUMAN INVESTMENT DECISION** | **NONE** | **Evidence-driven only.** Price is `QUIET`; use frozen YTO `QUIET / REOPEN / FRAME CHANGE` trigger design. |
 | **美的集团 / 000333.SZ** | Mature high-ROE global consumer-industrial franchise; owner return depends on incremental ROIC, dividends and **true net share shrinkage**, not gross buybacks. | **NO HUMAN INVESTMENT DECISION** | **NONE** | Evidence-driven: Smart Home durability, overseas OBM economics, B2B incremental ROIC, normalized owner cash, and cancellation / incentive-adjusted diluted share count. No price trigger yet. |
@@ -77,6 +77,7 @@ FIRST ENTRY = CNY320–335/share
 POSITION STEP = first tranche
 ACTION = NOT YET EXECUTED
 HUMAN EVALUATION HORIZON = NOT YET SPECIFIED
+PROBABILITY QUALIFICATION = PARTIAL / ORDINAL_ONLY
 CARDINAL PROBABILITY = not established
 NUMERICAL ODDS = withheld under current Decision Hygiene state
 ```
@@ -91,6 +92,7 @@ Authoritative lineage:
 - `docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md`
 - `docs/dogfood/gigadevice-first-entry-reverse-underwriting-2026-09-03.md`
 - `docs/dogfood/gigadevice-specialty-memory-duration-underwriting-2026-09-03.md`
+- `docs/dogfood/gigadevice-analysis-divergence-v0-2026-09-03.md`
 - `docs/decisions/603986-gigadevice-human-decision-2026-09-03.md`
 
 ### Micron
