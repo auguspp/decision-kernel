@@ -31,8 +31,13 @@ jobs:
       - name: Build Decision Inbox
         shell: bash
         run: |
+          # Human-facing Inbox inputs are deliberately curated. Do not replace
+          # this list with dogfood/*.json: a historical mechanics fixture can
+          # remain useful for replay without retaining current Odds eligibility.
           decision-kernel build-inbox \
-            dogfood/*.json \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/601088-shenhua.json \
             research_cases/603986-gigadevice-deep-research-v2.json \
             research_cases/002050-sanhua-deep-research-v1.json
       - name: Capture Surprise Radar market-history shadow
