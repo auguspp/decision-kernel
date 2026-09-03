@@ -2,214 +2,266 @@
 
 Status: **RESEARCH CHALLENGER / PRICE-IMPLIED OPTIONALITY / NO TOTAL-COMPANY CARDINAL ODDS**  
 Security: **三花智控 / 002050.SZ / 02050.HK**  
-Parent core underwriting: `docs/dogfood/sanhua-core-valuation-underwriting-2026-09-03.md`  
+Parent underwriting: `docs/dogfood/sanhua-core-valuation-underwriting-2026-09-03.md`  
 Publication anchor supplied by Human: **CNY36.3/share**  
 Investment Authority: **NONE**
 
 ## Executive verdict
 
-The core-underwriting repair established that a material part of CNY36.3 is not explained by normalized observable refrigeration + automotive economics.
+The parent underwriting established that CNY36.3 contains a material price component above normalized observable operating earnings.
 
 This note closes the next question:
 
-> What must the prepaid future actually earn for CNY36.3 to be justified?
+> What future economics must that prepaid price represent, and what does the answer mean in yuan per share?
 
-The answer should be expressed back in **share price**, not only in hundreds of billions of market value.
-
-Using the parent underwriting's central core anchor:
+Central diagnostic:
 
 ```text
-2027 normalized core earning power = CNY4.9bn
-central core P/E = 18-20x
-core value/share = CNY21.0-23.4
+2027 normalized observable-base earning power = CNY4.9bn
+central base P/E = 18-20x
+base value/share = CNY21.0-23.4
+midpoint at 19x = CNY22.2/share
 current price = CNY36.3
-residual price/share = CNY12.9-15.3
+midpoint residual = about CNY14.1/share
 ```
 
-A useful midpoint is:
+The residual is **not robot value**.
+
+It can contain:
 
 ```text
-CNY4.9bn × 19x = CNY93.1bn core equity value
-core value/share ≈ CNY22.2
-residual at CNY36.3 ≈ CNY14.1/share
+extra duration / quality above the normalized base
++ incremental liquid-cooling economics above the already embedded base
++ robot economics
++ A-share market-expression premium
 ```
 
-The residual is **not robot value**. It is the price of all economics above normalized core: extra core duration, liquid cooling, robot actuators, and A-share market-expression premium.
+The central Research conclusion is:
 
-But the residual can still be reverse-underwritten.
+> Under a transparent end-2030 / 25x / 9% reverse-underwriting diagnostic, CNY36.3 requires roughly 31.5-37.2亿元 of durable incremental operating profit if the whole residual must ultimately be earned by future business economics. That scale is very close to Dongwu Securities' 35亿元 robot success-state scenario.
 
-## 1. A sell-side robot success-state anchor exists
+That does not mean the scenario will happen. It means current price is already asking for economics on roughly that scale.
 
-Dongwu Securities uses a robot success-state scenario based on:
+## 1. Scope correction: the observable base may already contain some liquid cooling
+
+The parent note used refrigeration + automotive economics to build the CNY4.7-5.1bn 2027 base range.
+
+But company disclosure places data-center liquid cooling inside the refrigeration business discussion. The 2026H1 report says liquid-cooling applications already cover primary-side, CDU and server-cabinet scenarios.
+
+CITIC Construction Investment's 2026-08-31 report further estimates that related liquid-cooling revenue could reach roughly CNY2-3bn in 2026. That estimate is sell-side context, not company guidance.
+
+Sources:
+- https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+- https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/841477655686/index.phtml
+
+Therefore:
 
 ```text
-1.0m units annual robot output
+CNY4.7-5.1bn observable-base earning power
+!=
+perfectly pure old refrigeration + automotive earnings
+```
+
+It may already contain some currently commercialized liquid-cooling revenue / profit inside reported segment economics.
+
+The correct residual identity is therefore:
+
+```text
+current price
+=
+observable base already earning money
++ future incremental liquid-cooling value above that base
++ robot value
++ extra duration / quality premium
++ market-expression premium
+```
+
+Do **not** add the whole liquid-cooling business again on top of the base.
+
+## 2. A sell-side robot success-state anchor
+
+Dongwu Securities uses the following success-state arithmetic:
+
+```text
+1.0m annual robot units
 × CNY50,000 actuator-assembly value per robot
 × 70% Sanhua share
 × 10% net margin
 = CNY3.5bn / 35亿元 profit
 ```
 
-This is **sell-side scenario arithmetic**, not company guidance and not a verified customer commitment.
-
-The same report frames the 1.0m-unit benchmark as a downstream overseas customer's pre-2030 production target.
+The report frames the 1.0m-unit benchmark around an overseas downstream customer's pre-2030 production target.
 
 Sources:
 - https://www.sdyanbao.com/detail/968768
 - https://finance.sina.com.cn/stock/bxjj/2026-03-25/doc-inhseqhc9850810.shtml
 
-Current company evidence is much earlier in the proof ladder:
+This is **sell-side scenario arithmetic**.
 
-- 2026H1 robot actuator core products are progressing through batch delivery and production-line ramp;
-- liquid-cooling products cover primary loop, CDU and server-cabinet applications;
-- the company states that some liquid-cooling products are supplied to global customers.
+It is not Sanhua guidance, not a customer commitment, and not expected earnings.
 
-Sources:
-- https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+Company evidence is earlier in the proof ladder. In 2026H1 the company says robot actuator core products are progressing through batch delivery and production-line ramp.
+
+Source:
 - https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
-- https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=10001452&gather=1&id=12433636
 
-Therefore `CNY3.5bn robot profit` is useful as a **success-state reference**, not as expected earnings.
+So 35亿元 is useful as a success-state reference, not as a probability-weighted forecast.
 
-## 2. Convert future optionality profit into today's share price
+## 3. Translate future profit into today's share price
 
-To compare a 2030-style success state with a 2026 price, use a transparent sensitivity rather than pretending there is one canonical option value.
-
-Central publication diagnostic:
+Publication diagnostic assumptions:
 
 ```text
-option profit horizon = end-2030
+future optionality profit horizon = end-2030
 horizon from 2026-09-03 ≈ 4.33 years
-required return / discount rate = 9%
-mature option-business P/E = 20x / 25x / 30x sensitivity
+discount rate = 9%
+mature optionality P/E sensitivity = 20x / 25x / 30x
 shares ≈ 4.1955bn
 ```
 
-The 9% discount rate and terminal P/E are **assumptions for reverse underwriting**, not Research facts.
+These are reverse-underwriting assumptions, not canonical valuation inputs.
 
 At 9%, the 4.33-year discount factor is about 0.689.
 
-For every **CNY1.0bn / 10亿元** of durable 2030 optionality profit, today's implied share-price contribution is approximately:
+For each **10亿元** of durable 2030 incremental profit, today's share-price contribution is approximately:
 
-| 2030 mature P/E | Today value of 10亿元 profit | Per-share value today |
+| Mature P/E | Value today | Per-share contribution |
 | ---: | ---: | ---: |
-| 20x | CNY13.8bn | **CNY3.28/share** |
-| 25x | CNY17.2bn | **CNY4.10/share** |
-| 30x | CNY20.7bn | **CNY4.92/share** |
+| 20x | CNY13.8bn | **CNY3.28** |
+| 25x | CNY17.2bn | **CNY4.10** |
+| 30x | CNY20.7bn | **CNY4.92** |
 
-This creates a simple price bridge:
+Central price bridge:
 
 ```text
-Today's share price
-≈ core value/share
-+ discounted value/share of future optionality profit
+CNY22.2/share observable-base midpoint
++ every 10亿元 durable 2030 incremental profit ≈ CNY4.1/share
 ```
 
-It deliberately excludes a separate arbitrary TAM premium.
+under the 25x / 9% diagnostic.
 
-## 3. Reverse CNY36.3 into required 2030 optionality profit
+## 4. Reverse CNY36.3 into required future profit
 
-Using the central `CNY4.9bn` core earnings anchor:
+Using CNY4.9bn observable-base earnings:
 
-### Core at 18x
+### Base at 18x
 
 ```text
-core value/share ≈ CNY21.0
+base value/share ≈ CNY21.0
 residual ≈ CNY15.3/share
 ```
 
-To fill that residual, required durable 2030 optionality profit is approximately:
+Required 2030 durable incremental profit if operating economics must fill the whole residual:
 
-| Mature optionality P/E | Required 2030 profit |
+| Mature P/E | Required profit |
 | ---: | ---: |
-| 20x | **CNY4.65bn / 46.5亿元** |
-| 25x | **CNY3.72bn / 37.2亿元** |
-| 30x | **CNY3.10bn / 31.0亿元** |
+| 20x | **46.5亿元** |
+| 25x | **37.2亿元** |
+| 30x | **31.0亿元** |
 
-### Core at 20x
+### Base at 20x
 
 ```text
-core value/share ≈ CNY23.4
+base value/share ≈ CNY23.4
 residual ≈ CNY12.9/share
 ```
 
-Required durable 2030 optionality profit:
-
-| Mature optionality P/E | Required 2030 profit |
+| Mature P/E | Required profit |
 | ---: | ---: |
-| 20x | **CNY3.94bn / 39.4亿元** |
-| 25x | **CNY3.15bn / 31.5亿元** |
-| 30x | **CNY2.63bn / 26.3亿元** |
+| 20x | **39.4亿元** |
+| 25x | **31.5亿元** |
+| 30x | **26.3亿元** |
 
-Therefore, under the central core band and a 25x mature optionality multiple, CNY36.3 requires roughly:
+At the central 25x optionality diagnostic:
 
 ```text
-CNY3.15-3.72bn
-=
-31.5-37.2亿元
+CNY36.3 requires about 31.5-37.2亿元
+of durable 2030 incremental operating profit
 ```
 
-of durable 2030 **combined optionality profit** if the entire residual is assigned to future operating economics.
+if the entire residual is treated as future operating value.
 
-That is strikingly close to Dongwu's **35亿元 robot success-state** scenario.
+This is a price-implied requirement, not a forecast.
 
-This does **not** prove the market is pricing exactly that robot scenario. It shows the scale of future economics required by the current price.
+## 5. Convert the 35亿元 robot success state back into price
 
-## 4. Convert the sell-side 35亿元 robot success state back into today's share price
+Assume the Dongwu 35亿元 robot success-state profit is reached at the end-2030 horizon.
 
-Assume the full CNY3.5bn robot success-state profit is reached at the end-2030 horizon.
+Its present value per share is approximately:
 
-Discounting only a terminal equity value at 9% gives today's robot contribution:
+| 2030 robot P/E | Robot value/share today |
+| ---: | ---: |
+| 20x | **CNY11.49** |
+| 25x | **CNY14.36** |
+| 30x | **CNY17.23** |
 
-| 2030 robot P/E | Robot value today | Robot value/share today |
-| ---: | ---: | ---: |
-| 20x | CNY48.2bn | **CNY11.49/share** |
-| 25x | CNY60.3bn | **CNY14.36/share** |
-| 30x | CNY72.3bn | **CNY17.23/share** |
+Add that to different base P/E assumptions:
 
-Add that to the central core values:
-
-| Core P/E / core price | + robot @20x | + robot @25x | + robot @30x |
+| Base P/E / base price | + robot @20x | + robot @25x | + robot @30x |
 | --- | ---: | ---: | ---: |
 | 18x / CNY21.0 | **CNY32.5** | **CNY35.4** | **CNY38.3** |
 | 19x / CNY22.2 | **CNY33.7** | **CNY36.6** | **CNY39.4** |
 | 20x / CNY23.4 | **CNY34.8** | **CNY37.7** | **CNY40.6** |
 | 22x / CNY25.7 | **CNY37.2** | **CNY40.1** | **CNY42.9** |
 
-The cleanest publication diagnostic is the midpoint:
+The clean midpoint is:
 
 ```text
-core: CNY4.9bn × 19x ≈ CNY22.2/share
+observable base: CNY4.9bn × 19x ≈ CNY22.2/share
 +
-robot sell-side success state: CNY3.5bn × 25x, discounted to today ≈ CNY14.4/share
+Dongwu robot success state: CNY3.5bn × 25x discounted to today ≈ CNY14.4/share
 =
 CNY36.6/share
 ```
 
-That is almost the Human publication anchor of **CNY36.3**.
+That is almost the Human publication anchor of CNY36.3.
 
-Therefore, under these midpoint assumptions:
+Therefore:
 
-> CNY36.3 is already close to `central core + full sell-side robot success state`.
+> Under midpoint assumptions, CNY36.3 is already close to `observable base + full Dongwu robot success-state present value`.
 
-There is very little room to describe robot as a free option under that framing.
+## 6. Reverse the robot scenario into units and price
 
-## 5. Partial-success price map
-
-A price map is more informative than only quoting the 35亿元 success state.
-
-Using:
+Dongwu's assumptions imply:
 
 ```text
-core = CNY4.9bn × 19x = CNY22.2/share
-option horizon = end-2030
-option mature P/E = 25x
-discount rate = 9%
+1.0m units → 35亿元 robot profit
+100k units → 3.5亿元 robot profit
 ```
 
-then every additional 10亿元 of durable 2030 optionality profit adds about **CNY4.10/share** today.
+Under the same central 25x / 9% price diagnostic, every additional **100k annual units** contributes roughly:
 
-| Durable 2030 optionality profit | Implied price today |
+```text
+3.5亿元 profit
+→ about CNY1.44/share today
+```
+
+Starting from the CNY22.2/share observable-base midpoint:
+
+| Robot annual output under Dongwu ASP/share/margin assumptions | Robot profit | Implied price today |
+| ---: | ---: | ---: |
+| 0 | 0 | **CNY22.2** |
+| 500k | 17.5亿元 | **CNY29.4** |
+| 700k | 24.5亿元 | **CNY32.2** |
+| 800k | 28.0亿元 | **CNY33.7** |
+| 900k | 31.5亿元 | **CNY35.1** |
+| 1.0m | 35.0亿元 | **CNY36.6** |
+
+Under this deliberately simplified framing, CNY36.3 corresponds to roughly **0.98m annual units** if robot alone must explain the whole residual and all Dongwu ASP/share/margin assumptions hold.
+
+That is not a shipment forecast.
+
+It is the clearest way to see how much of the sell-side success state the current price is already asking investors to pay for.
+
+If incremental liquid-cooling economics, extra core duration, or market-expression premium carries part of the residual, the robot unit burden falls accordingly.
+
+## 7. Partial-profit price map
+
+The same point can be shown without relying on robot-unit assumptions.
+
+Using the midpoint base and 25x / 9% optionality diagnostic:
+
+| Durable 2030 incremental profit | Implied price today |
 | ---: | ---: |
 | 0 | **CNY22.2** |
 | 10亿元 | **CNY26.3** |
@@ -220,129 +272,107 @@ then every additional 10亿元 of durable 2030 optionality profit adds about **C
 | 40亿元 | **CNY38.6** |
 | 50亿元 | **CNY42.7** |
 
-This is the clearest reverse-price surface for publication.
+This is the preferred publication closure because the headline itself is a per-share price question.
 
-It says:
+## 8. Why no true robot probability is assigned
 
-```text
-CNY36.3
-≈
-CNY22.2 observable-core midpoint
-+
-~CNY14.1 prepaid future
-```
+Do not turn the previous tables into a cardinal success probability.
 
-and under the 25x / 9% / end-2030 diagnostic, that prepaid future corresponds to roughly **34亿元 of durable 2030 optionality profit**.
+The downside state is not zero:
 
-## 6. Why this still does not establish a true probability
+- robot can partially commercialize;
+- already-commercialized liquid cooling is partly embedded in the base;
+- incremental liquid cooling can add future value;
+- core duration can be stronger than the normalized anchor;
+- market-expression premium may persist.
 
-A tempting next step is:
+And the upside is not binary.
 
-```text
-full success value × success probability = option value
-```
-
-Do not treat that as canonical Odds yet.
-
-The failure state is not zero:
-
-- robot could partially commercialize;
-- liquid cooling could contribute independently;
-- core duration could exceed the normalized anchor;
-- market-expression premium can persist for some period.
-
-And the success state itself is not one binary endpoint.
-
-Therefore a numerical `robot success probability` remains **NOT ESTABLISHED**.
-
-But one conditional diagnostic is still useful:
-
-> Under the midpoint core / 25x robot-success assumptions, current CNY36.3 is almost equal to the full sell-side 35亿元 success-state present value before any probability haircut.
-
-This means the price leaves limited room for execution shortfall **unless** liquid cooling, stronger core duration, or a persistent market-expression premium supplies part of the residual.
-
-That is a price-implied requirement, not a probability claim.
-
-## 7. Liquid cooling shares the same residual
-
-Liquid cooling must not be added on top of a full residual-consuming robot scenario without subtracting it somewhere else.
-
-Current evidence proves product supply and customer commercialization, but not independent revenue / margin / profit / ROIC large enough for a standalone valuation.
-
-Therefore the correct identity is:
+Therefore:
 
 ```text
-residual price
-=
-extra core duration value
-+ liquid-cooling value
-+ robot value
-+ market-expression premium
-```
-
-not:
-
-```text
-residual price
-+ robot value
-+ liquid-cooling value
-```
-
-If the full Dongwu 35亿元 robot success state is used at the midpoint assumptions, robot alone nearly consumes the residual.
-
-If future liquid-cooling economics become measurable, the robot profit burden implied by CNY36.3 should fall one-for-one with the present value assigned to liquid cooling.
-
-## 8. What CNY36.3 currently means
-
-Research-supported statement:
-
-> CNY36.3 is not `cheap core + free robot`. Under a central CNY22.2/share core-value diagnostic, roughly CNY14.1/share is prepaid future. At a 25x mature multiple and 9% discount to end-2030, that residual is equivalent to roughly 34亿元 of durable future optionality profit. Dongwu's 35亿元 robot success-state scenario almost exactly fills that gap.
-
-This does **not** mean 35亿元 robot profit will happen.
-
-It means:
-
-> The current price is already close to the present value of a strong robot success case under central assumptions, before separately giving material value to liquid cooling.
-
-## 9. Current Research stance after optionality closure
-
-```text
-CORE BUSINESS QUALITY = GOOD / SUPPORTED
-2027 NORMALIZED CORE EARNING POWER = ~CNY4.7-5.1bn CHALLENGER RANGE
-CORE P/E = ~16-22x CHALLENGER RANGE
-CENTRAL CORE VALUE = ~CNY21.0-23.4/share at CNY4.9bn × 18-20x
-CNY36.3 RESIDUAL = ~CNY12.9-15.3/share
-MIDPOINT RESIDUAL = ~CNY14.1/share
-PRICE-IMPLIED 2030 OPTIONALITY PROFIT = ~CNY3.15-3.72bn under 25x / 9% / core 18-20x
-DONGWU ROBOT SUCCESS-STATE PROFIT = CNY3.5bn SELL-SIDE SCENARIO, NOT FACT
-MIDPOINT CORE + FULL DONGWU SUCCESS STATE ≈ CNY36.6/share
-LIQUID-COOLING ECONOMICS = NOT YET QUANTIFIED
 ROBOT CARDINAL SUCCESS PROBABILITY = NOT ESTABLISHED
 TOTAL-COMPANY NUMERICAL ODDS = WITHHOLD
 ```
 
-## 10. Publication consequence
+But the price statement remains valid:
+
+> At midpoint assumptions, CNY36.3 is almost equal to the present value of the observable base plus a strong 35亿元 robot success state before any separate material value is assigned to future incremental liquid-cooling economics.
+
+## 9. Double-counting guard
+
+Never write:
+
+```text
+base value
++ full robot success value that consumes the residual
++ a separate full liquid-cooling option
+```
+
+without subtracting the value already embedded elsewhere.
+
+Correct identity:
+
+```text
+residual price/share
+=
+extra duration / quality value/share
++ future incremental liquid-cooling value/share
++ robot value/share
++ market-expression premium/share
+```
+
+The pieces share one residual.
+
+## 10. Current Research stance
+
+```text
+BUSINESS QUALITY = GOOD / SUPPORTED
+2027 NORMALIZED OBSERVABLE-BASE EARNING POWER = ~CNY4.7-5.1bn CHALLENGER RANGE
+OBSERVABLE-BASE P/E = ~16-22x CHALLENGER RANGE
+CENTRAL BASE VALUE = ~CNY21.0-23.4/share at CNY4.9bn × 18-20x
+MIDPOINT BASE VALUE = ~CNY22.2/share at 19x
+CNY36.3 MIDPOINT RESIDUAL = ~CNY14.1/share
+PRICE-IMPLIED 2030 INCREMENTAL PROFIT = ~31.5-37.2亿元 under 25x / 9% / base 18-20x
+DONGWU ROBOT SUCCESS-STATE PROFIT = 35亿元 SELL-SIDE SCENARIO, NOT FACT
+MIDPOINT BASE + FULL DONGWU SUCCESS STATE ≈ CNY36.6/share
+CURRENT LIQUID COOLING = PARTLY EMBEDDED IN OBSERVABLE BASE / EXACT PROFIT NOT SEPARATELY DISCLOSED
+FUTURE INCREMENTAL LIQUID-COOLING ECONOMICS = NOT YET QUANTIFIED
+ROBOT CARDINAL SUCCESS PROBABILITY = NOT ESTABLISHED
+TOTAL-COMPANY NUMERICAL ODDS = WITHHOLD
+```
+
+## 11. Publication consequence
 
 The article should not stop at `500-600亿元 residual`.
 
-It should translate the residual back into price:
+It should close back to price:
 
 ```text
-core midpoint ≈ CNY22.2/share
-+ 10亿元 durable 2030 optionality profit ≈ +CNY4.1/share
-+ 20亿元 ≈ price CNY30.4
-+ 30亿元 ≈ price CNY34.5
-+ 35亿元 ≈ price CNY36.6
+observable-base midpoint ≈ CNY22.2/share
++ 10亿元 durable 2030 incremental profit ≈ price CNY26.3
++ 20亿元 ≈ CNY30.4
++ 30亿元 ≈ CNY34.5
++ 35亿元 ≈ CNY36.6
 ```
 
-Then answer the valuation question directly:
+And, when the robot-unit sell-side assumptions are shown:
 
-> At CNY36.3, the market is already asking for future economics close to a strong robot-success state under central assumptions. The new businesses are real, but the price is no longer paying only for proof of commercialization; it is paying for a substantial amount of future profit.
+```text
+500k units ≈ CNY29.4
+700k units ≈ CNY32.2
+900k units ≈ CNY35.1
+1.0m units ≈ CNY36.6
+```
+
+The publication answer supported by current Research is:
+
+> CNY36.3 is clearly not `cheap base + free robot`. Under central assumptions it is already close to the present value of a strong robot success state. That does not prove the stock is definitively overvalued because future liquid-cooling growth, stronger base duration and market-expression premium also share the residual. It does mean the price offers little room to treat commercialization evidence alone as sufficient; substantial durable profit still has to arrive.
 
 Do not publish Human position / Decision / Action state or the private historical CNY30 participation trigger.
 
 ## Stop rule
 
-Do not turn the 25x / 9% / end-2030 diagnostic into a canonical valuation model.
+Do not turn the 25x / 9% / end-2030 diagnostic into a target-price engine or canonical valuation model.
 
-Re-underwrite when measurable robot / liquid-cooling revenue, margin, profit, capital intensity, or allocation evidence arrives.
+Re-underwrite when measurable robot / liquid-cooling revenue, margin, profit, capital intensity, allocation or utilization evidence arrives.
