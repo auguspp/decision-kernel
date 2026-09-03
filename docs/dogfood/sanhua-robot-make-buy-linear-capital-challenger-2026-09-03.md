@@ -62,7 +62,59 @@ That is a sell-side expectation, not issuer guidance or an established mature-st
 
 ---
 
-## 2. Why make-or-buy changes both numerator and denominator
+## 2. Current-stage external harmonic-reducer sourcing is now directly evidenced
+
+A supplier-side primary filing materially improves the make-buy map.
+
+**FACT — Fengli Intelligent / 丰立智能, April 2026 Shenzhen Stock Exchange financing inquiry response** — The issuer says that during the reporting period it had:
+
+```text
+already supplied Xingdong Era / 星动纪元 in batch
+and
+provided harmonic reducers to Sanhua Intelligent Controls / 三花智控 and Hechuan Technology / 禾川科技
+for validation introduction or small-batch supply
+```
+
+The same filing lists Sanhua among the known customers of Fengli's new-generation precision-transmission project and says harmonic-reducer orders across the project's known customers were about CNY4.5m / more than 7,000 units as of March 25, 2026.
+
+The filing does **not** disclose what portion of those orders belongs to Sanhua.
+
+### What this upgrades
+
+This evidence supports:
+
+```text
+CURRENT-STAGE EXTERNAL HARMONIC-REDUCER SOURCING / VALIDATION INTO SANHUA = FACT
+```
+
+It is stronger than the earlier inference from Sanhua's generic `supplier co-development` wording.
+
+It establishes that, at least during the current commercialization / validation stage, Sanhua's actuator effort can source harmonic reducers from an external precision-transmission supplier.
+
+### What it does not establish
+
+It does **not** establish:
+
+```text
+Fengli is the only / principal reducer supplier
+Sanhua's mature reducer purchase share
+Sanhua will not internalize reducers later
+which unnamed robot program uses the reducer
+Fengli's reducer content maps one-for-one to Sanhua's current batch-delivery actuator
+long-run supplier allocation or transfer price
+```
+
+Therefore the correct mature-state label remains:
+
+```text
+SANHUA REDUCER MATURE MAKE-BUY SHARE = NOT ESTABLISHED
+```
+
+The new fact changes the burden of proof, however. A mature model that assumes `100% internal reducer value capture` must now explain how Sanhua moves from an observed external validation / small-batch supply relationship to full internalization, and what incremental capital that transition requires.
+
+---
+
+## 3. Why make-or-buy changes both numerator and denominator
 
 A robot actuator integrator can reach the same customer billable value through very different economic structures.
 
@@ -121,11 +173,11 @@ not simply whether the component is produced in-house.
 
 ---
 
-## 3. A new primary reference for mature planetary-roller-screw pricing
+## 4. A primary reference for mature planetary-roller-screw pricing
 
 Five Continents Spring / 五洲新春 disclosed an exchange-reviewed financing model for a humanoid-robot and intelligent-vehicle precision-component project.
 
-### 3.1 Mature project assumptions
+### 4.1 Mature project assumptions
 
 **FACT — management project model, exchange-reviewed filing**:
 
@@ -146,7 +198,7 @@ This is not a realized market-clearing price and not Sanhua pricing.
 
 It is nevertheless a much stronger industrial reference than an uncited round number because the issuer uses it in a regulated capital-raising project model with explicit capacity, unit cost and equipment assumptions.
 
-### 3.2 Implication for Dongwu's CNY2,000 mature roller-screw assumption
+### 4.2 Implication for Dongwu's CNY2,000 mature roller-screw assumption
 
 Dongwu assumes roughly:
 
@@ -181,7 +233,7 @@ CNY2,000 MATURE ROLLER-SCREW ASP
 
 ---
 
-## 4. Architecture itself can rewrite unit value
+## 5. Architecture itself can rewrite unit value
 
 Five Continents' reference architecture uses:
 
@@ -232,7 +284,7 @@ before it can be treated as economically comparable across sources.
 
 ---
 
-## 5. Linear precision transmission has visible equipment intensity
+## 6. Linear precision transmission has visible equipment intensity
 
 Five Continents provides a useful component-specific capital reference.
 
@@ -256,7 +308,7 @@ This excludes allocated buildings, land, common utilities, development capital a
 
 It is therefore an **equipment-only outside-view intensity**, not total invested capital.
 
-### 5.1 What that means for a 1m-robot success state
+### 6.1 What that means for a 1m-robot success state
 
 If an actuator supplier used Dongwu's architecture:
 
@@ -291,7 +343,7 @@ Sanhua incremental ROIC
 
 ---
 
-## 6. The full Five Continents project reinforces the capital point
+## 7. The full Five Continents project reinforces the capital point
 
 **FACT** — The combined humanoid-robot + intelligent-vehicle project has:
 
@@ -318,7 +370,7 @@ That is directionally important for Sanhua's owner-economics question.
 
 ---
 
-## 7. Implication for the 35亿元 success state
+## 8. Implication for the 35亿元 success state
 
 The sell-side bridge:
 
@@ -360,16 +412,19 @@ purchased content
 → upstream supplier margin embedded in BOM
 ```
 
-Only after that can Research ask whether a 10% net margin corresponds to an attractive owner return.
+The Fengli evidence means the current observed system already contains at least one externally sourced / validated transmission path.
+
+Only after mature make-buy is established can Research ask whether a 10% net margin corresponds to an attractive owner return.
 
 ---
 
-## 8. Current status
+## 9. Current status
 
 ```text
 SANHUA MOTOR INTERNALIZATION = PARTIAL PRIMARY SUPPORT / EXACT ROBOT SCOPE NOT CLOSED
 SANHUA ROLLER-SCREW INTERNALIZATION = R&D / PRODUCTIZATION INTENT SUPPORTED; MATURE MAKE SHARE NOT ESTABLISHED
-SANHUA REDUCER INTERNALIZATION = NOT ESTABLISHED
+CURRENT-STAGE EXTERNAL HARMONIC-REDUCER SOURCING / VALIDATION = FACT
+SANHUA REDUCER MATURE MAKE-BUY SHARE = NOT ESTABLISHED
 SANHUA SENSOR / ENCODER INTERNALIZATION = NOT ESTABLISHED
 SANHUA CONTROLLER INTERNALIZATION = NOT ESTABLISHED
 FULL CORE-COMPONENT VERTICAL INTEGRATION = NOT ESTABLISHED
@@ -377,7 +432,7 @@ FULL CORE-COMPONENT VERTICAL INTEGRATION = NOT ESTABLISHED
 CNY2,000 MATURE ROLLER-SCREW ASP = NOT ESTABLISHED
 CNY500 ROLLER-SCREW ASP = MANAGEMENT PROJECT MODEL / REFERENCE CLASS, NOT SANHUA FACT
 
-ROBOT-SPECIFIC MAKE-BUY MIX = NOT ESTABLISHED
+ROBOT-SPECIFIC MATURE MAKE-BUY MIX = NOT ESTABLISHED
 ROBOT-SPECIFIC CAPITAL BY COMPONENT = NOT ESTABLISHED
 INCREMENTAL ROIC = NOT ESTABLISHED
 OWNER CASH = NOT ESTABLISHED
@@ -385,12 +440,12 @@ OWNER CASH = NOT ESTABLISHED
 
 ---
 
-## 9. Highest-value next evidence
+## 10. Highest-value next evidence
 
 The next evidence that would materially improve the model is:
 
 1. Sanhua issuer disclosure identifying which robot components are already self-produced at batch-delivery stage;
-2. supplier-side disclosure proving actual reducer / screw / encoder / sensor shipments into Sanhua's actuator assembly;
+2. supplier-side disclosure quantifying reducer / screw / encoder / sensor shipments into Sanhua's actuator assembly;
 3. customer or engineering disclosure showing the mature actuator count and architecture;
 4. realized roller-screw ASP / cost / yield from a genuine large-volume humanoid ramp;
 5. Sanhua robot-specific equipment, production capacity, working capital and utilization;
@@ -400,7 +455,7 @@ Until then, `CNY50k customer content` cannot be translated directly into `CNY50k
 
 ---
 
-## 10. Sources
+## 11. Sources
 
 ### Sanhua primary
 
@@ -408,6 +463,11 @@ Until then, `CNY50k customer content` cannot be translated directly into `CNY50k
   https://static.cninfo.com.cn/finalpage/2023-10-13/1218021211.PDF
 - GDR prospectus draft — robot R&D project / supplier collaboration / partial self-development:  
   https://static.cninfo.com.cn/finalpage/2023-09-06/1217782098.PDF
+
+### Fengli Intelligent / 丰立智能 primary / exchange-reviewed
+
+- April 2026 Shenzhen Stock Exchange financing inquiry response — Sanhua listed among harmonic-reducer customers receiving validation introduction or small-batch supply; project customer/order context:  
+  https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-20/334a322e-ff89-484e-9775-8382b07abf12.PDF
 
 ### Five Continents Spring / 五洲新春 primary / exchange-reviewed
 
