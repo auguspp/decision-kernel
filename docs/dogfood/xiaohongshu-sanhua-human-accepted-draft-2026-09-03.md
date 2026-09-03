@@ -1,0 +1,305 @@
+# Xiaohongshu Sanhua Human-Accepted Draft — 2026-09-03
+
+Status: **HUMAN_ACCEPTED_DRAFT / POSITIVE STRUCTURE+VOICE CALIBRATION / PUBLICATION OUTCOME NOT YET OBSERVED**  
+Security: **三花智控 / 002050.SZ**  
+Accepted by Human: **2026-09-03**  
+Investment Authority: **NONE**
+
+## Why this record exists
+
+The Human explicitly accepted the Sanhua Xiaohongshu draft after several real dogfood revisions.
+
+This is a **writing calibration record**, not an investment decision and not publication-performance evidence.
+
+Do not label it `HIGH_READ` until actual post-publication engagement is observed.
+
+The accepted draft captures several corrections earned through real Human feedback:
+
+- remove research-process narration;
+- remove unnecessary first-person scaffolding;
+- do not stop at a market-cap residual when the headline asks about a per-share price;
+- continue `price -> base -> residual -> future economics -> operating requirements -> price`;
+- keep sell-side success states visibly separate from expected earnings;
+- do not double count liquid cooling / robot optionality already embedded in the observable base or residual;
+- answer the headline valuation question directly without recommendation language.
+
+## Accepted title
+
+> **跌跌不休的三花智控，36.3元贵不贵？**
+
+## Accepted draft
+
+36.3元，三花智控市值大约1523亿元。
+
+目前卖方对2027年归母净利润的预测，大致在52.6亿—57.7亿元，中间位置约54.5亿元。
+
+按54.5亿元算，对应大约28倍PE。
+
+但这54.5亿元不是一份纯粹的传统制冷和汽车业务利润。
+
+液冷已经开始商业化，机器人也进入批量交付阶段，部分机构的盈利预测已经把这些新业务的增长放进了未来几年。
+
+所以36.3元到底贵不贵，先要知道现在已经跑出来的业务能值多少钱。
+
+## 1、已经跑出来的业务，值多少？
+
+2025年，三花扣非净利润39.58亿元。
+
+2026年上半年，扣非净利润21.47亿元，同比增长6.82%。
+
+制冷业务收入104.45亿元，同比增长0.54%。
+
+汽车业务收入64.55亿元，同比增长9.89%。
+
+两块业务毛利率都在28%左右。
+
+制冷已经比较成熟，汽车还在增长，利润率和现金流保持稳定。
+
+按目前的业务增速和盈利能力，2027年可观察业务大致能够支撑 **47亿—51亿元利润**。
+
+这里有一个口径要注意。
+
+三花把数据中心液冷放在制冷业务里披露，所以这47亿—51亿元并不是完全剥离液冷后的“纯老业务利润”。
+
+已经开始商业化的那部分液冷，很可能已经藏在这套盈利基线里。
+
+后面真正应该另外计算的，是液冷未来继续增长带来的增量，而不是把整个液冷业务再加一遍。
+
+## 2、47亿—51亿元利润，应该值多少？
+
+盾安、DENSO这类成熟制造企业，大多只有十几倍估值。
+
+能长期获得二十多倍估值的工业公司，通常需要更强的资本回报、更长的增长持续性，或者非常明确的结构性增长。
+
+三花自己还有一个很有意思的参照。
+
+同一家公司、同一份利润表、同样的机器人和液冷业务，中报后的卖方口径里，A股大约28倍2027年PE，H股只有17倍左右。
+
+业务没有变，交易市场不同，估值可以差这么多。
+
+28倍显然不能全部解释成生意本身的价值。
+
+结合增长、利润率、现金流和可比公司，现有可观察业务用 **16—22倍** 做估值比较容易解释。
+
+18—20倍处在中间位置。
+
+取49亿元利润、19倍PE：
+
+**49亿 × 19倍 = 931亿元。**
+
+按目前股本计算，大约：
+
+**22.2元/股。**
+
+现在股价是36.3元。
+
+也就是说，中间口径下：
+
+**22.2元是已经能观察到的盈利基线。**
+
+另外还有：
+
+**14.1元，是提前付给未来的。**
+
+## 3、14.1元到底买了多少未来？
+
+把这14.1元继续往下算。
+
+假设新业务到2030年已经形成比较稳定的利润，届时给25倍PE，再按9%的要求回报折回今天。
+
+这个口径下：
+
+**未来每多10亿元可持续利润，大约值今天4.1元/股。**
+
+那么价格就很好理解了。
+
+未来新业务没有额外利润：
+
+**22.2元。**
+
+多赚10亿元：
+
+**26.3元。**
+
+多赚20亿元：
+
+**30.4元。**
+
+多赚30亿元：
+
+**34.5元。**
+
+多赚35亿元：
+
+**36.6元。**
+
+36.3元，基本就落在最后一档。
+
+换句话说，按照这组中间假设，当前价格需要未来新业务最终贡献 **30多亿元可持续增量利润**。
+
+如果2030年只能给20倍估值，需要的利润还要更高。
+
+给到30倍，要求会低一点。
+
+但数量级没有变。
+
+现在付的钱，需要以后真的长成一笔很大的利润。
+
+## 4、机器人能不能挣到这30多亿元？
+
+东吴证券做过一个机器人情景测算：
+
+100万台机器人年产量。
+
+单台执行器总成价值5万元。
+
+三花份额70%。
+
+净利率10%。
+
+对应三花利润：
+
+**35亿元。**
+
+这不是公司指引，也不是已经拿到的订单。
+
+它只是一个乐观成功情景。
+
+但拿来和36.3元对照，非常有意思。
+
+前面算出来：
+
+**35亿元未来利润，大约对应今天14.4元/股。**
+
+再加上22.2元的业务基线：
+
+**22.2 + 14.4 = 36.6元。**
+
+几乎就是现在的36.3元。
+
+也就是说，按这组中间假设，现在的股价已经非常接近：
+
+**现有业务 + 一个完整的35亿元机器人成功情景。**
+
+## 5、再换成机器人产量，会更直观
+
+按照东吴那套单机价值、份额和净利率假设：
+
+100万台，对应35亿元利润。
+
+每10万台，大约对应3.5亿元利润。
+
+折回今天，每10万台大约值：
+
+**1.44元/股。**
+
+于是：
+
+50万台，大约对应 **29.4元**。
+
+70万台，大约 **32.2元**。
+
+80万台，大约 **33.7元**。
+
+90万台，大约 **35.1元**。
+
+100万台，大约 **36.6元**。
+
+如果把36.3元里超过基线的部分全部交给机器人解释，大致相当于接近 **100万台年产量** 的成功情景。
+
+这当然不能理解成市场真的预测机器人一定卖到100万台。
+
+因为那14.1元里还混着别的东西：
+
+汽车业务可能比现在增长得更久。
+
+液冷未来还会继续贡献增量。
+
+三花本身的资产质量可能值得更高估值。
+
+A股市场也可能长期给它更高的交易溢价。
+
+这些东西都会减少机器人单独需要承担的压力。
+
+但它们共享的是同一笔14.1元。
+
+不能机器人算满一遍，液冷再算满一遍，最后再给主业一个更高PE。
+
+## 6、现在已经证明了什么？
+
+机器人已经不是纯概念。
+
+2026年上半年，公司明确表示核心产品正在推进批量交付和产线爬坡。
+
+液冷也已经有实际产品供应，覆盖一次侧、CDU和服务器机柜等应用。
+
+商业化是真实发生的。
+
+但现在距离35亿元机器人利润，仍然差着最重要的几组数字：
+
+一年到底有多少量。
+
+单机价值量最终是多少。
+
+客户份额能不能维持。
+
+规模起来以后毛利率和净利率是多少。
+
+为了赚这些利润，需要投入多少资本。
+
+批量交付可以证明产品开始落地。
+
+它还不能证明最终能赚35亿元。
+
+## 结论：36.3元贵不贵？
+
+**不便宜。**
+
+36.3元绝对不是“买一份便宜制造业，免费送机器人”。
+
+按中间估值，已经能观察到的业务大约解释22元左右。
+
+剩下14元左右，市场已经提前付给了未来。
+
+更关键的是，把这14元继续反推以后，会发现它对应的不是一个很小的机器人期权。
+
+按照中间假设，它需要未来产生大约30多亿元可持续增量利润。
+
+甚至东吴那个100万台、35亿元机器人利润的强成功情景，折回今天以后，刚好把股价推到36.6元附近。
+
+这说明36.3元并没有贵到完全无法解释。
+
+机器人如果真的走到百万台量级，液冷继续增长，核心业务也能保持较长增长，价格可以成立。
+
+但当前证据还只走到批量交付和产线爬坡。
+
+利润兑现还在后面。
+
+**所以36.3元的问题不是未来有没有可能。**
+
+**而是这个价格已经提前为一个相当成功的未来付了钱。**
+
+在更多收入、利润率和资本回报数据出来之前，36.3元更适合定义为：
+
+**不便宜，未来兑现要求已经比较高，安全边际并不厚。**
+
+本文仅为个人研究记录，不构成投资建议。
+
+## Calibration notes
+
+The accepted version is notably more direct than earlier dogfood drafts:
+
+```text
+price
+→ observable earning base
+→ independently bounded base valuation
+→ residual/share
+→ required future profit
+→ operating-unit equivalent
+→ price/share closure
+→ direct valuation answer
+```
+
+It does not prove publication performance, the probability of the sell-side robot scenario, or any Human investment Decision / Action / position state.
+
+Publication outcome should be recorded separately if and when observed.
