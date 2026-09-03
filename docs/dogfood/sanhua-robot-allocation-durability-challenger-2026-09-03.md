@@ -14,60 +14,42 @@ The sell-side CNY3.5bn success state assumes:
 70% Sanhua share
 ```
 
-Earlier work already showed that the same sell-side research discusses share potentially falling toward ~50% after mass production.
+The Research question is not whether a high early share is imaginable.
 
-This note asks a narrower question:
+It is:
 
-> What public evidence actually establishes Sanhua's customer allocation, and what could make an early allocation fail to persist across scale-up and product generations?
+> What public evidence establishes Sanhua's actual customer allocation, and what would make that allocation persist or decay through scale-up, second sourcing, cost-down and robot-generation changes?
 
-This note does **not** identify an unnamed Sanhua customer by inference.
+This note does **not** identify an unnamed customer by inference.
 
 ---
 
-## 1. Sanhua's own proof ladder has improved materially — but allocation remains undisclosed
+## 1. Sanhua's commercialization proof ladder has advanced — allocation has not been disclosed
 
-### 1.1 2024: no designated customer
-
-**FACT** — In a 2024 exchange inquiry response, Sanhua described its robot actuator work as an R&D project and said it had no designated customer at that time.
-
-### 1.2 End-2024 / 2025: key-customer co-development
-
-**FACT** — Sanhua's 2025 Hong Kong prospectus says that by December 31, 2024 its bionic-robot actuator R&D team had grown to more than 180 people and that the company was collaborating with key customers to develop products while planning overseas production.
-
-As of the prospectus reference date, the company still described the product as being in the R&D / prototype-refinement stage before scalable commercialization.
-
-### 1.3 2025: trial / iteration / sampling
-
-**FACT** — The 2025 annual report says Sanhua cooperated with customers in:
+Issuer-supported chronology:
 
 ```text
-R&D
-trial production
-iteration
-sampling
-```
+2024:
+R&D project / no designated customer disclosed
 
-of key robot-actuator products.
+→ end-2024 / 2025:
+180+ robot R&D team
++ key-customer co-development
++ prototype refinement
++ trial production / iteration / sampling
 
-### 1.4 2026H1: batch delivery + line ramp
-
-**FACT** — Sanhua's August 27, 2026 investor-relations record says core robot actuator products are steadily advancing through:
-
-```text
+→ 2026H1:
 batch delivery
-+
-production-line ramp
++ production-line ramp
 ```
 
 This is a real commercialization upgrade.
 
-### 1.5 What is still absent
-
-The company has not publicly disclosed in the reviewed primary materials:
+Reviewed primary materials still do not disclose:
 
 ```text
 customer name
-formal customer designation document
+formal designation document
 contracted order volume
 allocation percentage
 rotary-vs-linear allocation
@@ -84,42 +66,64 @@ CUSTOMER-SPECIFIC ECONOMIC ALLOCATION = NOT ESTABLISHED
 
 ---
 
-## 2. A direct investor question did not produce public order / capacity evidence
+## 2. Public order evidence has a hard boundary
 
-**FACT / PUBLIC IR RESPONSE** — In May 2026 an investor directly asked Sanhua whether it had received orders from domestic or North American robot customers and how overseas capacity ramp was progressing.
+### 2.1 May 2026 investor question did not establish customer / order / allocation
 
-The company did not confirm a customer, order value, allocation or production volume. It replied that customer-cooperation information that is material and meets disclosure standards, and is not commercially confidential, should be found in the company's statutory disclosures.
+**FACT / PUBLIC IR** — An investor directly asked whether Sanhua had received domestic or North-American robot-customer orders and about overseas capacity ramp.
 
-This response should **not** be interpreted as evidence that no orders exist.
+The company did not disclose a customer, order value, allocation percentage or production volume and referred material, non-confidential customer cooperation to statutory disclosure.
 
-It does establish a public-evidence boundary:
+This should **not** be interpreted as evidence that no robot orders exist.
+
+It establishes only:
 
 ```text
-public order / allocation detail
-= not available from that response
+PUBLIC CUSTOMER / ORDER / ALLOCATION DETAIL
+= NOT ESTABLISHED FROM THAT RESPONSE
 ```
 
-Therefore secondary reports claiming named customers, exact order amounts or exclusive allocation cannot be promoted into `FACT` merely because Sanhua later says batch delivery is occurring.
+### 2.2 October 2025 large-order rumor was formally denied
+
+**FACT — Sanhua clarification announcement dated October 15, 2025** — The company said that online rumors that Sanhua had obtained a **large robot order** were false; it also said there was no material matter that should have been disclosed but had not been disclosed, and that the company had not accepted any media interview that day.
+
+Correct Research treatment:
+
+```text
+LARGE ROBOT ORDER RUMOR = FORMALLY DENIED
+```
+
+This clarification does **not** establish:
+
+```text
+NO ROBOT ORDERS OF ANY KIND
+NO CUSTOMER CO-DEVELOPMENT
+NO BATCH DELIVERY
+```
+
+because later issuer disclosure independently establishes batch delivery / line ramp.
+
+It does establish that secondary claims of a specific **large order amount** cannot be used as `FACT` unless supported by a later primary disclosure.
+
+Therefore:
+
+```text
+EXACT LARGE-ORDER RUMOR = EXCLUDED FROM RESEARCH FACT
+GENERAL ROBOT COMMERCIALIZATION = FACT
+CUSTOMER-SPECIFIC VOLUME / ALLOCATION = NOT ESTABLISHED
+```
 
 ---
 
 ## 3. Upstream multi-sourcing at Sanhua is FACT — downstream customer dual-sourcing is not
 
-Sanhua's Hong Kong prospectus provides useful evidence about **Sanhua's own procurement system**.
+Sanhua's Hong Kong prospectus describes its own procurement-risk policies.
 
-**FACT** — The company says it generally procures materials under non-exclusive supply contracts and uses supply-risk policies that include:
+**FACT** — Sanhua uses non-exclusive supply contracts and can maintain multiple / alternative suppliers for the same goods or services.
 
-```text
-maintaining two or more suppliers
-securing stock in advance
-having alternative suppliers
-```
+This matters because Sanhua describes robot actuators as combining supplier co-development with partial self-development.
 
-The prospectus also says Sanhua diversifies its supplier base by engaging multiple suppliers for the same goods or services.
-
-This is relevant to robot value capture because Sanhua describes its actuator architecture as combining supplier co-development with partial self-development.
-
-But it is an important category distinction:
+But the category distinction must remain explicit:
 
 ```text
 SANHUA USES MULTIPLE UPSTREAM SUPPLIERS
@@ -131,84 +135,74 @@ The former is `FACT`.
 
 The latter remains `NOT ESTABLISHED` for any specific robot program.
 
+Supplier-side evidence separately shows current-stage harmonic-reducer validation / small-batch supply into Sanhua from Fengli Intelligent, reinforcing that the current actuator BOM can cross external supplier boundaries.
+
 ---
 
-## 4. Tesla's general procurement policy is useful context, not customer proof
+## 4. Tesla sourcing policy is outside-view context, not Sanhua customer proof
 
-**MARKET_CONTEXT** — Tesla's 2025 Form 10-K says some procured components and systems are single-sourced, while for certain key components where multiple sources are available it works to qualify multiple suppliers when sensible to reduce production-disruption risk.
+**MARKET_CONTEXT** — Tesla's 2025 Form 10-K says some procured components and systems are single-sourced, while for key components where alternatives exist it works to qualify multiple suppliers when sensible to reduce disruption risk.
 
-Tesla also describes continuous efforts to improve cost and manufacturing efficiency, including vertical integration.
+Tesla also describes continuous cost reduction and vertical-integration efforts.
 
-This is useful as an outside view of a large-scale manufacturing customer's sourcing behavior.
+This is useful downstream sourcing context.
 
 It is **not** evidence that:
 
 ```text
-Tesla is the unnamed Sanhua robot customer
-or
-an Optimus actuator is specifically dual-sourced
-or
-Sanhua has a particular percentage allocation
+Tesla is Sanhua's unnamed customer
+Optimus actuator sourcing is specifically dual-sourced
+Sanhua has a particular allocation percentage
 ```
 
-No such inference is made here.
+No such inference is made.
 
 ---
 
-## 5. Customer architecture can change across robot generations
+## 5. Allocation can decay through more than direct supplier competition
 
-A second allocation risk is deeper than conventional second sourcing.
-
-**MARKET_CONTEXT — direct management remarks reported in multiple public transcripts** — During Tesla's Q2 2026 earnings call, management described Optimus as having specialized electronics designed by Tesla but fabricated by suppliers, and said the future Optimus 4 supply system is intended to be **more vertically integrated** than Optimus 3.
-
-Tesla's 2025 Form 10-K separately says the company is exploring vertical integration to optimize cost, functionality, efficiency and safety.
-
-The earnings-call remark is not Sanhua-specific and is not accepted as customer-allocation proof.
-
-But it establishes a valid long-run industry question:
+A mature allocation can weaken through at least four channels:
 
 ```text
-early supplier share
-can be diluted not only by a second supplier
-but also by customer vertical integration
-or architecture redesign
+second-source qualification
+customer annual cost-down / rebidding
+architecture redesign / module-boundary changes
+customer vertical integration across robot generations
 ```
 
-This means long-run share needs to be underwritten across product generations, not only inside one design-in cycle.
+`MARKET_CONTEXT` — Tesla has publicly discussed greater future vertical integration in the Optimus supply system and generally discusses redesign / vertical integration as cost and manufacturing tools.
+
+That does not identify Sanhua's customer or allocation.
+
+It establishes a broader Research requirement:
+
+> Long-run share has to survive product-generation and sourcing-system changes, not merely the first design-in cycle.
 
 ---
 
-## 6. Observable competitor evidence says the actuator supply market is not empty
+## 6. Observable competition exists
 
-### 6.1 Tuopu has real actuator revenue
+### Tuopu realized actuator economics
 
-**FACT — Tuopu 2025 annual report**:
+**FACT — Tuopu 2025:**
 
 ```text
-robot actuator revenue = CNY13.591m
+robot-actuator revenue = CNY13.591m
 cost = CNY9.752m
 gross margin = 28.25%
 ```
 
-Its annual report nevertheless lists robot-actuator production / sales / inventory volume as `not applicable` in the production-and-sales table.
-
-So even for a competitor with a separately disclosed revenue line, public volume / allocation data remain thin.
-
-### 6.2 2026H1
-
-**FACT — Tuopu 2026H1 report**:
+**FACT — Tuopu 2026H1:**
 
 ```text
-robot actuator revenue = CNY14.048m
-cost = CNY10.250m
-implied / reported gross margin ≈ 27.0%
+robot-actuator revenue ≈ CNY14.048m
+gross margin ≈ 27.03%
+linear / rotary actuators + dexterous-hand motors = small-batch delivery
 ```
 
-Tuopu says its embodied-intelligence business centers on robot actuators and has an independent business-unit structure.
+This proves real competing actuator commercialization capability.
 
-This demonstrates real competing actuator commercialization capability.
-
-It does **not** establish overlap with the same unnamed Sanhua customer.
+It does **not** prove overlap with the same Sanhua customer.
 
 Therefore:
 
@@ -221,14 +215,14 @@ SAME-CUSTOMER COMPETITOR ALLOCATION = NOT ESTABLISHED
 
 ## 7. Four different kinds of 'share' must not be collapsed
 
-The public evidence now supports a more disciplined share ladder:
+The allocation ladder should remain:
 
 ```text
-1. design-in / co-development participation
-2. qualified-source status
+1. co-development / design participation
+2. formal qualified-source / supplier-of-record status
 3. initial production allocation
 4. mature economic allocation after:
-   - second-source qualification
+   - second sourcing
    - cost-down
    - redesign
    - vertical integration
@@ -246,69 +240,71 @@ mature allocation percentage = NOT ESTABLISHED
 cross-generation share persistence = NOT ESTABLISHED
 ```
 
-The 70% sell-side input therefore remains an `ASSUMPTION / MARKET_CONTEXT`, not a Research fact.
+Therefore:
+
+```text
+70% LONG-RUN SANHUA SHARE
+= ASSUMPTION / MARKET_CONTEXT
+!= RESEARCH FACT
+```
 
 ---
 
-## 8. Why the cross-generation issue matters to the CNY3.5bn state
+## 8. Why the 70% assumption is load-bearing for CNY3.5bn
 
-The headline arithmetic implicitly assumes a single steady state:
+The headline state is:
 
 ```text
 1m units
 × CNY50k mature content
 × 70% share
 × 10% net margin
+= CNY3.5bn
 ```
 
-But a realistic supplier path can be:
+But the same sell-side work separately discusses mature share moving toward roughly 50%.
+
+Pure state-consistency arithmetic:
 
 ```text
-generation N:
-  high design-in share
-  high content
-  low volume
-
-→ scale-up:
-  second-source qualification
-  customer price-down
-  allocation diversification
-
-→ generation N+1:
-  architecture redesign
-  more customer vertical integration
-  different module boundaries
-  different supplier value capture
+1m × CNY50k × 50% × 10%
+= CNY2.5bn
 ```
 
-Therefore a durable CNY3.5bn profit state requires more than a high early allocation.
+To preserve CNY3.5bn at 1m units and CNY50k content:
 
-It requires:
+```text
+required net margin = 14%
+```
 
-> Sanhua to retain enough economically valuable content after sourcing diversification and architecture evolution for the mature revenue and margin bridge to survive.
+These are `DERIVATION`, not forecasts.
 
-That persistence is currently `NOT ESTABLISHED`.
+The allocation problem therefore cannot be treated as a cosmetic sensitivity. If mature share is lower, another load-bearing assumption has to compensate.
 
 ---
 
-## 9. What would materially upgrade the allocation Research
+## 9. Research stop / reopen condition for allocation
 
-Highest-value evidence:
+This allocation pass has reached a reasonable public-evidence boundary.
 
-1. customer or Sanhua disclosure of formal designation / SOP status;
-2. named supplier-of-record evidence by actuator type;
-3. actual initial mass-production allocation;
-4. second-source qualification / sourcing-change evidence;
-5. allocation changes after annual price negotiations;
-6. changes in module boundaries across robot generations;
-7. explicit insourcing / outsourcing decisions by the downstream customer;
-8. realized Sanhua robot revenue or shipment data that can be reconciled with downstream production.
+Do **not** upgrade unnamed-customer media stories, exact order amounts, exclusivity claims or sell-side supplier maps merely because Sanhua has now reached batch delivery.
+
+Reopen when public evidence provides one or more of:
+
+1. named customer / program;
+2. formal designation / SOP / supplier-of-record evidence;
+3. rotary / linear allocation by supplier;
+4. contracted or realized production volume;
+5. second-source qualification or sourcing-change evidence;
+6. allocation changes after price negotiations;
+7. module-boundary / architecture changes across generations;
+8. realized Sanhua robot revenue / shipment data reconcilable with downstream production.
 
 Until then:
 
 ```text
-70% LONG-RUN SANHUA SHARE = ASSUMPTION
 ROBOT CUSTOMER-SPECIFIC ALLOCATION = NOT ESTABLISHED
+70% LONG-RUN SHARE = ASSUMPTION
 CROSS-GENERATION SHARE DURABILITY = NOT ESTABLISHED
 ```
 
@@ -318,59 +314,53 @@ CROSS-GENERATION SHARE DURABILITY = NOT ESTABLISHED
 
 ### Sanhua primary / public IR
 
-- 2025 Hong Kong prospectus — 180+ R&D team, key-customer co-development, pre-scale status; supplier-management / multiple-source procurement policy:  
+- 2025 Hong Kong prospectus — 180+ R&D team, key-customer co-development, pre-scale status; multiple-source procurement policy:  
   https://www.hkexnews.hk/listedco/listconews/sehk/2025/0613/2025061300017.pdf
-
 - 2025 annual report — customer R&D / trial / iteration / sampling:  
   https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032301606_c.pdf
-
-- March 24, 2026 IR — company describes itself as robot-parts supplier and continues R&D / trial / iteration / sampling:  
+- October 15, 2025 clarification — large robot-order rumor formally denied:  
+  https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1015/2025101501405_c.pdf
+  https://static.cninfo.com.cn/finalpage/2025-10-16/1224715357.PDF
+- March 24, 2026 IR — robot-parts supplier / continued R&D, trial and iteration:  
   https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12015391&stockid=002050
-
-- May 2026 public investor Q&A — company does not confirm specific domestic / North American robot orders or overseas ramp details: public Dongmi response mirrored by market information services.
-
+- May 2026 public investor Q&A — no public customer / order / allocation disclosure from the reviewed response.
 - August 27, 2026 IR — batch delivery / production-line ramp:  
   https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
 
 ### Customer outside view
 
-- Tesla 2025 Form 10-K — multi-source qualification where sensible; vertical-integration / manufacturing strategy:  
+- Tesla 2025 Form 10-K — multi-source qualification where sensible; cost-down / vertical-integration context:  
   https://www.sec.gov/Archives/edgar/data/1318605/000162828026003952/tsla-20251231.htm
-
-- Tesla Q2 2026 earnings-call transcript — management remarks that Optimus 4 is intended to use a more vertically integrated supply system than Optimus 3. Preserve as `MARKET_CONTEXT`, not customer-allocation proof.
 
 ### Competitor primary
 
-- Tuopu 2025 annual report — robot-actuator revenue / cost / GM; production-sales quantity disclosed as not applicable:  
+- Tuopu 2025 annual report — robot-actuator revenue / cost / GM:  
   https://static.cninfo.com.cn/finalpage/2026-03-24/1225026446.PDF
-
-- Tuopu 2026H1 report — robot-actuator revenue / cost and current embodied-intelligence business description:  
+- Tuopu 2026H1 report — robot-actuator revenue / GM / small-batch state:  
   https://stock.stockstar.com/notice/SN2026082700051918.shtml
 
 ---
 
-## 11. Current verdict
+## 11. Verdict
 
-The Research can now state more precisely:
+The Research can state:
 
 ```text
-Sanhua's robot commercialization has progressed materially.
+Sanhua robot commercialization has progressed materially.
 ```
 
-But it cannot yet state:
+It cannot state:
 
 ```text
 Sanhua has proven 70% durable allocation.
 ```
 
-The long-run share risk has at least three distinct channels:
+A specific large-order rumor has been formally denied, while the company later independently disclosed batch delivery / line ramp. Those two facts are fully compatible:
 
 ```text
-supplier competition / second sourcing
-+
-customer bargaining / cost-down
-+
-architecture or vertical-integration changes across generations
+commercialization is real
+!= a rumored large order is real
+!= mature allocation is known
 ```
 
-That is why `70%` remains a scenario input rather than an independently underwritten long-run share.
+The long-run share remains a load-bearing assumption rather than an independently underwritten fact.
