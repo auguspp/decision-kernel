@@ -62,7 +62,7 @@ That is a sell-side expectation, not issuer guidance or an established mature-st
 
 ---
 
-## 2. Current-stage external harmonic-reducer sourcing is now directly evidenced
+## 2. Current-stage external harmonic-reducer sourcing is directly evidenced
 
 A supplier-side primary filing materially improves the make-buy map.
 
@@ -114,7 +114,99 @@ The new fact changes the burden of proof, however. A mature model that assumes `
 
 ---
 
-## 3. Why make-or-buy changes both numerator and denominator
+## 3. Supplier-side reverse checks: screws, encoders and force sensors remain unbound to Sanhua robot
+
+After the harmonic-reducer evidence upgraded, the same supplier-side method was applied to other major actuator content.
+
+### 3.1 Planetary roller screws / linear modules
+
+Reviewed primary disclosures from public screw / linear-module suppliers such as Shuanglin and Wuzhou show real humanoid-product development, samples, pilot lines, small-batch delivery and capacity construction.
+
+For example, Shuanglin discloses:
+
+```text
+humanoid planetary roller screws
++ linear joint modules
++ samples / small-batch deliveries to two leading domestic new-energy vehicle customers
++ 100k / year screw capacity under construction / built in stages
+```
+
+but its reviewed filings do **not** identify Sanhua as the customer for these humanoid screw / module products.
+
+Similarly, public-market claims that Beste / Beite / other screw suppliers reach Sanhua directly or indirectly were not supported by a reviewed issuer / exchange filing that simultaneously establishes:
+
+```text
+product = robot screw / linear transmission
++
+customer = Sanhua
++
+stage = validation / sample / small-batch / supply
+```
+
+Therefore:
+
+```text
+SANHUA EXTERNAL ROBOT SCREW SUPPLIER = NOT ESTABLISHED
+```
+
+This does not mean Sanhua has no external screw suppliers. It means the reviewed public evidence does not meet the same standard as Fengli's reducer filing.
+
+### 3.2 Encoders
+
+Public encoder filings such as Yuheng Optical / 奥普光电子公司禹衡光学 show that robot encoder products can still be in small-batch trial / validation and often flow through servo suppliers before reaching robot manufacturers.
+
+The reviewed primary material does not identify Sanhua's robot actuator project as an encoder customer.
+
+Therefore:
+
+```text
+SANHUA ROBOT ENCODER SUPPLIER = NOT ESTABLISHED
+SANHUA ROBOT ENCODER INTERNALIZATION = NOT ESTABLISHED
+```
+
+### 3.3 Force / torque sensors
+
+Ampron / 安培龙 provides a useful anti-overclaim control.
+
+**FACT — 2026 financing inquiry response** — Ampron lists Sanhua among its established **automotive-component customers** together with other Tier-1 suppliers.
+
+The same filing separately discusses its robot force-sensor business and names robot customers such as Tianji Intelligent and Estun in that context.
+
+It does **not** state that Ampron supplies force / torque sensors to Sanhua's robot actuator business.
+
+Therefore:
+
+```text
+SANHUA IS AMPRON AUTOMOTIVE CUSTOMER = FACT
+AMPRON FORCE-SENSOR SUPPLY TO SANHUA ROBOT = NOT ESTABLISHED
+```
+
+This distinction matters because:
+
+```text
+existing customer relationship
++
+new robot product at supplier
+!=
+new robot product is already supplied to that customer
+```
+
+### Research implication
+
+The supplier-side make-buy map currently has an asymmetric proof state:
+
+```text
+harmonic reducer external validation / small-batch into Sanhua = FACT
+robot screw source = NOT ESTABLISHED
+robot encoder source = NOT ESTABLISHED
+robot force / torque sensor source = NOT ESTABLISHED
+```
+
+The correct response is not to fill the remaining cells from supply-chain diagrams. It is to preserve the asymmetry until product-customer-stage evidence appears.
+
+---
+
+## 4. Why make-or-buy changes both numerator and denominator
 
 A robot actuator integrator can reach the same customer billable value through very different economic structures.
 
@@ -173,11 +265,11 @@ not simply whether the component is produced in-house.
 
 ---
 
-## 4. A primary reference for mature planetary-roller-screw pricing
+## 5. A primary reference for mature planetary-roller-screw pricing
 
 Five Continents Spring / 五洲新春 disclosed an exchange-reviewed financing model for a humanoid-robot and intelligent-vehicle precision-component project.
 
-### 4.1 Mature project assumptions
+### 5.1 Mature project assumptions
 
 **FACT — management project model, exchange-reviewed filing**:
 
@@ -198,7 +290,7 @@ This is not a realized market-clearing price and not Sanhua pricing.
 
 It is nevertheless a much stronger industrial reference than an uncited round number because the issuer uses it in a regulated capital-raising project model with explicit capacity, unit cost and equipment assumptions.
 
-### 4.2 Implication for Dongwu's CNY2,000 mature roller-screw assumption
+### 5.2 Implication for Dongwu's CNY2,000 mature roller-screw assumption
 
 Dongwu assumes roughly:
 
@@ -233,7 +325,7 @@ CNY2,000 MATURE ROLLER-SCREW ASP
 
 ---
 
-## 5. Architecture itself can rewrite unit value
+## 6. Architecture itself can rewrite unit value
 
 Five Continents' reference architecture uses:
 
@@ -284,7 +376,7 @@ before it can be treated as economically comparable across sources.
 
 ---
 
-## 6. Linear precision transmission has visible equipment intensity
+## 7. Linear precision transmission has visible equipment intensity
 
 Five Continents provides a useful component-specific capital reference.
 
@@ -308,7 +400,7 @@ This excludes allocated buildings, land, common utilities, development capital a
 
 It is therefore an **equipment-only outside-view intensity**, not total invested capital.
 
-### 6.1 What that means for a 1m-robot success state
+### 7.1 What that means for a 1m-robot success state
 
 If an actuator supplier used Dongwu's architecture:
 
@@ -343,7 +435,7 @@ Sanhua incremental ROIC
 
 ---
 
-## 7. The full Five Continents project reinforces the capital point
+## 8. The full Five Continents project reinforces the capital point
 
 **FACT** — The combined humanoid-robot + intelligent-vehicle project has:
 
@@ -370,7 +462,7 @@ That is directionally important for Sanhua's owner-economics question.
 
 ---
 
-## 8. Implication for the 35亿元 success state
+## 9. Implication for the 35亿元 success state
 
 The sell-side bridge:
 
@@ -418,14 +510,16 @@ Only after mature make-buy is established can Research ask whether a 10% net mar
 
 ---
 
-## 9. Current status
+## 10. Current status
 
 ```text
 SANHUA MOTOR INTERNALIZATION = PARTIAL PRIMARY SUPPORT / EXACT ROBOT SCOPE NOT CLOSED
 SANHUA ROLLER-SCREW INTERNALIZATION = R&D / PRODUCTIZATION INTENT SUPPORTED; MATURE MAKE SHARE NOT ESTABLISHED
 CURRENT-STAGE EXTERNAL HARMONIC-REDUCER SOURCING / VALIDATION = FACT
 SANHUA REDUCER MATURE MAKE-BUY SHARE = NOT ESTABLISHED
-SANHUA SENSOR / ENCODER INTERNALIZATION = NOT ESTABLISHED
+SANHUA EXTERNAL ROBOT SCREW SUPPLIER = NOT ESTABLISHED
+SANHUA ROBOT ENCODER SUPPLIER / INTERNALIZATION = NOT ESTABLISHED
+SANHUA ROBOT FORCE / TORQUE SENSOR SUPPLIER / INTERNALIZATION = NOT ESTABLISHED
 SANHUA CONTROLLER INTERNALIZATION = NOT ESTABLISHED
 FULL CORE-COMPONENT VERTICAL INTEGRATION = NOT ESTABLISHED
 
@@ -440,7 +534,7 @@ OWNER CASH = NOT ESTABLISHED
 
 ---
 
-## 10. Highest-value next evidence
+## 11. Highest-value next evidence
 
 The next evidence that would materially improve the model is:
 
@@ -455,7 +549,7 @@ Until then, `CNY50k customer content` cannot be translated directly into `CNY50k
 
 ---
 
-## 11. Sources
+## 12. Sources
 
 ### Sanhua primary
 
@@ -468,6 +562,16 @@ Until then, `CNY50k customer content` cannot be translated directly into `CNY50k
 
 - April 2026 Shenzhen Stock Exchange financing inquiry response — Sanhua listed among harmonic-reducer customers receiving validation introduction or small-batch supply; project customer/order context:  
   https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-20/334a322e-ff89-484e-9775-8382b07abf12.PDF
+
+### Other supplier-side reverse checks
+
+- Shuanglin 2025H1 / 2026 IR — humanoid roller-screw / linear-module samples, pilot / capacity and unnamed customer state; no reviewed Sanhua product-customer-stage binding:  
+  https://static.cninfo.com.cn/finalpage/2025-08-28/1224592445.PDF  
+  https://static.cninfo.com.cn/finalpage/2026-01-07/1224922386.PDF
+- Aopuguangdian / Yuheng Optical 2023 IR — robot encoder market commonly reached through servo suppliers; high-end products still in small-batch trial; no Sanhua robot binding in reviewed material:  
+  https://static.cninfo.com.cn/finalpage/2023-06-01/1216968228.PDF
+- Ampron 2026 financing inquiry response — Sanhua listed as automotive-component customer while robot force-sensor customer discussion is separate; does not establish force-sensor supply to Sanhua robot:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12310885&stockid=301413
 
 ### Five Continents Spring / 五洲新春 primary / exchange-reviewed
 
