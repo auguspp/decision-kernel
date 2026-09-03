@@ -73,9 +73,17 @@ def test_shadow_capture_binds_real_research_identity_to_qualified_history(
         "thscode": "600036.SH",
         "ticker": "600036",
     }
-    assert artifact["research_identity"]["research_snapshot_id"] == (
-        "edda6f4b-0fdd-5699-9fa3-76338a58ff3d"
-    )
+    assert artifact["research_identity"] == {
+        "research_snapshot_id": "edda6f4b-0fdd-5699-9fa3-76338a58ff3d",
+        "research_created_at": "2026-09-02T00:10:00+00:00",
+        "research_as_of": "2026-08-30T00:00:00+00:00",
+        "research_information_bundle_hash": (
+            "6ad42a3b342c0bc043d8e2589ea46a9072d598e502e4755071c109d13f538872"
+        ),
+    }
+    assert artifact["research_identity"]["research_created_at"] != artifact[
+        "research_identity"
+    ]["research_as_of"]
     assert artifact["market_contract"] == {
         "expected_latest_session": "2026-09-02",
         "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
