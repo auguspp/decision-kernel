@@ -10,37 +10,34 @@ Investment Authority: **NONE**
 
 ## 0. Why this note exists
 
-The current 35亿元 robot success-state still lacks a robot-specific invested-capital denominator.
+The CNY3.5bn / 35亿元 robot success state gives a profit endpoint but not the commercialization sequence or capital path required to reach it.
 
-One reason is that Sanhua's public robot capital disclosures refer to **different stages and mixed scopes**:
+Public evidence now supports a more specific sequence:
 
 ```text
-R&D / prototype development
-→ pilot / trial production
-→ customer co-development
-→ production-base preparation
+dedicated R&D blueprint
+→ prototype / customer validation
+→ trial production / iteration / sampling
+→ production-capital commitment
 → batch delivery / line ramp
-→ mature mass production
+→ capacity absorption
+→ mature utilization / margin
+→ owner return
 ```
 
-A single headline such as `CNY3.8bn investment` cannot safely represent all of these stages, and it cannot be assigned wholly to robot production when the project explicitly contains other businesses.
+The Research question is not which single factory headline should be divided by CNY3.5bn.
 
-This note therefore reconstructs two things together:
+It is:
 
-1. the public commercialization proof ladder; and
-2. the capital layers that appear at each stage.
-
-The goal is not to estimate robot ROIC with guessed numbers. The goal is to establish what capital must eventually be measured before ROIC can be calculated honestly.
+> What cumulative development, pilot, production and working capital must listed Sanhua commit before the robot NOPAT underlying that success state becomes durable?
 
 ---
 
 ## 1. Commercialization proof ladder
 
-### 1.1 2023 GDR plan: dedicated R&D project, no production capacity
+### 1.1 2023: dedicated R&D blueprint, explicitly no capacity
 
-**FACT** — Sanhua's 2023 GDR fundraising plan included a dedicated `机器人机电执行器研发项目` with planned total investment of **CNY201.8m** and proposed GDR proceeds of CNY200m.
-
-Planned budget:
+**FACT** — Sanhua's 2023 GDR plan included a dedicated `机器人机电执行器研发项目`:
 
 ```text
 factory rental + renovation = CNY7.35m
@@ -49,75 +46,54 @@ project development + other R&D = CNY142.65m
 total = CNY201.80m
 ```
 
-The project description says Sanhua intended to integrate resources including servo motors, transmission components, encoders and controllers to develop cost-effective electromechanical actuators for bionic robots.
-
-**FACT** — The same filing explicitly says:
+The filing explicitly said the project:
 
 ```text
-this is an R&D project
-→ it does not generate direct economic benefits
-→ it does not add production capacity
+was an R&D project
+did not generate direct economic benefits
+did not add production capacity
 ```
 
-The project code was `2306-330114-89-02-522891` and no environmental approval was required because the R&D project did not involve added capacity.
-
-**INFERENCE** — Sanhua itself originally separated robot **development capital** from eventual production capacity. Therefore an owner-economics bridge that begins only with production PP&E is incomplete.
-
-### 1.2 Critical scope correction: planned R&D budget != realized robot investment
-
-**FACT** — On October 30, 2024, Sanhua's board approved termination of the Swiss GDR issuance plan; the termination announcement was published October 31, 2024.
+**FACT** — The GDR plan was later terminated in 2024.
 
 Therefore:
 
 ```text
 CNY201.8m
-= disclosed planned R&D-project budget under the GDR plan
-!= proof that CNY201.8m was actually spent on robot R&D
+= disclosed development-capital blueprint
+!= proven realized robot R&D cash spend
 ```
 
-The original fundraising document allowed the company to make self-funded early investments before proceeds arrived, but the later GDR termination does not disclose the realized robot-specific amount.
+This establishes a conceptual point with primary evidence: robot capital begins **before** production PP&E.
 
-**NOT ESTABLISHED** — cumulative realized robot-specific R&D cash investment under this project.
+### 1.2 2024: R&D / no designated customer
 
-This distinction matters because using the full CNY201.8m as realized invested capital would fabricate precision.
+**FACT** — A September 2024 exchange response said the robot project was still an R&D project and had no designated customer at that time.
 
-### 1.3 2024 regulatory inquiry: functional-sample stage and no designated customer
+The issuer also explained that robot actuator production overlaps with existing stamping, injection molding, machining, welding, surface treatment, motor winding, PCBA SMT and assembly, while adding higher-precision transmission / reduction machining requirements.
 
-**FACT** — In the September 2024 exchange inquiry response, Sanhua described the robot product as a motor-driven actuator with a reduction mechanism.
+`INFERENCE` — Existing process overlap can reduce some greenfield needs, but precision transmission introduces incremental equipment / process-control / yield requirements that cannot be assumed free.
 
-The response says the robot project at that time was an R&D project and had **no designated customer** (`暂无定点客户`).
+### 1.3 End-2024 / 2025: key-customer co-development and validation
 
-The company also explained that robot actuator production uses many processes already present in its existing products — stamping, injection molding, machining, welding, surface treatment, motor winding, PCBA SMT and assembly — but robot products add precision machining for the reduction mechanism because of tighter tolerance requirements.
+**FACT** — Sanhua's 2025 Hong Kong prospectus says its bionic-robot actuator R&D team exceeded 180 people by end-2024 and that the company was collaborating with key customers while planning overseas production.
 
-**INFERENCE** — Existing manufacturing know-how and equipment may reduce greenfield needs for some process steps, but the higher-precision transmission / reduction content creates incremental equipment, process-control and yield requirements that cannot be assumed to be free.
-
-### 1.4 End-2024 / 2025 listing evidence: customer co-development, still pre-scale
-
-**FACT** — Sanhua's 2025 Hong Kong prospectus says its bionic-robot actuator R&D team had grown to **more than 180 people by December 31, 2024**, more than three times the year-earlier level.
-
-The prospectus says the company was planning overseas production and **collaborating with key customers to develop products**.
-
-**FACT** — As of the prospectus's Latest Practicable Date, Sanhua still described the business as:
+**FACT** — The 2025 annual report describes:
 
 ```text
-R&D phase
-→ refining prototypes
-→ before scalable commercialization
+R&D
+trial production
+iteration
+sampling
 ```
 
-while actively deploying overseas factories for future production.
+with customers.
 
-This is a stronger proof state than `no designated customer`, but it still does not establish mass-production allocation or realized unit economics.
+The business was still earning commercialization through validation rather than already operating at mature economics.
 
-### 1.5 2025 operating disclosure: repeated trial / iteration / sampling
+### 1.4 2026H1: batch delivery + production-line ramp
 
-**FACT** — Sanhua's 2025 annual report says the company worked with customers on R&D, trial production, iteration and sampling of key robot-actuator products and continued overseas production-layout work.
-
-**INFERENCE** — The commercialization ladder was still being earned through product iteration and customer validation during 2025 rather than already operating at mature mass-production economics.
-
-### 1.6 2026H1: batch delivery and line ramp
-
-**FACT** — On August 27, 2026, Sanhua's investor-relations record says its bionic-robot electromechanical actuator products had received positive customer feedback, product development had made progress, and core products were steadily advancing through:
+**FACT** — August 27, 2026 IR says core products are steadily advancing through:
 
 ```text
 batch delivery
@@ -125,19 +101,14 @@ batch delivery
 production-line ramp
 ```
 
-while new-product R&D and market development continued.
+This is the strongest current issuer proof state.
 
-This is the strongest current issuer disclosure in the proof ladder.
-
-It establishes that commercialization has moved beyond the 2024 prototype / no-designation stage.
-
-It still does **not** disclose:
+It does not disclose:
 
 ```text
 named customer
-customer-specific qualified-source status
-mass-production allocation
-robot actuator revenue
+contracted allocation
+robot revenue
 shipment units
 rated line capacity
 yield
@@ -155,35 +126,32 @@ MATURE MASS-PRODUCTION ECONOMICS = NOT ESTABLISHED
 
 ---
 
-## 2. Capital sequence: what must be counted before incremental ROIC is real
+## 2. Capital sequence
 
-The public record points to at least five economically distinct capital layers.
+The public record now supports at least six economically distinct capital layers.
 
-### Layer A — product-development capital
+### Layer A — development capital
 
-Evidence:
+Primary evidence:
 
 ```text
-planned dedicated R&D project = CNY201.8m
+historical planned dedicated R&D project = CNY201.8m
 ```
 
-but realized amount remains `NOT ESTABLISHED` because the GDR plan was later terminated and no robot-specific realized-spend bridge is publicly closed.
+Realized robot-specific amount remains `NOT ESTABLISHED`.
 
-The budget itself is informative about the **type** of capital:
+Economic content can include:
 
 ```text
 R&D equipment
-+
-project-development / other R&D inputs
-+
-R&D site / renovation
+engineering labor / development
+site / renovation
+prototype design
 ```
 
-This capital exists before production output is available.
+### Layer B — customer-validation / pilot capital
 
-### Layer B — customer-validation / pilot-production capital
-
-Public evidence shows repeated:
+Public proof states include:
 
 ```text
 prototype refinement
@@ -193,34 +161,40 @@ sampling
 customer co-development
 ```
 
-**NOT ESTABLISHED** — robot-specific pilot-line equipment, test rigs, metrology, tooling, scrap, engineering samples, certification expense and field-validation cost.
+**NOT ESTABLISHED:**
 
-These costs can be economically real even if accounting treatment places much of them in current R&D expense rather than on the balance sheet.
+```text
+pilot-line equipment
+test rigs / metrology
+tooling
+engineering samples
+scrap / rework
+field-validation cost
+```
 
-### Layer C — production PP&E and tooling
+These costs can be economically real even when accounting treatment expenses much of them through R&D.
 
-**FACT** — Sanhua's 2024 future-industry agreement contemplated at least **CNY3.8bn** for a combined:
+### Layer C — mixed China production capital
+
+**FACT** — The CNY3.8bn future-industry agreement is mixed:
 
 ```text
 robot electromechanical actuator
 +
-domain-controller
-R&D and production base
+domain controller
 ```
 
-The project was a mixed scope and the disclosed amount was an investment target, not a robot-only realized asset balance.
+and is an investment target, not a robot-only realized asset balance.
 
-**FACT** — The later CNY700m intelligent-drive future-industry-center project is also mixed:
+**FACT** — The later CNY700m intelligent-drive center is also mixed:
 
 ```text
-new-energy vehicle thermal-management components
+new-energy thermal-management components
 +
 bionic-robot components
 ```
 
-and contains land, buildings, equipment, contingency and initial working capital.
-
-Its disclosed planned capital stack is:
+Capital stack:
 
 ```text
 land                    CNY70.89m
@@ -231,96 +205,140 @@ initial working capital CNY65.42m
 total                   CNY700.00m
 ```
 
-By 2025 year-end this project had **CNY138.97m** of construction-in-progress, equal to **19.85%** of its budget, with project progress reported at **25%**.
-
-By 2026H1 its construction-in-progress balance had risen to **CNY194.75m**, equal to **32.01%** of budget, with project progress reported at **60%**.
-
-The project is therefore no longer merely planned capital: **realized mixed capital deployment is FACT**.
-
-But the same scope problem remains:
+Realized mixed deployment:
 
 ```text
-CNY3.8bn != robot-only invested capital
-CNY700m != robot-only invested capital
-CNY194.75m realized mixed-center CIP != robot-only invested capital
-```
+2025 ending CIP = CNY138.97m
+2025 investment / budget = 19.85%
+project progress = 25%
 
-No public filing reviewed here allocates the shared center's factory area, equipment or initial working capital between robot and thermal-management products.
+2026H1 ending CIP = CNY194.75m
+investment / budget = 32.01%
+project progress = 60%
+```
 
 Therefore:
 
 ```text
-REALIZED MIXED PRODUCTION CAPITAL = FACT
-ROBOT ATTRIBUTION OF MIXED PRODUCTION CAPITAL = NOT ESTABLISHED
-ROBOT-SPECIFIC PRODUCTION PP&E / TOOLING = NOT ESTABLISHED
+REALIZED MIXED CHINA PRODUCTION CAPITAL = FACT
+ROBOT ATTRIBUTION WITHIN MIXED CHINA CAPITAL = NOT ESTABLISHED
 ```
 
-See `docs/dogfood/sanhua-robot-realized-capital-attribution-challenger-2026-09-03.md` for the detailed attribution pass.
+### Layer D — listed-company-perimeter Thailand robot production capital
 
-### Layer D — ramp losses / underutilized fixed cost
+This layer is now independently established.
 
-Sanhua's current public proof state is `production-line ramp`, not mature utilization.
+**FACT — Sanhua 2024 annual report** — `Sanhua Intelligent Drives (Thailand) Co., Ltd.` was newly established with a **100% contribution ratio** and included in listed Sanhua's consolidation scope.
 
-The 2025 Hong Kong prospectus itself warns that expansion into the robot-actuator industry requires significant capital investment in new production facilities and qualified personnel, with incremental depreciation, raw-material, financing and labor costs. It also says expansion success depends in part on customer demand for the added capacity.
+**FACT — Thailand BOI / OSOS** — In February 2026 the same named subsidiary received promotion for a Chonburi project to manufacture **humanoid-robot actuators**, with planned investment of **THB1.8bn**.
 
-This issuer warning is economically important:
+Therefore:
 
 ```text
-capacity investment
-→ creates depreciation / labor / overhead before utilization is necessarily mature
+LISTED-COMPANY-PERIMETER ROBOT-SPECIFIC PLANNED PRODUCTION CAPITAL
+= FACT / THB1.8bn
 ```
 
-Outside-view evidence from Leaderdrive and Nabtesco shows that precision-transmission capacity can spend multiple years below full utilization and that margin is highly sensitive to utilization.
+This is a genuine upgrade from the earlier state where only mixed project capital was visible.
 
-**NOT ESTABLISHED** — Sanhua robot line utilization and startup-loss burden.
-
-### Layer E — working capital and owner-cash reinvestment
-
-The CNY700m mixed project explicitly includes initial working capital, while Leaderdrive's precision-transmission reference project also budgets material initial working capital.
-
-For Sanhua robot specifically, public evidence does not disclose:
+But BOI does not disclose:
 
 ```text
-robot receivables
-robot inventory
-robot payables
+rated annual capacity
+investment composition
+line count / machinery
+realized robot-only fixed assets
+yield
+utilization
+```
+
+### Layer E — broader Thailand factory capital cannot be assigned wholly to robot
+
+**FACT — Thailand BOI / OSOS** — The same Thailand subsidiary had previously received investment promotion for **advanced automotive components** supplying BYD, Volvo and Tesla, with investment above **THB3.2bn**.
+
+**FACT — Sanhua 2026H1** — The issuer separately reports a broader `Thailand drive-factory project`:
+
+```text
+budget = USD140m
+ending CIP = CNY556.43m
+cumulative investment / budget = 63.87%
+progress = 57%
+H1 transfer from CIP to fixed assets = CNY2.86m
+```
+
+Therefore:
+
+```text
+THAILAND SUBSIDIARY / DRIVE-FACTORY CAPITAL
+!= ROBOT-ONLY CAPITAL
+```
+
+Public evidence does not reconcile:
+
+```text
+THB1.8bn humanoid-actuator project
+>THB3.2bn prior advanced-auto project
+USD140m broader drive-factory project
+```
+
+at the asset / production-line level.
+
+The correct state is:
+
+```text
+ROBOT-SPECIFIC PLANNED THAILAND CAPITAL = FACT
+BROADER THAILAND REALIZED CAPITAL = FACT
+ROBOT ATTRIBUTION OF BROADER REALIZED CAPITAL = NOT ESTABLISHED
+```
+
+### Layer F — ramp losses / working capital / maintenance capital
+
+Sanhua's current proof state is line ramp, not mature utilization.
+
+The Hong Kong prospectus itself warns that robot-actuator expansion requires significant new facilities and qualified personnel and creates depreciation, raw-material, financing and labor costs; success depends partly on demand absorbing added capacity.
+
+Robot-specific public data still do not disclose:
+
+```text
+receivables
+inventory
+payables
 customer payment terms
 supplier payment terms
-safety-stock requirements
 work-in-process days
+startup losses
+maintenance / replacement capex
 ```
 
-So even if a future robot net-profit number became visible, owner cash would still require a working-capital bridge.
+So even a future robot profit number would still need a capital / cash-conversion bridge.
 
 ---
 
-## 3. Why the 35亿元 case is not yet an ROIC case
+## 3. Why the CNY3.5bn case is not yet an ROIC case
 
-The sell-side success-state gives an income-statement endpoint:
+The sell-side state gives:
 
 ```text
 CNY3.5bn net profit
 ```
 
-but not the capital sequence required to get there.
-
-A real incremental-ROIC bridge needs at least:
+A real owner-economics denominator needs at least:
 
 ```text
 realized development capital
 +
-pilot / testing / tooling capital
+pilot / validation / tooling capital
 +
 robot-attributable production PP&E
 +
-ramp / underutilization burden
-+
 working capital
 +
-maintenance / replacement capex
+ramp / underutilization burden
++
+maintenance / replacement capital
 ```
 
-then:
+Then:
 
 ```text
 incremental NOPAT
@@ -329,7 +347,7 @@ incremental invested capital
 = incremental ROIC
 ```
 
-and owner cash needs one further bridge:
+and:
 
 ```text
 incremental NOPAT
@@ -339,163 +357,150 @@ incremental NOPAT
 = owner cash
 ```
 
-Current public evidence is not sufficient to fill the denominator with a defensible Sanhua-specific number.
+Current public evidence cannot fill that denominator with a defensible Sanhua-specific mature number.
 
-Therefore:
+---
+
+## 4. Current capital proof state
 
 ```text
-ROBOT REALIZED DEVELOPMENT CAPITAL = NOT ESTABLISHED
-ROBOT-SPECIFIC PILOT / TOOLING CAPITAL = NOT ESTABLISHED
-ROBOT-SPECIFIC PRODUCTION PP&E = NOT ESTABLISHED
-ROBOT RAMP UTILIZATION = NOT ESTABLISHED
-ROBOT WORKING CAPITAL = NOT ESTABLISHED
-ROBOT MAINTENANCE CAPEX = NOT ESTABLISHED
-ROBOT INCREMENTAL INVESTED CAPITAL = NOT ESTABLISHED
-ROBOT INCREMENTAL ROIC = NOT ESTABLISHED
-ROBOT OWNER CASH = NOT ESTABLISHED
+PLANNED DEDICATED ROBOT R&D CAPITAL
+= historical blueprint / realized amount NOT ESTABLISHED
+
+ROBOT-SPECIFIC PILOT / VALIDATION CAPITAL
+= NOT ESTABLISHED
+
+REALIZED MIXED CHINA PRODUCTION CAPITAL
+= FACT
+
+ROBOT ATTRIBUTION WITHIN CHINA MIXED CAPITAL
+= NOT ESTABLISHED
+
+LISTED-COMPANY-PERIMETER THAILAND HUMANOID-ACTUATOR PLANNED CAPITAL
+= FACT / THB1.8bn
+
+BROADER THAILAND DRIVE-FACTORY REALIZED CAPITAL
+= FACT
+
+ROBOT ATTRIBUTION WITHIN BROADER THAILAND REALIZED CAPITAL
+= NOT ESTABLISHED
+
+ROBOT-SPECIFIC RATED CAPACITY
+= PUBLICLY NOT ESTABLISHED
+
+ROBOT RAMP UTILIZATION / YIELD
+= NOT ESTABLISHED
+
+ROBOT WORKING CAPITAL
+= NOT ESTABLISHED
+
+ROBOT MAINTENANCE CAPEX
+= NOT ESTABLISHED
+
+TOTAL ROBOT INCREMENTAL INVESTED CAPITAL
+= NOT ESTABLISHED
+
+ROBOT INCREMENTAL ROIC
+= NOT ESTABLISHED
+
+ROBOT OWNER CASH
+= NOT ESTABLISHED
 ```
 
 ---
 
-## 4. What did become stronger after this pass
+## 5. Research stop / reopen condition for capital
 
-### 4.1 The business has clearly moved through real commercialization stages
+The current public-capital pass has reached a reasonable evidence boundary.
 
-The issuer's own chronology now supports:
+Do not manufacture a capacity denominator from sell-side volume assumptions or allocate an entire mixed factory to robot.
 
-```text
-2023 dedicated R&D plan / no capacity
-→ 2024 no designated customer / functional-product work
-→ end-2024 180+ R&D team / key-customer co-development
-→ 2025 prototype refinement + trial / iteration / sampling
-→ 2026H1 batch delivery + production-line ramp
-```
+Reopen when public evidence provides one or more of:
 
-That is meaningful progress.
+1. Thailand BOI / factory-license / industrial-estate rated robot capacity;
+2. robot-specific machinery list / line count / floor allocation;
+3. issuer reconciliation of THB1.8bn robot project vs broader USD140m drive factory;
+4. robot-attributable fixed assets transferred from CIP;
+5. actual robot actuator output / utilization / yield;
+6. robot-specific inventory / receivables / payables;
+7. maintenance / replacement capital or robot-specific cash-flow disclosure.
 
-### 4.2 But progress in proof stage is not proof of mature economics
-
-The progression does not establish:
+Until then:
 
 ```text
-1m realized downstream units
-70% durable allocation
-CNY50k mature billable content
-10% durable net margin
-robot-specific invested capital
+DO NOT
+= divide THB1.8bn by guessed capacity
+= allocate the whole Thailand subsidiary to robot
+= allocate the whole CNY700m / CNY3.8bn China projects to robot
 ```
-
-So it cannot by itself validate the 35亿元 success state.
-
-### 4.3 The capital question is broader than one factory number
-
-The GDR R&D blueprint demonstrates that dedicated development capital was contemplated before production capacity.
-
-The mixed CNY3.8bn and CNY700m projects demonstrate that subsequent production expansion is capital-consuming but not publicly separable into robot-only assets.
-
-The CNY700m center further establishes that actual mixed capital has already been deployed, including a budgeted equipment and initial-working-capital layer, even though robot attribution remains unavailable.
-
-The prospectus explicitly warns that robot-actuator expansion requires substantial production capital and qualified personnel and creates depreciation / raw-material / financing / labor costs.
-
-**INFERENCE** — The correct question is not:
-
-> Which disclosed headline project number should we divide by 35亿元?
-
-It is:
-
-> What cumulative incremental capital — development, pilot, attributable shared infrastructure, dedicated PP&E, working capital and ongoing reinvestment — must Sanhua commit to produce the durable NOPAT underlying that 35亿元 scenario?
-
-That cumulative robot-specific number is still `NOT ESTABLISHED`.
-
----
-
-## 5. Highest-value next evidence
-
-The next Research upgrade should prioritize evidence capable of assigning capital to robot specifically:
-
-1. project filings / government approvals that disclose robot-only equipment or rated output;
-2. equipment procurement / line specifications / production-area evidence;
-3. issuer disclosure of robot revenue, shipment volume or production capacity;
-4. robot-specific R&D / headcount / tooling spend after the GDR plan was terminated;
-5. customer allocation evidence capable of linking required capacity to economic share;
-6. realized utilization / yield / margin disclosure once the current line ramp matures.
-
-If those data remain unavailable, the correct Research state is not to invent a capital range. It is to preserve the missing attribution explicitly.
 
 ---
 
 ## 6. Source register
 
-### Dedicated R&D blueprint / GDR
+### Development / China
 
-- 2023 GDR fundraising feasibility analysis — robot actuator R&D project CNY201.8m, budget composition, no added capacity / no direct economic benefit:  
+- 2023 GDR feasibility analysis — CNY201.8m robot actuator R&D blueprint / no added capacity:  
   https://static.cninfo.com.cn/finalpage/2023-06-21/1217108276.PDF
-
-- 2024 GDR termination announcement — confirms the financing plan was terminated:  
+- 2024 GDR termination:  
   https://static.cninfo.com.cn/finalpage/2024-10-31/1221570947.PDF
-
-### Product architecture / 2024 proof state
-
-- September 2024 exchange inquiry response — robot product architecture, precision-machining difference, no designated customer at that time:  
+- September 2024 exchange inquiry — robot architecture / no designated customer:  
   https://static.cninfo.com.cn/finalpage/2024-09-26/1221289654.PDF
-
-### 2025 commercialization state / capital-risk language
-
-- 2025 Hong Kong prospectus — 180+ robot R&D team by end-2024; customer co-development; prototype refinement before scalable commercialization; significant-capital-investment risk for production expansion:  
+- 2025 Hong Kong prospectus — customer co-development / capital-risk language:  
   https://www.hkexnews.hk/listedco/listconews/sehk/2025/0613/2025061300017.pdf
-
-- 2025 annual report — customer R&D / trial production / iteration / sampling; intelligent-drive-center 2025 CIP:  
-  https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032301606_c.pdf
-
-### Current commercialization state
-
-- August 27, 2026 investor-relations record — batch delivery / production-line ramp:  
-  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
-
-- 2026H1 report — intelligent-drive-center CIP CNY194.75m / 32.01% budget / 60% reported progress:  
-  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
-
-### Mixed production-capital disclosures
-
-- 2024 future-industry investment agreement — at least CNY3.8bn mixed robot actuator + domain-controller R&D / production base:  
+- 2025 intelligent-drive-center project — CNY700m mixed project / capital stack:  
+  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0730/2025073001653_c.pdf
+- 2024 future-industry agreement — CNY3.8bn mixed robot actuator + domain-controller project:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=9763716&stockid=002050
 
-- Intelligent-drive future-industry-center project — CNY700m mixed thermal-management + robot-component project including land / buildings / equipment / initial working capital:  
-  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0730/2025073001653_c.pdf
+### Thailand
+
+- Sanhua 2024 annual report — Thailand Intelligent Drives established at 100% contribution ratio / included in consolidation:  
+  https://www.zjshc.com/upload/img/2025-05/683960f6eef82.pdf
+- Thailand BOI / OSOS — THB1.8bn humanoid-actuator project + prior >THB3.2bn advanced-auto-parts project:  
+  https://osos.boi.go.th/TH/news/2353/
+- Sanhua 2026H1 report — broader Thailand drive-factory CIP / fixed-asset transfer / progress; China mixed-center CIP:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+
+### Commercialization
+
+- Sanhua 2025 annual report — trial / iteration / sampling.
+- August 27, 2026 IR — batch delivery / production-line ramp:  
+  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12563691&stockid=002050
 
 ---
 
-## 7. Current verdict
+## 7. Verdict
 
-The capital pass improves the Research in one important way:
-
-```text
-robot capital is not one number
-```
-
-The public evidence instead points to a sequence:
+The capital Research has moved from:
 
 ```text
-development capital
-→ customer-validation / pilot capital
-→ production PP&E / tooling
-→ ramp / underutilization burden
-→ working capital
-→ maintenance + growth reinvestment
+only mixed investment headlines are visible
 ```
 
-Sanhua has demonstrably progressed from R&D toward batch delivery and line ramp. Actual mixed capital is now observable in the intelligent-drive center, but robot attribution inside that mixed capital remains unavailable.
-
-Therefore the 35亿元 state should continue to be treated as:
+to:
 
 ```text
-PROFIT SUCCESS-STATE REFERENCE
-/
-ROBOT-SPECIFIC CAPITAL ATTRIBUTION NOT YET CLOSED
-/
-INCREMENTAL ROIC NOT ESTABLISHED
-/
-OWNER ECONOMICS NOT ESTABLISHED
+a listed-company-perimeter robot-specific planned production-capital project is established,
+real broader China / Thailand capital deployment is visible,
+and the exact attribution / capacity gaps preventing ROIC are explicit.
 ```
 
-No generic Research method is promoted from this case yet.
+That is enough to reject both:
+
+```text
+robot capital is negligible / asset-light
+```
+
+and:
+
+```text
+all disclosed Sanhua factory capital belongs to robot
+```
+
+The honest endpoint remains:
+
+```text
+SANHUA ROBOT INCREMENTAL ROIC = NOT ESTABLISHED
+SANHUA ROBOT OWNER ECONOMICS = NOT ESTABLISHED
+```
