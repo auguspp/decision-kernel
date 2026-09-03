@@ -1,6 +1,6 @@
 # Sanhua Robot Realized-Capital Attribution Challenger — 2026-09-03
 
-Status: **RESEARCH CHALLENGER SUPPORT / CASE-SPECIFIC / REALIZED-CAPITAL PASS / NO ROBOT-ONLY CAPITAL ESTIMATE**  
+Status: **RESEARCH CHALLENGER SUPPORT / CASE-SPECIFIC / REALIZED-CAPITAL PASS / NO ROBOT-ONLY REALIZED-CAPITAL ESTIMATE**  
 Security: **三花智控 / 002050.SZ / 02050.HK**  
 Parent challenger: `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md`  
 Sibling capital sequence: `docs/dogfood/sanhua-robot-commercialization-capital-sequence-2026-09-03.md`  
@@ -9,27 +9,172 @@ Investment Authority: **NONE**
 
 ## 0. Purpose
 
-Earlier work correctly concluded that Sanhua's public production-capital disclosures are mixed-scope and cannot be assigned wholly to robot economics.
-
-This pass adds a sharper distinction:
+The capital question now has three distinct layers:
 
 ```text
-planned mixed capital
-!= realized mixed capital
+robot-specific planned production capital
+!= realized project capital
 != robot-attributable realized capital
 ```
 
-Public evidence now supports the first two layers for one important Sanhua project.
+Earlier work established real mixed capital deployment in China but could not identify any clean robot-specific production-capital project.
 
-The third layer remains `NOT ESTABLISHED`.
+That first layer has now improved: Thailand's Board of Investment publicly identifies a Sanhua humanoid-robot actuator project with THB1.8bn planned investment.
+
+The realized robot-only denominator remains `NOT ESTABLISHED`.
 
 ---
 
-## 1. The CNY700m intelligent-drive center has a disclosed capital structure
+## 1. Thailand: robot-specific planned production capital is now FACT
 
-**FACT — issuer disclosure** — `浙江三花智能驱动未来产业中心建设项目` has planned total investment of **CNY700m**.
+**FACT — Thailand Board of Investment / OSOS** — In February 2026, the Thai BOI said `Sanhua Intelligent Drives` received investment promotion for a project in Chonburi to manufacture **actuators for humanoid robots**, with planned investment of **THB1.8bn**.
 
-The budget is:
+This is materially stronger than the earlier mixed Chinese project disclosures because it identifies both:
+
+```text
+product scope = humanoid-robot actuator
++
+planned investment = THB1.8bn
+```
+
+Therefore the previous broad state can be upgraded:
+
+```text
+ROBOT-SPECIFIC PLANNED PRODUCTION CAPITAL = FACT
+```
+
+But BOI's public release does not disclose:
+
+```text
+rated annual actuator capacity
+investment composition by land / building / machinery / working capital
+line count
+machine list
+robot generation / actuator mix
+realized fixed assets
+utilization
+yield
+```
+
+Therefore:
+
+```text
+ROBOT-SPECIFIC REALIZED PRODUCTION PP&E = NOT ESTABLISHED
+ROBOT RATED CAPACITY = NOT ESTABLISHED
+ROBOT UTILIZATION / YIELD = NOT ESTABLISHED
+```
+
+### Customer-language boundary
+
+The same BOI announcement describes the five-company humanoid-parts investment cluster as primarily targeting Tesla Bot and also other global technology companies.
+
+That statement is government context for the **cluster**. It is not promoted into:
+
+```text
+Sanhua-specific Tesla contract
+Sanhua-specific order quantity
+Sanhua-specific allocation
+exclusive / primary-source status
+```
+
+Those remain `NOT ESTABLISHED`.
+
+---
+
+## 2. The BOI robot project is not automatically identical to Sanhua's broader Thailand drive-factory project
+
+**FACT — Sanhua 2026H1 report** — The issuer separately discloses a `泰国驱动厂房项目` with:
+
+```text
+budget = USD140m
+opening CIP = CNY371.54m
+H1 additions = CNY187.75m
+H1 transfer to fixed assets = CNY2.86m
+ending CIP = CNY556.43m
+cumulative investment / budget = 63.87%
+reported project progress = 57%
+```
+
+This is strong issuer evidence that the Thailand drive operation is absorbing real capital and beginning to transfer some construction in progress into fixed assets.
+
+However:
+
+```text
+THB1.8bn BOI humanoid-actuator project
+!= automatically the same scope as
+USD140m issuer Thailand drive-factory project
+```
+
+The public materials reviewed here do not provide a reconciliation between the two scopes.
+
+The broader Thai subsidiary is registered for R&D / production / sale of electric motors and control systems, and Sanhua's group disclosures do not label the full USD140m project robot-only.
+
+Therefore:
+
+```text
+THAILAND HUMANOID-ACTUATOR PLANNED PROJECT = FACT
+THAILAND DRIVE-FACTORY REALIZED CAPITAL = FACT AT BROADER PROJECT LEVEL
+ROBOT SHARE OF BROADER THAILAND DRIVE-FACTORY REALIZED CAPITAL = NOT ESTABLISHED
+```
+
+This distinction prevents both errors:
+
+```text
+error A: ignore Thailand robot-specific capital completely
+error B: assign the entire USD140m Thailand factory to robot
+```
+
+---
+
+## 3. Thailand operating-readiness signals: useful, not volume proof
+
+Public Thai operating evidence shows the subsidiary is moving beyond a paper investment vehicle.
+
+### Corporate / workforce setup
+
+Registry-derived public data show `Sanhua Intelligent Drives (Thailand) Co., Ltd.` was registered in November 2024 and its registered capital later increased to THB1.5bn.
+
+This is subsidiary-level capitalization context, not proof that THB1.5bn is robot capital or that all registered capital is robot PP&E.
+
+### Government training
+
+Thailand's Department of Skill Development records a March 2026 training program held at Sanhua Intelligent Drives Thailand for production-maintenance / automation-related capabilities.
+
+### Production / NPI / delivery hiring
+
+Public employer postings during 2026 include roles for:
+
+```text
+production supervision
+production-line Q / Q / D control
+NPI from sample → trial production → customer approval → formal production
+customer-order / delivery planning against factory capacity
+process / equipment / maintenance engineering
+quality / CMM inspection
+warehouse / purchasing / logistics
+```
+
+A `Production Supervisor (Factory ACT)` role explicitly references daily / weekly / monthly production planning and production-line quality, quantity and delivery management.
+
+These are `MARKET_CONTEXT / OPERATING SIGNALS` that the Thailand factory is building or operating a manufacturing organization.
+
+They do **not** establish:
+
+```text
+ACT acronym = publicly confirmed robot-actuator line
+humanoid-actuator commercial shipment volume
+rated robot capacity
+robot utilization
+robot revenue
+```
+
+Do not convert hiring infrastructure into shipment arithmetic.
+
+---
+
+## 4. China: the CNY700m intelligent-drive center remains mixed capital
+
+**FACT — issuer disclosure** — `浙江三花智能驱动未来产业中心建设项目` has planned total investment of **CNY700m**:
 
 ```text
 land purchase                    CNY70.89m
@@ -41,21 +186,7 @@ initial working capital          CNY65.42m
 total                            CNY700.00m
 ```
 
-**DERIVATION** — share of total planned investment:
-
-```text
-land                 ≈ 10.1%
-building             ≈ 60.2%
-equipment            ≈ 16.5%
-contingency          ≈ 3.8%
-initial working cap  ≈ 9.3%
-```
-
-The project plans 109.092 mu of land and about 152,900 square meters of new buildings, including 1#, 2# and 5# production plants plus utilities / canteen.
-
-### Scope warning
-
-**FACT** — The same issuer disclosure explicitly says the facilities will later be used for both:
+The same disclosure explicitly says future production includes both:
 
 ```text
 new-energy-vehicle thermal-management system components
@@ -63,308 +194,90 @@ new-energy-vehicle thermal-management system components
 bionic-robot components
 ```
 
-Therefore:
+So none of the CNY700m, equipment budget or initial working capital can be assigned wholly to robot.
 
-```text
-CNY700m != robot-only capital
-CNY115.74m equipment != robot-only equipment
-CNY65.42m initial working capital != robot-only working capital
-```
+### Realized mixed capital
 
-No public building-to-product or equipment-to-product allocation has been found.
-
----
-
-## 2. Realized capital is now visible at the mixed-project level
-
-### 2.1 2025 construction-in-progress
-
-**FACT — 2025 annual report** — The project appears as a separately disclosed important construction-in-progress item.
-
-For 2025:
+2025:
 
 ```text
 project budget                   CNY700.00m
-2025 additions to CIP            CNY138.9748m
-year-end CIP                     CNY138.9748m
+2025 additions / ending CIP      CNY138.9748m
 cumulative investment / budget   19.85%
 reported project progress        25%
 ```
 
-No amount had yet been transferred from this project into fixed assets in that table at year-end 2025.
-
-This establishes that capital was no longer merely a future plan.
-
-### 2.2 2026H1 construction-in-progress
-
-**FACT — 2026H1 report** — By June 30, 2026 the same project had:
+2026H1:
 
 ```text
 opening CIP                      CNY138.9748m
 H1 additions                     CNY55.7704m
-H1 transfers to fixed assets     CNY0
 ending CIP                       CNY194.7452m
 cumulative investment / budget   32.01%
 reported project progress        60%
 ```
 
-Thus the project-wide realized capital base continued to grow during the same period in which Sanhua later described core robot products as entering batch delivery / production-line ramp.
-
-This timing does **not** establish that the CNY194.75m is robot capital. It establishes only that the mixed center was physically absorbing capital while the robot commercialization proof state advanced.
-
-### 2.3募集资金 use through 2025
-
-**FACT — issuer fundraising disclosure** — After the old refrigeration-control project was closed, Sanhua redirected funds into this project through capital contribution to Zhejiang Sanhua Intelligent Drive.
-
-By the relevant 2025 reporting date, disclosed募集资金 investment into the new project was approximately:
+This establishes:
 
 ```text
-CNY82.5933m
-```
-
-This is a financing-source view and should not be added mechanically to the CIP figure: it is part of the same project capital, not a separate economic layer.
-
-### 2.4 2026H1募集资金 progress
-
-**FACT — 2026H1募集资金 report** — Adjusted募集资金 earmarked for the project were CNY295.7279m.
-
-During 2026H1:
-
-```text
-period investment                CNY80.5443m
-cumulative募集资金 investment   CNY163.1376m
-progress vs earmarked funds      55.16%
-```
-
-Again, this is not the project's full economic capital and not robot-only capital. It is one traceable financing channel into the mixed project.
-
----
-
-## 3. Construction status: physical readiness is approaching, but product allocation is still opaque
-
-**FACT — June 2026 issuer announcement** — The project was originally expected to reach usable status in June 2026, but the date was postponed to December 2026.
-
-The company said:
-
-```text
-main structural works were basically completed
-+
-outdoor road-base construction was basically completed
-+
-landscaping / walls / external supporting work and acceptance remained
-```
-
-The implementation entity, total investment, location and intended use did not change.
-
-### Research implication
-
-This is stronger evidence of real physical capital deployment than an investment memorandum or future plan.
-
-But it still does not reveal:
-
-```text
-which factory is for robot products
-which factory is for thermal-management products
-robot production area
-robot equipment list
-robot rated capacity
-robot line count
-robot tooling / metrology
-robot-specific working capital
-```
-
-Therefore:
-
-```text
-MIXED PHYSICAL CAPACITY BUILD-OUT = FACT
-ROBOT-SPECIFIC PHYSICAL CAPACITY = NOT ESTABLISHED
+REALIZED MIXED PHYSICAL CAPACITY BUILD-OUT = FACT
+ROBOT ATTRIBUTION WITHIN THAT BUILD-OUT = NOT ESTABLISHED
 ```
 
 ---
 
-## 4. Why `CNY700m / guessed robot capacity` would be wrong
+## 5. The CNY3.8bn future-industry agreement is also mixed and planned
 
-The project budget itself demonstrates why a simple division is not economically valid.
-
-Approximately 70% of the project is land + building construction:
-
-```text
-CNY70.89m land
-+ CNY421.60m buildings
-= CNY492.49m
-≈ 70.4% of project total
-```
-
-The disclosed equipment budget is only about:
-
-```text
-CNY115.74m
-≈ 16.5% of total
-```
-
-and the project is shared by at least two business families.
-
-So a calculation such as:
-
-```text
-CNY700m / X robot units
-```
-
-would silently assume all of the following false / unsupported identities:
-
-```text
-all shared land belongs to robot
-all shared buildings belong to robot
-all equipment belongs to robot
-all initial working capital belongs to robot
-no thermal-management capacity shares the site
-rated capacity equals economic output
-```
-
-The public evidence does not support any of those assumptions.
-
----
-
-## 5. The useful thing the CNY700m project *does* tell us
-
-It provides a real-world capital stack that future robot attribution must eventually reconcile with.
-
-If robot production occupies part of this project, its owner-economics denominator can include some attributable share of:
-
-```text
-shared land / infrastructure
-+ building space
-+ production equipment
-+ initial working capital
-```
-
-in addition to the earlier capital layers already identified:
-
-```text
-robot development / R&D
-+ prototype / validation
-+ pilot tooling / test
-+ overseas production capital
-+ other dedicated production assets
-```
-
-**INFERENCE** — Robot capital is therefore not safely approximated by either extreme:
-
-```text
-zero / asset-light
-or
-full CNY700m
-```
-
-The missing variable is **capital attribution**.
-
----
-
-## 6. A useful negative finding from project / approval searches
-
-The issuer discloses project code:
-
-```text
-2409-330114-89-01-348431
-```
-
-and the project filing / land / building scope.
-
-Public searches of the project code, project name, production-building numbers and equipment / tender terms did **not** surface an authoritative document that allocates:
-
-```text
-1# / 2# / 5# factory by product
-or
-equipment by robot vs thermal-management use
-or
-rated robot output
-```
-
-This is a negative search result, not proof that no such internal allocation exists.
-
-Current Research status:
-
-```text
-FACT: project-wide building / equipment / WC budget
-FACT: project-wide realized capital deployment through 2026H1
-FACT: project-wide construction progress
-NOT ESTABLISHED: robot-attributable share of any of the above
-```
-
----
-
-## 7. Other overseas / factory capital cannot be silently attributed to robot either
-
-**FACT** — Sanhua's 2026H1 report separately lists a `泰国驱动厂房项目` with:
-
-```text
-budget = USD140m
-ending CIP = CNY556.43m
-cumulative investment / budget = 63.87%
-reported progress = 57%
-```
-
-**FACT** — Company IR says Sanhua intends to expand overseas production of electromechanical actuators and will continue investing in overseas production bases.
-
-However, the reviewed primary disclosures do **not** identify the Thai drive-factory CIP line as a robot-only project or disclose its robot/non-robot product allocation.
-
-Therefore:
-
-```text
-THAILAND DRIVE FACTORY CAPITAL = FACT AT COMPANY PROJECT LEVEL
-ROBOT ATTRIBUTION TO THAILAND DRIVE FACTORY = NOT ESTABLISHED
-```
-
-A sell-side report may group the Thai drive factory with robot-related capacity expansion, but that classification cannot be upgraded to `FACT` without issuer product-scope disclosure.
-
----
-
-## 8. Interaction with the larger CNY3.8bn future-industry investment
-
-Sanhua's 2024 agreement separately contemplated at least CNY3.8bn for a combined:
+Sanhua's 2024 agreement contemplated at least CNY3.8bn for a combined:
 
 ```text
 robot electromechanical actuator
 +
-domain-controller
+domain controller
 R&D / production base
 ```
 
-That amount remains a mixed investment target, not a realized robot asset balance.
+The public agreement does not disclose robot-only project capital, rated robot capacity, or realized robot assets.
 
-`MARKET_CONTEXT` — a contemporaneous First Yicai report said company securities-department staff described the domain-controller / new-energy-auto portion as the largest investment component of the broader future-industry center.
+Therefore:
 
-This is useful context against assigning the whole CNY3.8bn to robot, but it is not primary project allocation data and no numerical robot share should be inferred from it.
+```text
+CNY3.8bn = mixed investment target
+!= robot-only planned capital
+!= robot-only realized capital
+```
+
+The Thailand BOI evidence is better for the narrow question of whether a **product-specific robot production-capital commitment** exists.
 
 ---
 
-## 9. Updated capital state
+## 6. Capital state after the Thailand upgrade
 
-The previous binary statement:
-
-```text
-robot production PP&E = NOT ESTABLISHED
-```
-
-is still correct at the robot-specific level, but can now be made more informative:
+The denominator is no longer wholly invisible. It is now separated as follows:
 
 ```text
 PLANNED DEDICATED ROBOT R&D CAPITAL
-= disclosed blueprint / not proven realized
+= historical disclosed blueprint / not proven realized
 
-REALIZED MIXED INTELLIGENT-DRIVE CENTER CAPITAL
-= FACT
+THAILAND HUMANOID-ACTUATOR PLANNED PRODUCTION CAPITAL
+= FACT / THB1.8bn BOI-approved project
 
-MIXED CENTER EQUIPMENT / WORKING-CAPITAL BUDGET
-= FACT
+THAILAND DRIVE-FACTORY REALIZED CAPITAL
+= FACT at broader company-project level
 
-ROBOT ATTRIBUTION WITHIN MIXED CENTER
+ROBOT ATTRIBUTION OF THAILAND DRIVE-FACTORY REALIZED CAPITAL
 = NOT ESTABLISHED
 
-OTHER OVERSEAS DRIVE-FACTORY CAPITAL
-= FACT AT PROJECT LEVEL / ROBOT ATTRIBUTION NOT ESTABLISHED
+REALIZED CHINA MIXED INTELLIGENT-DRIVE CENTER CAPITAL
+= FACT
 
-OTHER ROBOT-SPECIFIC PRODUCTION ASSETS
+ROBOT ATTRIBUTION WITHIN CHINA MIXED CENTER
+= NOT ESTABLISHED
+
+ROBOT-SPECIFIC RATED CAPACITY
+= NOT ESTABLISHED
+
+ROBOT-SPECIFIC WORKING CAPITAL
 = NOT ESTABLISHED
 
 TOTAL ROBOT INCREMENTAL INVESTED CAPITAL
@@ -374,83 +287,124 @@ ROBOT INCREMENTAL ROIC
 = NOT ESTABLISHED
 ```
 
-This is a genuine Research upgrade: the denominator is no longer wholly invisible; the unresolved problem is now attribution rather than existence.
+This is a meaningful Research upgrade:
+
+> We can now prove that Sanhua has at least one identified robot-actuator production project carrying a substantial planned-capital commitment. We still cannot divide that commitment by a public rated capacity or reconcile it to realized robot assets.
 
 ---
 
-## 10. Next evidence needed
+## 7. Why the new evidence still does not permit a per-unit capital estimate
 
-The highest-value capital evidence is now very specific:
-
-1. factory / floor allocation by product;
-2. robot-specific equipment procurement or line specification;
-3. rated robot component capacity attached to specific equipment;
-4. robot-specific inventory / receivable / payable data or working-capital assumptions;
-5. actual transferred fixed assets once the center reaches usable status;
-6. whether robot lines are located in this center, the Thailand drive factory, Mexico / other overseas sites, existing plants, or several locations.
-
-Until such evidence is public:
+A tempting calculation would be:
 
 ```text
-DO NOT
-= allocate the full project to robot
-= allocate equipment pro rata without a causal basis
-= divide total project capital by guessed robot capacity
-= classify the Thailand drive factory as robot-only from its project name
+THB1.8bn / guessed actuator units
+```
+
+That remains invalid because the denominator is absent.
+
+Likewise, using sell-side robot volume to manufacture a denominator would reverse the evidence chain:
+
+```text
+sell-side guessed capacity
+→ divide official project capital
+→ apparent unit-capital precision
+```
+
+That is exactly what this challenger is designed to avoid.
+
+The public evidence must establish the capacity independently before per-unit capital intensity can be calculated for Sanhua.
+
+---
+
+## 8. Highest-value next evidence
+
+The missing evidence is now unusually specific:
+
+1. BOI / industrial-estate / factory-license material disclosing promoted production capacity;
+2. robot-specific machinery list or production-line specification;
+3. robot-actuator area / line count inside the Thailand factory;
+4. issuer reconciliation of the THB1.8bn BOI project with the broader USD140m Thailand drive-factory project;
+5. fixed assets transferred from CIP and attributable to the robot line;
+6. actual robot-actuator output, utilization and yield;
+7. robot-specific receivables / inventory / payables or working-capital assumptions.
+
+Public searches of BOI material, factory-license terminology, company filings and current public hiring material have not surfaced an authoritative rated-capacity figure.
+
+That is a negative research result, not evidence that internal capacity does not exist.
+
+Current public state:
+
+```text
+ROBOT-SPECIFIC PLANNED CAPITAL = ESTABLISHED
+ROBOT-SPECIFIC CAPACITY = NOT ESTABLISHED
+ROBOT-SPECIFIC REALIZED CAPITAL = NOT ESTABLISHED
 ```
 
 ---
 
-## 11. Source register
+## 9. Source register
 
-### Sanhua issuer / exchange
+### Thailand primary / government
 
-- 2025 project change announcement / HK shareholder circular — CNY700m budget; mixed thermal-management + robot use; project-code / building / capital breakdown:  
-  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0730/2025073001653_c.pdf
+- Thailand Board of Investment / OSOS, February 23, 2026 — Sanhua Intelligent Drives promoted for a THB1.8bn humanoid-robot actuator project in Chonburi; broader five-company humanoid-component cluster context:  
+  https://osos.boi.go.th/TH/news/2353/
+- Thailand Department of Skill Development — March 2026 production-maintenance / automation training held at Sanhua Intelligent Drives Thailand:  
+  https://idev.dsd.go.th/~train69/course_detail.php?dep=97&occ=7220082091001&pid=002304
 
-- 2025 annual report — separately disclosed intelligent-drive-center CIP of CNY138.9748m; 19.85% cumulative investment / budget and 25% project progress:  
-  https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032301606_c.pdf
+### Sanhua issuer
 
-- 2026H1 report — intelligent-drive-center ending CIP CNY194.7452m / 32.01% budget / 60% progress; Thailand drive-factory ending CIP CNY556.43m / 63.87% budget / 57% progress:  
+- 2026H1 report — Thailand drive-factory budget, CIP, fixed-asset transfer and construction progress; China intelligent-drive-center CIP:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+- 2025 intelligent-drive-center project disclosure — CNY700m mixed thermal-management + robot project and capital stack:  
+  https://www.hkexnews.hk/listedco/listconews/sehk/2025/0730/2025073001653_c.pdf
+- 2024 future-industry agreement — mixed robot actuator + domain-controller project:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=9763716&stockid=002050
 
-- 2026H1募集资金 report — cumulative募集资金 investment CNY163.1376m / 55.16%; project expected usable status December 2026:  
-  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550181&stockid=002050
+### Thailand operating signals / registry-derived context
 
-- June 2026 project-delay announcement — main works largely complete; usable-status date June → December 2026:  
-  https://disc.static.szse.cn/disc/disk03/finalpage/2026-07-01/0e8fbdb0-09dc-408d-960e-bf4d6eb7e3a2.PDF
-
-- March / July 2026 IR — company says it will expand electromechanical-actuator overseas production and continue overseas-base capital investment, without assigning a disclosed factory project to robot-only use:  
-  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12015391&stockid=002050
-  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12433636&stockid=002050
-
-### Secondary market context only
-
-- First Yicai contemporaneous call with Sanhua securities department on the 2024 future-industry-center investment; domain-control investment described as the largest component. Preserve as `MARKET_CONTEXT`, not a numerical allocation source.
+- JobThai company / roles — production, NPI, delivery planning, equipment, quality and warehouse organization:  
+  https://www.jobthai.com/en/company/374316
+- Thai public-data-derived company registry page — registration date / registered capital / business scope. Preserve as registry-derived context, not issuer evidence:  
+  https://www.dataforthai.com/company/0215567014145/
 
 ---
 
-## 12. Current verdict
+## 10. Current verdict
 
-The capital Research has moved from:
-
-```text
-we see investment headlines but do not know what they mean
-```
-
-to:
+The capital Research has moved through three stages:
 
 ```text
-we can identify real mixed capital stacks,
-observe actual cash / CIP deployment and construction progress,
-and show exactly which attribution step prevents a robot-only ROIC denominator.
+Stage 1:
+investment headlines exist
+but project scopes are mixed
+
+Stage 2:
+real mixed capital deployment is visible
+but robot attribution is missing
+
+Stage 3:
+a robot-specific Thailand actuator project with THB1.8bn planned capital is independently identified
+but rated capacity and realized robot assets remain undisclosed
 ```
 
-The remaining unknown is economically load-bearing:
+That is enough to reject both extremes:
 
-> How much of shared and dedicated capital must be attributed to the robot revenue / NOPAT that eventually emerges?
+```text
+robot business is asset-light / capital is negligible
+```
 
-Until that is closed:
+and
+
+```text
+all disclosed Sanhua drive-factory capital belongs to robot
+```
+
+The honest current state is narrower:
+
+> Sanhua is committing identifiable production capital specifically to humanoid actuators, while the public record still does not disclose the capacity and realized asset base required to compute robot incremental ROIC.
+
+Until that bridge closes:
 
 ```text
 SANHUA ROBOT INCREMENTAL ROIC = NOT ESTABLISHED
