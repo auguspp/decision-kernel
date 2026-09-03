@@ -35,6 +35,17 @@ jobs:
             dogfood/*.json \
             research_cases/603986-gigadevice-deep-research-v2.json \
             research_cases/002050-sanhua-deep-research-v1.json
+      - name: Capture Surprise Radar market-history shadow
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m decision_kernel.runtime.market_history_shadow \
+            dogfood/*.json \
+            research_cases/603986-gigadevice-deep-research-v2.json \
+            research_cases/002050-sanhua-deep-research-v1.json \
+            --output-dir market-history-shadow \
+            2>&1 | tee market-history-shadow-status.txt
       - name: Publish Human summary
         if: always()
         shell: bash
@@ -52,6 +63,16 @@ jobs:
         with:
           name: decision-inbox
           path: decision-inbox/
+          retention-days: 14
+      - name: Upload market-history shadow inputs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: market-history-shadow
+          path: |
+            market-history-shadow/
+            market-history-shadow-status.txt
+          if-no-files-found: ignore
           retention-days: 14
 
   disclosures:
