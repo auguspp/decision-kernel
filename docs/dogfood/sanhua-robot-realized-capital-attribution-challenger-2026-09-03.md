@@ -95,7 +95,24 @@ No amount had yet been transferred from this project into fixed assets in that t
 
 This establishes that capital was no longer merely a future plan.
 
-### 2.2募集资金 use through 2025
+### 2.2 2026H1 construction-in-progress
+
+**FACT — 2026H1 report** — By June 30, 2026 the same project had:
+
+```text
+opening CIP                      CNY138.9748m
+H1 additions                     CNY55.7704m
+H1 transfers to fixed assets     CNY0
+ending CIP                       CNY194.7452m
+cumulative investment / budget   32.01%
+reported project progress        60%
+```
+
+Thus the project-wide realized capital base continued to grow during the same period in which Sanhua later described core robot products as entering batch delivery / production-line ramp.
+
+This timing does **not** establish that the CNY194.75m is robot capital. It establishes only that the mixed center was physically absorbing capital while the robot commercialization proof state advanced.
+
+### 2.3募集资金 use through 2025
 
 **FACT — issuer fundraising disclosure** — After the old refrigeration-control project was closed, Sanhua redirected funds into this project through capital contribution to Zhejiang Sanhua Intelligent Drive.
 
@@ -107,7 +124,7 @@ CNY82.5933m
 
 This is a financing-source view and should not be added mechanically to the CIP figure: it is part of the same project capital, not a separate economic layer.
 
-### 2.3 2026H1募集资金 progress
+### 2.4 2026H1募集资金 progress
 
 **FACT — 2026H1募集资金 report** — Adjusted募集资金 earmarked for the project were CNY295.7279m.
 
@@ -269,14 +286,40 @@ Current Research status:
 
 ```text
 FACT: project-wide building / equipment / WC budget
-FACT: project-wide realized capital deployment
+FACT: project-wide realized capital deployment through 2026H1
 FACT: project-wide construction progress
 NOT ESTABLISHED: robot-attributable share of any of the above
 ```
 
 ---
 
-## 7. Interaction with the larger CNY3.8bn future-industry investment
+## 7. Other overseas / factory capital cannot be silently attributed to robot either
+
+**FACT** — Sanhua's 2026H1 report separately lists a `泰国驱动厂房项目` with:
+
+```text
+budget = USD140m
+ending CIP = CNY556.43m
+cumulative investment / budget = 63.87%
+reported progress = 57%
+```
+
+**FACT** — Company IR says Sanhua intends to expand overseas production of electromechanical actuators and will continue investing in overseas production bases.
+
+However, the reviewed primary disclosures do **not** identify the Thai drive-factory CIP line as a robot-only project or disclose its robot/non-robot product allocation.
+
+Therefore:
+
+```text
+THAILAND DRIVE FACTORY CAPITAL = FACT AT COMPANY PROJECT LEVEL
+ROBOT ATTRIBUTION TO THAILAND DRIVE FACTORY = NOT ESTABLISHED
+```
+
+A sell-side report may group the Thai drive factory with robot-related capacity expansion, but that classification cannot be upgraded to `FACT` without issuer product-scope disclosure.
+
+---
+
+## 8. Interaction with the larger CNY3.8bn future-industry investment
 
 Sanhua's 2024 agreement separately contemplated at least CNY3.8bn for a combined:
 
@@ -295,7 +338,7 @@ This is useful context against assigning the whole CNY3.8bn to robot, but it is 
 
 ---
 
-## 8. Updated capital state
+## 9. Updated capital state
 
 The previous binary statement:
 
@@ -318,6 +361,9 @@ MIXED CENTER EQUIPMENT / WORKING-CAPITAL BUDGET
 ROBOT ATTRIBUTION WITHIN MIXED CENTER
 = NOT ESTABLISHED
 
+OTHER OVERSEAS DRIVE-FACTORY CAPITAL
+= FACT AT PROJECT LEVEL / ROBOT ATTRIBUTION NOT ESTABLISHED
+
 OTHER ROBOT-SPECIFIC PRODUCTION ASSETS
 = NOT ESTABLISHED
 
@@ -332,7 +378,7 @@ This is a genuine Research upgrade: the denominator is no longer wholly invisibl
 
 ---
 
-## 9. Next evidence needed
+## 10. Next evidence needed
 
 The highest-value capital evidence is now very specific:
 
@@ -341,7 +387,7 @@ The highest-value capital evidence is now very specific:
 3. rated robot component capacity attached to specific equipment;
 4. robot-specific inventory / receivable / payable data or working-capital assumptions;
 5. actual transferred fixed assets once the center reaches usable status;
-6. whether robot lines are located in this center, overseas sites, existing plants, or all three.
+6. whether robot lines are located in this center, the Thailand drive factory, Mexico / other overseas sites, existing plants, or several locations.
 
 Until such evidence is public:
 
@@ -350,11 +396,12 @@ DO NOT
 = allocate the full project to robot
 = allocate equipment pro rata without a causal basis
 = divide total project capital by guessed robot capacity
+= classify the Thailand drive factory as robot-only from its project name
 ```
 
 ---
 
-## 10. Source register
+## 11. Source register
 
 ### Sanhua issuer / exchange
 
@@ -364,11 +411,18 @@ DO NOT
 - 2025 annual report — separately disclosed intelligent-drive-center CIP of CNY138.9748m; 19.85% cumulative investment / budget and 25% project progress:  
   https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032301606_c.pdf
 
+- 2026H1 report — intelligent-drive-center ending CIP CNY194.7452m / 32.01% budget / 60% progress; Thailand drive-factory ending CIP CNY556.43m / 63.87% budget / 57% progress:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+
 - 2026H1募集资金 report — cumulative募集资金 investment CNY163.1376m / 55.16%; project expected usable status December 2026:  
   https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550181&stockid=002050
 
 - June 2026 project-delay announcement — main works largely complete; usable-status date June → December 2026:  
   https://disc.static.szse.cn/disc/disk03/finalpage/2026-07-01/0e8fbdb0-09dc-408d-960e-bf4d6eb7e3a2.PDF
+
+- March / July 2026 IR — company says it will expand electromechanical-actuator overseas production and continue overseas-base capital investment, without assigning a disclosed factory project to robot-only use:  
+  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12015391&stockid=002050
+  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12433636&stockid=002050
 
 ### Secondary market context only
 
@@ -376,7 +430,7 @@ DO NOT
 
 ---
 
-## 11. Current verdict
+## 12. Current verdict
 
 The capital Research has moved from:
 
@@ -387,7 +441,7 @@ we see investment headlines but do not know what they mean
 to:
 
 ```text
-we can identify a real mixed capital stack,
+we can identify real mixed capital stacks,
 observe actual cash / CIP deployment and construction progress,
 and show exactly which attribution step prevents a robot-only ROIC denominator.
 ```
