@@ -24,8 +24,6 @@ The familiar sell-side arithmetic remains only a reference state:
 = CNY3.5bn / 35亿元 profit
 ```
 
-This file is now the synthesis entry for the supporting case-specific challengers created on this branch.
-
 No numerical success probability is introduced.
 No Kernel schema is changed.
 No BUY / HOLD / SELL engine is introduced.
@@ -33,25 +31,43 @@ No Human portfolio state, private trigger, action or participation rule is infer
 
 ---
 
-## 1. Current executive verdict
+## 1. Executive verdict
 
-The sell-side CNY3.5bn state is **not disproven**, but it is not independently established.
+The CNY3.5bn success state is **not disproven**, but it is not independently established.
 
-The strongest current Research conclusion is:
-
-> The 35亿元 state requires several commercialization assumptions to remain simultaneously favorable across different stages — realized robot volume, mature actuator architecture / billable content, durable customer allocation, mature margin, make-or-buy mix, utilization and capital intensity. Public evidence currently proves commercialization progress, but not that those mature-state conditions all coexist.
-
-The largest case-specific failure found so far is **cross-state assumption mixing**:
+Public evidence now proves more than at the start of this challenger:
 
 ```text
-mature low ASP / value content
+commercialization has reached batch delivery / line ramp
++
+a product-specific Thailand humanoid-actuator project has THB1.8bn planned investment
++
+real mixed factory capital is already being deployed in China and Thailand
+```
+
+But the mature-state bridge still breaks before owner economics because public evidence does not establish that all of the following coexist:
+
+```text
+1m realized downstream robot output
+~CNY50k mature billable actuator content
+~70% durable economic allocation
+10% mature robot net margin
+specific make / buy economics
+healthy yield / utilization
+robot-attributable realized invested capital
+```
+
+The strongest case-specific failure remains **cross-state assumption mixing**:
+
+```text
+mature low value content
 ×
 higher early / headline share
 ```
 
-The same sell-side work that uses roughly CNY50k mature value also discusses share potentially declining toward roughly 50% after mass production.
+The same sell-side work using roughly CNY50k mature value separately discusses share potentially declining toward ~50% after mass production.
 
-Pure state-consistency arithmetic:
+Then:
 
 ```text
 1.0m × CNY50k × 50% × 10%
@@ -60,19 +76,19 @@ Pure state-consistency arithmetic:
 
 not CNY3.5bn.
 
-To preserve CNY3.5bn at 50% share, one of the other inputs must compensate. Holding 1m units and CNY50k value constant:
+To preserve CNY3.5bn at 50% share and CNY50k value:
 
 ```text
 required net margin = 14%
 ```
 
-If mature billable value is also lower, required margin can move into the mid/high teens. These are `DERIVATION`, not forecasts.
+If mature billable value is also lower, reverse arithmetic can push required margin into the mid/high teens.
+
+These are `DERIVATION`, not forecasts.
 
 ---
 
 ## 2. Product / component architecture
-
-### Supported
 
 **FACT** — Sanhua describes robot electromechanical actuators as integrating:
 
@@ -84,24 +100,22 @@ transmission
 + brake / bearing auxiliary content
 ```
 
-**FACT** — The company says the system integrates motor drive, transmission components, encoders and controllers through supplier co-development plus partial component self-development.
+**FACT** — The system uses supplier co-development plus partial component self-development. Sanhua has motor capability and has identified planetary-roller-screw process / productization and higher-power-density motors as R&D directions.
 
-**FACT** — R&D targets include planetary-roller-screw process / productization for linear actuators and higher-power-density motors for rotary actuators.
+**FACT** — Robot manufacturing overlaps with existing stamping, injection molding, machining, welding, surface treatment, motor winding, PCBA SMT and assembly capabilities, while adding higher-precision transmission / reduction machining requirements.
 
-**FACT** — Robot production overlaps with existing stamping, injection molding, machining, welding, surface treatment, motor winding, PCBA SMT and assembly capabilities, while adding higher-precision transmission machining requirements.
-
-### Not established
+**NOT ESTABLISHED:**
 
 ```text
 exact rotary / linear product mix at batch-delivery stage
-exact actuator count per robot at mature scale
+exact mature actuator count per robot
 component-level customer quotation
-customer-supplied vs Sanhua-purchased vs Sanhua-manufactured content
+customer-supplied vs purchased vs internally manufactured content
 mature BOM by component
 mature yield / scrap / rework / warranty economics
 ```
 
-### Implication
+Therefore:
 
 ```text
 customer billable content
@@ -109,15 +123,11 @@ customer billable content
 Sanhua internally manufactured value added
 ```
 
-The difference matters for both margin and capital intensity.
-
 ---
 
-## 3. CNY50k value content: now decomposed, still not a Research fact
+## 3. CNY50k value content: decomposed, still an assumption
 
-Dongwu's mature-state reference contains a concrete architecture rather than a pure TAM placeholder.
-
-Literal body-actuator bridge:
+Dongwu's mature-state reference can be decomposed approximately as:
 
 ```text
 14 rotary actuators × CNY1,500 = CNY21,000
@@ -127,13 +137,11 @@ Literal body-actuator bridge:
 literal total ≈ CNY54,000
 ```
 
-The headline `CNY50k` is therefore a rounded mature-state assumption, not a disclosed Sanhua ASP.
+So the familiar `CNY50k` is a rounded structured sell-side mature-state assumption, not a disclosed Sanhua ASP.
 
-### Rotary challenge
+### Rotary budget challenge
 
-Public-company harmonic-reducer pricing shows that a complete CNY1,500 rotary actuator requires much more than reducer cost-down.
-
-A complete rotary actuator still has to contain:
+A complete CNY1,500 rotary actuator must still contain:
 
 ```text
 motor
@@ -147,13 +155,15 @@ motor
 + supplier margin
 ```
 
-Current references place harmonic reducers from aggressive new-entrant pricing in the high hundreds of yuan to broader incumbent averages around the low thousands. Therefore a CNY1,500 complete actuator requires coordinated cost-down across the whole subsystem.
+Public harmonic-reducer evidence shows realized prices from aggressive new-entrant levels in the high hundreds of yuan to broader incumbent averages around the low thousands.
 
-### Linear challenge
+Therefore CNY1,500 for the **complete** actuator requires coordinated cost-down across the full subsystem, not merely a cheap reducer.
+
+### Linear / roller-screw challenge
 
 Dongwu's mature roller-screw assumption is roughly CNY2,000 per screw.
 
-An exchange-reviewed Five Continents Spring project model uses:
+An exchange-reviewed Five Continents Spring project model instead uses:
 
 ```text
 planetary roller screw ASP = CNY500
@@ -163,7 +173,7 @@ GM = 36.25%
 
 and assumes 14 roller screws per humanoid robot.
 
-This does **not** prove CNY500 is the future clearing price; specifications and architecture can differ.
+This does not prove CNY500 is the future clearing price. Specifications and architecture differ.
 
 It does prove:
 
@@ -172,12 +182,12 @@ CNY2,000 mature roller-screw ASP
 != unique publicly supported mature endpoint
 ```
 
-Architecture also differs across references, so value-per-robot is partly a component-count / mechanism choice, not just price-down.
+Architecture and component count are load-bearing parts of mature value content.
 
-### Current status
+Current state:
 
 ```text
-CNY50k mature customer billable content = STRUCTURED SELL-SIDE ASSUMPTION
+CNY50k MATURE BILLABLE CONTENT = STRUCTURED SELL-SIDE ASSUMPTION
 SAME BOM SURVIVES TO MATURITY = NOT ESTABLISHED
 CNY1.5k COMPLETE ROTARY ACTUATOR = NOT ESTABLISHED
 CNY2k MATURE ROLLER SCREW = NOT ESTABLISHED
@@ -186,9 +196,9 @@ CNY3k COMPLETE ROLLER-SCREW ACTUATOR = NOT ESTABLISHED
 
 ---
 
-## 4. Price-down has two economically different forms
+## 4. Price-down has two different economic meanings
 
-The early `CNY200k+ → ~CNY50k` path cannot be treated as one generic 75% price cut.
+The early `CNY200k+ → ~CNY50k` path cannot be treated as one generic 75% price reduction.
 
 ### Manufacturing / sourcing cost-down
 
@@ -215,11 +225,9 @@ customer redesign
 → lower customer bill because content disappears
 ```
 
-This can permanently reduce supplier revenue opportunity even if manufacturing is efficient.
+This can permanently reduce supplier revenue opportunity even with efficient manufacturing.
 
-Current public robot architecture evidence shows both fully driven and underactuated approaches exist in adjacent applications.
-
-Therefore mature value content must be underwritten as:
+So mature value must be underwritten as:
 
 ```text
 component count
@@ -228,16 +236,16 @@ component count
 × mature price
 ```
 
-not simply `early value × price-down percentage`.
+not `early value × generic price-down percentage`.
 
 ---
 
-## 5. Competition / allocation: commercialization is FACT, durable 70% is not
+## 5. Commercialization / allocation
 
-Sanhua's proof ladder has advanced materially:
+Sanhua's issuer-supported proof ladder has advanced:
 
 ```text
-2024: R&D project / no designated customer disclosed
+2024: R&D / no designated customer disclosed
 → key-customer co-development
 → trial production / iteration / sampling
 → 2026H1 batch delivery + production-line ramp
@@ -245,7 +253,7 @@ Sanhua's proof ladder has advanced materially:
 
 This is genuine commercialization progress.
 
-But reviewed primary materials do not disclose:
+Reviewed primary materials still do not disclose:
 
 ```text
 customer name
@@ -264,9 +272,9 @@ CUSTOMER-SPECIFIC ECONOMIC ALLOCATION = NOT ESTABLISHED
 70% LONG-RUN MASS-PRODUCTION SHARE = ASSUMPTION
 ```
 
-Tuopu has separately disclosed robot-actuator revenue, proving competing actuator commercialization exists.
+Tuopu separately reports robot-actuator revenue, proving competing commercialization capability exists.
 
-Tesla's public procurement policy is useful outside-view context: it qualifies multiple suppliers for key components where sensible, continuously seeks supplier cost reductions, can source cheaper alternatives and redesign parts. This is not Optimus-specific allocation evidence and is not used to identify Sanhua's customer.
+Tesla's general procurement policy is useful `MARKET_CONTEXT`: multiple-source qualification where sensible, continuous supplier cost reduction, alternate sourcing and redesign. It is not Optimus-specific Sanhua allocation evidence.
 
 Long-run share can be diluted by:
 
@@ -278,17 +286,13 @@ new robot generation
 component-level directed sourcing
 ```
 
-not only by a conventional direct competitor.
-
 ---
 
-## 6. Make-or-buy is now a load-bearing state variable
+## 6. Make-or-buy is load-bearing
 
-Sanhua primary evidence supports supplier co-development plus partial self-development.
+Sanhua primary evidence supports supplier co-development plus partial self-development, not full mature vertical integration of every core component.
 
-It does not support full mature vertical integration across all core components.
-
-Therefore the owner-economics bridge must split:
+The owner-economics bridge therefore needs:
 
 ```text
 customer billable content
@@ -303,7 +307,7 @@ purchased content
 ```text
 lower internal PP&E / tooling burden
 but lower internal value capture
-and supplier margin appears inside purchased BOM
+and upstream supplier margin sits in purchased BOM
 ```
 
 ### More internal content
@@ -311,10 +315,10 @@ and supplier margin appears inside purchased BOM
 ```text
 higher potential value capture
 but higher development / equipment / working-capital burden
-and direct utilization / yield / depreciation risk
+and direct yield / utilization / depreciation risk
 ```
 
-The relevant test is:
+The economic test is:
 
 ```text
 incremental NOPAT gained by internalization
@@ -322,92 +326,89 @@ incremental NOPAT gained by internalization
 incremental invested capital required
 ```
 
-not whether a component is simply labelled `self-produced`.
+not `self-produced = automatically better`.
 
-### Linear component capital reference
-
-Five Continents Spring discloses roughly CNY223.15m of major production equipment for 980k sets/year planetary-roller-screw capacity.
-
-Outside-view equipment-only intensity:
+Five Continents Spring provides an outside-view equipment-intensity reference for planetary roller screws:
 
 ```text
-~CNY228 equipment capital
-per one unit of annual roller-screw capacity
+major production equipment ≈ CNY223.15m
+rated capacity ≈ 980k sets/year
+→ ~CNY228 equipment capital per unit of annual screw capacity
 ```
 
-If an actuator integrator used 8 roller screws / robot for 1m robots and internalized all 8m screws at similar manufacturing intensity, the reference-class diagnostic is roughly:
+A hypothetical 8 screws / robot × 1m robots, fully internalized at the same manufacturing intensity, would imply roughly CNY1.82bn of equipment alone before buildings, utilities, development and working capital.
+
+That is a reference-class diagnostic, **not a Sanhua capex forecast**.
+
+Thailand public hiring shows production, NPI, maintenance, quality, logistics and `ACT`-labelled line roles, but public materials do not formally establish that specific stamping / die-casting / CMM processes belong to the humanoid-actuator BOM.
+
+Therefore:
 
 ```text
-~CNY1.82bn equipment capital
+THAILAND MANUFACTURING ORGANIZATION / LINE READINESS = OBSERVABLE OPERATING SIGNAL
+ROBOT-SPECIFIC COMPONENT MAKE SHARE = NOT ESTABLISHED
 ```
-
-before buildings, land, common utilities, development capital and working capital.
-
-This is not a Sanhua capex forecast. It shows why make-or-buy belongs inside the ROIC denominator.
 
 ---
 
-## 7. Margin: 10% is conceivable, but not independently underwritten
+## 7. Margin
 
-Peer evidence does not validate a direct `high-20s / low-30s GM → 10% net margin` shortcut.
+A 10% mature robot net margin is conceivable as a scenario, but not independently underwritten.
 
-### Realized Tuopu actuator economics
+### Tuopu realized early actuator economics
 
 2025:
 
 ```text
 robot-actuator revenue ≈ CNY13.6m
-GM = 28.25%
-GM change = -22.65ppt YoY
+gross margin = 28.25%
 ```
 
-Material, labor and manufacturing expense all matter.
+but the business was very small and ramp cost was volatile.
 
-### Integrated execution-unit project reference
-
-Zhongda Leader management project model:
+### Zhongda Leader execution-unit project model
 
 ```text
 mature GM = 25.84%
 mature net margin = 7.31%
 construction = 2 years
 first operating year utilization = 80%
-100% utilization from following year in model
+100% utilization from the following year in the model
 ```
 
-This is management underwriting, not realized Sanhua economics.
+This is project underwriting, not Sanhua realized economics.
 
-It demonstrates that even an integrated execution-unit project can lose most of its gross margin after period costs, depreciation and tax.
+It shows high-20s gross margin does not mechanically produce 10%+ net margin.
 
 ### Compensation problem
 
-If mature share falls to 50% while value remains CNY50k:
+At 50% share / CNY50k value / 1m units:
 
 ```text
-required net margin to preserve CNY3.5bn profit = 14%
+required net margin to preserve CNY3.5bn = 14%
 ```
 
-If mature value also falls toward ~CNY39k and share is 50%:
+If mature value also falls toward ~CNY39k at 50% share:
 
 ```text
 required net margin ≈ 18%
 ```
 
-Again: pure reverse arithmetic, not forecasts.
-
-This makes the combined mature-state requirement materially harder than examining `10% margin` in isolation.
+Again: reverse arithmetic only.
 
 ---
 
-## 8. Capital: real deployment is visible, robot-only denominator still is not
+## 8. Capital: an important Thailand upgrade
 
-### Dedicated development layer
+The capital evidence now has three different levels.
 
-A historical GDR plan budgeted a CNY201.8m robot electromechanical-actuator R&D project and explicitly said it would not add production capacity. The GDR plan was later terminated, so the amount is evidence of planned development-capital scope, not realized investment.
+### A. Dedicated development blueprint
 
-### CNY3.8bn future-industry project
+A historical GDR plan budgeted CNY201.8m for a robot electromechanical-actuator R&D project and explicitly said it would not add production capacity. The GDR plan was later terminated, so this is a development-capital blueprint, not proof of realized spend.
 
-This is a mixed:
+### B. Mixed Chinese production capital
+
+The CNY3.8bn future-industry agreement is mixed:
 
 ```text
 robot actuator
@@ -415,13 +416,7 @@ robot actuator
 domain controller
 ```
 
-R&D / production-base project.
-
-It cannot be assigned wholly to robot capital.
-
-### CNY700m intelligent-drive future-industry center
-
-This is also mixed:
+The CNY700m intelligent-drive future-industry center is also mixed:
 
 ```text
 new-energy thermal-management components
@@ -429,7 +424,7 @@ new-energy thermal-management components
 bionic-robot components
 ```
 
-but its capital stack is disclosed:
+The CNY700m project's disclosed stack is:
 
 ```text
 land                 CNY70.89m
@@ -441,55 +436,78 @@ initial working cap  CNY65.42m
 total                CNY700.00m
 ```
 
-Realized mixed-project capital is now visible:
+Realized mixed capital is visible through CIP, but robot attribution remains unavailable.
+
+### C. Thailand humanoid-actuator planned production capital
+
+**FACT — Thailand Board of Investment / OSOS** — Sanhua Intelligent Drives received investment promotion for a **THB1.8bn project in Chonburi to manufacture actuators for humanoid robots**.
+
+This upgrades one previously missing layer:
 
 ```text
-2025 additions to CIP ≈ CNY138.97m
-2025 year-end CIP     ≈ CNY138.97m
-investment / budget   ≈ 19.85%
-reported progress     ≈ 25%
+ROBOT-SPECIFIC PLANNED PRODUCTION CAPITAL = FACT
 ```
 
-2026 disclosures show continued financing / physical progress and a delay in expected usable status to December 2026.
-
-This proves:
+The BOI public material still does not disclose:
 
 ```text
-MIXED PHYSICAL CAPACITY BUILD-OUT = FACT
+rated annual capacity
+machine / line count
+investment composition
+realized robot fixed assets
+utilization
+yield
 ```
 
-but does not reveal robot-specific building area, equipment, capacity or working capital.
+Sanhua's own 2026H1 report separately shows a broader `Thailand drive-factory project`:
+
+```text
+budget = USD140m
+ending CIP = CNY556.43m
+cumulative investment / budget = 63.87%
+progress = 57%
+```
+
+Public evidence does not reconcile the THB1.8bn product-specific BOI project with the broader USD140m issuer project.
 
 Therefore:
 
 ```text
-ROBOT-SPECIFIC REALIZED CAPITAL = NOT ESTABLISHED
+THAILAND HUMANOID-ACTUATOR PLANNED CAPITAL = FACT
+THAILAND DRIVE-FACTORY REALIZED CAPITAL = FACT AT BROADER PROJECT LEVEL
+MAPPING BETWEEN THE TWO SCOPES = NOT ESTABLISHED
+ROBOT-SPECIFIC REALIZED PP&E = NOT ESTABLISHED
+ROBOT-SPECIFIC RATED CAPACITY = NOT ESTABLISHED
 ```
+
+Public Thai operating signals — production supervisors, line leaders, NPI project management, equipment maintenance, quality, warehouse and customer-delivery planning — strengthen the view that the subsidiary is building / operating a real manufacturing organization.
+
+They do not prove commercial robot-actuator volume.
 
 ---
 
-## 9. Outside view: what actually happens during industrial ramp
+## 9. Outside view: industrial ramp is not linear
 
-The current small reference class deliberately avoids formal probability statistics.
+The small reference class deliberately does not produce probabilities.
 
 ### Tuopu actuator
 
-Realized early commercialization can show positive high-20s GM while revenue remains immaterial and cost grows faster than revenue.
+Realized early commercialization can show positive high-20s GM while revenue remains immaterial and costs remain volatile.
 
 ### Zhongda Leader integrated execution unit
 
-Management model uses mid-20s GM but only ~7% mature net margin after full cost burden.
+Management model: mid-20s GM but ~7% mature net margin after the broader cost burden.
 
-### Five Continents precision component project
+### Five Continents Spring precision component project
 
-Management model combines mid-30s planetary-roller-screw GM with only:
+Management model combines 36.25% planetary-roller-screw GM with:
 
 ```text
 12.27% post-tax project IRR
 6.60-year payback incl. construction
 ```
 
-once the broader capital system is included.
+once capital is included.
 
 ### Leaderdrive / Green Harmonic
 
@@ -500,7 +518,7 @@ The new precision-transmission project originally modeled:
 5.66-year payback
 ```
 
-but realized harmonic-reducer utilization was:
+but realized theoretical harmonic-reducer utilization was:
 
 ```text
 2023 51.59%
@@ -508,9 +526,9 @@ but realized harmonic-reducer utilization was:
 2025 67.76%
 ```
 
-and the new project was later delayed from end-2026 to end-2028 to absorb existing capacity first.
+and the newer project was later delayed from end-2026 to end-2028 to absorb existing capacity.
 
-### Repeated outside-view mechanics
+Repeated mechanics:
 
 ```text
 validation
@@ -524,26 +542,20 @@ validation
 
 are distinct stages.
 
-Also:
+Therefore:
 
 ```text
-attractive project-model IRR
-!= realized demand timing
-!= realized utilization path
-```
-
-and:
-
-```text
-30% GM
-!= known ROIC
+GROSS MARGIN
+!= NET MARGIN
+!= ROIC
+!= OWNER CASH
 ```
 
 ---
 
 ## 10. Owner-economics bridge that still must close
 
-A complete mature-state bridge should be:
+A mature bridge should be:
 
 ```text
 terminal robot units
@@ -551,7 +563,7 @@ terminal robot units
 × mature actuator architecture / billable content
 = Sanhua robot customer revenue
 
-split revenue economics into:
+split into:
 
 internally manufactured content
 +
@@ -609,9 +621,10 @@ CUSTOMER-SPECIFIC SECOND-SOURCE / ALLOCATION = NOT ESTABLISHED
 ROBOT MAKE-BUY MIX = NOT ESTABLISHED
 ROBOT MATURE GROSS MARGIN = NOT ESTABLISHED
 ROBOT 10% NET MARGIN = ASSUMPTION
-ROBOT YIELD = NOT ESTABLISHED
-ROBOT UTILIZATION = NOT ESTABLISHED
-ROBOT-SPECIFIC INVESTED CAPITAL = NOT ESTABLISHED
+THAILAND HUMANOID-ACTUATOR PLANNED CAPITAL = FACT / THB1.8bn
+ROBOT-SPECIFIC RATED CAPACITY = NOT ESTABLISHED
+ROBOT YIELD / UTILIZATION = NOT ESTABLISHED
+ROBOT-SPECIFIC REALIZED INVESTED CAPITAL = NOT ESTABLISHED
 ROBOT INCREMENTAL ROIC = NOT ESTABLISHED
 ROBOT OWNER CASH = NOT ESTABLISHED
 ROBOT CARDINAL SUCCESS PROBABILITY = NOT ESTABLISHED
@@ -619,80 +632,64 @@ ROBOT CARDINAL SUCCESS PROBABILITY = NOT ESTABLISHED
 
 ---
 
-## 12. What has changed versus the original 35亿元 framing
+## 12. Research conclusion
 
-Before:
-
-```text
-1m × 50k × 70% × 10%
-= 35亿元
-```
-
-Now:
+The research has now moved from:
 
 ```text
-1m planned / reference downstream scale
-!= 1m realized annual output
-
-CNY50k customer billable content
-!= CNY50k Sanhua value added
-
-mature value content
-= architecture × component count × specification × mature price
-
-70% headline / early share
-!= 70% durable mass-production allocation
-
-10% net margin
-must survive purchased content
-+ price-down
-+ depreciation
-+ ramp underutilization
-+ R&D / SG&A
-
-more vertical integration
-can raise value capture
-but also raises capital intensity
-
-35亿元 accounting profit
-!= 35亿元 owner cash
+sell-side gives a 35亿元 success state
 ```
 
-The Research has therefore moved materially closer to the stated objective:
+to:
 
-> We can now explain several concrete industrial mechanisms by which Sanhua might or might not earn CNY3.5bn, and why the amount of capital required is inseparable from the answer.
+```text
+we can decompose the mature product architecture,
+challenge price-down and long-run share for state consistency,
+separate billable content from Sanhua value added,
+identify make-buy as an ROIC fork,
+observe real industrial-ramp reference classes,
+trace mixed realized capital deployment,
+and identify a product-specific THB1.8bn Thailand humanoid-actuator production project.
+```
 
-But the owner-economics closure is not yet complete because robot-specific realized allocation, mature BOM / pricing, make-buy mix and invested capital remain undisclosed.
+The remaining gap is narrower and more empirical:
+
+> How many robot actuators can the dedicated / shared capital actually produce at mature yield and utilization, what customer allocation will fill that capacity, what share of the billable content will Sanhua retain after purchased content, and what owner cash will remain after the capital required to sustain it?
+
+Public evidence does not yet answer those questions.
+
+So the correct endpoint is still:
+
+```text
+CNY3.5bn SUCCESS STATE = NOT DISPROVEN / NOT INDEPENDENTLY ESTABLISHED
+SANHUA ROBOT INCREMENTAL ROIC = NOT ESTABLISHED
+SANHUA ROBOT OWNER ECONOMICS = NOT ESTABLISHED
+```
+
+No generic method or schema promotion is proposed from this single case.
 
 ---
 
-## 13. Supporting challenger files
+## 13. Key supporting files
 
 - `docs/dogfood/sanhua-robot-35bn-proof-table-2026-09-03.md`
-- `docs/dogfood/sanhua-robot-allocation-durability-challenger-2026-09-03.md`
 - `docs/dogfood/sanhua-robot-commercialization-capital-sequence-2026-09-03.md`
-- `docs/dogfood/sanhua-robot-industrial-ramp-outside-view-challenger-2026-09-03.md`
+- `docs/dogfood/sanhua-robot-realized-capital-attribution-challenger-2026-09-03.md`
+- `docs/dogfood/sanhua-robot-value-content-price-down-challenger-2026-09-03.md`
 - `docs/dogfood/sanhua-robot-linear-actuator-value-capture-challenger-2026-09-03.md`
 - `docs/dogfood/sanhua-robot-make-buy-linear-capital-challenger-2026-09-03.md`
 - `docs/dogfood/sanhua-robot-margin-compensation-challenger-2026-09-03.md`
+- `docs/dogfood/sanhua-robot-allocation-durability-challenger-2026-09-03.md`
+- `docs/dogfood/sanhua-robot-industrial-ramp-outside-view-challenger-2026-09-03.md`
 - `docs/dogfood/sanhua-robot-outside-view-ramp-return-challenger-2026-09-03.md`
-- `docs/dogfood/sanhua-robot-realized-capital-attribution-challenger-2026-09-03.md`
-- `docs/dogfood/sanhua-robot-value-content-price-down-challenger-2026-09-03.md`
 
-These remain case-specific Research support. None are promoted into generic Kernel method / schema.
+## 14. Thailand source upgrade
 
----
-
-## 14. Next evidence priority
-
-The next upgrade should come from evidence, not additional framework.
-
-Priority order:
-
-1. **Customer / allocation evidence** — customer or supplier proof of actual allocation by actuator type / robot generation.
-2. **Sanhua make-buy evidence** — which motor / screw / reducer / encoder / sensor / controller content is already self-produced at batch-delivery stage.
-3. **Robot-specific manufacturing evidence** — line capacity, output, yield, utilization, equipment and working capital.
-4. **Realized commercial price / margin** — complete actuator quotation / realized revenue and gross profit.
-5. **Architecture change evidence** — whether mass-production design removes content versus merely lowering component costs.
-
-Until one of these appears, tighter point estimates would mostly hide the remaining unknowns rather than reduce them.
+- Thailand Board of Investment / OSOS — THB1.8bn Sanhua humanoid-actuator investment in Chonburi:  
+  https://osos.boi.go.th/TH/news/2353/
+- Sanhua 2026H1 report — broader Thailand drive-factory CIP / progress:  
+  https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
+- Thailand Department of Skill Development — production-maintenance / automation training at Sanhua Intelligent Drives Thailand:  
+  https://idev.dsd.go.th/~train69/course_detail.php?dep=97&occ=7220082091001&pid=002304
+- JobThai — public production / NPI / quality / maintenance / logistics hiring signals at Sanhua Intelligent Drives Thailand:  
+  https://www.jobthai.com/en/company/374316
