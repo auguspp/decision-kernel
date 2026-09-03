@@ -159,14 +159,14 @@ ResearchSnapshot.created_at exists before candidate anomaly
 
 This distinction was exposed by the first real shadow review. CATL, for example, has an older PIT `as_of_datetime` but a 2026-09-02 `created_at`. The original `market-history-shadow` retained snapshot id / as-of / hash but omitted `created_at`, so a retrospective review could mistake old price bars for prospective post-Research observations.
 
-PR #138 (`radar/shadow-research-created-at`) is the minimal lineage fix:
+Accepted and merged PR #138 is the authoritative minimal lineage fix:
 
 ```text
 shadow research_identity += research_created_at
 ResearchSnapshot schema change = NO
 kernel authority change = NO
 latest kernel-tests = SUCCESS
-PR = mergeable / ready for review
+PR #138 = ACCEPTED / MERGED / AUTHORITATIVE
 ```
 
 Historical bars before Research creation remain useful context but are not actual current-v0 Radar observations.
@@ -185,7 +185,7 @@ false-negative candidate = NOT YET EARNED
 
 These ten observations are valid prospective Radar evidence, but they do **not** establish a detector threshold or prove that ±2.74% is ordinary noise. The useful result is narrower: the valid prospective corpus is no longer empty, and its first natural baseline is mechanically quiet relative to the larger pre-Research historical paths.
 
-The Human has frozen a broader alert preference:
+The Human alert preference is now accepted authoritative Radar policy:
 
 ```text
 CASE HAS PRE-EXISTING RESEARCH = YES
@@ -240,16 +240,16 @@ Current state:
 ```text
 qualified HiThink history input = available
 short-lived shadow sampling = available
-research creation-time lineage = FIX PROPOSED / PR #138 / TESTS PASS
-first real scheduled batch = mechanically reviewed
+research creation-time lineage = ACCEPTED / MERGED / AUTHORITATIVE
+first real scheduled batch review = ACCEPTED / MERGED / AUTHORITATIVE
 eligible post-Research baseline = 10 daily observations / 6 securities
-Human alert preference = frozen
+Human alert preference = ACCEPTED / AUTHORITATIVE
 valid post-Research anomaly example = NOT YET EARNED
 false-negative candidate = NOT YET EARNED
 anomaly detector = NOT YET PROMOTED
 ```
 
-PR #137 (`radar/first-real-shadow-review`) preserves the first batch, eligibility correction, GigaDevice counterfactual probe, Human alert-policy checkpoint, and the first 10-observation post-Research baseline. Latest `kernel-tests` passed; it remains non-authoritative until accepted / merged.
+Accepted and merged PR #137 preserves the first batch, eligibility correction, GigaDevice counterfactual probe, Human alert-policy checkpoint, and the first 10-observation post-Research baseline. These Radar checkpoints are now authoritative frozen lineage.
 
 ### Radar authority boundary
 
@@ -265,7 +265,7 @@ Radar may NOT create Fundamental Belief, Probability, Odds, Human Decision, Acti
 1. **Append natural post-Research price windows** to the existing 10-observation baseline using `ResearchSnapshot.created_at` as the mechanical left boundary; do not substitute `as_of_datetime`.
 2. **Calibrate `qualified price anomaly` vs ordinary noise** from real cross-case windows; do not turn the current 2.74% maximum into a threshold and do not tune to GigaDevice or Sanhua historical examples.
 3. **Look for false-negative candidates**: quieter post-Research paths followed by genuinely decision-relevant evidence.
-4. **Use the Human alert preference as delivery policy**, not as detector logic: followed + researched + qualified anomaly may alert; explicit no-longer-following suppresses.
+4. **Use the accepted Human alert preference as delivery policy**, not as detector logic: followed + researched + qualified anomaly may alert; explicit no-longer-following suppresses.
 5. **Do not build the detector yet**; real post-Research evidence is still too thin.
 6. Continue Commitment Radar use without promoting a second attention authority.
 7. Let real surprises, commitment resolutions, and method mismatches select heterogeneous prospective cases.
@@ -312,11 +312,11 @@ For Sanhua specifically, do not upgrade unnamed-customer/exclusive-supply/alloca
 - `docs/case-coverage-checkpoint-2026-09-03.md` — phase / coverage / longitudinal gaps.
 - `docs/dogfood/commitment-radar-v0-2026-09-03.md` — Commitment Radar lineage boundary.
 - `docs/dogfood/surprise-radar-v0-qualified-history-foundation-2026-09-03.md` and `docs/dogfood/surprise-radar-v0-shadow-sampling-2026-09-03.md` — Surprise Radar input / observation foundation.
-- PR #137 / `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — first real shadow-batch review + eligibility / alert-policy correction.
-- PR #137 / `docs/dogfood/surprise-radar-v0-first-post-research-baseline-2026-09-04.md` — first true prospective baseline: 10 eligible daily observations across six securities; no anomaly threshold promoted.
-- PR #137 / `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — frozen Human alert preference.
-- PR #137 / `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — retained filename; corrected GigaDevice counterfactual policy probe, **not a valid positive control**.
-- PR #138 / `src/decision_kernel/runtime/market_history_shadow.py` + `tests/test_market_history_shadow.py` — minimal Research creation-time lineage fix; **not authoritative until accepted / merged**.
+- `docs/dogfood/surprise-radar-v0-first-real-window-review-2026-09-04.md` — accepted first real shadow-batch review + eligibility / alert-policy correction; merged via #137.
+- `docs/dogfood/surprise-radar-v0-first-post-research-baseline-2026-09-04.md` — accepted first true prospective baseline: 10 eligible daily observations across six securities; no anomaly threshold promoted; merged via #137.
+- `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — accepted Human alert preference; merged via #137.
+- `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — retained filename; corrected GigaDevice counterfactual policy probe, **not a valid positive control**; merged via #137.
+- `src/decision_kernel/runtime/market_history_shadow.py` + `tests/test_market_history_shadow.py` — accepted Research creation-time lineage fix; merged via #138.
 - `docs/dogfood/odds-semantic-replay-cmb-v0-2026-09-03.md` — Odds semantic / horizon pressure.
 - `docs/prospective-decision-outcome-capture-protocol-2026-09-03.md` — prospective longitudinal capture discipline.
 
@@ -326,10 +326,10 @@ Historical handoffs remain lineage only.
 
 ## 9. Recent state delta
 
+- **NEW — Human accepted and merged PR #138.** `ResearchSnapshot.created_at` is now preserved in shadow `research_identity`; the Research-existence eligibility boundary is authoritative without a Research schema or authority change.
+- **NEW — Human accepted and merged PR #137.** The first real scheduled shadow review, Research-created-at eligibility correction, default Human alert preference, and first 10-observation post-Research baseline are now authoritative Radar lineage.
 - **NEW — first true post-Research Surprise Radar baseline established.** The retained 2026-09-03 shadow batch yields 10 eligible daily observations across six securities after slicing by `ResearchSnapshot.created_at`; largest absolute move is CATL `-2.74%` on 2026-09-02. This is a baseline, not a threshold or anomaly label.
-- **NEW — real Surprise Radar lineage bug found from the first shadow review.** `ResearchSnapshot.as_of_datetime` is a PIT information cutoff, not the time Research came into existence; using it as the eligibility boundary can create false prospective history.
-- **NEW — PR #138 adds existing `ResearchSnapshot.created_at` to shadow `research_identity`.** No Research schema change; latest `kernel-tests` passed; PR is mergeable and ready for review.
-- **NEW — Human Surprise Radar alert preference frozen.** For a case with pre-existing Research that remains followed, a qualified price anomaly may alert by default; suppression requires an explicit Human statement that the case is no longer followed / no longer of interest.
+- **CHANGED — Human Surprise Radar alert preference is authoritative.** For a case with pre-existing Research that remains followed, a qualified price anomaly may alert by default; suppression requires an explicit Human statement that the case is no longer followed / no longer of interest.
 - **CHANGED — per-anomaly Human A/B alert labeling is no longer the primary Surprise Radar experiment.** The earlier “positive control / large-move Human IGNORE negative control” framing is retired for active followed researched cases.
 - **CHANGED — Surprise Radar experiment now targets signal quality.** Need more real post-Research evidence to distinguish qualified anomalies from ordinary noise and to find false-negative candidates.
 - **UNCHANGED — GigaDevice July/August and Sanhua 2026-08-19 historical moves predate Research creation and cannot be promoted into current-v0 Radar evidence.**
