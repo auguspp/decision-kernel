@@ -1,19 +1,20 @@
 # Surprise Radar v0 — First Real Scheduled Window Review
 
-Status: **REAL SCHEDULED SHADOW BATCH / CONTROL ELIGIBILITY CORRECTED / NO DETECTOR / NO HUMAN-WAKE CHANGE**  
+Status: **REAL SCHEDULED SHADOW BATCH / ELIGIBILITY + HUMAN ALERT POLICY CORRECTED / NO DETECTOR / NO INVESTMENT AUTHORITY**  
 Date: **2026-09-04**
 
 ## Purpose
 
 Review the first naturally scheduled `market-history-shadow` batch before its short-lived Actions artifact expires, without promoting any anomaly rule or inferring Fundamental Belief from price.
 
-A later Human-triage pass initially promoted GigaDevice as the first positive control. That promotion has now been **retracted** because the candidate anomaly occurred before GigaDevice had a frozen ResearchSnapshot in the repository.
+A later Human-triage pass initially promoted GigaDevice as the first positive control. That promotion was retracted because the candidate anomaly occurred before GigaDevice had a frozen ResearchSnapshot in the repository.
 
-The corrected follow-on checkpoint is:
+The Human subsequently clarified a more important policy point: for a case that **already has frozen Research and remains followed**, a qualified price anomaly may be surfaced by default; alert permission does not need to be re-earned case by case. Only an explicit Human statement that the case is no longer followed should suppress future Surprise Radar alerts.
 
-`docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md`
+Relevant follow-on checkpoints:
 
-The filename is retained for lineage, but the document now records a counterfactual Human triage response rather than a valid positive control.
+- `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md` — retained filename; corrected counterfactual GigaDevice checkpoint, not a valid control.
+- `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — frozen Human alert preference.
 
 ## Source batch
 
@@ -52,7 +53,6 @@ Every observation retained the existing boundary:
 
 ```text
 RADAR SEMANTICS = SHADOW_OBSERVATION_ONLY
-HUMAN ATTENTION AUTHORITY = NONE
 INVESTMENT AUTHORITY = NONE
 ```
 
@@ -98,19 +98,18 @@ Sanhua's 2026-09-03 packet was an H-share next-day disclosure form and does not,
 
 No new GigaDevice official disclosure packet appeared in this scheduled scan.
 
-## Control eligibility correction
+## Eligibility correction
 
 Current Surprise Radar v0 shadow observations bind to an exact frozen `ResearchSnapshot` id / as-of / information-bundle hash.
 
-Therefore a historical anomaly can qualify as a control only if:
+Therefore a historical anomaly can qualify as a real current-v0 observation only if:
 
 ```text
 frozen ResearchSnapshot exists before anomaly
 + anomaly occurs after Research freeze
-+ Human later labels whether that anomaly deserved Research triage
 ```
 
-This matters because a full retained history window can extend **before** the ResearchSnapshot used by the scheduled observation. Those older bars are mechanically valid price history, but they are not automatically eligible Radar controls.
+A full retained history window can extend **before** the ResearchSnapshot used by the scheduled observation. Those older bars are mechanically valid price history, but they are not automatically eligible Surprise Radar observations.
 
 ### 603986 / GigaDevice
 
@@ -125,20 +124,20 @@ Therefore:
 
 ```text
 PRE-ANOMALY RESEARCH = NO
-VALID SURPRISE RADAR POSITIVE CONTROL = NO
+VALID SURPRISE RADAR v0 OBSERVATION = NO
 ```
 
-The Human subsequently answered the counterfactual usefulness question with:
+The Human answered the earlier counterfactual usefulness question with:
 
 ```text
 A = worth alerting me; should trigger Research triage
 ```
 
-That answer remains useful as a Human preference / cold-start counterfactual, but **does not belong in the current Surprise Radar v0 control corpus**.
+That answer remains useful as a counterfactual preference, but it does not backdate Radar eligibility.
 
 ### 002050 / Sanhua
 
-The same issue invalidates using the 2026-08-19 `-7.10%` day as a negative-control candidate:
+The same issue applies to the 2026-08-19 `-7.10%` day:
 
 ```text
 first Sanhua Full Research package = 2026-09-02 20:24:02 +08:00
@@ -146,27 +145,79 @@ candidate large move = 2026-08-19
 PRE-ANOMALY RESEARCH = NO
 ```
 
-Do not ask the Human to label that move for the current Radar corpus.
+It is not an actual current-v0 Radar observation either.
+
+The Human later clarified that **if prior Research had existed and the case remained followed**, both the GigaDevice and Sanhua price anomalies could have been surfaced as alerts. That is a Human alert-policy statement, not historical control promotion.
 
 ### 300750 / CATL and other windows
 
-They remain context windows until a candidate anomaly **after their applicable frozen ResearchSnapshot** is identified and labeled.
+They remain context windows until a candidate anomaly **after their applicable frozen ResearchSnapshot** is identified.
+
+## Human alert preference — replaces per-anomaly alert labeling
+
+The frozen Human preference is:
+
+```text
+PRE-EXISTING FROZEN RESEARCH = YES
+CASE STILL FOLLOWED = YES
+QUALIFIED PRICE ANOMALY = YES
+→ MAY ALERT BY DEFAULT
+```
+
+Suppression requires an explicit Human opt-out:
+
+```text
+Human explicitly says no longer follow / no longer interested
+→ suppress Surprise Radar alerts for that case
+```
+
+Do not treat `WAIT`, `NO_ACTION`, a frozen Research stop state, or lack of recent discussion as an opt-out.
+
+This means the earlier evaluation plan — earn a `positive control` when the Human says alert, and a `negative control` when the Human says a large move should be ignored — is no longer the right primary experiment for active researched cases.
+
+Alerting remains only attention allocation:
+
+```text
+ALERT
+!= automatic Research reopen
+!= Fundamental Belief change
+!= Odds change
+!= Recommendation
+!= Action
+!= Investment Authority
+```
+
+After receiving an alert, the Human may still triage `DEEPEN / WAIT / DROP`.
+
+## What still needs evidence
+
+The Human policy does **not** define what mechanical path qualifies as a `price anomaly`.
+
+That is now the main Surprise Radar experiment:
+
+1. observe natural **post-Research** price windows;
+2. distinguish mechanically meaningful anomalies from ordinary price noise without tuning to one case;
+3. identify quieter post-Research paths followed by decision-relevant evidence as false-negative candidates;
+4. preserve cross-case diversity and exact ResearchSnapshot / price-source lineage;
+5. only after enough natural evidence, test a simple explainable shadow rule.
+
+The detector still must avoid turning routine fluctuations into alerts.
 
 ## What this review proves
 
 ```text
 REAL SCHEDULED SHADOW BATCH = YES
-SIX QUALIFIED WINDOWS = YES
+SIX QUALIFIED HISTORY WINDOWS = YES
 ARTIFACT RETENTION / REPLAY IDENTITY = YES
-MECHANICALLY DISTINCT PATHS = YES
+MECHANICALLY DISTINCT HISTORICAL PATHS = YES
 HISTORICAL PRE-RESEARCH PRICE PATHS EXIST = YES
-VALID POSITIVE CONTROL = NOT YET
-VALID NEGATIVE CONTROL = NOT YET
-VALID FALSE-NEGATIVE CONTROL = NOT YET
+DEFAULT HUMAN ALERT PREFERENCE FOR FOLLOWED RESEARCHED CASES = FROZEN
+VALID POST-RESEARCH ANOMALY EXAMPLE = NOT YET EARNED
+FALSE-NEGATIVE CANDIDATE = NOT YET EARNED
 DETECTOR THRESHOLD = NOT JUSTIFIED
 RADAR SCORE = NO
-HUMAN WAKE CHANGE = NO
 KERNEL CHANGE = NO
+INVESTMENT AUTHORITY = NONE
 ```
 
 ## Next evidence
@@ -175,19 +226,21 @@ Do not tune a threshold from this batch.
 
 Next useful step:
 
-1. use the exact frozen ResearchSnapshot timestamp as the left boundary for control eligibility;
+1. use each exact frozen ResearchSnapshot timestamp as the left boundary for Surprise Radar eligibility;
 2. let post-Research price windows accumulate naturally;
-3. obtain Human triage only on anomalies that occur after that freeze;
-4. earn a valid positive, negative and false-negative candidate from those prospective windows;
+3. evaluate which mechanical paths deserve the label `qualified price anomaly` versus ordinary noise;
+4. look explicitly for quieter false-negative candidates;
 5. only then test a simple explainable shadow rule.
 
 ## Disposition
 
 ```text
 FIRST REAL SHADOW REVIEW = COMPLETE
-603986 HISTORICAL ANOMALY = COUNTERFACTUAL ONLY / NOT VALID CONTROL
-002050 2026-08-19 LARGE MOVE = PRE-RESEARCH / NOT VALID CONTROL CANDIDATE
-VALID CONTROL CORPUS = EMPTY
+603986 HISTORICAL ANOMALY = COUNTERFACTUAL ONLY / PRE-RESEARCH
+002050 2026-08-19 LARGE MOVE = COUNTERFACTUAL ONLY / PRE-RESEARCH
+PER-ANOMALY HUMAN ALERT A/B LABELING = NOT THE PRIMARY EXPERIMENT
+FOLLOWED + RESEARCHED + QUALIFIED ANOMALY = MAY ALERT BY DEFAULT
+EXPLICIT HUMAN NO-LONGER-FOLLOWING = SUPPRESS
 DETECTOR DESIGN = WAIT
-CURRENT PROJECT PRIORITY = ACCUMULATE POST-RESEARCH NATURAL WINDOWS + HUMAN TRIAGE
+CURRENT PROJECT PRIORITY = ACCUMULATE POST-RESEARCH NATURAL WINDOWS + CALIBRATE QUALIFIED-ANOMALY / FALSE-NEGATIVE BEHAVIOR
 ```
