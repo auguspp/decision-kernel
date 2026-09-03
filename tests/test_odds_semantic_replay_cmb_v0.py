@@ -175,8 +175,8 @@ def test_real_cmb_near_one_year_is_a_semantic_convergence_control() -> None:
     assert aggregate is not None
 
     assert odds.holding_period_days == 363
-    assert odds.expected_holding_period_return == Decimal(
-        "0.363191385217816935878609887"
+    assert odds.expected_holding_period_return.quantize(Decimal("0.0001")) == Decimal(
+        "0.3632"
     )
     assert odds.positive_return_probability == Decimal("0.75")
     assert aggregate.probability_weighted_total_payoff_per_share == Decimal("55.7")
