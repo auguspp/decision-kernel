@@ -143,7 +143,7 @@ def test_every_material_numeric_clause_can_carry_its_own_provenance_path() -> No
             input_claim_hash=canonical_hash(unit_claim),
             numerical_check=_identity_check(
                 package,
-                field_name="unit_revenue",
+                field_name="unit_rev",
                 value="2.17",
                 unit="CNY/parcel",
             ),
@@ -191,7 +191,7 @@ def test_one_supported_clause_does_not_cover_an_unsupported_numeric_clause() -> 
             input_claim_hash=canonical_hash(unit_claim),
             numerical_check=_identity_check(
                 package,
-                field_name="unit_revenue",
+                field_name="unit_rev",
                 value="2.17",
                 unit="CNY/parcel",
             ),
