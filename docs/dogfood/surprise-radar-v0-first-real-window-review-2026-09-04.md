@@ -1,15 +1,19 @@
 # Surprise Radar v0 — First Real Scheduled Window Review
 
-Status: **HUMAN-TRIAGE PREP / REAL SCHEDULED SHADOW BATCH / NO DETECTOR / NO HUMAN-WAKE CHANGE**  
+Status: **REAL SCHEDULED SHADOW BATCH / CONTROL ELIGIBILITY CORRECTED / NO DETECTOR / NO HUMAN-WAKE CHANGE**  
 Date: **2026-09-04**
 
 ## Purpose
 
 Review the first naturally scheduled `market-history-shadow` batch before its short-lived Actions artifact expires, without promoting any anomaly rule or inferring Fundamental Belief from price.
 
-This note preserves the mechanical review that existed before Human labeling. A separate follow-on checkpoint now freezes the first earned Human triage label:
+A later Human-triage pass initially promoted GigaDevice as the first positive control. That promotion has now been **retracted** because the candidate anomaly occurred before GigaDevice had a frozen ResearchSnapshot in the repository.
+
+The corrected follow-on checkpoint is:
 
 `docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md`
+
+The filename is retained for lineage, but the document now records a counterfactual Human triage response rather than a valid positive control.
 
 ## Source batch
 
@@ -94,69 +98,59 @@ Sanhua's 2026-09-03 packet was an H-share next-day disclosure form and does not,
 
 No new GigaDevice official disclosure packet appeared in this scheduled scan.
 
-## Candidate review queue
+## Control eligibility correction
+
+Current Surprise Radar v0 shadow observations bind to an exact frozen `ResearchSnapshot` id / as-of / information-bundle hash.
+
+Therefore a historical anomaly can qualify as a control only if:
+
+```text
+frozen ResearchSnapshot exists before anomaly
++ anomaly occurs after Research freeze
++ Human later labels whether that anomaly deserved Research triage
+```
+
+This matters because a full retained history window can extend **before** the ResearchSnapshot used by the scheduled observation. Those older bars are mechanically valid price history, but they are not automatically eligible Radar controls.
 
 ### 603986 / GigaDevice
 
-Mechanical state at the time this review was first prepared:
+Repository history:
 
 ```text
-CLEAR PRICE-PATH DISLOCATION CANDIDATE = YES
-POSITIVE CONTROL = NOT YET
+first Full Research package = 2026-09-02 09:37:02 +08:00
+candidate anomaly = 2026-07-21 → 2026-08-03
 ```
 
-Relevant frozen lineage existed later in the repository:
-
-- current Research was refreshed through the 2026-09-02 PIT;
-- a prospective Human decision was frozen on 2026-09-03;
-- the Human chose a CNY350 assumption-review checkpoint and a conditional CNY320–335 first-entry band.
-
-The correct causal statement remained limited:
+Therefore:
 
 ```text
-price dislocation existed
-+ later Research / Human decision work existed
-!= price dislocation caused useful Research triage
+PRE-ANOMALY RESEARCH = NO
+VALID SURPRISE RADAR POSITIVE CONTROL = NO
 ```
 
-A separate Human checkpoint has now answered the missing usefulness question. The Human explicitly selected:
+The Human subsequently answered the counterfactual usefulness question with:
 
 ```text
 A = worth alerting me; should trigger Research triage
 ```
 
-Therefore the current evaluation state is now:
+That answer remains useful as a Human preference / cold-start counterfactual, but **does not belong in the current Surprise Radar v0 control corpus**.
+
+### 002050 / Sanhua
+
+The same issue invalidates using the 2026-08-19 `-7.10%` day as a negative-control candidate:
 
 ```text
-603986 SURPRISE RADAR POSITIVE CONTROL = YES / EARNED BY HUMAN TRIAGE
+first Sanhua Full Research package = 2026-09-02 20:24:02 +08:00
+candidate large move = 2026-08-19
+PRE-ANOMALY RESEARCH = NO
 ```
 
-The historical pre-label state is preserved here rather than rewritten away.
+Do not ask the Human to label that move for the current Radar corpus.
 
-### 300750 / CATL
+### 300750 / CATL and other windows
 
-Mechanical state:
-
-```text
-SUSTAINED REPRICING CANDIDATE = YES
-20d return ~= -9.9%
-max drawdown ~= -14.0%
-```
-
-The existing CATL Commitment Radar positive control is based on exact disclosure-to-frozen-commitment lineage, not this price path. Keep the two experiments separate.
-
-The 2026-09-03 buyback-progress disclosure does not by itself explain the multi-week price path and must not be used as retrospective attribution.
-
-### Other four windows
-
-Current disposition:
-
-```text
-002050 / 600519 / 601088 / 600036
-= CONTEXT WINDOWS / UNLABELED
-```
-
-They are not promoted as negative controls merely because their paths look quieter. A useful negative control requires a sufficiently large mechanical observation that a Human later judges should have remained `IGNORE`.
+They remain context windows until a candidate anomaly **after their applicable frozen ResearchSnapshot** is identified and labeled.
 
 ## What this review proves
 
@@ -165,9 +159,10 @@ REAL SCHEDULED SHADOW BATCH = YES
 SIX QUALIFIED WINDOWS = YES
 ARTIFACT RETENTION / REPLAY IDENTITY = YES
 MECHANICALLY DISTINCT PATHS = YES
-FIRST HUMAN-LABELED POSITIVE CONTROL = YES / 603986
-NEGATIVE CONTROL = NOT YET
-FALSE-NEGATIVE CONTROL = NOT YET
+HISTORICAL PRE-RESEARCH PRICE PATHS EXIST = YES
+VALID POSITIVE CONTROL = NOT YET
+VALID NEGATIVE CONTROL = NOT YET
+VALID FALSE-NEGATIVE CONTROL = NOT YET
 DETECTOR THRESHOLD = NOT JUSTIFIED
 RADAR SCORE = NO
 HUMAN WAKE CHANGE = NO
@@ -180,20 +175,19 @@ Do not tune a threshold from this batch.
 
 Next useful step:
 
-1. let another scheduled batch arrive naturally;
-2. compare whether GigaDevice / CATL-style paths persist, reverse, or resolve;
-3. earn at least one mechanically meaningful `IGNORE` example from Human triage;
-4. identify one plausible false-negative candidate from a quieter path followed by decision-relevant evidence;
-5. only then test a simple explainable shadow rule against the small reviewed corpus.
+1. use the exact frozen ResearchSnapshot timestamp as the left boundary for control eligibility;
+2. let post-Research price windows accumulate naturally;
+3. obtain Human triage only on anomalies that occur after that freeze;
+4. earn a valid positive, negative and false-negative candidate from those prospective windows;
+5. only then test a simple explainable shadow rule.
 
 ## Disposition
 
 ```text
 FIRST REAL SHADOW REVIEW = COMPLETE
-603986 = FIRST HUMAN-LABELED POSITIVE CONTROL
-300750 = SUSTAINED-REPRICING CANDIDATE / UNLABELED
-NEGATIVE CONTROL = NOT YET
-FALSE-NEGATIVE CONTROL = NOT YET
+603986 HISTORICAL ANOMALY = COUNTERFACTUAL ONLY / NOT VALID CONTROL
+002050 2026-08-19 LARGE MOVE = PRE-RESEARCH / NOT VALID CONTROL CANDIDATE
+VALID CONTROL CORPUS = EMPTY
 DETECTOR DESIGN = WAIT
-CURRENT PROJECT PRIORITY = CONTINUE REAL-WINDOW ACCUMULATION + HUMAN TRIAGE
+CURRENT PROJECT PRIORITY = ACCUMULATE POST-RESEARCH NATURAL WINDOWS + HUMAN TRIAGE
 ```
