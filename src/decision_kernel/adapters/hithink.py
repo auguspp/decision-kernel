@@ -34,6 +34,24 @@ class HithinkCompletedSessionPrice:
     expected_latest_session: date
 
 
+@dataclass(frozen=True)
+class HithinkCompletedPricePoint:
+    """One qualified raw close at the exact completed A-share session it represents."""
+
+    close: Decimal
+    as_of: datetime
+
+
+@dataclass(frozen=True)
+class HithinkCompletedPriceHistory:
+    """Harness-owned qualified raw-close window with explicit freshness state."""
+
+    thscode: str
+    points: tuple[HithinkCompletedPricePoint, ...]
+    response_session: date
+    expected_latest_session: date
+
+
 def to_hithink_thscode(*, ticker: str, exchange: str) -> str:
     """Map explicit kernel A-share identity to the provider identifier."""
 
@@ -133,14 +151,20 @@ def latest_completed_a_share_session(
     return max(completed)
 
 
-def normalize_hithink_latest_completed_price(
+def normalize_hithink_completed_price_history(
     envelope: Mapping[str, Any],
     *,
     thscode: str,
     sessions: Sequence[date],
     observed_at: datetime,
-) -> HithinkCompletedSessionPrice:
-    """Normalize one raw daily close without fabricating request-time market freshness."""
+) -> HithinkCompletedPriceHistory:
+    """Normalize the exact raw-close window without creating Radar semantics.
+
+    The same provider, ticker, raw-adjustment, trading-calendar and completed-session
+    rules used by live ObservedMarket apply to every returned point. A stale response
+    remains explicitly stale through ``response_session`` versus
+    ``expected_latest_session``; an unfinished/future bar fails closed.
+    """
 
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
         raise HithinkAdapterError("observed_at must be timezone-aware")
@@ -168,15 +192,46 @@ def normalize_hithink_latest_completed_price(
             "raw A-share history extends beyond the latest completed session"
         )
 
-    return HithinkCompletedSessionPrice(
+    points = tuple(
+        HithinkCompletedPricePoint(
+            close=bars[session],
+            as_of=datetime.combine(
+                session,
+                A_SHARE_CLOSE,
+                tzinfo=SHANGHAI_TZ,
+            ),
+        )
+        for session in sorted(bars)
+    )
+    return HithinkCompletedPriceHistory(
         thscode=normalized_thscode,
-        close=bars[response_session],
-        as_of=datetime.combine(
-            response_session,
-            A_SHARE_CLOSE,
-            tzinfo=SHANGHAI_TZ,
-        ),
+        points=points,
+        response_session=response_session,
         expected_latest_session=expected_latest,
+    )
+
+
+def normalize_hithink_latest_completed_price(
+    envelope: Mapping[str, Any],
+    *,
+    thscode: str,
+    sessions: Sequence[date],
+    observed_at: datetime,
+) -> HithinkCompletedSessionPrice:
+    """Normalize one raw daily close without fabricating request-time market freshness."""
+
+    history = normalize_hithink_completed_price_history(
+        envelope,
+        thscode=thscode,
+        sessions=sessions,
+        observed_at=observed_at,
+    )
+    latest = history.points[-1]
+    return HithinkCompletedSessionPrice(
+        thscode=history.thscode,
+        close=latest.close,
+        as_of=latest.as_of,
+        expected_latest_session=history.expected_latest_session,
     )
 
 

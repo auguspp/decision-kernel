@@ -10,10 +10,11 @@ from urllib.request import Request, urlopen
 
 from ..adapters.hithink import (
     SHANGHAI_TZ,
-    HithinkAdapterError,
+    HithinkCompletedPriceHistory,
+    HithinkCompletedSessionPrice,
     latest_completed_a_share_session,
     normalize_hithink_calendar,
-    normalize_hithink_latest_completed_price,
+    normalize_hithink_completed_price_history,
     observed_market_from_completed_price,
 )
 from ..market import ObservedMarket
@@ -25,18 +26,24 @@ _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
 class HithinkRuntimeError(RuntimeError):
-    """The outer HiThink runtime could not produce the required live market input."""
+    """The outer HiThink runtime could not produce the required qualified market input."""
 
 
-def fetch_latest_hithink_observed_market(
+def fetch_hithink_completed_price_history(
     *,
     thscode: str,
     observed_at: datetime,
     api_key: str | None,
     request_json: _RequestJSON | None = None,
     timeout_seconds: float = 10.0,
-) -> ObservedMarket:
-    """Fetch exactly the calendar and raw history required for one live Odds price."""
+) -> HithinkCompletedPriceHistory:
+    """Fetch the existing 45-day raw-close window for Harness consumers.
+
+    This is commodity acquisition only. It does not classify anomalies, allocate
+    Research attention, change fundamental state, or carry investment authority.
+    The live runtime still requires the provider response to reach the latest
+    completed A-share session.
+    """
 
     if observed_at.tzinfo is None or observed_at.utcoffset() is None:
         raise HithinkRuntimeError("live observed_at must be timezone-aware")
@@ -74,21 +81,45 @@ def fetch_latest_hithink_observed_market(
             "adjust": "none",
         },
     )
-    try:
-        price = normalize_hithink_latest_completed_price(
-            envelope,
-            thscode=thscode,
-            sessions=calendar,
-            observed_at=observed_at,
-        )
-    except HithinkAdapterError:
-        raise
-
-    if price.as_of.date() != price.expected_latest_session:
+    history = normalize_hithink_completed_price_history(
+        envelope,
+        thscode=thscode,
+        sessions=calendar,
+        observed_at=observed_at,
+    )
+    if history.response_session != history.expected_latest_session:
         raise HithinkRuntimeError(
             "HiThink raw history does not reach the latest completed A-share session"
         )
-    return observed_market_from_completed_price(price)
+    return history
+
+
+def fetch_latest_hithink_observed_market(
+    *,
+    thscode: str,
+    observed_at: datetime,
+    api_key: str | None,
+    request_json: _RequestJSON | None = None,
+    timeout_seconds: float = 10.0,
+) -> ObservedMarket:
+    """Fetch the latest qualified completed close for live Odds."""
+
+    history = fetch_hithink_completed_price_history(
+        thscode=thscode,
+        observed_at=observed_at,
+        api_key=api_key,
+        request_json=request_json,
+        timeout_seconds=timeout_seconds,
+    )
+    latest = history.points[-1]
+    return observed_market_from_completed_price(
+        HithinkCompletedSessionPrice(
+            thscode=history.thscode,
+            close=latest.close,
+            as_of=latest.as_of,
+            expected_latest_session=history.expected_latest_session,
+        )
+    )
 
 
 def _request_hithink_json(
