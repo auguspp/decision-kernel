@@ -51,7 +51,19 @@ _AUTHOR_BACKSTORY_SCAFFOLD = (
     "之前我觉得",
 )
 
+_FIRST_PERSON_PROCESS_SCAFFOLD = (
+    "所以这次我",
+    "这次我重新",
+    "我重新拆",
+    "我重新算",
+    "我重新找",
+    "我更想看到",
+)
+
 _NOT_BUT_RE = re.compile(r"不是[^。！？\n]{0,96}而是")
+_UNNECESSARY_FIRST_PERSON_RE = re.compile(
+    r"(?:这才是|这就是|这里是|关键是)[^。！？\n]{0,24}我(?:觉得|认为)"
+)
 
 
 def voice_lint(draft: XiaohongshuDraft) -> VoiceLintReport:
@@ -103,6 +115,24 @@ def voice_lint(draft: XiaohongshuDraft) -> VoiceLintReport:
                 message=(
                     "Draft appears to manufacture a prior author stance or review history: "
                     + ", ".join(backstory)
+                ),
+            )
+        )
+
+    first_person_process = [
+        marker for marker in _FIRST_PERSON_PROCESS_SCAFFOLD if marker in text
+    ]
+    if first_person_process or _UNNECESSARY_FIRST_PERSON_RE.search(text):
+        examples = list(first_person_process)
+        if _UNNECESSARY_FIRST_PERSON_RE.search(text):
+            examples.append("这才是/这就是…我觉得…")
+        issues.append(
+            VoiceLintIssue(
+                code="UNNECESSARY_FIRST_PERSON",
+                message=(
+                    "First person is being used as narrator presence rather than information. "
+                    "Delete the process/emphasis scaffold or state the analytical judgment directly: "
+                    + ", ".join(examples)
                 ),
             )
         )
@@ -180,6 +210,10 @@ Anti-AI voice rules:
 - Do not invent author history. Never write things like “我最近重新看…”, “这和我以前的看法不太一样”,
   “我一开始也这么想”, or imply a previous stance unless that prior stance is explicitly supplied
   in BRIEF or PLAN. First-person memory is evidence too; do not fabricate it for warmth.
+- First person is expensive. Use `我` only when a genuine personal stance itself carries information.
+  Do not use it for emphasis, transition, or process narration. “这才是我觉得36.3元最关键的地方”
+  should normally be “这才是36.3元最关键的地方”. “所以这次我重新拆了一遍” should normally be
+  deleted or replaced by the analytical action itself, such as “先把主业和未来拆开算”.
 - Do not make every paragraph feel like it is closing a checklist item.
 - Do not repeatedly use stock transitions such as “真正的问题是”, “换句话说”, “这意味着”,
   “所以现在”, “这里就”, or “我的结论是”. One natural use is fine; repeated scaffolding is not.
