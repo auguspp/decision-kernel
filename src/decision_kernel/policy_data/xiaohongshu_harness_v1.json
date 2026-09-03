@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "purpose": "Writing calibration and evaluation policy for downstream Xiaohongshu publication. Never investment authority.",
+  "global_rules": [
+    "One article has one primary reader tension; subordinate questions only serve that tension.",
+    "Open from a concrete contradiction between price, earnings, evidence, or market expectation; do not start with company introduction.",
+    "Ask what the current price is requiring the company to prove before expanding into broad industry narrative.",
+    "Use reverse valuation, simple arithmetic, or scenario paths only when they sharpen the price-implied requirement.",
+    "Separate reported facts from extrapolation, extrapolation from durable earning power, and earning power from the multiple it deserves.",
+    "A capability, certification, expansion plan, batch delivery, or product catalog is not automatically revenue, profit, market share, or durable ROIC.",
+    "Treat the strongest counterargument seriously; do not win by making the opposing case stupid.",
+    "Give a real preferred judgment when evidence supports one; do not hide behind symmetric scenario enumeration.",
+    "Use short paragraphs and plain Chinese. Technical terms are allowed only when they carry causal meaning.",
+    "Do not dump the Research table of contents into the article and do not use generic headings such as company introduction, industry overview, or core competitiveness.",
+    "Do not use emojis, growth-hacking language, or empty motivational conclusions.",
+    "Publishing is downstream only: omit Human Decision, Action, position, cost basis, and private portfolio state.",
+    "End by answering the title question and naming the one remaining evidence gap that would most change the judgment."
+  ],
+  "samples": [
+    {
+      "id": "yunnan_inp",
+      "label": "云南锗业 / 磷化铟",
+      "visible_engagement": "146 likes / 89 saves / 116 comments / 63 shares",
+      "central_tension": "短缺与暴利可以是真的，但当前价格真正要求的是短缺持续得足够久。",
+      "opening_move": "从极低历史利润与594亿元市值的反差切入，马上问市场究竟在押什么。",
+      "closing_move": "承认短缺和暴利的现实可能性，但把风险落在持续时间，而不是简单说故事是假的。",
+      "signature_moves": [
+        "先纠正市场流行叙事中的过度说法，再保留其中真正成立的部分。",
+        "用供给弹性和扩产周期解释为什么近端与远端概率完全不同。",
+        "从市值和目标回报反推未来利润、售价和净利率要求。",
+        "概率是在因果拆开以后才给，不是先拍一个百分比。"
+      ]
+    },
+    {
+      "id": "hengtong_58",
+      "label": "亨通光电 / 58元",
+      "visible_engagement": "156 likes / 100 saves / 159 comments / 69 shares",
+      "central_tension": "公司确实变好了，但市场是否把周期利润提前当成了永久身份重构。",
+      "opening_move": "用业绩接近翻倍、股价腰斩的反常识冲突开篇，再追问125元和58元分别相信了什么。",
+      "closing_move": "用同一个翅膀隐喻收尾：能力存在，但还要证明在涨价退潮后仍能承重。",
+      "signature_moves": [
+        "一个隐喻贯穿全文，不连续换比喻。",
+        "把需求增长和价格上涨拆开，因为两者对利润持续性的意义不同。",
+        "用极简单位经济学解释为什么售价回落会让利润比收入更快回吐。",
+        "产品目录不等于规模利润，扩产不等于需求兑现，报表才证明货币化。"
+      ]
+    },
+    {
+      "id": "gigadevice_48_5",
+      "label": "兆易创新 / 扣非48.5亿",
+      "visible_engagement": "145 likes / 123 saves / 106 comments / 41 shares",
+      "central_tension": "市场不仅押高利润，还押高利润与高估值可以同时成立。",
+      "opening_move": "从业绩大增却暴跌切入，立即提出暴跌前交易多少利润、现实能赚多少、跌后是否回归价值三个问题。",
+      "closing_move": "把暴跌解释成确定性被削掉，而不是已兑现利润被否定。",
+      "signature_moves": [
+        "先反推暴跌前市场交易的利润水平和倍数。",
+        "把半年事实、全年外推、可持续利润、估值倍数四层拆开。",
+        "把乐观情景拆成若干必须同时成立的经营条件，再找真正难的条件。",
+        "明确给出基准概率区间和可验证价值中枢。"
+      ]
+    },
+    {
+      "id": "dongshan_201",
+      "label": "东山精密 / 中报后201元",
+      "visible_engagement": "117 likes / 63 saves / 105 comments / 48 shares",
+      "central_tension": "价格几乎没变，但新证据提高了更高盈利路径的可信度，因此判断可以改变。",
+      "opening_move": "先承认一个月前的旧判断，再说明价格锚没变但证据变了。",
+      "closing_move": "不是价格变了，而是后两种高盈利路径的可信度变了。",
+      "signature_moves": [
+        "允许公开修正旧判断，不把一致性当成正确性。",
+        "不把已经预告过的headline profit当作新信息，而找真正改变利润结构的数据。",
+        "用多条未来盈利路径而不是单点目标价表达估值。",
+        "把最大风险压到一个可测变量，例如高毛利率在规模放量后的耐久性。"
+      ]
+    },
+    {
+      "id": "shengyi_3213",
+      "label": "生益科技 / 3213亿",
+      "visible_engagement": "127 likes / 96 saves / 113 comments / 19 shares",
+      "central_tension": "基本面趋势是真的，但当前价格要求认证、订单、份额、利润率和高倍数中的多件好事连续兑现。",
+      "opening_move": "先承认利润很好，再问跌停后的3213亿元还price in了多少预期。",
+      "closing_move": "不是争论公司好不好，而是公司要好到什么程度才能支撑价格。",
+      "signature_moves": [
+        "先SOTP拆掉可以独立定价的上市资产，再审计剩余业务隐含价值。",
+        "由剩余市值反推需要多少稳定利润以及利润完成后还要维持多少倍PE。",
+        "认证即使属实也只是第一步，不自动等于订单、份额和长期利润。",
+        "避免重复计算期权：已经体现在高利润和高倍数里的故事不能再单独加一次价值。"
+      ]
+    }
+  ],
+  "judge_rubric": [
+    "Single tension: every major paragraph advances the same price-versus-reality question.",
+    "Price implication: the article makes explicit what the current price requires to be true.",
+    "Fact discipline: facts, market context, inference, assumption, and opinion are linguistically separated.",
+    "Causal chain: the reader can follow how operational facts become earnings and how earnings become valuation.",
+    "Reverse reasoning: at least one important claim is tested by working backward from price, valuation, or scenario requirements rather than repeating a narrative.",
+    "Counterpoint quality: the strongest bull or bear case is represented fairly and then bounded by evidence.",
+    "Author voice: the draft sounds like a person making a judgment, not an AI summarizing a research report.",
+    "Numerical economy: numbers produce insight instead of data density; no decorative statistics.",
+    "Clear verdict: the conclusion answers the title question and states what still needs proof.",
+    "Authority boundary: no Human Decision, Action, position, cost basis, or transaction instruction appears."
+  ]
+}
