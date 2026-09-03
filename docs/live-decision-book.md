@@ -39,7 +39,7 @@ Investment Authority remains `NONE`.
 | **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**. Analysis-divergence dogfood retains only **partial / ordinal** probability knowledge; full cardinal probability remains unqualified. | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** first-entry band only if thesis survives. | **NOT YET EXECUTED** | At ~350 re-underwrite duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory and 2030 earnings floor. |
 | **Micron / MU / NASDAQ** | Memory oligopoly potentially transitioning toward contracted strategic AI-memory economics; SCA trough cushioning supported, company-wide earnings rebase unproven. | **WAIT / DO NOT BUY FOR NOW** because Human is temporarily not buying U.S. equities; this is not bearish Micron Belief. | **NO_ACTION** | **2026-09-30 FY2026/FQ4 earnings**: SCA coverage / floor, HBM, FY27 GM, capex / depreciation, normalized FCF and incremental ROIC. |
 | **圆通速递 / 600233.SH** | Scaled franchised network with improving efficiency; durable low-reinvestment compounder transition possible but unproven; franchise economics load-bearing. | **NO HUMAN INVESTMENT DECISION** | **NONE** | **Evidence-driven only.** Price is `QUIET`; use frozen YTO `QUIET / REOPEN / FRAME CHANGE` trigger design. |
-| **美的集团 / 000333.SZ** | Mature high-ROE global consumer-industrial franchise; owner return depends on incremental ROIC, dividends and **true net share shrinkage**, not gross buybacks. | **NO HUMAN INVESTMENT DECISION** | **NONE** | Evidence-driven: Smart Home durability, overseas OBM economics, B2B incremental ROIC, normalized owner cash, and cancellation / incentive-adjusted diluted share count. No price trigger yet. |
+| **美的集团 / 000333.SZ** | Mature high-ROE global consumer-industrial franchise. Analysis-divergence negative control found OBM / B2B narratives largely collapse into the same **incremental-ROIC → per-share owner-return** model; divergence is not a probability blocker here. | **NO HUMAN INVESTMENT DECISION** | **NONE** | Evidence-driven: Smart Home durability, overseas OBM economics, B2B incremental ROIC, normalized owner cash, and cancellation / incentive-adjusted diluted share count. No price trigger yet. |
 | **厦门钨业 / 600549.SH** | Negative control: integrated cyclical resource / industrial business; old mixed-regime framing rejected. | **NOT A CURRENT ACTION CANDIDATE** | **NONE** | Process guard only unless new evidence maps tungsten price + self-sufficiency + ownership / quota / capex into attributable through-cycle cash returns. |
 
 ---
@@ -158,6 +158,8 @@ Authoritative lineage:
 RESEARCH = complete enough to stop first public-diligence loop
 REFERENCE FRAME = mature high-ROE global consumer-industrial franchise
 PRIMARY TOOL = per-share owner-return decomposition
+ANALYSIS DIVERGENCE = WEAK / PARTIALLY COLLAPSED
+PROBABILITY QUALIFICATION = PARTIAL / ORDINAL_ONLY
 CARDINAL PROBABILITY = not established / not currently required
 NUMERICAL ODDS = WITHHELD
 HUMAN DECISION = NONE
@@ -175,6 +177,10 @@ per-share owner return
 +/- valuation multiple change
 ```
 
+Primary method rule:
+
+> **For Midea, strategic narratives should first be translated into retention × incremental ROIC. OBM / B2B narrative divergence is not an independent reason to reject cardinal probability when the owner-economics model is shared.**
+
 Primary anti-error rule:
 
 > **Gross repurchase cash != shareholder yield. Trace cancellation, employee-plan usage, dilution and financing to determine true net per-share accretion.**
@@ -190,6 +196,7 @@ Next evidence:
 Authoritative lineage:
 
 - `docs/dogfood/midea-compounder-decision-hygiene-zero-schema-2026-09-03.md`
+- `docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md`
 
 ### 厦门钨业
 
