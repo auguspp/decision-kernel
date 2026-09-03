@@ -246,5 +246,5 @@ def test_fixed_risk_addons_impose_horizon_dependent_annualized_burden() -> None:
     assert short_stressed == pytest.approx(0.949855, abs=1e-6)
     assert long_baseline == pytest.approx(0.095445, abs=1e-6)
     assert long_stressed == pytest.approx(0.178983, abs=1e-6)
-    assert (short_stressed - short_baseline) > Decimal("0.50")
-    assert (long_stressed - long_baseline) < Decimal("0.09")
+    assert (short_stressed - short_baseline) > 0.50
+    assert (long_stressed - long_baseline) < 0.09
