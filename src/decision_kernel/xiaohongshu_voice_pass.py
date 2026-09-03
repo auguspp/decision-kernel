@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import re
 from typing import Literal
 
 from pydantic import Field
@@ -42,6 +43,16 @@ _VISIBLE_HARNESS_LANGUAGE = (
     "PublicationBrief",
 )
 
+_AUTHOR_BACKSTORY_SCAFFOLD = (
+    "我最近重新看",
+    "和以前不太一样",
+    "我一开始也",
+    "以前我觉得",
+    "之前我觉得",
+)
+
+_NOT_BUT_RE = re.compile(r"不是[^。！？\n]{0,96}而是")
+
 
 def voice_lint(draft: XiaohongshuDraft) -> VoiceLintReport:
     text = "\n".join(
@@ -68,6 +79,30 @@ def voice_lint(draft: XiaohongshuDraft) -> VoiceLintReport:
                 message=(
                     "Repeated transition scaffolding makes the draft sound model-generated: "
                     + ", ".join(repeated)
+                ),
+            )
+        )
+
+    not_but_count = len(_NOT_BUT_RE.findall(text))
+    if not_but_count >= 2:
+        issues.append(
+            VoiceLintIssue(
+                code="REPEATED_NOT_BUT_CONTRAST",
+                message=(
+                    "Repeated 不是…而是… contrast is functioning as AI scaffolding; "
+                    "prefer direct statements or delete the setup."
+                ),
+            )
+        )
+
+    backstory = [marker for marker in _AUTHOR_BACKSTORY_SCAFFOLD if marker in text]
+    if backstory:
+        issues.append(
+            VoiceLintIssue(
+                code="INVENTED_AUTHOR_BACKSTORY",
+                message=(
+                    "Draft appears to manufacture a prior author stance or review history: "
+                    + ", ".join(backstory)
                 ),
             )
         )
@@ -140,11 +175,23 @@ Hard invariants:
 The main failure to fix is AI voice, not investment logic.
 
 Anti-AI voice rules:
+- Delete sentences that merely announce what the author is about to investigate when the next
+  paragraph can simply investigate it. Do not narrate the writing process.
+- Do not invent author history. Never write things like “我最近重新看…”, “这和我以前的看法不太一样”,
+  “我一开始也这么想”, or imply a previous stance unless that prior stance is explicitly supplied
+  in BRIEF or PLAN. First-person memory is evidence too; do not fabricate it for warmth.
 - Do not make every paragraph feel like it is closing a checklist item.
 - Do not repeatedly use stock transitions such as “真正的问题是”, “换句话说”, “这意味着”,
   “所以现在”, “这里就”, or “我的结论是”. One natural use is fine; repeated scaffolding is not.
+- Treat “不是A，而是B” as a high-cost rhetorical device, not a default transition. If B can stand
+  alone, write B directly. More than one such contrast in a note is usually a rewrite signal.
 - Do not force every idea into balanced A/B symmetry, two-line slogans, or “如果A/如果B”的机械对照.
 - Do not end every section with a mini-summary. Let some sections simply move the thought forward.
+- Prefer direct section questions over pseudo-personal headings. For example, “所以，如何看待未来？”
+  is usually cleaner than “我现在更偏向哪边？”, unless the Human explicitly asked for a personal
+  position update.
+- When making a valuation judgment, state the judgment directly. “30倍可能不应该被当成常态估值”
+  is better than manufacturing a personal preamble such as “我不太愿意把30倍直接当成…”.
 - Do not expose the harness's internal vocabulary: reader tension, proof ladder, claim authority,
   PUBLIC_SAFE, PublicationBrief, or similar meta-language.
 - The proof ladder stays in the author's head. In prose, write the concrete missing step instead of
@@ -154,8 +201,8 @@ Anti-AI voice rules:
   teaching an investing method.
 - Uneven paragraph lengths are fine. A short sentence should earn its emphasis; do not manufacture
   a punchline every three lines.
-- Use first-person judgment sparingly and specifically (“我更倾向于…”, “我现在更关心…”), not as
-  a repeated author-brand device.
+- Use first-person judgment only when it adds information that cannot be stated more cleanly as a
+  direct judgment. Do not use first person as an authenticity costume.
 - Keep the article focused on the company and the price. Do not turn the ending into a generic lesson
   about investing.
 
