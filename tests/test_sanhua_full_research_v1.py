@@ -75,7 +75,15 @@ def test_sanhua_v1_locks_expectation_envelope_and_worlds() -> None:
     )
 
 
-def test_sanhua_v1_is_in_current_inbox_and_disclosure_universe() -> None:
+def test_sanhua_v1_is_in_current_inbox_disclosure_and_shadow_universes() -> None:
     workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
     path = "research_cases/002050-sanhua-deep-research-v1.json"
-    assert workflow.count(path) == 2
+
+    # The current workflow deliberately uses the same frozen Research in three
+    # separate Harness contexts: Human Inbox, non-authoritative Surprise Radar
+    # history sampling, and official-disclosure acquisition. None of these
+    # occurrences creates another investment-authority or Human-wake policy.
+    assert workflow.count(path) == 3
+    assert "- name: Build Decision Inbox" in workflow
+    assert "- name: Capture Surprise Radar market-history shadow" in workflow
+    assert "- name: Scan official disclosures and prepare Research handoffs" in workflow
