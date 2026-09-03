@@ -50,6 +50,7 @@ def _serialize_shadow_observation(
         "package_path": package_path.as_posix(),
         "research_identity": {
             "research_snapshot_id": str(snapshot.id),
+            "research_created_at": snapshot.created_at.isoformat(),
             "research_as_of": snapshot.as_of_datetime.isoformat(),
             "research_information_bundle_hash": snapshot.information_bundle_hash,
         },
