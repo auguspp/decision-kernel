@@ -31,9 +31,60 @@ The headline state remains a sell-side reference:
 | Full core-component vertical integration is mature reality | `NOT ESTABLISHED` | motor / roller-screw R&D capabilities have partial support | reducer / encoder / sensor / controller mature make share | more integration can raise value capture and capital simultaneously |
 | 10% mature robot net margin is established | `ASSUMPTION` | adjacent businesses / projects offer reference margins | Sanhua robot-specific GM / R&D / SG&A / depreciation / tax | required margin rises if share / value fall |
 | Ramp utilization reaches maturity quickly | `NOT ESTABLISHED`; outside-view contra | peer utilization often takes years | Sanhua robot line output / utilization / yield | installed capacity is not mature economics |
-| Robot-specific fixed capital is known | `NOT ESTABLISHED` | mixed project capital and realized CIP are visible | robot-only attribution | denominator cannot be closed |
+| A robot-specific production-capital project exists | `FACT — GOVERNMENT APPROVAL / PLANNED CAPITAL` | Thailand BOI says Sanhua Intelligent Drives received investment promotion for a **THB1.8bn humanoid-robot actuator project in Chonburi** | rated actuator capacity, investment composition, realized spend, utilization | robot production capital is no longer wholly invisible; denominator still cannot be closed |
+| Thailand company-level drive-factory capital equals the robot-only project | `NOT ESTABLISHED` | Sanhua 2026H1 separately reports a **USD140m Thailand drive-factory project** at 63.87% cumulative investment / budget and 57% progress | mapping between BOI THB1.8bn robot-actuator project and the broader USD140m company project | do not assign the whole Thailand drive factory to robot |
+| Robot-specific realized fixed capital is known | `NOT ESTABLISHED` | mixed China project capital / realized CIP and Thailand robot-specific planned capital are visible | robot-only realized PP&E / tooling / transferred fixed assets | ROIC denominator remains open |
 | Robot-specific working capital is known | `NOT ESTABLISHED` | mixed projects contain explicit WC budgets | robot-only receivables / inventory / payables | owner cash cannot be closed |
 | CNY3.5bn accounting profit converts to owner cash | `NOT ESTABLISHED` | — | NOPAT, growth capex, maintenance capex, WC | profit is not owner cash |
+
+## Thailand evidence upgrade
+
+**FACT — Thai Board of Investment / OSOS** — In February 2026, Thailand's Board of Investment said Sanhua Intelligent Drives had received investment promotion for a project in Chonburi to manufacture **actuators for humanoid robots**, with investment of **THB1.8bn**.
+
+This is the first reviewed public evidence that identifies a Sanhua production-capital project by both:
+
+```text
+product scope = humanoid-robot actuator
++
+planned investment = THB1.8bn
+```
+
+The same BOI release describes the five-company humanoid-component investment cluster as targeting Tesla Bot as the main market/customer and other technology companies as additional customers.
+
+That statement is preserved at the **project-cluster / government-context level**. It does **not** establish:
+
+```text
+Sanhua-specific Tesla contract
+Sanhua-specific order quantity
+Sanhua allocation percentage
+exclusive / primary-source status
+```
+
+### Relation to Sanhua's Thailand drive-factory disclosure
+
+Sanhua's own 2026H1 report separately identifies a `泰国驱动厂房项目`:
+
+```text
+budget = USD140m
+ending CIP = CNY556.43m
+cumulative investment / budget = 63.87%
+reported progress = 57%
+```
+
+The BOI robot project and the issuer's broader Thailand drive-factory project are both real disclosures, but public evidence reviewed here does not prove they are economically identical in scope.
+
+The different headline investment amounts are themselves a warning against collapsing them into one number.
+
+Current status:
+
+```text
+THAILAND HUMANOID-ACTUATOR PLANNED CAPITAL = FACT / THB1.8bn BOI-approved project
+THAILAND DRIVE-FACTORY PROJECT = FACT / USD140m issuer budget
+MAPPING BETWEEN THE TWO PROJECT SCOPES = NOT ESTABLISHED
+ROBOT-SPECIFIC REALIZED PP&E = NOT ESTABLISHED
+ROBOT RATED CAPACITY = NOT ESTABLISHED
+ROBOT UTILIZATION / YIELD = NOT ESTABLISHED
+```
 
 ## State-consistency check
 
@@ -106,7 +157,25 @@ But the public evidence does not currently establish that all of the following c
 + attractive incremental ROIC
 ```
 
-The remaining decisive evidence is customer allocation, mature architecture / quotation, Sanhua make-buy split, robot-specific manufacturing utilization / capital and realized margin.
+The Thailand BOI evidence is a real capital upgrade:
+
+```text
+robot-specific planned production capital
+```
+
+is no longer wholly `NOT ESTABLISHED`.
+
+But the evidence still stops before:
+
+```text
+rated capacity
+→ realized fixed assets
+→ utilization / yield
+→ robot NOPAT
+→ incremental ROIC
+```
+
+The remaining decisive evidence is customer allocation, mature architecture / quotation, Sanhua make-buy split, robot-specific manufacturing capacity / utilization, realized capital attribution and realized margin.
 
 Until those appear:
 
@@ -117,3 +186,10 @@ ROBOT OWNER CASH = NOT ESTABLISHED
 ```
 
 This remains a case-specific Research Challenger. No generic method or schema promotion is authorized by this file.
+
+## Source upgrade
+
+- Thailand Board of Investment / OSOS, February 23, 2026 — Sanhua Intelligent Drives: THB1.8bn humanoid-robot actuator investment in Chonburi; five-company cluster targets Tesla Bot and other global technology companies:  
+  https://osos.boi.go.th/TH/news/2353/
+- Sanhua 2026H1 report — Thailand drive-factory budget / CIP / progress:  
+  https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12550185&stockid=002050
