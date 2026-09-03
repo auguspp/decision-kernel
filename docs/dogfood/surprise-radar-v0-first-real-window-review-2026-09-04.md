@@ -1,13 +1,15 @@
 # Surprise Radar v0 — First Real Scheduled Window Review
 
-Status: **HUMAN-TRIAGE PREP / REAL SCHEDULED SHADOW BATCH / NO DETECTOR / NO LABEL PROMOTION / NO HUMAN-WAKE CHANGE**  
+Status: **HUMAN-TRIAGE PREP / REAL SCHEDULED SHADOW BATCH / NO DETECTOR / NO HUMAN-WAKE CHANGE**  
 Date: **2026-09-04**
 
 ## Purpose
 
 Review the first naturally scheduled `market-history-shadow` batch before its short-lived Actions artifact expires, without promoting any anomaly rule or inferring Fundamental Belief from price.
 
-This note preserves only a compact mechanical review. It does **not** turn any window into a positive, negative, or false-negative control yet.
+This note preserves the mechanical review that existed before Human labeling. A separate follow-on checkpoint now freezes the first earned Human triage label:
+
+`docs/dogfood/surprise-radar-v0-gigadevice-positive-control-2026-09-04.md`
 
 ## Source batch
 
@@ -92,26 +94,24 @@ Sanhua's 2026-09-03 packet was an H-share next-day disclosure form and does not,
 
 No new GigaDevice official disclosure packet appeared in this scheduled scan.
 
-## Candidate review queue — deliberately unlabeled
+## Candidate review queue
 
 ### 603986 / GigaDevice
 
-Mechanical state:
+Mechanical state at the time this review was first prepared:
 
 ```text
 CLEAR PRICE-PATH DISLOCATION CANDIDATE = YES
 POSITIVE CONTROL = NOT YET
-NEGATIVE CONTROL = NO
-FALSE-NEGATIVE CONTROL = NO
 ```
 
-Relevant frozen lineage exists later in the repository:
+Relevant frozen lineage existed later in the repository:
 
 - current Research was refreshed through the 2026-09-02 PIT;
 - a prospective Human decision was frozen on 2026-09-03;
 - the Human chose a CNY350 assumption-review checkpoint and a conditional CNY320–335 first-entry band.
 
-But the correct causal statement is still limited:
+The correct causal statement remained limited:
 
 ```text
 price dislocation existed
@@ -119,7 +119,19 @@ price dislocation existed
 != price dislocation caused useful Research triage
 ```
 
-Do not promote this as the first positive Surprise Radar control unless the Human explicitly judges that this price-path anomaly would have been worth Research triage at the time.
+A separate Human checkpoint has now answered the missing usefulness question. The Human explicitly selected:
+
+```text
+A = worth alerting me; should trigger Research triage
+```
+
+Therefore the current evaluation state is now:
+
+```text
+603986 SURPRISE RADAR POSITIVE CONTROL = YES / EARNED BY HUMAN TRIAGE
+```
+
+The historical pre-label state is preserved here rather than rewritten away.
 
 ### 300750 / CATL
 
@@ -153,7 +165,9 @@ REAL SCHEDULED SHADOW BATCH = YES
 SIX QUALIFIED WINDOWS = YES
 ARTIFACT RETENTION / REPLAY IDENTITY = YES
 MECHANICALLY DISTINCT PATHS = YES
-HUMAN TRIAGE LABELS = NOT YET
+FIRST HUMAN-LABELED POSITIVE CONTROL = YES / 603986
+NEGATIVE CONTROL = NOT YET
+FALSE-NEGATIVE CONTROL = NOT YET
 DETECTOR THRESHOLD = NOT JUSTIFIED
 RADAR SCORE = NO
 HUMAN WAKE CHANGE = NO
@@ -168,17 +182,18 @@ Next useful step:
 
 1. let another scheduled batch arrive naturally;
 2. compare whether GigaDevice / CATL-style paths persist, reverse, or resolve;
-3. obtain explicit Human triage on at least one mechanically meaningful window;
-4. preserve a durable control only after the label is earned;
-5. require at least one irrelevant large-move example and one plausible false-negative candidate before detector design.
+3. earn at least one mechanically meaningful `IGNORE` example from Human triage;
+4. identify one plausible false-negative candidate from a quieter path followed by decision-relevant evidence;
+5. only then test a simple explainable shadow rule against the small reviewed corpus.
 
 ## Disposition
 
 ```text
 FIRST REAL SHADOW REVIEW = COMPLETE
-603986 = STRONGEST UNLABELED DISLOCATION CANDIDATE
-300750 = SUSTAINED-REPRICING CANDIDATE
-CONTROL LABEL PROMOTION = NO
+603986 = FIRST HUMAN-LABELED POSITIVE CONTROL
+300750 = SUSTAINED-REPRICING CANDIDATE / UNLABELED
+NEGATIVE CONTROL = NOT YET
+FALSE-NEGATIVE CONTROL = NOT YET
 DETECTOR DESIGN = WAIT
 CURRENT PROJECT PRIORITY = CONTINUE REAL-WINDOW ACCUMULATION + HUMAN TRIAGE
 ```
