@@ -48,7 +48,7 @@ Investment Authority remains `NONE`.
 | **三花智控 / 002050.SZ** | Qualified thermal-management industrial franchise; core is relatively auditable, robot / liquid cooling remain upside until measurable economics exist. | **CONDITIONAL BUY** — first tranche around **CNY30**. Intended evaluation window **~3–6 months after actual execution**. | **NOT YET EXECUTED** | If price approaches the entry condition, verify core revenue / margin, cash conversion, capex / ROIC and that optionality has not silently become Base. |
 | **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; differentiated thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**, not merely “memory stays tight.” | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** is first-entry band if thesis survives. | **NOT YET EXECUTED** | Around CNY350, re-underwrite duration, new supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom-memory and the 2030 earnings floor. |
 | **Micron / MU / NASDAQ** | Capital-intensive memory oligopoly potentially transitioning toward strategic contracted AI-memory economics; SCA trough cushioning is supported, company-wide earnings rebase is not yet proven. | **WAIT / DO NOT BUY FOR NOW** because the Human is temporarily not buying U.S. equities. This is a mandate / action constraint, not bearish Micron Belief. | **NO_ACTION** | **2026-09-30 FY2026/FQ4 earnings** validation window: SCA RPO / coverage / floor economics, HBM, FY27 GM slope, capex / depreciation, normalized FCF and incremental ROIC. |
-| **圆通速递 / 600233.SH** | Scaled franchised express network with improving HQ efficiency; transition to a durable low-reinvestment compounder is possible but not proven. Franchisee economics remain load-bearing. | **NO HUMAN INVESTMENT DECISION** | **NONE** | Wait for evidence that changes probability knowledge: sustainable unit profit, franchise / network health, rolling OCF versus cash capex, and through-cycle ROIC. Do not invent a buy band merely because price falls. |
+| **圆通速递 / 600233.SH** | Scaled franchised express network with improving HQ efficiency; transition to a durable low-reinvestment compounder is possible but not proven. Franchisee economics remain load-bearing. | **NO HUMAN INVESTMENT DECISION** | **NONE** | **Evidence-driven only.** Price moves are `QUIET`; reopen on material unit-profit durability evidence, YTO-specific network health evidence, rolling OCF/capex failure or improvement, official core-earnings deterioration, or material non-core capital drag. See the frozen YTO evidence-trigger design. |
 | **厦门钨业 / 600549.SH** | Negative control: integrated cyclical resource / industrial business. Prior H1 annualization / impairment-normalization framing mixed incompatible commodity regimes and is rejected. | **NOT A CURRENT ACTION CANDIDATE** | **NONE** | Use only as a process guard unless new evidence maps tungsten price + resource self-sufficiency + ownership / quota / capex into attributable through-cycle cash returns. |
 
 ---
@@ -212,11 +212,12 @@ NUMERICAL ODDS = WITHHELD
 HUMAN DECISION = NONE
 ACTION = NONE
 PRICE TRIGGER = NONE
+EVIDENCE TRIGGER DESIGN = frozen supplement
 ```
 
 Current frame:
 
-> **Scaled franchised network with improving efficiency, but terminal economics depend on the durability of unit profit, franchise-network health, reinvestment needs and owner cash conversion.**
+> **Scaled franchised network with improving efficiency, but terminal economics depend on the durability and ownership of unit profit, franchise-network health, reinvestment needs and owner cash conversion.**
 
 The key causal chain remains:
 
@@ -232,19 +233,64 @@ parcel volume / share
 -> owner economics
 ```
 
-### Next evidence worth attention
+### Manual evidence semantics
 
-Do not reopen merely because the share price is lower.
+The frozen trigger design uses three documentation labels only. They are **not** Kernel states or a second wake gate.
 
-Reopen when new evidence materially informs:
+```text
+QUIET
+= record context, keep Research frozen
 
-1. **unit profit durability** — whether the strong unit economics persist rather than representing a short policy / pricing window;
-2. **franchise / network health** — whether HQ margin gains coexist with a healthy network rather than extracting economics from franchisees;
-3. **rolling cash conversion** — whether OCF begins to clear cash capex through a meaningful period;
-4. **capital efficiency** — whether incremental investment translates into durable ROIC rather than continued heavy reinvestment;
-5. **non-core drag** — whether aviation / international operations become economically relevant to consolidated owner returns.
+REOPEN
+= new admissible evidence materially discriminates retained worlds
+  or hits an existing Research Contract falsifier
 
-Existing contract-level falsifiers remain especially useful, including sustained unit profit weakness, YTO-specific franchise deterioration and rolling cash capex staying at or above OCF without a structural economic reset.
+FRAME CHANGE
+= new evidence challenges the hybrid economic model itself;
+  rebuild causal worlds before valuation / probability
+```
+
+### What stays QUIET
+
+Do not reopen Fundamental Research for:
+
+- share-price moves;
+- broad logistics / market multiple moves;
+- target-price or P/E changes without new company evidence;
+- one analyst forecast revision unsupported by new realized economics;
+- generic anti-involution / price-war headlines;
+- industry-only franchise-regulator evidence without YTO-specific proof;
+- one month of parcel volume / share alone;
+- management slogans about AI / digitalization / capex maturity without realized transmission;
+- one isolated period of OCF > capex;
+- aviation / international revenue growth without return evidence.
+
+### Hard REOPEN triggers inherited from the Research Contract
+
+1. **Express unit profit stays materially below CNY0.18 for two quarters without a structural cost reset.**
+2. **YTO-specific evidence shows material franchise or network deterioration despite HQ margin gains.**
+3. **Rolling cash capex stays at / above OCF while unit economics and utilization fail to improve.**
+4. **2027 company earnings evidence moves materially below CNY6.0bn on weaker core economics.**
+5. **Aviation / international keep absorbing material capital without credible positive incremental returns.**
+
+These are evidence triggers, not price triggers.
+
+### Positive REOPEN / possible frame promotion
+
+A stronger `harvest / network compounder` frame becomes worth re-underwriting only when evidence accumulates **together**:
+
+```text
+multi-period strong / resilient unit owner economics
++ healthy share growth without obvious destructive pricing
++ YTO-specific franchise / network health remains stable
++ rolling OCF consistently clears cash capex
++ lower reinvestment does not starve service / utilization
++ incremental ROIC becomes supportable
+```
+
+The core question is not merely whether profit is high. It is:
+
+> **Who owns the unit-economics improvement, how long does it last, and does it convert into owner cash after the full network and capital cycle are paid for?**
 
 ### Authoritative lineage
 
@@ -252,6 +298,7 @@ Existing contract-level falsifiers remain especially useful, including sustained
 - `research_cases/600233-yto-research-contract-v2.json`
 - `research_cases/600233-yto-claim-audit-v2.json`
 - `docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md`
+- `docs/dogfood/yto-evidence-trigger-design-2026-09-03.md`
 
 ---
 
@@ -309,7 +356,7 @@ No automation or scheduled price watcher is implied.
 ### Evidence / event-conditioned reviews
 
 - **Micron:** 2026-09-30 FY2026/FQ4 earnings validation window.
-- **YTO:** next material operating evidence on unit economics, network health and owner cash conversion.
+- **YTO:** use `docs/dogfood/yto-evidence-trigger-design-2026-09-03.md`; price is QUIET, while hard falsifiers or multi-period evidence on unit economics, network health and owner cash justify REOPEN.
 - **Xiamen Tungsten:** only if new evidence is strong enough to rebuild the corrected resource / owner-cash frame.
 
 ---
