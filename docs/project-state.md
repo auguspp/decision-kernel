@@ -144,6 +144,40 @@ Odds 未生成
 
 No new Radar score, Research route, wake gate, Belief authority, probability state, recommendation, or investment authority was added.
 
+### Scheduled production composition
+
+PR #144 `feat: wire scheduled Research attention inbox` is **MERGED / ACTIVE HARNESS WIRING**.
+
+Merge commit: `91990649692cfeacd2c73bdaf05c3936a6761426`.
+
+The weekday `decision-inbox` workflow now runs `python -m decision_kernel.runtime.attention_inbox` and maintains two separate explicit lists:
+
+```text
+decision_packages
+research_attention_handoffs
+```
+
+`decision_packages` remains curated for current live Odds. `research_attention_handoffs` may contain only exact, unresolved, validated `ResearchFunnelResult` files that currently retain `DEEPEN_REQUIRED`.
+
+Current scheduled Research-attention list:
+
+```text
+EMPTY — no unresolved DEEPEN_REQUIRED handoff exists at this PIT
+```
+
+Tinavi's frozen cold-start handoff remains audit lineage, but Full Research and the Human WATCH / NO_ACTION disposition have resolved that attention request. It must not recur as a stale daily cold-start card.
+
+Operating rule:
+
+```text
+new unresolved DEEPEN_REQUIRED -> add exact path
+Full Research / Human disposition resolves request -> remove exact path
+frozen handoff remains auditable
+file presence alone never restores current Human-facing eligibility
+```
+
+No new score, route, wake gate, schema, recommendation, or investment authority was added.
+
 ### Operating constraint from legacy Web Radar
 
 The old Codex Radar GitHub mirror no longer exists; references to reading that mirror are legacy OS-era assumptions.
@@ -367,7 +401,7 @@ Priority order:
 
 1. **Use, do not expand.** Let real policy, industry, disclosure, price/path and open-discovery events generate candidates.
 2. Migrate existing useful Web discovery producers toward durable GitHub-backed PIT artifacts only when this removes repeated attention/plumbing cost; do not create a new cognition framework.
-3. Feed validated `ResearchFunnelResult` handoffs into the accepted ticker-centric Attention Inbox.
+3. When a real unresolved `DEEPEN_REQUIRED` handoff appears, add its exact path to the scheduled `research_attention_handoffs` list; remove it promptly when Full Research or a Human disposition resolves the attention request.
 4. Human front surface should remain 0–3 tickers or `nothing requires attention`.
 5. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
 6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
@@ -415,8 +449,9 @@ Also:
 - `docs/project-state.md` — mutable current-state index.
 - `docs/decision-hygiene-constitution-review-checkpoint-2026-09-03.md` — Constitution / schema disposition.
 - `docs/live-decision-book.md` — live-case navigation; subordinate to frozen case artifacts.
-- `docs/decision-inbox.md` — accepted ticker-centric Attention Inbox behavior.
+- `docs/decision-inbox.md` — accepted ticker-centric Attention Inbox behavior and scheduled composition rule.
 - `src/decision_kernel/runtime/attention_inbox.py` — Research-attention + Decision-review Human front door.
+- `.github/workflows/decision-inbox.yml` — scheduled explicit Decision / Research-attention input lists.
 - `docs/full-research-review-gate-v1.md` — Full Research review discipline.
 - `docs/full-research-price-implied-economics-closure-v1.md` — price-implied economics closure discipline.
 - `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md` — accepted Sanhua challenger.
@@ -432,6 +467,7 @@ Also:
 
 - **NEW — PR #139 accepted / merged.** Human front surface is ticker-first, why-worth-looking-first, drill-down oriented.
 - **NEW — PR #140 accepted / merged.** `DEEPEN_REQUIRED` Research attention and canonical Decision review now share one Human Inbox without merging authority.
+- **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
 - **NEW — legacy Codex Radar GitHub mirror is confirmed gone.** Existing Web Radar long outputs are recognized as an attention-fragmentation problem; future migration should hide background complexity rather than reproduce dashboards.
 - **NEW — PR #141 accepted / merged.** Tinavi is the first real cold-start policy/industry discovery to pass Research Funnel and surface as a ticker-centric attention case.
 - **NEW — PR #142 accepted / merged.** Tinavi Full Research is authoritative Research lineage; business reversal and cheapness remain unproven.
