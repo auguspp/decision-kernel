@@ -3,6 +3,9 @@ from pathlib import Path
 
 
 WORKFLOW_PATH = Path(".github/workflows/decision-inbox.yml")
+CATL_REUNDERWRITE_PATH = Path(
+    "docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md"
+)
 
 
 def _between(text: str, start: str, end: str) -> str:
@@ -39,7 +42,6 @@ def test_scheduled_human_inbox_uses_attention_composition_and_curated_inputs() -
 
     expected_current_inputs = {
         "dogfood/600519-moutai.json",
-        "dogfood/300750-catl.json",
         "dogfood/601088-shenhua.json",
         "research_cases/603986-gigadevice-deep-research-v2.json",
         "research_cases/002050-sanhua-deep-research-v1.json",
@@ -48,6 +50,7 @@ def test_scheduled_human_inbox_uses_attention_composition_and_curated_inputs() -
 
     assert decision_inputs == expected_current_inputs
     assert "dogfood/600036-cmb.json" not in decision_inputs
+    assert "dogfood/300750-catl.json" not in decision_inputs
     assert not any("*" in path for path in decision_inputs)
 
 
@@ -96,6 +99,37 @@ def test_shadow_sampling_uses_exact_research_package_objects() -> None:
     for path in shadow_inputs:
         payload = json.loads(Path(path).read_text(encoding="utf-8"))
         assert isinstance(payload, dict), path
+
+
+def test_catl_generic_package_is_monitoring_only_after_full_reunderwrite() -> None:
+    workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+    inbox_step = _between(
+        workflow,
+        "- name: Build Attention Inbox",
+        "- name: Capture Surprise Radar market-history shadow",
+    )
+    shadow_step = _between(
+        workflow,
+        "- name: Capture Surprise Radar market-history shadow",
+        "- name: Publish Human summary",
+    )
+    disclosure_step = _between(
+        workflow,
+        "- name: Scan official disclosures and prepare Research handoffs",
+        "- name: Publish disclosure summary",
+    )
+
+    catl_path = "dogfood/300750-catl.json"
+    assert catl_path not in _bash_array_entries(inbox_step, "decision_packages")
+    assert catl_path in _bash_array_entries(shadow_step, "shadow_packages")
+    assert any(
+        line.startswith(catl_path) for line in _argument_lines(disclosure_step)
+    )
+
+    research = CATL_REUNDERWRITE_PATH.read_text(encoding="utf-8")
+    assert "OLD GENERIC DECISION WAKE = DE-QUALIFIED" in research
+    assert "CARDINAL PROBABILITY = NOT ESTABLISHED" in research
+    assert "NUMERICAL ODDS = WITHHOLD" in research
 
 
 def test_legacy_cmb_fixture_can_remain_non_authoritative_outside_human_inbox() -> None:

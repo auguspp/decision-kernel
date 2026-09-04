@@ -36,9 +36,14 @@ jobs:
           # Human-facing Decision inputs are deliberately curated. Do not replace
           # this list with dogfood/*.json: a historical mechanics fixture can
           # remain useful for replay without retaining current Odds eligibility.
+          #
+          # CATL generic dogfood is intentionally excluded after the 2026-09-04
+          # Full Research re-underwrite found that its illustrative EPS / P-E /
+          # probability assumptions are not qualified current Decision authority.
+          # It remains available to disclosure monitoring and non-authoritative
+          # market-history shadow sampling.
           decision_packages=(
             dogfood/600519-moutai.json
-            dogfood/300750-catl.json
             dogfood/601088-shenhua.json
             research_cases/603986-gigadevice-deep-research-v2.json
             research_cases/002050-sanhua-deep-research-v1.json
