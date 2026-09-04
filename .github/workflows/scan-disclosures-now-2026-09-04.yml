@@ -53,6 +53,24 @@ jobs:
             --packet-dir disclosure-assessment-packets \
             --packet-limit 20 \
             "${receipt_args[@]}" | tee disclosure-scan.txt
+      - name: Render exact GigaDevice form for semantic review
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p disclosure-visual-review/gigadevice-1225546905
+          curl --fail --location --retry 0 \
+            'https://static.cninfo.com.cn/finalpage/2026-09-04/1225546905.PDF' \
+            --output disclosure-visual-review/gigadevice-1225546905/source.pdf
+          if ! command -v pdftoppm >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq poppler-utils
+          fi
+          pdftoppm -png -r 140 \
+            disclosure-visual-review/gigadevice-1225546905/source.pdf \
+            disclosure-visual-review/gigadevice-1225546905/page
+          sha256sum disclosure-visual-review/gigadevice-1225546905/source.pdf \
+            | tee disclosure-visual-review/gigadevice-1225546905/source.sha256
       - name: Publish scan summary
         if: always()
         shell: bash
@@ -84,5 +102,6 @@ jobs:
             disclosure-scan.txt
             disclosure-scan-meta.txt
             disclosure-assessment-packets/
+            disclosure-visual-review/
           if-no-files-found: warn
           retention-days: 3
