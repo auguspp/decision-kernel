@@ -1,46 +1,46 @@
 # Decision Kernel — Current Project State
 
-Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW SCHEMA**  
-Updated: **2026-09-04**  
-Repository: `auguspp/decision-kernel`
+Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW KERNEL SCHEMA**  
+Updated: **2026-09-05**  
+Repository: `auguspp/decision-kernel`  
+Verified clean baseline before this state-only sync: `e3d8611b40d7b59694d1d86a4d85c8342de1cd39`
 
 ## Operating rule
 
-This file is the default cross-conversation current-state entry. Frozen Research / Human Decision / Action / Outcome artifacts remain authoritative over this mutable index.
+This file is the default cross-conversation entry point. Frozen Research, Human Decision, Action and Outcome artifacts remain authoritative over this mutable index.
 
 ```text
-New conversation: 读状态，继续。
-End of conversation: 同步状态。
+New conversation: read this file and the latest handoff, then verify current main.
+End of conversation: sync only real state deltas.
 ```
 
-`同步状态` updates only real state deltas; no ceremonial edits.
+Do not trust a chat summary over repository state, frozen lineage, CI results or real workflow artifacts.
 
 ---
 
 ## 1. Current phase
 
 ```text
-TRUSTWORTHY COGNITION CORE = STABLE ENOUGH TO STOP EXPANDING WITHOUT FAILURE
-RESEARCH METHOD = DE-PRIORITIZED FOR METHOD-LED EXPANSION
+TRUSTWORTHY COGNITION CORE = STABLE / DO NOT EXPAND WITHOUT REAL FAILURE
 ATTENTION ACQUISITION = ACTIVE HIGHEST PRIORITY
 HUMAN ATTENTION SURFACE = ACCEPTED / MERGED / ACTIVE
-HETEROGENEOUS PROSPECTIVE CASES = RADAR-ASSISTED, EVENT-DRIVEN
+SECTOR DISCOVERY RADAR = SHADOW CONTRACTS + DURABLE BOOTSTRAP READY
+SECTOR DISCOVERY RADAR DAILY PRODUCER = NOT YET MERGED
+SECTOR DISCOVERY RADAR PROSPECTIVE CORPUS = NOT YET STARTED
 ODDS / CONSTITUTION REDESIGN = FROZEN PENDING OUTCOME-BACKED EVIDENCE
 ```
 
 Current product objective:
 
-> **后台足够复杂，前台足够简洁。Human first view should answer: 看哪只股票 / 为什么值得看 / 现在研究到哪一步；其余信息按需钻取。**
+> **后台可以复杂，Human 前门必须稀缺。Human first view should normally show 0–3 genuinely attention-worthy tickers, or explicitly say nothing requires attention.**
 
-Human attention budget is intentionally scarce. Background discovery may be broad and noisy; the Human front door should normally show only 0–3 genuinely attention-worthy tickers, or explicitly say nothing requires attention.
-
-Do not add frameworks, schemas, enums, routers, category-filling cases, or composite opportunity scores for completeness.
+Sector Radar is currently a separate market-observation surface. It has no canonical Human-wake authority and must not be inserted into the ticker-centric Attention Inbox before prospective shadow evidence is reviewed.
 
 ---
 
-## 2. Architecture / doctrine
+## 2. Architecture and authority
 
-Decision Kernel is a **Decision Hygiene layer, not a Truth Machine**.
+Decision Kernel remains a **Decision Hygiene layer, not a Truth Machine**.
 
 ```text
 Reality
@@ -57,7 +57,7 @@ Reality
 → Human decides
 ```
 
-Two Human-attention lanes share one front door without merging authority:
+The accepted Human-attention lanes remain exactly two:
 
 ```text
 Research Funnel
@@ -66,136 +66,82 @@ Research Funnel
 
 Decision Spine
 → HumanResearchSurface.attention_eligible == true
-→ Decision-review card
+→ canonical Decision-review card
 ```
 
-Semantics:
+Sector Radar is not a third lane:
 
 ```text
-DEEPEN_REQUIRED = spend Research budget
-DEEPEN_REQUIRED != BUY signal
-DEEPEN_REQUIRED != canonical Decision wake
-
-HumanResearchSurface.attention_eligible = canonical Decision-review wake
+Sector Radar shadow observation
+!= DEEPEN_REQUIRED
+!= canonical Decision wake
+!= Recommendation
+!= Action
 ```
 
-Core doctrine remains:
+Core doctrine:
 
 ```text
 Evidence changes Belief.
 Price changes Odds.
 
 Research complete != Probability established != Odds ready.
-Research explains reality.
-Kernel enforces mechanical invariants.
 Human owns the investment decision.
 Investment Authority = NONE.
 Frozen lineage is authoritative.
 ```
 
+Not authorized:
+
 ```text
-CONSTITUTION CHANGE = NOT AUTHORIZED
-SCHEMA CHANGE = NOT AUTHORIZED
-NEW PROBABILITY STATE MACHINE = NOT AUTHORIZED
-SECOND HUMAN WAKE GATE = NOT AUTHORIZED
-LIVE ODDS POLICY REPLACEMENT = NOT AUTHORIZED
+CONSTITUTION CHANGE
+NEW KERNEL SCHEMA
+NEW PROBABILITY STATE MACHINE
+THIRD CANONICAL HUMAN WAKE
+LIVE ODDS POLICY REPLACEMENT
+COMPOSITE OPPORTUNITY SCORE AS AUTHORITY
 ```
 
 ---
 
-## 3. Attention system — accepted current state
+## 3. Existing Attention Inbox and disclosure operations
 
-### Human Attention Surface
+### Ticker-centric Human front door
 
-PR #139 `feat: compress Human Attention surface` is **HUMAN ACCEPTED / MERGED / AUTHORITATIVE PRODUCT BEHAVIOR**.
+PR #139 and PR #140 remain authoritative product behavior:
 
-Merge commit: `258ec766d1c611eeed1cf1f0bd3cc76e773734da`.
+- ticker-first, why-worth-looking-first and drill-down oriented;
+- only unresolved `DEEPEN_REQUIRED` Research handoffs surface as Research attention;
+- only `HumanResearchSurface.attention_eligible` creates canonical Decision review;
+- quiet researched cases remain collapsed.
 
-Front surface is ticker-first and drill-down oriented:
-
-```text
-company / ticker / price
-→ 为什么值得看
-→ current Research / Odds state
-→ 深入查看 only on demand
-```
-
-Quiet researched cases remain collapsed; empty state explicitly says no Human attention is required while background monitoring continues.
-
-### Cold-start Research attention
-
-PR #140 `feat: add Research attention to ticker-centric Inbox` is **HUMAN ACCEPTED / MERGED / AUTHORITATIVE HARNESS BEHAVIOR**.
-
-Merge commit: `dc7973bfb16e368017128d8c3ba0bce8f8558160`.
-
-Accepted behavior:
-
-- consume existing validated `ResearchFunnelResult`;
-- only `DEEPEN_REQUIRED` reaches the Human front surface;
-- `WAIT_FOR_TRIGGER` / `DROP_FOR_NOW` remain background dispositions;
-- multiple Research questions for one ticker may be grouped into one front card;
-- if the ticker already has frozen Research / live Odds, join that display state without mutating frozen Research;
-- true cold-start cases explicitly show:
-
-```text
-尚未建立 frozen Research
-Odds 未生成
-```
-
-No new Radar score, Research route, wake gate, Belief authority, probability state, recommendation, or investment authority was added.
-
-### Scheduled production composition
-
-PR #144 `feat: wire scheduled Research attention inbox` is **MERGED / ACTIVE HARNESS WIRING**.
-
-Merge commit: `91990649692cfeacd2c73bdaf05c3936a6761426`.
-
-The weekday `decision-inbox` workflow now runs `python -m decision_kernel.runtime.attention_inbox` and maintains two separate explicit lists:
+PR #144 remains the scheduled composition root. The weekday `decision-inbox` workflow keeps separate explicit lists:
 
 ```text
 decision_packages
 research_attention_handoffs
 ```
 
-`decision_packages` remains curated for current live Odds. `research_attention_handoffs` may contain only exact, unresolved, validated `ResearchFunnelResult` files that currently retain `DEEPEN_REQUIRED`.
-
-Current scheduled Research-attention list:
+Current unresolved Research-attention list:
 
 ```text
-EMPTY — no unresolved DEEPEN_REQUIRED handoff exists at this PIT
+EMPTY
 ```
 
-Tinavi's frozen cold-start handoff remains audit lineage, but Full Research and the Human WATCH / NO_ACTION disposition have resolved that attention request. It must not recur as a stale daily cold-start card.
+The current numerical Decision package set remains curated to Moutai, China Shenhua, GigaDevice and Sanhua. CATL's old generic package is retained for audit, disclosures and non-authoritative observation but no longer creates a canonical numerical Decision wake.
 
-Operating rule:
+### Disclosure memory
+
+Quiet CNINFO assessments remain exact, lossy Harness receipts:
 
 ```text
-new unresolved DEEPEN_REQUIRED -> add exact path
-Full Research / Human disposition resolves request -> remove exact path
-frozen handoff remains auditable
-file presence alone never restores current Human-facing eligibility
+cache hit → suppress only the exact reviewed identity
+cache loss → reassess
+receipt != Research truth
+receipt != Human wake
 ```
 
-No new score, route, wake gate, schema, recommendation, or investment authority was added.
-
-### Disclosure scan / receipt-memory health
-
-The 2026-09-03 scheduled disclosure artifact (`33757562673`) contained exactly nine packet identities: eight CATL batches and one Sanhua batch. Existing Research Funnel semantics resolved them as:
-
-```text
-DROP_FOR_NOW = 5
-WAIT_FOR_TRIGGER = 4
-DEEPEN_REQUIRED = 0
-```
-
-PR #147 recovered those nine exact quiet identities into the default-branch best-effort Actions cache. PR #148 removed the one-time recovery workflow and script after the cache save and audit artifact succeeded.
-
-The 2026-09-04 current scan then restored that cache and correctly suppressed all nine previously reviewed identities. It surfaced exactly two genuinely new packet identities:
-
-- China Shenhua `1225546775 + 1225546779` — meeting notice/materials repeat the interim-dividend proposal already disclosed before the frozen Research cutoff and add only voting procedure/timing. Disposition: **DROP_FOR_NOW**.
-- GigaDevice `1225546905` — visual review of the H-share next-day securities return confirms a 2026-09-03 A-share repurchase of 135,000 shares (0.02%) at RMB380.27–385.00 for RMB51,852,403, intended for cancellation; issued A shares remained 670,718,327. This is real post-H-share capital-allocation evidence, but not enough to establish a material per-share owner-economics change. Disposition: **WAIT_FOR_TRIGGER**.
-
-Current new-packet result:
+The latest frozen 2026-09-04 new-packet result remains:
 
 ```text
 DROP_FOR_NOW = 1
@@ -203,393 +149,461 @@ WAIT_FOR_TRIGGER = 1
 DEEPEN_REQUIRED = 0
 ```
 
-PR #153 validated the exact packet/content hashes, replayed both assessments through the existing Research Funnel, asserted that no Human Research attention was earned, and saved both quiet receipts to default-branch cache. PR #154 then removed the temporary recovery workflow and helper script; no recovery-only product code remains.
+No disclosure packet currently earns Human Research attention.
 
-Receipt memory remains only a Harness attention optimization:
+### Current production workflows
 
-```text
-cache hit -> suppress this exact already-reviewed quiet identity
-cache loss -> reassess rather than silently suppress
-receipt != Research truth
-receipt != Human wake
-```
-
-No current disclosure packet earned Human Research attention. The scheduled `research_attention_handoffs` list remains empty.
-
-### HiThink live acquisition health
-
-PR #149 `fix: reduce HiThink batch pressure without fallback` is **MERGED / ACTIVE HARNESS BEHAVIOR**.
-
-Merge commit: `e4bac4eb6e4aed37d0b86e638c67415b26d2bbc1`.
-
-The live acquisition path reuses only the exact trading-calendar response within one process for the same credential, Shanghai date and timeout. Price-history requests remain independent and uncached. A new Shanghai date cannot inherit the prior date's calendar.
-
-Real operations probes established the fail-closed boundary before the first successful post-close proof:
+After PR #184 cleanup, default branch contains only:
 
 ```text
-probe 1 -> TLS handshake timeout at calendar request
-probe 2 -> HTTP 429 at first history request
-post-#149 intraday probe -> calendar + history transport succeeded
-               -> provider returned unfinished current-session row
-               -> adapter rejected it before Research / Odds / Human surface
+apply-disclosure-assessment.yml
+ci.yml
+decision-inbox.yml
+live-dogfood.yml
 ```
 
-Rejecting the unfinished intraday row was intended PIT protection, not a production defect. Do not force a future `observed_at`, silently filter a provider contract violation, accept an intraday row as a completed close, substitute stale prices, or add a fallback market provider.
-
-PR #156 was a same-repository operations probe and was **CLOSED WITHOUT MERGE** after preserving its proof artifact. Workflow run `33848495590` then established the first full post-#149, post-close Human composition proof using the exact current five-package production set and the real HiThink credential:
-
-```text
-completed market session = 2026-09-04 15:00 +08:00
-Research attention = 0
-canonical Decision wake = 1
-Research handoffs = 0
-researched cases = 5
-
-CATL / 300750 = CNY351.00 / ACCEPTABLE_ODDS / Human review
-Sanhua / Moutai / China Shenhua / GigaDevice = quiet / INSUFFICIENT_ODDS
-stale Tinavi cold-start attention = absent
-Investment Authority = NONE
-```
-
-This proves the normal post-close acquisition and Human rendering path. It does not validate every future provider response, create a retry/fallback policy, or change frozen Research, Odds thresholds, Human Decisions, Actions or authority.
-
-That run remains valid as historical mechanics evidence. After PR #159, the old CATL generic package is no longer a current numerical Decision authority, so the scheduled `decision_packages` set now contains four cases: Moutai, China Shenhua, GigaDevice and Sanhua. CATL remains in official-disclosure monitoring and non-authoritative market-history shadow sampling.
-
-### Operating constraint from legacy Web Radar
-
-The old Codex Radar GitHub mirror no longer exists; references to reading that mirror are legacy OS-era assumptions.
-
-Current Web-based radars produce too much Human-visible output and have become an attention-fragmentation source: Human consumption is effectively `有时间就看 / 没时间就不看`.
-
-Accepted direction:
-
-```text
-Web / GitHub background discovery may remain complex
-→ durable PIT artifacts / Research Funnel
-→ ticker-centric Attention Inbox
-→ Human sees only what deserves attention
-→ drill down on demand
-```
-
-Do not rebuild another broad dashboard. Migration of existing Web scanners into durable GitHub-backed producers is future plumbing, not a new cognition framework.
+There is **no scheduled Sector Discovery Radar workflow yet**. Do not infer production activation from merged pure contracts, bootstrap data, closed experiment PRs or previous chat wording.
 
 ---
 
 ## 4. Current live cases
 
 ### CATL / 宁德时代 / 300750.SZ
-- PR #159 `research: re-underwrite CATL owner economics` is **MERGED / AUTHORITATIVE CURRENT RESEARCH LINEAGE**.
-- Reference Frame: global scaled electrochemical manufacturing franchise; power / ESS share leadership and demand runway are established, while margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven.
-- CNY351 price requirement: bounded and explicit; roughly CNY98bn–131bn of 2028 parent profit under 20x–15x terminal P/E and a 10% required return, or a durable premium-duration / high-ROE world.
-- Cheapness: **NOT ESTABLISHED**. Cardinal probability: **NOT ESTABLISHED**. Numerical Odds: **WITHHELD**.
-- Human Decision: **NONE**. Action: **NONE**. Followed: **YES**. Price trigger: **NONE**.
-- The old `dogfood/300750-catl.json` remains frozen audit dogfood and may support disclosure monitoring / shadow observation, but its illustrative EPS / P-E / probability inputs no longer create a canonical Decision wake.
-- Pointers: `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md`; `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md`.
+
+```text
+BUSINESS QUALITY = HIGH / ESTABLISHED
+GLOBAL SHARE LEADERSHIP = ESTABLISHED
+CHEAPNESS AT CNY351 = NOT ESTABLISHED
+CARDINAL PROBABILITY = NOT ESTABLISHED
+NUMERICAL ODDS = WITHHELD
+HUMAN DECISION = NONE
+ACTION = NONE
+FOLLOWED = YES
+PRICE TRIGGER = NONE
+```
+
+Reopen only on discriminating margin, owner-cash, supplier-finance, capex/utilisation, overseas-ROIC, capital-allocation or new-business owner-economics evidence.
 
 ### GigaDevice / 603986.SH
-- Thesis: cycle-amplified fabless platform; longer specialty-memory duration + higher post-cycle earnings floor remain live.
-- Probability: partial / ordinal; full cardinal distribution not established.
-- Human Decision: **CONDITIONAL BUY** — ~CNY350 re-underwrite; CNY320–335 first-entry band only if thesis survives.
-- Action: **NOT EXECUTED**.
-- 2026-09-03 repurchase execution: 135,000 A shares / 0.02% / RMB51.85m / intended cancellation; Research Funnel disposition **WAIT_FOR_TRIGGER**. This does not reopen Full Research or change the frozen Human Decision.
-- Pointer: `docs/decisions/603986-gigadevice-human-decision-2026-09-03.md`.
+
+```text
+HUMAN DECISION = CONDITIONAL BUY
+~CNY350 = RE-UNDERWRITE
+CNY320–335 = FIRST-ENTRY BAND ONLY IF THESIS SURVIVES
+ACTION = NOT EXECUTED
+```
 
 ### Sanhua / 002050.SZ
-- Core thermal-management economics remain auditable.
-- Robot operating-economics challenger: **HUMAN ACCEPTED / MERGED / AUTHORITATIVE** via PR #136.
-- Research: **STOP / REOPEN** at a reasonable public-evidence boundary.
-- Human Decision: **CONDITIONAL BUY** — first tranche around CNY30.
-- Action: **NOT EXECUTED**.
-- CNY3.5bn robot success state: **not disproven / not independently established**.
-- Pointer: `docs/decisions/002050-sanhua-human-decision-2026-09-03.md`.
-
-### Tinavi / 天智航 / 688277.SH
-
-This is the first accepted real cold-start Attention Inbox case.
-
-PR #141 `dogfood: surface Tinavi DRG/DIP payment change` is **HUMAN ACCEPTED / MERGED**; merge commit `9d020f2b121e7253ef91756fb3deb8ebc8bf1cc6`.
-
-It proved the real chain:
 
 ```text
-policy / industry change
-→ listed-company mapping
-→ contradiction
-→ Research Funnel
-→ DEEPEN_REQUIRED
-→ ticker-centric Human attention
+RESEARCH = STOP / REOPEN
+HUMAN DECISION = CONDITIONAL BUY AROUND CNY30
+ACTION = NOT EXECUTED
+ROBOT OPTIONALITY = NOT INDEPENDENTLY ESTABLISHED
 ```
 
-without creating Odds, a recommendation, or a second wake gate.
-
-PR #142 `research: underwrite Tinavi reversal candidate` is **HUMAN ACCEPTED / MERGED / AUTHORITATIVE RESEARCH LINEAGE**; merge commit `207b1d57b4282de0f5435ece6e12ecdef48aa219`.
-
-Accepted Research state:
-
-```text
-CLINICAL UTILIZATION = REAL / GROWING
-PAYMENT-FRICTION REDUCTION = PLAUSIBLE / PARTIALLY ESTABLISHED
-RECURRING MONETIZATION REVERSAL = NOT ESTABLISHED
-OWNER-CASH REVERSAL = NOT ESTABLISHED
-PROPOSED M&A STRATEGIC FIT = PLAUSIBLE
-PROPOSED M&A PER-SHARE ECONOMICS = NOT ESTABLISHED
-PRICE DRAWDOWN = FACT
-CHEAPNESS = NOT ESTABLISHED
-CARDINAL PROBABILITY = NOT ESTABLISHED
-NUMERICAL ODDS = NOT METHOD-READY
-```
-
-Human Decision is frozen:
+### Tinavi / 688277.SH
 
 ```text
 DECISION = WATCH / CONTINUE FOLLOWING
 ACTION = NO_ACTION
-RESEARCH = STOP CURRENT PUBLIC-DILIGENCE LOOP / REOPEN ON DISCRIMINATING EVIDENCE
-FOLLOWED = YES
+RESEARCH = STOP CURRENT PUBLIC-DILIGENCE LOOP
 ```
 
-Central question:
-
-> Can improved hospital payment treatment make already-real procedure growth convert into recurring revenue, gross profit and owner cash, and can the proposed Shanghai MicroPort Orthopedics transaction improve rather than dilute per-share owner economics?
-
-Reopen buckets:
-1. local DRG/DIP payment implementation / hospital economics;
-2. procedure monetization — utilization, consumables/service revenue per procedure, attach rate, recurring mix, margin;
-3. owner-cash conversion — revenue reacceleration, loss narrowing, OCF, working capital;
-4. transaction economics — final consideration, purchase-share dilution, financing dilution, audited target economics, goodwill, pro-forma balance sheet / cash flow;
-5. Reference-Frame evidence — robot + implant + overseas-channel economics versus simple combination of loss-making / capital-intensive businesses.
-
-Pointers:
-- `docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md`
-- `docs/dogfood/tinavi-reversal-proof-table-2026-09-04.md`
-- `docs/decisions/688277-tinavi-human-watch-2026-09-04.md`
-
-### YTO / 600233.SH
-- Research complete enough to stop; franchise/network economics and reinvestment remain load-bearing.
-- Cardinal probability not established; price remains QUIET for Fundamental Belief.
-- No Human investment decision; Action NONE.
-- Pointer: `docs/dogfood/yto-evidence-trigger-design-2026-09-03.md`.
+Reopen only on payment implementation, procedure monetisation, owner-cash conversion, transaction economics or Reference-Frame evidence.
 
 ### Micron / MU
-- SCA/AI-memory may improve cycle economics; company-wide structural rebase unproven.
-- Human Decision: **WAIT / DO NOT BUY FOR NOW** under current U.S.-equity constraint.
-- Action: NO_ACTION.
-- Next hinge: **2026-09-30 FY2026/FQ4 earnings**.
-- Pointer: `docs/decisions/MU-micron-human-wait-validation-2026-09-03.md`.
 
-### Midea / 000333.SZ
-- Mature high-ROE global consumer-industrial franchise; owner-return better expressed through retention × incremental ROIC.
-- No Human decision; Action NONE.
+```text
+DECISION = WAIT / DO NOT BUY FOR NOW
+ACTION = NO_ACTION
+NEXT NATURAL HINGE = 2026-09-30 FY2026/FQ4 EARNINGS
+```
 
-### Xiamen Tungsten / 600549.SH
-- Historical Reference-Frame failure negative control.
-- Not a current action candidate; Action NONE.
+### Other existing cases
+
+- YTO: Research complete enough to stop; cardinal probability not established; no Human decision.
+- Midea: mature high-ROE global consumer-industrial franchise; no Human decision.
+- Xiamen Tungsten: historical Reference-Frame failure negative control; no current action.
+
+No live-case decision or action changed during the Sector Radar work.
 
 ---
 
 ## 5. Radar state
 
-### Commitment Radar
-Purpose: allocate attention to frozen commitments that can now be resolved or falsified.
+### 5.1 Sector Discovery Radar — accepted current state
 
-Current v0 proves exact Research / commitment / Evidence lineage; semantic relevance remains cognition. CATL buyback-progress is still the same capital-allocation theme, not a genuinely different second promotion case.
+The Human exposed a real false negative: agriculture, livestock, aquaculture and shipbuilding-related moves had developed for weeks before manual browsing found them. The old Surprise Radar could not discover them because it was limited to already-researched tickers.
 
-### Surprise Radar
-Purpose: discover **post-Research price anomalies** in already-researched cases so Human can allocate attention.
-
-Eligibility:
+PR #163 selected a native HiThink-only Harness design after prior-art and repository review:
 
 ```text
-ResearchSnapshot.created_at exists before candidate anomaly
-+ anomaly occurs after Research creation
+5 / 20 / 60-session relative strength
++ rank change / acceleration
++ persistence / trend age
++ turnover pulse
++ current constituent breadth for finalists
 ```
 
-`ResearchSnapshot.as_of_datetime` is PIT cutoff only, not Research-existence proof.
+Rejected for v0:
+
+```text
+copying an external platform
+composite opportunity score
+LLM ranking authority
+RRG or PELT as detector
+new scientific-computing dependencies
+multi-provider fallback
+third canonical Human wake
+Recommendation / Action / investment authority
+```
+
+PR #164 added the pure frozen-PIT calculation contract in `runtime/sector_radar.py`.
+
+#### 881 broad-universe replay
+
+PR #169 froze the experiment result:
+
+```text
+90 exact 881*.TI broad industries
++ CSI 300 benchmark
++ 104 frozen-PIT replay dates
+
+EARLY DISCOVERY FOR AGRICULTURE / LIVESTOCK = DEMONSTRATED
+TREND-AGE VISIBILITY = DEMONSTRATED
+BROAD-ONLY SHIPBUILDING COVERAGE = FAILED
+PRODUCTION THRESHOLD = NOT EARNED
+```
+
+The broad parent `881166.TI 军工装备` diluted the narrower `884183.TI 航海装备` move. It must not be relabelled as “shipbuilding.”
+
+#### Separate 884 granular replay
+
+PR #171 froze a separate 230-member `884*.TI` cross-sectional replay:
+
+```text
+NARROW-THEME COVERAGE = IMPROVED
+884 AS PRIMARY HUMAN-FACING UNIVERSE = REJECTED
+881 + 884 MIXED RANKING = PROHIBITED
+884 = SEPARATE BOUNDED / SECONDARY CHALLENGER
+```
+
+The granular universe generated substantially more events and truncation than 881. It is useful for decomposition and narrow-theme recovery, not as an unfiltered replacement.
+
+#### Current breadth proof
+
+PR #173 established current constituent breadth as a useful finalist qualifier:
+
+- advancers / decliners / unchanged;
+- equal-weight mean and median return;
+- current denominator and missing rows;
+- turnover and positive-return concentration;
+- leaders / laggards;
+- current membership overlap and containment.
+
+Boundaries:
+
+```text
+CURRENT CONSTITUENT BREADTH = CURRENT SESSION ONLY
+HISTORICAL BREADTH = NOT ESTABLISHED / NOT CLAIMED
+EQUAL-WEIGHT PROXY != INDEX CONTRIBUTION
+```
+
+Tiny groups such as two- or three-stock water-product industries must always expose denominator and concentration.
+
+#### Provider identity contract
+
+The live proof showed standard Shanghai indices may return provider ticker aliases:
+
+```text
+000001.SH -> 1A0001
+000300.SH -> 1B0300
+```
+
+PR #175 accepts valid standard-index ticker aliases while preserving exact requested/returned `thscode` as canonical identity. Formal `.TI` industries still require ticker metadata to match their six-digit code.
+
+#### Pure breadth and hierarchical composition
+
+PR #176 added `runtime/sector_breadth.py`, a provider-agnostic, content-hashed current-breadth contract.
+
+PR #177 added `runtime/sector_radar_shadow.py`:
+
+- 881 and 884 remain separate homogeneous universes;
+- only false-to-true state entries are emitted;
+- unchanged strong sectors remain quiet;
+- parent/child and sibling candidates may be grouped only with exact same-session membership evidence;
+- full auditable groups are retained while the shadow display is capped at three;
+- no canonical Attention Inbox insertion.
+
+Current replay challengers remain descriptive, not promoted detector law:
+
+```text
+PERSISTENT TOP-DECILE ENTRY
+ACCELERATING ENTRY
+```
+
+Do not retune or promote them before prospective evidence.
+
+#### Current 881→884 hierarchy and parent hints
+
+PR #179 froze the full current hierarchy:
+
+```text
+broad identities = 90
+granular identities = 230
+unique fully-contained child→parent mappings = 230
+ambiguous children = 0
+unmapped children = 0
+```
+
+Committed lookup:
+
+```text
+radar_inputs/sector-parent-hints-2026-09-05.json
+```
+
+This is a **current-PIT routing hint, not permanent taxonomy**.
+
+PR #180 added candidate-time validation. Before grouping a surfaced 884 child:
+
+```text
+validate current catalog identity
+→ load the exact frozen hint
+→ fetch current child and hinted-parent memberships
+→ revalidate full containment
+→ group only if containment still holds
+```
+
+Do not perform a daily 320-membership fan-out. Catalog or containment drift must remain visible and block automatic grouping.
+
+#### Rolling state and durable bootstrap
+
+PR #181 added `runtime/sector_radar_state.py`:
+
+- exactly 127 completed sessions;
+- benchmark + exact 90/230 identities;
+- deterministic content hash;
+- exact previous/current replay;
+- next-session-only append;
+- every provider `prev_price` must match cached latest close;
+- same-session identical rerun is idempotent;
+- missed sessions, revisions, catalog drift or identity drift fail closed.
+
+PR #182 committed the durable bootstrap:
+
+```text
+radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz
+radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json
+docs/sector-radar-state-bootstrap-2026-09-04.md
+```
+
+Frozen bootstrap identity:
+
+```text
+latest completed session = 2026-09-04
+rolling sessions = 127
+series = 321
+benchmark = 1
+broad = 90
+granular = 230
+catalog hash = 367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360
+state hash = 3a87b66cdf947b0102634d31f29e31adfc1a8b2c2151c425c26b55ae3ed226cd
+```
+
+It is only an initial state. It cannot bridge a missed completed session.
+
+#### HiThink sector-breadth acquisition
+
+PR #183 added strict current-membership and paginated all-A-share snapshot acquisition:
+
+- exact `.TI` membership request;
+- deterministic full-market pagination;
+- every page must match the independently qualified completed session;
+- stable declared total and unique identities;
+- unpriced rows remain explicit;
+- no fallback or stale substitution.
+
+Its first post-merge main run exposed one omitted fail-closed check: a fake `ABCDEF.XY` row passed because only ticker-prefix equality was checked. PR #184 repaired this by requiring `^\d{6}\.(SH|SZ|BJ)$`, retained the regression and removed the accidentally retained one-time repair workflow.
+
+Verified baseline after PR #184:
+
+```text
+main = e3d8611b40d7b59694d1d86a4d85c8342de1cd39
+kernel-tests run = 33930589341
+result = 342 passed
+one-time repair workflow on main = ABSENT
+```
+
+### 5.2 What is not built yet
+
+Despite the merged contracts and bootstrap:
+
+```text
+DAILY SECTOR RADAR PRODUCER = NOT MERGED
+SCHEDULED SECTOR RADAR WORKFLOW = NOT PRESENT
+PERSISTED FUTURE LIVE STATE = NOT YET CREATED
+PROSPECTIVE SHADOW CANDIDATE CORPUS = EMPTY
+T+5 / T+20 PROSPECTIVE EVALUATION = NOT STARTED
+CANONICAL ATTENTION INBOX INSERTION = NOT AUTHORIZED
+```
+
+Closed experiment PRs and their artifacts are evidence lineage, not product runtime.
+
+### 5.3 Existing Surprise Radar
+
+The old ticker-scoped Surprise Radar remains a separate product for already-researched cases.
 
 Accepted reviewed baseline remains:
 
 ```text
 eligible post-Research daily observations = 10
-securities represented = 6
+securities = 6
 largest absolute eligible daily move = 2.74% / CATL / 2026-09-02
-qualified price-anomaly label = NOT YET EARNED
-false-negative candidate = NOT YET EARNED
-anomaly detector = NOT YET PROMOTED
+qualified anomaly label = NOT YET EARNED
+detector = NOT PROMOTED
 ```
 
 Do not turn 2.74% into a threshold.
 
-The 2026-09-04 post-close proof exposed a separate Harness input failure: `dogfood/*.json` had become invalid because the directory now contains Research package objects, Evidence arrays and Research-attention handoffs. The Human Inbox still rendered, but the independent shadow failed closed on a non-object package input.
+### 5.4 Commitment Radar
 
-PR #157 `fix: curate Surprise Radar shadow package inputs` is **MERGED / ACTIVE HARNESS BEHAVIOR**.
-
-Merge commit: `ca512c07ce7c7c229f369e9b6606bcb46fb96d8e`.
-
-The scheduled shadow now uses an exact, explicit six-package list rather than a heterogeneous directory wildcard. Real proof run `33848953117` produced and validated:
-
-```text
-qualified windows = 6
-tickers = 600519 / 300750 / 600036 / 601088 / 603986 / 002050
-response session = 2026-09-04
-Radar semantics = SHADOW_OBSERVATION_ONLY
-Human attention authority = NONE
-Investment Authority = NONE
-```
-
-These short-lived windows prove acquisition and batch integrity only. They have not been reviewed into a new anomaly corpus, do not change the accepted 10-observation baseline above, and do not authorize a detector, threshold or automatic Research route.
-
-Human alert policy remains:
-
-```text
-PRE-EXISTING RESEARCH = YES
-CASE REMAINS FOLLOWED = YES
-QUALIFIED PRICE ANOMALY = YES
-→ MAY ALERT BY DEFAULT
-```
-
-Alert = attention only. It does not automatically reopen Research, change Belief or Odds, recommend, act, or create investment authority.
-
-Cold-start Attention Discovery and Surprise Radar remain distinct products:
-
-```text
-Cold-start Discovery = what deserves first Research attention?
-Surprise Radar = what already-researched case deserves renewed attention?
-```
-
-Do not merge their semantics merely because both feed the same Human Inbox.
+Commitment Radar remains an attention allocator for frozen commitments that can now be resolved or falsified. It does not create a second attention authority.
 
 ---
 
-## 6. Research-method lessons currently live
+## 6. Next work
 
-Reusable discipline:
+### P0 — independent prospective Sector Radar shadow producer
 
-```text
-industry success
-!= company revenue
-!= listed-company profit
-!= owner cash
-```
+Build from clean, green `main`; keep it separate from `decision-inbox`.
 
-Tinavi adds a heterogeneous confirmation:
+Required flow:
 
 ```text
-procedure / usage growth
-!= recurring monetization
-!= gross-profit conversion
-!= owner cash
+durable 2026-09-04 bootstrap or later exact persisted state
+→ current formal-industry catalog
+→ independently qualified completed-session index snapshot
+→ direct continuity check against cached last closes
+→ append exactly one new completed session
+→ reconstruct previous/current 881 and 884 snapshots
+→ detect false→true shadow entries
+→ 881 primary + bounded 884 secondary
+→ revalidate parent hints only for surfaced granular candidates
+→ hierarchical deduplication
+→ current breadth only for finalists
+→ retain full audit artifact
+→ render normally 0–3 shadow groups
 ```
 
-A large drawdown may justify attention but does not establish cheapness.
+Operational requirements:
 
-A policy change may improve an economic friction point but must still be traced through:
+1. No missed-session bridging. A stale bootstrap after more than one completed session must fail closed and require an explicit recovery procedure.
+2. Same-session reruns must be exactly idempotent; changed values must fail.
+3. Catalog hash or identity drift must be visible.
+4. Market-state persistence and candidate-state persistence must be content hashed and source identified.
+5. State restoration failure must never silently reset the Radar.
+6. Current breadth fetches only finalists; do not fan out memberships for all 320 industries daily.
+7. All output must prominently retain:
+   ```text
+   SHADOW OBSERVATION ONLY
+   HUMAN ATTENTION AUTHORITY = NONE
+   INVESTMENT AUTHORITY = NONE
+   ```
+8. Keep a separate GitHub Summary/artifact. Do not insert Sector Radar directly into the canonical ticker Inbox.
 
-```text
-policy
-→ customer / hospital economics
-→ operating behavior
-→ listed-company revenue / margin
-→ capital / cash conversion
-→ per-share owner economics
-```
+### P1 — prospective evaluation after real candidates exist
 
-A proposed acquisition that can change business mix / capital structure must be treated as a possible Reference-Frame change, not free optionality. Standalone and pro-forma worlds must not borrow economics from one another before transaction terms are established.
+For each first prospective candidate, freeze signal-time identity and later calculate objective T+5/T+20 path outcomes without relabelling the original observation.
 
-Pointers:
-- `docs/full-research-review-gate-v1.md`
-- `docs/full-research-price-implied-economics-closure-v1.md`
+Do not tune thresholds until a real prospective corpus exists. False positives, false negatives, repeated-state suppression and 0–3 compression all need prospective review.
+
+### P1 — existing operations
+
+- add only exact unresolved `DEEPEN_REQUIRED` handoffs to the scheduled Research-attention list;
+- remove them when Full Research or Human disposition resolves the request;
+- continue current disclosure receipt discipline;
+- maintain Tinavi, CATL, Sanhua, GigaDevice and Micron only on their stated reopen evidence;
+- freeze real Human Decision / Action / Outcome lineage promptly.
 
 ---
 
-## 7. Next work
-
-Priority order:
-
-1. **Use, do not expand.** Let real policy, industry, disclosure, price/path and open-discovery events generate candidates.
-2. When a real unresolved `DEEPEN_REQUIRED` handoff appears, add its exact path to the scheduled `research_attention_handoffs` list; remove it promptly when Full Research or a Human disposition resolves the attention request.
-3. Keep exact quiet disclosure receipts as lossy Harness memory only; cache loss must cause reassessment, not silent suppression.
-4. Human front surface should remain 0–3 tickers or `nothing requires attention`.
-5. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
-6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
-7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
-8. CATL remains followed with numerical Odds withheld; reopen only on discriminating margin, owner-cash, supplier-finance, capex / utilisation, overseas-ROIC, capital-allocation or new-business owner-economics evidence.
-9. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
-10. Continue Commitment Radar without promoting a second attention authority.
-11. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
-12. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
-
----
-
-## 8. Do not do
+## 7. Do not do
 
 ```text
 no new probability enum
 no EconomicSpecies schema / router
-no second investment-decision wake gate
-no probability generator
-no generic provider framework
-no broker / portfolio ledger inside Kernel
-no heuristic Decision ↔ Action linking
+no third canonical Human wake
+no Sector Radar → automatic Research route
+no Sector Radar → Recommendation / Action
+no composite opportunity score
+no mixed 881 / 884 percentile ranking
+no current membership backfilled into history
+no parent hint treated as permanent taxonomy
+no daily 320-membership fan-out
+no retry-until-favourable experiment
+no fallback provider or stale-price substitution
+no missed-session bridge
+no silent state reset after cache loss
+no threshold tuning to one retrospective replay
 no price → Fundamental Belief shortcut
 no forced cardinal probabilities
-no conceptual framework without real case pressure
-no composite opportunity score as attention authority
-no broad Human-facing dashboard that exposes background noise
-no Surprise Radar threshold tuned to one historical example
-no pre-Research price window promoted as current Radar evidence
-no as_of_datetime used as Research-existence timestamp
-no per-anomaly Human alert permission loop for actively followed researched cases
-no Sanhua- or Tinavi-specific numbers promoted into generic constants
-no intraday row used as completed-close Odds input
-no fallback or stale-price substitution when HiThink fails
+no broker / portfolio ledger inside Kernel
 ```
 
-Also:
-- do not infer historical Human intent from trades or price paths;
-- do not use market movement alone as Outcome attribution;
-- do not infer “no longer followed” without an explicit Human statement;
-- do not equate capacity / project investment / policy support / procedure growth with realized owner return;
-- do not let presentation-friendly wording mutate canonical frozen state.
+Also do not treat a strong sector as proof that every constituent has the same economic exposure. Sector discovery must eventually pass through company mapping and the existing Research Funnel before any Research budget is allocated.
 
 ---
 
-## 9. Authoritative entry pointers
+## 8. Authoritative entry pointers
+
+### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/decision-hygiene-constitution-review-checkpoint-2026-09-03.md` — Constitution / schema disposition.
-- `docs/live-decision-book.md` — live-case navigation; subordinate to frozen case artifacts.
-- `docs/decision-inbox.md` — accepted ticker-centric Attention Inbox behavior and scheduled composition rule.
-- `src/decision_kernel/runtime/attention_inbox.py` — Research-attention + Decision-review Human front door.
-- `.github/workflows/decision-inbox.yml` — scheduled explicit Decision, Research-attention and Surprise Radar shadow package lists.
-- `src/decision_kernel/runtime/hithink_http.py` — fail-closed HiThink transport, completed-session qualification and process-local calendar reuse.
-- `src/decision_kernel/runtime/disclosure_receipts.py` — exact quiet-disposition receipt semantics.
-- `docs/full-research-review-gate-v1.md` — Full Research review discipline.
-- `docs/full-research-price-implied-economics-closure-v1.md` — price-implied economics closure discipline.
-- `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md` — current CATL Full Research lineage.
-- `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md` — CNY351 bounded price-requirement closure.
-- `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md` — accepted Sanhua challenger.
-- `docs/dogfood/surprise-radar-v0-first-post-research-baseline-2026-09-04.md` — prospective Radar baseline.
-- `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — Human alert policy.
-- `docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md` — accepted Tinavi Full Research.
-- `docs/decisions/688277-tinavi-human-watch-2026-09-04.md` — frozen Tinavi WATCH decision.
-- `docs/prospective-decision-outcome-capture-protocol-2026-09-03.md` — longitudinal capture discipline.
+- `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — next-conversation instructions.
+
+### Sector Radar decisions and evidence
+
+- `docs/sector-discovery-radar-prior-art-and-v0-decision-2026-09-04.md`
+- `docs/sector-discovery-radar-hithink-acquisition-proof-2026-09-04.md`
+- `docs/sector-discovery-radar-frozen-pit-replay-result-2026-09-04.md`
+- `docs/sector-discovery-radar-884-replay-result-2026-09-04.md`
+- `docs/sector-discovery-radar-current-breadth-proof-2026-09-04.md`
+- `docs/sector-discovery-radar-full-current-hierarchy-result-2026-09-05.md`
+- `docs/sector-radar-state-bootstrap-2026-09-04.md`
+
+### Sector Radar runtime and data
+
+- `src/decision_kernel/runtime/sector_radar.py`
+- `src/decision_kernel/runtime/sector_breadth.py`
+- `src/decision_kernel/runtime/sector_radar_shadow.py`
+- `src/decision_kernel/runtime/sector_parent_hints.py`
+- `src/decision_kernel/runtime/sector_radar_state.py`
+- `src/decision_kernel/adapters/hithink_index.py`
+- `src/decision_kernel/runtime/hithink_index_http.py`
+- `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
+- `radar_inputs/sector-parent-hints-2026-09-05.json`
+- `radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz`
+- `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json`
+
+### Existing Human system
+
+- `docs/decision-inbox.md`
+- `src/decision_kernel/runtime/attention_inbox.py`
+- `.github/workflows/decision-inbox.yml`
+- `docs/live-decision-book.md`
 
 ---
 
-## 10. Recent state delta
+## 9. Recent state delta
 
-- **NEW — PR #159 merged.** CATL was re-underwritten as a high-quality global electrochemical manufacturing franchise, but CNY351 cheapness, cardinal probability and numerical Odds remain unestablished. The old generic CATL package is retained for audit / disclosures / shadow observation and removed from current numerical Decision authority; no Human Decision or Action was inferred.
-- **NEW — PR #149 merged.** HiThink trading-calendar acquisition is reused only within the same process / credential / Shanghai date / timeout; histories remain independent, and endpoint-specific failures remain visible without retry, fallback or stale-price substitution.
-- **NEW — 2026-09-04 current disclosure review closed with 1 DROP / 1 WAIT / 0 DEEPEN after the recovered cache suppressed all nine previously reviewed identities.** China Shenhua meeting materials were dropped as repeated voting/timing disclosure; GigaDevice’s 135,000-share / 0.02% repurchase execution remains WAIT_FOR_TRIGGER. PR #153 saved both exact quiet receipts to default-branch cache; PR #154 removed all temporary recovery code.
-- **NEW — first full post-#149 post-close production proof succeeded.** PR #156 was closed without merge after run `33848495590` accepted the completed 2026-09-04 session, rendered 1 canonical Decision wake / 4 quiet cases / 0 Research attention, excluded stale Tinavi attention and preserved Investment Authority NONE.
-- **NEW — PR #157 merged after the same proof exposed a heterogeneous `dogfood/*.json` shadow-input failure.** The scheduled Surprise Radar shadow now uses six exact Research package objects; real run `33848953117` produced six qualified 2026-09-04 windows with no Human or investment authority.
-- **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
-- **NEW — PR #139 accepted / merged.** Human front surface is ticker-first, why-worth-looking-first, drill-down oriented.
-- **NEW — PR #140 accepted / merged.** `DEEPEN_REQUIRED` Research attention and canonical Decision review now share one Human Inbox without merging authority.
-- **NEW — legacy Codex Radar GitHub mirror is confirmed gone.** Existing Web Radar long outputs are recognized as an attention-fragmentation problem; future migration should hide background complexity rather than reproduce dashboards.
-- **NEW — PR #141 accepted / merged.** Tinavi is the first real cold-start policy/industry discovery to pass Research Funnel and surface as a ticker-centric attention case.
-- **NEW — PR #142 accepted / merged.** Tinavi Full Research is authoritative Research lineage; business reversal and cheapness remain unproven.
-- **NEW — Tinavi Human Decision frozen as WATCH / CONTINUE FOLLOWING / NO_ACTION.** Research stops current public loop and reopens only on discriminating payment, monetization, owner-cash, transaction or Reference-Frame evidence.
-- **UNCHANGED — Sanhua remains CONDITIONAL BUY around CNY30 / Action NOT EXECUTED.**
-- **UNCHANGED — GigaDevice remains CONDITIONAL BUY / Action NOT EXECUTED.**
-- **UNCHANGED — Surprise Radar detector / score / automatic Research route / schema / investment authority remain unpromoted.**
+- **PR #163–#164:** prior-art decision and pure Sector Radar calculation contract merged.
+- **PR #169:** broad 881 replay frozen as a partial pass; agriculture/livestock early discovery demonstrated, broad-only shipbuilding coverage rejected.
+- **PR #171:** separate 884 replay frozen; narrow-theme coverage improved, but 884 rejected as the primary unfiltered universe.
+- **PR #173:** current breadth value and parent-child overlap risk established; historical breadth remains unclaimed.
+- **PR #175–#177:** provider alias fix, pure breadth contract and hierarchical shadow composition merged.
+- **PR #179–#180:** full current 881→884 hierarchy and candidate-time parent-hint validation merged.
+- **PR #181–#182:** content-hashed rolling market state and durable 2026-09-04 bootstrap merged.
+- **PR #183:** strict HiThink sector membership / all-market snapshot acquisition merged.
+- **PR #184:** repaired the post-merge A-share identity gap, retained the regression, removed the leaked one-time workflow and restored `main` to `342 passed`.
+- **UNCHANGED:** no scheduled Sector Radar producer, no prospective candidate corpus, no canonical Inbox insertion, no Research route, no Recommendation, no Action, no investment authority.
