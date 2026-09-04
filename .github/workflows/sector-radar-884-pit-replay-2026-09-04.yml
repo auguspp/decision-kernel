@@ -1,0 +1,78 @@
+name: sector-radar-884-pit-replay-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sector-radar-884-pit-replay-2026-09-04.yml"
+      - "experiments/sector_radar_884_pit_replay_2026_09_04.py"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  replay:
+    if: github.event.pull_request.head.ref == 'experiment/sector-radar-884-pit-replay-2026-09-04'
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      SECTOR_RADAR_884_HISTORY_PACE_SECONDS: "15"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Restore exact broad replay source artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: sector-radar-pit-replay-2026-09-04
+          path: broad-source
+          github-token: ${{ github.token }}
+          repository: auguspp/decision-kernel
+          run-id: 33869436890
+      - name: Replay separate 884 granular universe
+        shell: bash
+        run: |
+          set -o pipefail
+          python experiments/sector_radar_884_pit_replay_2026_09_04.py \
+            2>&1 | tee sector-radar-884-pit-replay-status.txt
+      - name: Publish replay summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Sector Discovery Radar — separate 884 challenger'
+            echo
+            if [ -f sector-radar-884-pit-replay-summary.md ]; then
+              cat sector-radar-884-pit-replay-summary.md
+            elif [ -f sector-radar-884-pit-replay-error.json ]; then
+              echo 'Replay failed closed. No completed analytical result was published.'
+              echo
+              echo '```json'
+              cat sector-radar-884-pit-replay-error.json
+              echo '```'
+              if [ -f sector-radar-884-pit-replay-progress.jsonl ]; then
+                echo
+                echo "Progress records: $(wc -l < sector-radar-884-pit-replay-progress.jsonl)"
+              fi
+            else
+              echo 'Replay ended before a result or explicit error artifact was written.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload granular replay evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-884-pit-replay-2026-09-04
+          path: |
+            sector-radar-884-pit-replay.json
+            sector-radar-884-pit-replay-summary.md
+            sector-radar-884-pit-replay-progress.jsonl
+            sector-radar-884-pit-replay-error.json
+            sector-radar-884-pit-replay-status.txt
+            sector-radar-884-pit-replay-inputs/
+          if-no-files-found: warn
+          retention-days: 14
