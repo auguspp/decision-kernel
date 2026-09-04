@@ -200,6 +200,36 @@ def test_snapshot_requires_exact_identity_set_and_preserves_request_order() -> N
     assert snapshot.points[1].turnover == Decimal("1000")
 
 
+def test_snapshot_preserves_standard_index_provider_ticker_aliases() -> None:
+    shanghai_alias = _snapshot_row(
+        "000300.SH",
+        last="4548.05",
+        previous="4530",
+    )
+    shanghai_alias["ticker"] = "1b0300"
+    shenzhen_index = _snapshot_row(
+        "399006.SZ",
+        last="3286.55",
+        previous="3312",
+    )
+    industry = _snapshot_row(
+        "881101.TI",
+        last="1847.32",
+        previous="1800",
+    )
+
+    snapshot = normalize_hithink_index_snapshot(
+        _snapshot_envelope([industry, shanghai_alias, shenzhen_index]),
+        requested_thscodes=("000300.SH", "399006.SZ", "881101.TI"),
+    )
+
+    assert [point.ticker for point in snapshot.points] == [
+        "1B0300",
+        "399006",
+        "881101",
+    ]
+
+
 def test_snapshot_fails_closed_on_missing_extra_duplicate_and_bad_total() -> None:
     benchmark = _snapshot_row("000300.SH", last="4548.05", previous="4530")
     industry = _snapshot_row("881102.TI", last="3043.893", previous="3000")
@@ -238,11 +268,33 @@ def test_snapshot_rejects_invalid_market_values_and_ticker_mismatch() -> None:
             requested_thscodes=("000300.SH",),
         )
 
-    bad_ticker = _snapshot_row("000300.SH", last="4548.05", previous="4530")
-    bad_ticker["ticker"] = "999999"
-    with pytest.raises(HithinkIndexAdapterError, match="ticker disagrees"):
+    bad_industry_ticker = _snapshot_row(
+        "881101.TI",
+        last="1847.32",
+        previous="1800",
+    )
+    bad_industry_ticker["ticker"] = "999999"
+    with pytest.raises(
+        HithinkIndexAdapterError,
+        match="industry snapshot ticker disagrees",
+    ):
         normalize_hithink_index_snapshot(
-            _snapshot_envelope([bad_ticker]),
+            _snapshot_envelope([bad_industry_ticker]),
+            requested_thscodes=("881101.TI",),
+        )
+
+    malformed_standard_ticker = _snapshot_row(
+        "000300.SH",
+        last="4548.05",
+        previous="4530",
+    )
+    malformed_standard_ticker["ticker"] = "bad alias"
+    with pytest.raises(
+        HithinkIndexAdapterError,
+        match="ticker metadata is invalid",
+    ):
+        normalize_hithink_index_snapshot(
+            _snapshot_envelope([malformed_standard_ticker]),
             requested_thscodes=("000300.SH",),
         )
 

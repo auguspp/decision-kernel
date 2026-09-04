@@ -27,6 +27,7 @@ _INDEX_THSCODE = re.compile(r"^\d{6}\.(?:TI|SH|SZ)$")
 _INDUSTRY_THSCODE = re.compile(r"^\d{6}\.TI$")
 _BROAD_INDUSTRY_THSCODE = re.compile(r"^881\d{3}\.TI$")
 _GRANULAR_INDUSTRY_THSCODE = re.compile(r"^884\d{3}\.TI$")
+_PROVIDER_INDEX_TICKER = re.compile(r"^[0-9A-Z]{6}$")
 
 
 class HithinkIndexAdapterError(ValueError):
@@ -146,6 +147,36 @@ def normalize_hithink_index_thscode(thscode: str) -> str:
             "HiThink index identity must be a six-digit .TI, .SH, or .SZ thscode"
         )
     return normalized
+
+
+def normalize_hithink_index_provider_ticker(
+    *,
+    ticker: Any,
+    thscode: str,
+) -> str:
+    """Preserve provider ticker metadata without replacing exact index identity.
+
+    Exact requested and returned ``thscode`` remains canonical. HiThink may
+    return six-character aliases such as ``1B0300`` for Shanghai standard
+    indices, while formal ``.TI`` industry rows retain their six-digit code.
+    """
+
+    normalized_thscode = normalize_hithink_index_thscode(thscode)
+    normalized_ticker = str(ticker).strip().upper()
+    if not _PROVIDER_INDEX_TICKER.fullmatch(normalized_ticker):
+        raise HithinkIndexAdapterError(
+            "HiThink index snapshot ticker metadata is invalid for "
+            f"{normalized_thscode}"
+        )
+    if (
+        normalized_thscode.endswith(".TI")
+        and normalized_ticker != normalized_thscode[:6]
+    ):
+        raise HithinkIndexAdapterError(
+            "HiThink industry snapshot ticker disagrees with "
+            f"{normalized_thscode}"
+        )
+    return normalized_ticker
 
 
 def normalize_hithink_industry_catalog(
@@ -268,11 +299,10 @@ def normalize_hithink_index_snapshot(
             raise HithinkIndexAdapterError(
                 f"HiThink index snapshot contains duplicate identity {thscode}"
             )
-        ticker = str(raw.get("ticker", "")).strip()
-        if ticker != thscode[:6]:
-            raise HithinkIndexAdapterError(
-                f"HiThink index snapshot ticker disagrees with {thscode}"
-            )
+        ticker = normalize_hithink_index_provider_ticker(
+            ticker=raw.get("ticker"),
+            thscode=thscode,
+        )
 
         point = HithinkIndexSnapshotPoint(
             thscode=thscode,
