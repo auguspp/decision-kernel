@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/sector-radar-current-breadth-2026-09-04.yml"
       - "experiments/sector_radar_current_breadth_2026_09_04.py"
+      - "experiments/sector_radar_current_breadth_runner_2026_09_04.py"
       - "experiments/sector_radar_index_snapshot_identity_diagnostic_2026_09_04.py"
       - "tests/test_sector_radar_current_breadth_experiment.py"
 
@@ -34,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python experiments/sector_radar_current_breadth_2026_09_04.py \
+          python experiments/sector_radar_current_breadth_runner_2026_09_04.py \
             2>&1 | tee sector-radar-current-breadth-status.txt
       - name: Publish breadth summary
         if: always()
@@ -70,6 +71,7 @@ jobs:
           name: sector-radar-current-breadth-2026-09-04
           path: |
             sector-radar-index-snapshot-identity-diagnostic.json
+            sector-radar-index-snapshot-provider-aliases.json
             sector-radar-current-breadth.json
             sector-radar-current-breadth-summary.md
             sector-radar-current-breadth-progress.jsonl
