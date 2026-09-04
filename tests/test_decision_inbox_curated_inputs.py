@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 
@@ -67,6 +68,36 @@ def test_scheduled_research_attention_is_explicit_and_has_no_stale_current_hando
     assert '"${research_attention_args[@]}"' in inbox_step
 
 
+def test_shadow_sampling_uses_exact_research_package_objects() -> None:
+    workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+    shadow_step = _between(
+        workflow,
+        "- name: Capture Surprise Radar market-history shadow",
+        "- name: Publish Human summary",
+    )
+    shadow_inputs = set(_bash_array_entries(shadow_step, "shadow_packages"))
+
+    expected_shadow_inputs = {
+        "dogfood/600519-moutai.json",
+        "dogfood/300750-catl.json",
+        "dogfood/600036-cmb.json",
+        "dogfood/601088-shenhua.json",
+        "research_cases/603986-gigadevice-deep-research-v2.json",
+        "research_cases/002050-sanhua-deep-research-v1.json",
+    }
+
+    assert shadow_inputs == expected_shadow_inputs
+    assert '"${shadow_packages[@]}"' in shadow_step
+    assert "dogfood/*.json" not in _argument_lines(shadow_step)
+    assert not any("688277-tinavi" in path for path in shadow_inputs)
+
+    # File presence in a heterogeneous dogfood directory must not qualify an
+    # Evidence array or Research-attention handoff as a market-history package.
+    for path in shadow_inputs:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        assert isinstance(payload, dict), path
+
+
 def test_legacy_cmb_fixture_can_remain_non_authoritative_outside_human_inbox() -> None:
     workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
     inbox_step = _between(
@@ -88,8 +119,8 @@ def test_legacy_cmb_fixture_can_remain_non_authoritative_outside_human_inbox() -
     assert "dogfood/600036-cmb.json" not in _bash_array_entries(
         inbox_step, "decision_packages"
     )
-    assert any(
-        line.startswith("dogfood/*.json") for line in _argument_lines(shadow_step)
+    assert "dogfood/600036-cmb.json" in _bash_array_entries(
+        shadow_step, "shadow_packages"
     )
     assert any(
         line.startswith("dogfood/600036-cmb.json")
