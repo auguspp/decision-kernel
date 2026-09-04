@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Sequence
 
@@ -81,10 +81,12 @@ class SectorRadarCurrentParentLink:
     parent_name: str
     parent_member_count: int
     parent_constituent_set_hash: str
+    parent_membership_captured_at: datetime
     child_thscode: str
     child_name: str
     child_member_count: int
     child_constituent_set_hash: str
+    child_membership_captured_at: datetime
     intersection_count: int
     jaccard: Decimal
     child_fully_contained: bool
@@ -341,10 +343,12 @@ def build_current_parent_link(
         parent_name=parent.sector_name,
         parent_member_count=len(parent.members),
         parent_constituent_set_hash=parent.constituent_set_hash,
+        parent_membership_captured_at=parent.captured_at,
         child_thscode=child.sector_thscode,
         child_name=child.sector_name,
         child_member_count=len(child.members),
         child_constituent_set_hash=child.constituent_set_hash,
+        child_membership_captured_at=child.captured_at,
         intersection_count=overlap.intersection_count,
         jaccard=overlap.jaccard,
         child_fully_contained=overlap.left_contains_right,
@@ -368,11 +372,27 @@ def _validate_composition_inputs(
         raise ValueError("Sector Radar composition requires an 884 granular entry set")
     if broad_entries.as_of_session != granular_entries.as_of_session:
         raise ValueError("Sector Radar composition entry sessions disagree")
+    if broad_entries.policy_version != granular_entries.policy_version:
+        raise ValueError("Sector Radar composition policy versions disagree")
+    if broad_entries.formula_version != granular_entries.formula_version:
+        raise ValueError("Sector Radar composition formula versions disagree")
+    if broad_entries.benchmark_thscode != granular_entries.benchmark_thscode:
+        raise ValueError("Sector Radar composition benchmarks disagree")
 
     all_candidates = broad_entries.candidates + granular_entries.candidates
     by_candidate = {item.thscode: item for item in all_candidates}
     if len(by_candidate) != len(all_candidates):
         raise ValueError("Sector Radar composition contains duplicate candidates")
+    for candidate in broad_entries.candidates:
+        if candidate.family != BROAD_881 or not _BROAD_CODE.fullmatch(candidate.thscode):
+            raise ValueError("Sector Radar broad entry contains a non-881 candidate")
+        if candidate.as_of_session != broad_entries.as_of_session:
+            raise ValueError("Sector Radar broad candidate session mismatch")
+    for candidate in granular_entries.candidates:
+        if candidate.family != GRANULAR_884 or not _GRANULAR_CODE.fullmatch(candidate.thscode):
+            raise ValueError("Sector Radar granular entry contains a non-884 candidate")
+        if candidate.as_of_session != granular_entries.as_of_session:
+            raise ValueError("Sector Radar granular candidate session mismatch")
 
     breadth_by_code = {item.sector_thscode: item for item in breadth_observations}
     if len(breadth_by_code) != len(tuple(breadth_observations)):
@@ -391,6 +411,8 @@ def _validate_composition_inputs(
             raise ValueError("Sector Radar composition breadth identity name mismatch")
 
     link_by_child: dict[str, SectorRadarCurrentParentLink] = {}
+    broad_candidate_by_code = {item.thscode: item for item in broad_entries.candidates}
+    granular_candidate_codes = {item.thscode for item in granular_entries.candidates}
     for link in parent_links:
         if link.child_thscode in link_by_child:
             raise ValueError("Sector Radar composition contains duplicate child parent links")
@@ -398,6 +420,25 @@ def _validate_composition_inputs(
             raise ValueError("Sector Radar composition parent link is not 881")
         if not _GRANULAR_CODE.fullmatch(link.child_thscode):
             raise ValueError("Sector Radar composition child link is not 884")
+        if link.child_thscode not in granular_candidate_codes:
+            raise ValueError("Sector Radar composition parent link has no child candidate")
+        child_candidate = by_candidate[link.child_thscode]
+        child_breadth = breadth_by_code[link.child_thscode]
+        if link.child_name != child_candidate.name:
+            raise ValueError("Sector Radar composition child link name mismatch")
+        if link.child_constituent_set_hash != child_breadth.constituent_set_hash:
+            raise ValueError("Sector Radar composition child membership hash mismatch")
+        if link.child_membership_captured_at != child_breadth.membership_captured_at:
+            raise ValueError("Sector Radar composition child membership clock mismatch")
+        parent_candidate = broad_candidate_by_code.get(link.parent_thscode)
+        if parent_candidate is not None:
+            parent_breadth = breadth_by_code[link.parent_thscode]
+            if link.parent_name != parent_candidate.name:
+                raise ValueError("Sector Radar composition parent link name mismatch")
+            if link.parent_constituent_set_hash != parent_breadth.constituent_set_hash:
+                raise ValueError("Sector Radar composition parent membership hash mismatch")
+            if link.parent_membership_captured_at != parent_breadth.membership_captured_at:
+                raise ValueError("Sector Radar composition parent membership clock mismatch")
         link_by_child[link.child_thscode] = link
 
     return all_candidates, breadth_by_code, link_by_child

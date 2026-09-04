@@ -320,6 +320,8 @@ def test_broad_parent_and_contained_child_use_one_group() -> None:
         parent=parent_membership,
         child=child_membership,
     )
+    assert link.parent_membership_captured_at == CAPTURED
+    assert link.child_membership_captured_at == CAPTURED
 
     composed = compose_sector_radar_shadow(
         broad_entries=entries(BROAD_881, (broad_candidate,)),
@@ -444,6 +446,32 @@ def test_three_group_cap_preserves_complete_omitted_set() -> None:
     assert {group.group_key for group in composed.all_groups} == {
         item.thscode for item in broad_candidates
     }
+
+
+def test_composition_rejects_formula_or_candidate_session_mismatch() -> None:
+    broad_candidate = candidate("881101.TI", "种植业与林业", BROAD_881)
+    broad = entries(BROAD_881, (broad_candidate,))
+    granular = replace(entries(GRANULAR_884), formula_version="other")
+    with pytest.raises(ValueError, match="formula versions disagree"):
+        compose_sector_radar_shadow(
+            broad_entries=broad,
+            granular_entries=granular,
+            breadth_observations=(
+                breadth("881101.TI", "种植业与林业", ("600001.SH",)),
+            ),
+            parent_links=(),
+        )
+
+    wrong_session_candidate = replace(broad_candidate, as_of_session=PREVIOUS)
+    with pytest.raises(ValueError, match="broad candidate session mismatch"):
+        compose_sector_radar_shadow(
+            broad_entries=entries(BROAD_881, (wrong_session_candidate,)),
+            granular_entries=entries(GRANULAR_884),
+            breadth_observations=(
+                breadth("881101.TI", "种植业与林业", ("600001.SH",)),
+            ),
+            parent_links=(),
+        )
 
 
 def test_composition_requires_same_session_breadth_and_retains_no_authority() -> None:
