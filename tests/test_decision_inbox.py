@@ -127,7 +127,7 @@ def test_inbox_uses_existing_human_gate_and_collapses_quiet_cases() -> None:
 
     assert "需要关注：1" in html
     assert "招商银行" in html
-    assert "为什么现在" in html
+    assert "为什么值得看" in html
     assert "无需关注（1）" in html
     assert html.index("招商银行") < html.index("宁德时代")
     assert "为什么安静" in html
