@@ -168,21 +168,37 @@ def render_decision_inbox_markdown(
         "",
     ]
     if not attention:
-        lines.extend(["今天没有 case 需要人工复核。", ""])
+        lines.extend(
+            [
+                "今天没有 case 需要人工复核。",
+                "",
+                "后台监控继续运行；没有新的 Human attention requirement。",
+                "",
+            ]
+        )
 
     for decision in attention:
         surface = decision.human_surface
         brief = surface.brief
+        prefix = _currency_prefix(brief.currency)
         lines.extend(
             [
                 f"## {brief.company_name} {brief.ticker}",
                 "",
-                f"**当前价格：{brief.current_price} {brief.currency}**  ",
-                f"赔率：`{brief.odds.participation_zone.value}`  ",
-                f"行情时间：{brief.as_of.isoformat()}  ",
-                f"系统投资权限：`{surface.investment_authority}`",
+                "**需要你看的原因**  ",
+                brief.why_now,
                 "",
-                f"**为什么现在**  \n{brief.why_now}",
+                (
+                    f"**当前状态：** Research 已存在 · "
+                    f"`{brief.odds.participation_zone.value}` · "
+                    f"{prefix}{_format_money(brief.current_price)} · "
+                    f"行情 {brief.as_of.isoformat()}"
+                ),
+                "",
+                "<details>",
+                "<summary>深入查看</summary>",
+                "",
+                f"系统投资权限：`{surface.investment_authority}`",
                 "",
                 f"**我们相信什么**  \n{brief.current_belief}",
                 "",
@@ -197,6 +213,8 @@ def render_decision_inbox_markdown(
                 "**监控指标**",
                 *[f"- {item}" for item in brief.monitoring_triggers],
                 "",
+                "</details>",
+                "",
             ]
         )
 
@@ -210,32 +228,40 @@ def render_decision_inbox_markdown(
                 [
                     (
                         f"- **{brief.company_name} {brief.ticker}** — "
-                        f"{brief.current_price} {brief.currency} — "
-                        f"`{brief.odds.participation_zone.value}`"
+                        f"{prefix}{_format_money(brief.current_price)} — "
+                        f"`{brief.odds.participation_zone.value}` — "
+                        "重新值得看：`ACCEPTABLE_ODDS "
+                        f"{context.acceptable_operator} "
+                        f"{prefix}{_format_money(context.acceptable_price)}`"
                     ),
+                    "<details>",
+                    "<summary>为什么安静</summary>",
+                    "",
                     (
-                        "  - 为什么安静：期望收益 "
+                        "- 当前：期望收益 "
                         f"`{_format_percent(context.expected_return)}` · "
                         "正收益概率 "
                         f"`{_format_percent(context.positive_probability)}`"
                     ),
                     (
-                        "  - `ACCEPTABLE_ODDS` 要求：期望收益 ≥ "
+                        "- `ACCEPTABLE_ODDS` 要求：期望收益 ≥ "
                         f"`{_format_percent(context.required_return)}` · "
                         "正收益概率 ≥ "
                         f"`{_format_percent(context.required_probability)}`"
                     ),
                     (
-                        "  - 重新值得看：`ACCEPTABLE_ODDS "
+                        "- 重新值得看：`ACCEPTABLE_ODDS "
                         f"{context.acceptable_operator} "
                         f"{prefix}{_format_money(context.acceptable_price)}`"
                         "（距当前价约 "
                         f"`{_format_percent(context.drawdown_to_acceptable)}`）"
                     ),
                     (
-                        "  - Frozen scenarios："
+                        "- Frozen scenarios："
                         f"{_scenario_summary(context, currency=brief.currency)}"
                     ),
+                    "",
+                    "</details>",
                 ]
             )
         lines.extend(["", "</details>", ""])
@@ -265,6 +291,7 @@ def render_decision_inbox_html(
     for decision in attention:
         surface = decision.human_surface
         brief = surface.brief
+        prefix = _currency_prefix(brief.currency)
         cards.append(
             f"""
             <article class="card attention">
@@ -273,27 +300,38 @@ def render_decision_inbox_html(
                   <p class="eyebrow">需要你看</p>
                   <h2>{text(brief.company_name)} <span>{text(brief.ticker)}</span></h2>
                 </div>
-                <div class="price">¥{text(brief.current_price)}</div>
+                <div class="price">{text(prefix)}{text(_format_money(brief.current_price))}</div>
               </div>
-              <div class="chips">
+
+              <section class="why-now">
+                <h3>为什么现在</h3>
+                <p>{text(brief.why_now)}</p>
+              </section>
+
+              <div class="state-row">
+                <span>Research 已存在</span>
                 <span>{text(brief.odds.participation_zone.value)}</span>
                 <span>{text(brief.as_of.isoformat())}</span>
               </div>
-              <section><h3>为什么现在</h3><p>{text(brief.why_now)}</p></section>
-              <section><h3>我们相信什么</h3><p>{text(brief.current_belief)}</p></section>
-              <section><h3>市场可能在定价什么</h3><p>{text(brief.market_expectation)}</p></section>
-              <section><h3>关键问题</h3>{bullets(brief.open_questions)}</section>
-              <section><h3>失效条件</h3>{bullets(brief.invalidation)}</section>
-              <section><h3>监控指标</h3>{bullets(brief.monitoring_triggers)}</section>
-              <p class="authority">系统投资权限：{text(surface.investment_authority)}</p>
+
+              <details class="drilldown">
+                <summary>深入查看</summary>
+                <section><h3>我们相信什么</h3><p>{text(brief.current_belief)}</p></section>
+                <section><h3>市场可能在定价什么</h3><p>{text(brief.market_expectation)}</p></section>
+                <section><h3>关键问题</h3>{bullets(brief.open_questions)}</section>
+                <section><h3>失效条件</h3>{bullets(brief.invalidation)}</section>
+                <section><h3>监控指标</h3>{bullets(brief.monitoring_triggers)}</section>
+                <p class="authority">系统投资权限：{text(surface.investment_authority)}</p>
+              </details>
             </article>
             """
         )
 
     if not cards:
         cards.append(
-            '<article class="card empty"><h2>今天没有 case 需要人工复核。</h2>'
-            '<p>当前 checked-in research cases 均未跨过 Human wake gate。</p></article>'
+            '<article class="card empty"><p class="eyebrow">今天</p>'
+            '<h2>没有需要你关注的东西。</h2>'
+            '<p class="muted">今天没有 case 需要人工复核。后台监控继续运行。</p></article>'
         )
 
     quiet_rows: list[str] = []
@@ -309,21 +347,24 @@ def render_decision_inbox_html(
                 <strong>{text(brief.company_name)} {text(brief.ticker)}</strong>
                 <span>{text(prefix)}{text(_format_money(brief.current_price))} · {text(brief.odds.participation_zone.value)}</span>
               </div>
-              <div class="quiet-metrics">
-                <span><b>为什么安静</b>　期望收益 {text(_format_percent(context.expected_return))} · 正收益概率 {text(_format_percent(context.positive_probability))}</span>
-                <span><b>ACCEPTABLE_ODDS 要求</b>　期望收益 ≥ {text(_format_percent(context.required_return))} · 正收益概率 ≥ {text(_format_percent(context.required_probability))}</span>
-              </div>
               <div class="quiet-threshold">
                 <b>重新值得看</b>　ACCEPTABLE_ODDS {text(context.acceptable_operator)} {text(prefix)}{text(_format_money(context.acceptable_price))}
                 <span>距当前价约 {text(_format_percent(context.drawdown_to_acceptable))}</span>
               </div>
-              <div class="quiet-scenarios"><b>Frozen scenarios</b>　{text(scenario_summary)}</div>
+              <details class="quiet-detail">
+                <summary>为什么安静</summary>
+                <div class="quiet-metrics">
+                  <span>当前：期望收益 {text(_format_percent(context.expected_return))} · 正收益概率 {text(_format_percent(context.positive_probability))}</span>
+                  <span>ACCEPTABLE_ODDS 要求：期望收益 ≥ {text(_format_percent(context.required_return))} · 正收益概率 ≥ {text(_format_percent(context.required_probability))}</span>
+                </div>
+                <div class="quiet-scenarios"><b>Frozen scenarios</b>　{text(scenario_summary)}</div>
+              </details>
             </li>
             """
         )
     quiet_block = (
-        f'<details><summary>无需关注（{len(quiet)}）</summary>'
-        f'<ul class="quiet-list">{"".join(quiet_rows)}</ul></details>'
+        f'<details class="background"><summary>无需关注（{len(quiet)}）</summary>'
+        f'<ul class="quiet-list'>{"".join(quiet_rows)}</ul></details>'
         if quiet
         else ""
     )
@@ -337,7 +378,7 @@ def render_decision_inbox_html(
 <style>
 :root {{ color-scheme: light dark; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }}
 body {{ margin:0; background:#f5f6f8; color:#16181d; }}
-main {{ max-width:760px; margin:0 auto; padding:24px 16px 48px; }}
+main {{ max-width:720px; margin:0 auto; padding:24px 16px 48px; }}
 header {{ margin-bottom:20px; }}
 h1 {{ margin:0 0 6px; font-size:30px; }}
 .meta,.muted {{ color:#6b7280; }}
@@ -349,34 +390,38 @@ h1 {{ margin:0 0 6px; font-size:30px; }}
 h2 {{ margin:0; font-size:24px; }}
 h2 span {{ color:#6b7280; font-size:16px; font-weight:600; }}
 .price {{ font-size:25px; font-weight:750; white-space:nowrap; }}
-.chips {{ display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 20px; }}
-.chips span {{ background:#f0f1f3; border-radius:999px; padding:6px 10px; font-size:12px; }}
+.why-now {{ border-top:0; margin-top:18px; padding-top:0; }}
+.state-row {{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 2px; }}
+.state-row span {{ background:#f0f1f3; border-radius:999px; padding:6px 10px; font-size:12px; }}
 section {{ border-top:1px solid #eceef1; padding-top:14px; margin-top:14px; }}
 h3 {{ margin:0 0 8px; font-size:15px; }}
 p {{ line-height:1.65; margin:0; }}
 ul {{ padding-left:20px; line-height:1.65; }}
 .authority {{ margin-top:18px; font-size:12px; color:#6b7280; }}
 details {{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:14px 16px; margin-top:18px; }}
+.card .drilldown {{ background:transparent; border-style:dashed; }}
 summary {{ cursor:pointer; font-weight:650; }}
 .quiet-list {{ list-style:none; padding:0; margin:12px 0 0; }}
 .quiet-list li {{ border-top:1px solid #eceef1; padding:14px 0; }}
 .quiet-head {{ display:flex; justify-content:space-between; gap:12px; }}
 .quiet-head span {{ color:#6b7280; text-align:right; }}
-.quiet-metrics {{ display:grid; gap:5px; margin-top:9px; font-size:13px; line-height:1.5; }}
-.quiet-threshold {{ margin-top:10px; font-size:14px; line-height:1.5; }}
+.quiet-threshold {{ margin-top:8px; font-size:14px; line-height:1.5; }}
 .quiet-threshold span {{ color:#6b7280; margin-left:8px; }}
+.quiet-detail {{ margin-top:10px; padding:10px 12px; }}
+.quiet-metrics {{ display:grid; gap:5px; margin-top:9px; font-size:13px; line-height:1.5; }}
 .quiet-scenarios {{ margin-top:7px; color:#6b7280; font-size:12px; line-height:1.5; }}
 footer {{ margin-top:22px; color:#6b7280; font-size:12px; }}
 @media (max-width:560px) {{
   .quiet-head {{ display:block; }}
   .quiet-head span {{ display:block; margin-top:3px; text-align:left; }}
   .quiet-threshold span {{ display:block; margin:3px 0 0; }}
+  .card-head {{ align-items:flex-start; }}
 }}
 @media (prefers-color-scheme: dark) {{
   body {{ background:#0f1115; color:#f3f4f6; }}
   .card,details {{ background:#171a21; border-color:#2a2f39; }}
   section,.quiet-list li {{ border-color:#2a2f39; }}
-  .chips span {{ background:#252a33; }}
+  .state-row span {{ background:#252a33; }}
   .meta,.muted,h2 span,.authority,.quiet-head span,.quiet-threshold span,.quiet-scenarios,footer {{ color:#9ca3af; }}
 }}
 </style>
