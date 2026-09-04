@@ -1,0 +1,172 @@
+name: apply-catl-state-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/apply-catl-state-2026-09-04.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - name: Apply exact CATL current-state delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          project_path = Path('docs/project-state.md')
+          project = project_path.read_text(encoding='utf-8')
+
+          proof_marker = (
+              'This proves the normal post-close acquisition and Human rendering path. '
+              'It does not validate every future provider response, create a retry/fallback policy, '
+              'or change frozen Research, Odds thresholds, Human Decisions, Actions or authority.\n\n'
+          )
+          proof_note = proof_marker + (
+              'That run remains valid as historical mechanics evidence. After PR #159, the old CATL '
+              'generic package is no longer a current numerical Decision authority, so the scheduled '
+              '`decision_packages` set now contains four cases: Moutai, China Shenhua, GigaDevice and '
+              'Sanhua. CATL remains in official-disclosure monitoring and non-authoritative '
+              'market-history shadow sampling.\n\n'
+          )
+          if proof_marker not in project:
+              raise SystemExit('project-state post-close proof marker not found')
+          project = project.replace(proof_marker, proof_note, 1)
+
+          catl_section = '''### CATL / 宁德时代 / 300750.SZ
+          - PR #159 `research: re-underwrite CATL owner economics` is **MERGED / AUTHORITATIVE CURRENT RESEARCH LINEAGE**.
+          - Reference Frame: global scaled electrochemical manufacturing franchise; power / ESS share leadership and demand runway are established, while margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven.
+          - CNY351 price requirement: bounded and explicit; roughly CNY98bn–131bn of 2028 parent profit under 20x–15x terminal P/E and a 10% required return, or a durable premium-duration / high-ROE world.
+          - Cheapness: **NOT ESTABLISHED**. Cardinal probability: **NOT ESTABLISHED**. Numerical Odds: **WITHHELD**.
+          - Human Decision: **NONE**. Action: **NONE**. Followed: **YES**. Price trigger: **NONE**.
+          - The old `dogfood/300750-catl.json` remains frozen audit dogfood and may support disclosure monitoring / shadow observation, but its illustrative EPS / P-E / probability inputs no longer create a canonical Decision wake.
+          - Pointers: `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md`; `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md`.
+
+          '''
+          catl_section = '\n'.join(
+              line[10:] if line.startswith('          ') else line
+              for line in catl_section.splitlines()
+          ) + '\n'
+          live_marker = '### GigaDevice / 603986.SH\n'
+          if live_marker not in project:
+              raise SystemExit('project-state GigaDevice marker not found')
+          project = project.replace(live_marker, catl_section + live_marker, 1)
+
+          old_next = '''6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
+          7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
+          8. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
+          9. Continue Commitment Radar without promoting a second attention authority.
+          10. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
+          11. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
+          '''
+          new_next = '''6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
+          7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
+          8. CATL remains followed with numerical Odds withheld; reopen only on discriminating margin, owner-cash, supplier-finance, capex / utilisation, overseas-ROIC, capital-allocation or new-business owner-economics evidence.
+          9. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
+          10. Continue Commitment Radar without promoting a second attention authority.
+          11. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
+          12. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
+          '''
+          old_next = '\n'.join(line[10:] if line.startswith('          ') else line for line in old_next.splitlines()) + '\n'
+          new_next = '\n'.join(line[10:] if line.startswith('          ') else line for line in new_next.splitlines()) + '\n'
+          if old_next not in project:
+              raise SystemExit('project-state next-work block not found')
+          project = project.replace(old_next, new_next, 1)
+
+          pointer_marker = '- `docs/full-research-price-implied-economics-closure-v1.md` — price-implied economics closure discipline.\n'
+          pointer_add = pointer_marker + (
+              '- `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md` — current CATL Full Research lineage.\n'
+              '- `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md` — CNY351 bounded price-requirement closure.\n'
+          )
+          if pointer_marker not in project:
+              raise SystemExit('project-state pointer marker not found')
+          project = project.replace(pointer_marker, pointer_add, 1)
+
+          delta_marker = '## 10. Recent state delta\n\n'
+          delta = (
+              '- **NEW — PR #159 merged.** CATL was re-underwritten as a high-quality global electrochemical manufacturing franchise, but CNY351 cheapness, cardinal probability and numerical Odds remain unestablished. The old generic CATL package is retained for audit / disclosures / shadow observation and removed from current numerical Decision authority; no Human Decision or Action was inferred.\n'
+          )
+          if delta_marker not in project:
+              raise SystemExit('project-state recent-delta marker not found')
+          project = project.replace(delta_marker, delta_marker + delta, 1)
+          project_path.write_text(project, encoding='utf-8')
+
+          book_path = Path('docs/live-decision-book.md')
+          book = book_path.read_text(encoding='utf-8')
+          book = book.replace('Updated: **2026-09-03**', 'Updated: **2026-09-04**', 1)
+
+          catl_row = (
+              '| **宁德时代 / 300750.SZ** | Global scaled electrochemical manufacturing franchise; share leadership and demand runway are established, but segment-margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven. | **NO HUMAN INVESTMENT DECISION**; the old generic `ACCEPTABLE_ODDS` wake is de-qualified. | **NONE** | Evidence-driven only: adjusted profit / OCF, EV and ESS gross margins, inventory / receivables / supplier finance, capex / utilisation / overseas ROIC, H-share proceeds, buyback cancellation and new-business owner economics. |\n'
+          )
+          row_marker = '| **三花智控 / 002050.SZ** |'
+          if row_marker not in book:
+              raise SystemExit('live-book Sanhua row marker not found')
+          book = book.replace(row_marker, catl_row + row_marker, 1)
+
+          catl_card = '''### 宁德时代
+
+          ```text
+          RESEARCH = complete enough to stop current public-diligence loop
+          BUSINESS QUALITY = HIGH / ESTABLISHED
+          GLOBAL SHARE LEADERSHIP = ESTABLISHED
+          CNY351 PRICE REQUIREMENT = BOUNDED / EXPLICIT
+          CHEAPNESS = NOT ESTABLISHED
+          CARDINAL PROBABILITY = NOT ESTABLISHED
+          NUMERICAL ODDS = WITHHELD
+          OLD GENERIC DECISION WAKE = DE-QUALIFIED
+          HUMAN DECISION = NONE
+          ACTION = NONE
+          PRICE TRIGGER = NONE
+          FOLLOWED = YES
+          ```
+
+          Core rule:
+
+          > **Strong business evidence does not qualify illustrative probabilities. Reopen on owner-economics evidence, not on price movement alone.**
+
+          The old generic package remains useful for disclosure acquisition and non-authoritative market-history shadow sampling, but no longer belongs to the scheduled numerical Decision lane.
+
+          Authoritative lineage:
+
+          - `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md`
+          - `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md`
+          - `dogfood/300750-catl.json` — frozen historical mechanics fixture; not current numerical Decision authority.
+
+          '''
+          catl_card = '\n'.join(
+              line[10:] if line.startswith('          ') else line
+              for line in catl_card.splitlines()
+          ) + '\n'
+          card_marker = '### 三花智控\n'
+          if card_marker not in book:
+              raise SystemExit('live-book Sanhua card marker not found')
+          book = book.replace(card_marker, catl_card + card_marker, 1)
+
+          event_marker = '### Evidence / event-conditioned reviews\n\n'
+          event_line = (
+              '- **CATL:** quarterly margin / owner-cash / working-capital and supplier-finance evidence; capex / utilisation / overseas ROIC; H-share-proceeds deployment; cancellation buyback; actual new-business revenue, margin and capital returns.\n'
+          )
+          if event_marker not in book:
+              raise SystemExit('live-book evidence review marker not found')
+          book = book.replace(event_marker, event_marker + event_line, 1)
+          book_path.write_text(book, encoding='utf-8')
+          PY
+
+          git diff --check
+          git diff -- docs/project-state.md docs/live-decision-book.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/project-state.md docs/live-decision-book.md
+          git commit -m 'state: record CATL re-underwrite'
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
