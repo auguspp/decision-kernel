@@ -3,7 +3,7 @@
   "research_funnel": {
     "terminal_state": "DEEPEN_REQUIRED",
     "terminal_stage": "QUICK_RESEARCH",
-    "terminal_reason": "支付端出现可验证结构变化，且公司存在手术量增长与收入/现金流恶化的明确矛盾；值得 Full Research 验证政策能否改变商业化转化，而不是把政策本身当作利好结论。",
+    "terminal_reason": "政策变化直接命中行业支付摩擦，公司又存在真实且可量化的“使用增长但 owner economics 未改善”矛盾；Full Research 有现实可能显著减少 decision-relevant unknown。",
     "discovery": {
       "discovery_id": "2026-09-04-INDUSTRY_DISCOVERY-688277-drg-dip3-robot-payment",
       "source_lane": "INDUSTRY_DISCOVERY",
