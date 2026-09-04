@@ -65,10 +65,22 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
+
+          # Shadow inputs are exact Research package objects, curated separately
+          # from both Human Inbox eligibility and heterogeneous dogfood artifacts.
+          # Never replace this with dogfood/*.json: Evidence arrays and Research-
+          # attention handoffs are valid dogfood files but invalid shadow packages.
+          shadow_packages=(
+            dogfood/600519-moutai.json
+            dogfood/300750-catl.json
+            dogfood/600036-cmb.json
+            dogfood/601088-shenhua.json
+            research_cases/603986-gigadevice-deep-research-v2.json
+            research_cases/002050-sanhua-deep-research-v1.json
+          )
+
           python -m decision_kernel.runtime.market_history_shadow \
-            dogfood/*.json \
-            research_cases/603986-gigadevice-deep-research-v2.json \
-            research_cases/002050-sanhua-deep-research-v1.json \
+            "${shadow_packages[@]}" \
             --output-dir market-history-shadow \
             2>&1 | tee market-history-shadow-status.txt
       - name: Publish Human summary
