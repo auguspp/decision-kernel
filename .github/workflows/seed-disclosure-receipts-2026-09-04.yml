@@ -1,0 +1,86 @@
+name: seed-disclosure-receipts-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/seed-disclosure-receipts-2026-09-04.yml'
+      - '.github/scripts/seed_disclosure_receipts_2026_09_04.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/seed-disclosure-receipts-2026-09-04.yml'
+      - '.github/scripts/seed_disclosure_receipts_2026_09_04.py'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  seed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    concurrency:
+      group: disclosure-receipt-memory
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e .
+      - name: Restore best-effort disclosure receipt memory
+        uses: actions/cache/restore@v6
+        with:
+          path: decision-state/disclosure-receipts.json
+          key: disclosure-receipts-seed-current-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            disclosure-receipts-state-
+      - name: Download exact current disclosure artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: current-official-disclosure-scan
+          path: disclosure-handoff
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 33844850684
+      - name: Validate two exact quiet dispositions and materialize receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p decision-state current-disclosure-receipt-audit
+          python .github/scripts/seed_disclosure_receipts_2026_09_04.py \
+            --packet-dir disclosure-handoff/disclosure-assessment-packets \
+            --receipts decision-state/disclosure-receipts.json \
+            --audit-dir current-disclosure-receipt-audit \
+            | tee current-disclosure-receipt-audit/run.txt
+          grep -q '^DISCLOSURE RECEIPTS: 2 exact quiet batches$' current-disclosure-receipt-audit/run.txt
+          grep -q '^DROP_FOR_NOW: 1$' current-disclosure-receipt-audit/run.txt
+          grep -q '^WAIT_FOR_TRIGGER: 1$' current-disclosure-receipt-audit/run.txt
+          grep -q '^DEEPEN_REQUIRED: 0$' current-disclosure-receipt-audit/run.txt
+          grep -q '^INVESTMENT AUTHORITY: NONE$' current-disclosure-receipt-audit/run.txt
+      - name: Save main-branch disclosure receipt memory
+        if: success() && github.event_name == 'push'
+        uses: actions/cache/save@v6
+        with:
+          path: decision-state/disclosure-receipts.json
+          key: disclosure-receipts-state-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Publish audit summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f current-disclosure-receipt-audit/summary.md ]; then
+            cat current-disclosure-receipt-audit/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '## Current disclosure receipt seed unavailable' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload exact current receipt audit
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: current-disclosure-receipt-audit-${{ github.run_id }}
+          path: |
+            current-disclosure-receipt-audit/
+            decision-state/disclosure-receipts.json
+          if-no-files-found: warn
+          retention-days: 14
