@@ -1,7 +1,7 @@
 # Live Decision Book
 
 Status: **MUTABLE NAVIGATION LAYER / NOT AUTHORITATIVE STATE / NO NEW WAKE GATE / NO AUTOMATION**  
-Updated: **2026-09-03**  
+Updated: **2026-09-04**
 Repository: `auguspp/decision-kernel`
 
 ## Purpose
@@ -35,6 +35,7 @@ Investment Authority remains `NONE`.
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
 | --- | --- | --- | --- | --- |
+| **宁德时代 / 300750.SZ** | Global scaled electrochemical manufacturing franchise; share leadership and demand runway are established, but segment-margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven. | **NO HUMAN INVESTMENT DECISION**; the old generic `ACCEPTABLE_ODDS` wake is de-qualified. | **NONE** | Evidence-driven only: adjusted profit / OCF, EV and ESS gross margins, inventory / receivables / supplier finance, capex / utilisation / overseas ROIC, H-share proceeds, buyback cancellation and new-business owner economics. |
 | **三花智控 / 002050.SZ** | Qualified thermal-management franchise; core is relatively auditable; robot / liquid cooling remain upside until measurable economics exist. | **CONDITIONAL BUY** — first tranche around **CNY30**; intended evaluation window **~3–6 months after actual execution**. | **NOT YET EXECUTED** | Price may satisfy the condition only if core revenue / margin, cash conversion and capex / ROIC remain intact; optionality must not become necessary Base. |
 | **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**. Analysis-divergence dogfood retains only **partial / ordinal** probability knowledge; full cardinal probability remains unqualified. | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** first-entry band only if thesis survives. | **NOT YET EXECUTED** | At ~350 re-underwrite duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory and 2030 earnings floor. |
 | **Micron / MU / NASDAQ** | Memory oligopoly potentially transitioning toward contracted strategic AI-memory economics; SCA trough cushioning supported, company-wide earnings rebase unproven. | **WAIT / DO NOT BUY FOR NOW** because Human is temporarily not buying U.S. equities; this is not bearish Micron Belief. | **NO_ACTION** | **2026-09-30 FY2026/FQ4 earnings**: SCA coverage / floor, HBM, FY27 GM, capex / depreciation, normalized FCF and incremental ROIC. |
@@ -45,6 +46,35 @@ Investment Authority remains `NONE`.
 ---
 
 ## Decision / review cards
+
+### 宁德时代
+
+```text
+RESEARCH = complete enough to stop current public-diligence loop
+BUSINESS QUALITY = HIGH / ESTABLISHED
+GLOBAL SHARE LEADERSHIP = ESTABLISHED
+CNY351 PRICE REQUIREMENT = BOUNDED / EXPLICIT
+CHEAPNESS = NOT ESTABLISHED
+CARDINAL PROBABILITY = NOT ESTABLISHED
+NUMERICAL ODDS = WITHHELD
+OLD GENERIC DECISION WAKE = DE-QUALIFIED
+HUMAN DECISION = NONE
+ACTION = NONE
+PRICE TRIGGER = NONE
+FOLLOWED = YES
+```
+
+Core rule:
+
+> **Strong business evidence does not qualify illustrative probabilities. Reopen on owner-economics evidence, not on price movement alone.**
+
+The old generic package remains useful for disclosure acquisition and non-authoritative market-history shadow sampling, but no longer belongs to the scheduled numerical Decision lane.
+
+Authoritative lineage:
+
+- `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md`
+- `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md`
+- `dogfood/300750-catl.json` — frozen historical mechanics fixture; not current numerical Decision authority.
 
 ### 三花智控
 
@@ -243,6 +273,7 @@ No automation or scheduled price watcher is implied.
 
 ### Evidence / event-conditioned reviews
 
+- **CATL:** quarterly margin / owner-cash / working-capital and supplier-finance evidence; capex / utilisation / overseas ROIC; H-share-proceeds deployment; cancellation buyback; actual new-business revenue, margin and capital returns.
 - **Micron:** 2026-09-30 FY2026/FQ4 earnings validation window.
 - **YTO:** frozen evidence-trigger design; price remains QUIET.
 - **Midea:** incremental ROIC / owner-cash / true net-share-shrinkage evidence; no price trigger yet.

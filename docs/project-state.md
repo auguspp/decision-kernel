@@ -253,6 +253,8 @@ Investment Authority = NONE
 
 This proves the normal post-close acquisition and Human rendering path. It does not validate every future provider response, create a retry/fallback policy, or change frozen Research, Odds thresholds, Human Decisions, Actions or authority.
 
+That run remains valid as historical mechanics evidence. After PR #159, the old CATL generic package is no longer a current numerical Decision authority, so the scheduled `decision_packages` set now contains four cases: Moutai, China Shenhua, GigaDevice and Sanhua. CATL remains in official-disclosure monitoring and non-authoritative market-history shadow sampling.
+
 ### Operating constraint from legacy Web Radar
 
 The old Codex Radar GitHub mirror no longer exists; references to reading that mirror are legacy OS-era assumptions.
@@ -274,6 +276,15 @@ Do not rebuild another broad dashboard. Migration of existing Web scanners into 
 ---
 
 ## 4. Current live cases
+
+### CATL / 宁德时代 / 300750.SZ
+- PR #159 `research: re-underwrite CATL owner economics` is **MERGED / AUTHORITATIVE CURRENT RESEARCH LINEAGE**.
+- Reference Frame: global scaled electrochemical manufacturing franchise; power / ESS share leadership and demand runway are established, while margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven.
+- CNY351 price requirement: bounded and explicit; roughly CNY98bn–131bn of 2028 parent profit under 20x–15x terminal P/E and a 10% required return, or a durable premium-duration / high-ROE world.
+- Cheapness: **NOT ESTABLISHED**. Cardinal probability: **NOT ESTABLISHED**. Numerical Odds: **WITHHELD**.
+- Human Decision: **NONE**. Action: **NONE**. Followed: **YES**. Price trigger: **NONE**.
+- The old `dogfood/300750-catl.json` remains frozen audit dogfood and may support disclosure monitoring / shadow observation, but its illustrative EPS / P-E / probability inputs no longer create a canonical Decision wake.
+- Pointers: `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md`; `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md`.
 
 ### GigaDevice / 603986.SH
 - Thesis: cycle-amplified fabless platform; longer specialty-memory duration + higher post-cycle earnings floor remain live.
@@ -501,10 +512,11 @@ Priority order:
 5. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
 6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
 7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
-8. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
-9. Continue Commitment Radar without promoting a second attention authority.
-10. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
-11. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
+8. CATL remains followed with numerical Odds withheld; reopen only on discriminating margin, owner-cash, supplier-finance, capex / utilisation, overseas-ROIC, capital-allocation or new-business owner-economics evidence.
+9. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
+10. Continue Commitment Radar without promoting a second attention authority.
+11. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
+12. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
 
 ---
 
@@ -553,6 +565,8 @@ Also:
 - `src/decision_kernel/runtime/disclosure_receipts.py` — exact quiet-disposition receipt semantics.
 - `docs/full-research-review-gate-v1.md` — Full Research review discipline.
 - `docs/full-research-price-implied-economics-closure-v1.md` — price-implied economics closure discipline.
+- `docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md` — current CATL Full Research lineage.
+- `docs/dogfood/catl-price-implied-owner-economics-2026-09-04.md` — CNY351 bounded price-requirement closure.
 - `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md` — accepted Sanhua challenger.
 - `docs/dogfood/surprise-radar-v0-first-post-research-baseline-2026-09-04.md` — prospective Radar baseline.
 - `docs/dogfood/surprise-radar-v0-human-alert-policy-2026-09-04.md` — Human alert policy.
@@ -564,6 +578,7 @@ Also:
 
 ## 10. Recent state delta
 
+- **NEW — PR #159 merged.** CATL was re-underwritten as a high-quality global electrochemical manufacturing franchise, but CNY351 cheapness, cardinal probability and numerical Odds remain unestablished. The old generic CATL package is retained for audit / disclosures / shadow observation and removed from current numerical Decision authority; no Human Decision or Action was inferred.
 - **NEW — PR #149 merged.** HiThink trading-calendar acquisition is reused only within the same process / credential / Shanghai date / timeout; histories remain independent, and endpoint-specific failures remain visible without retry, fallback or stale-price substitution.
 - **NEW — 2026-09-04 current disclosure review closed with 1 DROP / 1 WAIT / 0 DEEPEN after the recovered cache suppressed all nine previously reviewed identities.** China Shenhua meeting materials were dropped as repeated voting/timing disclosure; GigaDevice’s 135,000-share / 0.02% repurchase execution remains WAIT_FOR_TRIGGER. PR #153 saved both exact quiet receipts to default-branch cache; PR #154 removed all temporary recovery code.
 - **NEW — first full post-#149 post-close production proof succeeded.** PR #156 was closed without merge after run `33848495590` accepted the completed 2026-09-04 session, rendered 1 canonical Decision wake / 4 quiet cases / 0 Research attention, excluded stale Tinavi attention and preserved Investment Authority NONE.
