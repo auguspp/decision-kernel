@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
+from email.message import Message
+from urllib.error import HTTPError
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -127,9 +129,9 @@ def test_runtime_exposes_same_fresh_window_without_adding_radar_semantics() -> N
 
     def request_json(path: str, params):
         calls.append((path, dict(params)))
-        if path == "/api/a-share/calendar/trading-days":
+        if path == hithink_http.HITHINK_CALENDAR_PATH:
             return _calendar_envelope(sessions)
-        if path == "/api/a-share/prices/historical":
+        if path == hithink_http.HITHINK_HISTORY_PATH:
             return _history_envelope(sessions)
         raise AssertionError(path)
 
@@ -143,8 +145,8 @@ def test_runtime_exposes_same_fresh_window_without_adding_radar_semantics() -> N
     assert history.points[-1].close == Decimal("14")
     assert history.response_session == history.expected_latest_session == sessions[-1]
     assert [path for path, _ in calls] == [
-        "/api/a-share/calendar/trading-days",
-        "/api/a-share/prices/historical",
+        hithink_http.HITHINK_CALENDAR_PATH,
+        hithink_http.HITHINK_HISTORY_PATH,
     ]
     assert calls[1][1]["adjust"] == "none"
     assert int(calls[1][1]["end"]) - int(calls[1][1]["start"]) == int(
@@ -157,9 +159,9 @@ def test_runtime_history_fails_visibly_when_provider_window_is_stale() -> None:
     observed_at = datetime.combine(sessions[-1], time(16), tzinfo=SHANGHAI)
 
     def request_json(path: str, params):
-        if path == "/api/a-share/calendar/trading-days":
+        if path == hithink_http.HITHINK_CALENDAR_PATH:
             return _calendar_envelope(sessions)
-        if path == "/api/a-share/prices/historical":
+        if path == hithink_http.HITHINK_HISTORY_PATH:
             return _history_envelope(sessions[:-1])
         raise AssertionError(path)
 
@@ -170,3 +172,89 @@ def test_runtime_history_fails_visibly_when_provider_window_is_stale() -> None:
             api_key="fixture-secret",
             request_json=request_json,
         )
+
+
+def test_default_batch_reuses_calendar_but_never_history(
+    monkeypatch,
+) -> None:
+    sessions = _sessions()
+    observed_at = datetime.combine(sessions[-1], time(16), tzinfo=SHANGHAI)
+    calls: list[tuple[str, dict[str, str]]] = []
+
+    def fake_request_hithink_json(*, api_key, path, params, timeout_seconds):
+        assert api_key == "fixture-secret"
+        assert timeout_seconds == 10.0
+        calls.append((path, dict(params)))
+        if path == hithink_http.HITHINK_CALENDAR_PATH:
+            return _calendar_envelope(sessions)
+        if path == hithink_http.HITHINK_HISTORY_PATH:
+            envelope = _history_envelope(sessions)
+            envelope["data"]["thscode"] = params["thscode"]
+            return envelope
+        raise AssertionError(path)
+
+    hithink_http._request_hithink_calendar.cache_clear()
+    monkeypatch.setattr(
+        hithink_http,
+        "_request_hithink_json",
+        fake_request_hithink_json,
+    )
+    try:
+        first = hithink_http.fetch_hithink_completed_price_history(
+            thscode="600000.SH",
+            observed_at=observed_at,
+            api_key="fixture-secret",
+        )
+        second = hithink_http.fetch_hithink_completed_price_history(
+            thscode="600001.SH",
+            observed_at=observed_at,
+            api_key="fixture-secret",
+        )
+    finally:
+        hithink_http._request_hithink_calendar.cache_clear()
+
+    assert first.thscode == "600000.SH"
+    assert second.thscode == "600001.SH"
+    assert [path for path, _ in calls] == [
+        hithink_http.HITHINK_CALENDAR_PATH,
+        hithink_http.HITHINK_HISTORY_PATH,
+        hithink_http.HITHINK_HISTORY_PATH,
+    ]
+    assert [params["thscode"] for path, params in calls if path == hithink_http.HITHINK_HISTORY_PATH] == [
+        "600000.SH",
+        "600001.SH",
+    ]
+
+
+def test_http_429_preserves_retry_after_diagnostic_without_retry(
+    monkeypatch,
+) -> None:
+    headers = Message()
+    headers["Retry-After"] = "120"
+    calls = 0
+
+    def fail_with_rate_limit(request, timeout):
+        nonlocal calls
+        calls += 1
+        raise HTTPError(
+            request.full_url,
+            429,
+            "Too Many Requests",
+            headers,
+            None,
+        )
+
+    monkeypatch.setattr(hithink_http, "urlopen", fail_with_rate_limit)
+
+    with pytest.raises(
+        HithinkRuntimeError,
+        match=r"calendar/trading-days with status 429; Retry-After=120",
+    ):
+        hithink_http._request_hithink_json(
+            api_key="fixture-secret",
+            path=hithink_http.HITHINK_CALENDAR_PATH,
+            params={},
+            timeout_seconds=10.0,
+        )
+
+    assert calls == 1
