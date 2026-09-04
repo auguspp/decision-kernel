@@ -364,7 +364,7 @@ def render_decision_inbox_html(
         )
     quiet_block = (
         f'<details class="background"><summary>无需关注（{len(quiet)}）</summary>'
-        f'<ul class="quiet-list'>{"".join(quiet_rows)}</ul></details>'
+        f'<ul class="quiet-list">{"".join(quiet_rows)}</ul></details>'
         if quiet
         else ""
     )
