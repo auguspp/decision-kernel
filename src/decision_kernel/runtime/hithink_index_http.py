@@ -4,7 +4,11 @@ from collections.abc import Callable, Mapping, Sequence
 from datetime import datetime, timedelta
 from typing import Any
 
-from ..adapters.hithink import SHANGHAI_TZ, normalize_hithink_calendar
+from ..adapters.hithink import (
+    SHANGHAI_TZ,
+    latest_completed_a_share_session,
+    normalize_hithink_calendar,
+)
 from ..adapters.hithink_index import (
     HithinkCompletedIndexHistory,
     HithinkIndustryCatalog,
@@ -143,9 +147,12 @@ def fetch_hithink_completed_index_history(
         calendar_envelope = request_json(HITHINK_CALENDAR_PATH, {})
 
     calendar = normalize_hithink_calendar(calendar_envelope)
-    local_date = observed_at.astimezone(SHANGHAI_TZ).date()
+    expected_latest = latest_completed_a_share_session(
+        calendar,
+        observed_at=observed_at,
+    )
     end_at = datetime.combine(
-        local_date + timedelta(days=1),
+        expected_latest + timedelta(days=1),
         datetime.min.time(),
         tzinfo=SHANGHAI_TZ,
     )
