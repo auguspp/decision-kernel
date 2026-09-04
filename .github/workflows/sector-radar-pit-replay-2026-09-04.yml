@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/sector-radar-pit-replay-2026-09-04.yml"
       - "experiments/sector_radar_pit_replay_2026_09_04.py"
+      - "experiments/sector_radar_pit_replay_transport_v2.py"
 
 permissions:
   contents: read
@@ -27,7 +28,7 @@ jobs:
       - name: Replay exact broad-industry frozen PITs
         run: |
           set -o pipefail
-          python experiments/sector_radar_pit_replay_2026_09_04.py \
+          python experiments/sector_radar_pit_replay_transport_v2.py \
             2>&1 | tee sector-radar-pit-replay-status.txt
       - name: Publish summary
         if: always()
@@ -62,5 +63,6 @@ jobs:
             sector-radar-pit-replay-progress.jsonl
             sector-radar-pit-replay-error.json
             sector-radar-pit-replay-status.txt
+            sector-radar-pit-replay-inputs/
           if-no-files-found: warn
           retention-days: 14
