@@ -185,7 +185,7 @@ def render_decision_inbox_markdown(
             [
                 f"## {brief.company_name} {brief.ticker}",
                 "",
-                "**需要你看的原因**  ",
+                "**为什么值得看**  ",
                 brief.why_now,
                 "",
                 (
@@ -304,7 +304,7 @@ def render_decision_inbox_html(
               </div>
 
               <section class="why-now">
-                <h3>为什么现在</h3>
+                <h3>为什么值得看</h3>
                 <p>{text(brief.why_now)}</p>
               </section>
 
