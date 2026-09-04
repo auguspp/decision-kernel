@@ -12,7 +12,13 @@ from decision_kernel.runtime.hithink_index_http import HITHINK_INDEX_SNAPSHOT_PA
 
 
 OUTPUT = Path("sector-radar-index-snapshot-identity-diagnostic.json")
-REQUESTED = ("000300.SH", "881101.TI")
+REQUESTED = (
+    "000001.SH",
+    "000300.SH",
+    "399001.SZ",
+    "399006.SZ",
+    "881101.TI",
+)
 
 
 def main() -> None:
