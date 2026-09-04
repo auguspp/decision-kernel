@@ -1,0 +1,109 @@
+name: prepare-sector-radar-full-hierarchy-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/prepare-sector-radar-full-hierarchy-2026-09-04.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-and-verify:
+    if: github.event.pull_request.head.ref == 'experiment/sector-radar-full-current-hierarchy-2026-09-04'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Apply exact member-set duplicate fix
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          script = Path("experiments/sector_radar_full_current_hierarchy_2026_09_04.py")
+          text = script.read_text(encoding="utf-8")
+          start = text.index("def exact_duplicate_groups(\n")
+          end = text.index("\ndef broad_overlap_controls(\n", start)
+          replacement = '''def exact_duplicate_groups(
+              memberships: Sequence[SectorMembershipSnapshot],
+          ) -> tuple[dict[str, Any], ...]:
+              """Group industries by the member set itself, not a sector-scoped hash."""
+
+              by_member_set: dict[tuple[str, ...], list[SectorMembershipSnapshot]] = defaultdict(list)
+              for item in memberships:
+                  member_set = tuple(sorted(member.thscode for member in item.members))
+                  by_member_set[member_set].append(item)
+              groups = []
+              for member_set, items in by_member_set.items():
+                  if len(items) <= 1:
+                      continue
+                  ordered = sorted(items, key=lambda item: item.sector_thscode)
+                  groups.append(
+                      {
+                          "member_set_hash": digest(member_set),
+                          "member_count": len(member_set),
+                          "members": member_set,
+                          "industries": tuple(
+                              {
+                                  "thscode": item.sector_thscode,
+                                  "name": item.sector_name,
+                                  "sector_scoped_constituent_set_hash": (
+                                      item.constituent_set_hash
+                                  ),
+                              }
+                              for item in ordered
+                          ),
+                      }
+                  )
+              groups.sort(
+                  key=lambda item: (
+                      len(item["industries"]),
+                      item["member_count"],
+                      item["member_set_hash"],
+                  ),
+                  reverse=True,
+              )
+              return tuple(groups)
+          '''
+          text = text[:start] + replacement + text[end:]
+          script.write_text(text, encoding="utf-8")
+
+          tests = Path("tests/test_sector_radar_full_current_hierarchy_experiment.py")
+          text = tests.read_text(encoding="utf-8")
+          text = text.replace(
+              "from datetime import datetime\n",
+              "from datetime import datetime\nfrom decimal import Decimal\n",
+              1,
+          )
+          text = text.replace(
+              'item["child_containment"] == 1 / 3',
+              'item["child_containment"] == Decimal(1) / Decimal(3)',
+          )
+          text = text.replace(
+              'rows[0]["jaccard"] == 1 / 2',
+              'rows[0]["jaccard"] == Decimal(1) / Decimal(2)',
+          )
+          tests.write_text(text, encoding="utf-8")
+          PY
+      - name: Verify focused and full test suites
+        run: |
+          python -m pip install -e '.[dev]'
+          python -m pytest -q tests/test_sector_radar_full_current_hierarchy_experiment.py
+          python -m pytest -q
+      - name: Remove one-time workflow and publish prepared experiment
+        shell: bash
+        run: |
+          rm .github/workflows/prepare-sector-radar-full-hierarchy-2026-09-04.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add experiments/sector_radar_full_current_hierarchy_2026_09_04.py \
+                  tests/test_sector_radar_full_current_hierarchy_experiment.py \
+                  .github/workflows/prepare-sector-radar-full-hierarchy-2026-09-04.yml
+          git commit -m "test: prepare full current hierarchy experiment"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
