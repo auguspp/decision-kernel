@@ -222,21 +222,36 @@ PR #149 `fix: reduce HiThink batch pressure without fallback` is **MERGED / ACTI
 
 Merge commit: `e4bac4eb6e4aed37d0b86e638c67415b26d2bbc1`.
 
-The live acquisition path now reuses only the exact trading-calendar response within one process for the same credential, Shanghai date and timeout. Price-history requests remain independent and uncached. A new Shanghai date cannot inherit the prior date's calendar.
+The live acquisition path reuses only the exact trading-calendar response within one process for the same credential, Shanghai date and timeout. Price-history requests remain independent and uncached. A new Shanghai date cannot inherit the prior date's calendar.
 
-Real operations probes established three distinct failure states:
+Real operations probes established the fail-closed boundary before the first successful post-close proof:
 
 ```text
 probe 1 -> TLS handshake timeout at calendar request
 probe 2 -> HTTP 429 at first history request
 post-#149 intraday probe -> calendar + history transport succeeded
-                         -> provider returned unfinished current-session row
-                         -> adapter rejected it before Research / Odds / Human surface
+               -> provider returned unfinished current-session row
+               -> adapter rejected it before Research / Odds / Human surface
 ```
 
-The third probe ran before the A-share close. Rejecting the unfinished row is intended PIT protection, not a production defect to bypass. Do not force a future `observed_at`, silently filter a provider contract violation, accept an intraday row as a completed close, substitute stale prices, or add a fallback market provider.
+Rejecting the unfinished intraday row was intended PIT protection, not a production defect. Do not force a future `observed_at`, silently filter a provider contract violation, accept an intraday row as a completed close, substitute stale prices, or add a fallback market provider.
 
-At this checkpoint, post-#149 full rendering has not yet been observed in a normal post-close production window. The next valid operational proof is the existing scheduled after-close run, not another intraday bypass.
+PR #156 was a same-repository operations probe and was **CLOSED WITHOUT MERGE** after preserving its proof artifact. Workflow run `33848495590` then established the first full post-#149, post-close Human composition proof using the exact current five-package production set and the real HiThink credential:
+
+```text
+completed market session = 2026-09-04 15:00 +08:00
+Research attention = 0
+canonical Decision wake = 1
+Research handoffs = 0
+researched cases = 5
+
+CATL / 300750 = CNY351.00 / ACCEPTABLE_ODDS / Human review
+Sanhua / Moutai / China Shenhua / GigaDevice = quiet / INSUFFICIENT_ODDS
+stale Tinavi cold-start attention = absent
+Investment Authority = NONE
+```
+
+This proves the normal post-close acquisition and Human rendering path. It does not validate every future provider response, create a retry/fallback policy, or change frozen Research, Odds thresholds, Human Decisions, Actions or authority.
 
 ### Operating constraint from legacy Web Radar
 
@@ -380,7 +395,7 @@ ResearchSnapshot.created_at exists before candidate anomaly
 
 `ResearchSnapshot.as_of_datetime` is PIT cutoff only, not Research-existence proof.
 
-Accepted current baseline:
+Accepted reviewed baseline remains:
 
 ```text
 eligible post-Research daily observations = 10
@@ -392,6 +407,25 @@ anomaly detector = NOT YET PROMOTED
 ```
 
 Do not turn 2.74% into a threshold.
+
+The 2026-09-04 post-close proof exposed a separate Harness input failure: `dogfood/*.json` had become invalid because the directory now contains Research package objects, Evidence arrays and Research-attention handoffs. The Human Inbox still rendered, but the independent shadow failed closed on a non-object package input.
+
+PR #157 `fix: curate Surprise Radar shadow package inputs` is **MERGED / ACTIVE HARNESS BEHAVIOR**.
+
+Merge commit: `ca512c07ce7c7c229f369e9b6606bcb46fb96d8e`.
+
+The scheduled shadow now uses an exact, explicit six-package list rather than a heterogeneous directory wildcard. Real proof run `33848953117` produced and validated:
+
+```text
+qualified windows = 6
+tickers = 600519 / 300750 / 600036 / 601088 / 603986 / 002050
+response session = 2026-09-04
+Radar semantics = SHADOW_OBSERVATION_ONLY
+Human attention authority = NONE
+Investment Authority = NONE
+```
+
+These short-lived windows prove acquisition and batch integrity only. They have not been reviewed into a new anomaly corpus, do not change the accepted 10-observation baseline above, and do not authorize a detector, threshold or automatic Research route.
 
 Human alert policy remains:
 
@@ -461,17 +495,16 @@ Pointers:
 Priority order:
 
 1. **Use, do not expand.** Let real policy, industry, disclosure, price/path and open-discovery events generate candidates.
-2. Inspect the next normal post-close `decision-inbox` run as the valid production proof for PR #149; do not bypass completed-session protection with an intraday or future-dated observation.
-3. When a real unresolved `DEEPEN_REQUIRED` handoff appears, add its exact path to the scheduled `research_attention_handoffs` list; remove it promptly when Full Research or a Human disposition resolves the attention request.
-4. Keep exact quiet disclosure receipts as lossy Harness memory only; cache loss must cause reassessment, not silent suppression.
-5. Human front surface should remain 0–3 tickers or `nothing requires attention`.
-6. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
-7. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
-8. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
-9. Continue natural Surprise Radar observation without tuning a detector to small samples.
-10. Continue Commitment Radar without promoting a second attention authority.
-11. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
-12. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
+2. When a real unresolved `DEEPEN_REQUIRED` handoff appears, add its exact path to the scheduled `research_attention_handoffs` list; remove it promptly when Full Research or a Human disposition resolves the attention request.
+3. Keep exact quiet disclosure receipts as lossy Harness memory only; cache loss must cause reassessment, not silent suppression.
+4. Human front surface should remain 0–3 tickers or `nothing requires attention`.
+5. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
+6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
+7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
+8. Continue natural Surprise Radar observation through the explicit curated shadow package list; review real windows before promoting any detector or threshold.
+9. Continue Commitment Radar without promoting a second attention authority.
+10. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
+11. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
 
 ---
 
@@ -515,7 +548,7 @@ Also:
 - `docs/live-decision-book.md` — live-case navigation; subordinate to frozen case artifacts.
 - `docs/decision-inbox.md` — accepted ticker-centric Attention Inbox behavior and scheduled composition rule.
 - `src/decision_kernel/runtime/attention_inbox.py` — Research-attention + Decision-review Human front door.
-- `.github/workflows/decision-inbox.yml` — scheduled explicit Decision / Research-attention input lists.
+- `.github/workflows/decision-inbox.yml` — scheduled explicit Decision, Research-attention and Surprise Radar shadow package lists.
 - `src/decision_kernel/runtime/hithink_http.py` — fail-closed HiThink transport, completed-session qualification and process-local calendar reuse.
 - `src/decision_kernel/runtime/disclosure_receipts.py` — exact quiet-disposition receipt semantics.
 - `docs/full-research-review-gate-v1.md` — Full Research review discipline.
@@ -533,7 +566,8 @@ Also:
 
 - **NEW — PR #149 merged.** HiThink trading-calendar acquisition is reused only within the same process / credential / Shanghai date / timeout; histories remain independent, and endpoint-specific failures remain visible without retry, fallback or stale-price substitution.
 - **NEW — 2026-09-04 current disclosure review closed with 1 DROP / 1 WAIT / 0 DEEPEN after the recovered cache suppressed all nine previously reviewed identities.** China Shenhua meeting materials were dropped as repeated voting/timing disclosure; GigaDevice’s 135,000-share / 0.02% repurchase execution remains WAIT_FOR_TRIGGER. PR #153 saved both exact quiet receipts to default-branch cache; PR #154 removed all temporary recovery code.
-- **NEW — post-#149 live intraday probe reached calendar and history acquisition, then correctly rejected an unfinished current-session row before Research / Odds / Human surface.** A normal post-close run remains the valid production proof.
+- **NEW — first full post-#149 post-close production proof succeeded.** PR #156 was closed without merge after run `33848495590` accepted the completed 2026-09-04 session, rendered 1 canonical Decision wake / 4 quiet cases / 0 Research attention, excluded stale Tinavi attention and preserved Investment Authority NONE.
+- **NEW — PR #157 merged after the same proof exposed a heterogeneous `dogfood/*.json` shadow-input failure.** The scheduled Surprise Radar shadow now uses six exact Research package objects; real run `33848953117` produced six qualified 2026-09-04 windows with no Human or investment authority.
 - **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
 - **NEW — PR #139 accepted / merged.** Human front surface is ticker-first, why-worth-looking-first, drill-down oriented.
 - **NEW — PR #140 accepted / merged.** `DEEPEN_REQUIRED` Research attention and canonical Decision review now share one Human Inbox without merging authority.
