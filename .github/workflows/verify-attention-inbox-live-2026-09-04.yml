@@ -1,0 +1,69 @@
+name: verify-attention-inbox-live-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/verify-attention-inbox-live-2026-09-04.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e .
+      - name: Check HiThink secret
+        shell: bash
+        run: |
+          if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
+            echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
+            exit 1
+          fi
+      - name: Run current ticker-centric Attention Inbox live path
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p attention-inbox-live
+          python -m decision_kernel.runtime.attention_inbox \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v2.json \
+            research_cases/002050-sanhua-deep-research-v1.json \
+            --output attention-inbox-live/index.html \
+            --summary attention-inbox-live/summary.md \
+            | tee attention-inbox-live/run.txt
+
+          grep -q '^ATTENTION INBOX:' attention-inbox-live/run.txt
+          grep -q '^# Attention Inbox' attention-inbox-live/summary.md
+          grep -q 'Investment Authority = NONE' attention-inbox-live/summary.md
+          if grep -q '天智航' attention-inbox-live/summary.md; then
+            echo '::error::Resolved Tinavi cold-start attention resurfaced in the current live Inbox'
+            exit 1
+          fi
+      - name: Publish Human summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f attention-inbox-live/summary.md ]; then
+            cat attention-inbox-live/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '## Live Attention Inbox unavailable' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload live verification snapshot
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: attention-inbox-live-verification
+          path: attention-inbox-live/
+          if-no-files-found: warn
+          retention-days: 3
