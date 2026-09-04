@@ -1,0 +1,317 @@
+name: sector-radar-reality-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/sector-radar-reality-2026-09-04.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e .
+      - name: Probe industry and concept reality
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import math
+          import os
+          import time
+          from datetime import date, datetime, timedelta
+          from pathlib import Path
+          from statistics import fmean
+          from zoneinfo import ZoneInfo
+
+          from decision_kernel.runtime.hithink_http import _request_hithink_json
+
+          API_KEY = os.environ.get('HITHINK_FINANCE_API_KEY')
+          if not API_KEY:
+              raise SystemExit('HITHINK_FINANCE_API_KEY is required')
+
+          TZ = ZoneInfo('Asia/Shanghai')
+          NOW = datetime.now(TZ)
+          THROUGH = NOW.date()
+          START = date(2026, 1, 1)
+          START_MS = int(datetime.combine(START, datetime.min.time(), tzinfo=TZ).timestamp() * 1000)
+          END_MS = int(datetime.combine(THROUGH + timedelta(days=1), datetime.min.time(), tzinfo=TZ).timestamp() * 1000)
+          request_count = 0
+
+          def request(path: str, params: dict[str, str], *, pace_seconds: float = 0.0):
+              global request_count
+              if request_count and pace_seconds:
+                  time.sleep(pace_seconds)
+              envelope = _request_hithink_json(
+                  api_key=API_KEY,
+                  path=path,
+                  params=params,
+                  timeout_seconds=25.0,
+              )
+              request_count += 1
+              if envelope.get('code') != 0:
+                  raise RuntimeError(
+                      f'{path} business failure: code={envelope.get("code")} '
+                      f'request_id={envelope.get("request_id")}'
+                  )
+              data = envelope.get('data')
+              if not isinstance(data, dict):
+                  raise RuntimeError(f'{path} returned no data object')
+              return data
+
+          def catalog(tag: str):
+              data = request(
+                  '/api/a-share-index/catalog/ths-index-list',
+                  {'tag': tag},
+                  pace_seconds=2.0,
+              )
+              rows = data.get('item')
+              if not isinstance(rows, list):
+                  raise RuntimeError(f'catalog {tag} returned no item list')
+              parsed = []
+              for row in rows:
+                  if not isinstance(row, dict):
+                      continue
+                  code = str(row.get('thscode', '')).strip().upper()
+                  name = str(row.get('name', '')).strip()
+                  if code.endswith('.TI') and name:
+                      parsed.append({'kind': tag, 'thscode': code, 'name': name})
+              return parsed
+
+          industries = catalog('industry')
+          concepts = catalog('cn_concept')
+
+          keywords = (
+              '船舶', '航海', '造船', '中船',
+              '水产', '渔业', '养殖', '猪肉', '鸡肉',
+              '农业', '种植', '林业', '农产品', '粮食', '玉米', '大豆',
+          )
+          matches = sorted(
+              [
+                  row for row in industries + concepts
+                  if any(keyword in row['name'] for keyword in keywords)
+              ],
+              key=lambda row: (row['kind'], row['name'], row['thscode']),
+          )
+
+          # Prefer formal industries, then compact concept labels that directly
+          # represent the Human examples. Bound the live history fan-out.
+          exact_priority = (
+              '航海装备', '船舶制造', '中船系',
+              '养殖业', '水产养殖', '猪肉', '鸡肉',
+              '种植业与林业', '农业种植', '农产品加工',
+              '粮食概念', '玉米', '大豆',
+          )
+          selected = []
+          seen = set()
+          for preferred in exact_priority:
+              for row in matches:
+                  if row['name'] == preferred and row['thscode'] not in seen:
+                      selected.append(row)
+                      seen.add(row['thscode'])
+          for row in matches:
+              if row['kind'] == 'industry' and row['thscode'] not in seen:
+                  selected.append(row)
+                  seen.add(row['thscode'])
+          for row in matches:
+              if row['thscode'] not in seen:
+                  selected.append(row)
+                  seen.add(row['thscode'])
+          selected = selected[:18]
+
+          def history(thscode: str):
+              data = request(
+                  '/api/a-share-index/prices/historical',
+                  {
+                      'thscode': thscode,
+                      'interval': '1d',
+                      'start': str(START_MS),
+                      'end': str(END_MS),
+                  },
+                  pace_seconds=20.0,
+              )
+              rows = data.get('item')
+              if not isinstance(rows, list) or not rows:
+                  raise RuntimeError(f'history {thscode} is empty')
+              parsed = {}
+              for row in rows:
+                  if not isinstance(row, dict):
+                      continue
+                  session = datetime.fromtimestamp(int(row['date_ms']) / 1000, tz=TZ).date()
+                  if session > THROUGH:
+                      continue
+                  close = float(row['close_price'])
+                  turnover = float(row['turnover'])
+                  if not math.isfinite(close) or close <= 0:
+                      raise RuntimeError(f'history {thscode} has invalid close')
+                  if not math.isfinite(turnover) or turnover < 0:
+                      raise RuntimeError(f'history {thscode} has invalid turnover')
+                  parsed[session] = {'close': close, 'turnover': turnover}
+              return parsed
+
+          benchmark = history('000001.SH')
+
+          def return_over(values, sessions: int):
+              if len(values) <= sessions:
+                  return None
+              return values[-1] / values[-1 - sessions] - 1.0
+
+          def metric(row):
+              board = history(row['thscode'])
+              common = sorted(set(board) & set(benchmark))
+              if len(common) < 65:
+                  raise RuntimeError(
+                      f'{row["name"]} {row["thscode"]} has only {len(common)} common sessions'
+                  )
+              board_close = [board[session]['close'] for session in common]
+              market_close = [benchmark[session]['close'] for session in common]
+              result = {
+                  **row,
+                  'through': common[-1].isoformat(),
+                  'sessions': len(common),
+                  'close': board_close[-1],
+              }
+              for horizon in (5, 20, 60):
+                  board_return = return_over(board_close, horizon)
+                  market_return = return_over(market_close, horizon)
+                  result[f'return_{horizon}d'] = board_return
+                  result[f'excess_{horizon}d_vs_shanghai'] = (
+                      None if board_return is None or market_return is None
+                      else board_return - market_return
+                  )
+
+              turnovers = [board[session]['turnover'] for session in common]
+              recent_turnover = fmean(turnovers[-5:])
+              prior_turnover = fmean(turnovers[-25:-5])
+              result['turnover_5d_vs_prior_20d'] = (
+                  None if prior_turnover <= 0 else recent_turnover / prior_turnover
+              )
+              result['distance_from_20d_average'] = (
+                  board_close[-1] / fmean(board_close[-20:]) - 1.0
+              )
+
+              # Count how long rolling 20-session excess return has remained
+              # positive at the current edge. This is descriptive persistence,
+              # not an opportunity score or investment recommendation.
+              persistence = 0
+              for end in range(len(common) - 1, 19, -1):
+                  board_20 = board_close[end] / board_close[end - 20] - 1.0
+                  market_20 = market_close[end] / market_close[end - 20] - 1.0
+                  if board_20 - market_20 <= 0:
+                      break
+                  persistence += 1
+              result['positive_20d_excess_persistence_sessions'] = persistence
+              return result
+
+          metrics = [metric(row) for row in selected]
+          metrics.sort(
+              key=lambda item: (
+                  item.get('excess_20d_vs_shanghai') is not None,
+                  item.get('excess_20d_vs_shanghai') or float('-inf'),
+              ),
+              reverse=True,
+          )
+
+          output = {
+              'schema_version': 1,
+              'captured_at': NOW.isoformat(),
+              'through': THROUGH.isoformat(),
+              'source': 'HiThink official index catalog and historical endpoint',
+              'catalog_counts': {
+                  'industry': len(industries),
+                  'cn_concept': len(concepts),
+              },
+              'keyword_matches': matches,
+              'selected_history_targets': selected,
+              'metrics': metrics,
+              'request_count': request_count,
+              'semantics': 'REALITY_PROBE_ONLY',
+              'human_attention_authority': 'NONE',
+              'investment_authority': 'NONE',
+          }
+          Path('sector-radar-reality.json').write_text(
+              json.dumps(output, ensure_ascii=False, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8',
+          )
+
+          print(f'INDUSTRY_CATALOG={len(industries)}')
+          print(f'CONCEPT_CATALOG={len(concepts)}')
+          print(f'KEYWORD_MATCHES={len(matches)}')
+          print(f'HISTORY_TARGETS={len(selected)}')
+          print(f'REQUEST_COUNT={request_count}')
+          print()
+          for item in metrics:
+              def pct(key):
+                  value = item.get(key)
+                  return 'NA' if value is None else f'{value:+.2%}'
+              turnover = item.get('turnover_5d_vs_prior_20d')
+              turnover_text = 'NA' if turnover is None else f'{turnover:.2f}x'
+              print(
+                  f"{item['kind']:10s} {item['name']} {item['thscode']} | "
+                  f"5d={pct('return_5d')} 20d={pct('return_20d')} 60d={pct('return_60d')} | "
+                  f"excess20={pct('excess_20d_vs_shanghai')} "
+                  f"persistence={item['positive_20d_excess_persistence_sessions']} "
+                  f"turnover={turnover_text}"
+              )
+          print()
+          print('SEMANTICS=REALITY_PROBE_ONLY')
+          print('HUMAN_ATTENTION_AUTHORITY=NONE')
+          print('INVESTMENT_AUTHORITY=NONE')
+          PY
+      - name: Publish summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Sector Radar current-reality probe'
+            echo
+            if [ -f sector-radar-reality.json ]; then
+              python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('sector-radar-reality.json').read_text(encoding='utf-8'))
+          print(f"Catalog: {data['catalog_counts']['industry']} industries / {data['catalog_counts']['cn_concept']} concepts")
+          print()
+          print('| Board | Kind | 5d | 20d | 60d | 20d excess vs Shanghai | persistence | turnover 5d/prior20d |')
+          print('| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |')
+          for item in data['metrics']:
+              def pct(key):
+                  value = item.get(key)
+                  return 'NA' if value is None else f'{value:+.1%}'
+              turnover = item.get('turnover_5d_vs_prior_20d')
+              turnover_text = 'NA' if turnover is None else f'{turnover:.2f}x'
+              print(
+                  f"| {item['name']} `{item['thscode']}` | {item['kind']} | "
+                  f"{pct('return_5d')} | {pct('return_20d')} | {pct('return_60d')} | "
+                  f"{pct('excess_20d_vs_shanghai')} | "
+                  f"{item['positive_20d_excess_persistence_sessions']} | {turnover_text} |"
+              )
+          print()
+          print('Reality probe only. No Research route, Human wake, recommendation, action, or investment authority.')
+          PY
+            else
+              echo 'Probe failed before a result was written.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload probe artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-reality-2026-09-04
+          path: sector-radar-reality.json
+          if-no-files-found: warn
+          retention-days: 14
