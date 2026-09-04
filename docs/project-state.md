@@ -178,6 +178,55 @@ file presence alone never restores current Human-facing eligibility
 
 No new score, route, wake gate, schema, recommendation, or investment authority was added.
 
+### Disclosure scan / receipt-memory health
+
+The latest complete scheduled disclosure artifact reviewed at this checkpoint is workflow run `33757562673` from 2026-09-03. It contained exactly nine packet identities: eight CATL batches and one Sanhua batch.
+
+Every packet was resolved through existing Research Funnel semantics:
+
+```text
+DROP_FOR_NOW = 5
+WAIT_FOR_TRIGGER = 4
+DEEPEN_REQUIRED = 0
+```
+
+The 2026-09-03 CATL repurchase-progress batch remains the same capital-allocation question and waits for actual execution / owner-cash evidence. The Sanhua H-share next-day securities return does not change a frozen Research reopen bucket and was dropped.
+
+PR #147 recovered the exact quiet receipt identities into the default-branch best-effort Actions cache. PR #148 removed the one-time recovery workflow and script after the cache save and audit artifact succeeded.
+
+Receipt memory remains only a Harness attention optimization:
+
+```text
+cache hit -> suppress this exact already-reviewed quiet identity
+cache loss -> reassess rather than silently suppress
+receipt != Research truth
+receipt != Human wake
+```
+
+No current disclosure packet earned Human Research attention.
+
+### HiThink live acquisition health
+
+PR #149 `fix: reduce HiThink batch pressure without fallback` is **MERGED / ACTIVE HARNESS BEHAVIOR**.
+
+Merge commit: `e4bac4eb6e4aed37d0b86e638c67415b26d2bbc1`.
+
+The live acquisition path now reuses only the exact trading-calendar response within one process for the same credential, Shanghai date and timeout. Price-history requests remain independent and uncached. A new Shanghai date cannot inherit the prior date's calendar.
+
+Real operations probes established three distinct failure states:
+
+```text
+probe 1 -> TLS handshake timeout at calendar request
+probe 2 -> HTTP 429 at first history request
+post-#149 intraday probe -> calendar + history transport succeeded
+                         -> provider returned unfinished current-session row
+                         -> adapter rejected it before Research / Odds / Human surface
+```
+
+The third probe ran before the A-share close. Rejecting the unfinished row is intended PIT protection, not a production defect to bypass. Do not force a future `observed_at`, silently filter a provider contract violation, accept an intraday row as a completed close, substitute stale prices, or add a fallback market provider.
+
+At this checkpoint, post-#149 full rendering has not yet been observed in a normal post-close production window. The next valid operational proof is the existing scheduled after-close run, not another intraday bypass.
+
 ### Operating constraint from legacy Web Radar
 
 The old Codex Radar GitHub mirror no longer exists; references to reading that mirror are legacy OS-era assumptions.
@@ -400,16 +449,17 @@ Pointers:
 Priority order:
 
 1. **Use, do not expand.** Let real policy, industry, disclosure, price/path and open-discovery events generate candidates.
-2. Migrate existing useful Web discovery producers toward durable GitHub-backed PIT artifacts only when this removes repeated attention/plumbing cost; do not create a new cognition framework.
+2. Inspect the next normal post-close `decision-inbox` run as the valid production proof for PR #149; do not bypass completed-session protection with an intraday or future-dated observation.
 3. When a real unresolved `DEEPEN_REQUIRED` handoff appears, add its exact path to the scheduled `research_attention_handoffs` list; remove it promptly when Full Research or a Human disposition resolves the attention request.
-4. Human front surface should remain 0–3 tickers or `nothing requires attention`.
-5. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
-6. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
-7. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
-8. Continue natural Surprise Radar observation without tuning a detector to small samples.
-9. Continue Commitment Radar without promoting a second attention authority.
-10. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
-11. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
+4. Keep exact quiet disclosure receipts as lossy Harness memory only; cache loss must cause reassessment, not silent suppression.
+5. Human front surface should remain 0–3 tickers or `nothing requires attention`.
+6. Run Full Research only on cases that earn `DEEPEN_REQUIRED`; leave WAIT/DROP in background.
+7. Tinavi remains WATCH / NO_ACTION until one of its five reopen buckets changes.
+8. Sanhua remains STOP / REOPEN until its frozen evidence buckets change.
+9. Continue natural Surprise Radar observation without tuning a detector to small samples.
+10. Continue Commitment Radar without promoting a second attention authority.
+11. Treat MU 2026-09-30 earnings as a natural prospective replay hinge if no more important event arrives first.
+12. Freeze real Human Decision / Action / Outcome / falsifier / resolution lineage promptly when events occur.
 
 ---
 
@@ -433,6 +483,8 @@ no pre-Research price window promoted as current Radar evidence
 no as_of_datetime used as Research-existence timestamp
 no per-anomaly Human alert permission loop for actively followed researched cases
 no Sanhua- or Tinavi-specific numbers promoted into generic constants
+no intraday row used as completed-close Odds input
+no fallback or stale-price substitution when HiThink fails
 ```
 
 Also:
@@ -452,6 +504,8 @@ Also:
 - `docs/decision-inbox.md` — accepted ticker-centric Attention Inbox behavior and scheduled composition rule.
 - `src/decision_kernel/runtime/attention_inbox.py` — Research-attention + Decision-review Human front door.
 - `.github/workflows/decision-inbox.yml` — scheduled explicit Decision / Research-attention input lists.
+- `src/decision_kernel/runtime/hithink_http.py` — fail-closed HiThink transport, completed-session qualification and process-local calendar reuse.
+- `src/decision_kernel/runtime/disclosure_receipts.py` — exact quiet-disposition receipt semantics.
 - `docs/full-research-review-gate-v1.md` — Full Research review discipline.
 - `docs/full-research-price-implied-economics-closure-v1.md` — price-implied economics closure discipline.
 - `docs/dogfood/sanhua-robot-operating-economics-challenger-2026-09-03.md` — accepted Sanhua challenger.
@@ -465,9 +519,12 @@ Also:
 
 ## 10. Recent state delta
 
+- **NEW — PR #149 merged.** HiThink trading-calendar acquisition is reused only within the same process / credential / Shanghai date / timeout; histories remain independent, and endpoint-specific failures remain visible without retry, fallback or stale-price substitution.
+- **NEW — exact 2026-09-03 disclosure review closed with 5 DROP / 4 WAIT / 0 DEEPEN.** PR #147 recovered the nine exact quiet identities into default-branch receipt memory; PR #148 removed all one-time recovery code after successful cache save.
+- **NEW — post-#149 live intraday probe reached calendar and history acquisition, then correctly rejected an unfinished current-session row before Research / Odds / Human surface.** A normal post-close run remains the valid production proof.
+- **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
 - **NEW — PR #139 accepted / merged.** Human front surface is ticker-first, why-worth-looking-first, drill-down oriented.
 - **NEW — PR #140 accepted / merged.** `DEEPEN_REQUIRED` Research attention and canonical Decision review now share one Human Inbox without merging authority.
-- **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
 - **NEW — legacy Codex Radar GitHub mirror is confirmed gone.** Existing Web Radar long outputs are recognized as an attention-fragmentation problem; future migration should hide background complexity rather than reproduce dashboards.
 - **NEW — PR #141 accepted / merged.** Tinavi is the first real cold-start policy/industry discovery to pass Research Funnel and surface as a ticker-centric attention case.
 - **NEW — PR #142 accepted / merged.** Tinavi Full Research is authoritative Research lineage; business reversal and cheapness remain unproven.
