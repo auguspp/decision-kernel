@@ -30,7 +30,7 @@ The shadow step is deliberately `continue-on-error`. A sampling failure must not
 
 ## Capture boundary
 
-`python -m decision_kernel.runtime.market_history_shadow` accepts the same current A-share Research packages used by the Inbox and captures one qualified HiThink history window per security.
+`python -m decision_kernel.runtime.market_history_shadow` accepts exact reviewed A-share Research package objects selected for shadow observation and captures one qualified HiThink history window per security.
 
 Each JSON observation records only:
 
@@ -55,6 +55,31 @@ It does **not** record or compute:
 - Recommendation;
 - Action;
 - investment authority.
+
+## Scheduled input discipline
+
+The scheduled workflow must pass an explicit `shadow_packages` list. It must not expand `dogfood/*.json` or infer package eligibility from directory membership.
+
+The `dogfood` directory is intentionally heterogeneous. It may contain:
+
+- reviewed Research package objects;
+- EvidenceArtifact arrays;
+- Research-attention handoffs;
+- other audit fixtures.
+
+Only the first category is a valid `market_history_shadow` input. The 2026-09-04 post-close operations proof demonstrated the failure mode directly: the Human Attention Inbox rendered successfully, but the shadow wildcard encountered a Tinavi Evidence array and failed closed with `market-history shadow package must be a JSON object`.
+
+The correction is selection discipline, not parser permissiveness:
+
+```text
+exact curated Research package paths
+→ market-history shadow
+
+heterogeneous directory wildcard
+→ prohibited
+```
+
+A historical package such as CMB may remain eligible for non-authoritative shadow observation while being deliberately excluded from the current Human Inbox. Shadow inclusion does not restore live Odds eligibility, create Human attention, or confer investment authority.
 
 ## Storage class
 
@@ -86,7 +111,7 @@ Duplicate current Research packages for the same qualified `thscode` also fail c
 
 ## Why the shadow step is independent of Inbox
 
-The cleanest long-term implementation may eventually reuse one market fetch for both the Human Inbox and Radar observation capture. That is not yet worth changing the `build-inbox` production contract.
+The cleanest long-term implementation may eventually reuse one market fetch for both the Human Inbox and Radar observation capture. That is not yet worth changing the Attention Inbox production contract.
 
 For v0, the safer boundary is:
 
@@ -125,6 +150,8 @@ not trading return and not stock-picking accuracy.
 
 ```text
 QUALIFIED HISTORY INPUT = YES
+SCHEDULED INPUTS = EXPLICIT / TYPE-QUALIFIED
+DIRECTORY WILDCARD = PROHIBITED
 NATURAL WINDOW RETENTION = NOW ENABLED, SHORT-LIVED
 NEW SCHEDULE = NO
 HUMAN INBOX FAILURE COUPLING = NO
