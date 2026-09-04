@@ -1,4 +1,4 @@
-# Decision / Attention Inbox v0.2
+# Decision / Attention Inbox v0.3
 
 The Inbox is the Human-facing shell over **existing** Research and Decision outputs. It is deliberately ticker-centric at the front and drill-down oriented behind each card.
 
@@ -6,7 +6,7 @@ It does **not** create a new score, Research route, Decision wake gate, recommen
 
 ## Two existing input lanes
 
-The front door may now compose two already-authoritative kinds of output:
+The front door may compose two already-authoritative kinds of output:
 
 ```text
 Research Funnel
@@ -72,13 +72,41 @@ When a new discovery maps to an already-researched ticker, the surface may join 
 
 Only `DEEPEN_REQUIRED` handoffs appear on the front surface. `WAIT_FOR_TRIGGER` and `DROP_FOR_NOW` remain collapsed as background Research dispositions.
 
-## Normal current Decision use
+## Scheduled production composition
 
-The existing GitHub Actions workflow `decision-inbox` runs automatically on A-share weekdays after the market close. Its Decision inputs remain an **explicit curated package list** and are run through the existing HiThink live path.
+The GitHub Actions workflow `decision-inbox` runs automatically on A-share weekdays after the market close. It now invokes the same ticker-centric composition root used for Research attention replay:
 
-The scheduled Decision input list must **not** become a directory wildcard such as `dogfood/*.json`. A checked-in package may remain useful as a historical mechanics fixture, shadow-observation input, or disclosure-acquisition anchor after fresh probability / Odds eligibility has been withdrawn. File presence alone must not restore Human-facing eligibility.
+```bash
+python -m decision_kernel.runtime.attention_inbox
+```
 
-The existing command remains available:
+The workflow owns two separate, explicit Harness lists:
+
+```text
+decision_packages
+research_attention_handoffs
+```
+
+`decision_packages` contains the currently curated Research packages that may be run through the existing HiThink live path.
+
+`research_attention_handoffs` may contain only exact, unresolved, validated `ResearchFunnelResult` handoffs that currently retain `DEEPEN_REQUIRED`. It must not become a wildcard, directory scan, or file-presence rule.
+
+The current scheduled Research-attention list is intentionally empty. The accepted Tinavi cold-start handoff remains valuable frozen dogfood, but Full Research has already been completed and the Human state is now WATCH / NO_ACTION. Replaying that old handoff every weekday would incorrectly recreate a stale cold-start `DEEPEN_REQUIRED` card.
+
+Operating rule:
+
+```text
+new unresolved DEEPEN_REQUIRED handoff
+→ explicitly add its exact path to the scheduled list
+
+Full Research / Human disposition resolves the attention request
+→ remove the path from the scheduled list
+→ retain the frozen handoff as audit lineage
+```
+
+A checked-in package or handoff may remain useful as a historical mechanics fixture, shadow-observation input, disclosure-acquisition anchor, or audit artifact after current Human-facing eligibility has ended. File presence alone must never restore eligibility.
+
+The legacy Decision-only command remains available:
 
 ```bash
 decision-kernel build-inbox dogfood/300750-catl.json research_cases/002050-sanhua-deep-research-v1.json
@@ -111,6 +139,7 @@ It must not:
 
 - decide a Research route itself;
 - turn `WAIT_FOR_TRIGGER` into `DEEPEN_REQUIRED`;
+- retain a resolved handoff as recurring current attention;
 - change Fundamental Belief from price/path evidence;
 - alter Odds thresholds;
 - create a second canonical Decision wake;

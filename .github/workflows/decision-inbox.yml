@@ -28,18 +28,38 @@ jobs:
             echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
             exit 1
           fi
-      - name: Build Decision Inbox
+      - name: Build Attention Inbox
         shell: bash
         run: |
-          # Human-facing Inbox inputs are deliberately curated. Do not replace
+          set -euo pipefail
+
+          # Human-facing Decision inputs are deliberately curated. Do not replace
           # this list with dogfood/*.json: a historical mechanics fixture can
           # remain useful for replay without retaining current Odds eligibility.
-          decision-kernel build-inbox \
-            dogfood/600519-moutai.json \
-            dogfood/300750-catl.json \
-            dogfood/601088-shenhua.json \
-            research_cases/603986-gigadevice-deep-research-v2.json \
+          decision_packages=(
+            dogfood/600519-moutai.json
+            dogfood/300750-catl.json
+            dogfood/601088-shenhua.json
+            research_cases/603986-gigadevice-deep-research-v2.json
             research_cases/002050-sanhua-deep-research-v1.json
+          )
+
+          # Research-attention inputs are curated separately. Add only exact,
+          # unresolved, validated ResearchFunnelResult handoffs. A resolved
+          # cold-start handoff remains audit dogfood and must not become a stale
+          # daily DEEPEN_REQUIRED card merely because its file still exists.
+          research_attention_handoffs=(
+            # Add exact current handoff paths here when real state earns attention.
+          )
+
+          research_attention_args=()
+          for handoff in "${research_attention_handoffs[@]}"; do
+            research_attention_args+=(--research-attention "$handoff")
+          done
+
+          python -m decision_kernel.runtime.attention_inbox \
+            "${decision_packages[@]}" \
+            "${research_attention_args[@]}"
       - name: Capture Surprise Radar market-history shadow
         continue-on-error: true
         shell: bash
@@ -58,9 +78,9 @@ jobs:
           if [ -f decision-inbox/summary.md ]; then
             cat decision-inbox/summary.md >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "## Decision Inbox unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo "## Attention Inbox unavailable" >> "$GITHUB_STEP_SUMMARY"
             echo >> "$GITHUB_STEP_SUMMARY"
-            echo "The batch run failed before a Human inbox could be produced." >> "$GITHUB_STEP_SUMMARY"
+            echo "The batch run failed before a Human attention inbox could be produced." >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Upload mobile HTML snapshot
         if: success()
