@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Mapping
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from functools import lru_cache
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -31,45 +32,28 @@ class HithinkRuntimeError(RuntimeError):
     """The outer HiThink runtime could not produce the required qualified market input."""
 
 
-def build_hithink_batch_request_json(
+@lru_cache(maxsize=8)
+def _request_hithink_calendar(
     *,
-    api_key: str | None,
-    timeout_seconds: float = 10.0,
-) -> _RequestJSON:
-    """Build one process-local requester for a bounded acquisition batch.
+    api_key: str,
+    shanghai_date: date,
+    timeout_seconds: float,
+) -> Mapping[str, Any]:
+    """Reuse one exact calendar response per credential/date in this process only.
 
-    The exact trading-calendar response is reused for identical calendar requests
-    within the batch. History requests remain independent and provider-qualified.
-    This helper performs no retry, fallback, persistence, stale-data substitution,
-    Research routing, Human wake, or investment-authority work.
+    `shanghai_date` deliberately participates in the cache key even though the
+    provider endpoint has no date parameter. A long-lived Harness process therefore
+    cannot carry yesterday's calendar into a new Shanghai date. History responses
+    are never cached. Exceptions are not cached by ``lru_cache``.
     """
 
-    if not api_key:
-        raise HithinkRuntimeError("HiThink credentials are required for live market data")
-
-    calendar_cache: dict[
-        tuple[tuple[str, str], ...], Mapping[str, Any]
-    ] = {}
-
-    def request_json(
-        path: str,
-        params: Mapping[str, str],
-    ) -> Mapping[str, Any]:
-        calendar_key = tuple(sorted(params.items()))
-        if path == HITHINK_CALENDAR_PATH and calendar_key in calendar_cache:
-            return calendar_cache[calendar_key]
-
-        payload = _request_hithink_json(
-            api_key=api_key,
-            path=path,
-            params=params,
-            timeout_seconds=timeout_seconds,
-        )
-        if path == HITHINK_CALENDAR_PATH:
-            calendar_cache[calendar_key] = payload
-        return payload
-
-    return request_json
+    del shanghai_date
+    return _request_hithink_json(
+        api_key=api_key,
+        path=HITHINK_CALENDAR_PATH,
+        params={},
+        timeout_seconds=timeout_seconds,
+    )
 
 
 def fetch_hithink_completed_price_history(
@@ -94,16 +78,21 @@ def fetch_hithink_completed_price_history(
         raise HithinkRuntimeError("HiThink credentials are required for live market data")
 
     if request_json is None:
+        calendar_envelope = _request_hithink_calendar(
+            api_key=api_key,
+            shanghai_date=observed_at.astimezone(SHANGHAI_TZ).date(),
+            timeout_seconds=timeout_seconds,
+        )
         request_json = lambda path, params: _request_hithink_json(
             api_key=api_key,
             path=path,
             params=params,
             timeout_seconds=timeout_seconds,
         )
+    else:
+        calendar_envelope = request_json(HITHINK_CALENDAR_PATH, {})
 
-    calendar = normalize_hithink_calendar(
-        request_json(HITHINK_CALENDAR_PATH, {})
-    )
+    calendar = normalize_hithink_calendar(calendar_envelope)
     expected_latest = latest_completed_a_share_session(
         calendar,
         observed_at=observed_at,
