@@ -17,6 +17,7 @@ from ..adapters.hithink_index import (
     normalize_hithink_completed_index_history,
     normalize_hithink_industry_catalog,
     normalize_hithink_index_snapshot,
+    normalize_hithink_index_thscode,
     qualify_hithink_index_snapshot,
 )
 from .hithink_http import (
@@ -98,7 +99,10 @@ def fetch_hithink_index_snapshot_batch(
     """Fetch an explicit index snapshot batch without inferring session freshness."""
 
     normalized_key = _require_runtime_inputs(api_key=api_key)
-    requested = tuple(thscodes)
+    requested = tuple(
+        normalize_hithink_index_thscode(thscode)
+        for thscode in thscodes
+    )
     request_json = request_json or _default_request_json(
         api_key=normalized_key,
         timeout_seconds=timeout_seconds,
@@ -128,6 +132,7 @@ def fetch_hithink_completed_index_history(
         api_key=api_key,
         observed_at=observed_at,
     )
+    normalized_thscode = normalize_hithink_index_thscode(thscode)
     if lookback_calendar_days <= 0:
         raise HithinkRuntimeError(
             "HiThink index history lookback must be positive"
@@ -160,7 +165,7 @@ def fetch_hithink_completed_index_history(
     envelope = request_json(
         HITHINK_INDEX_HISTORY_PATH,
         {
-            "thscode": thscode,
+            "thscode": normalized_thscode,
             "interval": "1d",
             "start": str(int(start_at.timestamp() * 1000)),
             "end": str(int(end_at.timestamp() * 1000)),
@@ -168,7 +173,7 @@ def fetch_hithink_completed_index_history(
     )
     history = normalize_hithink_completed_index_history(
         envelope,
-        thscode=thscode,
+        thscode=normalized_thscode,
         sessions=calendar,
         observed_at=observed_at,
     )
@@ -199,10 +204,12 @@ def fetch_hithink_qualified_index_snapshot_batch(
         api_key=api_key,
         observed_at=observed_at,
     )
-    requested = tuple(thscodes)
-    if benchmark_thscode.strip().upper() not in {
-        value.strip().upper() for value in requested
-    }:
+    requested = tuple(
+        normalize_hithink_index_thscode(thscode)
+        for thscode in thscodes
+    )
+    normalized_benchmark = normalize_hithink_index_thscode(benchmark_thscode)
+    if normalized_benchmark not in set(requested):
         raise HithinkRuntimeError(
             "qualified index snapshot request must include its benchmark identity"
         )
@@ -218,7 +225,7 @@ def fetch_hithink_qualified_index_snapshot_batch(
         timeout_seconds=timeout_seconds,
     )
     benchmark_history = fetch_hithink_completed_index_history(
-        thscode=benchmark_thscode,
+        thscode=normalized_benchmark,
         observed_at=observed_at,
         api_key=normalized_key,
         request_json=effective_request,
