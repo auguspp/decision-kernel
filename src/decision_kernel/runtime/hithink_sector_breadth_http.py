@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -29,6 +30,7 @@ HITHINK_ALL_MARKET_SNAPSHOT_SEMANTICS = (
 HITHINK_SECTOR_BREADTH_HUMAN_ATTENTION_AUTHORITY = "NONE"
 HITHINK_SECTOR_BREADTH_INVESTMENT_AUTHORITY = "NONE"
 
+_A_SHARE_THSCODE = re.compile(r"^\d{6}\.(?:SH|SZ|BJ)$")
 _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
@@ -235,6 +237,10 @@ def _normalize_stock_snapshot_point(
 ) -> ConstituentMarketPoint:
     thscode = str(raw.get("thscode", "")).strip().upper()
     ticker = str(raw.get("ticker", "")).strip()
+    if not _A_SHARE_THSCODE.fullmatch(thscode):
+        raise HithinkRuntimeError(
+            f"{row_label} has an invalid A-share identity {thscode!r}"
+        )
     if ticker != thscode[:6]:
         raise HithinkRuntimeError(
             f"{row_label} ticker disagrees with A-share identity {thscode}"
