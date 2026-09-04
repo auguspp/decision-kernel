@@ -15,6 +15,8 @@ SESSION = date(2026, 9, 4)
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 
 
+# This regression must remain in the ordinary full suite after the one-time repair
+# workflow removes itself.
 def test_all_market_snapshot_rejects_non_a_share_identity_even_when_ticker_matches() -> None:
     timestamp_ms = int(
         datetime(2026, 9, 4, 18, tzinfo=SHANGHAI).timestamp() * 1000
