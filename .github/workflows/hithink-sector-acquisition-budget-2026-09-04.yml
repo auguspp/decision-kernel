@@ -12,7 +12,7 @@ jobs:
   probe:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 4
     env:
       HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
     steps:
@@ -22,361 +22,142 @@ jobs:
           python-version: '3.12'
       - name: Install
         run: python -m pip install -e .
-      - name: Measure catalog, batch snapshot and history contracts
+      - name: Inspect industry catalog layers
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from __future__ import annotations
 
+          import hashlib
           import json
           import os
-          import time
-          from datetime import date, datetime, timedelta
+          from collections import Counter
+          from datetime import datetime
           from pathlib import Path
-          from typing import Any
           from zoneinfo import ZoneInfo
 
-          from decision_kernel.runtime.hithink_http import (
-              HithinkRuntimeError,
-              _request_hithink_json,
-          )
+          from decision_kernel.runtime.hithink_http import _request_hithink_json
 
           api_key = os.environ.get('HITHINK_FINANCE_API_KEY')
           if not api_key:
               raise SystemExit('HITHINK_FINANCE_API_KEY is required')
 
-          tz = ZoneInfo('Asia/Shanghai')
-          now = datetime.now(tz)
-          start = date(2026, 1, 1)
-          end = now.date() + timedelta(days=1)
-          start_ms = int(datetime.combine(start, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
-          end_ms = int(datetime.combine(end, datetime.min.time(), tzinfo=tz).timestamp() * 1000)
-
-          records: list[dict[str, Any]] = []
-          last_request_finished = 0.0
-
-          def call(
-              label: str,
-              path: str,
-              params: dict[str, str],
-              *,
-              minimum_gap_seconds: float,
-          ) -> dict[str, Any] | None:
-              global last_request_finished
-              elapsed = time.monotonic() - last_request_finished
-              if last_request_finished and elapsed < minimum_gap_seconds:
-                  time.sleep(minimum_gap_seconds - elapsed)
-              started = time.monotonic()
-              try:
-                  envelope = _request_hithink_json(
-                      api_key=api_key,
-                      path=path,
-                      params=params,
-                      timeout_seconds=25.0,
-                  )
-              except HithinkRuntimeError as exc:
-                  duration = time.monotonic() - started
-                  last_request_finished = time.monotonic()
-                  records.append(
-                      {
-                          'label': label,
-                          'path': path,
-                          'duration_seconds': round(duration, 3),
-                          'transport_success': False,
-                          'error': str(exc),
-                      }
-                  )
-                  return None
-
-              duration = time.monotonic() - started
-              last_request_finished = time.monotonic()
-              data = envelope.get('data')
-              record = {
-                  'label': label,
-                  'path': path,
-                  'duration_seconds': round(duration, 3),
-                  'transport_success': True,
-                  'business_code': envelope.get('code'),
-                  'request_id': envelope.get('request_id'),
-                  'data_type': type(data).__name__,
-              }
-              if isinstance(data, dict):
-                  items = data.get('item')
-                  record.update(
-                      {
-                          'data_timestamp': data.get('timestamp'),
-                          'data_total': data.get('total'),
-                          'item_count': len(items) if isinstance(items, list) else None,
-                          'first_item_fields': (
-                              sorted(items[0])
-                              if isinstance(items, list) and items and isinstance(items[0], dict)
-                              else None
-                          ),
-                      }
-                  )
-              records.append(record)
-              if envelope.get('code') != 0 or not isinstance(data, dict):
-                  return None
-              return data
-
-          catalog_data = call(
-              'industry_catalog',
-              '/api/a-share-index/catalog/ths-index-list',
-              {'tag': 'industry'},
-              minimum_gap_seconds=0.0,
+          envelope = _request_hithink_json(
+              api_key=api_key,
+              path='/api/a-share-index/catalog/ths-index-list',
+              params={'tag': 'industry'},
+              timeout_seconds=25.0,
           )
-          if catalog_data is None:
-              raise SystemExit('industry catalog did not return qualified data')
-          catalog_items = catalog_data.get('item')
-          if not isinstance(catalog_items, list) or not catalog_items:
-              raise SystemExit('industry catalog returned no items')
-
-          industries = []
-          for item in catalog_items:
-              if not isinstance(item, dict):
-                  continue
-              thscode = str(item.get('thscode', '')).strip().upper()
-              name = str(item.get('name', '')).strip()
-              if thscode.endswith('.TI') and name:
-                  industries.append({'thscode': thscode, 'name': name})
-          if not industries:
-              raise SystemExit('industry catalog contained no qualified .TI identities')
-
-          all_codes = ['000300.SH'] + [item['thscode'] for item in industries]
-          snapshot_data = call(
-              'all_industry_snapshot',
-              '/api/a-share-index/prices/snapshot',
-              {'thscodes': ','.join(all_codes)},
-              minimum_gap_seconds=5.0,
-          )
-
-          if snapshot_data is None:
-              snapshot_codes = all_codes[:51]
-              snapshot_data = call(
-                  'bounded_50_industry_snapshot',
-                  '/api/a-share-index/prices/snapshot',
-                  {'thscodes': ','.join(snapshot_codes)},
-                  minimum_gap_seconds=10.0,
+          if envelope.get('code') != 0:
+              raise SystemExit(
+                  f"industry catalog business failure: {envelope.get('code')}"
               )
-          else:
-              snapshot_codes = all_codes
+          data = envelope.get('data')
+          rows = data.get('item') if isinstance(data, dict) else None
+          if not isinstance(rows, list) or not rows:
+              raise SystemExit('industry catalog is empty')
 
-          snapshot_by_code = {}
-          if snapshot_data is not None and isinstance(snapshot_data.get('item'), list):
-              snapshot_by_code = {
-                  str(item.get('thscode', '')).strip().upper(): item
-                  for item in snapshot_data['item']
-                  if isinstance(item, dict)
-              }
-
-          keywords = ('船舶', '航海', '养殖', '种植', '林业', '农业')
-          selected = []
-          for keyword in keywords:
-              match = next(
-                  (
-                      item for item in industries
-                      if keyword in item['name']
-                      and item['thscode'] not in {row['thscode'] for row in selected}
-                  ),
-                  None,
-              )
-              if match is not None:
-                  selected.append(match)
-              if len(selected) == 2:
-                  break
-          if len(selected) < 2:
-              for item in industries:
-                  if item['thscode'] not in {row['thscode'] for row in selected}:
-                      selected.append(item)
-                  if len(selected) == 2:
-                      break
-
-          history_targets = [
-              {'thscode': '000300.SH', 'name': '沪深300'},
-              *selected,
-          ]
-          history_summaries = []
-          for target in history_targets:
-              data = call(
-                  f"history_{target['thscode']}",
-                  '/api/a-share-index/prices/historical',
+          items = sorted(
+              (
                   {
-                      'thscode': target['thscode'],
-                      'interval': '1d',
-                      'start': str(start_ms),
-                      'end': str(end_ms),
-                  },
-                  minimum_gap_seconds=20.0,
-              )
-              if data is None:
-                  history_summaries.append(
-                      {
-                          **target,
-                          'qualified': False,
-                      }
-                  )
-                  continue
-              rows = data.get('item')
-              if not isinstance(rows, list) or not rows:
-                  history_summaries.append(
-                      {
-                          **target,
-                          'qualified': False,
-                          'reason': 'empty history item',
-                      }
-                  )
-                  continue
-              latest = rows[-1]
-              if not isinstance(latest, dict):
-                  raise SystemExit(f"history {target['thscode']} latest row malformed")
-              latest_session = datetime.fromtimestamp(
-                  int(latest['date_ms']) / 1000,
-                  tz=tz,
-              ).date()
-              snapshot_item = snapshot_by_code.get(target['thscode'])
-              snapshot_last = (
-                  snapshot_item.get('last_price')
-                  if isinstance(snapshot_item, dict)
-                  else None
-              )
-              history_summaries.append(
-                  {
-                      **target,
-                      'qualified': True,
-                      'history_item_count': len(rows),
-                      'history_timestamp': data.get('timestamp'),
-                      'latest_session': latest_session.isoformat(),
-                      'latest_close': latest.get('close_price'),
-                      'latest_turnover': latest.get('turnover'),
-                      'history_adjust': data.get('adjust'),
-                      'snapshot_present': snapshot_item is not None,
-                      'snapshot_last_price': snapshot_last,
-                      'snapshot_matches_latest_close': (
-                          snapshot_last is not None
-                          and str(snapshot_last) == str(latest.get('close_price'))
-                      ),
+                      'thscode': str(row.get('thscode', '')).strip().upper(),
+                      'name': str(row.get('name', '')).strip(),
                   }
-              )
+                  for row in rows
+                  if isinstance(row, dict)
+              ),
+              key=lambda item: item['thscode'],
+          )
+          if any(not item['thscode'].endswith('.TI') or not item['name'] for item in items):
+              raise SystemExit('industry catalog contains malformed identity')
+          if len({item['thscode'] for item in items}) != len(items):
+              raise SystemExit('industry catalog contains duplicate identity')
 
+          prefixes = Counter(item['thscode'][:3] for item in items)
+          families = {
+              prefix: [item for item in items if item['thscode'].startswith(prefix)]
+              for prefix in sorted(prefixes)
+          }
+          human_keywords = (
+              '船舶', '航海', '水产', '养殖', '农业', '种植', '林业',
+          )
+
+          canonical_bytes = json.dumps(
+              items,
+              ensure_ascii=False,
+              sort_keys=True,
+              separators=(',', ':'),
+          ).encode('utf-8')
           result = {
               'schema_version': 1,
-              'captured_at': now.isoformat(),
-              'research_question': (
-                  'Can one industry catalog plus one explicit batch snapshot support '
-                  'daily full-industry discovery, and what history budget remains?'
-              ),
-              'catalog': {
-                  'qualified_industry_count': len(industries),
-                  'data_timestamp': catalog_data.get('timestamp'),
-                  'sample': industries[:10],
-                  'matched_human_examples': [
-                      item
-                      for item in industries
-                      if any(keyword in item['name'] for keyword in keywords)
-                  ],
-              },
-              'snapshot': {
-                  'requested_code_count': len(snapshot_codes),
-                  'returned_code_count': len(snapshot_by_code),
-                  'data_timestamp': (
-                      snapshot_data.get('timestamp')
-                      if snapshot_data is not None
-                      else None
-                  ),
-                  'data_total': (
-                      snapshot_data.get('total')
-                      if snapshot_data is not None
-                      else None
-                  ),
-                  'field_names': (
-                      sorted(next(iter(snapshot_by_code.values())))
-                      if snapshot_by_code
-                      else None
-                  ),
-              },
-              'history_targets': history_summaries,
-              'requests': records,
-              'request_count': len(records),
-              'semantics': 'ACQUISITION_BUDGET_PROBE_ONLY',
-              'production_decision': 'NOT_MADE_BY_THIS_PROBE',
+              'captured_at': datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),
+              'source_timestamp': data.get('timestamp') if isinstance(data, dict) else None,
+              'item_count': len(items),
+              'catalog_sha256': hashlib.sha256(canonical_bytes).hexdigest(),
+              'prefix_counts': dict(sorted(prefixes.items())),
+              'families': families,
+              'human_example_matches': [
+                  item
+                  for item in items
+                  if any(keyword in item['name'] for keyword in human_keywords)
+              ],
+              'semantics': 'CATALOG_LAYER_PROBE_ONLY',
+              'production_universe_decision': 'NOT_MADE_BY_THIS_PROBE',
               'human_attention_authority': 'NONE',
               'investment_authority': 'NONE',
           }
-          Path('hithink-sector-acquisition-budget.json').write_text(
+          Path('hithink-industry-catalog-layers.json').write_text(
               json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + '\n',
               encoding='utf-8',
           )
 
-          print(f"INDUSTRY_COUNT={len(industries)}")
-          print(f"SNAPSHOT_REQUESTED={len(snapshot_codes)}")
-          print(f"SNAPSHOT_RETURNED={len(snapshot_by_code)}")
-          print(f"SNAPSHOT_TIMESTAMP={result['snapshot']['data_timestamp']}")
-          print(f"MATCHED_HUMAN_EXAMPLES={result['catalog']['matched_human_examples']}")
-          for item in history_summaries:
-              print(f"HISTORY={item}")
-          print(f"REQUEST_COUNT={len(records)}")
-          for record in records:
-              print(f"REQUEST={record}")
-          print('SEMANTICS=ACQUISITION_BUDGET_PROBE_ONLY')
+          print(f"ITEM_COUNT={len(items)}")
+          print(f"PREFIX_COUNTS={dict(sorted(prefixes.items()))}")
+          print(f"CATALOG_SHA256={result['catalog_sha256']}")
+          for prefix, family in families.items():
+              print(f"FAMILY={prefix} COUNT={len(family)}")
+              for item in family:
+                  print(f"  {item['thscode']} {item['name']}")
+          print(f"HUMAN_EXAMPLE_MATCHES={result['human_example_matches']}")
+          print('SEMANTICS=CATALOG_LAYER_PROBE_ONLY')
           print('HUMAN_ATTENTION_AUTHORITY=NONE')
           print('INVESTMENT_AUTHORITY=NONE')
           PY
-      - name: Publish probe summary
+      - name: Publish catalog-layer summary
         if: always()
         shell: bash
         run: |
           {
-            echo '## HiThink Sector Radar acquisition-budget probe'
+            echo '## HiThink industry catalog layer probe'
             echo
-            if [ -f hithink-sector-acquisition-budget.json ]; then
+            if [ -f hithink-industry-catalog-layers.json ]; then
               python - <<'PY'
           import json
           from pathlib import Path
 
           data = json.loads(
-              Path('hithink-sector-acquisition-budget.json').read_text(encoding='utf-8')
+              Path('hithink-industry-catalog-layers.json').read_text(encoding='utf-8')
           )
-          print(f"Industry catalog: **{data['catalog']['qualified_industry_count']}** identities")
-          print(
-              f"Batch snapshot: requested **{data['snapshot']['requested_code_count']}**, "
-              f"returned **{data['snapshot']['returned_code_count']}**, "
-              f"timestamp = `{data['snapshot']['data_timestamp']}`"
-          )
+          print(f"Catalog identities: **{data['item_count']}**")
+          print(f"Prefix counts: `{data['prefix_counts']}`")
+          print(f"Catalog hash: `{data['catalog_sha256']}`")
           print()
-          print('### Human-example catalog matches')
-          for item in data['catalog']['matched_human_examples']:
+          print('Human-example matches:')
+          for item in data['human_example_matches']:
               print(f"- {item['name']} `{item['thscode']}`")
           print()
-          print('### History coherence samples')
-          for item in data['history_targets']:
-              print(
-                  f"- {item['name']} `{item['thscode']}`: "
-                  f"qualified={item.get('qualified')} / "
-                  f"latest={item.get('latest_session')} / "
-                  f"snapshot_matches={item.get('snapshot_matches_latest_close')}"
-              )
-          print()
-          print('### Request budget')
-          for item in data['requests']:
-              print(
-                  f"- `{item['label']}`: transport={item.get('transport_success')} / "
-                  f"business={item.get('business_code')} / "
-                  f"items={item.get('item_count')} / "
-                  f"{item['duration_seconds']}s"
-              )
-          print()
-          print('Probe only; no provider, detector, alert, Research route or authority decision is made here.')
+          print('Catalog probe only; no production universe or alert decision is made here.')
           PY
             else
-              echo 'Probe failed before a result artifact was written.'
+              echo 'Catalog-layer probe failed before a result was written.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload probe artifact
+      - name: Upload catalog-layer artifact
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: hithink-sector-acquisition-budget-2026-09-04
-          path: hithink-sector-acquisition-budget.json
+          name: hithink-industry-catalog-layers-2026-09-04
+          path: hithink-industry-catalog-layers.json
           if-no-files-found: warn
           retention-days: 14
