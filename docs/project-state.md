@@ -180,9 +180,7 @@ No new score, route, wake gate, schema, recommendation, or investment authority 
 
 ### Disclosure scan / receipt-memory health
 
-The latest complete scheduled disclosure artifact reviewed at this checkpoint is workflow run `33757562673` from 2026-09-03. It contained exactly nine packet identities: eight CATL batches and one Sanhua batch.
-
-Every packet was resolved through existing Research Funnel semantics:
+The 2026-09-03 scheduled disclosure artifact (`33757562673`) contained exactly nine packet identities: eight CATL batches and one Sanhua batch. Existing Research Funnel semantics resolved them as:
 
 ```text
 DROP_FOR_NOW = 5
@@ -190,9 +188,22 @@ WAIT_FOR_TRIGGER = 4
 DEEPEN_REQUIRED = 0
 ```
 
-The 2026-09-03 CATL repurchase-progress batch remains the same capital-allocation question and waits for actual execution / owner-cash evidence. The Sanhua H-share next-day securities return does not change a frozen Research reopen bucket and was dropped.
+PR #147 recovered those nine exact quiet identities into the default-branch best-effort Actions cache. PR #148 removed the one-time recovery workflow and script after the cache save and audit artifact succeeded.
 
-PR #147 recovered the exact quiet receipt identities into the default-branch best-effort Actions cache. PR #148 removed the one-time recovery workflow and script after the cache save and audit artifact succeeded.
+The 2026-09-04 current scan then restored that cache and correctly suppressed all nine previously reviewed identities. It surfaced exactly two genuinely new packet identities:
+
+- China Shenhua `1225546775 + 1225546779` — meeting notice/materials repeat the interim-dividend proposal already disclosed before the frozen Research cutoff and add only voting procedure/timing. Disposition: **DROP_FOR_NOW**.
+- GigaDevice `1225546905` — visual review of the H-share next-day securities return confirms a 2026-09-03 A-share repurchase of 135,000 shares (0.02%) at RMB380.27–385.00 for RMB51,852,403, intended for cancellation; issued A shares remained 670,718,327. This is real post-H-share capital-allocation evidence, but not enough to establish a material per-share owner-economics change. Disposition: **WAIT_FOR_TRIGGER**.
+
+Current new-packet result:
+
+```text
+DROP_FOR_NOW = 1
+WAIT_FOR_TRIGGER = 1
+DEEPEN_REQUIRED = 0
+```
+
+PR #153 validated the exact packet/content hashes, replayed both assessments through the existing Research Funnel, asserted that no Human Research attention was earned, and saved both quiet receipts to default-branch cache. PR #154 then removed the temporary recovery workflow and helper script; no recovery-only product code remains.
 
 Receipt memory remains only a Harness attention optimization:
 
@@ -203,7 +214,7 @@ receipt != Research truth
 receipt != Human wake
 ```
 
-No current disclosure packet earned Human Research attention.
+No current disclosure packet earned Human Research attention. The scheduled `research_attention_handoffs` list remains empty.
 
 ### HiThink live acquisition health
 
@@ -254,6 +265,7 @@ Do not rebuild another broad dashboard. Migration of existing Web scanners into 
 - Probability: partial / ordinal; full cardinal distribution not established.
 - Human Decision: **CONDITIONAL BUY** — ~CNY350 re-underwrite; CNY320–335 first-entry band only if thesis survives.
 - Action: **NOT EXECUTED**.
+- 2026-09-03 repurchase execution: 135,000 A shares / 0.02% / RMB51.85m / intended cancellation; Research Funnel disposition **WAIT_FOR_TRIGGER**. This does not reopen Full Research or change the frozen Human Decision.
 - Pointer: `docs/decisions/603986-gigadevice-human-decision-2026-09-03.md`.
 
 ### Sanhua / 002050.SZ
@@ -520,7 +532,7 @@ Also:
 ## 10. Recent state delta
 
 - **NEW — PR #149 merged.** HiThink trading-calendar acquisition is reused only within the same process / credential / Shanghai date / timeout; histories remain independent, and endpoint-specific failures remain visible without retry, fallback or stale-price substitution.
-- **NEW — exact 2026-09-03 disclosure review closed with 5 DROP / 4 WAIT / 0 DEEPEN.** PR #147 recovered the nine exact quiet identities into default-branch receipt memory; PR #148 removed all one-time recovery code after successful cache save.
+- **NEW — 2026-09-04 current disclosure review closed with 1 DROP / 1 WAIT / 0 DEEPEN after the recovered cache suppressed all nine previously reviewed identities.** China Shenhua meeting materials were dropped as repeated voting/timing disclosure; GigaDevice’s 135,000-share / 0.02% repurchase execution remains WAIT_FOR_TRIGGER. PR #153 saved both exact quiet receipts to default-branch cache; PR #154 removed all temporary recovery code.
 - **NEW — post-#149 live intraday probe reached calendar and history acquisition, then correctly rejected an unfinished current-session row before Research / Odds / Human surface.** A normal post-close run remains the valid production proof.
 - **NEW — PR #144 merged.** The weekday job now runs the ticker-centric Attention Inbox composition root with separate explicit Decision and Research-attention lists; the current Research-attention list is empty, and resolved handoffs do not regain eligibility from file presence.
 - **NEW — PR #139 accepted / merged.** Human front surface is ticker-first, why-worth-looking-first, drill-down oriented.
