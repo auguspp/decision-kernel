@@ -104,7 +104,11 @@ jobs:
 
           book_path = Path('docs/live-decision-book.md')
           book = book_path.read_text(encoding='utf-8')
-          book = book.replace('Updated: **2026-09-03**', 'Updated: **2026-09-04**', 1)
+          old_date = 'Updated: **2026-09-03**  ' + chr(10)
+          new_date = 'Updated: **2026-09-04**' + chr(10)
+          if old_date not in book:
+              raise SystemExit('live-book date marker not found')
+          book = book.replace(old_date, new_date, 1)
 
           catl_row = (
               '| **宁德时代 / 300750.SZ** | Global scaled electrochemical manufacturing franchise; share leadership and demand runway are established, but segment-margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven. | **NO HUMAN INVESTMENT DECISION**; the old generic `ACCEPTABLE_ODDS` wake is de-qualified. | **NONE** | Evidence-driven only: adjusted profit / OCF, EV and ESS gross margins, inventory / receivables / supplier finance, capex / utilisation / overseas ROIC, H-share proceeds, buyback cancellation and new-business owner economics. |\n'
