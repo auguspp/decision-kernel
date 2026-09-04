@@ -1,0 +1,22 @@
+name: export-project-state-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/export-project-state-2026-09-04.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v7
+      - name: Upload exact current state file
+        uses: actions/upload-artifact@v7
+        with:
+          name: project-state-source
+          path: docs/project-state.md
+          retention-days: 1
