@@ -54,15 +54,21 @@ jobs:
           if len(paths) != 6:
               raise SystemExit(f'expected 6 shadow observations, got {len(paths)}: {paths}')
           payloads = [json.loads(path.read_text(encoding='utf-8')) for path in paths]
-          tickers = {payload['research_identity']['ticker'] for payload in payloads}
+          tickers = {payload['security']['ticker'] for payload in payloads}
           expected = {'600519', '300750', '600036', '601088', '603986', '002050'}
           if tickers != expected:
               raise SystemExit(f'unexpected shadow ticker set: {sorted(tickers)}')
           if '688277' in tickers:
               raise SystemExit('Tinavi non-package artifact leaked into shadow batch')
           for payload in payloads:
-              if payload['classification'] != 'SHADOW_OBSERVATION_ONLY':
-                  raise SystemExit('shadow classification boundary missing')
+              if payload['radar_semantics'] != 'SHADOW_OBSERVATION_ONLY':
+                  raise SystemExit('shadow semantics boundary missing')
+              if payload['human_attention_authority'] != 'NONE':
+                  raise SystemExit('shadow gained Human attention authority')
+              if payload['investment_authority'] != 'NONE':
+                  raise SystemExit('shadow gained investment authority')
+              if payload['market_contract']['response_session'] != '2026-09-04':
+                  raise SystemExit('shadow did not reach the completed 2026-09-04 session')
           PY
       - name: Publish proof summary
         if: always()
