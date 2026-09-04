@@ -1,0 +1,72 @@
+name: sector-radar-full-current-hierarchy-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sector-radar-full-current-hierarchy-2026-09-04.yml"
+      - "experiments/sector_radar_full_current_hierarchy_2026_09_04.py"
+      - "tests/test_sector_radar_full_current_hierarchy_experiment.py"
+
+permissions:
+  contents: read
+
+jobs:
+  hierarchy-proof:
+    if: github.event.pull_request.head.ref == 'experiment/sector-radar-full-current-hierarchy-2026-09-04'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      SECTOR_RADAR_HIERARCHY_PACE_SECONDS: "2.5"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Verify hierarchy experiment helpers
+        run: python -m pytest -q tests/test_sector_radar_full_current_hierarchy_experiment.py
+      - name: Map full current 881-to-884 hierarchy
+        shell: bash
+        run: |
+          set -o pipefail
+          python experiments/sector_radar_full_current_hierarchy_2026_09_04.py \
+            2>&1 | tee sector-radar-full-current-hierarchy-status.txt
+      - name: Publish hierarchy summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Sector Discovery Radar — full current hierarchy proof'
+            echo
+            if [ -f sector-radar-full-current-hierarchy-summary.md ]; then
+              cat sector-radar-full-current-hierarchy-summary.md
+            elif [ -f sector-radar-full-current-hierarchy-error.json ]; then
+              echo 'Full current hierarchy proof failed closed. No completed result was published.'
+              echo
+              echo '```json'
+              cat sector-radar-full-current-hierarchy-error.json
+              echo '```'
+              if [ -d sector-radar-full-current-hierarchy-inputs ]; then
+                echo
+                echo "Qualified membership checkpoints: $(find sector-radar-full-current-hierarchy-inputs -type f -name '*.json' | wc -l)"
+              fi
+            else
+              echo 'The proof ended before a result or explicit error artifact was written.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload full current hierarchy evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-full-current-hierarchy-2026-09-04
+          path: |
+            sector-radar-full-current-hierarchy.json
+            sector-radar-full-current-hierarchy-summary.md
+            sector-radar-full-current-hierarchy-progress.jsonl
+            sector-radar-full-current-hierarchy-error.json
+            sector-radar-full-current-hierarchy-status.txt
+            sector-radar-full-current-hierarchy-inputs/
+          if-no-files-found: warn
+          retention-days: 14
