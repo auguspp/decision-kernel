@@ -22,11 +22,54 @@ from ..market import ObservedMarket
 
 HITHINK_API_KEY_ENV = "HITHINK_FINANCE_API_KEY"
 HITHINK_BASE_URL = "https://fuyao.aicubes.cn"
+HITHINK_CALENDAR_PATH = "/api/a-share/calendar/trading-days"
+HITHINK_HISTORY_PATH = "/api/a-share/prices/historical"
 _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
 class HithinkRuntimeError(RuntimeError):
     """The outer HiThink runtime could not produce the required qualified market input."""
+
+
+def build_hithink_batch_request_json(
+    *,
+    api_key: str | None,
+    timeout_seconds: float = 10.0,
+) -> _RequestJSON:
+    """Build one process-local requester for a bounded acquisition batch.
+
+    The exact trading-calendar response is reused for identical calendar requests
+    within the batch. History requests remain independent and provider-qualified.
+    This helper performs no retry, fallback, persistence, stale-data substitution,
+    Research routing, Human wake, or investment-authority work.
+    """
+
+    if not api_key:
+        raise HithinkRuntimeError("HiThink credentials are required for live market data")
+
+    calendar_cache: dict[
+        tuple[tuple[str, str], ...], Mapping[str, Any]
+    ] = {}
+
+    def request_json(
+        path: str,
+        params: Mapping[str, str],
+    ) -> Mapping[str, Any]:
+        calendar_key = tuple(sorted(params.items()))
+        if path == HITHINK_CALENDAR_PATH and calendar_key in calendar_cache:
+            return calendar_cache[calendar_key]
+
+        payload = _request_hithink_json(
+            api_key=api_key,
+            path=path,
+            params=params,
+            timeout_seconds=timeout_seconds,
+        )
+        if path == HITHINK_CALENDAR_PATH:
+            calendar_cache[calendar_key] = payload
+        return payload
+
+    return request_json
 
 
 def fetch_hithink_completed_price_history(
@@ -59,7 +102,7 @@ def fetch_hithink_completed_price_history(
         )
 
     calendar = normalize_hithink_calendar(
-        request_json("/api/a-share/calendar/trading-days", {})
+        request_json(HITHINK_CALENDAR_PATH, {})
     )
     expected_latest = latest_completed_a_share_session(
         calendar,
@@ -72,7 +115,7 @@ def fetch_hithink_completed_price_history(
     )
     start_at = end_at - timedelta(days=45)
     envelope = request_json(
-        "/api/a-share/prices/historical",
+        HITHINK_HISTORY_PATH,
         {
             "thscode": thscode,
             "interval": "1d",
@@ -140,12 +183,15 @@ def _request_hithink_json(
         with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
             payload = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
-        raise HithinkRuntimeError(
-            f"HiThink HTTP request failed with status {exc.code}"
-        ) from exc
+        message = f"HiThink HTTP request failed for {path} with status {exc.code}"
+        retry_after = exc.headers.get("Retry-After") if exc.headers is not None else None
+        if retry_after:
+            safe_retry_after = " ".join(retry_after.split())[:64]
+            message += f"; Retry-After={safe_retry_after}"
+        raise HithinkRuntimeError(message) from exc
     except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise HithinkRuntimeError(
-            "HiThink request or response decoding failed"
+            f"HiThink request or response decoding failed for {path}"
         ) from exc
     if not isinstance(payload, Mapping):
         raise HithinkRuntimeError("HiThink response is not a JSON object")
