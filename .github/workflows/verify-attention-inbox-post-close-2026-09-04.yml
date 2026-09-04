@@ -1,0 +1,105 @@
+name: verify-attention-inbox-post-close-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/verify-attention-inbox-post-close-2026-09-04.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e .
+      - name: Check HiThink secret
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
+            echo '::error::Missing repository secret HITHINK_FINANCE_API_KEY'
+            exit 1
+          fi
+      - name: Build exact post-close Attention Inbox composition
+        shell: bash
+        run: |
+          set -euo pipefail
+          decision_packages=(
+            dogfood/600519-moutai.json
+            dogfood/300750-catl.json
+            dogfood/601088-shenhua.json
+            research_cases/603986-gigadevice-deep-research-v2.json
+            research_cases/002050-sanhua-deep-research-v1.json
+          )
+          research_attention_handoffs=(
+          )
+          research_attention_args=()
+          for handoff in "${research_attention_handoffs[@]}"; do
+            research_attention_args+=(--research-attention "$handoff")
+          done
+          python -m decision_kernel.runtime.attention_inbox \
+            "${decision_packages[@]}" \
+            "${research_attention_args[@]}" \
+            2>&1 | tee attention-inbox-status.txt
+      - name: Validate Human-facing boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s decision-inbox/summary.md
+          test -s decision-inbox/index.html
+          grep -q '^# Attention Inbox' decision-inbox/summary.md
+          grep -q 'Investment Authority = NONE' decision-inbox/summary.md
+          if grep -Eq '天智航|688277|尚未建立 frozen Research|DEEPEN_REQUIRED' decision-inbox/summary.md; then
+            echo '::error::Resolved or non-current Research attention leaked into the Human surface'
+            exit 1
+          fi
+      - name: Capture Surprise Radar market-history shadow
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m decision_kernel.runtime.market_history_shadow \
+            dogfood/*.json \
+            research_cases/603986-gigadevice-deep-research-v2.json \
+            research_cases/002050-sanhua-deep-research-v1.json \
+            --output-dir market-history-shadow \
+            2>&1 | tee market-history-shadow-status.txt
+      - name: Publish exact Human summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Post-close Attention Inbox proof'
+            echo
+            echo 'This is a one-time same-repository operations probe using the exact current curated production composition.'
+            echo
+            if [ -f decision-inbox/summary.md ]; then
+              cat decision-inbox/summary.md
+            else
+              echo 'No Human Inbox was produced. Inspect the failed acquisition step.'
+            fi
+            echo
+            echo 'No product code from this probe is intended for merge.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload exact proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: attention-inbox-post-close-proof
+          path: |
+            attention-inbox-status.txt
+            decision-inbox/
+            market-history-shadow-status.txt
+            market-history-shadow/
+          if-no-files-found: warn
+          retention-days: 7
