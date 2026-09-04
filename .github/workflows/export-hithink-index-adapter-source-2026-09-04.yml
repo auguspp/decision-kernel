@@ -1,0 +1,24 @@
+name: export-hithink-index-adapter-source-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/export-hithink-index-adapter-source-2026-09-04.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    if: github.event.pull_request.head.ref == 'experiment/export-hithink-index-adapter-source-2026-09-04'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Upload exact source files
+        uses: actions/upload-artifact@v7
+        with:
+          name: hithink-index-adapter-source-2026-09-04
+          path: |
+            src/decision_kernel/adapters/hithink_index.py
+            tests/test_hithink_index_adapter.py
+          retention-days: 2
