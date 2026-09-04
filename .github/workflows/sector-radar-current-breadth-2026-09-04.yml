@@ -1,0 +1,67 @@
+name: sector-radar-current-breadth-2026-09-04
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/sector-radar-current-breadth-2026-09-04.yml"
+      - "experiments/sector_radar_current_breadth_2026_09_04.py"
+      - "tests/test_sector_radar_current_breadth_experiment.py"
+
+permissions:
+  contents: read
+
+jobs:
+  breadth-proof:
+    if: github.event.pull_request.head.ref == 'experiment/sector-radar-current-breadth-2026-09-04'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      SECTOR_RADAR_BREADTH_REQUEST_PACE_SECONDS: "2"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Verify breadth experiment helpers
+        run: python -m pytest -q tests/test_sector_radar_current_breadth_experiment.py
+      - name: Capture bounded current constituent breadth
+        shell: bash
+        run: |
+          set -o pipefail
+          python experiments/sector_radar_current_breadth_2026_09_04.py \
+            2>&1 | tee sector-radar-current-breadth-status.txt
+      - name: Publish breadth summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Sector Discovery Radar — current breadth proof'
+            echo
+            if [ -f sector-radar-current-breadth-summary.md ]; then
+              cat sector-radar-current-breadth-summary.md
+            elif [ -f sector-radar-current-breadth-error.json ]; then
+              echo 'Current breadth proof failed closed. No completed result was published.'
+              echo
+              echo '```json'
+              cat sector-radar-current-breadth-error.json
+              echo '```'
+            else
+              echo 'The proof ended before a result or explicit error artifact was written.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload current breadth evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-current-breadth-2026-09-04
+          path: |
+            sector-radar-current-breadth.json
+            sector-radar-current-breadth-summary.md
+            sector-radar-current-breadth-progress.jsonl
+            sector-radar-current-breadth-error.json
+            sector-radar-current-breadth-status.txt
+          if-no-files-found: warn
+          retention-days: 14
