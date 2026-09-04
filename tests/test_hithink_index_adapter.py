@@ -231,7 +231,7 @@ def test_snapshot_fails_closed_on_missing_extra_duplicate_and_bad_total() -> Non
 
 def test_snapshot_rejects_invalid_market_values_and_ticker_mismatch() -> None:
     bad_range = _snapshot_row("000300.SH", last="4548.05", previous="4530")
-    bad_range["high_price"] = "4400"
+    bad_range["high_price"] = "4540"
     with pytest.raises(HithinkIndexAdapterError, match="outside daily range"):
         normalize_hithink_index_snapshot(
             _snapshot_envelope([bad_range]),
