@@ -84,6 +84,6 @@ def test_sanhua_v1_is_in_current_inbox_disclosure_and_shadow_universes() -> None
     # history sampling, and official-disclosure acquisition. None of these
     # occurrences creates another investment-authority or Human-wake policy.
     assert workflow.count(path) == 3
-    assert "- name: Build Decision Inbox" in workflow
+    assert "- name: Build Attention Inbox" in workflow
     assert "- name: Capture Surprise Radar market-history shadow" in workflow
     assert "- name: Scan official disclosures and prepare Research handoffs" in workflow
