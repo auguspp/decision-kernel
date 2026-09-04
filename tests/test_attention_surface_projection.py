@@ -117,19 +117,19 @@ def test_attention_surface_is_ticker_first_and_detail_is_collapsed() -> None:
     )
 
     assert "招商银行" in html
-    assert "为什么现在" in html
+    assert "为什么值得看" in html
     assert "Research 已存在" in html
     assert '<summary>深入查看</summary>' in html
-    assert html.index("为什么现在") < html.index("我们相信什么")
+    assert html.index("为什么值得看") < html.index("我们相信什么")
     assert html.index("招商银行") < html.index("宁德时代")
     assert "无需关注（1）" in html
     assert '<summary>为什么安静</summary>' in html
 
     assert "## 招商银行 600036" in markdown
-    assert "**需要你看的原因**" in markdown
+    assert "**为什么值得看**" in markdown
     assert "**当前状态：** Research 已存在" in markdown
     assert "<summary>深入查看</summary>" in markdown
-    assert markdown.index("需要你看的原因") < markdown.index("我们相信什么")
+    assert markdown.index("为什么值得看") < markdown.index("我们相信什么")
 
 
 def test_empty_attention_surface_tells_human_to_close_it() -> None:
