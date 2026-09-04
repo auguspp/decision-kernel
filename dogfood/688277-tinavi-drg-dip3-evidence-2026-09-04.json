@@ -1,6 +1,6 @@
 [
   {
-    "available_at": "2026-09-03T15:59:59+08:00",
+    "available_at": "2026-09-03T23:59:59+08:00",
     "content_hash": "8662e5ac9d6888a07573561b44ff4d5a48d31914c9a72b7079f622f6cbec2485",
     "extracted_structured_values": {
       "dip_robot_groups": [
@@ -21,7 +21,7 @@
     "idempotency_key": "NHSA:2026-09-03:DRG-DIP3-robot-surgery",
     "license_terms_note": "Public official source; only structured facts retained.",
     "permitted_excerpt": null,
-    "published_at": "2026-09-03T15:59:59+08:00",
+    "published_at": "2026-09-03T23:59:59+08:00",
     "raw_storage_ref": null,
     "replayability_level": "PARTIAL",
     "report_period_end": null,
@@ -34,7 +34,7 @@
     "source_type": "OFFICIAL_POLICY"
   },
   {
-    "available_at": "2026-08-26T15:59:59+08:00",
+    "available_at": "2026-08-26T23:59:59+08:00",
     "content_hash": "4303ddaed6f634a909b6a13676070508067cff66b2ab1ceebaa688bc9ca8f42f",
     "extracted_structured_values": {
       "cumulative_surgery_count_lower_bound": 180000,
@@ -52,7 +52,7 @@
     "idempotency_key": "SSE:688277:2026-H1",
     "license_terms_note": "Public listed-company filing; only structured facts retained.",
     "permitted_excerpt": null,
-    "published_at": "2026-08-26T15:59:59+08:00",
+    "published_at": "2026-08-26T23:59:59+08:00",
     "raw_storage_ref": null,
     "replayability_level": "PARTIAL",
     "report_period_end": "2026-06-30",
