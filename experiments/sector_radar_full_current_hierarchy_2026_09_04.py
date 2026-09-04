@@ -314,22 +314,29 @@ def map_granular_to_broad(
 def exact_duplicate_groups(
     memberships: Sequence[SectorMembershipSnapshot],
 ) -> tuple[dict[str, Any], ...]:
-    by_hash: dict[str, list[SectorMembershipSnapshot]] = defaultdict(list)
+    """Group industries by the member set itself, not a sector-scoped hash."""
+
+    by_member_set: dict[tuple[str, ...], list[SectorMembershipSnapshot]] = defaultdict(list)
     for item in memberships:
-        by_hash[item.constituent_set_hash].append(item)
+        member_set = tuple(sorted(member.thscode for member in item.members))
+        by_member_set[member_set].append(item)
     groups = []
-    for constituent_hash, items in by_hash.items():
+    for member_set, items in by_member_set.items():
         if len(items) <= 1:
             continue
         ordered = sorted(items, key=lambda item: item.sector_thscode)
         groups.append(
             {
-                "constituent_set_hash": constituent_hash,
-                "member_count": len(ordered[0].members),
+                "member_set_hash": digest(member_set),
+                "member_count": len(member_set),
+                "members": member_set,
                 "industries": tuple(
                     {
                         "thscode": item.sector_thscode,
                         "name": item.sector_name,
+                        "sector_scoped_constituent_set_hash": (
+                            item.constituent_set_hash
+                        ),
                     }
                     for item in ordered
                 ),
@@ -339,12 +346,11 @@ def exact_duplicate_groups(
         key=lambda item: (
             len(item["industries"]),
             item["member_count"],
-            item["constituent_set_hash"],
+            item["member_set_hash"],
         ),
         reverse=True,
     )
     return tuple(groups)
-
 
 def broad_overlap_controls(
     broad: Sequence[SectorMembershipSnapshot],

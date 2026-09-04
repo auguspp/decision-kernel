@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import sys
 from datetime import datetime
+from decimal import Decimal
 from pathlib import Path
 from types import ModuleType
 from zoneinfo import ZoneInfo
@@ -137,7 +138,7 @@ def test_unmapped_granular_retains_ranked_partial_parents() -> None:
         item["parent_thscode"] for item in row["best_partial_parents"]
     } == {"881101.TI", "881102.TI"}
     assert all(
-        item["child_containment"] == 1 / 3
+        item["child_containment"] == Decimal(1) / Decimal(3)
         for item in row["best_partial_parents"]
     )
 
@@ -196,7 +197,7 @@ def test_broad_overlap_control_is_current_only_and_ranked() -> None:
     rows = module.broad_overlap_controls(broad)
 
     assert rows[0]["intersection_count"] == 2
-    assert rows[0]["jaccard"] == 1 / 2
+    assert rows[0]["jaccard"] == Decimal(1) / Decimal(2)
     assert {
         rows[0]["left_thscode"],
         rows[0]["right_thscode"],
