@@ -3,7 +3,7 @@
 Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW KERNEL SCHEMA**  
 Updated: **2026-09-05**  
 Repository: `auguspp/decision-kernel`  
-Verified clean baseline before this state-only sync: `e3d8611b40d7b59694d1d86a4d85c8342de1cd39`
+Verified implementation baseline before this state-only sync: `d0c18690f406d2a2d90b32048ede37f643669a93`
 
 ## Operating rule
 
@@ -24,9 +24,11 @@ Do not trust a chat summary over repository state, frozen lineage, CI results or
 TRUSTWORTHY COGNITION CORE = STABLE / DO NOT EXPAND WITHOUT REAL FAILURE
 ATTENTION ACQUISITION = ACTIVE HIGHEST PRIORITY
 HUMAN ATTENTION SURFACE = ACCEPTED / MERGED / ACTIVE
-SECTOR DISCOVERY RADAR = SHADOW CONTRACTS + DURABLE BOOTSTRAP READY
-SECTOR DISCOVERY RADAR DAILY PRODUCER = NOT YET MERGED
-SECTOR DISCOVERY RADAR PROSPECTIVE CORPUS = NOT YET STARTED
+SECTOR RADAR PURE DAILY COMPOSITION ROOT = MERGED
+SECTOR RADAR MANUAL WORKFLOW_DISPATCH PRODUCER = MERGED
+SECTOR RADAR LIVE WORKFLOW PROOF = NOT YET EXECUTED
+SECTOR RADAR SCHEDULE = NOT PRESENT
+SECTOR RADAR PROSPECTIVE CORPUS = NOT YET STARTED
 ODDS / CONSTITUTION REDESIGN = FROZEN PENDING OUTCOME-BACKED EVIDENCE
 ```
 
@@ -34,7 +36,7 @@ Current product objective:
 
 > **后台可以复杂，Human 前门必须稀缺。Human first view should normally show 0–3 genuinely attention-worthy tickers, or explicitly say nothing requires attention.**
 
-Sector Radar is currently a separate market-observation surface. It has no canonical Human-wake authority and must not be inserted into the ticker-centric Attention Inbox before prospective shadow evidence is reviewed.
+Sector Radar remains a separate shadow market-observation surface. The existence of a manual workflow does not create a canonical Human wake, a Research route or investment authority.
 
 ---
 
@@ -104,7 +106,7 @@ COMPOSITE OPPORTUNITY SCORE AS AUTHORITY
 
 ---
 
-## 3. Existing Attention Inbox and disclosure operations
+## 3. Existing Human and disclosure operations
 
 ### Ticker-centric Human front door
 
@@ -115,7 +117,7 @@ PR #139 and PR #140 remain authoritative product behavior:
 - only `HumanResearchSurface.attention_eligible` creates canonical Decision review;
 - quiet researched cases remain collapsed.
 
-PR #144 remains the scheduled composition root. The weekday `decision-inbox` workflow keeps separate explicit lists:
+PR #144 remains the scheduled Attention Inbox composition root. It keeps separate explicit lists:
 
 ```text
 decision_packages
@@ -128,7 +130,7 @@ Current unresolved Research-attention list:
 EMPTY
 ```
 
-The current numerical Decision package set remains curated to Moutai, China Shenhua, GigaDevice and Sanhua. CATL's old generic package is retained for audit, disclosures and non-authoritative observation but no longer creates a canonical numerical Decision wake.
+The current numerical Decision package set remains curated to Moutai, China Shenhua, GigaDevice and Sanhua. CATL's old generic package remains audit and observation input but does not create a canonical numerical Decision wake.
 
 ### Disclosure memory
 
@@ -141,7 +143,7 @@ receipt != Research truth
 receipt != Human wake
 ```
 
-The latest frozen 2026-09-04 new-packet result remains:
+Latest frozen 2026-09-04 new-packet result:
 
 ```text
 DROP_FOR_NOW = 1
@@ -151,18 +153,21 @@ DEEPEN_REQUIRED = 0
 
 No disclosure packet currently earns Human Research attention.
 
-### Current production workflows
+### Current workflow directory
 
-After PR #184 cleanup, default branch contains only:
+Default branch now contains five formal workflows:
 
 ```text
 apply-disclosure-assessment.yml
 ci.yml
 decision-inbox.yml
 live-dogfood.yml
+sector-radar-shadow.yml
 ```
 
-There is **no scheduled Sector Discovery Radar workflow yet**. Do not infer production activation from merged pure contracts, bootstrap data, closed experiment PRs or previous chat wording.
+`sector-radar-shadow.yml` is **manual `workflow_dispatch` only**. It has no `schedule`, is separate from `decision-inbox.yml`, and rejects GitHub job reruns in favour of a fresh dispatch identity.
+
+No successful Sector Radar workflow run or persistent state artifact has yet been produced. Do not infer live activation from the merged workflow file alone.
 
 ---
 
@@ -226,17 +231,17 @@ NEXT NATURAL HINGE = 2026-09-30 FY2026/FQ4 EARNINGS
 - Midea: mature high-ROE global consumer-industrial franchise; no Human decision.
 - Xiamen Tungsten: historical Reference-Frame failure negative control; no current action.
 
-No live-case decision or action changed during the Sector Radar work.
+No live-case decision or action changed during the Sector Radar producer work.
 
 ---
 
-## 5. Radar state
+## 5. Sector Discovery Radar
 
-### 5.1 Sector Discovery Radar — accepted current state
+### 5.1 Accepted discovery design
 
-The Human exposed a real false negative: agriculture, livestock, aquaculture and shipbuilding-related moves had developed for weeks before manual browsing found them. The old Surprise Radar could not discover them because it was limited to already-researched tickers.
+The Human exposed a real false negative: agriculture, livestock, aquaculture and shipbuilding-related moves had developed for weeks before manual browsing found them. Sector Radar addresses cold-start market discovery that the ticker-scoped Surprise Radar cannot perform.
 
-PR #163 selected a native HiThink-only Harness design after prior-art and repository review:
+Selected native HiThink-only observation family:
 
 ```text
 5 / 20 / 60-session relative strength
@@ -249,7 +254,6 @@ PR #163 selected a native HiThink-only Harness design after prior-art and reposi
 Rejected for v0:
 
 ```text
-copying an external platform
 composite opportunity score
 LLM ranking authority
 RRG or PELT as detector
@@ -259,48 +263,34 @@ third canonical Human wake
 Recommendation / Action / investment authority
 ```
 
-PR #164 added the pure frozen-PIT calculation contract in `runtime/sector_radar.py`.
+### 5.2 Frozen replay evidence
 
-#### 881 broad-universe replay
+#### 881 broad layer
 
-PR #169 froze the experiment result:
+The 90-member `881*.TI` replay demonstrated early-enough agriculture and livestock discovery and trend-age visibility, but broad-only shipbuilding coverage failed. `881166.TI 军工装备` must not be relabelled as shipbuilding.
 
-```text
-90 exact 881*.TI broad industries
-+ CSI 300 benchmark
-+ 104 frozen-PIT replay dates
+#### 884 granular layer
 
-EARLY DISCOVERY FOR AGRICULTURE / LIVESTOCK = DEMONSTRATED
-TREND-AGE VISIBILITY = DEMONSTRATED
-BROAD-ONLY SHIPBUILDING COVERAGE = FAILED
-PRODUCTION THRESHOLD = NOT EARNED
-```
-
-The broad parent `881166.TI 军工装备` diluted the narrower `884183.TI 航海装备` move. It must not be relabelled as “shipbuilding.”
-
-#### Separate 884 granular replay
-
-PR #171 froze a separate 230-member `884*.TI` cross-sectional replay:
+The separate 230-member `884*.TI` replay recovered narrow themes including marine equipment and water-product distinctions, but generated materially more noise and truncation.
 
 ```text
-NARROW-THEME COVERAGE = IMPROVED
-884 AS PRIMARY HUMAN-FACING UNIVERSE = REJECTED
-881 + 884 MIXED RANKING = PROHIBITED
-884 = SEPARATE BOUNDED / SECONDARY CHALLENGER
+881 = primary broad comparison layer
+884 = separate bounded granular challenger / decomposition layer
+881 + 884 mixed ranking = PROHIBITED
 ```
 
-The granular universe generated substantially more events and truncation than 881. It is useful for decomposition and narrow-theme recovery, not as an unfiltered replacement.
+#### Current breadth
 
-#### Current breadth proof
+Current constituent breadth is accepted as a finalist qualifier:
 
-PR #173 established current constituent breadth as a useful finalist qualifier:
-
-- advancers / decliners / unchanged;
-- equal-weight mean and median return;
-- current denominator and missing rows;
-- turnover and positive-return concentration;
-- leaders / laggards;
-- current membership overlap and containment.
+```text
+advancers / decliners / unchanged
+priced denominator and coverage
+mean and median return
+turnover and positive-return concentration
+leaders / laggards
+current membership hash and capture clock
+```
 
 Boundaries:
 
@@ -310,44 +300,11 @@ HISTORICAL BREADTH = NOT ESTABLISHED / NOT CLAIMED
 EQUAL-WEIGHT PROXY != INDEX CONTRIBUTION
 ```
 
-Tiny groups such as two- or three-stock water-product industries must always expose denominator and concentration.
+Tiny groups must expose denominator and concentration.
 
-#### Provider identity contract
+### 5.3 Hierarchy and provider contracts
 
-The live proof showed standard Shanghai indices may return provider ticker aliases:
-
-```text
-000001.SH -> 1A0001
-000300.SH -> 1B0300
-```
-
-PR #175 accepts valid standard-index ticker aliases while preserving exact requested/returned `thscode` as canonical identity. Formal `.TI` industries still require ticker metadata to match their six-digit code.
-
-#### Pure breadth and hierarchical composition
-
-PR #176 added `runtime/sector_breadth.py`, a provider-agnostic, content-hashed current-breadth contract.
-
-PR #177 added `runtime/sector_radar_shadow.py`:
-
-- 881 and 884 remain separate homogeneous universes;
-- only false-to-true state entries are emitted;
-- unchanged strong sectors remain quiet;
-- parent/child and sibling candidates may be grouped only with exact same-session membership evidence;
-- full auditable groups are retained while the shadow display is capped at three;
-- no canonical Attention Inbox insertion.
-
-Current replay challengers remain descriptive, not promoted detector law:
-
-```text
-PERSISTENT TOP-DECILE ENTRY
-ACCELERATING ENTRY
-```
-
-Do not retune or promote them before prospective evidence.
-
-#### Current 881→884 hierarchy and parent hints
-
-PR #179 froze the full current hierarchy:
+The frozen current hierarchy contains:
 
 ```text
 broad identities = 90
@@ -363,34 +320,24 @@ Committed lookup:
 radar_inputs/sector-parent-hints-2026-09-05.json
 ```
 
-This is a **current-PIT routing hint, not permanent taxonomy**.
+It is a current-PIT routing hint, not permanent taxonomy. Every surfaced 884 candidate must revalidate the current catalog and exact child containment inside its hinted 881 parent. There is no daily 320-membership fan-out.
 
-PR #180 added candidate-time validation. Before grouping a surfaced 884 child:
-
-```text
-validate current catalog identity
-→ load the exact frozen hint
-→ fetch current child and hinted-parent memberships
-→ revalidate full containment
-→ group only if containment still holds
-```
-
-Do not perform a daily 320-membership fan-out. Catalog or containment drift must remain visible and block automatic grouping.
+Standard Shanghai index provider aliases remain accepted only under the exact requested/returned `thscode` identity contract. A-share constituent and stock snapshot identities require `^\d{6}\.(SH|SZ|BJ)$`.
 
 #### Rolling state and durable bootstrap
 
-PR #181 added `runtime/sector_radar_state.py`:
+The rolling state contract provides:
 
 - exactly 127 completed sessions;
-- benchmark + exact 90/230 identities;
+- benchmark plus exact 90/230 identities;
 - deterministic content hash;
 - exact previous/current replay;
-- next-session-only append;
-- every provider `prev_price` must match cached latest close;
-- same-session identical rerun is idempotent;
-- missed sessions, revisions, catalog drift or identity drift fail closed.
+- one-next-session append;
+- every provider `prev_price` matching the cached latest close;
+- same-session exact idempotence;
+- fail-closed revisions, catalog drift, identity drift and missed sessions.
 
-PR #182 committed the durable bootstrap:
+Committed bootstrap files:
 
 ```text
 radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz
@@ -404,7 +351,7 @@ Canonical bootstrap identity source:
 radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json
 ```
 
-That manifest is the sole canonical source for the bootstrap state hash, byte sizes and hashes, formula, session window, universe shape and source lineage. This mutable index repeats only the compact operational identity below:
+That manifest is the sole canonical source for the bootstrap state hash, byte sizes and hashes, formula, session window, universe shape and source lineage. This mutable index repeats only the compact operational identity:
 
 ```text
 latest completed session = 2026-09-04
@@ -421,116 +368,176 @@ It is only an initial state. It cannot bridge a missed completed session.
 
 #### HiThink sector-breadth acquisition
 
-PR #183 added strict current-membership and paginated all-A-share snapshot acquisition:
+Merged acquisition contracts provide:
 
 - exact `.TI` membership request;
-- deterministic full-market pagination;
-- every page must match the independently qualified completed session;
+- qualified complete index snapshot;
+- normalized A-share trading calendar;
+- deterministic paginated all-A-share snapshot;
+- every page matching the independently qualified completed session;
 - stable declared total and unique identities;
-- unpriced rows remain explicit;
+- explicit unpriced rows;
 - no fallback or stale substitution.
 
-Its first post-merge main run exposed one omitted fail-closed check: a fake `ABCDEF.XY` row passed because only ticker-prefix equality was checked. PR #184 repaired this by requiring `^\d{6}\.(SH|SZ|BJ)$`, retained the regression and removed the accidentally retained one-time repair workflow.
+### 5.4 Pure prospective composition root — merged in PR #187
 
-Verified baseline after PR #184:
+`runtime/sector_radar_daily.py` now composes one daily run in two pure phases:
 
 ```text
-main = e3d8611b40d7b59694d1d86a4d85c8342de1cd39
-kernel-tests run = 33930589341
-result = 342 passed
-one-time repair workflow on main = ABSENT
+market state + current catalog + qualified index snapshot
+→ append or exact same-session no-op
+→ reconstruct previous/current 881 and 884 snapshots
+→ calculate false→true separately
+→ create exact enrichment plan
+
+planned memberships + one same-session all-A snapshot
+→ candidate-time parent revalidation
+→ breadth for every candidate
+→ hierarchical composition
+→ complete artifact
+→ 0–3 shadow projection
 ```
 
-### 5.2 What is not built yet
-
-Despite the merged contracts and bootstrap:
+The acquisition safety cap is:
 
 ```text
-DAILY SECTOR RADAR PRODUCER = NOT MERGED
-SCHEDULED SECTOR RADAR WORKFLOW = NOT PRESENT
-PERSISTED FUTURE LIVE STATE = NOT YET CREATED
+32 distinct membership requests per run
+```
+
+It is an operations guard only. If exceeded, the full candidate/request plan remains auditable and finalization fails; the system never silently enriches only the top three.
+
+`runtime/sector_radar_events.py` provides a content-hashed append-only candidate event ledger:
+
+```text
+previous/current market state = sole false→true authority
+candidate event ledger = immutable audit / idempotence / later outcome anchor only
+signal-transition authority = NONE
+```
+
+### 5.5 Manual prospective producer — merged in PR #188
+
+`runtime/sector_radar_producer.py`, `runtime/sector_radar_persistence.py` and `.github/workflows/sector-radar-shadow.yml` now provide a manual operational shell.
+
+Persistence discipline:
+
+```text
+newest prior successful workflow state artifact = restore authority
+Actions cache = byte-identical acceleration copy only
+cache/artifact disagreement = fail closed
+latest artifact missing or expired = explicit qualified recovery required
+older artifact fallback = prohibited
+committed bootstrap = first successful run only
+artifact retention = 90 days
+automatic long-term checkpoint = not implemented
+```
+
+Completed-session discipline:
+
+```text
+latest completed == cached session
+→ exact validation only
+→ no membership fetch
+→ no retrospective event append
+
+exactly one completed session follows cached state
+→ require direct calendar continuity
+→ append exactly once
+→ prospective composition
+
+more than one completed session follows cached state
+→ fail closed
+→ no bridge
+```
+
+Workflow output remains a separate GitHub Summary and audit artifact. The workflow has no schedule and no canonical Inbox insertion.
+
+### 5.6 What still has not happened
+
+Despite the merged code and manual workflow:
+
+```text
+SUCCESSFUL SECTOR RADAR WORKFLOW RUN = NONE
+PERSISTENT LIVE STATE ARTIFACT = NONE
+PERSISTENT LIVE CACHE = NONE
+SAME-SESSION PROVIDER VALIDATION PROOF = NOT EXECUTED
+2026-09-07 DIRECT APPEND PROOF = NOT EXECUTED
 PROSPECTIVE SHADOW CANDIDATE CORPUS = EMPTY
-T+5 / T+20 PROSPECTIVE EVALUATION = NOT STARTED
+OBJECTIVE T+5 / T+20 EVALUATION = NOT STARTED
+HUMAN REVIEW ANNOTATION = NOT STARTED
+SCHEDULED SECTOR RADAR WORKFLOW = NOT PRESENT
 CANONICAL ATTENTION INBOX INSERTION = NOT AUTHORIZED
 ```
 
-Closed experiment PRs and their artifacts are evidence lineage, not product runtime.
-
-### 5.3 Existing Surprise Radar
-
-The old ticker-scoped Surprise Radar remains a separate product for already-researched cases.
-
-Accepted reviewed baseline remains:
-
-```text
-eligible post-Research daily observations = 10
-securities = 6
-largest absolute eligible daily move = 2.74% / CATL / 2026-09-02
-qualified anomaly label = NOT YET EARNED
-detector = NOT PROMOTED
-```
-
-Do not turn 2.74% into a threshold.
-
-### 5.4 Commitment Radar
-
-Commitment Radar remains an attention allocator for frozen commitments that can now be resolved or falsified. It does not create a second attention authority.
+Merged prerequisites are not evidence that the producer has successfully contacted HiThink or persisted a prospective state.
 
 ---
 
 ## 6. Next work
 
-### P0 — independent prospective Sector Radar shadow producer
+### P0 — first fresh manual validation dispatch
 
-Build from clean, green `main`; keep it separate from `decision-inbox`.
+Run a new `workflow_dispatch` from `main`, not a GitHub job rerun.
 
-Required flow:
+On 2026-09-05, the expected qualified completed session is still 2026-09-04. Therefore the first proof should be:
 
 ```text
-durable 2026-09-04 bootstrap or later exact persisted state
-→ current formal-industry catalog
-→ independently qualified completed-session index snapshot
-→ direct continuity check against cached last closes
-→ append exactly one new completed session
-→ reconstruct previous/current 881 and 884 snapshots
-→ detect false→true shadow entries
-→ 881 primary + bounded 884 secondary
-→ revalidate parent hints only for surfaced granular candidates
-→ hierarchical deduplication
-→ current breadth only for finalists
-→ retain full audit artifact
-→ render normally 0–3 shadow groups
+verified committed bootstrap
+→ current catalog
+→ exact same-session qualified 321-series snapshot
+→ market-state equality validation
+→ no membership acquisition
+→ no retrospective candidate event
+→ new 90-day state artifact
 ```
 
-Operational requirements:
+Any state, turnover, catalog or provider identity disagreement remains a real proof failure and must not be weakened silently.
 
-1. No missed-session bridging. A stale bootstrap after more than one completed session must fail closed and require an explicit recovery procedure.
-2. Same-session reruns must be exactly idempotent; changed values must fail.
-3. Catalog hash or identity drift must be visible.
-4. Market-state persistence and candidate-state persistence must be content hashed and source identified.
-5. State restoration failure must never silently reset the Radar.
-6. Current breadth fetches only finalists; do not fan out memberships for all 320 industries daily.
-7. All output must prominently retain:
-   ```text
-   SHADOW OBSERVATION ONLY
-   HUMAN ATTENTION AUTHORITY = NONE
-   INVESTMENT AUTHORITY = NONE
-   ```
-8. Keep a separate GitHub Summary/artifact. Do not insert Sector Radar directly into the canonical ticker Inbox.
+### P0 — fresh same-session idempotence dispatch
 
-### P1 — prospective evaluation after real candidates exist
+After the first successful run, start a second fresh `workflow_dispatch`:
 
-For each first prospective candidate, freeze signal-time identity and later calculate objective T+5/T+20 path outcomes without relabelling the original observation.
+```text
+restore latest successful artifact
++ restore cache acceleration copy
+→ require exact agreement
+→ validate same completed session
+→ market-state hash unchanged
+→ event-ledger hash unchanged
+→ zero prospective events
+```
 
-Do not tune thresholds until a real prospective corpus exists. False positives, false negatives, repeated-state suppression and 0–3 compression all need prospective review.
+Do not use “rerun jobs,” because it reuses a run identity.
 
-### P1 — existing operations
+### P0 — first direct completed-session append
 
-- add only exact unresolved `DEEPEN_REQUIRED` handoffs to the scheduled Research-attention list;
-- remove them when Full Research or Human disposition resolves the request;
-- continue current disclosure receipt discipline;
-- maintain Tinavi, CATL, Sanhua, GigaDevice and Micron only on their stated reopen evidence;
-- freeze real Human Decision / Action / Outcome lineage promptly.
+The bootstrap's direct next A-share session is:
+
+```text
+2026-09-07
+```
+
+A first real append may occur only against that completed session. If ordinary production first sees 2026-09-08 or later while restored state still ends at 2026-09-04, it must fail closed and use a separate qualified recovery procedure.
+
+### P1 — objective outcomes and Human review
+
+After the first real prospective false→true event, keep three layers separate:
+
+```text
+SignalEvent
+→ immutable signal-time path, breadth and hierarchy
+
+ObjectiveOutcomeRecord
+→ T+5 / T+20 sector, benchmark and excess return
+→ MFE / MAE
+→ rank and gate persistence
+
+HumanReviewAnnotation
+→ whether Human had already noticed the move
+→ whether it formed a useful Research question
+→ reviewer, review time and rationale
+```
+
+Human annotation must not overwrite the signal event or enter the objective outcome hash. Do not tune thresholds until a meaningful prospective corpus exists.
 
 ---
 
@@ -538,7 +545,6 @@ Do not tune thresholds until a real prospective corpus exists. False positives, 
 
 ```text
 no new probability enum
-no EconomicSpecies schema / router
 no third canonical Human wake
 no Sector Radar → automatic Research route
 no Sector Radar → Recommendation / Action
@@ -547,17 +553,19 @@ no mixed 881 / 884 percentile ranking
 no current membership backfilled into history
 no parent hint treated as permanent taxonomy
 no daily 320-membership fan-out
-no retry-until-favourable experiment
+no silent top-three-only breadth enrichment
 no fallback provider or stale-price substitution
 no missed-session bridge
 no silent state reset after cache loss
-no threshold tuning to one retrospective replay
+no older-artifact fallback after latest-artifact loss
+no GitHub rerun of a state-producing run
+no threshold tuning to retrospective examples
 no price → Fundamental Belief shortcut
 no forced cardinal probabilities
 no broker / portfolio ledger inside Kernel
 ```
 
-Also do not treat a strong sector as proof that every constituent has the same economic exposure. Sector discovery must eventually pass through company mapping and the existing Research Funnel before any Research budget is allocated.
+A strong sector remains only a discovery fact. It does not prove every constituent has equal exposure, company revenue or profit, owner cash, cheapness, probability or Odds.
 
 ---
 
@@ -566,17 +574,18 @@ Also do not treat a strong sector as proof that every constituent has the same e
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — next-conversation instructions.
+- `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md` — latest next-conversation instructions.
+- `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — prior prerequisite handoff retained for lineage.
 
 ### Sector Radar decisions and evidence
 
 - `docs/sector-discovery-radar-prior-art-and-v0-decision-2026-09-04.md`
-- `docs/sector-discovery-radar-hithink-acquisition-proof-2026-09-04.md`
 - `docs/sector-discovery-radar-frozen-pit-replay-result-2026-09-04.md`
 - `docs/sector-discovery-radar-884-replay-result-2026-09-04.md`
 - `docs/sector-discovery-radar-current-breadth-proof-2026-09-04.md`
 - `docs/sector-discovery-radar-full-current-hierarchy-result-2026-09-05.md`
 - `docs/sector-radar-state-bootstrap-2026-09-04.md`
+- `docs/sector-radar-prospective-producer-operations.md`
 
 ### Sector Radar runtime and data
 
@@ -585,9 +594,13 @@ Also do not treat a strong sector as proof that every constituent has the same e
 - `src/decision_kernel/runtime/sector_radar_shadow.py`
 - `src/decision_kernel/runtime/sector_parent_hints.py`
 - `src/decision_kernel/runtime/sector_radar_state.py`
-- `src/decision_kernel/adapters/hithink_index.py`
+- `src/decision_kernel/runtime/sector_radar_events.py`
+- `src/decision_kernel/runtime/sector_radar_daily.py`
+- `src/decision_kernel/runtime/sector_radar_persistence.py`
+- `src/decision_kernel/runtime/sector_radar_producer.py`
 - `src/decision_kernel/runtime/hithink_index_http.py`
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
+- `.github/workflows/sector-radar-shadow.yml`
 - `radar_inputs/sector-parent-hints-2026-09-05.json`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json`
@@ -603,13 +616,11 @@ Also do not treat a strong sector as proof that every constituent has the same e
 
 ## 9. Recent state delta
 
-- **PR #163–#164:** prior-art decision and pure Sector Radar calculation contract merged.
-- **PR #169:** broad 881 replay frozen as a partial pass; agriculture/livestock early discovery demonstrated, broad-only shipbuilding coverage rejected.
-- **PR #171:** separate 884 replay frozen; narrow-theme coverage improved, but 884 rejected as the primary unfiltered universe.
-- **PR #173:** current breadth value and parent-child overlap risk established; historical breadth remains unclaimed.
-- **PR #175–#177:** provider alias fix, pure breadth contract and hierarchical shadow composition merged.
-- **PR #179–#180:** full current 881→884 hierarchy and candidate-time parent-hint validation merged.
-- **PR #181–#182:** content-hashed rolling market state and durable 2026-09-04 bootstrap merged.
-- **PR #183:** strict HiThink sector membership / all-market snapshot acquisition merged.
-- **PR #184:** repaired the post-merge A-share identity gap, retained the regression, removed the leaked one-time workflow and restored `main` to `342 passed`.
-- **UNCHANGED:** no scheduled Sector Radar producer, no prospective candidate corpus, no canonical Inbox insertion, no Research route, no Recommendation, no Action, no investment authority.
+- **PR #184:** repaired strict A-share identity validation, retained regression coverage and removed the leaked one-time workflow.
+- **PR #185:** synchronized the prerequisite-era state and handoff.
+- **PR #186:** made the committed bootstrap manifest the sole canonical bootstrap identity source and added dynamic documentation consistency coverage.
+- **PR #187:** merged the pure two-phase daily composition root, exact acquisition plan, deterministic full artifact/summary and append-only event ledger.
+- **PR #188:** merged the manual `workflow_dispatch` producer, artifact-authoritative persistence, exact cache conflict checks, 90-day retention, direct-session discipline and separate shadow output.
+- **VERIFIED IMPLEMENTATION BASELINE:** `d0c18690f406d2a2d90b32048ede37f643669a93`, main CI run `33934306867`, `374 passed`.
+- **NOT YET PROVEN LIVE:** no Sector Radar workflow run, state artifact, future market-state append, prospective candidate, T+5/T+20 outcome or canonical Inbox insertion.
+- **UNCHANGED AUTHORITY:** no Research route, Recommendation, Action or investment authority.
