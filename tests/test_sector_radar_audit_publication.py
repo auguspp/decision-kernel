@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import timedelta
 from pathlib import Path
 
 import pytest
@@ -113,19 +112,21 @@ def test_default_wiring_failures_preserve_old_target_bytes(tmp_path, monkeypatch
     elif stage == "audit_validation":
         monkeypatch.setattr(audit, "validate_sector_radar_input_audit", lambda root: (_ for _ in ()).throw(audit.SectorRadarAuditError("synthetic sealed-audit validation failure")))
     elif stage == "final_publish":
-        rename = Path.rename
+        replace_directory = Path.replace
         target = tmp_path / "state-target"
-        def failed_rename(self, destination):
+        def failed_replace(self, destination):
             # Fail precisely after the old target was moved to backup. The
             # production bundle writer must restore that backup on error.
             if self == target.with_name(f".{target.name}.tmp") and Path(destination) == target:
                 raise OSError("synthetic final directory-swap failure")
-            return rename(self, destination)
-        monkeypatch.setattr(Path, "rename", failed_rename)
+            return replace_directory(self, destination)
+        monkeypatch.setattr(Path, "replace", failed_replace)
     with pytest.raises((OSError, audit.SectorRadarAuditError)):
         boundary.run()
     assert {path.name: path.read_bytes() for path in (tmp_path / "state-target").iterdir()} == before
     assert len(publications) == (1 if stage == "final_publish" else 0)
+    assert not (tmp_path / ".state-target.tmp").exists()
+    assert not (tmp_path / ".state-target.backup").exists()
 
 
 def test_context_clock_offset_is_preserved_for_existing_state_hash_contract(tmp_path, monkeypatch):
@@ -162,7 +163,7 @@ def test_cli_dispatches_through_audit_wrapper_without_any_real_network(tmp_path,
 
 
 def test_replay_checks_source_manifest_against_actual_input_files(tmp_path, monkeypatch):
-    first, _, first_root = execute(tmp_path / "first")
+    first, _, _ = execute(tmp_path / "first")
     bundle = first.persistent_bundle
     from decision_kernel.runtime.sector_radar_persistence import SectorRadarPersistenceResolution, SOURCE_LATEST_SUCCESS_ARTIFACT
     restored = SectorRadarPersistenceResolution(
