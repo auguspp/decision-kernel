@@ -26,6 +26,8 @@ def test_sector_radar_workflow_is_manual_and_separate_from_decision_inbox() -> N
     assert "sector-radar-prospective-state" in raw
     assert "cancel-in-progress: false" in raw
     assert "Require main branch" in raw
+    assert "Require fresh workflow dispatch" in raw
+    assert '"${GITHUB_RUN_ATTEMPT}" != "1"' in raw
 
 
 def test_sector_radar_workflow_restores_artifact_authority_before_running() -> None:
@@ -66,6 +68,8 @@ def test_workflow_and_operations_doc_freeze_expiry_and_authority_rules() -> None
     assert "no automatic long-term checkpoint" in document
     assert "do not trust cache alone" in document
     assert "no retrospective candidate-event append" in document
+    assert "fresh `workflow_dispatch`" in document
+    assert "not a rerun of the first run" in document
     assert "32 distinct current-membership requests" in document
     assert "ObjectiveOutcomeRecord" in document
     assert "HumanReviewAnnotation" in document
