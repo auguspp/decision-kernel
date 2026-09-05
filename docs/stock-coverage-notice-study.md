@@ -1,6 +1,8 @@
 # Frozen stock coverage: original notices, not automatic eligibility
 
-Status: BOUNDED PUBLIC-ONLY SOURCE PROFILE / LIVE RESULT NOT YET REVIEWED / NO PRODUCTION DATA ACCEPTANCE.
+Status: BOUNDED PUBLIC-ONLY SOURCE PROFILE / NINE ORIGINALS REVIEWED / ONE AMBIGUOUS SELECTION / NO PRODUCTION DATA ACCEPTANCE.
+
+Actual run `33966231127` retained nine PDFs using twenty public requests and remained INCOMPLETE_SOURCE_STUDY because 603448 returned two equally dated matching notices. Original-source interpretation, exact hashes, page references and review limits: `docs/stock-coverage-originals-proof-2026-09-05.md`. This result does not overwrite the original frozen stock differences or close every coverage question.
 
 ## Why this slice
 
