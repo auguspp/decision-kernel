@@ -3,7 +3,7 @@
 Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW KERNEL SCHEMA**  
 Updated: **2026-09-05**  
 Repository: `auguspp/decision-kernel`  
-Last independently verified live implementation: `5f8f635d191dd8559844d1b74af0dca0cf4c02df`
+Last independently verified live Sector Radar implementation: `5f8f635d191dd8559844d1b74af0dca0cf4c02df`
 
 ## Operating rule
 
@@ -16,7 +16,7 @@ End of conversation: sync only real state deltas.
 
 Do not trust a chat summary over repository state, frozen lineage, CI results or real workflow artifacts.
 
-Latest expansion handoff: `docs/handoffs/2026-09-05-radar-expansion-next.md`. A merged read command or source-study tool is not an activated production channel.
+Latest implementation handoff: `docs/handoffs/2026-09-05-context-and-public-capture-next.md`. Prior expansion handoff is retained for lineage. A merged tool or a partial public-source capture is not a complete production channel.
 
 ---
 
@@ -31,9 +31,10 @@ SECTOR RADAR MANUAL WORKFLOW_DISPATCH PRODUCER = MERGED
 SECTOR RADAR LIVE SAME-SESSION VALIDATION = PROVEN
 SECTOR RADAR LIVE ARTIFACT/CACHE RESTORE = PROVEN
 SECTOR RADAR INPUT AUDIT / OFFLINE REPLAY = IMPLEMENTED / SYNTHETICALLY TESTED
-SECTOR RADAR READ-ONLY CONTEXT = STANDALONE CLI / NOT WORKFLOW-PUBLISHED
+SECTOR RADAR READ-ONLY CONTEXT = WORKFLOW ARTIFACT WIRING MERGED / LIVE PUBLICATION PENDING
 HITHINK STOCK DUMP = OFFLINE INSPECTOR ONLY / REAL DATA NOT QUALIFIED
 ECONOMIC NODES = TWO BOUNDED PUBLIC-EXCERPT PILOTS / NO AUTOMATED FEED
+ECONOMIC RAW CAPTURE = TWO SPB PAGES MATCHED / TWO MOA HTTP FAILURES / OVERALL INCOMPLETE
 SECTOR RADAR NEW COMPLETED-SESSION APPEND = NOT YET PROVEN LIVE
 SECTOR RADAR SCHEDULE = NOT PRESENT
 SECTOR RADAR PROSPECTIVE CORPUS = EMPTY
@@ -163,17 +164,20 @@ No disclosure packet currently earns Human Research attention.
 
 ### Current workflow directory
 
-Default branch now contains five formal workflows:
+Default branch now contains six formal workflows:
 
 ```text
 apply-disclosure-assessment.yml
 ci.yml
 decision-inbox.yml
+economic-source-capture.yml
 live-dogfood.yml
 sector-radar-shadow.yml
 ```
 
 `sector-radar-shadow.yml` is **manual `workflow_dispatch` only**. It has no `schedule`, is separate from `decision-inbox.yml`, and rejects GitHub job reruns in favour of a fresh dispatch identity.
+
+`economic-source-capture.yml` is an independent public-only compatibility probe: manual dispatch or tightly path-filtered main pushes, at most four reviewed pages, no credentials, market cache or state access, and no schedule. Its first real run `33947395994` is **failure / INCOMPLETE**, not green: two SPB pages matched and two MOA requests failed with HTTPError. Its uploaded artifact preserves both outcomes. Kernel tests on that same commit succeeded; unit-test success does not override the source failure.
 
 Runs `33938625934` and `33939414197` succeeded. They proved live bootstrap validation and subsequent artifact/cache restoration at the same completed session, 2026-09-04. They did not append a new market session or create prospective candidates. Full evidence is frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`.
 
@@ -486,6 +490,7 @@ Artifact digests, content-hash reconciliation, cache-log evidence and review lim
 2026-09-07 DIRECT APPEND PROOF = NOT EXECUTED
 LIVE CANDIDATE-TIME HIERARCHY/BREADTH IN THIS PRODUCER = NOT EXERCISED
 LIVE REPLAYABLE INPUT AUDIT PROOF = NOT EXECUTED
+LIVE SECTOR CONTEXT ARTIFACT PUBLICATION = NOT EXECUTED
 PROSPECTIVE SHADOW CANDIDATE CORPUS = EMPTY
 OBJECTIVE T+5 / T+20 EVALUATION = NOT STARTED
 HUMAN REVIEW ANNOTATION = NOT STARTED
@@ -509,13 +514,39 @@ The audit contract, replay command, operational budgets and limits are documente
 
 The approved expansion preserves the market detector while adding better state reading, independently qualified stock-data research and economic-source observations. The first slices are additive; they do not establish a complete continuous multi-channel Radar.
 
-**PR #194 — saved-state context.** `runtime/sector_radar_context.py` produces an on-demand HTML/JSON report from a validated state bundle. It shows active, weakening/exited and full industry paths separately for 881 and 884, including raw sector/benchmark/excess returns and censor-aware trend age. It distinguishes trend start, unavailable system-first-observed time and recorded prospective-event time. Presentation labels do not change gates or create events. No breadth is carried forward. This is a standalone CLI, not yet automatically included in the producer workflow or hosted as a website.
+**PR #194 — saved-state context.** `runtime/sector_radar_context.py` produces an on-demand HTML/JSON report from a validated state bundle. It shows active, weakening/exited and full industry paths separately for 881 and 884, including raw sector/benchmark/excess returns and censor-aware trend age. It distinguishes trend start, unavailable system-first-observed time and recorded prospective-event time. Presentation labels do not change gates or create events. No breadth is carried forward. It was initially a standalone CLI; PR #198 added workflow artifact wiring described below, not public hosting.
 
 **PR #195 — stock-dump integrity study.** `runtime/hithink_dump_inspection.py` checks local recent-ten-session rows against an explicit calendar, stock universe and snapshot. It exposes missing/unpriced rows, unit/schema discrepancies and raw-previous-close differences requiring corporate-action review. The pure row contract is tested; a real signed download, account entitlement, Parquet-reader execution, overlapping-vintage revisions and production qualification are not established. PyArrow is optional and isolated, not a project dependency. No stock panel or multi-day breadth is activated.
 
-**PR #196 — two economic-source pilots.** `runtime/economic_node_study.py` parses four reviewed official MOA/SPB excerpts saved in `radar_inputs/economic-node-study-2026-09-05.json`: two livestock/feed weeks and two express-business months. It separates period, date-only publication and actual capture, preserves immutable versions and descriptive comparisons, and does not backdate system-PIT availability. Express revenue per parcel is a rounded mix proxy, not like-for-like price or profit. These are manually reviewed public-source studies, not full HTTP capture, automated feeds, historical first-vintage proof, company mapping, fundamental-state confirmation or market candidate events.
+**PR #196 — two economic-source pilots.** `runtime/economic_node_study.py` parses four reviewed official MOA/SPB excerpts saved in `radar_inputs/economic-node-study-2026-09-05.json`: two livestock/feed weeks and two express-business months. It separates period, date-only publication and actual capture, preserves immutable versions and descriptive comparisons, and does not backdate system-PIT availability. Express revenue per parcel is a rounded mix proxy, not like-for-like price or profit. These are manually reviewed public-source studies, not full HTTP capture, automated feeds, historical first-vintage proof, company mapping, fundamental-state confirmation or market candidate events. Later raw captures retain new, separate capture-time records; they do not rewrite these original studies.
 
 The implementation baseline after these three PRs is `f7f5aa9e7433a4d1d75fb6e05fb3e8aadb16c2e9`; full CI contains 463 passing tests. Its test success does not replace the older, explicitly identified live operational proof. No workflow definition, schedule, signal threshold, live market state, candidate ledger or company decision changed in these slices.
+
+### 5.10 Read-context artifact delivery — PR #198
+
+The existing manual Sector workflow renders `context/index.html` and `context/context.json` after successful producer calculation and includes them in its complete run artifact. The summary links the actual uploaded artifact only after successful rendering and upload. This is a downloadable self-contained page, not a hosted dashboard or a new alert surface.
+
+Rendering reads the exact saved bundle with no HiThink credential or network request. It does not modify market state, ledger or the sealed calculation audit. A rendering failure remains visible and blocks remote state-artifact/cache publication; a calculated local bundle or retained page alone is not proof that the whole workflow succeeded. Tests cover quiet/candidate bundle rendering, local packaging and byte preservation. A new live Sector dispatch has not yet exercised this delivery path.
+
+### 5.11 Official raw-source capture — PR #199–#200
+
+`runtime/economic_source_capture.py` archives original bounded response-body bytes for explicitly reviewed MOA/SPB URLs, safe headers and actual request/capture clocks. It binds selected reviewed text to those bodies and reconstructs accepted/rejected bindings offline. No redirects, credentials, cookies, automatic retries, fallback or linked resources are used. Budgets are four sources, 2 MiB/body and 20 MiB/archive; source changes remain visible rather than silently replacing reviewed facts.
+
+The first real compatibility run `33947395994` on `1c19360e5b400933339f452ba159117d5a8408e2` produced:
+
+```text
+SPB raw pages + reviewed bindings = 2 / 2 matched
+MOA raw pages = 0 / 2 obtained; HTTPError
+aggregate = INCOMPLETE
+workflow = failure
+proof artifact = 9963755766
+capture archive integrity = VERIFIED, still INCOMPLETE
+market state / candidate event writes = 0
+```
+
+The proof artifact was downloaded and its ZIP, inventory, file/content hashes, original-body text and binding offsets checked independently. The recorded workflow verifier reconstructed observations from raw inputs. Detailed hashes and limits are in `docs/economic-source-raw-capture-proof-2026-09-05.md`.
+
+This version did not retain numeric HTTP status for the MOA errors, so their exact HTTP cause is unknown. The two failures must not be reclassified as successful source capture, a permanent outage or evidence of source revision. There is still no automatic new-release discovery, historical first-vintage proof or continuous industry monitoring. The older reviewed snippets and live Sector state are unchanged.
 
 ---
 
@@ -543,11 +574,13 @@ Zero candidates is a valid quiet outcome; do not force a candidate. If ordinary 
 
 Review the real new-session append before adding a schedule. Continue to use a new `workflow_dispatch`, not “rerun jobs.” Any state, turnover, catalog or provider identity disagreement remains a real proof failure and must not be weakened silently.
 
-For the next audited run, also download its complete run artifact and verify `input-audit/` with the recorded implementation. Successful offline reproduction supplements, but does not replace, the workflow's artifact publication and cache checks.
+For the next audited run, also download its complete run artifact and verify `input-audit/` with the recorded implementation. Confirm `context/index.html` and `context/context.json` match that exact state/ledger and were actually uploaded. Successful offline reproduction supplements, but does not replace, the workflow's artifact publication and cache checks.
 
 ### P1 — expansion qualification and usable reading
 
-The next additive steps are a reviewed read-context artifact delivery path, a bounded official economic-page capture adapter with more natural releases, and a separately authorized real HiThink dump trial in a credentialed environment. Do not ask for secrets in chat or install a competing provider. The dump trial must validate actual Parquet decoding, entitlement, units, reference identity, overlapping vintages and corporate actions before any stock-panel or multi-day breadth adoption.
+Read-context delivery and bounded raw capture are implemented, but live view publication and complete four-source capture are not proven. Investigate the MOA failure with safe numeric HTTP diagnostics and retained failure lineage; do not retry until a favourable result or substitute browser text for original bodies. Additional natural releases still require source/period/unit review before joining a future feed.
+
+The real HiThink dump trial remains separate work in a credentialed environment. Do not ask for secrets in chat or install a competing provider. The trial must validate actual Parquet decoding, entitlement, units, reference identity, overlapping vintages and corporate actions before any stock-panel or multi-day breadth adoption.
 
 The original benchmark-sensitivity acceptance item still needs an explicit evidence result. Keep its effect on excess sign, persistence and transition dates separate from within-universe ranks. Concept expansion, company-economic mapping and new trigger challengers remain later scoped work, not implied by the new read labels or two source pilots.
 
@@ -607,8 +640,10 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-radar-expansion-next.md` — latest implementation handoff and explicit qualification gaps.
-- `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md` — latest live evidence and next-step constraints.
+- `docs/handoffs/2026-09-05-context-and-public-capture-next.md` — latest delivery/capture handoff and remaining proof gaps.
+- `docs/handoffs/2026-09-05-radar-expansion-next.md` — prior expansion handoff, retained for lineage.
+- `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md` — latest live Sector evidence and next-step constraints.
+- `docs/economic-source-raw-capture-proof-2026-09-05.md` — partial raw public-source proof and retained failures.
 - `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md` — pre-live handoff retained for lineage; live-execution status is superseded by the proof above.
 - `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — prior prerequisite handoff retained for lineage.
 
@@ -625,6 +660,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `docs/sector-radar-read-only-context.md`
 - `docs/hithink-dump-qualification-study.md`
 - `docs/economic-node-public-source-pilots-2026-09-05.md`
+- `docs/economic-source-raw-capture.md`
+- `docs/economic-source-compatibility-operations.md`
 
 ### Sector Radar runtime and data
 
@@ -641,9 +678,11 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/sector_radar_context.py`
 - `src/decision_kernel/runtime/hithink_dump_inspection.py`
 - `src/decision_kernel/runtime/economic_node_study.py`
+- `src/decision_kernel/runtime/economic_source_capture.py`
 - `src/decision_kernel/runtime/hithink_index_http.py`
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
 - `.github/workflows/sector-radar-shadow.yml`
+- `.github/workflows/economic-source-capture.yml`
 - `radar_inputs/sector-parent-hints-2026-09-05.json`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json`
@@ -668,10 +707,13 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #190:** repaired the same-session calendar-boundary failure exposed by run `33936773283` without requiring a future calendar row.
 - **PR #191:** repaired index snapshot data-ready timestamp interpretation exposed by run `33937883228`, preserving benchmark-price and calendar qualification.
 - **PR #193:** added bounded replayable input audit, full separate-universe diagnostics, staged publication and synthetic full-path integration/rollback coverage; no new live proof is claimed.
-- **PR #194:** added a standalone read-only context CLI; full state visibility is not a new alert or an automatic workflow attachment.
+- **PR #194:** added a standalone read-only context CLI; full state visibility is not a new alert.
 - **PR #195:** added isolated stock-dump integrity tooling; actual download, entitlement, reader execution and production qualification remain unproven.
 - **PR #196:** added two public-source economic pilots using four reviewed excerpts; no automated feed, industry-wide coverage or fundamental-state migration is claimed.
-- **VERIFIED LIVE IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
-- **PROVEN LIVE:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
-- **NOT YET PROVEN LIVE:** future market-state append, candidate enrichment or the new replayable input audit on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
+- **PR #198:** wired context rendering and an actual artifact link into the manual Sector workflow; live delivery remains pending.
+- **PR #199:** added original public-response capture and accepted/rejected excerpt reconstruction; no market state or event writer.
+- **PR #200:** added the separate bounded public-source compatibility workflow. First live run `33947395994` remained INCOMPLETE: SPB 2/2 matched, MOA 0/2 obtained. Artifact `9963755766` and failure evidence retained.
+- **VERIFIED LIVE SECTOR IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
+- **PROVEN LIVE SECTOR:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
+- **NOT YET PROVEN LIVE SECTOR:** future market-state append, candidate enrichment, the new replayable input audit or context delivery on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
 - **UNCHANGED AUTHORITY:** no Research route, Recommendation, Action or investment authority.
