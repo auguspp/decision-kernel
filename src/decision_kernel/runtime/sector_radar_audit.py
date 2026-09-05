@@ -20,6 +20,8 @@ from .sector_radar_events import (
     serialize_sector_radar_candidate_event_ledger,
 )
 from .sector_radar_persistence import (
+    SOURCE_COMMITTED_BOOTSTRAP,
+    SOURCE_LATEST_SUCCESS_ARTIFACT,
     SectorRadarPersistenceResolution,
     parse_sector_radar_persistent_manifest,
     serialize_sector_radar_persistent_manifest,
@@ -79,6 +81,7 @@ _SOURCE_FILES = (
 )
 _SENSITIVE_KEY = re.compile(r"(?:api.?key|token|authorization|cookie|password|secret)", re.I)
 _HASH = re.compile(r"^[0-9a-f]{64}$")
+_ERROR_TYPE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,127}$")
 _MANIFEST_FIELDS = {
     "schema_version", "audit_semantics", "provenance", "implementation",
     "files", "requests", "run_clocks", "status", "error_type", "authority", "audit_hash",
@@ -101,8 +104,8 @@ def _sha(data: bytes) -> str:
 
 
 def _json_bytes(value: Any) -> bytes:
-    # Provider envelopes can contain JSON floats. Preserve decoded JSON semantics;
-    # do not pass these envelopes through the domain canonical Decimal encoder.
+    # Preserve decoded JSON semantics, including finite provider floats. Domain
+    # canonical hashes deliberately reject binary floats and are not used here.
     return json.dumps(
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
     ).encode("utf-8")
@@ -120,6 +123,16 @@ def _clock(value: Any) -> datetime:
     if parsed.tzinfo is None or parsed.utcoffset() is None:
         raise SectorRadarAuditError("audit clock must be timezone-aware")
     return parsed
+
+
+def _fields(value: Any, expected: set[str], label: str) -> dict[str, Any]:
+    if not isinstance(value, dict) or set(value) != expected:
+        raise SectorRadarAuditError(f"{label} fields disagree")
+    return value
+
+
+def _hash_string(value: Any) -> bool:
+    return isinstance(value, str) and _HASH.fullmatch(value) is not None
 
 
 def _implementation() -> dict[str, str]:
@@ -143,7 +156,9 @@ def _check_safe_json(value: Any, credential: str | None = None, *, depth: int = 
 
 
 def _check_request(path: str, params: Mapping[str, str]) -> dict[str, str]:
-    if path not in _ROUTES or set(params) != _ROUTES[path]:
+    if not isinstance(path, str) or path not in _ROUTES or not isinstance(params, Mapping):
+        raise SectorRadarAuditError("request is outside the exact audited endpoint contract")
+    if set(params) != _ROUTES[path]:
         raise SectorRadarAuditError("request is outside the exact audited endpoint contract")
     if any(not isinstance(value, str) or len(value) > 16384 for value in params.values()):
         raise SectorRadarAuditError("audited request parameters are invalid")
@@ -152,7 +167,7 @@ def _check_request(path: str, params: Mapping[str, str]) -> dict[str, str]:
 
 
 def _allowed_file(name: str) -> bool:
-    return (
+    return isinstance(name, str) and (
         name in {f"inputs/{item}" for item in _INPUT_FILES}
         or name in {f"expected/state/{item}" for item in _STATE_FILES}
         or name in {f"expected/output/{item}" for item in _OUTPUT_FILES}
@@ -201,7 +216,6 @@ class _Recorder:
         total = sum(item["bytes"] for item in self.manifest["files"].values())
         if total + len(data) > MAX_AUDIT_BYTES:
             raise SectorRadarAuditError("input audit exceeds the operations byte budget")
-        # Reject, rather than silently modifying, a credential-bearing response.
         if self.credential and self.credential.encode("utf-8") in data:
             raise SectorRadarAuditError("credential material cannot enter the input audit")
         _atomic_bytes(self.root / name, data)
@@ -236,7 +250,6 @@ class _Recorder:
             self.add(record["response_file"], data)
             self.manifest["requests"].append(record)
             self.flush()
-            # Use exactly the decoded JSON representation retained for replay.
             return json.loads(data)
         return request_json
 
@@ -274,7 +287,7 @@ def _fetchers(request: _Request) -> dict[str, Callable[..., Any]]:
 
 
 def write_daily_observation_audit(preparation: Any, output_directory: Path) -> None:
-    """Retain both full homogeneous universes and the existing gate decisions.
+    """Retain both homogeneous universes and the existing gate decisions.
 
     Gate predicates are reused, not reimplemented or granted new authority. The
     ledger is neither an input nor an alternative trigger-state source.
@@ -316,7 +329,11 @@ def _save_inputs(recorder: _Recorder, resolution: SectorRadarPersistenceResoluti
     recorder.add("inputs/market-state.json", serialize_sector_radar_market_state(resolution.market_state).encode("utf-8"))
     recorder.add("inputs/candidate-events.json", serialize_sector_radar_candidate_event_ledger(resolution.event_ledger).encode("utf-8"))
     recorder.add("inputs/parent-hints.json", parent_hints_json.encode("utf-8"))
-    recorder.add("inputs/context.json", _domain_bytes(asdict(context)))
+    # The existing market-state serializer preserves ISO offsets in its hashed
+    # string payload. Preserve the exact input representation, not just its instant.
+    context_payload = asdict(context)
+    context_payload["observed_at"] = _clock(context.observed_at).isoformat()
+    recorder.add("inputs/context.json", _domain_bytes(context_payload))
     source_manifest = resolution.source_bundle_manifest
     recorder.add("inputs/resolution.json", _domain_bytes({
         "source_kind": resolution.source_kind,
@@ -361,11 +378,11 @@ def run_audited_sector_radar_producer(
     now: Callable[[], datetime] | None = None,
     capture_now: Callable[[], datetime] | None = None,
 ) -> Any:
-    """Stage a complete producer run; seal its audit before publishing live state.
+    """Stage a producer run; seal its audit before publishing live state.
 
     Injected transports must be explicitly synthetic. Their calculated state is
     retained only inside the labelled audit, never published to state_directory.
-    No fixture, replay, or audit can become ordinary restoration authority.
+    No replay or audit manifest is accepted as ordinary restoration authority.
     """
     from .sector_radar_producer import run_sector_radar_producer
 
@@ -379,8 +396,7 @@ def run_audited_sector_radar_producer(
         raise SectorRadarAuditError("audit parent hints disagree with producer input")
     if output_directory.is_symlink() or (output_directory.exists() and any(output_directory.iterdir())):
         raise SectorRadarAuditError("audited run requires a new empty output directory")
-    target = state_directory.resolve()
-    output = output_directory.resolve()
+    target, output = state_directory.resolve(), output_directory.resolve()
     if target == output or target in output.parents or output in target.parents:
         raise SectorRadarAuditError("audit and live state directories must not overlap")
     now = now or (lambda: datetime.now(timezone.utc))
@@ -409,14 +425,13 @@ def run_audited_sector_radar_producer(
                 recorder.add(name, data)
             recorder.manifest.update(status="REJECTED", error_type=type(exc).__name__)
             recorder.flush()
-            # The outer CLI may render this error; never propagate credentials.
             message = str(exc).replace(api_key, "[REDACTED]") if api_key else str(exc)
             raise SectorRadarAuditError(f"Audited producer rejected input ({type(exc).__name__}): {message[:1000]}") from None
         for name, data in _output_files(staged_state, output_directory).items():
             recorder.add(name, data)
+        # SUCCEEDED describes the staged calculation, not final workflow publication.
         recorder.manifest.update(status="SUCCEEDED", error_type=None)
         recorder.flush()
-        # Read back every retained byte before an ordinary state publication.
         validate_sector_radar_input_audit(recorder.root)
         if provenance == LIVE_PROVENANCE:
             _publish_bundle(outcome.persistent_bundle, state_directory)
@@ -428,23 +443,27 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
     if root.is_symlink() or not root.is_dir():
         raise SectorRadarAuditError("audit root must be a real directory")
     manifest_path = root / "manifest.json"
-    if manifest_path.is_symlink() or manifest_path.stat().st_size > MAX_FILE_BYTES:
+    if manifest_path.is_symlink() or not manifest_path.is_file() or manifest_path.stat().st_size > MAX_FILE_BYTES:
         raise SectorRadarAuditError("audit manifest is invalid")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if not isinstance(manifest, dict) or set(manifest) != _MANIFEST_FIELDS:
-        raise SectorRadarAuditError("audit manifest fields disagree")
+    manifest = _fields(json.loads(manifest_path.read_text(encoding="utf-8")), _MANIFEST_FIELDS, "audit manifest")
     payload = dict(manifest)
     digest = payload.pop("audit_hash")
-    if digest != canonical_hash(payload):
+    if not _hash_string(digest) or digest != canonical_hash(payload):
         raise SectorRadarAuditError("audit manifest hash mismatch")
     if type(manifest["schema_version"]) is not int or manifest["schema_version"] != AUDIT_SCHEMA_VERSION:
         raise SectorRadarAuditError("unsupported audit schema")
     if manifest["audit_semantics"] != AUDIT_SEMANTICS or manifest["authority"] != AUTHORITY:
         raise SectorRadarAuditError("audit semantics or authority disagrees")
-    if manifest["provenance"] not in {LIVE_PROVENANCE, SYNTHETIC_PROVENANCE}:
+    if manifest["provenance"] not in (LIVE_PROVENANCE, SYNTHETIC_PROVENANCE):
         raise SectorRadarAuditError("audit provenance is invalid")
-    if manifest["status"] not in {"SUCCEEDED", "REJECTED"}:
+    if manifest["status"] not in ("SUCCEEDED", "REJECTED"):
         raise SectorRadarAuditError("input audit is incomplete")
+    error_type = manifest["error_type"]
+    if manifest["status"] == "SUCCEEDED":
+        if error_type is not None:
+            raise SectorRadarAuditError("successful calculation cannot carry an error")
+    elif not isinstance(error_type, str) or not _ERROR_TYPE.fullmatch(error_type):
+        raise SectorRadarAuditError("rejected calculation must identify its error type")
     if manifest["implementation"] != _implementation():
         raise SectorRadarAuditError("replay requires the exact recorded implementation files")
     files = manifest["files"]
@@ -452,6 +471,8 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
         raise SectorRadarAuditError("audit file inventory is invalid")
     if not {f"inputs/{name}" for name in _INPUT_FILES} <= set(files):
         raise SectorRadarAuditError("audit is missing its exact input state")
+    if manifest["status"] == "SUCCEEDED" and not {f"expected/state/{name}" for name in _STATE_FILES} <= set(files):
+        raise SectorRadarAuditError("successful calculation lacks its complete state bundle")
     actual = set()
     for path in root.rglob("*"):
         if path.is_symlink():
@@ -462,10 +483,11 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
         raise SectorRadarAuditError("audit file inventory mismatch")
     total = 0
     for name, descriptor in files.items():
-        if not _allowed_file(name) or set(descriptor) != {"bytes", "sha256"}:
-            raise SectorRadarAuditError("audit file descriptor is invalid")
+        if not _allowed_file(name):
+            raise SectorRadarAuditError("audit file name is outside the allowed inventory")
+        _fields(descriptor, {"bytes", "sha256"}, "audit file descriptor")
         size = descriptor["bytes"]
-        if type(size) is not int or not 0 <= size <= MAX_FILE_BYTES or not _HASH.fullmatch(descriptor["sha256"]):
+        if type(size) is not int or not 0 <= size <= MAX_FILE_BYTES or not _hash_string(descriptor["sha256"]):
             raise SectorRadarAuditError("audit file descriptor exceeds limits")
         path = root / name
         if path.stat().st_size != size:
@@ -480,8 +502,7 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
         raise SectorRadarAuditError("audit request transcript is invalid")
     referenced = set()
     for index, record in enumerate(requests):
-        if set(record) != {"path", "params", "captured_at", "response_file", "error_type"}:
-            raise SectorRadarAuditError("audit request fields disagree")
+        _fields(record, {"path", "params", "captured_at", "response_file", "error_type"}, "audit request")
         _check_request(record["path"], record["params"])
         _clock(record["captured_at"])
         if record["error_type"] is None:
@@ -489,45 +510,77 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
             if record["response_file"] != expected or expected not in files:
                 raise SectorRadarAuditError("audit response identity is missing or reordered")
             referenced.add(expected)
-        elif record["response_file"] is not None or not isinstance(record["error_type"], str):
+        elif (record["response_file"] is not None or not isinstance(record["error_type"], str)
+              or not _ERROR_TYPE.fullmatch(record["error_type"])):
             raise SectorRadarAuditError("recorded transport failure is malformed")
     if referenced != {name for name in files if name.startswith("responses/")}:
         raise SectorRadarAuditError("unreferenced response in audit")
     if not isinstance(manifest["run_clocks"], list) or len(manifest["run_clocks"]) > 16:
         raise SectorRadarAuditError("audit run clocks are invalid")
-    for value in manifest["run_clocks"]:
-        _clock(value)
+    clocks = [_clock(value) for value in manifest["run_clocks"]]
+    if clocks != sorted(clocks):
+        raise SectorRadarAuditError("audit run clocks moved backward")
     return manifest
 
 
-def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
-    """Re-run qualification and composition using only sealed local inputs.
+def _restore_audit_inputs(root: Path) -> tuple[Any, Any, SectorRadarPersistenceResolution]:
+    from .sector_radar_producer import SectorRadarProducerContext, _validate_context
 
-    There is no URL fetch, caller-supplied output path, cache save, workflow dispatch
-    or production-ledger write. All regenerated artifacts live in a disposable
-    temporary directory and are compared byte-for-byte with the recorded outputs.
-    """
-    from .sector_radar_producer import SectorRadarProducerContext, run_sector_radar_producer
-
-    manifest = validate_sector_radar_input_audit(root)
     def read(name: str) -> str:
-        return (root / name).read_text(encoding="utf-8")
-    raw_context = json.loads(read("inputs/context.json"))
+        return (root / "inputs" / name).read_text(encoding="utf-8")
+    raw_context = _fields(json.loads(read("context.json")), {
+        "repository", "workflow_path", "run_id", "run_attempt", "commit_sha", "observed_at",
+    }, "audit context")
     raw_context["observed_at"] = _clock(raw_context["observed_at"])
     context = SectorRadarProducerContext(**raw_context)
-    hints = parse_sector_parent_hints(read("inputs/parent-hints.json"))
-    source = json.loads(read("inputs/resolution.json"))
+    _validate_context(context)
+    hints = parse_sector_parent_hints(read("parent-hints.json"))
+    source = _fields(json.loads(read("resolution.json")), {
+        "source_kind", "source_bundle_manifest", "bootstrap_manifest_hash", "parent_hint_mapping_hash",
+    }, "audit resolution")
     raw_manifest = source["source_bundle_manifest"]
     source_manifest = None if raw_manifest is None else parse_sector_radar_persistent_manifest(json.dumps(raw_manifest))
+    state_text, ledger_text = read("market-state.json"), read("candidate-events.json")
     resolution = SectorRadarPersistenceResolution(
         source_kind=source["source_kind"],
-        market_state=parse_sector_radar_market_state(read("inputs/market-state.json")),
-        event_ledger=parse_sector_radar_candidate_event_ledger(read("inputs/candidate-events.json")),
+        market_state=parse_sector_radar_market_state(state_text),
+        event_ledger=parse_sector_radar_candidate_event_ledger(ledger_text),
         source_bundle_manifest=source_manifest,
         bootstrap_manifest_hash=source["bootstrap_manifest_hash"],
     )
     if hints.mapping_hash != source["parent_hint_mapping_hash"]:
         raise SectorRadarAuditError("replay hint identity mismatch")
+    if source_manifest is None:
+        if source["source_kind"] != SOURCE_COMMITTED_BOOTSTRAP or not _hash_string(source["bootstrap_manifest_hash"]):
+            raise SectorRadarAuditError("replay bootstrap source identity is invalid")
+    else:
+        if source["source_kind"] != SOURCE_LATEST_SUCCESS_ARTIFACT or source["bootstrap_manifest_hash"] is not None:
+            raise SectorRadarAuditError("replay artifact source identity is invalid")
+        state, ledger = resolution.market_state, resolution.event_ledger
+        expected = {
+            "source_repository": context.repository, "source_workflow": context.workflow_path,
+            "market_state_file_sha256": _sha(state_text.encode("utf-8")),
+            "event_ledger_file_sha256": _sha(ledger_text.encode("utf-8")),
+            "market_state_hash": state.state_hash, "event_ledger_hash": ledger.ledger_hash,
+            "market_session": state.sessions[-1], "catalog_hash": state.catalog_hash,
+            "benchmark_thscode": state.benchmark_thscode, "formula_version": state.formula_version,
+            "parent_hint_mapping_hash": hints.mapping_hash,
+        }
+        if any(getattr(source_manifest, field) != value for field, value in expected.items()):
+            raise SectorRadarAuditError("replay input files conflict with the recorded source manifest")
+    return context, hints, resolution
+
+
+def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
+    """Re-run qualification and composition using only sealed local inputs.
+
+    No URL fetch, caller-supplied output path, cache save or workflow dispatch is
+    available. Regenerated states live only in a disposable temporary directory.
+    """
+    from .sector_radar_producer import run_sector_radar_producer
+
+    manifest = validate_sector_radar_input_audit(root)
+    context, hints, resolution = _restore_audit_inputs(root)
     request_index = 0
     clock_index = 0
 
@@ -541,7 +594,7 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
         request_index += 1
         if record["error_type"] is not None:
             raise _RecordedRequestFailure(record["error_type"])
-        return json.loads(read(record["response_file"]))
+        return json.loads((root / record["response_file"]).read_text(encoding="utf-8"))
 
     def now() -> datetime:
         nonlocal clock_index
