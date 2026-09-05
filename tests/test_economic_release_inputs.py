@@ -162,8 +162,7 @@ def test_invalid_seed_fails_before_scanning(tmp_path, seed_error):
 def test_future_review_is_not_admitted_using_earlier_capture(tmp_path, monkeypatch):
     seed, reviews, *_ = accepted_case(tmp_path, monkeypatch)
     with pytest.raises(ValueError, match="cutoff"):
-        inputs.load_release_inputs(seed, reviews, as_of=RECORDED - timedelta(microseconds=1)):
-            pass
+        inputs.load_release_inputs(seed, reviews, as_of=RECORDED - timedelta(microseconds=1))
     assert inputs.load_release_inputs(seed, reviews, as_of=RECORDED).receipt["accepted_bundle_count"] == 1
 
 
