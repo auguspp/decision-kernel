@@ -34,10 +34,11 @@ def test_public_profile_has_no_provider_credential_and_offline_check_always_runs
     text = WORKFLOW.read_text(encoding='utf-8')
     assert 'secrets.' not in text and 'HITHINK_FINANCE_API_KEY' not in text
     source = text.split('- name: Collect targeted public')[1].split('- name: Verify retained')[0]
-    assert '--profile coverage-notices' in source
+    assert '--profile remaining-listings' in source
+    assert '--profile coverage-notices' not in source and '--profile event-samples' not in source
     verify = text.split('- name: Verify retained')[1].split('- name: Retain complete')[0]
     assert 'if: always()' in verify
-    assert 'build_plan(source, profile="coverage-notices") == plan' in verify
+    assert 'build_plan(source, profile="remaining-listings") == plan' in verify
     assert 'plan["provider_requests"] == []' in verify
     assert 'hashlib.sha256(raw).hexdigest() == item["sha256"]' in verify
     assert 'production_qualification' in verify
