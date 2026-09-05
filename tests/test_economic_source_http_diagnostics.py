@@ -9,7 +9,7 @@ import pytest
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import economic_source_capture as capture
-from test_economic_source_capture import NOW, SOURCES, execute, rehash_file, response
+from test_economic_source_capture import SOURCES, execute, rehash_file, response
 
 
 class UnreadBody(io.BytesIO):
@@ -160,13 +160,23 @@ def test_redirect_is_not_followed_or_saved_but_its_numeric_code_is_known(tmp_pat
     assert capture.verify_capture(root)["status"] == "INCOMPLETE"
 
 
-@pytest.mark.parametrize("value", [True, "200", 200.0, 99, 600, None, 403])
+@pytest.mark.parametrize("value", [True, "200", 99, 600, None, 403])
 def test_rehashed_http_status_must_match_retained_response_metadata(tmp_path, value):
     root = tmp_path / "capture"
     execute(root, [SOURCES[0]])
     mutate_manifest(root, lambda payload: payload["records"][0].update(http_status=value))
     with pytest.raises(capture.EconomicCaptureError, match="HTTP status"):
         capture.verify_capture(root)
+
+
+def test_binary_float_status_is_refused_before_any_canonical_rehash(tmp_path):
+    root = tmp_path / "capture"
+    execute(root, [SOURCES[0]])
+    before = (root / "manifest.json").read_bytes()
+    assert capture._numeric_http_status(200.0) is None
+    with pytest.raises(ValueError, match="binary float"):
+        mutate_manifest(root, lambda payload: payload["records"][0].update(http_status=200.0))
+    assert (root / "manifest.json").read_bytes() == before
 
 
 def test_error_code_cannot_change_without_a_consistent_safe_diagnostic(tmp_path):
