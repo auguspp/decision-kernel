@@ -87,8 +87,15 @@ The 2026-09-04 bootstrap contains:
 90 broad industries
 230 granular industries
 321 total series
-state hash 3a87b66cdf947b0102634d31f29e31adfc1a8b2c2151c425c26b55ae3ed226cd
 ```
+
+Canonical bootstrap identity source:
+
+```text
+radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json
+```
+
+The manifest is authoritative for the bootstrap state hash, byte sizes and hashes, formula, session window, universe shape and source lineage. Future handoffs must point to it rather than copy those values.
 
 Parent hints contain 230 exact current-PIT child→parent mappings. They are routing hints, not permanent taxonomy.
 
