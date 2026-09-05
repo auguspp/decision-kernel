@@ -4,9 +4,10 @@ import argparse
 import hashlib
 import html
 import json
+import platform
 import re
 from datetime import date, datetime, timezone
-from html.parser import HTMLParser
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Callable, Mapping, Sequence
 from urllib.error import HTTPError
@@ -22,12 +23,13 @@ from .economic_source_capture import (
 )
 
 
-SCHEMA = 1
+SCHEMA = 2
 SEMANTICS = "BOUNDED_VISIBLE_DIRECTORY_DISCOVERY_TO_UNREVIEWED_SOURCE_PACKETS"
-POLICY = "moa-feed-spb-monthly-visible-window-v1"
+POLICY = "moa-feed-spb-statistics-visible-window-bs4-v2"
+PARSER_VERSION = "4.14.3"
 DIRECTORIES = {
     "MOA_FEED": "https://xmsyj.moa.gov.cn/jcyj/",
-    "SPB_EXPRESS": "https://www.spb.gov.cn/gjyzj/c100015/c100016/common_list.shtml",
+    "SPB_EXPRESS": "https://www.spb.gov.cn/gjyzj/c100275/pubtz.shtml",
 }
 PATHS = {
     "MOA_FEED": r"/jcyj/[0-9]{6}/t[0-9]{8}_[0-9]+\.htm",
@@ -94,9 +96,18 @@ def _implementation() -> dict:
     return {name: _sha((package / name).read_bytes()) for name in names}
 
 
+def _parser_runtime() -> dict:
+    try:
+        installed = version("beautifulsoup4")
+    except PackageNotFoundError as exc:
+        raise ReleaseDiscoveryError("install the pinned discovery extra before scanning or replay") from exc
+    if installed != PARSER_VERSION:
+        raise ReleaseDiscoveryError("Beautiful Soup version differs from the qualified parser pin")
+    return {"beautifulsoup4": installed, "builder": "html.parser", "python": platform.python_version()}
+
+
 def _decoded(response: PublicResponse) -> str:
-    # Reuse strict HTML/status/size/header/encoding checks. This parser slice accepts
-    # UTF-8 only; unsupported encodings remain explicit rather than guessed.
+    # Keep strict source decoding. Do not ask the parser to guess an encoding.
     decode_page(response)
     try:
         return response.body.decode("utf-8-sig")
@@ -104,75 +115,42 @@ def _decoded(response: PublicResponse) -> str:
         raise ReleaseDiscoveryError("directory/detail link parser requires valid UTF-8") from exc
 
 
-class _DirectoryRows(HTMLParser):
-    """Extract li-local anchors and dates; never associate a date across rows."""
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.rows = []
-        self.stack = []
-        self.anchor = None
-        self.ignored = []
-        self.base_seen = False
+def _duplicate_attribute(attributes, name, value) -> None:
+    # Beautiful Soup exposes this policy hook; do not implement another tokenizer.
+    raise ReleaseDiscoveryError("duplicate HTML attributes make source identity ambiguous")
 
-    def handle_starttag(self, tag, attrs):
-        if tag in {"script", "style", "template", "noscript"}:
-            self.ignored.append(tag)
-        if self.ignored:
-            return
-        if tag == "base":
-            self.base_seen = True
-        if tag == "li":
-            self.stack.append({"anchors": [], "text": [], "line": self.getpos()[0]})
-        if tag == "a" and self.stack:
-            if self.anchor is not None:
-                raise ReleaseDiscoveryError("nested directory anchors")
-            values = dict(attrs)
-            if len(values) != len(attrs):
-                raise ReleaseDiscoveryError("duplicate directory attributes")
-            self.anchor = {"href": values.get("href", ""), "title": values.get("title", ""),
-                           "text": [], "line": self.getpos()[0], "column": self.getpos()[1]}
 
-    def handle_endtag(self, tag):
-        if self.ignored:
-            if tag == self.ignored[-1]:
-                self.ignored.pop()
-            return
-        if tag == "a" and self.anchor is not None:
-            if not self.stack:
-                raise ReleaseDiscoveryError("anchor without a list row")
-            self.stack[-1]["anchors"].append(self.anchor)
-            self.anchor = None
-        if tag == "li" and self.stack:
-            if self.anchor is not None:
-                raise ReleaseDiscoveryError("unclosed directory anchor")
-            self.rows.append(self.stack.pop())
+def _soup(response: PublicResponse):
+    _parser_runtime()
+    from bs4 import BeautifulSoup
 
-    def handle_data(self, data):
-        if self.ignored:
-            return
-        if self.stack:
-            self.stack[-1]["text"].append(data)
-        if self.anchor is not None:
-            self.anchor["text"].append(data)
+    soup = BeautifulSoup(_decoded(response), "html.parser", multi_valued_attributes=None,
+                         on_duplicate_attribute=_duplicate_attribute)
+    for node in list(soup.find_all(["script", "style", "template", "noscript"])):
+        if node.parent is not None:
+            node.decompose()
+    if soup.find("base") is not None:
+        raise ReleaseDiscoveryError("unsupported base URL")
+    return soup
 
 
 def parse_directory(family: str, response: PublicResponse, *, captured_at: datetime) -> dict:
     if response.url != DIRECTORIES[family]:
         raise ReleaseDiscoveryError("directory response identity changed")
     local_date = _aware(captured_at).astimezone(SHANGHAI).date()
-    parser = _DirectoryRows()
-    parser.feed(_decoded(response))
-    parser.close()
-    if parser.stack or parser.anchor or parser.ignored or parser.base_seen:
-        raise ReleaseDiscoveryError("unclosed directory markup or unsupported base URL")
+    soup = _soup(response)
     rows = []
     by_url = {}
-    for row in parser.rows:
+    for row in soup.find_all("li"):
         links = []
-        for anchor in row["anchors"]:
-            visible = _compact("".join(anchor["text"]))
-            title = _compact(anchor["title"] or visible)
-            href = anchor["href"]
+        for anchor in row.find_all("a"):
+            if anchor.find_parent("li") is not row:
+                continue
+            if anchor.find("a") is not None or anchor.find_parent("a") is not None:
+                raise ReleaseDiscoveryError("nested directory anchors")
+            visible = _compact(anchor.get_text())
+            title = _compact(anchor.get("title") or visible)
+            href = anchor.get("href", "")
             if not isinstance(href, str) or not isinstance(title, str):
                 raise ReleaseDiscoveryError("malformed directory anchor")
             absolute = urljoin(response.url, href)
@@ -189,20 +167,21 @@ def parse_directory(family: str, response: PublicResponse, *, captured_at: datet
             continue
         if len(links) != 1:
             raise ReleaseDiscoveryError("ambiguous article/date association within directory row")
-        days = set(re.findall(r"(?<![0-9])[0-9]{4}-[0-9]{2}-[0-9]{2}(?![0-9])", "".join(row["text"])))
+        # Only this li's own text can establish its date; nested rows cannot lend one.
+        own_text = "".join(str(text) for text in row.strings if text.find_parent("li") is row)
+        days = set(re.findall(r"(?<![0-9])[0-9]{4}-[0-9]{2}-[0-9]{2}(?![0-9])", own_text))
         if len(days) != 1:
             raise ReleaseDiscoveryError("directory article requires exactly one explicit full date")
         published = date.fromisoformat(next(iter(days)))
         if published > local_date:
             raise ReleaseDiscoveryError("directory publication date is in the future")
         url, title, anchor = links[0]
-        # Some list templates include the date inside the anchor itself.
         title = re.sub(re.escape(published.isoformat()) + r"$", "", title).strip()
         item = {"family": family, "source_url": url, "title": title,
                 "listed_publication_date": published.isoformat(),
                 "date_precision": "DATE_ONLY", "directory_capture_at": captured_at.isoformat(),
-                "directory_body_sha256": _sha(response.body), "anchor_line": anchor["line"],
-                "anchor_column": anchor["column"], "target_family": bool(re.fullmatch(TITLES[family], title))}
+                "directory_body_sha256": _sha(response.body), "anchor_line": anchor.sourceline,
+                "anchor_column": anchor.sourcepos, "target_family": bool(re.fullmatch(TITLES[family], title))}
         signature = (title, published.isoformat())
         if url in by_url:
             if by_url[url] != signature:
@@ -269,31 +248,19 @@ def discovery_plan(sources: list, directories: list) -> dict:
             "max_detail_requests": MAX_DETAIL_REQUESTS, "candidate_count": len(selected)}
 
 
-class _ArticleMetadata(HTMLParser):
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.values = {}
-
-    def handle_starttag(self, tag, attrs):
-        if tag != "meta":
-            return
-        values = dict(attrs)
-        name = (values.get("name") or "").lower()
-        if name not in {"articletitle", "pubdate"}:
-            return
-        if len(values) != len(attrs) or name in self.values:
-            raise ReleaseDiscoveryError("ambiguous article identity metadata")
-        self.values[name] = values.get("content", "")
-
-
 def review_packet(item: Mapping, response: PublicResponse, *, acquired_at: datetime) -> dict:
     if response.url != item["source_url"]:
         raise ReleaseDiscoveryError("detail response URL differs from the discovered URL")
-    parser = _ArticleMetadata()
-    parser.feed(_decoded(response))
-    parser.close()
-    title = _compact(parser.values.get("articletitle", ""))
-    published = parser.values.get("pubdate", "")
+    values = {}
+    for tag in _soup(response).find_all("meta"):
+        name = (tag.get("name") or "").lower()
+        if name not in {"articletitle", "pubdate"}:
+            continue
+        if name in values:
+            raise ReleaseDiscoveryError("ambiguous article identity metadata")
+        values[name] = tag.get("content", "")
+    title = _compact(values.get("articletitle", ""))
+    published = values.get("pubdate", "")
     if (title != item["title"] or not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}(?: [0-9]{2}:[0-9]{2}:[0-9]{2})?", published)
             or published[:10] != item["listed_publication_date"]):
         raise ReleaseDiscoveryError("article title/date do not corroborate directory identity")
@@ -390,6 +357,7 @@ def _summary(result: Mapping) -> str:
 def run_discovery(sources: list, root: Path, *, transport: Callable | None = None,
                   provenance: str = LIVE, now: Callable | None = None) -> dict:
     _baseline(sources)
+    parser_runtime = _parser_runtime()
     if provenance not in {LIVE, SYNTHETIC} or ((transport is not None) != (provenance == SYNTHETIC)):
         raise ReleaseDiscoveryError("injected transport requires explicit synthetic provenance")
     if root.exists() or any(path.is_symlink() for path in (root, *root.parents)) or "decision-state" in root.resolve().parts:
@@ -465,7 +433,8 @@ def run_discovery(sources: list, root: Path, *, transport: Callable | None = Non
     put("summary.md", _summary(result).encode("utf-8"))
     manifest = {"schema_version": SCHEMA, "policy": POLICY, "semantics": SEMANTICS,
                 "provenance": provenance, "request_count": len(acquisitions), "files": files,
-                "implementation": _implementation(), "status": result["status"], **AUTHORITY}
+                "implementation": _implementation(), "parser_runtime": parser_runtime,
+                "status": result["status"], **AUTHORITY}
     manifest["archive_hash"] = canonical_hash(manifest)
     (root / "manifest.json").write_bytes(_bytes(manifest))
     return result
@@ -476,10 +445,11 @@ def verify_discovery(root: Path) -> dict:
         raise ReleaseDiscoveryError("invalid discovery archive root/manifest")
     manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
     claimed = manifest.pop("archive_hash")
-    if (set(manifest) != {"schema_version", "policy", "semantics", "provenance", "request_count", "files", "implementation", "status", *AUTHORITY}
+    if (set(manifest) != {"schema_version", "policy", "semantics", "provenance", "request_count", "files", "implementation", "parser_runtime", "status", *AUTHORITY}
             or canonical_hash(manifest) != claimed or type(manifest["schema_version"]) is not int
             or manifest["schema_version"] != SCHEMA or manifest["policy"] != POLICY or manifest["semantics"] != SEMANTICS
             or manifest["provenance"] not in {LIVE, SYNTHETIC} or manifest["implementation"] != _implementation()
+            or manifest["parser_runtime"] != _parser_runtime()
             or any(manifest[key] != value for key, value in AUTHORITY.items())):
         raise ReleaseDiscoveryError("archive identity/hash/implementation differs")
     count = manifest["request_count"]
