@@ -11,12 +11,14 @@ from email.message import Message
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Callable, Mapping, Sequence
+from urllib.error import HTTPError
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from .economic_node_study import AUTHORITY, qualify_release_excerpt
 
 
+CAPTURE_SCHEMA_VERSION = 2
 MAX_SOURCES = 4
 MAX_BODY_BYTES = 2 * 1024 * 1024
 MAX_ARCHIVE_BYTES = 20 * 1024 * 1024
@@ -32,6 +34,22 @@ class EconomicCaptureError(ValueError):
     pass
 
 
+def _numeric_http_status(value, *, minimum: int = 100, maximum: int = 599) -> int | None:
+    # Do not coerce booleans, arbitrary exception text or string payloads into codes.
+    return value if type(value) is int and minimum <= value <= maximum else None
+
+
+def _http_error_reason(status: int | None) -> str:
+    diagnostic = f"status={status}" if status is not None else "valid numeric status unavailable"
+    return f"source HTTP response rejected ({diagnostic}); no retry or fallback"
+
+
+class EconomicRedirectError(EconomicCaptureError):
+    def __init__(self, code):
+        self.http_status = _numeric_http_status(code, minimum=300, maximum=399)
+        super().__init__("redirect requires explicit source review")
+
+
 @dataclass(frozen=True)
 class PublicResponse:
     url: str
@@ -42,7 +60,13 @@ class PublicResponse:
 
 class _NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        raise EconomicCaptureError("redirect requires explicit source review")
+        # Do not follow or retain Location, cookies, reason text or the error body.
+        if fp is not None:
+            try:
+                fp.close()
+            except (OSError, ValueError):
+                pass
+        raise EconomicRedirectError(code)
 
 
 def _clock(value: datetime) -> datetime:
@@ -235,6 +259,23 @@ def _new_directory(root: Path) -> None:
     root.mkdir(parents=True, exist_ok=False)
 
 
+def _render_capture_summary(manifest: Mapping) -> str:
+    matched = sum(item["status"] == MATCHED for item in manifest["records"])
+    diagnostics = "\n".join(
+        f"- Source {item['index']:04d}: {item['status']}; "
+        f"HTTP={item['http_status'] if item['http_status'] is not None else 'UNKNOWN'}."
+        for item in manifest["records"]
+    )
+    return (f"## Official economic-source capture — {manifest['status']}\n\n"
+            f"Reviewed excerpts bound to full captured pages: {matched}/{len(manifest['records'])}.\n\n"
+            f"Provenance: {manifest['provenance']}. Each selected URL was attempted once; no automatic retries.\n\n"
+            + diagnostics + "\n\n"
+            "HTTP diagnostics describe this request only. UNKNOWN is not success, and a status code alone does not establish a permanent outage, source revision or an industry change.\n\n"
+            "This is source capture and excerpt reconciliation, not a current industry signal, continuous feed, historical first-vintage proof, or company-profit conclusion.\n\n"
+            "Raw HTML is retained as response.bin only when received through the bounded body path; do not execute it. HTTPError bodies, reasons, cookies and redirect targets are not read or retained.\n\n"
+            "HUMAN ATTENTION AUTHORITY = NONE; INVESTMENT AUTHORITY = NONE.\n")
+
+
 def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *,
                              transport: Callable[[str], PublicResponse] | None = None,
                              provenance: str = LIVE, now: Callable[[], datetime] | None = None) -> dict:
@@ -251,7 +292,7 @@ def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *
     _new_directory(root)
     now = now or (lambda: datetime.now(timezone.utc))
     transport = transport or fetch_public_page
-    manifest = {"schema_version": 1, "semantics": SEMANTICS, "provenance": provenance,
+    manifest = {"schema_version": CAPTURE_SCHEMA_VERSION, "semantics": SEMANTICS, "provenance": provenance,
                 "implementation": _implementation(), "status": "RECORDING", "records": [], "files": {}, **AUTHORITY}
 
     def flush():
@@ -273,9 +314,13 @@ def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *
         prefix = f"{index:04d}"
         put(f"{prefix}/source.json", _bytes(source))
         record = {"index": index, "source_url": source["source_url"], "started_at": _clock(now()).isoformat(),
-                  "completed_at": None, "status": "SOURCE_UNAVAILABLE", "error_type": None, "error_reason": None}
+                  "completed_at": None, "status": "SOURCE_UNAVAILABLE", "http_status": None,
+                  "error_type": None, "error_reason": None}
         try:
             response = transport(source["source_url"])
+            record["http_status"] = _numeric_http_status(response.status)
+            if record["http_status"] is None:
+                raise EconomicCaptureError("response HTTP status is not a valid integer")
             record["completed_at"] = _clock(now()).isoformat()
             if datetime.fromisoformat(record["completed_at"]) < datetime.fromisoformat(record["started_at"]):
                 raise EconomicCaptureError("capture completion clock precedes request")
@@ -287,7 +332,19 @@ def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *
         except (OSError, ValueError, RuntimeError) as exc:
             record["completed_at"] = record["completed_at"] or _clock(now()).isoformat()
             record["error_type"] = type(exc).__name__
-            record["error_reason"] = str(exc) if isinstance(exc, EconomicCaptureError) else "source transport failed; no retry or fallback"
+            if isinstance(exc, HTTPError):
+                record["http_status"] = _numeric_http_status(exc.code, minimum=300)
+                record["error_reason"] = _http_error_reason(record["http_status"])
+                # HTTPError is file-like: close it without reading its unsafe body.
+                try:
+                    exc.close()
+                except (OSError, ValueError):
+                    pass
+            elif isinstance(exc, EconomicRedirectError):
+                record["http_status"] = exc.http_status
+                record["error_reason"] = "redirect requires explicit source review"
+            else:
+                record["error_reason"] = str(exc) if isinstance(exc, EconomicCaptureError) else "source transport failed; no retry or fallback"
         else:
             try:
                 page, binding, observation = bind_reviewed_source(source, response,
@@ -304,13 +361,7 @@ def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *
         flush()
     matched = sum(item["status"] == MATCHED for item in manifest["records"])
     manifest["status"] = "COMPLETE" if matched == len(sources) else "INCOMPLETE"
-    summary = (f"## Official economic-source capture — {manifest['status']}\n\n"
-               f"Reviewed excerpts bound to full captured pages: {matched}/{len(sources)}.\n\n"
-               f"Provenance: {provenance}. Each selected URL was attempted once; no automatic retries.\n\n"
-               "This is source capture and excerpt reconciliation, not a current industry signal, continuous feed, historical first-vintage proof, or company-profit conclusion.\n\n"
-               "Raw HTML is retained as response.bin; do not execute it. Source records, response metadata and binding hashes are in the archive.\n\n"
-               "HUMAN ATTENTION AUTHORITY = NONE; INVESTMENT AUTHORITY = NONE.\n")
-    put("summary.md", summary.encode("utf-8"))
+    put("summary.md", _render_capture_summary(manifest).encode("utf-8"))
     flush()
     return {**manifest, "capture_hash": canonical_hash(manifest)}
 
@@ -326,8 +377,8 @@ def verify_capture(root: Path) -> dict:
     expected_fields = {"schema_version", "semantics", "provenance", "implementation", "status", "records", "files", *AUTHORITY}
     if set(payload) != expected_fields or claimed != canonical_hash(payload):
         raise EconomicCaptureError("capture manifest fields/hash disagree")
-    if type(payload["schema_version"]) is not int or payload["schema_version"] != 1 or payload["semantics"] != SEMANTICS or payload["provenance"] not in {LIVE, SYNTHETIC}:
-        raise EconomicCaptureError("unsupported capture contract")
+    if type(payload["schema_version"]) is not int or payload["schema_version"] != CAPTURE_SCHEMA_VERSION or payload["semantics"] != SEMANTICS or payload["provenance"] not in {LIVE, SYNTHETIC}:
+        raise EconomicCaptureError("unsupported capture contract; verify older archives at their recorded implementation")
     if payload["implementation"] != _implementation() or any(payload[key] != value for key, value in AUTHORITY.items()):
         raise EconomicCaptureError("capture implementation or authority differs")
     records = payload["records"]
@@ -354,8 +405,11 @@ def verify_capture(root: Path) -> dict:
     seen_urls = set()
     for index, record in enumerate(records):
         prefix = f"{index:04d}"
-        if set(record) != {"index", "source_url", "started_at", "completed_at", "status", "error_type", "error_reason"} or type(record["index"]) is not int or record["index"] != index:
+        if set(record) != {"index", "source_url", "started_at", "completed_at", "status", "http_status", "error_type", "error_reason"} or type(record["index"]) is not int or record["index"] != index:
             raise EconomicCaptureError("capture record fields or order differ")
+        http_status = record["http_status"]
+        if http_status is not None and _numeric_http_status(http_status) is None:
+            raise EconomicCaptureError("capture HTTP status must be a valid integer or null")
         source = json.loads((root / prefix / "source.json").read_text(encoding="utf-8"))
         qualify_release_excerpt(source)
         if record["source_url"] != source["source_url"] or record["source_url"] in seen_urls:
@@ -372,7 +426,22 @@ def verify_capture(root: Path) -> dict:
             metadata = json.loads((root / prefix / "response.json").read_text(encoding="utf-8"))
             if set(metadata) != {"url", "status", "headers"} or metadata["headers"] != _safe_headers(metadata["headers"]):
                 raise EconomicCaptureError("response metadata fields differ")
+            if _numeric_http_status(metadata["status"]) is None or metadata["status"] != http_status:
+                raise EconomicCaptureError("capture HTTP status disagrees with retained response")
             response = PublicResponse(metadata["url"], metadata["status"], metadata["headers"], (root / prefix / "response.bin").read_bytes())
+        if record["error_type"] in {"HTTPError", "EconomicRedirectError"}:
+            if record["status"] != "SOURCE_UNAVAILABLE" or response is not None or (root / prefix / "response.bin").exists():
+                raise EconomicCaptureError("HTTP transport errors cannot carry captured bodies or successful bindings")
+            if record["error_type"] == "HTTPError":
+                if http_status is not None and _numeric_http_status(http_status, minimum=300) is None:
+                    raise EconomicCaptureError("HTTP error carries a non-error status")
+                expected_reason = _http_error_reason(http_status)
+            else:
+                if http_status is not None and _numeric_http_status(http_status, minimum=300, maximum=399) is None:
+                    raise EconomicCaptureError("redirect diagnostic carries a non-redirect status")
+                expected_reason = "redirect requires explicit source review"
+            if record["error_reason"] != expected_reason:
+                raise EconomicCaptureError("HTTP error diagnostic disagrees with its safe status record")
         if record["status"] == MATCHED:
             if response is None or record["error_type"] is not None or record["error_reason"] is not None:
                 raise EconomicCaptureError("successful capture lacks a response or carries an error")
@@ -399,6 +468,8 @@ def verify_capture(root: Path) -> dict:
             raise EconomicCaptureError("unsupported capture disposition")
     if (payload["status"] == "COMPLETE") != (matched == len(records)):
         raise EconomicCaptureError("aggregate capture status disagrees")
+    if (root / "summary.md").read_bytes() != _render_capture_summary(payload).encode("utf-8"):
+        raise EconomicCaptureError("capture summary differs from its status records")
     return {"capture_hash": claimed, "archive_integrity": "VERIFIED", "matched_excerpts": matched,
             "attempted_sources": len(records), "status": payload["status"], "network_calls": 0,
             "production_state_writes": 0, "semantics": "OFFLINE_CAPTURE_VERIFICATION_NOT_PROVIDER_AUTHENTICATION", **AUTHORITY}
