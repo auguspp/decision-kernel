@@ -1,0 +1,90 @@
+name: economic-release-discovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/economic-release-discovery.yml
+      - src/decision_kernel/runtime/economic_release_discovery.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: economic-release-discovery-compatibility
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Require reviewed main
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Discovery proof requires reviewed main"
+            exit 1
+          fi
+      - name: Install
+        run: python -m pip install -e .
+      - name: Record run identity
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from decision_kernel.identity import canonical_hash, canonical_json
+          root = Path("release-discovery-proof")
+          root.mkdir(exist_ok=False)
+          record = {key: os.environ[key] for key in (
+              "GITHUB_REPOSITORY", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_SHA", "GITHUB_EVENT_NAME"
+          )}
+          record.update(semantics="BOUNDED_DIRECTORY_COMPATIBILITY_PROOF_NOT_CONTINUOUS_MONITORING",
+                        human_attention_authority="NONE", research_authority="NONE", investment_authority="NONE")
+          record["provenance_hash"] = canonical_hash(record)
+          (root / "workflow.json").write_text(canonical_json(record) + "\n", encoding="utf-8")
+          PY
+      - name: Scan two visible directory windows once
+        run: |
+          python -m decision_kernel.runtime.economic_release_discovery scan \
+            radar_inputs/economic-node-study-2026-09-05.json \
+            --output release-discovery-proof/scan
+      - name: Reconstruct discovery offline
+        if: always()
+        run: |
+          if [ ! -f release-discovery-proof/scan/manifest.json ]; then
+            echo "::error::No sealed discovery archive; no success is inferred"
+            exit 1
+          fi
+          python -m decision_kernel.runtime.economic_release_discovery verify \
+            release-discovery-proof/scan > release-discovery-proof/verification.json
+          cat release-discovery-proof/verification.json
+      - name: Retain complete attempt evidence
+        if: always()
+        id: evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: economic-release-discovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: release-discovery-proof/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish bounded discovery summary
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
+        run: |
+          if [ -f release-discovery-proof/scan/summary.md ]; then
+            cat release-discovery-proof/scan/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No complete discovery summary was produced; inspect failed steps." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\n[目录原文、请求计划与待核验材料](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo '仅验证两个可见目录窗口；未发现候选不等于发布者没有更新。不自动接受经济事实，不生成市场事件。' >> "$GITHUB_STEP_SUMMARY"
