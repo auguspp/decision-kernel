@@ -34,7 +34,7 @@ Important findings remain unchanged:
 
 Reuse first. Do not build a new adjustment engine, quote downloader, crawler or mutable review platform. Frozen comparisons, actual source bodies and the existing diagnostic are sufficient for further targeted review.
 
-1. Resolve the remaining source distinctions rather than reacquire the nineteen already obtained issuer/event sources: the BSE exact transaction record and vendor scope/precision, 603448's original selection, the ten unqueried gap cases and any necessary resumption intervals.
+1. Resolve the remaining source distinctions rather than reacquire already retained event records and issuer originals: the BSE exact transaction record and vendor scope/precision, 603448's original selection, the ten unqueried gap cases and any necessary resumption intervals.
 2. Keep gross cash per participating share separate from the ex-reference deduction. Establish final exchange/provider quotation rounding where it is necessary; the reviewed SZSE order-price-limit rounding clause is not sufficient proof.
 3. A naturally later overlapping stock vintage and sufficient 20/60-session data remain prerequisites for multi-day breadth. Same-day repeated bytes are not a revision/PIT proof. No daily repeat of these fixed September 4 studies is necessary merely to repeat success.
 
