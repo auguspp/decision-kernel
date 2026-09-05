@@ -2,6 +2,8 @@
 
 Status: REAL RECENT DUMP DECODED / COMPLETE PAGINATED REFERENCES / DIFFERENCES_REQUIRE_REVIEW / NOT A STOCK PANEL.
 
+Latest field-specific review: `docs/hithink-stock-field-diagnostics-2026-09-05.md`. It separates exact latest-close agreement, small amount differences, a large amount outlier, previous-close events and coverage gaps without changing the original disposition or accepting a production panel.
+
 ## Why this is the next Radar slice
 
 The existing Radar can inspect current constituent breadth, but multi-day participation needs qualified individual-stock paths. The previous dump inspector was tested only on Python row fixtures. This slice composes that inspector with a real, isolated recent-ten-session download and physical Parquet decoding. It does not add another signal, price fallback, crawler or state machine.
