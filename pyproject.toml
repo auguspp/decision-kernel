@@ -21,10 +21,16 @@ documents = [
 discovery = [
   "beautifulsoup4==4.14.3",
 ]
+dump-study = [
+  "requests==2.34.2",
+  "pyarrow==25.0.1",
+]
 dev = [
   "pytest==9.1.1",
   "pypdf==6.16.2",
   "beautifulsoup4==4.14.3",
+  "requests==2.34.2",
+  "pyarrow==25.0.1",
 ]
 
 [tool.setuptools]
