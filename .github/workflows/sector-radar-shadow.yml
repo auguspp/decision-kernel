@@ -87,7 +87,18 @@ jobs:
             --state-directory decision-state/sector-radar \
             --artifact-directory restored-artifact/sector-radar \
             --output-directory sector-radar-run
+      - name: Render read-only saved-state context
+        id: context-view
+        if: success()
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+        run: |
+          python -m decision_kernel.runtime.sector_radar_context \
+            --bundle decision-state/sector-radar \
+            --parent-hints radar_inputs/sector-parent-hints-2026-09-05.json \
+            --output sector-radar-run/context
       - name: Upload complete run audit
+        id: run-audit
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -112,6 +123,9 @@ jobs:
       - name: Publish separate shadow summary
         if: always()
         shell: bash
+        env:
+          CONTEXT_OUTCOME: ${{ steps.context-view.outcome }}
+          RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
           if [ -f sector-radar-run/operations.md ]; then
             cat sector-radar-run/operations.md >> "$GITHUB_STEP_SUMMARY"
@@ -123,5 +137,14 @@ jobs:
           if [ -f sector-radar-run/summary.md ]; then
             echo >> "$GITHUB_STEP_SUMMARY"
             cat sector-radar-run/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "### 完整行业状态 · 只读附件" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CONTEXT_OUTCOME" = "success" ] && [ -n "$RUN_AUDIT_URL" ]; then
+            printf '[下载本次运行附件](%s)\n\n' "$RUN_AUDIT_URL" >> "$GITHUB_STEP_SUMMARY"
+            echo '解压后用浏览器打开 `context/index.html`；机器可读数据在 `context/context.json`。这不是已托管的网站。' >> "$GITHUB_STEP_SUMMARY"
+            echo '该页只读取本次保存状态，不再获取行情，不新增提醒；页面不代替整个 workflow、状态上传和 cache 保存的成功证明。' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '本次未能提供已上传的完整状态页面。请检查 Render read-only saved-state context 与 Upload complete run audit 步骤；不要使用旧页面冒充本次结果。' >> "$GITHUB_STEP_SUMMARY"
           fi
           exit 0

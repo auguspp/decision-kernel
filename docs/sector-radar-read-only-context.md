@@ -1,6 +1,6 @@
 # Sector Radar: saved-state context, not another alert lane
 
-Status: IMPLEMENTED READ-ONLY CLI / NO NEW SIGNAL / NO SCHEDULE / NO LIVE ACQUISITION.
+Status: IMPLEMENTED READ-ONLY CLI AND WORKFLOW ARTIFACT WIRING / NEW LIVE PUBLICATION NOT YET VERIFIED / NO NEW SIGNAL / NO SCHEDULE.
 
 ## Product distinction
 
@@ -20,7 +20,29 @@ Three times remain distinct:
 
 The latest-session ledger must agree with market state, formula, benchmark, catalog and the recomputed candidate. Older incompatible records are not used to infer a current event. The ledger is read only after selection has been independently computed and never drives gate evaluation.
 
-## Use
+## Workflow delivery
+
+The manual `sector-radar-shadow` workflow now renders this existing CLI after a successful producer calculation, into `sector-radar-run/context/`. Its existing complete-run upload includes `context/index.html` and `context/context.json`; no extra artifact, public hosting, trigger or provider request is added. The rendering step has an empty HiThink credential environment value.
+
+GitHub Summary links to the uploaded run artifact only when rendering succeeded and `actions/upload-artifact` returned `artifact-url`. Download that trusted archive, extract it, and open `context/index.html` in a browser. This is a local self-contained page, not a hosted dashboard. The link requires GitHub access and remains subject to the existing 90-day artifact retention. The official action documents `artifact-url` in https://github.com/actions/upload-artifact#outputs .
+
+Ordering is explicit:
+
+```text
+successful producer calculation and local state bundle
+→ render context from that exact bundle
+→ upload complete run audit (including the projection)
+→ upload authoritative state bundle
+→ save cache acceleration copy
+```
+
+Rendering failure is visible and blocks remote state-artifact publication and cache save. No `continue-on-error` is used. Failure audits are still uploaded, and the summary says the view is unavailable rather than advertising an old report. A local producer bundle may already have been written when rendering fails; the prior remote successful artifact/cache remains the recovery authority. A retained view or a producer operations `success` record does not prove that every later workflow step succeeded.
+
+The view is outside the sealed `input-audit/expected/output` calculation inventory. It is a read-only post-calculation projection, not a modification to a recorded input audit. The input-audit replay continues to verify original calculated outputs byte for byte. Context/state/ledger hashes allow a reviewer to reconcile the attachment with the state bundle.
+
+This is implemented wiring plus synthetic end-to-end/local-archive coverage. A future real fresh dispatch must still prove the view was actually rendered and uploaded. Old run #3/#4 artifacts are not changed retroactively.
+
+## Standalone use
 
 Use an extracted, trusted `sector-radar-state-bundle` plus the matching parent hints:
 
@@ -33,11 +55,11 @@ python -m decision_kernel.runtime.sector_radar_context \
 
 Open `index.html`; `context.json` retains exact values and the context hash. No JavaScript, remote image, external font, public hosting or provider credential is needed. HTML source strings are escaped. Output must be a new directory outside all input paths; the state and event ledger are never written.
 
-This first slice is a standalone read command, not automatically inserted in the producer workflow. Automatic artifact publication can be added separately after the view is reviewed. The existing workflow YAML, producer result, input-audit fingerprint set, event schema and canonical Attention Inbox are unchanged.
+The producer result, input-audit fingerprint set, event schema, gate formulas and canonical Attention Inbox are unchanged.
 
 ## Freshness and unavailable data
 
-The header says exactly which saved market session was rendered and when. Calendar-day age is not a count of missing trading sessions. The command cannot assert that a saved bundle is the latest completed market state, because it makes no network call and has no newly qualified calendar.
+The header says exactly which saved market session was rendered and when. Calendar-day age is not a count of missing trading sessions. The command cannot assert that a saved bundle is the latest completed market state, because it makes no network call and has no newly qualified calendar. Refer to the matching successful workflow qualification, not a later page-generation clock, for live freshness evidence.
 
 The report does not fetch membership or reuse a previous day's breadth. It directs the reviewer to the same-session run audit for breadth and grouping. A saved strong path is not evidence of current participation, business improvement, cheapness or a recommendation.
 
@@ -45,6 +67,8 @@ The report does not fetch membership or reuse a previous day's breadth. It direc
 
 Tests run the saved 321-series bootstrap and the existing real-calculation synthetic pipeline. They cover active paths with an empty event ledger, separate 90/230 universes, exact latest-session event reconciliation, determinism, no state writes/network, future-ledger rejection, clocks, left-censoring, HTML escaping and output-path protection.
 
-These are software tests, not a new live provider proof. First real next-session append, real-input audit replay, benchmark sensitivity, multi-day constituent breadth and schedule remain separate work.
+Additional publication tests run quiet/candidate producer calculations, render their saved bundles with networking disabled, verify market-state/ledger/input-audit bytes remain unchanged, and package/extract the same context paths used by the workflow. Workflow tests verify rendering and upload order, failure gates and conditional artifact-link publication.
+
+These are software tests, not a new live provider proof. First real next-session append, real-input audit replay, real context publication, benchmark sensitivity, multi-day constituent breadth and schedule remain separate work.
 
 SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
