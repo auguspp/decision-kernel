@@ -1,6 +1,6 @@
 # Official economic-source raw capture
 
-Status: BOUNDED CAPTURE IMPLEMENTATION / NOT CONTINUOUS ECONOMIC COVERAGE / NO MARKET EVENT OR INVESTMENT AUTHORITY.
+Status: BOUNDED CAPTURE IMPLEMENTATION / PARTIAL LIVE PROOF / NOT CONTINUOUS ECONOMIC COVERAGE / NO MARKET EVENT OR INVESTMENT AUTHORITY.
 
 ## Purpose and scope
 
@@ -53,14 +53,14 @@ A changed value is not silently accepted as a revision. Its raw response is reta
 
 A source transport failure retains its class and an operations reason, not arbitrary exception payloads. Other selected independent pages can still be attempted once. Any rejected or unavailable source makes the aggregate `INCOMPLETE`, and the capture command exits nonzero. Complete success cannot be inferred from one working node.
 
-Offline verification checks file inventory and hashes, provenance and implementation compatibility. Successful bindings are recomputed from source records and original response bodies; changed observations cannot be legitimized merely by changing their file hashes. Network failures have integrity evidence only; verification does not recreate remote outages or fetch missing responses. It makes zero network calls and writes no production state. An incomplete archive does not turn into a complete acquisition because its retained bytes pass integrity checks.
+Offline verification checks file inventory and hashes, provenance and implementation compatibility. Successful bindings are recomputed from source records and original response bodies; changed observations cannot be legitimized merely by changing their file hashes. Rejected bindings must reproduce the recorded rejection. Network failures have integrity evidence only; verification does not recreate remote outages or fetch missing responses. It makes zero network calls and writes no production state. An incomplete archive does not turn into a complete acquisition because its retained bytes pass integrity checks.
 
 Injecting a test transport requires explicit `SYNTHETIC_TEST_ONLY` provenance, carried into the rebound observations. Unit-test HTML is generated from the reviewed excerpts and is not described as captured official HTML. Full-suite tests are offline. A separate real compatibility probe is required to establish actual server reachability, markup, encoding and response-body capture.
 
 ## Operational delivery
 
-A separate maintained public-source compatibility workflow may invoke these commands on relevant main-branch implementation changes and by manual dispatch. It must use no secrets, no market cache, no Research/Inbox integration and no schedule. Its artifact and status are separate from `sector-radar-shadow` and `kernel-tests`. A main push may trigger four bounded public GETs, but does not activate continuous industry monitoring.
+PR #200 added the maintained `economic-source-capture.yml` compatibility workflow: manual main dispatch or tightly path-filtered main-branch implementation/source-list changes, no secrets, market cache, Research/Inbox integration or schedule. Its artifact and status are separate from `sector-radar-shadow` and `kernel-tests`. A qualifying main push attempts four bounded public GETs, but does not activate continuous industry monitoring.
 
-At this implementation stage there is no successful raw capture proof yet. The local development runtime failed DNS resolution and its file-download tool could not retrieve the public page bytes. A web tool can read some page text, but that is not a substitute for original response-body archival. Do not fabricate originals from the existing snippets.
+At the #199 implementation-only stage, local DNS and file-download failures prevented original-byte acquisition. Web-tool page text was not substituted for the original responses. The first real networked workflow later captured and matched both SPB pages, while both MOA requests failed with HTTPError. Overall run `33947395994` remains `INCOMPLETE` / failure; numeric status for those HTTP failures was not preserved in this version. Do not infer a specific HTTP cause or four-source success. See `docs/economic-source-raw-capture-proof-2026-09-05.md` for artifact identity, independent hash/text checks and exact limitations.
 
 SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
