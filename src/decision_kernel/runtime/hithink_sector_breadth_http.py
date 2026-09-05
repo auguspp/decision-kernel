@@ -2,12 +2,21 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
-from datetime import date, datetime
+from dataclasses import asdict, dataclass
+from datetime import date, datetime, time, timezone
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from decision_kernel.adapters.hithink import SHANGHAI_TZ, require_hithink_data
+from decision_kernel.adapters.hithink import (
+    SHANGHAI_TZ,
+    latest_completed_a_share_session,
+    require_hithink_data,
+)
+from decision_kernel.adapters.hithink_index import (
+    HITHINK_INDEX_SNAPSHOT_QUALIFICATION,
+    HithinkQualifiedIndexSnapshotBatch,
+)
+from decision_kernel.identity import canonical_hash
 
 from .hithink_http import HithinkRuntimeError, _request_hithink_json
 from .sector_breadth import (
@@ -27,6 +36,13 @@ HITHINK_SECTOR_MEMBERSHIP_SEMANTICS = "CURRENT_CONSTITUENTS_AT_CAPTURE_ONLY"
 HITHINK_ALL_MARKET_SNAPSHOT_SEMANTICS = (
     "CURRENT_COMPLETED_SESSION_ALL_A_SHARE_SNAPSHOT"
 )
+HITHINK_STOCK_REFERENCE_SEMANTICS = (
+    "OBSERVED_STOCK_QUOTES_FOR_OFFLINE_RECONCILIATION_NOT_PER_SECURITY_SESSION_PROOF"
+)
+HITHINK_STOCK_TIMESTAMP_SEMANTICS = "PROVIDER_DATA_READY_TIME_NOT_MARKET_SESSION"
+# Capture after the fixed-price trading window too; this is an acquisition guard,
+# not a guarantee of provider finality or a change to the index close convention.
+STOCK_REFERENCE_NOT_BEFORE = time(15, 30)
 HITHINK_SECTOR_BREADTH_HUMAN_ATTENTION_AUTHORITY = "NONE"
 HITHINK_SECTOR_BREADTH_INVESTMENT_AUTHORITY = "NONE"
 
@@ -35,8 +51,107 @@ _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 
 @dataclass(frozen=True)
+class HithinkStockSnapshotReference:
+    """Explicit opt-in for the isolated dump study, not a new production default.
+
+    A benchmark/calendar anchors the comparison session, not each stock quote's
+    last-trade date. The provider does not expose per-row timestamps here. Exact
+    date-keyed dump reconciliation is still required and can reject the result.
+    Weekday gaps, including holidays not independently established here, fail.
+    """
+
+    trading_sessions: tuple[date, ...]
+    benchmark: HithinkQualifiedIndexSnapshotBatch
+    observed_at: datetime
+
+    @property
+    def market_session(self) -> date:
+        return self.benchmark.market_session
+
+    def validate(self) -> None:
+        _aware_reference_clock(self.observed_at)
+        sessions = self.trading_sessions
+        if (
+            not isinstance(sessions, tuple)
+            or not sessions
+            or any(type(day) is not date or day.weekday() >= 5 for day in sessions)
+            or sessions != tuple(sorted(set(sessions)))
+        ):
+            raise HithinkRuntimeError("stock reference calendar must be exact ascending weekday sessions")
+        if (
+            not isinstance(self.benchmark, HithinkQualifiedIndexSnapshotBatch)
+            or self.benchmark.benchmark_thscode != "000300.SH"
+            or self.benchmark.qualification_method != HITHINK_INDEX_SNAPSHOT_QUALIFICATION
+            or sum(p.thscode == "000300.SH" for p in self.benchmark.points) != 1
+        ):
+            raise HithinkRuntimeError("stock reference requires the qualified CSI300 price anchor")
+        session = self.market_session
+        if type(session) is not date or session not in sessions:
+            raise HithinkRuntimeError("stock reference benchmark session is absent from calendar")
+        if latest_completed_a_share_session(sessions, observed_at=self.observed_at) != session:
+            raise HithinkRuntimeError("stock reference benchmark/calendar session disagreement")
+        local = self.observed_at.astimezone(SHANGHAI_TZ)
+        if local.date() == session:
+            if local.time() < STOCK_REFERENCE_NOT_BEFORE:
+                raise HithinkRuntimeError("stock reference capture is before 15:30 completed-session boundary")
+        elif not (
+            session.weekday() == 4
+            and local.weekday() in (5, 6)
+            and 1 <= (local.date() - session).days <= 2
+        ):
+            raise HithinkRuntimeError(
+                "stock reference weekday gap or unfinished session; calendar absence is not holiday evidence"
+            )
+
+    def validate_received_at(self, received_at: datetime) -> None:
+        self.validate()
+        _aware_reference_clock(received_at)
+        if received_at < self.observed_at:
+            raise HithinkRuntimeError("stock reference receive clock precedes observation")
+        if received_at.astimezone(SHANGHAI_TZ).date() != self.observed_at.astimezone(SHANGHAI_TZ).date():
+            raise HithinkRuntimeError("stock reference capture crossed an observation-date boundary")
+
+    def validate_ready_time(self, timestamp_ms: Any, *, received_at: datetime) -> None:
+        self.validate_received_at(received_at)
+        if type(timestamp_ms) is not int or timestamp_ms <= 0:
+            raise HithinkRuntimeError("stock reference data-ready timestamp must be positive integer milliseconds")
+        try:
+            ready = datetime.fromtimestamp(timestamp_ms / 1000, tz=SHANGHAI_TZ)
+        except (OSError, OverflowError, ValueError) as exc:
+            raise HithinkRuntimeError("stock reference data-ready timestamp is invalid") from exc
+        lower = datetime.combine(self.market_session, STOCK_REFERENCE_NOT_BEFORE, tzinfo=SHANGHAI_TZ)
+        if ready < lower:
+            raise HithinkRuntimeError("stock reference data-ready time precedes the completed capture boundary")
+        if ready > received_at:
+            raise HithinkRuntimeError("stock reference data-ready time follows response receipt")
+
+    def evidence(self) -> dict[str, Any]:
+        self.validate()
+        return {
+            "semantics": HITHINK_STOCK_REFERENCE_SEMANTICS,
+            "provider_timestamp_semantics": HITHINK_STOCK_TIMESTAMP_SEMANTICS,
+            "comparison_session": self.market_session.isoformat(),
+            "observed_at": self.observed_at.isoformat(),
+            "calendar_hash": canonical_hash(self.trading_sessions),
+            "qualified_benchmark_hash": canonical_hash(asdict(self.benchmark)),
+            "closed_interval_basis": (
+                "SAME_SESSION_AFTER_1530"
+                if self.observed_at.astimezone(SHANGHAI_TZ).date() == self.market_session
+                else "FRIDAY_TO_SATURDAY_OR_SUNDAY_ONLY"
+            ),
+            "per_security_market_session": "NOT_PROVEN_BY_PAGE_TIMESTAMP",
+            "production_qualification": "NOT_ESTABLISHED",
+        }
+
+
+def _aware_reference_clock(value: datetime) -> None:
+    if not isinstance(value, datetime) or value.tzinfo is None or value.utcoffset() is None:
+        raise HithinkRuntimeError("stock reference clocks must be timezone-aware")
+
+
+@dataclass(frozen=True)
 class HithinkAllMarketSnapshotBatch:
-    """One exact paginated A-share snapshot for a qualified market session."""
+    """Exact paginated quotes under the explicitly recorded snapshot semantics."""
 
     market_session: date
     page_size: int
@@ -274,12 +389,15 @@ def fetch_hithink_all_market_snapshot(
     request_json: _RequestJSON | None = None,
     timeout_seconds: float = 10.0,
     page_size: int = HITHINK_A_SHARE_SNAPSHOT_PAGE_SIZE,
+    reference_context: HithinkStockSnapshotReference | None = None,
+    received_at: Callable[[], datetime] | None = None,
 ) -> HithinkAllMarketSnapshotBatch:
-    """Fetch one exact paginated current A-share snapshot.
+    """Fetch exact paginated quotes, with an explicit isolated-study opt-in.
 
-    The caller must supply the independently qualified completed market session.
-    Every provider page must map to that same Shanghai date. Missing market values
-    remain explicit and are not converted into zero returns.
+    With no reference_context the existing Sector producer date-equality contract
+    is unchanged. With a context, page timestamps are data-ready clocks bounded by
+    the completed capture window and response receipt; they do not prove each stock
+    traded in the anchor session. Missing values remain explicit in both modes.
     """
 
     normalized_key = _require_runtime_inputs(
@@ -290,6 +408,13 @@ def fetch_hithink_all_market_snapshot(
         raise HithinkRuntimeError(
             "HiThink all-market snapshot page_size must be positive"
         )
+    if reference_context is not None:
+        reference_context.validate()
+        if reference_context.market_session != market_session:
+            raise HithinkRuntimeError("stock reference context disagrees with requested market session")
+    elif received_at is not None:
+        raise HithinkRuntimeError("stock reference receive clock requires an explicit reference context")
+    receive_clock = received_at or (lambda: datetime.now(timezone.utc))
     request_json = request_json or _default_request_json(
         api_key=normalized_key,
         timeout_seconds=timeout_seconds,
@@ -310,6 +435,8 @@ def fetch_hithink_all_market_snapshot(
             envelope,
             endpoint=HITHINK_A_SHARE_SNAPSHOT_PATH,
         )
+        if reference_context is not None:
+            reference_context.validate_ready_time(data.get("timestamp"), received_at=receive_clock())
         timestamp_ms = _provider_timestamp_ms(
             data,
             endpoint=HITHINK_A_SHARE_SNAPSHOT_PATH,
@@ -318,7 +445,7 @@ def fetch_hithink_all_market_snapshot(
             timestamp_ms / 1000,
             tz=SHANGHAI_TZ,
         ).date()
-        if provider_session != market_session:
+        if reference_context is None and provider_session != market_session:
             raise HithinkRuntimeError(
                 "HiThink all-market snapshot provider date disagrees with the "
                 f"qualified market session: {provider_session} != {market_session}"
@@ -403,4 +530,5 @@ def fetch_hithink_all_market_snapshot(
         provider_timestamp_min_ms=min(provider_timestamps),
         provider_timestamp_max_ms=max(provider_timestamps),
         points=ordered_points,
+        snapshot_semantics=(HITHINK_ALL_MARKET_SNAPSHOT_SEMANTICS if reference_context is None else HITHINK_STOCK_REFERENCE_SEMANTICS),
     )
