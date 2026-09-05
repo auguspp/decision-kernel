@@ -3,7 +3,7 @@
 Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW KERNEL SCHEMA**  
 Updated: **2026-09-05**  
 Repository: `auguspp/decision-kernel`  
-Verified implementation baseline before this state-only sync: `5f8f635d191dd8559844d1b74af0dca0cf4c02df`
+Last independently verified live implementation: `5f8f635d191dd8559844d1b74af0dca0cf4c02df`
 
 ## Operating rule
 
@@ -28,6 +28,7 @@ SECTOR RADAR PURE DAILY COMPOSITION ROOT = MERGED
 SECTOR RADAR MANUAL WORKFLOW_DISPATCH PRODUCER = MERGED
 SECTOR RADAR LIVE SAME-SESSION VALIDATION = PROVEN
 SECTOR RADAR LIVE ARTIFACT/CACHE RESTORE = PROVEN
+SECTOR RADAR INPUT AUDIT / OFFLINE REPLAY = IMPLEMENTED / SYNTHETICALLY TESTED
 SECTOR RADAR NEW COMPLETED-SESSION APPEND = NOT YET PROVEN LIVE
 SECTOR RADAR SCHEDULE = NOT PRESENT
 SECTOR RADAR PROSPECTIVE CORPUS = EMPTY
@@ -479,6 +480,7 @@ Artifact digests, content-hash reconciliation, cache-log evidence and review lim
 ```text
 2026-09-07 DIRECT APPEND PROOF = NOT EXECUTED
 LIVE CANDIDATE-TIME HIERARCHY/BREADTH IN THIS PRODUCER = NOT EXERCISED
+LIVE REPLAYABLE INPUT AUDIT PROOF = NOT EXECUTED
 PROSPECTIVE SHADOW CANDIDATE CORPUS = EMPTY
 OBJECTIVE T+5 / T+20 EVALUATION = NOT STARTED
 HUMAN REVIEW ANNOTATION = NOT STARTED
@@ -487,6 +489,16 @@ CANONICAL ATTENTION INBOX INSERTION = NOT AUTHORIZED
 ```
 
 The successful same-session runs are not a new-session screen showing no market opportunities. They deliberately perform validation only and create no retrospective candidate events.
+
+### 5.8 Replayable input audit and full-path offline tests — PR #193
+
+`runtime/sector_radar_audit.py` now records bounded decoded provider JSON, exact input states, parent hints, request identities and clocks, implementation hashes and expected calculation outputs. The live CLI stages state, seals and validates the audit, then publishes using the existing transactional bundle writer. No credential headers or environment snapshots are retained.
+
+New-session `observations.json` retains complete previous/current 881 and 884 snapshots separately, plus diagnostics from the existing gate predicates. Offline replay checks the sealed input inventory, source-manifest relationships, request order, clocks and every regenerated output byte; it has no network or production-state output path.
+
+Synthetic integration tests execute real adapters, relative strength, false-to-true gates, hierarchy, breadth, event append, artifact/cache resolution and same-session idempotence. They also cover interrupted acquisition, tampered inputs and failure before or during state publication. These are implementation tests, not live HiThink evidence or prospective events.
+
+The audit contract, replay command, operational budgets and limits are documented in `docs/sector-radar-input-audit-and-offline-replay.md`. Existing run #3/#4 artifacts cannot be retroactively upgraded to this input format. The workflow definition, schedule, signal policy, live state and investment authority are unchanged.
 
 ---
 
@@ -513,6 +525,8 @@ restore newest successful artifact, currently ending 2026-09-04
 Zero candidates is a valid quiet outcome; do not force a candidate. If ordinary production first sees 2026-09-08 or later while restored state still ends at 2026-09-04, it must fail closed and use a separate qualified recovery procedure.
 
 Review the real new-session append before adding a schedule. Continue to use a new `workflow_dispatch`, not “rerun jobs.” Any state, turnover, catalog or provider identity disagreement remains a real proof failure and must not be weakened silently.
+
+For the next audited run, also download its complete run artifact and verify `input-audit/` with the recorded implementation. Successful offline reproduction supplements, but does not replace, the workflow's artifact publication and cache checks.
 
 ### P1 — objective outcomes and Human review
 
@@ -583,6 +597,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `docs/sector-discovery-radar-full-current-hierarchy-result-2026-09-05.md`
 - `docs/sector-radar-state-bootstrap-2026-09-04.md`
 - `docs/sector-radar-prospective-producer-operations.md`
+- `docs/sector-radar-input-audit-and-offline-replay.md`
 
 ### Sector Radar runtime and data
 
@@ -595,6 +610,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/sector_radar_daily.py`
 - `src/decision_kernel/runtime/sector_radar_persistence.py`
 - `src/decision_kernel/runtime/sector_radar_producer.py`
+- `src/decision_kernel/runtime/sector_radar_audit.py`
 - `src/decision_kernel/runtime/hithink_index_http.py`
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
 - `.github/workflows/sector-radar-shadow.yml`
@@ -620,7 +636,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #188:** merged the manual `workflow_dispatch` producer, artifact-authoritative persistence, exact cache conflict checks, 90-day retention, direct-session discipline and separate shadow output.
 - **PR #190:** repaired the same-session calendar-boundary failure exposed by run `33936773283` without requiring a future calendar row.
 - **PR #191:** repaired index snapshot data-ready timestamp interpretation exposed by run `33937883228`, preserving benchmark-price and calendar qualification.
+- **PR #193:** added bounded replayable input audit, full separate-universe diagnostics, staged publication and synthetic full-path integration/rollback coverage; no new live proof is claimed.
 - **VERIFIED LIVE IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
 - **PROVEN LIVE:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
-- **NOT YET PROVEN LIVE:** future market-state append or candidate enrichment. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
+- **NOT YET PROVEN LIVE:** future market-state append, candidate enrichment or the new replayable input audit on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
 - **UNCHANGED AUTHORITY:** no Research route, Recommendation, Action or investment authority.
