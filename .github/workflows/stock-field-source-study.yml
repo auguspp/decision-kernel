@@ -53,17 +53,17 @@ jobs:
               "GITHUB_REPOSITORY", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_SHA", "GITHUB_EVENT_NAME"
           )}
           value.update(source_run_id=33959190974, source_artifact_id=9967375391,
+                       study_profile="coverage-notices",
                        semantics="FROZEN_CASE_SOURCE_STUDY_NOT_MARKET_PRODUCTION")
           value["provenance_hash"] = canonical_hash(value)
           (root / "workflow.json").write_text(canonical_json(value) + "\n", encoding="utf-8")
           (root / "source-offline-inspection.json").write_bytes(
               Path("frozen-stock-comparison/offline-inspection.json").read_bytes())
           PY
-      - name: Collect targeted events and issuer originals once
-        env:
-          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      - name: Collect targeted public coverage notices once
         run: |
           python -m decision_kernel.runtime.stock_field_source_study \
+            --profile coverage-notices \
             --frozen frozen-stock-comparison --output stock-field-source-study/capture
       - name: Verify retained evidence offline even when collection is incomplete
         if: always()
@@ -81,8 +81,10 @@ jobs:
           assert canonical_hash(report) == claimed
           plan = json.loads((root / "plan.json").read_text())
           source = json.loads(Path("stock-field-source-study/source-offline-inspection.json").read_text())
-          assert build_plan(source) == plan
+          assert build_plan(source, profile="coverage-notices") == plan
           assert plan["plan_hash"] == report["plan_hash"]
+          assert plan["provider_requests"] == []
+          assert report["study_profile"] == "coverage-notices"
           expected = {"plan.json", "report.json", "summary.md"}
           for item in report["files"]:
               raw = (root / item["name"]).read_bytes()
