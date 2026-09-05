@@ -135,7 +135,9 @@ def test_expired_or_ambiguous_link_never_resigned(expires):
 
 def test_download_is_retained_but_reference_rejection_is_not_success(parquet, tmp_path):
     payloads = responses()
-    payloads[trial.hithink_sector_breadth_http.HITHINK_A_SHARE_SNAPSHOT_PATH]["data"]["timestamp"] = ms(date(2026, 9, 5), 16)
+    # A future response remains rejected; a Saturday data-ready clock is now
+    # legitimate in the explicit study window and has separate positive coverage.
+    payloads[trial.hithink_sector_breadth_http.HITHINK_A_SHARE_SNAPSHOT_PATH]["data"]["timestamp"] = ms(date(2026, 9, 6), 16)
     result, calls = execute(tmp_path / "study", parquet, payloads)
     assert result["status"] == "FAILED_CLOSED"
     assert result["stage"] == "QUALIFIED_REFERENCE"

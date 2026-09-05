@@ -236,7 +236,7 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
                        "runtime/hithink_http.py", "runtime/hithink_index_http.py",
                        "runtime/hithink_sector_breadth_http.py", "runtime/hithink_dump_inspection.py",
                        "runtime/hithink_dump_trial.py", "runtime/sector_radar_audit.py")
-    report = {"schema_version": 1, "provenance": provenance, "started_at": started.isoformat(),
+    report = {"schema_version": 2, "provenance": provenance, "started_at": started.isoformat(),
               "status": "FAILED_CLOSED", "stage": "SIGNING", "production_qualification": "NOT_ESTABLISHED",
               "reader_runtime": runtime, "signing_endpoint": SIGNING_PATH, "download_completed": False,
               "implementation": {name: hashlib.sha256((package / name).read_bytes()).hexdigest() for name in implementations},
@@ -310,20 +310,35 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
         if benchmark.market_session != latest:
             raise DumpTrialError("REFERENCE_BENCHMARK_SESSION_DISAGREES")
         save("benchmark.json", json.loads(canonical_json(asdict(benchmark))))
+        reference_context = hithink_sector_breadth_http.HithinkStockSnapshotReference(
+            trading_sessions=calendar, benchmark=benchmark, observed_at=_clock(now()))
+        save("reference-window.json", reference_context.evidence())
         stock_snapshot = hithink_sector_breadth_http.fetch_hithink_all_market_snapshot(
-            market_session=latest, api_key=api_key, request_json=reference_request)
+            market_session=latest, api_key=api_key, request_json=reference_request,
+            reference_context=reference_context, received_at=now)
         universe = [point.thscode for point in stock_snapshot.points]
-        snapshot = json.loads(canonical_json({"market_session": latest, "points": [asdict(p) for p in stock_snapshot.points]}))
+        snapshot = json.loads(canonical_json({
+            "market_session": latest, "points": [asdict(p) for p in stock_snapshot.points],
+            "reference_semantics": stock_snapshot.snapshot_semantics,
+            "per_security_session_proof": "NOT_ESTABLISHED_BY_PAGE_TIMESTAMP",
+        }))
         save("universe.json", universe)
         save("snapshot.json", snapshot)
         report["reference_scope"] = "PROVIDER_PAGINATED_CURRENT_A_SHARE_SET_NOT_INDEPENDENT_EXCHANGE_CENSUS"
-        report["reference_summary"] = {"market_session": latest.isoformat(), "total": stock_snapshot.declared_total,
-                                       "pages": stock_snapshot.page_count, "unpriced": stock_snapshot.unpriced_rows}
+        report["reference_summary"] = {
+            "market_session": latest.isoformat(), "total": stock_snapshot.declared_total,
+            "pages": stock_snapshot.page_count, "unpriced": stock_snapshot.unpriced_rows,
+            "snapshot_semantics": stock_snapshot.snapshot_semantics,
+            "provider_timestamp_min_ms": stock_snapshot.provider_timestamp_min_ms,
+            "provider_timestamp_max_ms": stock_snapshot.provider_timestamp_max_ms,
+            "window": reference_context.evidence(),
+        }
         report["stage"] = "ROW_INSPECTION"
         inspection = inspect_daily_k_rows(parquet_rows(path), expected_sessions=sessions,
                                          current_universe=universe, reference_snapshot=snapshot)
         if _file_hash(path, MAX_FILE_BYTES) != actual_hash:
             raise DumpTrialError("DUMP_CHANGED_DURING_INSPECTION")
+        reference_context.validate_received_at(_clock(now()))
         if latest_completed_a_share_session(calendar, observed_at=now()) != latest:
             raise DumpTrialError("COMPLETED_SESSION_CHANGED_DURING_TRIAL")
         report["inspection"] = inspection
@@ -341,6 +356,7 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
     summary = (f"## Stock dump trial — {report['status']}\n\n"
                f"Stage: {report['stage']}\n\nDownload retained: {report['download_completed']}\n\n"
                "Production qualification = NOT_ESTABLISHED. No stock panel or multi-day breadth is activated.\n\n"
+               "Stock page timestamps are data-ready clocks, not per-security market-session evidence. "
                "A matching snapshot is same-provider consistency, not independent market authentication. "
                "Overlapping vintages, corporate actions, missing/suspended/delisted coverage remain unqualified.\n\n"
                "SHADOW OBSERVATION ONLY · HUMAN ATTENTION AUTHORITY = NONE · RESEARCH AUTHORITY = NONE · INVESTMENT AUTHORITY = NONE\n")
