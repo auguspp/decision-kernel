@@ -13,8 +13,10 @@ def envelope(url):
     return {"code": 0, "data": {"presigned_url": url, "presigned_url_expires_at": "2026-09-05T09:05:00Z"}}
 
 
-def test_exact_official_cdn_object_is_accepted_without_rewriting_signed_url():
-    original = "https://o.thsi.cn" + PATH + "?X-Amz-Signature=synthetic-test-only"
+@pytest.mark.parametrize("path", [PATH, "/different_release_layout/recent.parquet", "/storage-v2/daily_k/2026-09-04.parquet"])
+def test_authenticated_service_selects_object_path_on_exact_origin_without_url_rewriting(path):
+    # Synthetic alternative layouts are not claims about the live object's path.
+    original = "https://o.thsi.cn" + path + "?X-Amz-Signature=synthetic-test-only"
     url, expiry, host = signing_identity(envelope(original), now=NOW)
     assert url == original
     assert host == "o.thsi.cn"
@@ -24,8 +26,6 @@ def test_exact_official_cdn_object_is_accepted_without_rewriting_signed_url():
 @pytest.mark.parametrize("url", [
     "https://o.thsi.cn.evil.invalid" + PATH + "?x=1",
     "https://other.o.thsi.cn" + PATH + "?x=1",
-    "https://o.thsi.cn/other/object.parquet?x=1",
-    "https://o.thsi.cn/fuyao-market-dump-lookalike/object.parquet?x=1",
     "https://o.thsi.cn/fuyao-market-dump/../other/object.parquet?x=1",
     "https://o.thsi.cn/fuyao-market-dump/%2e%2e/object.parquet?x=1",
     "https://o.thsi.cn/fuyao-market-dump/\\other/object.parquet?x=1",
@@ -35,6 +35,6 @@ def test_exact_official_cdn_object_is_accepted_without_rewriting_signed_url():
     "https://o.thsi.cn" + PATH + "?x=1#fragment",
     "https://o.thsi.cn" + PATH,
 ])
-def test_cdn_configuration_does_not_authorize_other_paths_or_identities(url):
+def test_cdn_configuration_does_not_authorize_other_origins_or_ambiguous_paths(url):
     with pytest.raises(DumpTrialError):
         signing_identity(envelope(url), now=NOW)
