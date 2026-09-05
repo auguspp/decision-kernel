@@ -1,0 +1,217 @@
+{
+  "view_version": 1,
+  "source_commit": "7c9bd59c46d752c1a9d95c292ed9a5cb5e270d41",
+  "scope_note": "本页只投影2026年9月3–4日的四份冻结记录，不代表今日最新状态。没有扫描后续档案、读取新行情或重新评价判断；这里的未来日期仅是原记录当时的约定。",
+  "cases": [
+    {
+      "key": "catl",
+      "label": "宁德时代 · 300750.SZ",
+      "records": [
+        {
+          "path": "docs/decisions/300750-catl-human-research-acceptance-2026-09-04.md",
+          "blob_sha1": "c685c245b0dc0e4953c83e8266a75fa1b090ae12",
+          "title": "认可研究，不是投资决定",
+          "clock": [
+            5,
+            5
+          ],
+          "human_quote": [
+            12,
+            12
+          ],
+          "parent": null,
+          "panels": [
+            {
+              "label": "当时的研究",
+              "navigation_note": "企业质量得到认可，但部分利润持续性、现金质量和新投资回报仍未确立。351元是这份研究的价格语境，不是本页最新行情；数值 Odds 仍 withheld。",
+              "span": [
+                31,
+                52
+              ]
+            },
+            {
+              "label": "Human 回应的范围",
+              "navigation_note": "在当前市场环境下，比较认可这版研究姿态。没有 BUY／SELL／HOLD 决定，也没有因此接受一套完整概率。",
+              "span": [
+                10,
+                30
+              ]
+            },
+            {
+              "label": "行动记录",
+              "navigation_note": "原记录明确没有 Action；没有执行时间、价格或数量。本页没有查询或推断后来交易。",
+              "span": [
+                116,
+                125
+              ]
+            },
+            {
+              "label": "当时在等什么",
+              "navigation_note": "等待利润与现金流质量、分部毛利、资本开支和增量 ROIC 等经营证据。价格下降本身不构成投资授权。",
+              "span": [
+                101,
+                115
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "sanhua",
+      "label": "三花智控 · 002050.SZ",
+      "records": [
+        {
+          "path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
+          "blob_sha1": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
+          "title": "条件买入已表达，尚未执行",
+          "clock": [
+            5,
+            5
+          ],
+          "human_quote": [
+            12,
+            12
+          ],
+          "parent": null,
+          "panels": [
+            {
+              "label": "当时的研究",
+              "navigation_note": "核心热管理业务优先，机器人与液冷仍是未证实的可选上行。旧情景概率没有被记录为 Human 接受的概率，不能用来填充新的 Odds。",
+              "span": [
+                35,
+                62
+              ]
+            },
+            {
+              "label": "Human 决定的范围",
+              "navigation_note": "在核心论点仍成立时，约30元开始第一笔。30元是条件价，不是已成交价格，也不是目标价或自动订单。",
+              "span": [
+                8,
+                34
+              ]
+            },
+            {
+              "label": "行动记录",
+              "navigation_note": "原记录是 NOT YET EXECUTED；价格以后触及30元，也不能由此推断执行。",
+              "span": [
+                131,
+                155
+              ]
+            },
+            {
+              "label": "当时的评价期限",
+              "navigation_note": "07:04 的原记录尚未声明个人评价期限；研究估值期限不能替代它。07:22 的独立补充在下方保留，原记录不改写。",
+              "span": [
+                156,
+                177
+              ]
+            }
+          ]
+        },
+        {
+          "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
+          "blob_sha1": "ccc66895c2aaf29b78630208b95e0ca11655362f",
+          "title": "补充持有窗口，不改写先前决定",
+          "clock": [
+            5,
+            5
+          ],
+          "human_quote": [
+            11,
+            11
+          ],
+          "parent": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
+          "panels": [
+            {
+              "label": "期限的含义",
+              "navigation_note": "Human 使用“可能”：实际执行后约3–6个月。不是从本记录日期起算，也不是三个月或六个月必须卖出的指令。",
+              "span": [
+                15,
+                31
+              ]
+            },
+            {
+              "label": "研究期限与个人期限",
+              "navigation_note": "原研究估值期限是2027-09-02；个人窗口是执行后约3–6个月。两者分开保留。",
+              "span": [
+                68,
+                81
+              ]
+            },
+            {
+              "label": "行动仍未改变",
+              "navigation_note": "仍未执行，因此不能生成具体的三个月／六个月结算日期。以后明确的 Action 应另行记录。",
+              "span": [
+                82,
+                92
+              ]
+            },
+            {
+              "label": "以后怎样评价",
+              "navigation_note": "分别检查核心论点、经营证据、估值与预期、可选业务和执行；股价涨跌本身不能判定原决定好坏。",
+              "span": [
+                50,
+                67
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "micron",
+      "label": "Micron · MU / NASDAQ",
+      "records": [
+        {
+          "path": "docs/decisions/MU-micron-human-wait-validation-2026-09-03.md",
+          "blob_sha1": "590453f3ad36e70cc11b8bae196aad377f082854",
+          "title": "选择等待，不是看空企业",
+          "clock": [
+            5,
+            5
+          ],
+          "human_quote": [
+            15,
+            15
+          ],
+          "parent": null,
+          "panels": [
+            {
+              "label": "当时的研究",
+              "navigation_note": "合同对周期底部的缓冲获得部分支持，公司整体盈利中枢重塑仍未证明。原记录明确美国生产 ObservedMarket 不可用，数值 Odds withheld。",
+              "span": [
+                39,
+                65
+              ]
+            },
+            {
+              "label": "Human 约束与企业判断",
+              "navigation_note": "暂时不买美股是 Human 的市场配置约束，不等于基本面转空、论点失效或永远排除该标的。",
+              "span": [
+                66,
+                85
+              ]
+            },
+            {
+              "label": "行动记录",
+              "navigation_note": "原记录明确 NO_ACTION，没有执行时间、价格或数量。以后变便宜或发生财报事件都不会自动产生买入。",
+              "span": [
+                194,
+                208
+              ]
+            },
+            {
+              "label": "当时约定的验证窗口",
+              "navigation_note": "2026-09-30 财报是该记录约定的验证事件，不是本次重新核实的日程或强制买卖日期。关注合同、HBM、毛利、资本开支与正常化现金流。",
+              "span": [
+                86,
+                168
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
