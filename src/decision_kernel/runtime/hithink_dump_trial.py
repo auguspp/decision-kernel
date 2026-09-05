@@ -112,6 +112,28 @@ def request_json(path: str, params: dict, *, api_key: str) -> dict:
     return payload
 
 
+def destination_diagnostics(url: str, *, credential: str) -> dict:
+    """Retain predicate results, never a usable URL or an unbounded path."""
+    if not isinstance(url, str) or len(url) > 8192:
+        return {"parse_status": "INVALID_OR_OVERSIZED"}
+    try:
+        part = urlsplit(url)
+        port = part.port
+    except ValueError:
+        return {"parse_status": "INVALID_URL_OR_PORT"}
+    namespace = part.path.split("/")[1] if part.path.startswith("/") else ""
+    if not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", namespace) or (credential and credential in namespace):
+        namespace = "NOT_RETAINED"
+    return {"parse_status": "PARSED", "https": part.scheme == "https",
+            "port": port, "userinfo_present": part.username is not None or part.password is not None,
+            "fragment_present": bool(part.fragment), "query_present": bool(part.query),
+            "aws_host_match": bool(S3_HOST.fullmatch(part.hostname or "")),
+            "cdn_host_match": part.hostname == CDN_HOST, "cdn_prefix_match": part.path.startswith(CDN_PREFIX),
+            "top_level_namespace": namespace, "path_has_percent_escape": "%" in part.path,
+            "path_has_backslash": "\\" in part.path, "path_has_dot_segment": bool({".", ".."}.intersection(part.path.split("/"))),
+            "control_or_space_present": any(ord(c) < 33 for c in url)}
+
+
 def signing_identity(payload: dict, *, now: datetime) -> tuple[str, datetime, str]:
     if type(payload.get("code")) is not int or payload["code"] != 0:
         raise DumpTrialError("SIGNING_PROVIDER_REJECTED")
@@ -254,6 +276,7 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
         report["signing_provider_code"] = signed.get("code") if type(signed.get("code")) is int else None
         offered = signed.get("data")
         if isinstance(offered, dict) and isinstance(offered.get("presigned_url"), str):
+            report["destination_diagnostics"] = destination_diagnostics(offered["presigned_url"], credential=api_key)
             offered_host = urlsplit(offered["presigned_url"]).hostname
             if offered_host and re.fullmatch(r"[a-z0-9.-]{1,253}", offered_host) and api_key not in offered_host:
                 report["offered_download_host"] = offered_host
