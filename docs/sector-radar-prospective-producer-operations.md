@@ -21,6 +21,8 @@ qualified persistent state
 
 The workflow remains separate from `decision-inbox.yml` and is started only by `workflow_dispatch`. It has no schedule in this phase.
 
+Each execution must be a **fresh** `workflow_dispatch` with `GITHUB_RUN_ATTEMPT = 1`. GitHub's “re-run jobs” action is rejected because it reuses a run identity and can collide with artifacts from an earlier attempt. A same-session idempotence proof therefore uses a second fresh dispatch, not a rerun of the first run.
+
 ## Authority boundary
 
 Every run remains:
@@ -247,9 +249,9 @@ Human annotations must never overwrite the signal event or enter the objective o
 
 ```text
 manual workflow merged
-→ same-session validation run reviewed
+→ fresh same-session validation dispatch reviewed
 → first direct-next-session append reviewed
-→ same-session rerun proves state and event idempotence
+→ fresh same-session dispatch proves state and event idempotence
 → next completed-session append proves continuity
 → only then consider adding a schedule
 ```
