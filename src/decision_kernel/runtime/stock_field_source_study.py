@@ -16,6 +16,7 @@ from decimal import Decimal
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from decision_kernel.adapters.cninfo import normalize_cninfo_announcement_page
 from decision_kernel.identity import canonical_hash, canonical_json
 from .hithink_dump_diagnostics import diagnose_inspection_report
 from .hithink_dump_inspection import _file_hash, MAX_FILE_BYTES
@@ -35,6 +36,15 @@ AUTHORITY = {"production_qualification": "NOT_ESTABLISHED", "research_authority"
              "human_attention_authority": "NONE", "investment_authority": "NONE",
              "market_state_writes": 0, "events_created": 0}
 PDF_PATH = re.compile(r"finalpage/[0-9]{4}-[0-9]{2}-[0-9]{2}/[0-9]+\.PDF", re.I)
+# Reviewed search leads, not trading-status classifications. Fetch at most one
+# uniquely latest matching original per sampled code; preserve the full query.
+COVERAGE_KEYWORDS = {
+    "000016.SZ": "停牌公告", "002731.SZ": "停牌", "002870.SZ": "停牌公告",
+    "002998.SZ": "停牌公告", "301139.SZ": "停牌", "301266.SZ": "停牌",
+    "600929.SH": "停牌", "688432.SH": "停牌",
+    "603448.SH": "上市公告书", "920289.BJ": "上市公告书",
+}
+PROFILES = ("event-samples", "coverage-notices")
 
 
 def _utc():
@@ -47,7 +57,9 @@ def _clock(value):
     return value
 
 
-def build_plan(report: dict) -> dict:
+def build_plan(report: dict, *, profile: str = "event-samples") -> dict:
+    if profile not in PROFILES:
+        raise ValueError("UNREVIEWED_STUDY_PROFILE")
     diagnostic = diagnose_inspection_report(report)
     raw_sessions = report["inspection"].get("expected_sessions")
     if not isinstance(raw_sessions, list) or len(raw_sessions) < 2:
@@ -56,6 +68,23 @@ def build_plan(report: dict) -> dict:
     if sessions != sorted(set(sessions)):
         raise ValueError("ORDERED_SESSION_WINDOW_REQUIRED")
     day = sessions[-1]
+    if profile == "coverage-notices":
+        gaps = set(diagnostic["coverage"]["missing_latest_or_unpriced_union"])
+        gaps.update(row["thscode"] for row in diagnostic["bar_gaps"]["previous_bar"])
+        selected = sorted(gaps.intersection(COVERAGE_KEYWORDS))
+        result = {"schema_version": 2, "profile": profile,
+                  "source_report_hash": report["report_hash"],
+                  "comparison_session": day.isoformat(), "provider_requests": [],
+                  "notice_sample_codes": selected,
+                  "notice_keywords": {code: COVERAGE_KEYWORDS[code] for code in selected},
+                  "unqueried_gap_codes": sorted(gaps.difference(selected)),
+                  "selection_semantics": "BOUNDED_SOURCE_LEADS_NOT_TRADING_STATUS_OR_ELIGIBILITY",
+                  "max_requests": MAX_REQUESTS,
+                  "source_disposition": diagnostic["source_inspection_status"], **AUTHORITY}
+        if (1 + 2 * len(selected) if selected else 0) > MAX_REQUESTS:
+            raise ValueError("CASE_BUDGET_EXCEEDED_NO_TRUNCATION")
+        result["plan_hash"] = canonical_hash(result)
+        return result
     differences = diagnostic["field_summaries"]["raw_previous_close"]["all_differences"]
     if len(differences) > 16:
         raise ValueError("CASE_BUDGET_EXCEEDED_NO_TRUNCATION")
@@ -148,6 +177,38 @@ def notice_pdf(code: str, payload: dict) -> dict:
     return {"id": "notice-pdf-" + code, "method": "GET", "url": PDF_ORIGIN + relative, "params": {}}
 
 
+def coverage_notice_pdf(code: str, payload: dict, query: dict) -> dict:
+    """Reuse CNINFO identity/date normalization; select a document, never a status."""
+    keyword = COVERAGE_KEYWORDS.get(code)
+    params = query["params"]
+    if (keyword is None or params.get("searchkey") != keyword
+            or not params.get("stock", "").startswith(code[:6] + ",")):
+        raise ValueError("UNREVIEWED_COVERAGE_QUERY")
+    if payload.get("hasMore") is not False:
+        raise ValueError("CNINFO_NOTICE_WINDOW_INCOMPLETE")
+    page = normalize_cninfo_announcement_page(
+        payload, stock_code=code[:6], org_id=params["stock"].split(",", 1)[1])
+    if page.total_announcement_count != len(page.announcements) or len(page.announcements) > 30:
+        raise ValueError("CNINFO_NOTICE_WINDOW_INCOMPLETE")
+    start, end = (date.fromisoformat(value) for value in params["seDate"].split("~"))
+    candidates = []
+    for item in page.announcements:
+        if item.published_at is None or not start <= item.published_at.astimezone(TZ).date() <= end:
+            raise ValueError("CNINFO_NOTICE_DATE_OUTSIDE_QUERY")
+        if keyword in item.title:
+            candidates.append(item)
+    if not candidates:
+        raise ValueError("CNINFO_NOTICE_SELECTION_AMBIGUOUS_OR_MISSING")
+    latest = max(item.published_at for item in candidates)
+    selected = [item for item in candidates if item.published_at == latest]
+    if len(selected) != 1:
+        raise ValueError("CNINFO_NOTICE_SELECTION_AMBIGUOUS_OR_MISSING")
+    url = selected[0].source_locator
+    if not url.startswith(PDF_ORIGIN) or PDF_PATH.fullmatch(url[len(PDF_ORIGIN):]) is None:
+        raise ValueError("CNINFO_ORIGINAL_PDF_PATH_REQUIRED")
+    return {"id": "notice-pdf-" + code, "method": "GET", "url": url, "params": {}}
+
+
 def capture_sources(plan: dict, root: Path, *, api_key: str, request=None, now=_utc,
                     provenance: str = "LIVE_SOURCE_STUDY") -> dict:
     if canonical_hash({k: v for k, v in plan.items() if k != "plan_hash"}) != plan.get("plan_hash"):
@@ -156,7 +217,17 @@ def capture_sources(plan: dict, root: Path, *, api_key: str, request=None, now=_
         raise ValueError("INJECTED_REQUEST_MUST_BE_SYNTHETIC")
     if root.exists() or "decision-state" in root.resolve().parts:
         raise ValueError("NEW_ISOLATED_OUTPUT_REQUIRED")
-    if len(plan["provider_requests"]) > 17 or len(plan["notice_sample_codes"]) > 2:
+    coverage = plan.get("profile") == "coverage-notices"
+    if plan.get("profile", "event-samples") not in PROFILES:
+        raise ValueError("UNREVIEWED_STUDY_PROFILE")
+    if coverage:
+        codes = plan["notice_sample_codes"]
+        if (plan.get("schema_version") != 2 or plan["provider_requests"]
+                or len(codes) > 10 or codes != sorted(set(codes))
+                or not set(codes).issubset(COVERAGE_KEYWORDS)
+                or plan.get("notice_keywords") != {code: COVERAGE_KEYWORDS[code] for code in codes}):
+            raise ValueError("COVERAGE_PROFILE_MUST_REMAIN_PUBLIC_ONLY_AND_BOUNDED")
+    elif len(plan["provider_requests"]) > 17 or len(plan["notice_sample_codes"]) > 2:
         raise ValueError("PLAN_BUDGET_INVALID")
     root.mkdir(parents=True)
     (root / "plan.json").write_text(canonical_json(plan) + "\n", encoding="utf-8")
@@ -226,9 +297,11 @@ def capture_sources(plan: dict, root: Path, *, api_key: str, request=None, now=_
         for code in plan["notice_sample_codes"]:
             try:
                 query = notice_query(code, symbols or {}, date.fromisoformat(plan["comparison_session"]))
+                if coverage:
+                    query["params"]["searchkey"] = plan["notice_keywords"][code]
                 payload = get(query)
                 if payload is not None:
-                    get(notice_pdf(code, payload))
+                    get(coverage_notice_pdf(code, payload, query) if coverage else notice_pdf(code, payload))
             except ValueError as exc:
                 problems.append({"id": "notice-selection-" + code, "error_type": str(exc)})
     result = {"schema_version": 1, "semantics": "FROZEN_CASE_SOURCE_COLLECTION_NOT_PRICE_ACCEPTANCE",
@@ -238,6 +311,9 @@ def capture_sources(plan: dict, root: Path, *, api_key: str, request=None, now=_
               "problems": problems, "status": "INCOMPLETE_SOURCE_STUDY" if problems else "CAPTURE_COMPLETE_REVIEW_REQUIRED",
               "event_publication_time": "NOT_PROVEN_BY_CURRENT_EVENT_API",
               "causes_automatically_accepted": 0, **AUTHORITY}
+    if coverage:
+        result["study_profile"] = "coverage-notices"
+        result["coverage_status_classification"] = "REVIEW_REQUIRED_NO_AUTOMATIC_EXCLUSIONS"
     result["study_hash"] = canonical_hash(result)
     (root / "report.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
     (root / "summary.md").write_text(f"# Frozen stock-field source study\n\n{result['status']}\n\n"
@@ -251,20 +327,22 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--frozen", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--profile", choices=PROFILES, default="event-samples")
     args = parser.parse_args(argv)
     report_path = args.frozen / "offline-inspection.json"
     _file_hash(report_path, 16 * 1024 * 1024)
     report = json.loads(report_path.read_text(encoding="utf-8"))
     if report.get("report_hash") != SOURCE_HASH:
         parser.error("this reviewed study requires the exact run-33959190974 offline report")
-    plan = build_plan(report)
+    plan = build_plan(report, profile=args.profile)
     for key, name in {"parquet": "daily-k-10d.parquet", "sessions": "sessions.json",
                       "universe": "universe.json", "snapshot": "snapshot.json"}.items():
         if _file_hash(args.frozen / "capture" / name, MAX_FILE_BYTES) != report["input_file_sha256"][key]:
             parser.error("frozen original input hash disagrees")
-    if not os.environ.get("HITHINK_FINANCE_API_KEY"):
+    api_key = os.environ.get("HITHINK_FINANCE_API_KEY", "") if args.profile == "event-samples" else ""
+    if args.profile == "event-samples" and not api_key:
         parser.error("HiThink credential required; no substitute source")
-    result = capture_sources(plan, args.output, api_key=os.environ["HITHINK_FINANCE_API_KEY"])
+    result = capture_sources(plan, args.output, api_key=api_key)
     print(result["status"], "production qualification = NOT_ESTABLISHED")
     return 2 if result["problems"] else 0
 
