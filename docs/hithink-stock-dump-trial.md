@@ -11,13 +11,16 @@ Reuse: Requests 2.34.2 handles HTTPS streaming and connection cleanup; Apache Py
 Reviewed primary contracts:
 
 - https://github.com/HiThink-Tech/Financial-API/blob/main/skills/hithink-finance/references/api/endpoints-market-dumps.md (inspected blob `07e93d98ec02e33e6db6c1661c1d280a38a5fcb6`)
+- https://github.com/HiThink-Tech/Financial-API/blob/765513c2616030803ad80915ed65b205f425a942/python/marketdb/providers/dump.py (inspected after the first trial; blob `9673fa730b8c676a34b4c2ed0f7762d75cef5e27`)
 - https://arrow.apache.org/docs/python/generated/pyarrow.parquet.ParquetFile.html
 - https://arrow.apache.org/release/
 - https://requests.readthedocs.io/en/latest/user/advanced/
 
+The official `DumpDownloader` is a real existing wheel, not claimed absent. Its mutable cache, size-only cache hit, HEAD probe, redirect/resume behavior, optional automatic re-signing and exception-body diagnostics target a different use case. Retries can be disabled, but that alone does not meet this bounded immutable trial's limits or secret-safe evidence contract. This slice reuses Requests/PyArrow and project qualifiers rather than importing and overriding most of that downloader or adopting its full database. Broader data ingestion should assess the upstream package again before expanding this trial into a warehouse.
+
 ## Exact acquisition and safety boundary
 
-One request to the official `daily-k-10d/download-url` signing endpoint, then at most one object GET using its unexpired HTTPS S3 URL. The API key is sent only to the fixed `fuyao.aicubes.cn` API origin. No key, signing response, usable presigned URL, query signature, authorization header or exception traceback is archived/logged. Only safe provider code, expiry and hostname diagnostics are retained. Unsupported signing hosts fail visibly; they are not followed automatically.
+One request to the official `daily-k-10d/download-url` signing endpoint, then at most one object GET using its unexpired HTTPS S3-compatible URL. Allowed destinations are the reviewed S3 host pattern or exactly `o.thsi.cn` under `/fuyao-market-dump/`, with no encoded/dot-segment path ambiguity. The official Python client documents this CDN namespace. The API key is sent only to the fixed `fuyao.aicubes.cn` API origin. No key, signing response, usable presigned URL, query signature, authorization header or exception traceback is archived/logged. Only safe provider code, expiry and hostname diagnostics are retained. Unsupported signing hosts fail visibly; they are not followed automatically.
 
 Requests has no configured retry adapter; every URL is attempted once, with redirects disabled and environment credentials/proxies disabled. Signing expiration does not cause re-signing. Separate sessions do not carry cookies or provider authorization to the object host. No object-store upload occurs.
 
@@ -52,5 +55,11 @@ This re-inspects the file against frozen references without network. It is not a
 A transport/schema/reference failure returns nonzero, retains safe evidence and never creates a fallback file or adopts a stock panel. Field mismatches and partial coverage also remain nonzero. A `CHECKED_FIELDS_MATCH` result means only this downloaded vintage matched the checked same-provider fields. `production_qualification = NOT_ESTABLISHED` is unconditional.
 
 Two overlapping vintages, revision policy, delisting/new-listing/suspension coverage, corporate-action semantics and actual publication/PIT limitations must be examined before multi-day stock breadth. Stock dumps do not provide historical sector membership and cannot replace or repair missing 881/884 index sessions. No signal, ranking, Research route, market-state/event write or company posture changes here.
+
+## First retained live rejection
+
+Run `33956532596` on `659dc36c9c4ec081d0e825ac58fcb3fc23b10fbe` reached the real signing endpoint, returned provider code 0 and offered `o.thsi.cn`. The initial AWS-only destination check rejected it before any object or reference GET. The workflow remains failure, `stage=SIGNING`, `download_completed=false`, `production_qualification=NOT_ESTABLISHED`. Artifact `9966543809` retains the safe report and workflow identity, not the usable URL. ZIP SHA256 `bf13d7d8aeb84ab35f189d30567eca640cb4f4c291cbeaba85da88c6c545b165`; report hash `ffae7f95f174c682d29f68c7043c0caec834fa03ce07469fdff54c99217fd73e`. Independent local hashing matched both report and workflow hashes.
+
+The official Python client above corroborated that exact namespace, so a separate correction adds only that CDN host/path allowance plus rejection regressions. A subsequent changed-code trial is new evidence, not an unchanged retry or a claim the first run downloaded data.
 
 SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. RESEARCH AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
