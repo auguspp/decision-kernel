@@ -87,6 +87,12 @@ jobs:
             --state-directory decision-state/sector-radar \
             --artifact-directory restored-artifact/sector-radar \
             --output-directory sector-radar-run
+      - name: Verify exact offline replay before publication
+        id: replay-check
+        if: success()
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+        run: python .github/scripts/verify-sector-radar-publication.py
       - name: Render read-only saved-state context
         id: context-view
         if: success()
@@ -124,6 +130,7 @@ jobs:
         if: always()
         shell: bash
         env:
+          REPLAY_OUTCOME: ${{ steps.replay-check.outcome }}
           CONTEXT_OUTCOME: ${{ steps.context-view.outcome }}
           RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
@@ -137,6 +144,13 @@ jobs:
           if [ -f sector-radar-run/summary.md ]; then
             echo >> "$GITHUB_STEP_SUMMARY"
             cat sector-radar-run/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "### 发布前离线重放" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$REPLAY_OUTCOME" = "success" ]; then
+            echo '重放与待上传文件逐字节一致。核验记录：`publication-verification.json`；此记录不代替远端 artifact 上传和 cache 保存的成功证明。' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '发布前重放未通过或未执行；本次不应发布新的权威状态包或 cache。计算阶段摘要不是整个工作流成功证明。' >> "$GITHUB_STEP_SUMMARY"
           fi
           echo >> "$GITHUB_STEP_SUMMARY"
           echo "### 完整行业状态 · 只读附件" >> "$GITHUB_STEP_SUMMARY"
