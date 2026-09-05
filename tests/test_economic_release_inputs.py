@@ -162,7 +162,8 @@ def test_invalid_seed_fails_before_scanning(tmp_path, seed_error):
 def test_future_review_is_not_admitted_using_earlier_capture(tmp_path, monkeypatch):
     seed, reviews, *_ = accepted_case(tmp_path, monkeypatch)
     with pytest.raises(ValueError, match="cutoff"):
-        inputs.load_release_inputs(seed, reviews, as_of=RECORDED - timedelta(microseconds=1))
+        inputs.load_release_inputs(seed, reviews, as_of=RECORDED - timedelta(microseconds=1)):
+            pass
     assert inputs.load_release_inputs(seed, reviews, as_of=RECORDED).receipt["accepted_bundle_count"] == 1
 
 
@@ -279,7 +280,7 @@ def test_scan_replay_requires_exact_inputs_and_reports(tmp_path, tamper):
 def test_one_directory_context_uses_existing_cli_with_unchanged_candidate_state(tmp_path, monkeypatch):
     seed, reviews, *_ = accepted_case(tmp_path, monkeypatch, public=False)
     outcome, _, audit = produce(tmp_path / "market", jump=True)
-    links = tmp_path / "links.json"
+    links = seed.parent / "links.json"
     links.write_text(canonical_json(links_for(outcome.persistent_bundle.market_state)))
     class Clock(inputs.datetime):
         @classmethod
