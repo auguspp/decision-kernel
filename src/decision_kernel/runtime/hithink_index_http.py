@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from ..adapters.hithink import (
@@ -65,6 +65,39 @@ def _default_request_json(
     )
 
 
+def _validate_runtime_calendar(
+    sessions: Sequence[date],
+) -> tuple[date, ...]:
+    normalized = tuple(sessions)
+    if not normalized or normalized != tuple(sorted(set(normalized))):
+        raise HithinkRuntimeError(
+            "HiThink trading calendar must be non-empty, unique and ascending"
+        )
+    return normalized
+
+
+def _resolve_runtime_calendar(
+    *,
+    trading_sessions: Sequence[date] | None,
+    observed_at: datetime,
+    api_key: str,
+    request_json: _RequestJSON | None,
+    effective_request: _RequestJSON,
+    timeout_seconds: float,
+) -> tuple[date, ...]:
+    if trading_sessions is not None:
+        return _validate_runtime_calendar(trading_sessions)
+    if request_json is None:
+        envelope = _request_hithink_calendar(
+            api_key=api_key,
+            shanghai_date=observed_at.astimezone(SHANGHAI_TZ).date(),
+            timeout_seconds=timeout_seconds,
+        )
+    else:
+        envelope = effective_request(HITHINK_CALENDAR_PATH, {})
+    return _validate_runtime_calendar(normalize_hithink_calendar(envelope))
+
+
 def fetch_hithink_industry_catalog(
     *,
     api_key: str | None,
@@ -125,6 +158,7 @@ def fetch_hithink_completed_index_history(
     request_json: _RequestJSON | None = None,
     timeout_seconds: float = 10.0,
     lookback_calendar_days: int = HITHINK_INDEX_HISTORY_LOOKBACK_DAYS,
+    trading_sessions: Sequence[date] | None = None,
 ) -> HithinkCompletedIndexHistory:
     """Fetch one qualified completed-session index history window."""
 
@@ -138,20 +172,18 @@ def fetch_hithink_completed_index_history(
             "HiThink index history lookback must be positive"
         )
 
-    if request_json is None:
-        calendar_envelope = _request_hithink_calendar(
-            api_key=normalized_key,
-            shanghai_date=observed_at.astimezone(SHANGHAI_TZ).date(),
-            timeout_seconds=timeout_seconds,
-        )
-        request_json = _default_request_json(
-            api_key=normalized_key,
-            timeout_seconds=timeout_seconds,
-        )
-    else:
-        calendar_envelope = request_json(HITHINK_CALENDAR_PATH, {})
-
-    calendar = normalize_hithink_calendar(calendar_envelope)
+    effective_request = request_json or _default_request_json(
+        api_key=normalized_key,
+        timeout_seconds=timeout_seconds,
+    )
+    calendar = _resolve_runtime_calendar(
+        trading_sessions=trading_sessions,
+        observed_at=observed_at,
+        api_key=normalized_key,
+        request_json=request_json,
+        effective_request=effective_request,
+        timeout_seconds=timeout_seconds,
+    )
     expected_latest = latest_completed_a_share_session(
         calendar,
         observed_at=observed_at,
@@ -162,7 +194,7 @@ def fetch_hithink_completed_index_history(
         tzinfo=SHANGHAI_TZ,
     )
     start_at = end_at - timedelta(days=lookback_calendar_days)
-    envelope = request_json(
+    envelope = effective_request(
         HITHINK_INDEX_HISTORY_PATH,
         {
             "thscode": normalized_thscode,
@@ -192,12 +224,15 @@ def fetch_hithink_qualified_index_snapshot_batch(
     api_key: str | None,
     request_json: _RequestJSON | None = None,
     timeout_seconds: float = 10.0,
+    trading_sessions: Sequence[date] | None = None,
 ) -> HithinkQualifiedIndexSnapshotBatch:
-    """Fetch and qualify one explicit sector snapshot against completed benchmark history.
+    """Fetch and qualify one explicit snapshot against completed benchmark history.
 
-    The snapshot timestamp is not trusted by itself. Qualification requires the
-    provider date, latest benchmark close and previous benchmark close to agree with
-    the independently normalized completed-session history.
+    HiThink defines the snapshot timestamp as data-ready time, not the represented
+    market session. The completed session is anchored by exact latest/previous
+    benchmark closes and an independently normalized trading calendar. A timestamp
+    on a weekend or holiday may therefore follow the completed market date, while a
+    timestamp on a later trading session remains disallowed.
     """
 
     normalized_key = _require_runtime_inputs(
@@ -224,14 +259,25 @@ def fetch_hithink_qualified_index_snapshot_batch(
         request_json=effective_request,
         timeout_seconds=timeout_seconds,
     )
+    calendar = _resolve_runtime_calendar(
+        trading_sessions=trading_sessions,
+        observed_at=observed_at,
+        api_key=normalized_key,
+        request_json=request_json,
+        effective_request=effective_request,
+        timeout_seconds=timeout_seconds,
+    )
     benchmark_history = fetch_hithink_completed_index_history(
         thscode=normalized_benchmark,
         observed_at=observed_at,
         api_key=normalized_key,
         request_json=effective_request,
         timeout_seconds=timeout_seconds,
+        trading_sessions=calendar,
     )
     return qualify_hithink_index_snapshot(
         snapshot,
         benchmark_history=benchmark_history,
+        trading_sessions=calendar,
+        observed_at=observed_at,
     )
