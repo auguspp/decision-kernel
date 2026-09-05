@@ -1,6 +1,6 @@
 # Real stock-dump compatibility trial
 
-Status: REAL RECENT DUMP RETAINED / PYARROW FOOTER READ / STOCK REFERENCE REJECTED / NOT A STOCK PANEL.
+Status: REAL RECENT DUMP DECODED / COMPLETE PAGINATED REFERENCES / DIFFERENCES_REQUIRE_REVIEW / NOT A STOCK PANEL.
 
 ## Why this is the next Radar slice
 
@@ -28,11 +28,11 @@ Download bounds: 256 MiB file, 180-second streamed-download clock plus connect/r
 
 Reference bounds: at most 32 JSON requests and 32 MiB retained JSON, 4 MiB per response. The reference path reuses the exact normalized calendar, qualified CSI300 latest/previous benchmark prices, and complete deterministic paginated stock-snapshot contract. The ten expected sessions are established by the calendar, never by selecting whatever dates happen to exist in the dump. The reference universe is the provider's current returned stock set, not an independently proven exchange-wide census.
 
-Important: the existing all-stock snapshot qualifier still requires its provider date to equal the completed session. A weekend data-ready timestamp can therefore reject this trial at the reference phase, and this actually occurred in run `33957604949`. This study does NOT silently change that contract or borrow the more permissive index rule. Retain the raw reference JSON and downloaded file; diagnose independently before a separate qualified change. Missing/zero/revised/corporate-action discrepancies must also remain visible rather than receive a tolerance or backfill.
+PR #215 added an explicit isolated-study reference context after reviewing the actual stock endpoint's data-ready timestamp semantics. It permits only the independently established session after 15:30 or Friday's directly following weekend, bounds each original page timestamp by receipt, and rejects missing weekdays rather than inferring holidays. Stock quotes remain comparison inputs, not per-security-session proof. The Sector producer's default date-equality behavior is unchanged. No raw timestamp, null or price is rewritten; exact field discrepancies remain non-success. See `docs/hithink-stock-snapshot-reference-window.md` for the full boundary and source evidence. Earlier reference-date failures remain unchanged records.
 
 ## Output and inspection
 
-The new `stock-dump-trial/capture` directory can retain the original Parquet, numbered decoded reference JSON responses, exact request clocks, normalized sessions/universe/snapshot, benchmark evidence and a hashed report. A failed reference still leaves an explicitly failed report and any completed dump, not a claimed fully inspected file. `metadata_row_count` is a footer claim, not a row-level proof until row iteration succeeds.
+The new `stock-dump-trial/capture` directory can retain the original Parquet, numbered decoded reference JSON responses, exact request clocks, normalized sessions/universe/snapshot, benchmark evidence and a hashed report. Report schema 2 also records `reference-window.json`, explicit reference semantics and the original page clock range. A failed reference still leaves an explicitly failed report and any completed dump, not a claimed fully inspected file. `metadata_row_count` is a footer claim, not a row-level proof until row iteration succeeds.
 
 The report includes input-file hashes, implementation hashes and actual reader versions. Its inventory covers inputs; `report.json` hashes its own payload and `summary.md` is a reading projection, not an additional source of truth. Workflow identity and optional independent row re-inspection are outside this input inventory. Public cloud/HTTP assertions and local hashes do not independently authenticate all market values.
 
@@ -64,6 +64,12 @@ After the initial CDN allowance, `33956943929` still rejected at signing. The di
 
 Run `33957604949` on `bde9bad7ef725fbca54f5c7a567227e6b9b7dd56` finally retained a 1,077,266-byte Parquet file and successfully read its 11-column footer with PyArrow. Footer row count is 55,467; full row inspection did not run. Calendar and exact benchmark history/snapshot checks qualified September 4, but stock page 0 carried a September 5 timestamp and the unchanged stock adapter rejected it before further pagination. The overall run remains FAILED_CLOSED at QUALIFIED_REFERENCE, with `inspection=null`. No full stock reference universe, successful offline row comparison or stock panel was created.
 
-Exact file/artifact hashes, four-run lineage, CI, request clocks and verification limits are in `docs/handoffs/2026-09-05-stock-dump-trial-next.md`. Next work is separate stock-snapshot timestamp qualification from retained original evidence; do not retimestamp the response, disable the existing check or keep retrying until green. All results remain distinct from prospective Sector state updates.
+Exact file/artifact hashes and four-run lineage are retained in `docs/handoffs/2026-09-05-stock-dump-trial-next.md`. Those failures were not upgraded by the later reference-window correction.
+
+Run `33959190974` on `74509398a1a9afa226e83ef878c418fbe114586b` subsequently completed all 12 stock pages (5,567 identities), physically decoded and inspected 55,467 real Parquet rows, and retained explicit differences. All 5,548 fully priced latest closes agreed exactly. Turnover had 4,654 differences; previous raw close had 15 differences and one missing prior bar. The 19 unpriced reference identities were also the 19 identities missing a latest dump bar. Neither causes nor exclusions were invented. Overall status is DIFFERENCES_REQUIRE_REVIEW, stage INSPECTED_NOT_ADOPTED, workflow failure and production qualification NOT_ESTABLISHED.
+
+The workflow's second offline inspection wrote an identical inspection result and returned nonzero for those differences. Its subsequent shell equality assertion was skipped by fail-fast execution; equality was independently checked after artifact download. All 21 input file hashes and the exact 25-file archive inventory were verified locally, alongside page clocks/identities/values and report hashes. Full local Parquet execution is not claimed. The file bytes equalled the prior same-day download, not a naturally later independent vintage. Detailed evidence and next diagnostic steps: `docs/handoffs/2026-09-05-stock-reference-reconciliation-next.md`.
+
+Next work is field-specific precision/corporate-action/coverage reconciliation using frozen inputs and reviewed source contracts, not another timestamp workaround or arbitrary tolerance. These study outcomes remain distinct from prospective Sector state updates.
 
 SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. RESEARCH AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
