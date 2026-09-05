@@ -79,7 +79,7 @@ def inspect_daily_k_rows(
     if not universe or len(universe) != len(set(universe)):
         raise DumpInspectionError("explicit current universe must be nonempty and unique")
     latest, previous = sessions[-1], sessions[-2]
-    if reference_snapshot.get("market_session") != latest.isoformat():
+    if not isinstance(reference_snapshot, Mapping) or reference_snapshot.get("market_session") != latest.isoformat():
         raise DumpInspectionError("reference snapshot session disagrees with expected latest session")
     refs = reference_snapshot.get("points")
     if not isinstance(refs, list) or not refs:
@@ -153,9 +153,16 @@ def inspect_daily_k_rows(
                                "reason": "CORPORATE_ACTION_OR_PRICE_CONVENTION_RECONCILIATION_REQUIRED"})
 
     missing_sessions = [day for day in sessions if not by_session[day]]
+    missing_latest = sorted(set(universe) - set(latest_rows))
+    missing_reference = sorted(set(universe) - set(reference))
+    status = "CHECKED_FIELDS_MATCH"
+    if mismatches or missing_sessions:
+        status = "DIFFERENCES_REQUIRE_REVIEW"
+    elif missing_latest or missing_reference or unpriced or not checked:
+        status = "INCOMPLETE_REFERENCE_COVERAGE"
     payload = {
         "schema_version": 1, "semantics": SEMANTICS,
-        "inspection_status": "DIFFERENCES_REQUIRE_REVIEW" if mismatches or missing_sessions else "CHECKED_FIELDS_MATCH",
+        "inspection_status": status,
         "production_qualification": "NOT_ESTABLISHED",
         "input_authenticity": "NOT_ESTABLISHED_BY_LOCAL_HASHES",
         "expected_sessions": sessions,
@@ -164,9 +171,9 @@ def inspect_daily_k_rows(
         "row_count": row_count, "identity_count": len(identities), "zero_volume_rows": zero_volume_rows,
         "session_counts": [{"session": day, "rows": len(by_session[day])} for day in sessions],
         "missing_sessions": missing_sessions,
-        "current_universe_missing_latest_bar": sorted(set(universe) - set(latest_rows)),
+        "current_universe_missing_latest_bar": missing_latest,
         "dump_identities_outside_current_universe": sorted(identities - set(universe)),
-        "current_universe_missing_reference": sorted(set(universe) - set(reference)),
+        "current_universe_missing_reference": missing_reference,
         "unpriced_reference_identities": unpriced,
         "checked_priced_latest_identities": checked, "reference_mismatches": mismatches,
         "not_established": ["ACCOUNT_ENTITLEMENT", "CONTINUOUS_DOWNLOAD_HEALTH", "VINTAGE_AND_REVISION_POLICY",
@@ -220,9 +227,10 @@ def main(argv=None) -> int:
         parser.error("output must be a new file, not an input")
     try:
         hashes = [_file_hash(path, MAX_FILE_BYTES if index == 0 else MAX_METADATA_BYTES) for index, path in enumerate(paths)]
-        sessions = [date.fromisoformat(value) for value in json.loads(args.sessions.read_text(encoding="utf-8"))]
-        if len(sessions) != 10:
+        raw_sessions = json.loads(args.sessions.read_text(encoding="utf-8"))
+        if not isinstance(raw_sessions, list) or len(raw_sessions) != 10 or any(not isinstance(value, str) for value in raw_sessions):
             raise DumpInspectionError("this first CLI slice requires exactly ten independently qualified sessions")
+        sessions = [date.fromisoformat(value) for value in raw_sessions]
         report = inspect_daily_k_rows(parquet_rows(args.parquet), expected_sessions=sessions,
             current_universe=json.loads(args.universe.read_text(encoding="utf-8")),
             reference_snapshot=json.loads(args.snapshot.read_text(encoding="utf-8")))
@@ -233,7 +241,7 @@ def main(argv=None) -> int:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with args.output.open("x", encoding="utf-8") as stream:
             stream.write(json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n")
-    except (OSError, ValueError, RuntimeError) as exc:
+    except (OSError, ValueError, RuntimeError, TypeError) as exc:
         parser.exit(2, f"Dump inspection unavailable: {exc}\n")
     print(f"{report['inspection_status']}; production qualification = NOT_ESTABLISHED")
     return 0 if report["inspection_status"] == "CHECKED_FIELDS_MATCH" else 2
