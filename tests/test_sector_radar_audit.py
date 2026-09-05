@@ -4,7 +4,7 @@ import copy
 import json
 import shutil
 import socket
-from dataclasses import asdict, replace
+from dataclasses import replace
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -33,7 +33,10 @@ from decision_kernel.runtime.sector_radar_producer import (
     SECTOR_RADAR_WORKFLOW_PATH,
     SectorRadarProducerContext,
 )
-from decision_kernel.runtime.sector_radar_state import create_sector_radar_market_state
+from decision_kernel.runtime.sector_radar_state import (
+    SectorRadarStateSourceLineage,
+    create_sector_radar_market_state,
+)
 
 
 TZ = ZoneInfo("Asia/Shanghai")
@@ -125,7 +128,11 @@ def resolution():
         benchmark=series("000300.SH", "Synthetic benchmark", "0.2"),
         broad_series=tuple(series(*row) for row in IDENTITIES[:2]),
         granular_series=tuple(series(*row) for row in IDENTITIES[2:]),
-        created_at=CREATED, source="SYNTHETIC_TEST_ONLY", source_lineage=(),
+        created_at=CREATED, source="SYNTHETIC_TEST_ONLY",
+        source_lineage=(SectorRadarStateSourceLineage(
+            role="SYNTHETIC_TEST_ONLY", workflow_run_id=1, artifact_id=2,
+            artifact_digest="sha256:" + "a" * 64, result_hash="b" * 64,
+        ),),
     )
     return SectorRadarPersistenceResolution(
         source_kind=SOURCE_COMMITTED_BOOTSTRAP, market_state=state,
@@ -165,7 +172,7 @@ class SyntheticProvider:
         self.calls.append((path, dict(params)))
         if path == hithink_http.HITHINK_CALENDAR_PATH:
             sessions = self.restored.market_state.sessions
-            additions = () if self.same_session else ((MONDAY, TUESDAY) if self.session == TUESDAY else (self.session,))
+            additions = tuple(day for day in (MONDAY, TUESDAY) if sessions[-1] < day <= self.session)
             return {"code": 0, "data": {"item": [{"date": day.strftime("%Y%m%d")} for day in (*sessions, *additions)]}}
         if path == hithink_index_http.HITHINK_INDEX_CATALOG_PATH:
             envelope = catalog_envelope()
@@ -179,7 +186,6 @@ class SyntheticProvider:
             return {"code": 0, "data": {"timestamp": ms(self.session), "total": len(rows), "item": rows}}
         if path == hithink_index_http.HITHINK_INDEX_HISTORY_PATH:
             code = params["thscode"]
-            series = next(item for item in self.restored.market_state.series if item.thscode == code)
             dates = (self.restored.market_state.sessions[-2], self.session) if self.same_session else (self.restored.market_state.sessions[-1], self.session)
             prices = (self.rows[code]["prev_price"], self.rows[code]["last_price"])
             return {"code": 0, "data": {
@@ -307,6 +313,29 @@ def test_restore_then_same_session_does_not_repeat_real_candidate_entries(tmp_pa
     assert audit.replay_sector_radar_input_audit(second_root)["status"] == "MATCHED_SUCCEEDED"
 
 
+def test_continued_active_market_does_not_emit_even_without_ledger_memory(tmp_path):
+    first, _, _ = execute(tmp_path / "first")
+    bundle = first.persistent_bundle
+    with_ledger = SectorRadarPersistenceResolution(
+        source_kind=SOURCE_LATEST_SUCCESS_ARTIFACT, market_state=bundle.market_state,
+        event_ledger=bundle.event_ledger, source_bundle_manifest=bundle.manifest,
+        bootstrap_manifest_hash=None,
+    )
+    continued, provider, _ = execute(tmp_path / "continued", restored=with_ledger,
+        session=TUESDAY, jump=False, run_id=102)
+    assert continued.status == PRODUCER_STATUS_APPENDED_QUIET
+    assert continued.persistent_bundle.event_ledger == bundle.event_ledger
+    # A deliberately independent synthetic input demonstrates selection authority:
+    # the same market snapshots with an empty ledger still have no state entry.
+    without_ledger = replace(resolution(), market_state=bundle.market_state)
+    independent, _, _ = execute(tmp_path / "independent", restored=without_ledger,
+        session=TUESDAY, jump=False, run_id=103)
+    assert independent.status == PRODUCER_STATUS_APPENDED_QUIET
+    assert independent.persistent_bundle.event_ledger.events == ()
+    assert continued.result.composition == independent.result.composition
+    assert not any("constituents" in path for path, _ in provider.calls)
+
+
 @pytest.mark.parametrize("failure", ["continuity", "catalog", "containment", "breadth", "pagination", "transport", "gap"])
 def test_rejected_inputs_keep_previous_files_and_replay_failure(tmp_path, monkeypatch, failure):
     target = tmp_path / "live-state"
@@ -356,7 +385,6 @@ def test_replay_checks_transcript_order_even_with_rehashed_manifest(tmp_path, mo
     _, _, root = execute(tmp_path, jump=False)
     path = root / "manifest.json"
     manifest = json.loads(path.read_text())
-    # Valid structure and content hashes do not authorize a different request.
     manifest["requests"][1]["params"]["tag"] = "concept"
     manifest.pop("audit_hash")
     manifest["audit_hash"] = canonical_hash(manifest)
