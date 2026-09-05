@@ -535,7 +535,7 @@ def test_same_session_run_validates_without_membership_or_event_append(
         state_directory=tmp_path / "state",
         output_directory=tmp_path / "run",
         api_key="fixture-secret",
-        fetch_calendar=lambda **kwargs: calendar(NEXT_SESSION),
+        fetch_calendar=lambda **kwargs: calendar(),
         fetch_catalog=lambda **kwargs: catalog(),
         fetch_snapshot=lambda **kwargs: snapshot(
             restored.market_state,
@@ -549,6 +549,7 @@ def test_same_session_run_validates_without_membership_or_event_append(
     )
 
     assert outcome.status == PRODUCER_STATUS_VALIDATED_ALREADY_CURRENT
+    assert outcome.preparation is None
     assert outcome.result is None
     assert outcome.persistent_bundle.market_state.state_hash == (
         restored.market_state.state_hash
@@ -559,10 +560,25 @@ def test_same_session_run_validates_without_membership_or_event_append(
     assert outcome.persistent_bundle.event_ledger.events == ()
     assert membership_calls == []
     assert all_market_calls == []
-    assert outcome.operations.candidate_count is not None
+    assert outcome.operations.direct_next_session is None
+    assert outcome.operations.candidate_count == 0
+    assert outcome.operations.membership_request_count == 0
     assert "validation only" in (
         tmp_path / "run" / "operations.md"
     ).read_text(encoding="utf-8").lower()
+
+    validation_path = tmp_path / "run" / "same-session-validation.json"
+    validation = json.loads(validation_path.read_text(encoding="utf-8"))
+    validation_hash = validation.pop("validation_hash")
+    assert canonical_hash(validation) == validation_hash
+    assert validation["market_session"] == CACHED_SESSION.isoformat()
+    assert validation["input_market_state_hash"] == restored.market_state.state_hash
+    assert validation["output_market_state_hash"] == restored.market_state.state_hash
+    assert validation["state_update_status"] == "ALREADY_CURRENT_IDEMPOTENT"
+    assert validation["signal_transition_authority"] == "NONE"
+    assert validation["human_attention_authority"] == "NONE"
+    assert validation["investment_authority"] == "NONE"
+
     load_sector_radar_persistent_bundle(
         tmp_path / "state",
         expected_repository=REPOSITORY,
@@ -603,6 +619,7 @@ def test_one_new_session_quiet_run_appends_without_breadth_calls(
     )
 
     assert outcome.status == PRODUCER_STATUS_APPENDED_QUIET
+    assert outcome.preparation is not None
     assert outcome.result is not None
     assert outcome.persistent_bundle.market_state.sessions[-1] == NEXT_SESSION
     assert outcome.persistent_bundle.event_ledger.events == ()
@@ -647,6 +664,7 @@ def test_one_new_session_fetches_exact_candidate_plan_and_appends_events(
     )
 
     assert outcome.status == PRODUCER_STATUS_APPENDED_WITH_CANDIDATES
+    assert outcome.preparation is not None
     assert membership_codes == ["881101.TI", "884001.TI"]
     assert all_market_sessions == [NEXT_SESSION]
     assert outcome.result is not None
