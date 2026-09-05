@@ -147,7 +147,8 @@ def _economic_panel(records: list[dict], *, as_of: datetime, market_session: dat
 
 
 def build_economic_market_context(*, market_state, event_ledger, observations: Sequence[Mapping[str, Any]],
-                                  links: Mapping[str, Any], as_of: datetime, generated_at: datetime) -> dict:
+                                  links: Mapping[str, Any], as_of: datetime, generated_at: datetime,
+                                  reviewed_releases: Sequence[Path] = ()) -> dict:
     """Use the existing saved-market projector and source-derived economic checks."""
     _aware(as_of)
     _aware(generated_at)
@@ -155,6 +156,18 @@ def build_economic_market_context(*, market_state, event_ledger, observations: S
         raise ValueError("input cutoff follows generation")
     if not isinstance(observations, (list, tuple)) or len(observations) > MAX_OBSERVATIONS:
         raise ValueError("economic input count exceeds bounded reading budget")
+    if (not isinstance(reviewed_releases, (list, tuple))
+            or len(observations) + len(reviewed_releases) > MAX_OBSERVATIONS):
+        raise ValueError("combined economic input count exceeds bounded reading budget")
+    # A source capture is not yet an accepted excerpt. Keep that later eligibility
+    # clock without altering the existing observation's actual capture identity.
+    accepted = {}
+    if reviewed_releases:
+        from .economic_release_review import verify_release_review
+        for root in reviewed_releases:
+            receipt = verify_release_review(root, as_of=as_of)
+            accepted[receipt["acceptance_hash"]] = receipt
+    all_observations = [*observations, *(r["observation"] for r in accepted.values())]
     with localcontext(Context(prec=28)):
         # This is a reconstructed view at the explicit cutoff, not an original run receipt.
         context = build_sector_radar_context(market_state=market_state, event_ledger=event_ledger, generated_at=as_of)
@@ -163,7 +176,7 @@ def build_economic_market_context(*, market_state, event_ledger, observations: S
             raise ValueError("saved market close follows input cutoff")
         _validate_links(links, context, as_of)
         unique, methods = {}, set()
-        for item in observations:
+        for item in all_observations:
             _validate(item)
             if _clock(item["system_pit_eligible_from"]) > as_of:
                 raise ValueError("economic record was captured after input cutoff")
@@ -200,6 +213,12 @@ def build_economic_market_context(*, market_state, event_ledger, observations: S
             "live_prospective_evidence_created": False, "company_exposure_established": False,
             **AUTHORITY,
         }
+        if accepted:
+            payload["source_review_receipts"] = [{
+                **{key: r[key] for key in ("acceptance_hash", "archive_hash", "source_packet_id", "review_hash",
+                    "reviewer", "reviewed_at", "recorded_at", "eligible_from", "reviewer_identity", "provenance")},
+                "observation_hash": r["observation"]["observation_hash"],
+            } for _, r in sorted(accepted.items())]
         return json.loads(canonical_json({"generated_at": generated_at, "projection": payload,
                                           "projection_hash": canonical_hash(payload)}))
 
@@ -257,6 +276,13 @@ def render_economic_market_context(report: dict) -> str:
             source = observation["source_record"]
             parts.append(f'<details><summary>{e(source["title"])} · 资料期 {e(observation["period"]["start"])}—{e(observation["period"]["end"])}</summary>')
             parts.append(f'<p>公开日期：{e(source["published_date"])}（仅日期）；实际采集：{e(source["captured_at"])}<br>出处标记：{e(source["capture_method"])}</p>')
+            for review in p.get("source_review_receipts", []):
+                if review["observation_hash"] == observation["observation_hash"]:
+                    parts.append(f'<p class="notice">来源摘录审阅：{e(review["reviewer"])}（自报身份，非认证）；'
+                                 f'审阅时间：{e(review["reviewed_at"])}；收录时间：{e(review["recorded_at"])}。'
+                                 f'用于本读取通道不早于：{e(review["eligible_from"])}。'
+                                 '这是来源审阅，不是 Human 投资判断或基本面确认。'
+                                 f'<br>审阅凭证：<code>{e(review["acceptance_hash"])}</code></p>')
             if timing["provided_capture_after_market_close"]:
                 parts.append('<p class="notice">本条采集凭证晚于保存行情收盘，不证明它曾进入当天信号；也不代表市场此前不知道这条公开资料。</p>')
             if timing["period_extends_beyond_market_session"]:
@@ -292,16 +318,18 @@ def main(argv=None) -> int:
     parser.add_argument('--parent-hints', type=Path, required=True)
     parser.add_argument('--links', type=Path, default=Path(DEFAULT_LINKS))
     parser.add_argument('--observation', type=Path, action='append', default=[])
+    parser.add_argument('--reviewed-release', type=Path, action='append', default=[])
     parser.add_argument('--as-of', required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args(argv)
     owned = False
     try:
         inputs = [args.parent_hints, args.links, *args.observation]
-        if len(args.observation) > MAX_OBSERVATIONS:
+        if len(args.observation) + len(args.reviewed_release) > MAX_OBSERVATIONS:
             raise ValueError('economic input count exceeds bounded reading budget')
         if (args.output.exists() or args.output.is_symlink()
                 or args.output.resolve().is_relative_to(args.bundle.resolve())
+                or any(args.output.resolve().is_relative_to(p.resolve()) for p in args.reviewed_release)
                 or any(args.output.resolve().is_relative_to(p.parent.resolve()) for p in inputs)):
             raise ValueError('output must be a new directory outside input directories')
         hints = load_sector_parent_hints(args.parent_hints)
@@ -311,7 +339,8 @@ def main(argv=None) -> int:
             expected_parent_hint_mapping_hash=hints.mapping_hash)
         report = build_economic_market_context(market_state=bundle.market_state, event_ledger=bundle.event_ledger,
             observations=[_read_json(p) for p in args.observation], links=_read_json(args.links),
-            as_of=_clock(args.as_of), generated_at=datetime.now(timezone.utc))
+            as_of=_clock(args.as_of), generated_at=datetime.now(timezone.utc),
+            reviewed_releases=args.reviewed_release)
         page = render_economic_market_context(report)
         args.output.mkdir(parents=True, exist_ok=False)
         owned = True
