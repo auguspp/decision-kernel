@@ -3,6 +3,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import re
 from pathlib import Path
 
 from decision_kernel.identity import canonical_hash
@@ -15,6 +16,8 @@ BOOTSTRAP = Path("radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz")
 MANIFEST = Path(
     "radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json"
 )
+PROJECT_STATE = Path("docs/project-state.md")
+HANDOFF = Path("docs/handoffs/2026-09-05-sector-radar-next-conversation.md")
 
 
 def test_durable_sector_radar_state_bootstrap_matches_manifest_and_parser() -> None:
@@ -55,3 +58,42 @@ def test_durable_sector_radar_state_bootstrap_matches_manifest_and_parser() -> N
     assert manifest["historical_membership_authority"] == "NONE"
     assert manifest["human_attention_authority"] == "NONE"
     assert manifest["investment_authority"] == "NONE"
+
+
+def test_bootstrap_documentation_uses_manifest_as_canonical_identity() -> None:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    project_state = PROJECT_STATE.read_text(encoding="utf-8")
+    handoff = HANDOFF.read_text(encoding="utf-8")
+    manifest_path = MANIFEST.as_posix()
+
+    rolling_state_section = project_state.split(
+        "#### Rolling state and durable bootstrap\n",
+        maxsplit=1,
+    )[1].split(
+        "\n#### HiThink sector-breadth acquisition",
+        maxsplit=1,
+    )[0]
+    assert manifest_path in rolling_state_section
+    assert "sole canonical source" in rolling_state_section
+    stated_hashes = re.findall(
+        r"^state hash = ([0-9a-f]{64})$",
+        rolling_state_section,
+        flags=re.MULTILINE,
+    )
+    assert stated_hashes == [manifest["state_hash"]]
+
+    durable_data_section = handoff.split(
+        "### Durable initial data\n",
+        maxsplit=1,
+    )[1].split(
+        "\n### Main-branch health repair",
+        maxsplit=1,
+    )[0]
+    assert manifest_path in durable_data_section
+    assert "The manifest is authoritative" in durable_data_section
+    assert manifest["state_hash"] not in durable_data_section
+    assert not re.search(
+        r"^state hash(?: =)? [0-9a-f]{64}$",
+        durable_data_section,
+        flags=re.MULTILINE,
+    )
