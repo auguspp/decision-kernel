@@ -1,0 +1,98 @@
+name: hithink-stock-dump-trial
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/hithink-stock-dump-trial.yml
+      - src/decision_kernel/runtime/hithink_dump_trial.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hithink-stock-dump-qualification
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Require reviewed main and a fresh run
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+      - name: Install isolated reader and transport
+        run: python -m pip install -e '.[dump-study]'
+      - name: Record workflow identity
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from decision_kernel.identity import canonical_hash, canonical_json
+          root = Path("stock-dump-trial")
+          root.mkdir(exist_ok=False)
+          value = {key: os.environ[key] for key in (
+              "GITHUB_REPOSITORY", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_SHA", "GITHUB_EVENT_NAME"
+          )}
+          value.update(semantics="ISOLATED_DATA_COMPATIBILITY_TRIAL_NOT_MARKET_PRODUCTION",
+                       human_attention_authority="NONE", research_authority="NONE", investment_authority="NONE")
+          value["provenance_hash"] = canonical_hash(value)
+          (root / "workflow.json").write_text(canonical_json(value) + "\n", encoding="utf-8")
+          PY
+      - name: Acquire one recent dump and reconcile qualified references
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+        run: |
+          python -m decision_kernel.runtime.hithink_dump_trial --output stock-dump-trial/capture
+      - name: Repeat row inspection offline when all inputs exist
+        if: always()
+        run: |
+          root=stock-dump-trial/capture
+          if [ ! -f "$root/snapshot.json" ] || [ ! -f "$root/universe.json" ] || [ ! -f "$root/sessions.json" ]; then
+            echo "Reference acquisition did not complete; full-field offline inspection is unavailable."
+            exit 0
+          fi
+          python -m decision_kernel.runtime.hithink_dump_inspection \
+            --parquet "$root/daily-k-10d.parquet" --sessions "$root/sessions.json" \
+            --universe "$root/universe.json" --snapshot "$root/snapshot.json" \
+            --output stock-dump-trial/offline-inspection.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("stock-dump-trial")
+          original = json.loads((root / "capture/report.json").read_text())
+          replay = json.loads((root / "offline-inspection.json").read_text())
+          assert original["inspection"] == replay["inspection"], "offline inspection differs"
+          PY
+      - name: Retain complete attempt evidence
+        if: always()
+        id: evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: hithink-stock-dump-trial-${{ github.run_id }}-${{ github.run_attempt }}
+          path: stock-dump-trial/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish isolated study result
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
+        run: |
+          if [ -f stock-dump-trial/capture/summary.md ]; then
+            cat stock-dump-trial/capture/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Stock dump trial did not produce a sealed result; inspect failed steps.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\n[隔离数据试验与原始文件](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo '不是行业状态更新、历史成员宽度或投资信号。没有执行自动恢复或替代来源。' >> "$GITHUB_STEP_SUMMARY"
