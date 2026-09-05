@@ -7,6 +7,9 @@ on:
     paths:
       - .github/workflows/economic-release-discovery.yml
       - src/decision_kernel/runtime/economic_release_discovery.py
+      - src/decision_kernel/runtime/economic_release_inputs.py
+      - radar_inputs/economic-node-study-2026-09-05.json
+      - radar_inputs/economic-reviewed-releases/**
 
 permissions:
   contents: read
@@ -52,18 +55,21 @@ jobs:
           PY
       - name: Scan two visible directory windows once
         run: |
-          python -m decision_kernel.runtime.economic_release_discovery scan \
-            radar_inputs/economic-node-study-2026-09-05.json \
-            --output release-discovery-proof/scan
+          python -m decision_kernel.runtime.economic_release_inputs scan \
+            --seed radar_inputs/economic-node-study-2026-09-05.json \
+            --reviews-dir radar_inputs/economic-reviewed-releases \
+            --output release-discovery-proof/input-run
       - name: Reconstruct discovery offline
         if: always()
         run: |
-          if [ ! -f release-discovery-proof/scan/manifest.json ]; then
-            echo "::error::No sealed discovery archive; no success is inferred"
+          if [ ! -f release-discovery-proof/input-run/input-set.json ]; then
+            echo "::error::No assembled input receipt; no success is inferred"
             exit 1
           fi
-          python -m decision_kernel.runtime.economic_release_discovery verify \
-            release-discovery-proof/scan > release-discovery-proof/verification.json
+          python -m decision_kernel.runtime.economic_release_inputs verify \
+            release-discovery-proof/input-run \
+            --seed radar_inputs/economic-node-study-2026-09-05.json \
+            --reviews-dir radar_inputs/economic-reviewed-releases > release-discovery-proof/verification.json
           cat release-discovery-proof/verification.json
       - name: Retain complete attempt evidence
         if: always()
@@ -79,10 +85,13 @@ jobs:
         env:
           ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
         run: |
-          if [ -f release-discovery-proof/scan/summary.md ]; then
-            cat release-discovery-proof/scan/summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -f release-discovery-proof/input-run/summary.md ]; then
+            cat release-discovery-proof/input-run/summary.md >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "No complete discovery summary was produced; inspect failed steps." >> "$GITHUB_STEP_SUMMARY"
+            echo "No complete input assembly summary was produced; inspect failed steps." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f release-discovery-proof/input-run/scan/summary.md ]; then
+            cat release-discovery-proof/input-run/scan/summary.md >> "$GITHUB_STEP_SUMMARY"
           fi
           if [ -n "$ARTIFACT_URL" ]; then
             printf '\n[目录原文、请求计划与待核验材料](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
