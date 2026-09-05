@@ -68,8 +68,8 @@ def test_workflow_and_operations_doc_freeze_expiry_and_authority_rules() -> None
     assert "no automatic long-term checkpoint" in document
     assert "do not trust cache alone" in document
     assert "no retrospective candidate-event append" in document
-    assert "fresh `workflow_dispatch`" in document
-    assert "not a rerun of the first run" in document
+    assert "GITHUB_RUN_ATTEMPT = 1" in document
+    assert "second fresh dispatch" in document
     assert "32 distinct current-membership requests" in document
     assert "ObjectiveOutcomeRecord" in document
     assert "HumanReviewAnnotation" in document
