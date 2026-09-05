@@ -24,6 +24,10 @@ from .sector_parent_hints import (
     load_sector_parent_hints,
     validate_sector_parent_hint_catalog,
 )
+from .sector_radar_audit import (
+    run_audited_sector_radar_producer,
+    write_daily_observation_audit,
+)
 from .sector_radar_daily import (
     PREPARATION_BUDGET_EXCEEDED,
     PREPARATION_QUIET,
@@ -1007,6 +1011,7 @@ def run_sector_radar_producer(
         next_completed_session_after_state=direct_next,
     )
     output_directory.mkdir(parents=True, exist_ok=True)
+    write_daily_observation_audit(preparation, output_directory)
     _write_text_atomic(
         output_directory / "preparation.json",
         serialize_sector_radar_daily_preparation(preparation),
@@ -1251,9 +1256,10 @@ def main(
             expected_workflow=context.workflow_path,
             expected_parent_hint_mapping_hash=parent_hints.mapping_hash,
         )
-        outcome = run_sector_radar_producer(
+        outcome = run_audited_sector_radar_producer(
             resolution=resolution,
             parent_hints=parent_hints,
+            parent_hints_json=args.parent_hints.read_text(encoding="utf-8"),
             context=context,
             state_directory=args.state_directory,
             output_directory=output_directory,
