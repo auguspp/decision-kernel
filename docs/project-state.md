@@ -16,7 +16,7 @@ End of conversation: sync only real state deltas.
 
 Do not trust a chat summary over repository state, frozen lineage, CI results or real workflow artifacts.
 
-Latest implementation handoff: `docs/handoffs/2026-09-05-http-diagnostics-and-four-page-proof-next.md`. Prior handoffs are retained for lineage. Four reviewed pages captured successfully are not a continuous production channel.
+Latest implementation handoff: `docs/handoffs/2026-09-05-bounded-release-discovery-next.md`. Prior handoffs are retained for lineage. A successful bounded directory scan is not complete publisher coverage or accepted new economic evidence.
 
 ---
 
@@ -35,6 +35,7 @@ SECTOR RADAR READ-ONLY CONTEXT = WORKFLOW ARTIFACT WIRING MERGED / LIVE PUBLICAT
 HITHINK STOCK DUMP = OFFLINE INSPECTOR ONLY / REAL DATA NOT QUALIFIED
 ECONOMIC NODES = TWO BOUNDED PUBLIC-EXCERPT PILOTS / NO AUTOMATED FEED
 ECONOMIC RAW CAPTURE = FOUR REVIEWED PAGES MATCHED / PRIOR INCOMPLETE PROOF RETAINED / NO CONTINUOUS FEED
+ECONOMIC RELEASE DISCOVERY = TWO VISIBLE DIRECTORY WINDOWS PROVEN / ZERO LIVE NEW DETAIL PACKETS / NOT COMPLETE COVERAGE
 SECTOR RADAR NEW COMPLETED-SESSION APPEND = NOT YET PROVEN LIVE
 SECTOR RADAR SCHEDULE = NOT PRESENT
 SECTOR RADAR PROSPECTIVE CORPUS = EMPTY
@@ -164,12 +165,13 @@ No disclosure packet currently earns Human Research attention.
 
 ### Current workflow directory
 
-Default branch now contains six formal workflows:
+Default branch now contains seven formal workflows:
 
 ```text
 apply-disclosure-assessment.yml
 ci.yml
 decision-inbox.yml
+economic-release-discovery.yml
 economic-source-capture.yml
 live-dogfood.yml
 sector-radar-shadow.yml
@@ -180,6 +182,8 @@ sector-radar-shadow.yml
 `economic-source-capture.yml` is an independent public-only compatibility probe: manual dispatch or tightly path-filtered main pushes, at most four reviewed pages, no credentials, market cache or state access, and no schedule. Its first real run `33947395994` is **failure / INCOMPLETE**, not green: two SPB pages matched and two MOA requests failed with HTTPError. Its uploaded artifact preserves both outcomes. Kernel tests on that same commit succeeded; unit-test success does not override the source failure.
 
 A later controlled diagnostic run `33949122077` on `386f12112e56089d2c76822ed342c4f084ff3b85` returned HTTP 200 and matched all four reviewed pages. It is a separate success / COMPLETE proof, not a rewrite of the first failure or continuous monitoring. The earlier HTTP codes and cause remain unknown because that rejection did not recur. See section 5.12.
+
+`economic-release-discovery.yml` separately checks two fixed official directory windows, with at most four planned article requests and no automatic fact acceptance. It runs manually on main or for narrowly scoped main code/workflow changes, without secrets, market cache or a schedule. First live run `33952315592` succeeded as a bounded scan with two directory requests and zero eligible detail requests; this is not complete publisher coverage. See section 5.13.
 
 Runs `33938625934` and `33939414197` succeeded. They proved live bootstrap validation and subsequent artifact/cache restoration at the same completed session, 2026-09-04. They did not append a new market session or create prospective candidates. Full evidence is frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`.
 
@@ -548,7 +552,7 @@ market state / candidate event writes = 0
 
 The proof artifact was downloaded and its ZIP, inventory, file/content hashes, original-body text and binding offsets checked independently. The recorded workflow verifier reconstructed observations from raw inputs. Detailed hashes and limits are in `docs/economic-source-raw-capture-proof-2026-09-05.md`.
 
-That first version did not retain numeric HTTP status for the MOA errors, so their exact HTTP cause is unknown. The two failures must not be reclassified as successful source capture, a permanent outage or evidence of source revision. There is still no automatic new-release discovery, historical first-vintage proof or continuous industry monitoring. The older reviewed snippets and live Sector state are unchanged.
+That first version did not retain numeric HTTP status for the MOA errors, so their exact HTTP cause is unknown. The two failures must not be reclassified as successful source capture, a permanent outage or evidence of source revision. At that proof stage there was no directory-discovery implementation. Historical first-vintage proof and continuous industry monitoring remain unestablished; the older reviewed snippets and live Sector state are unchanged.
 
 ### 5.12 Safe HTTP diagnostics and four-page proof — PR #202
 
@@ -557,6 +561,16 @@ Capture schema 2 records exact numeric HTTP status or explicit null, without ret
 One controlled post-merge public compatibility run `33949122077` on `386f12112e56089d2c76822ed342c4f084ff3b85` returned HTTP 200 for all four original reviewed URLs and matched all four excerpts. The workflow completed successfully; archive status is COMPLETE and offline integrity is VERIFIED. Artifact `9964235933` retains all four raw bodies. After download, independent checks reconciled its ZIP digest, 25 file entries, hashes, raw text, fragment offsets, capture clocks and descriptive metric arithmetic. The two SPB raw bodies equal the prior capture byte for byte; the MOA bodies have no earlier retained body for comparison.
 
 This new success does not explain the old failure: the earlier rejection did not recur and request headers/URLs were unchanged. Its old codes and cause remain unknown, and the original INCOMPLETE proof is retained. No retry or access-control bypass was introduced. The successful four-page proof is not continuous economic coverage, new-release discovery, a market event or a company-profit conclusion. Detailed lineage and limits: `docs/economic-source-four-page-capture-proof-2026-09-05.md`.
+
+### 5.13 Bounded official-directory discovery — PR #204–#205
+
+`runtime/economic_release_discovery.py` starts from two fixed MOA/SPB directory first pages rather than only preselected article URLs. It preserves original directory bytes, row-local title/date/link evidence, the exact reviewed baseline and an explicit acquisition plan. Known URLs, changed metadata, older unreviewed backlog and eligible unreviewed releases are distinguished. At most four detail bodies may be fetched; an over-budget plan retains all candidates and fetches no top-N subset. Acquired details must corroborate title/date identity but remain pending source review, never automatically accepted economic observations or market events. There is no persistent seen/review queue and known URL body-only revisions are not checked.
+
+The first live compatibility run `33952315592` on `26769c4bdf5254b9eace867395157dcb28c9848e` returned HTTP 200 for both directories and completed as `COMPLETE_BOUNDED_SCAN`. MOA had 20 dated entries, including 10 target feed-price releases: two known and eight older backlog entries. The SPB news first page had 10 ordinary news entries dated September 3–4 and no target monthly report. Exactly two directory requests and zero article requests occurred; no new review packet, economic observation or market event was created.
+
+Artifact `9965217757` retained the original bodies and nine-file sealed inventory. Workflow verification reconstructed the scan offline; independent local hash/HTML/clock/plan checks reconciled the downloaded artifact and unchanged baseline. Detailed lineage: `docs/economic-release-directory-proof-2026-09-05.md`.
+
+This proves the two visible windows, not complete publisher coverage or natural new-release body acquisition. SPB's window does not reach the reviewed August 14 release boundary, so no monthly target on that page cannot mean no publisher update. Qualified statistics-directory/pagination coverage and missed-window handling remain required before continuous monitoring. Full implementation CI now contains 569 tests; this does not replace the unchanged live Sector proof.
 
 ---
 
@@ -588,7 +602,7 @@ For the next audited run, also download its complete run artifact and verify `in
 
 ### P1 — expansion qualification and usable reading
 
-Read-context delivery and bounded raw capture are implemented. Four selected original pages are now proven captured in run `33949122077`, but live Sector view publication and automatic discovery of new economic releases remain unproven. Safe numeric HTTP diagnostics are available for future failures; the earlier MOA cause remains unknown and no further retry is justified just to obtain a green status. Additional naturally published releases require source/period/unit review before joining a future feed.
+Read-context delivery and bounded raw capture are implemented. Four selected original pages and two directory windows now have separate live proofs, but live Sector view publication, natural new-release detail acquisition and complete economic-release coverage remain unproven. Qualify SPB statistics-directory or pagination coverage before continuous monitoring; do not treat a quiet news first page as no publisher update. New packets require explicit source/period/unit review. Safe numeric HTTP diagnostics are available for future failures; the earlier MOA cause remains unknown. Do not repeat unchanged scans or alter the baseline just to force a candidate or green status.
 
 The real HiThink dump trial remains separate work in a credentialed environment. Do not ask for secrets in chat or install a competing provider. The trial must validate actual Parquet decoding, entitlement, units, reference identity, overlapping vintages and corporate actions before any stock-panel or multi-day breadth adoption.
 
@@ -650,12 +664,14 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-http-diagnostics-and-four-page-proof-next.md` — latest diagnostic/capture handoff and remaining proof gaps.
+- `docs/handoffs/2026-09-05-bounded-release-discovery-next.md` — latest directory-discovery handoff and coverage limits.
+- `docs/handoffs/2026-09-05-http-diagnostics-and-four-page-proof-next.md` — prior diagnostic/capture handoff, retained for lineage.
 - `docs/handoffs/2026-09-05-context-and-public-capture-next.md` — prior delivery and partial-capture handoff, retained for lineage.
 - `docs/handoffs/2026-09-05-radar-expansion-next.md` — prior expansion handoff, retained for lineage.
 - `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md` — latest live Sector evidence and next-step constraints.
 - `docs/economic-source-raw-capture-proof-2026-09-05.md` — partial raw public-source proof and retained failures.
 - `docs/economic-source-four-page-capture-proof-2026-09-05.md` — subsequent four-page capture, without a claimed cause for prior failure.
+- `docs/economic-release-directory-proof-2026-09-05.md` — two-window discovery proof, zero new detail packets and explicit coverage gaps.
 - `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md` — pre-live handoff retained for lineage; live-execution status is superseded by the proof above.
 - `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — prior prerequisite handoff retained for lineage.
 
@@ -675,6 +691,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `docs/economic-source-raw-capture.md`
 - `docs/economic-source-compatibility-operations.md`
 - `docs/economic-source-http-diagnostics.md`
+- `docs/economic-release-discovery.md`
+- `docs/economic-release-discovery-operations.md`
 
 ### Sector Radar runtime and data
 
@@ -692,10 +710,12 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/hithink_dump_inspection.py`
 - `src/decision_kernel/runtime/economic_node_study.py`
 - `src/decision_kernel/runtime/economic_source_capture.py`
+- `src/decision_kernel/runtime/economic_release_discovery.py`
 - `src/decision_kernel/runtime/hithink_index_http.py`
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
 - `.github/workflows/sector-radar-shadow.yml`
 - `.github/workflows/economic-source-capture.yml`
+- `.github/workflows/economic-release-discovery.yml`
 - `radar_inputs/sector-parent-hints-2026-09-05.json`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz`
 - `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json`
@@ -727,6 +747,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #199:** added original public-response capture and accepted/rejected excerpt reconstruction; no market state or event writer.
 - **PR #200:** added the separate bounded public-source compatibility workflow. First live run `33947395994` remained INCOMPLETE: SPB 2/2 matched, MOA 0/2 obtained. Artifact `9963755766` and failure evidence retained.
 - **PR #202:** added safe numeric HTTP diagnostics and schema-2 status/summary reconciliation. New public run `33949122077` matched all four pages, artifact `9964235933`; old HTTP failure codes/cause remain unknown. No continuous feed or market event is implied.
+- **PR #204–#205:** added bounded directory discovery into unreviewed source packets and its independent compatibility workflow. Live run `33952315592` captured two directory windows, with zero eligible detail requests; artifact `9965217757` preserves scope and backlog evidence. Complete publisher coverage and natural new-release detail acquisition remain unproven.
 - **VERIFIED LIVE SECTOR IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
 - **PROVEN LIVE SECTOR:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
 - **NOT YET PROVEN LIVE SECTOR:** future market-state append, candidate enrichment, the new replayable input audit or context delivery on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
