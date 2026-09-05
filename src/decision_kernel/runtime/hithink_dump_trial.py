@@ -33,11 +33,12 @@ LIVE = "LIVE_HITHINK_ISOLATED_DUMP_TRIAL"
 SYNTHETIC = "SYNTHETIC_TEST_ONLY"
 AUTHORITY = {"human_attention_authority": "NONE", "research_authority": "NONE",
              "investment_authority": "NONE", "market_state_writes": 0, "events_created": 0}
-# S3 presigning also uses the exact CDN path documented in the official Python
-# client. This is not permission for arbitrary CDN paths, redirects or providers.
+# The authenticated fixed signing endpoint selects the object path. The SDK's
+# example directory is not a stable API contract. Restrict the exact CDN origin,
+# not a guessed release layout; no caller-supplied URL or redirects are accepted.
 S3_HOST = re.compile(r"(?:[a-z0-9][a-z0-9.-]*\.)?s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com(?:\.cn)?")
 CDN_HOST = "o.thsi.cn"
-CDN_PREFIX = "/fuyao-market-dump/"
+CDN_PREFIX = "/"
 
 
 class DumpTrialError(ValueError):
