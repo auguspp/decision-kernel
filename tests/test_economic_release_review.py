@@ -114,9 +114,11 @@ def test_exact_packet_acceptance_reuses_source_binder_and_keeps_all_clocks(tmp_p
     observation = item["observation"]
     assert observation["node_id"] == node
     assert observation["source_record"]["captured_at"] == packet["content_acquired_at"]
-    assert observation["system_pit_eligible_from"] == packet["content_acquired_at"]
+    assert datetime.fromisoformat(observation["system_pit_eligible_from"]) == datetime.fromisoformat(packet["content_acquired_at"])
+    assert observation == qualify_release_excerpt(observation["source_record"])
     assert item["reviewed_at"] == REVIEWED.isoformat()
-    assert item["eligible_from"] == item["recorded_at"] == RECORDED.isoformat()
+    assert item["eligible_from"] == item["recorded_at"]
+    assert datetime.fromisoformat(item["recorded_at"]) == RECORDED
     assert item["provenance"] == observation["source_record"]["capture_method"] == review.SYNTHETIC
     assert item["reviewer_identity"] == "DECLARED_NOT_AUTHENTICATED"
     assert item["automatic_acceptance"] is False
@@ -275,7 +277,7 @@ def test_new_review_connects_to_existing_panel_without_changing_market_or_ledger
     assert p["event_ledger_hash"] == before["projection"]["event_ledger_hash"]
     assert p["panels"][0]["markets"][0]["saved_market"] == before["projection"]["panels"][0]["markets"][0]["saved_market"]
     assert p["new_events_created"] == 0
-    assert p["source_review_receipts"][0]["eligible_from"] == RECORDED.isoformat()
+    assert datetime.fromisoformat(p["source_review_receipts"][0]["eligible_from"]) == RECORDED
     assert context([output, output], observations=[previous]) == after
     assert context([output], observations=[previous], generated_at=AS_OF + timedelta(days=1))["projection_hash"] == after["projection_hash"]
     page = view.render_economic_market_context(after)
@@ -365,7 +367,7 @@ def test_full_cli_prepare_apply_verify_then_actual_bundle_association(tmp_path, 
     assert view.main(cli) == 0
     report = json.loads((target / "association.json").read_text())
     assert report["projection"]["new_events_created"] == 0
-    assert report["projection"]["source_review_receipts"][0]["eligible_from"] == RECORDED.isoformat()
+    assert datetime.fromisoformat(report["projection"]["source_review_receipts"][0]["eligible_from"]) == RECORDED
     assert len(bundle.event_ledger.events) == 2
     assert original == (bytes_under(output), bytes_under(audit))
     assert view.main(cli) == 2, "do not overwrite existing reports"
