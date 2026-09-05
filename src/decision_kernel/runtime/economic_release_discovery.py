@@ -29,7 +29,7 @@ POLICY = "moa-feed-spb-statistics-visible-window-bs4-v2"
 PARSER_VERSION = "4.14.3"
 DIRECTORIES = {
     "MOA_FEED": "https://xmsyj.moa.gov.cn/jcyj/",
-    "SPB_EXPRESS": "https://www.spb.gov.cn/gjyzj/c100275/pubtz.shtml",
+    "SPB_EXPRESS": "https://www.spb.gov.cn/gjyzj/c100276/common_list.shtml",
 }
 PATHS = {
     "MOA_FEED": r"/jcyj/[0-9]{6}/t[0-9]{8}_[0-9]+\.htm",

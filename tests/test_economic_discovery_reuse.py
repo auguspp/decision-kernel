@@ -62,7 +62,7 @@ def test_optional_dependency_does_not_enter_the_kernel_base_environment():
     assert pin not in project["dependencies"]
     assert project["optional-dependencies"]["discovery"] == [pin]
     assert pin in project["optional-dependencies"]["dev"]
-    assert discovery.DIRECTORIES["SPB_EXPRESS"] == "https://www.spb.gov.cn/gjyzj/c100275/pubtz.shtml"
+    assert discovery.DIRECTORIES["SPB_EXPRESS"] == "https://www.spb.gov.cn/gjyzj/c100276/common_list.shtml"
 
 
 def test_library_source_positions_and_decoded_entities_are_retained():
@@ -142,3 +142,25 @@ def test_statistics_window_does_not_change_review_authority_or_claim_complete_co
     assert result["observation_writes"] == result["market_event_writes"] == 0
     assert discovery.verify_discovery(root)["network_calls"] == 0
     assert all(item["discovery_disposition"] == "KNOWN_URL_NOT_REVALIDATED" for item in result["plan"]["entries"])
+
+
+@pytest.mark.parametrize("target", ["/gjyzj/c100276/common_list.shtml", "https://unreviewed.invalid/"])
+def test_script_only_navigation_remains_incomplete_without_following_target(tmp_path, target):
+    calls = []
+    spb = discovery.DIRECTORIES["SPB_EXPRESS"]
+    ticks = iter(NOW + timedelta(seconds=i) for i in range(20))
+    def transport(url):
+        calls.append(url)
+        if url == MOA_URL:
+            return response(url, row())
+        assert url == spb
+        return response(url, '<script>window.location.href="' + target + '";</script>')
+    root = tmp_path / "script-only"
+    result = discovery.run_discovery(SOURCES, root, transport=transport,
+                                    provenance=discovery.SYNTHETIC, now=lambda: next(ticks))
+    assert calls == [MOA_URL, spb]
+    assert result["status"] == "INCOMPLETE"
+    assert result["directories"][1]["status"] == "UNAVAILABLE_OR_UNPARSEABLE"
+    assert result["review_packets"] == []
+    assert (root / "01.body.bin").read_bytes().startswith(b"<script>")
+    assert discovery.verify_discovery(root)["status"] == "INCOMPLETE"
