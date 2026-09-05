@@ -16,7 +16,7 @@ End of conversation: sync only real state deltas.
 
 Do not trust a chat summary over repository state, frozen lineage, CI results or real workflow artifacts.
 
-Latest implementation handoff: `docs/handoffs/2026-09-05-stock-reference-reconciliation-next.md`. Prior handoffs and failed probes are retained for lineage. Completing a row comparison does not mean all fields matched or production qualification was established; a bounded directory scan is not complete publisher coverage or accepted economic evidence.
+Latest implementation handoff: `docs/handoffs/2026-09-05-stock-primary-sources-next.md`. Prior handoffs and failed probes are retained for lineage. Completing a row comparison or acquiring original sources does not establish production qualification; a bounded directory scan is not complete publisher coverage or accepted economic evidence.
 
 Human implementation preference: **reuse mature wheels before building generic infrastructure**. Prefer exact official structured data/feeds, maintained source adapters and mature libraries. Bespoke code is for missing project-specific identity, time/version, review and authority contracts, not another parser/crawler/queue. See `docs/radar-reuse-decision-2026-09-05.md`.
 
@@ -35,6 +35,7 @@ SECTOR RADAR LIVE ARTIFACT/CACHE RESTORE = PROVEN
 SECTOR RADAR INPUT AUDIT / OFFLINE REPLAY = IMPLEMENTED / SYNTHETICALLY TESTED
 SECTOR RADAR READ-ONLY CONTEXT = WORKFLOW ARTIFACT WIRING MERGED / LIVE PUBLICATION PENDING
 HITHINK STOCK DUMP = REAL ROW INSPECTION COMPLETED / DIFFERENCES_REQUIRE_REVIEW / NO PRODUCTION ADOPTION
+STOCK FIELD SOURCE STUDY = 15 EVENT RECORDS + TWO ISSUER ORIGINALS OBTAINED / NO AUTOMATIC ADJUSTMENT
 ECONOMIC NODES = TWO BOUNDED PUBLIC-EXCERPT PILOTS / NO AUTOMATED FEED
 ECONOMIC RAW CAPTURE = FOUR REVIEWED PAGES MATCHED / PRIOR INCOMPLETE PROOF RETAINED / NO CONTINUOUS FEED
 ECONOMIC RELEASE DISCOVERY = BEAUTIFUL SOUP REUSED / DIRECT SPB STATISTICS WINDOW PROVEN / ZERO LIVE NEW DETAIL PACKETS
@@ -167,7 +168,7 @@ No disclosure packet currently earns Human Research attention.
 
 ### Current workflow directory
 
-Default branch now contains eight formal workflows:
+Default branch now contains nine formal workflows:
 
 ```text
 apply-disclosure-assessment.yml
@@ -178,6 +179,7 @@ economic-source-capture.yml
 hithink-stock-dump-trial.yml
 live-dogfood.yml
 sector-radar-shadow.yml
+stock-field-source-study.yml
 ```
 
 `sector-radar-shadow.yml` is **manual `workflow_dispatch` only**. It has no `schedule`, is separate from `decision-inbox.yml`, and rejects GitHub job reruns in favour of a fresh dispatch identity.
@@ -189,6 +191,8 @@ A later controlled diagnostic run `33949122077` on `386f12112e56089d2c76822ed342
 `economic-release-discovery.yml` separately checks two fixed official directory windows, with at most four planned article requests and no automatic fact acceptance. It runs manually on main or for narrowly scoped main code/workflow changes, without secrets, market cache or a schedule. First live run `33952315592` succeeded as a bounded scan with two directory requests and zero eligible detail requests; this is not complete publisher coverage. See section 5.13. It now installs optional `.[discovery]` and uses Beautiful Soup; the current direct-statistics proof and retained script-stub failure are in section 5.14.
 
 `hithink-stock-dump-trial.yml` is an isolated compatibility study, not a Sector state producer. It uses optional Requests/PyArrow and the existing HiThink secret only during acquisition, has fresh-main/manual or narrow main-path triggers, and has no schedule or market cache/state access. Run `33957604949` first retained a Parquet file but stopped at reference-date qualification. The later run `33959190974` completed all stock pages and full row inspection, retaining DIFFERENCES_REQUIRE_REVIEW rather than adopting data. See sections 5.15–5.16; both workflows remain failure evidence for their respective scopes.
+
+`stock-field-source-study.yml` restores the fixed prior comparison artifact, verifies its hashes and collects only identified event/history/issuer-notice evidence. It is a retained isolated manual/narrow-main-path study with read-only permissions, no schedule, market cache or state access. Run `33963949084` obtained 21 source bodies; collection success does not change price acceptance. See section 5.17.
 
 Runs `33938625934` and `33939414197` succeeded. They proved live bootstrap validation and subsequent artifact/cache restoration at the same completed session, 2026-09-04. They did not append a new market session or create prospective candidates. Full evidence is frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`.
 
@@ -605,6 +609,16 @@ One changed-code live run `33959190974` on `74509398a1a9afa226e83ef878c418fbe114
 
 Artifact `9967375391` preserves 21 input files plus report/summary/offline inspection/workflow identity. The workflow's second actual offline Parquet inspection wrote the same inspection object and returned nonzero for differences; the following shell equality assertion was skipped. Equality, all inventory/file/content hashes, page clocks/counts/identities, original-to-normalized values and diagnostic categories were independently checked after download. Local full Parquet execution is not claimed. The Parquet was byte-identical to the prior same-day download, not a naturally later vintage or revision proof. Detailed evidence and next steps: `docs/handoffs/2026-09-05-stock-reference-reconciliation-next.md`.
 
+### 5.17 Frozen-field diagnosis and actual primary-source evidence — PR #217–#218
+
+PR #217 added a read-only diagnostic projection without changing acceptance. It separated a material 920371.BJ turnover difference from the small differences; its full CI passed 697 tests. PR #218 reused existing Requests/identity/audit helpers and a maintained adapter's CNINFO query contract to collect only the identified evidence. No new dependency, adjustment engine, whole-market download or signal rule was introduced. Full PR CI `33963783988` passed 722 tests; main CI `33963949069` succeeded.
+
+One actual source-study run `33963949084` on `9b062cd5b7024ddd9ecc74129e0a36767f5e4f10` made 21 once-only successful requests and retained 15 exact-date event records, one targeted raw history, a public organization directory, two notice queries and two original issuer PDFs. Its 26-file artifact `9968826124` passed offline plan/inventory/hash checks and independent local review, including pypdf extraction and rendered-page review. Collection status is CAPTURE_COMPLETE_REVIEW_REQUIRED, not production qualification.
+
+The 15 events all refer to September 4; twelve gross-cash subtractions match the frozen displayed prev_price and three leave explicit residuals. This is not a universal price rule. The original 000408 notice prescribes a treasury-share-adjusted deduction of 0.9967967 rather than gross cash 1; the 001316 notice supports a cash-only example with 27.79 - 0.35 = 27.44. The original wordings and actual capture clocks are retained. For 920371, targeted REST raw amount agrees with the frozen Parquet, while snapshot differs by 10,312,354.49 CNY and 1,983,145 shares; the original BSE transaction details and provider scope/precision remain pending.
+
+The old stock comparison still has DIFFERENCES_REQUIRE_REVIEW and production qualification NOT_ESTABLISHED. No price rewrite, tolerance, missing-stock exclusion, historical availability backfill or live Sector change occurred. Exact source/PDF hashes, arithmetic, interpretation limits and remaining work are in `docs/stock-field-primary-source-proof-2026-09-05.md`.
+
 ---
 
 ## 6. Next work
@@ -638,6 +652,8 @@ For the next audited run, also download its complete run artifact and verify `in
 Reuse mature components before building more generic infrastructure. Read-context delivery, raw capture and bounded discovery are implemented; the direct SPB statistics window now reaches the current reviewed monthly boundary. Natural new-detail acquisition, continuous coverage, known-body revisions and live Sector view publication remain unproven. Use the existing explicit source-review process rather than invent another approval engine. Do not repeat unchanged scans or rewrite the baseline to force a candidate. Earlier failures and their limits remain evidence.
 
 The stock trial now has complete comparison references and a real full-row inspection, but field agreement and production qualification remain incomplete. Work from retained inputs to establish turnover precision/units, corporate-action evidence for the fifteen previous-close differences, and the nineteen missing/unpriced identities plus one missing previous bar. Do not invent a numerical tolerance, dividend or suspension classification. Reuse official tooling before adding calculations. A naturally later overlapping vintage and longer stock history remain necessary before stock-panel or multi-day breadth adoption. Do not repeat failed probes blindly, ask for secrets in chat, install a competing provider or use stock dumps to bridge missing industry sessions.
+
+Section 5.17 now supplies the fifteen effective-date event records and two original issuer examples. Next reconcile the remaining distinctions, not merely acquire these same sources again: gross cash versus ex-reference deduction, final quotation rounding, BSE transaction types/provider scope, and the unresolved listing/trading gaps. Current event APIs and a later PDF capture do not establish earlier system availability.
 
 The original benchmark-sensitivity acceptance item still needs an explicit evidence result. Keep its effect on excess sign, persistence and transition dates separate from within-universe ranks. Concept expansion, company-economic mapping and new trigger challengers remain later scoped work, not implied by the new read labels or two source pilots.
 
@@ -697,7 +713,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-stock-reference-reconciliation-next.md` — latest complete stock-row inspection, unresolved differences and reference-window limits.
+- `docs/handoffs/2026-09-05-stock-primary-sources-next.md` — latest targeted source evidence, original issuer distinctions and remaining adoption gates.
+- `docs/handoffs/2026-09-05-stock-reference-reconciliation-next.md` — prior complete stock-row inspection, unresolved differences and reference-window limits.
 - `docs/handoffs/2026-09-05-stock-dump-trial-next.md` — prior real stock delivery, rejected reference contract and failed probes.
 - `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md` — prior reuse decision, direct-statistics proof and retained failed probe.
 - `docs/handoffs/2026-09-05-bounded-release-discovery-next.md` — prior directory-discovery handoff and coverage limits.
@@ -725,6 +742,9 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `docs/hithink-dump-qualification-study.md`
 - `docs/hithink-stock-dump-trial.md`
 - `docs/hithink-stock-snapshot-reference-window.md`
+- `docs/hithink-stock-field-diagnostics-2026-09-05.md`
+- `docs/stock-field-source-study.md`
+- `docs/stock-field-primary-source-proof-2026-09-05.md`
 - `docs/economic-node-public-source-pilots-2026-09-05.md`
 - `docs/economic-source-raw-capture.md`
 - `docs/economic-source-compatibility-operations.md`
@@ -748,6 +768,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/sector_radar_context.py`
 - `src/decision_kernel/runtime/hithink_dump_inspection.py`
 - `src/decision_kernel/runtime/hithink_dump_trial.py`
+- `src/decision_kernel/runtime/hithink_dump_diagnostics.py`
+- `src/decision_kernel/runtime/stock_field_source_study.py`
 - `src/decision_kernel/runtime/economic_node_study.py`
 - `src/decision_kernel/runtime/economic_source_capture.py`
 - `src/decision_kernel/runtime/economic_release_discovery.py`
@@ -755,6 +777,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
 - `.github/workflows/sector-radar-shadow.yml`
 - `.github/workflows/hithink-stock-dump-trial.yml`
+- `.github/workflows/stock-field-source-study.yml`
 - `.github/workflows/economic-source-capture.yml`
 - `.github/workflows/economic-release-discovery.yml`
 - `radar_inputs/sector-parent-hints-2026-09-05.json`
@@ -792,6 +815,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #207–#208:** replaced custom discovery parsers with optional Beautiful Soup, retained the script-only landing-page failure and corrected one explicit SPB statistics-list URL. Live run `33954898834` captured the direct statistics window including reviewed monthly records; no new article, observation or market event was created.
 - **PR #210–#213:** added the isolated Requests/PyArrow stock trial, corrected our unsupported signing destination/path assumptions and retained all failed probes. Run `33957604949` downloaded actual Parquet and read its footer but stopped at stock-reference date qualification. No full row validation, stock-panel adoption or market/event write occurred.
 - **PR #215:** separated stock data-ready clocks from isolated comparison-session evidence without switching the Sector producer default. Run `33959190974` completed 12-page acquisition and real row inspection; latest closes matched for 5,548 priced references, while turnover, previous-close and coverage differences remain unresolved. Artifact `9967375391` and matching offline inspection are retained; workflow failure is not promoted to production acceptance.
+- **PR #217–#218:** diagnosed the frozen field discrepancies and collected 15 effective-date event records, targeted raw history and two original issuer notices in run `33963949084`. Treasury-share/ex-reference distinctions remain explicit; raw prices and the original non-acceptance are unchanged. Source artifact `9968826124` is evidence, not a production stock panel.
 - **VERIFIED LIVE SECTOR IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
 - **PROVEN LIVE SECTOR:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
 - **NOT YET PROVEN LIVE SECTOR:** future market-state append, candidate enrichment, the new replayable input audit or context delivery on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
