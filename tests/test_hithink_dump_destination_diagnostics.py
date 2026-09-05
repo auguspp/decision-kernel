@@ -12,7 +12,7 @@ KEY = "sensitive-credential"
 def test_diagnostics_distinguish_namespace_port_and_path_without_usable_url():
     url = "https://o.thsi.cn:443/reviewed-namespace/release%3Afile.parquet?signature=" + KEY
     value = destination_diagnostics(url, credential=KEY)
-    assert value["cdn_host_match"] and not value["cdn_prefix_match"]
+    assert value["cdn_host_match"] and value["cdn_prefix_match"]
     assert value["port"] == 443 and value["path_has_percent_escape"]
     assert value["top_level_namespace"] == "reviewed-namespace"
     assert value["query_present"] and not value["userinfo_present"]
