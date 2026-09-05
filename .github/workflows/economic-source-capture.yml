@@ -1,0 +1,102 @@
+name: economic-source-capture
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/economic-source-capture.yml
+      - src/decision_kernel/runtime/economic_source_capture.py
+      - src/decision_kernel/runtime/economic_node_study.py
+      - radar_inputs/economic-node-study-2026-09-05.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: economic-source-capture-compatibility
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Require reviewed main branch
+        shell: bash
+        run: |
+          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
+            echo "::error::Public-source capture is allowed only from reviewed main"
+            exit 1
+          fi
+      - name: Install
+        run: python -m pip install -e .
+      - name: Record proof provenance
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from decision_kernel.identity import canonical_hash, canonical_json
+          root = Path("economic-source-proof")
+          root.mkdir(exist_ok=False)
+          record = {
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "commit_sha": os.environ["GITHUB_SHA"],
+              "event": os.environ["GITHUB_EVENT_NAME"],
+              "semantics": "PUBLIC_SOURCE_COMPATIBILITY_PROOF_NOT_CONTINUOUS_MONITORING",
+              "human_attention_authority": "NONE",
+              "investment_authority": "NONE",
+          }
+          record["provenance_hash"] = canonical_hash(record)
+          (root / "workflow.json").write_text(canonical_json(record) + "\n", encoding="utf-8")
+          PY
+      - name: Capture four reviewed official pages once
+        run: |
+          python -m decision_kernel.runtime.economic_source_capture capture \
+            radar_inputs/economic-node-study-2026-09-05.json \
+            --output economic-source-proof/capture
+      - name: Verify retained source archive without network
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -f economic-source-proof/capture/manifest.json ]; then
+            echo "::error::No structured capture archive is available"
+            exit 1
+          fi
+          python -m decision_kernel.runtime.economic_source_capture verify \
+            economic-source-proof/capture > economic-source-proof/verification.json
+          cat economic-source-proof/verification.json
+      - name: Upload bounded public-source proof
+        id: proof
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: economic-source-capture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: economic-source-proof/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish source compatibility summary
+        if: always()
+        shell: bash
+        env:
+          PROOF_URL: ${{ steps.proof.outputs.artifact-url }}
+        run: |
+          if [ -f economic-source-proof/capture/summary.md ]; then
+            cat economic-source-proof/capture/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Economic source capture unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo "The run did not produce a structured capture. Inspect failed steps; no source success is inferred." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -n "$PROOF_URL" ]; then
+            printf '\n[本次原文与核验记录](%s)\n' "$PROOF_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo '这是最多四个已审阅页面的采集兼容性验证，不是自动发现新发布，也不是持续产业监控。失败记录不会写入行情状态或候选账本。' >> "$GITHUB_STEP_SUMMARY"
