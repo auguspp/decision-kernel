@@ -17,3 +17,60 @@ jobs:
         run: python -m pip install -e '.[dev]'
       - name: Test
         run: python -m pytest -q
+
+  judgment-timeline:
+    name: Judgment timeline attachment
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'auguspp/decision-kernel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Local Git must contain the separately pinned historical source commit.
+          fetch-depth: 0
+          fetch-tags: false
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install existing package
+        run: python -m pip install -e .
+      - name: Build and verify read-only timeline delivery
+        id: timeline-build
+        run: python .github/scripts/build-judgment-timeline.py
+      - name: Upload read-only timeline
+        id: timeline-upload
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: judgment-timeline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/judgment-timeline/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish timeline access
+        if: always()
+        shell: bash
+        env:
+          BUILD_OUTCOME: ${{ steps.timeline-build.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.timeline-upload.outcome }}
+          ARTIFACT_URL: ${{ steps.timeline-upload.outputs.artifact-url }}
+          ARTIFACT_DIGEST: ${{ steps.timeline-upload.outputs.artifact-digest }}
+        run: |
+          {
+            echo '## 判断时间线 · 选定历史记录'
+            echo
+            if [ "$BUILD_OUTCOME" = 'success' ] && [ "$UPLOAD_OUTCOME" = 'success' ] && [ -n "$ARTIFACT_URL" ] && [ -n "$ARTIFACT_DIGEST" ]; then
+              printf '[下载本次时间线附件](%s)\n\n' "$ARTIFACT_URL"
+              echo '解压后打开 index.html。projection.json 为原始投影，sources/ 保留四份选定原文与展示清单，build.json 记录生成版本与文件哈希。'
+              printf '\n生成代码版本：`%s`；运行：`%s`，attempt `%s`。\n\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+              printf 'GitHub artifact SHA-256：`%s`。\n\n' "$ARTIFACT_DIGEST"
+              echo '附件保留30天，需要仓库访问权限；过期后按固定 Git 版本重建。未部署公开网站。'
+            else
+              echo '本次没有已核验且成功上传的时间线附件。请查看构建／上传步骤；不要拿旧附件冒充本次结果。'
+            fi
+            echo
+            echo '这不是今天最新状态，也没有读取新行情、自动结算或记录 Human 阅读／同意。附件数不是预测样本数。System investment authority = NONE。'
+          } >> "$GITHUB_STEP_SUMMARY"
