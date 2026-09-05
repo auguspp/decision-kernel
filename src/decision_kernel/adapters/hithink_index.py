@@ -563,17 +563,19 @@ def qualify_hithink_index_snapshot(
         snapshot.provider_timestamp_ms / 1000,
         tz=SHANGHAI_TZ,
     )
+    if (
+        trading_sessions is None
+        and provider_ready_at.date() != benchmark_history.response_session
+    ):
+        raise HithinkIndexAdapterError(
+            "index snapshot provider date disagrees with the completed benchmark session"
+        )
     if provider_ready_at < latest.as_of:
         raise HithinkIndexAdapterError(
             "index snapshot provider data-ready time precedes the completed benchmark close"
         )
 
-    if trading_sessions is None:
-        if provider_ready_at.date() != benchmark_history.response_session:
-            raise HithinkIndexAdapterError(
-                "index snapshot provider date disagrees with the completed benchmark session"
-            )
-    else:
+    if trading_sessions is not None:
         if observed_at is None or observed_at.tzinfo is None or observed_at.utcoffset() is None:
             raise HithinkIndexAdapterError(
                 "snapshot qualification observed_at must be timezone-aware"
