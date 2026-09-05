@@ -33,9 +33,11 @@ LIVE = "LIVE_HITHINK_ISOLATED_DUMP_TRIAL"
 SYNTHETIC = "SYNTHETIC_TEST_ONLY"
 AUTHORITY = {"human_attention_authority": "NONE", "research_authority": "NONE",
              "investment_authority": "NONE", "market_state_writes": 0, "events_created": 0}
-# The documented signing service returns S3 presigned objects. No arbitrary host,
-# local address, URL redirect, third-party provider or caller-provided URL is used.
+# S3 presigning also uses the exact CDN path documented in the official Python
+# client. This is not permission for arbitrary CDN paths, redirects or providers.
 S3_HOST = re.compile(r"(?:[a-z0-9][a-z0-9.-]*\.)?s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com(?:\.cn)?")
+CDN_HOST = "o.thsi.cn"
+CDN_PREFIX = "/fuyao-market-dump/"
 
 
 class DumpTrialError(ValueError):
@@ -120,9 +122,13 @@ def signing_identity(payload: dict, *, now: datetime) -> tuple[str, datetime, st
     if not isinstance(url, str) or len(url) > 8192 or any(ord(c) < 33 for c in url):
         raise DumpTrialError("INVALID_SIGNED_URL")
     parsed = urlsplit(url)
+    allowed_host = bool(S3_HOST.fullmatch(parsed.hostname or "")) or (
+        parsed.hostname == CDN_HOST and parsed.path.startswith(CDN_PREFIX)
+        and "%" not in parsed.path and "\\" not in parsed.path
+        and not {".", ".."}.intersection(parsed.path.split("/")))
     if (parsed.scheme != "https" or parsed.username is not None or parsed.password is not None
             or parsed.port is not None or parsed.fragment or not parsed.query
-            or not S3_HOST.fullmatch(parsed.hostname or "") or not parsed.path.startswith("/")):
+            or not allowed_host or not parsed.path.startswith("/")):
         raise DumpTrialError("UNREVIEWED_SIGNED_OBJECT_DESTINATION")
     if not isinstance(raw_expiry, str):
         raise DumpTrialError("SIGNED_EXPIRY_REQUIRED")
