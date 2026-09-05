@@ -3,7 +3,7 @@
 Status: **MUTABLE CURRENT-STATE INDEX / NOT AUTHORITATIVE OVER FROZEN LINEAGE / NO NEW KERNEL SCHEMA**  
 Updated: **2026-09-05**  
 Repository: `auguspp/decision-kernel`  
-Verified implementation baseline before this state-only sync: `d0c18690f406d2a2d90b32048ede37f643669a93`
+Verified implementation baseline before this state-only sync: `5f8f635d191dd8559844d1b74af0dca0cf4c02df`
 
 ## Operating rule
 
@@ -26,9 +26,11 @@ ATTENTION ACQUISITION = ACTIVE HIGHEST PRIORITY
 HUMAN ATTENTION SURFACE = ACCEPTED / MERGED / ACTIVE
 SECTOR RADAR PURE DAILY COMPOSITION ROOT = MERGED
 SECTOR RADAR MANUAL WORKFLOW_DISPATCH PRODUCER = MERGED
-SECTOR RADAR LIVE WORKFLOW PROOF = NOT YET EXECUTED
+SECTOR RADAR LIVE SAME-SESSION VALIDATION = PROVEN
+SECTOR RADAR LIVE ARTIFACT/CACHE RESTORE = PROVEN
+SECTOR RADAR NEW COMPLETED-SESSION APPEND = NOT YET PROVEN LIVE
 SECTOR RADAR SCHEDULE = NOT PRESENT
-SECTOR RADAR PROSPECTIVE CORPUS = NOT YET STARTED
+SECTOR RADAR PROSPECTIVE CORPUS = EMPTY
 ODDS / CONSTITUTION REDESIGN = FROZEN PENDING OUTCOME-BACKED EVIDENCE
 ```
 
@@ -167,7 +169,7 @@ sector-radar-shadow.yml
 
 `sector-radar-shadow.yml` is **manual `workflow_dispatch` only**. It has no `schedule`, is separate from `decision-inbox.yml`, and rejects GitHub job reruns in favour of a fresh dispatch identity.
 
-No successful Sector Radar workflow run or persistent state artifact has yet been produced. Do not infer live activation from the merged workflow file alone.
+Runs `33938625934` and `33939414197` succeeded. They proved live bootstrap validation and subsequent artifact/cache restoration at the same completed session, 2026-09-04. They did not append a new market session or create prospective candidates. Full evidence is frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`.
 
 ---
 
@@ -449,18 +451,34 @@ more than one completed session follows cached state
 → no bridge
 ```
 
+PR #190 removed the unnecessary requirement for a future calendar row during same-session validation. PR #191 qualified index snapshots using their documented data-ready timestamp semantics, completed benchmark prices and the normalized calendar. Neither repair introduced a fallback provider or relaxed exact market-state equality.
+
 Workflow output remains a separate GitHub Summary and audit artifact. The workflow has no schedule and no canonical Inbox insertion.
 
-### 5.6 What still has not happened
-
-Despite the merged code and manual workflow:
+### 5.6 Live validation and recovery — proven on 2026-09-05
 
 ```text
-SUCCESSFUL SECTOR RADAR WORKFLOW RUN = NONE
-PERSISTENT LIVE STATE ARTIFACT = NONE
-PERSISTENT LIVE CACHE = NONE
-SAME-SESSION PROVIDER VALIDATION PROOF = NOT EXECUTED
+FIRST SUCCESSFUL LIVE VALIDATION = run 33938625934 / workflow #3 / attempt 1
+SAME-SESSION RESTORE PROOF = run 33939414197 / workflow #4 / attempt 1
+EXECUTED IMPLEMENTATION = 5f8f635d191dd8559844d1b74af0dca0cf4c02df
+LATEST VERIFIED RESTORE SOURCE = LATEST_SUCCESS_ARTIFACT
+LATEST STATE ARTIFACT = 9961284050
+LATEST RUN AUDIT ARTIFACT = 9961283551
+LATEST SAVED CACHE KEY = sector-radar-state-33939414197-1
+STATE SESSION = 2026-09-04
+MARKET STATE AND EVENT LEDGER BETWEEN RUNS = BYTE-FOR-BYTE UNCHANGED
+PROSPECTIVE EVENTS = 0
+```
+
+Run #4 restored run #3's artifact and cache, passed their consistency checks, validated the same completed session and published the next provenance wrapper. Its market state and candidate-ledger file bytes remained identical to run #3. The per-run bundle manifest and ZIP hashes changed normally with run identity and update time.
+
+Artifact digests, content-hash reconciliation, cache-log evidence and review limitations are frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`. The two earlier failed runs remain failure evidence; they did not publish a successful state bundle.
+
+### 5.7 What still has not happened
+
+```text
 2026-09-07 DIRECT APPEND PROOF = NOT EXECUTED
+LIVE CANDIDATE-TIME HIERARCHY/BREADTH IN THIS PRODUCER = NOT EXERCISED
 PROSPECTIVE SHADOW CANDIDATE CORPUS = EMPTY
 OBJECTIVE T+5 / T+20 EVALUATION = NOT STARTED
 HUMAN REVIEW ANNOTATION = NOT STARTED
@@ -468,55 +486,33 @@ SCHEDULED SECTOR RADAR WORKFLOW = NOT PRESENT
 CANONICAL ATTENTION INBOX INSERTION = NOT AUTHORIZED
 ```
 
-Merged prerequisites are not evidence that the producer has successfully contacted HiThink or persisted a prospective state.
+The successful same-session runs are not a new-session screen showing no market opportunities. They deliberately perform validation only and create no retrospective candidate events.
 
 ---
 
 ## 6. Next work
 
-### P0 — first fresh manual validation dispatch
+### Completed — initial live validation and same-session recovery
 
-Run a new `workflow_dispatch` from `main`, not a GitHub job rerun.
-
-On 2026-09-05, the expected qualified completed session is still 2026-09-04. Therefore the first proof should be:
-
-```text
-verified committed bootstrap
-→ current catalog
-→ exact same-session qualified 321-series snapshot
-→ market-state equality validation
-→ no membership acquisition
-→ no retrospective candidate event
-→ new 90-day state artifact
-```
-
-Any state, turnover, catalog or provider identity disagreement remains a real proof failure and must not be weakened silently.
-
-### P0 — fresh same-session idempotence dispatch
-
-After the first successful run, start a second fresh `workflow_dispatch`:
-
-```text
-restore latest successful artifact
-+ restore cache acceleration copy
-→ require exact agreement
-→ validate same completed session
-→ market-state hash unchanged
-→ event-ledger hash unchanged
-→ zero prospective events
-```
-
-Do not use “rerun jobs,” because it reuses a run identity.
+Runs `33938625934` and `33939414197` completed these proofs. No additional same-session dispatch is required merely to repeat them. The latest operational evidence supersedes the pre-live expectations in `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md`.
 
 ### P0 — first direct completed-session append
 
-The bootstrap's direct next A-share session is:
+The next validation target is a fresh `main` dispatch after the 2026-09-07 close. The actual latest completed session must still be established by the provider calendar and qualified snapshot, not hardcoded.
 
 ```text
-2026-09-07
+restore newest successful artifact, currently ending 2026-09-04
++ verify any restored cache agrees
+→ require exactly one subsequent completed session
+→ require every provider prev_price to match the cached latest close
+→ append only 2026-09-07
+→ calculate prospective entries from market snapshots only
+→ retain complete audit and persist market state and event ledger
 ```
 
-A first real append may occur only against that completed session. If ordinary production first sees 2026-09-08 or later while restored state still ends at 2026-09-04, it must fail closed and use a separate qualified recovery procedure.
+Zero candidates is a valid quiet outcome; do not force a candidate. If ordinary production first sees 2026-09-08 or later while restored state still ends at 2026-09-04, it must fail closed and use a separate qualified recovery procedure.
+
+Review the real new-session append before adding a schedule. Continue to use a new `workflow_dispatch`, not “rerun jobs.” Any state, turnover, catalog or provider identity disagreement remains a real proof failure and must not be weakened silently.
 
 ### P1 — objective outcomes and Human review
 
@@ -574,7 +570,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md` — latest next-conversation instructions.
+- `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md` — latest live evidence and next-step constraints.
+- `docs/handoffs/2026-09-05-sector-radar-manual-producer-next.md` — pre-live handoff retained for lineage; live-execution status is superseded by the proof above.
 - `docs/handoffs/2026-09-05-sector-radar-next-conversation.md` — prior prerequisite handoff retained for lineage.
 
 ### Sector Radar decisions and evidence
@@ -621,6 +618,9 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #186:** made the committed bootstrap manifest the sole canonical bootstrap identity source and added dynamic documentation consistency coverage.
 - **PR #187:** merged the pure two-phase daily composition root, exact acquisition plan, deterministic full artifact/summary and append-only event ledger.
 - **PR #188:** merged the manual `workflow_dispatch` producer, artifact-authoritative persistence, exact cache conflict checks, 90-day retention, direct-session discipline and separate shadow output.
-- **VERIFIED IMPLEMENTATION BASELINE:** `d0c18690f406d2a2d90b32048ede37f643669a93`, main CI run `33934306867`, `374 passed`.
-- **NOT YET PROVEN LIVE:** no Sector Radar workflow run, state artifact, future market-state append, prospective candidate, T+5/T+20 outcome or canonical Inbox insertion.
+- **PR #190:** repaired the same-session calendar-boundary failure exposed by run `33936773283` without requiring a future calendar row.
+- **PR #191:** repaired index snapshot data-ready timestamp interpretation exposed by run `33937883228`, preserving benchmark-price and calendar qualification.
+- **VERIFIED LIVE IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
+- **PROVEN LIVE:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
+- **NOT YET PROVEN LIVE:** future market-state append or candidate enrichment. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
 - **UNCHANGED AUTHORITY:** no Research route, Recommendation, Action or investment authority.
