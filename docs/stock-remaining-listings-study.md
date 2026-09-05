@@ -1,6 +1,8 @@
 # Remaining frozen listing/issuance originals and data-use boundaries
 
-Status: BOUNDED SOURCE PROFILE / REAL CAPTURE AND REVIEW PENDING / NOT STOCK-PANEL ACCEPTANCE.
+Status: BOUNDED SOURCE PROFILE / NINE NEW ORIGINALS REVIEWED / TWO EMPTY QUERIES RETAINED / NOT STOCK-PANEL ACCEPTANCE.
+
+Actual run `33967897334` retained nine new PDFs, including the exact 603448 full listing original, but remained INCOMPLETE_SOURCE_STUDY because the 601091 and 920298 keyword queries were empty. Detailed page evidence, inventory and limits: `docs/stock-remaining-listings-proof-2026-09-05.md`. Do not repeat the successful originals or infer a listing status from either empty query.
 
 ## Scope and reuse
 
@@ -26,7 +28,7 @@ The known 603448 full announcement is explicitly selected by its already reviewe
 
 Queries use one exact-code/organization page within the existing August 15–September 4 window. At most one PDF per case: 1 directory + 11 queries + 11 PDFs = 23 requests within the existing 24-request cap. Each request is attempted once, with no redirects, credentials, retries, widened windows or fallback. Empty results remain incomplete, not evidence of no listing. HTTP bodies, title/date/URL identity, acquisition clocks and input hashes are retained. A later capture never backdates system knowledge to an issue, publication or listing date.
 
-The previous local direct-PDF attempt could not connect; the planned controlled Actions attempt is a distinct execution, not a claimed successful local download. Public indexed disclosure pages inform source leads only. The original document, not a secondary summary, must support any resulting fact.
+The previous local direct-PDF attempt could not connect; the controlled Actions attempt is a distinct execution, not a claimed successful local download. Public indexed disclosure pages inform source leads only. The original document, not a secondary summary, must support any resulting fact.
 
 ## Field-specific data-use boundaries (not yet activated runtime acceptance)
 
@@ -38,6 +40,6 @@ The previous local direct-PDF attempt could not connect; the planned controlled 
 - Turnover and volume cannot be combined across endpoints before scope and precision are established. A possible block-trade interpretation does not approve a tolerance or delete the outlier. Exact price agreement does not validate those other fields.
 - A later field-specific contract must leave unknown/unsupported metrics unavailable and report coverage. This study does not make a price-only production adoption, fabricate prices, change thresholds or activate 20/60-session breadth.
 
-Keep the frozen result DIFFERENCES_REQUIRE_REVIEW and production_qualification NOT_ESTABLISHED. Acquisition completion is not data approval. The real source review should narrow only claims supported by original pages and retain remaining uncertainties. The existing Sector producer, 881/884 ranks, signal state authority, market persistence and company decisions are untouched.
+Keep the frozen result DIFFERENCES_REQUIRE_REVIEW and production_qualification NOT_ESTABLISHED. Acquisition completion is not data approval. The real source review narrows only claims supported by original pages and retains remaining uncertainties. The existing Sector producer, 881/884 ranks, signal state authority, market persistence and company decisions are untouched.
 
 SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. RESEARCH AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
