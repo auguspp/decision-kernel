@@ -20,7 +20,10 @@ from .hithink import (
 HITHINK_INDEX_MARKET_SOURCE = "HiThink Financial-API index daily market data"
 HITHINK_INDEX_PRICE_CONVENTION = "UNADJUSTED_COMPLETED_A_SHARE_INDEX_CLOSE"
 HITHINK_INDEX_SNAPSHOT_QUALIFICATION = (
-    "PROVIDER_DATE_AND_BENCHMARK_LATEST_PREVIOUS_CLOSE_MATCH"
+    "BENCHMARK_LATEST_PREVIOUS_CLOSE_AND_DATA_READY_TIME_MATCH"
+)
+HITHINK_INDEX_SNAPSHOT_TIMESTAMP_SEMANTICS = (
+    "PROVIDER_DATA_READY_TIME_NOT_MARKET_SESSION"
 )
 
 _INDEX_THSCODE = re.compile(r"^\d{6}\.(?:TI|SH|SZ)$")
@@ -95,6 +98,7 @@ class HithinkQualifiedIndexSnapshotBatch:
     provider_timestamp_ms: int
     qualification_method: str
     points: tuple[HithinkIndexSnapshotPoint, ...]
+    provider_timestamp_semantics: str = HITHINK_INDEX_SNAPSHOT_TIMESTAMP_SEMANTICS
 
 
 def _provider_timestamp_ms(data: Mapping[str, Any], *, endpoint: str) -> int:
@@ -510,7 +514,19 @@ def qualify_hithink_index_snapshot(
     snapshot: HithinkIndexSnapshotBatch,
     *,
     benchmark_history: HithinkCompletedIndexHistory,
+    trading_sessions: Sequence[date] | None = None,
+    observed_at: datetime | None = None,
 ) -> HithinkQualifiedIndexSnapshotBatch:
+    """Qualify a snapshot by completed benchmark prices, not response date.
+
+    HiThink documents snapshot ``timestamp`` as the data-ready time. It may
+    therefore fall on a weekend or holiday after the market session represented by
+    ``last_price`` and ``prev_price``. The completed benchmark history remains the
+    session anchor. When calendar context is supplied, a data-ready time on a later
+    trading session is rejected so an unfinished session cannot masquerade as the
+    prior completed close.
+    """
+
     if benchmark_history.response_session != benchmark_history.expected_latest_session:
         raise HithinkIndexAdapterError(
             "benchmark history is stale and cannot qualify an index snapshot"
@@ -518,6 +534,10 @@ def qualify_hithink_index_snapshot(
     if len(benchmark_history.points) < 2:
         raise HithinkIndexAdapterError(
             "benchmark history requires latest and previous completed closes"
+        )
+    if (trading_sessions is None) != (observed_at is None):
+        raise HithinkIndexAdapterError(
+            "snapshot qualification requires trading_sessions and observed_at together"
         )
 
     benchmark_thscode = benchmark_history.thscode
@@ -539,14 +559,58 @@ def qualify_hithink_index_snapshot(
             "index snapshot benchmark previous price disagrees with completed history"
         )
 
-    provider_session = datetime.fromtimestamp(
+    provider_ready_at = datetime.fromtimestamp(
         snapshot.provider_timestamp_ms / 1000,
         tz=SHANGHAI_TZ,
-    ).date()
-    if provider_session != benchmark_history.response_session:
+    )
+    if provider_ready_at < latest.as_of:
         raise HithinkIndexAdapterError(
-            "index snapshot provider date disagrees with the completed benchmark session"
+            "index snapshot provider data-ready time precedes the completed benchmark close"
         )
+
+    if trading_sessions is None:
+        if provider_ready_at.date() != benchmark_history.response_session:
+            raise HithinkIndexAdapterError(
+                "index snapshot provider date disagrees with the completed benchmark session"
+            )
+    else:
+        if observed_at is None or observed_at.tzinfo is None or observed_at.utcoffset() is None:
+            raise HithinkIndexAdapterError(
+                "snapshot qualification observed_at must be timezone-aware"
+            )
+        normalized_sessions = tuple(trading_sessions)
+        if not normalized_sessions or normalized_sessions != tuple(
+            sorted(set(normalized_sessions))
+        ):
+            raise HithinkIndexAdapterError(
+                "snapshot qualification trading calendar must be unique and ascending"
+            )
+        session_set = set(normalized_sessions)
+        if benchmark_history.response_session not in session_set:
+            raise HithinkIndexAdapterError(
+                "completed benchmark session is absent from the qualification calendar"
+            )
+        expected_latest = latest_completed_a_share_session(
+            normalized_sessions,
+            observed_at=observed_at,
+        )
+        if expected_latest != benchmark_history.expected_latest_session:
+            raise HithinkIndexAdapterError(
+                "snapshot qualification calendar disagrees with benchmark history"
+            )
+        observed_local_date = observed_at.astimezone(SHANGHAI_TZ).date()
+        provider_ready_date = provider_ready_at.date()
+        if provider_ready_date > observed_local_date:
+            raise HithinkIndexAdapterError(
+                "index snapshot provider data-ready date follows the observation date"
+            )
+        if (
+            provider_ready_date > benchmark_history.response_session
+            and provider_ready_date in session_set
+        ):
+            raise HithinkIndexAdapterError(
+                "index snapshot provider data-ready time falls on a later trading session"
+            )
 
     return HithinkQualifiedIndexSnapshotBatch(
         market_session=benchmark_history.response_session,
