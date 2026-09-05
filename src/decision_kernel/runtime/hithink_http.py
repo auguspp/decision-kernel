@@ -56,6 +56,39 @@ def _request_hithink_calendar(
     )
 
 
+def fetch_hithink_trading_calendar(
+    *,
+    observed_at: datetime,
+    api_key: str | None,
+    request_json: _RequestJSON | None = None,
+    timeout_seconds: float = 10.0,
+) -> tuple[date, ...]:
+    """Fetch one exact normalized A-share trading calendar.
+
+    The calendar is a market-session qualification input only. It does not infer a
+    missing trading day, create a Radar candidate, or carry Research, Human-attention,
+    or investment authority.
+    """
+
+    if observed_at.tzinfo is None or observed_at.utcoffset() is None:
+        raise HithinkRuntimeError("calendar observed_at must be timezone-aware")
+    if not api_key:
+        raise HithinkRuntimeError(
+            "HiThink credentials are required for the A-share trading calendar"
+        )
+    if timeout_seconds <= 0:
+        raise HithinkRuntimeError("HiThink calendar timeout must be positive")
+    if request_json is None:
+        envelope = _request_hithink_calendar(
+            api_key=api_key,
+            shanghai_date=observed_at.astimezone(SHANGHAI_TZ).date(),
+            timeout_seconds=timeout_seconds,
+        )
+    else:
+        envelope = request_json(HITHINK_CALENDAR_PATH, {})
+    return normalize_hithink_calendar(envelope)
+
+
 def fetch_hithink_completed_price_history(
     *,
     thscode: str,

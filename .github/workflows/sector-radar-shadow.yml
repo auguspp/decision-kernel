@@ -1,0 +1,127 @@
+name: sector-radar-shadow
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sector-radar-prospective-state
+  cancel-in-progress: false
+
+jobs:
+  producer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Require main branch
+        shell: bash
+        run: |
+          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
+            echo "::error::Sector Radar state production is allowed only from main"
+            exit 1
+          fi
+      - name: Require fresh workflow dispatch
+        shell: bash
+        run: |
+          if [ "${GITHUB_RUN_ATTEMPT}" != "1" ]; then
+            echo "::error::Do not rerun a Sector Radar workflow run; start a fresh workflow_dispatch so run and artifact identity remain unique"
+            exit 1
+          fi
+      - name: Check HiThink secret
+        shell: bash
+        run: |
+          if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
+            echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
+            exit 1
+          fi
+      - name: Restore cache acceleration copy
+        id: state-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: decision-state/sector-radar
+          key: sector-radar-state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            sector-radar-state-
+      - name: Discover latest successful state artifact
+        id: state-artifact
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python -m decision_kernel.runtime.sector_radar_producer discover-artifact \
+            --repository "${GITHUB_REPOSITORY}" \
+            --workflow-file sector-radar-shadow.yml \
+            --current-run-id "${GITHUB_RUN_ID}" \
+            --github-output "${GITHUB_OUTPUT}"
+      - name: Download exact latest successful state artifact
+        if: steps.state-artifact.outputs.artifact_available == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ steps.state-artifact.outputs.artifact_name }}
+          path: restored-artifact/sector-radar
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.state-artifact.outputs.artifact_run_id }}
+      - name: Run independent Sector Radar shadow producer
+        shell: bash
+        run: |
+          python -m decision_kernel.runtime.sector_radar_producer run \
+            --repository "${GITHUB_REPOSITORY}" \
+            --workflow-path .github/workflows/sector-radar-shadow.yml \
+            --run-id "${GITHUB_RUN_ID}" \
+            --run-attempt "${GITHUB_RUN_ATTEMPT}" \
+            --commit-sha "${GITHUB_SHA}" \
+            --prior-success-found "${{ steps.state-artifact.outputs.prior_success_found }}" \
+            --artifact-available "${{ steps.state-artifact.outputs.artifact_available }}" \
+            --state-directory decision-state/sector-radar \
+            --artifact-directory restored-artifact/sector-radar \
+            --output-directory sector-radar-run
+      - name: Upload complete run audit
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-run-${{ github.run_id }}
+          path: sector-radar-run/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Upload authoritative state bundle
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-radar-state-bundle
+          path: decision-state/sector-radar/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Save cache acceleration copy
+        if: success()
+        uses: actions/cache/save@v6
+        with:
+          path: decision-state/sector-radar
+          key: sector-radar-state-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Publish separate shadow summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f sector-radar-run/operations.md ]; then
+            cat sector-radar-run/operations.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Sector Discovery Radar operations unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo "The workflow failed before a structured operations record was written." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f sector-radar-run/summary.md ]; then
+            echo >> "$GITHUB_STEP_SUMMARY"
+            cat sector-radar-run/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit 0
