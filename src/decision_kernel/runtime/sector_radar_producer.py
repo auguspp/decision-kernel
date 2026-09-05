@@ -22,6 +22,7 @@ from . import hithink_http, hithink_index_http, hithink_sector_breadth_http
 from .sector_parent_hints import (
     SectorParentHintIndex,
     load_sector_parent_hints,
+    validate_sector_parent_hint_catalog,
 )
 from .sector_radar_daily import (
     PREPARATION_BUDGET_EXCEEDED,
@@ -47,6 +48,7 @@ from .sector_radar_persistence import (
 from .sector_radar_state import (
     STATE_UPDATE_ALREADY_CURRENT,
     STATE_UPDATE_APPENDED,
+    append_qualified_sector_snapshot,
 )
 
 
@@ -68,6 +70,10 @@ SECTOR_RADAR_DEFAULT_ARTIFACT_DIRECTORY = Path(
 SECTOR_RADAR_DEFAULT_OUTPUT_DIRECTORY = Path("sector-radar-run")
 SECTOR_RADAR_GITHUB_API_VERSION = "2022-11-28"
 SECTOR_RADAR_MEMBERSHIP_REQUEST_DELAY_SECONDS = 0.25
+SECTOR_RADAR_SAME_SESSION_VALIDATION_SCHEMA_VERSION = 1
+SECTOR_RADAR_SAME_SESSION_VALIDATION_SEMANTICS = (
+    "EXACT_SAME_COMPLETED_SESSION_MARKET_STATE_VALIDATION_ONLY"
+)
 
 PRODUCER_STATUS_VALIDATED_ALREADY_CURRENT = (
     "VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT"
@@ -95,7 +101,7 @@ _Now = Callable[[], datetime]
 
 
 class SectorRadarProducerError(RuntimeError):
-    """The independent producer cannot publish a successful shadow state."""
+    """The independent producer cannot publish the required shadow state."""
 
 
 @dataclass(frozen=True)
@@ -166,7 +172,7 @@ class SectorRadarProducerOutcome:
     status: str
     operations: SectorRadarProducerOperations
     persistent_bundle: SectorRadarPersistentBundle
-    preparation: SectorRadarDailyPreparation
+    preparation: SectorRadarDailyPreparation | None
     result: SectorRadarDailyResult | None
 
 
@@ -388,22 +394,33 @@ def write_github_output(
             print(f"{key}={value}", file=output)
 
 
-def _next_calendar_session(
+def _validated_calendar(
     sessions: Sequence[date],
     *,
     cached_session: date,
-) -> date:
+) -> tuple[date, ...]:
     normalized = tuple(sessions)
     if normalized != tuple(sorted(set(normalized))):
         raise SectorRadarProducerError(
             "A-share trading calendar must be unique and ascending"
         )
-    try:
-        index = normalized.index(cached_session)
-    except ValueError as exc:
+    if cached_session not in normalized:
         raise SectorRadarProducerError(
             "cached Sector Radar session is absent from the current trading calendar"
-        ) from exc
+        )
+    return normalized
+
+
+def _next_calendar_session(
+    sessions: Sequence[date],
+    *,
+    cached_session: date,
+) -> date:
+    normalized = _validated_calendar(
+        sessions,
+        cached_session=cached_session,
+    )
+    index = normalized.index(cached_session)
     if index + 1 >= len(normalized):
         raise SectorRadarProducerError(
             "trading calendar does not expose the session after cached state"
@@ -505,6 +522,12 @@ def render_sector_radar_producer_operations(
             f"`{operations.latest_completed_session.isoformat()}`"
         )
         lines.append("")
+    if operations.direct_next_session is not None:
+        lines.append(
+            "Direct next calendar session: "
+            f"`{operations.direct_next_session.isoformat()}`"
+        )
+        lines.append("")
     if operations.candidate_count is not None:
         lines.append(
             f"New false→true candidates: **{operations.candidate_count}**"
@@ -592,6 +615,74 @@ def write_sector_radar_operations(
     )
 
 
+def _same_session_validation_payload(
+    *,
+    context: SectorRadarProducerContext,
+    validated_at: datetime,
+    catalog_hash: str,
+    parent_hint_mapping_hash: str,
+    qualified_snapshot: Any,
+    input_market_state_hash: str,
+    output_market_state_hash: str,
+) -> dict[str, Any]:
+    payload = {
+        "schema_version": SECTOR_RADAR_SAME_SESSION_VALIDATION_SCHEMA_VERSION,
+        "validated_at": validated_at,
+        "repository": context.repository,
+        "workflow_path": context.workflow_path,
+        "run_id": context.run_id,
+        "run_attempt": context.run_attempt,
+        "commit_sha": context.commit_sha,
+        "market_session": qualified_snapshot.market_session,
+        "catalog_hash": catalog_hash,
+        "parent_hint_mapping_hash": parent_hint_mapping_hash,
+        "qualified_snapshot_hash": canonical_hash(asdict(qualified_snapshot)),
+        "input_market_state_hash": input_market_state_hash,
+        "output_market_state_hash": output_market_state_hash,
+        "state_update_status": STATE_UPDATE_ALREADY_CURRENT,
+        "validation_semantics": SECTOR_RADAR_SAME_SESSION_VALIDATION_SEMANTICS,
+        "signal_transition_authority": "NONE",
+        "research_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+    }
+    payload["validation_hash"] = canonical_hash(payload)
+    return payload
+
+
+def write_sector_radar_same_session_validation(
+    *,
+    output_directory: Path,
+    context: SectorRadarProducerContext,
+    validated_at: datetime,
+    catalog_hash: str,
+    parent_hint_mapping_hash: str,
+    qualified_snapshot: Any,
+    input_market_state_hash: str,
+    output_market_state_hash: str,
+) -> str:
+    payload = _same_session_validation_payload(
+        context=context,
+        validated_at=validated_at,
+        catalog_hash=catalog_hash,
+        parent_hint_mapping_hash=parent_hint_mapping_hash,
+        qualified_snapshot=qualified_snapshot,
+        input_market_state_hash=input_market_state_hash,
+        output_market_state_hash=output_market_state_hash,
+    )
+    _write_text_atomic(
+        output_directory / "same-session-validation.json",
+        json.dumps(
+            json.loads(canonical_json(payload)),
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+    )
+    return payload["validation_hash"]
+
+
 def _success_operations(
     *,
     status: str,
@@ -599,12 +690,31 @@ def _success_operations(
     completed_at: datetime,
     resolution: SectorRadarPersistenceResolution,
     latest_completed_session: date,
-    direct_next_session: date,
-    preparation: SectorRadarDailyPreparation,
+    direct_next_session: date | None,
+    preparation: SectorRadarDailyPreparation | None,
     output_bundle: SectorRadarPersistentBundle,
     result: SectorRadarDailyResult | None,
 ) -> SectorRadarProducerOperations:
     source_manifest = resolution.source_bundle_manifest
+    if preparation is None:
+        if status != PRODUCER_STATUS_VALIDATED_ALREADY_CURRENT or result is not None:
+            raise SectorRadarProducerError(
+                "only same-session validation may omit prospective preparation"
+            )
+        state_update_status = STATE_UPDATE_ALREADY_CURRENT
+        preparation_status = None
+        preparation_hash = None
+        candidate_count = 0
+        membership_request_count = 0
+    else:
+        state_update_status = preparation.state_update_status
+        preparation_status = preparation.acquisition_plan.status
+        preparation_hash = preparation.preparation_hash
+        candidate_count = preparation.acquisition_plan.candidate_count
+        membership_request_count = (
+            preparation.acquisition_plan.distinct_membership_request_count
+        )
+
     operations = SectorRadarProducerOperations(
         schema_version=SECTOR_RADAR_PRODUCER_OPERATIONS_SCHEMA_VERSION,
         status=status,
@@ -625,13 +735,11 @@ def _success_operations(
         latest_cached_session=resolution.market_state.sessions[-1],
         latest_completed_session=latest_completed_session,
         direct_next_session=direct_next_session,
-        state_update_status=preparation.state_update_status,
-        preparation_status=preparation.acquisition_plan.status,
-        preparation_hash=preparation.preparation_hash,
-        candidate_count=preparation.acquisition_plan.candidate_count,
-        membership_request_count=(
-            preparation.acquisition_plan.distinct_membership_request_count
-        ),
+        state_update_status=state_update_status,
+        preparation_status=preparation_status,
+        preparation_hash=preparation_hash,
+        candidate_count=candidate_count,
+        membership_request_count=membership_request_count,
         output_market_state_hash=output_bundle.market_state.state_hash,
         output_event_ledger_hash=output_bundle.event_ledger.ledger_hash,
         result_hash=None if result is None else result.result_hash,
@@ -757,9 +865,12 @@ def run_sector_radar_producer(
 
     state = resolution.market_state
     cached_session = state.sessions[-1]
-    sessions = fetch_calendar(
-        observed_at=context.observed_at,
-        api_key=api_key,
+    sessions = _validated_calendar(
+        fetch_calendar(
+            observed_at=context.observed_at,
+            api_key=api_key,
+        ),
+        cached_session=cached_session,
     )
     latest_completed = latest_completed_a_share_session(
         sessions,
@@ -769,10 +880,6 @@ def run_sector_radar_producer(
         raise SectorRadarProducerError(
             "latest completed A-share session precedes restored market state"
         )
-    direct_next = _next_calendar_session(
-        sessions,
-        cached_session=cached_session,
-    )
     completed_after_cache = tuple(
         session
         for session in sessions
@@ -783,10 +890,17 @@ def run_sector_radar_producer(
             "restored Sector Radar state missed one or more completed sessions; "
             "ordinary production cannot bridge the gap"
         )
-    if completed_after_cache and completed_after_cache != (direct_next,):
-        raise SectorRadarProducerError(
-            "completed-session sequence after restored state is not directly contiguous"
+
+    direct_next: date | None = None
+    if completed_after_cache:
+        direct_next = _next_calendar_session(
+            sessions,
+            cached_session=cached_session,
         )
+        if completed_after_cache != (direct_next,):
+            raise SectorRadarProducerError(
+                "completed-session sequence after restored state is not directly contiguous"
+            )
 
     catalog = fetch_catalog(api_key=api_key)
     snapshot = fetch_snapshot(
@@ -799,23 +913,6 @@ def run_sector_radar_producer(
         raise SectorRadarProducerError(
             "qualified index snapshot does not match the latest completed session"
         )
-    preparation = prepare_sector_radar_daily_run(
-        market_state=state,
-        catalog=catalog,
-        qualified_snapshot=snapshot,
-        parent_hints=parent_hints,
-        prepared_at=context.observed_at,
-        next_completed_session_after_state=direct_next,
-    )
-    output_directory.mkdir(parents=True, exist_ok=True)
-    _write_text_atomic(
-        output_directory / "preparation.json",
-        serialize_sector_radar_daily_preparation(preparation),
-    )
-    _write_text_atomic(
-        output_directory / "preparation.md",
-        render_sector_radar_daily_preparation_markdown(preparation),
-    )
 
     bundle_created_at = (
         context.observed_at
@@ -829,12 +926,38 @@ def run_sector_radar_producer(
     )
 
     if latest_completed == cached_session:
-        if preparation.state_update_status != STATE_UPDATE_ALREADY_CURRENT:
+        validate_sector_parent_hint_catalog(
+            hints=parent_hints,
+            catalog=catalog,
+        )
+        state_update = append_qualified_sector_snapshot(
+            state=state,
+            catalog=catalog,
+            snapshot=snapshot,
+            observed_at=context.observed_at,
+        )
+        if state_update.status != STATE_UPDATE_ALREADY_CURRENT:
             raise SectorRadarProducerError(
                 "same-session validation unexpectedly changed market state"
             )
+        if state_update.state != state:
+            raise SectorRadarProducerError(
+                "same-session validation returned a changed market-state object"
+            )
+
         completed_at = now()
         _aware(completed_at, field="producer completion clock")
+        output_directory.mkdir(parents=True, exist_ok=True)
+        write_sector_radar_same_session_validation(
+            output_directory=output_directory,
+            context=context,
+            validated_at=completed_at,
+            catalog_hash=catalog.catalog_hash,
+            parent_hint_mapping_hash=parent_hints.mapping_hash,
+            qualified_snapshot=snapshot,
+            input_market_state_hash=state.state_hash,
+            output_market_state_hash=state_update.state.state_hash,
+        )
         bundle = write_sector_radar_persistent_bundle(
             state_directory,
             market_state=state,
@@ -856,8 +979,8 @@ def run_sector_radar_producer(
             completed_at=completed_at,
             resolution=resolution,
             latest_completed_session=latest_completed,
-            direct_next_session=direct_next,
-            preparation=preparation,
+            direct_next_session=None,
+            preparation=None,
             output_bundle=bundle,
             result=None,
         )
@@ -866,14 +989,33 @@ def run_sector_radar_producer(
             status=PRODUCER_STATUS_VALIDATED_ALREADY_CURRENT,
             operations=operations,
             persistent_bundle=bundle,
-            preparation=preparation,
+            preparation=None,
             result=None,
         )
 
-    if latest_completed != direct_next:
+    if direct_next is None or latest_completed != direct_next:
         raise SectorRadarProducerError(
             "latest completed session is not the direct next session after state"
         )
+
+    preparation = prepare_sector_radar_daily_run(
+        market_state=state,
+        catalog=catalog,
+        qualified_snapshot=snapshot,
+        parent_hints=parent_hints,
+        prepared_at=context.observed_at,
+        next_completed_session_after_state=direct_next,
+    )
+    output_directory.mkdir(parents=True, exist_ok=True)
+    _write_text_atomic(
+        output_directory / "preparation.json",
+        serialize_sector_radar_daily_preparation(preparation),
+    )
+    _write_text_atomic(
+        output_directory / "preparation.md",
+        render_sector_radar_daily_preparation_markdown(preparation),
+    )
+
     if preparation.state_update_status != STATE_UPDATE_APPENDED:
         raise SectorRadarProducerError(
             "new completed session did not append exactly once"
