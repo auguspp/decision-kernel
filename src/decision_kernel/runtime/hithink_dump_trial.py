@@ -188,7 +188,9 @@ def parquet_metadata(path: Path) -> dict:
 
 def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
               request=None, download=None, now=None) -> dict:
-    if provenance not in {LIVE, SYNTHETIC} or ((request is not None or download is not None) != (provenance == SYNTHETIC)):
+    if (provenance not in {LIVE, SYNTHETIC}
+            or (provenance == LIVE and (request is not None or download is not None))
+            or (provenance == SYNTHETIC and (not callable(request) or not callable(download)))):
         raise DumpTrialError("INJECTED_TRANSPORT_REQUIRES_SYNTHETIC_PROVENANCE")
     if not api_key:
         raise DumpTrialError("HITHINK_CREDENTIAL_REQUIRED")
@@ -200,9 +202,15 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
     started = _clock(now())
     request = request or (lambda path, params: request_json(path, params, api_key=api_key))
     download = download or download_object
+    package = Path(__file__).resolve().parents[1]
+    implementations = ("identity.py", "adapters/hithink.py", "adapters/hithink_index.py",
+                       "runtime/hithink_http.py", "runtime/hithink_index_http.py",
+                       "runtime/hithink_sector_breadth_http.py", "runtime/hithink_dump_inspection.py",
+                       "runtime/hithink_dump_trial.py", "runtime/sector_radar_audit.py")
     report = {"schema_version": 1, "provenance": provenance, "started_at": started.isoformat(),
               "status": "FAILED_CLOSED", "stage": "SIGNING", "production_qualification": "NOT_ESTABLISHED",
               "reader_runtime": runtime, "signing_endpoint": SIGNING_PATH, "download_completed": False,
+              "implementation": {name: hashlib.sha256((package / name).read_bytes()).hexdigest() for name in implementations},
               "reference_requests": [], "inspection": None, **AUTHORITY}
     files = {}
     json_bytes = 0
@@ -238,6 +246,11 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
     try:
         signed = request(SIGNING_PATH, {})
         report["signing_provider_code"] = signed.get("code") if type(signed.get("code")) is int else None
+        offered = signed.get("data")
+        if isinstance(offered, dict) and isinstance(offered.get("presigned_url"), str):
+            offered_host = urlsplit(offered["presigned_url"]).hostname
+            if offered_host and re.fullmatch(r"[a-z0-9.-]{1,253}", offered_host) and api_key not in offered_host:
+                report["offered_download_host"] = offered_host
         url, expiry, host = signing_identity(signed, now=now())
         report.update(signed_expires_at=expiry.isoformat(), download_host=host, stage="DOWNLOAD")
         report["download_started_at"] = _clock(now()).isoformat()
@@ -292,7 +305,7 @@ def run_trial(root: Path, *, api_key: str | None, provenance: str = LIVE,
         report["error_code"] = exc.code if isinstance(exc, DumpTrialError) else "EXISTING_COMPONENT_OR_TRANSPORT_REJECTED"
         report["http_status"] = exc.http_status if isinstance(exc, DumpTrialError) else None
     report["completed_at"] = _clock(now()).isoformat()
-    report["files"] = files
+    report["files"] = dict(files)
     report["report_hash"] = canonical_hash(report)
     save("report.json", report)
     summary = (f"## Stock dump trial — {report['status']}\n\n"
