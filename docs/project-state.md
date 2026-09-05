@@ -398,7 +398,13 @@ radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json
 docs/sector-radar-state-bootstrap-2026-09-04.md
 ```
 
-Frozen bootstrap identity:
+Canonical bootstrap identity source:
+
+```text
+radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json
+```
+
+That manifest is the sole canonical source for the bootstrap state hash, byte sizes and hashes, formula, session window, universe shape and source lineage. This mutable index repeats only the compact operational identity below:
 
 ```text
 latest completed session = 2026-09-04
@@ -408,7 +414,7 @@ benchmark = 1
 broad = 90
 granular = 230
 catalog hash = 367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360
-state hash = 3a87b66cdf947b0102634d31f29e31adfc1a8b2c2151c425c26b55ae3ed226cd
+state hash = 2963d7fa62757a56e7296b3d9855a7d6d067d59816738078361f86c51d1f41d7
 ```
 
 It is only an initial state. It cannot bridge a missed completed session.
