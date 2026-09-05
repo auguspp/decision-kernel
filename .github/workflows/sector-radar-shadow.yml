@@ -32,6 +32,13 @@ jobs:
             echo "::error::Sector Radar state production is allowed only from main"
             exit 1
           fi
+      - name: Require fresh workflow dispatch
+        shell: bash
+        run: |
+          if [ "${GITHUB_RUN_ATTEMPT}" != "1" ]; then
+            echo "::error::Do not rerun a Sector Radar workflow run; start a fresh workflow_dispatch so run and artifact identity remain unique"
+            exit 1
+          fi
       - name: Check HiThink secret
         shell: bash
         run: |
