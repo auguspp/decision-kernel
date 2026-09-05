@@ -79,6 +79,14 @@ def _safe_headers(headers: Mapping[str, str]) -> dict[str, str]:
     return output
 
 
+def _body_integrity(body: bytes, headers: Mapping[str, str]) -> None:
+    if not isinstance(body, bytes) or not 0 < len(body) <= MAX_BODY_BYTES:
+        raise EconomicCaptureError("response body is empty or exceeds the byte budget")
+    length = headers.get("content-length")
+    if length is not None and (not re.fullmatch(r"[0-9]+", length) or int(length) != len(body)):
+        raise EconomicCaptureError("response body length disagrees with Content-Length")
+
+
 def fetch_public_page(url: str) -> PublicResponse:
     """One credential-free request; URL must first pass the reviewed-source parser.
 
@@ -105,8 +113,7 @@ def fetch_public_page(url: str) -> PublicResponse:
         if length is not None and (not re.fullmatch(r"[0-9]+", length) or int(length) > MAX_BODY_BYTES):
             raise EconomicCaptureError("response exceeds the declared byte budget")
         body = response.read(MAX_BODY_BYTES + 1)
-        if len(body) > MAX_BODY_BYTES:
-            raise EconomicCaptureError("response exceeds the actual byte budget")
+        _body_integrity(body, headers)
         return PublicResponse(response.geturl(), response.status, headers, body)
 
 
@@ -142,9 +149,8 @@ class _VisibleText(HTMLParser):
 def decode_page(response: PublicResponse) -> str:
     if type(response.status) is not int or response.status != 200:
         raise EconomicCaptureError("response is not HTTP 200")
-    if not isinstance(response.body, bytes) or not 0 < len(response.body) <= MAX_BODY_BYTES:
-        raise EconomicCaptureError("response body is empty or exceeds the byte budget")
     headers = _safe_headers(response.headers)
+    _body_integrity(response.body, headers)
     if headers.get("content-encoding", "identity").lower() not in {"", "identity"}:
         raise EconomicCaptureError("compressed response requires a separately reviewed decoder")
     message = Message()
@@ -232,8 +238,8 @@ def _new_directory(root: Path) -> None:
 def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *,
                              transport: Callable[[str], PublicResponse] | None = None,
                              provenance: str = LIVE, now: Callable[[], datetime] | None = None) -> dict:
-    if provenance not in {LIVE, SYNTHETIC} or (transport is not None and provenance != SYNTHETIC):
-        raise EconomicCaptureError("injected transports must declare synthetic provenance")
+    if provenance not in {LIVE, SYNTHETIC} or ((transport is not None) != (provenance == SYNTHETIC)):
+        raise EconomicCaptureError("injected transports must declare synthetic provenance and synthetic runs require an injected transport")
     if not 1 <= len(sources) <= MAX_SOURCES or len({source["source_url"] for source in sources}) != len(sources):
         raise EconomicCaptureError("source list must contain 1–4 unique reviewed pages")
     source_records = []
@@ -311,7 +317,7 @@ def capture_reviewed_sources(sources: Sequence[Mapping[str, str]], root: Path, *
 
 def verify_capture(root: Path) -> dict:
     """Verify a trusted extracted archive without network or production writes."""
-    if root.is_symlink() or (root / "manifest.json").is_symlink():
+    if any(path.is_symlink() for path in (root, *root.parents)) or (root / "manifest.json").is_symlink():
         raise EconomicCaptureError("capture path must not be a symlink")
     if (root / "manifest.json").stat().st_size > 65536:
         raise EconomicCaptureError("manifest is oversized")
@@ -320,7 +326,7 @@ def verify_capture(root: Path) -> dict:
     expected_fields = {"schema_version", "semantics", "provenance", "implementation", "status", "records", "files", *AUTHORITY}
     if set(payload) != expected_fields or claimed != canonical_hash(payload):
         raise EconomicCaptureError("capture manifest fields/hash disagree")
-    if payload["schema_version"] != 1 or payload["semantics"] != SEMANTICS or payload["provenance"] not in {LIVE, SYNTHETIC}:
+    if type(payload["schema_version"]) is not int or payload["schema_version"] != 1 or payload["semantics"] != SEMANTICS or payload["provenance"] not in {LIVE, SYNTHETIC}:
         raise EconomicCaptureError("unsupported capture contract")
     if payload["implementation"] != _implementation() or any(payload[key] != value for key, value in AUTHORITY.items()):
         raise EconomicCaptureError("capture implementation or authority differs")
@@ -334,7 +340,7 @@ def verify_capture(root: Path) -> dict:
             raise EconomicCaptureError("capture inventory contains a symlink")
         if path.is_file():
             actual.add(path.relative_to(root).as_posix())
-    if actual != expected or sum(item["bytes"] for item in payload["files"].values()) > MAX_ARCHIVE_BYTES:
+    if actual != expected or "summary.md" not in expected or sum(item["bytes"] for item in payload["files"].values()) > MAX_ARCHIVE_BYTES:
         raise EconomicCaptureError("capture inventory or byte budget disagrees")
     for name, entry in payload["files"].items():
         if name != "summary.md":
@@ -342,35 +348,55 @@ def verify_capture(root: Path) -> dict:
             if len(parts) != 2 or parts[0] not in {f"{i:04d}" for i in range(len(records))} or parts[1] not in FILES:
                 raise EconomicCaptureError("capture file path is outside the fixed inventory")
         path = root / name
-        if set(entry) != {"bytes", "sha256"} or path.stat().st_size > MAX_BODY_BYTES or path.stat().st_size != entry["bytes"] or _sha(path.read_bytes()) != entry["sha256"]:
+        if set(entry) != {"bytes", "sha256"} or type(entry["bytes"]) is not int or path.stat().st_size > MAX_BODY_BYTES or path.stat().st_size != entry["bytes"] or _sha(path.read_bytes()) != entry["sha256"]:
             raise EconomicCaptureError("captured file hash or size disagrees")
     matched = 0
+    seen_urls = set()
     for index, record in enumerate(records):
         prefix = f"{index:04d}"
-        if record["index"] != index:
-            raise EconomicCaptureError("capture record order differs")
+        if set(record) != {"index", "source_url", "started_at", "completed_at", "status", "error_type", "error_reason"} or type(record["index"]) is not int or record["index"] != index:
+            raise EconomicCaptureError("capture record fields or order differ")
         source = json.loads((root / prefix / "source.json").read_text(encoding="utf-8"))
         qualify_release_excerpt(source)
-        if record["source_url"] != source["source_url"]:
-            raise EconomicCaptureError("capture source identity differs")
+        if record["source_url"] != source["source_url"] or record["source_url"] in seen_urls:
+            raise EconomicCaptureError("capture source identity differs or is repeated")
+        seen_urls.add(record["source_url"])
         if (source["capture_method"] == SYNTHETIC) != (payload["provenance"] == SYNTHETIC):
             raise EconomicCaptureError("synthetic/public provenance differs")
         start = _clock(datetime.fromisoformat(record["started_at"]))
         end = _clock(datetime.fromisoformat(record["completed_at"]))
         if end < start:
             raise EconomicCaptureError("capture clocks are reversed")
-        if record["status"] == MATCHED:
+        response = None
+        if (root / prefix / "response.json").exists():
             metadata = json.loads((root / prefix / "response.json").read_text(encoding="utf-8"))
+            if set(metadata) != {"url", "status", "headers"} or metadata["headers"] != _safe_headers(metadata["headers"]):
+                raise EconomicCaptureError("response metadata fields differ")
             response = PublicResponse(metadata["url"], metadata["status"], metadata["headers"], (root / prefix / "response.bin").read_bytes())
+        if record["status"] == MATCHED:
+            if response is None or record["error_type"] is not None or record["error_reason"] is not None:
+                raise EconomicCaptureError("successful capture lacks a response or carries an error")
             page, binding, observation = bind_reviewed_source(source, response, captured_at=end)
             for name, value in (("page.txt", page.encode("utf-8")), ("binding.json", _bytes(binding)), ("observation.json", _bytes(observation))):
                 if (root / prefix / name).read_bytes() != value:
                     raise EconomicCaptureError("captured binding/output does not reconstruct from raw response")
             matched += 1
-        elif record["status"] not in {"SOURCE_UNAVAILABLE", "REJECTED_BINDING"}:
+        elif record["status"] in {"SOURCE_UNAVAILABLE", "REJECTED_BINDING"}:
+            if any((root / prefix / name).exists() for name in ("page.txt", "binding.json", "observation.json")) or not record["error_type"] or not record["error_reason"]:
+                raise EconomicCaptureError("rejected capture cannot carry a successful observation or omit its error")
+            if record["status"] == "REJECTED_BINDING":
+                if response is None:
+                    raise EconomicCaptureError("rejected binding lacks its response")
+                try:
+                    bind_reviewed_source(source, response, captured_at=end)
+                except (ValueError, RuntimeError) as exc:
+                    reason = str(exc) if isinstance(exc, EconomicCaptureError) else "source qualification failed"
+                    if record["error_type"] != type(exc).__name__ or record["error_reason"] != reason:
+                        raise EconomicCaptureError("recorded rejection differs from raw reconstruction") from exc
+                else:
+                    raise EconomicCaptureError("recorded rejection now accepts its retained response")
+        else:
             raise EconomicCaptureError("unsupported capture disposition")
-        elif any((root / prefix / name).exists() for name in ("binding.json", "observation.json")):
-            raise EconomicCaptureError("rejected capture cannot carry a successful observation")
     if (payload["status"] == "COMPLETE") != (matched == len(records)):
         raise EconomicCaptureError("aggregate capture status disagrees")
     return {"capture_hash": claimed, "archive_integrity": "VERIFIED", "matched_excerpts": matched,
