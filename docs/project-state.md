@@ -16,7 +16,7 @@ End of conversation: sync only real state deltas.
 
 Do not trust a chat summary over repository state, frozen lineage, CI results or real workflow artifacts.
 
-Latest implementation handoff: `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md`. Prior handoffs and failed probes are retained for lineage. A successful bounded directory scan is not complete publisher coverage or accepted new economic evidence.
+Latest implementation handoff: `docs/handoffs/2026-09-05-stock-dump-trial-next.md`. Prior handoffs and failed probes are retained for lineage. A successful file download is not full data qualification; a bounded directory scan is not complete publisher coverage or accepted economic evidence.
 
 Human implementation preference: **reuse mature wheels before building generic infrastructure**. Prefer exact official structured data/feeds, maintained source adapters and mature libraries. Bespoke code is for missing project-specific identity, time/version, review and authority contracts, not another parser/crawler/queue. See `docs/radar-reuse-decision-2026-09-05.md`.
 
@@ -34,7 +34,7 @@ SECTOR RADAR LIVE SAME-SESSION VALIDATION = PROVEN
 SECTOR RADAR LIVE ARTIFACT/CACHE RESTORE = PROVEN
 SECTOR RADAR INPUT AUDIT / OFFLINE REPLAY = IMPLEMENTED / SYNTHETICALLY TESTED
 SECTOR RADAR READ-ONLY CONTEXT = WORKFLOW ARTIFACT WIRING MERGED / LIVE PUBLICATION PENDING
-HITHINK STOCK DUMP = OFFLINE INSPECTOR ONLY / REAL DATA NOT QUALIFIED
+HITHINK STOCK DUMP = REAL RECENT FILE RETAINED / FOOTER READ / FULL REFERENCE AND ROW QUALIFICATION INCOMPLETE
 ECONOMIC NODES = TWO BOUNDED PUBLIC-EXCERPT PILOTS / NO AUTOMATED FEED
 ECONOMIC RAW CAPTURE = FOUR REVIEWED PAGES MATCHED / PRIOR INCOMPLETE PROOF RETAINED / NO CONTINUOUS FEED
 ECONOMIC RELEASE DISCOVERY = BEAUTIFUL SOUP REUSED / DIRECT SPB STATISTICS WINDOW PROVEN / ZERO LIVE NEW DETAIL PACKETS
@@ -167,7 +167,7 @@ No disclosure packet currently earns Human Research attention.
 
 ### Current workflow directory
 
-Default branch now contains seven formal workflows:
+Default branch now contains eight formal workflows:
 
 ```text
 apply-disclosure-assessment.yml
@@ -175,6 +175,7 @@ ci.yml
 decision-inbox.yml
 economic-release-discovery.yml
 economic-source-capture.yml
+hithink-stock-dump-trial.yml
 live-dogfood.yml
 sector-radar-shadow.yml
 ```
@@ -186,6 +187,8 @@ sector-radar-shadow.yml
 A later controlled diagnostic run `33949122077` on `386f12112e56089d2c76822ed342c4f084ff3b85` returned HTTP 200 and matched all four reviewed pages. It is a separate success / COMPLETE proof, not a rewrite of the first failure or continuous monitoring. The earlier HTTP codes and cause remain unknown because that rejection did not recur. See section 5.12.
 
 `economic-release-discovery.yml` separately checks two fixed official directory windows, with at most four planned article requests and no automatic fact acceptance. It runs manually on main or for narrowly scoped main code/workflow changes, without secrets, market cache or a schedule. First live run `33952315592` succeeded as a bounded scan with two directory requests and zero eligible detail requests; this is not complete publisher coverage. See section 5.13. It now installs optional `.[discovery]` and uses Beautiful Soup; the current direct-statistics proof and retained script-stub failure are in section 5.14.
+
+`hithink-stock-dump-trial.yml` is an isolated compatibility study, not a Sector state producer. It uses optional Requests/PyArrow and the existing HiThink secret only during acquisition, has fresh-main/manual or narrow main-path triggers, and has no schedule or market cache/state access. Run `33957604949` retained its first actual recent-stock Parquet but failed at stock-reference date qualification; neither complete row inspection nor production adoption occurred. See section 5.15.
 
 Runs `33938625934` and `33939414197` succeeded. They proved live bootstrap validation and subsequent artifact/cache restoration at the same completed session, 2026-09-04. They did not append a new market session or create prospective candidates. Full evidence is frozen in `docs/sector-radar-live-bootstrap-restore-proof-2026-09-05.md`.
 
@@ -524,7 +527,7 @@ The approved expansion preserves the market detector while adding better state r
 
 **PR #194 — saved-state context.** `runtime/sector_radar_context.py` produces an on-demand HTML/JSON report from a validated state bundle. It shows active, weakening/exited and full industry paths separately for 881 and 884, including raw sector/benchmark/excess returns and censor-aware trend age. It distinguishes trend start, unavailable system-first-observed time and recorded prospective-event time. Presentation labels do not change gates or create events. No breadth is carried forward. It was initially a standalone CLI; PR #198 added workflow artifact wiring described below, not public hosting.
 
-**PR #195 — stock-dump integrity study.** `runtime/hithink_dump_inspection.py` checks local recent-ten-session rows against an explicit calendar, stock universe and snapshot. It exposes missing/unpriced rows, unit/schema discrepancies and raw-previous-close differences requiring corporate-action review. The pure row contract is tested; a real signed download, account entitlement, Parquet-reader execution, overlapping-vintage revisions and production qualification are not established. PyArrow is optional and isolated, not a project dependency. No stock panel or multi-day breadth is activated.
+**PR #195 — stock-dump integrity study.** `runtime/hithink_dump_inspection.py` checks local recent-ten-session rows against an explicit calendar, stock universe and snapshot. It exposes missing/unpriced rows, unit/schema discrepancies and raw-previous-close differences requiring corporate-action review. That slice tested pure Python rows only; it did not establish a real download, physical Parquet decoding, overlapping-vintage revisions or production qualification. PyArrow was then optional but not installed by the project. Later optional-library tests and actual partial delivery evidence are recorded in section 5.15; no stock panel or multi-day breadth is activated.
 
 **PR #196 — two economic-source pilots.** `runtime/economic_node_study.py` parses four reviewed official MOA/SPB excerpts saved in `radar_inputs/economic-node-study-2026-09-05.json`: two livestock/feed weeks and two express-business months. It separates period, date-only publication and actual capture, preserves immutable versions and descriptive comparisons, and does not backdate system-PIT availability. Express revenue per parcel is a rounded mix proxy, not like-for-like price or profit. These are manually reviewed public-source studies, not full HTTP capture, automated feeds, historical first-vintage proof, company mapping, fundamental-state confirmation or market candidate events. Later raw captures retain new, separate capture-time records; they do not rewrite these original studies.
 
@@ -582,7 +585,17 @@ Its controlled run `33954522717` remained INCOMPLETE: MOA parsed successfully, b
 
 The resulting run `33954898834` on `aa7f9f4f03e529604c164e164c99e04471aa465d` completed successfully with two directory requests and zero article requests. MOA retained 20 qualified rows / 10 target releases; SPB had 9 qualified rows / 6 target titles, including both reviewed monthly reports. Its visible dates ran from 2025-11-18 through 2026-08-14, reaching the current reviewed boundary. Artifact `9966022845` and its nine-file inventory were downloaded and reconciled independently; the workflow rebuilt the scan offline. The original baseline and MOA raw body remained byte-identical to prior evidence.
 
-This is improved current-window coverage, not complete history, continuous discovery, new-detail acquisition or source acceptance. No pending new packet, economic observation or market event was created. Full implementation CI contains 587 passing tests; no HiThink call, live Sector change, schedule or authority change occurred. Exact PR/run/hash evidence, failure lineage and next-step constraints are in `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md`.
+This is improved current-window coverage, not complete history, continuous discovery, new-detail acquisition or source acceptance. No pending new packet, economic observation or market event was created. Full implementation CI at that stage contained 587 passing tests; no HiThink call, live Sector change, schedule or authority change occurred in that slice. Exact PR/run/hash evidence, failure lineage and next-step constraints are in `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md`.
+
+### 5.15 First real stock dump, incomplete reference qualification — PR #210–#213
+
+`runtime/hithink_dump_trial.py` composes mature Requests/PyArrow with the existing row inspector and strict market reference adapters. Libraries are isolated in `.[dump-study]` and CI `.[dev]`; Kernel base dependencies remain unchanged. Physical synthetic Parquet tests now run in CI. Its separate main-only workflow has bounded one-signing/one-download acquisition and at most 32 reference requests, no market cache/state writer or schedule, and never retains usable presigned URLs or credentials. Every outcome keeps production qualification NOT_ESTABLISHED.
+
+Three initial real signing attempts returned code 0 but stopped before object/reference acquisition because of our AWS-only or example-directory assumptions. Safe diagnostics isolated the remaining prefix mismatch. The official signing service selects object paths, so PR #213 removed the unsupported fixed-directory assumption on the exact reviewed CDN origin, without adding arbitrary hosts, redirects, ambiguous paths or price tolerance. The upstream downloader exists and was reviewed; the trial reuses Requests/PyArrow rather than its mutable cache/resume behavior. All earlier failed runs remain unchanged.
+
+Run `33957604949` on `bde9bad7ef725fbca54f5c7a567227e6b9b7dd56` retained the first real 1,077,266-byte recent-stock Parquet, artifact `9966871869`. PyArrow read the exact 11-column footer, reporting 55,467 rows and one row group. Calendar and benchmark checks qualified 2026-09-04; then stock page 0 had a 2026-09-05 data timestamp. The unchanged all-stock adapter rejected the date before further pagination. The overall workflow remains failure / FAILED_CLOSED at QUALIFIED_REFERENCE, not successful data qualification. Full row inspection did not execute (`inspection=null`), and no complete stock-universe reference, multi-day breadth or stock panel was produced.
+
+Original Parquet, four raw decoded reference JSON responses, normalized calendar tail and qualified benchmark are retained. Independent download checks reconciled all seven input files, ZIP/report/provenance hashes, clocks, the benchmark close pair and stock timestamp. Full local Parquet decoding and full local project tests are not claimed. Full code CI now has 639 passing tests. Exact PRs, failed stages, artifact digests, interpretation limits and next steps: `docs/handoffs/2026-09-05-stock-dump-trial-next.md`.
 
 ---
 
@@ -616,7 +629,7 @@ For the next audited run, also download its complete run artifact and verify `in
 
 Reuse mature components before building more generic infrastructure. Read-context delivery, raw capture and bounded discovery are implemented; the direct SPB statistics window now reaches the current reviewed monthly boundary. Natural new-detail acquisition, continuous coverage, known-body revisions and live Sector view publication remain unproven. Use the existing explicit source-review process rather than invent another approval engine. Do not repeat unchanged scans or rewrite the baseline to force a candidate. Earlier failures and their limits remain evidence.
 
-The real HiThink dump trial remains separate work in a credentialed environment. Do not ask for secrets in chat or install a competing provider. The trial must validate actual Parquet decoding, entitlement, units, reference identity, overlapping vintages and corporate actions before any stock-panel or multi-day breadth adoption.
+The first real HiThink dump has now been retained, but stock-reference qualification and full row inspection remain incomplete. Review the stock-snapshot timestamp/session contract against official semantics and the saved raw response in a separate change; do not retimestamp it or silently copy the index rule. Reuse PyArrow for row reconciliation once references qualify, then examine overlapping vintages, units, revisions, corporate actions and coverage before any stock-panel or multi-day breadth adoption. Do not repeat failed probes blindly, ask for secrets in chat, install a competing provider or use stock dumps to bridge missing industry sessions.
 
 The original benchmark-sensitivity acceptance item still needs an explicit evidence result. Keep its effect on excess sign, persistence and transition dates separate from within-universe ranks. Concept expansion, company-economic mapping and new trigger challengers remain later scoped work, not implied by the new read labels or two source pilots.
 
@@ -676,7 +689,8 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 ### Cross-conversation
 
 - `docs/project-state.md` — mutable current-state index.
-- `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md` — latest reuse decision, direct-statistics proof and retained failed probe.
+- `docs/handoffs/2026-09-05-stock-dump-trial-next.md` — latest real stock delivery, unresolved reference contract, failed probes and next steps.
+- `docs/handoffs/2026-09-05-reuse-first-statistics-proof-next.md` — prior reuse decision, direct-statistics proof and retained failed probe.
 - `docs/handoffs/2026-09-05-bounded-release-discovery-next.md` — prior directory-discovery handoff and coverage limits.
 - `docs/handoffs/2026-09-05-http-diagnostics-and-four-page-proof-next.md` — prior diagnostic/capture handoff, retained for lineage.
 - `docs/handoffs/2026-09-05-context-and-public-capture-next.md` — prior delivery and partial-capture handoff, retained for lineage.
@@ -700,6 +714,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `docs/sector-radar-input-audit-and-offline-replay.md`
 - `docs/sector-radar-read-only-context.md`
 - `docs/hithink-dump-qualification-study.md`
+- `docs/hithink-stock-dump-trial.md`
 - `docs/economic-node-public-source-pilots-2026-09-05.md`
 - `docs/economic-source-raw-capture.md`
 - `docs/economic-source-compatibility-operations.md`
@@ -722,12 +737,14 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - `src/decision_kernel/runtime/sector_radar_audit.py`
 - `src/decision_kernel/runtime/sector_radar_context.py`
 - `src/decision_kernel/runtime/hithink_dump_inspection.py`
+- `src/decision_kernel/runtime/hithink_dump_trial.py`
 - `src/decision_kernel/runtime/economic_node_study.py`
 - `src/decision_kernel/runtime/economic_source_capture.py`
 - `src/decision_kernel/runtime/economic_release_discovery.py`
 - `src/decision_kernel/runtime/hithink_index_http.py`
 - `src/decision_kernel/runtime/hithink_sector_breadth_http.py`
 - `.github/workflows/sector-radar-shadow.yml`
+- `.github/workflows/hithink-stock-dump-trial.yml`
 - `.github/workflows/economic-source-capture.yml`
 - `.github/workflows/economic-release-discovery.yml`
 - `radar_inputs/sector-parent-hints-2026-09-05.json`
@@ -763,6 +780,7 @@ A strong sector remains only a discovery fact. It does not prove every constitue
 - **PR #202:** added safe numeric HTTP diagnostics and schema-2 status/summary reconciliation. New public run `33949122077` matched all four pages, artifact `9964235933`; old HTTP failure codes/cause remain unknown. No continuous feed or market event is implied.
 - **PR #204–#205:** added bounded directory discovery into unreviewed source packets and its independent compatibility workflow. Live run `33952315592` captured two directory windows, with zero eligible detail requests; artifact `9965217757` preserves scope and backlog evidence. Complete publisher coverage and natural new-release detail acquisition remain unproven.
 - **PR #207–#208:** replaced custom discovery parsers with optional Beautiful Soup, retained the script-only landing-page failure and corrected one explicit SPB statistics-list URL. Live run `33954898834` captured the direct statistics window including reviewed monthly records; no new article, observation or market event was created.
+- **PR #210–#213:** added the isolated Requests/PyArrow stock trial, corrected our unsupported signing destination/path assumptions and retained all failed probes. Run `33957604949` downloaded actual Parquet and read its footer but stopped at stock-reference date qualification. No full row validation, stock-panel adoption or market/event write occurred.
 - **VERIFIED LIVE SECTOR IMPLEMENTATION:** `5f8f635d191dd8559844d1b74af0dca0cf4c02df`; successful runs `33938625934` and `33939414197`.
 - **PROVEN LIVE SECTOR:** committed-bootstrap validation, state-artifact publication, cache publication, authoritative artifact recovery, cache agreement and same-session market/event idempotence.
 - **NOT YET PROVEN LIVE SECTOR:** future market-state append, candidate enrichment, the new replayable input audit or context delivery on real provider data. Prospective corpus remains empty; T+5/T+20 outcomes and schedule have not started; canonical Inbox insertion remains unauthorized.
