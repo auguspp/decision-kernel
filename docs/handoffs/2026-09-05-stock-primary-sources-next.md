@@ -2,7 +2,17 @@
 
 Read `docs/project-state.md`, this existing stable handoff entry, then `docs/sector-radar-publication-check.md`. Verify current main, CI and actual workflow runs. This mutable handoff now prioritizes the Sector operational path; frozen stock-source proofs listed below remain unchanged and authoritative for their original bytes, dates, hashes and limits. No historical failure is replaced by this handoff.
 
-## Latest implementation — PR #224
+## Prior-art first batch — tests and prospective Human capture only
+
+The Human approved the TradingAgents / ARTi gap-analysis sequence. PR #226 adds only `tests/test_prior_art_research_ingress.py` and `docs/prior-art-acceptance-map-2026-09-05.md`: base `76b95cbc1a6958dcca4a5c5148f653f61850b152`, head `bcf07a238f8278f5ce9e34bba8fc23d24197d902`, merge `1784a065d3187f7c142df41e5f7aa774fa29fc0f`. Full PR CI `33972403929` / job `101323121608`: **811 passed in 15.37s**, 15 new cases; merged main CI `33972486968` succeeded. Existing runtime passed unchanged. Tests cover instant-based PIT, late value/metadata revisions despite valid hashes, formal CLI refusal of text/schema/semantic failures, and fixed-input Odds unaffected by non-authoritative framing. All market transport is mocked/blocked; no full local checkout execution or live proof was claimed.
+
+Read `docs/human-exposure-and-response-capture-v0.md` for the new zero-schema supplement to the existing prospective Decision/Outcome and Human Response protocols. It preserves exact displayed-version identity, exposure versus response, actual versus recorded time, raw Human wording, optional reason/confidence, UNKNOWN rather than inferred independence, and explicit response/decision/action separation. The template is ready for a natural new case; no real exposure, decision, episode, Action, outcome or independent forecast was created or backfilled. The old frozen protocols and case records are unchanged.
+
+The next Human-product work is a read-only projection of existing frozen records, not a second Judgment store. Pre-prompt future-memory isolation, governed reflection acceptance and general LLM checkpoint resume remain DESIGN-ONLY at their future consumers. Submitted-package PIT tests do not prove a model never saw undeclared future context. Do not invent those subsystems to manufacture test coverage. Episode links need explicit information/evaluation context; record/episode counts do not establish statistical independence. No timeline implementation, live learning or new Kernel schema has been introduced in this batch.
+
+Sector's next real acceptance remains below; the prior-art work changes no runtime, workflow, dependencies, thresholds, market state, ledger, company posture or authority. It performs no market/public-source acquisition. Kernel validates admissibility and lineage, not the truth or quality of a judgment; Human remains final.
+
+## Latest Sector runtime implementation — PR #224
 
 ```text
 base = da8cab205ff2001ef8c327411f7bd1fa9a186ea2
