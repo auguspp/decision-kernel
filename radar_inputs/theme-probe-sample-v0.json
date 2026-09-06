@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "purpose": "Predeclared engineering sample: related robotics concepts and three possible industrial overlaps. Selected before quote/history acquisition to test cross-industry coverage and duplicate membership, not because of observed returns. No investment or Human approval claim.",
+  "themes": [
+    {"name": "机器人概念", "reason": "The official HiThink concept example uses this exact label. Resolve only its unique identity in the actually captured cn_concept catalog; no substitute or price-based selection."},
+    {"name": "人形机器人", "reason": "Adjacent robotics narrative chosen before price acquisition to test whether a narrower label actually shares members with the broader concept. Exact unique catalog match required; no claim of permanent containment."}
+  ],
+  "industries": [
+    {"thscode": "881117.TI", "name": "通用设备", "reason": "Fixed broad-industry coverage probe from the saved catalog, not a complete robotics taxonomy."},
+    {"thscode": "881171.TI", "name": "自动化设备", "reason": "Fixed equipment/control comparison; constituents may or may not intersect the concepts."},
+    {"thscode": "881126.TI", "name": "汽车零部件", "reason": "Check a cross-industry member relationship without inferring robotics revenue, beneficiaries or business exposure."}
+  ]
+}
