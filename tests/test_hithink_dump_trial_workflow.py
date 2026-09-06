@@ -24,7 +24,7 @@ def test_secret_is_only_in_acquisition_step_and_optional_libraries_are_installed
     acquisition = stock.split("- name: Acquire one recent dump", 1)[1].split("- name: Repeat row inspection", 1)[0]
     assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in acquisition
     assert stock.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
-    theme = text.split("  theme-probe:\n", 1)[1]
+    theme = text.split("  theme-probe:\n", 1)[1].split("  native-feed:\n", 1)[0]
     capture = theme.split("- name: Capture bounded theme", 1)[1].split("- name: Rebuild from original", 1)[0]
     assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in capture
     assert theme.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1

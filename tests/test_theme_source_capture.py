@@ -207,7 +207,7 @@ def test_actual_sample_reads_existing_exact_fields_without_new_evidence_or_named
 
 def test_workflow_keeps_fixed_name_and_dump_manual_and_current_source_push_bounded():
     text = Path('.github/workflows/hithink-stock-dump-trial.yml').read_text()
-    assert 'options: [stock-dump, theme-probe, theme-source]' in text
+    assert 'options: [stock-dump, theme-probe, theme-source, native-feed-acceptance]' in text
     assert 'default: stock-dump' in text
     assert 'selection=radar_inputs/theme-source-sample-v0.json' in text
     assert '[ "$GITHUB_EVENT_NAME" = workflow_dispatch ] && [ "$TRIAL_PURPOSE" = theme-probe ]' in text

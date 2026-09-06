@@ -6,8 +6,25 @@ on:
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
-        options: [stock-dump, theme-probe, theme-source]
+        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance]
         default: stock-dump
+      native-feed-run-id:
+        description: Native acceptance only - exact successful RSS run; never initializes or refetches RSS
+        type: string
+        default: ''
+      native-market-run-id:
+        description: Native acceptance only - exact successful Sector state run; required only for qualified pending sources
+        type: string
+        default: ''
+      native-batch-size:
+        description: Isolated trial batch, not a continuous consumer or automatic next batch
+        type: choice
+        options: ['1', '4', '8', '16', '32']
+        default: '32'
+      native-execute:
+        description: Explicitly execute this trial's exact market plan after scanning (otherwise catalogs and scan only)
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -181,4 +198,126 @@ jobs:
               lines += ['解压后打开 capture/index.html；不是全市场主题排名或真实前瞻候选。']
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
               f.write('\n\n'.join(lines) + '\n')
+          PY
+  native-feed:
+    if: github.event_name == 'workflow_dispatch' && inputs.trial-purpose == 'native-feed-acceptance'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing feed and market libraries
+        run: python -m pip install -e '.[feeds,dump-study,discovery]'
+      - name: Record explicit isolated native acceptance intent
+        id: intent
+        env:
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
+          NATIVE_FEED_RUN_ID: ${{ inputs.native-feed-run-id }}
+          NATIVE_MARKET_RUN_ID: ${{ inputs.native-market-run-id }}
+          NATIVE_BATCH_SIZE: ${{ inputs.native-batch-size }}
+          NATIVE_EXECUTE: ${{ inputs.native-execute }}
+        run: python .github/scripts/native-feed-acceptance.py init
+      - name: Bind exact source artifact metadata
+        id: source-meta
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ steps.intent.outputs.source_run_id }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN" > native-feed-acceptance/source-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN/artifacts?per_page=100" > native-feed-acceptance/source-artifacts.json
+          python .github/scripts/native-feed-acceptance.py metadata --kind source
+      - name: Download only the bound source artifact
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ steps.source-meta.outputs.artifact_id }}
+          run-id: ${{ steps.intent.outputs.source_run_id }}
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: native-feed-acceptance/source
+      - name: Rebuild and qualify sources before market access
+        id: source-check
+        run: python .github/scripts/native-feed-acceptance.py qualify
+      - name: Bind exact saved market artifact when sources qualify
+        id: market-meta
+        if: steps.source-check.outputs.needs_market == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARKET_RUN: ${{ steps.intent.outputs.market_run_id }}
+        run: |
+          test -n "$MARKET_RUN"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN" > native-feed-acceptance/market-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN/artifacts?per_page=100" > native-feed-acceptance/market-artifacts.json
+          python .github/scripts/native-feed-acceptance.py metadata --kind market
+      - name: Download only the bound read-only market state
+        if: steps.source-check.outputs.needs_market == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ steps.market-meta.outputs.artifact_id }}
+          run-id: ${{ steps.intent.outputs.market_run_id }}
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: native-feed-acceptance/market
+      - name: Scan one batch and optionally execute its exact plan
+        id: native-capture
+        if: steps.source-check.outputs.needs_market == 'true'
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+        run: python .github/scripts/native-feed-acceptance.py run > native-feed-acceptance/operation.json
+      - name: Rebuild isolated acceptance without credentials
+        id: native-verify
+        if: always()
+        env:
+          HITHINK_FINANCE_API_KEY: ''
+        run: python .github/scripts/native-feed-acceptance.py verify
+      - name: Preserve isolated acceptance including failed steps
+        id: native-evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-feed-acceptance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: native-feed-acceptance/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Publish native acceptance stage status
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.native-evidence.outputs.artifact-url }}
+          UPLOAD_RESULT: ${{ steps.native-evidence.outcome }}
+          SOURCE_RESULT: ${{ steps.source-check.outcome }}
+          CAPTURE_RESULT: ${{ steps.native-capture.outcome }}
+          VERIFY_RESULT: ${{ steps.native-verify.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path('native-feed-acceptance')
+          lines = ['## 原生来源隔离验收', 'SHADOW OBSERVATION ONLY · Human / Research / Investment authority = NONE',
+                   '明确空的试验回执历史；不是每日消费、RSS 初始化或跨运行去重证明。没有 RSS、文章或生产 Sector 请求。']
+          for name in ['source-qualification.json', 'trial/acceptance.json', 'verification.json']:
+              p = root / name
+              if p.is_file():
+                  value = json.loads(p.read_text())
+                  lines += [name + ': ' + value.get('acceptance_status', value.get('status', 'UNKNOWN'))]
+                  if 'requests_attempted' in value:
+                      lines += [f"本次市场请求 {value['requests_attempted']}；上限15，不自动执行下一批。"]
+          lines += [f"来源资格 {os.environ['SOURCE_RESULT']}；扫描／执行 {os.environ['CAPTURE_RESULT']}；重建 {os.environ['VERIFY_RESULT']}；上传 {os.environ['UPLOAD_RESULT']}",
+                    '无后基线版本不是新来源通过；来源时间受阻时不获取目录和行情。旧资料不伪装成新发布。']
+          if os.environ['UPLOAD_RESULT'] == 'success' and os.environ['ARTIFACT_URL']:
+              lines += [f"[本次来源原文、精确输入与阶段证据]({os.environ['ARTIFACT_URL']})"]
+              if os.environ['VERIFY_RESULT'] == 'success' and os.environ['CAPTURE_RESULT'] == 'success':
+                  if (root/'trial/scan/index.html').is_file():
+                      lines += ['来源页面：trial/scan/index.html。扫描完成不等于行情已执行。']
+                  if (root/'trial/execution/index.html').is_file():
+                      lines += ['市场页面：trial/execution/index.html。采集重建和远端上传分别记录，不证明 Human 阅读或投资结论。']
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as stream:
+              stream.write('\n\n'.join(lines) + '\n')
           PY
