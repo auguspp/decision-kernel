@@ -2,14 +2,24 @@ name: economic-release-discovery
 
 on:
   workflow_dispatch:
+    inputs:
+      source-kind:
+        description: Explicit source study; no article acceptance or market request
+        type: choice
+        options: [economic-directories, nbs-native-rss]
+        default: economic-directories
+      bootstrap:
+        description: Explicit separate RSS baseline only; never a continuation or new-publication claim
+        type: boolean
+        default: false
+      previous-run-id:
+        description: Exact successful native RSS predecessor run; required unless explicitly bootstrapping
+        type: string
+        default: ""
   push:
     branches: [main]
     paths:
-      - .github/workflows/economic-release-discovery.yml
-      - src/decision_kernel/runtime/economic_release_discovery.py
-      - src/decision_kernel/runtime/economic_release_inputs.py
-      - radar_inputs/economic-node-study-2026-09-05.json
-      - radar_inputs/economic-reviewed-releases/**
+      - src/decision_kernel/runtime/radar_feed_intake.py
 
 permissions:
   contents: read
@@ -20,6 +30,7 @@ concurrency:
 
 jobs:
   discover:
+    if: github.event_name == 'workflow_dispatch' && inputs.source-kind == 'economic-directories'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -97,3 +108,119 @@ jobs:
             printf '\n[目录原文、请求计划与待核验材料](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
           fi
           echo '仅验证两个可见目录窗口；未发现候选不等于发布者没有更新。不自动接受经济事实，不生成市场事件。' >> "$GITHUB_STEP_SUMMARY"
+  native-rss:
+    if: github.event_name == 'push' || inputs.source-kind == 'nbs-native-rss'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate explicit source registry lifecycle
+        env:
+          SOURCE_EVENT: ${{ github.event_name }}
+          BOOTSTRAP: ${{ inputs.bootstrap }}
+          PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
+        run: |
+          mkdir native-rss-intake
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          assert os.environ['GITHUB_REF'] == 'refs/heads/main'
+          assert os.environ['GITHUB_RUN_ATTEMPT'] == '1'
+          previous = os.environ['PREVIOUS_RUN_ID']
+          baseline = os.environ['SOURCE_EVENT'] == 'push' or os.environ['BOOTSTRAP'] == 'true'
+          assert bool(previous) != baseline, 'Explicit previous run OR a separate baseline is required'
+          assert not previous or re.fullmatch(r'[1-9][0-9]{0,19}', previous), 'Exact numeric source run required'
+          Path('native-rss-intake/preflight.json').write_text(json.dumps({'explicit_baseline': baseline, 'previous_run_id': previous, 'event': os.environ['SOURCE_EVENT']}))
+          PY
+      - name: Verify exact successful source predecessor with GitHub CLI
+        if: inputs.previous-run-id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
+        run: |
+          gh api --method GET "repos/${GITHUB_REPOSITORY}/actions/runs/${PREVIOUS_RUN_ID}" > native-rss-intake/predecessor-run.json
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          r = json.loads(Path('native-rss-intake/predecessor-run.json').read_text())
+          assert str(r['id']) == os.environ['PREVIOUS_RUN_ID']
+          assert r['name'] == 'economic-release-discovery' and r['path'] == '.github/workflows/economic-release-discovery.yml'
+          assert r['head_branch'] == 'main' and r['run_attempt'] == 1
+          assert r['status'] == 'completed' and r['conclusion'] == 'success'
+          assert r['repository']['full_name'] == os.environ['GITHUB_REPOSITORY']
+          PY
+      - name: Restore that source artifact only
+        if: inputs.previous-run-id != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: radar-feed-intake-${{ inputs.previous-run-id }}-1
+          run-id: ${{ inputs.previous-run-id }}
+          github-token: ${{ github.token }}
+          path: previous-native-rss
+          digest-mismatch: error
+      - name: Install existing package with mature feed parser
+        run: python -m pip install -e '.[feeds]'
+      - name: Read two native feeds once without business credentials
+        id: rss-capture
+        env:
+          SOURCE_EVENT: ${{ github.event_name }}
+          BOOTSTRAP: ${{ inputs.bootstrap }}
+          EXPECTED_PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
+        run: |
+          if [ -n "$EXPECTED_PREVIOUS_RUN_ID" ]; then
+            python -m decision_kernel.runtime.radar_feed_intake capture \
+              --previous previous-native-rss/capture --output native-rss-intake/capture > native-rss-intake/operation.json
+          else
+            test "$SOURCE_EVENT" = push || test "$BOOTSTRAP" = true
+            python -m decision_kernel.runtime.radar_feed_intake capture \
+              --bootstrap --output native-rss-intake/capture > native-rss-intake/operation.json
+          fi
+      - name: Rebuild native intake from preserved bytes offline
+        id: rss-verify
+        if: always()
+        run: |
+          python -m decision_kernel.runtime.radar_feed_intake verify \
+            --output native-rss-intake/capture > native-rss-intake/verification.json
+      - name: Retain native source attempt
+        id: rss-artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: radar-feed-intake-${{ github.run_id }}-${{ github.run_attempt }}
+          path: native-rss-intake/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish exact native source status
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.rss-artifact.outputs.artifact-url }}
+          CAPTURE_RESULT: ${{ steps.rss-capture.outcome }}
+          VERIFY_RESULT: ${{ steps.rss-verify.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path('native-rss-intake/capture')
+          lines = ['## 原生 RSS 来源窗口', 'SHADOW OBSERVATION ONLY · Human / Research / Investment authority = NONE']
+          if (root/'capture.json').is_file():
+              r = json.loads((root/'capture.json').read_text())
+              lines += [f"采集状态：{r['status']}；请求尝试：{len(r['requests'])}；首次基线：{r['bootstrap']}"]
+          if (root/'delta.json').is_file():
+              d = json.loads((root/'delta.json').read_text())
+              lines += [f"窗口状态：{d['status']}；条目出现：{d['feed_occurrences']}；去重版本：{d['current_unique_versions']}"]
+          lines += ['首次看到不等于刚刚发布；两个滚动窗口不代表完整历史。未获取文章正文，未自动接受经济事实，未调用市场。',
+                    '附件保留90天；恢复失败或过期不得静默建立新基线。没有自动寻找上一成功、cache或长期checkpoint。']
+          if os.environ['ARTIFACT_URL']:
+              lines += [f"[本次原始 RSS 与登记结果]({os.environ['ARTIFACT_URL']})"]
+          if os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success' and os.environ['ARTIFACT_URL']:
+              lines += ['解压后打开 capture/index.html。']
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f: f.write('\n\n'.join(lines)+'\n')
+          PY
