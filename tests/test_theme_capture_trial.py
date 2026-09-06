@@ -183,7 +183,7 @@ def test_actual_fixed_sample_and_workflow_do_not_enable_production_or_redownload
     mod = code(); mod['validate_selection'](json.loads(Path('radar_inputs/theme-probe-sample-v0.json').read_text()))
     text = WORKFLOW.read_text()
     assert "if: github.event_name == 'workflow_dispatch' && inputs.trial-purpose == 'stock-dump'" in text
-    assert "options: [stock-dump, theme-probe]" in text
+    assert "options: [stock-dump, theme-probe, theme-source]" in text
     assert "default: stock-dump" in text
     theme = text.split('  theme-probe:\n',1)[1]
     assert "pip install -e '.[dump-study,discovery]'" in theme

@@ -38,6 +38,6 @@ def test_trial_is_not_an_unbounded_compatibility_trigger():
     paths = text.split("    paths:\n", 1)[1].split("\n\n", 1)[0]
     assert paths.splitlines() == [
         "      - .github/scripts/capture-theme-probe.py",
-        "      - radar_inputs/theme-probe-sample-v0.json",
+        "      - radar_inputs/theme-source-sample-v0.json",
     ]
     assert "presigned_url" not in text and "curl " not in text
