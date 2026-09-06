@@ -78,7 +78,7 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
     context = build_sector_radar_context(market_state=state, event_ledger=ledger, generated_at=observed_at)
     all_rows = {r['observation']['thscode']: r for u in context['universes'] for r in u['rows']}
     panels = {row['node_id']: row for row in p['panels']}
-    directions, issuers, order, covered = {}, {}, [], set()
+    directions, issuers, order = {}, {}, []
     for node in linked['projection']['nodes']:
         panel = panels[node['node_id']]
         active = []
@@ -86,7 +86,6 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
             code = row['identity']['thscode']
             if row['saved_market'] != all_rows.get(code):
                 raise ValueError('embedded sector state does not reproduce from exact saved market')
-            covered.add(code)
             if row['saved_market']['currently_gate_active']:
                 active.append(code)
         if not active or not node['companies']:
@@ -143,7 +142,6 @@ def _stock_path(state, code, response, *, at):
             or qualified.response_session != state.sessions[-1]
             or qualified.expected_latest_session != state.sessions[-1]):
         raise ValueError('stock must have every one of the exact 61 completed sessions; no drop or fill')
-    # The existing adapter already validates finite nonnegative volume/turnover.
     by_day = {datetime.fromtimestamp(int(r['date_ms']) / 1000, tz=SHANGHAI_TZ).date(): r
               for r in response['data']['item']}
     closes = tuple(p.close for p in qualified.points)
@@ -184,38 +182,58 @@ def _select(rows, node_order):
     return selected
 
 
-def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datetime) -> dict:
-    """Use the ORIGINAL adapters with an injected request seam; no fallback.
+def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datetime,
+                          cutoff_clock=None) -> dict:
+    """Run an original-input-verified plan; all issuers precede compression.
 
-    The formal runner reconstructs plan from original source files before this
-    call. This internal function accepts that prepared plan, not arbitrary leads.
-    Every planned issuer is evaluated before first-screen compression.
+    cutoff_clock is the last actual response receipt, supplied by capture/replay.
+    Fixed offline callers use observed_at. No guessed future receipt is accepted.
     """
+    with localcontext(Context(prec=28)):
+        return _observe(plan, state, request_json=request_json, observed_at=observed_at,
+                        cutoff_clock=cutoff_clock)
+
+
+def _observe(plan, state, *, request_json, observed_at, cutoff_clock):
     if (plan['version'] != VERSION or plan['policy'] != POLICY or not _hash_ok(plan, 'plan_hash')
             or plan['market_state_hash'] != state.state_hash
             or any(plan[k] != v for k, v in LIMITS.items())
             or len(plan['issuers']) > MAX_ISSUERS or len(plan['directions']) > MAX_MEMBERSHIPS):
         raise ValueError('stock plan identity, policy or authority differs')
-    probe._window(state, observed_at)
-    if not probe._clock(plan['observed_at']) <= observed_at <= probe._clock(plan['observed_at']) + timedelta(minutes=30):
-        raise ValueError('stock observation is outside its declared plan lifetime')
+    last = observed_at
+    def at():
+        nonlocal last
+        value = cutoff_clock() if cutoff_clock else observed_at
+        probe._window(state, value)
+        if not probe._clock(plan['observed_at']) <= last <= value <= probe._clock(plan['observed_at']) + timedelta(minutes=30):
+            raise ValueError('stock observation is outside its declared plan lifetime or clock reversed')
+        last = value
+        return value
+    at()
     rows, memberships = [], {}
     state_rows = _state_rows(state)
     def get(path, params):
-        return request_json(path, params)
+        value = request_json(path, params)
+        at()
+        return value
     if plan['issuers']:
         calendar = normalize_hithink_calendar(get(HITHINK_CALENDAR_PATH, {}))
-        if (latest_completed_a_share_session(calendar, observed_at=observed_at) != state.sessions[-1]
+        if (latest_completed_a_share_session(calendar, observed_at=at()) != state.sessions[-1]
                 or tuple(d for d in calendar if state.sessions[0] <= d <= state.sessions[-1]) != tuple(state.sessions)):
             raise ValueError('saved industry state is not the exact latest calendar window; run producer separately')
         catalog = indices.fetch_hithink_industry_catalog(api_key='INJECTED', request_json=get)
         if catalog.catalog_hash != state.catalog_hash:
             raise ValueError('industry catalog changed; no name or proxy substitution')
-        snapshot = indices.fetch_hithink_qualified_index_snapshot_batch(
-            thscodes=tuple(sorted(state_rows)), benchmark_thscode=state.benchmark_thscode,
-            observed_at=observed_at, api_key='INJECTED', request_json=get, trading_sessions=calendar)
-        if snapshot.market_session != state.sessions[-1]:
-            raise ValueError('fresh index snapshot has another completed session')
+        raw_snapshot = indices.fetch_hithink_index_snapshot_batch(
+            thscodes=tuple(sorted(state_rows)), api_key='INJECTED', request_json=get)
+        benchmark_history = indices.fetch_hithink_completed_index_history(
+            thscode=state.benchmark_thscode, observed_at=at(), api_key='INJECTED',
+            request_json=get, trading_sessions=calendar)
+        snapshot = indices.qualify_hithink_index_snapshot(raw_snapshot,
+            benchmark_history=benchmark_history, trading_sessions=calendar, observed_at=at())
+        if (snapshot.market_session != state.sessions[-1]
+                or datetime.fromtimestamp(snapshot.provider_timestamp_ms/1000, tz=SHANGHAI_TZ) > at()):
+            raise ValueError('fresh index snapshot has another completed session or future ready time')
         for p in snapshot.points:
             prices = state_rows[p.thscode]['closes']
             if p.last_price != Decimal(prices[-1]) or p.prev_price != Decimal(prices[-2]):
@@ -223,10 +241,10 @@ def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datet
         for code, direction in plan['directions'].items():
             m = members.fetch_hithink_sector_membership(sector_thscode=code,
                 sector_name=direction['observation']['name'], api_key='INJECTED', request_json=get)
-            if m.captured_at > observed_at:
+            received = at()
+            if m.captured_at > received:
                 raise ValueError('membership is future relative to reading cutoff')
-            # Current only: require the observation date, never carry an old set forward.
-            if m.captured_at.astimezone(SHANGHAI_TZ).date() != observed_at.astimezone(SHANGHAI_TZ).date():
+            if m.captured_at.astimezone(SHANGHAI_TZ).date() != received.astimezone(SHANGHAI_TZ).date():
                 raise ValueError('membership is not from this current observation date')
             memberships[code] = m
     benchmark = tuple(Decimal(v) for v in state_rows[state.benchmark_thscode]['closes'])
@@ -237,61 +255,60 @@ def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datet
             if member.thscode in identities and identities[member.thscode] != member:
                 raise ValueError('current memberships disagree on stock identity')
             identities[member.thscode] = member
-    with localcontext(Context(prec=28)):
-        for issuer in plan['issuers']:
-            code = issuer['thscode']
-            valid_origins = []
-            for origin in issuer['origins']:
-                present = [s for s in origin['sector_codes'] if any(m.thscode == code for m in memberships[s].members)]
-                if present:
-                    valid_origins.append({**origin, 'current_member_sectors': present})
-            row = {**issuer, 'current_origins': valid_origins, 'stock_path': None,
-                   'market_comparison': {}, 'sector_comparisons': [], 'eligible_nodes': [],
-                   'excluded_reasons': [], 'eligible_for_shadow_reading': False}
-            if not valid_origins:
-                row['excluded_reasons'].append('NOT_A_CURRENT_MEMBER_OF_REVIEWED_ACTIVE_DIRECTION')
-                rows.append(row); continue
-            name = identities[code].name
-            row['current_member_name'] = name
-            if 'ST' in name.upper() or '退' in name or re.match(r'^[NC]', name):
-                row['excluded_reasons'].append('RISK_OR_NEW_LISTING_NAME_LABEL')
-                rows.append(row); continue
-            response = get(STOCK_HISTORY, _history_params(code, state.sessions))
-            path = _stock_path(state, code, response, at=observed_at)
-            row['stock_path'] = path
-            row['market_comparison'] = {n: {'stock_return': value, 'benchmark_return': bret[n],
-                'excess_return': value - bret[n]} for n, value in path['returns'].items()}
-            for origin in valid_origins:
-                beat = False
-                for sector in origin['current_member_sectors']:
-                    comparison = {'node_id': origin['node_id'], 'thscode': sector,
-                        'name': plan['directions'][sector]['observation']['name'], 'horizons': {}}
-                    prices = tuple(Decimal(v) for v in state_rows[sector]['closes'])
-                    for n in (5, 20, 60):
-                        ret = _return_over(prices, end_index=len(prices)-1, sessions=n)
-                        comparison['horizons'][str(n)] = {'sector_return': ret,
-                            'stock_excess_return': path['returns'][str(n)] - ret}
-                    beat |= comparison['horizons']['20']['stock_excess_return'] > 0
-                    row['sector_comparisons'].append(comparison)
-                if beat:
-                    row['eligible_nodes'].append(origin['node_id'])
-            reasons = row['excluded_reasons']
-            if path['latest_volume'] <= 0 or path['latest_turnover'] <= 0:
-                reasons.append('NO_POSITIVE_LATEST_REPORTED_TRADING_ACTIVITY')
-            if path['returns']['5'] <= 0 or row['market_comparison']['5']['excess_return'] <= 0:
-                reasons.append('FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE')
-            if row['market_comparison']['20']['excess_return'] <= 0:
-                reasons.append('TWENTY_DAY_MARKET_EXCESS_NOT_POSITIVE')
-            if not row['eligible_nodes']:
-                reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
-            row['eligible_for_shadow_reading'] = not reasons
-            rows.append(row)
+    for issuer in plan['issuers']:
+        code = issuer['thscode']
+        valid_origins = []
+        for origin in issuer['origins']:
+            present = [s for s in origin['sector_codes'] if any(m.thscode == code for m in memberships[s].members)]
+            if present:
+                valid_origins.append({**origin, 'current_member_sectors': present})
+        row = {**issuer, 'current_origins': valid_origins, 'stock_path': None,
+               'market_comparison': {}, 'sector_comparisons': [], 'eligible_nodes': [],
+               'excluded_reasons': [], 'eligible_for_shadow_reading': False}
+        if not valid_origins:
+            row['excluded_reasons'].append('NOT_A_CURRENT_MEMBER_OF_REVIEWED_ACTIVE_DIRECTION')
+            rows.append(row); continue
+        name = identities[code].name
+        row['current_member_name'] = name
+        if re.match(r'^(?:\*?ST|[NC])', name) or '退' in name:
+            row['excluded_reasons'].append('RISK_OR_NEW_LISTING_NAME_LABEL')
+            rows.append(row); continue
+        response = get(STOCK_HISTORY, _history_params(code, state.sessions))
+        path = _stock_path(state, code, response, at=at())
+        row['stock_path'] = path
+        row['market_comparison'] = {n: {'stock_return': value, 'benchmark_return': bret[n],
+            'excess_return': value - bret[n]} for n, value in path['returns'].items()}
+        for origin in valid_origins:
+            beat = False
+            for sector in origin['current_member_sectors']:
+                comparison = {'node_id': origin['node_id'], 'thscode': sector,
+                    'name': plan['directions'][sector]['observation']['name'], 'horizons': {}}
+                prices = tuple(Decimal(v) for v in state_rows[sector]['closes'])
+                for n in (5, 20, 60):
+                    ret = _return_over(prices, end_index=len(prices)-1, sessions=n)
+                    comparison['horizons'][str(n)] = {'sector_return': ret,
+                        'stock_excess_return': path['returns'][str(n)] - ret}
+                beat |= comparison['horizons']['20']['stock_excess_return'] > 0
+                row['sector_comparisons'].append(comparison)
+            if beat:
+                row['eligible_nodes'].append(origin['node_id'])
+        reasons = row['excluded_reasons']
+        if path['latest_volume'] <= 0 or path['latest_turnover'] <= 0:
+            reasons.append('NO_POSITIVE_LATEST_REPORTED_TRADING_ACTIVITY')
+        if path['returns']['5'] <= 0 or row['market_comparison']['5']['excess_return'] <= 0:
+            reasons.append('FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE')
+        if row['market_comparison']['20']['excess_return'] <= 0:
+            reasons.append('TWENTY_DAY_MARKET_EXCESS_NOT_POSITIVE')
+        if not row['eligible_nodes']:
+            reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
+        row['eligible_for_shadow_reading'] = not reasons
+        rows.append(row)
     rows = _plain(rows)
     selected = _select(rows, plan['node_order'])
     reviewed_codes = {r['thscode'] for r in plan['issuers']}
     payload = {
         'version': VERSION, 'semantics': SEMANTICS, 'policy': POLICY, 'plan_hash': plan['plan_hash'],
-        'market_session': state.sessions[-1], 'observed_at': observed_at,
+        'market_session': state.sessions[-1], 'observed_at': at(),
         'status': 'STOCKS_FOR_SHADOW_READING' if selected else 'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE',
         'scope': plan['reviewed_company_coverage'], 'reviewed_issuers': len(plan['issuers']),
         'active_directions_without_stock_business_scope': plan['active_directions_without_stock_business_scope'],
@@ -332,7 +349,8 @@ def render_stock_reading(report: dict) -> str:
         parts += [f'<article><h2>{e(row["company_name"])} <small>{e(row["thscode"])}</small></h2>',
             f'<p>原始收盘价 <strong>{e(path["last_close"])} CNY</strong>；当日原始价格变化 {pct(path["daily_raw_return"])}。不是成交建议。</p>',
             '<div class="scroll"><table><tr><th>窗口</th><th>股票原始收益</th><th>沪深300收益</th><th>超额收益</th></tr>']
-        for n, values in row['market_comparison'].items():
+        for n in ('5', '20', '60'):
+            values = row['market_comparison'][n]
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (n+'日',pct(values['stock_return']),pct(values['benchmark_return']),pct(values['excess_return'])))+'</tr>')
         parts += ['</table></div>', '<p><small>未复权价格路径，不含分红再投资，不等于投资者总回报；60日仅展示，不参与本版门槛。没有自动复权或使用全市场试验文件。</small></p>']
         for origin in row['current_origins']:
