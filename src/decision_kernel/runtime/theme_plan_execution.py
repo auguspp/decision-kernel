@@ -9,7 +9,7 @@ import json
 import re
 import shutil
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
@@ -36,13 +36,24 @@ def _decode(raw, credential=None):
     return value
 
 
+def _execution_clock(state, plan, at):
+    current = probe._clock(at)
+    probe._window(state, current)
+    # Same exact-plan lifetime already enforced by build_theme_probe; reject
+    # before transport rather than waiting until the final market calculation.
+    planned = probe._clock(plan['planned_at'])
+    if current < planned or current - planned > timedelta(minutes=30):
+        raise ValueError('exact plan is outside the existing 30-minute capture window')
+    return current
+
+
 def _identity(root, *, at):
     scan = consumer.verify_scan(root, as_of=at)
     plan = scan['result']['acquisition_plan']
     if plan is None:
         raise ValueError('no market plan from this source scan')
     state = probe.parse_sector_radar_market_state(probe._read(root / 'market-state.json').decode())
-    probe._window(state, probe._clock(at))  # An old plan is not authority to use stale prices.
+    _execution_clock(state, plan, at)  # Neither market-day nor plan-age limits are refreshed.
     return scan, plan, state, consumer._json(root / 'context.json')
 
 
@@ -107,20 +118,18 @@ def capture_plan(scan_root: Path, output: Path, *, transport, context=None,
         for i, slot in enumerate(plan['requests'], 1):
             pause(20)  # Also pace the first detail after the previously supplied catalogs.
             requested = now().isoformat()
-            request_clock = probe._clock(requested)
+            request_clock = _execution_clock(state, plan, requested)
             if request_clock < last_response:
                 raise ValueError('request clock precedes the previous execution boundary')
-            probe._window(state, request_clock)  # Pacing must not authorize an expired plan.
             entry = {**slot, 'requested_at': requested, 'received_at': None,
                      'response_file': None, 'http_status': None, 'error_type': None}
             requests.append(entry)
             try:
                 raw = transport(slot['path'], slot['params'])
                 entry['received_at'] = now().isoformat()
-                received_clock = probe._clock(entry['received_at'])
+                received_clock = _execution_clock(state, plan, entry['received_at'])
                 if received_clock < request_clock:
                     raise ValueError('response clock precedes the request')
-                probe._window(state, received_clock)
                 body = _decode(raw, credential)
                 name = f'responses/{i:02d}.json'; save(name, raw)
                 entry.update(response_file=name, http_status=200)
