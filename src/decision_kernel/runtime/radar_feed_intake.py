@@ -151,6 +151,7 @@ def validate_registry(value):
             raise ValueError('registered first-seen clocks are invalid')
         if not isinstance(item['appearances'], list) or not item['appearances']:
             raise ValueError('registered source appearances missing')
+            
         for appearance in item['appearances']:
             _keys(appearance, {'feed_id', 'entry_id'})
             if appearance['feed_id'] not in FEEDS:
@@ -296,9 +297,21 @@ def render(registry, delta, exports):
     return ''.join(parts)
 
 
+def failure_origin(exc):
+    # Program location only; never serialize the exception text, locals or full paths.
+    frames, tb = [], exc.__traceback__
+    while tb is not None:
+        frames.append({'file': Path(tb.tb_frame.f_code.co_filename).name,
+                       'function': tb.tb_frame.f_code.co_name, 'line': tb.tb_lineno})
+        tb = tb.tb_next
+    return frames[-4:]
+
+
 class FeedResponseRejected(ValueError):
-    def __init__(self, reason):
+    def __init__(self, reason, *, http_status=None, headers=None):
         self.reason = reason
+        self.http_status = http_status
+        self.response_headers = _safe_headers(headers or {})
         super().__init__(reason)
 
 
@@ -327,7 +340,8 @@ def fetch_feed(feed_id):
         headers = _safe_headers(dict(response.headers.items()))
         length = headers.get('content-length')
         if length is not None and (not re.fullmatch('[0-9]+', length) or int(length) > MAX_BODY):
-            raise ValueError('feed byte budget exceeded')
+            raise FeedResponseRejected('DECLARED_BODY_BYTE_BUDGET_EXCEEDED',
+                http_status=response.status, headers=headers)
         raw = response.read(MAX_BODY + 1); _body_integrity(raw, headers)
         result=PublicResponse(response.geturl(), response.status, headers, raw)
         # Preserve bounded HTTP metadata in the attempt before checking its media contract.
@@ -374,6 +388,9 @@ def capture(output, *, previous=None, bootstrap=False, context=None, transport=N
                 if type(status) is int: entry['status']=status
                 if isinstance(exc, FeedResponseRejected):
                     entry['rejection_reason'] = exc.reason
+                    if exc.response_headers:
+                        entry['headers'] = exc.response_headers
+                entry['failure_origin'] = failure_origin(exc)
                 raise
         recorded=now().isoformat(); receipt['recorded_at']=recorded
         registry,delta=advance(windows,recorded_at=recorded,previous=old,bootstrap=bootstrap)
