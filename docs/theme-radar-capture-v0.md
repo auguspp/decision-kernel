@@ -39,3 +39,7 @@ The unchanged probe HTML intentionally retains its supplied-input provenance wor
 Actual raw response semantics, historical continuity, snapshot/history values and current industry overlaps must be reviewed after the first run. Same-source consistency is not independent economic evidence. A successful selected probe does not establish all-theme coverage, current-stock breadth, daily theme state, prospective candidates/outcomes, economic benefit or Research eligibility. The normal Sector next-session append and joint-page remote delivery remain separate pending milestones. All Human/Research/Investment and signal-transition authorities remain NONE.
 
 Primary provider references inspected: `HiThink-Tech/Financial-API` index endpoint specification and its official concept example, https://fuyao.aicubes.cn/best-practices/03-index-constituents/example.html . No upstream SDK code was imported; this reuses the project's already-adopted transport and parser contracts.
+
+## Source-driven candidate entry, separate from this fixed live trial
+
+See `docs/theme-source-discovery-v0.md`: retained EvidenceArtifact text can now supply exact catalog-label leads and an all-or-nothing bounded plan. This offline entry does not change the fixed-name collector above, execute its generated plan, certify a new source, or create a prospective event. Source-feed integration and a naturally arriving source-to-probe run remain pending.
