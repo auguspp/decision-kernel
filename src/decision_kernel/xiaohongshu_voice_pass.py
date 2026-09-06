@@ -35,6 +35,18 @@ _TEMPLATE_TRANSITIONS = (
     "这时候",
 )
 
+# Soft style signals only. One natural use is fine; repeated throat-clearing across a
+# note is a rewrite signal. These do not carry Research or publication authority.
+_CANNED_SLOP_PHRASES = (
+    "值得注意的是",
+    "需要强调的是",
+    "从本质上看",
+    "进一步来看",
+    "不难发现",
+    "归根结底",
+    "简单来说",
+)
+
 _VISIBLE_HARNESS_LANGUAGE = (
     "核心张力",
     "reader tension",
@@ -91,6 +103,28 @@ def voice_lint(draft: XiaohongshuDraft) -> VoiceLintReport:
                 message=(
                     "Repeated transition scaffolding makes the draft sound model-generated: "
                     + ", ".join(repeated)
+                ),
+            )
+        )
+
+    slop_counts = Counter(
+        marker for marker in _CANNED_SLOP_PHRASES for _ in range(text.count(marker))
+    )
+    slop_total = sum(slop_counts.values())
+    repeated_slop = [
+        f"{marker}×{count}" for marker, count in slop_counts.items() if count >= 2
+    ]
+    if slop_total >= 3 or repeated_slop:
+        examples = repeated_slop or [
+            marker for marker, count in slop_counts.items() if count
+        ]
+        issues.append(
+            VoiceLintIssue(
+                code="CANNED_SLOP_PHRASES",
+                message=(
+                    "Canned throat-clearing is becoming structure rather than information: "
+                    + ", ".join(examples)
+                    + ". Delete the preamble and state the claim directly."
                 ),
             )
         )
@@ -207,6 +241,13 @@ The main failure to fix is AI voice, not investment logic.
 Anti-AI voice rules:
 - Delete sentences that merely announce what the author is about to investigate when the next
   paragraph can simply investigate it. Do not narrate the writing process.
+- State the main point early. If a paragraph contains a concrete judgment, put that judgment in the
+  first sentence instead of spending the opening on throat-clearing such as “值得注意的是”,
+  “需要强调的是”, “从本质上看”, “进一步来看”, “不难发现”, “归根结底” or “简单来说”.
+  One natural use is fine; repeated canned framing is a rewrite signal.
+- One paragraph should advance one main idea. Keep the existing paragraph objects; do not split or
+  merge paragraphs to game this rule. Rewrite around the dominant idea while preserving every
+  factual qualifier and claim reference already carried by that paragraph.
 - Do not invent author history. Never write things like “我最近重新看…”, “这和我以前的看法不太一样”,
   “我一开始也这么想”, or imply a previous stance unless that prior stance is explicitly supplied
   in BRIEF or PLAN. First-person memory is evidence too; do not fabricate it for warmth.
@@ -219,6 +260,11 @@ Anti-AI voice rules:
   “所以现在”, “这里就”, or “我的结论是”. One natural use is fine; repeated scaffolding is not.
 - Treat “不是A，而是B” as a high-cost rhetorical device, not a default transition. If B can stand
   alone, write B directly. More than one such contrast in a note is usually a rewrite signal.
+- Protect epistemic boundaries while removing rhetorical contrast. Anti-slop cleanup must never
+  delete or soften evidence scope, uncertainty, falsification conditions, or causal limits. A move
+  like “这证明A，但还不能证明B” carries information rather than decorative contrast. A cleaner form
+  such as “A已有证据；B仍缺证据” is fine only when it preserves the exact same boundary. Keep words
+  such as “仅”, “可能”, “尚未”, “不能证明” and equivalent qualifiers whenever they carry Research meaning.
 - Do not force every idea into balanced A/B symmetry, two-line slogans, or “如果A/如果B”的机械对照.
 - Do not end every section with a mini-summary. Let some sections simply move the thought forward.
 - Prefer direct section questions over pseudo-personal headings. For example, “所以，如何看待未来？”
@@ -257,5 +303,4 @@ CURRENT DRAFT:
 {draft.model_dump_json(indent=2)}
 
 Return STRICT JSON matching the existing XiaohongshuDraft schema. Preserve every card number,
-paragraph kind, and claim_ids exactly. Only rewrite the user-visible prose.
-"""
+paragraph kind, and claim_ids exactly. Only rewrite the user-visible prose."""
