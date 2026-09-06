@@ -2,6 +2,10 @@
 
 Status: INDEPENDENT OFFLINE SHADOW PROBE / NOT A GLOBAL THEME SCANNER / NO INVESTMENT AUTHORITY.
 
+## Subsequent real-source trial
+
+The offline-only completion statements below describe PR #239. PR #240 subsequently added an isolated collector using the same planner/calculations; see `docs/theme-radar-capture-v0.md`. The first real bounded run and downloaded original-response/page checks are recorded in `docs/theme-radar-real-capture-proof-2026-09-06.md`. This does not make the probe a daily scanner or alter its supplied-input provenance. The production Sector workflow and restoration chain remain separate.
+
 ## Delivered slice
 
 `runtime/theme_radar_probe.py` reads a strict existing Sector market-state original plus an explicitly supplied, bounded collection of HiThink concept records. Select one to three exact concept identities and zero to six broad 881 industries. Output: each concept's 5/20/60-session index/benchmark/excess path, five-session change in 20-day excess, positive-excess duration with left censoring, turnover pulse, current constituent intersections with the selected industries, and pairwise concept overlap. No concept receives a cross-sectional rank or rating from this small selected sample. A positive trend is not a new false-to-true event or the system's first discovery.
