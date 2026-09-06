@@ -25,6 +25,19 @@ on:
         description: Explicitly execute this trial's exact market plan after scanning (otherwise catalogs and scan only)
         type: boolean
         default: false
+      native-history-mode:
+        description: Isolated trial, explicit first consumer history, or pinned continuation (never resets RSS)
+        type: choice
+        options: [isolated, initialize, continue]
+        default: isolated
+      native-history-run-id:
+        description: Continue only - exact prior run publishing verified native history, including retained failed market attempts
+        type: string
+        default: ''
+      native-history-hash:
+        description: Continue only - exact history_hash from the prior successful history upload
+        type: string
+        default: ''
   push:
     branches: [main]
     paths:
@@ -215,7 +228,7 @@ jobs:
           python-version: '3.12'
       - name: Install existing feed and market libraries
         run: python -m pip install -e '.[feeds,dump-study,discovery]'
-      - name: Record explicit isolated native acceptance intent
+      - name: Record explicit native acceptance and history intent
         id: intent
         env:
           TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
@@ -223,6 +236,9 @@ jobs:
           NATIVE_MARKET_RUN_ID: ${{ inputs.native-market-run-id }}
           NATIVE_BATCH_SIZE: ${{ inputs.native-batch-size }}
           NATIVE_EXECUTE: ${{ inputs.native-execute }}
+          NATIVE_HISTORY_MODE: ${{ inputs.native-history-mode }}
+          NATIVE_HISTORY_RUN_ID: ${{ inputs.native-history-run-id }}
+          NATIVE_HISTORY_HASH: ${{ inputs.native-history-hash }}
         run: python .github/scripts/native-feed-acceptance.py init
       - name: Bind exact source artifact metadata
         id: source-meta
@@ -245,6 +261,29 @@ jobs:
       - name: Rebuild and qualify sources before market access
         id: source-check
         run: python .github/scripts/native-feed-acceptance.py qualify
+      - name: Bind explicitly selected history artifact
+        id: history-meta
+        if: steps.intent.outputs.history_mode == 'continue'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HISTORY_RUN: ${{ steps.intent.outputs.history_run_id }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$HISTORY_RUN" > native-feed-acceptance/history-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$HISTORY_RUN/artifacts?per_page=100" > native-feed-acceptance/history-artifacts.json
+          python .github/scripts/native-feed-acceptance.py metadata --kind history
+      - name: Download only the pinned history artifact
+        if: steps.intent.outputs.history_mode == 'continue'
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ steps.history-meta.outputs.artifact_id }}
+          run-id: ${{ steps.intent.outputs.history_run_id }}
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: native-feed-acceptance/previous-history
+      - name: Verify pinned history before market access
+        id: history-ready
+        run: python .github/scripts/native-feed-acceptance.py history-prepare
       - name: Bind exact saved market artifact when sources qualify
         id: market-meta
         if: steps.source-check.outputs.needs_market == 'true'
@@ -278,6 +317,21 @@ jobs:
         env:
           HITHINK_FINANCE_API_KEY: ''
         run: python .github/scripts/native-feed-acceptance.py verify
+      - name: Register replayed history including valid failed market attempts
+        id: history-save
+        if: always() && steps.source-check.outcome == 'success' && steps.history-ready.outcome == 'success' && steps.intent.outputs.history_mode != 'isolated'
+        env:
+          HITHINK_FINANCE_API_KEY: ''
+        run: python .github/scripts/native-feed-acceptance.py history-save
+      - name: Publish only fully verified consumer history
+        id: history-upload
+        if: always() && steps.history-save.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-feed-history-${{ github.run_id }}-${{ github.run_attempt }}
+          path: native-feed-acceptance/history-export/
+          retention-days: 90
+          if-no-files-found: error
       - name: Preserve isolated acceptance including failed steps
         id: native-evidence
         if: always()
@@ -295,13 +349,28 @@ jobs:
           SOURCE_RESULT: ${{ steps.source-check.outcome }}
           CAPTURE_RESULT: ${{ steps.native-capture.outcome }}
           VERIFY_RESULT: ${{ steps.native-verify.outcome }}
+          HISTORY_MODE: ${{ steps.intent.outputs.history_mode }}
+          HISTORY_SAVE: ${{ steps.history-save.outcome }}
+          HISTORY_UPLOAD: ${{ steps.history-upload.outcome }}
+          HISTORY_URL: ${{ steps.history-upload.outputs.artifact-url }}
+          HISTORY_HASH: ${{ steps.history-save.outputs.history_hash }}
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
           root = Path('native-feed-acceptance')
-          lines = ['## 原生来源隔离验收', 'SHADOW OBSERVATION ONLY · Human / Research / Investment authority = NONE',
-                   '明确空的试验回执历史；不是每日消费、RSS 初始化或跨运行去重证明。没有 RSS、文章或生产 Sector 请求。']
+          lines = ['## 原生来源手动验收', 'SHADOW OBSERVATION ONLY · Human / Research / Investment authority = NONE',
+                   '不是每日消费、RSS 初始化或全局最新状态证明。没有 RSS、文章或生产 Sector 请求。']
+          if os.environ['HISTORY_MODE'] == 'isolated':
+              lines += ['隔离模式：明确空的试验回执历史，不登记进度。']
+          else:
+              lines += [f"处理历史模式 {os.environ['HISTORY_MODE']}；原始回执与失败尝试不改写。"]
+          lines += [f"历史登记 {os.environ['HISTORY_SAVE']}；历史附件上传 {os.environ['HISTORY_UPLOAD']}。"]
+          if os.environ['HISTORY_UPLOAD'] == 'success' and os.environ['HISTORY_URL']:
+              lines += [f"[已保存的精确处理历史]({os.environ['HISTORY_URL']})",
+                        f"下一次明确选择本次 run 与 history_hash={os.environ['HISTORY_HASH']}。",
+                        '历史保存成功不代表行情成功；失败尝试仍失败，不自动重试或刷新旧计划。']
+
           for name in ['source-qualification.json', 'trial/acceptance.json', 'verification.json']:
               p = root / name
               if p.is_file():

@@ -1,6 +1,6 @@
 """One explicit native-feed acceptance trial using existing capture and replay.
 
-No RSS fetch, baseline reset, production receipt store, or automatic next batch.
+No RSS fetch, baseline reset, automatic next batch, or global latest selection.
 Only the fixed sibling collector supplies HTTP; all inputs are data, never code.
 """
 from __future__ import annotations
@@ -16,15 +16,18 @@ from pathlib import Path
 from decision_kernel.identity import canonical_hash
 from decision_kernel.runtime import radar_feed_consumer as consumer
 from decision_kernel.runtime import radar_feed_intake as feed
+from decision_kernel.runtime import radar_feed_history as history
 from decision_kernel.runtime import theme_plan_execution as execution
 from decision_kernel.runtime import theme_radar_probe as probe
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('native-feed-acceptance')
 KINDS = {'source': ('economic-release-discovery', 'radar-feed-intake-{run}-1'),
-         'market': ('sector-radar-shadow', 'sector-radar-state-bundle')}
+         'market': ('sector-radar-shadow', 'sector-radar-state-bundle'),
+         'history': ('hithink-stock-dump-trial', 'native-feed-history-{run}-1')}
 HISTORY = 'EXPLICIT_EMPTY_HISTORY_FOR_ISOLATED_ACCEPTANCE_NOT_DAILY_CONSUMPTION'
 VERSION = 'manual-native-feed-acceptance-v0'
+TRACKED = 'EXPLICIT_PINNED_BRANCH_HISTORY_NOT_GLOBAL_LATEST_OR_DAILY_SERVICE'
 
 
 def sibling(name):
@@ -54,9 +57,23 @@ def intent(env, at):
         raise ValueError('explicit bounded batch and execution switch required')
     if workflow['GITHUB_RUN_ID'] in {source, market}:
         raise ValueError('an invocation cannot restore itself')
+    mode = env.get('NATIVE_HISTORY_MODE', 'isolated')
+    previous, pin = env.get('NATIVE_HISTORY_RUN_ID', ''), env.get('NATIVE_HISTORY_HASH', '')
+    if mode not in {'isolated', 'initialize', 'continue'}:
+        raise ValueError('explicit supported history mode required')
+    extra = {}
+    if mode == 'continue':
+        helper['number'](previous); helper['hash_value'](pin)
+        if previous in {workflow['GITHUB_RUN_ID'], source, market}:
+            raise ValueError('history must identify a distinct previous native run')
+    elif previous or pin:
+        raise ValueError('only continuation accepts a previous run and history hash')
+    if mode != 'isolated':
+        extra = {'history_mode': mode, 'history_run_id': previous, 'history_hash': pin or None,
+                 'history_scope': TRACKED}
     return {'version': VERSION, 'workflow': workflow, 'source_run_id': source,
             'market_run_id': market, 'batch_size': int(batch), 'execute_market': env['NATIVE_EXECUTE'] == 'true',
-            'history_scope': HISTORY, 'prepared_at': probe._clock(at).isoformat(), **probe.AUTHORITY}
+            'history_scope': HISTORY, 'prepared_at': probe._clock(at).isoformat(), **probe.AUTHORITY, **extra}
 
 
 def metadata(request, kind, run, listing):
@@ -74,13 +91,17 @@ def metadata(request, kind, run, listing):
         artifact_id = bound['artifact_id']
     else:
         name, artifact_name = KINDS[kind]
+        artifact_name = artifact_name.format(run=wanted)
+        conclusions = {'success', 'failure'} if kind == 'history' else {'success'}
         if (type(run['id']) is not int or str(run['id']) != wanted or run['name'] != name
                 or run['path'] != f'.github/workflows/{name}.yml' or run['head_branch'] != 'main'
                 or run['repository']['full_name'] != 'auguspp/decision-kernel'
                 or type(run['run_attempt']) is not int or run['run_attempt'] != 1
-                or run['status'] != 'completed' or run['conclusion'] != 'success'
+                or run['status'] != 'completed' or run['conclusion'] not in conclusions
                 or run['event'] not in {'push', 'workflow_dispatch'}):
             raise ValueError('market input run identity differs')
+        if kind == 'history' and run['event'] != 'workflow_dispatch':
+            raise ValueError('history requires a previous explicit manual invocation')
         helper['hash_value'](run['head_sha'], 40)
         if type(listing['total_count']) is not int or listing['total_count'] != len(listing['artifacts']):
             raise ValueError('complete artifact listing required')
@@ -147,15 +168,152 @@ def market_state(root, request):
     return bundle.market_state
 
 
+def history_options(root, request):
+    mode = request.get('history_mode', 'isolated')
+    return {'history_mode': mode,
+            'history_root': root/'previous-history/history' if mode == 'continue' else None,
+            'history_hash': request.get('history_hash')}
+
+
+def _history_check(source, mode, previous, pin, at):
+    if mode not in {'isolated', 'initialize', 'continue'}:
+        raise ValueError('invalid consumer history mode')
+    if mode == 'continue':
+        if previous is None or not pin:
+            raise ValueError('complete pinned previous history required')
+        return history.verify_history(previous, as_of=at, expected_hash=pin, source=source)
+    if previous is not None or pin is not None:
+        raise ValueError('initial or isolated scope cannot consume an implicit predecessor')
+    return None
+
+
+def prepare_history(root, request):
+    """Verify remote identity AND original objects before any market credential."""
+    mode = request.get('history_mode', 'isolated')
+    options = history_options(root, request)
+    previous = _history_check(root/'source/capture', mode, options['history_root'],
+                              options['history_hash'], request['prepared_at'])
+    if previous is not None:
+        run, listing = read(root/'history-run.json'), read(root/'history-artifacts.json')
+        bound = metadata(request, 'history', run, listing)
+        if read(root/'history-binding.json') != bound:
+            raise ValueError('history remote binding differs')
+        directory = root/'previous-history'
+        if {p.name for p in directory.iterdir()} != {'history', 'publication.json'}:
+            raise ValueError('complete published history envelope required')
+        p = read(directory/'publication.json')
+        probe._keys(p, {'version', 'status', 'workflow', 'history_mode', 'history_hash',
+            'parent_history_hash', 'source_capture_hash', 'registered_at', 'attempt_status',
+            'source_delivery_acknowledged', 'remote_publication_verified', 'publication_hash', *probe.AUTHORITY})
+        expected = {**request['workflow'], 'GITHUB_RUN_ID': bound['run_id'], 'GITHUB_SHA': bound['commit']}
+        if (p['version'] != 1 or type(p['version']) is not int
+                or p['status'] != 'VERIFIED_HISTORY_READY_FOR_UPLOAD_NOT_UPLOAD_ACK'
+                or p['workflow'] != expected or p['history_mode'] not in {'initialize', 'continue'}
+                or p['history_hash'] != previous['history_hash']
+                or p['parent_history_hash'] != previous['parent_history_hash']
+                or (p['history_mode'] == 'initialize') != (previous['parent_history_hash'] is None)
+                or p['source_capture_hash'] != previous['source_anchor']['capture_hash']
+                or p['registered_at'] != previous['recorded_at']
+                or probe._clock(p['registered_at']) > probe._clock(run['updated_at'])
+                or previous['source_anchor']['provenance'] != 'PUBLIC_HTTP_CAPTURE'
+                or p['publication_hash'] != canonical_hash({k:v for k,v in p.items() if k != 'publication_hash'})
+                or any(p[k] != v for k,v in probe.AUTHORITY.items())
+                or p['source_delivery_acknowledged'] is not False or p['remote_publication_verified'] is not False):
+            raise ValueError('published history does not match the selected remote execution')
+    elif (root/'previous-history').exists():
+        raise ValueError('unexpected predecessor; no silent initialization over history')
+    return {'status': 'PINNED_HISTORY_REBUILT' if previous is not None else 'EXPLICIT_HISTORY_SCOPE',
+            'history_mode': mode, 'history_hash': options['history_hash'],
+            'request_hash': canonical_hash(request), 'network_calls': 0, **probe.AUTHORITY}
+
+
+def _scan(source, state, context, output, *, as_of, batch_size,
+          history_mode='isolated', history_root=None, history_hash=None):
+    with tempfile.TemporaryDirectory(prefix='native-consumer-history-') as temp:
+        root = Path(temp)
+        if history_mode == 'isolated':
+            receipts, executions = root, None  # Preserve v0 isolated scan bytes.
+        else:
+            restored = root/'restored'
+            if history_mode == 'continue':
+                history.restore_history(history_root, source, restored, as_of=as_of, expected_hash=history_hash)
+            else:
+                (restored/'scans').mkdir(parents=True); (restored/'executions').mkdir()
+            receipts, executions = restored/'scans', restored/'executions'
+        return consumer.scan(source, state, context, receipts, output, as_of=as_of, generated_at=as_of,
+                             batch_size=batch_size, executions=executions)
+
+
+def save_history(root, request, *, at):
+    """Publishable snapshot only after exact replay; a failed market stage stays failed."""
+    options = history_options(root, request)
+    if probe._clock(at) < probe._clock(request['prepared_at']):
+        raise ValueError('history registration cannot precede this invocation')
+    if options['history_mode'] == 'isolated':
+        raise ValueError('isolated mode never registers history')
+    if prepare_history(root, request) != read(root/'history-preparation.json'):
+        raise ValueError('history preparation changed')
+    qualification = qualify(root, request)
+    if qualification != read(root/'source-qualification.json') or qualification['gaps']:
+        raise ValueError('unqualified sources cannot advance consumer history')
+    scans, executions = [], []
+    status = qualification['status']
+    if qualification['needs_market']:
+        report = read(root/'trial/acceptance.json')
+        if any(report[k] != request[k] for k in ('workflow', 'history_scope', 'batch_size', 'execute_market')):
+            raise ValueError('history trial differs from manual intent')
+        proof = verify_trial(root/'source/capture', market_state(root, request), root/'trial', **options)
+        if proof['status'] != 'ORIGINAL_SOURCE_SCAN_AND_OPTIONAL_EXECUTION_REBUILT':
+            raise ValueError('incomplete attempt cannot advance history')
+        status = proof['acceptance_status']
+        if probe._clock(at) < probe._clock(report['finished_at']):
+            raise ValueError('history registration cannot precede the completed attempt')
+        if status == 'SOURCE_SCAN_BLOCKED':
+            raise ValueError('blocked scan is not registered; retain its separate attempt artifact')
+        if (root/'trial/scan/scan-receipt.json').is_file():
+            scans.append(root/'trial/scan')
+        if (root/'trial/execution').exists():
+            executions.append(root/'trial/execution')
+    else:
+        if (root/'trial').exists():
+            raise ValueError('no-work source has unexpected market trial')
+        proof = qualification
+    if read(root/'verification.json') != proof:
+        raise ValueError('credential-free replay must precede history registration')
+    output = root/'history-export'
+    history._new_output(output, [root/'source', *([options['history_root']] if options['history_root'] else [])])
+    with tempfile.TemporaryDirectory(prefix='.history-export-', dir=root) as temp:
+        stage = Path(temp)/'export'; stage.mkdir()
+        h = history.register_history(root/'source/capture', stage/'history', as_of=at,
+                previous=options['history_root'], previous_hash=options['history_hash'],
+                initialize=options['history_mode'] == 'initialize', scans=scans, executions=executions)
+        publication = feed._sealed({'version': 1, 'status': 'VERIFIED_HISTORY_READY_FOR_UPLOAD_NOT_UPLOAD_ACK',
+            'workflow': request['workflow'], 'history_mode': options['history_mode'],
+            'history_hash': h['history_hash'], 'parent_history_hash': h['parent_history_hash'],
+            'source_capture_hash': h['source_anchor']['capture_hash'], 'registered_at': h['recorded_at'],
+            'attempt_status': status, 'source_delivery_acknowledged': False,
+            'remote_publication_verified': False, **probe.AUTHORITY}, 'publication_hash')
+        write(stage/'publication.json', publication)
+        history.verify_history(stage/'history', as_of=at, expected_hash=h['history_hash'])
+        if output.exists():
+            raise ValueError('history publication output appeared; never replace')
+        stage.rename(output)
+    return publication
+
+
 def trial(source, state, output, *, batch_size, execute_market, workflow, transport,
-          public_http=False, credential='', now=lambda: datetime.now(timezone.utc), pause=time.sleep):
-    """Single bounded trial; empty receipt history is explicit, never a reset."""
+          public_http=False, credential='', now=lambda: datetime.now(timezone.utc), pause=time.sleep,
+          history_mode='isolated', history_root=None, history_hash=None):
+    """One batch against an explicit isolated, initial, or pinned history scope."""
     if type(execute_market) is not bool or type(batch_size) is not int or not 1 <= batch_size <= 32:
         raise ValueError('invalid explicit acceptance limits')
     probe._safe_path(output)
     if output.exists() or output.resolve().is_relative_to(source.resolve()):
         raise ValueError('new isolated trial directory required')
     started = now().isoformat()
+    _history_check(source, history_mode, history_root, history_hash, started)
+    if history_root is not None:
+        history._new_output(output, [history_root])
     qualification = source_status(source, as_of=started)
     if not qualification['needs_market']:
         raise ValueError('source qualification must precede market requests')
@@ -175,6 +333,8 @@ def trial(source, state, output, *, batch_size, execute_market, workflow, transp
               'scan_as_of': None, 'failure_type': None, 'source_qualification': qualification,
               'requests_attempted': 0, 'maximum_requests': 15, 'source_delivery_acknowledged': False,
               'remote_publication_verified': False, **probe.AUTHORITY}
+    if history_mode != 'isolated':
+        report.update(history_scope=TRACKED, history_mode=history_mode, previous_history_hash=history_hash)
     collector = sibling('capture-theme-probe.py')
     context = {'industries': []}
     last = probe._clock(started)
@@ -211,10 +371,11 @@ def trial(source, state, output, *, batch_size, execute_market, workflow, transp
                 raise
         write(output/'context.json', context)
         report['scan_as_of'] = now().isoformat()
-        with tempfile.TemporaryDirectory(prefix='native-empty-history-') as temp:
-            result = consumer.scan(source, state, context, Path(temp), output/'scan',
-                    as_of=report['scan_as_of'], generated_at=report['scan_as_of'], batch_size=batch_size)
-        if result['status'] != 'SOURCE_SCAN_COMPLETED':
+        result = _scan(source, state, context, output/'scan', as_of=report['scan_as_of'], batch_size=batch_size,
+                       history_mode=history_mode, history_root=history_root, history_hash=history_hash)
+        if result['status'] == 'NO_PENDING_SOURCE_SCAN':
+            report['status'] = 'NO_PENDING_SOURCE_SCAN'
+        elif result['status'] != 'SOURCE_SCAN_COMPLETED':
             report['status'] = 'SOURCE_SCAN_BLOCKED'
         else:
             checked = consumer.verify_scan(output/'scan')
@@ -234,9 +395,13 @@ def trial(source, state, output, *, batch_size, execute_market, workflow, transp
     return report
 
 
-def verify_trial(source, state, output):
+def verify_trial(source, state, output, *, history_mode='isolated', history_root=None, history_hash=None):
     report = read(output/'acceptance.json')
-    if (report['version'] != VERSION or report['history_scope'] != HISTORY
+    _history_check(source, history_mode, history_root, history_hash, report['started_at'])
+    if (report.get('history_mode', 'isolated') != history_mode or report.get('previous_history_hash') != history_hash):
+        raise ValueError('trial must reconstruct against its exact previous history')
+    scope = HISTORY if history_mode == 'isolated' else TRACKED
+    if (report['version'] != VERSION or report['history_scope'] != scope
             or report['acceptance_hash'] != canonical_hash({k:v for k,v in report.items() if k != 'acceptance_hash'})
             or report['files'] != {k:v for k,v in consumer._inventory(output, maximum_files=128).items() if k != 'acceptance.json'}
             or any(report.get(k) != v for k,v in probe.AUTHORITY.items())
@@ -278,12 +443,14 @@ def verify_trial(source, state, output):
     if not probe._clock(report['started_at']) <= probe._clock(report['scan_as_of']) <= probe._clock(report['finished_at']):
         raise ValueError('scan clock outside trial')
     with tempfile.TemporaryDirectory(prefix='native-acceptance-replay-') as temp:
-        root = Path(temp); (root/'receipts').mkdir()
-        handoff = consumer.scan(source, state, context, root/'receipts', root/'scan',
-                as_of=report['scan_as_of'], generated_at=report['scan_as_of'], batch_size=report['batch_size'])
+        root = Path(temp)
+        handoff = _scan(source, state, context, root/'scan', as_of=report['scan_as_of'], batch_size=report['batch_size'],
+                        history_mode=history_mode, history_root=history_root, history_hash=history_hash)
         if consumer._inventory(root/'scan') != consumer._inventory(output/'scan'):
             raise ValueError('source selection and scan do not rebuild')
-    expected = 'SOURCE_SCAN_BLOCKED'
+    expected = 'NO_PENDING_SOURCE_SCAN' if handoff['status'] == 'NO_PENDING_SOURCE_SCAN' else 'SOURCE_SCAN_BLOCKED'
+    if handoff['status'] != 'SOURCE_SCAN_COMPLETED' and (output/'execution').exists():
+        raise ValueError('no new scan can authorize an execution')
     detail_count = 0
     if handoff['status'] == 'SOURCE_SCAN_COMPLETED':
         proof = consumer.verify_scan(output/'scan')
@@ -306,7 +473,7 @@ def verify_trial(source, state, output):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode', choices=['init', 'metadata', 'qualify', 'run', 'verify'])
+    parser.add_argument('mode', choices=['init', 'metadata', 'qualify', 'history-prepare', 'history-save', 'run', 'verify'])
     parser.add_argument('--kind', choices=KINDS)
     parser.add_argument('--root', type=Path, default=ROOT)
     args = parser.parse_args(argv); root = args.root
@@ -316,7 +483,8 @@ def main(argv=None):
         if args.mode == 'init':
             value = intent(os.environ, datetime.now(timezone.utc).isoformat())
             root.mkdir(parents=True, exist_ok=False); write(root/'request.json', value)
-            outputs = {'source_run_id': value['source_run_id'], 'market_run_id': value['market_run_id']}
+            outputs = {'source_run_id': value['source_run_id'], 'market_run_id': value['market_run_id'],
+                       'history_mode': value.get('history_mode', 'isolated'), 'history_run_id': value.get('history_run_id', '')}
         else:
             request = read(root/'request.json')
             if request['workflow'] != sibling('capture-theme-probe.py')['workflow_identity'](os.environ):
@@ -330,25 +498,37 @@ def main(argv=None):
                     write(root/'source-qualification.json', qualification)
                     outputs = {'needs_market': str(qualification['needs_market']).lower()}
                     value = qualification
+                elif args.mode == 'history-prepare':
+                    value = prepare_history(root, request); write(root/'history-preparation.json', value)
+                elif args.mode == 'history-save':
+                    if os.environ.get('HITHINK_FINANCE_API_KEY'):
+                        raise ValueError('history registration cannot receive market credential')
+                    value = save_history(root, request, at=datetime.now(timezone.utc).isoformat())
+                    outputs = {'history_hash': value['history_hash']}
                 elif args.mode == 'run':
                     if not qualification['needs_market']:
                         raise ValueError('no qualified sources require a market scan')
+                    if request.get('history_mode') and prepare_history(root, request) != read(root/'history-preparation.json'):
+                        raise ValueError('pinned history must be verified before market access')
                     state = market_state(root, request)
                     collector = sibling('capture-theme-probe.py')
                     key = os.environ.get('HITHINK_FINANCE_API_KEY', '')
                     value = trial(root/'source/capture', state, root/'trial', batch_size=request['batch_size'],
                         execute_market=request['execute_market'], workflow=request['workflow'], public_http=True,
-                        credential=key, transport=lambda p,q:collector['request_raw'](p,q,api_key=key), pause=time.sleep)
+                        credential=key, transport=lambda p,q:collector['request_raw'](p,q,api_key=key), pause=time.sleep,
+                        **history_options(root, request))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):
                         raise ValueError('offline verification cannot receive market credential')
+                    if request.get('history_mode') and prepare_history(root, request) != read(root/'history-preparation.json'):
+                        raise ValueError('pinned history preparation differs')
                     if qualification != read(root/'source-qualification.json'):
                         raise ValueError('source precheck does not reconstruct')
                     if qualification['needs_market']:
                         saved = read(root/'trial/acceptance.json')
                         if any(saved[k] != request[k] for k in ('workflow', 'history_scope', 'batch_size', 'execute_market')):
                             raise ValueError('trial differs from explicit manual intent')
-                        value = verify_trial(root/'source/capture', market_state(root, request), root/'trial')
+                        value = verify_trial(root/'source/capture', market_state(root, request), root/'trial', **history_options(root, request))
                     else:
                         if (root/'trial').exists():
                             raise ValueError('unqualified source cannot acquire market inputs')
