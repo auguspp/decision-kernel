@@ -1,9 +1,8 @@
-"""One stock-first shadow reader, reconciled with the separate local projection.
+"""One stock-first shadow reader using the existing HiThink acquisition path.
 
-A's direction, gates and round-robin presentation are retained. B's exact dated
-reference checks are reused here, not a second selector. Current HiThink daily
-history does NOT document daily prev_price. No live reference source is wired;
-that is a visible data gap, never a price fabricated from yesterday's close.
+Raw close ratios and independently reference-qualified/adjusted performance are
+not interchangeable contracts. Real input uses HiThink's dated raw bars, exact
+latest quote checks and reported-action exclusions, not synthetic daily references.
 """
 from __future__ import annotations
 
@@ -23,17 +22,20 @@ from . import economic_company_context as company
 from . import hithink_index_http as indices
 from . import hithink_sector_breadth_http as members
 from . import theme_radar_probe as probe
+from . import hithink_stock_reading as own_stock
+from .hithink_stock_reading import StockReadingInputError
 from .hithink_http import HITHINK_CALENDAR_PATH
 from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-raw-path-v1'
+VERSION = 'stock-first-reviewed-scope-raw-path-v2'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
 COMPANY_MANIFEST = 'radar_inputs/economic-company-links-livestock-v1.json'
 SYNTHETIC_REFERENCES = 'SYNTHETIC_TEST_ONLY'
+HITHINK_RAW = 'HITHINK_REQUEST_BOUND_RAW_OBSERVATION'
 POLICY = {
     'version': VERSION,
     'direction': 'EXISTING_CURRENT_SECTOR_GATE_NOT_NEW_EVENT_REQUIRED',
@@ -44,8 +46,9 @@ POLICY = {
     'activity': 'POSITIVE_LATEST_VOLUME_AND_TURNOVER_NOT_EXECUTION_ELIGIBILITY',
     'name_guard': 'ST_DELISTING_AND_N_C_PREFIX_LABELS_ONLY_NOT_FULL_REGULATORY_STATUS',
     'presentation': 'NODE_ORDER_ROUND_ROBIN_THEN_20D_MARKET_EXCESS_5D_MARKET_EXCESS_CODE',
-    'reference_requirement': 'EXACT_DATED_INDEPENDENT_REFERENCE_WINDOW_AND_LATEST_QUOTE_NO_FILL',
-    'live_reference_source': 'NOT_ESTABLISHED',
+    'reference_requirement': 'HITHINK_61_OWN_RAW_BARS_EXACT_LATEST_QUOTE_NO_REPORTED_ACTIONS',
+    'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
+    'source_contract': own_stock.CONTRACT,
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
@@ -66,13 +69,6 @@ STATUS_LABELS = {
 }
 
 
-class StockReadingInputError(ValueError):
-    """Sanitized, finite diagnostic vocabulary; never echo provider error text."""
-    def __init__(self, category, reason_code, *, thscode=None):
-        self.category, self.reason_code, self.thscode = category, reason_code, thscode
-        super().__init__(reason_code)
-
-
 def _plain(value):
     return json.loads(canonical_json(value))
 
@@ -88,8 +84,7 @@ def _hash_ok(value, key):
 def _reference_inputs(value):
     if value is None:
         return
-    # The local ZIP was a normalized-input demonstration, not a provider adapter.
-    # Until a real origin-qualified source exists, supplied references are TEST ONLY.
+    # Retained B normalized references are still TEST ONLY, never a real source.
     if (not isinstance(value, dict) or set(value) != {'provenance', 'windows', 'latest_quotes'}
             or value['provenance'] != SYNTHETIC_REFERENCES
             or not isinstance(value['windows'], dict) or not isinstance(value['latest_quotes'], dict)):
@@ -145,7 +140,9 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
                 'node_relation_note': panel['relation_note'], 'review_question': panel['review_question'],
                 'economic_coverage': node['economic_coverage'],
             })
-    request_count = 4 + len(directions) + len(issuers) if issuers else 0
+    # Reserve history + explicit single-stock quote + action query for EVERY issuer.
+    # Keep the old 26-call ceiling; an over-budget plan fails, not top-three truncates.
+    request_count = 4 + len(directions) + 3*len(issuers) if issuers else 0
     if len(issuers) > MAX_ISSUERS or len(directions) > MAX_MEMBERSHIPS or request_count > MAX_REQUESTS:
         raise ValueError('stock reading request budget exceeded; no partial top-three enrichment')
     active_codes = {code for code, r in all_rows.items() if r['currently_gate_active']}
@@ -169,10 +166,7 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
 
 
 def _history_params(code, sessions):
-    start = datetime.combine(sessions[-61], datetime.min.time(), tzinfo=SHANGHAI_TZ)
-    end = datetime.combine(sessions[-1] + timedelta(days=1), datetime.min.time(), tzinfo=SHANGHAI_TZ)
-    return {'thscode': code, 'interval': '1d', 'adjust': 'none',
-            'start': str(int(start.timestamp() * 1000)), 'end': str(int(end.timestamp() * 1000))}
+    return own_stock.history_params(code, sessions)
 
 
 def _reference_number(value):
@@ -188,11 +182,7 @@ def _reference_number(value):
 
 
 def _qualify_references(code, expected, bars, references, at):
-    """B's independent-reference invariant; no derived prev_price or tolerance.
-
-    The supplied test windows and latest quote are separate inputs. No caller can
-    relabel them LIVE_HITHINK. A live source needs a separately reviewed adapter.
-    """
+    """B's separate supplied-reference invariant, not a requirement to buy another API."""
     if references is None:
         raise StockReadingInputError('DATA_INSUFFICIENT',
             'QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE', thscode=code)
@@ -229,25 +219,32 @@ def _qualify_references(code, expected, bars, references, at):
         raise ValueError('current quote differs from the exact latest dated reference')
 
 
-def _stock_path(state, code, response, *, at, references=None):
-    qualified = normalize_hithink_completed_price_history(
-        response, thscode=code, sessions=state.sessions, observed_at=at)
+def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None):
     expected = tuple(state.sessions[-61:])
-    if (tuple(p.as_of.astimezone(SHANGHAI_TZ).date() for p in qualified.points) != expected
-            or qualified.response_session != state.sessions[-1]
-            or qualified.expected_latest_session != state.sessions[-1]):
-        raise StockReadingInputError('DATA_INSUFFICIENT', 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', thscode=code)
-    by_day = {}
-    for row in response['data']['item']:
-        stamp = row['date_ms']
-        if type(stamp) is not int:
-            raise ValueError('stock bar timestamp must be exact integer milliseconds')
-        instant = datetime.fromtimestamp(stamp / 1000, tz=SHANGHAI_TZ)
-        if instant.time() != datetime.min.time():
-            raise ValueError('stock bar must use an explicit Shanghai-midnight date key')
-        by_day[instant.date()] = row
-    _qualify_references(code, expected, by_day, references, at)
-    closes = tuple(p.close for p in qualified.points)
+    if references is None:
+        by_day, checks = own_stock.qualify(response, quote, actions, code=code,
+            sessions=state.sessions, params=_history_params(code,state.sessions), observed_at=at)
+        closes = tuple(by_day[d]['close_price'] for d in expected)
+    else:
+        qualified = normalize_hithink_completed_price_history(
+            response, thscode=code, sessions=state.sessions, observed_at=at)
+        if (tuple(p.as_of.astimezone(SHANGHAI_TZ).date() for p in qualified.points) != expected
+                or qualified.response_session != state.sessions[-1]
+                or qualified.expected_latest_session != state.sessions[-1]):
+            raise StockReadingInputError('DATA_INSUFFICIENT', 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', thscode=code)
+        by_day = {}
+        for row in response['data']['item']:
+            stamp = row['date_ms']
+            if type(stamp) is not int:
+                raise ValueError('stock bar timestamp must be exact integer milliseconds')
+            instant = datetime.fromtimestamp(stamp / 1000, tz=SHANGHAI_TZ)
+            if instant.time() != datetime.min.time():
+                raise ValueError('stock bar must use an explicit Shanghai-midnight date key')
+            by_day[instant.date()] = row
+        _qualify_references(code, expected, by_day, references, at)
+        closes = tuple(p.close for p in qualified.points)
+        checks = {'contract':'SUPPLIED_SYNTHETIC_REFERENCES_ONLY',
+                  'historical_daily_reference_check':'EXACT_SUPPLIED_TEST_REFERENCES_NOT_LIVE_ORIGIN_PROOF'}
     amounts = tuple(Decimal(str(by_day[d]['turnover'])) for d in expected)
     prior = _average(amounts[-25:-5])
     return {
@@ -259,8 +256,8 @@ def _stock_path(state, code, response, *, at, references=None):
         'twenty_day_return_five_sessions_ago': _return_over(closes, end_index=55, sessions=20),
         'price_convention': 'RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN',
         'corporate_action_adjustment': 'NOT_PERFORMED', 'tradability': 'NOT_CERTIFIED_BY_PRICE_AND_VOLUME',
-        'reference_continuity': 'EXACT_SUPPLIED_TEST_REFERENCES_NOT_LIVE_ORIGIN_PROOF',
-        'history_session_count': 61,
+        'reference_continuity': checks['historical_daily_reference_check'],
+        'input_checks': checks, 'history_session_count': 61,
     }
 
 
@@ -293,7 +290,7 @@ def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datet
 
 
 def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_inputs):
-    expected_requests = 4 + len(plan['directions']) + len(plan['issuers']) if plan['issuers'] else 0
+    expected_requests = 4 + len(plan['directions']) + 3*len(plan['issuers']) if plan['issuers'] else 0
     if reference_inputs is not None:
         planned_codes = {r['thscode'] for r in plan['issuers']}
         if (set(reference_inputs['windows']) - planned_codes
@@ -382,7 +379,12 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
             row['excluded_reasons'].append('RISK_OR_NEW_LISTING_NAME_LABEL')
             rows.append(row); continue
         response = get(STOCK_HISTORY, _history_params(code, state.sessions))
-        path = _stock_path(state, code, response, at=at(), references=reference_inputs)
+        quote = actions = None
+        if reference_inputs is None:
+            quote = get(own_stock.SNAPSHOT, {'thscodes':code})
+            actions = get(own_stock.ACTIONS, own_stock.action_params(code,state.sessions))
+        path = _stock_path(state, code, response, at=at(), references=reference_inputs,
+                           quote=quote, actions=actions)
         row['stock_path'] = path
         row['market_comparison'] = {n: {'stock_return': value, 'benchmark_return': bret[n],
             'excess_return': value - bret[n]} for n, value in path['returns'].items()}
@@ -410,7 +412,8 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if not row['eligible_nodes']:
             reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
         row['eligible_for_shadow_reading'] = not reasons
-        row['status'] = 'QUALIFIED_SYNTHETIC_READING' if not reasons else 'CONDITIONS_NOT_MET'
+        row['status'] = ('QUALIFIED_SYNTHETIC_READING' if reference_inputs is not None else
+                         'CONTRACT_CHECKED_RAW_READING') if not reasons else 'CONDITIONS_NOT_MET'
         rows.append(row)
     rows = _plain(rows)
     selected = _select(rows, plan['node_order'])
@@ -429,7 +432,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         'source_event_status': ('RECORDED_SECTOR_EVENTS_PRESENT' if plan['recorded_sector_events_latest_session']
                                 else 'NO_NEW_RECORDED_SECTOR_EVENT_NOT_NO_STOCK_OPPORTUNITY'),
         'fresh_context_revalidated': bool(plan['issuers']),
-        'reference_input_provenance': reference_inputs['provenance'] if reference_inputs else 'UNAVAILABLE',
+        'reference_input_provenance': reference_inputs['provenance'] if reference_inputs else HITHINK_RAW,
         'reference_input_hash': canonical_hash(reference_inputs) if reference_inputs else None,
         'live_stock_qualification': 'NOT_ESTABLISHED',
         'current_member_union_count': len(identities),
@@ -453,7 +456,7 @@ def render_stock_reading(report: dict) -> str:
             or p['policy'] != POLICY or any(p[k] != v for k, v in LIMITS.items())
             or len(codes) > 3 or len(codes) != len(set(codes))
             or p['status'] not in STATUS_LABELS
-            or (codes and p['reference_input_provenance'] != SYNTHETIC_REFERENCES)):
+            or (codes and p['reference_input_provenance'] not in {SYNTHETIC_REFERENCES,HITHINK_RAW})):
         raise ValueError('stock reading identity or authority differs')
     e = lambda x: escape(str(x), quote=True)
     pct = lambda x: f'{Decimal(x)*100:+.2f}%'
@@ -475,11 +478,13 @@ def render_stock_reading(report: dict) -> str:
         parts += [f'<article><h2>{e(row["company_name"])} <small>{e(row["thscode"])}</small></h2>',
             '<p><strong>为什么值得进一步看：</strong>当前有关联的强势方向及留存业务依据；个股5日上涨并跑赢基准，20日跑赢基准及至少一个相关行业。只是固定试行观察条件，未证明投资价值。</p>',
             f'<p>原始收盘价 <strong>{e(path["last_close"])} CNY</strong>；当日原始价格变化 {pct(path["daily_raw_return"])}。</p>',
-            '<div class="scroll"><table><tr><th>窗口</th><th>股票原始收益</th><th>沪深300收益</th><th>超额收益</th></tr>']
+            '<div class="scroll"><table><tr><th>窗口</th><th>个股原始价格变化</th><th>沪深300价格变化</th><th>变化率差</th></tr>']
         for n in ('5', '20', '60'):
             values = row['market_comparison'][n]
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (n+'日',pct(values['stock_return']),pct(values['benchmark_return']),pct(values['excess_return'])))+'</tr>')
         parts += ['</table></div><p><small>61个完成交易日；未复权原始价格变化，非含分红总回报；60日只展示，不参与门槛。当前成员不倒灌历史。</small></p>']
+        if p['reference_input_provenance'] == HITHINK_RAW:
+            parts.append('<p class="notice">本版仅原始收盘价路径观察：已核对当前快照前收及量额，窗口内有已报告公司行为则不展示。事件接口未报告不等于所有公司行为已被独立排除；没有逐日历史前收核验，不声称复权表现或投资者总回报。</p>')
         for origin in row['current_origins']:
             c = origin['company']
             sources = [s for s in origin['direction_sources'] if s['thscode'] in origin['current_member_sectors']]

@@ -1,4 +1,4 @@
-"""Counterexamples migrated from local B; real source qualification is not mocked into existence."""
+"""Counterexamples migrated from local B; reference fixtures are not live evidence."""
 import copy
 from datetime import timedelta
 from pathlib import Path
@@ -18,23 +18,24 @@ def offline(monkeypatch):
     prohibit_network(monkeypatch)
 
 
-def test_no_reference_source_is_a_gap_not_a_qualified_raw_return():
-    state,_,_,plan,response,_=prepared()
+def test_missing_supplied_reference_cannot_be_certified_as_independent_reference():
+    state,_,_,plan,_,_=prepared()
+    code=plan['issuers'][0]['thscode']
     with pytest.raises(stock.StockReadingInputError) as exc:
-        stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW)
+        stock._qualify_references(code,state.sessions[-61:],{},None,NOW)
     assert exc.value.category=='DATA_INSUFFICIENT'
     assert exc.value.reason_code=='QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE'
 
 
-def test_undocumented_prev_price_in_raw_response_does_not_create_a_live_contract():
-    state,_,_,plan,response,_=prepared()
+def test_undocumented_prev_price_does_not_replace_required_current_quote():
+    from test_hithink_stock_reading_integration import contract_provider
+    state,plan,response,_=contract_provider(missing_quote=True)
     def changed(path,params):
         body=response(path,params)
         if path==stock.STOCK_HISTORY:
-            for row in body['data']['item']:
-                row['prev_price']='1'
+            for row in body['data']['item']:row['prev_price']='1'
         return body
-    with pytest.raises(stock.StockReadingInputError,match='REFERENCE_HISTORY_UNAVAILABLE'):
+    with pytest.raises(stock.StockReadingInputError,match='REQUIRED_INPUT_OR_FIELD_MISSING'):
         stock.observe_stock_reading(plan,state,request_json=changed,observed_at=NOW)
 
 
@@ -79,11 +80,13 @@ def test_reference_and_source_origin_cannot_be_relabelled_live_before_requests(t
     assert not calls and not out.exists()
 
 
-def test_missing_live_reference_produces_rebuildable_negative_page(tmp_path):
-    mod,_,out,calls,_,run=setup(tmp_path)
-    r=run(reference_inputs=None,provenance=mod['PUBLIC'],credential='dummy-secret')
+def test_missing_current_quote_produces_rebuildable_negative_page(tmp_path):
+    from test_hithink_stock_reading_integration import contract_provider
+    mod,_,out,_,_,run=setup(tmp_path)
+    _,_,provider,calls=contract_provider(missing_quote=True)
+    r=run(reference_inputs=None,transport=provider,provenance=mod['PUBLIC'],credential='dummy-secret')
     assert r['status']==mod['FAILED'] and r['failure_category']=='DATA_INSUFFICIENT'
-    assert r['reason_code']=='QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE'
+    assert r['reason_code']=='REQUIRED_INPUT_OR_FIELD_MISSING'
     assert any(path==stock.STOCK_HISTORY for path,_ in calls)
     assert not (out/'stock-reading.json').exists()
     assert not (out/'synthetic-reference-inputs.json').exists()
@@ -105,8 +108,10 @@ def test_http_success_with_business_failure_is_request_failure(tmp_path):
 
 
 def test_negative_page_cannot_be_rehashed_into_success_or_renamed_plan(tmp_path):
+    from test_hithink_stock_reading_integration import contract_provider
     mod,_,out,_,_,run=setup(tmp_path)
-    run(reference_inputs=None)
+    _,_,provider,_=contract_provider(missing_quote=True)
+    run(reference_inputs=None,transport=provider)
     r=mod['read'](out/'capture.json')
     r['planned_issuer_outcomes'][0]['company_name']='invented company'
     (out/'index.html').write_bytes(mod['failure_page'](r))

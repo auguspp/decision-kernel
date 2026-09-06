@@ -1,8 +1,8 @@
-"""One bounded stock reading attempt, with credential-free positive/negative replay.
+"""One bounded HiThink stock reading attempt, with credential-free replay.
 
-No producer, fallback price, RSS or state writes. Original A artifact binding is
-retained. Local B normalized references remain explicitly synthetic: they are not
-a real source adapter and cannot be passed to a LIVE_HITHINK capture.
+No producer, fallback provider, RSS or state writes. Original artifact binding is
+retained. Supplied B daily-reference fixtures remain test-only. The actual path
+uses HiThink own dated bars, latest quote and reported-action checks.
 """
 from __future__ import annotations
 
@@ -18,20 +18,22 @@ from pathlib import Path
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import stock_radar_reading as stock
 from decision_kernel.runtime import theme_radar_probe as probe
-from decision_kernel.runtime import hithink_http
+from decision_kernel.runtime import hithink_stock_reading
 from decision_kernel.runtime.economic_release_inputs import load_release_inputs
 from decision_kernel.runtime.economic_market_context import build_economic_market_context
 from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorRadarAuditError
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
-VERSION = 'stock-reading-capture-replay-v1'
+VERSION = 'stock-reading-capture-replay-v2'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
 REASONS = {
+    'CURRENT_QUOTE_HISTORY_MISMATCH': '当前快照与个股最新完成交易日的价格或量额不一致；不选较接近的一边，也不添加容差。',
+    'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该不完整尝试的股票卡片。',
     'UNPRICED_OR_NONTRADING_SESSION_IN_PATH': '个股窗口中存在无有效成交的交易日；不是已确认停牌或退市，不用前值补齐历史。',
     'PROVIDER_BUSINESS_REQUEST_FAILED': '供应商返回业务失败码；HTTP成功不等于本次数据请求成功。原响应通过安全检查后单独保留。',
-    'QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE': '已取得的个股历史不能提供独立且口径合格的逐日前收参考价。不得复制昨日收盘补字段；真实参考价来源尚未建立。',
+    'QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE': '所供独立逐日前收参考价测试输入缺失；不能从昨日收盘补字段。此检查不是HiThink原始价格观察必须新增第二家供应商的理由。',
     'REFERENCE_WINDOW_OR_CURRENT_QUOTE_MISSING': '独立的61日参考价窗口或同日当前报价不完整。',
     'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED': '必须有该股票自己的连续61个明确完成交易日；不丢日、不填值、不用行业收益或10日dump替代。',
     'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW': '原始前收参考价与上一日真实收盘不连续；保留公司行为／口径问题，不自动复权或加容差。',
@@ -107,7 +109,7 @@ def page(report, provenance):
     result = stock.render_stock_reading(report)
     notice = ('合成验收样本：公司名可能来自真实留存资料，成员、行情和参考价是测试数据，不是实际选股。'
               if provenance == SYNTHETIC else
-              '本次 HiThink 数据读取；公司资料是留存摘录，未重新取得公司原文。真实个股资格仍以逐项输入检查为准。')
+              '本次 HiThink 数据读取；公司资料是留存摘录，未重新取得公司原文。原始价格观察不是复权或总回报认证。')
     return result.replace('<h1>', '<p class="notice">'+notice+'</p><h1>',1).encode('utf-8')
 
 
@@ -127,8 +129,6 @@ def failure_details(exc):
 
 def failure_page(report):
     """A failed attempt is a readable first screen, never a successful empty scan."""
-    # Capture has datetime objects; replay has canonical JSON strings.
-    # Render the identical normalized representation on both paths.
     report = stock._plain(report)
     e = lambda value: escape(str(value), quote=True)
     reason = report['reason_code']
@@ -211,11 +211,10 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
                 try:
                     value=transport(path,params)
                 except (ValueError,RuntimeError,OSError,TypeError) as exc:
-                    # Existing transport wraps HTTPError. Retain only numeric status,
-                    # never exception strings, response bodies, headers or signed URLs.
                     cause = exc.__cause__ or exc
-                    status=getattr(cause,'code',getattr(cause,'http_status',None))
-                    if type(status) is int:entry['http_status']=status
+                    status=getattr(cause,'http_status',None)
+                    if type(status) is not int:status=getattr(cause,'code',None)
+                    if type(status) is int and 100 <= status <= 599:entry['http_status']=status
                     raise StockRequestFailure('TRANSPORT_REQUEST_FAILED') from None
                 entry['received_at']=now();clock(entry['received_at'])
                 try:
@@ -399,7 +398,7 @@ def main(argv=None):
                     key=os.environ.get('HITHINK_FINANCE_API_KEY','')
                     value=capture(Path(os.environ['GITHUB_WORKSPACE']),root/'market',root/'reading',
                         observed_at=datetime.now(timezone.utc),workflow=request['workflow'],provenance=PUBLIC,credential=key,
-                        transport=lambda p,q:hithink_http._request_hithink_json(api_key=key,path=p,params=q,timeout_seconds=15))
+                        transport=lambda p,q:hithink_stock_reading.request_json(api_key=key,path=p,params=q))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')
                     value=verify(root/'reading');write(root/'verification.json',value)
