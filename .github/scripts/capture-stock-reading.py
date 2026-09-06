@@ -28,7 +28,14 @@ ROOT = Path('stock-reading-run')
 VERSION = 'stock-reading-capture-replay-v2'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
+NOT_STARTED = 'STOCK_READING_NOT_STARTED'
+INTENT_REASONS = {
+    'STOCK_MARKET_RUN_ID_REQUIRED': '选择 stock-reading 时必须填写 stock-market-run-id：请输入要使用的、已成功的 sector-radar-shadow 运行编号，不是本次股票任务编号。',
+    'STOCK_MARKET_RUN_ID_INVALID': 'stock-market-run-id 必须是一个完整的正整数运行编号，不能填 latest、网址、前后空格或其他文字。',
+    'STOCK_MARKET_RUN_ID_IS_CURRENT_RUN': 'stock-market-run-id 不能是本次股票任务自身；必须明确选择已成功的 Sector 输入运行。',
+}
 REASONS = {
+    **INTENT_REASONS,
     'HISTORY_READY_AFTER_ACTUAL_RECEIPT': '个股历史就绪时间晚于该响应实际接收时间；后续请求经过的时间不能修复这次未来时钟。',
     'CURRENT_QUOTE_HISTORY_MISMATCH': '当前快照与个股最新完成交易日的价格或量额不一致；不选较接近的一边，也不添加容差。',
     'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该不完整尝试的股票卡片。',
@@ -353,9 +360,56 @@ def intent(env, at):
     wf=sibling('capture-theme-probe.py')['workflow_identity'](env)
     if env.get('GITHUB_EVENT_NAME')!='workflow_dispatch' or env.get('TRIAL_PURPOSE')!='stock-reading':
         raise ValueError('stock reading requires explicit manual intent')
-    run=sibling('prepare-native-rss-successor.py')['number'](env.get('STOCK_MARKET_RUN_ID',''))
-    if run==wf['GITHUB_RUN_ID']:raise ValueError('cannot use this execution as its own input')
+    raw=env.get('STOCK_MARKET_RUN_ID','')
+    if isinstance(raw,str) and not raw.strip():
+        raise stock.StockReadingInputError('DATA_INSUFFICIENT','STOCK_MARKET_RUN_ID_REQUIRED')
+    try:
+        run=sibling('prepare-native-rss-successor.py')['number'](raw)
+    except (ValueError,TypeError):
+        raise stock.StockReadingInputError('DATA_QUALIFICATION_FAILED','STOCK_MARKET_RUN_ID_INVALID') from None
+    if run==wf['GITHUB_RUN_ID']:
+        raise stock.StockReadingInputError('DATA_QUALIFICATION_FAILED','STOCK_MARKET_RUN_ID_IS_CURRENT_RUN')
     return {'workflow':wf,'market_run_id':run,'prepared_at':at,'semantics':stock.SEMANTICS}
+
+
+def initialize(root, env, at):
+    """Retain safe intent diagnostics without inventing a scan or input binding."""
+    probe._safe_path(root)
+    try:
+        value=intent(env,at)
+    except stock.StockReadingInputError as exc:
+        if exc.reason_code not in INTENT_REASONS:
+            raise
+        # intent checked the workflow first. Keep only that validated allowlist,
+        # never the raw invalid field or the environment/credentials.
+        value={'status':NOT_STARTED,'phase':'INTENT_VALIDATION',
+            'reason_code':exc.reason_code,'failure_category':exc.category,
+            'message':INTENT_REASONS[exc.reason_code], 'recorded_at':at,
+            'workflow':sibling('capture-theme-probe.py')['workflow_identity'](env),
+            'market_run_id':None,'market_requests':0,'stock_scan_completed':False,
+            'remote_upload_verified':False,**stock.LIMITS}
+        root.mkdir(exist_ok=False)
+        write(root/'preflight.json',value)
+        explanation=(value['message']+'\n\n'
+            '本次仅在输入校验阶段停止：未绑定行情状态，未调用 HiThink，未执行股票扫描。'
+            '不是成功零匹配，也不是行情认证失败或真实数据资格验收。'
+            '没有使用 latest 或 bootstrap 替代输入。请修正参数后发起新的 Run workflow，不使用 Re-run jobs。\n'
+            'SHADOW OBSERVATION ONLY; HUMAN ATTENTION / RESEARCH / INVESTMENT AUTHORITY = NONE\n')
+        with (root/'README.txt').open('x',encoding='utf-8') as stream:
+            stream.write(explanation)
+        with (root/'index.html').open('x',encoding='utf-8') as stream:
+            stream.write('<!doctype html><html lang="zh-CN"><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; base-uri \'none\'">'
+                '<title>股票读取未开始</title><h1>股票读取未开始</h1><p>'
+                +escape(explanation).replace('\n','<br>')+'</p></html>\n')
+        with open(env['GITHUB_OUTPUT'],'a') as stream:
+            stream.write('artifact_ready=true\n')
+        return value
+    root.mkdir(exist_ok=False);write(root/'request.json',value)
+    with open(env['GITHUB_OUTPUT'],'a') as stream:
+        stream.write('artifact_ready=true\nmarket_run_id='+value['market_run_id']+'\n')
+    return value
 
 
 def binding(root, request):
@@ -383,9 +437,7 @@ def main(argv=None):
     try:
         probe._safe_path(root)
         if args.mode=='init':
-            value=intent(os.environ,datetime.now(timezone.utc).isoformat())
-            root.mkdir(exist_ok=False);write(root/'request.json',value)
-            with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('market_run_id='+value['market_run_id']+'\n')
+            value=initialize(root,os.environ,datetime.now(timezone.utc).isoformat())
         else:
             request=read(root/'request.json')
             if request['workflow']!=sibling('capture-theme-probe.py')['workflow_identity'](os.environ):
@@ -408,7 +460,7 @@ def main(argv=None):
             with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
                 f.write('## 股票观察：'+stock.STATUS_LABELS[value['failure_category']]+'\n\n'
                     +REASONS[value['reason_code']]+'\n\n不是成功空名单。附件内 reading/index.html 为本次可读缺口页。\n')
-        return 2 if value.get('status') in {FAILED,'RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'} else 0
+        return 2 if value.get('status') in {FAILED,NOT_STARTED,'RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'} else 0
     except (ValueError,RuntimeError,OSError,KeyError,TypeError) as exc:
         category,reason,_=failure_details(exc)
         print(canonical_json({'status':'STOCK_READING_UNAVAILABLE','error_type':type(exc).__name__,

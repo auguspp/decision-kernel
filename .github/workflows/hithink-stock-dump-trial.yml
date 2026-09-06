@@ -9,7 +9,7 @@ on:
         options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading]
         default: stock-dump
       stock-market-run-id:
-        description: Stock reading only - exact successful Sector state run; no bootstrap or latest-state fallback
+        description: '选 stock-reading 时必填：已成功的 sector-radar-shadow 运行编号；不是本次股票编号，无 latest 或 bootstrap 回退'
         type: string
         default: ''
       native-feed-run-id:
@@ -184,13 +184,13 @@ jobs:
         run: python .github/scripts/capture-stock-reading.py capture --root "$RUNNER_TEMP/stock-reading-run" > "$RUNNER_TEMP/stock-reading-run/operation.json"
       - name: Rebuild stock selection without credentials
         id: stock-verify
-        if: always()
+        if: always() && (steps.stock-capture.outcome == 'success' || steps.stock-capture.outcome == 'failure')
         env:
           HITHINK_FINANCE_API_KEY: ''
         run: python .github/scripts/capture-stock-reading.py verify --root "$RUNNER_TEMP/stock-reading-run"
       - name: Retain stock page and exact evidence including failures
         id: stock-evidence
-        if: always()
+        if: always() && steps.stock-intent.outputs.artifact_ready == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: stock-reading-${{ github.run_id }}-${{ github.run_attempt }}
@@ -213,7 +213,12 @@ jobs:
           lines = ['## 股票观察 · 可展开看的对象', 'SHADOW ONLY；不是买入建议或 canonical Inbox 推送。']
           success = all(os.environ[k] == 'success' for k in ('UPLOAD_RESULT','CAPTURE_RESULT','VERIFY_RESULT'))
           report = root/'reading/stock-reading.json'
-          if success and report.is_file():
+          preflight = root/'preflight.json'
+          if preflight.is_file():
+              p = json.loads(preflight.read_text())
+              lines += [p['message'], '输入校验未通过；采集未开始，未调用 HiThink。不是扫描后零匹配。',
+                        '失败诊断见附件根目录 index.html / preflight.json；修正参数后使用新的 Run workflow，不重跑旧任务。']
+          elif success and report.is_file():
               p = json.loads(report.read_text())['projection']
               lines += [f"行情交易日 {p['market_session']}；已接入业务依据范围内 {len(p['surfaced_stocks'])} 只通过观察条件。"]
               for row in p['surfaced_stocks']:
@@ -226,7 +231,7 @@ jobs:
               lines += ['本次未形成可发布的股票结果。请看失败步骤，不用空名单冒充扫描成功。']
           lines += [f"采集 {os.environ['CAPTURE_RESULT']}；重建 {os.environ['VERIFY_RESULT']}；上传 {os.environ['UPLOAD_RESULT']}。"]
           if os.environ['UPLOAD_RESULT'] == 'success' and os.environ['ARTIFACT_URL']:
-              lines += [f"[本次股票阅读与审计附件]({os.environ['ARTIFACT_URL']})"]
+              lines += [f"[本次股票阅读／失败诊断附件]({os.environ['ARTIFACT_URL']})"]
           lines += ['不使用未通过资格的全市场 dump；没有生产状态、候选账本或 Human / Research / Investment authority 变更。']
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write('\n\n'.join(lines)+'\n')
           PY
