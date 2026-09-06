@@ -27,10 +27,11 @@ def test_native_inputs_reach_shell_through_validated_outputs_not_code_interpolat
     assert 'MARKET_RUN: ${{ steps.intent.outputs.market_run_id }}' in job
     assert 'test -n "$MARKET_RUN"' in job
     assert '${{ inputs.native-feed-run-id }}' not in job.split('run: python .github/scripts/native-feed-acceptance.py init', 1)[1]
-    assert job.count('digest-mismatch: error') == 2
-    assert job.count('uses: actions/download-artifact@v8') == 2
+    assert job.count('digest-mismatch: error') == 3
+    assert job.count('uses: actions/download-artifact@v8') == 3
     assert 'artifact-ids: ${{ steps.source-meta.outputs.artifact_id }}' in job
     assert 'artifact-ids: ${{ steps.market-meta.outputs.artifact_id }}' in job
+    assert 'artifact-ids: ${{ steps.history-meta.outputs.artifact_id }}' in job
 
 
 def test_no_market_secret_or_catalog_access_precedes_source_qualification():
