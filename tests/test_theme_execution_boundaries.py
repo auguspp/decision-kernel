@@ -72,7 +72,8 @@ def test_response_safety_is_checked_before_retention_and_before_next_request(tmp
     assert execute.verify_execution(output)['market_stage_succeeded'] is False
 
 
-@pytest.mark.parametrize('raw', [None, 'not bytes', b'', b' ' * (probe.MAX_INPUT_BYTES + 1) + b'{}'])
+@pytest.mark.parametrize('raw', [None, 'not bytes', b'', b' ' * (probe.MAX_INPUT_BYTES + 1) + b'{}'],
+                         ids=['none', 'text', 'empty', 'oversized'])
 def test_market_decode_applies_original_body_bound_before_json(raw):
     with pytest.raises(ValueError):
         execute._decode(raw)
