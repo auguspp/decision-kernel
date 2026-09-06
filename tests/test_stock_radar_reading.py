@@ -26,6 +26,24 @@ def offline(monkeypatch):
     prohibit_network(monkeypatch)
 
 
+def synthetic_references(state, codes, *, kind=None):
+    """Explicit independent TEST fixtures, never a provider field or origin proof."""
+    windows, latest = {}, {}
+    for code in codes:
+        rows=[]
+        for i,day in enumerate(state.sessions[-61:]):
+            close=Decimal(100-i) if kind=='falling' else Decimal(10)+Decimal('0.5')*i
+            previous=close+1 if kind=='falling' else close-Decimal('0.5')
+            rows.append({'thscode':code,'market_session':day.isoformat(),
+                'captured_at':datetime.combine(day,datetime.min.time(),tzinfo=stock.SHANGHAI_TZ).replace(hour=15,minute=30).isoformat(),
+                'last_price':str(close),'prev_price':str(previous),
+                'volume':'0' if kind=='zero_volume' and i==60 else '100',
+                'turnover':'0' if kind=='zero_turnover' and i==60 else str(10000+i*10)})
+        windows[code]=rows
+        latest[code]={**copy.deepcopy(rows[-1]),'captured_at':NOW.isoformat()}
+    return {'provenance':stock.SYNTHETIC_REFERENCES,'windows':windows,'latest_quotes':latest}
+
+
 def prepared():
     raw = gzip.decompress((ROOT/'radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz').read_bytes()).decode()
     state = parse_sector_radar_market_state(raw)
@@ -55,12 +73,13 @@ def prepared():
     return state, ledger, association, plan, response, calls
 
 
-def observe(change=None):
+def observe(change=None, *, reference_kind=None):
     state, ledger, association, plan, response, calls = prepared()
     def altered(path, params):
         result = response(path,params)
         return change(path, params, result) if change else result
-    result = stock.observe_stock_reading(plan,state,request_json=altered,observed_at=NOW)
+    refs=synthetic_references(state,[r['thscode'] for r in plan['issuers']],kind=reference_kind)
+    result = stock.observe_stock_reading(plan,state,request_json=altered,observed_at=NOW,reference_inputs=refs)
     return result, plan, calls
 
 
@@ -74,20 +93,23 @@ def test_original_gates_and_business_sources_produce_actual_stock_cards_not_sect
     assert '600999.SH' in [r['thscode'] for r in p['unreviewed_current_members']]
     assert p['market_state_writes']==p['events_created']==0 and p['recommendation'] is None
     assert p['scope']=='CURATED_LINKS_ONLY_NOT_A_BLIND_ALL_STOCK_SCREEN'
+    assert p['reference_input_provenance']=='SYNTHETIC_TEST_ONLY'
+    assert p['live_stock_qualification']=='NOT_ESTABLISHED'
     assert not p['business_benefit_established']
     assert all(r['stock_path']['history_session_count']==61 for r in p['surfaced_stocks'])
     assert len(calls)<=plan['maximum_request_count']<=26
     m=next(r for r in p['surfaced_stocks'] if r['thscode']=='002714.SZ')
     assert Decimal(m['market_comparison']['20']['stock_return'])==Decimal(40)/Decimal(30)-1
-    assert len(m['sector_comparisons'])==2  # broad and granular remain separate, one ticker card
+    assert len(m['sector_comparisons'])==2
     assert m['current_origins'][0]['company']['basis'][0]['evidence']['replayability_level']=='PARTIAL'
 
 
 def test_source_and_sector_objects_are_not_modified():
     state,ledger,a,plan,response,_=prepared()
-    before=serialize_sector_radar_market_state(state),canonical_json(a),canonical_json(plan)
-    stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW)
-    assert before==(serialize_sector_radar_market_state(state),canonical_json(a),canonical_json(plan))
+    refs=synthetic_references(state,[r['thscode'] for r in plan['issuers']])
+    before=serialize_sector_radar_market_state(state),canonical_json(a),canonical_json(plan),canonical_json(refs)
+    stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)
+    assert before==(serialize_sector_radar_market_state(state),canonical_json(a),canonical_json(plan),canonical_json(refs))
     assert ledger.events==()
 
 
@@ -140,7 +162,12 @@ def test_explicit_stock_exclusions_are_not_beneficiary_inference(kind):
             elif kind=='falling':
                 for i,r in enumerate(result['data']['item']):r['close_price']=str(100-i)
         return result
-    result,_,calls=observe(change)
+    if kind in {'zero_volume','zero_turnover'}:
+        with pytest.raises(stock.StockReadingInputError,match='NONTRADING') as exc:
+            observe(change,reference_kind=kind)
+        assert exc.value.category=='DATA_INSUFFICIENT'
+        return
+    result,_,calls=observe(change,reference_kind=kind)
     p=result['projection']
     assert not p['surfaced_stocks'] and p['status']=='NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE'
     assert all(r['excluded_reasons'] for r in p['all_stock_observations'])
@@ -195,7 +222,8 @@ def test_stock_first_page_exposes_business_limits_price_windows_and_full_scope()
     assert soup.find('h1').get_text().startswith('股票观察')
     assert len(soup.find_all('article'))==len(result['projection']['surfaced_stocks'])
     text=soup.get_text()
-    for word in ('牧原股份','5日','20日','60日','PARTIAL','不是全 A 股盲选','未复权','公司依据','不倒灌历史'):
+    for word in ('牧原股份','5日','20日','60日','PARTIAL','不是全 A 股盲选','未复权','公司依据','不倒灌历史',
+                 '为什么值得进一步看','风险／缺口','下一步核查','仍强势阅读，非新事件','SYNTHETIC_TEST_ONLY'):
         assert word in text
     assert soup.find('script') is soup.find('iframe') is None
     result['projection']['surfaced_stocks'][0]['company_name']='<script>alert(1)</script>'

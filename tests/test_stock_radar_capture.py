@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from decision_kernel.identity import canonical_hash
 from decision_kernel.runtime.sector_parent_hints import load_sector_parent_hints
 from decision_kernel.runtime.sector_radar_persistence import write_sector_radar_persistent_bundle
-from test_stock_radar_reading import prepared, ROOT, NOW
+from test_stock_radar_reading import prepared, ROOT, NOW, synthetic_references
 from test_sector_radar_audit import prohibit_network
 from test_native_feed_acceptance import environment, remote
 
@@ -40,7 +40,9 @@ def setup(tmp_path):
     out=tmp_path/'reading';clock=iter(NOW+timedelta(seconds=i*21) for i in range(100));pauses=[]
     def run(**kwargs):
         return mod['capture'](ROOT,state_dir,out,observed_at=NOW,transport=kwargs.pop('transport',response),
-            workflow={'test':'synthetic'},now=kwargs.pop('now',lambda:next(clock)),pause=pauses.append,**kwargs)
+            workflow={'test':'synthetic'},now=kwargs.pop('now',lambda:next(clock)),pause=pauses.append,
+            reference_inputs=kwargs.pop('reference_inputs',synthetic_references(state,[r['thscode'] for r in plan['issuers']])),
+            **kwargs)
     return mod,state_dir,out,calls,pauses,run
 
 
@@ -69,7 +71,8 @@ def test_source_copy_is_sufficient_for_replay_without_original_state_directory(t
 
 
 @pytest.mark.parametrize('name',['stock-reading.json','index.html','plan.json','association.json','responses/01.json',
-    'inputs/state/market-state.json','inputs/radar_inputs/company-evidence/002714-muyuan-h1-2026-09-06.json'])
+    'inputs/state/market-state.json','inputs/radar_inputs/company-evidence/002714-muyuan-h1-2026-09-06.json',
+    'synthetic-reference-inputs.json'])
 def test_modified_bytes_cannot_be_published_as_stock_results(tmp_path,name):
     mod,_,out,_,_,run=setup(tmp_path);assert run()['status']==mod['COMPLETE']
     p=out/name;p.write_bytes(p.read_bytes()+b'\n')
@@ -94,8 +97,10 @@ def test_first_transport_failure_preserves_attempt_not_an_empty_stock_success(tm
     def fail(*args):attempts.append(args);raise RuntimeError('secret-like text must not be kept')
     r=run(transport=fail)
     assert r['status']==mod['FAILED'] and len(attempts)==1 and pauses==[]
-    assert not (out/'index.html').exists() and not (out/'stock-reading.json').exists()
+    assert r['failure_category']=='REQUEST_FAILED'
+    assert (out/'index.html').exists() and not (out/'stock-reading.json').exists()
     assert 'secret-like text' not in (out/'capture.json').read_text()
+    assert '请求失败' in (out/'index.html').read_text()
     assert mod['verify'](out)['status']=='RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'
 
 
@@ -106,13 +111,15 @@ def test_unsafe_decoded_response_is_not_retained(tmp_path,value):
     assert r['status']==mod['FAILED'] and len(r['requests'])==1
     assert r['requests'][0]['response_file'] is None
     assert not (out/'responses').exists()
+    assert r['reason_code']=='UNSAFE_RESPONSE_NOT_RETAINED'
 
 
 def test_plan_timeout_before_first_request(tmp_path):
     mod,_,out,calls,pauses,run=setup(tmp_path)
     r=run(now=lambda:NOW+timedelta(minutes=31))
     assert r['status']==mod['FAILED'] and not calls and not r['requests']
-    assert not (out/'index.html').exists()
+    assert '时间' in (out/'index.html').read_text()
+    assert not (out/'stock-reading.json').exists()
 
 
 def test_timeout_after_response_retains_failed_attempt_and_stops(tmp_path):
@@ -168,7 +175,8 @@ def test_result_is_invariant_to_caller_decimal_context():
     from decimal import localcontext
     from decision_kernel.runtime import stock_radar_reading as stock
     state,_,_,plan,response,_=prepared()
-    normal=stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW)
+    refs=synthetic_references(state,[r['thscode'] for r in plan['issuers']])
+    normal=stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)
     with localcontext() as context:
         context.prec=12
-        assert stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW)==normal
+        assert stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)==normal

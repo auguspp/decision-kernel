@@ -20,7 +20,7 @@ def test_dump_trial_runs_only_reviewed_main_and_has_no_state_lane():
 
 def test_secret_is_only_in_acquisition_step_and_optional_libraries_are_installed():
     text = WORKFLOW.read_text(encoding="utf-8")
-    stock = text.split("  theme-probe:\n", 1)[0]
+    stock = text.split("  inspect:\n", 1)[1].split("  stock-reading:\n", 1)[0]
     acquisition = stock.split("- name: Acquire one recent dump", 1)[1].split("- name: Repeat row inspection", 1)[0]
     assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in acquisition
     assert stock.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
