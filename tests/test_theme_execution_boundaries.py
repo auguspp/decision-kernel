@@ -131,11 +131,25 @@ def test_response_clock_reversal_stops_following_requests(tmp_path):
         execute.verify_execution(output)
 
 
-def test_last_valid_weekend_seconds_remain_usable(tmp_path):
+def test_last_valid_weekend_seconds_remain_usable(tmp_path, monkeypatch):
     _, output, calls, _, run = prepared(tmp_path)
+    failures = []
+
+    def inspected(check):
+        def wrapped(*args, **kwargs):
+            try:
+                return check(*args, **kwargs)
+            except ValueError as exc:
+                failures.append((check.__name__, str(exc)))
+                raise
+        return wrapped
+
+    # Diagnostics are confined to this synthetic positive case, never production.
+    monkeypatch.setattr(probe, '_window', inspected(probe._window))
+    monkeypatch.setattr(execute, '_decode', inspected(execute._decode))
     start = (AS_OF + timedelta(days=2)).replace(hour=23, minute=59, second=0)
     clock = iter(start + timedelta(seconds=i) for i in range(60))
     report = run(now=lambda: next(clock))
-    assert report['status'] == execute.COMPLETE, report['failure']
+    assert report['status'] == execute.COMPLETE, (report['failure'], failures, report['requests'])
     assert len(calls) == 7
     assert execute.verify_execution(output)['market_stage_succeeded'] is True
