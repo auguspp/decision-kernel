@@ -10,12 +10,9 @@ def test_discovery_workflow_is_manual_or_exact_main_code_change_only():
     assert "schedule:" not in raw and "pull_request:" not in raw and "workflow_run:" not in raw
     paths = raw.split("    paths:\n", 1)[1].split("\n\n", 1)[0]
     assert [line.strip()[2:] for line in paths.splitlines()] == [
-        ".github/workflows/economic-release-discovery.yml",
-        "src/decision_kernel/runtime/economic_release_discovery.py",
-        "src/decision_kernel/runtime/economic_release_inputs.py",
-        "radar_inputs/economic-node-study-2026-09-05.json",
-        "radar_inputs/economic-reviewed-releases/**",
+        "src/decision_kernel/runtime/radar_feed_intake.py",
     ]
+    assert "if: github.event_name == 'workflow_dispatch' && inputs.source-kind == 'economic-directories'" in raw
     assert '"$GITHUB_REF" != "refs/heads/main"' in raw
     assert "timeout-minutes: 5" in raw and "cancel-in-progress: false" in raw
 
@@ -71,5 +68,31 @@ def test_default_review_input_directory_exists_without_fabricated_acceptances():
     root = Path("radar_inputs/economic-reviewed-releases")
     assert root.is_dir()
     assert (root / ".gitkeep").read_bytes() == b""
-    # Future explicit source-bundle registrations may add directories, never drafts/loose JSON.
     assert all(p.name == ".gitkeep" or p.is_dir() for p in root.iterdir())
+
+
+def test_native_feed_parser_and_previous_artifact_are_mature_components_not_silent_reset():
+    raw = WORKFLOW.read_text()
+    rss = raw.split('  native-rss:\n',1)[1]
+    assert "pip install -e '.[feeds]'" in rss
+    assert 'uses: actions/download-artifact@v8' in rss and 'digest-mismatch: error' in rss
+    assert 'run-id: ${{ inputs.previous-run-id }}' in rss
+    assert 'name: radar-feed-intake-${{ inputs.previous-run-id }}-1' in rss
+    assert "r['status'] == 'completed' and r['conclusion'] == 'success'" in rss
+    assert 'gh api --method GET' in rss
+    assert 'EXPECTED_PREVIOUS_RUN_ID' in rss and '--previous previous-native-rss/capture' in rss
+    assert 'bool(previous) != baseline' in rss
+    assert 'default: false' in raw and 'default: economic-directories' in raw
+    names=['Validate explicit source registry lifecycle','Verify exact successful source predecessor','Restore that source artifact only',
+           'Read two native feeds once','Rebuild native intake','Retain native source attempt','Publish exact native source status']
+    assert [rss.index(x) for x in names] == sorted(rss.index(x) for x in names)
+
+
+def test_native_feed_source_step_has_no_github_or_business_token_and_failure_is_not_success():
+    raw=WORKFLOW.read_text(); rss=raw.split('  native-rss:\n',1)[1]
+    source=rss.split('- name: Read two native feeds once',1)[1].split('- name: Rebuild native intake',1)[0]
+    assert 'github.token' not in source and 'GH_TOKEN' not in source
+    assert "test \"$SOURCE_EVENT\" = push || test \"$BOOTSTRAP\" = true" in source
+    assert "os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success'" in rss
+    assert 'registry' not in rss.split('uses: actions/upload-artifact@v7',1)[1].split('- name: Publish',1)[0]
+    assert 'retention-days: 90' in rss and '没有自动寻找上一成功' in rss
