@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .
+        run: python -m pip install -e '.[discovery]'
       - name: Require main branch
         shell: bash
         run: |
@@ -103,6 +103,12 @@ jobs:
             --bundle decision-state/sector-radar \
             --parent-hints radar_inputs/sector-parent-hints-2026-09-05.json \
             --output sector-radar-run/context
+      - name: Package joint economic and company reading
+        id: joint-reading
+        if: success()
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+        run: python .github/scripts/build-sector-radar-reading.py
       - name: Upload complete run audit
         id: run-audit
         if: always()
@@ -132,6 +138,7 @@ jobs:
         env:
           REPLAY_OUTCOME: ${{ steps.replay-check.outcome }}
           CONTEXT_OUTCOME: ${{ steps.context-view.outcome }}
+          JOINT_OUTCOME: ${{ steps.joint-reading.outcome }}
           RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
           if [ -f sector-radar-run/operations.md ]; then
@@ -160,5 +167,15 @@ jobs:
             echo '该页只读取本次保存状态，不再获取行情，不新增提醒；页面不代替整个 workflow、状态上传和 cache 保存的成功证明。' >> "$GITHUB_STEP_SUMMARY"
           else
             echo '本次未能提供已上传的完整状态页面。请检查 Render read-only saved-state context 与 Upload complete run audit 步骤；不要使用旧页面冒充本次结果。' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo '### 行业—产业数据—公司依据 · 联合阅读' >> "$GITHUB_STEP_SUMMARY"
+          if [ "$JOINT_OUTCOME" = "success" ] && [ -n "$RUN_AUDIT_URL" ]; then
+            printf '[下载包含联合页面的本次附件](%s)\n\n' "$RUN_AUDIT_URL" >> "$GITHUB_STEP_SUMMARY"
+            echo '打开 `economic-company/index.html`；三份业务 JSON、`delivery.json` 与 `inputs.zip` 同目录保留。无需再运行采集工作流。' >> "$GITHUB_STEP_SUMMARY"
+            echo '只读既有经济记录与牧原／圆通依据；未验证最新发布、未重读公司 PDF，也不代表受益确认。输入截止不等于行情交易日。' >> "$GITHUB_STEP_SUMMARY"
+            echo '联合页面和输入副本不是恢复事实源。权威状态包与 cache 是否保存，仍看对应步骤；本地交付凭证不是上传成功证明。' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '本次没有已上传的联合页面；不要以旧页、现有单独行业页或计算成功摘要代替它。联合页生成失败将阻止本次权威状态与 cache 发布，失败审计仍保留。' >> "$GITHUB_STEP_SUMMARY"
           fi
           exit 0

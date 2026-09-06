@@ -8,13 +8,19 @@ Status: READ-ONLY HARNESS / RETAINED SOURCE INPUTS / NO BENEFICIARY SELECTION.
 
 This answers: which retained company fields are relevant to a proposed transmission mechanism; which business scope and period do they describe; what still needs evidence? It does not answer which stock will benefit or whether a current investment thesis is true. The independent 881/884 rankings and existing market events are not modified. No ranking, member list, ticker keyword or generic supply-chain graph creates a company link.
 
+## Joint reading in the existing Sector artifact — PR #238
+
+Read `docs/sector-radar-joint-reading-delivery.md`. The existing manual Sector workflow now packages this joint view after the mandatory replay and original industry context, explicitly selecting the livestock-v1 manifest. Its existing run artifact contains `economic-company/index.html`, the three original data JSON files, exact supplied inputs in `inputs.zip`, and a separate delivery receipt. No new workflow or data acquisition is added. The CLI's old v0 default remains unchanged.
+
+This is wiring and tested code, not yet a real dispatch/upload proof. Full CI does not replace the independent real next-session acceptance. As with the existing context step, failed joint generation keeps authoritative state/cache publication blocked and retains the failed audit. Copied inputs are only for reading reconstruction, never a new producer recovery source. Summary links require actual page-step and upload success; source originality, same-period confirmation and business-benefit limits remain unchanged.
+
 ## Additional original-page livestock case — explicit opt-in
 
 Read `docs/muyuan-livestock-evidence-2026-09-06.md` for the actual CNINFO capture and selected-page proof. Use `--company-links radar_inputs/economic-company-links-livestock-v1.json` with the same command below to display Muyuan alongside the preserved YTO inputs. The old default manifest stays unchanged; its historical no-livestock state is not retroactively rewritten.
 
 The new case uses existing EvidenceArtifacts in a bounded `radar_inputs/company-evidence/` container with exact company identity and first recording time, NOT a manufactured ResearchSnapshot. Acquisition precedes recording, then mapping preparation and input cutoff. No Kernel model was added. Financial table fields, company operating statements and targets retain different source-use roles; a reviewed range is not a model coefficient, and internal revenue elimination is not discarded. Capacity, current freshness, exposure magnitude and net benefit remain unestablished. The three subsets come from one original, not three independent sources.
 
-Its source PDF was actually acquired and selected pages visually checked once; subsequent page generation only reads frozen EXTRACTED_VALUES/PARTIAL inputs and does not reopen the PDF. Thus the renderer's `original_page_verified_this_run=false` is intentional. The original remains a 90-day Actions artifact, not perpetually stored by a derived JSON. Neither source-role labels nor hash matches certify financial truth or Human approval. This opt-in report has no automatic workflow publication.
+Its source PDF was actually acquired and selected pages visually checked once; subsequent page generation only reads frozen EXTRACTED_VALUES/PARTIAL inputs and does not reopen the PDF. Thus the renderer's `original_page_verified_this_run=false` is intentional. The original remains a 90-day Actions artifact, not perpetually stored by a derived JSON. Neither source-role labels nor hash matches certify financial truth or Human approval. The Sector workflow integration above does not certify a new original-page review.
 
 ## First bounded example: YTO, not a new company research conclusion
 
@@ -67,7 +73,7 @@ python -m decision_kernel.runtime.economic_company_context \
   --output ../economic-company-reading
 ```
 
-The output directory must be new and outside source/market input roots. Open `index.html` with `association.json`, `input-set.json` and `company-links.json` retained. There is no hosted site, remote asset, auto-fetch or telemetry. Clicking an explicit source link can open its original recorded locator. Reproduction requires the exact original source files and economic/market inputs, not only the derived report hashes. No workflow attachment or remote long-term retention was added.
+The output directory must be new and outside source/market input roots. Open `index.html` with `association.json`, `input-set.json` and `company-links.json` retained. There is no hosted site, remote asset, auto-fetch or telemetry. Clicking an explicit source link can open its original recorded locator. Reproduction requires the exact original source files and economic/market inputs, not only the derived report hashes. The separate workflow wrapper now packages those reading inputs as documented above; no long-term source retention service was added.
 
 ## Acceptance and remaining work
 
