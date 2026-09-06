@@ -42,3 +42,7 @@ The ZIP is a reading-input copy only; do not use it as a new production restore 
 Regression tests use the existing actual audited producer/replay and full joint CLI with mocked transport in temporary directories. They preserve computed candidate IDs across same-session, quiet append and candidate append. They test source-copy rebuilding, exact bytes and clocks, source failures, output cleanup and workflow ordering. Real company/excerpt inputs may be read, but synthetic market fixtures are never published as real prospective records.
 
 Before calling actual delivery proven, verify a fresh legitimate completed-session run, both HTML views and their state identities, download the combined artifact and replay its original inputs, then inspect authoritative state upload and cache save separately. Do not dispatch during an old session merely to manufacture another green badge. No new source acquisition or live Sector run is performed by merging this wiring-only PR.
+
+## Separate cross-industry theme experiment
+
+See `docs/theme-radar-probe-v0.md` for the independent offline concept path/current-overlap probe. It reuses existing adapters and calculation, caps selection at three concepts and six 881 coverage probes, leaves unknown/ambiguous members visible, and produces no theme rank, new event or company-benefit conclusion. It is NOT part of this workflow, artifact or restore chain; its synthetic tests do not establish real concept acquisition or change the Sector live acceptance status.
