@@ -302,3 +302,50 @@ def test_public_branch_full_scan_execution_and_export_keep_actual_failure(tmp_pa
     receipt=consumer.verify_scan(next((root/'history-export/history/scans').iterdir()))['receipt']
     assert receipt['acquisition_status']=='PLAN_NOT_EXECUTED'
     assert all(b'fake-test-key' not in raw for raw in contents(root/'history-export').values())
+    # A red market run with a verified history artifact can be the explicit parent.
+    # This simulates transfer; no GitHub request or artifact upload occurs in tests.
+    second=tmp_path/'next-run';second.mkdir()
+    shutil.copytree(root/'source',second/'source')
+    shutil.copytree(root/'history-export',second/'previous-history')
+    req2=mod['intent'](env_mode('continue',run='1000',prior='999',pin=publication['history_hash']),
+        (AS_OF+timedelta(minutes=12)).isoformat())
+    for kind in ('source','market'):
+        run_meta,listed=remote(kind)
+        for name,value in [(f'{kind}-run.json',run_meta),(f'{kind}-artifacts.json',listed),
+            (f'{kind}-binding.json',mod['metadata'](req2,kind,run_meta,listed))]:mod['write'](second/name,value)
+    shutil.copytree(root/'market',second/'market')
+    run_meta,listed=history_remote(req2,publication)
+    run_meta.update(conclusion='failure' if failed else 'success',updated_at=(AS_OF+timedelta(minutes=11)).isoformat())
+    for name,value in [('history-run.json',run_meta),('history-artifacts.json',listed),
+        ('history-binding.json',mod['metadata'](req2,'history',run_meta,listed))]:mod['write'](second/name,value)
+    mod['write'](second/'source-qualification.json',mod['qualify'](second,req2))
+    mod['write'](second/'history-preparation.json',mod['prepare_history'](second,req2))
+    options=mod['history_options'](second,req2);after=[]
+    def catalogs_only(path,params):
+        assert path==probe.CATALOG, 'no automatic retry of the historical plan'
+        after.append(path);return transport(path,params)
+    next_clock=iter(AS_OF+timedelta(minutes=12,seconds=25*i) for i in range(100))
+    continued=mod['trial'](second/'source/capture',state,second/'trial',batch_size=32,execute_market=False,
+        workflow=req2['workflow'],transport=catalogs_only,public_http=True,credential='fake-test-key',
+        now=lambda:next(next_clock),pause=lambda _:None,**options)
+    assert continued['status']=='NO_PENDING_SOURCE_SCAN' and len(after)==2
+    handoff=mod['read'](second/'trial/scan/handoff.json')
+    assert len(handoff['unexecuted_prior_plans'])==int(failed)
+    mod['write'](second/'verification.json',mod['verify_trial'](second/'source/capture',state,second/'trial',**options))
+    successor=mod['save_history'](second,req2,at=(AS_OF+timedelta(minutes=16)).isoformat())
+    h2=history.verify_history(second/'history-export/history')
+    assert successor['parent_history_hash']==publication['history_hash']
+    assert h2['scans']==h['scans'] and h2['executions']==h['executions']
+
+
+def test_history_cli_saves_only_after_checks_and_refuses_overwrite(tmp_path,monkeypatch):
+    root=tmp_path/'cli';mod,request=remote_root(root,monkeypatch)
+    for key,value in env_mode().items():monkeypatch.setenv(key,value)
+    monkeypatch.setenv('HITHINK_FINANCE_API_KEY','')
+    monkeypatch.setenv('GITHUB_OUTPUT',str(tmp_path/'outputs'))
+    assert mod['main'](['history-save','--root',str(root)])==0
+    publication=mod['read'](root/'history-export/publication.json')
+    assert 'history_hash='+publication['history_hash'] in (tmp_path/'outputs').read_text()
+    before=contents(root/'history-export')
+    assert mod['main'](['history-save','--root',str(root)])==2
+    assert contents(root/'history-export')==before
