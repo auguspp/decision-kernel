@@ -296,14 +296,26 @@ def render(registry, delta, exports):
     return ''.join(parts)
 
 
+class FeedResponseRejected(ValueError):
+    def __init__(self, reason):
+        self.reason = reason
+        super().__init__(reason)
+
+
 def check_response(response, feed_id):
     headers = _safe_headers(response.headers)
     _body_integrity(response.body, headers)
-    if (type(response.status) is not int or response.status != 200 or response.url != FEEDS[feed_id]
-            or len(response.body)>MAX_BODY
-            or headers.get('content-encoding', 'identity').lower() not in {'','identity'}
-            or headers.get('content-type','').split(';')[0].lower() not in {'application/rss+xml','application/atom+xml','application/xml','text/xml'}):
-        raise ValueError('unexpected official-feed HTTP response')
+    checks = [
+        (type(response.status) is not int or response.status != 200, 'HTTP_STATUS_NOT_200'),
+        (response.url != FEEDS[feed_id], 'RESPONSE_URL_MISMATCH'),
+        (len(response.body) > MAX_BODY, 'BODY_BYTE_BUDGET_EXCEEDED'),
+        (headers.get('content-encoding', 'identity').lower() not in {'','identity'}, 'UNSUPPORTED_CONTENT_ENCODING'),
+        (headers.get('content-type','').split(';')[0].strip().lower() not in
+            {'application/rss+xml','application/atom+xml','application/xml','text/xml'}, 'UNSUPPORTED_FEED_MEDIA_TYPE'),
+    ]
+    for rejected, reason in checks:
+        if rejected:
+            raise FeedResponseRejected(reason)
     return headers
 
 
@@ -318,7 +330,8 @@ def fetch_feed(feed_id):
             raise ValueError('feed byte budget exceeded')
         raw = response.read(MAX_BODY + 1); _body_integrity(raw, headers)
         result=PublicResponse(response.geturl(), response.status, headers, raw)
-        check_response(result, feed_id)
+        # Preserve bounded HTTP metadata in the attempt before checking its media contract.
+        # Qualification happens exactly once in capture; feedparser still sees only accepted bytes.
         return result
 
 
@@ -350,13 +363,17 @@ def capture(output, *, previous=None, bootstrap=False, context=None, transport=N
             try:
                 response = (transport or fetch_feed)(feed_id)
                 entry['received_at']=now().isoformat(); entry['status']=response.status
-                headers = check_response(response,feed_id)
-                entry['headers']=headers; name=feed_id+'.xml'; save(name,response.body); entry['body_file']=name
+                entry['headers'] = _safe_headers(response.headers)
+                entry['received_body'] = digest(response.body)
+                check_response(response,feed_id)
+                name=feed_id+'.xml'; save(name,response.body); entry['body_file']=name
                 windows[feed_id]={'raw':response.body,'requested_at':entry['requested_at'],'received_at':entry['received_at']}
             except (ValueError,OSError,RuntimeError) as exc:
                 entry['received_at']=entry['received_at'] or now().isoformat(); entry['error_type']=type(exc).__name__
                 status=getattr(exc,'code',getattr(exc,'http_status',None))
                 if type(status) is int: entry['status']=status
+                if isinstance(exc, FeedResponseRejected):
+                    entry['rejection_reason'] = exc.reason
                 raise
         recorded=now().isoformat(); receipt['recorded_at']=recorded
         registry,delta=advance(windows,recorded_at=recorded,previous=old,bootstrap=bootstrap)
