@@ -32,12 +32,12 @@ VERSION = 'nbs-native-feed-seen-versions-v0'
 FEEDPARSER_VERSION = '6.0.14'
 FEEDS = {'nbs-releases': 'https://www.stats.gov.cn/sj/zxfb/rss.xml',
          'nbs-interpretations': 'https://www.stats.gov.cn/sj/sjjd/rss.xml'}
-# Source-only resource review after the 4,207,576-byte declared NBS response.
-# Existing economic HTML/market limits and source/entry/consumer budgets do not change.
+# Reviewed against preserved publisher XML: 4.2/4.5 MB and 500 entries per feed.
+# This is a complete-window capacity, not a first-N truncation or consumer budget.
 MAX_BODY = 8 * 1024 * 1024
+MAX_ITEMS, MAX_VERSIONS, MAX_TEXT = 512, 4096, 65536
 POLICY_HASH = canonical_hash({'version': VERSION, 'feeds': FEEDS, 'feedparser': FEEDPARSER_VERSION,
-                              'maximum_feed_body_bytes': MAX_BODY})
-MAX_ITEMS, MAX_VERSIONS, MAX_TEXT = 128, 4096, 65536
+                              'maximum_feed_body_bytes': MAX_BODY, 'maximum_feed_items': MAX_ITEMS})
 SEMANTICS = 'FEED_REPRESENTATIONS_NOT_ARTICLE_ACCEPTANCE_OR_MARKET_SIGNALS'
 LINK = re.compile(r'https?://www\.stats\.gov\.cn/sj/(?:zxfb|sjjd)/[0-9]{6}/t[0-9]{8}_[0-9]+\.html')
 
