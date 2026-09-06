@@ -15,13 +15,19 @@ def test_dump_trial_runs_only_reviewed_main_and_has_no_state_lane():
     assert "persist-credentials: false" in text
     assert "cancel-in-progress: false" in text
     assert "timeout-minutes: 12" in text
+    assert "if: github.event_name == 'workflow_dispatch' && inputs.trial-purpose == 'stock-dump'" in text
 
 
 def test_secret_is_only_in_acquisition_step_and_optional_libraries_are_installed():
     text = WORKFLOW.read_text(encoding="utf-8")
-    acquisition = text.split("- name: Acquire one recent dump", 1)[1].split("- name: Repeat row inspection", 1)[0]
+    stock = text.split("  theme-probe:\n", 1)[0]
+    acquisition = stock.split("- name: Acquire one recent dump", 1)[1].split("- name: Repeat row inspection", 1)[0]
     assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in acquisition
-    assert text.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
+    assert stock.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
+    theme = text.split("  theme-probe:\n", 1)[1]
+    capture = theme.split("- name: Capture bounded theme", 1)[1].split("- name: Rebuild from original", 1)[0]
+    assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in capture
+    assert theme.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
     assert "pip install -e '.[dump-study]'" in text
     assert "python -m decision_kernel.runtime.hithink_dump_inspection" in text
     assert "retention-days: 90" in text and "if: always()" in text
@@ -31,7 +37,7 @@ def test_trial_is_not_an_unbounded_compatibility_trigger():
     text = WORKFLOW.read_text(encoding="utf-8")
     paths = text.split("    paths:\n", 1)[1].split("\n\n", 1)[0]
     assert paths.splitlines() == [
-        "      - .github/workflows/hithink-stock-dump-trial.yml",
-        "      - src/decision_kernel/runtime/hithink_dump_trial.py",
+        "      - .github/scripts/capture-theme-probe.py",
+        "      - radar_inputs/theme-probe-sample-v0.json",
     ]
     assert "presigned_url" not in text and "curl " not in text
