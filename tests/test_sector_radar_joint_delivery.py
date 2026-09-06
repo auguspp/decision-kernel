@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import hashlib
 import json
 import runpy
@@ -32,7 +31,7 @@ def case(tmp_path, monkeypatch, mode='candidates'):
     gate = publication_script()
     receipt = gate['verify_publication'](run, state, identity())
     (run / 'publication-verification.json').write_text(canonical_json(receipt) + '\n')
-    class Clock:
+    class Clock(datetime):
         @staticmethod
         def now(tz=None): return NOW + timedelta(seconds=1)
     monkeypatch.setattr(context, 'datetime', Clock)
