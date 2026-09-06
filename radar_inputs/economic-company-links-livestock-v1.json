@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "semantics": "CURATED_COMPANY_BUSINESS_INPUTS_NOT_BENEFICIARY_OR_CAUSAL_CONFIRMATION",
+  "prepared_at": "2026-09-06T00:06:02.185309+00:00",
+  "prepared_by": "IMPLEMENTATION_SOURCE_REVIEW_NOT_HUMAN_INVESTMENT_JUDGMENT",
+  "source_commit": "2b2df3995e3b393f7600ef340f5cc982c40b54e3",
+  "scope_note": "牧原半年报指定页已从实际取得的原文核对；圆通仍为此前保留的 PARTIAL 摘录。两家公司均非受益推荐；生成此页不重新认证原文，不证明当前或全行业业务覆盖。",
+  "nodes": [
+    {
+      "node_id": "cn.livestock.price_feed",
+      "coverage_note": "仅纳入牧原一个原文核验案例。全国集贸生猪、玉米及育肥猪配合饲料价格与公司售价、自配原料成本、跨期会计成本不等价。",
+      "companies": [
+        {
+          "ticker": "002714", "exchange": "SZSE", "company_name": "牧原股份",
+          "business_scope": "生猪养殖销售与屠宰肉食一体化；饲料加工属于公司所述产业链。养殖与屠宰之间存在内部交易，不按单向猪价敏感度推导整个集团利润。",
+          "source_path": "radar_inputs/company-evidence/002714-muyuan-h1-2026-09-06.json",
+          "source_blob_sha1": "363479c51ba6fe33987f332c5b89bee4598cec29",
+          "issuer_binding_note": "原文 PDF 第6页对应牧原股份／002714 A股／深圳证券交易所；本视图不替换为02714 H股。来源为巨潮1225485220原始文件，采集与指定页审阅证据见 docs/muyuan-livestock-evidence-2026-09-06.md。",
+          "exposure_size_note": "原表88.25%养殖、37.13%屠宰收入比重含内部销售抵消，不是可直接相加的外部收入权重。原材料55%-65%为过去几年多种原料合计范围，不取60%中点或玉米权重；弹性与净受益方向未建立。",
+          "basis": [
+            {
+              "key": "financial",
+              "evidence_artifact_id": "2bf30886-1413-5f58-9381-5540319ae4a9",
+              "source_identifier": "MUYUAN:002714:2026-H1:financial",
+              "source_use": {"source_role": "PRIMARY_REALIZED", "assertion_scope": "REALIZED_OUTCOME", "role_basis": "原文财务表中的报告期实际披露值，不是独立审计结论；原始表单位、内部抵消与合并范围分别保留。"},
+              "fields": [
+                {"field":"consolidated_revenue_cny","label":"H1合并营业收入","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；2026H1总额，不是全年或生猪单一分部收入。"},
+                {"field":"farming_revenue_cny","label":"养殖业务收入","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；与屠宰之间存在内部交易，须同时读取抵消项。"},
+                {"field":"slaughter_meat_revenue_cny","label":"屠宰肉食业务收入","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；不是全部对外收入，也不是养殖收益。"},
+                {"field":"trade_revenue_cny","label":"贸易业务收入","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；饲料原料产品收入不等于集团饲料采购成本。"},
+                {"field":"other_revenue_cny","label":"其他业务收入","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；保留原表收入桥，不将其隐去。"},
+                {"field":"interbusiness_revenue_elimination_cny","label":"内部销售抵消","unit":"元","kind":"NUMBER","scope_note":"PDF第19页；保留表中负号，不再次取负或当成独立业务亏损。"},
+                {"field":"reported_farming_revenue_percent","label":"原表养殖收入比重","unit":"%","kind":"NUMBER","scope_note":"PDF第19页原披露88.25%；不是互斥外部业务暴露权重。"},
+                {"field":"reported_slaughter_revenue_percent","label":"原表屠宰收入比重","unit":"%","kind":"NUMBER","scope_note":"PDF第19页原披露37.13%；不可与养殖比重相加后归一化成收益权重。"},
+                {"field":"farming_gross_margin_percent","label":"养殖业务毛利率","unit":"%","kind":"NUMBER","scope_note":"PDF第20页；毛利率不是净利润率，负号不丢弃。"},
+                {"field":"slaughter_gross_margin_percent","label":"屠宰肉食毛利率","unit":"%","kind":"NUMBER","scope_note":"PDF第20页；不同业务会计范围，不替代集团利润率。"},
+                {"field":"consolidated_operating_cash_flow_cny","label":"合并经营现金流净额","unit":"元","kind":"NUMBER","scope_note":"PDF第19页及66-67页合并现金流量表；非母公司单体现金流。"},
+                {"field":"consolidated_long_lived_asset_cash_purchase_cny","label":"购建长期资产支付现金","unit":"元","kind":"NUMBER","scope_note":"PDF第67页；购建固定资产、无形资产和其他长期资产，不等于全部投资净流出或维护性资本开支。"}
+              ]
+            },
+            {
+              "key": "operations",
+              "evidence_artifact_id": "3df069ad-154a-5abf-ac85-f686544d0fae",
+              "source_identifier": "MUYUAN:002714:2026-H1:operations",
+              "source_use": {"source_role": "PRIMARY_STATEMENT", "assertion_scope": "ATTRIBUTED_STATEMENT", "role_basis": "归属于公司经营讨论，包括经营量、单月近似成本与未来目标；目标不得被解释为已经兑现的经营结果。"},
+              "fields": [
+                {"field":"commercial_pigs_sold_10k","label":"H1公司披露商品猪销量","unit":"万头","kind":"NUMBER","scope_note":"PDF第11-12页3861.5万头含销售给集团屠宰肉食业务的部分；不是完全对外销量或产能。"},
+                {"field":"pigs_slaughtered_10k","label":"H1公司披露屠宰量","unit":"万头","kind":"NUMBER","scope_note":"PDF第11-12页；实际处理量不是设计产能或产能利用率。"},
+                {"field":"june_full_cost_statement","label":"6月成本表述","unit":"公司表述","kind":"TEXT","scope_note":"PDF第11页；保留2026年6月与约数，不与8月全国周度价格相减制造利润。"},
+                {"field":"annual_cost_target_statement","label":"全年成本目标（非实际）","unit":"前瞻目标","kind":"TEXT","scope_note":"PDF第11页；目标保持文字和限定，不输出已实现成本值。"},
+                {"field":"business_model_statement","label":"一体化业务描述","unit":"公司表述","kind":"TEXT","scope_note":"PDF第12页；业务存在不等于收益弹性或完整产业链证据。"}
+              ]
+            },
+            {
+              "key": "feed_risk",
+              "evidence_artifact_id": "e34c3013-2f08-5758-8c59-fa60246696fb",
+              "source_identifier": "MUYUAN:002714:2026-H1:feed_risk",
+              "source_use": {"source_role":"PRIMARY_STATEMENT","assertion_scope":"ATTRIBUTED_STATEMENT","role_basis":"风险章节描述过去几年范围及应对措施；不是本期精确原材料结构或采购策略成效。"},
+              "fields": [
+                {"field":"raw_material_cost_scope_statement","label":"原料成本范围与时期","unit":"公司表述","kind":"TEXT","scope_note":"PDF第25页；小麦、玉米、豆粕等合计、过去几年约55%-65%。不以玉米单项或单一60%替代。"},
+                {"field":"substitution_and_procurement_statement","label":"配方与采购应对","unit":"公司表述","kind":"TEXT","scope_note":"PDF第26页；可能替代及采购应对，不证明实际比例、价格时滞和成效。"}
+              ]
+            }
+          ],
+          "mechanisms": [
+            {"channel":"REVENUE","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"猪价变化提示检查公司同期间对外销量、售价和业务结构；养殖与屠宰的内部交易必须抵消，不能把两侧收入相加当成集团增量。","basis_keys":["financial","operations"],"next_checks":["获取同期间公司生猪外销口径、售价和屠宰业务组合","区分商品猪、仔猪、种猪和集团内部销售"]},
+            {"channel":"COST","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"全国玉米和配合饲料价格只是外部参照；公司自配原料、替代配方和存货时滞共同影响成本。原料多年范围、6月约数和全年目标保持独立，不能直接计算8月养殖利润。","basis_keys":["feed_risk","operations"],"next_checks":["核对同期间原料实际采购结构、配方与库存成本时滞","区分成本近似值、目标与后续已实现值","单独核对猪病、成活率、体重和费用口径"]},
+            {"channel":"CAPACITY","status":"EVIDENCE_GAP","hypothesis":"销量和屠宰量没有对应的可用产能分母；不能据此推导产能利用率或新增资本回报。","basis_keys":[],"next_checks":["补齐同期间有效产能、投产时点与可比利用率口径"]},
+            {"channel":"CASH_FLOW","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"现金兑现须读合并经营现金流、营运资本和购建长期资产现金；不拿母公司单体值或总投资流出替代，也不自动计算可分配现金。","basis_keys":["financial"],"next_checks":["区分维护、增长投资及营运资本变化","检查后续现金流与同期间经营量价，避免一次半年报代表长期现金能力"]}
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "cn.express.unit_economics",
+      "coverage_note": "只读取一个已留存案例。圆通总部单票口径、加盟网点收益与全国快递收入／件数口径不能相互替代。",
+      "companies": [
+        {
+          "ticker": "600233", "exchange": "SSE", "company_name": "圆通速递",
+          "business_scope": "国内快递网络／总部经济口径；不把总部收益视为整个加盟网络或国际、航空业务收益。",
+          "source_path": "research_cases/600233-yto-deep-research-v2.json",
+          "source_blob_sha1": "ae9bfce4dd3cfbedddb4be84075238d867f58529",
+          "issuer_binding_note": "显式选择原记录中 YTO:600233 的半年报与 YTO:IR 的公司表态。来源地址包含镜像；匹配哈希只核对原记录，没有独立认证原文或公司身份。",
+          "exposure_size_note": "所选结构化字段没有足以核验的分部收入占比、公司行动或传导弹性；不以快递净利润除以归母净利润制造业务占比。",
+          "basis": [
+            {
+              "key":"h1","evidence_artifact_id":"047e2546-389b-5274-a8dc-e4a0ce3931f4","source_identifier":"YTO:600233:2026-H1",
+              "source_use":{"source_role":"PRIMARY_REALIZED","assertion_scope":"REALIZED_OUTCOME","role_basis":"复用已有 H1 公司披露结构化摘录，不把研究推断、预测或价格视为已实现业务数据。PARTIAL 保留状态不提升。"},
+              "fields":[
+                {"field":"volume_yi","label":"H1 快递业务量","unit":"亿件","kind":"NUMBER","scope_note":"2026H1 所留存快递业务量；不是月度全国量，也不是产能。"},
+                {"field":"unit_rev","label":"单票收入","unit":"元／件","kind":"NUMBER","scope_note":"原研究采用的总部单票口径；不等于全国行业收入除件数。"},
+                {"field":"unit_cost","label":"单票成本","unit":"元／件","kind":"NUMBER","scope_note":"原研究的总部成本口径；不证明加盟网点成本或盈利。"},
+                {"field":"unit_transport","label":"单票运输成本","unit":"元／件","kind":"NUMBER","scope_note":"保留运输成本字段；不从下降自动推导利用率改善。"},
+                {"field":"unit_center","label":"单票中心操作成本","unit":"元／件","kind":"NUMBER","scope_note":"保留操作成本字段；不假设完整网络经营口径。"},
+                {"field":"ocf","label":"经营现金流","unit":"元","kind":"NUMBER","scope_note":"2026H1 经营现金流；非自由现金流或可分配现金。"},
+                {"field":"capex","label":"现金资本开支","unit":"元","kind":"NUMBER","scope_note":"既有摘录的现金开支字段；未区分维护与增长投资。"}
+              ]
+            },
+            {
+              "key":"franchise_statement","evidence_artifact_id":"049a2ca6-c4e4-5469-8e59-9f3f0e071911","source_identifier":"YTO:IR:2026-08-28:FRANCHISE",
+              "source_use":{"source_role":"PRIMARY_STATEMENT","assertion_scope":"ATTRIBUTED_STATEMENT","role_basis":"只说明管理层怎样解释派费和成本，不作为加盟商实际回报或未来盈利兑现的证明。"},
+              "fields":[
+                {"field":"stance","label":"管理层派费表态","unit":"文字","kind":"TEXT","scope_note":"归属于公司表态，不是实际加盟商盈利。"},
+                {"field":"cost_note","label":"管理层成本口径解释","unit":"文字","kind":"TEXT","scope_note":"保留原解释；须用后续经营披露检验。"}
+              ]
+            }
+          ],
+          "mechanisms": [
+            {"channel":"REVENUE","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"全国量与收入变化提示检查圆通自身业务量及单票收入；全国件均收入代理不能直接代入总部收入模型。","basis_keys":["h1"],"next_checks":["取得同期间公司量、价及口径说明","核验客户、产品、重量与地区结构变化"]},
+            {"channel":"COST","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"运输、中心操作及结算规则可能影响总部成本；总部成本改善不证明加盟网点盈利同步改善。","basis_keys":["h1","franchise_statement"],"next_checks":["将成本变动拆为效率、业务结构与结算变化","获取公司特定的加盟网点经营证据，不能套用全行业标签"]},
+            {"channel":"CAPACITY","status":"EVIDENCE_GAP","hypothesis":"业务量或资本开支本身不能证明产能缺口、产能利用率或新增投资回报。","basis_keys":[],"next_checks":["补充枢纽与干线产能、使用率及投产时点","分别识别维护投资和增长投资"]},
+            {"channel":"CASH_FLOW","status":"HYPOTHESIS_WITH_RETAINED_INPUTS","hypothesis":"业务增长能否传导为股东现金，需要结合经营现金流、再投入及营运资本检查；不从两项数值自动生成自由现金流结论。","basis_keys":["h1"],"next_checks":["对齐现金流和资本开支的会计范围","查看多期营运资本、维护投资及低回报邻接业务占用"]}
+          ]
+        }
+      ]
+    }
+  ]
+}

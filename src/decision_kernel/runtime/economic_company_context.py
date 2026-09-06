@@ -132,15 +132,27 @@ def build_company_links(source_root: Path, association: dict, *, manifest_path: 
             if len(seen_companies) > 16:
                 raise ValueError("company inventory exceeds reading budget; no truncation")
             path = _text(company["source_path"])
-            if not path.startswith("research_cases/") or not path.endswith(".json"):
-                raise ValueError("v0 selects existing research-case evidence containers only")
+            evidence_only = path.startswith("radar_inputs/company-evidence/")
+            if not (path.startswith("research_cases/") or evidence_only) or not path.endswith(".json"):
+                raise ValueError("select an explicit research-case or evidence-only company container")
             if path not in source_bytes:
                 source_bytes[path] = _json(root, path)
             raw, container = source_bytes[path]
             blob = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
             if blob != company["source_blob_sha1"]:
                 raise ValueError("frozen company source bytes changed; explicit new mapping review required")
-            snapshot = container["research_snapshot"]
+            recorded = None
+            if evidence_only:
+                _keys(container, {"semantics", "recorded_at", "company_identity", "evidence_artifacts"})
+                if container["semantics"] != "COMPANY_EVIDENCE_ONLY_NOT_RESEARCH_OR_JUDGMENT":
+                    raise ValueError("evidence-only input is not a ResearchSnapshot or judgment")
+                recorded = _clock(container["recorded_at"])
+                if recorded > prepared:
+                    raise ValueError("company evidence was recorded after mapping preparation")
+                snapshot = container["company_identity"]
+                _keys(snapshot, {"ticker", "exchange", "company_name"})
+            else:
+                snapshot = container["research_snapshot"]
             if any(company[k] != snapshot[k] for k in ("ticker", "exchange", "company_name")):
                 raise ValueError("company identity differs from the explicitly selected source container")
             if not isinstance(company["ticker"], str) or not re.fullmatch(r"[0-9]{6}", company["ticker"]) or company["exchange"] not in {"SSE", "SZSE", "BSE"}:
@@ -155,6 +167,8 @@ def build_company_links(source_root: Path, association: dict, *, manifest_path: 
             bases, ids = {}, set()
             for item in _bounded(company["basis"], 8, minimum=1):
                 basis = _basis(item, artifacts, prepared=prepared, as_of=as_of)
+                if recorded is not None and _clock(basis["evidence"]["retrieved_at"]) > recorded:
+                    raise ValueError("company evidence recording precedes original acquisition")
                 if basis["key"] in bases or basis["evidence"]["id"] in ids:
                     raise ValueError("duplicate company evidence basis")
                 bases[basis["key"]] = basis; ids.add(basis["evidence"]["id"])
@@ -184,6 +198,9 @@ def build_company_links(source_root: Path, association: dict, *, manifest_path: 
                 "basis": list(bases.values()), "mechanisms": mechanisms,
                 "exposure_size": None, "elasticity": None, "benefit_direction": None,
                 "current_business_freshness": "NOT_REVALIDATED", "temporal_alignment": "NOT_ESTABLISHED"})
+            if recorded is not None:
+                companies[-1]["evidence_recorded_at"] = container["recorded_at"]
+                companies[-1]["source_container_semantics"] = container["semantics"]
         economic = parent_nodes[node_id]["economics"]
         nodes.append({"node_id": node_id, "coverage_note": node["coverage_note"], "companies": companies,
                       "company_coverage": "SELECTED_RETAINED_CASES_ONLY" if companies else "NO_COMPANY_EVIDENCE_SUPPLIED",
@@ -216,6 +233,8 @@ def render_company_links(report: dict) -> str:
             parts += [f'<h3>{e(company["company_name"])} · {e(company["ticker"])} · {e(company["exchange"])}</h3>',
                       f'<p>{e(company["business_scope"])}</p><p class="muted">{e(company["issuer_binding_note"])}</p>',
                       f'<p class="notice">暴露比例、敏感度与净受益方向未建立。{e(company["exposure_size_note"])}</p>']
+            if 'evidence_recorded_at' in company:
+                parts.append(f'<p class="muted">公司摘录记录时间：{e(company["evidence_recorded_at"])}；仅 Evidence，不是新增 Research 或 Human 判断。</p>')
             for mechanism in company["mechanisms"]:
                 label = '缺少直接证据' if mechanism['status'] == 'EVIDENCE_GAP' else '有保留输入的待验证机制'
                 parts += [f'<h3>{e(CHANNELS[mechanism["channel"]])} · {label}</h3><p>{e(mechanism["hypothesis"])}</p>',

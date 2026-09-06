@@ -1,0 +1,102 @@
+{
+  "semantics": "COMPANY_EVIDENCE_ONLY_NOT_RESEARCH_OR_JUDGMENT",
+  "recorded_at": "2026-09-06T00:03:48.879155+00:00",
+  "company_identity": {
+    "ticker": "002714",
+    "exchange": "SZSE",
+    "company_name": "牧原股份"
+  },
+  "evidence_artifacts": [
+    {
+      "id": "2bf30886-1413-5f58-9381-5540319ae4a9",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "MUYUAN:002714:2026-H1:financial",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225485220.PDF",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "available_at": "2026-09-05T23:56:48.407690+00:00",
+      "retrieved_at": "2026-09-05T23:56:48.407690+00:00",
+      "content_hash": "018fd92ec294522270ae9e811c3b612a4dbd81ddc2fcee868f409a52a6a500be",
+      "idempotency_key": "MUYUAN:002714:2026-H1:financial:018fd92ec294522270ae9e811c3b612a4dbd81ddc2fcee868f409a52a6a500be",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "consolidated_revenue_cny": "59410306384.59",
+        "farming_revenue_cny": "52430296318.87",
+        "slaughter_meat_revenue_cny": "22061248684.20",
+        "trade_revenue_cny": "4319430543.58",
+        "other_revenue_cny": "1639750264.40",
+        "interbusiness_revenue_elimination_cny": "-21040419426.46",
+        "reported_farming_revenue_percent": "88.25",
+        "reported_slaughter_revenue_percent": "37.13",
+        "farming_gross_margin_percent": "-4.51",
+        "slaughter_gross_margin_percent": "4.24",
+        "consolidated_operating_cash_flow_cny": "-2223668382.68",
+        "consolidated_long_lived_asset_cash_purchase_cny": "6520966515.39",
+        "original_pdf_sha256": "06f3f6284318122399c6cf1156f5a142c9b9abd8157c669ccd37bdb298002c53",
+        "original_capture_run_id": "33999968354",
+        "original_capture_artifact_id": "9979191964"
+      },
+      "permitted_excerpt": null,
+      "source_location": "PDF/printed pp.19-20: H1 revenue bridge and gross margins; pp.66-67: consolidated cash flow, CNY",
+      "license_terms_note": "Implementer-reviewed selected pages, not an authenticated Human investment review. Published midnight is CNINFO metadata, not independently verified intraday availability. Conservative available_at equals actual PDF acquisition. content_hash binds URL/raw-PDF hash/location/retained fields. Original is in the 90-day source artifact, not this JSON; no perpetual retention or FULL replay claim.",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    },
+    {
+      "id": "3df069ad-154a-5abf-ac85-f686544d0fae",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "MUYUAN:002714:2026-H1:operations",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225485220.PDF",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "available_at": "2026-09-05T23:56:48.407690+00:00",
+      "retrieved_at": "2026-09-05T23:56:48.407690+00:00",
+      "content_hash": "864abe10f204795ba23533fa4f6baf2eb28428cef85c75be4d9f542d59e522b5",
+      "idempotency_key": "MUYUAN:002714:2026-H1:operations:864abe10f204795ba23533fa4f6baf2eb28428cef85c75be4d9f542d59e522b5",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "commercial_pigs_sold_10k": "3861.5",
+        "pigs_slaughtered_10k": "1723.4",
+        "june_full_cost_statement": "公司披露2026年6月生猪养殖完全成本约11.7元/kg；是单月近似值，不是半年平均成本。",
+        "annual_cost_target_statement": "公司提出努力实现全年平均11.5元/kg的成本目标；属于前瞻目标，不是已经实现的全年成本。",
+        "business_model_statement": "公司描述主营生猪养殖销售和生猪屠宰，形成饲料加工、种猪育种、商品猪饲养及屠宰肉食一体化链条。",
+        "original_pdf_sha256": "06f3f6284318122399c6cf1156f5a142c9b9abd8157c669ccd37bdb298002c53",
+        "original_capture_run_id": "33999968354",
+        "original_capture_artifact_id": "9979191964"
+      },
+      "permitted_excerpt": null,
+      "source_location": "PDF/printed pp.11-12: H1 operating volumes, June cost approximation, annual cost target and business description; p.6: issuer identity",
+      "license_terms_note": "Implementer-reviewed selected pages, not an authenticated Human investment review. Published midnight is CNINFO metadata, not independently verified intraday availability. Conservative available_at equals actual PDF acquisition. content_hash binds URL/raw-PDF hash/location/retained fields. Original is in the 90-day source artifact, not this JSON; no perpetual retention or FULL replay claim.",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    },
+    {
+      "id": "e34c3013-2f08-5758-8c59-fa60246696fb",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "MUYUAN:002714:2026-H1:feed_risk",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225485220.PDF",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "available_at": "2026-09-05T23:56:48.407690+00:00",
+      "retrieved_at": "2026-09-05T23:56:48.407690+00:00",
+      "content_hash": "757bcd37e766e57b08b6225e01ca9df4bc477c96af29f965f0ecaddd4bd4f21d",
+      "idempotency_key": "MUYUAN:002714:2026-H1:feed_risk:757bcd37e766e57b08b6225e01ca9df4bc477c96af29f965f0ecaddd4bd4f21d",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "raw_material_cost_scope_statement": "公司称过去几年小麦、玉米和豆粕等主要原材料成本合计占营业成本约55%-65%；不是2026H1精确占比，也不是玉米单项占比。",
+        "substitution_and_procurement_statement": "公司称会随粮价调整配方，灵活搭配小麦、稻谷、豆粕等，并调整原料采购策略；不代表替代比例、时滞或对冲成效已经量化。",
+        "original_pdf_sha256": "06f3f6284318122399c6cf1156f5a142c9b9abd8157c669ccd37bdb298002c53",
+        "original_capture_run_id": "33999968354",
+        "original_capture_artifact_id": "9979191964"
+      },
+      "permitted_excerpt": null,
+      "source_location": "PDF/printed p.25: raw-material risk scope and past-years range; p.26: management substitution/procurement statements",
+      "license_terms_note": "Implementer-reviewed selected pages, not an authenticated Human investment review. Published midnight is CNINFO metadata, not independently verified intraday availability. Conservative available_at equals actual PDF acquisition. content_hash binds URL/raw-PDF hash/location/retained fields. Original is in the 90-day source artifact, not this JSON; no perpetual retention or FULL replay claim.",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    }
+  ]
+}
