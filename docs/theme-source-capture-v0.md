@@ -35,3 +35,7 @@ The exact September 4 bootstrap is ONLY an isolated comparison, not producer res
 ## Tests and evidence limits
 
 Tests reuse existing synthetic source/market fixtures and execute the original complete theme calculation, raw capture loop, refusal handling and offline reconstruction. They cover real committed source-byte pins without treating that test as a new acquisition. Full tests and one eventual real source-derived run must be reported separately. A successful run proves previously retained source-to-market integration, not an automatically arriving news feed, prospective candidate corpus, daily theme state, active-trading eligibility or stock-price breadth.
+
+## Native source intake, separately qualified
+
+See `docs/native-rss-source-intake-v0.md` and `docs/native-rss-qualification-2026-09-06.md` for the reused feedparser intake and real NBS two-feed baseline. It stores 1000 initial feed versions, forwards none as new sources, and keeps unzoned publication strings unqualified. Its successor dedup is tested, not yet proven with a live restored predecessor or natural new release. The retained-company capture above is unchanged; no RSS-to-market automatic execution or new accepted economic record is implied.
