@@ -2,18 +2,19 @@ from pathlib import Path
 
 
 WORKFLOW = Path(".github/workflows/economic-release-discovery.yml")
+SCRIPT = Path('.github/scripts/prepare-native-rss-successor.py')
 
 
-def test_discovery_workflow_is_manual_or_exact_main_code_change_only():
+def test_discovery_workflow_is_manual_or_explicit_successor_request_only():
     raw = WORKFLOW.read_text(encoding="utf-8")
     assert "workflow_dispatch:" in raw and "branches: [main]" in raw
     assert "schedule:" not in raw and "pull_request:" not in raw and "workflow_run:" not in raw
     paths = raw.split("    paths:\n", 1)[1].split("\n\n", 1)[0]
     assert [line.strip()[2:] for line in paths.splitlines()] == [
-        "src/decision_kernel/runtime/radar_feed_intake.py",
+        "radar_inputs/native-rss-successor-request.json",
     ]
     assert "if: github.event_name == 'workflow_dispatch' && inputs.source-kind == 'economic-directories'" in raw
-    assert '"$GITHUB_REF" != "refs/heads/main"' in raw
+    assert '\"$GITHUB_REF\" != \"refs/heads/main\"' in raw
     assert "timeout-minutes: 5" in raw and "cancel-in-progress: false" in raw
 
 
@@ -47,7 +48,7 @@ def test_workflow_identity_remains_outside_sealed_scan_inventory():
     assert 'root / "workflow.json"' in raw
     assert 'record["provenance_hash"] = canonical_hash(record)' in raw
     for name in ("GITHUB_REPOSITORY", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_SHA", "GITHUB_EVENT_NAME"):
-        assert '"' + name + '"' in raw
+        assert '\"' + name + '\"' in raw
     assert "--output release-discovery-proof/input-run" in raw
     assert "> release-discovery-proof/verification.json" in raw
     assert "BOUNDED_DIRECTORY_COMPATIBILITY_PROOF_NOT_CONTINUOUS_MONITORING" in raw
@@ -72,19 +73,19 @@ def test_default_review_input_directory_exists_without_fabricated_acceptances():
 
 
 def test_native_feed_parser_and_previous_artifact_are_mature_components_not_silent_reset():
-    raw = WORKFLOW.read_text()
+    raw = WORKFLOW.read_text(); script = SCRIPT.read_text()
     rss = raw.split('  native-rss:\n',1)[1]
     assert "pip install -e '.[feeds]'" in rss
     assert 'uses: actions/download-artifact@v8' in rss and 'digest-mismatch: error' in rss
-    assert 'run-id: ${{ inputs.previous-run-id }}' in rss
-    assert 'name: radar-feed-intake-${{ inputs.previous-run-id }}-1' in rss
-    assert "r['status'] == 'completed' and r['conclusion'] == 'success'" in rss
-    assert 'gh api --method GET' in rss
+    assert 'run-id: ${{ steps.lifecycle.outputs.previous_run_id }}' in rss
+    assert 'artifact-ids: ${{ steps.predecessor.outputs.artifact_id }}' in rss
+    assert "run['status'] != 'completed' or run['conclusion'] != 'success'" in script
+    assert rss.count('gh api --method GET') == 2
     assert 'EXPECTED_PREVIOUS_RUN_ID' in rss and '--previous previous-native-rss/capture' in rss
-    assert 'bool(previous) != baseline' in rss
+    assert 'prepare-native-rss-successor.py restore' in rss
     assert 'default: false' in raw and 'default: economic-directories' in raw
     names=['Validate explicit source registry lifecycle','Verify exact successful source predecessor','Restore that source artifact only',
-           'Read two native feeds once','Rebuild native intake','Retain native source attempt','Publish exact native source status']
+           'Bind restored original source','Read two native feeds once','Rebuild native intake','Retain native source attempt','Publish exact native source status']
     assert [rss.index(x) for x in names] == sorted(rss.index(x) for x in names)
 
 
@@ -92,7 +93,8 @@ def test_native_feed_source_step_has_no_github_or_business_token_and_failure_is_
     raw=WORKFLOW.read_text(); rss=raw.split('  native-rss:\n',1)[1]
     source=rss.split('- name: Read two native feeds once',1)[1].split('- name: Rebuild native intake',1)[0]
     assert 'github.token' not in source and 'GH_TOKEN' not in source
-    assert "test \"$SOURCE_EVENT\" = push || test \"$BOOTSTRAP\" = true" in source
+    assert 'test "$BOOTSTRAP" = true' in source and 'SOURCE_EVENT' not in source
+    assert 'test -f native-rss-intake/predecessor-verification.json' in source
     assert "os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success'" in rss
     assert 'registry' not in rss.split('uses: actions/upload-artifact@v7',1)[1].split('- name: Publish',1)[0]
     assert 'retention-days: 90' in rss and '没有自动寻找上一成功' in rss
