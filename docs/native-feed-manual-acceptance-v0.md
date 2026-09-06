@@ -2,6 +2,8 @@
 
 Status: IMPLEMENTED MANUAL WORKFLOW ENTRY / FULL CI MUST BE REPORTED SEPARATELY / NO NATURAL-SOURCE OR LIVE EXECUTION CLAIM.
 
+Offline history registration/restoration is now described in `docs/native-feed-consumer-history-v0.md`. Those commands reuse the original consumer directories; this manual workflow STILL uses the explicitly empty isolated history below until a separately verified remote integration.
+
 This connects the existing source qualification, opt-in batching, source scanner and exact-plan executor in one isolated run of the existing `hithink-stock-dump-trial` workflow. It does not create another RSS feed, a production queue, an automatic consumer, a new Kernel object or another canonical attention lane. Reuse-first: the fixed sibling collector supplies Requests transport; feedparser, original RSS replay, source metadata binding, persistent Sector bundle loading, decoded response protection and all theme calculations remain existing implementations. Official `actions/download-artifact@v8` and `upload-artifact@v7` provide transfer; no custom ZIP downloader or extractor is introduced.
 
 ## Explicit manual inputs
