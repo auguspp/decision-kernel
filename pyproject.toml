@@ -21,6 +21,10 @@ documents = [
 discovery = [
   "beautifulsoup4==4.14.3",
 ]
+feeds = [
+  "feedparser==6.0.14",
+  "beautifulsoup4==4.14.3",
+]
 dump-study = [
   "requests==2.34.2",
   "pyarrow==25.0.1",
@@ -29,6 +33,7 @@ dev = [
   "pytest==9.1.1",
   "pypdf==6.16.2",
   "beautifulsoup4==4.14.3",
+  "feedparser==6.0.14",
   "requests==2.34.2",
   "pyarrow==25.0.1",
 ]
