@@ -197,6 +197,8 @@ def advance(windows, *, recorded_at, previous=None, bootstrap=False):
             if key not in versions:
                 versions[key] = {k:copy.deepcopy(row[k]) for k in ('url','document_key','payload','version_hash')}
                 versions[key].update(first_received_at=received.isoformat(), first_recorded_at=recorded.isoformat(), appearances=[])
+            if key not in before and received < _clock(versions[key]['first_received_at']):
+                versions[key]['first_received_at'] = received.isoformat()
             appearance = {'feed_id': feed_id, 'entry_id': row['entry_id']}
             if appearance not in versions[key]['appearances']:
                 versions[key]['appearances'].append(appearance)
@@ -226,15 +228,19 @@ def advance(windows, *, recorded_at, previous=None, bootstrap=False):
 
 
 def source_rows(registry, delta):
-    """New, usable descriptions only; every gap blocks the whole downstream batch."""
+    """Unacknowledged non-baseline descriptions; gaps survive unchanged later windows."""
     validate_registry(registry)
     if (delta['registry_hash'] != registry['registry_hash']
             or canonical_hash({k:v for k,v in delta.items() if k != 'delta_hash'}) != delta['delta_hash']):
         raise ValueError('source export delta differs')
     if delta['status'] == 'INITIAL_BASELINE_ONLY':
         return {'status': 'BASELINE_NOT_FORWARDED', 'sources': [], 'gaps': []}
-    wanted = {c['version_hash'] for c in delta['changes']}
-    if not wanted <= {v['version_hash'] for v in registry['versions']}: raise ValueError('delta references missing version')
+    if not {c['version_hash'] for c in delta['changes']} <= {v['version_hash'] for v in registry['versions']}:
+        raise ValueError('delta references missing version')
+    # Seen is NOT delivered. Until an explicit consumer acknowledgment exists,
+    # offer stable original IDs and keep ALL post-baseline versions pending.
+    wanted = {v['version_hash'] for v in registry['versions']
+              if _clock(v['first_recorded_at']) > _clock(registry['initialized_at'])}
     rows, gaps = [], []
     if delta['multiple_current_representations']:
         gaps.append({'reason':'MULTIPLE_CURRENT_REPRESENTATIONS_REQUIRE_REVIEW','links':delta['multiple_current_representations']})
@@ -268,8 +274,8 @@ def source_rows(registry, delta):
     if sum(len(r['evidence']['permitted_excerpt']) for r in rows) > MAX_TOTAL_CHARS:
         gaps.append({'reason':'DOWNSTREAM_TEXT_BUDGET_EXCEEDED'})
     if gaps:
-        return {'status': 'SOURCE_EXPORT_BLOCKED', 'sources': [], 'gaps': gaps}
-    return {'status': 'READY_RETAINED_DESCRIPTIONS' if rows else 'NO_NEW_SOURCE_ROWS', 'sources': rows, 'gaps': []}
+        return {'status': 'SOURCE_EXPORT_BLOCKED', 'sources': [], 'gaps': gaps, 'pending_versions': len(wanted), 'delivery_acknowledged': False}
+    return {'status': 'READY_RETAINED_DESCRIPTIONS' if rows else 'NO_NEW_SOURCE_ROWS', 'sources': rows, 'gaps': [], 'pending_versions': len(wanted), 'delivery_acknowledged': False}
 
 
 def render(registry, delta, exports):
@@ -317,7 +323,7 @@ def fetch_feed(feed_id):
 
 
 def capture(output, *, previous=None, bootstrap=False, context=None, transport=None, now=lambda:datetime.now(timezone.utc)):
-    if (previous is None) != bootstrap: raise ValueError('explicit previous capture or baseline required')
+    if type(bootstrap) is not bool or (previous is None) != bootstrap: raise ValueError('explicit previous capture or baseline required')
     old = None
     if previous is not None:
         checked = verify_capture(previous)
@@ -374,7 +380,7 @@ def verify_capture(root):
             or canonical_hash({k:v for k,v in receipt.items() if k!='capture_hash'})!=receipt['capture_hash']):
         raise ValueError('invalid capture identity')
     allowed={'previous-registry.json','registry.json','delta.json','source-rows.json','index.html',*(x+'.xml' for x in FEEDS)}
-    if (not set(receipt['files'])<=allowed or {str(p.relative_to(root)) for p in root.rglob('*') if not p.is_dir()} != {'capture.json',*receipt['files']}):
+    if (not set(receipt['files'])<=allowed or {str(p.relative_to(root)) for p in root.rglob('*') if p.is_symlink() or not p.is_dir()} != {'capture.json',*receipt['files']}):
         raise ValueError('capture inventory differs')
     for name,expected in receipt['files'].items():
         if digest(_read(root/name))!=expected: raise ValueError('capture bytes differ')
@@ -382,6 +388,8 @@ def verify_capture(root):
     for i,request in enumerate(receipt['requests']):
         key=request['feed_id']
         if i>=len(FEEDS) or key!=sorted(FEEDS)[i] or request['url']!=FEEDS[key]: raise ValueError('request sequence differs')
+        if i and _clock(receipt['requests'][i-1]['received_at']) > _clock(request['requested_at']):
+            raise ValueError('sequential request clocks overlap or reverse')
         if not _clock(receipt['started_at'])<=_clock(request['requested_at'])<=_clock(request['received_at'])<=_clock(receipt['finished_at']):
             raise ValueError('captured request clocks differ')
         if request['body_file']:
