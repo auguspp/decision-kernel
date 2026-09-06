@@ -92,8 +92,9 @@ def check_daily_response(raw: bytes, *, request: dict, thscode: str,
 
     Observation clocks are caller-supplied and do not authenticate the origin.
     No status from this function permits production cards, even with matching hashes.
-    Nonzero/unknown after-hours values are retained, never silently added to regular
-    turnover or declared equivalent to another provider's daily totals.
+    Nonzero/unknown after-hours values are retained, never silently added to the reported
+    vol/amount fields or declared equivalent to another provider's daily totals.
+    The contract does not establish whether vol/amount already include after-hours.
     """
     days = _window(thscode, sessions)
     if request != daily_request(thscode, days):
@@ -157,7 +158,7 @@ def check_daily_response(raw: bytes, *, request: dict, thscode: str,
                 _fail('DATA_QUALIFICATION_FAILED', 'AFTER_HOURS_VOLUME_NOT_WHOLE_SHARES')
             by_day[day] = {'market_session': day.isoformat(), 'thscode': thscode,
                 'close': str(close), 'reported_ex_reference': str(reference),
-                'regular_volume_shares': str(volume), 'regular_turnover_cny': str(amount),
+                'reported_volume_shares': str(volume), 'reported_turnover_cny': str(amount),
                 'after_hours_volume_shares': None if ah_volume is None else str(ah_volume),
                 'after_hours_turnover_cny': None if ah_amount is None else str(ah_amount)}
     rows = [by_day[d] for d in days]

@@ -12,7 +12,7 @@
    https://github.com/HiThink-Tech/Financial-API/blob/main/skills/hithink-finance/references/api/endpoints-prices.md
 2. Tushare 日线 `daily`：官方明确为未复权行情、停牌期间不提供数据，`trade_date` 为交易日期，`pre_close` 为除权昨收价；`vol` 单位为手，`amount` 单位为千元。可作为下一步真实来源候选，不是已获真实数据或原文真实性证明。
    https://tushare.pro/document/2?doc_id=27
-3. 同一日线文档单列 `ah_vol`、`ah_amount`，并说明2026-07-06开始有盘后数据。缺失保持未知，常规与盘后成交分开保留；不得把两者相加或舍弃后声称和 HiThink 的量额口径已经一致。
+3. 同一日线文档单列 `ah_vol`、`ah_amount`，并说明2026-07-06开始有盘后数据。缺失保持未知，原 vol/amount 与单列盘后字段分开保留。文档未明确 vol/amount 是否已含盘后部分，因此不标为“剔除盘后的常规成交”，不得相加、相减或舍弃后声称和 HiThink 的量额口径已经一致。
 4. 官方 REST 示例仍为明文 HTTP，不能从“HTTPS网站”推定“HTTPS REST终点”。官方另有 HTTPS MCP 配置说明，但它是独立的 MCP 路径，不是 REST 终点认证。未向任何猜测地址发送 token，不降级明文、不关闭证书检查。
    https://tushare.pro/document/1?doc_id=130
    https://tushare.pro/document/1?doc_id=463

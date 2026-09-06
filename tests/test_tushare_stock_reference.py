@@ -39,8 +39,8 @@ def check(payload=None, **kwargs):
 def test_exact_daily_reference_units_and_after_hours_are_separate():
     report=check();rows=report['rows']
     assert len(rows)==61 and Decimal(rows[0]['close'])==10
-    assert Decimal(rows[0]['regular_volume_shares'])==125
-    assert Decimal(rows[0]['regular_turnover_cny'])==Decimal('12.34000')
+    assert Decimal(rows[0]['reported_volume_shares'])==125
+    assert Decimal(rows[0]['reported_turnover_cny'])==Decimal('12.34000')
     assert rows[0]['after_hours_volume_shares'] is None
     assert Decimal(rows[-1]['after_hours_volume_shares'])==1
     assert Decimal(rows[-1]['after_hours_turnover_cny'])==Decimal('0.2')
@@ -158,4 +158,4 @@ def test_numeric_json_values_are_read_without_binary_float_roundtrip():
         row[4]=1.25;row[5]=0.01234
     report=check(payload)
     assert report['status']=='SOURCE_FIELDS_CHECKED_ONLY'
-    assert all(Decimal(r['regular_turnover_cny'])==Decimal('12.34') for r in report['rows'])
+    assert all(Decimal(r['reported_turnover_cny'])==Decimal('12.34') for r in report['rows'])
