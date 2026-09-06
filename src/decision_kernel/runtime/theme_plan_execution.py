@@ -9,7 +9,7 @@ import json
 import re
 import shutil
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
@@ -17,6 +17,7 @@ from decision_kernel.identity import canonical_hash
 from . import radar_feed_consumer as consumer
 from . import radar_feed_intake as feed
 from . import theme_radar_probe as probe
+from .sector_radar_audit import _check_safe_json
 
 VERSION = 'source-scan-exact-market-plan-execution-v1'
 LIVE = 'PUBLIC_HTTP_CAPTURE_CLAIM_NOT_REMOTE_PUBLICATION'
@@ -24,12 +25,26 @@ COMPLETE = 'COMPLETE_EXACT_PLAN_CAPTURE'
 FAILED = 'INCOMPLETE_EXACT_PLAN_CAPTURE'
 
 
-def _decode(raw):
+def _decode(raw, credential=None):
+    if not isinstance(raw, bytes) or not 0 < len(raw) <= probe.MAX_INPUT_BYTES:
+        raise ValueError('bounded original market response bytes required')
     value = json.loads(raw.decode('utf-8'), parse_float=Decimal, object_pairs_hook=probe._unique_object)
     if not isinstance(value, dict):
         raise ValueError('market response must be an object')
+    _check_safe_json(value, credential)  # Inspect decoded keys/values before saving original bytes.
     feed.data(value)  # Reject nonfinite values before they reach market adapters.
     return value
+
+
+def _execution_clock(state, plan, at):
+    current = probe._clock(at)
+    probe._window(state, current)
+    # Same exact-plan lifetime already enforced by build_theme_probe; reject
+    # before transport rather than waiting until the final market calculation.
+    planned = probe._clock(plan['planned_at'])
+    if current < planned or current - planned > timedelta(minutes=30):
+        raise ValueError('exact plan is outside the existing 30-minute capture window')
+    return current
 
 
 def _identity(root, *, at):
@@ -38,7 +53,7 @@ def _identity(root, *, at):
     if plan is None:
         raise ValueError('no market plan from this source scan')
     state = probe.parse_sector_radar_market_state(probe._read(root / 'market-state.json').decode())
-    probe._window(state, probe._clock(at))  # An old plan is not authority to use stale prices.
+    _execution_clock(state, plan, at)  # Neither market-day nor plan-age limits are refreshed.
     return scan, plan, state, consumer._json(root / 'context.json')
 
 
@@ -99,21 +114,28 @@ def capture_plan(scan_root: Path, output: Path, *, transport, context=None,
         if copied['receipt'] != scan['receipt'] or copied_plan != plan:
             raise ValueError('copied source scan identity differs')
         save('plan.json', feed.data(plan))  # Written before the FIRST detail request.
+        last_response = probe._clock(started)
         for i, slot in enumerate(plan['requests'], 1):
             pause(20)  # Also pace the first detail after the previously supplied catalogs.
-            entry = {**slot, 'requested_at': now().isoformat(), 'received_at': None,
+            requested = now().isoformat()
+            request_clock = _execution_clock(state, plan, requested)
+            if request_clock < last_response:
+                raise ValueError('request clock precedes the previous execution boundary')
+            entry = {**slot, 'requested_at': requested, 'received_at': None,
                      'response_file': None, 'http_status': None, 'error_type': None}
             requests.append(entry)
             try:
                 raw = transport(slot['path'], slot['params'])
                 entry['received_at'] = now().isoformat()
-                if not isinstance(raw, bytes):
-                    raise ValueError('transport must retain original response bytes')
-                body = _decode(raw)
+                received_clock = _execution_clock(state, plan, entry['received_at'])
+                if received_clock < request_clock:
+                    raise ValueError('response clock precedes the request')
+                body = _decode(raw, credential)
                 name = f'responses/{i:02d}.json'; save(name, raw)
                 entry.update(response_file=name, http_status=200)
                 captures[slot['id']] = {k: entry[k] for k in ('path', 'params', 'requested_at', 'received_at')}
                 captures[slot['id']]['response'] = body
+                last_response = received_clock
             except (ValueError, OSError, RuntimeError) as exc:
                 entry['received_at'] = entry['received_at'] or now().isoformat()
                 entry['error_type'] = type(exc).__name__
