@@ -6,13 +6,13 @@ on:
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
-        options: [stock-dump, theme-probe]
+        options: [stock-dump, theme-probe, theme-source]
         default: stock-dump
   push:
     branches: [main]
     paths:
       - .github/scripts/capture-theme-probe.py
-      - radar_inputs/theme-probe-sample-v0.json
+      - radar_inputs/theme-source-sample-v0.json
 
 permissions:
   contents: read
@@ -104,7 +104,7 @@ jobs:
           fi
           echo '不是行业状态更新、历史成员宽度或投资信号。没有执行自动恢复或替代来源。' >> "$GITHUB_STEP_SUMMARY"
   theme-probe:
-    if: github.event_name == 'push' || inputs.trial-purpose == 'theme-probe'
+    if: github.event_name == 'push' || inputs.trial-purpose == 'theme-probe' || inputs.trial-purpose == 'theme-source'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -124,9 +124,14 @@ jobs:
         id: capture
         env:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
         run: |
           mkdir theme-probe-trial
-          python .github/scripts/capture-theme-probe.py capture \
+          selection=radar_inputs/theme-source-sample-v0.json
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] && [ "$TRIAL_PURPOSE" = theme-probe ]; then
+            selection=radar_inputs/theme-probe-sample-v0.json
+          fi
+          python .github/scripts/capture-theme-probe.py capture --selection "$selection" \
             --output theme-probe-trial/capture > theme-probe-trial/operation.json
       - name: Rebuild from original responses without market credentials
         id: verification
@@ -165,11 +170,14 @@ jobs:
           else:
               lines += ['没有完整采集记录，请检查失败步骤。']
           lines += [f"采集步骤：{os.environ['CAPTURE_RESULT']}；离线核验步骤：{os.environ['VERIFY_RESULT']}",
-                    '失败核验成功只证明已保留字节完整，不代表主题计算成功。',
+                    '失败核验成功只证明已保留字节或来源扫描可重建，不代表主题行情计算成功。',
                     '没有生产市场状态、候选账本、Human / Research / Investment authority 变更。']
           if os.environ['ARTIFACT_URL']:
               lines += [f"[本次原始响应与核验附件]({os.environ['ARTIFACT_URL']})"]
-          if os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success' and os.environ['ARTIFACT_URL']:
+              if Path('theme-probe-trial/capture/source-discovery.html').is_file():
+                  lines += ['来源线索与阻塞原因：capture/source-discovery.html。留存文字可能是部分转述，提及不是受益。']
+          if (os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success'
+                  and os.environ['ARTIFACT_URL'] and Path('theme-probe-trial/capture/index.html').is_file()):
               lines += ['解压后打开 capture/index.html；不是全市场主题排名或真实前瞻候选。']
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
               f.write('\n\n'.join(lines) + '\n')
