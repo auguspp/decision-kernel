@@ -19,7 +19,7 @@ on:
   push:
     branches: [main]
     paths:
-      - src/decision_kernel/runtime/radar_feed_intake.py
+      - radar_inputs/native-rss-successor-request.json
 
 permissions:
   contents: read
@@ -122,64 +122,49 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+      - name: Install existing package with mature feed parser
+        run: python -m pip install -e '.[feeds]'
       - name: Validate explicit source registry lifecycle
+        id: lifecycle
         env:
           SOURCE_EVENT: ${{ github.event_name }}
           BOOTSTRAP: ${{ inputs.bootstrap }}
           PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
-        run: |
-          mkdir native-rss-intake
-          python - <<'PY'
-          import json, os, re
-          from pathlib import Path
-          assert os.environ['GITHUB_REF'] == 'refs/heads/main'
-          assert os.environ['GITHUB_RUN_ATTEMPT'] == '1'
-          previous = os.environ['PREVIOUS_RUN_ID']
-          baseline = os.environ['SOURCE_EVENT'] == 'push' or os.environ['BOOTSTRAP'] == 'true'
-          assert bool(previous) != baseline, 'Explicit previous run OR a separate baseline is required'
-          assert not previous or re.fullmatch(r'[1-9][0-9]{0,19}', previous), 'Exact numeric source run required'
-          Path('native-rss-intake/preflight.json').write_text(json.dumps({'explicit_baseline': baseline, 'previous_run_id': previous, 'event': os.environ['SOURCE_EVENT']}))
-          PY
+        run: python .github/scripts/prepare-native-rss-successor.py request
       - name: Verify exact successful source predecessor with GitHub CLI
-        if: inputs.previous-run-id != ''
+        id: predecessor
+        if: steps.lifecycle.outputs.previous_run_id != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
+          PREVIOUS_RUN_ID: ${{ steps.lifecycle.outputs.previous_run_id }}
         run: |
           gh api --method GET "repos/${GITHUB_REPOSITORY}/actions/runs/${PREVIOUS_RUN_ID}" > native-rss-intake/predecessor-run.json
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          r = json.loads(Path('native-rss-intake/predecessor-run.json').read_text())
-          assert str(r['id']) == os.environ['PREVIOUS_RUN_ID']
-          assert r['name'] == 'economic-release-discovery' and r['path'] == '.github/workflows/economic-release-discovery.yml'
-          assert r['head_branch'] == 'main' and r['run_attempt'] == 1
-          assert r['status'] == 'completed' and r['conclusion'] == 'success'
-          assert r['repository']['full_name'] == os.environ['GITHUB_REPOSITORY']
-          PY
+          gh api --method GET "repos/${GITHUB_REPOSITORY}/actions/runs/${PREVIOUS_RUN_ID}/artifacts?per_page=100" > native-rss-intake/predecessor-artifacts.json
+          python .github/scripts/prepare-native-rss-successor.py metadata
       - name: Restore that source artifact only
-        if: inputs.previous-run-id != ''
+        if: steps.lifecycle.outputs.previous_run_id != ''
         uses: actions/download-artifact@v8
         with:
-          name: radar-feed-intake-${{ inputs.previous-run-id }}-1
-          run-id: ${{ inputs.previous-run-id }}
+          artifact-ids: ${{ steps.predecessor.outputs.artifact_id }}
+          run-id: ${{ steps.lifecycle.outputs.previous_run_id }}
           github-token: ${{ github.token }}
           path: previous-native-rss
           digest-mismatch: error
-      - name: Install existing package with mature feed parser
-        run: python -m pip install -e '.[feeds]'
+      - name: Bind restored original source to verified execution before requests
+        if: steps.lifecycle.outputs.previous_run_id != ''
+        run: python .github/scripts/prepare-native-rss-successor.py restore
       - name: Read two native feeds once without business credentials
         id: rss-capture
         env:
-          SOURCE_EVENT: ${{ github.event_name }}
-          BOOTSTRAP: ${{ inputs.bootstrap }}
-          EXPECTED_PREVIOUS_RUN_ID: ${{ inputs.previous-run-id }}
+          BOOTSTRAP: ${{ steps.lifecycle.outputs.baseline }}
+          EXPECTED_PREVIOUS_RUN_ID: ${{ steps.lifecycle.outputs.previous_run_id }}
         run: |
           if [ -n "$EXPECTED_PREVIOUS_RUN_ID" ]; then
+            test -f native-rss-intake/predecessor-verification.json
             python -m decision_kernel.runtime.radar_feed_intake capture \
               --previous previous-native-rss/capture --output native-rss-intake/capture > native-rss-intake/operation.json
           else
-            test "$SOURCE_EVENT" = push || test "$BOOTSTRAP" = true
+            test "$BOOTSTRAP" = true
             python -m decision_kernel.runtime.radar_feed_intake capture \
               --bootstrap --output native-rss-intake/capture > native-rss-intake/operation.json
           fi
@@ -216,8 +201,12 @@ jobs:
           if (root/'delta.json').is_file():
               d = json.loads((root/'delta.json').read_text())
               lines += [f"窗口状态：{d['status']}；条目出现：{d['feed_occurrences']}；去重版本：{d['current_unique_versions']}"]
+          if (root/'source-rows.json').is_file():
+              e = json.loads((root/'source-rows.json').read_text())
+              lines += [f"来源导出：{e['status']}；待处理版本：{e.get('pending_versions', 0)}；时区缺口不自动补齐。"]
           lines += ['首次看到不等于刚刚发布；两个滚动窗口不代表完整历史。未获取文章正文，未自动接受经济事实，未调用市场。',
-                    '附件保留90天；恢复失败或过期不得静默建立新基线。没有自动寻找上一成功、cache或长期checkpoint。']
+                    '附件保留90天；恢复失败或过期不得静默建立新基线。没有自动寻找上一成功、cache或长期checkpoint。',
+                    '代码变更不再触发初始化；push 仅执行明确声明的前序接续。']
           if os.environ['ARTIFACT_URL']:
               lines += [f"[本次原始 RSS 与登记结果]({os.environ['ARTIFACT_URL']})"]
           if os.environ['CAPTURE_RESULT'] == os.environ['VERIFY_RESULT'] == 'success' and os.environ['ARTIFACT_URL']:
