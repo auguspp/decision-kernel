@@ -67,6 +67,19 @@ def _instant(value, code):
         _bad(code)
 
 
+
+def check_history_receipt(history, *, code, received_at):
+    """Check the actual history receipt before any subsequent market request."""
+    data = _data(history, code)
+    if (not isinstance(received_at, datetime) or received_at.tzinfo is None
+            or received_at.utcoffset() is None):
+        _bad(code)
+    if 'timestamp' not in data:
+        _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
+    if _instant(data['timestamp'], code) > received_at:
+        _bad(code, 'HISTORY_READY_AFTER_ACTUAL_RECEIPT')
+
+
 def history_params(code, sessions):
     start = datetime.combine(sessions[-61], time(), TZ)
     end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ)

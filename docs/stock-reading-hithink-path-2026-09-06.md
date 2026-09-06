@@ -34,3 +34,11 @@ B 的独立参考价检查与反例继续保留在显式 SYNTHETIC_TEST_ONLY 路
 完整 CI 和精确 diff 通过后才合并；然后进行一次有界真实输入和实际下载附件验收。无实际认证请求就不宣称密钥失效；没有真实运行不宣称自动筛选已证明。仅需现有 GitHub HiThink secret，不要求 Tushare。会话工具缺少 workflow_dispatch 是执行入口限制，不是行情供应商失效；不得以修改 push 触发器或 Re-run jobs 绕过它。
 
 股票读取不运行 Sector producer。普通 Sector 下一交易日追加、同日幂等、RSS时间资格、消费者历史云端接续仍分别取得真实证明；漏过中间完成交易日先 qualified recovery，不桥接。SHADOW OBSERVATION ONLY；HUMAN ATTENTION / RESEARCH / INVESTMENT AUTHORITY = NONE。无新增 canonical wake、Research、Recommendation、Action 或公司判断改写。
+
+## 合并前补充审阅
+
+首次完整 CI `34040116968` 在 `3a39bb742ac2ba430e827022c158bf8951c049b2` 的合并测试树 `6cf2723a396f6241ad65072fa67961ae231b575e` 上通过1705项（339.18秒）；后续修订仍需单独完整CI。实际股票工作流安装的 feeds extra 原未包含 Requests，而开发环境已经包含，不能用开发CI掩盖真实缺库。现为 feeds 补入仓库已采用的 `requests==2.34.2`，其他 feeds 使用者也会安装该固定版本；不改工作流触发或密钥，不另装整套 Parquet 研究依赖。新增安装配置回归。
+
+历史数据的就绪时刻在该次历史响应接收后立即检查，不能等后续快照或事件请求完成后再让未来时间变得合法；原响应和同一次接收时刻支持离线重建该拒绝。新增直接调用与采集/重建两项反例。
+
+未接线的 Tushare 源检查器及其专属测试不纳入本次发布树，原提交和候选来源说明仍保留。它们的移除是供应商范围纠偏，不是为通过HiThink测试删除安全断言。B的独立参考价反例、HiThink资格检查、凭据、时间、身份和失败重建检查仍保留。测试数量以前后各精确提交的实际完整CI为准，不能相加或假称减少即通过。

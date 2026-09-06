@@ -29,6 +29,7 @@ VERSION = 'stock-reading-capture-replay-v2'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
 REASONS = {
+    'HISTORY_READY_AFTER_ACTUAL_RECEIPT': '个股历史就绪时间晚于该响应实际接收时间；后续请求经过的时间不能修复这次未来时钟。',
     'CURRENT_QUOTE_HISTORY_MISMATCH': '当前快照与个股最新完成交易日的价格或量额不一致；不选较接近的一边，也不添加容差。',
     'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该不完整尝试的股票卡片。',
     'UNPRICED_OR_NONTRADING_SESSION_IN_PATH': '个股窗口中存在无有效成交的交易日；不是已确认停牌或退市，不用前值补齐历史。',

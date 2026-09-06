@@ -24,6 +24,7 @@ discovery = [
 feeds = [
   "feedparser==6.0.14",
   "beautifulsoup4==4.14.3",
+  "requests==2.34.2",
 ]
 dump-study = [
   "requests==2.34.2",

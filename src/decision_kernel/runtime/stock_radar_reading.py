@@ -316,7 +316,11 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     state_rows = _state_rows(state)
     def get(path, params):
         value = request_json(path, params)
-        at()
+        received = at()
+        # Use this response's receipt, not the later quote/action receipt. A
+        # provider future-ready clock cannot become valid by waiting for more calls.
+        if path == STOCK_HISTORY and reference_inputs is None:
+            own_stock.check_history_receipt(value, code=params['thscode'], received_at=received)
         if isinstance(value, dict) and type(value.get('code')) is int and value['code'] != 0:
             raise StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED')
         return value
