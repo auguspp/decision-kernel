@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import theme_radar_probe as probe
+from decision_kernel.runtime.hithink_http import HithinkRuntimeError
 from decision_kernel.runtime.sector_radar import (
     SectorPricePoint, SectorPriceSeries, calculate_sector_radar_snapshot,
 )
@@ -207,7 +208,9 @@ def test_member_quality_does_not_silently_shrink_denominator(change):
     elif change=='fake_identity': rows[0]['thscode']='ABCDEF.XY';rows[0]['ticker']='ABCDEF'
     elif change=='ticker': rows[0]['ticker']='000002'
     else: rows.clear()
-    with pytest.raises(ValueError): run(state,x)
+    reason = {'duplicate': 'duplicate constituent', 'fake_identity': 'qualified A-share',
+              'ticker': 'ticker disagrees', 'empty': 'membership is empty'}[change]
+    with pytest.raises(HithinkRuntimeError, match=reason): run(state,x)
 
 
 def test_ambiguous_and_identical_memberships_are_visible_without_forced_assignment():
@@ -310,3 +313,14 @@ def test_cli_rejects_unsafe_input_and_cleans_interrupted_output(tmp_path,monkeyp
         monkeypatch.setattr(Path,'rename',stop)
     assert probe.main(args)==2 and not out.exists()
     assert not list(tmp_path.glob('.theme-probe-*'))
+
+
+def test_cli_handles_existing_membership_runtime_rejection_without_an_output(tmp_path):
+    args, source, out = cli_case(tmp_path)
+    path = source / 'input.json'
+    payload = json.loads(path.read_text())
+    payload['captures']['members:886001.TI']['response']['data']['item'] = []
+    path.write_text(canonical_json(payload))
+    before = inventory(source)
+    assert probe.main(args) == 2
+    assert not out.exists() and inventory(source) == before
