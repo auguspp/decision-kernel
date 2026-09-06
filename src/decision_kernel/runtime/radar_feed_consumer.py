@@ -1,6 +1,7 @@
 """Verified receipts for the existing source scanner, not market-delivery acks.
 
-The feed registry and its strict complete-export guard are left unchanged.
+The feed registry and default complete export remain unchanged. Explicit batches
+partition work before matching, with every deferred source still visible.
 A receipt proves exactly which qualified descriptions the existing scanner read.
 It does not prove article acceptance, Human review, or execution of a market plan.
 """
@@ -35,7 +36,7 @@ def _json(path: Path):
     return feed.decode(probe._read(path))
 
 
-def _inventory(root: Path) -> dict:
+def _inventory(root: Path, *, maximum_files: int = 32) -> dict:
     probe._safe_path(root)
     if not root.is_dir():
         raise ValueError('complete saved directory required')
@@ -46,7 +47,7 @@ def _inventory(root: Path) -> dict:
             continue
         raw = probe._read(path)
         total += len(raw)
-        if total > MAX_BUNDLE_BYTES or len(files) >= 32:
+        if total > MAX_BUNDLE_BYTES or len(files) >= maximum_files:
             raise ValueError('source-scan bundle budget exceeded')
         files[path.relative_to(root).as_posix()] = feed.digest(raw)
     return files
@@ -88,10 +89,19 @@ def _source_key(row: dict) -> str:
 
 
 def _evaluate(source: Path, state, context: dict, selection: dict):
-    probe._keys(selection, {'source_keys', 'as_of', 'generated_at'})
+    probe._keys(selection, {'source_keys', 'as_of', 'generated_at'} | ({'batch'} if 'batch' in selection else set()))
     captured, registry, exports = _load_feed(source, selection['as_of'])
     inputs, scope = _context(state, context, captured['provenance'], selection['as_of'], selection['generated_at'])
     keys = selection['source_keys']
+    if 'batch' in selection:
+        delta = _json(source / 'delta.json')
+        _, candidates, gaps = feed._source_candidates(registry, delta)
+        batch = selection['batch']
+        expected = _batch_selection(candidates, batch['previously_scanned_source_keys'],
+                                    batch['maximum_sources'], context)
+        if gaps or batch != expected or keys != expected['selected_source_keys']:
+            raise ValueError('batch partition does not reconstruct or has semantic source gaps')
+        exports = feed.source_rows(registry, delta, selected_source_keys=keys)
     if (exports['status'] != 'READY_RETAINED_DESCRIPTIONS' or not isinstance(keys, list)
             or not keys or keys != sorted(set(keys))):
         raise ValueError('qualified nonempty exact source selection required')
@@ -111,6 +121,8 @@ def _evaluate(source: Path, state, context: dict, selection: dict):
                 'acquisition_status': 'PLAN_NOT_EXECUTED' if result['acquisition_plan'] else 'NO_PLAN_FROM_THIS_SCAN',
                 'source_delivery_acknowledged': False, 'article_accepted': False,
                 'human_review_recorded': False, **probe.AUTHORITY}
+        if 'batch' in selection:
+            body['batch_manifest_hash'] = canonical_hash(selection['batch'])
         receipt = feed._sealed(body, 'receipt_hash')
     return result, receipt
 
@@ -133,7 +145,7 @@ def verify_scan(root: Path, *, as_of: str | None = None) -> dict:
     if receipt is None:
         raise ValueError('blocked or prepared-only source scan is not acknowledged')
     expected = {'source-discovery.json': feed.data(result), 'scan-receipt.json': feed.data(receipt),
-                'index.html': discovery.render_source_discovery(result).encode('utf-8')}
+                'index.html': _render_scan(result, selection.get('batch'))}
     if any(probe._read(root / name) != raw for name, raw in expected.items()):
         raise ValueError('source scan does not rebuild from original feed and market inputs')
     handoff = _json(root / 'handoff.json')
@@ -147,6 +159,8 @@ def verify_scan(root: Path, *, as_of: str | None = None) -> dict:
             or handoff.get('network_calls') != 0
             or any(handoff.get(k) != v for k,v in probe.AUTHORITY.items())):
         raise ValueError('handoff does not identify the completed source scan')
+    if selection.get('batch') != handoff.get('batch'):
+        raise ValueError('handoff batch partition differs from verified selection')
     if as_of is not None and probe._clock(receipt['recorded_at']) > probe._clock(as_of):
         raise ValueError('consumer receipt is later than the requested cutoff')
     return {'receipt': receipt, 'result': result, 'verification': 'ORIGINAL_FEED_AND_SOURCE_SCAN_REBUILT',
@@ -192,11 +206,84 @@ def _prior(root: Path, registry: dict, captured: dict, exports: dict, scope: dic
     return sorted(prior, key=lambda r: r['receipt_hash']), done, outstanding
 
 
-def scan(source: Path, state, context: dict, receipts: Path, output: Path, *, as_of: str, generated_at: str) -> dict:
+def _executions(root: Path, outstanding: list, as_of: str):
+    # Delayed import avoids a cycle: execution reuses this module's source proof.
+    from .theme_plan_execution import verify_execution
+    probe._safe_path(root)
+    if not root.is_dir():
+        raise ValueError('explicit execution directory missing; no empty history fallback')
+    paths = sorted(root.iterdir())
+    if len(paths) > MAX_RECEIPTS + 1:
+        raise ValueError('execution history budget exceeded')
+    by_receipt = {p['receipt_hash']: p for p in outstanding}
+    observed, completed, seen = [], set(), set()
+    for path in paths:
+        probe._safe_path(path)
+        if path.name == '.gitkeep' and path.is_file() and path.read_bytes() == b'':
+            continue
+        if not path.is_dir():
+            raise ValueError('complete execution bundles required, not loose acknowledgments')
+        checked = verify_execution(path, as_of=as_of)
+        parent = by_receipt.get(checked['scan_receipt_hash'])
+        if parent is None or checked['plan_hash'] != canonical_hash(parent['plan']):
+            raise ValueError('execution belongs to another source-scan plan')
+        if checked['execution_hash'] in seen:
+            continue
+        seen.add(checked['execution_hash']); observed.append(checked)
+        if checked['market_stage_succeeded']:
+            completed.add(checked['scan_receipt_hash'])
+    return sorted(observed, key=lambda x: x['execution_hash']), [p for p in outstanding if p['receipt_hash'] not in completed]
+
+
+BATCH_VERSION = 'first-received-prefix-before-theme-matching-v1'
+
+
+def _batch_selection(rows: list, done, size: int, context: dict) -> dict:
+    """Operational FIFO prefix, not an opportunity ranking or theme-budget dodge."""
+    if type(size) is not int or not 1 <= size <= discovery.MAX_SOURCES:
+        raise ValueError('batch size must be an explicit integer within the existing 32-source budget')
+    by_key = {_source_key(row): row for row in rows}
+    if (not isinstance(done, (list, set)) or any(not isinstance(k, str) for k in done)
+            or len(done) != len(set(done)) or not set(done) <= set(by_key)):
+        raise ValueError('batch history contains unknown source keys')
+    ordered = sorted(set(by_key) - set(done), key=lambda k: (
+        probe._clock(by_key[k]['evidence']['retrieved_at']),
+        probe._clock(by_key[k]['recorded_at']), by_key[k]['evidence']['content_hash']))
+    labels = len({r['name'] for r in context['concept_catalog']['response']['data']['item']})
+    selected, chars = [], 0
+    for key in ordered:
+        length = len(by_key[key]['evidence']['permitted_excerpt'])
+        if (len(selected) == size or chars + length > discovery.MAX_TOTAL_CHARS
+                or labels * (chars + length) > discovery.MAX_SCAN_CELLS):
+            break  # Do not skip a large row to cherry-pick smaller/later stories.
+        selected.append(key); chars += length
+    return {'version': BATCH_VERSION, 'maximum_sources': size,
+            'maximum_text_characters': discovery.MAX_TOTAL_CHARS,
+            'maximum_scan_cells': discovery.MAX_SCAN_CELLS,
+            'all_post_baseline_source_keys': sorted(by_key),
+            'previously_scanned_source_keys': sorted(done),
+            'ordered_pending_source_keys': ordered, 'selected_source_keys': sorted(selected),
+            'deferred_source_keys': ordered[len(selected):], 'selected_text_characters': chars,
+            'selection_precedes_theme_matching': True,
+            'historical_receipt_completeness': 'NOT_CERTIFIED_BY_STANDALONE_RECEIPT'}
+
+
+def _render_scan(result: dict, batch: dict | None = None) -> bytes:
+    page = discovery.render_source_discovery(result)
+    if batch is not None:
+        note = ('<details><summary>本批与完整剩余来源 · 分批完成不等于全部完成</summary><pre>'
+                + escape(canonical_json(batch)) + '</pre></details>')
+        page = page.replace('</main>', note + '</main>')
+    return page.encode('utf-8')
+
+
+def scan(source: Path, state, context: dict, receipts: Path, output: Path, *, as_of: str, generated_at: str,
+         batch_size: int | None = None, executions: Path | None = None) -> dict:
     """Single-writer immutable output. Register completed bundles explicitly.
 
-    Full upstream date/text/32-source guard runs BEFORE receipt suppression. This
-    deliberately does not extend intake capacity or turn seen versions into acks.
+    Default v0 full-export behavior stays reproducible. Explicit batch_size opts
+    into FIFO partitioning before theme matching. All semantic gaps still block;
+    only per-operation count/aggregate-work budgets apply to the selected prefix.
     """
     for path in (source, receipts, output):
         probe._safe_path(path)
@@ -204,12 +291,36 @@ def scan(source: Path, state, context: dict, receipts: Path, output: Path, *, as
         raise ValueError('new output must be outside source and registered receipt directories')
     captured, registry, exports = _load_feed(source, as_of)
     inputs, scope = _context(state, context, captured['provenance'], as_of, generated_at)
+    strict_export_status = exports['status']
+    candidates = []
+    if batch_size is not None:
+        if type(batch_size) is not int or not 1 <= batch_size <= discovery.MAX_SOURCES:
+            raise ValueError('batch size outside existing source budget')
+        wanted, candidates, gaps = feed._source_candidates(registry, _json(source / 'delta.json'))
+        if strict_export_status != 'BASELINE_NOT_FORWARDED':
+            # Internal qualified inventory only, never sent unbounded to matcher.
+            exports = {'status': 'SOURCE_EXPORT_BLOCKED' if gaps else 'READY_RETAINED_DESCRIPTIONS',
+                       'sources': candidates, 'gaps': gaps, 'pending_versions': len(wanted)}
     prior, done, outstanding = _prior(receipts, registry, captured, exports, scope, as_of)
+    execution_history = None
+    if executions is not None:
+        if output.resolve().is_relative_to(executions.resolve()):
+            raise ValueError('execution history cannot contain the new scan output')
+        execution_history, outstanding = _executions(executions, outstanding, as_of)
     keys = sorted({_source_key(row) for row in exports.get('sources', [])} - done)
+    batch = None
+    if batch_size is not None and exports['status'] != 'SOURCE_EXPORT_BLOCKED':
+        batch = _batch_selection(candidates, done, batch_size, context)
+        keys = batch['selected_source_keys']
     selection = {'source_keys': keys, 'as_of': as_of, 'generated_at': generated_at}
+    if batch is not None:
+        selection['batch'] = batch
     result = receipt = None
     if exports['status'] == 'SOURCE_EXPORT_BLOCKED':
         status = 'SOURCE_EXPORT_BLOCKED'
+    elif batch is not None and batch['ordered_pending_source_keys'] and not keys:
+        status = 'SOURCE_SCAN_BLOCKED'
+        exports['gaps'].append({'reason': 'BATCH_HEAD_EXCEEDS_WORK_BUDGET'})
     elif not keys:
         status = 'BASELINE_NOT_FORWARDED' if exports['status'] == 'BASELINE_NOT_FORWARDED' else 'NO_PENDING_SOURCE_SCAN'
     else:
@@ -223,6 +334,11 @@ def scan(source: Path, state, context: dict, receipts: Path, output: Path, *, as
                'prior_scan_receipts': prior, 'unexecuted_prior_plans': outstanding,
                'gaps': exports.get('gaps', []), 'new_scan_receipt': receipt['receipt_hash'] if receipt else None,
                'source_delivery_acknowledged': False, 'network_calls': 0, **probe.AUTHORITY}
+    if execution_history is not None:
+        handoff.update(market_execution_observations=execution_history, remote_publication_verified=False)
+    if batch_size is not None:
+        handoff.update(batch=batch, strict_whole_export_status=strict_export_status,
+                       batch_mode=BATCH_VERSION, complete_queue_or_market_delivery_claim=False)
     handoff = feed._sealed(handoff, 'handoff_hash')
     original = _inventory(source)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -236,7 +352,7 @@ def scan(source: Path, state, context: dict, receipts: Path, output: Path, *, as
                     'selection.json': feed.data(selection), 'handoff.json': feed.data(handoff)}
         if result is not None:
             contents['source-discovery.json'] = feed.data(result)
-            contents['index.html'] = discovery.render_source_discovery(result).encode('utf-8')
+            contents['index.html'] = _render_scan(result, batch)
         else:
             contents['index.html'] = ('<!doctype html><html lang="zh-CN"><meta charset="utf-8">'
                 '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -266,6 +382,8 @@ def main(argv=None):
     parser.add_argument('--context', type=Path)
     parser.add_argument('--receipts-dir', type=Path)
     parser.add_argument('--as-of')
+    parser.add_argument('--executions-dir', type=Path, help='Complete retained market execution bundles only')
+    parser.add_argument('--batch-size', type=int, help='Opt-in FIFO source batch; 1..32, never a theme rank')
     args = parser.parse_args(argv)
     try:
         if args.mode == 'verify':
@@ -276,12 +394,11 @@ def main(argv=None):
             raise ValueError('all explicit feed, context, receipt and cutoff inputs required')
         state = probe.parse_sector_radar_market_state(probe._read(args.market_state).decode('utf-8'))
         result = scan(args.feed_capture, state, _json(args.context), args.receipts_dir, args.output,
-                      as_of=args.as_of, generated_at=datetime.now(timezone.utc).isoformat())
+                      as_of=args.as_of, generated_at=datetime.now(timezone.utc).isoformat(), batch_size=args.batch_size, executions=args.executions_dir)
         print(canonical_json(result))
         return 2 if result['status'] in {'SOURCE_EXPORT_BLOCKED', 'SOURCE_SCAN_BLOCKED'} else 0
     except (ValueError, OSError, RuntimeError, KeyError, TypeError) as exc:
-        print(canonical_json({'status': 'SOURCE_CONSUMER_UNAVAILABLE', 'error_type': type(exc).__name__, 'network_calls': 0}))
-        return 2
+        print(canonical_json({'status': 'SOURCE_CONSUMER_UNAVAILABLE', 'error_type': type(exc).__name__})); return 2
 
 
 if __name__ == '__main__':

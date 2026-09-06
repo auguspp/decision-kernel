@@ -2,6 +2,8 @@
 
 Status: OFFLINE CONNECTOR / COMPLETE SOURCE-SCAN RECEIPTS / NOT MARKET DELIVERY OR NATURAL NEW-SOURCE PROOF.
 
+Opt-in follow-up: `docs/native-feed-batches-and-execution-v1.md` adds explicit bounded source batches and verification of an exact market acquisition stage. The default v0 whole-export behavior and old receipt proofs below remain reproducible. This does not establish a live RSS-to-market workflow, qualified NBS publication clocks or remote delivery.
+
 This slice connects the existing native feed exporter to the existing literal theme-source scanner. It deliberately leaves `radar_feed_intake`, `EvidenceArtifact`, source publication-time policy and market computation unchanged. It uses the same original-feed verifier, source discovery, parser, canonical identity and static HTML renderer. No queue, database, crawler, library, workflow, source fetch, authority or Kernel object is added.
 
 ## Distinct states, not a generic acknowledgment flag

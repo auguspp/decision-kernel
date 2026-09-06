@@ -231,14 +231,18 @@ def advance(windows, *, recorded_at, previous=None, bootstrap=False):
     return registry, delta
 
 
-def source_rows(registry, delta):
-    """Unacknowledged non-baseline descriptions; gaps survive unchanged later windows."""
+def _source_candidates(registry, delta):
+    """Qualify every pending version once; this internal inventory is NOT a batch.
+
+    Registry/clock/text semantics remain global. Callers must apply consumer
+    budgets before exporting any rows. No registry or first-seen clock changes.
+    """
     validate_registry(registry)
     if (delta['registry_hash'] != registry['registry_hash']
             or canonical_hash({k:v for k,v in delta.items() if k != 'delta_hash'}) != delta['delta_hash']):
         raise ValueError('source export delta differs')
     if delta['status'] == 'INITIAL_BASELINE_ONLY':
-        return {'status': 'BASELINE_NOT_FORWARDED', 'sources': [], 'gaps': []}
+        return set(), [], []
     if not {c['version_hash'] for c in delta['changes']} <= {v['version_hash'] for v in registry['versions']}:
         raise ValueError('delta references missing version')
     # Seen is NOT delivered. Until an explicit consumer acknowledgment exists,
@@ -273,8 +277,33 @@ def source_rows(registry, delta):
             license_terms_note='First received is conservative availability. Library-projected feed description; no article/full-text, fact acceptance, Human review or independent-source claim.')
         rows.append({'recorded_at': item['first_recorded_at'], 'evidence': ev.model_dump(mode='json'),
                      'text_fields': [['permitted_excerpt']]})
-    if len(wanted) > MAX_SOURCES:
-        gaps.append({'reason': 'DOWNSTREAM_SOURCE_BUDGET_EXCEEDED', 'count': len(wanted)})
+    return wanted, rows, gaps
+
+
+def source_rows(registry, delta, *, selected_source_keys=None):
+    """Default complete export is unchanged; explicit batches keep global gaps.
+
+    A batch limits one consumer operation, never truncates the seen registry or
+    treats unselected records as delivered. Selection is a whole-row identity.
+    """
+    wanted, rows, gaps = _source_candidates(registry, delta)
+    if delta['status'] == 'INITIAL_BASELINE_ONLY':
+        if selected_source_keys not in (None, []):
+            raise ValueError('baseline cannot be forwarded by selecting a batch')
+        return {'status': 'BASELINE_NOT_FORWARDED', 'sources': [], 'gaps': []}
+    count = len(wanted)
+    if selected_source_keys is not None:
+        if (not isinstance(selected_source_keys, list)
+                or any(not isinstance(k, str) for k in selected_source_keys)
+                or selected_source_keys != sorted(set(selected_source_keys))):
+            raise ValueError('explicit unique sorted batch source keys required')
+        by_key = {canonical_hash(row): row for row in rows}
+        if not set(selected_source_keys) <= set(by_key):
+            raise ValueError('batch selected unknown or unqualified source')
+        rows = [by_key[k] for k in selected_source_keys]
+        count = len(rows)
+    if count > MAX_SOURCES:
+        gaps.append({'reason': 'DOWNSTREAM_SOURCE_BUDGET_EXCEEDED', 'count': count})
     if sum(len(r['evidence']['permitted_excerpt']) for r in rows) > MAX_TOTAL_CHARS:
         gaps.append({'reason':'DOWNSTREAM_TEXT_BUDGET_EXCEEDED'})
     if gaps:
