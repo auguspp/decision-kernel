@@ -21,7 +21,7 @@ from decision_kernel.runtime import theme_radar_probe as probe
 from decision_kernel.runtime import hithink_http
 from decision_kernel.runtime.economic_release_inputs import load_release_inputs
 from decision_kernel.runtime.economic_market_context import build_economic_market_context
-from decision_kernel.runtime.sector_radar_audit import _check_safe_json
+from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorRadarAuditError
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
@@ -127,6 +127,9 @@ def failure_details(exc):
 
 def failure_page(report):
     """A failed attempt is a readable first screen, never a successful empty scan."""
+    # Capture has datetime objects; replay has canonical JSON strings.
+    # Render the identical normalized representation on both paths.
+    report = stock._plain(report)
     e = lambda value: escape(str(value), quote=True)
     reason = report['reason_code']
     if reason not in REASONS or report['failure_category'] not in stock.STATUS_LABELS:
@@ -217,7 +220,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
                 entry['received_at']=now();clock(entry['received_at'])
                 try:
                     _check_safe_json(value,credential or None)
-                except ValueError:
+                except (ValueError, SectorRadarAuditError):
                     raise UnsafeStockResponse('UNSAFE_RESPONSE_NOT_RETAINED') from None
                 raw=(json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
                 if len(raw)>8*1024*1024:
@@ -286,15 +289,22 @@ def verify(output):
         if position>=len(report['requests']):raise ValueError('unrecorded request; no network fallback')
         entry=report['requests'][position];position+=1
         requested=probe._clock(entry['requested_at'])
-        if entry['path']!=path or entry['params']!=params or not last<=requested<=finished:
+        if (entry['path']!=path or entry['params']!=params or not last<=requested<=finished
+                or requested>at+timedelta(minutes=30)):
             raise ValueError('stock request identity or request clock differs')
         probe._window(bundle.market_state,requested)
         if entry['error_type'] is not None:
             if entry['response_file'] is not None:
                 raise ValueError('discarded response cannot be claimed as retained input')
             if entry['error_type']=='StockRequestFailure':
+                if entry['received_at'] is not None:
+                    raise ValueError('transport failure cannot claim a decoded response receipt')
                 raise StockRequestFailure('TRANSPORT_REQUEST_FAILED')
             if entry['error_type']=='UnsafeStockResponse':
+                received=probe._clock(entry['received_at'])
+                if not requested<=received<=finished or received>at+timedelta(minutes=30):
+                    raise ValueError('discarded unsafe response has an invalid receipt clock')
+                probe._window(bundle.market_state,received)
                 raise UnsafeStockResponse('UNSAFE_RESPONSE_NOT_RETAINED')
             raise ValueError('recorded request/receipt qualification failed')
         received=probe._clock(entry['received_at'])
