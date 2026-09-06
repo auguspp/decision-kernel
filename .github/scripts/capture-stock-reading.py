@@ -25,7 +25,7 @@ from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorR
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
-VERSION = 'stock-reading-capture-replay-v2'
+VERSION = 'stock-reading-capture-replay-v3'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
 NOT_STARTED = 'STOCK_READING_NOT_STARTED'
@@ -36,6 +36,9 @@ INTENT_REASONS = {
 }
 REASONS = {
     **INTENT_REASONS,
+    'STOCK_CALENDAR_COVERAGE_INSUFFICIENT': '本次交易日历未覆盖保存窗口和实际读取日期，不能证明最新完成交易日；不按星期推算或补日。',
+    'STOCK_CALENDAR_STATE_WINDOW_DIFFERS': '真实交易日历与保存的行业状态窗口不一致；缺失的中间交易日不能跨日桥接。',
+    'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION': '实际日历显示已有更新的完成交易日；请先取得相应合格Sector状态，漏过中间日先qualified recovery。',
     'HISTORY_READY_AFTER_ACTUAL_RECEIPT': '个股历史就绪时间晚于该响应实际接收时间；后续请求经过的时间不能修复这次未来时钟。',
     'CURRENT_QUOTE_HISTORY_MISMATCH': '当前快照与个股最新完成交易日的价格或量额不一致；不选较接近的一边，也不添加容差。',
     'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该不完整尝试的股票卡片。',
@@ -202,7 +205,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             'status':'NOT_COMPLETED_NO_SELECTION_CLAIM'} for r in plan['issuers']]
         def clock(value):
             nonlocal last
-            probe._window(bundle.market_state,value)
+            stock.check_observation_clock(bundle.market_state,value)
             if not last <= value <= observed_at+timedelta(minutes=30):
                 raise ValueError('request/receipt clock reversed or plan expired')
             last=value
@@ -299,7 +302,7 @@ def verify(output):
         if (entry['path']!=path or entry['params']!=params or not last<=requested<=finished
                 or requested>at+timedelta(minutes=30)):
             raise ValueError('stock request identity or request clock differs')
-        probe._window(bundle.market_state,requested)
+        stock.check_observation_clock(bundle.market_state,requested)
         if entry['error_type'] is not None:
             if entry['response_file'] is not None:
                 raise ValueError('discarded response cannot be claimed as retained input')
@@ -311,14 +314,14 @@ def verify(output):
                 received=probe._clock(entry['received_at'])
                 if not requested<=received<=finished or received>at+timedelta(minutes=30):
                     raise ValueError('discarded unsafe response has an invalid receipt clock')
-                probe._window(bundle.market_state,received)
+                stock.check_observation_clock(bundle.market_state,received)
                 raise UnsafeStockResponse('UNSAFE_RESPONSE_NOT_RETAINED')
             raise ValueError('recorded request/receipt qualification failed')
         received=probe._clock(entry['received_at'])
         if (entry['http_status']!=200 or entry['response_file']!=f'responses/{position:02d}.json'
                 or not requested<=received<=finished or received>at+timedelta(minutes=30)):
             raise ValueError('stock response identity or actual clock differs')
-        probe._window(bundle.market_state,received)
+        stock.check_observation_clock(bundle.market_state,received)
         value=read(output/entry['response_file']);_check_safe_json(value)
         last=received;return value
     try:

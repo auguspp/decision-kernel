@@ -57,6 +57,10 @@ def prepared():
 
     def response(path, params):
         calls.append((path, params))
+        if path == stock.HITHINK_CALENDAR_PATH:
+            # Explicit synthetic future sessions, not a real exchange-calendar proof.
+            sessions = (*state.sessions, FRIDAY+timedelta(days=3), FRIDAY+timedelta(days=4))
+            return {'code':0,'data':{'item':[{'date':d.strftime('%Y%m%d')} for d in sessions]}}
         if path == stock.indices.HITHINK_INDEX_CATALOG_PATH:
             return {'code':0,'data':{'timestamp':int(NOW.timestamp()*1000),'item':[
                 {'thscode':r.thscode,'name':r.name} for r in state.series if r.thscode!=state.benchmark_thscode]}}

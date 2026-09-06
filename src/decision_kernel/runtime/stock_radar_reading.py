@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from decimal import Decimal, localcontext, Context, InvalidOperation
 from html import escape
 from pathlib import Path
@@ -29,7 +29,7 @@ from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-raw-path-v2'
+VERSION = 'stock-first-reviewed-scope-raw-path-v3'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
@@ -49,6 +49,7 @@ POLICY = {
     'reference_requirement': 'HITHINK_61_OWN_RAW_BARS_EXACT_LATEST_QUOTE_NO_REPORTED_ACTIONS',
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
     'source_contract': own_stock.CONTRACT,
+    'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
@@ -91,10 +92,34 @@ def _reference_inputs(value):
         raise ValueError('reference input is not an explicitly synthetic normalized fixture')
 
 
+def check_observation_clock(state, at, *, calendar=None):
+    """A real cutoff first; freshness only after this attempt's calendar arrives.
+
+    Preparing a bounded plan is not qualification. The recorder/replayer calls
+    this for actual timestamps; the selector supplies the retained calendar on
+    every subsequent request/receipt and at final projection. Never rewrite at.
+    """
+    if not isinstance(at, datetime) or at.tzinfo is None or at.utcoffset() is None:
+        raise ValueError('stock observation clock must be timezone-aware')
+    close = datetime.combine(state.sessions[-1], time(15), tzinfo=SHANGHAI_TZ)
+    if at < close:
+        raise ValueError('saved stock context session is not completed at the observation clock')
+    if calendar is not None:
+        if (not calendar or calendar != tuple(sorted(set(calendar)))
+                or calendar[0] > state.sessions[0]
+                or calendar[-1] < at.astimezone(SHANGHAI_TZ).date()):
+            raise StockReadingInputError('DATA_INSUFFICIENT', 'STOCK_CALENDAR_COVERAGE_INSUFFICIENT')
+        if tuple(d for d in calendar if state.sessions[0] <= d <= state.sessions[-1]) != tuple(state.sessions):
+            raise StockReadingInputError('DATA_QUALIFICATION_FAILED', 'STOCK_CALENDAR_STATE_WINDOW_DIFFERS')
+        if latest_completed_a_share_session(calendar, observed_at=at) != state.sessions[-1]:
+            raise StockReadingInputError('DATA_INSUFFICIENT', 'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION')
+    return close
+
+
 def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *,
                           observed_at: datetime, company_manifest: str = COMPANY_MANIFEST) -> dict:
     """Freeze the whole reviewed scope before any stock history or compression."""
-    probe._window(state, observed_at)
+    check_observation_clock(state, observed_at)
     linked = company.build_company_links(source_root, association, manifest_path=company_manifest)
     p = association['projection']
     if (p['market_state_hash'] != state.state_hash or p['event_ledger_hash'] != ledger.ledger_hash
@@ -303,10 +328,11 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
             or expected_requests != plan['maximum_request_count'] or expected_requests > MAX_REQUESTS):
         raise ValueError('stock plan identity, policy, budget or authority differs')
     last = observed_at
+    calendar = None
     def at():
         nonlocal last
         value = cutoff_clock() if cutoff_clock else observed_at
-        probe._window(state, value)
+        check_observation_clock(state, value, calendar=calendar)
         if not probe._clock(plan['observed_at']) <= last <= value <= probe._clock(plan['observed_at']) + timedelta(minutes=30):
             raise ValueError('stock observation is outside its declared plan lifetime or clock reversed')
         last = value
@@ -315,6 +341,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     rows, memberships = [], {}
     state_rows = _state_rows(state)
     def get(path, params):
+        at()
         value = request_json(path, params)
         received = at()
         # Use this response's receipt, not the later quote/action receipt. A
@@ -326,9 +353,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         return value
     if plan['issuers']:
         calendar = normalize_hithink_calendar(get(HITHINK_CALENDAR_PATH, {}))
-        if (latest_completed_a_share_session(calendar, observed_at=at()) != state.sessions[-1]
-                or tuple(d for d in calendar if state.sessions[0] <= d <= state.sessions[-1]) != tuple(state.sessions)):
-            raise ValueError('saved industry state is not the exact latest calendar window; run producer separately')
+        at()  # Qualify the actual calendar before catalog, snapshot or stock requests.
         catalog = indices.fetch_hithink_industry_catalog(api_key='INJECTED', request_json=get)
         if catalog.catalog_hash != state.catalog_hash:
             raise ValueError('industry catalog changed; no name or proxy substitution')
