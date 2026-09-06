@@ -46,7 +46,7 @@ Current members are NEVER used to reconstruct historical index returns. Those re
 
 ## Run and reconstruction
 
-Use an existing exact market-state file and separately collected capture input; this command cannot fetch them:
+Use the existing package with its already-defined `discovery` extra (`python -m pip install -e '.[discovery]'`), an exact market-state file and separately collected capture input. The reused source-review helper imports the existing Beautiful Soup environment; there is no new dependency declaration. This command cannot fetch the inputs:
 
 ```bash
 python -m decision_kernel.runtime.theme_radar_probe \
