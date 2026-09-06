@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 
 from decision_kernel.evidence import EvidenceArtifact
 from decision_kernel.identity import canonical_hash, canonical_json
-from .economic_source_capture import PublicResponse, _NoRedirect, _safe_headers, _body_integrity
+from .economic_source_capture import PublicResponse, _NoRedirect, _safe_headers
 from .theme_radar_probe import _clock, _keys, _safe_path, _read, _unique_object, AUTHORITY
 from .theme_source_discovery import MAX_SOURCES, MAX_TEXT_CHARS, MAX_TOTAL_CHARS
 
@@ -32,8 +32,11 @@ VERSION = 'nbs-native-feed-seen-versions-v0'
 FEEDPARSER_VERSION = '6.0.14'
 FEEDS = {'nbs-releases': 'https://www.stats.gov.cn/sj/zxfb/rss.xml',
          'nbs-interpretations': 'https://www.stats.gov.cn/sj/sjjd/rss.xml'}
-POLICY_HASH = canonical_hash({'version': VERSION, 'feeds': FEEDS, 'feedparser': FEEDPARSER_VERSION})
-MAX_BODY = 2 * 1024 * 1024
+# Source-only resource review after the 4,207,576-byte declared NBS response.
+# Existing economic HTML/market limits and source/entry/consumer budgets do not change.
+MAX_BODY = 8 * 1024 * 1024
+POLICY_HASH = canonical_hash({'version': VERSION, 'feeds': FEEDS, 'feedparser': FEEDPARSER_VERSION,
+                              'maximum_feed_body_bytes': MAX_BODY})
 MAX_ITEMS, MAX_VERSIONS, MAX_TEXT = 128, 4096, 65536
 SEMANTICS = 'FEED_REPRESENTATIONS_NOT_ARTICLE_ACCEPTANCE_OR_MARKET_SIGNALS'
 LINK = re.compile(r'https?://www\.stats\.gov\.cn/sj/(?:zxfb|sjjd)/[0-9]{6}/t[0-9]{8}_[0-9]+\.html')
@@ -315,9 +318,18 @@ class FeedResponseRejected(ValueError):
         super().__init__(reason)
 
 
+def _feed_body_integrity(body, headers):
+    """RSS-specific size profile; do not relax the existing HTML capture limit."""
+    if not isinstance(body, bytes) or not 0 < len(body) <= MAX_BODY:
+        raise FeedResponseRejected('BODY_BYTE_BUDGET_EXCEEDED')
+    length = headers.get('content-length')
+    if length is not None and (not re.fullmatch('[0-9]+', length) or int(length) != len(body)):
+        raise FeedResponseRejected('BODY_CONTENT_LENGTH_MISMATCH')
+
+
 def check_response(response, feed_id):
     headers = _safe_headers(response.headers)
-    _body_integrity(response.body, headers)
+    _feed_body_integrity(response.body, headers)
     checks = [
         (type(response.status) is not int or response.status != 200, 'HTTP_STATUS_NOT_200'),
         (response.url != FEEDS[feed_id], 'RESPONSE_URL_MISMATCH'),
@@ -342,7 +354,7 @@ def fetch_feed(feed_id):
         if length is not None and (not re.fullmatch('[0-9]+', length) or int(length) > MAX_BODY):
             raise FeedResponseRejected('DECLARED_BODY_BYTE_BUDGET_EXCEEDED',
                 http_status=response.status, headers=headers)
-        raw = response.read(MAX_BODY + 1); _body_integrity(raw, headers)
+        raw = response.read(MAX_BODY + 1); _feed_body_integrity(raw, headers)
         result=PublicResponse(response.geturl(), response.status, headers, raw)
         # Preserve bounded HTTP metadata in the attempt before checking its media contract.
         # Qualification happens exactly once in capture; feedparser still sees only accepted bytes.
