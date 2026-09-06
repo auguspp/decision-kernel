@@ -195,7 +195,7 @@ class XiaohongshuWritingBrief(KernelModel):
 
 
 class XiaohongshuPlanCard(KernelModel):
-    card_number: int = Field(ge=1, le=13)
+    card_number: int = Field(ge=1)
     job: str = Field(min_length=1, max_length=512)
     turn: str = Field(min_length=1, max_length=512)
     claim_ids: tuple[str, ...] = ()
@@ -205,7 +205,7 @@ class XiaohongshuPlan(KernelModel):
     schema_version: Literal[1]
     reader_tension: str = Field(min_length=1)
     title_candidates: tuple[str, ...] = Field(min_length=3, max_length=5)
-    cards: tuple[XiaohongshuPlanCard, ...] = Field(min_length=7, max_length=13)
+    cards: tuple[XiaohongshuPlanCard, ...] = Field(min_length=1)
     strongest_counterpoint: str | None = None
     final_takeaway: str = Field(min_length=1)
 
@@ -229,6 +229,7 @@ class XiaohongshuDraftParagraph(KernelModel):
             DraftParagraphKind.FACT,
             DraftParagraphKind.MARKET_CONTEXT,
             DraftParagraphKind.INFERENCE,
+            DraftParagraphKind.ASSUMPTION,
             DraftParagraphKind.DERIVATION,
         } and not self.claim_ids:
             raise ValueError(f"{self.kind} draft paragraph requires claim_ids")
@@ -236,7 +237,7 @@ class XiaohongshuDraftParagraph(KernelModel):
 
 
 class XiaohongshuDraftCard(KernelModel):
-    card_number: int = Field(ge=1, le=13)
+    card_number: int = Field(ge=1)
     heading: str | None = Field(default=None, max_length=256)
     paragraphs: tuple[XiaohongshuDraftParagraph, ...] = Field(min_length=1)
 
@@ -245,7 +246,7 @@ class XiaohongshuDraft(KernelModel):
     schema_version: Literal[1]
     title: str = Field(min_length=1, max_length=256)
     reader_tension: str = Field(min_length=1)
-    cards: tuple[XiaohongshuDraftCard, ...] = Field(min_length=7, max_length=13)
+    cards: tuple[XiaohongshuDraftCard, ...] = Field(min_length=1)
     final_takeaway: str = Field(min_length=1)
 
     @model_validator(mode="after")
@@ -556,6 +557,8 @@ Authority boundary:
 - A later market anchor is price context only; it is not new fundamental Evidence.
 - Do not do new arithmetic. Any publishable arithmetic must already appear as a DERIVATION claim.
 - Preserve FACT vs MARKET_CONTEXT vs INFERENCE vs ASSUMPTION vs DERIVATION.
+- Publishing must not synthesize a new INFERENCE from facts or a new ASSUMPTION from prose convenience.
+  Those ideas must already exist as selected claims of the matching kind.
 
 Writing objective:
 - One note = ONE reader_tension.
@@ -629,7 +632,10 @@ Hard boundary:
 - Investment Authority = NONE.
 - Human Decision / Action / holdings / cost basis are OMIT.
 - Every FACT or MARKET_CONTEXT paragraph must cite claim_ids in the structured output.
-- Every INFERENCE paragraph must cite the claims it reasons from.
+- Every INFERENCE paragraph must cite at least one selected INFERENCE claim. It may explain that
+  Research inference with supporting selected claims, but it may not create a new inference.
+- Every ASSUMPTION paragraph must cite at least one selected ASSUMPTION claim. Do not introduce a
+  new assumption merely to make the prose or valuation cleaner.
 - DERIVATION paragraphs may use only provided DERIVATION claim ids; do not invent arithmetic.
 - ASSUMPTION must remain visibly conditional.
 - Do not turn certification, capacity, product availability, or management aspiration into orders,
@@ -714,6 +720,7 @@ Score each dimension 0-5:
 
 Hard blockers:
 - any unsupported factual upgrade;
+- any new inference or assumption that is not already present as a selected matching-kind claim;
 - invented number, price, probability, source, decision, action, position, or arithmetic;
 - Human portfolio state leakage;
 - recommendation language;
@@ -755,6 +762,15 @@ def validate_plan(
                 severity=ValidationSeverity.BLOCK,
                 location="reader_tension",
                 message="plan reader_tension must exactly preserve the brief tension",
+            )
+        )
+    if not 7 <= len(plan.cards) <= 13:
+        issues.append(
+            DraftValidationIssue(
+                code="CARD_COUNT_OUTSIDE_HEURISTIC",
+                severity=ValidationSeverity.WARN,
+                location="cards",
+                message="7-13 cards is a style heuristic, not a publication validity rule",
             )
         )
     if not any("?" in title or "？" in title for title in plan.title_candidates):
@@ -805,6 +821,15 @@ def validate_draft(
                 severity=ValidationSeverity.BLOCK,
                 location="reader_tension",
                 message="draft reader_tension must exactly preserve the brief tension",
+            )
+        )
+    if not 7 <= len(draft.cards) <= 13:
+        issues.append(
+            DraftValidationIssue(
+                code="CARD_COUNT_OUTSIDE_HEURISTIC",
+                severity=ValidationSeverity.WARN,
+                location="cards",
+                message="7-13 cards is a style heuristic, not a publication validity rule",
             )
         )
 
@@ -876,6 +901,36 @@ def validate_draft(
                         location=location,
                         message=(
                             "MARKET_CONTEXT paragraph may reference only MARKET_CONTEXT claims"
+                        ),
+                    )
+                )
+            if (
+                paragraph.kind is DraftParagraphKind.INFERENCE
+                and PublicationClaimKind.INFERENCE not in referenced_kinds
+            ):
+                issues.append(
+                    DraftValidationIssue(
+                        code="UNDECLARED_INFERENCE",
+                        severity=ValidationSeverity.BLOCK,
+                        location=location,
+                        message=(
+                            "INFERENCE paragraph requires at least one explicit selected "
+                            "INFERENCE publication claim"
+                        ),
+                    )
+                )
+            if (
+                paragraph.kind is DraftParagraphKind.ASSUMPTION
+                and PublicationClaimKind.ASSUMPTION not in referenced_kinds
+            ):
+                issues.append(
+                    DraftValidationIssue(
+                        code="UNDECLARED_ASSUMPTION",
+                        severity=ValidationSeverity.BLOCK,
+                        location=location,
+                        message=(
+                            "ASSUMPTION paragraph requires at least one explicit selected "
+                            "ASSUMPTION publication claim"
                         ),
                     )
                 )
