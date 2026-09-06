@@ -8,6 +8,14 @@ Status: READ-ONLY HARNESS / RETAINED SOURCE INPUTS / NO BENEFICIARY SELECTION.
 
 This answers: which retained company fields are relevant to a proposed transmission mechanism; which business scope and period do they describe; what still needs evidence? It does not answer which stock will benefit or whether a current investment thesis is true. The independent 881/884 rankings and existing market events are not modified. No ranking, member list, ticker keyword or generic supply-chain graph creates a company link.
 
+## Additional original-page livestock case — explicit opt-in
+
+Read `docs/muyuan-livestock-evidence-2026-09-06.md` for the actual CNINFO capture and selected-page proof. Use `--company-links radar_inputs/economic-company-links-livestock-v1.json` with the same command below to display Muyuan alongside the preserved YTO inputs. The old default manifest stays unchanged; its historical no-livestock state is not retroactively rewritten.
+
+The new case uses existing EvidenceArtifacts in a bounded `radar_inputs/company-evidence/` container with exact company identity and first recording time, NOT a manufactured ResearchSnapshot. Acquisition precedes recording, then mapping preparation and input cutoff. No Kernel model was added. Financial table fields, company operating statements and targets retain different source-use roles; a reviewed range is not a model coefficient, and internal revenue elimination is not discarded. Capacity, current freshness, exposure magnitude and net benefit remain unestablished. The three subsets come from one original, not three independent sources.
+
+Its source PDF was actually acquired and selected pages visually checked once; subsequent page generation only reads frozen EXTRACTED_VALUES/PARTIAL inputs and does not reopen the PDF. Thus the renderer's `original_page_verified_this_run=false` is intentional. The original remains a 90-day Actions artifact, not perpetually stored by a derived JSON. Neither source-role labels nor hash matches certify financial truth or Human approval. This opt-in report has no automatic workflow publication.
+
 ## First bounded example: YTO, not a new company research conclusion
 
 The manifest `radar_inputs/economic-company-links-v0.json` explicitly selects the existing `research_cases/600233-yto-deep-research-v2.json`, local Git blob `ae9bfce4dd3cfbedddb4be84075238d867f58529`, available at source reference `f0a667a4e569584b511bf16f151772a38492e700`.
@@ -17,9 +25,9 @@ The manifest `radar_inputs/economic-company-links-v0.json` explicitly selects th
 - Revenue, cost and cash/reinvestment channels are HYPOTHESIS_WITH_RETAINED_INPUTS. Their fields are available inputs, not proof that the mechanism has occurred.
 - Capacity/utilization is EVIDENCE_GAP. Parcel count and capex do not establish capacity, utilization, investment return or maintenance/growth allocation.
 - Exposure size, elasticity and net-benefit direction remain null. In particular, dividing express profit by group parent profit does not produce an audited segment revenue share.
-- Livestock has NO_COMPANY_EVIDENCE_SUPPLIED. This is missing supplied coverage, not evidence that no company is exposed. Do not fill it with industry members to make the page look complete.
+- In this unchanged default v0 manifest, livestock has NO_COMPANY_EVIDENCE_SUPPLIED. This is missing supplied coverage, not evidence that no company is exposed. The separate opt-in livestock manifest above adds one original-page case, not industry members.
 
-These are existing retained records, not new 2026 company disclosures acquired this turn. Their source locations include mirrors; both selected artifacts have EXTRACTED_VALUES / PARTIAL retention. The original PDF and exact original page numbers were not reverified. The display keeps the original source locator, location description, period and available/retrieved clocks and explicitly shows these limits. There is no fabricated page citation, raw-PDF hash, direct-original acquisition, FULL replay or current-business freshness claim.
+These YTO inputs are existing retained records, not new 2026 company disclosures acquired this turn. Their source locations include mirrors; both selected artifacts have EXTRACTED_VALUES / PARTIAL retention. The YTO original PDF and exact original page numbers were not reverified. The display keeps the original source locator, location description, period and available/retrieved clocks and explicitly shows these limits. There is no fabricated page citation, raw-PDF hash, direct-original acquisition, FULL replay or current-business freshness claim for this old case.
 
 ## Reuse and layer discipline
 
@@ -65,4 +73,4 @@ The output directory must be new and outside source/market input roots. Open `in
 
 Tests use the actual committed YTO source and economic excerpts, and the existing audited synthetic Sector producer for full shared-input CLI execution. They cover missing coverage, source roles, exact bytes, rehashed invalid fields, issuer/ID mismatches, PIT boundaries, HTML escaping, nonmutation and interrupted output. Synthetic candidate events are not a real prospective corpus. Full run/test results belong to the implementing PR, not an invented live proof.
 
-A natural current-company application still needs original filing/page verification, period-aligned operating observations, explicit segment magnitude where reported, and relevant counterevidence. None of those gaps is solved by this projection. No automatic Research route, opportunity score, equity ranking, Human Decision, Action, schedule or market/cache/event-ledger write is authorized. Sector's real next-session append and later T+5/T+20 maturity remain separate pending milestones.
+The new livestock case has specific original-page evidence as documented above. Period-aligned operating observations, current business freshness, explicit segment magnitude where applicable, capacity denominators and relevant counterevidence remain needed. None is solved by merely rendering this projection. No automatic Research route, opportunity score, equity ranking, Human Decision, Action, schedule or market/cache/event-ledger write is authorized. Sector's real next-session append and later T+5/T+20 maturity remain separate pending milestones.
