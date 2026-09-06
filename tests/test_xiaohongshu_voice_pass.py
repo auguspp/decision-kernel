@@ -54,7 +54,8 @@ def _plan(brief):
     )
 
 
-def _draft(brief, *, text: str):
+def _draft_texts(brief, texts: tuple[str, ...]):
+    assert len(texts) == 7
     return XiaohongshuDraft(
         schema_version=1,
         title="跌跌不休的三花智控，36.3元贵不贵？",
@@ -71,10 +72,14 @@ def _draft(brief, *, text: str):
                     ),
                 ),
             )
-            for index in range(1, 8)
+            for index, text in enumerate(texts, 1)
         ),
         final_takeaway="test",
     )
+
+
+def _draft(brief, *, text: str):
+    return _draft_texts(brief, (text,) * 7)
 
 
 def test_voice_lint_catches_repeated_template_transitions() -> None:
@@ -106,6 +111,47 @@ def test_voice_lint_catches_invented_author_backstory() -> None:
     assert any(issue.code == "INVENTED_AUTHOR_BACKSTORY" for issue in report.issues)
 
 
+def test_voice_lint_treats_one_canned_phrase_as_soft_signal() -> None:
+    brief = _brief()
+    report = voice_lint(
+        _draft_texts(
+            brief,
+            (
+                "值得注意的是，收入确认仍要看订单兑现。",
+                "先看现有订单。",
+                "再看收入兑现。",
+                "毛利率决定利润质量。",
+                "估值要回到每股价格。",
+                "新业务还缺规模证据。",
+                "最后看最难证明的环节。",
+            ),
+        )
+    )
+
+    assert report.status == "PASS"
+
+
+def test_voice_lint_catches_canned_slop_cluster() -> None:
+    brief = _brief()
+    report = voice_lint(
+        _draft_texts(
+            brief,
+            (
+                "值得注意的是，先看现有订单。",
+                "需要强调的是，再看收入兑现。",
+                "进一步来看，毛利率决定利润质量。",
+                "估值要回到每股价格。",
+                "新业务还缺规模证据。",
+                "现金流仍要验证。",
+                "最后看最难证明的环节。",
+            ),
+        )
+    )
+
+    assert report.status == "REVISE"
+    assert any(issue.code == "CANNED_SLOP_PHRASES" for issue in report.issues)
+
+
 def test_voice_rewrite_prompt_uses_real_sentence_anchors_and_preserves_authority() -> None:
     brief = _brief()
     draft = _draft(brief, text="这一页只推进同一个问题。")
@@ -118,5 +164,9 @@ def test_voice_rewrite_prompt_uses_real_sentence_anchors_and_preserves_authority
     assert "Do not force every idea into balanced A/B symmetry" in prompt
     assert "First-person memory is evidence too" in prompt
     assert "Treat “不是A，而是B” as a high-cost rhetorical device" in prompt
+    assert "State the main point early" in prompt
+    assert "One paragraph should advance one main idea" in prompt
+    assert "Anti-slop cleanup must never" in prompt
+    assert "这证明A，但还不能证明B" in prompt
     assert "30倍可能不应该被当成常态估值" in prompt
     assert "Do not turn the ending into a generic lesson about investing" in normalized
