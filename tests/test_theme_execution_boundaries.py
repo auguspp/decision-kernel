@@ -7,6 +7,8 @@ from datetime import timedelta
 
 import pytest
 
+import test_theme_plan_execution as execution_fixture
+
 from decision_kernel.identity import canonical_json
 from decision_kernel.runtime import radar_feed_intake as feed
 from decision_kernel.runtime import theme_plan_execution as execute
@@ -21,6 +23,14 @@ from test_radar_feed_consumer import AS_OF, contents
 def offline(monkeypatch):
     prohibit_network(monkeypatch)
     monkeypatch.setattr(feed.feedparser.http, 'get', lambda *a, **k: pytest.fail('no feed fetch'))
+
+
+def prepared_at(tmp_path, at, monkeypatch):
+    # Freeze a genuinely later synthetic source scan/plan. Keep the original
+    # source/feed/catalog clocks, rather than treating a Friday plan as current.
+    with monkeypatch.context() as fixture_clock:
+        fixture_clock.setattr(execution_fixture, 'AS_OF', at)
+        return prepared(tmp_path)
 
 
 def lookup():
@@ -84,9 +94,9 @@ def test_replay_decoder_reuses_sensitive_field_guard():
         execute._decode(b'{"nested":[{"api\\u005fkey":"test-only"}]}')
 
 
-def test_crossing_saved_day_window_during_pacing_stops_before_first_request(tmp_path):
-    _, output, calls, pauses, run = prepared(tmp_path)
+def test_crossing_saved_day_window_during_pacing_stops_before_first_request(tmp_path, monkeypatch):
     sunday = (AS_OF + timedelta(days=2)).replace(hour=23, minute=59, second=50)
+    _, output, calls, pauses, run = prepared_at(tmp_path, sunday, monkeypatch)
     after = sunday + timedelta(seconds=20)
     clock = iter([sunday, *[after + timedelta(seconds=i) for i in range(100)]])
     report = run(now=lambda: next(clock))
@@ -95,9 +105,9 @@ def test_crossing_saved_day_window_during_pacing_stops_before_first_request(tmp_
     assert execute.verify_execution(output)['market_stage_succeeded'] is False
 
 
-def test_window_expires_on_receipt_no_more_requests_are_sent(tmp_path):
-    _, output, calls, pauses, run = prepared(tmp_path)
+def test_window_expires_on_receipt_no_more_requests_are_sent(tmp_path, monkeypatch):
     sunday = (AS_OF + timedelta(days=2)).replace(hour=23, minute=59, second=30)
+    _, output, calls, pauses, run = prepared_at(tmp_path, sunday, monkeypatch)
     request = sunday + timedelta(seconds=20)
     received = sunday + timedelta(seconds=40)
     clock = iter([sunday, request, received, *[received + timedelta(seconds=i + 1) for i in range(100)]])
@@ -132,24 +142,50 @@ def test_response_clock_reversal_stops_following_requests(tmp_path):
 
 
 def test_last_valid_weekend_seconds_remain_usable(tmp_path, monkeypatch):
-    _, output, calls, _, run = prepared(tmp_path)
-    failures = []
-
-    def inspected(check):
-        def wrapped(*args, **kwargs):
-            try:
-                return check(*args, **kwargs)
-            except ValueError as exc:
-                failures.append((check.__name__, str(exc)))
-                raise
-        return wrapped
-
-    # Diagnostics are confined to this synthetic positive case, never production.
-    monkeypatch.setattr(probe, '_window', inspected(probe._window))
-    monkeypatch.setattr(execute, '_decode', inspected(execute._decode))
     start = (AS_OF + timedelta(days=2)).replace(hour=23, minute=59, second=0)
+    _, output, calls, _, run = prepared_at(tmp_path, start, monkeypatch)
     clock = iter(start + timedelta(seconds=i) for i in range(60))
     report = run(now=lambda: next(clock))
-    assert report['status'] == execute.COMPLETE, (report['failure'], failures, report['requests'])
+    assert report['status'] == execute.COMPLETE, report['failure']
     assert len(calls) == 7
+    assert execute.verify_execution(output)['market_stage_succeeded'] is True
+
+
+def test_old_plan_refused_even_inside_same_market_day(tmp_path):
+    _, output, calls, pauses, run = prepared(tmp_path)
+    with pytest.raises(ValueError, match='30-minute'):
+        run(now=lambda: AS_OF + timedelta(minutes=31))
+    assert calls == pauses == [] and not output.exists()
+
+
+def test_plan_lifetime_expiring_during_wait_stops_before_transport(tmp_path):
+    _, output, calls, pauses, run = prepared(tmp_path)
+    start = AS_OF + timedelta(minutes=29, seconds=50)
+    clock = iter([start, start + timedelta(seconds=20), start + timedelta(seconds=21)])
+    report = run(now=lambda: next(clock))
+    assert report['status'] == execute.FAILED
+    assert calls == [] and report['requests'] == [] and pauses == [20]
+    assert execute.verify_execution(output)['market_stage_succeeded'] is False
+
+
+def test_plan_lifetime_expiring_on_receipt_stops_next_request(tmp_path):
+    _, output, calls, pauses, run = prepared(tmp_path)
+    start = AS_OF + timedelta(minutes=29, seconds=30)
+    clock = iter([start, start + timedelta(seconds=20), start + timedelta(seconds=40),
+                  start + timedelta(seconds=41)])
+    report = run(now=lambda: next(clock))
+    assert report['status'] == execute.FAILED and len(calls) == 1 and pauses == [20]
+    assert report['requests'][0]['response_file'] is None
+    assert execute.verify_execution(output)['market_stage_succeeded'] is False
+
+
+def test_exact_thirty_minute_cutoff_remains_usable(tmp_path):
+    _, output, calls, _, run = prepared(tmp_path)
+    start = AS_OF + timedelta(minutes=29, seconds=40)
+    cutoff = AS_OF + timedelta(minutes=30)
+    clock = iter([start, *[start + timedelta(seconds=i) for i in range(1, 15)],
+                  cutoff, cutoff + timedelta(seconds=1), cutoff + timedelta(seconds=2)])
+    report = run(now=lambda: next(clock))
+    assert report['status'] == execute.COMPLETE, report['failure']
+    assert report['as_of'] == cutoff.isoformat() and len(calls) == 7
     assert execute.verify_execution(output)['market_stage_succeeded'] is True
