@@ -25,7 +25,8 @@ from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorR
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
-VERSION = 'stock-reading-capture-replay-v4'
+VERSION = 'stock-reading-capture-replay-v5'
+LIVE_COMPANIES = 'radar_inputs/economic-company-links-livestock-v2.json'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
 PARTIAL = 'COMPLETED_BATCH_WITH_STOCK_DATA_GAPS'
@@ -85,6 +86,13 @@ def write(path, value):
         f.write(data(value))
 
 
+def company_scope(value):
+    """Two explicit reviewed inputs, not latest/fallback or caller-nominated stocks."""
+    if not isinstance(value, str) or value not in {stock.COMPANY_MANIFEST, LIVE_COMPANIES}:
+        raise ValueError('an exact reviewed stock company manifest is required')
+    return value
+
+
 def inventory(root):
     helper = sibling('build-sector-radar-reading.py')
     files = {}
@@ -103,7 +111,8 @@ def inventory(root):
     return files
 
 
-def load_inputs(root, at):
+def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST):
+    company_manifest = company_scope(company_manifest)
     helper = sibling('build-sector-radar-reading.py')
     from decision_kernel.runtime.sector_parent_hints import load_sector_parent_hints
     hints = load_sector_parent_hints(root/helper['HINTS'])
@@ -115,7 +124,8 @@ def load_inputs(root, at):
     association = build_economic_market_context(market_state=bundle.market_state,event_ledger=bundle.event_ledger,
         observations=inputs.seed_observations, reviewed_releases=inputs.review_paths,
         links=read(root/helper['LINKS']), as_of=at, generated_at=at)
-    plan = stock.prepare_stock_reading(root,bundle.market_state,bundle.event_ledger,association,observed_at=at)
+    plan = stock.prepare_stock_reading(root,bundle.market_state,bundle.event_ledger,association,
+        observed_at=at,company_manifest=company_manifest)
     return bundle, association, plan
 
 
@@ -171,7 +181,10 @@ def failure_page(report):
 
 def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             provenance=SYNTHETIC, credential='', now=lambda:datetime.now(timezone.utc),
-            pause=time.sleep, reference_inputs=None):
+            pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST):
+    # Historical library callers remain explicit/reproducible; the live CLI below
+    # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.
+    company_manifest = company_scope(company_manifest)
     for p in (source_root,state_dir,output):
         probe._safe_path(p)
     if output.exists() or any(output.resolve().is_relative_to(p.resolve()) for p in (source_root,state_dir)):
@@ -181,7 +194,8 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             or (provenance==PUBLIC and reference_inputs is not None)):
         raise ValueError('live capture cannot use synthetic normalized reference inputs')
     helper = sibling('build-sector-radar-reading.py')
-    files, directories = helper['_source_files'](source_root,state_dir,as_of=observed_at)
+    files, directories = helper['_source_files'](source_root,state_dir,as_of=observed_at,
+        company_manifest=company_manifest)
     output.mkdir(parents=True)
     for name in directories:
         (output/'inputs'/name).mkdir(parents=True,exist_ok=True)
@@ -195,12 +209,13 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         'reason_code':None,'failed_thscode':None,'requests':[],
         'response_semantics':'DECODED_PROVIDER_JSON_NOT_ORIGINAL_HTTP_BYTES',
         'source_directories':directories,'plan_hash':None,'projection_hash':None,'coverage':None,
+        'company_manifest':company_manifest,
         'reference_input_hash':canonical_hash(reference_inputs) if reference_inputs is not None else None,
         'planned_issuer_outcomes':[], 'recorded_sector_events_latest_session':None,
         'remote_upload_verified':False,**stock.LIMITS}
     last=observed_at
     try:
-        bundle, association, plan = load_inputs(output/'inputs',observed_at)
+        bundle, association, plan = load_inputs(output/'inputs',observed_at,company_manifest=company_manifest)
         write(output/'association.json',association);write(output/'plan.json',plan)
         report['plan_hash']=plan['plan_hash']
         report['recorded_sector_events_latest_session']=plan['recorded_sector_events_latest_session']
@@ -250,7 +265,8 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         report['projection_hash']=result['projection_hash']
         write(output/'stock-reading.json',result)
         (output/'index.html').write_bytes(page(result,provenance))
-        if helper['_source_files'](source_root,state_dir,as_of=observed_at)!=(files,directories):
+        if helper['_source_files'](source_root,state_dir,as_of=observed_at,
+                company_manifest=company_manifest)!=(files,directories):
             raise ValueError('source inputs changed during stock reading')
         report['planned_issuer_outcomes']=[{'thscode':r['thscode'],'company_name':r['company_name'],
             'status':r['status']} for r in result['projection']['all_stock_observations']]
@@ -284,6 +300,7 @@ def verify(output):
             or report['provenance'] not in {PUBLIC,SYNTHETIC}
             or report['files']!={k:v for k,v in inventory(output).items() if k!='capture.json'}):
         raise ValueError('stock capture identity or retained bytes differ')
+    company_manifest = company_scope(report['company_manifest'])
     at=probe._clock(report['observed_at']);finished=probe._clock(report['finished_at'])
     if finished<at:raise ValueError('invalid finish clock')
     reference_path=output/'synthetic-reference-inputs.json'
@@ -294,7 +311,7 @@ def verify(output):
         raise ValueError('reference provenance changed; normalized fixtures are never live origin evidence')
     if report['status'] not in {COMPLETE,PARTIAL,FAILED}:
         raise ValueError('unknown capture status')
-    bundle,association,plan=load_inputs(output/'inputs',at)
+    bundle,association,plan=load_inputs(output/'inputs',at,company_manifest=company_manifest)
     if (plan!=read(output/'plan.json') or association!=read(output/'association.json')
             or report['plan_hash']!=plan['plan_hash']):
         raise ValueError('stock plan does not reconstruct from original source/state inputs')
@@ -463,6 +480,7 @@ def main(argv=None):
                     key=os.environ.get('HITHINK_FINANCE_API_KEY','')
                     value=capture(Path(os.environ['GITHUB_WORKSPACE']),root/'market',root/'reading',
                         observed_at=datetime.now(timezone.utc),workflow=request['workflow'],provenance=PUBLIC,credential=key,
+                        company_manifest=LIVE_COMPANIES,
                         transport=lambda p,q:hithink_stock_reading.request_json(api_key=key,path=p,params=q))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')
