@@ -119,7 +119,7 @@ def test_older_event_does_not_skip_identity_schema_or_numeric_validation(kind):
     elif kind == 'negative_bonus': e['per_share_bonus'] = '-1'
     elif kind == 'wrong_ticker': e['ticker'] = '999999'
     elif kind == 'intraday': e['ex_date_ms'] += 1
-    else: e['ex_date_ms'] -= 86400000*200
+    else: e['ex_date_ms'] = h['data']['item'][4]['date_ms'] + 86400000  # Saturday inside price window
     with pytest.raises(own.StockReadingInputError): check(h,q,a)
 
 
