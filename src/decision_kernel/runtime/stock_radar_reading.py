@@ -34,7 +34,7 @@ from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-raw-path-v4'
+VERSION = 'stock-first-reviewed-scope-issuer-isolation-v5'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
@@ -45,6 +45,17 @@ PREMARKET_CARRY_CUTOFF = time(9, 15)
 _LATER_TRADING_DAY_SNAPSHOT_ERROR = (
     'index snapshot provider data-ready time falls on a later trading session'
 )
+# Only an explicit single-stock response may be isolated. Authentication,
+# rate limits, unknown business errors, transport/safety errors, shared inputs,
+# request clocks and budgets remain batch-fatal. Never convert 3002 to no events.
+_ISSUER_BUSINESS_CODES = frozenset({3001, 3002, 3004})
+_ISSUER_DATA_REASONS = frozenset({
+    'REQUIRED_INPUT_OR_FIELD_MISSING', 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED',
+    'UNPRICED_OR_NONTRADING_SESSION_IN_PATH', 'CURRENT_QUOTE_HISTORY_MISMATCH',
+    'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW',
+    'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW',
+    'INPUT_CLOCK_IDENTITY_OR_SCHEMA_REJECTED',
+})
 POLICY = {
     'version': VERSION,
     'direction': 'EXISTING_CURRENT_SECTOR_GATE_NOT_NEW_EVENT_REQUIRED',
@@ -60,6 +71,8 @@ POLICY = {
     'source_contract': own_stock.CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
     'premarket_index_carry': 'STOCK_ONLY_RECEIPT_BOUND_STRICTLY_BEFORE_0915_OPENING_AUCTION',
+    'issuer_failure_scope': 'ISOLATE_KNOWN_STOCK_DATA_FAILURES_NOT_SHARED_OR_TRANSPORT_FAILURES',
+    'partial_result': 'USABLE_SUBSET_ONLY_WITH_FULL_PLAN_DENOMINATOR_AND_EXPLICIT_GAPS',
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
@@ -71,6 +84,9 @@ LIMITS = {
 }
 STATUS_LABELS = {
     'STOCKS_FOR_SHADOW_READING': '本范围有通过观察条件的股票',
+    'PARTIAL_STOCKS_FOR_SHADOW_READING': '可用数据子集有通过观察条件的股票；另有隔离项',
+    'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS': '已完成检查的子集没有匹配；其他股票数据不可用，不能判断',
+    'NO_USABLE_STOCK_DATA': '计划内股票数据均不可用；不是完整检查后的零匹配',
     'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE': '资料完整，但本范围没有通过全部观察条件的股票',
     'NO_ACTIVE_DIRECTIONS': '当前没有满足既有行业门槛的方向',
     'BUSINESS_COVERAGE_INSUFFICIENT': '有活跃方向，但没有相应已接入公司依据',
@@ -304,11 +320,13 @@ def _qualify_references(code, expected, bars, references, at):
         raise ValueError('current quote differs from the exact latest dated reference')
 
 
-def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None):
+def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None,
+                quote_received_at=None):
     expected = tuple(state.sessions[-61:])
     if references is None:
         by_day, checks = own_stock.qualify(response, quote, actions, code=code,
-            sessions=state.sessions, params=_history_params(code,state.sessions), observed_at=at)
+            sessions=state.sessions, params=_history_params(code,state.sessions), observed_at=at,
+            quote_received_at=quote_received_at)
         closes = tuple(by_day[d]['close_price'] for d in expected)
     else:
         qualified = normalize_hithink_completed_price_history(
@@ -366,6 +384,32 @@ def _select(rows, node_order):
     return selected
 
 
+def _isolatable_stock_error(exc, code):
+    if exc.thscode != code:
+        return False
+    if exc.category == 'REQUEST_FAILED':
+        return (exc.reason_code == 'PROVIDER_BUSINESS_REQUEST_FAILED'
+                and type(exc.provider_code) is int and exc.provider_code in _ISSUER_BUSINESS_CODES)
+    return (exc.category in {'DATA_INSUFFICIENT', 'DATA_QUALIFICATION_FAILED'}
+            and exc.reason_code in _ISSUER_DATA_REASONS)
+
+
+def _coverage(rows):
+    unavailable = [r for r in rows if r['input_failure'] is not None]
+    if any(r['eligible_for_shadow_reading'] or r['stock_path'] is not None
+           or r['excluded_reasons'] for r in unavailable):
+        raise ValueError('isolated stock cannot be selected, priced or labelled conditions-not-met')
+    return {
+        'planned_issuers': len(rows), 'dispositioned_issuers': len(rows),
+        'evaluated_issuers': len(rows)-len(unavailable),
+        'price_path_checked_issuers': sum(r['stock_path'] is not None for r in rows),
+        'qualified_issuers': sum(r['eligible_for_shadow_reading'] for r in rows),
+        'conditions_not_met_issuers': sum(r['status'] == 'CONDITIONS_NOT_MET' for r in rows),
+        'unavailable_issuers': len(unavailable), 'not_evaluated_issuers': 0,
+        'scope_complete': not unavailable,
+    }
+
+
 def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datetime,
                           cutoff_clock=None, reference_inputs=None) -> dict:
     _reference_inputs(reference_inputs)
@@ -407,12 +451,18 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         at()
         value = request_json(path, params)
         received = at()
-        # Use this response's receipt, not the later quote/action receipt. A
-        # provider future-ready clock cannot become valid by waiting for more calls.
-        if path == STOCK_HISTORY and reference_inputs is None:
-            own_stock.check_history_receipt(value, code=params['thscode'], received_at=received)
         if isinstance(value, dict) and type(value.get('code')) is int and value['code'] != 0:
-            raise StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED')
+            code = None
+            if path in {STOCK_HISTORY, own_stock.SNAPSHOT, own_stock.ACTIONS}:
+                code = params.get('thscode', params.get('thscodes'))
+            raise StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED',
+                                         thscode=code, provider_code=value['code'])
+        # Check readiness at the exact response receipt, before later requests.
+        if reference_inputs is None:
+            if path == STOCK_HISTORY:
+                own_stock.check_history_receipt(value, code=params['thscode'], received_at=received)
+            elif path == own_stock.SNAPSHOT:
+                own_stock.check_quote_receipt(value, code=params['thscodes'], received_at=received)
         return value
     if plan['issuers']:
         calendar = normalize_hithink_calendar(get(HITHINK_CALENDAR_PATH, {}))
@@ -471,7 +521,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         row = {**issuer, 'current_origins': valid_origins, 'stock_path': None,
                'market_comparison': {}, 'sector_comparisons': [], 'eligible_nodes': [],
                'excluded_reasons': [], 'eligible_for_shadow_reading': False,
-               'status': 'CONDITIONS_NOT_MET'}
+               'status': 'CONDITIONS_NOT_MET', 'input_failure': None}
         if not valid_origins:
             row['excluded_reasons'].append('NOT_A_CURRENT_MEMBER_OF_REVIEWED_ACTIVE_DIRECTION')
             rows.append(row); continue
@@ -480,13 +530,33 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if re.match(r'^(?:\*?ST|[NC])', name) or '退' in name:
             row['excluded_reasons'].append('RISK_OR_NEW_LISTING_NAME_LABEL')
             rows.append(row); continue
-        response = get(STOCK_HISTORY, _history_params(code, state.sessions))
-        quote = actions = None
-        if reference_inputs is None:
-            quote = get(own_stock.SNAPSHOT, {'thscodes':code})
-            actions = get(own_stock.ACTIONS, own_stock.action_params(code,state.sessions))
-        path = _stock_path(state, code, response, at=at(), references=reference_inputs,
-                           quote=quote, actions=actions)
+        phase = 'HISTORY'
+        try:
+            response = get(STOCK_HISTORY, _history_params(code, state.sessions))
+            quote = actions = quote_received_at = None
+            if reference_inputs is None:
+                phase = 'QUOTE'
+                quote = get(own_stock.SNAPSHOT, {'thscodes':code})
+                quote_received_at = last
+                phase = 'CORPORATE_ACTIONS'
+                actions = get(own_stock.ACTIONS, own_stock.action_params(code,state.sessions))
+            phase = 'INPUT_QUALIFICATION'
+            path = _stock_path(state, code, response, at=at(), references=reference_inputs,
+                              quote=quote, actions=actions, quote_received_at=quote_received_at)
+        except StockReadingInputError as exc:
+            # Reference-fixture corruption, shared errors, clocks, credentials,
+            # 429/4001 and unknown failures must never be hidden as stock gaps.
+            if reference_inputs is not None or not _isolatable_stock_error(exc, code):
+                raise
+            row['status'] = exc.category
+            row['input_failure'] = {
+                'scope': 'ISSUER_LOCAL', 'category': exc.category,
+                'reason_code': exc.reason_code, 'phase': phase,
+                'provider_business_code': exc.provider_code,
+                'selection_claim': 'NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET',
+            }
+            rows.append(row)
+            continue
         row['stock_path'] = path
         row['market_comparison'] = {n: {'stock_return': value, 'benchmark_return': bret[n],
             'excess_return': value - bret[n]} for n, value in path['returns'].items()}
@@ -518,16 +588,23 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
                          'CONTRACT_CHECKED_RAW_READING') if not reasons else 'CONDITIONS_NOT_MET'
         rows.append(row)
     rows = _plain(rows)
+    coverage = _coverage(rows)
     selected = _select(rows, plan['node_order'])
     reviewed_codes = {r['thscode'] for r in plan['issuers']}
-    status = ('STOCKS_FOR_SHADOW_READING' if selected else
-              'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
-              'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
-              'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
+    if coverage['unavailable_issuers']:
+        status = ('PARTIAL_STOCKS_FOR_SHADOW_READING' if selected else
+                  'NO_USABLE_STOCK_DATA' if not coverage['evaluated_issuers'] else
+                  'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS')
+    else:
+        status = ('STOCKS_FOR_SHADOW_READING' if selected else
+                  'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
+                  'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
+                  'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
     payload = {
         'version': VERSION, 'semantics': SEMANTICS, 'policy': POLICY, 'plan_hash': plan['plan_hash'],
         'market_session': state.sessions[-1], 'observed_at': at(), 'status': status,
         'scope': plan['reviewed_company_coverage'], 'reviewed_issuers': len(plan['issuers']),
+        'coverage': coverage, 'selection_scope_complete': coverage['scope_complete'],
         'evidence_scope_issuers': plan['evidence_scope_issuers'],
         'active_directions_without_stock_business_scope': plan['active_directions_without_stock_business_scope'],
         'recorded_sector_events_latest_session': plan['recorded_sector_events_latest_session'],
@@ -554,10 +631,15 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
 def render_stock_reading(report: dict) -> str:
     p = report['projection']
     codes = [r['thscode'] for r in p['surfaced_stocks']]
+    coverage = _coverage(p['all_stock_observations'])
     if (report['projection_hash'] != canonical_hash(p) or p['semantics'] != SEMANTICS
             or p['policy'] != POLICY or any(p[k] != v for k, v in LIMITS.items())
             or len(codes) > 3 or len(codes) != len(set(codes))
             or p['status'] not in STATUS_LABELS
+            or p['coverage'] != coverage or p['reviewed_issuers'] != coverage['planned_issuers']
+            or p['selection_scope_complete'] != coverage['scope_complete']
+            or any(r['input_failure'] is not None or not r['eligible_for_shadow_reading']
+                   or r not in p['all_stock_observations'] for r in p['surfaced_stocks'])
             or (codes and p['reference_input_provenance'] not in {SYNTHETIC_REFERENCES,HITHINK_RAW})):
         raise ValueError('stock reading identity or authority differs')
     e = lambda x: escape(str(x), quote=True)
@@ -570,11 +652,15 @@ def render_stock_reading(report: dict) -> str:
         f'<p><strong>{len(codes)} 只通过本版观察条件</strong>；行情交易日 {e(p["market_session"])}；读取截止 {e(p["observed_at"])}</p>',
         '<p class="notice">值得看不等于值得买。按需打开的 shadow 页面，不是买入建议或 canonical Inbox 推送；不是全 A 股盲选。</p>',
         f'<p>已接入依据的公司：{e("、".join(r["company_name"]+" "+r["thscode"] for r in p["evidence_scope_issuers"]))}。本次活跃方向内计划审阅 {p["reviewed_issuers"]} 只；未接入业务依据的所查成员 {len(p["unreviewed_current_members"])} 只。</p>',
-        f'<p>来源事件：{p["recorded_sector_events_latest_session"]} 个已记录行业事件；没有新事件不等于没有仍强势路径。本层不生成事件。</p></header>']
+        f'<p>来源事件：{p["recorded_sector_events_latest_session"]} 个已记录行业事件；没有新事件不等于没有仍强势路径。本层不生成事件。</p></header>',
+        f'<section><h2>{e(STATUS_LABELS[p["status"]])}</h2><p>计划 {coverage["planned_issuers"]} 只；已完成条件检查 {coverage["evaluated_issuers"]} 只；其中价格路径完整 {coverage["price_path_checked_issuers"]} 只；条件不满足 {coverage["conditions_not_met_issuers"]} 只；数据不可用 {coverage["unavailable_issuers"]} 只；未处理 {coverage["not_evaluated_issuers"]} 只。</p>']
+    if not coverage['scope_complete']:
+        parts.append('<p class="notice">部分股票已隔离，其他股票继续按原条件检查。下面的结果只代表可用数据子集，不是全计划排名或完整零匹配；被隔离股票仍计入计划分母，不能视为条件不满足。</p>')
+    parts.append('</section>')
     if p['reference_input_provenance'] == SYNTHETIC_REFERENCES:
         parts.append('<p class="notice">SYNTHETIC_TEST_ONLY：合成行情及参考价验收样本，不是真实程序选股；不能用作市场判断。</p>')
     if not codes:
-        parts.append(f'<section><h2>{e(STATUS_LABELS[p["status"]])}</h2><p>不等于市场没有机会。覆盖缺口、条件不满足与数据不足分别记录；数据不足的尝试不会生成成功空名单。</p></section>')
+        parts.append('<section><h2>本次没有可展示的合格卡片</h2><p>不等于市场没有机会。覆盖缺口、条件不满足与数据不足分别记录；数据不足的尝试不会生成成功空名单。</p></section>')
     for row in p['surfaced_stocks']:
         path = row['stock_path']
         parts += [f'<article><h2>{e(row["company_name"])} <small>{e(row["thscode"])}</small></h2>',
@@ -603,8 +689,17 @@ def render_stock_reading(report: dict) -> str:
             parts += ['<details><summary>公司依据、原始位置及全部核查问题</summary><pre>',
                 e(canonical_json({'basis':c['basis'],'mechanisms':c['mechanisms'], 'issuer_binding_note':c['issuer_binding_note']})), '</pre></details>']
         parts.append('</article>')
+    if coverage['unavailable_issuers']:
+        parts.append('<section><h2>数据不可用的股票 · 不进入合格名单</h2><div class="scroll"><table><tr><th>公司</th><th>阶段</th><th>原因</th><th>业务码</th></tr>')
+        for row in p['all_stock_observations']:
+            failure = row['input_failure']
+            if failure is not None:
+                values = (row['company_name']+' '+row['thscode'], failure['phase'],
+                          failure['reason_code'], failure['provider_business_code'])
+                parts.append('<tr>'+''.join('<td>'+e(v)+'</td>' for v in values)+'</tr>')
+        parts.append('</table></div><p>原始响应和精确请求保留在附件；没有删除证券身份、填补价格、伪造无公司行为或放宽金额一致性。</p></section>')
     parts += ['<section><h2>完整范围与未选中原因</h2><details><summary>全部公司、未覆盖成员及合格但未展示项</summary><pre>',
-              e(canonical_json({k:p[k] for k in ('all_stock_observations','unreviewed_current_members','omitted_eligible_stock_codes','active_directions_without_stock_business_scope')})),
+              e(canonical_json({k:p[k] for k in ('coverage','all_stock_observations','unreviewed_current_members','omitted_eligible_stock_codes','active_directions_without_stock_business_scope')})),
               '</pre></details><p>固定条件尚未经过前瞻效果验证；最多3只只是阅读压缩，不是综合机会分数。</p>',
               '<a href="stock-reading.json">完整结构化结果</a></section>',
               '<footer>SHADOW OBSERVATION ONLY · HUMAN ATTENTION AUTHORITY = NONE · RESEARCH AUTHORITY = NONE · INVESTMENT AUTHORITY = NONE</footer></main></html>']
