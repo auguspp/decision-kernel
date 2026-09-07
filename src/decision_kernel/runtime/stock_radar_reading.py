@@ -2,7 +2,8 @@
 
 Raw close ratios and independently reference-qualified/adjusted performance are
 not interchangeable contracts. Real input uses HiThink's dated raw bars, exact
-latest quote checks and reported-action exclusions, not synthetic daily references.
+latest price checks, bounded turnover reconciliation and window-scoped action
+checks, not synthetic daily references.
 """
 from __future__ import annotations
 
@@ -34,7 +35,7 @@ from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-issuer-isolation-v5'
+VERSION = 'stock-first-reviewed-scope-window-qualified-v6'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
@@ -62,11 +63,13 @@ POLICY = {
     'issuer_universe': 'ALL_REVIEWED_ISSUERS_IN_ACTIVE_LINKED_NODES_NOT_ALL_A_SHARES',
     'membership': 'EXACT_CURRENT_MEMBER_REQUIRED_NOT_HISTORICAL_EXPOSURE',
     'stock_gate': 'POSITIVE_5D_RAW_AND_5D_MARKET_EXCESS_AND_20D_MARKET_EXCESS_AND_ONE_20D_SECTOR_EXCESS',
-    'sixty_day': 'CONTEXT_ONLY_NOT_A_GATE',
+    'sixty_day': 'CONTEXT_ONLY_NOT_A_GATE_NULL_IF_REPORTED_ACTION_CROSSES',
     'activity': 'POSITIVE_LATEST_VOLUME_AND_TURNOVER_NOT_EXECUTION_ELIGIBILITY',
     'name_guard': 'ST_DELISTING_AND_N_C_PREFIX_LABELS_ONLY_NOT_FULL_REGULATORY_STATUS',
     'presentation': 'NODE_ORDER_ROUND_ROBIN_THEN_20D_MARKET_EXCESS_5D_MARKET_EXCESS_CODE',
-    'reference_requirement': 'HITHINK_61_OWN_RAW_BARS_EXACT_LATEST_QUOTE_NO_REPORTED_ACTIONS',
+    'reference_requirement': 'HITHINK_61_OWN_BARS_EXACT_PRICES_VOLUME_TOLERANT_TURNOVER_ACTIONS_BY_WINDOW',
+    'turnover_reconciliation': dict(own_stock.TURNOVER_POLICY),
+    'corporate_actions': 'SUCCESSFUL_QUERY_REQUIRED_NO_REPORTED_EVENT_CROSSING_5D_OR_20D',
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
     'source_contract': own_stock.CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
@@ -350,13 +353,20 @@ def _stock_path(state, code, response, *, at, references=None, quote=None, actio
                   'historical_daily_reference_check':'EXACT_SUPPLIED_TEST_REFERENCES_NOT_LIVE_ORIGIN_PROOF'}
     amounts = tuple(Decimal(str(by_day[d]['turnover'])) for d in expected)
     prior = _average(amounts[-25:-5])
+    windows = checks.get('action_window_checks', {})
+    def comparable(name):
+        return references is not None or windows[name]['usable_for_raw_comparison']
     return {
         'last_close': closes[-1], 'previous_raw_close': closes[-2],
         'latest_volume': Decimal(str(by_day[expected[-1]]['volume'])), 'latest_turnover': amounts[-1],
         'daily_raw_return': closes[-1] / closes[-2] - 1,
-        'returns': {str(n): _return_over(closes, end_index=60, sessions=n) for n in (5, 20, 60)},
+        'returns': {str(n): (_return_over(closes, end_index=60, sessions=n)
+                             if comparable(str(n)) else None) for n in (5, 20, 60)},
+        'unavailable_price_metrics': [name for name, w in windows.items()
+                                      if not w['usable_for_raw_comparison']],
         'turnover_pulse_5_vs_prior_20': _average(amounts[-5:]) / prior if prior else None,
-        'twenty_day_return_five_sessions_ago': _return_over(closes, end_index=55, sessions=20),
+        'twenty_day_return_five_sessions_ago': (_return_over(closes, end_index=55, sessions=20)
+                                              if comparable('20_five_sessions_ago') else None),
         'price_convention': 'RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN',
         'corporate_action_adjustment': 'NOT_PERFORMED', 'tradability': 'NOT_CERTIFIED_BY_PRICE_AND_VOLUME',
         'reference_continuity': checks['historical_daily_reference_check'],
@@ -571,7 +581,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
             continue
         row['stock_path'] = path
         row['market_comparison'] = {n: {'stock_return': value, 'benchmark_return': bret[n],
-            'excess_return': value - bret[n]} for n, value in path['returns'].items()}
+            'excess_return': None if value is None else value - bret[n]} for n, value in path['returns'].items()}
         for origin in valid_origins:
             beat = False
             for sector in origin['current_member_sectors']:
@@ -581,7 +591,8 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
                 for n in (5, 20, 60):
                     ret = _return_over(prices, end_index=len(prices)-1, sessions=n)
                     comparison['horizons'][str(n)] = {'sector_return': ret,
-                        'stock_excess_return': path['returns'][str(n)] - ret}
+                        'stock_excess_return': (None if path['returns'][str(n)] is None
+                                                else path['returns'][str(n)] - ret)}
                 beat |= comparison['horizons']['20']['stock_excess_return'] > 0
                 row['sector_comparisons'].append(comparison)
             if beat:
@@ -656,7 +667,7 @@ def render_stock_reading(report: dict) -> str:
             or (codes and p['reference_input_provenance'] not in {SYNTHETIC_REFERENCES,HITHINK_RAW})):
         raise ValueError('stock reading identity or authority differs')
     e = lambda x: escape(str(x), quote=True)
-    pct = lambda x: f'{Decimal(x)*100:+.2f}%'
+    pct = lambda x: '不可比（跨公司行为）' if x is None else f'{Decimal(x)*100:+.2f}%'
     parts = ['<!doctype html><html lang="zh-CN"><meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width,initial-scale=1">',
         '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; base-uri \'none\'">',
@@ -666,7 +677,7 @@ def render_stock_reading(report: dict) -> str:
         '<p class="notice">值得看不等于值得买。按需打开的 shadow 页面，不是买入建议或 canonical Inbox 推送；不是全 A 股盲选。</p>',
         f'<p>已接入依据的公司：{e("、".join(r["company_name"]+" "+r["thscode"] for r in p["evidence_scope_issuers"]))}。本次活跃方向内计划审阅 {p["reviewed_issuers"]} 只；未接入业务依据的所查成员 {len(p["unreviewed_current_members"])} 只。</p>',
         f'<p>来源事件：{p["recorded_sector_events_latest_session"]} 个已记录行业事件；没有新事件不等于没有仍强势路径。本层不生成事件。</p></header>',
-        f'<section><h2>{e(STATUS_LABELS[p["status"]])}</h2><p>计划 {coverage["planned_issuers"]} 只；已完成条件检查 {coverage["evaluated_issuers"]} 只；其中价格路径完整 {coverage["price_path_checked_issuers"]} 只；条件不满足 {coverage["conditions_not_met_issuers"]} 只；数据不可用 {coverage["unavailable_issuers"]} 只；未处理 {coverage["not_evaluated_issuers"]} 只。</p>']
+        f'<section><h2>{e(STATUS_LABELS[p["status"]])}</h2><p>计划 {coverage["planned_issuers"]} 只；已完成条件检查 {coverage["evaluated_issuers"]} 只；其中61日数据及筛选窗口已核验 {coverage["price_path_checked_issuers"]} 只；条件不满足 {coverage["conditions_not_met_issuers"]} 只；数据不可用 {coverage["unavailable_issuers"]} 只；未处理 {coverage["not_evaluated_issuers"]} 只。</p>']
     if not coverage['scope_complete']:
         parts.append('<p class="notice">部分股票已隔离，其他股票继续按原条件检查。下面的结果只代表可用数据子集，不是全计划排名或完整零匹配；被隔离股票仍计入计划分母，不能视为条件不满足。</p>')
     parts.append('</section>')
@@ -683,9 +694,17 @@ def render_stock_reading(report: dict) -> str:
         for n in ('5', '20', '60'):
             values = row['market_comparison'][n]
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (n+'日',pct(values['stock_return']),pct(values['benchmark_return']),pct(values['excess_return'])))+'</tr>')
-        parts += ['</table></div><p><small>61个完成交易日；未复权原始价格变化，非含分红总回报；60日只展示，不参与门槛。当前成员不倒灌历史。</small></p>']
+        parts += ['</table></div><p><small>61个完成交易日；未复权原始价格变化，非含分红总回报；60日不参与门槛，跨已报告公司行为时不计算其比较值。当前成员不倒灌历史。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
-            parts.append('<p class="notice">本版仅原始收盘价路径观察：已核对当前快照前收及量额，窗口内有已报告公司行为则不展示。事件接口未报告不等于所有公司行为已被独立排除；没有逐日历史前收核验，不声称复权表现或投资者总回报。</p>')
+            parts.append('<p class="notice">本版仅原始收盘价路径观察：价格、前收及成交量严格核对，成交额使用明示容差；公司行为查询成功且5/20日筛选区间未跨已报告事件。更早事件保留，受影响的60日或移位窗口不提供比较值。事件接口未报告不等于所有公司行为已被独立排除；没有逐日历史前收核验，不声称复权表现或投资者总回报。</p>')
+            checks = path['input_checks']
+            amount = checks['turnover_reconciliation']
+            parts.append(f'<p>成交额核对：历史 {e(amount["historical_cny"])} 元；快照 {e(amount["snapshot_cny"])} 元；差额 {e(amount["absolute_difference_cny"])} 元，允许上限 {e(amount["allowed_difference_cny"])} 元。计算仍使用历史原值；不是供应商精度保证。</p>')
+            for event in checks['reported_corporate_actions']:
+                parts.append(f'<p class="notice">已报告公司行为：{e(event["ex_date"])}，每股现金 {e(event["dividend_per_share"])}，每股送转 {e(event["per_share_bonus"])}。事件未隐去；未自动复权。</p>')
+            parts += ['<details><summary>金额容差与各价格窗口的公司行为检查</summary><pre>',
+                      e(canonical_json({'turnover': amount, 'windows': checks['action_window_checks']})),
+                      '</pre></details>']
         for origin in row['current_origins']:
             c = origin['company']
             sources = [s for s in origin['direction_sources'] if s['thscode'] in origin['current_member_sectors']]
@@ -710,7 +729,7 @@ def render_stock_reading(report: dict) -> str:
                 values = (row['company_name']+' '+row['thscode'], failure['phase'],
                           failure['reason_code'], failure['provider_business_code'])
                 parts.append('<tr>'+''.join('<td>'+e(v)+'</td>' for v in values)+'</tr>')
-        parts.append('</table></div><p>原始响应和精确请求保留在附件；没有删除证券身份、填补价格、伪造无公司行为或放宽金额一致性。</p></section>')
+        parts.append('</table></div><p>原始响应和精确请求保留在附件；没有删除证券身份、填补价格或伪造无公司行为；只有成交额使用明示的有界容差，其他关键字段仍严格检查。</p></section>')
     parts += ['<section><h2>完整范围与未选中原因</h2><details><summary>全部公司、未覆盖成员及合格但未展示项</summary><pre>',
               e(canonical_json({k:p[k] for k in ('coverage','all_stock_observations','unreviewed_current_members','omitted_eligible_stock_codes','active_directions_without_stock_business_scope')})),
               '</pre></details><p>固定条件尚未经过前瞻效果验证；最多3只只是阅读压缩，不是综合机会分数。</p>',
