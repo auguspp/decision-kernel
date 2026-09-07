@@ -10,14 +10,23 @@ from __future__ import annotations
 import json
 import re
 from datetime import datetime, time, timedelta, timezone
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, Context, localcontext
 from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-CONTRACT = 'hithink-own-61-raw-bars-receipt-bound-quote-and-reported-actions-v2'
+CONTRACT = 'hithink-own-61-bars-turnover-tolerance-window-actions-v3'
+# Project reconciliation policy, not HiThink precision or a supplier guarantee.
+# PEP 485 symmetric relative/absolute comparison, with an extra CNY hard cap.
+TURNOVER_POLICY = {
+    'version': 'stock-snapshot-turnover-cny-v1',
+    'relative_tolerance': '0.0000001', 'absolute_tolerance_cny': '0.01',
+    'hard_cap_cny': '100', 'calculation_source': 'DATED_HISTORY_UNCHANGED',
+    'supplier_precision_rule_established': False,
+}
+SELECTION_WINDOWS = (5, 20)
 
 
 class StockReadingInputError(ValueError):
@@ -112,14 +121,54 @@ def action_params(code, sessions):
     return {'thscode': code, 'from': sessions[-61].isoformat(), 'to': sessions[-1].isoformat()}
 
 
+def reconcile_turnover(historical, snapshot, *, code):
+    """A narrow field-only tolerance; never round, replace or fill source values."""
+    a = _number({'turnover': historical}, 'turnover', code, positive=True)
+    b = _number({'turnover': snapshot}, 'turnover', code, positive=True)
+    # Independent of the caller's Decimal context. Inputs have <=28 digits and
+    # exponent magnitude <=12, so this also preserves the boundary subtraction.
+    with localcontext(Context(prec=64)):
+        delta = abs(a-b)
+        bound = min(Decimal(TURNOVER_POLICY['hard_cap_cny']),
+                    max(Decimal(TURNOVER_POLICY['absolute_tolerance_cny']),
+                        Decimal(TURNOVER_POLICY['relative_tolerance'])*max(a,b)))
+        if delta > bound:
+            _bad(code, 'CURRENT_QUOTE_HISTORY_MISMATCH')
+        return {**TURNOVER_POLICY, 'historical_cny': str(a), 'snapshot_cny': str(b),
+                'absolute_difference_cny': str(delta), 'allowed_difference_cny': str(bound),
+                'status': 'EXACT' if a == b else 'WITHIN_EXPLICIT_TOLERANCE'}
+
+
+def action_window_checks(expected, dates):
+    """The ex-date affects an interval only after its base CLOSE: (base, end].
+
+    These are checks of reported events, not proof of exhaustive event coverage.
+    No adjustment formula, inferred no-event response or issuer-specific exception.
+    """
+    windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
+    windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
+    result = {}
+    for name,(base,end) in windows.items():
+        crossing = [d.date().isoformat() for d in dates if base < d.date() <= end]
+        result[name] = {'base_session': base.isoformat(), 'end_session': end.isoformat(),
+                        'boundary': 'BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE',
+                        'reported_event_dates': crossing,
+                        'status': ('REPORTED_ACTION_CROSSES_RAW_WINDOW' if crossing else
+                                   'NO_REPORTED_ACTION_CROSSES_RAW_WINDOW'),
+                        'usable_for_raw_comparison': not crossing,
+                        'is_selection_window': name in {'5','20'}}
+    return result
+
+
 def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             quote_received_at=None):
     """Check actual same-provider values without inventing 61 daily prev_price fields.
 
-    A nonempty reported action window is conservatively blocked, not adjusted.
+    Require a successful, validated action response. Reported events block only
+    the selection intervals they cross; affected context intervals are unavailable.
     Empty means no event REPORTED BY THIS PROVIDER, not exhaustive absence proof.
-    The snapshot has no individual date: its values must exactly match the dated
-    history, and its date is explicitly NOT independently certified.
+    The snapshot has no individual date: OHLC/volume/previous close remain exact,
+    turnover alone has a bounded policy, and trade date is not independently certified.
     """
     if not isinstance(code, str) or not re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', code):
         _bad(code)
@@ -175,9 +224,10 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         _bad(code)
     last = bars[expected[-1]]
     for current, historical in (('last_price','close_price'),('open_price','open_price'),
-            ('high_price','high_price'),('low_price','low_price'),('volume','volume'),('turnover','turnover')):
+            ('high_price','high_price'),('low_price','low_price'),('volume','volume')):
         if _number(last_quote, current, code) != last[historical]:
             _bad(code, 'CURRENT_QUOTE_HISTORY_MISMATCH')
+    turnover_check = reconcile_turnover(str(last['turnover']), last_quote.get('turnover'), code=code)
     if _number(last_quote, 'prev_price', code, positive=True) != bars[expected[-2]]['close_price']:
         _bad(code, 'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW')
     event_data = _data(actions, code)
@@ -186,7 +236,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     events = event_data.get('item')
     if not isinstance(events, list) or len(events) > 256:
         _bad(code)
-    dates = []
+    dates, retained_events = [], []
     for event in events:
         if not isinstance(event, dict) or event.get('ticker') != code[:6]:
             _bad(code)
@@ -194,25 +244,32 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         if key.time() != time() or key.date() not in expected:
             _bad(code)
         dates.append(key)
-        _number(event, 'dividend_per_share', code)
-        _number(event, 'per_share_bonus', code)
-    if dates != sorted(dates, reverse=True):
+        cash = _number(event, 'dividend_per_share', code)
+        bonus = _number(event, 'per_share_bonus', code)
+        retained_events.append({'ticker': code[:6], 'ex_date': key.date().isoformat(),
+                                'dividend_per_share': str(cash), 'per_share_bonus': str(bonus)})
+    if dates != sorted(set(dates), reverse=True):
         _bad(code)
-    if events:
+    window_checks = action_window_checks(expected, dates)
+    if any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
     return bars, {
         'contract': CONTRACT,
         'history_identity_basis': 'EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED',
         'history_request': dict(params), 'history_provider_ready_at': ready.isoformat(),
         'market_session_basis': 'EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR',
-        'latest_quote_check': 'EXACT_OHLC_VOLUME_TURNOVER_AND_PREVIOUS_RAW_CLOSE_MATCH',
+        'latest_quote_check': 'EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE',
+        'turnover_reconciliation': turnover_check,
         'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
         'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
         'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
         # Captures serialize actual clocks in UTC; equivalent offset inputs must
         # regenerate identical metadata rather than preserve a caller's spelling.
         'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
-        'corporate_actions': 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF',
+        'corporate_actions': ('REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF'
+                              if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
+        'reported_corporate_actions': retained_events, 'action_window_checks': window_checks,
+        'corporate_action_query_succeeded': True,
         'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
         'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',
     }
