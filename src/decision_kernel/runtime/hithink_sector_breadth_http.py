@@ -344,6 +344,38 @@ def fetch_hithink_sector_membership(
     )
 
 
+def _coherent_unpriced_zero_previous(raw: Mapping[str, Any]) -> bool:
+    """Recognize only the provider's whole-row pre-trading zero sentinel.
+
+    Full-market pages can include code-table identities before they have a tradable
+    previous close. A live 2026-09-07 capture showed such a row with every quote
+    field missing, zero volume/turnover and ``prev_price == 0``. Preserve the row as
+    unpriced instead of inventing a return. Any contradictory zero previous close
+    (for example a present last price or trading activity) still fails closed.
+    """
+
+    previous = raw.get("prev_price")
+    if isinstance(previous, bool) or previous != 0:
+        return False
+    if any(
+        raw.get(field) is not None
+        for field in (
+            "last_price",
+            "open_price",
+            "high_price",
+            "low_price",
+            "price_change",
+            "price_change_ratio_pct",
+        )
+    ):
+        return False
+    volume = raw.get("volume")
+    turnover = raw.get("turnover")
+    if isinstance(volume, bool) or isinstance(turnover, bool):
+        return False
+    return volume == 0 and turnover == 0
+
+
 def _normalize_stock_snapshot_point(
     raw: Mapping[str, Any],
     *,
@@ -361,6 +393,7 @@ def _normalize_stock_snapshot_point(
             f"{row_label} ticker disagrees with A-share identity {thscode}"
         )
 
+    previous = None if _coherent_unpriced_zero_previous(raw) else raw.get("prev_price")
     return ConstituentMarketPoint(
         thscode=thscode,
         market_session=market_session,
@@ -370,7 +403,7 @@ def _normalize_stock_snapshot_point(
             positive=True,
         ),
         prev_price=_optional_decimal(
-            raw.get("prev_price"),
+            previous,
             field=f"{row_label} prev_price",
             positive=True,
         ),
