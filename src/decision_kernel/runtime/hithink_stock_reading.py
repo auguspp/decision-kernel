@@ -17,7 +17,8 @@ TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-CONTRACT = 'hithink-own-61-bars-turnover-tolerance-window-actions-v3'
+CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
+MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
 # Project reconciliation policy, not HiThink precision or a supplier guarantee.
 # PEP 485 symmetric relative/absolute comparison, with an extra CNY hard cap.
 TURNOVER_POLICY = {
@@ -118,7 +119,14 @@ def history_params(code, sessions):
 
 
 def action_params(code, sessions):
-    return {'thscode': code, 'from': sessions[-61].isoformat(), 'to': sessions[-1].isoformat()}
+    """One documented history query, clipped at the exact completed session.
+
+    HiThink makes from/to optional and documents omitted-from history retrieval.
+    Do not first request a short window and then retry/widen after a 3002. Every
+    planned issuer uses this same initial query, with the original request budget.
+    A successful response remains required; no error-to-empty conversion exists.
+    """
+    return {'thscode': code, 'to': sessions[-1].isoformat()}
 
 
 def reconcile_turnover(historical, snapshot, *, code):
@@ -234,14 +242,33 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     if event_data.get('thscode') != code or event_data.get('ticker') != code[:6]:
         _bad(code)
     events = event_data.get('item')
-    if not isinstance(events, list) or len(events) > 256:
+    if not isinstance(events, list) or len(events) > MAX_ACTION_EVENTS:
+        _bad(code)
+    # The documented event endpoint is not paginated. A newly exposed partial
+    # response cannot support window exclusions; stop this issuer, never follow
+    # cursors, raise the budget, or treat a retained prefix as the whole response.
+    if ('total' in event_data and (type(event_data['total']) is not int
+                                   or event_data['total'] != len(events))):
+        _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
+    for flag in ('has_more', 'has_next', 'truncated'):
+        if flag in event_data and event_data[flag] is not False:
+            _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
+    for cursor in ('next_cursor', 'next_page', 'next'):
+        if cursor in event_data and event_data[cursor] not in (None, ''):
+            _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
+    if (('from' in event_data and event_data['from'] not in (None, ''))
+            or ('to' in event_data and event_data['to'] != expected[-1].isoformat())):
         _bad(code)
     dates, retained_events = [], []
     for event in events:
         if not isinstance(event, dict) or event.get('ticker') != code[:6]:
             _bad(code)
         key = _instant(event.get('ex_date_ms'), code)
-        if key.time() != time() or key.date() not in expected:
+        if key.time() != time() or key.date() > expected[-1]:
+            _bad(code)
+        # Earlier history is permitted, but never used to invent trading sessions.
+        # Inside the retained price calendar, the original session check stays strict.
+        if key.date() >= expected[0] and key.date() not in expected:
             _bad(code)
         dates.append(key)
         cash = _number(event, 'dividend_per_share', code)
@@ -270,6 +297,15 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
                               if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
         'reported_corporate_actions': retained_events, 'action_window_checks': window_checks,
         'corporate_action_query_succeeded': True,
+        'corporate_action_query': {
+            'scope': 'AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION',
+            'expected_request': action_params(code, sessions),
+            'response_event_count': len(events),
+            'events_before_price_window': sum(d.date() < expected[0] for d in dates),
+            'maximum_event_rows': MAX_ACTION_EVENTS,
+            'older_event_session_qualification': 'NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR',
+            'exhaustive_absence_proven': False,
+        },
         'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
         'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',
     }
@@ -287,7 +323,7 @@ def request_json(path, params, *, api_key):
     from .sector_radar_audit import _check_request
     from .judgment_timeline import _unique_object
     own = {HISTORY: {'thscode','interval','adjust','start','end'},
-           SNAPSHOT: {'thscodes'}, ACTIONS: {'thscode','from','to'}}
+           SNAPSHOT: {'thscodes'}, ACTIONS: {'thscode','to'}}
     if path in own:
         if not isinstance(params, dict) or set(params) != own[path] or any(type(v) is not str for v in params.values()):
             raise ValueError('stock request contract differs')
