@@ -122,7 +122,25 @@ Fresh manual stock intent uses `hithink-stock-dump-trial.yml`, `trial-purpose=st
 | Source-instruction isolation | #263 independent draft | Real-model behavior NOT_RUN; tool-capable behavior NOT_TESTED |
 | Human Surface | Existing two canonical routes and read-only Judgment Timeline | Stock promoted to canonical Inbox, new Human decision/action/outcome |
 
-Canonical historical bootstrap identity remains solely `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json` plus its parser/tests; latest live state is a different identity. The older dump remains `DIFFERENCES_REQUIRE_REVIEW / production qualification NOT_ESTABLISHED`. Do not upgrade it because the own-bars stock path succeeded. Consumer history remains bounded at 32 MiB; artifact expiry/capacity never permits silent reset/pruning. Stock/Sector artifacts use 90-day retention; CI Timeline uses 30 days, not permanent storage.
+#### Rolling state and durable bootstrap
+
+`radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json` is the **sole canonical source** for the frozen bootstrap identity, byte lengths/hashes, catalog and lineage. The parser and existing regression test remain authoritative over prose. The following are historical September4 bootstrap values, not the latest September7 live state or permission to reset it.
+
+```text
+bootstrap completed session = 2026-09-04
+rolling sessions = 127
+series = 321
+benchmark = 1
+broad = 90
+granular = 230
+state hash = 2963d7fa62757a56e7296b3d9855a7d6d067d59816738078361f86c51d1f41d7
+```
+
+#### HiThink sector-breadth acquisition
+
+Reuse current-member and same-session breadth adapters. Parent hints are current-PIT routing aids, not permanent taxonomy. Cover the complete declared Sector plan or fail explicitly; do not silently enrich only the first three. A new event is decided by previous/current market state, not inferred from an empty event ledger. Stock-local isolation does not authorize partial authoritative Sector state.
+
+The older dump remains `DIFFERENCES_REQUIRE_REVIEW / production qualification NOT_ESTABLISHED`. Do not upgrade it because the own-bars stock path succeeded. Consumer history remains bounded at 32 MiB; artifact expiry/capacity never permits silent reset/pruning. Stock/Sector artifacts use 90-day retention; CI Timeline uses 30 days, not permanent storage.
 
 ## Authority, project meaning and unchanged company state
 
