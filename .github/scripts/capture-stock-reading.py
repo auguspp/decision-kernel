@@ -25,9 +25,10 @@ from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorR
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
-VERSION = 'stock-reading-capture-replay-v3'
+VERSION = 'stock-reading-capture-replay-v4'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
+PARTIAL = 'COMPLETED_BATCH_WITH_STOCK_DATA_GAPS'
 NOT_STARTED = 'STOCK_READING_NOT_STARTED'
 INTENT_REASONS = {
     'STOCK_MARKET_RUN_ID_REQUIRED': '选择 stock-reading 时必须填写 stock-market-run-id：请输入要使用的、已成功的 sector-radar-shadow 运行编号，不是本次股票任务编号。',
@@ -40,8 +41,10 @@ REASONS = {
     'STOCK_CALENDAR_STATE_WINDOW_DIFFERS': '真实交易日历与保存的行业状态窗口不一致；缺失的中间交易日不能跨日桥接。',
     'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION': '实际日历显示已有更新的完成交易日；请先取得相应合格Sector状态，漏过中间日先qualified recovery。',
     'HISTORY_READY_AFTER_ACTUAL_RECEIPT': '个股历史就绪时间晚于该响应实际接收时间；后续请求经过的时间不能修复这次未来时钟。',
+    'QUOTE_READY_AFTER_ACTUAL_RECEIPT': '报价就绪时间晚于这份报价实际接收时间；不会等待公司行为请求后再把未来时钟判为有效。',
+    'QUOTE_ACTUAL_RECEIPT_REQUIRED': '非空报价就绪时间必须绑定该响应自己的有效接收时间，不能用后续检查时间替代。',
     'CURRENT_QUOTE_HISTORY_MISMATCH': '当前快照与个股最新完成交易日的价格或量额不一致；不选较接近的一边，也不添加容差。',
-    'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该不完整尝试的股票卡片。',
+    'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW': 'HiThink报告本窗口内有公司行为；原始价格变化不能直接视作可比投资回报。本版不自动复权，不展示该股票卡片。',
     'UNPRICED_OR_NONTRADING_SESSION_IN_PATH': '个股窗口中存在无有效成交的交易日；不是已确认停牌或退市，不用前值补齐历史。',
     'PROVIDER_BUSINESS_REQUEST_FAILED': '供应商返回业务失败码；HTTP成功不等于本次数据请求成功。原响应通过安全检查后单独保留。',
     'QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE': '所供独立逐日前收参考价测试输入缺失；不能从昨日收盘补字段。此检查不是HiThink原始价格观察必须新增第二家供应商的理由。',
@@ -191,7 +194,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         'provenance':provenance,'workflow':workflow,'failure_type':None,'failure_category':None,
         'reason_code':None,'failed_thscode':None,'requests':[],
         'response_semantics':'DECODED_PROVIDER_JSON_NOT_ORIGINAL_HTTP_BYTES',
-        'source_directories':directories,'plan_hash':None,'projection_hash':None,
+        'source_directories':directories,'plan_hash':None,'projection_hash':None,'coverage':None,
         'reference_input_hash':canonical_hash(reference_inputs) if reference_inputs is not None else None,
         'planned_issuer_outcomes':[], 'recorded_sector_events_latest_session':None,
         'remote_upload_verified':False,**stock.LIMITS}
@@ -251,7 +254,8 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             raise ValueError('source inputs changed during stock reading')
         report['planned_issuer_outcomes']=[{'thscode':r['thscode'],'company_name':r['company_name'],
             'status':r['status']} for r in result['projection']['all_stock_observations']]
-        report['status']=COMPLETE
+        report['coverage']=result['projection']['coverage']
+        report['status']=COMPLETE if report['coverage']['scope_complete'] else PARTIAL
     except (ValueError,RuntimeError,OSError,KeyError,TypeError) as exc:
         report['failure_type']=type(exc).__name__
         report['failure_category'],report['reason_code'],report['failed_thscode']=failure_details(exc)
@@ -261,6 +265,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         report.update(status=FAILED,failure_type='ReversedFinishClock',projection_hash=None,
             failure_category='DATA_QUALIFICATION_FAILED',reason_code='REVERSED_FINISH_CLOCK')
     if report['status']==FAILED:
+        report['coverage']=None
         for row in report['planned_issuer_outcomes']:
             row['status'] = (report['failure_category'] if row['thscode']==report['failed_thscode']
                              else 'NOT_COMPLETED_NO_SELECTION_CLAIM')
@@ -287,7 +292,7 @@ def verify(output):
     if (report['reference_input_hash']!=(canonical_hash(refs) if refs is not None else None)
             or (report['provenance']==PUBLIC and refs is not None)):
         raise ValueError('reference provenance changed; normalized fixtures are never live origin evidence')
-    if report['status'] not in {COMPLETE,FAILED}:
+    if report['status'] not in {COMPLETE,PARTIAL,FAILED}:
         raise ValueError('unknown capture status')
     bundle,association,plan=load_inputs(output/'inputs',at)
     if (plan!=read(output/'plan.json') or association!=read(output/'association.json')
@@ -333,7 +338,7 @@ def verify(output):
         expected_outcomes=[{'thscode':r['thscode'],'company_name':r['company_name'],
             'status':report['failure_category'] if r['thscode']==report['failed_thscode'] else 'NOT_COMPLETED_NO_SELECTION_CLAIM'}
             for r in plan['issuers']]
-        if (report['planned_issuer_outcomes']!=expected_outcomes
+        if (report['planned_issuer_outcomes']!=expected_outcomes or report['coverage'] is not None
                 or report['recorded_sector_events_latest_session']!=plan['recorded_sector_events_latest_session']
                 or (report['failure_category'],report['reason_code'],report['failed_thscode'])!=failure_details(exc)
                 or position!=len(report['requests']) or (output/'stock-reading.json').exists()
@@ -346,17 +351,21 @@ def verify(output):
             'capture_hash':report['capture_hash'],**stock.LIMITS}
     expected_outcomes=[{'thscode':r['thscode'],'company_name':r['company_name'],'status':r['status']}
         for r in result['projection']['all_stock_observations']]
-    if (report['planned_issuer_outcomes']!=expected_outcomes
+    coverage=result['projection']['coverage']
+    expected_status=COMPLETE if coverage['scope_complete'] else PARTIAL
+    if (report['planned_issuer_outcomes']!=expected_outcomes or report['coverage']!=coverage
             or report['recorded_sector_events_latest_session']!=plan['recorded_sector_events_latest_session']
-            or report['status']!=COMPLETE or position!=len(report['requests']) or position>plan['maximum_request_count']
+            or report['status']!=expected_status or position!=len(report['requests']) or position>plan['maximum_request_count']
             or position>stock.MAX_REQUESTS or report['projection_hash']!=result['projection_hash']
             or report['failure_type'] is not None or report['failure_category'] is not None or report['reason_code'] is not None
             or (output/'stock-reading.json').read_bytes()!=data(result)
             or (output/'index.html').read_bytes()!=page(result,report['provenance'])):
         raise ValueError('stock result/page does not reconstruct from exact original inputs')
-    return {'status':'ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT','capture_hash':report['capture_hash'],
+    return {'status':('ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT' if coverage['scope_complete'] else
+                      'STOCK_BATCH_WITH_DATA_GAPS_REBUILT'), 'capture_hash':report['capture_hash'],
             'projection_hash':result['projection_hash'],'stock_count':len(result['projection']['surfaced_stocks']),
-            'provenance':report['provenance'],'requests_replayed':position,'network_calls':0,**stock.LIMITS}
+            'provenance':report['provenance'],'requests_replayed':position,'network_calls':0,
+            'coverage':coverage,**stock.LIMITS}
 
 
 def intent(env, at):
@@ -459,10 +468,22 @@ def main(argv=None):
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')
                     value=verify(root/'reading');write(root/'verification.json',value)
         print(canonical_json(value))
-        if args.mode=='capture' and value.get('status')==FAILED and os.environ.get('GITHUB_STEP_SUMMARY'):
-            with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
-                f.write('## 股票观察：'+stock.STATUS_LABELS[value['failure_category']]+'\n\n'
+        if args.mode=='capture' and os.environ.get('GITHUB_STEP_SUMMARY'):
+            if value.get('status')==FAILED:
+                text=('## 股票观察：'+stock.STATUS_LABELS[value['failure_category']]+'\n\n'
                     +REASONS[value['reason_code']]+'\n\n不是成功空名单。附件内 reading/index.html 为本次可读缺口页。\n')
+            elif value.get('status')==PARTIAL:
+                c=value['coverage']
+                text=('## 股票批次已处理：存在单股数据隔离\n\n'
+                    f"计划 {c['planned_issuers']}；已完成条件检查 {c['evaluated_issuers']}；"
+                    f"通过 {c['qualified_issuers']}；条件不满足 {c['conditions_not_met_issuers']}；"
+                    f"数据不可用 {c['unavailable_issuers']}。\n\n"
+                    '**仅交付可用数据子集，不是全计划排名或完整零匹配。** '
+                    '业务码3002仍是不可用输入，不代表已确认无公司行为。具体股票与原因见 reading/index.html / stock-reading.json。\n')
+            else:
+                text=''
+            if text:
+                with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write(text)
         return 2 if value.get('status') in {FAILED,NOT_STARTED,'RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'} else 0
     except (ValueError,RuntimeError,OSError,KeyError,TypeError) as exc:
         category,reason,_=failure_details(exc)
