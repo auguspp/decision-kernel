@@ -17,6 +17,11 @@ from decision_kernel.adapters.hithink import (
     SHANGHAI_TZ, latest_completed_a_share_session, normalize_hithink_calendar,
     normalize_hithink_completed_price_history, to_hithink_thscode,
 )
+from decision_kernel.adapters.hithink_index import (
+    HITHINK_INDEX_SNAPSHOT_QUALIFICATION,
+    HithinkIndexAdapterError,
+    HithinkQualifiedIndexSnapshotBatch,
+)
 from decision_kernel.identity import canonical_hash, canonical_json
 from . import economic_company_context as company
 from . import hithink_index_http as indices
@@ -29,13 +34,17 @@ from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-raw-path-v3'
+VERSION = 'stock-first-reviewed-scope-raw-path-v4'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
 COMPANY_MANIFEST = 'radar_inputs/economic-company-links-livestock-v1.json'
 SYNTHETIC_REFERENCES = 'SYNTHETIC_TEST_ONLY'
 HITHINK_RAW = 'HITHINK_REQUEST_BOUND_RAW_OBSERVATION'
+PREMARKET_CARRY_CUTOFF = time(9, 15)
+_LATER_TRADING_DAY_SNAPSHOT_ERROR = (
+    'index snapshot provider data-ready time falls on a later trading session'
+)
 POLICY = {
     'version': VERSION,
     'direction': 'EXISTING_CURRENT_SECTOR_GATE_NOT_NEW_EVENT_REQUIRED',
@@ -50,6 +59,7 @@ POLICY = {
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
     'source_contract': own_stock.CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
+    'premarket_index_carry': 'STOCK_ONLY_RECEIPT_BOUND_STRICTLY_BEFORE_0915_OPENING_AUCTION',
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
@@ -114,6 +124,56 @@ def check_observation_clock(state, at, *, calendar=None):
         if latest_completed_a_share_session(calendar, observed_at=at) != state.sessions[-1]:
             raise StockReadingInputError('DATA_INSUFFICIENT', 'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION')
     return close
+
+
+def _qualify_stock_index_snapshot(raw_snapshot, benchmark_history, calendar, *,
+                                  observed_at, received_at):
+    """Stock-only carry of the latest completed snapshot before opening auction.
+
+    Shared index qualification remains strict. This exception is entered only
+    when every earlier benchmark/calendar check passed and the sole rejection was
+    that the provider data-ready date is today's later trading session. Exact
+    response receipt is mandatory; waiting for a later request can never repair a
+    future provider clock. 09:15 is a hard expiry, not an inferred market session.
+    """
+    if (not isinstance(received_at, datetime) or received_at.tzinfo is None
+            or received_at.utcoffset() is None or not isinstance(observed_at, datetime)
+            or observed_at.tzinfo is None or observed_at.utcoffset() is None):
+        raise ValueError('index snapshot receipt and qualification clocks must be timezone-aware')
+    provider_ready_at = datetime.fromtimestamp(
+        raw_snapshot.provider_timestamp_ms / 1000, tz=SHANGHAI_TZ)
+    received_local = received_at.astimezone(SHANGHAI_TZ)
+    observed_local = observed_at.astimezone(SHANGHAI_TZ)
+    if provider_ready_at > received_local or received_local > observed_local:
+        raise ValueError('index snapshot provider-ready time follows actual receipt or observation clock')
+    try:
+        qualified = indices.qualify_hithink_index_snapshot(
+            raw_snapshot, benchmark_history=benchmark_history,
+            trading_sessions=calendar, observed_at=observed_at)
+        return qualified, None
+    except HithinkIndexAdapterError as exc:
+        if str(exc) != _LATER_TRADING_DAY_SNAPSHOT_ERROR:
+            raise
+    ready_date = provider_ready_at.date()
+    if (ready_date != received_local.date() or ready_date != observed_local.date()
+            or ready_date not in set(calendar)
+            or ready_date <= benchmark_history.response_session):
+        raise ValueError('premarket index carry must be same-date on the later observed trading session')
+    if (provider_ready_at.time() >= PREMARKET_CARRY_CUTOFF
+            or received_local.time() >= PREMARKET_CARRY_CUTOFF
+            or observed_local.time() >= PREMARKET_CARRY_CUTOFF):
+        raise ValueError('premarket index snapshot carry expired at the 09:15 opening auction')
+    if latest_completed_a_share_session(calendar, observed_at=observed_at) != benchmark_history.response_session:
+        raise ValueError('premarket index carry cannot pass a newer completed session')
+    qualified = HithinkQualifiedIndexSnapshotBatch(
+        market_session=benchmark_history.response_session,
+        benchmark_thscode=benchmark_history.thscode,
+        provider_timestamp_ms=raw_snapshot.provider_timestamp_ms,
+        qualification_method=HITHINK_INDEX_SNAPSHOT_QUALIFICATION,
+        points=raw_snapshot.points,
+    )
+    expires_at = datetime.combine(ready_date, PREMARKET_CARRY_CUTOFF, tzinfo=SHANGHAI_TZ)
+    return qualified, expires_at
 
 
 def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *,
@@ -329,10 +389,13 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         raise ValueError('stock plan identity, policy, budget or authority differs')
     last = observed_at
     calendar = None
+    snapshot_valid_until = None
     def at():
         nonlocal last
         value = cutoff_clock() if cutoff_clock else observed_at
         check_observation_clock(state, value, calendar=calendar)
+        if snapshot_valid_until is not None and value.astimezone(SHANGHAI_TZ) >= snapshot_valid_until:
+            raise ValueError('premarket index snapshot carry expired at the 09:15 opening auction')
         if not probe._clock(plan['observed_at']) <= last <= value <= probe._clock(plan['observed_at']) + timedelta(minutes=30):
             raise ValueError('stock observation is outside its declared plan lifetime or clock reversed')
         last = value
@@ -357,13 +420,23 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         catalog = indices.fetch_hithink_industry_catalog(api_key='INJECTED', request_json=get)
         if catalog.catalog_hash != state.catalog_hash:
             raise ValueError('industry catalog changed; no name or proxy substitution')
+        snapshot_received_at = None
+        def snapshot_get(path, params):
+            nonlocal snapshot_received_at
+            value = get(path, params)
+            snapshot_received_at = last
+            return value
         raw_snapshot = indices.fetch_hithink_index_snapshot_batch(
-            thscodes=tuple(sorted(state_rows)), api_key='INJECTED', request_json=get)
+            thscodes=tuple(sorted(state_rows)), api_key='INJECTED', request_json=snapshot_get)
+        if snapshot_received_at is None:
+            raise ValueError('index snapshot receipt was not bound to the exact response')
         benchmark_history = indices.fetch_hithink_completed_index_history(
             thscode=state.benchmark_thscode, observed_at=at(), api_key='INJECTED',
             request_json=get, trading_sessions=calendar)
-        snapshot = indices.qualify_hithink_index_snapshot(raw_snapshot,
-            benchmark_history=benchmark_history, trading_sessions=calendar, observed_at=at())
+        qualification_at = at()
+        snapshot, snapshot_valid_until = _qualify_stock_index_snapshot(
+            raw_snapshot, benchmark_history, calendar, observed_at=qualification_at,
+            received_at=snapshot_received_at)
         if (snapshot.market_session != state.sessions[-1]
                 or datetime.fromtimestamp(snapshot.provider_timestamp_ms/1000, tz=SHANGHAI_TZ) > at()):
             raise ValueError('fresh index snapshot has another completed session or future ready time')
