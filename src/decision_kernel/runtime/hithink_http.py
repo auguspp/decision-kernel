@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import time
@@ -43,6 +44,85 @@ HITHINK_SECTOR_REQUEST_GAP_SECONDS = 20.0
 _sector_request_lock = Lock()
 _sector_request_finished_at: float | None = None
 _sector_rate_limited = False
+
+# Persist only bounded, credential-free provider diagnostics. HiThink's own public
+# support guidance asks for request_id and call times when reduced-frequency calls
+# still hit dynamic limits. Raw error bodies are never copied into runtime errors.
+HITHINK_HTTP_ERROR_BODY_SAMPLE_BYTES = 4096
+_HITHINK_HTTP_DIAGNOSTIC_HEADERS = (
+    "Date",
+    "Retry-After",
+    "X-Request-Id",
+    "Request-Id",
+    "X-Correlation-Id",
+    "X-RateLimit-Limit",
+    "X-RateLimit-Remaining",
+    "X-RateLimit-Reset",
+    "Server",
+    "Via",
+    "CF-Ray",
+    "X-Azure-Ref",
+)
+_HITHINK_HTTP_DIAGNOSTIC_JSON_FIELDS = (
+    "request_id",
+    "requestId",
+    "code",
+    "message",
+)
+
+
+def _safe_http_diagnostic_value(value: object, *, api_key: str) -> str:
+    text = " ".join(str(value).split())[:256]
+    if api_key:
+        text = text.replace(api_key, "***")
+    return text
+
+
+def _http_error_diagnostics(exc: HTTPError, *, api_key: str) -> tuple[str, ...]:
+    """Extract support-useful HTTP error metadata without retaining credentials.
+
+    Response headers are allow-listed. For the body, retain only a bounded sample
+    hash/size plus a few fields when the complete sampled body is a JSON object.
+    Arbitrary HTML/text bodies are never copied into logs or audit manifests.
+    """
+
+    diagnostics: list[str] = []
+    if exc.headers is not None:
+        for name in _HITHINK_HTTP_DIAGNOSTIC_HEADERS:
+            value = exc.headers.get(name)
+            if value:
+                diagnostics.append(
+                    f"{name}={_safe_http_diagnostic_value(value, api_key=api_key)}"
+                )
+
+    try:
+        body = exc.read(HITHINK_HTTP_ERROR_BODY_SAMPLE_BYTES + 1)
+    except (AttributeError, OSError, ValueError):
+        body = b""
+    if not body:
+        return tuple(diagnostics)
+
+    truncated = len(body) > HITHINK_HTTP_ERROR_BODY_SAMPLE_BYTES
+    sample = body[:HITHINK_HTTP_ERROR_BODY_SAMPLE_BYTES]
+    diagnostics.append(f"body_sample_bytes={len(sample)}")
+    diagnostics.append(f"body_sample_sha256={hashlib.sha256(sample).hexdigest()}")
+    if truncated:
+        diagnostics.append("body_sample_truncated=true")
+        return tuple(diagnostics)
+
+    try:
+        payload = json.loads(sample.decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return tuple(diagnostics)
+    if not isinstance(payload, Mapping):
+        return tuple(diagnostics)
+    for field in _HITHINK_HTTP_DIAGNOSTIC_JSON_FIELDS:
+        value = payload.get(field)
+        if isinstance(value, (str, int, float)) and not isinstance(value, bool):
+            diagnostics.append(
+                f"body.{field}={_safe_http_diagnostic_value(value, api_key=api_key)}"
+            )
+    return tuple(diagnostics)
 
 
 @contextmanager
@@ -253,10 +333,9 @@ def _request_hithink_json(
                 payload = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         message = f"HiThink HTTP request failed for {path} with status {exc.code}"
-        retry_after = exc.headers.get("Retry-After") if exc.headers is not None else None
-        if retry_after:
-            safe_retry_after = " ".join(retry_after.split())[:64]
-            message += f"; Retry-After={safe_retry_after}"
+        diagnostics = _http_error_diagnostics(exc, api_key=api_key)
+        if diagnostics:
+            message += "; " + "; ".join(diagnostics)
         raise HithinkRuntimeError(message) from exc
     except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise HithinkRuntimeError(
