@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from zoneinfo import ZoneInfo
 
@@ -17,13 +17,14 @@ TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-CONTRACT = 'hithink-own-61-raw-bars-current-quote-and-reported-actions-v1'
+CONTRACT = 'hithink-own-61-raw-bars-receipt-bound-quote-and-reported-actions-v2'
 
 
 class StockReadingInputError(ValueError):
     """Finite diagnostic codes only; never echo provider text or credentials."""
-    def __init__(self, category, reason_code, *, thscode=None):
+    def __init__(self, category, reason_code, *, thscode=None, provider_code=None):
         self.category, self.reason_code, self.thscode = category, reason_code, thscode
+        self.provider_code = provider_code
         super().__init__(reason_code)
 
 
@@ -80,6 +81,26 @@ def check_history_receipt(history, *, code, received_at):
         _bad(code, 'HISTORY_READY_AFTER_ACTUAL_RECEIPT')
 
 
+def check_quote_receipt(quote, *, code, received_at):
+    """Accept null or an actual upstream-ready timestamp, never a trade-date claim.
+
+    The website prices contract allows a non-null latest upstream timestamp even
+    though the older repository contract describes null for explicit thscodes.
+    Validate it against THIS response's receipt before the action request; a later
+    response must not make a future timestamp retroactively valid.
+    """
+    data = _data(quote, code)
+    if 'timestamp' not in data:
+        _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
+    if data['timestamp'] is None:
+        return
+    if (not isinstance(received_at, datetime) or received_at.tzinfo is None
+            or received_at.utcoffset() is None):
+        _bad(code, 'QUOTE_ACTUAL_RECEIPT_REQUIRED')
+    if _instant(data['timestamp'], code) > received_at:
+        _bad(code, 'QUOTE_READY_AFTER_ACTUAL_RECEIPT')
+
+
 def history_params(code, sessions):
     start = datetime.combine(sessions[-61], time(), TZ)
     end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ)
@@ -91,7 +112,8 @@ def action_params(code, sessions):
     return {'thscode': code, 'from': sessions[-61].isoformat(), 'to': sessions[-1].isoformat()}
 
 
-def qualify(history, quote, actions, *, code, sessions, params, observed_at):
+def qualify(history, quote, actions, *, code, sessions, params, observed_at,
+            quote_received_at=None):
     """Check actual same-provider values without inventing 61 daily prev_price fields.
 
     A nonempty reported action window is conservatively blocked, not adjusted.
@@ -141,8 +163,12 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at):
             _bad(code, 'UNPRICED_OR_NONTRADING_SESSION_IN_PATH', 'DATA_INSUFFICIENT')
         bars[day] = values
     q = _data(quote, code)
-    # Explicit thscodes mode is documented to return timestamp=null.
-    if 'timestamp' not in q or q['timestamp'] is not None or not isinstance(q.get('item'), list) or len(q['item']) != 1:
+    check_quote_receipt(quote, code=code, received_at=quote_received_at)
+    if quote_received_at is not None:
+        if (not isinstance(quote_received_at, datetime) or quote_received_at.tzinfo is None
+                or quote_received_at.utcoffset() is None or quote_received_at > observed_at):
+            _bad(code, 'QUOTE_ACTUAL_RECEIPT_REQUIRED')
+    if not isinstance(q.get('item'), list) or len(q['item']) != 1:
         _bad(code)
     last_quote = q['item'][0]
     if not isinstance(last_quote, dict) or last_quote.get('thscode') != code or last_quote.get('ticker') != code[:6]:
@@ -181,6 +207,11 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at):
         'market_session_basis': 'EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR',
         'latest_quote_check': 'EXACT_OHLC_VOLUME_TURNOVER_AND_PREVIOUS_RAW_CLOSE_MATCH',
         'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
+        'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
+        'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
+        # Captures serialize actual clocks in UTC; equivalent offset inputs must
+        # regenerate identical metadata rather than preserve a caller's spelling.
+        'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
         'corporate_actions': 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF',
         'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
         'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',

@@ -35,8 +35,11 @@ def test_undocumented_prev_price_does_not_replace_required_current_quote():
         if path==stock.STOCK_HISTORY:
             for row in body['data']['item']:row['prev_price']='1'
         return body
-    with pytest.raises(stock.StockReadingInputError,match='REQUIRED_INPUT_OR_FIELD_MISSING'):
-        stock.observe_stock_reading(plan,state,request_json=changed,observed_at=NOW)
+    p=stock.observe_stock_reading(plan,state,request_json=changed,observed_at=NOW)['projection']
+    assert p['status']=='NO_USABLE_STOCK_DATA' and not p['surfaced_stocks']
+    assert p['coverage']['unavailable_issuers']==len(plan['issuers'])
+    assert all(r['input_failure']['reason_code']=='REQUIRED_INPUT_OR_FIELD_MISSING'
+               and r['stock_path'] is None for r in p['all_stock_observations'])
 
 
 @pytest.mark.parametrize('kind',['missing_window','short_window','missing_latest','identity','day','order','reference_break',
@@ -80,22 +83,25 @@ def test_reference_and_source_origin_cannot_be_relabelled_live_before_requests(t
     assert not calls and not out.exists()
 
 
-def test_missing_current_quote_produces_rebuildable_negative_page(tmp_path):
+def test_missing_current_quote_produces_rebuildable_isolated_data_gap_page(tmp_path):
     from test_hithink_stock_reading_integration import contract_provider
     mod,_,out,_,_,run=setup(tmp_path)
     _,_,provider,calls=contract_provider(missing_quote=True)
     r=run(reference_inputs=None,transport=provider,provenance=mod['PUBLIC'],credential='dummy-secret')
-    assert r['status']==mod['FAILED'] and r['failure_category']=='DATA_INSUFFICIENT'
-    assert r['reason_code']=='REQUIRED_INPUT_OR_FIELD_MISSING'
+    assert r['status']==mod['PARTIAL'] and r['failure_category'] is None
+    p=mod['read'](out/'stock-reading.json')['projection']
+    assert p['status']=='NO_USABLE_STOCK_DATA' and not p['surfaced_stocks']
+    assert all(row['input_failure']['reason_code']=='REQUIRED_INPUT_OR_FIELD_MISSING'
+               for row in p['all_stock_observations'])
     assert any(path==stock.STOCK_HISTORY for path,_ in calls)
-    assert not (out/'stock-reading.json').exists()
     assert not (out/'synthetic-reference-inputs.json').exists()
     soup=BeautifulSoup((out/'index.html').read_text(),'html.parser')
-    assert not soup.find_all('article') and '数据不足' in soup.get_text()
-    assert '不是“扫描成功且零匹配”' in soup.get_text()
+    assert not soup.find_all('article') and '数据不可用' in soup.get_text()
+    assert '不是完整检查后的零匹配' in soup.get_text()
     v=mod['verify'](out)
-    assert v['failure_replay']=='REPRODUCED_FROM_RETAINED_INPUTS' and v['network_calls']==0
-    assert v['status']=='RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'
+    assert v['coverage']==r['coverage'] and not v['coverage']['scope_complete']
+    assert v['network_calls']==0 and v['stock_count']==0
+    assert v['status']=='STOCK_BATCH_WITH_DATA_GAPS_REBUILT'
 
 
 def test_http_success_with_business_failure_is_request_failure(tmp_path):
@@ -107,14 +113,13 @@ def test_http_success_with_business_failure_is_request_failure(tmp_path):
     assert mod['verify'](out)['reason_code']==r['reason_code']
 
 
-def test_negative_page_cannot_be_rehashed_into_success_or_renamed_plan(tmp_path):
+def test_isolated_page_cannot_be_rehashed_into_success_or_renamed_plan(tmp_path):
     from test_hithink_stock_reading_integration import contract_provider
     mod,_,out,_,_,run=setup(tmp_path)
     _,_,provider,_=contract_provider(missing_quote=True)
-    run(reference_inputs=None,transport=provider)
+    assert run(reference_inputs=None,transport=provider)['status']==mod['PARTIAL']
     r=mod['read'](out/'capture.json')
     r['planned_issuer_outcomes'][0]['company_name']='invented company'
-    (out/'index.html').write_bytes(mod['failure_page'](r))
     r['files']={k:v for k,v in mod['inventory'](out).items() if k!='capture.json'}
     r['capture_hash']=canonical_hash({k:v for k,v in r.items() if k!='capture_hash'})
     (out/'capture.json').write_bytes(mod['data'](r))

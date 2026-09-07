@@ -230,6 +230,14 @@ def test_stock_first_page_exposes_business_limits_price_windows_and_full_scope()
                  '为什么值得进一步看','风险／缺口','下一步核查','仍强势阅读，非新事件','SYNTHETIC_TEST_ONLY'):
         assert word in text
     assert soup.find('script') is soup.find('iframe') is None
-    result['projection']['surfaced_stocks'][0]['company_name']='<script>alert(1)</script>'
+    # Keep the synthetic selected row and its full-scope counterpart consistent
+    # so this remains an escaping test rather than an identity-forgery test.
+    selected=result['projection']['surfaced_stocks'][0]
+    for row in result['projection']['all_stock_observations']:
+        if row['thscode']==selected['thscode']:
+            row['company_name']='<script>alert(1)</script>'
+    selected['company_name']='<script>alert(1)</script>'
     result['projection_hash']=canonical_hash(result['projection'])
-    assert BeautifulSoup(stock.render_stock_reading(result),'html.parser').find('script') is None
+    escaped=BeautifulSoup(stock.render_stock_reading(result),'html.parser')
+    assert escaped.find('script') is None
+    assert '<script>alert(1)</script>' in escaped.get_text()
