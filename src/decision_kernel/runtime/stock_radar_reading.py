@@ -150,7 +150,7 @@ def _qualify_stock_index_snapshot(raw_snapshot, benchmark_history, calendar, *,
     when every earlier benchmark/calendar check passed and the sole rejection was
     that the provider data-ready date is today's later trading session. Exact
     response receipt is mandatory; waiting for a later request can never repair a
-    future provider clock. 09:15 is a hard expiry, not an inferred market session.
+    future clock. 09:15 is a hard expiry, not an inferred market session.
     """
     if (not isinstance(received_at, datetime) or received_at.tzinfo is None
             or received_at.utcoffset() is None or not isinstance(observed_at, datetime)
@@ -410,6 +410,14 @@ def _coverage(rows):
     }
 
 
+def _partial_status(coverage, selected):
+    if coverage['scope_complete']:
+        return None
+    return ('PARTIAL_STOCKS_FOR_SHADOW_READING' if selected else
+            'NO_USABLE_STOCK_DATA' if not coverage['evaluated_issuers'] else
+            'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS')
+
+
 def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datetime,
                           cutoff_clock=None, reference_inputs=None) -> dict:
     _reference_inputs(reference_inputs)
@@ -451,7 +459,11 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         at()
         value = request_json(path, params)
         received = at()
-        if isinstance(value, dict) and type(value.get('code')) is int and value['code'] != 0:
+        # Do not misread a malformed authentication/rate-limit envelope as an
+        # issuer-local schema failure. Unknown business status stops the batch.
+        if not isinstance(value, dict) or type(value.get('code')) is not int:
+            raise ValueError('provider business envelope is invalid; batch cannot continue')
+        if value['code'] != 0:
             code = None
             if path in {STOCK_HISTORY, own_stock.SNAPSHOT, own_stock.ACTIONS}:
                 code = params.get('thscode', params.get('thscodes'))
@@ -591,15 +603,11 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     coverage = _coverage(rows)
     selected = _select(rows, plan['node_order'])
     reviewed_codes = {r['thscode'] for r in plan['issuers']}
-    if coverage['unavailable_issuers']:
-        status = ('PARTIAL_STOCKS_FOR_SHADOW_READING' if selected else
-                  'NO_USABLE_STOCK_DATA' if not coverage['evaluated_issuers'] else
-                  'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS')
-    else:
-        status = ('STOCKS_FOR_SHADOW_READING' if selected else
-                  'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
-                  'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
-                  'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
+    status = _partial_status(coverage, selected) or (
+        'STOCKS_FOR_SHADOW_READING' if selected else
+        'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
+        'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
+        'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
     payload = {
         'version': VERSION, 'semantics': SEMANTICS, 'policy': POLICY, 'plan_hash': plan['plan_hash'],
         'market_session': state.sessions[-1], 'observed_at': at(), 'status': status,
@@ -632,10 +640,15 @@ def render_stock_reading(report: dict) -> str:
     p = report['projection']
     codes = [r['thscode'] for r in p['surfaced_stocks']]
     coverage = _coverage(p['all_stock_observations'])
+    partial_status = _partial_status(coverage, codes)
     if (report['projection_hash'] != canonical_hash(p) or p['semantics'] != SEMANTICS
             or p['policy'] != POLICY or any(p[k] != v for k, v in LIMITS.items())
             or len(codes) > 3 or len(codes) != len(set(codes))
             or p['status'] not in STATUS_LABELS
+            or (partial_status is not None and p['status'] != partial_status)
+            or (partial_status is None and p['status'] in {
+                'PARTIAL_STOCKS_FOR_SHADOW_READING', 'NO_USABLE_STOCK_DATA',
+                'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS'})
             or p['coverage'] != coverage or p['reviewed_issuers'] != coverage['planned_issuers']
             or p['selection_scope_complete'] != coverage['scope_complete']
             or any(r['input_failure'] is not None or not r['eligible_for_shadow_reading']

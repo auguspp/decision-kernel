@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from zoneinfo import ZoneInfo
 
@@ -209,7 +209,9 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
         'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
         'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
-        'quote_received_at': None if quote_received_at is None else quote_received_at.isoformat(),
+        # Captures serialize actual clocks in UTC; equivalent offset inputs must
+        # regenerate identical metadata rather than preserve a caller's spelling.
+        'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
         'corporate_actions': 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF',
         'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
         'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',
