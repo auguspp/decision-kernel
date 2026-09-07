@@ -114,12 +114,16 @@ def _check_run(run: Path, state: Path, identity: dict) -> dict:
     return receipt
 
 
-def _source_files(root: Path, state: Path, *, as_of: datetime) -> tuple[dict, list[str]]:
+def _source_files(root: Path, state: Path, *, as_of: datetime,
+                  company_manifest: str | None = None) -> tuple[dict, list[str]]:
     _safe_path(root)
     root = root.resolve(strict=True)
     load_release_inputs(root / SEED, root / REVIEWS, as_of=as_of)
-    spec = json.loads(_read(root, COMPANIES), object_pairs_hook=_unique_object)
-    paths = {SEED, LINKS, HINTS, COMPANIES}
+    # Sector retains its historical default. Stock explicitly binds its own
+    # reviewed manifest; missing/newer evidence never falls back to another one.
+    selected = COMPANIES if company_manifest is None else company_manifest
+    spec = json.loads(_read(root, selected), object_pairs_hook=_unique_object)
+    paths = {SEED, LINKS, HINTS, selected}
     paths.update(c['source_path'] for n in spec['nodes'] for c in n['companies'])
     files = {path: _read(root, path) for path in sorted(paths)}
     directories = [REVIEWS]
