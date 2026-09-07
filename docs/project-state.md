@@ -91,7 +91,25 @@ An already successful Sector run may be reused when its exact state still passes
 | Source instruction isolation | #263 draft, paired input preparation and deterministic boundary tests | Real-model behavior `NOT_RUN`; tool-capable behavior `NOT_TESTED` |
 | Human Surface | Existing two canonical routes and read-only Judgment Timeline | Stock page promoted into canonical Inbox; new genuine Human decision/execution/outcome records |
 
-Latest verified successful Sector run remains `33939414197`, code `5f8f635d191dd8559844d1b74af0dca0cf4c02df`, market session **2026-09-04**, empty prospective ledger. It predates the newer sealed audit; do not manufacture one for it. Canonical bootstrap identity and bytes remain in `radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json` (127 sessions, 321 series); the manifest/parser outrank prose.
+Latest verified successful Sector run remains `33939414197`, code `5f8f635d191dd8559844d1b74af0dca0cf4c02df`, market session **2026-09-04**, empty prospective ledger. It predates the newer sealed audit; do not manufacture one for it.
+
+#### Rolling state and durable bootstrap
+
+`radar_inputs/sector-radar-state-bootstrap-2026-09-04.manifest.json` is the **sole canonical source** for bootstrap identity, byte lengths/hashes, catalog and lineage. The parser and existing regression test remain authoritative over prose. These are the preserved bootstrap values, not proof of a new daily append.
+
+```text
+latest completed session = 2026-09-04
+rolling sessions = 127
+series = 321
+benchmark = 1
+broad = 90
+granular = 230
+state hash = 2963d7fa62757a56e7296b3d9855a7d6d067d59816738078361f86c51d1f41d7
+```
+
+#### HiThink sector-breadth acquisition
+
+Reuse current-member and same-session breadth adapters. Parent hints are current-PIT routing aids, not permanent taxonomy. Cover the complete declared plan or fail explicitly; do not silently enrich only the first three. A new event is decided by previous/current market state, not inferred from an empty event ledger.
 
 The old dump remains `DIFFERENCES_REQUIRE_REVIEW / production qualification NOT_ESTABLISHED`; old saved-state calculations and synthetic pages are not live selections. See the unchanged `docs/handoffs/2026-09-05-stock-primary-sources-next.md`. Consumer history remains bounded at 32 MiB with finite objects; artifacts use 90-day retention, not permanent storage. Expiry/capacity never authorizes silent reset or pruning.
 
