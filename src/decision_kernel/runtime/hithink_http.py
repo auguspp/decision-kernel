@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Callable, Mapping
+import os
+import time
+from collections.abc import Callable, Iterator, Mapping
+from contextlib import contextmanager
 from datetime import date, datetime, timedelta
 from functools import lru_cache
+from threading import Lock
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -30,6 +34,48 @@ _RequestJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
 
 class HithinkRuntimeError(RuntimeError):
     """The outer HiThink runtime could not produce the required qualified market input."""
+
+
+# Explicitly enabled by the Sector workflow only. This is a conservative client
+# interval, NOT a verified provider/account quota or a cross-process Key lock.
+HITHINK_SECTOR_PACING_ENV = "HITHINK_SECTOR_REQUEST_PACING"
+HITHINK_SECTOR_REQUEST_GAP_SECONDS = 20.0
+_sector_request_lock = Lock()
+_sector_request_finished_at: float | None = None
+_sector_rate_limited = False
+
+
+@contextmanager
+def _sector_request_spacing() -> Iterator[None]:
+    """Space actual serial requests; never retry a failure or rewrite a clock.
+
+    The one-run process remembers HTTP 429 even if an outer caller catches it.
+    Other workflows retain their existing behavior unless explicitly opted in.
+    This cannot establish that another process/account consumer is idle.
+    """
+    global _sector_request_finished_at, _sector_rate_limited
+    enabled = os.environ.get(HITHINK_SECTOR_PACING_ENV, "")
+    if enabled == "":
+        yield
+        return
+    if enabled != "1":
+        raise HithinkRuntimeError("Sector request pacing must be explicitly enabled with 1")
+    with _sector_request_lock:
+        if _sector_rate_limited:
+            raise HithinkRuntimeError("Sector acquisition stopped after HTTP 429; no retry is permitted")
+        if _sector_request_finished_at is not None:
+            elapsed = time.monotonic() - _sector_request_finished_at
+            remaining = HITHINK_SECTOR_REQUEST_GAP_SECONDS - elapsed
+            if remaining > 0:
+                time.sleep(remaining)
+        try:
+            yield
+        except HTTPError as exc:
+            if exc.code == 429:
+                _sector_rate_limited = True
+            raise
+        finally:
+            _sector_request_finished_at = time.monotonic()
 
 
 @lru_cache(maxsize=8)
@@ -202,8 +248,9 @@ def _request_hithink_json(
         method="GET",
     )
     try:
-        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-            payload = json.loads(response.read().decode("utf-8"))
+        with _sector_request_spacing():
+            with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+                payload = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         message = f"HiThink HTTP request failed for {path} with status {exc.code}"
         retry_after = exc.headers.get("Retry-After") if exc.headers is not None else None
