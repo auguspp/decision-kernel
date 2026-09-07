@@ -99,7 +99,7 @@ def test_current_snapshot_must_match_own_history_exactly(kind):
     with pytest.raises(own.StockReadingInputError):check(q=q)
 
 
-@pytest.mark.parametrize('kind',['cash','bonus','unknown','wrong_code','wrong_ticker','missing_list','nonlist','out_of_window'])
+@pytest.mark.parametrize('kind',['cash','bonus','unknown','wrong_code','wrong_ticker','missing_list','nonlist','after_query_end'])
 def test_selection_window_actions_are_never_converted_to_inferred_adjustments(kind):
     _,_,h,_,a=inputs();d=a['data']
     if kind=='wrong_code':d['thscode']='000001.SZ'
@@ -110,7 +110,7 @@ def test_selection_window_actions_are_never_converted_to_inferred_adjustments(ki
         d['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
             'dividend_per_share':'0.1' if kind=='cash' else '0',
             'per_share_bonus':'0.1' if kind=='bonus' else '0'}]
-        if kind=='out_of_window':d['item'][0]['ex_date_ms']-=86400*1000*200
+        if kind=='after_query_end':d['item'][0]['ex_date_ms']+=86400*1000*200
     with pytest.raises(own.StockReadingInputError):check(a=a)
 
 
