@@ -74,6 +74,9 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ steps.state-artifact.outputs.artifact_run_id }}
       - name: Run independent Sector Radar shadow producer
+        env:
+          # Conservative per-process spacing, not a verified provider quota.
+          HITHINK_SECTOR_REQUEST_PACING: "1"
         shell: bash
         run: |
           python -m decision_kernel.runtime.sector_radar_producer run \
