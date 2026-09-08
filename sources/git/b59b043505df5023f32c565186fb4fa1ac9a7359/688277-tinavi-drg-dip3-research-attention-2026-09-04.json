@@ -1,0 +1,141 @@
+{
+  "company_name": "天智航",
+  "research_funnel": {
+    "terminal_state": "DEEPEN_REQUIRED",
+    "terminal_stage": "QUICK_RESEARCH",
+    "terminal_reason": "政策变化直接命中行业支付摩擦，公司又存在真实且可量化的“使用增长但 owner economics 未改善”矛盾；Full Research 有现实可能显著减少 decision-relevant unknown。",
+    "discovery": {
+      "discovery_id": "2026-09-04-INDUSTRY_DISCOVERY-688277-drg-dip3-robot-payment",
+      "source_lane": "INDUSTRY_DISCOVERY",
+      "ticker": "688277",
+      "security_id": "688277.SH",
+      "economic_direction": "医保按病种付费对机器人辅助手术的单独分组可能降低医院采用摩擦，但能否改善上市公司 owner economics 尚未建立。",
+      "as_of": "2026-09-04T01:21:00Z",
+      "factual_observations": [
+        {
+          "statement": "国家医保局 2026-09-03 说明，DRG 3.0 新增 9 个机器人辅助手术组，DIP 3.0 在膝关节、腰椎和骨盆骨折、股骨颈骨折等病种设置对应分组。",
+          "evidence_artifact_ids": ["fa105f7b-4900-5a08-83da-a9acbb019bcb"]
+        },
+        {
+          "statement": "天智航 2026H1 天玑骨科手术机器人开展手术超过 2.8 万例、累计超过 18 万例，但同期营业收入同比下降 16%，归母净利润亏损约 7011 万元，经营现金流净流出约 1.34 亿元。",
+          "evidence_artifact_ids": ["63618b91-bf5e-54e9-9680-80432dc52e2f"]
+        }
+      ],
+      "source_lineage": [
+        {
+          "evidence_artifact_id": "fa105f7b-4900-5a08-83da-a9acbb019bcb",
+          "source_locator": "https://www.nhsa.gov.cn/art/2026/9/3/art_14_21987.html",
+          "available_at": "2026-09-03T15:59:59Z"
+        },
+        {
+          "evidence_artifact_id": "63618b91-bf5e-54e9-9680-80432dc52e2f",
+          "source_locator": "https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-08-26/688277_20260826_PSLH.pdf",
+          "available_at": "2026-08-26T15:59:59Z"
+        }
+      ],
+      "why_now": "支付端出现新的可验证结构变化，而最新公司经营数据同时呈现“手术量增长、但收入/利润/现金流仍弱”的矛盾，值得验证支付变化是否会改变商业化转化。",
+      "current_market_expression": null,
+      "supporting_securities": [],
+      "contradiction_or_mapping_warning": "政策直接作用于医院支付与机器人手术场景，但不能从“单独分组”直接推导天智航设备订单、耗材收入、利润率或 owner cash 改善。",
+      "next_discriminating_search": "验证 DRG/DIP 3.0 的地方支付标准与落地节奏，并追踪天智航单位装机利用率、手术量、耗材/服务收入、整机 ASP、毛利率和经营现金流。",
+      "known_stop_or_downgrade_condition": "若地方支付标准并未改善医院机器人手术经济性，或手术量增长继续无法转化为高质量经常性收入和现金流，则该政策变化不应升级为公司投资 thesis。",
+      "schema_version": 1
+    },
+    "pre_research": {
+      "discovery_id": "2026-09-04-INDUSTRY_DISCOVERY-688277-drg-dip3-robot-payment",
+      "as_of": "2026-09-04T01:21:00Z",
+      "what_is_this": "骨科手术机器人支付机制变化与上市公司商业化转化问题。",
+      "economic_direction": "医保按病种付费对机器人辅助手术的单独分组可能降低医院采用摩擦，但能否改善上市公司 owner economics 尚未建立。",
+      "why_surfaced_now": "支付端出现新的可验证结构变化，而最新公司经营数据同时呈现“手术量增长、但收入/利润/现金流仍弱”的矛盾，值得验证支付变化是否会改变商业化转化。",
+      "current_expression_or_leadership": null,
+      "basic_business_role": "天智航是骨科手术机器人设备、配套设备与耗材、技术服务提供商；DIP 3.0 明确覆盖多个骨科机器人手术病种。",
+      "potential_fundamental_driver": "若支付分组提高医院开展机器人辅助手术的经济可承受性，可能支持手术量、设备利用率以及耗材/服务收入，但对设备价格、订单、利润和现金流的影响未知。",
+      "current_market_expectation_hypothesis": "市场可能已普遍知道手术机器人国产替代与政策支持叙事；当前真正未知的是支付变化能否改善上市公司经济转化，不能用股价表现替代该判断。",
+      "material_claims": [
+        {
+          "statement": "DRG/DIP 3.0 对机器人辅助手术进行更细分的单独分组，支付端对高成本新技术的识别方式发生变化。",
+          "kind": "FACT",
+          "evidence_artifact_ids": ["fa105f7b-4900-5a08-83da-a9acbb019bcb"]
+        },
+        {
+          "statement": "天智航 2026H1 手术量继续增长，但收入下降且亏损、经营现金流净流出扩大。",
+          "kind": "FACT",
+          "evidence_artifact_ids": ["63618b91-bf5e-54e9-9680-80432dc52e2f"]
+        }
+      ],
+      "obvious_contradiction": "临床使用量增长尚未转化为总收入、利润和经营现金流改善。",
+      "largest_unknown": "支付分组变化是否足以提高医院采用和使用强度，并进一步转化为天智航的经常性耗材/服务收入、设备经济性和 owner cash。",
+      "next_discriminating_search": "先确认地方 DRG/DIP 3.0 支付标准和实际医院经济性，再拆天智航装机利用率、单台手术量、耗材 attach、服务收入、整机 ASP/订单和现金流。",
+      "route": "CONTINUE_TO_QUICK",
+      "route_reason": "存在一项直接命中行业商业化摩擦的新政策事实，同时有最新公司经营矛盾可验证；值得花 bounded Quick Research 预算。",
+      "schema_version": 1
+    },
+    "quick_research": {
+      "discovery_id": "2026-09-04-INDUSTRY_DISCOVERY-688277-drg-dip3-robot-payment",
+      "pre_research_hash": "d120a5b529072ad97a8bd3485eff15b535a893c4019c56260596472a716a1940",
+      "as_of": "2026-09-04T01:21:00Z",
+      "business_model": "骨科手术机器人整机销售 + 配套设备/耗材 + 技术服务；公司以经销为主、直销为辅，并探索按技术服务收费的商业模式。",
+      "segment_mix": "核心为骨科手术导航定位机器人，配套设备与耗材、技术服务构成后续收入；2026H1 手术量增长但整机销售承压，说明利用率与上市公司经济转化之间仍有断裂。",
+      "economic_role": "政策变化直接作用于医院机器人辅助手术支付；天智航在骨科机器人手术场景具直接产品与耗材/服务暴露。",
+      "major_profit_drivers": [
+        "整机订单与 ASP",
+        "已装机设备利用率与手术量",
+        "配套设备/耗材 attach 与单例收入",
+        "技术服务收入",
+        "毛利率与渠道结构",
+        "研发/销售费用强度",
+        "营运资本与经营现金流"
+      ],
+      "industry_supply_demand_variables": [
+        "DRG/DIP 3.0 地方支付标准与落地节奏",
+        "医院机器人手术预算与采购",
+        "机器人辅助手术量与单台利用率",
+        "国产竞争格局与招投标价格",
+        "耗材/服务收入渗透率",
+        "临床科室覆盖与适应症"
+      ],
+      "value_chain_position": "面向医疗机构提供骨科手术机器人设备、配套耗材及服务，处于支付政策向医院采用和手术使用传导后的直接商业化环节。",
+      "current_industry_state": "支付端出现更精细的机器人辅助手术分组，但具体地方支付权重、医院行为和上市公司收入/利润响应尚未观察到。",
+      "market_expectation_hypothesis": "市场可能已普遍知道手术机器人国产替代与政策支持叙事；当前真正未知的是支付变化能否改善上市公司经济转化，不能用股价表现替代该判断。",
+      "current_expression_or_leadership": null,
+      "supporting_claims": [
+        {
+          "statement": "机器人辅助手术在 DRG/DIP 3.0 中被更明确地单独识别，降低支付端“被平均掉”的制度摩擦具有现实可能性。",
+          "kind": "FACT",
+          "evidence_artifact_ids": ["fa105f7b-4900-5a08-83da-a9acbb019bcb"]
+        },
+        {
+          "statement": "天智航 2026H1 手术量超过 2.8 万例、累计超过 18 万例，临床使用基础真实存在且仍在增长。",
+          "kind": "FACT",
+          "evidence_artifact_ids": ["63618b91-bf5e-54e9-9680-80432dc52e2f"]
+        }
+      ],
+      "contradictory_claims": [
+        {
+          "statement": "天智航 2026H1 营收同比下降 16%，归母亏损约 7011 万元，经营现金流净流出约 1.34 亿元；临床使用增长尚未形成 owner-economics 改善。",
+          "kind": "FACT",
+          "evidence_artifact_ids": ["63618b91-bf5e-54e9-9680-80432dc52e2f"]
+        }
+      ],
+      "evidence_authority_assessment": "政策侧为国家医保局官方信息；公司侧为上市公司 2026 半年度报告。二者足以建立“支付机制变化 + 商业化转化矛盾”，但不足以建立盈利改善、估值或买入结论。",
+      "variant_perception": "值得研究的 Gap 不是“手术机器人需求会增长”，而是：支付端摩擦下降后，已有手术量增长能否开始转化为更高质量的耗材/服务经常性收入，并缓解整机价格与订单压力。",
+      "unresolved_questions": [
+        "DRG/DIP 3.0 在各地的具体支付标准、权重和执行时间如何，医院单例经济性实际改善多少？",
+        "天智航当前装机数量、单台利用率和不同病种手术量如何变化？",
+        "配套耗材与技术服务的单例收入、毛利率、attach rate 和经常性占比是多少？",
+        "整机 ASP、订单、经销/直销结构和招投标竞争是否继续恶化？",
+        "手术量增长何时能在收入、毛利和经营现金流上形成可验证的转化？"
+      ],
+      "next_discriminating_evidence": [
+        "地方医保部门公布的 DRG/DIP 3.0 机器人手术支付标准与医院端实施数据",
+        "天智航后续季度/年度手术量、装机利用率、耗材/服务收入及毛利率",
+        "整机新增订单、ASP/招投标价格和渠道结构变化",
+        "经营现金流与经常性收入占比是否改善"
+      ],
+      "route": "DEEPEN",
+      "route_reason": "政策变化直接命中行业支付摩擦，公司又存在真实且可量化的“使用增长但 owner economics 未改善”矛盾；Full Research 有现实可能显著减少 decision-relevant unknown。",
+      "schema_version": 1
+    },
+    "investment_authority": "NONE"
+  }
+}

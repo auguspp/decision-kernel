@@ -1,0 +1,202 @@
+name: decision-inbox
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 8 * * 1-5"
+
+permissions:
+  contents: read
+
+jobs:
+  inbox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Check HiThink secret
+        shell: bash
+        run: |
+          if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
+            echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
+            exit 1
+          fi
+      - name: Build Attention Inbox
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Human-facing Decision inputs are deliberately curated. Do not replace
+          # this list with dogfood/*.json: a historical mechanics fixture can
+          # remain useful for replay without retaining current Odds eligibility.
+          #
+          # CATL generic dogfood is intentionally excluded after the 2026-09-04
+          # Full Research re-underwrite found that its illustrative EPS / P-E /
+          # probability assumptions are not qualified current Decision authority.
+          # It remains available to disclosure monitoring and non-authoritative
+          # market-history shadow sampling.
+          decision_packages=(
+            dogfood/600519-moutai.json
+            dogfood/601088-shenhua.json
+            research_cases/603986-gigadevice-deep-research-v2.json
+            research_cases/002050-sanhua-deep-research-v1.json
+          )
+
+          # Research-attention inputs are curated separately. Add only exact,
+          # unresolved, validated ResearchFunnelResult handoffs. A resolved
+          # cold-start handoff remains audit dogfood and must not become a stale
+          # daily DEEPEN_REQUIRED card merely because its file still exists.
+          research_attention_handoffs=(
+            # Add exact current handoff paths here when real state earns attention.
+          )
+
+          research_attention_args=()
+          for handoff in "${research_attention_handoffs[@]}"; do
+            research_attention_args+=(--research-attention "$handoff")
+          done
+
+          python -m decision_kernel.runtime.attention_inbox \
+            "${decision_packages[@]}" \
+            "${research_attention_args[@]}"
+      - name: Capture Surprise Radar market-history shadow
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+
+          # Shadow inputs are exact Research package objects, curated separately
+          # from both Human Inbox eligibility and heterogeneous dogfood artifacts.
+          # Never replace this with dogfood/*.json: Evidence arrays and Research-
+          # attention handoffs are valid dogfood files but invalid shadow packages.
+          shadow_packages=(
+            dogfood/600519-moutai.json
+            dogfood/300750-catl.json
+            dogfood/600036-cmb.json
+            dogfood/601088-shenhua.json
+            research_cases/603986-gigadevice-deep-research-v2.json
+            research_cases/002050-sanhua-deep-research-v1.json
+          )
+
+          python -m decision_kernel.runtime.market_history_shadow \
+            "${shadow_packages[@]}" \
+            --output-dir market-history-shadow \
+            2>&1 | tee market-history-shadow-status.txt
+      - name: Publish Human summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f decision-inbox/summary.md ]; then
+            cat decision-inbox/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Attention Inbox unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo "The batch run failed before a Human attention inbox could be produced." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload mobile HTML snapshot
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: decision-inbox
+          path: decision-inbox/
+          retention-days: 14
+      - name: Upload market-history shadow inputs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: market-history-shadow
+          path: |
+            market-history-shadow/
+            market-history-shadow-status.txt
+          if-no-files-found: ignore
+          retention-days: 14
+
+  disclosures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    concurrency:
+      group: disclosure-receipt-memory
+      cancel-in-progress: false
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install with official PDF text extraction
+        run: python -m pip install -e '.[documents]'
+      - name: Restore best-effort disclosure receipt memory
+        id: disclosure-memory
+        uses: actions/cache/restore@v6
+        with:
+          path: decision-state/disclosure-receipts.json
+          key: disclosure-receipts-scan-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            disclosure-receipts-state-
+      - name: Scan official disclosures and prepare Research handoffs
+        shell: bash
+        run: |
+          set -euo pipefail
+          through="$(date +%F)"
+          receipt_args=()
+          memory_status="EMPTY_SAFE_REASSESSMENT"
+          if [ -f decision-state/disclosure-receipts.json ]; then
+            receipt_args=(--receipts decision-state/disclosure-receipts.json)
+            memory_status="RESTORED_BEST_EFFORT"
+          fi
+          printf 'MEMORY_STATUS=%s\n' "$memory_status" > disclosure-scan-meta.txt
+          printf 'THROUGH=%s\n' "$through" >> disclosure-scan-meta.txt
+          decision-kernel scan-disclosures \
+            dogfood/600519-moutai.json \
+            dogfood/300750-catl.json \
+            dogfood/600036-cmb.json \
+            dogfood/601088-shenhua.json \
+            research_cases/603986-gigadevice-deep-research-v2.json \
+            research_cases/002050-sanhua-deep-research-v1.json \
+            --through "$through" \
+            --packet-dir disclosure-assessment-packets \
+            --packet-limit 10 \
+            "${receipt_args[@]}" | tee disclosure-scan.txt
+      - name: Publish disclosure summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Official disclosure scan"
+            echo
+            if [ -f disclosure-scan-meta.txt ]; then
+              source disclosure-scan-meta.txt
+              echo "Receipt memory: \`$MEMORY_STATUS\`"
+              echo
+              echo "Through: \`$THROUGH\` (Asia/Shanghai)"
+              echo
+            fi
+            if [ -f disclosure-scan.txt ]; then
+              echo '```text'
+              cat disclosure-scan.txt
+              echo '```'
+            else
+              echo "The disclosure scan failed before a result was produced."
+            fi
+            echo
+            echo "Assessment packets are auditable Research-producer inputs only; they do not create a Recommendation, Human wake, or investment authority."
+            echo
+            echo "Receipt memory is only a Harness attention optimization. Cache loss intentionally causes reassessment rather than silent suppression."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload disclosure scan and assessment handoffs
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: official-disclosure-scan
+          path: |
+            disclosure-scan.txt
+            disclosure-scan-meta.txt
+            disclosure-assessment-packets/
+          retention-days: 14
