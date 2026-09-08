@@ -92,7 +92,9 @@ cutoff; exact readback occurs before launch. Its code_commit pins the declaratio
 catalogue. Callers must choose current trusted code and recheck the current declared
 scope at admission. The adapter reads main without the GET cache before and after
 readback; a changed main rejects admission as ADMISSION_CODE_OR_SCOPE_MOVED, even
-when the older frozen catalogue is internally intact. No old clean snapshot may
+when the older frozen catalogue is internally intact. The actual finishing clock
+is checked again after remote reads: preflight expiry during readback also blocks
+launch; the starting check time is not substituted for the launch time. No old clean snapshot may
 be reused to evade newly recorded conflicts. There is no cross-branch/global lock or hard tool sandbox;
 unrecorded inputs and privileged bypasses of trusted code are not authenticated.
 No new formal registration is made by appending the prospective input to an

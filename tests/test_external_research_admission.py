@@ -80,7 +80,8 @@ def checks(packet, p, catalogue, values, commits):
                    ("c" * 40, ins["path"]): data})
     args = dict(input_raw=data, preflight_raw=pf, catalog_source=cs,
                 load=lambda s: values[(s["ref"], s["path"])], commit=lambda r: commits[r],
-                checked_at="2026-09-08T11:02:00Z", input_source=ins, current_code=lambda: "d" * 40)
+                checked_at="2026-09-08T11:02:00Z", input_source=ins, current_code=lambda: "d" * 40,
+                now=lambda: "2026-09-08T11:02:01Z")
     try:
         args["expected_key"] = identity.input_key(ExternalResearchInputPacket.model_validate_json(data)).as_dict()
     except ValueError:
@@ -257,3 +258,13 @@ def test_moved_main_cannot_reuse_previously_clean_identity_scope(when):
     values = iter(["a" * 40] if when == "before" else ["d" * 40, "a" * 40])
     args["current_code"] = lambda: next(values)
     denied(args, "ADMISSION_CODE_OR_SCOPE_MOVED")
+
+
+@pytest.mark.parametrize("late_clock,reason", [
+    ("2026-09-08T12:00:01Z", "SOURCE_PREFLIGHT_STALE_OR_INVALID"),
+    ("2026-09-08T11:01:59Z", "ADMISSION_CLOCK_REVERSED"),
+])
+def test_preflight_must_still_be_valid_after_readback(late_clock, reason):
+    args = checks(*setup())
+    args["now"] = lambda: late_clock
+    denied(args, reason)

@@ -221,7 +221,8 @@ def prepare_input(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dic
 
 def assess_admission(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dict,
                      load: Callable[[dict], bytes], commit: Callable[[str], dict], checked_at: str,
-                     current_code: Callable[[], str], input_source: dict | None = None, expected_key: dict | None = None) -> dict:
+                     current_code: Callable[[], str], now: Callable[[], str],
+                     input_source: dict | None = None, expected_key: dict | None = None) -> dict:
     """Recheck before launch. A prepare PASS alone never permits execution."""
     report = {"schema_version": 1, "status": "NOT_EXECUTED", "reason": None,
               "research_execution_allowed": False, "formal_research_budget_used": 0,
@@ -264,6 +265,10 @@ def assess_admission(*, input_raw: bytes, preflight_raw: bytes, catalog_source: 
         scope = identity.load_execution_scope(json.dumps(catalog).encode(), load)
         scope.require_unambiguous(key)
         require(current_code() == packet.code_commit, "ADMISSION_CODE_OR_SCOPE_MOVED")
+        finished_at = now()
+        require(clock(checked_at) <= clock(finished_at), "ADMISSION_CLOCK_REVERSED")
+        check_preflight(preflight_raw, checked_at=finished_at)
+        report["finished_at"] = finished_at
         report["checks"].update(exact_input_readback="PASS", identity_postcheck="PASS")
         report.update(reason="RESEARCH_EXECUTION_ALLOWED", research_execution_allowed=True,
                       input_source=dict(input_source), identity_scope_hash=scope.scope_hash)
@@ -304,7 +309,8 @@ def main(argv=None) -> int:
             load=lambda spec: api.file(spec["path"], spec["ref"]),
             commit=lambda ref: api.get("git/commits/" + ref), checked_at=datetime.now(timezone.utc).isoformat(),
             # Bypass only the client's GET memo for this mutable ref. No write/retry.
-            current_code=lambda: api._call("GET", "git/ref/heads/main").json()["object"]["sha"])
+            current_code=lambda: api._call("GET", "git/ref/heads/main").json()["object"]["sha"],
+            now=lambda: datetime.now(timezone.utc).isoformat())
     except (ValueError, KeyError, TypeError, OSError, RuntimeError, ImportError) as exc:
         report = {"status": "NOT_EXECUTED", "reason": getattr(exc, "code", "ADMISSION_INPUT_UNAVAILABLE"),
                   "research_execution_allowed": False, "formal_research_budget_used": 0,
