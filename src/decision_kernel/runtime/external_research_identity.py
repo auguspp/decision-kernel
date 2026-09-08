@@ -229,8 +229,12 @@ def project_registered_handoffs(entries: list[dict], load: Callable[[dict], tupl
                 row["external_execution"] = key.as_dict()
     result["gaps"].extend(gaps)
     if scope is None:
-        result["gaps"].append({"status": scope_error, "source": scope_source,
-                               "meaning": "EXTERNAL_PROMOTION_NOT_VERIFIED_LEGACY_INPUTS_INDEPENDENT"})
+        # An absent external catalogue is not an error in an unrelated legacy
+        # handoff. Always expose availability below; affected external inputs
+        # still fail closed above and retain their own gap records.
+        if known_ids or any(e.get("external_execution") is not None for e in entries):
+            result["gaps"].append({"status": scope_error, "source": scope_source,
+                                   "meaning": "EXTERNAL_PROMOTION_NOT_VERIFIED_LEGACY_INPUTS_INDEPENDENT"})
     else:
         result["gaps"].extend(scope.conflicts())
     result["execution_identity_scope"] = {
