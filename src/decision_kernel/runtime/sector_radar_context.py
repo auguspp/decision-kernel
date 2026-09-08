@@ -359,7 +359,7 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
         f'生成时间：{esc(payload["generated_at"]) }<br>'
         f'基准：{esc(payload["benchmark_thscode"]) }；距状态日 '
         f'{payload["calendar_days_since_market_session"]} 个自然日（不是缺失交易日数）。</p>'
-        '<p class="warning">这是保存状态的只读投影，不是实时行情。本页不重新资格化完成交易日，'
+        '<p class="warning">这是保存数据的只读投影，也是保存状态的市场阅读；不是实时行情。本页不重新资格化完成交易日，'
         '不新增事件、提醒或 Research。</p>'
         '<div class="overview"><strong>怎么读：</strong> NEW 只读账本本次已记录事件；'
         'ONGOING 读当前 gate；WEAKENING / EXIT 读近期相对减弱与具体 predicate 退出；'
