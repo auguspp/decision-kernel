@@ -44,7 +44,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing package
-        run: python -m pip install -e .
+        # Existing feeds extra supplies the pinned requests client. No feeds run.
+        run: python -m pip install -e '.[feeds]'
       - name: Verify saved products and publish read-only ref
         env:
           GH_TOKEN: ${{ github.token }}
