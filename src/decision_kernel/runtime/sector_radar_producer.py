@@ -267,11 +267,12 @@ def discover_previous_sector_radar_artifact(
         )
 
     workflow_ref = quote(workflow_file, safe="")
+    # Both manual and scheduled successes maintain this one state lineage.
+    # An event filter would hide a newer scheduled state behind an older manual run.
     query = urlencode(
         {
             "branch": "main",
             "status": "success",
-            "event": "workflow_dispatch",
             "per_page": "2",
         }
     )
