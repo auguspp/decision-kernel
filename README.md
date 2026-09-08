@@ -4,6 +4,12 @@ Decision Kernel is the small, explicit investment-decision core extracted from D
 
 It is **not** Decision OS v2 and it is **not** a new platform build.
 
+## 股票阅读 · 历史已验收结果
+
+**[打开 2026-09-07 完成交易日的已验收保存结果](docs/stock-reading-accepted-2026-09-07.md)** — 四家公司全部检查：神农集团一张观察卡，其余三家条件不满足，数据不可用零。
+
+这是固定历史索引，不是实时行情或自动更新的最新结果中心；索引更新／核验日为 2026-09-08（UTC+08:00），不表示已自动检查今天有无更新。索引说明四家公司处置、通过／未通过原因和未覆盖范围，并提供原件入口；下载需仓库权限，解压后打开 `reading/index.html`。观察卡不是买入建议。
+
 ## Operating principles
 
 1. **Own only investment cognition invariants.** PIT, exact lineage, frozen state identity, deterministic Odds inputs, Human accountability, authority boundaries, and Human-surface eligibility belong here when changing them would break the decision system itself.
