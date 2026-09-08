@@ -2,19 +2,19 @@
 
 本项只为已有 `sector-radar-shadow.yml` 接入工作日收盘后定时。保留手动入口，两种触发都走同一 producer、原重放、阅读、权威状态发布与 cache 保存链路。#277 的全部 qualified changes 可发现与首页 0–3 不变。
 
-**工程配置与真实验收分开：本文件不证明自然 schedule 已运行。** 首条真实验收必须绑定 GitHub `event=schedule` 的 attempt 1，记录在本项 PR 的回执中；没有这种证据时状态为 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING`。不以 CI、手动 dispatch 或本地合成测试替代。`FULLY_UNATTENDED_RECOVERY = NOT_ESTABLISHED`。
+**工程配置与真实验收分开：本文件不证明自然 schedule 已运行。** 首条用于本次时间修正验收的真实运行必须绑定采用 18:13 配置的 main SHA、GitHub `event=schedule` 和 attempt 1，记录在本项 PR 的回执中；没有这种证据时状态为 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING`。不以 CI、手动 dispatch 或本地合成测试替代。`FULLY_UNATTENDED_RECOVERY = NOT_ESTABLISHED`。
 
 ## 时点与开工证据
 
-名义时点：**每周一至周五北京时间 17:37，UTC cron `37 9 * * 1-5`**。不增盘中、小时轮询或节假日调度器。非交易日仍由原 provider calendar 与 completed-session qualification 判断，不能靠 weekday 或时钟制造新 session。
+Human 最终确认的名义时点：**每周一至周五北京时间 18:13，UTC cron `13 10 * * 1-5`**。优先 completed-session 稳定性与共享任务错峰，保留晚间消费窗口，不追求盘中或最早收盘后结果。不增盘中、小时轮询或节假日调度器。非交易日仍由原 provider calendar 与 completed-session qualification 判断，不能靠 weekday 或时钟制造新 session。
 
 基线 `8ce373cbd9e9390bc7c94fd504d5d499cc520790`（#277）读回时，开放 PR 只有独立草稿 #263，非 PR Issue 为 0；全仓 in_progress/queued 均为 0。这只是开工时的观测，不是之后的活动或额度保证。
 
 当前四个 workflow 引用同一 repository Key：Sector、本仓 `decision-inbox`、`hithink-stock-dump-trial`、`live-dogfood`。只有 Inbox 既有定时 `20 8 * * 1-5`（16:20），使用 Key 的 job 超时 8 分钟；stock-dump 有手动及两个限定路径的 main push，live-dogfood 为手动。此次不改另外三个工作流，也不碰 stock-dump 的 push 路径。
 
-17:37 比 Inbox 名义时间晚 77 分钟，超过其名义超时窗口 69 分钟；Sector 自身保留 20 分钟 timeout，正常情况下晚间仍有阅读消费空间。已成功的 Sector run `34107253263` 在 2026-09-07 17:39–17:54 运行，是这一保守收盘后窗口的已有观察，不是每日供应商就绪承诺。实际资格仍由运行时验证。
+18:13 比 Inbox 名义时间晚 113 分钟，超过其名义超时窗口 105 分钟；Sector 自身保留 20 分钟 timeout，正常情况下晚间仍有阅读消费空间。已成功的 Sector run `34107253263` 在 2026-09-07 17:39–17:54 运行，是既有收盘后生产的历史观察，不是每日供应商就绪承诺。实际资格仍由运行时验证。
 
-必须保留反例：Inbox 的自然 schedule run `34132068387` 实际到 **2026-09-07 22:16:34** 才启动，最终 failure；本项未分析其失败原因。名义 cron 错峰不保证无碰撞。[GitHub 官方 schedule 文档](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule) 明确可能延迟，高负载时甚至丢弃排队任务；37 分选择也避开整点，但不提供准点或每日必达 SLA。
+必须保留反例：Inbox 的自然 schedule run `34132068387` 实际到 **2026-09-07 22:16:34** 才启动，最终 failure；本项未分析其失败原因。名义 cron 错峰不保证无碰撞。[GitHub 官方 schedule 文档](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule) 明确可能延迟，高负载时甚至丢弃排队任务；13 分也避开整点，但不提供准点或每日必达 SLA。
 
 ## 同一路径与最小改动
 
@@ -54,7 +54,7 @@
 
 新增测试检查双方主干/attempt guard、单一生产命令、允许事件在下游的闭合、活动/不完整查询非零停止、失败不打印凭据、元数据请求不重试。合成 provider 输入走原 adapters/detector/audit/replayer，分别检验同日、quiet、candidate、gap、provider failure 和429异常；原 #277 discoverability 测试继续执行。重放和失败审计均不得生成 live state。事件 admission 单测会隔离昂贵下游函数，原三种状态的完整 publication/context 集成测试也扩展至两种触发，reading checks 仍由既有集成测试覆盖；不把模拟事件名说成自然 schedule 验收。
 
-首条自然运行核验：event=schedule；实际 main SHA / attempt 1 / 开始与完成时钟；活动检查和真实共享任务时间；精确 restore run/artifact/manifest；calendar 与最新合格完成日/cached/direct next；provider 请求记录及429；operations 状态/candidate数/state与ledger hash；完整远端 artifacts；原离线重放与发布 gates；Job Summary。缺任何项如实记录。CI绿不预填这一回执。
+首条自然运行核验：event=schedule；采用 18:13 配置的实际 main SHA / attempt 1 / 开始与完成时钟及相对名义时点的延迟；活动检查和真实共享任务时间；精确 restore run/artifact/manifest；calendar 与最新合格完成日/cached/direct next；provider 请求记录及429；operations 状态/candidate数/state与ledger hash；完整远端 artifacts；原离线重放与发布 gates；Job Summary。缺任何项如实记录。CI绿不预填这一回执。
 
 第一次自然运行失败就保留原失败，调查真实原因；不 Re-run，不手动替代。未触发、触发延迟、失败和成功但未验收是不同状态。没有自动 gap recovery、补触发器或第二 provider。本项不承诺后台代查，也不要求用户搬运日志。
 

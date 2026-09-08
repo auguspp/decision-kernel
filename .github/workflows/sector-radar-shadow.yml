@@ -3,8 +3,8 @@ name: sector-radar-shadow
 on:
   workflow_dispatch:
   schedule:
-    # UTC 09:37 = Asia/Shanghai 17:37, Monday-Friday. Calendar remains authoritative.
-    - cron: "37 9 * * 1-5"
+    # UTC 10:13 = Asia/Shanghai 18:13, Monday-Friday. Calendar remains authoritative.
+    - cron: "13 10 * * 1-5"
 
 permissions:
   actions: read
