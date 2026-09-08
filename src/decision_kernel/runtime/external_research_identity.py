@@ -80,8 +80,8 @@ def read_bound_execution(input_raw: bytes, candidate_raw: bytes, expected: Execu
     require(candidate.receipt.execution_id == expected.execution_id
             and candidate.input_hash == candidate.receipt.input_hash == expected.canonical_input_hash,
             "EXECUTION_RECEIPT_BINDING_MISMATCH")
-    if candidate.discovery is not None:
-        require(candidate.discovery.discovery_id == expected.execution_id, "EXECUTION_DISCOVERY_BINDING_MISMATCH")
+    # Discovery identity belongs to the existing Funnel; do not conflate an
+    # observation id with this execution id. Candidate/receipt bind the latter.
     validation = validate_external_research_candidate(packet=packet, candidate=candidate)
     return packet, candidate, validation
 
