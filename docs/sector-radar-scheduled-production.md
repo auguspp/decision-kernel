@@ -26,6 +26,14 @@
 
 活动检查只写 Job Summary/日志，不往 sealed run inventory 偷塞新文件。原 producer 之前失败时，可能没有 operations.json 或 audit ZIP；该情况显示“未取得生产记录/检查失败”，不能伪装 quiet。原 producer 已开始后的失败继续保存现有失败审计与 operations。Invocation summary 增加 trigger / run / attempt / SHA / UTC 记录时钟和活动检查结果，不增加 Human wake。
 
+## 定时状态必须接续同一条恢复链
+
+#278 合并后的代码读回发现一个遗漏：成功运行查询仍带 `event=workflow_dispatch`，会隐藏较新的 scheduled success，转而选择更旧的手动状态；两次连续定时运行因而可能错误缺日。这个代码缺口不能由 CI green 掩盖，本项以独立的小修复补齐，不声称它已经发生过自然定时失败。
+
+修复仅移除同一 Sector workflow、main、success 查询的手动事件过滤，使最近成功记录不因触发类型而不可见。仍只检查最新 prior success 的精确 artifact：该包缺失或过期，返回不可用并 fail closed，绝不继续寻找旧手动包或旧定时包；不增请求、不改分页数量、cache/manifest 权威规则、状态机或恢复实现。
+
+新增五项参数化回归的模拟 GitHub 响应真正遵守 URL event filter，覆盖“新定时/旧手动”“新手动/旧定时”“连续定时”，以及最新定时 artifact 缺失/过期时不回退。它们能暴露旧查询的错误，但不是自然 schedule 验收。
+
 ## 原状态机和恢复边界
 
 | 条件 | 原生产语义 |
@@ -38,7 +46,7 @@
 
 开工核到最近成功的 Sector 为 `34107253263`，state artifact `10013384600`（未过期），完成日 2026-09-07。下载 ZIP 为 438508 bytes，SHA256 `e154b1221fd8ecee699eca6f0390d8c9123e2624a28012a458b51a22444e3848`；三文件 CRC、manifest 的 state/ledger 文件摘要匹配。state hash `93a4e45222e085d5e06e75848c794546c3874c1c4f0316d96a64b78dda654841`，ledger hash `d37316b957117698c8e03d0b4064909fde81b90abdc77d80fe44b700b2d68b84`。这只是启用前基线，**没有把该 run 硬编码成永久 restore 来源**。
 
-保留原 operations.json/md；新 session 的 result.json/summary.md；同日的 same-session-validation.json；complete run audit；authoritative state bundle；cache acceleration copy；context 与 economic/company reading；publication verification。未改 state/ledger/operations schema、REST restore 规则、replay inventory、detector/rank/gate 或任何 HiThink 请求预算。这里只增加每天自动尝试的频率，不宣称累计请求总量不变。
+保留原 operations.json/md；新 session 的 result.json/summary.md；同日的 same-session-validation.json；complete run audit；authoritative state bundle；cache acceleration copy；context 与 economic/company reading；publication verification。REST 成功运行查询仅移除手动事件过滤，未改 state/ledger/operations schema、权威恢复及缺失包不回退规则、replay inventory、detector/rank/gate 或任何 HiThink 请求预算。这里只增加每天自动尝试的频率，不宣称累计请求总量不变。
 
 ## 确定性测试与自然验收
 
