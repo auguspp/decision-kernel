@@ -76,11 +76,13 @@ def workflow_environment(monkeypatch):
         monkeypatch.setenv(key, value)
 
 
+@pytest.mark.parametrize("event", ["workflow_dispatch", "schedule"])
 @pytest.mark.parametrize("mode", ["same-session", "quiet", "candidates"])
-def test_existing_replay_matches_actual_uploads_then_context_without_new_events(tmp_path, monkeypatch, mode):
+def test_existing_replay_matches_actual_uploads_then_context_without_new_events(tmp_path, monkeypatch, mode, event):
     run_dir, state_dir, outcome, observed = make_case(tmp_path, monkeypatch, mode)
     before_state, before_run = inventory(state_dir), inventory(run_dir)
     workflow_environment(monkeypatch)
+    monkeypatch.setenv("GITHUB_EVENT_NAME", event)
     monkeypatch.chdir(tmp_path)
     gate = script()
     gate["main"]()
@@ -181,7 +183,7 @@ def test_missing_stale_or_unsealed_files_fail_without_writes(tmp_path, monkeypat
 
 
 @pytest.mark.parametrize("key,value", [
-    ("GITHUB_REF", "refs/heads/feature"), ("GITHUB_EVENT_NAME", "schedule"),
+    ("GITHUB_REF", "refs/heads/feature"), ("GITHUB_EVENT_NAME", "push"),
     ("GITHUB_RUN_ATTEMPT", "2"), ("HITHINK_FINANCE_API_KEY", "must-not-be-passed"),
 ])
 def test_cli_refuses_wrong_context_before_reading_any_state(tmp_path, monkeypatch, key, value):
@@ -208,4 +210,5 @@ def test_workflow_gates_remote_publication_and_retains_failed_audit():
     assert "if: always()" in text.split("      - name: " + names[3] + "\n")[1].split("      - name: ")[0]
     assert "steps.replay-check.outcome" in text
     assert "publication-verification.json" in text
-    assert "schedule:" not in text and "continue-on-error" not in text
+    assert "workflow_dispatch:" in text and "schedule:" in text
+    assert "continue-on-error" not in text

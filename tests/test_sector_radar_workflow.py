@@ -16,11 +16,14 @@ WORKFLOW = Path(SECTOR_RADAR_WORKFLOW_PATH)
 OPERATIONS_DOC = Path("docs/sector-radar-prospective-producer-operations.md")
 
 
-def test_sector_radar_workflow_is_manual_and_separate_from_decision_inbox() -> None:
+def test_sector_radar_workflow_has_two_triggers_and_remains_separate_from_decision_inbox() -> None:
     raw = WORKFLOW.read_text(encoding="utf-8")
 
     assert "workflow_dispatch:" in raw
-    assert not re.search(r"^\s*schedule:\s*$", raw, flags=re.MULTILINE)
+    # User-approved P0-1 replaces the former manual-only trigger requirement.
+    assert re.search(r"^  schedule:\s*$", raw, flags=re.MULTILINE)
+    assert re.findall(r'cron: "([^\"]+)"', raw) == ["37 9 * * 1-5"]
+    assert raw.count("Run independent Sector Radar shadow producer") == 1
     assert "decision-inbox" not in raw
     assert "continue-on-error" not in raw
     assert "sector-radar-prospective-state" in raw
