@@ -89,8 +89,8 @@ def verify_publication(run_directory: Path, state_directory: Path, expected_cont
 
 
 def main() -> None:
-    if os.environ.get("GITHUB_REF") != "refs/heads/main" or os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch":
-        raise ValueError("publication precheck requires a fresh main workflow_dispatch")
+    if os.environ.get("GITHUB_REF") != "refs/heads/main" or os.environ.get("GITHUB_EVENT_NAME") not in {"workflow_dispatch", "schedule"}:
+        raise ValueError("publication precheck requires a fresh main workflow_dispatch or schedule")
     if os.environ.get("GITHUB_RUN_ATTEMPT") != "1":
         raise ValueError("publication precheck requires attempt 1")
     if os.environ.get("HITHINK_FINANCE_API_KEY"):

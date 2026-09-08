@@ -51,7 +51,8 @@ def test_context_summary_only_advertises_an_uploaded_successful_projection():
     assert "context/index.html" in summary and "context/context.json" in summary
     assert "不要使用旧页面冒充本次结果" in summary
     assert 'cat sector-radar-run/summary.md >> "$GITHUB_STEP_SUMMARY"' in summary
-    assert "workflow_dispatch:" in raw and "schedule:" not in raw
+    # Both triggers retain the same read-only context and publication gates.
+    assert "workflow_dispatch:" in raw and "schedule:" in raw
 
 
 @pytest.mark.parametrize("jump", [False, True])

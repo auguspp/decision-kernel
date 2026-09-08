@@ -2,6 +2,9 @@ name: sector-radar-shadow
 
 on:
   workflow_dispatch:
+  schedule:
+    # UTC 09:37 = Asia/Shanghai 17:37, Monday-Friday. Calendar remains authoritative.
+    - cron: "37 9 * * 1-5"
 
 permissions:
   actions: read
@@ -36,7 +39,7 @@ jobs:
         shell: bash
         run: |
           if [ "${GITHUB_RUN_ATTEMPT}" != "1" ]; then
-            echo "::error::Do not rerun a Sector Radar workflow run; start a fresh workflow_dispatch so run and artifact identity remain unique"
+            echo "::error::Do not rerun a Sector Radar workflow run; use a new scheduled run or fresh workflow_dispatch so run and artifact identity remain unique"
             exit 1
           fi
       - name: Check HiThink secret
@@ -73,6 +76,12 @@ jobs:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ steps.state-artifact.outputs.artifact_run_id }}
+      - name: Check shared-Key activity once before acquisition
+        id: key-activity
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HITHINK_FINANCE_API_KEY: ""
+        run: python .github/scripts/check-sector-scheduled-activity.py
       - name: Run independent Sector Radar shadow producer
         env:
           # Conservative per-process spacing, not a verified provider quota.
@@ -139,11 +148,20 @@ jobs:
         if: always()
         shell: bash
         env:
+          KEY_ACTIVITY_OUTCOME: ${{ steps.key-activity.outcome }}
           REPLAY_OUTCOME: ${{ steps.replay-check.outcome }}
           CONTEXT_OUTCOME: ${{ steps.context-view.outcome }}
           JOINT_OUTCOME: ${{ steps.joint-reading.outcome }}
           RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
+          {
+            echo '### Sector production invocation'
+            printf 'Trigger: `%s`; run: `%s`; attempt: `%s`; commit: `%s`\n\n' "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA"
+            printf 'Summary recorded at UTC: `%s`\n\n' "$(date -u +%FT%TZ)"
+            printf 'Shared-Key activity precheck: `%s` (one observation, not a global lock).\n\n' "$KEY_ACTIVITY_OUTCOME"
+            echo 'A failed or missing production record is not quiet success. Gap or unavailable/integrity-failed authoritative state requires explicit qualified recovery; ordinary production cannot bridge or reset it. Any 429 stops this attempt: no Re-run, retry or fallback.'
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
           if [ -f sector-radar-run/operations.md ]; then
             cat sector-radar-run/operations.md >> "$GITHUB_STEP_SUMMARY"
           else

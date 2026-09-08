@@ -220,7 +220,7 @@ def build_delivery(root: Path, run: Path, state: Path, temporary: Path, *, ident
 def main() -> int:
     try:
         if (os.environ.get('GITHUB_REF') != 'refs/heads/main'
-                or os.environ.get('GITHUB_EVENT_NAME') != 'workflow_dispatch'
+                or os.environ.get('GITHUB_EVENT_NAME') not in {'workflow_dispatch', 'schedule'}
                 or os.environ.get('GITHUB_RUN_ATTEMPT') != '1'
                 or os.environ.get('GITHUB_REPOSITORY') != 'auguspp/decision-kernel'
                 or os.environ.get('HITHINK_FINANCE_API_KEY')):
