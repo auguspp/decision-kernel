@@ -1,0 +1,37 @@
+{
+  "semantics": "COMPANY_EVIDENCE_ONLY_NOT_RESEARCH_OR_JUDGMENT",
+  "recorded_at": "2026-09-08T01:22:40.725848+00:00",
+  "company_identity": {
+    "ticker": "000048",
+    "exchange": "SZSE",
+    "company_name": "京基智农"
+  },
+  "evidence_artifacts": [
+    {
+      "id": "de10e399-fe9c-5565-85a9-fb91d4337fb4",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "KINGKEY:000048:2026-H1:business",
+      "source_locator": "https://file.finance.sina.com.cn/211.154.219.97%3A9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-24/12521114.PDF",
+      "published_at": "2026-08-24T00:00:00+08:00",
+      "available_at": "2026-09-08T01:22:40.725848+00:00",
+      "retrieved_at": "2026-09-08T01:22:40.725848+00:00",
+      "content_hash": "b295b8b3f0569b5cba9272daa8a86bb0609b5f6afbbca21277467e30e71b2139",
+      "idempotency_key": "KINGKEY:000048:2026-H1:business:b295b8b3f0569b5cba9272daa8a86bb0609b5f6afbbca21277467e30e71b2139",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "business_scope_statement": "中报列示生猪、饲料、禽养殖及房地产等业务。",
+        "operating_model_statement": "生猪业务采用自繁自养，并开展合同育肥；项目配套饲料厂。",
+        "products_and_sales_statement": "饲料产品含猪料、鸡料和水产料；食品端与屠宰厂、商超等合作。",
+        "other_business_boundary_statement": "地产为存量去化业务；汇博投资原增资协议终止，改为少数股权投资。",
+        "report_scope_statement": "材料报告期为2026年上半年；只保留上述业务与投资性质的有限转述。"
+      },
+      "permitted_excerpt": null,
+      "source_location": "2026年半年度报告全文：PDF第6页公司身份，第9页第三节一之主要业务、经营模式，第31页十四之第2项股权投资进展。第6、9页已查看渲染；第31页仅核对解析正文，截图请求返回Cache miss。",
+      "license_terms_note": "来源是公司署名披露文档的新浪PDF副本，不是新浪编辑观点；未取得巨潮原件作逐字节同一性比对，不以OFFICIAL_FILING标签认证源站或独立真实性。网页工具读取并对指定页作有限转述；本仓库不保存完整PDF或完整HTTP字节。content_hash只绑定URL、位置和转述，不是PDF哈希。published_at为披露日零点记号，不证明当日盘中可得；available_at/retrieved_at按本次读取完成后记录，不回填旧capture。无投资判断或净受益认证。",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    }
+  ]
+}

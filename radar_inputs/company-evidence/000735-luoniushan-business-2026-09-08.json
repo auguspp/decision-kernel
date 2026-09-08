@@ -1,0 +1,37 @@
+{
+  "semantics": "COMPANY_EVIDENCE_ONLY_NOT_RESEARCH_OR_JUDGMENT",
+  "recorded_at": "2026-09-08T01:22:40.725848+00:00",
+  "company_identity": {
+    "ticker": "000735",
+    "exchange": "SZSE",
+    "company_name": "罗牛山"
+  },
+  "evidence_artifacts": [
+    {
+      "id": "5d8d5eab-1f10-50a4-880c-bf0e8bf45e54",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "LUONIUSHAN:000735:2026-H1:business",
+      "source_locator": "https://file.finance.sina.com.cn/211.154.219.97%3A9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-22/12517288.PDF",
+      "published_at": "2026-08-22T00:00:00+08:00",
+      "available_at": "2026-09-08T01:22:40.725848+00:00",
+      "retrieved_at": "2026-09-08T01:22:40.725848+00:00",
+      "content_hash": "de5a54e07e5d9e5b8d42651c8f49bf23b55855c48ea8ee7526317018f5c9685b",
+      "idempotency_key": "LUONIUSHAN:000735:2026-H1:business:de5a54e07e5d9e5b8d42651c8f49bf23b55855c48ea8ee7526317018f5c9685b",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "business_scope_statement": "中报列示生猪养殖与屠宰、冷链仓储物流、地产及职业教育等业务。",
+        "operating_model_statement": "养殖以自繁自养为主，另有公司加农户模式；饲料同时用于自有场和外销。",
+        "products_and_sales_statement": "生猪产品包括外三元猪和黑猪；屠宰区分自营销售与对外代宰收费。",
+        "other_business_boundary_statement": "冷链、地产和职业教育与养殖业务并存。",
+        "report_scope_statement": "材料报告期为2026年上半年；只保留业务转述，不提取收入权重、产能或成本数值。"
+      },
+      "permitted_excerpt": null,
+      "source_location": "2026年半年度报告全文：PDF第6页公司身份，第9至10页第三节一之业务、产品及经营模式；三页均已查看渲染。本批不提取财务指标。",
+      "license_terms_note": "来源是公司署名披露文档的新浪PDF副本，不是新浪编辑观点；未取得巨潮原件作逐字节同一性比对，不以OFFICIAL_FILING标签认证源站或独立真实性。网页工具读取并对指定页作有限转述；本仓库不保存完整PDF或完整HTTP字节。content_hash只绑定URL、位置和转述，不是PDF哈希。published_at为披露日零点记号，不证明当日盘中可得；available_at/retrieved_at按本次读取完成后记录，不回填旧capture。无投资判断或净受益认证。",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    }
+  ]
+}
