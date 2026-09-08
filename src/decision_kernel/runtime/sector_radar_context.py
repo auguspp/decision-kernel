@@ -369,7 +369,7 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
         '</tr></thead><tbody>' + "".join(summary_rows) + '</tbody></table></div>'
         f'<p>状态交易日账本共有 {payload["recorded_events_latest_session"]} 个 sector event；'
         '真正的 0–3 首页及全部 qualified change 分组仍以同次 producer summary.md 为准。'
-        '零新事件不等于市场没有持续状态。</p>'
+        '零事件不等于零强势行业；零新事件不等于市场没有持续状态。</p>'
         '<p>窗口收益是滚动窗口表现，不是逐日连续上涨；绝对收益和相对基准分开。'
         '原因、业务关系和持续性结论没有证据时保持未知。</p></header>'
         + "".join(sections)
