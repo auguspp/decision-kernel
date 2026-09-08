@@ -197,7 +197,10 @@ def render_sector_radar_discovery(result: dict) -> str:
         lines += ['</details>', '']
     lines += ['### 其他变化', '',
               '以下各组只从首页摘要省略，并未删除。每行给出变化、位置、幅度、广度和 leader；展开可看全部驱动及未知项。', '']
-    if not rest:
+    if rest:
+        lines += [f'{len(rest)} additional complete group(s) are listed below for reading; '
+                  'omitted only from the homepage summary.', '']
+    else:
         lines += ['没有被首页摘要省略的合格变化组。', '']
     for i, group in enumerate(rest, len(shown) + 1):
         lines += ['<details>', f'<summary>{i}. {_brief(group)}</summary>', '']

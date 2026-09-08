@@ -167,6 +167,8 @@ RESEARCH CONCLUSION = NONE；BELIEF = NONE；Human Attention / Research / Invest
 
 以下各组只从首页摘要省略，并未删除。每行给出变化、位置、幅度、广度和 leader；展开可看全部驱动及未知项。
 
+9 additional complete group(s) are listed below for reading; omitted only from the homepage summary.
+
 <details>
 <summary>4. 种植业与林业 881101.TI / 其他种植业 884003.TI — 新进入加速条件；当日指数 +4.35%；上涨 9/10；当日 leader：亚盛集团 600108.SH；组内另含：农业综合 884012.TI</summary>
 
