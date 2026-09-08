@@ -19,6 +19,7 @@ from pathlib import Path
 import requests
 
 from . import current_state as model
+from .external_research_identity import project_registered_handoffs
 
 MAX_RUNS = 20
 MAX_API_CALLS = 180
@@ -331,7 +332,7 @@ class Collector:
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 gaps.append({"id": record["id"], "status": "RESEARCH_REFERENCE_REJECTED", "error_type": type(exc).__name__})
         return {"production_configuration": configuration, "production_inputs": packages,
-                "records": records, "handoffs": model.project_handoffs(entries, self.source), "gaps": gaps,
+                "records": records, "handoffs": project_registered_handoffs(entries, self.source), "gaps": gaps,
                 "confirmed_actions": [r for r in records if r["use"] == "CONFIRMED_ACTION_CHECKPOINT"],
                 "confirmed_action_scope": "EXPLICIT_REGISTRY_ONLY_NOT_PROOF_NO_TRADES_OCCURRED",
                 "scope": "EXPLICIT_CONFIG_AND_REGISTERED_LINEAGE_NOT_EXHAUSTIVE_RESEARCH_COVERAGE"}
