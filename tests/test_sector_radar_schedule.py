@@ -68,7 +68,7 @@ def test_one_production_path_and_existing_publication_gates():
     raw = WORKFLOW.read_text()
     trigger = raw.split('on:\n', 1)[1].split('\npermissions:', 1)[0]
     assert '  workflow_dispatch:\n' in trigger
-    assert '    - cron: "37 9 * * 1-5"' in trigger
+    assert '    - cron: "13 10 * * 1-5"' in trigger
     assert trigger.count('cron:') == 1 and 'push:' not in trigger
     assert raw.count('python -m decision_kernel.runtime.sector_radar_producer run') == 1
     assert raw.index('Require main branch') < raw.index('Check shared-Key activity')
@@ -206,7 +206,7 @@ def test_scheduled_failures_keep_rejected_audit_and_never_publish(tmp_path, monk
     monkeypatch.setenv('GITHUB_EVENT_NAME', 'schedule')
     monkeypatch.setenv('HITHINK_FINANCE_API_KEY', 'fixture-credential-do-not-retain')
     restored = resolution(); session = TUESDAY if failure == 'gap' else MONDAY
-    observed = datetime.combine(session, time(17, 37), tzinfo=TZ)
+    observed = datetime.combine(session, time(18, 13), tzinfo=TZ)
     calls = []; original = SyntheticProvider.__call__
     def response(self, path, params):
         calls.append(path)
