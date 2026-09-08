@@ -80,7 +80,7 @@ def checks(packet, p, catalogue, values, commits):
                    ("c" * 40, ins["path"]): data})
     args = dict(input_raw=data, preflight_raw=pf, catalog_source=cs,
                 load=lambda s: values[(s["ref"], s["path"])], commit=lambda r: commits[r],
-                checked_at="2026-09-08T11:02:00Z", input_source=ins)
+                checked_at="2026-09-08T11:02:00Z", input_source=ins, current_code=lambda: "d" * 40)
     try:
         args["expected_key"] = identity.input_key(ExternalResearchInputPacket.model_validate_json(data)).as_dict()
     except ValueError:
@@ -221,6 +221,11 @@ def test_cli_uses_read_only_existing_client_and_reports_prepare(monkeypatch, tmp
     calls = []
     class ReadOnlyAPI:
         def __init__(self, token): pass
+        def _call(self, method, endpoint):
+            assert method == "GET" and endpoint == "git/ref/heads/main"
+            class Reply:
+                def json(self): return {"object": {"sha": "d" * 40}}
+            return Reply()
         def file(self, path, ref):
             calls.append((path, ref))
             return args["load"]({"path": path, "ref": ref})
@@ -244,3 +249,11 @@ def test_cli_uses_read_only_existing_client_and_reports_prepare(monkeypatch, tmp
     report = json.loads(capsys.readouterr().out)
     assert not report["research_execution_allowed"] and report["formal_research_budget_used"] == 0
     assert calls and "synthetic-not-a-credential" not in json.dumps(report)
+
+
+@pytest.mark.parametrize("when", ["before", "after"])
+def test_moved_main_cannot_reuse_previously_clean_identity_scope(when):
+    args = checks(*setup())
+    values = iter(["a" * 40] if when == "before" else ["d" * 40, "a" * 40])
+    args["current_code"] = lambda: next(values)
+    denied(args, "ADMISSION_CODE_OR_SCOPE_MOVED")

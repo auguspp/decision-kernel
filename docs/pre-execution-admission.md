@@ -90,8 +90,10 @@ other proof types later requires an explicit verifier, not a plausible date.
 The preflight is committed before selected_at; the formal input is committed after
 cutoff; exact readback occurs before launch. Its code_commit pins the declaration
 catalogue. Callers must choose current trusted code and recheck the current declared
-scope at admission. A later attempt must not reuse an old clean snapshot to evade
-newly recorded conflicts. There is no cross-branch/global lock or hard tool sandbox;
+scope at admission. The adapter reads main without the GET cache before and after
+readback; a changed main rejects admission as ADMISSION_CODE_OR_SCOPE_MOVED, even
+when the older frozen catalogue is internally intact. No old clean snapshot may
+be reused to evade newly recorded conflicts. There is no cross-branch/global lock or hard tool sandbox;
 unrecorded inputs and privileged bypasses of trusted code are not authenticated.
 No new formal registration is made by appending the prospective input to an
 in-memory checked #288 catalogue. Promotion still requires the normal durable
@@ -99,7 +101,7 @@ identity catalogue, original validation and separate Human semantic approval.
 
 ## Read-only CLI
 
-The CLI uses only `file` and `get(git/commits/...)` of the existing bounded GitHub
+The CLI uses only GET/file/commit/ref reads of the existing bounded GitHub
 client, with the already provisioned credential. It does not print/read Secrets
 APIs, call the client's writer, request market data or dispatch anything.
 

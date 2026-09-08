@@ -178,13 +178,15 @@ def _publication_checks(packet, preflight, load, commit) -> None:
 
 
 def prepare_input(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dict,
-                  load: Callable[[dict], bytes], commit: Callable[[str], dict], checked_at: str):
+                  load: Callable[[dict], bytes], commit: Callable[[str], dict], checked_at: str,
+                  current_code: Callable[[], str]):
     """No formal input write or Research call occurs in this prepare step."""
     p = check_preflight(preflight_raw, checked_at=checked_at)
     try:
         packet = ExternalResearchInputPacket.model_validate(identity._json(input_raw))
     except ValueError as exc:
         raise AdmissionRejected("INPUT_REJECTED") from exc
+    require(current_code() == packet.code_commit, "ADMISSION_CODE_OR_SCOPE_MOVED")
     require(all(p[k] == getattr(packet, k) for k in ("case_id", "ticker", "security_id")), "INPUT_REJECTED")
     require(clock(p["finished_at"]) <= packet.selected_at <= packet.research_cutoff <= clock(checked_at),
             "INPUT_REJECTED")
@@ -219,7 +221,7 @@ def prepare_input(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dic
 
 def assess_admission(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dict,
                      load: Callable[[dict], bytes], commit: Callable[[str], dict], checked_at: str,
-                     input_source: dict | None = None, expected_key: dict | None = None) -> dict:
+                     current_code: Callable[[], str], input_source: dict | None = None, expected_key: dict | None = None) -> dict:
     """Recheck before launch. A prepare PASS alone never permits execution."""
     report = {"schema_version": 1, "status": "NOT_EXECUTED", "reason": None,
               "research_execution_allowed": False, "formal_research_budget_used": 0,
@@ -231,7 +233,8 @@ def assess_admission(*, input_raw: bytes, preflight_raw: bytes, catalog_source: 
     phase = "SOURCE_PREFLIGHT_INCOMPLETE"
     try:
         packet, key, catalog_raw = prepare_input(input_raw=input_raw, preflight_raw=preflight_raw,
-            catalog_source=catalog_source, load=load, commit=commit, checked_at=checked_at)
+            catalog_source=catalog_source, load=load, commit=commit, checked_at=checked_at,
+            current_code=current_code)
         report["execution_key"] = key.as_dict()
         report["checks"] = {"source_preflight": "PASS", "input_model_validation": "PASS",
                             "seed_publication": "PASS", "canonical_input_hash": "COMPUTED",
@@ -260,6 +263,7 @@ def assess_admission(*, input_raw: bytes, preflight_raw: bytes, catalog_source: 
         catalog["inputs"].append({**key.as_dict(), "input": input_source})
         scope = identity.load_execution_scope(json.dumps(catalog).encode(), load)
         scope.require_unambiguous(key)
+        require(current_code() == packet.code_commit, "ADMISSION_CODE_OR_SCOPE_MOVED")
         report["checks"].update(exact_input_readback="PASS", identity_postcheck="PASS")
         report.update(reason="RESEARCH_EXECUTION_ALLOWED", research_execution_allowed=True,
                       input_source=dict(input_source), identity_scope_hash=scope.scope_hash)
@@ -298,7 +302,9 @@ def main(argv=None) -> int:
             input_source=identity._json(args.input_source.read_bytes()) if args.input_source else None,
             expected_key=identity._json(args.expected_key.read_bytes()) if args.expected_key else None,
             load=lambda spec: api.file(spec["path"], spec["ref"]),
-            commit=lambda ref: api.get("git/commits/" + ref), checked_at=datetime.now(timezone.utc).isoformat())
+            commit=lambda ref: api.get("git/commits/" + ref), checked_at=datetime.now(timezone.utc).isoformat(),
+            # Bypass only the client's GET memo for this mutable ref. No write/retry.
+            current_code=lambda: api._call("GET", "git/ref/heads/main").json()["object"]["sha"])
     except (ValueError, KeyError, TypeError, OSError, RuntimeError, ImportError) as exc:
         report = {"status": "NOT_EXECUTED", "reason": getattr(exc, "code", "ADMISSION_INPUT_UNAVAILABLE"),
                   "research_execution_allowed": False, "formal_research_budget_used": 0,
