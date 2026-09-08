@@ -1,6 +1,7 @@
 # P0-3 current-state read seam — delivery roadmap
 
 This is a mutable engineering/reading index, not authoritative market, Research or Human state.
+Implementation and final acceptance receipt: PR #282 in this repository.
 
 Start at `auguspp/decision-kernel`, ref `read-model/current-state`, `current-state.json`.
 Resolve the ref once to commit R; fetch the JSON, README and every `read_path` at R.

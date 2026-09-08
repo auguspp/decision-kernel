@@ -261,14 +261,14 @@ class Collector:
                             "status", "error_type", "error_message", "latest_cached_session",
                             "latest_completed_session", "direct_next_session")})
                         latest["operation"]["source"] = failure_source
-                    except (ValueError, KeyError, OSError, RuntimeError, zipfile.BadZipFile):
+                    except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, zipfile.BadZipFile):
                         latest = dict(latest, operation={"status": "FAILURE_DETAIL_UNAVAILABLE_NOT_QUIET"})
             if successful:
                 # Exactly one chosen success. A rejected archive never triggers older search.
                 qualified = self.saved_product(lane, successful)
             else:
                 failure = "NO_SUCCESS_IN_BOUNDED_QUERY"
-        except (ValueError, KeyError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
+        except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
             failure = "INPUT_UNAVAILABLE_OR_REJECTED:" + type(exc).__name__ + ":" + str(exc)[:180]
         previous = (self.previous or {}).get("lanes", {}).get(lane)
         result = model.lane_reading(latest=latest, qualified=qualified, failure=failure,
@@ -289,6 +289,7 @@ class Collector:
                 try:
                     data, source = self.source({"path": path})
                     value = json.loads(data)
+                    model.check(isinstance(value, dict), "production package must be an object")
                     if "deep_research" in value and "discovery" in value:
                         from decision_kernel.deep_research import DeepResearchPackage
                         DeepResearchPackage.model_validate(value)
@@ -299,7 +300,7 @@ class Collector:
                         kind = "ResearchCommitPackage"
                     packages.append({"source": source, "label": value.get("label", path), "schema": kind,
                         "use": "CURRENT_PRODUCTION_CONFIG_INPUT_NOT_NEW_ODDS_OR_HUMAN_ACCEPTANCE"})
-                except (ValueError, KeyError, OSError, RuntimeError) as exc:
+                except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                     gaps.append({"path": path, "status": "PRODUCTION_INPUT_REJECTED_NOT_REMOVED", "error_type": type(exc).__name__})
             history = copy.deepcopy(registry["historical_handoffs"])
             for path in handoff_paths:
@@ -313,11 +314,11 @@ class Collector:
                         entry = matches[0]
                         history.remove(entry)
                         entry["registered_current"] = True
-                except (ValueError, KeyError, OSError, RuntimeError):
+                except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError):
                     pass  # The original parser below records this input's failure.
                 entries.append(entry)
             entries.extend(history)  # Never collapse multiple versions by ticker/path.
-        except (ValueError, KeyError, OSError, RuntimeError) as exc:
+        except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
             gaps.append({"status": "PRODUCTION_REGISTRATION_UNAVAILABLE", "error_type": type(exc).__name__})
             # Independent explicitly registered handoffs remain readable.
         entries.extend(registry.get("additional_registered_handoffs", []))
@@ -327,7 +328,7 @@ class Collector:
                 records.append({"id": record["id"], "case": record["case"], "use": record["use"],
                                 "purpose_note": record["purpose_note"], "source": source,
                                 "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION"})
-            except (ValueError, KeyError, OSError, RuntimeError) as exc:
+            except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 gaps.append({"id": record["id"], "status": "RESEARCH_REFERENCE_REJECTED", "error_type": type(exc).__name__})
         return {"production_configuration": configuration, "production_inputs": packages,
                 "records": records, "handoffs": model.project_handoffs(entries, self.source), "gaps": gaps,
@@ -348,7 +349,7 @@ class Collector:
             try:
                 _, reference = self.source(item["source"])
                 capabilities.append({"id": item["id"], "status": item["status"], "source": reference})
-            except (ValueError, KeyError, OSError, RuntimeError):
+            except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError):
                 capabilities.append({"id": item["id"], "status": "ACCEPTANCE_SOURCE_UNAVAILABLE"})
         payload = model.assemble(code_commit=self.code_commit, checked_at=self.now(), check_started_at=started,
                                  lanes=lanes, research=research, capabilities=capabilities, refresh_identity=refresh)
@@ -422,7 +423,7 @@ def main(argv=None) -> int:
                     out.write(f"`{model.REPOSITORY}` / `{model.READ_REF}` / commit `{commit}` / `current-state.json`.\n\n")
                     out.write("This is a read-only delivery, not market/Research execution or natural Sector acceptance.\n")
         return 0
-    except (ValueError, KeyError, OSError, RuntimeError, requests.RequestException) as exc:
+    except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, requests.RequestException) as exc:
         print("READ_ENTRY_PUBLICATION_FAILED: " + type(exc).__name__)
         return 2
 
