@@ -211,7 +211,8 @@ def test_workflow_reuses_existing_artifact_and_keeps_all_or_nothing_publication(
     assert 'if: success()' in step and 'HITHINK_FINANCE_API_KEY: ""' in step
     assert 'python .github/scripts/build-sector-radar-reading.py' in step
     assert "pip install -e '.[discovery]'" in text
-    assert 'schedule:' not in text and 'continue-on-error' not in text
+    assert 'workflow_dispatch:' in text and 'schedule:' in text
+    assert 'continue-on-error' not in text
     assert 'economic-company/index.html' in text and 'steps.joint-reading.outcome' in text
     assert '[ "$JOINT_OUTCOME" = "success" ] && [ -n "$RUN_AUDIT_URL" ]' in text
     assert text.count('uses: actions/upload-artifact@v7') == 2

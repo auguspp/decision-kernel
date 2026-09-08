@@ -42,9 +42,9 @@
 
 ## 确定性测试与自然验收
 
-两处旧测试明确禁止 schedule，与本需求冲突：把这两处断言迁移为双触发/精确 cron，保留其余权限、串行、恢复、发布与阅读断言，并增加测试，而非绕过 YAML 检测或删掉整个测试。
+四个旧测试文件中的手动限定断言禁止 schedule，与本需求冲突：把这些断言迁移为双触发/精确 cron（发布入口的拒绝样本改为未授权 push），保留其余权限、串行、恢复、发布与阅读断言，并增加测试，而非绕过 YAML 检测或删掉整个测试。
 
-新增测试检查双方主干/attempt guard、单一生产命令、允许事件在下游的闭合、活动/不完整查询非零停止、失败不打印凭据、元数据请求不重试。合成 provider 输入走原 adapters/detector/audit/replayer，分别检验同日、quiet、candidate、gap、provider failure 和429异常；原 #277 discoverability 测试继续执行。重放和失败审计均不得生成 live state。事件 admission 单测会隔离昂贵下游函数，完整 publication/reading checks 仍由既有集成测试覆盖；不把模拟事件名说成自然 schedule 验收。
+新增测试检查双方主干/attempt guard、单一生产命令、允许事件在下游的闭合、活动/不完整查询非零停止、失败不打印凭据、元数据请求不重试。合成 provider 输入走原 adapters/detector/audit/replayer，分别检验同日、quiet、candidate、gap、provider failure 和429异常；原 #277 discoverability 测试继续执行。重放和失败审计均不得生成 live state。事件 admission 单测会隔离昂贵下游函数，原三种状态的完整 publication/context 集成测试也扩展至两种触发，reading checks 仍由既有集成测试覆盖；不把模拟事件名说成自然 schedule 验收。
 
 首条自然运行核验：event=schedule；实际 main SHA / attempt 1 / 开始与完成时钟；活动检查和真实共享任务时间；精确 restore run/artifact/manifest；calendar 与最新合格完成日/cached/direct next；provider 请求记录及429；operations 状态/candidate数/state与ledger hash；完整远端 artifacts；原离线重放与发布 gates；Job Summary。缺任何项如实记录。CI绿不预填这一回执。
 
