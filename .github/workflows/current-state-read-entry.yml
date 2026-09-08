@@ -1,0 +1,63 @@
+name: current-state-read-entry
+
+on:
+  workflow_run:
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests]
+    types: [requested, completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: current-state-read-entry-publication
+  cancel-in-progress: false
+
+jobs:
+  publish-reading:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch == 'main' &&
+      ((github.event.workflow_run.name == 'kernel-tests' &&
+        github.event.action == 'completed' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.conclusion == 'success') ||
+       (github.event.workflow_run.name != 'kernel-tests' &&
+        (github.event.workflow_run.event == 'schedule' ||
+         github.event.workflow_run.event == 'workflow_dispatch')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      # Only trusted default-branch code is executed, never code from an artifact
+      # or workflow_run.head_sha. Market producers and their triggers stay unchanged.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing package
+        run: python -m pip install -e .
+      - name: Verify saved products and publish read-only ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+          READ_CODE_COMMIT: ${{ github.sha }}
+          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: >-
+          python -m decision_kernel.runtime.current_state_delivery
+          --code-commit "$READ_CODE_COMMIT"
+          --output current-state-delivery
+          --publish
+      - name: Explain a failed reading publication
+        if: failure()
+        run: |
+          echo '## Current-state reading publication failed' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Inspect the actual read ref: a failure before pointer update preserves it; a lost write response is uncertain. Do not retry or infer delivery.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This failure is not a market quiet result and does not change production restore authority.' >> "$GITHUB_STEP_SUMMARY"
