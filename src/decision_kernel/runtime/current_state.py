@@ -296,7 +296,8 @@ def project_handoffs(entries: list[dict], load: Callable[[dict], tuple[bytes, di
             check(identity not in seen, "duplicate exact handoff reference")
             seen.add(identity)
             row = {"request_id": identity, "discovery_id": funnel.discovery.discovery_id,
-                   "ticker": funnel.discovery.ticker, "economic_direction": funnel.discovery.economic_direction,
+                   "ticker": funnel.discovery.ticker, "security_id": funnel.discovery.security_id,
+                   "economic_direction": funnel.discovery.economic_direction,
                    "source_lane": funnel.discovery.source_lane, "as_of": funnel.discovery.as_of.isoformat(),
                    "terminal_state": funnel.terminal_state.value, "reason": funnel.terminal_reason,
                    "source": source, "resolution": None}

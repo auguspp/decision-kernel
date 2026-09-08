@@ -271,10 +271,11 @@ def test_sector_question_without_ticker_is_not_assigned_a_leader():
     from decision_kernel.research_workflow_v1 import ResearchFunnelResult
     value = _deepen(ticker="000001", discovery_id="industry-only", lane="SECTOR").model_dump(mode="json")
     value["discovery"]["ticker"] = None
-    value["discovery"]["security_id"] = None
+    value["discovery"]["security_id"] = "SECTOR:SYNTHETIC-INDUSTRY"
     frozen = ResearchFunnelResult.model_validate(value)
     raw = serialize_research_attention_handoff(ResearchAttentionHandoff(frozen)).encode()
     result = read.project_handoffs([{"source": {"path": "sector.json"}, "registered_current": True}], loader({"sector.json": raw}))
     assert not result["gaps"]
     assert result["active"][0]["ticker"] is None
+    assert result["active"][0]["security_id"] == "SECTOR:SYNTHETIC-INDUSTRY"
     assert result["active"][0]["source_lane"] == "SECTOR"
