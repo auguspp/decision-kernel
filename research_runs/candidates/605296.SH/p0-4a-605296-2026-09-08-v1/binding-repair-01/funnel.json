@@ -1,0 +1,93 @@
+{
+  "discovery": {
+    "as_of": "2026-09-08T12:17:30Z",
+    "contradiction_or_mapping_warning": "Price strength cannot establish profit improvement. The existing company mapping is real, but the saved observation did not establish WHY or a current business benefit.",
+    "current_market_expression": "Saved 2026-09-07 Stock Reading observation only; no new market data was fetched for this research execution.",
+    "discovery_id": "p0-4a-605296-2026-09-08-v1",
+    "economic_direction": "A saved positive stock-price observation creates a question about whether future hog-cycle or company operating economics are changing; it does not establish a business benefit or current earnings improvement.",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": ["3a4ef4ae-ff00-5e4f-8134-ac52e50af745"],
+        "statement": "The accepted bounded Stock Reading for market session 2026-09-07 surfaced 605296.SH as its one displayed company observation among four planned/evaluated reviewed issuers; this was not an all-A-share screen."
+      },
+      {
+        "evidence_artifact_ids": ["a8d97815-33ac-5d30-977c-0678ea4b15b7"],
+        "statement": "Pre-existing company Evidence establishes that Shennong operates feed, hog breeding/sales, slaughter and pork/food-processing activities, while explicitly not establishing 2026 profitability."
+      }
+    ],
+    "known_stop_or_downgrade_condition": "Do not deepen if available evidence only shows cyclical price expectation or volume growth without durable realized economics, or if source authority is insufficient.",
+    "next_discriminating_search": "Read first-party 2026 operating disclosures and test whether realized price, volume, cost and cash evidence supports or contradicts a durable company-level recovery explanation.",
+    "schema_version": 1,
+    "security_id": "SSE:605296",
+    "source_lane": "SAVED_STOCK_OBSERVATION",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-08T10:56:53Z",
+        "evidence_artifact_id": "3a4ef4ae-ff00-5e4f-8134-ac52e50af745",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/e7ad9591a3139b568708a8d927494027d45da924/details/stock/34167972382/reading/stock-reading.json"
+      },
+      {
+        "available_at": "2026-09-07T12:44:18.367059Z",
+        "evidence_artifact_id": "a8d97815-33ac-5d30-977c-0678ea4b15b7",
+        "source_locator": "https://paper.cnstock.com/html/2026-04/25/content_2206266.htm"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "605296",
+    "why_now": "P0-4A explicitly selected the accepted saved 605296.SH observation as one bounded real-execution case after P0-3 consumer acceptance."
+  },
+  "investment_authority": "NONE",
+  "pre_research": {
+    "as_of": "2026-09-08T12:17:30Z",
+    "basic_business_role": "Feed processing and sales, hog breeding/sales, hog slaughter, fresh pork and food processing, plus slaughter services; the saved company evidence is a 2025 business-scope description, not proof of 2026 profitability.",
+    "current_expression_or_leadership": "Saved Stock Reading observation only; this execution does not establish broad-market leadership, all-stock coverage, or a fresh price signal.",
+    "current_market_expectation_hypothesis": "The saved positive price observation may reflect investors looking through weak realized H1 economics toward a later hog-cycle or cost recovery, but this is an inference: this execution did not directly observe market expectations.",
+    "discovery_id": "p0-4a-605296-2026-09-08-v1",
+    "economic_direction": "The saved price observation creates a question about a possible cycle/earnings expectation turn, but the observed operating evidence through H1 2026 points to severe realized price pressure rather than established current profit improvement.",
+    "largest_unknown": "Whether post-H1 hog pricing and company unit-cost/cash economics have improved enough to support a durable company-specific recovery rather than a temporary or broad-sector expectation trade.",
+    "material_claims": [
+      {"evidence_artifact_ids": ["a8d97815-33ac-5d30-977c-0678ea4b15b7"], "kind": "FACT", "statement": "The pre-existing company Evidence describes an integrated feed, hog breeding/sales, slaughter, fresh-pork and processing business, while explicitly warning that it is a 2025 business description rather than 2026 profitability evidence."},
+      {"evidence_artifact_ids": ["c0782d9f-4507-5d3f-b559-ff193b1b48dd"], "kind": "FACT", "statement": "In the company's official April 2026 operating announcement, commercial hog sales volume rose 48.53% year on year to 31.80万头, but hog-sales revenue fell 8.46% year on year and average selling price fell to CNY8.65/kg, down 11.91% month on month."},
+      {"evidence_artifact_ids": ["c0782d9f-4507-5d3f-b559-ff193b1b48dd"], "kind": "FACT", "statement": "The official April announcement shows a Jan-April average selling-price sequence of CNY12.03, 11.20, 9.82, and 8.65/kg and warns that hog-price moves can materially affect company performance."},
+      {"evidence_artifact_ids": ["97f1f198-c6e3-5cac-ac66-28f499a0b2f2"], "kind": "MARKET_CONTEXT", "statement": "A Sina-hosted mirror of the company's July 15 H1 earnings warning reports forecast attributable net profit of roughly -CNY720m to -CNY880m and attributes the H1 breeding loss primarily to an approximately 32% year-on-year decline in hog selling price, with inventory impairment also noted."},
+      {"evidence_artifact_ids": [], "kind": "INFERENCE", "statement": "The combination of a positive saved price observation with sharply weaker realized hog pricing is more consistent with a forward-looking recovery hypothesis than with price confirming current earnings strength."}
+    ],
+    "next_discriminating_search": "Within the already found source set, test the contrary explanation that the saved price move is merely anticipatory/cyclical by comparing volume growth with price pressure and realized H1 loss; a later input version should add official subsequent monthly ASP/cost/cash and industry-supply evidence.",
+    "obvious_contradiction": "Volume growth did not translate into revenue or profit improvement in the observed period: April volume rose strongly while revenue fell and price declined, and the H1 earnings warning indicated a large loss.",
+    "potential_fundamental_driver": "A durable improvement would have to come from some combination of hog selling-price recovery, unit-cost improvement, volume/scale economics, and downstream contribution; the current execution has not established which of these, if any, is durable.",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "First-party operating data establishes a real, material contradiction between volume growth and realized price/revenue pressure. Quick is warranted to test whether the observation can be explained without assuming current fundamental improvement; no DEEPEN conclusion is precommitted.",
+    "schema_version": 1,
+    "what_is_this": "A saved single-stock observation for an integrated livestock company whose operating economics depend materially on hog selling prices, unit costs, volume, and the interaction between breeding and downstream processing.",
+    "why_surfaced_now": "The accepted 2026-09-07 bounded Stock Reading surfaced 605296.SH as its one displayed observation; P0-4A explicitly selected that saved observation for a new current research execution."
+  },
+  "quick_research": {
+    "as_of": "2026-09-08T12:17:30Z",
+    "business_model": "Integrated livestock chain spanning feed, hog breeding/sales, slaughter and pork/food processing; current-period segment economics are not fully established by this execution.",
+    "contradictory_claims": [
+      {"evidence_artifact_ids": ["c0782d9f-4507-5d3f-b559-ff193b1b48dd"], "kind": "FACT", "statement": "The same official April disclosure shows hog-sales revenue down 8.46% year on year despite volume growth, with average selling price at CNY8.65/kg and down 11.91% month on month; Jan-April average prices fell sequentially from CNY12.03 to 8.65/kg."},
+      {"evidence_artifact_ids": ["97f1f198-c6e3-5cac-ac66-28f499a0b2f2"], "kind": "MARKET_CONTEXT", "statement": "The read H1 earnings-warning mirror reports a forecast attributable net loss of roughly CNY720m-CNY880m and attributes the breeding loss primarily to an approximately 32% year-on-year decline in hog selling price, with inventory impairment also noted."}
+    ],
+    "current_expression_or_leadership": "One accepted saved Stock Reading observation for 605296.SH; no claim of current leadership or market-wide Stock Surprise.",
+    "current_industry_state": "Not independently established for the full industry in this bounded execution. Company-specific evidence shows a steep deterioration in its realized hog selling price through April and the H1 earnings warning attributes losses primarily to lower hog prices.",
+    "discovery_id": "p0-4a-605296-2026-09-08-v1",
+    "economic_role": "Hog producer/processor whose realized economics are exposed to hog selling price, unit cost, sales volume, feed/raw-material economics and downstream processing.",
+    "evidence_authority_assessment": "The April operating facts come from a first-party SSE-hosted company PDF. The H1 loss magnitude/reasons were read from a Sina-hosted mirror of the company announcement because direct H1 source retrieval failed in the bounded execution; that mirror is lower-authority and is not treated as independent confirmation. No industry-wide official supply data or market-consensus evidence was successfully read.",
+    "industry_supply_demand_variables": ["hog market price", "industry hog supply and breeding capacity", "feed/raw-material prices", "demand for pork and slaughter throughput"],
+    "major_profit_drivers": ["commercial hog selling price", "hog unit cost and feed/raw-material cost", "sales volume and scale utilization", "slaughter/processing contribution", "inventory impairment"],
+    "market_expectation_hypothesis": "The saved positive stock observation may be anticipating a later hog-price/cost recovery and looking through weak H1 results, but the execution did not directly observe consensus expectations, valuation expectations, or a company-specific expectation gap.",
+    "next_discriminating_evidence": ["first-party official H1 2026 report with cost, margin, cash-flow and impairment detail", "subsequent first-party monthly hog volume/revenue/ASP releases after April/H1", "official industry sow/supply and hog-price data available under a new cutoff", "explicit expectation/valuation evidence sufficient to distinguish company-specific from broad-cycle repricing"],
+    "pre_research_hash": "c35ffd1b080c882ceeb874c6b9360aa31b6953df53554ab4906735e4a05e4acf",
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "Quick falsifies the simple interpretation that the saved price rise reflects already-improving realized earnings: volume growth coexisted with falling price/revenue and a large H1 loss warning. The evidence does not yet establish durable post-H1 cost/cash improvement or a company-specific expectation gap, and one key H1 source was only a mirror. Wait for stronger first-party operating/financial and industry-supply evidence before Deep.",
+    "schema_version": 1,
+    "segment_mix": "The 2025 business description establishes multiple segments but this execution did not establish a current 2026 revenue/profit mix; April operating data covers only live-hog sales in the breeding segment.",
+    "supporting_claims": [{"evidence_artifact_ids": ["c0782d9f-4507-5d3f-b559-ff193b1b48dd"], "kind": "FACT", "statement": "Official April operating data shows commercial hog volume of 31.80万头, up 48.53% year on year, indicating material volume growth even while price economics were weak."}],
+    "unresolved_questions": ["What were Shennong's actual H1 2026 unit costs, segment margins, operating cash flow and balance-sheet/inventory changes in the official report?", "Did company hog ASP and unit cost improve sustainably after H1, rather than merely bounce from a trough?", "What does official industry supply/breeding-capacity data imply for the durability of any hog-price recovery?", "Was the saved price observation company-specific or primarily a broad livestock-cycle re-rating?", "What market expectation or valuation baseline would make a Shennong-specific expectation gap testable?"],
+    "value_chain_position": "Upstream feed and breeding through hog production into slaughter and downstream pork/food processing.",
+    "variant_perception": null
+  },
+  "terminal_reason": "Quick falsifies the simple interpretation that the saved price rise reflects already-improving realized earnings: volume growth coexisted with falling price/revenue and a large H1 loss warning. The evidence does not yet establish durable post-H1 cost/cash improvement or a company-specific expectation gap, and one key H1 source was only a mirror. Wait for stronger first-party operating/financial and industry-supply evidence before Deep.",
+  "terminal_stage": "QUICK_RESEARCH",
+  "terminal_state": "WAIT_FOR_TRIGGER"
+}
