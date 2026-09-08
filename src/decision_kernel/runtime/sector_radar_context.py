@@ -174,7 +174,7 @@ def _state_markers(item: dict[str, Any]) -> tuple[str, ...]:
 
 def _window_order(rows: list[dict[str, Any]], horizon: int) -> list[dict[str, Any]]:
     return sorted(rows, key=lambda item: (
-        int(item["observation"][f"horizon_{horizon}"]["cross_sectional_rank"]),
+        Decimal(item["observation"][f"horizon_{horizon}"]["cross_sectional_rank"]),
         item["observation"]["thscode"],
     ))
 
@@ -273,21 +273,24 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
                 '<th>基准收益</th><th>超额收益</th><th>绝对/相对描述</th>'
                 '<th>层内排名</th><th>层内rating</th></tr></thead><tbody>'
                 + "".join(values) + '</tbody></table></div>'
-                f'<p>正超额年龄：{esc(_age(row, "positive_20d_excess"))}<br>'
-                f'前四分位年龄：{esc(_age(row, "top_quartile_20d"))}<br>'
+                f'<p>20日滚动超额连续为正：{esc(_age(row, "positive_20d_excess"))}<br>'
+                f'20日排名连续前四分位：{esc(_age(row, "top_quartile_20d"))}<br>'
                 f'5日内20日排名变化：{esc(row["rank_change_5_sessions_20d"])}；'
                 f'超额加速度：{esc(_percent(row["excess_acceleration_5_sessions_20d"]))}；'
                 f'成交额脉冲：{esc(pulse_text)}</p>'
                 f'<p>账本中首次前瞻事件：{esc(event_session)}<br>'
                 '系统首次观察时间：未记录，不以趋势起点、首次事件或页面生成时间代替。</p>'
                 '<p class="muted">Breadth / leaders：本 context 未获取，也不复用旧交易日宽度。'
-                '原因、公司业务关系与持续性结论：NOT ESTABLISHED。</p></article>'
+                '原因、公司业务关系与持续性结论：NOT ESTABLISHED。</p>'
+                '<p><a href="#read-nav">返回状态／窗口入口</a></p></article>'
             )
         return "".join(output)
 
     summary_rows = []
+    navigation = []
     sections = []
     for universe in payload["universes"]:
+        family = universe["family"]
         title = "881 广义行业" if universe["family"] == "BROAD_881" else "884 细分行业"
         rows = universe["rows"]
         active = [row for row in rows if row["currently_gate_active"]]
@@ -304,12 +307,18 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
             f"<td>{len(active)}</td><td>{len(weakening)}</td><td>{len(exits)}</td>"
             f"<td>{len(overlap)}</td></tr>"
         )
+        destinations = (("new", "NEW"), ("ongoing", "ONGOING"),
+                        ("weakening", "WEAKENING / EXIT"),
+                        ("window-5", "5日"), ("window-20", "20日"), ("window-60", "60日"))
+        navigation.append(f'<div><strong>{esc(title)}</strong> ' + " ".join(
+            f'<a href="#{esc(family)}-{suffix}">{label}</a>'
+            for suffix, label in destinations) + '</div>')
         window_blocks = []
         for horizon in (5, 20, 60):
             window_blocks.append(
                 f'<details class="window-view" data-horizon="{horizon}">'
                 f'<summary>{horizon}日窗口 · 完整 {len(rows)} 个行业</summary>'
-                f'{window_table(rows, horizon)}</details>'
+                f'<div id="{esc(family)}-window-{horizon}">{window_table(rows, horizon)}</div></details>'
             )
         sections.append(
             f'<section data-family="{esc(universe["family"])}"><h2>{esc(title)} · {len(rows)} 个</h2>'
@@ -317,14 +326,14 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
             f'<details><summary>NEW · 本交易日账本 sector event {event_count} 个</summary>'
             '<p>这里只读取已保存 ledger；完整 qualified change 分组、breadth / leaders '
             '仍看同次运行 summary.md（若本页来自完整运行附件）。</p>'
-            f'{compact_table(new_rows)}</details>'
+            f'<div id="{esc(family)}-new">{compact_table(new_rows)}</div></details>'
             f'<details open><summary>ONGOING · 当前仍满足至少一个既有条件 · {len(active)}</summary>'
-            f'{compact_table(active)}</details>'
+            f'<div id="{esc(family)}-ongoing">{compact_table(active)}</div></details>'
             f'<details><summary>WEAKENING / EXIT · 近期减弱或具体条件退出 · '
             f'{len(weakening_or_exit)}</summary>'
             '<p>recent weakening = 20日层内排名的5-session变化与20日超额加速度都为负；'
             'EXIT 只表示具体 gate true→false，不等于全部条件退出、基本面恶化或卖出。</p>'
-            f'{compact_table(weakening_or_exit)}</details>'
+            f'<div id="{esc(family)}-weakening">{compact_table(weakening_or_exit)}</div></details>'
             '<h3>多时间窗口 · 原层内排名</h3>'
             '<p>这不是新综合分或机会榜；每个窗口完整列出本层全部行业，按保存的单窗口 '
             'cross-sectional rank 排序，平局按代码。</p>'
@@ -348,6 +357,8 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
         '.scroll{overflow-x:auto}code{overflow-wrap:anywhere;font-size:12px}.warning{color:#7c4414}'
         '.overview{background:#f0f4f5;padding:14px;border-radius:8px}'
         'a{color:#195b70;text-decoration:none}a:hover{text-decoration:underline}'
+        '.read-nav a{display:inline-block;padding:6px 10px;margin:3px;border:1px solid #b8cbd0;border-radius:6px}'
+        '.read-nav strong{display:block}article:target{outline:2px solid #276b70}'
         '@media(max-width:600px){body{padding:12px}header,section,article{padding:14px}'
         'h1{font-size:23px}table{min-width:680px}}'
         '</style></head><body><main><header><h1>Sector Radar · 市场状态总览</h1>'
@@ -359,6 +370,8 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
         f'生成时间：{esc(payload["generated_at"]) }<br>'
         f'基准：{esc(payload["benchmark_thscode"]) }；距状态日 '
         f'{payload["calendar_days_since_market_session"]} 个自然日（不是缺失交易日数）。</p>'
+        '<nav id="read-nav" class="read-nav" aria-label="按层级、状态和窗口直达">'
+        + "".join(navigation) + '</nav>'
         '<p class="warning">这是保存数据的只读投影，也是保存状态的市场阅读；不是实时行情。本页不重新资格化完成交易日，'
         '不新增事件、提醒或 Research。</p>'
         '<div class="overview"><strong>怎么读：</strong> NEW 只读账本本次已记录事件；'
@@ -373,7 +386,7 @@ def render_sector_radar_context_html(payload: dict[str, Any]) -> str:
         '<p>窗口收益是滚动窗口表现，不是逐日连续上涨；绝对收益和相对基准分开。'
         '原因、业务关系和持续性结论没有证据时保持未知。</p></header>'
         + "".join(sections)
-        + f'<footer><p>Market state: <code>{esc(payload["market_state_hash"])}</code><br>'
+        + f'<footer><p><a href="context.json">原始只读投影 context.json</a></p><p>Market state: <code>{esc(payload["market_state_hash"])}</code><br>'
         f'Ledger: <code>{esc(payload["event_ledger_hash"])}</code><br>'
         f'Context: <code>{esc(payload["context_hash"])}</code></p></footer></main></body></html>\n'
     )
