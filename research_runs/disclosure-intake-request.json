@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "source_run_id": 34354228621,
+  "artifact_id": 10105040865,
+  "expected_work_commit": "c355eea159a1113704b06d19942fe277f56591e2",
+  "expected_key": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+  "expected_packet_sha256": "7db40596aabbfd665ad5d414a8f9cd30428e513438d50ea860bb8472631ee4ca",
+  "expires_at": "2026-09-10T04:00:00Z"
+}
