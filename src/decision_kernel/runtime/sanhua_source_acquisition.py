@@ -81,8 +81,10 @@ def obj(raw):
     return value
 
 
-def plan():
-    return {"schema_version": 1, "issuer": ISSUER, "stock_code": CODE, "security_id": SECURITY,
+def plan(channel="fulltext"):
+    """Two fixed profiles only; legacy fulltext bytes/hash remain unchanged."""
+    require(channel in ("fulltext", "relation"), "UNREVIEWED_SOURCE_CHANNEL")
+    value = {"schema_version": 1, "issuer": ISSUER, "stock_code": CODE, "security_id": SECURITY,
             "window": {"from": START, "through": END, "timezone": "Asia/Shanghai"},
             "window_meaning": "DATE_FILTER_OBSERVED_AT_CAPTURE_NOT_FUTURE_DAY_COMPLETENESS",
             "page_size": PAGE_SIZE, "max_pages": MAX_PAGES, "max_primary_bodies": MAX_BODIES,
@@ -94,13 +96,23 @@ def plan():
             "ir_title_contains": "投资者关系活动记录表",
             "ir_publication_dates": ["2026-08-27", "2026-08-28"],
             "alternate_primary_routes": [], "semantics": SEMANTICS, **AUTHORITY}
+    if channel == "relation":
+        value.pop("formal_report")
+        value.update(source_channel="CNINFO_RELATION", tab_name="relation",
+                     max_primary_bodies=1, max_requests=1 + MAX_PAGES + 1,
+                     required_classes=value["required_classes"][1:],
+                     previous_fulltext={"run_id": 34316364031,
+                                        "artifact_id": 10090204888,
+                                        "relationship": "REFERENCE_ONLY_NOT_REACQUISITION"})
+    return value
 
 
-def query(org, number):
+def query(org, number, *, channel="fulltext"):
+    plan(channel)
     require(isinstance(org, str) and re.fullmatch(r"[A-Za-z0-9]+", org), "ISSUER_ORG_INVALID")
     require(type(number) is int and 1 <= number <= MAX_PAGES, "PAGE_BUDGET_EXCEEDED")
     return {"id": f"inventory-{number}", "method": "POST", "url": NOTICES, "params": {
-        "pageNum": str(number), "pageSize": str(PAGE_SIZE), "column": "szse", "tabName": "fulltext",
+        "pageNum": str(number), "pageSize": str(PAGE_SIZE), "column": "szse", "tabName": channel,
         "plate": "", "stock": CODE + "," + org, "searchkey": "", "secid": "", "category": "",
         "trade": "", "seDate": START + "~" + END, "sortName": "", "sortType": "", "isHLtitle": "false"}}
 
@@ -112,20 +124,22 @@ def pdf_request(item, ordinal):
     return {"id": f"primary-{ordinal}", "method": "GET", "url": url, "params": {}}
 
 
-def allowed(spec):
+def allowed(spec, *, channel="fulltext"):
+    profile = plan(channel)
     if spec == FIRST:
         return
     if spec.get("url") == NOTICES:
         try:
             org = spec["params"]["stock"].split(",")[1]
-            expected = query(org, int(spec["params"]["pageNum"]))
+            expected = query(org, int(spec["params"]["pageNum"]), channel=channel)
         except (KeyError, TypeError, ValueError, IndexError) as exc:
             raise CaptureError("UNREVIEWED_REQUEST") from exc
         require(spec == expected, "UNREVIEWED_REQUEST")
         return
     url = spec.get("url", "")
+    primary_ids = {f"primary-{n}" for n in range(1, profile["max_primary_bodies"] + 1)}
     require(spec.get("method") == "GET" and spec.get("params") == {}
-            and re.fullmatch(r"primary-[1-4]", spec.get("id", "")) is not None
+            and spec.get("id") in primary_ids
             and url.startswith(PDF_ORIGIN) and PDF_PATH.fullmatch(url[len(PDF_ORIGIN):]) is not None
             and set(spec) == {"id", "method", "url", "params"}, "UNREVIEWED_REQUEST")
 
@@ -138,13 +152,13 @@ class Response:
     error: str | None = None
 
 
-def public_request(spec):
+def public_request(spec, *, channel="fulltext"):
     """Same public session as source study; add actual MIME/status retention.
 
     Fixed CNINFO endpoints only. Fresh cookie-free session, no environment
     credentials, authentication, redirects, retries or provider/price requests.
     """
-    allowed(spec)
+    allowed(spec, channel=channel)
     headers = {"Accept-Encoding": "identity", "User-Agent": "decision-kernel-source-bridge/0",
                "Accept": "application/pdf" if spec["id"].startswith("primary-") else "application/json"}
     with _session() as session:
@@ -208,8 +222,9 @@ def _page(payload, org, number, existing, total, observed_at):
     return result, total, more
 
 
-def collect(get):
+def collect(get, *, channel="fulltext"):
     """Deterministic selection; get returns actual or retained (bytes, record)."""
+    profile = plan(channel)
     result = {"issuer_resolution": None, "inventory": [], "inventory_complete": False,
               "inventory_total": None, "inventory_pages": [], "selected": [], "bodies": [],
               "status": INCOMPLETE, "problem": None, "version_qualification": {}, **AUTHORITY}
@@ -223,7 +238,7 @@ def collect(get):
             "org_id": org, "request_id": rec["id"], "mapping_sha256": sha(raw)}
         seen, total = set(), None
         for number in range(1, MAX_PAGES + 1):
-            raw, rec = get(query(org, number))
+            raw, rec = get(query(org, number, channel=channel))
             payload = obj(raw)
             rows, total, more = _page(payload, org, number, seen, total, rec["completed_at"])
             result["inventory"].extend(rows)
@@ -234,22 +249,28 @@ def collect(get):
                 result["inventory_complete"] = True
                 break
         versions = qualify_versions(result["inventory"],
-            ir_publication_dates=plan()["ir_publication_dates"])
-        result["version_qualification"] = versions
-        require(versions["report"]["status"] == "SELECTED", versions["report"]["status"])
-        require(versions["ir"]["status"] in {"SELECTED", "RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY"},
-                versions["ir"]["status"])
-        # Both families are qualified before the first PDF; ambiguity is never
-        # resolved by downloading a candidate, ranking or falling back to an old body.
-        formal = [r for r in result["inventory"]
-                  if r["announcement_id"] == versions["report"]["selected_announcement_id"]]
+            ir_publication_dates=profile["ir_publication_dates"])
+        result["version_qualification"] = versions if channel == "fulltext" else {"ir": versions["ir"]}
+        selected = []
+        if channel == "fulltext":
+            require(versions["report"]["status"] == "SELECTED", versions["report"]["status"])
+            require(versions["ir"]["status"] in {"SELECTED", "RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY"},
+                    versions["ir"]["status"])
+            formal = next(r for r in result["inventory"]
+                          if r["announcement_id"] == versions["report"]["selected_announcement_id"])
+            selected.append(("FORMAL_CURRENT_PERIOD_ACTUALS", formal))
+        else:
+            status = versions["ir"]["status"]
+            require(status == "SELECTED", "RELEVANT_IR_MISSING_FROM_RELATION_INVENTORY"
+                    if status == "RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY" else status)
+        # All applicable version decisions finish BEFORE any primary request.
+        # The relation profile never selects a report, even if one is returned.
         updates = [r for r in result["inventory"]
                    if r["announcement_id"] == versions["ir"]["selected_announcement_id"]]
-        selected = [("FORMAL_CURRENT_PERIOD_ACTUALS", formal[0])]
         if updates:
             selected.append(("RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE", updates[0]))
         result["selected"] = [{"source_class": c, **r} for c, r in selected]
-        require(len(selected) <= MAX_BODIES, "PRIMARY_BODY_BUDGET_EXCEEDED")
+        require(len(selected) <= profile["max_primary_bodies"], "PRIMARY_BODY_BUDGET_EXCEEDED")
         for number, (source_class, item) in enumerate(selected, 1):
             raw, rec = get(pdf_request(item, number))
             require(raw.startswith(b"%PDF-"), "PDF_CONTAINER_REQUIRED")
@@ -279,7 +300,7 @@ def _safe(root):
             "ISOLATED_READING_DIRECTORY_REQUIRED")
 
 
-def _check_record(rec, *, previous, index, total_bytes, raw):
+def _check_record(rec, *, previous, index, total_bytes, raw, max_requests=MAX_REQUESTS):
     require(rec["id"] == index and clock(rec["started_at"]) >= previous
             and clock(rec["completed_at"]) >= clock(rec["started_at"]), "CAPTURE_CLOCK_OR_ORDER_INVALID")
     require(rec["http_status"] is None or (type(rec["http_status"]) is int and 100 <= rec["http_status"] <= 599),
@@ -295,7 +316,7 @@ def _check_record(rec, *, previous, index, total_bytes, raw):
         total_bytes += len(raw)
     else:
         require(raw is None, "UNINDEXED_BODY")
-    require(total_bytes <= MAX_TOTAL_BYTES and index <= MAX_REQUESTS, "CAPTURE_BYTE_OR_REQUEST_BUDGET")
+    require(total_bytes <= MAX_TOTAL_BYTES and index <= max_requests, "CAPTURE_BYTE_OR_REQUEST_BUDGET")
     if rec["error"] is not None:
         require(body is None or rec["http_status"] == 200, "FAILED_HTTP_BODY_NOT_ACCEPTED")
         raise CaptureError(rec["error"])
@@ -303,13 +324,14 @@ def _check_record(rec, *, previous, index, total_bytes, raw):
     return total_bytes
 
 
-def capture(root: Path, *, request=None, now=utc):
+def capture(root: Path, *, request=None, now=utc, channel="fulltext"):
+    profile = plan(channel)
     _safe(root)
     require(not root.exists(), "NEW_SINGLE_CAPTURE_DIRECTORY_REQUIRED")
     provenance = LIVE if request is None else SYNTHETIC
-    request = request or public_request
+    request = request or (lambda spec: public_request(spec, channel=channel))
     root.mkdir(parents=True)
-    (root / "plan.json").write_bytes(data(plan()))
+    (root / "plan.json").write_bytes(data(profile))
     started = clock(now()).isoformat()
     previous, total_bytes, records = clock(started), 0, []
     journal = root / "request-journal.jsonl"
@@ -320,8 +342,8 @@ def capture(root: Path, *, request=None, now=utc):
 
     def get(spec):
         nonlocal previous, total_bytes
-        allowed(spec)
-        require(len(records) < MAX_REQUESTS, "REQUEST_BUDGET_EXCEEDED")
+        allowed(spec, channel=channel)
+        require(len(records) < profile["max_requests"], "REQUEST_BUDGET_EXCEEDED")
         before = clock(now())
         require(before >= previous, "CAPTURE_CLOCK_OR_ORDER_INVALID")
         rec = {"id": len(records) + 1, "spec": spec, "started_at": before.isoformat(),
@@ -346,14 +368,15 @@ def capture(root: Path, *, request=None, now=utc):
         rec["completed_at"] = clock(now()).isoformat()
         records.append(rec)
         append({"phase": "RESPONSE", **rec})
-        total_bytes = _check_record(rec, previous=previous, index=len(records), total_bytes=total_bytes, raw=raw)
+        total_bytes = _check_record(rec, previous=previous, index=len(records), total_bytes=total_bytes,
+                                    raw=raw, max_requests=profile["max_requests"])
         previous = clock(rec["completed_at"])
         return raw, rec
 
-    outcome = collect(get)
+    outcome = collect(get, channel=channel)
     finished = clock(now()).isoformat()
     value = {"schema_version": 1, "semantics": SEMANTICS, "provenance": provenance,
-             "plan_hash": canonical_hash(plan()), "capture_started_at": started, "capture_completed_at": finished,
+             "plan_hash": canonical_hash(profile), "capture_started_at": started, "capture_completed_at": finished,
              "requests": records, "outcome": outcome,
              "journal_sha256": sha(journal.read_bytes()) if journal.exists() else sha(b""),
              "research_cutoff": None, "proof_scope": "CAPTURED_HTTP_RECORDS_NOT_SOURCE_TRUTH_OR_ADMISSION"}
@@ -364,14 +387,15 @@ def capture(root: Path, *, request=None, now=utc):
     return value
 
 
-def verify(root: Path):
-    """Recompute plan, request chain, issuer, pagination, selection and outcome offline."""
+def verify(root: Path, *, channel="fulltext"):
+    """Recompute one explicitly requested fixed profile, never cross-channel fallback."""
+    profile = plan(channel)
     _safe(root)
     for file in root.iterdir():
         require(file.is_file() and not file.is_symlink(), "UNEXPECTED_FILE_OR_SYMLINK")
     require((root / "capture.json").stat().st_size <= 2 * 1024 * 1024, "MANIFEST_BYTE_LIMIT")
     value = obj((root / "capture.json").read_bytes())
-    require((root / "plan.json").read_bytes() == data(plan()) and value["plan_hash"] == canonical_hash(plan()),
+    require((root / "plan.json").read_bytes() == data(profile) and value["plan_hash"] == canonical_hash(profile),
             "PLAN_MISMATCH")
     require(value["schema_version"] == 1 and value["semantics"] == SEMANTICS
             and value["provenance"] in {LIVE, SYNTHETIC} and value["research_cutoff"] is None
@@ -380,7 +404,7 @@ def verify(root: Path):
             "CAPTURE_HASH_OR_IDENTITY_MISMATCH")
     require((root / "request-journal.jsonl").stat().st_size <= 2 * 1024 * 1024, "JOURNAL_BYTE_LIMIT")
     records = value["requests"]
-    require(isinstance(records, list) and 1 <= len(records) <= MAX_REQUESTS, "REQUEST_BUDGET_EXCEEDED")
+    require(isinstance(records, list) and 1 <= len(records) <= profile["max_requests"], "REQUEST_BUDGET_EXCEEDED")
     expected_journal, expected_files = b"", {"plan.json", "capture.json", "request-journal.jsonl"}
     retained = {}
     for rec in records:
@@ -403,15 +427,16 @@ def verify(root: Path):
         nonlocal position, total_bytes, previous
         require(position < len(records), "REPLAY_MISSING_RESPONSE")
         rec = records[position]; position += 1
-        allowed(spec)
+        allowed(spec, channel=channel)
         require(rec["spec"] == spec, "EXACT_REQUEST_CHAIN_MISMATCH")
         raw = retained[rec["body"]["path"]] if rec["body"] else None
         require(clock(rec["completed_at"]) <= clock(value["capture_completed_at"]), "CAPTURE_CLOCK_OR_ORDER_INVALID")
-        total_bytes = _check_record(rec, previous=previous, index=position, total_bytes=total_bytes, raw=raw)
+        total_bytes = _check_record(rec, previous=previous, index=position, total_bytes=total_bytes,
+                                    raw=raw, max_requests=profile["max_requests"])
         previous = clock(rec["completed_at"])
         return raw, rec
 
-    rebuilt = collect(replay)
+    rebuilt = collect(replay, channel=channel)
     require(position == len(records) and rebuilt == value["outcome"], "OFFLINE_SELECTION_OR_OUTCOME_MISMATCH")
     return {"status": "OFFLINE_VERIFICATION_PASS", "capture_status": rebuilt["status"],
             "capture_hash": value["capture_hash"], "network_calls": 0, "research_execution": "NOT_EXECUTED",
@@ -422,8 +447,10 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("command", choices=["capture", "verify"])
     p.add_argument("directory", type=Path)
+    p.add_argument("--channel", choices=("fulltext", "relation"), default="fulltext")
     a = p.parse_args(argv)
-    value = capture(a.directory) if a.command == "capture" else verify(a.directory)
+    operation = capture if a.command == "capture" else verify
+    value = operation(a.directory, channel=a.channel)
     print(canonical_json(value))
     return 0 if a.command == "verify" or value["outcome"]["status"] == COMPLETE else 2
 
