@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "execution_id": "p0-4a-sanhua-20260909T1208Z-r3-7a42",
+  "sequence": 5,
+  "phase": "RESPONSE",
+  "request_commit": "9a1ee3c8a799ff5acab87878bc8f9c926e36f235",
+  "request_blob": "3957074d128e39fa5e601f0da56b7e8a9f9b9ea6",
+  "source_id": "CNINFO:1225514010",
+  "started_at": "2026-09-09T12:14:20.990381+00:00",
+  "finished_at": "2026-09-09T12:14:20.992015+00:00",
+  "status": "SUCCEEDED",
+  "bytes": 156592,
+  "sha256": "e244c31b6a23c7ee07a89f4c57a57dd771ff0e53d59e2e230e137bef0d0073ce",
+  "record_kind": "EXECUTOR_ACTION_SUMMARY",
+  "clock_semantics": "LOCAL_RUNTIME_CLOCK_NOT_PLATFORM_NATIVE_TELEMETRY",
+  "network_source_requests": 0,
+  "technical_retries": 0,
+  "authority": "NONE"
+}
