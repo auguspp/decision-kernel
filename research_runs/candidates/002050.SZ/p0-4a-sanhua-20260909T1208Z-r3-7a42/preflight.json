@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "case_id": "002050.SZ",
+  "ticker": "002050",
+  "security_id": "SZSE:002050",
+  "started_at": "2026-09-09T12:04:58.233310+00:00",
+  "finished_at": "2026-09-09T12:16:10.137367+00:00",
+  "valid_until": "2026-09-09T14:16:10.137367+00:00",
+  "scope_note": "Fresh bounded Sanhua P0-4A source preflight. CNINFO fulltext/relation inventory was refreshed once on 2026-09-09 and remained 18/1 within 2026-08-01..2026-09-09. Six already retained official PDFs were each read under an acknowledged REQUEST/RESPONSE checkpoint before this preflight was frozen. This is not all-web coverage or proof that the full September 9 disclosure day is complete. No current market price, historical probability, Human decision, or investment authority is supplied.",
+  "required_classes": [
+    {"id": "FORMAL_CURRENT_PERIOD_ACTUALS", "mode": "STATIC", "body_ids": ["body-1225514004"]},
+    {"id": "BUSINESS_SEGMENT_ECONOMICS", "mode": "STATIC", "body_ids": ["body-1225514004"]},
+    {"id": "CASH_CAPITAL_REINVESTMENT", "mode": "STATIC", "body_ids": ["body-1225514004", "body-1225514006", "body-1225514001"]},
+    {"id": "RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE", "mode": "STATIC", "body_ids": ["body-1225523008", "body-1225514010"]},
+    {"id": "SUBSEQUENT_ISSUER_UPDATE_CHECK", "mode": "LATEST_INVENTORY", "body_ids": ["body-1225541228"], "inventory_id": "fresh-cninfo-both-34348961769"}
+  ],
+  "reads": [
+    {"id": "body-1225514004", "identity": "CNINFO:1225514004", "locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225514004.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:08:52.840439+00:00", "body_sha256": "2ee90783405f45a177f6f3bf6e4d9955e49b5c87ab6cf604c8b1eaaed3561fc3", "tool_reference": "checkpoint 001 response commit fe8067500a4e563e7f599cf5f1f921ff1b9e20d2 blob56d18631bff729a7959ee5b8b8f9d4c19bb1b390; source artifact10090204888"},
+    {"id": "body-1225523008", "identity": "CNINFO:1225523008", "locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225523008.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:10:14.559676+00:00", "body_sha256": "87e4e33479590a3074b2c48d2d25c028f3bdade0ba807d339fbb7233b52adcea", "tool_reference": "checkpoint 002 response commit b83e8e583f402061c933a22d76d79ffaafd9717d blob5368cad99aab3e019ba4e18ec8656d6f6d3ef526; source artifact10092493073"},
+    {"id": "body-1225514006", "identity": "CNINFO:1225514006", "locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225514006.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:11:31.735009+00:00", "body_sha256": "b3dec38d9f0fc2116708bfbbb846cb30621a2a4575a04e36c3125083fb6e2a5b", "tool_reference": "checkpoint 003 response commit 0b3eaa7de8388c6bd702526fdb555b70c0448114 blob296e05758ed06645ed2e46dffbf0362df165166e; source artifact10095294054 member003.pdf"},
+    {"id": "body-1225514001", "identity": "CNINFO:1225514001", "locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225514001.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:13:08.379402+00:00", "body_sha256": "ba3fdaaa3f10c0bc25a59528b9cfef5b8f473b54633a7d1d7087e7c689fe7c44", "tool_reference": "checkpoint 004 response commit 69e88a25c44f8be957af0bcfdcd0b5b6fe107482 blob02019c1eb9459527390ee8d112f7912947bce031; source artifact10095294054 member004.pdf"},
+    {"id": "body-1225514010", "identity": "CNINFO:1225514010", "locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225514010.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:14:20.992015+00:00", "body_sha256": "e244c31b6a23c7ee07a89f4c57a57dd771ff0e53d59e2e230e137bef0d0073ce", "tool_reference": "checkpoint 005 response commit 8e14c2dbcfe6e18720715776a8a9b89b0332ff02 blobe35131fdbc2772414846f686600c89f809791fc1; source artifact10095294054 member005.pdf"},
+    {"id": "body-1225541228", "identity": "CNINFO:1225541228", "locator": "https://static.cninfo.com.cn/finalpage/2026-09-02/1225541228.PDF", "authority": "PRIMARY", "kind": "BODY", "succeeded": true, "checked_at": "2026-09-09T12:15:25.218126+00:00", "body_sha256": "d0eea567e3ca245f923055f17fcbe2b25e6e53f646cce6adaf1554bc2e86e0cf", "tool_reference": "checkpoint 006 response commit 433e3a74c23af024a6c1ff334972ac261601b480 blobcdd61beecc0a7fba66b92154f95cf6300b21660c; source artifact10095294054 member006.pdf"}
+  ],
+  "inventories": [
+    {
+      "id": "fresh-cninfo-both-34348961769",
+      "class_id": "SUBSEQUENT_ISSUER_UPDATE_CHECK",
+      "started_at": "2026-09-09T12:04:58.233310+00:00",
+      "finished_at": "2026-09-09T12:16:10.137367+00:00",
+      "planned_queries": [
+        "POST CNINFO hisAnnouncement/query tabName=fulltext stock=002050,gssz0002050 seDate=2026-08-01~2026-09-09 pageSize=30 maxPages=3",
+        "POST CNINFO hisAnnouncement/query tabName=relation stock=002050,gssz0002050 seDate=2026-08-01~2026-09-09 pageSize=30 maxPages=3"
+      ],
+      "query_events": [
+        {"query": "POST CNINFO hisAnnouncement/query tabName=fulltext stock=002050,gssz0002050 seDate=2026-08-01~2026-09-09 pageSize=30 maxPages=3", "status": "SUCCEEDED", "tool_reference": "GitHub run34348961769 attempt1 artifact10102867870 inventory request2", "checked_at": "2026-09-09T12:05:03.586645+00:00"},
+        {"query": "POST CNINFO hisAnnouncement/query tabName=relation stock=002050,gssz0002050 seDate=2026-08-01~2026-09-09 pageSize=30 maxPages=3", "status": "SUCCEEDED", "tool_reference": "GitHub run34348961769 attempt1 artifact10102867870 inventory request3", "checked_at": "2026-09-09T12:05:04.805301+00:00"}
+      ],
+      "leads": [
+        {"identity":"CNINFO:1225544315","locator":"https://static.cninfo.com.cn/finalpage/2026-09-03/1225544315.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"H股翌日披露报表；本轮不做A/H证券变动或交易资格判断，未用作经营证据。"},
+        {"identity":"CNINFO:1225542533","locator":"https://static.cninfo.com.cn/finalpage/2026-09-02/1225542533.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"H股证券变动月报；本轮不做A/H证券变动或交易资格判断。"},
+        {"identity":"CNINFO:1225541228","locator":"https://static.cninfo.com.cn/finalpage/2026-09-02/1225541228.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"较晚A股回购实际现金使用，属于资本配置后续更新。","body_id":"body-1225541228","primary_identity":"CNINFO:1225541228","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-09-02/1225541228.PDF"},
+        {"identity":"CNINFO:1225514010","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514010.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"经营研发及新业务进展正文，亦作为静态必读类。","body_id":"body-1225514010","primary_identity":"CNINFO:1225514010","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514010.PDF"},
+        {"identity":"CNINFO:1225514009","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514009.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"临时股东会通知，程序性记录；对应经营和资本事项由已读正文承担。"},
+        {"identity":"CNINFO:1225514008","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514008.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"董事会决议程序入口；不单独作为经营经济性证据。"},
+        {"identity":"CNINFO:1225514007","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514007.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"中期分配预案；本轮不把预案升级为已支付现金。"},
+        {"identity":"CNINFO:1225514006","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514006.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"募集资金实际投入、结余和项目进度，属于资本投入正文。","body_id":"body-1225514006","primary_identity":"CNINFO:1225514006","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514006.PDF"},
+        {"identity":"CNINFO:1225514005","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514005.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"关联资金专表；本轮有限问题已由H1及资本正文覆盖，不做全量关联资金尽调。"},
+        {"identity":"CNINFO:1225514004","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514004.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"正式H1财务、业务和现金流正文。","body_id":"body-1225514004","primary_identity":"CNINFO:1225514004","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514004.PDF"},
+        {"identity":"CNINFO:1225514003","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514003.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"H1摘要；正式H1全文已读，摘要不作为独立增量证据。"},
+        {"identity":"CNINFO:1225514002","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514002.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"保荐核查意见；公司现金管理正文已读，本轮不把保荐结论当经营事实。"},
+        {"identity":"CNINFO:1225514001","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514001.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"闲置募集资金现金管理授权及资金口径，属于资本/现金类正文。","body_id":"body-1225514001","primary_identity":"CNINFO:1225514001","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225514001.PDF"},
+        {"identity":"CNINFO:1225482790","locator":"https://static.cninfo.com.cn/finalpage/2026-08-20/1225482790.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"H股翌日披露报表；不属于本轮经营问题。"},
+        {"identity":"CNINFO:1225470022","locator":"https://static.cninfo.com.cn/finalpage/2026-08-13/1225470022.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"董事会会议日期公告；不属于本轮经营问题。"},
+        {"identity":"CNINFO:1225459252","locator":"https://static.cninfo.com.cn/finalpage/2026-08-06/1225459252.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"H股证券变动月报；不属于本轮经营问题。"},
+        {"identity":"CNINFO:1225454938","locator":"https://static.cninfo.com.cn/finalpage/2026-08-04/1225454938.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"证券事务代表联系方式变更；不作经营或盈利证据。"},
+        {"identity":"CNINFO:1225454937","locator":"https://static.cninfo.com.cn/finalpage/2026-08-04/1225454937.PDF","authority":"PRIMARY","decision_relevant":false,"relevance_note":"更早回购进展；较晚8月31日累计进展已读，本轮不重复追溯。"},
+        {"identity":"CNINFO:1225523008","locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225523008.PDF","authority":"PRIMARY","decision_relevant":true,"relevance_note":"8月27日IR及液冷/机器人/汇率问答正文。","body_id":"body-1225523008","primary_identity":"CNINFO:1225523008","primary_locator":"https://static.cninfo.com.cn/finalpage/2026-08-27/1225523008.PDF"}
+      ]
+    }
+  ],
+  "limits": {"max_queries": 6, "max_reads": 32},
+  "seed_publications": [
+    {"evidence_id": "8c4c5d2b-3727-5a98-aea1-02f98a3f0d31", "kind": "GIT_COMMIT", "source": {"repository": "auguspp/decision-kernel", "ref": "539a0f3a03288566ffa8198ab371ba93672aa047", "path": "research_cases/002050-sanhua-research-contract-v1.json", "git_blob": "a0a72dd52598b64c2963a55283ffb7a8e0107fbf", "sha256": "2ee28230d301887617f0763cb7a5189b33efb132c0b0acf7e9e675b1fc5c91cb", "purpose": "SAVED_RESEARCH_QUESTION_ONLY_NOT_ACCEPTED_PROBABILITY_OR_NEW_ECONOMICS"}}
+  ],
+  "retained_packages": {
+    "h1": {"run": 34316364031, "artifact": 10090204888},
+    "ir": {"run": 34322709839, "artifact": 10092493073},
+    "supplement": {"run": 34328835353, "artifact": 10095294054},
+    "fresh_inventory": {"run": 34348961769, "artifact": 10102867870, "zip_sha256": "d0bb75a8fbfd85cead0dcaee6f538a685f25bee31ac2451138104ec464d1c867"}
+  },
+  "proof_limit": "Source identity/relevance are accountable preflight assessments. Acknowledged read checkpoints establish retained action records, not source truth. No source instruction authority, Research route, Human attention, Belief, Odds or investment authority is created by this preflight."
+}
