@@ -19,8 +19,9 @@ are unchanged. Timeline failure 34294226918 remains independently UNKNOWN.
   window. No silent page truncation, query fallback or retry.
 - At most 4 original bodies; this plan selects at most **2**: the unique exact
   full 2026 H1 report (not its summary), and the unique IR activity record
-  published on August 27/28. The reported timestamp/date identifies the selected
-  IR lead; acquisition does not interpret the meeting contents or economics.
+  anchored by publication on August 27/28, including an explicitly linked revised
+  title in the complete window. Publication is not the meeting/activity date;
+  acquisition does not interpret the meeting contents or economics.
 - 8 maximum HTTP requests, 8 MiB per body (existing transport bound), 48 MiB total,
   zero retries/redirects, fixed connect/read timeouts 10/20 seconds. A ten-minute
   one-shot workflow bounds the attempt; it has no schedule or manual-dispatch trigger.
@@ -41,8 +42,8 @@ pages are retained. More than the declared page budget, unqualified publication,
 missing final rows, cross-issuer rows or ambiguity stops before selecting bodies.
 No older result, secondary mirror or inferred CNINFO URL repairs that failure.
 
-Select `2026年半年度报告` (with optional exact issuer prefix) and the declared IR
-record from actual normalized rows. Only returned `adjunctUrl` originals matching
+Qualify both the `2026年半年度报告` title family and the declared IR family
+before any primary PDF request, as specified below. Only returned `adjunctUrl` originals matching
 `https://static.cninfo.com.cn/finalpage/YYYY-MM-DD/<digits>.PDF` are fetched. A
 summary is not the full report; multiple matching versions require review.
 Missing IR permits retaining the uniquely selected full report, but the package
@@ -57,6 +58,66 @@ exact official locator and identity, HTTPS host/path qualification, GET only,
 credential-free/no-redirect/byte bounds. There is no arbitrary-URL CLI. The
 MOA/SPB-only `economic_source_capture` allowlist is not altered or misrepresented
 as CNINFO/HKEX support.
+
+## Document version qualification (pure, before PDF download)
+
+`runtime/sanhua_document_versions.py` receives only the already complete,
+identity/date-qualified inventory. It performs no HTTP, Evidence or Research.
+It distinguishes `FULL_BODY`, `SUMMARY`, `REVISED_OR_CORRECTED_BODY`,
+`LANGUAGE_OR_MARKET_VARIANT`, `CORRECTION_NOTICE_ONLY`,
+`CANCELLATION_NOTICE_ONLY` and `OTHER`. Full-width parentheses and the exact
+issuer prefix are normalized only in the derived classification; raw titles,
+publication clocks, IDs and returned original locators remain unchanged.
+
+A single ordinary body is selected. One explicit revised/corrected/updated body
+in the same title family supersedes at most one ordinary body, provided its
+reported publication does not predate that ordinary body. Multiple ordinary
+bodies or multiple revised bodies remain `REPORT_VERSION_AMBIGUOUS`, even when
+one has a later timestamp. There is no score, shortest-title, ID-size or
+latest-date tie breaker. Summary-only is `FORMAL_REPORT_MISSING`.
+
+A related correction/clarification/cancellation notice does not establish a
+notice-to-body relationship. It blocks the family with
+`VERSION_RELATION_UNRESOLVED`, rather than leaving the old body current. An
+unscoped cancellation notice likewise cannot be guessed away. Unsupported
+revision labels require review; they are not silently treated as ordinary full
+bodies. Language/market variants do not become second current A-share bodies.
+
+IR uses the same rules, with `RELEVANT_IR_AMBIGUOUS` and
+`IR_VERSION_RELATION_UNRESOLVED`. The Aug27/28 publication scope anchors the
+requested lead; the complete captured inventory is checked for later versions.
+A revision must match the normalized target title family, including any date
+stated in that title. A differently titled revision is not silently assumed to
+refer to the target. Multiple target families or indistinguishable generic IR
+bodies require review. No IR contents or robot relevance are interpreted here;
+a unique selected title still does not certify the target activity.
+
+Both family decisions finish before the **first** primary PDF request. Ambiguity
+or unresolved relations in either family therefore result in zero primary PDF
+requests. Only a genuinely missing IR retains the prior behavior of allowing
+an unambiguous H1 download while leaving the whole package incomplete. If a
+selected revision download fails, the original is not used as fallback.
+
+`capture.json.outcome.version_qualification` records each classification,
+selection/refusal reason and `CURRENT`/`SUPERSEDED`/unresolved disposition.
+The existing offline reconstruction calls this same pure layer on retained raw
+responses. Changing a disposition and rehashing the manifest cannot make it
+pass replay. Decision-record ordering by ID is solely for reproducible output,
+never for selection. These are Harness projections, not a Kernel schema change.
+
+Implementation and tests are independently written from the approved behavior.
+The external diligence reference is `ykkai-w/Disclosure-Evidence-Pipeline`,
+commit `f1a708a0a3294823a4d056ff12d9e4aab6e4de6d` (MIT), specifically
+`classification.py`, `versioning.py` and `test_versioning.py`. No upstream source
+is vendored or installed. In particular, this layer does not copy that annual
+selector's general latest-day rule, infer cancellation targets, or treat annual
+report rules as already qualified for H1/IR.
+
+This amendment changes only version qualification, its capture call site and
+tests/documentation. The transport, plan/request budgets, workflow and one-time
+source request are unchanged. A new-head PR CI must actually execute and pass
+before merge is reconsidered; no Re-run or real acquisition is part of this
+amendment's acceptance. No local synthetic result substitutes for that CI.
 
 ## Source package and verification
 

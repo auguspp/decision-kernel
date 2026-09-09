@@ -18,6 +18,7 @@ from decision_kernel.adapters.cninfo import (
     normalize_cninfo_announcement_page, resolve_cninfo_org_id,
 )
 from decision_kernel.identity import canonical_hash, canonical_json
+from .sanhua_document_versions import qualify_versions
 from .stock_field_source_study import (
     SYMBOLS, NOTICES, PDF_ORIGIN, PDF_PATH, TZ, MAX_BYTES, _session, _check_response,
 )
@@ -211,7 +212,7 @@ def collect(get):
     """Deterministic selection; get returns actual or retained (bytes, record)."""
     result = {"issuer_resolution": None, "inventory": [], "inventory_complete": False,
               "inventory_total": None, "inventory_pages": [], "selected": [], "bodies": [],
-              "status": INCOMPLETE, "problem": None, **AUTHORITY}
+              "status": INCOMPLETE, "problem": None, "version_qualification": {}, **AUTHORITY}
     try:
         raw, rec = get(FIRST)
         symbols = obj(raw)
@@ -232,12 +233,18 @@ def collect(get):
             if not more:
                 result["inventory_complete"] = True
                 break
-        formal = [r for r in result["inventory"] if r["title"] in {
-            "2026年半年度报告", "三花智控：2026年半年度报告", "三花智控:2026年半年度报告"}]
-        require(len(formal) == 1, "FORMAL_REPORT_MISSING_OR_AMBIGUOUS")
-        updates = [r for r in result["inventory"] if "投资者关系活动记录表" in r["title"]
-            and clock(r["published_at"]).astimezone(TZ).date().isoformat() in plan()["ir_publication_dates"]]
-        require(len(updates) <= 1, "RELEVANT_IR_AMBIGUOUS")
+        versions = qualify_versions(result["inventory"],
+            ir_publication_dates=plan()["ir_publication_dates"])
+        result["version_qualification"] = versions
+        require(versions["report"]["status"] == "SELECTED", versions["report"]["status"])
+        require(versions["ir"]["status"] in {"SELECTED", "RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY"},
+                versions["ir"]["status"])
+        # Both families are qualified before the first PDF; ambiguity is never
+        # resolved by downloading a candidate, ranking or falling back to an old body.
+        formal = [r for r in result["inventory"]
+                  if r["announcement_id"] == versions["report"]["selected_announcement_id"]]
+        updates = [r for r in result["inventory"]
+                   if r["announcement_id"] == versions["ir"]["selected_announcement_id"]]
         selected = [("FORMAL_CURRENT_PERIOD_ACTUALS", formal[0])]
         if updates:
             selected.append(("RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE", updates[0]))
