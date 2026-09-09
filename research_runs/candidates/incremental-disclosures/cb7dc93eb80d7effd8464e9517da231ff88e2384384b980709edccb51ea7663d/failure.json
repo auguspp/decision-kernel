@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "assessment_input_hash": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+  "case_id": "300750.SZ",
+  "reservation_commit": "1dd63278f2e81681988bc3c47de50e2262c16603",
+  "packet_blob": "c32116e28faa6d4e0b2a2f6bc2107784f1787efe",
+  "packet_sha256": "7db40596aabbfd665ad5d414a8f9cd30428e513438d50ea860bb8472631ee4ca",
+  "intake_run": 34418402344,
+  "intake_artifact": 10129970786,
+  "intake_status": "RESERVED_EXACT_BYTES_NOT_RESEARCH",
+  "plan_commit": "dcc6da1ea8d742c673d248ac14ab49e1b73e378c",
+  "plan_blob": "08210350c84473cbbd1c9ee0ef95ac2c5060920c",
+  "status": "SOURCE_PREFLIGHT_INCOMPLETE",
+  "research_execution": "NOT_EXECUTED",
+  "funnel_status": "NOT_REACHED",
+  "research_execution_id": null,
+  "canonical_input_hash": null,
+  "formal_research_budget_used": 0,
+  "started_at": "2026-09-09T23:48:23.038660+00:00",
+  "finished_at": "2026-09-09T23:49:24.519957+00:00",
+  "actions": [
+    {
+      "sequence": 1,
+      "kind": "WEB_SEARCH",
+      "queries": ["\"1225554553\"", "site:cninfo.com.cn \"宁德时代\" \"2026-09\" \"股权激励\"", "site:catl.com \"2026\" \"9月\" \"股权激励\""],
+      "observed_at": "2026-09-09T23:48:37.352504+00:00",
+      "status": "RETURNED_NO_RELEVANT_PRIMARY_RESULT",
+      "tool_reference": "turn321173search0..6",
+      "meaning": "Three planned queries were sent in one tool call. Only unrelated numeric-ID matches returned. No unrelated personal or retail results were used as issuer evidence. These searches do not establish a complete primary issuer inventory or prove absence of subsequent filings."
+    },
+    {
+      "sequence": 2,
+      "kind": "WEB_OPEN",
+      "target": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225554553.PDF",
+      "status": "FAILED",
+      "tool_reference": "turn931682view0",
+      "returned_message": "URL is not safe to open (non-retryable error). You can only use the exact same URL from the previous search results or the user's message",
+      "classification": "TOOL_URL_SAFETY_OR_ROUTING_REFUSAL_NOT_SOURCE_HTTP_STATUS",
+      "technical_retry": false,
+      "primary_body_obtained": false
+    },
+    {
+      "sequence": 3,
+      "kind": "LOCAL_SAVED_REPRESENTATION_CHECK",
+      "announcement_ids": ["1225554550", "1225554551", "1225554552", "1225554554", "1225554555", "1225554556"],
+      "status": "SIX_TEXT_HASHES_MATCHED_IDENTITY_AND_LEGIBILITY_SAMPLED",
+      "meaning": "Original complete page-text representations were hash-checked and their first 750 characters sampled. This is not full semantic reading, original PDF/table inspection or a Research result. The seventh original legal-opinion item remains NO_TEXT."
+    }
+  ],
+  "budget_used": {"search_queries":3,"web_open_calls":1,"local_body_checks":6,"new_primary_downloads":0,"technical_retries":0},
+  "budget_scope": "Preflight source actions, not all engineering/GitHub/tool operations in this conversation. Local observed clocks, not platform-native network telemetry.",
+  "missing_required_primary_body": {
+    "announcement_id": "1225554553",
+    "description": "Tongli Law Firm legal opinion on CATL 2022 incentive vesting/exercise and cancellations, and 2023 restricted-share cancellations",
+    "packet_pdf_sha256": "80a98ac60f4c35550f4cf48b59b7a72362a3ac19f512bc4abaf5b18cea516a69",
+    "page_count": 14,
+    "text_status": "NO_TEXT"
+  },
+  "latest_update_check": "PLANNED_SEARCHES_EXECUTED_NO_RELEVANT_PRIMARY_RESULTS_NOT_EXHAUSTIVE_ISSUER_INVENTORY",
+  "automatic_retry": false,
+  "reservation_remains": true,
+  "historical_records_rewritten": false,
+  "next_input": "Obtain the legal-opinion original through an allowed supplied attachment or an independently completed already-authorized natural scan; verify its actual bytes and identity. Do not bypass this tool refusal, repeat the URL, change required classes, or substitute another company to turn this attempt green. Any later authorized continuation has a new dated preflight/input/budget while retaining this failure.",
+  "investment_authority": "NONE",
+  "human_attention_authority": "NONE",
+  "research_authority": "NONE"
+}
