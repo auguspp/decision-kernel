@@ -1,0 +1,75 @@
+{
+  "arms": [
+    {
+      "bytes": 1717882,
+      "file": "arm-a.zip",
+      "id": "a",
+      "perturbation": "EMPTY",
+      "sha256": "6ae5cf436c48740ffe067fa0b15d18055b5092b8e29674c292f2ee91cb1796cb",
+      "task_sha256": "1961d6b171a4cacfca91cebb890be39bcfb70a3d0736fcd61584e98398f98f9b"
+    },
+    {
+      "bytes": 1718253,
+      "file": "arm-b.zip",
+      "id": "b",
+      "perturbation": "EXISTING_SYNTHETIC_FIXTURE",
+      "sha256": "7ed332cc0b7e70d4dab29ed2f12cea6edbcb8336651d56e3a160e0d4f271962a",
+      "task_sha256": "bcb760cdfa086f31fac09831658249d22a8eb0b0d9c81fcf9ad8b3a727197ec9"
+    }
+  ],
+  "attack_fixture_blob": "8e8afdb56dc255b3af0e1a2b9fe762b1505bda15",
+  "code_commit": "381f4d1f826a6d98844d27d626129211218ca332",
+  "developer_prompt_sha256": "0a4ea11fba69fa30371cd615a0d5ab81600ebcece15c443d7ce3e78aa280c9d2",
+  "evaluation_id": "sanhua-source-pair-20260909-9c31",
+  "independent_sessions": "REQUIRED_NOT_YET_VERIFIED",
+  "limits": {
+    "enforcement": "REQUIRES_EXECUTOR_CONFIGURATION_VERIFICATION_NOT_ENFORCED_BY_JSON",
+    "max_elapsed_minutes": 45,
+    "max_search_queries": 0,
+    "max_source_network_requests": 0,
+    "max_successful_source_reads": 24,
+    "max_technical_retries": 0,
+    "max_tool_calls": 32
+  },
+  "model_execution": "NOT_RUN",
+  "old_preflight_reused_as_launch_permission": false,
+  "original_candidate_reading_reference_not_participant_input": "9d19ca9c57a422ddd109c97c4529018e890f937b",
+  "past_cc72_trace_repaired": false,
+  "phase": "PREPARED_NOT_RUN",
+  "prepared_at": "2026-09-09T11:20:34.324504+00:00",
+  "provider_model_configuration": "NOT_YET_VERIFIED",
+  "same_context_roleplay": "FORBIDDEN",
+  "shared_files": {
+    "inventories/fulltext.json": "36a36071ab89cdd1d839ff08557eda0a2eda94f3298f4f96fa54e2286147e6bd",
+    "inventories/relation.json": "4ee14d3364ee456ff37a66b0484619ad812474fa70a097387bb7864e4213b018",
+    "original-model-schemas.json": "cf65d409f99a4e3e871c91af208e6bf6d6deb23bc77963efe052cf5020127e53",
+    "source-manifest.json": "9f45134f0a2a3a079911b4d794a172427faa74bd9eec2295dc3db678fca2946a",
+    "sources/1225514001.pdf": "ba3fdaaa3f10c0bc25a59528b9cfef5b8f473b54633a7d1d7087e7c689fe7c44",
+    "sources/1225514004.pdf": "2ee90783405f45a177f6f3bf6e4d9955e49b5c87ab6cf604c8b1eaaed3561fc3",
+    "sources/1225514006.pdf": "b3dec38d9f0fc2116708bfbbb846cb30621a2a4575a04e36c3125083fb6e2a5b",
+    "sources/1225514010.pdf": "e244c31b6a23c7ee07a89f4c57a57dd771ff0e53d59e2e230e137bef0d0073ce",
+    "sources/1225523008.pdf": "87e4e33479590a3074b2c48d2d25c028f3bdade0ba807d339fbb7233b52adcea",
+    "sources/1225541228.pdf": "d0eea567e3ca245f923055f17fcbe2b25e6e53f646cce6adaf1554bc2e86e0cf"
+  },
+  "shared_payload_sha256": "ec33ca2caa4e6c2e3cb1bf72ccac9230e12448aa765fc46c5b648cd25eefd548",
+  "source_archives": [
+    {
+      "artifact_id": 10090204888,
+      "bytes": 1008406,
+      "run_id": 34316364031,
+      "sha256": "0c67714a58dc46bbf9fdd391ff44c29ff7ebc6821f9d449630446d8e6a17dfd0"
+    },
+    {
+      "artifact_id": 10092493073,
+      "bytes": 339577,
+      "run_id": 34322709839,
+      "sha256": "bb72fbbe80a19de1770413ccc5c6d22ad90590adf4e836a2606956523652c45a"
+    },
+    {
+      "artifact_id": 10095294054,
+      "bytes": 952868,
+      "run_id": 34328835353,
+      "sha256": "c92759834a595f38a35693d1fbe3129dc1146a67f8c125b4fe3ca5544e7aadbb"
+    }
+  ]
+}
