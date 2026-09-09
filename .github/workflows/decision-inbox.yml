@@ -162,6 +162,7 @@ jobs:
             research_cases/002050-sanhua-deep-research-v1.json \
             --through "$through" \
             --packet-dir disclosure-assessment-packets \
+            --raw-pdf-dir disclosure-primary-bodies \
             --packet-limit 10 \
             "${receipt_args[@]}" | tee disclosure-scan.txt
       - name: Publish disclosure summary
@@ -199,4 +200,14 @@ jobs:
             disclosure-scan.txt
             disclosure-scan-meta.txt
             disclosure-assessment-packets/
+          retention-days: 14
+      - name: Upload already-fetched disclosure PDF bodies
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: official-disclosure-primary-bodies
+          path: |
+            disclosure-primary-bodies/
+            disclosure-scan-meta.txt
+          if-no-files-found: warn
           retention-days: 14
