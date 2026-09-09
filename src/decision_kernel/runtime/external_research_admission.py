@@ -205,7 +205,7 @@ def prepare_input(*, input_raw: bytes, preflight_raw: bytes, catalog_source: dic
             "PREFLIGHT_NOT_COMMITTED_BEFORE_SELECTION")
     try:
         _publication_checks(packet, p, load, commit)
-    except (ValueError, KeyError, TypeError, AttributeError) as exc:
+    except (ValueError, KeyError, TypeError, AttributeError, OSError, RuntimeError) as exc:
         raise AdmissionRejected("INPUT_REJECTED") from exc
     key = identity.input_key(packet)  # Only the original parsed model is hashed.
     require(catalog_source["ref"] == packet.code_commit and catalog_source["path"] == identity.CATALOG_PATH,

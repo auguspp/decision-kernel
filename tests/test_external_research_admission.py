@@ -268,3 +268,17 @@ def test_preflight_must_still_be_valid_after_readback(late_clock, reason):
     args = checks(*setup())
     args["now"] = lambda: late_clock
     denied(args, reason)
+
+
+@pytest.mark.parametrize("failure", [OSError, RuntimeError])
+def test_unavailable_publication_proof_is_input_rejected_not_research_gap(failure):
+    args = checks(*setup())
+    original = args["commit"]
+    def unavailable(ref):
+        if ref == "e" * 40:
+            raise failure("untrusted transport text must not become a Research result")
+        return original(ref)
+    args["commit"] = unavailable
+    report = denied(args, "INPUT_REJECTED")
+    assert report["execution_key"] is None
+    assert "untrusted transport text" not in json.dumps(report)
