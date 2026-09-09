@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "execution_id": "p0-4a-sanhua-20260909T1208Z-r3-7a42",
+  "sequence": 4,
+  "phase": "REQUEST",
+  "requested_at": "2026-09-09T12:12:16.681938+00:00",
+  "action": "READ_SAVED_PRIMARY_BODY",
+  "source_id": "CNINFO:1225514001",
+  "artifact_id": 10095294054,
+  "member": "004.pdf",
+  "expected_sha256": "ba3fdaaa3f10c0bc25a59528b9cfef5b8f473b54633a7d1d7087e7c689fe7c44",
+  "network_source_requests": 0,
+  "technical_retries": 0,
+  "authority": "NONE"
+}
