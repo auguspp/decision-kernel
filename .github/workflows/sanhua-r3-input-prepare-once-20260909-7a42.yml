@@ -1,0 +1,186 @@
+name: Sanhua r3 input prepare once 7a42
+
+on:
+  push:
+    branches: ["ops/sanhua-r3-input-prepare-20260909-7a42"]
+    paths: [".github/workflows/sanhua-r3-input-prepare-once-20260909-7a42.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanhua-r3-input-prepare-20260909-7a42
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'auguspp/decision-kernel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TRUSTED_MAIN: 381f4d1f826a6d98844d27d626129211218ca332
+    steps:
+      - name: Require fresh one-shot preparation
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$EVENT_BEFORE" = "$TRUSTED_MAIN"
+          test "$(TZ=Asia/Shanghai date +%F)" = "2026-09-09"
+      - uses: actions/checkout@v7
+        with:
+          ref: 381f4d1f826a6d98844d27d626129211218ca332
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install unchanged trusted package
+        run: python -m pip install -e '.[dev]'
+      - name: Build provisional input and run original prepare_input gate
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import base64, hashlib, json, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from urllib.parse import quote
+
+          from decision_kernel.identity import canonical_json
+          from decision_kernel.runtime.external_research_execution import ExternalResearchInputPacket
+          from decision_kernel.runtime.external_research_admission import prepare_input
+
+          REPO = 'auguspp/decision-kernel'
+          MAIN = '381f4d1f826a6d98844d27d626129211218ca332'
+          PRE_COMMIT = 'da2c8b6d0de27d8bae03243072e65be009eb990d'
+          PRE_PATH = 'research_runs/candidates/002050.SZ/p0-4a-sanhua-20260909T1208Z-r3-7a42/preflight.json'
+          PRE_BLOB = '87d73c296aa0a597e412883af4c9fb8fd514429c'
+          CONTRACT_COMMIT = '539a0f3a03288566ffa8198ab371ba93672aa047'
+          CONTRACT_PATH = 'research_cases/002050-sanhua-research-contract-v1.json'
+          CONTRACT_BLOB = 'a0a72dd52598b64c2963a55283ffb7a8e0107fbf'
+          CONTRACT_SHA256 = '2ee28230d301887617f0763cb7a5189b33efb132c0b0acf7e9e675b1fc5c91cb'
+          CATALOG_BLOB = '4c4c458d6e076e6deaa69c66fe7516f51592e7e8'
+          EXECUTION_ID = 'p0-4a-sanhua-20260909T1208Z-r3-7a42'
+          PREFIX = f'research_runs/candidates/002050.SZ/{EXECUTION_ID}/'
+
+          def gh_json(*args):
+              raw = subprocess.check_output(['gh', 'api', *args])
+              return json.loads(raw)
+
+          def load(spec):
+              endpoint = f"repos/{REPO}/contents/{quote(spec['path'], safe='/')}"
+              value = gh_json('--method', 'GET', endpoint, '-f', f"ref={spec['ref']}")
+              return base64.b64decode(value['content'])
+
+          def commit(sha):
+              return gh_json(f'repos/{REPO}/git/commits/{sha}')
+
+          def current_code():
+              return gh_json(f'repos/{REPO}/git/ref/heads/main')['object']['sha']
+
+          pre_spec = {'repository': REPO, 'ref': PRE_COMMIT, 'path': PRE_PATH, 'git_blob': PRE_BLOB}
+          contract_spec = {'repository': REPO, 'ref': CONTRACT_COMMIT, 'path': CONTRACT_PATH,
+                           'git_blob': CONTRACT_BLOB, 'sha256': CONTRACT_SHA256}
+          pre_raw = load(pre_spec)
+          contract_raw = load(contract_spec)
+          assert hashlib.sha256(contract_raw).hexdigest() == CONTRACT_SHA256
+          pre_sha = hashlib.sha256(pre_raw).hexdigest()
+          selected = datetime.now(timezone.utc).isoformat()
+
+          source_refs = [
+              {**contract_spec, 'purpose': 'SAVED_RESEARCH_QUESTION_ONLY_NOT_ACCEPTED_PROBABILITY_OR_NEW_ECONOMICS'},
+              {**pre_spec, 'sha256': pre_sha, 'purpose': 'PRE_EXECUTION_SOURCE_PREFLIGHT'},
+          ]
+          seed = {
+              'id': '8c4c5d2b-3727-5a98-aea1-02f98a3f0d31',
+              'source_type': 'SAVED_RESEARCH_QUESTION',
+              'source_identifier': 'SANHUA:RETAINED-RESEARCH-CONTRACT:539a0f3a:QUESTION-ONLY',
+              'source_locator': f'https://github.com/{REPO}/blob/{CONTRACT_COMMIT}/{CONTRACT_PATH}',
+              'published_at': '2026-09-02T12:24:02Z',
+              'available_at': '2026-09-02T12:24:02Z',
+              'retrieved_at': selected,
+              'content_hash': CONTRACT_SHA256,
+              'idempotency_key': 'sanhua-question-' + CONTRACT_SHA256,
+              'retention_mode': 'FULL_ARTIFACT',
+              'replayability_level': 'FULL',
+              'raw_storage_ref': f'github:{REPO}@{CONTRACT_COMMIT}:{CONTRACT_PATH}',
+              'extracted_structured_values': {
+                  'role': 'Existing saved monitoring questions only; no inherited probability/valuation or new operating fact',
+                  'monitoring_scope': ['core revenue and margins', 'robot unit economics', 'liquid-cooling contribution', 'capital use and cash conversion'],
+              },
+              'source_location': 'monitoring_indicators and monitoring_falsifiers; existing Full Research lineage',
+              'license_terms_note': 'Internal retained question; historical probabilities/scenarios are not accepted or refreshed by this execution.',
+          }
+          value = {
+              'execution_id': EXECUTION_ID,
+              'case_id': '002050.SZ',
+              'ticker': '002050',
+              'security_id': 'SZSE:002050',
+              'source_lane': 'SAVED_RESEARCH_OBSERVATION',
+              'selected_at': selected,
+              'research_cutoff': selected,
+              'code_commit': MAIN,
+              'current_state_commit': '48f2fa79120fec599e9510b23694d600194e1d4e',
+              'current_state_reading_hash': '3857606dc56efa883263a5f54a079ef26211642fb11c19b8b98837162f96f18e',
+              'source_refs': source_refs,
+              'seed_evidence_artifacts': [seed],
+              'research_question': '围绕已有三花研究监控问题，以新鲜CNINFO双通道清单和已确认读取检查点的六份官方原件，检查核心业务盈利/现金/资本投入与液冷及机器人商业化的证据边界。区分财务实际值、公司表述、推论和未披露经济性；比较支持与反证，完成Pre及必要Quick。此轮不刷新历史概率、卖方预测、当前价格或A/H估值，不生成Human决定。',
+              'known_unknowns': [
+                  'REQUIRED_SOURCE_CLASS:FORMAL_CURRENT_PERIOD_ACTUALS:STATIC',
+                  'REQUIRED_SOURCE_CLASS:BUSINESS_SEGMENT_ECONOMICS:STATIC',
+                  'REQUIRED_SOURCE_CLASS:CASH_CAPITAL_REINVESTMENT:STATIC',
+                  'REQUIRED_SOURCE_CLASS:RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE:STATIC',
+                  'REQUIRED_SOURCE_CLASS:SUBSEQUENT_ISSUER_UPDATE_CHECK:LATEST_INVENTORY',
+                  '读到原文但未披露某指标与必需正文未取得分开；后者必须EXECUTION_GAP。',
+                  '公司客户、批量交付和产线爬坡表述不等于独立验证的机器人/液冷收入、毛利或ROIC。',
+                  '旧研究的市场预期、概率和价格未重新取证，不能作为本轮当期市场事实。',
+                  '任何原文财务或募集资金口径差异并列保留，不自行调平。',
+                  '每份正式来源读取均已有先REQUEST后RESPONSE的精确远端确认；本轮不得以事后摘要替代。',
+              ],
+              'next_discriminating_search': '只读已保存六份原件并使用既有检查点身份，核对核心收入/毛利、现金流及投入、项目时点与单独效益口径；不新增源站请求。',
+              'method_version': 'RESEARCH_METHOD_V1',
+              'prompt_version': 'P0_4A_ACK_CHECKPOINT_SOURCE_PRE_QUICK_20260909',
+              'allowed_tools': ['OTHER_READ', 'GITHUB_READ'],
+              'candidate_output_prefix': PREFIX,
+              'budget': {
+                  'max_tool_calls': 32, 'max_search_queries': 0, 'max_source_reads': 24,
+                  'max_technical_retries': 0, 'max_elapsed_minutes': 45,
+                  'tool_calls_enforcement': 'SOFT_EXECUTOR', 'search_queries_enforcement': 'SOFT_EXECUTOR',
+                  'source_reads_enforcement': 'SOFT_EXECUTOR', 'technical_retries_enforcement': 'SOFT_EXECUTOR',
+                  'elapsed_time_enforcement': 'SOFT_EXECUTOR',
+              },
+          }
+          packet = ExternalResearchInputPacket.model_validate(value)
+          raw = (canonical_json(packet.model_dump(mode='json')) + '\n').encode()
+          catalog_source = {'repository': REPO, 'ref': MAIN, 'path': 'research_runs/execution-inputs.json',
+                            'git_blob': CATALOG_BLOB}
+          checked_at = datetime.now(timezone.utc).isoformat()
+          prepared, key, _ = prepare_input(input_raw=raw, preflight_raw=pre_raw,
+              catalog_source=catalog_source, load=load, commit=commit, checked_at=checked_at,
+              current_code=current_code)
+          assert prepared == packet
+          root = Path('sanhua-r3-input-prepare')
+          root.mkdir(exist_ok=False)
+          (root / 'input.json').write_bytes(raw)
+          receipt = {
+              'status': 'INPUT_READY_TO_COMMIT_NOT_EXECUTION_ADMISSION',
+              'prepared_at': checked_at,
+              'execution_key': key.as_dict(),
+              'input_file_sha256': hashlib.sha256(raw).hexdigest(),
+              'preflight_sha256': pre_sha,
+              'preflight_ref': PRE_COMMIT,
+              'preflight_blob': PRE_BLOB,
+              'main': current_code(),
+              'formal_research_budget_used': 0,
+              'authority': 'NONE',
+          }
+          (root / 'prepare.json').write_text(canonical_json(receipt) + '\n', encoding='utf-8')
+          print(canonical_json(receipt))
+          PY
+      - name: Upload prepared exact input
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanhua-r3-input-prepare-${{ github.run_id }}-${{ github.run_attempt }}
+          path: sanhua-r3-input-prepare/
+          if-no-files-found: error
+          retention-days: 90
