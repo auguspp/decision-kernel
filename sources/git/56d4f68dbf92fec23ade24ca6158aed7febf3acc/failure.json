@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "assessment_input_hash": "0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9",
+  "packet_blob": "78c7f6633293a7edc532a92407d7981fc7cf08c7",
+  "packet_sha256": "782d581875e95ed80c10d8cd71efb40142e01cc139ce24734f037f13036b53e6",
+  "plan_commit": "514d89bbceed0d87682c4a1e0013837b93f1eefb",
+  "plan_blob": "eb4508523c00a99d19acd86dfbafaa98229b0422",
+  "status": "SOURCE_PREFLIGHT_INCOMPLETE",
+  "research_execution": "NOT_EXECUTED",
+  "funnel_status": "NOT_REACHED",
+  "research_execution_id": null,
+  "canonical_input_hash": null,
+  "formal_research_budget_used": 0,
+  "started_at": "2026-09-09T16:28:16.012388+00:00",
+  "finished_at": "2026-09-09T16:28:47.751752+00:00",
+  "actions": [
+    {
+      "sequence": 1,
+      "kind": "WEB_OPEN",
+      "target": "https://static.cninfo.com.cn/finalpage/2026-09-05/1225549295.PDF",
+      "started_at": "2026-09-09T16:28:16.012388+00:00",
+      "finished_at": "2026-09-09T16:28:47.751752+00:00",
+      "status": "FAILED",
+      "tool_reference": "turn129543view0",
+      "returned_message": "URL is not safe to open (non-retryable error). You can only use the exact same URL from the previous search results or the user's message.",
+      "classification": "TOOL_URL_SAFETY_OR_ROUTING_REFUSAL_NOT_SOURCE_HTTP_STATUS",
+      "technical_retry": false,
+      "primary_body_obtained": false
+    }
+  ],
+  "budget_used": {"web_reads": 1, "web_searches": 0, "technical_retries": 0, "explicit_source_http_requests": 0, "primary_bodies": 0},
+  "limits_note": "Underlying web-service network activity is UNKNOWN. Local request/response observation clocks, not platform-native server telemetry. The non-retryable refusal was respected: no repeat URL, alternate route, direct-network bypass or second company was attempted.",
+  "incomplete_classes": ["SELECTED_OFFICIAL_SHARE_CAPITAL_BODY", "SUBSEQUENT_ISSUER_UPDATE_CHECK"],
+  "meaning": "The retained scan packet is byte-valid but its extracted page text is garbled. No readable primary body or fresh latest-update inventory was obtained by this attempt. This does not establish that the PDF is unavailable publicly, that the company has no filings, or that all acquisition routes fail. It cannot become a completed WAIT, DROP, Deepen, or validator-produced EXECUTION_GAP.",
+  "automatic_retry": false,
+  "reservation_remains": true,
+  "input_or_source_history_rewritten": false,
+  "transfer_correction_reference": "83ed8d364bcd7390bfb36af49753428802a14524:transfer-correction.md; first manual Unicode transfer failed and was explicitly restored to original bytes before this attempt",
+  "investment_authority": "NONE",
+  "human_attention_authority": "NONE",
+  "research_authority": "NONE"
+}
