@@ -1,0 +1,34 @@
+{
+  "record_kind": "SOURCE_PREFLIGHT_PLAN_NOT_RESEARCH",
+  "case_id": "300750.SZ",
+  "ticker": "300750",
+  "security_id": "SZSE:300750",
+  "assessment_input_hash": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+  "reservation_commit": "1dd63278f2e81681988bc3c47de50e2262c16603",
+  "packet_blob": "c32116e28faa6d4e0b2a2f6bc2107784f1787efe",
+  "packet_sha256": "7db40596aabbfd665ad5d414a8f9cd30428e513438d50ea860bb8472631ee4ca",
+  "intake_run": 34418402344,
+  "intake_artifact": 10129970786,
+  "scope": "September 8 incentive resolutions, eligibility, vesting/cancellation and their relevance to retained monitoring questions; not a fresh full-company underwriting or revival of old numerical Odds.",
+  "required_classes": [
+    {"id":"INCENTIVE_RESOLUTIONS","mode":"STATIC","announcement_ids":["1225554550","1225554552"]},
+    {"id":"INCENTIVE_EXERCISE","mode":"STATIC","announcement_ids":["1225554551"]},
+    {"id":"INCENTIVE_VESTING","mode":"STATIC","announcement_ids":["1225554554"]},
+    {"id":"INCENTIVE_CANCELLATIONS","mode":"STATIC","announcement_ids":["1225554555","1225554556"]},
+    {"id":"INCENTIVE_LEGAL_REVIEW","mode":"STATIC","announcement_ids":["1225554553"]},
+    {"id":"SUBSEQUENT_ISSUER_UPDATE_CHECK","mode":"LATEST_INVENTORY"}
+  ],
+  "saved_body_policy": "Reuse six complete readable extracted page-text representations from the byte-verified original packet. Recompute original text_sha256, retain page numbers and distinguish text-representation hashes from unverified raw PDF hashes. NO_TEXT legal opinion requires readable primary document; no claim of original-PDF read if only extraction exists.",
+  "planned_search_queries": [
+    "\"1225554553\"",
+    "site:cninfo.com.cn \"宁德时代\" \"2026-09\" \"股权激励\"",
+    "site:catl.com \"2026\" \"9月\" \"股权激励\""
+  ],
+  "source_limits": {"max_search_queries":3,"max_web_open_or_screenshot_calls":8,"max_saved_body_reads":6,"max_primary_downloads":1,"max_technical_retries":0,"max_elapsed_minutes":25},
+  "failure_policy": "Respect non-retryable refusals, retain the existing reservation and actual failure. No alternate-transport bypass of a refused URL, no changed requirements to turn source gaps into WAIT, no automatic next-company execution.",
+  "inventory_scope": "The named queries only, not a complete exchange feed or proof no subsequent disclosure exists. Material primary/secondary leads must resolve to readable primary bodies within budget. No unsupported absence claim.",
+  "formal_research_phase_policy": "Source preflight, immutable-input preparation, admission and output publication are separate phases. Only after original execute_after_admission invokes the launch callback does the formal window start. Every actual successful/failed tool call and read during that window is recorded, including local file reads and screenshot views. Research is performed in the interactive executor using visible sources, with no private chain-of-thought retained. Publication GitHub writes occur only after the formal window closes and do not replace missing source/tool events.",
+  "proposed_formal_budget_not_yet_frozen": {"max_tool_calls":32,"max_search_queries":3,"max_source_reads":28,"max_technical_retries":0,"max_elapsed_minutes":35},
+  "investment_authority": "NONE",
+  "research_result": null
+}
