@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "execution_id": "p0-4a-sanhua-20260909T084245Z-6d91",
+  "input_commit": "44fd8b6c958badeceed2009ffa731dc1a658ff58",
+  "input_blob": "7ec280dba6bdbb007af0e5c2b82b8ad00e9caf61",
+  "status": "INTERRUPTED_WITHOUT_VERIFIABLE_COMPLETION",
+  "observed_on": "2026-09-09",
+  "finding": "At takeover the exact candidate directory and branch head contain only the frozen preflight and input. No original admission receipt, action journal, Pre, Quick or Funnel output is available to establish the execution's actual progress or completion. Source reads visible in prior conversation do not establish a complete bound execution.",
+  "scope": "Descriptive interruption record, not a validator-produced EXECUTION_GAP or a reconstructed ResearchExecutionReceipt. Do not assert that Research never ran, and do not certify any output as complete.",
+  "continuation": "User has delegated continued P0 work. A separate bounded execution key may reuse the same still-valid source preflight only after fresh original #291 admission. It must preserve its own live action journal, must not reuse this execution_id, and may not reacquire H1/IR or alter these frozen bytes.",
+  "research_registration": "NONE",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE"
+}
