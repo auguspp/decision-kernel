@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "execution_id": "p0-4a-sanhua-20260909T1208Z-r3-7a42",
+  "canonical_input_hash": "0361878270ed68f07b26a4bd6faa360c0b3835a5db84f74775ed06ef76566f40",
+  "sequence": 2,
+  "phase": "REQUEST",
+  "requested_at": "2026-09-09T12:30:08.202577+00:00",
+  "action": "FORMAL_RESEARCH_READ_SAVED_PRIMARY_BODY",
+  "source_id": "CNINFO:1225523008",
+  "artifact_id": 10092493073,
+  "member": "capture/003.pdf",
+  "expected_sha256": "87e4e33479590a3074b2c48d2d25c028f3bdade0ba807d339fbb7233b52adcea",
+  "planned_pages_1_based": [1, 2, 3, 4, 5],
+  "network_source_requests": 0,
+  "technical_retries": 0,
+  "research_source_reads_planned": 1,
+  "authority": "NONE"
+}
