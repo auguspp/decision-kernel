@@ -2,8 +2,8 @@
   "schema_version": 1,
   "source_run_id": 34354228621,
   "artifact_id": 10105040865,
-  "expected_work_commit": "c355eea159a1113704b06d19942fe277f56591e2",
-  "expected_key": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
-  "expected_packet_sha256": "7db40596aabbfd665ad5d414a8f9cd30428e513438d50ea860bb8472631ee4ca",
+  "expected_work_commit": "917d352ca16121783f42b1710c741dcac8bf8984",
+  "expected_key": "aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+  "expected_packet_sha256": "562abdcc134b820aab76bfdb190660a9dbea43fa9214b1e4c016f038d99697d5",
   "expires_at": "2026-09-10T04:00:00Z"
 }
