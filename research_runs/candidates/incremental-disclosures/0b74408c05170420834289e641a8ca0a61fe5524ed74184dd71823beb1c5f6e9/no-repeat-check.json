@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "READ_ONLY_NO_REPEAT_CHECK_NOT_SECOND_RESERVATION_OR_EXECUTION",
+  "checked_at": "2026-09-09T16:33:20.494125+00:00",
+  "work_commit": "195dcfe710c62c3796fef4d19e68cadd05a8d84d",
+  "scope": "Actual complete Git tree was read, truncated=false; all reserved packet.json files (one) supplied with matching Git blob. Non-packet metadata not used by this key-only check.",
+  "source_run": 34354228621,
+  "source_artifact": 10105040865,
+  "packet_count": 5,
+  "reserved_count": 1,
+  "blocked_key": "0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9",
+  "blocked_status": "ALREADY_RESERVED",
+  "next_eligible_key_not_executed": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+  "next_eligible_stock_code": "300750",
+  "next_eligible_action": "NOT_RESERVED_NOT_EXECUTED",
+  "plan_hash": "14d7c95e1a4548fee317729c243c1d0983561b865e59a6a1bbb40cd01a796518",
+  "investment_authority": "NONE"
+}
