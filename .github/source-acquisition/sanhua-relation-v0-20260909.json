@@ -1,0 +1,48 @@
+{
+  "approved_base": "b71ff68984a243f3aa397819336b7aaf7e586515",
+  "plan": {
+    "alternate_primary_routes": [],
+    "events_created": 0,
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "ir_publication_dates": [
+      "2026-08-27",
+      "2026-08-28"
+    ],
+    "ir_title_contains": "投资者关系活动记录表",
+    "issuer": "三花智控",
+    "market_requests": 0,
+    "market_state_writes": 0,
+    "max_body_bytes": 8388608,
+    "max_pages": 3,
+    "max_primary_bodies": 1,
+    "max_requests": 5,
+    "max_total_bytes": 50331648,
+    "page_size": 30,
+    "previous_fulltext": {
+      "artifact_id": 10090204888,
+      "relationship": "REFERENCE_ONLY_NOT_REACQUISITION",
+      "run_id": 34316364031
+    },
+    "required_classes": [
+      "RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE",
+      "SUBSEQUENT_ISSUER_UPDATE_INVENTORY"
+    ],
+    "research_authority": "NONE",
+    "research_budget_used": 0,
+    "schema_version": 1,
+    "security_id": "SZSE:002050",
+    "semantics": "PRIMARY_SOURCE_BYTES_ONLY_NOT_EVIDENCE_RESEARCH_OR_ADMISSION",
+    "source_channel": "CNINFO_RELATION",
+    "stock_code": "002050",
+    "tab_name": "relation",
+    "technical_retries": 0,
+    "window": {
+      "from": "2026-08-01",
+      "through": "2026-09-09",
+      "timezone": "Asia/Shanghai"
+    },
+    "window_meaning": "DATE_FILTER_OBSERVED_AT_CAPTURE_NOT_FUTURE_DAY_COMPLETENESS"
+  },
+  "request": "P0-4A / Human-authorized single CNINFO relation-only source-channel test"
+}

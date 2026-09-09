@@ -196,3 +196,69 @@ After successful acquisition, future Research still needs **new** accessibility
 preflight and #291 full admission with a separately frozen execution/input/cutoff/
 budget. Old preflight is never rewritten as PASS. No research launch, normal/
 adversarial pair, Deep, Odds, Human write-back or attention is part of this batch.
+
+## Relation-only follow-up: one separate official source-channel test
+
+#293 merged at `b71ff68984a243f3aa397819336b7aaf7e586515`. Its real fulltext
+run `34316364031`, artifact `10090204888`, retained the formal H1 original but
+reported `RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY`. That accepted history and
+its plan/hash remain unchanged; it is not rerun or relabelled as relation.
+
+The existing runtime now accepts only two fixed `--channel` values. The default
+`fulltext` plan is byte-identical to the old frozen request. `relation` changes
+only the official query form's `tabName`, selects at most one IR and applies a
+five-request ceiling: issuer map once, up to three pages of 30, one IR PDF.
+Issuer, dates (2026-08-01..2026-09-09), exact public HTTPS endpoint, 8MiB/body,
+48MiB total, zero retries/redirects/credentials, and all original page/identity/
+time checks are retained. There is no second HTTP client, journal, hash layer,
+verifier, source database or version classifier.
+
+The parameter reference is `akfamily/akshare` at
+`8e95744b79ae22326308ccd2b4e62650c5b53c55`,
+`akshare/stock_feature/stock_disclosure_cninfo.py`, function
+`stock_zh_a_disclosure_relation_cninfo`. Only the already-reviewed official
+relation form semantics are adopted. AKShare is neither installed nor vendored;
+its HTTP scheme, unbounded pagination and repeated first-page request are not
+adopted. This code starts with the accepted local relation draft, not a redesign.
+
+Complete relation inventory precedes the existing IR version qualification and
+the first PDF. H1 rows can remain in the raw inventory but are never selected or
+downloaded. Ambiguity/unresolved relations stop before PDF requests. A complete
+inventory without qualified IR is `SOURCE_CAPTURE_INCOMPLETE` with
+`RELEVANT_IR_MISSING_FROM_RELATION_INVENTORY`. It does not establish absence from
+other official channels. A selected IR title/container does not certify the
+activity, robotics/thermal claims, source sufficiency or Research admission.
+
+```sh
+python -m decision_kernel.runtime.sanhua_source_acquisition capture <NEW_DIRECTORY> --channel relation
+python -m decision_kernel.runtime.sanhua_source_acquisition verify <CAPTURE_DIRECTORY> --channel relation
+```
+
+Verification must explicitly request the matching channel. The original
+`verify(old_directory)` remains fulltext; no automatic cross-channel fallback
+or changed historical plan hash. The new workflow first retrieves the **saved**
+GitHub artifact `10090204888`, verifies its exact 1008406-byte ZIP SHA256
+`0c67714a58dc46bbf9fdd391ff44c29ff7ebc6821f9d449630446d8e6a17dfd0`, and calls the
+installed new verifier. Its result must equal the archived verification.json,
+including the old incomplete outcome and zero replay network calls. All old
+file hashes must remain unchanged. This is a retained-artifact read, not an H1
+source acquisition. Only the small compatibility receipt enters the new package;
+the old H1 bytes keep their original lineage. Artifact unavailable/corrupt or
+compatibility failure prevents the source step; no similar/older package fallback.
+
+One frozen request, `.github/source-acquisition/sanhua-relation-v0-20260909.json`,
+is activated only by its first addition on a legitimate reviewed main merge.
+The dedicated workflow requires attempt 1 and exact previous main
+`b71ff68984a243f3aa397819336b7aaf7e586515`. No schedule or workflow_dispatch.
+Main must be reread before merge; a changed parent means stop, not relax the guard.
+The old fulltext request/workflow and other workflows are unmodified. Permissions
+are contents:read plus actions:read solely for retrieving the saved artifact;
+the built-in token is scoped to that step and never sent to CNINFO.
+
+The separate relation artifact retains invocation, plan, raw response/IR bytes,
+request journal, actual capture outcome, relation verification and old-fulltext
+compatibility receipt for 90 days. Capture failure stays failure even when
+`OFFLINE_VERIFICATION_PASS`; no new channel, retry or second company is attempted.
+Engineering CI, old-package compatibility, real relation capture and remote
+readback are separate acceptance levels. Stop after this one source-channel test;
+any later source preflight/admission/Research requires a new authorized batch.
