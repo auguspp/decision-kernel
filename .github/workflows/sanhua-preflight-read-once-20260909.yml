@@ -1,0 +1,198 @@
+name: Sanhua saved-source preflight read once
+on:
+  push:
+    branches: ["ops/sanhua-preflight-read-20260909-9f6d"]
+    paths: [".github/workflows/sanhua-preflight-read-once-20260909.yml"]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: sanhua-preflight-read-20260909-9f6d
+  cancel-in-progress: false
+jobs:
+  read:
+    if: github.repository == 'auguspp/decision-kernel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Require original base and first attempt
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$(TZ=Asia/Shanghai date +%F)" = "2026-09-09"
+          test "$EVENT_BEFORE" = "381f4d1f826a6d98844d27d626129211218ca332"
+      - uses: actions/checkout@v7
+        with:
+          ref: 381f4d1f826a6d98844d27d626129211218ca332
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install unchanged trusted package
+        run: python -m pip install -e '.[dev]'
+      - name: Run unchanged full regression suite before new source reads
+        run: python -m pytest -q
+      - name: Read exact retained GitHub artifacts, not source reacquisition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          timeout 60s gh api --method GET repos/auguspp/decision-kernel/actions/artifacts/10090204888/zip > "$RUNNER_TEMP/h1.zip"
+          timeout 60s gh api --method GET repos/auguspp/decision-kernel/actions/artifacts/10092493073/zip > "$RUNNER_TEMP/ir.zip"
+          python - <<'PY_ZIP'
+          import hashlib, os, zipfile
+          from pathlib import Path
+          common = {'workflow.json','verification.json','capture/plan.json','capture/capture.json',
+                    'capture/request-journal.jsonl','capture/001.json','capture/002.json','capture/003.pdf'}
+          expected = {'h1': (1008406,'0c67714a58dc46bbf9fdd391ff44c29ff7ebc6821f9d449630446d8e6a17dfd0',common),
+                      'ir': (339577,'bb72fbbe80a19de1770413ccc5c6d22ad90590adf4e836a2606956523652c45a',common|{'legacy-fulltext-verification.json'})}
+          for label,(size,digest,names) in expected.items():
+              path=Path(os.environ['RUNNER_TEMP'])/(label+'.zip')
+              assert path.stat().st_size==size and hashlib.sha256(path.read_bytes()).hexdigest()==digest
+              with zipfile.ZipFile(path) as z:
+                  assert len(z.infolist())==len(names) and set(z.namelist())==names
+                  assert sum(i.file_size for i in z.infolist())<8*1024*1024 and z.testzip() is None
+                  z.extractall(Path(os.environ['RUNNER_TEMP'])/('saved-'+label))
+          PY_ZIP
+      - name: Read two bounded inventories and four exact existing locators
+        run: |
+          python - <<'PY_SOURCE'
+          import json, os, subprocess
+          from pathlib import Path
+          from decision_kernel.runtime import sanhua_source_acquisition as s
+
+          OUT = Path('source-read-output')
+          OUT.mkdir(exist_ok=False)
+          BASE = '381f4d1f826a6d98844d27d626129211218ca332'
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip() == BASE
+          EXPECTED = {
+              'h1': ('fulltext', '5eeef570ac42299532e438f57b42beb09bc07749597c592a65afe6f30082e34f'),
+              'ir': ('relation', 'fead1a6f133478749b53af891c936134d103297eb7bbf2594d9db79682c04af8'),
+          }
+          old, compatibility = {}, {}
+          for label, (channel, expected) in EXPECTED.items():
+              base = Path(os.environ['RUNNER_TEMP']) / ('saved-' + label)
+              value = s.obj((base/'capture/capture.json').read_bytes())
+              assert value['capture_hash'] == expected
+              result = s.verify(base/'capture', channel=channel)
+              assert result == json.loads((base/'verification.json').read_bytes())
+              old[label] = value
+              compatibility[label] = result
+          org = old['h1']['outcome']['issuer_resolution']['org_id']
+          assert org == old['ir']['outcome']['issuer_resolution']['org_id'] == 'gssz0002050'
+          IDS = ['1225514006', '1225514001', '1225514010', '1225541228']
+          previous_rows = {r['announcement_id']: r for r in old['h1']['outcome']['inventory']}
+          selected = [previous_rows[i] for i in IDS]
+          plan = {'purpose': 'BOUNDED_PREFLIGHT_SOURCE_READ_NOT_RESEARCH', 'code_commit': BASE,
+                  'prior_artifacts': {'h1': 10090204888, 'ir': 10092493073},
+                  'window': ['2026-08-01','2026-09-09'], 'channels': ['fulltext','relation'],
+                  'primary_selection': selected, 'max_http_requests': 10, 'max_pages_per_channel': 3,
+                  'max_primary_bodies': 4, 'max_bytes_per_body': s.MAX_BYTES, 'technical_retries': 0,
+                  'h1_ir_redownloads': 0, 'research_execution': 'NOT_EXECUTED', **s.AUTHORITY}
+          (OUT/'plan.json').write_bytes(s.data(plan))
+          (OUT/'legacy-compatibility.json').write_bytes(s.data(compatibility))
+          records, total, started = [], 0, s.utc()
+          last = started
+          journal = OUT/'request-journal.jsonl'
+          journal.write_bytes(b'')
+          def append(e):
+              with journal.open('ab') as f:
+                  f.write(s.data(e)); f.flush(); os.fsync(f.fileno())
+          def live_get(spec, channel):
+              global total, last
+              s.require(len(records) < 10, 'REQUEST_BUDGET_EXCEEDED')
+              s.allowed(spec, channel=channel)
+              start = s.utc(); s.require(start >= last, 'CLOCK_REVERSED')
+              rec = {'id': len(records)+1, 'spec': spec, 'channel': channel, 'started_at': start.isoformat(),
+                     'completed_at': None, 'http_status': None, 'content_type': None, 'body': None, 'error': None}
+              append({'phase':'REQUEST','id':rec['id'],'channel':channel,'spec':spec,'started_at':rec['started_at']})
+              raw = None
+              try:
+                  response = s.public_request(spec, channel=channel)
+                  rec.update(http_status=response.status, content_type=response.content_type, error=response.error)
+                  raw = response.body
+                  if raw is not None:
+                      s.require(0 < len(raw) <= s.MAX_BYTES and total+len(raw) <= s.MAX_TOTAL_BYTES, 'BODY_BYTE_LIMIT')
+                      name = f"{rec['id']:03d}." + ('pdf' if spec['id'].startswith('primary-') else 'json')
+                      (OUT/name).write_bytes(raw)
+                      rec['body'] = {'path':name, 'bytes':len(raw), 'sha256':s.sha(raw)}
+              except Exception as exc:
+                  rec['error'] = getattr(exc, 'code', 'TRANSPORT_EXCEPTION:' + type(exc).__name__)
+              rec['completed_at'] = s.utc().isoformat(); records.append(rec)
+              append({'phase':'RESPONSE',**rec})
+              total = s._check_record(rec, previous=last, index=len(records), total_bytes=total, raw=raw, max_requests=10)
+              last = s.clock(rec['completed_at'])
+              return raw, rec
+
+          def read_sources(get):
+              outcome = {'status':'SOURCE_READ_INCOMPLETE', 'problem':None, 'inventories':{}, 'bodies':[]}
+              try:
+                  for channel in ('fulltext','relation'):
+                      seen, total_count, rows, pages = set(), None, [], []
+                      for number in range(1,4):
+                          raw, rec = get(s.query(org,number,channel=channel), channel)
+                          batch, total_count, more = s._page(s.obj(raw),org,number,seen,total_count,rec['completed_at'])
+                          rows.extend(batch); pages.append({'page':number,'request_id':rec['id'],'total':total_count,'hasMore':more})
+                          if not more: break
+                      s.require(not more,'INVENTORY_WINDOW_INCOMPLETE')
+                      outcome['inventories'][channel] = {'rows':rows,'pages':pages,'total':total_count,'complete':True}
+                  frows = outcome['inventories']['fulltext']['rows']
+                  rrows = outcome['inventories']['relation']['rows']
+                  versions = {'report':s.qualify_versions(frows,ir_publication_dates=['2026-08-27','2026-08-28'])['report'],
+                              'ir':s.qualify_versions(rrows,ir_publication_dates=['2026-08-27','2026-08-28'])['ir']}
+                  outcome['existing_primary_version_check'] = versions
+                  s.require(versions['report']['status']=='SELECTED' and versions['report']['selected_announcement_id']=='1225514004', 'H1_VERSION_CHANGED_REVIEW_REQUIRED')
+                  s.require(versions['ir']['status']=='SELECTED' and versions['ir']['selected_announcement_id']=='1225523008', 'IR_VERSION_CHANGED_REVIEW_REQUIRED')
+                  current = {r['announcement_id']:r for r in frows}
+                  for ordinal,item in enumerate(selected,1):
+                      nowrow = current.get(item['announcement_id'])
+                      s.require(nowrow is not None and all(nowrow[k]==item[k] for k in ('stock_code','org_id','title','source_locator','published_at')), 'SAVED_LOCATOR_IDENTITY_CHANGED')
+                      raw, rec = get(s.pdf_request(item,ordinal),'fulltext')
+                      s.require(raw.startswith(b'%PDF-') and (rec['content_type'] or '').split(';')[0].strip().lower() in {'application/pdf','application/octet-stream'}, 'PDF_CONTAINER_REQUIRED')
+                      outcome['bodies'].append({'announcement':nowrow, 'request_id':rec['id'], **rec['body']})
+                  outcome['status'] = 'SAVED_LOCATORS_READ_REVIEW_REQUIRED'
+              except (ValueError,KeyError,TypeError) as exc:
+                  outcome['problem'] = getattr(exc,'code',type(exc).__name__)
+              return outcome
+          outcome = read_sources(live_get)
+          finished = s.utc()
+          receipt = {'plan_hash':s.canonical_hash(plan),'started_at':started.isoformat(),'finished_at':finished.isoformat(),
+                     'workflow':{k:os.environ[k] for k in ('GITHUB_REPOSITORY','GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT')},
+                     'code_commit':BASE,'requests':records,'outcome':outcome,'journal_sha256':s.sha(journal.read_bytes()),
+                     'proof_scope':'RECORDED_TOOL_RETURNS_NOT_SOURCE_TRUTH_OR_RESEARCH',**s.AUTHORITY}
+          receipt['receipt_hash'] = s.canonical_hash(receipt)
+          (OUT/'receipt.json').write_bytes(s.data(receipt))
+          position, replay_total, replay_last = 0, 0, started
+          expected_journal = b''
+          for rec in records:
+              expected_journal += s.data({'phase':'REQUEST','id':rec['id'],'channel':rec['channel'],'spec':rec['spec'],'started_at':rec['started_at']})
+              expected_journal += s.data({'phase':'RESPONSE',**rec})
+          assert expected_journal == journal.read_bytes()
+          def replay_get(spec,channel):
+              global position,replay_total,replay_last
+              s.require(position < len(records),'MISSING_RECORDED_RESPONSE')
+              rec=records[position]; position+=1
+              s.require(rec['spec']==spec and rec['channel']==channel,'EXACT_READ_SEQUENCE_MISMATCH')
+              s.allowed(spec,channel=channel)
+              raw=(OUT/rec['body']['path']).read_bytes() if rec['body'] else None
+              replay_total=s._check_record(rec,previous=replay_last,index=position,total_bytes=replay_total,raw=raw,max_requests=10)
+              replay_last=s.clock(rec['completed_at'])
+              return raw,rec
+          rebuilt=read_sources(replay_get)
+          assert rebuilt==outcome and position==len(records)
+          (OUT/'readback-verification.json').write_bytes(s.data({'status':'SAVED_READ_SEQUENCE_MATCHED','network_calls':0,
+              'receipt_hash':receipt['receipt_hash'],'read_status':outcome['status'],'research_execution':'NOT_EXECUTED',
+              'not_the_sanhua_capture_verifier':True}))
+          subprocess.run(['git','archive','--format=tar','-o',str(OUT/'trusted-source.tar'),BASE,'src','pyproject.toml'],check=True)
+          (OUT/'trusted-source-tree.txt').write_bytes(subprocess.check_output(['git','ls-tree','-r',BASE,'src','pyproject.toml']))
+          print(json.dumps({'status':outcome['status'],'problem':outcome['problem'],'requests':len(records),'bodies':len(outcome['bodies']),'receipt_hash':receipt['receipt_hash']},ensure_ascii=False))
+          raise SystemExit(0 if outcome['status']=='SAVED_LOCATORS_READ_REVIEW_REQUIRED' else 2)
+          PY_SOURCE
+      - name: Preserve source-read receipt and exact trusted code, including failure
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanhua-preflight-read-${{ github.run_id }}-${{ github.run_attempt }}
+          path: source-read-output/
+          if-no-files-found: warn
+          retention-days: 90
