@@ -1,0 +1,20 @@
+{
+  "body": {
+    "bytes": 992669,
+    "sha256": "2ee90783405f45a177f6f3bf6e4d9955e49b5c87ab6cf604c8b1eaaed3561fc3"
+  },
+  "clock_semantics": "LOCAL_RUNTIME_CLOCK_NOT_PLATFORM_NATIVE_TELEMETRY",
+  "finished_at": "2026-09-09T11:15:58.489773+00:00",
+  "formal_research_budget_used": 0,
+  "id": "checkpoint-drill-9c31-1",
+  "network_source_requests": 0,
+  "phase": "RESPONSE",
+  "platform_reference": null,
+  "record_kind": "EXECUTOR_ACTION_SUMMARY",
+  "request_blob": "9bc7f48b252ca74d5e9b3d14dfaf591fc9f30a89",
+  "request_commit": "05768906c8fb31200848f571c975e09ba248f269",
+  "source_read_kind": "SAVED_BYTES_HASH_CHECK_NOT_SEMANTIC_BODY_RESEARCH",
+  "source_truth_certified": false,
+  "started_at": "2026-09-09T11:15:58.480590+00:00",
+  "status": "SUCCEEDED"
+}
