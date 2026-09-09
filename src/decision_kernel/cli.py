@@ -20,6 +20,7 @@ from .runtime.disclosure_assessment import (
     prepare_disclosure_assessment_packet,
     serialize_disclosure_assessment_packet,
 )
+from .runtime.disclosure_pdf_capture import DisclosurePdfCapture
 from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
     group_disclosures_by_publication_date,
@@ -123,6 +124,11 @@ def build_parser() -> argparse.ArgumentParser:
             "Optional directory for auditable assessment packets for still-unassessed batches. "
             "Requires the documents extra for PDF text extraction."
         ),
+    )
+    disclosure_scan.add_argument(
+        "--raw-pdf-dir",
+        type=Path,
+        help="Fresh separate directory retaining PDF bytes already fetched for --packet-dir.",
     )
     disclosure_scan.add_argument(
         "--packet-limit",
@@ -343,6 +349,15 @@ def main(
             return 0
 
         if args.command == "scan-disclosures":
+            if args.raw_pdf_dir is not None:
+                if args.packet_dir is None:
+                    raise ValueError("--raw-pdf-dir requires --packet-dir")
+                raw_dir, packet_dir = args.raw_pdf_dir.resolve(), args.packet_dir.resolve()
+                if (raw_dir == packet_dir or raw_dir in packet_dir.parents
+                        or packet_dir in raw_dir.parents):
+                    raise ValueError("raw PDF and packet directories must be separate")
+                if args.raw_pdf_dir.exists() or args.raw_pdf_dir.is_symlink():
+                    raise ValueError("raw PDF capture requires a new directory")
             if args.packet_dir is not None and args.packet_limit <= 0:
                 raise ValueError("disclosure assessment packet limit must be positive")
 
@@ -407,12 +422,16 @@ def main(
                         "disclosure assessment packet limit exceeded: "
                         f"{len(unassessed)} unassessed > {args.packet_limit}; no packets written"
                     )
+                capture = (DisclosurePdfCapture(args.raw_pdf_dir)
+                           if args.raw_pdf_dir is not None else None)
+                capture_args = {"fetch_pdf": capture.fetch} if capture is not None else {}
                 prepared_at = datetime.now(timezone.utc)
                 for batch in unassessed:
                     packet = prepare_disclosure_assessment_packet(
                         research_snapshot=research_snapshot_by_stock[batch.stock_code],
                         batch=batch,
                         prepared_at=prepared_at,
+                        **capture_args,
                     )
                     packet_path = args.packet_dir / (
                         f"{batch.stock_code}-{batch.publication_date.isoformat()}-"
@@ -430,6 +449,8 @@ def main(
                     args.packet_dir.mkdir(parents=True, exist_ok=True)
                     for packet_path, serialized, _input_hash in packet_outputs:
                         packet_path.write_text(serialized, encoding="utf-8")
+                if capture is not None:
+                    capture.complete()
 
             print(
                 "OFFICIAL DISCLOSURE SCAN: "
