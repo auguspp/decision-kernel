@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "execution_id": "p0-4a-sanhua-20260909T1208Z-r3-7a42",
+  "canonical_input_hash": "0361878270ed68f07b26a4bd6faa360c0b3835a5db84f74775ed06ef76566f40",
+  "requested_at": "2026-09-09T12:39:31.506783+00:00",
+  "action": "SYNTHESIZE_PRE_AND_NECESSARY_QUICK",
+  "source_read_responses": [
+    {"sequence":1,"source_id":"CNINFO:1225514004","commit":"cd46e9881257c27870257f3eb15d125fc4672141","blob":"4fee77dcc9be4e7275d8a71f922997e1d851523e"},
+    {"sequence":2,"source_id":"CNINFO:1225523008","commit":"fc3f6f5550d276f36c4285d732deb80e1a77135b","blob":"0f21baf590768bac0288536a2bc7fbf0db254cea"},
+    {"sequence":3,"source_id":"CNINFO:1225514006","commit":"ed38fa5c8ffcc5f2d1b4d04858a3e49e86048a74","blob":"9cfc0c4e3c04825a863e21085f7332382254b94b"},
+    {"sequence":4,"source_id":"CNINFO:1225514001","commit":"4d24058be21bec21b17a423d2a641fd0e125305a","blob":"8ddcf3d63b89cbc1dce30cf89448239337abe24b"},
+    {"sequence":5,"source_id":"CNINFO:1225514010","commit":"d8c492e89c977e9ed9df90c3db716a19e89ad881","blob":"9cd5b5e05b0030c16734c52505f5a483deb0aebb"},
+    {"sequence":6,"source_id":"CNINFO:1225541228","commit":"801d6e4b2ab8bdff533dbc118f66e724ea99e0d3","blob":"07952abf45b448333b8dfd06403ae400a142f382"}
+  ],
+  "constraints": [
+    "Use only the frozen input and six acknowledged formal Research reads.",
+    "Do not import cc72 candidate, A/B evaluation outputs, old probabilities, current market price or sell-side forecasts.",
+    "Preserve original factual labels, contradictions and UNKNOWN; do not reconcile unexplained source differences.",
+    "Issuer commercialization statements are not independent proof of new-business revenue, margin or ROIC.",
+    "A source gap must become EXECUTION_GAP; a source read that omits a metric may remain UNKNOWN.",
+    "Pre/Quick route must be evidence-derived, not predeclared by this request.",
+    "No Deep, Odds, Human decision or investment authority."
+  ],
+  "route_predeclared": null,
+  "authority": "NONE"
+}
