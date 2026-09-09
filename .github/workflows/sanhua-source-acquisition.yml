@@ -1,0 +1,101 @@
+name: sanhua-source-acquisition
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/source-acquisition/sanhua-v0-20260909.json]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanhua-source-acquisition-v0
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SOURCE_BASE: ${{ github.event.before }}
+    steps:
+      - name: Require reviewed main and one fresh attempt
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$SOURCE_BASE" = "15b74321c6d152b2984c11b556bbfb336c279509"
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing isolated public transport extra
+        run: python -m pip install -e '.[dump-study]'
+      - name: Require first addition of the approved request
+        run: |
+          request=.github/source-acquisition/sanhua-v0-20260909.json
+          if git cat-file -e "$SOURCE_BASE:$request" 2>/dev/null; then
+            echo 'Source request already existed; no repeat acquisition.'
+            exit 1
+          fi
+          test "$(git diff --name-only --diff-filter=A "$SOURCE_BASE" "$GITHUB_SHA" -- "$request")" = "$request"
+      - name: Retain exact invocation, not a Research execution receipt
+        run: |
+          python - <<'PY'
+          import os, json
+          from pathlib import Path
+          from decision_kernel.identity import canonical_hash, canonical_json
+          from decision_kernel.runtime.sanhua_source_acquisition import plan
+          request = json.loads(Path('.github/source-acquisition/sanhua-v0-20260909.json').read_text())
+          assert request['plan'] == plan()
+          assert request['approved_base'] == os.environ['SOURCE_BASE']
+          root = Path('sanhua-source-package')
+          root.mkdir(exist_ok=False)
+          value = {key: os.environ[key] for key in (
+              'GITHUB_REPOSITORY', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_SHA', 'GITHUB_EVENT_NAME')}
+          value['semantics'] = 'SINGLE_PRIMARY_SOURCE_CAPTURE_NOT_RESEARCH'
+          value['request_hash'] = canonical_hash(request)
+          value['invocation_hash'] = canonical_hash(value)
+          (root / 'workflow.json').write_text(canonical_json(value) + '\n', encoding='utf-8')
+          PY
+      - name: Capture fixed Sanhua inventory and selected originals once
+        run: python -m decision_kernel.runtime.sanhua_source_acquisition capture sanhua-source-package/capture
+      - name: Verify retained success or failure offline
+        if: always()
+        run: python -m decision_kernel.runtime.sanhua_source_acquisition verify sanhua-source-package/capture > sanhua-source-package/verification.json
+      - name: Preserve source bytes, metadata and any failure
+        if: always()
+        id: source
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanhua-source-package-${{ github.run_id }}-${{ github.run_attempt }}
+          path: sanhua-source-package/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish separate source-only summary
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.source.outputs.artifact-url }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('sanhua-source-package/capture/capture.json')
+          lines = ['## Sanhua primary-source acquisition (not Research)', '']
+          if path.is_file():
+              value = json.loads(path.read_text())
+              out = value['outcome']
+              lines += [f"Status: `{out['status']}`", f"Failure: `{out['problem']}`",
+                        f"Inventory complete: `{out['inventory_complete']}`",
+                        f"Retained qualified PDF containers: `{len(out['bodies'])}`",
+                        f"Capture hash: `{value['capture_hash']}`"]
+          else:
+              lines += ['No sealed source capture. Acquisition not established.']
+          lines += ['', 'Source Acquisition is not Research, source-truth certification or #291 admission.']
+          if os.environ.get('ARTIFACT_URL'):
+              lines += ['', '[Raw source package (90-day retention)](' + os.environ['ARTIFACT_URL'] + ')']
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as stream:
+              stream.write('\n'.join(lines) + '\n')
+          PY

@@ -1,0 +1,43 @@
+{
+  "approved_base": "15b74321c6d152b2984c11b556bbfb336c279509",
+  "plan": {
+    "alternate_primary_routes": [],
+    "events_created": 0,
+    "formal_report": "2026年半年度报告",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "ir_publication_dates": [
+      "2026-08-27",
+      "2026-08-28"
+    ],
+    "ir_title_contains": "投资者关系活动记录表",
+    "issuer": "三花智控",
+    "market_requests": 0,
+    "market_state_writes": 0,
+    "max_body_bytes": 8388608,
+    "max_pages": 3,
+    "max_primary_bodies": 4,
+    "max_requests": 8,
+    "max_total_bytes": 50331648,
+    "page_size": 30,
+    "required_classes": [
+      "FORMAL_CURRENT_PERIOD_ACTUALS",
+      "RELEVANT_ROBOT_OR_THERMAL_PRIMARY_DISCLOSURE",
+      "SUBSEQUENT_ISSUER_UPDATE_INVENTORY"
+    ],
+    "research_authority": "NONE",
+    "research_budget_used": 0,
+    "schema_version": 1,
+    "security_id": "SZSE:002050",
+    "semantics": "PRIMARY_SOURCE_BYTES_ONLY_NOT_EVIDENCE_RESEARCH_OR_ADMISSION",
+    "stock_code": "002050",
+    "technical_retries": 0,
+    "window": {
+      "from": "2026-08-01",
+      "through": "2026-09-09",
+      "timezone": "Asia/Shanghai"
+    },
+    "window_meaning": "DATE_FILTER_OBSERVED_AT_CAPTURE_NOT_FUTURE_DAY_COMPLETENESS"
+  },
+  "request": "P0-4A Source Acquisition Bridge v0 / Human-requested single acquisition"
+}
