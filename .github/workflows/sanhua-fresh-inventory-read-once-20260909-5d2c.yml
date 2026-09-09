@@ -1,0 +1,142 @@
+name: Sanhua fresh bounded inventory once 5d2c
+
+on:
+  push:
+    branches: ["ops/sanhua-fresh-inventory-20260909-5d2c"]
+    paths: [".github/workflows/sanhua-fresh-inventory-read-once-20260909-5d2c.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanhua-fresh-inventory-20260909-5d2c
+  cancel-in-progress: false
+
+jobs:
+  inventory:
+    if: github.repository == 'auguspp/decision-kernel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TRUSTED_MAIN: 381f4d1f826a6d98844d27d626129211218ca332
+    steps:
+      - name: Require exact parent, date and one fresh attempt
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$EVENT_BEFORE" = "$TRUSTED_MAIN"
+          test "$(TZ=Asia/Shanghai date +%F)" = "2026-09-09"
+      - uses: actions/checkout@v7
+        with:
+          ref: 381f4d1f826a6d98844d27d626129211218ca332
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing bounded public transport
+        run: python -m pip install -e '.[dump-study]'
+      - name: Read issuer map and both bounded inventories only
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from decision_kernel.adapters.cninfo import resolve_cninfo_org_id
+          from decision_kernel.identity import canonical_json
+          from decision_kernel.runtime.sanhua_source_acquisition import (
+              CODE, ISSUER, SECURITY, FIRST, MAX_PAGES, _page, obj, public_request, query,
+          )
+
+          root = Path('sanhua-fresh-inventory')
+          root.mkdir(exist_ok=False)
+          journal = []
+          request_count = 0
+
+          def now():
+              return datetime.now(timezone.utc).isoformat()
+
+          def read(spec, *, channel, name):
+              nonlocal_request = None
+              started = now()
+              response = public_request(spec, channel=channel)
+              finished = now()
+              body = response.body
+              record = {
+                  'id': len(journal) + 1,
+                  'spec': spec,
+                  'channel': channel,
+                  'started_at': started,
+                  'finished_at': finished,
+                  'http_status': response.status,
+                  'content_type': response.content_type,
+                  'error': response.error,
+                  'body': None,
+              }
+              if body is not None:
+                  path = root / name
+                  path.write_bytes(body)
+                  record['body'] = {
+                      'path': name,
+                      'bytes': len(body),
+                      'sha256': hashlib.sha256(body).hexdigest(),
+                  }
+              journal.append(record)
+              if response.status != 200 or response.error is not None or body is None:
+                  raise RuntimeError('SOURCE_READ_FAILED')
+              return body, record
+
+          raw, issuer_rec = read(FIRST, channel='fulltext', name='issuer.json')
+          symbols = obj(raw)
+          org = resolve_cninfo_org_id(symbols, stock_code=CODE)
+          matches = [r for r in symbols['stockList'] if r.get('code') == CODE]
+          assert len(matches) == 1 and matches[0].get('zwjc') == ISSUER
+          assert org == 'gssz0002050'
+
+          inventories = {}
+          for channel in ('fulltext', 'relation'):
+              seen, total, normalized, pages = set(), None, [], []
+              for number in range(1, MAX_PAGES + 1):
+                  raw, rec = read(query(org, number, channel=channel), channel=channel,
+                                  name=f'{channel}-p{number}.json')
+                  payload = obj(raw)
+                  rows, total, more = _page(payload, org, number, seen, total, rec['finished_at'])
+                  normalized.extend(rows)
+                  pages.append({'page': number, 'returned': len(rows), 'total': total, 'has_more': more,
+                                'request_id': rec['id']})
+                  if not more:
+                      break
+              assert pages and pages[-1]['has_more'] is False
+              assert len(normalized) == total
+              inventories[channel] = {'total': total, 'pages': pages, 'announcements': normalized}
+
+          value = {
+              'schema_version': 1,
+              'purpose': 'FRESH_BOUNDED_SOURCE_PREFLIGHT_INVENTORY_NOT_RESEARCH',
+              'code_commit': '381f4d1f826a6d98844d27d626129211218ca332',
+              'issuer': {'stock_code': CODE, 'security_id': SECURITY, 'name': ISSUER, 'org_id': org},
+              'window': {'from': '2026-08-01', 'through': '2026-09-09', 'timezone': 'Asia/Shanghai'},
+              'window_limit': 'OBSERVED_AT_RUN_NOT_PROOF_OF_FULL_2026_09_09_DAY',
+              'inventories': inventories,
+              'requests': journal,
+              'source_network_requests': len(journal),
+              'technical_retries': 0,
+              'market_requests': 0,
+              'research_execution': 'NOT_EXECUTED',
+              'authority': 'NONE',
+          }
+          (root / 'inventory.json').write_text(canonical_json(value) + '\n', encoding='utf-8')
+          (root / 'request-journal.jsonl').write_text(
+              ''.join(canonical_json(row) + '\n' for row in journal), encoding='utf-8')
+          print(canonical_json({'fulltext': inventories['fulltext']['total'],
+                                'relation': inventories['relation']['total'],
+                                'requests': len(journal)}))
+          PY
+      - name: Upload fresh inventory bytes
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanhua-fresh-inventory-${{ github.run_id }}-${{ github.run_attempt }}
+          path: sanhua-fresh-inventory/
+          if-no-files-found: error
+          retention-days: 90
