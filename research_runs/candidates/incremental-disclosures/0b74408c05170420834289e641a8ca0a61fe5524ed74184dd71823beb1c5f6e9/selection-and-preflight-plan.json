@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "stage": "SOURCE_PREFLIGHT_PLANNED_NOT_RESEARCH",
+  "code_commit": "fe3ca58d4bff7d2ee470c0744deecf1464ce16b8",
+  "selection": {
+    "policy": "saved-cninfo-fifo-one-v1",
+    "selected_at": "2026-09-09T16:15:17.386557+00:00",
+    "original_work_commit": "6e76271c35078343952f2d6e0a051b7e3e38c99d",
+    "original_inventory": "Complete recursive tree: README only, truncated=false; no reserved packets",
+    "local_original_plan_hash": "4b2fbff5d082fe3f9ba354fbf4a0d6420a61ca27b9f2d9f1fd303c037d0b4eed",
+    "meaning": "This is a source-bound summary of the actual original plan, not its exact serialized bytes",
+    "source_run": 34354228621,
+    "source_artifact": 10105040865,
+    "source_archive_sha256": "8831e7dc5dff5e5aab49c59e23ac36aa1f9de80837b0c9e118d722196ee3e507",
+    "packet_count": 5,
+    "reserved_count_before_selection": 0,
+    "rows": [
+      {"stock_code":"603986","publication_date":"2026-09-05","assessment_input_hash":"0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9","announcement_ids":["1225549295"],"status":"SELECTED"},
+      {"stock_code":"300750","publication_date":"2026-09-08","assessment_input_hash":"cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d","announcement_ids":["1225554550","1225554551","1225554552","1225554553","1225554554","1225554555","1225554556"],"status":"DEFERRED_CAPACITY"},
+      {"stock_code":"600036","publication_date":"2026-09-08","assessment_input_hash":"aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199","announcement_ids":["1225552023"],"status":"DEFERRED_CAPACITY"},
+      {"stock_code":"603986","publication_date":"2026-09-08","assessment_input_hash":"383c08e94f88660d57cba68f61a287de112f0f9fbdeb4e4df205258884f1cb6c","announcement_ids":["1225551618"],"status":"DEFERRED_CAPACITY"},
+      {"stock_code":"600036","publication_date":"2026-09-09","assessment_input_hash":"389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997","announcement_ids":["1225554309"],"status":"DEFERRED_CAPACITY"}
+    ],
+    "selection_blindness": "NOT_A_BLIND_EXPERIMENT; saved packet text was visible during engineering inspection; FIFO was not changed to seek a preferred outcome"
+  },
+  "source_packet": {
+    "ref": "83ed8d364bcd7390bfb36af49753428802a14524",
+    "path": "research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/packet.json",
+    "blob": "78c7f6633293a7edc532a92407d7981fc7cf08c7",
+    "sha256": "782d581875e95ed80c10d8cd71efb40142e01cc139ce24734f037f13036b53e6",
+    "bytes": 9808,
+    "transfer": "First create-only Unicode copy failed; exact original restored before any research input/admission, rejected bytes and correction note retained"
+  },
+  "question_scope": "Does the selected September5 issuer share/repurchase disclosure, together with necessary later issuer updates in the bounded inventory, establish a new capital-use or per-share-economics fact that warrants deeper work? Preserve the earlier research questions but do not inherit old market expectations, probabilities, valuation or Human decisions. This is incremental triage, not a full new earnings review.",
+  "necessary_source_classes": ["SELECTED_OFFICIAL_SHARE_CAPITAL_BODY", "SUBSEQUENT_ISSUER_UPDATE_CHECK"],
+  "preflight_limits": {
+    "source_http_requests": 8,
+    "web_reads": 3,
+    "web_searches": 0,
+    "technical_retries": 0,
+    "max_pdf_bodies": 3,
+    "max_pdf_bytes_each": 10000000,
+    "max_json_bytes_each": 5000000,
+    "request_timeout_seconds": 15,
+    "max_elapsed_minutes": 20,
+    "enforcement": "SOFT_EXECUTOR; actual calls and failures retained; no provider request guarantee",
+    "formal_research_budget_used": 0
+  },
+  "planned_acquisition": [
+    "Open the selected official PDF https://static.cninfo.com.cn/finalpage/2026-09-05/1225549295.PDF, retain exact bytes and compare existing PDF hash16b40368830970c3c4af67a8e57ae24b227de62757c1733379495893106f4bd2; render rather than guess garbled text.",
+    "Use existing CNINFO stock-map resolver and bounded hisAnnouncement/query fulltext/relation inventory for603986 from2026-09-05 through2026-09-10. Maximum2 pages per channel and8 total HTTP requests including PDF bodies. No claim to all of September10 or all websites.",
+    "The already known September8 lead1225551618 must be considered; later decision-relevant inventory leads require readable primary bodies. No older body substitutes for a missing necessary update.",
+    "Stop on an actual source failure or exhausted bound. Preserve SOURCE_PREFLIGHT_INCOMPLETE / NOT_EXECUTED; do not turn an unadmitted attempt into Funnel WAIT or validator EXECUTION_GAP. Do not automatically choose a second company after failure."
+  ],
+  "start_clock_rule": "Actual first source action recorded separately after this plan is committed and read back",
+  "research_execution_id": null,
+  "research_input_frozen": false,
+  "research_executed": false,
+  "investment_authority": "NONE"
+}
