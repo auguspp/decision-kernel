@@ -3,6 +3,8 @@
   "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
   "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
   "references": [
+    {"id":"p0-delivery-checkpoint-20260910","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"已批准P0进展与未完成边界；不是新市场结果或Human决定。","source":{"path":"docs/p0-delivery-checkpoint-2026-09-10.md"}},
+    {"id":"incremental-603986-0b74408c-preflight-failure","case":"603986.SH","use":"RESEARCH_PRE_EXECUTION_FAILURE","purpose_note":"来源预检失败，Research未执行、Funnel未到达；不是完成WAIT或新增待深化。保留精确失败和无自动重试边界。","source":{"path":"research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/failure.json","ref":"195dcfe710c62c3796fef4d19e68cadd05a8d84d","git_blob":"56d4f68dbf92fec23ade24ca6158aed7febf3acc","contains":["PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT","SOURCE_PREFLIGHT_INCOMPLETE","NOT_REACHED"]}},
     {"id":"decision-book","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"研究与决定导航，不是每日运行结果，不替代冻结记录。","source":{"path":"docs/live-decision-book.md"}},
     {"id":"gigadevice-baseline","case":"603986.SH","use":"HISTORICAL_CALCULATION_BASELINE","purpose_note":"原完整数值基线；是否仍为生产输入另外从 workflow 的显式配置读取，不表示 Human 接受其概率。","source":{"path":"research_cases/603986-gigadevice-deep-research-v2.json"}},
     {"id":"gigadevice-method","case":"603986.SH","use":"METHOD_SUPPLEMENT","purpose_note":"方法实验没有授权移除生产 Inbox；不改写原概率或 Odds。","source":{"path":"docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md","git_blob":"6210d53f74356c9baac3d8f8c5a44574326a83fc","contains":["remove GigaDevice from the current production Inbox"]}},
