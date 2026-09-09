@@ -406,9 +406,18 @@ def render_summary(payload: dict) -> str:
              "| 范围 | 最近尝试 | 最后可读日期/结果 |", "|---|---|---|"]
     for name, lane in payload["lanes"].items():
         saved = lane["last_qualified_result"] or {}
-        lines.append(f"| {name} | {text(lane['health'])} | {text(saved.get('market_session', '日期未提供'))} / {text(saved.get('status', '无已验证结果'))} |")
+        lines.append(f"| {name} | {text(lane['health'])} | {text(saved.get('market_session') or '日期未提供')} / {text(saved.get('status', '无已验证结果'))} |")
+    # Keep the Markdown table contiguous. Lane gaps must not break later rows.
+    for name, lane in payload["lanes"].items():
         for gap in lane["gaps"]:
             lines.append(f"\n{name} 缺口：{text(gap)}。")
+        proof = (lane["last_qualified_result"] or {}).get("job_qualification")
+        if proof:
+            lines.append(f"\ninbox 保存交付 job：{text(proof['inbox_conclusion'])}；"
+                         f"整次 workflow：{text(proof['workflow_conclusion'])}。"
+                         "局部交付可读不改变失败，也不重新验证 Odds。")
+            for sibling in proof["sibling_jobs"]:
+                lines.append(f"旁路 {text(sibling['name'])}：{text(sibling['conclusion'])}。")
     lines += ["", f"已登记且仍符合原 Funnel 的研究请求：{len(payload['pending'])}。这不是已研究全市场的计数。",
               "研究资料按生产配置／历史计算基线／方法补充／Human 记录／明确 Action 分别引用，互不自动覆盖。",
               "", "入口未更新：查 `.github/workflows/current-state-read-entry.yml` 的运行及失败日志；保留最后版本不代表持续新鲜。",

@@ -121,6 +121,8 @@ class Collector:
         self.files = {}
         self.sources = {}
         self.archive_cache = {}
+        self.inbox_job_checks = {}
+        self.inbox_job_gaps = []
 
     def retain(self, path: str, raw: bytes) -> dict:
         model.safe_path(path)
@@ -211,8 +213,85 @@ class Collector:
                 complete = False
         return stock, complete
 
+    def failed_run_inbox_check(self, run: dict) -> dict:
+        """Qualify only the Inbox job of a completed failed attempt, never its Odds.
+
+        GitHub's attempt-specific endpoint avoids borrowing jobs from a rerun.
+        Existing whole-run success qualification is unchanged. This proof cannot
+        turn the parent workflow or a failed disclosure scan green.
+        """
+        model.run_identity(run, "inbox")
+        model.check(run.get("status") == "completed" and run.get("conclusion") == "failure",
+                    "Inbox job exception requires completed failed workflow")
+        if run["id"] in self.inbox_job_checks:
+            proof = self.inbox_job_checks[run["id"]]
+            model.check(proof["head_sha"] == run["head_sha"], "cached Inbox job commit differs")
+            return proof
+        data = self.api.get(f"actions/runs/{run['id']}/attempts/1/jobs?per_page=100")
+        jobs = data["jobs"]
+        model.check(isinstance(jobs, list) and 0 < len(jobs) <= 100
+                    and data["total_count"] == len(jobs), "Inbox job enumeration incomplete")
+        ids = [job["id"] for job in jobs]
+        model.check(all(type(i) is int and i > 0 for i in ids) and len(set(ids)) == len(ids),
+                    "Inbox job identities invalid or duplicated")
+        for job in jobs:
+            model.check(job.get("run_id") == run["id"] and job.get("head_sha") == run["head_sha"],
+                        "Inbox job belongs to another run or commit")
+            model.check(job.get("status") == "completed" and bool(job.get("conclusion")),
+                        "completed workflow has unfinished job metadata")
+        inbox = [job for job in jobs if job.get("name") == "inbox"]
+        disclosures = [job for job in jobs if job.get("name") == "disclosures"]
+        model.check(len(inbox) == len(disclosures) == 1, "Inbox or disclosure job missing or ambiguous")
+        job = inbox[0]
+        succeeded = job["conclusion"] == "success"
+        if succeeded:
+            model.check(model.clock(run["created_at"]) <= model.clock(job["started_at"])
+                        <= model.clock(job["completed_at"]) <= model.clock(run["updated_at"]),
+                        "Inbox job clocks outside workflow")
+            for name in ("Build Attention Inbox", "Upload mobile HTML snapshot"):
+                steps = [step for step in job.get("steps", []) if step.get("name") == name]
+                model.check(len(steps) == 1 and steps[0].get("status") == "completed"
+                            and steps[0].get("conclusion") == "success", "Inbox delivery step not successful")
+        source = self.retain(f"details/inbox/{run['id']}/attempt-1-jobs.json", model.json_bytes(data))
+        proof = {"run_id": run["id"], "run_attempt": 1, "head_sha": run["head_sha"],
+                 "workflow_conclusion": run["conclusion"], "inbox_job_id": job["id"],
+                 "inbox_conclusion": job["conclusion"], "delivery_job_succeeded": succeeded,
+                 "sibling_jobs": [{k: item.get(k) for k in ("id", "name", "status", "conclusion")}
+                                  for item in jobs if item["id"] != job["id"]],
+                 "source": source, "meaning": "SAVED_DELIVERY_JOB_ONLY_NOT_REVALIDATED_ODDS"}
+        self.inbox_job_checks[run["id"]] = proof
+        return proof
+
+    def select_inbox_delivery(self, runs: list[dict]) -> dict | None:
+        # The bounded list is the same list used for latest_attempt. Stop at the
+        # first qualified delivery; artifact rejection never searches farther.
+        model.check(len(runs) <= MAX_RUNS, "Inbox run query bound")
+        eligible = [run for run in runs if model.select_runs([run], "inbox")[0] is not None]
+        for run in sorted(eligible, key=lambda item: (model.clock(item["created_at"]), item["id"]), reverse=True):
+            model.run_identity(run, "inbox")
+            if run.get("status") != "completed":
+                continue
+            if run.get("conclusion") == "success":
+                return run  # Preserve the original success path, not a new schema.
+            if run.get("conclusion") != "failure":
+                continue  # Cancelled/skipped/unknown runs are not new deliveries.
+            try:
+                if self.failed_run_inbox_check(run)["delivery_job_succeeded"]:
+                    return run
+            except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
+                self.inbox_job_gaps.append({"run_id": run["id"], "status": "INBOX_JOB_CHECK_INCOMPLETE",
+                                           "error_type": type(exc).__name__})
+                # An older independently successful result may remain historical;
+                # missing job metadata is never converted into today's success.
+        return None
+
     def saved_product(self, lane: str, run: dict) -> dict:
-        model.run_identity(run, lane, success=True)
+        inbox_job = None
+        if lane == "inbox" and run.get("conclusion") == "failure":
+            inbox_job = self.failed_run_inbox_check(run)
+            model.check(inbox_job["delivery_job_succeeded"], "Inbox delivery job failed")
+        else:
+            model.run_identity(run, lane, success=True)
         artifacts = self.artifacts(run)
         name = (f"sector-radar-run-{run['id']}" if lane == "sector" else
                 f"stock-reading-{run['id']}-1" if lane == "stock" else "decision-inbox")
@@ -241,6 +320,8 @@ class Collector:
                       "market_session": None, "odds_recomputed": False,
                       "limitation": "Markdown/HTML retained as untrusted historical output; no inferred quiet or accepted probability"}
             details = {n: self.retain(prefix + n, files[n]) for n in ("summary.md", "index.html")}
+            if inbox_job is not None:
+                result["job_qualification"] = inbox_job
         return {**result, "run": model.concise_run(run), "archive": archive_ref, "details": details,
                 "source_checked_at": self.now(), "run_metadata": run_reference}
 
@@ -264,6 +345,8 @@ class Collector:
                         latest["operation"]["source"] = failure_source
                     except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, zipfile.BadZipFile):
                         latest = dict(latest, operation={"status": "FAILURE_DETAIL_UNAVAILABLE_NOT_QUIET"})
+            if lane == "inbox":
+                successful = self.select_inbox_delivery(runs)
             if successful:
                 # Exactly one chosen success. A rejected archive never triggers older search.
                 qualified = self.saved_product(lane, successful)
@@ -276,6 +359,17 @@ class Collector:
                                    checked_at=self.now(), query_complete=query_complete, previous=previous)
         if qualified is None and result["last_qualified_result"] is not None:
             result["previous_read_commit"] = self.previous_commit
+        if lane == "inbox":
+            if latest and latest["id"] in self.inbox_job_checks:
+                result["latest_job_check"] = self.inbox_job_checks[latest["id"]]
+            if self.inbox_job_gaps:
+                result["job_check_gaps"] = self.inbox_job_gaps
+                result["gaps"].append("INBOX_JOB_CHECK_INCOMPLETE_NOT_CURRENT_SUCCESS")
+            if qualified and qualified.get("job_qualification"):
+                result["gaps"].append("INBOX_DELIVERY_PRESERVED_WORKFLOW_FAILURE_NOT_HIDDEN")
+                if latest and latest["id"] == qualified["run"]["id"]:
+                    result["gaps"] = [gap for gap in result["gaps"]
+                                      if gap != "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"]
         result["query_scope"] = f"newest {MAX_RUNS} runs of exact workflow on main; not an all-history audit"
         return result
 
