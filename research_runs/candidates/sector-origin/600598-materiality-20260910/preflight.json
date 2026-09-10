@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "case_id": "600598.SH",
+  "ticker": "600598",
+  "security_id": "SSE:600598",
+  "started_at": "2026-09-10T04:56:32.464117+00:00",
+  "finished_at": "2026-09-10T04:56:32.464181+00:00",
+  "valid_until": "2026-09-10T06:56:32.464181+00:00",
+  "reads": [
+    {
+      "id": "retained-core",
+      "identity": "SSE600598:2025_ANNUAL_AND_2026_018_ISSUER_EXTRACTS",
+      "locator": "https://github.com/auguspp/decision-kernel/blob/62e6850322dfd1552dac871072a9002fa5ad7f82/research_runs/candidates/sector-origin/600598-materiality-20260910/source-note.json",
+      "tool_reference": "LOCAL_EXEC:setup.py:2026-09-10T04:56:32.464181+00:00",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-10T04:56:32.464181+00:00",
+      "body_sha256": "10e6d76c52cbde964565480be6d7a64e9cda4f16c884fb8a9ed44b1973aec37d"
+    }
+  ],
+  "required_classes": [
+    {
+      "id": "SECTOR_PROFIT_BASE_AND_TAX_EVENT",
+      "mode": "STATIC",
+      "body_ids": [
+        "retained-core"
+      ],
+      "inventory_id": null
+    }
+  ],
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "seed_publications": [
+    {
+      "evidence_id": "02927705-32b3-51b2-a590-7fc791f4e3c4",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "repository": "auguspp/decision-kernel",
+        "ref": "62e6850322dfd1552dac871072a9002fa5ad7f82",
+        "path": "research_runs/candidates/sector-origin/600598-materiality-20260910/source-note.json",
+        "git_blob": "ae3193a2a9583950b626a8bff4269c447aae26ec",
+        "sha256": "10e6d76c52cbde964565480be6d7a64e9cda4f16c884fb8a9ed44b1973aec37d",
+        "purpose": "SAVED_SECTOR_ANNUAL_AND_TAX_NOTICE_EXTRACTS"
+      }
+    }
+  ],
+  "notes": "Exact retained limited extracts were actually printed/read; original issuer-authored annual native HTML tables and complete tax-notice narrative had been opened through Web. PRIMARY refers to original authorship plus saved market observation, not our note as a truth certificate, issuer hosting, PDF originals or a complete latest inventory. Missing current-period report is disclosed, not turned into a future trigger or imposed as a prerequisite for all Pre. No research disposition assigned here."
+}
