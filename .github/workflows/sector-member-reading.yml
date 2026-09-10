@@ -67,11 +67,13 @@ jobs:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
         run: python -m decision_kernel.runtime.sector_member_reading capture --root "$RUNNER_TEMP/sector-member-reading"
       - name: Repeat calculations without credentials or network requests
+        id: verify
         if: steps.capture.outcome == 'success'
         env:
           HITHINK_FINANCE_API_KEY: ''
         run: python -m decision_kernel.runtime.sector_member_reading verify --root "$RUNNER_TEMP/sector-member-reading"
       - name: Retain results and partial failures
+        id: evidence
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -81,6 +83,14 @@ jobs:
           if-no-files-found: error
       - name: Publish readable result
         if: always()
+        env:
+          CAPTURE_RESULT: ${{ steps.capture.outcome }}
+          VERIFY_RESULT: ${{ steps.verify.outcome }}
+          UPLOAD_RESULT: ${{ steps.evidence.outcome }}
         run: |
           summary="$RUNNER_TEMP/sector-member-reading/capture/summary.md"
           if [ -f "$summary" ]; then cat "$summary" >> "$GITHUB_STEP_SUMMARY"; else echo '成员比较未完成；查看本次明确失败及已保存材料，不是成功零匹配。' >> "$GITHUB_STEP_SUMMARY"; fi
+          printf '\nCapture: %s; offline verification: %s; artifact upload: %s.\n' "$CAPTURE_RESULT" "$VERIFY_RESULT" "$UPLOAD_RESULT" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CAPTURE_RESULT/$VERIFY_RESULT/$UPLOAD_RESULT" != success/success/success ]; then
+            echo '**本次交付未全部通过，已生成的表格不能替代失败验证；不视为合格完整结果。**' >> "$GITHUB_STEP_SUMMARY"
+          fi
