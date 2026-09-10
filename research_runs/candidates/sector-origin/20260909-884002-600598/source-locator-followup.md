@@ -1,0 +1,7 @@
+# Source locator follow-up — before formal Research
+
+The continuation authorized by Human has used three search queries: a broad 2025-report query, a 2024-report CNINFO-domain query, and an exact 2025-report query restricted to SSE/CNINFO. The first returns report summaries, while the restricted query returns no result. None is yet accepted as company business Evidence. There have been zero primary opens and zero retries. The earlier failed homepage lookup remains unchanged.
+
+The next bounded step is document location, not a repeat of the refused homepage request: permit up to three additional queries (six total for this continuation) and up to four document/locator opens (four total), with at most four PDF screenshots and zero technical retries. A securities dissemination page may be opened to follow its original issuer-filed PDF; broker/AI summaries are not a substitute for the issuer's words. Prefer exchange/CNINFO originals. If only a reproduced issuer report is obtainable, retain the host/authorship distinction and do not claim direct issuer-server acquisition. Do not follow any previously refused URL or switch transport to bypass refusal.
+
+This scope change is explicit and prospective; the exhausted first search is not backfilled as success. No Research input or formal research clock has yet been frozen. No source-acquisition code, workflow, Gate or provider is being added. Core business role is the only required question at this stage; there is no demand to collect all current financial, commodity or policy information before Pre.
