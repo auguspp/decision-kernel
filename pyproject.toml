@@ -15,6 +15,9 @@ dependencies = [
 decision-kernel = "decision_kernel.cli:main"
 
 [project.optional-dependencies]
+research-api = [
+  "openai==3.11.0",
+]
 documents = [
   "pypdf==6.16.2",
 ]
@@ -31,6 +34,7 @@ dump-study = [
   "pyarrow==25.0.1",
 ]
 dev = [
+  "openai==3.11.0",
   "pytest==9.1.1",
   "pypdf==6.16.2",
   "beautifulsoup4==4.14.3",
