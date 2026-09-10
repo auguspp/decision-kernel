@@ -1,0 +1,37 @@
+{
+  "record_kind": "SOURCE_PREPARATION_RESULT_NOT_FORMAL_RESEARCH",
+  "origin": "SAVED_SECTOR_MARKET_STATE",
+  "selection_commit": "c05813241f3b406943ada1261078b7dad2703c1d",
+  "sector_run": 34364727989,
+  "sector": "884002.TI",
+  "ticker": "600598",
+  "status": "CORE_COMPANY_SOURCE_NOT_OBTAINED",
+  "saved_market_source": "READABLE_PINNED_SUMMARY_FIRST_GROUP_AND_FIRST_LEADER",
+  "formal_research_execution": "NOT_EXECUTED",
+  "funnel_status": "NOT_REACHED",
+  "observed_by": "2026-09-10T01:10:42.978588Z",
+  "clock_scope": "Local post-attempt observation, not a claimed exact request or source server timestamp.",
+  "actions": [
+    {
+      "kind": "WEB_SEARCH",
+      "queries": ["北大荒 600598 2025 年度报告 土地承包费 农产品经营 site:sse.com.cn", "北大荒农业股份有限公司 主营业务 土地发包 site:hacl.cn"],
+      "query_count": 2,
+      "tool_reference": "turn369536search0..11",
+      "result": "Returned unrelated exchange pages, no qualifying company-primary business document. None used as business Evidence."
+    },
+    {
+      "kind": "WEB_OPEN",
+      "target": "https://www.hacl.cn/",
+      "tool_reference": "turn383459view0",
+      "result": "URL https://www.hacl.cn/ is not safe to open (non-retryable error). You can only use the exact same URL from the previous search results or the user's message",
+      "classification": "TOOL_URL_ROUTING_REFUSAL_NOT_ISSUER_HTTP_FAILURE",
+      "primary_body_obtained": false,
+      "technical_retry": false
+    }
+  ],
+  "budget_used": {"search_queries": 2, "web_opens": 1, "technical_retries": 0, "primary_bodies_obtained": 0},
+  "meaning": "This narrowly bounded lookup did not obtain the company-primary business description. It does not prove the document is unavailable, that no company source exists, that the company is not a beneficiary, or that the saved market event warrants completed WAIT. No URL retry, alternate transport bypass, new acquisition workflow or switch to an easier stock followed. Sector-origin research acceptance is still pending; CMB Disclosure completion does not replace it.",
+  "placement_correction": "Selection plan was initially put on disclosure work ref at b2b917a8; identical bytes retained on this isolated case branch at c0581324 before removing only that new misplaced path in665eacab8da9504564ad3a21b365651ef637c21d. Both history entries remain; all disclosure reservations and outcomes are untouched. No formal Research input had been frozen.",
+  "automatic_retry": false,
+  "investment_authority": "NONE"
+}
