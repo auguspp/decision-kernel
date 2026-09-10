@@ -17,7 +17,7 @@ TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v5'
+CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
 # Project reconciliation policy, not HiThink precision or a supplier guarantee.
 # PEP 485 symmetric relative/absolute comparison, with an extra CNY hard cap.

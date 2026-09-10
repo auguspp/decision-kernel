@@ -61,7 +61,7 @@ def test_new_query_never_reaches_the_following_midnight(retained):
     query = own.history_params('600598.SH', state.sessions)
     assert query == {'thscode': '600598.SH', 'interval': '1d', 'adjust': 'none',
                      'start': '1781539200000', 'end': '1788969599999'}
-    assert own.CONTRACT == 'hithink-own-61-bars-history-actions-through-session-v5'
+    assert own.CONTRACT == 'hithink-own-61-bars-history-actions-through-session-v4'
     assert stock.POLICY['source_contract'] == own.CONTRACT
     assert stock._history_params('600598.SH', state.sessions) == query
 
