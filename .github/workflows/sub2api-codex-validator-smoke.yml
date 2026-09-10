@@ -10,6 +10,10 @@ concurrency:
   group: sub2api-codex-validator-smoke
   cancel-in-progress: false
 
+env:
+  SUB2API_RESPONSES_ENDPOINT: https://ai.6600600.xyz/v1/responses
+  SUB2API_CODEX_MODEL: gpt6
+
 jobs:
   smoke:
     runs-on: ubuntu-24.04
@@ -31,14 +35,10 @@ jobs:
       - name: Validate Sub2API configuration without printing secrets
         env:
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
-          SUB2API_RESPONSES_ENDPOINT: ${{ vars.SUB2API_RESPONSES_ENDPOINT }}
         run: |
           test -n "$SUB2API_API_KEY"
-          test -n "$SUB2API_RESPONSES_ENDPOINT"
-          case "$SUB2API_RESPONSES_ENDPOINT" in
-            https://*/v1/responses*|https://*/responses*) ;;
-            *) echo 'SUB2API_RESPONSES_ENDPOINT must be a full HTTPS Responses API endpoint' >&2; exit 2 ;;
-          esac
+          test "$SUB2API_RESPONSES_ENDPOINT" = 'https://ai.6600600.xyz/v1/responses'
+          test "$SUB2API_CODEX_MODEL" = 'gpt6'
 
       - name: Prove the selected existing validators pass before involving a model
         run: >-
@@ -72,8 +72,8 @@ jobs:
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.SUB2API_API_KEY }}
-          responses-api-endpoint: ${{ vars.SUB2API_RESPONSES_ENDPOINT }}
-          model: ${{ vars.SUB2API_CODEX_MODEL }}
+          responses-api-endpoint: ${{ env.SUB2API_RESPONSES_ENDPOINT }}
+          model: ${{ env.SUB2API_CODEX_MODEL }}
           codex-version: '0.153.4'
           permission-profile: ':workspace'
           output-file: codex-smoke/final-message.txt
@@ -109,13 +109,12 @@ jobs:
         if: always()
         env:
           CODEX_OUTCOME: ${{ steps.codex.outcome }}
-          CODEX_MODEL: ${{ vars.SUB2API_CODEX_MODEL }}
         run: |
           echo '## Sub2API Codex validator smoke' >> "$GITHUB_STEP_SUMMARY"
           echo "- checkout: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- endpoint: https://ai.6600600.xyz/v1/responses" >> "$GITHUB_STEP_SUMMARY"
+          echo "- configured model: gpt6" >> "$GITHUB_STEP_SUMMARY"
           echo "- Codex action outcome: $CODEX_OUTCOME" >> "$GITHUB_STEP_SUMMARY"
-          if [ -n "$CODEX_MODEL" ]; then echo "- configured model: $CODEX_MODEL" >> "$GITHUB_STEP_SUMMARY"; else echo '- configured model: provider/default' >> "$GITHUB_STEP_SUMMARY"; fi
           if [ -f codex-smoke/exit-code.txt ]; then echo "- validator exit: $(cat codex-smoke/exit-code.txt)" >> "$GITHUB_STEP_SUMMARY"; else echo '- validator exit: NOT_RECORDED' >> "$GITHUB_STEP_SUMMARY"; fi
-          if grep -q 'SUB2API_CODEX_VALIDATOR_SMOKE=PASS' "$GITHUB_STEP_SUMMARY" 2>/dev/null; then :; fi
           echo '- Research/HiThink/Odds/Action: NOT_RUN' >> "$GITHUB_STEP_SUMMARY"
           echo '- repository write permission: contents:read only' >> "$GITHUB_STEP_SUMMARY"
