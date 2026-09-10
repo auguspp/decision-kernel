@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
+  "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
+  "references": [
+    {"id":"sector-600598-materiality-20260910","case":"600598.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"Human许可后Sector来源的有限Pre/Quick，税后盈利问题待深化；最终H1仍有正文核验缺口，非全景研究/新Odds/自动Deep或Human决定。","source":{"path":"research_runs/candidates/sector-origin/600598-materiality-20260910/README.md","ref":"822c5c725df2d1e5d66768b3b06bc9ddfef93a2e","git_blob":"fda17f439ddb03323de60b6a77dac1bd8974dd02"}},
+    {"id":"incremental-cmb-aa9ea8d2-pre","case":"600036.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"限定保存公告的实际Pre WAIT；非当前公司全景、非新Odds或Human判断。Disclosure origin不替代Sector origin。","source":{"path":"research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/README.md","ref":"3c385ac1510295ae1c1f2b92f5ae19c2323d4607","git_blob":"f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c"}},
+    {"id":"p0-delivery-checkpoint-20260910","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"已批准P0进展与未完成边界；不是新市场结果或Human决定。","source":{"path":"docs/p0-delivery-checkpoint-2026-09-10.md"}},
+    {"id":"incremental-603986-0b74408c-preflight-failure","case":"603986.SH","use":"RESEARCH_PRE_EXECUTION_FAILURE","purpose_note":"来源预检失败，Research未执行、Funnel未到达；不是完成WAIT或新增待深化。保留精确失败和无自动重试边界。","source":{"path":"research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/failure.json","ref":"195dcfe710c62c3796fef4d19e68cadd05a8d84d","git_blob":"56d4f68dbf92fec23ade24ca6158aed7febf3acc","contains":["PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT","SOURCE_PREFLIGHT_INCOMPLETE","NOT_REACHED"]}},
+    {"id":"decision-book","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"研究与决定导航，不是每日运行结果，不替代冻结记录。","source":{"path":"docs/live-decision-book.md"}},
+    {"id":"gigadevice-baseline","case":"603986.SH","use":"HISTORICAL_CALCULATION_BASELINE","purpose_note":"原完整数值基线；是否仍为生产输入另外从 workflow 的显式配置读取，不表示 Human 接受其概率。","source":{"path":"research_cases/603986-gigadevice-deep-research-v2.json"}},
+    {"id":"gigadevice-method","case":"603986.SH","use":"METHOD_SUPPLEMENT","purpose_note":"方法实验没有授权移除生产 Inbox；不改写原概率或 Odds。","source":{"path":"docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md","git_blob":"6210d53f74356c9baac3d8f8c5a44574326a83fc","contains":["remove GigaDevice from the current production Inbox"]}},
+    {"id":"gigadevice-human","case":"603986.SH","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"冻结的条件决定；历史分布 NON-DRIVING。Action 未执行状态只属于该 checkpoint，不能推断后续成交。","source":{"path":"docs/decisions/603986-gigadevice-human-decision-2026-09-03.md","git_blob":"f803dc551dba69f0f39291b98353bc4e406a7710","contains":["NON-DRIVING","ACTION = NOT YET EXECUTED"]}},
+    {"id":"sanhua-baseline","case":"002050.SZ","use":"HISTORICAL_CALCULATION_BASELINE","purpose_note":"原计算基线；与 Human 使用的核心业务方法背景分开。","source":{"path":"research_cases/002050-sanhua-deep-research-v1.json"}},
+    {"id":"sanhua-method","case":"002050.SZ","use":"METHOD_SUPPLEMENT","purpose_note":"零 schema 方法补充，不是自动替代生产输入的授权。","source":{"path":"docs/dogfood/sanhua-decision-hygiene-zero-schema-2026-09-03.md"}},
+    {"id":"sanhua-human","case":"002050.SZ","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"条件首笔约30元，非机械订单；旧总公司概率不是该决定的驱动依据。","source":{"path":"docs/decisions/002050-sanhua-human-decision-2026-09-03.md","git_blob":"0c7739cb5a376be9cc722e37f6acd168dca9704e","contains":["not the driving basis","ACTION = NOT YET EXECUTED"]}},
+    {"id":"sanhua-horizon","case":"002050.SZ","use":"HUMAN_METHOD_SUPPLEMENT","purpose_note":"后续 Human 时间范围补充，不能回写此前 checkpoint 或冒充已执行 Action。","source":{"path":"docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md"}},
+    {"id":"catl-qualified-exit","case":"300750.SZ","use":"EXPLICIT_QUALIFICATION_EXIT_REFERENCE","purpose_note":"宁德旧通用数值资格退出的具体依据；不机械推广到兆易或三花。","source":{"path":"docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md"}},
+    {"id":"catl-historical","case":"300750.SZ","use":"HISTORICAL_MECHANICS_NOT_CURRENT_NUMERICAL_INPUT","purpose_note":"保留历史机械/采集用途；生产配置另行读取，不能因本文件存在恢复资格。","source":{"path":"dogfood/300750-catl.json"}},
+    {"id":"yto-research","case":"600233.SH","use":"RETAINED_RESEARCH_PACKAGE","purpose_note":"既有完整研究包，非本次新研究或新的 Human 采用判断。","source":{"path":"research_cases/600233-yto-deep-research-v2.json"}},
+    {"id":"yto-method","case":"600233.SH","use":"METHOD_SUPPLEMENT","purpose_note":"现有方法补充；不自动取得新 Odds 或投资权限。","source":{"path":"docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md"}},
+    {"id":"micron-human","case":"MU","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"冻结 Human WAIT/NO_ACTION 及其原因；事件日期只是所读 checkpoint 的记录，未重新核验安排。","source":{"path":"docs/decisions/MU-micron-human-wait-validation-2026-09-03.md"}},
+    {"id":"midea-method","case":"000333.SZ","use":"METHOD_SUPPLEMENT","purpose_note":"方法对照的用途独立保留，不是新概率或投资决定。","source":{"path":"docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md"}},
+    {"id":"xiamen-negative-control","case":"600549.SH","use":"METHOD_NEGATIVE_CONTROL","purpose_note":"研究方法负对照，不将其登记成当前投资待办。","source":{"path":"docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md"}},
+    {"id":"tinavi-research","case":"688277.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"已完成 public-diligence 的保留记录，不重新运行旧 Quick。","source":{"path":"docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md"}},
+    {"id":"tinavi-human","case":"688277.SH","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"WATCH/NO_ACTION 冻结记录，非本次投资指令。","source":{"path":"docs/decisions/688277-tinavi-human-watch-2026-09-04.md","git_blob":"04655814a52d28b50d4d0e3dcbdac666c22b71df"}}
+  ],
+  "historical_handoffs": [
+    {
+      "source": {"path":"dogfood/688277-tinavi-drg-dip3-research-attention-2026-09-04.json","git_blob":"b59b043505df5023f32c565186fb4fa1ac9a7359"},
+      "registered_current": false,
+      "resolved_handoff_git_blob": "b59b043505df5023f32c565186fb4fa1ac9a7359",
+      "resolution": {"path":"docs/decision-inbox.md","git_blob":"8b0528376bb04fa78317f9d0d8c6073093490f76","contains":["Full Research has already been completed","WATCH / NO_ACTION"]}
+    }
+  ],
+  "additional_registered_handoffs": [],
+  "capability_gaps": [
+    {"id":"P0-1-natural-schedule","status":"NATURAL_SCHEDULE_ACCEPTANCE_PENDING","source":{"path":"docs/current-state.md"}},
+    {"id":"P0-2-natural-reading-publication","status":"NATURAL_PUBLICATION_ACCEPTANCE_PENDING","source":{"path":"docs/current-state.md"}},
+    {"id":"fully-unattended-recovery","status":"NOT_ESTABLISHED","source":{"path":"docs/sector-radar-scheduled-production.md"}},
+    {"id":"external-pre-quick-executor","status":"NOT_IMPLEMENTED_IN_THIS_BATCH","source":{"path":"docs/current-state.md"}}
+  ]
+}
