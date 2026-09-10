@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "record_kind": "RETAINED_SOURCE_PARAPHRASES_NOT_FULL_ORIGINALS",
+  "ticker": "600598",
+  "security_id": "SSE:600598",
+  "origin": "SAVED_SECTOR_MARKET_STATE",
+  "market": {
+    "repository": "auguspp/decision-kernel",
+    "ref": "9cf1abf29c53bdfb4fe35295f2918bbb4c704528",
+    "path": "details/sector/34364727989/summary.md",
+    "git_blob": "c0f65c7c2435ad98e5c57502d6ca0678f2b198c1",
+    "read_reference": "/response/turn306",
+    "session": "2026-09-09",
+    "selection": "Original first group 884002.TI, original first daily member 600598.SH; no research-ease reranking.",
+    "saved_values": {"sector_daily_return_pct": "-1.96", "members_up": 0, "members_priced": 2, "selected_member_daily_return_pct": "-1.00", "sector_excess_return_5d_pct": "11.65", "sector_excess_return_20d_pct": "22.92"},
+    "limits": "Saved daily and multi-day market observation only; no new market download, no causal or company-benefit conclusion. Entire source has seven groups, this case covers one company only."
+  },
+  "company": {
+    "document": "黑龙江北大荒农业股份有限公司2025年年度报告",
+    "author": "黑龙江北大荒农业股份有限公司",
+    "host": "Sina financial disclosure reproduction, not issuer or exchange server",
+    "url": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12009703&stockid=600598",
+    "displayed_publication_date": "2026-03-21",
+    "report_period_end": "2025-12-31",
+    "location": "Third section, I: business description and operating model, clauses 1 and 2; web parsed line182. Identity in second section, company code600598.",
+    "read_references": ["turn138904view0", "turn497243view0"],
+    "paraphrased_facts": [
+      "报告描述公司将耕地发包给家庭农场；公司和农户各自核算、各自承担盈亏。",
+      "农户承担生产投入并自行销售所产农产品，公司负责相应农业基础设施与服务。",
+      "部分农业分公司另行收购农产品再销售获益，不能把公司全部业务都等同于农户生产或纯土地发包。"
+    ],
+    "limitations": "Readable issuer-authored narrative reproduced by a third-party host. Original PDF link returned Cache miss and was not retried. No PDF bytes, visual table verification, latest-filing inventory, current business continuity, segment weights, rent repricing formula or grain-price elasticity are certified. No broker target price or AI financial summary used."
+  },
+  "preparation_accounting": {
+    "search_queries_total": 5,
+    "document_or_locator_opens": 4,
+    "local_find_operations": 3,
+    "pdf_screenshots": 0,
+    "technical_retries": 0,
+    "scope_change": "source-locator-followup.md at7fc4479a explicitly extended the exhausted first three-query scope before the additional queries/opens. Prior failed homepage attempt remains unchanged.",
+    "clock_scope": "This is a post-read retention record. Git commit time will prove internal publication, not exact external tool-return time or historical issuer availability."
+  },
+  "authority": "NONE"
+}
