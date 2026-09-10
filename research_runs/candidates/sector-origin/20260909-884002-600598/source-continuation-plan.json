@@ -1,0 +1,20 @@
+{
+  "record_kind": "HUMAN_REQUESTED_SOURCE_CONTINUATION_NOT_RESEARCH_OUTCOME",
+  "authorization": "Current Human message: 继续推进 p0; within #297 and calibration5610967133.",
+  "prior_attempt": "d60a5664d66cf2088e4e201097549d9d5479afa1:source-preparation-result.json",
+  "preserve_prior_failure": true,
+  "origin": "SAVED_SECTOR_MARKET_STATE",
+  "selection": "Unchanged 20260909-884002-600598, first saved group then first daily leader; no easier replacement.",
+  "question": "Establish the selected company's business role before inferring grain-price or earnings benefit from a saved Sector price observation. The source report is business evidence, not proof of the reason for the September market move.",
+  "source_preparation": {
+    "allowed": "Independent exchange/CNINFO issuer-filed report search. Open only discovered primary-document URLs. Existing saved Git market data can be read without new market calls.",
+    "max_search_queries": 3,
+    "max_primary_opens": 3,
+    "max_pdf_screenshots": 4,
+    "max_technical_retries": 0,
+    "forbidden": "Do not retry or bypass the prior refused hacl.cn homepage, do not fetch via an alternate transport after refusal, do not revive old disclosure reservations, no HiThink/dispatch/Re-run/new acquisition workflow.",
+    "scope": "Core readable business identity/operating model. No requirement to collect every possible supplementary policy, commodity or financial source before Pre. No completed WAIT if core company text remains unavailable."
+  },
+  "formal_research": "NOT_STARTED; original input, budget and admission will be frozen after source availability is known. No prior Research input exists for this case.",
+  "investment_authority": "NONE"
+}
