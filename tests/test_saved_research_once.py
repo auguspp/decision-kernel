@@ -246,7 +246,7 @@ def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch):
         if os.environ.get("GITHUB_ACTIONS") == "true":
             pytest.fail("declared development SDK was not installed")
         pytest.skip("official SDK is unavailable in this local execution environment")
-    import httpx
+    import httpx2 as httpx
     p,d,c=fixture()
     prompt={"binding":{"discovery_id":p.execution_id,"as_of":p.research_cutoff.isoformat()},"evidence_ids":[str(p.seed_evidence_artifacts[0].id)]}
     text=pre(prompt).model_dump_json()
