@@ -1,0 +1,92 @@
+{
+  "metadata_projections": {
+    "2bb33fdcc1771a3723bf70f41bc355971fa9c388": {
+      "sha": "2bb33fdcc1771a3723bf70f41bc355971fa9c388",
+      "committer": {
+        "date": "2026-09-10T00:21:05Z"
+      }
+    },
+    "017727f583d08e6edc3d9a8702184483e73ad0ba": {
+      "sha": "017727f583d08e6edc3d9a8702184483e73ad0ba",
+      "committer": {
+        "date": "2026-09-10T00:23:29Z"
+      }
+    },
+    "9c7d1d6d88de87f77fc159e6ff4cd1bdc9dc447a": {
+      "sha": "9c7d1d6d88de87f77fc159e6ff4cd1bdc9dc447a",
+      "committer": {
+        "date": "2026-09-10T00:25:03Z"
+      }
+    }
+  },
+  "loads": [
+    {
+      "ref": "017727f583d08e6edc3d9a8702184483e73ad0ba",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/preflight.json",
+      "blob": "f201c36da639d931fa902ce2f28b3ee8c7079835",
+      "checked_at": "2026-09-10T00:53:52.913543+00:00"
+    },
+    {
+      "ref": "2bb33fdcc1771a3723bf70f41bc355971fa9c388",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+      "blob": "eed0b91cd916f215b7521834c58497ecd6c28912",
+      "checked_at": "2026-09-10T00:53:52.913759+00:00"
+    },
+    {
+      "ref": "25679a21b9ae0852f7dea17520ac10950a552979",
+      "path": "research_runs/execution-inputs.json",
+      "blob": "4c4c458d6e076e6deaa69c66fe7516f51592e7e8",
+      "checked_at": "2026-09-10T00:53:52.914142+00:00"
+    },
+    {
+      "ref": "fd0fb8f96ddff135530ee0c12a4b44fa5db4adbd",
+      "path": "research_runs/candidates/605296.SH/p0-4a-605296-2026-09-08-v2/input.json",
+      "blob": "4dd05220c85673305e5a0129f934b899cf350ea2",
+      "checked_at": "2026-09-10T00:53:52.914283+00:00"
+    },
+    {
+      "ref": "1d6e2053714982e7add41531f40dd723411b5f17",
+      "path": "research_runs/candidates/605296.SH/p0-4a-605296-2026-09-08-v2/input.json",
+      "blob": "de4b9dd901120600915bbe63dcafcd7037a5412c",
+      "checked_at": "2026-09-10T00:53:52.915221+00:00"
+    },
+    {
+      "ref": "9c7d1d6d88de87f77fc159e6ff4cd1bdc9dc447a",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/input.json",
+      "blob": "492df7254696f0a19bdd0ce8a51bc4f4ac765cb1",
+      "checked_at": "2026-09-10T00:53:52.916163+00:00"
+    },
+    {
+      "ref": "25679a21b9ae0852f7dea17520ac10950a552979",
+      "path": "research_runs/execution-inputs.json",
+      "blob": "4c4c458d6e076e6deaa69c66fe7516f51592e7e8",
+      "checked_at": "2026-09-10T00:53:52.916650+00:00"
+    },
+    {
+      "ref": "fd0fb8f96ddff135530ee0c12a4b44fa5db4adbd",
+      "path": "research_runs/candidates/605296.SH/p0-4a-605296-2026-09-08-v2/input.json",
+      "blob": "4dd05220c85673305e5a0129f934b899cf350ea2",
+      "checked_at": "2026-09-10T00:53:52.916784+00:00"
+    },
+    {
+      "ref": "1d6e2053714982e7add41531f40dd723411b5f17",
+      "path": "research_runs/candidates/605296.SH/p0-4a-605296-2026-09-08-v2/input.json",
+      "blob": "de4b9dd901120600915bbe63dcafcd7037a5412c",
+      "checked_at": "2026-09-10T00:53:52.917473+00:00"
+    },
+    {
+      "ref": "9c7d1d6d88de87f77fc159e6ff4cd1bdc9dc447a",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/input.json",
+      "blob": "492df7254696f0a19bdd0ce8a51bc4f4ac765cb1",
+      "checked_at": "2026-09-10T00:53:52.918203+00:00"
+    }
+  ],
+  "main_observation": {
+    "main": "25679a21b9ae0852f7dea17520ac10950a552979",
+    "observed_at": "2026-09-10T00:53:51.212944+00:00",
+    "origin": "Immediately preceding GitHub.fetch /git/ref/heads/main tool return; local receipt observation clock, not GitHub server timestamp."
+  },
+  "current_code_calls": 2,
+  "proof_scope": "Connector-read exact-byte and commit-metadata snapshots. No continuous live HTTP callback or global lock. Preparation is not formal Research. Before launch: one local DNS failure and one download-tool routing rejection; no issuer URL or model call. Exact UTF-8 source transfers were hash-checked.",
+  "research_callback_invoked": true
+}

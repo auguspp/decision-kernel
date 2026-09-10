@@ -1,0 +1,158 @@
+{
+  "input_hash": "feae350cdbd3f5e5ffab51ae4bb696ad53efebf1f6173f3cf5d44daed8ac140e",
+  "completion": "COMPLETE",
+  "discovery": {
+    "discovery_id": "cninfo-cmb-aa9ea8d22fab7705-20260908",
+    "source_lane": "CNINFO_INCREMENTAL",
+    "ticker": "600036",
+    "security_id": "SSE:600036",
+    "economic_direction": "银行治理事件与既有净息差、信用风险、存款和ROAE研究问题的潜在联系，尚未建立",
+    "as_of": "2026-09-10T00:24:30.379035Z",
+    "factual_observations": [
+      {
+        "statement": "保存的公告正文称：招商银行董事会收到行长助理王兴海的辞任函，披露原因为工作原因，辞任自2026年9月7日起生效。这里只确认该历史公告的表述，不判断当前任职或未披露原因。",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      }
+    ],
+    "source_lineage": [
+      {
+        "evidence_artifact_id": "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+        "available_at": "2026-09-10T00:21:05Z"
+      }
+    ],
+    "why_now": "现有官方公告扫描保存了2026年9月8日披露批；它在固定问题身份下首次进入本次正式Pre评估。来源日期、抓取日期、内部Git保存时间及研究cutoff分别保留，不称为今天发生的人事变动。",
+    "current_market_expression": null,
+    "supporting_securities": [],
+    "contradiction_or_mapping_warning": "人员变动不是经营恶化或改善的同义词；历史research_context只是原监控问题，不是被本次证据确认的公司优势或市场共识。",
+    "next_discriminating_search": "仅在后续实际获得的官方披露把此次人事变动连接到重大治理分歧、风控或业务安排变化，或既有经营监控提供净息差/信用成本/存款/ROAE的新证据时重新评估。单纯重读相同公告或股价变化不足以更新基本面判断；不声称这些后续资料现在不存在。",
+    "known_stop_or_downgrade_condition": "若只剩相同任职公告和未证实的人事原因猜测，不自动推进Quick/Deep；若核心保存正文不完整，应改记执行缺口，不能使用此完整WAIT。",
+    "schema_version": 1
+  },
+  "pre_research": {
+    "discovery_id": "cninfo-cmb-aa9ea8d22fab7705-20260908",
+    "as_of": "2026-09-10T00:24:30.379035Z",
+    "what_is_this": "一份已保存且正文可读的高级管理人员离任公告；本次只做限定的公告增量Pre，不做当前公司全景或高管现任信息核验。",
+    "economic_direction": "银行治理事件与既有净息差、信用风险、存款和ROAE研究问题的潜在联系，尚未建立",
+    "why_surfaced_now": "现有官方公告扫描保存了2026年9月8日披露批；它在固定问题身份下首次进入本次正式Pre评估。来源日期、抓取日期、内部Git保存时间及研究cutoff分别保留，不称为今天发生的人事变动。",
+    "current_expression_or_leadership": null,
+    "basic_business_role": "对象是招商银行的一则治理披露；原研究上下文的待验证问题是净息差、信用成本、存款基础和ROAE。这里引用问题，不把其中低不良率或负债优势当作新核实事实。",
+    "potential_fundamental_driver": "只有具体治理、风险管理或业务连续性证据才可能把人事事件连接到经济变量；本公告尚未建立这个连接。",
+    "current_market_expectation_hypothesis": "UNKNOWN；未读取当前价格、市场共识或概率，旧AI预期叙述不是本次新的Evidence。",
+    "material_claims": [
+      {
+        "statement": "保存的公告正文称：招商银行董事会收到行长助理王兴海的辞任函，披露原因为工作原因，辞任自2026年9月7日起生效。这里只确认该历史公告的表述，不判断当前任职或未披露原因。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      },
+      {
+        "statement": "保存正文称：其确认与董事会无不同意见，也无与辞任有关的其他事项需提请股东和债权人注意；并称已按规定做好工作交接。这是公司披露，不是独立调查结论。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      },
+      {
+        "statement": "该公告的可读叙述没有披露净息差、信用成本、客户存款或ROAE的变化，也没有给出本次离任的量化经营影响。本次不使用抽取表格中可能受布局影响的字段。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      },
+      {
+        "statement": "单一人员离任可能有治理信息价值，不能机械当噪音；但本公告没有支持立即修改基本面判断的明确经济或治理机制。",
+        "kind": "INFERENCE",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      },
+      {
+        "statement": "公司称无不同意见并完成交接，限制了从这份公告直接推断公开治理冲突的依据，但不能据此推出不存在风险或隐藏问题。",
+        "kind": "INFERENCE",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      },
+      {
+        "statement": "沿原冻结研究问题监控，并保留独立治理反证入口；本次未重新认定该监控框架覆盖全部重要风险。",
+        "kind": "ASSUMPTION",
+        "evidence_artifact_ids": [
+          "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+        ]
+      }
+    ],
+    "obvious_contradiction": "需同时保留：高管离任可能值得关注；公司披露无分歧和完成交接，却没有交代足以推断经济后果的细节。两者都不能被升级成确定因果。",
+    "largest_unknown": "超出披露的具体工作原因、原分管职责与继任安排及其经营影响均UNKNOWN；当前银行经营状况、后续公告和市场预期不在本次已冻结的保存公告问题内。",
+    "next_discriminating_search": "仅在后续实际获得的官方披露把此次人事变动连接到重大治理分歧、风控或业务安排变化，或既有经营监控提供净息差/信用成本/存款/ROAE的新证据时重新评估。单纯重读相同公告或股价变化不足以更新基本面判断；不声称这些后续资料现在不存在。",
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "WAIT_FOR_TRIGGER：核心公告已完整读到，当前完成的是这份历史管理人员离任公告是否值得立即追加研究的Pre判断，而非全公司研究。离任事实成立于保存的披露表述层，但本文没有建立它与银行盈利、信用风险或负债优势变化的具体证据联系；无分歧/已交接的公司表述也不足以证明无风险。保留UNKNOWN和治理反证入口，目前不为缺乏支持的因果猜测追加Quick。等待新的可区分证据，不因缺必需正文而假装WAIT。",
+    "schema_version": 1
+  },
+  "quick_research": null,
+  "supplemental_evidence_artifacts": [],
+  "receipt": {
+    "execution_id": "p0-4b-cmb-20260910-aa9ea8d2-v1",
+    "input_hash": "feae350cdbd3f5e5ffab51ae4bb696ad53efebf1f6173f3cf5d44daed8ac140e",
+    "started_at": "2026-09-10T00:53:52.918885Z",
+    "finished_at": "2026-09-10T00:55:13.327538Z",
+    "research_cutoff": "2026-09-10T00:24:30.379035Z",
+    "completion": "COMPLETE",
+    "tool_events": [
+      {
+        "sequence": 1,
+        "kind": "OTHER_READ",
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+        "observed_at": "2026-09-10T00:53:52.919997Z",
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "platform_reference": null,
+        "query_count": 0,
+        "technical_retry": false,
+        "note": "Actual container.exec invocation 1: after original execute_after_admission callback, read full pinned packet locally, validate original packet/page hashes and print full narrative plus historical context. Local tool-return observation; not platform server trace."
+      },
+      {
+        "sequence": 2,
+        "kind": "OTHER_READ",
+        "status": "SUCCEEDED",
+        "target": "local://p0-4b-cmb/finalization-and-original-validator",
+        "observed_at": "2026-09-10T00:55:13.322096Z",
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "platform_reference": null,
+        "query_count": 0,
+        "technical_retry": false,
+        "note": "Actual container.exec invocation 2: read exact input, launch, full packet and first event; construct model-authored Discovery/Pre, invoke original validator/Funnel and serialize result. This local read/finalization is conservatively counted as a tool call and successful read; it is not a second primary document."
+      }
+    ],
+    "source_dispositions": [
+      {
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+        "opened": true,
+        "used_as_evidence": true,
+        "disposition": "Read full retained one-page narrative and linked historical context after admission. Facts refer to readable narrative only; context is historical hypothesis, not new truth. Original PDF not re-downloaded or independently rendered.",
+        "evidence_artifact_id": "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2"
+      }
+    ],
+    "tool_calls_used": 2,
+    "search_queries_used": 0,
+    "source_reads_used": 2,
+    "technical_retries_used": 0,
+    "elapsed_minutes_observed": 2,
+    "last_completed_stage": "PRE_RESEARCH",
+    "stop_or_failure_reason": null,
+    "model_or_executor": "ChatGPT research executor (self-identified GPT-6 Astra Pro); actual local read calls, not a synthetic research fixture",
+    "model_exact_version": null,
+    "platform_task_id": null,
+    "private_chain_of_thought_recorded": false
+  },
+  "explicit_action_summary": [
+    "完成一份限定历史公告的实际Pre；核心正文已读，Quick未触发且没有自动Deep。",
+    "所有两次正式容器调用计入receipt；零搜索、零源站请求、零技术重试；源文档一份，不将两次读工具等同于两份来源。",
+    "保留原packet与input、来源日期和cutoff。未修改ResearchSnapshot、Belief、Odds、Human决定、Action或生产登记。",
+    "这是Disclosure origin的一个完成案例，不证明Sector/Market-State origin、每日无人值守执行或完整P0。"
+  ],
+  "schema_version": 1
+}
