@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-09-10T01:14:40.507057+00:00",
+  "status": "CMB_AND_BOTH_PRIOR_FAILURES_ALREADY_RESERVED",
+  "work_commit": "665eacab8da9504564ad3a21b365651ef637c21d",
+  "work_key_tree": "a4660ade40ba4455f480112ac14b6f4a0141bb06",
+  "original_module_blob": "d83dae67f44c8c7afde040685bbb30e8079d92ef",
+  "plan_hash": "5bea3ea88a1cbea3fc0db1fe8d586127a88437d24d9aa92442dff5a3efa4e869",
+  "packet_count": 5,
+  "reserved_count": 3,
+  "dispositions": [
+    {
+      "stock_code": "300750",
+      "publication_date": "2026-09-08",
+      "assessment_input_hash": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+      "status": "ALREADY_RESERVED"
+    },
+    {
+      "stock_code": "600036",
+      "publication_date": "2026-09-08",
+      "assessment_input_hash": "aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+      "status": "ALREADY_RESERVED"
+    },
+    {
+      "stock_code": "600036",
+      "publication_date": "2026-09-09",
+      "assessment_input_hash": "389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+      "status": "DEFERRED_CAPACITY"
+    },
+    {
+      "stock_code": "603986",
+      "publication_date": "2026-09-05",
+      "assessment_input_hash": "0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9",
+      "status": "ALREADY_RESERVED"
+    },
+    {
+      "stock_code": "603986",
+      "publication_date": "2026-09-08",
+      "assessment_input_hash": "383c08e94f88660d57cba68f61a287de112f0f9fbdeb4e4df205258884f1cb6c",
+      "status": "SELECTED_REQUIRES_RESERVATION_AND_ORIGINAL_ADMISSION"
+    }
+  ],
+  "scope": "Actual readonly original planner over original scan ZIP and complete three-key inventory read at pinned work ref. Packet bytes restored from original ZIP and compared to all three remote Git blobs; auxiliary body contents not reread or used to infer outcomes. Fresh run/artifact GET field projections, not HTTP replay. No new reservation or Research executed.",
+  "new_execution": false,
+  "investment_authority": "NONE"
+}
