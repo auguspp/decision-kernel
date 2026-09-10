@@ -41,12 +41,12 @@ jobs:
           import json, os
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP'])/'sector-member-reading'
-          relevant = {'sector-radar-shadow.yml', 'decision-inbox.yml', 'hithink-stock-dump-trial.yml', 'sector-member-reading.yml'}
+          relevant = {'sector-radar-shadow.yml', 'decision-inbox.yml', 'hithink-stock-dump-trial.yml', 'live-dogfood.yml', 'sector-member-reading.yml'}
           for p in root.glob('active-*.json'):
               data = json.loads(p.read_text())
               assert data['total_count'] == len(data['workflow_runs']), 'active-run read incomplete'
               for r in data['workflow_runs']:
-                  assert r['id'] == int(os.environ['GITHUB_RUN_ID']) or r['path'].split('/')[-1] not in relevant, 'active shared-key workflow; stop without retry'
+                  assert r['id'] == int(os.environ['GITHUB_RUN_ID']) or r['path'].split('@', 1)[0].split('/')[-1] not in relevant, 'active shared-key workflow; stop without retry'
           identity = {k: os.environ[k] for k in ('GITHUB_REPOSITORY','GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT','GITHUB_EVENT_NAME')}
           (root/'workflow.json').write_text(json.dumps(identity, indent=2)+'\n')
           PY
