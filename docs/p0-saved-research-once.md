@@ -26,3 +26,17 @@
 本次仅生成候选/回执和artifact；**不会直接把未审阅结果写进current-state，也没有接通每日触发**。接续对话完成语义审阅后，按既有阅读引用发布到Brief。23:10只读任务不改。
 
 官方接口依据：OpenAI structured outputs指南及openai/openai-python v3.11.0。复用现成SDK和既有source/admission/Funnel，没有新增通用agent、DAG、provider框架或真理Gate。
+
+## 首次失败后的局部修复：提交时序与原诊断
+
+**当前固定请求已在 run34490271156 失败并留下 launch，不能再次执行上方首次运行操作。修复不会解除此标记；后续真实尝试须单独明确与该失败的关联和授权，不删历史、不偷偷换ID或Re-run。**
+
+Reuse Decision: THIN_ADAPTER。施工前证据在 [#297 comment5620693226](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5620693226)。直接复用现有 `Retainer.save/native`、GitHubAPI、原 admission 和原 full-host 测试，只有一个现有 runtime 的局部修改，没有新组件、依赖或 workflow。
+
+实际预检结束于 `2026-09-10T14:37:59.261214+00:00`，其提交 `72ecf07a0bc34d88674bc411326f27a478b6d44c` 记录为 `14:37:59Z`。Git 内部提交时间以秒表示，ISO 小数秒会忽略；这不能独立证明实际事件倒序。原 `preflight.finished_at <= commit.date` 的必要条件仍失败。来源：[Git 官方日期说明](https://git-scm.com/docs/git-commit-tree)、[GitHub commit API](https://docs.github.com/en/rest/git/commits)。
+
+修复仅在 `preflight.json` 和 `input.json` 的现有写入前，保留原完整事件时间与字节，计算不早于该事件的整秒；尚未到达时用标准库 `time.sleep` 等待一次，参数小于一秒，复查本地时钟后再写。已过边界不等；时钟倒退、不带时区或等待未推进则停止。原远端提交时钟与 admission 条件不改，服务器时钟偏差仍可能被原检查拒绝，不自动重试或回填日期。实际睡眠可能因调度变长，由原15分钟总预算限制；不是一个新的时钟同步服务或长期 Kernel 规则。
+
+准备前把拟提交 input 原字节保存到同run附件的 `input-preparation.json`；这是诊断草稿，不冒充正式 `input.json` 或准入通过。原 `assess_admission` 返回值通过既有保存器保留为 `prepare.json`，即便拒绝也保留原原因码。成功时正式 input 与上述草稿字节一致；后续正式准入仍独立执行。没有补造失败 run 当时丢失的 input 或 prepare 报告。
+
+回归使用实际两种精度的失败时间对，覆盖预检/正式input两处提交、时区/整秒/已过边界、时钟异常、整秒模拟Git下的原准入与Funnel、服务器倒序仍拒绝、拒绝不调用模型、旧launch继续拒绝。模拟来源/模型/写入不是新的公司 Research 或真实网关通过证明。
