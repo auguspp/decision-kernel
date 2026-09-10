@@ -1,0 +1,18 @@
+{
+  "version": "sector-two-member-history-reading-v0",
+  "market_session": "2026-09-09",
+  "sector": "884002.TI",
+  "benchmark": "000300.SH",
+  "constituent_set_hash": "5093228bd9a6b130bc6e3e9628c21b2158d610cf09268f483c98f04f3f4391dd",
+  "members": [{"thscode": "600598.SH", "name": "北大荒"}, {"thscode": "601952.SH", "name": "苏垦农发"}],
+  "windows": [5, 20, 60],
+  "price_convention": "RAW_WITH_REPORTED_ACTION_WINDOW_EXCLUSIONS",
+  "max_requests": 4,
+  "automatic_research": false,
+  "source": {
+    "run_id": 34364727989,
+    "artifact_id": 10109789379,
+    "digest": "sha256:6c824daecf781402ebf156637e08b6c57fa783579b09dc35e436535d6f2d4301",
+    "head_sha": "381f4d1f826a6d98844d27d626129211218ca332"
+  }
+}
