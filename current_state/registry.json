@@ -3,6 +3,7 @@
   "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
   "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
   "references": [
+    {"id":"sector-member-reading-34458428607","case":"884002.TI","use":"METHOD_SUPPLEMENT","purpose_note":"9月9日两成员真实5/20/60日比较及选择依据纠正：苏垦近期价格领先、北大荒主要成交载体；角色仅候选，非新Research、Odds或自动Deep。","source":{"path":"docs/readings/sector-member-2026-09-09.md","git_blob":"ca2b12061a5a28260e5a320e72feaa3e8436e798"}},
     {"id":"sector-600598-materiality-20260910","case":"600598.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"Human许可后Sector来源的有限Pre/Quick，税后盈利问题待深化；最终H1仍有正文核验缺口，非全景研究/新Odds/自动Deep或Human决定。","source":{"path":"research_runs/candidates/sector-origin/600598-materiality-20260910/README.md","ref":"822c5c725df2d1e5d66768b3b06bc9ddfef93a2e","git_blob":"fda17f439ddb03323de60b6a77dac1bd8974dd02"}},
     {"id":"incremental-cmb-aa9ea8d2-pre","case":"600036.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"限定保存公告的实际Pre WAIT；非当前公司全景、非新Odds或Human判断。Disclosure origin不替代Sector origin。","source":{"path":"research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/README.md","ref":"3c385ac1510295ae1c1f2b92f5ae19c2323d4607","git_blob":"f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c"}},
     {"id":"p0-delivery-checkpoint-20260910","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"已批准P0进展与未完成边界；不是新市场结果或Human决定。","source":{"path":"docs/p0-delivery-checkpoint-2026-09-10.md"}},
