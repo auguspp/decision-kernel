@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "NOT_EXECUTED",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_execution_allowed": true,
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "checked_at": "2026-09-10T00:53:52.912742+00:00",
+  "execution_key": {
+    "execution_id": "p0-4b-cmb-20260910-aa9ea8d2-v1",
+    "canonical_input_hash": "feae350cdbd3f5e5ffab51ae4bb696ad53efebf1f6173f3cf5d44daed8ac140e"
+  },
+  "input_source": {
+    "repository": "auguspp/decision-kernel",
+    "ref": "9c7d1d6d88de87f77fc159e6ff4cd1bdc9dc447a",
+    "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/input.json",
+    "git_blob": "492df7254696f0a19bdd0ce8a51bc4f4ac765cb1"
+  },
+  "identity_scope_hash": "ced9e4ea2210952dcf659a49d1596fe916173ba19efa8485a71ca498fea6f7af",
+  "preflight_sha256": "d232e15d7839d359a41e848b8a8b41b1f261c821283be1b774085c9027520c93",
+  "input_file_sha256": "907ef1af1a118e2d8aa660ced38c6dd19e8a4c93e8e0584ca53c678656f31bf4",
+  "authority": "NONE",
+  "human_attention_authority": "NONE",
+  "research_authority": "NONE",
+  "investment_authority": "NONE",
+  "checks": {
+    "source_preflight": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "canonical_input_hash": "COMPUTED",
+    "identity_precheck": "PASS",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS"
+  },
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "finished_at": "2026-09-10T00:53:52.918767+00:00"
+}

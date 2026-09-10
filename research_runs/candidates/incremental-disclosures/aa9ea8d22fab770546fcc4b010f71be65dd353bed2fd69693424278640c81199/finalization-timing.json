@@ -1,0 +1,9 @@
+{
+  "invocation_started_at": "2026-09-10T00:55:13.322096+00:00",
+  "formal_judgment_finished_at": "2026-09-10T00:55:13.327538+00:00",
+  "deterministic_validation_and_local_readback_finished_at": "2026-09-10T00:55:13.332823+00:00",
+  "formal_tool_invocations": 2,
+  "primary_documents_read": 1,
+  "schema_calls_and_serialization_after_judgment_in_same_counted_invocation": true,
+  "private_chain_of_thought_recorded": false
+}
