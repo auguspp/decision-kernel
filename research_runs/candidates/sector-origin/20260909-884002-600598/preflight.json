@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "case_id": "600598.SH",
+  "ticker": "600598",
+  "security_id": "SSE:600598",
+  "started_at": "2026-09-10T01:38:53.969501+00:00",
+  "finished_at": "2026-09-10T01:38:53.969616+00:00",
+  "valid_until": "2026-09-10T03:38:53.969616+00:00",
+  "reads": [
+    {
+      "id": "source-note",
+      "identity": "600598:SECTOR_20260909_AND_ISSUER_2025_NARRATIVE_PARAPHRASES",
+      "locator": "https://github.com/auguspp/decision-kernel/blob/1aecf64d9d799dfbb99d320facd99b36cd5b36bb/research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+      "tool_reference": "LOCAL_PREFLIGHT_READ:2026-09-10T01:38:53.969616+00:00",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-10T01:38:53.969616+00:00",
+      "body_sha256": "5438a722d97ed324001813f7a267ed9db816ffeff3812637be1cece9381613e7"
+    }
+  ],
+  "required_classes": [
+    {
+      "id": "SAVED_SECTOR_AND_BUSINESS_NARRATIVE",
+      "mode": "STATIC",
+      "body_ids": [
+        "source-note"
+      ],
+      "inventory_id": null
+    }
+  ],
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "seed_publications": [
+    {
+      "evidence_id": "ec2ad57b-980b-5173-8c90-dc95e0806869",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "repository": "auguspp/decision-kernel",
+        "ref": "1aecf64d9d799dfbb99d320facd99b36cd5b36bb",
+        "path": "research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+        "git_blob": "9c3e8226382d002794875e892243c3cb4cdbe7b1",
+        "sha256": "5438a722d97ed324001813f7a267ed9db816ffeff3812637be1cece9381613e7",
+        "purpose": "SECTOR_AND_BUSINESS_EXTRACTS"
+      }
+    }
+  ],
+  "notes": "This preflight verifies the exact retained representation after actual successful Web reading of issuer-authored narrative reproduced by Sina and connector reading of the saved Sector summary. PRIMARY identifies original authorship/observation, not direct issuer hosting or full original bytes. Only paraphrases and saved values retained; no PDF/table or latest-inventory proof. Original source discovery attempts, including failures and explicit scope extension, are in source-note and the preceding plans. No research route or conclusion assigned here."
+}
