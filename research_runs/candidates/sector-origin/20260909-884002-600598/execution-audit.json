@@ -1,0 +1,208 @@
+{
+  "record_kind": "ACTUAL_EXECUTOR_ACTION_SUMMARIES_NOT_PLATFORM_TRACE",
+  "records": {
+    "admission": {
+      "schema_version": 1,
+      "status": "NOT_EXECUTED",
+      "reason": "RESEARCH_EXECUTION_ALLOWED",
+      "research_execution_allowed": true,
+      "formal_research_budget_used": 0,
+      "funnel_invoked": false,
+      "checked_at": "2026-09-10T01:41:49.946701+00:00",
+      "execution_key": {
+        "execution_id": "p0-sector-600598-20260910-business-v1",
+        "canonical_input_hash": "346e1e9e1bb495b240c47f9cde5933829932e4c3d8721f76867758729f19f99a"
+      },
+      "input_source": {
+        "repository": "auguspp/decision-kernel",
+        "ref": "8c42719d50e00e60015cf2ad562446adec519def",
+        "path": "research_runs/candidates/sector-origin/20260909-884002-600598/input.json",
+        "git_blob": "0f276417e27c652e63ddb7ef3a1760c55b38e8dc",
+        "sha256": "3d2f00c0cf623baabe531762aa140fb8215e929b499b36caee9f7202e0d35021",
+        "purpose": "EXACT_FROZEN_INPUT"
+      },
+      "identity_scope_hash": "2f3e115885e1b57246826075f33d764fa218cfca0ef653b668ccf5633fedbf96",
+      "preflight_sha256": "7cd8299715ce0e8e86cb36dc4061992d5f5801b2706e7bfd8d1798d09d348876",
+      "input_file_sha256": "3d2f00c0cf623baabe531762aa140fb8215e929b499b36caee9f7202e0d35021",
+      "authority": "NONE",
+      "human_attention_authority": "NONE",
+      "research_authority": "NONE",
+      "investment_authority": "NONE",
+      "checks": {
+        "source_preflight": "PASS",
+        "input_model_validation": "PASS",
+        "seed_publication": "PASS",
+        "canonical_input_hash": "COMPUTED",
+        "identity_precheck": "PASS",
+        "exact_input_readback": "PASS",
+        "identity_postcheck": "PASS"
+      },
+      "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+      "finished_at": "2026-09-10T01:41:49.950262+00:00"
+    },
+    "launch": {
+      "execution_key": {
+        "execution_id": "p0-sector-600598-20260910-business-v1",
+        "canonical_input_hash": "346e1e9e1bb495b240c47f9cde5933829932e4c3d8721f76867758729f19f99a"
+      },
+      "started_at": "2026-09-10T01:41:49.950324+00:00",
+      "original_callback_invoked": true,
+      "clock_scope": "Actual local clock; GitHub main snapshot refreshed immediately before this tool invocation, not an atomic lock."
+    },
+    "event-8": {
+      "sequence": 8,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "local://sector-case/quick-and-original-final-validator",
+      "observed_at": "2026-09-10T01:47:40.307553+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Actual formal tool8/container.exec reads retained source note, input and serialized Pre, conducts bounded value-chain/counterexample Quick, and invokes normal original candidate/Funnel validation. Final validator supplies mandatory stage validation; optional failed standalone Pre call was not retried. No source request retry."
+    },
+    "event-9": {
+      "sequence": 9,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "local://sector-case/retain-incomplete-execution",
+      "observed_at": "2026-09-10T01:48:48.737974+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Actual formal tool9/container.exec reads saved stage drafts and events to seal an incomplete execution with the original validator. Does not repeat source reading or the complete Quick finalizer; preserves both local integration errors and conservative retry accounting."
+    },
+    "event-8-return-correction": {
+      "sequence": 8,
+      "actual_status": "FAILED",
+      "exception_type": "ValidationError",
+      "reason": "ResearchSourceDisposition.evidence_artifact_id expected string, UUID object supplied during local candidate construction. Final original Funnel was never invoked.",
+      "recorded_at": "2026-09-10T01:48:48.737974+00:00",
+      "prior_event_file_preserved": true
+    }
+  },
+  "final_events": [
+    {
+      "sequence": 1,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/1aecf64d9d799dfbb99d320facd99b36cd5b36bb/research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+      "observed_at": "2026-09-10T01:41:49.950494+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Actual formal tool1/container.exec: original admission callback read and printed exact retained Sector/business source note. One retained representation, not a full original PDF."
+    },
+    {
+      "status": "SUCCEEDED",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "sequence": 2,
+      "kind": "WEB_OPEN",
+      "target": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12009703&stockid=600598",
+      "observed_at": "2026-09-10T01:44:48.336436+00:00",
+      "note": "Actual formal tool2/web.run reopened the issuer-authored 2025 annual-report narrative hosted by Sina; result turn662260view0. Successful narrative reading, not original PDF download. Timestamp is local post-return recording upper bound; exact external completion timestamp unavailable. No new financial-table claims used."
+    },
+    {
+      "status": "SUCCEEDED",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "sequence": 3,
+      "kind": "OTHER_READ",
+      "target": "local://sector-case/launch-and-event-resume",
+      "observed_at": "2026-09-10T01:44:30.680542+00:00",
+      "note": "Actual formal tool3/container.exec listed case files and read launch.json/event-1.json to resume the already running execution; did not relaunch or acquire a new source. Conservatively counts as one successful read."
+    },
+    {
+      "status": "SUCCEEDED",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "sequence": 4,
+      "kind": "OTHER_READ",
+      "target": "local://sector-case/model-schema-and-event-records",
+      "observed_at": "2026-09-10T01:44:48.336436+00:00",
+      "note": "Actual formal tool4/container.exec reads original Research model fields and records preceding Web/local action summaries. Counts toward the frozen budget; not a new primary source."
+    },
+    {
+      "sequence": 5,
+      "kind": "OTHER_READ",
+      "status": "FAILED",
+      "target": "local://sector-case/retained-input-and-pre-analysis",
+      "observed_at": "2026-09-10T01:46:02.108917+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Actual formal tool5/container.exec read frozen input and constructed model-authored Discovery/Pre, then failed original Pre validator invocation: unexpected keyword result instead of pre_research. No serialized stage file, no Quick. This is a local integration error, not source unavailability. Timestamp is post-failure recording bound."
+    },
+    {
+      "sequence": 6,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "local://sector-case/original-retry-contract-and-failure-retention",
+      "observed_at": "2026-09-10T01:46:02.108917+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Actual formal tool6/container.exec records local failed invocation and reads the unchanged validator/retry contract before deciding permitted finalization; does not repeat the failed call."
+    },
+    {
+      "sequence": 7,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "local://sector-case/pre-serialization",
+      "observed_at": "2026-09-10T01:46:44.040268+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": true,
+      "note": "Actual formal tool7/container.exec reads frozen input and serializes the model-authored Discovery/Pre. The failed optional standalone Pre check is not repeated; the normal final candidate/Funnel validator will validate the stages. No source, transport or failed tool command was retried. The earlier local API-argument error is retained. FINAL ACCOUNTING: counted conservatively as one local technical recovery after tool5; frozen zero-retry limit therefore exceeded."
+    },
+    {
+      "sequence": 8,
+      "kind": "OTHER_READ",
+      "status": "FAILED",
+      "target": "local://sector-case/quick-and-original-final-validator",
+      "observed_at": "2026-09-10T01:47:40.307553+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Tool8 constructed/saved Quick draft; candidate constructor rejected two UUID objects where source dispositions require strings. Original complete Funnel NOT reached. Prior event-8.json was premature and is preserved with this correction."
+    },
+    {
+      "sequence": 9,
+      "kind": "OTHER_READ",
+      "status": "FAILED",
+      "target": "local://sector-case/retain-incomplete-execution",
+      "observed_at": "2026-09-10T01:48:48.737974+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Tool9 attempted original incomplete-candidate validation; validator rejected declared technical retries1>0. No validator-produced EXECUTION_GAP or Funnel output exists. No budget relaxation or renamed execution followed."
+    },
+    {
+      "sequence": 10,
+      "kind": "OTHER_READ",
+      "status": "SUCCEEDED",
+      "target": "local://sector-case/final-failure-envelope",
+      "observed_at": "2026-09-10T01:49:33.889242+00:00",
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "platform_reference": null,
+      "query_count": 0,
+      "technical_retry": false,
+      "note": "Final diagnostic retention only: read immutable input/stage drafts/event files, preserve actual exceptions and corrected final event accounting. No source read repetition, Research relaunch or validator retry."
+    }
+  ],
+  "limits": "Preparation and post-failure replay/publication are separate from the ten-call formal span. Some event timestamps are explicit post-return bounds. Original early success annotations for calls8/9 are preserved above but corrected to failed in final_events. Local recovery conservatively counted as one technical retry, not an external source retry; original zero budget was not rewritten."
+}
