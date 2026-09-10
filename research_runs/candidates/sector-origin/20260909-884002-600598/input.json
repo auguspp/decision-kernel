@@ -1,0 +1,95 @@
+{
+  "execution_id": "p0-sector-600598-20260910-business-v1",
+  "case_id": "600598.SH",
+  "ticker": "600598",
+  "security_id": "SSE:600598",
+  "source_lane": "SAVED_SECTOR_MARKET_STATE",
+  "selected_at": "2026-09-10T01:40:21.804827+00:00",
+  "research_cutoff": "2026-09-10T01:40:21.804827+00:00",
+  "code_commit": "ac4e68d9b6015aa08c1898344bf1ee3484e702d9",
+  "current_state_commit": "9cf1abf29c53bdfb4fe35295f2918bbb4c704528",
+  "current_state_reading_hash": "0ab0dd3720b71f0f17e19315987f290325b5a334090b24fe817df4c155b7f4b4",
+  "source_refs": [
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "1aecf64d9d799dfbb99d320facd99b36cd5b36bb",
+      "path": "research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+      "git_blob": "9c3e8226382d002794875e892243c3cb4cdbe7b1",
+      "sha256": "5438a722d97ed324001813f7a267ed9db816ffeff3812637be1cece9381613e7",
+      "purpose": "SECTOR_AND_BUSINESS_EXTRACTS"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "cc5ae25193d3f0b2e08b0807a00ee9293713a87c",
+      "path": "research_runs/candidates/sector-origin/20260909-884002-600598/preflight.json",
+      "git_blob": "87247d1754d322652a18185a7dedd6850d1805cf",
+      "sha256": "7cd8299715ce0e8e86cb36dc4061992d5f5801b2706e7bfd8d1798d09d348876",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT"
+    }
+  ],
+  "seed_evidence_artifacts": [
+    {
+      "id": "ec2ad57b-980b-5173-8c90-dc95e0806869",
+      "source_type": "RETAINED_SECTOR_AND_ISSUER_NARRATIVE_EXTRACT",
+      "source_identifier": "SECTOR:20260909:884002:600598:BUSINESS_MAPPING",
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/1aecf64d9d799dfbb99d320facd99b36cd5b36bb/research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+      "published_at": "2026-09-10T01:35:47Z",
+      "available_at": "2026-09-10T01:35:47Z",
+      "retrieved_at": "2026-09-10T01:40:21.804827+00:00",
+      "content_hash": "5438a722d97ed324001813f7a267ed9db816ffeff3812637be1cece9381613e7",
+      "idempotency_key": "sector-20260909-884002-600598:5438a722d97ed324001813f7a267ed9db816ffeff3812637be1cece9381613e7",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "saved_market": {
+          "sector_daily_return_pct": "-1.96",
+          "members_up": 0,
+          "members_priced": 2,
+          "selected_member_daily_return_pct": "-1.00",
+          "sector_excess_return_5d_pct": "11.65",
+          "sector_excess_return_20d_pct": "22.92"
+        },
+        "issuer_narrative_paraphrases": [
+          "报告描述公司将耕地发包给家庭农场；公司和农户各自核算、各自承担盈亏。",
+          "农户承担生产投入并自行销售所产农产品，公司负责相应农业基础设施与服务。",
+          "部分农业分公司另行收购农产品再销售获益，不能把公司全部业务都等同于农户生产或纯土地发包。"
+        ]
+      },
+      "permitted_excerpt": null,
+      "source_location": "Exact internal source note links saved Sector summary and issuer report reproduced by Sina; no original PDF retained.",
+      "license_terms_note": "The hash and Git publication clock bind the internal extracted note, not full HTML/PDF or the historical market/filing publication. Issuer authorship is distinct from third-party hosting. No independent source-truth certificate.",
+      "report_period_end": null,
+      "schema_version": 1
+    }
+  ],
+  "research_question": "For the preselected 2026-09-09 grain-sector acceleration and its first daily member600598, test whether the issuer-described business model supports a direct grain-price-to-listed-company-profit mapping. Evaluate the historical operating model and its counterexamples, not current valuation, latest company health, or the cause of the September market move.",
+  "known_unknowns": [
+    "REQUIRED_SOURCE_CLASS:SAVED_SECTOR_AND_BUSINESS_NARRATIVE:STATIC",
+    "Market WHY, current grain prices, latest business changes, segment profit weights and rent repricing terms are UNKNOWN. No latest-inventory claim is made.",
+    "Core source is readable issuer-authored business narrative reproduced by Sina; PDF link failed. Use narrative only; no financial-table or original-byte assertion.",
+    "The first homepage preparation failed and is preserved. Subsequent Human-requested independent document location and its prospective scope extension are separate, not retroactive success."
+  ],
+  "next_discriminating_search": "First read saved market facts and operating-model narrative. If the distinction between household farming and issuer revenue requires Quick, test land-contract, product-trading and cost transmission separately; identify the exact new disclosures that would distinguish direct from indirect benefit. Do not force Quick or Deep, probabilities, a buy thesis or an invented cause.",
+  "method_version": "RESEARCH_METHOD_V1",
+  "prompt_version": "P0_SECTOR_BUSINESS_MAPPING_V1",
+  "allowed_tools": [
+    "OTHER_READ",
+    "WEB_OPEN"
+  ],
+  "candidate_output_prefix": "research_runs/candidates/sector-origin/20260909-884002-600598/",
+  "budget": {
+    "tool_calls_enforcement": "SOFT_EXECUTOR",
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_tool_calls": 12,
+    "max_search_queries": 0,
+    "max_source_reads": 10,
+    "max_technical_retries": 0,
+    "max_elapsed_minutes": 20
+  },
+  "untrusted_test_material": null,
+  "schema_version": 1
+}
