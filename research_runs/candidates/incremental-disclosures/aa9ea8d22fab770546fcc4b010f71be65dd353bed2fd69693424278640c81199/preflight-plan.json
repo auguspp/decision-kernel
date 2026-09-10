@@ -1,0 +1,19 @@
+{
+  "record_kind": "SOURCE_PREFLIGHT_PLAN_NOT_RESEARCH",
+  "case_id": "600036.SH",
+  "ticker": "600036",
+  "security_id": "SSE:600036",
+  "assessment_input_hash": "aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+  "reservation_commit": "2bb33fdcc1771a3723bf70f41bc355971fa9c388",
+  "intake_run": 34420890443,
+  "question_scope": "Determine whether the September 8 saved management-departure notice itself supplies incremental evidence relevant to the monitoring questions carried in its frozen research context. This is a bounded document assessment, not a current-company re-underwrite, current officer lookup, latest-announcement audit, price assessment or absence-of-other-news claim.",
+  "required_classes": [{"id":"SAVED_MANAGEMENT_NOTICE","mode":"STATIC","announcement_ids":["1225552023"]}],
+  "sources": [{"kind":"FULL_SAVED_PAGE_TEXT_REPRESENTATION","announcement_id":"1225552023","locator":"https://static.cninfo.com.cn/finalpage/2026-09-08/1225552023.PDF","expected_page_count":1}],
+  "context_policy": "The packet's frozen AI research context is background, not newly verified financial evidence. Read it together with the notice; do not revive generic valuation scenarios or probabilities.",
+  "preflight_limits": {"max_saved_packet_reads":1,"max_web_queries":0,"max_new_source_requests":0,"max_technical_retries":0,"max_elapsed_minutes":5},
+  "failure_policy": "Require complete legible saved notice text and original packet/page hashes. Missing or garbled body is an execution gap, not completed WAIT/STOP. Do not alter the source requirement after seeing the result. No automatic next-company execution inside this attempt.",
+  "formal_phase_policy": "Original prepare_input, exact committed-input readback, and execute_after_admission are required. All immutable source adapters use actual hash-checked connector copies; mutable main checks use new connector GETs during gate invocation. The launch callback rereads the complete saved packet and outputs the full notice and linked context to the interactive research executor. Preparation/admission and later output publication are separate from formal research. All actual formal source/calc/analysis-tool operations are recorded; private chain-of-thought is not retained.",
+  "proposed_formal_budget_not_yet_frozen": {"max_tool_calls":16,"max_search_queries":0,"max_source_reads":12,"max_technical_retries":0,"max_elapsed_minutes":15},
+  "research_route": null,
+  "investment_authority": "NONE"
+}
