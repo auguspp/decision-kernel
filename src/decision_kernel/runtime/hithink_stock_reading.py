@@ -113,7 +113,10 @@ def check_quote_receipt(quote, *, code, received_at):
 
 def history_params(code, sessions):
     start = datetime.combine(sessions[-61], time(), TZ)
-    end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ)
+    # The observed endpoint can include a bar keyed exactly at `end`.
+    # Stop INSIDE the cutoff day, not at the following day's midnight.
+    # Keep strict 61-session validation; never trim an oversized response.
+    end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ) - timedelta(milliseconds=1)
     return {'thscode': code, 'interval': '1d', 'adjust': 'none',
             'start': str(int(start.timestamp()*1000)), 'end': str(int(end.timestamp()*1000))}
 
