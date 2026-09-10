@@ -12,7 +12,7 @@ concurrency:
 
 env:
   SUB2API_RESPONSES_ENDPOINT: https://ai.6600600.xyz/v1/responses
-  SUB2API_CODEX_MODEL: gpt6
+  SUB2API_CODEX_MODEL: gpt-6-astra
 
 jobs:
   smoke:
@@ -38,7 +38,7 @@ jobs:
         run: |
           test -n "$SUB2API_API_KEY"
           test "$SUB2API_RESPONSES_ENDPOINT" = 'https://ai.6600600.xyz/v1/responses'
-          test "$SUB2API_CODEX_MODEL" = 'gpt6'
+          test "$SUB2API_CODEX_MODEL" = 'gpt-6-astra'
 
       - name: Prove the selected existing validators pass before involving a model
         run: >-
@@ -113,7 +113,7 @@ jobs:
           echo '## Sub2API Codex validator smoke' >> "$GITHUB_STEP_SUMMARY"
           echo "- checkout: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
           echo "- endpoint: https://ai.6600600.xyz/v1/responses" >> "$GITHUB_STEP_SUMMARY"
-          echo "- configured model: gpt6" >> "$GITHUB_STEP_SUMMARY"
+          echo "- configured model: gpt-6-astra" >> "$GITHUB_STEP_SUMMARY"
           echo "- Codex action outcome: $CODEX_OUTCOME" >> "$GITHUB_STEP_SUMMARY"
           if [ -f codex-smoke/exit-code.txt ]; then echo "- validator exit: $(cat codex-smoke/exit-code.txt)" >> "$GITHUB_STEP_SUMMARY"; else echo '- validator exit: NOT_RECORDED' >> "$GITHUB_STEP_SUMMARY"; fi
           echo '- Research/HiThink/Odds/Action: NOT_RUN' >> "$GITHUB_STEP_SUMMARY"
