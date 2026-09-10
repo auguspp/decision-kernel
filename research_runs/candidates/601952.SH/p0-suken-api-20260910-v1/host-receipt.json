@@ -1,0 +1,54 @@
+{
+  "code_commit": "c4be0da52cf5235d289fba22e9059668a33e34dc",
+  "error_code": "original prepare rejected",
+  "error_type": "TrialError",
+  "finished_at": "2026-09-10T14:38:02.717052+00:00",
+  "formal_research_started": false,
+  "github_read_api_calls": 13,
+  "investment_authority": "NONE",
+  "market_source": {
+    "git_blob": "ca2b12061a5a28260e5a320e72feaa3e8436e798",
+    "path": "docs/readings/sector-member-2026-09-09.md",
+    "ref": "d8775e5eba1ac7e6d290716686d4fcff82ec040b",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "c4288a3a2b770784ca34d95ea141ed40acacc3f429ed505b3b48dbc58b573a11"
+  },
+  "mutation_uncertain": false,
+  "phase": "INPUT_PREPARATION",
+  "retained_files": [
+    {
+      "git_blob": "165e348ac1611c5e4d03ccc5d36426d3acc80afb",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/launch.json",
+      "purpose": "launch.json",
+      "ref": "f2bc089bc24f13a4aaf59cbd74b279839fa67365",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6ae26ad160df33537b990132db9de26d202850154924e149dcd98efedea91a37"
+    },
+    {
+      "git_blob": "3d1daa0101f48923eb2be3f74c83c008939b0ad0",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/source.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "815c46e1d7cbaeb30d934688613f6ad8c40f3fe1",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5768f85115213292f40efec87ad5eac0b862d67396e24bd892661335cd8b710c"
+    },
+    {
+      "git_blob": "10599edbd35856f5d97df5a2541fd841f80836bf",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "72ecf07a0bc34d88674bc411326f27a478b6d44c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "3bdef62d4e6eb459559a227827f3d695eeb46608da649e7de4edfebba200b3fb"
+    },
+    {
+      "git_blob": "31390bf215404dabb44488ab5c067249564d915b",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/failure.json",
+      "purpose": "failure.json",
+      "ref": "5bdf2b260256faf7607c29efeb924cc25f7f58f5",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "b0883fe70b8fd61508f47152f3b92812d46898d925c9555de574461a870637ee"
+    }
+  ],
+  "started_at": "2026-09-10T14:37:44.766290+00:00",
+  "status": "NOT_EXECUTED"
+}
