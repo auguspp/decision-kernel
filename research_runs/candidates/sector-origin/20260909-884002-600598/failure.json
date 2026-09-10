@@ -1,0 +1,53 @@
+{
+  "record_kind": "FAILED_FORMAL_EXECUTION_NOT_VALIDATOR_FUNNEL_RESULT",
+  "execution_id": "p0-sector-600598-20260910-business-v1",
+  "input_commit": "8c42719d50e00e60015cf2ad562446adec519def",
+  "input_blob": "0f276417e27c652e63ddb7ef3a1760c55b38e8dc",
+  "input_hash": "346e1e9e1bb495b240c47f9cde5933829932e4c3d8721f76867758729f19f99a",
+  "status": "INCOMPLETE_TECHNICAL_FAILURE_WITH_BUDGET_REJECTION",
+  "started_at": "2026-09-10T01:41:49.950324+00:00",
+  "finished_at": "2026-09-10T01:49:33.889619+00:00",
+  "source_status": "CORE_SOURCE_READABLE_AND_ACTUALLY_READ",
+  "pre_content": "DRAFT_CONTINUE_TO_QUICK",
+  "quick_content": "DRAFT_WAIT_FOR_TRIGGER_NOT_ACCEPTED_ROUTE",
+  "funnel_status": "NOT_REACHED",
+  "validator_result": "REJECTED: research execution exceeded declared budget: technical retries 1>0",
+  "tool_calls_used": 10,
+  "successful_read_calls": 7,
+  "failed_local_calls": 3,
+  "search_queries_used": 0,
+  "source_network_retries": 0,
+  "technical_retries_conservative_total": 1,
+  "frozen_retry_limit": 0,
+  "errors": [
+    {
+      "tool_sequence": 5,
+      "error": "TypeError: optional validate_pre_research_transition called with result instead of pre_research."
+    },
+    {
+      "tool_sequence": 8,
+      "error": "ValidationError: source_dispositions evidence_artifact_id UUID supplied instead of string; no final Funnel invocation."
+    },
+    {
+      "tool_sequence": 9,
+      "error": "DomainValidationError: original validator rejects conservative retry count exceeding zero."
+    }
+  ],
+  "stage_files": {
+    "discovery.json": {
+      "git_blob": "43c9fa9590627d15351073fba9423ef5dc5c5345",
+      "sha256": "f40ebd9560ad6d4b84691060690a2061b2bb6f72eb4d8eabd0922490e9955c66"
+    },
+    "pre.json": {
+      "git_blob": "149223582540828504c266afe145ff69d4bf700b",
+      "sha256": "5d905684677f8ec065e77ccd353d26f4a5fd520205def263195804be1f1a6919"
+    },
+    "quick.json": {
+      "git_blob": "46491062ee4b87d4f35b0c0c41e92e72b3bc3fe2",
+      "sha256": "88d2fc0983b525d501e542634188b6f279b41a06ac0b32a6c451f59b8844b6f1"
+    }
+  },
+  "scope": "Same frozen execution. No source access restriction bypass; failures are local AI-authored integration errors, not missing source, GitHub outage or company risk. Stage drafts remain useful reading but are not a completed WAIT or P0 acceptance. Raw premature event records and final corrections retained.",
+  "automatic_retry": false,
+  "investment_authority": "NONE"
+}
