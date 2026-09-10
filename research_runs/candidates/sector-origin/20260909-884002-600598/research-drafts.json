@@ -1,0 +1,163 @@
+{
+  "record_kind": "SAVED_STAGE_DRAFTS_NOT_ACCEPTED_RESEARCH",
+  "discovery": {
+    "discovery_id": "sector-20260909-884002-600598-business-v1",
+    "source_lane": "SAVED_SECTOR_MARKET_STATE",
+    "ticker": "600598",
+    "security_id": "SSE:600598",
+    "economic_direction": "粮食价格到农户种植收益、上市公司土地发包和购销业务的不同传导路径",
+    "as_of": "2026-09-10T01:40:21.804827Z",
+    "factual_observations": [
+      {
+        "statement": "保存日粮食组-1.96%、上涨0/2，北大荒-1.00%；行业5/20日超额11.65%/22.92%。当日相对首位不等于当天上涨。",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      }
+    ],
+    "source_lineage": [
+      {
+        "evidence_artifact_id": "ec2ad57b-980b-5173-8c90-dc95e0806869",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/1aecf64d9d799dfbb99d320facd99b36cd5b36bb/research_runs/candidates/sector-origin/20260909-884002-600598/source-note.json",
+        "available_at": "2026-09-10T01:35:47Z"
+      }
+    ],
+    "why_now": "按9月9日保存页面第一组和第一当日成员选择600598，检验多日行业强势能否映射为公司受益；不是今日新公告。",
+    "current_market_expression": "保存日粮食组-1.96%、上涨0/2，北大荒-1.00%；行业5/20日超额11.65%/22.92%。当日相对首位不等于当天上涨。",
+    "supporting_securities": [
+      "SSE:600598"
+    ],
+    "contradiction_or_mapping_warning": "行业标签及相对表现不证明公司获得农户全部粮价收益；土地发包也不足以证明公司完全无价格敏感性。",
+    "next_discriminating_search": "分别检验农户销售、公司土地发包和公司农产品购销的收益归属，列出能区分直接与间接受益的合同或经营披露。",
+    "known_stop_or_downgrade_condition": "核心正文读不到则记执行缺口；不能建立传导时不自动Deep或改Belief/Odds。",
+    "schema_version": 1
+  },
+  "pre": {
+    "discovery_id": "sector-20260909-884002-600598-business-v1",
+    "as_of": "2026-09-10T01:40:21.804827Z",
+    "what_is_this": "一条保存Sector变化到公司历史经营角色的Pre核验。",
+    "economic_direction": "粮食价格到农户种植收益、上市公司土地发包和购销业务的不同传导路径",
+    "why_surfaced_now": "按9月9日保存页面第一组和第一当日成员选择600598，检验多日行业强势能否映射为公司受益；不是今日新公告。",
+    "current_expression_or_leadership": "保存日粮食组-1.96%、上涨0/2，北大荒-1.00%；行业5/20日超额11.65%/22.92%。当日相对首位不等于当天上涨。",
+    "basic_business_role": "所读2025年报叙述：土地发包给家庭农场，双方独立核算盈亏；公司提供设施服务，部分农业分公司另有农产品购销。未核定各业务占比。",
+    "potential_fundamental_driver": "农户收益、土地合同经济与公司购销价差可能不同步；首先分清收益归属。",
+    "current_market_expectation_hypothesis": "UNKNOWN；本次没有市场共识、粮价、估值或当前预期差证据。",
+    "material_claims": [
+      {
+        "statement": "年报叙述公司与家庭农场分别核算盈亏，农户负担投入并自行销售产品。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      },
+      {
+        "statement": "部分农业分公司另行收购农产品后再销售；不能只看土地发包。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      },
+      {
+        "statement": "现有业务叙述不支持把全部农户销售收益直接计入上市公司，也不足以判定公司粮价敏感性为零。",
+        "kind": "INFERENCE",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      }
+    ],
+    "obvious_contradiction": "农户独立盈亏和公司部分购销同时存在，直接受益与完全无关两个简单说法都需检验。",
+    "largest_unknown": "合同调价机制、购销价差及库存风险、业务利润权重与2026后续变化未核定；行情WHY未知。",
+    "next_discriminating_search": "分别检验农户销售、公司土地发包和公司农产品购销的收益归属，列出能区分直接与间接受益的合同或经营披露。",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "核心来源已读，两条不同收益归属路径仍易造成相反误判；追加短Quick分解传导、列出反证与下一具体证据，而非展开全公司估值。",
+    "schema_version": 1
+  },
+  "quick": {
+    "discovery_id": "sector-20260909-884002-600598-business-v1",
+    "pre_research_hash": "d4bdf2cac959babad68c4ab32ac81fd3de137c5cd99402915e555de9b03f151d",
+    "as_of": "2026-09-10T01:40:21.804827Z",
+    "business_model": "历史叙述中的土地发包与农产品购销并存。农户生产销售、自负盈亏，不等于上市公司直接合并农户全部种植利润。公司设施服务责任也不自动等于已核实收费收入。",
+    "segment_mix": "已识别业务类型，收入/利润权重UNKNOWN；不把公司定性为纯收租或纯粮食种植企业。",
+    "economic_role": "土地经营合同提供者、部分农产品购销参与者；与独立家庭农场的生产主体角色区分。",
+    "major_profit_drivers": [
+      "土地合同经济：可能取决于约定价款、面积和收取情况；当前调价条款及收益弹性未读证据，不能假设现货粮价同步传导。",
+      "购销业务：销售收入增长与利润增长不同，采购成本、购销价差、销量及库存风险须同时考虑；本次没有其数值。",
+      "设施服务与维护成本可能抵消收入改善；仅凭经营角色不能推算净利润。"
+    ],
+    "industry_supply_demand_variables": [
+      "粮价、产量、农资投入和农户承包意愿是待观察变量，而非本次已确认的行情原因。",
+      "品种、合同周期、供求与政策变化可能改变传导，但没有冻结时点的行业定量核验。"
+    ],
+    "value_chain_position": "农户生产并销售农产品；公司土地发包收益通过合同路径，部分公司分支另经采购—销售路径。存在两种渠道，不可把种植者盈亏与上市公司盈亏合为一层。",
+    "current_industry_state": "仅确认保存的多日行业强势条件与当日回落并存；实物粮价、供需及本次股价WHY为UNKNOWN。",
+    "market_expectation_hypothesis": "市场是否已将土地经营与购销混同UNKNOWN；没有共识或价格隐含预期证据。",
+    "current_expression_or_leadership": "保存日粮食组-1.96%、上涨0/2，北大荒-1.00%；行业5/20日超额11.65%/22.92%。当日相对首位不等于当天上涨。",
+    "supporting_claims": [
+      {
+        "statement": "年报叙述农户独立核算、自担投入并销售产品；上市公司不是这些农户全部经营盈亏的同一主体。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      },
+      {
+        "statement": "所以行业价格观察不足以推出“粮价每上涨一点，公司利润必然按农户种植利润同步增加”。",
+        "kind": "INFERENCE",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      }
+    ],
+    "contradictory_claims": [
+      {
+        "statement": "同一年报叙述部分农业分公司有农产品采购销售，不能从土地发包推出整个公司完全不承担商品经营风险。",
+        "kind": "FACT",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      },
+      {
+        "statement": "农户经济改善也可能通过未来合同条款或履约能力间接影响公司，但这种可能性不是本次已发生的受益证据。",
+        "kind": "INFERENCE",
+        "evidence_artifact_ids": [
+          "ec2ad57b-980b-5173-8c90-dc95e0806869"
+        ]
+      }
+    ],
+    "evidence_authority_assessment": "市场来自精确保存Sector；业务来自公司署名年报在新浪的可读转载叙述，正式阶段重新打开核对。仅留存摘要/定位且PARTIAL，不是完整PDF、直接发行人服务器、最新财务或真理认证。两类资料合存于原source-note，不能当两个独立交叉验证源。",
+    "variant_perception": "待检验的映射纠错：行业强势/粮价上涨与公司盈利增长并非同义词。尚不是相对市场共识的已证实认知差。",
+    "unresolved_questions": [
+      "2026年的业务结构是否已变，土地合同何时及按何种机制调整？",
+      "购销业务的利润贡献、价差和库存暴露有多大？",
+      "本次市场变化的真实驱动及预期计价仍UNKNOWN。"
+    ],
+    "next_discriminating_evidence": [
+      "实际新增的土地合同定价/调整披露，区分固定条款、重订价格与面积或回款变化。",
+      "最近一期公司报告中分业务收入成本及库存说明，核对购销规模增长是否同时带来利润，而非只看粮价。",
+      "可核验的同期行业与公司披露，检验是否真有经营变化；不把同一价格图或同一摘要重复读取当作新证据。"
+    ],
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "限定的历史业务映射已研究完成：不能从粮食组加速直接升级600598为已证实的直接盈利受益者，也不能判定零暴露。两种传导路径和反证已区分；未建立需要立即Deep的公司特定变化或可验证预期差。等待具体合同/经营新证据，不把当前资料未覆盖的全公司问题伪装成已完成；原核心正文不再缺失。",
+    "schema_version": 1
+  },
+  "offline_replay": {
+    "record_kind": "POST_FAILURE_DETERMINISTIC_REPLAY_NOT_RESEARCH_RETRY_OR_ACCEPTANCE",
+    "started_at": "2026-09-10T01:51:25.751860+00:00",
+    "finished_at": "2026-09-10T01:51:25.752419+00:00",
+    "original_function": "decision_kernel.research_workflow_v1.run_research_funnel",
+    "source_code_commit": "ac4e68d9b6015aa08c1898344bf1ee3484e702d9",
+    "inputs": {
+      "input.json": "0f276417e27c652e63ddb7ef3a1760c55b38e8dc",
+      "discovery.json": "43c9fa9590627d15351073fba9423ef5dc5c5345",
+      "pre.json": "149223582540828504c266afe145ff69d4bf700b",
+      "quick.json": "46491062ee4b87d4f35b0c0c41e92e72b3bc3fe2"
+    },
+    "funnel_blob": "03532a5aa56e8ab8576577e88fb567d79132e12c",
+    "funnel_hash": "ad90447013abadab4cbcb3ed5832a8c1aa075d7c70169a3e343a56cce40da76c",
+    "terminal_state": "WAIT_FOR_TRIGGER",
+    "terminal_stage": "QUICK_RESEARCH",
+    "meaning": "Saved typed content is structurally accepted by the original deterministic Funnel. This does not repair the failed external execution, its over-budget retry count, source provenance limits or P0 semantic acceptance. No fresh research, source/tool replay, changed input, probability or investment action.",
+    "formal_execution_status": "INCOMPLETE_TECHNICAL_FAILURE_WITH_BUDGET_REJECTION",
+    "investment_authority": "NONE"
+  }
+}
