@@ -1,0 +1,7 @@
+{
+  "automatic_retry": false,
+  "error_code": "original prepare rejected",
+  "error_type": "TrialError",
+  "phase": "INPUT_PREPARATION",
+  "status": "NOT_EXECUTED"
+}
