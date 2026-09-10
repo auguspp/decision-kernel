@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "case_id": "600036.SH",
+  "ticker": "600036",
+  "security_id": "SSE:600036",
+  "started_at": "2026-09-10T00:22:15.896079+00:00",
+  "finished_at": "2026-09-10T00:23:07.515688+00:00",
+  "valid_until": "2026-09-10T01:23:07.515688+00:00",
+  "reads": [
+    {
+      "id": "cmb-management-notice",
+      "identity": "CNINFO:600036:1225552023:SAVED_PAGE_TEXT",
+      "locator": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+      "tool_reference": "LOCAL_EXECUTION:preflight_read.py:2026-09-10T00:22:15.896775Z",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-10T00:22:15.896775+00:00",
+      "body_sha256": "8c1c6929b625a0aa1ec8618f3ff15df82344a51a28f12012fdffac55f2856c2c"
+    }
+  ],
+  "required_classes": [
+    {
+      "id": "SAVED_MANAGEMENT_NOTICE",
+      "mode": "STATIC",
+      "body_ids": [
+        "cmb-management-notice"
+      ],
+      "inventory_id": null
+    }
+  ],
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "seed_publications": [
+    {
+      "evidence_id": "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "repository": "auguspp/decision-kernel",
+        "ref": "2bb33fdcc1771a3723bf70f41bc355971fa9c388",
+        "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+        "git_blob": "eed0b91cd916f215b7521834c58497ecd6c28912",
+        "sha256": "562abdcc134b820aab76bfdb190660a9dbea43fa9214b1e4c016f038d99697d5",
+        "purpose": "INCREMENTAL_DISCLOSURE_PACKET"
+      }
+    }
+  ],
+  "notes": "Complete one-page saved notice text was printed and read as legible after original packet/page hash validation. Primary authority refers to the retained issuer-notice representation, not independent PDF or source truth certification. No original PDF/table rendering performed; any research claims must be supported by readable narrative paragraphs, not ambiguous table layout. Historical linked AI research remains background. This STATIC historical-document question makes no current-company, current-officer, latest-inventory or absence-of-other-filings claim. Actual source read action is recorded, not a platform-native global trace.",
+  "plan_reference": {
+    "ref": "99124865e4efb8b8f96dfe0b9eb855eb5be8d533",
+    "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/preflight-plan.json",
+    "git_blob": "1d16d121bb0a98c9d387fee63a0e8a31566e8151"
+  },
+  "original_pdf_sha256_not_recomputed": "9907f443fd2b535bc87868618863e52caba6df987ba83945d7af8b38920e99db"
+}

@@ -3,6 +3,7 @@
   "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
   "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
   "references": [
+    {"id":"incremental-cmb-aa9ea8d2-pre","case":"600036.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"限定保存公告的实际Pre WAIT；非当前公司全景、非新Odds或Human判断。Disclosure origin不替代Sector origin。","source":{"path":"research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/README.md","ref":"3c385ac1510295ae1c1f2b92f5ae19c2323d4607","git_blob":"f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c"}},
     {"id":"p0-delivery-checkpoint-20260910","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"已批准P0进展与未完成边界；不是新市场结果或Human决定。","source":{"path":"docs/p0-delivery-checkpoint-2026-09-10.md"}},
     {"id":"incremental-603986-0b74408c-preflight-failure","case":"603986.SH","use":"RESEARCH_PRE_EXECUTION_FAILURE","purpose_note":"来源预检失败，Research未执行、Funnel未到达；不是完成WAIT或新增待深化。保留精确失败和无自动重试边界。","source":{"path":"research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/failure.json","ref":"195dcfe710c62c3796fef4d19e68cadd05a8d84d","git_blob":"56d4f68dbf92fec23ade24ca6158aed7febf3acc","contains":["PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT","SOURCE_PREFLIGHT_INCOMPLETE","NOT_REACHED"]}},
     {"id":"decision-book","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"研究与决定导航，不是每日运行结果，不替代冻结记录。","source":{"path":"docs/live-decision-book.md"}},
