@@ -33,10 +33,12 @@ def read(path):
 
 
 def write(path, value):
+    # Validate/serialize before creating a file; failed payloads leave no empty success artifact.
+    raw = (canonical_json(value) + '\n').encode('utf-8')
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open('xb') as stream:
-        stream.write((canonical_json(value) + '\n').encode('utf-8'))
+        stream.write(raw)
 
 
 def require_request(request):
@@ -87,7 +89,9 @@ def load_source(request, raw, artifact, run):
         if record['path'] != own.SNAPSHOT or record.get('error_type') is not None:
             continue
         name = 'input-audit/' + saved.safe_path(record['response_file'])
-        response = json.loads(files[name])
+        # Match own.request_json: preserve stored decimal lexemes as strings.
+        # The original response bytes/hash stay unchanged; never round binary floats.
+        response = json.loads(files[name], parse_float=str)
         saved.check(response['code'] == 0, 'saved snapshot failed')
         for row in response['data']['item']:
             code = row.get('thscode')
