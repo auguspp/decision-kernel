@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "fixture_id": "hengrui-price-led-regression-20260911",
+  "status": "HUMAN_ACCEPTED_DRAFT_NOT_HIGH_READ",
+  "accepted_title": "创新药还有机会吗，42元的恒瑞医药贵不贵？",
+  "required_spine": [
+    "current_price",
+    "implied_expectations",
+    "observed_reality",
+    "expectation_gap",
+    "gap_closing_paths",
+    "evidence_for_each_path",
+    "required_return_as_second_layer",
+    "extra_conditions_for_required_return",
+    "return_to_current_price"
+  ],
+  "must_survive_in_planner_prompt": [
+    "当前隐含预期优先于作者自己的基准模型",
+    "要求回报是第二层问题",
+    "压缩不能压掉因果桥",
+    "研究里查到的数字不等于文章里都要出现",
+    "不要按创新药、授权、现金流、估值的研报目录顺序平铺"
+  ],
+  "must_survive_failure_modes": [
+    "按研究报告顺序写成创新药→License-out→现金流→估值，导致价格问题在中段消失",
+    "开头连续塞入三年、10%回报、30倍PE等未解释模型参数",
+    "内部基准模型结果在读者看到输入前提前出现",
+    "为了显得简洁而压掉因果链，制造似是而非的财经句子",
+    "把所有深度研究成果都塞进文章，导致信息多但主线变弱"
+  ],
+  "rejected_examples": [
+    "先要看这16%的创新药增长，最后能不能长成126亿元利润。",
+    "而是明年、后年，高基数以后还能剩多少。",
+    "License-out已经赚到真钱，但还不能当成年金",
+    "而我目前这套基准假设里，2029年利润大约只有"
+  ],
+  "review_rule": "A price-led note is not a shortened research report. It must first reconstruct what the current price already believes, compare that with what the company has actually proved, quantify the gap, and only then introduce a required-return hurdle as a second-layer diagnostic."
+}
