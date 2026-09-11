@@ -1,0 +1,266 @@
+{
+  "automatic_retry": false,
+  "candidate_hash": "e01a559fadf96f0d35a8a205cc8aeb553f7a5a1c24500021515b70fd01e90fde",
+  "canonical_input_hash": "4ab192be9c4e33f5500d23df2aca10dbe8981068305d5a8b8b3c73995adb612d",
+  "code_commit": "ad41ff8aa13db77c0dcc5e36c4795277696e01f4",
+  "continuation": {
+    "authorization": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088",
+    "execution_id": "p0-suken-api-20260910-v1",
+    "run_id": 34490271156,
+    "source": {
+      "git_blob": "d7f52a24207a41ac9b52f991c48576318bd2021e",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/host-receipt.json",
+      "purpose": "PREVIOUS_FAILED_EXECUTION",
+      "ref": "2722e676e0a7c273fd60b6c388a2941f5c1fc284",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1fd80d7bcd20dedc10024adce3841a36508930238993bb1309a598a339c78f76"
+    }
+  },
+  "finished_at": "2026-09-11T00:59:55.200581+00:00",
+  "formal_research_started": true,
+  "github_read_api_calls": 26,
+  "investment_authority": "NONE",
+  "market_source": {
+    "git_blob": "ca2b12061a5a28260e5a320e72feaa3e8436e798",
+    "path": "docs/readings/sector-member-2026-09-09.md",
+    "ref": "d8775e5eba1ac7e6d290716686d4fcff82ec040b",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "c4288a3a2b770784ca34d95ea141ed40acacc3f429ed505b3b48dbc58b573a11"
+  },
+  "model_calls": [
+    {
+      "finished_at": "2026-09-11T00:58:13.311697+00:00",
+      "input_sha256": "95cb6b84cd7f0f8712821f715bd476f8b33caa859989ff2fb72537b88e2284bd",
+      "max_output_tokens": 6000,
+      "output_sha256": "8763ba94f8fdb243b7a0aa0e864151ee29ea01bdc6bb54111f0f5239197f560e",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_03336f6a1ca338cb016aa351e1db3487d0b117bb2ddfaadb7e",
+      "stage": "pre",
+      "started_at": "2026-09-11T00:57:04.127477+00:00",
+      "status": "completed",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_03336f6a1ca338cb016aa351e1e1f487d080cab72f5acf5aa0": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 8204,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 8204,
+              "output_tokens": 0
+            },
+            "msg_03336f6a1ca338cb016aa351e42ec887d0ac0e634053aa31f0": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 2170
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 2170
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 188,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 434,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 8828,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2170,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 10998
+      }
+    },
+    {
+      "finished_at": "2026-09-11T00:59:46.636663+00:00",
+      "input_sha256": "eb6bb9c4582f4b8c243e94d82f277d38a1efe9befac9d4afad7edf54ee652ba8",
+      "max_output_tokens": 6000,
+      "output_sha256": "6f7223449ebbd8e695e214ee7439ebce348e2ee4076ff83a52f18582118a9aaf",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_0bdde56da3a7261e016aa35227cb0087d0b2c0fb6afab52fd3",
+      "stage": "quick",
+      "started_at": "2026-09-11T00:58:13.314383+00:00",
+      "status": "completed",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_0bdde56da3a7261e016aa352281d1487d0889346379ed2d78d": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 10417,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 10417,
+              "output_tokens": 0
+            },
+            "msg_0bdde56da3a7261e016aa35229a59087d0a1e134c20a016105": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 2888
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 2888
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 188,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 560,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 11167,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2888,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 14055
+      }
+    }
+  ],
+  "mutation_uncertain": false,
+  "phase": "RETENTION",
+  "retained_files": [
+    {
+      "git_blob": "ccff0f66ca5738035fe5bc0a722b6fafb9518069",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/launch.json",
+      "purpose": "launch.json",
+      "ref": "af3519d9a03c003dc6898a08ae4f9673c4ab73c9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "622d3f1ebf8f6c029f2f7d412f77e9a3c92d0d7217425cd04b78ae8383ff3ba3"
+    },
+    {
+      "git_blob": "1917c6041679818819c6d6f3b04fdcf578d10cc7",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/source.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "7bbc16dcfe0c10533db36a1babf825908577c1d9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "81c0a61da43eb9aca6b420fa4023549d37e14e6c4ae70facb6c9aa58a87f2067"
+    },
+    {
+      "git_blob": "445d3e6114c31f60fa049078b91d47fb0f767a1c",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "4b2ef0da3c18192574860949f8175794bc72ddfb",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e49836befd50814a115e5c4d3dd5d01c2bae3d3f7543359a210ffa1f05276228"
+    },
+    {
+      "git_blob": "f04a9489bf2f69a1f66a0babcb50252a92a3eed7",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/prepare.json",
+      "purpose": "prepare.json",
+      "ref": "77802b3d3eac212302e96b5afb94488767ce46b6",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7b3359160a73b45e1b8102b83cd02ef7ce5ede0d85dc16f8e75e89ae46f3cf3b"
+    },
+    {
+      "git_blob": "1965c0e718ca1ba41e875d8c8f84e9ed402e2294",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/input.json",
+      "purpose": "input.json",
+      "ref": "ae21a6e549e8f9d8ae3669429ffebccb76f61fec",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "778c48602f79ff99b5b871b59864c1b3b296acd6711bab50fb6fe060df232bf6"
+    },
+    {
+      "git_blob": "9b192f7ceb78994069cafb29b9b2c5fed02cdaa1",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/admission.json",
+      "purpose": "admission.json",
+      "ref": "b980df60807b95f8bde56c7e09a24f6f7f2b441c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4d7d9b9dcc25f678e9cfb166468b6fac33517bc7d8b184e5ecef859e5ef3162f"
+    },
+    {
+      "git_blob": "affde47fbdae2fe869a022fcadc10119f2a7a2ef",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/candidate.json",
+      "purpose": "candidate.json",
+      "ref": "bd43b5efa8a4c4a9a0e32dfe3ee80b0fe1cd7549",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "8e7aec0b792c00a39f2c2294737bbc8a6afe3c5f314fbe377d76d0e2d61d5468"
+    },
+    {
+      "git_blob": "d81c75fc11972a0e8ab09c6e4772bf38e8752f77",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/receipt.json",
+      "purpose": "receipt.json",
+      "ref": "eac83e4f7594509ca8644add90bc3dae8e50303a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "53f634225e1866aaf847ab96f45f13f1672d29650fee062e66cc3e1ff7f8d2b1"
+    },
+    {
+      "git_blob": "f82673bcc8799356efc2e4f8d501c777cb3f4fba",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/validation.json",
+      "purpose": "validation.json",
+      "ref": "d08e8afedbf33213537adfcb4a907317538e4141",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7975d597e08a327c2650b9e9d0161248f31f86884abef40e9575b8e07d1f4504"
+    },
+    {
+      "git_blob": "eab1bb41a2c167b0b75bbd5c455e37ce10dde25f",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/funnel.json",
+      "purpose": "funnel.json",
+      "ref": "8948ec62bb437144c37707b6750f466729fbb31b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "b2845a83b19bdd9b43f96c5cf970c478135cc79ee0a43515feaaa01ad8861736"
+    },
+    {
+      "git_blob": "baf7dd03499216acd99dc75458033f5de3019974",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/README.md",
+      "purpose": "README.md",
+      "ref": "8ef502b5b13d069f8b1a570d2c21bbefacb884a8",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "769eae2d77b22e6475a56a555decf9f6fb4ed25cc099626d10bb7120eb3b9e00"
+    }
+  ],
+  "semantic_acceptance": "PENDING_INDEPENDENT_REVIEW",
+  "started_at": "2026-09-11T00:56:42.453483+00:00",
+  "status": "VALIDATED_FUNNEL_RESULT",
+  "validation_hash": "daaa6807d4fbbce1e239a9b2e00fbc38ffc630a8fdd7525011730218ec3cfc2c"
+}
