@@ -1,0 +1,51 @@
+name: ths-v2-history-probe
+
+on:
+  push:
+    branches: [probe/ths-v2-884189-20260911]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v7
+        with: {python-version: '3.12'}
+      - name: Install requests only
+        run: python -m pip install --disable-pip-version-check requests==2.34.2
+      - name: Download frozen HiThink evidence
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/source
+      - name: Probe known 884002 and stubborn 884189 over THS v2
+        id: probe
+        continue-on-error: true
+        run: |
+          python .github/scripts/probe-ths-v2-history.py \
+            --source "$RUNNER_TEMP/source" \
+            --output "$RUNNER_TEMP/v2-probe"
+      - name: Retain exact raw and receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ths-v2-history-probe-${{ github.run_id }}
+          path: ${{ runner.temp }}/v2-probe/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Enforce probe
+        if: always()
+        env:
+          OUTCOME: ${{ steps.probe.outcome }}
+        run: test "$OUTCOME" = success
