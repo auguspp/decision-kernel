@@ -38,7 +38,13 @@ def activity_module() -> dict:
 
 
 def validate_successor(env: Mapping[str, str]) -> int:
-    """Admit only a fresh same-code successor of a natural successful Sector run."""
+    """Admit only a fresh successor of one exact natural successful Sector run.
+
+    The successor executes trusted current-default-branch code, while the existing
+    Stock contract separately binds the exact upstream Sector run/artifact.  Do not
+    require those two code SHAs to match: main can legitimately advance after a long
+    natural Sector run without invalidating that run's immutable saved state.
+    """
     if (
         env.get("GITHUB_REPOSITORY") != REPOSITORY
         or env.get("GITHUB_REF") != "refs/heads/main"
@@ -59,7 +65,6 @@ def validate_successor(env: Mapping[str, str]) -> int:
         or env.get("UPSTREAM_HEAD_BRANCH") != "main"
         or env.get("UPSTREAM_HEAD_REPOSITORY") != REPOSITORY
         or SHA.fullmatch(env.get("UPSTREAM_HEAD_SHA", "")) is None
-        or env.get("UPSTREAM_HEAD_SHA") != env.get("GITHUB_SHA")
         or POSITIVE.fullmatch(env.get("UPSTREAM_RUN_ID", "")) is None
     ):
         raise SuccessorCheckError("NATURAL_SECTOR_SUCCESS_IDENTITY_REQUIRED")
