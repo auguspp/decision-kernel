@@ -100,7 +100,7 @@
       "url": "https://api.github.com/users/auguspp",
       "user_view_type": "public"
     },
-    "private": true,
+    "private": false,
     "pulls_url": "https://api.github.com/repos/auguspp/decision-kernel/pulls{/number}",
     "releases_url": "https://api.github.com/repos/auguspp/decision-kernel/releases{/id}",
     "stargazers_url": "https://api.github.com/repos/auguspp/decision-kernel/stargazers",
@@ -179,7 +179,7 @@
       "url": "https://api.github.com/users/auguspp",
       "user_view_type": "public"
     },
-    "private": true,
+    "private": false,
     "pulls_url": "https://api.github.com/repos/auguspp/decision-kernel/pulls{/number}",
     "releases_url": "https://api.github.com/repos/auguspp/decision-kernel/releases{/id}",
     "stargazers_url": "https://api.github.com/repos/auguspp/decision-kernel/stargazers",
