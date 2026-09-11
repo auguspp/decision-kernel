@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "archive_name": "hengrui-600276-research-to-provisional-odds-2026-09-11",
+  "archive_purpose": "Preserve the complete three-round Research record, frozen Belief, provisional price context, ordinal provisional Odds, calculation artifacts and failed qualified-market attempt without upgrading provisional inputs to Kernel canonical state.",
+  "repository": "auguspp/decision-kernel",
+  "archive_base_main": "542e8585440ef0776eefe071936da2eed868fc70",
+  "source_research_branch_commit": "7ea9e819ba703c3f3b748e4651d2a21712286eb0",
+  "source_market_run": {
+    "workflow": "live-dogfood",
+    "run_id": 34556401563,
+    "run_attempt": 1,
+    "conclusion": "failure",
+    "error": "raw A-share history extends beyond the latest completed session"
+  },
+  "authority": {
+    "research": "FROZEN_FOR_DECISION_PREPARATION",
+    "price": "CONTEXT_ONLY",
+    "market_observation": "NOT_QUALIFIED",
+    "provisional_odds": "PARTIAL_ORDINAL_ONLY",
+    "canonical_odds": "NOT_ESTABLISHED",
+    "investment_authority": "NONE_HUMAN_ONLY"
+  },
+  "files": [
+    {
+      "original_zip": "round1-research-packet.zip",
+      "original_zip_sha256": "59887bced9c0a665a2230e9902619986ff4ca0d77b328cf560c4c62738d4ccfb",
+      "archive_path": "round1-research-packet.zip.b64",
+      "archive_base64_sha256": "84b4e452916e084d702e7e608e135da587780448e2fc840126a980b4749c711d",
+      "encoding": "base64_of_original_zip_bytes"
+    },
+    {
+      "original_zip": "round2-research-packet.zip",
+      "original_zip_sha256": "a32fd4555f9c8e5dd0920ce627676199d99e8f636118b90468835bc755187c94",
+      "archive_path": "round2-research-packet.zip.b64",
+      "archive_base64_sha256": "cfe9d96800e4067ae33839bf05605ccbd674cd3e0ba8b739b184bddd8ce24749",
+      "encoding": "base64_of_original_zip_bytes"
+    },
+    {
+      "original_zip": "round3-research-packet.zip",
+      "original_zip_sha256": "34e8a6fef8c7f9e0eea37df0b74803007046a98ef9cbd5ea68fc86002d729f4f",
+      "archive_path": "round3-research-packet.zip.b64",
+      "archive_base64_sha256": "aa4ca98092675c447a2271d5ac413e269468b9bb8b486a7e8e1d7bb25ae9ade2",
+      "encoding": "base64_of_original_zip_bytes"
+    }
+  ],
+  "inner_payloads": [
+    {
+      "container": "round3-research-packet.zip",
+      "path": "恒瑞_第三轮_现金滚动与条件检验.xlsx",
+      "sha256": "42036abb0d59028234b7d96b814e011d2aaae3c366c80ad731d571ff275777de"
+    },
+    {
+      "container": "round3-research-packet.zip",
+      "path": "model_preview.png",
+      "note": "presentation preview; exact bytes retained inside the round3 ZIP"
+    }
+  ]
+}
