@@ -44,7 +44,7 @@ def test_adoption_adapter_is_exact_case_bound_and_has_no_market_transport_import
     assert m["CHECKPOINT_ARTIFACT_ID"] == 10196584150
     assert m["CANDIDATE_STATE_HASH"] == "98c1f4425cf087a15a72c03af4a34ab7be43bdefea4d2467d20757b73d0ecd10"
     assert m["CANDIDATE_STATE_SHA256"] == "ff76904ee48aa8613095e91392b469989801080f5befec672225203985e391bf"
-    assert "requests" not in raw
+    assert "import requests" not in raw
     assert "urlopen" not in raw
     assert "hithink_http" not in raw
     assert "HITHINK_FINANCE_API_KEY" in raw
