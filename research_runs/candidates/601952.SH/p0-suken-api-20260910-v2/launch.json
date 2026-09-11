@@ -1,0 +1,20 @@
+{
+  "automatic_retry": false,
+  "code_commit": "ad41ff8aa13db77c0dcc5e36c4795277696e01f4",
+  "continuation": {
+    "authorization": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088",
+    "execution_id": "p0-suken-api-20260910-v1",
+    "run_id": 34490271156,
+    "source": {
+      "git_blob": "d7f52a24207a41ac9b52f991c48576318bd2021e",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/host-receipt.json",
+      "purpose": "PREVIOUS_FAILED_EXECUTION",
+      "ref": "2722e676e0a7c273fd60b6c388a2941f5c1fc284",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1fd80d7bcd20dedc10024adce3841a36508930238993bb1309a598a339c78f76"
+    }
+  },
+  "id": "p0-suken-api-20260910-v2",
+  "run_id": "34548590855",
+  "started_at": "2026-09-11T00:56:42.726430+00:00"
+}
