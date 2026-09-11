@@ -3,6 +3,12 @@
   "fixture_id": "hengrui-price-led-regression-20260911",
   "status": "HUMAN_ACCEPTED_DRAFT_NOT_HIGH_READ",
   "accepted_title": "创新药还有机会吗，42元的恒瑞医药贵不贵？",
+  "applies_to": [
+    "IMPLIED_EARNINGS",
+    "price-led notes whose headline explicitly asks whether a quoted share price is expensive, cheap, justified, overvalued or undervalued"
+  ],
+  "does_not_apply_globally": true,
+  "scope_note": "This is one Human-calibrated structure for price-led notes, not a global Xiaohongshu template. Other archetypes may use different argument spines when their reader tension is not price-led.",
   "required_spine": [
     "current_price",
     "implied_expectations",
@@ -34,5 +40,5 @@
     "License-out已经赚到真钱，但还不能当成年金",
     "而我目前这套基准假设里，2029年利润大约只有"
   ],
-  "review_rule": "A price-led note is not a shortened research report. It must first reconstruct what the current price already believes, compare that with what the company has actually proved, quantify the gap, and only then introduce a required-return hurdle as a second-layer diagnostic."
+  "review_rule": "For a price-led note, do not compress the Research into a shorter research report. Reconstruct what the quoted price already believes, compare that with what the company has actually proved, quantify the gap, and only then introduce a required-return hurdle as a second-layer diagnostic. Do not apply this spine to unrelated archetypes by default."
 }
