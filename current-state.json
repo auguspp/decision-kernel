@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-11T13:42:31.963358+00:00",
+    "finished_at": "2026-09-11T13:49:58.979499+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-12T13:42:31.963358+00:00",
-    "started_at": "2026-09-11T13:42:22.380279+00:00"
+    "recheck_after": "2026-09-12T13:49:58.979499+00:00",
+    "started_at": "2026-09-11T13:49:50.341510+00:00"
   },
   "code_commit": "bb77bf82ef3bb5e8068cc966a7fa7b8fdf6fdd2d",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-11T13:42:31.963358+00:00",
+  "generated_at": "2026-09-11T13:49:58.979499+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-11T13:42:30.937665+00:00",
+      "checks_at": "2026-09-11T13:49:57.989783+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -143,7 +143,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4725fa3b3fea60d47e21f3f7b2040df0416e4de4966016d53d84fb9d29a219f4"
         },
-        "source_checked_at": "2026-09-11T13:42:30.937644+00:00",
+        "source_checked_at": "2026-09-11T13:49:57.989765+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -166,12 +166,12 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-11T13:42:24.307350+00:00",
+      "checks_at": "2026-09-11T13:49:52.228496+00:00",
       "gaps": [
         "INPUT_UNAVAILABLE_OR_REJECTED:KeyError:'input-audit/inputs/parent-hints.json'",
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"
       ],
-      "health": "IN_PROGRESS",
+      "health": "LATEST_ATTEMPT_FAILED",
       "last_qualified_result": {
         "archive": {
           "artifact_id": 10109789379,
@@ -326,27 +326,60 @@
         "validation": "EXISTING_BUNDLE_AND_CONTEXT_VALIDATORS_PLUS_STORED_PUBLICATION_BINDING_NOT_NEW_PRODUCTION_REPLAY"
       },
       "latest_attempt": {
-        "conclusion": null,
+        "conclusion": "failure",
         "created_at": "2026-09-11T13:42:07Z",
         "event": "workflow_dispatch",
         "head_sha": "bb77bf82ef3bb5e8068cc966a7fa7b8fdf6fdd2d",
         "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34605815770",
         "id": 34605815770,
-        "operation": null,
+        "operation": {
+          "direct_next_session": null,
+          "error_message": "Audited producer rejected input (HithinkRuntimeError): HiThink request or response decoding failed for /api/a-share/prices/snapshot; failure_kind=TIMEOUT; elapsed_ms=10850",
+          "error_type": "SectorRadarAuditError",
+          "latest_cached_session": "2026-09-10",
+          "latest_completed_session": null,
+          "source": {
+            "artifact_id": 10266842024,
+            "artifact_name": "sector-radar-run-34605815770",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/34605815770/artifacts/10266842024",
+            "bytes": 797365,
+            "expires_at": "2026-12-10T13:42:08Z",
+            "git_blob": "b212512d184c2891cfb36472cc8ae4a2a6e56b76",
+            "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+            "origin_run": {
+              "conclusion": "failure",
+              "created_at": "2026-09-11T13:42:07Z",
+              "event": "workflow_dispatch",
+              "head_sha": "bb77bf82ef3bb5e8068cc966a7fa7b8fdf6fdd2d",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34605815770",
+              "id": 34605815770,
+              "operation": null,
+              "path": ".github/workflows/sector-radar-shadow.yml",
+              "run_attempt": 1,
+              "run_started_at": "2026-09-11T13:42:07Z",
+              "status": "completed",
+              "updated_at": "2026-09-11T13:49:36Z"
+            },
+            "read_path": "sources/artifacts/da0e12bda53cb8083ec32b0adb27e501e325c0f0274116cc1d555a6b78cae983.zip",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "da0e12bda53cb8083ec32b0adb27e501e325c0f0274116cc1d555a6b78cae983"
+          },
+          "status": "FAILED_CLOSED"
+        },
         "path": ".github/workflows/sector-radar-shadow.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-11T13:42:07Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-11T13:42:11Z"
+        "status": "completed",
+        "updated_at": "2026-09-11T13:49:36Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
-      "previous_read_commit": "dd3f403c37967d60bc36b0220a95840958903ca6",
+      "previous_read_commit": "7888fc1521ac329b2b7a69b5bdc3260685e6f2b7",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
       "reading_copy_kind": "PREVIOUSLY_VERIFIED_READ_COPY_NOT_RESTORE_INPUT",
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-11T13:42:29.923682+00:00",
+      "checks_at": "2026-09-11T13:49:57.172320+00:00",
       "gaps": [
         "LATEST_ATTEMPT_CHECK_INCOMPLETE"
       ],
@@ -485,7 +518,7 @@
           "sha256": "13dba56c8f78fe379c4c457098850d5eb1bf7790298f6f9ed9bc1ce4c50f4b77"
         },
         "scope": "CURATED_LINKS_ONLY_NOT_A_BLIND_ALL_STOCK_SCREEN",
-        "source_checked_at": "2026-09-11T13:42:29.923660+00:00",
+        "source_checked_at": "2026-09-11T13:49:57.172301+00:00",
         "status": "STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "605296.SH"
@@ -514,12 +547,12 @@
     }
   },
   "pending": [],
-  "reading_hash": "f457bc2c9f9fc93fadec282929d1d9afc8d65a0231eff52fd166e72f0bd62dc7",
+  "reading_hash": "1d69477d10d1002e56e0deb0a9e4359a3f767c81f0621b5d62f5691e259b22ce",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "34605818705",
+    "run_id": "34606541310",
     "trigger_run_id": "34605815770",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
