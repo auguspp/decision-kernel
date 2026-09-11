@@ -1,0 +1,78 @@
+name: sector-ths-v4-source-completion
+
+on:
+  push:
+    branches: [recovery/sector-ths-v4-source-final-20260911]
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sector-ths-v4-source-completion-20260911
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v7
+        with: {python-version: '3.12'}
+      - name: Install frozen AKShare source adapter
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+          python -m py_compile .github/scripts/capture-sector-ths-v4-source-completion.py
+      - name: Download frozen HiThink source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/source
+      - name: Download retained 298-identity source bundle
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10196213877'
+          run-id: '34592526507'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/prior
+      - name: Download accepted 884293 v4 probe
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10196301442'
+          run-id: '34592767428'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/probe
+      - name: Complete only remaining 22 identities over one-request HTTP-v4
+        id: capture
+        continue-on-error: true
+        timeout-minutes: 20
+        run: |
+          python .github/scripts/capture-sector-ths-v4-source-completion.py \
+            --source "$RUNNER_TEMP/source" \
+            --prior "$RUNNER_TEMP/prior" \
+            --probe "$RUNNER_TEMP/probe" \
+            --output "$RUNNER_TEMP/v4-source-complete"
+      - name: Retain exact raw and receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-ths-v4-source-completion-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/v4-source-complete/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Enforce source-completion acceptance
+        if: always()
+        env: {OUTCOME: '${{ steps.capture.outcome }}'}
+        run: test "$OUTCOME" = success
