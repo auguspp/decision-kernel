@@ -1,0 +1,70 @@
+name: ths-sector-history-reuse-probe
+
+on:
+  push:
+    branches:
+      - probe/ths-sector-history-20260911
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: ths-sector-history-reuse-probe-20260911
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact probe branch
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install exact AKShare reuse wheel from fixed commit
+        run: |
+          python -m pip install --disable-pip-version-check \
+            'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+
+      - name: Download retained failed-recovery evidence only
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/sector-recovery-source
+
+      - name: Probe five exact THS identities against retained HiThink evidence
+        id: probe
+        continue-on-error: true
+        run: |
+          python .github/scripts/probe-ths-sector-history.py \
+            --source "$RUNNER_TEMP/sector-recovery-source" \
+            --output "$RUNNER_TEMP/ths-sector-history-probe"
+
+      - name: Retain public raw responses and exact comparison receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ths-sector-history-reuse-probe-${{ github.run_id }}
+          path: ${{ runner.temp }}/ths-sector-history-probe/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+
+      - name: Enforce probe result without retry
+        if: always()
+        env:
+          PROBE_OUTCOME: ${{ steps.probe.outcome }}
+        run: |
+          printf 'Probe outcome: %s\n' "$PROBE_OUTCOME"
+          test "$PROBE_OUTCOME" = success
