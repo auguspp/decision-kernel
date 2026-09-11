@@ -111,6 +111,16 @@ def test_actual_existing_metadata_binding_rules_reused(kind):
     assert binding['artifact_id']=='200' and binding['commit']=='b'*40
 
 
+def test_market_metadata_accepts_natural_sector_schedule_without_other_event_widening():
+    mod=code();r=mod['intent'](environment(),AS_OF.isoformat());run,listing=remote('market')
+    run['event']='schedule'
+    binding=mod['metadata'](r,'market',run,listing)
+    assert binding['artifact_id']=='200' and binding['commit']=='b'*40
+    run['event']='repository_dispatch'
+    with pytest.raises(ValueError,match='identity'):
+        mod['metadata'](r,'market',run,listing)
+
+
 @pytest.mark.parametrize('kind',['source','market'])
 @pytest.mark.parametrize('change',['failed','foreign','future','expired','digest','duplicate','listing','commit'])
 def test_bad_remote_inputs_fail_before_download_or_market(kind,change):

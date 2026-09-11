@@ -98,7 +98,7 @@ def metadata(request, kind, run, listing):
                 or run['repository']['full_name'] != 'auguspp/decision-kernel'
                 or type(run['run_attempt']) is not int or run['run_attempt'] != 1
                 or run['status'] != 'completed' or run['conclusion'] not in conclusions
-                or run['event'] not in {'push', 'workflow_dispatch'}):
+                or run['event'] not in ({'push', 'workflow_dispatch', 'schedule'} if kind == 'market' else {'push', 'workflow_dispatch'})):
             raise ValueError('market input run identity differs')
         if kind == 'history' and run['event'] != 'workflow_dispatch':
             raise ValueError('history requires a previous explicit manual invocation')
