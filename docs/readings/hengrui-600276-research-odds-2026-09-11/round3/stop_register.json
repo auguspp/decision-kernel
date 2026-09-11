@@ -1,0 +1,32 @@
+[
+  {
+    "id": "U1",
+    "unknown": "单品制造商净收入、销量/患者留存、净价、贡献毛利",
+    "status": "STOP_CURRENT_PUBLIC_EVIDENCE",
+    "boundary": "取得的公司报告仅定性，医保进入不等于净价与终端消耗。不能按主观比例拆25.45亿元。"
+  },
+  {
+    "id": "U2",
+    "unknown": "许可组合归属净利润与自由现金（18–24月）",
+    "status": "STOP_UNIDENTIFIABLE",
+    "boundary": "缺持续服务、历史和失败项目再生研发成本、共享成本、交易税费分配及项目现金台账。"
+  },
+  {
+    "id": "U3",
+    "unknown": "BMS首付款到账、成本预算与可留存现金",
+    "status": "STOP_NO_RECEIPT_PROOF",
+    "boundary": "协议生效≠到账；偿付未来研发义务的成本不能假设为零。"
+  },
+  {
+    "id": "U4",
+    "unknown": "9月10日期初可分配现金及2026–2029逐期现金兑现",
+    "status": "STOP_MISSING_CLOCK_AND_INPUTS",
+    "boundary": "不得将6月30日余额直接当价格日余额；滚动模型保留UNKNOWN。"
+  },
+  {
+    "id": "ACCESS",
+    "unknown": "9月10日业绩说明会问答正文",
+    "status": "NOT_RETRIEVED",
+    "boundary": "确认计划公告，SSE路演主页返回无可解析内容；不能声称已查遍全部公开问答。"
+  }
+]
