@@ -57,10 +57,10 @@ def test_successor_is_one_natural_sector_handoff_not_a_new_clock_or_market_reade
         "github.event.workflow_run.run_attempt == 1",
         "github.event.workflow_run.head_branch == 'main'",
         "github.event.workflow_run.head_repository.full_name == github.repository",
-        "github.event.workflow_run.head_sha == github.sha",
         "github.run_attempt == 1",
     ):
         assert required in raw
+    assert "github.event.workflow_run.head_sha == github.sha" not in raw
     assert "contents: read" in raw and "actions: write" in raw
     assert "persist-credentials: false" in raw
     assert "cancel-in-progress: false" in raw and "timeout-minutes: 5" in raw
@@ -73,16 +73,20 @@ def test_successor_is_one_natural_sector_handoff_not_a_new_clock_or_market_reade
     assert "/rerun" not in raw and "sleep(" not in raw and "while " not in raw
 
 
-def test_exact_successor_identity_accepts_only_same_code_natural_sector_success():
+def test_exact_successor_identity_accepts_natural_sector_success_and_separate_code_sha():
     mod = module()
     assert mod["validate_successor"](environment()) == 499
+    # A long natural Sector run may finish after main has legitimately advanced.
+    # The existing Stock contract binds the immutable upstream artifact separately.
+    assert mod["validate_successor"](environment(GITHUB_SHA="b" * 40)) == 499
+    assert mod["validate_successor"](environment(UPSTREAM_HEAD_SHA="b" * 40)) == 499
     invalid = (
         ("GITHUB_REPOSITORY", "other/repo"),
         ("GITHUB_REF", "refs/heads/other"),
         ("GITHUB_WORKFLOW", "other-workflow"),
         ("GITHUB_EVENT_NAME", "workflow_dispatch"),
         ("GITHUB_RUN_ATTEMPT", "2"),
-        ("GITHUB_SHA", "b" * 40),
+        ("GITHUB_SHA", "not-a-sha"),
         ("UPSTREAM_NAME", "other"),
         ("UPSTREAM_PATH", ".github/workflows/other.yml"),
         ("UPSTREAM_EVENT", "workflow_dispatch"),
@@ -92,7 +96,7 @@ def test_exact_successor_identity_accepts_only_same_code_natural_sector_success(
         ("UPSTREAM_RUN_ID", "0"),
         ("UPSTREAM_HEAD_BRANCH", "feature"),
         ("UPSTREAM_HEAD_REPOSITORY", "other/repo"),
-        ("UPSTREAM_HEAD_SHA", "b" * 40),
+        ("UPSTREAM_HEAD_SHA", "not-a-sha"),
     )
     for key, value in invalid:
         with pytest.raises(mod["SuccessorCheckError"]):
