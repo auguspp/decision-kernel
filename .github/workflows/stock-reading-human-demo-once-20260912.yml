@@ -7,88 +7,54 @@ on:
       - .github/workflows/stock-reading-human-demo-once-20260912.yml
 
 permissions:
-  contents: read
-  actions: write
+  contents: write
 
 concurrency:
   group: stock-reading-human-demo-once-20260912
   cancel-in-progress: false
 
 jobs:
-  dispatch-existing-stock-reading:
+  patch-scheduled-sector-binding:
     if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
         with:
-          persist-credentials: false
+          ref: fix/stock-accept-scheduled-sector-20260912
+          persist-credentials: true
+          fetch-depth: 1
 
-      - name: Validate exact saved natural Sector input
-        env:
-          GH_TOKEN: ${{ github.token }}
-          MARKET_RUN: '34610140283'
-        run: |
-          set -euo pipefail
-          test "$GITHUB_REPOSITORY" = 'auguspp/decision-kernel'
-          test "$GITHUB_REF" = 'refs/heads/main'
-          test "$GITHUB_RUN_ATTEMPT" = '1'
-          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN" > /tmp/market-run.json
-          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN/artifacts?per_page=100" > /tmp/market-artifacts.json
-          python - <<'PY'
-          import json
-          run = json.load(open('/tmp/market-run.json'))
-          artifacts = json.load(open('/tmp/market-artifacts.json'))['artifacts']
-          assert run['name'] == 'sector-radar-shadow'
-          assert run['path'].split('@', 1)[0] == '.github/workflows/sector-radar-shadow.yml'
-          assert run['event'] == 'schedule'
-          assert run['status'] == 'completed'
-          assert run['conclusion'] == 'success'
-          assert run['run_attempt'] == 1
-          assert run['head_branch'] == 'main'
-          assert any(a['name'] == 'sector-radar-run-34610140283' and not a['expired'] for a in artifacts)
-          print('PINNED_NATURAL_SECTOR_INPUT_OK')
-          PY
-
-      - name: Reuse bounded shared-Key activity observation
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Apply exact two-file P0 binder fix
         run: |
           set -euo pipefail
           python - <<'PY'
-          import os, runpy
-          m = runpy.run_path('.github/scripts/check-sector-scheduled-activity.py', run_name='human_demo_activity_reuse')
-          peers = frozenset({
-              '.github/workflows/sector-radar-shadow.yml',
-              '.github/workflows/hithink-stock-dump-trial.yml',
-              '.github/workflows/decision-inbox.yml',
-              '.github/workflows/live-dogfood.yml',
-          })
-          blockers = m['check_activity'](m['request_reader'](os.environ['GITHUB_TOKEN']), peers=peers)
-          if blockers:
-              raise SystemExit('BLOCKED_SHARED_KEY_ACTIVITY run_ids=' + ','.join(map(str, blockers)))
-          print('NO_VISIBLE_PEER_ACTIVITY_NOT_A_GLOBAL_LOCK')
-          PY
+          from pathlib import Path
 
-      - name: Dispatch existing Stock reading exactly once
-        env:
-          GH_TOKEN: ${{ github.token }}
-          MARKET_RUN: '34610140283'
+          script = Path('.github/scripts/native-feed-acceptance.py')
+          text = script.read_text(encoding='utf-8')
+          old = "                or run['event'] not in {'push', 'workflow_dispatch'}):"
+          new = "                or run['event'] not in ({'push', 'workflow_dispatch', 'schedule'} if kind == 'market' else {'push', 'workflow_dispatch'})):"
+          assert text.count(old) == 1, 'expected one exact event-admission line'
+          script.write_text(text.replace(old, new), encoding='utf-8')
+
+          test = Path('tests/test_native_feed_acceptance.py')
+          body = test.read_text(encoding='utf-8')
+          anchor = """@pytest.mark.parametrize('kind',['source','market'])\ndef test_actual_existing_metadata_binding_rules_reused(kind):\n    mod=code();r=mod['intent'](environment(),AS_OF.isoformat()); run,listing=remote(kind)\n    binding=mod['metadata'](r,kind,run,listing)\n    assert binding['artifact_id']=='200' and binding['commit']=='b'*40\n\n\n"""
+          addition = """def test_market_metadata_accepts_natural_sector_schedule_without_other_event_widening():\n    mod=code();r=mod['intent'](environment(),AS_OF.isoformat());run,listing=remote('market')\n    run['event']='schedule'\n    binding=mod['metadata'](r,'market',run,listing)\n    assert binding['artifact_id']=='200' and binding['commit']=='b'*40\n    run['event']='repository_dispatch'\n    with pytest.raises(ValueError,match='identity'):\n        mod['metadata'](r,'market',run,listing)\n\n\n"""
+          assert body.count(anchor) == 1, 'expected one exact metadata regression-test anchor'
+          test.write_text(body.replace(anchor, anchor + addition), encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- .github/scripts/native-feed-acceptance.py tests/test_native_feed_acceptance.py
+
+      - name: Commit only the reviewed binder and regression test
         run: |
           set -euo pipefail
-          python - <<'PY' > /tmp/dispatch.json
-          import json
-          print(json.dumps({
-              'ref': 'main',
-              'inputs': {
-                  'trial-purpose': 'stock-reading',
-                  'stock-market-run-id': '34610140283',
-              },
-          }, separators=(',', ':')))
-          PY
-          gh api --method POST \
-            -H 'Accept: application/vnd.github+json' \
-            "repos/$GITHUB_REPOSITORY/actions/workflows/hithink-stock-dump-trial.yml/dispatches" \
-            --input /tmp/dispatch.json
-          printf '%s\n' 'DISPATCH_ACCEPTED_ONCE; no polling/retry in this workflow.' >> "$GITHUB_STEP_SUMMARY"
-          printf '%s\n' 'This is HUMAN_AUTHORIZED_DEMO, not natural-schedule acceptance.' >> "$GITHUB_STEP_SUMMARY"
+          test "$(git status --short | wc -l)" -eq 2
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/scripts/native-feed-acceptance.py tests/test_native_feed_acceptance.py
+          git commit -m 'fix: accept natural Sector schedule as Stock market input'
+          git push origin HEAD:fix/stock-accept-scheduled-sector-20260912
+          printf '%s\n' 'PATCH_BRANCH_UPDATED; no market request, dispatch, retry, or state write.' >> "$GITHUB_STEP_SUMMARY"
