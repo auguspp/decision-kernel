@@ -1,0 +1,31 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-11T00:56:59.079202+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "NOT_CHECKED",
+    "identity_postcheck": "NOT_CHECKED",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "4ab192be9c4e33f5500d23df2aca10dbe8981068305d5a8b8b3c73995adb612d",
+    "execution_id": "p0-suken-api-20260910-v2"
+  },
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": null,
+  "input_file_sha256": "778c48602f79ff99b5b871b59864c1b3b296acd6711bab50fb6fe060df232bf6",
+  "input_source": null,
+  "investment_authority": "NONE",
+  "preflight_sha256": "e49836befd50814a115e5c4d3dd5d01c2bae3d3f7543359a210ffa1f05276228",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "INPUT_READY_TO_COMMIT_NOT_EXECUTION_ADMISSION",
+  "research_authority": "NONE",
+  "research_execution_allowed": false,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}
