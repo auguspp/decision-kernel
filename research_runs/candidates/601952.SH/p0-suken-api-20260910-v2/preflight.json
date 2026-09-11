@@ -1,0 +1,53 @@
+{
+  "case_id": "601952.SH",
+  "finished_at": "2026-09-11T00:56:56.238286+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "notes": "Accessibility and declared issuer identity only. Existing parser is not semantic truth certification. STATIC H1 business mapping, not latest-disclosure completeness.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "37963782aa53690018b1dac50a4aa928b73712b3a365a86150bcb58c5b5b5f69",
+      "checked_at": "2026-09-11T00:56:54.603481+00:00",
+      "id": "h1",
+      "identity": "601952:2026H1:SINA_ISSUER_PDF",
+      "kind": "BODY",
+      "locator": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-8/2026-08-19/12502187.PDF",
+      "succeeded": true,
+      "tool_reference": "GITHUB_ACTIONS:34548590855:source.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "h1"
+      ],
+      "id": "SAVED_H1_BUSINESS_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:601952",
+  "seed_publications": [
+    {
+      "evidence_id": "a89392d6-7755-5fab-bcd8-5c27f1614bf6",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "1917c6041679818819c6d6f3b04fdcf578d10cc7",
+        "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "7bbc16dcfe0c10533db36a1babf825908577c1d9",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "81c0a61da43eb9aca6b420fa4023549d37e14e6c4ae70facb6c9aa58a87f2067"
+      }
+    }
+  ],
+  "started_at": "2026-09-11T00:56:46.530580+00:00",
+  "ticker": "601952",
+  "valid_until": "2026-09-11T01:41:56.238286+00:00"
+}
