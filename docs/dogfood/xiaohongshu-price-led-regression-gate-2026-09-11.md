@@ -6,6 +6,29 @@ This gate exists because the Hengrui draft required repeated Human correction ev
 
 The failure was not mainly factual. The writing system kept compressing a research report instead of reconstructing what the quoted share price already believed.
 
+## Scope boundary
+
+This is **not** a global Xiaohongshu structure.
+
+Apply it when the chosen publication problem is genuinely price-led, especially `IMPLIED_EARNINGS` notes whose headline explicitly asks whether a quoted per-share price is expensive / cheap / justified / overvalued / undervalued.
+
+Do **not** force this spine onto unrelated publication archetypes by default. Other valid structures remain available, including:
+
+- event-driven notes: what one new disclosure changed;
+- industry-odds notes: how long a bottleneck / shortage / cycle can persist;
+- normalized-earnings notes: what part of current profit is durable versus peak/cyclical;
+- expectation-repricing notes: what changed in the credibility of an earnings path even if price barely moved;
+- company-mechanism notes: explain one economic mechanism without manufacturing a price question;
+- more personal / exploratory notes when the Human explicitly chooses that voice.
+
+The rule is therefore:
+
+> **If the note chooses a price-led archetype, do not let it collapse back into a research-report outline.**
+
+It is not:
+
+> **Every Xiaohongshu note must start from price.**
+
 ## Mandatory spine for price-led notes
 
 When the headline asks whether `X元贵不贵 / 值不值 / 高估低估`, the plan should normally follow this sequence:
