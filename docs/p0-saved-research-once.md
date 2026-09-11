@@ -21,7 +21,7 @@
 
 ## 验收
 
-新入口 `saved-research-once` 手动运行一次，无参数。首先读回main与最新运行防重复。检查实际input/准入、两阶段模型调用和预算、原Funnel、真实来源与候选分支读回。仅有job绿灯不够，结果还需内容语义审阅。
+入口 `saved-research-once` 沿用手动运行、main、无参数；当前只允许下文明确授权的v2后继首次执行，不重跑已终止v1。首先读回main与最新运行防重复。检查实际input/准入、两阶段模型调用和预算、原Funnel、真实来源与候选分支读回。仅有job绿灯不够，结果还需内容语义审阅。
 
 本次仅生成候选/回执和artifact；**不会直接把未审阅结果写进current-state，也没有接通每日触发**。接续对话完成语义审阅后，按既有阅读引用发布到Brief。23:10只读任务不改。
 
@@ -29,7 +29,7 @@
 
 ## 首次失败后的局部修复：提交时序与原诊断
 
-**当前固定请求已在 run34490271156 失败并留下 launch，不能再次执行上方首次运行操作。修复不会解除此标记；后续真实尝试须单独明确与该失败的关联和授权，不删历史、不偷偷换ID或Re-run。**
+**v1请求已在 run34490271156 失败并留下 launch，不能再次执行。修复不会解除此标记；只允许下文已授权、明确关联该失败的独立v2尝试，不删历史、不偷偷换ID或Re-run。**
 
 Reuse Decision: THIN_ADAPTER。施工前证据在 [#297 comment5620693226](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5620693226)。直接复用现有 `Retainer.save/native`、GitHubAPI、原 admission 和原 full-host 测试，只有一个现有 runtime 的局部修改，没有新组件、依赖或 workflow。
 
@@ -40,3 +40,13 @@ Reuse Decision: THIN_ADAPTER。施工前证据在 [#297 comment5620693226](https
 准备前把拟提交 input 原字节保存到同run附件的 `input-preparation.json`；这是诊断草稿，不冒充正式 `input.json` 或准入通过。原 `assess_admission` 返回值通过既有保存器保留为 `prepare.json`，即便拒绝也保留原原因码。成功时正式 input 与上述草稿字节一致；后续正式准入仍独立执行。没有补造失败 run 当时丢失的 input 或 prepare 报告。
 
 回归使用实际两种精度的失败时间对，覆盖预检/正式input两处提交、时区/整秒/已过边界、时钟异常、整秒模拟Git下的原准入与Funnel、服务器倒序仍拒绝、拒绝不调用模型、旧launch继续拒绝。模拟来源/模型/写入不是新的公司 Research 或真实网关通过证明。
+
+## 明确授权的v2纠错后继
+
+[Human单次许可](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088)与[施工前复用检查](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5627258617)分别保留。Reuse Decision: THIN_ADAPTER。仅修改既有请求、worker固定身份/前驱绑定、原测试与本文档，不新增runtime、writer、workflow、依赖或恢复框架。
+
+当前唯一后继为 `p0-suken-api-20260910-v2`；同一 `research-candidate/p0-suken-api-20260910` 分支写入独立v2前缀。标识中的日期是案例身份，不是回填实际执行日期；选定、预检、cutoff和执行时钟仍记录真实发生时间。v1原run、文件与launch不变，v2重复启动也由原create-only阻止，不自动产生v3。
+
+原 `identity._checked_source` 读取前驱commit `2722e676e0a7c273fd60b6c388a2941f5c1fc284` 的v1 `host-receipt.json`，核对原blob/SHA256及 `NOT_EXECUTED / INPUT_PREPARATION / formal_research_started=false / mutation_uncertain=false`。缺失、损坏或状态不符时，停止在新尝试的前驱检查阶段，不取得报告、不调用模型。前驱/许可绑定保留于现有launch和host；冻结input同时引用该确切前驱文件，但它不是研究Evidence，也不向模型发送。
+
+对象、问题、公开报告URL/页码、市场观察、模型、权限和预算与v1相同。本后继不消费公告FIFO，不补取新行情，不证明今日公司全景，不借技术纠错修改研究路由。CI只执行无真实外部I/O的测试，不启动付费研究；合并后的一次真实运行和语义验收分别记录。现有23:10 Brief不因本配置自动修改，未审阅结果也不会自动进入读取包。
