@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """One-time mixed-source Sector gap continuation; candidate only.
 
-Reuse the 110 retained HiThink histories and any already-retained public THS raw
-files. Request only exact identities still missing. No retries, no signal creation,
-no production state write.
+Reuse retained HiThink histories and prior valid public THS raw files. Request only
+exact identities still missing. One bounded second attempt is allowed only for
+HTTP 502/503/504; all attempts are retained. No signals or production state write.
 """
 from __future__ import annotations
 
@@ -50,10 +50,10 @@ SOURCE_ARTIFACT_ID = 10187281705
 SOURCE_ARTIFACT_SHA256 = (
     "aedf5fc5507fa33c00f316be72c14b50962486961ba7199e097d2628205dc60b"
 )
-PRIOR_PUBLIC_RUN_ID = 34573861341
-PRIOR_PUBLIC_ARTIFACT_ID = 10188840893
+PRIOR_PUBLIC_RUN_ID = 34574330259
+PRIOR_PUBLIC_ARTIFACT_ID = 10189018848
 PRIOR_PUBLIC_ARTIFACT_SHA256 = (
-    "651a99fcd43b5d09418003211ce9cfe96a9a9acdbcb30b02e8c40b570a78e5f2"
+    "7cd5ff3009099c14dd91dfddd6a0f228b5a9d355e54dafbb530d6f4b67151c24"
 )
 
 SOURCE_WORKFLOW = ".github/workflows/sector-radar-shadow.yml"
@@ -62,15 +62,18 @@ EXPECTED_PARENT_ARTIFACT_ID = 10109790767
 
 EXPECTED_RETAINED_HISTORY_COUNT = 110
 EXPECTED_PUBLIC_HISTORY_COUNT = 211
-EXPECTED_REUSED_PUBLIC_RAW_COUNT = 6
+EXPECTED_REUSED_PUBLIC_RAW_COUNT = 14
 EXPECTED_NEW_PUBLIC_REQUEST_COUNT = (
     EXPECTED_PUBLIC_HISTORY_COUNT - EXPECTED_REUSED_PUBLIC_RAW_COUNT
 )
 
 TARGET_SESSION = date(2026, 9, 10)
 PUBLIC_YEAR = 2026
-PUBLIC_SPACING_SECONDS = 1.0
+PUBLIC_SPACING_SECONDS = 2.0
 PUBLIC_TIMEOUT_SECONDS = 12.0
+TRANSIENT_RETRY_DELAY_SECONDS = 5.0
+MAX_TRANSIENT_SECOND_ATTEMPTS = 25
+TRANSIENT_STATUSES = frozenset({502, 503, 504})
 MAX_PUBLIC_RESPONSE_BYTES = 4 * 1024 * 1024
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 CODE_RE = re.compile(r"^(?:881|884)\d{3}\.TI$")
@@ -225,7 +228,6 @@ def _parse_public_year(
         require(len(columns) in (11, 12), f"public row width unsupported {code}")
         day = _parse_day(columns[0].strip(), code)
         if day not in wanted:
-            # Critical PIT boundary: do not parse or consume 9/11 current-session values.
             continue
         require(day not in points, f"public duplicate needed date {code} {day}")
         points[day] = (
@@ -240,9 +242,11 @@ def _parse_public_year(
 def _public_get_raw(
     code: str,
     cookie: str,
-    raw_dir: Path,
+    attempts_dir: Path,
+    attempt: int,
 ) -> tuple[bytes, dict[str, Any]]:
     require(CODE_RE.fullmatch(code) is not None, f"public identity rejected {code}")
+    require(attempt in (1, 2), "public attempt number invalid")
     numeric = code[:6]
     url = f"https://d.10jqka.com.cn/v4/line/bk_{numeric}/01/{PUBLIC_YEAR}.js"
     headers = {
@@ -267,11 +271,12 @@ def _public_get_raw(
     finished = datetime.now(tz=SHANGHAI)
     body = response.content
     require(len(body) <= MAX_PUBLIC_RESPONSE_BYTES, f"public response too large {code}")
-    raw_dir.mkdir(parents=True, exist_ok=True)
-    raw_name = f"{numeric}-{PUBLIC_YEAR}.js"
-    _atomic_bytes(raw_dir / raw_name, body)
+    attempts_dir.mkdir(parents=True, exist_ok=True)
+    raw_name = f"{numeric}-{PUBLIC_YEAR}-attempt{attempt}.js"
+    _atomic_bytes(attempts_dir / raw_name, body)
     meta = {
         "code": code,
+        "attempt": attempt,
         "url": url,
         "started_at": started.isoformat(),
         "finished_at": finished.isoformat(),
@@ -279,26 +284,40 @@ def _public_get_raw(
         "bytes": len(body),
         "sha256": hashlib.sha256(body).hexdigest(),
         "redirect": response.headers.get("Location"),
-        "raw_file": f"raw/{raw_name}",
+        "attempt_raw_file": f"attempts/{raw_name}",
     }
     return body, meta
 
 
 def _prior_public_raw(prior_public: Path) -> dict[str, Path]:
+    """Select only prior HTTP-200 canonical raw files; ignore retained error bodies."""
     raw_dir = prior_public / "raw"
     require(raw_dir.is_dir() and not raw_dir.is_symlink(), "prior public raw directory missing")
+    receipt = _load_json(prior_public / "receipt.json")
+    require(receipt.get("status") == "FAILED_CLOSED", "prior public receipt status disagrees")
+
+    valid_codes: set[str] = set()
+    for item in receipt.get("public_reused_raw", []):
+        require(isinstance(item, dict), "prior reused-raw row invalid")
+        code = str(item.get("code", "")).strip().upper()
+        require(CODE_RE.fullmatch(code) is not None, "prior reused identity invalid")
+        valid_codes.add(code)
+    for item in receipt.get("public_new_requests", []):
+        require(isinstance(item, dict), "prior request row invalid")
+        code = str(item.get("code", "")).strip().upper()
+        require(CODE_RE.fullmatch(code) is not None, "prior requested identity invalid")
+        if item.get("http_status") == 200:
+            valid_codes.add(code)
+
     result: dict[str, Path] = {}
-    for path in sorted(raw_dir.glob(f"*-{PUBLIC_YEAR}.js")):
-        match = re.fullmatch(r"(\d{6})-2026\.js", path.name)
-        require(match is not None, "unexpected prior public raw filename")
-        code = match.group(1) + ".TI"
-        require(CODE_RE.fullmatch(code) is not None, "unexpected prior public identity")
-        require(path.is_file() and not path.is_symlink(), "invalid prior public raw file")
+    for code in sorted(valid_codes):
+        path = raw_dir / f"{code[:6]}-{PUBLIC_YEAR}.js"
+        require(path.is_file() and not path.is_symlink(), f"prior valid raw missing {code}")
         require(path.stat().st_size <= MAX_PUBLIC_RESPONSE_BYTES, "prior public raw too large")
         result[code] = path
     require(
         len(result) == EXPECTED_REUSED_PUBLIC_RAW_COUNT,
-        f"prior public raw count changed: {len(result)}",
+        f"prior valid public raw count changed: {len(result)}",
     )
     return result
 
@@ -385,9 +404,12 @@ def _compose(
         "retained_hithink_history_count": len(retained_codes),
         "public_ths_history_count": len(missing_codes),
         "public_reused_raw_count": 0,
-        "public_new_request_cap": EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
-        "public_new_requests": [],
+        "public_new_identity_count": 0,
+        "public_http_attempt_cap": EXPECTED_NEW_PUBLIC_REQUEST_COUNT + MAX_TRANSIENT_SECOND_ATTEMPTS,
+        "public_http_attempts": [],
+        "public_new_success_codes": [],
         "public_reused_raw": [],
+        "transient_second_attempt_count": 0,
         "overlap_checks": [],
         "candidate_state_hash": None,
         "candidate_state_sha256": None,
@@ -448,12 +470,43 @@ def _compose(
                 receipt["public_reused_raw_count"] = len(receipt["public_reused_raw"])
                 _save_json(capture_root / "receipt.partial.json", receipt)
             elif capture_mode:
-                body, meta = _public_get_raw(code, cookie, raw_dir)
-                # Persist request metadata before status/parse validation.
-                receipt["public_new_requests"].append(meta)
-                _save_json(capture_root / "receipt.partial.json", receipt)
-                require(meta["http_status"] == 200, f"public HTTP {meta['http_status']} {code}")
-                if len(receipt["public_new_requests"]) < EXPECTED_NEW_PUBLIC_REQUEST_COUNT:
+                attempts_dir = capture_root / "attempts"
+                body = b""
+                success = False
+                for attempt in (1, 2):
+                    if attempt == 2:
+                        require(
+                            receipt["transient_second_attempt_count"]
+                            < MAX_TRANSIENT_SECOND_ATTEMPTS,
+                            "transient second-attempt budget exhausted",
+                        )
+                        receipt["transient_second_attempt_count"] += 1
+                        _save_json(capture_root / "receipt.partial.json", receipt)
+                        time.sleep(TRANSIENT_RETRY_DELAY_SECONDS)
+
+                    body, meta = _public_get_raw(code, cookie, attempts_dir, attempt)
+                    receipt["public_http_attempts"].append(meta)
+                    _save_json(capture_root / "receipt.partial.json", receipt)
+
+                    if meta["http_status"] == 200:
+                        _atomic_bytes(final_raw_path, body)
+                        receipt["public_new_success_codes"].append(code)
+                        receipt["public_new_identity_count"] = len(
+                            receipt["public_new_success_codes"]
+                        )
+                        _save_json(capture_root / "receipt.partial.json", receipt)
+                        success = True
+                        break
+
+                    if meta["http_status"] not in TRANSIENT_STATUSES or attempt == 2:
+                        raise CaptureError(
+                            f"public HTTP {meta['http_status']} {code} attempt={attempt}"
+                        )
+                require(success, f"public identity did not succeed {code}")
+                if (
+                    len(receipt["public_new_success_codes"])
+                    < EXPECTED_NEW_PUBLIC_REQUEST_COUNT
+                ):
                     time.sleep(spacing)
             else:
                 require(final_raw_path.is_file(), f"public raw missing {code}")
@@ -488,12 +541,23 @@ def _compose(
             "reused public raw count changed",
         )
         require(
-            len(receipt["public_new_requests"]) == EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
-            f"new public request count changed: {len(receipt['public_new_requests'])}",
+            receipt["public_new_identity_count"] == EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
+            f"new public identity count changed: {receipt['public_new_identity_count']}",
         )
         require(
-            all(item["http_status"] == 200 for item in receipt["public_new_requests"]),
-            "one or more public requests were not HTTP 200",
+            len(receipt["public_new_success_codes"]) == EXPECTED_NEW_PUBLIC_REQUEST_COUNT
+            and len(set(receipt["public_new_success_codes"]))
+            == EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
+            "new public success identities are incomplete or duplicated",
+        )
+        require(
+            len(receipt["public_http_attempts"])
+            <= EXPECTED_NEW_PUBLIC_REQUEST_COUNT + MAX_TRANSIENT_SECOND_ATTEMPTS,
+            "public HTTP attempt cap exceeded",
+        )
+        require(
+            receipt["transient_second_attempt_count"] <= MAX_TRANSIENT_SECOND_ATTEMPTS,
+            "transient second-attempt cap exceeded",
         )
 
     series: list[SectorPriceSeries] = []
@@ -537,10 +601,15 @@ def _compose(
         status="RECOVERY_CANDIDATE_REVIEW_REQUIRED",
         candidate_state_hash=candidate.state_hash,
         candidate_state_sha256=hashlib.sha256(candidate_bytes).hexdigest(),
-        public_new_request_count=(
-            len(receipt["public_new_requests"])
+        public_new_identity_count=(
+            receipt["public_new_identity_count"]
             if capture_mode
             else EXPECTED_NEW_PUBLIC_REQUEST_COUNT
+        ),
+        public_http_attempt_count=(
+            len(receipt["public_http_attempts"])
+            if capture_mode
+            else None
         ),
         public_reused_raw_count=(
             receipt["public_reused_raw_count"]
@@ -573,7 +642,8 @@ def capture(
         _save_json(output / "receipt.json", receipt)
         print(
             f"status={receipt['status']} reused={receipt['public_reused_raw_count']} "
-            f"new_requests={receipt['public_new_request_count']} "
+            f"new_identities={receipt['public_new_identity_count']} "
+            f"http_attempts={receipt['public_http_attempt_count']} "
             f"candidate={receipt['candidate_state_hash']}"
         )
         return 0
@@ -585,8 +655,10 @@ def capture(
             receipt = {
                 "schema_version": 2,
                 "status": "FAILED_CLOSED",
-                "public_new_requests": [],
+                "public_http_attempts": [],
+                "public_new_success_codes": [],
                 "public_reused_raw": [],
+                "transient_second_attempt_count": 0,
                 **AUTHORITY,
             }
         receipt["status"] = "FAILED_CLOSED"
