@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-11T13:37:46.227725+00:00",
+    "finished_at": "2026-09-11T13:38:25.723892+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-12T13:37:46.227725+00:00",
-    "started_at": "2026-09-11T13:37:36.690046+00:00"
+    "recheck_after": "2026-09-12T13:38:25.723892+00:00",
+    "started_at": "2026-09-11T13:38:18.583599+00:00"
   },
   "code_commit": "bb77bf82ef3bb5e8068cc966a7fa7b8fdf6fdd2d",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-11T13:37:46.227725+00:00",
+  "generated_at": "2026-09-11T13:38:25.723892+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-11T13:37:45.347586+00:00",
+      "checks_at": "2026-09-11T13:38:24.996860+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -143,7 +143,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4725fa3b3fea60d47e21f3f7b2040df0416e4de4966016d53d84fb9d29a219f4"
         },
-        "source_checked_at": "2026-09-11T13:37:45.347567+00:00",
+        "source_checked_at": "2026-09-11T13:38:24.996841+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -166,11 +166,11 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-11T13:37:39.458789+00:00",
+      "checks_at": "2026-09-11T13:38:19.772866+00:00",
       "gaps": [
-        "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"
+        "INPUT_UNAVAILABLE_OR_REJECTED:KeyError:'input-audit/inputs/parent-hints.json'"
       ],
-      "health": "IN_PROGRESS",
+      "health": "LATEST_SUCCESS_INPUT_REJECTED",
       "last_qualified_result": {
         "archive": {
           "artifact_id": 10109789379,
@@ -325,7 +325,7 @@
         "validation": "EXISTING_BUNDLE_AND_CONTEXT_VALIDATORS_PLUS_STORED_PUBLICATION_BINDING_NOT_NEW_PRODUCTION_REPLAY"
       },
       "latest_attempt": {
-        "conclusion": null,
+        "conclusion": "success",
         "created_at": "2026-09-11T13:37:23Z",
         "event": "workflow_dispatch",
         "head_sha": "bb77bf82ef3bb5e8068cc966a7fa7b8fdf6fdd2d",
@@ -335,16 +335,17 @@
         "path": ".github/workflows/sector-radar-shadow.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-11T13:37:23Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-11T13:37:27Z"
+        "status": "completed",
+        "updated_at": "2026-09-11T13:37:42Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
+      "previous_read_commit": "9fcaa8e16b5a8abdc08aa13f7b1f2bed21d9e827",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
-      "reading_copy_kind": "VERIFIED_SAVED_PRODUCT",
+      "reading_copy_kind": "PREVIOUSLY_VERIFIED_READ_COPY_NOT_RESTORE_INPUT",
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-11T13:37:44.536656+00:00",
+      "checks_at": "2026-09-11T13:38:24.355654+00:00",
       "gaps": [
         "LATEST_ATTEMPT_CHECK_INCOMPLETE"
       ],
@@ -483,7 +484,7 @@
           "sha256": "13dba56c8f78fe379c4c457098850d5eb1bf7790298f6f9ed9bc1ce4c50f4b77"
         },
         "scope": "CURATED_LINKS_ONLY_NOT_A_BLIND_ALL_STOCK_SCREEN",
-        "source_checked_at": "2026-09-11T13:37:44.536639+00:00",
+        "source_checked_at": "2026-09-11T13:38:24.355635+00:00",
         "status": "STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "605296.SH"
@@ -512,12 +513,12 @@
     }
   },
   "pending": [],
-  "reading_hash": "8d020c0c4c02f3c3d24aab7146acf833860a40463ff1611b51fdd71cd2e7c754",
+  "reading_hash": "f95790fd126493eb98fb4aa73278ed9ba9d7e4c5320a13e211e193144c08610c",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "34605365033",
+    "run_id": "34605396784",
     "trigger_run_id": "34605361588",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
