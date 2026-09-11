@@ -25,8 +25,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.run_attempt == 1 &&
       github.event.workflow_run.head_branch == 'main' &&
-      github.event.workflow_run.head_repository.full_name == github.repository &&
-      github.event.workflow_run.head_sha == github.sha
+      github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -79,6 +78,8 @@ jobs:
             echo
             printf 'Natural Sector run `%s` passed the bounded shared-Key preflight and was handed once to the existing `stock-reading` workflow contract.\n\n' "$MARKET_RUN_ID"
             echo 'No market data was read in this successor. The dispatched Stock workflow remains responsible for exact Sector artifact binding, the existing 26-request ceiling, live capture, offline replay and retained delivery.'
+            echo
+            echo 'The successor executes current default-branch code; the existing Stock contract separately verifies the immutable upstream Sector run/artifact. A later main commit does not rewrite that market input.'
             echo
             echo 'Do not Re-run this successor. A failed or uncertain dispatch is not permission to issue a duplicate handoff.'
           } >> "$GITHUB_STEP_SUMMARY"
