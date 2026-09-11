@@ -1,0 +1,20 @@
+{
+  "request_id": "sector-gap-20260911-v1",
+  "authorization_comment_id": 5628923881,
+  "prior_failure_run_id": 34489102107,
+  "max_hithink_requests": 323,
+  "job_timeout_minutes": 150,
+  "request_gap_seconds": 20,
+  "technical_retries": 0,
+  "capture_only": true,
+  "parent": {
+    "run_id": 34364727989,
+    "commit": "381f4d1f826a6d98844d27d626129211218ca332",
+    "artifact_id": 10109790767,
+    "artifact_bytes": 443755,
+    "artifact_digest": "sha256:1f5f6ffa1795c8ccfdb457425d7a116e150fe5a504efac92b23294d891eb4324",
+    "market_session": "2026-09-09",
+    "state_hash": "fbfbf132dd11fd0d5be686db855b9f037aca7fc3055d2cb8dbac794494b95e05",
+    "parent_hint_mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38"
+  }
+}
