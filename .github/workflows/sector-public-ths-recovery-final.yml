@@ -1,0 +1,101 @@
+name: sector-public-ths-recovery-final
+
+on:
+  push:
+    branches:
+      - recovery/sector-public-ths-gap-final-20260911
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sector-public-ths-recovery-final-20260911
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact isolated final-recovery branch
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install existing Kernel and fixed AKShare reuse commit
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -e .
+          python -m pip install --disable-pip-version-check \
+            'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+          python -m py_compile .github/scripts/capture-sector-public-ths-recovery.py
+
+      - name: Download exact failed HiThink-recovery source artifact
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/sector-recovery-source
+
+      - name: Download latest partial public source artifact
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10189018848'
+          run-id: '34574330259'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/prior-public
+
+      - name: Reuse 14 valid raw files and request only remaining 197 identities
+        id: capture
+        continue-on-error: true
+        timeout-minutes: 20
+        run: |
+          python .github/scripts/capture-sector-public-ths-recovery.py capture \
+            --source "$RUNNER_TEMP/sector-recovery-source" \
+            --prior-public "$RUNNER_TEMP/prior-public/sector-public-ths-cont-capture" \
+            --output "$RUNNER_TEMP/sector-public-ths-final-capture" \
+            --spacing-seconds 2.0
+
+      - name: Offline rebuild candidate without network
+        id: verify
+        if: ${{ steps.capture.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python .github/scripts/capture-sector-public-ths-recovery.py verify \
+            --source "$RUNNER_TEMP/sector-recovery-source" \
+            --capture "$RUNNER_TEMP/sector-public-ths-final-capture" \
+            --output "$RUNNER_TEMP/sector-public-ths-final-verify"
+
+      - name: Retain complete raw/attempt evidence, candidate and receipts
+        id: evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-public-ths-recovery-final-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sector-public-ths-final-capture/
+            ${{ runner.temp }}/sector-public-ths-final-verify/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+
+      - name: Enforce candidate-only acceptance
+        if: always()
+        env:
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+        run: |
+          printf 'Capture outcome: %s; offline verify: %s\n' "$CAPTURE_OUTCOME" "$VERIFY_OUTCOME"
+          test "$CAPTURE_OUTCOME" = success
+          test "$VERIFY_OUTCOME" = success
