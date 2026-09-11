@@ -1,0 +1,99 @@
+name: sector-public-history-probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: sector-public-history-probe-20260911-v1
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing kernel and pinned AKShare reuse
+        run: |
+          python -m pip install -e .
+          python -m pip install 'akshare==1.18.94'
+      - name: Retain exact failed-recovery artifact metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/sector-public-history-probe"
+          mkdir -p "$root/metadata"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/10187281705" > "$root/metadata/source-artifact.json"
+      - name: Download retained HiThink originals from the failed one-shot
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/sector-public-history-probe/hithink
+      - name: Run exactly five public THS source-identity requests, no retry
+        id: capture
+        run: >-
+          python .github/scripts/probe-sector-public-history.py capture
+          --root "$RUNNER_TEMP/sector-public-history-probe"
+      - name: Verify retained bytes and qualification boundaries offline
+        if: always()
+        id: verify
+        run: >-
+          python .github/scripts/probe-sector-public-history.py verify
+          --root "$RUNNER_TEMP/sector-public-history-probe"
+      - name: Retain raw THS JS, normalized comparison, hashes and source originals
+        if: always()
+        id: evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-public-history-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sector-public-history-probe/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Publish the bounded result
+        if: always()
+        env:
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
+        shell: bash
+        run: |
+          root="$RUNNER_TEMP/sector-public-history-probe/output"
+          {
+            echo '## Sector public-history 5-code source-identity probe'
+            printf 'Capture: %s; offline verification: %s\n\n' "$CAPTURE_OUTCOME" "$VERIFY_OUTCOME"
+            if [ -f "$root/comparison.json" ]; then
+              python - "$root/comparison.json" <<'PY'
+          import json, sys
+          value = json.load(open(sys.argv[1], encoding='utf-8'))
+          print('Probe status: `' + value['status'] + '`')
+          print('Exact match: `' + str(value['exact_match']).lower() + '`')
+          print('Compared rows: ' + str(value['actual_comparison_count']) + '/' + str(value['expected_comparison_count']))
+          PY
+            else
+              echo 'No sealed comparison; inspect retained failure evidence.'
+            fi
+            printf '\nEvidence: %s\n\n' "$ARTIFACT_URL"
+            echo 'Source-identity qualification only. No production state/cache/event/Research/Odds/Action writes.'
+            echo 'Even EXACT_MATCH does not authorize 321-code expansion or recovery checkpoint promotion.'
+            echo 'Do not Re-run this probe after a failed or uncertain response without a new explicit review.'
+          } >> "$GITHUB_STEP_SUMMARY"
