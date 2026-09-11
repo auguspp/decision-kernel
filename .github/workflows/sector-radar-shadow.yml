@@ -2,6 +2,15 @@ name: sector-radar-shadow
 
 on:
   workflow_dispatch:
+    inputs:
+      operation:
+        description: Sector operation
+        required: true
+        default: produce
+        type: choice
+        options:
+          - produce
+          - adopt-recovery-2026-09-10
   schedule:
     # UTC 10:13 = Asia/Shanghai 18:13, Monday-Friday. Calendar remains authoritative.
     - cron: "13 10 * * 1-5"
@@ -19,7 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
       TZ: Asia/Shanghai
     steps:
       - uses: actions/checkout@v7
@@ -43,6 +51,9 @@ jobs:
             exit 1
           fi
       - name: Check HiThink secret
+        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
         shell: bash
         run: |
           if [ -z "${HITHINK_FINANCE_API_KEY:-}" ]; then
@@ -50,6 +61,7 @@ jobs:
             exit 1
           fi
       - name: Restore cache acceleration copy
+        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
         id: state-cache
         uses: actions/cache/restore@v6
         with:
@@ -76,14 +88,53 @@ jobs:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ steps.state-artifact.outputs.artifact_run_id }}
+      - name: Download exact recovery checkpoint
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-recovery-2026-09-10'
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10196584150'
+          run-id: '34593517648'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/sector-recovery-checkpoint
+      - name: Adopt exact recovery checkpoint into original Sector lineage
+        id: recovery-adoption
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-recovery-2026-09-10'
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+          RECOVERY_OPERATION: adopt-recovery-2026-09-10
+        run: |
+          python .github/scripts/adopt-sector-recovery-checkpoint.py adopt \
+            --parent restored-artifact/sector-radar \
+            --checkpoint "${RUNNER_TEMP}/sector-recovery-checkpoint" \
+            --state-dir decision-state/sector-radar \
+            --output sector-radar-run \
+            --discovered-run-id "${{ steps.state-artifact.outputs.artifact_run_id }}" \
+            --discovered-artifact-id "${{ steps.state-artifact.outputs.artifact_id }}" \
+            --discovered-head-sha "${{ steps.state-artifact.outputs.artifact_head_sha }}"
+      - name: Verify recovery adoption exact offline match
+        id: recovery-adoption-verify
+        if: success() && github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-recovery-2026-09-10'
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+          RECOVERY_OPERATION: adopt-recovery-2026-09-10
+        run: |
+          python .github/scripts/adopt-sector-recovery-checkpoint.py verify \
+            --checkpoint "${RUNNER_TEMP}/sector-recovery-checkpoint" \
+            --state-dir decision-state/sector-radar \
+            --output sector-radar-run
       - name: Check shared-Key activity once before acquisition
+        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
         id: key-activity
         env:
           GITHUB_TOKEN: ${{ github.token }}
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/check-sector-scheduled-activity.py
       - name: Run independent Sector Radar shadow producer
+        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
         env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
           # Conservative per-process spacing, not a verified provider quota.
           HITHINK_SECTOR_REQUEST_PACING: "1"
         shell: bash
@@ -101,13 +152,13 @@ jobs:
             --output-directory sector-radar-run
       - name: Verify exact offline replay before publication
         id: replay-check
-        if: success()
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/verify-sector-radar-publication.py
       - name: Render read-only saved-state context
         id: context-view
-        if: success()
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: |
@@ -117,7 +168,7 @@ jobs:
             --output sector-radar-run/context
       - name: Package joint economic and company reading
         id: joint-reading
-        if: success()
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/build-sector-radar-reading.py
@@ -131,6 +182,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
       - name: Upload authoritative state bundle
+        id: state-upload
         if: success()
         uses: actions/upload-artifact@v7
         with:
@@ -139,6 +191,7 @@ jobs:
           if-no-files-found: error
           retention-days: 90
       - name: Save cache acceleration copy
+        id: cache-save
         if: success()
         uses: actions/cache/save@v6
         with:
@@ -148,12 +201,34 @@ jobs:
         if: always()
         shell: bash
         env:
+          OPERATION: ${{ inputs.operation }}
           KEY_ACTIVITY_OUTCOME: ${{ steps.key-activity.outcome }}
           REPLAY_OUTCOME: ${{ steps.replay-check.outcome }}
           CONTEXT_OUTCOME: ${{ steps.context-view.outcome }}
           JOINT_OUTCOME: ${{ steps.joint-reading.outcome }}
+          ADOPTION_OUTCOME: ${{ steps.recovery-adoption.outcome }}
+          ADOPTION_VERIFY_OUTCOME: ${{ steps.recovery-adoption-verify.outcome }}
+          STATE_UPLOAD_OUTCOME: ${{ steps.state-upload.outcome }}
+          CACHE_SAVE_OUTCOME: ${{ steps.cache-save.outcome }}
           RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$OPERATION" = "adopt-recovery-2026-09-10" ]; then
+            {
+              echo '### Sector production recovery adoption'
+              printf 'Run: `%s`; attempt: `%s`; commit: `%s`\n\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA"
+              echo 'This case-bounded mode makes no market/provider request. It validates the exact retained 2026-09-10 checkpoint, preserves the old event ledger, and only then prepares the original Sector state artifact lineage.'
+              echo
+              printf 'Local checkpoint adoption: `%s`; independent offline exact verification: `%s`.\n\n' "$ADOPTION_OUTCOME" "$ADOPTION_VERIFY_OUTCOME"
+              printf 'Authoritative state artifact upload: `%s`; cache acceleration save: `%s`.\n\n' "$STATE_UPLOAD_OUTCOME" "$CACHE_SAVE_OUTCOME"
+              echo 'The candidate state bytes intentionally keep their historical source label ending in NOT_RESTORE_AUTHORITY; restore authority comes only from this successful original-workflow state artifact publication, not from rewriting the frozen candidate.'
+              echo
+              echo 'No retrospective candidate event, Research, Human attention, Odds, Action or investment authority is created. A later ordinary Sector production run must separately prove normal reconnection.'
+              if [ -n "$RUN_AUDIT_URL" ]; then
+                printf '\n[Download this adoption audit](%s)\n' "$RUN_AUDIT_URL"
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           {
             echo '### Sector production invocation'
             printf 'Trigger: `%s`; run: `%s`; attempt: `%s`; commit: `%s`\n\n' "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA"
