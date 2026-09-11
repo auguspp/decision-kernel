@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""One-time mixed-source Sector gap capture; candidate only, never restore authority.
+"""One-time mixed-source Sector gap continuation; candidate only.
 
-Reuse retained HiThink responses for already-successful histories and exact-identity
-10jqka public board history only for the missing histories. No retries, no signals.
+Reuse the 110 retained HiThink histories and any already-retained public THS raw
+files. Request only exact identities still missing. No retries, no signal creation,
+no production state write.
 """
 from __future__ import annotations
 
@@ -43,16 +44,29 @@ from decision_kernel.runtime.sector_radar_state import (
 
 REPO = "auguspp/decision-kernel"
 AKSHARE_COMMIT = "8e95744b79ae22326308ccd2b4e62650c5b53c55"
+
 SOURCE_RUN_ID = 34566950303
 SOURCE_ARTIFACT_ID = 10187281705
 SOURCE_ARTIFACT_SHA256 = (
     "aedf5fc5507fa33c00f316be72c14b50962486961ba7199e097d2628205dc60b"
 )
+PRIOR_PUBLIC_RUN_ID = 34573861341
+PRIOR_PUBLIC_ARTIFACT_ID = 10188840893
+PRIOR_PUBLIC_ARTIFACT_SHA256 = (
+    "651a99fcd43b5d09418003211ce9cfe96a9a9acdbcb30b02e8c40b570a78e5f2"
+)
+
 SOURCE_WORKFLOW = ".github/workflows/sector-radar-shadow.yml"
 EXPECTED_PARENT_RUN_ID = 34364727989
 EXPECTED_PARENT_ARTIFACT_ID = 10109790767
+
 EXPECTED_RETAINED_HISTORY_COUNT = 110
 EXPECTED_PUBLIC_HISTORY_COUNT = 211
+EXPECTED_REUSED_PUBLIC_RAW_COUNT = 6
+EXPECTED_NEW_PUBLIC_REQUEST_COUNT = (
+    EXPECTED_PUBLIC_HISTORY_COUNT - EXPECTED_REUSED_PUBLIC_RAW_COUNT
+)
+
 TARGET_SESSION = date(2026, 9, 10)
 PUBLIC_YEAR = 2026
 PUBLIC_SPACING_SECONDS = 1.0
@@ -60,6 +74,7 @@ PUBLIC_TIMEOUT_SECONDS = 12.0
 MAX_PUBLIC_RESPONSE_BYTES = 4 * 1024 * 1024
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 CODE_RE = re.compile(r"^(?:881|884)\d{3}\.TI$")
+
 AUTHORITY = {
     "restore_authority": "NONE",
     "production_state_writes": 0,
@@ -171,9 +186,22 @@ def _cookie_value() -> str:
     return value
 
 
+def _parse_day(raw_day: str, code: str) -> date:
+    if len(raw_day) == 8 and raw_day.isdigit():
+        return date(int(raw_day[:4]), int(raw_day[4:6]), int(raw_day[6:8]))
+    try:
+        return datetime.fromisoformat(raw_day).date()
+    except ValueError as exc:
+        raise CaptureError(f"public date invalid {code}") from exc
+
+
 def _parse_public_year(
-    body: bytes, *, code: str
+    body: bytes,
+    *,
+    code: str,
+    needed: tuple[date, ...],
 ) -> dict[date, tuple[Decimal, Decimal, Decimal]]:
+    """Parse only the frozen recovery dates; ignore later/current-session fields."""
     require(len(body) <= MAX_PUBLIC_RESPONSE_BYTES, f"public response too large {code}")
     try:
         text = body.decode("utf-8")
@@ -190,30 +218,30 @@ def _parse_public_year(
         f"public data series missing {code}",
     )
 
+    wanted = set(needed)
     points: dict[date, tuple[Decimal, Decimal, Decimal]] = {}
     for record in payload["data"].split(";"):
         columns = record.split(",")
         require(len(columns) in (11, 12), f"public row width unsupported {code}")
-        raw_day = columns[0].strip()
-        if len(raw_day) == 8 and raw_day.isdigit():
-            day = date(int(raw_day[:4]), int(raw_day[4:6]), int(raw_day[6:8]))
-        else:
-            try:
-                day = datetime.fromisoformat(raw_day).date()
-            except ValueError as exc:
-                raise CaptureError(f"public date invalid {code}") from exc
-        require(day not in points, f"public duplicate date {code} {day}")
+        day = _parse_day(columns[0].strip(), code)
+        if day not in wanted:
+            # Critical PIT boundary: do not parse or consume 9/11 current-session values.
+            continue
+        require(day not in points, f"public duplicate needed date {code} {day}")
         points[day] = (
             _decimal(columns[4], f"{code}.{day}.close"),
             _decimal(columns[5], f"{code}.{day}.volume"),
             _decimal(columns[6], f"{code}.{day}.turnover"),
         )
+    require(set(points) == wanted, f"public history missing needed dates {code}")
     return points
 
 
-def _public_get(
-    code: str, cookie: str, raw_dir: Path
-) -> tuple[dict[date, tuple[Decimal, Decimal, Decimal]], dict[str, Any]]:
+def _public_get_raw(
+    code: str,
+    cookie: str,
+    raw_dir: Path,
+) -> tuple[bytes, dict[str, Any]]:
     require(CODE_RE.fullmatch(code) is not None, f"public identity rejected {code}")
     numeric = code[:6]
     url = f"https://d.10jqka.com.cn/v4/line/bk_{numeric}/01/{PUBLIC_YEAR}.js"
@@ -238,6 +266,7 @@ def _public_get(
         raise CaptureError(f"public request failed {code}: {type(exc).__name__}") from exc
     finished = datetime.now(tz=SHANGHAI)
     body = response.content
+    require(len(body) <= MAX_PUBLIC_RESPONSE_BYTES, f"public response too large {code}")
     raw_dir.mkdir(parents=True, exist_ok=True)
     raw_name = f"{numeric}-{PUBLIC_YEAR}.js"
     _atomic_bytes(raw_dir / raw_name, body)
@@ -252,38 +281,58 @@ def _public_get(
         "redirect": response.headers.get("Location"),
         "raw_file": f"raw/{raw_name}",
     }
-    require(response.status_code == 200, f"public HTTP {response.status_code} {code}")
-    return _parse_public_year(body, code=code), meta
+    return body, meta
+
+
+def _prior_public_raw(prior_public: Path) -> dict[str, Path]:
+    raw_dir = prior_public / "raw"
+    require(raw_dir.is_dir() and not raw_dir.is_symlink(), "prior public raw directory missing")
+    result: dict[str, Path] = {}
+    for path in sorted(raw_dir.glob(f"*-{PUBLIC_YEAR}.js")):
+        match = re.fullmatch(r"(\d{6})-2026\.js", path.name)
+        require(match is not None, "unexpected prior public raw filename")
+        code = match.group(1) + ".TI"
+        require(CODE_RE.fullmatch(code) is not None, "unexpected prior public identity")
+        require(path.is_file() and not path.is_symlink(), "invalid prior public raw file")
+        require(path.stat().st_size <= MAX_PUBLIC_RESPONSE_BYTES, "prior public raw too large")
+        result[code] = path
+    require(
+        len(result) == EXPECTED_REUSED_PUBLIC_RAW_COUNT,
+        f"prior public raw count changed: {len(result)}",
+    )
+    return result
 
 
 def _compose(
     *,
     source: Path,
-    public_root: Path,
+    capture_root: Path,
     capture_mode: bool,
     spacing: float,
+    prior_public: Path | None = None,
     cookie: str | None = None,
 ) -> tuple[bytes, bytes, dict[str, Any]]:
-    report = _source_report(source)
+    source_report = _source_report(source)
     calendar_envelope, catalog_envelope, retained_histories = _retained_inputs(
-        source, report
+        source, source_report
     )
     bundle = load_sector_radar_persistent_bundle(
         source / "input",
         expected_repository=REPO,
         expected_workflow=SOURCE_WORKFLOW,
-        expected_parent_hint_mapping_hash=report["binding"]["request"]["parent"][
+        expected_parent_hint_mapping_hash=source_report["binding"]["request"]["parent"][
             "parent_hint_mapping_hash"
         ],
     )
     state = bundle.market_state
     sessions = normalize_hithink_calendar(calendar_envelope)
-    observed_at = datetime.fromisoformat(report["observed_at"])
+    observed_at = datetime.fromisoformat(source_report["observed_at"])
     target = latest_completed_a_share_session(sessions, observed_at=observed_at)
     require(target == TARGET_SESSION, f"target session changed: {target}")
     require(state.sessions[-1] == date(2026, 9, 9), "frozen state no longer ends 2026-09-09")
     overlap = state.sessions[-3:]
     needed = (*overlap, target)
+
     catalog = normalize_hithink_industry_catalog(catalog_envelope)
     require(catalog.catalog_hash == state.catalog_hash, "catalog hash changed")
 
@@ -306,24 +355,39 @@ def _compose(
         all(CODE_RE.fullmatch(code) for code in missing_codes),
         "missing set contains non-THS-board identity",
     )
-    if capture_mode:
-        require(cookie is not None, "public cookie missing")
 
-    public_dir = public_root / "raw"
+    prior_raw: dict[str, Path] = {}
+    if capture_mode:
+        require(prior_public is not None, "prior public artifact is required")
+        require(cookie is not None, "public cookie missing")
+        prior_raw = _prior_public_raw(prior_public)
+        require(
+            set(prior_raw).issubset(set(missing_codes)),
+            "prior public raw contains a non-missing identity",
+        )
+
+    raw_dir = capture_root / "raw"
     receipt: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "status": "RECORDING" if capture_mode else "VERIFYING",
-        "semantics": "ONE_TIME_MIXED_RETAINED_HITHINK_AND_PUBLIC_THS_RECOVERY_CANDIDATE_ONLY",
+        "semantics": (
+            "ONE_TIME_MIXED_RETAINED_HITHINK_AND_PUBLIC_THS_RECOVERY_CANDIDATE_ONLY"
+        ),
         "akshare_commit": AKSHARE_COMMIT,
         "source_run_id": SOURCE_RUN_ID,
         "source_artifact_id": SOURCE_ARTIFACT_ID,
         "source_artifact_sha256": SOURCE_ARTIFACT_SHA256,
+        "prior_public_run_id": PRIOR_PUBLIC_RUN_ID,
+        "prior_public_artifact_id": PRIOR_PUBLIC_ARTIFACT_ID,
+        "prior_public_artifact_sha256": PRIOR_PUBLIC_ARTIFACT_SHA256,
         "target_session": target.isoformat(),
         "overlap_sessions": [day.isoformat() for day in overlap],
         "retained_hithink_history_count": len(retained_codes),
         "public_ths_history_count": len(missing_codes),
-        "public_request_cap": EXPECTED_PUBLIC_HISTORY_COUNT,
-        "public_requests": [],
+        "public_reused_raw_count": 0,
+        "public_new_request_cap": EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
+        "public_new_requests": [],
+        "public_reused_raw": [],
         "overlap_checks": [],
         "candidate_state_hash": None,
         "candidate_state_sha256": None,
@@ -344,6 +408,7 @@ def _compose(
                 state.sessions, old.closes, old.turnovers, strict=True
             )
         }
+
         if code in retained_histories:
             envelope = _load_json(retained_histories[code])
             history = normalize_hithink_completed_index_history(
@@ -365,21 +430,36 @@ def _compose(
                 f"retained history missing needed dates {code}",
             )
             source_kind = "RETAINED_HITHINK"
+
         else:
-            raw_path = public_dir / f"{code[:6]}-{PUBLIC_YEAR}.js"
-            if capture_mode:
-                by_day, meta = _public_get(code, cookie, public_dir)
-                receipt["public_requests"].append(meta)
-                _save_json(public_root / "receipt.partial.json", receipt)
-                if len(receipt["public_requests"]) < len(missing_codes):
+            final_raw_path = raw_dir / f"{code[:6]}-{PUBLIC_YEAR}.js"
+            if capture_mode and code in prior_raw:
+                body = prior_raw[code].read_bytes()
+                raw_dir.mkdir(parents=True, exist_ok=True)
+                _atomic_bytes(final_raw_path, body)
+                prior_meta = {
+                    "code": code,
+                    "source_artifact_id": PRIOR_PUBLIC_ARTIFACT_ID,
+                    "bytes": len(body),
+                    "sha256": hashlib.sha256(body).hexdigest(),
+                    "raw_file": f"raw/{final_raw_path.name}",
+                }
+                receipt["public_reused_raw"].append(prior_meta)
+                receipt["public_reused_raw_count"] = len(receipt["public_reused_raw"])
+                _save_json(capture_root / "receipt.partial.json", receipt)
+            elif capture_mode:
+                body, meta = _public_get_raw(code, cookie, raw_dir)
+                # Persist request metadata before status/parse validation.
+                receipt["public_new_requests"].append(meta)
+                _save_json(capture_root / "receipt.partial.json", receipt)
+                require(meta["http_status"] == 200, f"public HTTP {meta['http_status']} {code}")
+                if len(receipt["public_new_requests"]) < EXPECTED_NEW_PUBLIC_REQUEST_COUNT:
                     time.sleep(spacing)
             else:
-                require(raw_path.is_file(), f"public raw missing {code}")
-                by_day = _parse_public_year(raw_path.read_bytes(), code=code)
-            require(
-                all(day in by_day for day in needed),
-                f"public history missing needed dates {code}",
-            )
+                require(final_raw_path.is_file(), f"public raw missing {code}")
+                body = final_raw_path.read_bytes()
+
+            by_day = _parse_public_year(body, code=code, needed=needed)
             source_kind = "PUBLIC_10JQKA_VIA_AKSHARE"
 
         for day in overlap:
@@ -402,6 +482,19 @@ def _compose(
         completed[code] = (target_close, target_turnover)
 
     require(len(completed) == len(all_codes), "candidate series coverage incomplete")
+    if capture_mode:
+        require(
+            receipt["public_reused_raw_count"] == EXPECTED_REUSED_PUBLIC_RAW_COUNT,
+            "reused public raw count changed",
+        )
+        require(
+            len(receipt["public_new_requests"]) == EXPECTED_NEW_PUBLIC_REQUEST_COUNT,
+            f"new public request count changed: {len(receipt['public_new_requests'])}",
+        )
+        require(
+            all(item["http_status"] == 200 for item in receipt["public_new_requests"]),
+            "one or more public requests were not HTTP 200",
+        )
 
     series: list[SectorPriceSeries] = []
     for old in state.series:
@@ -415,7 +508,7 @@ def _compose(
         points += (SectorPricePoint(target, target_close, target_turnover),)
         series.append(SectorPriceSeries(old.thscode, old.name, points))
 
-    parent = report["binding"]["request"]["parent"]
+    parent = source_report["binding"]["request"]["parent"]
     lineage = (
         *state.source_lineage,
         SectorRadarStateSourceLineage(
@@ -444,22 +537,33 @@ def _compose(
         status="RECOVERY_CANDIDATE_REVIEW_REQUIRED",
         candidate_state_hash=candidate.state_hash,
         candidate_state_sha256=hashlib.sha256(candidate_bytes).hexdigest(),
-        public_request_count=(
-            len(receipt["public_requests"])
+        public_new_request_count=(
+            len(receipt["public_new_requests"])
             if capture_mode
-            else EXPECTED_PUBLIC_HISTORY_COUNT
+            else EXPECTED_NEW_PUBLIC_REQUEST_COUNT
+        ),
+        public_reused_raw_count=(
+            receipt["public_reused_raw_count"]
+            if capture_mode
+            else EXPECTED_REUSED_PUBLIC_RAW_COUNT
         ),
     )
     return candidate_bytes, event_bytes, receipt
 
 
-def capture(source: Path, output: Path, spacing: float) -> int:
+def capture(
+    source: Path,
+    prior_public: Path,
+    output: Path,
+    spacing: float,
+) -> int:
     output.mkdir(parents=True, exist_ok=False)
     receipt: dict[str, Any] | None = None
     try:
         candidate, events, receipt = _compose(
             source=source,
-            public_root=output,
+            prior_public=prior_public,
+            capture_root=output,
             capture_mode=True,
             spacing=spacing,
             cookie=_cookie_value(),
@@ -468,7 +572,8 @@ def capture(source: Path, output: Path, spacing: float) -> int:
         _atomic_bytes(output / "candidate-events.json", events)
         _save_json(output / "receipt.json", receipt)
         print(
-            f"status={receipt['status']} public_requests={receipt['public_request_count']} "
+            f"status={receipt['status']} reused={receipt['public_reused_raw_count']} "
+            f"new_requests={receipt['public_new_request_count']} "
             f"candidate={receipt['candidate_state_hash']}"
         )
         return 0
@@ -478,9 +583,10 @@ def capture(source: Path, output: Path, spacing: float) -> int:
             receipt = _load_json(partial_path)
         else:
             receipt = {
-                "schema_version": 1,
+                "schema_version": 2,
                 "status": "FAILED_CLOSED",
-                "public_requests": [],
+                "public_new_requests": [],
+                "public_reused_raw": [],
                 **AUTHORITY,
             }
         receipt["status"] = "FAILED_CLOSED"
@@ -506,7 +612,8 @@ def verify(source: Path, capture_root: Path, output: Path) -> int:
         )
         candidate, events, rebuilt = _compose(
             source=source,
-            public_root=capture_root,
+            prior_public=None,
+            capture_root=capture_root,
             capture_mode=False,
             spacing=0.0,
         )
@@ -521,6 +628,10 @@ def verify(source: Path, capture_root: Path, output: Path) -> int:
         require(
             rebuilt["candidate_state_hash"] == saved_receipt["candidate_state_hash"],
             "candidate state hash changed",
+        )
+        require(
+            rebuilt["candidate_state_sha256"] == saved_receipt["candidate_state_sha256"],
+            "candidate byte hash changed",
         )
         verification = {
             "schema_version": 1,
@@ -557,19 +668,35 @@ def verify(source: Path, capture_root: Path, output: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
+
     p_capture = sub.add_parser("capture")
     p_capture.add_argument("--source", required=True, type=Path)
+    p_capture.add_argument("--prior-public", required=True, type=Path)
     p_capture.add_argument("--output", required=True, type=Path)
-    p_capture.add_argument("--spacing-seconds", type=float, default=PUBLIC_SPACING_SECONDS)
+    p_capture.add_argument(
+        "--spacing-seconds",
+        type=float,
+        default=PUBLIC_SPACING_SECONDS,
+    )
+
     p_verify = sub.add_parser("verify")
     p_verify.add_argument("--source", required=True, type=Path)
     p_verify.add_argument("--capture", required=True, type=Path)
     p_verify.add_argument("--output", required=True, type=Path)
+
     args = parser.parse_args()
 
     if args.command == "capture":
-        require(0.5 <= args.spacing_seconds <= 5.0, "public spacing outside bounded range")
-        return capture(args.source, args.output, args.spacing_seconds)
+        require(
+            0.5 <= args.spacing_seconds <= 5.0,
+            "public spacing outside bounded range",
+        )
+        return capture(
+            args.source,
+            args.prior_public,
+            args.output,
+            args.spacing_seconds,
+        )
     return verify(args.source, args.capture, args.output)
 
 
