@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import runpy
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -128,11 +129,13 @@ def test_successor_reuses_existing_bounded_activity_observation_for_all_key_user
     assert tuple(calls) == mod["activity_module"]()["ACTIVE"]
 
 
-def test_successor_preflight_has_no_market_or_dispatch_authority_itself():
+def test_successor_preflight_has_no_market_dispatch_or_polling_authority_itself():
     raw = HELPER.read_text(encoding="utf-8")
     assert "HITHINK_FINANCE_API_KEY" not in raw
     assert "/dispatches" not in raw and "gh api" not in raw
-    assert "sleep(" not in raw and "while " not in raw
+    assert "sleep(" not in raw
+    tree = ast.parse(raw)
+    assert not any(isinstance(node, ast.While) for node in ast.walk(tree))
     assert "check-sector-scheduled-activity.py" in raw
 
 
