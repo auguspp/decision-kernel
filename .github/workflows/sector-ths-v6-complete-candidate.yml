@@ -1,0 +1,99 @@
+name: sector-ths-v6-complete-candidate
+
+on:
+  push:
+    branches:
+      - recovery/sector-ths-v6-complete-20260911
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sector-ths-v6-complete-candidate-20260911
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install Kernel and fixed AKShare helper
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -e .
+          python -m pip install --disable-pip-version-check \
+            'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+          python -m py_compile .github/scripts/capture-sector-ths-v6-complete.py
+      - name: Download frozen HiThink recovery source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/hithink-source
+      - name: Download 40-valid-v4 partial source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10189239372'
+          run-id: '34574796927'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/v4-source
+      - name: Download accepted v6 884075 probe source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10189399695'
+          run-id: '34575354939'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/v6-probe
+      - name: Fetch only remaining 170 exact identities over THS v6
+        id: capture
+        continue-on-error: true
+        timeout-minutes: 15
+        run: |
+          python .github/scripts/capture-sector-ths-v6-complete.py capture \
+            --source "$RUNNER_TEMP/hithink-source" \
+            --prior-v4 "$RUNNER_TEMP/v4-source/sector-public-ths-final-capture" \
+            --probe-v6 "$RUNNER_TEMP/v6-probe" \
+            --output "$RUNNER_TEMP/sector-ths-v6-complete"
+      - name: Offline exact rebuild without network
+        id: verify
+        if: ${{ steps.capture.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python .github/scripts/capture-sector-ths-v6-complete.py verify \
+            --source "$RUNNER_TEMP/hithink-source" \
+            --capture "$RUNNER_TEMP/sector-ths-v6-complete" \
+            --output "$RUNNER_TEMP/sector-ths-v6-verify"
+      - name: Retain complete source set, candidate and receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-ths-v6-complete-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sector-ths-v6-complete/
+            ${{ runner.temp }}/sector-ths-v6-verify/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Enforce candidate-only acceptance
+        if: always()
+        env:
+          C: ${{ steps.capture.outcome }}
+          V: ${{ steps.verify.outcome }}
+        run: |
+          printf 'capture=%s verify=%s\n' "$C" "$V"
+          test "$C" = success
+          test "$V" = success
