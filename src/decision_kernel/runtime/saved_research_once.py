@@ -34,6 +34,16 @@ REPO = "auguspp/decision-kernel"
 REQUEST_PATH = "research_runs/api-once-request.json"
 BASE_URL = "https://ai.6600600.xyz/v1"
 MODEL = "gpt-6-astra"
+# One explicitly authorized successor, not automatic retry/resume policy.
+APPROVED_CONTINUATION = {
+    "execution_id": "p0-suken-api-20260910-v1", "run_id": 34490271156,
+    "source": {"repository": REPO, "ref": "2722e676e0a7c273fd60b6c388a2941f5c1fc284",
+        "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/host-receipt.json",
+        "git_blob": "d7f52a24207a41ac9b52f991c48576318bd2021e",
+        "sha256": "1fd80d7bcd20dedc10024adce3841a36508930238993bb1309a598a339c78f76",
+        "purpose": "PREVIOUS_FAILED_EXECUTION"},
+    "authorization": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088",
+}
 MAX_SOURCE_BYTES = 16 * 1024 * 1024
 MAX_PROMPT_BYTES = 64 * 1024
 MAX_OUTPUT_TOKENS = 6000
@@ -96,9 +106,10 @@ def locator(spec):
 def checked_request(request):
     # This trial's approved object is not selectable by a model or dispatch input.
     require(request["schema_version"] == 1 and request["ticker"] == "601952", "unapproved request")
-    require(request["id"] == "p0-suken-api-20260910-v1", "unapproved execution")
+    require(request["id"] == "p0-suken-api-20260910-v2", "unapproved execution")
     require(request["work_ref"] == "research-candidate/p0-suken-api-20260910", "unapproved work ref")
-    require(request["prefix"] == "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/", "unapproved prefix")
+    require(request["prefix"] == "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/", "unapproved prefix")
+    require(request.get("continuation") == APPROVED_CONTINUATION, "unapproved continuation")
     require(request["source_url"] == "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-8/2026-08-19/12502187.PDF", "unapproved source URL")
     require(request["pages"] == [7, 11, 12, 13, 14, 19, 20, 21, 24], "source scope changed")
     require(request["market_source"]["repository"] == REPO, "wrong market repository")
@@ -134,7 +145,8 @@ class Retainer:
             self.native("POST", "git/refs", {"ref": "refs/heads/" + self.request["work_ref"], "sha": self.code})
         # No SHA parameter: an existing launch marker rejects repeat spending.
         return self.save("launch.json", {"id": self.request["id"], "code_commit": self.code,
-            "run_id": os.environ.get("GITHUB_RUN_ID"), "started_at": now(), "automatic_retry": False})
+            "run_id": os.environ.get("GITHUB_RUN_ID"), "started_at": now(), "automatic_retry": False,
+            "continuation": self.request["continuation"]})
 
     def save(self, name, value):
         require(name in OUTPUT_NAMES, "write outside fixed candidate files")
@@ -315,8 +327,15 @@ def run(request, code, out):
     out.mkdir(parents=True, exist_ok=False)
     retain = Retainer(api, request, code, out)
     host = {"status": "NOT_EXECUTED", "phase": "RESERVATION", "formal_research_started": False, "code_commit": code, "started_at": now(), "investment_authority": "NONE"}
+    host["continuation"] = request["continuation"]
     try:
         retain.begin()
+        host["phase"] = "PREDECESSOR_CHECK"
+        predecessor = request["continuation"]["source"]
+        previous = identity._json(identity._checked_source(predecessor, lambda s: api.file(s["path"], s["ref"])))
+        require(previous["status"] == "NOT_EXECUTED" and previous["phase"] == "INPUT_PREPARATION"
+                and previous["formal_research_started"] is False and previous["mutation_uncertain"] is False,
+                "predecessor is not the preserved pre-research failure")
         host["phase"] = "SOURCE_PREFLIGHT"
         pf_start = now()
         market_spec = request["market_source"]
@@ -363,7 +382,7 @@ def run(request, code, out):
         packet = ExternalResearchInputPacket(execution_id=request["id"], case_id="601952.SH", ticker="601952", security_id="SSE:601952",
             source_lane="SECTOR_SAVED_MEMBER_READING", selected_at=selected, research_cutoff=cutoff,
             code_commit=code, current_state_commit=r, current_state_reading_hash=reading["reading_hash"],
-            source_refs=(context_source, pf_source, market_origin), seed_evidence_artifacts=(seed,), research_question=request["question"],
+            source_refs=(context_source, pf_source, market_origin, predecessor), seed_evidence_artifacts=(seed,), research_question=request["question"],
             known_unknowns=("REQUIRED_SOURCE_CLASS:SAVED_H1_BUSINESS_REPORT:STATIC", *request["known_unknowns"]),
             next_discriminating_search="仅用已冻结半年报业务、经营与风险披露区分自产、加工和购销的价格暴露；缺项留UNKNOWN。",
             method_version="research-funnel-v1", prompt_version="saved-responses-once-v1", allowed_tools=("OTHER_READ",),
