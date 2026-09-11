@@ -1,0 +1,78 @@
+[
+  {
+    "id": "S1",
+    "title": "2026年半年度报告（正式全文，A股会计报表）",
+    "url": "https://manager.wisdomir.com/files/760/2026/0819/20260819220001_48713042_tc.pdf",
+    "published_date": "2026-08-19",
+    "locations": ["pp18–21 产品/增长来源","p145收入、许可营业成本","p150税与银行利息收现","pp80–81,p151现金","p157研发投入"],
+    "retention": "EXTRACTED_VALUES_ONLY",
+    "raw_file_retained": false,
+    "visual_review": {
+      "S1_success_pages": [21,145,150,157],
+      "S1_screenshot_failed_pages": [80,81,151],
+      "S2_success_pages": [12,140],
+      "S5_success_pages": [1],
+      "note": "Failed screenshot pages used parsed text and arithmetic reconciliation only. No raw PDF retained."
+    }
+  },
+  {
+    "id": "S2",
+    "title": "2025年年报（正式H股报告）",
+    "url": "https://manager.wisdomir.com/files/760/2026/0326/20260326063001_65519526_tc.pdf",
+    "published_date": "2026-03-26",
+    "locations": ["p12已收款与确认","p21授权条款及股权对价","p140许可收入精确数"],
+    "retention": "EXTRACTED_VALUES_ONLY",
+    "raw_file_retained": false,
+    "visual_review_success_pages": [12,140]
+  },
+  {
+    "id": "S3",
+    "title": "BMS交易公告",
+    "url": "https://manager.wisdomir.com/files/760/2026/0512/20260512121501_08474207_tc.pdf",
+    "published_date": "2026-05-12",
+    "locations": ["PDF pp2–3，0-index：阶段、责任、地区、付款"],
+    "retention": "EXTRACTED_VALUES_ONLY",
+    "raw_file_retained": false
+  },
+  {
+    "id": "S4",
+    "title": "IDEAYA 2026Q2 SEC Form 10-Q（从公司IR官方filing链接取得）",
+    "url": "https://app.quotemedia.com/data/downloadFiling?cdn=6a1be50ff156f6b97a31c682d158c473&companyName=IDEAYA+Biosciences+Inc.&dateFiled=2026-08-04&formType=10-Q&ref=320241109&symbol=IDYA&type=HTML&webmasterId=101533",
+    "filed_date": "2026-08-04",
+    "locations": ["Note10，Hengrui及AstraZeneca agreements，pp22–23"],
+    "retention": "EXTRACTED_VALUES_ONLY",
+    "raw_file_retained": false,
+    "interpretation": "Counterparty's own filing, not Hengrui bank statement; do not generalize one study cost allocation to whole partnership."
+  },
+  {
+    "id": "S5",
+    "title": "A股回购进展公告",
+    "url": "https://manager.wisdomir.com/files/760/2026/0902/20260902171501_67341269_tc.pdf",
+    "published_date": "2026-09-02",
+    "locations": ["PDF p1，0-index：金额、用途、截至8月末执行"],
+    "retention": "EXTRACTED_VALUES_ONLY",
+    "visual_review_success_pages": [1]
+  },
+  {
+    "id": "S6",
+    "title": "2026半年度业绩说明会安排公告",
+    "url": "https://manager.wisdomir.com/files/760/2026/0902/20260902173001_52733090_tc.pdf",
+    "published_date": "2026-09-02",
+    "use": "Confirms scheduled Sep10 14:00–15:00 meeting only; does not establish meeting Q&A content.",
+    "retrieval_gap": "SSE roadshow homepage returned no parseable text; meeting Q&A not retrieved."
+  },
+  {
+    "id": "G1",
+    "title": "原始研究输入（GitHub精确提交，只读）",
+    "url": "https://github.com/auguspp/decision-kernel/blob/7ea9e819ba703c3f3b748e4651d2a21712286eb0/research_cases/600276-hengrui-external-20260911.json",
+    "ref": "7ea9e819ba703c3f3b748e4651d2a21712286eb0",
+    "changed": false
+  },
+  {
+    "id": "H1",
+    "title": "本对话Human暂定A股价格",
+    "value": "42.93",
+    "date_claim": "2026-09-10",
+    "qualified": false
+  }
+]

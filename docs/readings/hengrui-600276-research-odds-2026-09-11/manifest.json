@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "archive_name": "hengrui-600276-research-to-provisional-odds-2026-09-11",
+  "archive_purpose": "Preserve three Research rounds, frozen Belief, provisional human-supplied price context, ordinal provisional Odds, arithmetic records and the failed qualified-market attempt without upgrading provisional inputs to Kernel canonical state.",
+  "repository": "auguspp/decision-kernel",
+  "archive_base_main": "542e8585440ef0776eefe071936da2eed868fc70",
+  "source_research_branch_commit": "7ea9e819ba703c3f3b748e4651d2a21712286eb0",
+  "source_market_run": {
+    "workflow": "live-dogfood",
+    "run_id": 34556401563,
+    "run_attempt": 1,
+    "conclusion": "failure",
+    "error": "raw A-share history extends beyond the latest completed session"
+  },
+  "authority": {
+    "research": "FROZEN_FOR_DECISION_PREPARATION",
+    "price": "CONTEXT_ONLY",
+    "market_observation": "NOT_QUALIFIED",
+    "provisional_odds": "PARTIAL_ORDINAL_ONLY",
+    "canonical_odds": "NOT_ESTABLISHED",
+    "investment_authority": "NONE_HUMAN_ONLY"
+  },
+  "round1": {
+    "archive_path": "round1-research-packet.zip.b64",
+    "original_zip_sha256": "59887bced9c0a665a2230e9902619986ff4ca0d77b328cf560c4c62738d4ccfb",
+    "archive_base64_sha256": "84b4e452916e084d702e7e608e135da587780448e2fc840126a980b4749c711d",
+    "encoding": "base64_of_original_zip_bytes"
+  },
+  "round2": {
+    "archive_path": "round2-research-packet.zip.b64",
+    "original_zip_sha256": "a32fd4555f9c8e5dd0920ce627676199d99e8f636118b90468835bc755187c94",
+    "archive_base64_sha256": "cfe9d96800e4067ae33839bf05605ccbd674cd3e0ba8b739b184bddd8ce24749",
+    "encoding": "base64_of_original_zip_bytes"
+  },
+  "round3": {
+    "archive_path": "round3/",
+    "mode": "SEMANTIC_ARCHIVE_WITH_SOURCE_HASHES",
+    "original_zip_sha256": "34e8a6fef8c7f9e0eea37df0b74803007046a98ef9cbd5ea68fc86002d729f4f",
+    "semantic_files_preserved": [
+      "round3/README.md",
+      "round3/arithmetic_checks.json",
+      "round3/calculation_audit.json",
+      "round3/license_economic_ledger.json",
+      "round3/manifest.json",
+      "round3/nononc_product_matrix.json",
+      "round3/prior_execution_receipt_UNCHANGED.json",
+      "round3/recompute.py",
+      "round3/research_supplement.md",
+      "round3/sources.json",
+      "round3/stop_register.json"
+    ],
+    "convenience_binary_hashes": {
+      "cash_model_xlsx": {
+        "filename": "恒瑞_第三轮_现金滚动与条件检验.xlsx",
+        "bytes": 31845,
+        "sha256": "42036abb0d59028234b7d96b814e011d2aaae3c366c80ad731d571ff275777de",
+        "retained_in_git": false,
+        "authority": "PRESENTATION_EDITABILITY_ONLY"
+      },
+      "model_preview_png": {
+        "filename": "model_preview.png",
+        "bytes": 146375,
+        "sha256": "470c68836c2f4eacba808be1378ba1338298ce2d4235f9ab605a72e3c4a33e66",
+        "retained_in_git": false,
+        "authority": "PRESENTATION_ONLY"
+      }
+    }
+  },
+  "odds_record": "provisional-odds.json",
+  "note": "Round 3 economically relevant inputs, calculations, UNKNOWN propagation and stop boundaries are preserved as UTF-8 semantic records. Convenience XLSX/PNG binaries are identity-recorded by SHA-256 but deliberately not granted canonical evidence status by duplicating them into Git."
+}
