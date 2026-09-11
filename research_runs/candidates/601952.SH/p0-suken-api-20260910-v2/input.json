@@ -1,0 +1,97 @@
+{
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "budget": {
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_elapsed_minutes": 15,
+    "max_search_queries": 0,
+    "max_source_reads": 4,
+    "max_technical_retries": 0,
+    "max_tool_calls": 6,
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "tool_calls_enforcement": "SOFT_EXECUTOR"
+  },
+  "candidate_output_prefix": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/",
+  "case_id": "601952.SH",
+  "code_commit": "ad41ff8aa13db77c0dcc5e36c4795277696e01f4",
+  "current_state_commit": "27318ae1965b49233772549dfc41a285867d5b1f",
+  "current_state_reading_hash": "9394a61ee6b3ba79a6ec5ce202e80985352274019f935156eed3b4bc7c842823",
+  "execution_id": "p0-suken-api-20260910-v2",
+  "known_unknowns": [
+    "REQUIRED_SOURCE_CLASS:SAVED_H1_BUSINESS_REPORT:STATIC",
+    "不同业务净利润权重、粮价和投入成本敏感性未独立量化。",
+    "没有核验2026年半年报后的完整公告目录和业务变化，不能声称最新公司状态完整。",
+    "没有核验当前价格、估值、市场预期或9月行业行情的基本面原因。",
+    "本次不追加源站搜索、行情或新资料；需要补充正文而当前材料不能回答时，明确保留缺口。"
+  ],
+  "method_version": "research-funnel-v1",
+  "next_discriminating_search": "仅用已冻结半年报业务、经营与风险披露区分自产、加工和购销的价格暴露；缺项留UNKNOWN。",
+  "prompt_version": "saved-responses-once-v1",
+  "research_cutoff": "2026-09-11T00:56:58.920497Z",
+  "research_question": "按苏垦农发2026年半年报的经营披露，它通过自产种植、种业、粮食购销和加工等哪些业务承担粮价变化？哪些投入、购粮成本、价格或风险披露会抵消简单的粮价上涨受益解释？由此能否形成一个值得继续核验的经济问题？不解释9月行情，不假定当前业务未发生后续变化。",
+  "schema_version": 1,
+  "security_id": "SSE:601952",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-11T00:56:56.238120Z",
+      "content_hash": "81c0a61da43eb9aca6b420fa4023549d37e14e6c4ae70facb6c9aa58a87f2067",
+      "extracted_structured_values": null,
+      "id": "a89392d6-7755-5fab-bcd8-5c27f1614bf6",
+      "idempotency_key": "p0-suken-api-20260910-v2:public-context",
+      "license_terms_note": "Full retained context, not full source/market universe. PDF in same-run artifact. Issuer-authored report via a mirror; no source-truth certification.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-11T00:56:55Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/7bbc16dcfe0c10533db36a1babf825908577c1d9/research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/source.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-11T00:56:56.238134Z",
+      "schema_version": 1,
+      "source_identifier": "p0-suken-api-20260910-v2",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/7bbc16dcfe0c10533db36a1babf825908577c1d9/research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/source.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "selected_at": "2026-09-11T00:56:58.920473Z",
+  "source_lane": "SECTOR_SAVED_MEMBER_READING",
+  "source_refs": [
+    {
+      "git_blob": "1917c6041679818819c6d6f3b04fdcf578d10cc7",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/source.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "7bbc16dcfe0c10533db36a1babf825908577c1d9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "81c0a61da43eb9aca6b420fa4023549d37e14e6c4ae70facb6c9aa58a87f2067"
+    },
+    {
+      "git_blob": "445d3e6114c31f60fa049078b91d47fb0f767a1c",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "4b2ef0da3c18192574860949f8175794bc72ddfb",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e49836befd50814a115e5c4d3dd5d01c2bae3d3f7543359a210ffa1f05276228"
+    },
+    {
+      "git_blob": "ca2b12061a5a28260e5a320e72feaa3e8436e798",
+      "path": "docs/readings/sector-member-2026-09-09.md",
+      "purpose": "SAVED_SECTOR_DISCOVERY_ORIGIN",
+      "ref": "d8775e5eba1ac7e6d290716686d4fcff82ec040b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c4288a3a2b770784ca34d95ea141ed40acacc3f429ed505b3b48dbc58b573a11"
+    },
+    {
+      "git_blob": "d7f52a24207a41ac9b52f991c48576318bd2021e",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/host-receipt.json",
+      "purpose": "PREVIOUS_FAILED_EXECUTION",
+      "ref": "2722e676e0a7c273fd60b6c388a2941f5c1fc284",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1fd80d7bcd20dedc10024adce3841a36508930238993bb1309a598a339c78f76"
+    }
+  ],
+  "ticker": "601952",
+  "untrusted_test_material": null
+}
