@@ -75,7 +75,7 @@ def request_reader(token: str) -> Callable[[str], dict]:
     return read
 
 
-def check_activity(read: Callable[[str], dict]) -> list[int]:
+def check_activity(read: Callable[[str], dict], *, peers: frozenset[str] = PEERS) -> list[int]:
     """At most five single-page GETs; incomplete visibility fails closed."""
     blockers = set()
     for status in ACTIVE:
@@ -95,7 +95,7 @@ def check_activity(read: Callable[[str], dict]) -> list[int]:
                     or row.get("status") not in ACTIVE):
                 raise CheckError("GITHUB_ACTIVITY_ROW_INVALID")
             seen.add(row["id"])
-            if row["path"].split("@", 1)[0] in PEERS:
+            if row["path"].split("@", 1)[0] in peers:
                 blockers.add(row["id"])
     return sorted(blockers)
 
