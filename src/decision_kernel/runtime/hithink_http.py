@@ -339,8 +339,8 @@ def _request_hithink_json(
                 elapsed_ms = round((time.monotonic() - request_started) * 1000)
     except HTTPError as exc:
         kind = "HTTP_429" if exc.code == 429 else "HTTP_OTHER"
-        message = (f"HiThink HTTP request failed for {path} with status {exc.code}; "
-                   f"failure_kind={kind}; elapsed_ms={elapsed_ms}")
+        message = (f"failure_kind={kind}; elapsed_ms={elapsed_ms}; "
+                   f"HiThink HTTP request failed for {path} with status {exc.code}")
         diagnostics = _http_error_diagnostics(exc, api_key=api_key)
         if diagnostics:
             message += "; " + "; ".join(diagnostics)
