@@ -1,0 +1,94 @@
+name: stock-reading-human-demo-once-20260912
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/stock-reading-human-demo-once-20260912.yml
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: stock-reading-human-demo-once-20260912
+  cancel-in-progress: false
+
+jobs:
+  dispatch-existing-stock-reading:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Validate exact saved natural Sector input
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARKET_RUN: '34610140283'
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'auguspp/decision-kernel'
+          test "$GITHUB_REF" = 'refs/heads/main'
+          test "$GITHUB_RUN_ATTEMPT" = '1'
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN" > /tmp/market-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MARKET_RUN/artifacts?per_page=100" > /tmp/market-artifacts.json
+          python - <<'PY'
+          import json
+          run = json.load(open('/tmp/market-run.json'))
+          artifacts = json.load(open('/tmp/market-artifacts.json'))['artifacts']
+          assert run['name'] == 'sector-radar-shadow'
+          assert run['path'].split('@', 1)[0] == '.github/workflows/sector-radar-shadow.yml'
+          assert run['event'] == 'schedule'
+          assert run['status'] == 'completed'
+          assert run['conclusion'] == 'success'
+          assert run['run_attempt'] == 1
+          assert run['head_branch'] == 'main'
+          assert any(a['name'] == 'sector-radar-run-34610140283' and not a['expired'] for a in artifacts)
+          print('PINNED_NATURAL_SECTOR_INPUT_OK')
+          PY
+
+      - name: Reuse bounded shared-Key activity observation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, runpy
+          m = runpy.run_path('.github/scripts/check-sector-scheduled-activity.py', run_name='human_demo_activity_reuse')
+          peers = frozenset({
+              '.github/workflows/sector-radar-shadow.yml',
+              '.github/workflows/hithink-stock-dump-trial.yml',
+              '.github/workflows/decision-inbox.yml',
+              '.github/workflows/live-dogfood.yml',
+          })
+          blockers = m['check_activity'](m['request_reader'](os.environ['GITHUB_TOKEN']), peers=peers)
+          if blockers:
+              raise SystemExit('BLOCKED_SHARED_KEY_ACTIVITY run_ids=' + ','.join(map(str, blockers)))
+          print('NO_VISIBLE_PEER_ACTIVITY_NOT_A_GLOBAL_LOCK')
+          PY
+
+      - name: Dispatch existing Stock reading exactly once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARKET_RUN: '34610140283'
+        run: |
+          set -euo pipefail
+          python - <<'PY' > /tmp/dispatch.json
+          import json
+          print(json.dumps({
+              'ref': 'main',
+              'inputs': {
+                  'trial-purpose': 'stock-reading',
+                  'stock-market-run-id': '34610140283',
+              },
+          }, separators=(',', ':')))
+          PY
+          gh api --method POST \
+            -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/hithink-stock-dump-trial.yml/dispatches" \
+            --input /tmp/dispatch.json
+          printf '%s\n' 'DISPATCH_ACCEPTED_ONCE; no polling/retry in this workflow.' >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' 'This is HUMAN_AUTHORIZED_DEMO, not natural-schedule acceptance.' >> "$GITHUB_STEP_SUMMARY"
