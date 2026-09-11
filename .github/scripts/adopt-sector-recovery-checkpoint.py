@@ -212,8 +212,14 @@ def adopt(args: argparse.Namespace) -> int:
     state, ledger, state_bytes, event_bytes = validate_checkpoint(args.checkpoint)
     require(event_bytes == (args.parent / "candidate-events.json").read_bytes(), "checkpoint event ledger differs from production parent")
     require(state.catalog_hash == parent.market_state.catalog_hash, "checkpoint catalog differs from parent")
-    require(state.sessions[:-1] == parent.market_state.sessions, "checkpoint does not extend parent by exactly one session")
-    require(state.series[0].thscode == parent.market_state.series[0].thscode, "checkpoint benchmark identity changed")
+    require(state.sessions[:-1] == parent.market_state.sessions[1:], "checkpoint rolling session window changed")
+    require(state.broad_identities == parent.market_state.broad_identities, "checkpoint broad identities changed")
+    require(state.granular_identities == parent.market_state.granular_identities, "checkpoint granular identities changed")
+    require(len(state.series) == len(parent.market_state.series), "checkpoint series count changed")
+    for previous, recovered in zip(parent.market_state.series, state.series, strict=True):
+        require((recovered.thscode, recovered.name) == (previous.thscode, previous.name), "checkpoint series identity changed")
+        require(recovered.closes[:-1] == previous.closes[1:], "checkpoint historical closes changed")
+        require(recovered.turnovers[:-1] == previous.turnovers[1:], "checkpoint historical turnovers changed")
 
     completed_at = datetime.now(timezone.utc)
     args.output.mkdir(parents=True, exist_ok=False)
