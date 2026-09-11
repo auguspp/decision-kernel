@@ -1,0 +1,81 @@
+name: sector-recovery-offline-checkpoint
+
+on:
+  push:
+    branches: [recovery/sector-ths-offline-checkpoint-20260911]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v7
+        with: {python-version: '3.12'}
+      - name: Install Kernel and frozen AKShare helper
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -e .
+          python -m pip install --disable-pip-version-check 'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+          python -m py_compile .github/scripts/build-sector-recovery-offline-checkpoint.py
+      - name: Download frozen recovery parent/source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/source
+      - name: Download exact-complete 321 identity source bundle
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10196462869'
+          run-id: '34593139374'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/complete
+      - name: Build offline recovery checkpoint candidate
+        id: build
+        continue-on-error: true
+        run: |
+          python .github/scripts/build-sector-recovery-offline-checkpoint.py build \
+            --source "$RUNNER_TEMP/source" \
+            --complete "$RUNNER_TEMP/complete" \
+            --output "$RUNNER_TEMP/checkpoint"
+      - name: Independently rebuild exact candidate bytes
+        id: verify
+        if: ${{ steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python .github/scripts/build-sector-recovery-offline-checkpoint.py verify \
+            --source "$RUNNER_TEMP/source" \
+            --complete "$RUNNER_TEMP/complete" \
+            --checkpoint "$RUNNER_TEMP/checkpoint" \
+            --output "$RUNNER_TEMP/checkpoint-verify"
+      - name: Retain candidate checkpoint and reproducibility receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-recovery-offline-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/checkpoint/
+            ${{ runner.temp }}/checkpoint-verify/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Enforce review-required offline checkpoint only
+        if: always()
+        env:
+          BUILD: ${{ steps.build.outcome }}
+          VERIFY: ${{ steps.verify.outcome }}
+        run: |
+          printf 'build=%s verify=%s\n' "$BUILD" "$VERIFY"
+          test "$BUILD" = success
+          test "$VERIFY" = success
