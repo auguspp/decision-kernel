@@ -229,7 +229,7 @@ def test_synthetic_capture_and_replay_never_enter_opted_in_transport(tmp_path, m
     assert audit.replay_sector_radar_input_audit(root)["status"] == "MATCHED_SUCCEEDED"
 
 
-def test_only_sector_capture_step_enables_pacing():
+def test_only_authorized_sector_capture_steps_enable_pacing():
     root = Path(__file__).resolve().parents[1]
     workflow = (root / ".github/workflows/sector-radar-shadow.yml").read_text()
     capture = workflow.split("- name: Run independent Sector Radar shadow producer", 1)[1].split("- name: Verify exact offline replay", 1)[0]
@@ -237,6 +237,15 @@ def test_only_sector_capture_step_enables_pacing():
     assert workflow.count("HITHINK_SECTOR_REQUEST_PACING") == 1
     assert "timeout-minutes: 20" in workflow
     assert "cancel-in-progress: false" in workflow
+    # The separately approved one-shot reuses pacing; every other workflow is still denied.
+    recovery = (root / ".github/workflows/sector-recovery-once.yml").read_text()
+    step = recovery.split("- name: Capture this missing interval once", 1)[1].split("- name: Rebuild candidate", 1)[0]
+    assert "HITHINK_SECTOR_REQUEST_PACING: '1'" in step
+    assert recovery.count("HITHINK_SECTOR_REQUEST_PACING") == 1
+    assert "workflow_dispatch:" in recovery and "schedule:" not in recovery
+    assert "timeout-minutes: 150" in recovery and "timeout-minutes: 140" in step
+    assert "group: sector-radar-prospective-state" in recovery
+    assert "cancel-in-progress: false" in recovery
     for path in (root / ".github/workflows").glob("*.yml"):
-        if path.name != "sector-radar-shadow.yml":
+        if path.name not in {"sector-radar-shadow.yml", "sector-recovery-once.yml"}:
             assert "HITHINK_SECTOR_REQUEST_PACING" not in path.read_text()
