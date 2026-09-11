@@ -107,8 +107,8 @@ def test_request_error_message_exposes_safe_support_diagnostics_without_retry(
         )
 
     text = str(caught.value)
-    assert "status 429" in text
-    assert "Retry-After=60" in text
+    assert "status 429; Retry-After=60" in text
+    assert "failure_kind=HTTP_429; elapsed_ms=" in text
     assert "X-Correlation-Id=corr-789" in text
     assert "body.request_id=req-live-shape" in text
     assert "body.code=4001" in text
