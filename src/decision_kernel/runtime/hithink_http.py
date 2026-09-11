@@ -327,19 +327,38 @@ def _request_hithink_json(
         headers={"Accept": "application/json", "X-api-key": api_key},
         method="GET",
     )
+    elapsed_ms: int | None = None  # None if interrupted before the request starts.
     try:
         with _sector_request_spacing():
-            with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-                payload = json.loads(response.read().decode("utf-8"))
+            # Exclude local pacing/lock waits; include open, body read and decode.
+            request_started = time.monotonic()
+            try:
+                with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+                    payload = json.loads(response.read().decode("utf-8"))
+            finally:
+                elapsed_ms = round((time.monotonic() - request_started) * 1000)
     except HTTPError as exc:
-        message = f"HiThink HTTP request failed for {path} with status {exc.code}"
+        kind = "HTTP_429" if exc.code == 429 else "HTTP_OTHER"
+        message = (f"HiThink HTTP request failed for {path} with status {exc.code}; "
+                   f"failure_kind={kind}; elapsed_ms={elapsed_ms}")
         diagnostics = _http_error_diagnostics(exc, api_key=api_key)
         if diagnostics:
             message += "; " + "; ".join(diagnostics)
         raise HithinkRuntimeError(message) from exc
     except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        if isinstance(exc, TimeoutError) or (
+            isinstance(exc, URLError) and isinstance(exc.reason, TimeoutError)
+        ):
+            kind = "TIMEOUT"
+        elif isinstance(exc, URLError):
+            kind = "URL_ERROR"  # Do not guess from a provider's message string.
+        elif isinstance(exc, json.JSONDecodeError):
+            kind = "JSON_DECODE_ERROR"
+        else:
+            kind = "UNICODE_DECODE_ERROR"
         raise HithinkRuntimeError(
-            f"HiThink request or response decoding failed for {path}"
+            f"HiThink request or response decoding failed for {path}; "
+            f"failure_kind={kind}; elapsed_ms={elapsed_ms}"
         ) from exc
     if not isinstance(payload, Mapping):
         raise HithinkRuntimeError("HiThink response is not a JSON object")
