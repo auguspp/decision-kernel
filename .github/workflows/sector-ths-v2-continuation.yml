@@ -1,0 +1,100 @@
+name: sector-ths-v2-http-continuation
+
+on:
+  push:
+    branches: [recovery/sector-ths-v2-cont-20260911]
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sector-ths-v2-http-continuation-20260911
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@v7
+        with: {python-version: '3.12'}
+      - name: Install Kernel and frozen AKShare helper
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -e .
+          python -m pip install --disable-pip-version-check \
+            'git+https://github.com/akfamily/akshare.git@8e95744b79ae22326308ccd2b4e62650c5b53c55'
+          python -m py_compile \
+            .github/scripts/capture-sector-ths-v6-complete.py \
+            .github/scripts/capture-sector-ths-dual-complete.py \
+            .github/scripts/capture-sector-ths-http-v4-continuation.py \
+            .github/scripts/capture-sector-ths-v2-continuation.py
+      - name: Download frozen HiThink source
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10187281705'
+          run-id: '34566950303'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/source
+      - name: Download retained 263-identity continuation bundle
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10195067463'
+          run-id: '34589492732'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/prior
+      - name: Download accepted 884251 v2 probe
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10195203091'
+          run-id: '34589974825'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/probe
+      - name: Continue only remaining 57 identities over one-request v2
+        id: capture
+        continue-on-error: true
+        timeout-minutes: 24
+        run: |
+          python .github/scripts/capture-sector-ths-v2-continuation.py capture \
+            --source "$RUNNER_TEMP/source" \
+            --prior "$RUNNER_TEMP/prior/http-v4-cont" \
+            --probe "$RUNNER_TEMP/probe" \
+            --output "$RUNNER_TEMP/v2-cont"
+      - name: Offline exact rebuild
+        id: verify
+        if: ${{ steps.capture.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          python .github/scripts/capture-sector-ths-v2-continuation.py verify \
+            --source "$RUNNER_TEMP/source" \
+            --capture "$RUNNER_TEMP/v2-cont" \
+            --output "$RUNNER_TEMP/v2-verify"
+      - name: Retain exact raw, attempts, candidate and receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sector-ths-v2-continuation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/v2-cont/
+            ${{ runner.temp }}/v2-verify/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
+      - name: Enforce candidate-only acceptance
+        if: always()
+        env:
+          C: ${{ steps.capture.outcome }}
+          V: ${{ steps.verify.outcome }}
+        run: |
+          printf 'capture=%s verify=%s\n' "$C" "$V"
+          test "$C" = success
+          test "$V" = success
