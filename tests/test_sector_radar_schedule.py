@@ -74,8 +74,9 @@ def test_one_production_path_and_existing_publication_gates():
     assert raw.index('Require main branch') < raw.index('Check shared-Key activity')
     assert raw.index('Require fresh workflow dispatch') < raw.index('Check shared-Key activity')
     assert raw.index('Check shared-Key activity') < raw.index('Run independent Sector Radar shadow producer')
-    assert 'if:' not in step('Check shared-Key activity once before acquisition')
-    assert 'if:' not in step('Run independent Sector Radar shadow producer')
+    normal_gate = "if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'"
+    assert normal_gate in step('Check shared-Key activity once before acquisition')
+    assert normal_gate in step('Run independent Sector Radar shadow producer')
     assert 'HITHINK_SECTOR_REQUEST_PACING: "1"' in raw
     for name in ('Verify exact offline replay before publication',
                  'Render read-only saved-state context', 'Package joint economic and company reading',
