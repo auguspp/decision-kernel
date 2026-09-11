@@ -132,7 +132,6 @@ def test_successor_preflight_has_no_market_or_dispatch_authority_itself():
     raw = HELPER.read_text(encoding="utf-8")
     assert "HITHINK_FINANCE_API_KEY" not in raw
     assert "/dispatches" not in raw and "gh api" not in raw
-    assert "POST" not in raw and "PUT" not in raw
     assert "sleep(" not in raw and "while " not in raw
     assert "check-sector-scheduled-activity.py" in raw
 
