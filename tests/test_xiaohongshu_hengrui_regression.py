@@ -49,6 +49,14 @@ def test_hengrui_reference_remains_human_reference_not_high_read() -> None:
     assert sample.title_pattern == fixture["accepted_title"]
 
 
+def test_hengrui_gate_is_price_led_not_global() -> None:
+    fixture = _fixture()
+
+    assert fixture["does_not_apply_globally"] is True
+    assert "IMPLIED_EARNINGS" in fixture["applies_to"]
+    assert "not a global Xiaohongshu template" in fixture["scope_note"]
+
+
 def test_hengrui_price_led_lessons_are_injected_into_planner_prompt() -> None:
     fixture = _fixture()
     sample = _hengrui_sample()
