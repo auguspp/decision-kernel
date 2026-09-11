@@ -50,25 +50,46 @@ jobs:
           print('PINNED_NATURAL_SECTOR_INPUT_OK')
           PY
 
-      - name: Reuse bounded shared-Key activity observation
+      - name: Workflow-scoped shared-Key activity observation
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           python - <<'PY'
-          import os, runpy
-          m = runpy.run_path('.github/scripts/check-sector-scheduled-activity.py', run_name='human_demo_activity_reuse')
-          peers = frozenset({
-              '.github/workflows/sector-radar-shadow.yml',
-              '.github/workflows/hithink-stock-dump-trial.yml',
-              '.github/workflows/decision-inbox.yml',
-              '.github/workflows/live-dogfood.yml',
-          })
-          blockers = m['check_activity'](m['request_reader'](os.environ['GITHUB_TOKEN']), peers=peers)
+          import json, os, subprocess
+
+          repository = os.environ['GITHUB_REPOSITORY']
+          peers = (
+              'sector-radar-shadow.yml',
+              'hithink-stock-dump-trial.yml',
+              'decision-inbox.yml',
+              'live-dogfood.yml',
+          )
+          active = ('in_progress', 'queued', 'waiting', 'pending', 'requested')
+          blockers = []
+          for workflow in peers:
+              expected_path = f'.github/workflows/{workflow}'
+              for status in active:
+                  path = f'repos/{repository}/actions/workflows/{workflow}/runs?status={status}&per_page=100&page=1'
+                  raw = subprocess.check_output(['gh', 'api', path], text=True)
+                  payload = json.loads(raw)
+                  rows = payload.get('workflow_runs')
+                  count = payload.get('total_count')
+                  if not isinstance(rows, list) or type(count) is not int or not 0 <= count <= 100 or len(rows) != count:
+                      raise SystemExit(f'INCOMPLETE_ACTIVITY_VIEW {workflow} {status}')
+                  seen = set()
+                  for row in rows:
+                      run_id = row.get('id')
+                      row_path = str(row.get('path', '')).split('@', 1)[0]
+                      if type(run_id) is not int or run_id <= 0 or run_id in seen or row_path != expected_path or row.get('status') != status:
+                          raise SystemExit(f'INVALID_ACTIVITY_ROW {workflow} {status}')
+                      seen.add(run_id)
+                      blockers.append(run_id)
           if blockers:
-              raise SystemExit('BLOCKED_SHARED_KEY_ACTIVITY run_ids=' + ','.join(map(str, blockers)))
-          print('NO_VISIBLE_PEER_ACTIVITY_NOT_A_GLOBAL_LOCK')
+              raise SystemExit('BLOCKED_SHARED_KEY_ACTIVITY run_ids=' + ','.join(map(str, sorted(set(blockers)))))
+          print('NO_VISIBLE_SHARED_KEY_PEER_ACTIVITY_NOT_A_GLOBAL_LOCK')
           PY
+          printf '%s\n' 'Temporary demo preflight is workflow-scoped to avoid the prior all-repository activity-list race; production shared-Key checker is unchanged.' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Dispatch existing Stock reading exactly once
         env:
