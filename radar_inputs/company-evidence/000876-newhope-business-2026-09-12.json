@@ -1,0 +1,36 @@
+{
+  "semantics": "COMPANY_EVIDENCE_ONLY_NOT_RESEARCH_OR_JUDGMENT",
+  "recorded_at": "2026-09-12T00:07:33.789585+00:00",
+  "company_identity": {
+    "ticker": "000876",
+    "exchange": "SZSE",
+    "company_name": "新希望"
+  },
+  "evidence_artifacts": [
+    {
+      "id": "27370a1c-c52d-5aac-adcc-46400c5a506a",
+      "source_type": "OFFICIAL_FILING",
+      "source_identifier": "NEWHOPE:000876:2025-ANNUAL:business",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225251161.PDF",
+      "published_at": "2026-04-29T00:00:00+08:00",
+      "available_at": "2026-09-12T00:07:33.789585+00:00",
+      "retrieved_at": "2026-09-12T00:07:33.789585+00:00",
+      "content_hash": "f164f03668b295f94fe765196c23b6ee6dba0efa69fe422cf29a48493bc9faff",
+      "idempotency_key": "NEWHOPE:000876:2025-ANNUAL:business:f164f03668b295f94fe765196c23b6ee6dba0efa69fe422cf29a48493bc9faff",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "business_scope_statement": "2025年公司主营业务聚焦于饲料、生猪养殖与屠宰；本记录只把饲料业务存在作为公司业务覆盖依据。",
+        "feed_products_statement": "公司披露饲料包括预混料、浓缩料与配合料，并覆盖禽料、猪料、水产料与反刍料等料种。",
+        "feed_customer_boundary_statement": "预混料与浓缩料既供内部配合料工厂，也对外销售给其他饲料企业、经销商及具备生产能力的大型养殖场；内部与外部口径不能混为单一行业敞口。",
+        "report_scope_statement": "2025年年度报告业务叙述；不是2026年当前收入、利润、估值或股价受益证明。"
+      },
+      "permitted_excerpt": null,
+      "source_location": "《新希望六和股份有限公司2025年年度报告》第二节公司信息（PDF页11：000876/深圳证券交易所）；第三节一报告期内主要业务（PDF页15起：饲料业务、产品与客户边界）。本记录只保留业务身份与范围转述，不把板块成员身份、价格方向或2025经营结果解释为当前受益。",
+      "license_terms_note": "本轮读取巨潮资讯年度报告解析正文并核对渲染页面后作有限转述；published_at只标记披露日，available_at/retrieved_at采用本次实际读取后的记录时刻，不回填此前Stock运行。未把完整PDF写入仓库；content_hash绑定URL、位置与保留字段，不是原PDF哈希或源站真实性认证。",
+      "report_period_end": "2025-12-31",
+      "schema_version": 1
+    }
+  ]
+}
