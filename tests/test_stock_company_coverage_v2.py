@@ -193,7 +193,7 @@ def test_unknown_company_manifest_is_rejected(tmp_path, value):
         mod['company_scope'](value)
 
 
-def test_normal_live_cli_explicitly_uses_v2_without_new_user_input(tmp_path, monkeypatch):
+def test_normal_live_cli_explicitly_uses_current_reviewed_scope_without_new_user_input(tmp_path, monkeypatch):
     mod, _, _, _, _, _ = setup(tmp_path)
     env = stock_environment()
     for key,value in env.items():
@@ -208,7 +208,7 @@ def test_normal_live_cli_explicitly_uses_v2_without_new_user_input(tmp_path, mon
     seen = []
     def captured(*args, **kwargs):
         seen.append(kwargs)
-        assert kwargs['company_manifest'] == V2 == mod['LIVE_COMPANIES']
+        assert kwargs['company_manifest'] == mod['LIVE_COMPANIES'] == 'radar_inputs/economic-company-links-livestock-v3.json'
         assert kwargs['provenance'] == mod['PUBLIC']
         return {'status':mod['COMPLETE']}
     monkeypatch.setitem(scope, 'capture', captured)

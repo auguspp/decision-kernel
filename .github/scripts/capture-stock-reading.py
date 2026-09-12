@@ -26,7 +26,8 @@ from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_p
 
 ROOT = Path('stock-reading-run')
 VERSION = 'stock-reading-capture-replay-v6'
-LIVE_COMPANIES = 'radar_inputs/economic-company-links-livestock-v2.json'
+LEGACY_V2 = 'radar_inputs/economic-company-links-livestock-v2.json'
+LIVE_COMPANIES = 'radar_inputs/economic-company-links-livestock-v3.json'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
 PARTIAL = 'COMPLETED_BATCH_WITH_STOCK_DATA_GAPS'
@@ -88,7 +89,7 @@ def write(path, value):
 
 def company_scope(value):
     """Two explicit reviewed inputs, not latest/fallback or caller-nominated stocks."""
-    if not isinstance(value, str) or value not in {stock.COMPANY_MANIFEST, LIVE_COMPANIES}:
+    if not isinstance(value, str) or value not in {stock.COMPANY_MANIFEST, LEGACY_V2, LIVE_COMPANIES}:
         raise ValueError('an exact reviewed stock company manifest is required')
     return value
 
@@ -183,7 +184,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             provenance=SYNTHETIC, credential='', now=lambda:datetime.now(timezone.utc),
             pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST):
     # Historical library callers remain explicit/reproducible; the live CLI below
-    # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.
+    # selects LIVE_COMPANIES. Never backdate v2/v3 or silently fall back to an older scope.
     company_manifest = company_scope(company_manifest)
     for p in (source_root,state_dir,output):
         probe._safe_path(p)

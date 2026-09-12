@@ -1,17 +1,30 @@
 {
   "schema_version": 1,
   "semantics": "REVIEWED_READING_LINK_NOT_MEMBERSHIP_TAXONOMY_OR_COMPANY_EXPOSURE",
-  "reviewed_at": "2026-09-05T16:48:40.970722+00:00",
+  "reviewed_at": "2026-09-12T00:09:43.632545+00:00",
   "catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
   "links": [
     {
       "node_id": "cn.livestock.price_feed",
       "label": "养殖：生猪报价与饲料报价",
-      "relation_note": "人工选定的观察关联：全国生猪与饲料价格同养殖业、生猪养殖指数并列。养殖业还包含其他子行业；本关系不是成分包含证明、公司受益名单或盈利确认。881 与 884 各自保留层内排名。",
-      "review_question": "报价变化是否持续，实际养殖成本与出栏结构怎样变化？需要企业经营披露验证，不能把猪价上涨或猪粮比当成利润改善。",
+      "relation_note": "人工选定的观察关联：同一国家级采集同时保存生猪、玉米与育肥猪配合饲料价格。因此除养殖业/生猪养殖外，把畜禽饲料作为并列阅读对象；这不是行业因果、成分包含、公司受益名单或盈利确认。881与884各自保留层内排名。",
+      "review_question": "生猪与饲料报价变化是否持续？对养殖公司需核对出栏、售价与成本；对饲料公司需核对自身销量、售价、原料与内外销结构。不能把行业饲料报价直接当成公司售价、成本或利润。",
       "targets": [
-        {"family": "BROAD_881", "thscode": "881102.TI", "name": "养殖业"},
-        {"family": "GRANULAR_884", "thscode": "884275.TI", "name": "生猪养殖"}
+        {
+          "family": "BROAD_881",
+          "thscode": "881102.TI",
+          "name": "养殖业"
+        },
+        {
+          "family": "GRANULAR_884",
+          "thscode": "884275.TI",
+          "name": "生猪养殖"
+        },
+        {
+          "family": "GRANULAR_884",
+          "thscode": "884278.TI",
+          "name": "畜禽饲料"
+        }
       ]
     },
     {
@@ -20,7 +33,11 @@
       "relation_note": "人工选定的宽口径阅读关联：全国快递业务统计同物流指数并列。物流不等于快递，本指数不是快递纯组合；不能推断所有物流成分都受到同一影响。未制造一个不存在的 884 快递行业。",
       "review_question": "量、收入与每件收入代理的变化来自季节、产品结构还是同质服务价格？须对照公司分项披露；该汇总比值不是快递公司单票利润。",
       "targets": [
-        {"family": "BROAD_881", "thscode": "881152.TI", "name": "物流"}
+        {
+          "family": "BROAD_881",
+          "thscode": "881152.TI",
+          "name": "物流"
+        }
       ]
     }
   ]
