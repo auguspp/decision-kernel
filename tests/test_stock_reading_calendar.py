@@ -12,6 +12,7 @@ from test_hithink_stock_reading_integration import contract_provider
 from test_sector_radar_audit import prohibit_network
 
 MONDAY = datetime(2026,9,7,7,tzinfo=stock.SHANGHAI_TZ)
+SATURDAY = datetime(2026,9,12,10,tzinfo=stock.SHANGHAI_TZ)
 
 
 @pytest.fixture(autouse=True)
@@ -31,7 +32,8 @@ def inputs(at=MONDAY, *, calendar_mode=None):
             value['data']['timestamp']=int(at.timestamp()*1000)
         if path==stock.HITHINK_CALENDAR_PATH:
             rows=value['data']['item']
-            if calendar_mode=='truncated':value['data']['item']=rows[:-2]
+            value['data']['timestamp']=int(at.timestamp()*1000)
+            if calendar_mode=='truncated':value['data']['item']=rows[:-3]
             elif calendar_mode=='missing_middle':rows.pop(20)
             elif calendar_mode=='holiday':rows.pop(-2)  # explicitly synthetic closure, not real Sept 7
         return value
@@ -74,6 +76,46 @@ def test_explicit_synthetic_holiday_does_not_become_weekday_inference():
     assert result['projection']['surfaced_stocks']
     assert result['projection']['market_session']=='2026-09-04'
     assert calls[0][0]==stock.HITHINK_CALENDAR_PATH
+
+
+def test_current_provider_calendar_can_end_at_prior_session_without_weekday_inference():
+    state,plan,response,calls=inputs(SATURDAY)
+    def current_source(path,params):
+        value=response(path,params)
+        if path==stock.HITHINK_CALENDAR_PATH:
+            last=state.sessions[-1].strftime('%Y%m%d')
+            value['data']['item']=[row for row in value['data']['item'] if row['date']<=last]
+        return value
+    result=stock.observe_stock_reading(plan,state,request_json=current_source,observed_at=SATURDAY)
+    assert result['projection']['surfaced_stocks']
+    assert result['projection']['market_session']=='2026-09-04'
+    assert calls[0]==(stock.HITHINK_CALENDAR_PATH,{})
+
+
+def test_prior_date_provider_clock_does_not_relax_calendar_coverage():
+    state,plan,response,calls=inputs(SATURDAY)
+    def stale_source(path,params):
+        value=response(path,params)
+        if path==stock.HITHINK_CALENDAR_PATH:
+            last=state.sessions[-1].strftime('%Y%m%d')
+            value['data']['item']=[row for row in value['data']['item'] if row['date']<=last]
+            value['data']['timestamp']=int((SATURDAY-timedelta(days=1)).timestamp()*1000)
+        return value
+    with pytest.raises(stock.StockReadingInputError,match='STOCK_CALENDAR_COVERAGE_INSUFFICIENT'):
+        stock.observe_stock_reading(plan,state,request_json=stale_source,observed_at=SATURDAY)
+    assert calls==[(stock.HITHINK_CALENDAR_PATH,{})]
+
+
+def test_future_provider_calendar_clock_is_not_used_as_freshness_evidence():
+    state,plan,response,calls=inputs(SATURDAY)
+    def future_source(path,params):
+        value=response(path,params)
+        if path==stock.HITHINK_CALENDAR_PATH:
+            value['data']['timestamp']=int((SATURDAY+timedelta(seconds=1)).timestamp()*1000)
+        return value
+    with pytest.raises(ValueError,match='provider-ready'):
+        stock.observe_stock_reading(plan,state,request_json=future_source,observed_at=SATURDAY)
+    assert calls==[(stock.HITHINK_CALENDAR_PATH,{})]
 
 
 def test_calendar_failure_is_not_assumed_holiday_or_empty_success():
