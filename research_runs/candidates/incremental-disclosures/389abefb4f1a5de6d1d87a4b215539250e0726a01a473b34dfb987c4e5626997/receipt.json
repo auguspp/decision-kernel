@@ -1,0 +1,66 @@
+{
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "elapsed_minutes_observed": 1,
+  "execution_id": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+  "finished_at": "2026-09-12T15:43:42.682694Z",
+  "input_hash": "494614957cd3acf7340e117abb90f288dba325be3b74c4180e2b9c9ad70a2ba5",
+  "last_completed_stage": "ADMISSION_OR_RETAINED_PARTIAL",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "34703004892",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-12T15:42:54.233461Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "9ecb6b10-c0d6-5abe-aafc-02f55434725e",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/1c0482c80db388d3b59d6514feb8eed2bcb63efe/research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 2,
+  "started_at": "2026-09-12T15:43:00.564749Z",
+  "stop_or_failure_reason": "DomainValidationError",
+  "technical_retries_used": 0,
+  "tool_calls_used": 3,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-12T15:43:00.564777Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/1c0482c80db388d3b59d6514feb8eed2bcb63efe/research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Model output, not primary-source Evidence.",
+      "observed_at": "2026-09-12T15:43:42.682610Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:PRE",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Raw output retained; no retry or route repair.",
+      "observed_at": "2026-09-12T15:43:42.682672Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 3,
+      "status": "FAILED",
+      "target": "EXECUTOR:PRE",
+      "technical_retry": false
+    }
+  ]
+}
