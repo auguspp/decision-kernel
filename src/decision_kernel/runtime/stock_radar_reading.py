@@ -633,7 +633,8 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if row['market_comparison']['20']['excess_return'] <= 0:
             reasons.append('TWENTY_DAY_MARKET_EXCESS_NOT_POSITIVE')
         if not row['eligible_nodes']:
-            reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
+            reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR' if is_market_expression
+                           else 'TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
         row['eligible_for_shadow_reading'] = not reasons
         if is_market_expression and not reasons:
             row['market_expression_status'] = 'OBSERVED'

@@ -161,7 +161,9 @@ def prepare_market_expression_reading(source_root: Path, state, ledger, associat
             if reviewed_company is not None:
                 issuers[code]["business_linkage_status"] = REVIEWED_BUSINESS_LINK
 
-    selected = [issuers[k] for k in sorted(issuers)]
+    # Dict insertion order is the frozen surfaced-group round-robin routing order.
+    # Do not silently replace it with ticker order before the existing Stock gate.
+    selected = list(issuers.values())
     used_sectors = sorted({s for item in selected for o in item["origins"] for s in o["sector_codes"]})
     directions = {code: all_rows[code] for code in used_sectors}
     order = [route["group"]["group_key"] for route in routed
