@@ -4,16 +4,16 @@ on:
   push:
     branches: [fix/p0-stock-market-expression-20260912]
     paths:
-      - .github/scripts/apply-p0-stock-market-expression-patch.py
+      - .github/scripts/finalize-p0-stock-market-expression-tests.py
       - .github/workflows/p0-stock-market-expression-construction.yml
 
 permissions:
   contents: write
 
 jobs:
-  patch:
+  focused:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
@@ -21,26 +21,26 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Apply exact construction patch
-        run: python .github/scripts/apply-p0-stock-market-expression-patch.py
+      - name: Apply focused semantic/test patch
+        run: python .github/scripts/finalize-p0-stock-market-expression-tests.py
       - name: Compile touched Python
         run: |
           python -m py_compile \
             src/decision_kernel/runtime/stock_radar_reading.py \
             src/decision_kernel/runtime/stock_market_expression.py \
-            src/decision_kernel/runtime/current_state.py \
-            src/decision_kernel/runtime/current_state_delivery.py \
-            .github/scripts/capture-stock-reading.py
-      - name: Commit non-workflow target files only
+            tests/test_stock_market_expression.py
+      - name: Install test environment
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused Stock compatibility tests
+        run: python -m pytest -q tests/test_stock_market_expression.py tests/test_stock_radar_reading.py
+      - name: Commit focused target files only
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add \
             src/decision_kernel/runtime/stock_radar_reading.py \
             src/decision_kernel/runtime/stock_market_expression.py \
-            src/decision_kernel/runtime/current_state.py \
-            src/decision_kernel/runtime/current_state_delivery.py \
-            .github/scripts/capture-stock-reading.py
+            tests/test_stock_market_expression.py
           git diff --cached --check
-          git commit -m 'fix: separate Stock market expression from business evidence'
+          git commit -m 'test: lock Stock market-expression boundary'
           git push origin HEAD:fix/p0-stock-market-expression-20260912
