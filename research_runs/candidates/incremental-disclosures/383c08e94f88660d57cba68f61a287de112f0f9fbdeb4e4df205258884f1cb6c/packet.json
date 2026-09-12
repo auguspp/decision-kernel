@@ -1,0 +1,106 @@
+{
+  "announcement_ids": [
+    "1225551618"
+  ],
+  "assessment_input_hash": "383c08e94f88660d57cba68f61a287de112f0f9fbdeb4e4df205258884f1cb6c",
+  "assessment_semantics_id": "research-funnel-v1",
+  "disclosure_assessment_status": "UNASSESSED",
+  "evidence": [
+    {
+      "announcement_id": "1225551618",
+      "evidence_artifact": {
+        "available_at": "2026-09-08T00:00:00+08:00",
+        "content_hash": "0eb6a2ad271fe469db76976aa80bae3788848c3a30b4b82c8803daf67a325d83",
+        "extracted_structured_values": null,
+        "id": "11d4858d-dac3-556e-af55-7abba33901cb",
+        "idempotency_key": "CNINFO:603986:ANNOUNCEMENT:1225551618",
+        "license_terms_note": "Reference-only official disclosure; raw PDF is not retained by this adapter.",
+        "permitted_excerpt": null,
+        "published_at": "2026-09-08T00:00:00+08:00",
+        "raw_storage_ref": null,
+        "replayability_level": "REFERENCE_ONLY",
+        "report_period_end": null,
+        "retention_mode": "METADATA_ONLY",
+        "retrieved_at": "2026-09-11T12:50:59.614576Z",
+        "schema_version": 1,
+        "source_identifier": "CNINFO:603986:ANNOUNCEMENT:1225551618",
+        "source_location": "CNINFO announcement 1225551618",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551618.PDF",
+        "source_type": "OFFICIAL_DISCLOSURE"
+      },
+      "extracted_char_count": 1292,
+      "page_count": 7,
+      "pages": [
+        {
+          "page_number": 1,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\nၵರ஼੝Ḹі\u0001\n\nٺܢ\n⦁ğௐ ⊯Ⅲğࢌ\nඳ଀Ẁğඳ\nರ௹ğ \u0013\u0011\u0013\u0017୍\u001aᄅ\u0018ರ\n\u0001\nඳ(&.⊈ಊ\n၂ᅣᾳ\u0001b\u0001\n၂ᅣᾳ\n ٳٺܢܢ⦁ \"෮ഈ൧ڎ\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0017\u0011\u0014\u001a\u0019\u0017 䪌ૼܢ\nṉọ\nࡱ\nĎṉọ\nĎ⅂\nଢ\nႵၘứ\nܢ\nб\u0001\t䩏\u0014\nṉọ\nଢ\nứྛ\u0010ԛ൲ᾁ\u0001\t䩏\u0015\n⊺⅂\n᾵թ\t䩏\u0012\n \u0013\u0011\u0013\u0017୍\u001aᄅ\u0015ರ \u0017\u0018\u0011\n\u0018\u0012\u0019\n\u0014\u0013\u0018 \u0011 \u0017\u0018\u0011\n\u0018\u0012\u0019\n\u0014\u0013\u0018\nٳ\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u001aᄅ\u0018ರ\n\u0011 \u0006\n୍\u001aᄅ\u0018ರ \u0017\u0018\u0011\n\u0018\u0012\u0019\n\u0014\u0013\u0018 \u0011 \u0017\u0018\u0011\n\u0018\u0012\u0019\n\u0014\u0013\u0018\n\n\u0017ࠣ"
+        },
+        {
+          "page_number": 2,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\n1).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0012ರ\n\u0013\u0015\u0018\n\u0011\u0011\u0011 \u0011\u000f\u0011\u0015 % 3.# \u0015\u0011\u0017\u000f\u0015\u0019\n2).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0015ರ\n\u0016\u0012\u0018\n\u0012\u0011\u0011 \u0011\u000f\u0011\u0019 % 3.# \u0014\u0019\u0014\u000f\u0014\u0018\n3).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0016ರ\n\u0013\u0017\u0016\n\u0011\u0011\u0011 \u0011\u000f\u0011\u0015 % 3.# \u0014\u0019\u0018\u000f\u0017\u0015\n4).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0017ರ\n\u0013\u0016\u0018\n\u0016\u0011\u0011 \u0011\u000f\u0011\u0015 % 3.# \u0014\u001a\u0012\u000f\u001a\u001a\n5).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0018ರ\n\u0013\u0015\u0017\n\u0013\u0011\u0011 \u0011\u000f\u0011\u0015 % 3.# \u0015\u0011\u0017\u000f\u0013\u0017\n6).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u0019ᄅ\u0013\u0019ರ\n\u0012\u0013\u001a\n\u0016\u0011\u0011 \u0011\u000f\u0011\u0013 % 3.# \u0015\u0011\u0013\u000f\u0017\u0013\n7).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u001aᄅ\u0014ರ\n\u0012\u0014\u0016\n\u0011\u0011\u0011 \u0011\u000f\u0011\u0013 % 3.# \u0014\u0019\u0015\u000f\u0011\u001a\n8).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u001aᄅ\u0015ರ\n\u0012\u0014\u0013\n\u0017\u0011\u0011 \u0011\u000f\u0011\u0013 % 3.# \u0014\u0018\u0016\u000f\u001a\u0018\n9).ٺܢ֥\nṉọರ௹ \u0013\u0011\u0013\u0017୍\u001aᄅ\u0018ರ\n\u0012\u0014\u0013\n\u0011\u0011\u0011 \u0011\u000f\u0011\u0013 % 3.# \u0014\u0019\u0014\u000f\u0017\u0013"
+        },
+        {
+          "page_number": 3,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\n⃷⃾\n൙὜ᆞൔ൱⃴஻ሙđ❣቎\n౦㣐༯ğ\u0001\n\u0001\n\t䩏\u0018\n\u0001\nಆ҆ॻ⇊Ġ\u0001\n\u0001\nĠ\u0001\n\u0001\nčೂႵĎၘჍ੫ྛĠ\u0001\n\u0001\n૫नℾཌྷ๝\t䩏\u0019\nĠ\u0001\n\u0001\nၧၘಆ҆቎ྛĠ\u0001\n\u0001\nῂၘứෂ\u0010⇀ᆞ⊵Ḿứෂ\u0010ᆞᄝ⊵Ḿᇏ❣ᾞ὜ứෂĠ\u0001\n\u0001\n\u0001ࠣ\n\u0001\nĎb\n\u0001\n\u0001\n၂ᅣᾳ䩏ℴğ\u0001\nഈ\n௹⊔᾵թರ௹b\u0001\nԉቀ⊷ਘđၛ\nίෘđᄝ๝\nῘ‥ἠ ⦁஼੝b\u0001\n௹Ԛ᾵թίෘb\u0001\nᾁxb\u0001\nb\u0001"
+        },
+        {
+          "page_number": 4,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\nರ௹b\u0001\n෮ἲ\nഉໃФ䩏⇍b\u0001\n౦∣ᄝ#҆ቔ\nԛ஼੝b\u0001\nଢჍၛྩịb\u0001\n\u0019\u000f\u0001 ᄝՎwཌྷ๝xᆷğ\u0001\nॻၧཌྷ๝Ġ\u0001\n\u0001ࠣ\nၭb\u0001"
+        },
+        {
+          "page_number": 5,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\nᅣᾳb\nۡ\nᅣᾳ\n ٳٺܢܢ⦁ \"෮ഈ൧ڎ\n⊈ಊսὂ\u0001\tೂഈ൧\n \u0017\u0011\u0014\u001a\u0019\u0017 䪌ૼܢ\nۡ\nၞರଢൔ\u0001\t䩏\u0012\nᾁ\u0001\tჭ\nᾁ\u0001\tჭ\n⊺ỡ\u0001\tჭ\n\u0012\n\u000f \u0013\u0011\u0013\u0017୍\u001aᄅ\u0018ರ \u0012\u0014\u0013\n\u0011\u0011\u0011ၞ෮Άྛ\nၞ෮\n3.# \u0014\u0019\u0016 3.# \u0014\u0019\u0012\u000f\u0016\u0014 3.# \u0016\u0011\n\u0017\u0014\u0018\n\u0016\u0013\u0019\n⊺⅂⊺ỡ\u0001\tჭ\n 3.# \u0016\u0011\n\u0017\u0014\u0018\n\u0016\u0013\u0019\nčₘ䩏⇍Ď⅂ଢ\u0001\u0001 \u0012\u0014\u0013\n\u0011\u0011\u0011\nĎ\n⅂ଢ \u0011\nః෰⊷ਘ\nರ௹\n⊺⅂\nଢ \tB\nб\u0001\nĎ⅂ଢ\n%\nᇀ\n҂ℳႨ"
+        },
+        {
+          "page_number": 6,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\nᅣᾳ䩏ℴğ\u0001\n\u0001\nൔΆྛb\u0001\u0001\n\u0001\nၞ෮Άྛđन҂\u0001\nί὏b\u0001"
+        },
+        {
+          "page_number": 7,
+          "text": "FF305\n∉ \u0012\u000f\u0014\u000f\u0011\n೘ᅣᾳb\n҂ℳႨ\nᆀğ ⇖Ỵຫ\n\tྠ଀\n\u0001\n⊊↼ğඳ૝ℼ\nದ≇"
+        }
+      ],
+      "pdf_sha256": "0eb6a2ad271fe469db76976aa80bae3788848c3a30b4b82c8803daf67a325d83",
+      "published_at": "2026-09-08T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225551618.PDF",
+      "text_sha256": "39249095aa72dd638d19f025ca69b28c3f82fd9517268967de24f252f4de83ec",
+      "text_status": "EXTRACTED",
+      "title": "H股公告-翌日披露报表"
+    }
+  ],
+  "investment_authority": "NONE",
+  "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+  "publication_date": "2026-09-08",
+  "research_context": {
+    "core_thesis": "兆易创新的2026盈利跃迁同时包含真实的产品/供需结构改善与强周期成分。Full Research v2修正v1的预期区间截断：H1后认真更新的2027研报主要聚集在约140-180亿元净利润世界，不能在赋概率前被静默删除；但这些世界仍需经过存储景气持续性、MCU/定制化存储增长、供给响应、现金转化与估值压缩的共同检验。",
+    "market_expectations_narrative": "截至2026-08-31，21家机构2027净利润预测均值约116.14亿元、范围约35.81-179.58亿元；更重要的是H1后更新的主要研报集中约139.77-178.72亿元，中位数约168.68亿元。该区间只定义市场认真交易的expectation envelope，不等于未来事实或我们的概率分布。",
+    "model_risk_level": "VERY_HIGH",
+    "model_risk_notes": "2026H1存储毛利率67.57%显著高于FY2025的42.84%，且报告净利含约19.74亿元非经常性损益；研报分歧极大，2027存储供需持续时间、MCU/定制化存储贡献和终值估值倍数均高度不确定。v2保留完整预期区间但不降低模型风险等级。",
+    "monitoring_triggers": [
+      "季度存储收入、毛利率、ASP与库存联动",
+      "MCU/定制化存储收入、毛利率及量产客户进展",
+      "经营现金流、营运资本与H股后资本配置",
+      "利基存储新增供给、合同价与客户库存变化",
+      "H1后2027盈利预测的继续上修/下修及估值倍数变化"
+    ],
+    "open_questions": [
+      "2027 NOR/SLC/利基DRAM价格与毛利率能维持到什么水平？",
+      "MCU、青耘定制化存储及其他非存储业务能贡献多少可持续利润？",
+      "新增供给和客户库存何时开始压缩存储周期？",
+      "如果盈利维持高位，市场愿意给出的2027终值PE是多少？",
+      "H股后现金、营运资本和采购依赖如何影响每股owner economics？"
+    ],
+    "research_as_of": "2026-09-02T01:00:00+00:00",
+    "research_information_bundle_hash": "fefaf2f3088f83aaec75f469d615646c5c25313c1453af57bacfc49f5a6a6a5e",
+    "research_snapshot_id": "7d304818-9368-513d-bbe8-c393532e5e75",
+    "thesis_invalidation": [
+      "Specialty-memory revenue or gross margin normalizes materially faster than the retained worlds while inventory rises and cash conversion weakens.",
+      "Recurring 2027 earnings evidence trends below the rapid-normalization world despite stable end demand, implying the model still overstates cycle durability.",
+      "MCU, custom-memory and other non-storage products fail to scale economically enough to offset storage normalization.",
+      "New supply or customer inventory adjustment materially shortens the 2027 specialty-memory tightness assumed in the central worlds.",
+      "Post-H-share capital allocation, procurement dependence or working-capital intensity reduces per-share owner returns without an offsetting operating advantage."
+    ]
+  },
+  "source_lane": "CNINFO",
+  "stock_code": "603986"
+}
