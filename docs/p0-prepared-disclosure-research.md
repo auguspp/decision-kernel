@@ -66,8 +66,8 @@ hard enforcement by relabeling a soft budget. Unsupported `HARD_RUNTIME`
 claims and shapes fail before spending. Preparation/Git I/O are distinct from
 formal model-stage events; the receipt does not claim a global tool journal.
 
-An existing launch marker prevents execution, including after earlier failure or
-lost output. Concurrent create failure or uncertain mutation stops; no overwrite,
+An existing launch marker or any retained execution/admission/result/failure record
+prevents execution, including older executors that did not write launch.json. Concurrent create failure or uncertain mutation stops; no overwrite,
 rollback, timeout reset, different-key escape or automatic retry. Missing/malformed
 reserved bytes are not an empty history. Source/preflight failures stay NOT_EXECUTED;
 provider execution failure retains the original EXECUTION_GAP, never a completed
@@ -95,7 +95,7 @@ This does not close the complete P0 loop. Still required:
 
 ## Verification scope
 
-Forty new synthetic cases call the **original** admission, identity, packet,
+Forty-eight new synthetic cases call the **original** admission, identity, packet,
 Pre/Quick, Funnel and Retainer code with fake GitHub/model I/O and denied sockets.
 They cover three issuer identities, all terminal routes, no Quick after Pre WAIT,
 input/context/seed/egress mismatches, future Discovery, unsupported budgets,
@@ -103,7 +103,9 @@ original admission rejection, conflicts, main movement/expiry after marker,
 concurrent launches, uncertain writes/readback, preserved historical bytes and
 private permission refs excluded from model context.
 
-Local related suites: 185 passed, 1 skipped. Pydantic matches the repository pin;
+Regression-first review found that historical results without launch.json also
+needed to block spending: all eight new legacy-record cases failed before that
+correction. Local related suites after the correction: 193 passed, 1 skipped. Pydantic matches the repository pin;
 pytest/requests/pypdf differ, and the official SDK is absent locally, so its existing
 SDK transport test is skipped. This **does not replace exact-head full repository
 CI**. These are engineering tests, not a new company Research result or proof of
