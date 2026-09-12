@@ -30,11 +30,14 @@ def check(*, api, code_commit: str, request_source: dict, new_packet_raw: bytes,
                  and request_source["purpose"] == REQUEST_PURPOSE, "continuation request is not trusted main input")
     now = read.clock(checked_at)
     sources = []
-    def load(spec):
+    def load(spec, *, exposure_deadline=None):
         raw = identity._checked_source(spec, lambda s: api.file(s["path"], s["ref"]))
         meta = api.get("git/commits/" + spec["ref"])
         once.require(meta["sha"] == spec["ref"] and read.clock(meta["committer"]["date"]) <= now,
                      "continuation source commit is from the future")
+        if exposure_deadline is not None:
+            once.require(read.clock(meta["committer"]["date"]) <= exposure_deadline,
+                         "permission precedes its exposed reading commit")
         return raw
     request = identity._json(load(request_source))
     once.require(set(request) == FIELDS and request["schema_version"] == 1
@@ -107,7 +110,7 @@ def check(*, api, code_commit: str, request_source: dict, new_packet_raw: bytes,
     once.require(recorded_at <= read.clock(comment["updated_at"]) <= now,
                  "permission record clocks are invalid or future")
     # The preserved reading is historical exposure, not a current market input.
-    exposure = identity._json(load(request["exposed_reading"]))
+    exposure = identity._json(load(request["exposed_reading"], exposure_deadline=recorded_at))
     read.validate_read_package(exposure)
     once.require(request["exposed_reading"]["path"] == "current-state.json"
                  and read.clock(exposure["checks"]["finished_at"]) <= recorded_at,
