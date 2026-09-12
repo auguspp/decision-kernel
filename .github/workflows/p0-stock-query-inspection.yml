@@ -4,76 +4,66 @@ on:
     branches: [fix/p0-stock-latest-attempt-scope-20260912]
     paths: [.github/workflows/p0-stock-query-inspection.yml]
 permissions:
-  contents: read
-  actions: read
+  contents: write
 jobs:
-  inspect:
-    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+  patch-and-test:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/fix/p0-stock-latest-attempt-scope-20260912' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      PINNED_MAIN: dbf3abaa81f8265f8445df5b52741e8bc5ab833e
-      PINNED_READING: 7fd6e562e1d626881507407b4d5be1d308365aa1
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: dbf3abaa81f8265f8445df5b52741e8bc5ab833e
-          persist-credentials: false
+          ref: ${{ github.sha }}
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Install existing read-only collector dependencies
-        run: python -m pip install -e '.[feeds,discovery]'
-      - name: Inspect existing newest-20 query and retain exact inputs
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Apply exact source patch, not a new collector
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$PINNED_MAIN"
-          mkdir proof
-          git archive --format=tar "$PINNED_MAIN" > proof/repository.tar
-          git ls-tree -rz "$PINNED_MAIN" > proof/tree-index.bin
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git hash-object src/decision_kernel/runtime/current_state_delivery.py)" = '72567ea015711ad8a5c5ebc185434e63b319bd57'
+          test "$(git hash-object tests/test_current_state_stock_query_scope.py)" = 'e388e3c0429294747d3ea34d0f8de50495ef2cf9'
           python - <<'PY'
-          import hashlib, json, os, subprocess
           from pathlib import Path
-          from decision_kernel.runtime.current_state_delivery import Collector, GitHubAPI
-          from decision_kernel.runtime import current_state as model
-          api = GitHubAPI(os.environ['GITHUB_TOKEN'])
-          collector = Collector(api, os.environ['PINNED_MAIN'], Path.cwd())
-          selected, complete = collector.runs('stock')
-          endpoint = 'actions/workflows/hithink-stock-dump-trial.yml/runs?branch=main&per_page=20'
-          rows = []
-          for run in api.memo[endpoint]['workflow_runs']:
-              jobs = api.memo[f"actions/runs/{run['id']}/jobs?per_page=100"]['jobs']
-              relevant = any(j['name'] == 'stock-reading' and j.get('conclusion') != 'skipped' for j in jobs)
-              unknown = not relevant and (run.get('status') != 'completed' or
-                  (not any(j['name'] == 'stock-reading' for j in jobs) and run.get('conclusion') != 'success'))
-              rows.append({'run': model.concise_run(run), 'stock_relevant': relevant,
-                           'unclassified': unknown,
-                           'jobs': [{k:j.get(k) for k in ('id','name','status','conclusion','run_id','head_sha')} for j in jobs]})
-          for name, path in [('current-state.json','current-state.json'), ('README.md','README.md')]:
-              Path('proof',name).write_bytes(api.file(path, os.environ['PINNED_READING']))
-          api.get('actions/runs/34673882756')
-          Path('proof/github-metadata.json').write_text(json.dumps(api.memo, ensure_ascii=False, indent=2)+'\n')
-          result = {'scope':'READ_ONLY_GITHUB_METADATA_NOT_MARKET_OR_ACCEPTANCE',
-                    'code_commit':os.environ['PINNED_MAIN'], 'reading_commit':os.environ['PINNED_READING'],
-                    'tree_sha':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
-                    'query_complete':complete, 'selected_ids':[r['id'] for r in selected],
-                    'api_calls':api.calls, 'rows':rows}
-          Path('proof/inspection.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
-          print('QUERY_COMPLETE='+str(complete))
-          for row in rows:
-              r=row['run']
-              print(json.dumps({'id':r['id'],'created_at':r['created_at'],'event':r['event'],
-                                'conclusion':r['conclusion'],'relevant':row['stock_relevant'],
-                                'unclassified':row['unclassified'],'jobs':row['jobs']},ensure_ascii=False))
-          manifest = {p.name:{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
-                      for p in Path('proof').iterdir() if p.is_file()}
-          Path('proof/manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          p = Path('src/decision_kernel/runtime/current_state_delivery.py')
+          source = p.read_text()
+          old = '''        stock, complete = [], True
+                  for run in candidates:
+                      jobs = self.api.get(f"actions/runs/{run['id']}/jobs?per_page=100")'''
+          old = old.replace('\n        ', '\n')
+          new = '''        stock, complete = [], True
+                  for run in candidates:
+                      # Match select_runs' existing production-trigger scope before checking
+                      # purpose. Historical push-only trials cannot make production unknown.
+                      if run.get("event") not in {"schedule", "workflow_dispatch"}:
+                          continue
+                      jobs = self.api.get(f"actions/runs/{run['id']}/jobs?per_page=100")'''
+          new = new.replace('\n        ', '\n')
+          assert source.count(old) == 1
+          p.write_text(source.replace(old, new))
           PY
+          test "$(git hash-object src/decision_kernel/runtime/current_state_delivery.py)" = '11e3e69b31bb33043e80a16a2f3342574445b3aa'
+      - name: Install exact repository test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused offline regressions
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_current_state_stock_query_scope.py tests/test_current_state.py tests/test_current_state_delivery.py tests/test_current_state_stock_completion.py tests/test_inbox_partial_delivery.py | tee "$RUNNER_TEMP/stock-query-focused.log"
+      - name: Commit only the verified production target to this branch
+        run: |
+          set -euo pipefail
+          branch='fix/p0-stock-latest-attempt-scope-20260912'
+          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
+          test "$(git diff --name-only)" = 'src/decision_kernel/runtime/current_state_delivery.py'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- src/decision_kernel/runtime/current_state_delivery.py
+          git commit -m 'fix: scope Stock completeness to existing production triggers'
+          git push origin "HEAD:refs/heads/$branch"
       - uses: actions/upload-artifact@v7
+        if: always()
         with:
-          name: stock-query-inspection-${{ github.run_id }}
-          path: proof/
+          name: stock-query-focused-${{ github.run_id }}
+          path: ${{ runner.temp }}/stock-query-focused.log
           retention-days: 14
-          if-no-files-found: error
+          if-no-files-found: warn
