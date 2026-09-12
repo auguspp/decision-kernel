@@ -1,0 +1,53 @@
+{
+  "case_id": "600036.SH",
+  "finished_at": "2026-09-12T15:42:22.880420+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "notes": "STATIC saved-announcement triage, not an exhaustive latest-issuer inventory. Original packet and prior research context are preserved, not newly accepted facts. PDF/text identity and format checks do not certify semantic readability or truth. Unreadable required content is an execution/source gap, never completed WAIT. Ambiguous tables, economic effects and present market expectations remain UNKNOWN.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "fb86d7ce6ac79c368798559c03b971085fee237934f8ee0fc96586e769fbcaef",
+      "checked_at": "2026-09-12T15:42:21.433793+00:00",
+      "id": "body1",
+      "identity": "CNINFO:600036:ANNOUNCEMENT:1225554309",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225554309.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/fb86d7ce6ac79c368798559c03b971085fee237934f8ee0fc96586e769fbcaef.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "body1"
+      ],
+      "id": "SAVED_DISCLOSURE_BODIES",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:600036",
+  "seed_publications": [
+    {
+      "evidence_id": "9ecb6b10-c0d6-5abe-aafc-02f55434725e",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "820f999ace83fc039f98e8e98fa5f3cbd11fb523",
+        "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "1c0482c80db388d3b59d6514feb8eed2bcb63efe",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "9e75b30d1937a9c920300614456f152c6439b802ab83b15c212209f09c13f581"
+      }
+    }
+  ],
+  "started_at": "2026-09-12T15:42:19.826426+00:00",
+  "ticker": "600036",
+  "valid_until": "2026-09-12T16:27:22.880422+00:00"
+}
