@@ -105,14 +105,21 @@ def run_prepared(*, api, code_commit: str, input_source: dict, expected_key: dic
         work_head = api._call("GET", "git/ref/heads/" + work.WORK_REF).json()["object"]["sha"]
         once.require(api.file(packet_source["path"], work_head) == reserved_raw,
                      "packet is not reserved on the existing work ref")
-        try:
-            api.file(prefix + "launch.json", work_head)
-        except GitHubReadError as exc:
-            if str(exc) != "GitHub HTTP 404":
-                raise
-        else:
-            host["status"] = "ALREADY_LAUNCHED_NO_EXECUTION"
-            return host
+        # Older trusted executors may have saved results without this adapter's
+        # launch marker. Missing launch.json is never proof of no prior attempt.
+        for name in ("launch.json", "candidate.json", "candidate-before-validation.json",
+                     "receipt.json", "validation.json", "funnel.json", "host-receipt.json",
+                     "failure.json", "admission.json"):
+            try:
+                api.file(prefix + name, work_head)
+            except GitHubReadError as exc:
+                if str(exc) != "GitHub HTTP 404":
+                    raise
+            else:
+                host["status"] = ("ALREADY_LAUNCHED_NO_EXECUTION" if name == "launch.json"
+                                  else "ALREADY_ATTEMPTED_NO_EXECUTION")
+                host["existing_attempt_record"] = name
+                return host
         context_source = _one(packet, "MODEL_CONTEXT")
         context = identity._json(identity._checked_source(context_source, load))
         discovery = DiscoveryInput.model_validate(identity._json(
