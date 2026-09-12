@@ -1,0 +1,78 @@
+{
+  "approved_egress_hash": "5f8a4e23a1002950b12c245d0a0369be495aa2363ec5f2540b7b878566a3d877",
+  "automatic_retry": false,
+  "candidate_hash": "f59bd48c037707718a7dd049d14ce8b8fd4264f0e9465a7f4f1217da7c619d4e",
+  "code_commit": "934ee0c4481bc72374b4ce8e3f4845ef7e77d7de",
+  "current_state_published": false,
+  "execution_key": {
+    "canonical_input_hash": "494614957cd3acf7340e117abb90f288dba325be3b74c4180e2b9c9ad70a2ba5",
+    "execution_id": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997"
+  },
+  "finished_at": "2026-09-12T15:43:48.629450+00:00",
+  "formal_research_started": true,
+  "input_source": {
+    "git_blob": "2a3fa626988ad728d2c87a183ab12cce8d81df4a",
+    "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/input.json",
+    "purpose": "input.json",
+    "ref": "81295fb73eb2f3a2a949feadbb0c9d11e24398ef",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "eb8a51f1da2ad5e039303780c31eed09c6bb2f71edf5ae711b564e12e4b64caf"
+  },
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "retained_files": [
+    {
+      "git_blob": "51c5e53a6b339b06ddb8261c791fb0cb59633e89",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/launch.json",
+      "purpose": "launch.json",
+      "ref": "0be31c4ce5f2f233b48a5099c761e6b885b6cdea",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f8286caf7e42621a8adc15dd1af196db66f0297d2f1913e5d190210d69bcde88"
+    },
+    {
+      "git_blob": "e4ccad956cb7042503a1cab2288b30be0c4c5c0c",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/admission.json",
+      "purpose": "admission.json",
+      "ref": "4cd99f84190c466d8fe895e3bffe6806849ebfba",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "46cc4a5fd686f6d5b0973d1a4742be63c3fbe305590691d65bb7c14531a2d645"
+    },
+    {
+      "git_blob": "b6cc6cb990f0d2641480e6f4e6ea90e6f9dba7d5",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/candidate.json",
+      "purpose": "candidate.json",
+      "ref": "b2400b76f7627bb2f559e0da72c52bc3d337ef0d",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c09ae0ac3cabc3104dc6f936ebf38f8e03f3f12f99508a330f76235bf06945e1"
+    },
+    {
+      "git_blob": "784894d1caf0c37f45169a3d60ec9f83220321a1",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/receipt.json",
+      "purpose": "receipt.json",
+      "ref": "fbac869ca27518cbda1630d2ddbe9f66fb9e6732",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c5f1ee2bdafc96d89a2540643914311daef37ad5cbb783dd81e568671ae22c48"
+    },
+    {
+      "git_blob": "3294619cdd9cb4e9150270a3ce068535e3e4760a",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/validation.json",
+      "purpose": "validation.json",
+      "ref": "23a6adbd66959f9ff95e9f04ed18635b45d9597e",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e34d1b66487715642048c3f2dc88780930407c91f03074ddade574f13a85df20"
+    },
+    {
+      "git_blob": "01356d7c95d21c7b00f4bab3e609b7671b521e27",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/README.md",
+      "purpose": "README.md",
+      "ref": "15b1beaf6373925739b607a91933a60c1f8cd767",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "69e1d6f6c5b0390d14b4c4c9a0f7fa1c3aca3ae08b0cdd91c5a630ea0f150eaf"
+    }
+  ],
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "started_at": "2026-09-12T15:42:56.357617+00:00",
+  "status": "EXECUTION_GAP",
+  "validation_hash": "6ff2fe95a9610190afa122e0461d77fe451c94fb6f4825fe553912ab2ab4f325"
+}
