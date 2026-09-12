@@ -209,6 +209,17 @@ def test_api_reserve_stops_before_packet_reads(tmp_path):
     assert work.request_path(key) in files
 
 
+def test_source_file_budget_stops_before_packet_reads(tmp_path):
+    key, files = candidate_files()
+    c, api = collector(tmp_path, files)
+    c.sources = {(f"existing-{i}", CODE): (b"x", {})
+                 for i in range(delivery.MAX_SOURCE_FILES - 3)}
+    with pytest.raises(ValueError, match="source-file budget"):
+        c.research_work(CONFIG)
+    assert not any(row.startswith("file:") for row in api.reads)
+    assert work.request_path(key) in files
+
+
 @pytest.mark.parametrize("change", [
     {"mode": "AUTO_PROMOTE"},
     {"ref": "other"},

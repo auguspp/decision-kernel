@@ -437,6 +437,8 @@ class Collector:
         if type(used) is int:
             model.check(used + extra_reads + RESEARCH_WORK_API_RESERVE <= MAX_API_CALLS,
                         "research work read would exhaust publication API reserve")
+        model.check(len(self.sources) + extra_reads <= MAX_SOURCE_FILES,
+                    "research work read would exceed source-file budget")
 
         _, work_files = work_inventory(self.api, work_commit)
 
