@@ -115,7 +115,24 @@ Round 3 的完整语义记录在 [`round3/`](round3/)；其中包括产品矩阵
 - NewCo 权益出现可验证估值、变现或 royalty 现金流，并能避免重复计价；
 - HiThink 恢复 qualified market observation。届时只替换 market state，不改写 Frozen Research，重算 canonical Odds 并与本 provisional Odds 比较。
 
-## 8. Archive payloads
+## 8. Human-accepted first-entry distribution — 2026-09-12
+
+Human 已接受基于冻结 Research / ordinal reverse-underwriting 的条件式 first-entry 分布。正式决策记录：
+
+[`docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md`](../../decisions/600276-hengrui-human-first-entry-2026-09-12.md)
+
+摘要：
+
+- `> CNY39.6` → `WAIT`
+- `~ CNY39.6` → `RE_UNDERWRITE / ASSUMPTION_RECHECK`
+- `CNY37–38` → `CONDITIONAL_FIRST_ENTRY_REVIEW`
+- `~ CNY35` → `SECOND_REVIEW / MATERIALLY_BETTER_ODDS`
+- `CNY32–32.5` → `HIGH_MARGIN_OF_SAFETY_REVIEW`
+- `~ CNY29.45 and below` → `DEEP_RE_UNDERWRITE`
+
+该分布不是 standing order，也不包含 position size。任何价格层级都要求先确认 Frozen Belief 未被新 Evidence 破坏；若 thesis 改变，原价格分布失效。
+
+## 9. Archive payloads
 
 - `round1-research-packet.zip.b64` — 第一轮原 ZIP 字节的 base64，可逆还原；哈希见 `manifest.json`
 - `round2-research-packet.zip.b64` — 第二轮原 ZIP 字节的 base64，可逆还原；哈希见 `manifest.json`
