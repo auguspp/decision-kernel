@@ -35,6 +35,11 @@ jobs:
         run: python -m pytest -q tests/test_stock_market_expression.py tests/test_stock_radar_reading.py
       - name: Commit focused target files only
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('tests/test_stock_market_expression.py')
+          path.write_text(path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
+          PY
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add \
