@@ -5,6 +5,7 @@ on:
     branches: [fix/p0-stock-current-calendar-date-20260912]
     paths:
       - .github/scripts/apply-p0-stock-calendar-freshness-patch.py
+      - .github/scripts/fix-p0-stock-calendar-test-date.py
       - .github/workflows/p0-stock-calendar-freshness-construction.yml
 
 permissions:
@@ -22,7 +23,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Apply exact calendar freshness patch
-        run: python .github/scripts/apply-p0-stock-calendar-freshness-patch.py
+        run: |
+          python .github/scripts/apply-p0-stock-calendar-freshness-patch.py
+          python .github/scripts/fix-p0-stock-calendar-test-date.py
       - name: Compile touched Python
         run: |
           python -m py_compile \
