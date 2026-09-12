@@ -1,0 +1,21 @@
+{
+  "assessment_input_hash": "674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf",
+  "automatic_retry": false,
+  "case_id": "603986",
+  "error_code": "required page text unavailable",
+  "error_type": "TrialError",
+  "finished_at": "2026-09-12T22:25:00.105020+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_status": "NOT_REACHED",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "packet_blob": "7ee41b6c41203de703254306400ceeec8354f47f",
+  "packet_sha256": "8b0dfe0bfa51f027144ca96d3145c1247eeab14790538ae14200d29cdf179a82",
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "research_authority": "NONE",
+  "research_execution": "NOT_EXECUTED",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-12T22:24:58.039369+00:00",
+  "status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE"
+}
