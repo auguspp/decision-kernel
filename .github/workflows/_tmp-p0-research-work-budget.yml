@@ -24,8 +24,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git apply --check construction/p0-research-work-source-budget.patch
-          git apply construction/p0-research-work-source-budget.patch
+          python - <<'PY'
+          from pathlib import Path
+
+          source = Path('src/decision_kernel/runtime/current_state_delivery.py')
+          text = source.read_text()
+          old = '''        if type(used) is int:\n            model.check(used + extra_reads + RESEARCH_WORK_API_RESERVE <= MAX_API_CALLS,\n                        "research work read would exhaust publication API reserve")\n\n        _, work_files = work_inventory(self.api, work_commit)\n'''
+          new = '''        if type(used) is int:\n            model.check(used + extra_reads + RESEARCH_WORK_API_RESERVE <= MAX_API_CALLS,\n                        "research work read would exhaust publication API reserve")\n        model.check(len(self.sources) + extra_reads <= MAX_SOURCE_FILES,\n                    "research work read would exceed source-file budget")\n\n        _, work_files = work_inventory(self.api, work_commit)\n'''
+          assert text.count(old) == 1
+          source.write_text(text.replace(old, new))
+
+          test = Path('tests/test_current_state_research_work_read.py')
+          text = test.read_text()
+          marker = '''@pytest.mark.parametrize("change", [\n'''
+          addition = '''def test_source_file_budget_stops_before_packet_reads(tmp_path):\n    key, files = candidate_files()\n    c, api = collector(tmp_path, files)\n    c.sources = {(f"existing-{i}", CODE): (b"x", {})\n                 for i in range(delivery.MAX_SOURCE_FILES - 3)}\n    with pytest.raises(ValueError, match="source-file budget"):\n        c.research_work(CONFIG)\n    assert not any(row.startswith("file:") for row in api.reads)\n    assert work.request_path(key) in files\n\n\n'''
+          assert text.count(marker) == 1 and 'test_source_file_budget_stops_before_packet_reads' not in text
+          test.write_text(text.replace(marker, addition + marker))
+          PY
           expected=$'src/decision_kernel/runtime/current_state_delivery.py\ntests/test_current_state_research_work_read.py'
           actual="$({ git diff --name-only; git ls-files --others --exclude-standard; } | grep -v '^construction/' | grep -v '^.github/workflows/_tmp-' | sort)"
           test "$actual" = "$expected"
