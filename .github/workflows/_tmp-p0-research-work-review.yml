@@ -25,6 +25,8 @@ jobs:
         run: |
           set -euo pipefail
           python construction/fix_p0_research_work_review.py
+          python construction/fix_p0_research_work_review_syntax.py
+          python -m py_compile src/decision_kernel/runtime/current_state_delivery.py tests/test_current_state_research_work_read.py
           expected=$'src/decision_kernel/runtime/current_state_delivery.py\ntests/test_current_state_research_work_read.py'
           actual="$({ git diff --name-only; git ls-files --others --exclude-standard; } | grep -v '^construction/' | grep -v '^.github/workflows/_tmp-' | sort)"
           test "$actual" = "$expected"
