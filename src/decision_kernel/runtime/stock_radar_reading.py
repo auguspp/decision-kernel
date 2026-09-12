@@ -133,7 +133,33 @@ def _reference_inputs(value):
         raise ValueError('reference input is not an explicitly synthetic normalized fixture')
 
 
-def check_observation_clock(state, at, *, calendar=None):
+def _current_calendar_source_date(envelope, *, received_at):
+    """Use an optional provider-ready clock only as same-day calendar coverage evidence.
+
+    A current provider timestamp can prove that a trading-day list ending before
+    the wall-clock date is this source's current response (for example, a closure
+    or non-session date).  It never invents a session from weekday arithmetic.
+    Missing timestamps preserve the older explicit-date coverage rule.
+    """
+    if not isinstance(received_at, datetime) or received_at.tzinfo is None or received_at.utcoffset() is None:
+        raise ValueError('calendar receipt clock must be timezone-aware')
+    data = envelope.get('data') if isinstance(envelope, dict) else None
+    stamp = data.get('timestamp') if isinstance(data, dict) else None
+    if stamp is None:
+        return None
+    if type(stamp) is not int:
+        raise ValueError('calendar provider timestamp must be an exact integer millisecond clock')
+    try:
+        provider_ready_at = datetime.fromtimestamp(stamp / 1000, tz=SHANGHAI_TZ)
+    except (OverflowError, OSError, ValueError) as exc:
+        raise ValueError('calendar provider timestamp is invalid') from exc
+    received_local = received_at.astimezone(SHANGHAI_TZ)
+    if provider_ready_at > received_local:
+        raise ValueError('calendar provider-ready time follows actual receipt')
+    return provider_ready_at.date() if provider_ready_at.date() == received_local.date() else None
+
+
+def check_observation_clock(state, at, *, calendar=None, calendar_source_date=None):
     """A real cutoff first; freshness only after this attempt's calendar arrives.
 
     Preparing a bounded plan is not qualification. The recorder/replayer calls
@@ -146,9 +172,11 @@ def check_observation_clock(state, at, *, calendar=None):
     if at < close:
         raise ValueError('saved stock context session is not completed at the observation clock')
     if calendar is not None:
+        local_date = at.astimezone(SHANGHAI_TZ).date()
         if (not calendar or calendar != tuple(sorted(set(calendar)))
                 or calendar[0] > state.sessions[0]
-                or calendar[-1] < at.astimezone(SHANGHAI_TZ).date()):
+                or calendar[-1] < state.sessions[-1]
+                or (calendar[-1] < local_date and calendar_source_date != local_date)):
             raise StockReadingInputError('DATA_INSUFFICIENT', 'STOCK_CALENDAR_COVERAGE_INSUFFICIENT')
         if tuple(d for d in calendar if state.sessions[0] <= d <= state.sessions[-1]) != tuple(state.sessions):
             raise StockReadingInputError('DATA_QUALIFICATION_FAILED', 'STOCK_CALENDAR_STATE_WINDOW_DIFFERS')
@@ -475,11 +503,12 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         raise ValueError('stock plan identity, policy, budget or authority differs')
     last = observed_at
     calendar = None
+    calendar_source_date = None
     snapshot_valid_until = None
     def at():
         nonlocal last
         value = cutoff_clock() if cutoff_clock else observed_at
-        check_observation_clock(state, value, calendar=calendar)
+        check_observation_clock(state, value, calendar=calendar, calendar_source_date=calendar_source_date)
         if snapshot_valid_until is not None and value.astimezone(SHANGHAI_TZ) >= snapshot_valid_until:
             raise ValueError('premarket index snapshot carry expired at the 09:15 opening auction')
         if not probe._clock(plan['observed_at']) <= last <= value <= probe._clock(plan['observed_at']) + timedelta(minutes=30):
@@ -511,8 +540,11 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
                 own_stock.check_quote_receipt(value, code=params['thscodes'], received_at=received)
         return value
     if plan['issuers']:
-        calendar = normalize_hithink_calendar(get(HITHINK_CALENDAR_PATH, {}))
-        at()  # Qualify the actual calendar before catalog, snapshot or stock requests.
+        raw_calendar = get(HITHINK_CALENDAR_PATH, {})
+        calendar_received_at = last
+        calendar_source_date = _current_calendar_source_date(raw_calendar, received_at=calendar_received_at)
+        calendar = normalize_hithink_calendar(raw_calendar)
+        at()  # Qualify exact dates plus optional same-day provider source clock before later requests.
         catalog = indices.fetch_hithink_industry_catalog(api_key='INJECTED', request_json=get)
         if catalog.catalog_hash != state.catalog_hash:
             raise ValueError('industry catalog changed; no name or proxy substitution')

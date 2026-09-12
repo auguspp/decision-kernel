@@ -39,7 +39,7 @@ INTENT_REASONS = {
 }
 REASONS = {
     **INTENT_REASONS,
-    'STOCK_CALENDAR_COVERAGE_INSUFFICIENT': '本次交易日历未覆盖保存窗口和实际读取日期，不能证明最新完成交易日；不按星期推算或补日。',
+    'STOCK_CALENDAR_COVERAGE_INSUFFICIENT': '本次交易日历未覆盖保存窗口／读取日期，且没有可验证的同日 provider calendar 时钟补足来源时点；不按星期推算或补日。',
     'STOCK_CALENDAR_STATE_WINDOW_DIFFERS': '真实交易日历与保存的行业状态窗口不一致；缺失的中间交易日不能跨日桥接。',
     'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION': '实际日历显示已有更新的完成交易日；请先取得相应合格Sector状态，漏过中间日先qualified recovery。',
     'HISTORY_READY_AFTER_ACTUAL_RECEIPT': '个股历史就绪时间晚于该响应实际接收时间；后续请求经过的时间不能修复这次未来时钟。',
