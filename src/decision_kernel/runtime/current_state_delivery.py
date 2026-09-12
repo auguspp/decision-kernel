@@ -26,7 +26,7 @@ MAX_API_CALLS = 180
 MAX_SOURCE_FILES = 60
 MAX_RETAINED_OUTPUT = 128 * 1024 * 1024
 MAX_RESEARCH_WORK_ITEMS = 8
-RESEARCH_WORK_METADATA_CALLS = 2
+RESEARCH_WORK_API_RESERVE = 12
 REGISTRY_PATH = "current_state/registry.json"
 
 
@@ -125,12 +125,6 @@ class Collector:
         self.archive_cache = {}
         self.inbox_job_checks = {}
         self.inbox_job_gaps = []
-
-    def _publication_calls(self, file_count: int) -> int:
-        model.check(type(file_count) is int and file_count >= 0, "publication file count invalid")
-        # publish(): one blob write per file, then tree + commit + immutable
-        # current-state readback + ref write, plus previous-tree lookup when present.
-        return file_count + 4 + int(self.previous_commit is not None)
 
     def retain(self, path: str, raw: bytes) -> dict:
         model.safe_path(path)
@@ -388,6 +382,17 @@ class Collector:
         return result
 
     def research_work(self, config: dict) -> dict:
+        """Stage optional reading in memory; rejected work cannot impair base delivery."""
+        before_files, before_sources = dict(self.files), dict(self.sources)
+        try:
+            return self._research_work(config)
+        except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError):
+            # Only discard this invocation's unaccepted local projection. No Git
+            # write, history reset, source retry or API-call counter rollback.
+            self.files, self.sources = before_files, before_sources
+            raise
+
+    def _research_work(self, config: dict) -> dict:
         """Read retained disclosure Research work without promoting it to current attention.
 
         The work ref is data-only. Existing packet/input/candidate validators establish
@@ -412,12 +417,14 @@ class Collector:
         model.check(type(config["max_items"]) is int and 1 <= config["max_items"] <= MAX_RESEARCH_WORK_ITEMS,
                     "research work read item bound invalid")
 
+        # publish() writes every retained blob, two entry files, then at most
+        # five Git operations (prior commit, tree, commit, readback, ref). Reject
+        # even metadata reads when they would steal the base publication budget.
+        entry_paths = {"current-state.json", "README.md"}
         used = getattr(self.api, "calls", None)
-        if type(used) is int:
-            model.check(used + RESEARCH_WORK_METADATA_CALLS
-                        + self._publication_calls(len(self.files) + 2) <= MAX_API_CALLS,
-                        "research work metadata would consume base publication budget")
-
+        model.check(type(used) is int and used >= 0, "research work API accounting unavailable")
+        model.check(used + 2 + len(set(self.files) | entry_paths) + 5 <= MAX_API_CALLS,
+                    "research work API reserve would consume base publication budget")
         ref = self.api.get("git/ref/heads/" + work.WORK_REF)["object"]
         model.check(ref.get("type") == "commit" and model.SHA.fullmatch(ref.get("sha", "")) is not None,
                     "research work ref is not a pinned commit")
@@ -439,59 +446,49 @@ class Collector:
             keys.setdefault(key, set()).add(name)
         model.check(len(keys) <= config["max_items"], "research work item bound exceeded")
 
-        source_paths: set[str] = set()
+        needed = set()
         for key, names in keys.items():
-            packet_path = work.request_path(key)
-            source_paths.add(packet_path)
-            has_candidate = "candidate.json" in names or "input.json" in names
-            has_failure = "failure.json" in names
-            model.check(not (has_candidate and has_failure),
-                        "research work item contains both candidate and pre-execution failure")
-            if has_candidate:
-                model.check({"input.json", "candidate.json"}.issubset(names),
-                            "research work candidate lacks input or candidate")
-                base = prefix + key + "/"
-                source_paths.update({base + "input.json", base + "candidate.json"})
-                if "funnel.json" in names:
-                    source_paths.add(base + "funnel.json")
-            if has_failure:
-                source_paths.add(prefix + key + "/failure.json")
-
-        for path in source_paths:
-            row = rows[path]
-            model.check(row.get("mode") == "100644" and type(row.get("size")) is int
-                        and 0 <= row["size"] <= model.MAX_ARCHIVE,
-                        "research work source metadata invalid")
-        new_source_count = sum((path, work_commit) not in self.sources for path in source_paths)
-        model.check(len(self.sources) + new_source_count <= MAX_SOURCE_FILES,
+            base = prefix + key + "/"
+            needed.add(base + "packet.json")
+            for name in ("input.json", "candidate.json", "funnel.json", "failure.json"):
+                if name in names:
+                    needed.add(base + name)
+        model.check(needed.issubset(rows), "research work reserved packet unavailable")
+        new_sources = {(path, work_commit) for path in needed} - set(self.sources)
+        model.check(len(self.sources) + len(new_sources) <= MAX_SOURCE_FILES,
                     "research work read would exceed source-file budget")
-        projected_source_bytes = sum(rows[path]["size"] for path in source_paths
-                                     if (path, work_commit) not in self.sources)
-        model.check(sum(len(value) for value in self.files.values()) + projected_source_bytes
-                    <= MAX_RETAINED_OUTPUT,
-                    "research work read would exceed retained-output budget")
-        # Conservatively count one remote body read per selected source. work_inventory's
-        # recursive-tree GET is memoized from the metadata read above.
-        body_reads = len(source_paths)
-        used = getattr(self.api, "calls", None)
-        if type(used) is int:
-            projected_files = len(self.files) + new_source_count + 2
-            model.check(used + body_reads + self._publication_calls(projected_files) <= MAX_API_CALLS,
-                        "research work bodies would consume publication budget")
+        new_files = {}
+        for path in needed:
+            row = rows[path]
+            size, blob = row.get("size"), row.get("sha", "")
+            model.check(row.get("mode") == "100644" and type(size) is int
+                        and 0 <= size <= model.MAX_ARCHIVE and model.SHA.fullmatch(blob),
+                        "research work source metadata invalid")
+            read_path = "sources/git/" + blob + "/" + Path(path).name
+            if read_path in new_files:
+                model.check(new_files[read_path] == size, "research work source metadata conflicts")
+            new_files[read_path] = size
+        extra_bytes = sum(size for path, size in new_files.items() if path not in self.files)
+        model.check(sum(map(len, self.files.values())) + extra_bytes <= MAX_RETAINED_OUTPUT,
+                    "research work would exhaust reading retention bound")
+        # work_inventory's tree request is memoized by GitHubAPI; reserve one
+        # extra request anyway. Include all source reads and all new blob writes.
+        remaining_reads = len(needed) + 1
+        publication_calls = len(set(self.files) | set(new_files) | entry_paths) + 5
+        model.check(self.api.calls + remaining_reads + max(RESEARCH_WORK_API_RESERVE, publication_calls)
+                    <= MAX_API_CALLS, "research work read would exhaust publication API reserve")
 
-        _, work_files = work_inventory(self.api, work_commit)
         _, work_files = work_inventory(self.api, work_commit)
 
         def retained(path: str, raw: bytes) -> dict:
-            source_key = (path, work_commit)
-            if source_key in self.sources:
-                prior_raw, reference = self.sources[source_key]
-                model.check(prior_raw == raw, "cached research work source bytes differ")
-                return reference
-            model.check(len(self.sources) < MAX_SOURCE_FILES, "source registry bound")
             row = rows[path]
             model.check(row.get("mode") == "100644" and row.get("size") == len(raw)
                         and row.get("sha") == model.blob_sha(raw), "research work blob differs")
+            source_key = (path, work_commit)
+            if source_key in self.sources:
+                model.check(self.sources[source_key][0] == raw, "research work source cache differs")
+                return self.sources[source_key][1]
+            model.check(len(self.sources) < MAX_SOURCE_FILES, "source registry bound")
             stored = self.retain("sources/git/" + row["sha"] + "/" + Path(path).name, raw)
             reference = {"repository": model.REPOSITORY, "ref": work_commit, "path": path,
                          "git_blob": row["sha"], **stored}
@@ -499,13 +496,9 @@ class Collector:
             return reference
 
         def fetched(path: str) -> tuple[bytes, dict]:
-            source_key = (path, work_commit)
-            if source_key in self.sources:
-                return self.sources[source_key]
             raw = self.api.file(path, work_commit)
             return raw, retained(path, raw)
 
-        items = []
         items = []
         for key in sorted(keys):
             names = keys[key]
@@ -603,7 +596,7 @@ class Collector:
                 "mode": config["mode"], "item_count": len(items), "counts": counts, "items": items,
                 "meaning": "READ_ONLY_RETAINED_WORK_NOT_SEMANTIC_ACCEPTANCE_OR_HANDOFF_REGISTRATION"}
 
-    def research(self, registry: dict) -> dict:
+    def research(self, registry: dict, *, include_work: bool = True) -> dict:
         records, packages, gaps, entries = [], [], [], []
         configuration = None
         try:
@@ -655,32 +648,28 @@ class Collector:
                                 "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION"})
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 gaps.append({"id": record["id"], "status": "RESEARCH_REFERENCE_REJECTED", "error_type": type(exc).__name__})
-        handoffs = project_registered_handoffs(entries, self.source)
+        result = {"production_configuration": configuration, "production_inputs": packages,
+                  "records": records,
+                  "candidate_work": {"status": "NOT_CONFIGURED",
+                      "meaning": "NO_AUTODISCOVERED_RESEARCH_WORK_READ_REQUESTED"},
+                  "handoffs": project_registered_handoffs(entries, self.source), "gaps": gaps,
+                  "confirmed_actions": [r for r in records if r["use"] == "CONFIRMED_ACTION_CHECKPOINT"],
+                  "confirmed_action_scope": "EXPLICIT_REGISTRY_ONLY_NOT_PROOF_NO_TRADES_OCCURRED",
+                  "scope": "EXPLICIT_CONFIG_REGISTERED_LINEAGE_AND_OPTED_IN_RETAINED_WORK_NOT_EXHAUSTIVE_RESEARCH_COVERAGE"}
+        if include_work:
+            self.include_research_work(registry, result)
+        return result
+
+    def include_research_work(self, registry: dict, research: dict) -> None:
         work_config = registry.get("research_work_read")
-        if work_config is None:
-            candidate_work = {"status": "NOT_CONFIGURED",
-                              "meaning": "NO_AUTODISCOVERED_RESEARCH_WORK_READ_REQUESTED"}
-        else:
-            files_before = dict(self.files)
-            sources_before = dict(self.sources)
+        if work_config is not None:
             try:
-                candidate_work = self.research_work(work_config)
+                research["candidate_work"] = self.research_work(work_config)
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
-                # Optional projection is transactional in memory. API reads cannot be
-                # undone, so preflight budgeting above guarantees base publication
-                # remains affordable even after a failed optional attempt.
-                self.files = files_before
-                self.sources = sources_before
-                candidate_work = {"status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
-                                  "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED"}
-                gaps.append({"status": "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET",
-                             "error_type": type(exc).__name__})
-        return {"production_configuration": configuration, "production_inputs": packages,
-                "records": records, "candidate_work": candidate_work,
-                "handoffs": handoffs, "gaps": gaps,
-                "confirmed_actions": [r for r in records if r["use"] == "CONFIRMED_ACTION_CHECKPOINT"],
-                "confirmed_action_scope": "EXPLICIT_REGISTRY_ONLY_NOT_PROOF_NO_TRADES_OCCURRED",
-                "scope": "EXPLICIT_CONFIG_REGISTERED_LINEAGE_AND_OPTED_IN_RETAINED_WORK_NOT_EXHAUSTIVE_RESEARCH_COVERAGE"}
+                research["candidate_work"] = {"status": "UNAVAILABLE_OR_REJECTED",
+                    "error_type": type(exc).__name__, "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED"}
+                research["gaps"].append({"status": "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET",
+                                         "error_type": type(exc).__name__})
 
     def collect(self, refresh: dict) -> dict:
         started = self.now()
@@ -688,8 +677,6 @@ class Collector:
         registry = json.loads(raw)
         model.check(registry["schema_version"] == 1, "registry unsupported")
         lanes = {name: self.lane(name) for name in model.WORKFLOWS}
-        # Capabilities are mandatory baseline reads, so complete them before the
-        # optional retained-Research projection can spend any of the shared budget.
         capabilities = []
         for item in registry["capability_gaps"]:
             try:
@@ -697,20 +684,36 @@ class Collector:
                 capabilities.append({"id": item["id"], "status": item["status"], "source": reference})
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError):
                 capabilities.append({"id": item["id"], "status": "ACCEPTANCE_SOURCE_UNAVAILABLE"})
-        research = self.research(registry)
+        research = self.research(registry, include_work=False)
         research["registry"] = registry_ref
-        payload = model.assemble(code_commit=self.code_commit, checked_at=self.now(), check_started_at=started,
-                                 lanes=lanes, research=research, capabilities=capabilities, refresh_identity=refresh)
-        current_raw = model.json_bytes(payload)
-        summary_raw = model.render_summary(payload).encode()
-        model.check(sum(len(value) for value in self.files.values()) + len(current_raw) + len(summary_raw)
-                    <= MAX_RETAINED_OUTPUT, "reading retention batch limit")
+        # All baseline lanes, registered handoffs and capability references have
+        # now consumed their actual budget. Optional work is always last.
+        baseline_files, baseline_sources = dict(self.files), dict(self.sources)
+        self.include_research_work(registry, research)
+
+        def assembled():
+            value = model.assemble(code_commit=self.code_commit, checked_at=self.now(), check_started_at=started,
+                                   lanes=lanes, research=research, capabilities=capabilities, refresh_identity=refresh)
+            return value, {"current-state.json": model.json_bytes(value),
+                           "README.md": model.render_summary(value).encode()}
+
+        payload, entry_files = assembled()
+        size = sum(map(len, self.files.values())) + sum(map(len, entry_files.values()))
+        if size > MAX_RETAINED_OUTPUT and research["candidate_work"]["status"] == "READ_OK":
+            # Final entry size is only knowable after projection. Keep the exact
+            # baseline sources and an explicit gap, rather than break delivery.
+            self.files, self.sources = baseline_files, baseline_sources
+            research["candidate_work"] = {"status": "UNAVAILABLE_OR_REJECTED",
+                "error_type": "ReadingEntryRetentionLimit", "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED"}
+            research["gaps"].append({"status": "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET",
+                                     "error_type": "ReadingEntryRetentionLimit"})
+            payload, entry_files = assembled()
         used = getattr(self.api, "calls", None)
         if type(used) is int:
-            model.check(used + self._publication_calls(len(self.files) + 2) <= MAX_API_CALLS,
+            model.check(used + len(set(self.files) | set(entry_files)) + 5 <= MAX_API_CALLS,
                         "collection leaves insufficient publication API budget")
-        self.retain("current-state.json", current_raw)
-        self.retain("README.md", summary_raw)
+        for path, raw in entry_files.items():
+            self.retain(path, raw)
         return payload
 
 
