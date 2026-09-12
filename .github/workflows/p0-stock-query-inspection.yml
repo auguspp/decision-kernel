@@ -1,0 +1,79 @@
+name: p0-stock-query-inspection
+on:
+  push:
+    branches: [fix/p0-stock-latest-attempt-scope-20260912]
+    paths: [.github/workflows/p0-stock-query-inspection.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PINNED_MAIN: dbf3abaa81f8265f8445df5b52741e8bc5ab833e
+      PINNED_READING: 7fd6e562e1d626881507407b4d5be1d308365aa1
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: dbf3abaa81f8265f8445df5b52741e8bc5ab833e
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing read-only collector dependencies
+        run: python -m pip install -e '.[feeds,discovery]'
+      - name: Inspect existing newest-20 query and retain exact inputs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$PINNED_MAIN"
+          mkdir proof
+          git archive --format=tar "$PINNED_MAIN" > proof/repository.tar
+          git ls-tree -rz "$PINNED_MAIN" > proof/tree-index.bin
+          python - <<'PY'
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          from decision_kernel.runtime.current_state_delivery import Collector, GitHubAPI
+          from decision_kernel.runtime import current_state as model
+          api = GitHubAPI(os.environ['GITHUB_TOKEN'])
+          collector = Collector(api, os.environ['PINNED_MAIN'], Path.cwd())
+          selected, complete = collector.runs('stock')
+          endpoint = 'actions/workflows/hithink-stock-dump-trial.yml/runs?branch=main&per_page=20'
+          rows = []
+          for run in api.memo[endpoint]['workflow_runs']:
+              jobs = api.memo[f"actions/runs/{run['id']}/jobs?per_page=100"]['jobs']
+              relevant = any(j['name'] == 'stock-reading' and j.get('conclusion') != 'skipped' for j in jobs)
+              unknown = not relevant and (run.get('status') != 'completed' or
+                  (not any(j['name'] == 'stock-reading' for j in jobs) and run.get('conclusion') != 'success'))
+              rows.append({'run': model.concise_run(run), 'stock_relevant': relevant,
+                           'unclassified': unknown,
+                           'jobs': [{k:j.get(k) for k in ('id','name','status','conclusion','run_id','head_sha')} for j in jobs]})
+          for name, path in [('current-state.json','current-state.json'), ('README.md','README.md')]:
+              Path('proof',name).write_bytes(api.file(path, os.environ['PINNED_READING']))
+          api.get('actions/runs/34673882756')
+          Path('proof/github-metadata.json').write_text(json.dumps(api.memo, ensure_ascii=False, indent=2)+'\n')
+          result = {'scope':'READ_ONLY_GITHUB_METADATA_NOT_MARKET_OR_ACCEPTANCE',
+                    'code_commit':os.environ['PINNED_MAIN'], 'reading_commit':os.environ['PINNED_READING'],
+                    'tree_sha':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+                    'query_complete':complete, 'selected_ids':[r['id'] for r in selected],
+                    'api_calls':api.calls, 'rows':rows}
+          Path('proof/inspection.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print('QUERY_COMPLETE='+str(complete))
+          for row in rows:
+              r=row['run']
+              print(json.dumps({'id':r['id'],'created_at':r['created_at'],'event':r['event'],
+                                'conclusion':r['conclusion'],'relevant':row['stock_relevant'],
+                                'unclassified':row['unclassified'],'jobs':row['jobs']},ensure_ascii=False))
+          manifest = {p.name:{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+                      for p in Path('proof').iterdir() if p.is_file()}
+          Path('proof/manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: stock-query-inspection-${{ github.run_id }}
+          path: proof/
+          retention-days: 14
+          if-no-files-found: error
