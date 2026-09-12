@@ -165,6 +165,9 @@ def test_invalid_candidate_is_a_visible_research_gap_not_fallback(tmp_path, monk
     damaged["input_hash"] = "0" * 64
     files[candidate_path] = read.json_bytes(damaged)
     c, _ = collector(tmp_path, files)
+    c.files = {"baseline.txt": b"keep"}
+    c.sources = {("baseline.txt", CODE): (b"keep", {"read_path": "baseline.txt"})}
+    files_before, sources_before = dict(c.files), dict(c.sources)
     monkeypatch.setattr(c, "source", lambda spec: (
         b"decision_packages=(\n)\nresearch_attention_handoffs=(\n)\n",
         {"path": spec["path"], "ref": CODE},
@@ -174,6 +177,7 @@ def test_invalid_candidate_is_a_visible_research_gap_not_fallback(tmp_path, monk
     assert result["candidate_work"]["status"] == "UNAVAILABLE_OR_REJECTED"
     assert any(gap["status"] == "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET" for gap in result["gaps"])
     assert not result["handoffs"]["active"]
+    assert c.files == files_before and c.sources == sources_before
 
 
 def test_unconfigured_registry_does_not_touch_work_ref(tmp_path, monkeypatch):
@@ -200,13 +204,15 @@ def test_item_bound_stops_before_packet_reads(tmp_path):
     assert not any(row.startswith("file:") for row in api.reads)
 
 
-def test_api_reserve_stops_before_packet_reads(tmp_path):
-    key, files = candidate_files()
-    c, api = collector(tmp_path, files, starting_calls=delivery.MAX_API_CALLS - delivery.RESEARCH_WORK_API_RESERVE - 2)
-    with pytest.raises(ValueError, match="API reserve"):
+def test_optional_metadata_cannot_consume_exact_base_publication_budget(tmp_path):
+    _, files = candidate_files()
+    c, api = collector(tmp_path, files, starting_calls=72)
+    c.previous_commit = "c" * 40
+    c.files = {f"already/{i}.json": b"x" for i in range(100)}
+    before = dict(c.files)
+    with pytest.raises(ValueError, match="base publication budget"):
         c.research_work(CONFIG)
-    assert not any(row.startswith("file:") for row in api.reads)
-    assert work.request_path(key) in files
+    assert c.files == before and api.reads == []
 
 
 def test_source_file_budget_stops_before_packet_reads(tmp_path):
@@ -218,6 +224,67 @@ def test_source_file_budget_stops_before_packet_reads(tmp_path):
         c.research_work(CONFIG)
     assert not any(row.startswith("file:") for row in api.reads)
     assert work.request_path(key) in files
+
+
+def test_successful_work_sources_populate_existing_source_cache(tmp_path):
+    key, files = candidate_files()
+    c, _ = collector(tmp_path, files)
+    value = c.research_work(CONFIG)
+    assert value["status"] == "READ_OK"
+    base = work.WORK_PREFIX + key + "/"
+    for name in ("packet.json", "input.json", "candidate.json", "funnel.json"):
+        assert (base + name, WORK) in c.sources
+
+
+def test_retention_overflow_rejects_optional_work_without_leaking_projection(tmp_path, monkeypatch):
+    _, files = candidate_files()
+    c, api = collector(tmp_path, files)
+    c.files = {"baseline.txt": b"keep"}
+    before = dict(c.files)
+    monkeypatch.setattr(delivery, "MAX_RETAINED_OUTPUT", len(b"keep"))
+    monkeypatch.setattr(c, "source", lambda spec: (
+        b"decision_packages=(\n)\nresearch_attention_handoffs=(\n)\n",
+        {"path": spec["path"], "ref": CODE},
+    ))
+    result = c.research({"references": [], "historical_handoffs": [],
+                         "additional_registered_handoffs": [], "research_work_read": CONFIG})
+    assert result["candidate_work"]["status"] == "UNAVAILABLE_OR_REJECTED"
+    assert c.files == before and c.sources == {}
+    assert not any(row.startswith("file:") for row in api.reads)
+
+
+def test_capabilities_and_registered_handoffs_finish_before_optional_work(tmp_path, monkeypatch):
+    c, _ = collector(tmp_path, {})
+    order = []
+    registry = {"schema_version": 1, "references": [], "historical_handoffs": [],
+                "additional_registered_handoffs": [], "research_work_read": CONFIG,
+                "capability_gaps": [{"id": "cap", "status": "KNOWN", "source": {"path": "cap.txt"}}]}
+    workflow = b"decision_packages=(\n)\nresearch_attention_handoffs=(\n)\n"
+    def source(spec):
+        path = spec["path"]
+        if path == delivery.REGISTRY_PATH:
+            return read.json_bytes(registry), {"path": path, "ref": CODE}
+        if path == read.WORKFLOWS["inbox"]:
+            return workflow, {"path": path, "ref": CODE}
+        if path == "cap.txt":
+            order.append("capability")
+            return b"cap", {"path": path, "ref": CODE}
+        raise AssertionError(path)
+    monkeypatch.setattr(c, "source", source)
+    monkeypatch.setattr(c, "lane", lambda name: {"name": name})
+    def handoffs(entries, loader):
+        order.append("handoffs")
+        return {"active": [], "background": [], "resolved_history": [], "gaps": []}
+    monkeypatch.setattr(delivery, "project_registered_handoffs", handoffs)
+    def optional(config):
+        assert order == ["capability", "handoffs"]
+        order.append("optional")
+        return {"status": "READ_OK", "items": []}
+    monkeypatch.setattr(c, "research_work", optional)
+    monkeypatch.setattr(delivery.model, "assemble", lambda **kwargs: {"reading_hash": "a" * 64})
+    monkeypatch.setattr(delivery.model, "render_summary", lambda payload: "ok")
+    c.collect({})
+    assert order == ["capability", "handoffs", "optional"]
 
 
 @pytest.mark.parametrize("change", [
