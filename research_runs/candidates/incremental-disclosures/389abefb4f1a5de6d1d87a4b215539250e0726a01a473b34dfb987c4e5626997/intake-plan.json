@@ -1,0 +1,171 @@
+{
+  "intake_code_commit": "934ee0c4481bc72374b4ce8e3f4845ef7e77d7de",
+  "plan": {
+    "archive_sha256": "e41d663eab1911cb766ca8deb8fe41dcdda123f6ae65267e764e02b0a101e2aa",
+    "dispositions": [
+      {
+        "announcement_ids": [
+          "1225554550",
+          "1225554551",
+          "1225554552",
+          "1225554553",
+          "1225554554",
+          "1225554555",
+          "1225554556"
+        ],
+        "assessment_input_hash": "cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d",
+        "bytes": 114098,
+        "packet_blob": "2c604e1b473a2b1639f01332f7c277d34bc1368b",
+        "packet_path": "disclosure-assessment-packets/300750-2026-09-08-cb7dc93eb80d7eff.json",
+        "packet_sha256": "9ff0315b8e23f74817302208cc171a6188c3dca132861e9dbd6098a8997c1564",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-08",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/cb7dc93eb80d7effd8464e9517da231ff88e2384384b980709edccb51ea7663d/packet.json",
+        "status": "ALREADY_RESERVED",
+        "stock_code": "300750"
+      },
+      {
+        "announcement_ids": [
+          "1225561227",
+          "1225561268",
+          "1225561269",
+          "1225561681"
+        ],
+        "assessment_input_hash": "b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824",
+        "bytes": 60504,
+        "packet_blob": "858957d3a5f362d4f34980d6b1278b53afc6242a",
+        "packet_path": "disclosure-assessment-packets/300750-2026-09-11-b16bb5f84358a242.json",
+        "packet_sha256": "852ba1de06040c5423c5217bd72a9c76890619d28a71688a7d83f18eb2032e4a",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-11",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/packet.json",
+        "status": "DEFERRED_CAPACITY",
+        "stock_code": "300750"
+      },
+      {
+        "announcement_ids": [
+          "1225552023"
+        ],
+        "assessment_input_hash": "aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+        "bytes": 5282,
+        "packet_blob": "2031063e1890eba85835cdd64c4be3a6a08e3a97",
+        "packet_path": "disclosure-assessment-packets/600036-2026-09-08-aa9ea8d22fab7705.json",
+        "packet_sha256": "0513fb2034a68900a605f1d26dfa85899f50aa72ed834ec95572182918d1f641",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-08",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+        "status": "ALREADY_RESERVED",
+        "stock_code": "600036"
+      },
+      {
+        "announcement_ids": [
+          "1225554309"
+        ],
+        "assessment_input_hash": "389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+        "bytes": 6339,
+        "packet_blob": "115d77952f6b24e5c68aea90f1f785abf9641c6a",
+        "packet_path": "disclosure-assessment-packets/600036-2026-09-09-389abefb4f1a5de6.json",
+        "packet_sha256": "a87453b8584142ce8a11e5df15d280d0c855df38e3880171d0d03a3f5f048718",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-09",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/packet.json",
+        "status": "SELECTED_REQUIRES_RESERVATION_AND_ORIGINAL_ADMISSION",
+        "stock_code": "600036"
+      },
+      {
+        "announcement_ids": [
+          "1225549295"
+        ],
+        "assessment_input_hash": "0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9",
+        "bytes": 9808,
+        "packet_blob": "50429220ecc064ed36d912dcaac56b827651991e",
+        "packet_path": "disclosure-assessment-packets/603986-2026-09-05-0b74408c05170420.json",
+        "packet_sha256": "1731d58ad8d6c0cf4f39cea27a40a271d0d0d015c5f2b08f31a3253094aaa212",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-05",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/packet.json",
+        "status": "ALREADY_RESERVED",
+        "stock_code": "603986"
+      },
+      {
+        "announcement_ids": [
+          "1225551618"
+        ],
+        "assessment_input_hash": "383c08e94f88660d57cba68f61a287de112f0f9fbdeb4e4df205258884f1cb6c",
+        "bytes": 9951,
+        "packet_blob": "0c0fa4d91ff25bd08abf273f3560e8e2d25e7283",
+        "packet_path": "disclosure-assessment-packets/603986-2026-09-08-383c08e94f88660d.json",
+        "packet_sha256": "40a4829a0c4ea5cf5aa670401dd11c6af0e2a069e3aac85f3293793209ce4493",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-08",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/383c08e94f88660d57cba68f61a287de112f0f9fbdeb4e4df205258884f1cb6c/packet.json",
+        "status": "ALREADY_RESERVED",
+        "stock_code": "603986"
+      },
+      {
+        "announcement_ids": [
+          "1225555799",
+          "1225555804"
+        ],
+        "assessment_input_hash": "674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf",
+        "bytes": 21834,
+        "packet_blob": "7ee41b6c41203de703254306400ceeec8354f47f",
+        "packet_path": "disclosure-assessment-packets/603986-2026-09-10-674d5c2c670cfd85.json",
+        "packet_sha256": "8b0dfe0bfa51f027144ca96d3145c1247eeab14790538ae14200d29cdf179a82",
+        "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+        "publication_date": "2026-09-10",
+        "reservation_path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/packet.json",
+        "status": "DEFERRED_CAPACITY",
+        "stock_code": "603986"
+      }
+    ],
+    "formal_research_executed": false,
+    "history_scope": "CALLER_SUPPLIED_PINNED_WORK_REF_NOT_GLOBAL_ALL_BRANCH_HISTORY",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "packet_count": 7,
+    "plan_hash": "10e9e211342ab0cd52432999f72b778e7d3bfb97764a54ca3efe14792cd4c8a2",
+    "policy": "saved-cninfo-fifo-one-v1",
+    "research_authority": "NONE",
+    "reserved_count": 4,
+    "schema_version": 1,
+    "selected": {
+      "announcement_ids": [
+        "1225554309"
+      ],
+      "assessment_input_hash": "389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+      "bytes": 6339,
+      "packet_blob": "115d77952f6b24e5c68aea90f1f785abf9641c6a",
+      "packet_path": "disclosure-assessment-packets/600036-2026-09-09-389abefb4f1a5de6.json",
+      "packet_sha256": "a87453b8584142ce8a11e5df15d280d0c855df38e3880171d0d03a3f5f048718",
+      "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+      "publication_date": "2026-09-09",
+      "reservation_path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/packet.json",
+      "status": "SELECTED_REQUIRES_RESERVATION_AND_ORIGINAL_ADMISSION",
+      "stock_code": "600036"
+    },
+    "selected_at": "2026-09-12T15:42:16.888692+00:00",
+    "signal_transition_authority": "NONE",
+    "source_artifact_id": 10263914356,
+    "source_quality": "PACKET_INTEGRITY_ONLY_NOT_READABILITY_OR_COMPLETE_RESEARCH",
+    "source_run": {
+      "conclusion": "success",
+      "created_at": "2026-09-11T12:50:35Z",
+      "event": "schedule",
+      "head_sha": "8048135919853096fb762c6d5b85940ab5d18af0",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34601025149",
+      "id": 34601025149,
+      "operation": null,
+      "path": ".github/workflows/decision-inbox.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-11T12:50:35Z",
+      "status": "completed",
+      "updated_at": "2026-09-11T12:51:16Z"
+    },
+    "status": "ONE_SELECTED",
+    "work_commit": "d16870c4ed92b396137e13494df1f1c048185ea3",
+    "work_ref": "research-work/disclosures-v0"
+  },
+  "research_execution": "NOT_EXECUTED",
+  "reservation_commit": "7f3487036b259972ddc8be738d5e2456239e7a15"
+}
