@@ -27,7 +27,7 @@ jobs:
           git apply --check construction/p0-research-work-reading.patch
           git apply construction/p0-research-work-reading.patch
           expected=$'current_state/registry.json\nsrc/decision_kernel/runtime/current_state_delivery.py\ntests/test_current_state_research_work_read.py'
-          actual="$(git diff --name-only | sort)"
+          actual="$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort)"
           test "$actual" = "$expected"
           git diff --check
       - uses: actions/setup-python@v7
