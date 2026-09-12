@@ -17,6 +17,7 @@ from pathlib import Path
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import stock_radar_reading as stock
+from decision_kernel.runtime import stock_market_expression as market_expression
 from decision_kernel.runtime import theme_radar_probe as probe
 from decision_kernel.runtime import hithink_stock_reading
 from decision_kernel.runtime.economic_release_inputs import load_release_inputs
@@ -25,7 +26,7 @@ from decision_kernel.runtime.sector_radar_audit import _check_safe_json, SectorR
 from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_persistent_bundle
 
 ROOT = Path('stock-reading-run')
-VERSION = 'stock-reading-capture-replay-v6'
+VERSION = 'stock-reading-capture-replay-v7'
 LIVE_COMPANIES = 'radar_inputs/economic-company-links-livestock-v2.json'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
@@ -111,7 +112,7 @@ def inventory(root):
     return files
 
 
-def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST):
+def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST, sector_result=None):
     company_manifest = company_scope(company_manifest)
     helper = sibling('build-sector-radar-reading.py')
     from decision_kernel.runtime.sector_parent_hints import load_sector_parent_hints
@@ -124,13 +125,18 @@ def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST):
     association = build_economic_market_context(market_state=bundle.market_state,event_ledger=bundle.event_ledger,
         observations=inputs.seed_observations, reviewed_releases=inputs.review_paths,
         links=read(root/helper['LINKS']), as_of=at, generated_at=at)
-    plan = stock.prepare_stock_reading(root,bundle.market_state,bundle.event_ledger,association,
-        observed_at=at,company_manifest=company_manifest)
+    plan = (market_expression.prepare_market_expression_reading(
+        root,bundle.market_state,bundle.event_ledger,association,sector_result,
+        observed_at=at,company_manifest=company_manifest) if sector_result is not None else
+        stock.prepare_stock_reading(root,bundle.market_state,bundle.event_ledger,association,
+            observed_at=at,company_manifest=company_manifest))
     return bundle, association, plan
 
 
 def page(report, provenance):
-    result = stock.render_stock_reading(report)
+    result = (market_expression.render_market_expression_reading(report)
+              if report['projection']['version'] == stock.MARKET_EXPRESSION_VERSION
+              else stock.render_stock_reading(report))
     notice = ('合成验收样本：公司名可能来自真实留存资料，成员、行情和参考价是测试数据，不是实际选股。'
               if provenance == SYNTHETIC else
               '本次 HiThink 数据读取；公司资料是留存摘录，未重新取得公司原文。原始价格观察不是复权或总回报认证。')
@@ -172,7 +178,7 @@ def failure_page(report):
         f'<p>{e(REASONS[reason])}</p><p>原因代码：<code>{e(reason)}</code></p>'
         f'<p>输入截止：{e(report["observed_at"])}；完成：{e(report["finished_at"])}；来源：{e(report["provenance"])}。</p>'
         f'<p>来源事件：{e(event_text)}。本层不创建新事件。</p>'
-        '<p>只限已接入公司依据及其活跃方向，不是全A股盲筛。后续未完成项不视为条件不满足；之前已取得的输入也不冒充完整筛选。</p>'
+        '<p>只处理本次显式有界范围，不是全A股盲筛。Business Evidence 不由成员身份或价格补写；后续未完成项不视为条件不满足。</p>'
         '<h2>完整计划与未完成项</h2><table><tr><th>计划公司</th><th>本次状态</th></tr>'+rows+'</table>'
         '<p>保留的请求与响应、精确输入及失败类别见 capture.json、plan.json 和 responses/；没有响应的请求不制造数据。</p>'
         '<p><strong>下一核查：</strong>先补齐上述资格缺口；不重复下载旧10日dump，不用合成页面或人工点名替代真实程序输出。</p>'
@@ -181,7 +187,8 @@ def failure_page(report):
 
 def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             provenance=SYNTHETIC, credential='', now=lambda:datetime.now(timezone.utc),
-            pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST):
+            pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST,
+            sector_result=None):
     # Historical library callers remain explicit/reproducible; the live CLI below
     # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.
     company_manifest = company_scope(company_manifest)
@@ -201,6 +208,8 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         (output/'inputs'/name).mkdir(parents=True,exist_ok=True)
     for name, raw in files.items():
         p=output/'inputs'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
+    if sector_result is not None:
+        write(output/'inputs/sector-result.json', sector_result)
     if reference_inputs is not None:
         _check_safe_json(reference_inputs, credential or None)
         write(output/'synthetic-reference-inputs.json', reference_inputs)
@@ -215,7 +224,9 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
         'remote_upload_verified':False,**stock.LIMITS}
     last=observed_at
     try:
-        bundle, association, plan = load_inputs(output/'inputs',observed_at,company_manifest=company_manifest)
+        copied_sector = read(output/'inputs/sector-result.json') if (output/'inputs/sector-result.json').exists() else None
+        bundle, association, plan = load_inputs(output/'inputs',observed_at,company_manifest=company_manifest,
+            sector_result=copied_sector)
         write(output/'association.json',association);write(output/'plan.json',plan)
         report['plan_hash']=plan['plan_hash']
         report['recorded_sector_events_latest_session']=plan['recorded_sector_events_latest_session']
@@ -311,7 +322,9 @@ def verify(output):
         raise ValueError('reference provenance changed; normalized fixtures are never live origin evidence')
     if report['status'] not in {COMPLETE,PARTIAL,FAILED}:
         raise ValueError('unknown capture status')
-    bundle,association,plan=load_inputs(output/'inputs',at,company_manifest=company_manifest)
+    sector_path=output/'inputs/sector-result.json'
+    sector_result=read(sector_path) if sector_path.exists() else None
+    bundle,association,plan=load_inputs(output/'inputs',at,company_manifest=company_manifest,sector_result=sector_result)
     if (plan!=read(output/'plan.json') or association!=read(output/'association.json')
             or report['plan_hash']!=plan['plan_hash']):
         raise ValueError('stock plan does not reconstruct from original source/state inputs')
@@ -445,9 +458,37 @@ def binding(root, request):
     return sibling('native-feed-acceptance.py')['metadata'](request,'market',read(root/'market-run.json'),read(root/'market-artifacts.json'))
 
 
+def context_binding(root, request):
+    state_bound = binding(root, request)
+    run, listing = read(root/'market-run.json'), read(root/'market-artifacts.json')
+    at = probe._clock(request['prepared_at'])
+    if type(listing['total_count']) is not int or listing['total_count'] != len(listing['artifacts']):
+        raise ValueError('complete market artifact listing required')
+    name = 'sector-radar-run-' + request['market_run_id']
+    matches = [a for a in listing['artifacts'] if a['name'] == name]
+    if len(matches) != 1:
+        raise ValueError('one exact Sector run artifact required')
+    a = matches[0]; relation = a['workflow_run']
+    if (type(a['id']) is not int or a['expired'] is not False
+            or type(a['size_in_bytes']) is not int or not 0 < a['size_in_bytes'] <= 32*1024*1024
+            or relation['id'] != run['id'] or relation['head_sha'] != run['head_sha']
+            or relation['head_branch'] != 'main' or relation['repository_id'] != run['repository']['id']
+            or relation['head_repository_id'] != run['repository']['id']
+            or probe._clock(a['expires_at']) <= at
+            or not isinstance(a['digest'], str) or not a['digest'].startswith('sha256:')):
+        raise ValueError('Sector run artifact identity or retention differs')
+    helper=sibling('prepare-native-rss-successor.py')
+    helper['number'](str(a['id']));helper['hash_value'](a['digest'][7:])
+    return {'kind':'market-context','run_id':request['market_run_id'],'commit':run['head_sha'],
+            'artifact_id':str(a['id']),'artifact_digest':a['digest'],
+            'state_artifact_id':state_bound['artifact_id'],'request_hash':canonical_hash(request)}
+
+
 def bound_state(root, request):
     bound=binding(root,request)
     if bound!=read(root/'market-binding.json'):raise ValueError('market binding changed')
+    context=context_binding(root,request)
+    if context!=read(root/'market-context-binding.json'):raise ValueError('market context binding changed')
     helper=sibling('build-sector-radar-reading.py')
     if {p.name for p in (root/'market').iterdir()}!=helper['STATE_FILES']:raise ValueError('exact market package required')
     b=load_sector_radar_persistent_bundle(root/'market',expected_repository='auguspp/decision-kernel',
@@ -455,6 +496,9 @@ def bound_state(root, request):
     m=b.manifest
     if str(m.source_run_id)!=bound['run_id'] or m.source_commit_sha!=bound['commit'] or m.source_run_attempt!=1:
         raise ValueError('state does not identify selected successful remote run')
+    identity={'repository':'auguspp/decision-kernel','workflow_path':'.github/workflows/sector-radar-shadow.yml',
+              'run_id':int(bound['run_id']),'run_attempt':1,'commit_sha':bound['commit']}
+    helper['_check_run'](root/'market-context',root/'market',identity)
     return b
 
 
@@ -472,15 +516,18 @@ def main(argv=None):
             if request['workflow']!=sibling('capture-theme-probe.py')['workflow_identity'](os.environ):
                 raise ValueError('workflow identity changed')
             if args.mode=='metadata':
-                value=binding(root,request);write(root/'market-binding.json',value)
-                with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('artifact_id='+value['artifact_id']+'\n')
+                value=binding(root,request);context=context_binding(root,request)
+                write(root/'market-binding.json',value);write(root/'market-context-binding.json',context)
+                with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+                    f.write('artifact_id='+value['artifact_id']+'\ncontext_artifact_id='+context['artifact_id']+'\n')
             else:
                 bound_state(root,request)
                 if args.mode=='capture':
                     key=os.environ.get('HITHINK_FINANCE_API_KEY','')
+                    sector_result=read(root/'market-context/result.json')
                     value=capture(Path(os.environ['GITHUB_WORKSPACE']),root/'market',root/'reading',
                         observed_at=datetime.now(timezone.utc),workflow=request['workflow'],provenance=PUBLIC,credential=key,
-                        company_manifest=LIVE_COMPANIES,
+                        company_manifest=LIVE_COMPANIES,sector_result=sector_result,
                         transport=lambda p,q:hithink_stock_reading.request_json(api_key=key,path=p,params=q))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')

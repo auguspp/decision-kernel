@@ -310,8 +310,10 @@ class Collector:
             result["state_archive"] = state_ref
         elif lane == "stock":
             result = model.validate_stock(run, files)
-            details = {n: self.retain(prefix + n, files[n]) for n in (
-                "reading/stock-reading.json", "reading/index.html", "verification.json", "market-binding.json")}
+            names = ["reading/stock-reading.json", "reading/index.html", "verification.json", "market-binding.json"]
+            if "market-context-binding.json" in files:
+                names += ["market-context-binding.json", "reading/inputs/sector-result.json"]
+            details = {n: self.retain(prefix + n, files[n]) for n in names}
         else:
             model.check("summary.md" in files and "index.html" in files, "Inbox reading missing")
             # The existing CLI saves HTML/Markdown, not a typed DecisionSpineResult.
