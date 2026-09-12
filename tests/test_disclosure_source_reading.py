@@ -164,3 +164,23 @@ def test_new_exact_request_byte_bound_still_blocks_before_sdk(tmp_path):
     with pytest.raises(once.TrialError, match="model input byte budget"):
         once.model_call("pre", {"body": "x" * once.MAX_PROMPT_BYTES}, PreResearchResult, tmp_path, usage)
     assert not usage and not list(tmp_path.iterdir())
+
+
+def test_unresolved_damaged_text_keeps_original_failure_code_and_page_diagnosis():
+    pdf = _pdf_with_text_pages("Bad\x01text")
+    events = []
+    with pytest.raises(once.TrialError, match="required text contains encoding damage"):
+        r.represent(pdf, evidence(pdf), diagnostics=events)
+    assert events[0]["pages"][0]["status"] == "REQUIRES_VISUAL_REVIEW"
+    assert events[0]["pages"][0]["render"]["pixels_sha256"]
+    assert events[0]["status"] == "INCOMPLETE"
+
+
+def test_damaged_nonempty_text_can_use_an_exact_review_without_cleaning_it():
+    pdf = _pdf_with_text_pages("Bad\x01text"); e = evidence(pdf)
+    note, spec = visual(pdf, e)
+    events = []
+    result = r.represent(pdf, e, load_review=lambda *_: (note, spec), diagnostics=events)
+    assert result["pages"][0]["method"] == "AI_VISUAL_READING"
+    assert result["pages"][0]["text"] == note["text"]
+    assert events[0]["pages"][0]["extracted_text_sha256"] == read.sha256(b"Bad\x01text")

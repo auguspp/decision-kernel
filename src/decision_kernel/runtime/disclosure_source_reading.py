@@ -146,7 +146,11 @@ def represent(pdf, evidence, *, load_review=None, diagnostics=None):
                     rendered, _ = render_page(page)
                     page_event["render"] = rendered
                     reviewed = load_review(evidence["pdf_sha256"], i + 1) if load_review else None
-                    once.require(reviewed is not None, "required page visual review unavailable")
+                    # Preserve the original damaged-text failure classification;
+                    # the page journal carries the additional visual-review gap.
+                    missing = ("required text contains encoding damage" if text.strip()
+                               else "required page visual review unavailable")
+                    once.require(reviewed is not None, missing)
                     pages.append(checked_visual(*reviewed, evidence["pdf_sha256"], i + 1, engine, rendered))
                     page_event["status"] = "VISUAL_READING_BOUND_NOT_TRUTH_CERTIFIED"
                     page_event["review_source"] = pages[-1]["review_source"]
