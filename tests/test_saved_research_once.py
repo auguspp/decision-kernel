@@ -317,7 +317,10 @@ def test_full_host_uses_original_gate_and_retains_exact_input_before_model(tmp_p
     assert len(model_prompts)==1
 
 
-def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch):
+@pytest.mark.parametrize("stage,output_type,make_result", [
+    ("pre", PreResearchResult, pre), ("quick", QuickResearchResult, quick)])
+@pytest.mark.parametrize("foreign_reference", [False, True])
+def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch, stage, output_type, make_result, foreign_reference):
     sdk=pytest.importorskip("openai")
     if not hasattr(sdk, "OpenAI"):
         import os
@@ -327,7 +330,12 @@ def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch):
     import httpx2 as httpx
     p,d,c=fixture()
     prompt={"binding":{"discovery_id":p.execution_id,"as_of":p.research_cutoff.isoformat()},"evidence_ids":[str(p.seed_evidence_artifacts[0].id)]}
-    text=pre(prompt).model_dump_json()
+    if stage == "quick": prompt["pre_research_hash"] = canonical_hash(pre(prompt, "CONTINUE_TO_QUICK"))
+    value=make_result(prompt).model_dump(mode="json")
+    foreign="d761d18c-37dd-58ff-ba02-3826e25bd988"
+    field="material_claims" if stage == "pre" else "supporting_claims"
+    if foreign_reference: value[field][0]["evidence_artifact_ids"]=[foreign]
+    text=json.dumps(value)
     part={"type":"output_text","text":text,"annotations":[]}
     item={"id":"msg_fixture","type":"message","role":"assistant","status":"completed","content":[part]}
     final={"id":"resp_fixture","object":"response","created_at":1789056000,"status":"completed","model":w.MODEL,
@@ -348,6 +356,9 @@ def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch):
         body=json.loads(request.content);seen.append(body)
         assert request.url==w.BASE_URL+"/responses"
         assert body["model"]==w.MODEL and body["tools"]==[] and body["stream"] is True
+        claim_schema=body["text"]["format"]["schema"]["$defs"]["ResearchClaim"]
+        assert claim_schema["properties"]["evidence_artifact_ids"]["items"]["enum"] == prompt["evidence_ids"]
+        assert body["text"]["format"]["strict"] is True
         assert "GH_FAKE_TOKEN_MUST_NOT_LEAVE" not in request.content.decode()
         assert request.headers["authorization"]=="Bearer fake-sdk-test-key"
         return httpx.Response(200, headers={"content-type":"text/event-stream"},content=data)
@@ -355,9 +366,18 @@ def test_actual_sdk_stream_shape_with_mock_http_only(tmp_path, monkeypatch):
     monkeypatch.setenv("SUB2API_API_KEY","fake-sdk-test-key")
     monkeypatch.setenv("GH_TOKEN","GH_FAKE_TOKEN_MUST_NOT_LEAVE")
     usage=[]
-    result=w.model_call("pre",prompt,PreResearchResult,tmp_path,usage)
-    assert result.route.value=="WAIT_FOR_TRIGGER" and len(seen)==1
+    result=w.model_call(stage,prompt,output_type,tmp_path,usage)
+    assert type(result) is output_type and result.route.value=="WAIT_FOR_TRIGGER" and len(seen)==1
     assert usage[0]["usage"]["total_tokens"]==2
+    assert (tmp_path/(stage+"-model-output.txt")).read_text()==text
+    if foreign_reference:
+        # A provider ignoring the requested enum must not cause eager SDK
+        # citation admission or silent ID repair before retaining raw output.
+        assert str(getattr(result,field)[0].evidence_artifact_ids[0])==foreign
+        from decision_kernel.research_funnel import validate_pre_research_transition, validate_funnel_transition
+        with pytest.raises(ValueError,match="missing evidence"):
+            if stage=="pre": validate_pre_research_transition(d,result,p.seed_evidence_artifacts)
+            else: validate_funnel_transition(d,pre(prompt,"CONTINUE_TO_QUICK"),result,p.seed_evidence_artifacts)
 
 
 @pytest.mark.parametrize("name,field", [("preflight.json", "finished_at"), ("input.json", "research_cutoff")])
