@@ -219,6 +219,17 @@ def validate_sector(run: dict, files: dict[str, bytes], state_files: dict[str, b
     }
 
 
+def _validate_stock_replay_completion(capture: dict, verification: dict, projection: dict) -> None:
+    """Admit the existing full/partial replay contracts without relabeling coverage."""
+    complete = projection["coverage"]["scope_complete"]
+    check(type(complete) is bool, "stock coverage completion flag must be boolean")
+    expected = (("COMPLETE_STOCK_READING", "ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT")
+                if complete else
+                ("COMPLETED_BATCH_WITH_STOCK_DATA_GAPS", "STOCK_BATCH_WITH_DATA_GAPS_REBUILT"))
+    check((capture["status"], verification["status"]) == expected,
+          "stock stored replay completion differs from coverage")
+
+
 def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     from . import stock_radar_reading as stock
     from .stock_market_expression import render_market_expression_reading
@@ -243,8 +254,8 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
         stock.render_stock_reading(report)
     check(p["reference_input_provenance"] == HITHINK_RAW, "synthetic stock reading rejected")
     verification = json.loads(files["verification.json"])
-    check(verification["status"] == "ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT"
-          and verification["network_calls"] == 0 and verification["capture_hash"] == capture["capture_hash"]
+    _validate_stock_replay_completion(capture, verification, p)
+    check(verification["network_calls"] == 0 and verification["capture_hash"] == capture["capture_hash"]
           and verification["projection_hash"] == report["projection_hash"] == capture["projection_hash"],
           "stock stored replay binding differs")
     check(verification["coverage"] == capture["coverage"] == p["coverage"], "stock coverage disagreement")
