@@ -1,0 +1,47 @@
+name: p0-stock-market-expression-construction
+
+on:
+  push:
+    branches: [fix/p0-stock-market-expression-20260912]
+    paths:
+      - .github/scripts/apply-p0-stock-market-expression-patch.py
+      - .github/workflows/p0-stock-market-expression-construction.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: fix/p0-stock-market-expression-20260912
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Apply exact construction patch
+        run: python .github/scripts/apply-p0-stock-market-expression-patch.py
+      - name: Compile touched Python
+        run: |
+          python -m py_compile \
+            src/decision_kernel/runtime/stock_radar_reading.py \
+            src/decision_kernel/runtime/stock_market_expression.py \
+            src/decision_kernel/runtime/current_state.py \
+            src/decision_kernel/runtime/current_state_delivery.py \
+            .github/scripts/capture-stock-reading.py
+      - name: Commit target files only
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            src/decision_kernel/runtime/stock_radar_reading.py \
+            src/decision_kernel/runtime/stock_market_expression.py \
+            src/decision_kernel/runtime/current_state.py \
+            src/decision_kernel/runtime/current_state_delivery.py \
+            .github/scripts/capture-stock-reading.py \
+            .github/workflows/hithink-stock-dump-trial.yml
+          git diff --cached --check
+          git commit -m 'fix: separate Stock market expression from business evidence'
+          git push origin HEAD:fix/p0-stock-market-expression-20260912
