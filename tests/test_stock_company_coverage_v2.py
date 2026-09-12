@@ -193,7 +193,7 @@ def test_unknown_company_manifest_is_rejected(tmp_path, value):
         mod['company_scope'](value)
 
 
-def test_normal_live_cli_explicitly_uses_v2_without_new_user_input(tmp_path, monkeypatch):
+def test_normal_live_cli_uses_v2_annotation_and_sector_result_without_new_user_input(tmp_path, monkeypatch):
     mod, _, _, _, _, _ = setup(tmp_path)
     env = stock_environment()
     for key,value in env.items():
@@ -204,12 +204,16 @@ def test_normal_live_cli_explicitly_uses_v2_without_new_user_input(tmp_path, mon
     root = tmp_path/'cli'; root.mkdir()
     request = mod['intent'](env, AT.isoformat())
     mod['write'](root/'request.json', request)
+    sector_result = {'result_hash':'SYNTHETIC_SECTOR_RESULT_FOR_CLI_ROUTING_TEST'}
+    (root/'market-context').mkdir()
+    mod['write'](root/'market-context/result.json', sector_result)
     scope = mod['main'].__globals__
     seen = []
     def captured(*args, **kwargs):
         seen.append(kwargs)
         assert kwargs['company_manifest'] == V2 == mod['LIVE_COMPANIES']
         assert kwargs['provenance'] == mod['PUBLIC']
+        assert kwargs['sector_result'] == sector_result
         return {'status':mod['COMPLETE']}
     monkeypatch.setitem(scope, 'capture', captured)
     monkeypatch.setitem(scope, 'bound_state', lambda *args:None)
