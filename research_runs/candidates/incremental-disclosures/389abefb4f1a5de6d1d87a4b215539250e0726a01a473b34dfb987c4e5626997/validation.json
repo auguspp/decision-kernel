@@ -1,0 +1,12 @@
+{
+  "candidate_hash": "f59bd48c037707718a7dd049d14ce8b8fd4264f0e9465a7f4f1217da7c619d4e",
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "funnel_result": null,
+  "gap_reason": "DomainValidationError",
+  "human_attention_authority": "NONE",
+  "input_hash": "494614957cd3acf7340e117abb90f288dba325be3b74c4180e2b9c9ad70a2ba5",
+  "investment_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "status": "EXECUTION_GAP"
+}
