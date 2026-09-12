@@ -36,6 +36,12 @@
     }
   ],
   "additional_registered_handoffs": [],
+  "research_work_read": {
+    "ref": "research-work/disclosures-v0",
+    "prefix": "research_runs/candidates/incremental-disclosures/",
+    "mode": "RETAINED_DISCLOSURE_CANDIDATE_READ_ONLY",
+    "max_items": 8
+  },
   "capability_gaps": [
     {"id":"P0-1-natural-schedule","status":"NATURAL_SCHEDULE_ACCEPTANCE_PENDING","source":{"path":"docs/current-state.md"}},
     {"id":"P0-2-natural-reading-publication","status":"NATURAL_PUBLICATION_ACCEPTANCE_PENDING","source":{"path":"docs/current-state.md"}},
