@@ -79,6 +79,15 @@ POLICY = {
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
+MARKET_EXPRESSION_VERSION = 'stock-market-expression-window-qualified-v7'
+MARKET_EXPRESSION_SEMANTICS = 'BOUNDED_MARKET_EXPRESSION_NOT_BUSINESS_BENEFIT_OR_RECOMMENDATION'
+MARKET_EXPRESSION_POLICY = {
+    **POLICY,
+    'version': MARKET_EXPRESSION_VERSION,
+    'issuer_universe': 'BOUNDED_SURFACED_SECTOR_BREADTH_LEADERS_NOT_ALL_A_SHARES',
+    'business_evidence': 'ANNOTATION_ONLY_NOT_CANDIDATE_GATE',
+    'presentation': 'SURFACED_GROUP_ROUND_ROBIN_CANDIDATES_THEN_EXISTING_STOCK_GATE',
+}
 LIMITS = {
     **probe.AUTHORITY, 'creates_canonical_wake': False, 'events_created': 0,
     'market_state_writes': 0, 'automatic_research_routing': False,
@@ -93,6 +102,9 @@ STATUS_LABELS = {
     'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE': '资料完整，但本范围没有通过全部观察条件的股票',
     'NO_ACTIVE_DIRECTIONS': '当前没有满足既有行业门槛的方向',
     'BUSINESS_COVERAGE_INSUFFICIENT': '有活跃方向，但没有相应已接入公司依据',
+    'NO_SURFACED_SECTOR_GROUPS': 'Sector 本轮没有进入首页有界组；未执行股票市场表达候选',
+    'NO_MARKET_EXPRESSION_CANDIDATES': 'Sector 有界组没有可路由的 breadth leader 候选',
+    'NO_MATCH_WITHIN_BOUNDED_MARKET_EXPRESSION_SCOPE': '本次有界市场表达候选没有通过全部价格观察条件',
     'DATA_INSUFFICIENT': '数据不足，不能形成合格股票名单',
     'DATA_QUALIFICATION_FAILED': '输入资格校验未通过，不能形成合格股票名单',
     'REQUEST_FAILED': '请求失败，本次检查未完成',
@@ -428,6 +440,14 @@ def _partial_status(coverage, selected):
             'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS')
 
 
+def _plan_contract(plan: dict):
+    if plan.get('version') == VERSION:
+        return SEMANTICS, POLICY, False
+    if plan.get('version') == MARKET_EXPRESSION_VERSION:
+        return MARKET_EXPRESSION_SEMANTICS, MARKET_EXPRESSION_POLICY, True
+    return None
+
+
 def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datetime,
                           cutoff_clock=None, reference_inputs=None) -> dict:
     _reference_inputs(reference_inputs)
@@ -443,8 +463,12 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if (set(reference_inputs['windows']) - planned_codes
                 or set(reference_inputs['latest_quotes']) - planned_codes):
             raise ValueError('reference inputs contain unplanned stock identities')
-    if (plan['version'] != VERSION or plan['policy'] != POLICY or not _hash_ok(plan, 'plan_hash')
-            or plan['market_state_hash'] != state.state_hash or plan['semantics'] != SEMANTICS
+    contract = _plan_contract(plan)
+    if contract is None:
+        raise ValueError('stock plan identity, policy, budget or authority differs')
+    contract_semantics, contract_policy, is_market_expression = contract
+    if (plan['policy'] != contract_policy or not _hash_ok(plan, 'plan_hash')
+            or plan['market_state_hash'] != state.state_hash or plan['semantics'] != contract_semantics
             or any(plan[k] != v for k, v in LIMITS.items())
             or len(plan['issuers']) > MAX_ISSUERS or len(plan['directions']) > MAX_MEMBERSHIPS
             or expected_requests != plan['maximum_request_count'] or expected_requests > MAX_REQUESTS):
@@ -543,9 +567,13 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         row = {**issuer, 'current_origins': valid_origins, 'stock_path': None,
                'market_comparison': {}, 'sector_comparisons': [], 'eligible_nodes': [],
                'excluded_reasons': [], 'eligible_for_shadow_reading': False,
+               'market_expression_status': 'NOT_ESTABLISHED',
+               'business_linkage_status': issuer.get('business_linkage_status', 'REVIEWED_BUSINESS_LINK_PRESENT'),
+               'business_benefit_status': issuer.get('business_benefit_status', 'NOT_ESTABLISHED'),
                'status': 'CONDITIONS_NOT_MET', 'input_failure': None}
         if not valid_origins:
-            row['excluded_reasons'].append('NOT_A_CURRENT_MEMBER_OF_REVIEWED_ACTIVE_DIRECTION')
+            row['excluded_reasons'].append('NOT_A_CURRENT_MEMBER_OF_ROUTED_ACTIVE_DIRECTION' if is_market_expression
+                                           else 'NOT_A_CURRENT_MEMBER_OF_REVIEWED_ACTIVE_DIRECTION')
             rows.append(row); continue
         name = identities[code].name
         row['current_member_name'] = name
@@ -605,24 +633,35 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if row['market_comparison']['20']['excess_return'] <= 0:
             reasons.append('TWENTY_DAY_MARKET_EXCESS_NOT_POSITIVE')
         if not row['eligible_nodes']:
-            reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
+            reasons.append('TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR' if is_market_expression
+                           else 'TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_REVIEWED_SECTOR')
         row['eligible_for_shadow_reading'] = not reasons
+        if is_market_expression and not reasons:
+            row['market_expression_status'] = 'OBSERVED'
         row['status'] = ('QUALIFIED_SYNTHETIC_READING' if reference_inputs is not None else
                          'CONTRACT_CHECKED_RAW_READING') if not reasons else 'CONDITIONS_NOT_MET'
         rows.append(row)
     rows = _plain(rows)
     coverage = _coverage(rows)
     selected = _select(rows, plan['node_order'])
-    reviewed_codes = {r['thscode'] for r in plan['issuers']}
-    status = _partial_status(coverage, selected) or (
-        'STOCKS_FOR_SHADOW_READING' if selected else
-        'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
-        'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
-        'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
+    reviewed_codes = {r['thscode'] for r in (plan['evidence_scope_issuers'] if is_market_expression else plan['issuers'])}
+    if is_market_expression:
+        complete_status = ('STOCKS_FOR_SHADOW_READING' if selected else
+            'NO_SURFACED_SECTOR_GROUPS' if not plan['candidate_source_group_count'] else
+            'NO_MARKET_EXPRESSION_CANDIDATES' if not plan['issuers'] else
+            'NO_MATCH_WITHIN_BOUNDED_MARKET_EXPRESSION_SCOPE')
+    else:
+        complete_status = ('STOCKS_FOR_SHADOW_READING' if selected else
+            'NO_ACTIVE_DIRECTIONS' if not plan['all_active_direction_count'] else
+            'BUSINESS_COVERAGE_INSUFFICIENT' if not plan['issuers'] else
+            'NO_MATCH_WITHIN_REVIEWED_COMPANY_SCOPE')
+    status = _partial_status(coverage, selected) or complete_status
     payload = {
-        'version': VERSION, 'semantics': SEMANTICS, 'policy': POLICY, 'plan_hash': plan['plan_hash'],
+        'version': plan['version'], 'semantics': plan['semantics'], 'policy': plan['policy'], 'plan_hash': plan['plan_hash'],
         'market_session': state.sessions[-1], 'observed_at': at(), 'status': status,
-        'scope': plan['reviewed_company_coverage'], 'reviewed_issuers': len(plan['issuers']),
+        'scope': plan.get('reading_scope', plan['reviewed_company_coverage']),
+        'reviewed_issuers': (sum(r.get('business_linkage_status') == 'REVIEWED_BUSINESS_LINK_PRESENT' for r in plan['issuers'])
+                             if is_market_expression else len(plan['issuers'])),
         'coverage': coverage, 'selection_scope_complete': coverage['scope_complete'],
         'evidence_scope_issuers': plan['evidence_scope_issuers'],
         'active_directions_without_stock_business_scope': plan['active_directions_without_stock_business_scope'],
@@ -643,6 +682,9 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         'market_state_hash': state.state_hash, 'event_ledger_hash': plan['event_ledger_hash'],
         'new_stock_event_created': False, 'price_path_is_not_total_return': True,
         'profitability_valuation_or_odds_established': False, **LIMITS,
+        **({'sector_result_hash': plan['sector_result_hash'],
+            'candidate_source_group_count': plan['candidate_source_group_count'],
+            'candidate_routing': plan['candidate_routing']} if is_market_expression else {}),
     }
     return _plain({'projection': payload, 'projection_hash': canonical_hash(payload)})
 
