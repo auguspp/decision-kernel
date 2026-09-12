@@ -1,0 +1,119 @@
+name: p0-stock-partial-read-construction
+on:
+  push:
+    branches: [fix/p0-stock-partial-read-publication-20260912]
+    paths: [.github/workflows/p0-stock-partial-read-construction.yml]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: p0-stock-partial-read-construction
+  cancel-in-progress: false
+jobs:
+  focused:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/fix/p0-stock-partial-read-publication-20260912' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: fix/p0-stock-partial-read-publication-20260912
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Apply exact read-layer completion patch
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          p=Path('src/decision_kernel/runtime/current_state.py')
+          raw=p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest() == '1bf772527446e3c7f6c0404f94d5c64835bea289'
+          s=raw.decode('utf-8')
+          old='    check(verification["status"] == "ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT"\n          and verification["network_calls"] == 0 and verification["capture_hash"] == capture["capture_hash"]'
+          new='    _validate_stock_replay_completion(capture, verification, p)\n    check(verification["network_calls"] == 0 and verification["capture_hash"] == capture["capture_hash"]'
+          helper='''def _validate_stock_replay_completion(capture: dict, verification: dict, projection: dict) -> None:
+              """Admit the existing full/partial replay contracts without relabeling coverage."""
+              complete = projection["coverage"]["scope_complete"]
+              check(type(complete) is bool, "stock coverage completion flag must be boolean")
+              expected = (("COMPLETE_STOCK_READING", "ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT")
+                          if complete else
+                          ("COMPLETED_BATCH_WITH_STOCK_DATA_GAPS", "STOCK_BATCH_WITH_DATA_GAPS_REBUILT"))
+              check((capture["status"], verification["status"]) == expected,
+                    "stock stored replay completion differs from coverage")
+
+
+          '''
+          anchor='def validate_stock(run: dict, files: dict[str, bytes]) -> dict:\n'
+          assert s.count(old) == s.count(anchor) == 1
+          s=s.replace(anchor,helper+anchor,1).replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          python -m py_compile src/decision_kernel/runtime/current_state.py tests/test_current_state_stock_completion.py
+          git diff --check
+      - name: Install existing test environment
+        run: python -m pip install -e '.[dev]'
+      - name: Run read-contract regressions
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/partial-proof"
+          python -m pytest -q tests/test_current_state_stock_completion.py tests/test_current_state.py tests/test_current_state_delivery.py tests/test_current_state_isolation.py | tee "$RUNNER_TEMP/partial-proof/focused.log"
+      - name: Read exact completed Stock run metadata only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api repos/auguspp/decision-kernel/actions/runs/34673882756 > "$RUNNER_TEMP/partial-proof/stock-run.json"
+      - name: Download the same retained Stock artifact, no market acquisition
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10291478835'
+          run-id: '34673882756'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/retained-stock
+      - name: Validate and replay unchanged partial result with network denied
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,os,runpy,socket
+          from decision_kernel.runtime import current_state as model
+          def denied(*args,**kwargs): raise RuntimeError('Network prohibited during retained-result verification')
+          socket.create_connection=denied
+          root=Path(os.environ['RUNNER_TEMP'])/'retained-stock'
+          proof=Path(os.environ['RUNNER_TEMP'])/'partial-proof'
+          run=json.loads((proof/'stock-run.json').read_bytes())
+          assert run['id']==34673882756 and run['head_sha']=='93f667ebb2cedd553b66a495127b6ed657ad521e'
+          files={p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}
+          result=model.validate_stock(run,files)
+          cap=runpy.run_path('.github/scripts/capture-stock-reading.py',run_name='offline_partial_stock_proof')
+          verification=cap['verify'](root/'reading')
+          assert verification==json.loads(files['verification.json']) and verification['network_calls']==0
+          lane=model.lane_reading(latest=run,qualified=result,failure=None,checked_at=verification.get('observed_at','2026-09-12T05:00:00Z'),query_complete=True)
+          assert result['coverage']['scope_complete'] is False
+          assert result['coverage']['planned_issuers']==6 and result['coverage']['qualified_issuers']==4 and result['coverage']['unavailable_issuers']==2
+          assert result['surfaced_codes']==['600184.SH','300711.SZ','603353.SH']
+          assert 'PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET' in lane['gaps']
+          assert files=={p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}
+          (proof/'verification.json').write_bytes(model.json_bytes({'meaning':'READ_ONLY_RETAINED_PARTIAL_RESULT_PROOF_NOT_PRODUCTION_PUBLICATION','result':result,'replay':verification,'gaps':lane['gaps']}))
+          print('UNCHANGED_REAL_PARTIAL_STOCK_REPLAY_AND_READER_VALIDATION_PASSED; no network or state writes')
+          PY
+      - name: Commit only reviewed reader change
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote origin refs/heads/fix/p0-stock-partial-read-publication-20260912 | cut -f1)" = "$GITHUB_SHA"
+          git diff -- src/decision_kernel/runtime/current_state.py > "$RUNNER_TEMP/partial-proof/patch.diff"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/decision_kernel/runtime/current_state.py
+          git commit -m 'fix: admit exact existing partial Stock replay pair without hiding gaps'
+          git push origin HEAD:fix/p0-stock-partial-read-publication-20260912
+          git rev-parse HEAD > "$RUNNER_TEMP/partial-proof/commit.txt"
+      - name: Retain read-only construction proof
+        uses: actions/upload-artifact@v7
+        with:
+          name: stock-partial-reader-proof-${{ github.run_id }}
+          path: ${{ runner.temp }}/partial-proof/
+          retention-days: 7
+          if-no-files-found: error
