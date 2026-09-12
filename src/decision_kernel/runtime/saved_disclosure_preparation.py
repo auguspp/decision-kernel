@@ -130,7 +130,8 @@ def _wait_until(cutoff, clock, wait):
 
 def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: bytes,
                      scan_artifact: dict, body_raw: bytes, body_artifact: dict, run: dict,
-                     reading_commit: str, output: Path, clock=once.now, wait=time.sleep) -> dict:
+                     reading_commit: str, output: Path, clock=once.now, wait=time.sleep,
+                     continuation_request_source=None) -> dict:
     """Create original context/Discovery/preflight/input; never launch a model.
 
     prepare.json holds the original DiscoveryInput (not an admission PASS).
@@ -168,8 +169,18 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
         retain = once.Retainer(api, {"id": execution_id, "prefix": prefix, "work_ref": work.WORK_REF},
                                code_commit, output)
         receipt.update(phase="SOURCE_PREFLIGHT", assessment_input_hash=key)
+        continuation = None
+        if continuation_request_source is not None:
+            from . import disclosure_continuation
+            continuation = disclosure_continuation.check(api=api, code_commit=code_commit,
+                request_source=continuation_request_source, new_packet_raw=packet_raw, checked_at=clock())
         context, reads = source_context(packet_raw=packet_raw, archive_raw=body_raw,
                                        artifact=body_artifact, run=run, clock=clock, journal=journal)
+        if continuation is not None:
+            context["continuation_context"] = continuation["public_context"]
+            receipt["continuation_permission"] = continuation["permission_receipt"]
+            once.require(len(once.raw(context)) < once.MAX_PROMPT_BYTES - 16000,
+                         "continuation context exceeds saved executor bound; no clipping")
         # The trusted caller may approve only this fixed public source/context shape.
         cs = retain.save("source.json", context); cs["purpose"] = "MODEL_CONTEXT"
         meta = api.get("git/commits/" + cs["ref"])
@@ -219,11 +230,11 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
         packet = ExternalResearchInputPacket(execution_id=execution_id, case_id=case_id, ticker=ticker,
             security_id=security_id, source_lane="CNINFO_INCREMENTAL", selected_at=selected,
             research_cutoff=cutoff, code_commit=code_commit, current_state_commit=reading_commit,
-            current_state_reading_hash=reading["reading_hash"], source_refs=(packet_source, cs, ps, ds),
-            seed_evidence_artifacts=(seed,), research_question=QUESTION,
+            current_state_reading_hash=reading["reading_hash"], source_refs=(packet_source, cs, ps, ds, *(continuation["source_refs"] if continuation else ())),
+            seed_evidence_artifacts=(seed,), research_question=continuation["question"] if continuation else QUESTION,
             known_unknowns=(f"REQUIRED_SOURCE_CLASS:{SOURCE_CLASS}:STATIC", LIMITATIONS),
             next_discriminating_search=discovery.next_discriminating_search,
-            method_version="research-funnel-v1", prompt_version="saved-disclosure-preparation-v1",
+            method_version="research-funnel-v1", prompt_version="saved-disclosure-continuation-v1" if continuation else "saved-disclosure-preparation-v1",
             allowed_tools=("OTHER_READ",), candidate_output_prefix=prefix,
             budget={"max_tool_calls": 6, "max_search_queries": 0, "max_source_reads": 4,
                 "max_technical_retries": 0, "max_elapsed_minutes": 15,

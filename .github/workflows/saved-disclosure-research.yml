@@ -11,6 +11,10 @@ on:
         description: Exact successful saved decision-inbox run, never latest
         type: string
         required: true
+      continue-research:
+        description: Use the explicitly reviewed main Human-continuation request (not quota authorization)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -36,6 +40,7 @@ jobs:
     permissions:
       contents: write
       actions: read
+      issues: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -51,12 +56,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
           SOURCE_RUN_ID: ${{ github.event.workflow_run.id || inputs.source-run-id }}
+          CONTINUATION_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.continue-research }}
         run: |
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -n "$SUB2API_API_KEY"
+          extra=()
+          if [ "$CONTINUATION_REQUESTED" = true ]; then extra+=(--continuation); fi
           python -m decision_kernel.runtime.saved_disclosure_host \
-            --source-run-id "$SOURCE_RUN_ID" --code-commit "$GITHUB_SHA" --output run-output
+            --source-run-id "$SOURCE_RUN_ID" --code-commit "$GITHUB_SHA" --output run-output "${extra[@]}"
       - name: Preserve originals, preparation, results and partial failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
