@@ -32,12 +32,12 @@ CODE, READING, WORK = 'a' * 40, 'b' * 40, 'c' * 40
 AT = '2026-09-12T13:00:00+00:00'
 
 
-def packet_pdf(text='Synthetic issuer body.', code='600036'):
+def packet_pdf(text='Synthetic issuer body.', code='600036', *, thesis='Synthetic only', extractor=extract_pdf_text):
     stamp = datetime(2026, 9, 8, tzinfo=timezone.utc)
     pdf = _pdf_with_text_pages(text)
     snapshot = ResearchSnapshot(id=UUID(int=1), ticker=code, company_name='Synthetic', exchange='SSE',
         currency='CNY', created_at='2026-09-01T00:00:00Z', as_of_datetime='2026-09-01T00:00:00Z',
-        valuation_horizon_date='2027-09-01', version=1, core_thesis='Synthetic only', created_by='test')
+        valuation_horizon_date='2027-09-01', version=1, core_thesis=thesis, created_by='test')
     ann = CninfoAnnouncement(announcement_id=code+'1008', stock_code=code, org_id='test', title='Synthetic',
         announcement_type=None, published_at=stamp,
         source_locator=f'https://static.cninfo.com.cn/finalpage/2026-09-08/{code}1008.PDF')
@@ -45,7 +45,7 @@ def packet_pdf(text='Synthetic issuer body.', code='600036'):
                             last_published_at=stamp, announcements=(ann,))
     packet = prepare_disclosure_assessment_packet(research_snapshot=snapshot, batch=batch,
         prepared_at=datetime.fromisoformat('2026-09-09T13:00:00+00:00'),
-        fetch_pdf=lambda **kwargs: pdf, extract_pdf=extract_pdf_text)
+        fetch_pdf=lambda **kwargs: pdf, extract_pdf=extractor)
     return serialize_disclosure_assessment_packet(packet).encode(), pdf
 
 
