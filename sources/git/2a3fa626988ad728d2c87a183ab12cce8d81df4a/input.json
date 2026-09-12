@@ -1,0 +1,94 @@
+{
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "budget": {
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_elapsed_minutes": 15,
+    "max_search_queries": 0,
+    "max_source_reads": 4,
+    "max_technical_retries": 0,
+    "max_tool_calls": 6,
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "tool_calls_enforcement": "SOFT_EXECUTOR"
+  },
+  "candidate_output_prefix": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/",
+  "case_id": "600036.SH",
+  "code_commit": "934ee0c4481bc72374b4ce8e3f4845ef7e77d7de",
+  "current_state_commit": "33a38e13611136cecbc003ba71c3da752542e641",
+  "current_state_reading_hash": "917a6626f0d669a9ae570c2ff4598e0e44dc775a38afecb43a0116f3642b5f21",
+  "execution_id": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+  "known_unknowns": [
+    "REQUIRED_SOURCE_CLASS:SAVED_DISCLOSURE_BODIES:STATIC",
+    "STATIC saved-announcement triage, not an exhaustive latest-issuer inventory. Original packet and prior research context are preserved, not newly accepted facts. PDF/text identity and format checks do not certify semantic readability or truth. Unreadable required content is an execution/source gap, never completed WAIT. Ambiguous tables, economic effects and present market expectations remain UNKNOWN."
+  ],
+  "method_version": "research-funnel-v1",
+  "next_discriminating_search": "仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
+  "prompt_version": "saved-disclosure-preparation-v1",
+  "research_cutoff": "2026-09-12T15:42:54.233461Z",
+  "research_question": "这组已保存公告是否带来值得继续核验的公司经济问题？仅研究本组公告增量，不冒充当前全公司研究。",
+  "schema_version": 1,
+  "security_id": "SSE:600036",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-12T15:42:22.880306Z",
+      "content_hash": "9e75b30d1937a9c920300614456f152c6439b802ab83b15c212209f09c13f581",
+      "extracted_structured_values": null,
+      "id": "9ecb6b10-c0d6-5abe-aafc-02f55434725e",
+      "idempotency_key": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+      "license_terms_note": "Exact internal public context, not primary truth certification. Original PDFs remain in the producing artifact with its expiry.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-12T15:42:21Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/1c0482c80db388d3b59d6514feb8eed2bcb63efe/research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-12T15:42:22.880350Z",
+      "schema_version": 1,
+      "source_identifier": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/1c0482c80db388d3b59d6514feb8eed2bcb63efe/research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "selected_at": "2026-09-12T15:42:24.233459Z",
+  "source_lane": "CNINFO_INCREMENTAL",
+  "source_refs": [
+    {
+      "git_blob": "115d77952f6b24e5c68aea90f1f785abf9641c6a",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/packet.json",
+      "purpose": "INCREMENTAL_DISCLOSURE_PACKET",
+      "ref": "7f3487036b259972ddc8be738d5e2456239e7a15",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "a87453b8584142ce8a11e5df15d280d0c855df38e3880171d0d03a3f5f048718"
+    },
+    {
+      "git_blob": "820f999ace83fc039f98e8e98fa5f3cbd11fb523",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "1c0482c80db388d3b59d6514feb8eed2bcb63efe",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "9e75b30d1937a9c920300614456f152c6439b802ab83b15c212209f09c13f581"
+    },
+    {
+      "git_blob": "cd24008b1eb39bf0b966700a6e66a9a3624f7c15",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "31dad0f9a25986d7a9c04da70e55e969209daab7",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f29cb678c9c14ff22512a945ec26195b29931f9e0b1c725ecfc28b14f64446dc"
+    },
+    {
+      "git_blob": "e4729fe98a396360670fcfa3fb19241c2c2d763e",
+      "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/prepare.json",
+      "purpose": "PREPARED_DISCLOSURE_DISCOVERY",
+      "ref": "4751a1774444815781921c097eafb13b79228672",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "a746469258bca47e93b3c1ad620f65aacf61200b55cc37b25e91edcb5b6353c9"
+    }
+  ],
+  "ticker": "600036",
+  "untrusted_test_material": null
+}
