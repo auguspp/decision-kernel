@@ -1,0 +1,90 @@
+{
+  "disclosure_packet": {
+    "announcement_ids": [
+      "1225554309"
+    ],
+    "assessment_input_hash": "389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+    "assessment_semantics_id": "research-funnel-v1",
+    "disclosure_assessment_status": "UNASSESSED",
+    "evidence": [
+      {
+        "announcement_id": "1225554309",
+        "evidence_artifact": {
+          "available_at": "2026-09-09T00:00:00+08:00",
+          "content_hash": "fb86d7ce6ac79c368798559c03b971085fee237934f8ee0fc96586e769fbcaef",
+          "extracted_structured_values": null,
+          "id": "d761d18c-37dd-58ff-ba02-3826e25bd988",
+          "idempotency_key": "CNINFO:600036:ANNOUNCEMENT:1225554309",
+          "license_terms_note": "Reference-only official disclosure; raw PDF is not retained by this adapter.",
+          "permitted_excerpt": null,
+          "published_at": "2026-09-09T00:00:00+08:00",
+          "raw_storage_ref": null,
+          "replayability_level": "REFERENCE_ONLY",
+          "report_period_end": null,
+          "retention_mode": "METADATA_ONLY",
+          "retrieved_at": "2026-09-11T12:50:59.614576Z",
+          "schema_version": 1,
+          "source_identifier": "CNINFO:600036:ANNOUNCEMENT:1225554309",
+          "source_location": "CNINFO announcement 1225554309",
+          "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225554309.PDF",
+          "source_type": "OFFICIAL_DISCLOSURE"
+        },
+        "extracted_char_count": 877,
+        "page_count": 2,
+        "pages": [
+          {
+            "page_number": 1,
+            "text": "1\nA股简称：招商银行 A股代码：600036 公告编号：2026-037\n招商银行股份有限公司关于独立董事任职资格核准及\n董事会专门委员会成员调整的公告\n本公司董事会及全体董事保证本公告内容不存在任何虚假记载、误导性陈述或者\n重大遗漏，并对其内容的真实性、准确性和完整性承担法律责任。\n招商银行股份有限公司（简称本公司或招商银行）收到《国家金融\n监督管理总局关于张湧招商银行独立董事任职资格的批复》（金复〔2026〕\n496号）。根据上述批复，张湧先生招商银行独立董事的任职资格已获得\n核准。张湧先生担任本公司独立非执行董事的任期自2026年9月8日起生\n效，至本公司第十三届董事会届满之日止。\n自2026年9月8日起，根据本公司第十三届董事会第十八次会议审议\n通过的《关于调整董事会专门委员会成员组成的议案》：张湧先生任董\n事会战略与可持续发展委员会委员及董事会薪酬与考核委员会主任委\n员；黄玉山先生任董事会薪酬与考核委员会委员，不再任该委员会主任\n委员。\n特此公告。\n附件：张湧先生简历及相关信息\n招商银行股份有限公司董事会\n2026 年9月8 日"
+          },
+          {
+            "page_number": 2,
+            "text": "2\n附件\n张湧先生简历及相关信息\n张湧先生，1975 年 11 月出生，经济学博士，理论经济学博士后工作经历。上海\n财经大学滴水湖研究院执行院长、滴水湖高级金融学院副院长。兼任复旦大学上海自\n贸区综合研究院研究员，天能动力国际有限公司（香港联交所上市公司）和海南银行\n股份有限公司独立董事。曾任中国（上海）自贸试验区管委会政策研究局局长，民生\n人寿保险股份有限公司执行委员、董事会秘书、审计责任人，丝路研究院（海口）有\n限公司首席专家兼院长，上海交通大学上海高级金融学院副院长，上海金融与发展实\n验室副主任，上海临港控股股份有限公司（上海证券交易所上市公司）、腾达建设集\n团股份有限公司（上海证券交易所上市公司）独立董事等职务。\n张湧先生的其他相关信息请参阅刊登在上海证券交易所网站（www.sse.com.cn）\n和本公司网站（www.cmbchina.com）的本公司 2025 年度股东会文件。"
+          }
+        ],
+        "pdf_sha256": "fb86d7ce6ac79c368798559c03b971085fee237934f8ee0fc96586e769fbcaef",
+        "published_at": "2026-09-09T00:00:00+08:00",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225554309.PDF",
+        "text_sha256": "5005b0720c4ddd72ba93ee6a6dedd4f936ce0b105a07e2ba11cd11fe38c4a9b8",
+        "text_status": "EXTRACTED",
+        "title": "招商银行股份有限公司关于独立董事任职资格核准及董事会专门委员会成员调整的公告"
+      }
+    ],
+    "investment_authority": "NONE",
+    "prepared_at": "2026-09-11T12:50:59.614576+00:00",
+    "publication_date": "2026-09-09",
+    "research_context": {
+      "core_thesis": "招商银行的低不良率、较高拨备覆盖与零售负债基础可能继续支撑优于行业的风险调整后回报，但净息差、信用成本与ROE下行仍决定估值上限。",
+      "market_expectations_narrative": "工作假设：市场认可招行资产质量和零售负债优势，但仍担忧利率下行压缩盈利能力；进一步重估需要收入恢复与信用成本稳定共同抵消ROE压力。",
+      "model_risk_level": "HIGH",
+      "model_risk_notes": "Bank valuation is highly sensitive to future credit costs, net-interest margin and book-value growth; P/B scenarios are deliberately simple dogfood assumptions, not consensus estimates.",
+      "monitoring_triggers": [
+        "下一季度净利息收入与营业收入增速",
+        "不良率、拨备覆盖率与信用减值损失",
+        "客户存款和贷款增速",
+        "ROAE与净息差趋势"
+      ],
+      "open_questions": [
+        "净利息收入增长能否持续抵消资产收益率下降？",
+        "不良率稳定的同时拨备覆盖下降是否只是正常化？",
+        "ROAE能否在利率下行环境中稳定在较高水平？"
+      ],
+      "research_as_of": "2026-08-30T00:00:00+00:00",
+      "research_information_bundle_hash": "6ad42a3b342c0bc043d8e2589ea46a9072d598e502e4755071c109d13f538872",
+      "research_snapshot_id": "edda6f4b-0fdd-5699-9fa3-76338a58ff3d",
+      "thesis_invalidation": [
+        "不良贷款率连续明显上升并伴随信用成本扩大。",
+        "客户存款增长显著落后于贷款扩张，负债优势削弱。",
+        "ROAE持续显著下行且收入增长无法恢复。"
+      ]
+    },
+    "source_lane": "CNINFO",
+    "stock_code": "600036"
+  },
+  "source_capture": {
+    "archive_sha256": "eef0bded2de7a5682715fada619489affbf32cf376951cc242a80630a5e100ba",
+    "artifact_id": 10263794441,
+    "head_sha": "8048135919853096fb762c6d5b85940ab5d18af0",
+    "run_id": 34601025149
+  },
+  "source_limitations": "STATIC saved-announcement triage, not an exhaustive latest-issuer inventory. Original packet and prior research context are preserved, not newly accepted facts. PDF/text identity and format checks do not certify semantic readability or truth. Unreadable required content is an execution/source gap, never completed WAIT. Ambiguous tables, economic effects and present market expectations remain UNKNOWN."
+}
