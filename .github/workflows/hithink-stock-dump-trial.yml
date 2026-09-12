@@ -177,6 +177,15 @@ jobs:
           github-token: ${{ github.token }}
           digest-mismatch: error
           path: ${{ runner.temp }}/stock-reading-run/market
+      - name: Download exact read-only Sector result context
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ steps.stock-state.outputs.context_artifact_id }}
+          run-id: ${{ steps.stock-intent.outputs.market_run_id }}
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/stock-reading-run/market-context
       - name: Build stock-first observations
         id: stock-capture
         env:
@@ -226,10 +235,10 @@ jobs:
                         f"计划 {c['planned_issuers']}；已完成条件检查 {c['evaluated_issuers']}；条件不满足 {c['conditions_not_met_issuers']}；数据不可用 {c['unavailable_issuers']}。"]
               if not c['scope_complete']:
                   lines += ['覆盖尚未完整；只能陈述已检查子集，不能称作全计划零匹配。']
-              lines += [f"行情交易日 {p['market_session']}；已接入业务依据范围内 {len(p['surfaced_stocks'])} 只通过观察条件。"]
+              lines += [f"行情交易日 {p['market_session']}；本次有界 Market Expression 范围内 {len(p['surfaced_stocks'])} 只通过观察条件。"]
               for row in p['surfaced_stocks']:
                   lines += [f"**{row['thscode']} {row['company_name']}** · 来源：" + '、'.join(o['node_label'] for o in row['current_origins'])]
-              lines += [f"审阅公司 {p['reviewed_issuers']}；未接入业务依据的当前成员 {len(p['unreviewed_current_members'])}；不是全 A 股盲选。",
+              lines += [f"计划候选 {c['planned_issuers']}；其中 exact reviewed business link {p['reviewed_issuers']}；Business Evidence 不是候选门槛；不是全 A 股盲选。",
                         '解压后打开 reading/index.html；所有剔除原因和覆盖缺口均保留。']
           else:
               lines += ['本次未形成可发布的股票结果。请看失败步骤，不用空名单冒充扫描成功。']
