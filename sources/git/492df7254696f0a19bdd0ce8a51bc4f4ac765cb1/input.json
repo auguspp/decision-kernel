@@ -1,0 +1,80 @@
+{
+  "execution_id": "p0-4b-cmb-20260910-aa9ea8d2-v1",
+  "case_id": "600036.SH",
+  "ticker": "600036",
+  "security_id": "SSE:600036",
+  "source_lane": "CNINFO_INCREMENTAL",
+  "selected_at": "2026-09-10T00:24:30.379035Z",
+  "research_cutoff": "2026-09-10T00:24:30.379035Z",
+  "code_commit": "25679a21b9ae0852f7dea17520ac10950a552979",
+  "current_state_commit": "9cf1abf29c53bdfb4fe35295f2918bbb4c704528",
+  "current_state_reading_hash": "0ab0dd3720b71f0f17e19315987f290325b5a334090b24fe817df4c155b7f4b4",
+  "source_refs": [
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "2bb33fdcc1771a3723bf70f41bc355971fa9c388",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+      "git_blob": "eed0b91cd916f215b7521834c58497ecd6c28912",
+      "sha256": "562abdcc134b820aab76bfdb190660a9dbea43fa9214b1e4c016f038d99697d5",
+      "purpose": "INCREMENTAL_DISCLOSURE_PACKET"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "017727f583d08e6edc3d9a8702184483e73ad0ba",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/preflight.json",
+      "git_blob": "f201c36da639d931fa902ce2f28b3ee8c7079835",
+      "sha256": "d232e15d7839d359a41e848b8a8b41b1f261c821283be1b774085c9027520c93",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT"
+    }
+  ],
+  "seed_evidence_artifacts": [
+    {
+      "id": "2f9b0237-ff3c-5843-ba9d-a7d84d92d8a2",
+      "source_type": "SAVED_DISCLOSURE_PACKET",
+      "source_identifier": "CNINFO_INCREMENTAL:aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+      "published_at": "2026-09-10T00:21:05Z",
+      "available_at": "2026-09-10T00:21:05Z",
+      "retrieved_at": "2026-09-10T00:24:30.379035Z",
+      "content_hash": "562abdcc134b820aab76bfdb190660a9dbea43fa9214b1e4c016f038d99697d5",
+      "idempotency_key": "aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199",
+      "retention_mode": "FULL_ARTIFACT",
+      "replayability_level": "FULL",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/2bb33fdcc1771a3723bf70f41bc355971fa9c388/research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/packet.json",
+      "extracted_structured_values": null,
+      "permitted_excerpt": null,
+      "source_location": "Original 5282-byte saved DisclosureAssessmentPacket with complete extracted notice pages and linked historical context.",
+      "license_terms_note": "FULL refers to the retained internal packet, not original PDF bytes or a new issuer HTTP capture. Its Git publication clock is not the original filing date. Historical AI research context is not new financial evidence.",
+      "report_period_end": null,
+      "schema_version": 1
+    }
+  ],
+  "research_question": "Does the September 8 saved management-departure notice itself add decision-relevant evidence to the monitoring questions in its frozen research context, or warrant further research? Assess the actual notice, not current company health or current office-holders.",
+  "known_unknowns": [
+    "REQUIRED_SOURCE_CLASS:SAVED_MANAGEMENT_NOTICE:STATIC",
+    "The current issuer-wide financial position, subsequent filings, current leadership, price and expectations are not established by this bounded saved-document assessment.",
+    "The linked research context contains historical AI hypotheses. Do not import its generic valuation assumptions as accepted probabilities or new facts.",
+    "Do not invent an undisclosed reason for the departure or infer that a personnel event has already changed bank economics."
+  ],
+  "next_discriminating_search": "Read the complete retained notice and linked questions. Determine which disclosed facts, if any, connect to net interest margin, credit risk, deposits or return on equity. Name what additional evidence would change the disposition, without automatically starting Deep or claiming no other disclosures exist.",
+  "method_version": "RESEARCH_METHOD_V1",
+  "prompt_version": "P0_BOUNDED_SAVED_NOTICE_V1",
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "candidate_output_prefix": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/",
+  "budget": {
+    "max_tool_calls": 16,
+    "max_search_queries": 0,
+    "max_source_reads": 12,
+    "max_technical_retries": 0,
+    "max_elapsed_minutes": 15,
+    "tool_calls_enforcement": "SOFT_EXECUTOR",
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "elapsed_time_enforcement": "SOFT_EXECUTOR"
+  },
+  "untrusted_test_material": null,
+  "schema_version": 1
+}
