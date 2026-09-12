@@ -188,10 +188,18 @@ def failure_page(report):
 def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             provenance=SYNTHETIC, credential='', now=lambda:datetime.now(timezone.utc),
             pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST,
-            sector_result=None):
+            sector_result=None, sector_result_raw=None):
     # Historical library callers remain explicit/reproducible; the live CLI below
     # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.
     company_manifest = company_scope(company_manifest)
+    # The live CLI supplies the original bound artifact bytes. Do not reformat
+    # them: current-state compares this retained copy byte-for-byte. Library
+    # callers supplying only a dict retain their historical canonical encoding.
+    if sector_result_raw is not None:
+        if sector_result is None or not isinstance(sector_result_raw, bytes):
+            raise ValueError('raw Sector context requires bytes and a parsed result')
+        if canonical_hash(json.loads(sector_result_raw.decode('utf-8'))) != canonical_hash(sector_result):
+            raise ValueError('raw Sector context differs from the selected parsed result')
     for p in (source_root,state_dir,output):
         probe._safe_path(p)
     if output.exists() or any(output.resolve().is_relative_to(p.resolve()) for p in (source_root,state_dir)):
@@ -209,7 +217,10 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
     for name, raw in files.items():
         p=output/'inputs'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
     if sector_result is not None:
-        write(output/'inputs/sector-result.json', sector_result)
+        if sector_result_raw is None:
+            write(output/'inputs/sector-result.json', sector_result)
+        else:
+            (output/'inputs/sector-result.json').write_bytes(sector_result_raw)
     if reference_inputs is not None:
         _check_safe_json(reference_inputs, credential or None)
         write(output/'synthetic-reference-inputs.json', reference_inputs)
@@ -524,10 +535,11 @@ def main(argv=None):
                 bound_state(root,request)
                 if args.mode=='capture':
                     key=os.environ.get('HITHINK_FINANCE_API_KEY','')
-                    sector_result=read(root/'market-context/result.json')
+                    sector_result_raw=(root/'market-context/result.json').read_bytes()
+                    sector_result=json.loads(sector_result_raw.decode('utf-8'))
                     value=capture(Path(os.environ['GITHUB_WORKSPACE']),root/'market',root/'reading',
                         observed_at=datetime.now(timezone.utc),workflow=request['workflow'],provenance=PUBLIC,credential=key,
-                        company_manifest=LIVE_COMPANIES,sector_result=sector_result,
+                        company_manifest=LIVE_COMPANIES,sector_result=sector_result,sector_result_raw=sector_result_raw,
                         transport=lambda p,q:hithink_stock_reading.request_json(api_key=key,path=p,params=q))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')
