@@ -200,6 +200,10 @@ class Collector:
             return candidates, True
         stock, complete = [], True
         for run in candidates:
+            # Match select_runs' existing production-trigger scope before checking
+            # purpose. Historical push-only trials cannot make production unknown.
+            if run.get("event") not in {"schedule", "workflow_dispatch"}:
+                continue
             jobs = self.api.get(f"actions/runs/{run['id']}/jobs?per_page=100")
             model.check(jobs["total_count"] <= len(jobs["jobs"]), "stock job enumeration incomplete")
             relevant = [j for j in jobs["jobs"] if j["name"] == "stock-reading"
