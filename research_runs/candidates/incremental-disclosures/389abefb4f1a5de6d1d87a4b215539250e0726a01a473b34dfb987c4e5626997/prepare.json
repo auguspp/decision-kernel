@@ -1,0 +1,30 @@
+{
+  "as_of": "2026-09-12T15:42:54.233461Z",
+  "contradiction_or_mapping_warning": null,
+  "current_market_expression": null,
+  "discovery_id": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997",
+  "economic_direction": "已保存公告对公司经济问题的增量尚未解释",
+  "factual_observations": [
+    {
+      "evidence_artifact_ids": [
+        "9ecb6b10-c0d6-5abe-aafc-02f55434725e"
+      ],
+      "statement": "已保存本组公告及其原研究上下文；保存不代表结论被接受。"
+    }
+  ],
+  "known_stop_or_downgrade_condition": "无证据支持经济联系时允许停止；不发明原因，不为测试强行Quick。",
+  "next_discriminating_search": "仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
+  "schema_version": 1,
+  "security_id": "SSE:600036",
+  "source_lane": "CNINFO_INCREMENTAL",
+  "source_lineage": [
+    {
+      "available_at": "2026-09-12T15:42:22.880306Z",
+      "evidence_artifact_id": "9ecb6b10-c0d6-5abe-aafc-02f55434725e",
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/1c0482c80db388d3b59d6514feb8eed2bcb63efe/research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/source.json"
+    }
+  ],
+  "supporting_securities": [],
+  "ticker": "600036",
+  "why_now": "原FIFO选中的新工作项，不是当前价格信号或完整公司更新。"
+}
