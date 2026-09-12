@@ -1,0 +1,32 @@
+diff --git a/src/decision_kernel/runtime/current_state_delivery.py b/src/decision_kernel/runtime/current_state_delivery.py
+--- a/src/decision_kernel/runtime/current_state_delivery.py
++++ b/src/decision_kernel/runtime/current_state_delivery.py
+@@ -430,6 +430,8 @@
+         if type(used) is int:
+             model.check(used + extra_reads + RESEARCH_WORK_API_RESERVE <= MAX_API_CALLS,
+                         "research work read would exhaust publication API reserve")
++        model.check(len(self.sources) + extra_reads <= MAX_SOURCE_FILES,
++                    "research work read would exceed source-file budget")
+ 
+         _, work_files = work_inventory(self.api, work_commit)
+diff --git a/tests/test_current_state_research_work_read.py b/tests/test_current_state_research_work_read.py
+--- a/tests/test_current_state_research_work_read.py
++++ b/tests/test_current_state_research_work_read.py
+@@ -199,6 +199,17 @@
+     assert work.request_path(key) in files
+ 
+ 
++def test_source_file_budget_stops_before_packet_reads(tmp_path):
++    key, files = candidate_files()
++    c, api = collector(tmp_path, files)
++    c.sources = {(f"existing-{i}", CODE): (b"x", {})
++                 for i in range(delivery.MAX_SOURCE_FILES - 3)}
++    with pytest.raises(ValueError, match="source-file budget"):
++        c.research_work(CONFIG)
++    assert not any(row.startswith("file:") for row in api.reads)
++    assert work.request_path(key) in files
++
++
+ @pytest.mark.parametrize("change", [
+     {"mode": "AUTO_PROMOTE"},
+     {"ref": "other"},
