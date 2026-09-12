@@ -20,6 +20,7 @@ research-api = [
 ]
 documents = [
   "pypdf==6.16.2",
+  "pypdfium2==5.8.0",
 ]
 discovery = [
   "beautifulsoup4==4.14.3",
@@ -37,6 +38,7 @@ dev = [
   "openai==3.11.0",
   "pytest==9.1.1",
   "pypdf==6.16.2",
+  "pypdfium2==5.8.0",
   "beautifulsoup4==4.14.3",
   "feedparser==6.0.14",
   "requests==2.34.2",

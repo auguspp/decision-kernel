@@ -25,7 +25,8 @@ RESOURCE_AUTHORIZATION = "https://github.com/auguspp/decision-kernel/issues/297#
 # Known local format gaps may be retained while the original finite FIFO advances.
 # Any unknown, transport, identity, admission, clock or model failure stops this batch.
 LOCAL_SOURCE_GAPS = frozenset({"required body has no text", "required page text unavailable",
-    "required text contains encoding damage", "context exceeds saved executor bound; no clipping"})
+    "required text contains encoding damage", "required page visual review unavailable",
+    "context exceeds saved executor bound; no clipping"})
 
 
 def execute_prepared(*, api, prepared: dict, code_commit: str, output: Path, clock=once.now):
@@ -53,6 +54,9 @@ def execute_prepared(*, api, prepared: dict, code_commit: str, output: Path, clo
     once.require(set(context) == expected_keys and context["source_limitations"] == preparation.LIMITATIONS
                  and packet.research_question == question and packet.prompt_version == version,
                  "unsupported egress shape")
+    from . import disclosure_source_reading as page_reading
+    page_reading.validate_context(context,
+        load_review=page_reading.main_review_loader(api, code_commit, clock))
     digest = executor.public_egress_hash(packet, discovery, context)
     return executor.run_prepared(api=api, code_commit=code_commit, input_source=source,
         expected_key=prepared["expected_key"], approved_egress_hash=digest, output=output, clock=clock)

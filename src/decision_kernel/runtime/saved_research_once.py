@@ -45,7 +45,9 @@ APPROVED_CONTINUATION = {
     "authorization": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088",
 }
 MAX_SOURCE_BYTES = 16 * 1024 * 1024
-MAX_PROMPT_BYTES = 64 * 1024
+# Full saved multi-document packet plus labelled reading representations; still
+# checked before SDK use, including the output schema. Not a daily spending quota.
+MAX_PROMPT_BYTES = 128 * 1024
 MAX_OUTPUT_TOKENS = 6000
 OUTPUT_NAMES = frozenset({"launch.json", "source.json", "preflight.json", "input.json",
     "admission.json", "candidate.json", "validation.json", "funnel.json", "receipt.json",

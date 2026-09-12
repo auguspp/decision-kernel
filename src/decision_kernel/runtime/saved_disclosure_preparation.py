@@ -76,14 +76,14 @@ def captured_bodies(*, archive_raw: bytes, artifact: dict, run: dict) -> dict:
 
 
 def source_context(*, packet_raw: bytes, archive_raw: bytes, artifact: dict, run: dict,
-                   clock=once.now, extract=extract_pdf_text, journal=None) -> tuple[dict, list[dict]]:
+                   clock=once.now, extract=extract_pdf_text, journal=None, requalify=None) -> tuple[dict, list[dict]]:
     """Read all required original bodies; no silent subset, OCR, fetch or new claim."""
     packet = work._packet(packet_raw)
     once.require(packet.prepared_at <= read.clock(run["updated_at"]) <= read.clock(clock()),
                  "packet or saved run is from the future")
     bodies = captured_bodies(archive_raw=archive_raw, artifact=artifact, run=run)
     original = identity._json(packet_raw)
-    reads = []
+    reads, representations = [], []
     for index, evidence in enumerate(original["evidence"], 1):
         event = {"source_locator": evidence["source_locator"], "started_at": clock(),
                  "status": "FAILED", "scope": "LOCAL_SAVED_PDF_READ_NOT_GLOBAL_TOOL_JOURNAL"}
@@ -92,7 +92,7 @@ def source_context(*, packet_raw: bytes, archive_raw: bytes, artifact: dict, run
         try:
             pdf, capture = bodies[evidence["source_locator"]]
             once.require(evidence["pdf_sha256"] == read.sha256(pdf), "packet PDF differs from captured body")
-            once.require(evidence["text_status"] == "EXTRACTED" and evidence["pages"], "required body has no text")
+            once.require((evidence["text_status"] == "EXTRACTED" or requalify is not None) and evidence["pages"], "required body has no text")
             parsed = extract(pdf, max_pdf_bytes=once.MAX_SOURCE_BYTES, max_pages=200,
                              max_extracted_chars=1_000_000)
             pages = [{"page_number": p.page_number, "text": p.text} for p in parsed.pages]
@@ -100,9 +100,16 @@ def source_context(*, packet_raw: bytes, archive_raw: bytes, artifact: dict, run
                          and parsed.text_sha256 == evidence["text_sha256"]
                          and parsed.page_count == evidence["page_count"] and pages == evidence["pages"],
                          "original PDF extraction identity differs")
-            once.require(all(p["text"].strip() for p in pages), "required page text unavailable")
-            once.require(all(not any((ord(c) < 32 and c not in "\n\r\t") or c == "\ufffd"
-                                     for c in p["text"]) for p in pages), "required text contains encoding damage")
+            from . import disclosure_source_reading as page_reading
+            if requalify is not None and not all(page_reading.text_ok(p["text"]) for p in pages):
+                representation = requalify(pdf, evidence)
+                page_reading.validate(representation, evidence)
+                representations.append(representation)
+                event["representation_hash"] = representation["reading_hash"]
+            else:
+                once.require(all(p["text"].strip() for p in pages), "required page text unavailable")
+                once.require(all(not any((ord(c) < 32 and c not in "\n\r\t") or c == "\ufffd"
+                                         for c in p["text"]) for p in pages), "required text contains encoding damage")
             reads.append({"id": "body" + str(index), "identity": evidence["evidence_artifact"]["source_identifier"],
                 "locator": evidence["source_locator"], "authority": "PRIMARY", "kind": "BODY", "succeeded": True,
                 "checked_at": clock(), "body_sha256": evidence["pdf_sha256"],
@@ -114,6 +121,8 @@ def source_context(*, packet_raw: bytes, archive_raw: bytes, artifact: dict, run
     context = {"disclosure_packet": original, "source_limitations": LIMITATIONS,
                "source_capture": {"run_id": run["id"], "head_sha": run["head_sha"],
                                   "artifact_id": artifact["id"], "archive_sha256": read.sha256(archive_raw)}}
+    if representations:
+        context["source_capture"]["page_readings"] = representations
     once.require(len(once.raw(context)) < once.MAX_PROMPT_BYTES - 16000,
                  "context exceeds saved executor bound; no clipping")
     return context, reads
@@ -144,7 +153,7 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
                "formal_research_started": False, "automatic_retry": False, **read.AUTHORITY}
     retain, reserved, packet_raw = None, None, None
     input_written = False
-    journal = []
+    journal, representation_events = [], []
     try:
         once.require(mutable_ref(api, "main") == code_commit, "main moved")
         packet_raw = identity._checked_source(packet_source, lambda s: api.file(s["path"], s["ref"]))
@@ -174,8 +183,12 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
             from . import disclosure_continuation
             continuation = disclosure_continuation.check(api=api, code_commit=code_commit,
                 request_source=continuation_request_source, new_packet_raw=packet_raw, checked_at=clock())
+        from . import disclosure_source_reading as page_reading
+        review_loader = page_reading.main_review_loader(api, code_commit, clock)
         context, reads = source_context(packet_raw=packet_raw, archive_raw=body_raw,
-                                       artifact=body_artifact, run=run, clock=clock, journal=journal)
+                                       artifact=body_artifact, run=run, clock=clock, journal=journal,
+                                       requalify=lambda pdf, evidence: page_reading.represent(
+                                           pdf, evidence, load_review=review_loader, diagnostics=representation_events))
         if continuation is not None:
             context["continuation_context"] = continuation["public_context"]
             receipt["continuation_permission"] = continuation["permission_receipt"]
@@ -268,5 +281,6 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
         receipt.update(finished_at=clock(), retained_files=list(retain.writes) if retain else [],
                        mutation_uncertain=bool(retain and retain.uncertain))
         (output / "preflight-read-events.json").write_bytes(once.raw(journal))
+        (output / "source-reading-events.json").write_bytes(once.raw(representation_events))
         (output / "preparation-receipt.json").write_bytes(once.raw(receipt))
     return receipt
