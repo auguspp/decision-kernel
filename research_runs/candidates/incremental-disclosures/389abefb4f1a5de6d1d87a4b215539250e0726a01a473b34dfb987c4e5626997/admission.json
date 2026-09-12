@@ -1,0 +1,39 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-12T15:43:00.108098+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "494614957cd3acf7340e117abb90f288dba325be3b74c4180e2b9c9ad70a2ba5",
+    "execution_id": "saved-disclosure-389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997"
+  },
+  "finished_at": "2026-09-12T15:43:00.564611+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": "9549ff07855aef4beb8c16f9862d038a6b4eb5c9193ee203b5bf7c4bf4371ca2",
+  "input_file_sha256": "eb8a51f1da2ad5e039303780c31eed09c6bb2f71edf5ae711b564e12e4b64caf",
+  "input_source": {
+    "git_blob": "2a3fa626988ad728d2c87a183ab12cce8d81df4a",
+    "path": "research_runs/candidates/incremental-disclosures/389abefb4f1a5de6d1d87a4b215539250e0726a01a473b34dfb987c4e5626997/input.json",
+    "purpose": "input.json",
+    "ref": "81295fb73eb2f3a2a949feadbb0c9d11e24398ef",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "eb8a51f1da2ad5e039303780c31eed09c6bb2f71edf5ae711b564e12e4b64caf"
+  },
+  "investment_authority": "NONE",
+  "preflight_sha256": "f29cb678c9c14ff22512a945ec26195b29931f9e0b1c725ecfc28b14f64446dc",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_authority": "NONE",
+  "research_execution_allowed": true,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}
