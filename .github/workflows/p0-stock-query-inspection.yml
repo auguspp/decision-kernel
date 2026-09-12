@@ -27,20 +27,15 @@ jobs:
           from pathlib import Path
           p = Path('src/decision_kernel/runtime/current_state_delivery.py')
           source = p.read_text()
-          old = '''        stock, complete = [], True
-                  for run in candidates:
-                      jobs = self.api.get(f"actions/runs/{run['id']}/jobs?per_page=100")'''
-          old = old.replace('\n        ', '\n')
-          new = '''        stock, complete = [], True
-                  for run in candidates:
-                      # Match select_runs' existing production-trigger scope before checking
-                      # purpose. Historical push-only trials cannot make production unknown.
-                      if run.get("event") not in {"schedule", "workflow_dispatch"}:
-                          continue
-                      jobs = self.api.get(f"actions/runs/{run['id']}/jobs?per_page=100")'''
-          new = new.replace('\n        ', '\n')
-          assert source.count(old) == 1
-          p.write_text(source.replace(old, new))
+          needle = '        stock, complete = [], True\n        for run in candidates:\n'
+          addition = ''.join([
+              "            # Match select_runs' existing production-trigger scope before checking\n",
+              '            # purpose. Historical push-only trials cannot make production unknown.\n',
+              '            if run.get("event") not in {"schedule", "workflow_dispatch"}:\n',
+              '                continue\n',
+          ])
+          assert source.count(needle) == 1
+          p.write_text(source.replace(needle, needle + addition))
           PY
           test "$(git hash-object src/decision_kernel/runtime/current_state_delivery.py)" = '11e3e69b31bb33043e80a16a2f3342574445b3aa'
       - name: Install exact repository test dependencies
