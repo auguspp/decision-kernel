@@ -25,6 +25,8 @@ MAX_RUNS = 20
 MAX_API_CALLS = 180
 MAX_SOURCE_FILES = 60
 MAX_RETAINED_OUTPUT = 128 * 1024 * 1024
+MAX_RESEARCH_WORK_ITEMS = 8
+RESEARCH_WORK_API_RESERVE = 12
 REGISTRY_PATH = "current_state/registry.json"
 
 
@@ -379,6 +381,174 @@ class Collector:
         result["query_scope"] = f"newest {MAX_RUNS} runs of exact workflow on main; not an all-history audit"
         return result
 
+    def research_work(self, config: dict) -> dict:
+        """Read retained disclosure Research work without promoting it to current attention.
+
+        The work ref is data-only. Existing packet/input/candidate validators establish
+        identity and Funnel shape only; this reader does not grant semantic acceptance,
+        Human attention, continuation authority or investment authority.
+        """
+        from decision_kernel.research_workflow_v1 import ResearchFunnelResult
+        from . import incremental_disclosure as work
+        from .external_research_execution import (
+            ExternalResearchInputPacket, ExternalResearchValidationResult,
+        )
+        from .external_research_identity import _json
+        from .incremental_disclosure_intake import work_inventory
+
+        expected = {"ref", "prefix", "mode", "max_items"}
+        model.check(isinstance(config, dict) and set(config) == expected,
+                    "research work read config differs")
+        model.check(config["ref"] == work.WORK_REF and config["prefix"] == work.WORK_PREFIX,
+                    "research work read points outside approved work ref")
+        model.check(config["mode"] == "RETAINED_DISCLOSURE_CANDIDATE_READ_ONLY",
+                    "research work read mode differs")
+        model.check(type(config["max_items"]) is int and 1 <= config["max_items"] <= MAX_RESEARCH_WORK_ITEMS,
+                    "research work read item bound invalid")
+
+        ref = self.api.get("git/ref/heads/" + work.WORK_REF)["object"]
+        model.check(ref.get("type") == "commit" and model.SHA.fullmatch(ref.get("sha", "")) is not None,
+                    "research work ref is not a pinned commit")
+        work_commit = ref["sha"]
+        tree = self.api.get("git/trees/" + work_commit + "?recursive=1")
+        model.check(tree.get("truncated") is False and isinstance(tree.get("tree"), list),
+                    "research work tree incomplete")
+
+        prefix = work.WORK_PREFIX
+        rows = {row["path"]: row for row in tree["tree"] if row.get("type") == "blob"}
+        keys: dict[str, set[str]] = {}
+        for path in rows:
+            if not path.startswith(prefix):
+                continue
+            tail = path[len(prefix):].split("/")
+            model.check(len(tail) == 2, "research work path outside one request")
+            key, name = tail
+            work.request_path(key)
+            keys.setdefault(key, set()).add(name)
+        model.check(len(keys) <= config["max_items"], "research work item bound exceeded")
+
+        extra_reads = len(keys)  # work_inventory reads every reserved packet exactly once.
+        for names in keys.values():
+            if "candidate.json" in names or "input.json" in names:
+                extra_reads += int("input.json" in names) + int("candidate.json" in names) + int("funnel.json" in names)
+            if "failure.json" in names:
+                extra_reads += 1
+        used = getattr(self.api, "calls", None)
+        if type(used) is int:
+            model.check(used + extra_reads + RESEARCH_WORK_API_RESERVE <= MAX_API_CALLS,
+                        "research work read would exhaust publication API reserve")
+
+        _, work_files = work_inventory(self.api, work_commit)
+
+        def retained(path: str, raw: bytes) -> dict:
+            row = rows[path]
+            model.check(row.get("mode") == "100644" and row.get("size") == len(raw)
+                        and row.get("sha") == model.blob_sha(raw), "research work blob differs")
+            stored = self.retain("sources/git/" + row["sha"] + "/" + Path(path).name, raw)
+            return {"repository": model.REPOSITORY, "ref": work_commit, "path": path,
+                    "git_blob": row["sha"], **stored}
+
+        def fetched(path: str) -> tuple[bytes, dict]:
+            raw = self.api.file(path, work_commit)
+            return raw, retained(path, raw)
+
+        items = []
+        for key in sorted(keys):
+            names = keys[key]
+            packet_path = work.request_path(key)
+            model.check(packet_path in work_files and work_files[packet_path],
+                        "research work reserved packet unavailable")
+            packet_raw = work_files[packet_path]
+            packet_source = retained(packet_path, packet_raw)
+            has_candidate = "candidate.json" in names or "input.json" in names
+            has_failure = "failure.json" in names
+            model.check(not (has_candidate and has_failure),
+                        "research work item contains both candidate and pre-execution failure")
+
+            if has_candidate:
+                model.check({"input.json", "candidate.json"}.issubset(names),
+                            "research work candidate lacks input or candidate")
+                base = prefix + key + "/"
+                input_raw, input_source = fetched(base + "input.json")
+                candidate_raw, candidate_source = fetched(base + "candidate.json")
+                input_model = ExternalResearchInputPacket.model_validate(_json(input_raw))
+                outcome = work.describe_outcome(reserved_packet=packet_raw,
+                                                input_raw=input_raw, candidate_raw=candidate_raw)
+                validation = ExternalResearchValidationResult.model_validate(outcome["validation"])
+                sources = {"packet": packet_source, "input": input_source, "candidate": candidate_source}
+                if "funnel.json" in names:
+                    funnel_raw, funnel_source = fetched(base + "funnel.json")
+                    saved_funnel = ResearchFunnelResult.model_validate(_json(funnel_raw))
+                    model.check(validation.funnel_result is not None and saved_funnel == validation.funnel_result,
+                                "saved Funnel differs from original candidate revalidation")
+                    sources["funnel"] = funnel_source
+                if validation.funnel_result is None:
+                    status = "VALIDATED_EXECUTION_GAP"
+                    terminal_state = terminal_reason = None
+                else:
+                    status = "VALIDATED_FUNNEL_CANDIDATE"
+                    terminal_state = validation.funnel_result.terminal_state.value
+                    terminal_reason = validation.funnel_result.terminal_reason
+                items.append({"assessment_input_hash": key, "case_id": input_model.case_id,
+                              "ticker": input_model.ticker, "status": status,
+                              "validation_status": validation.status.value,
+                              "completion": validation.completion.value,
+                              "terminal_state": terminal_state, "terminal_reason": terminal_reason,
+                              "finished_at": candidate_raw and _json(candidate_raw)["receipt"]["finished_at"],
+                              "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+                              "registered_current_handoff": False,
+                              **model.AUTHORITY, "sources": sources})
+                continue
+
+            if has_failure:
+                failure_raw, failure_source = fetched(prefix + key + "/failure.json")
+                failure = _json(failure_raw)
+                model.check(failure.get("schema_version") == 1
+                            and failure.get("record_kind") == "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT"
+                            and failure.get("assessment_input_hash") == key,
+                            "research work failure identity differs")
+                model.check(failure.get("research_execution") == "NOT_EXECUTED"
+                            and failure.get("funnel_status") == "NOT_REACHED"
+                            and failure.get("formal_research_budget_used", 0) == 0,
+                            "research work pre-execution failure gained Research state")
+                model.check(all(failure.get(k, "NONE") == "NONE" for k in model.AUTHORITY),
+                            "research work failure gained authority")
+                model.check(failure.get("packet_blob") == model.blob_sha(packet_raw)
+                            and failure.get("packet_sha256") == model.sha256(packet_raw),
+                            "research work failure packet binding differs")
+                packet = work._packet(packet_raw)
+                items.append({"assessment_input_hash": key,
+                              "case_id": failure.get("case_id") or packet.stock_code,
+                              "ticker": packet.stock_code, "status": "PRE_EXECUTION_FAILURE",
+                              "failure_status": failure.get("status"),
+                              "research_execution": "NOT_EXECUTED", "terminal_state": None,
+                              "finished_at": failure.get("finished_at"),
+                              "semantic_acceptance": "NOT_APPLICABLE_FAILURE_NOT_RESEARCH",
+                              "registered_current_handoff": False,
+                              **model.AUTHORITY,
+                              "sources": {"packet": packet_source, "failure": failure_source}})
+                continue
+
+            packet = work._packet(packet_raw)
+            items.append({"assessment_input_hash": key, "case_id": packet.stock_code,
+                          "ticker": packet.stock_code, "status": "RETAINED_NO_RESEARCH_RESULT",
+                          "terminal_state": None, "finished_at": None,
+                          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+                          "registered_current_handoff": False,
+                          **model.AUTHORITY, "sources": {"packet": packet_source}})
+
+        def sort_key(item: dict):
+            stamp = item.get("finished_at")
+            return (model.clock(stamp) if stamp else datetime.min.replace(tzinfo=timezone.utc),
+                    item["assessment_input_hash"])
+        items.sort(key=sort_key, reverse=True)
+        counts = {name: sum(item["status"] == name for item in items) for name in (
+            "VALIDATED_FUNNEL_CANDIDATE", "VALIDATED_EXECUTION_GAP",
+            "PRE_EXECUTION_FAILURE", "RETAINED_NO_RESEARCH_RESULT")}
+        return {"status": "READ_OK", "work_ref": work.WORK_REF, "work_commit": work_commit,
+                "mode": config["mode"], "item_count": len(items), "counts": counts, "items": items,
+                "meaning": "READ_ONLY_RETAINED_WORK_NOT_SEMANTIC_ACCEPTANCE_OR_HANDOFF_REGISTRATION"}
+
     def research(self, registry: dict) -> dict:
         records, packages, gaps, entries = [], [], [], []
         configuration = None
@@ -431,11 +601,24 @@ class Collector:
                                 "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION"})
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 gaps.append({"id": record["id"], "status": "RESEARCH_REFERENCE_REJECTED", "error_type": type(exc).__name__})
+        work_config = registry.get("research_work_read")
+        if work_config is None:
+            candidate_work = {"status": "NOT_CONFIGURED",
+                              "meaning": "NO_AUTODISCOVERED_RESEARCH_WORK_READ_REQUESTED"}
+        else:
+            try:
+                candidate_work = self.research_work(work_config)
+            except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
+                candidate_work = {"status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
+                                  "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED"}
+                gaps.append({"status": "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET",
+                             "error_type": type(exc).__name__})
         return {"production_configuration": configuration, "production_inputs": packages,
-                "records": records, "handoffs": project_registered_handoffs(entries, self.source), "gaps": gaps,
+                "records": records, "candidate_work": candidate_work,
+                "handoffs": project_registered_handoffs(entries, self.source), "gaps": gaps,
                 "confirmed_actions": [r for r in records if r["use"] == "CONFIRMED_ACTION_CHECKPOINT"],
                 "confirmed_action_scope": "EXPLICIT_REGISTRY_ONLY_NOT_PROOF_NO_TRADES_OCCURRED",
-                "scope": "EXPLICIT_CONFIG_AND_REGISTERED_LINEAGE_NOT_EXHAUSTIVE_RESEARCH_COVERAGE"}
+                "scope": "EXPLICIT_CONFIG_REGISTERED_LINEAGE_AND_OPTED_IN_RETAINED_WORK_NOT_EXHAUSTIVE_RESEARCH_COVERAGE"}
 
     def collect(self, refresh: dict) -> dict:
         started = self.now()
