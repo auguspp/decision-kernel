@@ -1,0 +1,74 @@
+name: p0-stock-context-retention-construction
+on:
+  push:
+    branches: [fix/p0-stock-sector-raw-retention-20260912]
+    paths: [.github/workflows/p0-stock-context-retention-construction.yml]
+permissions:
+  contents: write
+concurrency:
+  group: p0-stock-context-retention-construction
+  cancel-in-progress: false
+jobs:
+  focused:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/fix/p0-stock-sector-raw-retention-20260912' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: fix/p0-stock-sector-raw-retention-20260912
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Apply exact reviewed source patch
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          p = Path('.github/scripts/capture-stock-reading.py')
+          raw = p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest() == '3a2f7bcd05f2311ce393fcaf172ecc3da59b5651'
+          source = raw.decode('utf-8')
+          changes = [
+            ("            sector_result=None):\n    # Historical library", "            sector_result=None, sector_result_raw=None):\n    # Historical library"),
+            ("    # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.\n    company_manifest = company_scope(company_manifest)\n", "    # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.\n    company_manifest = company_scope(company_manifest)\n    # The live CLI supplies the original bound artifact bytes. Do not reformat\n    # them: current-state compares this retained copy byte-for-byte. Library\n    # callers supplying only a dict retain their historical canonical encoding.\n    if sector_result_raw is not None:\n        if sector_result is None or not isinstance(sector_result_raw, bytes):\n            raise ValueError('raw Sector context requires bytes and a parsed result')\n        if canonical_hash(json.loads(sector_result_raw.decode('utf-8'))) != canonical_hash(sector_result):\n            raise ValueError('raw Sector context differs from the selected parsed result')\n"),
+            ("    if sector_result is not None:\n        write(output/'inputs/sector-result.json', sector_result)\n", "    if sector_result is not None:\n        if sector_result_raw is None:\n            write(output/'inputs/sector-result.json', sector_result)\n        else:\n            (output/'inputs/sector-result.json').write_bytes(sector_result_raw)\n"),
+            ("                    sector_result=read(root/'market-context/result.json')\n", "                    sector_result_raw=(root/'market-context/result.json').read_bytes()\n                    sector_result=json.loads(sector_result_raw.decode('utf-8'))\n"),
+            ("                        company_manifest=LIVE_COMPANIES,sector_result=sector_result,\n", "                        company_manifest=LIVE_COMPANIES,sector_result=sector_result,sector_result_raw=sector_result_raw,\n"),
+          ]
+          for old, new in changes:
+              assert source.count(old) == 1, repr(old)
+              source = source.replace(old, new, 1)
+          p.write_text(source, encoding='utf-8')
+          PY
+          python -m py_compile .github/scripts/capture-stock-reading.py tests/test_stock_sector_raw_retention.py
+          git diff --check
+      - name: Install existing test environment
+        run: python -m pip install -e '.[dev]'
+      - name: Run offline capture and replay regressions
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/stock-context-proof"
+          python -m pytest -q tests/test_stock_sector_raw_retention.py tests/test_stock_market_expression.py tests/test_stock_radar_capture.py tests/test_stock_company_coverage_v2.py tests/test_stock_reading_calendar.py | tee "$RUNNER_TEMP/stock-context-proof/focused.log"
+      - name: Commit only reviewed production change and retain source snapshot
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote origin refs/heads/fix/p0-stock-sector-raw-retention-20260912 | cut -f1)" = "$GITHUB_SHA"
+          git diff -- .github/scripts/capture-stock-reading.py > "$RUNNER_TEMP/stock-context-proof/patch.diff"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/scripts/capture-stock-reading.py
+          git commit -m 'fix: preserve exact bound Sector bytes in Stock capture'
+          git push origin HEAD:fix/p0-stock-sector-raw-retention-20260912
+          git rev-parse HEAD > "$RUNNER_TEMP/stock-context-proof/commit.txt"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/stock-context-proof/repository.zip"
+          sha256sum "$RUNNER_TEMP/stock-context-proof/repository.zip" > "$RUNNER_TEMP/stock-context-proof/repository.sha256"
+      - name: Retain construction-only offline proof
+        uses: actions/upload-artifact@v7
+        with:
+          name: stock-context-retention-construction-${{ github.run_id }}
+          path: ${{ runner.temp }}/stock-context-proof/
+          retention-days: 7
+          if-no-files-found: error
