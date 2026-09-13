@@ -15,6 +15,10 @@ on:
         description: Use the reviewed main source-recovery request; never reset first-baseline history
         type: boolean
         default: false
+      prepare-sources:
+        description: Only preflight the two explicitly authorized failed sources; no model or work writes
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -28,6 +32,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      !(github.event_name == 'workflow_dispatch' && inputs.prepare-sources) &&
       (github.event_name == 'workflow_dispatch' ||
        (github.event.workflow_run.name == 'hithink-stock-dump-trial' &&
         github.event.workflow_run.conclusion == 'success' &&
@@ -72,5 +77,48 @@ jobs:
         with:
           name: stock-business-research-${{ github.run_id }}-${{ github.run_attempt }}
           path: run-output/
+          if-no-files-found: warn
+          retention-days: 30
+
+  prepare-stock-sources:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event_name == 'workflow_dispatch' && inputs.prepare-sources
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      actions: read
+      issues: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Install existing source dependencies only
+        run: python -m pip install -e '.[documents,feeds]'
+      - name: Check full sources without Research launch or model credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
+          RECOVER_SOURCES: ${{ inputs.recover-sources }}
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          extra=()
+          if [ "$RECOVER_SOURCES" = true ]; then extra+=(--recover-sources); fi
+          python -m decision_kernel.runtime.stock_research_host \
+            --source-run-id "$SOURCE_STOCK_RUN" --code-commit "$GITHUB_SHA" \
+            --output source-output --prepare-sources "${extra[@]}"
+      - name: Preserve complete source preflight and partial failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stock-source-preparation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: source-output/
           if-no-files-found: warn
           retention-days: 30
