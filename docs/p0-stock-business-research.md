@@ -35,8 +35,10 @@ version. An old annual report reissued later cannot displace a newer half-year
 period. Summary titles do not count as full business reports. Ambiguity, unknown
 or future publication times/periods are source gaps.
 
-Capture the selected full report and ALL same/later-published disclosures in
-that inventory, including risk announcements. The bound is 32 required bodies,
+Capture ALL disclosures from the earliest full version of the selected reporting
+period through that inventory, including intervening risks and prior report
+versions. The latest report version is labelled explicitly; a later correction
+does not reset the inventory anchor or erase earlier risk disclosures. The bound is 32 required bodies,
 not a bullish headline filter. Original PDF bytes, original extracted pages,
 decoded query responses and partial process records stay in the original run
 artifact. Decoded API JSON is not labelled HTTP wire bytes. The full declared

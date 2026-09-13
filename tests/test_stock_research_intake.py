@@ -99,3 +99,10 @@ def test_workflow_reuses_stock_successor_and_original_publication():
     publisher=(root/'.github/workflows/current-state-read-entry.yml').read_text()
     assert 'stock-business-research' in publisher and 'saved-disclosure-research' in publisher
     assert 'decision_kernel.runtime.current_state_delivery' in publisher
+
+
+def test_original_default_byte_bound_is_resolved_at_call_time(tmp_path,monkeypatch):
+    monkeypatch.setattr(once,'MAX_PROMPT_BYTES',1)
+    with pytest.raises(ValueError,match='model input byte budget'):
+        once.model_call('pre',{},None,tmp_path,[])
+    assert not list(tmp_path.iterdir())

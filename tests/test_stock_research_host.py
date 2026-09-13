@@ -145,3 +145,39 @@ def test_permission_change_before_start_does_not_capture_or_create(tmp_path,monk
     api.comment['body']='Changed'
     result=host.run_item(**args)
     assert result['status']=='SOURCE_OR_INPUT_PREPARATION_INCOMPLETE' and not writes and not captures and not calls
+
+
+@pytest.mark.parametrize('scenario,count,status',[
+    ('all_complete',4,'COMPLETED'),('first_gap',4,'BATCH_INCOMPLETE'),('uncertain',1,'BATCH_INCOMPLETE')])
+def test_batch_preserves_all_planned_issuers_and_stops_only_on_uncertain_mutation(tmp_path,monkeypatch,scenario,count,status):
+    # Batch-control fixture only: original Stock replay is separately exercised
+    # against the actual retained artifact; this does not manufacture its proof.
+    args,api,_,_,_=setup_host(tmp_path,monkeypatch)
+    original_get=api.get
+    origin={'id':42,'head_sha':'d'*40}
+    artifact={'name':'stock-reading-42-1','id':43}
+    def get(path):
+        if path=='actions/runs/42':return origin
+        if path=='actions/runs/42/artifacts?per_page=100':return {'total_count':1,'artifacts':[artifact]}
+        return original_get(path)
+    monkeypatch.setattr(api,'get',get)
+    api.archive=lambda _:b'synthetic archive never a live source'
+    monkeypatch.setattr(host.reading,'run_identity',lambda *_a,**_k:None)
+    monkeypatch.setattr(host.reading,'select_artifact',lambda *_a:artifact)
+    monkeypatch.setattr(host.reading,'unpack_archive',lambda *_a:{})
+    monkeypatch.setattr(host.reading,'concise_run',lambda value:value)
+    codes=['600184.SH','300183.SZ','603353.SH','300711.SZ']
+    plan={'items':[{'thscode':code} for code in codes], 'excluded':[{'thscode':'600967.SH'}],
+          'projection_hash':'e'*64,'market_session':'2026-09-11'}
+    monkeypatch.setattr(host.intake,'plan',lambda *_a:plan)
+    called=[]
+    def run_one(**kw):
+        called.append(kw['item']['thscode'])
+        failed=len(called)==1 and scenario!='all_complete'
+        return {'thscode':called[-1], 'status':'VALIDATED_EXECUTION_GAP' if failed else 'VALIDATED_FUNNEL_CANDIDATE',
+                'mutation_uncertain':failed and scenario=='uncertain'}
+    result=host.consume(api=api,code=args['code'],source_run_id=42,output=tmp_path/'batch',run_one=run_one)
+    assert result['status']==status and called==codes[:count]
+    assert result['planned_issuers']==codes and result['unattempted_issuers']==codes[count:]
+    assert result['excluded']==plan['excluded']
+    assert json.loads((tmp_path/'batch'/'batch-receipt.json').read_bytes())==result

@@ -38,7 +38,7 @@ def test_summaries_not_full_reports_and_newest_version_selected():
     b=row('b','2026年半年度报告（修订版）','2026-08-30T00:00:00+08:00')
     summary=row('summary','2026年半年度报告摘要','2026-08-31T00:00:00+08:00')
     selected,items=sources.choose(batch(a,b,summary),checked_at=NOW)
-    assert selected==b and items==[b,summary]
+    assert selected==b and items==[a,b,summary]
 
 
 @pytest.mark.parametrize('rows',[
@@ -126,6 +126,16 @@ def test_same_pdf_alternate_representation_receives_original_locator(tmp_path,mo
 
 def test_finite_prompt_bound_defaults_and_original_one_shot_guard():
     import inspect
-    assert inspect.signature(once.model_call).parameters['max_prompt_bytes'].default==128*1024
+    assert inspect.signature(once.model_call).parameters['max_prompt_bytes'].default is None
+    assert once.MAX_PROMPT_BYTES==128*1024
     for changed in ({'ticker':'600184'},{'schema_version':2}):
         with pytest.raises((ValueError,KeyError)): once.checked_request(changed)
+
+
+def test_report_revision_does_not_erase_intervening_risk():
+    original=row('original','2026年半年度报告')
+    risk=row('risk','重大诉讼及风险公告','2026-09-11T00:00:00+08:00')
+    revision=row('revision','2026年半年度报告（修订版）','2026-09-12T00:00:00+08:00')
+    latest, selected=sources.choose(batch(original,risk,revision),checked_at=NOW)
+    assert latest==revision
+    assert [r.announcement_id for r in selected]==['original','risk','revision']

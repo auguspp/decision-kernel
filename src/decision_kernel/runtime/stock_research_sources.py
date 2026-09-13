@@ -19,7 +19,7 @@ from . import current_state as reading
 CONTEXT_BYTES = 448 * 1024
 REPORT = re.compile(r"(20\d{2})年(半年度|年度)报告(?:[（(].*[）)])?\Z")
 SCOPE = ("CNINFO latest full annual/half-year report in a coherent 400-day query, "
-         "and ALL disclosures dated on/after that report within the same query. "
+         "and ALL disclosures dated on/after the earliest full version of that reporting period within the same query. "
          "Not all issuer channels or full company Research. Full required text is "
          "supplied without clipping. Parsed tables and issuer claims are not truth "
          "certification. Original PDFs and decoded query returns remain in this run artifact. "
@@ -47,7 +47,9 @@ def choose(batch, *, checked_at: str):
     matches = [row for row in current if row.published_at == latest]
     once.require(len(matches) == 1, "latest business report ambiguous")
     report = matches[0]
-    selected = sorted((r for r in rows if r.published_at >= report.published_at),
+    # A revised report must not erase risks disclosed since its original version.
+    inventory_anchor = min(row.published_at for row in current)
+    selected = sorted((r for r in rows if r.published_at >= inventory_anchor),
                       key=lambda r: (r.published_at, r.announcement_id))
     once.require(0 < len(selected) <= 32, "required issuer bodies exceed finite capture capacity")
     return report, selected
@@ -90,7 +92,9 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
             "start_date": batch.start_date.isoformat(), "end_date": batch.end_date.isoformat(),
             "checked_at": inventory_end,
             "announcements": [{**asdict(row), "published_at": row.published_at.isoformat()} for row in batch.announcements],
-            "report_id": report.announcement_id, "selected_ids": [r.announcement_id for r in selected]}
+            "report_id": report.announcement_id,
+            "post_report_inventory_anchor": min(r.published_at for r in selected).isoformat(),
+            "selected_ids": [r.announcement_id for r in selected]}
         (output / "inventory.json").write_bytes(once.raw(inventory))
         documents = []
         for index, row in enumerate(selected, 1):

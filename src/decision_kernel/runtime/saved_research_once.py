@@ -251,8 +251,11 @@ def admitted_output_type(output_type, evidence_ids):
     return AdmittedOutput
 
 
-def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=MAX_PROMPT_BYTES):
+def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None):
     """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
+    # Resolve the unchanged default at call time; explicit Stock opt-in is separate.
+    if max_prompt_bytes is None:
+        max_prompt_bytes = MAX_PROMPT_BYTES
     require(type(max_prompt_bytes) is int and MAX_PROMPT_BYTES <= max_prompt_bytes <= 512 * 1024,
             "unsupported model request byte bound")
     body = raw(context).decode()
