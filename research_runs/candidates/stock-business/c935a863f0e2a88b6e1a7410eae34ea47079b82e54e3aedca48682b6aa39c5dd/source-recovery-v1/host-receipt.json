@@ -1,0 +1,19 @@
+{
+  "automatic_retry": false,
+  "error_code": "full business context too large; no clipping",
+  "error_type": "TrialError",
+  "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-recovery-v1",
+  "finished_at": "2026-09-13T10:24:53.427011+00:00",
+  "formal_research_started": false,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "SOURCE_PREPARATION",
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T10:24:16.629215+00:00",
+  "status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+  "thscode": "300711.SZ"
+}
