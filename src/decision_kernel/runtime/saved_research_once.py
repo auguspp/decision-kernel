@@ -251,41 +251,64 @@ def admitted_output_type(output_type, evidence_ids):
     return AdmittedOutput
 
 
-def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None):
-    """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
-    # Resolve the unchanged default at call time; explicit Stock opt-in is separate.
-    if max_prompt_bytes is None:
-        max_prompt_bytes = MAX_PROMPT_BYTES
-    require(type(max_prompt_bytes) is int and MAX_PROMPT_BYTES <= max_prompt_bytes <= 512 * 1024,
-            "unsupported model request byte bound")
+def response_parameters(body, output_format):
+    """One original SDK argument set, shared with the network-free Pre preview."""
+    return dict(model=MODEL, instructions=SYSTEM, input=[{"role": "user", "content": body}],
+        text={"format": output_format}, tools=[], store=False, max_output_tokens=MAX_OUTPUT_TOKENS)
+
+
+def model_request(context, output_type, *, max_prompt_bytes):
+    """Original byte/schema checks and request parameters, without a send or key."""
     body = raw(context).decode()
     require(len(SYSTEM.encode()) + len(body.encode()) <= max_prompt_bytes, "model input byte budget")
     request_type = admitted_output_type(output_type, context.get("evidence_ids"))
     schema = request_type.model_json_schema()
     require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(schema)) <= max_prompt_bytes, "model input byte budget")
-    from openai import OpenAI, DefaultHttpxClient
     from openai.lib._parsing._responses import type_to_text_format_param
     # Reuse the pinned SDK's SAME strict wire schema, but do not ask it to
     # parse our application model before public output/usage can be retained.
     output_format = type_to_text_format_param(request_type)
     require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(output_format)) <= max_prompt_bytes,
             "model input byte budget")
+    return body, schema, output_format, response_parameters(body, output_format)
+
+
+def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None, bound_context=None):
+    """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
+    # Resolve the unchanged default at call time; explicit Stock opt-in is separate.
+    if bound_context is None:
+        if max_prompt_bytes is None:
+            max_prompt_bytes = MAX_PROMPT_BYTES
+        require(type(max_prompt_bytes) is int and MAX_PROMPT_BYTES <= max_prompt_bytes <= 512 * 1024,
+                "unsupported model request byte bound")
+    else:
+        from .stock_full_input_bridge import require_bound
+        require(max_prompt_bytes is None, "full input cannot override shared request limits")
+        require_bound(bound_context).check_plain(context["public_context"])
+        from .stock_full_input import REQUEST_BYTES
+        max_prompt_bytes = REQUEST_BYTES
+    body, schema, output_format, parameters = model_request(context, output_type, max_prompt_bytes=max_prompt_bytes)
+    from openai import OpenAI, DefaultHttpxClient
     record = {"stage": stage, "started_at": now(), "requested_model": MODEL,
               "input_sha256": sha(body.encode()), "status": "REQUEST_STARTED", "max_output_tokens": MAX_OUTPUT_TOKENS,
               "reference_contract": "ADMITTED_EVIDENCE_IDS_V1", "system_sha256": sha(SYSTEM.encode()),
               "output_model_schema_sha256": sha(raw(schema)),
               "output_format_sha256": sha(raw(output_format)), "phase": "RESPONSE",
               "response_received": False, "output_text_retained": False}
+    client_options = {}
+    if bound_context is not None:
+        record["full_input"] = bound_context.record()
+        record["pre_send"] = {}
+        client_options = {"trust_env": False, "event_hooks": {"request": [bound_context.send_hook(
+            stage, context, output_type, parameters, record["pre_send"])]}}
     usage.append(record)
     # Only explicitly prepared public context is supplied; no repo/environment scan.
     with (out / (stage + "-model-input.json")).open("xb") as f:
         f.write(body.encode())
     try:
         with OpenAI(api_key=os.environ["SUB2API_API_KEY"], base_url=BASE_URL, max_retries=0,
-                    timeout=180, http_client=DefaultHttpxClient(follow_redirects=False)) as client:
-            with client.responses.stream(model=MODEL, instructions=SYSTEM,
-                    input=[{"role": "user", "content": body}], text={"format": output_format},
-                    tools=[], store=False, max_output_tokens=MAX_OUTPUT_TOKENS) as stream:
+                    timeout=180, http_client=DefaultHttpxClient(follow_redirects=False, **client_options)) as client:
+            with client.responses.stream(**parameters) as stream:
                 response = stream.get_final_response()
         # Retain only output text/usage, never reasoning items or private CoT.
         text = response.output_text
@@ -308,8 +331,21 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         record["finished_at"] = now()
 
 
-def research(packet, discovery, context, out, *, call=None, clock=now):
+def pre_prompt(packet, discovery, context):
+    """The original complete Pre prompt; also used before a full-input launch."""
+    return {"stage": "PRE", "binding": {"discovery_id": discovery.discovery_id,
+        "as_of": packet.research_cutoff.isoformat()}, "question": packet.research_question,
+        "known_unknowns": packet.known_unknowns, "discovery_observation": {
+            "ticker": discovery.ticker, "source_lane": discovery.source_lane, "why_now": discovery.why_now,
+            "factual_observations": [v.model_dump(mode="json") for v in discovery.factual_observations]},
+        "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts]}
+
+
+def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None):
     """Original stage models and transitions; never force a route or repair output."""
+    if call is None and bound_context is not None:
+        from functools import partial
+        call = partial(model_call, bound_context=bound_context)
     call = call or model_call
     began, monotonic_start = clock(), time.monotonic()
     events, usage = [], []
@@ -324,13 +360,12 @@ def research(packet, discovery, context, out, *, call=None, clock=now):
         if spec.purpose == "MODEL_CONTEXT":
             event("OTHER_READ", locator(spec.model_dump()), "SUCCEEDED", "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.")
     try:
-        require(sha(raw(context)) == next(s.sha256 for s in packet.source_refs if s.purpose == "MODEL_CONTEXT"), "egress context changed")
-        prompt = {"stage": "PRE", "binding": {"discovery_id": discovery.discovery_id,
-            "as_of": packet.research_cutoff.isoformat()}, "question": packet.research_question,
-            "known_unknowns": packet.known_unknowns, "discovery_observation": {
-                "ticker": discovery.ticker, "source_lane": discovery.source_lane, "why_now": discovery.why_now,
-                "factual_observations": [v.model_dump(mode="json") for v in discovery.factual_observations]},
-            "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts]}
+        if bound_context is None:
+            require(sha(raw(context)) == next(s.sha256 for s in packet.source_refs if s.purpose == "MODEL_CONTEXT"), "egress context changed")
+        else:
+            from .stock_full_input_bridge import require_bound
+            require_bound(bound_context).check_packet(packet, context)
+        prompt = pre_prompt(packet, discovery, context)
         stage = "PRE"
         pre = call("pre", prompt, PreResearchResult, out, usage)
         event("OTHER_READ", "SUB2API_RESPONSES:PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
