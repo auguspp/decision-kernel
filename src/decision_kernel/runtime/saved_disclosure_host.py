@@ -48,7 +48,7 @@ def execute_prepared(*, api, prepared: dict, code_commit: str, output: Path, clo
             request_source=refs[continuation.REQUEST_PURPOSE],
             new_packet_raw=identity._checked_source(refs[work.PACKET_PURPOSE], load), checked_at=clock())
         expected_keys.add("continuation_context")
-        once.require(context.get("continuation_context") == prior["public_context"],
+        once.require(context.get("continuation_context") == continuation.bound_public_context(prior, context),
                      "continuation public context differs")
         question, version = prior["question"], "saved-disclosure-continuation-v1"
     once.require(set(context) == expected_keys and context["source_limitations"] == preparation.LIMITATIONS
@@ -106,6 +106,41 @@ def consume(*, api, source_run_id: int, code_commit: str, output: Path,
             from . import disclosure_continuation as continuation
             spec = continuation_request_source
             request = identity._json(identity._checked_source(spec, lambda s: api.file(s["path"], s["ref"])))
+            reading_targets = continuation.reading_requests(request)
+            if reading_targets is not None:
+                once.require(request["source_run_id"] == source_run_id, "continuation saved scan differs")
+                receipt["continuation_request_source"] = spec
+                # Validate every requested parent before reserving ANY child.
+                for item in reading_targets:
+                    parent_raw = identity._checked_source(item["predecessor"]["packet"],
+                        lambda r: api.file(r["path"], r["ref"]))
+                    continuation.check(api=api, code_commit=code_commit, request_source=spec,
+                                       new_packet_raw=parent_raw, checked_at=clock())
+                for item in reading_targets:
+                    if new_question_api is not None:
+                        api = new_question_api(); clients.append(api)
+                    key = item["assessment_input_hash"]
+                    spec_parent = {**item["predecessor"]["packet"], "purpose": work.PACKET_PURPOSE}
+                    prepared = prepare(api=api, code_commit=code_commit, packet_source=spec_parent,
+                        scan_raw=scan_raw, scan_artifact=scan_artifact, body_raw=body_raw, body_artifact=body_artifact,
+                        run=run, reading_commit=reading_commit, output=output/key/"preparation", clock=clock,
+                        continuation_request_source=spec)
+                    record = {"assessment_input_hash": key, "preparation_status": prepared["status"],
+                              "research_status": "NOT_EXECUTED", "kind": "HUMAN_SAME_SOURCE_READING_CONTINUATION"}
+                    receipt["items"].append(record)
+                    if prepared["status"] == "ALREADY_ATTEMPTED_NO_PREPARATION":
+                        continue  # Read-only reconciliation; never try a different child ID.
+                    once.require(prepared["status"] == "INPUT_PREPARED_NOT_EXECUTED"
+                                 and not prepared["mutation_uncertain"], "continuation preparation failure stops batch")
+                    result = execute(api=api, prepared=prepared, code_commit=code_commit,
+                                     output=output/key/"execution", clock=clock)
+                    record["research_status"] = result["status"]
+                    once.require(result["status"] == "VALIDATED_FUNNEL_RESULT" and not result["mutation_uncertain"],
+                                 "Research or retention failure stops batch")
+                receipt["status"] = ("EXPLICIT_READING_CONTINUATIONS_PROCESSED"
+                    if any(i["research_status"] == "VALIDATED_FUNNEL_RESULT" for i in receipt["items"])
+                    else "CONTINUATIONS_ALREADY_ATTEMPTED_NO_EXECUTION")
+                return receipt
             target_key = request["new_assessment_input_hash"]
             scan_files = read.unpack_archive(scan_raw, scan_artifact, run)
             targets = [raw for path, raw in scan_files.items() if path.startswith("disclosure-assessment-packets/")

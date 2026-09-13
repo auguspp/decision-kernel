@@ -162,11 +162,25 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
         once.require(packet_source["path"] == work.request_path(key)
                      and packet_source["purpose"] == work.PACKET_PURPOSE, "reserved packet path differs")
         prefix = work.request_path(key).removesuffix("packet.json")
+        continuation = None
+        if continuation_request_source is not None:
+            from . import disclosure_continuation
+            continuation = disclosure_continuation.check(api=api, code_commit=code_commit,
+                request_source=continuation_request_source, new_packet_raw=packet_raw, checked_at=clock())
+            prefix = continuation.get("execution_prefix", prefix)
         w = mutable_ref(api, work.WORK_REF)
         _, files = work_inventory(api, w)
         once.require(files[work.request_path(key)] == packet_raw, "reserved packet bytes changed")
+        if continuation and "execution_prefix" in continuation:
+            previous = next(r for r in continuation["source_refs"] if r["purpose"] == "CONTINUATION_PREDECESSOR_RESULT")
+            identity._checked_source(previous, lambda ref: api.file(ref["path"], w))
+        is_reading_continuation = bool(continuation and "execution_prefix" in continuation)
+        if is_reading_continuation:
+            family = work.request_path(key).removesuffix("packet.json") + "continuations/"
+            once.require(not any(p.startswith(family) and not p.startswith(prefix) for p in files),
+                         "source-reading predecessor has other continuation history")
         prior = [p for p in files if p.startswith(prefix)
-                 and p.rsplit("/", 1)[-1] not in {"packet.json", "intake-plan.json"}]
+                 and (is_reading_continuation or p.rsplit("/", 1)[-1] not in {"packet.json", "intake-plan.json"})]
         if prior:
             receipt.update(status="ALREADY_ATTEMPTED_NO_PREPARATION", existing_paths=sorted(prior))
             return receipt
@@ -174,15 +188,10 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
         scan = read.unpack_archive(scan_raw, scan_artifact, run)
         scan_path = f"disclosure-assessment-packets/{reserved.stock_code}-{reserved.publication_date}-{key[:16]}.json"
         once.require(scan[scan_path] == packet_raw, "reserved packet not exact producing scan bytes")
-        execution_id = "saved-disclosure-" + key
+        execution_id = continuation["execution_id"] if is_reading_continuation else "saved-disclosure-" + key
         retain = once.Retainer(api, {"id": execution_id, "prefix": prefix, "work_ref": work.WORK_REF},
                                code_commit, output)
         receipt.update(phase="SOURCE_PREFLIGHT", assessment_input_hash=key)
-        continuation = None
-        if continuation_request_source is not None:
-            from . import disclosure_continuation
-            continuation = disclosure_continuation.check(api=api, code_commit=code_commit,
-                request_source=continuation_request_source, new_packet_raw=packet_raw, checked_at=clock())
         from . import disclosure_source_reading as page_reading
         review_loader = page_reading.main_review_loader(api, code_commit, clock)
         context, reads = source_context(packet_raw=packet_raw, archive_raw=body_raw,
@@ -190,7 +199,7 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
                                        requalify=lambda pdf, evidence: page_reading.represent(
                                            pdf, evidence, load_review=review_loader, diagnostics=representation_events))
         if continuation is not None:
-            context["continuation_context"] = continuation["public_context"]
+            context["continuation_context"] = disclosure_continuation.bound_public_context(continuation, context)
             receipt["continuation_permission"] = continuation["permission_receipt"]
             once.require(len(once.raw(context)) < once.MAX_PROMPT_BYTES - 16000,
                          "continuation context exceeds saved executor bound; no clipping")
@@ -232,7 +241,8 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
                                    "evidence_artifact_ids": (seed.id,)},),
             source_lineage=({"evidence_artifact_id": seed.id, "source_locator": seed.source_locator,
                              "available_at": seed.available_at},),
-            why_now="原FIFO选中的新工作项，不是当前价格信号或完整公司更新。",
+            why_now=("Human已明确许可的原问题读取补证续作；不是新公告、新价格发现或原失败的改写。"
+                     if is_reading_continuation else "原FIFO选中的新工作项，不是当前价格信号或完整公司更新。"),
             next_discriminating_search="仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
             known_stop_or_downgrade_condition="无证据支持经济联系时允许停止；不发明原因，不为测试强行Quick。")
         ds = retain.save("prepare.json", discovery); ds["purpose"] = DISCOVERY_PURPOSE
@@ -273,6 +283,9 @@ def prepare_reserved(*, api, code_commit: str, packet_source: dict, scan_raw: by
                 "started_at": receipt["started_at"], "finished_at": clock(),
                 "error_type": type(exc).__name__, "error_code": getattr(exc, "code", None),
                 "automatic_retry": False, **read.AUTHORITY}
+            if is_reading_continuation:
+                failure.update(execution_id=execution_id,
+                    continuation_permission_id=continuation["permission_receipt"]["comment_id"])
             try:
                 retain.save("failure.json", failure)
             except Exception as retaining:

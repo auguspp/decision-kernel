@@ -98,13 +98,34 @@ def run_prepared(*, api, code_commit: str, input_source: dict, expected_key: dic
         packet_source = _one(packet, work.PACKET_PURPOSE)
         reserved_raw = identity._checked_source(packet_source, load)
         reserved = work._packet(reserved_raw)
-        prefix = work.request_path(reserved.assessment_input_hash).removesuffix("packet.json")
-        once.require(packet_source["path"] == prefix + "packet.json"
+        root = work.request_path(reserved.assessment_input_hash).removesuffix("packet.json")
+        prefix = work.output_prefix(packet, reserved.assessment_input_hash)
+        once.require(packet_source["path"] == root + "packet.json"
                      and packet.candidate_output_prefix == prefix
                      and input_source["path"] == prefix + "input.json", "prepared reservation differs")
+        def check_continuation(context=None):
+            from . import disclosure_continuation as continuation
+            refs = [s for s in packet.source_refs if s.purpose == continuation.REQUEST_PURPOSE]
+            if not refs:
+                once.require(prefix == root, "continuation permission missing")
+                return
+            checked = continuation.check(api=api, code_commit=code_commit,
+                request_source=_one(packet, continuation.REQUEST_PURPOSE), new_packet_raw=reserved_raw, checked_at=clock())
+            once.require(prefix == checked.get("execution_prefix", root)
+                         and packet.execution_id == checked.get("execution_id", packet.execution_id),
+                         "continuation execution differs")
+            if context is not None:
+                once.require(context.get("continuation_context") == continuation.bound_public_context(checked, context),
+                             "continuation material binding differs")
+        check_continuation()
         work_head = api._call("GET", "git/ref/heads/" + work.WORK_REF).json()["object"]["sha"]
         once.require(api.file(packet_source["path"], work_head) == reserved_raw,
                      "packet is not reserved on the existing work ref")
+        if prefix != root:
+            from .incremental_disclosure_intake import work_inventory
+            _, files = work_inventory(api, work_head)
+            once.require(not any(p.startswith(root + "continuations/") and not p.startswith(prefix) for p in files),
+                         "source-reading predecessor has other continuation history")
         # Older trusted executors may have saved results without this adapter's
         # launch marker. Missing launch.json is never proof of no prior attempt.
         for name in ("launch.json", "candidate.json", "candidate-before-validation.json",
@@ -133,6 +154,7 @@ def run_prepared(*, api, code_commit: str, input_source: dict, expected_key: dic
                      and admission.clock(discovery_meta["committer"]["date"]) <= packet.research_cutoff,
                      "prepared discovery is from the future")
         _supported(packet, discovery, context, context_source, reserved)
+        check_continuation(context)
         once.require(public_egress_hash(packet, discovery, context) == approved_egress_hash,
                      "public egress not approved for these exact inputs")
         preflight = identity._checked_source(_one(packet, admission.PREFLIGHT_PURPOSE), load)
@@ -163,6 +185,7 @@ def run_prepared(*, api, code_commit: str, input_source: dict, expected_key: dic
 
         def execute(exact, key):
             once.require(exact == data and key == expected_key, "callback identity differs")
+            check_continuation(context)  # Fresh permission after launch/admission, before any model call.
             host.update(phase="RESEARCH", formal_research_started=True)
             return once.research(packet, discovery, context, output, call=call, clock=clock)
 

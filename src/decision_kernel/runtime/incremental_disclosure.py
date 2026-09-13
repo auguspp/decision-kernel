@@ -40,6 +40,45 @@ def request_path(key: str) -> str:
     return WORK_PREFIX + key + "/packet.json"
 
 
+
+def continuation_prefix(key: str, comment_id: int) -> str:
+    reading.check(type(comment_id) is int and 0 < comment_id < 10**20, "invalid continuation permission ID")
+    return request_path(key).removesuffix("packet.json") + f"continuations/{comment_id}/"
+
+
+def split_work_path(path: str) -> tuple[str, str, str]:
+    """Parent packet stays canonical. Child paths carry a permission, not a new key."""
+    reading.safe_path(path)
+    reading.check(path.startswith(WORK_PREFIX), "work path outside prefix")
+    parts = path[len(WORK_PREFIX):].split("/")
+    reading.check(len(parts) in {2, 4}, "work history path outside one request")
+    key, name = parts[0], parts[-1]
+    prefix = request_path(key).removesuffix("packet.json")
+    if len(parts) == 4:
+        reading.check(parts[1] == "continuations" and re.fullmatch(r"[1-9][0-9]{0,19}", parts[2])
+                      and name != "packet.json", "invalid continuation history path")
+        prefix = continuation_prefix(key, int(parts[2]))
+    return key, prefix, name
+
+
+def output_prefix(packet, key: str) -> str:
+    """Check retained identity only. Live callers must independently check permission."""
+    prefix = packet.candidate_output_prefix.rstrip("/") + "/"
+    root = request_path(key).removesuffix("packet.json")
+    if prefix != root:
+        parsed_key, expected, _ = split_work_path(prefix + "input.json")
+        comment_id = int(prefix.rstrip("/").rsplit("/", 1)[1])
+        refs = {s.purpose: s for s in packet.source_refs}
+        permission = refs.get("TRUSTED_HUMAN_CONTINUATION_REQUEST")
+        failure = refs.get("CONTINUATION_PREDECESSOR_RESULT")
+        reading.check(parsed_key == key and expected == prefix
+            and packet.execution_id == f"saved-disclosure-{key}-reading-{comment_id}"
+            and permission is not None and permission.ref == packet.code_commit
+            and permission.path == "research_runs/disclosure-continuation-request.json"
+            and failure is not None and failure.path == root + "failure.json",
+            "output changed continuation identity")
+    return prefix
+
 def _packet(raw: bytes):
     _json(raw)  # Original size and duplicate-key checks before the packet parser.
     return parse_disclosure_assessment_packet(raw.decode("utf-8"))
@@ -57,10 +96,7 @@ def _history(files: Mapping[str, bytes]) -> set[str]:
         reading.safe_path(path)
         if not path.startswith(WORK_PREFIX):
             continue
-        tail = path[len(WORK_PREFIX):].split("/")
-        reading.check(len(tail) == 2, "work history path outside one request")
-        key, name = tail
-        request_path(key)
+        key, _, name = split_work_path(path)
         if name != "packet.json":
             reading.check(request_path(key) in files, "work history lacks reserved packet")
             continue
@@ -177,7 +213,7 @@ def describe_outcome(*, reserved_packet: bytes, input_raw: bytes, candidate_raw:
                   and refs[0].git_blob == reading.blob_sha(reserved_packet)
                   and refs[0].sha256 == reading.sha256(reserved_packet), "output changed reserved source")
     reading.check(packet.ticker == saved.stock_code and saved.stock_code in SCOPE
-                  and packet.candidate_output_prefix.rstrip("/") == refs[0].path.rsplit("/", 1)[0]
+                  and output_prefix(packet, saved.assessment_input_hash)
                   and packet.source_lane == "CNINFO_INCREMENTAL",
                   "output changed work identity")
     result = validate_external_research_candidate(packet=packet, candidate=candidate)
