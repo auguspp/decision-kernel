@@ -51,9 +51,16 @@ def authorize(api, code, request, *, request_path=REQUEST, mode=intake.QUESTION_
 
 
 def run_item(*, api, code, request, item, origin, reading_commit, output,
-             capture=sources.capture, call=None, clock=once.now, recovery_request=None):
+             capture=sources.capture, call=None, clock=once.now, recovery_request=None, full_input=False):
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "unsafe Stock output")
     from . import stock_source_recovery as recovery
+    once.require(type(full_input) is bool, "invalid full input mode")
+    if full_input:
+        from . import stock_full_input_bridge as bridge
+        once.require(item["thscode"][:6] in bridge.full.TICKERS and recovery_request is None,
+                     "full input not permitted for this scope or old recovery")
+        if capture is sources.capture:
+            capture = bridge.capture_complete
     expected = intake.execution(item["thscode"]) if recovery_request is None else recovery.execution(item["thscode"])
     once.require((item["execution_id"], item["prefix"]) == expected
         and item["security_id"] == intake.security(item["thscode"])
@@ -66,6 +73,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         "status": "NOT_EXECUTED", "phase": "HISTORY", "automatic_retry": False, **reading.AUTHORITY}
     reserved = False
     binding = None
+    bound_context = None
+    pre_preview = None
     try:
         authorize(api, code, request)
         try:
@@ -97,8 +106,15 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         if binding is not None:
             recovery.check_materials(binding, context)
             context["source_recovery"] = binding
-        once.require(len(once.raw(context)) <= sources.CONTEXT_BYTES, "full stock context too large; no clipping")
-        cs = retain.save("source.json", context); cs["purpose"] = "MODEL_CONTEXT"
+        if full_input:
+            stored = bridge.full.pack(once.raw(context), ticker=item["thscode"][:6])
+            cs = retain.save("source.json", stored); cs["purpose"] = "MODEL_CONTEXT"
+            bound_context = bridge.BoundFullContext.load(cs, lambda s: api.file(s["path"], s["ref"]),
+                                                        ticker=item["thscode"][:6])
+            bound_context.check_plain(context)
+        else:
+            once.require(len(once.raw(context)) <= sources.CONTEXT_BYTES, "full stock context too large; no clipping")
+            cs = retain.save("source.json", context); cs["purpose"] = "MODEL_CONTEXT"
         meta = api.get("git/commits/" + cs["ref"])
         once.require(meta["sha"] == cs["ref"], "stock source commit differs")
         seed = EvidenceArtifact(id=uuid5(NAMESPACE_URL, item["execution_id"] + cs["sha256"]),
@@ -170,12 +186,20 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
             contradiction_or_mapping_warning="行业成员身份不是收入/利润/现金流受益证明。",
             next_discriminating_search=packet.next_discriminating_search,
             known_stop_or_downgrade_condition="Pre可停止；Quick只在原路由要求时执行。必需来源或技术失败不得包装为WAIT。")
+        if bound_context is not None:
+            authorize(api, code, request)
+            sources.recheck(context, api=api, code_commit=code, clock=clock)
+            bound_context.recheck(checks["load"])
+            pre_preview = bridge.preview_pre(packet, discovery, context, bound_context)
+            bound_context = bound_context.prepared(pre_preview)
+            retain.local("pre-request-preview.json", once.raw(pre_preview))
         egress = canonical_hash({"input_hash": canonical_hash(packet), "discovery": discovery, "context": context})
         checks.update(input_source=ins, expected_key=identity.input_key(packet).as_dict(), checked_at=clock())
         preliminary = admission.assess_admission(**checks)
         once.require(preliminary["research_execution_allowed"], preliminary["reason"])
         retain.save("launch.json", {"id": packet.execution_id, "input_hash": canonical_hash(packet),
-            "public_egress_hash": egress, "permission": request["permission"], "automatic_retry": False})
+            "public_egress_hash": egress, "permission": request["permission"], "automatic_retry": False,
+            **({"full_input": bound_context.record(), "pre_request_preview": pre_preview} if bound_context else {})})
         checks["checked_at"] = clock()
         def execute(exact, key):
             once.require(exact == checks["input_raw"] and key == checks["expected_key"], "Stock callback identity differs")
@@ -187,10 +211,15 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
                     once.require(fresh == binding, "Stock source recovery binding changed before model")
                     recovery.check_materials(fresh, context)
                 sources.recheck(context, api=api, code_commit=code, clock=clock)
+                if bound_context is not None:
+                    bound_context.recheck(checks["load"])
+                    bound_context.check_packet(packet, context)
+                    return (call or partial(once.model_call, bound_context=bound_context))(stage, prompt, model, out, usage)
                 once.require(once.sha(once.raw(context)) == cs["sha256"], "Stock context changed before egress")
                 return (call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES))(stage, prompt, model, out, usage)
             receipt.update(formal_research_started=True, phase="RESEARCH")
-            return once.research(packet, discovery, context, output, call=guarded, clock=clock)
+            return once.research(packet, discovery, context, output, call=guarded, clock=clock,
+                                 **({"bound_context": bound_context} if bound_context else {}))
         report, result = admission.execute_after_admission(executor=execute, **checks)
         retain.save("admission.json", report)
         once.require(result is not None, report["reason"])
