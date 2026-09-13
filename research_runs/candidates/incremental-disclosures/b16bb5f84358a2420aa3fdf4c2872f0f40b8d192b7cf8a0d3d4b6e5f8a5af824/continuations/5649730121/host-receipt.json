@@ -1,0 +1,78 @@
+{
+  "approved_egress_hash": "4e2344c7cf5a7d9929fc0945b22adeee5f572ba7b14f4535a412d8064c302298",
+  "automatic_retry": false,
+  "candidate_hash": "c4a43dc71e157b8bfc442add4d4f99fc92d3f075343998c8cf09d4c4757b50ee",
+  "code_commit": "408c1de3eecc52af742a1ac9e32c39efc0917bde",
+  "current_state_published": false,
+  "execution_key": {
+    "canonical_input_hash": "448dd50db7609d75e96e06f82dd7af667b8239f026eda80ca9779085274ec463",
+    "execution_id": "saved-disclosure-b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824-reading-5649730121"
+  },
+  "finished_at": "2026-09-13T02:29:35.798851+00:00",
+  "formal_research_started": true,
+  "input_source": {
+    "git_blob": "45e59307847856440ad358ffe6e679b3b31e3915",
+    "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/input.json",
+    "purpose": "input.json",
+    "ref": "3f36f9bb35f259f10aa2c3e4d512267fd7a0acba",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "0938fda8f2b3d49876fb579150289c0bf5c0867a8476f221d4c7618f49774d18"
+  },
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "retained_files": [
+    {
+      "git_blob": "e0ff0e29f078acb0f9f135acffe9ae2669f840e2",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/launch.json",
+      "purpose": "launch.json",
+      "ref": "5298bf5cf4f095fb7445b04f676c2bbea4e56657",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "87c4108342f7313c62c122d988fe120af5c67546c9dbae7287d193dadb230a25"
+    },
+    {
+      "git_blob": "811959398327c64f3e4e2d5dccaf4f45778009b6",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/admission.json",
+      "purpose": "admission.json",
+      "ref": "831a4d2ac20f51c3c73a509ff464c59d18e99cee",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c82c95f3d9e5ab5596ea5ef3e8f63a72fdc58a1d91f6a9bc08dd0560f341bf61"
+    },
+    {
+      "git_blob": "2924894b4a194fdc1d8b872428f8d7419a73c99d",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/candidate.json",
+      "purpose": "candidate.json",
+      "ref": "cc4d0498f2a2e6360b1c5628ff8b623eb24868ac",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "9a839091883bbc5c717d96500d4945d0ea1410f1f32a0b36b783f70f833c9161"
+    },
+    {
+      "git_blob": "1d681e2e0d47b2c6bc7afd7f81b813a1f46da2b6",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/receipt.json",
+      "purpose": "receipt.json",
+      "ref": "b686ada26129c5d3c79f4b83f7225ca91323e26a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1caf161ee387e07b65f84a24f1909142bba724e5e97773927642c795ade2fb1c"
+    },
+    {
+      "git_blob": "9ee9e63c1eab2319d40fc2a851368fa664a7f0a3",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/validation.json",
+      "purpose": "validation.json",
+      "ref": "2f872e3460f44e1d09d18720c989d33b0f93ac98",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "da46f86134e1ee52ba288b6fb1eadae725db107e55447a5834a10edeee2352f8"
+    },
+    {
+      "git_blob": "2fe502cba93f428a108dc1603481c7a463105a0e",
+      "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/README.md",
+      "purpose": "README.md",
+      "ref": "a1d9e16ad61355577cbe1e590dd9a8e2301e8a27",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "40d49f192e76c4c508b5af5654ce29b95a6ed5d4e0ede4ba6f36cde83b8027b8"
+    }
+  ],
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "started_at": "2026-09-13T02:26:57.280202+00:00",
+  "status": "EXECUTION_GAP",
+  "validation_hash": "7fe095c304e27cd1355d255a4f86a11af37ff3b523e40d600176dc373e59042b"
+}
