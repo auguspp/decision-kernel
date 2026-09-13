@@ -26,6 +26,60 @@ def call_limit(api):
     return min(getattr(api, 'max_calls', delivery.MAX_API_CALLS), delivery.MAX_API_CALLS + EXTRA_API_CALLS)
 
 
+def attempts(collector):
+    """Job identity, not a green workflow/title, distinguishes source preparation.
+
+    Inspect at most ten invocations. Missing/queued/unreadable job metadata stays
+    unknown and never replaces the last identified model-execution attempt.
+    """
+    api = collector.api
+    runs = api.get('actions/workflows/stock-business-research.yml/runs?branch=main&per_page=10')
+    model.check(isinstance(runs.get('workflow_runs'), list) and len(runs['workflow_runs']) <= 10
+        and (runs['workflow_runs'] or runs.get('total_count') == 0), 'Stock Research attempts unavailable')
+    result = {'latest_workflow_invocation': None, 'latest_execution_attempt': None,
+        'latest_source_preparation_attempt': None, 'unclassified_invocations': [],
+        'attempt_query_scope': 'NEWEST_TEN_EXACT_WORKFLOW_INVOCATIONS_NOT_ALL_HISTORY',
+        'preparation_result_semantics': 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'}
+    seen = set()
+    for run in runs['workflow_runs']:
+        model.check(run.get('event') in {'workflow_run', 'workflow_dispatch'}
+            and run.get('path') == '.github/workflows/stock-business-research.yml'
+            and run.get('head_branch') == 'main' and type(run.get('run_attempt')) is int
+            and run['run_attempt'] == 1 and type(run.get('id')) is int and run['id'] > 0
+            and run['id'] not in seen and model.SHA.fullmatch(run.get('head_sha', ''))
+            and run.get('head_repository', {}).get('full_name') == model.REPOSITORY,
+            'Stock Research attempt identity differs')
+        seen.add(run['id'])
+        summary = model.concise_run(run)
+        if result['latest_workflow_invocation'] is None:
+            result['latest_workflow_invocation'] = summary
+        model.check(api.calls + 1 + len(collector.files) + 5 <= call_limit(api),
+                    'Stock purpose reads would consume publication reserve')
+        try:
+            jobs = api.get(f"actions/runs/{run['id']}/jobs?per_page=100")
+            rows = jobs['jobs']
+            model.check(isinstance(rows, list) and type(jobs['total_count']) is int
+                and len(rows) == jobs['total_count'] and len(rows) <= 100
+                and all(isinstance(j, dict) and j.get('run_id') == run['id']
+                        and j.get('name') in {'research-stock-business', 'prepare-stock-sources'} for j in rows)
+                and len({j['name'] for j in rows}) == len(rows), 'Stock invocation jobs incomplete or ambiguous')
+            active = [j['name'] for j in rows if j.get('conclusion') != 'skipped']
+            if active == ['research-stock-business']:
+                key = 'latest_execution_attempt'
+            elif active == ['prepare-stock-sources'] and run['event'] == 'workflow_dispatch':
+                key = 'latest_source_preparation_attempt'
+            else:
+                raise ValueError('Stock invocation mode not established')
+            if result[key] is None:
+                result[key] = summary
+        except (ValueError, KeyError, TypeError, AttributeError, OSError, RuntimeError) as exc:
+            result['unclassified_invocations'].append({'run': summary, 'error_type': type(exc).__name__,
+                'meaning': 'UNCLASSIFIED_INVOCATION_NOT_RESEARCH_OR_QUIET'})
+    result['attempt_classification_status'] = ('PARTIAL_OR_UNAVAILABLE' if result['unclassified_invocations']
+                                              else 'CLASSIFIED_WITHIN_DECLARED_WINDOW')
+    return result
+
+
 def _collect(collector, payload):
     api = collector.api
     used = getattr(api, 'calls', None)
@@ -38,19 +92,7 @@ def _collect(collector, payload):
              if row['status'] == 'CONTRACT_CHECKED_RAW_READING' and row.get('input_failure') is None]
     model.check(len(codes) == len(set(codes)) == stock['coverage']['qualified_issuers']
                 and len(codes) <= 16, 'Stock business reading scope differs')
-    runs = api.get('actions/workflows/stock-business-research.yml/runs?branch=main&per_page=10')
-    model.check(isinstance(runs.get('workflow_runs'), list) and len(runs['workflow_runs']) <= 10
-                and (runs['workflow_runs'] or runs['total_count'] == 0), 'Stock Research attempts unavailable')
-    latest = None
-    for run in runs['workflow_runs']:
-        if run.get('event') not in {'workflow_run', 'workflow_dispatch'}:
-            continue
-        model.check(run.get('path') == '.github/workflows/stock-business-research.yml'
-            and run.get('head_branch') == 'main' and run.get('run_attempt') == 1
-            and run.get('head_repository', {}).get('full_name') == model.REPOSITORY,
-            'Stock Research attempt identity differs')
-        latest = model.concise_run(run)
-        break
+    invocation = attempts(collector)
     # Reuse the publisher's exact matching-ref discovery, not exception identity
     # across `python -m` and an imported copy of the delivery module.
     refs = api.get('git/matching-refs/heads/' + intake.WORK_REF)
@@ -60,7 +102,7 @@ def _collect(collector, payload):
     exact = [r for r in refs if r['ref'] == 'refs/heads/' + intake.WORK_REF]
     model.check(len(exact) <= 1, 'Stock work ref discovery ambiguous')
     if not exact:
-        return {'status': 'NOT_STARTED', 'latest_execution_attempt': latest,
+        return {'status': 'NOT_STARTED', **invocation,
                 'items': [{'thscode': code, 'status': 'NOT_STARTED', **model.AUTHORITY} for code in codes],
                 'meaning': 'NO_STOCK_BUSINESS_WORK_REF_NOT_RESEARCH_COMPLETE'}
     obj = exact[0]['object']
@@ -177,7 +219,7 @@ def _collect(collector, payload):
             items.append(item)
             parents[code] = item
     return {'status': 'READ_OK', 'work_ref': intake.WORK_REF, 'work_commit': commit,
-            'latest_execution_attempt': latest,
+            **invocation,
             'scope': 'CURRENT_QUALIFIED_STOCKS_FIRST_BUSINESS_BASELINES_NOT_ALL_RESEARCH',
             'items': items, 'source_recovery_counts': {status: sum(
                 i.get('source_recovery', {}).get('status') == status for i in items) for status in

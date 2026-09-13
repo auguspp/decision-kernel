@@ -1,0 +1,59 @@
+{
+  "enabled": true,
+  "exposed_reading": {
+    "git_blob": "bdf10c063bbbb82bd0ce0751da30c38bcb6a49bc",
+    "path": "current-state.json",
+    "purpose": "HUMAN_CONTINUATION_EXPOSURE",
+    "ref": "fe6a00cd85656396dd089a2db81fcabb9b9fc54c",
+    "repository": "auguspp/decision-kernel"
+  },
+  "items": [
+    {
+      "failure": {
+        "git_blob": "32a6e1da4129c3f34467f269ff7f8425e1543c18",
+        "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-recovery-v1/failure.json",
+        "purpose": "STOCK_SOURCE_PREPARATION_PREDECESSOR",
+        "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "0c37c9b7768cd46da12d63fc3cc24ca883d771b7fc370cb075704ad60efeea3d"
+      },
+      "selection": {
+        "git_blob": "8ec291225eef3da2227d7cdecb914a6b986d7aaf",
+        "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-recovery-v1/prepare.json",
+        "purpose": "STOCK_SOURCE_PREPARATION_PREDECESSOR",
+        "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "a05dc38c9e74deef7b367f4be7976bb621057987198607c645fbdcf30bd499d2"
+      },
+      "thscode": "603353.SH"
+    },
+    {
+      "failure": {
+        "git_blob": "d943938d6297d9381c3799179a0735fd3f751fea",
+        "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-recovery-v1/failure.json",
+        "purpose": "STOCK_SOURCE_PREPARATION_PREDECESSOR",
+        "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "40b76b118b305188194b469156622a68657363ad9a41b2250a4104d69f76f533"
+      },
+      "selection": {
+        "git_blob": "b2f0276bbd7fa5286a0f98b3d86b89eb5224eb82",
+        "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-recovery-v1/prepare.json",
+        "purpose": "STOCK_SOURCE_PREPARATION_PREDECESSOR",
+        "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "5fe0ea8f2fa4af662cc1741b3885d04ff06a561ff3e07447f2af4da609bfb2f3"
+      },
+      "thscode": "300711.SZ"
+    }
+  ],
+  "mode": "HUMAN_AUTHORIZED_STOCK_SOURCE_PREPARATION_ONLY",
+  "permission": {
+    "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
+    "comment_id": 5652950925,
+    "created_at": "2026-09-13T11:22:23Z"
+  },
+  "schema_version": 1,
+  "source_research_run_id": 34751517820,
+  "source_stock_run_id": 34673882756
+}

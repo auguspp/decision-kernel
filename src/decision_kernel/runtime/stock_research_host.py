@@ -228,7 +228,10 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
     return receipt
 
 
-def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_item, recover_sources=False):
+def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_item, recover_sources=False,
+            prepare_sources=False):
+    once.require(type(prepare_sources) is bool and type(recover_sources) is bool
+        and not (prepare_sources and recover_sources), "conflicting Stock preparation/recovery modes")
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "unsafe output")
     output.mkdir(parents=True, exist_ok=False)
     request = identity._json(api.file(REQUEST, code)); authorize(api, code, request)
@@ -239,6 +242,7 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
     name = f"stock-reading-{source_run_id}-1"
     available = [a for a in artifacts["artifacts"] if a["name"] == name]
     if not available:
+        once.require(not prepare_sources, "source preparation requires a saved Stock reading artifact")
         jobs = api.get(f"actions/runs/{source_run_id}/jobs?per_page=100")
         once.require(jobs["total_count"] == len(jobs["jobs"]) and jobs["jobs"], "Stock purpose metadata incomplete")
         once.require(not any(j["name"] == "stock-reading" and j.get("conclusion") != "skipped"
@@ -261,6 +265,10 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
     origin = {"run": reading.concise_run(run), "artifact_id": artifact["id"],
         "archive_sha256": once.sha(archive), "projection_hash": selected["projection_hash"],
         "market_session": selected["market_session"]}
+    if prepare_sources:
+        from .stock_source_preparation import prepare
+        return prepare(api=api, code=code, selected=selected, origin=origin,
+                       reading_commit=r, output=output)
     result = {"status": "COMPLETED", "source_run_id": source_run_id, "items": [],
         "source_recovery": recover_sources, "original_qualified_issuers": original_codes,
         "excluded": selected["excluded"], "planned_issuers": [i["thscode"] for i in selected["items"]],
@@ -284,25 +292,43 @@ def main(argv=None):
     parser.add_argument("--source-run-id", type=int, required=True)
     parser.add_argument("--code-commit", required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--recover-sources", action="store_true")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--recover-sources", action="store_true")
+    modes.add_argument("--prepare-sources", action="store_true")
     args = parser.parse_args(argv)
     once.require(os.environ.get("GITHUB_REPOSITORY") == once.REPO
         and os.environ.get("GITHUB_REF") == "refs/heads/main" and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
         and os.environ.get("GITHUB_SHA") == args.code_commit, "untrusted Stock research host")
-    once.require(not args.recover_sources or os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch",
-                 "Stock source recovery requires explicit native dispatch")
+    once.require(not (args.recover_sources or args.prepare_sources)
+                 or os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch",
+                 "Stock source preparation/recovery requires explicit native dispatch")
+    once.require(not args.prepare_sources or not os.environ.get("SUB2API_API_KEY"),
+                 "source-only preparation must not receive a model credential")
     try:
         result = consume(api=GitHubAPI(os.environ["GH_TOKEN"], max_calls=1024), code=args.code_commit,
-                         source_run_id=args.source_run_id, output=args.output, recover_sources=args.recover_sources)
+                         source_run_id=args.source_run_id, output=args.output, recover_sources=args.recover_sources,
+                         prepare_sources=args.prepare_sources)
     except Exception as exc:
-        if args.output.is_dir() and not args.output.is_symlink():
-            (args.output / "batch-failure.json").write_bytes(once.raw({
-                "status": "BATCH_INCOMPLETE", "error_type": type(exc).__name__,
-                "source_run_id": args.source_run_id, "automatic_retry": False, **reading.AUTHORITY}))
-        print("STOCK_RESEARCH_INCOMPLETE: " + type(exc).__name__)
+        if (args.output.is_dir() and not args.output.is_symlink()
+                and not any(p.is_symlink() for p in args.output.parents)):
+            failure = {"status": "SOURCE_PREPARATION_INCOMPLETE" if args.prepare_sources else "BATCH_INCOMPLETE",
+                "error_type": type(exc).__name__, "source_run_id": args.source_run_id,
+                "automatic_retry": False, **reading.AUTHORITY}
+            if args.prepare_sources:
+                failure.update(research_execution_allowed=False, formal_research_started=False)
+                try:
+                    with (args.output / "source-preparation-failure.json").open("xb") as stream:
+                        stream.write(once.raw(failure))
+                except FileExistsError:
+                    pass  # Preserve an earlier local failure; never overwrite it.
+            else:
+                (args.output / "batch-failure.json").write_bytes(once.raw(failure))
+        print(("STOCK_SOURCE_PREPARATION_INCOMPLETE: " if args.prepare_sources
+               else "STOCK_RESEARCH_INCOMPLETE: ") + type(exc).__name__)
         return 2
     print(once.raw(result).decode())
-    return 0 if result["status"] in {"COMPLETED", "NOT_A_STOCK_READING_RUN"} else 2
+    return 0 if result["status"] in {"COMPLETED", "NOT_A_STOCK_READING_RUN",
+                                      "SOURCES_CHECKED_NOT_EXECUTION_ADMITTED"} else 2
 
 
 if __name__ == "__main__":
