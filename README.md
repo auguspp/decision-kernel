@@ -4,6 +4,12 @@ Decision Kernel is the small, explicit investment-decision core extracted from D
 
 It is **not** Decision OS v2 and it is **not** a new platform build.
 
+## 公司研究 / Odds / 第一笔：新聊天从这里开始
+
+**[打开统一研究执行入口](docs/RESEARCH-ENTRY.md)**。先固定当前 `main` commit，读取入口及案例更正，再接续 Research、估值、Odds 或买入价讨论；不要依赖旧聊天或搜索片段。根目录 [AGENTS.md](AGENTS.md) 指向同一入口。
+
+入口复用已有 Decision Hygiene / Full Research Review Gate，不新增 Kernel 宪法或自动交易能力。光电旧 first-entry 梯度已标为待方法复核；恒瑞原 Human 接受记录保留，并补了完整下行的回放。**档案存在不代表已登记监控、已接受或已交易。** 未读取仓库的客户端不会自动获得这些规则。
+
 ## 股票阅读 · 历史已验收结果
 
 **[打开 2026-09-07 完成交易日的已验收保存结果](docs/stock-reading-accepted-2026-09-07.md)** — 四家公司全部检查：神农集团一张观察卡，其余三家条件不满足，数据不可用零。
