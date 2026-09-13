@@ -85,6 +85,26 @@ real final request measurement remain NOT IMPLEMENTED / NOT ACCEPTED.
 Do not send a compressed string to the model or drop bodies, metadata needed
 for identity, risk evidence or required material to fit a limit.
 
+## New Heshun capacity finding after the page reading
+
+Fixing page23 does NOT make Heshun ready for model execution. A local size-only
+probe over the same 20 selected PDFs counts 372 pages and 622,943 UTF-8 bytes
+of required readable page text alone, before JSON/source metadata or any model
+request envelope. This already exceeds both448KiB and512KiB.
+
+The probe uses the artifact's original extraction for18 documents, its saved
+same-PDF reading for1225530957, and the same pinned PDFium text method for the
+22 nonempty pages of1225530965 plus the actual new page23 note. It does not
+invent a production context or re-date a source acquisition. No selected page
+was omitted. This is a page-text LOWER BOUND, not the final serialized context,
+not a new source-preparation run, and not production20/20 acceptance.
+
+Thus BOTH issuers now have a confirmed full-input capacity blocker. Heshun's
+new reading must pass the original trusted-main/CI path, and both issuers still
+need the bounded lossless storage/checked-source/decode/final-egress bridge.
+The old artifact still truthfully records Heshun20selected/19checked.
+Do not spend a successor merely because the visual gap has been filled.
+
 ## Continuation boundary
 
 This change does not create a successor, work key, launch or Research result;
