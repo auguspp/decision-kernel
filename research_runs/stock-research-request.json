@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "enabled": true,
+  "mode": "FIRST_BUSINESS_BASELINE",
+  "permission": {
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z",
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62"
+  },
+  "note": "Human 那就去闭环吧; all original qualified Stock observations, not three displayed cards. Research only; no investment authority."
+}

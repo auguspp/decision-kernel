@@ -251,19 +251,21 @@ def admitted_output_type(output_type, evidence_ids):
     return AdmittedOutput
 
 
-def model_call(stage, context, output_type, out, usage):
+def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=MAX_PROMPT_BYTES):
     """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
+    require(type(max_prompt_bytes) is int and MAX_PROMPT_BYTES <= max_prompt_bytes <= 512 * 1024,
+            "unsupported model request byte bound")
     body = raw(context).decode()
-    require(len(SYSTEM.encode()) + len(body.encode()) <= MAX_PROMPT_BYTES, "model input byte budget")
+    require(len(SYSTEM.encode()) + len(body.encode()) <= max_prompt_bytes, "model input byte budget")
     request_type = admitted_output_type(output_type, context.get("evidence_ids"))
     schema = request_type.model_json_schema()
-    require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(schema)) <= MAX_PROMPT_BYTES, "model input byte budget")
+    require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(schema)) <= max_prompt_bytes, "model input byte budget")
     from openai import OpenAI, DefaultHttpxClient
     from openai.lib._parsing._responses import type_to_text_format_param
     # Reuse the pinned SDK's SAME strict wire schema, but do not ask it to
     # parse our application model before public output/usage can be retained.
     output_format = type_to_text_format_param(request_type)
-    require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(output_format)) <= MAX_PROMPT_BYTES,
+    require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(output_format)) <= max_prompt_bytes,
             "model input byte budget")
     record = {"stage": stage, "started_at": now(), "requested_model": MODEL,
               "input_sha256": sha(body.encode()), "status": "REQUEST_STARTED", "max_output_tokens": MAX_OUTPUT_TOKENS,

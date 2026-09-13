@@ -1,0 +1,69 @@
+name: stock-business-research
+
+on:
+  workflow_run:
+    workflows: [hithink-stock-dump-trial]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source-stock-run-id:
+        description: Exact successful saved Stock reading run, never latest
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stock-business-first-v0
+  cancel-in-progress: false
+
+jobs:
+  research-stock-business:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.name == 'hithink-stock-dump-trial' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.run_attempt == 1 &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.head_repository.full_name == github.repository &&
+        (github.event.workflow_run.event == 'schedule' ||
+         github.event.workflow_run.event == 'workflow_dispatch')))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 160
+    permissions:
+      contents: write
+      actions: read
+      issues: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Install existing source and Research dependencies
+        run: python -m pip install -e '.[documents,feeds,research-api]'
+      - name: Original Stock validation, business sources, admission and Pre with necessary Quick
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
+          SOURCE_STOCK_RUN: ${{ github.event.workflow_run.id || inputs.source-stock-run-id }}
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -n "$SUB2API_API_KEY"
+          python -m decision_kernel.runtime.stock_research_host \
+            --source-run-id "$SOURCE_STOCK_RUN" --code-commit "$GITHUB_SHA" --output run-output
+      - name: Preserve original sources, model outputs and partial failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stock-business-research-${{ github.run_id }}-${{ github.run_attempt }}
+          path: run-output/
+          if-no-files-found: warn
+          retention-days: 30
