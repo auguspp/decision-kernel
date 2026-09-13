@@ -25,7 +25,7 @@ MAX_RUNS = 20
 MAX_API_CALLS = 180
 MAX_SOURCE_FILES = 60
 MAX_RETAINED_OUTPUT = 128 * 1024 * 1024
-MAX_RESEARCH_WORK_ITEMS = 8
+MAX_RESEARCH_WORK_ITEMS = 10  # Seven retained parents plus two explicitly authorized children.
 RESEARCH_WORK_API_RESERVE = 12
 REGISTRY_PATH = "current_state/registry.json"
 
@@ -435,21 +435,19 @@ class Collector:
 
         prefix = work.WORK_PREFIX
         rows = {row["path"]: row for row in tree["tree"] if row.get("type") == "blob"}
-        keys: dict[str, set[str]] = {}
+        keys: dict[tuple[str, str], set[str]] = {}
         for path in rows:
             if not path.startswith(prefix):
                 continue
-            tail = path[len(prefix):].split("/")
-            model.check(len(tail) == 2, "research work path outside one request")
-            key, name = tail
-            work.request_path(key)
-            keys.setdefault(key, set()).add(name)
+            key, base, name = work.split_work_path(path)
+            keys.setdefault((key, base), set()).add(name)
         model.check(len(keys) <= config["max_items"], "research work item bound exceeded")
 
         needed = set()
-        for key, names in keys.items():
-            base = prefix + key + "/"
-            needed.add(base + "packet.json")
+        for (key, base), names in keys.items():
+            needed.add(work.request_path(key))
+            if base != work.request_path(key).removesuffix("packet.json"):
+                needed.add(work.request_path(key).replace("packet.json", "failure.json"))
             for name in ("input.json", "candidate.json", "funnel.json", "failure.json"):
                 if name in names:
                     needed.add(base + name)
@@ -500,8 +498,17 @@ class Collector:
             return raw, retained(path, raw)
 
         items = []
-        for key in sorted(keys):
-            names = keys[key]
+        for key, base in sorted(keys):
+            names = keys[key, base]
+            is_child = base != work.request_path(key).removesuffix("packet.json")
+            comment_id = int(base.rstrip("/").rsplit("/", 1)[1]) if is_child else None
+            lineage = {} if not is_child else {"work_kind": "HUMAN_SAME_SOURCE_READING_CONTINUATION",
+                "permission_comment_id": comment_id, "parent_assessment_input_hash": key,
+                "execution_id": f"saved-disclosure-{key}-reading-{comment_id}",
+                "candidate_output_prefix": base, "new_disclosure": False}
+            if is_child:
+                model.check("failure.json" in keys.get((key, work.request_path(key).removesuffix("packet.json")), set()),
+                            "source-reading child lacks retained parent failure")
             packet_path = work.request_path(key)
             model.check(packet_path in work_files and work_files[packet_path],
                         "research work reserved packet unavailable")
@@ -515,10 +522,14 @@ class Collector:
             if has_candidate:
                 model.check({"input.json", "candidate.json"}.issubset(names),
                             "research work candidate lacks input or candidate")
-                base = prefix + key + "/"
                 input_raw, input_source = fetched(base + "input.json")
                 candidate_raw, candidate_source = fetched(base + "candidate.json")
                 input_model = ExternalResearchInputPacket.model_validate(_json(input_raw))
+                model.check(work.output_prefix(input_model, key) == base, "retained execution path differs")
+                if is_child:
+                    prior = [r for r in input_model.source_refs if r.purpose == "CONTINUATION_PREDECESSOR_RESULT"]
+                    model.check(len(prior) == 1 and prior[0].git_blob == rows[prior[0].path]["sha"],
+                                "retained continuation predecessor differs")
                 outcome = work.describe_outcome(reserved_packet=packet_raw,
                                                 input_raw=input_raw, candidate_raw=candidate_raw)
                 validation = ExternalResearchValidationResult.model_validate(outcome["validation"])
@@ -544,11 +555,11 @@ class Collector:
                               "finished_at": candidate_raw and _json(candidate_raw)["receipt"]["finished_at"],
                               "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
                               "registered_current_handoff": False,
-                              **model.AUTHORITY, "sources": sources})
+                              **model.AUTHORITY, **lineage, "sources": sources})
                 continue
 
             if has_failure:
-                failure_raw, failure_source = fetched(prefix + key + "/failure.json")
+                failure_raw, failure_source = fetched(base + "failure.json")
                 failure = _json(failure_raw)
                 model.check(failure.get("schema_version") == 1
                             and failure.get("record_kind") == "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT"
@@ -563,6 +574,10 @@ class Collector:
                 model.check(failure.get("packet_blob") == model.blob_sha(packet_raw)
                             and failure.get("packet_sha256") == model.sha256(packet_raw),
                             "research work failure packet binding differs")
+                if is_child:
+                    model.check(failure.get("execution_id") == lineage["execution_id"]
+                        and failure.get("continuation_permission_id") == comment_id,
+                        "continuation failure identity differs")
                 packet = work._packet(packet_raw)
                 items.append({"assessment_input_hash": key,
                               "case_id": failure.get("case_id") or packet.stock_code,
@@ -572,7 +587,7 @@ class Collector:
                               "finished_at": failure.get("finished_at"),
                               "semantic_acceptance": "NOT_APPLICABLE_FAILURE_NOT_RESEARCH",
                               "registered_current_handoff": False,
-                              **model.AUTHORITY,
+                              **model.AUTHORITY, **lineage,
                               "sources": {"packet": packet_source, "failure": failure_source}})
                 continue
 
@@ -582,7 +597,7 @@ class Collector:
                           "terminal_state": None, "finished_at": None,
                           "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
                           "registered_current_handoff": False,
-                          **model.AUTHORITY, "sources": {"packet": packet_source}})
+                          **model.AUTHORITY, **lineage, "sources": {"packet": packet_source}})
 
         def sort_key(item: dict):
             stamp = item.get("finished_at")
