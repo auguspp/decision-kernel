@@ -50,13 +50,19 @@ def _collect(collector, payload):
             'Stock Research attempt identity differs')
         latest = model.concise_run(run)
         break
-    try:
-        obj = api.get('git/ref/heads/' + intake.WORK_REF)['object']
-    except delivery.GitHubReadError as exc:
-        if str(exc) != 'GitHub HTTP 404': raise
+    # Reuse the original publisher's exact matching-ref discovery. The CLI
+    # transport may be loaded as __main__; absence must not depend on catching
+    # a separately imported class with the same GitHubReadError name.
+    refs = api.get('git/matching-refs/heads/' + intake.WORK_REF)
+    model.check(isinstance(refs, list) and all(isinstance(r, dict)
+                and isinstance(r.get('ref'), str) for r in refs), 'Stock ref response invalid')
+    exact = [r for r in refs if r['ref'] == 'refs/heads/' + intake.WORK_REF]
+    model.check(len(exact) <= 1, 'Stock work ref ambiguous')
+    if not exact:
         return {'status': 'NOT_STARTED', 'latest_execution_attempt': latest,
                 'items': [{'thscode': code, 'status': 'NOT_STARTED', **model.AUTHORITY} for code in codes],
                 'meaning': 'NO_STOCK_BUSINESS_WORK_REF_NOT_RESEARCH_COMPLETE'}
+    obj = exact[0]['object']
     model.check(obj.get('type') == 'commit' and model.SHA.fullmatch(obj.get('sha', '')),
                 'Stock work ref not exact commit')
     commit = obj['sha']
