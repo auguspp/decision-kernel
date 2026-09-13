@@ -1,0 +1,251 @@
+{
+  "completion": "COMPLETE",
+  "discovery": {
+    "as_of": "2026-09-13T02:23:59.095867Z",
+    "contradiction_or_mapping_warning": null,
+    "current_market_expression": null,
+    "discovery_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+    "economic_direction": "已保存公告对公司经济问题的增量尚未解释",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "statement": "已保存本组公告及其原研究上下文；保存不代表结论被接受。"
+      }
+    ],
+    "known_stop_or_downgrade_condition": "无证据支持经济联系时允许停止；不发明原因，不为测试强行Quick。",
+    "next_discriminating_search": "仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
+    "schema_version": 1,
+    "security_id": "SSE:603986",
+    "source_lane": "CNINFO_INCREMENTAL",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-13T02:23:27.475484Z",
+        "evidence_artifact_id": "b404666a-d79b-5d44-8e3a-71b87be5c8d5",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/973343b35bbc95f0b7b929ff091de45c2b874fa2/research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/source.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "603986",
+    "why_now": "Human已明确许可的原问题读取补证续作；不是新公告、新价格发现或原失败的改写。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "e2830e0251a0a0c432bb9157ffed7ba3aee2f41379045111b7e89cb008a1baa5",
+  "pre_research": {
+    "as_of": "2026-09-13T02:23:59.095867Z",
+    "basic_business_role": "本组文件中的兆易创新（603986）是H股股份奖励计划的实施主体。公告未提供主营业务、产品竞争地位或利润结构的新增证据；原研究中的存储、MCU等描述不作为本次已核实事实。",
+    "current_expression_or_leadership": null,
+    "current_market_expectation_hypothesis": "UNKNOWN：本组公告没有当前价格、市场一致预期或投资者定价证据。保存的既往AI研究及其盈利预测区间不构成当前市场预期的核验。",
+    "discovery_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+    "economic_direction": "方向未定。可核验的问题是奖励计划是否通过股份供给、现金支出和股份支付费用影响每股经济利益，以及激励收益能否抵偿这些成本；本组文件不能确认实际发生或规模。",
+    "largest_unknown": "计划的股份来源、具体限额、授予规模及价格、归属与业绩条件、受益对象、现金安排和费用确认均未在本组正文中给出，因而无法判断潜在摊薄、现金成本及激励回报的重大性。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "据本证据包内《2026年第三次临时股东会决议公告》（1225555799）第1—4页，公司于2026年9月9日召开股东会，H股股份奖励计划、计划限额、服务提供商分项限额及相关授权四项议案均获特别决议通过；这确认的是审批进展，不是实际授予或经济收益。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "据决议公告第2—3页，四项议案普通股合计同意比例为88.1248%—88.6968%，反对比例为11.0495%—11.6305%；5%以下股东的反对比例为19.7797%—20.8197%。各项H股反对票数均高于H股同意票数，但H股行所列百分比不能当作H股内部支持率，也不能据票数推定反对原因。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "据《法律意见书》（1225555804）第1页及第4—5页，律师意见覆盖会议程序、人员及召集人资格、表决程序和结果，并明确不对议案内容及相关事实数据的完整性、真实性和准确性发表意见；文件还载明本次会议未修改议案。因此，合法通过不能充当计划经济合理性的认证。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内绑定同一《法律意见书》第6页整页图像的AI读取记录，将该页描述为写有“本页无正文”的签章页，并明确未核验签章真实性、人员身份或法律效力。本次可使用的是补充读取描述，而非新增独立原始证据；该描述未提供收入、利润或现金流信息。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "INFERENCE",
+        "statement": "结合决议公告第2—4页的审批进展与法律意见书第1页的意见范围限制，值得有限核验的是奖励计划对每股经济利益的潜在影响，而不是据此上修经营盈利。反对票构成不能将批准解读为一致认可的反证，但不证明计划损害股东利益。"
+      }
+    ],
+    "next_discriminating_search": "定向查找本次表决所对应的《2026年H股股份奖励计划》全文及股东会通函，优先核对新发股或存量股来源、计划及服务提供商限额的数值和分母、授予价格、归属条件、资金来源及股份支付安排。先区分仅有授权上限与已承诺实际授予，再判断是否存在具有重大性的每股成本；不扩展为全公司最新公告盘点。",
+    "obvious_contradiction": "不能把高票通过等同于一致支持或经济利好：存在明确反对票，尤其5%以下股东反对比例接近两成；法律意见仅认证其声明范围内的程序和结果。本组也没有实际授予、费用、摊薄或业务改善数据，无法支持既往盈利跃迁叙事的新增确认。",
+    "potential_fundamental_driver": "条件性驱动是股权激励带来的利益分配变化：若使用新股，可能涉及摊薄；若购买存量股，可能涉及现金支出；具体安排还可能涉及股份支付费用。人才或服务激励是否产生抵偿收益仍为UNKNOWN。",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "有一个明确且可通过计划原文快速区分的公司经济问题：已获批准的H股奖励计划是否形成重大的每股成本或激励约束。本次继续仅限条款与重大性核验，不因补齐读取而自动升级研究，也不宣称已证实经济影响。第6页已有带明确未知项的补充读取记录，不再仅以原始提取为空判定失败；但该记录不认证原件真实性。",
+    "schema_version": 1,
+    "what_is_this": "兆易创新2026年第三次临时股东会决议及配套法律意见书的静态公告增量预筛，核心事项是H股股份奖励计划相关议案获批。",
+    "why_surfaced_now": "这是Human明确许可的原问题补证续作：同一法律意见书第6页原文本提取为空，现补入绑定整页图像的AI读取记录。不是新公告、新价格发现，也不追认此前保存的研究结论。"
+  },
+  "quick_research": {
+    "as_of": "2026-09-13T02:23:59.095867Z",
+    "business_model": "UNKNOWN（本组未核验）：两份文件属于股东会决议及法律意见，不提供产品、客户、收入模式或主营业务利润结构。本次不沿用既往AI研究中的业务描述作为已核实事实。",
+    "contradictory_claims": [
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内《2026年第三次临时股东会决议公告》（1225555799）第2—3页显示，四项议案普通股合计反对比例为11.0495%—11.6305%，5%以下股东反对比例为19.7797%—20.8197%；各项H股反对票数均高于H股同意票数。因此存在明确异议，不能将通过解读为一致支持；H股行百分比不能直接当作H股内部支持率，票数也不说明反对原因。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内《法律意见书》（1225555804）第1页明确，意见限于会议召集召开、资格、表决程序及结果，不对议案内容及相关事实数据的完整性、真实性和准确性发表意见；第5页载明未修改议案。程序合法有效不构成计划经济合理性的认证。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "INFERENCE",
+        "statement": "据证据包内决议公告第1—4页和法律意见书第1—5页及第6页补充读取记录，本组增量不能确认实际授予、摊薄、费用或经营改善；既往AI研究中的盈利跃迁及预测区间未因此获得新增验证。反对票也不足以反向证明计划损害股东利益。"
+      }
+    ],
+    "current_expression_or_leadership": null,
+    "current_industry_state": "UNKNOWN：本组未提供行业供需、产品价格、库存或竞争地位的可核验增量。",
+    "discovery_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+    "economic_role": "本次可确认的角色是H股股份奖励计划的实施及授权主体；经济问题是奖励安排对股东每股权益、公司现金与费用的潜在影响，而非已经证实的主营业务增长。",
+    "evidence_authority_assessment": "仅使用获准证据包。包内决议公告正文是审批及表决事项的直接披露，法律意见是其声明范围内的程序性意见，二者均不能认证激励回报。法律意见书第6页原提取为空，但已提供绑定同一PDF整页图像的AI读取记录，可作为有限的页面内容描述；本次未直接查看原图，不认证签章、姓名或日期真实性。该补充记录不是独立原始证据，包引用及哈希一致性也不等于真实性认证。既往AI研究仅是问题背景。本次范围仅为已保存公告，不代表已检查所有后续披露。",
+    "industry_supply_demand_variables": [
+      "UNKNOWN：本组未提供可验证的行业供需变量；不将既往AI背景中的存储价格、供给响应或MCU增长转为本次事实。"
+    ],
+    "major_profit_drivers": [
+      "主营业务利润驱动为UNKNOWN，本组无法核验分部利润暴露。",
+      "条件性费用渠道：具体授予安排可能产生股份支付费用，金额和确认期间未知。",
+      "条件性每股权益及现金渠道：新股来源可能涉及摊薄，存量股购买可能涉及现金支出；二者不等同于已发生的利润损失。",
+      "条件性激励收益：人才留任或服务贡献能否抵偿成本未知，不能仅据计划获批推定。"
+    ],
+    "market_expectation_hypothesis": "UNKNOWN：本组没有当前市场价格、一致预期或定价证据，无法判断奖励计划是否已被市场计入。保存的既往AI预测区间不构成当前市场预期核验。",
+    "next_discriminating_evidence": [
+      "本次表决对应的《2026年H股股份奖励计划》全文及股东会通函：核对股份来源、计划限额和服务提供商分项限额的数值、分母及适用期限。",
+      "具体授予或实施文件：区分授权上限与实际承诺，核对授予数量、价格、受益对象、归属条件、业绩约束及追索安排。",
+      "资金和会计安排：核对存量股购买资金来源、股份支付计量及费用期间；以对应股本、现金流和利润基数检验重大性，避免将现金支出与会计费用重复计为同一成本。"
+    ],
+    "pre_research_hash": "0c2604c2d79acc46c5259d4f4cd7f4267996a4b8976b352dbf34d03616a30f90",
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "存在值得有限续核的每股经济问题，但本组仅确认审批，尚无条款数值、实际授予或成本重大性证据，不足以支持深化全公司研究。触发条件是取得对应计划或实施条款后，能够辨别股份来源、成本规模与激励约束；不要求这些文件必须是未来新公告。本次已处理所供正文及第6页有限读取描述，等待的是范围外的经济条款补证，并非将必需正文读取失败包装为完成，也不宣称已完成原计划条款核验。",
+    "schema_version": 1,
+    "segment_mix": "UNKNOWN：本组没有收入、利润或资产的分部构成。",
+    "supporting_claims": [
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内《2026年第三次临时股东会决议公告》（1225555799）第1—4页披露，兆易创新于2026年9月9日召开股东会，H股股份奖励计划、计划限额、服务提供商分项限额及相关授权四项议案均以特别决议通过；普通股合计同意比例为88.1248%—88.6968%。这是审批进展，不是实际授予证明。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内《法律意见书》（1225555804）第4—5页列出同样四项获批议案，并认定表决程序及结果合法有效，与决议公告的审批结果一致。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "FACT",
+        "statement": "证据包内绑定《法律意见书》（1225555804）第6页的AI整页读取记录，将其描述为写有“本页无正文”的签章页，并明确未核验签章真实性、人员身份或法律效力。这是读取记录所述内容，不是本次对原图的独立鉴定，也未提供新增收入、利润或现金流证据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+        ],
+        "kind": "INFERENCE",
+        "statement": "由证据包内决议公告第2—4页可提出一个可检验而尚未定向的经济问题：计划的股份来源、授予条件和资金安排是否形成重大每股成本，激励约束是否可能抵偿该成本。当前只能提出条件性机制，不能确认影响规模或正负方向。"
+      }
+    ],
+    "unresolved_questions": [
+      "奖励股份来自新发行、库存或市场购入股份，还是混合来源？",
+      "计划及服务提供商限额的具体数值和分母是什么，是否仅为授权上限？",
+      "是否已实际授予或承诺授予，数量、价格及受益对象是什么？",
+      "归属、业绩、离职处理及追索条件能否约束激励回报？",
+      "潜在现金支出、股份支付费用和摊薄的金额、期间及重大性如何？",
+      "反对票的具体原因未知；不能将投票分歧直接转化为经济损害结论。"
+    ],
+    "value_chain_position": "UNKNOWN：本组是公司治理与奖励授权披露，不能据此核验其产业价值链位置。",
+    "variant_perception": null
+  },
+  "receipt": {
+    "completion": "COMPLETE",
+    "elapsed_minutes_observed": 3,
+    "execution_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+    "finished_at": "2026-09-13T02:26:10.500984Z",
+    "input_hash": "e2830e0251a0a0c432bb9157ffed7ba3aee2f41379045111b7e89cb008a1baa5",
+    "last_completed_stage": "QUICK",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+    "platform_task_id": "34732914560",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-13T02:23:59.095867Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "b404666a-d79b-5d44-8e3a-71b87be5c8d5",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/973343b35bbc95f0b7b929ff091de45c2b874fa2/research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/source.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 3,
+    "started_at": "2026-09-13T02:24:05.871516Z",
+    "stop_or_failure_reason": null,
+    "technical_retries_used": 0,
+    "tool_calls_used": 3,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-13T02:24:05.871552Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/973343b35bbc95f0b7b929ff091de45c2b874fa2/research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/source.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-13T02:25:00.190297Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:PRE",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-13T02:26:10.500955Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 3,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:QUICK",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
