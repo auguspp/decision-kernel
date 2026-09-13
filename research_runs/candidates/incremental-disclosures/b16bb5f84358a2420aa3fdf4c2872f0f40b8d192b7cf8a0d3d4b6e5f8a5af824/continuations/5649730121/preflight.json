@@ -1,0 +1,89 @@
+{
+  "case_id": "300750.SZ",
+  "finished_at": "2026-09-13T02:26:23.233921+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 4
+  },
+  "notes": "STATIC saved-announcement triage, not an exhaustive latest-issuer inventory. Original packet and prior research context are preserved, not newly accepted facts. PDF/text identity and format checks do not certify semantic readability or truth. Unreadable required content is an execution/source gap, never completed WAIT. Ambiguous tables, economic effects and present market expectations remain UNKNOWN.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "82d78be28da5de6f7df7f78c3368f20cd3e3da7f918e82788c2807f71f75cfaa",
+      "checked_at": "2026-09-13T02:26:21.035478+00:00",
+      "id": "body1",
+      "identity": "CNINFO:300750:ANNOUNCEMENT:1225561227",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-11/1225561227.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/82d78be28da5de6f7df7f78c3368f20cd3e3da7f918e82788c2807f71f75cfaa.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "1175d536e04f9ebbb1fcb0571f49d17957e61868d5b6de841ad70d156a53ae69",
+      "checked_at": "2026-09-13T02:26:21.904818+00:00",
+      "id": "body2",
+      "identity": "CNINFO:300750:ANNOUNCEMENT:1225561268",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-11/1225561268.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/1175d536e04f9ebbb1fcb0571f49d17957e61868d5b6de841ad70d156a53ae69.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "017374e08f8d79a62022a93a93aa8c938ef6cee89789bb1a9eae5ad2f6a09048",
+      "checked_at": "2026-09-13T02:26:21.956239+00:00",
+      "id": "body3",
+      "identity": "CNINFO:300750:ANNOUNCEMENT:1225561269",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-11/1225561269.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/017374e08f8d79a62022a93a93aa8c938ef6cee89789bb1a9eae5ad2f6a09048.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "c5d767d14454cf3bcdd6452fe680eb621d0ecb9d9e8141ecf7989848630fabcf",
+      "checked_at": "2026-09-13T02:26:22.069907+00:00",
+      "id": "body4",
+      "identity": "CNINFO:300750:ANNOUNCEMENT:1225561681",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-11/1225561681.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/c5d767d14454cf3bcdd6452fe680eb621d0ecb9d9e8141ecf7989848630fabcf.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "body1",
+        "body2",
+        "body3",
+        "body4"
+      ],
+      "id": "SAVED_DISCLOSURE_BODIES",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SZSE:300750",
+  "seed_publications": [
+    {
+      "evidence_id": "5267b16f-952d-5d47-bad1-2d9d440534ed",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "a6f61caebcb2069b571c48057c403f00dd8f6012",
+        "path": "research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "218fab4bad179b20e029bf303a0bc99e299dc99c",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "63a0f4d05e6d262f5feb04191832a81fe048e9967aab125a6366a314e4754f66"
+      }
+    }
+  ],
+  "started_at": "2026-09-13T02:26:18.805928+00:00",
+  "ticker": "300750",
+  "valid_until": "2026-09-13T03:11:23.233924+00:00"
+}
