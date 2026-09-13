@@ -104,13 +104,17 @@ def checked_visual(note, spec, digest, page_number, engine, render):
             "review": note, "review_source": spec}
 
 
-def represent(pdf, evidence, *, load_review=None, diagnostics=None):
+def represent(pdf, evidence, *, load_review=None, diagnostics=None, collect_missing=False):
     """Called only AFTER original PDF structure/extraction identity checks.
 
     One PDFium pass, no OCR/network/model, no algorithm search or text cleaning.
     Every page remains present. No review means a real source gap, not blank.
+    Source-only preparation may enumerate every missing review in one pass;
+    it still raises and NEVER returns a partially valid representation.
     """
     import pypdfium2 as pdfium
+    once.require(type(collect_missing) is bool, "invalid page diagnostic mode")
+    missing_reviews = []
     once.require(isinstance(pdf, bytes) and pdf.startswith(b"%PDF-")
         and len(pdf) <= once.MAX_SOURCE_BYTES and read.sha256(pdf) == evidence["pdf_sha256"],
         "representation PDF identity differs")
@@ -150,6 +154,10 @@ def represent(pdf, evidence, *, load_review=None, diagnostics=None):
                     # the page journal carries the additional visual-review gap.
                     missing = ("required text contains encoding damage" if text.strip()
                                else "required page visual review unavailable")
+                    if reviewed is None and collect_missing:
+                        page_event["error_code"] = missing
+                        missing_reviews.append(missing)
+                        continue
                     once.require(reviewed is not None, missing)
                     pages.append(checked_visual(*reviewed, evidence["pdf_sha256"], i + 1, engine, rendered))
                     page_event["status"] = "VISUAL_READING_BOUND_NOT_TRUTH_CERTIFIED"
@@ -158,6 +166,11 @@ def represent(pdf, evidence, *, load_review=None, diagnostics=None):
                     once.require(total <= 1_000_000, "representation text limit")
             finally:
                 page.close()
+    if missing_reviews:
+        event.update(status="REQUIRED_PAGE_REVIEWS_MISSING",
+                     missing_review_count=len(missing_reviews))
+        # Preserve the existing failure code and withhold every partial result.
+        raise once.TrialError(missing_reviews[0])
     result = {"policy": POLICY, "pdf_sha256": evidence["pdf_sha256"],
         "original_text_sha256": evidence["text_sha256"], "source_locator": evidence["source_locator"],
         "engine": engine, "page_count": len(pages), "pages": pages,

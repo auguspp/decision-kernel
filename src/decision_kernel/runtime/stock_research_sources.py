@@ -15,6 +15,7 @@ from ..adapters.cninfo import SHANGHAI_TZ
 from . import cninfo_http as cninfo
 from . import saved_research_once as once
 from . import current_state as reading
+from . import external_research_identity as identity
 
 CONTEXT_BYTES = 448 * 1024
 REPORT = re.compile(r"(20\d{2})年(半年度|年度)报告(?:[（(](?:更正后|修订版|修订后|更新|更新版|修正版|更正版)[）)])?\Z")
@@ -77,12 +78,31 @@ def choose(batch, *, checked_at: str, issuer_name=None):
 
 def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Path,
             clock=once.now, fetch=cninfo.fetch_cninfo_disclosures,
-            fetch_pdf=cninfo.fetch_cninfo_pdf_bytes, extract=extract_pdf_text):
+            fetch_pdf=cninfo.fetch_cninfo_pdf_bytes, extract=extract_pdf_text,
+            preparation_only=False):
+    """Existing capture; optional source-only inventory is NOT execution admission.
+
+    Only missing page reviews are collected instead of stopping at the first.
+    Transport, security, clock, resource and malformed-review errors still raise.
+    Default Research capture behavior and all byte limits remain unchanged.
+    """
+    once.require(type(preparation_only) is bool, "invalid source preparation mode")
+    if preparation_only:
+        once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents),
+                     "unsafe source preparation output")
     output.mkdir(parents=True, exist_ok=False)
     start = clock()
     end_date = reading.clock(start).astimezone(SHANGHAI_TZ).date()
     events, reads, body_events, representation_events = [], [], [], []
     total_pdf = 0
+    preparation = {"schema_version": 1, "kind": "SOURCE_PREPARATION_ONLY",
+        "ticker": ticker, "code_commit": code_commit, "started_at": start,
+        "status": "PREPARATION_INCOMPLETE", "inventory_checked": False,
+        "all_planned_bodies_inspected": False, "selected_ids": [],
+        "checked_body_ids": [], "unattempted_ids": [], "missing_page_reviews": [],
+        "complete_context": None, "research_execution_allowed": False,
+        "meaning": "LOCAL_SOURCE_CHECK_NOT_ADMISSION_OR_RESEARCH_RESULT",
+        "scope": SCOPE, **reading.AUTHORITY}
 
     def query(method, url, form=None):
         once.require(url in {cninfo.CNINFO_STOCK_MAP_URL, cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL},
@@ -117,11 +137,15 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
             "post_report_inventory_anchor": min(r.published_at for r in selected).isoformat(),
             "selected_ids": [r.announcement_id for r in selected]}
         (output / "inventory.json").write_bytes(once.raw(inventory))
+        preparation.update(inventory_checked=True, selected_ids=inventory["selected_ids"],
+            unattempted_ids=list(inventory["selected_ids"]),
+            inventory_sha256=once.sha(once.raw(inventory)))
         documents = []
         for index, row in enumerate(selected, 1):
             event = {"announcement_id": row.announcement_id, "source_locator": row.source_locator,
                      "started_at": clock(), "status": "INCOMPLETE"}
             body_events.append(event)
+            preparation["unattempted_ids"].remove(row.announcement_id)
             pdf = fetch_pdf(source_locator=row.source_locator, max_bytes=once.MAX_SOURCE_BYTES,
                             timeout_seconds=45)
             total_pdf += len(pdf)
@@ -142,8 +166,23 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
             method = "ORIGINAL_PYPDF"
             represented = None
             if not all(page_reading.text_ok(p["text"]) for p in pages):
-                represented = page_reading.represent(pdf, evidence,
-                    load_review=page_reading.main_review_loader(api, code_commit, clock), diagnostics=representation_events)
+                try:
+                    represented = page_reading.represent(pdf, evidence,
+                        load_review=page_reading.main_review_loader(api, code_commit, clock),
+                        diagnostics=representation_events,
+                        **({"collect_missing": True} if preparation_only else {}))
+                except once.TrialError as exc:
+                    if not preparation_only or exc.code not in {
+                        "required page visual review unavailable", "required text contains encoding damage"}:
+                        raise
+                    event.update(status="REQUIRED_PAGE_REVIEWS_MISSING", error_code=exc.code,
+                                 finished_at=clock())
+                    preparation["missing_page_reviews"].append({
+                        "announcement_id": row.announcement_id, "pdf_sha256": digest,
+                        "error_code": exc.code,
+                        "pages": [p for p in representation_events[-1]["pages"]
+                                  if p["status"] == "REQUIRES_VISUAL_REVIEW"]})
+                    continue
                 page_reading.validate(represented, evidence)
                 (output / (digest + "-page-readings.json")).write_bytes(once.raw(represented))
                 pages = represented["pages"]
@@ -158,17 +197,47 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
                 "original_text_sha256": parsed.text_sha256, "page_count": parsed.page_count,
                 "reading_method": method, "pages": pages, "page_reading": represented})
             event.update(status="FORMAT_AND_IDENTITY_CHECKED_NOT_TRUTH", finished_at=clock())
+            preparation["checked_body_ids"].append(row.announcement_id)
             reads.append({"id": "body" + str(index), "identity": ticker + ":" + row.announcement_id,
                 "locator": row.source_locator, "authority": "PRIMARY", "kind": "BODY", "succeeded": True,
                 "checked_at": clock(), "body_sha256": digest,
                 "tool_reference": "SAME_RUN_ARTIFACT:" + ticker + (".SH" if ticker.startswith("6") else ".SZ") + "/sources/" + digest + ".pdf"})
+        preparation["all_planned_bodies_inspected"] = True
+        if preparation_only and preparation["missing_page_reviews"]:
+            return preparation
         context = {"stock_observation": observation, "issuer_inventory": inventory,
                    "issuer_documents": documents, "source_limitations": SCOPE}
+        if preparation_only:
+            # Keep exact whole-context bytes, even when rejected for capacity.
+            # A partial document set can never reach this artifact.
+            context_raw = once.raw(context)
+            (output / "prepared-context.json").write_bytes(context_raw)
+            preparation["complete_context"] = {"path": "prepared-context.json",
+                "bytes": len(context_raw), "sha256": once.sha(context_raw),
+                "limit_bytes": CONTEXT_BYTES, "within_current_limit": len(context_raw) <= CONTEXT_BYTES,
+                "source_reference_limit_bytes": identity.MAX_BYTES,
+                "within_source_reference_limit": len(context_raw) <= identity.MAX_BYTES}
+            if len(context_raw) <= min(CONTEXT_BYTES, identity.MAX_BYTES):
+                preparation["status"] = "SOURCES_CHECKED_NOT_EXECUTION_ADMITTED"
+            elif len(context_raw) > CONTEXT_BYTES:
+                preparation["error_code"] = "full business context too large; no clipping"
+            else:
+                preparation["error_code"] = "complete source exceeds checked reference byte limit"
+            return preparation
         once.require(len(once.raw(context)) <= CONTEXT_BYTES, "full business context too large; no clipping")
         return context, reads, {"started_at": start, "finished_at": clock(),
             "inventory_finished_at": inventory_end, "decoded_query_events": events,
             "scope": SCOPE, "captured_pdf_bytes": total_pdf}
+    except Exception as exc:
+        if preparation_only:
+            preparation.update(error_type=type(exc).__name__)
+            if isinstance(exc, once.TrialError):
+                preparation["error_code"] = exc.code
+        raise
     finally:
+        if preparation_only:
+            preparation["finished_at"] = clock()
+            (output / "source-preparation.json").write_bytes(once.raw(preparation))
         (output / "source-journal.json").write_bytes(once.raw({"started_at": start,
             "finished_at": clock(), "events": events, "body_events": body_events,
             "representation_events": representation_events, "completed_reads": reads,
