@@ -17,7 +17,9 @@ from . import saved_research_once as once
 from . import current_state as reading
 
 CONTEXT_BYTES = 448 * 1024
-REPORT = re.compile(r"(20\d{2})年(半年度|年度)报告(?:[（(].*[）)])?\Z")
+REPORT = re.compile(r"(20\d{2})年(半年度|年度)报告(?:[（(](?:更正后|修订版|修订后|更新|更新版|修正版|更正版)[）)])?\Z")
+AUXILIARY = re.compile(r"关于|摘要|董事|监事|审计|核查|意见|公告|说明|问询|回复|报告")
+LEGAL_NAME = re.compile(r"[\u4e00-\u9fffA-Za-z·＆&（）() -]{2,90}(?:股份有限公司|有限责任公司|有限公司)\Z")
 SCOPE = ("CNINFO latest full annual/half-year report in a coherent 400-day query, "
          "and ALL disclosures dated on/after the earliest full version of that reporting period within the same query. "
          "Not all issuer channels or full company Research. Full required text is "
@@ -27,14 +29,32 @@ SCOPE = ("CNINFO latest full annual/half-year report in a coherent 400-day query
          "not a reconstruction of what was known on the price date.")
 
 
-def choose(batch, *, checked_at: str):
+def report_match(title, issuer_name=None):
+    """Title is discovery only; original row and printed-PDF identity gates remain."""
+    title = title.strip()
+    match = REPORT.search(title)
+    if match is None:
+        return None
+    prefix = title[:match.start()].strip().rstrip(":：").strip()
+    if not prefix:
+        return match
+    if AUXILIARY.search(prefix):
+        return None
+    # A short name comes from the identity-bound Stock observation, not free text.
+    # A legal-name prefix is still verified against the PDF's printed security.
+    bound_legal = (isinstance(issuer_name, str) and bool(issuer_name)
+                   and issuer_name in prefix and LEGAL_NAME.fullmatch(prefix))
+    return match if prefix == issuer_name or bound_legal else None
+
+
+def choose(batch, *, checked_at: str, issuer_name=None):
     rows = list(batch.announcements)
     now = reading.clock(checked_at)
     once.require(rows and all(r.published_at is not None and r.published_at <= now for r in rows),
                  "issuer inventory has unknown or future publication")
     reports = []
     for row in rows:
-        match = REPORT.fullmatch(row.title.strip())
+        match = report_match(row.title, issuer_name)
         if match is not None:
             period = date(int(match[1]), 6, 30) if match[2] == "半年度" else date(int(match[1]), 12, 31)
             once.require(period <= now.astimezone(SHANGHAI_TZ).date(), "business report period is in the future")
@@ -87,7 +107,8 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
             get_json=lambda url: query("GET", url), post_json=lambda url, form: query("POST", url, form))
         inventory_end = clock()
         once.require(batch.stock_code == ticker, "issuer inventory security differs")
-        report, selected = choose(batch, checked_at=inventory_end)
+        report, selected = choose(batch, checked_at=inventory_end,
+                                  issuer_name=observation.get("row", {}).get("company_name"))
         inventory = {"stock_code": batch.stock_code, "org_id": batch.org_id,
             "start_date": batch.start_date.isoformat(), "end_date": batch.end_date.isoformat(),
             "checked_at": inventory_end,

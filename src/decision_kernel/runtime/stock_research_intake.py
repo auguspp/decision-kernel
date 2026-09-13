@@ -79,8 +79,9 @@ def inventory(api, commit: str) -> dict[str, dict]:
         if not path.startswith(PREFIX) or row["type"] == "tree":
             continue
         parts = path[len(PREFIX):].split("/")
-        once.require(len(parts) == 2 and re.fullmatch(r"[a-f0-9]{64}", parts[0])
-                     and parts[1] in once.OUTPUT_NAMES and row["type"] == "blob"
+        once.require((len(parts) == 2 or (len(parts) == 3 and parts[1] == "source-recovery-v1"))
+                     and re.fullmatch(r"[a-f0-9]{64}", parts[0])
+                     and parts[-1] in once.OUTPUT_NAMES and row["type"] == "blob"
                      and row["mode"] == "100644", "stock work path outside contract")
         rows[path] = row
     return rows
@@ -91,12 +92,23 @@ def describe(input_raw: bytes, candidate_raw: bytes) -> dict:
     candidate = ExternalResearchCandidate.model_validate(identity._json(candidate_raw))
     thscode = packet.ticker + (".SH" if packet.security_id.startswith("SSE:") else ".SZ")
     eid, prefix = execution(thscode)
+    recovery = packet.candidate_output_prefix != prefix
+    if recovery:
+        from .stock_source_recovery import execution as recovery_execution, FAILURE_PURPOSE, SELECTION_PURPOSE
+        parents = {role: [r for r in packet.source_refs if r.purpose == role]
+                   for role in (FAILURE_PURPOSE, SELECTION_PURPOSE)}
+        once.require(all(len(v) == 1 for v in parents.values())
+            and parents[FAILURE_PURPOSE][0].path == prefix + "failure.json"
+            and parents[SELECTION_PURPOSE][0].path == prefix + "prepare.json"
+            and packet.research_question == QUESTION, "Stock recovery predecessor binding missing")
+        eid, prefix = recovery_execution(thscode)
     once.require(packet.source_lane == LANE and packet.execution_id == eid
                  and packet.security_id == security(thscode)
                  and packet.candidate_output_prefix == prefix, "stock research identity differs")
     result = validate_external_research_candidate(packet=packet, candidate=candidate)
     funnel = result.funnel_result
     return {"thscode": thscode, "execution_id": eid, "candidate_output_prefix": prefix,
+        **({"work_kind": "SOURCE_PREPARATION_RECOVERY", "new_disclosure": False} if recovery else {}),
         "status": "VALIDATED_FUNNEL_CANDIDATE" if funnel else "VALIDATED_EXECUTION_GAP",
         "completion": result.completion.value, "validation_status": result.status.value,
         "terminal_state": funnel.terminal_state.value if funnel else None,
