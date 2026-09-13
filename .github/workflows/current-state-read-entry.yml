@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research]
     types: [requested, completed]
     branches: [main]
 
@@ -25,13 +25,15 @@ jobs:
         github.event.action == 'completed' &&
         github.event.workflow_run.event == 'push' &&
         github.event.workflow_run.conclusion == 'success') ||
-       (github.event.workflow_run.name == 'saved-disclosure-research' &&
+       ((github.event.workflow_run.name == 'saved-disclosure-research' ||
+         github.event.workflow_run.name == 'stock-business-research') &&
         github.event.action == 'completed' &&
         github.event.workflow_run.run_attempt == 1 &&
         (github.event.workflow_run.event == 'workflow_run' ||
          github.event.workflow_run.event == 'workflow_dispatch')) ||
        (github.event.workflow_run.name != 'kernel-tests' &&
         github.event.workflow_run.name != 'saved-disclosure-research' &&
+        github.event.workflow_run.name != 'stock-business-research' &&
         (github.event.workflow_run.event == 'schedule' ||
          github.event.workflow_run.event == 'workflow_dispatch')))
     runs-on: ubuntu-latest

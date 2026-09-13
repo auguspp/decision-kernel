@@ -36,7 +36,9 @@ class GitHubReadError(RuntimeError):
 
 class GitHubAPI:
     """Narrow repository API client. Errors never echo credentials or response text."""
-    def __init__(self, token: str):
+    def __init__(self, token: str, *, max_calls: int = MAX_API_CALLS):
+        model.check(type(max_calls) is int and 1 <= max_calls <= 1024, "invalid repository request bound")
+        self.max_calls = max_calls
         self.session = requests.Session()
         self.session.headers.update({"Authorization": "Bearer " + token,
             "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
@@ -52,7 +54,7 @@ class GitHubAPI:
             if endpoint == "git/refs":
                 model.check(body.get("ref") == "refs/heads/" + model.READ_REF, "wrong publication ref")
         self.calls += 1
-        model.check(self.calls <= MAX_API_CALLS, "GitHub request budget exhausted")
+        model.check(self.calls <= self.max_calls, "GitHub request budget exhausted")
         try:
             response = self.session.request(method, self.root + endpoint, json=body,
                                             timeout=45, allow_redirects=False)
@@ -729,6 +731,9 @@ class Collector:
                         "collection leaves insufficient publication API budget")
         for path, raw in entry_files.items():
             self.retain(path, raw)
+        if registry.get("stock_business_work_read") is True:
+            from .stock_research_reading import attach
+            payload = attach(self, payload)
         return payload
 
 
@@ -765,7 +770,10 @@ def main(argv=None) -> int:
     parser.add_argument("--publish", action="store_true")
     args = parser.parse_args(argv)
     model.check(model.SHA.fullmatch(args.code_commit) is not None, "code commit required")
-    api = GitHubAPI(os.environ["GH_TOKEN"])
+    # Baseline Collector keeps its original 180-call/60-source limits. The
+    # optional Stock lane reserves its own finite additional reading/publication.
+    from .stock_research_reading import EXTRA_API_CALLS
+    api = GitHubAPI(os.environ["GH_TOKEN"], max_calls=MAX_API_CALLS + EXTRA_API_CALLS)
     prior_commit = None
     previous = None
     try:

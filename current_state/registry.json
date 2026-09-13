@@ -36,6 +36,7 @@
     }
   ],
   "additional_registered_handoffs": [],
+  "stock_business_work_read": true,
   "research_work_read": {
     "ref": "research-work/disclosures-v0",
     "prefix": "research_runs/candidates/incremental-disclosures/",
