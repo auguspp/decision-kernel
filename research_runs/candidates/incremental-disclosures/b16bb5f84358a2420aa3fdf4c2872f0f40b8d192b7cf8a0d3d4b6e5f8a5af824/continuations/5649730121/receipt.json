@@ -1,0 +1,66 @@
+{
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "elapsed_minutes_observed": 3,
+  "execution_id": "saved-disclosure-b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824-reading-5649730121",
+  "finished_at": "2026-09-13T02:29:30.303356Z",
+  "input_hash": "448dd50db7609d75e96e06f82dd7af667b8239f026eda80ca9779085274ec463",
+  "last_completed_stage": "ADMISSION_OR_RETAINED_PARTIAL",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "34732914560",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-13T02:26:55.094328Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "5267b16f-952d-5d47-bad1-2d9d440534ed",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/218fab4bad179b20e029bf303a0bc99e299dc99c/research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 2,
+  "started_at": "2026-09-13T02:27:01.332965Z",
+  "stop_or_failure_reason": "ValidationError",
+  "technical_retries_used": 0,
+  "tool_calls_used": 3,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-13T02:27:01.332999Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/218fab4bad179b20e029bf303a0bc99e299dc99c/research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Model output, not primary-source Evidence.",
+      "observed_at": "2026-09-13T02:28:06.729143Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:PRE",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Raw output retained; no retry or route repair.",
+      "observed_at": "2026-09-13T02:29:30.303246Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 3,
+      "status": "FAILED",
+      "target": "EXECUTOR:QUICK",
+      "technical_retry": false
+    }
+  ]
+}
