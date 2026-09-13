@@ -1,0 +1,21 @@
+{
+  "automatic_retry": false,
+  "error_code": "required page visual review unavailable",
+  "error_type": "TrialError",
+  "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-recovery-v1",
+  "finished_at": "2026-09-13T10:24:14.736032+00:00",
+  "formal_research_started": false,
+  "funnel_status": "NOT_REACHED",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "phase": "SOURCE_PREPARATION",
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "research_authority": "NONE",
+  "research_execution": "NOT_EXECUTED",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T10:24:00.919885+00:00",
+  "status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+  "thscode": "603353.SH"
+}
