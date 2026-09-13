@@ -13,6 +13,7 @@ from . import current_state_delivery as delivery
 from . import external_research_identity as identity
 from . import saved_research_once as once
 from . import stock_research_intake as intake
+from . import stock_source_recovery as recovery
 
 
 # Additive bounds for the new lane, not a reduction of the original 180/60.
@@ -50,27 +51,36 @@ def _collect(collector, payload):
             'Stock Research attempt identity differs')
         latest = model.concise_run(run)
         break
-    try:
-        obj = api.get('git/ref/heads/' + intake.WORK_REF)['object']
-    except delivery.GitHubReadError as exc:
-        if str(exc) != 'GitHub HTTP 404': raise
+    # Reuse the publisher's exact matching-ref discovery, not exception identity
+    # across `python -m` and an imported copy of the delivery module.
+    refs = api.get('git/matching-refs/heads/' + intake.WORK_REF)
+    model.check(isinstance(refs, list) and len(refs) <= 16
+        and all(isinstance(r, dict) and isinstance(r.get('ref'), str) for r in refs),
+        'Stock work ref discovery malformed')
+    exact = [r for r in refs if r['ref'] == 'refs/heads/' + intake.WORK_REF]
+    model.check(len(exact) <= 1, 'Stock work ref discovery ambiguous')
+    if not exact:
         return {'status': 'NOT_STARTED', 'latest_execution_attempt': latest,
                 'items': [{'thscode': code, 'status': 'NOT_STARTED', **model.AUTHORITY} for code in codes],
                 'meaning': 'NO_STOCK_BUSINESS_WORK_REF_NOT_RESEARCH_COMPLETE'}
+    obj = exact[0]['object']
     model.check(obj.get('type') == 'commit' and model.SHA.fullmatch(obj.get('sha', '')),
                 'Stock work ref not exact commit')
     commit = obj['sha']
     rows = intake.inventory(api, commit)
     needed, groups = set(), {}
     for code in codes:
-        eid, prefix = intake.execution(code)
-        names = {path[len(prefix):] for path in rows if path.startswith(prefix)}
-        groups[code] = (eid, prefix, names)
-        if names:
-            model.check('prepare.json' in names, 'Stock work missing original reservation')
-            needed.add(prefix + 'prepare.json')
-            for name in ('candidate.json', 'input.json', 'failure.json'):
-                if name in names: needed.add(prefix + name)
+        for is_recovery, (eid, prefix) in ((False, intake.execution(code)), (True, recovery.execution(code))):
+            names = {path[len(prefix):] for path in rows
+                     if path.startswith(prefix) and '/' not in path[len(prefix):]}
+            if is_recovery and not names:
+                continue
+            groups[(code, is_recovery)] = (eid, prefix, names)
+            if names:
+                model.check('prepare.json' in names, 'Stock work missing original reservation')
+                needed.add(prefix + 'prepare.json')
+                for name in ('candidate.json', 'input.json', 'failure.json'):
+                    if name in names: needed.add(prefix + name)
     model.check(len(needed) <= MAX_STOCK_SOURCE_FILES,
                 'Stock work exceeds separate source-file capacity; no silent truncation')
     extra_files = {}
@@ -87,14 +97,16 @@ def _collect(collector, payload):
                 'Stock work would consume original retained-byte reserve')
     model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 5 <= call_limit(api),
                 'Stock work would consume original publication API reserve')
+    raw_cache = {}
     def fetched(path):
         data = api.file(path, commit)
+        raw_cache[path] = data
         model.check(len(data) == rows[path]['size'] and model.blob_sha(data) == rows[path]['sha'],
                     'Stock work source bytes differ')
         stored = collector.retain('sources/git/' + rows[path]['sha'] + '/' + Path(path).name, data)
         return data, {'repository': model.REPOSITORY, 'ref': commit, 'path': path, **stored}
-    items = []
-    for code, (eid, prefix, names) in groups.items():
+    items, parents = [], {}
+    for (code, is_recovery), (eid, prefix, names) in groups.items():
         item = {'thscode': code, 'execution_id': eid, 'candidate_output_prefix': prefix,
                 'question_kind': intake.QUESTION_KIND, 'semantic_acceptance': 'NOT_ESTABLISHED_BY_READER',
                 'registered_current_handoff': False, 'terminal_state': None, **model.AUTHORITY, 'sources': {}}
@@ -135,11 +147,42 @@ def _collect(collector, payload):
                             finished_at=failure.get('finished_at'))
             else:
                 item['status'] = 'RETAINED_NO_RESEARCH_RESULT'
-        items.append(item)
+        if is_recovery:
+            root = parents[code]
+            _, root_prefix, root_names = groups[(code, False)]
+            model.check(root['status'] == 'PRE_EXECUTION_FAILURE' and not any(n in root_names for n in
+                ('launch.json', 'input.json', 'candidate.json', 'funnel.json', 'admission.json', 'receipt.json')),
+                'Stock recovery parent has execution history')
+            parent_selection = identity._json(raw_cache[root_prefix + 'prepare.json'])
+            parent_failure = identity._json(raw_cache[root_prefix + 'failure.json'])
+            recovery.parent(code, parent_selection, parent_failure)
+            binding = prep['source_recovery']
+            model.check(binding['kind'] == recovery.MODE and binding['new_disclosure'] is False
+                and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
+                and binding['parent_failure']['path'] == root_prefix + 'failure.json'
+                and prep['observation'] == parent_selection['observation']
+                and prep['origin'] == parent_selection['origin'], 'Stock recovery reading parent differs')
+            for key in ('parent_selection', 'parent_failure'):
+                identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
+            if 'candidate.json' in names:
+                for key in ('parent_selection', 'parent_failure', 'request', 'exposure'):
+                    spec = binding[key]
+                    matches = [r.model_dump(mode='json') for r in packet.source_refs if r.purpose == spec['purpose']]
+                    model.check(len(matches) == 1 and all(matches[0].get(k) == spec.get(k)
+                        for k in ('repository', 'ref', 'path', 'git_blob', 'sha256')),
+                        'Stock recovery candidate lost bound predecessor or permission')
+            item.update(work_kind='SOURCE_PREPARATION_RECOVERY', new_disclosure=False)
+            root['source_recovery'] = item
+        else:
+            items.append(item)
+            parents[code] = item
     return {'status': 'READ_OK', 'work_ref': intake.WORK_REF, 'work_commit': commit,
             'latest_execution_attempt': latest,
             'scope': 'CURRENT_QUALIFIED_STOCKS_FIRST_BUSINESS_BASELINES_NOT_ALL_RESEARCH',
-            'items': items, 'counts': {status: sum(i['status'] == status for i in items) for status in
+            'items': items, 'source_recovery_counts': {status: sum(
+                i.get('source_recovery', {}).get('status') == status for i in items) for status in
+                ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
+            'counts': {status: sum(i['status'] == status for i in items) for status in
                 ('NOT_STARTED','RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE',
                  'VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
             'meaning': 'PRICE_OBSERVATION_AND_RESEARCH_REMAIN_SEPARATE_NO_AUTOMATIC_BELIEF_OR_ATTENTION'}
