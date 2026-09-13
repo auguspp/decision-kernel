@@ -1,0 +1,182 @@
+{
+  "automatic_retry": false,
+  "candidate_output_prefix": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/source-recovery-v1/",
+  "completion": "COMPLETE",
+  "execution_id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea-source-recovery-v1",
+  "finished_at": "2026-09-13T10:24:00.016719+00:00",
+  "formal_research_started": true,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "new_disclosure": false,
+  "phase": "COMPLETE",
+  "provider_usage": [
+    {
+      "finished_at": "2026-09-13T10:21:18.412677+00:00",
+      "input_sha256": "a33ed72c11ce928ee10676a181394e06eb1693cb2beda5f707563db04a57e79d",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "10b3700700831b9c29866359d3065c6128d570c12e117013bb3db2ac08a7c313",
+      "output_model_schema_sha256": "6b297571de2785369633901a73550410bcfd8567012d37043db8b17a1d9ee0ec",
+      "output_sha256": "e712b44b626d740e4e29453b0a1616ea1dc90759690b5f77b9b76ee7cd143fb2",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_0cfbf8784787c9ae016aa678bad58c87d08e145497362eb157",
+      "response_received": true,
+      "stage": "pre",
+      "started_at": "2026-09-13T10:19:33.891486+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_0cfbf8784787c9ae016aa678bae25c87d0ab77fe7c69b888aa": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 138228,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 138228,
+              "output_tokens": 0
+            },
+            "msg_0cfbf8784787c9ae016aa678c0849887d0a81b2b51359f66ab": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 3126
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 3126
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 265,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 464,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 138959,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 3126,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 142085
+      }
+    },
+    {
+      "finished_at": "2026-09-13T10:23:53.664869+00:00",
+      "input_sha256": "6dfde73a51ea14bd1b996646ffb9870d617cb04d218ba1fcedf8cbe46b1b9164",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "10edf195a8ca35bf8b1bdadff9a629e29e7ce7640c86046d0f4b462604b20097",
+      "output_model_schema_sha256": "dec598d81fedb58b229c83f3a30f56c655f9f2549342125d245ca807e39e27a6",
+      "output_sha256": "90013029c21ba719cf7c79e70b70e2dee378ca7616fffb1b868ca599a7eae3da",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_03d69944c2157868016aa67922ae1887d0ad05db4c00cfc61e",
+      "response_received": true,
+      "stage": "quick",
+      "started_at": "2026-09-13T10:21:19.501753+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_03d69944c2157868016aa67922b74887d0a544bab915969bf3": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 141437,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 141437,
+              "output_tokens": 0
+            },
+            "msg_03d69944c2157868016aa67927b18c87d0a0758c817cd40e04": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 4526
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 4526
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 265,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 590,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 142294,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 4526,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 146820
+      }
+    }
+  ],
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "registered_current_handoff": false,
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T10:19:00.666706+00:00",
+  "status": "VALIDATED_FUNNEL_CANDIDATE",
+  "terminal_reason": "已在声明来源范围内完成业务联系、财务暴露及最新披露的有限核验，直接防务联系成立，但经营受益尚未成立。预收款和在产品增加提供可检验线索，却缺少板块归属、交付时间及利润率证据；光学材料增长也面临现金转化反证。当前不足以建立已验证的预期差，先等待明确的分项说明或交付、扣非利润及板块回款披露，而非仅凭价格、来源修复许可或建设计划推进深入研究。此等待不是技术失败替代状态，也不声称完成了未提供的补充问答或PDF视觉核对。",
+  "terminal_state": "WAIT_FOR_TRIGGER",
+  "thscode": "600184.SH",
+  "validation_status": "VALIDATED_FUNNEL_RESULT",
+  "work_kind": "SOURCE_PREPARATION_RECOVERY"
+}
