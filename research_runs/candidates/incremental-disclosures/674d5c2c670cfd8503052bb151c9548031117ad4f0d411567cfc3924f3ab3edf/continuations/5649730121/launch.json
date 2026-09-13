@@ -1,0 +1,8 @@
+{
+  "approved_egress_hash": "eff44d4ecdff541190019d974ec8cd7f54c5d39fc9a413c36b3b6f1ea8ce0711",
+  "automatic_retry": false,
+  "code_commit": "408c1de3eecc52af742a1ac9e32c39efc0917bde",
+  "id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+  "input_hash": "e2830e0251a0a0c432bb9157ffed7ba3aee2f41379045111b7e89cb008a1baa5",
+  "started_at": "2026-09-13T02:24:03.907507+00:00"
+}
