@@ -1,0 +1,180 @@
+{
+  "automatic_retry": false,
+  "candidate_output_prefix": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/",
+  "completion": "COMPLETE",
+  "execution_id": "stock-business-914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2",
+  "finished_at": "2026-09-13T07:22:06.596364+00:00",
+  "formal_research_started": true,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "provider_usage": [
+    {
+      "finished_at": "2026-09-13T07:19:50.086444+00:00",
+      "input_sha256": "998c6492a8b8897ffe168f730ff85064d40cbc36fd3bb24b45e16be01e02b679",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "e8bf5c9e938f907b886d6a262f2c7c07b8428f9827ad6f98a6c6b3fc058601dc",
+      "output_model_schema_sha256": "746a55b81a6d3c3d8aedcbe1669dd89b2c2fa2839c8e87904446ceba82f961b2",
+      "output_sha256": "7ff6431e4ba0801740e436388240e50299a7c9f72d145d905253378ab287b2e5",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_0c6d8272ba4f2ad4016aa64e3221cc87d0a0feafd13435b71f",
+      "response_received": true,
+      "stage": "pre",
+      "started_at": "2026-09-13T07:17:49.395382+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_0c6d8272ba4f2ad4016aa64e32315087d099c78a23de491b0a": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 127253,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 127253,
+              "output_tokens": 0
+            },
+            "msg_0c6d8272ba4f2ad4016aa64e3608e087d09069d2f905feeb7e": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 3078
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 3078
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 265,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 462,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 127982,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 3078,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 131060
+      }
+    },
+    {
+      "finished_at": "2026-09-13T07:22:00.790679+00:00",
+      "input_sha256": "e38f9a105ff64e54de9cadcdb1fb3a3d40d59fede9561dcaaad35ec07bc0fe8e",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "036e41f8c9ee5307ea648393308e88e87b20ac2eb52aa654da81fe9f72455c08",
+      "output_model_schema_sha256": "0a3f5abc76d7fe1df1743cfbe68f98b31644f7bf6eb337258a0fbe1b85978a75",
+      "output_sha256": "8a5613ac250855f3bcbeaf769fc466aab57aee66429e0bc224e4656f026d793c",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_0584d1da33a43f6d016aa64ea4647887d083503165ee217bc3",
+      "response_received": true,
+      "stage": "quick",
+      "started_at": "2026-09-13T07:19:50.585652+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_0584d1da33a43f6d016aa64ea46ad887d0abab1a6d0e242af4": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 130423,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 130423,
+              "output_tokens": 0
+            },
+            "msg_0584d1da33a43f6d016aa64ea8f3ec87d088e8894d977b459f": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 3726
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 3726
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 265,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 588,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 131278,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 3726,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 135004
+      }
+    }
+  ],
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "registered_current_handoff": false,
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T07:17:22.861755+00:00",
+  "status": "VALIDATED_FUNNEL_CANDIDATE",
+  "terminal_reason": "本次有界核验已建立真实电力通信业务联系和主要毛利暴露，但没有足以确认经营拐点的客户侧或订单兑现证据；当期收入、通信毛利率与扣非亏损构成实质反证。不因价格表现自动深化，也不因经营暂弱永久终止。等待可核验的中标份额、交付验收、毛利及回款变化再重评；此等待基于已读必需正文后的证据判断，而非技术失败或宣称全渠道核查完成。",
+  "terminal_state": "WAIT_FOR_TRIGGER",
+  "thscode": "300183.SZ",
+  "validation_status": "VALIDATED_FUNNEL_RESULT"
+}
