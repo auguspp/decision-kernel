@@ -1,0 +1,30 @@
+{
+  "as_of": "2026-09-13T02:23:59.095867Z",
+  "contradiction_or_mapping_warning": null,
+  "current_market_expression": null,
+  "discovery_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121",
+  "economic_direction": "已保存公告对公司经济问题的增量尚未解释",
+  "factual_observations": [
+    {
+      "evidence_artifact_ids": [
+        "b404666a-d79b-5d44-8e3a-71b87be5c8d5"
+      ],
+      "statement": "已保存本组公告及其原研究上下文；保存不代表结论被接受。"
+    }
+  ],
+  "known_stop_or_downgrade_condition": "无证据支持经济联系时允许停止；不发明原因，不为测试强行Quick。",
+  "next_discriminating_search": "仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
+  "schema_version": 1,
+  "security_id": "SSE:603986",
+  "source_lane": "CNINFO_INCREMENTAL",
+  "source_lineage": [
+    {
+      "available_at": "2026-09-13T02:23:27.475484Z",
+      "evidence_artifact_id": "b404666a-d79b-5d44-8e3a-71b87be5c8d5",
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/973343b35bbc95f0b7b929ff091de45c2b874fa2/research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/source.json"
+    }
+  ],
+  "supporting_securities": [],
+  "ticker": "603986",
+  "why_now": "Human已明确许可的原问题读取补证续作；不是新公告、新价格发现或原失败的改写。"
+}
