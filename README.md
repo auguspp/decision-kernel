@@ -143,7 +143,7 @@ Two current conveniences are intentional, but they do not gain semantic authorit
 
 **`live.py`**
 
-`live.py` is the default executable composition root. It may wire security-id mapping, the default Odds policy, a supplied market fetch capability, and the Decision Spine. It must not accumulate provider fallback, retry/backoff, scheduling, case persistence, research routing, Radar logic, notification policy, or similar operating-system responsibilities. Those concerns belong in replaceable Harness code outside this composition root.
+`live.py` is the default executable composition root. It may wire security-id mapping, the default Odds policy, a supplied market fetch capability, and the Decision Spine. It must not accumulate provider fallback, retry/backoff, scheduling, case persistence, research routing, Radar logic, notifications, and similar operating-system responsibilities. Those concerns belong in replaceable Harness code outside this composition root.
 
 Architecture tests intentionally guard both boundaries. Adding a new local dependency to `research_commit.py` or `live.py` should require an explicit architecture decision rather than happening accidentally.
 
@@ -208,6 +208,7 @@ Do not add by default:
 - scheduler framework
 - process supervisor
 - generic artifact service
+- agent framework
 - portfolio construction or sizing
 - trade execution
 
