@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "ticker": "600184",
+  "company_name": "光电股份",
+  "exchange": "SSE",
+  "research_status": "FROZEN_FOR_DECISION_PREPARATION",
+  "price_context": {
+    "price_cny": "19.98",
+    "price_date": "2026-09-11",
+    "authority": "PUBLIC_NON_QUALIFIED_CONTEXT_ONLY",
+    "qualified_market_observation": false,
+    "canonical_market_state": false
+  },
+  "share_count": "582727468",
+  "odds": {
+    "type": "PROVISIONAL_ORDINAL_REVERSE_UNDERWRITING",
+    "cardinal_probability": "NOT_ESTABLISHED",
+    "canonical_numerical_odds": "NOT_ESTABLISHED",
+    "risk_reward_at_context_price": "UNFAVORABLE",
+    "investment_authority": "NONE_HUMAN_ONLY"
+  },
+  "worlds": [
+    {
+      "name": "STALLED_WEAK_RECOVERY",
+      "normalized_parent_np_cny_range": ["100000000", "140000000"],
+      "terminal_pe_range": [22, 28],
+      "terminal_value_per_share_cny_range": ["3.78", "6.73"]
+    },
+    {
+      "name": "CONSERVATIVE_RECOVERY",
+      "normalized_parent_np_cny_range": ["140000000", "190000000"],
+      "terminal_pe_range": [25, 30],
+      "terminal_value_per_share_cny_range": ["6.01", "9.78"]
+    },
+    {
+      "name": "CORE_RECOVERY",
+      "normalized_parent_np_cny_range": ["230000000", "290000000"],
+      "terminal_pe_range": [28, 35],
+      "terminal_value_per_share_cny_range": ["11.05", "17.42"]
+    },
+    {
+      "name": "STRONG_EXECUTION",
+      "normalized_parent_np_cny_range": ["320000000", "400000000"],
+      "terminal_pe_range": [32, 40],
+      "terminal_value_per_share_cny_range": ["17.57", "27.46"]
+    },
+    {
+      "name": "RIGHT_TAIL",
+      "normalized_parent_np_cny_range": ["450000000", "550000000"],
+      "terminal_pe_range": [40, 45],
+      "terminal_value_per_share_cny_range": ["30.89", "42.47"]
+    }
+  ],
+  "first_entry_ladder": [
+    {
+      "price_region_cny": ">13.2",
+      "state": "WAIT"
+    },
+    {
+      "price_region_cny": "12-13.2",
+      "state": "RE_UNDERWRITE_EXPLORATORY_ONLY"
+    },
+    {
+      "price_region_cny": "10-11.5",
+      "state": "CONDITIONAL_FIRST_ENTRY_REVIEW_PROPOSED",
+      "human_accepted": false
+    },
+    {
+      "price_region_cny": "8-9.5",
+      "state": "MATERIALLY_BETTER_ODDS"
+    },
+    {
+      "price_region_cny": "6.5-7",
+      "state": "HIGH_MARGIN_OF_SAFETY_DEEP_VALUE_REVIEW"
+    }
+  ],
+  "method_correction": {
+    "problem": "The first pass mixed high downside-protection preference into the economic world set, producing an excessively low default first-entry region.",
+    "corrected_order": [
+      "Reality Map",
+      "Market Belief Map",
+      "Our Belief",
+      "Price to Odds"
+    ],
+    "discipline": [
+      "Use sell-side dispersion and historical extreme pricing as Market Belief evidence, not truth.",
+      "Do not let margin-of-safety preference silently redefine ordinary/core operating worlds.",
+      "Separate re-underwrite, first-entry review and high-MOS zones.",
+      "Historical high price is an expectation datapoint, not an intrinsic-value anchor."
+    ],
+    "kernel_constitution_change": false,
+    "construction_authority": false
+  },
+  "human_acceptance_of_distribution": "NOT_RECORDED",
+  "first_entry_executed": false,
+  "position_size_recorded": false,
+  "automatic_execution_authority": "NONE"
+}
