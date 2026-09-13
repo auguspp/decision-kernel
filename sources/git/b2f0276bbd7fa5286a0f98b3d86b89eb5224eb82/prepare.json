@@ -1,0 +1,379 @@
+{
+  "code_commit": "501551ecfa9ffd6c092ea610e0327603077550f3",
+  "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-recovery-v1",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "广哈通信",
+    "current_member_name": "广哈通信",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.051767048282727725236436038",
+          "name": "广哈通信",
+          "thscode": "300711.SZ",
+          "ticker": "300711",
+          "turnover": "443181630"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "884265.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他通信设备",
+            "recorded_event_ids": [
+              "e423a8dd8c2a0456c3b212d4ce8906abcc5719d115217b2f27e39fb438024de7"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884265.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881129.TI",
+        "node_label": "其他通信设备 884265.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884265.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881129.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0333741973646986206246195787",
+        "excess_return": "0.1817437625820899249724456657",
+        "stock_return": "0.148369565217391304347826087"
+      },
+      "5": {
+        "benchmark_return": "-0.0083310429744615824364287992",
+        "excess_return": "0.1738026370174841968876146792",
+        "stock_return": "0.165471594043022614451185880"
+      },
+      "60": {
+        "benchmark_return": "-0.0873077545734175165938157682",
+        "excess_return": "0.2743864062588107750207820602",
+        "stock_return": "0.187078651685393258426966292"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.051767048282727725236436038",
+          "name": "广哈通信",
+          "thscode": "300711.SZ",
+          "ticker": "300711",
+          "turnover": "443181630"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他通信设备",
+            "recorded_event_ids": [
+              "e423a8dd8c2a0456c3b212d4ce8906abcc5719d115217b2f27e39fb438024de7"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884265.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881129.TI",
+        "node_label": "其他通信设备 884265.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884265.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.012067557341702461018313934",
+            "stock_excess_return": "0.136302007875688843329512153"
+          },
+          "5": {
+            "sector_return": "0.028561951936736046739308101",
+            "stock_excess_return": "0.136909642106286567711877779"
+          },
+          "60": {
+            "sector_return": "-0.0961950064442889494353784898",
+            "stock_excess_return": "0.2832736581296822078623447818"
+          }
+        },
+        "name": "其他通信设备",
+        "node_id": "881129.TI",
+        "thscode": "884265.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.051767048282727725236436038",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-10",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-14",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-07",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-04",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-04",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-18",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 9,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "300711.SZ",
+            "to": "2026-09-11"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 9,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-11T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789142399999",
+          "interval": "1d",
+          "start": "1781712000000",
+          "thscode": "300711.SZ"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-12T12:53:58+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-12T04:53:58.861290+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2026-05-28",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2025-05-13",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2024-06-18",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.0800000000",
+            "ex_date": "2023-05-31",
+            "per_share_bonus": "0.2000000000",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2022-06-10",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.0380000000",
+            "ex_date": "2021-06-10",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.0280000000",
+            "ex_date": "2020-06-12",
+            "per_share_bonus": "0.2000000000",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.0280000000",
+            "ex_date": "2019-07-11",
+            "per_share_bonus": "0.2000000000",
+            "ticker": "300711"
+          },
+          {
+            "dividend_per_share": "0.0800000000",
+            "ex_date": "2018-06-29",
+            "per_share_bonus": "0",
+            "ticker": "300711"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "4.35",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "44.3181630",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "443181625.65",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "443181630",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "21.13",
+      "latest_turnover": "443181625.65",
+      "latest_volume": "21465812",
+      "previous_raw_close": "20.09",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.148369565217391304347826087",
+        "5": "0.165471594043022614451185880",
+        "60": "0.187078651685393258426966292"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "1.613653045588885467263839769",
+      "twenty_day_return_five_sessions_ago": "-0.0898594377510040160642570281",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "300711.SZ"
+  },
+  "origin": {
+    "archive_sha256": "3bc8413f93e4994e6bbed4686d565d3fbb363cb62f042d6844a54cd2a93ac24e",
+    "artifact_id": 10291478835,
+    "market_session": "2026-09-11",
+    "projection_hash": "7855c155611d3775574d97a32c82dd655fc261c8b727e5611cd354dfafdc057f",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-12T04:46:28Z",
+      "event": "workflow_dispatch",
+      "head_sha": "93f667ebb2cedd553b66a495127b6ed657ad521e",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34673882756",
+      "id": 34673882756,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-12T04:46:28Z",
+      "status": "completed",
+      "updated_at": "2026-09-12T04:55:33Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "source_recovery": {
+    "exposure": {
+      "git_blob": "5cc66ac7edd555ed6d6e399e07e03e7b1de9c6b0",
+      "path": "current-state.json",
+      "purpose": "HUMAN_CONTINUATION_EXPOSURE",
+      "ref": "5401ad55e02edd06948610c801368aadd80ac58b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "d879d2afe7dab1fc3f950a2c5a4cf3bd911726f460aed0c718dfce0b4dc499c9"
+    },
+    "kind": "HUMAN_AUTHORIZED_STOCK_SOURCE_RECOVERY",
+    "meaning": "REPAIR_OF_REQUIRED_SOURCE_NOT_NEW_PRICE_QUESTION_OR_INDEPENDENT_EVIDENCE",
+    "new_disclosure": false,
+    "parent_failure": {
+      "git_blob": "1bf26ec8b97b13769dfdeb5409f5f6642102be57",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/failure.json",
+      "purpose": "STOCK_SOURCE_FAILURE_PREDECESSOR",
+      "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5f88f0398b84ccef8be267f0568b9348882fc4e162baa610e4ba900317f6dc0c"
+    },
+    "parent_selection": {
+      "git_blob": "67d24e8de7d2049e7552c51d041c10ffb5295f26",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/prepare.json",
+      "purpose": "STOCK_SOURCE_FAILURE_SELECTION",
+      "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "71963cef58fc62abbddca1df49e28ac9200fb8235508aabb15de98bf72c48112"
+    },
+    "permission": {
+      "body_sha256": "a90353b19c4d609821ebdb862af2894a4e8bd79124bc122c19ca3f03b5158284",
+      "comment_id": 5652047028,
+      "created_at": "2026-09-13T07:49:57Z"
+    },
+    "repair": {
+      "kind": "BOUND_VISUAL_PAGE",
+      "page_number": 4,
+      "pdf_sha256": "cc65030bd9e676f5289d2bc2649eb7ff23b26a5b406b08b88cd20392d45df342",
+      "report_id": "1225486852",
+      "review_git_blob": "3cb9d03c52db14cf2856de6da512f2ca5e4fd2ab"
+    },
+    "request": {
+      "git_blob": "e3b33073f9348afcf91edc4c4e24239ea15b25ed",
+      "path": "research_runs/stock-source-recovery-request.json",
+      "purpose": "TRUSTED_STOCK_SOURCE_RECOVERY_REQUEST",
+      "ref": "501551ecfa9ffd6c092ea610e0327603077550f3",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f86de3b7482c8b1cea39832e1bf57a990fa250d08e1047483cce321f5c7f8347"
+    }
+  },
+  "started_at": "2026-09-13T10:24:18.243452+00:00",
+  "thscode": "300711.SZ"
+}
