@@ -1,0 +1,86 @@
+{
+  "approved_egress_hash": "eff44d4ecdff541190019d974ec8cd7f54c5d39fc9a413c36b3b6f1ea8ce0711",
+  "automatic_retry": false,
+  "candidate_hash": "79907a0e29f8fcf55a764d54743c9fc0f2de59cd3886021db3a35f65d10042b5",
+  "code_commit": "408c1de3eecc52af742a1ac9e32c39efc0917bde",
+  "current_state_published": false,
+  "execution_key": {
+    "canonical_input_hash": "e2830e0251a0a0c432bb9157ffed7ba3aee2f41379045111b7e89cb008a1baa5",
+    "execution_id": "saved-disclosure-674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf-reading-5649730121"
+  },
+  "finished_at": "2026-09-13T02:26:17.718224+00:00",
+  "formal_research_started": true,
+  "input_source": {
+    "git_blob": "fb8590f0870539522a656bf637284512a60be407",
+    "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/input.json",
+    "purpose": "input.json",
+    "ref": "ff4e47ed86291a8be1abf24f25aa4a3638ad1be5",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "aba274a7a76a390eaafe968433635d6168912c0d3c4fc66cee776b8bc7f03f67"
+  },
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "retained_files": [
+    {
+      "git_blob": "3ac55f26db68cfbb0edf29c425dbaaf45cf59638",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/launch.json",
+      "purpose": "launch.json",
+      "ref": "3d2a10b82b0466d817b2e6696777628f2cef8c37",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7450946528c764e5e68900ee1e81fbdfe544d55fdb4787ea88b8cc2fe5aaafb6"
+    },
+    {
+      "git_blob": "3eec733aca2cf08e60743b4f51ac5e7219e0b9ab",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/admission.json",
+      "purpose": "admission.json",
+      "ref": "0318f9207167b9ff2d9d5e35f1d50edd6b33cde3",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e66b445aee0a545982ee8f838417b923d44c3d2b07b4fd70d7f1702cfa0f6268"
+    },
+    {
+      "git_blob": "cec8ac4e1f440c31d2aa1227e57bf4beb5d3d0db",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/candidate.json",
+      "purpose": "candidate.json",
+      "ref": "9abff8a08d6bbc709a76345d0bb9626d881f873a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "22c3ebfa95a57c774f8f5dcc62e7e4af7c0daefac00c56ba1eac8fff931dc97c"
+    },
+    {
+      "git_blob": "3ea5f6ddfabe666d4ad66cf8c42a1072d83f5c36",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/receipt.json",
+      "purpose": "receipt.json",
+      "ref": "13c24bd69c4e812027e4677c983ceabface01fc0",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e158e338c692e9bb56ca4da8a20850ba818a5f14f3711f50825ed248d0053e22"
+    },
+    {
+      "git_blob": "f806799794e19480cc047cbfb7fcef875bb0416b",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/validation.json",
+      "purpose": "validation.json",
+      "ref": "6349d93071fec2e793f8ea1f89e5abb27f802f01",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "9ba474e8e37f30b3d43b966083cf280150688e99a65f525b67919220651e6225"
+    },
+    {
+      "git_blob": "7905cd94cb84f067b42f0656ea9caee40ff59222",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/funnel.json",
+      "purpose": "funnel.json",
+      "ref": "cd054b96d148bfd9acfbd6ffd5025c630873be91",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6984eb12a1551f6fa77861975efccffa2ae968bcd2f9fd7f1ce7f402d5019ddd"
+    },
+    {
+      "git_blob": "e6a66e99dc25917905cb4b8c79e04f31d57b9d42",
+      "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/README.md",
+      "purpose": "README.md",
+      "ref": "5f34577092a34310e84ba0456ca797532b991183",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c19c0aa38f2c5afd09259e312d7d758f8cad2930dbfcd9c50b287f64910ae96e"
+    }
+  ],
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "started_at": "2026-09-13T02:24:01.254364+00:00",
+  "status": "VALIDATED_FUNNEL_RESULT",
+  "validation_hash": "7e98dcf0d20f15a7d3fb4cd1c53bf95a096c6595c7316b9da6927659c4390de1"
+}
