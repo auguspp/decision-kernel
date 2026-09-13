@@ -1,0 +1,28 @@
+{
+  "scope": "LOCAL_STDLIB_ARITHMETIC_REPLAY_ONLY",
+  "kernel_validator_run": false,
+  "independent_model_or_new_chat_test": false,
+  "calibration_or_investment_outcome_validation": false,
+  "tests_run": 12,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "unit_conflict_ratio": "10",
+  "electro_optic_core_endpoints": [
+    "11.05147835591645733095938425885220155780",
+    "17.41809088704224253249033388623444810740"
+  ],
+  "electro_optic_cagr_at_14": [
+    "-0.0758039374214505717560250734787190140722",
+    "0.075534070035053216066452279769450602546"
+  ],
+  "electro_optic_core_high_entry_bound": "13.08646948688372842410994281",
+  "hengrui_cagr_4731_at_4293": "0.032913657546928360648869918463473036831",
+  "hengrui_core_boundary": "39.59429000751314800901577761",
+  "hengrui_downside_cumulative_at_38": [
+    "-0.4052631578947368421052631579",
+    "-0.1447368421052631578947368421"
+  ],
+  "three_year_cumulative_at_minus_15pct_annual": "-0.385875",
+  "investment_authority": "NONE"
+}
