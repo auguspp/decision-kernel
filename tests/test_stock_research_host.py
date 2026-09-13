@@ -46,6 +46,10 @@ def setup_host(tmp_path, monkeypatch, *, mode='quick', fail=None):
             self.calls+=1
             if path.startswith('actions/workflows/stock-business-research.yml/runs'):
                 return {'total_count':0,'workflow_runs':[]}
+            if path.startswith('git/matching-refs/heads/'):
+                prefix=path.removeprefix('git/matching-refs/heads/')
+                return [{'ref':'refs/heads/'+name, 'object':{'sha':sha, 'type':'commit'}}
+                        for name,sha in heads.items() if name.startswith(prefix)]
             if path.startswith('git/ref/heads/'):
                 name=path.removeprefix('git/ref/heads/')
                 if name not in heads: raise delivery.GitHubReadError('GitHub HTTP 404')
