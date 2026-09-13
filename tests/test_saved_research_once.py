@@ -147,6 +147,8 @@ def test_sdk_is_tool_free_pinned_and_does_not_retain_reasoning(tmp_path, monkeyp
     class Client(Context):
         def __init__(self,**kwargs): kwargs_seen.update(kwargs); self.responses=self
         def stream(self,**kwargs): kwargs_seen["request"]=kwargs; return Context()
+    from test_saved_research_raw_retention import format_converter
+    format_converter(monkeypatch)
     monkeypatch.setitem(sys.modules,"openai",SimpleNamespace(OpenAI=Client,DefaultHttpxClient=lambda **kwargs:kwargs))
     monkeypatch.setenv("SUB2API_API_KEY","synthetic-key-never-real")
     usage=[]
