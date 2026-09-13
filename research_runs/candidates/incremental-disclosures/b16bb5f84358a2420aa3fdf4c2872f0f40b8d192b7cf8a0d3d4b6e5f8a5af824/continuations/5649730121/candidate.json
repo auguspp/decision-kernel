@@ -1,0 +1,181 @@
+{
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "discovery": {
+    "as_of": "2026-09-13T02:26:55.094328Z",
+    "contradiction_or_mapping_warning": null,
+    "current_market_expression": null,
+    "discovery_id": "saved-disclosure-b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824-reading-5649730121",
+    "economic_direction": "已保存公告对公司经济问题的增量尚未解释",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "statement": "已保存本组公告及其原研究上下文；保存不代表结论被接受。"
+      }
+    ],
+    "known_stop_or_downgrade_condition": "无证据支持经济联系时允许停止；不发明原因，不为测试强行Quick。",
+    "next_discriminating_search": "仅核验本组公告相对原上下文的经济增量；必要材料缺失则留缺口。",
+    "schema_version": 1,
+    "security_id": "SZSE:300750",
+    "source_lane": "CNINFO_INCREMENTAL",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-13T02:26:23.233844Z",
+        "evidence_artifact_id": "5267b16f-952d-5d47-bad1-2d9d440534ed",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/218fab4bad179b20e029bf303a0bc99e299dc99c/research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "300750",
+    "why_now": "Human已明确许可的原问题读取补证续作；不是新公告、新价格发现或原失败的改写。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "448dd50db7609d75e96e06f82dd7af667b8239f026eda80ca9779085274ec463",
+  "pre_research": {
+    "as_of": "2026-09-13T02:26:55.094328Z",
+    "basic_business_role": "研究对象为宁德时代（300750）。原研究上下文将其定位于动力与储能电池业务，但本组公告主要涉及资本配置与股权激励，不足以独立核验业务结构、竞争地位或盈利暴露。",
+    "current_expression_or_leadership": null,
+    "current_market_expectation_hypothesis": "UNKNOWN：本组没有当前市场一致预期、估值或预期修正证据。保存的旧研究叙述只是待检验假设，不能据此认定市场已计入回购、增长或资金压力。",
+    "discovery_id": "saved-disclosure-b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824-reading-5649730121",
+    "economic_direction": "资本配置层面存在双向作用：回购消耗资金，若最终注销可减少股份；股权激励归属带来认缴资金并新增股份。净每股收益、融资成本及投资能力影响仍为UNKNOWN，不能将回购直接等同于经营改善。",
+    "largest_unknown": "200亿至400亿元回购计划的实际执行规模、资金来源及其与经营现金流、资本开支和其他资金用途的匹配程度；本组首次回购金额不能证明完整计划的资金承受能力。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "FACT",
+        "statement": "公告1225561269第1页披露：既有回购方案金额为人民币200亿至400亿元，使用自有或自筹资金，用于注销并减少注册资本，期限为2026年8月12日股东会批准后12个月内；2026年9月11日首次回购604,293股，成交金额199,978,827.46元（不含交易费用）。这是既有计划开始执行，不是本次新批准整个额度。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "INFERENCE",
+        "statement": "根据公告1225561269第1—2页，首次投入约2亿元，约为计划下限的1%、上限的0.5%。执行起步值得核验资本配置，但尚不能外推后续速度或全额实施；公告亦称后续将根据市场情况实施。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "FACT",
+        "statement": "公告1225561681同一PDF的可读补充表示第3—4、7页列示上述604,293股为拟注销、截至期末尚未注销，回购金额与A股首次回购公告一致；第7页拟持作库存股份数量为0。该文件虽题为H股公告，所披露回购类别实际为A股，并非另一笔H股回购。补充表示不是独立证据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "INFERENCE",
+        "statement": "公告1225561681可读表示第1—3页的新股事件合计41,283股，与A股已发行总数从4,408,470,110增至4,408,511,393的差额一致；不含库存股份数量下降与库存股份增加604,293股可以对接。因此不能把不含库存股份数量的下降当成已完成法定注销，亦不能重复计算回购。该算术核对不认证所有表格口径。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "FACT",
+        "statement": "公告1225561268第1、14、16—18页披露：151名激励对象归属422,839股，定向发行A股，占当时总股本约0.01%，预计2026年9月16日上市；已收到认缴股款52,554,659.31元，全部补充流动资金。公司称该归属会摊薄基本每股收益和净资产收益率，但不会对财务状况和经营成果产生重大影响；高管仍受转让限制。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "FACT",
+        "statement": "公告1225561227第1页披露208,019份股票期权因离职、行权期届满未行权等情形完成注销，并明确不影响公司股本及激励计划继续实施。公告1225561268第10、14页还披露特定四期及五期授予群体自授予以来累计离职人数，以及1名对象因个人绩效不达标作废1,434股；这些并非全公司当期人员流失数据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "FACT",
+        "statement": "公告1225561268第14页称2022—2025年累计营业收入15,152.25亿元，达到第四归属期12,600亿元门槛。该信息是历史累计考核达标，不是2026年新增经营业绩或盈利预测。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "5267b16f-952d-5d47-bad1-2d9d440534ed"
+        ],
+        "kind": "INFERENCE",
+        "statement": "公告1225561681可读表示第8页的回购后30天发行限制明确包含豁免条件，而公告1225561268第16—18页披露后续归属上市及律师合规意见；仅凭日期接近不能认定违规，具体豁免适用仍待核验。"
+      }
+    ],
+    "next_discriminating_search": "优先核验公告1225561269引用的2026-060回购报告书中资金来源、融资安排与资金影响测算，并对接相应财务报告中的可用现金、经营现金流、资本开支和债务约束，区分现金承受能力与仅有授权额度；再核验实际回购及注销进展、激励新增股份口径。补充资料须另行取得，本次不声称已检索。",
+    "obvious_contradiction": "未发现足以否定资本配置核验问题的直接矛盾，但存在重要约束：大额计划不是本次新授权，首次执行仅约2亿元且尚未注销；激励归属同时增加股份；历史收入达标不代表当前经营加速。库存口径与注销用途不应混同，回购后归属上市亦不能忽略豁免条款而直接认定违规。",
+    "potential_fundamental_driver": "既有大额注销式回购由授权进入实际执行后，资金支出与未来股份减少之间的权衡，是否会实质改变现金余量、融资需求及每股经济结果。",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "本组形成了可明确检验的资本配置问题：首笔回购已执行，而完整计划的资金承受能力及注销后的净股份效果尚不清楚，值得有界快速核验。其余激励事项主要是小规模执行进展，不能单独支持经营重估。本次已利用同一PDF九页可读表示处理原读取缺口，不把旧失败改写为研究结论，也不据此自动进入更深研究或投资行动。",
+    "schema_version": 1,
+    "what_is_this": "对四份已保存公告的静态增量初筛，重点区分回购授权、实际回购、待注销股份、期权注销与激励新股发行；不是截至当前的全公司研究或最新公告全集。",
+    "why_surfaced_now": "Human许可对原问题补证续作：同一份翌日披露表旧提取存在异常字符，现提供同一原件的可读表示。此次触发来自读取补证，不是新公告、新价格发现或对旧研究结论的接受。"
+  },
+  "quick_research": null,
+  "receipt": {
+    "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+    "elapsed_minutes_observed": 3,
+    "execution_id": "saved-disclosure-b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824-reading-5649730121",
+    "finished_at": "2026-09-13T02:29:30.303356Z",
+    "input_hash": "448dd50db7609d75e96e06f82dd7af667b8239f026eda80ca9779085274ec463",
+    "last_completed_stage": "ADMISSION_OR_RETAINED_PARTIAL",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+    "platform_task_id": "34732914560",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-13T02:26:55.094328Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "5267b16f-952d-5d47-bad1-2d9d440534ed",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/218fab4bad179b20e029bf303a0bc99e299dc99c/research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 2,
+    "started_at": "2026-09-13T02:27:01.332965Z",
+    "stop_or_failure_reason": "ValidationError",
+    "technical_retries_used": 0,
+    "tool_calls_used": 3,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-13T02:27:01.332999Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/218fab4bad179b20e029bf303a0bc99e299dc99c/research_runs/candidates/incremental-disclosures/b16bb5f84358a2420aa3fdf4c2872f0f40b8d192b7cf8a0d3d4b6e5f8a5af824/continuations/5649730121/source.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-13T02:28:06.729143Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:PRE",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Raw output retained; no retry or route repair.",
+        "observed_at": "2026-09-13T02:29:30.303246Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 3,
+        "status": "FAILED",
+        "target": "EXECUTOR:QUICK",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
