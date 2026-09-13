@@ -1,0 +1,11 @@
+{
+  "automatic_retry": false,
+  "id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea-source-recovery-v1",
+  "input_hash": "5f04cdb10225b69367c11977ffd4151a5fcd7e988b35223e719a317e319c27e2",
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "public_egress_hash": "92dfc1c0f55d19b7814fd8d96a3289a3d2f04675a5e5c815d33c049bea8b889c"
+}
