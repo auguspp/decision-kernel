@@ -1,0 +1,65 @@
+{
+  "case_id": "603986.SH",
+  "finished_at": "2026-09-13T02:23:27.475592+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 2
+  },
+  "notes": "STATIC saved-announcement triage, not an exhaustive latest-issuer inventory. Original packet and prior research context are preserved, not newly accepted facts. PDF/text identity and format checks do not certify semantic readability or truth. Unreadable required content is an execution/source gap, never completed WAIT. Ambiguous tables, economic effects and present market expectations remain UNKNOWN.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "bee837473fe68452a89f761304360cf29760af8f58fedb1e23239a790ba90e9c",
+      "checked_at": "2026-09-13T02:23:25.650436+00:00",
+      "id": "body1",
+      "identity": "CNINFO:603986:ANNOUNCEMENT:1225555799",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-10/1225555799.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/bee837473fe68452a89f761304360cf29760af8f58fedb1e23239a790ba90e9c.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "bea6290c6ade5f68b3717068c1a2016a1f5757bf16d8abb5fb5d6b0d67a32723",
+      "checked_at": "2026-09-13T02:23:26.082086+00:00",
+      "id": "body2",
+      "identity": "CNINFO:603986:ANNOUNCEMENT:1225555804",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-10/1225555804.PDF",
+      "succeeded": true,
+      "tool_reference": "SAVED_ARTIFACT:34601025149/10263794441/objects/bea6290c6ade5f68b3717068c1a2016a1f5757bf16d8abb5fb5d6b0d67a32723.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "body1",
+        "body2"
+      ],
+      "id": "SAVED_DISCLOSURE_BODIES",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:603986",
+  "seed_publications": [
+    {
+      "evidence_id": "b404666a-d79b-5d44-8e3a-71b87be5c8d5",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "d3e2fa01b8dfa0a16eb112323aeaf870c92bd5a9",
+        "path": "research_runs/candidates/incremental-disclosures/674d5c2c670cfd8503052bb151c9548031117ad4f0d411567cfc3924f3ab3edf/continuations/5649730121/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "973343b35bbc95f0b7b929ff091de45c2b874fa2",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "2366cf4aaea65bcc3239dcea7b815bd783f71cd97eaf23cf23bea329ed1b4baf"
+      }
+    }
+  ],
+  "started_at": "2026-09-13T02:23:22.824042+00:00",
+  "ticker": "603986",
+  "valid_until": "2026-09-13T03:08:27.475596+00:00"
+}
