@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-13T07:12:34.814845+00:00",
+    "finished_at": "2026-09-13T07:23:15.741347+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-14T07:12:34.814845+00:00",
-    "started_at": "2026-09-13T07:12:22.553082+00:00"
+    "recheck_after": "2026-09-14T07:23:15.741347+00:00",
+    "started_at": "2026-09-13T07:23:03.565100+00:00"
   },
   "code_commit": "d04cecec186eaf28f20afff2dec066ae2372314a",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-13T07:12:34.814845+00:00",
+  "generated_at": "2026-09-13T07:23:15.741347+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-13T07:12:30.422348+00:00",
+      "checks_at": "2026-09-13T07:23:09.957269+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -143,7 +143,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4725fa3b3fea60d47e21f3f7b2040df0416e4de4966016d53d84fb9d29a219f4"
         },
-        "source_checked_at": "2026-09-13T07:12:30.422330+00:00",
+        "source_checked_at": "2026-09-13T07:23:09.957251+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -166,7 +166,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-13T07:12:24.725292+00:00",
+      "checks_at": "2026-09-13T07:23:05.566821+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -292,7 +292,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "adda030b2d224399fc50592df475ea3edf4e754ac8071d5a5f522c873ab43de3"
         },
-        "source_checked_at": "2026-09-13T07:12:24.725270+00:00",
+        "source_checked_at": "2026-09-13T07:23:05.566805+00:00",
         "state_archive": {
           "artifact_id": 10268611038,
           "artifact_name": "sector-radar-state-bundle",
@@ -342,7 +342,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-13T07:12:29.777766+00:00",
+      "checks_at": "2026-09-13T07:23:09.433907+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -537,7 +537,7 @@
           "sha256": "7f7cf4d044703197374ae8ea3834eb6a81a6909d7e7e3769631f596efe54e7b2"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-13T07:12:29.777746+00:00",
+        "source_checked_at": "2026-09-13T07:23:09.433890+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "600184.SH",
@@ -568,13 +568,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "1b593d4d91224a778889eb638d20216d583c92797f4bf189113b93ab3e7228fc",
+  "reading_hash": "ea4d56a06e0ff6c969405507dcd022f0959f03f13769546dd7bcc277dd42fa72",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "34744638228",
-    "trigger_run_id": "34744090835",
+    "run_id": "34745085889",
+    "trigger_run_id": "34744840053",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -1557,9 +1557,212 @@
     },
     "scope": "EXPLICIT_CONFIG_REGISTERED_LINEAGE_AND_OPTED_IN_RETAINED_WORK_NOT_EXHAUSTIVE_RESEARCH_COVERAGE",
     "stock_business_work": {
-      "error_type": "GitHubReadError",
-      "meaning": "STOCK_BUSINESS_READING_GAP_NOT_QUIET_OR_BUSINESS_DISPROOF",
-      "status": "UNAVAILABLE_OR_REJECTED"
+      "counts": {
+        "NOT_STARTED": 0,
+        "PRE_EXECUTION_FAILURE": 3,
+        "RETAINED_NO_RESEARCH_RESULT": 0,
+        "VALIDATED_EXECUTION_GAP": 0,
+        "VALIDATED_FUNNEL_CANDIDATE": 1
+      },
+      "items": [
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/",
+          "company_name": "光电股份",
+          "error_code": "full annual or half-year business report unavailable",
+          "error_type": "TrialError",
+          "execution_id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea",
+          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+          "finished_at": "2026-09-13T07:17:20.813786+00:00",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "origin_market_session": "2026-09-11",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {
+            "failure": {
+              "bytes": 840,
+              "git_blob": "8e2c478ef05a895ac2d89a4c6fae6af8a0d2e8d0",
+              "path": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/failure.json",
+              "read_path": "sources/git/8e2c478ef05a895ac2d89a4c6fae6af8a0d2e8d0/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "c515fad918fd52e8ddb5970b5f79ae0e4721194afa013642468b72abf70d00fb"
+            },
+            "selection": {
+              "bytes": 13515,
+              "git_blob": "a2859e00b822fb7bf4ebdf6ddd14c5c44c0969f7",
+              "path": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/prepare.json",
+              "read_path": "sources/git/a2859e00b822fb7bf4ebdf6ddd14c5c44c0969f7/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "3d59c68d10a47b4a8c10eb65c6df5f99a264ba7c486ac5afb4db9e4e2153482c"
+            }
+          },
+          "status": "PRE_EXECUTION_FAILURE",
+          "terminal_state": null,
+          "thscode": "600184.SH"
+        },
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/",
+          "company_name": "东软载波",
+          "completion": "COMPLETE",
+          "execution_id": "stock-business-914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2",
+          "finished_at": "2026-09-13T07:22:00.790800+00:00",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "origin_market_session": "2026-09-11",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {
+            "candidate": {
+              "bytes": 29168,
+              "git_blob": "d35a714871041cd2763b54443d9ad70f45ef4078",
+              "path": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/candidate.json",
+              "read_path": "sources/git/d35a714871041cd2763b54443d9ad70f45ef4078/candidate.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "278bb118baa0faa42269d4ba3dcade5312ce94e318e5c3b941288159f07f07b8"
+            },
+            "input": {
+              "bytes": 5376,
+              "git_blob": "e304e14a22fe09dfc44cd4c04ec885042cde7a99",
+              "path": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/input.json",
+              "read_path": "sources/git/e304e14a22fe09dfc44cd4c04ec885042cde7a99/input.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "1d2065ba4f7d8fa6f43d8f14b00c6a57fc4212c0c4057766148959a35e0baa8b"
+            },
+            "selection": {
+              "bytes": 13569,
+              "git_blob": "cb2797763e77bf130e914714432924a3a7a5b2f1",
+              "path": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/prepare.json",
+              "read_path": "sources/git/cb2797763e77bf130e914714432924a3a7a5b2f1/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "33f89e2146e7c1f6a89cf4cba04a3a42774fd32a30539ec498393a4aa15be731"
+            }
+          },
+          "status": "VALIDATED_FUNNEL_CANDIDATE",
+          "terminal_reason": "本次有界核验已建立真实电力通信业务联系和主要毛利暴露，但没有足以确认经营拐点的客户侧或订单兑现证据；当期收入、通信毛利率与扣非亏损构成实质反证。不因价格表现自动深化，也不因经营暂弱永久终止。等待可核验的中标份额、交付验收、毛利及回款变化再重评；此等待基于已读必需正文后的证据判断，而非技术失败或宣称全渠道核查完成。",
+          "terminal_state": "WAIT_FOR_TRIGGER",
+          "thscode": "300183.SZ",
+          "validation_status": "VALIDATED_FUNNEL_RESULT"
+        },
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/",
+          "company_name": "和顺石油",
+          "error_code": "full annual or half-year business report unavailable",
+          "error_type": "TrialError",
+          "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e",
+          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+          "finished_at": "2026-09-13T07:22:18.154881+00:00",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "origin_market_session": "2026-09-11",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {
+            "failure": {
+              "bytes": 840,
+              "git_blob": "477d2a5c9588c200eab2efffd337046f66efb69d",
+              "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/failure.json",
+              "read_path": "sources/git/477d2a5c9588c200eab2efffd337046f66efb69d/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "b4983866b7ef9975302d9a80d3bab273abd91e2207b813e085b5e80915d63948"
+            },
+            "selection": {
+              "bytes": 12653,
+              "git_blob": "ca406c06e9c3cc0c9f863287fe82959c02538b53",
+              "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/prepare.json",
+              "read_path": "sources/git/ca406c06e9c3cc0c9f863287fe82959c02538b53/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "15b53e59007317d112a937b5ad887a90c8f0cabf3f703750c8c384991f66c7f6"
+            }
+          },
+          "status": "PRE_EXECUTION_FAILURE",
+          "terminal_state": null,
+          "thscode": "603353.SH"
+        },
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/",
+          "company_name": "广哈通信",
+          "error_code": "required page visual review unavailable",
+          "error_type": "TrialError",
+          "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd",
+          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+          "finished_at": "2026-09-13T07:22:44.059208+00:00",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "origin_market_session": "2026-09-11",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {
+            "failure": {
+              "bytes": 827,
+              "git_blob": "1bf26ec8b97b13769dfdeb5409f5f6642102be57",
+              "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/failure.json",
+              "read_path": "sources/git/1bf26ec8b97b13769dfdeb5409f5f6642102be57/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "5f88f0398b84ccef8be267f0568b9348882fc4e162baa610e4ba900317f6dc0c"
+            },
+            "selection": {
+              "bytes": 12502,
+              "git_blob": "67d24e8de7d2049e7552c51d041c10ffb5295f26",
+              "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/prepare.json",
+              "read_path": "sources/git/67d24e8de7d2049e7552c51d041c10ffb5295f26/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "71963cef58fc62abbddca1df49e28ac9200fb8235508aabb15de98bf72c48112"
+            }
+          },
+          "status": "PRE_EXECUTION_FAILURE",
+          "terminal_state": null,
+          "thscode": "300711.SZ"
+        }
+      ],
+      "latest_execution_attempt": {
+        "conclusion": "failure",
+        "created_at": "2026-09-13T07:16:55Z",
+        "event": "workflow_dispatch",
+        "head_sha": "d04cecec186eaf28f20afff2dec066ae2372314a",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34744840053",
+        "id": 34744840053,
+        "operation": null,
+        "path": ".github/workflows/stock-business-research.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-09-13T07:16:55Z",
+        "status": "completed",
+        "updated_at": "2026-09-13T07:22:49Z"
+      },
+      "meaning": "PRICE_OBSERVATION_AND_RESEARCH_REMAIN_SEPARATE_NO_AUTOMATIC_BELIEF_OR_ATTENTION",
+      "scope": "CURRENT_QUALIFIED_STOCKS_FIRST_BUSINESS_BASELINES_NOT_ALL_RESEARCH",
+      "status": "READ_OK",
+      "work_commit": "9c1c78980de5f8ba6d83e12614d5b3a6538fb7b8",
+      "work_ref": "research-work/stock-business-v0"
     }
   },
   "research_authority": "NONE",

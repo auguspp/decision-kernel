@@ -1,0 +1,21 @@
+{
+  "automatic_retry": false,
+  "error_code": "full annual or half-year business report unavailable",
+  "error_type": "TrialError",
+  "execution_id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea",
+  "finished_at": "2026-09-13T07:17:20.813786+00:00",
+  "formal_research_started": false,
+  "funnel_status": "NOT_REACHED",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "phase": "SOURCE_PREPARATION",
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "research_authority": "NONE",
+  "research_execution": "NOT_EXECUTED",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T07:17:09.570021+00:00",
+  "status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+  "thscode": "600184.SH"
+}

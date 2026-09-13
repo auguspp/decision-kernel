@@ -1,0 +1,366 @@
+{
+  "code_commit": "d04cecec186eaf28f20afff2dec066ae2372314a",
+  "execution_id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "光电股份",
+    "current_member_name": "光电股份",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.100220264317180616740088106",
+          "name": "光电股份",
+          "thscode": "600184.SH",
+          "ticker": "600184",
+          "turnover": "920206630"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "881166.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "军工装备",
+            "recorded_event_ids": [
+              "b6324f01f836b66bd1ef44df344c9f63b45f9e710687d1d90e9b8c56d69da15f"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881166.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881166.TI",
+        "node_label": "军工装备 881166.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881166.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881166.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0333741973646986206246195787",
+        "excess_return": "0.1281687179126438261040716337",
+        "stock_return": "0.094794520547945205479452055"
+      },
+      "5": {
+        "benchmark_return": "-0.0083310429744615824364287992",
+        "excess_return": "0.1308029530868211329982265522",
+        "stock_return": "0.122471910112359550561797753"
+      },
+      "60": {
+        "benchmark_return": "-0.0873077545734175165938157682",
+        "excess_return": "-0.2046837408199205415209964217",
+        "stock_return": "-0.2919914953933380581148121899"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.100220264317180616740088106",
+          "name": "光电股份",
+          "thscode": "600184.SH",
+          "ticker": "600184",
+          "turnover": "920206630"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "军工装备",
+            "recorded_event_ids": [
+              "b6324f01f836b66bd1ef44df344c9f63b45f9e710687d1d90e9b8c56d69da15f"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881166.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881166.TI",
+        "node_label": "军工装备 881166.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881166.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.045147034547812757929489447",
+            "stock_excess_return": "0.049647486000132447549962608"
+          },
+          "5": {
+            "sector_return": "0.015230010124935287461115209",
+            "stock_excess_return": "0.107241899987424263100682544"
+          },
+          "60": {
+            "sector_return": "-0.0319262892006916394283402663",
+            "stock_excess_return": "-0.2600652061926464186864719236"
+          }
+        },
+        "name": "军工装备",
+        "node_id": "881166.TI",
+        "thscode": "881166.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.100220264317180616740088106",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-10",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-14",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-07",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-04",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-04",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-18",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 15,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "600184.SH",
+            "to": "2026-09-11"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 15,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-11T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789142399999",
+          "interval": "1d",
+          "start": "1781712000000",
+          "thscode": "600184.SH"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-12T12:49:42+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-12T04:49:43.211039+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.0330000000",
+            "ex_date": "2026-06-17",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0570000000",
+            "ex_date": "2024-06-20",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0570000000",
+            "ex_date": "2023-06-30",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0500000000",
+            "ex_date": "2022-06-13",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0330000000",
+            "ex_date": "2021-06-18",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0370000000",
+            "ex_date": "2020-06-04",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0350000000",
+            "ex_date": "2019-05-30",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0280000000",
+            "ex_date": "2018-06-29",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0180000000",
+            "ex_date": "2017-06-08",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0600000000",
+            "ex_date": "2016-05-25",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2015-04-23",
+            "per_share_bonus": "1.0000000000",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.0500000000",
+            "ex_date": "2012-05-18",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2007-05-31",
+            "per_share_bonus": "0.5000000000",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2006-11-23",
+            "per_share_bonus": "0.0600000000",
+            "ticker": "600184"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2004-06-16",
+            "per_share_bonus": "0",
+            "ticker": "600184"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "4.54",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "92.0206630",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "920206625.46",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "920206630",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "19.98",
+      "latest_turnover": "920206625.46",
+      "latest_volume": "46542221",
+      "previous_raw_close": "18.16",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.094794520547945205479452055",
+        "5": "0.122471910112359550561797753",
+        "60": "-0.2919914953933380581148121899"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "1.614635914735907120161531702",
+      "twenty_day_return_five_sessions_ago": "-0.0241228070175438596491228070",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "600184.SH"
+  },
+  "origin": {
+    "archive_sha256": "3bc8413f93e4994e6bbed4686d565d3fbb363cb62f042d6844a54cd2a93ac24e",
+    "artifact_id": 10291478835,
+    "market_session": "2026-09-11",
+    "projection_hash": "7855c155611d3775574d97a32c82dd655fc261c8b727e5611cd354dfafdc057f",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-12T04:46:28Z",
+      "event": "workflow_dispatch",
+      "head_sha": "93f667ebb2cedd553b66a495127b6ed657ad521e",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34673882756",
+      "id": 34673882756,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-12T04:46:28Z",
+      "status": "completed",
+      "updated_at": "2026-09-12T04:55:33Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-13T07:17:11.262361+00:00",
+  "thscode": "600184.SH"
+}
