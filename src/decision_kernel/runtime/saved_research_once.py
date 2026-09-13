@@ -259,10 +259,18 @@ def model_call(stage, context, output_type, out, usage):
     schema = request_type.model_json_schema()
     require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(schema)) <= MAX_PROMPT_BYTES, "model input byte budget")
     from openai import OpenAI, DefaultHttpxClient
+    from openai.lib._parsing._responses import type_to_text_format_param
+    # Reuse the pinned SDK's SAME strict wire schema, but do not ask it to
+    # parse our application model before public output/usage can be retained.
+    output_format = type_to_text_format_param(request_type)
+    require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(output_format)) <= MAX_PROMPT_BYTES,
+            "model input byte budget")
     record = {"stage": stage, "started_at": now(), "requested_model": MODEL,
               "input_sha256": sha(body.encode()), "status": "REQUEST_STARTED", "max_output_tokens": MAX_OUTPUT_TOKENS,
               "reference_contract": "ADMITTED_EVIDENCE_IDS_V1", "system_sha256": sha(SYSTEM.encode()),
-              "output_model_schema_sha256": sha(raw(schema))}
+              "output_model_schema_sha256": sha(raw(schema)),
+              "output_format_sha256": sha(raw(output_format)), "phase": "RESPONSE",
+              "response_received": False, "output_text_retained": False}
     usage.append(record)
     # Only explicitly prepared public context is supplied; no repo/environment scan.
     with (out / (stage + "-model-input.json")).open("xb") as f:
@@ -271,19 +279,23 @@ def model_call(stage, context, output_type, out, usage):
         with OpenAI(api_key=os.environ["SUB2API_API_KEY"], base_url=BASE_URL, max_retries=0,
                     timeout=180, http_client=DefaultHttpxClient(follow_redirects=False)) as client:
             with client.responses.stream(model=MODEL, instructions=SYSTEM,
-                    input=[{"role": "user", "content": body}], text_format=request_type,
+                    input=[{"role": "user", "content": body}], text={"format": output_format},
                     tools=[], store=False, max_output_tokens=MAX_OUTPUT_TOKENS) as stream:
                 response = stream.get_final_response()
         # Retain only output text/usage, never reasoning items or private CoT.
         text = response.output_text
+        record.update(response_received=True, phase="OUTPUT_RETENTION",
+            status=response.status, provider_status=response.status, response_id=response.id,
+            usage=response.usage.model_dump(mode="json") if response.usage else None)
         with (out / (stage + "-model-output.txt")).open("x", encoding="utf-8") as f:
             f.write(text)
-        record.update(status=response.status, response_id=response.id,
-            usage=response.usage.model_dump(mode="json") if response.usage else None,
-            output_sha256=sha(text.encode()))
+        record.update(output_text_retained=True, output_sha256=sha(text.encode()), phase="OUTPUT_CHECKS")
         require(response.status == "completed", "model did not complete")
         require(all(item.type in {"message", "reasoning"} for item in response.output), "unexpected model tool output")
-        return output_type.model_validate(identity._json(text.encode()))
+        record["phase"] = "APPLICATION_VALIDATION"
+        parsed = output_type.model_validate(identity._json(text.encode()))
+        record["phase"] = "COMPLETE"
+        return parsed
     except Exception as exc:
         record.update(status="FAILED", error_type=type(exc).__name__)
         raise
@@ -330,7 +342,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now):
     except Exception as exc:
         completion = "INCOMPLETE_BUDGET" if isinstance(exc, TimeoutError) else "INCOMPLETE_TECHNICAL_FAILURE"
         failure = exc.code if isinstance(exc, TrialError) else type(exc).__name__
-        event("OTHER_READ", "EXECUTOR:" + stage, "FAILED", "Raw output retained; no retry or route repair.")
+        event("OTHER_READ", "EXECUTOR:" + stage, "FAILED", "No retry or route repair. Per-stage files/usage record whether public output was retained; missing output is UNKNOWN.")
         # Invalid raw partial stages stay as raw files; never publish a completed
         # WAIT/STOP as an incomplete candidate or a Quick without validated Pre.
         pre = pre if pre and pre.route.value == "CONTINUE_TO_QUICK" else None

@@ -14,6 +14,8 @@ FOREIGN = 'd761d18c-37dd-58ff-ba02-3826e25bd988'
 
 
 def mock_sdk(monkeypatch, make_text):
+    from test_saved_research_raw_retention import format_converter
+    format_converter(monkeypatch)
     requests = []
     class Stream:
         def __init__(self, request): self.request = request
@@ -21,9 +23,10 @@ def mock_sdk(monkeypatch, make_text):
         def __exit__(self, *_): pass
         def get_final_response(self):
             text = make_text(self.request)
-            # Model the SDK's eager typed parsing too. Citation admission stays
-            # in the ORIGINAL transition validator, after raw text is retained.
-            self.request['text_format'].model_validate_json(text)
+            # Explicit wire schema does not ask the SDK to parse the application
+            # model. Original model and transition checks run after retention.
+            assert 'text_format' not in self.request
+            assert self.request['text']['format']['strict'] is True
             return SimpleNamespace(output_text=text, status='completed', id='synthetic',
                                    usage=None, output=[SimpleNamespace(type='message')])
     class Client:
@@ -57,7 +60,10 @@ def test_request_schema_only_adds_admitted_ids_and_keeps_original_models(tmp_pat
     seen = mock_sdk(monkeypatch, lambda request: make(value).model_dump_json())
     usage = []
     result = w.model_call(stage, value, model, tmp_path, usage)
-    schema = seen[0]['text_format'].model_json_schema()
+    request_type = w.admitted_output_type(model, value['evidence_ids'])
+    from openai.lib._parsing._responses import type_to_text_format_param
+    assert seen[0]['text']['format'] == type_to_text_format_param(request_type)
+    schema = request_type.model_json_schema()
     items = schema['$defs']['ResearchClaim']['properties']['evidence_artifact_ids']['items']
     assert items.pop('enum', None) == value['evidence_ids']
     schema['title'] = original['title']
@@ -67,7 +73,7 @@ def test_request_schema_only_adds_admitted_ids_and_keeps_original_models(tmp_pat
     assert FOREIGN in seen[0]['input'][0]['content']  # Do not delete source metadata.
     assert 'top-level evidence_ids' in seen[0]['instructions']
     assert usage[0]['reference_contract'] == 'ADMITTED_EVIDENCE_IDS_V1'
-    assert usage[0]['output_model_schema_sha256'] == w.sha(w.raw(seen[0]['text_format'].model_json_schema()))
+    assert usage[0]['output_model_schema_sha256'] == w.sha(w.raw(request_type.model_json_schema()))
 
 
 def test_per_call_reference_set_does_not_leak_or_mutate_original_schema(tmp_path, monkeypatch):
@@ -77,7 +83,7 @@ def test_per_call_reference_set_does_not_leak_or_mutate_original_schema(tmp_path
         directory=tmp_path/str(n); directory.mkdir()
         w.model_call('pre', dict(value, evidence_ids=ids), PreResearchResult, directory, [])
     for request, expected in zip(seen, [value['evidence_ids'], [FOREIGN, value['evidence_ids'][0]]]):
-        item=request['text_format'].model_json_schema()['$defs']['ResearchClaim']['properties']['evidence_artifact_ids']['items']
+        item=request['text']['format']['schema']['$defs']['ResearchClaim']['properties']['evidence_artifact_ids']['items']
         assert item['enum'] == expected
     assert PreResearchResult.model_json_schema() == original
 
@@ -135,7 +141,8 @@ def test_original_fact_and_extra_field_validators_not_weakened(monkeypatch, tmp_
     value=prompt()
     seen=mock_sdk(monkeypatch, lambda _: pre(value).model_dump_json())
     w.model_call('pre',value,PreResearchResult,tmp_path,[])
-    model=seen[0]['text_format']
+    model=w.admitted_output_type(PreResearchResult, value['evidence_ids'])
+    assert seen[0]['text']['format']['strict'] is True
     no_source=pre(value).model_dump(mode='json')
     no_source['material_claims'][0]['evidence_artifact_ids']=[]
     with pytest.raises(ValueError): model.model_validate(no_source)
