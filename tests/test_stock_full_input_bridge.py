@@ -196,8 +196,15 @@ def test_plain_or_stored_identity_not_bypassed_by_full_input_flag(tmp_path, monk
     packet, discovery, bound = saved_binding(args, api, contexts)
     out = tmp_path / "default"; out.mkdir()
     def denied(*args): pytest.fail("unbound compressed context reached model")
-    candidate, validation, usage = once.research(packet, discovery, contexts[0], out, call=denied)
+    # The Retainer fixture advances its clock to a Git commit second. Use that
+    # SAME clock here; research's definition-time default is the real clock.
+    candidate, validation, usage = once.research(
+        packet, discovery, contexts[0], out, call=denied, clock=args["clock"])
     assert candidate.completion.value == "INCOMPLETE_TECHNICAL_FAILURE" and not usage
+    assert candidate.receipt.stop_or_failure_reason == "egress context changed"
+    assert candidate.receipt.started_at == once.admission.clock(args["clock"]())
+    assert candidate.receipt.started_at >= packet.research_cutoff
+    assert validation.status.value == "EXECUTION_GAP" and validation.funnel_result is None
     prompt = once.pre_prompt(packet, discovery, contexts[0]); usage = []
     with pytest.raises(once.TrialError, match="missing pre-launch"):
         once.model_call("pre", prompt, once.PreResearchResult, tmp_path, usage,
@@ -206,6 +213,24 @@ def test_plain_or_stored_identity_not_bypassed_by_full_input_flag(tmp_path, monk
         once.model_call("pre", prompt, once.PreResearchResult, tmp_path, usage,
                        bound_context=bound, max_prompt_bytes=full.REQUEST_BYTES)
     assert not usage
+
+
+def test_original_receipt_still_rejects_a_clock_before_frozen_cutoff(tmp_path, monkeypatch):
+    from datetime import timedelta
+    from pydantic import ValidationError
+
+    args, api, calls, captures, writes, contexts = setup_full(tmp_path, monkeypatch, mode="STOP")
+    assert host.run_item(**args)["status"] == "VALIDATED_FUNNEL_CANDIDATE"
+    packet, discovery, _ = saved_binding(args, api, contexts)
+    out = tmp_path / "before-cutoff"; out.mkdir()
+    # Deterministically reproduce the unrelated clock failure without waiting
+    # for real wall time or weakening the production Receipt validator.
+    before_cutoff = (packet.research_cutoff - timedelta(seconds=1)).isoformat()
+    def denied(*args): pytest.fail("unbound compressed context reached model")
+    with pytest.raises(ValidationError, match="execution cannot start before the frozen research cutoff"):
+        once.research(packet, discovery, contexts[0], out,
+                      call=denied, clock=lambda: before_cutoff)
+    assert not list(out.iterdir())
 
 
 def capture_fixture(tmp_path, monkeypatch, defect=None):
