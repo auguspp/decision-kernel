@@ -107,11 +107,6 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
                 item=item, origin=origin, clock=clock)
         elif successor_session is not None:
             binding = successor_session.for_code(item["thscode"])
-            successor.recheck(api=api, code=code, session=successor_session,
-                              binding=binding, context={"stock_observation": {"row": item["observation"]},
-                              "issuer_inventory": {"selected_ids": binding["material"]["selected_ids"]},
-                              "source_successor_material": {"artifact_digest":
-                                  successor_session.binding["source_preparation"]["artifact_digest"]}}, clock=clock)
         reservation = retain.save("prepare.json", {"schema_version": 1, "thscode": item["thscode"],
             "execution_id": item["execution_id"], "question_kind": intake.QUESTION_KIND,
             "origin": origin, "observation": item["observation"], "code_commit": code,
@@ -402,7 +397,7 @@ def main(argv=None):
                     with (args.output / "source-preparation-failure.json").open("xb") as stream:
                         stream.write(once.raw(failure))
                 except FileExistsError:
-                    pass  # Preserve an earlier local failure; never overwrite it.
+                    pass
             else:
                 (args.output / "batch-failure.json").write_bytes(once.raw(failure))
         print(("STOCK_SOURCE_PREPARATION_INCOMPLETE: " if args.prepare_sources
