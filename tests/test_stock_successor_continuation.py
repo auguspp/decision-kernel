@@ -9,17 +9,19 @@ from pathlib import Path
 import pytest
 
 from decision_kernel.adapters import cninfo as adapter_cninfo
+from decision_kernel.runtime import cninfo_http
 from decision_kernel.runtime import saved_research_once as once
 from decision_kernel.runtime import stock_research_host as host
 from decision_kernel.runtime import stock_research_intake as intake
 from decision_kernel.runtime import stock_source_successor as successor
+from decision_kernel.runtime import stock_source_successor_continuation as continuation
 from test_stock_research_host import setup_host
 
 
-def test_timezone_regression_uses_adapter_contract_before_any_inventory_fetch(tmp_path, monkeypatch):
-    # Production 34797952444 failed because runtime.cninfo_http never exported this.
-    assert not hasattr(successor.cninfo, "SHANGHAI_TZ")
-    assert successor.SHANGHAI_TZ is adapter_cninfo.SHANGHAI_TZ
+def test_timezone_regression_uses_runtime_contract_before_any_inventory_fetch(tmp_path, monkeypatch):
+    # Production 34797952444 failed before network because runtime.cninfo_http lacked this export.
+    assert cninfo_http.SHANGHAI_TZ is adapter_cninfo.SHANGHAI_TZ
+    assert successor.cninfo.SHANGHAI_TZ is adapter_cninfo.SHANGHAI_TZ
     code = "603353.SH"; ticker = "603353"
     class Session:
         code = "a" * 40
@@ -47,20 +49,20 @@ def test_continuation_identity_is_fixed_sibling_not_revival_or_new_question():
     for code in ("603353.SH", "300711.SZ"):
         root_id, root_prefix = intake.execution(code)
         old_id, old_prefix = successor.execution(code)
-        eid, prefix = successor.continuation_execution(code)
+        eid, prefix = continuation.execution(code)
         assert old_id == root_id + "-source-successor-v1"
         assert old_prefix == root_prefix + "source-successor-v1/"
         assert eid == root_id + "-source-successor-continuation-v1"
         assert prefix == root_prefix + "source-successor-continuation-v1/"
         assert (eid, prefix) != (old_id, old_prefix)
     with pytest.raises(once.TrialError):
-        successor.continuation_execution("600184.SH")
+        continuation.execution("600184.SH")
 
 
 def test_continuation_request_pins_exact_failed_production_state():
     root = Path(__file__).parents[1]
-    request = once.identity._json((root / successor.CONTINUATION_REQUEST).read_bytes())
-    assert request["mode"] == successor.CONTINUATION_MODE
+    request = once.identity._json((root / continuation.REQUEST).read_bytes())
+    assert request["mode"] == continuation.MODE
     assert request["permission"] == {"comment_id": 5652950925,
         "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
         "created_at": "2026-09-13T11:22:23Z"}
@@ -79,7 +81,7 @@ def test_continuation_request_pins_exact_failed_production_state():
         "603353.SH": ("1d3fe1b752a18a2759618e464f733bfe34b962e6", "ed9c55c958e0ebb0a8e1b35fa3a2212b13520b71"),
         "300711.SZ": ("86a5679a7bc9211ddc283554ecc8f6040e73028c", "302559a71f342b3bfcab0faa658961cc1063d16a"),
     }
-    assert {i["thscode"] for i in request["items"]} == successor.TARGETS
+    assert {i["thscode"] for i in request["items"]} == continuation.TARGETS
     for item in request["items"]:
         assert (item["predecessor_selection"]["git_blob"], item["predecessor_failure"]["git_blob"]) == expected[item["thscode"]]
         assert item["predecessor_selection"]["ref"] == item["predecessor_failure"]["ref"] == request["failed_successor_work_commit"]
@@ -91,23 +93,23 @@ def test_source_refs_for_continuation_keeps_old_and_failed_successor_predecessor
         "parent_selection", "parent_failure", "recovery_selection", "recovery_failure",
         "predecessor_successor_selection", "predecessor_successor_failure",
         "predecessor_successor_request", "predecessor_successor_reading")}
-    assert [s["purpose"] for s in successor.source_refs(binding)] == list(binding)
+    assert [s["purpose"] for s in continuation.source_refs(binding)] == list(binding)
 
 
 def test_original_host_accepts_continuation_session_identity_without_reopening_old_child(tmp_path, monkeypatch):
     args, api, calls, captures, writes = setup_host(tmp_path, monkeypatch, mode="STOP")
-    code = "300711.SZ"; eid, prefix = successor.continuation_execution(code)
+    code = "300711.SZ"; eid, prefix = continuation.execution(code)
     args["item"].update(thscode=code, security_id=intake.security(code), execution_id=eid,
         prefix=prefix, observation={"thscode": code, "eligible_for_shadow_reading": True})
-    continuation_request = {"schema_version": 1, "enabled": True, "mode": successor.CONTINUATION_MODE,
+    continuation_request = {"schema_version": 1, "enabled": True, "mode": continuation.MODE,
         "permission": args["request"]["permission"]}
-    api.files[args["code"]][successor.CONTINUATION_REQUEST] = once.raw(continuation_request)
+    api.files[args["code"]][continuation.REQUEST] = once.raw(continuation_request)
     binding = {"thscode": code, "execution_id": eid, "prefix": prefix,
         "material": {"selected_ids": ["synthetic"]}}
     class Session:
         request = continuation_request
-        request_path = successor.CONTINUATION_REQUEST
-        mode = successor.CONTINUATION_MODE
+        request_path = continuation.REQUEST
+        mode = continuation.MODE
         binding = {"source_preparation": {"artifact_digest": "sha256:" + "1"*64}}
         def for_code(self, thscode):
             assert thscode == code
@@ -134,3 +136,11 @@ def test_reader_keeps_failed_work_ref_distinct_and_does_not_raise_accepted_bound
     assert "continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text
     assert "predecessor_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text
     assert "continuation_request['failed_successor_work_commit'] == commit" not in text
+
+
+def test_recheck_allows_new_child_work_commit_but_requires_predecessor_blobs():
+    root = Path(__file__).parents[1]
+    text = (root / "src/decision_kernel/runtime/stock_source_successor_continuation.py").read_text()
+    recheck = text.split("def recheck", 1)[1]
+    assert 'work_head == session.request["failed_successor_work_commit"]' not in recheck
+    assert 'rows.get(spec["path"], {}).get("sha") == spec["git_blob"]' in recheck
