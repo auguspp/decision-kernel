@@ -122,9 +122,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
           RECOVER_SOURCES: ${{ inputs.recover-sources }}
+          SOURCE_SUCCESSOR: ${{ inputs.source-successor }}
+          SOURCE_SUCCESSOR_CONTINUATION: ${{ inputs.source-successor-continuation }}
         run: |
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$SOURCE_SUCCESSOR" != true
+          test "$SOURCE_SUCCESSOR_CONTINUATION" != true
           extra=()
           if [ "$RECOVER_SOURCES" = true ]; then extra+=(--recover-sources); fi
           python -m decision_kernel.runtime.stock_research_host \
