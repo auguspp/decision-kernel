@@ -423,6 +423,113 @@ def validate_read_package(payload: dict) -> None:
     check(SHA.fullmatch(payload["code_commit"]) is not None, "unbound reading code")
 
 
+def _reading_navigation(payload: dict, text: Callable[[Any], str]) -> list[str]:
+    """Present already-retained fields/paths; no selection, acceptance or new state."""
+    from urllib.parse import quote
+
+    def link(label: str, source: dict | None) -> str:
+        if not isinstance(source, dict):
+            return text(label) + "（本读取未提供入口）"
+        path = source.get("read_path")
+        try:
+            safe_path(path)
+            check(path.startswith(("details/", "sources/git/"))
+                  and source.get("read_ref_rule") == "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "navigation must stay in the pinned reading")
+        except (ValueError, TypeError):
+            return text(label) + "（入口未核验）"
+        return f"[{text(label)}]({quote(path, safe='/')})"
+
+    research = payload["research"]
+    records = research.get("records", [])
+    stock = (payload["lanes"].get("stock", {}).get("last_qualified_result") or {})
+    sector = (payload["lanes"].get("sector", {}).get("last_qualified_result") or {})
+    lines = ["", "## 已发现的对象与可继续阅读的材料", "",
+             "以下沿用本包保存日期和原处置；不是今日重新检查、投资待办或研究接受。"]
+    if stock:
+        coverage = stock.get("coverage", {})
+        def count(key):
+            value = coverage.get(key)
+            return text(value if type(value) is int and value >= 0 else "UNKNOWN")
+        lines += ["", f"股票保存市场日：{text(stock.get('market_session') or 'UNKNOWN')}。"
+                  f"计划 {count('planned_issuers')} 只；完成价格路径判断 {count('price_path_checked_issuers')} 只；"
+                  f"通过价格观察 {count('qualified_issuers')} 只；条件不满足 {count('conditions_not_met_issuers')} 只；"
+                  f"数据不可用 {count('unavailable_issuers')} 只。",
+                  "", "| 公司 / 代码 | 原价格观察处置 | 数据缺口责任 | 同公司已保存研究 / 复核 |",
+                  "|---|---|---|---|"]
+        omitted = set(stock.get("omitted_eligible_codes", []))
+        eligible = omitted | set(stock.get("surfaced_codes", []))
+        work = research.get("stock_business_work", {})
+        for row in stock.get("dispositions", []):
+            code = row["thscode"]
+            failure = row.get("input_failure")
+            owner = "本行没有登记需 Human 处理的数据缺口"
+            if failure:
+                reason = failure.get("reason_code") or "UNKNOWN"
+                disposition = "数据不可用，未作价格条件否决：" + str(reason)
+                owner = ("CAPABILITY GAP：系统处理价格转换能力，不要求 Human 手工复权"
+                         if reason == "REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW" else
+                         "SYSTEM RECHECK：系统复核来源一致性，不要求 Human 手工核价"
+                         if reason == "CURRENT_QUOTE_HISTORY_MISMATCH" else
+                         "系统负责诊断；具体原因按原记录，本行不要求 Human 处理")
+            elif code in eligible:
+                disposition = "通过原价格观察" + ("；仅因展示上限未列首页" if code in omitted else "")
+            elif row.get("excluded_reasons"):
+                disposition = "原条件不满足：" + "；".join(row["excluded_reasons"])
+            else:
+                disposition = "原状态：" + str(row.get("status") or "UNKNOWN")
+            sources = [link("研究/复核说明：" + r["id"], r.get("source"))
+                       for r in records if r.get("case") == code]
+            if work.get("status") == "READ_OK":
+                for item in work.get("items", []):
+                    if item.get("thscode") != code:
+                        continue
+                    stages = [("原始执行", item)] + [(label, item[key]) for key, label in (
+                        ("source_recovery", "来源恢复"), ("source_successor", "来源后继"),
+                        ("source_successor_continuation", "技术接续")) if key in item]
+                    for label, stage in stages:
+                        refs = stage.get("sources", {})
+                        source = refs.get("candidate") or refs.get("failure")
+                        if source:
+                            sources.append(link(label + "记录（含历史，不等于语义接受）", source))
+            lines.append(f"| {text(row.get('company_name') or 'UNKNOWN')} {text(code)} | "
+                         f"{text(disposition)} | {text(owner)} | "
+                         + (" / ".join(sources) or "本读取未提供对应记录；不代表已查且无业务证据") + " |")
+        if not stock.get("dispositions"):
+            lines.append("\n本读取未提供逐股处置，不能把计划范围解释为零对象。")
+        lines += ["", "市场表达与业务受益分开；上述研究记录有独立范围和时钟，不能把未检查写成无受益。",
+                  link("全部股票、发现来路及原条件", stock.get("details", {}).get("reading/stock-reading.json"))]
+    else:
+        lines += ["", "股票：本读取没有可用保存结果，不是零候选。"]
+    if sector:
+        details = sector.get("details", {})
+        lines += ["", f"板块保存市场日：{text(sector.get('market_session') or 'UNKNOWN')}。",
+                  "新进入条件、仍处于强状态、已退出与未覆盖不是一回事；持续状态可查看，不据此重发新事件。",
+                  link("全部新变化与被首页省略的组", details.get("summary.md")) + " / "
+                  + link("全部已覆盖行业的持续/弱化/退出状态", details.get("context/context.json"))]
+        for universe in sector.get("coverage", []):
+            lines.append(f"{text(universe.get('family', 'UNKNOWN'))}："
+                         f"覆盖 {text(universe.get('nodes', 'UNKNOWN'))} 个；"
+                         f"仍满足原条件 {text(universe.get('ongoing', 'UNKNOWN'))} 个。")
+        lines.append("未覆盖的概念/主题不能写成没有变化；上面不是全市场概念扫描。")
+    else:
+        lines += ["", "板块：本读取没有可用保存结果，不是无持续状态。"]
+    lines += ["", "<details>", "<summary>同版本研究、方法更正与历史用途索引</summary>", "",
+              "更正只适用于其明确绑定的版本；不能仅按同一股票代码取代其他结果。",
+              "原执行/验证通过、业务理由、Human 接受与投资决定分开。先读对应复核，再复用旧终局。", ""]
+    for record in records:
+        lines.append(f"- {text(record.get('case', 'UNKNOWN'))} / {text(record.get('use', 'UNKNOWN'))}："
+                     + link(str(record.get("id", "UNKNOWN")), record.get("source"))
+                     + " — " + text(record.get("purpose_note", "UNKNOWN")))
+    for gap in research.get("gaps", []):
+        lines.append("- 研究读取缺口：" + text(gap.get("id") or gap.get("status") or "UNKNOWN")
+                     + "；不能据此断言无研究或无更正。")
+    if not records:
+        lines.append("本读取未登记用途记录，不代表没有历史研究。")
+    lines += ["", "</details>", ""]
+    return lines
+
+
 def render_summary(payload: dict) -> str:
     """Thin safe Markdown: no raw source instructions interpolated as markup."""
     validate_read_package(payload)
@@ -451,6 +558,7 @@ def render_summary(payload: dict) -> str:
                          "局部交付可读不改变失败，也不重新验证 Odds。")
             for sibling in proof["sibling_jobs"]:
                 lines.append(f"旁路 {text(sibling['name'])}：{text(sibling['conclusion'])}。")
+    lines += _reading_navigation(payload, text)
     lines += ["", f"已登记且仍符合原 Funnel 的研究请求：{len(payload['pending'])}。这不是已研究全市场的计数。",
               "研究资料按生产配置／历史计算基线／方法补充／Human 记录／明确 Action 分别引用，互不自动覆盖。",
               "", "入口未更新：查 `.github/workflows/current-state-read-entry.yml` 的运行及失败日志；保留最后版本不代表持续新鲜。",
