@@ -16,6 +16,7 @@ from . import current_state as reading
 from . import disclosure_source_reading as page_reading
 from . import external_research_identity as identity
 from . import saved_research_once as once
+from . import stock_full_input as full
 from . import stock_research_intake as intake
 from . import stock_research_sources as sources
 from . import stock_source_preparation as preparation
@@ -319,7 +320,7 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
         once.require(len(raw) == binding["material"]["prepared_context_bytes"]
             and once.sha(raw) == binding["material"]["prepared_context_sha256"],
             "Guangha saved context bytes differ before successor capture")
-        old_context = identity._json(raw)
+        old_context = full._context(raw, ticker)
         once.require(old_context["issuer_inventory"]["selected_ids"] == old_ids,
                      "Guangha saved context inventory differs")
     (output / "inventory.json").write_bytes(once.raw(current_inventory))
