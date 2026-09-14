@@ -103,8 +103,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
     original = {i["thscode"]: i for i in selected["items"]}
     once.require(TARGETS <= set(original), "Stock successor targets outside original qualified plan")
 
-    # Reuse the already-reviewed source-only request/binder; it proves the exact
-    # consumed source-recovery-v1 failures and old Human permission without reset.
     prep_raw = api.file(preparation.REQUEST, code)
     once.require(once.sha(prep_raw) == request["source_preparation_request_sha256"],
                  "Stock source-preparation request changed")
@@ -115,8 +113,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
         and [i["thscode"] for i in prep_binding["items"]] == ["603353.SH", "300711.SZ"],
         "Stock successor source-preparation binding differs")
 
-    # Bind the original parent failure directly as well; a recovery child alone
-    # cannot erase or substitute its first-baseline predecessor.
     binding_items = []
     for entry in entries:
         thscode = entry["thscode"]
@@ -140,7 +136,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
             and rec_failure["path"] == rec_prefix + "failure.json", "Stock successor recovery child path differs")
         for spec in (rec_selection, rec_failure):
             _current_work_ref(api, spec["path"], spec["git_blob"])
-        # Confirm recovery reservation itself still binds the original parent.
         recovery_prepare = identity._json(_checked_git(api, rec_selection))
         once.require(recovery_prepare["execution_id"] == rec_eid
             and recovery_prepare["source_recovery"]["parent_selection"]["path"] == root_prefix + "prepare.json"
@@ -164,8 +159,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
                 _checked_git(api, rec_failure), RECOVERY_FAILURE_PURPOSE),
             "required_reviews": reviews, "material": entry["material"]})
 
-    # The execution-time fixed reading, not the old permission exposure, is an
-    # explicit successor predecessor and must correspond to this exact main.
     once.require(head(api, reading.READ_REF) == reading_commit, "Stock successor fixed reading moved")
     reading_raw = api.file("current-state.json", reading_commit)
     saved = identity._json(reading_raw); reading.validate_read_package(saved)
@@ -184,7 +177,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
             "Stock successor current reading parent differs")
         bound["current_reading_item_status"] = shown["status"]
 
-    # Source-only run/artifact is immutable material, not a Research result.
     prep_run = api.get("actions/runs/" + str(request["source_preparation_run_id"]))
     once.require(prep_run["path"] == ".github/workflows/stock-business-research.yml"
         and prep_run["event"] == "workflow_dispatch" and prep_run["run_attempt"] == 1
@@ -228,10 +220,10 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
                 "Heshun saved preparation gap differs")
         else:
             full = p["complete_context"]
+            prepared_raw = files["300711.SZ/sources/prepared-context.json"]
             once.require(p["checked_body_ids"] == p["selected_ids"] and p["missing_page_reviews"] == []
-                and full["bytes"] == material["prepared_context_bytes"]
-                and full["sha256"] == material["prepared_context_sha256"]
-                and once.sha(files["300711.SZ/sources/prepared-context.json"]) == full["sha256"],
+                and full["bytes"] == material["prepared_context_bytes"] == len(prepared_raw)
+                and full["sha256"] == material["prepared_context_sha256"] == once.sha(prepared_raw),
                 "Guangha saved complete context differs")
 
     exposure = once.source_ref("current-state.json", reading_commit, reading_raw, EXPOSURE_PURPOSE)
@@ -242,7 +234,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
             "archive_sha256": once.sha(archive), "batch_sha256": once.sha(files["source-preparation-batch.json"])},
         "items": binding_items, "meaning": "CREATE_ONLY_SAVED_SOURCE_SUCCESSOR_NOT_RETRY_OR_NEW_PRICE_QUESTION",
         **reading.AUTHORITY}
-    # Preserve exact downloaded predecessor bytes in the run artifact, not work-ref.
     (output / "source-successor-origin.zip").write_bytes(archive)
     (output / "source-successor-binding.json").write_bytes(once.raw(binding))
     return [{**original[i["thscode"]], "execution_id": i["execution_id"], "prefix": i["prefix"]}
@@ -268,12 +259,12 @@ def _saved_document(session, thscode, identifier):
     return row, event, pdf, extraction
 
 
-def _represent(pdf, extraction, *, api, code_commit, clock):
+def _represent(pdf, extraction, *, api, code_commit, clock, diagnostics):
     pages = extraction["pages"]
     if all(page_reading.text_ok(p["text"]) for p in pages):
         return pages, None, "ORIGINAL_PYPDF"
     represented = page_reading.represent(pdf, extraction,
-        load_review=page_reading.main_review_loader(api, code_commit, clock))
+        load_review=page_reading.main_review_loader(api, code_commit, clock), diagnostics=diagnostics)
     page_reading.validate(represented, extraction)
     return represented["pages"], represented, "BOUND_SAME_PDF_READING"
 
@@ -286,7 +277,7 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
         and observation["row"]["thscode"] == thscode, "Stock successor capture identity differs")
     binding = session.for_code(thscode)
     output.mkdir(parents=True, exist_ok=False)
-    start = clock(); events = []
+    start = clock(); events, body_events, representation_events = [], [], []
     end_date = reading.clock(start).astimezone(cninfo.SHANGHAI_TZ).date()
     def query(method, url, form=None):
         once.require(url in {cninfo.CNINFO_STOCK_MAP_URL, cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL}
@@ -318,11 +309,25 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
     once.require(saved_inventory["selected_ids"] == old_ids and saved_prep["selected_ids"] == old_ids
         and saved_inventory["report_id"] == current_inventory["report_id"]
         and set(old_ids) <= set(current_ids), "Stock successor current inventory invalidates saved baseline")
+    old_context = None
+    if thscode == "300711.SZ":
+        raw = session.files[saved_prefix + "prepared-context.json"]
+        once.require(len(raw) == binding["material"]["prepared_context_bytes"]
+            and once.sha(raw) == binding["material"]["prepared_context_sha256"],
+            "Guangha saved context bytes differ before successor capture")
+        old_context = identity._json(raw)
+        once.require(old_context["issuer_inventory"]["selected_ids"] == old_ids,
+                     "Guangha saved context inventory differs")
     (output / "inventory.json").write_bytes(once.raw(current_inventory))
     documents, reads, total_pdf, upgrades = [], [], 0, []
     selected_by_id = {r.announcement_id: r for r in selected}
+    old_documents = ({d["announcement_id"]: d for d in old_context["issuer_documents"]}
+                     if old_context is not None else {})
     for index, identifier in enumerate(current_ids, 1):
         row = selected_by_id[identifier]
+        event = {"announcement_id": identifier, "source_locator": row.source_locator,
+                 "started_at": clock(), "status": "INCOMPLETE"}
+        body_events.append(event)
         if identifier in old_ids:
             old_row, old_event, pdf, extraction = _saved_document(session, thscode, identifier)
             once.require(old_row["source_locator"] == row.source_locator
@@ -330,6 +335,15 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
                 "Stock successor saved announcement identity changed")
             retrieved_at = old_event["captured_at"]
             body_origin = "SOURCE_ONLY_ARTIFACT:" + str(session.binding["source_preparation"]["artifact_id"])
+            event["original_captured_at"] = retrieved_at
+            if old_context is not None:
+                old_doc = old_documents[identifier]
+                once.require(old_doc["source_locator"] == row.source_locator
+                    and old_doc["published_at"] == row.published_at.isoformat()
+                    and old_doc["pdf_sha256"] == once.sha(pdf)
+                    and old_doc["original_text_sha256"] == extraction["text_sha256"]
+                    and old_doc["page_count"] == extraction["page_count"],
+                    "Guangha reconstructed saved document differs from original context")
         else:
             pdf = cninfo.fetch_cninfo_pdf_bytes(source_locator=row.source_locator,
                 max_bytes=once.MAX_SOURCE_BYTES, timeout_seconds=45)
@@ -343,9 +357,11 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
         digest = once.sha(pdf); total_pdf += len(pdf)
         once.require(total_pdf <= 128*1024*1024 and extraction["pdf_sha256"] == digest,
                      "Stock successor PDF capacity/identity differs")
+        event.update(pdf_sha256=digest, bytes=len(pdf), source_origin=body_origin)
         (output / (digest + ".pdf")).write_bytes(pdf)
         (output / (digest + "-extraction.json")).write_bytes(once.raw(extraction))
-        pages, represented, method = _represent(pdf, extraction, api=api, code_commit=code_commit, clock=clock)
+        pages, represented, method = _represent(pdf, extraction, api=api, code_commit=code_commit,
+                                                 clock=clock, diagnostics=representation_events)
         if represented is not None:
             (output / (digest + "-page-readings.json")).write_bytes(once.raw(represented))
             for page in represented["pages"]:
@@ -361,25 +377,33 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
             "source_locator": row.source_locator, "pdf_sha256": digest,
             "original_text_sha256": extraction["text_sha256"], "page_count": extraction["page_count"],
             "reading_method": method, "pages": pages, "page_reading": represented})
+        checked = clock(); event.update(status="FORMAT_AND_IDENTITY_CHECKED_NOT_TRUTH", finished_at=checked)
         reads.append({"id": "body" + str(index), "identity": ticker + ":" + identifier,
             "locator": row.source_locator, "authority": "PRIMARY", "kind": "BODY", "succeeded": True,
-            "checked_at": clock(), "body_sha256": digest, "tool_reference": body_origin})
+            "checked_at": checked, "body_sha256": digest, "tool_reference": body_origin})
     expected_reviews = {(r["pdf_sha256"], r["page_number"]): r["git_blob"] for r in binding["required_reviews"]}
     actual_reviews = {(u["pdf_sha256"], u["page_number"]): u["current_review_source"]["git_blob"] for u in upgrades}
     once.require(all(actual_reviews.get(k) == blob for k, blob in expected_reviews.items()),
                  "Stock successor required visual review did not rebind to exact current note")
+    material = {"source_preparation_run_id": session.request["source_preparation_run_id"],
+        "artifact_id": session.binding["source_preparation"]["artifact_id"],
+        "artifact_digest": session.binding["source_preparation"]["artifact_digest"],
+        "saved_selected_ids": old_ids, "current_selected_ids": current_ids,
+        "new_selected_ids": [i for i in current_ids if i not in old_ids],
+        "visual_ref_upgrades": upgrades, "latest_inventory_checked_at": inventory_end,
+        "meaning": "EXPLICIT_SAVED_ARTIFACT_SUCCESSOR_MATERIAL_NOT_INDEPENDENT_EVIDENCE"}
+    if old_context is not None:
+        material["saved_prepared_context_sha256"] = binding["material"]["prepared_context_sha256"]
     context = {"stock_observation": observation, "issuer_inventory": current_inventory,
         "issuer_documents": documents, "source_limitations": sources.SCOPE + " " + MATERIAL_LIMITATION,
-        "source_successor_material": {"source_preparation_run_id": session.request["source_preparation_run_id"],
-            "artifact_id": session.binding["source_preparation"]["artifact_id"],
-            "artifact_digest": session.binding["source_preparation"]["artifact_digest"],
-            "saved_selected_ids": old_ids, "current_selected_ids": current_ids,
-            "new_selected_ids": [i for i in current_ids if i not in old_ids],
-            "visual_ref_upgrades": upgrades, "latest_inventory_checked_at": inventory_end,
-            "meaning": "EXPLICIT_SAVED_ARTIFACT_SUCCESSOR_MATERIAL_NOT_INDEPENDENT_EVIDENCE"}}
+        "source_successor_material": material}
     sources.recheck(context, api=api, code_commit=code_commit, clock=clock)
     finished = clock()
-    (output / "source-successor-material.json").write_bytes(once.raw(context["source_successor_material"]))
+    (output / "source-successor-material.json").write_bytes(once.raw(material))
+    (output / "source-journal.json").write_bytes(once.raw({"started_at": start, "finished_at": finished,
+        "events": events, "body_events": body_events, "representation_events": representation_events,
+        "completed_reads": reads, "captured_pdf_bytes": total_pdf, "scope": context["source_limitations"],
+        "source_successor_material": material}))
     return context, reads, {"started_at": start, "finished_at": finished,
         "inventory_finished_at": inventory_end, "decoded_query_events": events,
         "scope": context["source_limitations"], "captured_pdf_bytes": total_pdf}
