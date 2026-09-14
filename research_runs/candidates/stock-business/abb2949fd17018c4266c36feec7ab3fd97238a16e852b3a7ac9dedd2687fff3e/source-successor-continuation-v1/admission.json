@@ -1,0 +1,39 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-14T04:58:07.939451+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "2003e6a12c8e1cd9f05f75e29a5025970bc1df3118d82ff177335ae621a80e33",
+    "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1"
+  },
+  "finished_at": "2026-09-14T04:58:08.205111+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": "7f2aaf1981a3f039ac1b6e92d77ae737cc4585e5fc7e3bd8dde59471f3717b43",
+  "input_file_sha256": "d0c7fdaed54982a417e6345bcec7dad6aab052b96f55b0ea71c4b7603dc8b5a5",
+  "input_source": {
+    "git_blob": "b3d4368b4bc84c700fab5c63b7da4dbefbfca973",
+    "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/input.json",
+    "purpose": "input.json",
+    "ref": "0bcae9b1fb167f2be9f6b98c923bc59bb9402753",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "d0c7fdaed54982a417e6345bcec7dad6aab052b96f55b0ea71c4b7603dc8b5a5"
+  },
+  "investment_authority": "NONE",
+  "preflight_sha256": "51eb41850d668913b7357e918d50c434be8b0c1246b038261458a4857b174462",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_authority": "NONE",
+  "research_execution_allowed": true,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}
