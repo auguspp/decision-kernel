@@ -70,7 +70,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         if capture is sources.capture:
             capture = bridge.capture_complete
     if successor_session is not None:
-        expected = successor.execution(item["thscode"])
+        scoped = successor_session.for_code(item["thscode"])
+        expected = (scoped["execution_id"], scoped["prefix"])
     else:
         expected = intake.execution(item["thscode"]) if recovery_request is None else recovery.execution(item["thscode"])
     once.require((item["execution_id"], item["prefix"]) == expected
@@ -89,7 +90,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
     try:
         authorize(api, code, request)
         if successor_session is not None:
-            authorize(api, code, successor_session.request, request_path=successor.REQUEST, mode=successor.MODE)
+            authorize(api, code, successor_session.request,
+                      request_path=successor_session.request_path, mode=successor_session.mode)
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
@@ -293,9 +295,9 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
 
 
 def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_item, recover_sources=False,
-            prepare_sources=False, source_successor=False):
-    once.require(all(type(v) is bool for v in (prepare_sources, recover_sources, source_successor))
-        and sum((prepare_sources, recover_sources, source_successor)) <= 1,
+            prepare_sources=False, source_successor=False, source_successor_continuation=False):
+    modes = (prepare_sources, recover_sources, source_successor, source_successor_continuation)
+    once.require(all(type(v) is bool for v in modes) and sum(modes) <= 1,
         "conflicting Stock preparation/recovery/successor modes")
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "unsafe output")
     output.mkdir(parents=True, exist_ok=False)
@@ -307,7 +309,7 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
     name = f"stock-reading-{source_run_id}-1"
     available = [a for a in artifacts["artifacts"] if a["name"] == name]
     if not available:
-        once.require(not (prepare_sources or source_successor),
+        once.require(not (prepare_sources or source_successor or source_successor_continuation),
                      "source preparation/successor requires a saved Stock reading artifact")
         jobs = api.get(f"actions/runs/{source_run_id}/jobs?per_page=100")
         once.require(jobs["total_count"] == len(jobs["jobs"]) and jobs["jobs"], "Stock purpose metadata incomplete")
@@ -336,14 +338,20 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
         from .stock_source_preparation import prepare
         return prepare(api=api, code=code, selected=selected, origin=origin,
                        reading_commit=r, output=output)
-    if source_successor:
+    if source_successor or source_successor_continuation:
         from . import stock_source_successor as successor
-        successor_request = identity._json(api.file(successor.REQUEST, code))
-        items, successor_session = successor.prepare(api=api, code=code, request=successor_request,
-            selected=selected, origin=origin, reading_commit=r, output=output)
+        if source_successor:
+            successor_request = identity._json(api.file(successor.REQUEST, code))
+            items, successor_session = successor.prepare(api=api, code=code, request=successor_request,
+                selected=selected, origin=origin, reading_commit=r, output=output)
+        else:
+            successor_request = identity._json(api.file(successor.CONTINUATION_REQUEST, code))
+            items, successor_session = successor.prepare_continuation(api=api, code=code, request=successor_request,
+                selected=selected, origin=origin, reading_commit=r, output=output)
         selected = {**selected, "items": items}
     result = {"status": "COMPLETED", "source_run_id": source_run_id, "items": [],
         "source_recovery": recover_sources, "source_successor": source_successor,
+        "source_successor_continuation": source_successor_continuation,
         "original_qualified_issuers": original_codes,
         "excluded": selected["excluded"], "planned_issuers": [i["thscode"] for i in selected["items"]],
         "unattempted_issuers": [i["thscode"] for i in selected["items"]], "reading_commit": r, **reading.AUTHORITY}
@@ -372,11 +380,13 @@ def main(argv=None):
     modes.add_argument("--recover-sources", action="store_true")
     modes.add_argument("--prepare-sources", action="store_true")
     modes.add_argument("--source-successor", action="store_true")
+    modes.add_argument("--source-successor-continuation", action="store_true")
     args = parser.parse_args(argv)
     once.require(os.environ.get("GITHUB_REPOSITORY") == once.REPO
         and os.environ.get("GITHUB_REF") == "refs/heads/main" and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
         and os.environ.get("GITHUB_SHA") == args.code_commit, "untrusted Stock research host")
-    once.require(not (args.recover_sources or args.prepare_sources or args.source_successor)
+    once.require(not (args.recover_sources or args.prepare_sources or args.source_successor
+                      or args.source_successor_continuation)
                  or os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch",
                  "Stock source preparation/recovery/successor requires explicit native dispatch")
     once.require(not args.prepare_sources or not os.environ.get("SUB2API_API_KEY"),
@@ -384,7 +394,8 @@ def main(argv=None):
     try:
         result = consume(api=GitHubAPI(os.environ["GH_TOKEN"], max_calls=1024), code=args.code_commit,
                          source_run_id=args.source_run_id, output=args.output, recover_sources=args.recover_sources,
-                         prepare_sources=args.prepare_sources, source_successor=args.source_successor)
+                         prepare_sources=args.prepare_sources, source_successor=args.source_successor,
+                         source_successor_continuation=args.source_successor_continuation)
     except Exception as exc:
         if (args.output.is_dir() and not args.output.is_symlink()
                 and not any(p.is_symlink() for p in args.output.parents)):
