@@ -1,0 +1,822 @@
+{
+  "code_commit": "e90d338577c8035dd82f96b2f48ad8c660b12324",
+  "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "和顺石油",
+    "current_member_name": "和顺石油",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.031537450722733245729303548",
+          "name": "和顺石油",
+          "thscode": "603353.SH",
+          "ticker": "603353",
+          "turnover": "476602130"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "884021.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "油品石化贸易",
+            "recorded_event_ids": [
+              "039776fcb396f33a9599a824ae5e335db6d84a7f871e585a6c8c21dac8d9be4d"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884021.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881180.TI",
+        "node_label": "油品石化贸易 884021.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884021.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881180.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0333741973646986206246195787",
+        "excess_return": "0.2750698632932022587138318537",
+        "stock_return": "0.241695665928503638089212275"
+      },
+      "5": {
+        "benchmark_return": "-0.0083310429744615824364287992",
+        "excess_return": "0.1651244411471700999725325422",
+        "stock_return": "0.156793398172708517536103743"
+      },
+      "60": {
+        "benchmark_return": "-0.0873077545734175165938157682",
+        "excess_return": "0.0504979386224972711950427621",
+        "stock_return": "-0.0368098159509202453987730061"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.031537450722733245729303548",
+          "name": "和顺石油",
+          "thscode": "603353.SH",
+          "ticker": "603353",
+          "turnover": "476602130"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "油品石化贸易",
+            "recorded_event_ids": [
+              "039776fcb396f33a9599a824ae5e335db6d84a7f871e585a6c8c21dac8d9be4d"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884021.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881180.TI",
+        "node_label": "油品石化贸易 884021.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884021.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.078280805349749357997123639",
+            "stock_excess_return": "0.163414860578754280092088636"
+          },
+          "5": {
+            "sector_return": "0.018654985064448941169494415",
+            "stock_excess_return": "0.138138413108259576366609328"
+          },
+          "60": {
+            "sector_return": "0.000093874916404023085952310",
+            "stock_excess_return": "-0.0369036908673242684847253161"
+          }
+        },
+        "name": "油品石化贸易",
+        "node_id": "881180.TI",
+        "thscode": "884021.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.031537450722733245729303548",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-10",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-14",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-07",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-04",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-04",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-18",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-11",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 10,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "603353.SH",
+            "to": "2026-09-11"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 10,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-11T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789142399999",
+          "interval": "1d",
+          "start": "1781712000000",
+          "thscode": "603353.SH"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-12T12:51:48+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-12T04:51:51.361828+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2026-06-02",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2025-12-30",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2025-06-06",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2025-02-28",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2024-07-01",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.3000000000",
+            "ex_date": "2023-10-13",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2023-06-20",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2022-06-22",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.5000000000",
+            "ex_date": "2021-05-31",
+            "per_share_bonus": "0.3000000000",
+            "ticker": "603353"
+          },
+          {
+            "dividend_per_share": "0.4000000000",
+            "ex_date": "2020-07-06",
+            "per_share_bonus": "0",
+            "ticker": "603353"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "1",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "47.6602130",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "476602129",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "476602130",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "39.25",
+      "latest_turnover": "476602129",
+      "latest_volume": "12439900",
+      "previous_raw_close": "38.05",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.241695665928503638089212275",
+        "5": "0.156793398172708517536103743",
+        "60": "-0.0368098159509202453987730061"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "2.691603065095680286569862792",
+      "twenty_day_return_five_sessions_ago": "0.129494007989347536617842876",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "603353.SH"
+  },
+  "origin": {
+    "archive_sha256": "3bc8413f93e4994e6bbed4686d565d3fbb363cb62f042d6844a54cd2a93ac24e",
+    "artifact_id": 10291478835,
+    "market_session": "2026-09-11",
+    "projection_hash": "7855c155611d3775574d97a32c82dd655fc261c8b727e5611cd354dfafdc057f",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-12T04:46:28Z",
+      "event": "workflow_dispatch",
+      "head_sha": "93f667ebb2cedd553b66a495127b6ed657ad521e",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34673882756",
+      "id": 34673882756,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-12T04:46:28Z",
+      "status": "completed",
+      "updated_at": "2026-09-12T04:55:33Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "source_successor": {
+    "current_reading": {
+      "git_blob": "4609d3521d4aa621b713c7cac1183412b6fc4f17",
+      "path": "current-state.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_CURRENT_READING",
+      "ref": "1bc71601be3f33dad5c24fe6ebebfe45e997f0c7",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7d6e22d3729342238e4df93a2571ee696df8b1d4e71adda335be2eb6b5d13440"
+    },
+    "current_reading_item_status": "PRE_EXECUTION_FAILURE",
+    "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+    "material": {
+      "inventory_sha256": "a2fc107b03facaf8b80a947a362d1ee5e8edc5234d06771f9e3508e9eeb632a0",
+      "missing_page_reviews": [
+        {
+          "announcement_id": "1225530965",
+          "error_code": "required page visual review unavailable",
+          "pages": [
+            {
+              "error_code": "required page visual review unavailable",
+              "extracted_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "page_number": 23,
+              "render": {
+                "crop": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "draw_annots": true,
+                "format": "RGB",
+                "height": 1678,
+                "pixels_sha256": "196d9e941525f37577039e27b81fed72354caa0f1afb2844f856940ef6177059",
+                "rotation": 0,
+                "scale": 2,
+                "width": 1180
+              },
+              "status": "REQUIRES_VISUAL_REVIEW"
+            }
+          ],
+          "pdf_sha256": "cc3a234f7551ef02c401fae60452b891ca48ef0047aad7e26981e0f4ec7948fa"
+        }
+      ],
+      "selected_ids": [
+        "1225530957",
+        "1225530958",
+        "1225530960",
+        "1225530961",
+        "1225530963",
+        "1225530965",
+        "1225530982",
+        "1225530984",
+        "1225531017",
+        "1225531019",
+        "1225531021",
+        "1225531023",
+        "1225531027",
+        "1225531032",
+        "1225531034",
+        "1225531040",
+        "1225547101",
+        "1225547108",
+        "1225547119",
+        "1225552981"
+      ]
+    },
+    "observation": {
+      "business_benefit_status": "NOT_ESTABLISHED",
+      "business_linkage_status": "UNKNOWN",
+      "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+      "company_name": "和顺石油",
+      "current_member_name": "和顺石油",
+      "current_origins": [
+        {
+          "breadth_leader": {
+            "daily_return": "0.031537450722733245729303548",
+            "name": "和顺石油",
+            "thscode": "603353.SH",
+            "ticker": "603353",
+            "turnover": "476602130"
+          },
+          "business_linkage_status": "UNKNOWN",
+          "company": null,
+          "current_member_sectors": [
+            "884021.TI"
+          ],
+          "direction_sources": [
+            {
+              "family": "GRANULAR_884",
+              "name": "油品石化贸易",
+              "recorded_event_ids": [
+                "039776fcb396f33a9599a824ae5e335db6d84a7f871e585a6c8c21dac8d9be4d"
+              ],
+              "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+              "thscode": "884021.TI"
+            }
+          ],
+          "economic_coverage": null,
+          "node_id": "881180.TI",
+          "node_label": "油品石化贸易 884021.TI",
+          "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+          "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+          "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+          "sector_codes": [
+            "884021.TI"
+          ]
+        }
+      ],
+      "eligible_for_shadow_reading": true,
+      "eligible_nodes": [
+        "881180.TI"
+      ],
+      "excluded_reasons": [],
+      "input_failure": null,
+      "market_comparison": {
+        "20": {
+          "benchmark_return": "-0.0333741973646986206246195787",
+          "excess_return": "0.2750698632932022587138318537",
+          "stock_return": "0.241695665928503638089212275"
+        },
+        "5": {
+          "benchmark_return": "-0.0083310429744615824364287992",
+          "excess_return": "0.1651244411471700999725325422",
+          "stock_return": "0.156793398172708517536103743"
+        },
+        "60": {
+          "benchmark_return": "-0.0873077545734175165938157682",
+          "excess_return": "0.0504979386224972711950427621",
+          "stock_return": "-0.0368098159509202453987730061"
+        }
+      },
+      "market_expression_status": "OBSERVED",
+      "origins": [
+        {
+          "breadth_leader": {
+            "daily_return": "0.031537450722733245729303548",
+            "name": "和顺石油",
+            "thscode": "603353.SH",
+            "ticker": "603353",
+            "turnover": "476602130"
+          },
+          "business_linkage_status": "UNKNOWN",
+          "company": null,
+          "direction_sources": [
+            {
+              "family": "GRANULAR_884",
+              "name": "油品石化贸易",
+              "recorded_event_ids": [
+                "039776fcb396f33a9599a824ae5e335db6d84a7f871e585a6c8c21dac8d9be4d"
+              ],
+              "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+              "thscode": "884021.TI"
+            }
+          ],
+          "economic_coverage": null,
+          "node_id": "881180.TI",
+          "node_label": "油品石化贸易 884021.TI",
+          "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+          "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+          "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+          "sector_codes": [
+            "884021.TI"
+          ]
+        }
+      ],
+      "sector_comparisons": [
+        {
+          "horizons": {
+            "20": {
+              "sector_return": "0.078280805349749357997123639",
+              "stock_excess_return": "0.163414860578754280092088636"
+            },
+            "5": {
+              "sector_return": "0.018654985064448941169494415",
+              "stock_excess_return": "0.138138413108259576366609328"
+            },
+            "60": {
+              "sector_return": "0.000093874916404023085952310",
+              "stock_excess_return": "-0.0369036908673242684847253161"
+            }
+          },
+          "name": "油品石化贸易",
+          "node_id": "881180.TI",
+          "thscode": "884021.TI"
+        }
+      ],
+      "status": "CONTRACT_CHECKED_RAW_READING",
+      "stock_path": {
+        "corporate_action_adjustment": "NOT_PERFORMED",
+        "daily_raw_return": "0.031537450722733245729303548",
+        "history_session_count": 61,
+        "input_checks": {
+          "action_window_checks": {
+            "1": {
+              "base_session": "2026-09-10",
+              "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+              "end_session": "2026-09-11",
+              "is_selection_window": false,
+              "reported_event_dates": [],
+              "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+              "usable_for_raw_comparison": true
+            },
+            "20": {
+              "base_session": "2026-08-14",
+              "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+              "end_session": "2026-09-11",
+              "is_selection_window": true,
+              "reported_event_dates": [],
+              "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+              "usable_for_raw_comparison": true
+            },
+            "20_five_sessions_ago": {
+              "base_session": "2026-08-07",
+              "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+              "end_session": "2026-09-04",
+              "is_selection_window": false,
+              "reported_event_dates": [],
+              "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+              "usable_for_raw_comparison": true
+            },
+            "5": {
+              "base_session": "2026-09-04",
+              "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+              "end_session": "2026-09-11",
+              "is_selection_window": true,
+              "reported_event_dates": [],
+              "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+              "usable_for_raw_comparison": true
+            },
+            "60": {
+              "base_session": "2026-06-18",
+              "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+              "end_session": "2026-09-11",
+              "is_selection_window": false,
+              "reported_event_dates": [],
+              "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+              "usable_for_raw_comparison": true
+            }
+          },
+          "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+          "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+          "corporate_action_query": {
+            "events_before_price_window": 10,
+            "exhaustive_absence_proven": false,
+            "expected_request": {
+              "thscode": "603353.SH",
+              "to": "2026-09-11"
+            },
+            "maximum_event_rows": 256,
+            "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+            "response_event_count": 10,
+            "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+          },
+          "corporate_action_query_succeeded": true,
+          "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+          "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+          "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+          "history_provider_ready_at": "2026-09-11T00:00:00+08:00",
+          "history_request": {
+            "adjust": "none",
+            "end": "1789142399999",
+            "interval": "1d",
+            "start": "1781712000000",
+            "thscode": "603353.SH"
+          },
+          "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+          "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+          "quote_provider_ready_at": "2026-09-12T12:51:48+08:00",
+          "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+          "quote_received_at": "2026-09-12T04:51:51.361828+00:00",
+          "reported_corporate_actions": [
+            {
+              "dividend_per_share": "0.1000000000",
+              "ex_date": "2026-06-02",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.1000000000",
+              "ex_date": "2025-12-30",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.1000000000",
+              "ex_date": "2025-06-06",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.1000000000",
+              "ex_date": "2025-02-28",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.1000000000",
+              "ex_date": "2024-07-01",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.3000000000",
+              "ex_date": "2023-10-13",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.2000000000",
+              "ex_date": "2023-06-20",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.2000000000",
+              "ex_date": "2022-06-22",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.5000000000",
+              "ex_date": "2021-05-31",
+              "per_share_bonus": "0.3000000000",
+              "ticker": "603353"
+            },
+            {
+              "dividend_per_share": "0.4000000000",
+              "ex_date": "2020-07-06",
+              "per_share_bonus": "0",
+              "ticker": "603353"
+            }
+          ],
+          "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+          "turnover_reconciliation": {
+            "absolute_difference_cny": "1",
+            "absolute_tolerance_cny": "0.01",
+            "allowed_difference_cny": "47.6602130",
+            "calculation_source": "DATED_HISTORY_UNCHANGED",
+            "hard_cap_cny": "100",
+            "historical_cny": "476602129",
+            "relative_tolerance": "0.0000001",
+            "snapshot_cny": "476602130",
+            "status": "WITHIN_EXPLICIT_TOLERANCE",
+            "supplier_precision_rule_established": false,
+            "version": "stock-snapshot-turnover-cny-v1"
+          }
+        },
+        "last_close": "39.25",
+        "latest_turnover": "476602129",
+        "latest_volume": "12439900",
+        "previous_raw_close": "38.05",
+        "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+        "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "returns": {
+          "20": "0.241695665928503638089212275",
+          "5": "0.156793398172708517536103743",
+          "60": "-0.0368098159509202453987730061"
+        },
+        "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+        "turnover_pulse_5_vs_prior_20": "2.691603065095680286569862792",
+        "twenty_day_return_five_sessions_ago": "0.129494007989347536617842876",
+        "unavailable_price_metrics": []
+      },
+      "thscode": "603353.SH"
+    },
+    "origin": {
+      "archive_sha256": "3bc8413f93e4994e6bbed4686d565d3fbb363cb62f042d6844a54cd2a93ac24e",
+      "artifact_id": 10291478835,
+      "market_session": "2026-09-11",
+      "projection_hash": "7855c155611d3775574d97a32c82dd655fc261c8b727e5611cd354dfafdc057f",
+      "run": {
+        "conclusion": "success",
+        "created_at": "2026-09-12T04:46:28Z",
+        "event": "workflow_dispatch",
+        "head_sha": "93f667ebb2cedd553b66a495127b6ed657ad521e",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34673882756",
+        "id": 34673882756,
+        "operation": null,
+        "path": ".github/workflows/hithink-stock-dump-trial.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-09-12T04:46:28Z",
+        "status": "completed",
+        "updated_at": "2026-09-12T04:55:33Z"
+      }
+    },
+    "parent_failure": {
+      "git_blob": "477d2a5c9588c200eab2efffd337046f66efb69d",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/failure.json",
+      "purpose": "STOCK_SUCCESSOR_PARENT_FAILURE",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "b4983866b7ef9975302d9a80d3bab273abd91e2207b813e085b5e80915d63948"
+    },
+    "parent_selection": {
+      "git_blob": "ca406c06e9c3cc0c9f863287fe82959c02538b53",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_PARENT_SELECTION",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "15b53e59007317d112a937b5ad887a90c8f0cabf3f703750c8c384991f66c7f6"
+    },
+    "permission": {
+      "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
+      "comment_id": 5652950925,
+      "created_at": "2026-09-13T11:22:23Z"
+    },
+    "predecessor_successor_failure": {
+      "git_blob": "ed9c55c958e0ebb0a8e1b35fa3a2212b13520b71",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-v1/failure.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_FAILURE",
+      "ref": "f53fdd6c0f1bb6088a8eae9a1363d35a975dbbb9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1e7405825505b7fb99f2dfb30366e17c5fccdfda23b002994c4af97ecce73f11"
+    },
+    "predecessor_successor_reading": {
+      "git_blob": "bc492761c81dfc17ebb62f70af282cd95e82eb3c",
+      "path": "current-state.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_READING",
+      "ref": "eb17ca1694057fe24dad51c99c9cec9aaf431ff6",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7f31356aef3e49cb4e201273ff3e4fb6e9f94f23b5eda0c86b688c2d1f5e82fc"
+    },
+    "predecessor_successor_request": {
+      "git_blob": "9a95c5c1b3383121689c8a999eb55a9c5626664d",
+      "path": "research_runs/stock-source-successor-request.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_REQUEST",
+      "ref": "23670560b79bb4b21f5f32fb60959b4044dd2910",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f19d7027a19641c16aed6480949ca9fac3cb5d01220107659c64247522a940ca"
+    },
+    "predecessor_successor_selection": {
+      "git_blob": "1d3fe1b752a18a2759618e464f733bfe34b962e6",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-v1/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_SELECTION",
+      "ref": "f53fdd6c0f1bb6088a8eae9a1363d35a975dbbb9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "0ebfbb59e8b7138349b402d24a9b6d37f4f5f11c0e631c0fd83306346960269d"
+    },
+    "prefix": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/",
+    "recovery_failure": {
+      "git_blob": "32a6e1da4129c3f34467f269ff7f8425e1543c18",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-recovery-v1/failure.json",
+      "purpose": "STOCK_SUCCESSOR_RECOVERY_FAILURE",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "0c37c9b7768cd46da12d63fc3cc24ca883d771b7fc370cb075704ad60efeea3d"
+    },
+    "recovery_selection": {
+      "git_blob": "8ec291225eef3da2227d7cdecb914a6b986d7aaf",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-recovery-v1/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_RECOVERY_SELECTION",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "a05dc38c9e74deef7b367f4be7976bb621057987198607c645fbdcf30bd499d2"
+    },
+    "required_reviews": [
+      {
+        "git_blob": "448def99da5a37e0e2b280adad288f57351cee77",
+        "page_number": 25,
+        "pdf_sha256": "0aa7c59b58b74ff50924716b18b37c9c95a6e4b76dbb06b4afe4dada5a84dd3f"
+      },
+      {
+        "git_blob": "3a0d80122d707097b7538ff63b7386b4b694341a",
+        "page_number": 23,
+        "pdf_sha256": "cc3a234f7551ef02c401fae60452b891ca48ef0047aad7e26981e0f4ec7948fa"
+      }
+    ],
+    "source_preparation": {
+      "archive_sha256": "25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
+      "artifact_digest": "sha256:25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
+      "artifact_id": 10320565453,
+      "artifact_name": "stock-source-preparation-34765190284-1",
+      "batch_sha256": "f81b71f243c7269397248f6bfa8d61f6e9cebb0c3513cf1bcffe4d1440973b36",
+      "run_id": 34765190284
+    },
+    "successor_request": {
+      "git_blob": "0e3b49af7b146dec787cf01d16239e09b56c50e0",
+      "path": "research_runs/stock-source-successor-continuation-request.json",
+      "purpose": "TRUSTED_STOCK_SUCCESSOR_TECHNICAL_CONTINUATION_REQUEST",
+      "ref": "e90d338577c8035dd82f96b2f48ad8c660b12324",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5757e0074fb097d33343c3569d084edf30f5a8f848a0ccbf0cf17ea09809fba3"
+    },
+    "technical_predecessor_run_id": 34797952444,
+    "thscode": "603353.SH"
+  },
+  "started_at": "2026-09-14T04:57:46.487089+00:00",
+  "thscode": "603353.SH"
+}
