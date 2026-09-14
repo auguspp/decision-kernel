@@ -15,10 +15,9 @@ from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_source_recovery as recovery
 from . import stock_source_successor as successor
+from . import stock_source_successor_continuation as continuation
 
 
-# Additive bounds for the Stock lane, not a reduction of the original 180/60.
-# Keep the accepted #360 bound; continuation must fit it rather than enlarge it.
 EXTRA_API_CALLS = 64
 MAX_STOCK_SOURCE_FILES = 24
 
@@ -28,11 +27,6 @@ def call_limit(api):
 
 
 def attempts(collector):
-    """Job identity, not a green workflow/title, distinguishes source preparation.
-
-    Inspect at most ten invocations. Missing/queued/unreadable job metadata stays
-    unknown and never replaces the last identified model-execution attempt.
-    """
     api = collector.api
     runs = api.get('actions/workflows/stock-business-research.yml/runs?branch=main&per_page=10')
     model.check(isinstance(runs.get('workflow_runs'), list) and len(runs['workflow_runs']) <= 10
@@ -114,7 +108,7 @@ def _collect(collector, payload):
         role_specs = [('ROOT', intake.execution(code)), ('RECOVERY', recovery.execution(code))]
         if code in successor.TARGETS:
             role_specs.extend([('SUCCESSOR', successor.execution(code)),
-                               ('CONTINUATION', successor.continuation_execution(code))])
+                               ('CONTINUATION', continuation.execution(code))])
         for role, (eid, prefix) in role_specs:
             names = {path[len(prefix):] for path in rows
                      if path.startswith(prefix) and '/' not in path[len(prefix):]}
@@ -140,8 +134,6 @@ def _collect(collector, payload):
     extra_bytes = sum(size for path, size in extra_files.items() if path not in collector.files)
     model.check(sum(map(len, collector.files.values())) + extra_bytes + 256*1024 <= delivery.MAX_RETAINED_OUTPUT,
                 'Stock work would consume original retained-byte reserve')
-    # +13 = original five publication operations plus at most eight unique pinned
-    # continuation/predecessor reads. It reserves calls; it does not enlarge the cap.
     model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 13 <= call_limit(api),
                 'Stock work would consume original publication API reserve')
     raw_cache, pinned_cache = {}, {}
@@ -260,8 +252,8 @@ def _collect(collector, payload):
             old_reading = identity._json(old_reading_raw); model.validate_read_package(old_reading)
             model.check(old_request['mode'] == successor.MODE
                 and old_request['permission'] == binding['permission']
-                and old_reading['research']['stock_business_work']['work_commit'] ==
-                    binding['parent_selection']['ref'], 'Stock successor pinned reservation context differs')
+                and old_reading['research']['stock_business_work']['work_commit'] == binding['parent_selection']['ref'],
+                'Stock successor pinned reservation context differs')
             if packet is not None:
                 for key in ('successor_request', 'current_reading'):
                     packet_ref(packet, binding[key])
@@ -292,23 +284,20 @@ def _collect(collector, payload):
         for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure',
                     'predecessor_successor_selection', 'predecessor_successor_failure'):
             identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
-        continuation_request_raw = pinned(binding['successor_request'], successor.CONTINUATION_REQUEST_PURPOSE)
-        continuation_reading_raw = pinned(binding['current_reading'], successor.CONTINUATION_EXPOSURE_PURPOSE)
-        predecessor_request_raw = pinned(binding['predecessor_successor_request'],
-                                         successor.CONTINUATION_PREDECESSOR_REQUEST_PURPOSE)
-        predecessor_reading_raw = pinned(binding['predecessor_successor_reading'],
-                                         successor.CONTINUATION_PREDECESSOR_READING_PURPOSE)
+        continuation_request_raw = pinned(binding['successor_request'], continuation.REQUEST_PURPOSE)
+        continuation_reading_raw = pinned(binding['current_reading'], continuation.EXPOSURE_PURPOSE)
+        predecessor_request_raw = pinned(binding['predecessor_successor_request'], continuation.PREDECESSOR_REQUEST_PURPOSE)
+        predecessor_reading_raw = pinned(binding['predecessor_successor_reading'], continuation.PREDECESSOR_READING_PURPOSE)
         continuation_request = identity._json(continuation_request_raw)
         continuation_reading = identity._json(continuation_reading_raw)
         predecessor_request = identity._json(predecessor_request_raw)
         predecessor_reading = identity._json(predecessor_reading_raw)
         model.validate_read_package(continuation_reading); model.validate_read_package(predecessor_reading)
-        model.check(continuation_request['mode'] == successor.CONTINUATION_MODE
+        model.check(continuation_request['mode'] == continuation.MODE
             and continuation_request['permission'] == binding['permission']
             and continuation_request['failed_successor_run_id'] == binding['technical_predecessor_run_id']
             and continuation_request['failed_successor_work_commit'] == failed_work_ref
-            and continuation_request['failed_successor_reading_commit'] ==
-                binding['predecessor_successor_reading']['ref']
+            and continuation_request['failed_successor_reading_commit'] == binding['predecessor_successor_reading']['ref']
             and continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref
             and predecessor_request['mode'] == successor.MODE
             and predecessor_request['permission'] == binding['permission']
@@ -338,7 +327,6 @@ def _collect(collector, payload):
 
 
 def attach(collector, baseline):
-    """Original collection finishes first; this optional stage can roll back only itself."""
     before_files, before_sources = dict(collector.files), dict(collector.sources)
     research = deepcopy(baseline['research'])
     def assemble():
