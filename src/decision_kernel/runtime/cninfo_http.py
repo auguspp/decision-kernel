@@ -229,6 +229,11 @@ def _request_json(
     form: Mapping[str, str] | None,
     timeout_seconds: float,
 ) -> Mapping[str, Any]:
+    # Fixed labels retain the failing phase without echoing URLs, forms or bodies.
+    stage = {
+        ("GET", CNINFO_STOCK_MAP_URL): "SECURITY_MAP",
+        ("POST", CNINFO_ANNOUNCEMENT_QUERY_URL): "ANNOUNCEMENT_QUERY",
+    }.get((method, url), "UNCLASSIFIED_JSON_ENDPOINT")
     body = None if form is None else urlencode(form).encode("utf-8")
     headers = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -244,12 +249,12 @@ def _request_json(
             payload = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         raise CninfoRuntimeError(
-            f"CNINFO HTTP request failed with status {exc.code}"
+            f"CNINFO HTTP request failed with status {exc.code} [stage={stage}]"
         ) from exc
     except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
-        raise CninfoRuntimeError("CNINFO request or response decoding failed") from exc
+        raise CninfoRuntimeError(f"CNINFO request or response decoding failed [stage={stage}]") from exc
     if not isinstance(payload, Mapping):
-        raise CninfoRuntimeError("CNINFO response is not a JSON object")
+        raise CninfoRuntimeError(f"CNINFO response is not a JSON object [stage={stage}]")
     return payload
 
 
