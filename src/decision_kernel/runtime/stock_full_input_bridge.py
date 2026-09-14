@@ -98,6 +98,62 @@ def require_bound(value):
     return value
 
 
+def successor_prompt_context(packet, context, bound):
+    """Describe bound input/lineage scopes; never attest admission or a route.
+
+    Called by the SAME Pre builder for SDK preview and actual execution. Quick
+    inherits that prompt only after the original validated Pre transition.
+    No context mutation, network, source-truth check or new execution identity.
+    """
+    require_bound(bound).check_packet(packet, context)
+    history = context.get("source_successor")
+    if "source_successor" not in context:
+        return {}  # Preserve unrelated/default full-input prompts byte-for-byte.
+    once.require(isinstance(history, dict)
+        and isinstance(history.get("current_reading"), dict)
+        and isinstance(history.get("successor_request"), dict)
+        and history.get("execution_id") == packet.execution_id
+        and history.get("prefix") == packet.candidate_output_prefix
+        and history.get("thscode") == context["stock_observation"]["row"]["thscode"]
+        and history.get("current_reading", {}).get("ref") == packet.current_state_commit
+        and history.get("successor_request", {}).get("ref") == packet.code_commit,
+        "full input successor prompt identity differs")
+    inventory = context["issuer_inventory"]
+    return {"source_state_interpretation": {
+        "contract": "STOCK_SUCCESSOR_FIELD_SCOPES_V1",
+        "current_request": {"execution_id": packet.execution_id,
+            "code_commit": packet.code_commit,
+            "reading_commit": packet.current_state_commit,
+            "context_sha256": once.sha(bound.decoded_raw),
+            "meaning": "REQUEST_INPUT_IDENTITY_NOT_EXECUTION_STATUS"},
+        "supplied_material": {
+            "selected_ids": list(inventory["selected_ids"]),
+            "document_count": len(context["issuer_documents"]),
+            "page_count": sum(d["page_count"] for d in context["issuer_documents"]),
+            "meaning": "PRESENT_BOUND_REPRESENTATIONS_NOT_TRUTH_OR_ADMISSION"},
+        "historical_fields": {
+            "public_context.source_successor.current_reading_item_status":
+                "INHERITED_PREDECESSOR_SNAPSHOT_NOT_CURRENT_EXECUTION_STATUS",
+            "public_context.source_successor.material":
+                "SAVED_SOURCE_ONLY_PREPARATION_SNAPSHOT_NOT_CURRENT_INPUT_GAPS"},
+        "rules": (
+            "The source_successor object mixes current child bindings with historical lineage; "
+            "do not treat the entire object as either current state or obsolete data. "
+            "In particular, material.missing_page_reviews records OLD missing pages, when present. "
+            "Compare them with the supplied issuer_documents pages and their exact review_source "
+            "before claiming a page is currently absent. Do not erase or reinterpret old failures. "
+            "The current request is not a completed stage; prompt construction does not attest "
+            "admission, delivery or Research completion. Only the original host/admission and "
+            "execution receipts establish those technical states. Do not infer this invocation "
+            "failed from a predecessor PRE_EXECUTION_FAILURE. "
+            "Use business evidence for the existing route choices; no route is forced. "
+            "Supplementary market/customer/competitor information outside the declared required "
+            "source classes may remain UNKNOWN; that is not itself a technical failure or a "
+            "new mandatory Deep requirement. Genuine current required-source or execution gaps "
+            "must still not be disguised as completed WAIT or a business rejection.")
+    }}
+
+
 def capture_complete(**kwargs):
     """Use original whole-source preparation, never clip or recapture on failure."""
     from . import stock_research_sources as sources
@@ -151,7 +207,7 @@ def preview_pre(packet, discovery, context, bound):
     """
     from openai import OpenAI, DefaultHttpxClient
     require_bound(bound).check_packet(packet, context)
-    prompt = once.pre_prompt(packet, discovery, context)
+    prompt = once.pre_prompt(packet, discovery, context, bound_context=bound)
     _, _, _, parameters = once.model_request(prompt, once.PreResearchResult, max_prompt_bytes=full.REQUEST_BYTES)
     record = {}
     check = bound.request_check("pre", prompt, once.PreResearchResult, parameters).hook(record)
