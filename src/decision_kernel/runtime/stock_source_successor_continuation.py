@@ -167,12 +167,22 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
         old_binding = prep["source_successor"]
         once.require(old_binding["execution_id"] == old_eid and old_binding["prefix"] == old_prefix
             and old_binding["permission"] == request["permission"], "Stock successor continuation old binding differs")
+        for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure"):
+            spec = old_binding[key]
+            once.require(rows.get(spec["path"], {}).get("sha") == spec["git_blob"],
+                         "Stock successor continuation old predecessor changed in failed work")
+            _checked(api, spec)
         old_request_raw = _checked(api, old_binding["successor_request"])
         old_request = identity._json(old_request_raw)
         once.require(old_request["mode"] == base.MODE and old_request["permission"] == request["permission"]
             and old_request["source_stock_run_id"] == request["source_stock_run_id"]
             and old_request["source_preparation_run_id"] == request["source_preparation_run_id"],
             "Stock successor continuation old request differs")
+        old_reading_raw = identity._checked_source(old_binding["current_reading"],
+            lambda s: api.file(s["path"], s["ref"]))
+        old_reading = identity._json(old_reading_raw); reading.validate_read_package(old_reading)
+        once.require(old_reading["research"]["stock_business_work"]["work_commit"] ==
+            old_binding["parent_selection"]["ref"], "Stock successor continuation original reading differs")
         old_sessions.append((old_binding, old_request, old_request_raw))
         binding_items.append({**old_binding, "execution_id": new_eid, "prefix": new_prefix,
             "predecessor_successor_selection": once.source_ref(selection_spec["path"], selection_spec["ref"], prep_raw, SELECTION_PURPOSE),
