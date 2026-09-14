@@ -254,8 +254,6 @@ def _collect(collector, payload):
                 'Stock successor reading predecessor differs')
             for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure'):
                 identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
-            # Reservation itself must remain independently auditable even when no
-            # input/candidate exists because source preparation failed.
             old_request_raw = pinned(binding['successor_request'], successor.REQUEST_PURPOSE)
             old_reading_raw = pinned(binding['current_reading'], successor.EXPOSURE_PURPOSE)
             old_request = identity._json(old_request_raw)
@@ -270,8 +268,6 @@ def _collect(collector, payload):
             item.update(work_kind='SOURCE_PREPARATION_SUCCESSOR', new_disclosure=False)
             root['source_successor'] = item; successors[code] = item
             continue
-        # Technical continuation is legal only after the exact production successor
-        # failed before Research; it is a sibling, never a revival of that child.
         model.check(code in successors and successors[code]['status'] == 'PRE_EXECUTION_FAILURE'
                     and successors[code].get('error_type') == 'AttributeError',
                     'Stock successor continuation lacks preserved AttributeError predecessor')
@@ -280,6 +276,7 @@ def _collect(collector, payload):
                     and not any(n in successor_names for n in
                         ('launch.json','input.json','candidate.json','admission.json','receipt.json','funnel.json')),
                     'Stock successor continuation predecessor reached Research/admission')
+        failed_work_ref = binding['predecessor_successor_selection']['ref']
         model.check(binding['thscode'] == code and binding['execution_id'] == eid
             and prep['observation'] == parent_selection['observation'] and prep['origin'] == parent_selection['origin']
             and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
@@ -288,6 +285,7 @@ def _collect(collector, payload):
             and binding['recovery_failure']['path'] == recovery_prefix + 'failure.json'
             and binding['predecessor_successor_selection']['path'] == successor_prefix + 'prepare.json'
             and binding['predecessor_successor_failure']['path'] == successor_prefix + 'failure.json'
+            and binding['predecessor_successor_failure']['ref'] == failed_work_ref
             and type(binding.get('technical_predecessor_run_id')) is int
             and binding['technical_predecessor_run_id'] > 0,
             'Stock successor continuation reading predecessor differs')
@@ -308,12 +306,13 @@ def _collect(collector, payload):
         model.check(continuation_request['mode'] == successor.CONTINUATION_MODE
             and continuation_request['permission'] == binding['permission']
             and continuation_request['failed_successor_run_id'] == binding['technical_predecessor_run_id']
-            and continuation_request['failed_successor_work_commit'] == commit
+            and continuation_request['failed_successor_work_commit'] == failed_work_ref
             and continuation_request['failed_successor_reading_commit'] ==
                 binding['predecessor_successor_reading']['ref']
+            and continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref
             and predecessor_request['mode'] == successor.MODE
             and predecessor_request['permission'] == binding['permission']
-            and predecessor_reading['research']['stock_business_work']['work_commit'] == commit,
+            and predecessor_reading['research']['stock_business_work']['work_commit'] == failed_work_ref,
             'Stock successor continuation pinned reservation context differs')
         if packet is not None:
             for key in ('successor_request', 'current_reading', 'predecessor_successor_request',
