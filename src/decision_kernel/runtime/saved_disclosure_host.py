@@ -64,7 +64,8 @@ def execute_prepared(*, api, prepared: dict, code_commit: str, output: Path, clo
 
 def consume(*, api, source_run_id: int, code_commit: str, output: Path,
             clock=once.now, execute=execute_prepared, reserve=intake.intake,
-            prepare=preparation.prepare_reserved, new_question_api=None, continuation_request_source=None) -> dict:
+            prepare=preparation.prepare_reserved, new_question_api=None, continuation_request_source=None,
+            expected_reading_commit=None, expected_work_commit=None) -> dict:
     """Consume a finite existing scan, serially; no retry/catch-up/new source scan.
 
     This is not a daily call quota. The existing scan's actual packet denominator
@@ -101,6 +102,16 @@ def consume(*, api, source_run_id: int, code_commit: str, output: Path,
         preparation.captured_bodies(archive_raw=body_raw, artifact=body_artifact, run=run)
         reading_commit = intake.mutable_ref(api, read.READ_REF)
         receipt["reading_commit"] = reading_commit
+        if expected_reading_commit is not None or expected_work_commit is not None:
+            once.require(isinstance(expected_reading_commit, str)
+                         and read.SHA.fullmatch(expected_reading_commit)
+                         and isinstance(expected_work_commit, str)
+                         and read.SHA.fullmatch(expected_work_commit), "incomplete invocation binding")
+            once.require(reading_commit == expected_reading_commit
+                         and intake.mutable_ref(api, work.WORK_REF) == expected_work_commit,
+                         "invocation reading or work moved before consumption")
+            receipt["invocation_expectation"] = {"reading_commit": expected_reading_commit,
+                                                  "work_commit": expected_work_commit}
         target_key = None
         if continuation_request_source is not None:
             from . import disclosure_continuation as continuation
@@ -157,6 +168,8 @@ def consume(*, api, source_run_id: int, code_commit: str, output: Path,
                 api = new_question_api()
                 clients.append(api)
             w = intake.mutable_ref(api, work.WORK_REF)
+            if index == 0 and expected_work_commit is not None:
+                once.require(w == expected_work_commit, "invocation work moved before first reservation")
             _, files = intake.work_inventory(api, w)
             plan = work.plan_one(archive_raw=scan_raw, artifact=scan_artifact, run=run,
                                  work_files=files, work_commit=w, selected_at=clock())
@@ -224,6 +237,8 @@ def main(argv=None):
     parser.add_argument("--code-commit", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--continuation", action="store_true")
+    parser.add_argument("--expected-reading-commit")
+    parser.add_argument("--expected-work-commit")
     args = parser.parse_args(argv)
     once.require(os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
                  and os.environ.get("GITHUB_REF") == "refs/heads/main", "main attempt1 only")
@@ -248,7 +263,9 @@ def main(argv=None):
         result = consume(api=api, source_run_id=args.source_run_id,
                          code_commit=args.code_commit, output=args.output, execute=bounded_execute,
                          new_question_api=lambda: GitHubAPI(os.environ["GH_TOKEN"]),
-                         continuation_request_source=continuation_source)
+                         continuation_request_source=continuation_source,
+                         expected_reading_commit=args.expected_reading_commit,
+                         expected_work_commit=args.expected_work_commit)
         print(result["status"])
         return 2 if result["status"] == "BATCH_INCOMPLETE" else 0
     finally:

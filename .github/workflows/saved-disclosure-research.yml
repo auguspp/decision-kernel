@@ -1,6 +1,10 @@
 name: saved-disclosure-research
 
 on:
+  # Explicit request-only main commit; validation below rejects edits/mixed changes.
+  push:
+    branches: [main]
+    paths: [.github/saved-disclosure-invocations/*.json]
   workflow_run:
     workflows: [decision-inbox]
     types: [completed]
@@ -28,7 +32,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_dispatch' || github.event_name == 'push' ||
        (github.event.workflow_run.name == 'decision-inbox' &&
         github.event.workflow_run.event == 'schedule' &&
         github.event.workflow_run.conclusion == 'success' &&
@@ -46,25 +50,46 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12'
       - name: Install existing PDF, GitHub and Responses dependencies
         run: python -m pip install -e '.[documents,feeds,research-api]'
+      - name: Validate explicit first-addition invocation without model credentials
+        if: github.event_name == 'push'
+        id: invocation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_BASE: ${{ github.event.before }}
+        run: python -m decision_kernel.runtime.saved_disclosure_invocation --output invocation-audit
       - name: Original FIFO, preparation, admission and Pre with necessary Quick
         env:
           GH_TOKEN: ${{ github.token }}
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
-          SOURCE_RUN_ID: ${{ github.event.workflow_run.id || inputs.source-run-id }}
-          CONTINUATION_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.continue-research }}
+          SOURCE_RUN_ID: ${{ steps.invocation.outputs.source_run_id || github.event.workflow_run.id || inputs.source-run-id }}
+          CONTINUATION_REQUESTED: ${{ github.event_name == 'push' && steps.invocation.outputs.continuation == 'true' || github.event_name == 'workflow_dispatch' && inputs.continue-research }}
+          EXPECTED_READING: ${{ steps.invocation.outputs.reading_commit }}
+          EXPECTED_WORK: ${{ steps.invocation.outputs.work_commit }}
         run: |
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -n "$SUB2API_API_KEY"
           extra=()
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            test -n "$EXPECTED_READING" && test -n "$EXPECTED_WORK"
+            extra+=(--expected-reading-commit "$EXPECTED_READING" --expected-work-commit "$EXPECTED_WORK")
+          fi
           if [ "$CONTINUATION_REQUESTED" = true ]; then extra+=(--continuation); fi
           python -m decision_kernel.runtime.saved_disclosure_host \
             --source-run-id "$SOURCE_RUN_ID" --code-commit "$GITHUB_SHA" --output run-output "${extra[@]}"
+      - name: Retain separate invocation receipt without changing the original batch layout
+        if: always() && github.event_name == 'push'
+        run: |
+          if [ -d invocation-audit ]; then
+            mkdir -p run-output
+            cp -R invocation-audit run-output/invocation
+          fi
       - name: Preserve originals, preparation, results and partial failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
