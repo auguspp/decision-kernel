@@ -1,0 +1,168 @@
+{
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "budget": {
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_elapsed_minutes": 15,
+    "max_search_queries": 0,
+    "max_source_reads": 4,
+    "max_technical_retries": 0,
+    "max_tool_calls": 6,
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "tool_calls_enforcement": "SOFT_EXECUTOR"
+  },
+  "candidate_output_prefix": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/",
+  "case_id": "300711.SZ",
+  "code_commit": "e90d338577c8035dd82f96b2f48ad8c660b12324",
+  "current_state_commit": "1bc71601be3f33dad5c24fe6ebebfe45e997f0c7",
+  "current_state_reading_hash": "7b502e288d1ec6669552663cd6d2121094dfc9432ebbf23f28565b6ee4d6b835",
+  "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+  "known_unknowns": [
+    "REQUIRED_SOURCE_CLASS:FULL_BUSINESS_REPORT:STATIC",
+    "REQUIRED_SOURCE_CLASS:RECENT_MATERIAL_DISCLOSURE_CHECK:LATEST_INVENTORY",
+    "Price is a question, not evidence of business benefit or WHY. Tables require semantic interpretation.",
+    "Only declared CNINFO window/channels inspected; external policy, competitor and customer evidence not acquired."
+  ],
+  "method_version": "research-funnel-v1",
+  "next_discriminating_search": "用原定期报告和后续公告检查业务对应、经济重大性及反证；不把股份或行业分类当作盈利暴露。",
+  "prompt_version": "stock-business-baseline-v1",
+  "research_cutoff": "2026-09-14T04:59:52.975145Z",
+  "research_question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。",
+  "schema_version": 1,
+  "security_id": "SZSE:300711",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-14T04:59:51.931965Z",
+      "content_hash": "2606ef5d53eaca6c0c5597858ce130d79cc1ae753f5a7dbb88908da373fb3d61",
+      "extracted_structured_values": null,
+      "id": "6ae8ef15-39b5-5f11-ba69-0b7079d53566",
+      "idempotency_key": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+      "license_terms_note": "CNINFO latest full annual/half-year report in a coherent 400-day query, and ALL disclosures dated on/after the earliest full version of that reporting period within the same query. Not all issuer channels or full company Research. Full required text is supplied without clipping. Parsed tables and issuer claims are not truth certification. Original PDFs and decoded query returns remain in this run artifact. Source acquisition can follow the price session; this is current research, not a reconstruction of what was known on the price date.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-14T04:59:50Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-14T04:59:51.931983Z",
+      "schema_version": 1,
+      "source_identifier": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "selected_at": "2026-09-14T04:59:52.975142Z",
+  "source_lane": "STOCK_MARKET_EXPRESSION",
+  "source_refs": [
+    {
+      "git_blob": "93e251bdaf06870ee197bedbac866be5d610766a",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "e1c8f881cb3dafb97f46c6df05bec75f10c74df4",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "2606ef5d53eaca6c0c5597858ce130d79cc1ae753f5a7dbb88908da373fb3d61"
+    },
+    {
+      "git_blob": "f7907da0e0ee17df30c656d446cfdda144b2e6fa",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "4c7c1c1f173e77349d82aaf6bfb96bb9ebd3f1d4",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "0106204140dece87f303eb2255d95c5b0e5adc454a3da3d27d40680659c3c2cc"
+    },
+    {
+      "git_blob": "f9c14b90046f56fab1e11b990065a2892860845c",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/prepare.json",
+      "purpose": "STOCK_BASELINE_SELECTION",
+      "ref": "3fafdfd5ecc01c2be2747caa183d5dddab793e7b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c7eed601d3e31a05b8b57428133e82c5c38e3691156eabfcefbcb8fc81f64f41"
+    },
+    {
+      "git_blob": "67d24e8de7d2049e7552c51d041c10ffb5295f26",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_PARENT_SELECTION",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "71963cef58fc62abbddca1df49e28ac9200fb8235508aabb15de98bf72c48112"
+    },
+    {
+      "git_blob": "1bf26ec8b97b13769dfdeb5409f5f6642102be57",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/failure.json",
+      "purpose": "STOCK_SUCCESSOR_PARENT_FAILURE",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5f88f0398b84ccef8be267f0568b9348882fc4e162baa610e4ba900317f6dc0c"
+    },
+    {
+      "git_blob": "b2f0276bbd7fa5286a0f98b3d86b89eb5224eb82",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-recovery-v1/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_RECOVERY_SELECTION",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5fe0ea8f2fa4af662cc1741b3885d04ff06a561ff3e07447f2af4da609bfb2f3"
+    },
+    {
+      "git_blob": "d943938d6297d9381c3799179a0735fd3f751fea",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-recovery-v1/failure.json",
+      "purpose": "STOCK_SUCCESSOR_RECOVERY_FAILURE",
+      "ref": "dc75bd59a06fa7b6da30c855fe232348270db089",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "40b76b118b305188194b469156622a68657363ad9a41b2250a4104d69f76f533"
+    },
+    {
+      "git_blob": "86a5679a7bc9211ddc283554ecc8f6040e73028c",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-v1/prepare.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_SELECTION",
+      "ref": "f53fdd6c0f1bb6088a8eae9a1363d35a975dbbb9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "1ca57d881a717800d4573f218e1e5a2e5c4756c9a83ae58cfd5b43182958adec"
+    },
+    {
+      "git_blob": "302559a71f342b3bfcab0faa658961cc1063d16a",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-v1/failure.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_FAILURE",
+      "ref": "f53fdd6c0f1bb6088a8eae9a1363d35a975dbbb9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6b344ff2edef0136802272c7a66095490fd4fbbee7659f0c849a721e48cbe85f"
+    },
+    {
+      "git_blob": "9a95c5c1b3383121689c8a999eb55a9c5626664d",
+      "path": "research_runs/stock-source-successor-request.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_REQUEST",
+      "ref": "23670560b79bb4b21f5f32fb60959b4044dd2910",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f19d7027a19641c16aed6480949ca9fac3cb5d01220107659c64247522a940ca"
+    },
+    {
+      "git_blob": "bc492761c81dfc17ebb62f70af282cd95e82eb3c",
+      "path": "current-state.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_READING",
+      "ref": "eb17ca1694057fe24dad51c99c9cec9aaf431ff6",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7f31356aef3e49cb4e201273ff3e4fb6e9f94f23b5eda0c86b688c2d1f5e82fc"
+    },
+    {
+      "git_blob": "0e3b49af7b146dec787cf01d16239e09b56c50e0",
+      "path": "research_runs/stock-source-successor-continuation-request.json",
+      "purpose": "TRUSTED_STOCK_SUCCESSOR_TECHNICAL_CONTINUATION_REQUEST",
+      "ref": "e90d338577c8035dd82f96b2f48ad8c660b12324",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5757e0074fb097d33343c3569d084edf30f5a8f848a0ccbf0cf17ea09809fba3"
+    },
+    {
+      "git_blob": "4609d3521d4aa621b713c7cac1183412b6fc4f17",
+      "path": "current-state.json",
+      "purpose": "STOCK_SUCCESSOR_CONTINUATION_CURRENT_READING",
+      "ref": "1bc71601be3f33dad5c24fe6ebebfe45e997f0c7",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7d6e22d3729342238e4df93a2571ee696df8b1d4e71adda335be2eb6b5d13440"
+    }
+  ],
+  "ticker": "300711",
+  "untrusted_test_material": null
+}
