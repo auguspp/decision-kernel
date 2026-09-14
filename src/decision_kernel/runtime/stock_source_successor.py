@@ -10,7 +10,6 @@ from dataclasses import asdict, dataclass
 from datetime import timedelta
 from pathlib import Path
 
-from ..adapters.cninfo import SHANGHAI_TZ
 from ..adapters.pdf_text import extract_pdf_text
 from . import cninfo_http as cninfo
 from . import current_state as reading
@@ -25,9 +24,6 @@ from . import stock_source_recovery as recovery
 REQUEST = "research_runs/stock-source-successor-request.json"
 MODE = "HUMAN_AUTHORIZED_STOCK_SOURCE_SUCCESSOR"
 CHILD = "source-successor-v1/"
-CONTINUATION_REQUEST = "research_runs/stock-source-successor-continuation-request.json"
-CONTINUATION_MODE = "HUMAN_AUTHORIZED_STOCK_SOURCE_SUCCESSOR_TECHNICAL_CONTINUATION"
-CONTINUATION_CHILD = "source-successor-continuation-v1/"
 TARGETS = frozenset({"603353.SH", "300711.SZ"})
 PARENT_SELECTION_PURPOSE = "STOCK_SUCCESSOR_PARENT_SELECTION"
 PARENT_FAILURE_PURPOSE = "STOCK_SUCCESSOR_PARENT_FAILURE"
@@ -35,12 +31,6 @@ RECOVERY_SELECTION_PURPOSE = "STOCK_SUCCESSOR_RECOVERY_SELECTION"
 RECOVERY_FAILURE_PURPOSE = "STOCK_SUCCESSOR_RECOVERY_FAILURE"
 REQUEST_PURPOSE = "TRUSTED_STOCK_SOURCE_SUCCESSOR_REQUEST"
 EXPOSURE_PURPOSE = "STOCK_SUCCESSOR_CURRENT_READING"
-CONTINUATION_SELECTION_PURPOSE = "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_SELECTION"
-CONTINUATION_FAILURE_PURPOSE = "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_FAILURE"
-CONTINUATION_REQUEST_PURPOSE = "TRUSTED_STOCK_SUCCESSOR_TECHNICAL_CONTINUATION_REQUEST"
-CONTINUATION_EXPOSURE_PURPOSE = "STOCK_SUCCESSOR_CONTINUATION_CURRENT_READING"
-CONTINUATION_PREDECESSOR_REQUEST_PURPOSE = "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_REQUEST"
-CONTINUATION_PREDECESSOR_READING_PURPOSE = "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_READING"
 MATERIAL_LIMITATION = ("Exact source-only artifact is the saved source body base. A fresh coherent CNINFO inventory "
     "is checked at successor time; already-saved PDFs are reused byte-for-byte and only newly selected PDFs, if any, "
     "are acquired. Same-PDF visual notes are explicitly rebound only after the current main note has the exact "
@@ -51,12 +41,6 @@ def execution(thscode: str) -> tuple[str, str]:
     eid, prefix = intake.execution(thscode)
     once.require(thscode in TARGETS, "Stock successor target outside approved scope")
     return eid + "-source-successor-v1", prefix + CHILD
-
-
-def continuation_execution(thscode: str) -> tuple[str, str]:
-    eid, prefix = intake.execution(thscode)
-    once.require(thscode in TARGETS, "Stock successor continuation target outside approved scope")
-    return eid + "-source-successor-continuation-v1", prefix + CONTINUATION_CHILD
 
 
 def _spec_equal(actual, expected):
@@ -93,67 +77,11 @@ class Session:
     reading_commit: str
     reading_raw: bytes
     origin: dict
-    request_path: str = REQUEST
-    mode: str = MODE
 
     def for_code(self, thscode):
         rows = [r for r in self.binding["items"] if r["thscode"] == thscode]
         once.require(len(rows) == 1, "Stock successor binding target differs")
         return rows[0]
-
-
-def _source_only_material(*, api, source_preparation, source_stock_run_id, material_by_code):
-    run_id = source_preparation["run_id"]
-    prep_run = api.get("actions/runs/" + str(run_id))
-    once.require(prep_run["path"] == ".github/workflows/stock-business-research.yml"
-        and prep_run["event"] == "workflow_dispatch" and prep_run["run_attempt"] == 1
-        and prep_run["head_branch"] == "main" and prep_run["status"] == "completed"
-        and prep_run["conclusion"] == "failure", "Stock successor source-only run identity differs")
-    jobs = api.get(f"actions/runs/{prep_run['id']}/jobs?per_page=100")
-    once.require(jobs["total_count"] == len(jobs["jobs"])
-        and {j["name"]: j.get("conclusion") for j in jobs["jobs"]} ==
-            {"research-stock-business": "skipped", "prepare-stock-sources": "failure"},
-        "Stock successor source-only jobs differ")
-    artifacts = api.get(f"actions/runs/{prep_run['id']}/artifacts?per_page=100")
-    once.require(artifacts["total_count"] == len(artifacts["artifacts"]), "Stock successor artifact enumeration incomplete")
-    matches = [a for a in artifacts["artifacts"] if a["id"] == source_preparation["artifact_id"]]
-    once.require(len(matches) == 1, "Stock successor source-only artifact missing")
-    artifact = matches[0]
-    once.require(artifact["name"] == source_preparation["artifact_name"]
-        and artifact["digest"] == source_preparation["artifact_digest"]
-        and not artifact.get("expired", True) and artifact["workflow_run"]["id"] == prep_run["id"],
-        "Stock successor source-only artifact identity differs")
-    archive = api.archive(artifact)
-    once.require(once.sha(archive) == source_preparation["archive_sha256"],
-                 "Stock successor source-only archive changed")
-    files = reading.unpack_archive(archive, artifact, prep_run)
-    batch = identity._json(files["source-preparation-batch.json"])
-    once.require(once.sha(files["source-preparation-batch.json"]) == source_preparation["batch_sha256"]
-        and batch["status"] == "SOURCE_PREPARATION_INCOMPLETE"
-        and batch["formal_research_started"] is False and batch["research_execution_allowed"] is False
-        and batch["model_calls"] == 0 and batch["research_work_writes"] == 0
-        and batch["source_run_id"] == source_stock_run_id
-        and batch["planned_issuers"] == ["603353.SH", "300711.SZ"]
-        and batch["unattempted_issuers"] == [], "Stock successor source-only batch differs")
-    for thscode, material in material_by_code.items():
-        source_item = next(i for i in batch["items"] if i["thscode"] == thscode)
-        p = source_item["preparation"]
-        once.require(p["selected_ids"] == material["selected_ids"]
-            and p["inventory_sha256"] == material["inventory_sha256"]
-            and p["all_planned_bodies_inspected"] is True and p["unattempted_ids"] == [],
-            "Stock successor saved material inventory differs")
-        if thscode == "603353.SH":
-            once.require(len(p["checked_body_ids"]) == 19 and p["complete_context"] is None
-                and p["missing_page_reviews"] == material["missing_page_reviews"],
-                "Heshun saved preparation gap differs")
-        else:
-            full = p["complete_context"]
-            prepared_raw = files["300711.SZ/sources/prepared-context.json"]
-            once.require(p["checked_body_ids"] == p["selected_ids"] and p["missing_page_reviews"] == []
-                and full["bytes"] == material["prepared_context_bytes"] == len(prepared_raw)
-                and full["sha256"] == material["prepared_context_sha256"] == once.sha(prepared_raw),
-                "Guangha saved complete context differs")
-    return prep_run, artifact, archive, files, batch
 
 
 def prepare(*, api, code, request, selected, origin, reading_commit, output, clock=once.now):
@@ -249,22 +177,60 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
             "Stock successor current reading parent differs")
         bound["current_reading_item_status"] = shown["status"]
 
-    source_preparation = {"run_id": request["source_preparation_run_id"],
-        "artifact_id": request["source_preparation_artifact"]["id"],
-        "artifact_name": request["source_preparation_artifact"]["name"],
-        "artifact_digest": request["source_preparation_artifact"]["digest"],
-        "archive_sha256": request["source_preparation_artifact"]["digest"].removeprefix("sha256:")}
-    prep_run, artifact, archive, files, batch = _source_only_material(api=api,
-        source_preparation={**source_preparation,
-            "batch_sha256": once.sha(reading.unpack_archive(archive, artifact, prep_run)["source-preparation-batch.json"])
-            if False else ""}, source_stock_run_id=request["source_stock_run_id"],
-        material_by_code={e["thscode"]: e["material"] for e in entries})
-    # The helper above needs the canonical batch hash. Rebuild from the checked archive once,
-    # then check it against the same bytes instead of inventing a request-side duplicate.
-    source_preparation.update(archive_sha256=once.sha(archive), batch_sha256=once.sha(files["source-preparation-batch.json"]))
+    prep_run = api.get("actions/runs/" + str(request["source_preparation_run_id"]))
+    once.require(prep_run["path"] == ".github/workflows/stock-business-research.yml"
+        and prep_run["event"] == "workflow_dispatch" and prep_run["run_attempt"] == 1
+        and prep_run["head_branch"] == "main" and prep_run["status"] == "completed"
+        and prep_run["conclusion"] == "failure", "Stock successor source-only run identity differs")
+    jobs = api.get(f"actions/runs/{prep_run['id']}/jobs?per_page=100")
+    once.require(jobs["total_count"] == len(jobs["jobs"])
+        and {j["name"]: j.get("conclusion") for j in jobs["jobs"]} ==
+            {"research-stock-business": "skipped", "prepare-stock-sources": "failure"},
+        "Stock successor source-only jobs differ")
+    artifacts = api.get(f"actions/runs/{prep_run['id']}/artifacts?per_page=100")
+    once.require(artifacts["total_count"] == len(artifacts["artifacts"]), "Stock successor artifact enumeration incomplete")
+    expected_artifact = request["source_preparation_artifact"]
+    matches = [a for a in artifacts["artifacts"] if a["id"] == expected_artifact["id"]]
+    once.require(len(matches) == 1, "Stock successor source-only artifact missing")
+    artifact = matches[0]
+    once.require(all(artifact.get(k) == expected_artifact[k] for k in
+        ("id", "name", "size_in_bytes", "digest")) and not artifact.get("expired", True)
+        and artifact["workflow_run"]["id"] == prep_run["id"]
+        and artifact["workflow_run"]["head_sha"] == expected_artifact["head_sha"],
+        "Stock successor source-only artifact identity differs")
+    archive = api.archive(artifact)
+    files = reading.unpack_archive(archive, artifact, prep_run)
+    batch = identity._json(files["source-preparation-batch.json"])
+    once.require(batch["status"] == "SOURCE_PREPARATION_INCOMPLETE"
+        and batch["formal_research_started"] is False and batch["research_execution_allowed"] is False
+        and batch["model_calls"] == 0 and batch["research_work_writes"] == 0
+        and batch["source_run_id"] == request["source_stock_run_id"]
+        and batch["planned_issuers"] == ["603353.SH", "300711.SZ"]
+        and batch["unattempted_issuers"] == [], "Stock successor source-only batch differs")
+    for entry in entries:
+        source_item = next(i for i in batch["items"] if i["thscode"] == entry["thscode"])
+        material = entry["material"]; p = source_item["preparation"]
+        once.require(p["selected_ids"] == material["selected_ids"]
+            and p["inventory_sha256"] == material["inventory_sha256"]
+            and p["all_planned_bodies_inspected"] is True and p["unattempted_ids"] == [],
+            "Stock successor saved material inventory differs")
+        if entry["thscode"] == "603353.SH":
+            once.require(len(p["checked_body_ids"]) == 19 and p["complete_context"] is None
+                and p["missing_page_reviews"] == material["missing_page_reviews"],
+                "Heshun saved preparation gap differs")
+        else:
+            full = p["complete_context"]
+            prepared_raw = files["300711.SZ/sources/prepared-context.json"]
+            once.require(p["checked_body_ids"] == p["selected_ids"] and p["missing_page_reviews"] == []
+                and full["bytes"] == material["prepared_context_bytes"] == len(prepared_raw)
+                and full["sha256"] == material["prepared_context_sha256"] == once.sha(prepared_raw),
+                "Guangha saved complete context differs")
 
     exposure = once.source_ref("current-state.json", reading_commit, reading_raw, EXPOSURE_PURPOSE)
     request_ref = once.source_ref(REQUEST, code, api.file(REQUEST, code), REQUEST_PURPOSE)
+    source_preparation = {"run_id": prep_run["id"], "artifact_id": artifact["id"],
+        "artifact_name": artifact["name"], "artifact_digest": artifact["digest"],
+        "archive_sha256": once.sha(archive), "batch_sha256": once.sha(files["source-preparation-batch.json"])}
     for bound in binding_items:
         bound.update(permission=request["permission"], successor_request=request_ref,
                      current_reading=exposure, source_preparation=source_preparation)
@@ -278,175 +244,8 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
             for i in binding_items], Session(request, binding, files, batch, code, reading_commit, reading_raw, origin)
 
 
-def prepare_continuation(*, api, code, request, selected, origin, reading_commit, output, clock=once.now):
-    """Bind the exact pre-Research successor failure into one create-only technical continuation."""
-    from .stock_research_host import authorize, head
-    authorize(api, code, request, request_path=CONTINUATION_REQUEST, mode=CONTINUATION_MODE)
-    once.require(set(request) == {"schema_version", "enabled", "mode", "permission", "source_stock_run_id",
-        "source_preparation_run_id", "failed_successor_run_id", "failed_successor_artifact",
-        "failed_successor_reading_commit", "failed_successor_work_commit", "items"}
-        and request["schema_version"] == 1 and request["enabled"] is True and request["mode"] == CONTINUATION_MODE
-        and all(type(request[k]) is int and request[k] > 0 for k in
-            ("source_stock_run_id", "source_preparation_run_id", "failed_successor_run_id")),
-        "Stock successor continuation request envelope differs")
-    once.require(origin["run"]["id"] == request["source_stock_run_id"],
-                 "Stock successor continuation original Stock run differs")
-    entries = request["items"]
-    once.require(isinstance(entries, list) and len(entries) == 2
-        and {e.get("thscode") for e in entries} == TARGETS, "Stock successor continuation targets differ")
-    original = {i["thscode"]: i for i in selected["items"]}
-    once.require(TARGETS <= set(original), "Stock successor continuation outside original qualified plan")
-    work_head = head(api, intake.WORK_REF)
-    once.require(work_head == request["failed_successor_work_commit"],
-                 "Stock successor continuation predecessor work moved")
-    rows = intake.inventory(api, work_head)
-
-    failed_run = api.get("actions/runs/" + str(request["failed_successor_run_id"]))
-    expected_artifact = request["failed_successor_artifact"]
-    once.require(failed_run["path"] == ".github/workflows/stock-business-research.yml"
-        and failed_run["event"] == "workflow_dispatch" and failed_run["run_attempt"] == 1
-        and failed_run["head_branch"] == "main" and failed_run["head_sha"] == expected_artifact["head_sha"]
-        and failed_run["status"] == "completed" and failed_run["conclusion"] == "failure",
-        "Stock successor continuation failed run identity differs")
-    jobs = api.get(f"actions/runs/{failed_run['id']}/jobs?per_page=100")
-    once.require(jobs["total_count"] == len(jobs["jobs"])
-        and {j["name"]: j.get("conclusion") for j in jobs["jobs"]} ==
-            {"research-stock-business": "failure", "prepare-stock-sources": "skipped"},
-        "Stock successor continuation failed jobs differ")
-    artifacts = api.get(f"actions/runs/{failed_run['id']}/artifacts?per_page=100")
-    once.require(artifacts["total_count"] == len(artifacts["artifacts"]),
-                 "Stock successor continuation failed artifact enumeration incomplete")
-    matches = [a for a in artifacts["artifacts"] if a["id"] == expected_artifact["id"]]
-    once.require(len(matches) == 1 and all(matches[0].get(k) == expected_artifact[k]
-        for k in ("id", "name", "size_in_bytes", "digest")) and not matches[0].get("expired", True)
-        and matches[0]["workflow_run"]["head_sha"] == expected_artifact["head_sha"],
-        "Stock successor continuation failed artifact identity differs")
-
-    failed_reading_raw = api.file("current-state.json", request["failed_successor_reading_commit"])
-    failed_reading = identity._json(failed_reading_raw); reading.validate_read_package(failed_reading)
-    failed_work = failed_reading["research"]["stock_business_work"]
-    once.require(failed_work["status"] == "READ_OK" and failed_work["work_commit"] == work_head
-        and failed_work["latest_execution_attempt"]["id"] == request["failed_successor_run_id"],
-        "Stock successor continuation failed reading differs")
-
-    once.require(head(api, reading.READ_REF) == reading_commit, "Stock successor continuation fixed reading moved")
-    reading_raw = api.file("current-state.json", reading_commit)
-    saved = identity._json(reading_raw); reading.validate_read_package(saved)
-    work = saved["research"]["stock_business_work"]
-    once.require(saved["code_commit"] == code and work["status"] == "READ_OK"
-        and work["work_commit"] == work_head
-        and work["latest_execution_attempt"]["id"] == request["failed_successor_run_id"],
-        "Stock successor continuation current reading does not show failed predecessor")
-
-    request_ref = once.source_ref(CONTINUATION_REQUEST, code, api.file(CONTINUATION_REQUEST, code),
-                                  CONTINUATION_REQUEST_PURPOSE)
-    exposure = once.source_ref("current-state.json", reading_commit, reading_raw, CONTINUATION_EXPOSURE_PURPOSE)
-    failed_exposure = once.source_ref("current-state.json", request["failed_successor_reading_commit"],
-                                      failed_reading_raw, CONTINUATION_PREDECESSOR_READING_PURPOSE)
-    binding_items = []
-    shared_source_preparation = None
-    material_by_code = {}
-    for entry in entries:
-        thscode = entry["thscode"]
-        once.require(set(entry) == {"thscode", "predecessor_selection", "predecessor_failure"},
-                     "Stock successor continuation item fields differ")
-        old_eid, old_prefix = execution(thscode)
-        new_eid, new_prefix = continuation_execution(thscode)
-        selection_spec, failure_spec = entry["predecessor_selection"], entry["predecessor_failure"]
-        once.require(selection_spec["path"] == old_prefix + "prepare.json"
-            and failure_spec["path"] == old_prefix + "failure.json"
-            and selection_spec["ref"] == failure_spec["ref"] == work_head
-            and rows.get(selection_spec["path"], {}).get("sha") == selection_spec["git_blob"]
-            and rows.get(failure_spec["path"], {}).get("sha") == failure_spec["git_blob"],
-            "Stock successor continuation predecessor work identity differs")
-        prep_raw, failure_raw = _checked_git(api, selection_spec), _checked_git(api, failure_spec)
-        prep, failure = identity._json(prep_raw), identity._json(failure_raw)
-        once.require(prep["execution_id"] == old_eid and prep["thscode"] == thscode
-            and prep["question_kind"] == intake.QUESTION_KIND
-            and prep["origin"] == origin and prep["observation"] == original[thscode]["observation"],
-            "Stock successor continuation predecessor selection differs")
-        once.require(failure.get("record_kind") == "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT"
-            and failure.get("execution_id") == old_eid and failure.get("thscode") == thscode
-            and failure.get("phase") == "SOURCE_PREPARATION" and failure.get("error_type") == "AttributeError"
-            and failure.get("formal_research_started") is False and failure.get("research_execution") == "NOT_EXECUTED"
-            and failure.get("funnel_status") == "NOT_REACHED"
-            and failure.get("status") == "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE"
-            and failure.get("automatic_retry") is False
-            and all(failure.get(k) == v for k, v in reading.AUTHORITY.items()),
-            "Stock successor continuation predecessor is not the exact pre-Research AttributeError")
-        old_names = {path[len(old_prefix):] for path in rows if path.startswith(old_prefix)
-                     and "/" not in path[len(old_prefix):]}
-        once.require(not any(name in old_names for name in
-            ("launch.json", "input.json", "candidate.json", "admission.json", "receipt.json", "funnel.json")),
-            "Stock successor continuation predecessor reached Research/admission")
-        shown_failed = _reading_item(failed_reading, thscode).get("source_successor")
-        shown_current = _reading_item(saved, thscode).get("source_successor")
-        once.require(isinstance(shown_failed, dict) and isinstance(shown_current, dict)
-            and shown_failed["status"] == shown_current["status"] == "PRE_EXECUTION_FAILURE"
-            and shown_failed["execution_id"] == shown_current["execution_id"] == old_eid,
-            "Stock successor continuation predecessor not preserved in fixed reading")
-        old_binding = prep["source_successor"]
-        once.require(old_binding["execution_id"] == old_eid and old_binding["prefix"] == old_prefix
-            and old_binding["permission"] == request["permission"],
-            "Stock successor continuation old binding differs")
-        for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure"):
-            _current_work_ref(api, old_binding[key]["path"], old_binding[key]["git_blob"]); _checked_git(api, old_binding[key])
-        old_request_raw = _checked_git(api, old_binding["successor_request"])
-        old_request = identity._json(old_request_raw)
-        once.require(old_request["mode"] == MODE and old_request["permission"] == request["permission"]
-            and old_request["source_stock_run_id"] == request["source_stock_run_id"]
-            and old_request["source_preparation_run_id"] == request["source_preparation_run_id"],
-            "Stock successor continuation old request differs")
-        old_source_preparation = old_binding["source_preparation"]
-        once.require(old_source_preparation["run_id"] == request["source_preparation_run_id"],
-                     "Stock successor continuation source-only run differs")
-        if shared_source_preparation is None:
-            shared_source_preparation = old_source_preparation
-        once.require(old_source_preparation == shared_source_preparation,
-                     "Stock successor continuation source material differs across issuers")
-        material_by_code[thscode] = old_binding["material"]
-        binding_items.append({**old_binding, "execution_id": new_eid, "prefix": new_prefix,
-            "predecessor_successor_selection": once.source_ref(selection_spec["path"], selection_spec["ref"],
-                prep_raw, CONTINUATION_SELECTION_PURPOSE),
-            "predecessor_successor_failure": once.source_ref(failure_spec["path"], failure_spec["ref"],
-                failure_raw, CONTINUATION_FAILURE_PURPOSE),
-            "predecessor_successor_request": once.source_ref(old_binding["successor_request"]["path"],
-                old_binding["successor_request"]["ref"], old_request_raw, CONTINUATION_PREDECESSOR_REQUEST_PURPOSE),
-            "predecessor_successor_reading": failed_exposure,
-            "technical_predecessor_run_id": request["failed_successor_run_id"],
-            "permission": request["permission"], "successor_request": request_ref,
-            "current_reading": exposure})
-
-    once.require(shared_source_preparation is not None, "Stock successor continuation missing source material")
-    prep_run, source_artifact, archive, files, batch = _source_only_material(api=api,
-        source_preparation=shared_source_preparation, source_stock_run_id=request["source_stock_run_id"],
-        material_by_code=material_by_code)
-    source_preparation = {"run_id": prep_run["id"], "artifact_id": source_artifact["id"],
-        "artifact_name": source_artifact["name"], "artifact_digest": source_artifact["digest"],
-        "archive_sha256": once.sha(archive), "batch_sha256": once.sha(files["source-preparation-batch.json"])}
-    once.require(source_preparation == shared_source_preparation,
-                 "Stock successor continuation source material bytes changed")
-    for bound in binding_items:
-        bound["source_preparation"] = source_preparation
-    binding = {"kind": CONTINUATION_MODE, "permission": request["permission"], "request": request_ref,
-        "current_reading": exposure, "predecessor_reading": failed_exposure,
-        "failed_successor_run": reading.concise_run(failed_run),
-        "failed_successor_artifact": expected_artifact, "source_preparation": source_preparation,
-        "items": binding_items,
-        "meaning": "CREATE_ONLY_TECHNICAL_CONTINUATION_OF_EXACT_PRE_RESEARCH_SUCCESSOR_FAILURE",
-        **reading.AUTHORITY}
-    (output / "source-successor-origin.zip").write_bytes(archive)
-    (output / "source-successor-continuation-binding.json").write_bytes(once.raw(binding))
-    return [{**original[i["thscode"]], "execution_id": i["execution_id"], "prefix": i["prefix"]}
-            for i in binding_items], Session(request, binding, files, batch, code, reading_commit, reading_raw, origin,
-                                             request_path=CONTINUATION_REQUEST, mode=CONTINUATION_MODE)
-
-
 def source_refs(binding):
-    keys = ["parent_selection", "parent_failure", "recovery_selection", "recovery_failure"]
-    keys += [k for k in ("predecessor_successor_selection", "predecessor_successor_failure",
-                          "predecessor_successor_request", "predecessor_successor_reading") if k in binding]
-    return [binding[k] for k in keys]
+    return [binding[k] for k in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure")]
 
 
 def _saved_document(session, thscode, identifier):
@@ -483,7 +282,7 @@ def capture(*, session: Session, ticker: str, observation: dict, api, code_commi
     binding = session.for_code(thscode)
     output.mkdir(parents=True, exist_ok=False)
     start = clock(); events, body_events, representation_events = [], [], []
-    end_date = reading.clock(start).astimezone(SHANGHAI_TZ).date()
+    end_date = reading.clock(start).astimezone(cninfo.SHANGHAI_TZ).date()
     def query(method, url, form=None):
         once.require(url in {cninfo.CNINFO_STOCK_MAP_URL, cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL}
             and len(events) < 48, "Stock successor inventory query differs")
@@ -628,17 +427,12 @@ def check_materials(session: Session, binding, context):
 def recheck(*, api, code, session: Session, binding, context, clock=once.now):
     """Recheck permission/current reading/parents/notes before every model stage."""
     from .stock_research_host import authorize, head
-    authorize(api, code, session.request, request_path=session.request_path, mode=session.mode)
+    authorize(api, code, session.request, request_path=REQUEST, mode=MODE)
     once.require(head(api, reading.READ_REF) == session.reading_commit
         and api.file("current-state.json", session.reading_commit) == session.reading_raw,
         "Stock successor fixed reading changed")
-    for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure",
-                "predecessor_successor_selection", "predecessor_successor_failure"):
-        if key in binding:
-            spec = binding[key]; _current_work_ref(api, spec["path"], spec["git_blob"]); _checked_git(api, spec)
-    for key in ("predecessor_successor_request", "predecessor_successor_reading"):
-        if key in binding:
-            _checked_git(api, binding[key])
+    for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure"):
+        spec = binding[key]; _current_work_ref(api, spec["path"], spec["git_blob"]); _checked_git(api, spec)
     once.require(binding["permission"] == session.request["permission"]
         and binding["successor_request"] == session.binding["request"]
         and binding["current_reading"] == session.binding["current_reading"]
