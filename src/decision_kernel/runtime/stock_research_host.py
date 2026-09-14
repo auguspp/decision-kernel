@@ -59,8 +59,12 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
     successor = None
     if successor_session is not None:
         from . import stock_source_successor as successor
-        if getattr(successor_session, "mode", successor.MODE) != successor.MODE:
+        session_mode = getattr(successor_session, "mode", successor.MODE)
+        if session_mode != successor.MODE:
             from . import stock_source_successor_continuation as successor
+        once.require(session_mode == successor.MODE
+            and getattr(successor_session, "request_path", successor.REQUEST) == successor.REQUEST,
+            "unknown Stock successor session contract")
         once.require(recovery_request is None and full_input is True,
                      "Stock successor requires full input and cannot reuse old recovery")
         if capture is sources.capture:
@@ -73,7 +77,9 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
             capture = bridge.capture_complete
     if successor_session is not None:
         scoped = successor_session.for_code(item["thscode"])
-        expected = (scoped["execution_id"], scoped["prefix"])
+        expected = successor.execution(item["thscode"])
+        once.require((scoped["execution_id"], scoped["prefix"]) == expected,
+                     "Stock successor session identity differs")
     else:
         expected = intake.execution(item["thscode"]) if recovery_request is None else recovery.execution(item["thscode"])
     once.require((item["execution_id"], item["prefix"]) == expected
@@ -93,8 +99,7 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         authorize(api, code, request)
         if successor_session is not None:
             authorize(api, code, successor_session.request,
-                      request_path=getattr(successor_session, "request_path", successor.REQUEST),
-                      mode=getattr(successor_session, "mode", successor.MODE))
+                      request_path=successor.REQUEST, mode=successor.MODE)
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
