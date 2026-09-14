@@ -10,6 +10,8 @@ The Sanhua dogfood exposed a real failure mode: operating evidence and earnings 
 
 Later dogfood added an upstream failure mode: a world model can be numerically coherent while its economic decomposition is wrong. `docs/full-research-economic-architecture-and-causal-state-space-v1.md` is therefore the required upstream method for decision-use worlds; this gate reviews the resulting Research before valuation / Odds use.
 
+Execution now follows [Full Research Operating Method v3](full-research-method-v3.md). That document composes the existing methods into inspectable research work, not a new runtime or schema. Its [workpaper](templates/full-research-workpaper-v3.md) is an aid, not a requirement to create extra files or a keyword-based score.
+
 This gate turns those failures into reusable discipline.
 
 It does **not** require every case to use P/E, SOTP, DCF, or any other fixed valuation method. It requires the chosen causal and valuation bridges to be underwritten with the same epistemic discipline as the earnings bridge.
@@ -37,6 +39,16 @@ BOUNDED ONLY
 ```
 
 are preferable to a guessed point estimate.
+
+## Inspect work products, not section titles
+
+For a new Full Research, find the material question set, evidence-to-mechanism bridges, actual multi-period accounting-contradiction review, cash/capital/per-share reconciliation, qualified outside-view comparison, and specific Challenger dispositions. Use the five-closure mapping in Operating Method v3 rather than adding a second scoring system. Existing work can be cited; a price-only refresh or bounded challenge need not redo unaffected research.
+
+A required but unresolved item must identify its scope and effect. Reasoned N/A, qualified analogues, conditional analysis and a targeted STOP are allowed. Missing an immaterial datum does not invalidate the entire Research; a load-bearing unresolved bridge cannot be concealed by a completed template.
+
+A few selected peer successes do not establish a base rate. A same-context self-review is not an independent reviewer. Failure to find a counterexample is not positive evidence. Separate causal axes do not imply statistical independence: joint worlds must satisfy shared operating and financing constraints.
+
+Arithmetic checks must use the declared cash-flow basis: reported CFO already incorporates operating working-capital movements, so do not subtract those movements again. Cash-flow classification, equity scope, reinvestment, debt and dilution still require substantive review. A numerical check, this process review, and Kernel identity/time/source validation are distinct; none certifies economic truth.
 
 ## Gate 0 — Economic Architecture / Causal State Space
 
@@ -173,9 +185,9 @@ This is an adversarial check, not a recommendation engine.
 
 A useful final sentence is often:
 
-> At this price, the market is requiring ______ to be true.
+> Under the stated horizon, return and valuation assumptions, this price requires ______ to be true.
 
-If that blank cannot be filled without unsupported assumptions, the valuation is not finished.
+This is a conditional requirement, not identification of the market's unique actual belief. If that blank cannot be filled without unsupported assumptions, the valuation is not finished.
 
 ## Review outcome
 
@@ -188,7 +200,7 @@ RESEARCH CHALLENGE — REUNDERWRITE
 NOT METHOD-READY — WITHHOLD NUMERICAL VALUATION / ODDS
 ```
 
-`PASS` does not mean the investment thesis is correct. It means the causal and valuation reasoning is sufficiently explicit and auditable for its stated use.
+`PASS` does not mean the investment thesis is correct. It means the causal and valuation reasoning is sufficiently explicit and auditable for its stated use. Withholding an unsupported valuation or cardinal Odds does not prohibit clearly labelled conditional arithmetic or independent retention of completed Research.
 
 ## Publication as an adversarial compression test
 
