@@ -1,0 +1,66 @@
+{
+  "completion": "COMPLETE",
+  "elapsed_minutes_observed": 3,
+  "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+  "finished_at": "2026-09-14T05:02:15.391232Z",
+  "input_hash": "d19abe853f62f511d382083669997ceb8effaf86701567dd77312512bee47f47",
+  "last_completed_stage": "QUICK",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "34807883332",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-14T04:59:52.975145Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "6ae8ef15-39b5-5f11-ba69-0b7079d53566",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 3,
+  "started_at": "2026-09-14T04:59:57.485358Z",
+  "stop_or_failure_reason": null,
+  "technical_retries_used": 0,
+  "tool_calls_used": 3,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-14T04:59:57.485385Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Model output, not primary-source Evidence.",
+      "observed_at": "2026-09-14T05:01:13.845577Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:PRE",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Model output, not primary-source Evidence.",
+      "observed_at": "2026-09-14T05:02:15.391203Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 3,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:QUICK",
+      "technical_retry": false
+    }
+  ]
+}
