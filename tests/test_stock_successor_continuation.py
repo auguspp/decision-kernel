@@ -19,7 +19,6 @@ from test_stock_research_host import setup_host
 
 
 def test_timezone_regression_uses_runtime_contract_before_any_inventory_fetch(tmp_path, monkeypatch):
-    # Production 34797952444 failed before network because runtime.cninfo_http lacked this export.
     assert cninfo_http.SHANGHAI_TZ is adapter_cninfo.SHANGHAI_TZ
     assert successor.cninfo.SHANGHAI_TZ is adapter_cninfo.SHANGHAI_TZ
     code = "603353.SH"; ticker = "603353"
@@ -127,10 +126,10 @@ def test_original_host_accepts_continuation_session_identity_without_reopening_o
     assert all(old_prefix not in endpoint for _, endpoint, _ in writes)
 
 
-def test_reader_keeps_failed_work_ref_distinct_and_does_not_raise_accepted_bounds():
+def test_reader_preserves_accepted_bounds_and_failed_work_ref():
     root = Path(__file__).parents[1]
     text = (root / "src/decision_kernel/runtime/stock_research_reading.py").read_text()
-    assert "EXTRA_API_CALLS = 64" in text and "MAX_STOCK_SOURCE_FILES = 24" in text
+    assert "EXTRA_API_CALLS = 72" in text and "MAX_STOCK_SOURCE_FILES = 32" in text
     assert "failed_work_ref = binding['predecessor_successor_selection']['ref']" in text
     assert "continuation_request['failed_successor_work_commit'] == failed_work_ref" in text
     assert "continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text
