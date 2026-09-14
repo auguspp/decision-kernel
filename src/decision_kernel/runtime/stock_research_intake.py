@@ -34,7 +34,6 @@ def security(thscode: str) -> str:
 
 
 def execution(thscode: str) -> tuple[str, str]:
-    # Do not incorporate price, run, date, code, consent or representation hash.
     sid = security(thscode)
     key = canonical_hash({"security_id": sid, "question_kind": QUESTION_KIND})
     return "stock-business-" + key, PREFIX + key + "/"
@@ -107,8 +106,9 @@ def describe(input_raw: bytes, candidate_raw: bytes) -> dict:
             eid, prefix, work_kind = recovery_eid, recovery_prefix, "SOURCE_PREPARATION_RECOVERY"
         else:
             from . import stock_source_successor as successor
+            from . import stock_source_successor_continuation as continuation
             successor_eid, successor_prefix = successor.execution(thscode)
-            continuation_eid, continuation_prefix = successor.continuation_execution(thscode)
+            continuation_eid, continuation_prefix = continuation.execution(thscode)
             if packet.candidate_output_prefix == successor_prefix:
                 roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
                          successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
@@ -127,22 +127,20 @@ def describe(input_raw: bytes, candidate_raw: bytes) -> dict:
                              "unknown Stock child execution identity")
                 roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
                          successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
-                         successor.CONTINUATION_SELECTION_PURPOSE, successor.CONTINUATION_FAILURE_PURPOSE,
-                         successor.CONTINUATION_PREDECESSOR_REQUEST_PURPOSE,
-                         successor.CONTINUATION_PREDECESSOR_READING_PURPOSE,
-                         successor.CONTINUATION_REQUEST_PURPOSE, successor.CONTINUATION_EXPOSURE_PURPOSE)
+                         continuation.SELECTION_PURPOSE, continuation.FAILURE_PURPOSE,
+                         continuation.PREDECESSOR_REQUEST_PURPOSE, continuation.PREDECESSOR_READING_PURPOSE,
+                         continuation.REQUEST_PURPOSE, continuation.EXPOSURE_PURPOSE)
                 refs = {role: [r for r in packet.source_refs if r.purpose == role] for role in roles}
                 once.require(all(len(v) == 1 for v in refs.values())
                     and refs[successor.PARENT_SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
                     and refs[successor.PARENT_FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
                     and refs[successor.RECOVERY_SELECTION_PURPOSE][0].path == recovery_prefix + "prepare.json"
                     and refs[successor.RECOVERY_FAILURE_PURPOSE][0].path == recovery_prefix + "failure.json"
-                    and refs[successor.CONTINUATION_SELECTION_PURPOSE][0].path == successor_prefix + "prepare.json"
-                    and refs[successor.CONTINUATION_FAILURE_PURPOSE][0].path == successor_prefix + "failure.json"
+                    and refs[continuation.SELECTION_PURPOSE][0].path == successor_prefix + "prepare.json"
+                    and refs[continuation.FAILURE_PURPOSE][0].path == successor_prefix + "failure.json"
                     and packet.research_question == QUESTION,
                     "Stock successor continuation predecessor/material binding missing")
-                eid, prefix, work_kind = (continuation_eid, continuation_prefix,
-                                          "SOURCE_PREPARATION_SUCCESSOR_TECHNICAL_CONTINUATION")
+                eid, prefix, work_kind = continuation_eid, continuation_prefix, "SOURCE_PREPARATION_SUCCESSOR_TECHNICAL_CONTINUATION"
     once.require(packet.source_lane == LANE and packet.execution_id == eid
                  and packet.security_id == security(thscode)
                  and packet.candidate_output_prefix == prefix, "stock research identity differs")
