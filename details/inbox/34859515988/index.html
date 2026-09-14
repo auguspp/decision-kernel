@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attention Inbox</title>
+<style>
+:root { color-scheme: light dark; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+body { margin:0; background:#f5f6f8; color:#16181d; }
+main { max-width:720px; margin:0 auto; padding:24px 16px 48px; }
+header { margin-bottom:20px; }
+h1 { margin:0 0 6px; font-size:30px; }
+.meta,.muted { color:#6b7280; }
+.counts { font-size:17px; font-weight:650; }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:20px; margin:16px 0; box-shadow:0 3px 14px rgba(0,0,0,.04); }
+.card.attention { border-width:2px; }
+.card-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+.eyebrow { margin:0 0 4px; font-size:13px; font-weight:750; text-transform:uppercase; letter-spacing:.04em; }
+h2 { margin:0; font-size:24px; }
+h2 span { color:#6b7280; font-size:16px; font-weight:600; }
+.price { font-size:25px; font-weight:750; white-space:nowrap; }
+.why-now { border-top:0; margin-top:18px; padding-top:0; }
+.state-row { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 2px; }
+.state-row span { background:#f0f1f3; border-radius:999px; padding:6px 10px; font-size:12px; }
+section { border-top:1px solid #eceef1; padding-top:14px; margin-top:14px; }
+h3 { margin:0 0 8px; font-size:15px; }
+p { line-height:1.65; margin:0; }
+ul { padding-left:20px; line-height:1.65; }
+.authority { margin-top:18px; font-size:12px; color:#6b7280; }
+details { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:14px 16px; margin-top:18px; }
+.card .drilldown { background:transparent; border-style:dashed; }
+summary { cursor:pointer; font-weight:650; }
+.quiet-list { list-style:none; padding:0; margin:12px 0 0; }
+.quiet-list li { border-top:1px solid #eceef1; padding:14px 0; }
+.quiet-head { display:flex; justify-content:space-between; gap:12px; }
+.quiet-head span { color:#6b7280; text-align:right; }
+.quiet-threshold { margin-top:8px; font-size:14px; line-height:1.5; }
+.quiet-threshold span { color:#6b7280; margin-left:8px; }
+.quiet-detail { margin-top:10px; padding:10px 12px; }
+.quiet-metrics { display:grid; gap:5px; margin-top:9px; font-size:13px; line-height:1.5; }
+.quiet-scenarios { margin-top:7px; color:#6b7280; font-size:12px; line-height:1.5; }
+footer { margin-top:22px; color:#6b7280; font-size:12px; }
+@media (max-width:560px) {
+  .quiet-head { display:block; }
+  .quiet-head span { display:block; margin-top:3px; text-align:left; }
+  .quiet-threshold span { display:block; margin:3px 0 0; }
+  .card-head { align-items:flex-start; }
+}
+@media (prefers-color-scheme: dark) {
+  body { background:#0f1115; color:#f3f4f6; }
+  .card,details { background:#171a21; border-color:#2a2f39; }
+  section,.quiet-list li { border-color:#2a2f39; }
+  .state-row span { background:#252a33; }
+  .meta,.muted,h2 span,.authority,.quiet-head span,.quiet-threshold span,.quiet-scenarios,footer { color:#9ca3af; }
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Attention Inbox</h1>
+  <p class="meta">生成时间：2026-09-14T15:02:30.975944+00:00</p>
+  <p class="counts">需要关注：1　·　后台研究处置：0　·　安静已研究：3</p>
+</header>
+
+            <article class="card attention">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">需要你看</p>
+                  <h2>贵州茅台 <span>600519</span></h2>
+                </div>
+                <div class="price">¥1277.96</div>
+              </div>
+
+              <section class="why-now">
+                <h3>为什么值得看</h3>
+                <p>2026 H1营业收入同比+1.47%，归母净利润同比-1.95%，同时公司加速价格与渠道机制改革，适合重新检查当前价格对应的赔率。</p>
+              </section>
+
+              <div class="state-row">
+                <span>Research 已存在</span>
+                <span>ACCEPTABLE_ODDS</span>
+                <span>2026-09-14T15:00:00+08:00</span>
+              </div>
+
+              <details class="drilldown">
+                <summary>深入查看</summary>
+                <section><h3>我们相信什么</h3><p>贵州茅台的品牌与直接触达消费者的渠道能力有机会在白酒行业调整期维持较强现金经济性，但短期盈利重新加速尚未得到验证。</p></section>
+                <section><h3>市场可能在定价什么</h3><p>工作假设：市场已经在折价反映低增长过渡、渠道租值压缩与价格机制改革的不确定性；进一步上行需要直接渠道改革稳定实际成交经济性并重新带动盈利增长。</p></section>
+                <section><h3>关键问题</h3><ul><li>2026 H2归母净利润增速能否在二季度走弱后重新转正？</li><li>直销与i茅台占比提升能否在不牺牲销量的前提下稳定实际成交经济性？</li><li>系列酒在2026 H1收入承压后能否稳定？</li></ul></section>
+                <section><h3>失效条件</h3><ul><li>核心茅台酒收入连续两个报告期出现明显下降。</li><li>渠道与价格改革未能稳定实际成交经济性，同时利润增长持续为负。</li><li>后续一手披露显示社会渠道库存持续、显著累积。</li></ul></section>
+                <section><h3>监控指标</h3><ul><li>下一季度营业收入与归母净利润同比增速</li><li>茅台酒与系列酒收入结构</li><li>直销及i茅台收入占比</li><li>管理层对价格机制与渠道库存的最新一手披露</li></ul></section>
+                <p class="authority">系统投资权限：NONE</p>
+              </details>
+            </article>
+            
+<details class="background"><summary>无需关注（3）</summary><ul class="quiet-list">
+            <li>
+              <div class="quiet-head">
+                <strong>三花智控 002050</strong>
+                <span>¥34.70 · INSUFFICIENT_ODDS</span>
+              </div>
+              <div class="quiet-threshold">
+                <b>重新值得看</b>　ACCEPTABLE_ODDS ≤ ¥29.56
+                <span>距当前价约 -14.8%</span>
+              </div>
+              <details class="quiet-detail">
+                <summary>为什么安静</summary>
+                <div class="quiet-metrics">
+                  <span>当前：期望收益 8.2% · 正收益概率 60%</span>
+                  <span>ACCEPTABLE_ODDS 要求：期望收益 ≥ 27% · 正收益概率 ≥ 55%</span>
+                </div>
+                <div class="quiet-scenarios"><b>Frozen scenarios</b>　consensus_core 35% → ¥36.71 · core_slowdown 15% → ¥26.89 · new_business_success 20% → ¥46.48 · robot_right_tail 5% → ¥70.91 · sell_side_low_core 25% → ¥31.28</div>
+              </details>
+            </li>
+            
+            <li>
+              <div class="quiet-head">
+                <strong>中国神华 601088</strong>
+                <span>¥47.20 · INSUFFICIENT_ODDS</span>
+              </div>
+              <div class="quiet-threshold">
+                <b>重新值得看</b>　ACCEPTABLE_ODDS ≤ ¥35.37
+                <span>距当前价约 -25.1%</span>
+              </div>
+              <details class="quiet-detail">
+                <summary>为什么安静</summary>
+                <div class="quiet-metrics">
+                  <span>当前：期望收益 -4.8% · 正收益概率 25%</span>
+                  <span>ACCEPTABLE_ODDS 要求：期望收益 ≥ 27% · 正收益概率 ≥ 55%</span>
+                </div>
+                <div class="quiet-scenarios"><b>Frozen scenarios</b>　base 50% → ¥44.80 · downside 25% → ¥31.20 · upside 25% → ¥58.90</div>
+              </details>
+            </li>
+            
+            <li>
+              <div class="quiet-head">
+                <strong>兆易创新 603986</strong>
+                <span>¥356.88 · INSUFFICIENT_ODDS</span>
+              </div>
+              <div class="quiet-threshold">
+                <b>重新值得看</b>　ACCEPTABLE_ODDS ≤ ¥330.69
+                <span>距当前价约 -7.3%</span>
+              </div>
+              <details class="quiet-detail">
+                <summary>为什么安静</summary>
+                <div class="quiet-metrics">
+                  <span>当前：期望收益 22.3% · 正收益概率 70%</span>
+                  <span>ACCEPTABLE_ODDS 要求：期望收益 ≥ 32% · 正收益概率 ≥ 55%</span>
+                </div>
+                <div class="quiet-scenarios"><b>Frozen scenarios</b>　partial_normalization 20% → ¥310.08 · rapid_normalization 10% → ¥203.06 · research_high_core 30% → ¥538.65 · research_low_core 30% → ¥427.79 · right_tail 10% → ¥642.68</div>
+              </details>
+            </li>
+            </ul></details>
+<footer>Research Funnel allocates research budget; only HumanResearchSurface owns the canonical Decision wake.<br>Research ≠ Recommendation · Investment Authority = NONE</footer>
+</main>
+</body>
+</html>
