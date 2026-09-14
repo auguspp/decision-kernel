@@ -1,0 +1,321 @@
+{
+  "completion": "COMPLETE",
+  "discovery": {
+    "as_of": "2026-09-14T04:59:52.975145Z",
+    "contradiction_or_mapping_warning": "行业成员身份不是收入/利润/现金流受益证明。",
+    "current_market_expression": null,
+    "discovery_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+    "economic_direction": "价格观察触发的首次公司业务与经济暴露核验，方向未定",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "statement": "Saved dated Stock observation and full declared issuer bodies are supplied; price does not establish benefit."
+      }
+    ],
+    "known_stop_or_downgrade_condition": "Pre可停止；Quick只在原路由要求时执行。必需来源或技术失败不得包装为WAIT。",
+    "next_discriminating_search": "用原定期报告和后续公告检查业务对应、经济重大性及反证；不把股份或行业分类当作盈利暴露。",
+    "schema_version": 1,
+    "security_id": "SZSE:300711",
+    "source_lane": "STOCK_MARKET_EXPRESSION",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-14T04:59:51.931965Z",
+        "evidence_artifact_id": "6ae8ef15-39b5-5f11-ba69-0b7079d53566",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "300711",
+    "why_now": "Human许可的已保存来源预检合法续作；显式绑定父失败、已消耗恢复和当前读取，不是新价格问题。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "d19abe853f62f511d382083669997ceb8effaf86701567dd77312512bee47f47",
+  "pre_research": {
+    "as_of": "2026-09-14T04:59:52.975145Z",
+    "basic_business_role": "广哈通信（300711）是国有控股通信设备与行业数字化解决方案企业，主要面向电力、国防、铁路、应急等行业客户，业务包括可靠通信网络、泛指挥调度系统和数智化服务。",
+    "current_expression_or_leadership": "市场表达层面，广哈通信被列为“其他通信设备”板块的当期强势成员；截至2026年9月11日，原始收盘价为21.13元，单日涨幅约5.18%，5日、20日和60日原始价格区间涨幅分别约16.55%、14.84%和18.71%，但该市场表达不等同于行业或业务领导地位，也不能证明公司从触发板块主题中受益。以上依据为本次保存的Stock observation及其市场路径记录，底层行情与板块归属材料未在本次正文中作为独立经营事实认证。",
+    "current_market_expectation_hypothesis": "可提出但不能确认的假设是：市场可能将公司与通信设备、智能调度、AI、5G或自主可控等主题联系起来。现有材料没有提供可验证的当前市场一致预期、定价逻辑或价格上涨原因，因此“市场正在预期何种盈利改善”仍为UNKNOWN。",
+    "discovery_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+    "economic_direction": "已披露经营数据呈现“收入增长、扣非利润增长，但归母净利润受上年较大政府补助基数影响下降，经营现金流持续为负”的混合方向。触发板块与主营业务存在产品和客户层面的真实交集，但尚不能将板块强势归因于公司基本面改善。",
+    "largest_unknown": "最大的未知是：触发板块的具体主题、客户订单和行业需求变化，是否已经转化为广哈通信可持续的新增收入、利润和经营现金流；现有报告披露了项目中标、应用和研发进展，但没有提供足以把近期价格表现与具体盈利预期建立因果联系的独立证据。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第9—12页，广哈通信主要为电力、国防、铁路、应急等行业用户提供可靠通信网络、泛指挥调度系统及数智化服务；报告还披露其产品覆盖程控交换、软交换、IMS、5G核心网、网关、终端及音视频通信应用。该文件属于本次保存来源包，证据ID为6ae8ef15-39b5-5f11-ba69-0b7079d53566；来源包引用不等于对原始文件真实性的独立认证。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第7页，2026年上半年营业收入为251,653,726.35元，同比增长29.58%；归属于上市公司股东的净利润为11,703,276.00元，同比下降52.11%；扣除非经常性损益后的归母净利润为9,868,832.90元，同比增长69.05%；经营活动产生的现金流量净额为-65,252,243.12元。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第15—16页，收入增长的披露原因包括赛康智能自2025年4月起纳入合并报表并在本期完整纳入，以及业务扩张；分产品收入中，可靠通信网络收入138,123,002.87元、泛指挥调度系统收入58,751,700.32元、数智化服务收入54,779,023.16元。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第14—16页，公司指挥调度系统类整机本期销量为717套、收入为95,258,427.36元、毛利率为56.72%；泛指挥调度系统收入同比增长112.10%，但毛利率同比下降10.69个百分点至33.62%。这支持主营业务与通信设备及行业调度主题存在产品层面的联系，同时也显示增长伴随业务结构和盈利质量差异。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第10—12页，公司披露了多个电力调度、抽水蓄能数字化、电力智能运检、国防、铁路、5G毫米波和应急通信项目的中标、落地或研发进展；但这些披露未在本次材料中形成逐项目合同金额、订单转收入、增量毛利和经营现金流的完整桥接。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第15页和第51—52页，经营活动现金流净额为-65,252,243.12元；报告期经营活动现金流入为312,612,849.02元、现金流出为377,865,092.14元。根据全文第107—109页，期末应收账款账面余额为528,486,253.23元、坏账准备为115,399,780.09元，前五大客户应收账款和合同资产合计占相关合计数75.96%，显示回款和客户集中度是经营现金流暴露的重要观察点。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年上半年募集资金存放、管理与使用情况的专项报告》第2、4—8页，截至2026年6月30日，募集资金净额为744,545,972.04元，累计投入募投项目37,232,279.59元，募集资金余额707,411,260.10元，其中516,000,000.00元用于现金管理；三项募投项目截至期末累计投资进度分别为8.98%、0%和5.06%。这表明募集资金支持未来能力建设，但尚未证明其已转化为当前收入、利润或现金流。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "INFERENCE",
+        "statement": "由《2026年半年度报告》全文第9—16页的业务描述、产品收入和项目进展可推断：公司与“通信设备/智能调度/行业数字化”触发板块存在真实业务交集，而非纯名称关联；但这是业务范围层面的联系，不足以证明近期板块强势由公司基本面驱动。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "INFERENCE",
+        "statement": "由收入增长、扣非利润增长、归母净利润下降、经营现金流为负、应收账款规模较高及泛指挥调度系统毛利率下降等信息综合推断，公司当前经济暴露更接近“订单或并表推动的收入扩张与利润结构分化”，而不是已被现金流全面验证的同步改善。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "MARKET_CONTEXT",
+        "statement": "本次保存的Stock observation记录广哈通信被路由为“其他通信设备”板块强势成员，并记录了近期正的原始价格路径；同一记录明确标注business benefit status为NOT_ESTABLISHED、business linkage status为UNKNOWN。该市场观察只能说明价格与板块路由，不构成公司为板块受益者或价格上涨原因的证据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "根据《2026年半年度报告》全文第25—26页，公司自列风险包括行业竞争加剧、人才竞争、行业及客户集中度较高、新产品研发及新业务拓展不达预期、以及收购后整合不达预期；报告还披露公司半年度财务报告未经审计。"
+      }
+    ],
+    "next_discriminating_search": "优先检索并核对：1）触发板块对应的明确主题与成分股定义；2）广哈通信在2026年半年度报告后披露的具体订单金额、合同负债、应收回款和项目验收；3）电力、国防、铁路、应急各业务分部的收入、毛利和经营现金流拆分；4）截至2026年9月11日后是否存在与AI、5G、军工或自主可控主题直接相关且可量化的公告；5）募集资金项目的实际建设进度、投产时间和预期产能。",
+    "obvious_contradiction": "存在一个需要保留的表面矛盾：公司披露营业收入同比增长29.58%、扣非归母净利润同比增长69.05%，但归母净利润同比下降52.11%。报告第7页解释归母净利润下降主要因上年存在较大金额政府补助；因此这不是简单的经营恶化结论，但也不能忽略经营现金流为负、应收账款较高及部分业务毛利率下降。另一个重要反证是：公司披露多个项目进展和市场应用，但截至期末部分募投项目投入比例很低，且项目收益尚未形成可验证贡献。",
+    "potential_fundamental_driver": "潜在基本面驱动因素包括电力调度通信和新型电力系统数字化需求、泛指挥调度系统扩张、国防信息化、铁路5G-R、应急通信，以及赛康智能并表带来的收入贡献。现有材料支持这些是公司自述的业务方向或增长来源，但未证明其已经成为近期价格强势的实际原因。",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "本次来源包包含可读取的半年度报告、募集资金报告及截至2026年9月8日的后续披露库存，足以进行受限的Quick级业务联系和财务暴露核验；但当前读取状态标记为PRE_EXECUTION_FAILURE，且缺少完整市场预期与外部竞争/客户证据，因此不应升级为全公司Deep，也不应把本结果表述为已完成的全面归因。",
+    "schema_version": 1,
+    "what_is_this": "这是对广哈通信主营业务、触发板块联系及收入/利润/现金流暴露的有界决策内核预研究，不是投资建议、涨价原因认证或买卖判断。",
+    "why_surfaced_now": "该标的因保存的市场观察被列为“其他通信设备”板块强势成员而触发；本次续作是对父级失败后的已许可来源续接和当前读取核验，不是新增价格事件。"
+  },
+  "quick_research": {
+    "as_of": "2026-09-14T04:59:52.975145Z",
+    "business_model": "广哈通信为国有控股通信设备与行业数字化解决方案企业，主要面向电力、国防、铁路、应急等行业客户，提供可靠通信网络、泛指挥调度系统及数智化服务；产品包括程控交换、软交换、IMS、5G核心网、网关、终端及音视频通信应用。根据《2026年半年度报告》第9—16页，收入按可靠通信网络、泛指挥调度系统和数智化服务三类披露。",
+    "contradictory_claims": [
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第7页披露，2026年上半年营业收入为2.5165亿元，同比增长29.58%；扣除非经常性损益后的归母净利润为986.88万元，同比增长69.05%；但归属于上市公司股东的净利润为1170.33万元，同比下降52.11%。报告解释归母净利润下降主要受上年较大政府补助基数影响。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第7页和第51—52页披露，经营活动现金流量净额为-6525.22万元，且2025年同期亦为负；因此利润增长并未表现为经营现金流同步转正。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第14—16页披露，泛指挥调度系统收入同比增长112.10%，但其毛利率同比下降10.69个百分点至33.62%；同期可靠通信网络毛利率为59.21%，数智化服务毛利率为66.96%。增长与盈利质量并非完全同向。"
+      }
+    ],
+    "current_expression_or_leadership": "市场表达方面，保存的Stock observation将广哈通信列为“其他通信设备”板块的强势成员；截至2026年9月11日，原始收盘价为21.13元，5日、20日、60日原始价格涨幅分别约16.55%、14.84%、18.71%。该记录明确标注business benefit status为NOT_ESTABLISHED、business linkage status为UNKNOWN。该表达不证明公司是行业或业务领导者，也不证明公司从板块主题中受益。",
+    "current_industry_state": "在本次限定资料中，公司自述电力、国防、铁路和应急行业存在数字化、智能化、自主可控及通信升级需求，并披露相关项目中标、落地和研发进展；但未取得外部行业、竞争者或客户验证，且来源范围仅限本次CNINFO窗口。行业真实供需强度及竞争格局仍部分UNKNOWN。",
+    "discovery_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+    "economic_role": "公司处于行业专用通信设备、指挥调度系统和产业数字化服务的解决方案供应环节，收入来源以国内行业客户项目、设备交付、软件及技术服务为主。并表子公司赛康智能和易用视点扩大了电力检测、抽水蓄能数字化等业务覆盖，但具体业务对合并利润和现金流的持续贡献仍需后续验证。",
+    "evidence_authority_assessment": "唯一获准Evidence ID为6ae8ef15-39b5-5f11-ba69-0b7079d53566，代表本次保存的来源包。来源包包含CNINFO披露文件正文及Stock observation，但来源包引用不等于对原始文件真实性的独立认证。半年度报告未经审计；部分表格和公司自述仍需结合原始披露和后续资料核验。当前读取状态标记为PRE_EXECUTION_FAILURE，因此本结果不视为完成了技术上完整的Quick执行或全面研究。",
+    "industry_supply_demand_variables": [
+      "电网投资及新型电力系统建设规模",
+      "电力调度通信和智能运检项目招标、验收及回款",
+      "国防信息化和指挥通信需求",
+      "铁路5G-R及专网通信建设进度",
+      "应急通信网络建设和地方项目预算",
+      "AI、5G及自主可控技术的实际商用转化",
+      "行业竞争强度、客户集中度和采购周期",
+      "项目验收、合同负债转收入及应收账款回款"
+    ],
+    "major_profit_drivers": [
+      "可靠通信网络设备及解决方案的销售规模和毛利率",
+      "泛指挥调度系统的订单、交付和产品结构",
+      "数智化服务及电力、抽水蓄能、电力检测业务扩张",
+      "赛康智能自2025年4月起并表带来的收入和利润贡献",
+      "项目验收进度及合同负债转化为收入的速度",
+      "应收账款回款、坏账损失和客户集中度",
+      "政府补助、理财收益等非经常性或非主营项目的影响"
+    ],
+    "market_expectation_hypothesis": "可提出但不能确认的假设是，市场可能将公司与其他通信设备、智能调度、AI、5G、自主可控或行业数字化主题联系起来。现有资料没有提供可验证的市场一致预期、估值依据或近期价格上涨原因，因此市场究竟预期何种盈利改善仍为UNKNOWN。",
+    "next_discriminating_evidence": [
+      "核对“其他通信设备”触发板块的正式定义、成分股规则及具体主题来源。",
+      "取得半年度报告后新增的订单金额、合同负债变化、项目验收、应收回款和坏账变化。",
+      "按电力、国防、铁路、应急及子公司拆分收入、毛利和经营现金流，验证主题与利润暴露的对应关系。",
+      "核实AI、5G、军工、自主可控项目是否形成可量化订单、收入、毛利和现金回款。",
+      "跟踪募集资金项目实际建设进度、投产时间、产能及新增收入贡献。",
+      "检查后续公告是否改变当前读取状态，并完成要求的技术执行核验。"
+    ],
+    "pre_research_hash": "9ce7289a0a7a2689ce4a495407e647084f6ef95b85be97135693a08f1ad471d0",
+    "route": "STOP",
+    "route_reason": "资料正文总体可读，足以支持有限的业务联系和财务暴露描述；但当前读取状态明确为PRE_EXECUTION_FAILURE，且缺少完整市场预期、外部竞争和客户证据。根据有界研究约束，不将其伪装为已完成的WAIT或Quick结论，也不升级为全公司Deep。",
+    "schema_version": 1,
+    "segment_mix": "2026年上半年：可靠通信网络收入1.3812亿元，占总收入约54.88%，毛利率59.21%；泛指挥调度系统收入5875.17万元，占比约23.35%，毛利率33.62%；数智化服务收入5477.90万元，占比约21.77%，毛利率66.96%。以上依据《2026年半年度报告》第16页。",
+    "supporting_claims": [
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第9—12页披露，公司面向电力、国防、铁路、应急等行业，提供可靠通信网络、泛指挥调度系统和数智化服务，并披露电力调度、抽水蓄能、电力智能运检、国防、铁路5G-R、5G毫米波及应急通信项目进展。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "INFERENCE",
+        "statement": "根据《2026年半年度报告》第9—16页的业务、产品收入和项目披露，公司与“其他通信设备”及智能调度主题存在真实产品和客户场景交集，而非纯名称关联；但该联系不足以证明板块强势由公司基本面驱动。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第15页披露，收入增长部分来自赛康智能自2025年4月起纳入合并报表并在本期完整纳入，以及业务扩张；因此收入同比增长不能全部解释为原有业务自然增长。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年半年度报告》第107—109页披露，期末应收账款账面余额为5.2849亿元，坏账准备为1.1540亿元；前五大客户应收账款和合同资产合计占相关合计数75.96%，回款和客户集中度是经营现金流的重要暴露点。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "INFERENCE",
+        "statement": "综合《2026年半年度报告》第7、14—16、51—52及107—109页，公司更接近“收入扩张、扣非利润改善但利润结构分化、经营现金流尚未验证”的状态，而非已被现金流全面确认的同步改善。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "6ae8ef15-39b5-5f11-ba69-0b7079d53566"
+        ],
+        "kind": "FACT",
+        "statement": "《2026年上半年募集资金存放、管理与使用情况的专项报告》第2、4—8页披露，募集资金净额约7.4455亿元，截至2026年6月30日累计投入约3723.23万元，使用暂时闲置募集资金进行现金管理余额约5.16亿元；三项募投项目期末投资进度分别为8.98%、0%和5.06%。这说明资金支持未来能力建设，但尚未证明已经转化为当前收入、利润或经营现金流。"
+      }
+    ],
+    "unresolved_questions": [
+      "当前触发板块的正式主题和成分股定义是什么？",
+      "近期价格强势是否对应具体可量化订单、项目验收或盈利预期？现有材料无法确认。",
+      "赛康智能并表及各业务项目对持续利润和现金流的独立贡献是多少？",
+      "应收账款账龄、客户集中度和合同负债后续将如何影响回款及经营现金流？",
+      "募投项目何时投产并形成收入、利润和现金流？",
+      "半年度报告后至当前日期是否存在尚未纳入本次有限来源范围的重大经营变化？",
+      "外部竞争者、客户采购预算和行业需求是否支持公司自述的市场地位？"
+    ],
+    "value_chain_position": "处于行业专用通信设备、指挥调度系统、软件及数智化服务的解决方案供应商位置，连接上游通信器件、软件和研发资源与下游电力、国防、铁路、应急等行业客户；部分业务还通过项目实施、运维和检测服务延伸至客户运营环节。",
+    "variant_perception": "公司自述在电力指挥调度、抽水蓄能数字化、电力设备检测及部分国防、铁路场景具有细分市场优势；但“头部企业”“领先供应商”等表述主要来自《2026年半年度报告》第12页，缺少本次资料之外的独立市场份额、竞争者或客户验证，因此只能视为公司披露的定位，不能独立认证为行业领导地位。"
+  },
+  "receipt": {
+    "completion": "COMPLETE",
+    "elapsed_minutes_observed": 3,
+    "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+    "finished_at": "2026-09-14T05:02:15.391232Z",
+    "input_hash": "d19abe853f62f511d382083669997ceb8effaf86701567dd77312512bee47f47",
+    "last_completed_stage": "QUICK",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+    "platform_task_id": "34807883332",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-14T04:59:52.975145Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "6ae8ef15-39b5-5f11-ba69-0b7079d53566",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 3,
+    "started_at": "2026-09-14T04:59:57.485358Z",
+    "stop_or_failure_reason": null,
+    "technical_retries_used": 0,
+    "tool_calls_used": 3,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-14T04:59:57.485385Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/e1c8f881cb3dafb97f46c6df05bec75f10c74df4/research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/source.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-14T05:01:13.845577Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:PRE",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-14T05:02:15.391203Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 3,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:QUICK",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
