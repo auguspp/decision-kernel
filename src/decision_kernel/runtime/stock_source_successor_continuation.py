@@ -71,54 +71,6 @@ def _reading_item(saved, code):
     return rows[0]
 
 
-def _material_session(*, api, code, original_request, selected, origin, reading_commit, output, clock):
-    """Rebuild the already-reviewed saved-source session without reopening its child."""
-    from .stock_research_host import authorize
-    authorize(api, code, original_request, request_path=base.REQUEST, mode=base.MODE)
-    entries = original_request["items"]
-    original = {i["thscode"]: i for i in selected["items"]}
-    once.require({e["thscode"] for e in entries} == TARGETS and TARGETS <= set(original),
-                 "Stock continuation original successor scope differs")
-    # Use a temporary API view in which the execution-time reading is the original
-    # pre-successor reading pinned by the trusted request. This calls only the
-    # original successor binder/material loader; no work child is reserved here.
-    old_reading = None
-    for entry in entries:
-        # Both items were bound to the same original fixed reading in source-successor-v1.
-        prep_path = base.execution(entry["thscode"])[1] + "prepare.json"
-        try:
-            prep = identity._json(api.file(prep_path, api.get("git/ref/heads/" + intake.WORK_REF)["object"]["sha"]))
-        except Exception:
-            prep = None
-        if prep is not None and isinstance(prep.get("source_successor"), dict):
-            old_reading = prep["source_successor"]["current_reading"]["ref"]
-            break
-    once.require(isinstance(old_reading, str) and reading.SHA.fullmatch(old_reading),
-                 "Stock continuation original successor reading unavailable")
-
-    class View:
-        def __init__(self, inner): self.inner = inner
-        def file(self, path, ref): return self.inner.file(path, ref)
-        def get(self, path):
-            if path == "git/ref/heads/" + reading.READ_REF:
-                return {"object": {"type": "commit", "sha": old_reading}}
-            return self.inner.get(path)
-        def _call(self, method, path, *args, **kwargs):
-            if method == "GET" and path == "git/ref/heads/" + reading.READ_REF:
-                class R:
-                    def json(self): return {"object": {"type": "commit", "sha": old_reading}}
-                return R()
-            return self.inner._call(method, path, *args, **kwargs)
-        def archive(self, artifact): return self.inner.archive(artifact)
-
-    # The original prepare requires the old work head before source-successor-v1
-    # existed. Reconstructing that historical work head via a view would silently
-    # weaken create-only history, so material loading is instead taken from the
-    # preserved predecessor selection bindings below. This function is deliberately
-    # unreachable until prepare() has built those exact bindings.
-    raise once.TrialError("continuation material session must be built from predecessor binding")
-
-
 def prepare(*, api, code, request, selected, origin, reading_commit, output, clock=once.now):
     """Bind the exact failed source-successor-v1 into a new create-only sibling."""
     from .stock_research_host import authorize, head
@@ -235,9 +187,19 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
         and all(r == first_request for _, r, _ in old_sessions), "Stock continuation predecessor material/request differs across issuers")
     source_preparation = first_binding["source_preparation"]
     prep_run = api.get("actions/runs/" + str(source_preparation["run_id"]))
+    once.require(prep_run["path"] == ".github/workflows/stock-business-research.yml"
+        and prep_run["event"] == "workflow_dispatch" and prep_run["run_attempt"] == 1
+        and prep_run["head_branch"] == "main" and prep_run["status"] == "completed"
+        and prep_run["conclusion"] == "failure", "Stock continuation source-only run differs")
+    prep_jobs = api.get(f"actions/runs/{prep_run['id']}/jobs?per_page=100")
+    once.require(prep_jobs["total_count"] == len(prep_jobs["jobs"])
+        and {j["name"]: j.get("conclusion") for j in prep_jobs["jobs"]} ==
+            {"research-stock-business": "skipped", "prepare-stock-sources": "failure"},
+        "Stock continuation source-only jobs differ")
     artifacts = api.get(f"actions/runs/{prep_run['id']}/artifacts?per_page=100")
     source_matches = [a for a in artifacts["artifacts"] if a["id"] == source_preparation["artifact_id"]]
-    once.require(len(source_matches) == 1 and source_matches[0]["digest"] == source_preparation["artifact_digest"]
+    once.require(artifacts["total_count"] == len(artifacts["artifacts"])
+        and len(source_matches) == 1 and source_matches[0]["digest"] == source_preparation["artifact_digest"]
         and not source_matches[0].get("expired", True), "Stock continuation source-only artifact differs")
     archive = api.archive(source_matches[0])
     once.require(once.sha(archive) == source_preparation["archive_sha256"], "Stock continuation source archive changed")
@@ -245,6 +207,10 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
     once.require(once.sha(files["source-preparation-batch.json"]) == source_preparation["batch_sha256"],
                  "Stock continuation source batch changed")
     batch = identity._json(files["source-preparation-batch.json"])
+    once.require(batch["status"] == "SOURCE_PREPARATION_INCOMPLETE"
+        and batch["source_run_id"] == request["source_stock_run_id"]
+        and batch["formal_research_started"] is False and batch["model_calls"] == 0
+        and batch["research_work_writes"] == 0, "Stock continuation source batch semantics differ")
     for bound in binding_items: bound["source_preparation"] = source_preparation
     binding = {"kind": MODE, "permission": request["permission"], "request": request_ref,
         "current_reading": exposure, "predecessor_reading": failed_exposure,
@@ -254,7 +220,6 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
         **reading.AUTHORITY}
     (output / "source-successor-origin.zip").write_bytes(archive)
     (output / "source-successor-continuation-binding.json").write_bytes(once.raw(binding))
-    # base.capture only needs files/batch/code/request/source_preparation/for_code.
     base_session = base.Session(first_request, {"items": binding_items, "source_preparation": source_preparation,
         "request": first_binding["successor_request"], "current_reading": first_binding["current_reading"]},
         files, batch, code, reading_commit, reading_raw, origin)
@@ -267,7 +232,6 @@ def capture(*, session: Session, **kwargs):
 
 
 def check_materials(session: Session, binding, context):
-    # base check is reused against the continuation binding's unchanged material.
     surrogate = base.Session(session.base_session.request,
         {"items": [binding], "source_preparation": session.binding["source_preparation"]},
         session.files, session.batch, session.code, session.reading_commit, session.reading_raw, session.origin)
@@ -288,14 +252,12 @@ def recheck(*, api, code, session: Session, binding, context, clock=once.now):
         and api.file("current-state.json", session.reading_commit) == session.reading_raw,
         "Stock successor continuation fixed reading changed")
     work_head = head(api, intake.WORK_REF)
-    once.require(work_head == session.request["failed_successor_work_commit"],
-                 "Stock successor continuation predecessor work moved")
+    rows = intake.inventory(api, work_head)
     for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure",
                 "predecessor_successor_selection", "predecessor_successor_failure"):
         spec = binding[key]
-        rows = intake.inventory(api, work_head)
         once.require(rows.get(spec["path"], {}).get("sha") == spec["git_blob"],
-                     "Stock successor continuation predecessor changed")
+                     "Stock successor continuation predecessor changed in latest work")
         _checked(api, spec)
     once.require(binding["permission"] == session.request["permission"]
         and binding["successor_request"] == session.binding["request"]
