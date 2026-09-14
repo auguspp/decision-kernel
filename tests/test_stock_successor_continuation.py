@@ -122,4 +122,4 @@ def test_original_host_accepts_continuation_session_identity_without_reopening_o
     assert result["execution_id"] == eid
     assert result["status"] == "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE"
     old_prefix = successor.execution(code)[1]
-    assert not any(path.startswith(old_prefix) for path in writes)
+    assert all(old_prefix not in endpoint for _, endpoint, _ in writes)
