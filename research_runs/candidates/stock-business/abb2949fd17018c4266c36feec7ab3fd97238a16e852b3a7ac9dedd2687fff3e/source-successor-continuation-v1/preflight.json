@@ -1,0 +1,509 @@
+{
+  "case_id": "603353.SH",
+  "finished_at": "2026-09-14T04:57:59.137635+00:00",
+  "inventories": [
+    {
+      "class_id": "RECENT_MATERIAL_DISCLOSURE_CHECK",
+      "finished_at": "2026-09-14T04:57:59.137635+00:00",
+      "id": "updates",
+      "leads": [
+        {
+          "authority": "PRIMARY",
+          "body_id": "body1",
+          "decision_relevant": true,
+          "identity": "603353:1225530957",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530957.PDF",
+          "primary_identity": "603353:1225530957",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530957.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body2",
+          "decision_relevant": true,
+          "identity": "603353:1225530958",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530958.PDF",
+          "primary_identity": "603353:1225530958",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530958.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body3",
+          "decision_relevant": true,
+          "identity": "603353:1225530960",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530960.PDF",
+          "primary_identity": "603353:1225530960",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530960.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body4",
+          "decision_relevant": true,
+          "identity": "603353:1225530961",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530961.PDF",
+          "primary_identity": "603353:1225530961",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530961.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body5",
+          "decision_relevant": true,
+          "identity": "603353:1225530963",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530963.PDF",
+          "primary_identity": "603353:1225530963",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530963.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body6",
+          "decision_relevant": true,
+          "identity": "603353:1225530965",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530965.PDF",
+          "primary_identity": "603353:1225530965",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530965.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body7",
+          "decision_relevant": true,
+          "identity": "603353:1225530982",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530982.PDF",
+          "primary_identity": "603353:1225530982",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530982.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body8",
+          "decision_relevant": true,
+          "identity": "603353:1225530984",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530984.PDF",
+          "primary_identity": "603353:1225530984",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530984.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body9",
+          "decision_relevant": true,
+          "identity": "603353:1225531017",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531017.PDF",
+          "primary_identity": "603353:1225531017",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531017.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body10",
+          "decision_relevant": true,
+          "identity": "603353:1225531019",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531019.PDF",
+          "primary_identity": "603353:1225531019",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531019.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body11",
+          "decision_relevant": true,
+          "identity": "603353:1225531021",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531021.PDF",
+          "primary_identity": "603353:1225531021",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531021.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body12",
+          "decision_relevant": true,
+          "identity": "603353:1225531023",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531023.PDF",
+          "primary_identity": "603353:1225531023",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531023.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body13",
+          "decision_relevant": true,
+          "identity": "603353:1225531027",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531027.PDF",
+          "primary_identity": "603353:1225531027",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531027.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body14",
+          "decision_relevant": true,
+          "identity": "603353:1225531032",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531032.PDF",
+          "primary_identity": "603353:1225531032",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531032.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body15",
+          "decision_relevant": true,
+          "identity": "603353:1225531034",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531034.PDF",
+          "primary_identity": "603353:1225531034",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531034.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body16",
+          "decision_relevant": true,
+          "identity": "603353:1225531040",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531040.PDF",
+          "primary_identity": "603353:1225531040",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531040.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body17",
+          "decision_relevant": true,
+          "identity": "603353:1225547101",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547101.PDF",
+          "primary_identity": "603353:1225547101",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547101.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body18",
+          "decision_relevant": true,
+          "identity": "603353:1225547108",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547108.PDF",
+          "primary_identity": "603353:1225547108",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547108.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body19",
+          "decision_relevant": true,
+          "identity": "603353:1225547119",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547119.PDF",
+          "primary_identity": "603353:1225547119",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547119.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "body20",
+          "decision_relevant": true,
+          "identity": "603353:1225552981",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225552981.PDF",
+          "primary_identity": "603353:1225552981",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225552981.PDF",
+          "relevance_note": "Full body retained: report and all same/later dated disclosures, not a bullish title filter."
+        }
+      ],
+      "planned_queries": [
+        "CNINFO_COHERENT_400_DAY_QUERY:603353.SH"
+      ],
+      "query_events": [
+        {
+          "checked_at": "2026-09-14T04:57:54.975004+00:00",
+          "query": "CNINFO_COHERENT_400_DAY_QUERY:603353.SH",
+          "status": "SUCCEEDED",
+          "tool_reference": "SAME_RUN_ARTIFACT:603353.SH/sources/source-journal.json"
+        }
+      ],
+      "started_at": "2026-09-14T04:57:47.887214+00:00"
+    }
+  ],
+  "limits": {
+    "max_queries": 1,
+    "max_reads": 20
+  },
+  "notes": "CNINFO latest full annual/half-year report in a coherent 400-day query, and ALL disclosures dated on/after the earliest full version of that reporting period within the same query. Not all issuer channels or full company Research. Full required text is supplied without clipping. Parsed tables and issuer claims are not truth certification. Original PDFs and decoded query returns remain in this run artifact. Source acquisition can follow the price session; this is current research, not a reconstruction of what was known on the price date. Logical inventory query; individual HTTP returns recorded separately.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "0aa7c59b58b74ff50924716b18b37c9c95a6e4b76dbb06b4afe4dada5a84dd3f",
+      "checked_at": "2026-09-14T04:57:55.536009+00:00",
+      "id": "body1",
+      "identity": "603353:1225530957",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530957.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "97694d795491ade65f1c870d3ea88dcea36a98101144bdecbc9436b5ff73b46d",
+      "checked_at": "2026-09-14T04:57:55.537327+00:00",
+      "id": "body2",
+      "identity": "603353:1225530958",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530958.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "f7b123b9a089241920232032c9930bcf2ba730ab6dfbd3a6b5fdfb11140a8e43",
+      "checked_at": "2026-09-14T04:57:55.539153+00:00",
+      "id": "body3",
+      "identity": "603353:1225530960",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530960.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "71cd9e3066fe16f5dc037423c4cd1571f9f37fdc3f20fbc80b870984b4a1c19f",
+      "checked_at": "2026-09-14T04:57:55.540460+00:00",
+      "id": "body4",
+      "identity": "603353:1225530961",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530961.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "d70a9d3f42d3ef66542dca793c5ad5d94742e06a4d1d571b353c3da77977286d",
+      "checked_at": "2026-09-14T04:57:55.542120+00:00",
+      "id": "body5",
+      "identity": "603353:1225530963",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530963.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "cc3a234f7551ef02c401fae60452b891ca48ef0047aad7e26981e0f4ec7948fa",
+      "checked_at": "2026-09-14T04:57:56.675837+00:00",
+      "id": "body6",
+      "identity": "603353:1225530965",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530965.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "57d490669f46820b1811df093aefe32608c5470591ff4da152d2618280a510c1",
+      "checked_at": "2026-09-14T04:57:56.677579+00:00",
+      "id": "body7",
+      "identity": "603353:1225530982",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530982.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "b71d38af02d6c0c376cea308aefca5ea9f67e42afd3a683799e1384fc1b2a756",
+      "checked_at": "2026-09-14T04:57:56.681893+00:00",
+      "id": "body8",
+      "identity": "603353:1225530984",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530984.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "2ea03bcb12e44e2d20e22133b71b10cf7261299c073812064fa1bef71b7592c7",
+      "checked_at": "2026-09-14T04:57:56.683168+00:00",
+      "id": "body9",
+      "identity": "603353:1225531017",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531017.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "55071ec1583e10a4b3338bd800c5c1f08e3a01c841fda045b56ed9c31f86a498",
+      "checked_at": "2026-09-14T04:57:56.684607+00:00",
+      "id": "body10",
+      "identity": "603353:1225531019",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531019.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "d6f81fefb03cd6de8d7a6fc3b405b3f924eadf7fd4e97c16db2c79fb21334233",
+      "checked_at": "2026-09-14T04:57:56.704050+00:00",
+      "id": "body11",
+      "identity": "603353:1225531021",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531021.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "c5cfd9add4bc2fde4980da8bd0fc9d1c04f4cd739f199ccefee2bf732f4c50bc",
+      "checked_at": "2026-09-14T04:57:56.706427+00:00",
+      "id": "body12",
+      "identity": "603353:1225531023",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531023.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "9a392eb58ea46b8fa206239c7a33fe02903210ebc5b6e35659254f016a989bfa",
+      "checked_at": "2026-09-14T04:57:56.707984+00:00",
+      "id": "body13",
+      "identity": "603353:1225531027",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531027.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "e4c9581c5eacba672f68bc36fceaa50bb5b27498de866a26b4123b75cb878505",
+      "checked_at": "2026-09-14T04:57:56.709170+00:00",
+      "id": "body14",
+      "identity": "603353:1225531032",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531032.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "de77ea96a2051a264d05cd5c42f365a881c778d6c4449401e360630b6d1fc5dc",
+      "checked_at": "2026-09-14T04:57:56.710687+00:00",
+      "id": "body15",
+      "identity": "603353:1225531034",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531034.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "4a86961889d4480863bcd6076f827b524aecc89c570798f3f355ecad707a0724",
+      "checked_at": "2026-09-14T04:57:56.714429+00:00",
+      "id": "body16",
+      "identity": "603353:1225531040",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531040.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "e1030523e8f4fe24ce538fa1c9bd80016a8f223a84fcf87e37b962a3427be00b",
+      "checked_at": "2026-09-14T04:57:56.715617+00:00",
+      "id": "body17",
+      "identity": "603353:1225547101",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547101.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "35d41c6d86919f6a6181074a870bcb6cc82fd6b72d89ac0253ee8bae400cda58",
+      "checked_at": "2026-09-14T04:57:56.717104+00:00",
+      "id": "body18",
+      "identity": "603353:1225547108",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547108.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "eae6ab8d9012de0fd144b083c2abb7189d30fb275fbb2f377dcbe8b2397c0b7b",
+      "checked_at": "2026-09-14T04:57:56.718945+00:00",
+      "id": "body19",
+      "identity": "603353:1225547119",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-04/1225547119.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "9031f2e758a07a56c63345109686d1e7e0263792f19ad45a379a39e776930790",
+      "checked_at": "2026-09-14T04:57:56.720252+00:00",
+      "id": "body20",
+      "identity": "603353:1225552981",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225552981.PDF",
+      "succeeded": true,
+      "tool_reference": "SOURCE_ONLY_ARTIFACT:10320565453"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "body11"
+      ],
+      "id": "FULL_BUSINESS_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [
+        "body1",
+        "body2",
+        "body3",
+        "body4",
+        "body5",
+        "body6",
+        "body7",
+        "body8",
+        "body9",
+        "body10",
+        "body11",
+        "body12",
+        "body13",
+        "body14",
+        "body15",
+        "body16",
+        "body17",
+        "body18",
+        "body19",
+        "body20"
+      ],
+      "id": "RECENT_MATERIAL_DISCLOSURE_CHECK",
+      "inventory_id": "updates",
+      "mode": "LATEST_INVENTORY"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:603353",
+  "seed_publications": [
+    {
+      "evidence_id": "368541be-a53c-5f3f-bad5-1eeb622c8ded",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "f31ef31c663b8e34ba948b96151656c81ebef9d3",
+        "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "ffedcf37ece9e583c0dde320384e291e0fdd3ca942d239cd457bb7409c29945c"
+      }
+    }
+  ],
+  "started_at": "2026-09-14T04:57:47.887214+00:00",
+  "ticker": "603353",
+  "valid_until": "2026-09-14T05:42:59.137635+00:00"
+}
