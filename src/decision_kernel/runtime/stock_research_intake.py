@@ -34,7 +34,6 @@ def security(thscode: str) -> str:
 
 
 def execution(thscode: str) -> tuple[str, str]:
-    # Do not incorporate price, run, date, code, consent or representation hash.
     sid = security(thscode)
     key = canonical_hash({"security_id": sid, "question_kind": QUESTION_KIND})
     return "stock-business-" + key, PREFIX + key + "/"
@@ -74,13 +73,13 @@ def inventory(api, commit: str) -> dict[str, dict]:
     tree = api.get("git/trees/" + commit + "?recursive=1")
     once.require(tree.get("truncated") is False, "stock work tree incomplete")
     rows = {}
+    children = {"source-recovery-v1", "source-successor-v1", "source-successor-continuation-v1"}
     for row in tree["tree"]:
         path = row["path"]
         if not path.startswith(PREFIX) or row["type"] == "tree":
             continue
         parts = path[len(PREFIX):].split("/")
-        once.require((len(parts) == 2 or (len(parts) == 3 and parts[1] in
-                     {"source-recovery-v1", "source-successor-v1"}))
+        once.require((len(parts) == 2 or (len(parts) == 3 and parts[1] in children))
                      and re.fullmatch(r"[a-f0-9]{64}", parts[0])
                      and parts[-1] in once.OUTPUT_NAMES and row["type"] == "blob"
                      and row["mode"] == "100644", "stock work path outside contract")
@@ -107,21 +106,41 @@ def describe(input_raw: bytes, candidate_raw: bytes) -> dict:
             eid, prefix, work_kind = recovery_eid, recovery_prefix, "SOURCE_PREPARATION_RECOVERY"
         else:
             from . import stock_source_successor as successor
+            from . import stock_source_successor_continuation as continuation
             successor_eid, successor_prefix = successor.execution(thscode)
-            once.require(packet.candidate_output_prefix == successor_prefix,
-                         "unknown Stock child execution identity")
-            roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
-                     successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
-                     successor.REQUEST_PURPOSE, successor.EXPOSURE_PURPOSE)
-            refs = {role: [r for r in packet.source_refs if r.purpose == role] for role in roles}
-            once.require(all(len(v) == 1 for v in refs.values())
-                and refs[successor.PARENT_SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
-                and refs[successor.PARENT_FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
-                and refs[successor.RECOVERY_SELECTION_PURPOSE][0].path == recovery_prefix + "prepare.json"
-                and refs[successor.RECOVERY_FAILURE_PURPOSE][0].path == recovery_prefix + "failure.json"
-                and packet.research_question == QUESTION,
-                "Stock successor predecessor/material binding missing")
-            eid, prefix, work_kind = successor_eid, successor_prefix, "SOURCE_PREPARATION_SUCCESSOR"
+            continuation_eid, continuation_prefix = continuation.execution(thscode)
+            if packet.candidate_output_prefix == successor_prefix:
+                roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
+                         successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
+                         successor.REQUEST_PURPOSE, successor.EXPOSURE_PURPOSE)
+                refs = {role: [r for r in packet.source_refs if r.purpose == role] for role in roles}
+                once.require(all(len(v) == 1 for v in refs.values())
+                    and refs[successor.PARENT_SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
+                    and refs[successor.PARENT_FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
+                    and refs[successor.RECOVERY_SELECTION_PURPOSE][0].path == recovery_prefix + "prepare.json"
+                    and refs[successor.RECOVERY_FAILURE_PURPOSE][0].path == recovery_prefix + "failure.json"
+                    and packet.research_question == QUESTION,
+                    "Stock successor predecessor/material binding missing")
+                eid, prefix, work_kind = successor_eid, successor_prefix, "SOURCE_PREPARATION_SUCCESSOR"
+            else:
+                once.require(packet.candidate_output_prefix == continuation_prefix,
+                             "unknown Stock child execution identity")
+                roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
+                         successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
+                         continuation.SELECTION_PURPOSE, continuation.FAILURE_PURPOSE,
+                         continuation.PREDECESSOR_REQUEST_PURPOSE, continuation.PREDECESSOR_READING_PURPOSE,
+                         continuation.REQUEST_PURPOSE, continuation.EXPOSURE_PURPOSE)
+                refs = {role: [r for r in packet.source_refs if r.purpose == role] for role in roles}
+                once.require(all(len(v) == 1 for v in refs.values())
+                    and refs[successor.PARENT_SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
+                    and refs[successor.PARENT_FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
+                    and refs[successor.RECOVERY_SELECTION_PURPOSE][0].path == recovery_prefix + "prepare.json"
+                    and refs[successor.RECOVERY_FAILURE_PURPOSE][0].path == recovery_prefix + "failure.json"
+                    and refs[continuation.SELECTION_PURPOSE][0].path == successor_prefix + "prepare.json"
+                    and refs[continuation.FAILURE_PURPOSE][0].path == successor_prefix + "failure.json"
+                    and packet.research_question == QUESTION,
+                    "Stock successor continuation predecessor/material binding missing")
+                eid, prefix, work_kind = continuation_eid, continuation_prefix, "SOURCE_PREPARATION_SUCCESSOR_TECHNICAL_CONTINUATION"
     once.require(packet.source_lane == LANE and packet.execution_id == eid
                  and packet.security_id == security(thscode)
                  and packet.candidate_output_prefix == prefix, "stock research identity differs")

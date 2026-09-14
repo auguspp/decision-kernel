@@ -11,6 +11,7 @@ from urllib.request import Request, urlopen
 
 from ..adapters.cninfo import (
     CNINFO_STATIC_BASE_URL,
+    SHANGHAI_TZ,
     CninfoAdapterError,
     CninfoAnnouncement,
     normalize_cninfo_announcement_page,

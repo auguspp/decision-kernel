@@ -15,10 +15,11 @@ from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_source_recovery as recovery
 from . import stock_source_successor as successor
+from . import stock_source_successor_continuation as continuation
 
 
-# Additive bounds for the Stock lane, not a reduction of the original 180/60.
-# The two bounded successor children add at most eight exact work/source reads.
+# Preserve the already accepted #360 Stock-reader capacity. Continuation must fit
+# inside it; this repair neither raises nor narrows the publication boundary.
 EXTRA_API_CALLS = 72
 MAX_STOCK_SOURCE_FILES = 32
 
@@ -28,11 +29,6 @@ def call_limit(api):
 
 
 def attempts(collector):
-    """Job identity, not a green workflow/title, distinguishes source preparation.
-
-    Inspect at most ten invocations. Missing/queued/unreadable job metadata stays
-    unknown and never replaces the last identified model-execution attempt.
-    """
     api = collector.api
     runs = api.get('actions/workflows/stock-business-research.yml/runs?branch=main&per_page=10')
     model.check(isinstance(runs.get('workflow_runs'), list) and len(runs['workflow_runs']) <= 10
@@ -113,7 +109,8 @@ def _collect(collector, payload):
     for code in codes:
         role_specs = [('ROOT', intake.execution(code)), ('RECOVERY', recovery.execution(code))]
         if code in successor.TARGETS:
-            role_specs.append(('SUCCESSOR', successor.execution(code)))
+            role_specs.extend([('SUCCESSOR', successor.execution(code)),
+                               ('CONTINUATION', continuation.execution(code))])
         for role, (eid, prefix) in role_specs:
             names = {path[len(prefix):] for path in rows
                      if path.startswith(prefix) and '/' not in path[len(prefix):]}
@@ -139,9 +136,9 @@ def _collect(collector, payload):
     extra_bytes = sum(size for path, size in extra_files.items() if path not in collector.files)
     model.check(sum(map(len, collector.files.values())) + extra_bytes + 256*1024 <= delivery.MAX_RETAINED_OUTPUT,
                 'Stock work would consume original retained-byte reserve')
-    model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 9 <= call_limit(api),
+    model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 13 <= call_limit(api),
                 'Stock work would consume original publication API reserve')
-    raw_cache = {}
+    raw_cache, pinned_cache = {}, {}
     def fetched(path):
         data = api.file(path, commit)
         raw_cache[path] = data
@@ -149,7 +146,24 @@ def _collect(collector, payload):
                     'Stock work source bytes differ')
         stored = collector.retain('sources/git/' + rows[path]['sha'] + '/' + Path(path).name, data)
         return data, {'repository': model.REPOSITORY, 'ref': commit, 'path': path, **stored}
-    items, roots, recoveries = [], {}, {}
+    def pinned(spec, purpose):
+        model.check(isinstance(spec, dict) and spec.get('purpose') == purpose,
+                    'Stock pinned source purpose differs')
+        key = (spec['ref'], spec['path'], spec['git_blob'], spec['sha256'])
+        if key not in pinned_cache:
+            data = identity._checked_source(spec, lambda s: api.file(s['path'], s['ref']))
+            stored = collector.retain('sources/git/' + model.blob_sha(data) + '/' + Path(spec['path']).name, data)
+            model.check(stored['git_blob'] == spec['git_blob'] and stored['sha256'] == spec['sha256'],
+                        'Stock pinned source differs')
+            pinned_cache[key] = data
+        return pinned_cache[key]
+    def packet_ref(packet, expected):
+        matches = [r.model_dump(mode='json') for r in packet.source_refs if r.purpose == expected['purpose']]
+        model.check(len(matches) == 1 and all(matches[0].get(k) == expected.get(k)
+            for k in ('repository','ref','path','git_blob','sha256','purpose')),
+            'Stock candidate lost pinned predecessor/source')
+
+    items, roots, recoveries, successors = [], {}, {}, {}
     for (code, role), (eid, prefix, names) in groups.items():
         item = {'thscode': code, 'execution_id': eid, 'candidate_output_prefix': prefix,
                 'question_kind': intake.QUESTION_KIND, 'semantic_acceptance': 'NOT_ESTABLISHED_BY_READER',
@@ -214,50 +228,100 @@ def _collect(collector, payload):
                 identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
             if packet is not None:
                 for key in ('parent_selection', 'parent_failure', 'request', 'exposure'):
-                    spec = binding[key]
-                    matches = [r.model_dump(mode='json') for r in packet.source_refs if r.purpose == spec['purpose']]
-                    model.check(len(matches) == 1 and all(matches[0].get(k) == spec.get(k)
-                        for k in ('repository', 'ref', 'path', 'git_blob', 'sha256')),
-                        'Stock recovery candidate lost bound predecessor or permission')
+                    packet_ref(packet, binding[key])
             item.update(work_kind='SOURCE_PREPARATION_RECOVERY', new_disclosure=False)
             root['source_recovery'] = item; recoveries[code] = item
             continue
-        # Successor is legal only after the exact failed recovery was preserved.
         model.check(code in recoveries and recoveries[code]['status'] == 'PRE_EXECUTION_FAILURE',
                     'Stock successor lacks preserved failed recovery')
         _, recovery_prefix, recovery_names = groups[(code, 'RECOVERY')]
         model.check('prepare.json' in recovery_names and 'failure.json' in recovery_names,
                     'Stock successor recovery history incomplete')
         binding = prep['source_successor']
+        if role == 'SUCCESSOR':
+            model.check(binding['thscode'] == code and binding['execution_id'] == eid
+                and prep['observation'] == parent_selection['observation'] and prep['origin'] == parent_selection['origin']
+                and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
+                and binding['parent_failure']['path'] == root_prefix + 'failure.json'
+                and binding['recovery_selection']['path'] == recovery_prefix + 'prepare.json'
+                and binding['recovery_failure']['path'] == recovery_prefix + 'failure.json',
+                'Stock successor reading predecessor differs')
+            for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure'):
+                identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
+            old_request_raw = pinned(binding['successor_request'], successor.REQUEST_PURPOSE)
+            old_reading_raw = pinned(binding['current_reading'], successor.EXPOSURE_PURPOSE)
+            old_request = identity._json(old_request_raw)
+            old_reading = identity._json(old_reading_raw); model.validate_read_package(old_reading)
+            model.check(old_request['mode'] == successor.MODE
+                and old_request['permission'] == binding['permission']
+                and old_reading['research']['stock_business_work']['work_commit'] == binding['parent_selection']['ref'],
+                'Stock successor pinned reservation context differs')
+            if packet is not None:
+                for key in ('successor_request', 'current_reading'):
+                    packet_ref(packet, binding[key])
+            item.update(work_kind='SOURCE_PREPARATION_SUCCESSOR', new_disclosure=False)
+            root['source_successor'] = item; successors[code] = item
+            continue
+        model.check(code in successors and successors[code]['status'] == 'PRE_EXECUTION_FAILURE'
+                    and successors[code].get('error_type') == 'AttributeError',
+                    'Stock successor continuation lacks preserved AttributeError predecessor')
+        _, successor_prefix, successor_names = groups[(code, 'SUCCESSOR')]
+        model.check('prepare.json' in successor_names and 'failure.json' in successor_names
+                    and not any(n in successor_names for n in
+                        ('launch.json','input.json','candidate.json','admission.json','receipt.json','funnel.json')),
+                    'Stock successor continuation predecessor reached Research/admission')
+        failed_work_ref = binding['predecessor_successor_selection']['ref']
         model.check(binding['thscode'] == code and binding['execution_id'] == eid
             and prep['observation'] == parent_selection['observation'] and prep['origin'] == parent_selection['origin']
             and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
             and binding['parent_failure']['path'] == root_prefix + 'failure.json'
             and binding['recovery_selection']['path'] == recovery_prefix + 'prepare.json'
-            and binding['recovery_failure']['path'] == recovery_prefix + 'failure.json',
-            'Stock successor reading predecessor differs')
-        for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure'):
+            and binding['recovery_failure']['path'] == recovery_prefix + 'failure.json'
+            and binding['predecessor_successor_selection']['path'] == successor_prefix + 'prepare.json'
+            and binding['predecessor_successor_failure']['path'] == successor_prefix + 'failure.json'
+            and binding['predecessor_successor_failure']['ref'] == failed_work_ref
+            and type(binding.get('technical_predecessor_run_id')) is int
+            and binding['technical_predecessor_run_id'] > 0,
+            'Stock successor continuation reading predecessor differs')
+        for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure',
+                    'predecessor_successor_selection', 'predecessor_successor_failure'):
             identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
+        continuation_request_raw = pinned(binding['successor_request'], continuation.REQUEST_PURPOSE)
+        continuation_reading_raw = pinned(binding['current_reading'], continuation.EXPOSURE_PURPOSE)
+        predecessor_request_raw = pinned(binding['predecessor_successor_request'], continuation.PREDECESSOR_REQUEST_PURPOSE)
+        predecessor_reading_raw = pinned(binding['predecessor_successor_reading'], continuation.PREDECESSOR_READING_PURPOSE)
+        continuation_request = identity._json(continuation_request_raw)
+        continuation_reading = identity._json(continuation_reading_raw)
+        predecessor_request = identity._json(predecessor_request_raw)
+        predecessor_reading = identity._json(predecessor_reading_raw)
+        model.validate_read_package(continuation_reading); model.validate_read_package(predecessor_reading)
+        model.check(continuation_request['mode'] == continuation.MODE
+            and continuation_request['permission'] == binding['permission']
+            and continuation_request['failed_successor_run_id'] == binding['technical_predecessor_run_id']
+            and continuation_request['failed_successor_work_commit'] == failed_work_ref
+            and continuation_request['failed_successor_reading_commit'] == binding['predecessor_successor_reading']['ref']
+            and continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref
+            and predecessor_request['mode'] == successor.MODE
+            and predecessor_request['permission'] == binding['permission']
+            and predecessor_reading['research']['stock_business_work']['work_commit'] == failed_work_ref,
+            'Stock successor continuation pinned reservation context differs')
         if packet is not None:
-            # intake.describe validates exact purposes/paths; additionally retain and
-            # recheck the permission/current-reading sources from their pinned refs.
-            refs = {r.purpose: r.model_dump(mode='json') for r in packet.source_refs}
-            for purpose in (successor.REQUEST_PURPOSE, successor.EXPOSURE_PURPOSE):
-                spec = refs[purpose]
-                data = identity._checked_source(spec, lambda s: api.file(s['path'], s['ref']))
-                retained = collector.retain('sources/git/' + model.blob_sha(data) + '/' + Path(spec['path']).name, data)
-                model.check(retained['git_blob'] == spec['git_blob'] and retained['sha256'] == spec['sha256'],
-                            'Stock successor pinned source differs')
-        item.update(work_kind='SOURCE_PREPARATION_SUCCESSOR', new_disclosure=False)
-        root['source_successor'] = item
+            for key in ('successor_request', 'current_reading', 'predecessor_successor_request',
+                        'predecessor_successor_reading'):
+                packet_ref(packet, binding[key])
+        item.update(work_kind='SOURCE_PREPARATION_SUCCESSOR_TECHNICAL_CONTINUATION', new_disclosure=False)
+        root['source_successor_continuation'] = item
+    statuses = ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')
     return {'status': 'READ_OK', 'work_ref': intake.WORK_REF, 'work_commit': commit,
             **invocation,
             'scope': 'CURRENT_QUALIFIED_STOCKS_FIRST_BUSINESS_BASELINES_NOT_ALL_RESEARCH',
             'items': items,
             'source_recovery_counts': {status: sum(i.get('source_recovery', {}).get('status') == status for i in items)
-                for status in ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
+                for status in statuses},
             'source_successor_counts': {status: sum(i.get('source_successor', {}).get('status') == status for i in items)
-                for status in ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
+                for status in statuses},
+            'source_successor_continuation_counts': {status: sum(
+                i.get('source_successor_continuation', {}).get('status') == status for i in items) for status in statuses},
             'counts': {status: sum(i['status'] == status for i in items) for status in
                 ('NOT_STARTED','RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE',
                  'VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
@@ -265,7 +329,6 @@ def _collect(collector, payload):
 
 
 def attach(collector, baseline):
-    """Original collection finishes first; this optional stage can roll back only itself."""
     before_files, before_sources = dict(collector.files), dict(collector.sources)
     research = deepcopy(baseline['research'])
     def assemble():

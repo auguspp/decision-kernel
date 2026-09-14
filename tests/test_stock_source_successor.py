@@ -24,14 +24,15 @@ def test_successor_identity_is_one_fixed_child_not_price_date_or_permission():
         successor.execution("600184.SH")
 
 
-def test_work_inventory_accepts_only_the_named_successor_child():
+def test_work_inventory_accepts_only_named_stock_children():
     code = "603353.SH"; _, root = intake.execution(code)
-    path = root + "source-successor-v1/prepare.json"
-    class API:
-        def get(self, _):
-            return {"truncated": False, "tree": [{"path": path, "type": "blob", "mode": "100644",
-                "sha": "a"*40, "size": 2}]}
-    assert path in intake.inventory(API(), "b"*40)
+    for child in ("source-successor-v1", "source-successor-continuation-v1"):
+        path = root + child + "/prepare.json"
+        class API:
+            def get(self, _):
+                return {"truncated": False, "tree": [{"path": path, "type": "blob", "mode": "100644",
+                    "sha": "a"*40, "size": 2}]}
+        assert path in intake.inventory(API(), "b"*40)
     bad = root + "source-successor-v2/prepare.json"
     class Bad:
         def get(self, _):
@@ -41,10 +42,11 @@ def test_work_inventory_accepts_only_the_named_successor_child():
         intake.inventory(Bad(), "b"*40)
 
 
-def test_successor_request_binds_exact_source_only_artifact_and_old_permission():
+def test_consumed_successor_request_is_retired_but_history_is_still_exact():
     root = Path(__file__).parents[1]
     request = once.identity._json((root / successor.REQUEST).read_bytes())
     prep = (root / "research_runs/stock-source-preparation-request.json").read_bytes()
+    assert request["enabled"] is False
     assert request["permission"] == {"comment_id": 5652950925,
         "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
         "created_at": "2026-09-13T11:22:23Z"}
@@ -76,6 +78,8 @@ def test_host_successor_does_not_run_a_context_recheck_before_saved_capture(tmp_
         "material": {"selected_ids": ["synthetic"]}}
     class Session:
         request = successor_request
+        request_path = successor.REQUEST
+        mode = successor.MODE
         binding = {"source_preparation": {"artifact_digest": "sha256:" + "1"*64}}
         def for_code(self, thscode):
             assert thscode == code
@@ -94,22 +98,24 @@ def test_host_successor_does_not_run_a_context_recheck_before_saved_capture(tmp_
     assert not result["formal_research_started"] and calls == []
 
 
-def test_cli_modes_remain_mutually_exclusive_and_successor_is_explicit_native_dispatch(tmp_path, monkeypatch):
+def test_cli_modes_remain_mutually_exclusive_and_children_require_native_dispatch(tmp_path, monkeypatch):
     with pytest.raises(SystemExit):
         host.main(["--source-run-id", "42", "--code-commit", "a"*40, "--output", str(tmp_path/"none"),
-                   "--source-successor", "--recover-sources"])
+                   "--source-successor-continuation", "--recover-sources"])
     for k,v in {"GITHUB_REPOSITORY": once.REPO, "GITHUB_REF": "refs/heads/main",
         "GITHUB_RUN_ATTEMPT": "1", "GITHUB_SHA": "a"*40, "GITHUB_EVENT_NAME": "schedule"}.items():
         monkeypatch.setenv(k,v)
     with pytest.raises(once.TrialError, match="explicit native dispatch"):
         host.main(["--source-run-id", "42", "--code-commit", "a"*40,
-                   "--output", str(tmp_path/"none2"), "--source-successor"])
+                   "--output", str(tmp_path/"none2"), "--source-successor-continuation"])
 
 
-def test_workflow_has_one_explicit_successor_flag_not_a_second_executor():
+def test_workflow_hard_disables_consumed_successor_and_keeps_one_continuation_flag():
     root = Path(__file__).parents[1]
     text = (root / ".github/workflows/stock-business-research.yml").read_text()
-    assert text.count("source-successor:") == 1
-    assert "--source-successor" in text
+    assert text.count("source-successor-continuation:") == 1
+    assert "--source-successor-continuation" in text
     assert text.count("research-stock-business:") == 1
-    assert 'test ! \\( "$RECOVER_SOURCES" = true -a "$SOURCE_SUCCESSOR" = true \\)' in text
+    assert 'test "$SOURCE_SUCCESSOR" != true' in text
+    assert 'test "$enabled" -le 1' in text
+    assert 'extra+=(--source-successor)' not in text
