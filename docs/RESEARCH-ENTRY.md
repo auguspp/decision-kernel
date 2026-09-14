@@ -22,6 +22,14 @@ Repository: `auguspp/decision-kernel`。每次新研究或接续先解析 `main`
 
 本入口不能自动注入所有未读取仓库的聊天。可复用启动句：**按 auguspp/decision-kernel 的 docs/RESEARCH-ENTRY.md 恢复后再做研究或投资判断。** 消费端没有读取入口，就不能声称已采用本协议。
 
+## 0.1 算过的 Odds 从哪里恢复；新结果怎样不再丢失
+
+先打开 [Odds Book v0](ODDS-BOOK.md)，并按其中精确版本查原输出、方法更正、Human接受及下一复核条件。它是有声明覆盖的导航，不是持仓、当前行情或全历史穷尽；未被Human接受的临时/受挑战结果仍须保留。固定读取中的 `odds-book` 及相关purpose引用提供同R原件副本，不中途拼接新的main。
+
+每次真实决策相关Odds计算或重大方法修订，交付的一部分就是按原留存协议保留结果、在既有用途索引登记精确path/ref/blob、追加old→new历史并读回。不能只给一个聊天答案后等待Human再问是否记录。原件、登记或发布未完成时明确报告 `NOT_SAVED / REGISTRATION_INCOMPLETE / PUBLICATION_PENDING` 的实际阶段；先核对已存在结果，不为补登记重新运行研究。无原件的历史线索保留UNKNOWN，不能补造过去的调用、时钟或结果。
+
+接受、条件投资决定与Action单独引用；新版本不继承旧Human接受，受挑战旧梯度不激活。此处复用交互保存与现有publisher，不声明全仓自动发现/全入口自动捕获已经实现，不创建监控或第二Odds引擎。
+
 ## 1. 先确定在回答哪种问题
 
 区分多年经营价值/现金回报与短期催化/预期交易；两者可并列，不互相代替。先保存以下 decision-use context：证券与股类、Research cutoff、价格日期/来源/authority、估值终点、持有期、绝对或相对回报门槛、分红/税费、股本及单位、允许承担的损失约束。
