@@ -228,10 +228,14 @@ def prepare(*, api, code, request, selected, origin, reading_commit, output, clo
 
     exposure = once.source_ref("current-state.json", reading_commit, reading_raw, EXPOSURE_PURPOSE)
     request_ref = once.source_ref(REQUEST, code, api.file(REQUEST, code), REQUEST_PURPOSE)
+    source_preparation = {"run_id": prep_run["id"], "artifact_id": artifact["id"],
+        "artifact_name": artifact["name"], "artifact_digest": artifact["digest"],
+        "archive_sha256": once.sha(archive), "batch_sha256": once.sha(files["source-preparation-batch.json"])}
+    for bound in binding_items:
+        bound.update(permission=request["permission"], successor_request=request_ref,
+                     current_reading=exposure, source_preparation=source_preparation)
     binding = {"kind": MODE, "permission": request["permission"], "request": request_ref,
-        "current_reading": exposure, "source_preparation": {"run_id": prep_run["id"],
-            "artifact_id": artifact["id"], "artifact_name": artifact["name"], "artifact_digest": artifact["digest"],
-            "archive_sha256": once.sha(archive), "batch_sha256": once.sha(files["source-preparation-batch.json"])},
+        "current_reading": exposure, "source_preparation": source_preparation,
         "items": binding_items, "meaning": "CREATE_ONLY_SAVED_SOURCE_SUCCESSOR_NOT_RETRY_OR_NEW_PRICE_QUESTION",
         **reading.AUTHORITY}
     (output / "source-successor-origin.zip").write_bytes(archive)
@@ -429,5 +433,10 @@ def recheck(*, api, code, session: Session, binding, context, clock=once.now):
         "Stock successor fixed reading changed")
     for key in ("parent_selection", "parent_failure", "recovery_selection", "recovery_failure"):
         spec = binding[key]; _current_work_ref(api, spec["path"], spec["git_blob"]); _checked_git(api, spec)
+    once.require(binding["permission"] == session.request["permission"]
+        and binding["successor_request"] == session.binding["request"]
+        and binding["current_reading"] == session.binding["current_reading"]
+        and binding["source_preparation"] == session.binding["source_preparation"],
+        "Stock successor child binding changed")
     sources.recheck(context, api=api, code_commit=code, clock=clock)
     check_materials(session, binding, context)
