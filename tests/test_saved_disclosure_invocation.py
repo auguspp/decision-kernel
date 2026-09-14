@@ -230,7 +230,7 @@ def test_original_host_rechecks_first_work_snapshot_after_preparation(tmp_path, 
         if endpoint == "git/ref/heads/" + work.WORK_REF:
             reads.append(endpoint)
             if len(reads) > 1:
-                return SimpleNamespace(json=lambda: {"object": {"type": "commit", "sha": "c" * 40}})
+                return SimpleNamespace(json=lambda: {"object": {"type": "commit", "sha": ("d" * 40 if WORK != "d" * 40 else "e" * 40)}})
         return original(method, endpoint)
     monkeypatch.setattr(api, "_call", shifted)
     result = host.consume(**args, expected_reading_commit=READING, expected_work_commit=WORK)
