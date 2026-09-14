@@ -123,3 +123,14 @@ def test_original_host_accepts_continuation_session_identity_without_reopening_o
     assert result["status"] == "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE"
     old_prefix = successor.execution(code)[1]
     assert all(old_prefix not in endpoint for _, endpoint, _ in writes)
+
+
+def test_reader_keeps_failed_work_ref_distinct_and_does_not_raise_accepted_bounds():
+    root = Path(__file__).parents[1]
+    text = (root / "src/decision_kernel/runtime/stock_research_reading.py").read_text()
+    assert "EXTRA_API_CALLS = 64" in text and "MAX_STOCK_SOURCE_FILES = 24" in text
+    assert "failed_work_ref = binding['predecessor_successor_selection']['ref']" in text
+    assert "continuation_request['failed_successor_work_commit'] == failed_work_ref" in text
+    assert "continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text
+    assert "predecessor_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text
+    assert "continuation_request['failed_successor_work_commit'] == commit" not in text
