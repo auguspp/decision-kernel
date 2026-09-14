@@ -79,7 +79,8 @@ def inventory(api, commit: str) -> dict[str, dict]:
         if not path.startswith(PREFIX) or row["type"] == "tree":
             continue
         parts = path[len(PREFIX):].split("/")
-        once.require((len(parts) == 2 or (len(parts) == 3 and parts[1] == "source-recovery-v1"))
+        once.require((len(parts) == 2 or (len(parts) == 3 and parts[1] in
+                     {"source-recovery-v1", "source-successor-v1"}))
                      and re.fullmatch(r"[a-f0-9]{64}", parts[0])
                      and parts[-1] in once.OUTPUT_NAMES and row["type"] == "blob"
                      and row["mode"] == "100644", "stock work path outside contract")
@@ -91,24 +92,43 @@ def describe(input_raw: bytes, candidate_raw: bytes) -> dict:
     packet = ExternalResearchInputPacket.model_validate(identity._json(input_raw))
     candidate = ExternalResearchCandidate.model_validate(identity._json(candidate_raw))
     thscode = packet.ticker + (".SH" if packet.security_id.startswith("SSE:") else ".SZ")
-    eid, prefix = execution(thscode)
-    recovery = packet.candidate_output_prefix != prefix
-    if recovery:
+    root_eid, root_prefix = execution(thscode)
+    eid, prefix, work_kind = root_eid, root_prefix, None
+    if packet.candidate_output_prefix != root_prefix:
         from .stock_source_recovery import execution as recovery_execution, FAILURE_PURPOSE, SELECTION_PURPOSE
-        parents = {role: [r for r in packet.source_refs if r.purpose == role]
-                   for role in (FAILURE_PURPOSE, SELECTION_PURPOSE)}
-        once.require(all(len(v) == 1 for v in parents.values())
-            and parents[FAILURE_PURPOSE][0].path == prefix + "failure.json"
-            and parents[SELECTION_PURPOSE][0].path == prefix + "prepare.json"
-            and packet.research_question == QUESTION, "Stock recovery predecessor binding missing")
-        eid, prefix = recovery_execution(thscode)
+        recovery_eid, recovery_prefix = recovery_execution(thscode)
+        if packet.candidate_output_prefix == recovery_prefix:
+            parents = {role: [r for r in packet.source_refs if r.purpose == role]
+                       for role in (FAILURE_PURPOSE, SELECTION_PURPOSE)}
+            once.require(all(len(v) == 1 for v in parents.values())
+                and parents[FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
+                and parents[SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
+                and packet.research_question == QUESTION, "Stock recovery predecessor binding missing")
+            eid, prefix, work_kind = recovery_eid, recovery_prefix, "SOURCE_PREPARATION_RECOVERY"
+        else:
+            from . import stock_source_successor as successor
+            successor_eid, successor_prefix = successor.execution(thscode)
+            once.require(packet.candidate_output_prefix == successor_prefix,
+                         "unknown Stock child execution identity")
+            roles = (successor.PARENT_SELECTION_PURPOSE, successor.PARENT_FAILURE_PURPOSE,
+                     successor.RECOVERY_SELECTION_PURPOSE, successor.RECOVERY_FAILURE_PURPOSE,
+                     successor.REQUEST_PURPOSE, successor.EXPOSURE_PURPOSE)
+            refs = {role: [r for r in packet.source_refs if r.purpose == role] for role in roles}
+            once.require(all(len(v) == 1 for v in refs.values())
+                and refs[successor.PARENT_SELECTION_PURPOSE][0].path == root_prefix + "prepare.json"
+                and refs[successor.PARENT_FAILURE_PURPOSE][0].path == root_prefix + "failure.json"
+                and refs[successor.RECOVERY_SELECTION_PURPOSE][0].path == recovery_prefix + "prepare.json"
+                and refs[successor.RECOVERY_FAILURE_PURPOSE][0].path == recovery_prefix + "failure.json"
+                and packet.research_question == QUESTION,
+                "Stock successor predecessor/material binding missing")
+            eid, prefix, work_kind = successor_eid, successor_prefix, "SOURCE_PREPARATION_SUCCESSOR"
     once.require(packet.source_lane == LANE and packet.execution_id == eid
                  and packet.security_id == security(thscode)
                  and packet.candidate_output_prefix == prefix, "stock research identity differs")
     result = validate_external_research_candidate(packet=packet, candidate=candidate)
     funnel = result.funnel_result
     return {"thscode": thscode, "execution_id": eid, "candidate_output_prefix": prefix,
-        **({"work_kind": "SOURCE_PREPARATION_RECOVERY", "new_disclosure": False} if recovery else {}),
+        **({"work_kind": work_kind, "new_disclosure": False} if work_kind else {}),
         "status": "VALIDATED_FUNNEL_CANDIDATE" if funnel else "VALIDATED_EXECUTION_GAP",
         "completion": result.completion.value, "validation_status": result.status.value,
         "terminal_state": funnel.terminal_state.value if funnel else None,
