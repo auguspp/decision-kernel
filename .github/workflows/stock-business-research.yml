@@ -20,7 +20,7 @@ on:
         type: boolean
         default: false
       source-successor:
-        description: Create the reviewed saved-artifact successor for Heshun/Guangha only; never reuse old recovery
+        description: CONSUMED source-successor-v1; must remain false
         type: boolean
         default: false
       source-successor-continuation:
@@ -77,14 +77,13 @@ jobs:
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -n "$SUB2API_API_KEY"
+          test "$SOURCE_SUCCESSOR" != true
           enabled=0
           if [ "$RECOVER_SOURCES" = true ]; then enabled=$((enabled+1)); fi
-          if [ "$SOURCE_SUCCESSOR" = true ]; then enabled=$((enabled+1)); fi
           if [ "$SOURCE_SUCCESSOR_CONTINUATION" = true ]; then enabled=$((enabled+1)); fi
           test "$enabled" -le 1
           extra=()
           if [ "$RECOVER_SOURCES" = true ]; then extra+=(--recover-sources); fi
-          if [ "$SOURCE_SUCCESSOR" = true ]; then extra+=(--source-successor); fi
           if [ "$SOURCE_SUCCESSOR_CONTINUATION" = true ]; then extra+=(--source-successor-continuation); fi
           python -m decision_kernel.runtime.stock_research_host \
             --source-run-id "$SOURCE_STOCK_RUN" --code-commit "$GITHUB_SHA" --output run-output "${extra[@]}"
