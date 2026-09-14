@@ -21,7 +21,9 @@ def retry_if_source_budget(collector, baseline: dict) -> dict:
     if not isinstance(research, dict):
         return baseline
     candidate = research.get("candidate_work")
-    diagnostic = candidate.get("diagnostic") if isinstance(candidate, dict) else None
+    if not isinstance(candidate, dict):
+        return baseline
+    diagnostic = candidate.get("diagnostic")
     if not (candidate.get("status") == "UNAVAILABLE_OR_REJECTED"
             and isinstance(diagnostic, dict) and diagnostic.get("code") == _SOURCE_BUDGET_CODE):
         return baseline
