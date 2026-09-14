@@ -1,0 +1,211 @@
+{
+  "completion": "COMPLETE",
+  "discovery": {
+    "as_of": "2026-09-14T04:58:01.106930Z",
+    "contradiction_or_mapping_warning": "行业成员身份不是收入/利润/现金流受益证明。",
+    "current_market_expression": null,
+    "discovery_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+    "economic_direction": "价格观察触发的首次公司业务与经济暴露核验，方向未定",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "statement": "Saved dated Stock observation and full declared issuer bodies are supplied; price does not establish benefit."
+      }
+    ],
+    "known_stop_or_downgrade_condition": "Pre可停止；Quick只在原路由要求时执行。必需来源或技术失败不得包装为WAIT。",
+    "next_discriminating_search": "用原定期报告和后续公告检查业务对应、经济重大性及反证；不把股份或行业分类当作盈利暴露。",
+    "schema_version": 1,
+    "security_id": "SSE:603353",
+    "source_lane": "STOCK_MARKET_EXPRESSION",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-14T04:57:59.137509Z",
+        "evidence_artifact_id": "368541be-a53c-5f3f-bad5-1eeb622c8ded",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5/research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "603353",
+    "why_now": "Human许可的已保存来源预检合法续作；显式绑定父失败、已消耗恢复和当前读取，不是新价格问题。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "2003e6a12c8e1cd9f05f75e29a5025970bc1df3118d82ff177335ae621a80e33",
+  "pre_research": {
+    "as_of": "2026-09-14T04:58:01.106930Z",
+    "basic_business_role": "和顺石油（603353）原主营为成品油批发、零售，并覆盖仓储、物流及加油站运营；2026年上半年通过收购奎芯科技进入半导体高速接口IP、Chiplet解决方案及芯片定制服务领域。当前材料显示，公司仍以成品油业务为主要收入来源，同时已形成能源与半导体并行的业务结构。",
+    "current_expression_or_leadership": "市场表达已观察到：截至2026年9月11日，公司收盘价39.25元，单日原始涨幅约3.15%；近5个交易日、20个交易日原始涨幅分别约15.68%、24.17%，同期触发板块“油品石化贸易”涨幅约1.87%、7.83%。公司相对该板块的超额表现约为13.81个百分点、16.34个百分点；近60个交易日公司原始跌幅约3.68%，板块基本持平。该信息仅证明价格表达，不证明公司主营业务受益或价格上涨原因。",
+    "current_market_expectation_hypothesis": "UNKNOWN。材料未提供可验证的市场一致预期、估值假设或价格上涨归因。可以观察到市场对公司近期表达强于“油品石化贸易”板块，但不能据此推断市场正在定价成品油改善、半导体并购成功、股权激励，或任何具体利润路径。",
+    "discovery_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+    "economic_direction": "现有材料显示，成品油业务收入规模大但受到新能源车替代、销量下降及油价波动影响；半导体业务具有潜在新增收入来源，但在2026年上半年纳入合并报表后的收入和利润贡献仍较小且为负。公司整体利润显著增长主要包含投资收益、公允价值变动及油价、批零价差等因素，不能简单归因于触发板块或半导体业务。",
+    "largest_unknown": "半导体业务收购后的持续经营质量和真实盈利能力，包括客户合同可验证性、订单转化、IP授权及量产后的权利金规模、毛利率、现金回款、核心人员稳定性，以及商誉和相关无形资产的可收回性，均缺少本次材料范围内的充分独立验证；此外，2026年9月14日股东会对股权激励及企业类型变更的最终表决结果在当前读取中未提供。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第11、13—15、148—149页，公司主营包括成品油零售、批发、仓储物流等；2026年上半年主营业务收入为13.4164亿元，其中零售收入5.8671亿元、批发收入7.5493亿元，成品油零售销量6.84万吨、批发销量11.15万吨。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第15页，2026年上半年营业收入13.6832亿元，同比下降6.05%；营业成本12.1506亿元，同比下降9.41%；经营活动现金流量净额9479.60万元，同比下降57.34%。公司披露营业收入下降主要系新能源车影响下零售销量下降，经营现金流下降主要系预付账款及存货增加。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第8—9、43、151—152、195—196页，归属于母公司股东的净利润为8155.03万元，同比增长480.48%，扣除非经常性损益后的净利润为2446.29万元，同比增长281.46%；投资收益为6866.45万元、公允价值变动收益为553.46万元，非经常性损益合计为5708.74万元。报告披露净利润增长包含原油价格上涨带来的批零价差扩大、证券投资公允价值及处置收益增加等因素。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第11—14、160—168页，公司2026年5月完成对奎芯科技的收购并取得控制权；交易对价5.4亿元，取得35.1105%股权并通过表决权安排合计控制51.1105%表决权，奎芯科技纳入合并范围。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第12—13、160—168页，奎芯科技主营高速接口IP研发与授权、Chiplet解决方案、高速互联产品及一站式芯片定制；购买日至期末收入为934.45万元、净利润为负1062.04万元，经营活动现金流为1335.07万元。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第135—136、161—162页，收购奎芯科技形成商誉4.1909亿元；报告期末奎芯科技相关无形资产账面价值约1.4300亿元，报告披露商誉减值准备项目为不适用，但本次材料未提供足以独立验证未来现金流或可收回金额的外部证据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年半年度报告》原文第21页，公司明确披露国际油价波动、充电设备迭代、收购整合及核心人员流失风险；其中收购整合风险来自上市公司此前缺乏半导体行业管理经验，核心人员流失风险与技术、IP迭代、客户维护及市场拓展对关键人员的依赖有关。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油2026年股票期权激励计划（草案）》原文第3—5、18—22、26—27页及《实施考核管理办法》第3页，公司拟向200名对象授予360万份股票期权，行权价26.25元/份；2026、2027年度营业收入增长目标分别为8%、15%，触发值分别为5%、10%，或扣非净利润增长目标分别为225%、230%。按草案假设测算，预计股份支付总额为2610.77万元，但实际金额取决于实际授权日、公允价值及可行权数量。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "INFERENCE",
+        "statement": "将报告期收入结构、利润构成和现金流结合，较合理的解释是：公司利润改善主要由成品油价差及金融资产相关收益共同推动，而非已经被当前材料证明的半导体业务盈利贡献。该判断是对披露数据的归因性推断，不是公司未来利润预测。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "INFERENCE",
+        "statement": "触发板块“油品石化贸易”与公司原主营成品油批发、零售存在业务名称层面的联系；同时，公司在该板块中的成员关系和价格路由仅能支持分类联系，不能证明板块上涨会传导为公司收入、利润或现金流改善。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "INFERENCE",
+        "statement": "半导体业务短期可能增加公司收入来源并改变业务组合，但截至2026年上半年，其纳入合并后的披露收入规模相对集团总体收入较小且净利润为负，因此当前材料不足以证明该业务已经成为公司整体利润或现金流的主要驱动。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "MARKET_CONTEXT",
+        "statement": "当前市场数据记录显示，公司近5日和20日价格表现明显强于“油品石化贸易”板块，但价格路径不能证明业务受益、不能证明上涨由半导体并购或股权激励引起，也不能替代收入、利润和现金流证据。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据当前来源继承材料，最近一次CNINFO库存检查覆盖至2026年9月14日，选定公告中包括2026年9月9日披露的激励对象名单公示核查说明；但当前读取状态标记为PRE_EXECUTION_FAILURE，且独立财务顾问报告原PDF第23页的必需视觉复核被标记为不可用，因此该来源包不满足完整的技术验收。"
+      },
+      {
+        "evidence_artifact_ids": [
+          "368541be-a53c-5f3f-bad5-1eeb622c8ded"
+        ],
+        "kind": "FACT",
+        "statement": "根据《和顺石油董事会薪酬与考核委员会关于2026年股票期权激励计划激励对象名单的核查意见及公示情况说明》原文第1—3页，公司称已于2026年8月29日至9月7日公示激励对象名单，公示期间未收到异议；但这属于公司公告中的陈述，不能替代对公示过程及底层人员资料的独立核验。"
+      }
+    ],
+    "next_discriminating_search": "在技术复核完成后，优先核验三类材料：一是2026年9月14日临时股东会决议、律师见证及股票期权后续授予登记公告；二是奎芯科技2026年下半年及全年按IP授权、权利金、芯片定制和量产客户拆分的收入、毛利、回款与新增订单证据；三是收购业绩承诺执行、商誉减值测试、核心客户及核心人员稳定性材料，并将其与成品油销量、批零价差、经营现金流和金融投资收益分开核验。",
+    "obvious_contradiction": "存在需要谨慎处理的表述差异：半年度报告摘要及正文显示公司2026年上半年营业收入同比下降、零售销量受新能源车影响下降，但公司管理层同时表述主营营收与利润稳步增长；此外，报告将归母净利润大幅增长同时归因于油品批零价差及证券投资收益，不能将利润增幅直接视为主营业务改善。另有部分来源表格对行权价格参考均价的展示存在格式差异，正式判断应以公司公告原文及后续决议为准。",
+    "potential_fundamental_driver": "当前可被材料支持的潜在基本面驱动有两条：第一，成品油业务的国际油价、国内调价机制、批零价差、销量和库存管理；第二，奎芯科技半导体IP业务的客户导入、授权收入、量产权利金、芯片定制交付及核心人才保留。当前尚不能确认哪一条将主导未来利润或现金流。",
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "虽然现有材料足以形成有限的业务联系与财务暴露初读，但当前来源继承状态明确为PRE_EXECUTION_FAILURE，且独立财务顾问报告原PDF第23页被标记为必需视觉复核不可用。根据边界规则，不能把未完成的技术复核伪装成已完成等待；应等待技术修复或重新提供可验收读取后再继续。",
+    "schema_version": 1,
+    "what_is_this": "这是对和顺石油（603353）被“油品石化贸易”触发板块表面带动后，主营业务联系、收入利润现金流暴露、支持证据、反证、替代解释及未知项的有界研究读数，不是投资建议或价格原因认证。",
+    "why_surfaced_now": "公司因近期相对“油品石化贸易”板块出现较强价格表达而被筛出；本次续作由已保存来源预检、父失败恢复和当前读取触发，重点不是新增价格事件，而是核验该市场表达是否能与公司真实业务及财务暴露建立证据链。"
+  },
+  "quick_research": null,
+  "receipt": {
+    "completion": "COMPLETE",
+    "elapsed_minutes_observed": 2,
+    "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+    "finished_at": "2026-09-14T04:59:32.909250Z",
+    "input_hash": "2003e6a12c8e1cd9f05f75e29a5025970bc1df3118d82ff177335ae621a80e33",
+    "last_completed_stage": "PRE",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+    "platform_task_id": "34807883332",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-14T04:58:01.106930Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "368541be-a53c-5f3f-bad5-1eeb622c8ded",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5/research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 2,
+    "started_at": "2026-09-14T04:58:08.205573Z",
+    "stop_or_failure_reason": null,
+    "technical_retries_used": 0,
+    "tool_calls_used": 2,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-14T04:58:08.205602Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5/research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-14T04:59:32.908859Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "SUB2API_RESPONSES:PRE",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
