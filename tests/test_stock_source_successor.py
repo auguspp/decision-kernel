@@ -4,7 +4,6 @@ No live source, GitHub Actions dispatch or model call occurs here. The real
 artifact/request identities are asserted as immutable configuration only.
 """
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -113,4 +112,4 @@ def test_workflow_has_one_explicit_successor_flag_not_a_second_executor():
     assert text.count("source-successor:") == 1
     assert "--source-successor" in text
     assert text.count("research-stock-business:") == 1
-    assert "test ! \\( \"$RECOVER_SOURCES\" = true -a \"$SOURCE_SUCCESSOR\" = true \\)" in text
+    assert 'test ! \\( "$RECOVER_SOURCES" = true -a "$SOURCE_SUCCESSOR" = true \\)' in text
