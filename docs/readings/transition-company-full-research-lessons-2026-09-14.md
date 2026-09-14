@@ -1,6 +1,7 @@
 # Transition-company Full Research lessons — 2026-09-14
 
-Status: **HUMAN-REQUESTED METHOD RETROSPECTIVE / REUSABLE RESEARCH DISCIPLINE / NO SCHEMA OR RUNTIME CHANGE**  
+Status: **HISTORICAL CASE-SPECIFIC PREDECESSOR / RETAINED / GENERAL METHOD SUPERSEDED BY `docs/full-research-economic-architecture-and-causal-state-space-v1.md` / NO SCHEMA OR RUNTIME CHANGE**  
+Current general method: `docs/full-research-economic-architecture-and-causal-state-space-v1.md`. Body retained as origin-case history and case-specific addendum.  
 Origin case: 兴业科技 / 002674.SZ Full Research challenge  
 Repository method context: `docs/RESEARCH-ENTRY.md`, `docs/full-research-review-gate-v1.md`, `docs/full-research-price-implied-economics-closure-v1.md`, `docs/decision-hygiene-method-note-2026-09-03.md`  
 Investment Authority: **NONE**

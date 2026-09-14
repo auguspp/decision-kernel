@@ -1,6 +1,6 @@
 # Research / Odds / First Entry — 统一执行入口
 
-Version: research-decision-handoff-v1 · 2026-09-13  
+Version: research-decision-handoff-v1.1 · 2026-09-14  
 Status: HUMAN-APPROVED PROCESS DISCIPLINE / NO KERNEL SCHEMA OR RUNTIME CHANGE  
 Scope: ChatGPT、外部研究者与仓库会话中的公司研究、估值、Odds、第一笔讨论及其质疑复核。Investment authority = NONE。
 
@@ -8,7 +8,7 @@ Scope: ChatGPT、外部研究者与仓库会话中的公司研究、估值、Odd
 
 Repository: `auguspp/decision-kernel`。每次新研究或接续先解析 `main` 一次，固定为 M；本文件、方法和当前案例更正说明均按 M 读取。旧研究按其明确记录的历史 commit/path/blob 读取，不混成同一时点。保留本次 M 与读取结果。
 
-先看本文，再按任务使用原有 [Full Research Review Gate](full-research-review-gate-v1.md)、[Price-Implied Economics Closure](full-research-price-implied-economics-closure-v1.md)、[Decision Hygiene](decision-hygiene-method-note-2026-09-03.md)。准备记录 Human 决定时读 [决策/结果协议](prospective-decision-outcome-capture-protocol-2026-09-03.md)。不是每次全文复述给用户。
+先看本文。凡进入 decision-use Full Research、世界构造、估值、Price-Implied Worlds 或第一笔工作，先读 [Economic Architecture & Causal State Space](full-research-economic-architecture-and-causal-state-space-v1.md)，再按任务使用原有 [Full Research Review Gate](full-research-review-gate-v1.md)、[Price-Implied Economics Closure](full-research-price-implied-economics-closure-v1.md)、[Decision Hygiene](decision-hygiene-method-note-2026-09-03.md)。准备记录 Human 决定时读 [决策/结果协议](prospective-decision-outcome-capture-protocol-2026-09-03.md)。不是每次全文复述给用户。
 
 只有需要声称生产/监控/待办状态时，再按 [current-state 消费协议](current-state.md) 独立解析 `read-model/current-state` 为 R，整包保持同一 R；M 不是 R。档案存在不等于已登记、持续观察、Human 接受或交易发生。读取失败就报告读取缺口，不从聊天猜测状态。
 
@@ -40,11 +40,13 @@ Human 已明确的条件直接复用并引用原话。跨公司沿用三年/10%�
 
 ## 2. 有限轮次研究，不让 Human 反复充当研究主管
 
-先定义经济模型与关键矛盾，再闭合收入→经营利润→归母/扣非→经营现金→再投资→股东现金。只深挖会改变判断的 3–5 个变量。对每个 UNKNOWN 保存重要性、下一项可区分证据、现在能否缩小、处置与 STOP 理由。
+先建立 Economic Architecture，再定义经济模型与关键矛盾：识别足以改变 owner outcomes 的经济引擎，说明各引擎的收入/利润/现金/资本回报，画出替代、共享固定成本、交叉补贴、资本迁移、营运资金和融资等重大关系，再识别能够独立变化的 load-bearing causal axes。**不要先写 Bear/Base/Bull 再往里填数字。**
+
+在此基础上闭合收入→经营利润→归母/扣非→经营现金→再投资→股东现金，并把引擎级状态重新勾稽到集团 owner cash / ROIC。只深挖会改变判断的 3–5 个变量。对每个 UNKNOWN 保存重要性、下一项可区分证据、现在能否缩小、处置与 STOP 理由。
 
 可以在一次用户请求内做 bounded passes；不用为格式造多轮，也不默认写完背景就算 Full Research。公开信息只能等待未来验证时 STOP，继续交付条件分析。资料取得失败与公开信息确实不足分开，不把前者称作穷尽公开证据。
 
-公司披露证明其实际报告/表述了什么，不自动证明可持续经济利润。行业研究和竞争对照应服务于驱动变量，不以管线数量、主题标签或成交上涨代替收入和现金。
+公司披露证明其实际报告/表述了什么，不自动证明可持续经济利润。行业研究、周期、竞争与价值链对照应服务于 load-bearing variables：谁有议价权、什么会改变利用率/价格/成本/份额、同行如何反应、哪些现象是周期而非结构。不要以管线数量、主题标签、TAM 或成交上涨代替收入、资本回报和现金。
 
 ## 3. 独立经营研究 → 市场对照 → 显式修订
 
@@ -60,7 +62,7 @@ Market Expectation 表至少区分：机构、报告日、目标财年、利润�
 
 ## 4. 经营与估值分别论证，再做联合压力测试
 
-每个世界说明量价、产品组合、产能利用率、成本/费用、资本投入、营运资金如何共同形成利润和现金。盈利区间不是独立建模完成的证明。
+世界必须来自已建立的 Economic Architecture 与独立 causal axes。每个世界说明各经济引擎的量价、产品组合、产能利用率、成本/费用、资本投入、营运资金如何共同形成集团利润和 owner cash；盈利区间不是独立建模完成的证明。经济上可行时必须主动检查反对角世界，例如旧业务变差+新业务成功、收入增长+利润率下降、利润增长+现金变差、新业务成功+ROIC仍差，而不是只保留整家公司 low/medium/high 同方向变化。
 
 倍数、折现率和增长持续期复用原 Gate 2 的独立论证要求；条件敏感性中可以测试未验证参数，但不能标为合理公允估值或默认第一笔。至少检查业绩改善但估值收缩，以及一般业绩而溢价延续，不只保留低利润×低PE、高利润×高PE的对角线。
 
@@ -74,7 +76,7 @@ Market Expectation 表至少区分：机构、报告日、目标财年、利润�
 
 现金、新业务、股权/royalty 必须回答是否已在利润或现金流中；不清楚就不重复加值。费用化研发不二扣，资本化研发仍扣现金；新增融资不是自由现金。分红与期末余额相互勾稽。A价×A+H股数可作每股条件计算，不能冒称实际A/H合计市值。
 
-无法合理约束估值桥，仍可交付 BOUNDED CONDITIONAL REQUIREMENTS，但默认第一笔保持 NOT METHOD-READY。UNKNOWN 不阻断所有分析，也不授权虚构完整价格梯度。
+无法合理约束 Economic Architecture、owner-economics 或估值桥，仍可交付 BOUNDED CONDITIONAL REQUIREMENTS，但默认第一笔保持 NOT METHOD-READY。UNKNOWN 不阻断所有分析，也不授权虚构完整价格梯度。
 
 ## 6. 第一笔使用条件卡，不强制五档价格
 
@@ -94,7 +96,7 @@ Market Expectation 表至少区分：机构、报告日、目标财年、利润�
 
 重要数字逐项核对输入→公式→输出→文字/JSON。1亿元=100000000元=0.1bn CNY；用真实复算，不能凭表格看起来合理就通过。受挑战的行动边界暂停复用，不能把 Kernel 身份校验当经济真相验证。
 
-简短交付至少包含：Belief；Price-Implied条件；联合经营/估值世界及完整下行；Odds/第一笔的资格和条件；关键敏感性；Reopen条件。底稿保存以上过程，不把正文写成流水账。
+简短交付至少包含：Economic Architecture/关键引擎和关系；Belief；Price-Implied条件；联合经营/估值世界及完整下行；Odds/第一笔的资格和条件；关键敏感性；Reopen条件。底稿保存以上过程，不把正文写成流水账。
 
 交接最小记录（Markdown足够，不新增schema）：
 
@@ -102,7 +104,8 @@ Market Expectation 表至少区分：机构、报告日、目标财年、利润�
 M / Research版本与源文件身份 / 方法版本
 cutoff / 证券与股类 / 价格日期、来源、authority
 期限、回报、损失与分红假设 / 哪些为Human明确、哪些待确认
-经营假设前后变化 / 市场对照可比性 / 估值桥与重复计价
+Economic Architecture / 独立causal axes / 关键关系与替代Reference Frame
+经营假设前后变化 / 市场对照可比性 / owner-economics与估值桥 / 重复计价
 算术实际执行回执 / 模型挑战处置 / 决定性UNKNOWN与STOP
 当前结果：条件分析、provisional、canonical分别是否成立
 Human原话及接受范围 / 决定与成交是否有记录
@@ -115,4 +118,6 @@ Human原话及接受范围 / 决定与成交是否有记录
 
 [两例回放](dogfood/research-handoff-replay-2026-09-13.md)区分实际算术检查、人工语义复核、尚未完成的新聊天消费端测试及事后收益检验。不能互相替代。
 
-本协议是已有9月3日方法与Review Gate的执行补充，不是Research v3，不修改Kernel宪法/概率/行情/唤醒/仓位语义。要求定义与优先级仍由Requirements Management负责，runtime实现仍由Main Construction负责。#321只承接方法验收材料，不因本文自动开工。用户未要求的任务、行情重跑、研究循环和监控均不启动。
+Full Research 的一个长期质量信号是：**Human 仍需亲自发现多少个 Research 本应主动提出的 load-bearing questions。** Human 与模型判断不同很正常；Human 反复发现“这么关键的问题你根本没问”则应进入 Research postmortem，并先区分 METHOD GAP / EXECUTION GAP / SOURCE GAP / JUDGMENT GAP，不要把每次 execution miss 都机械增加成 checklist。
+
+本协议是已有9月3日方法、Economic Architecture 方法与Review Gate的执行组合，不修改Kernel宪法/概率/行情/唤醒/仓位语义。要求定义与优先级仍由Requirements Management负责，runtime实现仍由Main Construction负责。#321只承接方法验收材料，不因本文自动开工。用户未要求的任务、行情重跑、研究循环和监控均不启动。
