@@ -14,12 +14,13 @@ from . import external_research_identity as identity
 from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_source_recovery as recovery
+from . import stock_source_successor as successor
 
 
-# Additive bounds for the new lane, not a reduction of the original 180/60.
-# At most 24 exact source reads + 24 new blob writes + metadata fit 64 calls.
-EXTRA_API_CALLS = 64
-MAX_STOCK_SOURCE_FILES = 24
+# Additive bounds for the Stock lane, not a reduction of the original 180/60.
+# The two bounded successor children add at most eight exact work/source reads.
+EXTRA_API_CALLS = 72
+MAX_STOCK_SOURCE_FILES = 32
 
 
 def call_limit(api):
@@ -93,8 +94,6 @@ def _collect(collector, payload):
     model.check(len(codes) == len(set(codes)) == stock['coverage']['qualified_issuers']
                 and len(codes) <= 16, 'Stock business reading scope differs')
     invocation = attempts(collector)
-    # Reuse the publisher's exact matching-ref discovery, not exception identity
-    # across `python -m` and an imported copy of the delivery module.
     refs = api.get('git/matching-refs/heads/' + intake.WORK_REF)
     model.check(isinstance(refs, list) and len(refs) <= 16
         and all(isinstance(r, dict) and isinstance(r.get('ref'), str) for r in refs),
@@ -112,12 +111,15 @@ def _collect(collector, payload):
     rows = intake.inventory(api, commit)
     needed, groups = set(), {}
     for code in codes:
-        for is_recovery, (eid, prefix) in ((False, intake.execution(code)), (True, recovery.execution(code))):
+        role_specs = [('ROOT', intake.execution(code)), ('RECOVERY', recovery.execution(code))]
+        if code in successor.TARGETS:
+            role_specs.append(('SUCCESSOR', successor.execution(code)))
+        for role, (eid, prefix) in role_specs:
             names = {path[len(prefix):] for path in rows
                      if path.startswith(prefix) and '/' not in path[len(prefix):]}
-            if is_recovery and not names:
+            if role != 'ROOT' and not names:
                 continue
-            groups[(code, is_recovery)] = (eid, prefix, names)
+            groups[(code, role)] = (eid, prefix, names)
             if names:
                 model.check('prepare.json' in names, 'Stock work missing original reservation')
                 needed.add(prefix + 'prepare.json')
@@ -137,7 +139,7 @@ def _collect(collector, payload):
     extra_bytes = sum(size for path, size in extra_files.items() if path not in collector.files)
     model.check(sum(map(len, collector.files.values())) + extra_bytes + 256*1024 <= delivery.MAX_RETAINED_OUTPUT,
                 'Stock work would consume original retained-byte reserve')
-    model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 5 <= call_limit(api),
+    model.check(api.calls + len(needed) + len(set(collector.files) | set(extra_files)) + 9 <= call_limit(api),
                 'Stock work would consume original publication API reserve')
     raw_cache = {}
     def fetched(path):
@@ -147,11 +149,12 @@ def _collect(collector, payload):
                     'Stock work source bytes differ')
         stored = collector.retain('sources/git/' + rows[path]['sha'] + '/' + Path(path).name, data)
         return data, {'repository': model.REPOSITORY, 'ref': commit, 'path': path, **stored}
-    items, parents = [], {}
-    for (code, is_recovery), (eid, prefix, names) in groups.items():
+    items, roots, recoveries = [], {}, {}
+    for (code, role), (eid, prefix, names) in groups.items():
         item = {'thscode': code, 'execution_id': eid, 'candidate_output_prefix': prefix,
                 'question_kind': intake.QUESTION_KIND, 'semantic_acceptance': 'NOT_ESTABLISHED_BY_READER',
                 'registered_current_handoff': False, 'terminal_state': None, **model.AUTHORITY, 'sources': {}}
+        packet = None; prep = None
         if not names:
             item['status'] = 'NOT_STARTED'
         else:
@@ -189,15 +192,18 @@ def _collect(collector, payload):
                             finished_at=failure.get('finished_at'))
             else:
                 item['status'] = 'RETAINED_NO_RESEARCH_RESULT'
-        if is_recovery:
-            root = parents[code]
-            _, root_prefix, root_names = groups[(code, False)]
-            model.check(root['status'] == 'PRE_EXECUTION_FAILURE' and not any(n in root_names for n in
-                ('launch.json', 'input.json', 'candidate.json', 'funnel.json', 'admission.json', 'receipt.json')),
-                'Stock recovery parent has execution history')
-            parent_selection = identity._json(raw_cache[root_prefix + 'prepare.json'])
-            parent_failure = identity._json(raw_cache[root_prefix + 'failure.json'])
-            recovery.parent(code, parent_selection, parent_failure)
+        if role == 'ROOT':
+            items.append(item); roots[code] = item
+            continue
+        root = roots[code]
+        _, root_prefix, root_names = groups[(code, 'ROOT')]
+        model.check(root['status'] == 'PRE_EXECUTION_FAILURE' and not any(n in root_names for n in
+            ('launch.json', 'input.json', 'candidate.json', 'funnel.json', 'admission.json', 'receipt.json')),
+            'Stock child parent has execution history')
+        parent_selection = identity._json(raw_cache[root_prefix + 'prepare.json'])
+        parent_failure = identity._json(raw_cache[root_prefix + 'failure.json'])
+        recovery.parent(code, parent_selection, parent_failure)
+        if role == 'RECOVERY':
             binding = prep['source_recovery']
             model.check(binding['kind'] == recovery.MODE and binding['new_disclosure'] is False
                 and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
@@ -206,7 +212,7 @@ def _collect(collector, payload):
                 and prep['origin'] == parent_selection['origin'], 'Stock recovery reading parent differs')
             for key in ('parent_selection', 'parent_failure'):
                 identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
-            if 'candidate.json' in names:
+            if packet is not None:
                 for key in ('parent_selection', 'parent_failure', 'request', 'exposure'):
                     spec = binding[key]
                     matches = [r.model_dump(mode='json') for r in packet.source_refs if r.purpose == spec['purpose']]
@@ -214,16 +220,44 @@ def _collect(collector, payload):
                         for k in ('repository', 'ref', 'path', 'git_blob', 'sha256')),
                         'Stock recovery candidate lost bound predecessor or permission')
             item.update(work_kind='SOURCE_PREPARATION_RECOVERY', new_disclosure=False)
-            root['source_recovery'] = item
-        else:
-            items.append(item)
-            parents[code] = item
+            root['source_recovery'] = item; recoveries[code] = item
+            continue
+        # Successor is legal only after the exact failed recovery was preserved.
+        model.check(code in recoveries and recoveries[code]['status'] == 'PRE_EXECUTION_FAILURE',
+                    'Stock successor lacks preserved failed recovery')
+        _, recovery_prefix, recovery_names = groups[(code, 'RECOVERY')]
+        model.check('prepare.json' in recovery_names and 'failure.json' in recovery_names,
+                    'Stock successor recovery history incomplete')
+        binding = prep['source_successor']
+        model.check(binding['thscode'] == code and binding['execution_id'] == eid
+            and prep['observation'] == parent_selection['observation'] and prep['origin'] == parent_selection['origin']
+            and binding['parent_selection']['path'] == root_prefix + 'prepare.json'
+            and binding['parent_failure']['path'] == root_prefix + 'failure.json'
+            and binding['recovery_selection']['path'] == recovery_prefix + 'prepare.json'
+            and binding['recovery_failure']['path'] == recovery_prefix + 'failure.json',
+            'Stock successor reading predecessor differs')
+        for key in ('parent_selection', 'parent_failure', 'recovery_selection', 'recovery_failure'):
+            identity._checked_source(binding[key], lambda spec: raw_cache[spec['path']])
+        if packet is not None:
+            # intake.describe validates exact purposes/paths; additionally retain and
+            # recheck the permission/current-reading sources from their pinned refs.
+            refs = {r.purpose: r.model_dump(mode='json') for r in packet.source_refs}
+            for purpose in (successor.REQUEST_PURPOSE, successor.EXPOSURE_PURPOSE):
+                spec = refs[purpose]
+                data = identity._checked_source(spec, lambda s: api.file(s['path'], s['ref']))
+                retained = collector.retain('sources/git/' + model.blob_sha(data) + '/' + Path(spec['path']).name, data)
+                model.check(retained['git_blob'] == spec['git_blob'] and retained['sha256'] == spec['sha256'],
+                            'Stock successor pinned source differs')
+        item.update(work_kind='SOURCE_PREPARATION_SUCCESSOR', new_disclosure=False)
+        root['source_successor'] = item
     return {'status': 'READ_OK', 'work_ref': intake.WORK_REF, 'work_commit': commit,
             **invocation,
             'scope': 'CURRENT_QUALIFIED_STOCKS_FIRST_BUSINESS_BASELINES_NOT_ALL_RESEARCH',
-            'items': items, 'source_recovery_counts': {status: sum(
-                i.get('source_recovery', {}).get('status') == status for i in items) for status in
-                ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
+            'items': items,
+            'source_recovery_counts': {status: sum(i.get('source_recovery', {}).get('status') == status for i in items)
+                for status in ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
+            'source_successor_counts': {status: sum(i.get('source_successor', {}).get('status') == status for i in items)
+                for status in ('RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE','VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},
             'counts': {status: sum(i['status'] == status for i in items) for status in
                 ('NOT_STARTED','RETAINED_NO_RESEARCH_RESULT','PRE_EXECUTION_FAILURE',
                  'VALIDATED_EXECUTION_GAP','VALIDATED_FUNNEL_CANDIDATE')},

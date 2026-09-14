@@ -51,17 +51,28 @@ def authorize(api, code, request, *, request_path=REQUEST, mode=intake.QUESTION_
 
 
 def run_item(*, api, code, request, item, origin, reading_commit, output,
-             capture=sources.capture, call=None, clock=once.now, recovery_request=None, full_input=False):
+             capture=sources.capture, call=None, clock=once.now, recovery_request=None,
+             full_input=False, successor_session=None):
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "unsafe Stock output")
     from . import stock_source_recovery as recovery
     once.require(type(full_input) is bool, "invalid full input mode")
+    successor = None
+    if successor_session is not None:
+        from . import stock_source_successor as successor
+        once.require(recovery_request is None and full_input is True,
+                     "Stock successor requires full input and cannot reuse old recovery")
+        if capture is sources.capture:
+            capture = partial(successor.capture, session=successor_session)
     if full_input:
         from . import stock_full_input_bridge as bridge
         once.require(item["thscode"][:6] in bridge.full.TICKERS and recovery_request is None,
                      "full input not permitted for this scope or old recovery")
         if capture is sources.capture:
             capture = bridge.capture_complete
-    expected = intake.execution(item["thscode"]) if recovery_request is None else recovery.execution(item["thscode"])
+    if successor_session is not None:
+        expected = successor.execution(item["thscode"])
+    else:
+        expected = intake.execution(item["thscode"]) if recovery_request is None else recovery.execution(item["thscode"])
     once.require((item["execution_id"], item["prefix"]) == expected
         and item["security_id"] == intake.security(item["thscode"])
         and item["observation"]["thscode"] == item["thscode"], "Stock item identity differs")
@@ -77,6 +88,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
     pre_preview = None
     try:
         authorize(api, code, request)
+        if successor_session is not None:
+            authorize(api, code, successor_session.request, request_path=successor.REQUEST, mode=successor.MODE)
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
@@ -92,18 +105,24 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         if recovery_request is not None:
             binding = recovery.bind(api=api, code=code, request=recovery_request,
                 item=item, origin=origin, clock=clock)
+        elif successor_session is not None:
+            binding = successor_session.for_code(item["thscode"])
         reservation = retain.save("prepare.json", {"schema_version": 1, "thscode": item["thscode"],
             "execution_id": item["execution_id"], "question_kind": intake.QUESTION_KIND,
             "origin": origin, "observation": item["observation"], "code_commit": code,
             "permission": request["permission"], "started_at": clock(),
-            **({"source_recovery": binding} if binding else {}), **reading.AUTHORITY})
+            **({"source_successor": binding} if successor_session is not None else
+               ({"source_recovery": binding} if binding else {})), **reading.AUTHORITY})
         reservation["purpose"] = "STOCK_BASELINE_SELECTION"
         reserved = True
         receipt["phase"] = "SOURCE_PREPARATION"
         context, reads, source_process = capture(ticker=item["thscode"][:6],
             observation={"origin": origin, "row": item["observation"]}, api=api,
             code_commit=code, output=output / "sources", clock=clock)
-        if binding is not None:
+        if successor_session is not None:
+            successor.check_materials(successor_session, binding, context)
+            context["source_successor"] = binding
+        elif binding is not None:
             recovery.check_materials(binding, context)
             context["source_recovery"] = binding
         if full_input:
@@ -152,7 +171,11 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         once.require(reading.clock(saved_reading["checks"]["finished_at"]) <= reading.clock(clock())
                      <= reading.clock(saved_reading["checks"]["recheck_after"]), "Stock reading window expired")
         selected = clock(); cutoff = clock()
-        parent_refs = [binding[k] for k in ("parent_failure", "parent_selection", "request", "exposure")] if binding else []
+        if successor_session is not None:
+            parent_refs = successor.source_refs(binding) + [successor_session.binding["request"],
+                                                            successor_session.binding["current_reading"]]
+        else:
+            parent_refs = [binding[k] for k in ("parent_failure", "parent_selection", "request", "exposure")] if binding else []
         packet = ExternalResearchInputPacket(execution_id=item["execution_id"], case_id=item["thscode"],
             ticker=item["thscode"][:6], security_id=item["security_id"], source_lane=intake.LANE,
             selected_at=selected, research_cutoff=cutoff, code_commit=code, current_state_commit=reading_commit,
@@ -181,14 +204,20 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
             economic_direction="价格观察触发的首次公司业务与经济暴露核验，方向未定",
             factual_observations=[{"statement": "Saved dated Stock observation and full declared issuer bodies are supplied; price does not establish benefit.", "evidence_artifact_ids": [seed.id]}],
             source_lineage=[{"evidence_artifact_id": seed.id, "source_locator": seed.source_locator, "available_at": seed.available_at}],
-            why_now=("Human许可的原Stock来源准备失败修复；保留父失败，不是新价格发现或独立新公告。"
-                     if binding else "原Stock合格观察首次进入业务研究；不是今日新增公告或自动受益认定。"),
+            why_now=("Human许可的已保存来源预检合法续作；显式绑定父失败、已消耗恢复和当前读取，不是新价格问题。"
+                     if successor_session is not None else
+                     ("Human许可的原Stock来源准备失败修复；保留父失败，不是新价格发现或独立新公告。"
+                      if binding else "原Stock合格观察首次进入业务研究；不是今日新增公告或自动受益认定。")),
             contradiction_or_mapping_warning="行业成员身份不是收入/利润/现金流受益证明。",
             next_discriminating_search=packet.next_discriminating_search,
             known_stop_or_downgrade_condition="Pre可停止；Quick只在原路由要求时执行。必需来源或技术失败不得包装为WAIT。")
         if bound_context is not None:
             authorize(api, code, request)
-            sources.recheck(context, api=api, code_commit=code, clock=clock)
+            if successor_session is not None:
+                successor.recheck(api=api, code=code, session=successor_session,
+                                  binding=binding, context=context, clock=clock)
+            else:
+                sources.recheck(context, api=api, code_commit=code, clock=clock)
             bound_context.recheck(checks["load"])
             pre_preview = bridge.preview_pre(packet, discovery, context, bound_context)
             bound_context = bound_context.prepared(pre_preview)
@@ -199,18 +228,24 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         once.require(preliminary["research_execution_allowed"], preliminary["reason"])
         retain.save("launch.json", {"id": packet.execution_id, "input_hash": canonical_hash(packet),
             "public_egress_hash": egress, "permission": request["permission"], "automatic_retry": False,
+            **({"source_successor": successor_session.binding["source_preparation"]} if successor_session is not None else {}),
             **({"full_input": bound_context.record(), "pre_request_preview": pre_preview} if bound_context else {})})
         checks["checked_at"] = clock()
         def execute(exact, key):
             once.require(exact == checks["input_raw"] and key == checks["expected_key"], "Stock callback identity differs")
             def guarded(stage, prompt, model, out, usage):
                 authorize(api, code, request)
-                if binding is not None:
+                if successor_session is not None:
+                    successor.recheck(api=api, code=code, session=successor_session,
+                                      binding=binding, context=context, clock=clock)
+                elif binding is not None:
                     fresh = recovery.bind(api=api, code=code, request=recovery_request,
                         item=item, origin=origin, clock=clock)
                     once.require(fresh == binding, "Stock source recovery binding changed before model")
                     recovery.check_materials(fresh, context)
-                sources.recheck(context, api=api, code_commit=code, clock=clock)
+                    sources.recheck(context, api=api, code_commit=code, clock=clock)
+                else:
+                    sources.recheck(context, api=api, code_commit=code, clock=clock)
                 if bound_context is not None:
                     bound_context.recheck(checks["load"])
                     bound_context.check_packet(packet, context)
@@ -258,9 +293,10 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
 
 
 def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_item, recover_sources=False,
-            prepare_sources=False):
-    once.require(type(prepare_sources) is bool and type(recover_sources) is bool
-        and not (prepare_sources and recover_sources), "conflicting Stock preparation/recovery modes")
+            prepare_sources=False, source_successor=False):
+    once.require(all(type(v) is bool for v in (prepare_sources, recover_sources, source_successor))
+        and sum((prepare_sources, recover_sources, source_successor)) <= 1,
+        "conflicting Stock preparation/recovery/successor modes")
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "unsafe output")
     output.mkdir(parents=True, exist_ok=False)
     request = identity._json(api.file(REQUEST, code)); authorize(api, code, request)
@@ -271,7 +307,8 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
     name = f"stock-reading-{source_run_id}-1"
     available = [a for a in artifacts["artifacts"] if a["name"] == name]
     if not available:
-        once.require(not prepare_sources, "source preparation requires a saved Stock reading artifact")
+        once.require(not (prepare_sources or source_successor),
+                     "source preparation/successor requires a saved Stock reading artifact")
         jobs = api.get(f"actions/runs/{source_run_id}/jobs?per_page=100")
         once.require(jobs["total_count"] == len(jobs["jobs"]) and jobs["jobs"], "Stock purpose metadata incomplete")
         once.require(not any(j["name"] == "stock-reading" and j.get("conclusion") != "skipped"
@@ -284,6 +321,7 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
     selected = intake.plan(run, files)
     (output / "selection.json").write_bytes(once.raw(selected))
     recovery_request = None
+    successor_session = None
     original_codes = [i["thscode"] for i in selected["items"]]
     if recover_sources:
         from . import stock_source_recovery as recovery
@@ -298,14 +336,23 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
         from .stock_source_preparation import prepare
         return prepare(api=api, code=code, selected=selected, origin=origin,
                        reading_commit=r, output=output)
+    if source_successor:
+        from . import stock_source_successor as successor
+        successor_request = identity._json(api.file(successor.REQUEST, code))
+        items, successor_session = successor.prepare(api=api, code=code, request=successor_request,
+            selected=selected, origin=origin, reading_commit=r, output=output)
+        selected = {**selected, "items": items}
     result = {"status": "COMPLETED", "source_run_id": source_run_id, "items": [],
-        "source_recovery": recover_sources, "original_qualified_issuers": original_codes,
+        "source_recovery": recover_sources, "source_successor": source_successor,
+        "original_qualified_issuers": original_codes,
         "excluded": selected["excluded"], "planned_issuers": [i["thscode"] for i in selected["items"]],
         "unattempted_issuers": [i["thscode"] for i in selected["items"]], "reading_commit": r, **reading.AUTHORITY}
     for item in selected["items"]:
         outcome = run_one(api=api, code=code, request=request, item=item, origin=origin,
             reading_commit=r, output=output / item["thscode"],
-            **({"recovery_request": recovery_request} if recovery_request is not None else {}))
+            **({"recovery_request": recovery_request} if recovery_request is not None else {}),
+            **({"successor_session": successor_session, "full_input": True}
+               if successor_session is not None else {}))
         result["items"].append(outcome)
         result["unattempted_issuers"].remove(item["thscode"])
         if outcome["status"] not in {"VALIDATED_FUNNEL_CANDIDATE", "EXISTING_BASELINE_REUSED_NO_EXECUTION"}:
@@ -324,19 +371,20 @@ def main(argv=None):
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--recover-sources", action="store_true")
     modes.add_argument("--prepare-sources", action="store_true")
+    modes.add_argument("--source-successor", action="store_true")
     args = parser.parse_args(argv)
     once.require(os.environ.get("GITHUB_REPOSITORY") == once.REPO
         and os.environ.get("GITHUB_REF") == "refs/heads/main" and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
         and os.environ.get("GITHUB_SHA") == args.code_commit, "untrusted Stock research host")
-    once.require(not (args.recover_sources or args.prepare_sources)
+    once.require(not (args.recover_sources or args.prepare_sources or args.source_successor)
                  or os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch",
-                 "Stock source preparation/recovery requires explicit native dispatch")
+                 "Stock source preparation/recovery/successor requires explicit native dispatch")
     once.require(not args.prepare_sources or not os.environ.get("SUB2API_API_KEY"),
                  "source-only preparation must not receive a model credential")
     try:
         result = consume(api=GitHubAPI(os.environ["GH_TOKEN"], max_calls=1024), code=args.code_commit,
                          source_run_id=args.source_run_id, output=args.output, recover_sources=args.recover_sources,
-                         prepare_sources=args.prepare_sources)
+                         prepare_sources=args.prepare_sources, source_successor=args.source_successor)
     except Exception as exc:
         if (args.output.is_dir() and not args.output.is_symlink()
                 and not any(p.is_symlink() for p in args.output.parents)):
@@ -349,7 +397,7 @@ def main(argv=None):
                     with (args.output / "source-preparation-failure.json").open("xb") as stream:
                         stream.write(once.raw(failure))
                 except FileExistsError:
-                    pass  # Preserve an earlier local failure; never overwrite it.
+                    pass
             else:
                 (args.output / "batch-failure.json").write_bytes(once.raw(failure))
         print(("STOCK_SOURCE_PREPARATION_INCOMPLETE: " if args.prepare_sources
