@@ -8,16 +8,19 @@ Investment Authority: **NONE**
 
 The Sanhua dogfood exposed a real failure mode: operating evidence and earnings scenarios had been researched more carefully than the terminal valuation multiples applied to them. The resulting surface looked internally coherent while mixing business duration, optionality, and market-expression premium.
 
-This gate turns that failure into reusable discipline.
+Later dogfood added an upstream failure mode: a world model can be numerically coherent while its economic decomposition is wrong. `docs/full-research-economic-architecture-and-causal-state-space-v1.md` is therefore the required upstream method for decision-use worlds; this gate reviews the resulting Research before valuation / Odds use.
 
-It does **not** require every case to use P/E, SOTP, DCF, or any other fixed valuation method. It requires the chosen valuation bridge to be underwritten with the same epistemic discipline as the earnings bridge.
+This gate turns those failures into reusable discipline.
+
+It does **not** require every case to use P/E, SOTP, DCF, or any other fixed valuation method. It requires the chosen causal and valuation bridges to be underwritten with the same epistemic discipline as the earnings bridge.
 
 ## Core rule
 
 ```text
 Research is not complete merely because the business story is complete.
 
-owner earnings
+economic architecture / causal state space
++ owner earnings
 + duration / reinvestment economics
 + valuation bridge
 + current-price requirements
@@ -34,6 +37,25 @@ BOUNDED ONLY
 ```
 
 are preferable to a guessed point estimate.
+
+## Gate 0 — Economic Architecture / Causal State Space
+
+Before reviewing world quality, confirm that the Research did not start from a neat Bear/Base/Bull narrative and work backward.
+
+Required questions:
+
+- Have the material economically distinct engines been identified without gratuitous over-segmentation?
+- Are the economics of each load-bearing engine explicit enough to connect revenue to margin, cash conversion, reinvestment and ROIC?
+- Are material cross-engine relationships mapped — substitution, shared fixed costs, cross-subsidy, capital migration, working capital, financing or other coupling where relevant?
+- Were load-bearing variables that can move independently identified **before** worlds were constructed?
+- Were anti-diagonal or alternative Reference Frames tested where economically plausible?
+- Can the engine-level states be reconciled to consolidated owner earnings / owner cash / ROIC?
+
+Hard failure:
+
+> A polished world table moves the whole company from bad → normal → good while economically independent engines or variables have been silently forced to move together.
+
+If Gate 0 fails, later world, valuation and first-entry precision is not decision-use-ready. Re-underwrite the economic architecture rather than adding another scenario label.
 
 ## Gate 1 — Earnings scope is explicit
 
@@ -166,7 +188,7 @@ RESEARCH CHALLENGE — REUNDERWRITE
 NOT METHOD-READY — WITHHOLD NUMERICAL VALUATION / ODDS
 ```
 
-`PASS` does not mean the investment thesis is correct. It means the valuation reasoning is sufficiently explicit and auditable for its stated use.
+`PASS` does not mean the investment thesis is correct. It means the causal and valuation reasoning is sufficiently explicit and auditable for its stated use.
 
 ## Publication as an adversarial compression test
 
@@ -210,6 +232,9 @@ Publishing has no authority to mutate Belief, Odds, Human Decision, or Action.
 
 A writing run should stop and return to Research when it exposes any of these:
 
+- `ECONOMIC_ARCHITECTURE_INCOMPLETE` — material engines / relationships are missing or wrongly coupled;
+- `CAUSAL_STATE_SPACE_COLLAPSED` — independent variables are forced into one whole-company good/normal/bad axis;
+- `OWNER_ECONOMICS_BRIDGE_GAP` — segment or revenue assumptions do not close to cash / reinvestment / ROIC;
 - `EARNINGS_SCOPE_AMBIGUOUS` — core versus total-company economics cannot be separated;
 - `VALUATION_INPUT_UNDERWRITTEN` — the load-bearing multiple / discount rate has no independent support;
 - `OPTIONALITY_DOUBLE_COUNT_RISK` — one narrative appears in both earnings and valuation without a second bridge;
