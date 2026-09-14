@@ -19,6 +19,10 @@ on:
         description: Only preflight the two explicitly authorized failed sources; no model or work writes
         type: boolean
         default: false
+      source-successor:
+        description: Create the reviewed saved-artifact successor for Heshun/Guangha only; never reuse old recovery
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -63,12 +67,15 @@ jobs:
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
           SOURCE_STOCK_RUN: ${{ github.event.workflow_run.id || inputs.source-stock-run-id }}
           RECOVER_SOURCES: ${{ github.event_name == 'workflow_dispatch' && inputs.recover-sources }}
+          SOURCE_SUCCESSOR: ${{ github.event_name == 'workflow_dispatch' && inputs.source-successor }}
         run: |
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -n "$SUB2API_API_KEY"
+          test ! \( "$RECOVER_SOURCES" = true -a "$SOURCE_SUCCESSOR" = true \)
           extra=()
           if [ "$RECOVER_SOURCES" = true ]; then extra+=(--recover-sources); fi
+          if [ "$SOURCE_SUCCESSOR" = true ]; then extra+=(--source-successor); fi
           python -m decision_kernel.runtime.stock_research_host \
             --source-run-id "$SOURCE_STOCK_RUN" --code-commit "$GITHUB_SHA" --output run-output "${extra[@]}"
       - name: Preserve original sources, model outputs and partial failures
