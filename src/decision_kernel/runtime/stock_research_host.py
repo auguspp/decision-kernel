@@ -59,6 +59,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
     successor = None
     if successor_session is not None:
         from . import stock_source_successor as successor
+        if getattr(successor_session, "mode", successor.MODE) != successor.MODE:
+            from . import stock_source_successor_continuation as successor
         once.require(recovery_request is None and full_input is True,
                      "Stock successor requires full input and cannot reuse old recovery")
         if capture is sources.capture:
@@ -91,7 +93,8 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
         authorize(api, code, request)
         if successor_session is not None:
             authorize(api, code, successor_session.request,
-                      request_path=successor_session.request_path, mode=successor_session.mode)
+                      request_path=getattr(successor_session, "request_path", successor.REQUEST),
+                      mode=getattr(successor_session, "mode", successor.MODE))
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
@@ -339,14 +342,15 @@ def consume(*, api, code: str, source_run_id: int, output: Path, run_one=run_ite
         return prepare(api=api, code=code, selected=selected, origin=origin,
                        reading_commit=r, output=output)
     if source_successor or source_successor_continuation:
-        from . import stock_source_successor as successor
         if source_successor:
+            from . import stock_source_successor as successor
             successor_request = identity._json(api.file(successor.REQUEST, code))
             items, successor_session = successor.prepare(api=api, code=code, request=successor_request,
                 selected=selected, origin=origin, reading_commit=r, output=output)
         else:
-            successor_request = identity._json(api.file(successor.CONTINUATION_REQUEST, code))
-            items, successor_session = successor.prepare_continuation(api=api, code=code, request=successor_request,
+            from . import stock_source_successor_continuation as successor
+            successor_request = identity._json(api.file(successor.REQUEST, code))
+            items, successor_session = successor.prepare(api=api, code=code, request=successor_request,
                 selected=selected, origin=origin, reading_commit=r, output=output)
         selected = {**selected, "items": items}
     result = {"status": "COMPLETED", "source_run_id": source_run_id, "items": [],
