@@ -42,10 +42,11 @@ def test_work_inventory_accepts_only_named_stock_children():
         intake.inventory(Bad(), "b"*40)
 
 
-def test_successor_request_binds_exact_source_only_artifact_and_old_permission():
+def test_consumed_successor_request_is_retired_but_history_is_still_exact():
     root = Path(__file__).parents[1]
     request = once.identity._json((root / successor.REQUEST).read_bytes())
     prep = (root / "research_runs/stock-source-preparation-request.json").read_bytes()
+    assert request["enabled"] is False
     assert request["permission"] == {"comment_id": 5652950925,
         "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
         "created_at": "2026-09-13T11:22:23Z"}
@@ -109,10 +110,12 @@ def test_cli_modes_remain_mutually_exclusive_and_children_require_native_dispatc
                    "--output", str(tmp_path/"none2"), "--source-successor-continuation"])
 
 
-def test_workflow_has_one_explicit_continuation_flag_and_one_executor():
+def test_workflow_hard_disables_consumed_successor_and_keeps_one_continuation_flag():
     root = Path(__file__).parents[1]
     text = (root / ".github/workflows/stock-business-research.yml").read_text()
     assert text.count("source-successor-continuation:") == 1
     assert "--source-successor-continuation" in text
     assert text.count("research-stock-business:") == 1
+    assert 'test "$SOURCE_SUCCESSOR" != true' in text
     assert 'test "$enabled" -le 1' in text
+    assert 'extra+=(--source-successor)' not in text
