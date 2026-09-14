@@ -331,14 +331,18 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         record["finished_at"] = now()
 
 
-def pre_prompt(packet, discovery, context):
+def pre_prompt(packet, discovery, context, *, bound_context=None):
     """The original complete Pre prompt; also used before a full-input launch."""
+    scope = {}
+    if bound_context is not None:
+        from .stock_full_input_bridge import successor_prompt_context
+        scope = successor_prompt_context(packet, context, bound_context)
     return {"stage": "PRE", "binding": {"discovery_id": discovery.discovery_id,
         "as_of": packet.research_cutoff.isoformat()}, "question": packet.research_question,
         "known_unknowns": packet.known_unknowns, "discovery_observation": {
             "ticker": discovery.ticker, "source_lane": discovery.source_lane, "why_now": discovery.why_now,
             "factual_observations": [v.model_dump(mode="json") for v in discovery.factual_observations]},
-        "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts]}
+        "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts], **scope}
 
 
 def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None):
@@ -365,7 +369,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         else:
             from .stock_full_input_bridge import require_bound
             require_bound(bound_context).check_packet(packet, context)
-        prompt = pre_prompt(packet, discovery, context)
+        prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
         stage = "PRE"
         pre = call("pre", prompt, PreResearchResult, out, usage)
         event("OTHER_READ", "SUB2API_RESPONSES:PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")

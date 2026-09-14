@@ -18,6 +18,7 @@ Repository: `auguspp/decision-kernel`。每次新研究或接续先解析 `main`
 | --- | --- | --- |
 | 光电股份 600184 | 旧 first-entry 梯度为历史、不可直接作行动边界；经营/估值桥受挑战，未记录 Human 接受 | [600184 复核与单位勘误](readings/600184-research-method-review-2026-09-13.md) |
 | 恒瑞医药 600276 | 保留原 Human 接受记录，不擅自改价；条件收益可复算，未验证的经营假设和风险约束仍需显式保留 | [原 Human 记录](decisions/600276-hengrui-human-first-entry-2026-09-12.md) 与 [两例回放](dogfood/research-handoff-replay-2026-09-13.md) |
+| 和顺石油 603353 / 广哈通信 300711 | run34807883332 已实际完成 Pre／必要 Quick；旧 WAIT／DROP 终局理由混淆历史失败与本轮状态，未通过本次语义复核，不作业务终局依据 | [终局理由复核与纠错边界](readings/stock-successor-terminal-review-2026-09-14.md) |
 
 本入口不能自动注入所有未读取仓库的聊天。可复用启动句：**按 auguspp/decision-kernel 的 docs/RESEARCH-ENTRY.md 恢复后再做研究或投资判断。** 消费端没有读取入口，就不能声称已采用本协议。
 
