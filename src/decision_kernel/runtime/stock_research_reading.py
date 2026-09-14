@@ -18,8 +18,10 @@ from . import stock_source_successor as successor
 from . import stock_source_successor_continuation as continuation
 
 
-EXTRA_API_CALLS = 64
-MAX_STOCK_SOURCE_FILES = 24
+# Preserve the already accepted #360 Stock-reader capacity. Continuation must fit
+# inside it; this repair neither raises nor narrows the publication boundary.
+EXTRA_API_CALLS = 72
+MAX_STOCK_SOURCE_FILES = 32
 
 
 def call_limit(api):
