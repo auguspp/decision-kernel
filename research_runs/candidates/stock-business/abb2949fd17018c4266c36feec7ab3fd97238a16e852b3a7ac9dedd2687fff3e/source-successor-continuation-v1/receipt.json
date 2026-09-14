@@ -1,0 +1,54 @@
+{
+  "completion": "COMPLETE",
+  "elapsed_minutes_observed": 2,
+  "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+  "finished_at": "2026-09-14T04:59:32.909250Z",
+  "input_hash": "2003e6a12c8e1cd9f05f75e29a5025970bc1df3118d82ff177335ae621a80e33",
+  "last_completed_stage": "PRE",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "34807883332",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-14T04:58:01.106930Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "368541be-a53c-5f3f-bad5-1eeb622c8ded",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5/research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 2,
+  "started_at": "2026-09-14T04:58:08.205573Z",
+  "stop_or_failure_reason": null,
+  "technical_retries_used": 0,
+  "tool_calls_used": 2,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-14T04:58:08.205602Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/58c572b4aaf3aa5c482dd7bd5cb02e2633d184f5/research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/source.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Model output, not primary-source Evidence.",
+      "observed_at": "2026-09-14T04:59:32.908859Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:PRE",
+      "technical_retry": false
+    }
+  ]
+}
