@@ -34,6 +34,36 @@ class GitHubReadError(RuntimeError):
     pass
 
 
+def research_work_diagnostic(exc: Exception, *, api_calls, source_count: int,
+                             retained_file_count: int) -> dict:
+    """Report only our static rejection labels, never exception/source contents."""
+    labels = {
+        "research work API accounting unavailable": "API_ACCOUNTING_UNAVAILABLE",
+        "research work API reserve would consume base publication budget": "BASE_PUBLICATION_RESERVE",
+        "research work item bound exceeded": "WORK_ITEM_BOUND",
+        "research work read would exceed source-file budget": "SOURCE_FILE_BUDGET",
+        "research work would exhaust reading retention bound": "RETENTION_BYTE_BUDGET",
+        "research work read would exhaust publication API reserve": "WORK_PUBLICATION_RESERVE",
+        "research work tree incomplete": "INCOMPLETE_WORK_TREE",
+        "research work reserved packet unavailable": "RESERVED_PACKET_UNAVAILABLE",
+        "research work item contains both candidate and pre-execution failure": "CANDIDATE_FAILURE_CONFLICT",
+        "research work blob differs": "WORK_BLOB_MISMATCH",
+        "research work failure packet binding differs": "FAILURE_PACKET_MISMATCH",
+        "saved Funnel differs from original candidate revalidation": "SAVED_FUNNEL_MISMATCH",
+    }
+    # A validator or transport exception may contain untrusted text or secrets.
+    # Do not stringify it, publish a URL/body, or guess a cause for unknown errors.
+    message = exc.args[0] if (type(exc) is ValueError and len(exc.args) == 1
+                             and type(exc.args[0]) is str) else None
+    return {
+        "code": labels.get(message, "UNCLASSIFIED_READ_REJECTION"),
+        "api_calls_after_attempt": api_calls if type(api_calls) is int and api_calls >= 0 else None,
+        "source_count_after_rollback": source_count,
+        "retained_file_count_after_rollback": retained_file_count,
+        "meaning": "DIAGNOSTIC_ONLY_NOT_RECOVERY_OR_RESEARCH_ACCEPTANCE",
+    }
+
+
 class GitHubAPI:
     """Narrow repository API client. Errors never echo credentials or response text."""
     def __init__(self, token: str, *, max_calls: int = MAX_API_CALLS):
@@ -684,7 +714,10 @@ class Collector:
                 research["candidate_work"] = self.research_work(work_config)
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 research["candidate_work"] = {"status": "UNAVAILABLE_OR_REJECTED",
-                    "error_type": type(exc).__name__, "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED"}
+                    "error_type": type(exc).__name__, "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED",
+                    "diagnostic": research_work_diagnostic(exc,
+                        api_calls=getattr(self.api, "calls", None), source_count=len(self.sources),
+                        retained_file_count=len(self.files))}
                 research["gaps"].append({"status": "RESEARCH_WORK_READ_UNAVAILABLE_NOT_QUIET",
                                          "error_type": type(exc).__name__})
 
