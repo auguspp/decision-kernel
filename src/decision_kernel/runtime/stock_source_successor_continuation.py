@@ -259,6 +259,16 @@ def recheck(*, api, code, session: Session, binding, context, clock=once.now):
         once.require(rows.get(spec["path"], {}).get("sha") == spec["git_blob"],
                      "Stock successor continuation predecessor changed in latest work")
         _checked(api, spec)
+    predecessor_request_raw = _checked(api, binding["predecessor_successor_request"])
+    predecessor_request = identity._json(predecessor_request_raw)
+    once.require(predecessor_request["mode"] == base.MODE
+        and predecessor_request["permission"] == session.request["permission"],
+        "Stock successor continuation predecessor request changed")
+    predecessor_reading_raw = identity._checked_source(binding["predecessor_successor_reading"],
+        lambda s: api.file(s["path"], s["ref"]))
+    predecessor_reading = identity._json(predecessor_reading_raw); reading.validate_read_package(predecessor_reading)
+    once.require(predecessor_reading["research"]["stock_business_work"]["work_commit"] ==
+        session.request["failed_successor_work_commit"], "Stock successor continuation predecessor reading changed")
     once.require(binding["permission"] == session.request["permission"]
         and binding["successor_request"] == session.binding["request"]
         and binding["current_reading"] == session.binding["current_reading"]
