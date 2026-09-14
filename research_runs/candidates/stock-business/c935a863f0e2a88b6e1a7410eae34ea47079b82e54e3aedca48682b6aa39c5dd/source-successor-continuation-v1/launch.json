@@ -1,0 +1,36 @@
+{
+  "automatic_retry": false,
+  "full_input": {
+    "decoded_bytes": 658453,
+    "decoded_sha256": "1b5800fe6881f9b54fe05c94e1cd9700eaa7855276d0a27a79da0bbcb58428e3",
+    "policy": "STOCK_FULL_INPUT_ZLIB_V1",
+    "stored_bytes": 225221,
+    "stored_sha256": "2606ef5d53eaca6c0c5597858ce130d79cc1ae753f5a7dbb88908da373fb3d61"
+  },
+  "id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+  "input_hash": "d19abe853f62f511d382083669997ceb8effaf86701567dd77312512bee47f47",
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "pre_request_preview": {
+    "decoded_bytes": 658453,
+    "decoded_sha256": "1b5800fe6881f9b54fe05c94e1cd9700eaa7855276d0a27a79da0bbcb58428e3",
+    "meaning": "SDK_PRE_REQUEST_BUILT_NO_NETWORK_NOT_ADMISSION",
+    "policy": "STOCK_FULL_INPUT_ZLIB_V1",
+    "prompt_sha256": "bd333f3bcba66dbcf440c8410abfbbf81fcffbf8eef53de422c22beb58020dfc",
+    "request_bytes": 692759,
+    "request_sha256": "5e05c70510f3273a6794bf848ab1d33038cd0efd8817c0355731fddec5ff9ea0",
+    "ticker": "300711"
+  },
+  "public_egress_hash": "be376679de6173341009bc55514da5108edf6cc20b5c235564534005f16805a1",
+  "source_successor": {
+    "archive_sha256": "25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
+    "artifact_digest": "sha256:25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
+    "artifact_id": 10320565453,
+    "artifact_name": "stock-source-preparation-34765190284-1",
+    "batch_sha256": "f81b71f243c7269397248f6bfa8d61f6e9cebb0c3513cf1bcffe4d1440973b36",
+    "run_id": 34765190284
+  }
+}
