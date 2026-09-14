@@ -24,34 +24,38 @@ that failure is `eb17ca1694057fe24dad51c99c9cec9aaf431ff6`.
 The exact failed workflow artifact is `10330128020`,
 `stock-business-research-34797952444-1`, 15,816,299 bytes, SHA256
 `9b9bab464bceee731e3090fe799a4defffacf7208bd9fa8e17034a3750ef4b9c`.
-It retains the two child reservations/failures/host receipts, batch receipt,
-source-successor binding, original Stock archive and the previously verified
-source-only ZIP.
+Its identity is frozen in the continuation request; canonical work and fixed
+reading independently preserve both failed child reservations and failures.
 
 ## Established defect
 
-`stock_source_successor.capture()` imported runtime `cninfo_http` as `cninfo`
-and evaluated `cninfo.SHANGHAI_TZ` before any CNINFO inventory request. The
-runtime HTTP seam does not export that timezone object. The existing original
-Stock source implementation imports `SHANGHAI_TZ` from `adapters.cninfo`.
+At failed head `23670560...`, `stock_source_successor.capture()` imported runtime
+`cninfo_http` as `cninfo` and evaluated `cninfo.SHANGHAI_TZ` before any CNINFO
+inventory request. That failed runtime module did not export the timezone object,
+while the existing adapter contract already defined `SHANGHAI_TZ` in
+`adapters.cninfo`.
 
-The repair therefore reuses that existing timezone contract directly. It does
-not change the CNINFO provider, query scope, PDF transport, parser, page-reading
-logic, source clocks, model or request-byte limits.
+The repair exports that existing timezone object through `runtime.cninfo_http`.
+It does not change the CNINFO provider, query scope, PDF transport, parser,
+page-reading logic, source clocks, model or request-byte limits.
 
 ## Legal continuation identity
 
 The failed `source-successor-v1/` children are create-only canonical history and
-must never be reopened. A fixed sibling
-`source-successor-continuation-v1/` is the only technical continuation for:
+must never be reopened. Their current request is retired with `enabled=false`,
+and the workflow rejects the consumed `source-successor=true` path.
+
+A separate thin adapter defines the fixed sibling
+`source-successor-continuation-v1/` only for:
 
 - `603353.SH` Heshun Petroleum;
 - `300711.SZ` Guangha Communications.
 
 The frozen continuation request binds the exact failed run/artifact, failed work
 commit, failed fixed reading, each predecessor successor `prepare.json` and
-`failure.json`, Human permission #297 comment `5652950925`, the already-consumed
-source-recovery predecessors and the exact saved source-only material.
+`failure.json`, the predecessor successor request/reading, Human permission #297
+comment `5652950925`, the already-consumed source-recovery predecessors and the
+exact saved source-only material.
 
 A changed price, date, permission number, code version or representation hash
 cannot create another continuation identity. Existing files under the fixed
@@ -60,9 +64,9 @@ Retainer.
 
 ## Original executor remains authoritative
 
-The continuation only selects/binds a new child identity and supplies the same
-saved-source capture adapter. The executor remains the original
-`stock_research_host.run_item()` followed by the original admission,
+The continuation adapter only selects/binds the new child and delegates source
+capture to the byte-identical #360 successor implementation. The executor remains
+`stock_research_host.run_item()` followed by the original admission, Retainer,
 full-input storage/decode, exact SDK pre-send check, Pre, conditional Quick,
 validator and Funnel.
 
@@ -73,6 +77,9 @@ position or monitoring authority.
 
 The original fixed reader preserves the failed `source_successor` history and
 reads any technical continuation separately under the same root company item.
+The accepted Stock-reading capacity remains `EXTRA_API_CALLS=72` and
+`MAX_STOCK_SOURCE_FILES=32`; this repair neither raises nor narrows it.
+
 A continuation candidate is not Human semantic acceptance or a registered
 investment handoff.
 
