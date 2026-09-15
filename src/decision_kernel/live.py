@@ -27,7 +27,7 @@ from .research_commit import (
     commit_research_package,
 )
 from .research_workflow_v1 import DeepenedDecisionResult, run_deepened_decision_path
-from .primitives import KernelModel
+from .primitives import DomainValidationError, KernelModel
 from .workflow import DecisionSpineResult, run_decision_spine
 
 
@@ -70,6 +70,12 @@ def run_live_research_commit_package(
     observed_at = _resolve_observed_at(observed_at)
     research_commit = commit_research_package(package)
     snapshot = research_commit.research_snapshot
+    # A committed research-only snapshot is not a request to acquire a price.
+    snapshot.assert_decision_spine_ready()
+    if package.framing is None:
+        raise DomainValidationError(
+            "Decision Spine requires rehearsal framing; use offline commit for Research-only retention"
+        )
     thscode = to_hithink_thscode(ticker=snapshot.ticker, exchange=snapshot.exchange)
     market = fetch_market(thscode=thscode, observed_at=observed_at)
     decision_created_at = max(

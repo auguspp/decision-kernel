@@ -87,7 +87,7 @@ python -m decision_kernel.runtime.research_commit_only save-progress next-workpa
 
 前驱只保存描述，不递归复制全历史或旧原件。原前驱底稿和来源继续保留在其原存储/精确 Git 位置，并写入底稿接续小节。不能把一个前驱摘要称作整条历史已独立重验。
 
-保存进度不需要 ResearchCommitPackage、valuation horizon、framing、概率、正式执行回执或最终结论；**不会尝试 COMMIT，也不会生成 commit-rejection 将正常暂停标红**。原 `commit` / `verify` 行为与旧包不变。旧 Kernel 数值场景门禁仍未改动；这不是 ordinal Research COMMITTED 的实现。
+保存进度不需要 ResearchCommitPackage、valuation horizon、framing、概率、正式执行回执或最终结论；**不会尝试 COMMIT，也不会生成 commit-rejection 将正常暂停标红**。原 `commit` / `verify` 留存流程与旧包不变。需要正式冻结已审阅的研究时，使用[同一入口的显式 schema v2](research-commit-only-v0.md#research-only-schema-v2)：Research-only COMMIT 与数值 Odds 条件已经分开，但进度保存不会自动升级为 COMMITTED；旧 schema v1 的数值门禁继续保留。
 
 `save-progress` / `read-progress` 不解析并执行正文，不请求网络，不读 secret，不改原工作请求、Funnel、launch 或 current-state。返回/命令输出是 `RETAINED_ONLY` 和 `CONTINUATION: NOT_EXECUTED`，不是 resume 授权。程序调用 `read_research_progress` 返回描述与原正文 bytes，供可信交互层作为数据阅读；CLI 只报告验证摘要，不把来源正文自动打印成指令。
 
@@ -107,4 +107,4 @@ python -m decision_kernel.runtime.research_commit_only save-progress next-workpa
 
 工程案例应证明：无最终字段的部分底稿可原样保存；新进度可关联精确前驱且不动旧 bytes；错对象/问题/摘要/时钟、缺失/篡改/部分目录拒绝；真实新进程读取不导入行情/模型执行器、不联网；恶意正文只保留为数据。合成案例不是新公司 Research、模型真实续作或 Human 接受样本。
 
-完整 PR/main CI 与正常 publisher 证明代码交付，不证明一家公司已经进入远端研究档案或 current-state。后续仍须闭合 research-only COMMIT 与数值 Odds readiness 的明确分离，以及真实档案自动保存/索引的具体接点；不把该留存切片冒充整个321-A完成。
+完整 PR/main CI 与正常 publisher 证明代码交付，不证明一家公司已经进入远端研究档案或 current-state。Research-only COMMIT 与数值 Odds 条件的分离见[commit-only 指南](research-commit-only-v0.md#research-only-schema-v2)。真实档案自动保存/索引仍须闭合；不能把本地留存或 schema v2 冒充整个321-A完成。

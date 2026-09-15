@@ -14,16 +14,27 @@ class ResearchCommitPackage(KernelModel):
 
     `framing` is an executable one-file convenience for the current CLI path.
     It is deliberately excluded from Research `information_bundle_hash` and has
-    no role in Research validity or commit authority. If a second consumer does
-    not need rehearsal framing, split that run context instead of expanding this
-    convenience into Research semantics.
+    no role in Research information identity. Schema v2 permits its absence for
+    the offline consumer; the live Decision Spine still requires that context.
+    Schema v1 keeps its original framing/snapshot contract and frozen hashes.
     """
 
     research_snapshot: ResearchSnapshot
     evidence_artifacts: tuple[EvidenceArtifact, ...] = ()
-    framing: NonAuthoritativeRehearsalFraming
+    framing: NonAuthoritativeRehearsalFraming | None = None
     proposed_committed_at: AwareDateTime
     schema_version: int = Field(default=1, ge=1)
+
+    @model_validator(mode="after")
+    def validate_schema_contract(self) -> "ResearchCommitPackage":
+        if type(self.schema_version) is not int or self.schema_version not in (1, 2):
+            raise DomainValidationError("unsupported ResearchCommitPackage schema_version")
+        if self.schema_version == 1:
+            if self.research_snapshot.schema_version != 1 or self.framing is None:
+                raise DomainValidationError("package schema v1 requires snapshot v1 and framing")
+        if self.framing is not None and not isinstance(self.framing, NonAuthoritativeRehearsalFraming):
+            raise DomainValidationError("invalid rehearsal framing")
+        return self
 
 
 class ResearchCommitResult(KernelModel):
@@ -94,6 +105,8 @@ def referenced_research_evidence_ids(snapshot: ResearchSnapshot) -> set:
 def validate_research_commit_package(package: ResearchCommitPackage) -> None:
     """Validate only method-agnostic evidence, PIT, identity, and commit prerequisites."""
 
+    # model_copy(update=...) is not validation; check the version pair at use too.
+    package.validate_schema_contract()
     snapshot = package.research_snapshot
     if snapshot.status is not ResearchStatus.REVIEW:
         raise DomainValidationError(
