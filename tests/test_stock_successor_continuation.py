@@ -1,7 +1,8 @@
-"""Regression tests for the exact pre-Research production successor failure.
+"""Synthetic safety tests for the consumed Stock successor continuation.
 
-Synthetic only: no live GitHub, CNINFO or model calls. The real failed run/work/
-reading/artifact identities are immutable request configuration, not test fetches.
+No live GitHub, CNINFO or model calls occur here. Exact one-shot production
+receipts stay frozen in the request/docs/Git history; blocking tests protect the
+reusable continuation identity, binding and fail-closed contracts.
 """
 from datetime import date, timedelta
 from pathlib import Path
@@ -24,8 +25,8 @@ def test_timezone_regression_uses_runtime_contract_before_any_inventory_fetch(tm
     code = "603353.SH"; ticker = "603353"
     class Session:
         code = "a" * 40
-        binding = {"source_preparation": {"artifact_id": 10320565453}}
-        request = {"source_preparation_run_id": 34765190284}
+        binding = {"source_preparation": {"artifact_id": 1}}
+        request = {"source_preparation_run_id": 2}
         def for_code(self, thscode):
             assert thscode == code
             return {"thscode": code, "material": {"selected_ids": []}, "required_reviews": []}
@@ -58,32 +59,50 @@ def test_continuation_identity_is_fixed_sibling_not_revival_or_new_question():
         continuation.execution("600184.SH")
 
 
-def test_continuation_request_pins_exact_failed_production_state():
+def test_continuation_request_stays_structurally_bound_to_consumed_predecessor():
     root = Path(__file__).parents[1]
     request = once.identity._json((root / continuation.REQUEST).read_bytes())
+    assert set(request) == {"schema_version", "enabled", "mode", "permission",
+        "source_stock_run_id", "source_preparation_run_id", "failed_successor_run_id",
+        "failed_successor_artifact", "failed_successor_reading_commit",
+        "failed_successor_work_commit", "items"}
+    assert request["schema_version"] == 1 and request["enabled"] is True
     assert request["mode"] == continuation.MODE
-    assert request["permission"] == {"comment_id": 5652950925,
-        "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
-        "created_at": "2026-09-13T11:22:23Z"}
-    assert request["source_stock_run_id"] == 34673882756
-    assert request["source_preparation_run_id"] == 34765190284
-    assert request["failed_successor_run_id"] == 34797952444
-    assert request["failed_successor_work_commit"] == "f53fdd6c0f1bb6088a8eae9a1363d35a975dbbb9"
-    assert request["failed_successor_reading_commit"] == "eb17ca1694057fe24dad51c99c9cec9aaf431ff6"
-    assert request["failed_successor_artifact"] == {
-        "id": 10330128020,
-        "name": "stock-business-research-34797952444-1",
-        "size_in_bytes": 15816299,
-        "digest": "sha256:9b9bab464bceee731e3090fe799a4defffacf7208bd9fa8e17034a3750ef4b9c",
-        "head_sha": "23670560b79bb4b21f5f32fb60959b4044dd2910"}
-    expected = {
-        "603353.SH": ("1d3fe1b752a18a2759618e464f733bfe34b962e6", "ed9c55c958e0ebb0a8e1b35fa3a2212b13520b71"),
-        "300711.SZ": ("86a5679a7bc9211ddc283554ecc8f6040e73028c", "302559a71f342b3bfcab0faa658961cc1063d16a"),
-    }
-    assert {i["thscode"] for i in request["items"]} == continuation.TARGETS
-    for item in request["items"]:
-        assert (item["predecessor_selection"]["git_blob"], item["predecessor_failure"]["git_blob"]) == expected[item["thscode"]]
-        assert item["predecessor_selection"]["ref"] == item["predecessor_failure"]["ref"] == request["failed_successor_work_commit"]
+    assert set(request["permission"]) == {"comment_id", "body_sha256", "created_at"}
+    assert type(request["permission"]["comment_id"]) is int and request["permission"]["comment_id"] > 0
+    assert len(request["permission"]["body_sha256"]) == 64
+    assert all(type(request[k]) is int and request[k] > 0 for k in
+        ("source_stock_run_id", "source_preparation_run_id", "failed_successor_run_id"))
+
+    def lowercase_hex(value, length):
+        return isinstance(value, str) and len(value) == length and all(c in "0123456789abcdef" for c in value)
+
+    assert lowercase_hex(request["failed_successor_work_commit"], 40)
+    assert lowercase_hex(request["failed_successor_reading_commit"], 40)
+    artifact = request["failed_successor_artifact"]
+    assert set(artifact) == {"id", "name", "size_in_bytes", "digest", "head_sha"}
+    assert type(artifact["id"]) is int and artifact["id"] > 0
+    assert type(artifact["size_in_bytes"]) is int and artifact["size_in_bytes"] > 0
+    assert isinstance(artifact["name"], str) and artifact["name"]
+    assert artifact["digest"].startswith("sha256:") and lowercase_hex(artifact["digest"][7:], 64)
+    assert lowercase_hex(artifact["head_sha"], 40)
+
+    items = request["items"]
+    assert isinstance(items, list) and len(items) == len(continuation.TARGETS)
+    assert {i["thscode"] for i in items} == continuation.TARGETS
+    for item in items:
+        assert set(item) == {"thscode", "predecessor_selection", "predecessor_failure"}
+        for key, suffix, purpose in (
+            ("predecessor_selection", "/source-successor-v1/prepare.json",
+             "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_SELECTION_REQUEST"),
+            ("predecessor_failure", "/source-successor-v1/failure.json",
+             "STOCK_SUCCESSOR_CONTINUATION_PREDECESSOR_FAILURE_REQUEST")):
+            spec = item[key]
+            assert set(spec) == {"repository", "path", "ref", "git_blob", "sha256", "purpose"}
+            assert spec["repository"] == once.REPO
+            assert spec["ref"] == request["failed_successor_work_commit"]
+            assert spec["path"].endswith(suffix) and spec["purpose"] == purpose
+            assert lowercase_hex(spec["git_blob"], 40) and lowercase_hex(spec["sha256"], 64)
 
 
 def test_source_refs_for_continuation_keeps_old_and_failed_successor_predecessors():
