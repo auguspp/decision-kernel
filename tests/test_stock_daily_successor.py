@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import json
 import runpy
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -11,6 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github/workflows/stock-reading-after-sector.yml"
 HELPER = ROOT / ".github/scripts/check-stock-daily-successor.py"
+SECTOR_WORKFLOW = ROOT / ".github/workflows/sector-radar-shadow.yml"
 STOCK_WORKFLOW = ROOT / ".github/workflows/hithink-stock-dump-trial.yml"
 STOCK_CAPTURE = ROOT / ".github/scripts/capture-stock-reading.py"
 CURRENT_STATE = ROOT / "src/decision_kernel/runtime/current_state.py"
@@ -39,12 +41,55 @@ def environment(**changes):
         "UPSTREAM_HEAD_BRANCH": "main",
         "UPSTREAM_HEAD_REPOSITORY": "auguspp/decision-kernel",
         "UPSTREAM_HEAD_SHA": "a" * 40,
+        "UPSTREAM_JOBS_JSON": "",
     }
     values.update(changes)
     return values
 
 
-def test_successor_is_one_natural_sector_handoff_not_a_new_clock_or_market_reader():
+def write_dispatch_jobs(path: Path, profile: str) -> Path:
+    outcomes = {
+        "Run independent Sector Radar shadow producer": "skipped",
+        "Verify exact offline replay before publication": "skipped",
+        "Upload authoritative state bundle": "success",
+        "Adopt exact 2026-09-14 missed-session checkpoint": "skipped",
+        "Verify 2026-09-14 missed-session adoption exact offline match": "skipped",
+        "Adopt exact recovery checkpoint into original Sector lineage": "skipped",
+        "Verify recovery adoption exact offline match": "skipped",
+    }
+    if profile == "produce":
+        outcomes["Run independent Sector Radar shadow producer"] = "success"
+        outcomes["Verify exact offline replay before publication"] = "success"
+    elif profile == "missed-adoption":
+        outcomes["Adopt exact 2026-09-14 missed-session checkpoint"] = "success"
+        outcomes["Verify 2026-09-14 missed-session adoption exact offline match"] = "success"
+    elif profile == "recovery-adoption":
+        outcomes["Adopt exact recovery checkpoint into original Sector lineage"] = "success"
+        outcomes["Verify recovery adoption exact offline match"] = "success"
+    elif profile == "ambiguous":
+        outcomes["Run independent Sector Radar shadow producer"] = "success"
+        outcomes["Verify exact offline replay before publication"] = "success"
+        outcomes["Adopt exact recovery checkpoint into original Sector lineage"] = "success"
+        outcomes["Verify recovery adoption exact offline match"] = "success"
+    elif profile != "unknown":
+        raise AssertionError(profile)
+    payload = {
+        "total_count": 1,
+        "jobs": [{
+            "name": "producer",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+                {"name": name, "status": "completed", "conclusion": conclusion}
+                for name, conclusion in outcomes.items()
+            ],
+        }],
+    }
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader():
     raw = WORKFLOW.read_text(encoding="utf-8")
     trigger = raw.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
     assert "workflow_run:" in trigger
@@ -53,6 +98,7 @@ def test_successor_is_one_natural_sector_handoff_not_a_new_clock_or_market_reade
     assert "schedule:" not in trigger and "workflow_dispatch:" not in trigger and "push:" not in trigger
     for required in (
         "github.event.workflow_run.event == 'schedule'",
+        "github.event.workflow_run.event == 'workflow_dispatch'",
         "github.event.workflow_run.status == 'completed'",
         "github.event.workflow_run.conclusion == 'success'",
         "github.event.workflow_run.run_attempt == 1",
@@ -67,20 +113,24 @@ def test_successor_is_one_natural_sector_handoff_not_a_new_clock_or_market_reade
     assert "cancel-in-progress: false" in raw and "timeout-minutes: 5" in raw
     assert raw.count("hithink-stock-dump-trial.yml/dispatches") == 1
     assert raw.count("gh api --method POST") == 1
+    assert "actions/runs/$UPSTREAM_RUN_ID/jobs?per_page=100&page=1" in raw
+    assert "UPSTREAM_JOBS_JSON" in raw
     assert '"trial-purpose": "stock-reading"' in raw
     assert '"stock-market-run-id": os.environ["MARKET_RUN_ID"]' in raw
     assert "steps.preflight.outputs.market_run_id" in raw
+    assert "steps.preflight.outputs.sector_origin" in raw
     assert "HITHINK_FINANCE_API_KEY" not in raw and "secrets.HITHINK_FINANCE_API_KEY" not in raw
     assert "/rerun" not in raw and "sleep(" not in raw and "while " not in raw
 
 
-def test_exact_successor_identity_accepts_natural_sector_success_and_separate_code_sha():
+def test_exact_successor_identity_accepts_native_schedule_and_separate_code_sha():
     mod = module()
-    assert mod["validate_successor"](environment()) == 499
-    # A long natural Sector run may finish after main has legitimately advanced.
+    assert mod["validate_successor"](environment()) == (499, "GITHUB_SCHEDULE")
+    assert mod["handoff_allowed"]("GITHUB_SCHEDULE") is True
+    # A long Sector run may finish after main has legitimately advanced.
     # The existing Stock contract binds the immutable upstream artifact separately.
-    assert mod["validate_successor"](environment(GITHUB_SHA="b" * 40)) == 499
-    assert mod["validate_successor"](environment(UPSTREAM_HEAD_SHA="b" * 40)) == 499
+    assert mod["validate_successor"](environment(GITHUB_SHA="b" * 40)) == (499, "GITHUB_SCHEDULE")
+    assert mod["validate_successor"](environment(UPSTREAM_HEAD_SHA="b" * 40)) == (499, "GITHUB_SCHEDULE")
     invalid = (
         ("GITHUB_REPOSITORY", "other/repo"),
         ("GITHUB_REF", "refs/heads/other"),
@@ -90,7 +140,7 @@ def test_exact_successor_identity_accepts_natural_sector_success_and_separate_co
         ("GITHUB_SHA", "not-a-sha"),
         ("UPSTREAM_NAME", "other"),
         ("UPSTREAM_PATH", ".github/workflows/other.yml"),
-        ("UPSTREAM_EVENT", "workflow_dispatch"),
+        ("UPSTREAM_EVENT", "push"),
         ("UPSTREAM_STATUS", "in_progress"),
         ("UPSTREAM_CONCLUSION", "failure"),
         ("UPSTREAM_RUN_ATTEMPT", "2"),
@@ -104,6 +154,49 @@ def test_exact_successor_identity_accepts_natural_sector_success_and_separate_co
             mod["validate_successor"](environment(**{key: value}))
     with pytest.raises(mod["SuccessorCheckError"]):
         mod["validate_successor"](environment(UPSTREAM_RUN_ID="500"))
+
+
+def test_workflow_dispatch_requires_exact_successful_produce_step_evidence(tmp_path):
+    mod = module()
+    produce = write_dispatch_jobs(tmp_path / "produce.json", "produce")
+    assert mod["validate_successor"](environment(
+        UPSTREAM_EVENT="workflow_dispatch",
+        UPSTREAM_JOBS_JSON=str(produce),
+    )) == (499, "WORKFLOW_DISPATCH_PRODUCE")
+    assert mod["handoff_allowed"]("WORKFLOW_DISPATCH_PRODUCE") is True
+
+    for profile in ("missed-adoption", "recovery-adoption"):
+        recovery = write_dispatch_jobs(tmp_path / f"{profile}.json", profile)
+        assert mod["validate_successor"](environment(
+            UPSTREAM_EVENT="workflow_dispatch",
+            UPSTREAM_JOBS_JSON=str(recovery),
+        )) == (499, "WORKFLOW_DISPATCH_RECOVERY")
+        assert mod["handoff_allowed"]("WORKFLOW_DISPATCH_RECOVERY") is False
+
+    for profile in ("unknown", "ambiguous"):
+        bad = write_dispatch_jobs(tmp_path / f"{profile}.json", profile)
+        with pytest.raises(mod["SuccessorCheckError"]):
+            mod["validate_successor"](environment(
+                UPSTREAM_EVENT="workflow_dispatch",
+                UPSTREAM_JOBS_JSON=str(bad),
+            ))
+    with pytest.raises(mod["SuccessorCheckError"]):
+        mod["validate_successor"](environment(UPSTREAM_EVENT="workflow_dispatch"))
+
+
+def test_dispatch_classifier_is_pinned_to_existing_sector_step_contract():
+    mod = module()
+    sector = SECTOR_WORKFLOW.read_text(encoding="utf-8")
+    for key in (
+        "PRODUCER_STEP",
+        "REPLAY_STEP",
+        "STATE_UPLOAD_STEP",
+        "MISSED_ADOPT_STEP",
+        "MISSED_VERIFY_STEP",
+        "RECOVERY_ADOPT_STEP",
+        "RECOVERY_VERIFY_STEP",
+    ):
+        assert f"- name: {mod[key]}" in sector
 
 
 def test_successor_reuses_existing_bounded_activity_observation_for_all_key_users():
