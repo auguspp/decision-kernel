@@ -1,0 +1,38 @@
+{
+  "as_of": "2026-09-08T21:36:01.998742Z",
+  "basic_business_role": "经营 DRAM、NAND 和其他存储产品的资本密集型制造商。",
+  "current_expression_or_leadership": "未取得或使用新股价；原 Human WAIT 不变。",
+  "current_market_expectation_hypothesis": "未直接测量当前市场预期；把当期高利润视为可永久延续只是一项待反证假设。",
+  "discovery_id": "saved-MU-SCA-20260903:review-7c9e2b41",
+  "economic_direction": "最低量价承诺可能缓和受保护业务的下行；不等于全公司盈利底线。",
+  "largest_unknown": "保护范围、实际履约和融资/再投资成本能否在非合同业务价格正常化时形成合并 owner cash 底线。",
+  "material_claims": [
+    {
+      "evidence_artifact_ids": [
+        "0d20e25f-1db4-5560-9f6d-9e5257aba221"
+      ],
+      "kind": "FACT",
+      "statement": "正式10-Q披露已执行的多年 take-or-pay 数量承诺，多数采用固定或上下限价格，少数价格随市。"
+    },
+    {
+      "evidence_artifact_ids": [
+        "59d87e32-920b-5961-b8e3-8f14f140b3a8"
+      ],
+      "kind": "FACT",
+      "statement": "6月24日准备稿披露16份已签协议的期限内数量覆盖，同时把更高公司收入覆盖描述为目标。"
+    },
+    {
+      "evidence_artifact_ids": [],
+      "kind": "INFERENCE",
+      "statement": "数量覆盖、目标收入覆盖及未来合并利润底线不是同一个指标。"
+    }
+  ],
+  "next_discriminating_search": "读取现金流与合同负债/融资分类、当期利润驱动、资本投入、同行供需及截止前较晚发行人更新，区分来源未取得与正文未披露。",
+  "obvious_contradiction": "当季表现同时受全行业涨价与产品组合驱动；不能全部归因于新合同。",
+  "potential_fundamental_driver": "已执行多年 take-or-pay 与量价约束；需与非受保护业务、产品成本和再投资共同检验。",
+  "route": "CONTINUE_TO_QUICK",
+  "route_reason": "正式合同事实已取得；现金/资本及范围问题可用已预检的一手正文进一步区分，值得一次限定 Quick。",
+  "schema_version": 1,
+  "what_is_this": "已有 SCA 合同观察的有限再核验：受保护收入子集是否足以支持合并公司穿越周期现金收益底线。",
+  "why_surfaced_now": "Human 明确要求一个必要一手来源可取得的真实 Pre/Quick 执行；不是新行情信号。"
+}
