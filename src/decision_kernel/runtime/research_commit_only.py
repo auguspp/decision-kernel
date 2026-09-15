@@ -184,6 +184,129 @@ def commit_research_file(package_path: Path, *, output: Path,
     return read_retained_commit(output)
 
 
+# Progress retention is deliberately not another ResearchStatus or Funnel route.
+PROGRESS_FORMAT = "research-progress-v0"
+PROGRESS_FIXED = {
+    "format": PROGRESS_FORMAT,
+    "research_status": "RETAINED_PROGRESS_NOT_COMMITTED",
+    "continuation_status": "NOT_EXECUTED",
+    "human_acceptance": "NOT_ESTABLISHED_BY_RETENTION",
+    "investment_authority": "NONE",
+    "publication_status": "LOCAL_ONLY_NOT_GITHUB_PUBLICATION",
+}
+
+
+def _progress_identity(value: str) -> None:
+    if (not isinstance(value, str) or not value.strip() or len(value) > 255
+            or any(ord(char) < 32 or ord(char) == 127 for char in value)):
+        raise ValueError("progress subject/question identity is invalid")
+
+
+def _progress_description(value: dict) -> None:
+    if (not isinstance(value, dict) or set(value) != {"bytes", "sha256"}
+            or type(value["bytes"]) is not int or not 0 < value["bytes"] <= MAX_BYTES
+            or not isinstance(value["sha256"], str) or len(value["sha256"]) != 64
+            or any(c not in "0123456789abcdef" for c in value["sha256"])):
+        raise ValueError("progress byte binding is invalid")
+
+
+def _progress_metadata(raw: bytes) -> dict:
+    metadata = _json(raw)
+    fields = {"subject", "question_id", "revision", "retained_at", "workpaper", "predecessor"}
+    if set(metadata) != set(PROGRESS_FIXED) | fields:
+        raise ValueError("progress fields differ")
+    if any(metadata[k] != v for k, v in PROGRESS_FIXED.items()):
+        raise ValueError("progress cannot confer commit, execution or publication authority")
+    _progress_identity(metadata["subject"])
+    _progress_identity(metadata["question_id"])
+    revision = metadata["revision"]
+    if type(revision) is not int or revision < 1:
+        raise ValueError("progress revision is invalid")
+    at = datetime.fromisoformat(metadata["retained_at"])
+    if at.tzinfo is None or at.utcoffset() is None or at > datetime.now(timezone.utc):
+        raise ValueError("progress retention clock is invalid")
+    _progress_description(metadata["workpaper"])
+    if (metadata["predecessor"] is None) != (revision == 1):
+        raise ValueError("progress predecessor/revision differs")
+    if metadata["predecessor"] is not None:
+        _progress_description(metadata["predecessor"])
+    return metadata
+
+
+def read_research_progress(output: Path, *, expected_sha256: str) -> tuple[dict, bytes]:
+    """Recover exact saved context, never execute its proposed next step.
+
+    The expected digest must come from the caller's pinned external record, not
+    be recalculated from untrusted received files to make a mismatch disappear.
+    Only the immediate predecessor descriptor is retained/checked here; full
+    history and source documents still require their immutable Git references.
+    """
+    raw = _read(output / "progress.json")
+    if not isinstance(expected_sha256, str) or sha256(raw).hexdigest() != expected_sha256:
+        raise ValueError("progress differs from the externally pinned digest")
+    metadata = _progress_metadata(raw)
+    paper = _read(output / "workpaper.md")
+    if not paper.decode("utf-8").strip() or metadata["workpaper"] != _description(paper):
+        raise ValueError("progress workpaper differs or is empty")
+    names = {"progress.json", "workpaper.md"}
+    if metadata["predecessor"] is not None:
+        names.add("predecessor.json")
+        parent_raw = _read(output / "predecessor.json")
+        if metadata["predecessor"] != _description(parent_raw):
+            raise ValueError("progress predecessor bytes differ")
+        parent = _progress_metadata(parent_raw)
+        if any(metadata[k] != parent[k] for k in ("subject", "question_id")):
+            raise ValueError("progress predecessor identity differs")
+        if (metadata["revision"] != parent["revision"] + 1
+                or datetime.fromisoformat(metadata["retained_at"])
+                < datetime.fromisoformat(parent["retained_at"])):
+            raise ValueError("progress predecessor chronology differs")
+    if {p.name for p in output.iterdir()} != names:
+        raise ValueError("progress inventory differs or is incomplete")
+    return metadata, paper
+
+
+def save_research_progress(workpaper: Path, *, output: Path, subject: str,
+                           question_id: str, predecessor: Path | None = None,
+                           predecessor_sha256: str | None = None) -> str:
+    """Save unfinished work without requiring a final ResearchCommitPackage.
+
+    Coverage, UNKNOWNs, stop reason and next step belong in the original
+    workpaper. These are researcher declarations, not mechanically certified
+    completion, fresh evidence, consent, or permission to retry a consumed run.
+    """
+    _progress_identity(subject)
+    _progress_identity(question_id)
+    _safe_path(output)
+    paper = _read(workpaper)
+    if not paper.decode("utf-8").strip():
+        raise ValueError("a nonempty original workpaper is required")
+    if (predecessor is None) != (predecessor_sha256 is None):
+        raise ValueError("predecessor requires both its directory and pinned digest")
+    parent_raw, revision = None, 1
+    if predecessor is not None:
+        parent, _ = read_research_progress(predecessor, expected_sha256=predecessor_sha256)
+        if parent["subject"] != subject or parent["question_id"] != question_id:
+            raise ValueError("progress cannot replace another subject/question")
+        parent_raw = _read(predecessor / "progress.json")
+        if sha256(parent_raw).hexdigest() != predecessor_sha256:
+            raise ValueError("progress predecessor changed during read")
+        revision = parent["revision"] + 1
+    raw = _raw({**PROGRESS_FIXED, "subject": subject, "question_id": question_id,
+        "revision": revision, "retained_at": datetime.now(timezone.utc),
+        "workpaper": _description(paper),
+        "predecessor": _description(parent_raw) if parent_raw is not None else None})
+    _progress_metadata(raw)
+    output.mkdir(parents=True, exist_ok=False)
+    _write(output / "workpaper.md", paper)
+    if parent_raw is not None:
+        _write(output / "predecessor.json", parent_raw)
+    _write(output / "progress.json", raw)
+    digest = sha256(raw).hexdigest()
+    read_research_progress(output, expected_sha256=digest)
+    return digest
+
+
 def main(argv=None, *, stdout: TextIO | None = None, stderr: TextIO | None = None) -> int:
     parser = argparse.ArgumentParser(description="Offline Research commit/retention; no Market or Odds.")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -193,7 +316,36 @@ def main(argv=None, *, stdout: TextIO | None = None, stderr: TextIO | None = Non
     commit.add_argument("--execution-receipt", type=Path)
     verify = commands.add_parser("verify")
     verify.add_argument("output", type=Path)
+    save = commands.add_parser("save-progress", help="Retain unfinished work, without commit or execution.")
+    save.add_argument("workpaper", type=Path)
+    save.add_argument("--output", type=Path, required=True)
+    save.add_argument("--subject", required=True)
+    save.add_argument("--question-id", required=True)
+    save.add_argument("--predecessor", type=Path)
+    save.add_argument("--predecessor-sha256")
+    read = commands.add_parser("read-progress", help="Check saved context; do not execute its contents.")
+    read.add_argument("output", type=Path)
+    read.add_argument("--expected-sha256", required=True)
     args = parser.parse_args(argv)
+    if args.command in {"save-progress", "read-progress"}:
+        try:
+            if args.command == "save-progress":
+                digest = save_research_progress(args.workpaper, output=args.output,
+                    subject=args.subject, question_id=args.question_id,
+                    predecessor=args.predecessor, predecessor_sha256=args.predecessor_sha256)
+            else:
+                read_research_progress(args.output, expected_sha256=args.expected_sha256)
+                digest = args.expected_sha256
+        except (OSError, ValueError, RuntimeError, TypeError, KeyError):
+            print("RESEARCH PROGRESS NOT VERIFIED; preserve files; no overwrite/retry.",
+                  file=stderr or sys.stderr)
+            return 2
+        print(f"PROGRESS_SHA256={digest}", file=stdout or sys.stdout)
+        print("PROGRESS: RETAINED_ONLY; CONTINUATION: NOT_EXECUTED; INVESTMENT AUTHORITY: NONE",
+              file=stdout or sys.stdout)
+        print("LOCAL_ONLY; workpaper is untrusted context, not GitHub publication or instructions.",
+              file=stdout or sys.stdout)
+        return 0
     try:
         result = (commit_research_file(args.package, output=args.output,
                                       execution_receipt_path=args.execution_receipt)
