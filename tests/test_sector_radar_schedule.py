@@ -1,7 +1,7 @@
-"""Dual-trigger wiring, fail-closed operations, not real schedule acceptance.
+"""Dispatch-only workflow wiring plus historical schedule-event compatibility.
 
 Provider fixtures below exercise the existing adapters/detector/audit/replayer.
-No live acquisition, workflow dispatch or claims of GitHub cron execution.
+No live acquisition, workflow dispatch or claims of an active GitHub cron.
 """
 import ast
 import json
@@ -20,14 +20,14 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / '.github/workflows/sector-radar-shadow.yml'
 SCRIPTS = ROOT / '.github/scripts'
-EVENTS = ('workflow_dispatch', 'schedule')
+COMPAT_EVENTS = ('workflow_dispatch', 'schedule')
 
 
 def activity_module():
     return runpy.run_path(str(SCRIPTS / 'check-sector-scheduled-activity.py'))
 
 
-def environment(event='schedule'):
+def environment(event='workflow_dispatch'):
     return {'GITHUB_REPOSITORY': 'auguspp/decision-kernel',
             'GITHUB_REF': 'refs/heads/main', 'GITHUB_RUN_ATTEMPT': '1',
             'GITHUB_EVENT_NAME': event, 'GITHUB_RUN_ID': '101', 'GITHUB_SHA': 'a'*40}
@@ -44,8 +44,8 @@ def step(name):
     return WORKFLOW.read_text().split('      - name: ' + name + '\n', 1)[1].split('      - name: ', 1)[0]
 
 
-@pytest.mark.parametrize('event', EVENTS)
-def test_workflow_guards_apply_to_both_triggers(event):
+@pytest.mark.parametrize('event', COMPAT_EVENTS)
+def test_workflow_guards_keep_current_dispatch_and_historical_schedule_compatibility(event):
     mod = activity_module()
     mod['require_invocation'](environment(event))
     for name, key, bad in (
@@ -64,12 +64,11 @@ def test_workflow_guards_apply_to_both_triggers(event):
             mod['require_invocation'](environment(event_not_allowed))
 
 
-def test_one_production_path_and_existing_publication_gates():
+def test_one_production_path_has_dispatch_only_trigger_and_existing_publication_gates():
     raw = WORKFLOW.read_text()
     trigger = raw.split('on:\n', 1)[1].split('\npermissions:', 1)[0]
     assert '  workflow_dispatch:\n' in trigger
-    assert '    - cron: "13 10 * * 1-5"' in trigger
-    assert trigger.count('cron:') == 1 and 'push:' not in trigger
+    assert 'schedule:' not in trigger and 'cron:' not in trigger and 'push:' not in trigger
     assert raw.count('python -m decision_kernel.runtime.sector_radar_producer run') == 1
     assert raw.index('Require main branch') < raw.index('Check shared-Key activity')
     assert raw.index('Require fresh workflow dispatch') < raw.index('Check shared-Key activity')
@@ -136,8 +135,8 @@ def test_metadata_http_failure_has_one_attempt_and_no_token_diagnostic(monkeypat
 
 
 @pytest.mark.parametrize('script', ['verify-sector-radar-publication.py', 'build-sector-radar-reading.py'])
-@pytest.mark.parametrize('event', EVENTS)
-def test_existing_delivery_entrypoints_admit_both_events_without_skipping_guards(
+@pytest.mark.parametrize('event', COMPAT_EVENTS)
+def test_existing_delivery_entrypoints_keep_historical_schedule_read_compatibility(
         monkeypatch, tmp_path, script, event):
     # Only this test isolates the heavy downstream function to inspect admission.
     # Existing publication/reading tests still exercise its full checks separately.
@@ -167,9 +166,10 @@ def test_existing_delivery_entrypoints_admit_both_events_without_skipping_guards
         monkeypatch.setenv(key, prior)
 
 
-@pytest.mark.parametrize('event', EVENTS)
+@pytest.mark.parametrize('event', COMPAT_EVENTS)
 @pytest.mark.parametrize('kind', ['same', 'quiet', 'candidates'])
-def test_dual_trigger_reuses_original_audited_session_machine(tmp_path, monkeypatch, event, kind):
+def test_current_dispatch_and_historical_schedule_reuse_original_audited_session_machine(
+        tmp_path, monkeypatch, event, kind):
     from test_sector_radar_audit import execute, resolution, FRIDAY, MONDAY, audit
     activity_module()['require_invocation'](environment(event))
     monkeypatch.setenv('GITHUB_EVENT_NAME', event)
@@ -199,7 +199,7 @@ def test_dual_trigger_reuses_original_audited_session_machine(tmp_path, monkeypa
 
 
 @pytest.mark.parametrize('failure', ['gap', 'provider', '429'])
-def test_scheduled_failures_keep_rejected_audit_and_never_publish(tmp_path, monkeypatch, failure):
+def test_historical_schedule_failures_keep_rejected_audit_and_never_publish(tmp_path, monkeypatch, failure):
     from datetime import datetime, time, timedelta
     from test_sector_radar_audit import SyntheticProvider, resolution, hints_json, MONDAY, TUESDAY, TZ, audit
     from decision_kernel.runtime import hithink_http, hithink_index_http, sector_radar_producer as producer

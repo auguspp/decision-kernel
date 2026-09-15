@@ -2,6 +2,8 @@
 
 本接口属于 Harness。它只验证、引用和交付已保存结果与显式登记，不获取行情/公告，不运行 Odds 或 Web Research，不新增 Pre/Quick/Deep、Human wake、Belief 或 Action。
 
+> **2026-09-15 trigger supersession.** Sector 当前生产 workflow 已在外部 Daily Trigger Reliability 实证后退役 native GitHub `schedule` 入口；当前 `sector-radar-shadow.yml` 仅接受 `workflow_dispatch`。Human 已配置但在本次 repo 退役门完成前保持 Inactive 的 cron-job.org 工作日北京时间 18:13 任务负责发起 `operation=produce`；GitHub 继续负责执行、状态、证据与恢复。历史 `event=schedule` run 仍是可验证来源，不因换钟被重写。下文及 registry 中的 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING` / `NATURAL_PUBLICATION_ACCEPTANCE_PENDING` 是原 native-schedule 架构的 legacy 验收标记，不应解释为当前仍存在 GitHub 18:13 cron。当前外部触发、duplicate-day NOOP 与 result-bearing downstream acceptance 以 #297 的 2026-09-15 receipts 为准；最终启用外部任务仍是 Human UI 动作。
+
 ## 从一个固定入口开始
 
 Repository：`auguspp/decision-kernel`。发布 ref：`read-model/current-state`。入口文件：`current-state.json`；简短说明：同 ref 的 `README.md`。
@@ -21,7 +23,7 @@ GitHub 连接需具备仓库读取权限。消费方不需要下载 ZIP 或搬�
 - Stock：选择实际有 stock-reading job 的运行，不将同 workflow 的其他 trial 当股票产物。复用原纯 `render_stock_reading` 校验；核对捕获库存、原 replay 记录、scope/coverage/plan 和运行绑定，不重算新 selector 或 Odds。
 - Inbox：旧 CLI 只保存 HTML/Markdown，没有 typed `DecisionSpineResult`。本接口留存并绑定这份历史交付，**不从文案反推今日 Odds、quiet 或 Human 已接受的概率**。这个限制显式出现在 JSON。
 - Research/Decision：同一代码 commit 的显式生产输入配置，以及 `current_state/registry.json` 中逐条指定的用途引用。原 `ResearchFunnelResult` 解析器决定 handoff 资格。独立行情/生产输入失败不阻断一个有效、仍登记的研究请求。
-- 更新：薄的 `current-state-read-entry` workflow 监听原生产的 `requested/completed`，以及 main 的完整 kernel-tests 成功事件。它没有 cron、不修改18:13 Sector触发器。requested 更新只能报告已观察到的进行状态；上游仍运行时不能认定新结果已发布。完整成功及实际 artifacts 验证后才采纳新的结果。
+- 更新：薄的 `current-state-read-entry` workflow 监听原生产的 `requested/completed`，以及 main 的完整 kernel-tests 成功事件。它自己没有 cron。Sector 当前时钟在 GitHub workflow 外部，但执行仍落入同一个 `workflow_dispatch` production lineage；requested 更新只能报告已观察到的进行状态，上游仍运行时不能认定新结果已发布。完整成功及实际 artifacts 验证后才采纳新的结果。历史 `schedule` run 仍可被同一只读校验路径读取。
 
 执行的是可信 default-branch 代码，不是 artifact 中的文件，不 checkout 外部 PR/head 的代码。GitHub token 只用于仓库读取和派生 ref 的 Git 对象发布；没有供应商 Key 读取或写入。没有扩大连接授权、关闭保护、自动重试或市场调度。
 
@@ -55,17 +57,17 @@ GitHub 连接需具备仓库读取权限。消费方不需要下载 ZIP 或搬�
 
 入口未更新时，查 `.github/workflows/current-state-read-entry.yml` 的运行与 Summary，比较 `generated_at/recheck_after`。发布失败保留上一版本，不修改其时钟；新 commit 若未通过读回确认，不报告交付完成。没有新刷新事件也不会虚造“今日已检查”。
 
-gap 或最新权威原件缺失/过期时，转到 [原 scheduled-production 运行说明](sector-radar-scheduled-production.md) 检查真实失败及既有 qualified recovery。这里不 bridge gap、不 bootstrap reset、不倒找旧成功来掩盖缺失。
+gap 或最新权威原件缺失/过期时，转到 [原 scheduled-production 运行说明](sector-radar-scheduled-production.md) 检查真实失败及既有 qualified recovery。该文档顶部注明当前外部时钟 supersession，正文保留原 native schedule 历史。本接口不 bridge gap、不 bootstrap reset、不倒找旧成功来掩盖缺失。
 
 ## 验收与 roadmap
 
 本项开工基线：#281 merge `0a2c213c7f1b6b42046cdbd42be3b89c49d8d320`，#281最终回执评论 `5581757964`。
 
-以下是**显式验收登记状态**，不能仅因运行成功自动升级：
+以下是**显式验收登记状态**，不能仅因运行成功自动升级；其中前两项状态字符串保留为原 native-schedule 架构的 legacy registry label，当前事实边界以 #297 后续 receipts 为准：
 
-- P0-1：`NATURAL_SCHEDULE_ACCEPTANCE_PENDING`，18:13工程配置已完成；独立验收。
-- P0-2：工程与保存数据阅读已完成；`NATURAL_PUBLICATION_ACCEPTANCE_PENDING`。
-- P0-3：实现/完整CI、REMOTE READ ENTRY、SAVED-RESULT CONSUMER ACCEPTANCE、AUTOMATIC REFRESH ACCEPTANCE 分开记录在本项PR回执。施工端能读不替代需求管理对话的消费端验收。首份读取发布也不等于以后自然生产刷新已验收。
+- P0-1：registry 仍写 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING`。该字符串不再表示“GitHub 18:13 cron 仍待验收”；外部 workflow-dispatch timer、exact produce handoff、same-session NOOP 已有实证。当前剩余运维门是 native trigger 退役的 exact-head/main/publisher 验收后，由 Human 启用 cron-job.org。
+- P0-2：registry 仍写 `NATURAL_PUBLICATION_ACCEPTANCE_PENDING`。2026-09-15 的 result-bearing Stock 已自然接到 `stock-business-research`，Research 在已知 CNINFO anonymous announcement 403 边界 evidence-based fail-closed，随后 completed Research 状态被自然 publisher 保留；这证明自动 handoff/publication identity，不是 Research 成功、市场真值或 Human 接受。
+- P0-3：实现/完整CI、REMOTE READ ENTRY、SAVED-RESULT CONSUMER ACCEPTANCE、AUTOMATIC REFRESH ACCEPTANCE 分开记录在本项PR回执。施工端能读不替代需求管理对话的消费端验收。首份读取发布也不等于以后每个自然生产刷新都成功。
 - FULLY_UNATTENDED_RECOVERY = NOT_ESTABLISHED。
 - 下一批：外部 Pre/Quick 执行者、执行回执、预算和最小安全边界；本项未施工。
 
