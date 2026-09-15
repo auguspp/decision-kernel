@@ -176,13 +176,14 @@ def _median(values: Sequence[Decimal]) -> Decimal | None:
 def _cohort_stats(
     rows: Sequence[dict[str, Any]], *, horizon: int, selector: str
 ) -> dict[str, Any]:
+    horizon_key = str(horizon)
     selected = [row for row in rows if row[selector]]
     evaluated = [
-        row for row in selected if row["outcomes"][horizon]["status"] == EVALUATED
+        row for row in selected if row["outcomes"][horizon_key]["status"] == EVALUATED
     ]
-    values = [row["outcomes"][horizon]["metrics"]["excess_return"] for row in evaluated]
-    mfes = [row["outcomes"][horizon]["metrics"]["close_path_excess_mfe"] for row in evaluated]
-    maes = [row["outcomes"][horizon]["metrics"]["close_path_excess_mae"] for row in evaluated]
+    values = [row["outcomes"][horizon_key]["metrics"]["excess_return"] for row in evaluated]
+    mfes = [row["outcomes"][horizon_key]["metrics"]["close_path_excess_mfe"] for row in evaluated]
+    maes = [row["outcomes"][horizon_key]["metrics"]["close_path_excess_mae"] for row in evaluated]
     positive = sum(value > 0 for value in values)
     return {
         "selected_count": len(selected),
@@ -200,17 +201,18 @@ def _cohort_stats(
 def _family_summary(
     rows: Sequence[dict[str, Any]], *, horizon: int
 ) -> dict[str, Any]:
+    horizon_key = str(horizon)
     radar = _cohort_stats(rows, horizon=horizon, selector="radar_selected")
     baseline = _cohort_stats(rows, horizon=horizon, selector="baseline_selected")
-    evaluated = [row for row in rows if row["outcomes"][horizon]["status"] == EVALUATED]
+    evaluated = [row for row in rows if row["outcomes"][horizon_key]["status"] == EVALUATED]
     false_positive = sum(
         row["radar_selected"]
-        and row["outcomes"][horizon]["metrics"]["excess_return"] <= 0
+        and row["outcomes"][horizon_key]["metrics"]["excess_return"] <= 0
         for row in evaluated
     )
     false_negative = sum(
         not row["radar_selected"]
-        and row["outcomes"][horizon]["metrics"]["excess_return"] > 0
+        and row["outcomes"][horizon_key]["metrics"]["excess_return"] > 0
         for row in evaluated
     )
     mean_delta = None
@@ -281,7 +283,7 @@ def build_sector_radar_historical_study(
                             "turnover_pulse_5_vs_prior_20": observation.turnover_pulse_5_vs_prior_20,
                         },
                         "outcomes": {
-                            horizon: _outcome(
+                            str(horizon): _outcome(
                                 sector=prices[observation.thscode],
                                 benchmark=benchmark,
                                 signal_index=signal_index,
