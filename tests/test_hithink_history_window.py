@@ -149,9 +149,14 @@ def test_runtime_exposes_same_fresh_window_without_adding_radar_semantics() -> N
         hithink_http.HITHINK_HISTORY_PATH,
     ]
     assert calls[1][1]["adjust"] == "none"
+    exclusive_end = datetime.combine(
+        sessions[-1] + timedelta(days=1), time(), tzinfo=SHANGHAI
+    )
+    expected_end = exclusive_end - timedelta(milliseconds=1)
+    assert int(calls[1][1]["end"]) == int(expected_end.timestamp() * 1000)
     assert int(calls[1][1]["end"]) - int(calls[1][1]["start"]) == int(
         timedelta(days=45).total_seconds() * 1000
-    )
+    ) - 1
 
 
 def test_runtime_history_fails_visibly_when_provider_window_is_stale() -> None:
