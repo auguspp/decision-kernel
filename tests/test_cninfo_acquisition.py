@@ -11,7 +11,7 @@ from decision_kernel.adapters.cninfo import (
 )
 from decision_kernel.runtime.cninfo_http import (
     CNINFO_ANNOUNCEMENT_QUERY_URL,
-    CNINFO_STOCK_MAP_URL,
+    CNINFO_ORG_SEARCH_URL,
     CninfoRuntimeError,
     fetch_cninfo_disclosures,
 )
@@ -53,15 +53,12 @@ def test_cninfo_page_preserves_official_identity_and_locator() -> None:
         stock_code="601318",
         org_id="9900002221",
     )
-
     assert page.total_announcement_count == 1
     announcement = page.announcements[0]
     assert announcement.announcement_id == "A1"
     assert announcement.stock_code == "601318"
     assert announcement.org_id == "9900002221"
-    assert announcement.source_locator == (
-        "https://static.cninfo.com.cn/finalpage/2026-08-29/A1.PDF"
-    )
+    assert announcement.source_locator == "https://static.cninfo.com.cn/finalpage/2026-08-29/A1.PDF"
     assert announcement.published_at is not None
     assert announcement.published_at.utcoffset() is not None
 
@@ -72,7 +69,6 @@ def test_cninfo_page_accepts_live_null_announcements_only_for_zero_total() -> No
         stock_code="601318",
         org_id="9900002221",
     )
-
     assert page.total_announcement_count == 0
     assert page.announcements == ()
 
@@ -103,20 +99,14 @@ def test_cninfo_page_rejects_cross_security_or_external_locator() -> None:
 
 
 def test_fetch_cninfo_disclosures_paginates_one_coherent_official_batch() -> None:
-    get_calls: list[str] = []
     post_calls: list[tuple[str, dict[str, str]]] = []
 
-    def get_json(url: str) -> dict:
-        get_calls.append(url)
-        return ORG_MAP
-
-    def post_json(url: str, form: dict[str, str]) -> dict:
+    def post_json(url: str, form: dict[str, str]):
         post_calls.append((url, dict(form)))
+        if url == CNINFO_ORG_SEARCH_URL:
+            return ORG_MAP["stockList"]
         if form["pageNum"] == "1":
-            return {
-                "totalAnnouncement": 3,
-                "announcements": [_row("A1"), _row("A2")],
-            }
+            return {"totalAnnouncement": 3, "announcements": [_row("A1"), _row("A2")]}
         return {"totalAnnouncement": 3, "announcements": [_row("A3")]}
 
     batch = fetch_cninfo_disclosures(
@@ -124,29 +114,28 @@ def test_fetch_cninfo_disclosures_paginates_one_coherent_official_batch() -> Non
         start_date=date(2026, 8, 1),
         end_date=date(2026, 8, 31),
         page_size=2,
-        get_json=get_json,
         post_json=post_json,
     )
 
-    assert get_calls == [CNINFO_STOCK_MAP_URL]
     assert [item.announcement_id for item in batch.announcements] == ["A1", "A2", "A3"]
     assert batch.org_id == "9900002221"
     assert [call[0] for call in post_calls] == [
+        CNINFO_ORG_SEARCH_URL,
         CNINFO_ANNOUNCEMENT_QUERY_URL,
         CNINFO_ANNOUNCEMENT_QUERY_URL,
     ]
-    assert post_calls[0][1]["stock"] == "601318,9900002221"
-    assert post_calls[0][1]["seDate"] == "2026-08-01~2026-08-31"
-    assert [call[1]["pageNum"] for call in post_calls] == ["1", "2"]
+    assert post_calls[0][1] == {"keyWord": "601318", "maxNum": "10"}
+    assert post_calls[1][1]["stock"] == "601318,9900002221"
+    assert post_calls[1][1]["seDate"] == "2026-08-01~2026-08-31"
+    assert [call[1]["pageNum"] for call in post_calls[1:]] == ["1", "2"]
 
 
 def test_fetch_cninfo_disclosures_fails_if_result_set_moves_during_pagination() -> None:
-    def post_json(_url: str, form: dict[str, str]) -> dict:
+    def post_json(url: str, form: dict[str, str]):
+        if url == CNINFO_ORG_SEARCH_URL:
+            return ORG_MAP["stockList"]
         if form["pageNum"] == "1":
-            return {
-                "totalAnnouncement": 3,
-                "announcements": [_row("A1"), _row("A2")],
-            }
+            return {"totalAnnouncement": 3, "announcements": [_row("A1"), _row("A2")]}
         return {"totalAnnouncement": 4, "announcements": [_row("A3")]}
 
     with pytest.raises(CninfoRuntimeError, match="changed during pagination"):
@@ -155,7 +144,6 @@ def test_fetch_cninfo_disclosures_fails_if_result_set_moves_during_pagination() 
             start_date=date(2026, 8, 1),
             end_date=date(2026, 8, 31),
             page_size=2,
-            get_json=lambda _url: ORG_MAP,
             post_json=post_json,
         )
 
@@ -165,11 +153,10 @@ def test_fetch_cninfo_disclosures_allows_a_truthful_empty_window() -> None:
         stock_code="601318",
         start_date=date(2026, 8, 31),
         end_date=date(2026, 8, 31),
-        get_json=lambda _url: ORG_MAP,
-        post_json=lambda _url, _form: {
+        post_json=lambda url, _form: (ORG_MAP["stockList"] if url == CNINFO_ORG_SEARCH_URL else {
             "totalAnnouncement": 0,
             "announcements": None,
-        },
+        }),
     )
     assert batch.announcements == ()
 
@@ -180,7 +167,6 @@ def test_fetch_cninfo_disclosures_rejects_invalid_window_or_page_size() -> None:
             stock_code="601318",
             start_date=date(2026, 9, 1),
             end_date=date(2026, 8, 31),
-            get_json=lambda _url: ORG_MAP,
             post_json=lambda _url, _form: {},
         )
 
@@ -190,6 +176,5 @@ def test_fetch_cninfo_disclosures_rejects_invalid_window_or_page_size() -> None:
             start_date=date(2026, 8, 1),
             end_date=date(2026, 8, 31),
             page_size=31,
-            get_json=lambda _url: ORG_MAP,
             post_json=lambda _url, _form: {},
         )

@@ -20,12 +20,14 @@ from ..adapters.cninfo import (
 from ..adapters.pdf_text import MAX_PDF_BYTES
 
 
-CNINFO_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/data/szse_stock.json"
+CNINFO_LEGACY_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/data/szse_stock.json"
+CNINFO_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
+CNINFO_ORG_SEARCH_URL = CNINFO_STOCK_MAP_URL  # compatibility alias for the current identity lookup
 CNINFO_ANNOUNCEMENT_QUERY_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
 DEFAULT_PAGE_SIZE = 30
 _MAX_PAGE_SIZE = 30
 _GetJSON = Callable[[str], Mapping[str, Any]]
-_PostJSON = Callable[[str, Mapping[str, str]], Mapping[str, Any]]
+_PostJSON = Callable[[str, Mapping[str, str]], Any]
 _GetBytes = Callable[[str], bytes]
 
 
@@ -77,8 +79,14 @@ def fetch_cninfo_disclosures(
         )
 
     try:
+        org_rows = post_json(
+            CNINFO_STOCK_MAP_URL,
+            {"keyWord": stock_code.strip(), "maxNum": "10"},
+        )
+        if not isinstance(org_rows, list):
+            raise CninfoRuntimeError("CNINFO org search response is not a JSON array")
         org_id = resolve_cninfo_org_id(
-            get_json(CNINFO_STOCK_MAP_URL),
+            {"stockList": org_rows},
             stock_code=stock_code,
         )
     except CninfoAdapterError:
@@ -135,7 +143,6 @@ def fetch_cninfo_disclosures(
             break
         page_number += 1
 
-        # A moving upstream result set can otherwise trap the caller in an unbounded loop.
         maximum_pages = (expected_total + page_size - 1) // page_size
         if page_number > maximum_pages:
             raise CninfoRuntimeError(
@@ -229,9 +236,10 @@ def _request_json(
     form: Mapping[str, str] | None,
     timeout_seconds: float,
 ) -> Mapping[str, Any]:
-    # Fixed labels retain the failing phase without echoing URLs, forms or bodies.
     stage = {
+        ("GET", CNINFO_LEGACY_STOCK_MAP_URL): "SECURITY_MAP",
         ("GET", CNINFO_STOCK_MAP_URL): "SECURITY_MAP",
+        ("POST", CNINFO_STOCK_MAP_URL): "ORG_SEARCH",
         ("POST", CNINFO_ANNOUNCEMENT_QUERY_URL): "ANNOUNCEMENT_QUERY",
     }.get((method, url), "UNCLASSIFIED_JSON_ENDPOINT")
     body = None if form is None else urlencode(form).encode("utf-8")
@@ -253,6 +261,10 @@ def _request_json(
         ) from exc
     except (URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise CninfoRuntimeError(f"CNINFO request or response decoding failed [stage={stage}]") from exc
+    if stage == "ORG_SEARCH":
+        if not isinstance(payload, list):
+            raise CninfoRuntimeError(f"CNINFO response is not a JSON array [stage={stage}]")
+        return payload
     if not isinstance(payload, Mapping):
         raise CninfoRuntimeError(f"CNINFO response is not a JSON object [stage={stage}]")
     return payload

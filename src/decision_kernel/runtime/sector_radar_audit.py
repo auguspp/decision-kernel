@@ -77,7 +77,7 @@ _SOURCE_FILES = (
     "runtime/sector_radar_shadow.py", "runtime/sector_radar_state.py",
     "runtime/sector_radar_events.py", "runtime/sector_radar_daily.py",
     "runtime/sector_radar_persistence.py", "runtime/sector_radar_producer.py",
-    "runtime/sector_radar_audit.py",
+    "runtime/stock_radar_reading.py", "runtime/sector_radar_audit.py",
 )
 _SENSITIVE_KEY = re.compile(r"(?:api.?key|token|authorization|cookie|password|secret)", re.I)
 _HASH = re.compile(r"^[0-9a-f]{64}$")
@@ -104,8 +104,6 @@ def _sha(data: bytes) -> str:
 
 
 def _json_bytes(value: Any) -> bytes:
-    # Preserve decoded JSON semantics, including finite provider floats. Domain
-    # canonical hashes deliberately reject binary floats and are not used here.
     return json.dumps(
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
     ).encode("utf-8")
@@ -262,7 +260,7 @@ class _Recorder:
         return recorded_now
 
 
-def _fetchers(request: _Request) -> dict[str, Callable[..., Any]]:
+def _fetchers(request: _Request, *, qualification_clock: Callable[[], datetime] | None = None) -> dict[str, Callable[..., Any]]:
     calendar: tuple | None = None
 
     def fetch_calendar(**kwargs):
@@ -273,9 +271,39 @@ def _fetchers(request: _Request) -> dict[str, Callable[..., Any]]:
     def fetch_snapshot(**kwargs):
         if calendar is None:
             raise SectorRadarAuditError("snapshot requested before the exact calendar")
-        return hithink_index_http.fetch_hithink_qualified_index_snapshot_batch(
-            request_json=request, trading_sessions=calendar, **kwargs,
+        if qualification_clock is None:
+            return hithink_index_http.fetch_hithink_qualified_index_snapshot_batch(
+                request_json=request, trading_sessions=calendar, **kwargs,
+            )
+        from decision_kernel.adapters.hithink_index import (
+            HithinkIndexAdapterError, qualify_hithink_index_snapshot,
         )
+        from . import stock_radar_reading as stock
+        requested = tuple(kwargs["thscodes"])
+        benchmark = kwargs["benchmark_thscode"]
+        api_key = kwargs.get("api_key")
+        raw_snapshot = hithink_index_http.fetch_hithink_index_snapshot_batch(
+            thscodes=requested, api_key=api_key, request_json=request,
+        )
+        snapshot_received_at = qualification_clock()
+        history = hithink_index_http.fetch_hithink_completed_index_history(
+            thscode=benchmark, observed_at=snapshot_received_at, api_key=api_key,
+            request_json=request, trading_sessions=calendar,
+        )
+        qualification_at = qualification_clock()
+        try:
+            return qualify_hithink_index_snapshot(
+                raw_snapshot, benchmark_history=history, trading_sessions=calendar,
+                observed_at=qualification_at,
+            )
+        except HithinkIndexAdapterError as exc:
+            if str(exc) != stock._LATER_TRADING_DAY_SNAPSHOT_ERROR:
+                raise
+            qualified, _ = stock._qualify_stock_index_snapshot(
+                raw_snapshot, history, calendar, observed_at=qualification_at,
+                received_at=snapshot_received_at,
+            )
+            return qualified
 
     return {
         "fetch_calendar": fetch_calendar,
@@ -287,11 +315,6 @@ def _fetchers(request: _Request) -> dict[str, Callable[..., Any]]:
 
 
 def write_daily_observation_audit(preparation: Any, output_directory: Path) -> None:
-    """Retain both homogeneous universes and the existing gate decisions.
-
-    Gate predicates are reused, not reimplemented or granted new authority. The
-    ledger is neither an input nor an alternative trigger-state source.
-    """
     pair = preparation.snapshot_pair
     decisions = []
     for family, previous, current, entries in (
@@ -329,8 +352,6 @@ def _save_inputs(recorder: _Recorder, resolution: SectorRadarPersistenceResoluti
     recorder.add("inputs/market-state.json", serialize_sector_radar_market_state(resolution.market_state).encode("utf-8"))
     recorder.add("inputs/candidate-events.json", serialize_sector_radar_candidate_event_ledger(resolution.event_ledger).encode("utf-8"))
     recorder.add("inputs/parent-hints.json", parent_hints_json.encode("utf-8"))
-    # The existing market-state serializer preserves ISO offsets in its hashed
-    # string payload. Preserve the exact input representation, not just its instant.
     context_payload = asdict(context)
     context_payload["observed_at"] = _clock(context.observed_at).isoformat()
     recorder.add("inputs/context.json", _domain_bytes(context_payload))
@@ -378,12 +399,6 @@ def run_audited_sector_radar_producer(
     now: Callable[[], datetime] | None = None,
     capture_now: Callable[[], datetime] | None = None,
 ) -> Any:
-    """Stage a producer run; seal its audit before publishing live state.
-
-    Injected transports must be explicitly synthetic. Their calculated state is
-    retained only inside the labelled audit, never published to state_directory.
-    No replay or audit manifest is accepted as ordinary restoration authority.
-    """
     from .sector_radar_producer import run_sector_radar_producer
 
     if provenance not in {LIVE_PROVENANCE, SYNTHETIC_PROVENANCE}:
@@ -413,12 +428,13 @@ def run_audited_sector_radar_producer(
     with tempfile.TemporaryDirectory(prefix="sector-radar-audit-stage-") as temporary:
         staged_state = Path(temporary) / "state"
         try:
+            recorded_now = recorder.run_clock(now)
             outcome = run_sector_radar_producer(
                 resolution=resolution, parent_hints=parent_hints, context=context,
                 state_directory=staged_state, output_directory=output_directory,
-                api_key=api_key, now=recorder.run_clock(now),
+                api_key=api_key, now=recorded_now,
                 membership_request_delay_seconds=0.25 if provenance == LIVE_PROVENANCE else 0.0,
-                **_fetchers(recorder.request(transport)),
+                **_fetchers(recorder.request(transport), qualification_clock=recorded_now),
             )
         except (OSError, ValueError, RuntimeError) as exc:
             for name, data in _output_files(staged_state, output_directory).items():
@@ -429,7 +445,6 @@ def run_audited_sector_radar_producer(
             raise SectorRadarAuditError(f"Audited producer rejected input ({type(exc).__name__}): {message[:1000]}") from None
         for name, data in _output_files(staged_state, output_directory).items():
             recorder.add(name, data)
-        # SUCCEEDED describes the staged calculation, not final workflow publication.
         recorder.manifest.update(status="SUCCEEDED", error_type=None)
         recorder.flush()
         validate_sector_radar_input_audit(recorder.root)
@@ -439,7 +454,6 @@ def run_audited_sector_radar_producer(
 
 
 def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
-    """Validate exact inventory, hashes, schema and code before any replay."""
     if root.is_symlink() or not root.is_dir():
         raise SectorRadarAuditError("audit root must be a real directory")
     manifest_path = root / "manifest.json"
@@ -572,11 +586,6 @@ def _restore_audit_inputs(root: Path) -> tuple[Any, Any, SectorRadarPersistenceR
 
 
 def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
-    """Re-run qualification and composition using only sealed local inputs.
-
-    No URL fetch, caller-supplied output path, cache save or workflow dispatch is
-    available. Regenerated states live only in a disposable temporary directory.
-    """
     from .sector_radar_producer import run_sector_radar_producer
 
     manifest = validate_sector_radar_input_audit(root)
@@ -612,7 +621,8 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
                 resolution=resolution, parent_hints=hints, context=context,
                 state_directory=state_dir, output_directory=output_dir,
                 api_key="OFFLINE_REPLAY_NO_CREDENTIAL", now=now,
-                membership_request_delay_seconds=0.0, **_fetchers(request),
+                membership_request_delay_seconds=0.0,
+                **_fetchers(request, qualification_clock=now),
             )
         except _RecordedRequestFailure as exc:
             error_type = exc.original_type

@@ -64,7 +64,11 @@ def setup_capture(tmp_path,monkeypatch,*,problem=None):
     def query(**kw):
         calls.append(kw)
         if problem=='transport':raise cninfo.CninfoRuntimeError('SYNTHETIC_PRIVATE_ERROR')
-        if kw['method']=='GET':return {'stockList':[{'code':'600184','orgId':'synthetic-org'}]}
+        if kw['url']==cninfo.CNINFO_STOCK_MAP_URL:
+            assert kw['method']=='POST'
+            assert kw['form']=={'keyWord':'600184','maxNum':'10'}
+            return [{'code':'600184','orgId':'synthetic-org'}]
+        assert kw['url']==cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL and kw['method']=='POST'
         if problem=='foreign':rows[0]['secCode']='300183'
         return {'totalAnnouncement':len(rows),'announcements':rows}
     monkeypatch.setattr(cninfo,'_request_json',query)
