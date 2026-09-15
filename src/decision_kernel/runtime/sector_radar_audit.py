@@ -454,6 +454,19 @@ def run_audited_sector_radar_producer(
 
 
 def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
+    """Ordinary replay still requires the exact producing implementation."""
+    manifest = validate_sector_radar_input_audit_integrity(root)
+    if manifest["implementation"] != _implementation():
+        raise SectorRadarAuditError("replay requires the exact recorded implementation files")
+    return manifest
+
+
+def validate_sector_radar_input_audit_integrity(root: Path) -> dict[str, Any]:
+    """Check sealed bytes only; NOT replay, source truth or restore authority.
+
+    Historical reconstruction may use a later, separately identified repair.
+    Ordinary replay must continue through validate_sector_radar_input_audit.
+    """
     if root.is_symlink() or not root.is_dir():
         raise SectorRadarAuditError("audit root must be a real directory")
     manifest_path = root / "manifest.json"
@@ -478,8 +491,13 @@ def validate_sector_radar_input_audit(root: Path) -> dict[str, Any]:
             raise SectorRadarAuditError("successful calculation cannot carry an error")
     elif not isinstance(error_type, str) or not _ERROR_TYPE.fullmatch(error_type):
         raise SectorRadarAuditError("rejected calculation must identify its error type")
-    if manifest["implementation"] != _implementation():
-        raise SectorRadarAuditError("replay requires the exact recorded implementation files")
+    implementation = manifest["implementation"]
+    current_names = set(_SOURCE_FILES)
+    legacy_names = current_names - {"runtime/stock_radar_reading.py"}
+    if (not isinstance(implementation, dict)
+            or set(implementation) not in (current_names, legacy_names)
+            or any(not _hash_string(value) for value in implementation.values())):
+        raise SectorRadarAuditError("audit implementation identity is malformed")
     files = manifest["files"]
     if not isinstance(files, dict) or len(files) > MAX_REQUESTS + 32:
         raise SectorRadarAuditError("audit file inventory is invalid")
