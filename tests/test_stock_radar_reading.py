@@ -5,6 +5,7 @@ import gzip
 import json
 from datetime import datetime, timedelta
 from decimal import Decimal
+from functools import lru_cache
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -44,12 +45,27 @@ def synthetic_references(state, codes, *, kind=None):
     return {'provenance':stock.SYNTHETIC_REFERENCES,'windows':windows,'latest_quotes':latest}
 
 
-def prepared():
+@lru_cache(maxsize=1)
+def _prepared_upstream():
+    """Build the frozen shared inputs once; never cache the mutable plan.
+
+    MarketState and the empty EventLedger are frozen dataclass graphs containing
+    immutable tuples.  The association is copied for every caller below because
+    several negative tests intentionally mutate it.  `stock.prepare_stock_reading`
+    must stay outside this cache: issuer-isolation tests monkeypatch that callable
+    and need every helper invocation to exercise the current wrapper.
+    """
     raw = gzip.decompress((ROOT/'radar_inputs/sector-radar-state-bootstrap-2026-09-04.json.gz').read_bytes()).decode()
     state = parse_sector_radar_market_state(raw)
     ledger = create_sector_radar_candidate_event_ledger(created_at=NOW, source='SYNTHETIC_STOCK_READING_TEST')
     links = json.loads((ROOT/'radar_inputs/economic-market-links-v0.json').read_text())
     association = reading(state=state, ledger=ledger, links=links)
+    return state, ledger, association
+
+
+def prepared():
+    state, ledger, frozen_association = _prepared_upstream()
+    association = copy.deepcopy(frozen_association)
     plan = stock.prepare_stock_reading(ROOT, state, ledger, association, observed_at=NOW)
     base = SyntheticProvider(SimpleNamespace(market_state=state), session=FRIDAY)
     calls = []
