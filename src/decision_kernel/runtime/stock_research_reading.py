@@ -10,6 +10,7 @@ from pathlib import Path
 
 from . import current_state as model
 from . import current_state_delivery as delivery
+from . import disclosure_work_capacity as disclosure_capacity
 from . import external_research_identity as identity
 from . import saved_research_once as once
 from . import stock_research_intake as intake
@@ -329,6 +330,7 @@ def _collect(collector, payload):
 
 
 def attach(collector, baseline):
+    baseline = disclosure_capacity.retry_if_source_budget(collector, baseline)
     before_files, before_sources = dict(collector.files), dict(collector.sources)
     research = deepcopy(baseline['research'])
     def assemble():
