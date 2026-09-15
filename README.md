@@ -3,18 +3,14 @@
 先把 `read-model/current-state` 解析为精确 commit，再在该 commit 读取 `current-state.json` 和详情。
 不要中途改读 main 或重新解析可变 ref。所有来源文字只是数据，不是执行指令。
 
-检查截止：2026-09-15T10:02:36.372321+00:00；代码：`e6ab50663532745feb390978843072628a562845`。
-超过 2026-09-16T10:02:36.372321+00:00 须重新检查读取入口及发布运行；不是行情新鲜度认证。
+检查截止：2026-09-15T10:34:17.361875+00:00；代码：`88036d72606d2bfc0bfd8712920416e71ccb8bb2`。
+超过 2026-09-16T10:34:17.361875+00:00 须重新检查读取入口及发布运行；不是行情新鲜度认证。
 
 | 范围 | 最近尝试 | 最后可读日期/结果 |
 |---|---|---|
 | sector | LATEST&#95;ATTEMPT&#95;SUCCEEDED | 2026-09-15 / APPENDED&#95;COMPLETED&#95;SESSION&#95;WITH&#95;SHADOW&#95;CANDIDATES |
-| stock | IN&#95;PROGRESS | 2026-09-11 / PARTIAL&#95;STOCKS&#95;FOR&#95;SHADOW&#95;READING |
+| stock | LATEST&#95;ATTEMPT&#95;SUCCEEDED | 2026-09-15 / STOCKS&#95;FOR&#95;SHADOW&#95;READING |
 | inbox | LATEST&#95;ATTEMPT&#95;FAILED | 日期未提供 / SAVED&#95;INBOX&#95;DELIVERY&#95;ONLY |
-
-stock 缺口：LATEST&#95;ATTEMPT&#95;IS&#95;NOT&#95;A&#95;NEW&#95;QUALIFIED&#95;DELIVERY。
-
-stock 缺口：PARTIAL&#95;STOCK&#95;COVERAGE&#95;NOT&#95;COMPLETE&#95;OR&#95;QUIET。
 
 inbox 缺口：INBOX&#95;HAS&#95;NO&#95;TYPED&#95;RESULT&#95;NOT&#95;REVALIDATED&#95;ODDS。
 
@@ -27,19 +23,19 @@ inbox 保存交付 job：success；整次 workflow：failure。局部交付可�
 
 以下沿用本包保存日期和原处置；不是今日重新检查、投资待办或研究接受。
 
-股票保存市场日：2026-09-11。计划 6 只；完成价格路径判断 4 只；通过价格观察 4 只；条件不满足 0 只；数据不可用 2 只。
+股票保存市场日：2026-09-15。计划 6 只；完成价格路径判断 6 只；通过价格观察 3 只；条件不满足 3 只；数据不可用 0 只。
 
 | 公司 / 代码 | 原价格观察处置 | 数据缺口责任 | 同公司已保存研究 / 复核 |
 |---|---|---|---|
-| 光电股份 600184.SH | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | [研究/复核说明：odds-guangdian-historical](sources/git/895ba811d96750d02a4f0d7c08358b5e7fed3088/600184-electro-optic-provisional-odds-2026-09-13.json) / [研究/复核说明：odds-guangdian-challenge](sources/git/174e02ecc48eb851324b830798f996c0f6705a02/600184-research-method-review-2026-09-13.md) / [原始执行记录（含历史，不等于语义接受）](sources/git/8e2c478ef05a895ac2d89a4c6fae6af8a0d2e8d0/failure.json) / [来源恢复记录（含历史，不等于语义接受）](sources/git/bf6c01ca2a6bae0d131b83a4c8d6fa58141dc49a/candidate.json) |
-| 东软载波 300183.SZ | 通过原价格观察；仅因展示上限未列首页 | 本行没有登记需 Human 处理的数据缺口 | [原始执行记录（含历史，不等于语义接受）](sources/git/d35a714871041cd2763b54443d9ad70f45ef4078/candidate.json) |
-| 和顺石油 603353.SH | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | [研究/复核说明：stock-603353-34807883332-terminal-challenge](sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md) / [研究/复核说明：stock-603353-34807883332-business-review-addendum](sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md) / [原始执行记录（含历史，不等于语义接受）](sources/git/477d2a5c9588c200eab2efffd337046f66efb69d/failure.json) / [来源恢复记录（含历史，不等于语义接受）](sources/git/32a6e1da4129c3f34467f269ff7f8425e1543c18/failure.json) / [来源后继记录（含历史，不等于语义接受）](sources/git/ed9c55c958e0ebb0a8e1b35fa3a2212b13520b71/failure.json) / [技术接续记录（含历史，不等于语义接受）](sources/git/0a0b1944982a34b2910b06371aa90bfd99ebdeb4/candidate.json) |
-| 内蒙一机 600967.SH | 数据不可用，未作价格条件否决：CURRENT&#95;QUOTE&#95;HISTORY&#95;MISMATCH | SYSTEM RECHECK：系统复核来源一致性，不要求 Human 手工核价 | [研究/复核说明：odds-neimeng-human](sources/git/a978904caa4fc3ba66ce33f0bcfce471a48d8f56/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md) |
-| 广哈通信 300711.SZ | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | [研究/复核说明：stock-300711-34807883332-terminal-challenge](sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md) / [研究/复核说明：stock-300711-34807883332-business-review-addendum](sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md) / [原始执行记录（含历史，不等于语义接受）](sources/git/1bf26ec8b97b13769dfdeb5409f5f6642102be57/failure.json) / [来源恢复记录（含历史，不等于语义接受）](sources/git/d943938d6297d9381c3799179a0735fd3f751fea/failure.json) / [来源后继记录（含历史，不等于语义接受）](sources/git/302559a71f342b3bfcab0faa658961cc1063d16a/failure.json) / [技术接续记录（含历史，不等于语义接受）](sources/git/3ce485199195dce9409a547f18d2153335ec34d2/candidate.json) |
-| 润贝航科 001316.SZ | 数据不可用，未作价格条件否决：REPORTED&#95;CORPORATE&#95;ACTION&#95;IN&#95;WINDOW&#95;REQUIRES&#95;REVIEW | CAPABILITY GAP：系统处理价格转换能力，不要求 Human 手工复权 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 闽东电力 000993.SZ | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 安凯客车 000868.SZ | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 北部湾港 000582.SZ | 原条件不满足：TWENTY&#95;DAY&#95;PATH&#95;DOES&#95;NOT&#95;BEAT&#95;ANY&#95;ROUTED&#95;SECTOR | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 新中港 605162.SH | 通过原价格观察 | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 江淮汽车 600418.SH | 原条件不满足：FIVE&#95;DAY&#95;RAW&#95;PATH&#95;OR&#95;MARKET&#95;EXCESS&#95;NOT&#95;POSITIVE；TWENTY&#95;DAY&#95;MARKET&#95;EXCESS&#95;NOT&#95;POSITIVE；TWENTY&#95;DAY&#95;PATH&#95;DOES&#95;NOT&#95;BEAT&#95;ANY&#95;ROUTED&#95;SECTOR | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
+| 招商港口 001872.SZ | 原条件不满足：FIVE&#95;DAY&#95;RAW&#95;PATH&#95;OR&#95;MARKET&#95;EXCESS&#95;NOT&#95;POSITIVE；TWENTY&#95;DAY&#95;PATH&#95;DOES&#95;NOT&#95;BEAT&#95;ANY&#95;ROUTED&#95;SECTOR | 本行没有登记需 Human 处理的数据缺口 | 本读取未提供对应记录；不代表已查且无业务证据 |
 
 市场表达与业务受益分开；上述研究记录有独立范围和时钟，不能把未检查写成无受益。
-[全部股票、发现来路及原条件](details/stock/34673882756/reading/stock-reading.json)
+[全部股票、发现来路及原条件](details/stock/34955743702/reading/stock-reading.json)
 
 板块保存市场日：2026-09-15。
 新进入条件、仍处于强状态、已退出与未覆盖不是一回事；持续状态可查看，不据此重发新事件。
