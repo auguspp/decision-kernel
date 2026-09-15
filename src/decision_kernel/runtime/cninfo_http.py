@@ -21,7 +21,7 @@ from ..adapters.pdf_text import MAX_PDF_BYTES
 
 
 CNINFO_LEGACY_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/data/szse_stock.json"
-CNINFO_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
+CNINFO_STOCK_MAP_URL = "http://www.cninfo.com.cn/new/information/topSearch/query"
 CNINFO_ORG_SEARCH_URL = CNINFO_STOCK_MAP_URL  # compatibility alias for the current identity lookup
 CNINFO_ANNOUNCEMENT_QUERY_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
 DEFAULT_PAGE_SIZE = 30
