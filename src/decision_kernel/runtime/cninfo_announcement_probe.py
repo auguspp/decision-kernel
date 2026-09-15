@@ -10,7 +10,7 @@ from typing import Any, Callable, Mapping
 import requests
 from requests.adapters import HTTPAdapter
 
-from decision_kernel.adapters.cninfo import resolve_cninfo_org_id
+from decision_kernel.adapters.cninfo import CninfoAdapterError, resolve_cninfo_org_id
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime.cninfo_http import (
     CNINFO_ANNOUNCEMENT_QUERY_URL,
@@ -19,12 +19,13 @@ from decision_kernel.runtime.cninfo_http import (
     _announcement_query_form,
     _request_json,
 )
+from decision_kernel.runtime.stock_field_source_study import notice_query
 
 STOCK_CODE = "600036"
 START_DATE = date(2026, 9, 14)
 END_DATE = date(2026, 9, 15)
 DISCLOSURE_PAGE_URL = "https://www.cninfo.com.cn/new/disclosure"
-MAX_REQUESTS = 6
+MAX_REQUESTS = 7
 MAX_JSON_BYTES = 256 * 1024
 
 AUTHORITY = {
@@ -71,31 +72,47 @@ def _status_from_runtime_error(exc: CninfoRuntimeError) -> int | None:
     return None if match is None else int(match.group(1))
 
 
+def _mapping_shape(payload: Mapping[str, Any]) -> dict[str, Any]:
+    rows = payload.get("announcements")
+    total = payload.get("totalAnnouncement")
+    contract_shape = (
+        type(total) is int
+        and total >= 0
+        and (rows is None or isinstance(rows, list))
+    )
+    return {
+        "json_shape": "OBJECT",
+        "contract_shape": (
+            "CNINFO_ANNOUNCEMENT_PAGE" if contract_shape else "OTHER_JSON_OBJECT"
+        ),
+        "top_level_keys": sorted(str(key) for key in payload),
+        "total_announcement": total,
+        "announcement_count": len(rows) if isinstance(rows, list) else None,
+        "has_more": payload.get("hasMore"),
+    }
+
+
 def _json_shape_from_response(response: Any) -> dict[str, Any]:
     length = response.headers.get("Content-Length") if hasattr(response, "headers") else None
     if isinstance(length, str) and length.isdigit() and int(length) > MAX_JSON_BYTES:
-        return {"json_shape": "REJECTED_OVERSIZE"}
+        return {"json_shape": "REJECTED_OVERSIZE", "contract_shape": "NOT_ESTABLISHED"}
     chunks: list[bytes] = []
     count = 0
     for chunk in response.iter_content(chunk_size=65536):
         count += len(chunk)
         if count > MAX_JSON_BYTES:
-            return {"json_shape": "REJECTED_OVERSIZE"}
+            return {"json_shape": "REJECTED_OVERSIZE", "contract_shape": "NOT_ESTABLISHED"}
         chunks.append(chunk)
     try:
         payload = json.loads(b"".join(chunks).decode("utf-8"))
     except (json.JSONDecodeError, UnicodeDecodeError):
-        return {"json_shape": "NOT_JSON"}
+        return {"json_shape": "NOT_JSON", "contract_shape": "NOT_ESTABLISHED"}
     if not isinstance(payload, Mapping):
-        return {"json_shape": type(payload).__name__.upper()}
-    rows = payload.get("announcements")
-    return {
-        "json_shape": "OBJECT",
-        "top_level_keys": sorted(str(key) for key in payload),
-        "total_announcement": payload.get("totalAnnouncement"),
-        "announcement_count": len(rows) if isinstance(rows, list) else None,
-        "has_more": payload.get("hasMore"),
-    }
+        return {
+            "json_shape": type(payload).__name__.upper(),
+            "contract_shape": "NOT_ESTABLISHED",
+        }
+    return _mapping_shape(payload)
 
 
 def _requests_post(
@@ -162,7 +179,7 @@ def run_probe(
     request_json: Callable[..., Any] = _request_json,
     session_factory: Callable[[], Any] = _fresh_session,
 ) -> dict[str, Any]:
-    request_count = 0
+    request_count = 1
     try:
         org_rows = request_json(
             url=CNINFO_STOCK_MAP_URL,
@@ -170,11 +187,10 @@ def run_probe(
             form={"keyWord": STOCK_CODE, "maxNum": "10"},
             timeout_seconds=10.0,
         )
-        request_count += 1
         if not isinstance(org_rows, list):
             raise ValueError("CNINFO_ORG_SEARCH_ARRAY_REQUIRED")
         org_id = resolve_cninfo_org_id({"stockList": org_rows}, stock_code=STOCK_CODE)
-    except Exception as exc:
+    except (CninfoRuntimeError, CninfoAdapterError, ValueError) as exc:
         result = {
             "schema_version": 1,
             "semantics": "CASE_BOUNDED_CNINFO_REQUEST_CONTRACT_PROBE_NOT_EVIDENCE",
@@ -182,7 +198,7 @@ def run_probe(
             "query_window": [START_DATE.isoformat(), END_DATE.isoformat()],
             "org_lookup": {"status": "FAILED", "error_type": type(exc).__name__},
             "announcement_attempts": [],
-            "request_count": max(request_count, 1),
+            "request_count": request_count,
             "max_requests": MAX_REQUESTS,
             "disposition": "ORG_LOOKUP_FAILED",
             "cause": "UNKNOWN",
@@ -191,7 +207,7 @@ def run_probe(
         result["probe_hash"] = canonical_hash(result)
         return result
 
-    form = _announcement_query_form(
+    current_form = _announcement_query_form(
         stock_code=STOCK_CODE,
         org_id=org_id,
         start_date=START_DATE,
@@ -199,6 +215,11 @@ def run_probe(
         page_size=1,
         page_number=1,
     )
+    prior_form = notice_query(
+        STOCK_CODE,
+        {"stockList": [{"code": STOCK_CODE, "orgId": org_id}]},
+        END_DATE,
+    )["params"]
     attempts: list[dict[str, Any]] = []
 
     request_count += 1
@@ -206,28 +227,22 @@ def run_probe(
         payload = request_json(
             url=CNINFO_ANNOUNCEMENT_QUERY_URL,
             method="POST",
-            form=form,
+            form=current_form,
             timeout_seconds=10.0,
         )
-        if isinstance(payload, Mapping):
-            rows = payload.get("announcements")
-            attempts.append({
-                "variant": "urllib_current_production",
-                "method": "POST",
-                "status": 200,
-                "json_shape": "OBJECT",
-                "top_level_keys": sorted(str(key) for key in payload),
-                "total_announcement": payload.get("totalAnnouncement"),
-                "announcement_count": len(rows) if isinstance(rows, list) else None,
-                "has_more": payload.get("hasMore"),
-            })
-        else:
-            attempts.append({
-                "variant": "urllib_current_production",
-                "method": "POST",
-                "status": 200,
-                "json_shape": type(payload).__name__.upper(),
-            })
+        attempts.append({
+            "variant": "urllib_current_production",
+            "method": "POST",
+            "status": 200,
+            **(
+                _mapping_shape(payload)
+                if isinstance(payload, Mapping)
+                else {
+                    "json_shape": type(payload).__name__.upper(),
+                    "contract_shape": "NOT_ESTABLISHED",
+                }
+            ),
+        })
     except CninfoRuntimeError as exc:
         attempts.append({
             "variant": "urllib_current_production",
@@ -239,8 +254,17 @@ def run_probe(
     with session_factory() as session:
         attempts.append(_requests_post(
             session=session,
+            variant="requests_current_form_prior_headers",
+            form=current_form,
+            headers=_PRIOR_STUDY_HEADERS,
+        ))
+        request_count += 1
+
+    with session_factory() as session:
+        attempts.append(_requests_post(
+            session=session,
             variant="requests_prior_source_study",
-            form=form,
+            form=prior_form,
             headers=_PRIOR_STUDY_HEADERS,
         ))
         request_count += 1
@@ -249,7 +273,7 @@ def run_probe(
         attempts.append(_requests_post(
             session=session,
             variant="requests_browser_headers",
-            form=form,
+            form=current_form,
             headers=_BROWSER_HEADERS,
         ))
         request_count += 1
@@ -262,7 +286,7 @@ def run_probe(
             attempts.append(_requests_post(
                 session=session,
                 variant="requests_warmed_browser_session",
-                form=form,
+                form=current_form,
                 headers=_BROWSER_HEADERS,
             ))
             request_count += 1
@@ -274,7 +298,8 @@ def run_probe(
     working = [
         item["variant"]
         for item in announcement_posts
-        if item.get("status") == 200 and item.get("json_shape") == "OBJECT"
+        if item.get("status") == 200
+        and item.get("contract_shape") == "CNINFO_ANNOUNCEMENT_PAGE"
     ]
     statuses = [item.get("status") for item in announcement_posts]
     if working:
@@ -316,10 +341,14 @@ def render_summary(result: Mapping[str, Any]) -> str:
         "",
     ]
     for item in result.get("announcement_attempts", []):
-        lines.append(f"- `{item['variant']}` {item['method']}: status `{item.get('status')}`")
+        shape = item.get("contract_shape")
+        suffix = "" if shape is None else f", shape `{shape}`"
+        lines.append(
+            f"- `{item['variant']}` {item['method']}: status `{item.get('status')}`{suffix}"
+        )
     lines.extend([
         "",
-        "No retry, provider fallback, redirect following, 403-body retention, cookie-value retention, PDF acquisition, Research, Odds or Action is performed.",
+        "No retry, provider fallback, redirect following, non-200 body retention, cookie-value retention, PDF acquisition, Research, Odds or Action is performed.",
         "",
     ])
     return "\n".join(lines)
