@@ -1,7 +1,9 @@
 """Synthetic tests for the bounded saved-artifact Stock successor.
 
-No live source, GitHub Actions dispatch or model call occurs here. The real
-artifact/request identities are asserted as immutable configuration only.
+No live source, GitHub Actions dispatch or model call occurs here. Blocking tests
+protect current child/dispatch/fail-closed contracts; exact one-shot run, artifact
+and context receipts remain frozen in repository history instead of being replayed
+as permanent forward CI requirements.
 """
 from pathlib import Path
 
@@ -42,28 +44,26 @@ def test_work_inventory_accepts_only_named_stock_children():
         intake.inventory(Bad(), "b"*40)
 
 
-def test_consumed_successor_request_is_retired_but_history_is_still_exact():
+def test_consumed_successor_request_stays_disabled_and_structurally_bounded():
     root = Path(__file__).parents[1]
     request = once.identity._json((root / successor.REQUEST).read_bytes())
     prep = (root / "research_runs/stock-source-preparation-request.json").read_bytes()
+    assert set(request) == {"enabled", "items", "mode", "permission", "schema_version",
+        "source_preparation_artifact", "source_preparation_request_sha256",
+        "source_preparation_run_id", "source_research_run_id", "source_stock_run_id"}
+    assert request["schema_version"] == 1
     assert request["enabled"] is False
-    assert request["permission"] == {"comment_id": 5652950925,
-        "body_sha256": "1770b224701663c95614830b6eabadc0465eafd12164e2ddbc5052cb8bb9a33e",
-        "created_at": "2026-09-13T11:22:23Z"}
+    assert request["mode"] == successor.MODE
+    assert set(request["permission"]) == {"comment_id", "body_sha256", "created_at"}
+    assert type(request["permission"]["comment_id"]) is int and request["permission"]["comment_id"] > 0
+    assert len(request["permission"]["body_sha256"]) == 64
     assert request["source_preparation_request_sha256"] == once.sha(prep)
-    assert request["source_preparation_run_id"] == 34765190284
-    assert request["source_research_run_id"] == 34751517820
-    assert request["source_stock_run_id"] == 34673882756
-    assert request["source_preparation_artifact"] == {
-        "id": 10320565453,
-        "name": "stock-source-preparation-34765190284-1",
-        "size_in_bytes": 12563240,
-        "digest": "sha256:25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
-        "head_sha": "99ad4e9391231be86b0bff27f2776a3966215fe8"}
+    assert all(type(request[k]) is int and request[k] > 0 for k in
+        ("source_preparation_run_id", "source_research_run_id", "source_stock_run_id"))
+    assert set(request["source_preparation_artifact"]) == {
+        "id", "name", "size_in_bytes", "digest", "head_sha"}
+    assert isinstance(request["items"], list) and len(request["items"]) == len(successor.TARGETS)
     assert {i["thscode"] for i in request["items"]} == successor.TARGETS
-    gh = next(i for i in request["items"] if i["thscode"] == "300711.SZ")
-    assert gh["material"]["prepared_context_bytes"] == 636462
-    assert gh["material"]["prepared_context_sha256"] == "4cb6c5a18a18ef6ed8b011f315c7bac000a3ecaaf4b21b6cd72b476a3344cbf0"
 
 
 def test_host_successor_does_not_run_a_context_recheck_before_saved_capture(tmp_path, monkeypatch):
