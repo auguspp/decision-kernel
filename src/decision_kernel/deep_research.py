@@ -292,6 +292,13 @@ def _validate_method_v1_snapshot_projection(
     deep: DeepResearchSupplement,
     snapshot: ResearchSnapshot,
 ) -> None:
+    if snapshot.schema_version != 1:
+        _issue(
+            issues,
+            "SNAPSHOT_SCHEMA_UNSUPPORTED",
+            "research_snapshot.schema_version",
+            "Research Method v1 retains its original snapshot schema v1 contract",
+        )
     if snapshot.status is not ResearchStatus.DRAFT or snapshot.committed_at is not None:
         _issue(
             issues,

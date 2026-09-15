@@ -307,7 +307,15 @@ def _validate_calculation_inputs(
                 )
             )
 
-    if snapshot.valuation_horizon_date < observed_market.market_date:
+    if snapshot.valuation_horizon_date is None:
+        failures.append(
+            _failure(
+                CalculationFailureCode.UNSUPPORTED_CALCULATION_INPUT,
+                "valuation_horizon_date",
+                "numerical calculation requires a valuation horizon",
+            )
+        )
+    elif snapshot.valuation_horizon_date < observed_market.market_date:
         failures.append(
             _failure(
                 CalculationFailureCode.UNSUPPORTED_CALCULATION_INPUT,
