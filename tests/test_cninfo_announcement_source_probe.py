@@ -156,6 +156,8 @@ def test_probe_workflow_is_manual_read_only_and_not_a_production_lane():
     assert "actions/cache" not in text and "decision-state" not in text
     assert 'test "$GITHUB_RUN_ATTEMPT" = "1"' in text
     assert "timeout-minutes: 5" in text
+    assert "python -m pip install -e '.[dump-study]'" in text
+    assert "python -m pip install -e .\n" not in text
     assert "cninfo_announcement_probe" in text
     assert "scan-disclosures" not in text
     assert "saved-disclosure-research" not in text
