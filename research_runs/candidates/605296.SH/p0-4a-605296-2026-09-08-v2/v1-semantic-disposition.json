@@ -1,0 +1,10 @@
+{
+  "candidate_commit": "22abf12023de211fe41c8e315f89f9aa130047a7",
+  "demand_side_semantic_acceptance": "FAIL_FOR_COMPLETE_RESEARCH",
+  "deterministic_funnel_validation": "PASS",
+  "original_files_changed": false,
+  "product_semantic_classification": "INCOMPLETE_SOURCE",
+  "recorded_notice_comment": 5586576337,
+  "scope": "No retrospective rewrite of the complete v1 candidate/Funnel into an execution gap. Original v1 remains the real negative sample; no formal Research handoff.",
+  "semantics": "USER_SUPPLIED_DEMAND_SIDE_DISPOSITION_NOT_REWRITTEN_EXECUTION"
+}
