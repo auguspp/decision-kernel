@@ -1,0 +1,330 @@
+{
+  "code_commit": "057cb51f4e06cc1f8e42b10c02df7026c4447f97",
+  "execution_id": "stock-business-1b0536a88c867f70ef4be6a6337483564fa0d817a658ae90d69b52e564305692",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "安凯客车",
+    "current_member_name": "安凯客车",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.023017902813299232736572890",
+          "name": "安凯客车",
+          "thscode": "000868.SZ",
+          "ticker": "000868",
+          "turnover": "421644590"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "881125.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "汽车整车",
+            "recorded_event_ids": [
+              "bfe2ef5320538a30810c2c88b4a5959f99de9afd8d1e8d4e843ae190470c8ab4"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881125.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881125.TI",
+        "node_label": "汽车整车 881125.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881125.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881125.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0583540176181437679466588796",
+        "excess_return": "0.1947176539817801315830225156",
+        "stock_return": "0.136363636363636363636363636"
+      },
+      "5": {
+        "benchmark_return": "-0.0238443078569955733382469718",
+        "excess_return": "0.1167404827203835514803234748",
+        "stock_return": "0.092896174863387978142076503"
+      },
+      "60": {
+        "benchmark_return": "-0.0954081705252073935996129601",
+        "excess_return": "0.2003805462158151284062427941",
+        "stock_return": "0.104972375690607734806629834"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.023017902813299232736572890",
+          "name": "安凯客车",
+          "thscode": "000868.SZ",
+          "ticker": "000868",
+          "turnover": "421644590"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "汽车整车",
+            "recorded_event_ids": [
+              "bfe2ef5320538a30810c2c88b4a5959f99de9afd8d1e8d4e843ae190470c8ab4"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881125.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881125.TI",
+        "node_label": "汽车整车 881125.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881125.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "-0.0063260566983565849312470704",
+            "stock_excess_return": "0.1426896930619929485676107064"
+          },
+          "5": {
+            "sector_return": "-0.0126849142666178420713953050",
+            "stock_excess_return": "0.1055810891300058202134718080"
+          },
+          "60": {
+            "sector_return": "-0.0340371227635963947780630415",
+            "stock_excess_return": "0.1390094984542041295846928755"
+          }
+        },
+        "name": "汽车整车",
+        "node_id": "881125.TI",
+        "thscode": "881125.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.023017902813299232736572890",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-14",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-15",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-18",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-15",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-11",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-08",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-08",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-15",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-23",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-15",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 9,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "000868.SZ",
+            "to": "2026-09-15"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 9,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-15T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789487999999",
+          "interval": "1d",
+          "start": "1782144000000",
+          "thscode": "000868.SZ"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-15T20:34:22+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-15T12:34:23.265473+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.0200000000",
+            "ex_date": "2016-08-05",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0.0600000000",
+            "ex_date": "2013-07-15",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2012-07-27",
+            "per_share_bonus": "1.0000000000",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0.0250000000",
+            "ex_date": "2011-05-12",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0.0446400000",
+            "ex_date": "2006-08-09",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2006-06-01",
+            "per_share_bonus": "0.7500000000",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2000-07-11",
+            "per_share_bonus": "0.3000000000",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "1999-11-29",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          },
+          {
+            "dividend_per_share": "0.3000000000",
+            "ex_date": "1999-08-24",
+            "per_share_bonus": "0",
+            "ticker": "000868"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "3.64",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "42.164459364",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "421644593.64",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "421644590",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "4.0",
+      "latest_turnover": "421644593.64",
+      "latest_volume": "102177682",
+      "previous_raw_close": "3.91",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.136363636363636363636363636",
+        "5": "0.092896174863387978142076503",
+        "60": "0.104972375690607734806629834"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "3.169193821642390225893829929",
+      "twenty_day_return_five_sessions_ago": "0.002739726027397260273972603",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "000868.SZ"
+  },
+  "origin": {
+    "archive_sha256": "ea0fa09196a7f2d0c2c9b18654263b92496dcb6ee30beb62e821a9778f66dbba",
+    "artifact_id": 10397365712,
+    "market_session": "2026-09-15",
+    "projection_hash": "91404eb630cb920701ec0c0613a7ec90830d4956e7311c52c789876a657cf9f8",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-15T12:30:03Z",
+      "event": "workflow_dispatch",
+      "head_sha": "057cb51f4e06cc1f8e42b10c02df7026c4447f97",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/34969200369",
+      "id": 34969200369,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-15T12:30:03Z",
+      "status": "completed",
+      "updated_at": "2026-09-15T12:39:07Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-15T12:39:39.930271+00:00",
+  "thscode": "000868.SZ"
+}
