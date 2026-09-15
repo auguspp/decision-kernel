@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-15T12:39:52.242892+00:00",
+    "finished_at": "2026-09-15T12:40:59.108069+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-16T12:39:52.242892+00:00",
-    "started_at": "2026-09-15T12:39:30.783479+00:00"
+    "recheck_after": "2026-09-16T12:40:59.108069+00:00",
+    "started_at": "2026-09-15T12:40:40.692360+00:00"
   },
   "code_commit": "057cb51f4e06cc1f8e42b10c02df7026c4447f97",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-15T12:39:52.242892+00:00",
+  "generated_at": "2026-09-15T12:40:59.108069+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-15T12:39:41.342614+00:00",
+      "checks_at": "2026-09-15T12:40:49.947509+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS",
         "INBOX_DELIVERY_PRESERVED_WORKFLOW_FAILURE_NOT_HIDDEN"
@@ -169,7 +169,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "08e8884b08fa6194f6b5dcc459def45fbfcbab384ef7b4adb98ee845681f249d"
         },
-        "source_checked_at": "2026-09-15T12:39:41.342593+00:00",
+        "source_checked_at": "2026-09-15T12:40:49.947495+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -217,7 +217,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-15T12:39:33.295702+00:00",
+      "checks_at": "2026-09-15T12:40:43.412468+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -325,7 +325,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "29e67aa2a7715ba5e5bf9eeca8cbd1e4da9d6a81764b4880b22fc4c478718294"
         },
-        "source_checked_at": "2026-09-15T12:39:33.295677+00:00",
+        "source_checked_at": "2026-09-15T12:40:43.412437+00:00",
         "state_archive": {
           "artifact_id": 10395848721,
           "artifact_name": "sector-radar-state-bundle",
@@ -375,7 +375,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-15T12:39:39.941047+00:00",
+      "checks_at": "2026-09-15T12:40:48.733104+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -561,7 +561,7 @@
           "sha256": "da9f171f8473bc7003cd9f1f2e2ec0ec84bb4e95a351623cafbd59c2935c7c64"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-15T12:39:39.941022+00:00",
+        "source_checked_at": "2026-09-15T12:40:48.733088+00:00",
         "status": "STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "000993.SZ",
@@ -592,13 +592,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "de61c9daa119c52e015eb57e6aaee669643a6856f72a951ad05c42a1ef5d4cc4",
+  "reading_hash": "ffab3221a3ccb63d3453ae332b4a29d9ed20be504001890811c2de6a35ce8d8a",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "34970111531",
-    "trigger_run_id": "34969200369",
+    "run_id": "34970187887",
+    "trigger_run_id": "34970111538",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -1957,7 +1957,7 @@
         }
       ],
       "latest_execution_attempt": {
-        "conclusion": null,
+        "conclusion": "failure",
         "created_at": "2026-09-15T12:39:09Z",
         "event": "workflow_run",
         "head_sha": "057cb51f4e06cc1f8e42b10c02df7026c4447f97",
@@ -1967,8 +1967,8 @@
         "path": ".github/workflows/stock-business-research.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-15T12:39:09Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-15T12:39:13Z"
+        "status": "completed",
+        "updated_at": "2026-09-15T12:39:55Z"
       },
       "latest_source_preparation_attempt": {
         "conclusion": "failure",
@@ -1985,7 +1985,7 @@
         "updated_at": "2026-09-13T15:19:31Z"
       },
       "latest_workflow_invocation": {
-        "conclusion": null,
+        "conclusion": "failure",
         "created_at": "2026-09-15T12:39:09Z",
         "event": "workflow_run",
         "head_sha": "057cb51f4e06cc1f8e42b10c02df7026c4447f97",
@@ -1995,8 +1995,8 @@
         "path": ".github/workflows/stock-business-research.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-15T12:39:09Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-15T12:39:13Z"
+        "status": "completed",
+        "updated_at": "2026-09-15T12:39:55Z"
       },
       "meaning": "PRICE_OBSERVATION_AND_RESEARCH_REMAIN_SEPARATE_NO_AUTOMATIC_BELIEF_OR_ATTENTION",
       "preparation_result_semantics": "INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE",
