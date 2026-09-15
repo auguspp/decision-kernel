@@ -14,7 +14,6 @@ jobs:
     timeout-minutes: 20
     env:
       CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      CI_REPORT_DIR: ${{ runner.temp }}/kernel-ci
     steps:
       - uses: actions/checkout@v7
         with:
@@ -30,6 +29,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$CI_CODE_SHA"
+          CI_REPORT_DIR="$RUNNER_TEMP/kernel-ci"
+          printf 'CI_REPORT_DIR=%s\n' "$CI_REPORT_DIR" >> "$GITHUB_ENV"
           mkdir -p "$CI_REPORT_DIR"
           printf 'code_sha=%s\nevent_sha=%s\nevent=%s\nrun_id=%s\nattempt=%s\n' \
             "$CI_CODE_SHA" "$GITHUB_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \

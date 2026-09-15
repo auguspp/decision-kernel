@@ -51,6 +51,10 @@ def test_ci_verifies_the_checked_out_code_not_just_event_metadata():
     assert "permissions:\n  contents: read\n" in WORKFLOW.read_text(encoding="utf-8")
     assert "secrets." not in job
     assert "code_sha=%s" in job and "event_sha=%s" in job
+    # Runner context is not available in job-level env; export it at runtime.
+    assert "runner." not in job.split("    steps:", 1)[0]
+    assert 'CI_REPORT_DIR="$RUNNER_TEMP/kernel-ci"' in job
+    assert '"$CI_REPORT_DIR" >> "$GITHUB_ENV"' in job
 
 
 def test_parallel_dependency_is_dev_only_and_local_default_stays_serial():
