@@ -188,12 +188,16 @@ def fetch_hithink_completed_index_history(
         calendar,
         observed_at=observed_at,
     )
-    end_at = datetime.combine(
+    exclusive_end_at = datetime.combine(
         expected_latest + timedelta(days=1),
         datetime.min.time(),
         tzinfo=SHANGHAI_TZ,
     )
-    start_at = end_at - timedelta(days=lookback_calendar_days)
+    # HiThink daily history can include a bar keyed exactly at `end`. Keep the
+    # request inside the latest completed session; strict adapter qualification
+    # still rejects any unfinished/future bar that crosses this bound.
+    end_at = exclusive_end_at - timedelta(milliseconds=1)
+    start_at = exclusive_end_at - timedelta(days=lookback_calendar_days)
     envelope = effective_request(
         HITHINK_INDEX_HISTORY_PATH,
         {
