@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  actions: write
+  actions: read
 
 concurrency:
   group: stock-reading-after-sector-${{ github.event.workflow_run.id }}
@@ -66,11 +66,15 @@ jobs:
       - name: Dispatch existing bounded Stock reading once
         if: steps.preflight.outputs.dispatch_allowed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}
           MARKET_RUN_ID: ${{ steps.preflight.outputs.market_run_id }}
           MARKET_ORIGIN: ${{ steps.preflight.outputs.sector_origin }}
         shell: bash
         run: |
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN; do not fall back to GITHUB_TOKEN because downstream workflow_run chaining would be suppressed"
+            exit 1
+          fi
           python - <<'PY' > "$RUNNER_TEMP/stock-reading-dispatch.json"
           import json, os
           print(json.dumps({
@@ -90,6 +94,8 @@ jobs:
             echo '### Stock daily successor handoff'
             echo
             printf 'Eligible Sector run `%s` with origin `%s` passed the bounded shared-Key preflight and was handed once to the existing `stock-reading` workflow contract.\n\n' "$MARKET_RUN_ID" "$MARKET_ORIGIN"
+            echo 'The event-emitting Stock dispatch uses the dedicated least-privilege Actions token, not GITHUB_TOKEN, so the existing Stock → Research → current-state workflow_run chain remains eligible to fire normally.'
+            echo
             echo 'No market data was read in this successor. The dispatched Stock workflow remains responsible for exact Sector artifact binding, the existing 26-request ceiling, live capture, offline replay and retained delivery.'
             echo
             echo 'A workflow_dispatch producer remains workflow_dispatch in lineage; this handoff does not relabel it as a native GitHub schedule run.'
