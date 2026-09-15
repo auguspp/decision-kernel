@@ -1,0 +1,75 @@
+name: cninfo-announcement-source-probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cninfo-announcement-source-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Require reviewed main and one fresh attempt
+        shell: bash
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+      - name: Install existing package
+        run: python -m pip install -e .
+      - name: Probe bounded CNINFO announcement request contracts
+        run: python -m decision_kernel.runtime.cninfo_announcement_probe --output cninfo-announcement-probe
+      - name: Verify sealed diagnostic result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from decision_kernel.identity import canonical_hash
+
+          path = Path("cninfo-announcement-probe/probe.json")
+          result = json.loads(path.read_text(encoding="utf-8"))
+          claimed = result.pop("probe_hash")
+          assert canonical_hash(result) == claimed
+          assert result["semantics"] == "CASE_BOUNDED_CNINFO_REQUEST_CONTRACT_PROBE_NOT_EVIDENCE"
+          assert 1 <= result["request_count"] <= result["max_requests"] == 6
+          assert result["cause"] == "UNKNOWN"
+          assert result["production_qualification"] == "NOT_ESTABLISHED"
+          assert result["research_authority"] == "NONE"
+          assert result["human_attention_authority"] == "NONE"
+          assert result["investment_authority"] == "NONE"
+          assert result["market_state_writes"] == result["events_created"] == 0
+          print("CNINFO source probe record verified; this is not production acceptance.")
+          PY
+      - name: Retain complete probe evidence
+        if: always()
+        id: evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: cninfo-announcement-source-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cninfo-announcement-probe/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish diagnostic summary
+        if: always()
+        env:
+          ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
+        run: |
+          if [ -f cninfo-announcement-probe/summary.md ]; then
+            cat cninfo-announcement-probe/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Probe did not produce a sealed diagnostic result.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\n[CNINFO request-contract probe artifact](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
