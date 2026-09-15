@@ -14,6 +14,8 @@ WORKFLOW = ROOT / ".github/workflows/stock-reading-after-sector.yml"
 HELPER = ROOT / ".github/scripts/check-stock-daily-successor.py"
 SECTOR_WORKFLOW = ROOT / ".github/workflows/sector-radar-shadow.yml"
 STOCK_WORKFLOW = ROOT / ".github/workflows/hithink-stock-dump-trial.yml"
+RESEARCH_WORKFLOW = ROOT / ".github/workflows/stock-business-research.yml"
+CURRENT_STATE_WORKFLOW = ROOT / ".github/workflows/current-state-read-entry.yml"
 STOCK_CAPTURE = ROOT / ".github/scripts/capture-stock-reading.py"
 CURRENT_STATE = ROOT / "src/decision_kernel/runtime/current_state.py"
 
@@ -108,7 +110,7 @@ def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader(
     ):
         assert required in raw
     assert "github.event.workflow_run.head_sha == github.sha" not in raw
-    assert "contents: read" in raw and "actions: write" in raw
+    assert "contents: read" in raw and "actions: read" in raw and "actions: write" not in raw
     assert "persist-credentials: false" in raw
     assert "cancel-in-progress: false" in raw and "timeout-minutes: 5" in raw
     assert raw.count("hithink-stock-dump-trial.yml/dispatches") == 1
@@ -119,6 +121,13 @@ def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader(
     assert '"stock-market-run-id": os.environ["MARKET_RUN_ID"]' in raw
     assert "steps.preflight.outputs.market_run_id" in raw
     assert "steps.preflight.outputs.sector_origin" in raw
+    dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1]
+    assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in dispatch
+    assert "GH_TOKEN: ${{ github.token }}" not in dispatch
+    assert 'Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN' in dispatch
+    assert 'do not fall back to GITHUB_TOKEN' in dispatch
+    assert "stock-business-research.yml/dispatches" not in raw
+    assert "gh run watch" not in raw
     assert "HITHINK_FINANCE_API_KEY" not in raw and "secrets.HITHINK_FINANCE_API_KEY" not in raw
     assert "/rerun" not in raw and "sleep(" not in raw and "while " not in raw
 
@@ -230,6 +239,20 @@ def test_successor_preflight_has_no_market_dispatch_or_polling_authority_itself(
     tree = ast.parse(raw)
     assert not any(isinstance(node, ast.While) for node in ast.walk(tree))
     assert "check-sector-scheduled-activity.py" in raw
+
+
+def test_non_github_token_stock_origin_preserves_existing_downstream_chain():
+    successor = WORKFLOW.read_text(encoding="utf-8")
+    research = RESEARCH_WORKFLOW.read_text(encoding="utf-8")
+    publisher = CURRENT_STATE_WORKFLOW.read_text(encoding="utf-8")
+    assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in successor
+    assert "workflows: [hithink-stock-dump-trial]" in research
+    assert "source-stock-run-id:" in research
+    assert "github.event.workflow_run.conclusion == 'success'" in research
+    assert "python -m decision_kernel.runtime.stock_research_host" in research
+    assert "stock-business-research" in publisher
+    assert "hithink-stock-dump-trial" in publisher
+    assert "workflow_run:" in publisher
 
 
 def test_existing_stock_and_current_state_production_contracts_are_not_broadened():
