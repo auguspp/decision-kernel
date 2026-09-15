@@ -192,15 +192,16 @@ def test_runtime_index_history_uses_completed_session_window_without_adjust() ->
     assert history_params["thscode"] == "000300.SH"
     assert history_params["interval"] == "1d"
     assert "adjust" not in history_params
-    expected_end = datetime.combine(
+    exclusive_end = datetime.combine(
         SESSIONS[-1] + timedelta(days=1),
         time(),
         tzinfo=SHANGHAI,
     )
+    expected_end = exclusive_end - timedelta(milliseconds=1)
     assert int(history_params["end"]) == int(expected_end.timestamp() * 1000)
     assert int(history_params["end"]) - int(history_params["start"]) == int(
         timedelta(days=120).total_seconds() * 1000
-    )
+    ) - 1
     assert history.response_session == history.expected_latest_session == SESSIONS[-1]
 
 
@@ -246,11 +247,12 @@ def test_runtime_history_request_ends_after_previous_session_before_close() -> N
         request_json=request_json,
     )
 
-    expected_end = datetime.combine(
+    exclusive_end = datetime.combine(
         SESSIONS[-2] + timedelta(days=1),
         time(),
         tzinfo=SHANGHAI,
     )
+    expected_end = exclusive_end - timedelta(milliseconds=1)
     assert int(calls[1][1]["end"]) == int(expected_end.timestamp() * 1000)
     assert history.response_session == SESSIONS[-2]
 
