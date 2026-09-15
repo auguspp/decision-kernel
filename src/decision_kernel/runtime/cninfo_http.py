@@ -23,7 +23,9 @@ from ..adapters.pdf_text import MAX_PDF_BYTES
 CNINFO_LEGACY_STOCK_MAP_URL = "https://www.cninfo.com.cn/new/data/szse_stock.json"
 CNINFO_STOCK_MAP_URL = "http://www.cninfo.com.cn/new/information/topSearch/query"
 CNINFO_ORG_SEARCH_URL = CNINFO_STOCK_MAP_URL  # compatibility alias for the current identity lookup
-CNINFO_ANNOUNCEMENT_QUERY_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+CNINFO_ANNOUNCEMENT_QUERY_URL = "http://www.cninfo.com.cn/new/hisAnnouncement/query"
+CNINFO_ANNOUNCEMENT_HTTPS_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+CNINFO_DISCLOSURE_STOCK_URL = "http://www.cninfo.com.cn/new/disclosure/stock"
 DEFAULT_PAGE_SIZE = 30
 _MAX_PAGE_SIZE = 30
 _GetJSON = Callable[[str], Mapping[str, Any]]
@@ -229,6 +231,19 @@ def _announcement_query_form(
     }
 
 
+def _announcement_disclosure_referer(form: Mapping[str, str] | None) -> str:
+    """Build only CNINFO's issuer disclosure-page locator from the exact bound form."""
+
+    stock = None if form is None else form.get("stock")
+    if isinstance(stock, str) and stock.count(",") == 1:
+        stock_code, org_id = (part.strip() for part in stock.split(",", 1))
+        if stock_code and org_id:
+            return CNINFO_DISCLOSURE_STOCK_URL + "?" + urlencode(
+                {"stockCode": stock_code, "orgId": org_id}
+            )
+    return "http://www.cninfo.com.cn/new/disclosure"
+
+
 def _request_json(
     *,
     url: str,
@@ -241,6 +256,7 @@ def _request_json(
         ("GET", CNINFO_STOCK_MAP_URL): "SECURITY_MAP",
         ("POST", CNINFO_STOCK_MAP_URL): "ORG_SEARCH",
         ("POST", CNINFO_ANNOUNCEMENT_QUERY_URL): "ANNOUNCEMENT_QUERY",
+        ("POST", CNINFO_ANNOUNCEMENT_HTTPS_URL): "ANNOUNCEMENT_QUERY",
     }.get((method, url), "UNCLASSIFIED_JSON_ENDPOINT")
     body = None if form is None else urlencode(form).encode("utf-8")
     headers = {
@@ -249,18 +265,11 @@ def _request_json(
         "Referer": "https://www.cninfo.com.cn/",
     }
     if stage == "ANNOUNCEMENT_QUERY":
-        # CNINFO's disclosure page uses this browser request context for the
-        # official HTTPS announcement endpoint. This is not a provider fallback,
-        # retry, cookie, guessed identity or relaxation of response validation.
-        headers.update({
-            "User-Agent": (
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-                "Version/17.2 Safari/605.1.15"
-            ),
-            "Referer": "https://www.cninfo.com.cn/new/disclosure",
-            "Origin": "https://www.cninfo.com.cn",
-        })
+        # Current CNINFO/OSS prior art uses the HTTP announcement route. Its JSON
+        # remains discovery metadata only: selected original bytes still have to
+        # come from the existing official HTTPS static-PDF transport and pass the
+        # unchanged issuer/time/pagination/PDF integrity checks.
+        headers["Referer"] = _announcement_disclosure_referer(form)
     if form is not None:
         headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
         headers["X-Requested-With"] = "XMLHttpRequest"
