@@ -11,6 +11,7 @@ on:
         options:
           - produce
           - adopt-recovery-2026-09-10
+          - adopt-missed-session-2026-09-14
   schedule:
     # UTC 10:13 = Asia/Shanghai 18:13, Monday-Friday. Calendar remains authoritative.
     - cron: "13 10 * * 1-5"
@@ -98,6 +99,42 @@ jobs:
           github-token: ${{ github.token }}
           digest-mismatch: error
           path: ${{ runner.temp }}/sector-recovery-checkpoint
+      - name: Download exact failed 2026-09-14 Sector run audit
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-missed-session-2026-09-14'
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '10358420687'
+          run-id: '34868170673'
+          repository: auguspp/decision-kernel
+          github-token: ${{ github.token }}
+          digest-mismatch: error
+          path: ${{ runner.temp }}/sector-missed-session-source
+      - name: Adopt exact 2026-09-14 missed-session checkpoint
+        id: missed-session-adoption
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-missed-session-2026-09-14'
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+          RECOVERY_OPERATION: adopt-missed-session-2026-09-14
+        run: |
+          python .github/scripts/adopt-sector-missed-session-20260914.py adopt \
+            --parent restored-artifact/sector-radar \
+            --source-audit "${RUNNER_TEMP}/sector-missed-session-source/input-audit" \
+            --state-dir decision-state/sector-radar \
+            --output sector-radar-run \
+            --discovered-run-id "${{ steps.state-artifact.outputs.artifact_run_id }}" \
+            --discovered-artifact-id "${{ steps.state-artifact.outputs.artifact_id }}" \
+            --discovered-head-sha "${{ steps.state-artifact.outputs.artifact_head_sha }}"
+      - name: Verify 2026-09-14 missed-session adoption exact offline match
+        id: missed-session-adoption-verify
+        if: success() && github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-missed-session-2026-09-14'
+        env:
+          HITHINK_FINANCE_API_KEY: ""
+          RECOVERY_OPERATION: adopt-missed-session-2026-09-14
+        run: |
+          python .github/scripts/adopt-sector-missed-session-20260914.py verify \
+            --source-audit "${RUNNER_TEMP}/sector-missed-session-source/input-audit" \
+            --state-dir decision-state/sector-radar \
+            --output sector-radar-run
       - name: Adopt exact recovery checkpoint into original Sector lineage
         id: recovery-adoption
         if: github.event_name == 'workflow_dispatch' && inputs.operation == 'adopt-recovery-2026-09-10'
@@ -208,10 +245,29 @@ jobs:
           JOINT_OUTCOME: ${{ steps.joint-reading.outcome }}
           ADOPTION_OUTCOME: ${{ steps.recovery-adoption.outcome }}
           ADOPTION_VERIFY_OUTCOME: ${{ steps.recovery-adoption-verify.outcome }}
+          MISSED_SESSION_ADOPTION_OUTCOME: ${{ steps.missed-session-adoption.outcome }}
+          MISSED_SESSION_ADOPTION_VERIFY_OUTCOME: ${{ steps.missed-session-adoption-verify.outcome }}
           STATE_UPLOAD_OUTCOME: ${{ steps.state-upload.outcome }}
           CACHE_SAVE_OUTCOME: ${{ steps.cache-save.outcome }}
           RUN_AUDIT_URL: ${{ steps.run-audit.outputs.artifact-url }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$OPERATION" = "adopt-missed-session-2026-09-14" ]; then
+            {
+              echo '### Sector missed-session PIT reconstruction adoption'
+              printf 'Run: `%s`; attempt: `%s`; commit: `%s`\n\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA"
+              echo 'This case-bounded mode makes no market/provider request. It reconstructs only the exact retained 2026-09-14 Sector index prefix from failed run 34868170673, keeps Stock as NOT_RECONSTRUCTED, preserves the 2026-09-11 event ledger, and prepares a 2026-09-14 restore checkpoint.'
+              echo
+              printf 'Local missed-session adoption: `%s`; independent offline exact verification: `%s`.\n\n' "$MISSED_SESSION_ADOPTION_OUTCOME" "$MISSED_SESSION_ADOPTION_VERIFY_OUTCOME"
+              printf 'Authoritative state artifact upload: `%s`; cache acceleration save: `%s`.\n\n' "$STATE_UPLOAD_OUTCOME" "$CACHE_SAVE_OUTCOME"
+              echo 'A successful state artifact publication establishes restore continuity only. It does not rewrite the failed natural 9/14 run, create retrospective 9/14 events, reconstruct historical Stock, or count as natural daily acceptance.'
+              echo
+              echo 'A later ordinary Sector production run must separately prove normal 9/15 continuation from this restore state.'
+              if [ -n "$RUN_AUDIT_URL" ]; then
+                printf '\n[Download this missed-session adoption audit](%s)\n' "$RUN_AUDIT_URL"
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$OPERATION" = "adopt-recovery-2026-09-10" ]; then
             {
               echo '### Sector production recovery adoption'
