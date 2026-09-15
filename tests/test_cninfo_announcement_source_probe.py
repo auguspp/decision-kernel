@@ -50,10 +50,11 @@ class _Session:
 
 class _SessionFactory:
     def __init__(self, sessions):
-        self._sessions = list(sessions)
+        self.sessions = list(sessions)
+        self._remaining = list(sessions)
 
     def __call__(self):
-        return self._sessions.pop(0)
+        return self._remaining.pop(0)
 
 
 def _request_json_all_403(*, url, method, form, timeout_seconds):
@@ -71,6 +72,7 @@ def test_all_https_variants_403_stays_unknown_and_non_authoritative():
         _Session([_Response(403)]),
         _Session([_Response(403)]),
         _Session([_Response(403)]),
+        _Session([_Response(403)]),
     ])
 
     result = probe.run_probe(
@@ -81,8 +83,8 @@ def test_all_https_variants_403_stays_unknown_and_non_authoritative():
     assert result["disposition"] == "ALL_TESTED_HTTPS_ANNOUNCEMENT_CONTRACTS_403"
     assert result["cause"] == "UNKNOWN"
     assert result["working_variants"] == []
-    assert result["request_count"] == 5
-    assert result["max_requests"] == 6
+    assert result["request_count"] == 6
+    assert result["max_requests"] == 7
     assert result["production_qualification"] == "NOT_ESTABLISHED"
     assert result["research_authority"] == result["human_attention_authority"] == "NONE"
     assert result["investment_authority"] == "NONE"
@@ -92,6 +94,7 @@ def test_all_https_variants_403_stays_unknown_and_non_authoritative():
 def test_requests_browser_success_is_request_contract_observation_only():
     payload = {"totalAnnouncement": 0, "announcements": None, "hasMore": False}
     factory = _SessionFactory([
+        _Session([_Response(403)]),
         _Session([_Response(403)]),
         _Session([_Response(200, payload)]),
         _Session([_Response(403)]),
@@ -110,9 +113,35 @@ def test_requests_browser_success_is_request_contract_observation_only():
     )
     assert browser["status"] == 200
     assert browser["json_shape"] == "OBJECT"
+    assert browser["contract_shape"] == "CNINFO_ANNOUNCEMENT_PAGE"
     assert browser["announcement_count"] is None
     assert result["production_qualification"] == "NOT_ESTABLISHED"
     assert result["cause"] == "UNKNOWN"
+
+
+def test_prior_source_study_variant_uses_its_reviewed_form_shape():
+    payload = {"totalAnnouncement": 0, "announcements": None, "hasMore": False}
+    current = _Session([_Response(403)])
+    prior = _Session([_Response(200, payload)])
+    browser = _Session([_Response(403)])
+    warm = _Session([_Response(403)])
+    factory = _SessionFactory([current, prior, browser, warm])
+
+    result = probe.run_probe(
+        request_json=_request_json_all_403,
+        session_factory=factory,
+    )
+
+    assert result["working_variants"] == ["requests_prior_source_study"]
+    _, _, kwargs = prior.calls[0]
+    assert kwargs["data"]["column"] == "szse"
+    assert kwargs["data"]["searchkey"] == "权益分派实施公告"
+    assert kwargs["data"]["isHLtitle"] == "false"
+    assert kwargs["data"]["pageSize"] == "30"
+    _, _, current_kwargs = current.calls[0]
+    assert current_kwargs["data"]["column"] == ""
+    assert current_kwargs["data"]["searchkey"] == ""
+    assert current_kwargs["data"]["isHLtitle"] == "true"
 
 
 def test_probe_workflow_is_manual_read_only_and_not_a_production_lane():
