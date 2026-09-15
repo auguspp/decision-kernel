@@ -256,12 +256,16 @@ def fetch_hithink_completed_price_history(
         calendar,
         observed_at=observed_at,
     )
-    end_at = datetime.combine(
+    exclusive_end_at = datetime.combine(
         expected_latest + timedelta(days=1),
         datetime.min.time(),
         tzinfo=SHANGHAI_TZ,
     )
-    start_at = end_at - timedelta(days=45)
+    # HiThink daily history can include a bar keyed exactly at `end`. Keep the
+    # request inside the latest completed session; the adapter remains fail-closed
+    # if any unfinished/future bar is nevertheless returned.
+    end_at = exclusive_end_at - timedelta(milliseconds=1)
+    start_at = exclusive_end_at - timedelta(days=45)
     envelope = request_json(
         HITHINK_HISTORY_PATH,
         {

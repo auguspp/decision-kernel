@@ -248,6 +248,19 @@ def _request_json(
         "User-Agent": "Mozilla/5.0",
         "Referer": "https://www.cninfo.com.cn/",
     }
+    if stage == "ANNOUNCEMENT_QUERY":
+        # CNINFO's disclosure page uses this browser request context for the
+        # official HTTPS announcement endpoint. This is not a provider fallback,
+        # retry, cookie, guessed identity or relaxation of response validation.
+        headers.update({
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                "Version/17.2 Safari/605.1.15"
+            ),
+            "Referer": "https://www.cninfo.com.cn/new/disclosure",
+            "Origin": "https://www.cninfo.com.cn",
+        })
     if form is not None:
         headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
         headers["X-Requested-With"] = "XMLHttpRequest"

@@ -129,7 +129,7 @@ def test_invalid_json_stays_rejected(monkeypatch, body):
                              form=None, timeout_seconds=1)
 
 
-def test_success_payload_and_request_are_unchanged(monkeypatch):
+def test_success_payload_and_request_use_announcement_browser_context(monkeypatch):
     calls = []
     def respond(request, **kwargs):
         calls.append(request)
@@ -139,5 +139,6 @@ def test_success_payload_and_request_are_unchanged(monkeypatch):
         method="POST", form={"stock": "600036,org", "pageNum": "1"}, timeout_seconds=1)
     assert result == {"announcements": [], "totalAnnouncement": 0}
     assert len(calls) == 1 and calls[0].data == b"stock=600036%2Corg&pageNum=1"
-    assert calls[0].get_header("User-agent") == "Mozilla/5.0"
-    assert calls[0].get_header("Referer") == "https://www.cninfo.com.cn/"
+    assert "AppleWebKit/605.1.15" in calls[0].get_header("User-agent")
+    assert calls[0].get_header("Referer") == "https://www.cninfo.com.cn/new/disclosure"
+    assert calls[0].get_header("Origin") == "https://www.cninfo.com.cn"
