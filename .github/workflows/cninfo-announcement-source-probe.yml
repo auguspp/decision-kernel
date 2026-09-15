@@ -42,7 +42,7 @@ jobs:
           claimed = result.pop("probe_hash")
           assert canonical_hash(result) == claimed
           assert result["semantics"] == "CASE_BOUNDED_CNINFO_REQUEST_CONTRACT_PROBE_NOT_EVIDENCE"
-          assert 1 <= result["request_count"] <= result["max_requests"] == 6
+          assert 1 <= result["request_count"] <= result["max_requests"] == 7
           assert result["cause"] == "UNKNOWN"
           assert result["production_qualification"] == "NOT_ESTABLISHED"
           assert result["research_authority"] == "NONE"
