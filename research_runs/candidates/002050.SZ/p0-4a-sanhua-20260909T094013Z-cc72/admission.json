@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "NOT_EXECUTED",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_execution_allowed": true,
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "checked_at": "2026-09-09T10:16:40.300458+00:00",
+  "execution_key": {
+    "execution_id": "p0-4a-sanhua-20260909T094013Z-cc72",
+    "canonical_input_hash": "bfee6fe264dd4322e9b67b4ddb05aa9ce5bb499b51e599aa00d81e6bdafab695"
+  },
+  "input_source": {
+    "repository": "auguspp/decision-kernel",
+    "ref": "05c67a2636d10e445f5ee533549792f464cb3ebe",
+    "path": "research_runs/candidates/002050.SZ/p0-4a-sanhua-20260909T094013Z-cc72/input.json",
+    "git_blob": "50eb2bce246f9572ae53692c923dab45b1255b50",
+    "sha256": "7d3140e28516efb42291eb1f80cf64e38f533ad0e3adc9be662480da0cfb69aa"
+  },
+  "identity_scope_hash": "e73a5176e53884601757f0578b9fccf45218205a675d6c23fe2d3e4613b88fbd",
+  "preflight_sha256": "95e40c653c79ae8a741ccceba8764d63bb06d8b143818f88a45b05dc30368512",
+  "input_file_sha256": "7d3140e28516efb42291eb1f80cf64e38f533ad0e3adc9be662480da0cfb69aa",
+  "authority": "NONE",
+  "human_attention_authority": "NONE",
+  "research_authority": "NONE",
+  "investment_authority": "NONE",
+  "checks": {
+    "source_preflight": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "canonical_input_hash": "COMPUTED",
+    "identity_precheck": "PASS",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS"
+  },
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "finished_at": "2026-09-09T10:17:49.033728+00:00"
+}
