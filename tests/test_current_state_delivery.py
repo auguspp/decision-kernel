@@ -186,7 +186,8 @@ def test_refresh_workflow_only_aggregates_saved_results_and_executes_trusted_mai
     assert "secrets." not in raw and "HITHINK_FINANCE_API_KEY" not in raw
     assert "cancel-in-progress: false" in raw
     producer = Path(read.WORKFLOWS["sector"]).read_text()
-    assert 'cron: "13 10 * * 1-5"' in producer
+    trigger = producer.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger and "schedule:" not in trigger and "cron:" not in trigger
     assert "current_state_delivery" not in producer
 
 

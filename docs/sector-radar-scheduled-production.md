@@ -1,5 +1,9 @@
 # Sector Radar P0-1：每日自动生产，不扩展判断权限
 
+> **2026-09-15 current trigger supersession.** 本文件下方保留的是原 GitHub native `schedule` 的设计、失败史与验收证据，不能删除或改写成“从未使用过 schedule”。当前生产 workflow 已在外部定时链完成实证后退役 native `schedule:` 入口；`sector-radar-shadow.yml` 当前只接受 `workflow_dispatch`。日常名义时钟由 Human 已配置的 cron-job.org 工作日北京时间 18:13 任务承担，调用现有 `workflow_dispatch operation=produce`，GitHub 继续承载执行、状态、证据与恢复。外部任务在 repo 退役 PR 的 exact-head CI、独立 main CI 与正常 publisher/readback 全部通过前保持 Inactive；最终 Enable 是 Human UI 动作。历史 `event=schedule` run 仍是可读取/可验证证据，runtime/current-state 不因换钟而重写历史。当前验收与 Reuse 证据以 #297 的 2026-09-15 Daily Trigger Reliability receipts 为准。
+
+## 以下为原 native schedule 的历史设计与验收记录
+
 本项只为已有 `sector-radar-shadow.yml` 接入工作日收盘后定时。保留手动入口，两种触发都走同一 producer、原重放、阅读、权威状态发布与 cache 保存链路。#277 的全部 qualified changes 可发现与首页 0–3 不变。
 
 **工程配置与真实验收分开：本文件不证明自然 schedule 已运行。** 首条用于本次时间修正验收的真实运行必须绑定采用 18:13 配置的 main SHA、GitHub `event=schedule` 和 attempt 1，记录在本项 PR 的回执中；没有这种证据时状态为 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING`。不以 CI、手动 dispatch 或本地合成测试替代。`FULLY_UNATTENDED_RECOVERY = NOT_ESTABLISHED`。

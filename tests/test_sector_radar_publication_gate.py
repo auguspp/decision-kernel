@@ -210,5 +210,6 @@ def test_workflow_gates_remote_publication_and_retains_failed_audit():
     assert "if: always()" in text.split("      - name: " + names[3] + "\n")[1].split("      - name: ")[0]
     assert "steps.replay-check.outcome" in text
     assert "publication-verification.json" in text
-    assert "workflow_dispatch:" in text and "schedule:" in text
+    trigger = text.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger and "schedule:" not in trigger and "cron:" not in trigger
     assert "continue-on-error" not in text

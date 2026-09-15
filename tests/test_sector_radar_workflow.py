@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 from decision_kernel.runtime.sector_radar_persistence import (
@@ -16,13 +15,12 @@ WORKFLOW = Path(SECTOR_RADAR_WORKFLOW_PATH)
 OPERATIONS_DOC = Path("docs/sector-radar-prospective-producer-operations.md")
 
 
-def test_sector_radar_workflow_has_two_triggers_and_remains_separate_from_decision_inbox() -> None:
+def test_sector_radar_workflow_is_dispatch_only_and_remains_separate_from_decision_inbox() -> None:
     raw = WORKFLOW.read_text(encoding="utf-8")
+    trigger = raw.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
 
-    assert "workflow_dispatch:" in raw
-    # User-approved P0-1 replaces the former manual-only trigger requirement.
-    assert re.search(r"^  schedule:\s*$", raw, flags=re.MULTILINE)
-    assert re.findall(r'cron: "([^\"]+)"', raw) == ["13 10 * * 1-5"]
+    assert "workflow_dispatch:" in trigger
+    assert "schedule:" not in trigger and "cron:" not in trigger and "push:" not in trigger
     assert raw.count("Run independent Sector Radar shadow producer") == 1
     assert "decision-inbox" not in raw
     assert "continue-on-error" not in raw
