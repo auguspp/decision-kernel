@@ -8,7 +8,7 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 
 ## 1. 总表：最后登记的解释，不按文件时间裁定唯一“最新有效”
 
-价格均为对应结果当时的参考价，不自动代表本日价格。没有明确取代关系的模型与 Human 条件并存；接受范围、方法资格和行动分栏。A股用 `.SH/.SZ` 统一导航，原件的 `.SS` 等标识不回写。
+价格均为对应结果当时的参考价，**非本日价格**；不自动代表本日行情。没有明确取代关系的模型与 Human 条件并存；接受范围、方法资格和行动分栏。A股用 `.SH/.SZ` 统一导航，原件的 `.SS` 等标识不回写。
 
 | 对象 | 最后找到的 Odds / 方法状态 | 原价格与来源资格 | Human 接受 / 决定 | 下一复核条件及当前处置 | 原件 / 历史 |
 |---|---|---|---|---|---|
@@ -46,7 +46,7 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 | G3 | 9/13，光电 | Human要求未接受的Odds也须保留，NOT_ACCEPTED_YET | **HUMAN_RESPONSE / RETENTION**；不是拒绝公司或接受旧梯度 |
 | N1 | 9/13，内蒙一机 | 接受记录保留Research与14.98元WEAK/FRAGILE ordinal结论、条件要求及不采用数值Odds的理由 | **ACCEPTANCE_CHECKPOINT**；完整原Research输入/计算包尚未在本次盘点定位，不由此补造 |
 | X1 | 9/14，兴业科技 | 修订稿保留“可修复旧业务+期权”的旧解释被挑战，改为旧业务衰减×新业务独立成长 | **REINTERPRETATION / METHOD_CORRECTION**；原早期草稿完整包未定位，相近13元讨论不等于同一模型 |
-| X2 | 9/14，兴业科技 | Human接受修订Research及临时条件卡；原记录18.61参考价、13–13.5条件首笔复核 | **HUMAN_ACCEPTANCE_CHANGE**；公司专属三年10%门槛仍非单独Human确认，无投资决定或Action |
+| X2 | 9/14，兴业科技 | Human接受修订研究及临时条件卡；原记录18.61参考价、13–13.5条件首笔复核 | **HUMAN_ACCEPTANCE_CHANGE**；公司专属三年10%门槛仍非单独Human确认，无投资决定或Action |
 | BA1 | 9/16，北大荒 | 复用已保存税制/税后现金续作，不重跑Pre/Quick；以9/15完成交易日12.33 public context做provisional reverse-underwriting并保存 | **PRICE_ONLY / PROVISIONAL / ORDINAL**；3年10%为工作敏感性而非Human专属要求；cardinal/canonical Odds、Human接受、仓位与watch均未建立 |
 
 H3的方法回放：[原回放与证明范围][REPLAY]。G3和B1的需求线索：[Odds Book需求补充][GD-H]。北大荒新Odds原件：[临时Odds][BD-O]。后来的主张必须指向其实际版本，不向过去回填。
