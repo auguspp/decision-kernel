@@ -1,0 +1,269 @@
+{
+  "jobs": [
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/104728938127",
+      "completed_at": "2026-09-16T08:52:36Z",
+      "conclusion": "success",
+      "created_at": "2026-09-16T08:52:02Z",
+      "head_branch": "main",
+      "head_sha": "60f08d4822ecd19029ca078242537b8647e6389f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35076145469/job/104728938127",
+      "id": 104728938127,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "name": "inbox",
+      "node_id": "CR_kwDOUK1L0c8AAAAYYlTGjw",
+      "run_attempt": 1,
+      "run_id": 35076145469,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/35076145469",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000002204,
+      "runner_name": "GitHub Actions 1000002204",
+      "started_at": "2026-09-16T08:52:04Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-09-16T08:52:05Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-09-16T08:52:04Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:06Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "started_at": "2026-09-16T08:52:05Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:06Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "started_at": "2026-09-16T08:52:06Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:10Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 4,
+          "started_at": "2026-09-16T08:52:06Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:11Z",
+          "conclusion": "success",
+          "name": "Check HiThink secret",
+          "number": 5,
+          "started_at": "2026-09-16T08:52:10Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:23Z",
+          "conclusion": "success",
+          "name": "Build Attention Inbox",
+          "number": 6,
+          "started_at": "2026-09-16T08:52:11Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:32Z",
+          "conclusion": "success",
+          "name": "Capture Surprise Radar market-history shadow",
+          "number": 7,
+          "started_at": "2026-09-16T08:52:23Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:32Z",
+          "conclusion": "success",
+          "name": "Publish Human summary",
+          "number": 8,
+          "started_at": "2026-09-16T08:52:32Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:33Z",
+          "conclusion": "success",
+          "name": "Upload mobile HTML snapshot",
+          "number": 9,
+          "started_at": "2026-09-16T08:52:32Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:33Z",
+          "conclusion": "success",
+          "name": "Upload typed Odds Watch",
+          "number": 10,
+          "started_at": "2026-09-16T08:52:33Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:34Z",
+          "conclusion": "success",
+          "name": "Upload market-history shadow inputs",
+          "number": 11,
+          "started_at": "2026-09-16T08:52:33Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:34Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 21,
+          "started_at": "2026-09-16T08:52:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:34Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 22,
+          "started_at": "2026-09-16T08:52:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:34Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "started_at": "2026-09-16T08:52:34Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/104728938127",
+      "workflow_name": "decision-inbox"
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/104728938250",
+      "completed_at": "2026-09-16T08:53:03Z",
+      "conclusion": "failure",
+      "created_at": "2026-09-16T08:52:02Z",
+      "head_branch": "main",
+      "head_sha": "60f08d4822ecd19029ca078242537b8647e6389f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35076145469/job/104728938250",
+      "id": 104728938250,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "name": "disclosures",
+      "node_id": "CR_kwDOUK1L0c8AAAAYYlTHCg",
+      "run_attempt": 1,
+      "run_id": 35076145469,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/35076145469",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000002205,
+      "runner_name": "GitHub Actions 1000002205",
+      "started_at": "2026-09-16T08:52:04Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-09-16T08:52:42Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-09-16T08:52:41Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:44Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "started_at": "2026-09-16T08:52:42Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:44Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "started_at": "2026-09-16T08:52:44Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:48Z",
+          "conclusion": "success",
+          "name": "Install with official PDF text extraction",
+          "number": 4,
+          "started_at": "2026-09-16T08:52:44Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:49Z",
+          "conclusion": "success",
+          "name": "Restore best-effort disclosure receipt memory",
+          "number": 5,
+          "started_at": "2026-09-16T08:52:48Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:59Z",
+          "conclusion": "failure",
+          "name": "Scan official disclosures and prepare Research handoffs",
+          "number": 6,
+          "started_at": "2026-09-16T08:52:49Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:59Z",
+          "conclusion": "success",
+          "name": "Publish disclosure summary",
+          "number": 7,
+          "started_at": "2026-09-16T08:52:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:52:59Z",
+          "conclusion": "skipped",
+          "name": "Upload disclosure scan and assessment handoffs",
+          "number": 8,
+          "started_at": "2026-09-16T08:52:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:53:00Z",
+          "conclusion": "success",
+          "name": "Upload already-fetched disclosure PDF bodies",
+          "number": 9,
+          "started_at": "2026-09-16T08:52:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:53:00Z",
+          "conclusion": "skipped",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 17,
+          "started_at": "2026-09-16T08:53:00Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:53:01Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 18,
+          "started_at": "2026-09-16T08:53:00Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-16T08:53:01Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "started_at": "2026-09-16T08:53:01Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/104728938250",
+      "workflow_name": "decision-inbox"
+    }
+  ],
+  "total_count": 2
+}
