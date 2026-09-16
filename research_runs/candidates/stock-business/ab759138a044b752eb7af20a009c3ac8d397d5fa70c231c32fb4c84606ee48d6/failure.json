@@ -1,0 +1,20 @@
+{
+  "automatic_retry": false,
+  "error_type": "CninfoRuntimeError",
+  "execution_id": "stock-business-ab759138a044b752eb7af20a009c3ac8d397d5fa70c231c32fb4c84606ee48d6",
+  "finished_at": "2026-09-16T10:38:15.488077+00:00",
+  "formal_research_started": false,
+  "funnel_status": "NOT_REACHED",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "phase": "SOURCE_PREPARATION",
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",
+  "research_authority": "NONE",
+  "research_execution": "NOT_EXECUTED",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-16T10:38:04.256998+00:00",
+  "status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+  "thscode": "300548.SZ"
+}
