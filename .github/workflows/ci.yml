@@ -5,18 +5,59 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install
         run: python -m pip install -e '.[dev]'
+      - name: Record exact code and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CI_CODE_SHA"
+          CI_REPORT_DIR="$RUNNER_TEMP/kernel-ci"
+          printf 'CI_REPORT_DIR=%s\n' "$CI_REPORT_DIR" >> "$GITHUB_ENV"
+          mkdir -p "$CI_REPORT_DIR"
+          printf 'code_sha=%s\nevent_sha=%s\nevent=%s\nrun_id=%s\nattempt=%s\n' \
+            "$CI_CODE_SHA" "$GITHUB_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            | tee "$CI_REPORT_DIR/identity.txt"
+          python --version > "$CI_REPORT_DIR/python.txt"
+          getconf _NPROCESSORS_ONLN > "$CI_REPORT_DIR/cpu-count.txt"
+          python -m pip list --format=json > "$CI_REPORT_DIR/packages.json"
+      - name: Record full test collection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest --collect-only -q > "$CI_REPORT_DIR/collection.txt"
       - name: Test
-        run: python -m pytest -q --durations=100 --durations-min=1.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q -n 2 --dist=loadfile --max-worker-restart=0 \
+            --durations=100 --durations-min=1.0 \
+            --junitxml="$CI_REPORT_DIR/pytest.xml" 2>&1 | tee "$CI_REPORT_DIR/pytest.log"
+      - name: Upload CI diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kernel-ci-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/kernel-ci/
+          if-no-files-found: warn
+          retention-days: 30
 
   judgment-timeline:
     name: Judgment timeline attachment

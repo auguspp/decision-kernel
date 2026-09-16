@@ -12,9 +12,6 @@ on:
           - produce
           - adopt-recovery-2026-09-10
           - adopt-missed-session-2026-09-14
-  schedule:
-    # UTC 10:13 = Asia/Shanghai 18:13, Monday-Friday. Calendar remains authoritative.
-    - cron: "13 10 * * 1-5"
 
 permissions:
   actions: read
@@ -48,7 +45,7 @@ jobs:
         shell: bash
         run: |
           if [ "${GITHUB_RUN_ATTEMPT}" != "1" ]; then
-            echo "::error::Do not rerun a Sector Radar workflow run; use a new scheduled run or fresh workflow_dispatch so run and artifact identity remain unique"
+            echo "::error::Do not rerun a Sector Radar workflow run; use a fresh workflow_dispatch so run and artifact identity remain unique"
             exit 1
           fi
       - name: Check HiThink secret

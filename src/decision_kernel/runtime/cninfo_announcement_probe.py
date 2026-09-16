@@ -6,6 +6,7 @@ import re
 from datetime import date
 from pathlib import Path
 from typing import Any, Callable, Mapping
+from urllib.parse import urlsplit
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -13,9 +14,11 @@ from requests.adapters import HTTPAdapter
 from decision_kernel.adapters.cninfo import CninfoAdapterError, resolve_cninfo_org_id
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime.cninfo_http import (
+    CNINFO_ANNOUNCEMENT_HTTPS_URL,
     CNINFO_ANNOUNCEMENT_QUERY_URL,
     CNINFO_STOCK_MAP_URL,
     CninfoRuntimeError,
+    _announcement_disclosure_referer,
     _announcement_query_form,
     _request_json,
 )
@@ -24,7 +27,6 @@ from decision_kernel.runtime.stock_field_source_study import notice_query
 STOCK_CODE = "600036"
 START_DATE = date(2026, 9, 14)
 END_DATE = date(2026, 9, 15)
-DISCLOSURE_PAGE_URL = "https://www.cninfo.com.cn/new/disclosure"
 MAX_REQUESTS = 7
 MAX_JSON_BYTES = 256 * 1024
 
@@ -41,22 +43,26 @@ _PRIOR_STUDY_HEADERS = {
     "Accept-Encoding": "identity",
     "Accept": "application/json",
 }
-_BROWSER_HEADERS = {
+_USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+    "Version/17.2 Safari/605.1.15"
+)
+_HTTP_BROWSER_HEADERS = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-        "Version/17.2 Safari/605.1.15"
-    ),
-    "Referer": DISCLOSURE_PAGE_URL,
-    "Origin": "https://www.cninfo.com.cn",
+    "User-Agent": _USER_AGENT,
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     "X-Requested-With": "XMLHttpRequest",
 }
+_HTTPS_BROWSER_HEADERS = {
+    **_HTTP_BROWSER_HEADERS,
+    "Referer": "https://www.cninfo.com.cn/new/disclosure",
+    "Origin": "https://www.cninfo.com.cn",
+}
 _PAGE_HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "User-Agent": _BROWSER_HEADERS["User-Agent"],
-    "Referer": "https://www.cninfo.com.cn/",
+    "User-Agent": _USER_AGENT,
+    "Referer": "http://www.cninfo.com.cn/",
 }
 
 
@@ -119,13 +125,14 @@ def _requests_post(
     *,
     session: Any,
     variant: str,
+    url: str,
     form: Mapping[str, str],
     headers: Mapping[str, str],
 ) -> dict[str, Any]:
     try:
         response = session.request(
             "POST",
-            CNINFO_ANNOUNCEMENT_QUERY_URL,
+            url,
             data=dict(form),
             headers=dict(headers),
             timeout=(5, 10),
@@ -134,7 +141,12 @@ def _requests_post(
         )
         with response:
             status = response.status_code
-            result: dict[str, Any] = {"variant": variant, "method": "POST", "status": status}
+            result: dict[str, Any] = {
+                "variant": variant,
+                "method": "POST",
+                "url_scheme": urlsplit(url).scheme,
+                "status": status,
+            }
             if status == 200:
                 result.update(_json_shape_from_response(response))
             return result
@@ -142,16 +154,17 @@ def _requests_post(
         return {
             "variant": variant,
             "method": "POST",
+            "url_scheme": urlsplit(url).scheme,
             "status": None,
             "transport_error_type": type(exc).__name__,
         }
 
 
-def _warm_disclosure_session(session: Any) -> dict[str, Any]:
+def _warm_disclosure_session(session: Any, disclosure_url: str) -> dict[str, Any]:
     try:
         response = session.request(
             "GET",
-            DISCLOSURE_PAGE_URL,
+            disclosure_url,
             headers=dict(_PAGE_HEADERS),
             timeout=(5, 10),
             stream=True,
@@ -159,15 +172,17 @@ def _warm_disclosure_session(session: Any) -> dict[str, Any]:
         )
         with response:
             return {
-                "variant": "requests_session_warm_get",
+                "variant": "requests_http_issuer_page_warm_get",
                 "method": "GET",
+                "url_scheme": urlsplit(disclosure_url).scheme,
                 "status": response.status_code,
                 "cookie_count_after": len(session.cookies),
             }
     except requests.RequestException as exc:
         return {
-            "variant": "requests_session_warm_get",
+            "variant": "requests_http_issuer_page_warm_get",
             "method": "GET",
+            "url_scheme": urlsplit(disclosure_url).scheme,
             "status": None,
             "cookie_count_after": len(session.cookies),
             "transport_error_type": type(exc).__name__,
@@ -192,12 +207,14 @@ def run_probe(
         org_id = resolve_cninfo_org_id({"stockList": org_rows}, stock_code=STOCK_CODE)
     except (CninfoRuntimeError, CninfoAdapterError, ValueError) as exc:
         result = {
-            "schema_version": 1,
+            "schema_version": 2,
             "semantics": "CASE_BOUNDED_CNINFO_REQUEST_CONTRACT_PROBE_NOT_EVIDENCE",
             "stock_code": STOCK_CODE,
             "query_window": [START_DATE.isoformat(), END_DATE.isoformat()],
             "org_lookup": {"status": "FAILED", "error_type": type(exc).__name__},
             "announcement_attempts": [],
+            "working_variants": [],
+            "production_contract_observed": False,
             "request_count": request_count,
             "max_requests": MAX_REQUESTS,
             "disposition": "ORG_LOOKUP_FAILED",
@@ -220,6 +237,7 @@ def run_probe(
         {"stockList": [{"code": STOCK_CODE, "orgId": org_id}]},
         END_DATE,
     )["params"]
+    issuer_page = _announcement_disclosure_referer(current_form)
     attempts: list[dict[str, Any]] = []
 
     request_count += 1
@@ -233,6 +251,7 @@ def run_probe(
         attempts.append({
             "variant": "urllib_current_production",
             "method": "POST",
+            "url_scheme": urlsplit(CNINFO_ANNOUNCEMENT_QUERY_URL).scheme,
             "status": 200,
             **(
                 _mapping_shape(payload)
@@ -247,6 +266,7 @@ def run_probe(
         attempts.append({
             "variant": "urllib_current_production",
             "method": "POST",
+            "url_scheme": urlsplit(CNINFO_ANNOUNCEMENT_QUERY_URL).scheme,
             "status": _status_from_runtime_error(exc),
             "transport_error_type": type(exc).__name__,
         })
@@ -254,7 +274,8 @@ def run_probe(
     with session_factory() as session:
         attempts.append(_requests_post(
             session=session,
-            variant="requests_current_form_prior_headers",
+            variant="requests_http_current_form_prior_headers",
+            url=CNINFO_ANNOUNCEMENT_QUERY_URL,
             form=current_form,
             headers=_PRIOR_STUDY_HEADERS,
         ))
@@ -263,7 +284,8 @@ def run_probe(
     with session_factory() as session:
         attempts.append(_requests_post(
             session=session,
-            variant="requests_prior_source_study",
+            variant="requests_http_prior_source_study",
+            url=CNINFO_ANNOUNCEMENT_QUERY_URL,
             form=prior_form,
             headers=_PRIOR_STUDY_HEADERS,
         ))
@@ -272,22 +294,24 @@ def run_probe(
     with session_factory() as session:
         attempts.append(_requests_post(
             session=session,
-            variant="requests_browser_headers",
+            variant="requests_https_legacy_browser_headers",
+            url=CNINFO_ANNOUNCEMENT_HTTPS_URL,
             form=current_form,
-            headers=_BROWSER_HEADERS,
+            headers=_HTTPS_BROWSER_HEADERS,
         ))
         request_count += 1
 
     with session_factory() as session:
-        warm = _warm_disclosure_session(session)
+        warm = _warm_disclosure_session(session, issuer_page)
         attempts.append(warm)
         request_count += 1
         if warm.get("status") == 200:
             attempts.append(_requests_post(
                 session=session,
-                variant="requests_warmed_browser_session",
+                variant="requests_warmed_http_browser_session",
+                url=CNINFO_ANNOUNCEMENT_QUERY_URL,
                 form=current_form,
-                headers=_BROWSER_HEADERS,
+                headers={**_HTTP_BROWSER_HEADERS, "Referer": issuer_page},
             ))
             request_count += 1
 
@@ -301,22 +325,36 @@ def run_probe(
         if item.get("status") == 200
         and item.get("contract_shape") == "CNINFO_ANNOUNCEMENT_PAGE"
     ]
+    production_contract_observed = "urllib_current_production" in working
+    http_working = [
+        item["variant"] for item in announcement_posts
+        if item.get("url_scheme") == "http" and item["variant"] in working
+    ]
+    https_working = [
+        item["variant"] for item in announcement_posts
+        if item.get("url_scheme") == "https" and item["variant"] in working
+    ]
     statuses = [item.get("status") for item in announcement_posts]
-    if working:
-        disposition = "HTTPS_ANNOUNCEMENT_REQUEST_CONTRACT_OBSERVED"
+    if production_contract_observed:
+        disposition = "PRODUCTION_HTTP_ANNOUNCEMENT_CONTRACT_OBSERVED"
+    elif http_working:
+        disposition = "HTTP_ANNOUNCEMENT_REQUEST_CONTRACT_OBSERVED_NOT_PRODUCTION"
+    elif https_working:
+        disposition = "HTTPS_ONLY_ANNOUNCEMENT_REQUEST_CONTRACT_OBSERVED"
     elif statuses and all(status == 403 for status in statuses):
-        disposition = "ALL_TESTED_HTTPS_ANNOUNCEMENT_CONTRACTS_403"
+        disposition = "ALL_TESTED_ANNOUNCEMENT_CONTRACTS_403"
     else:
-        disposition = "NO_WORKING_HTTPS_ANNOUNCEMENT_CONTRACT_OBSERVED"
+        disposition = "NO_WORKING_ANNOUNCEMENT_CONTRACT_OBSERVED"
 
     result = {
-        "schema_version": 1,
+        "schema_version": 2,
         "semantics": "CASE_BOUNDED_CNINFO_REQUEST_CONTRACT_PROBE_NOT_EVIDENCE",
         "stock_code": STOCK_CODE,
         "query_window": [START_DATE.isoformat(), END_DATE.isoformat()],
         "org_lookup": {"status": "OK", "org_id": org_id},
         "announcement_attempts": attempts,
         "working_variants": working,
+        "production_contract_observed": production_contract_observed,
         "request_count": request_count,
         "max_requests": MAX_REQUESTS,
         "disposition": disposition,
@@ -332,23 +370,35 @@ def render_summary(result: Mapping[str, Any]) -> str:
         "# CNINFO announcement source probe",
         "",
         f"Disposition: `{result['disposition']}`",
+        f"Production HTTP contract observed: `{result['production_contract_observed']}`",
         f"Requests used: `{result['request_count']}/{result['max_requests']}`",
         f"Cause: `{result['cause']}`",
         "",
         "This is a transport/request-contract probe only. It is not Evidence, Research, a market observation, or production acceptance.",
         "",
+        "HTTP announcement JSON is locator/discovery metadata only. Original document bytes remain qualified separately on CNINFO's official HTTPS static host.",
+        "",
         "## Attempts",
         "",
+        "| Variant | Method | Scheme | Status | Contract |",
+        "| --- | --- | --- | ---: | --- |",
     ]
-    for item in result.get("announcement_attempts", []):
-        shape = item.get("contract_shape")
-        suffix = "" if shape is None else f", shape `{shape}`"
+    for attempt in result["announcement_attempts"]:
         lines.append(
-            f"- `{item['variant']}` {item['method']}: status `{item.get('status')}`{suffix}"
+            "| {variant} | {method} | {scheme} | {status} | {contract} |".format(
+                variant=attempt["variant"],
+                method=attempt["method"],
+                scheme=attempt.get("url_scheme", "-"),
+                status=attempt.get("status"),
+                contract=attempt.get("contract_shape", "-"),
+            )
         )
     lines.extend([
         "",
-        "No retry, provider fallback, redirect following, non-200 body retention, cookie-value retention, PDF acquisition, Research, Odds or Action is performed.",
+        "Working variants: " + (
+            ", ".join(f"`{item}`" for item in result["working_variants"])
+            if result["working_variants"] else "none"
+        ),
         "",
     ])
     return "\n".join(lines)
@@ -356,13 +406,13 @@ def render_summary(result: Mapping[str, Any]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", required=True)
     args = parser.parse_args(argv)
-    args.output.mkdir(parents=True, exist_ok=False)
+    output = Path(args.output)
+    output.mkdir(parents=True, exist_ok=False)
     result = run_probe()
-    (args.output / "probe.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
-    (args.output / "summary.md").write_text(render_summary(result), encoding="utf-8")
-    print(result["disposition"])
+    (output / "probe.json").write_text(canonical_json(result) + "\n", encoding="utf-8")
+    (output / "summary.md").write_text(render_summary(result), encoding="utf-8")
     return 0
 
 

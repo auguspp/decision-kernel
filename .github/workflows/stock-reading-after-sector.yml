@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  actions: write
+  actions: read
 
 concurrency:
   group: stock-reading-after-sector-${{ github.event.workflow_run.id }}
@@ -20,7 +20,8 @@ jobs:
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
       github.event.workflow_run.name == 'sector-radar-shadow' &&
-      github.event.workflow_run.event == 'schedule' &&
+      (github.event.workflow_run.event == 'schedule' ||
+       github.event.workflow_run.event == 'workflow_dispatch') &&
       github.event.workflow_run.status == 'completed' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.run_attempt == 1 &&
@@ -36,10 +37,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Validate natural Sector successor and shared-Key activity
+      - name: Validate daily Sector successor and shared-Key activity
         id: preflight
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
           UPSTREAM_NAME: ${{ github.event.workflow_run.name }}
           UPSTREAM_PATH: ${{ github.event.workflow_run.path }}
           UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
@@ -50,14 +52,58 @@ jobs:
           UPSTREAM_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           UPSTREAM_HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
           UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-        run: python .github/scripts/check-stock-daily-successor.py
-      - name: Dispatch existing bounded Stock reading once
-        if: steps.preflight.outputs.dispatch_allowed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          MARKET_RUN_ID: ${{ steps.preflight.outputs.market_run_id }}
+          UPSTREAM_JOBS_JSON: ${{ runner.temp }}/sector-upstream-jobs.json
         shell: bash
         run: |
+          if [ "$UPSTREAM_EVENT" = "workflow_dispatch" ]; then
+            gh api \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "repos/$GITHUB_REPOSITORY/actions/runs/$UPSTREAM_RUN_ID/jobs?per_page=100&page=1" \
+              > "$UPSTREAM_JOBS_JSON"
+          fi
+          python .github/scripts/check-stock-daily-successor.py
+      - name: Require exact result-bearing Sector input for Stock
+        id: stock-input
+        if: steps.preflight.outputs.dispatch_allowed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          SUCCESSOR_CHECK_MODE: stock-input
+          UPSTREAM_NAME: ${{ github.event.workflow_run.name }}
+          UPSTREAM_PATH: ${{ github.event.workflow_run.path }}
+          UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
+          UPSTREAM_STATUS: ${{ github.event.workflow_run.status }}
+          UPSTREAM_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          UPSTREAM_HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          UPSTREAM_JOBS_JSON: ${{ runner.temp }}/sector-upstream-jobs.json
+          UPSTREAM_RUN_AUDIT: ${{ runner.temp }}/sector-stock-input
+        shell: bash
+        run: |
+          mkdir "$UPSTREAM_RUN_AUDIT"
+          gh run download "$UPSTREAM_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "sector-radar-run-$UPSTREAM_RUN_ID" \
+            --dir "$UPSTREAM_RUN_AUDIT"
+          python .github/scripts/check-stock-daily-successor.py
+      - name: Dispatch existing bounded Stock reading once
+        if: >-
+          steps.preflight.outputs.dispatch_allowed == 'true' &&
+          steps.stock-input.outputs.stock_input_ready == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}
+          MARKET_RUN_ID: ${{ steps.preflight.outputs.market_run_id }}
+          MARKET_ORIGIN: ${{ steps.preflight.outputs.sector_origin }}
+        shell: bash
+        run: |
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN; do not fall back to GITHUB_TOKEN because downstream workflow_run chaining would be suppressed"
+            exit 1
+          fi
           python - <<'PY' > "$RUNNER_TEMP/stock-reading-dispatch.json"
           import json, os
           print(json.dumps({
@@ -76,8 +122,14 @@ jobs:
           {
             echo '### Stock daily successor handoff'
             echo
-            printf 'Natural Sector run `%s` passed the bounded shared-Key preflight and was handed once to the existing `stock-reading` workflow contract.\n\n' "$MARKET_RUN_ID"
+            printf 'Eligible result-bearing Sector run `%s` with origin `%s` passed the bounded shared-Key and exact-result gates and was handed once to the existing `stock-reading` workflow contract.\n\n' "$MARKET_RUN_ID" "$MARKET_ORIGIN"
+            echo 'The event-emitting Stock dispatch uses the dedicated least-privilege Actions token, not GITHUB_TOKEN, so the existing Stock → Research → current-state workflow_run chain remains eligible to fire normally.'
+            echo
             echo 'No market data was read in this successor. The dispatched Stock workflow remains responsible for exact Sector artifact binding, the existing 26-request ceiling, live capture, offline replay and retained delivery.'
+            echo
+            echo 'A workflow_dispatch producer remains workflow_dispatch in lineage; this handoff does not relabel it as a native GitHub schedule run.'
+            echo
+            echo 'An already-current Sector success without a prospective result is a successful no-op here; it is never replaced by an older or latest result.'
             echo
             echo 'The successor executes current default-branch code; the existing Stock contract separately verifies the immutable upstream Sector run/artifact. A later main commit does not rewrite that market input.'
             echo

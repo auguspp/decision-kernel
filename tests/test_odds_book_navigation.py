@@ -1,4 +1,4 @@
-"""Odds Book uses existing purpose retention; no semantic or investment acceptance."""
+"""Odds Book uses existing purpose retention; no automatic investment authority."""
 import copy
 import json
 import re
@@ -35,7 +35,7 @@ def test_book_is_one_explicit_navigation_record_not_a_production_package():
 
 
 @pytest.mark.parametrize("code", ["600276.SH", "600967.SH", "002674.SZ", "600184.SH",
-    "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"])
+    "600598.SH", "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"])
 def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run(code):
     text = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
     table = text.split("## 2.")[0]
@@ -50,13 +50,55 @@ def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identit
     assert old["source"]["git_blob"] == "895ba811d96750d02a4f0d7c08358b5e7fed3088"
     assert rows["odds-guangdian-challenge"]["source"]["git_blob"] == "174e02ecc48eb851324b830798f996c0f6705a02"
     for key in ("odds-hengrui-provisional", "odds-hengrui-human", "odds-neimeng-human",
-                "odds-xingye-revision", "odds-xingye-human", "odds-inbox-history-20260911"):
+                "odds-xingye-revision", "odds-xingye-human", "odds-beidahuang-provisional",
+                "odds-beidahuang-profit-led-revision", "odds-beidahuang-human",
+                "odds-inbox-history-20260911"):
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["ref"])
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["git_blob"])
         assert rows[key]["use"] != "CONFIRMED_ACTION_CHECKPOINT"
     # Leave room for the original config, production packages, handoffs and gaps.
     specs = {(r["source"].get("ref", M), r["source"]["path"]) for r in rows.values()}
     assert len(specs) + 12 <= delivery.MAX_SOURCE_FILES
+
+
+def test_beidahuang_revision_is_append_only_and_not_human_acceptance_itself():
+    rows = {r["id"]: r for r in registry()["references"]}
+    old = rows["odds-beidahuang-provisional"]
+    new = rows["odds-beidahuang-profit-led-revision"]
+    assert old["source"]["ref"] == "cc95a4fb42f332f8384dd2240647e61fa36fd49f"
+    assert old["source"]["git_blob"] == "3611fa961ce09596849c3054e0edf3630e013e54"
+    assert new["source"]["ref"] == "daf25acbda3a764c73ffad1a5de89bc365e6d924"
+    assert new["source"]["git_blob"] == "d35934f5f4ef27a225c7d7928e5ee7634dab3878"
+    assert old["source"] != new["source"]
+    assert new["use"] == "RETAINED_ODDS_DOCUMENT"
+    payload = json.loads((ROOT / new["source"]["path"]).read_text(encoding="utf-8"))
+    assert payload["revision"]["type"] == "VALUATION_INTERPRETATION_NOT_PRICE_ONLY"
+    assert payload["price_context"]["price_refresh_this_revision"] is False
+    assert payload["profit_growth_evidence"] == "NOT_ESTABLISHED"
+    assert payload["valuation_revision"]["core_terminal_pe_range"] == [21, 23]
+    assert payload["valuation_revision"]["upper_good_market_expression_is_base"] is False
+    assert payload["decision_use_context"]["human_acceptance"] == "NOT_ESTABLISHED"
+    assert payload["odds"]["watch_enabled"] is False
+
+
+def test_beidahuang_human_acceptance_is_exact_ba2_checkpoint_without_action_or_watch():
+    rows = {r["id"]: r for r in registry()["references"]}
+    odds = rows["odds-beidahuang-profit-led-revision"]
+    human = rows["odds-beidahuang-human"]
+    assert human["use"] == "HUMAN_DECISION_CHECKPOINT"
+    assert human["source"]["ref"] == "e8f51d75111a29bbe62dc7eb160725e722542145"
+    assert human["source"]["git_blob"] == "f25f25cadd7018563f0a6394cbe7958337428765"
+    assert human["source"] != odds["source"]
+    text = (ROOT / human["source"]["path"]).read_text(encoding="utf-8")
+    assert "嗯，我现在同意了 odds" in text
+    assert "PROVISIONAL / ORDINAL ODDS BA2 = HUMAN ACCEPTED FOR DECISION PREPARATION" in text
+    assert "HUMAN INVESTMENT DECISION = NONE" in text
+    assert "WATCH / MONITORING REGISTRATION = NONE" in text
+    assert "ACTION = NONE" in text
+    assert "does **not** independently establish 10% as a permanent company-specific Human mandate" in text
+    book = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
+    assert "BA1–BA3" in book and "HUMAN_ACCEPTANCE_CHANGE" in book
+    assert "[Human接受][BD-H]" in book
 
 
 class SavedAPI:

@@ -89,7 +89,7 @@ class ResearchSnapshot(KernelModel):
     currency: CurrencyCode
     created_at: AwareDateTime
     as_of_datetime: AwareDateTime
-    valuation_horizon_date: date
+    valuation_horizon_date: date | None = None
     version: int = Field(ge=1)
     status: ResearchStatus = ResearchStatus.DRAFT
     supersedes_snapshot_id: UUID | None = None
@@ -114,8 +114,18 @@ class ResearchSnapshot(KernelModel):
     research_origin: str | None = Field(default=None, max_length=128)
     schema_version: int = Field(default=1, ge=1)
 
+    def _assert_schema_contract(self) -> None:
+        if type(self.schema_version) is not int or self.schema_version not in (1, 2):
+            raise DomainValidationError("unsupported ResearchSnapshot schema_version")
+        if self.valuation_horizon_date is None:
+            if self.schema_version == 1 or self.valuation_bases or self.scenarios:
+                raise DomainValidationError(
+                    "valuation_horizon_date is required for schema v1 or supplied valuation state"
+                )
+
     @model_validator(mode="after")
     def validate_aggregate_references(self) -> "ResearchSnapshot":
+        self._assert_schema_contract()
         if self.supersedes_snapshot_id == self.id:
             raise ValueError("ResearchSnapshot cannot supersede itself")
         if self.version == 1 and self.supersedes_snapshot_id is not None:
@@ -124,7 +134,8 @@ class ResearchSnapshot(KernelModel):
             raise ValueError(
                 "ResearchSnapshot versions after one must identify their predecessor"
             )
-        if self.valuation_horizon_date < self.as_of_datetime.date():
+        if (self.valuation_horizon_date is not None
+                and self.valuation_horizon_date < self.as_of_datetime.date()):
             raise ValueError("valuation horizon cannot precede as-of date")
         if self.status is ResearchStatus.COMMITTED and self.committed_at is None:
             raise ValueError("committed snapshot requires committed_at")
@@ -166,6 +177,8 @@ class ResearchSnapshot(KernelModel):
     def assert_decision_spine_ready(self) -> None:
         """Require only method-agnostic state consumed by Odds or Human accountability."""
 
+        if self.valuation_horizon_date is None:
+            raise DomainValidationError("Decision Spine requires valuation_horizon_date")
         if not self.core_thesis.strip():
             raise DomainValidationError("Decision Spine requires core_thesis")
         if (
@@ -179,6 +192,13 @@ class ResearchSnapshot(KernelModel):
             raise DomainValidationError("Decision Spine requires model_risk_notes")
         if not self.thesis_invalidation:
             raise DomainValidationError("Human accountability requires thesis_invalidation")
+        self._assert_numerical_distribution()
+        if not self.information_bundle_hash:
+            raise DomainValidationError(
+                "Decision Spine requires information_bundle_hash"
+            )
+
+    def _assert_numerical_distribution(self) -> None:
         if not self.scenarios:
             raise DomainValidationError("Decision Spine requires at least one Scenario")
         probability_sum = sum(
@@ -186,15 +206,33 @@ class ResearchSnapshot(KernelModel):
         )
         if abs(probability_sum - Decimal("1")) > PROBABILITY_TOLERANCE:
             raise DomainValidationError("scenario probabilities must sum to one")
+
+    def assert_research_ready(self) -> None:
+        """Research-only accountability; not numerical Odds or method acceptance.
+
+        Ordinal conditions stay in the original workpaper/narrative. Scenario
+        remains the existing numerical object, never a placeholder distribution.
+        """
+        for name in ("core_thesis", "model_risk_notes"):
+            value = getattr(self, name)
+            if value is None or not value.strip():
+                raise DomainValidationError(f"Research requires {name}")
+        if not self.thesis_invalidation:
+            raise DomainValidationError("Human accountability requires thesis_invalidation")
         if not self.information_bundle_hash:
-            raise DomainValidationError(
-                "Decision Spine requires information_bundle_hash"
-            )
+            raise DomainValidationError("Research requires information_bundle_hash")
+        # Absence is valid; contradictory supplied numerical state is not ignored.
+        if self.scenarios:
+            self._assert_numerical_distribution()
 
     def assert_commit_ready(self) -> None:
         if self.status is not ResearchStatus.REVIEW:
             raise DomainValidationError("only REVIEW snapshots can be committed")
-        self.assert_decision_spine_ready()
+        self._assert_schema_contract()
+        if self.schema_version == 1:
+            self.assert_decision_spine_ready()
+        else:
+            self.assert_research_ready()
 
 
 def submit_for_review(snapshot: ResearchSnapshot) -> ResearchSnapshot:
