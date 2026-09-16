@@ -51,13 +51,35 @@ def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identit
     assert rows["odds-guangdian-challenge"]["source"]["git_blob"] == "174e02ecc48eb851324b830798f996c0f6705a02"
     for key in ("odds-hengrui-provisional", "odds-hengrui-human", "odds-neimeng-human",
                 "odds-xingye-revision", "odds-xingye-human", "odds-beidahuang-provisional",
-                "odds-inbox-history-20260911"):
+                "odds-beidahuang-profit-led-revision", "odds-inbox-history-20260911"):
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["ref"])
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["git_blob"])
         assert rows[key]["use"] != "CONFIRMED_ACTION_CHECKPOINT"
     # Leave room for the original config, production packages, handoffs and gaps.
     specs = {(r["source"].get("ref", M), r["source"]["path"]) for r in rows.values()}
     assert len(specs) + 12 <= delivery.MAX_SOURCE_FILES
+
+
+def test_beidahuang_revision_is_append_only_and_not_human_acceptance():
+    rows = {r["id"]: r for r in registry()["references"]}
+    old = rows["odds-beidahuang-provisional"]
+    new = rows["odds-beidahuang-profit-led-revision"]
+    assert old["source"]["ref"] == "cc95a4fb42f332f8384dd2240647e61fa36fd49f"
+    assert old["source"]["git_blob"] == "3611fa961ce09596849c3054e0edf3630e013e54"
+    assert new["source"]["ref"] == "daf25acbda3a764c73ffad1a5de89bc365e6d924"
+    assert new["source"]["git_blob"] == "d35934f5f4ef27a225c7d7928e5ee7634dab3878"
+    assert old["source"] != new["source"]
+    assert new["use"] == "RETAINED_ODDS_DOCUMENT"
+    book = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
+    assert "BA1–BA2" in book and "9.8–10.3" in book and "9.3–9.6" in book
+    payload = json.loads((ROOT / new["source"]["path"]).read_text(encoding="utf-8"))
+    assert payload["revision"]["type"] == "VALUATION_INTERPRETATION_NOT_PRICE_ONLY"
+    assert payload["price_context"]["price_refresh_this_revision"] is False
+    assert payload["profit_growth_evidence"] == "NOT_ESTABLISHED"
+    assert payload["valuation_revision"]["core_terminal_pe_range"] == [21, 23]
+    assert payload["valuation_revision"]["upper_good_market_expression_is_base"] is False
+    assert payload["decision_use_context"]["human_acceptance"] == "NOT_ESTABLISHED"
+    assert payload["odds"]["watch_enabled"] is False
 
 
 class SavedAPI:
