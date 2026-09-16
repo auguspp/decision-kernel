@@ -62,7 +62,7 @@ jobs:
           READ_CODE_COMMIT: ${{ github.sha }}
           TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
         run: >-
-          python -m decision_kernel.runtime.current_state_delivery
+          python -m decision_kernel.runtime.current_state_delivery_with_odds_watch
           --code-commit "$READ_CODE_COMMIT"
           --output current-state-delivery
           --publish
