@@ -1,4 +1,4 @@
-"""Odds Book uses existing purpose retention; no automatic investment authority."""
+"""Odds Book uses existing purpose retention; Watch adds no investment authority."""
 import copy
 import json
 import re
@@ -18,19 +18,25 @@ def registry():
     return json.loads((ROOT / "current_state/registry.json").read_text(encoding="utf-8"))
 
 
-def test_book_is_one_explicit_navigation_record_not_a_production_package():
-    rows = [r for r in registry()["references"] if r["id"] == "odds-book"]
-    assert len(rows) == 1
-    assert rows[0]["use"] == "NAVIGATION_ONLY"
-    assert rows[0]["source"]["path"] == "docs/ODDS-BOOK.md"
-    source = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
+def test_book_and_watch_are_explicit_purpose_records_not_production_packages():
+    rows = {r["id"]: r for r in registry()["references"]}
+    book = rows["odds-book"]
+    watch = rows["odds-watch-v0"]
+    assert book["use"] == "NAVIGATION_ONLY"
+    assert book["source"]["path"] == "docs/ODDS-BOOK.md"
+    assert watch["use"] == "WATCH_CONFIGURATION"
+    assert watch["source"]["path"] == "decision_inputs/odds-watch-v0.json"
+    assert "五个" in watch["purpose_note"] and "Investment Authority" in watch["purpose_note"]
+    source = (ROOT / book["source"]["path"]).read_text(encoding="utf-8")
     assert "DECLARED_COVERAGE_BACKFILL" in source
-    assert "WATCH_NOT_ENABLED" in source
+    assert "BOUNDED_WATCH_V0" in source
+    assert "WATCH_REGISTRATION / READ_ONLY_ATTENTION" in source
     assert "NOT_SAVED / REGISTRATION_INCOMPLETE / PUBLICATION_PENDING" in source
     assert "全仓自动扫描器" in source
     workflow = (ROOT / reading.WORKFLOWS["inbox"]).read_text(encoding="utf-8")
-    assert rows[0]["source"]["path"] not in reading.configured_paths(workflow, "decision_packages")
-    assert rows[0]["source"]["path"] not in reading.configured_paths(workflow, "research_attention_handoffs")
+    for record in (book, watch):
+        assert record["source"]["path"] not in reading.configured_paths(workflow, "decision_packages")
+        assert record["source"]["path"] not in reading.configured_paths(workflow, "research_attention_handoffs")
     assert "Odds Book v0" in (ROOT / "docs/RESEARCH-ENTRY.md").read_text(encoding="utf-8")
 
 
@@ -40,7 +46,28 @@ def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run
     text = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
     table = text.split("## 2.")[0]
     assert f"**{code}**" in table
-    assert "非本日价格" in table and "未启用" in table
+    assert "非本日价格" in table
+
+
+@pytest.mark.parametrize("code", ["600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"])
+def test_only_exact_boundary_cases_are_visible_as_bounded_watch_cases(code):
+    table = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8").split("## 2.")[0]
+    line = next(row for row in table.splitlines() if f"**{code}**" in row)
+    assert "#349-C" in line or "typed watch" in line
+
+
+@pytest.mark.parametrize("code,state", [
+    ("600184.SH", "CHALLENGED_NO_ACTIVE_TRIGGER"),
+    ("600967.SH", "EVIDENCE_REVIEW_ONLY_NO_PRICE_BOUNDARY"),
+    ("600519.SH", "UNTYPED_HISTORY_NO_ACTIVE_TRIGGER"),
+    ("601088.SH", "UNTYPED_HISTORY_NO_ACTIVE_TRIGGER"),
+    ("300750.SZ", "DEQUALIFIED_HISTORY_ONLY"),
+    ("600036.SH", "DEQUALIFIED_HISTORY_ONLY"),
+])
+def test_inactive_cases_keep_explicit_safety_classification(code, state):
+    table = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8").split("## 2.")[0]
+    line = next(row for row in table.splitlines() if f"**{code}**" in row)
+    assert state in line
 
 
 def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identities():
@@ -56,9 +83,9 @@ def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identit
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["ref"])
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["git_blob"])
         assert rows[key]["use"] != "CONFIRMED_ACTION_CHECKPOINT"
-    # Leave room for the original config, production packages, handoffs and gaps.
+    # Leave room for original config, production packages, Watch config, handoffs and gaps.
     specs = {(r["source"].get("ref", M), r["source"]["path"]) for r in rows.values()}
-    assert len(specs) + 12 <= delivery.MAX_SOURCE_FILES
+    assert len(specs) + 13 <= delivery.MAX_SOURCE_FILES
 
 
 def test_beidahuang_revision_is_append_only_and_not_human_acceptance_itself():
@@ -81,7 +108,7 @@ def test_beidahuang_revision_is_append_only_and_not_human_acceptance_itself():
     assert payload["odds"]["watch_enabled"] is False
 
 
-def test_beidahuang_human_acceptance_is_exact_ba2_checkpoint_without_action_or_watch():
+def test_beidahuang_human_acceptance_remains_exact_ba2_checkpoint_then_watch_is_later_w1():
     rows = {r["id"]: r for r in registry()["references"]}
     odds = rows["odds-beidahuang-profit-led-revision"]
     human = rows["odds-beidahuang-human"]
@@ -99,6 +126,7 @@ def test_beidahuang_human_acceptance_is_exact_ba2_checkpoint_without_action_or_w
     book = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
     assert "BA1–BA3" in book and "HUMAN_ACCEPTANCE_CHANGE" in book
     assert "[Human接受][BD-H]" in book
+    assert "W1" in book and "WATCH_REGISTRATION / READ_ONLY_ATTENTION" in book
 
 
 class SavedAPI:
