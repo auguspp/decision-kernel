@@ -273,7 +273,9 @@ def build_watch(
         projected = [_condition_projection(item, price) for item in case["conditions"]]
         triggered = [item for item in projected if item["attention_triggered"]]
         unreached = [item for item in projected if not item["attention_triggered"]]
-        next_condition = unreached[-1] if unreached else None
+        # Conditions are validated shallow-to-deep. The nearest still-unreached
+        # boundary is therefore the first remaining item, never an arbitrary deep level.
+        next_condition = unreached[0] if unreached else None
         rows.append({
             **base,
             "status": "NEEDS_REVIEW_NOW" if triggered else "ACTIVE_ODDS_WATCH",
