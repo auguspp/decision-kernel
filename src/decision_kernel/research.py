@@ -31,6 +31,7 @@ class ModelRiskLevel(StrEnum):
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
     VERY_HIGH = "VERY_HIGH"
+    NOT_ESTABLISHED = "NOT_ESTABLISHED"
 
 
 class CashFlowBasis(StrEnum):
@@ -117,6 +118,12 @@ class ResearchSnapshot(KernelModel):
     def _assert_schema_contract(self) -> None:
         if type(self.schema_version) is not int or self.schema_version not in (1, 2):
             raise DomainValidationError("unsupported ResearchSnapshot schema_version")
+        if self.model_risk_level is ModelRiskLevel.NOT_ESTABLISHED and (
+            self.schema_version != 2 or self.valuation_bases or self.scenarios
+        ):
+            raise DomainValidationError(
+                "NOT_ESTABLISHED model risk is limited to schema-v2 Research-only state"
+            )
         if self.valuation_horizon_date is None:
             if self.schema_version == 1 or self.valuation_bases or self.scenarios:
                 raise DomainValidationError(
@@ -187,6 +194,10 @@ class ResearchSnapshot(KernelModel):
         ):
             raise DomainValidationError(
                 "Decision Spine requires market_expectations_narrative"
+            )
+        if self.model_risk_level is ModelRiskLevel.NOT_ESTABLISHED:
+            raise DomainValidationError(
+                "Decision Spine requires an established model-risk level"
             )
         if self.model_risk_notes is None or not self.model_risk_notes.strip():
             raise DomainValidationError("Decision Spine requires model_risk_notes")
