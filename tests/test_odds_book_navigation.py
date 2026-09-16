@@ -35,7 +35,7 @@ def test_book_is_one_explicit_navigation_record_not_a_production_package():
 
 
 @pytest.mark.parametrize("code", ["600276.SH", "600967.SH", "002674.SZ", "600184.SH",
-    "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"])
+    "600598.SH", "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"])
 def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run(code):
     text = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
     table = text.split("## 2.")[0]
@@ -50,7 +50,8 @@ def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identit
     assert old["source"]["git_blob"] == "895ba811d96750d02a4f0d7c08358b5e7fed3088"
     assert rows["odds-guangdian-challenge"]["source"]["git_blob"] == "174e02ecc48eb851324b830798f996c0f6705a02"
     for key in ("odds-hengrui-provisional", "odds-hengrui-human", "odds-neimeng-human",
-                "odds-xingye-revision", "odds-xingye-human", "odds-inbox-history-20260911"):
+                "odds-xingye-revision", "odds-xingye-human", "odds-beidahuang-provisional",
+                "odds-inbox-history-20260911"):
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["ref"])
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["git_blob"])
         assert rows[key]["use"] != "CONFIRMED_ACTION_CHECKPOINT"
