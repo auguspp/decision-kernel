@@ -3,6 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github/workflows/decision-inbox.yml"
+READ_WORKFLOW = ROOT / ".github/workflows/current-state-read-entry.yml"
 
 
 def text():
@@ -36,3 +37,15 @@ def test_watch_summary_is_human_attention_only_and_missing_watch_is_not_quiet():
     assert "No price-condition state is inferred from a missing typed Watch artifact." in value
     assert "BUY" not in value
     assert "standing order" not in value.lower()
+
+
+def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_watch_aware_reader():
+    value = READ_WORKFLOW.read_text(encoding="utf-8")
+    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research]" in value
+    assert "types: [requested, completed]" in value
+    assert "branches: [main]" in value
+    assert "contents: write" in value and "actions: read" in value
+    assert "python -m decision_kernel.runtime.current_state_delivery_with_odds_watch" in value
+    assert "--code-commit \"$READ_CODE_COMMIT\"" in value
+    assert "--publish" in value
+    assert "workflow_dispatch:" not in value
