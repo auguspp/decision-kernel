@@ -67,3 +67,7 @@ v0 支持一个目录内最多16个普通100644文件，每文件不超过512 Ki
 仍未交付：所有聊天自动归档、所有历史档案自动登记、任意大小PDF取回、无人值守模型续作或321-B/Odds Watch。#321更大范围保持开放。
 
 复用依据：[GitHub Git trees](https://docs.github.com/en/rest/git/trees)、[原生Git引用更新](https://git-scm.com/docs/git-update-ref)，以及已有#393的Python/CPython独占I/O复用审阅。原生版本化与已有validators已经够用，无新增依赖。
+
+## 6. #321-B 已生成 Odds 结果的显式依赖恢复
+
+`ODDS_RESULT` 使用同一恢复命令和同R purpose registry，绑定一个 `RESEARCH_COMMIT` 依赖；原三类档案的合同不变。结果两文件、研究至多五文件、禁止依赖链，原 API 预算不放宽。完整保存/登记/验证步骤见 [Odds 结果留存与恢复](odds-result-retention-v0.md)。恢复只重建核验原结果，不建立今日行情资格、公司数值接受或投资权限。上文历史首批“321-B尚未交付”描述不作为本扩展的当前状态。

@@ -24,6 +24,7 @@ FORMATS = {
     "RETAINED_FILES": {"format"},
     "RESEARCH_PROGRESS": {"format", "expected_sha256", "question_id"},
     "RESEARCH_COMMIT": {"format", "snapshot_id"},
+    "ODDS_RESULT": {"format", "result_kind", "research_record_id", "research_snapshot_hash"},
 }
 
 
@@ -77,6 +78,13 @@ def _record(api, reading_commit: str, record_id: str, output: Path) -> tuple[dic
     if config["format"] == "RESEARCH_COMMIT":
         model.check(str(UUID(config["snapshot_id"])) == config["snapshot_id"],
                     "commit archive needs exact snapshot id")
+    if config["format"] == "ODDS_RESULT":
+        from . import odds_retention as odds
+        model.check(config["result_kind"] in odds.KINDS, "unsupported Odds result kind")
+        model.check(isinstance(config["research_record_id"], str)
+                    and NAME.fullmatch(config["research_record_id"]) is not None
+                    and config["research_record_id"] != record_id, "invalid Research dependency")
+        odds.check_snapshot_hash(config["research_snapshot_hash"])
     retained._write(output / "reading.json", reading_raw)
     retained._write(output / "registry.json", registry_raw)
     return record, source
@@ -134,7 +142,8 @@ def _qualify(directory: Path, record: dict) -> dict:
     return {"qualification": "RETAINED_FILES_NOT_REVALIDATED_RESEARCH"}
 
 
-def recover_archive(api, *, reading_commit: str, record_id: str, output: Path) -> dict:
+def recover_archive(api, *, reading_commit: str, record_id: str, output: Path,
+                    _required_format: str | None = None) -> dict:
     """Fetch an exact existing archive. Source text is data, never resume authority.
 
     The supplied API needs only file/get. Unknown/failed remote reads are not
@@ -148,7 +157,16 @@ def recover_archive(api, *, reading_commit: str, record_id: str, output: Path) -
     output.mkdir(parents=True, exist_ok=False)
     try:
         record, source = _record(api, reading_commit, record_id, output)
+        config = record["archive"]
+        if _required_format is not None:
+            model.check(config["format"] == _required_format, "Research dependency must be RESEARCH_COMMIT")
         rows, tree_sha = _tree_files(api, source, output)
+        if config["format"] == "ODDS_RESULT":
+            from . import odds_retention as odds
+            model.check({PurePosixPath(r["path"]).name for r in rows} == odds.FILES,
+                        "Odds archive inventory differs")
+        if _required_format == "RESEARCH_COMMIT":
+            model.check(len(rows) <= 5, "Research dependency inventory exceeds bound")
         bundle = output / "bundle"; bundle.mkdir()
         inventory = {}
         for row in rows:
@@ -167,6 +185,26 @@ def recover_archive(api, *, reading_commit: str, record_id: str, output: Path) -
             retained._write(bundle / name, raw)
             inventory[name] = {"path": row["path"], "git_blob": row["sha"], **retained._description(raw)}
         qualified = _qualify(bundle, record)
+        if config["format"] == "ODDS_RESULT":
+            # One dependency only; a non-COMMIT target fails before its blob reads.
+            dependency = recover_archive(api, reading_commit=reading_commit,
+                record_id=config["research_record_id"], output=output / "research",
+                _required_format="RESEARCH_COMMIT")
+            model.check(dependency["case"] == record["case"], "Odds/Research navigation case differs")
+            for name in ("reading.json", "registry.json"):
+                model.check(retained._read(output / name) == retained._read(output / "research" / name),
+                            "dependency must use the exact same reading and registry bytes")
+            result = odds.read_retained_odds(bundle, research_directory=output / "research" / "bundle",
+                expected_research_hash=config["research_snapshot_hash"])
+            metadata = retained._json(retained._read(bundle / "retention.json"))
+            model.check(metadata["result_kind"] == config["result_kind"], "registered Odds kind differs")
+            qualified = {"qualification": "ODDS_RESULT_REVALIDATED_NOT_CURRENT_QUALIFICATION",
+                "result_kind": metadata["result_kind"], "result_hash": metadata["result_hash"],
+                "research_record_id": dependency["record_id"],
+                "research_source_commit": dependency["source_commit"],
+                "research_snapshot_hash": config["research_snapshot_hash"],
+                "research_package_hash": dependency["package_hash"],
+                "verification": "EXISTING_DETERMINISTIC_REBUILD_ONLY"}
         receipt = {"format": "research-archive-read-v0", "reading_commit": reading_commit,
             "record_id": record_id, "case": record["case"], "original_use": record["use"],
             "original_purpose_note": record["purpose_note"], "source_commit": source["ref"],
@@ -176,6 +214,9 @@ def recover_archive(api, *, reading_commit: str, record_id: str, output: Path) -
             "continuation_status": "NOT_EXECUTED", "human_acceptance": "NOT_ESTABLISHED_BY_RECOVERY",
             "investment_authority": "NONE", "market_status": "NOT_REQUESTED", "odds_status": "NOT_COMPUTED",
             "remote_write": False, "external_source_bodies": "ONLY_FILES_IN_INVENTORY_NOT_LINK_TARGETS"}
+        if config["format"] == "ODDS_RESULT":
+            receipt["odds_status"] = "SAVED_RESULT_REBUILT_FOR_VERIFICATION_NOT_NEW_PRICE_ANALYSIS"
+            receipt["market_qualification"] = "NOT_ESTABLISHED_BY_RECOVERY"
         retained._write(output / "readback.json", retained._raw(receipt))
         return receipt
     except (OSError, ValueError, RuntimeError, KeyError, TypeError, AttributeError) as exc:
