@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 
@@ -30,9 +29,15 @@ def test_historical_study_workflow_is_manual_only_and_read_only() -> None:
 
 def test_historical_study_workflow_requires_exact_source_identity_inputs() -> None:
     text = workflow_text()
+    lines = text.splitlines()
     for name in ("source_run_id", "expected_state_hash", "expected_market_session"):
-        pattern = rf"(?ms)^      {name}:\n(?:        .*\n)*?        required: true$"
-        assert re.search(pattern, text), name
+        start = lines.index(f"      {name}:")
+        block: list[str] = []
+        for line in lines[start + 1 :]:
+            if line.startswith("      ") and not line.startswith("        "):
+                break
+            block.append(line)
+        assert "        required: true" in block, name
 
     assert 'test "$GITHUB_REF" = "refs/heads/main"' in text
     assert 'test "$GITHUB_RUN_ATTEMPT" = "1"' in text
