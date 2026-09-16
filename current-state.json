@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-16T14:19:07.795393+00:00",
+    "finished_at": "2026-09-16T14:20:54.289252+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-17T14:19:07.795393+00:00",
-    "started_at": "2026-09-16T14:18:48.255188+00:00"
+    "recheck_after": "2026-09-17T14:20:54.289252+00:00",
+    "started_at": "2026-09-16T14:20:33.945946+00:00"
   },
   "code_commit": "fc9b6aeec03cec96b1352ea308d3f97b2b9aee70",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-16T14:19:07.795393+00:00",
+  "generated_at": "2026-09-16T14:20:54.289252+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-16T14:18:57.967184+00:00",
+      "checks_at": "2026-09-16T14:20:44.225777+00:00",
       "gaps": [
         "INPUT_UNAVAILABLE_OR_REJECTED:ValueError:Inbox Odds Watch registry identity differs",
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
@@ -579,13 +579,13 @@
         "workflow_conclusion": "failure"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
-      "previous_read_commit": "82df01a9db8ac3d9d45bf9111664f252f7fdadb0",
+      "previous_read_commit": "87034e9c4fd4187187cf847d24c9716ef5e48cc3",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
       "reading_copy_kind": "PREVIOUSLY_VERIFIED_READ_COPY_NOT_RESTORE_INPUT",
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-16T14:18:50.779147+00:00",
+      "checks_at": "2026-09-16T14:20:36.757462+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -711,7 +711,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "c24eac54cc7c1aa0465205e390dcee447a1b5e932925e18ab288076c30efbfb4"
         },
-        "source_checked_at": "2026-09-16T14:18:50.779118+00:00",
+        "source_checked_at": "2026-09-16T14:20:36.757435+00:00",
         "state_archive": {
           "artifact_id": 10442076271,
           "artifact_name": "sector-radar-state-bundle",
@@ -761,7 +761,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-16T14:18:56.433140+00:00",
+      "checks_at": "2026-09-16T14:20:42.782369+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -944,7 +944,7 @@
           "sha256": "b7c3c394a7f2294c978dfb1b1ee0aa76efcaadd7864ad2d701fb98048f721c55"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-16T14:18:56.433119+00:00",
+        "source_checked_at": "2026-09-16T14:20:42.782344+00:00",
         "status": "STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "600293.SH",
@@ -975,13 +975,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "f3a33ef83b36b3e6cd009d99c16475ff9e46bdec70989e4851410ad9ea904812",
+  "reading_hash": "9d1968ea911ba4bc27bbbd843e13e380b26e953e82d76fa534014694058b5077",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "35107638532",
-    "trigger_run_id": "35107009890",
+    "run_id": "35107835544",
+    "trigger_run_id": "35107048922",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
