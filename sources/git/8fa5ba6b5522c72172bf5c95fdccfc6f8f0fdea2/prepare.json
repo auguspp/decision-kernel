@@ -1,0 +1,334 @@
+{
+  "code_commit": "18f659d8232268019756896504ac4c9b2838d79f",
+  "execution_id": "stock-business-ab759138a044b752eb7af20a009c3ac8d397d5fa70c231c32fb4c84606ee48d6",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "长芯博创",
+    "current_member_name": "长芯博创",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.129511369134010643444605709",
+          "name": "长芯博创",
+          "thscode": "300548.SZ",
+          "ticker": "300548",
+          "turnover": "4649548000"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "881129.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "通信设备",
+            "recorded_event_ids": [
+              "e74cf6da041282c6e16db0283f39089045699e10100f4f6858a2fa7ecf9ada1d"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881129.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881129.TI",
+        "node_label": "通信设备 881129.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881129.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881129.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0236297862139603809357770175",
+        "excess_return": "0.2497089795760021832674648655",
+        "stock_return": "0.226079193362041802331687848"
+      },
+      "5": {
+        "benchmark_return": "-0.0201920132965927481082972488",
+        "excess_return": "0.1050897828133213726436132338",
+        "stock_return": "0.084897769516728624535315985"
+      },
+      "60": {
+        "benchmark_return": "-0.0936168577104684990147723457",
+        "excess_return": null,
+        "stock_return": null
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.129511369134010643444605709",
+          "name": "长芯博创",
+          "thscode": "300548.SZ",
+          "ticker": "300548",
+          "turnover": "4649548000"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "BROAD_881",
+            "name": "通信设备",
+            "recorded_event_ids": [
+              "e74cf6da041282c6e16db0283f39089045699e10100f4f6858a2fa7ecf9ada1d"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "881129.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881129.TI",
+        "node_label": "通信设备 881129.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "881129.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.104900667882313781675566940",
+            "stock_excess_return": "0.121178525479728020656120908"
+          },
+          "5": {
+            "sector_return": "0.009967405050765090963358044",
+            "stock_excess_return": "0.074930364465963533571957941"
+          },
+          "60": {
+            "sector_return": "-0.0872318257494915436291759387",
+            "stock_excess_return": null
+          }
+        },
+        "name": "通信设备",
+        "node_id": "881129.TI",
+        "thscode": "881129.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.129511369134010643444605709",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-15",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-19",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-12",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-09",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-09",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-24",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": false,
+            "reported_event_dates": [
+              "2026-07-14"
+            ],
+            "status": "REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": false
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 8,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "300548.SZ",
+            "to": "2026-09-16"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 9,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-16T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789574399999",
+          "interval": "1d",
+          "start": "1782230400000",
+          "thscode": "300548.SZ"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-16T18:36:50+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-16T10:36:52.542971+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.2900000000",
+            "ex_date": "2026-07-14",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.0800000000",
+            "ex_date": "2025-07-21",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.0800000000",
+            "ex_date": "2024-06-13",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.2200000000",
+            "ex_date": "2023-04-25",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.4000000000",
+            "ex_date": "2022-05-13",
+            "per_share_bonus": "0.5000000000",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.0500000000",
+            "ex_date": "2020-05-20",
+            "per_share_bonus": "0.8000000000",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.1000000000",
+            "ex_date": "2019-05-27",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2018-05-14",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          },
+          {
+            "dividend_per_share": "0.2000000000",
+            "ex_date": "2017-05-22",
+            "per_share_bonus": "0",
+            "ticker": "300548"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "34.27",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "100",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "4649547965.73",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "4649548000",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "233.47",
+      "latest_turnover": "4649547965.73",
+      "latest_volume": "20487023",
+      "previous_raw_close": "206.7",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.226079193362041802331687848",
+        "5": "0.084897769516728624535315985",
+        "60": null
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "0.8936187578385607645890700991",
+      "twenty_day_return_five_sessions_ago": "0.189081666482484252403580506",
+      "unavailable_price_metrics": [
+        "60"
+      ]
+    },
+    "thscode": "300548.SZ"
+  },
+  "origin": {
+    "archive_sha256": "36d179dc7c91c3e94aac9c108c1e6bdaff5a221ea94f372e11eaad20015b0de5",
+    "artifact_id": 10442132589,
+    "market_session": "2026-09-16",
+    "projection_hash": "cd5254a7fa2e57f55aeef310494eba0045835e83982449978618831d5e5afd9b",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-16T10:28:23Z",
+      "event": "workflow_dispatch",
+      "head_sha": "18f659d8232268019756896504ac4c9b2838d79f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35085161433",
+      "id": 35085161433,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-16T10:28:23Z",
+      "status": "completed",
+      "updated_at": "2026-09-16T10:37:22Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-16T10:38:04.809323+00:00",
+  "thscode": "300548.SZ"
+}
