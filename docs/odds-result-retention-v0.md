@@ -1,14 +1,19 @@
 # Odds 结果留存与同版本 Research 恢复 v0
 
-Scope: #321-B；接续 #405。Reuse Decision: THIN_ADAPTER。
+Scope: #321-B；接续 #405 / #406 / #407。Reuse Decision: THIN_ADAPTER。
 这不是新的研究、计算器、归档服务、行情源或 publisher。既有公司资格退出、
 Human 接受记录及 Watch 配置均不因保存/恢复而改变。
 
 ## 保存：原字节先落地，原验证器再复核
 
-`runtime.odds_retention` 只接收 #405 已生成的两种对象：
-`FrozenProvisionalOdds`（PROVISIONAL）与 `SameResearchOddsComparison`
-（SAME_RESEARCH_COMPARISON）。不解析任意研报、不新增情景、不重新取价。
+`runtime.odds_retention` 只接收已经由既有 typed consumer 生成的三种对象：
+`FrozenProvisionalOdds`（PROVISIONAL）、`SameResearchOddsComparison`
+（SAME_RESEARCH_COMPARISON）与 `FrozenConditionalProvisionalOdds`
+（CONDITIONAL_PROVISIONAL）。不解析任意研报、不新增情景、不重新取价。
+
+`CONDITIONAL_PROVISIONAL` 仅保存 #407 已声明且无概率的 conditional worlds；
+留存/恢复不得增加 scenario probability、weighted aggregate、Market qualification、
+canonical Odds、Human acceptance 或 Investment Authority。
 
 调用前通过原 #321-A 入口恢复并复核 Research。`expected-research-hash` 来自
 已核过的 Research/登记，而不是从待验证结果里抄一个自报 hash。
@@ -30,9 +35,12 @@ python -m decision_kernel.runtime.odds_retention verify \
 重新序列化的替代品；后者区分原结果时点与实际留存时点，绑定结果字节/语义 hash、
 snapshot 全文 hash、package hash 和 information-bundle hash。
 
-Research 使用原 `read_retained_commit()` 复验；结果使用 #405 的确定性重建
-验证器。只校验 JSON 形状或自报 hash 不够。没有数值世界的 schema-v2 结果
-可保留 `NO_CALCULATION / ORDINAL_NOT_ESTABLISHED`，这不是成功算出零赔率。
+Research 使用原 `read_retained_commit()` 复验；结果使用 #405 / #407 的确定性重建
+验证器。只校验 JSON 形状或自报 hash 不够。没有可计算输入的 typed 结果可保留
+`NO_CALCULATION / ORDINAL_NOT_ESTABLISHED`，这不是成功算出零赔率。conditional
+结果仍须保持 `cardinal_probability=NOT_ESTABLISHED`、
+`probability_input=ABSENT_BY_DESIGN`、`weighted_aggregate=NOT_COMPUTED` 与
+`canonical_odds=NOT_ESTABLISHED`。
 
 沿用原 512 KiB 文件上限、独占写入、symlink 拒绝和读回检查。验证失败保留
 `result.json` 和能够写出的 `rejection.json`；磁盘故障可能只留下前缀。
@@ -55,12 +63,15 @@ Research 使用原 `read_retained_commit()` 复验；结果使用 #405 的确定
 }
 ```
 
+`result_kind` 也可为 `SAME_RESEARCH_COMPARISON` 或 `CONDITIONAL_PROVISIONAL`；
+三者都复用同一个 `ODDS_RESULT` archive 格式，不建立第二套结果 registry。
+
 `source.path/ref/git_blob` 指向该结果目录的入口及不可变 Git commit/blob。
 依赖记录必须是同一 pinned R 中可见且显式登记的 `RESEARCH_COMMIT`；两个
 记录的导航 case 必须一致，实际证券/研究身份继续由原包与结果验证器检查。
 不按股票代码猜最新版本、不允许循环、不依赖另一个 Odds/Progress/raw 档案。
 比较结果使用 `result_kind=SAME_RESEARCH_COMPARISON`，不能把 provisional
-改标签当 canonical。
+改标签当 canonical；conditional 结果同样不能因归档而取得 cardinal probability。
 
 ## 恢复：同一个 R，两个原件，再重建验证
 
@@ -85,6 +96,8 @@ python -m decision_kernel.runtime.research_archive \
 原价格的算术核验，不是今天重算 Odds。恢复不会刷新来源或行情资格，不建立
 概率校准、Human 接受、投资决定、Watch 或 Action。型别中的 canonical 分支
 也不能独自证明实际行情源资格；原 ingress 的来源/证券绑定仍须独立成立。
+conditional 分支只重建已保存的 probability-free world arithmetic 和时钟语义，
+不能把历史 reference price 变成 PIT Market，也不能把无概率结果升级成 canonical。
 
 ## 验收边界
 
@@ -92,6 +105,10 @@ python -m decision_kernel.runtime.research_archive \
 真实离线 CLI。它们不是实际公司 provisional→canonical 接受，也不是新的自然
 生产样本。现有人工/ordinal公司报告不会自动转换；需要合格原始 typed Research
 及真实已声明的价格输入，不能为闭环捏造概率、时间或 Human 原话。
+
+#407 后的 conditional retention 也只证明 typed 结果能耐久保存、恢复并按原验证器
+重建；它不修复恒瑞损坏原件、不迁移北大荒旧手工 Odds、不恢复 CATL 已退出资格，
+也不构成 real-company acceptance pair。
 
 普通 publisher 不变：它仍发布原用途入口及同R registry；完整档案仅在显式恢复
 时取回。代码发布、实际数据登记/远端往返、公司数值资格与投资判断分别验收。
