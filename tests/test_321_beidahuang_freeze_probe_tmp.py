@@ -1,7 +1,7 @@
 """TEMP probe: generate exact commit-only bytes for the real 600598 freeze candidate."""
 from __future__ import annotations
 
-import base64
+import os
 from pathlib import Path
 import socket
 
@@ -63,6 +63,7 @@ def test_real_600598_research_only_package_and_generate_commit_bytes(tmp_path):
     assert result.research_snapshot.model_risk_level is ModelRiskLevel.NOT_ESTABLISHED
     assert result.research_snapshot.scenarios == ()
 
+    diagnostics = Path(os.environ["CI_REPORT_DIR"]) / "beidahuang-generation"
+    diagnostics.mkdir(parents=True, exist_ok=False)
     for name in ("retention.json", "research-commit.json", "commit.json"):
-        encoded = base64.b64encode((output / name).read_bytes()).decode("ascii")
-        print(f"BEIDAHUANG_PROBE_{name.upper().replace('.', '_')}={encoded}")
+        diagnostics.joinpath(name).write_bytes(output.joinpath(name).read_bytes())
