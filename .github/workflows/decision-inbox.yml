@@ -28,7 +28,7 @@ jobs:
             echo "::error::Missing repository secret HITHINK_FINANCE_API_KEY"
             exit 1
           fi
-      - name: Build Attention Inbox
+      - name: Build Attention Inbox and Odds Watch
         shell: bash
         run: |
           set -euo pipefail
@@ -62,9 +62,15 @@ jobs:
             research_attention_args+=(--research-attention "$handoff")
           done
 
-          python -m decision_kernel.runtime.attention_inbox \
+          # #349-C reuses the exact Attention Inbox market fetches in one process.
+          # The typed Watch compares qualified completed closes only with explicit
+          # retained Human/Odds boundaries; it never creates Action authority.
+          python -m decision_kernel.runtime.attention_inbox_with_odds_watch \
             "${decision_packages[@]}" \
-            "${research_attention_args[@]}"
+            "${research_attention_args[@]}" \
+            --odds-watch-config decision_inputs/odds-watch-v0.json \
+            --odds-watch-registry current_state/registry.json \
+            --odds-watch-output odds-watch
       - name: Capture Surprise Radar market-history shadow
         continue-on-error: true
         shell: bash
@@ -99,12 +105,29 @@ jobs:
             echo >> "$GITHUB_STEP_SUMMARY"
             echo "The batch run failed before a Human attention inbox could be produced." >> "$GITHUB_STEP_SUMMARY"
           fi
+          if [ -f odds-watch/summary.md ]; then
+            echo >> "$GITHUB_STEP_SUMMARY"
+            cat odds-watch/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo "## Odds Watch unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            echo "No price-condition state is inferred from a missing typed Watch artifact." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload mobile HTML snapshot
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: decision-inbox
           path: decision-inbox/
+          retention-days: 14
+      - name: Upload typed Odds Watch
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: odds-watch
+          path: odds-watch/
+          if-no-files-found: error
           retention-days: 14
       - name: Upload market-history shadow inputs
         if: always()
