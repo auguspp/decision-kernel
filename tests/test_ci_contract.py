@@ -32,6 +32,7 @@ def test_ci_keeps_one_full_suite_without_filtering_or_worker_retries():
     command = " ".join(_test_script().replace("\\\n", " ").splitlines()[1:]).split("2>&1", 1)[0]
     assert shlex.split(command) == [
         "python", "-m", "pytest", "-q", "-n", "2", "--dist=loadfile", "--max-worker-restart=0",
+        "-o", "faulthandler_timeout=60", "-o", "faulthandler_exit_on_timeout=true",
         "--durations=100", "--durations-min=1.0", "--junitxml=$CI_REPORT_DIR/pytest.xml",
     ]
     job = _test_job()
@@ -77,6 +78,8 @@ def test_ci_diagnostics_are_retained_on_failure_and_do_not_replace_the_test_resu
     assert "kernel-ci-${{ github.run_id }}-${{ github.run_attempt }}" in upload
     assert 'tee "$CI_REPORT_DIR/pytest.log"' in _test_script()
     assert '"$CI_REPORT_DIR/collection.txt"' in job
+    assert "faulthandler_timeout=60" in _test_script()
+    assert "faulthandler_exit_on_timeout=true" in _test_script()
     assert "continue-on-error" not in upload
 
 
