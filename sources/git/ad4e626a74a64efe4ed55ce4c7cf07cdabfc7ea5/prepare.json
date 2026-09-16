@@ -1,0 +1,330 @@
+{
+  "code_commit": "18f659d8232268019756896504ac4c9b2838d79f",
+  "execution_id": "stock-business-27b1efd2b49fce8f1d4e541fee3dd12db8886636e1ead61c156f93e45911048c",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "三峡新材",
+    "current_member_name": "三峡新材",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.016447368421052631578947368",
+          "name": "三峡新材",
+          "thscode": "600293.SH",
+          "ticker": "600293",
+          "turnover": "117266793"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "884059.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "玻璃玻纤",
+            "recorded_event_ids": [
+              "d5cc179d328e5915e65d971a91c9c3d6313018236563414def48c251bfe36113"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884059.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881115.TI",
+        "node_label": "玻璃玻纤 884059.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884059.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881115.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0236297862139603809357770175",
+        "excess_return": "0.1472661498503240172994133815",
+        "stock_return": "0.123636363636363636363636364"
+      },
+      "5": {
+        "benchmark_return": "-0.0201920132965927481082972488",
+        "excess_return": "0.0433708212436126156579661228",
+        "stock_return": "0.023178807947019867549668874"
+      },
+      "60": {
+        "benchmark_return": "-0.0936168577104684990147723457",
+        "excess_return": "-0.0133195584745025992511236081",
+        "stock_return": "-0.1069364161849710982658959538"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.016447368421052631578947368",
+          "name": "三峡新材",
+          "thscode": "600293.SH",
+          "ticker": "600293",
+          "turnover": "117266793"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "玻璃玻纤",
+            "recorded_event_ids": [
+              "d5cc179d328e5915e65d971a91c9c3d6313018236563414def48c251bfe36113"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884059.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881115.TI",
+        "node_label": "玻璃玻纤 884059.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884059.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.093236131087179458407988949",
+            "stock_excess_return": "0.030400232549184177955647415"
+          },
+          "5": {
+            "sector_return": "0.068011035577876226762568297",
+            "stock_excess_return": "-0.044832227630856359212899423"
+          },
+          "60": {
+            "sector_return": "-0.1977875963065341410339351879",
+            "stock_excess_return": "0.0908511801215630427680392341"
+          }
+        },
+        "name": "玻璃玻纤",
+        "node_id": "881115.TI",
+        "thscode": "884059.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.016447368421052631578947368",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-15",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-19",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-12",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-09",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-09",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-24",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-16",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 9,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "600293.SH",
+            "to": "2026-09-16"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 9,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-16T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789574399999",
+          "interval": "1d",
+          "start": "1782230400000",
+          "thscode": "600293.SH"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-16T18:34:44+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-16T10:34:46.823073+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.1040000000",
+            "ex_date": "2018-06-07",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0400000000",
+            "ex_date": "2017-06-12",
+            "per_share_bonus": "0.5000000000",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0130000000",
+            "ex_date": "2015-07-16",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0240000000",
+            "ex_date": "2013-07-03",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0100000000",
+            "ex_date": "2008-06-25",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0060000000",
+            "ex_date": "2007-05-22",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0",
+            "ex_date": "2006-06-19",
+            "per_share_bonus": "0.6500000000",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0250000000",
+            "ex_date": "2002-07-03",
+            "per_share_bonus": "0.3000000000",
+            "ticker": "600293"
+          },
+          {
+            "dividend_per_share": "0.0500000000",
+            "ex_date": "2001-06-19",
+            "per_share_bonus": "0",
+            "ticker": "600293"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "0.44",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "11.726679344",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "117266793.44",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "117266793",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "3.09",
+      "latest_turnover": "117266793.44",
+      "latest_volume": "38157443",
+      "previous_raw_close": "3.04",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.123636363636363636363636364",
+        "5": "0.023178807947019867549668874",
+        "60": "-0.1069364161849710982658959538"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "2.155412487852386355839352493",
+      "twenty_day_return_five_sessions_ago": "0.055944055944055944055944056",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "600293.SH"
+  },
+  "origin": {
+    "archive_sha256": "36d179dc7c91c3e94aac9c108c1e6bdaff5a221ea94f372e11eaad20015b0de5",
+    "artifact_id": 10442132589,
+    "market_session": "2026-09-16",
+    "projection_hash": "cd5254a7fa2e57f55aeef310494eba0045835e83982449978618831d5e5afd9b",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-16T10:28:23Z",
+      "event": "workflow_dispatch",
+      "head_sha": "18f659d8232268019756896504ac4c9b2838d79f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35085161433",
+      "id": 35085161433,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-16T10:28:23Z",
+      "status": "completed",
+      "updated_at": "2026-09-16T10:37:22Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-16T10:37:56.640656+00:00",
+  "thscode": "600293.SH"
+}
