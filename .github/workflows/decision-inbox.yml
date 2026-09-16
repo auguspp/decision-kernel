@@ -2,8 +2,6 @@ name: decision-inbox
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "20 8 * * 1-5"
 
 permissions:
   contents: read

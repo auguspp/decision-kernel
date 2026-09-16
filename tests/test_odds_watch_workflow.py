@@ -10,10 +10,11 @@ def text():
     return WORKFLOW.read_text(encoding="utf-8")
 
 
-def test_watch_reuses_existing_inbox_schedule_secret_and_job_not_a_new_scheduler():
+def test_watch_reuses_existing_inbox_dispatch_secret_and_job_not_a_new_scheduler():
     value = text()
-    assert 'cron: "20 8 * * 1-5"' in value
-    assert value.count("schedule:") == 1
+    trigger = value.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger
+    assert "schedule:" not in trigger and "cron:" not in trigger
     assert "HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}" in value
     assert "python -m decision_kernel.runtime.attention_inbox_with_odds_watch" in value
     assert "--odds-watch-config decision_inputs/odds-watch-v0.json" in value

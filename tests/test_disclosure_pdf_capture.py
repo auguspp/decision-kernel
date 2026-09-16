@@ -220,4 +220,6 @@ def test_workflow_keeps_original_artifact_separate_and_preserves_partial_bodies(
     assert "if: always()" in capture and "name: official-disclosure-primary-bodies" in capture
     assert "retention-days: 14" in capture and "continue-on-error" not in capture
     assert "overwrite:" not in capture and "secrets." not in capture
-    assert 'cron: "20 8 * * 1-5"' in source
+    trigger = source.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger
+    assert "schedule:" not in trigger and "cron:" not in trigger
