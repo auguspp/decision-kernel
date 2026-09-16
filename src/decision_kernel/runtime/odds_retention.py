@@ -1,4 +1,4 @@
-"""Create-only retention of existing #405 results, not another Odds executor.
+"""Create-only retention of existing #405/#407 results, not another Odds executor.
 
 Reuse the original Research reader, result rebuild verifiers and bounded I/O.
 An archive proves saved identity/computation, never current source eligibility.
@@ -11,6 +11,10 @@ from pathlib import Path
 import re
 import sys
 
+from ..conditional_odds import (
+    FrozenConditionalProvisionalOdds,
+    verify_conditional_provisional_odds,
+)
 from ..identity import canonical_hash
 from ..provisional_odds import (
     FrozenProvisionalOdds, SameResearchOddsComparison,
@@ -18,7 +22,7 @@ from ..provisional_odds import (
 )
 from . import research_commit_only as retained
 
-KINDS = {"PROVISIONAL", "SAME_RESEARCH_COMPARISON"}
+KINDS = {"CONDITIONAL_PROVISIONAL", "PROVISIONAL", "SAME_RESEARCH_COMPARISON"}
 FILES = {"result.json", "retention.json"}
 FIXED = {
     "format": "odds-result-retention-v0",
@@ -48,6 +52,10 @@ def _research(directory: Path, expected_hash: str):
 def _verify(raw: bytes, kind: str, research):
     value = retained._json(raw)
     snapshot = research.research_snapshot
+    if kind == "CONDITIONAL_PROVISIONAL":
+        return verify_conditional_provisional_odds(
+            FrozenConditionalProvisionalOdds.model_validate(value), snapshot
+        )
     if kind == "PROVISIONAL":
         return verify_provisional_odds(FrozenProvisionalOdds.model_validate(value), snapshot)
     if kind == "SAME_RESEARCH_COMPARISON":
@@ -58,8 +66,9 @@ def _verify(raw: bytes, kind: str, research):
 def _receipt(raw: bytes, kind: str, research, result, at: datetime) -> dict:
     if at.tzinfo is None or at.utcoffset() is None or at > datetime.now(timezone.utc):
         raise ValueError("invalid retention operation clock")
-    created_at = (result.artifact.created_at if kind == "PROVISIONAL"
-                  else result.canonical.artifact.created_at)
+    created_at = (result.canonical.artifact.created_at
+                  if kind == "SAME_RESEARCH_COMPARISON"
+                  else result.artifact.created_at)
     if created_at > at:
         raise ValueError("result follows the recorded retention operation")
     return {**FIXED, "result_kind": kind, "retained_at": at.isoformat(),
