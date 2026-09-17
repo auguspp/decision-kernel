@@ -47,12 +47,12 @@ def receipt(r,index,*,completion=ResearchExecutionCompletion.COMPLETE,elapsed=1,
         finished_at=start+timedelta(minutes=1),research_cutoff=cutoff or r.research_cutoff,completion=completion,tool_events=(),
         source_dispositions=(),tool_calls_used=0,search_queries_used=0,source_reads_used=0,technical_retries_used=0,
         elapsed_minutes_observed=elapsed,last_completed_stage=f"direct-deep-pass-{index}",model_or_executor="retained-replay")
-def executor(final=None):
-    final=final or pkg()
+def executor(final=None,ledger_source=None):
+    final=final or pkg(); ledger_source=ledger_source or final
     def run(r,prior):
         i=len(prior)+1
         return Pass(pass_index=i,focus=("economic structure","owner cash/adversarial","UNKNOWN stop")[i-1],summary=f"retained replay {i}",
-            unknowns=ledger(final,i),receipt=receipt(r,i),stop_reason=StopReason.PUBLIC_EVIDENCE_EXHAUSTED if i==3 else None,
+            unknowns=ledger(ledger_source,i),receipt=receipt(r,i),stop_reason=StopReason.PUBLIC_EVIDENCE_EXHAUSTED if i==3 else None,
             final_research_package=final if i==3 else None)
     return run
 def rehash(p,**updates):
@@ -116,11 +116,11 @@ def test_evidence_replacement_or_future_availability_fails_closed():
 
 @pytest.mark.parametrize("damage",["questions","case","evidence"])
 def test_final_package_must_match_unknowns_case_and_exact_accumulated_evidence(damage):
-    p=pkg()
+    baseline=pkg(); p=baseline
     if damage=="questions": p=rehash(p,open_questions=("different",))
     elif damage=="case": p=rehash(p,ticker="000001")
     else:
         changed=p.evidence_artifacts[0].model_copy(update={"license_terms_note":"changed"}); ev=(changed,*p.evidence_artifacts[1:])
         s=p.research_snapshot; h=research_commit_information_bundle_hash(research_snapshot=s,evidence_artifacts=ev)
         p=p.model_copy(update={"evidence_artifacts":ev,"research_snapshot":s.model_copy(update={"information_bundle_hash":h})})
-    with pytest.raises(DomainValidationError): run_direct_deep(request=req(),execute_pass=executor(p))
+    with pytest.raises(DomainValidationError): run_direct_deep(request=req(),execute_pass=executor(p,ledger_source=baseline))
