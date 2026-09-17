@@ -206,6 +206,8 @@ def render_sector_radar_discovery(result: dict) -> str:
         lines += ['<details>', f'<summary>{i}. {_brief(group)}</summary>', '']
         lines += _details(group, result)
         lines += ['</details>', '']
+    from .radar_stock_candidates import render_stock_discovery_pool
+    lines += render_stock_discovery_pool(result)
     lines += [
         f"Market-state hash: `{_text(result['output_market_state_hash'])}`", '',
         f"Event-ledger hash: `{_text(result['event_ledger_update']['event_ledger_hash'])}`", '',
