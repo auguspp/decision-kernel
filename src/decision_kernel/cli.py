@@ -20,6 +20,10 @@ from .runtime.disclosure_assessment import (
     prepare_disclosure_assessment_packet,
     serialize_disclosure_assessment_packet,
 )
+from .runtime.disclosure_attempt_history import (
+    disclosure_prefetch_identity,
+    parse_attempt_history,
+)
 from .runtime.disclosure_pdf_capture import DisclosurePdfCapture
 from .runtime.disclosure_radar import (
     filter_research_uncovered_disclosure_batches,
@@ -135,8 +139,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=DEFAULT_DISCLOSURE_PACKET_LIMIT,
         help=(
-            "Maximum unassessed batches to prepare when --packet-dir is used; fail closed rather "
-            f"than silently truncate. Default: {DEFAULT_DISCLOSURE_PACKET_LIMIT}."
+            "Maximum batches to PDF-prepare when --packet-dir is used. Unseen attempt lineages "
+            "receive FIFO priority; later work is explicitly deferred. "
+            f"Default: {DEFAULT_DISCLOSURE_PACKET_LIMIT}."
+        ),
+    )
+    disclosure_scan.add_argument(
+        "--attempt-history",
+        type=Path,
+        help=(
+            "Pinned disclosure work-history snapshot used only for preparation priority and exact "
+            "packet dedupe after PDF revalidation. Required with --packet-dir; it is not semantic "
+            "receipt memory."
         ),
     )
     apply_disclosure = subparsers.add_parser(
@@ -360,6 +374,20 @@ def main(
                     raise ValueError("raw PDF capture requires a new directory")
             if args.packet_dir is not None and args.packet_limit <= 0:
                 raise ValueError("disclosure assessment packet limit must be positive")
+            if args.packet_dir is not None and args.attempt_history is None:
+                raise ValueError("--packet-dir requires --attempt-history")
+            if args.attempt_history is not None and args.packet_dir is None:
+                raise ValueError("--attempt-history requires --packet-dir")
+
+            attempted_by_prefetch: dict[str, frozenset[str]] = {}
+            if args.attempt_history is not None:
+                attempt_history = parse_attempt_history(
+                    args.attempt_history.read_text(encoding="utf-8")
+                )
+                attempted_by_prefetch = {
+                    row["prefetch_hash"]: frozenset(row["assessment_input_hashes"])
+                    for row in attempt_history["attempts"]
+                }
 
             research_as_of_by_stock: dict[str, datetime] = {}
             research_identity_by_stock = {}
@@ -415,24 +443,43 @@ def main(
             )
             seen_suppressed = len(uncovered) - len(unassessed)
 
+            attempted_lineage = []
+            unseen_lineage = []
+            current_prefetch_hashes = set()
+            for batch in unassessed:
+                prefetch_hash = disclosure_prefetch_identity(
+                    research_snapshot=research_snapshot_by_stock[batch.stock_code],
+                    batch=batch,
+                )
+                if prefetch_hash in current_prefetch_hashes:
+                    raise ValueError("duplicate disclosure prefetch identity in current backlog")
+                current_prefetch_hashes.add(prefetch_hash)
+                row = (batch, prefetch_hash)
+                if prefetch_hash in attempted_by_prefetch:
+                    attempted_lineage.append(row)
+                else:
+                    unseen_lineage.append(row)
+
+            preparation_queue = [*unseen_lineage, *attempted_lineage]
+            selected_rows = preparation_queue[: args.packet_limit]
+            deferred_rows = preparation_queue[args.packet_limit :]
+            exact_revalidated = 0
             packet_outputs: list[tuple[Path, str, str]] = []
             if args.packet_dir is not None:
-                if len(unassessed) > args.packet_limit:
-                    raise ValueError(
-                        "disclosure assessment packet limit exceeded: "
-                        f"{len(unassessed)} unassessed > {args.packet_limit}; no packets written"
-                    )
                 capture = (DisclosurePdfCapture(args.raw_pdf_dir)
                            if args.raw_pdf_dir is not None else None)
                 capture_args = {"fetch_pdf": capture.fetch} if capture is not None else {}
                 prepared_at = datetime.now(timezone.utc)
-                for batch in unassessed:
+                for batch, prefetch_hash in selected_rows:
                     packet = prepare_disclosure_assessment_packet(
                         research_snapshot=research_snapshot_by_stock[batch.stock_code],
                         batch=batch,
                         prepared_at=prepared_at,
                         **capture_args,
                     )
+                    if packet.assessment_input_hash in attempted_by_prefetch.get(prefetch_hash, ()):
+                        exact_revalidated += 1
+                        continue
                     packet_path = args.packet_dir / (
                         f"{batch.stock_code}-{batch.publication_date.isoformat()}-"
                         f"{packet.assessment_input_hash[:16]}.json"
@@ -463,6 +510,19 @@ def main(
                 file=stdout,
             )
             if args.packet_dir is not None:
+                print(
+                    "PACKET WINDOW: "
+                    f"{len(unseen_lineage)} unseen-lineage / "
+                    f"{len(attempted_lineage)} attempted-lineage / "
+                    f"{len(selected_rows)} preparation-selected / "
+                    f"{len(deferred_rows)} deferred-by-capacity / "
+                    f"{len(unassessed)} unassessed",
+                    file=stdout,
+                )
+                print(
+                    f"EXACT ATTEMPT REVALIDATION: {exact_revalidated} unchanged-not-reemitted",
+                    file=stdout,
+                )
                 print(
                     f"ASSESSMENT PACKETS: {len(packet_outputs)} prepared | dir={args.packet_dir}",
                     file=stdout,
