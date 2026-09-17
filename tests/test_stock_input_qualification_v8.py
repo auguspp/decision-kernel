@@ -74,6 +74,8 @@ def test_noncritical_old_market_session_gap_keeps_selection_windows_but_nulls_60
     assert path['returns']['60'] is None
     assert '60' in path['unavailable_price_metrics']
     checks = path['input_checks']
+    assert checks['contract'] == own.CONTRACT
+    assert checks['selection_qualification_contract'] == own.SELECTION_QUALIFICATION_CONTRACT
     assert checks['history_market_session_gaps'] == [sessions_61()[10].isoformat()]
     assert checks['history_gap_meaning'] == 'ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING'
     assert checks['history_window_checks']['20']['usable_for_raw_comparison'] is True
