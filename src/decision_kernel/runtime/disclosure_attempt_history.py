@@ -1,9 +1,9 @@
 """Read existing disclosure work history for bounded packet preparation.
 
 Harness glue only. This module does not scan CNINFO, fetch PDFs, run Research, write
-work state, or infer semantic assessment. It derives a stable pre-PDF identity from
-already-reserved packets so the producer can advance a bounded window without
-re-preparing the same historical work forever.
+work state, or infer semantic assessment. Pre-PDF identity is scheduling priority
+only: exact assessment hashes remain available so changed PDF Evidence can still
+form a new packet after bounded revalidation.
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from .current_state_delivery import GitHubAPI
 from .disclosure_receipts import CURRENT_DISCLOSURE_ASSESSMENT_SEMANTICS_ID
 
 SEMANTICS = "PINNED_DISCLOSURE_ATTEMPT_HISTORY_V1"
-MEANING = "ATTEMPT_HISTORY_ONLY_NOT_SEMANTIC_ASSESSMENT_OR_QUIET"
+MEANING = "SCHEDULING_HISTORY_ONLY_NOT_SEMANTIC_ASSESSMENT_OR_QUIET"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -58,7 +58,7 @@ def _announcement_rows(items) -> list[dict]:
 
 
 def disclosure_prefetch_identity(*, research_snapshot, batch) -> str:
-    """Stable identity available before a PDF body is fetched."""
+    """Stable scheduling identity available before a PDF body is fetched."""
 
     payload = {
         "source_lane": "CNINFO",
@@ -86,25 +86,27 @@ def packet_prefetch_identity(packet) -> str:
 def build_attempt_history(*, work_files: dict[str, bytes], work_commit: str) -> dict:
     read.check(read.SHA.fullmatch(work_commit) is not None, "attempt history work commit must be pinned")
     reserved = work._history(work_files)
-    identities: dict[str, str] = {}
+    identities: dict[str, set[str]] = {}
     for path, raw in work_files.items():
         if not (path.startswith(work.WORK_PREFIX) and path.endswith("/packet.json")):
             continue
         packet = work._packet(raw)
         read.check(packet.assessment_input_hash in reserved, "attempt history packet not reserved")
         identity = packet_prefetch_identity(packet)
-        previous = identities.get(identity)
-        read.check(previous in {None, packet.assessment_input_hash},
-                   "ambiguous disclosure attempt identity in work history")
-        identities[identity] = packet.assessment_input_hash
-    read.check(len(identities) <= work.MAX_HISTORY, "attempt identity history over bound")
+        identities.setdefault(identity, set()).add(packet.assessment_input_hash)
+    read.check(len(reserved) <= work.MAX_HISTORY and len(identities) <= work.MAX_HISTORY,
+               "attempt identity history over bound")
+    attempts = [
+        {"prefetch_hash": identity, "assessment_input_hashes": sorted(keys)}
+        for identity, keys in sorted(identities.items())
+    ]
     payload = {
         "schema_version": 1,
         "semantics": SEMANTICS,
         "meaning": MEANING,
         "work_ref": work.WORK_REF,
         "work_commit": work_commit,
-        "attempted_prefetch_hashes": sorted(identities),
+        "attempts": attempts,
         "reserved_packet_count": len(reserved),
         "investment_authority": "NONE",
         "action_authority": "NONE",
@@ -122,7 +124,7 @@ def parse_attempt_history(raw: str) -> dict:
         raise ValueError("disclosure attempt history must be an object")
     expected = {
         "schema_version", "semantics", "meaning", "work_ref", "work_commit",
-        "attempted_prefetch_hashes", "reserved_packet_count", "investment_authority",
+        "attempts", "reserved_packet_count", "investment_authority",
         "action_authority", "history_hash",
     }
     if set(payload) != expected:
@@ -131,12 +133,27 @@ def parse_attempt_history(raw: str) -> dict:
         raise ValueError("disclosure attempt history semantics differ")
     if payload["work_ref"] != work.WORK_REF or read.SHA.fullmatch(payload["work_commit"]) is None:
         raise ValueError("disclosure attempt history work identity differs")
-    hashes = payload["attempted_prefetch_hashes"]
-    if (not isinstance(hashes, list) or len(hashes) > work.MAX_HISTORY
-            or any(not isinstance(item, str) or _SHA256.fullmatch(item) is None for item in hashes)
-            or hashes != sorted(set(hashes))):
-        raise ValueError("disclosure attempt history hashes are invalid")
-    if type(payload["reserved_packet_count"]) is not int or not 0 <= payload["reserved_packet_count"] <= work.MAX_HISTORY:
+    attempts = payload["attempts"]
+    if not isinstance(attempts, list) or len(attempts) > work.MAX_HISTORY:
+        raise ValueError("disclosure attempt history attempts are invalid")
+    prior_prefetch = None
+    exact_count = 0
+    for row in attempts:
+        if not isinstance(row, dict) or set(row) != {"prefetch_hash", "assessment_input_hashes"}:
+            raise ValueError("disclosure attempt history row fields differ")
+        prefetch = row["prefetch_hash"]
+        keys = row["assessment_input_hashes"]
+        if (not isinstance(prefetch, str) or _SHA256.fullmatch(prefetch) is None
+                or prior_prefetch is not None and prefetch <= prior_prefetch
+                or not isinstance(keys, list) or not keys
+                or keys != sorted(set(keys))
+                or any(not isinstance(key, str) or _SHA256.fullmatch(key) is None for key in keys)):
+            raise ValueError("disclosure attempt history row identity is invalid")
+        prior_prefetch = prefetch
+        exact_count += len(keys)
+    if (type(payload["reserved_packet_count"]) is not int
+            or not 0 <= payload["reserved_packet_count"] <= work.MAX_HISTORY
+            or exact_count != payload["reserved_packet_count"]):
         raise ValueError("disclosure attempt history reserved count is invalid")
     if payload["investment_authority"] != "NONE" or payload["action_authority"] != "NONE":
         raise ValueError("disclosure attempt history authority differs")
@@ -156,7 +173,7 @@ def empty_attempt_history(*, work_commit: str = "0" * 40) -> dict:
         "meaning": MEANING,
         "work_ref": work.WORK_REF,
         "work_commit": work_commit,
-        "attempted_prefetch_hashes": [],
+        "attempts": [],
         "reserved_packet_count": 0,
         "investment_authority": "NONE",
         "action_authority": "NONE",
