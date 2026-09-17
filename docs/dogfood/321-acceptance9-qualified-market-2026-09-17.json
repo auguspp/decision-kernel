@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "purpose": "#321 Acceptance 9 real qualified-market negative fixture; not a new Odds result",
+  "read_entry_commit": "36a466aab671b609869fd0af6103d8771e28ad34",
+  "code_commit": "1c6530be702af08107b799a8d52453c20f925c46",
+  "source": {
+    "path": "details/inbox/35199139169/odds-watch/watch.json",
+    "git_blob": "dc02289c7f932b03133cb17a9f95a492b290a0e6",
+    "sha256": "21ef12360307648096181eeefdf43a8c9310e8965e906acb0d39c1247b0ecd0b",
+    "watch_hash": "8ec725dcdd74134dfa5fecc881664810b5fdb99643931e7bc0499bdd3d7baf66"
+  },
+  "price_contract": "QUALIFIED_LATEST_COMPLETED_A_SHARE_RAW_CLOSE_VIA_EXISTING_HITHINK_RUNTIME",
+  "observed_market": {
+    "ticker": "600276.SH",
+    "market_price": "43.23",
+    "market_timestamp": "2026-09-17T15:00:00+08:00",
+    "market_utc_offset_minutes": 480,
+    "market_data_source": "HiThink Financial-API raw daily close | 600276.SH",
+    "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+    "currency": "CNY"
+  },
+  "authority": {
+    "research_authority": "NONE",
+    "investment_authority": "NONE",
+    "action_authority": "NONE"
+  },
+  "limitation": "This retained market fact is used only to prove that qualified price cannot manufacture a missing probability distribution. It is not a new Hengrui canonical Odds result."
+}
