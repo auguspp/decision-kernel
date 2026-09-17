@@ -1,0 +1,194 @@
+{
+  "research_snapshot": {
+    "id": "b604cd7e-be35-5cc5-9580-87db8324227e",
+    "ticker": "600276",
+    "company_name": "恒瑞医药",
+    "exchange": "SSE",
+    "currency": "CNY",
+    "created_at": "2026-09-17T10:05:52Z",
+    "as_of_datetime": "2026-09-17T09:57:00Z",
+    "valuation_horizon_date": null,
+    "version": 2,
+    "status": "REVIEW",
+    "supersedes_snapshot_id": "ea9b4e56-c998-5dcd-b8fa-3f1539612762",
+    "core_thesis": "恒瑞的创新转型继续得到产品注册推进与大型授权交易的支持，但 2026H1 仍显示会计利润与股东可支配现金之间存在显著距离：归母净利润约44.65亿元，而经营现金流净额约19.87亿元；购建固定资产、无形资产和其他长期资产支付现金约15.78亿元，其中开发支出现金约11.49亿元，简单的 CFO 减长期资产现金仅约4.09亿元，且这只是现金诊断而非自动等于FCFE。同期香港许可收入约14.22亿元，但合并与母公司披露的许可成本分别约0.22亿元与4.00亿元，说明报告口径不能直接替代全周期经济成本。BMS 一手10-Q已确认交易于2026年7月完成并约定2026Q3支付6亿美元首付款；管理层问答镜像称该款已收到并计入合同负债，但正式Q3账面闭合、License-out组合全成本税后现金、产品级净价与持续用药仍未被公开证据充分闭合。因此当前Belief是“创新资产和交易能力真实存在，但尚未证明在全部必要再投入后能稳定形成足以支持高估值要求的每股股东现金”，而不是用headline deal value或许可会计毛利替代股东经济结果。",
+    "market_expectations_narrative": null,
+    "model_risk_level": "NOT_ESTABLISHED",
+    "model_risk_notes": "Research-only schema v2; no valuation horizon, scenario distribution or cardinal probability is asserted. Key model risk is scope attribution: license accounting cost, development cash, fair-value gains and product-level net economics are not fully separable from public data. Management Q&A about BMS cash is retained only as a secondary mirror pending Q3 periodic-report confirmation.",
+    "open_questions": [
+      "非肿瘤创新药的产品级净价、患者持续用药与增量现金贡献是否足以覆盖成熟产品下滑？",
+      "License-out 组合在研发、共同履约、税费、后续里程碑与 royalty 全部纳入后，可持续税后股东现金是多少？",
+      "BMS 6 亿美元首付款的正式账面到账、合同负债与后续收入确认如何在 2026Q3 定期报告中闭合？",
+      "在持续研发费用、资本化开发支出、营运资金和必要资本投入后，恒瑞正常化每股可支配现金能够达到什么水平？"
+    ],
+    "thesis_invalidation": [
+      "若后续连续可比期证明主要创新药的产品级净价与持续用药、以及授权组合的全周期净现金，在扣除研发、资本化开发、税费、履约成本和必要资本投入后仍不能覆盖成熟业务下滑并形成持续增长的正常化股东现金，则撤销“创新转型可持续提高每股股东现金”的正向判断；反之，若Q3及后续定期报告和产品级经营数据能够把上述现金桥闭合并持续覆盖必要再投入，则应提高对该判断的信念。"
+    ],
+    "monitoring_triggers": [
+      "2026Q3定期报告：BMS 6亿美元现金、合同负债、许可收入确认及现金流分类的正式闭合",
+      "产品级或足够细分的创新药净价、销量/患者持续用药与收入证据，尤其非肿瘤新品",
+      "License-out组合的研发/共同履约/税费/里程碑与royalty现金披露，避免用会计许可毛利代替全周期净现金",
+      "经营现金流减必要长期资产/开发投入的连续可比改善，而非单次首付款或营运资金释放",
+      "Kailera/BRVE股权公允价值、实现现金与未来royalty的分别确认，防止重复计价"
+    ],
+    "valuation_bases": [],
+    "scenarios": [],
+    "evidence_links": [
+      {
+        "id": "472d793a-1b03-5ca4-aec2-677e177cf847",
+        "research_snapshot_id": "b604cd7e-be35-5cc5-9580-87db8324227e",
+        "evidence_artifact_id": "f288e558-5af4-53b3-94eb-6247c22e7cdf",
+        "relationship": "SUPPORTS",
+        "relevance": "2026H1 profit-to-cash, development-cash and license-revenue/cost scope evidence.",
+        "interpretation_notes": "Use only for the stated observation and scope. Do not infer business truth beyond source qualification or turn pipeline progress into shareholder cash."
+      },
+      {
+        "id": "54013699-5549-5a58-9f7a-eb5aa233d76d",
+        "research_snapshot_id": "b604cd7e-be35-5cc5-9580-87db8324227e",
+        "evidence_artifact_id": "e10235b7-2d97-5b7f-88e8-06c9d24f411d",
+        "relationship": "SUPPORTS",
+        "relevance": "Primary counterparty evidence for BMS transaction closing and contractual payment timing.",
+        "interpretation_notes": "Use only for the stated observation and scope. Do not infer business truth beyond source qualification or turn pipeline progress into shareholder cash."
+      },
+      {
+        "id": "6d66677b-3ba0-5fa6-8084-88146afc14ff",
+        "research_snapshot_id": "b604cd7e-be35-5cc5-9580-87db8324227e",
+        "evidence_artifact_id": "fb983cf5-30f9-5ce2-98b4-27c3ffba3ded",
+        "relationship": "CONTEXT",
+        "relevance": "Secondary mirror of management reply reducing, but not closing, BMS receipt/accounting UNKNOWN.",
+        "interpretation_notes": "Use only for the stated observation and scope. Do not infer business truth beyond source qualification or turn pipeline progress into shareholder cash."
+      },
+      {
+        "id": "3c9a017f-2732-595c-bc30-67616023489f",
+        "research_snapshot_id": "b604cd7e-be35-5cc5-9580-87db8324227e",
+        "evidence_artifact_id": "fb08d2fe-bddb-53e6-94d5-8d32c9419912",
+        "relationship": "CONTEXT",
+        "relevance": "Captured official announcement scope after the prior Research cutoff; clinical/regulatory progress does not close cash economics.",
+        "interpretation_notes": "Use only for the stated observation and scope. Do not infer business truth beyond source qualification or turn pipeline progress into shareholder cash."
+      }
+    ],
+    "created_by": "chatgpt-gpt-5.6-sol-direct-deep-dogfood",
+    "committed_at": null,
+    "research_engine_version": "direct-deep-v0+full-research-operating-v3",
+    "information_bundle_hash": "3dc755ff03349cf34accd78a6fdf277d2af3998fe773850e21421822ce42a873",
+    "research_origin": "HUMAN_ORIGIN_DIRECT_DEEP_FRESH_DOGFOOD",
+    "schema_version": 2
+  },
+  "evidence_artifacts": [
+    {
+      "id": "f288e558-5af4-53b3-94eb-6247c22e7cdf",
+      "source_type": "COMPANY_FILING_MIRROR",
+      "source_identifier": "SINA:600276:2026H1:12506905",
+      "source_locator": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12506905&stockid=600276",
+      "published_at": "2026-08-20T15:59:59Z",
+      "available_at": "2026-08-20T15:59:59Z",
+      "retrieved_at": "2026-09-17T10:03:30Z",
+      "content_hash": "sha256:02cbdee4f3016dc0e820534d4859375aafc0752f006e7ad2f3d43fbf92508a53",
+      "idempotency_key": "HENGRUI-DIRECT-DEEP-20260917:H1:7b67291e9e04c5c1",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "revenue_cny": "15455583728.11",
+        "attributable_net_profit_cny": "4465439428.10",
+        "cfo_cny": "1987003872.34",
+        "long_term_asset_cash_cny": "1577505322.86",
+        "development_expenditure_cash_cny": "1148782134.14",
+        "associate_investment_cash_cny": "315300000.00",
+        "license_revenue_cny": "1422301939.04",
+        "license_cost_consolidated_cny": "22191700.84",
+        "license_cost_parent_cny": "399955124.72",
+        "fair_value_gain_h1_cny": "843222978.34",
+        "cash_end_cny": "38031524933.81"
+      },
+      "permitted_excerpt": null,
+      "source_location": "docs/readings/600276-hengrui-direct-deep-dogfood-2026-09-17/source-captures.json#/h1",
+      "license_terms_note": "COMPANY_FILING_MIRROR; underlying 2026H1 company report; mirror used because official full-text retrieval was not available in this executor | Mirror is not independently recertified as exchange-original bytes. Reported license cost differs by consolidation scope; neither line alone establishes full-cycle economic cost. CFO minus long-term-asset cash is a diagnostic, not automatically FCFE.",
+      "report_period_end": "2026-06-30",
+      "schema_version": 1
+    },
+    {
+      "id": "e10235b7-2d97-5b7f-88e8-06c9d24f411d",
+      "source_type": "SEC_FILING",
+      "source_identifier": "SEC:CIK14272:10-Q:0000014272-26-000020",
+      "source_locator": "https://www.sec.gov/Archives/edgar/data/14272/000001427226000020/bmy-20260630.htm",
+      "published_at": "2026-07-31T03:59:59Z",
+      "available_at": "2026-07-31T03:59:59Z",
+      "retrieved_at": "2026-09-17T10:03:30Z",
+      "content_hash": "sha256:9acb05b5bd99ae8d8b20728269905be0d54a608cde88fbfddb8f908a40225db3",
+      "idempotency_key": "HENGRUI-DIRECT-DEEP-20260917:BMS:be470cb5f4f7c907",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "transaction_closed": "July 2026",
+        "upfront_payment_usd": "600000000",
+        "upfront_payment_timing": "2026Q3",
+        "anniversary_2027_usd": "175000000",
+        "conditional_anniversary_2028_usd": "175000000",
+        "contingent_milestones_up_to_usd": "14300000000",
+        "future_royalties": "tiered royalties on future net sales outside Hengrui Territory"
+      },
+      "permitted_excerpt": null,
+      "source_location": "docs/readings/600276-hengrui-direct-deep-dogfood-2026-09-17/source-captures.json#/bms",
+      "license_terms_note": "PRIMARY_SEC_FILING | BMS 10-Q establishes counterparty contract/closing/payment terms, not Hengrui's eventual accounting recognition or full net shareholder cash.",
+      "report_period_end": null,
+      "schema_version": 1
+    },
+    {
+      "id": "fb983cf5-30f9-5ce2-98b4-27c3ffba3ded",
+      "source_type": "COMPANY_MANAGEMENT_REPLY_MIRROR",
+      "source_identifier": "SINA:20260910:HENGRUI-QA:BMS-UPFRONT",
+      "source_locator": "https://www.sina.cn/news/detail/5341662635363365.html",
+      "published_at": "2026-09-10T07:52:23Z",
+      "available_at": "2026-09-10T07:52:23Z",
+      "retrieved_at": "2026-09-17T10:03:30Z",
+      "content_hash": "sha256:1c95bcc299594da3257178bdec6d381825baaa3d06489ffc541d2a2eda8760d9",
+      "idempotency_key": "HENGRUI-DIRECT-DEEP-20260917:QA:546215fac77f273d",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "management_reply_claim": "BMS $600m upfront was received in 2026Q3 and recorded in contract liabilities",
+        "respondent": "冯佶 / 刘健俊 replies mirrored on page"
+      },
+      "permitted_excerpt": null,
+      "source_location": "docs/readings/600276-hengrui-direct-deep-dogfood-2026-09-17/source-captures.json#/qa",
+      "license_terms_note": "SECONDARY_MIRROR_OF_COMPANY_MANAGEMENT_REPLY | The executor did not obtain the official SSE roadshow answer bytes; this mirror reduces but does not close formal accounting verification. Q3 periodic report remains the discriminating evidence for formal cash/contract-liability closure.",
+      "report_period_end": null,
+      "schema_version": 1
+    },
+    {
+      "id": "fb08d2fe-bddb-53e6-94d5-8d32c9419912",
+      "source_type": "COMPANY_INVESTOR_RELATIONS_INDEX",
+      "source_identifier": "HENGRUI:INVESTOR:PROVISIONAL-NOTICE:THROUGH-20260916",
+      "source_locator": "https://www.hengrui.com/investor/provisionalNotice.html",
+      "published_at": "2026-09-16T15:59:59Z",
+      "available_at": "2026-09-16T15:59:59Z",
+      "retrieved_at": "2026-09-17T10:03:30Z",
+      "content_hash": "sha256:47cf260e005ae159e2ee5e8b43a688848e71e555cf3dcdf4e941e66cf2d3d233",
+      "idempotency_key": "HENGRUI-DIRECT-DEEP-20260917:ANNOUNCEMENTS:9d4247ac2f5ad9e0",
+      "retention_mode": "EXTRACTED_VALUES",
+      "replayability_level": "PARTIAL",
+      "raw_storage_ref": null,
+      "extracted_structured_values": {
+        "latest_captured_date": "2026-09-16",
+        "post_2026_09_11_entries": [
+          "2026-09-11 breakthrough-therapy / registration-related announcement as shown in captured indexes",
+          "2026-09-12 breakthrough-therapy announcement in exchange-derived index",
+          "2026-09-15 drug marketing application accepted",
+          "2026-09-16 two clinical-trial approvals"
+        ],
+        "periodic_financial_report_after_2026_09_11_in_captured_scope": "NONE_SHOWN"
+      },
+      "permitted_excerpt": null,
+      "source_location": "docs/readings/600276-hengrui-direct-deep-dogfood-2026-09-17/source-captures.json#/announcements",
+      "license_terms_note": "COMPANY_OFFICIAL_INVESTOR_RELATIONS_INDEX | An announcement index proves the captured scope, not that no economically relevant fact exists anywhere. Clinical/regulatory progress is not automatically evidence of product-level net price or shareholder cash.",
+      "report_period_end": null,
+      "schema_version": 1
+    }
+  ],
+  "framing": null,
+  "proposed_committed_at": "2026-09-17T10:05:53Z",
+  "schema_version": 2
+}
