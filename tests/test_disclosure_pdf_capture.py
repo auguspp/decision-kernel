@@ -18,6 +18,7 @@ from decision_kernel.runtime.disclosure_assessment import (
     parse_disclosure_assessment_packet, prepare_disclosure_assessment_packet,
     serialize_disclosure_assessment_packet,
 )
+from decision_kernel.runtime.disclosure_attempt_history import empty_attempt_history
 from decision_kernel.runtime.disclosure_pdf_capture import DisclosurePdfCapture
 from decision_kernel.runtime.disclosure_radar import DisclosureBatch
 
@@ -163,6 +164,10 @@ def run_cli(tmp_path, monkeypatch, extra, *, fail_extract=False):
         kw.setdefault("fetch_pdf", fetch)
         return original(**kw, extract_pdf=fail if fail_extract else extract_pdf_text)
     monkeypatch.setattr(cli, "prepare_disclosure_assessment_packet", prepare)
+    if "--packet-dir" in extra:
+        history = tmp_path / "attempt-history.json"
+        history.write_text(json.dumps(empty_attempt_history()), encoding="utf-8")
+        extra = [*extra, "--attempt-history", str(history)]
     out, err = io.StringIO(), io.StringIO()
     code = cli.main(["scan-disclosures", str(package), "--through", "2026-09-09", *extra], stdout=out, stderr=err)
     return code, out.getvalue(), err.getvalue(), calls
@@ -213,9 +218,13 @@ def test_legacy_cli_without_capture_keeps_old_path(tmp_path, monkeypatch):
 def test_workflow_keeps_original_artifact_separate_and_preserves_partial_bodies():
     source = Path(".github/workflows/decision-inbox.yml").read_text()
     assert source.count("--raw-pdf-dir disclosure-primary-bodies") == 1
+    assert source.count("decision_kernel.runtime.disclosure_attempt_history") == 1
+    assert source.count("--attempt-history disclosure-attempt-history.json") == 1
+    assert "GH_TOKEN: ${{ github.token }}" in source
     original = source.split("- name: Upload disclosure scan and assessment handoffs", 1)[1].split("- name: Upload already-fetched", 1)[0]
     assert "if: success()" in original and "name: official-disclosure-scan" in original
     assert "disclosure-primary-bodies" not in original
+    assert "disclosure-attempt-history.json" in original
     capture = source.split("- name: Upload already-fetched disclosure PDF bodies", 1)[1]
     assert "if: always()" in capture and "name: official-disclosure-primary-bodies" in capture
     assert "retention-days: 14" in capture and "continue-on-error" not in capture
