@@ -73,7 +73,7 @@ POLICY = {
     'turnover_reconciliation': dict(own_stock.TURNOVER_POLICY),
     'corporate_actions': 'SUCCESSFUL_QUERY_REQUIRED_NO_REPORTED_EVENT_CROSSING_5D_OR_20D',
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
-    'source_contract': own_stock.CONTRACT,
+    'source_contract': own_stock.SELECTION_CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
     'premarket_index_carry': 'STOCK_ONLY_RECEIPT_BOUND_STRICTLY_BEFORE_0915_OPENING_AUCTION',
     'issuer_failure_scope': 'ISOLATE_KNOWN_STOCK_DATA_FAILURES_NOT_SHARED_OR_TRANSPORT_FAILURES',
@@ -128,7 +128,6 @@ def _hash_ok(value, key):
 def _reference_inputs(value):
     if value is None:
         return
-    # Retained B normalized references are still TEST ONLY, never a real source.
     if (not isinstance(value, dict) or set(value) != {'provenance', 'windows', 'latest_quotes'}
             or value['provenance'] != SYNTHETIC_REFERENCES
             or not isinstance(value['windows'], dict) or not isinstance(value['latest_quotes'], dict)):
@@ -136,13 +135,7 @@ def _reference_inputs(value):
 
 
 def _current_calendar_source_date(envelope, *, received_at):
-    """Use an optional provider-ready clock only as same-day calendar coverage evidence.
-
-    A current provider timestamp can prove that a trading-day list ending before
-    the wall-clock date is this source's current response (for example, a closure
-    or non-session date).  It never invents a session from weekday arithmetic.
-    Missing timestamps preserve the older explicit-date coverage rule.
-    """
+    """Use an optional provider-ready clock only as same-day calendar coverage evidence."""
     if not isinstance(received_at, datetime) or received_at.tzinfo is None or received_at.utcoffset() is None:
         raise ValueError('calendar receipt clock must be timezone-aware')
     data = envelope.get('data') if isinstance(envelope, dict) else None
@@ -162,12 +155,7 @@ def _current_calendar_source_date(envelope, *, received_at):
 
 
 def check_observation_clock(state, at, *, calendar=None, calendar_source_date=None):
-    """A real cutoff first; freshness only after this attempt's calendar arrives.
-
-    Preparing a bounded plan is not qualification. The recorder/replayer calls
-    this for actual timestamps; the selector supplies the retained calendar on
-    every subsequent request/receipt and at final projection. Never rewrite at.
-    """
+    """A real cutoff first; freshness only after this attempt's calendar arrives."""
     if not isinstance(at, datetime) or at.tzinfo is None or at.utcoffset() is None:
         raise ValueError('stock observation clock must be timezone-aware')
     close = datetime.combine(state.sessions[-1], time(15), tzinfo=SHANGHAI_TZ)
@@ -187,22 +175,13 @@ def check_observation_clock(state, at, *, calendar=None, calendar_source_date=No
     return close
 
 
-def _qualify_stock_index_snapshot(raw_snapshot, benchmark_history, calendar, *,
-                                  observed_at, received_at):
-    """Stock-only carry of the latest completed snapshot before opening auction.
-
-    Shared index qualification remains strict. This exception is entered only
-    when every earlier benchmark/calendar check passed and the sole rejection was
-    that the provider data-ready date is today's later trading session. Exact
-    response receipt is mandatory; waiting for a later request can never repair a
-    future clock. 09:15 is a hard expiry, not an inferred market session.
-    """
+def _qualify_stock_index_snapshot(raw_snapshot, benchmark_history, calendar, *, observed_at, received_at):
+    """Stock-only carry of the latest completed snapshot before opening auction."""
     if (not isinstance(received_at, datetime) or received_at.tzinfo is None
             or received_at.utcoffset() is None or not isinstance(observed_at, datetime)
             or observed_at.tzinfo is None or observed_at.utcoffset() is None):
         raise ValueError('index snapshot receipt and qualification clocks must be timezone-aware')
-    provider_ready_at = datetime.fromtimestamp(
-        raw_snapshot.provider_timestamp_ms / 1000, tz=SHANGHAI_TZ)
+    provider_ready_at = datetime.fromtimestamp(raw_snapshot.provider_timestamp_ms / 1000, tz=SHANGHAI_TZ)
     received_local = received_at.astimezone(SHANGHAI_TZ)
     observed_local = observed_at.astimezone(SHANGHAI_TZ)
     if provider_ready_at > received_local or received_local > observed_local:
@@ -217,8 +196,7 @@ def _qualify_stock_index_snapshot(raw_snapshot, benchmark_history, calendar, *,
             raise
     ready_date = provider_ready_at.date()
     if (ready_date != received_local.date() or ready_date != observed_local.date()
-            or ready_date not in set(calendar)
-            or ready_date <= benchmark_history.response_session):
+            or ready_date not in set(calendar) or ready_date <= benchmark_history.response_session):
         raise ValueError('premarket index carry must be same-date on the later observed trading session')
     if (provider_ready_at.time() >= PREMARKET_CARRY_CUTOFF
             or received_local.time() >= PREMARKET_CARRY_CUTOFF
@@ -369,14 +347,13 @@ def _stock_path(state, code, response, *, at, references=None, quote=None, actio
     if references is None:
         by_day, checks = own_stock.qualify(response, quote, actions, code=code,
             sessions=state.sessions, params=_history_params(code,state.sessions), observed_at=at,
-            quote_received_at=quote_received_at)
+            quote_received_at=quote_received_at, selection_mode=True)
         recent = tuple(by_day[d]['close_price'] for d in expected[-26:])
         amounts = tuple(Decimal(str(by_day[d]['turnover'])) for d in expected[-25:])
         windows = checks['action_window_checks']
         history_windows = checks['history_window_checks']
         def comparable(name):
-            return (windows[name]['usable_for_raw_comparison']
-                    and history_windows[name]['usable_for_raw_comparison'])
+            return windows[name]['usable_for_raw_comparison'] and history_windows[name]['usable_for_raw_comparison']
         returns = {
             '5': _return_over(recent, end_index=25, sessions=5) if comparable('5') else None,
             '20': _return_over(recent, end_index=25, sessions=20) if comparable('20') else None,
@@ -434,7 +411,6 @@ def _stock_path(state, code, response, *, at, references=None, quote=None, actio
 
 
 def _select(rows, node_order):
-    """A's unchanged visible lexicographic order; never a weighted opportunity score."""
     eligible = [r for r in rows if r['eligible_for_shadow_reading']]
     ordered = sorted(eligible, key=lambda r: (
         -Decimal(r['market_comparison']['20']['excess_return']),
@@ -740,15 +716,19 @@ def render_stock_reading(report: dict) -> str:
     codes = [r['thscode'] for r in p['surfaced_stocks']]
     coverage = _coverage(p['all_stock_observations'])
     partial_status = _partial_status(coverage, codes)
-    if (report['projection_hash'] != canonical_hash(p) or p['semantics'] != SEMANTICS
-            or p['policy'] != POLICY or any(p[k] != v for k, v in LIMITS.items())
+    contract = _plan_contract(p)
+    if contract is None:
+        raise ValueError('stock reading identity or authority differs')
+    expected_semantics, expected_policy, _ = contract
+    if (report['projection_hash'] != canonical_hash(p) or p['semantics'] != expected_semantics
+            or p['policy'] != expected_policy or any(p[k] != v for k, v in LIMITS.items())
             or len(codes) > 3 or len(codes) != len(set(codes))
             or p['status'] not in STATUS_LABELS
             or (partial_status is not None and p['status'] != partial_status)
             or (partial_status is None and p['status'] in {
                 'PARTIAL_STOCKS_FOR_SHADOW_READING', 'NO_USABLE_STOCK_DATA',
                 'NO_MATCH_IN_EVALUATED_SUBSET_WITH_DATA_GAPS'})
-            or p['coverage'] != coverage or p['reviewed_issuers'] != coverage['planned_issuers']
+            or p['coverage'] != coverage
             or p['selection_scope_complete'] != coverage['scope_complete']
             or any(r['input_failure'] is not None or not r['eligible_for_shadow_reading']
                    or r not in p['all_stock_observations'] for r in p['surfaced_stocks'])
@@ -775,23 +755,35 @@ def render_stock_reading(report: dict) -> str:
         parts.append('<section><h2>本次没有可展示的合格卡片</h2><p>不等于市场没有机会。覆盖缺口、条件不满足与数据不足分别记录；数据不足的尝试不会生成成功空名单。</p></section>')
     for row in p['surfaced_stocks']:
         path = row['stock_path']
+        checks = path.get('input_checks', {})
+        def window_pct(value, n):
+            if value is not None:
+                return f'{Decimal(value)*100:+.2f}%'
+            action_windows = checks.get('action_window_checks', {})
+            if n in action_windows and not action_windows[n]['usable_for_raw_comparison']:
+                return '不可比（跨公司行为）'
+            history_windows = checks.get('history_window_checks', {})
+            if n in history_windows and not history_windows[n]['usable_for_raw_comparison']:
+                return '不可比（历史bar缺口）'
+            return '不可比（资格窗口不可用）'
         parts += [f'<article><h2>{e(row["company_name"])} <small>{e(row["thscode"])}</small></h2>',
             '<p><strong>为什么值得进一步看：</strong>当前有关联的强势方向及留存业务依据；个股5日上涨并跑赢基准，20日跑赢基准及至少一个相关行业。只是固定试行观察条件，未证明投资价值。</p>',
             f'<p>原始收盘价 <strong>{e(path["last_close"])} CNY</strong>；当日原始价格变化 {pct(path["daily_raw_return"])}。</p>',
             '<div class="scroll"><table><tr><th>窗口</th><th>个股原始价格变化</th><th>沪深300价格变化</th><th>变化率差</th></tr>']
         for n in ('5', '20', '60'):
             values = row['market_comparison'][n]
-            parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (n+'日',pct(values['stock_return']),pct(values['benchmark_return']),pct(values['excess_return'])))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股原始bar完整；更早缺口不填值、不推断停牌，只使受影响的60日背景不可用。未复权原始价格变化，非含分红总回报；60日不参与门槛。</small></p>']
+            parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
+                n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
+                window_pct(values['excess_return'], n)))+'</tr>')
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股原始bar完整；更早缺口不填值、不推断停牌，只使受影响的60日背景不可用。没有把缺失日倒灌历史或补成零交易；未复权原始价格变化，非含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
-            parts.append('<p class="notice">本版仅原始收盘价路径观察：价格与前收严格核对，成交量和成交额仅做明示的有界跨接口一致性核对；两侧原值均保留。公司行为查询成功且5/20日筛选区间未跨已报告事件。更早事件或历史bar缺口保留，受影响的60日背景不提供比较值。缺bar原因保持 UNKNOWN，不自动解释为停牌。</p>')
-            checks = path['input_checks']
+            parts.append('<p class="notice">本版仅原始收盘价路径观察：最新价格与前收严格核对，但没有逐日历史前收核验；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功且5/20日筛选区间未跨已报告事件。更早事件或历史bar缺口保留，受影响的60日背景不提供比较值。缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
             volume = checks['volume_reconciliation']
             amount = checks['turnover_reconciliation']
             parts.append(f'<p>成交量核对：历史 {e(volume["historical_shares"])} 股；快照 {e(volume["snapshot_shares"])} 股；差额 {e(volume["absolute_difference_shares"])} 股，允许上限 {e(volume["allowed_difference_shares"])} 股。计算仍使用历史原值；不是供应商精度保证。</p>')
             parts.append(f'<p>成交额核对：历史 {e(amount["historical_cny"])} 元；快照 {e(amount["snapshot_cny"])} 元；差额 {e(amount["absolute_difference_cny"])} 元，允许上限 {e(amount["allowed_difference_cny"])} 元。计算仍使用历史原值；不是供应商精度保证。</p>')
             if checks['history_market_session_gaps']:
-                parts.append(f'<p class="notice">历史市场交易日缺口：{e("、".join(checks["history_market_session_gaps"]))}；原因 UNKNOWN，不填值、不推断停牌。核心选择窗口仍须完整。</p>')
+                parts.append(f'<p class="notice">历史市场交易日缺口：{e("、".join(checks["history_market_session_gaps"]))}；原因 UNKNOWN，不填值、不推断停牌、不倒灌历史。核心选择窗口仍须完整。</p>')
             for event in checks['reported_corporate_actions']:
                 parts.append(f'<p class="notice">已报告公司行为：{e(event["ex_date"])}，每股现金 {e(event["dividend_per_share"])}，每股送转 {e(event["per_share_bonus"])}。事件未隐去；未自动复权。</p>')
             parts += ['<details><summary>输入一致性与各价格窗口资格检查</summary><pre>',
