@@ -775,7 +775,7 @@ def render_stock_reading(report: dict) -> str:
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
                 n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
                 window_pct(values['excess_return'], n)))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股原始bar完整；更早缺口不填值、不推断停牌，只使受影响的60日背景不可用。没有把缺失日倒灌历史或补成零交易；未复权原始价格变化，非含分红总回报；60日不参与门槛。</small></p>']
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股原始bar完整；更早缺口不填值、不推断停牌，只使受影响的60日背景不可用。当前成员不倒灌历史；缺失的价格bar不填值、不补成零交易，也不推断停牌。未复权原始价格变化，非含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
             parts.append('<p class="notice">本版仅原始收盘价路径观察：最新价格与前收严格核对，但没有逐日历史前收核验；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功且5/20日筛选区间未跨已报告事件。更早事件或历史bar缺口保留，受影响的60日背景不提供比较值。缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
             volume = checks['volume_reconciliation']
