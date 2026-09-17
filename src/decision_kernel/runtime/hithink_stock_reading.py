@@ -20,9 +20,11 @@ ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
 # The request/source identity stays the existing v4 contract for every caller.
 # Stock Market Expression applies an additional bounded qualification policy on
 # top of those same bytes; it is recorded separately and is not a new provider
-# or acquisition contract.
+# or acquisition contract. SELECTION_CONTRACT remains a source-identity alias so
+# existing callers cannot accidentally reinterpret the acquisition bytes.
 CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
-SELECTION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
+SELECTION_CONTRACT = CONTRACT
+SELECTION_QUALIFICATION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
 REQUIRED_RECENT_SESSIONS = 26  # Covers 20d gate, shifted 20d and turnover pulse.
 # Project reconciliation policies, not HiThink precision or supplier guarantees.
@@ -355,7 +357,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     }
     if selection_mode:
         meta.update(
-            selection_qualification_contract=SELECTION_CONTRACT,
+            selection_qualification_contract=SELECTION_QUALIFICATION_CONTRACT,
             history_bar_count=len(bars),
             history_market_session_gaps=[d.isoformat() for d in missing],
             history_gap_meaning='ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING',
