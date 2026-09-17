@@ -17,11 +17,14 @@ TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-CONTRACT = 'hithink-required-selection-bars-history-actions-through-session-v5'
+# Shared/legacy consumers keep the exact 61-bar contract. The Stock Market
+# Expression selector opts into SELECTION_CONTRACT explicitly; no other caller
+# inherits its older-history-gap or volume-reconciliation policy by accident.
+CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
+SELECTION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
-REQUIRED_RECENT_SESSIONS = 26  # Covers 20d gate, 20d-five-sessions-ago and turnover pulse.
+REQUIRED_RECENT_SESSIONS = 26  # Covers 20d gate, shifted 20d and turnover pulse.
 # Project reconciliation policies, not HiThink precision or supplier guarantees.
-# Keep raw source values unchanged; these policies qualify only cross-endpoint identity.
 TURNOVER_POLICY = {
     'version': 'stock-snapshot-turnover-cny-v1',
     'relative_tolerance': '0.0000001', 'absolute_tolerance_cny': '0.01',
@@ -98,13 +101,7 @@ def check_history_receipt(history, *, code, received_at):
 
 
 def check_quote_receipt(quote, *, code, received_at):
-    """Accept null or an actual upstream-ready timestamp, never a trade-date claim.
-
-    The website prices contract allows a non-null latest upstream timestamp even
-    though the older repository contract describes null for explicit thscodes.
-    Validate it against THIS response's receipt before the action request; a later
-    response must not make a future timestamp retroactively valid.
-    """
+    """Accept null or an actual upstream-ready timestamp, never a trade-date claim."""
     data = _data(quote, code)
     if 'timestamp' not in data:
         _bad(code, 'REQUIRED_INPUT_OR_FIELD_MISSING', 'DATA_INSUFFICIENT')
@@ -121,21 +118,14 @@ def history_params(code, sessions):
     start = datetime.combine(sessions[-61], time(), TZ)
     # The observed endpoint can include a bar keyed exactly at `end`.
     # Stop INSIDE the cutoff day, not at the following day's midnight.
-    # Do not widen or retry after an issuer-local missing row; qualification below
-    # preserves the exact market window and explicitly marks affected context.
+    # Never widen/retry after an issuer-local missing row.
     end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ) - timedelta(milliseconds=1)
     return {'thscode': code, 'interval': '1d', 'adjust': 'none',
             'start': str(int(start.timestamp()*1000)), 'end': str(int(end.timestamp()*1000))}
 
 
 def action_params(code, sessions):
-    """One documented history query, clipped at the exact completed session.
-
-    HiThink makes from/to optional and documents omitted-from history retrieval.
-    Do not first request a short window and then retry/widen after a 3002. Every
-    planned issuer uses this same initial query, with the original request budget.
-    A successful response remains required; no error-to-empty conversion exists.
-    """
+    """One documented history query, clipped at the exact completed session."""
     return {'thscode': code, 'to': sessions[-1].isoformat()}
 
 
@@ -143,8 +133,6 @@ def reconcile_turnover(historical, snapshot, *, code):
     """A narrow field-only tolerance; never round, replace or fill source values."""
     a = _number({'turnover': historical}, 'turnover', code, positive=True)
     b = _number({'turnover': snapshot}, 'turnover', code, positive=True)
-    # Independent of the caller's Decimal context. Inputs have <=28 digits and
-    # exponent magnitude <=12, so this also preserves the boundary subtraction.
     with localcontext(Context(prec=64)):
         delta = abs(a-b)
         bound = min(Decimal(TURNOVER_POLICY['hard_cap_cny']),
@@ -176,11 +164,7 @@ def reconcile_volume(historical, snapshot, *, code):
 
 
 def action_window_checks(expected, dates):
-    """The ex-date affects an interval only after its base CLOSE: (base, end].
-
-    These are checks of reported events, not proof of exhaustive event coverage.
-    No adjustment formula, inferred no-event response or issuer-specific exception.
-    """
+    """The ex-date affects an interval only after its base CLOSE: (base, end]."""
     windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
     windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
     result = {}
@@ -197,17 +181,17 @@ def action_window_checks(expected, dates):
 
 
 def history_window_checks(expected, bars):
-    """Expose missing own bars without inferring why a market session is absent."""
+    """Expose missing own bars without inventing a suspension/zero-trading reason."""
     windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
     windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
-    result = {}
     present = set(bars)
+    result = {}
     for name, (base, end) in windows.items():
-        sessions = [d for d in expected if base <= d <= end]
-        missing = [d.isoformat() for d in sessions if d not in present]
+        required = [d for d in expected if base <= d <= end]
+        missing = [d.isoformat() for d in required if d not in present]
         result[name] = {
             'base_session': base.isoformat(), 'end_session': end.isoformat(),
-            'required_market_sessions': len(sessions), 'missing_market_sessions': missing,
+            'required_market_sessions': len(required), 'missing_market_sessions': missing,
             'status': 'MARKET_SESSION_BAR_GAP' if missing else 'ALL_REQUIRED_MARKET_SESSION_BARS_PRESENT',
             'usable_for_raw_comparison': not missing,
             'is_selection_window': name in {'5','20'},
@@ -217,14 +201,16 @@ def history_window_checks(expected, bars):
 
 
 def qualify(history, quote, actions, *, code, sessions, params, observed_at,
-            quote_received_at=None):
-    """Check same-provider raw inputs while preserving noncritical history gaps.
+            quote_received_at=None, selection_mode=False):
+    """Qualify one raw stock input under the shared or Stock-selection contract.
 
-    All last 26 market sessions are mandatory because they support every stock
-    gate, the shifted 20-day comparison, the turnover pulse and quote continuity.
-    Older gaps never become suspension claims; they only make affected context
-    windows unavailable. Successful corporate-action qualification remains required.
+    Default is the pre-existing exact-61/exact-volume contract used by shared
+    consumers. `selection_mode=True` is owned only by the Stock Market Expression
+    selector: the latest 26 market sessions remain mandatory; older missing own
+    bars are retained as UNKNOWN gaps and can only null affected context windows.
     """
+    if type(selection_mode) is not bool:
+        _bad(code)
     if not isinstance(code, str) or not re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', code):
         _bad(code)
     expected = tuple(sessions[-61:])
@@ -245,7 +231,8 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     if not datetime.combine(expected[-1], time(), TZ) <= ready <= observed_at:
         _bad(code)
     items = d.get('item')
-    if not isinstance(items, list) or not 1 <= len(items) <= 61:
+    valid_count = isinstance(items, list) and ((1 <= len(items) <= 61) if selection_mode else len(items) == 61)
+    if not valid_count:
         _bad(code, 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', 'DATA_INSUFFICIENT')
     bars = {}
     for row in items:
@@ -265,11 +252,16 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         if values['volume'] <= 0 or values['turnover'] <= 0:
             _bad(code, 'UNPRICED_OR_NONTRADING_SESSION_IN_PATH', 'DATA_INSUFFICIENT')
         bars[day] = values
-    missing = [d for d in expected if d not in bars]
-    required_missing = [d for d in expected[-REQUIRED_RECENT_SESSIONS:] if d not in bars]
-    if required_missing:
-        _bad(code, 'REQUIRED_SELECTION_WINDOW_STOCK_SESSIONS_MISSING', 'DATA_INSUFFICIENT')
-    history_checks = history_window_checks(expected, bars)
+    missing = [day for day in expected if day not in bars]
+    if not selection_mode and missing:
+        _bad(code, 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', 'DATA_INSUFFICIENT')
+    if selection_mode:
+        required_missing = [day for day in expected[-REQUIRED_RECENT_SESSIONS:] if day not in bars]
+        if required_missing:
+            _bad(code, 'REQUIRED_SELECTION_WINDOW_STOCK_SESSIONS_MISSING', 'DATA_INSUFFICIENT')
+        history_checks = history_window_checks(expected, bars)
+    else:
+        history_checks = None
     q = _data(quote, code)
     check_quote_receipt(quote, code=code, received_at=quote_received_at)
     if quote_received_at is not None:
@@ -282,11 +274,15 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     if not isinstance(last_quote, dict) or last_quote.get('thscode') != code or last_quote.get('ticker') != code[:6]:
         _bad(code)
     last = bars[expected[-1]]
-    for current, historical in (('last_price','close_price'),('open_price','open_price'),
-                                ('high_price','high_price'),('low_price','low_price')):
+    exact_fields = [('last_price','close_price'),('open_price','open_price'),
+                    ('high_price','high_price'),('low_price','low_price')]
+    if not selection_mode:
+        exact_fields.append(('volume','volume'))
+    for current, historical in exact_fields:
         if _number(last_quote, current, code) != last[historical]:
             _bad(code, 'CURRENT_QUOTE_HISTORY_MISMATCH')
-    volume_check = reconcile_volume(str(last['volume']), last_quote.get('volume'), code=code)
+    volume_check = (reconcile_volume(str(last['volume']), last_quote.get('volume'), code=code)
+                    if selection_mode else None)
     turnover_check = reconcile_turnover(str(last['turnover']), last_quote.get('turnover'), code=code)
     if _number(last_quote, 'prev_price', code, positive=True) != bars[expected[-2]]['close_price']:
         _bad(code, 'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW')
@@ -327,17 +323,14 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     window_checks = action_window_checks(expected, dates)
     if any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
-    return bars, {
-        'contract': CONTRACT,
+    meta = {
+        'contract': SELECTION_CONTRACT if selection_mode else CONTRACT,
         'history_identity_basis': 'EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED',
         'history_request': dict(params), 'history_provider_ready_at': ready.isoformat(),
-        'market_session_basis': 'LAST_26_REQUIRED_DATED_BARS_OLDER_GAPS_EXPLICIT_NOT_FILLED',
-        'history_bar_count': len(bars),
-        'history_market_session_gaps': [d.isoformat() for d in missing],
-        'history_gap_meaning': 'ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING',
-        'history_window_checks': history_checks,
-        'latest_quote_check': 'EXACT_OHLC_PREVIOUS_CLOSE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION',
-        'volume_reconciliation': volume_check,
+        'market_session_basis': ('LAST_26_REQUIRED_DATED_BARS_OLDER_GAPS_EXPLICIT_NOT_FILLED'
+                                 if selection_mode else 'EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR'),
+        'latest_quote_check': ('EXACT_OHLC_PREVIOUS_CLOSE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
+                               if selection_mode else 'EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE'),
         'turnover_reconciliation': turnover_check,
         'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
         'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
@@ -359,6 +352,15 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
         'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',
     }
+    if selection_mode:
+        meta.update(
+            history_bar_count=len(bars),
+            history_market_session_gaps=[d.isoformat() for d in missing],
+            history_gap_meaning='ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING',
+            history_window_checks=history_checks,
+            volume_reconciliation=volume_check,
+        )
+    return bars, meta
 
 
 def request_json(path, params, *, api_key):
