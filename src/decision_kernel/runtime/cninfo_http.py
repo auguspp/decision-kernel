@@ -37,6 +37,28 @@ class CninfoRuntimeError(RuntimeError):
     """The outer CNINFO runtime could not produce a coherent official-disclosure batch."""
 
 
+# Finite PDF-stage exception types are deliberately safe to retain by class name.
+# They never contain response bodies, cookies, headers, source bytes or credentials.
+class CninfoPdfSourceError(CninfoRuntimeError):
+    """The selected source is not the exact reviewed CNINFO static-PDF destination."""
+
+
+class CninfoPdfHttpError(CninfoRuntimeError):
+    """The official static host rejected the bounded request."""
+
+
+class CninfoPdfTransportError(CninfoRuntimeError):
+    """The bounded official static-host request could not complete coherently."""
+
+
+class CninfoPdfByteLimitError(CninfoRuntimeError):
+    """The official body exceeded the declared acquisition byte budget."""
+
+
+class CninfoPdfContainerError(CninfoRuntimeError):
+    """The returned body was not an exact PDF container."""
+
+
 @dataclass(frozen=True)
 class CninfoDisclosureBatch:
     stock_code: str
@@ -176,15 +198,17 @@ def fetch_cninfo_pdf_bytes(
 ) -> bytes:
     """Fetch one bounded PDF from CNINFO's official static host only.
 
-    This owns transport qualification only. PDF parsing, text extraction, persistence, OCR,
-    caching, retry/fallback and Research interpretation stay outside this runtime seam.
+    The default byte transport reuses the repository's already-live-accepted fresh
+    Requests session pattern used for bounded CNINFO static-PDF capture: identity
+    encoding, no redirects, no retries/cookies/proxies/credentials and streaming
+    under the caller's exact byte limit. Metadata acquisition remains separate.
     """
 
     locator = source_locator.strip()
     if not locator.startswith(f"{CNINFO_STATIC_BASE_URL}/"):
-        raise CninfoRuntimeError("CNINFO PDF source must use the official static host")
+        raise CninfoPdfSourceError("CNINFO PDF source must use the official static host")
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes <= 0:
-        raise CninfoRuntimeError("CNINFO PDF max_bytes must be a positive integer")
+        raise CninfoPdfByteLimitError("CNINFO PDF max_bytes must be a positive integer")
 
     if get_bytes is None:
         payload = _request_pdf_bytes(
@@ -196,11 +220,11 @@ def fetch_cninfo_pdf_bytes(
         payload = get_bytes(locator)
 
     if not isinstance(payload, bytes):
-        raise CninfoRuntimeError("CNINFO PDF fetcher did not return bytes")
+        raise CninfoPdfTransportError("CNINFO PDF fetcher did not return bytes")
     if len(payload) > max_bytes:
-        raise CninfoRuntimeError(f"CNINFO PDF exceeds the {max_bytes}-byte acquisition limit")
+        raise CninfoPdfByteLimitError(f"CNINFO PDF exceeds the {max_bytes}-byte acquisition limit")
     if not payload.startswith(b"%PDF-"):
-        raise CninfoRuntimeError("CNINFO PDF response does not start with a PDF header")
+        raise CninfoPdfContainerError("CNINFO PDF response does not start with a PDF header")
     return payload
 
 
@@ -265,10 +289,6 @@ def _request_json(
         "Referer": "https://www.cninfo.com.cn/",
     }
     if stage == "ANNOUNCEMENT_QUERY":
-        # Current CNINFO/OSS prior art uses the HTTP announcement route. Its JSON
-        # remains discovery metadata only: selected original bytes still have to
-        # come from the existing official HTTPS static-PDF transport and pass the
-        # unchanged issuer/time/pagination/PDF integrity checks.
         headers["Referer"] = _announcement_disclosure_referer(form)
     if form is not None:
         headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
@@ -293,21 +313,37 @@ def _request_json(
 
 
 def _request_pdf_bytes(*, url: str, max_bytes: int, timeout_seconds: float) -> bytes:
-    request = Request(
-        url,
-        headers={
-            "Accept": "application/pdf,*/*;q=0.8",
-            "User-Agent": "Mozilla/5.0",
-            "Referer": "https://www.cninfo.com.cn/",
-        },
-        method="GET",
-    )
+    """Reuse the proven bounded Requests transport; never retry or follow redirects."""
+    from .hithink_dump_trial import DumpTrialError, _check_response, _session
+    import requests
+
     try:
-        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-            return response.read(max_bytes + 1)
-    except HTTPError as exc:
-        raise CninfoRuntimeError(
-            f"CNINFO PDF request failed with status {exc.code}"
-        ) from exc
-    except (URLError, TimeoutError) as exc:
-        raise CninfoRuntimeError("CNINFO PDF request failed") from exc
+        with _session() as session:
+            with session.get(
+                url,
+                headers={"Accept": "application/pdf", "Accept-Encoding": "identity"},
+                timeout=(10, timeout_seconds),
+                stream=True,
+                allow_redirects=False,
+            ) as response:
+                length = _check_response(response)
+                if length is not None and length > max_bytes:
+                    raise CninfoPdfByteLimitError("CNINFO PDF response exceeds acquisition limit")
+                chunks: list[bytes] = []
+                count = 0
+                for chunk in response.iter_content(chunk_size=65536):
+                    count += len(chunk)
+                    if count > max_bytes:
+                        raise CninfoPdfByteLimitError("CNINFO PDF response exceeds acquisition limit")
+                    chunks.append(chunk)
+                if length is not None and count != length:
+                    raise CninfoPdfTransportError("CNINFO PDF response length differs")
+                return b"".join(chunks)
+    except CninfoRuntimeError:
+        raise
+    except DumpTrialError as exc:
+        if exc.code == "HTTP_REJECTED":
+            raise CninfoPdfHttpError("CNINFO PDF HTTP request rejected") from exc
+        raise CninfoPdfTransportError("CNINFO PDF HTTP response qualification failed") from exc
+    except requests.RequestException as exc:
+        raise CninfoPdfTransportError("CNINFO PDF request failed") from exc
