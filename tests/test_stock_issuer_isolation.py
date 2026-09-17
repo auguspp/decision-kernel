@@ -97,7 +97,8 @@ def test_local_data_failure_does_not_suppress_later_stocks(monkeypatch, failure)
         if params.get('thscode', params.get('thscodes')) != bad:
             return body
         if failure == 'short_history' and path == own.HISTORY:
-            body['data']['item'].pop(20)
+            # Keep this inside the latest 26 required Stock-selection sessions.
+            body['data']['item'].pop(50)
         if failure == 'missing_previous' and path == own.SNAPSHOT:
             body['data']['item'][0].pop('prev_price')
         if failure == 'turnover' and path == own.SNAPSHOT:
