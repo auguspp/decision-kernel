@@ -1,0 +1,342 @@
+{
+  "code_commit": "1c6530be702af08107b799a8d52453c20f925c46",
+  "execution_id": "stock-business-8e128fff22699c6c9da4b3f5719431e91f63b1a066209dbf607e6dc85b0b2b86",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "observation": {
+    "business_benefit_status": "NOT_ESTABLISHED",
+    "business_linkage_status": "UNKNOWN",
+    "candidate_source": "SECTOR_SURFACED_GROUP_BREADTH_LEADER",
+    "company_name": "会稽山",
+    "current_member_name": "会稽山",
+    "current_origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.053653370984821743734557007",
+          "name": "会稽山",
+          "thscode": "601579.SH",
+          "ticker": "601579",
+          "turnover": "1213677360"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "current_member_sectors": [
+          "884119.TI"
+        ],
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他酒类",
+            "recorded_event_ids": [
+              "98a12d60d431365d24b17277007389392a917a0db01c3520003ec898810720e1"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884119.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881133.TI",
+        "node_label": "其他酒类 884119.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884119.TI"
+        ]
+      }
+    ],
+    "eligible_for_shadow_reading": true,
+    "eligible_nodes": [
+      "881133.TI"
+    ],
+    "excluded_reasons": [],
+    "input_failure": null,
+    "market_comparison": {
+      "20": {
+        "benchmark_return": "-0.0288694137499319579772467476",
+        "excess_return": "0.6294056067794225745992306616",
+        "stock_return": "0.600536193029490616621983914"
+      },
+      "5": {
+        "benchmark_return": "-0.0193980727246344310844056908",
+        "excess_return": "0.2508337162889908667279700468",
+        "stock_return": "0.231435643564356435643564356"
+      },
+      "60": {
+        "benchmark_return": "-0.1115396107647258022748550826",
+        "excess_return": "1.144918357358731251866135737",
+        "stock_return": "1.033378746594005449591280654"
+      }
+    },
+    "market_expression_status": "OBSERVED",
+    "origins": [
+      {
+        "breadth_leader": {
+          "daily_return": "0.053653370984821743734557007",
+          "name": "会稽山",
+          "thscode": "601579.SH",
+          "ticker": "601579",
+          "turnover": "1213677360"
+        },
+        "business_linkage_status": "UNKNOWN",
+        "company": null,
+        "direction_sources": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他酒类",
+            "recorded_event_ids": [
+              "98a12d60d431365d24b17277007389392a917a0db01c3520003ec898810720e1"
+            ],
+            "source_kind": "SURFACED_SECTOR_GROUP_PRIMARY",
+            "thscode": "884119.TI"
+          }
+        ],
+        "economic_coverage": null,
+        "node_id": "881133.TI",
+        "node_label": "其他酒类 884119.TI",
+        "node_relation_note": "CURRENT_MEMBERSHIP_AND_PRICE_ROUTING_ONLY_NOT_BENEFICIARY_PROOF",
+        "origin_kind": "SECTOR_BREADTH_MARKET_EXPRESSION_CANDIDATE",
+        "review_question": "If decision-relevant, what public evidence establishes or rejects the business link?",
+        "sector_codes": [
+          "884119.TI"
+        ]
+      }
+    ],
+    "sector_comparisons": [
+      {
+        "horizons": {
+          "20": {
+            "sector_return": "0.091099396906970855030462045",
+            "stock_excess_return": "0.509436796122519761591521869"
+          },
+          "5": {
+            "sector_return": "0.028911419600471650075888546",
+            "stock_excess_return": "0.202524223963884785567675810"
+          },
+          "60": {
+            "sector_return": "0.221851987574200730277977719",
+            "stock_excess_return": "0.811526759019804719313302935"
+          }
+        },
+        "name": "其他酒类",
+        "node_id": "881133.TI",
+        "thscode": "884119.TI"
+      }
+    ],
+    "status": "CONTRACT_CHECKED_RAW_READING",
+    "stock_path": {
+      "corporate_action_adjustment": "NOT_PERFORMED",
+      "daily_raw_return": "0.053653370984821743734557007",
+      "history_session_count": 61,
+      "input_checks": {
+        "action_window_checks": {
+          "1": {
+            "base_session": "2026-09-16",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-17",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20": {
+            "base_session": "2026-08-20",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-17",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "20_five_sessions_ago": {
+            "base_session": "2026-08-13",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-10",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "5": {
+            "base_session": "2026-09-10",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-17",
+            "is_selection_window": true,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          },
+          "60": {
+            "base_session": "2026-06-25",
+            "boundary": "BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE",
+            "end_session": "2026-09-17",
+            "is_selection_window": false,
+            "reported_event_dates": [],
+            "status": "NO_REPORTED_ACTION_CROSSES_RAW_WINDOW",
+            "usable_for_raw_comparison": true
+          }
+        },
+        "adjustment_or_total_return_qualification": "NOT_ESTABLISHED",
+        "contract": "hithink-own-61-bars-history-actions-through-session-v4",
+        "corporate_action_query": {
+          "events_before_price_window": 11,
+          "exhaustive_absence_proven": false,
+          "expected_request": {
+            "thscode": "601579.SH",
+            "to": "2026-09-17"
+          },
+          "maximum_event_rows": 256,
+          "older_event_session_qualification": "NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR",
+          "response_event_count": 11,
+          "scope": "AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION"
+        },
+        "corporate_action_query_succeeded": true,
+        "corporate_actions": "REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF",
+        "historical_daily_reference_check": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+        "history_identity_basis": "EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED",
+        "history_provider_ready_at": "2026-09-17T00:00:00+08:00",
+        "history_request": {
+          "adjust": "none",
+          "end": "1789660799999",
+          "interval": "1d",
+          "start": "1782316800000",
+          "thscode": "601579.SH"
+        },
+        "latest_quote_check": "EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE",
+        "market_session_basis": "EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR",
+        "quote_provider_ready_at": "2026-09-17T18:30:12+08:00",
+        "quote_ready_time_check": "NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT",
+        "quote_received_at": "2026-09-17T10:30:12.626479+00:00",
+        "reported_corporate_actions": [
+          {
+            "dividend_per_share": "0.3000000000",
+            "ex_date": "2026-06-04",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.4000000000",
+            "ex_date": "2025-05-30",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.2100000000",
+            "ex_date": "2024-05-23",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.3000000000",
+            "ex_date": "2023-05-19",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1800000000",
+            "ex_date": "2022-06-13",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.0500000000",
+            "ex_date": "2021-07-05",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2019-07-22",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2018-06-13",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2017-06-23",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2016-05-06",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          },
+          {
+            "dividend_per_share": "0.1100000000",
+            "ex_date": "2015-06-17",
+            "per_share_bonus": "0",
+            "ticker": "601579"
+          }
+        ],
+        "snapshot_individual_trade_date": "NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK",
+        "turnover_reconciliation": {
+          "absolute_difference_cny": "1.73",
+          "absolute_tolerance_cny": "0.01",
+          "allowed_difference_cny": "100",
+          "calculation_source": "DATED_HISTORY_UNCHANGED",
+          "hard_cap_cny": "100",
+          "historical_cny": "1213677358.27",
+          "relative_tolerance": "0.0000001",
+          "snapshot_cny": "1213677360",
+          "status": "WITHIN_EXPLICIT_TOLERANCE",
+          "supplier_precision_rule_established": false,
+          "version": "stock-snapshot-turnover-cny-v1"
+        }
+      },
+      "last_close": "29.85",
+      "latest_turnover": "1213677358.27",
+      "latest_volume": "41405598",
+      "previous_raw_close": "28.33",
+      "price_convention": "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN",
+      "reference_continuity": "NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS",
+      "returns": {
+        "20": "0.600536193029490616621983914",
+        "5": "0.231435643564356435643564356",
+        "60": "1.033378746594005449591280654"
+      },
+      "tradability": "NOT_CERTIFIED_BY_PRICE_AND_VOLUME",
+      "turnover_pulse_5_vs_prior_20": "1.132550847435114078546327277",
+      "twenty_day_return_five_sessions_ago": "0.389111747851002865329512894",
+      "unavailable_price_metrics": []
+    },
+    "thscode": "601579.SH"
+  },
+  "origin": {
+    "archive_sha256": "bc0ad105e1f9a1c20705668a84d72e21384e808095a4bb7b70489b8e9e09ab79",
+    "artifact_id": 10492101582,
+    "market_session": "2026-09-17",
+    "projection_hash": "982a80f2d46ec82bd26d459fbc760d80bff590e01ef383c4ab6bcc2b7f2d7f57",
+    "run": {
+      "conclusion": "success",
+      "created_at": "2026-09-17T10:25:56Z",
+      "event": "workflow_dispatch",
+      "head_sha": "67701b4debd3b82971b78aa9650541f3f91b584a",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35210443356",
+      "id": 35210443356,
+      "operation": null,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-17T10:25:56Z",
+      "status": "completed",
+      "updated_at": "2026-09-17T10:34:55Z"
+    }
+  },
+  "permission": {
+    "body_sha256": "39095f7eb63bdcb965104cebaf7b27ce4e862d0eb7ee3505934410d9c0fd7b62",
+    "comment_id": 5651083343,
+    "created_at": "2026-09-13T04:14:14Z"
+  },
+  "question_kind": "FIRST_BUSINESS_BASELINE",
+  "research_authority": "NONE",
+  "schema_version": 1,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-17T10:35:13.762233+00:00",
+  "thscode": "601579.SH"
+}
