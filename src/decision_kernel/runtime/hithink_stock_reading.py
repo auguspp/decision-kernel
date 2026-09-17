@@ -17,9 +17,10 @@ TZ = ZoneInfo('Asia/Shanghai')
 HISTORY = '/api/a-share/prices/historical'
 SNAPSHOT = '/api/a-share/prices/snapshot'
 ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
-# Shared/legacy consumers keep the exact 61-bar contract. The Stock Market
-# Expression selector opts into SELECTION_CONTRACT explicitly; no other caller
-# inherits its older-history-gap or volume-reconciliation policy by accident.
+# The request/source identity stays the existing v4 contract for every caller.
+# Stock Market Expression applies an additional bounded qualification policy on
+# top of those same bytes; it is recorded separately and is not a new provider
+# or acquisition contract.
 CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
 SELECTION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
@@ -202,12 +203,12 @@ def history_window_checks(expected, bars):
 
 def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             quote_received_at=None, selection_mode=False):
-    """Qualify one raw stock input under the shared or Stock-selection contract.
+    """Qualify one raw stock input under the shared source contract.
 
-    Default is the pre-existing exact-61/exact-volume contract used by shared
-    consumers. `selection_mode=True` is owned only by the Stock Market Expression
-    selector: the latest 26 market sessions remain mandatory; older missing own
-    bars are retained as UNKNOWN gaps and can only null affected context windows.
+    Default is the pre-existing exact-61/exact-volume qualification used by shared
+    consumers. `selection_mode=True` is an additional Stock-only qualification on
+    the same v4 request/source bytes: the latest 26 market sessions are mandatory;
+    older missing own bars remain UNKNOWN and can only null affected context windows.
     """
     if type(selection_mode) is not bool:
         _bad(code)
@@ -324,7 +325,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     if any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
     meta = {
-        'contract': SELECTION_CONTRACT if selection_mode else CONTRACT,
+        'contract': CONTRACT,
         'history_identity_basis': 'EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED',
         'history_request': dict(params), 'history_provider_ready_at': ready.isoformat(),
         'market_session_basis': ('LAST_26_REQUIRED_DATED_BARS_OLDER_GAPS_EXPLICIT_NOT_FILLED'
@@ -354,6 +355,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     }
     if selection_mode:
         meta.update(
+            selection_qualification_contract=SELECTION_CONTRACT,
             history_bar_count=len(bars),
             history_market_session_gaps=[d.isoformat() for d in missing],
             history_gap_meaning='ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING',
