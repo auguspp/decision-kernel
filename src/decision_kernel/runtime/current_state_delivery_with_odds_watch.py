@@ -45,8 +45,11 @@ class Collector(base.Collector):
 
         report = json.loads(files[WATCH_JSON_PATH])
         odds_watch.validate_report(report)
-        config_raw, config_source = self.source({"path": WATCH_CONFIG_PATH})
-        registry_raw, registry_source = self.source({"path": base.REGISTRY_PATH})
+        origin_ref = run["head_sha"]
+        model.check(model.SHA.fullmatch(origin_ref) is not None,
+                    "Inbox Odds Watch origin commit required")
+        config_raw, config_source = self.source({"path": WATCH_CONFIG_PATH, "ref": origin_ref})
+        registry_raw, registry_source = self.source({"path": base.REGISTRY_PATH, "ref": origin_ref})
         config = json.loads(config_raw)
         registry = json.loads(registry_raw)
         odds_watch.validate_config(config, registry)

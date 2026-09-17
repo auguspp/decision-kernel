@@ -16,7 +16,8 @@ from decision_kernel.runtime import odds_watch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SHA = "a" * 40
+RUN_SHA = "a" * 40
+CODE_SHA = "b" * 40
 NOW = "2026-09-16T08:30:00Z"
 OBSERVED = datetime(2026, 9, 16, 16, 30, tzinfo=ZoneInfo("Asia/Shanghai"))
 
@@ -28,7 +29,7 @@ def run():
         "head_repository": {"full_name": model.REPOSITORY},
         "path": model.WORKFLOWS["inbox"],
         "head_branch": "main",
-        "head_sha": SHA,
+        "head_sha": RUN_SHA,
         "event": "schedule",
         "run_attempt": 1,
         "status": "completed",
@@ -49,9 +50,17 @@ def market(price: str):
     )
 
 
+def origin_sources():
+    return (
+        (ROOT / reading.WATCH_CONFIG_PATH).read_bytes(),
+        (ROOT / base.REGISTRY_PATH).read_bytes(),
+    )
+
+
 def watch_report():
-    config = json.loads((ROOT / reading.WATCH_CONFIG_PATH).read_text(encoding="utf-8"))
-    registry = json.loads((ROOT / base.REGISTRY_PATH).read_text(encoding="utf-8"))
+    config_raw, registry_raw = origin_sources()
+    config = json.loads(config_raw)
+    registry = json.loads(registry_raw)
     prices = {
         "600276.SH": "42.5", "002674.SZ": "18", "600598.SH": "12.33",
         "002050.SZ": "31", "603986.SH": "360",
@@ -65,8 +74,10 @@ def watch_report():
 
 
 class API:
-    def __init__(self, *, report=None, partial=False):
+    def __init__(self, *, report=None, partial=False, origin_registry=None):
         self.value = run()
+        self.origin_config, default_registry = origin_sources()
+        self.origin_registry = origin_registry if origin_registry is not None else default_registry
         memory = io.BytesIO()
         with zipfile.ZipFile(memory, "w") as archive:
             archive.writestr("summary.md", "Synthetic saved delivery")
@@ -82,7 +93,7 @@ class API:
             "expired": False,
             "size_in_bytes": len(self.raw),
             "digest": "sha256:" + model.sha256(self.raw),
-            "workflow_run": {"id": 55, "head_sha": SHA},
+            "workflow_run": {"id": 55, "head_sha": RUN_SHA},
         }
 
     def get(self, endpoint):
@@ -92,30 +103,47 @@ class API:
             return {"total_count": 1, "artifacts": [self.artifact]}
         raise AssertionError(endpoint)
 
+    def file(self, path, ref):
+        assert ref == RUN_SHA
+        if path == reading.WATCH_CONFIG_PATH:
+            return self.origin_config
+        if path == base.REGISTRY_PATH:
+            return self.origin_registry
+        raise AssertionError(path)
+
     def archive(self, artifact):
         assert artifact["id"] == 77
         return self.raw
 
 
-def patch_sources(monkeypatch):
-    config = (ROOT / reading.WATCH_CONFIG_PATH).read_bytes()
-    registry = (ROOT / base.REGISTRY_PATH).read_bytes()
+def patch_current_sources(monkeypatch, *, drift_registry=False):
+    config_raw, registry_raw = origin_sources()
+    registry = json.loads(registry_raw)
+    if drift_registry:
+        registry["references"].append({
+            "id": "later-unrelated-research",
+            "case": "002281.SZ",
+            "use": "RETAINED_RESEARCH_DOCUMENT",
+            "purpose_note": "later unrelated registry entry",
+            "source": {"path": "docs/readings/later-unrelated.md"},
+        })
+        registry_raw = (json.dumps(registry, ensure_ascii=False, separators=(",", ":")) + "\n").encode()
 
     def git_file(root, ref, path):
-        assert ref == SHA
+        assert ref == CODE_SHA
         if path == reading.WATCH_CONFIG_PATH:
-            return config
+            return config_raw
         if path == base.REGISTRY_PATH:
-            return registry
+            return registry_raw
         raise AssertionError(path)
 
     monkeypatch.setattr(base, "git_file", git_file)
 
 
-def test_typed_watch_is_hash_and_source_validated_then_retained_in_fixed_reading(tmp_path, monkeypatch):
-    patch_sources(monkeypatch)
+def test_typed_watch_uses_origin_identity_when_later_registry_advances(tmp_path, monkeypatch):
+    patch_current_sources(monkeypatch, drift_registry=True)
     report = watch_report()
-    collector = reading.Collector(API(report=report), SHA, tmp_path, now=lambda: NOW)
+    collector = reading.Collector(API(report=report), CODE_SHA, tmp_path, now=lambda: NOW)
     lane = collector.lane("inbox")
     saved = lane["last_qualified_result"]
     assert saved["status"] == "SAVED_INBOX_DELIVERY_ONLY"
@@ -124,6 +152,8 @@ def test_typed_watch_is_hash_and_source_validated_then_retained_in_fixed_reading
     assert typed["status"] == "TYPED_ODDS_WATCH_READ_OK"
     assert typed["report"] == report
     assert typed["report"]["watch"]["active_case_count"] == 5
+    assert typed["config_source"]["ref"] == RUN_SHA
+    assert typed["registry_source"]["ref"] == RUN_SHA
     assert typed["meaning"].endswith("NOT_REVALIDATED_DECISION_SPINE_ODDS_OR_ACTION")
     assert reading.WATCH_JSON_PATH in saved["details"]
     assert reading.WATCH_SUMMARY_PATH in saved["details"]
@@ -131,9 +161,28 @@ def test_typed_watch_is_hash_and_source_validated_then_retained_in_fixed_reading
     assert json.loads(retained) == report
 
 
+def test_origin_registry_mismatch_still_rejects_watch(tmp_path, monkeypatch):
+    patch_current_sources(monkeypatch)
+    report = watch_report()
+    _, registry_raw = origin_sources()
+    registry = json.loads(registry_raw)
+    registry["references"].append({
+        "id": "tampered-origin",
+        "case": "000001.SZ",
+        "use": "RETAINED_RESEARCH_DOCUMENT",
+        "purpose_note": "synthetic mismatch",
+        "source": {"path": "docs/readings/tampered.md"},
+    })
+    mismatched = (json.dumps(registry, ensure_ascii=False, separators=(",", ":")) + "\n").encode()
+    lane = reading.Collector(
+        API(report=report, origin_registry=mismatched), CODE_SHA, tmp_path, now=lambda: NOW
+    ).lane("inbox")
+    assert lane["last_qualified_result"] is None
+
+
 def test_old_inbox_without_watch_is_explicitly_not_available_not_quiet(tmp_path, monkeypatch):
-    patch_sources(monkeypatch)
-    collector = reading.Collector(API(), SHA, tmp_path, now=lambda: NOW)
+    patch_current_sources(monkeypatch)
+    collector = reading.Collector(API(), CODE_SHA, tmp_path, now=lambda: NOW)
     lane = collector.lane("inbox")
     typed = lane["last_qualified_result"]["odds_watch"]
     assert typed == {
@@ -143,12 +192,12 @@ def test_old_inbox_without_watch_is_explicitly_not_available_not_quiet(tmp_path,
 
 
 def test_partial_or_tampered_watch_rejects_latest_inbox_instead_of_parsing_prose(tmp_path, monkeypatch):
-    patch_sources(monkeypatch)
+    patch_current_sources(monkeypatch)
     report = watch_report()
-    partial = reading.Collector(API(report=report, partial=True), SHA, tmp_path, now=lambda: NOW).lane("inbox")
+    partial = reading.Collector(API(report=report, partial=True), CODE_SHA, tmp_path, now=lambda: NOW).lane("inbox")
     assert partial["last_qualified_result"] is None
 
     tampered = json.loads(json.dumps(report))
     tampered["watch"]["active_case_count"] = 999
-    broken = reading.Collector(API(report=tampered), SHA, tmp_path, now=lambda: NOW).lane("inbox")
+    broken = reading.Collector(API(report=tampered), CODE_SHA, tmp_path, now=lambda: NOW).lane("inbox")
     assert broken["last_qualified_result"] is None
