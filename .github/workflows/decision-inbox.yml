@@ -163,6 +163,13 @@ jobs:
           key: disclosure-receipts-scan-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             disclosure-receipts-state-
+      - name: Read pinned disclosure attempt history
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m decision_kernel.runtime.disclosure_attempt_history
+          --code-commit "$GITHUB_SHA"
+          --output disclosure-attempt-history.json
       - name: Scan official disclosures and prepare Research handoffs
         shell: bash
         run: |
@@ -187,6 +194,7 @@ jobs:
             --packet-dir disclosure-assessment-packets \
             --raw-pdf-dir disclosure-primary-bodies \
             --packet-limit 10 \
+            --attempt-history disclosure-attempt-history.json \
             "${receipt_args[@]}" | tee disclosure-scan.txt
       - name: Publish disclosure summary
         if: always()
@@ -212,7 +220,7 @@ jobs:
             echo
             echo "Assessment packets are auditable Research-producer inputs only; they do not create a Recommendation, Human wake, or investment authority."
             echo
-            echo "Receipt memory is only a Harness attention optimization. Cache loss intentionally causes reassessment rather than silent suppression."
+            echo "Attempt history only prevents repeated packet preparation; it is not semantic assessment or quiet. Receipt memory is a separate best-effort attention optimization."
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload disclosure scan and assessment handoffs
         if: success()
@@ -222,6 +230,7 @@ jobs:
           path: |
             disclosure-scan.txt
             disclosure-scan-meta.txt
+            disclosure-attempt-history.json
             disclosure-assessment-packets/
           retention-days: 14
       - name: Upload already-fetched disclosure PDF bodies
