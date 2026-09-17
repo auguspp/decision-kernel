@@ -1,7 +1,9 @@
 """Real 600276 Human-price conditional Odds fixture; no Market/provider execution."""
 from __future__ import annotations
 
+from copy import deepcopy
 from decimal import Decimal
+import json
 from hashlib import sha256
 from pathlib import Path
 import socket
@@ -12,7 +14,10 @@ from decision_kernel.calculation import CalculationStatus
 from decision_kernel.identity import canonical_hash
 from decision_kernel.research import ModelRiskLevel, ResearchStatus
 from decision_kernel.research_commit import ResearchCommitPackage
-from decision_kernel.runtime import odds_retention as odds
+from decision_kernel.runtime import odds_retention as odds, research_archive as archive
+from decision_kernel.runtime import current_state as model
+from test_odds_retention import CoupledAPI
+from test_research_archive import R, T
 from decision_kernel.runtime import research_commit_only as retained
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -125,3 +130,108 @@ def test_real_hengrui_human_price_conditional_odds_revalidates_without_market():
 
     assert files(RESEARCH) == research_files
     assert files(ODDS) == odds_files
+
+
+SOURCE_COMMIT = "4755d25e63dfe5d91f31d514342e4cc0f16115a2"
+RESEARCH_RECORD = "600276-hengrui-research-commit-20260917"
+ODDS_RECORD = "600276-hengrui-human-price-conditional-odds-20260917"
+
+
+def registered_pair():
+    registry = json.loads((ROOT / "current_state/registry.json").read_bytes())
+    by_id = {item["id"]: item for item in registry["references"]}
+    return registry, by_id[RESEARCH_RECORD], by_id[ODDS_RECORD]
+
+
+def test_hengrui_registration_pins_one_exact_research_dependency():
+    _, research, result = registered_pair()
+    assert research["archive"] == {"format": "RESEARCH_COMMIT", "snapshot_id": SNAPSHOT_ID}
+    assert result["archive"] == {
+        "format": "ODDS_RESULT", "result_kind": "CONDITIONAL_PROVISIONAL",
+        "research_record_id": RESEARCH_RECORD, "research_snapshot_hash": SNAPSHOT_HASH,
+    }
+    assert research["case"] == result["case"] == "600276.SH"
+    assert research["use"] == "RETAINED_RESEARCH_PACKAGE"
+    assert result["use"] == "HISTORICAL_PROVISIONAL_ODDS_CHECKPOINT"
+    for record, directory, entry in (
+        (research, RESEARCH, "commit.json"), (result, ODDS, "result.json"),
+    ):
+        assert record["source"] == {
+            "path": (directory / entry).relative_to(ROOT).as_posix(),
+            "ref": SOURCE_COMMIT, "git_blob": model.blob_sha((directory / entry).read_bytes()),
+        }
+
+
+def pair_api():
+    """Real immutable payload/registration, synthetic Git I/O: not live acceptance."""
+    api = CoupledAPI(files(ODDS), files(RESEARCH), SNAPSHOT_HASH,
+                     SNAPSHOT_ID, "CONDITIONAL_PROVISIONAL")
+    registry, research, result = registered_pair()
+    api.entry = "result.json"
+    api.registry = deepcopy(registry)
+    api.record = next(item for item in api.registry["references"] if item["id"] == ODDS_RECORD)
+    api.dependency = next(item for item in api.registry["references"] if item["id"] == RESEARCH_RECORD)
+    api.commit = {"sha": SOURCE_COMMIT, "tree": {"sha": T}}
+    api.tree["tree"] = [
+        {"path": (directory / name).relative_to(ROOT).as_posix(),
+         "mode": "100644", "type": "blob", "sha": model.blob_sha(raw), "size": len(raw)}
+        for directory in (RESEARCH, ODDS) for name, raw in files(directory).items()
+    ]
+    api.refresh()
+    api.reading = model.assemble(
+        code_commit=api.reg_source["ref"], checked_at="2026-09-17T05:50:00+00:00",
+        check_started_at="2026-09-17T05:49:00+00:00", lanes={}, capabilities=[],
+        refresh_identity={}, research=api.reading["research"],
+    )
+    original_get = api.get
+
+    def get(endpoint):
+        if endpoint == "git/commits/" + SOURCE_COMMIT:
+            api.calls.append(("get", endpoint))
+            return deepcopy(api.commit)
+        return original_get(endpoint)
+
+    api.get = get
+    return api
+
+
+def test_real_hengrui_pair_recovers_same_reading_exact_bytes_without_promotion(tmp_path):
+    api = pair_api()
+    before = (files(RESEARCH), files(ODDS))
+    output = tmp_path / "recovered"
+    receipt = archive.recover_archive(api, reading_commit=R, record_id=ODDS_RECORD, output=output)
+    assert receipt["qualification"] == "ODDS_RESULT_REVALIDATED_NOT_CURRENT_QUALIFICATION"
+    assert receipt["research_record_id"] == RESEARCH_RECORD
+    assert receipt["research_snapshot_hash"] == SNAPSHOT_HASH
+    assert receipt["result_hash"] == RESULT_HASH
+    assert receipt["result_kind"] == "CONDITIONAL_PROVISIONAL"
+    assert receipt["source_commit"] == receipt["research_source_commit"] == SOURCE_COMMIT
+    assert receipt["market_qualification"] == "NOT_ESTABLISHED_BY_RECOVERY"
+    assert receipt["human_acceptance"] == "NOT_ESTABLISHED_BY_RECOVERY"
+    assert receipt["investment_authority"] == "NONE" and receipt["remote_write"] is False
+    assert receipt["odds_status"] == "SAVED_RESULT_REBUILT_FOR_VERIFICATION_NOT_NEW_PRICE_ANALYSIS"
+    assert files(output / "research" / "bundle") == before[0]
+    assert files(output / "bundle") == before[1]
+    for name in ("reading.json", "registry.json"):
+        assert (output / name).read_bytes() == (output / "research" / name).read_bytes()
+    assert len(api.calls) == 14 <= archive.MAX_API_CALLS
+    assert all(call[2] == R for call in api.calls if call[0] == "file")
+    assert (files(RESEARCH), files(ODDS)) == before
+
+
+@pytest.mark.parametrize("damage", ["research-hash", "research-kind", "research-case"])
+def test_real_hengrui_pair_rejects_misbound_dependency(tmp_path, damage):
+    api = pair_api()
+    if damage == "research-hash":
+        api.record["archive"]["research_snapshot_hash"] = "f" * 64
+    elif damage == "research-kind":
+        api.dependency["archive"] = {"format": "RETAINED_FILES"}
+    else:
+        api.dependency["case"] = "OTHER"
+    api.refresh()
+    output = tmp_path / "rejected"
+    with pytest.raises(ValueError, match="preserve partial files"):
+        archive.recover_archive(api, reading_commit=R, record_id=ODDS_RECORD, output=output)
+    assert (output / "failure.json").exists()
+    assert not (output / "readback.json").exists()
+    assert files(output / "bundle") == files(ODDS)
