@@ -49,7 +49,21 @@
     {"id":"midea-method","case":"000333.SZ","use":"METHOD_SUPPLEMENT","purpose_note":"方法对照的用途独立保留，不是新概率或投资决定。","source":{"path":"docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md"}},
     {"id":"xiamen-negative-control","case":"600549.SH","use":"METHOD_NEGATIVE_CONTROL","purpose_note":"研究方法负对照，不将其登记成当前投资待办。","source":{"path":"docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md"}},
     {"id":"tinavi-research","case":"688277.SH","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"已完成 public-diligence 的保留记录，不重新运行旧 Quick。","source":{"path":"docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md"}},
-    {"id":"tinavi-human","case":"688277.SH","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"WATCH/NO_ACTION 冻结记录，非本次投资指令。","source":{"path":"docs/decisions/688277-tinavi-human-watch-2026-09-04.md","git_blob":"04655814a52d28b50d4d0e3dcbdac666c22b71df"}}
+    {"id":"tinavi-human","case":"688277.SH","use":"HUMAN_DECISION_CHECKPOINT","purpose_note":"WATCH/NO_ACTION 冻结记录，非本次投资指令。","source":{"path":"docs/decisions/688277-tinavi-human-watch-2026-09-04.md","git_blob":"04655814a52d28b50d4d0e3dcbdac666c22b71df"}},
+    {
+      "id": "002281-accelink-full-research-20260917-v1",
+      "case": "002281.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "User-requested, AI-drafted Full Research v3 as of 2026-09-17: business and financial evidence, frozen pre-expectation Builder, actual Challenger/reconciliation, and bounded profit/cash/price arithmetic. First-entry case NOT METHOD-READY; quoted price CONTEXT_ONLY; no calibrated probability, canonical Odds, Kernel COMMITTED, Human acceptance, Action/watch, or Investment Authority. Full original-source custody remains PARTIAL.",
+      "source": {
+        "path": "docs/readings/002281-accelink-full-research-2026-09-17/README.md",
+        "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+        "git_blob": "50982ed0c0f1c5f06941ec8252dc1c5ffcb64d64"
+      },
+      "archive": {
+        "format": "RETAINED_FILES"
+      }
+    }
   ],
   "historical_handoffs": [
     {
