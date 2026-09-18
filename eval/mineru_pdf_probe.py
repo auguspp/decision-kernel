@@ -26,7 +26,7 @@ def walk(x):
  elif isinstance(x,list):
   for v in x: yield from walk(v)
 def markdown_text_only(value):
- return re.sub(r'!\\[\\]\\(data:image/[^)]*\\)', '', value, flags=re.S)
+ return re.sub(r'!\[\]\(data:image/[^)]*\)', '', value, flags=re.S)
 def main():
  ap=argparse.ArgumentParser(); ap.add_argument('--archive',type=Path,required=True); ap.add_argument('--work',type=Path,required=True); ap.add_argument('--output',type=Path,required=True); a=ap.parse_args()
  raw=a.archive.read_bytes()
