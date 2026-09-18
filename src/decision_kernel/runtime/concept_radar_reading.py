@@ -17,6 +17,13 @@ QUERY = 'actions/workflows/radar-concept-source.yml/runs?branch=main&per_page=20
 def read(collector, cutoff):
     collector.concept_read_attempt = None
     collector.concept_read_stage = 'BUDGET_PREFLIGHT'
+    from .read_blob_reuse import GitHubReadReuseAPI
+    if isinstance(collector.api, GitHubReadReuseAPI) and collector.previous_commit:
+        collector.concept_read_stage = 'PUBLICATION_REUSE_PREFLIGHT'
+        shared._reserve(collector, calls=2, files=3)
+        collector.concept_read_stage = 'PUBLICATION_REUSE_IDENTITY'
+        collector.api.prime_previous_reading(collector.previous_commit)
+    collector.concept_read_stage = 'BUDGET_PREFLIGHT'
     # 34 maximum payload files + ZIP + origin verification/run + 3 composition files.
     shared._reserve(collector, calls=5, files=40)
     collector.concept_read_stage = 'RUN_DISCOVERY'

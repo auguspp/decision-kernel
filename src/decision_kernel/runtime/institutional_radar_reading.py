@@ -23,10 +23,12 @@ ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError,
           RuntimeError, OverflowError, zipfile.BadZipFile)
 
 
-def _reserve(collector, *, calls=0, files=0):
+def _reserve(collector, *, calls=0, files=0, replacements=None):
     used = getattr(collector.api, 'calls', None)
     model.check(type(used) is int and used >= 0, 'Radar API accounting unavailable')
-    model.check(used + calls + len(collector.files) + files + 5 <= call_limit(collector.api),
+    from .read_blob_reuse import pending_blob_writes
+    retained = collector.files if replacements is None else {**collector.files, **replacements}
+    model.check(used + calls + pending_blob_writes(collector.api, retained) + files + 5 <= call_limit(collector.api),
                 'Radar reading cannot consume existing publication reserve')
 
 
@@ -156,9 +158,13 @@ def attach(collector, baseline):
 
 
 def _concept_gap(collector, exc, *, stage=None):
+    from .read_blob_reuse import pending_blob_writes
     return {'status': 'UNAVAILABLE_OR_REJECTED', 'error_type': type(exc).__name__,
             'failed_stage': stage or getattr(collector, 'concept_read_stage', 'UNKNOWN'),
             'latest_attempt': getattr(collector, 'concept_read_attempt', None),
+            'api_calls_after_attempt': getattr(collector.api, 'calls', None),
+            'retained_file_count': len(collector.files),
+            'pending_blob_writes': pending_blob_writes(collector.api, collector.files),
             'meaning': 'CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK'}
 
 
@@ -201,6 +207,6 @@ def _assemble(collector, baseline, research):
     data = {'current-state.json': model.json_bytes(payload), 'README.md': (model.render_summary(payload) + '\n' + companies.navigation(research['radar_discovery'])).encode()}
     model.check(sum(len(v) for k, v in collector.files.items() if k not in data) + sum(map(len, data.values()))
                 <= delivery.MAX_RETAINED_OUTPUT, 'Radar reading exceeds existing byte bound')
-    _reserve(collector)
+    _reserve(collector, replacements=data)
     collector.files.update(data)
     return payload
