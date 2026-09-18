@@ -12,7 +12,7 @@ def test_mineru_pdf_probe_is_manual_read_only_and_bounded() -> None:
     assert 'secrets.' not in workflow
     assert '10320565453' in workflow
     assert '25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c' in workflow
-    assert 'mineru==4.0.0' in workflow
+    assert 'mineru==4.0.2' in workflow
     assert '--tier", "basic"' not in workflow  # command is owned by the probe script, not shell text
     assert 'Research' not in workflow
 
