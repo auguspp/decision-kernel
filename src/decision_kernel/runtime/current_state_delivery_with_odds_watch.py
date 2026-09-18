@@ -31,6 +31,9 @@ class Collector(base.Collector):
         if getattr(self, "include_radar_discovery", False):
             from .institutional_radar_reading import attach
             payload = attach(self, payload)
+            if getattr(self, "include_concept_discovery", False):
+                from .concept_observation_map_delivery import attach as attach_map
+                payload = attach_map(self, payload)
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:
