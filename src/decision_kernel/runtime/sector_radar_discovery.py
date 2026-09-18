@@ -166,6 +166,67 @@ def _details(group: dict, result: dict) -> list[str]:
     return lines
 
 
+def _stock_candidate_rows(result: dict) -> list[dict]:
+    """Collect source rows only; upstream owns qualification, caller owns copies."""
+    shown = {g['group_key'] for g in result['composition']['surfaced_groups']}
+    rows, sequences = {}, []
+    for group in result['composition']['all_groups']:
+        for candidate, breadth in _candidate_breadths(group):
+            local = []
+            for leader in breadth['leaders']:
+                code, name = leader['thscode'], leader['name']
+                if code in local:
+                    raise ValueError('duplicate leader in one discovery direction')
+                local.append(code)
+                if code not in rows:
+                    rows[code] = {'thscode': code, 'company_name': name, 'origins': []}
+                elif rows[code]['company_name'] != name:
+                    raise ValueError('one discovery security has conflicting source names')
+                rows[code]['origins'].append({
+                    'group_key': group['group_key'], 'sector_thscode': candidate['thscode'],
+                    'sector_name': candidate['name'], 'family': candidate['family'],
+                    'is_primary': candidate['thscode'] == group['primary_candidate']['thscode'],
+                    'group_on_homepage': group['group_key'] in shown, 'retained_leader': leader,
+                })
+            sequences.append(local)
+    ordered = {}
+    for position in range(max(map(len, sequences), default=0)):
+        for sequence in sequences:
+            if position < len(sequence):
+                code = sequence[position]
+                ordered.setdefault(code, rows[code])
+    return list(ordered.values())
+
+
+def _stock_pool_lines(result: dict) -> list[str]:
+    """Company-first detail; still pure display with no loader, planner or hash gate."""
+    rows = _stock_candidate_rows(result)
+    outside = sum(not any(o['group_on_homepage'] for o in r['origins']) for r in rows)
+    count = len(result['composition']['all_groups'])
+    lines = [
+        '### 股票发现池 · 不受首页三组限制', '',
+        f'本次全部 {count} 个合格变化组及其驱动方向，共保留 **{len(rows)} 个去重公司线索**；'
+        f'其中 **{outside} 个仅来自首页之外**。', '',
+        '这不是通过 Stock 检查的股票数量，不是新的推荐榜。仅收录本次已保存的当日突出成员，'
+        '不是全部成员、全市场或所有持续方向；概念、聪明钱尚未由本池接入。', '',
+        '个股多日价格条件、业务受益、Research 均未由本池检查；'
+        '已有 Stock / Research 结果须分别回看，未检查不等于条件不满足。'
+        '原始 ST 等名称标签保留，列出不授予交易资格。', '',
+        '| 公司／代码 | 发现方向（保留全部来路） | 与首页关系 | 下一研究问题 |',
+        '|---|---|---|---|',
+    ]
+    for row in rows:
+        origins = '；'.join(f"{_text(o['sector_name'])} {_text(o['sector_thscode'])}" for o in row['origins'])
+        location = '有首页来路' if any(o['group_on_homepage'] for o in row['origins']) else '仅首页之外'
+        lines.append(f"| {_text(row['company_name'])} {_text(row['thscode'])} | {origins} | {location} | "
+                     '多日表现是否持续领先该方向？什么公开材料能解释或否定业务联系？ |')
+    if not rows:
+        lines += ['', '本次保存范围没有成员线索；不是全市场没有值得研究的公司。']
+    lines += ['', '本表沿用原 result 的来源身份；不构造新的股票资格。',
+              '展示与分批检查独立；阅读本池不会自动发起行情、Pre、Quick、Deep 或投资 Action。', '']
+    return lines
+
+
 def render_sector_radar_discovery(result: dict) -> str:
     """Format all qualified groups; only the existing 0-3 enter the homepage summary."""
     _validate_projection(result)
@@ -206,8 +267,7 @@ def render_sector_radar_discovery(result: dict) -> str:
         lines += ['<details>', f'<summary>{i}. {_brief(group)}</summary>', '']
         lines += _details(group, result)
         lines += ['</details>', '']
-    from .radar_stock_candidates import render_stock_discovery_pool
-    lines += render_stock_discovery_pool(result)
+    lines += _stock_pool_lines(result)
     lines += [
         f"Market-state hash: `{_text(result['output_market_state_hash'])}`", '',
         f"Event-ledger hash: `{_text(result['event_ledger_update']['event_ledger_hash'])}`", '',

@@ -10,7 +10,7 @@ from decimal import Decimal, InvalidOperation
 
 from decision_kernel.adapters.hithink import to_hithink_thscode
 from decision_kernel.identity import canonical_hash
-from .sector_radar_discovery import _candidate_breadths, _text, _validate_projection
+from .sector_radar_discovery import _candidate_breadths, _stock_candidate_rows, _stock_pool_lines, _validate_projection
 
 VERSION = "sector-stock-discovery-pool-v1"
 SEMANTICS = "ALL_QUALIFIED_GROUP_RETAINED_LEADERS_NOT_ALL_MEMBERS_OR_STOCK_QUALIFICATION"
@@ -57,45 +57,15 @@ Sector detector or turn source consistency into economic truth.
     _validate_projection(result)
     composition = result["composition"]
     shown = {group["group_key"] for group in composition["surfaced_groups"]}
-    rows: dict[str, dict] = {}
-    sequences: list[list[str]] = []
-    direction_count = origin_count = 0
-    for group in composition["all_groups"]:
-        for candidate, breadth in _candidate_breadths(group):
-            direction_count += 1
-            local: list[str] = []
-            for leader in breadth["leaders"]:
-                code, name = _checked_leader(leader)
-                if code in local:
-                    raise ValueError("duplicate leader in one discovery direction")
-                local.append(code)
-                if code not in rows:
-                    rows[code] = {
-                        "thscode": code, "company_name": name, "origins": [],
-                        "stock_qualification": "NOT_CHECKED_BY_THIS_POOL",
-                        "business_link": "NOT_ESTABLISHED_BY_THIS_POOL",
-                        "research_status": "NOT_CHECKED_BY_THIS_POOL",
-                    }
-                elif rows[code]["company_name"] != name:
-                    raise ValueError("one discovery security has conflicting source names")
-                rows[code]["origins"].append({
-                    "group_key": group["group_key"],
-                    "sector_thscode": candidate["thscode"], "sector_name": candidate["name"],
-                    "family": candidate["family"],
-                    "is_primary": candidate["thscode"] == group["primary_candidate"]["thscode"],
-                    "group_on_homepage": group["group_key"] in shown,
-                    "retained_leader": deepcopy(leader),
-                })
-                origin_count += 1
-            sequences.append(local)
-    # Scheduling/read order only: no score or mixed industry cross-sectional rank.
-    ordered: dict[str, dict] = {}
-    for position in range(max(map(len, sequences), default=0)):
-        for sequence in sequences:
-            if position < len(sequence):
-                code = sequence[position]
-                ordered.setdefault(code, rows[code])
-    candidates = list(ordered.values())
+    candidates = deepcopy(_stock_candidate_rows(result))
+    for row in candidates:
+        for origin in row["origins"]:
+            _checked_leader(origin["retained_leader"])
+        row.update(stock_qualification="NOT_CHECKED_BY_THIS_POOL",
+                   business_link="NOT_ESTABLISHED_BY_THIS_POOL",
+                   research_status="NOT_CHECKED_BY_THIS_POOL")
+    direction_count = sum(len(_candidate_breadths(g)) for g in composition["all_groups"])
+    origin_count = sum(len(row["origins"]) for row in candidates)
     body = {
         "version": VERSION, "semantics": SEMANTICS,
         "market_session": result["market_session"], "source_produced_at": result["produced_at"],
@@ -163,29 +133,6 @@ cross-day cursor, progress receipt, retry permission, or automatic next dispatch
 
 
 def render_stock_discovery_pool(result: dict) -> list[str]:
-    """Company-first detail within the existing Sector Markdown, not a new UI."""
-    pool = build_stock_discovery_pool(result)
-    coverage = pool["coverage"]
-    lines = [
-        "### 股票发现池 · 不受首页三组限制", "",
-        f"本次全部 {coverage['qualified_groups']} 个合格变化组及其驱动方向，共保留 "
-        f"**{coverage['distinct_stocks']} 个去重公司线索**；其中 "
-        f"**{coverage['stocks_only_outside_homepage']} 个仅来自首页之外**。", "",
-        "这不是通过 Stock 检查的股票数量，不是新的推荐榜。仅收录本次已保存的当日突出成员，"
-        "不是全部成员、全市场或所有持续方向；概念、聪明钱尚未由本池接入。", "",
-        "个股多日价格条件、业务受益、Research 均未由本池检查；"
-        "已有 Stock / Research 结果须分别回看，未检查不等于条件不满足。"
-        "原始 ST 等名称标签保留，列出不授予交易资格。", "",
-        "| 公司／代码 | 发现方向（保留全部来路） | 与首页关系 | 下一研究问题 |",
-        "|---|---|---|---|",
-    ]
-    for row in pool["candidates"]:
-        origins = "；".join(f"{_text(o['sector_name'])} {_text(o['sector_thscode'])}" for o in row["origins"])
-        location = "有首页来路" if any(o["group_on_homepage"] for o in row["origins"]) else "仅首页之外"
-        lines.append(f"| {_text(row['company_name'])} {_text(row['thscode'])} | {origins} | {location} | "
-                     "多日表现是否持续领先该方向？什么公开材料能解释或否定业务联系？ |")
-    if not pool["candidates"]:
-        lines += ["", "本次保存范围没有成员线索；不是全市场没有值得研究的公司。"]
-    lines += ["", f"发现池版本：`{VERSION}`；pool hash：`{pool['pool_hash']}`。",
-              "展示与分批检查独立；阅读本池不会自动发起行情、Pre、Quick、Deep 或投资 Action。", ""]
-    return lines
+    """Strict saved-result consumer reusing the original pure display helper."""
+    build_stock_discovery_pool(result)
+    return _stock_pool_lines(result)
