@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-source, radar-institutional-source]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source]
     types: [requested, completed]
     branches: [main]
 
@@ -67,6 +67,7 @@ jobs:
           --output current-state-delivery
           --include-radar-discovery
           --include-concept-discovery
+          --include-concept-detail
           --publish
       - name: Explain a failed reading publication
         if: failure()

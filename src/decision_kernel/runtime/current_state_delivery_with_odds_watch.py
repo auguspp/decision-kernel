@@ -32,6 +32,9 @@ class Collector(base.Collector):
             from .institutional_radar_reading import attach
             payload = attach(self, payload)
             if getattr(self, "include_concept_discovery", False):
+                if getattr(self, "include_concept_detail", False):
+                    from .concept_detail_reading import attach as attach_detail
+                    payload = attach_detail(self, payload)
                 from .concept_observation_map_delivery import attach as attach_map
                 payload = attach_map(self, payload)
         return payload
@@ -95,7 +98,10 @@ def main(argv=None) -> int:
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--include-radar-discovery", action="store_true")
     parser.add_argument("--include-concept-discovery", action="store_true")
+    parser.add_argument("--include-concept-detail", action="store_true")
     args = parser.parse_args(argv)
+    model.check(not args.include_concept_detail or args.include_concept_discovery,
+                "concept detail reading requires the existing concept source")
     model.check(not args.include_concept_discovery or args.include_radar_discovery,
                 "concept reading requires the existing Radar composition")
     model.check(model.SHA.fullmatch(args.code_commit) is not None, "code commit required")
@@ -119,6 +125,7 @@ def main(argv=None) -> int:
         collector = Collector(api, args.code_commit, Path.cwd(), previous, prior_commit)
         collector.include_radar_discovery = args.include_radar_discovery
         collector.include_concept_discovery = args.include_concept_discovery
+        collector.include_concept_detail = args.include_concept_detail
         refresh = {
             "workflow": ".github/workflows/current-state-read-entry.yml",
             "run_id": os.environ.get("GITHUB_RUN_ID"),
