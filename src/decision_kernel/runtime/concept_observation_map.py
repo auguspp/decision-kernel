@@ -6,6 +6,7 @@ qualify its own source merely by hashing it. No historical source is rewritten.
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime
 from decimal import Decimal, Context, localcontext
 from html import escape
 
@@ -168,14 +169,16 @@ def _render(value):
     p = value['projection']; coverage = p['coverage']
     e = lambda x: escape(str(x), quote=True)
     pct = lambda x: f'{Decimal(x) * 100:+.2f}%'
+    points = lambda x: f'{Decimal(x) * 100:+.2f}'
+    observed_at = datetime.fromisoformat(p['source_observed_at'].replace('Z', '+00:00')).astimezone(source.SHANGHAI_TZ).strftime('%Y-%m-%d %H:%M:%S')
     by_code = {r['thscode']: r for r in p['universe']}
     out = ['<!doctype html><html lang="zh-CN"><meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width,initial-scale=1">',
         '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; base-uri \'none\'; form-action \'none\'">',
         '<title>概念观察地图 · 趋势、重叠与未覆盖</title>',
-        '<style>body{font:16px/1.7 system-ui;max-width:1100px;margin:auto;padding:24px}h1,h2{line-height:1.3}section{margin:28px 0}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #ddd}details{margin:12px 0}summary{cursor:pointer;font-weight:600}p,td,li{overflow-wrap:anywhere}.scroll{overflow:auto}.notice{padding:16px;background:#f2f5f7;border-left:4px solid #64748b}.muted{color:#475569}</style>',
+        '<style>body{font:16px/1.7 system-ui;max-width:1100px;margin:auto;padding:24px}h1,h2{line-height:1.3}section{margin:28px 0}table{border-collapse:collapse;width:100%;min-width:760px}th,td{white-space:nowrap}th,td{text-align:left;padding:10px;border-bottom:1px solid #ddd}details{margin:12px 0}summary{cursor:pointer;font-weight:600}p,li{overflow-wrap:anywhere}.scroll{overflow:auto}.notice{padding:16px;background:#f2f5f7;border-left:4px solid #64748b}.muted{color:#475569}</style>',
         '<h1>概念观察地图</h1>',
-        f'<p>保存市场日 {e(p["market_session"])} · 实际取得截止 {e(p["source_observed_at"])}</p>',
+        f'<p>保存市场日 {e(p["market_session"])} · 实际取得截止 {e(observed_at)}（北京时间）</p>',
         f'<p><strong>{coverage["snapshot_count"]} 个当日快照 · {coverage["history_count"]} 个已知多日路径 · {coverage["unexamined_details"]} 个详情未取得</strong></p>',
         '<p class="notice">这是保存结果的阅读整理，不是今日重新扫描。成员集合包含关系只用于减少重复阅读，不代表同一产业主题、业务受益或独立确认。没有新执行 Stock、Pre 或 Quick。</p>',
         '<section><h2>先看重叠，再看各自趋势</h2>',
@@ -184,36 +187,40 @@ def _render(value):
     for group in p['groups']:
         root = by_code[group['representative']]
         out.append(f'<details open><summary>{e(root["name"])} · {e(root["thscode"])} · {group["member_count"]} 家，关联 {len(group["detail_codes"])} 个指数详情</summary>')
-        out.append('<div class="scroll"><table><tr><th>指数</th><th>集合关系</th><th>成员</th><th>5日超额</th><th>20日超额</th><th>60日超额</th></tr>')
+        out.append('<div class="scroll"><table><tr><th>指数</th><th>集合关系</th><th>成员</th><th>5日超额（百分点）</th><th>20日超额（百分点）</th><th>60日超额（百分点）</th></tr>')
         for relation in group['relations']:
             row = by_code[relation['thscode']]
             horizons = {h['sessions']: h['excess_return'] for h in row['path']['horizons']} if row['path'] else {}
             label = {'REPRESENTATIVE': '最大观测集合', 'EQUAL_OBSERVED_SET': '成员相同，指数不等同', 'STRICT_SUBSET': '成员被包含，指标保留'}[relation['relation']]
             cells = [row['name'] + ' ' + row['thscode'], label, str(relation['member_count'])]
-            cells.extend(pct(horizons[n]) if n in horizons else '未取得' for n in (5, 20, 60))
+            cells.extend(points(horizons[n]) if n in horizons else '未取得' for n in (5, 20, 60))
             out.append('<tr>' + ''.join('<td>'+e(c)+'</td>' for c in cells) + '</tr>')
-        out.append('</table></div><p class="muted">超额相对沪深300。被包含指数没有增加集合外公司，但保留自身价格路径；不能相加成更多确认。</p></details>')
+        out.append('</table></div><p class="muted">超额相对沪深300，单位为百分点；当日涨跌另用百分比。手机可在表格内横向滚动。被包含指数没有增加集合外公司，但保留自身价格路径；不能相加成更多确认。</p></details>')
     if p['unresolved_membership_details']:
         out.append('<p>成员关系无法判断：' + e('、'.join(p['unresolved_membership_details'])) + '。各自历史是否可用单独保留。</p>')
     out.append('</section><section><h2>已知多日路径，不因当日平静而隐藏</h2>')
     for code in p['known_history_codes']:
         row = by_code[code]; path = row['path']
+        continuity_note = ('记录从观察窗口左端开始，实际连续时长可能更长，不能确定经济趋势起点'
+            if path['positive_20d_excess_persistence_left_censored'] else '连续段在观察窗口内可定位，不等于经济趋势起点')
         out.append(f'<p><strong>{e(row["name"])} {e(code)}</strong>：当日 {pct(row["daily_return"])}；'
                    f'20日正超额连续段 {path["positive_20d_excess_persistence_sessions"]} 个交易日；'
-                   f'左侧截断 {e(path["positive_20d_excess_persistence_left_censored"])}。这是保存窗口，不是趋势真实起点。</p>')
+                   f'{e(continuity_note)}。</p>')
     if not p['known_history_codes']:
         out.append('<p>本来源没有合格多日路径，不能写成所有方向均无趋势。</p>')
     out += ['</section><section><h2>完整观察范围与补查缺口</h2>',
         f'<p>尚未取详情 {coverage["unexamined_details"]} 个，已尝试但详情不完整 {coverage["incomplete_details"]} 个。'
         f'未取得范围按精确代码排列，可形成 {coverage["planning_pages"]} 个最多三项的检查计划；'
-        '<strong>这些计划尚未接到采集执行器，不是已执行批次，不需要 Human 逐页操作。</strong></p>',
+        '<strong>这些计划尚未接到采集执行器，不是已执行批次，不需要你逐页操作。</strong></p>',
         '<p>下表不以当日涨幅过滤或排序。没有历史时，不能推断强弱、持续性或业务受益。数据失败与尚未取得分开。</p>',
         '<details><summary>展开全部概念（浏览器页内查找可搜名称或代码）</summary><div class="scroll"><table><tr><th>概念／代码</th><th>当日</th><th>多日历史</th><th>成员</th><th>详情状态</th></tr>']
     for row in p['universe']:
-        cells = [row['name']+' '+row['thscode'], pct(row['daily_return']), row['history_status'],
-                 row['member_count'] if row['member_count'] is not None else '未取得', row['detail_disposition']]
+        history = '窗口已核对' if row['history_status'] == 'EXACT_WINDOW_CHECKED' else '未取得' if row['history_status'] == 'NOT_ACQUIRED' else '数据不可用'
+        disposition = {'NOT_ACQUIRED': '尚未取得', 'INCOMPLETE': '详情不完整', 'ACQUIRED': '已取得'}.get(row['detail_disposition'], row['detail_disposition'])
+        cells = [row['name']+' '+row['thscode'], pct(row['daily_return']), history,
+                 row['member_count'] if row['member_count'] is not None else '未取得', disposition]
         out.append('<tr>'+''.join('<td>'+e(c)+'</td>' for c in cells)+'</tr>')
     out += ['</table></div></details></section>',
         '<p><a href="concept-observation-map.json">结构化观察地图与完整补查范围</a> · <a href="index.html">公司来路与研究上下文</a></p>',
-        '<footer>WHY UNKNOWN · RESEARCH NOT EXECUTED · INVESTMENT AUTHORITY NONE</footer></html>']
+        '<footer>上涨或下跌原因尚未研究。本层没有执行研究或产生投资决定。</footer></html>']
     return '\n'.join(out)+'\n'
