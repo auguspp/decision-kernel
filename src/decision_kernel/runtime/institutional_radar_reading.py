@@ -30,10 +30,10 @@ def _reserve(collector, *, calls=0, files=0):
                 'Radar reading cannot consume existing publication reserve')
 
 
-def _run(run, *, cutoff, completed=False):
+def _run(run, *, cutoff, completed=False, workflow=WORKFLOW):
     model.check(run.get('repository', {}).get('full_name') == model.REPOSITORY
                 and run.get('head_repository', {}).get('full_name') == model.REPOSITORY
-                and run.get('path') == WORKFLOW and run.get('head_branch') == 'main'
+                and run.get('path') == workflow and run.get('head_branch') == 'main'
                 and run.get('event') == 'workflow_dispatch' and type(run.get('run_attempt')) is int
                 and run['run_attempt'] == 1 and model.SHA.fullmatch(run.get('head_sha', '')) is not None
                 and type(run.get('id')) is int and run['id'] > 0, 'Institutional run identity differs')
@@ -125,37 +125,73 @@ def attach(collector, baseline):
             'failed_stage': getattr(collector, 'radar_read_stage', 'UNKNOWN'),
             'latest_attempt': getattr(collector, 'radar_read_attempt', None),
             'meaning': 'SOURCE_READ_GAP_NOT_ZERO_ACTIVITY; NO_OLDER_SUCCESS_FALLBACK'}
+    include_concept = getattr(collector, 'include_concept_discovery', False)
+    concept_report = concept_reference = None
+    # Rollback point AFTER institutional success: optional concept cannot erase it.
+    concept_files, concept_sources, concept_cache = dict(collector.files), dict(collector.sources), dict(collector.archive_cache)
+    if include_concept:
+        try:
+            from .concept_radar_reading import read
+            concept_report, concept_reference, source_status['concept'] = read(collector, collector.now())
+        except ERRORS as exc:
+            collector.files, collector.sources, collector.archive_cache = dict(concept_files), dict(concept_sources), dict(concept_cache)
+            source_status['concept'] = _concept_gap(collector, exc)
     try:
-        _reserve(collector, files=3)
-        sector = baseline['lanes'].get('sector', {})
-        product = sector.get('last_qualified_result') or {}
-        sector_ref = product.get('details', {}).get('result.json')
-        sector_result = None
-        source_status['sector'] = {'status': 'NO_READABLE_SAVED_RESULT', 'lane_health': sector.get('health', 'UNKNOWN')}
-        if sector_ref:
-            sector_result = json.loads(companies.retained_bytes(collector.files, sector_ref))
-            model.check(sector_result['market_session'] == product['market_session']
-                        and sector_result['output_market_state_hash'] == product['market_state_hash']
-                        and sector_result['event_ledger_update']['event_ledger_hash'] == product['event_ledger_hash'], 'Sector saved result binding differs')
-            source_status['sector'].update(status='SAVED_SECTOR_RESULT', market_session=product['market_session'],
-                                          source=sector_ref)
-        built = companies.build(baseline, sector_result=sector_result, sector_source=sector_ref,
-            institution_report=report, institution_source=reference, source_status=source_status,
-            generated_at=collector.now())
-        context = collector.retain(PREFIX + 'base-context.json', model.json_bytes(baseline))
-        detail = collector.retain(PREFIX + 'company-reading.json', model.json_bytes(built))
-        page = collector.retain(PREFIX + 'index.html', companies.render(built).encode())
-        research['radar_discovery'] = {'status': 'READ_OK' if report is not None and sector_result is not None else 'READ_OK_WITH_SOURCE_GAPS',
-            'coverage': built['projection']['coverage'], 'source_status': source_status,
-            'details': {'base_context': context, 'company_reading': detail, 'index': page},
-            'projection_hash': built['projection_hash'], 'meaning': 'COMPANY_DISCOVERY_AND_SAVED_RESEARCH_CONTEXT_NOT_NEW_RESEARCH',
-            **companies.AUTHORITY}
-        return _assemble(collector, baseline, research)
+        return _compose(collector, baseline, research, report, reference, source_status,
+                        include_concept, concept_report, concept_reference)
     except ERRORS as exc:
+        if include_concept and concept_report is not None:
+            collector.files, collector.sources, collector.archive_cache = dict(concept_files), dict(concept_sources), dict(concept_cache)
+            source_status['concept'] = _concept_gap(collector, exc, stage='COMPANY_COMPOSITION')
+            try:
+                return _compose(collector, baseline, deepcopy(baseline['research']), report, reference,
+                                source_status, True, None, None)
+            except ERRORS as fallback:
+                exc = fallback
         collector.files, collector.sources, collector.archive_cache = before_files, before_sources, before_cache
+        research = deepcopy(baseline['research'])
         research['radar_discovery'] = {'status': 'UNAVAILABLE_OR_REJECTED', 'error_type': type(exc).__name__,
             'meaning': 'RADAR_READING_GAP_NOT_QUIET; BASELINE_PRESERVED', **companies.AUTHORITY}
         return _assemble(collector, baseline, research)
+
+
+def _concept_gap(collector, exc, *, stage=None):
+    return {'status': 'UNAVAILABLE_OR_REJECTED', 'error_type': type(exc).__name__,
+            'failed_stage': stage or getattr(collector, 'concept_read_stage', 'UNKNOWN'),
+            'latest_attempt': getattr(collector, 'concept_read_attempt', None),
+            'meaning': 'CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK'}
+
+
+def _compose(collector, baseline, research, report, reference, source_status,
+             include_concept, concept_report, concept_reference):
+    _reserve(collector, files=3)
+    sector = baseline['lanes'].get('sector', {})
+    product = sector.get('last_qualified_result') or {}
+    sector_ref = product.get('details', {}).get('result.json')
+    sector_result = None
+    source_status['sector'] = {'status': 'NO_READABLE_SAVED_RESULT', 'lane_health': sector.get('health', 'UNKNOWN')}
+    if sector_ref:
+        sector_result = json.loads(companies.retained_bytes(collector.files, sector_ref))
+        model.check(sector_result['market_session'] == product['market_session']
+                    and sector_result['output_market_state_hash'] == product['market_state_hash']
+                    and sector_result['event_ledger_update']['event_ledger_hash'] == product['event_ledger_hash'], 'Sector saved result binding differs')
+        source_status['sector'].update(status='SAVED_SECTOR_RESULT', market_session=product['market_session'],
+                                      source=sector_ref)
+    built = companies.build(baseline, sector_result=sector_result, sector_source=sector_ref,
+        institution_report=report, institution_source=reference, source_status=source_status,
+        generated_at=collector.now(), concept_report=concept_report,
+        concept_source=concept_reference, include_concept=include_concept)
+    context = collector.retain(PREFIX + 'base-context.json', model.json_bytes(baseline))
+    detail = collector.retain(PREFIX + 'company-reading.json', model.json_bytes(built))
+    page = collector.retain(PREFIX + 'index.html', companies.render(built).encode())
+    research['radar_discovery'] = {'status': ('READ_OK' if report is not None and sector_result is not None
+            and (not include_concept or (concept_report is not None
+                and not concept_report['projection']['coverage']['detail_gaps'])) else 'READ_OK_WITH_SOURCE_GAPS'),
+        'coverage': built['projection']['coverage'], 'source_status': source_status,
+        'details': {'base_context': context, 'company_reading': detail, 'index': page},
+        'projection_hash': built['projection_hash'], 'meaning': 'COMPANY_DISCOVERY_AND_SAVED_RESEARCH_CONTEXT_NOT_NEW_RESEARCH',
+        **companies.AUTHORITY}
+    return _assemble(collector, baseline, research)
 
 
 def _assemble(collector, baseline, research):

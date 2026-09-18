@@ -91,7 +91,10 @@ def main(argv=None) -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--include-radar-discovery", action="store_true")
+    parser.add_argument("--include-concept-discovery", action="store_true")
     args = parser.parse_args(argv)
+    model.check(not args.include_concept_discovery or args.include_radar_discovery,
+                "concept reading requires the existing Radar composition")
     model.check(model.SHA.fullmatch(args.code_commit) is not None, "code commit required")
 
     from .stock_research_reading import EXTRA_API_CALLS
@@ -108,6 +111,7 @@ def main(argv=None) -> int:
             model.validate_read_package(previous)
         collector = Collector(api, args.code_commit, Path.cwd(), previous, prior_commit)
         collector.include_radar_discovery = args.include_radar_discovery
+        collector.include_concept_discovery = args.include_concept_discovery
         refresh = {
             "workflow": ".github/workflows/current-state-read-entry.yml",
             "run_id": os.environ.get("GITHUB_RUN_ID"),
