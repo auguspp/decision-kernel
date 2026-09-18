@@ -1,0 +1,103 @@
+name: radar-concept-detail
+run-name: 'concept detail | source ${{ inputs.source-run-id }} | offset ${{ inputs.offset }} | ${{ inputs.code-sha }}'
+
+on:
+  workflow_dispatch:
+    inputs:
+      source-run-id:
+        description: 'Exact latest successful primary concept run; same completed market day only'
+        required: true
+        type: string
+      code-sha:
+        description: 'Exact reviewed current main SHA'
+        required: true
+        type: string
+      offset:
+        description: 'Internal exact-code unexamined offset, multiple of three; no arbitrary tickers'
+        required: true
+        default: '0'
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: radar-concept-detail
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    if: github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify exact reviewed code
+        env:
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          test "$EXPECTED_CODE" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+      - name: Install existing dependencies
+        run: python -m pip install -e '.[feeds]'
+      - name: Qualify original source without market credentials
+        id: prepare
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.source-run-id }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          python -m decision_kernel.runtime.concept_detail_capture prepare \
+            --source-run-id "$SOURCE_RUN" --expected-code "$EXPECTED_CODE" \
+            --output "$RUNNER_TEMP/concept-detail-input" \
+            --failure-output "$RUNNER_TEMP/concept-detail/preparation-failure.json"
+      - name: Capture one source-derived detail batch
+        id: capture
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+          DETAIL_OFFSET: ${{ inputs.offset }}
+        run: |
+          python -m decision_kernel.runtime.concept_detail_capture capture \
+            --inputs "$RUNNER_TEMP/concept-detail-input" --offset "$DETAIL_OFFSET" \
+            --expected-code "$EXPECTED_CODE" --output "$RUNNER_TEMP/concept-detail/payload" \
+            --failure-output "$RUNNER_TEMP/concept-detail/capture-preflight-failure.json"
+      - name: Replay exact original and supplementary bytes without credentials
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        run: |
+          python -m decision_kernel.runtime.concept_detail_capture verify \
+            --output "$RUNNER_TEMP/concept-detail/payload" \
+            > "$RUNNER_TEMP/concept-detail/verification.json"
+      - name: Retain exact native source as inert reproduction material
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        run: |
+          mkdir -p "$RUNNER_TEMP/concept-detail"
+          git archive --format=tar HEAD > "$RUNNER_TEMP/concept-detail/implementation-source.tar"
+          test "$(wc -c < "$RUNNER_TEMP/concept-detail/implementation-source.tar")" -le 67108864
+          git rev-parse HEAD > "$RUNNER_TEMP/concept-detail/code-sha.txt"
+          git ls-tree -r HEAD > "$RUNNER_TEMP/concept-detail/source-tree.txt"
+      - name: Retain bounded attempt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: concept-detail-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/concept-detail/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain scope
+        if: always()
+        run: |
+          {
+            echo '## 概念详情补查'
+            echo '从原完整目录的尚未检查范围按代码取一批；不按当日涨幅选取。'
+            echo '最多三项、六个来源请求；无重试、无自动下一批，不要求Human逐页操作。'
+            echo '原始概念采集不覆盖，补查结果有独立日期、时钟及缺口。'
+            echo '尚未接每日覆盖或固定公司读取；没有Stock、Pre/Quick、Odds或投资权限。'
+          } >> "$GITHUB_STEP_SUMMARY"
