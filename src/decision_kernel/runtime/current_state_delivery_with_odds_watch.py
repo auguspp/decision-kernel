@@ -98,7 +98,11 @@ def main(argv=None) -> int:
     model.check(model.SHA.fullmatch(args.code_commit) is not None, "code commit required")
 
     from .stock_research_reading import EXTRA_API_CALLS
-    api = base.GitHubAPI(os.environ["GH_TOKEN"], max_calls=base.MAX_API_CALLS + EXTRA_API_CALLS)
+    api_class = base.GitHubAPI
+    if args.include_concept_discovery:
+        from .read_blob_reuse import GitHubReadReuseAPI
+        api_class = GitHubReadReuseAPI
+    api = api_class(os.environ["GH_TOKEN"], max_calls=base.MAX_API_CALLS + EXTRA_API_CALLS)
     prior_commit = None
     previous = None
     try:
@@ -131,6 +135,8 @@ def main(argv=None) -> int:
                 api, collector.files, prior_commit, args.code_commit, payload["reading_hash"]
             )
             print("READ_ENTRY_COMMIT=" + commit)
+            if args.include_concept_discovery:
+                print("READ_BLOB_REUSE_HITS=" + str(api.blob_reuse_hits))
             summary = os.environ.get("GITHUB_STEP_SUMMARY")
             if summary:
                 with open(summary, "a") as out:
