@@ -24,6 +24,8 @@ def test_mineru_pdf_probe_script_keeps_authority_and_identity_explicit() -> None
     assert 'NOT_ESTABLISHED' in source
     assert source.count('investment_authority') >= 2
     assert 'research_authority' in source
+    assert 'mineru_text_chars_excluding_embedded_images' in source
+    assert 'data:image/' in source
     assert 'human_attention_authority' in source
     for value in (
         'cc3a234f7551ef02c401fae60452b891ca48ef0047aad7e26981e0f4ec7948fa',
