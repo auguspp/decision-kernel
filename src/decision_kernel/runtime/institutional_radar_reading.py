@@ -169,7 +169,8 @@ def _concept_gap(collector, exc, *, stage=None):
 
 
 def _compose(collector, baseline, research, report, reference, source_status,
-             include_concept, concept_report, concept_reference):
+             include_concept, concept_report, concept_reference, *,
+             include_detail=False, detail_report=None, detail_reference=None):
     _reserve(collector, files=3)
     sector = baseline['lanes'].get('sector', {})
     product = sector.get('last_qualified_result') or {}
@@ -186,13 +187,16 @@ def _compose(collector, baseline, research, report, reference, source_status,
     built = companies.build(baseline, sector_result=sector_result, sector_source=sector_ref,
         institution_report=report, institution_source=reference, source_status=source_status,
         generated_at=collector.now(), concept_report=concept_report,
-        concept_source=concept_reference, include_concept=include_concept)
+        concept_source=concept_reference, include_concept=include_concept, include_detail=include_detail,
+        detail_report=detail_report, detail_source=detail_reference)
     context = collector.retain(PREFIX + 'base-context.json', model.json_bytes(baseline))
     detail = collector.retain(PREFIX + 'company-reading.json', model.json_bytes(built))
     page = collector.retain(PREFIX + 'index.html', companies.render(built).encode())
     research['radar_discovery'] = {'status': ('READ_OK' if report is not None and sector_result is not None
             and (not include_concept or (concept_report is not None
-                and not concept_report['projection']['coverage']['detail_gaps'])) else 'READ_OK_WITH_SOURCE_GAPS'),
+                and not concept_report['projection']['coverage']['detail_gaps']))
+            and (not include_detail or (detail_report is not None and not detail_report['projection']['coverage']['detail_gaps']))
+            else 'READ_OK_WITH_SOURCE_GAPS'),
         'coverage': built['projection']['coverage'], 'source_status': source_status,
         'details': {'base_context': context, 'company_reading': detail, 'index': page},
         'projection_hash': built['projection_hash'], 'meaning': 'COMPANY_DISCOVERY_AND_SAVED_RESEARCH_CONTEXT_NOT_NEW_RESEARCH',

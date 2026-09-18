@@ -18,6 +18,7 @@ from .radar_stock_candidates import build_stock_discovery_pool
 
 VERSION = 'radar-company-reading-v1'
 CONCEPT_VERSION = 'radar-company-reading-with-concepts-v2'
+DETAIL_VERSION = 'radar-company-reading-with-concept-detail-v3'
 AUTHORITY = {**model.AUTHORITY, 'automatic_research_routing': False,
              'odds_recomputed': False, 'new_market_requests': 0, 'model_calls': 0}
 
@@ -96,12 +97,15 @@ def _questions(row):
 
 
 def build(baseline, *, sector_result, sector_source, institution_report, institution_source,
-          source_status, generated_at, concept_report=None, concept_source=None, include_concept=False):
+          source_status, generated_at, concept_report=None, concept_source=None, include_concept=False,
+          include_detail=False, detail_report=None, detail_source=None):
     model.validate_read_package(baseline)
     cutoff = model.clock(generated_at)
     model.check(cutoff >= model.clock(baseline['generated_at']), 'Radar reading clock reversed')
     model.check(type(include_concept) is bool and (include_concept or (concept_report is None and concept_source is None)),
                 'Concept reading must be explicitly enabled')
+    model.check(type(include_detail) is bool and (not include_detail or include_concept)
+                and (include_detail or (detail_report is None and detail_source is None)), 'Detail reading must be explicitly enabled')
     companies = {}
     def company(code, name):
         _code(code)
@@ -171,6 +175,13 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
             'overlaps': deepcopy(cp['overlaps']),
             'details': [{k: deepcopy(d[k]) for k in ('thscode', 'name', 'history_status', 'membership_status', 'path', 'gaps')}
                         for d in cp['details']], 'meaning': 'CURRENT_MEMBERS_NOT_ECONOMIC_EXPOSURE_OR_INDEPENDENT_CONFIRMATIONS'}
+    primary_codes, before_detail = set(concept_codes), set(companies)
+    detail_codes, detail_context = set(), {'status': 'NO_READABLE_SAVED_SUPPLEMENT'}
+    if detail_report is not None:
+        model.check(concept_report is not None, 'Supplement requires qualified primary')
+        from .concept_detail_reading import add_members
+        detail_codes, detail_context = add_members(company, detail_report, concept_report, detail_source, cutoff)
+        concept_codes.update(detail_codes)
     stock_lane = baseline['lanes'].get('stock', {})
     stock = stock_lane.get('last_qualified_result') or {}
     dispositions = stock.get('dispositions', [])
@@ -191,7 +202,7 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
         row['question_status'] = 'OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS'
         row['new_research_execution'] = 'NOT_EXECUTED'
         row['automatic_admission'] = False
-    payload = {'version': CONCEPT_VERSION if include_concept else VERSION, 'base_reading_hash': baseline['reading_hash'],
+    payload = {'version': DETAIL_VERSION if include_detail else CONCEPT_VERSION if include_concept else VERSION, 'base_reading_hash': baseline['reading_hash'],
         'generated_at': generated_at, 'source_status': deepcopy(source_status),
         'coverage': {'distinct_companies': len(companies), 'sector_companies': len(sector_codes),
             'institutional_companies': len(institution_codes), 'overlap_companies': len(sector_codes & institution_codes),
@@ -218,14 +229,19 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
                                                              for r in companies.values()),
             full_concept_trend_radar=False)
         payload['ordering'] = 'SECTOR_THEN_INSTITUTION_THEN_CONCEPT_RETAINED_ORDER_NOT_PRIORITY_OR_SCORE'
+    if include_detail:
+        payload['concept_detail_context'] = detail_context
+        payload['coverage'].update(primary_concept_companies=len(primary_codes),
+            supplemental_concept_companies=len(detail_codes), supplement_only_companies=len(detail_codes - before_detail),
+            supplement_overlap_existing_companies=len(detail_codes & before_detail), cumulative_all_batches=False)
     return {'projection': payload, 'projection_hash': canonical_hash(payload)}
 
 
 def render(report):
     p = report['projection']
-    model.check(report['projection_hash'] == canonical_hash(p) and p['version'] in {VERSION, CONCEPT_VERSION}
+    model.check(report['projection_hash'] == canonical_hash(p) and p['version'] in {VERSION, CONCEPT_VERSION, DETAIL_VERSION}
                 and all(p.get(k) == v for k, v in AUTHORITY.items()), 'Radar company reading identity differs')
-    with_concepts = p['version'] == CONCEPT_VERSION
+    with_concepts = p['version'] in {CONCEPT_VERSION, DETAIL_VERSION}
     e = lambda v: escape(str(v), quote=True)
     def link(label, ref):
         if not ref:
@@ -282,6 +298,26 @@ def render(report):
         parts.append(f'<p>概念独有公司 {c["concept_only_companies"]}；与行业/机构旧池重叠 {c["concept_overlap_existing_companies"]}。'
                      f'全部来路中现有Stock业务Research范围不支持 {c["unsupported_stock_business_research_companies"]} 家；'
                      '支持身份也不代表获准研究。概念归属不是业务受益。</p></section>')
+        if p['version'] == DETAIL_VERSION:
+            context = p['concept_detail_context']
+            parts.append('<section><h2>独立概念补查：原始采集之外的已保存详情</h2>')
+            if context['status'] == 'SAVED_SUPPLEMENT_AVAILABLE':
+                dc = context['coverage']
+                parts.append(f'<p>保存市场日 {e(context["market_session"])}；原来源取得截止 {e(context["base_observed_at"])}；'
+                    f'补查取得截止 {e(context["source_observed_at"])}。本批历史 {dc["history_checked"]}、成员 {dc["memberships_checked"]}、'
+                    f'详情缺口 {dc["detail_gaps"]}；不是累计全部批次。</p>')
+                parts.append('<p>' + link('补查原始结构化结果与成员重叠', context['source']) + '</p>')
+                for d in context['details']:
+                    path = d['path']
+                    with localcontext(Context(prec=28)):
+                        metrics = ('；'.join(f'{h["sessions"]}日超额 {Decimal(h["excess_return"])*100:+.2f}个百分点'
+                               for h in path['horizons']) if path else '多日历史不可用，不能写成无趋势')
+                    parts.append('<p><b>' + e(d['name'] + ' ' + d['thscode']) + '</b>：' + e(metrics) + '</p>')
+                parts.append(f'<p>本批成员 {c["supplemental_concept_companies"]} 家，原行业/机构/概念集合外 '
+                    f'{c["supplement_only_companies"]} 家；只增加可阅读来路，不增加研究准入。</p>')
+            else:
+                parts.append('<p>补查来源本次不可读；原始概念、行业、机构和已有研究上下文仍保留。不是无变化。</p>')
+            parts.append('<p>原概念观察地图仅描述原始采集，未改写成补查后的来源。各时钟独立，成员身份不是业务受益；本层没有新Pre/Quick。</p></section>')
         parts.append(navigation_html)
     for row in p['companies']:
         parts += [f'<article id="s-{row["thscode"]}"><h2>{e(" / ".join(row["source_names"]))} {row["thscode"]}</h2>']
@@ -291,7 +327,7 @@ def render(report):
                 parts.append('<p><b>行业来路：</b>' + e(origin['sector_name']) + ' ' + e(origin['sector_thscode'])
                              + '；' + prefix + ' ' + link('原行业结果', origin['source']) + '</p>')
             elif origin['kind'] == 'CONCEPT_CURRENT_MEMBER':
-                parts.append('<p><b>概念来路：</b>' + e(origin['concept_name']) + ' ' + e(origin['concept_thscode'])
+                parts.append(('<p><b>概念补查来路：</b>' if origin.get('acquisition_kind') == 'SUPPLEMENTAL_DETAIL' else '<p><b>概念来路：</b>') + e(origin['concept_name']) + ' ' + e(origin['concept_thscode'])
                              + '；' + prefix + ' ' + link('原概念成员结果', origin['source'])
                              + '。当前成员，业务联系未建立；多个标签不独立计票。</p>')
             else:

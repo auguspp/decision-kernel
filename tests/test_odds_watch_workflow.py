@@ -44,7 +44,7 @@ def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_wa
     value = READ_WORKFLOW.read_text(encoding="utf-8")
     # #427 institutional and the approved concept saved-source refresh extend
     # the original sources. No arbitrary workflow or new clock.
-    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-source, radar-institutional-source]" in value
+    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source]" in value
     assert value.count("    workflows:") == 1
     assert "types: [requested, completed]" in value
     assert "branches: [main]" in value
