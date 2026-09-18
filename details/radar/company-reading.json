@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "dcb1fd12a16996847a8f5a43cef1e634af4226820bf683aeeb646be3327baed0",
+    "base_reading_hash": "8445e01e4d889c869fa50a863fc3b7fe61597e786762ce22221802e9c7c22235",
     "companies": [
       {
         "automatic_admission": false,
@@ -82,6 +82,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002199.SZ"
       },
       {
@@ -203,6 +204,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601579.SH"
       },
       {
@@ -342,6 +344,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000980.SZ"
       },
       {
@@ -405,6 +408,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920087.BJ"
       },
       {
@@ -468,6 +472,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300010.SZ"
       },
       {
@@ -531,6 +536,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600792.SH"
       },
       {
@@ -621,6 +627,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "605577.SH"
       },
       {
@@ -684,6 +691,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920895.BJ"
       },
       {
@@ -747,6 +755,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600822.SH"
       },
       {
@@ -810,6 +819,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300990.SZ"
       },
       {
@@ -931,6 +941,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603989.SH"
       },
       {
@@ -1008,6 +1019,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603779.SH"
       },
       {
@@ -1146,6 +1158,7 @@
           },
           "status": "SAVED_DISPOSITION"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000572.SZ"
       },
       {
@@ -1209,6 +1222,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600354.SH"
       },
       {
@@ -1272,6 +1286,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300338.SZ"
       },
       {
@@ -1335,6 +1350,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601015.SH"
       },
       {
@@ -1425,6 +1441,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603230.SH"
       },
       {
@@ -1488,6 +1505,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301533.SZ"
       },
       {
@@ -1551,6 +1569,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920030.BJ"
       },
       {
@@ -1614,6 +1633,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002639.SZ"
       },
       {
@@ -1677,6 +1697,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300460.SZ"
       },
       {
@@ -1740,6 +1761,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600084.SH"
       },
       {
@@ -1803,6 +1825,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601127.SH"
       },
       {
@@ -1866,6 +1889,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600371.SH"
       },
       {
@@ -1929,6 +1953,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300688.SZ"
       },
       {
@@ -1992,6 +2017,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600408.SH"
       },
       {
@@ -2055,6 +2081,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300987.SZ"
       },
       {
@@ -2118,6 +2145,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600229.SH"
       },
       {
@@ -2181,6 +2209,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603029.SH"
       },
       {
@@ -2244,6 +2273,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600386.SH"
       },
       {
@@ -2307,6 +2337,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000811.SZ"
       },
       {
@@ -2370,6 +2401,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002484.SZ"
       },
       {
@@ -2433,6 +2465,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600543.SH"
       },
       {
@@ -2496,6 +2529,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002594.SZ"
       },
       {
@@ -2616,6 +2650,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300189.SZ"
       },
       {
@@ -2679,6 +2714,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600661.SH"
       },
       {
@@ -2742,6 +2778,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600740.SH"
       },
       {
@@ -2805,6 +2842,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300061.SZ"
       },
       {
@@ -2868,6 +2906,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601811.SH"
       },
       {
@@ -2931,6 +2970,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002779.SZ"
       },
       {
@@ -2994,6 +3034,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300825.SZ"
       },
       {
@@ -3057,6 +3098,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301018.SZ"
       },
       {
@@ -3120,6 +3162,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920641.BJ"
       },
       {
@@ -3183,6 +3226,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600059.SH"
       },
       {
@@ -3246,6 +3290,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000625.SZ"
       },
       {
@@ -3309,6 +3354,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000713.SZ"
       },
       {
@@ -3372,6 +3418,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "003032.SZ"
       },
       {
@@ -3435,6 +3482,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000723.SZ"
       },
       {
@@ -3498,6 +3546,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300413.SZ"
       },
       {
@@ -3561,6 +3610,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002181.SZ"
       },
       {
@@ -3624,6 +3674,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920608.BJ"
       },
       {
@@ -3687,6 +3738,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600653.SH"
       },
       {
@@ -3750,6 +3802,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301252.SZ"
       },
       {
@@ -3842,6 +3895,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300243.SZ"
       },
       {
@@ -3969,6 +4023,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300939.SZ"
       },
       {
@@ -4062,6 +4117,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300741.SZ"
       },
       {
@@ -4154,6 +4210,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002912.SZ"
       },
       {
@@ -4246,6 +4303,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002824.SZ"
       },
       {
@@ -4339,6 +4397,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000981.SZ"
       },
       {
@@ -4432,6 +4491,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002655.SZ"
       },
       {
@@ -4514,6 +4574,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920298.BJ"
       },
       {
@@ -4646,6 +4707,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "003001.SZ"
       },
       {
@@ -4738,6 +4800,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002137.SZ"
       },
       {
@@ -4830,6 +4893,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301699.SZ"
       },
       {
@@ -4922,6 +4986,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000056.SZ"
       },
       {
@@ -5015,6 +5080,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002640.SZ"
       },
       {
@@ -5096,6 +5162,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920268.BJ"
       },
       {
@@ -5188,6 +5255,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002531.SZ"
       },
       {
@@ -5281,6 +5349,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002285.SZ"
       },
       {
@@ -5373,6 +5442,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301390.SZ"
       },
       {
@@ -5466,6 +5536,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "300434.SZ"
       },
       {
@@ -5558,6 +5629,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301520.SZ"
       },
       {
@@ -5650,6 +5722,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002163.SZ"
       },
       {
@@ -5743,6 +5816,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002796.SZ"
       },
       {
@@ -5824,6 +5898,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
         "thscode": "920176.BJ"
       },
       {
@@ -5916,6 +5991,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002997.SZ"
       },
       {
@@ -6007,6 +6083,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301689.SZ"
       },
       {
@@ -6099,6 +6176,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000978.SZ"
       },
       {
@@ -6191,6 +6269,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "001209.SZ"
       },
       {
@@ -6283,6 +6362,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002579.SZ"
       },
       {
@@ -6375,6 +6455,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002584.SZ"
       },
       {
@@ -6456,6 +6537,7 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601091.SH"
       },
       {
@@ -6548,36 +6630,53 @@
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "688802.SH"
       }
     ],
+    "concept_context": {
+      "status": "NO_READABLE_SAVED_SOURCE"
+    },
     "coverage": {
       "all_members": false,
       "complete_research_history": false,
+      "concept_companies": 0,
+      "concept_only_companies": 0,
+      "concept_overlap_existing_companies": 0,
       "concept_radar": false,
       "distinct_companies": 83,
+      "full_concept_trend_radar": false,
       "institution_only_companies": 30,
       "institutional_companies": 33,
+      "multi_source_companies": 3,
       "new_research_executions": 0,
       "ongoing_without_event": false,
       "overlap_companies": 3,
       "sector_companies": 53,
+      "unsupported_stock_business_research_companies": 8,
       "with_saved_research_context": 2,
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-18T10:13:41.370690+00:00",
+    "generated_at": "2026-09-18T10:20:37.390346+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
     "new_market_requests": 0,
     "odds_recomputed": false,
-    "ordering": "SECTOR_RETAINED_ORDER_THEN_INSTITUTION_SOURCE_ORDER_NOT_PRIORITY_OR_SCORE",
+    "ordering": "SECTOR_THEN_INSTITUTION_THEN_CONCEPT_RETAINED_ORDER_NOT_PRIORITY_OR_SCORE",
     "research_authority": "NONE",
     "research_read_gaps": [],
     "research_work_read_status": "READ_OK",
     "signal_transition_authority": "NONE",
     "source_status": {
+      "concept": {
+        "error_type": "ValueError",
+        "failed_stage": "BUDGET_PREFLIGHT",
+        "latest_attempt": null,
+        "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
+        "status": "UNAVAILABLE_OR_REJECTED"
+      },
       "institutional": {
         "archive": {
           "artifact_id": 10527564199,
@@ -6727,7 +6826,7 @@
       }
     },
     "stock_business_read_status": "READ_OK",
-    "version": "radar-company-reading-v1"
+    "version": "radar-company-reading-with-concepts-v2"
   },
-  "projection_hash": "e638641105196d66d2e6b89fd3b6e9fba04f4f7091fcb813579d264d3c2bbe2e"
+  "projection_hash": "5b1857fa7400388ea76cca08a9115cde21d78f17003240e131e152e3147cd02c"
 }
