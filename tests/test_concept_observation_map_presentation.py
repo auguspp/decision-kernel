@@ -33,3 +33,15 @@ def test_table_scroll_not_wrapped_security_codes_and_original_states_unchanged()
     assert '.scroll{overflow:auto}' in html
     assert 'DEFERRED_NOT_ACQUIRED' not in html and '尚未取得' in html
     assert value == before
+
+
+def test_mutating_returned_policy_does_not_change_the_module_contract():
+    expected = deepcopy(view.POLICY)
+    value = view.build(Fixture().run())
+    try:
+        value['projection']['policy']['page_size'] = 100
+        assert view.POLICY == expected
+    finally:
+        # This also isolates an actual failure against the pre-fix implementation.
+        view.POLICY.clear()
+        view.POLICY.update(expected)

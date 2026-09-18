@@ -94,7 +94,7 @@ def build(report):
             'gaps': deepcopy(d['gaps']) if d else [],
             'detail_disposition': 'NOT_ACQUIRED' if d is None else 'INCOMPLETE' if c in incomplete else 'ACQUIRED',
             'member_count': len(memberships[c]) if c in memberships else None})
-    projection = {'version': VERSION, 'policy': POLICY,
+    projection = {'version': VERSION, 'policy': deepcopy(POLICY),
         'source_projection_hash': report['projection_hash'],
         'source_catalog_hash': p['concept_catalog_hash'], 'market_session': p['market_session'],
         'source_started_at': p['started_at'], 'source_observed_at': p['as_of'],
