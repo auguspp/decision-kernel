@@ -18,6 +18,7 @@ from pathlib import Path
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import stock_radar_reading as stock
 from decision_kernel.runtime import stock_market_expression as market_expression
+from decision_kernel.runtime import stock_discovery_page as discovery
 from decision_kernel.runtime import theme_radar_probe as probe
 from decision_kernel.runtime import hithink_stock_reading
 from decision_kernel.runtime.economic_release_inputs import load_release_inputs
@@ -27,6 +28,7 @@ from decision_kernel.runtime.sector_radar_persistence import load_sector_radar_p
 
 ROOT = Path('stock-reading-run')
 VERSION = 'stock-reading-capture-replay-v7'
+PAGE_VERSION = 'stock-reading-discovery-page-capture-v8'
 LIVE_COMPANIES = 'radar_inputs/economic-company-links-livestock-v2.json'
 PUBLIC, SYNTHETIC = 'LIVE_HITHINK', 'SYNTHETIC_TEST_ONLY'
 COMPLETE, FAILED = 'COMPLETE_STOCK_READING', 'INCOMPLETE_STOCK_READING'
@@ -51,6 +53,7 @@ REASONS = {
     'PROVIDER_BUSINESS_REQUEST_FAILED': '供应商返回业务失败码；HTTP成功不等于本次数据请求成功。原响应通过安全检查后单独保留。',
     'QUALIFIED_DAILY_REFERENCE_HISTORY_UNAVAILABLE': '所供独立逐日前收参考价测试输入缺失；不能从昨日收盘补字段。此检查不是HiThink原始价格观察必须新增第二家供应商的理由。',
     'REFERENCE_WINDOW_OR_CURRENT_QUOTE_MISSING': '独立的61日参考价窗口或同日当前报价不完整。',
+    'REQUIRED_SELECTION_WINDOW_STOCK_SESSIONS_MISSING': '最近26个市场交易日的核心选择窗口缺少个股原始bar；不能填值或解释为已确认停牌。',
     'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED': '必须有该股票自己的连续61个明确完成交易日；不丢日、不填值、不用行业收益或10日dump替代。',
     'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW': '原始前收参考价与上一日真实收盘不连续；保留公司行为／口径问题，不自动复权或加容差。',
     'TRANSPORT_REQUEST_FAILED': '请求或响应解码失败；没有自动重试，也没有使用替代来源。',
@@ -112,7 +115,7 @@ def inventory(root):
     return files
 
 
-def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST, sector_result=None):
+def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST, sector_result=None, discovery_page=None):
     company_manifest = company_scope(company_manifest)
     helper = sibling('build-sector-radar-reading.py')
     from decision_kernel.runtime.sector_parent_hints import load_sector_parent_hints
@@ -127,7 +130,7 @@ def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST, sector_res
         links=read(root/helper['LINKS']), as_of=at, generated_at=at)
     plan = (market_expression.prepare_market_expression_reading(
         root,bundle.market_state,bundle.event_ledger,association,sector_result,
-        observed_at=at,company_manifest=company_manifest) if sector_result is not None else
+        observed_at=at,company_manifest=company_manifest, discovery_page=discovery_page) if sector_result is not None else
         stock.prepare_stock_reading(root,bundle.market_state,bundle.event_ledger,association,
             observed_at=at,company_manifest=company_manifest))
     return bundle, association, plan
@@ -135,7 +138,7 @@ def load_inputs(root, at, *, company_manifest=stock.COMPANY_MANIFEST, sector_res
 
 def page(report, provenance):
     result = (market_expression.render_market_expression_reading(report)
-              if report['projection']['version'] == stock.MARKET_EXPRESSION_VERSION
+              if report['projection']['version'] in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}
               else stock.render_stock_reading(report))
     notice = ('合成验收样本：公司名可能来自真实留存资料，成员、行情和参考价是测试数据，不是实际选股。'
               if provenance == SYNTHETIC else
@@ -188,7 +191,7 @@ def failure_page(report):
 def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             provenance=SYNTHETIC, credential='', now=lambda:datetime.now(timezone.utc),
             pause=time.sleep, reference_inputs=None, company_manifest=stock.COMPANY_MANIFEST,
-            sector_result=None, sector_result_raw=None):
+            sector_result=None, sector_result_raw=None, discovery_page=None):
     # Historical library callers remain explicit/reproducible; the live CLI below
     # selects LIVE_COMPANIES. Never backdate v2 or silently fall back to v1.
     company_manifest = company_scope(company_manifest)
@@ -200,6 +203,8 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             raise ValueError('raw Sector context requires bytes and a parsed result')
         if canonical_hash(json.loads(sector_result_raw.decode('utf-8'))) != canonical_hash(sector_result):
             raise ValueError('raw Sector context differs from the selected parsed result')
+    if discovery_page is not None:
+        discovery.selection_page(sector_result, discovery_page)
     for p in (source_root,state_dir,output):
         probe._safe_path(p)
     if output.exists() or any(output.resolve().is_relative_to(p.resolve()) for p in (source_root,state_dir)):
@@ -221,10 +226,12 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
             write(output/'inputs/sector-result.json', sector_result)
         else:
             (output/'inputs/sector-result.json').write_bytes(sector_result_raw)
+    if discovery_page is not None:
+        write(output/'inputs/discovery-page.json', discovery_page)
     if reference_inputs is not None:
         _check_safe_json(reference_inputs, credential or None)
         write(output/'synthetic-reference-inputs.json', reference_inputs)
-    report = {'version':VERSION,'status':FAILED,'observed_at':observed_at,'finished_at':None,
+    report = {'version':PAGE_VERSION if discovery_page is not None else VERSION,'status':FAILED,'observed_at':observed_at,'finished_at':None,
         'provenance':provenance,'workflow':workflow,'failure_type':None,'failure_category':None,
         'reason_code':None,'failed_thscode':None,'requests':[],
         'response_semantics':'DECODED_PROVIDER_JSON_NOT_ORIGINAL_HTTP_BYTES',
@@ -237,7 +244,7 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
     try:
         copied_sector = read(output/'inputs/sector-result.json') if (output/'inputs/sector-result.json').exists() else None
         bundle, association, plan = load_inputs(output/'inputs',observed_at,company_manifest=company_manifest,
-            sector_result=copied_sector)
+            sector_result=copied_sector, discovery_page=discovery_page)
         write(output/'association.json',association);write(output/'plan.json',plan)
         report['plan_hash']=plan['plan_hash']
         report['recorded_sector_events_latest_session']=plan['recorded_sector_events_latest_session']
@@ -309,6 +316,10 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
                              else 'NOT_COMPLETED_NO_SELECTION_CLAIM')
         (output/'stock-reading.json').unlink(missing_ok=True)
         (output/'index.html').write_bytes(failure_page(report))
+    if discovery_page is not None:
+        write(output/'discovery-dispositions.json', discovery.dispositions(
+            sector_result, discovery_page, report['planned_issuer_outcomes'],
+            projection_hash=report['projection_hash']))
     report['files']=inventory(output)
     report['capture_hash']=canonical_hash(report)
     write(output/'capture.json',report)
@@ -317,7 +328,10 @@ def capture(source_root, state_dir, output, *, observed_at, transport, workflow,
 
 def verify(output):
     report=read(output/'capture.json')
-    if (report['version']!=VERSION or not stock._hash_ok(report,'capture_hash')
+    selection_file = output/'inputs/discovery-page.json'
+    discovery_page = read(selection_file) if selection_file.exists() else None
+    expected_version = PAGE_VERSION if discovery_page is not None else VERSION
+    if (report['version']!=expected_version or not stock._hash_ok(report,'capture_hash')
             or any(report[k]!=v for k,v in stock.LIMITS.items()) or report['remote_upload_verified'] is not False
             or report['provenance'] not in {PUBLIC,SYNTHETIC}
             or report['files']!={k:v for k,v in inventory(output).items() if k!='capture.json'}):
@@ -335,7 +349,15 @@ def verify(output):
         raise ValueError('unknown capture status')
     sector_path=output/'inputs/sector-result.json'
     sector_result=read(sector_path) if sector_path.exists() else None
-    bundle,association,plan=load_inputs(output/'inputs',at,company_manifest=company_manifest,sector_result=sector_result)
+    bundle,association,plan=load_inputs(output/'inputs',at,company_manifest=company_manifest,
+        sector_result=sector_result,discovery_page=discovery_page)
+    if discovery_page is not None:
+        expected = discovery.dispositions(sector_result, discovery_page, report['planned_issuer_outcomes'],
+                                           projection_hash=report['projection_hash'])
+        if (output/'discovery-dispositions.json').read_bytes() != data(expected):
+            raise ValueError('discovery full-pool dispositions do not reconstruct')
+    elif (output/'discovery-dispositions.json').exists():
+        raise ValueError('legacy capture cannot claim discovery-page dispositions')
     if (plan!=read(output/'plan.json') or association!=read(output/'association.json')
             or report['plan_hash']!=plan['plan_hash']):
         raise ValueError('stock plan does not reconstruct from original source/state inputs')
@@ -422,7 +444,11 @@ def intent(env, at):
         raise stock.StockReadingInputError('DATA_QUALIFICATION_FAILED','STOCK_MARKET_RUN_ID_INVALID') from None
     if run==wf['GITHUB_RUN_ID']:
         raise stock.StockReadingInputError('DATA_QUALIFICATION_FAILED','STOCK_MARKET_RUN_ID_IS_CURRENT_RUN')
-    return {'workflow':wf,'market_run_id':run,'prepared_at':at,'semantics':stock.SEMANTICS}
+    value = {'workflow':wf,'market_run_id':run,'prepared_at':at,'semantics':stock.SEMANTICS}
+    selection = discovery.parse_selection(env.get('STOCK_DISCOVERY_PAGE', ''))
+    if selection is not None:
+        value['discovery_page'] = selection
+    return value
 
 
 def initialize(root, env, at):
@@ -540,6 +566,7 @@ def main(argv=None):
                     value=capture(Path(os.environ['GITHUB_WORKSPACE']),root/'market',root/'reading',
                         observed_at=datetime.now(timezone.utc),workflow=request['workflow'],provenance=PUBLIC,credential=key,
                         company_manifest=LIVE_COMPANIES,sector_result=sector_result,sector_result_raw=sector_result_raw,
+                        discovery_page=request.get("discovery_page"),
                         transport=lambda p,q:hithink_stock_reading.request_json(api_key=key,path=p,params=q))
                 else:
                     if os.environ.get('HITHINK_FINANCE_API_KEY'):raise ValueError('replay cannot receive market credentials')

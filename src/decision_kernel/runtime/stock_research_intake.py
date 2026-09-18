@@ -33,6 +33,11 @@ def security(thscode: str) -> str:
     return ("SSE:" if suffix == "SH" else "SZSE:") + ticker
 
 
+def supported(thscode: str) -> bool:
+    return (isinstance(thscode, str) and CODE.fullmatch(thscode) is not None
+            and ((thscode.endswith('.SH')) == thscode.startswith('6')))
+
+
 def execution(thscode: str) -> tuple[str, str]:
     sid = security(thscode)
     key = canonical_hash({"security_id": sid, "question_kind": QUESTION_KIND})
@@ -45,9 +50,20 @@ def plan(run: dict, files: dict[str, bytes]) -> dict:
     rows = projection["all_stock_observations"]
     once.require(len(rows) == qualified["coverage"]["planned_issuers"]
                  and len({row["thscode"] for row in rows}) == len(rows), "Stock plan coverage differs")
-    items, excluded = [], []
+    from .stock_radar_reading import DISCOVERY_PAGE_VERSION
+    page = projection.get('version') == DISCOVERY_PAGE_VERSION
+    items, excluded, unsupported_qualified = [], [], []
     for row in rows:
         thscode = row["thscode"]
+        if page and not supported(thscode):
+            if row['eligible_for_shadow_reading']:
+                unsupported_qualified.append(thscode)
+            excluded.append({'thscode': thscode, 'company_name': row['company_name'],
+                'status': 'RESEARCH_SCOPE_UNSUPPORTED', 'original_stock_status': row['status'],
+                'price_eligible': row['eligible_for_shadow_reading'],
+                'input_failure': row['input_failure'], 'excluded_reasons': row['excluded_reasons'],
+                'research_execution': 'NOT_EXECUTED'})
+            continue
         security(thscode)
         if row["eligible_for_shadow_reading"] is not True:
             excluded.append({"thscode": thscode, "company_name": row["company_name"],
@@ -61,7 +77,7 @@ def plan(run: dict, files: dict[str, bytes]) -> dict:
         items.append({"thscode": thscode, "security_id": security(thscode),
             "company_name": row["company_name"], "execution_id": eid, "prefix": prefix,
             "observation": row})
-    once.require(len(items) == qualified["coverage"]["qualified_issuers"], "Stock qualified count differs")
+    once.require(len(items) + len(unsupported_qualified) == qualified["coverage"]["qualified_issuers"], "Stock qualified count differs")
     return {"schema_version": 1, "source_run": reading.concise_run(run),
         "market_session": qualified["market_session"], "projection_hash": qualified["projection_hash"],
         "question_kind": QUESTION_KIND, "items": items, "excluded": excluded,

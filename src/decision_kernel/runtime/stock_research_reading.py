@@ -5,6 +5,8 @@ market/disclosure bytes and their remaining publication budget take precedence.
 """
 from __future__ import annotations
 
+import re
+
 from copy import deepcopy
 from pathlib import Path
 
@@ -90,7 +92,15 @@ def _collect(collector, payload):
              if row['status'] == 'CONTRACT_CHECKED_RAW_READING' and row.get('input_failure') is None]
     model.check(len(codes) == len(set(codes)) == stock['coverage']['qualified_issuers']
                 and len(codes) <= 16, 'Stock business reading scope differs')
+    unsupported_codes = [code for code in codes if not intake.supported(code)]
+    model.check(all(re.fullmatch(r'[0-9]{6}\.BJ', code) for code in unsupported_codes),
+                'malformed Stock Research security identity')
+    codes = [code for code in codes if intake.supported(code)]
     invocation = attempts(collector)
+    if unsupported_codes:
+        invocation['unsupported_research_scope'] = [
+            {'thscode': code, 'status': 'RESEARCH_SCOPE_UNSUPPORTED', 'research_execution': 'NOT_EXECUTED'}
+            for code in unsupported_codes]
     refs = api.get('git/matching-refs/heads/' + intake.WORK_REF)
     model.check(isinstance(refs, list) and len(refs) <= 16
         and all(isinstance(r, dict) and isinstance(r.get('ref'), str) for r in refs),

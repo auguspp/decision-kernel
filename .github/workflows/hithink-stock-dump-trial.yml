@@ -8,6 +8,11 @@ on:
         type: choice
         options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading]
         default: stock-dump
+      stock-discovery-page:
+        description: 'Optional stock-reading page: exact pool_hash:offset. Empty preserves original route; no automatic next page.'
+        type: string
+        required: false
+        default: ''
       stock-market-run-id:
         description: '选 stock-reading 时必填：已成功的 sector-radar-shadow 运行编号；不是本次股票编号，无 latest 或 bootstrap 回退'
         type: string
@@ -158,6 +163,7 @@ jobs:
         env:
           TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
           STOCK_MARKET_RUN_ID: ${{ inputs.stock-market-run-id }}
+          STOCK_DISCOVERY_PAGE: ${{ inputs.stock-discovery-page }}
         run: python .github/scripts/capture-stock-reading.py init --root "$RUNNER_TEMP/stock-reading-run"
       - name: Bind exact successful Sector state artifact
         id: stock-state
