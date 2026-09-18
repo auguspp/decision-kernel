@@ -56,7 +56,8 @@ jobs:
         run: |
           python -m decision_kernel.runtime.concept_detail_capture prepare \
             --source-run-id "$SOURCE_RUN" --expected-code "$EXPECTED_CODE" \
-            --output "$RUNNER_TEMP/concept-detail-input"
+            --output "$RUNNER_TEMP/concept-detail-input" \
+            --failure-output "$RUNNER_TEMP/concept-detail/preparation-failure.json"
       - name: Capture one source-derived detail batch
         id: capture
         env:
@@ -66,7 +67,8 @@ jobs:
         run: |
           python -m decision_kernel.runtime.concept_detail_capture capture \
             --inputs "$RUNNER_TEMP/concept-detail-input" --offset "$DETAIL_OFFSET" \
-            --expected-code "$EXPECTED_CODE" --output "$RUNNER_TEMP/concept-detail/payload"
+            --expected-code "$EXPECTED_CODE" --output "$RUNNER_TEMP/concept-detail/payload" \
+            --failure-output "$RUNNER_TEMP/concept-detail/capture-preflight-failure.json"
       - name: Replay exact original and supplementary bytes without credentials
         if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
         run: |

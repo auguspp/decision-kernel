@@ -19,7 +19,7 @@ from decision_kernel.identity import canonical_hash, canonical_json
 from . import concept_radar_capture as original
 from . import concept_detail_supplement as detail
 from . import current_state as model
-from .current_state_delivery import GitHubAPI
+from .current_state_delivery import GitHubAPI, GitHubReadError
 
 VERSION = 'concept-detail-original-capture-v1'
 WORKFLOW = 'radar-concept-detail'
@@ -279,11 +279,40 @@ def verify(output):
             'projection_hash':rebuilt['projection_hash'], 'coverage':rebuilt['projection']['coverage'], 'network_calls':0}
 
 
+
+def preflight_diagnostic(exc, phase):
+    """Finite local labels only; never echo transport/source text or credentials."""
+    known = {
+        'DETAIL_WORKFLOW_REJECTED', 'WORKFLOW_IDENTITY_REJECTED',
+        'DETAIL_SOURCE_RUN_REJECTED', 'DETAIL_SOURCE_CLOCK_OR_ARTIFACT_REJECTED',
+        'DETAIL_BASE_PAYLOAD_REJECTED', 'DETAIL_BASE_IDENTITY_REJECTED',
+        'DETAIL_BASE_REPLAY_DIFFERS', 'CAPTURE_IDENTITY_REJECTED',
+        'DETAIL_SOURCE_SELECTOR_REJECTED', 'DETAIL_SOURCE_QUERY_REJECTED',
+        'DETAIL_NOT_LATEST_SOURCE', 'DETAIL_SOURCE_CHANGED', 'DETAIL_ARTIFACT_QUERY_INCOMPLETE',
+        'DETAIL_LIVE_SAME_SESSION_REQUIRED', 'CREATE_ONLY_INPUT_REQUIRED',
+        'CREATE_ONLY_OUTPUT_REQUIRED', 'DETAIL_INPUT_SIZE_REJECTED',
+        'DETAIL_PROVENANCE_REJECTED', 'DETAIL_OFFSET_REJECTED',
+        'DETAIL_BASE_OUTPUT_RESERVE_REJECTED', 'EXISTING_PROVIDER_CREDENTIAL_REQUIRED',
+        'DETAIL_REPLAY_MUST_NOT_RECEIVE_CREDENTIAL', 'DETAIL_PREPARE_MUST_NOT_RECEIVE_MARKET_CREDENTIAL',
+    }
+    message = exc.args[0] if len(exc.args) == 1 and type(exc.args[0]) is str else None
+    code = message if message in known else 'DETAIL_PHASE_REJECTED'
+    http = None
+    if isinstance(exc, GitHubReadError):
+        match = re.fullmatch(r'GitHub HTTP ([1-5][0-9]{2})', message or '')
+        code = 'GITHUB_HTTP_REJECTED' if match else 'GITHUB_READ_UNAVAILABLE'
+        http = int(match[1]) if match else None
+    return {'version': VERSION, 'phase': phase, 'status': 'PRE_EXECUTION_OR_REPLAY_REJECTION',
+            'reason_code': code, 'http_status': http,
+            'meaning': 'NO_REMOTE_CAUSE_INFERRED; NO_AUTOMATIC_RETRY'}
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description='One source-bound concept detail batch; no automatic next batch.')
     p.add_argument('mode', choices=('prepare','capture','verify')); p.add_argument('--output',type=Path,required=True)
     p.add_argument('--inputs',type=Path); p.add_argument('--source-run-id',type=int)
     p.add_argument('--expected-code'); p.add_argument('--offset',type=int,default=0)
+    p.add_argument('--failure-output',type=Path)
     a = p.parse_args(argv); now = lambda: datetime.now(timezone.utc)
     try:
         key = os.environ.get(original.HITHINK_API_KEY_ENV, '')
@@ -302,8 +331,18 @@ def main(argv=None):
                 now=now, credential=key, provenance='LIVE_HITHINK')
         print(canonical_json(result if a.mode != 'capture' else {k:result[k] for k in ('status','capture_hash')}))
         return 2 if result.get('status') == FAILED else 0
-    except ERRORS:
-        print('Concept detail unavailable; inspect finite retained diagnostics. No automatic retry.')
+    except ERRORS as exc:
+        failure = preflight_diagnostic(exc, a.mode)
+        failure['diagnostic_retention'] = 'NOT_REQUESTED' if a.failure_output is None else 'NOT_SAVED'
+        if a.failure_output is not None:
+            try:
+                original._safe_path(a.failure_output)
+                a.failure_output.parent.mkdir(parents=True, exist_ok=True)
+                failure['diagnostic_retention'] = 'SAVED_CREATE_ONLY'
+                _write(a.failure_output.parent, a.failure_output.name, _bytes(failure))
+            except (OSError, ValueError):
+                failure['diagnostic_retention'] = 'NOT_SAVED'
+        print(canonical_json(failure))
         return 2
 
 
