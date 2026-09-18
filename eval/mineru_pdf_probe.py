@@ -1,5 +1,5 @@
 from __future__ import annotations
-import argparse, hashlib, json, os, shutil, subprocess, time, zipfile
+import argparse, hashlib, json, os, re, shutil, subprocess, time, zipfile
 from pathlib import Path
 
 AID=10320565453; ABYTES=12563240; ASHA='25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c'
@@ -25,6 +25,8 @@ def walk(x):
   for v in x.values(): yield from walk(v)
  elif isinstance(x,list):
   for v in x: yield from walk(v)
+def markdown_text_only(value):
+ return re.sub(r'!\\[\\]\\(data:image/[^)]*\\)', '', value, flags=re.S)
 def main():
  ap=argparse.ArgumentParser(); ap.add_argument('--archive',type=Path,required=True); ap.add_argument('--work',type=Path,required=True); ap.add_argument('--output',type=Path,required=True); a=ap.parse_args()
  raw=a.archive.read_bytes()
@@ -65,6 +67,7 @@ def main():
    r=run([kit,'parse',str(a.work/f"{s['sample_id']}.pdf"),'-o',str(md),'--format','markdown','--tier','basic','--pages',str(s['page']),'--ocr-mode','ocr'],env)
    (sd/'markdown.stdout.txt').write_text(r.pop('stdout'),encoding='utf-8'); (sd/'markdown.stderr.txt').write_text(r.pop('stderr'),encoding='utf-8'); dump(sd/'markdown-command.json',r); failures+=r['exit_code']!=0
   txt=md.read_text(encoding='utf-8',errors='replace') if md.exists() else ''
+  text_only=markdown_text_only(txt)
   tcount=bcount=0; pidx=set(); bidx=[]
   if kit and s['sample_id'] in {'guangha-1225486858-p4','heshun-1225530957-p11-table'}:
    mid=sd/'middle.json'; r=run([kit,'parse',str(a.work/f"{s['sample_id']}.pdf"),'-o',str(mid),'--format','middle_json','--tier','basic','--pages',str(s['page']),'--ocr-mode','ocr'],env)
@@ -78,7 +81,7 @@ def main():
       if 'type' in n: bcount+=1; tcount+=str(n['type']).lower()=='table'
     except json.JSONDecodeError: pass
   table_signal|=tcount>0; locator_signal|=bool(pidx or bidx)
-  results.append({**s,'mineru_markdown_chars':len(txt),'mineru_nonempty':bool(txt.strip()),'middle_table_blocks':tcount,'middle_typed_blocks':bcount,'middle_page_indices':sorted(pidx),'middle_block_index_count':len(bidx),'manual_semantic_acceptance':'NOT_ESTABLISHED'})
+  results.append({**s,'mineru_markdown_chars':len(txt),'mineru_text_chars_excluding_embedded_images':len(text_only),'mineru_nonempty':bool(text_only.strip()),'middle_table_blocks':tcount,'middle_typed_blocks':bcount,'middle_page_indices':sorted(pidx),'middle_block_index_count':len(bidx),'manual_semantic_acceptance':'NOT_ESTABLISHED'})
  empty=[x for x in results if x['baseline_text_chars']==0]; recovered=sum(x['mineru_nonempty'] for x in empty); parsed=sum(x['mineru_nonempty'] for x in results)
  if not kit: status='ENVIRONMENT_GAP'
  elif failures and not parsed: status='EXECUTION_GAP'
@@ -87,8 +90,8 @@ def main():
  else: status='CAPABILITY_SIGNAL_NEGATIVE'
  out={'schema_version':1,'semantics':SEM,'status':status,'artifact_id':AID,'artifact_sha256':ASHA,'sample_count':len(results),'empty_baseline_sample_count':len(empty),'empty_baseline_recovered_nonempty_count':recovered,'structured_table_signal':table_signal,'structured_locator_signal':locator_signal,'command_failure_count':failures,'samples':results,'manual_quality_review':'REQUIRED','production_qualification':'NOT_ESTABLISHED','research_authority':'NONE','human_attention_authority':'NONE','investment_authority':'NONE'}
  out['probe_hash']=h(json.dumps(out,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()); dump(a.output/'probe.json',out)
- lines=['# MinerU retained-PDF capability probe','',f'Status: **{status}**','','Derived representation diagnostic only; not Evidence truth certification, Research execution, or production acceptance.','',f'Frozen source artifact: `{AID}` / `{ASHA}`','','| sample | baseline chars | MinerU chars | table blocks | manual acceptance |','|---|---:|---:|---:|---|']
- for x in results: lines.append(f"| {x['sample_id']} | {x['baseline_text_chars']} | {x['mineru_markdown_chars']} | {x['middle_table_blocks']} | NOT_ESTABLISHED |")
+ lines=['# MinerU retained-PDF capability probe','',f'Status: **{status}**','','Derived representation diagnostic only; not Evidence truth certification, Research execution, or production acceptance.','',f'Frozen source artifact: `{AID}` / `{ASHA}`','','| sample | baseline chars | MinerU text chars (embedded images excluded) | table blocks | manual acceptance |','|---|---:|---:|---:|---|']
+ for x in results: lines.append(f"| {x['sample_id']} | {x['baseline_text_chars']} | {x['mineru_text_chars_excluding_embedded_images']} | {x['middle_table_blocks']} | NOT_ESTABLISHED |")
  lines += ['',f'Recovered non-empty output on empty-baseline samples: **{recovered}/{len(empty)}**.',f'Structured table signal: **{table_signal}**. Structured locator signal: **{locator_signal}**.','','Manual visual/text review remains required before any capability or integration decision.','','Investment Authority: **NONE**.']
  (a.output/'summary.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
  # Self-verification: derived result cannot gain production, Research, attention, or investment authority.
