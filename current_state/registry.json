@@ -63,7 +63,8 @@
       "archive": {
         "format": "RETAINED_FILES"
       }
-    }
+    },
+    {"id":"radar-300183-eastsoft-progress-20260919","case":"300183.SZ","use":"RETAINED_RESEARCH_DOCUMENT","purpose_note":"2026-09-19 bounded interactive review of the retained 2026-09-13 Pre/Quick: restores the original WAIT and adds gross-profit, working-capital cash and goodwill-headroom arithmetic on saved filings. Current trigger refresh remains incomplete. Not new Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch.","source":{"path":"docs/readings/radar-question-review-2026-09-19/300183/workpaper.md","ref":"250efdc82567f9988d43cadae0a5b715e50d85da","git_blob":"e2ae22709d858e242c97ad816e9a28b57a1a92a2"},"archive":{"format":"RESEARCH_PROGRESS","expected_sha256":"b37e54e39bc0d0b92d9d946d09f950d6f27f5a208643e01f1b13de12d48d4e24","question_id":"communication-delivery-profit-cash-followup"}}
   ],
   "historical_handoffs": [
     {
