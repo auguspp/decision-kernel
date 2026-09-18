@@ -132,7 +132,7 @@ def _observe(request_raw, market_session, started_at, provenance):
         probe._record({'path': path, 'params': params, 'requested_at': requested.isoformat(),
                        'received_at': received.isoformat(), 'response': body}, path, params,
                       lower=started_at, upper=received,
-                      ready_after=None if path in {probe.HISTORY, HITHINK_CALENDAR_PATH} else close)
+                      ready_after=None if path in {probe.HISTORY, probe.CATALOG, HITHINK_CALENDAR_PATH} else close)
         return body
 
     calendar = normalize_hithink_calendar(get(HITHINK_CALENDAR_PATH, {}))
