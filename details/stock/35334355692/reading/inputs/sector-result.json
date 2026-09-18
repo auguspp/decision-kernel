@@ -1,0 +1,2210 @@
+{
+  "acquisition_plan": {
+    "all_market_snapshot_required": true,
+    "budget_semantics": "OPERATIONS_SAFETY_BUDGET_ONLY_NOT_A_SIGNAL_OR_RANKING_THRESHOLD",
+    "candidate_count": 4,
+    "candidate_thscodes": [
+      "881166.TI",
+      "884213.TI",
+      "884010.TI",
+      "884003.TI"
+    ],
+    "distinct_membership_request_count": 7,
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "market_session": "2026-09-18",
+    "max_membership_requests": 32,
+    "membership_requests": [
+      {
+        "name": "种植业与林业",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881101.TI"
+      },
+      {
+        "name": "农产品加工",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881103.TI"
+      },
+      {
+        "name": "军工装备",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE"
+        ],
+        "thscode": "881166.TI"
+      },
+      {
+        "name": "塑料制品",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881265.TI"
+      },
+      {
+        "name": "其他种植业",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884003.TI"
+      },
+      {
+        "name": "粮油加工",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884010.TI"
+      },
+      {
+        "name": "膜材料",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884213.TI"
+      }
+    ],
+    "plan_hash": "af597b0b73d858da0b099a4a125e41e6ae656628afd380ea5a9c01daeb467e56",
+    "status": "READY_FOR_CURRENT_BREADTH_ENRICHMENT"
+  },
+  "artifact_semantics": "PURE_PROSPECTIVE_SHADOW_COMPOSITION_AUDIT_ONLY",
+  "benchmark_thscode": "000300.SH",
+  "breadth_observations": [
+    {
+      "advancer_share": "0.7926829268292682926829268293",
+      "advancers": 65,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "826b1f455968976f2763c39e93ec92eaebe6dec703ff5830a7f2a5aee66c5624",
+      "coverage_ratio": "1",
+      "decliner_share": "0.1829268292682926829268292683",
+      "decliners": 15,
+      "equal_weight_mean_daily_return": "0.01358427029206247739661741368",
+      "equal_weight_median_daily_return": "0.0099344717786055889548678985",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.013584483142447329834669833",
+      "index_minus_equal_weight_mean": "0.00000021285038485243805241932",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0267847837415320479416362689",
+          "name": "菲利华",
+          "thscode": "300395.SZ",
+          "ticker": "300395",
+          "turnover": "2714851600"
+        },
+        {
+          "daily_return": "-0.0167438546490915568222301389",
+          "name": "光启技术",
+          "thscode": "002625.SZ",
+          "ticker": "002625",
+          "turnover": "811307600"
+        },
+        {
+          "daily_return": "-0.0153846153846153846153846154",
+          "name": "光电股份",
+          "thscode": "600184.SH",
+          "ticker": "600184",
+          "turnover": "931111850"
+        },
+        {
+          "daily_return": "-0.0112948769665187575635336829",
+          "name": "航亚科技",
+          "thscode": "688510.SH",
+          "ticker": "688510",
+          "turnover": "183462120"
+        },
+        {
+          "daily_return": "-0.0060504201680672268907563025",
+          "name": "中航成飞",
+          "thscode": "302132.SZ",
+          "ticker": "302132",
+          "turnover": "368349340"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.075144508670520231213872832",
+          "name": "*ST航图",
+          "thscode": "688066.SH",
+          "ticker": "688066",
+          "turnover": "94157200"
+        },
+        {
+          "daily_return": "0.074935400516795865633074935",
+          "name": "松发股份",
+          "thscode": "603268.SH",
+          "ticker": "603268",
+          "turnover": "2516275200"
+        },
+        {
+          "daily_return": "0.049523809523809523809523810",
+          "name": "纵横股份",
+          "thscode": "688070.SH",
+          "ticker": "688070",
+          "turnover": "74639616"
+        },
+        {
+          "daily_return": "0.044968669369701437523037228",
+          "name": "航宇科技",
+          "thscode": "688239.SH",
+          "ticker": "688239",
+          "turnover": "464143230"
+        },
+        {
+          "daily_return": "0.038734667527437056165267915",
+          "name": "航新科技",
+          "thscode": "300424.SZ",
+          "ticker": "300424",
+          "turnover": "313473560"
+        }
+      ],
+      "market_session": "2026-09-18",
+      "member_count": 82,
+      "membership_captured_at": "2026-09-18T10:15:38.098000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-09-18T10:21:28.077701Z",
+      "priced_member_count": 82,
+      "sector_name": "军工装备",
+      "sector_thscode": "881166.TI",
+      "top_three_positive_return_mass_share": "0.1640784271107767780843223566",
+      "top_three_turnover_share": "0.2971684401461543755415488539",
+      "total_constituent_turnover": "32639100556",
+      "unchanged": 2
+    },
+    {
+      "advancer_share": "0.5789473684210526315789473684",
+      "advancers": 11,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "8703aac39506e1b07a5732a68b83eb704f4dbe27ecef47d02afbbdb22271b25d",
+      "coverage_ratio": "1",
+      "decliner_share": "0.4210526315789473684210526316",
+      "decliners": 8,
+      "equal_weight_mean_daily_return": "0.01315369323810438989693376458",
+      "equal_weight_median_daily_return": "0.016279069767441860465116279",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.013153692058973355194729678",
+      "index_minus_equal_weight_mean": "-0.00000000117913103470220408658",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0191204588910133843212237094",
+          "name": "东材科技",
+          "thscode": "601208.SH",
+          "ticker": "601208",
+          "turnover": "3856384600"
+        },
+        {
+          "daily_return": "-0.0119760479041916167664670659",
+          "name": "双星新材",
+          "thscode": "002585.SZ",
+          "ticker": "002585",
+          "turnover": "1557311400"
+        },
+        {
+          "daily_return": "-0.0031678986272439281942977825",
+          "name": "国风新材",
+          "thscode": "000859.SZ",
+          "ticker": "000859",
+          "turnover": "501813320"
+        },
+        {
+          "daily_return": "-0.0030959752321981424148606811",
+          "name": "大东南",
+          "thscode": "002263.SZ",
+          "ticker": "002263",
+          "turnover": "126376564"
+        },
+        {
+          "daily_return": "-0.0016666666666666666666666667",
+          "name": "佛塑科技",
+          "thscode": "000973.SZ",
+          "ticker": "000973",
+          "turnover": "320765500"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.051819184123484013230429989",
+          "name": "道明光学",
+          "thscode": "002632.SZ",
+          "ticker": "002632",
+          "turnover": "366758930"
+        },
+        {
+          "daily_return": "0.041963578780680918448139351",
+          "name": "沃顿科技",
+          "thscode": "000920.SZ",
+          "ticker": "000920",
+          "turnover": "760915950"
+        },
+        {
+          "daily_return": "0.030607783121993878443375601",
+          "name": "德冠新材",
+          "thscode": "001378.SZ",
+          "ticker": "001378",
+          "turnover": "325655110"
+        },
+        {
+          "daily_return": "0.026981450252951096121416526",
+          "name": "浙江众成",
+          "thscode": "002522.SZ",
+          "ticker": "002522",
+          "turnover": "674609900"
+        },
+        {
+          "daily_return": "0.025980911983032873806998940",
+          "name": "中仑新材",
+          "thscode": "301565.SZ",
+          "ticker": "301565",
+          "turnover": "76603479"
+        }
+      ],
+      "market_session": "2026-09-18",
+      "member_count": 19,
+      "membership_captured_at": "2026-09-18T10:17:03.074000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-09-18T10:21:28.077701Z",
+      "priced_member_count": 19,
+      "sector_name": "膜材料",
+      "sector_thscode": "884213.TI",
+      "top_three_positive_return_mass_share": "0.4244758970755516498323454376",
+      "top_three_turnover_share": "0.6279061455200002734646301463",
+      "total_constituent_turnover": "11377559132",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.7142857142857142857142857143",
+      "advancers": 5,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "defb53bb1815302441c8f02ec9b44ab4808f6b81b454e2cd0558c2a326460601",
+      "coverage_ratio": "1",
+      "decliner_share": "0.2857142857142857142857142857",
+      "decliners": 2,
+      "equal_weight_mean_daily_return": "0.0211539271125723010958218540",
+      "equal_weight_median_daily_return": "0.004419445560466050622740056",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.021153633786917630891176579",
+      "index_minus_equal_weight_mean": "-0.0000002933256546702046452750",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0068181818181818181818181818",
+          "name": "嘉华股份",
+          "thscode": "603182.SH",
+          "ticker": "603182",
+          "turnover": "18937702"
+        },
+        {
+          "daily_return": "-0.0048899755501222493887530562",
+          "name": "道道全",
+          "thscode": "002852.SZ",
+          "ticker": "002852",
+          "turnover": "78843612"
+        },
+        {
+          "daily_return": "0.004209260372820204449789537",
+          "name": "索宝蛋白",
+          "thscode": "603231.SH",
+          "ticker": "603231",
+          "turnover": "23737260"
+        },
+        {
+          "daily_return": "0.004419445560466050622740056",
+          "name": "金龙鱼",
+          "thscode": "300999.SZ",
+          "ticker": "300999",
+          "turnover": "239892020"
+        },
+        {
+          "daily_return": "0.012066365007541478129713424",
+          "name": "京粮控股",
+          "thscode": "000505.SZ",
+          "ticker": "000505",
+          "turnover": "316209310"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.099846390168970814132104455",
+          "name": "金健米业",
+          "thscode": "600127.SH",
+          "ticker": "600127",
+          "turnover": "4160809300"
+        },
+        {
+          "daily_return": "0.039244186046511627906976744",
+          "name": "深粮控股",
+          "thscode": "000019.SZ",
+          "ticker": "000019",
+          "turnover": "270892900"
+        },
+        {
+          "daily_return": "0.012066365007541478129713424",
+          "name": "京粮控股",
+          "thscode": "000505.SZ",
+          "ticker": "000505",
+          "turnover": "316209310"
+        },
+        {
+          "daily_return": "0.004419445560466050622740056",
+          "name": "金龙鱼",
+          "thscode": "300999.SZ",
+          "ticker": "300999",
+          "turnover": "239892020"
+        },
+        {
+          "daily_return": "0.004209260372820204449789537",
+          "name": "索宝蛋白",
+          "thscode": "603231.SH",
+          "ticker": "603231",
+          "turnover": "23737260"
+        }
+      ],
+      "market_session": "2026-09-18",
+      "member_count": 7,
+      "membership_captured_at": "2026-09-18T10:16:42.313000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-09-18T10:21:28.077701Z",
+      "priced_member_count": 7,
+      "sector_name": "粮油加工",
+      "sector_thscode": "884010.TI",
+      "top_three_positive_return_mass_share": "0.9459982414763121325011609538",
+      "top_three_turnover_share": "0.9292644725379404265486097057",
+      "total_constituent_turnover": "5109322104",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.6",
+      "advancers": 6,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "7a7d2267355036305793c1ccaf216431d715b6bccb139d4f98b31c88736b17c0",
+      "coverage_ratio": "1",
+      "decliner_share": "0.4",
+      "decliners": 4,
+      "equal_weight_mean_daily_return": "0.00370454092696065150393701838",
+      "equal_weight_median_daily_return": "0.004756301594013715504403302",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.003704745344307726519716440",
+      "index_minus_equal_weight_mean": "0.00000020441734707501577942162",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0165484633569739952718676123",
+          "name": "亚盛集团",
+          "thscode": "600108.SH",
+          "ticker": "600108",
+          "turnover": "1330862120"
+        },
+        {
+          "daily_return": "-0.0151515151515151515151515152",
+          "name": "博闻科技",
+          "thscode": "600883.SH",
+          "ticker": "600883",
+          "turnover": "33055406"
+        },
+        {
+          "daily_return": "-0.0128410914927768860353130016",
+          "name": "海南橡胶",
+          "thscode": "601118.SH",
+          "ticker": "601118",
+          "turnover": "786539890"
+        },
+        {
+          "daily_return": "-0.0020639834881320949432404541",
+          "name": "诺普信",
+          "thscode": "002215.SZ",
+          "ticker": "002215",
+          "turnover": "187491740"
+        },
+        {
+          "daily_return": "0.004008016032064128256513026",
+          "name": "雪榕生物",
+          "thscode": "300511.SZ",
+          "ticker": "300511",
+          "turnover": "130015573"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.036",
+          "name": "宏辉果蔬",
+          "thscode": "603336.SH",
+          "ticker": "603336",
+          "turnover": "342268550"
+        },
+        {
+          "daily_return": "0.019253208868144690781796966",
+          "name": "华绿生物",
+          "thscode": "300970.SZ",
+          "ticker": "300970",
+          "turnover": "251090250"
+        },
+        {
+          "daily_return": "0.011538461538461538461538462",
+          "name": "新农开发",
+          "thscode": "600359.SH",
+          "ticker": "600359",
+          "turnover": "553754540"
+        },
+        {
+          "daily_return": "0.007346189164370982552800735",
+          "name": "众兴菌业",
+          "thscode": "002772.SZ",
+          "ticker": "002772",
+          "turnover": "137671860"
+        },
+        {
+          "daily_return": "0.005504587155963302752293578",
+          "name": "新赛股份",
+          "thscode": "600540.SH",
+          "ticker": "600540",
+          "turnover": "479931160"
+        }
+      ],
+      "market_session": "2026-09-18",
+      "member_count": 10,
+      "membership_captured_at": "2026-09-18T10:16:20.062000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-09-18T10:21:28.077701Z",
+      "priced_member_count": 10,
+      "sector_name": "其他种植业",
+      "sector_thscode": "884003.TI",
+      "top_three_positive_return_mass_share": "0.7984614573984095386961708574",
+      "top_three_turnover_share": "0.6310790947472678823405681817",
+      "total_constituent_turnover": "4232681089",
+      "unchanged": 0
+    }
+  ],
+  "broad_entries": {
+    "as_of_session": "2026-09-18",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0838419846306408417381930578",
+        "horizon_20_rank": "9",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "-0.0254940011918557070387881618",
+        "horizon_5_rank": "86",
+        "horizon_5_rating": 5,
+        "horizon_60_excess_return": "0.0750633345829457888555192528",
+        "horizon_60_rating": 36,
+        "name": "军工装备",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 30,
+        "rank_change_5_sessions_20d": "7",
+        "thscode": "881166.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+      }
+    ],
+    "family": "BROAD_881",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-17",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+  "composition": {
+    "all_candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-18",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0852263600967915524944614648",
+        "horizon_20_rank": "34",
+        "horizon_20_rating": 85,
+        "horizon_5_excess_return": "0.0828217521004613112119043910",
+        "horizon_5_rank": "11",
+        "horizon_5_rating": 95,
+        "horizon_60_excess_return": "-0.0794625232374961816855682142",
+        "horizon_60_rating": 10,
+        "name": "膜材料",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "138",
+        "thscode": "884213.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1448085354789363344498497448",
+        "horizon_20_rank": "7",
+        "horizon_20_rating": 96,
+        "horizon_5_excess_return": "-0.0170304380132527877340150939",
+        "horizon_5_rank": "191",
+        "horizon_5_rating": 18,
+        "horizon_60_excess_return": "0.4208516979912525365053294378",
+        "horizon_60_rating": 98,
+        "name": "粮油加工",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 48,
+        "rank_change_5_sessions_20d": "-5",
+        "thscode": "884010.TI",
+        "top_quartile_20d_persistence_sessions": 24,
+        "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0838419846306408417381930578",
+        "horizon_20_rank": "9",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "-0.0254940011918557070387881618",
+        "horizon_5_rank": "86",
+        "horizon_5_rating": 5,
+        "horizon_60_excess_return": "0.0750633345829457888555192528",
+        "horizon_60_rating": 36,
+        "name": "军工装备",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 30,
+        "rank_change_5_sessions_20d": "7",
+        "thscode": "881166.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1169257847127269213687748618",
+        "horizon_20_rank": "19",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "-0.0683994334482713313323905113",
+        "horizon_5_rank": "229",
+        "horizon_5_rating": 1,
+        "horizon_60_excess_return": "0.3011006188695450685188602418",
+        "horizon_60_rating": 94,
+        "name": "其他种植业",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 40,
+        "rank_change_5_sessions_20d": "-16",
+        "thscode": "884003.TI",
+        "top_quartile_20d_persistence_sessions": 24,
+        "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+      }
+    ],
+    "all_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": true,
+            "as_of_session": "2026-09-18",
+            "event_type": "ACCELERATING_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0852263600967915524944614648",
+            "horizon_20_rank": "34",
+            "horizon_20_rating": 85,
+            "horizon_5_excess_return": "0.0828217521004613112119043910",
+            "horizon_5_rank": "11",
+            "horizon_5_rating": 95,
+            "horizon_60_excess_return": "-0.0794625232374961816855682142",
+            "horizon_60_rating": 10,
+            "name": "膜材料",
+            "persistent_gate_entered": false,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "138",
+            "thscode": "884213.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881265.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "塑料制品",
+        "parent_context_thscode": "881265.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5789473684210526315789473684",
+          "advancers": 11,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "8703aac39506e1b07a5732a68b83eb704f4dbe27ecef47d02afbbdb22271b25d",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4210526315789473684210526316",
+          "decliners": 8,
+          "equal_weight_mean_daily_return": "0.01315369323810438989693376458",
+          "equal_weight_median_daily_return": "0.016279069767441860465116279",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013153692058973355194729678",
+          "index_minus_equal_weight_mean": "-0.00000000117913103470220408658",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0191204588910133843212237094",
+              "name": "东材科技",
+              "thscode": "601208.SH",
+              "ticker": "601208",
+              "turnover": "3856384600"
+            },
+            {
+              "daily_return": "-0.0119760479041916167664670659",
+              "name": "双星新材",
+              "thscode": "002585.SZ",
+              "ticker": "002585",
+              "turnover": "1557311400"
+            },
+            {
+              "daily_return": "-0.0031678986272439281942977825",
+              "name": "国风新材",
+              "thscode": "000859.SZ",
+              "ticker": "000859",
+              "turnover": "501813320"
+            },
+            {
+              "daily_return": "-0.0030959752321981424148606811",
+              "name": "大东南",
+              "thscode": "002263.SZ",
+              "ticker": "002263",
+              "turnover": "126376564"
+            },
+            {
+              "daily_return": "-0.0016666666666666666666666667",
+              "name": "佛塑科技",
+              "thscode": "000973.SZ",
+              "ticker": "000973",
+              "turnover": "320765500"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.051819184123484013230429989",
+              "name": "道明光学",
+              "thscode": "002632.SZ",
+              "ticker": "002632",
+              "turnover": "366758930"
+            },
+            {
+              "daily_return": "0.041963578780680918448139351",
+              "name": "沃顿科技",
+              "thscode": "000920.SZ",
+              "ticker": "000920",
+              "turnover": "760915950"
+            },
+            {
+              "daily_return": "0.030607783121993878443375601",
+              "name": "德冠新材",
+              "thscode": "001378.SZ",
+              "ticker": "001378",
+              "turnover": "325655110"
+            },
+            {
+              "daily_return": "0.026981450252951096121416526",
+              "name": "浙江众成",
+              "thscode": "002522.SZ",
+              "ticker": "002522",
+              "turnover": "674609900"
+            },
+            {
+              "daily_return": "0.025980911983032873806998940",
+              "name": "中仑新材",
+              "thscode": "301565.SZ",
+              "ticker": "301565",
+              "turnover": "76603479"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 19,
+          "membership_captured_at": "2026-09-18T10:17:03.074000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 19,
+          "sector_name": "膜材料",
+          "sector_thscode": "884213.TI",
+          "top_three_positive_return_mass_share": "0.4244758970755516498323454376",
+          "top_three_turnover_share": "0.6279061455200002734646301463",
+          "total_constituent_turnover": "11377559132",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": true,
+          "as_of_session": "2026-09-18",
+          "event_type": "ACCELERATING_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0852263600967915524944614648",
+          "horizon_20_rank": "34",
+          "horizon_20_rating": 85,
+          "horizon_5_excess_return": "0.0828217521004613112119043910",
+          "horizon_5_rank": "11",
+          "horizon_5_rating": 95,
+          "horizon_60_excess_return": "-0.0794625232374961816855682142",
+          "horizon_60_rating": 10,
+          "name": "膜材料",
+          "persistent_gate_entered": false,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "138",
+          "thscode": "884213.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1448085354789363344498497448",
+            "horizon_20_rank": "7",
+            "horizon_20_rating": 96,
+            "horizon_5_excess_return": "-0.0170304380132527877340150939",
+            "horizon_5_rank": "191",
+            "horizon_5_rating": 18,
+            "horizon_60_excess_return": "0.4208516979912525365053294378",
+            "horizon_60_rating": 98,
+            "name": "粮油加工",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 48,
+            "rank_change_5_sessions_20d": "-5",
+            "thscode": "884010.TI",
+            "top_quartile_20d_persistence_sessions": 24,
+            "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881103.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "农产品加工",
+        "parent_context_thscode": "881103.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7142857142857142857142857143",
+          "advancers": 5,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "defb53bb1815302441c8f02ec9b44ab4808f6b81b454e2cd0558c2a326460601",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2857142857142857142857142857",
+          "decliners": 2,
+          "equal_weight_mean_daily_return": "0.0211539271125723010958218540",
+          "equal_weight_median_daily_return": "0.004419445560466050622740056",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.021153633786917630891176579",
+          "index_minus_equal_weight_mean": "-0.0000002933256546702046452750",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0068181818181818181818181818",
+              "name": "嘉华股份",
+              "thscode": "603182.SH",
+              "ticker": "603182",
+              "turnover": "18937702"
+            },
+            {
+              "daily_return": "-0.0048899755501222493887530562",
+              "name": "道道全",
+              "thscode": "002852.SZ",
+              "ticker": "002852",
+              "turnover": "78843612"
+            },
+            {
+              "daily_return": "0.004209260372820204449789537",
+              "name": "索宝蛋白",
+              "thscode": "603231.SH",
+              "ticker": "603231",
+              "turnover": "23737260"
+            },
+            {
+              "daily_return": "0.004419445560466050622740056",
+              "name": "金龙鱼",
+              "thscode": "300999.SZ",
+              "ticker": "300999",
+              "turnover": "239892020"
+            },
+            {
+              "daily_return": "0.012066365007541478129713424",
+              "name": "京粮控股",
+              "thscode": "000505.SZ",
+              "ticker": "000505",
+              "turnover": "316209310"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099846390168970814132104455",
+              "name": "金健米业",
+              "thscode": "600127.SH",
+              "ticker": "600127",
+              "turnover": "4160809300"
+            },
+            {
+              "daily_return": "0.039244186046511627906976744",
+              "name": "深粮控股",
+              "thscode": "000019.SZ",
+              "ticker": "000019",
+              "turnover": "270892900"
+            },
+            {
+              "daily_return": "0.012066365007541478129713424",
+              "name": "京粮控股",
+              "thscode": "000505.SZ",
+              "ticker": "000505",
+              "turnover": "316209310"
+            },
+            {
+              "daily_return": "0.004419445560466050622740056",
+              "name": "金龙鱼",
+              "thscode": "300999.SZ",
+              "ticker": "300999",
+              "turnover": "239892020"
+            },
+            {
+              "daily_return": "0.004209260372820204449789537",
+              "name": "索宝蛋白",
+              "thscode": "603231.SH",
+              "ticker": "603231",
+              "turnover": "23737260"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 7,
+          "membership_captured_at": "2026-09-18T10:16:42.313000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 7,
+          "sector_name": "粮油加工",
+          "sector_thscode": "884010.TI",
+          "top_three_positive_return_mass_share": "0.9459982414763121325011609538",
+          "top_three_turnover_share": "0.9292644725379404265486097057",
+          "total_constituent_turnover": "5109322104",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1448085354789363344498497448",
+          "horizon_20_rank": "7",
+          "horizon_20_rating": 96,
+          "horizon_5_excess_return": "-0.0170304380132527877340150939",
+          "horizon_5_rank": "191",
+          "horizon_5_rating": 18,
+          "horizon_60_excess_return": "0.4208516979912525365053294378",
+          "horizon_60_rating": 98,
+          "name": "粮油加工",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 48,
+          "rank_change_5_sessions_20d": "-5",
+          "thscode": "884010.TI",
+          "top_quartile_20d_persistence_sessions": 24,
+          "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+            "family": "BROAD_881",
+            "horizon_20_excess_return": "0.0838419846306408417381930578",
+            "horizon_20_rank": "9",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "-0.0254940011918557070387881618",
+            "horizon_5_rank": "86",
+            "horizon_5_rating": 5,
+            "horizon_60_excess_return": "0.0750633345829457888555192528",
+            "horizon_60_rating": 36,
+            "name": "军工装备",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 30,
+            "rank_change_5_sessions_20d": "7",
+            "thscode": "881166.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881166.TI",
+        "grouping_reason": "QUALIFIED_881_PARENT_ONLY",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "军工装备",
+        "parent_context_thscode": "881166.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7926829268292682926829268293",
+          "advancers": 65,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "826b1f455968976f2763c39e93ec92eaebe6dec703ff5830a7f2a5aee66c5624",
+          "coverage_ratio": "1",
+          "decliner_share": "0.1829268292682926829268292683",
+          "decliners": 15,
+          "equal_weight_mean_daily_return": "0.01358427029206247739661741368",
+          "equal_weight_median_daily_return": "0.0099344717786055889548678985",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013584483142447329834669833",
+          "index_minus_equal_weight_mean": "0.00000021285038485243805241932",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0267847837415320479416362689",
+              "name": "菲利华",
+              "thscode": "300395.SZ",
+              "ticker": "300395",
+              "turnover": "2714851600"
+            },
+            {
+              "daily_return": "-0.0167438546490915568222301389",
+              "name": "光启技术",
+              "thscode": "002625.SZ",
+              "ticker": "002625",
+              "turnover": "811307600"
+            },
+            {
+              "daily_return": "-0.0153846153846153846153846154",
+              "name": "光电股份",
+              "thscode": "600184.SH",
+              "ticker": "600184",
+              "turnover": "931111850"
+            },
+            {
+              "daily_return": "-0.0112948769665187575635336829",
+              "name": "航亚科技",
+              "thscode": "688510.SH",
+              "ticker": "688510",
+              "turnover": "183462120"
+            },
+            {
+              "daily_return": "-0.0060504201680672268907563025",
+              "name": "中航成飞",
+              "thscode": "302132.SZ",
+              "ticker": "302132",
+              "turnover": "368349340"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.075144508670520231213872832",
+              "name": "*ST航图",
+              "thscode": "688066.SH",
+              "ticker": "688066",
+              "turnover": "94157200"
+            },
+            {
+              "daily_return": "0.074935400516795865633074935",
+              "name": "松发股份",
+              "thscode": "603268.SH",
+              "ticker": "603268",
+              "turnover": "2516275200"
+            },
+            {
+              "daily_return": "0.049523809523809523809523810",
+              "name": "纵横股份",
+              "thscode": "688070.SH",
+              "ticker": "688070",
+              "turnover": "74639616"
+            },
+            {
+              "daily_return": "0.044968669369701437523037228",
+              "name": "航宇科技",
+              "thscode": "688239.SH",
+              "ticker": "688239",
+              "turnover": "464143230"
+            },
+            {
+              "daily_return": "0.038734667527437056165267915",
+              "name": "航新科技",
+              "thscode": "300424.SZ",
+              "ticker": "300424",
+              "turnover": "313473560"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 82,
+          "membership_captured_at": "2026-09-18T10:15:38.098000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 82,
+          "sector_name": "军工装备",
+          "sector_thscode": "881166.TI",
+          "top_three_positive_return_mass_share": "0.1640784271107767780843223566",
+          "top_three_turnover_share": "0.2971684401461543755415488539",
+          "total_constituent_turnover": "32639100556",
+          "unchanged": 2
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+          "family": "BROAD_881",
+          "horizon_20_excess_return": "0.0838419846306408417381930578",
+          "horizon_20_rank": "9",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "-0.0254940011918557070387881618",
+          "horizon_5_rank": "86",
+          "horizon_5_rating": 5,
+          "horizon_60_excess_return": "0.0750633345829457888555192528",
+          "horizon_60_rating": 36,
+          "name": "军工装备",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 30,
+          "rank_change_5_sessions_20d": "7",
+          "thscode": "881166.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1169257847127269213687748618",
+            "horizon_20_rank": "19",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "-0.0683994334482713313323905113",
+            "horizon_5_rank": "229",
+            "horizon_5_rating": 1,
+            "horizon_60_excess_return": "0.3011006188695450685188602418",
+            "horizon_60_rating": 94,
+            "name": "其他种植业",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 40,
+            "rank_change_5_sessions_20d": "-16",
+            "thscode": "884003.TI",
+            "top_quartile_20d_persistence_sessions": 24,
+            "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881101.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "种植业与林业",
+        "parent_context_thscode": "881101.TI",
+        "primary_breadth": {
+          "advancer_share": "0.6",
+          "advancers": 6,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "7a7d2267355036305793c1ccaf216431d715b6bccb139d4f98b31c88736b17c0",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4",
+          "decliners": 4,
+          "equal_weight_mean_daily_return": "0.00370454092696065150393701838",
+          "equal_weight_median_daily_return": "0.004756301594013715504403302",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.003704745344307726519716440",
+          "index_minus_equal_weight_mean": "0.00000020441734707501577942162",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0165484633569739952718676123",
+              "name": "亚盛集团",
+              "thscode": "600108.SH",
+              "ticker": "600108",
+              "turnover": "1330862120"
+            },
+            {
+              "daily_return": "-0.0151515151515151515151515152",
+              "name": "博闻科技",
+              "thscode": "600883.SH",
+              "ticker": "600883",
+              "turnover": "33055406"
+            },
+            {
+              "daily_return": "-0.0128410914927768860353130016",
+              "name": "海南橡胶",
+              "thscode": "601118.SH",
+              "ticker": "601118",
+              "turnover": "786539890"
+            },
+            {
+              "daily_return": "-0.0020639834881320949432404541",
+              "name": "诺普信",
+              "thscode": "002215.SZ",
+              "ticker": "002215",
+              "turnover": "187491740"
+            },
+            {
+              "daily_return": "0.004008016032064128256513026",
+              "name": "雪榕生物",
+              "thscode": "300511.SZ",
+              "ticker": "300511",
+              "turnover": "130015573"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.036",
+              "name": "宏辉果蔬",
+              "thscode": "603336.SH",
+              "ticker": "603336",
+              "turnover": "342268550"
+            },
+            {
+              "daily_return": "0.019253208868144690781796966",
+              "name": "华绿生物",
+              "thscode": "300970.SZ",
+              "ticker": "300970",
+              "turnover": "251090250"
+            },
+            {
+              "daily_return": "0.011538461538461538461538462",
+              "name": "新农开发",
+              "thscode": "600359.SH",
+              "ticker": "600359",
+              "turnover": "553754540"
+            },
+            {
+              "daily_return": "0.007346189164370982552800735",
+              "name": "众兴菌业",
+              "thscode": "002772.SZ",
+              "ticker": "002772",
+              "turnover": "137671860"
+            },
+            {
+              "daily_return": "0.005504587155963302752293578",
+              "name": "新赛股份",
+              "thscode": "600540.SH",
+              "ticker": "600540",
+              "turnover": "479931160"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 10,
+          "membership_captured_at": "2026-09-18T10:16:20.062000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 10,
+          "sector_name": "其他种植业",
+          "sector_thscode": "884003.TI",
+          "top_three_positive_return_mass_share": "0.7984614573984095386961708574",
+          "top_three_turnover_share": "0.6310790947472678823405681817",
+          "total_constituent_turnover": "4232681089",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1169257847127269213687748618",
+          "horizon_20_rank": "19",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "-0.0683994334482713313323905113",
+          "horizon_5_rank": "229",
+          "horizon_5_rating": 1,
+          "horizon_60_excess_return": "0.3011006188695450685188602418",
+          "horizon_60_rating": 94,
+          "name": "其他种植业",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 40,
+          "rank_change_5_sessions_20d": "-16",
+          "thscode": "884003.TI",
+          "top_quartile_20d_persistence_sessions": 24,
+          "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "as_of_session": "2026-09-18",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "omitted_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1169257847127269213687748618",
+            "horizon_20_rank": "19",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "-0.0683994334482713313323905113",
+            "horizon_5_rank": "229",
+            "horizon_5_rating": 1,
+            "horizon_60_excess_return": "0.3011006188695450685188602418",
+            "horizon_60_rating": 94,
+            "name": "其他种植业",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 40,
+            "rank_change_5_sessions_20d": "-16",
+            "thscode": "884003.TI",
+            "top_quartile_20d_persistence_sessions": 24,
+            "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881101.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "种植业与林业",
+        "parent_context_thscode": "881101.TI",
+        "primary_breadth": {
+          "advancer_share": "0.6",
+          "advancers": 6,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "7a7d2267355036305793c1ccaf216431d715b6bccb139d4f98b31c88736b17c0",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4",
+          "decliners": 4,
+          "equal_weight_mean_daily_return": "0.00370454092696065150393701838",
+          "equal_weight_median_daily_return": "0.004756301594013715504403302",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.003704745344307726519716440",
+          "index_minus_equal_weight_mean": "0.00000020441734707501577942162",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0165484633569739952718676123",
+              "name": "亚盛集团",
+              "thscode": "600108.SH",
+              "ticker": "600108",
+              "turnover": "1330862120"
+            },
+            {
+              "daily_return": "-0.0151515151515151515151515152",
+              "name": "博闻科技",
+              "thscode": "600883.SH",
+              "ticker": "600883",
+              "turnover": "33055406"
+            },
+            {
+              "daily_return": "-0.0128410914927768860353130016",
+              "name": "海南橡胶",
+              "thscode": "601118.SH",
+              "ticker": "601118",
+              "turnover": "786539890"
+            },
+            {
+              "daily_return": "-0.0020639834881320949432404541",
+              "name": "诺普信",
+              "thscode": "002215.SZ",
+              "ticker": "002215",
+              "turnover": "187491740"
+            },
+            {
+              "daily_return": "0.004008016032064128256513026",
+              "name": "雪榕生物",
+              "thscode": "300511.SZ",
+              "ticker": "300511",
+              "turnover": "130015573"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.036",
+              "name": "宏辉果蔬",
+              "thscode": "603336.SH",
+              "ticker": "603336",
+              "turnover": "342268550"
+            },
+            {
+              "daily_return": "0.019253208868144690781796966",
+              "name": "华绿生物",
+              "thscode": "300970.SZ",
+              "ticker": "300970",
+              "turnover": "251090250"
+            },
+            {
+              "daily_return": "0.011538461538461538461538462",
+              "name": "新农开发",
+              "thscode": "600359.SH",
+              "ticker": "600359",
+              "turnover": "553754540"
+            },
+            {
+              "daily_return": "0.007346189164370982552800735",
+              "name": "众兴菌业",
+              "thscode": "002772.SZ",
+              "ticker": "002772",
+              "turnover": "137671860"
+            },
+            {
+              "daily_return": "0.005504587155963302752293578",
+              "name": "新赛股份",
+              "thscode": "600540.SH",
+              "ticker": "600540",
+              "turnover": "479931160"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 10,
+          "membership_captured_at": "2026-09-18T10:16:20.062000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 10,
+          "sector_name": "其他种植业",
+          "sector_thscode": "884003.TI",
+          "top_three_positive_return_mass_share": "0.7984614573984095386961708574",
+          "top_three_turnover_share": "0.6310790947472678823405681817",
+          "total_constituent_turnover": "4232681089",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1169257847127269213687748618",
+          "horizon_20_rank": "19",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "-0.0683994334482713313323905113",
+          "horizon_5_rank": "229",
+          "horizon_5_rating": 1,
+          "horizon_60_excess_return": "0.3011006188695450685188602418",
+          "horizon_60_rating": 94,
+          "name": "其他种植业",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 40,
+          "rank_change_5_sessions_20d": "-16",
+          "thscode": "884003.TI",
+          "top_quartile_20d_persistence_sessions": 24,
+          "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY",
+    "surfaced_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": true,
+            "as_of_session": "2026-09-18",
+            "event_type": "ACCELERATING_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0852263600967915524944614648",
+            "horizon_20_rank": "34",
+            "horizon_20_rating": 85,
+            "horizon_5_excess_return": "0.0828217521004613112119043910",
+            "horizon_5_rank": "11",
+            "horizon_5_rating": 95,
+            "horizon_60_excess_return": "-0.0794625232374961816855682142",
+            "horizon_60_rating": 10,
+            "name": "膜材料",
+            "persistent_gate_entered": false,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "138",
+            "thscode": "884213.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881265.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "塑料制品",
+        "parent_context_thscode": "881265.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5789473684210526315789473684",
+          "advancers": 11,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "8703aac39506e1b07a5732a68b83eb704f4dbe27ecef47d02afbbdb22271b25d",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4210526315789473684210526316",
+          "decliners": 8,
+          "equal_weight_mean_daily_return": "0.01315369323810438989693376458",
+          "equal_weight_median_daily_return": "0.016279069767441860465116279",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013153692058973355194729678",
+          "index_minus_equal_weight_mean": "-0.00000000117913103470220408658",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0191204588910133843212237094",
+              "name": "东材科技",
+              "thscode": "601208.SH",
+              "ticker": "601208",
+              "turnover": "3856384600"
+            },
+            {
+              "daily_return": "-0.0119760479041916167664670659",
+              "name": "双星新材",
+              "thscode": "002585.SZ",
+              "ticker": "002585",
+              "turnover": "1557311400"
+            },
+            {
+              "daily_return": "-0.0031678986272439281942977825",
+              "name": "国风新材",
+              "thscode": "000859.SZ",
+              "ticker": "000859",
+              "turnover": "501813320"
+            },
+            {
+              "daily_return": "-0.0030959752321981424148606811",
+              "name": "大东南",
+              "thscode": "002263.SZ",
+              "ticker": "002263",
+              "turnover": "126376564"
+            },
+            {
+              "daily_return": "-0.0016666666666666666666666667",
+              "name": "佛塑科技",
+              "thscode": "000973.SZ",
+              "ticker": "000973",
+              "turnover": "320765500"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.051819184123484013230429989",
+              "name": "道明光学",
+              "thscode": "002632.SZ",
+              "ticker": "002632",
+              "turnover": "366758930"
+            },
+            {
+              "daily_return": "0.041963578780680918448139351",
+              "name": "沃顿科技",
+              "thscode": "000920.SZ",
+              "ticker": "000920",
+              "turnover": "760915950"
+            },
+            {
+              "daily_return": "0.030607783121993878443375601",
+              "name": "德冠新材",
+              "thscode": "001378.SZ",
+              "ticker": "001378",
+              "turnover": "325655110"
+            },
+            {
+              "daily_return": "0.026981450252951096121416526",
+              "name": "浙江众成",
+              "thscode": "002522.SZ",
+              "ticker": "002522",
+              "turnover": "674609900"
+            },
+            {
+              "daily_return": "0.025980911983032873806998940",
+              "name": "中仑新材",
+              "thscode": "301565.SZ",
+              "ticker": "301565",
+              "turnover": "76603479"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 19,
+          "membership_captured_at": "2026-09-18T10:17:03.074000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 19,
+          "sector_name": "膜材料",
+          "sector_thscode": "884213.TI",
+          "top_three_positive_return_mass_share": "0.4244758970755516498323454376",
+          "top_three_turnover_share": "0.6279061455200002734646301463",
+          "total_constituent_turnover": "11377559132",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": true,
+          "as_of_session": "2026-09-18",
+          "event_type": "ACCELERATING_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0852263600967915524944614648",
+          "horizon_20_rank": "34",
+          "horizon_20_rating": 85,
+          "horizon_5_excess_return": "0.0828217521004613112119043910",
+          "horizon_5_rank": "11",
+          "horizon_5_rating": 95,
+          "horizon_60_excess_return": "-0.0794625232374961816855682142",
+          "horizon_60_rating": 10,
+          "name": "膜材料",
+          "persistent_gate_entered": false,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "138",
+          "thscode": "884213.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1448085354789363344498497448",
+            "horizon_20_rank": "7",
+            "horizon_20_rating": 96,
+            "horizon_5_excess_return": "-0.0170304380132527877340150939",
+            "horizon_5_rank": "191",
+            "horizon_5_rating": 18,
+            "horizon_60_excess_return": "0.4208516979912525365053294378",
+            "horizon_60_rating": 98,
+            "name": "粮油加工",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 48,
+            "rank_change_5_sessions_20d": "-5",
+            "thscode": "884010.TI",
+            "top_quartile_20d_persistence_sessions": 24,
+            "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881103.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "农产品加工",
+        "parent_context_thscode": "881103.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7142857142857142857142857143",
+          "advancers": 5,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "defb53bb1815302441c8f02ec9b44ab4808f6b81b454e2cd0558c2a326460601",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2857142857142857142857142857",
+          "decliners": 2,
+          "equal_weight_mean_daily_return": "0.0211539271125723010958218540",
+          "equal_weight_median_daily_return": "0.004419445560466050622740056",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.021153633786917630891176579",
+          "index_minus_equal_weight_mean": "-0.0000002933256546702046452750",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0068181818181818181818181818",
+              "name": "嘉华股份",
+              "thscode": "603182.SH",
+              "ticker": "603182",
+              "turnover": "18937702"
+            },
+            {
+              "daily_return": "-0.0048899755501222493887530562",
+              "name": "道道全",
+              "thscode": "002852.SZ",
+              "ticker": "002852",
+              "turnover": "78843612"
+            },
+            {
+              "daily_return": "0.004209260372820204449789537",
+              "name": "索宝蛋白",
+              "thscode": "603231.SH",
+              "ticker": "603231",
+              "turnover": "23737260"
+            },
+            {
+              "daily_return": "0.004419445560466050622740056",
+              "name": "金龙鱼",
+              "thscode": "300999.SZ",
+              "ticker": "300999",
+              "turnover": "239892020"
+            },
+            {
+              "daily_return": "0.012066365007541478129713424",
+              "name": "京粮控股",
+              "thscode": "000505.SZ",
+              "ticker": "000505",
+              "turnover": "316209310"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099846390168970814132104455",
+              "name": "金健米业",
+              "thscode": "600127.SH",
+              "ticker": "600127",
+              "turnover": "4160809300"
+            },
+            {
+              "daily_return": "0.039244186046511627906976744",
+              "name": "深粮控股",
+              "thscode": "000019.SZ",
+              "ticker": "000019",
+              "turnover": "270892900"
+            },
+            {
+              "daily_return": "0.012066365007541478129713424",
+              "name": "京粮控股",
+              "thscode": "000505.SZ",
+              "ticker": "000505",
+              "turnover": "316209310"
+            },
+            {
+              "daily_return": "0.004419445560466050622740056",
+              "name": "金龙鱼",
+              "thscode": "300999.SZ",
+              "ticker": "300999",
+              "turnover": "239892020"
+            },
+            {
+              "daily_return": "0.004209260372820204449789537",
+              "name": "索宝蛋白",
+              "thscode": "603231.SH",
+              "ticker": "603231",
+              "turnover": "23737260"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 7,
+          "membership_captured_at": "2026-09-18T10:16:42.313000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 7,
+          "sector_name": "粮油加工",
+          "sector_thscode": "884010.TI",
+          "top_three_positive_return_mass_share": "0.9459982414763121325011609538",
+          "top_three_turnover_share": "0.9292644725379404265486097057",
+          "total_constituent_turnover": "5109322104",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1448085354789363344498497448",
+          "horizon_20_rank": "7",
+          "horizon_20_rating": 96,
+          "horizon_5_excess_return": "-0.0170304380132527877340150939",
+          "horizon_5_rank": "191",
+          "horizon_5_rating": 18,
+          "horizon_60_excess_return": "0.4208516979912525365053294378",
+          "horizon_60_rating": 98,
+          "name": "粮油加工",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 48,
+          "rank_change_5_sessions_20d": "-5",
+          "thscode": "884010.TI",
+          "top_quartile_20d_persistence_sessions": 24,
+          "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-09-18",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+            "family": "BROAD_881",
+            "horizon_20_excess_return": "0.0838419846306408417381930578",
+            "horizon_20_rank": "9",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "-0.0254940011918557070387881618",
+            "horizon_5_rank": "86",
+            "horizon_5_rating": 5,
+            "horizon_60_excess_return": "0.0750633345829457888555192528",
+            "horizon_60_rating": 36,
+            "name": "军工装备",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 30,
+            "rank_change_5_sessions_20d": "7",
+            "thscode": "881166.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881166.TI",
+        "grouping_reason": "QUALIFIED_881_PARENT_ONLY",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "军工装备",
+        "parent_context_thscode": "881166.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7926829268292682926829268293",
+          "advancers": 65,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "826b1f455968976f2763c39e93ec92eaebe6dec703ff5830a7f2a5aee66c5624",
+          "coverage_ratio": "1",
+          "decliner_share": "0.1829268292682926829268292683",
+          "decliners": 15,
+          "equal_weight_mean_daily_return": "0.01358427029206247739661741368",
+          "equal_weight_median_daily_return": "0.0099344717786055889548678985",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013584483142447329834669833",
+          "index_minus_equal_weight_mean": "0.00000021285038485243805241932",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0267847837415320479416362689",
+              "name": "菲利华",
+              "thscode": "300395.SZ",
+              "ticker": "300395",
+              "turnover": "2714851600"
+            },
+            {
+              "daily_return": "-0.0167438546490915568222301389",
+              "name": "光启技术",
+              "thscode": "002625.SZ",
+              "ticker": "002625",
+              "turnover": "811307600"
+            },
+            {
+              "daily_return": "-0.0153846153846153846153846154",
+              "name": "光电股份",
+              "thscode": "600184.SH",
+              "ticker": "600184",
+              "turnover": "931111850"
+            },
+            {
+              "daily_return": "-0.0112948769665187575635336829",
+              "name": "航亚科技",
+              "thscode": "688510.SH",
+              "ticker": "688510",
+              "turnover": "183462120"
+            },
+            {
+              "daily_return": "-0.0060504201680672268907563025",
+              "name": "中航成飞",
+              "thscode": "302132.SZ",
+              "ticker": "302132",
+              "turnover": "368349340"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.075144508670520231213872832",
+              "name": "*ST航图",
+              "thscode": "688066.SH",
+              "ticker": "688066",
+              "turnover": "94157200"
+            },
+            {
+              "daily_return": "0.074935400516795865633074935",
+              "name": "松发股份",
+              "thscode": "603268.SH",
+              "ticker": "603268",
+              "turnover": "2516275200"
+            },
+            {
+              "daily_return": "0.049523809523809523809523810",
+              "name": "纵横股份",
+              "thscode": "688070.SH",
+              "ticker": "688070",
+              "turnover": "74639616"
+            },
+            {
+              "daily_return": "0.044968669369701437523037228",
+              "name": "航宇科技",
+              "thscode": "688239.SH",
+              "ticker": "688239",
+              "turnover": "464143230"
+            },
+            {
+              "daily_return": "0.038734667527437056165267915",
+              "name": "航新科技",
+              "thscode": "300424.SZ",
+              "ticker": "300424",
+              "turnover": "313473560"
+            }
+          ],
+          "market_session": "2026-09-18",
+          "member_count": 82,
+          "membership_captured_at": "2026-09-18T10:15:38.098000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-09-18T10:21:28.077701Z",
+          "priced_member_count": 82,
+          "sector_name": "军工装备",
+          "sector_thscode": "881166.TI",
+          "top_three_positive_return_mass_share": "0.1640784271107767780843223566",
+          "top_three_turnover_share": "0.2971684401461543755415488539",
+          "total_constituent_turnover": "32639100556",
+          "unchanged": 2
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-09-18",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0053207527181294631840840321",
+          "family": "BROAD_881",
+          "horizon_20_excess_return": "0.0838419846306408417381930578",
+          "horizon_20_rank": "9",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "-0.0254940011918557070387881618",
+          "horizon_5_rank": "86",
+          "horizon_5_rating": 5,
+          "horizon_60_excess_return": "0.0750633345829457888555192528",
+          "horizon_60_rating": 36,
+          "name": "军工装备",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 30,
+          "rank_change_5_sessions_20d": "7",
+          "thscode": "881166.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "0.9939868538445272395138875010"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "truncated_group_count": 1
+  },
+  "event_ledger_update": {
+    "added_event_ids": [
+      "221b7002865aaf645e5a1f4998bd840fa55460a3d26136d5cfd04626abb98bb9",
+      "84934afdb261b77e14d8815ffa546f192f45039b73b50b86441a973f418b4f19",
+      "c805499ee18dde0ed0fe07156a3c110ef24fbf8389f89d329bc7a7ac803da52d",
+      "fa35915adedf64648f92cd2c66fdd3924b7697275f99a12759fc22b7c3c5ef13"
+    ],
+    "event_count": 86,
+    "event_ledger_hash": "45a49d81415a8d4af3f1e1062890ee7e50568e748bcff8e9b7aaee010e7257b4",
+    "previous_event_ledger_hash": "38f64b650402880690dd1d5cc5ba0b66d4df2a29c0c26f828b63153b5e12719e",
+    "reused_event_ids": []
+  },
+  "granular_entries": {
+    "as_of_session": "2026-09-18",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-18",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0927611748245479983786244238",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0852263600967915524944614648",
+        "horizon_20_rank": "34",
+        "horizon_20_rating": 85,
+        "horizon_5_excess_return": "0.0828217521004613112119043910",
+        "horizon_5_rank": "11",
+        "horizon_5_rating": 95,
+        "horizon_60_excess_return": "-0.0794625232374961816855682142",
+        "horizon_60_rating": 10,
+        "name": "膜材料",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "138",
+        "thscode": "884213.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "1.512018410135706819637202570"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.1446690202734841222280688679",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1448085354789363344498497448",
+        "horizon_20_rank": "7",
+        "horizon_20_rating": 96,
+        "horizon_5_excess_return": "-0.0170304380132527877340150939",
+        "horizon_5_rank": "191",
+        "horizon_5_rating": 18,
+        "horizon_60_excess_return": "0.4208516979912525365053294378",
+        "horizon_60_rating": 98,
+        "name": "粮油加工",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 48,
+        "rank_change_5_sessions_20d": "-5",
+        "thscode": "884010.TI",
+        "top_quartile_20d_persistence_sessions": 24,
+        "turnover_pulse_5_vs_prior_20": "0.9644392477202102787429059062"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-18",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.1574642248225514788437699689",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1169257847127269213687748618",
+        "horizon_20_rank": "19",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "-0.0683994334482713313323905113",
+        "horizon_5_rank": "229",
+        "horizon_5_rating": 1,
+        "horizon_60_excess_return": "0.3011006188695450685188602418",
+        "horizon_60_rating": 94,
+        "name": "其他种植业",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 40,
+        "rank_change_5_sessions_20d": "-16",
+        "thscode": "884003.TI",
+        "top_quartile_20d_persistence_sessions": 24,
+        "turnover_pulse_5_vs_prior_20": "0.9694751468830356911338807859"
+      }
+    ],
+    "family": "GRANULAR_884",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-17",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "human_attention_authority": "NONE",
+  "input_market_state_hash": "7b2c8d085bdba16dc128a1b9236bd481f4026bbbbbf43134209ff71c5084a218",
+  "investment_authority": "NONE",
+  "market_session": "2026-09-18",
+  "output_market_state_hash": "011f47a37f4ce9b7966f15c7ad4b5d38daa60cd96cfe0721602b0f69eb0a12f9",
+  "parent_hint_mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+  "parent_revalidations": [
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "8703aac39506e1b07a5732a68b83eb704f4dbe27ecef47d02afbbdb22271b25d",
+        "child_fully_contained": true,
+        "child_member_count": 19,
+        "child_membership_captured_at": "2026-09-18T10:17:03.074000Z",
+        "child_name": "膜材料",
+        "child_thscode": "884213.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 19,
+        "investment_authority": "NONE",
+        "jaccard": "0.2467532467532467532467532468",
+        "parent_constituent_set_hash": "0f708b7c622d1b9a257cf6342b1c4ed126ad2227208a78952c1347551d8f52f5",
+        "parent_member_count": 77,
+        "parent_membership_captured_at": "2026-09-18T10:15:59.307000Z",
+        "parent_name": "塑料制品",
+        "parent_thscode": "881265.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "8703aac39506e1b07a5732a68b83eb704f4dbe27ecef47d02afbbdb22271b25d",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 19,
+        "child_membership_captured_at": "2026-09-04T16:31:46.615000Z",
+        "child_name": "膜材料",
+        "child_thscode": "884213.TI",
+        "intersection_count_at_capture": 19,
+        "parent_constituent_set_hash_at_capture": "0f708b7c622d1b9a257cf6342b1c4ed126ad2227208a78952c1347551d8f52f5",
+        "parent_member_count_at_capture": 77,
+        "parent_membership_captured_at": "2026-09-04T16:22:47.457000Z",
+        "parent_name": "塑料制品",
+        "parent_thscode": "881265.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": false,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": true,
+      "current_parent_link": {
+        "child_constituent_set_hash": "defb53bb1815302441c8f02ec9b44ab4808f6b81b454e2cd0558c2a326460601",
+        "child_fully_contained": true,
+        "child_member_count": 7,
+        "child_membership_captured_at": "2026-09-18T10:16:42.313000Z",
+        "child_name": "粮油加工",
+        "child_thscode": "884010.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 7,
+        "investment_authority": "NONE",
+        "jaccard": "0.1627906976744186046511627907",
+        "parent_constituent_set_hash": "731bdc228b7e6a596e639b306ba9969a7685c22f6ddd05c31bc53f6c6a28d0c7",
+        "parent_member_count": 43,
+        "parent_membership_captured_at": "2026-09-18T10:15:16.150000Z",
+        "parent_name": "农产品加工",
+        "parent_thscode": "881103.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "b7e730e744cd3d2de72d1b43e2733004dc4efac51cd3bc5e0af66ac840da1cfe",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 7,
+        "child_membership_captured_at": "2026-09-04T16:24:16.282000Z",
+        "child_name": "粮油加工",
+        "child_thscode": "884010.TI",
+        "intersection_count_at_capture": 7,
+        "parent_constituent_set_hash_at_capture": "323f10d3fb980903e67f588f8813986015de9f9d6ad3c445ea2552b936e75f34",
+        "parent_member_count_at_capture": 43,
+        "parent_membership_captured_at": "2026-09-04T16:17:59.768000Z",
+        "parent_name": "农产品加工",
+        "parent_thscode": "881103.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": true,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "7a7d2267355036305793c1ccaf216431d715b6bccb139d4f98b31c88736b17c0",
+        "child_fully_contained": true,
+        "child_member_count": 10,
+        "child_membership_captured_at": "2026-09-18T10:16:20.062000Z",
+        "child_name": "其他种植业",
+        "child_thscode": "884003.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 10,
+        "investment_authority": "NONE",
+        "jaccard": "0.3333333333333333333333333333",
+        "parent_constituent_set_hash": "940477493a3ca43b5b893eb2443f0c7eeeb692063630326a48297b7b638a1d92",
+        "parent_member_count": 30,
+        "parent_membership_captured_at": "2026-09-18T10:14:54.904000Z",
+        "parent_name": "种植业与林业",
+        "parent_thscode": "881101.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "7a7d2267355036305793c1ccaf216431d715b6bccb139d4f98b31c88736b17c0",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 10,
+        "child_membership_captured_at": "2026-09-04T16:24:00.038000Z",
+        "child_name": "其他种植业",
+        "child_thscode": "884003.TI",
+        "intersection_count_at_capture": 10,
+        "parent_constituent_set_hash_at_capture": "940477493a3ca43b5b893eb2443f0c7eeeb692063630326a48297b7b638a1d92",
+        "parent_member_count_at_capture": 30,
+        "parent_membership_captured_at": "2026-09-04T16:17:53.247000Z",
+        "parent_name": "种植业与林业",
+        "parent_thscode": "881101.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": false,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    }
+  ],
+  "preparation_hash": "4e17ba53dd0f2121cadf5eeb2d6703e4e3e00a2717ff88ed1404c7308da5679a",
+  "produced_at": "2026-09-18T10:21:28.077701Z",
+  "qualified_snapshot_hash": "438ca282e3158c881bea98ef483e4c40070e8aaf89d44d952fac69510ed9f4be",
+  "result_hash": "a9701c89902531f64202415628ec5437e6a7e9c13f91d2d92d7b91eafdb19766",
+  "schema_version": 1,
+  "state_update_status": "APPENDED_NEW_COMPLETED_SESSION"
+}

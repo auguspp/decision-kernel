@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "d9e81dfe5c9222592c473d68d1fa18f129f518f2cf27747709b31eda4b2f2e02",
+    "base_reading_hash": "0d10bb3f8697b9f183333735def227d8551213bfa25cd44893747a8dcd1fed14",
     "companies": [
       {
         "automatic_admission": false,
@@ -51,18 +51,31 @@
           "道明光学"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "道明光学",
+              "excluded_reasons": [
+                "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
+              ],
+              "input_failure": null,
+              "market_expression_status": "NOT_ESTABLISHED",
+              "status": "CONDITIONS_NOT_MET",
+              "thscode": "002632.SZ"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "002632.SZ"
@@ -115,18 +128,36 @@
           "金健米业"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "金健米业",
+              "excluded_reasons": [],
+              "input_failure": {
+                "category": "DATA_QUALIFICATION_FAILED",
+                "phase": "INPUT_QUALIFICATION",
+                "provider_business_code": null,
+                "reason_code": "CURRENT_QUOTE_HISTORY_MISMATCH",
+                "scope": "ISSUER_LOCAL",
+                "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
+              },
+              "market_expression_status": "NOT_ESTABLISHED",
+              "status": "DATA_QUALIFICATION_FAILED",
+              "thscode": "600127.SH"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "600127.SH"
@@ -179,18 +210,31 @@
           "*ST航图"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "*ST航图",
+              "excluded_reasons": [
+                "RISK_OR_NEW_LISTING_NAME_LABEL"
+              ],
+              "input_failure": null,
+              "market_expression_status": "NOT_ESTABLISHED",
+              "status": "CONDITIONS_NOT_MET",
+              "thscode": "688066.SH"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "688066.SH"
@@ -244,15 +288,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -293,32 +337,90 @@
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“膜材料”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“膜材料”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "已有来源准备失败记录：先按原执行身份处理接续，不重置旧问题、重复启动首次基线或把失败写成WAIT。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
           "references": [],
           "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "status": "SAVED_CONTEXT_PRESENT",
           "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
+          "stock_business_states": [
+            {
+              "record": {
+                "candidate_output_prefix": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/",
+                "company_name": "沃顿科技",
+                "error_code": null,
+                "error_type": "CninfoPdfHttpError",
+                "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+                "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+                "finished_at": "2026-09-18T10:31:13.111492+00:00",
+                "human_attention_authority": "NONE",
+                "investment_authority": "NONE",
+                "origin_market_session": "2026-09-18",
+                "question_kind": "FIRST_BUSINESS_BASELINE",
+                "registered_current_handoff": false,
+                "research_authority": "NONE",
+                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+                "signal_transition_authority": "NONE",
+                "sources": {
+                  "failure": {
+                    "bytes": 776,
+                    "git_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
+                    "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/failure.json",
+                    "read_path": "sources/git/531b5e21ed15928f2abf2550b0800dc666b47ffb/failure.json",
+                    "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                    "ref": "79362c980a6fb3208e0cdb3850d7ad6fe3d00cd9",
+                    "repository": "auguspp/decision-kernel",
+                    "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a"
+                  },
+                  "selection": {
+                    "bytes": 17411,
+                    "git_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
+                    "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/prepare.json",
+                    "read_path": "sources/git/f0efbab42adde8af50977c7f51f75087e518a0df/prepare.json",
+                    "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                    "ref": "79362c980a6fb3208e0cdb3850d7ad6fe3d00cd9",
+                    "repository": "auguspp/decision-kernel",
+                    "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73"
+                  }
+                },
+                "status": "PRE_EXECUTION_FAILURE",
+                "terminal_state": null,
+                "thscode": "000920.SZ"
+              },
+              "role": "ROOT"
+            }
+          ]
         },
         "source_names": [
           "沃顿科技"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "沃顿科技",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "000920.SZ"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000920.SZ"
@@ -371,18 +473,31 @@
           "深粮控股"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "深粮控股",
+              "excluded_reasons": [
+                "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
+              ],
+              "input_failure": null,
+              "market_expression_status": "NOT_ESTABLISHED",
+              "status": "CONDITIONS_NOT_MET",
+              "thscode": "000019.SZ"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000019.SZ"
@@ -427,26 +542,69 @@
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
           "references": [],
           "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "status": "SAVED_CONTEXT_PRESENT",
           "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
+          "stock_business_states": [
+            {
+              "record": {
+                "candidate_output_prefix": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/",
+                "company_name": "松发股份",
+                "execution_id": "stock-business-0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5",
+                "human_attention_authority": "NONE",
+                "investment_authority": "NONE",
+                "origin_market_session": "2026-09-18",
+                "question_kind": "FIRST_BUSINESS_BASELINE",
+                "registered_current_handoff": false,
+                "research_authority": "NONE",
+                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+                "signal_transition_authority": "NONE",
+                "sources": {
+                  "selection": {
+                    "bytes": 14568,
+                    "git_blob": "054c51495a3160a0aa16099c56ce46e334ba8057",
+                    "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/prepare.json",
+                    "read_path": "sources/git/054c51495a3160a0aa16099c56ce46e334ba8057/prepare.json",
+                    "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                    "ref": "79362c980a6fb3208e0cdb3850d7ad6fe3d00cd9",
+                    "repository": "auguspp/decision-kernel",
+                    "sha256": "0b069ea0a16677c4bcde496eac4c9a99347dac1025926d12c83e7c3a42c333c3"
+                  }
+                },
+                "status": "RETAINED_NO_RESEARCH_RESULT",
+                "terminal_state": null,
+                "thscode": "603268.SH"
+              },
+              "role": "ROOT"
+            }
+          ]
         },
         "source_names": [
           "松发股份"
         ],
         "stock": {
-          "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [
+            {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "松发股份",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "603268.SH"
+            }
+          ],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+          "status": "SAVED_DISPOSITION"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603268.SH"
@@ -500,15 +658,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -564,15 +722,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -628,15 +786,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -692,15 +850,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -756,15 +914,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -820,15 +978,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -884,15 +1042,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -948,15 +1106,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1012,15 +1170,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1076,15 +1234,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1140,15 +1298,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1204,15 +1362,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1268,15 +1426,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1361,15 +1519,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1489,15 +1647,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1583,15 +1741,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1676,15 +1834,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1769,15 +1927,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1863,15 +2021,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -1957,15 +2115,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2040,15 +2198,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2173,15 +2331,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2266,15 +2424,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2359,15 +2517,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2452,15 +2610,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2546,15 +2704,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2628,15 +2786,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2721,15 +2879,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2815,15 +2973,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -2908,15 +3066,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3002,15 +3160,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3095,15 +3253,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3188,15 +3346,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3282,15 +3440,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3364,15 +3522,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3457,15 +3615,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3549,15 +3707,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3641,36 +3799,18 @@
           "海马汽车"
         ],
         "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "海马汽车",
-              "excluded_reasons": [],
-              "input_failure": {
-                "category": "DATA_QUALIFICATION_FAILED",
-                "phase": "INPUT_QUALIFICATION",
-                "provider_business_code": null,
-                "reason_code": "CURRENT_QUOTE_HISTORY_MISMATCH",
-                "scope": "ISSUER_LOCAL",
-                "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
-              },
-              "market_expression_status": "NOT_ESTABLISHED",
-              "status": "DATA_QUALIFICATION_FAILED",
-              "thscode": "000572.SZ"
-            }
-          ],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "SAVED_DISPOSITION"
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000572.SZ"
@@ -3753,15 +3893,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -3846,36 +3986,18 @@
           "众泰汽车"
         ],
         "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "众泰汽车",
-              "excluded_reasons": [],
-              "input_failure": {
-                "category": "DATA_QUALIFICATION_FAILED",
-                "phase": "INPUT_QUALIFICATION",
-                "provider_business_code": null,
-                "reason_code": "CURRENT_QUOTE_HISTORY_MISMATCH",
-                "scope": "ISSUER_LOCAL",
-                "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
-              },
-              "market_expression_status": "NOT_ESTABLISHED",
-              "status": "DATA_QUALIFICATION_FAILED",
-              "thscode": "000980.SZ"
-            }
-          ],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
-          "status": "SAVED_DISPOSITION"
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "000980.SZ"
@@ -3958,15 +4080,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4051,15 +4173,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4144,15 +4266,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4237,15 +4359,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4319,15 +4441,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4412,15 +4534,15 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "IN_PROGRESS",
-          "market_session": "2026-09-17",
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-18",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
-            "bytes": 53071,
-            "git_blob": "cf945aa2757e3c34c7fd336bef7c74e7246e7837",
-            "read_path": "details/stock/35210443356/reading/stock-reading.json",
+            "bytes": 78241,
+            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
+            "read_path": "details/stock/35334355692/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "a868e341a8c1eae89a7fd7816c0c6c0b5bb298ccb2a3250962ad09b3dc11449e"
+            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
           },
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
@@ -4448,11 +4570,11 @@
       "overlap_companies": 0,
       "sector_companies": 20,
       "unsupported_stock_business_research_companies": 3,
-      "with_saved_research_context": 0,
-      "with_saved_stock_disposition": 2
+      "with_saved_research_context": 2,
+      "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-18T10:23:34.468004+00:00",
+    "generated_at": "2026-09-18T10:31:25.136040+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -4622,5 +4744,5 @@
     "stock_business_read_status": "READ_OK",
     "version": "radar-company-reading-with-concepts-v2"
   },
-  "projection_hash": "66f88c27a3abb4b75d68c05e1ae2a6e914a7199d27025ac8b1e539a83d79cc66"
+  "projection_hash": "d10b5b5f4054127a19af22f20a6af77a2c830a8b6683d7c2594814375ee67f32"
 }
