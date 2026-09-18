@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "6fc33abb4ae808ff70a9e79ac917cb3e3eef60f9947f0d39af30bf3e56c7fcd3",
+    "base_reading_hash": "d9e81dfe5c9222592c473d68d1fa18f129f518f2cf27747709b31eda4b2f2e02",
     "companies": [
       {
         "automatic_admission": false,
@@ -52,7 +52,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -116,7 +116,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -180,7 +180,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -244,7 +244,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -308,7 +308,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -372,7 +372,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -436,7 +436,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -500,7 +500,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -564,7 +564,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -628,7 +628,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -692,7 +692,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -756,7 +756,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -820,7 +820,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -884,7 +884,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -948,7 +948,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1012,7 +1012,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1076,7 +1076,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1140,7 +1140,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1204,7 +1204,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1268,7 +1268,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1361,7 +1361,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1489,7 +1489,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1583,7 +1583,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1676,7 +1676,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1769,7 +1769,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1863,7 +1863,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1957,7 +1957,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2040,7 +2040,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2173,7 +2173,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2266,7 +2266,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2359,7 +2359,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2452,7 +2452,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2546,7 +2546,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2628,7 +2628,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2721,7 +2721,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2815,7 +2815,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2908,7 +2908,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3002,7 +3002,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3095,7 +3095,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3188,7 +3188,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3282,7 +3282,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3364,7 +3364,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3457,7 +3457,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3549,7 +3549,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3660,7 +3660,7 @@
               "thscode": "000572.SZ"
             }
           ],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3753,7 +3753,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3865,7 +3865,7 @@
               "thscode": "000980.SZ"
             }
           ],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3958,7 +3958,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4051,7 +4051,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4144,7 +4144,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4237,7 +4237,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4319,7 +4319,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4412,7 +4412,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_SUCCESS_INPUT_REJECTED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-17",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4452,7 +4452,7 @@
       "with_saved_stock_disposition": 2
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-18T10:22:17.647219+00:00",
+    "generated_at": "2026-09-18T10:23:34.468004+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -4622,5 +4622,5 @@
     "stock_business_read_status": "READ_OK",
     "version": "radar-company-reading-with-concepts-v2"
   },
-  "projection_hash": "83a4b726f5cccb8aef47e4e951103c659030ca9c4f327458694aa87910dcb70b"
+  "projection_hash": "66f88c27a3abb4b75d68c05e1ae2a6e914a7199d27025ac8b1e539a83d79cc66"
 }
