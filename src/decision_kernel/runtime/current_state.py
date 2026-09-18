@@ -248,7 +248,7 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     check(capture["provenance"] == "LIVE_HITHINK", "synthetic capture is not live stock output")
     report = json.loads(files["reading/stock-reading.json"])
     p = report["projection"]
-    if p.get('version') == stock.MARKET_EXPRESSION_VERSION:
+    if p.get('version') in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}:
         render_market_expression_reading(report)
     else:
         stock.render_stock_reading(report)
@@ -268,7 +268,7 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     check(binding["request_hash"] == canonical_hash(request)
           and str(binding["run_id"]) == str(request["market_run_id"]) == str(market_manifest["source_run_id"])
           and binding["commit"] == market_manifest["source_commit_sha"], "stock exact market request differs")
-    if p.get('version') == stock.MARKET_EXPRESSION_VERSION:
+    if p.get('version') in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}:
         context_binding = json.loads(files["market-context-binding.json"])
         sector_raw = files["reading/inputs/sector-result.json"]
         check(files["market-context/result.json"] == sector_raw, "Stock Sector result copy differs from exact bound run artifact")
@@ -281,6 +281,12 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
               and sector_result["output_market_state_hash"] == p["market_state_hash"]
               and sector_result["event_ledger_update"]["event_ledger_hash"] == p["event_ledger_hash"],
               "Stock market-expression Sector result binding differs")
+    if ('reading/inputs/discovery-page.json' in files or 'discovery_page' in request
+            or capture.get('version') == 'stock-reading-discovery-page-capture-v8'):
+        check(p.get('version') == stock.DISCOVERY_PAGE_VERSION, 'discovery capture cannot become legacy Stock')
+    if p.get('version') == stock.DISCOVERY_PAGE_VERSION:
+        from .stock_discovery_page import validate_saved
+        validate_saved(request, capture, report, files)
     for name in ("manifest.json", "market-state.json", "candidate-events.json"):
         check(files["market/" + name] == files["reading/inputs/state/" + name], "stock retained state differs")
     check(sha256(files["market/market-state.json"]) == market_manifest["market_state_file_sha256"]

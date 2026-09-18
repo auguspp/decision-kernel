@@ -78,7 +78,7 @@ def candidate_label(group: dict) -> str:
 
 def prepare_market_expression_reading(source_root: Path, state, ledger, association: dict,
                                       sector_result: dict, *, observed_at,
-                                      company_manifest: str = stock.COMPANY_MANIFEST) -> dict:
+                                      company_manifest: str = stock.COMPANY_MANIFEST, discovery_page=None) -> dict:
     """Freeze a bounded market-expression candidate plan without beneficiary inference."""
     stock.check_observation_clock(state, observed_at)
     _validate_sector_result(sector_result, state, ledger, observed_at=observed_at)
@@ -92,6 +92,12 @@ def prepare_market_expression_reading(source_root: Path, state, ledger, associat
     context = build_sector_radar_context(market_state=state, event_ledger=ledger, generated_at=observed_at)
     all_rows = {r["observation"]["thscode"]: r for u in context["universes"] for r in u["rows"]}
     families = {r["observation"]["thscode"]: u["family"] for u in context["universes"] for r in u["rows"]}
+
+    if discovery_page is not None:
+        from .stock_discovery_page import prepare
+        return prepare(state, ledger, association, sector_result, linked=linked,
+                       reviewed=reviewed, context=context, observed_at=observed_at,
+                       company_manifest=company_manifest, selection=discovery_page)
 
     groups = sector_result["composition"]["surfaced_groups"]
     if len(groups) > 3:
@@ -221,10 +227,12 @@ def render_market_expression_reading(report: dict) -> str:
     p = report["projection"]
     coverage = stock._coverage(p["all_stock_observations"])
     partial = stock._partial_status(coverage, p["surfaced_stocks"])
+    expected_policy = (stock.DISCOVERY_PAGE_POLICY if p.get("version") == stock.DISCOVERY_PAGE_VERSION
+                       else stock.MARKET_EXPRESSION_POLICY)
     if (report["projection_hash"] != canonical_hash(p)
-            or p["version"] != stock.MARKET_EXPRESSION_VERSION
+            or p["version"] not in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}
             or p["semantics"] != stock.MARKET_EXPRESSION_SEMANTICS
-            or p["policy"] != stock.MARKET_EXPRESSION_POLICY
+            or p["policy"] != expected_policy
             or any(p[k] != v for k, v in stock.LIMITS.items())
             or p["coverage"] != coverage or p["selection_scope_complete"] != coverage["scope_complete"]
             or len(p["surfaced_stocks"]) > 3
@@ -273,4 +281,10 @@ def render_market_expression_reading(report: dict) -> str:
         "omitted_eligible_stock_codes": p["omitted_eligible_stock_codes"],
     })), '</pre><p>Human Attention / Research / Investment authority = NONE。</p></section>',
               '<footer>SHADOW OBSERVATION ONLY · Evidence changes Belief · Price changes Odds</footer></main></html>']
-    return "\n".join(parts) + "\n"
+    text = "\n".join(parts) + "\n"
+    if p["version"] == stock.DISCOVERY_PAGE_VERSION:
+        from .stock_discovery_page import reading_notice
+        text = text.replace("候选来自 Sector 已 surfaced 的", "候选来自 Sector 全部合格变化的")
+        text = text.replace("已 surfaced Sector 的 breadth leader 有界进入", "全部合格组及驱动方向的保存成员中按明确分页进入")
+        text = text.replace("</header>", reading_notice(p) + "</header>", 1)
+    return text

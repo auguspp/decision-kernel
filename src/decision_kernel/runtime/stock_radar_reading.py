@@ -90,6 +90,13 @@ MARKET_EXPRESSION_POLICY = {
     'business_evidence': 'ANNOTATION_ONLY_NOT_CANDIDATE_GATE',
     'presentation': 'SURFACED_GROUP_ROUND_ROBIN_CANDIDATES_THEN_EXISTING_STOCK_GATE',
 }
+DISCOVERY_PAGE_VERSION = 'stock-market-expression-discovery-page-v9'
+DISCOVERY_PAGE_POLICY = {
+    **MARKET_EXPRESSION_POLICY,
+    'version': DISCOVERY_PAGE_VERSION,
+    'issuer_universe': 'EXPLICIT_SNAPSHOT_BOUND_ALL_GROUP_DISCOVERY_PAGE_NOT_ALL_A_SHARES',
+    'presentation': 'SOURCE_POOL_ROUND_ROBIN_PAGE_THEN_EXISTING_STOCK_GATE',
+}
 LIMITS = {
     **probe.AUTHORITY, 'creates_canonical_wake': False, 'events_created': 0,
     'market_state_writes': 0, 'automatic_research_routing': False,
@@ -468,6 +475,8 @@ def _plan_contract(plan: dict):
         return SEMANTICS, POLICY, False
     if plan.get('version') == MARKET_EXPRESSION_VERSION:
         return MARKET_EXPRESSION_SEMANTICS, MARKET_EXPRESSION_POLICY, True
+    if plan.get('version') == DISCOVERY_PAGE_VERSION:
+        return MARKET_EXPRESSION_SEMANTICS, DISCOVERY_PAGE_POLICY, True
     return None
 
 
@@ -490,6 +499,9 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     if contract is None:
         raise ValueError('stock plan identity, policy, budget or authority differs')
     contract_semantics, contract_policy, is_market_expression = contract
+    if plan.get('version') == DISCOVERY_PAGE_VERSION:
+        from .stock_discovery_page import check_plan
+        check_plan(plan)
     if (plan['policy'] != contract_policy or not _hash_ok(plan, 'plan_hash')
             or plan['market_state_hash'] != state.state_hash or plan['semantics'] != contract_semantics
             or any(plan[k] != v for k, v in LIMITS.items())
@@ -585,7 +597,10 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         code = issuer['thscode']
         valid_origins = []
         for origin in issuer['origins']:
-            present = [s for s in origin['sector_codes'] if any(m.thscode == code for m in memberships[s].members)]
+            present = [s for s in origin['sector_codes']
+                       if (plan['version'] != DISCOVERY_PAGE_VERSION
+                           or plan['directions'][s]['currently_gate_active'])
+                       and any(m.thscode == code for m in memberships[s].members)]
             if present:
                 valid_origins.append({**origin, 'current_member_sectors': present})
         row = {**issuer, 'current_origins': valid_origins, 'stock_path': None,
