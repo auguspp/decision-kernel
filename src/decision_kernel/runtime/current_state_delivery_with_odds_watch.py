@@ -1,8 +1,8 @@
-"""Thin read-model extension that validates the typed #349-C Watch artifact.
+"""Thin saved-product reading for typed Odds Watch and optional Radar discovery.
 
 The base Collector remains canonical for Sector/Stock/Inbox/Research collection and
-publication. This subclass only validates bytes already retained inside the exact
-qualified decision-inbox artifact. It never fetches market data or dispatches work.
+publication. This subclass validates retained Watch bytes and optionally composes
+saved independent Radar sources. It never fetches market data or dispatches work.
 """
 from __future__ import annotations
 
@@ -26,6 +26,13 @@ WATCH_SUMMARY_PATH = "odds-watch/summary.md"
 
 
 class Collector(base.Collector):
+    def collect(self, refresh: dict) -> dict:
+        payload = super().collect(refresh)
+        if getattr(self, "include_radar_discovery", False):
+            from .institutional_radar_reading import attach
+            payload = attach(self, payload)
+        return payload
+
     def saved_product(self, lane: str, run: dict) -> dict:
         product = super().saved_product(lane, run)
         if lane != "inbox":
@@ -83,6 +90,7 @@ def main(argv=None) -> int:
     parser.add_argument("--code-commit", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--publish", action="store_true")
+    parser.add_argument("--include-radar-discovery", action="store_true")
     args = parser.parse_args(argv)
     model.check(model.SHA.fullmatch(args.code_commit) is not None, "code commit required")
 
@@ -99,6 +107,7 @@ def main(argv=None) -> int:
             previous = json.loads(api.file("current-state.json", prior_commit))
             model.validate_read_package(previous)
         collector = Collector(api, args.code_commit, Path.cwd(), previous, prior_commit)
+        collector.include_radar_discovery = args.include_radar_discovery
         refresh = {
             "workflow": ".github/workflows/current-state-read-entry.yml",
             "run_id": os.environ.get("GITHUB_RUN_ID"),
