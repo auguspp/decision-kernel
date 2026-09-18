@@ -1,0 +1,84 @@
+name: radar-concept-source
+
+on:
+  workflow_dispatch:
+    inputs:
+      market-session:
+        description: 'Explicit same-day completed A-share session YYYY-MM-DD; capture after 15:30 Shanghai'
+        required: true
+        type: string
+      code-sha:
+        description: 'Exact reviewed current main SHA; must match checkout and event'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: radar-concept-source
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    if: github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify explicit reviewed code
+        env:
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          test "$EXPECTED_CODE" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+      - name: Install existing source dependencies
+        run: python -m pip install -e '.[feeds]'
+      - name: Capture independent concept discovery
+        id: capture
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          MARKET_SESSION: ${{ inputs.market-session }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          python -m decision_kernel.runtime.concept_radar_capture capture \
+            --market-session "$MARKET_SESSION" --expected-code "$EXPECTED_CODE" \
+            --output "$RUNNER_TEMP/concept-radar/payload"
+      - name: Replay retained original bytes without market credentials
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        run: |
+          python -m decision_kernel.runtime.concept_radar_capture verify \
+            --output "$RUNNER_TEMP/concept-radar/payload" \
+            > "$RUNNER_TEMP/concept-radar/verification.json"
+      - name: Retain exact native source for offline reproduction
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        run: |
+          mkdir -p "$RUNNER_TEMP/concept-radar"
+          git archive --format=tar HEAD > "$RUNNER_TEMP/concept-radar/implementation-source.tar"
+          test "$(wc -c < "$RUNNER_TEMP/concept-radar/implementation-source.tar")" -le 67108864
+          git rev-parse HEAD > "$RUNNER_TEMP/concept-radar/code-sha.txt"
+          git ls-tree -r HEAD > "$RUNNER_TEMP/concept-radar/source-tree.txt"
+      - name: Upload source observation and explicit gaps
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: concept-radar-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/concept-radar/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain source coverage
+        if: always()
+        run: |
+          {
+            echo '## 独立概念／题材来源'
+            echo '原件与页面见附件 payload；完整快照不等于完整多日趋势。'
+            echo '详情选择是取数实验，不是投资排名；最多15请求，无重试或自动下一批。'
+            echo '当前成员不倒灌历史；没有执行Stock、Pre/Quick、Odds或Action。'
+            echo '尚未接每日采集或固定公司阅读；真实来源与阅读价值须分别验收。'
+          } >> "$GITHUB_STEP_SUMMARY"
