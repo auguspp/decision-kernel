@@ -13,7 +13,7 @@ from decision_kernel.identity import canonical_hash, canonical_json
 from . import concept_radar as radar
 from .institutional_radar import decode, MAX_BYTES
 from .institutional_radar_capture import _bytes, _digest, _write
-from .hithink_dump_trial import _session, _check_response
+from .hithink_dump_trial import DumpTrialError, _session, _check_response
 from .hithink_http import HITHINK_API_KEY_ENV, HITHINK_BASE_URL
 from .sector_radar_audit import _check_request, _check_safe_json, _clock
 from .theme_radar_probe import _safe_path
@@ -26,6 +26,26 @@ MAX_TOTAL = 32 * 1024 * 1024
 FAILURE_HTML = ('<!doctype html><meta charset="utf-8"><h1>概念来源未完成</h1>'
     '<p>不是概念没有变化。安全的阶段和原因见 capture.json，已取得原件仍保留。'
     '没有自动重试、Stock 检查、Pre／Quick、Odds 或投资权限。</p>\n').encode('utf-8')
+
+
+# Reuse finite errors from the existing response guard. Never retain str(exc),
+# response headers/body/URL, or arbitrary exception attributes as diagnostics.
+_RESPONSE_REASONS = frozenset({
+    'HTTP_REJECTED', 'UNEXPECTED_CONTENT_ENCODING', 'INVALID_CONTENT_LENGTH',
+})
+
+
+def _response_diagnostic(exc):
+    code = getattr(exc, 'code', None)
+    if not isinstance(code, str) or code not in _RESPONSE_REASONS:
+        return 'SOURCE_PREPARATION_REJECTED', None
+    status = getattr(exc, 'http_status', None)
+    if type(status) is not int or not 100 <= status <= 599:
+        status = None
+    if status is not None and ((code == 'HTTP_REJECTED') == (status == 200)):
+        # Inconsistent injected/custom failures cannot claim an HTTP observation.
+        return 'SOURCE_PREPARATION_REJECTED', None
+    return code, status
 
 
 def workflow_identity(env, expected_code):
@@ -79,7 +99,14 @@ def request_raw(path, params, *, credential):
         with session.get(HITHINK_BASE_URL + path, params=params,
                 headers={'X-api-key': credential, 'Accept': 'application/json', 'Accept-Encoding': 'identity'},
                 timeout=(10, 20), stream=True, allow_redirects=False) as response:
-            length = _check_response(response)
+            try:
+                length = _check_response(response)
+            except DumpTrialError as exc:
+                # The original guard has a status only for HTTP rejection. Bind
+                # the actual response status for header rejection too; no body read.
+                code, _ = _response_diagnostic(exc)
+                status = response.status_code
+                raise DumpTrialError(code, http_status=status) from None
             radar.require(length is None or length <= MAX_BYTES, 'BODY_SIZE_REJECTED')
             chunks, total = [], 0
             for chunk in response.iter_content(chunk_size=65536):
@@ -124,7 +151,14 @@ def capture(output, *, market_session, workflow, expected_code, transport, now,
         i = len(requests)
         _write(output, f'request-{i}.json', _bytes({k: entry[k] for k in ('path', 'params', 'requested_at')}))
         stage = 'TRANSPORT'
-        raw = transport(path, dict(params))
+        try:
+            raw = transport(path, dict(params))
+        except DumpTrialError as exc:
+            _, status = _response_diagnostic(exc)
+            if status is not None:
+                entry['http_status'] = status
+                entry['received_at'] = _clock(now())
+            raise
         received = _clock(now())
         entry['received_at'] = received
         stage = 'BODY_SAFETY'
@@ -144,7 +178,10 @@ def capture(output, *, market_session, workflow, expected_code, transport, now,
         _write(output, 'index.html', radar.render(report).encode('utf-8'))
         status = PARTIAL if report['projection']['coverage']['detail_gaps'] else COMPLETE
     except (ValueError, RuntimeError, TypeError, KeyError, OSError, OverflowError) as exc:
-        reason = str(exc) if isinstance(exc, radar.ConceptSourceError) else 'SOURCE_PREPARATION_REJECTED'
+        if isinstance(exc, DumpTrialError):
+            reason, _ = _response_diagnostic(exc)
+        else:
+            reason = str(exc) if isinstance(exc, radar.ConceptSourceError) else 'SOURCE_PREPARATION_REJECTED'
         failed_type = type(exc).__name__
         for name in ('observation.json', 'index.html'):
             (output / name).unlink(missing_ok=True)
@@ -204,6 +241,14 @@ def verify(output):
         else:
             radar.require(i == len(receipt['requests']) and receipt['status'] == FAILED,
                           'INCOMPLETE_RESPONSE_SCOPE_REJECTED')
+            status = entry['http_status']
+            if status is not None:
+                radar.require(type(status) is int and 100 <= status <= 599
+                    and entry['received_at'] is not None and receipt['failed_stage'] == 'TRANSPORT'
+                    and receipt['failure_type'] == 'DumpTrialError'
+                    and receipt['reason_code'] in _RESPONSE_REASONS
+                    and ((receipt['reason_code'] == 'HTTP_REJECTED') == (status != 200)),
+                    'FAILED_HTTP_DIAGNOSTIC_REJECTED')
     if receipt['status'] in {COMPLETE, PARTIAL}:
         names.add('observation.json')
     radar.require(set(receipt['files']) == names, 'FILE_SET_REJECTED')
