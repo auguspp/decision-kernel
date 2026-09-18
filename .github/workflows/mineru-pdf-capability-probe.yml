@@ -45,10 +45,6 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/$FROZEN_ARTIFACT_ID/zip" \
             -o retained-source.zip
           printf '%s  %s\n' "$FROZEN_ARTIFACT_SHA256" retained-source.zip | sha256sum --check --strict
-          python eval/mineru_pdf_probe.py prepare \
-            --archive retained-source.zip \
-            --work mineru-pdf-work \
-            --output mineru-pdf-probe
       - name: Install upstream MinerU 4.0.0 locally
         shell: bash
         run: |
@@ -60,17 +56,16 @@ jobs:
           status=${PIPESTATUS[0]}
           set -e
           printf '%s\n' "$status" > mineru-pdf-probe/environment/pip-install-exit-code.txt
-          # Installation failure is retained as an ENVIRONMENT_GAP by the probe;
-          # it is not silently converted into a MinerU capability failure.
+          # Package installation failure stays visible in the retained diagnostic;
+          # it is not silently converted into a parser-quality result.
           exit 0
       - name: Run bounded MinerU Basic CPU A/B
         shell: bash
         run: |
-          python eval/mineru_pdf_probe.py execute \
+          python eval/mineru_pdf_probe.py \
+            --archive retained-source.zip \
             --work mineru-pdf-work \
             --output mineru-pdf-probe
-          python eval/mineru_pdf_probe.py finalize --output mineru-pdf-probe
-          python eval/mineru_pdf_probe.py verify --output mineru-pdf-probe
       - name: Retain complete probe evidence
         if: always()
         id: evidence
@@ -92,5 +87,5 @@ jobs:
             echo 'MinerU probe did not produce a sealed diagnostic result.' >> "$GITHUB_STEP_SUMMARY"
           fi
           if [ -n "$ARTIFACT_URL" ]; then
-            printf '\n[Mineru PDF capability probe artifact](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+            printf '\n[MinerU PDF capability probe artifact](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
           fi
