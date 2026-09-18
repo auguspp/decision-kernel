@@ -45,13 +45,13 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/$FROZEN_ARTIFACT_ID/zip" \
             -o retained-source.zip
           printf '%s  %s\n' "$FROZEN_ARTIFACT_SHA256" retained-source.zip | sha256sum --check --strict
-      - name: Install upstream MinerU 4.0.0 locally
+      - name: Install upstream MinerU 4.0.2 locally
         shell: bash
         run: |
           set -o pipefail
           mkdir -p mineru-pdf-probe/environment
           set +e
-          python -m pip install --disable-pip-version-check "mineru==4.0.0" \
+          python -m pip install --disable-pip-version-check "mineru==4.0.2" \
             2>&1 | tee mineru-pdf-probe/environment/pip-install.log
           status=${PIPESTATUS[0]}
           set -e
