@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import runpy
+import shutil
 from datetime import timedelta
 from pathlib import Path
 
@@ -46,6 +47,25 @@ def setup(tmp_path):
     return mod,state_dir,out,calls,pauses,run
 
 
+@pytest.fixture(scope='module')
+def complete_capture_baseline(tmp_path_factory):
+    """One real immutable successful capture reused only as negative-test input bytes."""
+    root=tmp_path_factory.mktemp('stock-capture-baseline')
+    mod,_,out,_,_,run=setup(root)
+    report=run()
+    assert report['status']==mod['COMPLETE']
+    assert mod['verify'](out)['status']=='ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT'
+    return out
+
+
+@pytest.fixture
+def complete_capture_copy(tmp_path,complete_capture_baseline):
+    """Private bytes for one mutation; verification is never cached or shared."""
+    out=tmp_path/'reading'
+    shutil.copytree(complete_capture_baseline,out)
+    return code(),out
+
+
 def test_full_capture_replays_actual_calculation_and_synthetic_page(tmp_path):
     mod,state,out,calls,pauses,run=setup(tmp_path)
     original=mod['inventory'](state)
@@ -64,7 +84,6 @@ def test_full_capture_replays_actual_calculation_and_synthetic_page(tmp_path):
 
 
 def test_source_copy_is_sufficient_for_replay_without_original_state_directory(tmp_path):
-    import shutil
     mod,state,out,_,_,run=setup(tmp_path);run()
     shutil.rmtree(state)
     assert mod['verify'](out)['stock_count']>=1
@@ -73,14 +92,14 @@ def test_source_copy_is_sufficient_for_replay_without_original_state_directory(t
 @pytest.mark.parametrize('name',['stock-reading.json','index.html','plan.json','association.json','responses/01.json',
     'inputs/state/market-state.json','inputs/radar_inputs/company-evidence/002714-muyuan-h1-2026-09-06.json',
     'synthetic-reference-inputs.json'])
-def test_modified_bytes_cannot_be_published_as_stock_results(tmp_path,name):
-    mod,_,out,_,_,run=setup(tmp_path);assert run()['status']==mod['COMPLETE']
+def test_modified_bytes_cannot_be_published_as_stock_results(complete_capture_copy,name):
+    mod,out=complete_capture_copy
     p=out/name;p.write_bytes(p.read_bytes()+b'\n')
     with pytest.raises(ValueError):mod['verify'](out)
 
 
-def test_rehashed_stock_card_does_not_replace_recomputation(tmp_path):
-    mod,_,out,_,_,run=setup(tmp_path);run()
+def test_rehashed_stock_card_does_not_replace_recomputation(complete_capture_copy):
+    mod,out=complete_capture_copy
     result=mod['read'](out/'stock-reading.json')
     result['projection']['surfaced_stocks'][0]['company_name']='fabricated recommendation'
     result['projection_hash']=canonical_hash(result['projection'])
