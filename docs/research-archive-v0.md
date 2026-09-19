@@ -71,3 +71,11 @@ v0 支持一个目录内最多16个普通100644文件，每文件不超过512 Ki
 ## 6. #321-B 已生成 Odds 结果的显式依赖恢复
 
 `ODDS_RESULT` 使用同一恢复命令和同R purpose registry，绑定一个 `RESEARCH_COMMIT` 依赖；原三类档案的合同不变。结果两文件、研究至多五文件、禁止依赖链，原 API 预算不放宽。完整保存/登记/验证步骤见 [Odds 结果留存与恢复](odds-result-retention-v0.md)。恢复只重建核验原结果，不建立今日行情资格、公司数值接受或投资权限。上文历史首批“321-B尚未交付”描述不作为本扩展的当前状态。
+
+## 7. 显式按需档案索引（Radar-r3 / 2026-09-19）
+
+已读取正文与已登记档案定位必须分开。具体合同见[按需索引](research-archive-on-demand-v1.md)。在原references上opt-in `read_policy: ON_DEMAND_ARCHIVE`，只适用于RETAINED_RESEARCH_DOCUMENT的RETAINED_FILES/RESEARCH_PROGRESS；archive_source的commit/path/blob/SHA256/bytes及进度摘要必须精确提供。旧记录默认仍完整读取，不自动迁移。
+
+日常读取将这类声明投影为 `research.on_demand_archives`，状态REGISTERED_ARCHIVE_NOT_MATERIALIZED；不是正文读取或研究接受，不能据它创建Human待办。公司阅读单独显示和统计这些定位。上述第3节原命令仍使用同一固定R和record-id，验证registry与索引相符后恢复原精确目录、逐文件核验并调用原typed reader；没有main/latest或eager回退。成功回执才标明RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY。
+
+60份eager来源、API、128MiB保存、192KiB索引、单档案16文件/512KiB边界均不放宽。新登记增加元数据而不是每日原文取数；索引本身仍有上限，不承诺无限扩展。正文可能不可得或验证失败，定位存在不能替代原件。此扩展没有自动归档、来源采集、研究准入或续作。

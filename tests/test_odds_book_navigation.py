@@ -84,7 +84,11 @@ def test_old_branch_and_accepted_provisional_sources_have_exact_separate_identit
         assert re.fullmatch(r"[0-9a-f]{40}", rows[key]["source"]["git_blob"])
         assert rows[key]["use"] != "CONFIRMED_ACTION_CHECKPOINT"
     # Leave room for original config, production packages, Watch config, handoffs and gaps.
-    specs = {(r["source"].get("ref", M), r["source"]["path"]) for r in rows.values()}
+    from decision_kernel.runtime.research_archive_index import split
+    eager, deferred, gaps = split(registry())
+    assert not gaps  # Invalid declarations cannot buy a budget exemption.
+    assert len(eager['references']) + len(deferred) == len(rows)
+    specs = {(r["source"].get("ref", M), r["source"]["path"]) for r in eager['references']}
     assert len(specs) + 13 <= delivery.MAX_SOURCE_FILES
 
 

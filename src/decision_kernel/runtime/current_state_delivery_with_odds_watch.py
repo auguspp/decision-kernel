@@ -26,6 +26,15 @@ WATCH_SUMMARY_PATH = "odds-watch/summary.md"
 
 
 class Collector(base.Collector):
+    def research(self, registry: dict, *, include_work: bool = True) -> dict:
+        from .research_archive_index import split
+        eager, archive_index, gaps = split(registry)
+        result = super().research(eager, include_work=include_work)
+        if archive_index:
+            result["on_demand_archives"] = archive_index
+        result["gaps"].extend(gaps)
+        return result
+
     def collect(self, refresh: dict) -> dict:
         payload = super().collect(refresh)
         if getattr(self, "include_radar_discovery", False):
@@ -37,6 +46,12 @@ class Collector(base.Collector):
                     payload = attach_detail(self, payload)
                 from .concept_observation_map_delivery import attach as attach_map
                 payload = attach_map(self, payload)
+        if payload['research'].get('on_demand_archives'):
+            from .research_archive_index import navigation
+            raw = self.files['README.md'] + navigation(payload['research']['on_demand_archives']).encode()
+            model.check(sum(map(len, self.files.values())) - len(self.files['README.md']) + len(raw)
+                        <= base.MAX_RETAINED_OUTPUT, "archive navigation exceeds retained byte budget")
+            self.files['README.md'] = raw
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:
