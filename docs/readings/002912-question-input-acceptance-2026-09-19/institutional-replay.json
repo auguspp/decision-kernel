@@ -1,0 +1,15 @@
+{
+  "status": "ORIGINAL_INSTITUTIONAL_BODIES_AND_READING_REBUILT",
+  "network_calls": 0,
+  "capture_hash": "dc643194cdb77ef6528e1698b46afba0a86dee482f3aafcfb6720d2da12616fe",
+  "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+  "company_count": 33,
+  "human_attention_authority": "NONE",
+  "research_authority": "NONE",
+  "investment_authority": "NONE",
+  "signal_transition_authority": "NONE",
+  "automatic_research_routing": false,
+  "market_state_writes": 0,
+  "events_created": 0,
+  "odds_recomputed": false
+}

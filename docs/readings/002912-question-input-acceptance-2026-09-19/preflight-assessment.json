@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-19T12:32:20.093592+00:00",
+  "formal_research_budget_used": 0,
+  "full_reviewed_question_prepare": "NOT_RUN_REQUIRED_PRIMARY_BODIES_UNAVAILABLE",
+  "funnel_invoked": false,
+  "investment_authority": "NONE",
+  "not_a_research_terminal_state": true,
+  "preflight_sha256": "b36aec92a4e634e2e34838abd0940145701762d3d6885ab94c634f42a44809b4",
+  "question_plan_commit": "faf3acfc9f7659d494b81d1493dfbcee0e900ef7",
+  "reason": "SOURCE_PREFLIGHT_INCOMPLETE",
+  "research_execution_allowed": false,
+  "source_network_calls_by_checker": 0,
+  "source_preflight": "REJECTED",
+  "status": "NOT_EXECUTED"
+}

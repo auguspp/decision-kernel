@@ -1,0 +1,52 @@
+{
+  "case_id": "002912.SZ",
+  "finished_at": "2026-09-19T12:32:20.093592+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 2,
+    "max_reads": 4
+  },
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "checked_at": "2026-09-19T12:32:20.093592+00:00",
+      "id": "issuer-home",
+      "identity": "Sinovatio official website, investor relations navigation",
+      "kind": "INDEX",
+      "locator": "https://www.sinovatio.com/",
+      "succeeded": true,
+      "tool_reference": "web:turn103726view0"
+    },
+    {
+      "authority": "PRIMARY",
+      "checked_at": "2026-09-19T12:32:20.093592+00:00",
+      "id": "official-disclosure-index",
+      "identity": "SZSE disclosure page selected by issuer official website",
+      "kind": "INDEX",
+      "locator": "https://www.szse.cn/disclosure/listed/notice/index.html?name=%E4%B8%AD%E6%96%B0%E8%B5%9B%E5%85%8B&stock=002912",
+      "succeeded": false,
+      "tool_reference": "web:turn800320view0"
+    }
+  ],
+  "recording_note": "started_at is the saved declaration commit boundary before these source checks; checked_at is the actual local review time of the referenced returned results, not an invented provider publication/response timestamp. Empty required BODY bindings honestly record missing bodies. No full input packet or execution admission is claimed.",
+  "required_classes": [
+    {
+      "body_ids": [],
+      "id": "ISSUER_INTERIM_FINANCIAL_BODY",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [],
+      "id": "PROFIT_CASH_COUNTEREVIDENCE",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "002912.SZ",
+  "started_at": "2026-09-19T12:29:16Z",
+  "ticker": "002912",
+  "valid_until": "2026-09-19T13:02:20.093592+00:00"
+}
