@@ -13,7 +13,7 @@ Human 已将两个过长的施工会话交给当前 Main Construction，并明�
 安装仍用 `python -m pip install -e '.[dev]'`。本地默认 `python -m pytest -q` 仍是串行；并行与 stalled-test fail-fast 只由 CI 的显式命令启用：
 
 ```sh
-python -m pytest -q -n 2 --dist=loadfile --max-worker-restart=0 \
+python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
   -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
   --durations=100 --durations-min=1.0 --junitxml=pytest.xml
 ```
@@ -42,7 +42,7 @@ PR 测试显式 checkout `github.event.pull_request.head.sha`，main push 使用
 | consumed continuation 的历史 receipt 重复 literal | RETIRE 重复断言，复用 #385 | 保留 failed-work/predecessor/source binding 与现有 continuation 安全契约；不退役执行权限检查。 |
 | base-only 安装与 isolated CLI 执行 | KEEP blocking | 基线约 6.69 秒，但它证明 dev extras 没有泄漏为基础依赖，不能只按耗时退役。 |
 | 多核执行、JUnit、artifact 传输、stalled-test thread dump | REUSE | 使用 pytest-xdist、pytest 内建 faulthandler、GitHub 原生能力；不自建 scheduler/watchdog/registry/分片协议。 |
-| pip cache、更多 worker、changed-file 筛选、fast/slow suite | DEFER | 安装不是本次主瓶颈；其余缺少进一步净收益/隔离证据。无需为宣布 CI 收口而全部实施。 |
+| pip cache、changed-file 筛选、fast/slow suite | DEFER | 安装不是当前主瓶颈；路径筛选/拆 suite 仍缺少净收益与隔离证据。无需靠减少 blocking coverage 换速度。 |
 | 其他历史 one-shot 测试、production workflow 整理 | DEFER 至 #354 对应审阅 | 名称包含 once 或历史日期不等于可删除；仍在使用的 admission/recovery 合同继续有效。 |
 
 ## 复用依据与已知基线
@@ -53,9 +53,27 @@ PR 测试显式 checkout `github.event.pull_request.head.sha`，main push 使用
 
 收口必须有：未删除既有测试的 diff、完整清单与执行结果、真实失败传播回归、exact-head PR CI、合并后的独立 main CI、正常 publisher 和结果读回。速度只按实际样本报告，托管 runner 波动不包装为保证；本页不会预填尚未完成的运行。
 
+## 2026-09-19 第二轮实测：四 worker 与诊断体积修正
+
+随着 Radar / Research / Odds 等新能力进入同一 blocking suite，main `eb64d63a164f50c4d4bcb4a9ff9821f49f409054` 已达到 4213 tests。run `35410366885` 的 pytest 为 **4213 passed / 344.79s**；安装约12秒、collection约9秒，pytest 再次成为主耗时。该 runner 报告4 CPU，而 #387 仍只使用2 workers，因此“更多 worker”从原 DEFER 条件重新进入有界实测，而不是凭 test 数量直接拆 suite。
+
+PR #442 在保持完整 test identity、fail-closed、`loadfile` 与 `--max-worker-restart=0` 不变的前提下，保留三个独立 exact-head 样本：
+
+| workers | run | pytest | 结果 |
+| ---: | --- | ---: | --- |
+| 2 | 35412336901 | 334.82s | 4213 passed；0 failure/error/skip |
+| 3 | 35412499474 | 314.83s | 4213 passed；0 failure/error/skip |
+| 4 | 35412508707 | 299.51s | 4213 passed；0 failure/error/skip |
+
+三份实际 JUnit 各含4213个唯一 testcase，**testcase 集合完全相同**；执行顺序因 xdist 不同不作为身份差异。托管 runner 分别来自不同 Azure region，因此这些秒数是实际样本而非受控同机 benchmark；四 worker 的首个样本相对同轮二 worker 低约10.5%，且未出现 worker restart/crash。最终采用4 workers，仍由后续 exact-head 与独立 main CI 提供第二层实证；若实际 main 证明不稳定，按普通 reviewed PR 回滚，不通过 skip/retry 掩盖。
+
+同一 PR 还修正两处 pytest 自动参数 ID：8MiB+ feed body 和512KiB+ Research progress body的**输入字节与断言完全不变**，只增加短语义 `ids`。实际诊断原件从 main run35410366885 的 `collection.txt` **9,386,728 bytes** / `pytest.xml` **9,555,747 bytes**，降到本轮 **473,881 / 约642.9KiB**；最长 collection 行从8,388,709字符降到16,485。ZIP因重复文本压缩本来很强，因此压缩包降幅较小；此改动的主要收益是 collection/JUnit/诊断可读性与传输解析负担，不冒充 pytest 主耗时优化。
+
+这一轮仍不启用 changed-file selection、marker、skip/xfail、fast/slow suite、自建 sharding、test-result cache 或 continue-on-error。Stock capture/replay 的重复完整 synthetic preparation 仍是下一候选，只允许复用不可变 upstream/baseline；被测 validator、mutable plan 和结果不得缓存。
+
 ## 诊断与回滚
 
-并行异常先读本 run 的失败/环境/collection/JUnit/pytest log，不自动重跑生产。若单项测试超过 60 秒，先使用 faulthandler 留下的线程栈定位 blocking call；不要用 Re-run 把首次 stall 擦掉。串行诊断使用同一精确代码、同一 extras，去掉 `-n 2 --dist=loadfile --max-worker-restart=0`，运行原完整 pytest 命令；保留身份和诊断附件。遇到失败不以添加 skip/xfail 或减少测试换绿灯。
+并行异常先读本 run 的失败/环境/collection/JUnit/pytest log，不自动重跑生产。若单项测试超过 60 秒，先使用 faulthandler 留下的线程栈定位 blocking call；不要用 Re-run 把首次 stall 擦掉。串行诊断使用同一精确代码、同一 extras，去掉 `-n 4 --dist=loadfile --max-worker-restart=0`，运行原完整 pytest 命令；保留身份和诊断附件。遇到失败不以添加 skip/xfail 或减少测试换绿灯。
 
 需要代码回滚时，通过普通 reviewed PR 撤销这次 CI 配置及其专属回归/依赖改动；不改 #381/#383/#385、冻结 request、历史证据或任何 production workflow。回滚本身也必须通过真实 CI。不要直接在 main 写回旧文件，也不要 force-push。
 
