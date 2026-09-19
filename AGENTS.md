@@ -12,6 +12,24 @@ A method version is not a schema or runtime version. Do not change serialized me
 
 The entry is a Research/Decision Rehearsal operating protocol, not a replacement for Kernel validators. Preserve PIT, exact source identity, historical versions, and Human authority. Evidence changes Belief; price changes Odds. Unknown causes stay UNKNOWN.
 
+## Reuse First — required external prior-art check
+
+For engineering work that would add a non-unique capability, a pre-construction Reuse Check must explicitly cover all three layers before implementation:
+
+1. **Internal reuse** — inspect current exact-`main` modules, workflows, validators, adapters, schemas and utilities.
+2. **Official ecosystem reuse** — inspect relevant official SDKs, APIs, CLIs, GitHub Actions, standard capabilities or services.
+3. **Public GitHub / mature open-source prior art** — search for mature projects, libraries or implementations that address the exact capability.
+
+Do not silently skip layer 3. An existing external prior-art audit may be reused when it covers the same exact capability and there is no evidence of a material candidate/version change; reuse retained negative evidence instead of repeating the same audit.
+
+The Reuse Check or associated requirement/PR record must retain enough evidence to reconstruct: the exact need; internal, official and external candidates checked; what implementation/docs/tests were actually inspected; fit, mismatch and concrete blockers; material license/maintenance/dependency-cost concerns; material PIT/source/identity/replay/authority concerns; and the final `Reuse Decision: REUSE / THIN_ADAPTER / NEW_BUILD_JUSTIFIED`.
+
+A README, repository name, star count or marketing description alone is not adoption evidence. For a candidate that may become a dependency or runtime capability, inspect the real entry point, relevant implementation, tests or formal contract where practicable. A rejected external project may still contribute reusable algorithms, failure modes, test cases, data contracts or negative evidence without becoming a dependency.
+
+For non-unique commodity capability, `NEW_BUILD_JUSTIFIED` is not allowed until the external layer has been checked or specific evidence shows there is no meaningful external analogue. “Faster to write ourselves”, “more flexible/control”, “only 80% fit”, or “already nearly implemented” are not blocker evidence.
+
+External prior-art review does **not** mean an external dependency must be installed. Kernel-specific epistemic, PIT, identity and Human-authority semantics remain owned here. Do not create a new Reuse gate, scanner, crawler, Agent/DAG, provider framework or scheduler framework merely to enforce this rule.
+
 For engineering work, retain the existing handover and Requirements Management priority. This entry does not authorize implementation of #321, change #297 priorities, or create an agent/provider/scheduler framework. Main Construction owns runtime implementation.
 
 For CI/mainline engineering, first read `docs/CI-MAINLINE.md` and the latest #354 receipts. They retain the current CI takeover, full-suite policy, exact-head/main/publication acceptance and rollback boundary. Do not repeat completed CI slices or treat a CI success as production or Research acceptance.
