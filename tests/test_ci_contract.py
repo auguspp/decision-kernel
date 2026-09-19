@@ -31,7 +31,7 @@ def _test_script() -> str:
 def test_ci_keeps_one_full_suite_without_filtering_or_worker_retries():
     command = " ".join(_test_script().replace("\\\n", " ").splitlines()[1:]).split("2>&1", 1)[0]
     assert shlex.split(command) == [
-        "python", "-m", "pytest", "-q", "-n", "3", "--dist=loadfile", "--max-worker-restart=0",
+        "python", "-m", "pytest", "-q", "-n", "4", "--dist=loadfile", "--max-worker-restart=0",
         "-o", "faulthandler_timeout=60", "-o", "faulthandler_exit_on_timeout=true",
         "--durations=100", "--durations-min=1.0", "--junitxml=$CI_REPORT_DIR/pytest.xml",
     ]
