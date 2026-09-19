@@ -10,7 +10,15 @@ on:
       source-stock-run-id:
         description: Exact successful saved Stock reading run, never latest
         type: string
-        required: true
+        required: false
+      reviewed-question:
+        description: Run only the separately enabled and approved main question request; never legacy recovery
+        type: boolean
+        default: false
+      code-sha:
+        description: Required for reviewed-question; exact reviewed main SHA
+        type: string
+        required: false
       recover-sources:
         description: Use the reviewed main source-recovery request; never reset first-baseline history
         type: boolean
@@ -66,6 +74,7 @@ jobs:
       - name: Install existing source and Research dependencies
         run: python -m pip install -e '.[documents,feeds,research-api]'
       - name: Original Stock validation, business sources, admission and Pre with necessary Quick
+        if: github.event_name != 'workflow_dispatch' || !inputs.reviewed-question
         env:
           GH_TOKEN: ${{ github.token }}
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
@@ -77,6 +86,7 @@ jobs:
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -n "$SUB2API_API_KEY"
+          test -n "$SOURCE_STOCK_RUN"
           test "$SOURCE_SUCCESSOR" != true
           enabled=0
           if [ "$RECOVER_SOURCES" = true ]; then enabled=$((enabled+1)); fi
@@ -87,6 +97,31 @@ jobs:
           if [ "$SOURCE_SUCCESSOR_CONTINUATION" = true ]; then extra+=(--source-successor-continuation); fi
           python -m decision_kernel.runtime.stock_research_host \
             --source-run-id "$SOURCE_STOCK_RUN" --code-commit "$GITHUB_SHA" --output run-output "${extra[@]}"
+      - name: Approved question through original admission and saved Pre with necessary Quick
+        if: github.event_name == 'workflow_dispatch' && inputs.reviewed-question
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
+          EXPECTED_CODE_SHA: ${{ inputs.code-sha }}
+          SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
+          RECOVER_SOURCES: ${{ inputs.recover-sources }}
+          PREPARE_SOURCES: ${{ inputs.prepare-sources }}
+          SOURCE_SUCCESSOR: ${{ inputs.source-successor }}
+          SOURCE_SUCCESSOR_CONTINUATION: ${{ inputs.source-successor-continuation }}
+        run: |
+          test "$GITHUB_EVENT_NAME" = workflow_dispatch
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          [[ "$EXPECTED_CODE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_SHA" = "$EXPECTED_CODE_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE_SHA"
+          test -z "$SOURCE_STOCK_RUN"
+          test "$RECOVER_SOURCES" != true
+          test "$PREPARE_SOURCES" != true
+          test "$SOURCE_SUCCESSOR" != true
+          test "$SOURCE_SUCCESSOR_CONTINUATION" != true
+          test -n "$SUB2API_API_KEY"
+          python -m decision_kernel.runtime.stock_question_host \
+            --code-commit "$EXPECTED_CODE_SHA" --output run-output
       - name: Preserve original sources, model outputs and partial failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -122,6 +157,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
           RECOVER_SOURCES: ${{ inputs.recover-sources }}
+          REVIEWED_QUESTION: ${{ inputs.reviewed-question }}
           SOURCE_SUCCESSOR: ${{ inputs.source-successor }}
           SOURCE_SUCCESSOR_CONTINUATION: ${{ inputs.source-successor-continuation }}
         run: |
@@ -129,6 +165,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$SOURCE_SUCCESSOR" != true
           test "$SOURCE_SUCCESSOR_CONTINUATION" != true
+          test "$REVIEWED_QUESTION" != true
           extra=()
           if [ "$RECOVER_SOURCES" = true ]; then extra+=(--recover-sources); fi
           python -m decision_kernel.runtime.stock_research_host \
