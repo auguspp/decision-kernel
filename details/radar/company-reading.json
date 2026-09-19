@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "86bd46585a12e7fb0cd72f9f924df549c815c03fccdbd99839ce512c8a72768b",
+    "base_reading_hash": "32f8ef30b0dbb38e63cf004563433e89f090b97e05c84121a1480bcfc10298ac",
     "companies": [
       {
         "automatic_admission": false,
@@ -371,7 +371,7 @@
                     "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/failure.json",
                     "read_path": "sources/git/531b5e21ed15928f2abf2550b0800dc666b47ffb/failure.json",
                     "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                    "ref": "8e3c67ce827c7da566ab7ad8f2b37bf608f674ee",
+                    "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
                     "repository": "auguspp/decision-kernel",
                     "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a"
                   },
@@ -381,7 +381,7 @@
                     "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/prepare.json",
                     "read_path": "sources/git/f0efbab42adde8af50977c7f51f75087e518a0df/prepare.json",
                     "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                    "ref": "8e3c67ce827c7da566ab7ad8f2b37bf608f674ee",
+                    "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
                     "repository": "auguspp/decision-kernel",
                     "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73"
                   }
@@ -570,7 +570,7 @@
                     "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/failure.json",
                     "read_path": "sources/git/15b505bc0c87cfb9857fe38754134026b4c80f04/failure.json",
                     "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                    "ref": "8e3c67ce827c7da566ab7ad8f2b37bf608f674ee",
+                    "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
                     "repository": "auguspp/decision-kernel",
                     "sha256": "4dc555f7422f7433be0c8cbce246d79749306a1911e3bac3dfb9802f50876f65"
                   },
@@ -580,7 +580,7 @@
                     "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/prepare.json",
                     "read_path": "sources/git/054c51495a3160a0aa16099c56ce46e334ba8057/prepare.json",
                     "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                    "ref": "8e3c67ce827c7da566ab7ad8f2b37bf608f674ee",
+                    "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
                     "repository": "auguspp/decision-kernel",
                     "sha256": "0b069ea0a16677c4bcde496eac4c9a99347dac1025926d12c83e7c3a42c333c3"
                   }
@@ -64319,7 +64319,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-19T16:31:54.715087+00:00",
+    "generated_at": "2026-09-19T23:35:53.492807+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -64973,5 +64973,5 @@
     "stock_business_read_status": "READ_OK",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "3e2e00cfa0ab12f30644902b131a8ca10560bc8daf7c7d5a405d5fe9d3016f94"
+  "projection_hash": "871abab60a28454776426ac51d1b21c45c41a7891989904a3879a60049c440c6"
 }
