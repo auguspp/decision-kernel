@@ -50,3 +50,9 @@ Full Research 必须进行重要公告的有界核验；“尝试过”不等于
 下一接点先恢复已有候选、来源与进度，交付一份有明确新信息/计算/裁定的研究接续；仅有恢复旧材料不能计为新的 Pre/Quick。旧 Stock 专用入口如何接入新问题范围另做薄改，不增加新的provider、scanner或通用调度框架。Research与Odds分离；Human保留最终资本决定。
 
 外部复用依据：GitHub 官方 workflow_dispatch inputs 和 jobs.if 文档；boolean 使用 inputs context 保留类型。本轮不添加解析 YAML 的生产依赖。
+
+## Radar 到问题的下一接点（2026-09-19）
+
+遵守[Radar 来源资格与 Research Question Layer 合同](radar-research-question-contract-v0.md)：不同 Radar 各自验证 observation，不共用一种 Price Gate。先在 company-first context 形成具体、可证伪且可回答的问题，再沿本文声明必要证据、反证和缺口，最后进入既有 Pre admission。该层是下一目标合同，不是现已运行的自动问题生成器。通用 `questions` 提示不等于合格 question candidate，标签/来源数量或涨幅不决定 Pre。
+
+旧 `FIRST_BUSINESS_BASELINE` 的 stable key、失败及 lineage 不改；未来 THIN_ADAPTER 不能靠换问题名称或 key 重试已消费执行。Industry Inflection 尚未实现，公告收敛与必要来源失败的边界保持不变。

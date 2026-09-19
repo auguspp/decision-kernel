@@ -111,3 +111,20 @@ compatibility, independent current concept history/selection, other Smart Money
 dimensions, evidence preparation and real Pre/necessary Quick. The verified
 provider concept snapshot contract exposes current prices, not 5/20-day returns;
 its catalog+batch snapshot cannot be relabelled as a full multiday concept trend.
+
+## Radar-r3 qualification and Research Question contract supplement (2026-09-19)
+
+Read [Radar origins, qualification and Research Question Layer](radar-research-question-contract-v0.md)
+for v1/v2/v3 semantics and the next product boundary. Existing `origins[].kind`,
+source references/status, per-origin clocks and saved Stock dispositions already
+preserve the distinctions. `MARKET_EXPRESSION` is a semantic route label here,
+not a newly serialized field or a claim that every displayed member passed Stock.
+Smart Money retains its own observation qualification; Industry Inflection's
+future economic-exposure/materiality/value-chain qualification is not Price Gate.
+
+Target: `qualified observations -> company-first context -> Research Question Layer -> Pre`.
+Company reading remains broader visibility, including PARTIAL sources and gaps;
+readable does not mean every observation is qualified for every research purpose.
+The existing `questions` are generic orientation, not implemented question
+candidates. No score, threshold, ordering, schema, source or routing change is made
+by this supplement. New question-scoped execution remains NOT_IMPLEMENTED.
