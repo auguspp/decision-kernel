@@ -235,7 +235,14 @@ def test_registered_fibocom_has_exact_original_progress_and_keeps_eastsoft_eager
     assert row['source']['git_blob'] == '29db720caf59245b28a91b692d24c763d02caa07'
     assert row['source']['bytes'] == 6567
     assert row['archive'] == {'format': 'RESEARCH_PROGRESS', 'expected_sha256': '72b98ca4fe4dea23d8cf46d1c462eaf8e690d90020a53e9686eb54d3ad0201a6', 'question_id': 'module-profit-cash-source-review'}
-    assert len(eager['references']) == 49 and len(indexed) == 1
+    assert len(eager['references']) == 49
+    # Keep the exact historical binding above, without freezing the live index at one version.
+    declared_ids = [r['id'] for r in registry['references'] if 'read_policy' in r]
+    indexed_ids = [r['id'] for r in indexed]
+    assert len(indexed_ids) == len(set(indexed_ids)) == len(declared_ids)
+    assert set(indexed_ids) == set(declared_ids)
+    for entry in indexed:
+        index.validate(entry)
 
 
 def test_legacy_base_collector_fails_closed_without_eager_fallback(tmp_path, monkeypatch):
@@ -308,3 +315,30 @@ raise SystemExit(code)
     assert receipt['source_materialization'] == 'RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY'
     assert receipt['continuation_status'] == 'NOT_EXECUTED' and receipt['remote_write'] is False
     assert 'INVESTMENT AUTHORITY: NONE' in result.stdout
+
+
+def test_registered_fibocom_progress2_keeps_distinct_original_and_same_question():
+    registry = json.loads((Path(__file__).resolve().parents[1] / 'current_state/registry.json').read_text())
+    _, indexed, gaps = index.split(registry)
+    assert not gaps
+    by_id = {r['id']: r for r in indexed}
+    original = by_id['radar-300638-fibocom-progress-20260919']
+    second = by_id['radar-300638-fibocom-progress2-20260919']
+    assert original['id'] != second['id'] and original['source']['ref'] != second['source']['ref']
+    assert original['case'] == second['case'] == '300638.SZ'
+    assert second['source'] == {
+        'repository': 'auguspp/decision-kernel',
+        'path': 'docs/readings/radar-fibocom-profit-cash-progress-2-2026-09-19/workpaper.md',
+        'ref': 'f75ed7c5c338aa8497b042380d2c53bd6df6f495',
+        'git_blob': 'a67befbe62538bd5f4c7376a444206ffea6c641c',
+        'bytes': 8647,
+        'sha256': '34b7a8047b03e86be4e75433a99615aa8b6dc0db070487a639d1c45804606ece'}
+    assert second['archive'] == {
+        'format': 'RESEARCH_PROGRESS',
+        'expected_sha256': '3ec903ba6e1008e1ef08e74596e1504b8d5a25c581cae2df2896d0a43f3abb73',
+        'question_id': original['archive']['question_id']}
+    assert second['archive']['question_id'] == 'module-profit-cash-source-review'
+    assert original['body_materialized_in_reading'] is second['body_materialized_in_reading'] is False
+    assert original['qualification'] == second['qualification'] == index.QUALIFICATION
+    index.validate(original)
+    index.validate(second)
