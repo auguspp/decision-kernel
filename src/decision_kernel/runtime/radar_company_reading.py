@@ -62,11 +62,19 @@ def _research_context(code, research):
             r = state['record']
             model.check(r.get('thscode') == code and all(r.get(k) == v for k, v in model.AUTHORITY.items()),
                         'Research state security or authority differs')
-    return {'status': 'SAVED_CONTEXT_PRESENT' if references or states else 'UNKNOWN_WITHIN_READ_SCOPE',
+    result = {'status': 'SAVED_CONTEXT_PRESENT' if references or states else 'UNKNOWN_WITHIN_READ_SCOPE',
             'references': references, 'stock_business_states': states,
             'stock_business_read_status': work.get('status', 'NOT_CONFIGURED'),
             'scope': 'EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH',
             'meaning': 'NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE'}
+    deferred = [deepcopy(r) for r in research.get('on_demand_archives', []) if r.get('case') == code]
+    if deferred:
+        from .research_archive_index import validate
+        for item in deferred: validate(item)
+        result['on_demand_archives'] = deferred
+        if not references and not states:
+            result['status'] = 'REGISTERED_ARCHIVE_NOT_MATERIALIZED'
+    return result
 
 
 def _questions(row):
@@ -229,6 +237,11 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
                                                              for r in companies.values()),
             full_concept_trend_radar=False)
         payload['ordering'] = 'SECTOR_THEN_INSTITUTION_THEN_CONCEPT_RETAINED_ORDER_NOT_PRIORITY_OR_SCORE'
+    if baseline['research'].get('on_demand_archives'):
+        payload['coverage']['with_registered_archive_locator'] = sum(
+            bool(r['research'].get('on_demand_archives')) for r in companies.values())
+        payload['coverage']['registered_archive_only_companies'] = sum(
+            r['research']['status'] == 'REGISTERED_ARCHIVE_NOT_MATERIALIZED' for r in companies.values())
     if include_detail:
         payload['concept_detail_context'] = detail_context
         payload['coverage'].update(primary_concept_companies=len(primary_codes),
@@ -345,6 +358,11 @@ def render(report):
         parts.append('<p><b>研究上下文：</b>' + e(research['status']) + '。这次新Pre/Quick：未执行。</p>')
         for ref in research['references']:
             parts.append('<p>' + link(ref['id'], ref['source']) + ' — ' + e(ref['use']) + '；' + e(ref['purpose_note']) + '</p>')
+        for item in research.get('on_demand_archives', []):
+            from .research_archive_index import entry_url
+            parts.append('<p><b>已登记档案，正文按需恢复：</b><a href="' + e(entry_url(item)) + '">'
+                         + e(item['id']) + '</a> — ' + e(item['purpose_note'])
+                         + '。正文未纳入本读取；使用同一固定R及record-id经原archive reader核验，不是已完成研究。</p>')
         for state in research['stock_business_states']:
             r = state['record']; refs = r.get('sources', {})
             parts.append('<p>' + e(state['role'] + ' / ' + r['status']) + ' '

@@ -55,16 +55,25 @@ def _record(api, reading_commit: str, record_id: str, output: Path) -> tuple[dic
     registry = retained._json(registry_raw)
     model.check(registry["schema_version"] == 1, "unsupported purpose registry")
     records = [r for r in registry["references"] if r["id"] == record_id]
-    visible = [r for r in reading["research"]["records"] if r["id"] == record_id]
-    model.check(len(records) == len(visible) == 1, "archive record absent or ambiguous")
+    model.check(len(records) == 1, "archive record absent or ambiguous")
+    deferred = 'read_policy' in records[0]
+    visible_key = 'on_demand_archives' if deferred else 'records'
+    visible = [r for r in reading["research"].get(visible_key, []) if r["id"] == record_id]
+    other_key = 'records' if deferred else 'on_demand_archives'
+    other = [r for r in reading["research"].get(other_key, []) if r["id"] == record_id]
+    model.check(len(visible) == 1 and not other, "archive record absent or ambiguous")
     record, shown = records[0], visible[0]
     model.check(all(record[k] == shown[k] for k in ("id", "case", "use", "purpose_note")),
                 "archive purpose differs from shown reading")
+    if deferred:
+        from .research_archive_index import project
+        model.check(shown == project(record), "on-demand archive declaration differs from reading")
     source = shown["source"]
+    declared_source = record["archive_source"] if deferred else record["source"]
     model.check(source["repository"] == model.REPOSITORY
-                and source["ref"] == record["source"].get("ref", reg["ref"])
-                and source["path"] == record["source"]["path"]
-                and source["git_blob"] == record["source"].get("git_blob", source["git_blob"]),
+                and source["ref"] == declared_source.get("ref", reg["ref"])
+                and source["path"] == declared_source["path"]
+                and source["git_blob"] == declared_source.get("git_blob", source["git_blob"]),
                 "archive source differs from shown reading")
     _sha(source["ref"]); _sha(source["git_blob"])
     config = record["archive"]  # Missing opt-in is not permission to scan a directory.
@@ -217,6 +226,8 @@ def recover_archive(api, *, reading_commit: str, record_id: str, output: Path,
         if config["format"] == "ODDS_RESULT":
             receipt["odds_status"] = "SAVED_RESULT_REBUILT_FOR_VERIFICATION_NOT_NEW_PRICE_ANALYSIS"
             receipt["market_qualification"] = "NOT_ESTABLISHED_BY_RECOVERY"
+        if record.get('read_policy') == 'ON_DEMAND_ARCHIVE':
+            receipt['source_materialization'] = 'RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY'
         retained._write(output / "readback.json", retained._raw(receipt))
         return receipt
     except (OSError, ValueError, RuntimeError, KeyError, TypeError, AttributeError) as exc:
