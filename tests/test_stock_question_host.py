@@ -237,8 +237,17 @@ def test_same_problem_stable_identity_ignores_revision():
 def test_main_configuration_is_disabled_and_workflow_does_not_auto_select_question():
     root = Path(__file__).parents[1]
     request = json.loads((root/host.QUESTION_REQUEST).read_text())
-    assert request["enabled"] is False and request["permission"] is None
-    assert request["approved_egress_hash"] is None
+    # Keep this historical test identity; deployment may be explicitly activated.
+    # Synthetic disabled/unauthorized cases above still reject all model calls.
+    assert type(request["enabled"]) is bool and request["mode"] == host.QUESTION_MODE
+    if not request["enabled"]:
+        assert request["permission"] is None and request["approved_egress_hash"] is None
+    else:
+        assert set(request["permission"]) == {"comment_id", "created_at", "body_sha256"}
+        assert isinstance(request["permission"]["comment_id"], int)
+        assert len(request["permission"]["body_sha256"]) == 64
+        assert len(request["approved_egress_hash"]) == 64
+        assert all(request[k] for k in ("question_source", "context_source", "preflight_source"))
     workflow = (root/".github/workflows/stock-business-research.yml").read_text()
     assert "reviewed-question:" in workflow and "group: stock-business-first-v0" in workflow
     assert "if: github.event_name == 'workflow_dispatch' && inputs.reviewed-question" in workflow

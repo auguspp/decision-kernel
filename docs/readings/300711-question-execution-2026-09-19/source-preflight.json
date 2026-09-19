@@ -1,0 +1,91 @@
+{
+  "case_id": "300711.SZ",
+  "finished_at": "2026-09-19T16:00:29.528368+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 3
+  },
+  "notes": "仅复核已经留存的三份完整历史原件和原解析页；没有源站GET、OCR或最新公告查询。开始时刻在revision2实际Git提交之后；checked_at是本轮本地原件/表示/页面核对的完成时刻。三份原件17页原文本逐字不变，表格空格不自动补零；保荐人签章页手写/印章不由文本层认证。静态问题单次授权窗口至2026-09-20T10:30Z，小于原固定R的recheck_after；不是来源当前性认证，过期必须停止，不修改历史时钟。",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604",
+      "checked_at": "2026-09-19T16:00:29.528368+00:00",
+      "id": "body-1225486854",
+      "identity": "300711:1225486854",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486854.PDF",
+      "succeeded": true,
+      "tool_reference": "RETAINED_ARTIFACT:10320565453:300711.SZ/sources/3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065",
+      "checked_at": "2026-09-19T16:00:29.528368+00:00",
+      "id": "body-1225486857",
+      "identity": "300711:1225486857",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486857.PDF",
+      "succeeded": true,
+      "tool_reference": "RETAINED_ARTIFACT:10320565453:300711.SZ/sources/049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13",
+      "checked_at": "2026-09-19T16:00:29.528368+00:00",
+      "id": "body-1225554527",
+      "identity": "300711:1225554527",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225554527.PDF",
+      "succeeded": true,
+      "tool_reference": "RETAINED_ARTIFACT:10320565453:300711.SZ/sources/bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "body-1225486854"
+      ],
+      "id": "ISSUER_PROCEEDS_USE_BODY",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [
+        "body-1225486857"
+      ],
+      "id": "SUBSIDIARY_INJECTION_TERMS",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [
+        "body-1225554527"
+      ],
+      "id": "SPONSOR_FUNDS_COUNTEREVIDENCE",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SZSE:300711",
+  "seed_publications": [
+    {
+      "evidence_id": "631ae8e1-82e8-56bf-a26b-c4dce9c38148",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "bfd92bfd4b7a04d0ed92c71b3ff280ae6ec38166",
+        "path": "docs/readings/300711-question-execution-2026-09-19/context.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "ca6d8afa9e7d3a2f37653a422de967c7322803a2",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "fd9e1aa7d8a09fb2d4d131be987431a5deda795ddc04c1e66af52992b5db468e"
+      }
+    }
+  ],
+  "started_at": "2026-09-19T15:53:50.546266+00:00",
+  "ticker": "300711",
+  "valid_until": "2026-09-20T10:30:00+00:00"
+}
