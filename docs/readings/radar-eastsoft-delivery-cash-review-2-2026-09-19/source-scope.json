@@ -1,0 +1,38 @@
+{
+  "declared_at": "2026-09-19T10:02:47.972703+00:00",
+  "main": "a543e133ef7474f983c04eebea11f88a2033b09b",
+  "reading": "9ef4a2c0a60bc6c9f0ed274e16fa6a652c5fea0d",
+  "subject": "300183.SZ",
+  "question_id": "communication-delivery-profit-cash-followup",
+  "predecessor_commit": "250efdc82567f9988d43cadae0a5b715e50d85da",
+  "scope": "Bounded interactive continuation of saved delivery-profit-cash question; assess remaining performance obligations, revenue recognition/payment terms and segment recovery hurdle. Not fresh automatic Pre/Quick or Full Research, no price/Odds/Action.",
+  "required_sources": [
+    "Exact retained half-year report bytes including cover, recognition policy, product revenue/cost, remaining performance obligations, income/cash-flow notes",
+    "Bounded issuer and customer official update/tender search covering after original 2026-09-13 cutoff through 2026-09-19 to assess whether recovery/market-share explanation is resolved; absence of retrievable results is not no-event"
+  ],
+  "optional_sources": [
+    "General media narratives, current prices and social posts excluded from underwriting"
+  ],
+  "stop_rules": [
+    "No new transport experiments or source downloads via bespoke HTTP",
+    "Use retained files first; no OCR",
+    "Missing customer-level volume/price/share/acceptance data leaves causal question unresolved, do not relabel as optional",
+    "If source printed period/security mismatches retained description, stop current-period inference and record correction"
+  ],
+  "authorization": "Human approved plan then said 好，你继续 in current chat",
+  "prior_time_gap": "No date inconsistency inferred: predecessor 2026-09-18T16:45Z is 2026-09-19T00:45+08:00; original timestamps retained.",
+  "actual_update_search": {
+    "search_queries": [
+      "site.eastsoft.com.cn 东软载波 2026 半年度 订单 中标",
+      "site.cninfo.com.cn 东软载波 2026 9月 中标 供货",
+      "site.ecp.sgcc.com.cn 东软载波 2026",
+      "site.bidding.csg.cn 东软载波 2026"
+    ],
+    "issuer_homepage": "https://www.eastsoft.com.cn/ ; returned zero parsed lines",
+    "sgcc_homepage": "https://ecp.sgcc.com.cn/ ; tool Internal Error",
+    "csg_homepage": "https://www.bidding.csg.cn/ ; portal readable, no exact company award/acceptance data obtained",
+    "qualified_new_customer_evidence": false,
+    "coverage": "INCOMPLETE_NOT_NO_EVENT",
+    "pdf_viewer": "Existing exact CNINFO source locator read and six relevant pages screenshot; does not establish runner acquisition or new source bytes."
+  }
+}
