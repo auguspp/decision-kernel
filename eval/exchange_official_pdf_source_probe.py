@@ -489,9 +489,11 @@ def run_probe(output: Path, identity: dict, *, session_factory=_session, monoton
                     )
         except DumpTrialError as exc:
             if record["query_status"] == "NOT_ATTEMPTED":
-                record.update(query_status="REJECTED", query_reason=exc.code)
+                record.update(query_status="REJECTED", query_reason=exc.code,
+                              query_http_status=exc.http_status)
             else:
-                record.update(pdf_status="REJECTED", pdf_reason=exc.code)
+                record.update(pdf_status="REJECTED", pdf_reason=exc.code,
+                              pdf_http_status=exc.http_status)
             if exc.http_status == 429 or record["query_http_status"] == 429 or record["pdf_http_status"] == 429:
                 exchange_stop[sample["exchange"]] = "HTTP_429_STOP"
             elif exc.code in {"TOTAL_PDF_BYTE_LIMIT", "ELAPSED_BUDGET"}:
