@@ -74,3 +74,7 @@ Synthetic回归使用原admission fixtures、原prepare_input、真实输入模�
 已实现的是**显式问题声明的输入准备薄适配**。自动问题形成/质量审阅/全局语义去重/少量选择、company-first生产接线、问题式Stock执行及真实Pre仍未实施。Industry Inflection继续P2定义。公告按需收敛不变，不接Tushare/Jev/MinerU、不继续CNINFO/SZSE/SSE实验。
 
 外部复用：Pydantic官方Models及pytest monkeypatch（2026-09-19读取）；沿用已有版本，不增加依赖。结构验证不认证输入经济真相；没有需要引入Agent/DAG/router框架的缺口。
+
+## 2026-09-19 执行接续：原 Stock 工作流的显式问题模式
+
+见[问题式 Stock 手动宿主 v0](stock-question-host-v0.md)。它复用本prepare、原启动时admission、原Pre/必要Quick及Retainer，使用同一工作流/并发组/工作分支。默认请求关闭；不把#455固定样本当可执行令牌，不改旧基线。真实启用仍须精确问题/公开正文/预检、原permission与独立公开材料批准，保存并读回新的runtime输入。模式接线、实际执行、当前研究登记及Human接受分开验收；本页原prepare的未执行语义不变。

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "enabled": false,
+  "mode": "REVIEWED_RADAR_QUESTION",
+  "permission": null,
+  "question_source": null,
+  "context_source": null,
+  "preflight_source": null,
+  "approved_egress_hash": null
+}
