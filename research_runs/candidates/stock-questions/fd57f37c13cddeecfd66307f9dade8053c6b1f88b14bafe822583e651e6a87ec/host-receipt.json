@@ -1,0 +1,42 @@
+{
+  "automatic_retry": false,
+  "candidate_hash": "16e5f9ea2fc5a7bba2e19b0b9aefd8529a97a1bfdc6d92b9b469b3e860fb9f61",
+  "code_commit": "52be86fe0ba137599f1484d878aa269aee9609b5",
+  "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+  "finished_at": "2026-09-19T23:35:09.182527+00:00",
+  "formal_research_started": true,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "provider_usage": [
+    {
+      "error_type": "PermissionDeniedError",
+      "finished_at": "2026-09-19T23:35:03.209590+00:00",
+      "input_sha256": "c117e34dc022e642ad24b198b0d307e04edeb5387fbe5224fa8493f4c03d7ecc",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "cc9ca2180c3d258c07492d3f7109a1077e3987fe37ad1ae438dd437027d0e983",
+      "output_model_schema_sha256": "3993315522a21cdace841556468b831411163e2cf1b25d8e01b57b06fa576c5f",
+      "output_text_retained": false,
+      "phase": "RESPONSE",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_received": false,
+      "stage": "pre",
+      "started_at": "2026-09-19T23:35:01.681685+00:00",
+      "status": "FAILED",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35"
+    }
+  ],
+  "question_id": "restricted-proceeds-internal-transfer-2026h1",
+  "question_kind": "REVIEWED_RADAR_QUESTION",
+  "registered_current_handoff": false,
+  "research_authority": "NONE",
+  "revision": 2,
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-19T23:34:48.300408+00:00",
+  "status": "EXECUTION_GAP",
+  "thscode": "300711.SZ",
+  "validation_hash": "0b0b52439bd1de9262aa9eef5ffef386d144f22e336cacd6c6fc2786a07fe764"
+}
