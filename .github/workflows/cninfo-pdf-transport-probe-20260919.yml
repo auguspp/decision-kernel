@@ -1,6 +1,7 @@
 name: cninfo-pdf-transport-probe-20260919
 
-# Branch-local, first invocation only. Do not merge this experiment into main.
+# Branch-local corrected-code continuation. Original run failed before live requests.
+# Only invocation 2 / attempt1; do not merge this experiment into main.
 on:
   push:
     branches: [eval/cninfo-pdf-transport-20260919]
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:
   probe:
-    if: github.repository == 'auguspp/decision-kernel' && github.run_number == 1 && github.run_attempt == 1
+    if: github.repository == 'auguspp/decision-kernel' && github.run_number == 2 && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -28,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 2
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
@@ -41,7 +42,8 @@ jobs:
           test "$GITHUB_EVENT_NAME" = push
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          test "$(git rev-parse HEAD^)" = 51064af7d60ea6ed69193c8655ceec041143fa41
+          test "$(git rev-parse HEAD^^)" = "$BASE_SHA"
           mkdir -p proof/environment
           git diff --name-status "$BASE_SHA" HEAD > proof/environment/diff.txt
           python - <<'PY'
@@ -69,6 +71,12 @@ jobs:
           python --version > proof/environment/python.txt
           python -m pip list --format=json > proof/environment/packages.json
           python -m pytest --collect-only -q > proof/environment/collection.txt
+      - name: Run isolated offline safety tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q eval/test_cninfo_pdf_transport_probe.py \
+            --junitxml=proof/environment/probe-tests.xml 2>&1 | tee proof/environment/probe-tests.log
       - name: Run complete unchanged blocking suite
         shell: bash
         run: |
@@ -77,12 +85,6 @@ jobs:
             -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
             --durations=100 --durations-min=1.0 \
             --junitxml=proof/environment/pytest.xml 2>&1 | tee proof/environment/pytest.log
-      - name: Run isolated offline safety tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pytest -q eval/test_cninfo_pdf_transport_probe.py \
-            --junitxml=proof/environment/probe-tests.xml 2>&1 | tee proof/environment/probe-tests.log
       - name: Execute six bounded official PDF requests
         shell: bash
         run: |

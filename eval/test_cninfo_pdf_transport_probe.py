@@ -131,3 +131,15 @@ def test_hash_tamper_rejected_and_output_is_create_only(monkeypatch, tmp_path):
     path = next((tmp_path / "out").glob("*.pdf"))
     path.write_bytes(BODY + b"tampered")
     with pytest.raises(AssertionError): p.verify(tmp_path / "out")
+
+
+def test_nonempty_query_parameters_still_fail_before_send(monkeypatch, tmp_path):
+    original_get = requests.Session.get
+    def get_with_query(self, url, **kwargs):
+        return original_get(self, url, params={"unexpected": "query"}, **kwargs)
+    monkeypatch.setattr(requests.Session, "get", get_with_query)
+    calls = install(monkeypatch)
+    result = p.capture(tmp_path / "out")
+    assert not calls and result["request_count"] == 0
+    assert result["stop_reason"] == "ORIGINAL_TRANSPORT_CONTRACT_CHANGED"
+    assert all(r["status"] == "NOT_ATTEMPTED" for r in result["results"][1:])

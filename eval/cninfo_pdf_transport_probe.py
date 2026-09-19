@@ -126,8 +126,10 @@ def capture(output: Path):
                     nonlocal total
                     if method != "GET" or destination != url or record["application_get_calls"]:
                         raise ProbeLimit("UNPLANNED_REQUEST")
+                    # Requests 2.34.2 Session.get forwards its explicit params=None.
+                    # No arbitrary query parameters or request fields are accepted.
                     if kwargs != {"headers": {"Accept": "application/pdf", "Accept-Encoding": "identity"},
-                                  "timeout": (10, 45), "stream": True, "allow_redirects": False}:
+                                  "params": None, "timeout": (10, 45), "stream": True, "allow_redirects": False}:
                         raise ProbeLimit("ORIGINAL_TRANSPORT_CONTRACT_CHANGED")
                     if variant == "disclosures_headers":
                         kwargs["headers"] = {**kwargs["headers"], **CANDIDATE_HEADERS}
