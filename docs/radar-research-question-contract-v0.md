@@ -92,3 +92,10 @@ Research Question Layer 当前为 **TARGET_CONTRACT_ONLY / NOT_IMPLEMENTED**：�
 外部复用仅为既有pytest的fixtures/monkeypatch与GitHub原生Markdown/Git，不引入Radar框架。检查依据：pytest官方[fixtures](https://docs.pytest.org/en/stable/how-to/fixtures.html)与[monkeypatch](https://docs.pytest.org/en/stable/how-to/monkeypatch.html)，2026-09-19读取；原工具足够，不因无整包覆盖全部产品语义就自建整层。
 
 Evidence changes Belief; Price changes Odds。Kernel校验身份/时间/来源一致性，不认证真理。AI Investment Authority = NONE；Human拥有最终研究、判断和资本决定。
+
+
+## 2026-09-19 后续薄适配：显式问题输入准备
+
+见[已声明问题输入准备 v0](reviewed-question-input-v0.md)。它将一份预先保存的有界问题声明通过原 source_refs 绑定至原 ExternalResearchInputPacket，再调用原 prepare_input；不改变本页原来源字段、Price Gate、Stock基线或Kernel schema。输出仅为 QUESTION_INPUT_PREPARED_NOT_EXECUTED，不是Pre admission或执行权限。
+
+这是本页下一接点的一个有限实现，不是整个Research Question Layer上线：自动问题生成、语义审阅/去重/选择、company-first生产接线及真实Pre仍未实施。旧continuation/trigger/method宿主不因新的声明而被重开，必要来源失败仍拦住对应输入。
