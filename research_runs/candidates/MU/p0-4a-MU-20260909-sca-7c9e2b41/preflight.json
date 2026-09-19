@@ -1,0 +1,97 @@
+{
+  "accessibility": "BODIES_OBTAINED_FOR_REQUIRED_DOCUMENT_TYPES; PDF cover rendered, HTML 10-Q contains statements/notes/risk sections. This is not semantic completeness or latest-data certification.",
+  "completed_at_local_observation": "2026-09-08T21:36:01.998742Z",
+  "limits": [
+    "Earlier exploratory continuation tried Wens/Micron links; Wens was not selected or frozen and no Wens Research execution is claimed. Shennong was not retried.",
+    "Search snippets, source directories and incidental preflight financial text are not treated as completed Research. Actual Research must reread and assess the declared classes after the frozen commit.",
+    "The returned news/filings indexes currently show July as their newest visible dates and tool crawl metadata is cached. Later material updates require a targeted check; no exhaustive no-new-filing claim.",
+    "Complete preflight native telemetry/raw HTTP bytes are unavailable. These are tool-return references and a local completion observation, not a server attestation or a claimed hard budget.",
+    "Prior Micron research was seen; the future run is real but not blind or independent of prior context."
+  ],
+  "no_authority": "NONE",
+  "observation_provenance": {
+    "code_commit": "29f98409dddd0032259e05a4bdad7ebad60b8a76",
+    "file_sha256": "206fc075810aedc6955bae4a83845da245dbc24571cde2da17592fd0326eef6b",
+    "git_blob": "63650d015913daf11e92bf27eb91db0a1e3c0205",
+    "read_path": "sources/git/63650d015913daf11e92bf27eb91db0a1e3c0205/live-decision-book.md",
+    "reading_commit": "18f093c8c9c51a03c238233c143ad45d8901c9a5",
+    "reference": "turn730file0",
+    "repository": "auguspp/decision-kernel"
+  },
+  "platform_returns": [
+    "turn975123view0",
+    "turn975123view1",
+    "turn975123view2",
+    "turn357946view0",
+    "turn357946view1",
+    "turn357946view2",
+    "turn357946view3",
+    "turn357946view4",
+    "turn420657view2",
+    "turn420657view3",
+    "turn429898view0",
+    "turn429898view1",
+    "turn429898view2",
+    "turn429898view3"
+  ],
+  "required_classes": [
+    {
+      "id": "FORMAL_PERIOD_ACTUALS",
+      "must_assess": "Issuer/period/units, consolidated revenue/margin/profit/share count, and accounting notes; release is not a replacement for 10-Q.",
+      "required_sources": [
+        "FILING",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "SCA_CONTRACT_COVERAGE",
+      "must_assess": "Enforceability, actual signed coverage versus targets, fixed/banded/market pricing, RPO measurement dates/recognition and customer performance risks.",
+      "required_sources": [
+        "FILING",
+        "REMARKS"
+      ]
+    },
+    {
+      "id": "CASH_CAPITAL_ECONOMICS",
+      "must_assess": "Actual operating cash, gross versus net capex, customer deposits/financial commitments, receivables, depreciation and capital plans; no company-wide owner-cash floor from revenue obligations.",
+      "required_sources": [
+        "FILING",
+        "RELEASE",
+        "REMARKS",
+        "JULY_CAPITAL"
+      ]
+    },
+    {
+      "id": "INDEPENDENT_INDUSTRY_CONTEXT",
+      "must_assess": "Read both peer-primary bodies for demand, capacity and competition; management outlook is not independently established industry truth.",
+      "required_sources": [
+        "PEER_SK",
+        "PEER_SAMSUNG"
+      ]
+    },
+    {
+      "id": "SUBSEQUENT_ISSUER_UPDATE_CHECK",
+      "must_assess": "Inventory returned pages and use targeted official-source search through cutoff for later material SCA/capital/quarter updates. Read any discriminating later body found. Cached page absence cannot prove no later disclosure. If a required available body cannot be obtained, INCOMPLETE_SOURCE.",
+      "required_sources": [
+        "NEWS_INVENTORY",
+        "FILING_INVENTORY",
+        "JULY_AUTO",
+        "JULY_CAPITAL"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "selection": "p0-4a-MU-20260909-sca-7c9e2b41",
+  "sources": {
+    "FILING": "https://investors.micron.com/node/50686/html",
+    "FILING_INVENTORY": "https://investors.micron.com/sec-filings",
+    "JULY_AUTO": "https://investors.micron.com/news-releases/news-release-details/micron-strengthens-automotive-ecosystem-supply-through-strategic",
+    "JULY_CAPITAL": "https://investors.micron.com/news-releases/news-release-details/micron-accelerates-us-investments-pours-first-concrete-new-york",
+    "NEWS_INVENTORY": "https://investors.micron.com/latest-news",
+    "PEER_SAMSUNG": "https://news.samsung.com/global/samsung-electronics-announces-second-quarter-2026-results",
+    "PEER_SK": "https://news.skhynix.com/en/q2-2026-business-results/",
+    "RELEASE": "https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-record-results-third-quarter",
+    "REMARKS": "https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe"
+  },
+  "stage": "READ_ONLY_ACCESSIBILITY_PREFLIGHT_NOT_RESEARCH"
+}
