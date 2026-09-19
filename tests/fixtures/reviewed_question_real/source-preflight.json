@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "case_id": "300711.SZ",
+  "ticker": "300711",
+  "security_id": "SZSE:300711",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "started_at": "2026-09-19T13:18:21.248531+00:00",
+  "finished_at": "2026-09-19T13:24:36.498521+00:00",
+  "valid_until": "2026-09-20T12:03:53.415907+00:00",
+  "reads": [
+    {
+      "id": "body-1225486854",
+      "identity": "300711.SZ/CNINFO/1225486854",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486854.PDF",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-19T13:18:21.555379+00:00",
+      "tool_reference": "container:check_primary.py/artifact10320565453/300711.SZ/sources/3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604.pdf",
+      "body_sha256": "3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604"
+    },
+    {
+      "id": "body-1225486857",
+      "identity": "300711.SZ/CNINFO/1225486857",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486857.PDF",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-19T13:18:21.650115+00:00",
+      "tool_reference": "container:check_primary.py/artifact10320565453/300711.SZ/sources/049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065.pdf",
+      "body_sha256": "049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065"
+    },
+    {
+      "id": "body-1225554527",
+      "identity": "300711.SZ/CNINFO/1225554527",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225554527.PDF",
+      "authority": "PRIMARY",
+      "kind": "BODY",
+      "succeeded": true,
+      "checked_at": "2026-09-19T13:18:21.823218+00:00",
+      "tool_reference": "container:check_primary.py/artifact10320565453/300711.SZ/sources/bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13.pdf",
+      "body_sha256": "bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13"
+    }
+  ],
+  "required_classes": [
+    {
+      "id": "ISSUER_PROCEEDS_USE_BODY",
+      "mode": "STATIC",
+      "body_ids": [
+        "body-1225486854"
+      ],
+      "inventory_id": null
+    },
+    {
+      "id": "SUBSIDIARY_INJECTION_TERMS",
+      "mode": "STATIC",
+      "body_ids": [
+        "body-1225486857"
+      ],
+      "inventory_id": null
+    },
+    {
+      "id": "SPONSOR_FUNDS_COUNTEREVIDENCE",
+      "mode": "STATIC",
+      "body_ids": [
+        "body-1225554527"
+      ],
+      "inventory_id": null
+    }
+  ],
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 3
+  },
+  "seed_publications": [
+    {
+      "evidence_id": "0767b9ae-d447-5311-9cc8-2bcb832ba9c5",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "repository": "auguspp/decision-kernel",
+        "ref": "ead15d17e82f9487f76e78194b465331b64bb87d",
+        "path": "details/stock/34673882756/reading/stock-reading.json",
+        "git_blob": "2e9af24b340531d9a98f93836798a788c5d5ae71",
+        "sha256": "2c67059db52d529a501d394712cbac8f2df88cb0e8471ea85ea498c8f767b1e4",
+        "purpose": "SAVED_SECTOR_STOCK_ORIGIN"
+      }
+    }
+  ],
+  "scope_note": "Actual readback of retained original PDFs after question commit; official URLs identify archived sources, not new source-server GETs. Sponsor is primary to its own recorded statements only. Historical scope, not current company state or source truth."
+}

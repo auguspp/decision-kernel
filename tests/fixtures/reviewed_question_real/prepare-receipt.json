@@ -1,0 +1,30 @@
+{
+  "status": "QUESTION_INPUT_PREPARED_NOT_EXECUTED",
+  "question_source": {
+    "repository": "auguspp/decision-kernel",
+    "ref": "27cb769d2ef54e3fa0231cfeffb40c84e14a17d4",
+    "path": "docs/readings/300711-question-input-positive-2026-09-19/question.json",
+    "git_blob": "36ba0d107b56fb7cad8c4335c015d2dd163f45e6",
+    "sha256": "e962fb9c0a07a2c47b8c11b58526a65ce2d465ae0f706c918a54738e64d7e05f",
+    "purpose": "REVIEWED_RADAR_QUESTION"
+  },
+  "question_id": "restricted-proceeds-internal-transfer-2026h1",
+  "revision": 1,
+  "execution_key": {
+    "execution_id": "reviewed-question-300711-restricted-proceeds-20260919-v1",
+    "canonical_input_hash": "54f606c5217a3a12cd55865d595bc15bedb03029b47f6150d3661537d456736e"
+  },
+  "input_file_sha256": "0f6bda8df25bf4f3ad379f468adccfd4bfbfca422a61cced43da5d63b63a31b0",
+  "preflight_sha256": "e5c267673b5df25cba35d684aa3e6f67023f0d1bb11afb804a186a3c6f72277d",
+  "catalog_sha256": "91deb7b071113cc9c4d29b6f3fb98d1f328545f5bd398e9db81ac938de075445",
+  "current_state_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+  "current_state_reading_hash": "9df13bff2394152c5668a3f3d83cf2b1c9c01d47f67a16c1696d7fa4f449a790",
+  "dedup_scope": "EXPLICIT_CATALOG_QUESTION_IDS_NOT_GLOBAL_SEMANTIC_DEDUP",
+  "qualification": "DECLARATION_AND_SOURCE_BINDING_NOT_ECONOMIC_TRUTH_OR_QUESTION_QUALITY",
+  "research_execution_allowed": false,
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_acceptance": "NOT_ESTABLISHED",
+  "investment_authority": "NONE",
+  "remote_writes": 0
+}
