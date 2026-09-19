@@ -1,0 +1,9 @@
+# #453 真实原件输入验收（进行中）
+
+2026-09-19，#297/5742110963；REUSE。只增加原件回归夹具与既有接口验收，无runtime/workflow/依赖变化。
+
+第一步把固定R ead15d17e82f9487f76e78194b465331b64bb87d 的 current-state.json（原blob1060a6f8f1da49e2cb4ce1fb07763c9de23e51ab）及同R历史Stock34673882756的stock-reading.json（原blob2e9af24b340531d9a98f93836798a788c5d5ae71）原样放入测试夹具。日期和历史失败不变。原CI完整test job物化原件、运行原reading验证并保留诊断，不另开workflow或dispatch。
+
+这一阶段不是问题准备成功。后续须在问题及必要范围先提交之后检查库存原件，形成真实preflight/packet并实际运行完整reviewed_question_input.prepare。不得用合成通过、旧CI或source读回替代该结果。
+
+计划样本是300711.SZ的限定历史募资用途与内部划转问题，不重做旧收入/毛利/收现基线或撤销旧终局争议。三份已有完整PDF位于artifact10320565453：1225486854、1225486857、1225554527。无新公告获取、Research/Pre/Quick/Deep/Odds/Action；最终验收前本PR保持draft。
