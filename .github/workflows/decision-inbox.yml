@@ -2,6 +2,12 @@ name: decision-inbox
 
 on:
   workflow_dispatch:
+    inputs:
+      scan-disclosures:
+        description: Explicitly run the retained six-company disclosure scan; default off
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -94,6 +100,38 @@ jobs:
             "${shadow_packages[@]}" \
             --output-dir market-history-shadow \
             2>&1 | tee market-history-shadow-status.txt
+      - name: Record disclosure request scope
+        if: always()
+        env:
+          DISCLOSURE_SCAN_REQUESTED: ${{ inputs.scan-disclosures }}
+        run: |
+          python - <<'PY'
+          import html
+          import os
+          from pathlib import Path
+
+          requested = os.environ.get("DISCLOSURE_SCAN_REQUESTED", "")
+          if requested not in {"", "false", "true"}:
+              raise ValueError("INVALID_DISCLOSURE_SCAN_REQUEST")
+          note = (
+              "本次显式请求旧版六公司公告扫描；执行结果见独立 disclosures job，不由 Inbox 成功推断。"
+              if requested == "true" else
+              "本次未请求公告扫描（NOT_REQUESTED）；不代表没有公告，也不是来源获取失败。"
+          )
+          output = Path("decision-inbox")
+          markdown = output / "summary.md"
+          page = output / "index.html"
+          if markdown.is_file():
+              with markdown.open("a", encoding="utf-8") as stream:
+                  stream.write("\n## 公告覆盖\n\n" + note + "\n")
+          if page.is_file():
+              text = page.read_text(encoding="utf-8")
+              block = "<aside><h2>公告覆盖</h2><p>" + html.escape(note) + "</p></aside>"
+              if "</body>" not in text:
+                  raise ValueError("INBOX_HTML_BODY_CLOSURE_MISSING")
+              page.write_text(text.replace("</body>", block + "</body>", 1), encoding="utf-8")
+          print(note)
+          PY
       - name: Publish Human summary
         if: always()
         shell: bash
@@ -141,6 +179,7 @@ jobs:
           retention-days: 14
 
   disclosures:
+    if: github.event_name == 'workflow_dispatch' && inputs.scan-disclosures == true
     runs-on: ubuntu-latest
     timeout-minutes: 8
     concurrency:
