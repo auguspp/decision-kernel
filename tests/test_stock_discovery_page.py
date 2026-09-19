@@ -4,6 +4,7 @@ from datetime import timedelta
 import json
 from pathlib import Path
 import runpy
+import shutil
 
 import pytest
 
@@ -78,6 +79,30 @@ def capture_setup(tmp_path, *, transport_change=None, shown=0, offset=0, public_
         sector_result_raw=(json.dumps(result,ensure_ascii=False,indent=2)+'\n').encode(), discovery_page=selection)
     assert mod['inventory'](state_dir) == before
     return mod, out, observed, result, selection, calls
+
+
+@pytest.fixture(scope='module')
+def complete_page_capture_baseline(tmp_path_factory):
+    """One real successful default page capture retained only as immutable test input."""
+    blocker=pytest.MonkeyPatch()
+    prohibit_network(blocker)
+    try:
+        root=tmp_path_factory.mktemp('stock-discovery-page-baseline')
+        mod,out,capture,_,_,_=capture_setup(root)
+        assert capture['status']==mod['COMPLETE']
+        assert mod['verify'](out)['network_calls']==0
+        return out
+    finally:
+        blocker.undo()
+
+
+@pytest.fixture
+def complete_page_capture_copy(tmp_path,complete_page_capture_baseline):
+    """Private retained bytes for one tamper; original verify still runs per case."""
+    out=tmp_path/'reading'
+    shutil.copytree(complete_page_capture_baseline,out)
+    mod=runpy.run_path(str(ROOT/'.github/scripts/capture-stock-reading.py'))
+    return mod,out
 
 
 @pytest.mark.parametrize('value', ['latest:0', 'a'*64+':-1','a'*64+':01','a'*64+':1.0','A'*64+':1',' '+ 'a'*64+':0',None,True])
@@ -155,8 +180,9 @@ def test_transport_failure_does_not_make_selected_or_deferred_conditions_not_met
 
 
 @pytest.mark.parametrize('what', ['selector','dispositions','original_origin','version'])
-def test_rehashed_page_tamper_is_not_accepted(tmp_path,what):
-    mod,out,capture,_,_,_=capture_setup(tmp_path)
+def test_rehashed_page_tamper_is_not_accepted(complete_page_capture_copy,what):
+    mod,out=complete_page_capture_copy
+    capture=mod['read'](out/'capture.json')
     if what=='selector':
         p=out/'inputs/discovery-page.json'; data=mod['read'](p); data['offset']=1
     elif what=='dispositions':
