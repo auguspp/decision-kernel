@@ -1,0 +1,101 @@
+name: cninfo-pdf-transport-probe-20260919
+
+# Branch-local, first invocation only. Do not merge this experiment into main.
+on:
+  push:
+    branches: [eval/cninfo-pdf-transport-20260919]
+    paths:
+      - .github/workflows/cninfo-pdf-transport-probe-20260919.yml
+      - eval/cninfo_pdf_transport_probe.py
+      - eval/test_cninfo_pdf_transport_probe.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cninfo-pdf-transport-probe-20260919
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_number == 1 && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BASE_SHA: a6bb4b4c5bb371124aeb66132b3b45dad477fac4
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify exact experiment and unchanged production code
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/eval/cninfo-pdf-transport-20260919
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          mkdir -p proof/environment
+          git diff --name-status "$BASE_SHA" HEAD > proof/environment/diff.txt
+          python - <<'PY'
+          import hashlib, subprocess
+          from pathlib import Path
+          allowed = {'.github/workflows/cninfo-pdf-transport-probe-20260919.yml',
+                     'eval/cninfo_pdf_transport_probe.py', 'eval/test_cninfo_pdf_transport_probe.py'}
+          rows = [x.split('\t') for x in Path('proof/environment/diff.txt').read_text().splitlines()]
+          assert len(rows) == 3 and all(x[0] == 'A' for x in rows)
+          assert {x[1] for x in rows} == allowed
+          import runpy
+          probe = runpy.run_path('eval/cninfo_pdf_transport_probe.py')
+          for path, expected in probe['SOURCE_BLOBS'].items():
+              data = Path(path).read_bytes()
+              assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == expected
+          PY
+          printf 'base=%s\ncode=%s\nevent=%s\nrun=%s\nattempt=%s\n' \
+            "$BASE_SHA" "$GITHUB_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > proof/environment/identity.txt
+          cp eval/cninfo_pdf_transport_probe.py eval/test_cninfo_pdf_transport_probe.py proof/environment/
+          cp .github/workflows/cninfo-pdf-transport-probe-20260919.yml proof/environment/workflow.yml
+      - name: Install unchanged development extra
+        run: python -m pip install -e '.[dev]'
+      - name: Record environment and full existing collection
+        run: |
+          python --version > proof/environment/python.txt
+          python -m pip list --format=json > proof/environment/packages.json
+          python -m pytest --collect-only -q > proof/environment/collection.txt
+      - name: Run complete unchanged blocking suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
+            -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
+            --durations=100 --durations-min=1.0 \
+            --junitxml=proof/environment/pytest.xml 2>&1 | tee proof/environment/pytest.log
+      - name: Run isolated offline safety tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q eval/test_cninfo_pdf_transport_probe.py \
+            --junitxml=proof/environment/probe-tests.xml 2>&1 | tee proof/environment/probe-tests.log
+      - name: Execute six bounded official PDF requests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python eval/cninfo_pdf_transport_probe.py capture --output proof/capture \
+            2>&1 | tee proof/environment/capture.log
+      - name: Verify retained comparison without network
+        run: python eval/cninfo_pdf_transport_probe.py verify --output proof/capture
+      - name: Retain original bytes and diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cninfo-pdf-transport-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof/
+          if-no-files-found: error
+          retention-days: 30
