@@ -50,12 +50,17 @@ def setup(tmp_path):
 @pytest.fixture(scope='module')
 def complete_capture_baseline(tmp_path_factory):
     """One real immutable successful capture reused only as negative-test input bytes."""
-    root=tmp_path_factory.mktemp('stock-capture-baseline')
-    mod,_,out,_,_,run=setup(root)
-    report=run()
-    assert report['status']==mod['COMPLETE']
-    assert mod['verify'](out)['status']=='ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT'
-    return out
+    blocker=pytest.MonkeyPatch()
+    prohibit_network(blocker)
+    try:
+        root=tmp_path_factory.mktemp('stock-capture-baseline')
+        mod,_,out,_,_,run=setup(root)
+        report=run()
+        assert report['status']==mod['COMPLETE']
+        assert mod['verify'](out)['status']=='ORIGINAL_STOCK_INPUTS_AND_PAGE_REBUILT'
+        return out
+    finally:
+        blocker.undo()
 
 
 @pytest.fixture
