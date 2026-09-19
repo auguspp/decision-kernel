@@ -146,8 +146,15 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
                      "started_at": clock(), "status": "INCOMPLETE"}
             body_events.append(event)
             preparation["unattempted_ids"].remove(row.announcement_id)
-            pdf = fetch_pdf(source_locator=row.source_locator, max_bytes=once.MAX_SOURCE_BYTES,
-                            timeout_seconds=45)
+            try:
+                pdf = fetch_pdf(source_locator=row.source_locator, max_bytes=once.MAX_SOURCE_BYTES,
+                                timeout_seconds=45)
+            except Exception as exc:
+                event["finished_at"] = clock()
+                diagnostic = cninfo.pdf_failure_diagnostic(exc)
+                if diagnostic is not None:
+                    event["pdf_diagnostic"] = diagnostic
+                raise
             total_pdf += len(pdf)
             once.require(total_pdf <= 128 * 1024 * 1024, "issuer total PDF capture capacity")
             digest = once.sha(pdf)
@@ -231,6 +238,9 @@ def capture(*, ticker: str, observation: dict, api, code_commit: str, output: Pa
     except Exception as exc:
         if preparation_only:
             preparation.update(error_type=type(exc).__name__)
+            diagnostic = cninfo.pdf_failure_diagnostic(exc)
+            if diagnostic is not None:
+                preparation["pdf_diagnostic"] = diagnostic
             if isinstance(exc, once.TrialError):
                 preparation["error_code"] = exc.code
         raise
