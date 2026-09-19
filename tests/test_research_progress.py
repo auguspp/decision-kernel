@@ -198,7 +198,7 @@ def test_existing_directory_and_concurrent_save_never_overwrite(tmp_path):
     read(tmp_path / "p1", first)
 
 
-@pytest.mark.parametrize("body", [b"", b"   \n", b"\xff", b"a" * (512 * 1024 + 1)])
+@pytest.mark.parametrize("body", [b"", b"   \\n", b"\\xff", b"a" * (512 * 1024 + 1)], ids=["empty", "whitespace", "invalid-utf8", "oversized-512k"])
 def test_unsupported_text_is_not_truncated_or_fabricated(tmp_path, body):
     with pytest.raises(ValueError):
         save(tmp_path, paper=body)
