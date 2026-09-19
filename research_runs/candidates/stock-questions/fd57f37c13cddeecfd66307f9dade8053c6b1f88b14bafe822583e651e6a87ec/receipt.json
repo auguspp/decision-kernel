@@ -1,0 +1,54 @@
+{
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "elapsed_minutes_observed": 1,
+  "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+  "finished_at": "2026-09-19T23:35:03.209731Z",
+  "input_hash": "920f98ed01966b29aad47f777cc2aa5ee8da6773a01bb13dc8b941760499061f",
+  "last_completed_stage": "ADMISSION_OR_RETAINED_PARTIAL",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "35476493146",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-19T23:34:50.045443Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "631ae8e1-82e8-56bf-a26b-c4dce9c38148",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/ca6d8afa9e7d3a2f37653a422de967c7322803a2/docs/readings/300711-question-execution-2026-09-19/context.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 1,
+  "started_at": "2026-09-19T23:35:00.882506Z",
+  "stop_or_failure_reason": "PermissionDeniedError",
+  "technical_retries_used": 0,
+  "tool_calls_used": 2,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-19T23:35:00.882536Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/ca6d8afa9e7d3a2f37653a422de967c7322803a2/docs/readings/300711-question-execution-2026-09-19/context.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "No retry or route repair. Per-stage files/usage record whether public output was retained; missing output is UNKNOWN.",
+      "observed_at": "2026-09-19T23:35:03.209609Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "FAILED",
+      "target": "EXECUTOR:PRE",
+      "technical_retry": false
+    }
+  ]
+}
