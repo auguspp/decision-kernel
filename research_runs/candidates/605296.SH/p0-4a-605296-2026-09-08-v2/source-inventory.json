@@ -1,0 +1,132 @@
+{
+  "actual_validator_status": "PENDING_ORIGINAL_RUNTIME_CI",
+  "authority": {
+    "human_attention": "NONE",
+    "investment": "NONE",
+    "research_registration": "NONE"
+  },
+  "completion": "INCOMPLETE_SOURCE",
+  "excluded_search_leads": [
+    {
+      "disposition": "Secondary search result; not opened, no Evidence, no primary H1 qualification.",
+      "reference": "turn941944search1",
+      "url": "https://news.10jqka.com.cn/20260825/c679256644.shtml"
+    },
+    {
+      "disposition": "Secondary H1 report lead; not opened; reported August 24 versus Human August 25 dates not reconciled into invented primary publication metadata.",
+      "reference": "turn941944search2",
+      "url": "https://finance.sina.com.cn/stock/zqgd/2026-08-24/doc-inipmhfn9990522.shtml"
+    },
+    {
+      "disposition": "August operations news lead; not opened or promoted to primary source.",
+      "reference": "turn941944search3",
+      "url": "https://stock.10jqka.com.cn/20260907/c679653559.shtml"
+    },
+    {
+      "disposition": "July monthly secondary lead; not opened or promoted to primary source.",
+      "reference": "turn941944search15",
+      "url": "https://m.sohu.com/a/1059743994_115377"
+    }
+  ],
+  "execution_id": "p0-4a-605296-2026-09-08-v2",
+  "expected_validator_status": "EXECUTION_GAP",
+  "failure_scope": {
+    "cache_miss": "two mirror reads: events20,21",
+    "tool_url_policy_refusal": "events23,24: non-retryable; no source-server/credential verdict and no bypass",
+    "unicode_decoding_error": "mirror listing event22",
+    "unusable_success": "company root/SSE index produced no filing body; successful read count is not qualified document count"
+  },
+  "independent_normal_adversarial_pair": "NOT_ESTABLISHED",
+  "input_commit": "1d6e2053714982e7add41531f40dd723411b5f17",
+  "input_git_blob": "de4b9dd901120600915bbe63dcafcd7037a5412c",
+  "provenance_limits": [
+    "observed_at is a local UTC post-response observation, not tool-native server retrieval telemetry; events27/28 were logged after context restoration, with the delay explicitly noted.",
+    "Exact queries and requested URLs are retained. Result identifiers are platform references; they are not full search-result/HTTP archives. Search events15-17 have no returned identifier and are explicitly executor summaries.",
+    "No original company PDF was acquired, so no PDF table/visual verification is claimed. Source excerpts and hashes do not make unavailable raw documents into backups.",
+    "No supplemental Evidence is promoted from this incomplete inventory. Seed observation identities are inherited unchanged; no new Research conclusion is published.",
+    "Budget and write-path boundary are soft executor commitments, not a demonstrated runtime permission sandbox. No independent normal/adversarial pair is claimed."
+  ],
+  "read_counts": {
+    "failed_read_actions": 5,
+    "limits_exceeded": false,
+    "recorded_actions": 29,
+    "search_queries": 12,
+    "successful_read_events": 12,
+    "technical_retries": 0,
+    "unique_company_primary_bodies_read": 0,
+    "unique_external_business_or_industry_bodies_read": 2
+  },
+  "required_classes": [
+    {
+      "evidence_ids": [],
+      "id": "COMPANY_PRIMARY_FORMAL_H1",
+      "reason": "Search leads and Human-provided August 25 date are not a read of the company-primary formal report.",
+      "status": "NOT_OBTAINED"
+    },
+    {
+      "evidence_ids": [],
+      "id": "COMPANY_PRIMARY_POST_H1_MONTHLY",
+      "reason": "July/August reports appeared in secondary search leads; July mirror returned cache miss; no first-party monthly PDF was acquired.",
+      "status": "NOT_OBTAINED"
+    },
+    {
+      "evidence_ids": [],
+      "id": "COMPANY_PRIMARY_COST_AND_CASH",
+      "reason": "Formal financial/cost/cash pages were not read. Media snippets, older business scope, and national feed quotes cannot substitute.",
+      "status": "NOT_OBTAINED"
+    },
+    {
+      "evidence_ids": [],
+      "id": "OFFICIAL_INDUSTRY_SUPPLY_DEMAND",
+      "reason": "NBS H1 livestock and MOA July weekly price text were read. This is not a complete September supply/demand assessment and does not establish company cost/cash or causality.",
+      "status": "PARTIAL_HISTORICAL_CONTEXT_READ"
+    }
+  ],
+  "research_cutoff": "2026-09-08T14:13:04Z",
+  "semantics": "SOURCE_DISCOVERY_RECEIPT_NOT_COMPLETE_RESEARCH",
+  "source_notes": [
+    {
+      "displayed_publication_time": "2026-07-16 10:00",
+      "id": "NBS_2026_H1",
+      "observation_period": "2026 H1 / Q2 end",
+      "platform_references": [
+        "turn603187view0",
+        "turn684380view0"
+      ],
+      "retained_values": {
+        "breeding_sows_yoy_pct": "-6.5",
+        "end_q2_breeding_sows_10k_head": "3780",
+        "end_q2_hog_stock_10k_head": "42491",
+        "h1_hog_producer_price_yoy_pct": "-23.1",
+        "hog_slaughter_10k_head": "37246",
+        "hog_slaughter_yoy_pct": "1.7",
+        "pork_production_10k_tonnes": "3119",
+        "pork_production_yoy_pct": "3.3"
+      },
+      "retention": "LIMITED_EXECUTOR_TRANSCRIPTION_NOT_RAW_PAGE_OR_FROZEN_EVIDENCE",
+      "scope": "National statistics, not Shennong operating results or a September price explanation. The displayed publication date is not independent archival proof of a particular page version at the cutoff.",
+      "title": "魏锋华：全国夏粮实现丰收 畜牧生产稳定发展",
+      "url": "https://www.stats.gov.cn/sj/sjjd/202607/t20260716_1964140.html"
+    },
+    {
+      "collection_date": "2026-07-09",
+      "displayed_publication_date": "2026-07-14",
+      "id": "MOA_2026_JUL_WEEK2",
+      "platform_references": [
+        "turn159005view0"
+      ],
+      "retained_values": {
+        "corn_price_cny_per_kg": "2.48",
+        "hog_compound_feed_cny_per_kg": "3.36",
+        "hog_price_cny_per_kg": "11.35",
+        "hog_price_wow_pct": "8.3",
+        "hog_price_yoy_pct": "-24.8",
+        "soymeal_price_cny_per_kg": "3.18"
+      },
+      "retention": "LIMITED_EXECUTOR_TRANSCRIPTION_NOT_RAW_PAGE_OR_FROZEN_EVIDENCE",
+      "scope": "National 500-county monitoring. Weekly market/feed quotes are not company realized ASP or unit costs; do not subtract them to invent Shennong margins. No complete September demand/cost inference.",
+      "title": "7月第2周畜产品和饲料集贸市场价格情况",
+      "url": "https://xmsyj.moa.gov.cn/jcyj/202607/t20260714_6485797.htm"
+    }
+  ]
+}
