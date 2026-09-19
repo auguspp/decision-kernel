@@ -1,0 +1,44 @@
+{
+  "meaning": "EXISTING_RETAINED_SOURCE_INVENTORY_NOT_NEW_PREFLIGHT_OR_RESEARCH",
+  "security_id": "SZSE:300711",
+  "artifact_id": 10320565453,
+  "artifact_run_id": 34765190284,
+  "artifact_bytes": 12563240,
+  "artifact_sha256": "25cda8a1d4afb4783432320239cd6271fe193cfdc5ed6dc2095a5deb833dce9c",
+  "documents": [
+    {
+      "announcement_id": "1225486854",
+      "title": "2026年上半年募集资金存放、管理与使用情况的专项报告",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486854.PDF",
+      "artifact_member": "300711.SZ/sources/3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604.pdf",
+      "pdf_sha256": "3bfd8cb2266da9d68a30750baa851c572e0aff70c3000292139610c9637f2604",
+      "pdf_bytes": 142484,
+      "page_count": 8,
+      "extraction_sha256": "a921419e934a78bc1ec6f83d2eea62f8744883d3cf7ccd96188d48ee18b98743"
+    },
+    {
+      "announcement_id": "1225486857",
+      "title": "关于使用募集资金增资子公司以实施募投项目的公告",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486857.PDF",
+      "artifact_member": "300711.SZ/sources/049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065.pdf",
+      "pdf_sha256": "049507b9096190bbb7ed06729c302a1fa81bd1b2f8310aaaa858d5426f6bb065",
+      "pdf_bytes": 113278,
+      "page_count": 3,
+      "extraction_sha256": "6c9dc2f427b4c18a7ca1282c058dae9a6e3e92f79f5e184bee793b94584c6b22"
+    },
+    {
+      "announcement_id": "1225554527",
+      "title": "中信证券股份有限公司关于广州广哈通信股份有限公司2026年半年度跟踪报告",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-08/1225554527.PDF",
+      "artifact_member": "300711.SZ/sources/bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13.pdf",
+      "pdf_sha256": "bbcdaabc79944e7e2b1e35ff9f42794db95db6bb293f183f1ab819b678c9fa13",
+      "pdf_bytes": 317629,
+      "page_count": 6,
+      "extraction_sha256": "1a20285d7cd5075eb66c1de00e429d1457f63ffd58725ce9e7cee0668a73157d"
+    }
+  ],
+  "raw_pdf_location": "ORIGINAL_GITHUB_ARTIFACT_AND_LOCAL_VERIFIED_COPY_NOT_EMBEDDED_IN_THIS_JSON",
+  "scope": "HISTORICAL_DISCLOSED_FUND_NATURE_AND_INTERNAL_TRANSFER_NOT_CURRENT_CASH_BALANCE_OR_PROJECT_RETURN",
+  "research_executed": false,
+  "investment_authority": "NONE"
+}

@@ -1,0 +1,123 @@
+{
+  "execution_id": "reviewed-question-300711-restricted-proceeds-20260919-v1",
+  "case_id": "300711.SZ",
+  "ticker": "300711",
+  "security_id": "SZSE:300711",
+  "source_lane": "REVIEWED_RADAR_QUESTION",
+  "selected_at": "2026-09-19T13:27:05.573916Z",
+  "research_cutoff": "2026-09-19T13:27:05.573944Z",
+  "code_commit": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+  "current_state_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+  "current_state_reading_hash": "9df13bff2394152c5668a3f3d83cf2b1c9c01d47f67a16c1696d7fa4f449a790",
+  "source_refs": [
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "ead15d17e82f9487f76e78194b465331b64bb87d",
+      "path": "current-state.json",
+      "git_blob": "1060a6f8f1da49e2cb4ce1fb07763c9de23e51ab",
+      "sha256": "f17d44341d5f46c8a5197a4c9bac0df10656ba9581a5dc5f00704388dafca13d",
+      "purpose": "PINNED_CURRENT_READING"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "ead15d17e82f9487f76e78194b465331b64bb87d",
+      "path": "details/stock/34673882756/reading/stock-reading.json",
+      "git_blob": "2e9af24b340531d9a98f93836798a788c5d5ae71",
+      "sha256": "2c67059db52d529a501d394712cbac8f2df88cb0e8471ea85ea498c8f767b1e4",
+      "purpose": "SAVED_SECTOR_STOCK_ORIGIN"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+      "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
+      "git_blob": "0ae65c1103b45454d74f0ee9556c9f143c7f9ba4",
+      "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d",
+      "purpose": "EXISTING_RESEARCH_RELATION"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+      "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
+      "git_blob": "ea2062655e659ba89b7cdf1c9f5f10ab381850e7",
+      "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3",
+      "purpose": "EXISTING_RESEARCH_RELATION"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "fda87a349cfe64351d916395f442cb885d65da22",
+      "path": "docs/readings/300711-question-input-positive-2026-09-19/source-custody.json",
+      "git_blob": "abe790cb8fb45b42c7b6e5ccd62d4a112ae8e6b2",
+      "sha256": "643d980bc49d184b38fe312790d545c4230c474c9c93badb8fb5197104d5ded5",
+      "purpose": "RETAINED_PRIMARY_BODY_CUSTODY"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "27cb769d2ef54e3fa0231cfeffb40c84e14a17d4",
+      "path": "docs/readings/300711-question-input-positive-2026-09-19/question.json",
+      "git_blob": "36ba0d107b56fb7cad8c4335c015d2dd163f45e6",
+      "sha256": "e962fb9c0a07a2c47b8c11b58526a65ce2d465ae0f706c918a54738e64d7e05f",
+      "purpose": "REVIEWED_RADAR_QUESTION"
+    },
+    {
+      "repository": "auguspp/decision-kernel",
+      "ref": "9295e6af038851a9fd67cdb931af0eb0fd004a9d",
+      "path": "docs/readings/300711-question-input-positive-2026-09-19/source-preflight.json",
+      "git_blob": "0729ecacdaafc0dd4fb174698e9d7aeef80cb41b",
+      "sha256": "e5c267673b5df25cba35d684aa3e6f67023f0d1bb11afb804a186a3c6f72277d",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT"
+    }
+  ],
+  "seed_evidence_artifacts": [
+    {
+      "id": "0767b9ae-d447-5311-9cc8-2bcb832ba9c5",
+      "source_type": "SAVED_RADAR_READING",
+      "source_identifier": "stock34673882756:300711.SZ:retained-Git-reading",
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/ead15d17e82f9487f76e78194b465331b64bb87d/details/stock/34673882756/reading/stock-reading.json",
+      "published_at": "2026-09-19T12:03:58Z",
+      "available_at": "2026-09-19T12:03:58Z",
+      "retrieved_at": "2026-09-19T13:27:05.573916Z",
+      "content_hash": "2c67059db52d529a501d394712cbac8f2df88cb0e8471ea85ea498c8f767b1e4",
+      "idempotency_key": "saved-stock34673882756:300711:2c67059db52d529a501d394712cbac8f2df88cb0e8471ea85ea498c8f767b1e4",
+      "retention_mode": "FULL_ARTIFACT",
+      "replayability_level": "FULL",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/ead15d17e82f9487f76e78194b465331b64bb87d/details/stock/34673882756/reading/stock-reading.json",
+      "extracted_structured_values": null,
+      "permitted_excerpt": null,
+      "source_location": "Exact historical Stock reading: 300711.SZ row; not a new market observation",
+      "license_terms_note": "Git publication clock is the retained reading commit, not the original market/issuer disclosure time. No business-benefit or investment-authority claim.",
+      "report_period_end": "2026-09-11",
+      "schema_version": 1
+    }
+  ],
+  "research_question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+  "known_unknowns": [
+    "2026年9月19日实际划款及各项目最新投入未检查；本题不裁定当前资金余额或当前经营状态。",
+    "本题不估计全公司自由现金额、项目盈利或买卖价值，也不撤销旧研究的终局理由挑战。",
+    "既有索引和保存研究不是全仓问题历史穷尽；若发现同一经济问题已执行，回原宿主，不换key重跑。",
+    "REQUIRED_SOURCE_CLASS:ISSUER_PROCEEDS_USE_BODY:STATIC",
+    "REQUIRED_SOURCE_CLASS:SUBSIDIARY_INJECTION_TERMS:STATIC",
+    "REQUIRED_SOURCE_CLASS:SPONSOR_FUNDS_COUNTEREVIDENCE:STATIC"
+  ],
+  "next_discriminating_search": "只核对已保存的1225486854、1225486857和1225554527完整原件，区分受限募资、内部划转和对外实际支出；不搜索新公告、不调用模型。",
+  "method_version": "research-source-scope-v0",
+  "prompt_version": "reviewed-radar-question-v0",
+  "allowed_tools": [
+    "GITHUB_READ",
+    "OTHER_READ"
+  ],
+  "candidate_output_prefix": "research_runs/candidates/reviewed-radar/300711-restricted-proceeds-20260919/",
+  "budget": {
+    "max_tool_calls": 8,
+    "max_search_queries": 0,
+    "max_source_reads": 8,
+    "max_technical_retries": 0,
+    "max_elapsed_minutes": 10,
+    "tool_calls_enforcement": "SOFT_EXECUTOR",
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "elapsed_time_enforcement": "SOFT_EXECUTOR"
+  },
+  "untrusted_test_material": null,
+  "schema_version": 1
+}
