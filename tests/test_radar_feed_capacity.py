@@ -24,7 +24,7 @@ def test_large_whole_feed_under_reviewed_capacity_is_retained_and_rebuilt(tmp_pa
     with pytest.raises(EconomicCaptureError): _body_integrity(raw,{})
 
 
-@pytest.mark.parametrize('raw,length',[(b'', '0'),(b'<x/>', '6'),(b'x'*(8*1024*1024+1),None)])
+@pytest.mark.parametrize('raw,length',[(b'', '0'),(b'<x/>', '6'),(b'x'*(8*1024*1024+1),None)], ids=['empty','length-mismatch','oversized-8m'])
 def test_empty_mismatched_and_oversized_feed_bodies_still_fail(raw,length):
     with pytest.raises(intake.FeedResponseRejected):
         intake._feed_body_integrity(raw,{} if length is None else {'content-length':length})
