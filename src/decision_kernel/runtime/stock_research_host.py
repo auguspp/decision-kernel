@@ -283,6 +283,11 @@ def run_item(*, api, code, request, item, origin, reading_commit, output,
             error_type=type(exc).__name__)
         if isinstance(exc, (once.TrialError, identity.ExecutionIdentityError, admission.AdmissionRejected)):
             receipt["error_code"] = exc.code
+        if not receipt["formal_research_started"] and receipt["phase"] == "SOURCE_PREPARATION":
+            from .cninfo_http import pdf_failure_diagnostic
+            diagnostic = pdf_failure_diagnostic(exc)
+            if diagnostic is not None:
+                receipt["pdf_diagnostic"] = diagnostic
         if reserved and not receipt["formal_research_started"] and not retain.uncertain:
             try:
                 retain.save("failure.json", {**receipt, "record_kind": "PRE_EXECUTION_FAILURE_NOT_VALIDATOR_RESULT",

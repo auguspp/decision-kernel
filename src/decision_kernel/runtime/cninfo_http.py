@@ -46,9 +46,19 @@ class CninfoPdfSourceError(CninfoRuntimeError):
 class CninfoPdfHttpError(CninfoRuntimeError):
     """The official static host rejected the bounded request."""
 
+    def __init__(self, message: str, *, http_status: int | None = None):
+        super().__init__(message)
+        self.http_status = http_status
+
 
 class CninfoPdfTransportError(CninfoRuntimeError):
     """The bounded official static-host request could not complete coherently."""
+
+    def __init__(self, message: str, *, reason_code: str = "PDF_TRANSPORT_FAILED",
+                 http_status: int | None = None):
+        super().__init__(message)
+        self.reason_code = reason_code
+        self.http_status = http_status
 
 
 class CninfoPdfByteLimitError(CninfoRuntimeError):
@@ -57,6 +67,39 @@ class CninfoPdfByteLimitError(CninfoRuntimeError):
 
 class CninfoPdfContainerError(CninfoRuntimeError):
     """The returned body was not an exact PDF container."""
+
+
+_PDF_TRANSPORT_REASONS = frozenset({
+    "PDF_TRANSPORT_FAILED", "RESPONSE_QUALIFICATION_FAILED", "UNEXPECTED_CONTENT_ENCODING",
+    "INVALID_CONTENT_LENGTH", "RESPONSE_LENGTH_MISMATCH", "REQUEST_TIMEOUT",
+    "CONNECTION_FAILED", "REQUEST_FAILED",
+})
+
+
+def pdf_failure_diagnostic(error: Exception) -> dict | None:
+    """Retain only finite PDF failure fields; never messages, causes or remote data.
+
+    These are local diagnostic observations, not a repair, retry permission or
+    economic judgment. Legacy one-argument exceptions remain usable with unknown
+    status. Exact types prevent foreign exception attributes from becoming data.
+    """
+    kind = type(error)
+    fixed = {CninfoPdfSourceError: "PDF_SOURCE_REJECTED",
+             CninfoPdfByteLimitError: "PDF_BYTE_LIMIT_EXCEEDED",
+             CninfoPdfContainerError: "PDF_CONTAINER_REJECTED"}
+    if kind in fixed:
+        return {"reason_code": fixed[kind], "http_status": None}
+    if kind not in (CninfoPdfHttpError, CninfoPdfTransportError):
+        return None
+    status = vars(error).get("http_status")
+    if type(status) is not int or not 100 <= status <= 599:
+        status = None
+    if kind is CninfoPdfHttpError:
+        return {"reason_code": "HTTP_REJECTED", "http_status": status if status != 200 else None}
+    code = vars(error).get("reason_code")
+    if type(code) is not str or code not in _PDF_TRANSPORT_REASONS:
+        code = "PDF_TRANSPORT_FAILED"
+    return {"reason_code": code, "http_status": 200 if status == 200 else None}
 
 
 @dataclass(frozen=True)
@@ -317,6 +360,7 @@ def _request_pdf_bytes(*, url: str, max_bytes: int, timeout_seconds: float) -> b
     from .hithink_dump_trial import DumpTrialError, _check_response, _session
     import requests
 
+    observed_status = None
     try:
         with _session() as session:
             with session.get(
@@ -326,6 +370,7 @@ def _request_pdf_bytes(*, url: str, max_bytes: int, timeout_seconds: float) -> b
                 stream=True,
                 allow_redirects=False,
             ) as response:
+                observed_status = response.status_code
                 length = _check_response(response)
                 if length is not None and length > max_bytes:
                     raise CninfoPdfByteLimitError("CNINFO PDF response exceeds acquisition limit")
@@ -337,13 +382,21 @@ def _request_pdf_bytes(*, url: str, max_bytes: int, timeout_seconds: float) -> b
                         raise CninfoPdfByteLimitError("CNINFO PDF response exceeds acquisition limit")
                     chunks.append(chunk)
                 if length is not None and count != length:
-                    raise CninfoPdfTransportError("CNINFO PDF response length differs")
+                    raise CninfoPdfTransportError("CNINFO PDF response length differs",
+                        reason_code="RESPONSE_LENGTH_MISMATCH", http_status=observed_status)
                 return b"".join(chunks)
     except CninfoRuntimeError:
         raise
     except DumpTrialError as exc:
         if exc.code == "HTTP_REJECTED":
-            raise CninfoPdfHttpError("CNINFO PDF HTTP request rejected") from exc
-        raise CninfoPdfTransportError("CNINFO PDF HTTP response qualification failed") from exc
+            raise CninfoPdfHttpError("CNINFO PDF HTTP request rejected",
+                http_status=exc.http_status) from exc
+        reason = (exc.code if exc.code in {"UNEXPECTED_CONTENT_ENCODING", "INVALID_CONTENT_LENGTH"}
+                  else "RESPONSE_QUALIFICATION_FAILED")
+        raise CninfoPdfTransportError("CNINFO PDF HTTP response qualification failed",
+            reason_code=reason, http_status=observed_status) from exc
     except requests.RequestException as exc:
-        raise CninfoPdfTransportError("CNINFO PDF request failed") from exc
+        reason = ("REQUEST_TIMEOUT" if isinstance(exc, requests.Timeout) else
+                  "CONNECTION_FAILED" if isinstance(exc, requests.ConnectionError) else "REQUEST_FAILED")
+        raise CninfoPdfTransportError("CNINFO PDF request failed",
+            reason_code=reason, http_status=observed_status) from exc
