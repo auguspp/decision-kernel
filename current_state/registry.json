@@ -123,6 +123,25 @@
         "bytes": 7194,
         "sha256": "838523e30028189484e3dbc7cd00efbe0202030e1cc94aa785d99e6893875b9a"
       }
+    },
+    {
+      "id": "p0-000920-reports-only-working-capital-20260920",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Second typed progress checkpoint on the original Woton question using the already-retained 2026H1 Sina PDF. Six inventory categories reconcile exactly to the operating-cash inventory adjustment; receivable/bill balances explain the direction difference but do not establish cash receipts. Endorsed-bill asset/liability changes are kept together; detailed operating-receivable cash reconciliation and segment attribution remain UNKNOWN. This is separate financial work, not a result of the concurrent CNINFO source probe, formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance or Odds. Three-file archive contains the workpaper and current/predecessor progress descriptors, not source PDFs. Recover the exact body separately.",
+      "archive": {
+        "format": "RESEARCH_PROGRESS",
+        "expected_sha256": "f44b5d5609882c2003f6bee759ce0222eafac332ac6b3fc0572bc32d5409cbdc",
+        "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/000920-working-capital-progress-2026-09-20/workpaper.md",
+        "ref": "3ba635649edadafcd7715ab0e469e1a751dfe5cd",
+        "git_blob": "0692a0df16345dafcab2b6690874a21f283cb90d",
+        "bytes": 11510,
+        "sha256": "c346523d2d3d6416aebd7bc12805d8676b234bd0657ef0d2155590e074df6cc4"
+      }
     }
   ],
   "historical_handoffs": [

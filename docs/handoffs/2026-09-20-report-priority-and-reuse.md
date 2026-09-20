@@ -163,4 +163,12 @@ Brief [5749800329](https://github.com/auguspp/decision-kernel/issues/297#issueco
 
 本次使用原save-progress/read-progress保存恰好两个文件，并将远端tree/blob/大小/原字节逐项读回；`progress.json` SHA256为`0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6`。用途索引只追加`p0-000920-reports-only-profit-cash-20260920`的ON_DEMAND_ARCHIVE定位；登记不等于正文已进入每次日常读取。待正常publisher产生R后，另行执行原archive reader从该R恢复，保持RETAINED_PROGRESS_NOT_COMMITTED；本文件不预填该步骤已完成。原PDF及DataSinking全文不是这两件progress文件的一部分。
 
+## 同一财报内的下一份真实进展
+
+Human 要求继续后，来源候选验证与已有财报分析并行。[沃顿营运项目底稿](https://github.com/auguspp/decision-kernel/blob/3ba635649edadafcd7715ab0e469e1a751dfe5cd/docs/readings/000920-working-capital-progress-2026-09-20/workpaper.md)继续原问题根，并以原save-progress关联上份描述，形成revision 2；这不是新的独立问题或模型执行。
+
+本次新增：p78–79六类存货增加49,102,056.20元，与p104存货调节完全勾稽；合同履约成本与库存商品合计占存货净增88.11%。p37应收账款虽增加，但应收票据和应收款项融资下降更多，三项合计净减少25,830,319.25元。p89/93未终止确认背书票据的资产、负债两端共同变化，不能只把资产减少解释为现金回款。宽口径经营应收现金还原和分业务归属仍UNKNOWN。其基础是已取得的新浪财报，不依赖并行巨潮实验成功，也不要求先补齐其他公告。
+
+三文件档案commit为`3ba635649edadafcd7715ab0e469e1a751dfe5cd`；已实际读回每个远端原blob并与本地UTF-8字节、大小和Git blob身份匹配。`progress.json` SHA256为`f44b5d5609882c2003f6bee759ce0222eafac332ac6b3fc0572bc32d5409cbdc`，前驱描述摘要保持`0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6`。新增用途id为`p0-000920-reports-only-working-capital-20260920`，按原ON_DEMAND_ARCHIVE登记；正常发布和同R恢复仍由各自实际回执证明。PDF、服务全文及渲染中间文件不在这个三文件进度目录中。
+
 下一步直接复用已保存财报与本底稿，继续报告内管理层讨论、收入成本及营运资本附注的明确缺口。若以后要执行正式同题Pre/必要Quick，再在既有root接续与原预算内做必要来源消费接线；本次没有改runtime、重新开旧launch或调模型。当前daily的来源/旧题绑定尚未适配这份沃顿材料，并不妨碍有限财报研究与进度留存。
