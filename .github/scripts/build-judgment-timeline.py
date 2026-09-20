@@ -1,4 +1,4 @@
-"""CI-only delivery glue; reuse the existing read-only timeline and Git objects.
+"""Manual Actions delivery glue; reuse the existing read-only timeline and Git objects.
 
 No source acquisition, Human-event recording, state restoration or judgment logic.
 The outer receipt describes a local build, not successful remote publication.
@@ -24,7 +24,7 @@ from decision_kernel.runtime.judgment_timeline import (
 
 BUILD_FILES = (
     ".github/scripts/build-judgment-timeline.py",
-    ".github/workflows/ci.yml",
+    ".github/workflows/judgment-timeline.yml",
     "pyproject.toml",
     "src/decision_kernel/identity.py",
     "src/decision_kernel/primitives.py",
@@ -69,11 +69,11 @@ def _digest(raw: bytes) -> dict:
 
 
 def build_ci_delivery(root: Path, output: Path, *, environ: Mapping[str, str], generated_at: datetime) -> dict:
-    """Build from a tested main checkout, then rebuild from the copied source bytes."""
-    required = {"GITHUB_REPOSITORY": REPOSITORY, "GITHUB_EVENT_NAME": "push",
-                "GITHUB_REF": "refs/heads/main", "GITHUB_WORKFLOW": "kernel-tests"}
+    """Build from an explicit main-branch dispatch, then rebuild from copied source bytes."""
+    required = {"GITHUB_REPOSITORY": REPOSITORY, "GITHUB_EVENT_NAME": "workflow_dispatch",
+                "GITHUB_REF": "refs/heads/main", "GITHUB_WORKFLOW": "judgment-timeline"}
     if any(environ.get(key) != value for key, value in required.items()):
-        raise ValueError("timeline delivery requires the canonical main-push CI context")
+        raise ValueError("timeline delivery requires explicit main workflow_dispatch context")
     commit = environ.get("GITHUB_SHA", "")
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise ValueError("invalid build commit")
@@ -119,9 +119,9 @@ def build_ci_delivery(root: Path, output: Path, *, environ: Mapping[str, str], g
         files = {str(p.relative_to(output)): _digest(p.read_bytes())
                  for p in sorted(output.rglob("*")) if p.is_file()}
         receipt = {
-            "version": 1, "semantics": "READ_ONLY_CI_DELIVERY_NOT_JUDGMENT_OR_EXPOSURE",
-            "repository": REPOSITORY, "workflow": ".github/workflows/ci.yml",
-            "event": "push", "ref": "refs/heads/main", "build_commit": commit,
+            "version": 1, "semantics": "READ_ONLY_MANUAL_DELIVERY_NOT_JUDGMENT_OR_EXPOSURE",
+            "repository": REPOSITORY, "workflow": ".github/workflows/judgment-timeline.yml",
+            "event": "workflow_dispatch", "ref": "refs/heads/main", "build_commit": commit,
             "run_id": int(environ["GITHUB_RUN_ID"]), "run_attempt": int(environ["GITHUB_RUN_ATTEMPT"]),
             "generated_at": report["generated_at"], "source_commit": source_commit,
             "projection_hash": report["projection_hash"], "build_inputs": build_inputs,

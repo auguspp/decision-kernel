@@ -46,8 +46,8 @@ def checkout(source):
     spec["source_commit"] = pin
     manifest.write_text(json.dumps(spec, ensure_ascii=False), encoding="utf-8")
     head = commit(source)
-    env = {"GITHUB_REPOSITORY": "auguspp/decision-kernel", "GITHUB_EVENT_NAME": "push",
-           "GITHUB_REF": "refs/heads/main", "GITHUB_WORKFLOW": "kernel-tests",
+    env = {"GITHUB_REPOSITORY": "auguspp/decision-kernel", "GITHUB_EVENT_NAME": "workflow_dispatch",
+           "GITHUB_REF": "refs/heads/main", "GITHUB_WORKFLOW": "judgment-timeline",
            "GITHUB_SHA": head, "GITHUB_RUN_ID": "123", "GITHUB_RUN_ATTEMPT": "1",
            "GITHUB_TOKEN": "must-not-be-recorded", "HITHINK_FINANCE_API_KEY": "also-private"}
     return source, env
@@ -94,7 +94,7 @@ def test_later_build_and_attempt_never_create_a_new_judgment(checkout, tmp_path)
 
 
 @pytest.mark.parametrize("key,value", [
-    ("GITHUB_EVENT_NAME", "pull_request"), ("GITHUB_EVENT_NAME", "workflow_dispatch"),
+    ("GITHUB_EVENT_NAME", "pull_request"), ("GITHUB_EVENT_NAME", "push"),
     ("GITHUB_REF", "refs/heads/feature"), ("GITHUB_REPOSITORY", "other/repo"),
     ("GITHUB_WORKFLOW", "other"), ("GITHUB_RUN_ID", "../1"),
     ("GITHUB_RUN_ATTEMPT", "0"), ("GITHUB_SHA", "a" * 40),
@@ -173,18 +173,24 @@ def test_existing_output_is_never_deleted(checkout, tmp_path):
     assert marker.read_text(encoding="utf-8") == "owned by another operation"
 
 
-def test_existing_ci_delivery_is_main_only_secret_free_and_success_gated():
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    job = workflow.split("  judgment-timeline:", 1)[1]
-    assert "needs: test" in job
-    assert "github.event_name == 'push'" in job and "github.ref == 'refs/heads/main'" in job
-    assert "contents: read" in job and "persist-credentials: false" in job
+def test_manual_delivery_is_main_only_secret_free_and_success_gated():
+    ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "Judgment timeline attachment" not in ci
+    assert "judgment-timeline-" not in ci
+
+    workflow = (ROOT / ".github/workflows/judgment-timeline.yml").read_text(encoding="utf-8")
+    assert "workflow_dispatch:" in workflow
+    assert "push:" not in workflow and "schedule:" not in workflow
+    job = workflow.split("  build:", 1)[1]
+    assert "needs: test" not in job
+    assert "github.ref == 'refs/heads/main'" in job
+    assert "github.repository == 'auguspp/decision-kernel'" in job
+    assert "contents: read" in workflow and "persist-credentials: false" in job
     assert "fetch-depth: 0" in job and "fetch-tags: false" in job
     assert "actions/upload-artifact@v7" in job and "if-no-files-found: error" in job
     assert "retention-days: 30" in job
     assert "name: judgment-timeline-${{ github.run_id }}-${{ github.run_attempt }}" in job
     assert "secrets." not in job and "actions/cache" not in job
-    assert "workflow_dispatch" not in workflow and "schedule:" not in workflow
     assert "continue-on-error" not in job and "overwrite: true" not in job
     assert '[ "$BUILD_OUTCOME" = \'success\' ] && [ "$UPLOAD_OUTCOME" = \'success\' ]' in job
     assert "steps.timeline-upload.outputs.artifact-url" in job
