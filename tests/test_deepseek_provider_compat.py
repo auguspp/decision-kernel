@@ -210,7 +210,8 @@ def test_probe_success_is_synthetic_and_verifiable(tmp_path, monkeypatch):
     assert result["status"] == "COMPATIBILITY_PASSED"
     assert probe.verify(out) == "COMPATIBILITY_PASSED"
     assert json.loads((out / "parsed.json").read_text())["route"] == "STOP"
-    assert "company" not in probe.PROMPT["public_context"]["probe_statement"].lower()
+    text = json.dumps(probe.PROMPT, ensure_ascii=False)
+    assert "300711" not in text and "SZSE" not in text and "广哈通信" not in text
 
 
 def test_historical_defaults_remain_old_provider():
