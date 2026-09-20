@@ -1,0 +1,35 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "security": "000920.SZ",
+  "compiled_at": "2026-09-20 13:33:27 UTC",
+  "provenance": "RETROSPECTIVE_COPY_OF_EXISTING_PRE_ACQUISITION_DECLARATION_NOT_BACKDATED_LOCAL_PLAN",
+  "method_main": "5d6db8e395c28d62318bc7476f8a405b6e8f0ad5",
+  "research_ref": "551b6d2a148ec798afae0e6f0139dd9a1087f14d",
+  "prior_archive": "062f9761224e3aecfa9e314222d5069e79a351be",
+  "prior_scope_comment": 5749522521,
+  "resumed_scope": {
+    "id": 5750079861,
+    "url": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5750079861",
+    "created_at": "2026-09-20T13:24:38Z",
+    "updated_at": "2026-09-20T13:24:38Z",
+    "read_back": true,
+    "body": "## P0-A resumed source work — pre-acquisition scope — 2026-09-20\n\nHuman本会话新指令：**“继续”**，承接上一轮已交付的“补齐沃顿必要资料、相关更新、旧研究去重，并解决来源模式与实际执行条件匹配”的下一步。当前main `5d6db8e395c28d62318bc7476f8a405b6e8f0ad5`、R `551b6d2a148ec798afae0e6f0139dd9a1087f14d`；#474与5749800329的两次完整CI、正常发布和归档读回复用，不重做已完成验收。现有容量22/32尚足以容纳第一份完整新问题，暂不扩容。\n\n本次必要来源范围沿5749522521和归档 `062f9761224e3aecfa9e314222d5069e79a351be` 不变：\n- 已存在的2026H1官方完整报告1225486931（2026-08-21）；\n- 必要时2025年度完整报告1225028676，仅作基期；\n- 2026-07-01至2026-09-20能改变膜业务收入/利润/现金论证的相关发行人更新及反证，不能删掉获取失败项；\n- 同问题/旧失败关系去重。\n\n不同于重复普通GET可用性探测，本次先检查现有control-browser的标准官方页面/下载能力，若可用，仅从正常CNINFO/深交所/发行人页面取得上述必要资料或其精确官方表示。记录实际取得时点、官方定位、完整性、字节/哈希、页面和覆盖；不改请求头、不猜接口、不做反爬实验、不把镜像数值或HTML重打印PDF当原件。不新增下载基础设施或重新触发旧source/baseline运行。\n\n问题沿已保存草稿：2026H1膜产品与膜工程收入/毛利的变化，是否转为集团利润和经营现金，分别由销量/交付、价格/组合、成本、营运资本哪部分解释。必要动态更新仍保持必要；首版STATIC/每Git来源512KiB现状不会被改标签绕过。若原件取得路径成立，再具体审阅可复用的原LATEST_INVENTORY/保存来源接口，不先为未知输入叠加新框架或声称可执行。\n\n此来源阶段不调用研究模型、Pre/Quick/Deep/Odds、Watch或交易，不消费日常slot；不会把用户工程“继续”记成研究结论接受。只有真实材料与问题/权限/原准入均满足后，另行记录实际执行阶段。"
+  },
+  "required_sources": {
+    "report_2026H1": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486931.PDF",
+    "baseline_2025_if_required": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225028676.PDF",
+    "relevant_issuer_updates": {
+      "from": "2026-07-01",
+      "through": "2026-09-20",
+      "failed_required_items_remain_required": true
+    },
+    "question_relation_and_dedup": true
+  },
+  "acquisition_method": "EXISTING_CONTROL_BROWSER_NORMAL_VISIBLE_OFFICIAL_PAGES_AND_DOWNLOAD_CAPABILITY",
+  "authority": {
+    "source_review_only": true,
+    "formal_research_execution": false,
+    "model_calls": 0,
+    "github_write_by_this_agent": "NONE"
+  }
+}

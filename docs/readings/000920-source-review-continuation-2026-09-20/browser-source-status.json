@@ -1,0 +1,182 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "security": "000920.SZ",
+  "compiled_at": "2026-09-20 13:33:27 UTC",
+  "authority": "RETAINED_BROWSER_SOURCE_REVIEW_ONLY",
+  "scope_comment": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5750079861",
+  "capability": {
+    "runtime": "control-browser cloud/CDP through supported Node browser API",
+    "documented_standard_download": [
+      "tab.playwright.waitForEvent('download')",
+      "download.path()",
+      "browser shared-files synchronization"
+    ],
+    "docs_read": [
+      "browser.documentation()",
+      "cloud-shared-files"
+    ],
+    "source_navigation_started_only_after_scope": true,
+    "target_original_pdf_download_triggered": false,
+    "reason": "The target official PDF page displayed an explicit request block, and the issuer's visible report directory had no current target report link.",
+    "api_download_method_failure": "NOT_TESTED_NO_TARGET_DOWNLOAD_CONTROL_AVAILABLE"
+  },
+  "attempts": [
+    {
+      "sequence": 1,
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486931.PDF",
+      "method": "STANDARD_BROWSER_GOTO_ONCE",
+      "status": "VISIBLE_REQUEST_BLOCK",
+      "visible_title": "抱歉，您的请求被阻断了",
+      "page_displayed_request_id": "6aafdf2a_PS-LAX-04idK106_2734-31307",
+      "page_displayed_request_time": "2026-09-20 21:27:06 GMT+8",
+      "checked_by": [
+        "DOM snapshot",
+        "screenshot"
+      ],
+      "browser_http_status": "NOT_EXPOSED_BY_USED_API",
+      "original_pdf_bytes": 0,
+      "original_pdf_sha256": null,
+      "body_representation": "NOT_ACQUIRED",
+      "download_control": "NONE_VISIBLE",
+      "login_or_captcha_control": "NONE_VISIBLE",
+      "screenshot_retention": "VISUALLY_INSPECTED_IN_TOOL_RESPONSE_NOT_RETAINED_AS_FILE"
+    },
+    {
+      "sequence": 2,
+      "url": "https://www.vontron.com/",
+      "method": "STANDARD_BROWSER_GOTO_ONCE",
+      "status": "OFFICIAL_HTML_VISIBLE",
+      "identity": "沃顿科技股份有限公司，000920.SZ",
+      "observed_links": [
+        "https://www.vontron.com/Reports/5.html",
+        "https://www.vontron.com/Investor/17.html",
+        "https://www.vontron.com/Blog_details/131.html"
+      ],
+      "original_http_body_retained": false
+    },
+    {
+      "sequence": 3,
+      "url": "https://www.vontron.com/Reports/5.html",
+      "method": "CLICK_VISIBLE_ISSUER_PERIODIC_REPORTS_LINK",
+      "status": "OFFICIAL_REPORT_DIRECTORY_VISIBLE_BUT_NO_TARGET_LINK",
+      "visible_newest_report_period": "2023",
+      "visible_newest_upload_date": "2024-04-12",
+      "visible_first_page_reports": [
+        "2023年度ESG报告",
+        "2022年度ESG报告",
+        "2023年年度报告",
+        "2023年第三季度报告",
+        "2023年半年度报告",
+        "2023年第一季度报告",
+        "2022年年度报告",
+        "2022年第三季度报告",
+        "2022年半年度报告"
+      ],
+      "visible_page_count": 3,
+      "older_pages_followed": false,
+      "limitation": "First page ordering provides no 2026H1 or 2025 report link. This is not proof those reports are unpublished or absent from every issuer system."
+    },
+    {
+      "sequence": 4,
+      "url": "https://www.vontron.com/Investor/17.html",
+      "method": "STANDARD_BROWSER_GOTO_OBSERVED_ISSUER_LINK",
+      "status": "OFFICIAL_NOTICE_DIRECTORY_VISIBLE_BUT_OUTDATED_FOR_REQUIRED_WINDOW",
+      "visible_notices": [
+        {
+          "title": "沃顿科技2023年年度业绩说明会",
+          "date": "2024-04-17"
+        },
+        {
+          "title": "沃顿科技2023年半年度业绩说明会",
+          "date": "2023-08-29"
+        },
+        {
+          "title": "沃顿科技2021年度业绩说明会",
+          "date": "2022-05-06"
+        }
+      ],
+      "required_current_inventory_acquired": false
+    },
+    {
+      "sequence": 5,
+      "url": "https://www.cninfo.com.cn/new/disclosure/stock?stockCode=000920",
+      "method": "STANDARD_BROWSER_GOTO_ONCE_FOR_REQUIRED_INVENTORY",
+      "status": "VISIBLE_REQUEST_BLOCK",
+      "visible_title": "抱歉，您的请求被阻断了",
+      "page_displayed_request_id": "6aafdfd3_PSmgdfDEN1yd75_42741-23076",
+      "page_displayed_request_time": "2026-09-20 21:29:55 GMT+8",
+      "checked_by": [
+        "DOM snapshot"
+      ],
+      "browser_http_status": "NOT_EXPOSED_BY_USED_API",
+      "current_inventory_rows_acquired": 0,
+      "complete_coverage_20260919_20260920": "UNKNOWN"
+    },
+    {
+      "sequence": 6,
+      "url": "https://www.vontron.com/Blog_details/131.html",
+      "method": "STANDARD_BROWSER_GOTO_OBSERVED_ISSUER_NEWS_LINK",
+      "status": "OFFICIAL_ARTICLE_DOM_READ",
+      "title": "沃顿科技双展齐辉，硬核实力引全场瞩目",
+      "page_date": "2026-09-20",
+      "event_dates": "2026-09-15 through 2026-09-18",
+      "representation": "BROWSER_VISIBLE_DOM_TEXT_NOT_RAW_HTML_RESPONSE_OR_PDF_BYTES",
+      "read_scope": "Visible article paragraphs",
+      "bounded_observation": "发行人介绍在北京水展与IC WORLD展示工业水处理膜和UE超纯水膜。内容可证明公司披露了产品展示活动；不能证明订单、销售确认、半导体客户收入占比、毛利或现金。",
+      "relevance": "QUALITATIVE_ISSUER_UPDATE_WITHIN_WINDOW",
+      "financial_bridge_closed": false
+    },
+    {
+      "sequence": 7,
+      "method": "ONE_FOCUSED_PUBLIC_WEB_SEARCH",
+      "query": "沃顿科技 2026年半年度报告 2026-08-21 site:szse.cn",
+      "status": "EMPTY_SEARCH_RESULTS",
+      "browser_fallback_or_guessed_szse_urls": false
+    },
+    {
+      "sequence": 8,
+      "method": "ONE_NORMAL_PORTAL_DISCOVERY_SEARCH_AFTER_ROOT_STEERING",
+      "query": "深圳证券交易所 上市公司 公告查询",
+      "domains_filter_requested": [
+        "szse.cn"
+      ],
+      "status": "NO_RELEVANT_SZSE_PORTAL_IN_RETURNED_RESULTS",
+      "observed_result_domains": [
+        "govtlab.gov.hk",
+        "hkex.com.hk",
+        "eaa.labour.gov.hk"
+      ],
+      "verified_szse_candidates": 0,
+      "browser_fallback_or_guessed_szse_urls": false,
+      "limitation": "The search returned unrelated results despite the requested domain filter. No inference that SZSE has no report or portal is allowed."
+    }
+  ],
+  "no_retry_policy": {
+    "ordinary_http_gets_this_pass": 0,
+    "cninfo_pdf_browser_reloads": 0,
+    "cninfo_inventory_browser_reloads": 0,
+    "header_changes": 0,
+    "guessed_endpoints": 0,
+    "anti_bot_attempts": 0,
+    "mirrors_used_as_primary": 0,
+    "printed_pdf_substitutes": 0
+  },
+  "status_summary": {
+    "original_pdf_files_acquired": 0,
+    "original_pdf_bytes_acquired": 0,
+    "complete_current_official_inventory_acquired": false,
+    "general_browser_network_unavailable": false,
+    "general_browser_network_evidence": "Issuer home, report directory, notice directory and article loaded successfully.",
+    "cninfo_root_cause": "UNKNOWN_BOUNDARY",
+    "observed_cninfo_condition": "TARGET_AND_INVENTORY_URLS_RENDERED_EXPLICIT_REQUEST_BLOCK_PAGES",
+    "cannot_infer": [
+      "current browser HTTP status=403",
+      "confirmed environment routing policy",
+      "confirmed remote application/CDN owner of block",
+      "global network outage",
+      "public information exhausted",
+      "required existing H1 report not yet published"
+    ]
+  },
+  "retained_representation": "OBSERVATION_RECEIPT_FROM_BROWSER_DOM_AND_TOOL_OUTPUTS_NOT_ORIGINAL_HTTP_RESPONSE_BYTES"
+}
