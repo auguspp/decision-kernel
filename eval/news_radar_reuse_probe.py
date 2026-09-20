@@ -276,13 +276,14 @@ def cluster(rows: list[dict]):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, required=True)
+    ap.add_argument("--newsnow-base-url", default=NEWSNOW)
     args = ap.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     session = requests.Session()
     attempts, observations = [], []
 
     for source_id in SOURCES:
-        url = f"{NEWSNOW}?id={source_id}&latest"
+        url = f"{args.newsnow_base_url}?id={source_id}&latest"
         rec, body = capture(session, url, args.output / "raw" / f"newsnow-{source_id}.json", label=source_id)
         attempts.append(rec)
         if body is None:
@@ -308,6 +309,7 @@ def main() -> int:
         "semantics": "EXTERNAL_NEWS_OBSERVATION_PROBE_NOT_EVIDENCE_OR_RESEARCH",
         "generated_at": now(),
         "newsnow_upstream": "newsnext/newsnow@0f95b2c998dffbfd2ddbc51b47b5809887dc6b97",
+        "newsnow_base_url": args.newsnow_base_url,
         "trendradar_prior_art": "sansan0/TrendRadar@792bcc3928b1617bba09df34989fd5675c159b86",
         "requests": len(attempts),
         "source_successes": sum(x["status"] == "CAPTURED_PUBLIC_RESPONSE" for x in attempts),
