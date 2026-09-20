@@ -1,74 +1,78 @@
-# News / Industry Radar — 2026-09-20 retained-probe readback
+# News / Industry Radar 实测读回｜2026-09-20
 
-Status: REUSE FEASIBILITY DEMONSTRATED / QUALITY GAPS RETAINED / NOT PRODUCTION ADOPTION.
+状态：复用可行性已证明；质量缺口保留；尚未生产接入。
 
-This report supersedes the early-capture-only view in #297/5747325258 with the later captures already registered in #297/5747298151. Main remains `9933d61ee70018b1d8e54e187392a5c62362ca46`. The temporary experiment branch is not main, a production feed, an accepted Research result or an investment decision.
+承接 #297/5747298151 的后续成功探针，更正 #297/5747325258 仅根据早期失败样本形成的接续视图。主干仍为 `9933d61ee70018b1d8e54e187392a5c62362ca46`。本文位于试验分支，不是生产 Radar、正式 Research 或 Human 接受记录。
 
-## Exact inputs actually downloaded and inspected in this continuation
+## 本次真实下载、展开并核验的最终输入
 
-| Source | Run / artifact | ZIP bytes | SHA256 |
+| 输入 | Run / artifact | ZIP bytes | SHA256 |
 |---|---|---:|---|
-| NewsNow + saved company-name matching | 35486102537 / 10597975192 | 53446 | 8fdf2884e86f0b47c4a268345715d07471cdf14d7a5ac524f347ca9dc153fbe0 |
-| HiThink completed-window industry probe | 35486156318 / 10597645925 | 127752 | 8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502 |
+| NewsNow 与保存公司名称匹配 | 35486102537 / 10597975192 | 53446 | 8fdf2884e86f0b47c4a268345715d07471cdf14d7a5ac524f347ca9dc153fbe0 |
+| HiThink 有界历史样本 | 35486156318 / 10597645925 | 127752 | 8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502 |
 
-Both ZIP digests and CRCs were checked. All listed raw responses were checked against the byte counts and SHA256 values in their original capture receipts. The offline review used no network/model calls and did not modify the original captures. This is an additional arithmetic/identity review, not a substitute for Kernel validators or full CI.
+两个 ZIP 的 digest、CRC，以及各原始响应与 capture receipt 的字节数/SHA256 均已检查。追加离线复核完成12组检查，结果为 `REVIEW_COMPLETED_WITH_SOURCE_GAPS`，不是全部数据无缺口。离线复核没有联网、模型调用或改写原件，也不冒充原 Kernel validator、完整 CI 或生产验收。
 
-## News: reuse works; publication/meaning still require qualification
+## 新闻：来源可以复用，但标题、时间和公司命中不等于证据
 
-The retained sample contains 180 observations, 180 unique URLs and 21 possible title-based event groups. Source counts: CLS30, Wallstreetcn30, FastBull30, Jin1030 is NOT the count: Jin10 has25; MKTNews30, Gelonghui15 and Thepaper20. Seven NewsNow feeds succeeded; the two public RSSHub feeds failed403. Public-instance failure does not imply that the publisher or reusable project is unavailable.
+最终保存样本为180条 observation、180个唯一 URL、21个可能同事件组。来源计数：财联社30、华尔街见闻30、FastBull30、金十25、MKTNews30、格隆汇15、澎湃20。七个 NewsNow 来源成功；两个公共 RSSHub 请求仍403。公共实例被拒绝访问不等于媒体没有新闻或项目不可复用。
 
-The deployed Docker identity is `ghcr.io/ourongxing/newsnow@sha256:98b62bd971d308040937fdfde5263a00715b357894936e88b3ce3c0d8adbf55a`. The inspected source commit `newsnext/newsnow@0f95b2c998dffbfd2ddbc51b47b5809887dc6b97` is not proven to be the deployed image's source commit; that linkage stays UNKNOWN.
+实际部署镜像身份：
+`ghcr.io/ourongxing/newsnow@sha256:98b62bd971d308040937fdfde5263a00715b357894936e88b3ce3c0d8adbf55a`。
 
-There are160 parseable publication claims and20 missing ones; none of those parsed claims is later than the recorded client fetch. The old summary key `observations_with_qualified_publish_clock` overstates this result: parsing is not timestamp qualification. Some source adapters derive time from relative text; service updatedTime may describe cache handling rather than article publication. Do not promote either to an independently verified publisher clock. Likewise, 21 possible groups are not21 verified independent economic events. Title matching can miss differently worded reports about the same event.
+此前检查的源码 commit 为 `newsnext/newsnow@0f95b2c998dffbfd2ddbc51b47b5809887dc6b97`，但没有证明该镜像就是这个源码 commit 的构建产物；二者关联保持 UNKNOWN。
 
-The frozen903-company-name reading yielded4 title matches across3 company identifiers. This continuation reviewed those4 matched headlines only, not the economic meaning of all180 observations:
+160条有可解析的发布时间声明，20条没有；已解析声明均不晚于客户端取得时刻。原字段 `observations_with_qualified_publish_clock` 表达过强：可解析不是已完成时间资格核验。部分适配器根据相对时间推算，服务 updatedTime 也可能反映缓存处理而非文章发布时间。21个标题组不等于21个独立经济事件；同事件不同措辞仍可能漏合并，多个媒体也不自动构成独立证据。
 
-| Company text candidate | Saved headline observation | Interaction-layer draft disposition |
+保存的903家公司名称匹配出4条标题、3家公司。本轮只对这4条公司命中做内容分流，另外176条为 NOT_REVIEWED，不能算作已淘汰：
+
+| 公司名称候选 | 保存的标题线索 | 交互层初步分流，非程序准入 |
 |---|---|---|
-| 中国移动600941.SH | CLS2488035 and Wallstreetcn3167768:6G prototype/interconnection testing with Qualcomm | One bounded question draft: does this represent a new commercial timetable, capital commitment or economic increment, or progress within an existing R&D plan? The two differently worded headlines may refer to the same event; primary-source identity must resolve that. |
-| 国科微300672.SZ | Gelonghui5314996: broker maintains a buy rating | Analyst opinion retained. No new issuer operating evidence established; do not use the rating as automatic Pre admission. |
-| 亿纬锂能300014.SZ | Gelonghui5314987: broker maintains a buy rating and discusses storage/cylindrical batteries | Analyst opinion retained. The title does not establish new orders, margins or materiality; no automatic Pre. |
+| 中国移动600941.SH | 财联社2488035、华尔街见闻3167768：与高通的6G原型/对接测试 | 形成1个问题草稿：这是新的商用时间表、资本承诺或经济增量，还是既定研发计划进展？两条标题可能属于同一事件，需原始发布核对。 |
+| 国科微300672.SZ | 格隆汇5314996：券商维持买入评级 | 保留为分析师观点；尚未建立新增公司经营证据，不因评级自动进Pre。 |
+| 亿纬锂能300014.SZ | 格隆汇5314987：券商维持买入评级并讨论储能、大圆柱电池 | 标题不能证明新增订单、利润率或业务实质性；不自动进Pre。 |
 
-These are company-name candidates, not proof of the relevant share class, issuer economic exposure or investment merit. For the 中国移动 draft, required next material is the original issuer/partner technical release and existing research context, with counterchecks for previously disclosed work and lack of commercial commitment. No source body was acquired here, no formal question declaration/admission was created, and qualified Pre candidates remain0. Other176 headlines are NOT_REVIEWED, not rejected as useless.
+名称匹配不认证股类、经济暴露或投资价值。中国移动问题草稿的下一必要材料是公司/合作方原始技术发布与既有研究上下文，并反查是否旧进展、是否未作商业承诺。本轮未取得这些正文、未创建正式 question declaration/admission，正式Pre候选及执行均为0。
 
-## Industry: final history exists, but no inflection truth claim
+## 行业：历史已取得，不能再把早期身份解析失败当作缺数据
 
-The final capture contains12 successful HiThink response envelopes and3 series. Each has118 price observations from2026-04-01 through2026-09-18; basis and warehouse windows each contain35 observations from2026-08-03 through2026-09-18. Actual price timestamps were checked against the declared window and for duplicates. This does not certify a complete exchange calendar or historical point-in-time availability.
+最终样本有12个成功的HiThink业务响应、3个品种；每个品种有118个价格观察值，范围为2026-04-01至2026-09-18；基差和仓单各35个观察值，范围为2026-08-03至2026-09-18。已核价格时间窗、重复日期和收益算术；未认证完整交易所日历或历史PIT可得性。
 
-The returned identifiers are `LCZL.GFE`, `CUZL.SHF`, `RBZL.SHF`: provider main-continuous series, NOT fixed-expiry main contracts. The early evaluator expected ticker CU/LC/RB while the basis snapshot returned cu9999/lc9999/rb9999. The original main_contract_thscode label therefore needs explicit continuous-series semantics. Multiple spot_indicator_id rows exist per variety and cannot be silently collapsed.
+实际返回 `LCZL.GFE / CUZL.SHF / RBZL.SHF`，是供应商主连序列，不是固定到期合约。早期脚本用 CU/LC/RB 索引，而返回ticker为cu9999/lc9999/rb9999。`main_contract_thscode` 旧字段名须明确主连语义。每个品种存在多个spot_indicator_id，不能静默压成一条。
 
-Actual price returns and first-to-last changes were recomputed from retained raw records:
-
-| Variety | 5-observation return | 20-observation return | Reported basis-rate change, percentage points | Warehouse amount change, raw source unit |
+| 品种 | 5观察期收益 | 20观察期收益 | 保存基差率首尾变化：百分点 | 仓单变化：原始单位 |
 |---|---:|---:|---:|---:|
-| LC | -5.68165% | -19.86388% | +3.90 | +14553 |
-| CU | +0.57803% | +1.73550% | +0.58 | +1517 |
-| RB | -0.38610% | +1.87562% | +1.06 | +24018 |
+| 碳酸锂LC | -5.68165% | -19.86388% | +3.90 | +14553 |
+| 沪铜CU | +0.57803% | +1.73550% | +0.58 | +1517 |
+| 螺纹钢RB | -0.38610% | +1.87562% | +1.06 | +24018 |
 
-Units and direction matter. The actual snapshot/history uses close_basis = converted_spot_price - close_price. Reported close_basis_rate values such as5.6 represent percentage points, not a unitless5.6; normalization gives0.056. The original unqualified +3.90 delta must not be presented as+390%. The amount unit for warehouse data was not established from this capture and is not relabeled as tonnes or lots.
+上述价格收益和首尾差值已从留存原始响应复算。真实记录的基差金额为折算现货价减期货收盘价；比率5.6表示5.6%，归一化为0.056，不能把+3.90个百分点误呈现成+390%。本次capture没有确认仓单amount单位，不补写为吨或手。
 
-All105 recent basis amounts reconcile to spot-minus-futures. Of the105 reported basis rates,103 reconcile within0.005 percentage points, the declared two-decimal nearest-rounding check. Two LC rows do NOT:
+105条近期基差金额均能勾稽；按复核预先采用的两位小数最近舍入检查（容差0.005个百分点），103条比率通过，以下2条未完全勾稽：
 
-| Date | Spot | Futures close | Basis | Reported rate % | Recomputed rate % | Reported minus recomputed, percentage points |
+| 日期 | 现货 | 期货收盘 | 基差 | 保存比率% | 按保存量价重算% | 差：百分点 |
 |---|---:|---:|---:|---:|---:|---:|
 | 2026-09-11 | 145100 | 134820 | 10280 | 7.09 | 7.0847691247 | +0.0052308753 |
 | 2026-09-15 | 137500 | 129120 | 8380 | 6.10 | 6.0945454545 | +0.0054545455 |
 
-The reason is UNKNOWN. Do not silently widen the tolerance, fix the source bytes, or call this an economic contradiction. The field-level discrepancy does not invalidate unrelated verified price arithmetic. A later adapter can retain reported and explicitly calculated rates separately; it cannot call the two values identical.
+原因UNKNOWN。没有扩大容差、改写源值或把差异解释成经济矛盾。局部字段差异不否定无关的已复算价格；后续可分别保留“供应商报告值”和“按保存量价计算值”，不能称两者相同。
 
-The archived PELT results remain retrospective shadow annotations; this continuation did not rerun ruptures and does not certify predictive value. Main-continuous roll composition, warehouse unit, fully comparable spot-indicator history and issuer materiality remain unestablished. Price decline plus increased warehouse receipts can motivate a supply/demand/registration question, but does not itself prove a fundamental downturn or identify a beneficiary. Qualified company exposure candidates remain0.
+已保存的PELT输出仍为事后shadow观察，本轮没有重跑ruptures，不认证预测价值。主连换月构成、仓单单位、跨期现货指标可比性和公司materiality尚未建立。价格下降与仓单增加可以提出供需/注册变化问题，但不能直接确认行业恶化或受益公司。通过经济暴露资格的公司候选仍为0。
 
-## Reuse decision and next bounded implementation seam
+## 收敛后的复用决定
 
-- News: reuse self-hosted NewsNow; do not build a crawler or deploy the full TrendRadar stack merely for collection. Preserve original observations, cache/publication-clock distinctions and candidate-only entity/event mappings.
-- Industry: reuse existing HiThink transport. No additional AKShare price provider is needed for this sample. Bind actual continuous identifiers and spot IDs; preserve units, nulls, window and field-level discrepancies. Do not manufacture calendar completeness or rolling-contract economics.
-- ruptures remains EVAL_ONLY, not a production gate. AKShare company mappings remain optional discovery claims, never DIRECT_EXPOSURE/MATERIALITY authority.
-- The next runtime slice is a pure conversion/validation adapter feeding the existing company-first / Question layer. It is NOT implemented by this report. No new provider registry, scheduler, automatic Pre, Deep, Odds or Action is authorized by the observations.
+News：复用自托管NewsNow，不自建crawler，也不为采集整体部署TrendRadar。保留原始observation、发布时间/缓存差别，事件与公司映射只产生候选。
 
-## Continuation incident and cleanup
+Industry：复用现有HiThink transport；本样本不依赖新增AKShare行情源。薄适配需要绑定真实主连身份、spot ID、单位、缺值、时间窗和字段级差异，不补造历史成分与完整日历。
 
-The continuation initially missed the later03:23 receipt and repeated news sampling. Two new branch writes triggered three additional completed push runs:35486730093,35486754205,35486754288. They are retained, not hidden, and are not used to inflate the canonical sample counts above. They are not Research runs or Re-runs. No new HiThink or model call was added by this continuation.
+ruptures为EVAL_ONLY，不进入生产gate；AKShare公司映射仍是可选发现线索，不建立DIRECT_EXPOSURE/MATERIALITY。
 
-Both NewsNow-specific push workflow files were removed atomically in branch commit `e856cb9c776cd5a3ffdf49eb7b2b41e143530fe5`, preserving their old commits and artifacts. Do not push new live experiments to the obsolete probe branches. No experiment workflow, new dependency or runtime adapter was merged into main; no main-CI or production-acceptance claim is made.
+下一runtime接点仅为纯转换/验证适配，复用既有company-first与Question层。**本文没有实现这个接点**，不将取到数据冒称两个Radar已经上线。不创建provider registry、scheduler、自动Pre/Deep/Odds/Action。
 
-AI Investment Authority = NONE.
+## 接续失误与临时触发器清理
+
+本次接续先漏读了03:23的较新回执，导致重复新闻取样。两次试验分支写入额外触发3个已完成push run：35486730093、35486754205、35486754288。保留这些记录，不计入上述规范样本数量。它们不是Research或Re-run；本次接续未新增HiThink或模型调用。
+
+分支commit `e856cb9c776cd5a3ffdf49eb7b2b41e143530fe5` 已原子移除两个NewsNow专用push workflow，旧提交和artifact保留。不要再向旧probe分支推送联网实验。没有将试验workflow、依赖或runtime适配合并到main，也没有宣称新的main CI或生产验收。
+
+AI Investment Authority = NONE。
