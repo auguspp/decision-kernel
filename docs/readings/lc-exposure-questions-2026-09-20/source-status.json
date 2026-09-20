@@ -1,0 +1,162 @@
+{
+  "kind": "RESEARCHER_SOURCE_STATUS_NOT_RAW_HTTP_OR_ADMISSION",
+  "review_date": "2026-09-20",
+  "created_at": "2026-09-20T05:52:21.298093+00:00",
+  "main": "25854b9b32f0df2284f93a229070dcee1f410cd1",
+  "reading": "4f7d0dccd7c4c152943a39efa5959b0fb3b64e2e",
+  "pre_acquisition_plan_comment": 5747900428,
+  "sources": [
+    {
+      "id": "S0",
+      "kind": "EXACT_RETAINED_HITHINK_ARTIFACT",
+      "run_id": 35486156318,
+      "artifact_id": 10597645925,
+      "zip_bytes": 127752,
+      "sha256": "8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502",
+      "reading_path": "sources/artifacts/8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502.zip",
+      "checked": "size_digest_CRC_and_LC_prices_warehouse_receipts",
+      "new_market_request": false
+    },
+    {
+      "id": "S1",
+      "issuer": "Ganfeng Lithium Group",
+      "security": "002460.SZ",
+      "period": "2025FY",
+      "basis": "IFRS_GROUP_REPORT_HKEX_NOT_A_SHARE_PRICE",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0430/2026043002397_c.pdf",
+      "official_discovery_url": "https://www.ganfenglithium.com/ir_detail/id/3080.html",
+      "official_listing_date": "2026-04-30",
+      "representation": "WEB_PARSED_PDF_AND_SELECTED_VISUAL_SCREENSHOTS",
+      "used_pages_zero_based": [
+        265,
+        70
+      ],
+      "printed_pages": [
+        264,
+        69
+      ],
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "used_facts": "Operating segments and external revenue/intersegment reconciliation; product/segment distinction. Further text was scoped reading, not full-report verification."
+    },
+    {
+      "id": "S2",
+      "issuer": "EVE Energy",
+      "security": "300014.SZ",
+      "period": "2025FY",
+      "basis": "PRC_GAAP_GROUP_REPORT",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225045391.PDF",
+      "document_date": "2026-03-28",
+      "representation": "WEB_PARSED_PDF_AND_SELECTED_VISUAL_SCREENSHOTS",
+      "used_pages_zero_based": [
+        19,
+        20,
+        21,
+        30
+      ],
+      "printed_pages": [
+        20,
+        21,
+        22,
+        31
+      ],
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "used_facts": "Product revenue and cost, all-material cost share, lithium battery product categories, raw-material risk/mitigation statement; not lithium-specific cost weight."
+    },
+    {
+      "id": "S3",
+      "issuer": "Ganfeng Lithium Group",
+      "period": "2026Q1",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0429/2026042906023_c.pdf",
+      "official_discovery_url": "https://www.ganfenglithium.com/ir_detail/id/3081.html",
+      "representation": "WEB_PARSED_PDF",
+      "status": "SCOPED_BACKGROUND_READ_NOT_USED_TO_REPLACE_H1",
+      "raw_pdf_saved": false
+    },
+    {
+      "id": "GAP-TQ-H1",
+      "security": "002466.SZ",
+      "period": "2026H1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225522276.PDF",
+      "locator_provenance": "SECONDARY_ARTICLE_LOCATOR_NOT_OFFICIAL_BODY_VERIFIED",
+      "status": "PRIMARY_BODY_NOT_OBTAINED",
+      "cannot_claim": "current financial exposure or complete issuer source coverage"
+    },
+    {
+      "id": "GAP-GF-H1",
+      "security": "002460.SZ",
+      "period": "2026H1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225528828.PDF",
+      "locator_provenance": "SECONDARY_ARTICLE_LOCATOR_NOT_OFFICIAL_BODY_VERIFIED",
+      "status": "PRIMARY_BODY_NOT_OBTAINED",
+      "cannot_claim": "current margin/inventory exposure; recent reported figures not adopted"
+    },
+    {
+      "id": "GAP-EVE-H1",
+      "security": "300014.SZ",
+      "period": "2026H1",
+      "discovery_url": "https://quotedx.cfi.cn/quote.aspx?client=phone&contenttype=cbgg&stockid=10613",
+      "status": "LATEST_REPORT_LISTING_LEAD_NOT_CURRENT_PRIMARY_BODY",
+      "cannot_claim": "current pass-through/financial exposure; old report is historical only"
+    },
+    {
+      "id": "GAP-TQ-ANNUAL",
+      "security": "002466.SZ",
+      "period": "2025FY",
+      "discovery_url": "https://m.10jqka.com.cn/sn/20260327/56935285.shtml",
+      "status": "PDF_LINK_FOLLOW_FAILED",
+      "cannot_claim": "annual primary-body financial materiality verification"
+    }
+  ],
+  "current_update_scope": {
+    "required": "2026H1 plus relevant issuer updates through2026-09-20",
+    "status": "INCOMPLETE",
+    "search_absence_is_no_event": false
+  },
+  "existing_research_lookup": {
+    "method": "three exact-main repository code searches plus prior same-R EVE published context",
+    "queries": [
+      "002466",
+      "002460",
+      "300014"
+    ],
+    "result": "NO_CODE_SEARCH_MATCHES; EVE_SAME_R_CONTEXT_UNKNOWN",
+    "completeness": "NOT_ALL_ARCHIVES_OR_EXECUTION_CATALOG"
+  },
+  "direct_download_attempts": [
+    {
+      "id": "tianqi-2026h1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225522276.PDF",
+      "requested_at": "2026-09-20T05:39:04.828532+00:00",
+      "status": "SOURCE_UNAVAILABLE",
+      "error_type": "ConnectionError",
+      "received_at": "2026-09-20T05:39:04.833358+00:00"
+    },
+    {
+      "id": "ganfeng-2026h1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225528828.PDF",
+      "requested_at": "2026-09-20T05:39:04.833371+00:00",
+      "status": "SOURCE_UNAVAILABLE",
+      "error_type": "ConnectionError",
+      "received_at": "2026-09-20T05:39:09.840459+00:00"
+    },
+    {
+      "id": "eve-2025annual",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225045391.PDF",
+      "requested_at": "2026-09-20T05:39:09.840482+00:00",
+      "status": "SOURCE_UNAVAILABLE",
+      "error_type": "ConnectionError",
+      "received_at": "2026-09-20T05:39:09.842547+00:00"
+    }
+  ],
+  "web_read_limits": {
+    "exact_access_clocks": "NOT_RECORDED_BY_WEB_TOOL",
+    "PDF_binary_retention": "NOT_COMPLETED",
+    "screenshots_are_signatures": false,
+    "full_report_or_all_updates_reviewed": false
+  },
+  "formal_admission": false,
+  "formal_research_calls": 0,
+  "investment_authority": "NONE"
+}
