@@ -1,0 +1,60 @@
+{
+  "automatic_retry": false,
+  "candidate_hash": "658c1d15686eed3d1671218ad211061df9a37c520efa2ee24287af0f2de02f3c",
+  "code_commit": "9933d61ee70018b1d8e54e187392a5c62362ca46",
+  "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+  "finished_at": "2026-09-20T02:55:28.501569+00:00",
+  "formal_research_started": true,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "predecessor_execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+  "predecessor_run_id": 35476493146,
+  "provider_usage": [
+    {
+      "finished_at": "2026-09-20T02:55:22.204697+00:00",
+      "input_sha256": "7d3ffed72c9d5a4ee2ecd44f1e246d65d3dbe9dbaf2aa45ad71310d88eb0fb24",
+      "max_output_tokens": 6000,
+      "output_format_sha256": "9f2eab1812a80cc0b0f1ad200cd3e44ceafe507c772f969e66d22b67ce347724",
+      "output_model_schema_sha256": "3993315522a21cdace841556468b831411163e2cf1b25d8e01b57b06fa576c5f",
+      "output_sha256": "ef071feb3a7db48c29e032f243a91f8e8c2f525f48ca5713eb1d610e8066768c",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider": "DEEPSEEK_OFFICIAL",
+      "provider_base_url": "https://api.deepseek.com",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "deepseek-flash",
+      "response_id": "2714a932-b9de-41c6-874b-5887564bd8b6",
+      "response_received": true,
+      "stage": "pre",
+      "started_at": "2026-09-20T02:55:05.300958+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "input_tokens": 9875,
+        "input_tokens_details": {
+          "cache_write_tokens": null,
+          "cached_tokens": 256
+        },
+        "output_tokens": 3437,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 13312
+      }
+    }
+  ],
+  "question_id": "restricted-proceeds-internal-transfer-2026h1",
+  "question_kind": "HUMAN_AUTHORIZED_REVIEWED_QUESTION_TECHNICAL_CONTINUATION",
+  "registered_current_handoff": false,
+  "research_authority": "NONE",
+  "revision": 2,
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-20T02:54:51.228556+00:00",
+  "status": "VALIDATED_FUNNEL_RESULT",
+  "thscode": "300711.SZ",
+  "validation_hash": "5e86a90be099cf7920ade60158e1777646bb8f00715b95acfb2ea71acccde686"
+}

@@ -1,0 +1,20 @@
+{
+  "approved_egress_hash": "f8b414988f9049ca5be2923cd5d0a778dedf271e3f019343f4b6d015895a9c1e",
+  "automatic_retry": false,
+  "code_commit": "52be86fe0ba137599f1484d878aa269aee9609b5",
+  "id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+  "input_hash": "920f98ed01966b29aad47f777cc2aa5ee8da6773a01bb13dc8b941760499061f",
+  "permission": {
+    "body_sha256": "952b0df7870a025e139558139873c0cedb88979e91aaab7ba5c260a573f8c196",
+    "comment_id": 5743341330,
+    "created_at": "2026-09-19T16:06:49Z"
+  },
+  "question_source": {
+    "git_blob": "725af6706ee92fd19075fe75fbc27c11983fb7ff",
+    "path": "docs/readings/300711-question-execution-2026-09-19/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "61e2d1a86770188feb5e8c342932ae3031101860",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "b4833ecd8bec0b120a3dcd0d1679402425d5f29332da7186fd9dd23bce6020a2"
+  }
+}

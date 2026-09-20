@@ -1,0 +1,509 @@
+{
+  "format": "reviewed-question-reading-v1",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "question_work": {
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "items": [
+      {
+        "candidate_hash": "16e5f9ea2fc5a7bba2e19b0b9aefd8529a97a1bfdc6d92b9b469b3e860fb9f61",
+        "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/",
+        "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+        "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+        "finished_at": "2026-09-19T23:35:03.209731+00:00",
+        "gap_reason": "PermissionDeniedError",
+        "host_receipt_present": true,
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "known_counterevidence": [
+          "原研究已记录募集资金及现金管理事实，不能把再次读取包装为新的资金事件。",
+          "保荐人无异议不是现金自由使用或投资回报的证明；审批与实际执行可能不同。"
+        ],
+        "known_unknowns": [
+          "2026年9月19日实际划款及各项目最新投入未检查；本题不裁定当前资金余额或当前经营状态。",
+          "本题不估计全公司自由现金额、项目盈利或买卖价值，也不撤销旧研究的终局理由挑战。",
+          "既有索引和保存研究不是全仓问题历史穷尽；若发现同一经济问题已执行，回原宿主，不换key重跑。"
+        ],
+        "new_research_execution": "NOT_EXECUTED",
+        "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+        "original_platform_task_id": "35476493146",
+        "pre_present": false,
+        "predecessor_execution_id": null,
+        "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+        "question_id": "restricted-proceeds-internal-transfer-2026h1",
+        "question_source": {
+          "bytes": 4916,
+          "git_blob": "725af6706ee92fd19075fe75fbc27c11983fb7ff",
+          "path": "docs/readings/300711-question-execution-2026-09-19/question.json",
+          "read_path": "sources/git/725af6706ee92fd19075fe75fbc27c11983fb7ff/question.json",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "ref": "61e2d1a86770188feb5e8c342932ae3031101860",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "b4833ecd8bec0b120a3dcd0d1679402425d5f29332da7186fd9dd23bce6020a2"
+        },
+        "quick_present": false,
+        "registered_current_handoff": false,
+        "research_authority": "NONE",
+        "research_cutoff": "2026-09-19T23:34:50.045443+00:00",
+        "revision": 2,
+        "role": "ROOT",
+        "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+        "signal_transition_authority": "NONE",
+        "source_reading_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+        "sources": {
+          "admission.json": {
+            "bytes": 1694,
+            "git_blob": "52b48b4869c74ab12e57859732b6d0370e66a486",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/admission.json",
+            "read_path": "sources/git/52b48b4869c74ab12e57859732b6d0370e66a486/admission.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "01e7a250daa75fd9f1cd0b4eaecf27d5d16d6d7a4d1f91adfa7f3db90caf9f74"
+          },
+          "candidate.json": {
+            "bytes": 5097,
+            "git_blob": "49f0b297006a97003f69b4f522d55e8e6cc8775c",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/candidate.json",
+            "read_path": "sources/git/49f0b297006a97003f69b4f522d55e8e6cc8775c/candidate.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "c6186f10fd5f958d3bb8533108c88c837cc9b9cfd5fdf5e98d4a1d4f6247fc77"
+          },
+          "host-receipt.json": {
+            "bytes": 1830,
+            "git_blob": "a49280db99f5a5ab4c47c085af5ac07fb71c4505",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/host-receipt.json",
+            "read_path": "sources/git/a49280db99f5a5ab4c47c085af5ac07fb71c4505/host-receipt.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "0c815b472db2d7b0780d17b6454fe3644e5b302bd9dc3c1f3656952c237f723d"
+          },
+          "input.json": {
+            "bytes": 8098,
+            "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+            "read_path": "sources/git/0ebfafc5b20fb65edf364d6e61d7a92f1a550c08/input.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
+          },
+          "launch.json": {
+            "bytes": 933,
+            "git_blob": "c97872eb173e028aed531e77241bfab5bc1ac959",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/launch.json",
+            "read_path": "sources/git/c97872eb173e028aed531e77241bfab5bc1ac959/launch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "99f00a761c0923f1d4492062f5f303307bf2d3ac7ea1d6bb540bdd83bb049e50"
+          },
+          "prepare.json": {
+            "bytes": 1558,
+            "git_blob": "444833cb8aa73e3fa74aeb1fa90bd2c369c88e37",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/prepare.json",
+            "read_path": "sources/git/444833cb8aa73e3fa74aeb1fa90bd2c369c88e37/prepare.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "ce39e7ccd25d4abcb6b421985603558ee623eda17322b17be6330ad99d711d38"
+          },
+          "receipt.json": {
+            "bytes": 2326,
+            "git_blob": "902302515e469a0c4d5451100974c9e197850b9d",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/receipt.json",
+            "read_path": "sources/git/902302515e469a0c4d5451100974c9e197850b9d/receipt.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "f297bcf71035be8e8e6f01fa009dad000d9e1bcf41f5ac72d16c2e1f732d5e89"
+          },
+          "validation.json": {
+            "bytes": 455,
+            "git_blob": "f9c8e26f87bee13763598d86778b6edd10791c01",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/validation.json",
+            "read_path": "sources/git/f9c8e26f87bee13763598d86778b6edd10791c01/validation.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "5ba0b4928ffccd08270a14502454096974e91976e5118f825d4bf275d1cf9877"
+          }
+        },
+        "status": "VALIDATED_EXECUTION_GAP",
+        "terminal_reason": null,
+        "terminal_stage": null,
+        "terminal_state": null,
+        "thscode": "300711.SZ",
+        "validation_hash": "0b0b52439bd1de9262aa9eef5ffef386d144f22e336cacd6c6fc2786a07fe764",
+        "validation_scope": "SAVED_CANDIDATE_CONSISTENCY_NOT_LIVE_ADMISSION_OR_SOURCE_TRUTH",
+        "why_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不是以涨幅、标签数量或接口验收需要认定投资优先级。"
+      },
+      {
+        "candidate_hash": "658c1d15686eed3d1671218ad211061df9a37c520efa2ee24287af0f2de02f3c",
+        "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/",
+        "completion": "COMPLETE",
+        "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+        "finished_at": "2026-09-20T02:55:22.205034+00:00",
+        "gap_reason": null,
+        "host_receipt_present": true,
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "known_counterevidence": [
+          "原研究已记录募集资金及现金管理事实，不能把再次读取包装为新的资金事件。",
+          "保荐人无异议不是现金自由使用或投资回报的证明；审批与实际执行可能不同。"
+        ],
+        "known_unknowns": [
+          "2026年9月19日实际划款及各项目最新投入未检查；本题不裁定当前资金余额或当前经营状态。",
+          "本题不估计全公司自由现金额、项目盈利或买卖价值，也不撤销旧研究的终局理由挑战。",
+          "既有索引和保存研究不是全仓问题历史穷尽；若发现同一经济问题已执行，回原宿主，不换key重跑。"
+        ],
+        "new_research_execution": "NOT_EXECUTED",
+        "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+        "original_platform_task_id": "35485210755",
+        "pre_present": true,
+        "predecessor_execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+        "predecessor_sources": {
+          "admission": {
+            "git_blob": "52b48b4869c74ab12e57859732b6d0370e66a486",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/admission.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_ADMISSION",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "01e7a250daa75fd9f1cd0b4eaecf27d5d16d6d7a4d1f91adfa7f3db90caf9f74"
+          },
+          "candidate": {
+            "git_blob": "49f0b297006a97003f69b4f522d55e8e6cc8775c",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/candidate.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_CANDIDATE",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "c6186f10fd5f958d3bb8533108c88c837cc9b9cfd5fdf5e98d4a1d4f6247fc77"
+          },
+          "host_receipt": {
+            "git_blob": "a49280db99f5a5ab4c47c085af5ac07fb71c4505",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/host-receipt.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_HOST",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "0c815b472db2d7b0780d17b6454fe3644e5b302bd9dc3c1f3656952c237f723d"
+          },
+          "input": {
+            "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_INPUT",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
+          },
+          "launch": {
+            "git_blob": "c97872eb173e028aed531e77241bfab5bc1ac959",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/launch.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_LAUNCH",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "99f00a761c0923f1d4492062f5f303307bf2d3ac7ea1d6bb540bdd83bb049e50"
+          },
+          "receipt": {
+            "git_blob": "902302515e469a0c4d5451100974c9e197850b9d",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/receipt.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_RECEIPT",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "f297bcf71035be8e8e6f01fa009dad000d9e1bcf41f5ac72d16c2e1f732d5e89"
+          },
+          "validation": {
+            "git_blob": "f9c8e26f87bee13763598d86778b6edd10791c01",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/validation.json",
+            "purpose": "QUESTION_TECHNICAL_PREDECESSOR_VALIDATION",
+            "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "5ba0b4928ffccd08270a14502454096974e91976e5118f825d4bf275d1cf9877"
+          }
+        },
+        "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+        "question_id": "restricted-proceeds-internal-transfer-2026h1",
+        "question_source": {
+          "bytes": 4916,
+          "git_blob": "725af6706ee92fd19075fe75fbc27c11983fb7ff",
+          "path": "docs/readings/300711-question-execution-2026-09-19/question.json",
+          "read_path": "sources/git/725af6706ee92fd19075fe75fbc27c11983fb7ff/question.json",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "ref": "61e2d1a86770188feb5e8c342932ae3031101860",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "b4833ecd8bec0b120a3dcd0d1679402425d5f29332da7186fd9dd23bce6020a2"
+        },
+        "quick_present": false,
+        "registered_current_handoff": false,
+        "research_authority": "NONE",
+        "research_cutoff": "2026-09-20T02:54:52.704035+00:00",
+        "revision": 2,
+        "role": "TECHNICAL_CONTINUATION",
+        "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+        "signal_transition_authority": "NONE",
+        "source_reading_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+        "sources": {
+          "admission.json": {
+            "bytes": 1746,
+            "git_blob": "fe07ceb1b92513c2b89bd02e3e2cce9a35033724",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/admission.json",
+            "read_path": "sources/git/fe07ceb1b92513c2b89bd02e3e2cce9a35033724/admission.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "8a99bf71d7e68fde384b15c20c40f1bf41b1eb99f8bbad57559e6506e9fb627f"
+          },
+          "candidate.json": {
+            "bytes": 18540,
+            "git_blob": "9e304368441ba9b3414a155b94721a79bf9c507f",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/candidate.json",
+            "read_path": "sources/git/9e304368441ba9b3414a155b94721a79bf9c507f/candidate.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "d8aa68c1bd85c5a5d6fcc4d0e8c8e9e7ef44ef97d02128372742832fdfc0d0be"
+          },
+          "funnel.json": {
+            "bytes": 16871,
+            "git_blob": "d3b5486ae8a174220bc5ce2ea0503493f5a284d8",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/funnel.json",
+            "read_path": "sources/git/d3b5486ae8a174220bc5ce2ea0503493f5a284d8/funnel.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "4c5aff2bf92d4b0c50142303a785946395aaae0610fdfa18b97ee24f8b95a65b"
+          },
+          "host-receipt.json": {
+            "bytes": 2602,
+            "git_blob": "e494a9e5213588e6f275b592d6815ab53a8b2eaa",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/host-receipt.json",
+            "read_path": "sources/git/e494a9e5213588e6f275b592d6815ab53a8b2eaa/host-receipt.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "8f810a38dcf308959793ed17db98f4e46fc52f96217f50a20bec2a5c50f0ff33"
+          },
+          "input.json": {
+            "bytes": 11626,
+            "git_blob": "3cff654bd890235c99d90d6627146d575902abbd",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
+            "read_path": "sources/git/3cff654bd890235c99d90d6627146d575902abbd/input.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6"
+          },
+          "launch.json": {
+            "bytes": 5115,
+            "git_blob": "6f44ca6da6c0966e93e1fb555b382641172269b1",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/launch.json",
+            "read_path": "sources/git/6f44ca6da6c0966e93e1fb555b382641172269b1/launch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "4845ce98764b3d1e00118aff3af0354d1cbc3a70cc34c149211b5f96167dcb4c"
+          },
+          "prepare.json": {
+            "bytes": 1584,
+            "git_blob": "a3678b240d13582474dddfa0082430309f25c8dd",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/prepare.json",
+            "read_path": "sources/git/a3678b240d13582474dddfa0082430309f25c8dd/prepare.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "1665cdc3c64ff0d16da8dd16cadb6dfa80df396136ad732102e6298037f2b79d"
+          },
+          "receipt.json": {
+            "bytes": 2229,
+            "git_blob": "11bae98081b1d82e10c3360863793014caca8fc3",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/receipt.json",
+            "read_path": "sources/git/11bae98081b1d82e10c3360863793014caca8fc3/receipt.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "35f3b0cae5358f08eae8c18d45d55b0725979ee531530801e34196d423f2cb4d"
+          },
+          "validation.json": {
+            "bytes": 17570,
+            "git_blob": "a702faa3510672a17f7a4a250d4925551c91a123",
+            "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/validation.json",
+            "read_path": "sources/git/a702faa3510672a17f7a4a250d4925551c91a123/validation.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "repository": "auguspp/decision-kernel",
+            "sha256": "3a9a28662dfd9725bc64220b5ed13afcde7f4569b69e1075961efc677f0ab9b2"
+          }
+        },
+        "status": "VALIDATED_FUNNEL_RESULT",
+        "terminal_reason": "本次为PRE阶段限定性资金性质核查：三份已保存官方披露在用途约束、内部划转与专户管理上已给出可核验的一致口径（专户不得用作其它用途、不存在暂时补流、增资属募投实施方式），因此“余额/内部划转是否等同可自由分配现金或新增经营现金流”这一问题在历史披露层面已有可用结论，无需立即进入Quick/DEEPEN；但FALSIFICATION_TEST所要求的关键判别项（是否解除用途限制、是否存在集团外经营现金来源、9月19日实际划款与当前投入）在本次范围内缺失，且本题不裁定当前余额或当前经营状态，故待触发条件（出现解除用途限制或新资金用途披露、实际划款/投入进展披露）后再行判别。本次为测试性输入，不强行进入Quick或DEEPEN。",
+        "terminal_stage": "PRE_RESEARCH",
+        "terminal_state": "WAIT_FOR_TRIGGER",
+        "thscode": "300711.SZ",
+        "validation_hash": "5e86a90be099cf7920ade60158e1777646bb8f00715b95acfb2ea71acccde686",
+        "validation_scope": "SAVED_CANDIDATE_CONSISTENCY_NOT_LIVE_ADMISSION_OR_SOURCE_TRUTH",
+        "why_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不是以涨幅、标签数量或接口验收需要认定投资优先级。"
+      }
+    ],
+    "new_research_execution": "NOT_EXECUTED",
+    "research_authority": "NONE",
+    "scope": "research_runs/candidates/stock-questions/",
+    "scope_note": "ALL_RETAINED_ROOTS_WITHIN_BOUND_NOT_CURRENT_PRICE_QUALIFIED_MEMBERS",
+    "signal_transition_authority": "NONE",
+    "status": "READ_OK",
+    "work_commit": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+    "work_ref": "research-work/stock-business-v0"
+  },
+  "research_authority": "NONE",
+  "research_execution": "NOT_EXECUTED",
+  "signal_transition_authority": "NONE",
+  "stock_review_scope": {
+    "batch_id": "a5f7fb0222fc80fa377dc4ea923637750785e8859f57b493eb0bafa887b9f518",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "items": [
+      {
+        "company_name": "道明光学",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "道明光学",
+          "excluded_reasons": [
+            "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
+          ],
+          "input_failure": null,
+          "market_expression_status": "NOT_ESTABLISHED",
+          "status": "CONDITIONS_NOT_MET",
+          "thscode": "002632.SZ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "thscode": "002632.SZ"
+      },
+      {
+        "company_name": "金健米业",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "金健米业",
+          "excluded_reasons": [],
+          "input_failure": {
+            "category": "DATA_QUALIFICATION_FAILED",
+            "phase": "INPUT_QUALIFICATION",
+            "provider_business_code": null,
+            "reason_code": "CURRENT_QUOTE_HISTORY_MISMATCH",
+            "scope": "ISSUER_LOCAL",
+            "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
+          },
+          "market_expression_status": "NOT_ESTABLISHED",
+          "status": "DATA_QUALIFICATION_FAILED",
+          "thscode": "600127.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "DATA_UNAVAILABLE_NOT_PRICE_REJECTED",
+        "thscode": "600127.SH"
+      },
+      {
+        "company_name": "*ST航图",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "*ST航图",
+          "excluded_reasons": [
+            "RISK_OR_NEW_LISTING_NAME_LABEL"
+          ],
+          "input_failure": null,
+          "market_expression_status": "NOT_ESTABLISHED",
+          "status": "CONDITIONS_NOT_MET",
+          "thscode": "688066.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "thscode": "688066.SH"
+      },
+      {
+        "company_name": "沃顿科技",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "沃顿科技",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "000920.SZ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_NOT_YET_REVIEWED",
+        "thscode": "000920.SZ"
+      },
+      {
+        "company_name": "深粮控股",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "深粮控股",
+          "excluded_reasons": [
+            "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
+          ],
+          "input_failure": null,
+          "market_expression_status": "NOT_ESTABLISHED",
+          "status": "CONDITIONS_NOT_MET",
+          "thscode": "000019.SZ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "thscode": "000019.SZ"
+      },
+      {
+        "company_name": "松发股份",
+        "economic_question_assessed": false,
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "松发股份",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "603268.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_NOT_YET_REVIEWED",
+        "thscode": "603268.SH"
+      }
+    ],
+    "market_session": "2026-09-18",
+    "meaning": "NO_RESEARCH_REVIEW_RECEIPT_IS_NOT_NO_USEFUL_QUESTION",
+    "original_coverage": {
+      "conditions_not_met_issuers": 3,
+      "dispositioned_issuers": 6,
+      "evaluated_issuers": 5,
+      "not_evaluated_issuers": 0,
+      "planned_issuers": 6,
+      "price_path_checked_issuers": 4,
+      "qualified_issuers": 2,
+      "scope_complete": false,
+      "unavailable_issuers": 1
+    },
+    "research_authority": "NONE",
+    "reviewed_question_count": 0,
+    "signal_transition_authority": "NONE",
+    "source_run_id": 35334355692,
+    "status": "SAVED_STOCK_SCOPE_NOT_A_COMPLETED_RESEARCH_REVIEW",
+    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
+  }
+}
