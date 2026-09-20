@@ -1,0 +1,11 @@
+{
+  "approved_egress_hash": null,
+  "context_source": null,
+  "enabled": false,
+  "mode": "HUMAN_AUTHORIZED_REVIEWED_QUESTION_TECHNICAL_CONTINUATION",
+  "permission": null,
+  "predecessor": null,
+  "preflight_source": null,
+  "question_source": null,
+  "schema_version": 1
+}

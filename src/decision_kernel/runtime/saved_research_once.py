@@ -408,7 +408,9 @@ def pre_prompt(packet, discovery, context, *, bound_context=None):
         "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts], **scope}
 
 
-def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None):
+def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None,
+             provider_event_prefix="SUB2API_RESPONSES",
+             model_or_executor="trusted Python + Sub2API Responses / gpt-6-astra"):
     """Original stage models and transitions; never force a route or repair output."""
     if call is None and bound_context is not None:
         from functools import partial
@@ -435,7 +437,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
         stage = "PRE"
         pre = call("pre", prompt, PreResearchResult, out, usage)
-        event("OTHER_READ", "SUB2API_RESPONSES:PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
+        event("OTHER_READ", provider_event_prefix + ":PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
         validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
         with (out / "pre.json").open("xb") as f:
             f.write(raw(pre))
@@ -444,7 +446,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
             stage = "QUICK"
             prompt.update(stage="QUICK", pre_research=pre.model_dump(mode="json"), pre_research_hash=canonical_hash(pre))
             quick = call("quick", prompt, QuickResearchResult, out, usage)
-            event("OTHER_READ", "SUB2API_RESPONSES:QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.")
+            event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.")
         stage = "QUICK" if quick else "PRE"
     except Exception as exc:
         completion = "INCOMPLETE_BUDGET" if isinstance(exc, TimeoutError) else "INCOMPLETE_TECHNICAL_FAILURE"
@@ -466,7 +468,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         source_reads_used=sum(e.status.value == "SUCCEEDED" for e in events), technical_retries_used=0,
         elapsed_minutes_observed=math.ceil(time.monotonic()-monotonic_start) // 60 + 1,
         last_completed_stage=stage if completion == "COMPLETE" else "ADMISSION_OR_RETAINED_PARTIAL",
-        stop_or_failure_reason=failure, model_or_executor="trusted Python + Sub2API Responses / gpt-6-astra",
+        stop_or_failure_reason=failure, model_or_executor=model_or_executor,
         model_exact_version=None, platform_task_id=os.environ.get("GITHUB_RUN_ID"), private_chain_of_thought_recorded=False)
     candidate = ExternalResearchCandidate(input_hash=canonical_hash(packet), completion=completion,
         discovery=discovery, pre_research=pre, quick_research=quick, receipt=receipt,
