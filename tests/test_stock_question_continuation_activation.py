@@ -98,23 +98,15 @@ def real_inputs():
     api.file = file
     api.get = get
     api._call = call
-    request = {
-        "schema_version": 1,
-        "enabled": True,
-        "mode": cont.MODE,
-        "permission": base_request["permission"],
-        "question_source": base_request["question_source"],
-        "context_source": base_request["context_source"],
-        "preflight_source": {
-            "repository": once.REPO,
-            "ref": PREFLIGHT_REF,
-            "path": PREFLIGHT_PATH,
-            "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
-            "git_blob": PREFLIGHT_BLOB,
-            "sha256": PREFLIGHT_SHA256,
-        },
-        "approved_egress_hash": None,
-        "predecessor": predecessor,
+    assert request["enabled"] is True and request["mode"] == cont.MODE
+    assert request["predecessor"] == predecessor
+    assert request["preflight_source"] == {
+        "repository": once.REPO,
+        "ref": PREFLIGHT_REF,
+        "path": PREFLIGHT_PATH,
+        "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+        "git_blob": PREFLIGHT_BLOB,
+        "sha256": PREFLIGHT_SHA256,
     }
     q, packet, discovery, context, checks, pred = cont._inputs(
         api=api, code=CODE, request=request, clock=lambda: CHECKED_AT)
