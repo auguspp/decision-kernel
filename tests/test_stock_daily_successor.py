@@ -241,14 +241,15 @@ def test_successor_preflight_has_no_market_dispatch_or_polling_authority_itself(
     assert "check-sector-scheduled-activity.py" in raw
 
 
-def test_non_github_token_stock_origin_preserves_existing_downstream_chain():
+def test_non_github_token_stock_origin_publishes_before_any_manual_research():
     successor = WORKFLOW.read_text(encoding="utf-8")
     research = RESEARCH_WORKFLOW.read_text(encoding="utf-8")
     publisher = CURRENT_STATE_WORKFLOW.read_text(encoding="utf-8")
     assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in successor
-    assert "workflows: [hithink-stock-dump-trial]" in research
+    trigger = research.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger and "workflow_run:" not in trigger
     assert "source-stock-run-id:" in research
-    assert "github.event.workflow_run.conclusion == 'success'" in research
+    assert "github.event.workflow_run" not in research
     assert "python -m decision_kernel.runtime.stock_research_host" in research
     assert "stock-business-research" in publisher
     assert "hithink-stock-dump-trial" in publisher

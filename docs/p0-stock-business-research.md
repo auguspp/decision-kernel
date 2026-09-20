@@ -83,12 +83,32 @@ the batch and leaves the remaining planned issuers explicitly unattempted.
 A known issuer source/model failure does not silently remove other planned
 issuers. Missing output remains unknown, not zero usage or a completed WAIT.
 
-## Reading and natural operation
+## 2026-09-20 product supersession: question review before automatic Research
 
-`stock-business-research` listens to successful first-attempt original Stock
-runs, and supports one explicit native dispatch with `source-stock-run-id`.
-This is the substantive authorized Stock successor, not a temporary trigger or
-new scheduler. Only trusted main is executed; artifacts/work refs are data.
+The historical automatic `workflow_run` listener from successful Stock readings is
+retired prospectively by the P0 daily-loop reset (#297/5748559847 and
+5749416568). This does **not** rewrite the original Human permission, stable
+`FIRST_BUSINESS_BASELINE` keys, saved failures/results or recovery lineage.
+
+`stock-business-research` remains the single explicit `workflow_dispatch` host
+for legacy Stock source/recovery work and reviewed-question execution. A normal
+saved Stock reading now reaches the existing current-state publisher directly;
+the read surface must first distinguish original price disposition, issuer-local
+data unavailability, existing first-baseline source/result state and an
+observation question that has not yet been formally reviewed. Observation
+question prompts do not grant admission or model permission.
+
+This is a product-budget change, not a claim that earlier automatic executions
+were invalid. It prevents a newly price-qualified company from automatically
+consuming the old all-qualified baseline permission before the current Question
+Layer can review its economic question. Existing historical `workflow_run`
+invocations remain readable in the attempt history.
+
+## Reading and manual operation
+
+`stock-business-research` supports explicit native dispatch with `source-stock-run-id`
+for the retained legacy contract. It no longer listens automatically to each
+successful Stock run. Only trusted main is executed; artifacts/work refs are data.
 An unrelated successful HiThink job is not a Stock result; a Stock-purpose run
 missing its required artifact is a gap, not an empty successful scan.
 

@@ -270,7 +270,8 @@ def test_only_reasoning_is_an_allowed_explicit_provider_parameter():
 def test_workflow_isolates_deepseek_probe_from_research_job():
     workflow = (ROOT / ".github/workflows/stock-business-research.yml").read_text()
     assert "deepseek-compat:" in workflow
-    assert "!(github.event_name == 'workflow_dispatch' && inputs.deepseek-compat)" in workflow
+    trigger = workflow.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_run:" not in trigger and "!inputs.deepseek-compat" in workflow
     assert "deepseek-compatibility:" in workflow
     assert "secrets.DEEPSEEK_API_KEY" in workflow
     assert "eval/deepseek_responses_probe.py" in workflow

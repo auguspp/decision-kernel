@@ -1,10 +1,6 @@
 name: stock-business-research
 
 on:
-  workflow_run:
-    workflows: [hithink-stock-dump-trial]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
     inputs:
       source-stock-run-id:
@@ -56,16 +52,8 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      !(github.event_name == 'workflow_dispatch' && inputs.prepare-sources) &&
-      !(github.event_name == 'workflow_dispatch' && inputs.deepseek-compat) &&
-      (github.event_name == 'workflow_dispatch' ||
-       (github.event.workflow_run.name == 'hithink-stock-dump-trial' &&
-        github.event.workflow_run.conclusion == 'success' &&
-        github.event.workflow_run.run_attempt == 1 &&
-        github.event.workflow_run.head_branch == 'main' &&
-        github.event.workflow_run.head_repository.full_name == github.repository &&
-        (github.event.workflow_run.event == 'schedule' ||
-         github.event.workflow_run.event == 'workflow_dispatch')))
+      github.event_name == 'workflow_dispatch' &&
+      !inputs.prepare-sources && !inputs.deepseek-compat
     runs-on: ubuntu-24.04
     timeout-minutes: 160
     permissions:
@@ -83,14 +71,14 @@ jobs:
       - name: Install existing source and Research dependencies
         run: python -m pip install -e '.[documents,feeds,research-api]'
       - name: Original Stock validation, business sources, admission and Pre with necessary Quick
-        if: github.event_name != 'workflow_dispatch' || (!inputs.reviewed-question && !inputs.reviewed-question-continuation)
+        if: "!inputs.reviewed-question && !inputs.reviewed-question-continuation"
         env:
           GH_TOKEN: ${{ github.token }}
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
-          SOURCE_STOCK_RUN: ${{ github.event.workflow_run.id || inputs.source-stock-run-id }}
-          RECOVER_SOURCES: ${{ github.event_name == 'workflow_dispatch' && inputs.recover-sources }}
-          SOURCE_SUCCESSOR: ${{ github.event_name == 'workflow_dispatch' && inputs.source-successor }}
-          SOURCE_SUCCESSOR_CONTINUATION: ${{ github.event_name == 'workflow_dispatch' && inputs.source-successor-continuation }}
+          SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
+          RECOVER_SOURCES: ${{ inputs.recover-sources }}
+          SOURCE_SUCCESSOR: ${{ inputs.source-successor }}
+          SOURCE_SUCCESSOR_CONTINUATION: ${{ inputs.source-successor-continuation }}
         run: |
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
