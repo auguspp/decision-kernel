@@ -88,3 +88,26 @@ DeepSeek 兼容性通过后，也**不能直接重跑同一个问题**。真实�
 本页不创建该 continuation，也不自动登记 current-state/Brief。
 
 AI Investment Authority = NONE。
+
+
+## 首次真实兼容性 probe 结果与 wire 修正（2026-09-20）
+
+run `35480185939` 在 exact main `ea15091529c42e8e439a4b883fc738c8e422ec9d` 上实际执行一次合成调用。artifact `10595691407` 已下载并核验：
+
+- ZIP 1937 bytes，SHA256 `72496d2ebef94f1ccd3d9d7787f5ff41104950e8531d3c2950d8d8297e8c748a`；
+- 仅 `pre-model-input.json`、`probe.json` 两个文件；
+- provider/model/base-url 均为 `DEEPSEEK_OFFICIAL / deepseek-flash / https://api.deepseek.com`；
+- 请求进入 SDK 后收到 `BadRequestError`，有限诊断为 **HTTP 400**；
+- 无 parsed output、response_id 或 token usage。
+
+该结果证明 Secret 存在且请求到达 HTTP API 边界，但不证明 WHY。
+
+锁定的 OpenAI SDK 3.11.0 对 Pydantic Responses structured output 自动生成：
+
+`text.format = {type: json_schema, strict: true, name, schema}`
+
+而 DeepSeek 当前 Responses 文档的 `text.format=json_schema` 请求结构定义为 `type/name/schema`。因此下一薄修只对 **DeepSeek 精确 binding** 移除 SDK 自动添加的 `strict` 字段，保留 schema 本身、reasoning=none、工具禁用、无重试及其它原约束；历史 Sub2API wire 不变。
+
+同时，SDK 3.11.0 在创建 `BadRequestError` 等状态异常时，会将 HTTP body 中的 `error` 对象解包为 `exc.body`。有限诊断因此同时支持解包后的顶层 `code/type`，仍不保存任意 message/body。
+
+以上只是针对真实 400 的最小兼容修正，不创建 Chat Completions 第二执行器、不切换到 beta endpoint、不降低应用层 Pydantic 校验，也不授权公司 Research。
