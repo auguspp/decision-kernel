@@ -1,0 +1,136 @@
+{
+  "kind": "RESEARCHER_SOURCE_STATUS_NOT_RAW_HTTP_OR_ADMISSION",
+  "record_created_at": "2026-09-20T06:46:15.370351+00:00",
+  "log_scope": "SELECTED_LOAD_BEARING_READS_AND_GAPS_NOT_FULL_TOOL_TRANSCRIPT",
+  "main": "d38f0df0ec8fe60db0b5cd8569aadca8ca2465f6",
+  "reading": "a5b49eafed1fe14ab85df7fe023b3c5cb0244525",
+  "predecessor": {
+    "commit": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+    "directory": "docs/readings/lc-exposure-questions-2026-09-20/",
+    "workpaper_sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f",
+    "recovery": "LOCAL_BYTES_MATCH_REGISTERED_DIGEST; NOT_LIVE_ARCHIVE_CLI"
+  },
+  "scope": {
+    "subjects": [
+      "002460.SZ",
+      "300014.SZ"
+    ],
+    "original_plan_comment": 5747900428,
+    "formal_model_execution_allowed": false,
+    "H1_and_related_updates_remain_required": true
+  },
+  "sources": [
+    {
+      "id": "S0",
+      "run": 35486156318,
+      "artifact": 10597645925,
+      "sha256": "8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502",
+      "representation": "PREVIOUSLY_RETAINED_ZIP",
+      "used": "LC-prices receipt-bound data; local dates and returns recalculated",
+      "new_market_request": false
+    },
+    {
+      "id": "S4",
+      "issuer": "EVE Energy",
+      "security": "300014.SZ",
+      "document_id": "2026-084",
+      "document_date": "2026-06-15",
+      "period_end": "2026-06-30",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-06-15/1225371777.PDF",
+      "status": "WEB_PARSED_PRIMARY_PDF_READ",
+      "visual_pages_zero_based": [
+        0
+      ],
+      "used": "Management cost/procurement statement and forecast-not-final status; financial forecast not adopted as final H1 results",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null
+    },
+    {
+      "id": "S5",
+      "issuer": "EVE Energy",
+      "security": "300014.SZ",
+      "document_id": "2026-092",
+      "document_date": "2026-07-04",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409727.PDF",
+      "status": "WEB_PARSED_PRIMARY_PDF_READ",
+      "visual_pages_zero_based": [
+        0,
+        3
+      ],
+      "used": "Dated authorization to dispose associate shares, implementation uncertainty; not executed proceeds or operating cash",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null
+    },
+    {
+      "id": "S6",
+      "issuer": "EVE Energy",
+      "security": "300014.SZ",
+      "document_id": "2026-093",
+      "document_date": "2026-07-04",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409734.PDF",
+      "status": "WEB_PARSED_PRIMARY_PDF_READ",
+      "visual_pages_zero_based": [],
+      "used": "Board-approved intended CAS reporting arrangement; not completion of listing or exact equivalence of all figures",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GF-H1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225528828.PDF",
+      "status": "PRIMARY_BODY_NOT_OBTAINED",
+      "locator_origin": "PREDECESSOR_SECONDARY_LEAD; NOT_VERIFIED_ISSUER_BODY"
+    },
+    {
+      "id": "GF-MIRROR-H1",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608280006758316_1.PDF",
+      "status": "BODY_NOT_OBTAINED",
+      "locator_origin": "SECONDARY_LEAD"
+    },
+    {
+      "id": "EVE-H1",
+      "url": "https://www.cninfo.com.cn/new/disclosure/stock?orgId=9900008311&stockCode=300014&tabName=data",
+      "status": "ISSUER_LINKED_PORTAL_READ_WITHOUT_FULL_REPORT_BODY"
+    },
+    {
+      "id": "EVE-UPDATE-LIST",
+      "url": "https://gg.cfi.cn/ggqw/10613/300014.html?client=phone",
+      "status": "RETURNED_REPRESENTATION_ENDS_2026_07_04; NOT_FULL_UPDATE_INVENTORY",
+      "not_claimed": "No newer filings or cause of representation mismatch"
+    },
+    {
+      "id": "EVE-DIVIDEND-LEAD",
+      "url": "https://www.cfi.net.cn/p20260819003427.html",
+      "status": "SEARCH_EXCERPT_ONLY; OPEN_CACHE_MISS; NUMBERS_NOT_ADOPTED"
+    },
+    {
+      "id": "EVE-ASSOCIATE-DIVIDEND",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-06-24/1225386159.PDF",
+      "status": "PRIMARY_LINK_FOLLOW_FAILED; NO_BODY_READ"
+    },
+    {
+      "id": "EVE-FLUENCE",
+      "url": "https://cfi.net.cn/p20260918000088.html",
+      "secondary_url": "https://www.pv-magazine.com/2026/09/18/eve-energy-signs-206-gwh-battery-framework-with-us-storage-supplier-fluence/",
+      "status": "RELATED_LEAD_NOT_FULL_ISSUER_BODY_VERIFIED",
+      "discovery": "THIS_INTERACTIVE_FOLLOWUP_NOT_ORIGINAL_RADAR_CAPTURE",
+      "not_adopted": "firm orders, price, revenue, cash or contract terms as established company evidence"
+    },
+    {
+      "id": "GF-H1-REPRINT",
+      "url": "https://financialfilings.com/filings/ganfeng-lithium-group-co-ltd/interim-quarterly-report/2026/60245295/",
+      "status": "SEARCH_EXCERPT_ONLY; OPEN_CACHE_MISS; NUMBERS_NOT_ADOPTED"
+    }
+  ],
+  "custody": {
+    "original_issuer_pdf_bytes_saved": false,
+    "original_issuer_pdf_sha256": null,
+    "web_request_clocks": "NOT_EXPOSED_BY_WEB_TOOL",
+    "record_created_at_is_not_source_publication": true,
+    "complete_updates_through_2026_09_20": false
+  },
+  "formal_admission": false,
+  "formal_research_calls": 0,
+  "investment_authority": "NONE"
+}
