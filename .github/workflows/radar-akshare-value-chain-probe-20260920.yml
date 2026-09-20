@@ -1,0 +1,49 @@
+name: radar-akshare-value-chain-probe-20260920
+
+on:
+  push:
+    branches: [probe/akshare-value-chain-20260920]
+
+permissions:
+  contents: read
+
+jobs:
+  value-chain-probe:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install exact AKShare source
+        run: |
+          python -m pip install \
+            "git+https://github.com/akfamily/akshare.git@2e13a5f2fb003d299b5c299289c318b7979986e8"
+      - name: Read exact pinned company-first view and probe value-chain discovery
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          curl --fail --silent --show-error --location --max-time 30 \
+            "https://raw.githubusercontent.com/auguspp/decision-kernel/9e46792c1cb813e9fb1297c674d13c2d7a13b8d9/details/radar/company-reading.json" \
+            > "$RUNNER_TEMP/company-reading.json"
+          test "$(git hash-object "$RUNNER_TEMP/company-reading.json")" = \
+            "5658cddfadaba10624f20f4b90d47598d4e00184"
+          python eval/akshare_value_chain_probe.py \
+            --company-reading "$RUNNER_TEMP/company-reading.json" \
+            --output "$RUNNER_TEMP/value-chain-probe"
+          printf '%s\n' 'R=9e46792c1cb813e9fb1297c674d13c2d7a13b8d9 blob=5658cddfadaba10624f20f4b90d47598d4e00184' \
+            > "$RUNNER_TEMP/value-chain-probe/company-reading-identity.txt"
+          test -s "$RUNNER_TEMP/value-chain-probe/summary.json"
+      - name: Retain AKShare discovery receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: akshare-value-chain-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/value-chain-probe/
+          if-no-files-found: warn
+          retention-days: 30
