@@ -1,0 +1,63 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "method_main": "73b994bf9cc42270e0a401ed978dc1b546e23352",
+  "company_name": "沃顿科技",
+  "security": "000920.SZ",
+  "research_cutoff": "2026-09-20",
+  "compiled_at": "2026-09-20T11:54:31.860450+00:00",
+  "document_authority": "RETAINED_SOURCE_REVIEW_ONLY_NOT_RUNTIME_ADMISSION",
+  "investment_authority": "NONE",
+  "original_scope_declaration": {
+    "id": 5749522521,
+    "url": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5749522521",
+    "api_url": "https://api.github.com/repos/auguspp/decision-kernel/issues/comments/5749522521",
+    "created_at": "2026-09-20T11:31:06Z",
+    "updated_at": "2026-09-20T11:31:06Z",
+    "body": "## P0-A first normal Stock question review — pre-acquisition scope — 2026-09-20\n\nHuman has authorized continuing P0 without repeated '继续' prompts. Fresh accepted readback after #473: main `73b994bf9cc42270e0a401ed978dc1b546e23352`, R `e7127c414731ebbb9aed49dd2f2ac10975a73a61`.\n\nNormal 2026-09-18 Stock scope has two price-qualified rows, both with historical `FIRST_BUSINESS_BASELINE` pre-execution source gaps: `000920.SZ` 沃顿科技 and `603268.SH` 松发股份. Neither old failure is business WAIT/DROP; neither will be retried under a new key.\n\nTo avoid outcome-shopping, this review takes the **first price-qualified row in the saved Stock order: 000920.SZ 沃顿科技**. Selection is procedural, not an investment ranking.\n\n### Question-review purpose\nDecide whether there is a NEW_DISTINCT, bounded economic question materially narrower than the failed broad baseline and tied to the saved `膜材料` observation. If not, disposition it without Research execution.\n\nProvisional question to test, not yet formal Question:\n`沃顿科技的膜分离/膜材料业务是否在2026H1已形成足够重要且可量化的收入、利润或现金暴露，使9/18保存的“膜材料”市场表达值得进入公司基本面研究；若成立，近期变化主要来自销量/项目交付、售价/产品结构，还是成本与现金转换？`\n\n### Necessary evidence before any formal Question/admission\n- issuer 2026H1 primary report/body for segment/product revenue/cost, cash/working-capital and material membrane business disclosures;\n- issuer 2025 annual primary report only as historical baseline where needed;\n- bounded relevant issuer updates from 2026-07-01 through 2026-09-20 that can alter membrane-business exposure/materiality;\n- existing repository Research relation/dedup check before assigning NEW_DISTINCT_QUESTION.\n\nCounterevidence must include: membrane-market label may overstate listed-company exposure; non-membrane businesses may dominate economics; revenue growth may not translate to profit/cash; projects/order timing, price mix and working capital can offset sector strength.\n\nAcquisition boundary: conventional official issuer/SZSE/CNINFO representations and exact original files where available. No endpoint/header/anti-scraping experiment, no re-opening the generic announcement-download project, no NewsNow/HiThink refetch, no model call, no Pre/Quick/Deep/Odds/Action in this source-review pass.\n\nIf required current source remains unavailable, retain the specific gap and do not substitute secondary numbers or reopen the old baseline. If a distinct answerable question survives, save the declaration/source plan and then apply the existing reviewed-question preparation/admission path separately.\n\nAI Investment Authority = NONE.",
+    "body_utf8_sha256": "e3b13173b6380333bd9f4e4126ee3044b6e022a0cd2d1726bfbc6941a751e11c"
+  },
+  "provenance_note": "本文件在来源核对后编制，引用已存在的 #297 / 5749522521 原声明及其2026-09-20T11:31:06Z创建时间；不声称本地source-scope.md在首次搜索前生成。原声明的范围先于本轮来源发现。",
+  "question": "沃顿科技膜分离/膜材料业务是否在2026H1形成重要、可量化的收入、利润或现金暴露；变化由销量/项目交付、售价/产品结构还是成本和现金转换解释？",
+  "necessary_sources": [
+    {
+      "class": "ISSUER_2026H1_PRIMARY_REPORT",
+      "period": "2026-01-01/2026-06-30",
+      "required": true,
+      "purpose": "产品/分部收入和成本，利润、现金与营运资本，重大膜业务披露及更正。"
+    },
+    {
+      "class": "ISSUER_2025_ANNUAL_PRIMARY_REPORT",
+      "period": "2025-01-01/2025-12-31",
+      "required_when": "定义历史业务重要性、基期和会计/经营可比性需要时",
+      "used_in_this_pass": true,
+      "purpose": "仅历史基线，不能替代2026H1。"
+    },
+    {
+      "class": "LATEST_RELEVANT_ISSUER_UPDATES",
+      "period": "2026-07-01/2026-09-20",
+      "required": true,
+      "purpose": "合同/交付、产能、关联及子公司安排、财务会计及风险变化；已发现相关反证必须保留。"
+    },
+    {
+      "class": "EXISTING_RESEARCH_RELATION_DEDUP",
+      "required": true,
+      "purpose": "在赋予NEW_DISTINCT_QUESTION前核对旧问题、历史失败和已有研究。"
+    }
+  ],
+  "counterevidence": [
+    "市场标签可能夸大上市公司实际暴露",
+    "非膜业务可能主导利润或现金",
+    "收入增长可能不转为利润或现金",
+    "订单时点、交付、价格/组合和营运资本可能抵消市场表达"
+  ],
+  "dynamic_scope_rule": "出现能改变该问题结论的相关披露时保留为待判定/必要来源；不能因下载失败删除必要来源或将反证降为可选。",
+  "not_requested": [
+    "模型API",
+    "Pre/Quick/Deep/Odds/Action",
+    "NewsNow/HiThink重取",
+    "端点/请求头/反爬实验",
+    "重新打开旧FIRST_BUSINESS_BASELINE",
+    "监控登记"
+  ],
+  "optional_background": "发行人产品简介/一般行业背景只辅助术语和来源定位，不承担2026H1财务结论。"
+}

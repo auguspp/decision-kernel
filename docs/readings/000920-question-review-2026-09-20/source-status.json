@@ -1,0 +1,247 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "method_main": "73b994bf9cc42270e0a401ed978dc1b546e23352",
+  "company_name": "沃顿科技",
+  "security": "000920.SZ",
+  "research_cutoff": "2026-09-20",
+  "compiled_at": "2026-09-20T11:54:31.860450+00:00",
+  "document_authority": "RETAINED_SOURCE_REVIEW_ONLY_NOT_RUNTIME_ADMISSION",
+  "investment_authority": "NONE",
+  "status": "SOURCE_REVIEW_PARTIAL_REQUIRED_CURRENT_SOURCE_UNAVAILABLE",
+  "web_official_body_reads": [
+    {
+      "announcement_id": "1225486931",
+      "role": "PRIMARY_CURRENT_REPORT",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486931.PDF",
+      "title": "2026年半年度报告",
+      "published_at_from_retained_official_inventory": "2026-08-21T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225028676",
+      "role": "HISTORICAL_BASELINE",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225028676.PDF",
+      "title": "2025年年度报告",
+      "published_at_from_retained_official_inventory": "2026-03-25T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "RELEVANT_SECTIONS_READ_AS_WEB_PDF_TEXT",
+      "pdf_page_count_returned_by_web": 174,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225413015",
+      "role": "CONTRACT_AND_PROFIT_CASH_COUNTEREVIDENCE",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-07-08/1225413015.PDF",
+      "title": "关于膜分离工程业务日常经营性合同情况的公告",
+      "published_at_from_retained_official_inventory": "2026-07-08T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "WEB_PDF_TEXT_READ",
+      "pdf_page_count_returned_by_web": 2,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225569161",
+      "role": "LATEST_INVESTOR_UPDATE",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-09-17/1225569161.PDF",
+      "title": "2026年9月16日投资者关系活动记录表",
+      "published_at_from_retained_official_inventory": "2026-09-17T15:22:11+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225454728",
+      "role": "RELATED_PARTY_TRANSACTION",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-04/1225454728.PDF",
+      "title": "关联交易公告",
+      "published_at_from_retained_official_inventory": "2026-08-04T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225486935",
+      "role": "ACCOUNTING_POLICY_UPDATE",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486935.PDF",
+      "title": "关于变更会计政策的公告",
+      "published_at_from_retained_official_inventory": "2026-08-21T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225486932",
+      "role": "NON_OPERATING_AND_RELATED_FUNDS",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486932.PDF",
+      "title": "2026年半年度非经营性资金占用及其他关联资金往来情况汇总表",
+      "published_at_from_retained_official_inventory": "2026-08-21T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225486933",
+      "role": "FINANCE_COMPANY_RISK_ASSESSMENT",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486933.PDF",
+      "title": "关于中车财务有限公司2026年半年度风险持续评估报告",
+      "published_at_from_retained_official_inventory": "2026-08-21T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    },
+    {
+      "announcement_id": "1225486756",
+      "role": "HISTORICAL_FIRST_FAILED_BODY_PROFIT_DISTRIBUTION",
+      "official_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486756.PDF",
+      "title": "关于2026年半年度利润分配预案的公告",
+      "published_at_from_retained_official_inventory": "2026-08-21T00:00:00+08:00",
+      "observed_in_this_pass": true,
+      "exact_web_retrieval_clock": "NOT_RECORDED",
+      "web_representation_status": "UNAVAILABLE",
+      "pdf_page_count_returned_by_web": null,
+      "original_pdf_bytes_retained": 0,
+      "original_pdf_sha256": null,
+      "formal_source_admission": "NOT_PERFORMED"
+    }
+  ],
+  "ordinary_pdf_get_attempts": [
+    {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486931.PDF",
+      "started_at": "2026-09-20T11:49:57.672004+00:00",
+      "request": "ordinary urllib GET, no headers changed, no retries",
+      "raw_pdf_bytes_retained": 0,
+      "error_type": "HTTPError",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "finished_at": "2026-09-20T11:50:11.497798+00:00"
+    },
+    {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225028676.PDF",
+      "started_at": "2026-09-20T11:49:57.672774+00:00",
+      "request": "ordinary urllib GET, no headers changed, no retries",
+      "raw_pdf_bytes_retained": 0,
+      "error_type": "HTTPError",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "finished_at": "2026-09-20T11:50:11.559706+00:00"
+    },
+    {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-08/1225413015.PDF",
+      "started_at": "2026-09-20T11:49:57.673424+00:00",
+      "request": "ordinary urllib GET, no headers changed, no retries",
+      "raw_pdf_bytes_retained": 0,
+      "error_type": "HTTPError",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "finished_at": "2026-09-20T11:50:11.727782+00:00"
+    }
+  ],
+  "additional_historical_locator_get": {
+    "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486756.PDF",
+    "started_at": "2026-09-20T11:47:14.468796+00:00",
+    "request": "ordinary urllib GET, no headers changed, no retries",
+    "error_type": "HTTPError",
+    "error": "HTTP Error 403: Forbidden",
+    "http_status": 403,
+    "finished_at": "2026-09-20T11:47:26.710764+00:00"
+  },
+  "official_issuer_home": {
+    "url": "https://www.vontron.com/",
+    "web_status": "INTERNAL_ERROR",
+    "ordinary_get_http_status": 403,
+    "clock": "NOT_RECORDED",
+    "body_not_retained": true
+  },
+  "current_inventory_attempt": {
+    "company": "沃顿科技",
+    "stock_code": "000920",
+    "scope": [
+      "2026-07-01",
+      "2026-09-20"
+    ],
+    "started_at": "2026-09-20T11:49:06.084258+00:00",
+    "capability": "unchanged main cninfo_http.fetch_cninfo_disclosures",
+    "method_main": "73b994bf9cc42270e0a401ed978dc1b546e23352",
+    "error_type": "CninfoRuntimeError",
+    "error": "CNINFO request or response decoding failed [stage=ORG_SEARCH]",
+    "http_status": null,
+    "finished_at": "2026-09-20T11:49:21.103041+00:00"
+  },
+  "historical_artifact_recovery": {
+    "github_connector_file_reference_returned": true,
+    "first_file_reference_ordinary_get_http_status": 403,
+    "second_reader": "GitHub Actions MCP download_workflow_run_artifact",
+    "native_artifact_url_ordinary_get": "SUCCEEDED",
+    "sha256_verified": true,
+    "archive_identity": "source-inventory.json#historical_artifact",
+    "signed_urls_not_retained": "Temporary access locators are not durable provenance."
+  },
+  "secondary_mirror_navigation": [
+    {
+      "title": "2026年半年度报告",
+      "publication_date_displayed": "2026-08-21",
+      "page_url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12512184&stockid=000920",
+      "pdf_url": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-21/12512184.PDF",
+      "pages_returned": 133,
+      "status": "WEB_PDF_TEXT_NAVIGATION_ONLY",
+      "official_byte_equivalence": "NOT_ESTABLISHED",
+      "numeric_use_for_current_question": "NONE",
+      "original_pdf_bytes_retained": 0,
+      "page_navigation_not_officially_verified": {
+        "product_revenue_cost_and_margin": 16,
+        "income_cost_note": 97,
+        "subsidiary_cash_flow": 112,
+        "segment_basis_and_segment_table": [
+          123,
+          124
+        ]
+      }
+    }
+  ],
+  "visual_qa": {
+    "official_pdf_screenshots_requested": true,
+    "tool_output": "Only textual screenshot references were returned; no image content was available to this agent.",
+    "status": "VISUAL_INSPECTION_NOT_COMPLETED",
+    "mirror_page_16_screenshot_status": "TIMEOUT"
+  },
+  "preserved_limits": [
+    "2026H1报告已存在但未取得官方正文，不称为未来才发布的资料。",
+    "官方2025正文的网页解析表示可支持有限历史观察，但不是PDF原始bytes保管。",
+    "当前报告/反证缺口不由二手数值、标题、OCR或公司主页补齐。",
+    "仅本轮ordinary GET观察到403；旧9/18失败HTTP状态仍UNKNOWN。",
+    "当前查询ORG_SEARCH失败不等于没有新公告；9/19–9/20更新覆盖不完整。",
+    "未进行header、端点或反爬实验，无新的扫描器/抓取基础设施。"
+  ]
+}

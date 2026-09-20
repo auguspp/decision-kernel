@@ -1,0 +1,83 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "method_main": "73b994bf9cc42270e0a401ed978dc1b546e23352",
+  "company_name": "沃顿科技",
+  "security": "000920.SZ",
+  "research_cutoff": "2026-09-20",
+  "compiled_at": "2026-09-20T11:54:31.860450+00:00",
+  "document_authority": "RETAINED_SOURCE_REVIEW_ONLY_NOT_RUNTIME_ADMISSION",
+  "investment_authority": "NONE",
+  "review_status": "DRAFT_SOURCE_LIMITED",
+  "formal_question_status": "NOT_ADMITTED",
+  "execution_status": "NOT_EXECUTED",
+  "new_distinct_question_assignment": "NOT_ASSIGNED",
+  "historical_question": {
+    "question_kind": "FIRST_BUSINESS_BASELINE",
+    "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+    "source_ref": "8e3c67ce827c7da566ab7ad8f2b37bf608f674ee",
+    "failure_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
+    "prepare_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
+    "original_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+    "original_error_type": "CninfoPdfHttpError",
+    "formal_research_started": false,
+    "original_http_status": "UNKNOWN",
+    "stable_key_and_launch": "UNCHANGED"
+  },
+  "relation_review": {
+    "checked": "固定main的AGENTS/RESEARCH-ENTRY/资料范围及诊断说明，固定历史候选prepare/failure/host receipt，原artifact库存与journal。",
+    "not_exhaustively_checked": "全仓全部历史研究/并行问题版本；由主接手代理继续合并其去重结果。",
+    "candidate_relation": "POTENTIALLY_NARROWER_THAN_FAILED_BASELINE_NOT_YET_ASSIGNED_NEW_DISTINCT",
+    "proposed_boundary": "只解决2026H1膜业务收入/成本/利润/现金的重要性和变化来源，必要2025基期；不重做公司全量FIRST_BUSINESS_BASELINE。"
+  },
+  "observations": [
+    {
+      "source": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225028676.PDF",
+      "printed_page": 17,
+      "representation": "OFFICIAL_PDF_WEB_TEXT_ONLY_NO_ORIGINAL_BYTES",
+      "observation": "公司2025年报列示膜产品营业收入1,274,220,334.99元，公司营业收入2,020,771,791.14元，比例63.06%。",
+      "bounded_inference": "这能限定2025年膜产品收入的重要性，不能证明2026H1收入/利润/现金暴露，更不证明9/18价格表达对应基本面改善。",
+      "arithmetic": {
+        "formula": "membrane_product_revenue / consolidated_revenue * 100",
+        "computed_percent": "63.05612244671924107310507595",
+        "reported_percent": "63.06",
+        "rounded_match": true
+      }
+    },
+    {
+      "source": "https://static.cninfo.com.cn/finalpage/2026-07-08/1225413015.PDF",
+      "printed_page": 1,
+      "representation": "OFFICIAL_PDF_WEB_TEXT_ONLY_NO_ORIGINAL_BYTES",
+      "observation": "发行人合同公告将合同金额统计与报告收入/净利区分，交付周期、合同变动和核算口径仍影响转换。",
+      "bounded_inference": "合同存在不能闭合收入、利润或现金桥，保留交付与转换反证。"
+    }
+  ],
+  "draft_refinement": "在官方2026H1和相关更新齐备后，审阅膜产品与工程业务的收入/毛利变化能否转成集团利润和经营现金；先区分销量或交付、价格或产品组合、成本及营运资本。此处仅拟定待审方向，不能视为合格新问题。",
+  "required_source_disposition": {
+    "issuer_2026H1_primary_report": "REQUIRED_SOURCE_UNAVAILABLE",
+    "issuer_2025_baseline": "PARTIAL_OFFICIAL_REPRESENTATION_READ_NO_ORIGINAL_PDF",
+    "bounded_updates_20260701_20260920": "REQUIRED_INCOMPLETE",
+    "existing_research_relation_dedup": "PARTIAL_NOT_EXHAUSTIVE"
+  },
+  "stop_reason": "EXISTING_REQUIRED_SOURCE_NOT_ACQUIRED_AND_CURRENT_UPDATE_COVERAGE_INCOMPLETE",
+  "stop_is_not": [
+    "BUSINESS_WAIT",
+    "BUSINESS_DROP",
+    "PUBLIC_INFORMATION_EXHAUSTED",
+    "FUTURE_DISCLOSURE_NOT_YET_PUBLISHED",
+    "HUMAN_REJECTED"
+  ],
+  "next_action": "复用本次准确源定位，取得已存在的2026H1官方主报告及相关更新、完成同问题去重后再审阅；不再次消费旧baseline，不把恢复材料当新的Pre。若进入新的正式问题，另沿既有reviewed-question preparation/admission合同。",
+  "dynamic_required_rule": "必要来源/反证不得因失败降为可选；关联交易、会计政策、资金与风险披露的实际相关性待正文判断。",
+  "authority": {
+    "model_calls": 0,
+    "pre_calls": 0,
+    "quick_calls": 0,
+    "deep_calls": 0,
+    "odds_calls": 0,
+    "committed_research": false,
+    "human_research_acceptance": "NOT_ESTABLISHED",
+    "investment_decision": "NONE",
+    "watch_registration": "NOT_PERFORMED",
+    "github_write_by_this_agent": "NONE"
+  }
+}

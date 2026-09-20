@@ -1,0 +1,301 @@
+{
+  "repository": "auguspp/decision-kernel",
+  "method_main": "73b994bf9cc42270e0a401ed978dc1b546e23352",
+  "company_name": "沃顿科技",
+  "security": "000920.SZ",
+  "research_cutoff": "2026-09-20",
+  "compiled_at": "2026-09-20T11:54:31.860450+00:00",
+  "document_authority": "RETAINED_SOURCE_REVIEW_ONLY_NOT_RUNTIME_ADMISSION",
+  "investment_authority": "NONE",
+  "historical_artifact": {
+    "run_id": 35335061635,
+    "run_url": "https://github.com/auguspp/decision-kernel/actions/runs/35335061635",
+    "artifact_id": 10543485410,
+    "artifact_name": "stock-business-research-35335061635-1",
+    "archive_bytes": 3313608,
+    "archive_sha256": "ff5bf465ff2db0d3ecfee8c9bd3f87a22a1e7a56d21ec80bc8480b482d732866",
+    "actual_archive_hash_verified": true,
+    "verified_files": [
+      {
+        "artifact_member": "000920.SZ/failure.json",
+        "bytes": 776,
+        "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a",
+        "git_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
+        "expected_pinned_git_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
+        "matches_pinned_git_blob": true
+      },
+      {
+        "artifact_member": "000920.SZ/host-receipt.json",
+        "bytes": 670,
+        "sha256": "bbf12d111c8c8264a9d5b67d193f041bcdb1a62d66056987e6dabafd9cf3afaa"
+      },
+      {
+        "artifact_member": "000920.SZ/prepare.json",
+        "bytes": 17411,
+        "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73",
+        "git_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
+        "expected_pinned_git_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
+        "matches_pinned_git_blob": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/inventory.json",
+        "bytes": 49757,
+        "sha256": "1aad5c2881df66cfd47752efdcebf7aecbf5b42df59dbe212812b96572a98e11"
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-1.json",
+        "bytes": 205,
+        "sha256": "f5ebf36b8df73e523766b355b0dc4b3b9eb0106f789570cd0ca2eefdde6811de",
+        "recorded_query_sha256": "f5ebf36b8df73e523766b355b0dc4b3b9eb0106f789570cd0ca2eefdde6811de",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-2.json",
+        "bytes": 26012,
+        "sha256": "593fdaa1634adffb0c5a0a9a4a857c38a82d1202121acd4b8c8737664cfdb093",
+        "recorded_query_sha256": "593fdaa1634adffb0c5a0a9a4a857c38a82d1202121acd4b8c8737664cfdb093",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-3.json",
+        "bytes": 26425,
+        "sha256": "72cb5a84cd61cfc3f5b088c4458f91665a6cb70877b20b94c6bae066eff18d2a",
+        "recorded_query_sha256": "72cb5a84cd61cfc3f5b088c4458f91665a6cb70877b20b94c6bae066eff18d2a",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-4.json",
+        "bytes": 26370,
+        "sha256": "7c98cdca5f4461d6b2c292fe794aa651fdd8b7267d1b3bb4a2e84f490826e261",
+        "recorded_query_sha256": "7c98cdca5f4461d6b2c292fe794aa651fdd8b7267d1b3bb4a2e84f490826e261",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-5.json",
+        "bytes": 25830,
+        "sha256": "b89f9aaa56f05bb26fe6030358323e3c6516cc721a9945472cbe642d8715906a",
+        "recorded_query_sha256": "b89f9aaa56f05bb26fe6030358323e3c6516cc721a9945472cbe642d8715906a",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/query-6.json",
+        "bytes": 16234,
+        "sha256": "e98fa8f58b70ab8524a602efe127745c78ae99da849205e43e37cf7acc48abcc",
+        "recorded_query_sha256": "e98fa8f58b70ab8524a602efe127745c78ae99da849205e43e37cf7acc48abcc",
+        "matches_recorded_query_sha256": true
+      },
+      {
+        "artifact_member": "000920.SZ/sources/source-journal.json",
+        "bytes": 5617,
+        "sha256": "34bd062c164b6e892db069a35d2b369499a3490a12911429d80e90cc50b16d0b"
+      }
+    ]
+  },
+  "historical_inventory": {
+    "checked_at": "2026-09-18T10:31:11.387539+00:00",
+    "query_window": [
+      "2025-08-14",
+      "2026-09-18"
+    ],
+    "org_id": "gssz0000920",
+    "total_rows": 139,
+    "rows_in_current_declared_window": 20,
+    "representation": "DECODED_TOOL_RETURN_NOT_WIRE_BYTES",
+    "original_pdf_bytes_retained_in_historical_run": 0,
+    "inventory_restore_is_not_new_query": true,
+    "selected_report_id": "1225486931"
+  },
+  "window_source_leads": [
+    {
+      "announcement_id": "1225569161",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-09-17T15:22:11+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-17/1225569161.PDF",
+      "stock_code": "000920",
+      "title": "2026年9月16日投资者关系活动记录表"
+    },
+    {
+      "announcement_id": "1225564023",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-09-15T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225564023.PDF",
+      "stock_code": "000920",
+      "title": "2026年半年度分红派息实施公告"
+    },
+    {
+      "announcement_id": "1225554792",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-09-09T15:34:10+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-09/1225554792.PDF",
+      "stock_code": "000920",
+      "title": "2026年9月8日投资者关系活动记录表"
+    },
+    {
+      "announcement_id": "1225546093",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-09-03T17:08:11+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-09-03/1225546093.PDF",
+      "stock_code": "000920",
+      "title": "2026年9月3日投资者关系活动记录表"
+    },
+    {
+      "announcement_id": "1225508437",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-26T16:06:09+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225508437.PDF",
+      "stock_code": "000920",
+      "title": "2026年8月25日投资者关系活动记录表"
+    },
+    {
+      "announcement_id": "1225486938",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486938.PDF",
+      "stock_code": "000920",
+      "title": "关于举行2026年半年度网上业绩说明会并征集问题的公告"
+    },
+    {
+      "announcement_id": "1225486937",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486937.PDF",
+      "stock_code": "000920",
+      "title": "董事会秘书工作规则"
+    },
+    {
+      "announcement_id": "1225486936",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486936.PDF",
+      "stock_code": "000920",
+      "title": "关于“质量回报双提升”行动方案的进展公告"
+    },
+    {
+      "announcement_id": "1225486935",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486935.PDF",
+      "stock_code": "000920",
+      "title": "关于变更会计政策的公告"
+    },
+    {
+      "announcement_id": "1225486934",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486934.PDF",
+      "stock_code": "000920",
+      "title": "第八届董事会第十四次会议公告"
+    },
+    {
+      "announcement_id": "1225486933",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486933.PDF",
+      "stock_code": "000920",
+      "title": "关于中车财务有限公司2026年半年度风险持续评估报告"
+    },
+    {
+      "announcement_id": "1225486932",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486932.PDF",
+      "stock_code": "000920",
+      "title": "2026年半年度非经营性资金占用及其他关联资金往来情况汇总表"
+    },
+    {
+      "announcement_id": "1225486931",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486931.PDF",
+      "stock_code": "000920",
+      "title": "2026年半年度报告"
+    },
+    {
+      "announcement_id": "1225486930",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486930.PDF",
+      "stock_code": "000920",
+      "title": "2026年半年度报告摘要"
+    },
+    {
+      "announcement_id": "1225486756",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-21T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486756.PDF",
+      "stock_code": "000920",
+      "title": "关于2026年半年度利润分配预案的公告"
+    },
+    {
+      "announcement_id": "1225454728",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-04T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-04/1225454728.PDF",
+      "stock_code": "000920",
+      "title": "关联交易公告"
+    },
+    {
+      "announcement_id": "1225454727",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-08-04T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-04/1225454727.PDF",
+      "stock_code": "000920",
+      "title": "第八届董事会第十三次会议公告"
+    },
+    {
+      "announcement_id": "1225447776",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-07-30T16:20:10+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-07-30/1225447776.PDF",
+      "stock_code": "000920",
+      "title": "2026年7月29日投资者关系活动记录表"
+    },
+    {
+      "announcement_id": "1225421480",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-07-14T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-07-14/1225421480.PDF",
+      "stock_code": "000920",
+      "title": "股票交易异常波动的公告"
+    },
+    {
+      "announcement_id": "1225413015",
+      "announcement_type": null,
+      "org_id": "gssz0000920",
+      "published_at": "2026-07-08T00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-07-08/1225413015.PDF",
+      "stock_code": "000920",
+      "title": "关于膜分离工程业务日常经营性合同情况的公告"
+    }
+  ],
+  "historical_baseline_source": {
+    "announcement_id": "1225028676",
+    "announcement_type": null,
+    "org_id": "gssz0000920",
+    "published_at": "2026-03-25T00:00:00+08:00",
+    "source_locator": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225028676.PDF",
+    "stock_code": "000920",
+    "title": "2025年年度报告"
+  },
+  "latest_window_limit": "旧查询覆盖截至2026-09-18。当前7/1–9/20查询在ORG_SEARCH失败；9/19–9/20是否有其他相关披露保持UNKNOWN。",
+  "source_classification_limit": "公告标题和清单仅用于定位，不能认证相关性、无风险或正文已读。尚未读回正文的相关/潜在反证继续保留。"
+}
