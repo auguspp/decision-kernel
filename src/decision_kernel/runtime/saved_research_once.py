@@ -34,6 +34,8 @@ REPO = "auguspp/decision-kernel"
 REQUEST_PATH = "research_runs/api-once-request.json"
 BASE_URL = "https://ai.6600600.xyz/v1"
 MODEL = "gpt-6-astra"
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+DEEPSEEK_MODEL = "deepseek-flash"
 # One explicitly authorized successor, not automatic retry/resume policy.
 APPROVED_CONTINUATION = {
     "execution_id": "p0-suken-api-20260910-v1", "run_id": 34490271156,
@@ -251,13 +253,24 @@ def admitted_output_type(output_type, evidence_ids):
     return AdmittedOutput
 
 
-def response_parameters(body, output_format):
-    """One original SDK argument set, shared with the network-free Pre preview."""
-    return dict(model=MODEL, instructions=SYSTEM, input=[{"role": "user", "content": body}],
+def response_parameters(body, output_format, *, model=MODEL, extra_parameters=None):
+    """One SDK argument set; defaults preserve the historical provider contract."""
+    require(isinstance(model, str) and model, "model identity missing")
+    require(extra_parameters is None or (
+        isinstance(extra_parameters, dict)
+        and set(extra_parameters) <= {"reasoning"}
+        and isinstance(extra_parameters.get("reasoning"), dict)
+        and set(extra_parameters["reasoning"]) == {"effort"}
+        and extra_parameters["reasoning"]["effort"] in {"none", "low", "high", "max"}
+    ), "unsupported explicit provider parameters")
+    result = dict(model=model, instructions=SYSTEM, input=[{"role": "user", "content": body}],
         text={"format": output_format}, tools=[], store=False, max_output_tokens=MAX_OUTPUT_TOKENS)
+    if extra_parameters:
+        result.update(extra_parameters)
+    return result
 
 
-def model_request(context, output_type, *, max_prompt_bytes):
+def model_request(context, output_type, *, max_prompt_bytes, model=MODEL, extra_parameters=None):
     """Original byte/schema checks and request parameters, without a send or key."""
     body = raw(context).decode()
     require(len(SYSTEM.encode()) + len(body.encode()) <= max_prompt_bytes, "model input byte budget")
@@ -270,10 +283,32 @@ def model_request(context, output_type, *, max_prompt_bytes):
     output_format = type_to_text_format_param(request_type)
     require(len(SYSTEM.encode()) + len(body.encode()) + len(raw(output_format)) <= max_prompt_bytes,
             "model input byte budget")
-    return body, schema, output_format, response_parameters(body, output_format)
+    return body, schema, output_format, response_parameters(
+        body, output_format, model=model, extra_parameters=extra_parameters)
 
 
-def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None, bound_context=None):
+def _provider_error_diagnostic(exc):
+    """Retain only finite SDK diagnostics; never arbitrary error text or credentials."""
+    result = {}
+    status = getattr(exc, "status_code", None)
+    if type(status) is int and 100 <= status <= 599:
+        result["http_status"] = status
+    request_id = getattr(exc, "request_id", None)
+    if isinstance(request_id, str) and re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", request_id):
+        result["request_id"] = request_id
+    body = getattr(exc, "body", None)
+    error = body.get("error") if isinstance(body, dict) else None
+    if isinstance(error, dict):
+        for key in ("code", "type"):
+            value = error.get(key)
+            if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", value):
+                result["provider_error_" + key] = value
+    return result
+
+
+def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None, bound_context=None,
+               base_url=BASE_URL, model=MODEL, api_key_env="SUB2API_API_KEY",
+               provider="SUB2API", extra_parameters=None):
     """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
     # Resolve the unchanged default at call time; explicit Stock opt-in is separate.
     if bound_context is None:
@@ -287,9 +322,21 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         require_bound(bound_context).check_plain(context["public_context"])
         from .stock_full_input import REQUEST_BYTES
         max_prompt_bytes = REQUEST_BYTES
-    body, schema, output_format, parameters = model_request(context, output_type, max_prompt_bytes=max_prompt_bytes)
+    binding = (provider, base_url, model, api_key_env)
+    historical = ("SUB2API", BASE_URL, MODEL, "SUB2API_API_KEY")
+    deepseek = ("DEEPSEEK_OFFICIAL", DEEPSEEK_BASE_URL, DEEPSEEK_MODEL, "DEEPSEEK_API_KEY")
+    require(binding in {historical, deepseek}, "unsupported explicit provider binding")
+    if binding == historical:
+        require(extra_parameters is None, "historical provider parameters changed")
+    else:
+        require(extra_parameters == {"reasoning": {"effort": "none"}},
+                "DeepSeek compatibility parameters changed")
+    body, schema, output_format, parameters = model_request(
+        context, output_type, max_prompt_bytes=max_prompt_bytes,
+        model=model, extra_parameters=extra_parameters)
     from openai import OpenAI, DefaultHttpxClient
-    record = {"stage": stage, "started_at": now(), "requested_model": MODEL,
+    record = {"stage": stage, "started_at": now(), "provider": provider,
+              "provider_base_url": base_url, "requested_model": model,
               "input_sha256": sha(body.encode()), "status": "REQUEST_STARTED", "max_output_tokens": MAX_OUTPUT_TOKENS,
               "reference_contract": "ADMITTED_EVIDENCE_IDS_V1", "system_sha256": sha(SYSTEM.encode()),
               "output_model_schema_sha256": sha(raw(schema)),
@@ -306,7 +353,9 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
     with (out / (stage + "-model-input.json")).open("xb") as f:
         f.write(body.encode())
     try:
-        with OpenAI(api_key=os.environ["SUB2API_API_KEY"], base_url=BASE_URL, max_retries=0,
+        api_key = os.environ.get(api_key_env)
+        require(bool(api_key), "model connection required")
+        with OpenAI(api_key=api_key, base_url=base_url, max_retries=0,
                     timeout=180, http_client=DefaultHttpxClient(follow_redirects=False, **client_options)) as client:
             with client.responses.stream(**parameters) as stream:
                 response = stream.get_final_response()
@@ -325,7 +374,7 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         record["phase"] = "COMPLETE"
         return parsed
     except Exception as exc:
-        record.update(status="FAILED", error_type=type(exc).__name__)
+        record.update(status="FAILED", error_type=type(exc).__name__, **_provider_error_diagnostic(exc))
         raise
     finally:
         record["finished_at"] = now()

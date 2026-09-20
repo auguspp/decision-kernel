@@ -15,8 +15,12 @@ on:
         description: Run only the separately enabled and approved main question request; never legacy recovery
         type: boolean
         default: false
+      deepseek-compat:
+        description: One synthetic DeepSeek V4.1 Responses compatibility call; never Research
+        type: boolean
+        default: false
       code-sha:
-        description: Required for reviewed-question; exact reviewed main SHA
+        description: Required for reviewed-question or deepseek-compat; exact reviewed main SHA
         type: string
         required: false
       recover-sources:
@@ -49,6 +53,7 @@ jobs:
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
       !(github.event_name == 'workflow_dispatch' && inputs.prepare-sources) &&
+      !(github.event_name == 'workflow_dispatch' && inputs.deepseek-compat) &&
       (github.event_name == 'workflow_dispatch' ||
        (github.event.workflow_run.name == 'hithink-stock-dump-trial' &&
         github.event.workflow_run.conclusion == 'success' &&
@@ -129,6 +134,58 @@ jobs:
           name: stock-business-research-${{ github.run_id }}-${{ github.run_attempt }}
           path: run-output/
           if-no-files-found: warn
+          retention-days: 30
+
+  deepseek-compatibility:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event_name == 'workflow_dispatch' && inputs.deepseek-compat &&
+      !inputs.reviewed-question && !inputs.prepare-sources &&
+      !inputs.recover-sources && !inputs.source-successor &&
+      !inputs.source-successor-continuation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Install existing Research API dependency
+        run: python -m pip install -e '.[research-api]'
+      - name: One synthetic official DeepSeek V4.1 Responses call
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          EXPECTED_CODE_SHA: ${{ inputs.code-sha }}
+          SOURCE_STOCK_RUN: ${{ inputs.source-stock-run-id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = workflow_dispatch
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          [[ "$EXPECTED_CODE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_SHA" = "$EXPECTED_CODE_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE_SHA"
+          test -z "$SOURCE_STOCK_RUN"
+          test -n "$DEEPSEEK_API_KEY"
+          set +e
+          python eval/deepseek_responses_probe.py --output deepseek-compat-output
+          probe_status=$?
+          set -e
+          python eval/deepseek_responses_probe.py --output deepseek-compat-output --verify-only
+          exit "$probe_status"
+      - name: Retain synthetic DeepSeek compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: deepseek-compat-${{ github.run_id }}-${{ github.run_attempt }}
+          path: deepseek-compat-output/
+          if-no-files-found: error
           retention-days: 30
 
   prepare-stock-sources:
