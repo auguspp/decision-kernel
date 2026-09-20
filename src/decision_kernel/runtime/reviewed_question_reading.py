@@ -313,14 +313,15 @@ def render(report):
 
 
 def _seal(collector, baseline, work, scope, before_readme):
-    # Full rows are already retained in REPORT. The original 192KiB root index
-    # stays a small, hash-bound entry point, not a duplicate of every source.
+    # Full rows are retained in REPORT. The original 192KiB root index stays
+    # a small hash-bound entry point, not a duplicate of every source.
     summary = {key: deepcopy(work[key]) for key in
-               ('status', 'work_ref', 'work_commit', 'scope', 'meaning', 'error_type', 'details', 'structured')
-               if key in work}
+               ('status', 'work_ref', 'work_commit', 'scope', 'meaning', 'error_type',
+                'details', 'structured', 'diagnostic') if key in work}
     summary.update(stock_scope_status=scope['status'], stock_batch_id=scope.get('batch_id'),
                    stock_market_session=scope.get('market_session'),
-                   scope_coverage='FULL_DECLARED_ROWS_IN_SAME_READING_DETAILS',
+                   scope_coverage=('FULL_DECLARED_ROWS_IN_SAME_READING_DETAILS' if work.get('structured')
+                                   else 'NOT_MATERIALIZED_READ_GAP'),
                    new_research_execution='NOT_EXECUTED', **model.AUTHORITY)
     if work['status'] != 'UNAVAILABLE_OR_REJECTED':
         summary['execution_count'] = len(work['items'])
@@ -366,8 +367,17 @@ def attach(collector, baseline):
         return _seal(collector, baseline, work, scope, before_files['README.md'])
     except ERRORS as exc:
         collector.files, collector.sources = before_files, before_sources
+        labels = {'Question publication reserve': 'PUBLICATION_API_BUDGET',
+                  'Question retained-byte reserve': 'RETENTION_BYTE_BUDGET',
+                  'Question shared source-file bound': 'SHARED_SOURCE_FILE_BUDGET',
+                  'Question execution scope exceeds bound': 'EXECUTION_SCOPE_BOUND',
+                  'Question work tree incomplete': 'INCOMPLETE_WORK_TREE'}
+        message = exc.args[0] if type(exc) is ValueError and len(exc.args) == 1 and type(exc.args[0]) is str else None
         work = {'status': 'UNAVAILABLE_OR_REJECTED', 'items': [], 'error_type': type(exc).__name__,
-                'meaning': 'QUESTION_READING_GAP_NOT_ZERO_OR_QUIET', **model.AUTHORITY}
-        # Publish an explicit compact gap. If even this cannot fit, fail the
-        # original publisher instead of silently returning a false complete read.
+                'meaning': 'QUESTION_READING_GAP_NOT_ZERO_OR_QUIET',
+                'diagnostic': {'code': labels.get(message, 'UNCLASSIFIED_READ_REJECTION'),
+                               'api_calls_after_attempt': collector.api.calls,
+                               'retained_files_after_rollback': len(collector.files)}, **model.AUTHORITY}
+        # If even the compact gap cannot fit, fail the original publisher rather
+        # than silently returning a complete-looking zero.
         return _seal(collector, baseline, work, scope, before_files['README.md'])
