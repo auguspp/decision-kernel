@@ -10,6 +10,7 @@ import argparse
 from functools import partial
 import os
 from pathlib import Path
+import re
 from uuid import NAMESPACE_URL, uuid5
 
 from ..evidence import EvidenceArtifact
@@ -167,42 +168,84 @@ def _question_inputs(*, api, code, request, clock):
     return q, packet, discovery, context, checks
 
 
-def run_question(*, api, code, output, clock=once.now, call=None):
+def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
     """Explicit native host only: original prepare -> admission -> Pre/Quick.
 
     Default request is disabled. No acquisition, question selection or authority
     inferred from data; call substitutes only the model boundary in offline tests.
     """
     from . import reviewed_question_input as reviewed
-    import re
+    once.require(type(daily) is bool, "QUESTION_MODE_INVALID")
+    if daily:
+        from . import stock_daily_question as daily_policy
+        from . import stock_question_continuation as deepseek
+    request_path = daily_policy.REQUEST if daily else QUESTION_REQUEST
+    mode = daily_policy.MODE if daily else QUESTION_MODE
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "QUESTION_UNSAFE_OUTPUT")
     output.mkdir(parents=True, exist_ok=False)
-    result = {"status": "NOT_EXECUTED", "question_kind": QUESTION_MODE, "code_commit": code,
+    result = {"status": "NOT_EXECUTED", "question_kind": mode, "code_commit": code,
         "started_at": clock(), "phase": "AUTHORIZATION", "formal_research_started": False,
         "automatic_retry": False, "registered_current_handoff": False,
         "semantic_acceptance": "NOT_ESTABLISHED", **reading.AUTHORITY}
     retain = None
+    daily_retainers, daily_reservations = [], []
+    daily_archives = {}
+    daily_scope, egress = None, None
     reserved = False
     try:
-        request = identity._json(api.file(QUESTION_REQUEST, code))
-        authorize(api, code, request, request_path=QUESTION_REQUEST, mode=QUESTION_MODE)
-        q, packet, discovery, context, checks = _question_inputs(api=api, code=code, request=request, clock=clock)
+        request = identity._json(api.file(request_path, code))
+        authorize(api, code, request, request_path=request_path, mode=mode)
+        if daily:
+            daily_policy.check_policy(api, code, request, clock)
+        q, packet, discovery, context, checks = _question_inputs(api=api, code=code,
+            request=daily_policy.base_request(request) if daily else request, clock=clock)
+        base_packet = packet
+        if daily:
+            packet, daily_state, daily_scope = daily_policy.bind(api, request, q, packet, context, clock,
+                                                               archives=daily_archives)
+            daily_scope.update(execution_id=packet.execution_id, question_source=request["question_source"])
+            checks = {**checks, "input_raw": once.raw(packet)}
+            result["daily_scope"] = daily_scope
         result.update(question_id=q["question_id"], revision=q["revision"], thscode=packet.case_id,
                       execution_id=packet.execution_id, phase="INPUT_PREPARATION")
         def recheck():
-            authorize(api, code, request, request_path=QUESTION_REQUEST, mode=QUESTION_MODE)
+            nonlocal egress
+            authorize(api, code, request, request_path=request_path, mode=mode)
+            if daily:
+                daily_policy.check_policy(api, code, request, clock)
+                rebound, state, scope = daily_policy.bind(api, request, q, base_packet, context, clock,
+                                                         archives=daily_archives)
+                scope.update(execution_id=packet.execution_id, question_source=request["question_source"])
+                once.require(once.raw(rebound) == checks["input_raw"] and scope == daily_scope,
+                             "DAILY_BOUND_SCOPE_CHANGED")
+                if daily_reservations:
+                    current, rows = daily_policy.work_tree(api)
+                    daily_policy.capacity(api, current, rows, state, packet)
+                    daily_policy.reservation_plan(api, current, rows, scope, reserved=True)
+                    for source in daily_reservations:
+                        exact = identity._checked_source(source, checks["load"])
+                        once.require(api.file(source["path"], current) == exact, "DAILY_RESERVATION_CHANGED")
             prepared = reviewed.prepare(question_source=request["question_source"], checked_at=clock(), **checks)
             once.require(identity._checked_source(request["context_source"], checks["load"]) == once.raw(context),
                          "QUESTION_CONTEXT_CHANGED_BEFORE_EGRESS")
             _question_context(context, packet, identity._json(checks["preflight_raw"]))
             sources.recheck(context, api=api, code_commit=code, clock=clock)
-            once.require(question_egress_hash(packet, discovery, context) == request["approved_egress_hash"],
-                         "QUESTION_PUBLIC_EGRESS_NOT_APPROVED")
+            if daily:
+                digest = deepseek.egress_hash(packet, discovery, context)
+                once.require(egress in {None, digest}, "DAILY_PUBLIC_EGRESS_CHANGED")
+                egress = digest  # Authority comes from checked main policy, not this digest.
+            else:
+                egress = request["approved_egress_hash"]
+                once.require(question_egress_hash(packet, discovery, context) == egress,
+                             "QUESTION_PUBLIC_EGRESS_NOT_APPROVED")
             return prepared
         prepared = recheck()
         # Preview uses the SAME SDK request builder, before any reservation/spend.
-        once.model_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult,
-                           max_prompt_bytes=STOCK_PROMPT_BYTES)
+        if daily:
+            deepseek._deepseek_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult)
+        else:
+            once.model_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult,
+                               max_prompt_bytes=STOCK_PROMPT_BYTES)
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
@@ -217,12 +260,28 @@ def run_question(*, api, code, output, clock=once.now, call=None):
                 result.update(status="EXISTING_QUESTION_REUSED_NO_EXECUTION", existing_paths=existing,
                               reuse_meaning="EXISTING_RESULT_OR_PARTIAL_ATTEMPT_NOT_PROOF_OF_COMPLETION")
                 return result
+        if daily:
+            current, rows = daily_policy.work_tree(api)
+            once.require(current == work_head, "DAILY_WORK_HEAD_MOVED")
+            daily_policy.capacity(api, current, rows, daily_state, packet)
+            slot_prefix, day_prefix = daily_policy.reservation_plan(api, current, rows, daily_scope)
         retain = once.Retainer(api, {"prefix": packet.candidate_output_prefix,
             "id": packet.execution_id, "work_ref": intake.WORK_REF}, code, output)
         if work_head is None:
             retain.native("POST", "git/refs", {"ref": "refs/heads/" + intake.WORK_REF, "sha": code})
         # Create-only stable prepare is also a competing-writer reservation.
         recheck()
+        if daily:
+            marker = {**daily_scope, "policy": daily_policy.POLICY, "code_commit": code,
+                      "reserved_at": clock(), "automatic_retry": False, **reading.AUTHORITY}
+            for label, prefix in (("daily-slot", slot_prefix), ("daily-day", day_prefix)):
+                local = output / label
+                local.mkdir()
+                owner = once.Retainer(api, {"prefix": prefix, "id": packet.execution_id,
+                                           "work_ref": intake.WORK_REF}, code, local)
+                daily_retainers.append(owner)
+                daily_reservations.append(owner.save("prepare.json", marker))
+            result["daily_reservations"] = daily_reservations
         retain.save("prepare.json", prepared)
         reserved = True
         retain.save("source.json", context)
@@ -235,8 +294,10 @@ def run_question(*, api, code, output, clock=once.now, call=None):
         result["phase"] = "LAUNCH"
         launch = retain.save("launch.json", {"id": packet.execution_id, "input_hash": canonical_hash(packet),
             "code_commit": code, "question_source": request["question_source"],
-            "approved_egress_hash": request["approved_egress_hash"], "permission": request["permission"],
-            "automatic_retry": False})
+            "approved_egress_hash": egress, "permission": request["permission"],
+            "automatic_retry": False,
+            **({"provider": daily_policy.POLICY["provider"], "daily_scope": daily_scope,
+                "daily_reservations": daily_reservations} if daily else {})})
         recheck()
         launch_checks["checked_at"] = clock()
         def execute(exact, key):
@@ -255,9 +316,18 @@ def run_question(*, api, code, output, clock=once.now, call=None):
                                     pre_research_hash=canonical_hash(pre))
                 once.require((stage, model) in {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult)}
                              and prompt == expected, "QUESTION_MODEL_PROMPT_CHANGED")
-                return (call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES))(stage, prompt, model, out, usage)
+                if daily:
+                    fn = call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES,
+                        base_url=once.DEEPSEEK_BASE_URL, model=once.DEEPSEEK_MODEL,
+                        api_key_env="DEEPSEEK_API_KEY", provider=deepseek.PROVIDER,
+                        extra_parameters={"reasoning": deepseek.REASONING})
+                else:
+                    fn = call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES)
+                return fn(stage, prompt, model, out, usage)
             result.update(phase="RESEARCH", formal_research_started=True)
-            return once.research(packet, discovery, context, output, call=guarded, clock=clock)
+            return once.research(packet, discovery, context, output, call=guarded, clock=clock,
+                **({"provider_event_prefix": deepseek.PROVIDER_EVENT_PREFIX,
+                    "model_or_executor": deepseek.MODEL_OR_EXECUTOR} if daily else {}))
         report, outcome = admission.execute_after_admission(executor=execute, **launch_checks)
         retain.save("admission.json", report)
         once.require(outcome is not None, report["reason"])
@@ -280,8 +350,9 @@ def run_question(*, api, code, output, clock=once.now, call=None):
         if isinstance(reason, str) and re.fullmatch(r"[A-Z0-9_]{1,128}", reason):
             result["error_code"] = reason
     finally:
-        result.update(finished_at=clock(), mutation_uncertain=bool(retain and retain.uncertain))
-        if reserved and not retain.uncertain:
+        uncertain = bool(retain and retain.uncertain) or any(r.uncertain for r in daily_retainers)
+        result.update(finished_at=clock(), mutation_uncertain=uncertain)
+        if reserved and not uncertain:
             try:
                 retain.save("host-receipt.json", result)
             except Exception:
@@ -296,6 +367,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--code-commit", required=True)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--daily-reviewed-question", action="store_true")
     args = parser.parse_args(argv)
     once.require(os.environ.get("GITHUB_REPOSITORY") == once.REPO
         and os.environ.get("GITHUB_REF") == "refs/heads/main"
@@ -303,9 +375,10 @@ def main(argv=None):
         and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
         and reading.SHA.fullmatch(args.code_commit) is not None
         and os.environ.get("GITHUB_SHA") == args.code_commit, "QUESTION_NATIVE_IDENTITY_REQUIRED")
-    once.require(bool(os.environ.get("SUB2API_API_KEY")), "QUESTION_MODEL_CONNECTION_REQUIRED")
+    credential = "DEEPSEEK_API_KEY" if args.daily_reviewed_question else "SUB2API_API_KEY"
+    once.require(bool(os.environ.get(credential)), "QUESTION_MODEL_CONNECTION_REQUIRED")
     result = run_question(api=GitHubAPI(os.environ["GH_TOKEN"], max_calls=1024),
-                          code=args.code_commit, output=args.output)
+                          code=args.code_commit, output=args.output, daily=args.daily_reviewed_question)
     print(once.raw(result).decode())
     return 0 if result["status"] in {"VALIDATED_FUNNEL_RESULT", "EXISTING_QUESTION_REUSED_NO_EXECUTION"} else 2
 

@@ -61,3 +61,23 @@ context复用既有 `issuer_documents/pages` 表示，完整保留每份所需�
 本地开发环境无法安装原锁定SDK，临时格式化stand-in仅在仓库外运行，未进入提交或CI。局部开发PASS不代替完整native exact-head CI；最终原SDK、原4385项测试集合保留、新回归、独立main CI及正常publisher均须真实验收。
 
 已落地目标是默认关闭的显式执行接线。自动问题生成/选择、真实启用请求、模型实跑、自然日常运行及Radar→Research自动闭环尚未交付。公告按需收敛不变，不接Tushare/Jev/MinerU或重开下载工程。AI Investment Authority=NONE。
+
+## 2026-09-20：原宿主的有界日常问题模式
+
+本节延续 [#297 / 5748820065 日常政策](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5748820065)，施工前的三层复用检查见 [5749609810](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5749609810)。`stock_question_host.run_question(daily=True)` 复用原 prepare、admission、Pre/必要 Quick、stable question root、Retainer 和已接通的 reviewed-question reader。`stock_daily_question.py` 仅组合保存批次、来源与消费次数检查；没有新的执行器、provider、抓取器或调度器。原单问题请求和广哈固定技术接续继续保留原语义。
+
+主干政策为 `research_runs/stock-daily-question-policy.json`，请求为 `research_runs/stock-daily-question-request.json`。请求默认 `enabled=false`、全部材料引用为空。只有主干请求中的完整精确来源和真实许可满足原准入时，显式 `daily-reviewed-question=true` 才进入该模式；CLI 为 `--daily-reviewed-question`。旧模式、恢复开关和 source-stock-run-id 必须互斥，仍使用同一 `stock-business-first-v0` concurrency，仅 main / workflow_dispatch / attempt1。默认调度不会自行启动此模式。
+
+政策从保存的 2026-09-18 市场日起，最多消费 **10 个市场日、每市场日 1 个新问题尝试**，在 `2026-10-20T00:00:00Z` 到期；不以工作日历猜测正常市场日。固定使用官方 DeepSeek、`deepseek-flash`、`DEEPSEEK_API_KEY`、`reasoning.effort=none`；每阶段最多 6000 输出 tokens，prompt 512KiB、context 448KiB、最多 4 份公开完整 CNINFO PDF、PDF 总量 32MiB。首版保留原 **每来源文件 512KiB** 界限，实际可接材料范围因此比政策总上限更窄；不支持靠截断或拆分 PDF 绕过界限。
+
+沿原精确 Git SourceRef，在 question/context/preflight 外增加 `batch_review_source` 和 `source_custody_source`。完整批次审阅须绑定相同 R、批次 ID 和 question_source，依保存顺序为全部候选保留 disposition/reason，并且恰好声明一个已审阅的 NEW_DISTINCT_QUESTION。宿主核对保存运行、同 R reading hash 和完整行范围，研究者仍对问题质量与经济含义负责。批次处置正文不发送给模型。
+
+来源保管记录绑定 `ticker`、context、检查时间、完整原库存和 source journal 的精确 Git 引用、原 `source_run_id` / `source_artifact`，以及每份文档的原 PDF 来源、字节数、SHA256 和页数。来源资格复用原成功或保留部分成果的 Stock workflow run、attempt1、artifact ID/name/size/digest、原解包器及 `stock_source_successor._saved_document`。Git 保存的库存/journal/PDF 必须与真实原 artifact 内容相配；完整库存不按 preflight 的条数界限裁剪。公告身份、发行人、成功 body event、PRIMARY completed_read 及获取时间继续相互绑定。
+
+本版日常模式只接受完整 **ORIGINAL_PYPDF** 表示：重新解析保存 PDF，核对页数、逐页全文和发行人标识；未知 doc 字段被拒绝。旧模式的 BOUND_SAME_PDF_READING 不变，日常模式尚不接该表示。来源格式与身份检查不认证发行人的陈述或经济结论。原必要来源类必须为获准的 STATIC；需要最新披露库存的问题不得降级为 STATIC，资料缺失保留原缺口。
+
+消费前在同一 work ref 依次 create-only 保存固定 `slots/01..10/prepare.json`、市场日 marker、原稳定问题根。并发执行竞争同一个下一 slot，冲突后不改槽重试；中断后只有 slot 而没有 day/root 也已消费相应日期和问题。任何 Retainer 写入不确定都会停止后续远端补写。每次模型外发前再次核对当前 main/权限/期限、原问题准入、全部原件和自己保留的消费记录；Quick 仅沿原 Pre validator 的 CONTINUE_TO_QUICK。
+
+调用前检查原 reader 的共享 **32 个 Stock 来源文件 / 8 次问题执行**容量，包括旧基线、技术 child、已保存和新结果尚待写入的必需文件。10 日是消费许可上限，不保证现有容量能容纳 10 个完整研究结果；容量不足必须在模型花费前显式停止，不删除历史或扩大预算。正常 publisher 仍独立执行原 API/字节上限检查，预检查不等于未来发布成功。
+
+本轮沃顿的必要半年报原件、最新更新覆盖及正式新问题资格未齐备，且问题需要动态更新范围，因此保持请求关闭，没有实际 Pre/Quick 或日常消费。现有原生 Daily Brief v1.3 只读取已保存研究与明确的 on-demand 来源档案；自然研究阶段接入、实际结果交付、Human 回应和 5–10 个真实交易日使用仍分别验收。
