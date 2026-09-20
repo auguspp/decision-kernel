@@ -322,12 +322,15 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         require_bound(bound_context).check_plain(context["public_context"])
         from .stock_full_input import REQUEST_BYTES
         max_prompt_bytes = REQUEST_BYTES
-    require(isinstance(base_url, str) and base_url.startswith("https://") and "@" not in base_url,
-            "provider base URL invalid")
-    require(isinstance(api_key_env, str) and re.fullmatch(r"[A-Z0-9_]{1,64}", api_key_env),
-            "provider credential binding invalid")
-    require(isinstance(provider, str) and re.fullmatch(r"[A-Z0-9_]{1,64}", provider),
-            "provider identity invalid")
+    binding = (provider, base_url, model, api_key_env)
+    historical = ("SUB2API", BASE_URL, MODEL, "SUB2API_API_KEY")
+    deepseek = ("DEEPSEEK_OFFICIAL", DEEPSEEK_BASE_URL, DEEPSEEK_MODEL, "DEEPSEEK_API_KEY")
+    require(binding in {historical, deepseek}, "unsupported explicit provider binding")
+    if binding == historical:
+        require(extra_parameters is None, "historical provider parameters changed")
+    else:
+        require(extra_parameters == {"reasoning": {"effort": "none"}},
+                "DeepSeek compatibility parameters changed")
     body, schema, output_format, parameters = model_request(
         context, output_type, max_prompt_bytes=max_prompt_bytes,
         model=model, extra_parameters=extra_parameters)
