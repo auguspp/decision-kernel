@@ -47,11 +47,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          git fetch --no-tags --depth=1 origin \
-            refs/heads/read-model/current-state:refs/remotes/origin/read-model-current-state
-          test "$(git rev-parse refs/remotes/origin/read-model-current-state)" = \
-            "9e46792c1cb813e9fb1297c674d13c2d7a13b8d9"
-          git show 9e46792c1cb813e9fb1297c674d13c2d7a13b8d9:details/radar/company-reading.json \
+          curl --fail --silent --show-error --location --max-time 30 \
+            "https://raw.githubusercontent.com/auguspp/decision-kernel/9e46792c1cb813e9fb1297c674d13c2d7a13b8d9/details/radar/company-reading.json" \
             > "$RUNNER_TEMP/company-reading.json"
           test "$(git hash-object "$RUNNER_TEMP/company-reading.json")" = \
             "5658cddfadaba10624f20f4b90d47598d4e00184"
