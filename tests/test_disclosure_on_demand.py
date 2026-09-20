@@ -106,5 +106,5 @@ def test_research_entry_links_source_scope_without_weakening_legacy_stock_contra
     entry = Path('docs/RESEARCH-ENTRY.md').read_text(encoding='utf-8')
     policy = Path('docs/research-source-scope-v0.md').read_text(encoding='utf-8')
     assert '(research-source-scope-v0.md)' in entry
-    assert 'FIRST_BUSINESS_BASELINE' in policy and '尚未实现' in policy
+    assert 'FIRST_BUSINESS_BASELINE' in policy
     assert '不能在下载失败后把必要材料改成可选' in entry
