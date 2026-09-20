@@ -49,7 +49,8 @@ def collector(args, tmp_path, *, stock=True):
     payload = model.assemble(code_commit=args['code'], checked_at=args['clock'](),
         check_started_at=args['clock'](), lanes=lanes,
         research={'handoffs': {'active': []}, 'records': [], 'gaps': [],
-                  'candidate_work': {'status': 'READ_OK', 'items': []}},
+                  'candidate_work': {'status': 'READ_OK', 'items': []},
+                  'stock_business_work': {'status': 'READ_OK', 'items': []}},
         capabilities=[], refresh_identity={})
     c = delivery.Collector(api, args['code'], tmp_path, now=args['clock'])
     c.files = {'current-state.json': model.json_bytes(payload),
@@ -236,11 +237,39 @@ def test_newest_stock_batch_not_reviewed_is_not_zero_questions(tmp_path, monkeyp
     assert [r['review_status'] for r in scope['items']] == [
         'QUESTION_NOT_YET_REVIEWED', 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED', 'ORIGINAL_PRICE_DISPOSITION_ONLY']
     assert scope['reviewed_question_count'] == 0
-    assert scope['meaning'] == 'NO_RESEARCH_REVIEW_RECEIPT_IS_NOT_NO_USEFUL_QUESTION'
+    assert scope['meaning'] == 'OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION'
+    assert scope['question_review_required_count'] == 1
+    assert scope['existing_baseline_gap_count'] == 0
     assert not any(r['economic_question_assessed'] or r['research_execution_allowed'] for r in scope['items'])
     changed = deepcopy(baseline)
     changed['generated_at'] = '2030-01-01T00:00:00Z'
     assert reader.stock_review_scope(changed)['batch_id'] == scope['batch_id']
+
+
+def test_existing_baseline_source_gap_is_visible_and_not_retried_as_new_question(tmp_path, monkeypatch):
+    _, c, baseline, _, _, _ = completed(tmp_path, monkeypatch)
+    research = deepcopy(baseline['research'])
+    research['stock_business_work'] = {'status': 'READ_OK', 'items': [{
+        'thscode': '000920.SZ', 'status': 'PRE_EXECUTION_FAILURE',
+        'question_kind': 'FIRST_BUSINESS_BASELINE', 'execution_id': 'stock-business-' + 'a' * 64,
+        'failure_status': 'SOURCE_OR_INPUT_PREPARATION_INCOMPLETE',
+        'error_type': 'CninfoPdfHttpError', 'error_code': None,
+        'terminal_state': None, 'finished_at': '2026-09-18T10:31:13+00:00',
+        'sources': {'failure': {'read_path': 'sources/git/failure.json'}}}]}
+    changed = model.assemble(code_commit=baseline['code_commit'], checked_at=baseline['generated_at'],
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
+        research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+    observations = {'000920.SZ': {'current_origins': [{
+        'direction_sources': [{'family': 'GRANULAR_884', 'name': '膜材料', 'thscode': '884213.TI'}],
+        'review_question': 'If decision-relevant, what public evidence establishes or rejects the business link?'}]}}
+    scope = reader.stock_review_scope(changed, observations, 'SAME_READING_STOCK_OBSERVATIONS')
+    row = scope['items'][0]
+    assert row['review_status'] == 'EXISTING_BASELINE_SOURCE_OR_INPUT_GAP'
+    assert row['existing_research_relation']['error_type'] == 'CninfoPdfHttpError'
+    assert row['distinct_question_assessment'] == 'NOT_PERFORMED'
+    assert row['research_execution_allowed'] is False and row['economic_question_assessed'] is False
+    assert '膜材料' in row['origin_question_prompts'][0]
+    assert scope['existing_baseline_gap_count'] == 1 and scope['question_review_required_count'] == 0
 
 
 def test_markup_remains_data_in_the_read_surface():
