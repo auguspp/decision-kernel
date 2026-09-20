@@ -36,6 +36,8 @@ class PermissionDeniedError(RuntimeError):
 def setup_continuation(tmp_path, monkeypatch, *, route="WAIT_FOR_TRIGGER"):
     qargs, api, base_request, q, context, pf, _, writes, parent_prefix = setup_question(
         tmp_path, monkeypatch)
+    run_id = 77
+    monkeypatch.setenv("GITHUB_RUN_ID", str(run_id))
 
     # Generate the exact retained technical gap through the original question host.
     def failed_pre(stage, prompt, model, output, usage):
@@ -55,7 +57,6 @@ def setup_continuation(tmp_path, monkeypatch, *, route="WAIT_FOR_TRIGGER"):
     assert parent_prefix + "pre.json" not in saved
     assert parent_prefix + "funnel.json" not in saved
 
-    run_id = 77
     artifact = {
         "id": 78,
         "name": "stock-business-research-77-1",
@@ -316,6 +317,7 @@ def test_research_provider_labels_default_and_deepseek_are_distinct(
     def stop(stage, prompt, model, out, usage):
         return pre(prompt, "STOP")
 
+    (tmp_path / "old").mkdir()
     _, _, _ = once.research(
         packet, discovery, context, tmp_path / "old", call=stop)
     old = json.loads((tmp_path / "old" / "candidate-before-validation.json").read_text())
@@ -324,6 +326,7 @@ def test_research_provider_labels_default_and_deepseek_are_distinct(
     assert any(e["target"] == "SUB2API_RESPONSES:PRE"
                for e in old["receipt"]["tool_events"])
 
+    (tmp_path / "new").mkdir()
     _, _, _ = once.research(
         packet, discovery, context, tmp_path / "new", call=stop,
         provider_event_prefix=cont.PROVIDER_EVENT_PREFIX,
