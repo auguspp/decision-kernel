@@ -1,0 +1,43 @@
+name: radar-industry-followup-probe-20260920
+
+on:
+  push:
+    branches: [probe/industry-main-continuous-20260920]
+
+permissions:
+  contents: read
+
+jobs:
+  industry-reuse-followup:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+      HITHINK_SECTOR_REQUEST_PACING: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install current package and pinned shadow dependency
+        run: python -m pip install -e . 'ruptures==1.1.10'
+      - name: Probe public HiThink futures identity and LC CU RB variables
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -n "$HITHINK_FINANCE_API_KEY"
+          python eval/industry_inflection_reuse_probe.py --output "$RUNNER_TEMP/industry-followup"
+          test -s "$RUNNER_TEMP/industry-followup/summary.json"
+          test -s "$RUNNER_TEMP/industry-followup/requests.json"
+      - name: Retain industry followup receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: industry-inflection-followup-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/industry-followup/
+          if-no-files-found: warn
+          retention-days: 30
