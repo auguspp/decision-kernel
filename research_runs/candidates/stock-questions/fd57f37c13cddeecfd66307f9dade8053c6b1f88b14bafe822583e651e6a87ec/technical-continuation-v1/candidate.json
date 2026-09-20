@@ -1,0 +1,197 @@
+{
+  "completion": "COMPLETE",
+  "discovery": {
+    "as_of": "2026-09-20T02:54:52.704035Z",
+    "contradiction_or_mapping_warning": "逐条核对三份完整披露中的账户、用途、授权与实际使用口径。若材料明确解除用途限制、证明集团外经营现金来源，或显示转款等同对外项目付款，应据相应原文修订分类；未披露的实际划款、项目收益与当前自由现金总额保持UNKNOWN。",
+    "current_market_expression": null,
+    "discovery_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+    "economic_direction": "已声明的有限经济问题，方向未定；不从来路标签或价格推断受益。",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "statement": "已保存的公开正文用于核验这个问题；原件与表示的范围限制仍保留。"
+      }
+    ],
+    "known_stop_or_downgrade_condition": "必要正文或技术失败不得称业务WAIT；不强制Quick、Deep或投资决定。",
+    "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+    "schema_version": 1,
+    "security_id": "SZSE:300711",
+    "source_lane": "REVIEWED_RADAR_QUESTION",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-20T02:54:52.704035Z",
+        "evidence_artifact_id": "631ae8e1-82e8-56bf-a26b-c4dce9c38148",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/ca6d8afa9e7d3a2f37653a422de967c7322803a2/docs/readings/300711-question-execution-2026-09-19/context.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "300711",
+    "why_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不是以涨幅、标签数量或接口验收需要认定投资优先级。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "5b323ba38825f19c99c3a3a12e4cc5fb491e3e033a952d8f23994bdbf51c8902",
+  "pre_research": {
+    "as_of": "2026-09-20T02:54:52.704035Z",
+    "basic_business_role": "广哈通信为通信设备/指挥调度系统相关上市公司；其全资子公司广有通信（注册资本10,000万元，2002年12月30日成立，经营范围为通信系统设备制造、通信终端设备制造、通信设备制造与销售、5G通信技术服务、软件开发等）承担“数智指挥系统升级建设项目”部分建设投入，广有通信建设投入总额16,515.75万元，本次拟以募集资金增资0.5亿元注入。",
+    "current_expression_or_leadership": null,
+    "current_market_expectation_hypothesis": "UNKNOWN：本次输入未提供当前市场对广哈通信自由现金、募投进度或该增资事件的预期信息，不作推断；不得以价格路径推断基本面原因。",
+    "discovery_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+    "economic_direction": "指向股东经济桥中的资金来源性质判定：已披露的募集资金专户余额与集团内部增资划转，按披露口径属指定用途的募投项目资金与集团内资金转移，而非可自由分配的集团现金或新增外部经营现金流；资金仍以募投项目投入进度为主线释放。",
+    "largest_unknown": "UNKNOWN：三份已披露材料仅覆盖至2026年6月30日余额与投入数据，以及2026年8月董事会增资决议；2026年9月19日实际划款金额与进度、各募投项目截至当前的实际投入与产出效益、增资款在广有通信体内的具体占用形态、以及集团层面可自由支配现金总额（含母公司自有资金与经营现金流）均未在本次范围内披露或核验；广有通信2026半年度净利润为负的原因亦未说明。缺少的补充信息保持UNKNOWN。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：广州广哈通信2026年上半年募集资金专项报告（公告编号2026-034，2026-08-21，共8页）载明：经证监许可〔2026〕80号核准，向特定对象发行31,263,026股，发行价23.99元/股，募集资金总额749,999,993.74元，扣除不含税发行费用5,454,021.70元后实际募集资金净额744,545,972.04元，2026年3月12日由容诚会计师事务所出具验资报告（容诚验字[2026]518Z0028号）。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第1页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：该报告第2页与第5页载明，截至2026年6月30日募集资金余额707,411,260.10元，其中暂时闲置募集资金现金管理余额516,000,000.00元，募集资金专用账户余额191,411,260.10元；报告期内不存在用闲置募集资金暂时补充流动资金、节余募集资金使用、超募资金使用或其他募集资金使用情况。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第2、5页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：该报告第2页载明，公司对募集资金采取专户存储，专户仅用于存储、管理本次募集资金，不得存放非募集资金或用作其它用途；2026年3月18日公司及子公司已开立募集资金专项账户并与存放银行、保荐机构签署三方/四方监管协议。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第2页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：该报告第2、4页载明，2026年上半年本期使用募集资金投入募投项目37,232,279.59元，其中现金置换募投项目自有资金先期投入35,793,007.16元、募集资金账户直接投入募投项目1,439,272.43元；董事会（2026年4月28日第五届董事会第二十七次会议）同意置换自有资金先期投入51,857,745.92元，截至2026年6月30日已实际置换35,793,007.16元。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第2、4页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：增资公告（公告编号2026-033，2026-08-21，共3页）载明：公司于2026年8月20日第五届董事会第二十九次会议审议通过《关于使用募集资金增资子公司以实施募投项目的议案》，拟以增资方式向全资子公司广有通信注入募集资金0.5亿元；广有通信系公司持股100%的全资子公司，增资完成后仍为全资子公司；该事项不构成关联交易、不构成重大资产重组，无需提交股东会审议或经有关部门批准。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第1、3页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：增资公告第1、2页载明，“数智指挥系统升级建设项目”由公司及全资子公司广有通信共同实施，该项目广有通信建设投入总额为16,515.75万元；公司本次增资公告自述“符合募集资金用途，不存在变相改变募集资金用途或损害股东利益的情形”。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第1、2页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：增资公告第2页载明广有通信最近一年一期未经审计财务数据：2025年末/2025年资产总额50,905.26万元、负债总额18,639.26万元、净资产32,266.00万元、营业收入23,199.15万元、净利润2,522.79万元；2026年半年度末/2026年半年度资产总额44,917.96万元、负债总额13,344.12万元、净资产31,573.84万元、营业收入4,182.51万元、净利润-692.16万元。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第2、3页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT：中信证券2026年半年度跟踪报告（2026-09-08）载明：保荐人查询募集资金专户4次，认为公司募集资金项目进展与信息披露文件一致；现场检查1次未发现问题；发表专项意见3次均为同意；对募集资金存放及使用（查阅专户银行对账单、使用明细账、大额支付凭证抽查、实地查看募投项目现场等）未发现重大问题。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应第1—5页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "INFERENCE",
+        "statement": "INFERENCE（基于上述三份披露）：按已披露口径，707,411,260.10元期末余额中516,000,000.00元处于现金管理形态、191,411,260.10元留存于募集资金专户，且专户被明确设定为仅用于本次募集资金存储管理、不得存放非募集资金或用作其它用途，因此该等余额在披露口径下不等同于集团可自由分配现金；对全资子公司的0.5亿元增资属集团内部资金转移（母公司→100%子公司），属于指定募投项目“数智指挥系统升级建设项目”的实施方式，不等同于新增外部经营现金流。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应专项报告第2、4、5页；增资公告第1、3页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "INFERENCE",
+        "statement": "INFERENCE（口径分层）：三份披露支持区分三类口径——(a)批准/承诺额度（如募集资金净额744,545,972.04元、董事会决议的现金管理额度不超过5.5亿元、董事会同意的置换总额51,857,745.92元、拟增资额度0.5亿元）；(b)内部划转/置换（母子公司之间增资、用募集资金置换自有资金先期投入35,793,007.16元）；(c)实际募投项目支出（2026上半年投入募投项目合计37,232,279.59元，其中直接投入1,439,272.43元、置换口径35,793,007.16元；对照表披露累计投入3,723.23万元，投资进度5.00%）。三者含义不同，不可相互替代。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应专项报告第2、4、7页；增资公告第1—3页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "FACT",
+        "statement": "FACT/COUNTEREVIDENCE：原研究已记录募集资金及现金管理事实，本次复核为对已保存披露的再次读取，不构成新的资金事件；保荐人“无异议”及跟踪报告“未发现重大问题”不构成对现金可自由使用或投资回报的证明，审批与实际执行可能不同。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，对应跟踪报告第1—5页、增资公告第3页】"
+      },
+      {
+        "evidence_artifact_ids": [
+          "631ae8e1-82e8-56bf-a26b-c4dce9c38148"
+        ],
+        "kind": "MARKET_CONTEXT",
+        "statement": "MARKET_CONTEXT：本次输入为PRE阶段的问题与已保存官方披露，未提供当前市场价格、成交或市场对自由现金/募投进度的预期数据；不对价格路径作基本面归因，不推断当前市场预期。【证据：631ae8e1-82e8-56bf-a26b-c4dce9c38148，仅证明披露文本范围，不认证市场预期】"
+      }
+    ],
+    "next_discriminating_search": "按FALSIFICATION_TEST逐条核对三份完整披露中的账户、用途、授权与实际使用口径：(1) 检索是否存在明确解除募集资金用途限制的披露；(2) 检索是否有证明集团外部经营现金来源（如经营性回款、银行授信）的披露，以区分“专户资金”与“集团可用现金”；(3) 检索是否有披露显示向广有通信的转款等同对外项目付款或已形成对外支出凭证。若材料明确解除用途限制、证明集团外经营现金来源，或显示转款等同对外项目付款，应据相应原文修订上述分类；未披露的实际划款、项目收益与当前自由现金总额保持UNKNOWN。",
+    "obvious_contradiction": "存在表面张力而非事实矛盾：公司披露707,411,260.10元“募集资金余额/尚未使用募集资金”，数额巨大且部分以理财形态存在，易被读作集团可支配现金；但同一批披露同时表明专户仅限本次募集资金存储管理、不得用作其它用途，且上半年实际募投投入仅3,723.23万元（进度5.00%），并明确不存在暂时补充流动资金情形。故“余额规模大”与“用途受限、不可自由分配”并存，需要按口径区分，而非认定披露矛盾。同时提示：增资公告中广有通信2026半年度净利润为-692.16万元（未经审计），与“募集资金使用不存在重大问题”的保荐结论并非同一层面的判断，不可混用。",
+    "potential_fundamental_driver": "募集资金到位后的募投项目投入节奏（截至2026年6月30日累计投入3,723.23万元，整体投资进度约5.00%，项目预定可使用状态日期为2028-11-30）以及闲置募集资金现金管理收益（2026上半年98,067.65元利息与现金管理收益），而非可自由支配的现金总额。",
+    "route": "WAIT_FOR_TRIGGER",
+    "route_reason": "本次为PRE阶段限定性资金性质核查：三份已保存官方披露在用途约束、内部划转与专户管理上已给出可核验的一致口径（专户不得用作其它用途、不存在暂时补流、增资属募投实施方式），因此“余额/内部划转是否等同可自由分配现金或新增经营现金流”这一问题在历史披露层面已有可用结论，无需立即进入Quick/DEEPEN；但FALSIFICATION_TEST所要求的关键判别项（是否解除用途限制、是否存在集团外经营现金来源、9月19日实际划款与当前投入）在本次范围内缺失，且本题不裁定当前余额或当前经营状态，故待触发条件（出现解除用途限制或新资金用途披露、实际划款/投入进展披露）后再行判别。本次为测试性输入，不强行进入Quick或DEEPEN。",
+    "schema_version": 1,
+    "what_is_this": "对广哈通信（300711）历史募集资金性质的一次PRE阶段限定性核查问题：在2026年上半年募集资金专项报告、8月20/21日向全资子公司广有通信增资公告、9月8日保荐跟踪报告三份已保存官方披露范围内，判断“募资余额”与“向全资子公司划转资金”能否等同于集团可自由分配现金或新增经营现金流，并区分批准额度、内部划转与实际募投项目支出。",
+    "why_surfaced_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不以涨幅、标签数量或接口验收需要认定投资优先级。"
+  },
+  "quick_research": null,
+  "receipt": {
+    "completion": "COMPLETE",
+    "elapsed_minutes_observed": 1,
+    "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+    "finished_at": "2026-09-20T02:55:22.205034Z",
+    "input_hash": "5b323ba38825f19c99c3a3a12e4cc5fb491e3e033a952d8f23994bdbf51c8902",
+    "last_completed_stage": "PRE",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + DeepSeek Responses / deepseek-flash",
+    "platform_task_id": "35485210755",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-20T02:54:52.704035Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "631ae8e1-82e8-56bf-a26b-c4dce9c38148",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/ca6d8afa9e7d3a2f37653a422de967c7322803a2/docs/readings/300711-question-execution-2026-09-19/context.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 2,
+    "started_at": "2026-09-20T02:55:04.473448Z",
+    "stop_or_failure_reason": null,
+    "technical_retries_used": 0,
+    "tool_calls_used": 2,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-20T02:55:04.473459Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/ca6d8afa9e7d3a2f37653a422de967c7322803a2/docs/readings/300711-question-execution-2026-09-19/context.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-20T02:55:22.204790Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "DEEPSEEK_RESPONSES:PRE",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
