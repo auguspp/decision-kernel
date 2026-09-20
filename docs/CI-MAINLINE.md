@@ -30,7 +30,7 @@ PR 测试显式 checkout `github.event.pull_request.head.sha`，main push 使用
 
 每个 CI run 的 `kernel-ci-<run>-<attempt>` artifact 保留 30 天，包含代码/event/run 身份、Python/包版本、CPU 数、pytest 完整 collection、JUnit XML 与 pytest 日志。这是 CI 诊断附件，不是 canonical Research/Radar/Market 状态，不进入 production restore 发现路径。上载使用 always；测试命令的 pipefail 保证 tee 不会吞掉失败。checkout/install 早期失败可能没有完整附件；stalled test 在 JUnit 最终写入前被 faulthandler 终止时也可能没有 `pytest.xml`，但 `pytest.log` 应保留触发时的线程栈。这仍是失败，不是 quiet success。
 
-`tests/test_ci_contract.py` 既检查命令/依赖/权限边界，也在临时目录用工作流的实际 Test 脚本运行明确的 synthetic pass/fail/worker-crash 样本，验证退出码与 JUnit，禁止用模拟的全项目 PASS 代替它。既有 main-only Judgment timeline 继续依赖 `test` 成功，原 publisher 仍走正常路径。
+`tests/test_ci_contract.py` 既检查命令/依赖/权限边界，也在临时目录用工作流的实际 Test 脚本运行明确的 synthetic pass/fail/worker-crash 样本，验证退出码与 JUnit，禁止用模拟的全项目 PASS 代替它。Judgment Timeline 已退出普通 main CI，只有显式 main `workflow_dispatch` 才生成其只读附件；原 publisher 仍走正常路径。
 
 ## 已完成清理与保留理由
 
@@ -70,6 +70,21 @@ PR #442 在保持完整 test identity、fail-closed、`loadfile` 与 `--max-work
 同一 PR 还修正两处 pytest 自动参数 ID：8MiB+ feed body 和512KiB+ Research progress body的**输入字节与断言完全不变**，只增加短语义 `ids`。实际诊断原件从 main run35410366885 的 `collection.txt` **9,386,728 bytes** / `pytest.xml` **9,555,747 bytes**，降到本轮 **473,881 / 约642.9KiB**；最长 collection 行从8,388,709字符降到16,485。ZIP因重复文本压缩本来很强，因此压缩包降幅较小；此改动的主要收益是 collection/JUnit/诊断可读性与传输解析负担，不冒充 pytest 主耗时优化。
 
 这一轮仍不启用 changed-file selection、marker、skip/xfail、fast/slow suite、自建 sharding、test-result cache 或 continue-on-error。Stock capture/replay 的重复完整 synthetic preparation 仍是下一候选，只允许复用不可变 upstream/baseline；被测 validator、mutable plan 和结果不得缓存。
+
+
+## 2026-09-20：Judgment Timeline 退出普通 main CI
+
+Human 在真实使用中确认，每次 main push 都重新发布同一组选定历史 Judgment Timeline 会制造 Actions Summary / artifact 噪音。该阅读面仍有价值，但它不是每次代码变更的测试产物。
+
+因此此切片只调整交付触发，不改变 Timeline 的历史来源、投影语义或完整 blocking suite：
+
+- `kernel-tests` 删除 `Judgment timeline attachment` job；PR/main CI 不再自动生成 Timeline artifact；
+- 新的 `.github/workflows/judgment-timeline.yml` 仅接受显式 `workflow_dispatch`，并只在本仓库 main 上执行；
+- 继续复用原生成器、固定 source commit 校验、只读权限、无业务 secrets/cache、GitHub 官方 artifact 上传与30天保留；
+- 构建 receipt 改为绑定专用 workflow 与 `workflow_dispatch`，仍验证实际 checkout HEAD 等于本次 `GITHUB_SHA`；
+- Timeline 的手动生成不是新 Judgment、Human exposure、Outcome、Research 或 production acceptance。
+
+这项清理不通过减少测试覆盖换速度；普通 CI 的 `test` job 命令、collection/JUnit、失败传播和诊断 artifact 均保持原合同。真实手动 artifact 发布是独立验收事实，不能由 PR CI 静态测试冒充。
 
 ## 诊断与回滚
 
