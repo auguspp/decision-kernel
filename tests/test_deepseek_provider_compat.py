@@ -174,7 +174,7 @@ def test_model_call_rejects_cross_provider_binding_before_secret_or_network(tmp_
             extra_parameters={"reasoning": {"effort": "none"}},
         )
     assert usage == [] and list(tmp_path.iterdir()) == []
-\n\ndef test_provider_error_diagnostic_rejects_unsafe_identifiers():
+def test_provider_error_diagnostic_rejects_unsafe_identifiers():
     exc = SimpleNamespace(
         status_code=True,
         request_id="unsafe request id with spaces",
