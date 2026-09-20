@@ -22,7 +22,8 @@ FIELDS = {
     "falsification_test", "required_classes", "known_counterevidence", "known_unknowns",
     "next_discriminating_search", "origins", "existing_research_relation",
 }
-ORIGIN_KINDS = {"SECTOR_LEADER", "CONCEPT_CURRENT_MEMBER", "INSTITUTIONAL_WINDOWS"}
+ORIGIN_KINDS = {"SECTOR_LEADER", "CONCEPT_CURRENT_MEMBER", "INSTITUTIONAL_WINDOWS",
+                "NEWS_EVENT_CANDIDATE", "INDUSTRY_VARIABLE_OBSERVATION"}
 
 
 def _require(ok: bool, code: str) -> None:
