@@ -133,6 +133,31 @@ def security_text_candidates(title: str):
     return sorted(set(re.findall(r"(?<!\d)(?:00|30|60|68)\d{4}(?!\d)", title)))
 
 
+def company_catalog(path: Path | None):
+    if path is None:
+        return [], None
+    body = path.read_bytes()
+    value = json.loads(body)
+    projection = value.get("projection") if isinstance(value, dict) else None
+    companies = projection.get("companies") if isinstance(projection, dict) else None
+    if not isinstance(companies, list):
+        raise ValueError("COMPANY_READING_SHAPE_UNSUPPORTED")
+    rows = []
+    for company in companies:
+        if not isinstance(company, dict) or not isinstance(company.get("thscode"), str):
+            continue
+        for name in company.get("source_names", []):
+            if isinstance(name, str) and len(name.strip()) >= 3:
+                rows.append((name.strip(), company["thscode"]))
+    return rows, {"bytes": len(body), "sha256": sha(body), "names": len(rows)}
+
+
+def company_name_candidates(title: str, catalog):
+    matches = {(name, code) for name, code in catalog if name in title}
+    return [{"name": name, "thscode": code, "qualification": "EXACT_SAVED_COMPANY_NAME_TEXT_MATCH_ONLY"}
+            for name, code in sorted(matches)]
+
+
 def capture(session: requests.Session, url: str, path: Path, *, label: str):
     requested_at = now()
     record = {"label": label, "url": url, "requested_at": requested_at, "received_at": None,
@@ -270,7 +295,12 @@ def cluster(rows: list[dict]):
                 "sources": sorted(set(x["source_id"] for x in observations)),
                 "rules": reasons,
                 "representative_title": observations[0]["title"],
-                "company_name_candidates": sorted({(c["name"], c["thscode"]) for x in observations for c in x.get("company_name_candidates", [])}),
+                "company_name_candidates": [
+                    {"name": name, "thscode": code, "qualification": "EXACT_SAVED_COMPANY_NAME_TEXT_MATCH_ONLY"}
+                    for name, code in sorted({(c["name"], c["thscode"])
+                                              for x in observations
+                                              for c in x.get("company_name_candidates", [])})
+                ],
                 **AUTHORITY,
             })
     return groups
