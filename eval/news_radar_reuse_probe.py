@@ -161,7 +161,7 @@ def capture(session: requests.Session, url: str, path: Path, *, label: str):
         return record, None
 
 
-def newsnow_rows(source_id: str, body: bytes, fetched_at: str):
+def newsnow_rows(source_id: str, body: bytes, fetched_at: str, catalog):
     value = json.loads(body)
     if not isinstance(value, dict) or value.get("status") not in {"success", "cache"}:
         raise ValueError("NEWSNOW_RESPONSE_STATUS_UNSUPPORTED")
@@ -200,6 +200,7 @@ def newsnow_rows(source_id: str, body: bytes, fetched_at: str):
             "published_at": published,
             "fetched_at": fetched_at,
             "security_text_candidates": security_text_candidates(title),
+            "company_name_candidates": company_name_candidates(title, catalog),
             "topic_keyword_candidates": topic_candidates(title),
             "article_fact_accepted": False,
             **AUTHORITY,
@@ -207,7 +208,7 @@ def newsnow_rows(source_id: str, body: bytes, fetched_at: str):
     return rows
 
 
-def rss_rows(source_id: str, body: bytes, fetched_at: str, allowed: tuple[str, ...]):
+def rss_rows(source_id: str, body: bytes, fetched_at: str, allowed: tuple[str, ...], catalog):
     parsed = feedparser.parse(body, sanitize_html=False, resolve_relative_uris=False)
     if parsed.get("bozo", 1) or parsed.get("version") not in {"rss20", "rss10", "atom10"}:
         raise ValueError("RSS_NOT_WELL_FORMED_SUPPORTED_FEED")
@@ -236,6 +237,7 @@ def rss_rows(source_id: str, body: bytes, fetched_at: str, allowed: tuple[str, .
             "published_at": published,
             "fetched_at": fetched_at,
             "security_text_candidates": security_text_candidates(title),
+            "company_name_candidates": company_name_candidates(title, catalog),
             "topic_keyword_candidates": topic_candidates(title),
             "article_fact_accepted": False,
             **AUTHORITY,
@@ -268,6 +270,7 @@ def cluster(rows: list[dict]):
                 "sources": sorted(set(x["source_id"] for x in observations)),
                 "rules": reasons,
                 "representative_title": observations[0]["title"],
+                "company_name_candidates": sorted({(c["name"], c["thscode"]) for x in observations for c in x.get("company_name_candidates", [])}),
                 **AUTHORITY,
             })
     return groups
@@ -277,9 +280,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--newsnow-base-url", default=NEWSNOW)
+    ap.add_argument("--company-reading", type=Path)
     args = ap.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     session = requests.Session()
+    catalog, company_reading = company_catalog(args.company_reading)
     attempts, observations = [], []
 
     for source_id in SOURCES:
@@ -289,7 +294,7 @@ def main() -> int:
         if body is None:
             continue
         try:
-            observations.extend(newsnow_rows(source_id, body, rec["received_at"]))
+            observations.extend(newsnow_rows(source_id, body, rec["received_at"], catalog))
         except (ValueError, json.JSONDecodeError) as exc:
             rec.update(status="SOURCE_UNAVAILABLE", error_type=type(exc).__name__, validation_reason=str(exc))
     for source_id, (url, allowed) in RSS.items():
@@ -298,7 +303,7 @@ def main() -> int:
         if body is None:
             continue
         try:
-            observations.extend(rss_rows(source_id, body, rec["received_at"], allowed))
+            observations.extend(rss_rows(source_id, body, rec["received_at"], allowed, catalog))
         except ValueError as exc:
             rec.update(status="SOURCE_UNAVAILABLE", error_type=type(exc).__name__, validation_reason=str(exc))
 
@@ -321,6 +326,9 @@ def main() -> int:
         "observations_with_qualified_publish_clock": sum(x["published_at"] is not None for x in observations),
         "topic_candidate_counts": {k: sum(k in x["topic_keyword_candidates"] for x in observations) for k in TOPICS},
         "security_text_candidate_observations": sum(bool(x["security_text_candidates"]) for x in observations),
+        "company_name_candidate_observations": sum(bool(x.get("company_name_candidates")) for x in observations),
+        "distinct_company_name_candidates": len({c["thscode"] for x in observations for c in x.get("company_name_candidates", [])}),
+        "company_reading": company_reading,
         "event_cluster_truth_accepted": False,
         **AUTHORITY,
     }
