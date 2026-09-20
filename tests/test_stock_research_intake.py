@@ -88,16 +88,19 @@ def test_model_input_over_bound_is_not_clipped_or_sent(tmp_path):
     assert not list(tmp_path.iterdir())
 
 
-def test_workflow_reuses_stock_successor_and_original_publication():
+def test_legacy_stock_research_is_manual_only_and_original_publication_remains():
     root=Path(__file__).parents[1]
     s=(root/'.github/workflows/stock-business-research.yml').read_text()
-    assert 'workflows: [hithink-stock-dump-trial]' in s and 'source-stock-run-id:' in s
+    trigger=s.split('on:\n',1)[1].split('\npermissions:',1)[0]
+    assert 'workflow_dispatch:' in trigger and 'source-stock-run-id:' in trigger
+    assert 'workflow_run:' not in trigger and 'schedule:' not in trigger and 'push:' not in trigger
     assert 'github.run_attempt == 1' in s and "github.ref == 'refs/heads/main'" in s
-    assert 'github.event.workflow_run.head_repository.full_name == github.repository' in s
+    assert 'github.event.workflow_run' not in s
     assert 'persist-credentials: false' in s and 'if: always()' in s
-    assert 'schedule:' not in s and '\n  push:' not in s and 'continue-research' not in s
+    assert 'continue-research' not in s
     publisher=(root/'.github/workflows/current-state-read-entry.yml').read_text()
     assert 'stock-business-research' in publisher and 'saved-disclosure-research' in publisher
+    assert 'hithink-stock-dump-trial' in publisher
     assert 'decision_kernel.runtime.current_state_delivery' in publisher
 
 
