@@ -272,5 +272,6 @@ def test_workflow_source_job_has_no_model_secret_or_contents_write():
     assert 'SUB2API' not in source and 'research-api' not in source
     assert '--prepare-sources' in source and 'persist-credentials: false' in source
     assert "github.event_name == 'workflow_dispatch' && inputs.prepare-sources" in source
-    assert "!(github.event_name == 'workflow_dispatch' && inputs.prepare-sources)" in original
+    assert 'workflow_run:' not in original.split('on:\n', 1)[1].split('\npermissions:', 1)[0]
+    assert '!inputs.prepare-sources' in original
     assert 'cancel-in-progress: false' in text
