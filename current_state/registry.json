@@ -104,6 +104,25 @@
         "bytes": 3911,
         "sha256": "d7fafc72d5612e23533e1d97e87c9682a857cd1ff920dd1196464e7a3fca5917"
       }
+    },
+    {
+      "id": "p0-000920-reports-only-profit-cash-20260920",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Human scope 5750493197 prioritizes financial reports and pauses other announcement acquisition. Bounded continuation of the original Woton root using the acquired 2026H1 Sina issuer-report PDF: p104 profit-to-operating-cash reconciliation and p16 membrane product/engineering facts; volume/price/mix and segment cash attribution remain unresolved. First typed progress checkpoint, not a new distinct question or formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance, Odds, Action or Watch. ON_DEMAND_ARCHIVE locator only; exact body recovery is separate. Source PDFs/service full text are not included in the two-file progress directory.",
+      "archive": {
+        "format": "RESEARCH_PROGRESS",
+        "expected_sha256": "0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6",
+        "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/000920-reports-only-progress-2026-09-20/workpaper.md",
+        "ref": "7e992b3ce83993897930076f64da0eb9cf2035f6",
+        "git_blob": "b61066823d813e543729002c031c452d14549787",
+        "bytes": 7194,
+        "sha256": "838523e30028189484e3dbc7cd00efbe0202030e1cc94aa785d99e6893875b9a"
+      }
     }
   ],
   "historical_handoffs": [

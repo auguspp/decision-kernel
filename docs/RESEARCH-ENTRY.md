@@ -1,6 +1,6 @@
 # Research / Odds / First Entry — 统一执行入口
 
-Version: research-decision-handoff-v1.2 · 2026-09-14  
+Version: research-decision-handoff-v1.3 · 2026-09-20  
 Status: HUMAN-APPROVED PROCESS DISCIPLINE / NO KERNEL SCHEMA OR RUNTIME CHANGE  
 Scope: ChatGPT、外部研究者与仓库会话中的公司研究、估值、Odds、第一笔讨论及其质疑复核。Investment authority = NONE。
 
@@ -50,7 +50,9 @@ Full Research 请求仍按原有界范围自主完成，不把阶段保存变成
 
 先读[公告按需与研究资料范围](research-source-scope-v0.md)。取得材料前声明本次问题、必要来源与反证检查、可选背景和未覆盖范围；不能在下载失败后把必要材料改成可选。公告获取失败是 `SOURCE_UNAVAILABLE / UNKNOWN`，不是没有事件、业务 WAIT/DROP 或整条 Radar 不可用。Full Research 仍需有界核验相关重要披露；关键材料缺失只限制其承载的论证，不以网页/标题/OCR代替原证据。
 
-复用原 `external_research_admission` 的声明式来源检查及 `save-progress/read-progress` 留存，不建立第二套准入框架。原 Stock `FIRST_BUSINESS_BASELINE` 的全部正文及历史执行合同仍保留；本次默认关闭的是 Inbox 的例行六公司扫描，**不是已上线新的自动 Stock 按需研究入口**，不得把旧失败改称新研究完成。
+当前按 Human 2026-09-20 的明确范围，**优先财报，其他公告暂缓**；先恢复[已有能力与本轮接续说明](handoffs/2026-09-20-report-priority-and-reuse.md)，再决定是否需要施工。此范围变更向前生效，不改写旧失败或宣称已检查报告期后全部事件。只有具体公告原文不可替代且阻断一项必要结论时，才说明文件、影响与替代材料为何不足；局部缺口不升级成整个项目停止。
+
+复用原 `external_research_admission` 的声明式来源检查及 `save-progress/read-progress` 留存，不建立第二套准入框架。原 Stock `FIRST_BUSINESS_BASELINE` 的全部正文及历史执行合同仍保留。显式 reviewed-question 输入、`stock_question_host` 和 `stock_daily_question` 已有实现；当前 daily 请求默认关闭，仍有特定来源和执行绑定，不能称为任意公司均可自动运行。Inbox 例行六公司扫描默认关闭，与这些已实现能力分别记录；不得把旧失败改称新研究完成。
 
 ## 1. 先确定在回答哪种问题
 
