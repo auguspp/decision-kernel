@@ -1,0 +1,29 @@
+{
+  "format": "saved-external-radar-reading-v1",
+  "enabled": true,
+  "news": {
+    "run_id": 35486102537,
+    "workflow": ".github/workflows/radar-newsnow-selfhost-probe-20260920.yml",
+    "head_branch": "probe/newsnow-selfhost-20260920",
+    "head_sha": "9ed9c23680a62dd475fe8bd9e74e24a5c645da5d",
+    "artifact_id": 10597975192,
+    "artifact_name": "newsnow-selfhost-probe-35486102537-1",
+    "bytes": 53446,
+    "sha256": "8fdf2884e86f0b47c4a268345715d07471cdf14d7a5ac524f347ca9dc153fbe0"
+  },
+  "industry": {
+    "run_id": 35486156318,
+    "workflow": ".github/workflows/radar-industry-followup-probe-20260920.yml",
+    "head_branch": "probe/industry-main-continuous-20260920",
+    "head_sha": "2eb1e7bfdc25be2ce4315c344983939cf767b212",
+    "artifact_id": 10597645925,
+    "artifact_name": "industry-inflection-followup-35486156318-1",
+    "bytes": 127752,
+    "sha256": "8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502"
+  },
+  "window": {
+    "price_start": "2026-04-01",
+    "recent_start": "2026-08-01",
+    "period_end": "2026-09-18"
+  }
+}
