@@ -1,0 +1,37 @@
+{
+  "meaning": "OFFLINE_ARITHMETIC_NOT_PDF_AUTHENTICATION_OR_ADMISSION",
+  "input_archive_sha256": "8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502",
+  "LC": {
+    "price_count": 118,
+    "warehouse_count": 35,
+    "return_5_observations": "-0.0568164960688325174306482717697670968699",
+    "return_20_observations": "-0.1986387698512730022687169145449962188051",
+    "warehouse_delta_raw_unit": "14553.0",
+    "warehouse_unit": "UNKNOWN"
+  },
+  "Ganfeng_2025_IFRS_note4": {
+    "unit": "RMB_thousand",
+    "external_revenue_percent": [
+      "59.42575944409899091698962282557279392052",
+      "37.44227056310172662819733615560287411096",
+      "3.131969992799282454813041018824331968519"
+    ],
+    "external_revenue_total": "22797728",
+    "intersegment_elimination": "3893589",
+    "reconciled_profit_before_tax": "1188453",
+    "lithium_price_elasticity": "NOT_ESTABLISHED"
+  },
+  "EVE_2025_PRC_GAAP": {
+    "unit": "RMB",
+    "power_storage_revenue_percent": "81.82804590478374204881964692697125745587",
+    "all_raw_materials_cost_percent_reported": "81.99",
+    "all_raw_materials_cost_percent_recalculated": "81.98045375377492137732326178384763974906",
+    "display_percentage_difference_pp": "0.00954624622507862267673821615236025094",
+    "lithium_only_cost_share": "NOT_ESTABLISHED",
+    "raw_material_cost_savings_retention": "NOT_ESTABLISHED"
+  },
+  "network_calls": 0,
+  "model_calls": 0,
+  "formal_Pre_calls": 0,
+  "investment_authority": "NONE"
+}
