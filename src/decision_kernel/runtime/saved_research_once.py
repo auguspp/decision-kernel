@@ -297,7 +297,10 @@ def _provider_error_diagnostic(exc):
     if isinstance(request_id, str) and re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", request_id):
         result["request_id"] = request_id
     body = getattr(exc, "body", None)
-    error = body.get("error") if isinstance(body, dict) else None
+    error = None
+    if isinstance(body, dict):
+        nested = body.get("error")
+        error = nested if isinstance(nested, dict) else body
     if isinstance(error, dict):
         for key in ("code", "type"):
             value = error.get(key)
@@ -334,6 +337,17 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
     body, schema, output_format, parameters = model_request(
         context, output_type, max_prompt_bytes=max_prompt_bytes,
         model=model, extra_parameters=extra_parameters)
+    if binding == deepseek:
+        # OpenAI SDK 3.11.0 injects text.format.strict=true for Pydantic types.
+        # DeepSeek Responses documents json_schema as type/name/schema; remove
+        # only this SDK-specific field while preserving the exact schema itself.
+        require(output_format.get("type") == "json_schema"
+                and output_format.get("strict") is True
+                and set(output_format) == {"type", "strict", "name", "schema"},
+                "DeepSeek SDK output format changed")
+        output_format = {k: v for k, v in output_format.items() if k != "strict"}
+        parameters = response_parameters(
+            body, output_format, model=model, extra_parameters=extra_parameters)
     from openai import OpenAI, DefaultHttpxClient
     record = {"stage": stage, "started_at": now(), "provider": provider,
               "provider_base_url": base_url, "requested_model": model,
