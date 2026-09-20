@@ -87,6 +87,23 @@
         "bytes": 4996,
         "sha256": "071d8048df1b4f4c76729ffd927dd1d587f57af6a8c0e35a36eadfebfd686191"
       }
+    },
+    {
+      "id": "p0-000920-source-access-and-dedup-20260920",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Follow-up to the 2026-09-20 Woton source/question draft. Normal browser checks still acquired no official PDF or complete current disclosure inventory; issuer report directories were outdated. Bounded relation review of retained inputs, 529 local refs and visible GitHub discussions found no additional formal Woton question, while substantive overlap with the failed baseline remains. Continue the same draft; NEW_DISTINCT_QUESTION is not assigned. Seven files retain access observations, exact dedup scope and pending interface reuse. NOT_ADMITTED / NOT_EXECUTED; no Pre/Quick, business WAIT/DROP, Human acceptance or automatic supersession. Recover this exact archive before citing its body.",
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/000920-source-review-continuation-2026-09-20/README.md",
+        "ref": "02a8f8f2c1aadca8287c1f68ebbb6be2f7d8ac7e",
+        "git_blob": "07a090b69403e124fab36443bd3076ce215b2268",
+        "bytes": 3911,
+        "sha256": "d7fafc72d5612e23533e1d97e87c9682a857cd1ff920dd1196464e7a3fca5917"
+      }
     }
   ],
   "historical_handoffs": [
