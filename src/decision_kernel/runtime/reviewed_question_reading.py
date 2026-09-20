@@ -251,7 +251,54 @@ def collect(collector, payload):
             'items': items, 'new_research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
 
 
-def stock_review_scope(payload):
+def _saved_stock_observations(collector, payload):
+    lane = payload.get('lanes', {}).get('stock', {})
+    stock = lane.get('last_qualified_result')
+    if stock is None:
+        return {}, 'STOCK_SCOPE_UNAVAILABLE'
+    spec = stock.get('details', {}).get('reading/stock-reading.json')
+    if not isinstance(spec, dict):
+        return {}, 'STOCK_DETAIL_NOT_RETAINED'
+    model.check(spec.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT',
+                'Stock observation detail must remain in same reading')
+    raw = collector.files[model.safe_path(spec['read_path'])]
+    model.check(len(raw) == spec['bytes'] and once.sha(raw) == spec['sha256']
+                and model.blob_sha(raw) == spec['git_blob'], 'Stock observation retained detail differs')
+    report = identity._json(raw)
+    projection = report['projection']
+    model.check(report['projection_hash'] == canonical_hash(projection)
+                and report['projection_hash'] == stock.get('projection_hash')
+                and projection['market_session'] == stock.get('market_session'),
+                'Stock observation detail identity differs')
+    rows = projection['all_stock_observations']
+    model.check(isinstance(rows, list) and len(rows) <= 16
+                and len({r['thscode'] for r in rows}) == len(rows),
+                'Stock observation detail scope invalid')
+    return {r['thscode']: r for r in rows}, 'SAME_READING_STOCK_OBSERVATIONS'
+
+
+def _question_prompts(row, observation):
+    if not isinstance(observation, dict):
+        return [], []
+    prompts, directions = [], []
+    company = row.get('company_name') or row['thscode']
+    origins = observation.get('current_origins') or observation.get('origins') or []
+    for origin in origins:
+        for source in origin.get('direction_sources') or []:
+            name, code = source.get('name'), source.get('thscode')
+            if isinstance(name, str) and name and isinstance(code, str) and code:
+                directions.append({'name': name, 'thscode': code, 'family': source.get('family')})
+                prompts.append('来源方向“' + name + '”中，' + company
+                               + '的真实业务联系、收入/利润/现金暴露是否成立？'
+                               '哪些公开证据可以推翻这一联系？')
+        prompt = origin.get('review_question')
+        if not prompts and isinstance(prompt, str) and prompt:
+            prompts.append(prompt)
+    return list(dict.fromkeys(prompts)), list({(d['thscode'], d['name'], d.get('family')): d
+                                               for d in directions}.values())
+
+
+def stock_review_scope(payload, observations=None, observation_status='NOT_READ'):
     lane = payload.get('lanes', {}).get('stock', {})
     stock = lane.get('last_qualified_result')
     if stock is None:
@@ -259,25 +306,63 @@ def stock_review_scope(payload):
     rows = stock.get('dispositions')
     model.check(isinstance(rows, list) and len(rows) <= 16
                 and len({r['thscode'] for r in rows}) == len(rows), 'Stock review scope invalid')
+    work = payload.get('research', {}).get('stock_business_work', {})
+    work_items = work.get('items', []) if isinstance(work, dict) else []
+    model.check(isinstance(work_items, list) and len(work_items) <= 16
+                and len({r['thscode'] for r in work_items}) == len(work_items),
+                'Stock business relation scope invalid')
+    by_code = {r['thscode']: r for r in work_items}
+    observations = observations or {}
     items = []
     for row in rows:
         failed = row.get('input_failure') is not None
         passed = row['status'] == 'CONTRACT_CHECKED_RAW_READING' and not failed
-        disposition = ('DATA_UNAVAILABLE_NOT_PRICE_REJECTED' if failed else
-                       'QUESTION_NOT_YET_REVIEWED' if passed else 'ORIGINAL_PRICE_DISPOSITION_ONLY')
+        relation = by_code.get(row['thscode'])
+        if failed:
+            disposition = 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED'
+        elif not passed:
+            disposition = 'ORIGINAL_PRICE_DISPOSITION_ONLY'
+        elif relation is not None:
+            disposition = {
+                'PRE_EXECUTION_FAILURE': 'EXISTING_BASELINE_SOURCE_OR_INPUT_GAP',
+                'VALIDATED_EXECUTION_GAP': 'EXISTING_BASELINE_EXECUTION_GAP',
+                'VALIDATED_FUNNEL_CANDIDATE': 'EXISTING_BASELINE_RESULT_PRESENT',
+                'RETAINED_NO_RESEARCH_RESULT': 'EXISTING_BASELINE_PARTIAL_NO_RESULT',
+            }.get(relation.get('status'), 'EXISTING_BASELINE_STATE_PRESENT')
+        elif work.get('status') == 'READ_OK':
+            disposition = 'QUESTION_REVIEW_REQUIRED'
+        else:
+            disposition = 'RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION'
+        prompts, directions = _question_prompts(row, observations.get(row['thscode']))
+        existing = None
+        if relation is not None:
+            existing = {k: deepcopy(relation.get(k)) for k in (
+                'status', 'question_kind', 'execution_id', 'failure_status', 'error_type',
+                'error_code', 'terminal_state', 'finished_at', 'sources') if k in relation}
         items.append({'thscode': row['thscode'], 'company_name': row.get('company_name'),
                       'original_stock_disposition': deepcopy(row), 'review_status': disposition,
                       'research_scope_supported': intake.supported(row['thscode']),
+                      'origin_question_prompts': prompts, 'origin_directions': directions,
+                      'observation_context_status': observation_status if row['thscode'] in observations
+                      else 'NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS',
+                      'existing_research_relation': existing,
+                      'distinct_question_assessment': 'NOT_PERFORMED',
                       'economic_question_assessed': False, 'research_execution_allowed': False})
     source_run = stock.get('archive', {}).get('origin_run', {}).get('id')
-    return {'status': 'SAVED_STOCK_SCOPE_NOT_A_COMPLETED_RESEARCH_REVIEW',
+    return {'status': 'SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW',
             'batch_id': canonical_hash({'source_run': source_run, 'market_session': stock.get('market_session'),
                                        'projection_hash': stock.get('projection_hash'), 'dispositions': rows}),
             'source_run_id': source_run, 'market_session': stock.get('market_session'),
             'stock_lane_health': lane.get('health'), 'original_coverage': deepcopy(stock.get('coverage')),
             'items': items, 'reviewed_question_count': 0,
-            'meaning': 'NO_RESEARCH_REVIEW_RECEIPT_IS_NOT_NO_USEFUL_QUESTION', **model.AUTHORITY}
-
+            'question_review_required_count': sum(r['review_status'] == 'QUESTION_REVIEW_REQUIRED' for r in items),
+            'existing_baseline_gap_count': sum(r['review_status'] in {
+                'EXISTING_BASELINE_SOURCE_OR_INPUT_GAP', 'EXISTING_BASELINE_EXECUTION_GAP',
+                'EXISTING_BASELINE_PARTIAL_NO_RESULT'} for r in items),
+            'data_unavailable_count': sum(r['review_status'] == 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED' for r in items),
+            'automatic_research_execution': False,
+            'meaning': 'OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION',
+            **model.AUTHORITY}
 
 def _text(value):
     result = html.escape(str(value), quote=True).replace('\n', ' ').replace('\r', ' ')
@@ -295,7 +380,13 @@ def render(report):
     for row in scope['items']:
         lines.append('- ' + _text(row.get('company_name') or row['thscode']) + ' ' + _text(row['thscode'])
                      + '：' + _text(row['review_status']))
-    lines += ['', '未提供问题审阅回执的对象仍是未检查，不得由未执行Pre反推没有问题。', '', '## 已保存问题执行', '']
+        if row.get('existing_research_relation'):
+            rel = row['existing_research_relation']
+            lines.append('  - 既有研究关系：' + _text(rel.get('status'))
+                         + (' / ' + _text(rel.get('error_type')) if rel.get('error_type') else ''))
+        for prompt in row.get('origin_question_prompts', []):
+            lines.append('  - 观察问题草稿：' + _text(prompt))
+    lines += ['', '观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。', '', '## 已保存问题执行', '']
     work = report['question_work']
     lines.append('读取状态：' + _text(work['status']))
     for item in work['items']:
@@ -355,7 +446,11 @@ def attach(collector, baseline):
     model.validate_read_package(baseline)
     before_files, before_sources = dict(collector.files), dict(collector.sources)
     try:
-        scope = stock_review_scope(baseline)
+        observations, observation_status = _saved_stock_observations(collector, baseline)
+    except ERRORS:
+        observations, observation_status = {}, 'STOCK_OBSERVATION_DETAIL_UNAVAILABLE_OR_REJECTED'
+    try:
+        scope = stock_review_scope(baseline, observations, observation_status)
     except ERRORS:
         scope = {'status': 'STOCK_SCOPE_UNAVAILABLE', 'items': [], 'meaning': 'NOT_ZERO_QUESTIONS'}
     try:
