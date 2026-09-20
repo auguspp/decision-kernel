@@ -3,6 +3,7 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import socket
+from types import SimpleNamespace
 
 import pytest
 
@@ -15,6 +16,7 @@ from decision_kernel.runtime import stock_question_host as host
 from decision_kernel.runtime import stock_question_continuation as continuation
 from decision_kernel.runtime import stock_research_intake as intake
 from decision_kernel.runtime import stock_research_reading as legacy
+from decision_kernel.runtime.read_blob_reuse import GitHubReadReuseAPI
 from test_saved_research_once import pre, quick
 from test_stock_question_host import setup_question
 from test_stock_question_continuation import setup_continuation
@@ -281,3 +283,17 @@ def test_near_full_original_index_keeps_rows_in_hash_bound_details(tmp_path, mon
     assert after_size < 192 * 1024 and after_size - before_size < 3000
     assert len(report(c, result)['question_work']['items']) == 1
     assert result['research']['synthetic_existing_payload'] == research['synthetic_existing_payload']
+
+
+def test_real_sized_prior_reading_uses_proven_blob_write_count_not_file_count():
+    api = GitHubReadReuseAPI('SYNTHETIC', max_calls=252)
+    api.calls = 230
+    files = {f'prior/{i}.json': f'kept-{i}'.encode() for i in range(475)}
+    api.proven_read_blobs = frozenset(model.blob_sha(raw) for raw in files.values())
+    c = SimpleNamespace(api=api, files=files)
+    reader._reserve(c, new_files=3)
+    assert len(c.files) == 475
+    changed = dict(files)
+    changed['new.json'] = b'new-value'
+    c.files = changed
+    reader._reserve(c, new_files=2)
