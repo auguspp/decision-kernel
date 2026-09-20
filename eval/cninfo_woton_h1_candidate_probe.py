@@ -182,7 +182,8 @@ def _extract(raw):
 def _document(output, record, *, retain_extraction=False):
     result = {"request_sequence": record["sequence"], "candidate": record["candidate"],
               "status": "PDF_NOT_RETAINED", "extraction_file": None, "extraction_sha256": None,
-              "identity": None, "parse_error_type": None, "sina_comparison": "NOT_COMPARED"}
+              "identity": None, "parse_error_type": None, "sina_comparison": "NOT_COMPARED",
+              "page_count": None, "text_sha256": None}
     if record["body_file"] is None:
         return result
     raw = (output / record["body_file"]).read_bytes()
@@ -206,6 +207,7 @@ def _document(output, record, *, retain_extraction=False):
                 "ticker_in_text": bool(re.search(r"(?<![0-9])000920(?![0-9])", text)),
                 "statement_period": bool(re.search(r"合并利润表.{0,120}?项目2026年半年度", compact_text))}
     result.update(extraction_file=filename, extraction_sha256=_sha(_raw(parsed)), identity=identity,
+                  page_count=parsed["page_count"], text_sha256=parsed["text_sha256"],
                   status="PDF_PARSED_IDENTITY_CHECKED_NOT_RESEARCH" if all(identity.values())
                          else "PDF_RETAINED_DOCUMENT_IDENTITY_MISMATCH")
     return result
@@ -393,8 +395,25 @@ def main(argv=None):
     parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args(argv)
     if not args.verify_only:
-        run_probe(args.output, native_identity())
+        identity = native_identity()
+        result = run_probe(args.output, identity)
     print(verify(args.output))
+    if not args.verify_only:
+        observations = {
+            "identity": {"code_commit": identity["GITHUB_SHA"], "run_id": identity["GITHUB_RUN_ID"]},
+            "directory": {"status": result["catalog"]["status"],
+                          "match_status": result["catalog"]["match_status"],
+                          "candidate_count": len(result["catalog"]["candidates"])},
+            "requests": [{key: row[key] for key in ("sequence", "kind", "url", "http_status",
+                "received_bytes", "body_sha256", "reason", "started_at", "finished_at")}
+                for row in result["records"]],
+            "documents": [{"announcement_id": doc["candidate"]["announcement_id"],
+                **{key: doc[key] for key in ("status", "identity", "page_count", "text_sha256", "sina_comparison")}}
+                for doc in result["documents"]],
+            **{key: result[key] for key in ("attempted_requests", "stop_reason", "internal_failure",
+                                           "model_calls", "research_work_writes")},
+        }
+        print("SOURCE_PROBE_OBSERVATIONS=" + json.dumps(observations, ensure_ascii=False, sort_keys=True))
     return 0
 
 

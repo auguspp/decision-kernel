@@ -262,6 +262,45 @@ def test_verify_only_never_checks_live_identity_or_makes_request(tmp_path, monke
     assert p.main(["--output", str(output), "--verify-only"]) == 0
 
 
+def test_capture_cli_logs_only_verified_bounded_observations_once(tmp_path, monkeypatch, capsys):
+    private = "BODY_ONLY_DO_NOT_LOG_" + "x" * 100_000
+    rows = [announcement(internal_note=private), announcement("102", "2026年半年度报告（修订版）")]
+    factory, calls = session_factory([directory(rows), Response(headers={"Set-Cookie": private}),
+                                     Response(b"<html>BODY_ONLY_DO_NOT_LOG</html>")])
+    native = {"GITHUB_SHA": "a" * 40, "GITHUB_RUN_ID": "123"}
+    capture = p.run_probe
+    monkeypatch.setattr(p, "native_identity", lambda: native)
+    monkeypatch.setattr(p, "run_probe", lambda output, identity: capture(output, identity, session_factory=factory))
+    output = tmp_path / "capture"
+    assert p.main(["--output", str(output)]) == 0
+    logged = capsys.readouterr().out
+    lines = [line for line in logged.splitlines() if line.startswith("SOURCE_PROBE_OBSERVATIONS=")]
+    assert len(lines) == 1 and len(lines[0]) < 6000
+    observed = json.loads(lines[0].split("=", 1)[1])
+    saved = json.loads((output / "result.json").read_bytes())
+    assert observed["identity"] == {"code_commit": "a" * 40, "run_id": "123"}
+    assert observed["directory"]["candidate_count"] == 2
+    assert observed["directory"]["status"] == saved["catalog"]["status"]
+    assert observed["attempted_requests"] == len(calls) == 3
+    for actual, record in zip(observed["requests"], saved["records"]):
+        assert set(actual) == {"sequence", "kind", "url", "http_status", "received_bytes",
+                               "body_sha256", "reason", "started_at", "finished_at"}
+        assert actual == {key: record[key] for key in actual}
+    document = observed["documents"][0]
+    parsed = json.loads((output / "extraction-2.json").read_bytes())
+    assert document["page_count"] == parsed["page_count"] == 2
+    assert document["text_sha256"] == parsed["text_sha256"]
+    assert document["identity"] == saved["documents"][0]["identity"]
+    assert observed["documents"][1]["page_count"] is None
+    assert observed["documents"][1]["text_sha256"] is None
+    assert observed["model_calls"] == observed["research_work_writes"] == 0
+    assert all(text not in logged for text in ("BODY_ONLY_DO_NOT_LOG", "沃顿科技", "半年度报告", "Set-Cookie"))
+    before = {path.name: path.read_bytes() for path in output.iterdir()}
+    assert p.main(["--output", str(output), "--verify-only"]) == 0
+    assert "SOURCE_PROBE_OBSERVATIONS=" not in capsys.readouterr().out
+    assert len(calls) == 3 and before == {path.name: path.read_bytes() for path in output.iterdir()}
+
+
 def test_existing_output_is_never_reused(tmp_path):
     output, _, _ = run_case(tmp_path, [directory([])])
     factory, calls = session_factory([])
