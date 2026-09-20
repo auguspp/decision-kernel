@@ -159,7 +159,22 @@ def test_provider_error_diagnostic_is_finite_and_drops_message(tmp_path, monkeyp
     assert "SECRET" not in json.dumps(record)
 
 
-def test_provider_error_diagnostic_rejects_unsafe_identifiers():
+
+
+def test_model_call_rejects_cross_provider_binding_before_secret_or_network(tmp_path):
+    usage = []
+    with pytest.raises(once.TrialError, match="provider binding"):
+        once.model_call(
+            "pre", probe.PROMPT, PreResearchResult, tmp_path, usage,
+            max_prompt_bytes=once.MAX_PROMPT_BYTES,
+            base_url=once.DEEPSEEK_BASE_URL,
+            model=once.MODEL,
+            api_key_env="DEEPSEEK_API_KEY",
+            provider=probe.PROVIDER,
+            extra_parameters={"reasoning": {"effort": "none"}},
+        )
+    assert usage == [] and list(tmp_path.iterdir()) == []
+\n\ndef test_provider_error_diagnostic_rejects_unsafe_identifiers():
     exc = SimpleNamespace(
         status_code=True,
         request_id="unsafe request id with spaces",
