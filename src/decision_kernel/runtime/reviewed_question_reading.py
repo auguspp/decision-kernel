@@ -313,8 +313,22 @@ def render(report):
 
 
 def _seal(collector, baseline, work, scope, before_readme):
+    # Full rows are already retained in REPORT. The original 192KiB root index
+    # stays a small, hash-bound entry point, not a duplicate of every source.
+    summary = {key: deepcopy(work[key]) for key in
+               ('status', 'work_ref', 'work_commit', 'scope', 'meaning', 'error_type', 'details', 'structured')
+               if key in work}
+    summary.update(stock_scope_status=scope['status'], stock_batch_id=scope.get('batch_id'),
+                   stock_market_session=scope.get('market_session'),
+                   scope_coverage='FULL_DECLARED_ROWS_IN_SAME_READING_DETAILS',
+                   new_research_execution='NOT_EXECUTED', **model.AUTHORITY)
+    if work['status'] != 'UNAVAILABLE_OR_REJECTED':
+        summary['execution_count'] = len(work['items'])
+        summary['rejected_execution_count'] = sum(i['status'] == 'UNAVAILABLE_OR_REJECTED' for i in work['items'])
+    else:
+        summary['execution_count'] = None
     research = deepcopy(baseline['research'])
-    research['reviewed_question_work'] = {**work, 'stock_review_scope': scope}
+    research['reviewed_question_work'] = summary
     result = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
         capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
