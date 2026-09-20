@@ -276,11 +276,11 @@ def main() -> int:
     else:
         gaps.append({"target": "ALL", "reason": "VARIETIES_SOURCE_UNAVAILABLE"})
 
-    basis_latest = {}
+    basis_latest_items = []
     if basis_latest_env is not None:
         try:
             _, items = item_list(basis_latest_env)
-            basis_latest = {str(x.get("ticker", "")).upper(): x for x in items if isinstance(x, dict)}
+            basis_latest_items = [x for x in items if isinstance(x, dict)]
         except ValueError as exc:
             gaps.append({"target": "BASIS_LATEST", "reason": str(exc)})
     else:
@@ -289,11 +289,19 @@ def main() -> int:
     for code in TARGETS:
         row = varieties.get(code)
         direct = row.get("main_contract_thscode") if isinstance(row, dict) else None
-        continuous = basis_latest.get(code)
-        continuous_code = continuous.get("thscode") if isinstance(continuous, dict) else None
+        expected_name = row.get("name") if isinstance(row, dict) else None
+        candidates = [x for x in basis_latest_items
+                      if (expected_name and x.get("variety_name") == expected_name)
+                      or (isinstance(x.get("thscode"), str)
+                          and x["thscode"].upper().startswith(code + "ZL."))]
+        continuous_codes = sorted({x.get("thscode") for x in candidates
+                                   if isinstance(x.get("thscode"), str) and x.get("thscode")})
+        continuous_code = continuous_codes[0] if len(continuous_codes) == 1 else None
+        continuous = next((x for x in candidates if x.get("default_value") == "Y"), candidates[0] if candidates else None)
         thscode = direct if isinstance(direct, str) and direct else continuous_code
         if not isinstance(thscode, str) or not thscode:
-            gaps.append({"target": code, "reason": "PUBLIC_FUTURES_IDENTITY_NOT_RESOLVED"})
+            gaps.append({"target": code, "reason": "PUBLIC_FUTURES_IDENTITY_NOT_RESOLVED",
+                         "candidate_main_continuous_codes": continuous_codes})
             continue
         targets[code] = {
             "variety": row or {"variety_code": code, "name": continuous.get("variety_name") if continuous else None,
@@ -301,6 +309,7 @@ def main() -> int:
             "main_contract_thscode": thscode,
             "identity_source": "VARIETIES_MAIN_CONTRACT" if direct else "PUBLIC_BASIS_MAIN_CONTINUOUS_LATEST",
             "basis_latest": continuous,
+            "basis_latest_spot_indicator_id": continuous.get("spot_indicator_id") if continuous else None,
         }
 
     position_by_code = {}
