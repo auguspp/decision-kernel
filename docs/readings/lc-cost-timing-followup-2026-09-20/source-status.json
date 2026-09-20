@@ -1,0 +1,196 @@
+{
+  "kind": "RESEARCHER_PARAPHRASE_AND_SELECTED_VALUES_NOT_RAW_PDF_OR_TOOL_PAYLOAD",
+  "review_date": "2026-09-20",
+  "assembled_at": "2026-09-20T06:47:49.723417+00:00",
+  "main": "d38f0df0ec8fe60db0b5cd8569aadca8ca2465f6",
+  "reading": "a5b49eafed1fe14ab85df7fe023b3c5cb0244525",
+  "raw_pdf_custody": "NOT_COMPLETED",
+  "full_H1_required_class": "NOT_SATISFIED",
+  "full_update_inventory": "INCOMPLETE",
+  "sources": [
+    {
+      "id": "S-A",
+      "security": "300014.SZ",
+      "announcement": "2026-084",
+      "document_date": "2026-06-15",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-06-15/1225371777.PDF",
+      "pages": 2,
+      "representation": "WEB_PARSED_PDF_PLUS_VISUAL_PAGE_0",
+      "web_reference": "turn394911view1",
+      "screenshot_reference": "turn211858view1",
+      "time_scope": "Forecast Jan1-Jun30 2026; issued before period end, not final interim results",
+      "paraphrase": "Issuer described rising supply-chain costs and procurement/planning/financial-tool responses. Preliminary and unaudited.",
+      "adopted_for": "Question formation only; test procurement/inventory/customer repricing timing",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "exact_web_access_clock": "NOT_EXPOSED_BY_TOOL"
+    },
+    {
+      "id": "S-B",
+      "security": "300014.SZ",
+      "announcement": "2026-090",
+      "document_date": "2026-07-04",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409731.PDF",
+      "pages": 4,
+      "representation": "WEB_PARSED_PDF_ONLY",
+      "web_reference": "turn869383view0",
+      "visual_table_check": "ATTEMPTED_BUT_UNAVAILABLE",
+      "screenshot_attempts": [
+        "turn802211view0",
+        "turn985202view0"
+      ],
+      "paraphrase": "Related-party procurement description includes lithium-related inputs, as well as other goods/services; pricing is negotiated with reference to market. Expected transactions are not actual lithium-only cost.",
+      "table_amounts_used_for_calculation": false,
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "adopted_for": "Procurement-category and group-boundary questions, not numeric materiality",
+      "exact_web_access_clock": "NOT_EXPOSED_BY_TOOL"
+    },
+    {
+      "id": "S-C",
+      "security": "300014.SZ",
+      "announcement": "2026-092",
+      "document_date": "2026-07-04",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409727.PDF",
+      "pages": 4,
+      "representation": "WEB_PARSED_PDF_PLUS_VISUAL_PAGE_0",
+      "web_reference": "turn869383view1",
+      "screenshot_reference": "turn985202view1",
+      "paraphrase": "Authorized possible sales of an associate shareholding over the following twelve months; timing/price/effects uncertain. Authorization does not establish execution or operating cash improvement.",
+      "adopted_for": "Countercheck of future cash attribution; not an explanation of H1 or a sale-completion claim",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "exact_web_access_clock": "NOT_EXPOSED_BY_TOOL"
+    },
+    {
+      "id": "S-D",
+      "security": "300014.SZ",
+      "announcement": "2026-093",
+      "document_date": "2026-07-04",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409734.PDF",
+      "pages": 2,
+      "representation": "WEB_PARSED_PDF_ONLY",
+      "web_reference": "turn667956view2",
+      "visual_check": "UNAVAILABLE",
+      "paraphrase": "Announced unified PRC-GAAP financial statement preparation. Verify basis for later comparisons; no operating effect is established here.",
+      "raw_pdf_saved": false,
+      "raw_pdf_sha256": null,
+      "exact_web_access_clock": "NOT_EXPOSED_BY_TOOL"
+    }
+  ],
+  "unacquired_primary_targets": [
+    {
+      "security": "002460.SZ",
+      "period": "2026H1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225528828.PDF",
+      "locator_provenance": "PRIOR_SECONDARY_LOCATOR",
+      "body_status": "NOT_OBTAINED"
+    },
+    {
+      "security": "002460.SZ",
+      "period": "2026H1",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608280006758316_1.PDF",
+      "locator_provenance": "SECONDARY_REFERENCE_LIST",
+      "body_status": "NOT_OBTAINED"
+    },
+    {
+      "security": "002460.SZ",
+      "kind": "IR record Aug31",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608311828816542_1.PDF",
+      "body_status": "NOT_OBTAINED"
+    },
+    {
+      "security": "300014.SZ",
+      "period": "2026H1",
+      "url": "https://financialfilings.com/filings/eve-energy-co-ltd/interim-quarterly-report/2026/56640170/",
+      "locator_provenance": "DISCOVERY_ID_AND_SITE_URL_PATTERN",
+      "body_status": "NOT_OBTAINED"
+    },
+    {
+      "security": "002460.SZ",
+      "period": "2026H1",
+      "url": "https://financialfilings.com/filings/ganfeng-lithium-group-co-ltd/interim-quarterly-report/2026/60245295/",
+      "locator_provenance": "SEARCH_INDEX",
+      "body_status": "NOT_OBTAINED"
+    }
+  ],
+  "view_discrepancies": [
+    {
+      "url": "https://www.ganfenglithium.com/ir_en.html",
+      "search_view": "2026H1 presentation lead",
+      "opened_view": "older activities",
+      "cause": "UNKNOWN",
+      "absence_claim": false
+    },
+    {
+      "url": "https://gg.cfi.cn/ggqw/10613/300014.html?client=phone",
+      "search_view": "Sep18 items",
+      "opened_view": "latest listed Jul4",
+      "cause": "UNKNOWN",
+      "absence_claim": false
+    },
+    {
+      "url": "https://financialfilings.com/companies/eve-energy-co-ltd/",
+      "search_view": "H1 item56640170",
+      "opened_view": "latest Aug6",
+      "cause": "UNKNOWN",
+      "absence_claim": false
+    }
+  ],
+  "direct_requests": [
+    {
+      "label": "ganfeng-h1-official",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225528828.PDF",
+      "requested_at": "2026-09-20T06:35:14.674365+00:00",
+      "status": "SOURCE_UNAVAILABLE",
+      "received_at": "2026-09-20T06:35:14.678370+00:00",
+      "error_type": "ConnectionError",
+      "error_message": "HTTPSConnectionPool(host='static.cninfo.com.cn', port=443): Max retries exceeded with url: /finalpage/2026-08-29/1225528828.PDF (Caused by NameResolutionError(\"HTTPSConnection(host='static.cninfo.com.cn', port=443): Failed to resolve 'static.cninfo.com.cn' ([Errno -3] Temporary failure in name resolution)\"))"
+    },
+    {
+      "label": "ganfeng-h1-mirror",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608280006758316_1.PDF",
+      "requested_at": "2026-09-20T06:35:14.678410+00:00",
+      "status": "SOURCE_UNAVAILABLE",
+      "received_at": "2026-09-20T06:35:19.685155+00:00",
+      "error_type": "ConnectionError",
+      "error_message": "HTTPSConnectionPool(host='pdf.dfcfw.com', port=443): Max retries exceeded with url: /pdf/H2_AN202608280006758316_1.PDF (Caused by NameResolutionError(\"HTTPSConnection(host='pdf.dfcfw.com', port=443): Failed to resolve 'pdf.dfcfw.com' ([Errno -3] Temporary failure in name resolution)\"))"
+    }
+  ],
+  "additional_binary_attempt": {
+    "url": "https://static.cninfo.com.cn/finalpage/2026-07-04/1225409731.PDF",
+    "tool": "container.download",
+    "status": "DOWNLOAD_FAILED_NO_BYTES",
+    "http_status": "NOT_EXPOSED",
+    "exact_clock": "NOT_RECORDED"
+  },
+  "update_leads_not_adopted": [
+    {
+      "security": "300014.SZ",
+      "kind": "September Fluence supply framework",
+      "status": "SECONDARY_LEAD_PRIMARY_NOT_OBTAINED",
+      "not_inferred": [
+        "firm sales",
+        "revenue",
+        "margin",
+        "cash receipt",
+        "lithium cost pass-through"
+      ]
+    },
+    {
+      "security": "002460.SZ",
+      "kind": "H1 figures and July forecast",
+      "status": "SECONDARY_DATA_NOT_ADOPTED_AS_PRIMARY",
+      "not_inferred": [
+        "same-accounting-basis figures",
+        "current margin or cash direction"
+      ]
+    }
+  ],
+  "formal_pre_calls": 0,
+  "formal_quick_calls": 0,
+  "paid_model_api_calls": 0,
+  "new_radar_calls": 0,
+  "github_mutations": 0,
+  "investment_authority": "NONE"
+}
