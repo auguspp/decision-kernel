@@ -161,6 +161,6 @@ Brief [5749800329](https://github.com/auguspp/decision-kernel/issues/297#issueco
 
 第104页12项实际金额经Decimal逐项重算，两期均精确勾稽至经营现金；同比经营现金增加19,164,293.37元，分解为合并净利润增加5,507,828.90元、其他调节项增加1,492,513.92元、营运项目负向影响减少12,163,950.55元。采用合并净利润，未混用归母利润。第16页的膜产品/工程收入、成本和毛利也已有明确页表与算术；量价/组合/单位成本的定量归因及按业务分配集团现金仍未完成。
 
-本次使用原save-progress/read-progress保存恰好两个文件，并将远端tree/blob/大小/原字节逐项读回；`progress.json` SHA256为`0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6`。用途索引只追加`p0-000920-reports-only-profit-cash-20260920`的ON_DEMAND_ARCHIVE定位；登记不等于正文已进入每次日常读取。正常publisher产生R后，用原archive reader从该R恢复，保持RETAINED_PROGRESS_NOT_COMMITTED。原PDF及DataSinking全文不是这两件progress文件的一部分。
+本次使用原save-progress/read-progress保存恰好两个文件，并将远端tree/blob/大小/原字节逐项读回；`progress.json` SHA256为`0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6`。用途索引只追加`p0-000920-reports-only-profit-cash-20260920`的ON_DEMAND_ARCHIVE定位；登记不等于正文已进入每次日常读取。待正常publisher产生R后，另行执行原archive reader从该R恢复，保持RETAINED_PROGRESS_NOT_COMMITTED；本文件不预填该步骤已完成。原PDF及DataSinking全文不是这两件progress文件的一部分。
 
 下一步直接复用已保存财报与本底稿，继续报告内管理层讨论、收入成本及营运资本附注的明确缺口。若以后要执行正式同题Pre/必要Quick，再在既有root接续与原预算内做必要来源消费接线；本次没有改runtime、重新开旧launch或调模型。当前daily的来源/旧题绑定尚未适配这份沃顿材料，并不妨碍有限财报研究与进度留存。
