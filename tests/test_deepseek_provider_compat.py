@@ -100,6 +100,9 @@ def test_explicit_deepseek_binding_uses_only_dedicated_secret(tmp_path, monkeypa
     assert seen["client"]["http_client"]["follow_redirects"] is False
     assert seen["request"]["model"] == "deepseek-flash"
     assert seen["request"]["reasoning"] == {"effort": "none"}
+    assert seen["request"]["text"]["format"]["type"] == "json_schema"
+    assert set(seen["request"]["text"]["format"]) == {"type", "name", "schema"}
+    assert "strict" not in seen["request"]["text"]["format"]
     assert seen["request"]["tools"] == []
     assert seen["request"]["store"] is False
     assert usage[0]["provider"] == "DEEPSEEK_OFFICIAL"
@@ -174,6 +177,25 @@ def test_model_call_rejects_cross_provider_binding_before_secret_or_network(tmp_
             extra_parameters={"reasoning": {"effort": "none"}},
         )
     assert usage == [] and list(tmp_path.iterdir()) == []
+
+
+def test_provider_error_diagnostic_accepts_sdk_unwrapped_error_body():
+    exc = SimpleNamespace(
+        status_code=400,
+        request_id=None,
+        body={
+            "code": "INVALID_REQUEST",
+            "type": "invalid_request_error",
+            "message": "must never be retained",
+        },
+    )
+    assert once._provider_error_diagnostic(exc) == {
+        "http_status": 400,
+        "provider_error_code": "INVALID_REQUEST",
+        "provider_error_type": "invalid_request_error",
+    }
+
+
 def test_provider_error_diagnostic_rejects_unsafe_identifiers():
     exc = SimpleNamespace(
         status_code=True,
