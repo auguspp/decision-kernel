@@ -360,13 +360,29 @@
   "research_execution": "NOT_EXECUTED",
   "signal_transition_authority": "NONE",
   "stock_review_scope": {
+    "automatic_research_execution": false,
     "batch_id": "a5f7fb0222fc80fa377dc4ea923637750785e8859f57b493eb0bafa887b9f518",
+    "data_unavailable_count": 1,
+    "existing_baseline_gap_count": 2,
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "items": [
       {
         "company_name": "道明光学",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "膜材料",
+            "thscode": "884213.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“膜材料”中，道明光学的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -386,7 +402,20 @@
       },
       {
         "company_name": "金健米业",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "粮油加工",
+            "thscode": "884010.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“粮油加工”中，金健米业的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -411,7 +440,20 @@
       },
       {
         "company_name": "*ST航图",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "军工装备",
+            "thscode": "881166.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“军工装备”中，*ST航图的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -431,7 +473,51 @@
       },
       {
         "company_name": "沃顿科技",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": {
+          "error_code": null,
+          "error_type": "CninfoPdfHttpError",
+          "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+          "finished_at": "2026-09-18T10:31:13.111492+00:00",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {
+            "failure": {
+              "bytes": 776,
+              "git_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
+              "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/failure.json",
+              "read_path": "sources/git/531b5e21ed15928f2abf2550b0800dc666b47ffb/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a"
+            },
+            "selection": {
+              "bytes": 17411,
+              "git_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
+              "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/prepare.json",
+              "read_path": "sources/git/f0efbab42adde8af50977c7f51f75087e518a0df/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73"
+            }
+          },
+          "status": "PRE_EXECUTION_FAILURE",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "膜材料",
+            "thscode": "884213.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“膜材料”中，沃顿科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -444,12 +530,25 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_NOT_YET_REVIEWED",
+        "review_status": "EXISTING_BASELINE_SOURCE_OR_INPUT_GAP",
         "thscode": "000920.SZ"
       },
       {
         "company_name": "深粮控股",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "粮油加工",
+            "thscode": "884010.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“粮油加工”中，深粮控股的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -469,7 +568,51 @@
       },
       {
         "company_name": "松发股份",
+        "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
+        "existing_research_relation": {
+          "error_code": null,
+          "error_type": "CninfoPdfHttpError",
+          "execution_id": "stock-business-0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5",
+          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
+          "finished_at": "2026-09-18T10:31:26.538175+00:00",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {
+            "failure": {
+              "bytes": 776,
+              "git_blob": "15b505bc0c87cfb9857fe38754134026b4c80f04",
+              "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/failure.json",
+              "read_path": "sources/git/15b505bc0c87cfb9857fe38754134026b4c80f04/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "4dc555f7422f7433be0c8cbce246d79749306a1911e3bac3dfb9802f50876f65"
+            },
+            "selection": {
+              "bytes": 14568,
+              "git_blob": "054c51495a3160a0aa16099c56ce46e334ba8057",
+              "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/prepare.json",
+              "read_path": "sources/git/054c51495a3160a0aa16099c56ce46e334ba8057/prepare.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "0b069ea0a16677c4bcde496eac4c9a99347dac1025926d12c83e7c3a42c333c3"
+            }
+          },
+          "status": "PRE_EXECUTION_FAILURE",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "军工装备",
+            "thscode": "881166.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“军工装备”中，松发股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -482,12 +625,12 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_NOT_YET_REVIEWED",
+        "review_status": "EXISTING_BASELINE_SOURCE_OR_INPUT_GAP",
         "thscode": "603268.SH"
       }
     ],
     "market_session": "2026-09-18",
-    "meaning": "NO_RESEARCH_REVIEW_RECEIPT_IS_NOT_NO_USEFUL_QUESTION",
+    "meaning": "OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION",
     "original_coverage": {
       "conditions_not_met_issuers": 3,
       "dispositioned_issuers": 6,
@@ -499,11 +642,12 @@
       "scope_complete": false,
       "unavailable_issuers": 1
     },
+    "question_review_required_count": 0,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
     "source_run_id": 35334355692,
-    "status": "SAVED_STOCK_SCOPE_NOT_A_COMPLETED_RESEARCH_REVIEW",
+    "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
     "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
   }
 }

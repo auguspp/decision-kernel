@@ -4,15 +4,23 @@
 
 ## 当前保存Stock批次
 
-市场日：2026-09-18；SAVED&#95;STOCK&#95;SCOPE&#95;NOT&#95;A&#95;COMPLETED&#95;RESEARCH&#95;REVIEW
+市场日：2026-09-18；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
 - 道明光学 002632.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
+  - 观察问题草稿：来源方向“膜材料”中，道明光学的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 - 金健米业 600127.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
+  - 观察问题草稿：来源方向“粮油加工”中，金健米业的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 - &#42;ST航图 688066.SH：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-- 沃顿科技 000920.SZ：QUESTION&#95;NOT&#95;YET&#95;REVIEWED
+  - 观察问题草稿：来源方向“军工装备”中，&#42;ST航图的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 沃顿科技 000920.SZ：EXISTING&#95;BASELINE&#95;SOURCE&#95;OR&#95;INPUT&#95;GAP
+  - 既有研究关系：PRE&#95;EXECUTION&#95;FAILURE / CninfoPdfHttpError
+  - 观察问题草稿：来源方向“膜材料”中，沃顿科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 - 深粮控股 000019.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-- 松发股份 603268.SH：QUESTION&#95;NOT&#95;YET&#95;REVIEWED
+  - 观察问题草稿：来源方向“粮油加工”中，深粮控股的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 松发股份 603268.SH：EXISTING&#95;BASELINE&#95;SOURCE&#95;OR&#95;INPUT&#95;GAP
+  - 既有研究关系：PRE&#95;EXECUTION&#95;FAILURE / CninfoPdfHttpError
+  - 观察问题草稿：来源方向“军工装备”中，松发股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 
-未提供问题审阅回执的对象仍是未检查，不得由未执行Pre反推没有问题。
+观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。
 
 ## 已保存问题执行
 
