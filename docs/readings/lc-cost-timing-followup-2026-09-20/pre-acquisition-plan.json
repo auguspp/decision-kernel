@@ -1,0 +1,22 @@
+{
+  "recorded_at": "2026-09-20T06:33:14.292488+00:00",
+  "user_instruction": "好，你继续吧",
+  "main": "d38f0df0ec8fe60db0b5cd8569aadca8ca2465f6",
+  "reading": "a5b49eafed1fe14ab85df7fe023b3c5cb0244525",
+  "predecessor_commit": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+  "predecessor_directory": "docs/readings/lc-exposure-questions-2026-09-20",
+  "scope": "Continue Q-GF spread/inventory and Q-EVE pass-through/cash; preserve old questions and source gaps; no new Radar/model/Pre/Quick/Odds/Action execution.",
+  "necessary": [
+    "Issuer 2026H1 body with segment/product revenue and costs; inventories/impairments, operating cash and working capital; pricing/hedging where publicly available",
+    "Relevant official issuer disclosure/update inventory July1-Sep20; distinguish list coverage from content review, and missing sources from no event."
+  ],
+  "source_routes": [
+    "Ganfeng official investor relations -> HKEX/CNINFO original report",
+    "EVE official investor relations/CNINFO original report; primary issuer IR activity records"
+  ],
+  "limits": "Bounded conventional web lookup and official representation, no header/endpoint experiments or crawler build; no secret/API provider use; one direct binary request only where body available.",
+  "critical_time_boundary": "H1 through June30 is baseline, not ex-post evidence that August-September LC move changed earnings. Do not use H1 to claim a later effect occurred.",
+  "tianqi": "Prior SOURCE_CHECK_INCOMPLETE preserved; do not expand this continuation into a third full-company source investigation.",
+  "research_type": "BOUNDED_INTERACTIVE_CONTINUATION_NOT_FORMAL_PRE",
+  "investment_authority": "NONE"
+}
