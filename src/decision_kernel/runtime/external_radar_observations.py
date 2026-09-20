@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import date, datetime, time, timedelta, timezone
-from decimal import Decimal, localcontext
+from decimal import Context, Decimal, localcontext
 from hashlib import sha256
 import json
 import re
@@ -145,7 +145,7 @@ def news(body: bytes, receipt: dict, *, cutoff: str) -> dict:
         if item.get('mobileUrl'):
             _url(item['mobileUrl'], NEWS_DOMAINS[kind])
         item_id = item.get('id')
-        require(type(item_id) in (int, str) and len(str(item_id)) <= 256, 'NEWS_ITEM_ID_INVALID')
+        require(type(item_id) in (int, str) and 0 < len(str(item_id)) <= 256, 'NEWS_ITEM_ID_INVALID')
         alias = str(item_id)
         require(alias not in aliases or aliases[alias] == link, 'NEWS_ITEM_ID_REBOUND')
         aliases[alias] = link
@@ -154,7 +154,8 @@ def news(body: bytes, receipt: dict, *, cutoff: str) -> dict:
                   [('pubDate', item.get('pubDate')), ('extra.date', extra.get('date'))]}
         identity = {'source_id': kind, 'item_id': alias, 'url': link}
         version = {**identity, 'title': title, 'publication_claims': claims}
-        rows.append({**version, 'article_id': canonical_hash(identity), 'version_id': canonical_hash(version),
+        version_payload = {**identity, 'title': title, 'publication_claims': {k: v['raw'] for k, v in claims.items()}}
+        rows.append({**version, 'article_id': canonical_hash(identity), 'version_id': canonical_hash(version_payload),
                      'window_position': index, 'clock_origin': 'RELATIVE_TIME_DERIVED_BY_SOURCE_ADAPTER' if kind == 'gelonghui'
                      else 'SERVICE_PASSTHROUGH_NOT_VERIFIED_PUBLISHER_TIME',
                      'fetched_at': source['received_at'], 'business_linkage': 'NOT_ESTABLISHED',
@@ -173,6 +174,7 @@ def news_context(captures: list, *, cutoff: str, company_reading=None) -> dict:
     """
     require(0 < len(captures) <= 10, 'NEWS_SOURCE_COUNT_BUDGET')
     reports = [news(body, receipt, cutoff=cutoff) for body, receipt in captures]
+    reports.sort(key=lambda r: (clock(r['projection']['source']['received_at']), r['projection_hash']))
     seen, rows = set(), []
     for report in reports:
         for row in report['projection']['observations']:
@@ -217,7 +219,7 @@ def _number(value):
     if value is None:
         return None
     value = Decimal(value)
-    require(value.is_finite() and abs(value) < Decimal('1e30'), 'SERIES_NUMBER_OUT_OF_RANGE')
+    require(value.is_finite() and value.copy_abs() < Decimal('1e30'), 'SERIES_NUMBER_OUT_OF_RANGE')
     return value
 
 
@@ -291,8 +293,7 @@ def industry(variety: str, captures: dict, *, price_start: str, recent_start: st
     w_rows, w_excluded = _window(warehouse['item'], recent, last)
     gaps = []
     rates = []
-    with localcontext() as ctx:
-        ctx.prec = 40
+    with localcontext(Context(prec=40)):
         returns = {}
         for n in (5, 20):
             selected = points[-n-1:]
