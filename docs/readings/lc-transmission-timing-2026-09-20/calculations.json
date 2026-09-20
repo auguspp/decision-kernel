@@ -1,0 +1,60 @@
+{
+  "meaning": "RETAINED_DATE_ALIGNMENT_AND_SYNTHETIC_IDENTITY_NOT_COMPANY_EFFECT_ESTIMATE",
+  "input_archive_sha256": "8aa291e84d4b9577c903e702c43c9c8263871bd9371e8ed641a1118d0b312502",
+  "h1_period_end": "2026-06-30",
+  "LC_windows": [
+    {
+      "observation_intervals": 5,
+      "start": {
+        "date": "2026-09-11",
+        "raw_close_price": "134820"
+      },
+      "end": {
+        "date": "2026-09-18",
+        "raw_close_price": "127160"
+      },
+      "return": "-0.0568164960688325174306482717697670968699",
+      "starts_after_H1_period_end": true
+    },
+    {
+      "observation_intervals": 20,
+      "start": {
+        "date": "2026-08-21",
+        "raw_close_price": "158680"
+      },
+      "end": {
+        "date": "2026-09-18",
+        "raw_close_price": "127160"
+      },
+      "return": "-0.1986387698512730022687169145449962188051",
+      "starts_after_H1_period_end": true
+    }
+  ],
+  "h1_can_measure_realized_effect_of_these_later_windows": false,
+  "h1_required_as_pre_event_baseline": true,
+  "synthetic_example": {
+    "baseline_sales": "100",
+    "baseline_COGS": "80",
+    "post_event_input_purchase_saving": "4",
+    "customer_price_cut": "2",
+    "all_other_unit_COGS_change": "0",
+    "break_even_recognized_fraction": "0.5",
+    "examples": [
+      {
+        "fraction_of_purchase_saving_recognized_in_COGS": "0.25",
+        "gross_profit_after": "19.00",
+        "gross_profit_change": "-1.00"
+      },
+      {
+        "fraction_of_purchase_saving_recognized_in_COGS": "1",
+        "gross_profit_after": "22",
+        "gross_profit_change": "2"
+      }
+    ],
+    "company_parameters_established": false
+  },
+  "network_calls": 0,
+  "model_calls": 0,
+  "formal_admission": false,
+  "investment_authority": "NONE"
+}
