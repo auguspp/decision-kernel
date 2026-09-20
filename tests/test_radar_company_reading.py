@@ -203,7 +203,7 @@ def test_actual_capture_replay_and_existing_collector_retention_join(tmp_path):
     assert x['source_status']['institutional']['archive']['artifact_id'] == 200
     assert c.retained_bytes(col.files, x['details']['base_context']) == m.json_bytes(original)
     assert b == original and p['lanes'] == original['lanes'] and p['pending'] == []
-    assert m.json_bytes(p) == col.files['current-state.json']
+    assert m.read_package_bytes(p) == col.files['current-state.json']
     assert '打开全部公司' in col.files['README.md'].decode()
     assert len(api.reads) == 4 and api.reads[-1] == 'ARCHIVE'
     assert all(not ('prices' in v or 'dragon-tiger' in v) for v in api.reads)

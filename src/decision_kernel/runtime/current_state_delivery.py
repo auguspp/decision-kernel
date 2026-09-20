@@ -744,7 +744,7 @@ class Collector:
         def assembled():
             value = model.assemble(code_commit=self.code_commit, checked_at=self.now(), check_started_at=started,
                                    lanes=lanes, research=research, capabilities=capabilities, refresh_identity=refresh)
-            return value, {"current-state.json": model.json_bytes(value),
+            return value, {"current-state.json": model.read_package_bytes(value),
                            "README.md": model.render_summary(value).encode()}
 
         payload, entry_files = assembled()

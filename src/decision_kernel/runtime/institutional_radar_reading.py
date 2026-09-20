@@ -208,7 +208,7 @@ def _assemble(collector, baseline, research):
     payload = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
         capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
-    data = {'current-state.json': model.json_bytes(payload), 'README.md': (model.render_summary(payload) + '\n' + companies.navigation(research['radar_discovery'])).encode()}
+    data = {'current-state.json': model.read_package_bytes(payload), 'README.md': (model.render_summary(payload) + '\n' + companies.navigation(research['radar_discovery'])).encode()}
     model.check(sum(len(v) for k, v in collector.files.items() if k not in data) + sum(map(len, data.values()))
                 <= delivery.MAX_RETAINED_OUTPUT, 'Radar reading exceeds existing byte bound')
     _reserve(collector, replacements=data)

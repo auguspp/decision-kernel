@@ -225,6 +225,37 @@ def test_index_still_respects_original_read_package_size_bound():
     assert (archive.MAX_FILES, archive.MAX_FILE_BYTES, archive.MAX_API_CALLS) == (16, 512 * 1024, 24)
 
 
+def test_compact_root_preserves_all_archive_fields_and_original_reading_hash():
+    api = deferred()
+    rows = [{**index.project(api.record), 'id': f'item-{n}'} for n in range(250)]
+    api.reading['research']['on_demand_archives'] = rows
+    api.reseal()
+    original = deepcopy(api.reading)
+    pretty = model.json_bytes(original)
+    payload = model.assemble(code_commit=M, checked_at=original['generated_at'],
+        check_started_at=original['checks']['started_at'], lanes=original['lanes'],
+        research=original['research'], capabilities=original['capability_gaps'],
+        refresh_identity=original['refresh'])
+    raw = model.read_package_bytes(payload)
+    assert len(raw) < 192 * 1024 < len(pretty)
+    assert json.loads(raw) == json.loads(pretty) == payload == original
+    assert payload['research']['on_demand_archives'] == rows
+    assert payload['reading_hash'] == api.reading['reading_hash']
+    model.validate_read_package(json.loads(pretty))
+    model.validate_read_package(json.loads(raw))
+    assert model.json_bytes(original) == pretty  # Other artifacts keep their historical formatter.
+    # Exercise the final external-Radar assembly where the real large index failed.
+    from decision_kernel.runtime.external_radar_reading import _finish
+    from test_radar_company_reading import collector
+    c = collector()
+    c.files = {'current-state.json': raw, 'README.md': model.render_summary(payload).encode()}
+    result = _finish(c, payload, {'status': 'UNAVAILABLE_OR_REJECTED'})
+    emitted = c.files['current-state.json']
+    assert len(emitted) < 192 * 1024 < len(model.json_bytes(result))
+    assert json.loads(emitted) == result and result['research']['on_demand_archives'] == rows
+    model.validate_read_package(json.loads(emitted))
+
+
 def test_registered_fibocom_has_exact_original_progress_and_keeps_eastsoft_eager():
     registry = json.loads((Path(__file__).resolve().parents[1] / 'current_state/registry.json').read_text())
     eager, indexed, gaps = index.split(registry)
