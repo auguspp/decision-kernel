@@ -1,0 +1,39 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-20T02:55:04.251767+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "5b323ba38825f19c99c3a3a12e4cc5fb491e3e033a952d8f23994bdbf51c8902",
+    "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1"
+  },
+  "finished_at": "2026-09-20T02:55:04.473355+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": "0a4910f85a92cc4ae3c7dab3ba95c0c666016e67449da229810e28ae2f6d20f2",
+  "input_file_sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6",
+  "input_source": {
+    "git_blob": "3cff654bd890235c99d90d6627146d575902abbd",
+    "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
+    "purpose": "input.json",
+    "ref": "20525b8d541d083cd9f31f95a2f9f88ba4b3f7b0",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6"
+  },
+  "investment_authority": "NONE",
+  "preflight_sha256": "51c92c45a5b571374bbb3be349d3d6d1f1c28b62d1431609e23547c035926758",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_authority": "NONE",
+  "research_execution_allowed": true,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}
