@@ -194,7 +194,7 @@ def _finish(collector, baseline, reading):
         note += '\n这是明确保存的历史样本，不是今日重采、每日信号或待执行研究；重读不新增事件。\n'
     else:
         note = '\n保存新闻/行业观察读取有缺口；不代表没有新闻或行业变化。原有Radar及Research状态保留。\n'
-    data = {'current-state.json': model.json_bytes(payload),
+    data = {'current-state.json': model.read_package_bytes(payload),
             'README.md': model.render_summary(payload).encode() + root[len(old):] + note.encode()}
     model.check(sum(len(v) for k, v in collector.files.items() if k not in data)
                 + sum(map(len, data.values())) <= delivery.MAX_RETAINED_OUTPUT, 'External reading final byte budget')

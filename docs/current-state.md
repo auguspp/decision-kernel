@@ -51,6 +51,8 @@ GitHub 连接需具备仓库读取权限。消费方不需要下载 ZIP 或搬�
 
 发布 ref 只含小型读取包和必要详情、原件副本，没有 workflow 或可执行入口。接受的原 ZIP、研究/决定引用的原字节按内容哈希留存在 `sources/`；现有结果详情在 `details/`，可直接读，不只是hash加过期下载链接。
 
+根 `current-state.json` 使用 Python 标准 JSON 紧凑编码；组装检查与所有根文件输出共同执行原 192 KiB 实际 UTF-8 字节上限。仅移除 JSON 排版空白，保留全部字段、用途记录和原 `reading_hash` 算法；旧缩进版本继续按其原字节与内容哈希读取。`README.md`、来源原件、详情及通用 JSON 编码不变。此修复针对 [PR477 后的索引容量复现](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5751135440)，不增加资料读取范围或发布权限。
+
 正常发布使用原 ref 为父提交、保留已有 tree、只允许 fast-forward；并发冲突失败，不 force、不自动重试。已经取得的同一 artifact 在本次收集内复用；后续收集可用保留的相同字节，但仍检查远端身份及过期状态。过期来源不得因为有副本而恢复生产资格。
 
 无自动删历史或全量永久档案承诺。仓库/ref删除、重写或平台访问丢失仍会损失留存；原 Actions artifact 的90天/14天等期限仍独立存在。源数据保留副本是阅读留存，不是扩大 `sector_radar_persistence` 的恢复范围。

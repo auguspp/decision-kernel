@@ -351,7 +351,7 @@ def attach(collector, baseline):
         payload = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
             check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
             capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
-        data = {'current-state.json': model.json_bytes(payload), 'README.md': model.render_summary(payload).encode()}
+        data = {'current-state.json': model.read_package_bytes(payload), 'README.md': model.render_summary(payload).encode()}
         model.check(sum(len(v) for k,v in collector.files.items() if k not in data) + sum(map(len,data.values()))
                     <= delivery.MAX_RETAINED_OUTPUT, 'Stock reading entry exceeds original byte bound')
         model.check(collector.api.calls + len(set(collector.files) | set(data)) + 5 <= call_limit(collector.api),

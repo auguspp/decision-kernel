@@ -52,6 +52,13 @@ def json_bytes(value: Any) -> bytes:
     return (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode()
 
 
+def read_package_bytes(payload: dict) -> bytes:
+    """Serialize only current-state.json within its existing actual byte bound."""
+    raw = (json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    check(len(raw) <= 192 * 1024, "read package exceeds bounded index size")
+    return raw
+
+
 def sha256(raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest()
 
@@ -415,7 +422,7 @@ def assemble(*, code_commit: str, checked_at: str, check_started_at: str, lanes:
                "retention": "READ_REF_RETAINS_EXACT_ACCEPTED_ARCHIVES_AND_REFERENCES_IN_GIT_HISTORY_NO_AUTO_PRUNE_NOT_PRODUCTION_RESTORE",
                **AUTHORITY}
     payload["reading_hash"] = canonical_hash(payload)
-    check(len(json_bytes(payload)) <= 192 * 1024, "read package exceeds bounded index size")
+    read_package_bytes(payload)
     return payload
 
 

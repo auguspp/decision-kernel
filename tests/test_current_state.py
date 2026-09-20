@@ -245,6 +245,24 @@ def test_fixed_package_is_deterministic_and_source_text_cannot_expand_authority(
         read.validate_read_package(payload)
 
 
+def test_root_index_keeps_exact_utf8_byte_limit_including_final_newline():
+    kwargs = dict(code_commit=SHA, checked_at=AT, check_started_at=AT, lanes={},
+                  research={"handoffs": {"active": []}, "note": ""}, capabilities=[], refresh_identity={})
+    remaining = 192 * 1024 - len(read.read_package_bytes(read.assemble(**kwargs)))
+    kwargs["research"]["note"] = "中" * (remaining // 3) + "x" * (remaining % 3)
+    payload = read.assemble(**kwargs)
+    raw = read.read_package_bytes(payload)
+    assert len(raw) == 192 * 1024 and raw.endswith(b"\n")
+    assert len(raw.decode("utf-8")) < len(raw) < len(read.json_bytes(payload))
+    read.validate_read_package(json.loads(raw))
+    kwargs["research"]["note"] += "x"
+    with pytest.raises(ValueError, match="bounded index size"):
+        read.assemble(**kwargs)
+    # A later mutation cannot make an actual emitter exceed the same byte bound.
+    with pytest.raises(ValueError, match="bounded index size"):
+        read.read_package_bytes(payload)
+
+
 @pytest.mark.parametrize("terminal", ["WAIT_FOR_TRIGGER", "DROP_FOR_NOW"])
 def test_wait_or_drop_never_becomes_active_research(terminal):
     from test_attention_inbox_research import _wait

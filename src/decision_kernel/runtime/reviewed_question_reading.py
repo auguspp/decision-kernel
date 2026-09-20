@@ -425,7 +425,7 @@ def _seal(collector, baseline, work, scope, before_readme):
     result = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
         capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
-    index = model.json_bytes(result)
+    index = model.read_package_bytes(result)
     navigation = ('\n## 日常候选检查与具体问题研究\n\n读取状态：' + _text(work['status']) + '。'
                   '未审阅不等于没有问题；旧结果首次展示不算新研究。\n')
     if work.get('details'):
