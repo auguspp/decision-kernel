@@ -235,7 +235,7 @@ def test_newest_stock_batch_not_reviewed_is_not_zero_questions(tmp_path, monkeyp
     scope = report(c, result)['stock_review_scope']
     assert len(scope['items']) == 3
     assert [r['review_status'] for r in scope['items']] == [
-        'QUESTION_NOT_YET_REVIEWED', 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED', 'ORIGINAL_PRICE_DISPOSITION_ONLY']
+        'QUESTION_REVIEW_REQUIRED', 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED', 'ORIGINAL_PRICE_DISPOSITION_ONLY']
     assert scope['reviewed_question_count'] == 0
     assert scope['meaning'] == 'OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION'
     assert scope['question_review_required_count'] == 1
