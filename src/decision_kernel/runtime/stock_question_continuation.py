@@ -259,7 +259,8 @@ def _inputs(*, api, code, request, clock):
     for spec in predecessor["source_refs"]:
         if spec not in refs:
             refs.append(spec)
-    packet = packet.model_copy(update={
+    packet_data = packet.model_dump(mode="json")
+    packet_data.update({
         "execution_id": predecessor["child_execution_id"],
         "candidate_output_prefix": predecessor["child_prefix"],
         "source_refs": refs,
@@ -271,6 +272,7 @@ def _inputs(*, api, code, request, clock):
         ])),
         "prompt_version": "reviewed-question-technical-continuation-v1",
     })
+    packet = ExternalResearchInputPacket.model_validate(packet_data)
     discovery = discovery.model_copy(update={
         "discovery_id": packet.execution_id,
         "as_of": packet.research_cutoff,
