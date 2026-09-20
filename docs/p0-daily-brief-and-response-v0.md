@@ -97,3 +97,13 @@ Research只说哪个问题、关键认识或下一研究方向改变了；不要
 后续执行器尚须从获准来源获得一个合法新问题，使用原#288/#291与Funnel绑定其输入、预算、来源和处置。不能凭本页启动新公司、自动Deep、借复盘扩权限，或用六份旧材料重复跑出所谓增量。运行回执及语义验收各自保存，执行缺口不是WAIT。
 
 第一份实际Brief起记录使用负担，完整人机闭环天数只从相应功能接通计算。5–10交易日不能由合成测试或历史回放代替。P1 A/B路由隔离缺口、旧失败和人工记录限制原样保留，不临时增加clean P0门槛。
+
+## 2026-09-20 接手：现有原生任务 v1.3 的实际更新
+
+[接手原话与施工前复用记录](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5749609810)承接现有 P0 优先级。原生任务已实际取得，ID 为 `6aa28013b7348191a647f2f8e75d6017`，名称仍为 `Decision Kernel Daily Brief v0`，处于启用状态。2026-09-20 核对的实际日程为每日 **19:15 / Asia/Shanghai**；前文 23:10 是历史记录。本次保留实际日程，仅更新 Instructions，未新建任务、改通知渠道或执行 Run now。
+
+已保存并逐字读回的 [v1.3 完整 Instructions](readings/p0-takeover-2026-09-20/daily-brief-task-v1.3.txt)补充两条具体消费路径：读取同一 R 的 `research.reviewed_question_work` 及原问题/技术接续关系；读取相关 `research.on_demand_archives` 的精确历史来源，先恢复正文再引用其中的来源状态和问题审阅。注册的索引位置不等于正文已在当前 reading 中，系统来源缺口不转成 Human 待办。权限继续为保存结果的只读交付，不从任务文本获得新 Research dispatch 权限。
+
+本轮 [沃顿科技来源审阅](https://github.com/auguspp/decision-kernel/blob/062f9761224e3aecfa9e314222d5069e79a351be/docs/readings/000920-question-review-2026-09-20/workpaper.md)及同目录六行批次处置已归档并全部精确读回。用途 registry 沿既有 `ON_DEMAND_ARCHIVE / RETAINED_FILES` 路径登记，原目录保存 7 个文件，保留完整的来源状态、库存、事前范围与草稿问题。2026H1 报告已经披露，缺口是官方正文/PDF 原字节和必要更新覆盖未取得；它不是未来披露等待，也不是业务 WAIT/DROP。新问题未正式准入，Pre/Quick 未执行。
+
+任务更新、来源归档及哈希读回见 [实际保留回执](readings/p0-takeover-2026-09-20/retention-receipt.json)。本次任务更新不等于下一次自然交付已发生。工程接手原话不登记成公司 Research 的 Human 接受；完整 P0 闭环天数仍为 0，后续真实交付和回应按原协议分别记录。
