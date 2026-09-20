@@ -24,6 +24,8 @@ PREFLIGHT_BLOB = "8e492303179ef9cb6f3c9fd6a9673805bcba5a26"
 PREFLIGHT_SHA256 = "51c92c45a5b571374bbb3be349d3d6d1f1c28b62d1431609e23547c035926758"
 CHECKED_AT = "2026-09-20T02:30:00+00:00"
 BUNDLE = ROOT / "tests/fixtures/300711_question_continuation_predecessor.json"
+PERMISSION = MATERIAL / "permission.md"
+EGRESS = "7121338f113c3873e54ec11bcea9f1e1407bcb99fb1f95d05838e955a48ff574"
 
 
 @pytest.fixture(autouse=True)
@@ -37,7 +39,7 @@ def deny_network(monkeypatch):
 
 def real_inputs():
     _, api, _ = prepared_inputs(CHECKED_AT)
-    base_request = json.loads((ROOT / "research_runs/stock-question-request.json").read_bytes())
+    request = json.loads((ROOT / cont.REQUEST).read_bytes())
     bundle = json.loads(BUNDLE.read_bytes())
     preflight_raw = (ROOT / PREFLIGHT_PATH).read_bytes()
     assert once.blob(preflight_raw) == PREFLIGHT_BLOB
@@ -123,7 +125,14 @@ def test_real_continuation_material_prepares_and_computes_deepseek_egress():
     assert q["question_id"] == "restricted-proceeds-internal-transfer-2026h1"
     assert packet.execution_id == pred["child_execution_id"]
     assert packet.candidate_output_prefix.endswith("/technical-continuation-v1/")
-    assert digest and len(digest) == 64
+    assert digest == request["approved_egress_hash"] == EGRESS
+    permission = request["permission"]
+    assert permission == {
+        "body_sha256": "a1736d39ac068dc1a6104e0ff6cc3736ece77bde7a76ec825d26f19d474f8b38",
+        "comment_id": 5747059273,
+        "created_at": "2026-09-20T02:31:07Z",
+    }
+    assert once.sha(PERMISSION.read_bytes()) == permission["body_sha256"]
     prompt = once.pre_prompt(packet, discovery, context)
     _, _, fmt, params = cont._deepseek_request(prompt, once.PreResearchResult)
     assert set(fmt) == {"type", "name", "schema"}
