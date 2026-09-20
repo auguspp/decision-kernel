@@ -69,6 +69,7 @@ jobs:
           --include-concept-discovery
           --include-concept-detail
           --include-external-radar
+          --include-reviewed-questions
           --publish
       - name: Explain a failed reading publication
         if: failure()
