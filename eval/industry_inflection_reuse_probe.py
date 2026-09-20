@@ -28,6 +28,7 @@ START_DATE = "2026-08-01"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 ENDPOINTS = {
     "varieties": "/api/futures/varieties/list",
+    "basis_latest": "/api/futures/basis/main-continuous-latest",
     "prices": "/api/futures/prices/daily",
     "basis": "/api/futures/basis/historical",
     "warehouse": "/api/futures/warehouse-receipts/historical",
@@ -263,22 +264,44 @@ def main() -> int:
     recorder = Recorder(args.output, key)
     varieties_env = recorder.get("varieties", ENDPOINTS["varieties"], {})
     positions_env = recorder.get("positions-20260918", ENDPOINTS["positions"], {"date": END_DATE})
+    basis_latest_env = recorder.get("basis-main-continuous-latest", ENDPOINTS["basis_latest"], {})
     targets, gaps = {}, []
+    varieties = {}
     if varieties_env is not None:
         try:
             _, items = item_list(varieties_env)
-            by_code = {str(x.get("variety_code", "")).upper(): x for x in items if isinstance(x, dict)}
-            for code in TARGETS:
-                row = by_code.get(code)
-                thscode = row.get("main_contract_thscode") if isinstance(row, dict) else None
-                if not isinstance(thscode, str) or not thscode:
-                    gaps.append({"target": code, "reason": "MAIN_CONTRACT_NOT_AVAILABLE_FROM_VARIETIES"})
-                else:
-                    targets[code] = {"variety": row, "main_contract_thscode": thscode}
+            varieties = {str(x.get("variety_code", "")).upper(): x for x in items if isinstance(x, dict)}
         except ValueError as exc:
             gaps.append({"target": "ALL", "reason": str(exc)})
     else:
         gaps.append({"target": "ALL", "reason": "VARIETIES_SOURCE_UNAVAILABLE"})
+
+    basis_latest = {}
+    if basis_latest_env is not None:
+        try:
+            _, items = item_list(basis_latest_env)
+            basis_latest = {str(x.get("ticker", "")).upper(): x for x in items if isinstance(x, dict)}
+        except ValueError as exc:
+            gaps.append({"target": "BASIS_LATEST", "reason": str(exc)})
+    else:
+        gaps.append({"target": "BASIS_LATEST", "reason": "BASIS_MAIN_CONTINUOUS_SOURCE_UNAVAILABLE"})
+
+    for code in TARGETS:
+        row = varieties.get(code)
+        direct = row.get("main_contract_thscode") if isinstance(row, dict) else None
+        continuous = basis_latest.get(code)
+        continuous_code = continuous.get("thscode") if isinstance(continuous, dict) else None
+        thscode = direct if isinstance(direct, str) and direct else continuous_code
+        if not isinstance(thscode, str) or not thscode:
+            gaps.append({"target": code, "reason": "PUBLIC_FUTURES_IDENTITY_NOT_RESOLVED"})
+            continue
+        targets[code] = {
+            "variety": row or {"variety_code": code, "name": continuous.get("variety_name") if continuous else None,
+                               "exchange_code": None},
+            "main_contract_thscode": thscode,
+            "identity_source": "VARIETIES_MAIN_CONTRACT" if direct else "PUBLIC_BASIS_MAIN_CONTINUOUS_LATEST",
+            "basis_latest": continuous,
+        }
 
     position_by_code = {}
     if positions_env is not None:
@@ -330,6 +353,7 @@ def main() -> int:
                 "variety_name": target["variety"].get("name"),
                 "exchange_code": target["variety"].get("exchange_code"),
                 "main_contract_thscode": contract,
+                "identity_source": target["identity_source"],
                 "price_window": {"first": price_rows[0]["date"], "last": price_rows[-1]["date"],
                                  "observations": len(price_rows)},
                 "basis_observations": len(basis_items),
