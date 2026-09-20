@@ -1,0 +1,41 @@
+{
+  "format": "RESEARCHER_QUESTION_DELTA_NOT_RUNTIME_QUESTION_SCHEMA",
+  "predecessor_commit": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+  "predecessor_question_names": [
+    "Q-GF",
+    "Q-EVE"
+  ],
+  "scope_change": "SAME_QUESTIONS_REFINED_NOT_NEW_EXECUTION_KEYS",
+  "EVE": {
+    "security": "300014.SZ",
+    "previous": "Cost savings retained vs passed to customers; inventory/cash timing.",
+    "revised": "Test pre-existing procurement/inventory cost vintage versus later customer and input repricing, including hedging and the correct listed-group/cash boundaries.",
+    "support": [
+      "S-A",
+      "S-B",
+      "S-C"
+    ],
+    "baseline_period_end": "2026-06-30",
+    "observed_market_period_end": "2026-09-18",
+    "question_status": "DRAFT_CURRENT_SOURCE_GAP",
+    "pricing_formula": "UNKNOWN",
+    "lithium_specific_cost_share": "UNKNOWN",
+    "net_profit_effect": "UNKNOWN",
+    "latest_source_coverage": "INCOMPLETE",
+    "formal_admission": false
+  },
+  "Ganfeng": {
+    "security": "002460.SZ",
+    "content_update": "NONE_PRIMARY_BODY_GAP_PRESERVED",
+    "method_clarification": "H1 is pre-observation baseline, not proof of Aug-Sep realized impact.",
+    "formal_admission": false
+  },
+  "Tianqi": {
+    "security": "002466.SZ",
+    "status": "PRIOR_SOURCE_CHECK_INCOMPLETE_PRESERVED",
+    "new_investigation": false
+  },
+  "stopping_rule": "Do not mechanically repeat these URL attempts under unchanged access conditions; recover required primary bodies or a verified alternative issuer representation before numeric current exposure/admission.",
+  "automatic_admission": false,
+  "investment_authority": "NONE"
+}
