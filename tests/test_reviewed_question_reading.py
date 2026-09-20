@@ -70,6 +70,17 @@ def completed(tmp_path, monkeypatch, *, route='WAIT_FOR_TRIGGER', failure=False,
     return args, c, payload, prefix, calls, writes
 
 
+def report(c, result):
+    entry = result['research']['reviewed_question_work']
+    assert 'items' not in entry  # All rows remain in the same-R detail, not the index.
+    spec = entry['structured']
+    assert spec['read_path'] == reader.REPORT
+    raw = c.files[spec['read_path']]
+    assert len(raw) == spec['bytes'] and once.sha(raw) == spec['sha256']
+    assert once.blob(raw) == spec['git_blob']
+    return json.loads(raw)
+
+
 @pytest.mark.parametrize('route', ['WAIT_FOR_TRIGGER', 'STOP', 'CONTINUE_TO_QUICK'])
 @pytest.mark.parametrize('stock', [True, False])
 def test_original_result_survives_current_price_membership_and_absent_stock(
@@ -78,8 +89,8 @@ def test_original_result_survives_current_price_membership_and_absent_stock(
     saved = deepcopy(c.api.files[c.api.heads[intake.WORK_REF]])
     before_calls, before_writes = list(calls), len(writes)
     result = reader.attach(c, baseline)
-    work = result['research']['reviewed_question_work']
-    assert work['status'] == 'READ_OK', work
+    assert result['research']['reviewed_question_work']['status'] == 'READ_OK', result
+    work = report(c, result)['question_work']
     assert len(work['items']) == 1
     item = work['items'][0]
     actual = json.loads(saved[prefix + 'validation.json'])['funnel_result']
@@ -104,7 +115,7 @@ def test_original_result_survives_current_price_membership_and_absent_stock(
 def test_original_execution_gap_remains_gap_not_business_wait(tmp_path, monkeypatch):
     _, c, baseline, _, _, _ = completed(tmp_path, monkeypatch, failure=True)
     result = reader.attach(c, baseline)
-    work = result['research']['reviewed_question_work']
+    work = report(c, result)['question_work']
     assert work['status'] == 'READ_OK', work
     row = work['items'][0]
     assert row['status'] == 'VALIDATED_EXECUTION_GAP'
@@ -120,7 +131,7 @@ def test_fixed_technical_child_and_original_failure_are_both_retained(tmp_path, 
     before = deepcopy(api.files[api.heads[intake.WORK_REF]])
     call_count, write_count = len(calls), len(writes)
     result = reader.attach(c, baseline)
-    work = result['research']['reviewed_question_work']
+    work = report(c, result)['question_work']
     assert work['status'] == 'READ_OK', work
     byrole = {r['role']: r for r in work['items']}
     assert byrole['ROOT']['status'] == 'VALIDATED_EXECUTION_GAP'
@@ -147,7 +158,7 @@ def test_corrupt_or_unbound_result_is_explicit_not_silently_absent(tmp_path, mon
         name = {'host': 'host-receipt'}.get(damage, damage) + '.json'
         files[prefix + name] = b'{}'
     result = reader.attach(c, baseline)
-    work = result['research']['reviewed_question_work']
+    work = report(c, result)['question_work']
     assert work['status'] == 'READ_OK_WITH_QUESTION_GAPS', work
     assert work['items'][0]['status'] == 'UNAVAILABLE_OR_REJECTED'
     assert work['items'][0]['terminal_state'] is None
@@ -161,14 +172,15 @@ def test_partial_prepare_is_not_a_completed_research_result(tmp_path, monkeypatc
         if path.startswith(prefix) and path != prefix + 'prepare.json':
             del files[path]
     result = reader.attach(c, baseline)
-    row = result['research']['reviewed_question_work']['items'][0]
+    row = report(c, result)['question_work']['items'][0]
     assert row['status'] == 'RETAINED_NO_RESEARCH_RESULT' and row['terminal_state'] is None
 
 
 def test_absent_host_receipt_does_not_invent_write_completion(tmp_path, monkeypatch):
     _, c, baseline, prefix, _, _ = completed(tmp_path, monkeypatch)
     del c.api.files[c.api.heads[intake.WORK_REF]][prefix + 'host-receipt.json']
-    row = reader.attach(c, baseline)['research']['reviewed_question_work']['items'][0]
+    result = reader.attach(c, baseline)
+    row = report(c, result)['question_work']['items'][0]
     assert row['status'] == 'VALIDATED_FUNNEL_RESULT'
     assert row['host_receipt_present'] is False
 
@@ -190,14 +202,15 @@ def test_inventory_and_original_shared_capacity_fail_closed(tmp_path, monkeypatc
         return value
     c.api.get = get
     if damage == 'source-limit':
-        baseline['research']['stock_business_work'] = {'items': [
+        research = deepcopy(baseline['research'])
+        research['stock_business_work'] = {'items': [
             {'sources': {str(i): {'read_path': f'sources/git/legacy-{i}/input.json'} for i in range(32)}}]}
-        baseline['reading_hash'] = model.sha256(model.json_bytes({})) if False else baseline['reading_hash']
         baseline = model.assemble(code_commit=baseline['code_commit'], checked_at=baseline['generated_at'],
             check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
-            research=baseline['research'], capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+            research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
     result = reader.attach(c, baseline)
-    assert result['research']['reviewed_question_work']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    entry = result['research']['reviewed_question_work']
+    assert entry['status'] == 'UNAVAILABLE_OR_REJECTED' and entry['execution_count'] is None
     assert c.files['old-market.bin'] == b'original unrelated saved market'
     assert reader.DETAIL not in c.files
     assert 'UNAVAILABLE' in c.files['README.md'].decode()
@@ -216,7 +229,7 @@ def test_no_api_space_does_not_silently_publish_complete_read(tmp_path, monkeypa
 def test_newest_stock_batch_not_reviewed_is_not_zero_questions(tmp_path, monkeypatch):
     _, c, baseline, _, _, _ = completed(tmp_path, monkeypatch)
     result = reader.attach(c, baseline)
-    scope = result['research']['reviewed_question_work']['stock_review_scope']
+    scope = report(c, result)['stock_review_scope']
     assert len(scope['items']) == 3
     assert [r['review_status'] for r in scope['items']] == [
         'QUESTION_NOT_YET_REVIEWED', 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED', 'ORIGINAL_PRICE_DISPOSITION_ONLY']
@@ -245,8 +258,26 @@ def test_existing_production_collector_opts_in_without_a_second_publisher(tmp_pa
     p.include_reviewed_questions = True
     result = p.collect({})
     assert result['research']['reviewed_question_work']['status'] == 'READ_OK'
+    assert len(report(p, result)['question_work']['items']) == 1
     assert 'old-market.bin' in p.files
     root = Path(__file__).parents[1]
     workflow = (root / '.github/workflows/current-state-read-entry.yml').read_text()
     assert '--include-reviewed-questions' in workflow
     assert 'schedule:' not in workflow and 'DEEPSEEK_API_KEY' not in workflow
+
+
+def test_near_full_original_index_keeps_rows_in_hash_bound_details(tmp_path, monkeypatch):
+    _, c, baseline, _, _, _ = completed(tmp_path, monkeypatch)
+    research = deepcopy(baseline['research'])
+    research['synthetic_existing_payload'] = 'x' * 187000
+    baseline = model.assemble(code_commit=baseline['code_commit'], checked_at=baseline['generated_at'],
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
+        research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+    before_size = len(model.json_bytes(baseline))
+    assert before_size > 185000
+    c.files['current-state.json'] = model.json_bytes(baseline)
+    result = reader.attach(c, baseline)
+    after_size = len(model.json_bytes(result))
+    assert after_size < 192 * 1024 and after_size - before_size < 3000
+    assert len(report(c, result)['question_work']['items']) == 1
+    assert result['research']['synthetic_existing_payload'] == research['synthetic_existing_payload']
