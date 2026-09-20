@@ -1,8 +1,8 @@
-"""Return saved question results through the existing publisher, without execution.
+"""Return saved question outcomes through the existing publisher; never execute.
 
-Stable question roots are independent of today's Stock price membership. Reuse
-Git objects, the original candidate validator and existing publication bounds.
-A source/partial-read gap never becomes a business WAIT or a Human request.
+Read stable question roots independently of current Stock price membership.
+Reuse native Git, the original candidate validator and original reading bounds.
+Reading a saved result is not fresh admission, economic truth or Human acceptance.
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def _reserve(collector, reads=0, new_files=0, extra_bytes=0):
 
 
 def _legacy_sources(payload):
-    """Share the accepted Stock source-file allowance; do not create another one."""
+    """Share the accepted Stock file allowance, not a new independent budget."""
     paths = set()
     def walk(value):
         if isinstance(value, dict):
@@ -262,10 +262,11 @@ def stock_review_scope(payload):
     for row in rows:
         failed = row.get('input_failure') is not None
         passed = row['status'] == 'CONTRACT_CHECKED_RAW_READING' and not failed
+        disposition = ('DATA_UNAVAILABLE_NOT_PRICE_REJECTED' if failed else
+                       'QUESTION_NOT_YET_REVIEWED' if passed else 'ORIGINAL_PRICE_DISPOSITION_ONLY')
         items.append({'thscode': row['thscode'], 'company_name': row.get('company_name'),
-                      'original_stock_disposition': deepcopy(row),
-                      'review_status': ('DATA_UNAVAILABLE_NOT_PRICE_REJECTED' if failed else
-                          'QUESTION_NOT_YET_REVIEWED' if passed else 'PRICE_GATE_NOT_MET_IN_THIS_LANE'),
+                      'original_stock_disposition': deepcopy(row), 'review_status': disposition,
+                      'research_scope_supported': intake.supported(row['thscode']),
                       'economic_question_assessed': False, 'research_execution_allowed': False})
     source_run = stock.get('archive', {}).get('origin_run', {}).get('id')
     return {'status': 'SAVED_STOCK_SCOPE_NOT_A_COMPLETED_RESEARCH_REVIEW',
@@ -311,44 +312,48 @@ def render(report):
     return '\n'.join(lines)
 
 
+def _seal(collector, baseline, work, scope, before_readme):
+    research = deepcopy(baseline['research'])
+    research['reviewed_question_work'] = {**work, 'stock_review_scope': scope}
+    result = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
+        capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+    index = model.json_bytes(result)
+    navigation = ('\n## 日常候选检查与具体问题研究\n\n读取状态：' + _text(work['status']) + '。'
+                  '未审阅不等于没有问题；旧结果首次展示不算新研究。\n')
+    if work.get('details'):
+        navigation += '\n[查看本批完整处置、已执行问题的原结果及来源缺口](' + DETAIL + ')\n'
+    readme = before_readme + navigation.encode()
+    remaining = sum(len(v) for k, v in collector.files.items() if k not in {'README.md', 'current-state.json'})
+    model.check(remaining + len(index) + len(readme) <= delivery.MAX_RETAINED_OUTPUT,
+                'Question reading index exceeds byte budget')
+    model.check(collector.api.calls + len(collector.files) + 5 <= stock_reader.call_limit(collector.api),
+                'Question reading index exceeds publication reserve')
+    collector.files.update({'current-state.json': index, 'README.md': readme})
+    return result
+
+
 def attach(collector, baseline):
     model.validate_read_package(baseline)
     before_files, before_sources = dict(collector.files), dict(collector.sources)
     try:
         scope = stock_review_scope(baseline)
+    except ERRORS:
+        scope = {'status': 'STOCK_SCOPE_UNAVAILABLE', 'items': [], 'meaning': 'NOT_ZERO_QUESTIONS'}
+    try:
         work = collect(collector, baseline)
+        report = {'format': 'reviewed-question-reading-v1', 'question_work': work,
+                  'stock_review_scope': scope, 'research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
+        detail = render(report).encode()
+        body = model.json_bytes(report)
+        _reserve(collector, new_files=2, extra_bytes=len(body) + len(detail))
+        work = {**work, 'details': collector.retain(DETAIL, detail),
+                'structured': collector.retain(REPORT, body)}
+        return _seal(collector, baseline, work, scope, before_files['README.md'])
     except ERRORS as exc:
         collector.files, collector.sources = before_files, before_sources
         work = {'status': 'UNAVAILABLE_OR_REJECTED', 'items': [], 'error_type': type(exc).__name__,
                 'meaning': 'QUESTION_READING_GAP_NOT_ZERO_OR_QUIET', **model.AUTHORITY}
-        try:
-            scope = stock_review_scope(baseline)
-        except ERRORS:
-            scope = {'status': 'STOCK_SCOPE_UNAVAILABLE', 'items': [], 'meaning': 'NOT_ZERO_QUESTIONS'}
-    report = {'format': 'reviewed-question-reading-v1', 'question_work': work,
-              'stock_review_scope': scope, 'research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
-    try:
-        detail = render(report).encode()
-        body = model.json_bytes(report)
-        _reserve(collector, new_files=2, extra_bytes=len(body) + len(detail))
-        details = collector.retain(DETAIL, detail)
-        structured = collector.retain(REPORT, body)
-        research = deepcopy(baseline['research'])
-        research['reviewed_question_work'] = {**work, 'details': details, 'structured': structured,
-                                              'stock_review_scope': scope}
-        result = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
-            check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
-            capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
-        current = model.json_bytes(result)
-        _reserve(collector, extra_bytes=len(current))
-        collector.files['current-state.json'] = current
-        collector.files['README.md'] = before_files['README.md'] + (
-            '\n## 日常候选检查与具体问题研究\n\n'
-            '[查看本批完整处置、已执行问题的原结果及来源缺口](' + DETAIL + ')\n\n'
-            '读取状态：' + _text(work['status']) + '。未审阅不等于没有问题；旧结果首次展示不算新研究。\n'
-        ).encode()
-        return result
-    except ERRORS:
-        collector.files, collector.sources = before_files, before_sources
-        # Preserve the base delivery even when no optional publication space remains.
-        return baseline
+        # Publish an explicit compact gap. If even this cannot fit, fail the
+        # original publisher instead of silently returning a false complete read.
+        return _seal(collector, baseline, work, scope, before_files['README.md'])
