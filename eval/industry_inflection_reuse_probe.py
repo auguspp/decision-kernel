@@ -25,7 +25,10 @@ from decision_kernel.runtime import hithink_http
 TARGETS = ("LC", "CU", "RB")
 END_DATE = "2026-09-18"
 START_DATE = "2026-08-01"
+PRICE_START_DATE = "2026-04-01"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
+PRICE_START_MS = int(datetime(2026, 4, 1, tzinfo=SHANGHAI).timestamp() * 1000)
+PRICE_END_MS = int(datetime(2026, 9, 18, 23, 59, 59, 999000, tzinfo=SHANGHAI).timestamp() * 1000)
 ENDPOINTS = {
     "varieties": "/api/futures/varieties/list",
     "basis_latest": "/api/futures/basis/main-continuous-latest",
@@ -143,6 +146,8 @@ def price_points(envelope):
     rows.sort(key=lambda x: x["timestamp"])
     if len({x["timestamp"] for x in rows}) != len(rows):
         raise ValueError("DUPLICATE_PRICE_TIMESTAMP")
+    if any(x["date"] < PRICE_START_DATE or x["date"] > END_DATE for x in rows):
+        raise ValueError("PRICE_RESPONSE_OUTSIDE_FIXED_COMPLETED_WINDOW")
     return rows
 
 
@@ -219,8 +224,10 @@ def transparent_features(price_rows, basis_items, warehouse_items, position):
     prior5 = None
     if len(closes) >= 11 and closes[-11] != 0:
         prior5 = closes[-6] / closes[-11] - 1
-    basis = dated_numeric(basis_items, "close_basis_rate")
-    warehouse = dated_numeric(warehouse_items, "amount")
+    basis = [(d, v) for d, v in dated_numeric(basis_items, "close_basis_rate")
+             if START_DATE <= d <= END_DATE]
+    warehouse = [(d, v) for d, v in dated_numeric(warehouse_items, "amount")
+                 if START_DATE <= d <= END_DATE]
     changes = []
     if current5 is not None:
         changes.append({"metric": "PRICE_RETURN_5_OBS", "value": current5})
@@ -326,7 +333,9 @@ def main() -> int:
         if target is None:
             continue
         contract = target["main_contract_thscode"]
-        price_env = recorder.get(f"{code}-prices", ENDPOINTS["prices"], {"thscode": contract})
+        price_env = recorder.get(
+            f"{code}-prices", ENDPOINTS["prices"],
+            {"thscode": contract, "start": str(PRICE_START_MS), "end": str(PRICE_END_MS)})
         basis_env = recorder.get(f"{code}-basis", ENDPOINTS["basis"], {"thscode": contract})
         warehouse_env = recorder.get(
             f"{code}-warehouse", ENDPOINTS["warehouse"],
@@ -365,8 +374,10 @@ def main() -> int:
                 "identity_source": target["identity_source"],
                 "price_window": {"first": price_rows[0]["date"], "last": price_rows[-1]["date"],
                                  "observations": len(price_rows)},
-                "basis_observations": len(basis_items),
-                "warehouse_observations": len(warehouse_items),
+                "basis_observations": len([(d, v) for d, v in dated_numeric(basis_items, "close_basis_rate")
+                                           if START_DATE <= d <= END_DATE]),
+                "warehouse_observations": len([(d, v) for d, v in dated_numeric(warehouse_items, "amount")
+                                               if START_DATE <= d <= END_DATE]),
                 "position_date": position.get("date") if isinstance(position, dict) else None,
                 "source_status": source_status,
                 "transparent_features": features,
