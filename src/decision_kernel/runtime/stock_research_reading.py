@@ -37,7 +37,8 @@ def attempts(collector):
     model.check(isinstance(runs.get('workflow_runs'), list) and len(runs['workflow_runs']) <= 10
         and (runs['workflow_runs'] or runs.get('total_count') == 0), 'Stock Research attempts unavailable')
     result = {'latest_workflow_invocation': None, 'latest_execution_attempt': None,
-        'latest_source_preparation_attempt': None, 'unclassified_invocations': [],
+        'latest_source_preparation_attempt': None, 'latest_compatibility_attempt': None,
+        'unclassified_invocations': [],
         'attempt_query_scope': 'NEWEST_TEN_EXACT_WORKFLOW_INVOCATIONS_NOT_ALL_HISTORY',
         'preparation_result_semantics': 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'}
     seen = set()
@@ -61,13 +62,16 @@ def attempts(collector):
             model.check(isinstance(rows, list) and type(jobs['total_count']) is int
                 and len(rows) == jobs['total_count'] and len(rows) <= 100
                 and all(isinstance(j, dict) and j.get('run_id') == run['id']
-                        and j.get('name') in {'research-stock-business', 'prepare-stock-sources'} for j in rows)
+                        and j.get('name') in {'research-stock-business', 'prepare-stock-sources',
+                                               'deepseek-compatibility'} for j in rows)
                 and len({j['name'] for j in rows}) == len(rows), 'Stock invocation jobs incomplete or ambiguous')
             active = [j['name'] for j in rows if j.get('conclusion') != 'skipped']
             if active == ['research-stock-business']:
                 key = 'latest_execution_attempt'
             elif active == ['prepare-stock-sources'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_source_preparation_attempt'
+            elif active == ['deepseek-compatibility'] and run['event'] == 'workflow_dispatch':
+                key = 'latest_compatibility_attempt'
             else:
                 raise ValueError('Stock invocation mode not established')
             if result[key] is None:
