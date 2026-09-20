@@ -19,6 +19,7 @@ from . import reviewed_question_input as reviewed
 from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_research_reading as stock_reader
+from .read_blob_reuse import pending_blob_writes
 from .external_research_execution import (
     ExternalResearchInputPacket, ExternalResearchCandidate,
     validate_external_research_candidate,
@@ -37,7 +38,7 @@ ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, 
 def _reserve(collector, reads=0, new_files=0, extra_bytes=0):
     calls = getattr(collector.api, 'calls', None)
     model.check(type(calls) is int and calls >= 0, 'Question API accounting unavailable')
-    model.check(calls + reads + len(collector.files) + new_files + 7
+    model.check(calls + reads + pending_blob_writes(collector.api, collector.files) + new_files + 7
                 <= stock_reader.call_limit(collector.api), 'Question publication reserve')
     model.check(sum(map(len, collector.files.values())) + extra_bytes + 256 * 1024
                 <= delivery.MAX_RETAINED_OUTPUT, 'Question retained-byte reserve')
@@ -342,7 +343,9 @@ def _seal(collector, baseline, work, scope, before_readme):
     remaining = sum(len(v) for k, v in collector.files.items() if k not in {'README.md', 'current-state.json'})
     model.check(remaining + len(index) + len(readme) <= delivery.MAX_RETAINED_OUTPUT,
                 'Question reading index exceeds byte budget')
-    model.check(collector.api.calls + len(collector.files) + 5 <= stock_reader.call_limit(collector.api),
+    replacements = {**collector.files, 'current-state.json': index, 'README.md': readme}
+    model.check(collector.api.calls + pending_blob_writes(collector.api, replacements) + 5
+                <= stock_reader.call_limit(collector.api),
                 'Question reading index exceeds publication reserve')
     collector.files.update({'current-state.json': index, 'README.md': readme})
     return result
