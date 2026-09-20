@@ -248,7 +248,8 @@ def test_dispatch_opt_in_and_actual_three_parent_request_are_preserved():
     root=Path(__file__).parents[1]
     workflow=(root/'.github/workflows/stock-business-research.yml').read_text()
     assert 'recover-sources:' in workflow and 'default: false' in workflow
-    assert "github.event_name == 'workflow_dispatch' && inputs.recover-sources" in workflow
+    assert 'workflow_run:' not in workflow.split('on:\n', 1)[1].split('\npermissions:', 1)[0]
+    assert 'RECOVER_SOURCES: ${{ inputs.recover-sources }}' in workflow
     assert 'extra+=(--recover-sources)' in workflow
     assert 'schedule:' not in workflow and '\n  push:' not in workflow
     request=json.loads((root/recovery.REQUEST).read_bytes())
