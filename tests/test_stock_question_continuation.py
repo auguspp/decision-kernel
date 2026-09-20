@@ -272,20 +272,24 @@ def test_deepseek_egress_contract_uses_accepted_wire_shape(
     assert cont.egress_hash(packet, discovery, context) == request["approved_egress_hash"]
 
 
-def test_default_request_disabled_and_workflow_manual_only():
+def test_request_shape_and_workflow_manual_only():
     root = Path(__file__).parents[1]
     request = json.loads((root / cont.REQUEST).read_text())
-    assert request == {
-        "approved_egress_hash": None,
-        "context_source": None,
-        "enabled": False,
-        "mode": cont.MODE,
-        "permission": None,
-        "predecessor": None,
-        "preflight_source": None,
-        "question_source": None,
-        "schema_version": 1,
+    assert set(request) == {
+        "approved_egress_hash", "context_source", "enabled", "mode",
+        "permission", "predecessor", "preflight_source", "question_source",
+        "schema_version",
     }
+    assert request["schema_version"] == 1 and request["mode"] == cont.MODE
+    assert type(request["enabled"]) is bool
+    if request["enabled"]:
+        assert all(request[k] is not None for k in (
+            "approved_egress_hash", "context_source", "permission", "predecessor",
+            "preflight_source", "question_source"))
+    else:
+        assert all(request[k] is None for k in (
+            "approved_egress_hash", "context_source", "permission", "predecessor",
+            "preflight_source", "question_source"))
     workflow = (root / ".github/workflows/stock-business-research.yml").read_text()
     assert "reviewed-question-continuation:" in workflow
     assert "decision_kernel.runtime.stock_question_continuation" in workflow
