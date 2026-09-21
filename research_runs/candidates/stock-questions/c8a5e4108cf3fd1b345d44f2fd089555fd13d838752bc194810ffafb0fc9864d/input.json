@@ -1,0 +1,172 @@
+{
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "budget": {
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_elapsed_minutes": 15,
+    "max_search_queries": 0,
+    "max_source_reads": 4,
+    "max_technical_retries": 0,
+    "max_tool_calls": 6,
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "tool_calls_enforcement": "SOFT_EXECUTOR"
+  },
+  "candidate_output_prefix": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/",
+  "case_id": "603507.SH",
+  "code_commit": "ae53a9115d73cb56f04291a2a5f158e1ccaf2545",
+  "current_state_commit": "461df14b32dae4a2073b2707c74113def2231ebc",
+  "current_state_reading_hash": "40bec48a2354daf6f6a3ecba267f9d2b450338e87694471907fd8d7ad32361b7",
+  "execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
+  "known_unknowns": [
+    "报告后变化不在本次STATIC范围内。",
+    "逐工具套保与外币经营敞口对应、营运资本改善的持续性、维持性资本开支仍未建立。",
+    "此问题已有交互底稿；本次正式Pre不是全新经济发现或Full Research。",
+    "REQUIRED_SOURCE_CLASS:COMPLETE_H1_FINANCIAL_REPORT:STATIC",
+    "FALSIFICATION_TEST:若扣非、营运资本或资本支出证据不支持同步改善，应限制或否定该解释；保留支持真实经营改善的证据。缺失资料与套期披露矛盾不得补猜成收益或业务WAIT。",
+    "KNOWN_COUNTEREVIDENCE:原交互审阅提示扣非利润也增长，不能将归母增长全部当作一次性。",
+    "KNOWN_COUNTEREVIDENCE:经营现金的同比改善与资本占用变化有关，不能等同已产生同额股东自由现金。",
+    "EXISTING_RESEARCH_RELATION:相对已消费正式研究的初次独立问题根；已有9月21日交互问题/有限底稿全部引用并复用，不伪称新的知识发现。完整既有work树及其正式input按证券核对未见603507执行；不重开沃顿或广哈，不宣称穷尽所有聊天的语义历史。"
+  ],
+  "method_version": "research-funnel-v1",
+  "next_discriminating_search": "本次仅使用已保存完整半年报验证上述有限问题；需要其他关键材料时明确其名称与影响后停止，不自动抓取、重试或深化。",
+  "prompt_version": "reviewed-question-stock-v0",
+  "research_cutoff": "2026-09-21T15:44:33.659776Z",
+  "research_question": "在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。",
+  "schema_version": 1,
+  "security_id": "SSE:603507",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-21T15:44:33.659776Z",
+      "content_hash": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe",
+      "extracted_structured_values": null,
+      "id": "934dcdd2-0a9c-5cba-a408-731c29307b7f",
+      "idempotency_key": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d:8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe",
+      "license_terms_note": "Approved retained public question context; primary-read declarations are not truth certification.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-21T15:24:39Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/0e4d4c425f0dd526976924ab276ed16b08863193/research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-21T15:44:33.659776Z",
+      "schema_version": 1,
+      "source_identifier": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/0e4d4c425f0dd526976924ab276ed16b08863193/research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "selected_at": "2026-09-21T15:44:33.659776Z",
+  "source_lane": "REVIEWED_RADAR_QUESTION",
+  "source_refs": [
+    {
+      "git_blob": "fc52aee3bf922644287171e61e772778d1196ab1",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/question.json",
+      "purpose": "REVIEWED_RADAR_QUESTION",
+      "ref": "a17dcb961b4078106ab9e19c09172b94a26f97ac",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "f452e0d3b75b002f5f4bac1af6aa931ceb40e8c2ad736323ea32b3c328dbd80a"
+    },
+    {
+      "git_blob": "6b00ff0f518dd763b1b6fec1e7850ad20d791dfd",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "0e4d4c425f0dd526976924ab276ed16b08863193",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe"
+    },
+    {
+      "git_blob": "ca2774a9a1f7a80f99d9790a203faff402d470ee",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "c912c53a56413c9180614989e9bcd82528c6b0f8",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "cec29704d3464d54880f51dc288b6deed8e9863846e61e7d4994d118dfcc6734"
+    },
+    {
+      "git_blob": "a5499c7dddff49b04ed6ad8d6fe68be6ea634a8b",
+      "path": "current-state.json",
+      "purpose": "SAVED_QUESTION_READING",
+      "ref": "461df14b32dae4a2073b2707c74113def2231ebc",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "3f088821be115c4cf90dd3a10afbfc64b6e2712b91c4143e0e938f16f2d9263b"
+    },
+    {
+      "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+      "path": "details/stock/35588490572/reading/stock-reading.json",
+      "purpose": "SAVED_STOCK_BATCH_ORIGIN",
+      "ref": "461df14b32dae4a2073b2707c74113def2231ebc",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+    },
+    {
+      "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+      "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+      "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+      "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+    },
+    {
+      "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
+      "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
+      "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+      "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
+    },
+    {
+      "git_blob": "79ab62d35e0a2a8475253bcf8cf54791624f3740",
+      "path": "research_runs/sources/zhenjiang-603507-2026H1/603507-2026H1.pdf",
+      "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+      "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d"
+    },
+    {
+      "git_blob": "2c272a8c92fcf07120715c3eda7ec7a6fdf36b9c",
+      "path": "research_runs/stock-retained-source-imports.json",
+      "purpose": "REVIEWED_RETAINED_SOURCE_IMPORT",
+      "ref": "ae53a9115d73cb56f04291a2a5f158e1ccaf2545",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "517f37a12298419559d88ad7a780179ec726bd862f9232fc31e6e9a4164bc15d"
+    },
+    {
+      "git_blob": "cba5572b19dc0b8fbb896e4c427c45b763f76f0b",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/batch-review.json",
+      "purpose": "DAILY_STOCK_BATCH_REVIEW",
+      "ref": "fcb0d1f352103a9e7af2b917b31f11d025fcd37c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4ecea56800ecabac48e83f7ec537b35fbff2b6ccb39b644c50da1320b36c7ec0"
+    },
+    {
+      "git_blob": "c0ed32c6d0722a05130608db6a3641e23d435c0d",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/custody.json",
+      "purpose": "DAILY_PUBLIC_PDF_CUSTODY",
+      "ref": "2199aa75000dc5315d6989b4c41509d2f355a925",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "89a91a66c1f7b88b8bdc95e6978e4f3e3f72271652d34a3ea63e197135de27f8"
+    },
+    {
+      "git_blob": "729da26e8f2f75dd6c9d7b7ed8cfc30dbbb6a7f9",
+      "path": "research_runs/sources/zhenjiang-603507-2026H1/inventory.json",
+      "purpose": "RETAINED_CNINFO_ISSUER_INVENTORY",
+      "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "a5a45f11f119bffa1bc818dd00b7a3c06aa44d58f4b381c1a922a598fafdd0ba"
+    },
+    {
+      "git_blob": "90be312c556e3091d2be0f993d295e0e7e16bf22",
+      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/source-journal.json",
+      "purpose": "RETAINED_CNINFO_SOURCE_JOURNAL",
+      "ref": "5a61949486ad5f636d06572b8cd7677802133db3",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "cb3befabcd090afb86d80ce399c1da6aec335283c39ea861c6436c1dc1c38139"
+    }
+  ],
+  "ticker": "603507",
+  "untrusted_test_material": null
+}
