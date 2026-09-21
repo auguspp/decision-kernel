@@ -1,0 +1,36 @@
+{
+  "body_events": [
+    {
+      "announcement_id": "1225506358",
+      "bytes": 1337795,
+      "captured_at": "2026-09-21T13:06:12.259169+00:00",
+      "finished_at": "2026-09-21T13:06:23.512263+00:00",
+      "pdf_sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506358.PDF",
+      "status": "FORMAT_AND_IDENTITY_CHECKED_NOT_TRUTH"
+    }
+  ],
+  "completed_reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+      "checked_at": "2026-09-21T13:06:23.512263+00:00",
+      "id": "retained-1225506358",
+      "identity": "603507:1225506358",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506358.PDF",
+      "succeeded": true,
+      "tool_reference": "GitHub source run 35603425130; retained original receipt"
+    }
+  ],
+  "new_source_requests": 0,
+  "original_receipt_sha256": "912cca515fad84c0b1c530d8d56ff7f548b28e9d6b7a2e8e5fe9fa7e50999cb6",
+  "original_source_run": {
+    "event": "push",
+    "head_branch": "probe/ftshare-zhenjiang-discovery-20260921",
+    "head_sha": "03c65cd60b7f4783c14974a6ae0065362776c432",
+    "id": 35603425130,
+    "path": ".github/workflows/zhenjiang-ftshare-identified-report.yml"
+  },
+  "provenance": "IMPORTED_HISTORICAL_CAPTURE_NOT_NEW_ACQUISITION"
+}
