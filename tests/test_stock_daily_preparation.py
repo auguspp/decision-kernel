@@ -97,7 +97,10 @@ def test_native_rejections_produce_gap_and_never_export_an_executable_request(tm
         s = case.request['source_custody_source']
         case.api.files[s['ref']][s['path']] = once.raw(case.custody)
     elif damage == 'consumed-root':
-        case.api.files[case.api.heads[intake.WORK_REF]][case.prefix + 'failure.json'] = b'partial'
+        # setup_daily starts without a work branch; construct saved partial history.
+        work = 'd' * 40
+        case.api.heads[intake.WORK_REF] = work
+        case.api.files[work] = {case.prefix + 'failure.json': b'partial'}
     elif damage == 'policy':
         case.api.files[case.args['code']][daily.POLICY_PATH] = b'{}'
     else:
