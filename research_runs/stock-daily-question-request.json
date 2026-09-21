@@ -1,16 +1,51 @@
 {
-  "schema_version": 1,
-  "enabled": false,
+  "approved_egress_hash": null,
+  "batch_review_source": {
+    "git_blob": "cba5572b19dc0b8fbb896e4c427c45b763f76f0b",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/batch-review.json",
+    "purpose": "DAILY_STOCK_BATCH_REVIEW",
+    "ref": "fcb0d1f352103a9e7af2b917b31f11d025fcd37c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "4ecea56800ecabac48e83f7ec537b35fbff2b6ccb39b644c50da1320b36c7ec0"
+  },
+  "context_source": {
+    "git_blob": "6b00ff0f518dd763b1b6fec1e7850ad20d791dfd",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "0e4d4c425f0dd526976924ab276ed16b08863193",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe"
+  },
+  "enabled": true,
   "mode": "BOUNDED_DAILY_REVIEWED_STOCK_QUESTION",
   "permission": {
-    "comment_id": 5748820065,
     "body_sha256": "6f45cf4378304c70fe734d2b080fd24115a6056966f60be5ec66dd5e27fb93f5",
+    "comment_id": 5748820065,
     "created_at": "2026-09-20T09:00:30Z"
   },
-  "question_source": null,
-  "context_source": null,
-  "preflight_source": null,
-  "batch_review_source": null,
-  "source_custody_source": null,
-  "approved_egress_hash": null
+  "preflight_source": {
+    "git_blob": "ca2774a9a1f7a80f99d9790a203faff402d470ee",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/preflight.json",
+    "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+    "ref": "c912c53a56413c9180614989e9bcd82528c6b0f8",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "cec29704d3464d54880f51dc288b6deed8e9863846e61e7d4994d118dfcc6734"
+  },
+  "question_source": {
+    "git_blob": "fc52aee3bf922644287171e61e772778d1196ab1",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "a17dcb961b4078106ab9e19c09172b94a26f97ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "f452e0d3b75b002f5f4bac1af6aa931ceb40e8c2ad736323ea32b3c328dbd80a"
+  },
+  "schema_version": 1,
+  "source_custody_source": {
+    "git_blob": "c0ed32c6d0722a05130608db6a3641e23d435c0d",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/custody.json",
+    "purpose": "DAILY_PUBLIC_PDF_CUSTODY",
+    "ref": "2199aa75000dc5315d6989b4c41509d2f355a925",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "89a91a66c1f7b88b8bdc95e6978e4f3e3f72271652d34a3ea63e197135de27f8"
+  }
 }
