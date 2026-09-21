@@ -10,6 +10,7 @@ import tempfile
 from decision_kernel.identity import canonical_hash
 from . import current_state as model
 from . import concept_detail_capture as capture
+from . import concept_detail_compat as compat
 from . import concept_detail_supplement as detail
 from . import institutional_radar_reading as shared
 from . import radar_company_reading as companies
@@ -73,7 +74,7 @@ def read(collector, cutoff, primary):
     with tempfile.TemporaryDirectory(prefix='concept-detail-read-') as directory:
         root = Path(directory)
         for name, raw in payload.items(): (root / name).write_bytes(raw)
-        replay = capture.verify(root)
+        replay, replay_mode = compat.verify(root)
     model.check(json.loads(files['verification.json']) == replay, 'Detail origin verification differs')
     report = json.loads(payload['observation.json']); p = report['projection']
     model.check(p['base_projection_hash'] == primary['projection_hash']
@@ -87,7 +88,7 @@ def read(collector, cutoff, primary):
     status.update(status='VERIFIED_SAVED_CONCEPT_DETAIL', archive=archive, details=refs,
                   capture_status=receipt['status'], market_session=p['market_session'], source_observed_at=p['as_of'],
                   base_projection_hash=p['base_projection_hash'], projection_hash=report['projection_hash'],
-                  coverage=p['coverage'], replay=replay,
+                  coverage=p['coverage'], replay=replay, replay_mode=replay_mode,
                   meaning='SEPARATE_SAVED_SUPPLEMENT_NOT_NEW_PRIMARY_OR_RESEARCH; NOT_ALL_BATCHES')
     return report, refs['observation.json'], status
 
