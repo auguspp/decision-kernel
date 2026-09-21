@@ -1,0 +1,74 @@
+{
+  "code_commit": "ff6acfd856ceb6f58d6bb6c52a394414029429c2",
+  "custody_hash": "1b4a1d98eb2661181714a8ed22f832bf6fec7cf75817402d639182122ff2d840",
+  "files": {
+    "extraction.json": {
+      "bytes": 271419,
+      "git_blob": "a7baac08c9a0aba7c379a02a994c511986cf3529",
+      "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/extraction.json",
+      "purpose": "PUBLIC_REPORT_SOURCE_ONLY",
+      "ref": "7d61151c3ccfa2eb29623825c81d61f7468b0a6b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "44b6358b1c2320ef6d9d9f9193f61cc522c2d0c77bfb29f7d72ec571e1e11b18"
+    },
+    "source.pdf": {
+      "bytes": 1262185,
+      "git_blob": "87b56650d5ec01935e94e97d9e60ad986cb378d1",
+      "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/source.pdf",
+      "purpose": "PUBLIC_REPORT_SOURCE_ONLY",
+      "ref": "7ec7eee11ac61aecdf05940904631a47cc07436a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728"
+    }
+  },
+  "finished_at": "2026-09-21T02:55:37.293586+00:00",
+  "http_status": 200,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "provenance": "ISSUER_REPORT_VIA_SINA_MIRROR_NOT_CNINFO_BYTE_EQUIVALENCE",
+  "received_at": "2026-09-21T01:27:16.307920+00:00",
+  "representation_repair": {
+    "original_failure": {
+      "git_blob": "f45c0d6d004cc67145218df27dc43de11169c4b0",
+      "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/failure.json",
+      "purpose": "ORIGINAL_SOURCE_REPRESENTATION_FAILURE",
+      "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "2e29dfe9c00f591dec9231197b07fac204ad9fa4fab188d8ed605fb3fa01ebff"
+    },
+    "original_run_preserved_as_failure": true,
+    "reservation": {
+      "bytes": 1772,
+      "git_blob": "a5f340f80829d5c9e7234e51c9b0eb247ecee244",
+      "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/representation-repair.json",
+      "purpose": "PUBLIC_REPORT_SOURCE_ONLY",
+      "ref": "9e6558a2746da05aa804a48c9b42adabf45eded5",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "bf3499b532c8d8cee7e5801c30cd2828e81183e23221e69bc7dd323d71be7a8e"
+    },
+    "source_requests": 0
+  },
+  "requested_at": "2026-09-21T01:27:14.761946+00:00",
+  "research_authority": "NONE",
+  "scope": {
+    "enabled": true,
+    "execute_before": "2026-09-23T00:00:00Z",
+    "expected_bytes": 1262185,
+    "expected_sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728",
+    "mode": "WOTON_H1_PUBLIC_REPORT_CUSTODY_ONLY",
+    "page_count": 133,
+    "permission": {
+      "body_sha256": "a6fedda75600bcde32ec78e26e9ee2bbaa467f769fe4f2d936908acfac474f3f",
+      "comment_id": 5753902322,
+      "created_at": "2026-09-21T00:33:28Z"
+    },
+    "related_question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+    "report_period": "2026H1",
+    "schema_version": 1,
+    "source_url": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-21/12512184.PDF",
+    "subject": "000920.SZ"
+  },
+  "signal_transition_authority": "NONE",
+  "source_requests": 1,
+  "status": "SOURCE_CUSTODY_COMPLETE_NOT_RESEARCH"
+}
