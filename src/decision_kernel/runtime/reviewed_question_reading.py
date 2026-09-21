@@ -248,6 +248,7 @@ def collect(collector, payload):
     return {'status': 'READ_OK_WITH_QUESTION_GAPS' if any(i['status'] == 'UNAVAILABLE_OR_REJECTED' for i in items) else 'READ_OK',
             'work_ref': intake.WORK_REF, 'work_commit': commit, 'scope': PREFIX,
             'scope_note': 'ALL_RETAINED_ROOTS_WITHIN_BOUND_NOT_CURRENT_PRICE_QUALIFIED_MEMBERS',
+            'retained_source_file_count': len(legacy | projected) + len(qcache),
             'items': items, 'new_research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
 
 
@@ -420,7 +421,12 @@ def _recorded_batch_review(collector, payload, scope, work):
             shared.update(s['read_path'] for s in row.get('sources', {}).values())
             if row.get('question_source'):
                 shared.add(row['question_source']['read_path'])
-        model.check(len(shared | {read_path}) <= stock_reader.MAX_STOCK_SOURCE_FILES,
+        # Rejected roots still retain their raw files. Count the original
+        # collector's whole scope, not only source mappings of valid results.
+        retained_count = work['retained_source_file_count']
+        model.check(type(retained_count) is int and len(shared) <= retained_count
+                    and retained_count + int(read_path not in shared)
+                    <= stock_reader.MAX_STOCK_SOURCE_FILES,
                     'Recorded batch review source-file bound')
         _reserve(collector, reads=2, new_files=1, extra_bytes=identity.MAX_BYTES)
         raw = identity._checked_source(spec, lambda source: collector.api.file(source['path'], source['ref']))
