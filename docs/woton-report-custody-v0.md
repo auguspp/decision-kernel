@@ -1,7 +1,7 @@
 # Known Woton report: source-only native Git custody
 
 Scope: #297/5753902322, following Human “好，继续”. Reuse Decision:
-**THIN_ADAPTER**. This closes the custody gap identified by #297/5750454664:
+**THIN_ADAPTER**. This addresses the custody gap identified by #297/5750454664:
 the previously acquired Sina issuer PDF was retained as an earlier chat file,
 not as an Actions source artifact or a repository source record. That success
 is not erased by the absence of that attachment in the current conversation.
@@ -10,8 +10,8 @@ is not erased by the absence of that attachment in the current conversation.
 
 The existing `stock-business-research` workflow has one additional, default-false
 `retain-report-source` input and an isolated source-only job. All original jobs
-reject that flag. The new job requires trusted exact main, dispatch, attempt 1,
-no other mode and no source-stock-run-id. It installs only existing documents
+reject that flag. The new job requires trusted exact main, attempt 1, an explicit source trigger,
+and no other mode and no source-stock-run-id. It installs only existing documents
 and feeds extras and receives no model/market credentials. The request is fixed
 at `research_runs/woton-report-custody-request.json`; its exact retained scope
 and permission comment are checked before reservation and again before I/O.
@@ -117,3 +117,34 @@ report and an honest future source-consumer connection without renaming the
 question, lowering necessary source classes, or asking the Human to move files.
 P0 new-input -> bounded Research -> Brief -> real Human response is not closed
 by source retention alone. AI Investment Authority = NONE.
+
+## Native trigger transport correction before release
+
+The connected GitHub toolset does not expose workflow_dispatch and this chat has
+no authenticated CLI. Reuse the native `issues: labeled` event in the SAME Stock
+workflow, restricted to issue297, sender auguspp and `woton-h1-source-ready`.
+The source-only Python guard checks the same minimal event fields and empty
+dispatch inputs. The normal exact request/permission/main/expiry/atomic source
+marker remain mandatory; a label is transport, never authorization or Research
+evidence. It does not change the source URL, hash or permitted single GET.
+The prepare receipt records the actual event/issue/label, not a fabricated
+workflow_dispatch. Manual dispatch remains supported under its existing checks.
+
+All original jobs still require workflow_dispatch. The existing invocation
+reader accepts an issues event only as the isolated source job, never Research,
+legacy source preparation or provider compatibility. No additional workflow,
+relay, scheduler, credential or dependency is introduced. The normal publisher
+stock-event guard is unchanged and does not publish an issues-triggered source
+run; the subsequent lightweight registration PR/main CI provides normal
+publication. No source event is preclaimed as publication or Research acceptance.
+
+The first exact-head full CI ran4795 tests, with4793pass/2fail. Its two failures
+were the old exact-three-jobs assertion and source-job-to-EOF text slicing, not
+failed PDF acquisition. Keep their testcase identities and all original
+read-only/no-model assertions, adjust the declared job list and keep the legacy
+read-only preparation job last (its original test remains byte-identical),
+and add strict issue-event and wrong-mode regressions. Preserve that initial
+run instead of rerunning it or claiming local69 tests established full acceptance.
+
+Official event contract:
+https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#issues

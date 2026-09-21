@@ -38,7 +38,8 @@ def test_daily_dispatch_reuses_existing_job_and_concurrency_with_only_deepseek_c
     assert "schedule:" not in trigger and "workflow_run:" not in trigger
     assert "group: stock-business-first-v0\n  cancel-in-progress: false" in workflow
     assert re.findall(r"^  ([a-z-]+):$", workflow.split("jobs:\n", 1)[1], re.M) == [
-        "research-stock-business", "deepseek-compatibility", "prepare-stock-sources",
+        "research-stock-business", "deepseek-compatibility", "retain-public-report-source",
+        "prepare-stock-sources",
     ]
     step = daily_step()
     assert "GH_TOKEN: ${{ github.token }}" in step

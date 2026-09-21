@@ -39,6 +39,7 @@ SCOPE = {'schema_version': 1, 'enabled': True, 'mode': MODE, 'permission': PERMI
          'related_question_id': QUESTION_ID, 'execute_before': '2026-09-23T00:00:00Z'}
 COMPLETE = 'SOURCE_CUSTODY_COMPLETE_NOT_RESEARCH'
 REUSED = 'EXISTING_SOURCE_ATTEMPT_NO_ACQUISITION'
+READY_LABEL = 'woton-h1-source-ready'
 OTHER_FLAGS = ('reviewed-question', 'daily-reviewed-question', 'reviewed-question-continuation',
                'deepseek-compat', 'recover-sources', 'prepare-sources', 'source-successor',
                'source-successor-continuation')
@@ -50,11 +51,19 @@ def check_environment(env, code):
                  and env.get('GITHUB_REPOSITORY') == once.REPO
                  and env.get('GITHUB_REF') == 'refs/heads/main'
                  and env.get('GITHUB_WORKFLOW') == 'stock-business-research'
-                 and env.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
+                 and env.get('GITHUB_EVENT_NAME') in {'workflow_dispatch', 'issues'}
                  and env.get('GITHUB_RUN_ATTEMPT') == '1'
                  and str(env.get('GITHUB_RUN_ID', '')).isdigit()
                  and int(env['GITHUB_RUN_ID']) > 0, 'REPORT_WORKFLOW_IDENTITY')
     inputs = json.loads(env.get('REPORT_INPUTS', '{}'))
+    if env['GITHUB_EVENT_NAME'] == 'issues':
+        once.require(inputs == {} and env.get('REPORT_EVENT_ACTION') == 'labeled'
+                     and env.get('REPORT_ISSUE_NUMBER') == '297'
+                     and env.get('REPORT_LABEL') == READY_LABEL
+                     and env.get('REPORT_SENDER') == 'auguspp'
+                     and env.get('REPORT_IS_PULL_REQUEST') == 'false',
+                     'REPORT_LABEL_TRANSPORT_SCOPE')
+        return
     once.require(set(inputs) == {*OTHER_FLAGS, 'retain-report-source', 'source-stock-run-id', 'code-sha'}
                  and inputs['retain-report-source'] is True and inputs['code-sha'] == code
                  and inputs['source-stock-run-id'] == ''
@@ -187,7 +196,10 @@ def run(*, api, code, output, clock=once.now, download=acquire, retainer_factory
                                   'work_ref': WORK_REF}, code, output)
         retain.save('prepare.json', {'scope': SCOPE, 'code_commit': code,
             'started_at': clock(), 'run_id': os.environ.get('GITHUB_RUN_ID'),
-            'operation': 'SOURCE_ONLY_NOT_RESEARCH_LAUNCH', **model.AUTHORITY})
+            'operation': 'SOURCE_ONLY_NOT_RESEARCH_LAUNCH',
+            'trigger_event': os.environ.get('GITHUB_EVENT_NAME'),
+            'trigger_issue': os.environ.get('REPORT_ISSUE_NUMBER'),
+            'trigger_label': os.environ.get('REPORT_LABEL'), **model.AUTHORITY})
         reserved = True
         authorize(api, code, request, request_path=REQUEST, mode=MODE)
         once.require(model.clock(clock()) < model.clock(SCOPE['execute_before']), 'REPORT_SCOPE_EXPIRED')
