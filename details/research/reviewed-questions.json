@@ -358,6 +358,97 @@
   },
   "research_authority": "NONE",
   "research_execution": "NOT_EXECUTED",
+  "saved_batch_disposition": {
+    "applied": true,
+    "dispositioned_count": 6,
+    "economic_question_assessed": false,
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "items": [
+      {
+        "company_name": "道明光学",
+        "disposition": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "existing_execution_id": null,
+        "progress_locators": [],
+        "progress_record_ids": [],
+        "reason": "保留原5日价格路径或市场超额未满足的处置。本次不从此批启动新问题；不是已完成经营审阅，也不是否定膜材料业务价值。",
+        "thscode": "002632.SZ"
+      },
+      {
+        "company_name": "金健米业",
+        "disposition": "DATA_UNAVAILABLE",
+        "existing_execution_id": null,
+        "progress_locators": [],
+        "progress_record_ids": [],
+        "reason": "当前报价与历史数据不一致，原错误CURRENT_QUOTE_HISTORY_MISMATCH仍未消除。未作价格或经营否决，不用缺失数据制造问题执行资格；具体来源核对仍由施工端处理。",
+        "thscode": "600127.SH"
+      },
+      {
+        "company_name": "*ST航图",
+        "disposition": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "existing_execution_id": null,
+        "progress_locators": [],
+        "progress_record_ids": [],
+        "reason": "保留原RISK_OR_NEW_LISTING_NAME_LABEL名称风险过滤。它不是价格路径计算失败或公司经营终局；本次不越过原批次资格进入日常新问题执行。",
+        "thscode": "688066.SH"
+      },
+      {
+        "company_name": "沃顿科技",
+        "disposition": "EXISTING_RESEARCH",
+        "existing_execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+        "progress_locators": [
+          {
+            "id": "p0-000920-reports-only-profit-bridge-20260921",
+            "meaning": "REGISTERED_LOCATOR_NOT_BODY_READ_OR_ACCEPTED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/69305a766eb2cc4b09a6b1a6d4008625e54b8a3d/docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md"
+          }
+        ],
+        "progress_record_ids": [
+          "p0-000920-reports-only-profit-bridge-20260921"
+        ],
+        "reason": "沿原膜业务利润与现金问题继续，保留历史基线来源失败。133页财报原件与解析已完成，财务r3已有精确档案；不再获取同一原件，不把局部进度或新浪镜像自动升级为日常CNINFO新问题执行。",
+        "thscode": "000920.SZ"
+      },
+      {
+        "company_name": "深粮控股",
+        "disposition": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "existing_execution_id": null,
+        "progress_locators": [],
+        "progress_record_ids": [],
+        "reason": "保留原5日价格路径或市场超额未满足的处置。本次不从此批启动新问题；未据此判断粮油业务的盈利或现金质量。",
+        "thscode": "000019.SZ"
+      },
+      {
+        "company_name": "松发股份",
+        "disposition": "EXISTING_RESEARCH",
+        "existing_execution_id": "stock-business-0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5",
+        "progress_locators": [],
+        "progress_record_ids": [],
+        "reason": "保留原FIRST_BUSINESS_BASELINE来源准备失败及相同问题根。本次未形成材料齐备、与已消费根不同的可执行新问题；不换key重试，也不把来源缺口包装成业务WAIT或DROP。",
+        "thscode": "603268.SH"
+      }
+    ],
+    "meaning": "ROUTING_REVIEW_NOT_ECONOMIC_QUALIFICATION_OR_NO_OPPORTUNITIES",
+    "new_question_selected_count": 0,
+    "research_authority": "NONE",
+    "research_execution": "NOT_EXECUTED",
+    "reviewed_at": "2026-09-21T04:35:33.741571+00:00",
+    "reviewed_reading_commit": "d5191f188a8a054a7992ee061094959c5903e388",
+    "saved_batch_id": "a5f7fb0222fc80fa377dc4ea923637750785e8859f57b493eb0bafa887b9f518",
+    "saved_market_session": "2026-09-18",
+    "signal_transition_authority": "NONE",
+    "source": {
+      "bytes": 2980,
+      "git_blob": "9ce598f42f43377c43828053b672493906ad2bf6",
+      "path": "research_runs/stock-batch-disposition.json",
+      "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
+      "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+      "ref": "ef87dadb008d49d0510786a550e2a8d35f04c566",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
+    },
+    "status": "FULL_BATCH_DISPOSITION_RECORDED_NO_NEW_EXECUTION"
+  },
   "signal_transition_authority": "NONE",
   "stock_review_scope": {
     "automatic_research_execution": false,
