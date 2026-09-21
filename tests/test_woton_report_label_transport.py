@@ -94,3 +94,10 @@ def test_actual_workflow_label_scope_and_legacy_job_permissions_remain_separate(
     assert 'github.event.issue.body' not in source and 'github.event.comment.body' not in source
     legacy=text.split('  prepare-stock-sources:\n',1)[1]
     assert 'contents: read' in legacy and 'contents: write' not in legacy
+
+
+@pytest.mark.parametrize('serialized', ['null', '""'])
+def test_issue_event_accepts_only_empty_unavailable_dispatch_context(serialized):
+    # GitHub only defines inputs for reusable/manual workflows. Empty/unavailable
+    # representations carry no controls; exact issue identity and original auth remain.
+    c.check_environment({**label_env(), 'REPORT_INPUTS': serialized}, CODE)

@@ -57,7 +57,7 @@ def check_environment(env, code):
                  and int(env['GITHUB_RUN_ID']) > 0, 'REPORT_WORKFLOW_IDENTITY')
     inputs = json.loads(env.get('REPORT_INPUTS', '{}'))
     if env['GITHUB_EVENT_NAME'] == 'issues':
-        once.require(inputs == {} and env.get('REPORT_EVENT_ACTION') == 'labeled'
+        once.require(inputs in ({}, None, '') and env.get('REPORT_EVENT_ACTION') == 'labeled'
                      and env.get('REPORT_ISSUE_NUMBER') == '297'
                      and env.get('REPORT_LABEL') == READY_LABEL
                      and env.get('REPORT_SENDER') == 'auguspp'
