@@ -1,0 +1,95 @@
+name: register-saved-financial-review
+on:
+  push:
+    branches: [probe/ftshare-zhenjiang-discovery-20260921]
+    paths: [.github/workflows/register-saved-financial-review.yml]
+permissions:
+  contents: write
+jobs:
+  prepare-registration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Append exact saved archive references on the review branch only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json, os, subprocess
+          from pathlib import Path
+          REPO='auguspp/decision-kernel'
+          MAIN='cb0d3f74624b2a9397b11423d404bcac5cdb0f0b'
+          BRANCH='docs/register-september21-financial-review'
+          PATH='current_state/registry.json'
+          OLD_BLOB='1eb9ee2f6d9b8271459266e7035d822f8553b878'
+          OUT=Path('registration-result');OUT.mkdir(exist_ok=False)
+          def api(method,path,body=None):
+              args=['gh','api','--method',method,'repos/'+REPO+'/'+path]
+              raw=None
+              if body is not None:args+=['--input','-'];raw=json.dumps(body).encode()
+              p=subprocess.run(args,input=raw,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=45)
+              if p.returncode:raise RuntimeError('REGISTRATION_API_FAILED_'+method)
+              return json.loads(p.stdout)
+          def read(path,ref):
+              row=api('GET','contents/'+path+'?ref='+ref)
+              assert row['encoding']=='base64'
+              raw=base64.b64decode(row['content'])
+              assert len(raw)==row['size']
+              assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\x00'+raw).hexdigest()==row['sha']
+              return raw,row
+          assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_RUN_ATTEMPT']=='1'
+          assert os.environ['GITHUB_REF']=='refs/heads/probe/ftshare-zhenjiang-discovery-20260921'
+          assert api('GET','git/ref/heads/main')['object']['sha']==MAIN
+          assert api('GET','git/ref/heads/'+BRANCH)['object']['sha']==MAIN
+          old,metadata=read(PATH,MAIN);assert metadata['sha']==OLD_BLOB
+          registry=json.loads(old)
+          earlier={'path':'docs/readings/stock-financial-question-review-2026-09-21/workpaper.md',
+              'ref':'a1f73741d4223c058364a6e1446dc8fda908b350','git_blob':'b444d3507ee74e1ed757a5a5c3a1056f0143a72a',
+              'bytes':11153,'sha256':'c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22'}
+          current={'path':'docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md',
+              'ref':'6eacd1fe5963514948cbcf0a516a13098286fe14','git_blob':'0e2ba1468bf70404039d8b1ee71de344cb7b93d0',
+              'bytes':9519,'sha256':'6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52'}
+          for source in (earlier,current):
+              data,row=read(source['path'],source['ref'])
+              assert row['sha']==source['git_blob'] and len(data)==source['bytes']
+              assert hashlib.sha256(data).hexdigest()==source['sha256']
+          records=[]
+          for code in ('603507.SH','002285.SZ','000560.SZ','002792.SZ'):
+              records.append({'id':'stock-'+code[:6]+'-financial-question-review-20260921','case':code,
+                  'use':'RETAINED_RESEARCH_DOCUMENT',
+                  'purpose_note':'September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.',
+                  'archive':{'format':'RETAINED_FILES'},'read_policy':'ON_DEMAND_ARCHIVE','archive_source':earlier})
+          records.append({'id':'stock-603507-profit-hedging-cash-20260921','case':'603507.SH',
+              'use':'RETAINED_RESEARCH_DOCUMENT',
+              'purpose_note':'Same-question primary-page continuation: FTShare discovery led to retained CNINFO 215-page H1 PDF. Two-period profit and cash bridges reconcile; hedge disclosure inconsistency and sustainability remain unresolved. Two-file workpaper/calculation archive; large original PDF has separate exact Git custody. Not Pre/Quick, formal admission, Human acceptance or Odds.',
+              'archive':{'format':'RETAINED_FILES'},'read_policy':'ON_DEMAND_ARCHIVE','archive_source':current})
+          assert not {r['id'] for r in records}&{r['id'] for r in registry['references']}
+          text=old.decode('utf-8');key=text.index('"references"');start=text.index('[',key)
+          values,end=json.JSONDecoder().raw_decode(text,start)
+          assert values==registry['references'] and values and text[end-1]==']'
+          inserted=',\n'.join('    '+json.dumps(r,ensure_ascii=False,separators=(',',':')) for r in records)
+          new=(text[:end-1].rstrip()+',\n'+inserted+'\n  '+text[end-1:]).encode()
+          parsed=json.loads(new)
+          assert parsed['references'][:-5]==registry['references']
+          assert {k:v for k,v in parsed.items() if k!='references'}=={k:v for k,v in registry.items() if k!='references'}
+          assert api('GET','git/ref/heads/'+BRANCH)['object']['sha']==MAIN
+          result=api('PUT','contents/'+PATH,{'message':'docs: register retained September21 question notes and primary Zhenjiang continuation',
+              'branch':BRANCH,'sha':OLD_BLOB,'content':base64.b64encode(new).decode()})
+          commit=result['commit']['sha'];back,row=read(PATH,commit);assert back==new
+          (OUT/'registry.json').write_bytes(new)
+          (OUT/'receipt.json').write_text(json.dumps({'status':'REGISTRY_BRANCH_WRITTEN_NOT_MERGED',
+              'branch':BRANCH,'base':MAIN,'commit':commit,'registry_blob':row['sha'],
+              'bytes':len(new),'sha256':hashlib.sha256(new).hexdigest(),'added_ids':[r['id'] for r in records],
+              'old_references_preserved':True,'model_calls':0,'source_calls':0,'investment_authority':'NONE'},indent=2)+'\n')
+          print(commit)
+          PY
+      - name: Retain registration diff input and exact readback
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: financial-registration-${{ github.run_id }}-1
+          path: registration-result/
+          if-no-files-found: error
+          retention-days: 30
