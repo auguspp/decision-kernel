@@ -31,6 +31,10 @@ jobs:
         github.event.workflow_run.run_attempt == 1 &&
         (github.event.workflow_run.event == 'workflow_run' ||
          github.event.workflow_run.event == 'workflow_dispatch' ||
+         (github.event.workflow_run.name == 'stock-business-research' &&
+          github.event.workflow_run.path == '.github/workflows/stock-business-research.yml' &&
+          github.event.workflow_run.event == 'issues' &&
+          github.event.workflow_run.actor.login == 'auguspp') ||
          (github.event.workflow_run.name == 'saved-disclosure-research' &&
           github.event.workflow_run.event == 'push'))) ||
        (github.event.workflow_run.name != 'kernel-tests' &&
