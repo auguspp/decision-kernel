@@ -1,0 +1,110 @@
+{
+  "record_kind": "RESEARCHER_SOURCE_ACCESS_NOTES_NOT_OFFICIAL_PREFLIGHT",
+  "access_date": "2026-09-21",
+  "clock_note": "Date of this interactive investigation, not reconstructed per-request timestamps or issuer publication time.",
+  "raw_financial_pdfs_in_this_archive": false,
+  "sources": [
+    {
+      "id": "ZJ-H1-INDEX",
+      "security": "603507.SH",
+      "period": "2026H1 with 2025H1 comparative columns",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12538584&stockid=603507",
+      "representation": "SEARCH_INDEX_EXCERPT_OF_REPORT_MIRROR",
+      "body_open": "CACHE_MISS",
+      "original_pdf_acquired": false,
+      "printed_pages_verified": false,
+      "use": "Conditional arithmetic inputs only; comparative profit numbers require original-page confirmation.",
+      "limitation": "A Sina bulletin ID is not a CNINFO announcement ID; do not synthesize an official PDF locator."
+    },
+    {
+      "id": "ZJ-H1-SECONDARY",
+      "url": "https://finance.sina.com.cn/roll/2026-08-26/doc-iniprqcv6158320.shtml",
+      "representation": "SECONDARY_REPORTING_SHANGHAI_SECURITIES_NEWS_AI_LABEL",
+      "period": "2026H1",
+      "use": "Corroborates reported current net/adjusted profit and operating-cash figures; not original custody or causal verification."
+    },
+    {
+      "id": "ZJ-OFFICIAL-BUSINESS",
+      "url": "https://www.zjavim.com/",
+      "representation": "ISSUER_WEBSITE_TEXT_OPENED",
+      "use": "Basic wind/solar equipment, fastener and offshore-service business identity; not quantified current benefit.",
+      "limitation": "Investor-relations page retrieved in this session exposed July material; did not provide an accessible 2026H1 final report."
+    },
+    {
+      "id": "WL-H1-INDEX",
+      "security": "002285.SZ",
+      "url": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12537875&stockid=002285",
+      "representation": "SEARCH_INDEX_EXCERPT_OF_REPORT_MIRROR",
+      "body_open": "CACHE_MISS",
+      "original_pdf_acquired": false,
+      "printed_pages_verified": false,
+      "use": "Locate the full statement and notes; do not certify profit-to-cash causation."
+    },
+    {
+      "id": "WL-H1-SECONDARY",
+      "url": "https://m.caizhongshe.cn/article-7497977565605983469.html",
+      "representation": "SECONDARY_REPORTING",
+      "period": "2026H1",
+      "use": "Lead: revenue down, parent loss widened, operating cash turned positive. Needed statements remain unacquired."
+    },
+    {
+      "id": "5I5J-H1-SECONDARY",
+      "security": "000560.SZ",
+      "period": "2026H1",
+      "urls": [
+        "https://www.thepaper.cn/newsDetail_forward_33961405",
+        "https://www.sohu.com/a/1068922209_122121789",
+        "https://www.nbd.com.cn/articles/2026-08-27/4561695.html"
+      ],
+      "representation": "SECONDARY_REPORTING",
+      "original_pdf_acquired": false,
+      "use": "Reported net/adjusted profits increased while revenue and operating-cash amounts decreased; no causal acceptance."
+    },
+    {
+      "id": "5I5J-FY2025-TEXT",
+      "security": "000560.SZ",
+      "period": "2025 full year, not 2026H1",
+      "html_url": "https://financialfilings.com/filings/5i5j-holding-group-co-ltd/annual-report/2026/46702904/",
+      "pdf_url": "https://cdn.financialreports.eu/financialreports/media/filings/53677/2026/RNS/53677_rns_2026-05-20_a1576f0b-a7cd-44a1-9bf6-d8665f63565e.PDF",
+      "representation": "WEB_SERVICE_PARSED_PDF_AND_HTML_TEXT",
+      "reported_page_count": 196,
+      "cover_month": "2026-04",
+      "mirror_filing_date": "2026-05-20",
+      "pages_of_relevant_text": [22, 23, 176],
+      "screenshot_results": "INTERNAL_ERROR for attempted pages; no visual verification claimed",
+      "binary_download_result": "FAILED",
+      "original_pdf_acquired": false,
+      "source_hash": null,
+      "use": "Historical textual counterevidence: net-basis revenue and finance-sublease conversion gains must not be automatically interpreted as volume decline or a one-off asset sale.",
+      "limitation": "Exact final corrected exchange-report byte equivalence, layout/table verification and current-period applicability not established."
+    },
+    {
+      "id": "TY-H1-INDEX",
+      "security": "002792.SZ",
+      "period": "2026H1",
+      "urls": [
+        "https://stock.stockstar.com/notice/SN2026082600004139.shtml",
+        "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12539386&stockid=002792"
+      ],
+      "representation": "SEARCH_INDEX_EXCERPTS_OF_REPORT_MIRRORS",
+      "body_open": "CACHE_MISS_OR_INTERNAL_ERROR",
+      "original_pdf_acquired": false,
+      "printed_pages_verified": false,
+      "use": "Statement location only; excerpts contain both parent-company and consolidated columns, which must not be mixed."
+    },
+    {
+      "id": "TY-H1-SECONDARY",
+      "url": "https://finance.jrj.com.cn/2026/09/04164358356313.shtml",
+      "representation": "SECONDARY_REPORTING",
+      "use": "Lead: revenue growth with lower gross margin and net loss; claimed FX/share-pay/associate-loss explanations require primary reconciliation."
+    }
+  ],
+  "cross_source_limits": [
+    "No full 2026H1 financial-report PDF obtained for any of the four securities.",
+    "Search snippets, parsed text, original bytes, visually checked pages and formal source admission have different qualifications.",
+    "Old cached index pages are not evidence that a 2026 report does not exist.",
+    "CNINFO, Sina and static.cninfo DNS resolution in the container failed; no cookie, credential or alternate model service was used.",
+    "Connected-plugin search for CNINFO/A-share financial-report access returned no candidate.",
+    "No official inventory completeness, no source-artifact custody, no actual model egress, no new financial Research validation is asserted."
+  ]
+}
