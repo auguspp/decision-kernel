@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "imports": {
+    "zhenjiang-2026h1": {
+      "enabled": true,
+      "format": "CNINFO_EXACT_REPORT_CAPTURE_V1",
+      "case_id": "603507.SH",
+      "announcement_id": "1225506358",
+      "capture_code": "cb0d3f74624b2a9397b11423d404bcac5cdb0f0b",
+      "run": {
+        "id": 35603425130,
+        "path": ".github/workflows/zhenjiang-ftshare-identified-report.yml",
+        "head_branch": "probe/ftshare-zhenjiang-discovery-20260921",
+        "head_sha": "03c65cd60b7f4783c14974a6ae0065362776c432",
+        "event": "push"
+      },
+      "artifact": {
+        "id": 10639661916,
+        "name": "zhenjiang-source-35603425130-1",
+        "size_in_bytes": 1247756,
+        "digest": "sha256:048c0496fafb057dcdbae8d185b4f00a8e7ef70c6fa4b13a5aaaa6f6d8fa17d6",
+        "head_sha": "03c65cd60b7f4783c14974a6ae0065362776c432"
+      },
+      "files": {
+        "603507-2026H1.pdf": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/603507-2026H1.pdf",
+          "git_blob": "79ab62d35e0a2a8475253bcf8cf54791624f3740",
+          "sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+          "bytes": 1337795,
+          "purpose": "RETAINED_PUBLIC_ISSUER_PDF"
+        },
+        "inventory.json": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/inventory.json",
+          "git_blob": "729da26e8f2f75dd6c9d7b7ed8cfc30dbbb6a7f9",
+          "sha256": "a5a45f11f119bffa1bc818dd00b7a3c06aa44d58f4b381c1a922a598fafdd0ba",
+          "bytes": 2304,
+          "purpose": "RETAINED_CAPTURE_DATA"
+        },
+        "extraction.json": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/extraction.json",
+          "git_blob": "1794c24d313fb6af071137e2d9bb64570fca5c36",
+          "sha256": "c1ede476b54ea91cd492b0dfec3f7c626b2252217705de047783cbc77bde8472",
+          "bytes": 450530,
+          "purpose": "RETAINED_CAPTURE_DATA"
+        },
+        "query-1.json": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/query-1.json",
+          "git_blob": "4fedec577ac02bf9cf87c8bc8e42c051499df9e0",
+          "sha256": "07a6fcbe5073feff3d743cb250b40d1f88c4d05466bda50526687cb577aad7ef",
+          "bytes": 203,
+          "purpose": "RETAINED_CAPTURE_DATA"
+        },
+        "query-2.json": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/query-2.json",
+          "git_blob": "bfd967715bc7d088e2d11581eac9ca55dee86be7",
+          "sha256": "e4354a36efe84684cb3967392cee625237ac85318e3aec90c24d5b4a6f0c4dbc",
+          "bytes": 5386,
+          "purpose": "RETAINED_CAPTURE_DATA"
+        },
+        "receipt.json": {
+          "repository": "auguspp/decision-kernel",
+          "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+          "path": "research_runs/sources/zhenjiang-603507-2026H1/receipt.json",
+          "git_blob": "7966881e258af53355b40d071d32895732ccaca2",
+          "sha256": "912cca515fad84c0b1c530d8d56ff7f548b28e9d6b7a2e8e5fe9fa7e50999cb6",
+          "bytes": 3217,
+          "purpose": "RETAINED_CAPTURE_DATA"
+        }
+      }
+    }
+  }
+}
