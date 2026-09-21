@@ -369,10 +369,12 @@ def main(argv=None):
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--daily-reviewed-question", action="store_true")
     args = parser.parse_args(argv)
+    from . import stock_daily_question as daily_policy
     once.require(os.environ.get("GITHUB_REPOSITORY") == once.REPO
         and os.environ.get("GITHUB_REF") == "refs/heads/main"
         and os.environ.get("GITHUB_RUN_ATTEMPT") == "1"
-        and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+        and (os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+             or args.daily_reviewed_question and daily_policy.label_transport(os.environ))
         and reading.SHA.fullmatch(args.code_commit) is not None
         and os.environ.get("GITHUB_SHA") == args.code_commit, "QUESTION_NATIVE_IDENTITY_REQUIRED")
     credential = "DEEPSEEK_API_KEY" if args.daily_reviewed_question else "SUB2API_API_KEY"
