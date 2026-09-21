@@ -1,0 +1,76 @@
+{
+  "case_id": "603507.SH",
+  "declared_at": "2026-09-21T15:24:36.289767+00:00",
+  "existing_research_relation": {
+    "kind": "NEW_DISTINCT_QUESTION",
+    "note": "相对已消费正式研究的初次独立问题根；已有9月21日交互问题/有限底稿全部引用并复用，不伪称新的知识发现。完整既有work树及其正式input按证券核对未见603507执行；不重开沃顿或广哈，不宣称穷尽所有聊天的语义历史。",
+    "source_refs": [
+      {
+        "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+        "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+        "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+        "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+      },
+      {
+        "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
+        "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
+        "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+        "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
+      }
+    ]
+  },
+  "falsification_test": "若扣非、营运资本或资本支出证据不支持同步改善，应限制或否定该解释；保留支持真实经营改善的证据。缺失资料与套期披露矛盾不得补猜成收益或业务WAIT。",
+  "format": "reviewed-radar-question-v0",
+  "known_counterevidence": [
+    "原交互审阅提示扣非利润也增长，不能将归母增长全部当作一次性。",
+    "经营现金的同比改善与资本占用变化有关，不能等同已产生同额股东自由现金。"
+  ],
+  "known_unknowns": [
+    "报告后变化不在本次STATIC范围内。",
+    "逐工具套保与外币经营敞口对应、营运资本改善的持续性、维持性资本开支仍未建立。",
+    "此问题已有交互底稿；本次正式Pre不是全新经济发现或Full Research。"
+  ],
+  "next_discriminating_search": "本次仅使用已保存完整半年报验证上述有限问题；需要其他关键材料时明确其名称与影响后停止，不自动抓取、重试或深化。",
+  "origins": [
+    {
+      "kind": "SECTOR_LEADER",
+      "observed_at": "2026-09-21T10:33:15.802544Z",
+      "qualification": "QUALIFIED_FOR_DECLARED_SCOPE",
+      "qualification_reason": "保存的Sector→Stock来路与原价格资格，仅支持纳入问题审阅，不认证经营领先或受益。",
+      "source": {
+        "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+        "path": "details/stock/35588490572/reading/stock-reading.json",
+        "purpose": "SAVED_STOCK_BATCH_ORIGIN",
+        "ref": "461df14b32dae4a2073b2707c74113def2231ebc",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+      }
+    }
+  ],
+  "predecessor": null,
+  "question": "在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。",
+  "question_id": "profit-growth-cash-conversion-2026h1",
+  "reading_source": {
+    "git_blob": "a5499c7dddff49b04ed6ad8d6fe68be6ea634a8b",
+    "path": "current-state.json",
+    "purpose": "SAVED_QUESTION_READING",
+    "ref": "461df14b32dae4a2073b2707c74113def2231ebc",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "3f088821be115c4cf90dd3a10afbfc64b6e2712b91c4143e0e938f16f2d9263b"
+  },
+  "required_classes": [
+    {
+      "id": "COMPLETE_H1_FINANCIAL_REPORT",
+      "mode": "STATIC",
+      "planned_queries": []
+    }
+  ],
+  "revision": 1,
+  "security_id": "SSE:603507",
+  "ticker": "603507",
+  "why_now": "2026-09-21正常已保存Stock批次中，振江通过原价格观察；必要完整中报已经取得并核验。价格只是问题来路，不证明业务受益。本次是原初步问题的首次正式有界执行，而不是重跑任何已消费研究。"
+}

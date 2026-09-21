@@ -1,0 +1,30 @@
+{
+  "catalog_sha256": "91deb7b071113cc9c4d29b6f3fb98d1f328545f5bd398e9db81ac938de075445",
+  "current_state_commit": "461df14b32dae4a2073b2707c74113def2231ebc",
+  "current_state_reading_hash": "40bec48a2354daf6f6a3ecba267f9d2b450338e87694471907fd8d7ad32361b7",
+  "dedup_scope": "EXPLICIT_CATALOG_QUESTION_IDS_NOT_GLOBAL_SEMANTIC_DEDUP",
+  "execution_key": {
+    "canonical_input_hash": "3649122b9cbfd1dcf806a3fa3a3e9732ee473b19c8b5b70fc17032bb780da518",
+    "execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d"
+  },
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_acceptance": "NOT_ESTABLISHED",
+  "input_file_sha256": "99a80f2aba8f740b02f3110ca6ac84961664517983cbe7802a59cac4ae043d02",
+  "investment_authority": "NONE",
+  "preflight_sha256": "cec29704d3464d54880f51dc288b6deed8e9863846e61e7d4994d118dfcc6734",
+  "qualification": "DECLARATION_AND_SOURCE_BINDING_NOT_ECONOMIC_TRUTH_OR_QUESTION_QUALITY",
+  "question_id": "profit-growth-cash-conversion-2026h1",
+  "question_source": {
+    "git_blob": "fc52aee3bf922644287171e61e772778d1196ab1",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "a17dcb961b4078106ab9e19c09172b94a26f97ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "f452e0d3b75b002f5f4bac1af6aa931ceb40e8c2ad736323ea32b3c328dbd80a"
+  },
+  "remote_writes": 0,
+  "research_execution_allowed": false,
+  "revision": 1,
+  "status": "QUESTION_INPUT_PREPARED_NOT_EXECUTED"
+}
