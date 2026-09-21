@@ -142,6 +142,16 @@
         "bytes": 11510,
         "sha256": "c346523d2d3d6416aebd7bc12805d8676b234bd0657ef0d2155590e074df6cc4"
       }
+    },
+    {
+      "id": "p0-000920-h1-original-pdf-custody-20260921",
+      "case": "000920.SZ",
+      "use": "SOURCE_CUSTODY_REFERENCE",
+      "purpose_note": "Actual one-source attempt35550930725 acquired and natively retained the exact1262185-byte Sina issuer H1 PDF. Original PDF, prepare and failed representation record are independently pinned in this locator. The original run remains failure (code is onp6, not cover); representation repair is a separate zero-source-GET operation. Locator only, not raw PDF materialization in this reading, CNINFO byte equivalence, new Question, Pre/Quick, Research acceptance or model-egress permission. Existing Woton question/r2 and failures are unchanged.",
+      "source": {
+        "path": "docs/woton-report-representation-repair-v1.md",
+        "git_blob": "f1d709062517854e3eec300cd12541066a7cf2dc"
+      }
     }
   ],
   "historical_handoffs": [
