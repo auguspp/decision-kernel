@@ -54,7 +54,11 @@ jobs:
           start=s.index('      - name: Daily reviewed question through saved policy and original admission')
           end=s.index('      - name: One approved Woton same-question report continuation',start)
           new=s[start:end].replace("if: github.event_name == 'workflow_dispatch' && inputs.daily-reviewed-question", "if: >-\n          (github.event_name == 'workflow_dispatch' && inputs.daily-reviewed-question) ||\n          (github.event_name == 'issues' && github.event.label.name == 'daily-stock-question-ready')")
-          new=new.replace('EXPECTED_CODE_SHA: ${{ inputs.code-sha }}','EXPECTED_CODE_SHA: ${{ inputs.code-sha || github.sha }}\n          DAILY_EVENT_ACTION: ${{ github.event.action }}\n          DAILY_ISSUE_NUMBER: ${{ github.event.issue.number }}\n          DAILY_LABEL: ${{ github.event.label.name }}\n          DAILY_SENDER: ${{ github.event.sender.login }}\n          DAILY_IS_PULL_REQUEST: ${{ toJSON(github.event.issue.pull_request != null) }}')
+          expr=lambda text: '$'+'{{ '+text+' }}'
+          binding='EXPECTED_CODE_SHA: '+expr('inputs.code-sha || github.sha')
+          for field,value in [('DAILY_EVENT_ACTION','github.event.action'),('DAILY_ISSUE_NUMBER','github.event.issue.number'),('DAILY_LABEL','github.event.label.name'),('DAILY_SENDER','github.event.sender.login'),('DAILY_IS_PULL_REQUEST','toJSON(github.event.issue.pull_request != null)')]:
+              binding+='\n          '+field+': '+expr(value)
+          new=new.replace('EXPECTED_CODE_SHA: '+expr('inputs.code-sha'),binding)
           new=new.replace('test "$GITHUB_EVENT_NAME" = workflow_dispatch','if [ "$GITHUB_EVENT_NAME" = issues ]; then\n            test "$DAILY_EVENT_ACTION" = labeled\n            test "$DAILY_ISSUE_NUMBER" = 297\n            test "$DAILY_LABEL" = daily-stock-question-ready\n            test "$DAILY_SENDER" = auguspp\n            test "$DAILY_IS_PULL_REQUEST" = false\n          else\n            test "$GITHUB_EVENT_NAME" = workflow_dispatch\n          fi')
           s=s[:start]+new+s[end:];p.write_text(s)
           changed={'src/decision_kernel/runtime/stock_daily_question.py':'774f51e10eb9625f4e2ad06e2cb84eb9957416a0','src/decision_kernel/runtime/stock_question_host.py':'0edea70179d84f1f4c4087584b34e03020edc65a','.github/workflows/stock-business-research.yml':'a11ac91386317f4d2868a3e9acf004daa857f284'}
