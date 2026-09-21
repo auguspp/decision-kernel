@@ -58,7 +58,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/admission.json",
             "read_path": "sources/git/52b48b4869c74ab12e57859732b6d0370e66a486/admission.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "01e7a250daa75fd9f1cd0b4eaecf27d5d16d6d7a4d1f91adfa7f3db90caf9f74"
           },
@@ -68,7 +68,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/candidate.json",
             "read_path": "sources/git/49f0b297006a97003f69b4f522d55e8e6cc8775c/candidate.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "c6186f10fd5f958d3bb8533108c88c837cc9b9cfd5fdf5e98d4a1d4f6247fc77"
           },
@@ -78,7 +78,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/host-receipt.json",
             "read_path": "sources/git/a49280db99f5a5ab4c47c085af5ac07fb71c4505/host-receipt.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "0c815b472db2d7b0780d17b6454fe3644e5b302bd9dc3c1f3656952c237f723d"
           },
@@ -88,7 +88,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
             "read_path": "sources/git/0ebfafc5b20fb65edf364d6e61d7a92f1a550c08/input.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
           },
@@ -98,7 +98,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/launch.json",
             "read_path": "sources/git/c97872eb173e028aed531e77241bfab5bc1ac959/launch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "99f00a761c0923f1d4492062f5f303307bf2d3ac7ea1d6bb540bdd83bb049e50"
           },
@@ -108,7 +108,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/prepare.json",
             "read_path": "sources/git/444833cb8aa73e3fa74aeb1fa90bd2c369c88e37/prepare.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "ce39e7ccd25d4abcb6b421985603558ee623eda17322b17be6330ad99d711d38"
           },
@@ -118,7 +118,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/receipt.json",
             "read_path": "sources/git/902302515e469a0c4d5451100974c9e197850b9d/receipt.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "f297bcf71035be8e8e6f01fa009dad000d9e1bcf41f5ac72d16c2e1f732d5e89"
           },
@@ -128,7 +128,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/validation.json",
             "read_path": "sources/git/f9c8e26f87bee13763598d86778b6edd10791c01/validation.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "5ba0b4928ffccd08270a14502454096974e91976e5118f825d4bf275d1cf9877"
           }
@@ -252,7 +252,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/admission.json",
             "read_path": "sources/git/fe07ceb1b92513c2b89bd02e3e2cce9a35033724/admission.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "8a99bf71d7e68fde384b15c20c40f1bf41b1eb99f8bbad57559e6506e9fb627f"
           },
@@ -262,7 +262,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/candidate.json",
             "read_path": "sources/git/9e304368441ba9b3414a155b94721a79bf9c507f/candidate.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "d8aa68c1bd85c5a5d6fcc4d0e8c8e9e7ef44ef97d02128372742832fdfc0d0be"
           },
@@ -272,7 +272,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/funnel.json",
             "read_path": "sources/git/d3b5486ae8a174220bc5ce2ea0503493f5a284d8/funnel.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "4c5aff2bf92d4b0c50142303a785946395aaae0610fdfa18b97ee24f8b95a65b"
           },
@@ -282,7 +282,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/host-receipt.json",
             "read_path": "sources/git/e494a9e5213588e6f275b592d6815ab53a8b2eaa/host-receipt.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "8f810a38dcf308959793ed17db98f4e46fc52f96217f50a20bec2a5c50f0ff33"
           },
@@ -292,7 +292,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
             "read_path": "sources/git/3cff654bd890235c99d90d6627146d575902abbd/input.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6"
           },
@@ -302,7 +302,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/launch.json",
             "read_path": "sources/git/6f44ca6da6c0966e93e1fb555b382641172269b1/launch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "4845ce98764b3d1e00118aff3af0354d1cbc3a70cc34c149211b5f96167dcb4c"
           },
@@ -312,7 +312,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/prepare.json",
             "read_path": "sources/git/a3678b240d13582474dddfa0082430309f25c8dd/prepare.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "1665cdc3c64ff0d16da8dd16cadb6dfa80df396136ad732102e6298037f2b79d"
           },
@@ -322,7 +322,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/receipt.json",
             "read_path": "sources/git/11bae98081b1d82e10c3360863793014caca8fc3/receipt.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "35f3b0cae5358f08eae8c18d45d55b0725979ee531530801e34196d423f2cb4d"
           },
@@ -332,7 +332,7 @@
             "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/validation.json",
             "read_path": "sources/git/a702faa3510672a17f7a4a250d4925551c91a123/validation.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+            "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
             "repository": "auguspp/decision-kernel",
             "sha256": "3a9a28662dfd9725bc64220b5ed13afcde7f4569b69e1075961efc677f0ab9b2"
           }
@@ -353,7 +353,7 @@
     "scope_note": "ALL_RETAINED_ROOTS_WITHIN_BOUND_NOT_CURRENT_PRICE_QUALIFIED_MEMBERS",
     "signal_transition_authority": "NONE",
     "status": "READ_OK",
-    "work_commit": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+    "work_commit": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
     "work_ref": "research-work/stock-business-v0"
   },
   "research_authority": "NONE",
@@ -489,7 +489,7 @@
               "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/failure.json",
               "read_path": "sources/git/531b5e21ed15928f2abf2550b0800dc666b47ffb/failure.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
               "repository": "auguspp/decision-kernel",
               "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a"
             },
@@ -499,7 +499,7 @@
               "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/prepare.json",
               "read_path": "sources/git/f0efbab42adde8af50977c7f51f75087e518a0df/prepare.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
               "repository": "auguspp/decision-kernel",
               "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73"
             }
@@ -584,7 +584,7 @@
               "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/failure.json",
               "read_path": "sources/git/15b505bc0c87cfb9857fe38754134026b4c80f04/failure.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
               "repository": "auguspp/decision-kernel",
               "sha256": "4dc555f7422f7433be0c8cbce246d79749306a1911e3bac3dfb9802f50876f65"
             },
@@ -594,7 +594,7 @@
               "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/prepare.json",
               "read_path": "sources/git/054c51495a3160a0aa16099c56ce46e334ba8057/prepare.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "88784c6b84dbd497489ebb181d89fffc26fedce8",
+              "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
               "repository": "auguspp/decision-kernel",
               "sha256": "0b069ea0a16677c4bcde496eac4c9a99347dac1025926d12c83e7c3a42c333c3"
             }
