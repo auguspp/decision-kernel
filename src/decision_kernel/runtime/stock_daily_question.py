@@ -47,6 +47,20 @@ REVIEW_DISPOSITIONS = {"SELECTED_NEW_DISTINCT_QUESTION", "NOT_SELECTED", "NO_DIS
     "EXISTING_RESEARCH", "SOURCE_UNAVAILABLE", "ORIGINAL_PRICE_DISPOSITION_ONLY", "DATA_UNAVAILABLE"}
 
 
+READY_LABEL = "daily-stock-question-ready"
+
+
+def label_transport(env):
+    """A fixed owned-issue signal only; trusted main request still grants scope."""
+    return (env.get("GITHUB_EVENT_NAME") == "issues"
+            and env.get("GITHUB_WORKFLOW") == "stock-business-research"
+            and env.get("DAILY_EVENT_ACTION") == "labeled"
+            and env.get("DAILY_ISSUE_NUMBER") == "297"
+            and env.get("DAILY_LABEL") == READY_LABEL
+            and env.get("DAILY_SENDER") == "auguspp"
+            and env.get("DAILY_IS_PULL_REQUEST") == "false")
+
+
 def check_policy(api, code, request, clock):
     once.require(identity._json(api.file(POLICY_PATH, code)) == POLICY
                  and request["permission"] == PERMISSION, "DAILY_POLICY_CHANGED")
@@ -113,8 +127,11 @@ def _retained_pdf(api, spec, archived_pdf, expected_bytes, clock):
     return archived_pdf, meta["committer"]["date"]
 
 
-def _source_archive(api, custody, cache):
+def _source_archive(api, custody, cache, *, code=None):
     """Reuse native saved artifact qualification; no issuer acquisition."""
+    if "source_import" in custody:
+        from . import stock_retained_source_import as imported
+        return imported.load(api, code, custody, cache)
     expected = custody["source_artifact"]
     run_id = custody["source_run_id"]
     once.require(type(run_id) is int and run_id > 0, "DAILY_SOURCE_RUN_IDENTITY")
@@ -213,7 +230,7 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
     inventory_raw, _ = _source(api, custody["inventory_source"], "RETAINED_CNINFO_ISSUER_INVENTORY", selected_clock)
     journal_raw, _ = _source(api, custody["journal_source"], "RETAINED_CNINFO_SOURCE_JOURNAL", selected_clock)
     inventory, journal = identity._json(inventory_raw), identity._json(journal_raw)
-    archive_files = _source_archive(api, custody, {} if archives is None else archives)
+    archive_files = _source_archive(api, custody, {} if archives is None else archives, code=packet.code_commit)
     source_prefix = packet.case_id + "/sources/"
     once.require(archive_files[source_prefix + "inventory.json"] == inventory_raw
                  and archive_files[source_prefix + "source-journal.json"] == journal_raw,
@@ -272,6 +289,10 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
         once.require(doc["pages"] == [{"page_number": p.page_number, "text": p.text} for p in parsed.pages],
                      "DAILY_PDF_TEXT_DIFFERS")
         refs.append(record["pdf_source"])
+    if "source_import" in custody:
+        from .stock_retained_source_import import IMPORTS_PATH
+        refs.append(once.source_ref(IMPORTS_PATH, packet.code_commit, api.file(IMPORTS_PATH, packet.code_commit),
+                                   "REVIEWED_RETAINED_SOURCE_IMPORT"))
     refs.extend(request[k] for k in EXTRA_SOURCES)
     refs.extend(custody[k] for k in ("inventory_source", "journal_source"))
     packet = ExternalResearchInputPacket.model_validate({**packet.model_dump(mode="json"),
