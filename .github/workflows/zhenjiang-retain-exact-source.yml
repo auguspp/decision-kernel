@@ -1,0 +1,108 @@
+name: zhenjiang-retain-exact-source
+on:
+  push:
+    branches: [probe/ftshare-zhenjiang-discovery-20260921]
+    paths: [.github/workflows/zhenjiang-retain-exact-source.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  retain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Preserve exact existing artifact in the dedicated source-data branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          """One native Git append of six public source files. No issuer/model requests."""
+          import base64, hashlib, io, json, os, subprocess, zipfile
+          from datetime import datetime, timezone
+          from pathlib import Path
+          REPO='auguspp/decision-kernel'
+          BRANCH='research-work/zhenjiang-report-custody-20260921'
+          PARENT='cb0d3f74624b2a9397b11423d404bcac5cdb0f0b'
+          PREFIX='research_runs/sources/zhenjiang-603507-2026H1/'
+          ARTIFACT=10639661916
+          DIGEST='048c0496fafb057dcdbae8d185b4f00a8e7ef70c6fa4b13a5aaaa6f6d8fa17d6'
+          EXPECTED={'603507-2026H1.pdf':(1337795,'ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d'),
+              'extraction.json':(450530,'c1ede476b54ea91cd492b0dfec3f7c626b2252217705de047783cbc77bde8472'),
+              'inventory.json':(2304,'a5a45f11f119bffa1bc818dd00b7a3c06aa44d58f4b381c1a922a598fafdd0ba'),
+              'query-1.json':(203,'07a6fcbe5073feff3d743cb250b40d1f88c4d05466bda50526687cb577aad7ef'),
+              'query-2.json':(5386,'e4354a36efe84684cb3967392cee625237ac85318e3aec90c24d5b4a6f0c4dbc'),
+              'receipt.json':None}
+          OUT=Path('retention-result'); OUT.mkdir(exist_ok=False)
+          report={'kind':'NATIVE_GIT_SOURCE_APPEND_ONLY','started_at':datetime.now(timezone.utc).isoformat(),
+              'branch':BRANCH,'parent':PARENT,'source_run':35603425130,'source_artifact':ARTIFACT,
+              'issuer_requests':0,'model_calls':0,'formal_admission':'NOT_PERFORMED','files':[],
+              'investment_authority':'NONE','mutation_uncertain':False}
+          def api(method,path,body=None,binary=False):
+              cmd=['gh','api','--method',method,'repos/'+REPO+'/'+path]
+              raw=None
+              if body is not None:
+                  cmd+=['--input','-'];raw=json.dumps(body).encode()
+              p=subprocess.run(cmd,input=raw,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=60)
+              if p.returncode:
+                  raise RuntimeError('GITHUB_API_FAILED_'+method)
+              return p.stdout if binary else json.loads(p.stdout)
+          try:
+              assert os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_RUN_ATTEMPT']=='1'
+              assert os.environ['GITHUB_REF']=='refs/heads/probe/ftshare-zhenjiang-discovery-20260921'
+              assert api('GET','git/ref/heads/'+BRANCH)['object']['sha']==PARENT
+              meta=api('GET','actions/artifacts/'+str(ARTIFACT))
+              assert meta['workflow_run']['id']==35603425130 and meta['digest']=='sha256:'+DIGEST
+              assert not meta['expired'] and meta['size_in_bytes']==1247756
+              raw=api('GET','actions/artifacts/'+str(ARTIFACT)+'/zip',binary=True)
+              assert len(raw)==1247756 and hashlib.sha256(raw).hexdigest()==DIGEST
+              with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                  assert z.testzip() is None and set(z.namelist())==set(EXPECTED)
+                  assert len(z.namelist())==len(EXPECTED) and sum(x.file_size for x in z.infolist())<3*1024*1024
+                  files={n:z.read(n) for n in z.namelist()}
+              receipt=json.loads(files['receipt.json'])
+              assert receipt['status']=='EXACT_REPORT_RETAINED_NOT_RESEARCH_ADMITTED'
+              assert receipt['target']['announcement_id']=='1225506358' and receipt['page_count']==215
+              tree=api('GET','git/trees/'+PARENT+'?recursive=1')
+              assert not tree['truncated'] and not any(x['path'].startswith(PREFIX) for x in tree['tree'])
+              entries=[]
+              for name,data in sorted(files.items()):
+                  digest=hashlib.sha256(data).hexdigest()
+                  if EXPECTED[name] is not None: assert (len(data),digest)==EXPECTED[name]
+                  blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\x00'+data).hexdigest()
+                  report['mutation_uncertain']=True
+                  saved=api('POST','git/blobs',{'encoding':'base64','content':base64.b64encode(data).decode()})
+                  assert saved['sha']==blob
+                  report['mutation_uncertain']=False
+                  entries.append({'path':PREFIX+name,'mode':'100644','type':'blob','sha':blob})
+                  report['files'].append({'path':PREFIX+name,'bytes':len(data),'sha256':digest,'git_blob':blob})
+              report['mutation_uncertain']=True
+              t=api('POST','git/trees',{'base_tree':tree['sha'],'tree':entries})
+              c=api('POST','git/commits',{'message':'retain: exact Zhenjiang 2026H1 issuer PDF and acquisition records; no Research execution',
+                  'tree':t['sha'],'parents':[PARENT]})
+              assert api('GET','git/ref/heads/'+BRANCH)['object']['sha']==PARENT
+              api('PATCH','git/refs/heads/'+BRANCH,{'sha':c['sha'],'force':False})
+              report.update(commit=c['sha'],tree=t['sha'],mutation_uncertain=False)
+              for row in report['files']:
+                  read=api('GET','git/blobs/'+row['git_blob'])
+                  data=base64.b64decode(read['content'])
+                  assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
+              assert api('GET','git/ref/heads/'+BRANCH)['object']['sha']==c['sha']
+              report.update(status='RAW_SOURCE_GIT_SAVED_AND_READ_BACK',registered=False,published=False)
+          except Exception as exc:
+              report.update(status='RETENTION_INCOMPLETE',error_type=type(exc).__name__)
+              raise
+          finally:
+              report['finished_at']=datetime.now(timezone.utc).isoformat()
+              (OUT/'receipt.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+              print(json.dumps(report,ensure_ascii=False))
+          PY
+      - name: Retain byte readback receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: zhenjiang-retention-${{ github.run_id }}-1
+          path: retention-result/
+          if-no-files-found: error
+          retention-days: 90
