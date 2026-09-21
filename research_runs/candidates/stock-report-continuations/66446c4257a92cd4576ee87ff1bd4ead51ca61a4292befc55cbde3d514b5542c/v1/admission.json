@@ -1,0 +1,39 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-21T06:41:14.649088+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "4a382b895b12b5c9cd705cd91b90211a2b137a4050786fd66d344c447c299cae",
+    "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c-report-continuation-v1"
+  },
+  "finished_at": "2026-09-21T06:41:14.966341+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": "3a5856d7615e0d7ad866b72f828935d041ec12826a78ff98cd9c9523e8a8c22a",
+  "input_file_sha256": "da51f4b1f459fe96e128faf6905d1934dd10470197f268ae025575b9e958d184",
+  "input_source": {
+    "git_blob": "64c4f4e35fd556621f2272c462ea938fc4f0952d",
+    "path": "research_runs/candidates/stock-report-continuations/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/v1/input.json",
+    "purpose": "input.json",
+    "ref": "0243df08e1bfde88eb388fb58b37cb6cd04b147f",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "da51f4b1f459fe96e128faf6905d1934dd10470197f268ae025575b9e958d184"
+  },
+  "investment_authority": "NONE",
+  "preflight_sha256": "833c1c908ea0284e737c02efce40beed4824001387609329520086a673732330",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_authority": "NONE",
+  "research_execution_allowed": true,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}
