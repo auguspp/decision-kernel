@@ -1,0 +1,62 @@
+{
+  "stock_code": "603507",
+  "org_id": "9900033205",
+  "start_date": "2026-08-26",
+  "end_date": "2026-08-26",
+  "announcements": [
+    {
+      "announcement_id": "1225506501",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份2026年半年度报告摘要",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506501.PDF"
+    },
+    {
+      "announcement_id": "1225506461",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份关于应用套期会计的公告",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506461.PDF"
+    },
+    {
+      "announcement_id": "1225506424",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份公司章程（2026年8月修订）",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506424.PDF"
+    },
+    {
+      "announcement_id": "1225506421",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份第四届董事会第十七次会议决议公告",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506421.PDF"
+    },
+    {
+      "announcement_id": "1225506358",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份2026年半年度报告",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506358.PDF"
+    },
+    {
+      "announcement_id": "1225506301",
+      "stock_code": "603507",
+      "org_id": "9900033205",
+      "title": "振江股份关于变更公司注册资本暨修订《公司章程》并办理工商变更登记的公告",
+      "announcement_type": null,
+      "published_at": "2026-08-26 00:00:00+08:00",
+      "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506301.PDF"
+    }
+  ]
+}
