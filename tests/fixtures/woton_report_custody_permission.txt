@@ -1,0 +1,14 @@
+## P0-A 接续施工：把已知财报原件接入可恢复的运行留存（2026-09-21）
+
+Human 本轮原话：“好，继续”。承接上一回执5753840344与既定日常闭环主线。重新固定 main=44226a0c4447b4121785b14ba2b97047c6eec8b3、R=d2825ce88d4ee787b505c83d154802a06152790a。#479已关闭，不重复施工。
+
+已定位的当前阻塞：daily只接受NEW_DISTINCT_QUESTION、STATIC/CNINFO原PDF及既有Stock artifact custody；沃顿是原stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c的接续，不能改名重跑。5750454664明确：已取得新浪H1原件保存在旧聊天用户文件包，并未进入GitHub/Actions/registry。当前会话检索未找到该旧包，本地也没有该原件；这不否定历史成功，不让Human搬运。普通浏览工具无法取得这个既定URL，尚无新的HTTP200或PDF字节。
+
+本切片范围：复用既有stock-business-research工作流、原生Git创建式留存、现有requests和adapters/pdf_text。新增一个默认不选中的明确source-only模式，仅恢复下面这个已知公开发行人财报；先写不可覆盖的来源尝试标记，最多一次普通GET，无重试/重定向/备用URL/自定义伪装头/模型或行情凭证。原件必须与已记录的长度和SHA256完全相同，再做原133页全文解析。使用独立来源目录，不写/重开任何旧Research root或daily slot。Git原件留存/恢复与研究输入准入分开；不放宽generic SourceRef512KiB或daily的CNINFO/新问题政策。原件大于1MiB时复用原生Git blob读取，不把base64包伪装为小型Research正文。
+
+固定来源：https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-21/12512184.PDF
+期望原件：1262185 bytes，SHA256 27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728，000920.SZ/2026H1/133页。只保存发行人原PDF及本地解析，不再分发DataSinking服务全文，不声称与CNINFO1225486931同字节。
+
+Reuse Decision: THIN_ADAPTER。内部核对了saved_research_once.acquire/Retainer、stock_research_host.authorize、current_state_delivery.GitHubAPI、stock_daily_question.bind、原pdf_text以及原技术接续合同；复用5750454664及handoffs/2026-09-20-report-priority-and-reuse.md的原件/解析/留存三层审查，不新建下载器服务、PDF/OCR、provider或scheduler框架。官方进一步核对Requests streaming/redirect/Session实现与GitHub原生dispatch/contents/blob；公共实现仍用已有Requests/pypdf，不添依赖。GitHub.com当前dispatch支持25inputs，现10项无需合并magic参数或改旧字段类型。
+
+验收：保留全部现有测试，新增source-only/no-secret/one-attempt/hash/页数/失败/原生Git原件恢复回归，exact-head PR CI与同模型明确标注的审阅，独立main CI、正常publisher；之后一次实际source-only运行、下载原artifact并逐字节核验、Git固定版本读回。源站失败则保留真实失败和已取得字节，不伪装成功、不自动重试。最后以实际结果登记轻量来源定位。此范围只解决已知原件的runtime custody，不宣称日常Pre/Quick、Full Research、Human研究接受、Odds/Action/Watch或P0整体验收完成。技术参数是施工端进一步收窄，不冒充Human逐项口述。

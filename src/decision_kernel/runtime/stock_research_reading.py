@@ -38,6 +38,7 @@ def attempts(collector):
         and (runs['workflow_runs'] or runs.get('total_count') == 0), 'Stock Research attempts unavailable')
     result = {'latest_workflow_invocation': None, 'latest_execution_attempt': None,
         'latest_source_preparation_attempt': None, 'latest_compatibility_attempt': None,
+        'latest_report_source_attempt': None,
         'unclassified_invocations': [],
         'attempt_query_scope': 'NEWEST_TEN_EXACT_WORKFLOW_INVOCATIONS_NOT_ALL_HISTORY',
         'preparation_result_semantics': 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'}
@@ -63,7 +64,7 @@ def attempts(collector):
                 and len(rows) == jobs['total_count'] and len(rows) <= 100
                 and all(isinstance(j, dict) and j.get('run_id') == run['id']
                         and j.get('name') in {'research-stock-business', 'prepare-stock-sources',
-                                               'deepseek-compatibility'} for j in rows)
+                                               'deepseek-compatibility', 'retain-public-report-source'} for j in rows)
                 and len({j['name'] for j in rows}) == len(rows), 'Stock invocation jobs incomplete or ambiguous')
             active = [j['name'] for j in rows if j.get('conclusion') != 'skipped']
             if active == ['research-stock-business']:
@@ -72,6 +73,8 @@ def attempts(collector):
                 key = 'latest_source_preparation_attempt'
             elif active == ['deepseek-compatibility'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_compatibility_attempt'
+            elif active == ['retain-public-report-source'] and run['event'] == 'workflow_dispatch':
+                key = 'latest_report_source_attempt'
             else:
                 raise ValueError('Stock invocation mode not established')
             if result[key] is None:
