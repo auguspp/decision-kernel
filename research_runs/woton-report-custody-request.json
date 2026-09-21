@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "execute_before": "2026-09-23T00:00:00Z",
+  "expected_bytes": 1262185,
+  "expected_sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728",
+  "mode": "WOTON_H1_PUBLIC_REPORT_CUSTODY_ONLY",
+  "page_count": 133,
+  "permission": {
+    "body_sha256": "a6fedda75600bcde32ec78e26e9ee2bbaa467f769fe4f2d936908acfac474f3f",
+    "comment_id": 5753902322,
+    "created_at": "2026-09-21T00:33:28Z"
+  },
+  "related_question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+  "report_period": "2026H1",
+  "schema_version": 1,
+  "source_url": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-21/12512184.PDF",
+  "subject": "000920.SZ"
+}

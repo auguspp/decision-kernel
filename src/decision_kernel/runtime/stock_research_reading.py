@@ -38,15 +38,16 @@ def attempts(collector):
         and (runs['workflow_runs'] or runs.get('total_count') == 0), 'Stock Research attempts unavailable')
     result = {'latest_workflow_invocation': None, 'latest_execution_attempt': None,
         'latest_source_preparation_attempt': None, 'latest_compatibility_attempt': None,
+        'latest_report_source_attempt': None,
         'unclassified_invocations': [],
         'attempt_query_scope': 'NEWEST_TEN_EXACT_WORKFLOW_INVOCATIONS_NOT_ALL_HISTORY',
         'preparation_result_semantics': 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'}
     seen = set()
     for run in runs['workflow_runs']:
-        model.check(run.get('event') in {'workflow_run', 'workflow_dispatch'}
+        model.check(run.get('event') in {'workflow_run', 'workflow_dispatch', 'issues'}
             and run.get('path') == '.github/workflows/stock-business-research.yml'
             and run.get('head_branch') == 'main' and type(run.get('run_attempt')) is int
-            and run['run_attempt'] == 1 and type(run.get('id')) is int and run['id'] > 0
+            and run['run_attempt'] == 1 and type(run['id']) is int and run['id'] > 0
             and run['id'] not in seen and model.SHA.fullmatch(run.get('head_sha', ''))
             and run.get('head_repository', {}).get('full_name') == model.REPOSITORY,
             'Stock Research attempt identity differs')
@@ -63,15 +64,17 @@ def attempts(collector):
                 and len(rows) == jobs['total_count'] and len(rows) <= 100
                 and all(isinstance(j, dict) and j.get('run_id') == run['id']
                         and j.get('name') in {'research-stock-business', 'prepare-stock-sources',
-                                               'deepseek-compatibility'} for j in rows)
+                                               'deepseek-compatibility', 'retain-public-report-source'} for j in rows)
                 and len({j['name'] for j in rows}) == len(rows), 'Stock invocation jobs incomplete or ambiguous')
             active = [j['name'] for j in rows if j.get('conclusion') != 'skipped']
-            if active == ['research-stock-business']:
+            if active == ['research-stock-business'] and run['event'] in {'workflow_run', 'workflow_dispatch'}:
                 key = 'latest_execution_attempt'
             elif active == ['prepare-stock-sources'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_source_preparation_attempt'
             elif active == ['deepseek-compatibility'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_compatibility_attempt'
+            elif active == ['retain-public-report-source'] and run['event'] in {'workflow_dispatch', 'issues'}:
+                key = 'latest_report_source_attempt'
             else:
                 raise ValueError('Stock invocation mode not established')
             if result[key] is None:
