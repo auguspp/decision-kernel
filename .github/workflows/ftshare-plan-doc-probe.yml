@@ -1,0 +1,58 @@
+name: ftshare-plan-doc-probe
+
+on:
+  push:
+    branches:
+      - probe/ftshare-20260921
+
+permissions:
+  contents: read
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Fetch plan capability document
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, re, urllib.request, urllib.parse
+          from pathlib import Path
+
+          url="https://market.ft.tech/gateway/doc/p/pb8eizu3"
+          req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0","Accept":"text/html,*/*"})
+          with urllib.request.urlopen(req,timeout=30) as r:
+              body=r.read()
+              ctype=r.headers.get("Content-Type")
+          Path("page.html").write_bytes(body)
+          text=body.decode("utf-8","replace")
+          print(json.dumps({"status":200,"bytes":len(body),"content_type":ctype,
+                            "has_free":"免费" in text,"has_api":"API" in text},ensure_ascii=False))
+          print("HTML_PREVIEW_BEGIN")
+          print(text[:12000])
+          print("HTML_PREVIEW_END")
+          scripts=re.findall(r'<script[^>]+src=["\']([^"\']+)["\']',text,re.I)
+          links=re.findall(r'<link[^>]+href=["\']([^"\']+)["\']',text,re.I)
+          print("SCRIPTS",json.dumps(scripts,ensure_ascii=False))
+          print("LINKS",json.dumps(links,ensure_ascii=False))
+          # Fetch small JS assets and look for doc/page API patterns.
+          base=urllib.parse.urljoin(url,"/")
+          for i,src in enumerate(scripts[:12]):
+              u=urllib.parse.urljoin(url,src)
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(u,headers={"User-Agent":"Mozilla/5.0"}),timeout=30) as r:
+                      b=r.read()
+                  if len(b)>5_000_000: continue
+                  t=b.decode("utf-8","replace")
+                  hits=[]
+                  for pat in ("pb8eizu3","/gateway/doc","doc/p/","免费","套餐","route_not_allowed","api_key"):
+                      if pat in t: hits.append(pat)
+                  if hits:
+                      print("SCRIPT_HIT",i,u,len(b),hits)
+                      for m in re.finditer(r'.{0,250}(?:pb8eizu3|/gateway/doc|doc/p/|套餐|免费).{0,500}',t,re.S):
+                          print(m.group(0)[:1200])
+              except Exception as e:
+                  print("SCRIPT_ERR",i,u,type(e).__name__)
+          PY
