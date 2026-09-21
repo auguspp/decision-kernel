@@ -1,0 +1,13 @@
+## Human批准：沃顿单份新浪半年报、原问题一次有界接续（2026-09-21）
+
+Human在本会话看过5755923127对应的完整限定提案后明确回复：“嗯，同意”。本条保存该实际回应及其指向，不虚构消息ID或原话秒级时间。
+
+批准的范围：仅将已经保存的公开新浪沃顿2026H1发行人报告及相关研究问题，发送到既有官方DeepSeek，沿原问题/r3做一次有界接续。原问题stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c；直接前驱69305a766eb2cc4b09a6b1a6d4008625e54b8a3d/docs/readings/000920-profit-bridge-progress-2026-09-21/progress.json，SHA256 fbc34d8edd768a4fd499225dc76894bceca098062d9ae393bf1d350a775822f4。不是NEW_DISTINCT_QUESTION，不重开旧FIRST_BUSINESS_BASELINE，不修改旧失败或已有成果。
+
+原件限定：PDF SHA256 27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728、1262185字节、133页；source.json固定于ec93adf011819991c175f84640f30382b82515b8/research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/source.json。复用原生Git原件及完整生产提取，不重新访问发行人源站，不声称CNINFO字节等价。准确首次公开时间未知就保留未知，不用下载时间冒充。
+
+接续问题：报告中膜分离工程的收入确认、合同履约成本与收款披露，是否支持将集团营运资金占用归因于该业务；区分原页机制、集团金额与不可分配差额。复用r3集团利润桥，不将同材料重复核算计为新发现。
+
+模型固定DEEPSEEK_OFFICIAL / https://api.deepseek.com / deepseek-flash / DEEPSEEK_API_KEY / reasoning.effort=none。最多一次Pre，仅当原validated Pre要求CONTINUE_TO_QUICK时一次Quick；每阶段最多6000输出token，448KiB上下文、512KiB提示边界，不截断必要正文。无模型工具、自动重试、fallback、自动Deep、行情、Odds、Watch或投资操作。只外发该公开报告、相关问题和必要执行绑定；不外发密钥、非公开文件、聊天历史或内部回执。工程端进一步收窄为2026-09-23T00:00:00Z前的一次显式触发，不自动延长。
+
+Reuse Decision: THIN_ADAPTER。复用原Stock宿主、Pre/必要Quick、launch-time admission、原生Git create-only Retainer、已完成的woton_report_custody恢复及DeepSeek请求构造，不新建下载/解析/研究框架。内部检查以main ef87dadb008d49d0510786a550e2a8d35f04c566为基线；同能力官方/公共Git复用审查5749609810、5753902322继续适用。既有通用validator、daily政策/额度/任务和旧300711专用接续不放宽。新增原根显式child及来源manifest绑定须经过真实回归、exact-head PR CI、独立main CI和正常发布。当前仅保存授权，尚未创建该child、调用模型或取得研究结果；工程由施工端继续完成，不再索要相同授权。
