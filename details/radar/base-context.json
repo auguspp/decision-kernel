@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-21T10:23:58.999457+00:00",
+    "finished_at": "2026-09-21T10:25:05.913875+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-22T10:23:58.999457+00:00",
-    "started_at": "2026-09-21T10:23:34.224502+00:00"
+    "recheck_after": "2026-09-22T10:25:05.913875+00:00",
+    "started_at": "2026-09-21T10:24:40.639818+00:00"
   },
   "code_commit": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-21T10:23:58.999457+00:00",
+  "generated_at": "2026-09-21T10:25:05.913875+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-21T10:23:46.822929+00:00",
+      "checks_at": "2026-09-21T10:24:51.876280+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -509,7 +509,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "47b1bf6c38705a88d3addba0dc1efbda9c58bbfac63f4de505e3a53b8b9d0bd9"
         },
-        "source_checked_at": "2026-09-21T10:23:46.460818+00:00",
+        "source_checked_at": "2026-09-21T10:24:51.517714+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -532,7 +532,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-21T10:23:37.212082+00:00",
+      "checks_at": "2026-09-21T10:24:43.663867+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -658,7 +658,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "28b0b58fd4fd9023325ef8893e2722f7d175bdebd2c6dc54c809cd7a49492b7e"
         },
-        "source_checked_at": "2026-09-21T10:23:37.212063+00:00",
+        "source_checked_at": "2026-09-21T10:24:43.663843+00:00",
         "state_archive": {
           "artifact_id": 10633526413,
           "artifact_name": "sector-radar-state-bundle",
@@ -708,7 +708,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-21T10:23:45.540912+00:00",
+      "checks_at": "2026-09-21T10:24:50.472842+00:00",
       "gaps": [
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
@@ -901,7 +901,7 @@
           "sha256": "7aad4c2cbc5c40035c215bb5168090079c42647347ac18914f2f3a73a30c2a7f"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-21T10:23:45.540895+00:00",
+        "source_checked_at": "2026-09-21T10:24:50.472821+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "000920.SZ",
@@ -931,13 +931,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "d27cfe08e005503569d71fc8609d42120fc4781daff74398d97abf9fa05f928b",
+  "reading_hash": "63943e098a2483ca40a150d2f4b62182335ba47ddeb869dc40850c006a50f263",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "35588475510",
-    "trigger_run_id": "35587558977",
+    "run_id": "35588493137",
+    "trigger_run_id": "35588490572",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
