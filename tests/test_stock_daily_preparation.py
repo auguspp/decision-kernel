@@ -113,6 +113,8 @@ def test_native_rejections_produce_gap_and_never_export_an_executable_request(tm
     assert case.api.files == before and not case.calls and not case.writes
     assert report['research_execution_allowed'] is False
     assert (directory / 'preparation.json').is_file()
+    if damage == 'consumed-root':
+        assert report['error_code'] == 'DAILY_PREPARATION_QUESTION_ALREADY_CONSUMED'
 
 
 def test_already_consumed_day_does_not_reserve_another_slot(tmp_path, monkeypatch):
@@ -134,13 +136,14 @@ def test_state_move_after_native_checks_invalidates_preview(tmp_path, monkeypatc
         if changed == 'main':
             case.api.heads['main'] = 'f' * 40
         else:
-            previous = case.api.heads[intake.WORK_REF]
-            case.api.files['f' * 40] = deepcopy(case.api.files[previous])
+            previous = case.api.heads.get(intake.WORK_REF)
+            case.api.files['f' * 40] = deepcopy(case.api.files[previous]) if previous else {}
             case.api.heads[intake.WORK_REF] = 'f' * 40
         return value
     monkeypatch.setattr(deepseek, '_deepseek_request', moving)
     report = run(case, tmp_path / 'draft')
     assert report['status'] == 'DAILY_INPUT_PREPARATION_GAP', report
+    assert report['error_code'] == 'DAILY_PREPARATION_STATE_CHANGED'
     assert not report['request_draft_written'] and not case.calls and not case.writes
 
 
