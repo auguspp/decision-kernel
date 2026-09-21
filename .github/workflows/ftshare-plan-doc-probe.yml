@@ -13,59 +13,54 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Inspect FTShare document frontend
+      - name: Locate FTShare public document loader
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json, urllib.request
+          import re, urllib.request
+          u="https://market.ft.tech/gateway/doc/assets/index-CBGSO5Wy.js"
+          req=urllib.request.Request(u,headers={"User-Agent":"Mozilla/5.0","Accept":"*/*"})
+          with urllib.request.urlopen(req,timeout=30) as r:
+              t=r.read().decode("utf-8","replace")
+          print("BYTES",len(t))
 
-          def get(url):
-              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0","Accept":"*/*"})
-              with urllib.request.urlopen(req,timeout=30) as r:
-                  return r.read(), r.headers.get("Content-Type")
+          def show(label, needle, limit=20, span=1800):
+              print("\n###",label,repr(needle))
+              pos=0
+              n=0
+              while n<limit:
+                  i=t.find(needle,pos)
+                  if i<0: break
+                  print("\n--- HIT",n+1,"AT",i,"---")
+                  print(t[max(0,i-span):min(len(t),i+span)].replace("\n"," ")[:span*2])
+                  pos=i+len(needle)
+                  n+=1
+              print("HITS",n)
 
-          page_url="https://market.ft.tech/gateway/doc/p/pb8eizu3"
-          body,ctype=get(page_url)
-          print("PAGE",json.dumps({"bytes":len(body),"content_type":ctype},ensure_ascii=False))
+          for label,needle,limit in [
+              ("FREE_CN","免费",10),
+              ("PLAN_CN","套餐",10),
+              ("ROUTE_P","/p/",20),
+              ("SHARE_CODE","shareCode",20),
+              ("SHARE_ID","shareId",20),
+              ("PUBLIC_SHARE","publicShare",20),
+              ("SHARE","share",30),
+              ("SLUG","slug",20),
+              ("AXIOS_CREATE","axios.create",10),
+              ("BASE_URL","baseURL",20),
+          ]:
+              show(label,needle,limit)
 
-          js_url="https://market.ft.tech/gateway/doc/assets/index-CBGSO5Wy.js"
-          js,jctype=get(js_url)
-          text=js.decode("utf-8","replace")
-          print("JS",json.dumps({"bytes":len(js),"content_type":jctype},ensure_ascii=False))
-
-          needles=["/api/","/gateway/","document","share","slug","page","public","permission","free","plan","套餐","免费"]
-          for needle in needles:
-              print("COUNT",needle,text.count(needle))
-
-          seen=set()
-          markers=["/api/","axios","fetch(","document","share","slug","public","permission","plan"]
-          emitted=0
-          for marker in markers:
-              start=0
-              while emitted<180:
-                  i=text.find(marker,start)
-                  if i<0:
-                      break
-                  frag=text[max(0,i-280):min(len(text),i+1100)]
-                  key=frag[:180]
-                  if key not in seen:
-                      seen.add(key)
-                      print("CTX",marker,frag.replace("\n"," ")[:1500])
-                      emitted+=1
-                  start=i+len(marker)
-              if emitted>=180:
-                  break
-
+          print("\n### STRING_LITERALS")
           vals=[]
-          for q in (chr(34), chr(39), chr(96)):
-              parts=text.split(q)
+          for q in (chr(34),chr(39),chr(96)):
+              parts=t.split(q)
               for s in parts:
-                  if 4 <= len(s) <= 260 and any(k in s for k in ("/api/","/doc/","document","share","page","slug")):
+                  if 1<=len(s)<=240 and any(k in s.lower() for k in ("share","slug","public","page","doc")):
                       if s not in vals:
                           vals.append(s)
-          print("STRINGS_BEGIN")
-          for s in vals[:500]:
-              print(s)
-          print("STRINGS_END")
+          for s in vals:
+              if any(ch in s for ch in ("/","share","Share","slug","Slug","public","Public")):
+                  print(repr(s))
           PY
