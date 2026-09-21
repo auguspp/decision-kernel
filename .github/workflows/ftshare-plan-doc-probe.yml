@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Fetch FTShare free-plan document JSON
+      - name: Fetch FTShare free-plan capability document JSON
         shell: bash
         run: |
           set -euo pipefail
@@ -24,9 +24,11 @@ jobs:
           with urllib.request.urlopen(req,timeout=30) as r:
               body=r.read()
               print("STATUS",r.status)
-              print("CTYPE",r.headers.get("Content-Type"))
-          data=json.loads(body.decode("utf-8"))
-          print("TOP_KEYS",sorted(data.keys()) if isinstance(data,dict) else type(data).__name__)
+          envelope=json.loads(body.decode("utf-8"))
+          print("CODE",envelope.get("code"))
+          print("MSG",envelope.get("msg"))
+          data=envelope.get("data") or {}
+          print("DATA_KEYS",sorted(data.keys()) if isinstance(data,dict) else type(data).__name__)
           print("TITLE",data.get("title") if isinstance(data,dict) else None)
           print("LABEL",data.get("label") if isinstance(data,dict) else None)
           print("UPDATED",data.get("updated_at") if isinstance(data,dict) else None)
