@@ -1,0 +1,70 @@
+name: apply-daily-import-connection
+on:
+  push:
+    branches: [work/daily-source-import-check-20260921]
+    paths: [.github/workflows/apply-daily-import-connection.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 28d611a302ca75c765ec2c864dcd7d07017ff5e8
+          persist-credentials: false
+      - name: Apply only the exact locally tested connection
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, hashlib, os, base64, json
+          base='28d611a302ca75c765ec2c864dcd7d07017ff5e8'
+          branch='feat/daily-retained-source-import'
+          def git(*args):
+              return subprocess.run(['git',*args],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True).stdout.strip()
+          assert git('rev-parse','HEAD')==base
+          assert git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          expected={
+            'src/decision_kernel/runtime/stock_retained_source_import.py':'5b628064f15750e108273c031d061fd24c0dabce',
+            'tests/test_stock_retained_source_import.py':'5137a46a838dfac221334461c2fb38a6eca4adff',
+            'research_runs/stock-retained-source-imports.json':'2c272a8c92fcf07120715c3eda7ec7a6fdf36b9c',
+            'docs/daily-retained-source-import.md':'49f3501bc282ebf5070adf8c18a9bfb1886acdb8'}
+          def blob(p):
+              b=Path(p).read_bytes();return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          assert all(blob(p)==h for p,h in expected.items())
+          p=Path('src/decision_kernel/runtime/stock_daily_question.py');s=p.read_text()
+          assert blob(p)=='53efa56ed321c9b2b44f1e5ec9ea5ae2c99933d3'
+          s=s.replace('def _source_archive(api, custody, cache):','def _source_archive(api, custody, cache, *, code=None):')
+          s=s.replace('    expected = custody["source_artifact"]\n','    if "source_import" in custody:\n        from . import stock_retained_source_import as imported\n        return imported.load(api, code, custody, cache)\n    expected = custody["source_artifact"]\n',1)
+          s=s.replace('archive_files = _source_archive(api, custody, {} if archives is None else archives)','archive_files = _source_archive(api, custody, {} if archives is None else archives, code=packet.code_commit)')
+          s=s.replace('    refs.extend(request[k] for k in EXTRA_SOURCES)','    if "source_import" in custody:\n        from .stock_retained_source_import import IMPORTS_PATH\n        refs.append(once.source_ref(IMPORTS_PATH, packet.code_commit, api.file(IMPORTS_PATH, packet.code_commit),\n                                   "REVIEWED_RETAINED_SOURCE_IMPORT"))\n    refs.extend(request[k] for k in EXTRA_SOURCES)')
+          insert='\n\nREADY_LABEL = "daily-stock-question-ready"\n\n\ndef label_transport(env):\n    """A fixed owned-issue signal only; trusted main request still grants scope."""\n    return (env.get("GITHUB_EVENT_NAME") == "issues"\n            and env.get("GITHUB_WORKFLOW") == "stock-business-research"\n            and env.get("DAILY_EVENT_ACTION") == "labeled"\n            and env.get("DAILY_ISSUE_NUMBER") == "297"\n            and env.get("DAILY_LABEL") == READY_LABEL\n            and env.get("DAILY_SENDER") == "auguspp"\n            and env.get("DAILY_IS_PULL_REQUEST") == "false")\n'
+          s=s.replace('\n\ndef check_policy(api, code, request, clock):',insert+'\n\ndef check_policy(api, code, request, clock):');p.write_text(s)
+          p=Path('src/decision_kernel/runtime/stock_question_host.py');s=p.read_text()
+          assert blob(p)=='07ed990162ea6b21b6b244c2d900cb851a0418ad'
+          s=s.replace('    args = parser.parse_args(argv)\n    once.require(os.environ.get("GITHUB_REPOSITORY")','    args = parser.parse_args(argv)\n    from . import stock_daily_question as daily_policy\n    once.require(os.environ.get("GITHUB_REPOSITORY")')
+          s=s.replace('and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"\n        and reading.SHA','and (os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"\n             or args.daily_reviewed_question and daily_policy.label_transport(os.environ))\n        and reading.SHA');p.write_text(s)
+          p=Path('.github/workflows/stock-business-research.yml');s=p.read_text()
+          s=s.replace("github.event.label.name == 'woton-h1-analysis-ready'))", "(github.event.label.name == 'woton-h1-analysis-ready' ||\n         github.event.label.name == 'daily-stock-question-ready')))",1)
+          start=s.index('      - name: Daily reviewed question through saved policy and original admission')
+          end=s.index('      - name: One approved Woton same-question report continuation',start)
+          new=s[start:end].replace("if: github.event_name == 'workflow_dispatch' && inputs.daily-reviewed-question", "if: >-\n          (github.event_name == 'workflow_dispatch' && inputs.daily-reviewed-question) ||\n          (github.event_name == 'issues' && github.event.label.name == 'daily-stock-question-ready')")
+          new=new.replace('EXPECTED_CODE_SHA: ${{ inputs.code-sha }}','EXPECTED_CODE_SHA: ${{ inputs.code-sha || github.sha }}\n          DAILY_EVENT_ACTION: ${{ github.event.action }}\n          DAILY_ISSUE_NUMBER: ${{ github.event.issue.number }}\n          DAILY_LABEL: ${{ github.event.label.name }}\n          DAILY_SENDER: ${{ github.event.sender.login }}\n          DAILY_IS_PULL_REQUEST: ${{ toJSON(github.event.issue.pull_request != null) }}')
+          new=new.replace('test "$GITHUB_EVENT_NAME" = workflow_dispatch','if [ "$GITHUB_EVENT_NAME" = issues ]; then\n            test "$DAILY_EVENT_ACTION" = labeled\n            test "$DAILY_ISSUE_NUMBER" = 297\n            test "$DAILY_LABEL" = daily-stock-question-ready\n            test "$DAILY_SENDER" = auguspp\n            test "$DAILY_IS_PULL_REQUEST" = false\n          else\n            test "$GITHUB_EVENT_NAME" = workflow_dispatch\n          fi')
+          s=s[:start]+new+s[end:];p.write_text(s)
+          changed={'src/decision_kernel/runtime/stock_daily_question.py':'774f51e10eb9625f4e2ad06e2cb84eb9957416a0','src/decision_kernel/runtime/stock_question_host.py':'0edea70179d84f1f4c4087584b34e03020edc65a','.github/workflows/stock-business-research.yml':'a11ac91386317f4d2868a3e9acf004daa857f284'}
+          assert set(git('diff','--name-only').splitlines())==set(changed)
+          assert all(blob(p)==h for p,h in changed.items())
+          git('diff','--check');git('add','--',*changed)
+          git('-c','user.name=github-actions[bot]','-c','user.email=41898282+github-actions[bot]@users.noreply.github.com','commit','-m','feat: connect reviewed retained sources to the original daily workflow')
+          os.environ['GIT_CONFIG_COUNT']='1';os.environ['GIT_CONFIG_KEY_0']='http.https://github.com/.extraheader'
+          os.environ['GIT_CONFIG_VALUE_0']='AUTHORIZATION: basic '+base64.b64encode(('x-access-token:'+os.environ['GH_TOKEN']).encode()).decode()
+          assert git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          git('push','origin','HEAD:refs/heads/'+branch)
+          print(json.dumps({'commit':git('rev-parse','HEAD'),'files':changed}))
+          PY
