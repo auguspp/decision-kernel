@@ -322,6 +322,11 @@ def stock_review_scope(payload, observations=None, observation_status='NOT_READ'
             disposition = 'DATA_UNAVAILABLE_NOT_PRICE_REJECTED'
         elif not passed:
             disposition = 'ORIGINAL_PRICE_DISPOSITION_ONLY'
+        elif relation is not None and relation.get('status') == 'NOT_STARTED':
+            # The Stock reader emits an empty-root placeholder, not saved Research.
+            disposition = ('QUESTION_REVIEW_REQUIRED'
+                           if work.get('status') == 'READ_OK' and relation.get('sources') == {}
+                           else 'RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION')
         elif relation is not None:
             disposition = {
                 'PRE_EXECUTION_FAILURE': 'EXISTING_BASELINE_SOURCE_OR_INPUT_GAP',
@@ -382,7 +387,8 @@ def render(report):
                      + '：' + _text(row['review_status']))
         if row.get('existing_research_relation'):
             rel = row['existing_research_relation']
-            lines.append('  - 既有研究关系：' + _text(rel.get('status'))
+            label = '原首次业务研究状态：' if rel.get('status') == 'NOT_STARTED' else '既有研究关系：'
+            lines.append('  - ' + label + _text(rel.get('status'))
                          + (' / ' + _text(rel.get('error_type')) if rel.get('error_type') else ''))
         for prompt in row.get('origin_question_prompts', []):
             lines.append('  - 观察问题草稿：' + _text(prompt))
