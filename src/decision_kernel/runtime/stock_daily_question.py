@@ -73,6 +73,46 @@ def _source(api, spec, purpose, clock):
     return raw, meta["committer"]["date"]
 
 
+def _retained_pdf(api, spec, archived_pdf, expected_bytes, clock):
+    """Bind already-qualified artifact bytes to an immutable Git file.
+
+    Only large PDFs take the tree path. Small sources keep the original reader.
+    This does not qualify an artifact, fetch a PDF URL, or change metadata limits.
+    """
+    once.require(type(expected_bytes) is int and isinstance(archived_pdf, bytes)
+                 and 0 < expected_bytes == len(archived_pdf) <= POLICY["max_pdf_bytes"],
+                 "DAILY_RETAINED_PDF_IDENTITY_OR_SIZE")
+    if expected_bytes <= identity.MAX_BYTES:
+        raw, saved_at = _source(api, spec, "RETAINED_PUBLIC_ISSUER_PDF", clock)
+        once.require(raw == archived_pdf, "DAILY_SOURCE_ARTIFACT_DOCUMENT_DIFFERS")
+        return raw, saved_at
+    once.require(isinstance(spec, dict) and spec.get("purpose") == "RETAINED_PUBLIC_ISSUER_PDF"
+                 and spec.get("repository") == once.REPO
+                 and isinstance(spec.get("ref"), str) and reading.SHA.fullmatch(spec["ref"])
+                 and isinstance(spec.get("git_blob"), str) and reading.SHA.fullmatch(spec["git_blob"])
+                 and isinstance(spec.get("sha256"), str)
+                 and re.fullmatch(r"[0-9a-f]{64}", spec["sha256"]), "DAILY_PDF_SOURCE_REFERENCE")
+    path = reading.safe_path(spec["path"])
+    once.require(path.startswith("research_runs/") and path.lower().endswith(".pdf"),
+                 "DAILY_PDF_SOURCE_REFERENCE")
+    tree = api.get("git/trees/" + spec["ref"] + "?recursive=1")
+    once.require(tree.get("truncated") is False and isinstance(tree.get("tree"), list)
+                 and len(tree["tree"]) <= 5000
+                 and all(isinstance(row, dict) for row in tree["tree"]), "DAILY_PDF_TREE_INCOMPLETE")
+    matches = [row for row in tree["tree"] if row.get("path") == path]
+    once.require(len(matches) == 1, "DAILY_PDF_GIT_BINDING_DIFFERS")
+    row = matches[0]
+    once.require(row.get("type") == "blob" and row.get("mode") == "100644"
+                 and type(row.get("size")) is int and row["size"] == expected_bytes
+                 and row.get("sha") == spec["git_blob"] == once.blob(archived_pdf)
+                 and spec["sha256"] == once.sha(archived_pdf), "DAILY_PDF_GIT_BINDING_DIFFERS")
+    meta = api.get("git/commits/" + spec["ref"])
+    once.require(meta["sha"] == spec["ref"]
+                 and admission.clock(meta["committer"]["date"]) <= admission.clock(clock()),
+                 "DAILY_SOURCE_COMMIT_CLOCK")
+    return archived_pdf, meta["committer"]["date"]
+
+
 def _source_archive(api, custody, cache):
     """Reuse native saved artifact qualification; no issuer acquisition."""
     expected = custody["source_artifact"]
@@ -108,7 +148,7 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
     """Check complete saved batch review and original public PDF bytes, locally.
 
     Never fetch issuer websites or send batch/custody bodies to the model. The
-    original per-source512KiB bound is deliberately narrower than the32MiB total.
+    metadata reader stays at512KiB; PDF bytes use the existing32MiB total budget.
     """
     once.require(all(c["mode"] == "STATIC" and c["planned_queries"] == []
                      for c in q["required_classes"]), "DAILY_REQUIRES_DECLARED_STATIC_SOURCES")
@@ -206,10 +246,10 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
                      and admission.clock(captured["captured_at"]) <= admission.clock(doc["retrieved_at"])
                      <= admission.clock(captured["finished_at"]) <= admission.clock(custody["checked_at"]),
                      "DAILY_SOURCE_ACQUISITION_BINDING_DIFFERS")
-        pdf, pdf_saved = _source(api, record["pdf_source"], "RETAINED_PUBLIC_ISSUER_PDF", selected_clock)
         from .stock_source_successor import _saved_document
         _, _, saved_pdf, extraction = _saved_document(
             SimpleNamespace(files=archive_files), packet.case_id, doc["announcement_id"])
+        pdf, pdf_saved = _retained_pdf(api, record["pdf_source"], saved_pdf, record["bytes"], selected_clock)
         once.require(pdf == saved_pdf and extraction["pages"] == doc["pages"],
                      "DAILY_SOURCE_ARTIFACT_DOCUMENT_DIFFERS")
         completed = [r for r in journal["completed_reads"] if r["identity"] == packet.ticker + ":" + doc["announcement_id"]]
@@ -223,7 +263,7 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
                      and total <= POLICY["max_pdf_bytes"]
                      and admission.clock(pdf_saved) <= admission.clock(custody["checked_at"]),
                      "DAILY_RETAINED_PDF_IDENTITY_OR_SIZE")
-        parsed = extract_pdf_text(pdf, max_pdf_bytes=identity.MAX_BYTES, max_pages=500,
+        parsed = extract_pdf_text(pdf, max_pdf_bytes=POLICY["max_pdf_bytes"], max_pages=500,
                                   max_extracted_chars=POLICY["max_context_bytes"])
         once.require(parsed.page_count == record["page_count"] == doc["page_count"], "DAILY_PDF_PAGES_DIFFER")
         once.require(packet.ticker in "".join(p.text for p in parsed.pages[:10])
