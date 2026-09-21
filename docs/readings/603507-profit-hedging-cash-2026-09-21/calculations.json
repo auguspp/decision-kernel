@@ -1,0 +1,79 @@
+{
+  "periods": ["2026H1", "2025H1"],
+  "currency": "CNY",
+  "unit": "yuan",
+  "source_pdf_sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+  "source_pages": {"profit": [6,39,40], "nonrecurring": [6,7], "cfo": [43,44,153,154], "hedging_cash": [151,152]},
+  "profit_inputs": {
+    "revenue": ["2863416587.81", "1834295550.60"],
+    "cost_of_sales": ["2299504087.78", "1462639671.23"],
+    "taxes_surcharges": ["14993701.56", "21416688.72"],
+    "selling": ["34165537.44", "22388631.56"],
+    "administration": ["97598791.98", "78865184.50"],
+    "research": ["76214398.58", "62890845.43"],
+    "finance_cost": ["155475528.28", "56210331.52"],
+    "other_income": ["7639255.05", "10863167.12"],
+    "investment_income": ["7048902.29", "-51386591.04"],
+    "fair_value": ["25723003.46", "-51287397.82"],
+    "credit_impairment": ["-19860763.30", "-10212620.71"],
+    "asset_impairment": ["-27965376.89", "-13519592.10"],
+    "disposal": ["-3948027.55", "4554929.44"],
+    "non_operating_income": ["3455361.02", "10752873.01"],
+    "non_operating_expense": ["878701.06", "6069794.28"],
+    "income_tax": ["23397213.63", "5540132.08"],
+    "minority_profit": ["3447947.87", "2345546.17"],
+    "group_net": ["153280981.58", "18039039.18"],
+    "parent_net": ["149833033.71", "15693493.01"],
+    "adjusted_parent_net": ["97005857.01", "77690277.54"]
+  },
+  "cashflow_indirect_inputs": {
+    "group_net": ["153280981.58", "18039039.18"],
+    "asset_impairment": ["27965376.89", "13519592.10"],
+    "credit_impairment": ["19860763.30", "10212620.71"],
+    "depreciation": ["138890774.24", "114037417.49"],
+    "rou_amortization": ["17136674.93", "18417056.87"],
+    "intangibles_amortization": ["5637866.51", "5880954.33"],
+    "long_term_prepaid_amortization": ["6999438.22", "19185259.51"],
+    "disposal_adjustment": ["3948027.55", "-4554929.44"],
+    "scrap_adjustment": ["0.00", "4129516.30"],
+    "fair_value_adjustment": ["-25723003.46", "51287397.82"],
+    "finance_adjustment": ["124851283.68", "71799930.96"],
+    "investment_adjustment": ["-22368178.07", "40252793.26"],
+    "deferred_tax_asset": ["-41723972.62", "-19066373.23"],
+    "deferred_tax_liability": ["1655390.96", "-2915309.16"],
+    "inventory": ["38340961.23", "-263864443.31"],
+    "operating_receivables": ["-247999268.33", "-379005906.08"],
+    "operating_payables": ["151111714.53", "181322363.63"],
+    "other": ["13739105.29", "-952986.39"]
+  },
+  "cashflow_direct_inputs": {
+    "sales_receipts": ["2651786101.46", "1446693853.84"],
+    "tax_refunds": ["175843323.87", "86826185.89"],
+    "other_receipts": ["45283353.82", "141370238.16"],
+    "purchases": ["-1917782109.11", "-1330073134.77"],
+    "employees": ["-368018351.88", "-283490285.07"],
+    "taxes_paid": ["-103940220.39", "-80172664.06"],
+    "other_payments": ["-117568161.34", "-103430199.44"]
+  },
+  "nonrecurring_signed_components": {
+    "asset_disposal": "-21193048.27", "grants": "6888814.44",
+    "financial_assets_liabilities": "61506682.22", "fund_occupation": "1188834.68",
+    "other_nonoperating": "2576659.96", "other_items": "456572.92",
+    "less_income_tax_effect": "1680956.77", "less_minority_effect": "-278296.02"
+  },
+  "blank_cell_treatment": {"2026H1_fixed_asset_scrap_adjustment": "empty issuer additive table cell -> 0 solely to check reported subtotal"},
+  "checks": {
+    "2026H1": {"gross_profit": "563912500.03", "gross_margin_pct": "19.69369397490610676563984489", "operating_profit": "174101535.25", "pretax_profit": "176678195.21", "group_net_residual": "0.00", "parent_net_residual": "0.00", "cfo_indirect_sum": "365603936.43", "cfo_indirect_residual": "0.00", "cfo_direct_sum": "365603936.43", "cfo_direct_residual": "0.00"},
+    "2025H1": {"gross_profit": "371655879.37", "gross_margin_pct": "20.26150470944723012293829199", "operating_profit": "18896092.53", "pretax_profit": "23579171.26", "group_net_residual": "0.00", "parent_net_residual": "0.00", "cfo_indirect_sum": "-122276005.45", "cfo_indirect_residual": "0.00", "cfo_direct_sum": "-122276005.45", "cfo_direct_residual": "0.00"}
+  },
+  "parent_profit_bridge": {"parent_growth": "134139540.70", "adjusted_growth": "19315579.47", "net_nonrecurring_change": "114823961.23", "net_nonrecurring_change_share_of_parent_growth_pct": "85.60038347440084831004643510", "nonrecurring_2026_sum": "52827176.70", "nonrecurring_2026_residual": "0.00"},
+  "working_capital_cash_bridge": {"2026H1": "-58546592.57", "2025H1": "-461547985.76", "change": "403001393.19", "cfo_change": "487879941.88", "contribution_pct": "82.60257464922037921761179005", "inventory_change": "302205404.54", "receivables_change": "131006637.75", "payables_change": "-30210649.10"},
+  "hedge_and_capital_cross_checks": {
+    "fx_loss_in_finance_expense_2026": "51999256.96", "fx_loss_in_finance_expense_2025": "-26831291.33", "fx_expense_increase": "78830548.29",
+    "received_forward_contract_return_2026": "21014118.95", "paid_forward_fx_futures_losses_2026": "14180.91", "two_cash_rows_net_not_total_hedge_pnl": "20999938.04",
+    "hedging_oci_before_tax": "16636778.75", "hedging_oci_tax": "3167503.77", "hedging_oci_after_tax": "13469274.98", "hedging_oci_residual": "0.00",
+    "cfo_less_ppe_intangibles_cash_capex": "-159625667.82", "cfo_less_cash_capex_and_reported_lease_payments": "-217870278.51",
+    "cash_equivalents": "726331207.23", "cash_not_equivalents": "384442420.03", "monetary_funds": "1110773627.26", "cash_reconciliation_residual": "0.00"
+  },
+  "limits": ["Not sustainable-earnings normalization.", "Not all financial gain is FX/hedging.", "Working-capital contribution is accounting decomposition, not evidence of sustainable collections.", "Cashflow finance/investment adjustments are not identical to income-statement totals.", "CFO minus cash capex/lease is a scope-labelled screen, not FCFE or maintenance free cash flow.", "No model execution, formal admission, Human acceptance or investment authority."]
+}
