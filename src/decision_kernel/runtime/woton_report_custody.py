@@ -40,6 +40,8 @@ SCOPE = {'schema_version': 1, 'enabled': True, 'mode': MODE, 'permission': PERMI
 COMPLETE = 'SOURCE_CUSTODY_COMPLETE_NOT_RESEARCH'
 REUSED = 'EXISTING_SOURCE_ATTEMPT_NO_ACQUISITION'
 READY_LABEL = 'woton-h1-source-ready'
+REPRESENTATION_LABEL = 'woton-h1-representation-ready'
+DATA_FILES = {'source.pdf', 'extraction.json', 'representation-repair.json', 'representation-failure.json'}
 OTHER_FLAGS = ('reviewed-question', 'daily-reviewed-question', 'reviewed-question-continuation',
                'deepseek-compat', 'recover-sources', 'prepare-sources', 'source-successor',
                'source-successor-continuation')
@@ -59,7 +61,7 @@ def check_environment(env, code):
     if env['GITHUB_EVENT_NAME'] == 'issues':
         once.require(inputs in ({}, None, '') and env.get('REPORT_EVENT_ACTION') == 'labeled'
                      and env.get('REPORT_ISSUE_NUMBER') == '297'
-                     and env.get('REPORT_LABEL') == READY_LABEL
+                     and env.get('REPORT_LABEL') in {READY_LABEL, REPRESENTATION_LABEL}
                      and env.get('REPORT_SENDER') == 'auguspp'
                      and env.get('REPORT_IS_PULL_REQUEST') == 'false',
                      'REPORT_LABEL_TRANSPORT_SCOPE')
@@ -73,7 +75,7 @@ def check_environment(env, code):
 def _read_blob(api, spec, limit):
     """Native Git metadata + raw blob; no widening of ResearchInputSourceRef."""
     once.require(spec['repository'] == once.REPO and model.SHA.fullmatch(spec['ref'])
-                 and spec['path'] in {PREFIX + 'source.pdf', PREFIX + 'extraction.json'}
+                 and spec['path'] in {PREFIX + name for name in DATA_FILES}
                  and type(spec['bytes']) is int and 0 < spec['bytes'] <= limit,
                  'REPORT_SOURCE_REFERENCE')
     data = api.get('contents/' + quote(spec['path'], safe='/') + '?ref=' + spec['ref'])
@@ -92,7 +94,7 @@ def _read_blob(api, spec, limit):
 
 def _save_data(retain, name, data):
     limit = once.MAX_SOURCE_BYTES if name == 'source.pdf' else identity.MAX_BYTES
-    once.require(name in {'source.pdf', 'extraction.json'} and len(data) <= limit,
+    once.require(name in DATA_FILES and len(data) <= limit,
                  'REPORT_SOURCE_WRITE_SCOPE')
     path = PREFIX + name
     result = retain.native('PUT', 'contents/' + path,
@@ -131,7 +133,8 @@ def parse_original(pdf):
     parsed = extract_pdf_text(pdf, max_pdf_bytes=once.MAX_SOURCE_BYTES,
                               max_pages=200, max_extracted_chars=1_000_000)
     once.require(parsed.page_count == 133 and all(t in parsed.pages[0].text
-                 for t in ('000920', '2026', '半年度报告')),
+                 for t in ('2026', '半年度报告'))
+                 and '000920' in '\n'.join(p.text for p in parsed.pages[:6]),
                  'REPORT_PRINTED_IDENTITY')
     from .disclosure_source_reading import text_ok
     once.require(all(text_ok(p.text) for p in parsed.pages), 'REPORT_UNREADABLE_PAGE')
@@ -159,6 +162,22 @@ def recover(api, source):
                  and model.clock(PERMISSION['created_at']) <= model.clock(saved['requested_at'])
                  <= model.clock(saved['received_at']) <= model.clock(saved['finished_at'])
                  < model.clock(SCOPE['execute_before']), 'REPORT_MANIFEST_IDENTITY')
+    if 'representation_repair' in saved:
+        from .woton_report_representation import FAILURE_SOURCE, MARKER, PDF_SOURCE, PREPARE_SOURCE, original_failure
+        repair = saved['representation_repair']
+        failure = original_failure(api)
+        reservation = identity._json(identity._checked_source(repair['reservation'],
+            lambda s: api.file(s['path'], s['ref'])))
+        once.require(repair['original_failure'] == FAILURE_SOURCE and repair['source_requests'] == 0
+            and repair['original_run_preserved_as_failure'] is True
+            and saved['files']['source.pdf'] == PDF_SOURCE
+            and all(saved[k] == failure[k] for k in ('requested_at', 'received_at', 'http_status', 'source_requests'))
+            and repair['reservation']['path'] == PREFIX + MARKER
+            and reservation['original_failure'] == FAILURE_SOURCE
+            and reservation['original_pdf'] == PDF_SOURCE and reservation['original_prepare'] == PREPARE_SOURCE
+            and reservation['source_requests'] == 0 and reservation['operation'] == 'REBUILD_RETAINED_PDF_ONLY'
+            and all(reservation.get(k) == v for k, v in model.AUTHORITY.items())
+            and reservation['code_commit'] == saved['code_commit'], 'REPORT_REPAIR_MANIFEST_IDENTITY')
     pdf = _read_blob(api, saved['files']['source.pdf'], once.MAX_SOURCE_BYTES)
     pages = _read_blob(api, saved['files']['extraction.json'], identity.MAX_BYTES)
     once.require(once.raw(parse_original(pdf)) == pages, 'REPORT_EXTRACTION_REPLAY_DIFFERS')
@@ -247,7 +266,10 @@ def main(argv=None):
     check_environment(os.environ, args.code_commit)
     once.require(subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
                  == args.code_commit, 'REPORT_CHECKOUT_IDENTITY')
-    result = run(api=GitHubAPI(os.environ['GH_TOKEN'], max_calls=48), code=args.code_commit, output=args.output)
+    operation = run
+    if os.environ.get('GITHUB_EVENT_NAME') == 'issues' and os.environ.get('REPORT_LABEL') == REPRESENTATION_LABEL:
+        from .woton_report_representation import run as operation
+    result = operation(api=GitHubAPI(os.environ['GH_TOKEN'], max_calls=48), code=args.code_commit, output=args.output)
     print(result['status'])
     return 0 if result['status'] in {COMPLETE, REUSED} else 2
 

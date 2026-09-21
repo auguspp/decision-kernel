@@ -142,6 +142,23 @@
         "bytes": 11510,
         "sha256": "c346523d2d3d6416aebd7bc12805d8676b234bd0657ef0d2155590e074df6cc4"
       }
+    },
+    {
+      "id": "p0-000920-h1-original-pdf-custody-20260921",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Retained source-preparation working note for the original Woton financial question: exact original Sina H1 PDF, source attempt35550930725 and preserved representation failure. This one-file on-demand note locates raw PDF/prepare/failure bytes; it does not materialize them in the daily reading or declare repair success, CNINFO byte equivalence, new Question, Pre/Quick, financial Research completion, Human acceptance or model-egress permission. Representation repair is a separate zero-source-GET operation; old question/r2/failures remain.",
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/woton-original-source-custody-20260921/README.md",
+        "ref": "e9d116bd4f20f6f9a3ed6f2e299fe2a97f9c577b",
+        "git_blob": "f1d709062517854e3eec300cd12541066a7cf2dc",
+        "bytes": 6507,
+        "sha256": "48e3287c7c366f313933d720999b8f0e7defd589bbf41a894dd76ad2da8022ae"
+      }
     }
   ],
   "historical_handoffs": [

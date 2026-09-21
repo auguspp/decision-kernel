@@ -1,0 +1,23 @@
+{
+  "automatic_retry": false,
+  "code_commit": "aedf5160c344204b3595687c152c750af9cba0a3",
+  "error_code": "REPORT_PRINTED_IDENTITY",
+  "error_type": "TrialError",
+  "failure_meaning": "SOURCE_OPERATION_FAILED_NOT_NO_REPORT_OR_BUSINESS_WAIT",
+  "formal_research_started": false,
+  "http_status": 200,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "market_requests": 0,
+  "mode": "WOTON_H1_PUBLIC_REPORT_CUSTODY_ONLY",
+  "model_calls": 0,
+  "phase": "FULL_PDF_REPRESENTATION",
+  "received_at": "2026-09-21T01:27:16.307920+00:00",
+  "requested_at": "2026-09-21T01:27:14.761946+00:00",
+  "research_authority": "NONE",
+  "research_root_reset": false,
+  "signal_transition_authority": "NONE",
+  "source_requests": 1,
+  "started_at": "2026-09-21T01:27:11.995774+00:00",
+  "status": "SOURCE_CUSTODY_FAILED"
+}
