@@ -1,0 +1,83 @@
+name: ftshare-free-plan-matrix
+
+on:
+  push:
+    branches:
+      - probe/ftshare-20260921
+
+permissions:
+  contents: read
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+    steps:
+      - name: Probe selected FTShare routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request, urllib.error
+
+          key=os.environ["FTSHARE_API_KEY"]
+          base="https://market.ft.tech/gateway"
+          tests=[
+            ("finance-balance","/api/v1/market/data/finance/balance",{"year":2026,"report_type":"q2","page":1,"page_size":1}),
+            ("finance-income","/api/v1/market/data/finance/income",{"year":2026,"report_type":"q2","page":1,"page_size":1}),
+            ("finance-cashflow","/api/v1/market/data/finance/cashflow",{"year":2026,"report_type":"q2","page":1,"page_size":1}),
+            ("performance-forecast","/api/v1/market/data/finance/stock-performance-forecast",{"year":2026,"report_type":"q2","page":1,"page_size":1}),
+            ("performance-express","/api/v1/market/data/finance/stock-performance-express",{"year":2026,"report_type":"q2","page":1,"page_size":1}),
+            ("stock-quotes","/api/v1/market/data/daec/stocks",{"order_by":"change_rate desc","page":1,"page_size":1}),
+            ("major-contract","/api/v1/market/data/corporate/contract",{"start_date":"20260918","end_date":"20260918"}),
+            ("semantic-news","/api/v3/market/data/semantic-search-news",{"query":"沃顿科技","limit":1,"year":2026}),
+            ("financial-calendar","/api/v1/market/data/finance/financial-calendar/baidu",{"start_date":"2026-09-18","end_date":"2026-09-18","page":1,"page_size":1}),
+          ]
+          out=[]
+          for label,path,params in tests:
+              url=base+path+"?"+urllib.parse.urlencode(params)
+              req=urllib.request.Request(url,headers={
+                  "FTSHARE_API_KEY":key,
+                  "Content-Type":"application/json",
+                  "Accept":"application/json",
+                  "User-Agent":"decision-kernel-ftshare-matrix/0",
+              },method="GET")
+              row={"label":label}
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r:
+                      body=r.read()
+                      row["http_status"]=r.status
+                      row["bytes"]=len(body)
+                  try:
+                      data=json.loads(body.decode("utf-8"))
+                      if isinstance(data,dict):
+                          row["code"]=data.get("code")
+                          row["message"]=data.get("message") or data.get("msg")
+                          d=data.get("data")
+                          row["data_type"]=type(d).__name__
+                          if isinstance(d,list): row["data_len"]=len(d)
+                          if isinstance(d,dict):
+                              row["data_keys"]=sorted(d.keys())[:12]
+                      else:
+                          row["top_type"]=type(data).__name__
+                  except Exception as e:
+                      row["decode_error"]=type(e).__name__
+              except urllib.error.HTTPError as e:
+                  body=e.read()
+                  row["http_status"]=e.code
+                  row["bytes"]=len(body)
+                  try:
+                      data=json.loads(body.decode("utf-8"))
+                      row["code"]=data.get("code")
+                      row["message"]=data.get("message") or data.get("msg")
+                      reason=(data.get("data") or {}).get("reason") if isinstance(data.get("data"),dict) else None
+                      if reason: row["reason"]=reason
+                  except Exception:
+                      pass
+              except Exception as e:
+                  row["error_type"]=type(e).__name__
+              out.append(row)
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
