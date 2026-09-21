@@ -63,13 +63,17 @@ jobs:
       !inputs.retain-report-source &&
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      github.event_name == 'workflow_dispatch' &&
-      !inputs.prepare-sources && !inputs.deepseek-compat &&
-      (!inputs.daily-reviewed-question ||
-       (!inputs.reviewed-question && !inputs.reviewed-question-continuation &&
-        !inputs.recover-sources && !inputs.source-successor &&
-        !inputs.source-successor-continuation && !inputs.source-stock-run-id &&
-        inputs.code-sha == github.sha))
+      ((github.event_name == 'workflow_dispatch' &&
+        !inputs.prepare-sources && !inputs.deepseek-compat &&
+        (!inputs.daily-reviewed-question ||
+         (!inputs.reviewed-question && !inputs.reviewed-question-continuation &&
+          !inputs.recover-sources && !inputs.source-successor &&
+          !inputs.source-successor-continuation && !inputs.source-stock-run-id &&
+          inputs.code-sha == github.sha))) ||
+       (github.event_name == 'issues' && github.event.action == 'labeled' &&
+        github.event.issue.number == 297 && !github.event.issue.pull_request &&
+        github.event.sender.login == 'auguspp' &&
+        github.event.label.name == 'woton-h1-analysis-ready'))
     runs-on: ubuntu-24.04
     timeout-minutes: 160
     permissions:
@@ -87,7 +91,7 @@ jobs:
       - name: Install existing source and Research dependencies
         run: python -m pip install -e '.[documents,feeds,research-api]'
       - name: Original Stock validation, business sources, admission and Pre with necessary Quick
-        if: "!inputs.reviewed-question && !inputs.reviewed-question-continuation && !inputs.daily-reviewed-question"
+        if: "github.event_name == 'workflow_dispatch' && !inputs.reviewed-question && !inputs.reviewed-question-continuation && !inputs.daily-reviewed-question"
         env:
           GH_TOKEN: ${{ github.token }}
           SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
@@ -199,6 +203,21 @@ jobs:
           test -n "$DEEPSEEK_API_KEY"
           python -m decision_kernel.runtime.stock_question_host \
             --daily-reviewed-question --code-commit "$EXPECTED_CODE_SHA" --output run-output
+      - name: One approved Woton same-question report continuation
+        if: github.event_name == 'issues' && github.event.label.name == 'woton-h1-analysis-ready'
+        timeout-minutes: 20
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          EXPECTED_CODE_SHA: ${{ github.sha }}
+          REPORT_EVENT_ACTION: ${{ github.event.action }}
+          REPORT_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPORT_LABEL: ${{ github.event.label.name }}
+          REPORT_SENDER: ${{ github.event.sender.login }}
+          REPORT_IS_PULL_REQUEST: ${{ toJSON(github.event.issue.pull_request != null) }}
+        run: >-
+          python -m decision_kernel.runtime.woton_report_continuation
+          --code-commit "$EXPECTED_CODE_SHA" --output run-output
       - name: Preserve original sources, model outputs and partial failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
