@@ -159,6 +159,25 @@
         "bytes": 6507,
         "sha256": "48e3287c7c366f313933d720999b8f0e7defd589bbf41a894dd76ad2da8022ae"
       }
+    },
+    {
+      "id": "p0-000920-reports-only-profit-bridge-20260921",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Third same-question typed progress checkpoint using the retained 2026H1 issuer PDF: six-product gross profit and both H1 group gross-profit-to-parent-net-profit bridges reconcile exactly. Parent profit growth includes a minority-allocation effect; the tax-adjustment note has an unallocated551260.96-yuan discrepancy. Per-product expenses/tax/cash and prior receivable-cash attribution remain UNKNOWN. Interactive financial work, not new Pre/Quick, Full Research, COMMITTED, Human acceptance, model-egress permission or investment authority. Three-file progress archive only; raw PDF has separate native custody. Recover this exact revision on demand.",
+      "archive": {
+        "format": "RESEARCH_PROGRESS",
+        "expected_sha256": "fbc34d8edd768a4fd499225dc76894bceca098062d9ae393bf1d350a775822f4",
+        "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md",
+        "ref": "69305a766eb2cc4b09a6b1a6d4008625e54b8a3d",
+        "git_blob": "771502c279982e6e6c3d7ff95ed0928a46cbbe73",
+        "bytes": 14279,
+        "sha256": "cfc59e29f95245567bbedbccaed5987c6c54db9483e92a1dc352a5246aefdd39"
+      }
     }
   ],
   "historical_handoffs": [
