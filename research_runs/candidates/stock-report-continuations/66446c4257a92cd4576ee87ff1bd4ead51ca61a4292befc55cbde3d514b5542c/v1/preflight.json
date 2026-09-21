@@ -1,0 +1,53 @@
+{
+  "case_id": "000920.SZ",
+  "finished_at": "2026-09-21T06:41:06.973604+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "notes": "Recorded Git custody recovery and full-PDF replay; zero issuer GET. PRIMARY describes the issuer-authored report, not mirror authenticity certification. Git context publication is distinct from UNKNOWN issuer first-publication time.",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728",
+      "checked_at": "2026-09-21T06:41:06.973604+00:00",
+      "id": "report",
+      "identity": "000920:SINA-12512184",
+      "kind": "BODY",
+      "locator": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-8/2026-08-21/12512184.PDF",
+      "succeeded": true,
+      "tool_reference": "https://github.com/auguspp/decision-kernel/blob/ec93adf011819991c175f84640f30382b82515b8/research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/source.json"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "report"
+      ],
+      "id": "SAVED_H1_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SZSE:000920",
+  "seed_publications": [
+    {
+      "evidence_id": "e8dfaa24-a455-5d27-8656-99bf17bbcc4b",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "11e89cb55590558e476d4d4fb1de22f03ef001ce",
+        "path": "research_runs/candidates/stock-report-continuations/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/v1/source.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "b149e35b8076e1ef3dcee3fc91fef8b82d654039",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "7159721e0322dd710215c4e0216b9d24788e144bc473385ff72a58344cb34216"
+      }
+    }
+  ],
+  "started_at": "2026-09-21T06:40:56.203656+00:00",
+  "ticker": "000920",
+  "valid_until": "2026-09-21T07:26:06.973604+00:00"
+}
