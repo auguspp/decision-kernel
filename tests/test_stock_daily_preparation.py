@@ -98,7 +98,8 @@ def test_native_rejections_produce_gap_and_never_export_an_executable_request(tm
         case.api.files[s['ref']][s['path']] = once.raw(case.custody)
     elif damage == 'consumed-root':
         # setup_daily starts without a work branch; construct saved partial history.
-        work = 'd' * 40
+        work = '7' * 40
+        assert work not in case.api.files
         case.api.heads[intake.WORK_REF] = work
         case.api.files[work] = {case.prefix + 'failure.json': b'partial'}
     elif damage == 'policy':
@@ -131,14 +132,16 @@ def test_already_consumed_day_does_not_reserve_another_slot(tmp_path, monkeypatc
 def test_state_move_after_native_checks_invalidates_preview(tmp_path, monkeypatch, changed):
     case = setup_daily(tmp_path, monkeypatch)
     original = deepseek._deepseek_request
+    work = '7' * 40
+    assert work not in case.api.files
     def moving(*args, **kwargs):
         value = original(*args, **kwargs)
         if changed == 'main':
             case.api.heads['main'] = 'f' * 40
         else:
             previous = case.api.heads.get(intake.WORK_REF)
-            case.api.files['f' * 40] = deepcopy(case.api.files[previous]) if previous else {}
-            case.api.heads[intake.WORK_REF] = 'f' * 40
+            case.api.files[work] = deepcopy(case.api.files[previous]) if previous else {}
+            case.api.heads[intake.WORK_REF] = work
         return value
     monkeypatch.setattr(deepseek, '_deepseek_request', moving)
     report = run(case, tmp_path / 'draft')
