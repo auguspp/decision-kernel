@@ -1,0 +1,38 @@
+{
+  "approved_scope_egress_hash": "fca1889e9a7dec4100978b8e2efd6b24fbd04262ac2a6d55fa231041e80326d0",
+  "automatic_retry": false,
+  "code_commit": "b15357cf71129ca9483a7278d8c06b3c211c0344",
+  "id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c-report-continuation-v1",
+  "input_hash": "4a382b895b12b5c9cd705cd91b90211a2b137a4050786fd66d344c447c299cae",
+  "parent_execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
+  "permission": {
+    "body_sha256": "3d84a4b0f23a4283a0da1873c08dae2bdb1cc2a7475050c71f5a17e2cd6cc9e7",
+    "comment_id": 5755964301,
+    "created_at": "2026-09-21T05:47:30Z"
+  },
+  "predecessor_progress": {
+    "git_blob": "4393c2164368dcd52cc8ca7f4a7daf5793c4b817",
+    "path": "docs/readings/000920-profit-bridge-progress-2026-09-21/progress.json",
+    "purpose": "WOTON_R3_PROGRESS",
+    "ref": "69305a766eb2cc4b09a6b1a6d4008625e54b8a3d",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "fbc34d8edd768a4fd499225dc76894bceca098062d9ae393bf1d350a775822f4"
+  },
+  "provider": {
+    "base_url": "https://api.deepseek.com",
+    "credential_binding": "DEEPSEEK_API_KEY",
+    "model": "deepseek-flash",
+    "name": "DEEPSEEK_OFFICIAL",
+    "reasoning": {
+      "effort": "none"
+    }
+  },
+  "source_manifest": {
+    "git_blob": "5b35dbc2c69eb1b3ef7535194c96caf7bbc23afb",
+    "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/source.json",
+    "purpose": "WOTON_PUBLIC_REPORT_CUSTODY",
+    "ref": "ec93adf011819991c175f84640f30382b82515b8",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "215dc87a2a3d805407491f6d99676276a52a4a6b912e564bc054ebbf41f1cc0c"
+  }
+}
