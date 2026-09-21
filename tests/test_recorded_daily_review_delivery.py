@@ -144,3 +144,22 @@ def test_render_escapes_saved_review_text(tmp_path, monkeypatch):
     rendered = reader.render(value)
     assert '<script>' not in rendered and '[action]' not in rendered
     assert '&lt;script&gt;' in rendered
+
+
+def test_rejected_question_files_still_consume_the_shared_budget(tmp_path, monkeypatch):
+    case, c, baseline = setup(tmp_path, monkeypatch)
+    files = case.api.files[case.api.heads[intake.WORK_REF]]
+    # Nine core files plus one declaration for the good root, and 22 retained
+    # files from rejected roots: the original 32-file budget is already full.
+    names = sorted(reader.CORE)
+    for index, count in enumerate((9, 9, 4)):
+        prefix = reader.PREFIX + str(index + 1) * 64 + '/'
+        for name in names[:count]:
+            files[prefix + name] = once.raw({'invalid_record': index, 'name': name})
+    result = reader.attach(c, baseline)
+    value = report(c, result)
+    assert sum(i['status'] == 'UNAVAILABLE_OR_REJECTED' for i in value['question_work']['items']) == 3
+    assert sum(i['status'] == 'VALIDATED_FUNNEL_RESULT' for i in value['question_work']['items']) == 1
+    assert value['recorded_batch_review']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    assert value['recorded_batch_review']['selected_question_count'] is None
+    assert not case.calls[2:]  # No extra calls during reading.
