@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-09-21T15:24:46.343160+00:00",
+  "context": {
+    "git_blob": "6b00ff0f518dd763b1b6fec1e7850ad20d791dfd",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "0e4d4c425f0dd526976924ab276ed16b08863193",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe"
+  },
+  "documents": [
+    {
+      "announcement_id": "1225506358",
+      "bytes": 1337795,
+      "page_count": 215,
+      "pdf_sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+      "pdf_source": {
+        "git_blob": "79ab62d35e0a2a8475253bcf8cf54791624f3740",
+        "path": "research_runs/sources/zhenjiang-603507-2026H1/603507-2026H1.pdf",
+        "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+        "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d"
+      }
+    }
+  ],
+  "inventory_source": {
+    "git_blob": "729da26e8f2f75dd6c9d7b7ed8cfc30dbbb6a7f9",
+    "path": "research_runs/sources/zhenjiang-603507-2026H1/inventory.json",
+    "purpose": "RETAINED_CNINFO_ISSUER_INVENTORY",
+    "ref": "c08c73662dc64dd1ebb361f1f671ac9e96846f5a",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "a5a45f11f119bffa1bc818dd00b7a3c06aa44d58f4b381c1a922a598fafdd0ba"
+  },
+  "journal_source": {
+    "git_blob": "90be312c556e3091d2be0f993d295e0e7e16bf22",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/source-journal.json",
+    "purpose": "RETAINED_CNINFO_SOURCE_JOURNAL",
+    "ref": "5a61949486ad5f636d06572b8cd7677802133db3",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "cb3befabcd090afb86d80ce399c1da6aec335283c39ea861c6436c1dc1c38139"
+  },
+  "source_artifact": {
+    "digest": "sha256:048c0496fafb057dcdbae8d185b4f00a8e7ef70c6fa4b13a5aaaa6f6d8fa17d6",
+    "head_sha": "03c65cd60b7f4783c14974a6ae0065362776c432",
+    "id": 10639661916,
+    "name": "zhenjiang-source-35603425130-1",
+    "size_in_bytes": 1247756
+  },
+  "source_import": "zhenjiang-2026h1",
+  "source_run_id": 35603425130,
+  "ticker": "603507"
+}
