@@ -1,0 +1,52 @@
+{
+  "case_id": "603507.SH",
+  "finished_at": "2026-09-21T15:24:44.614640+00:00",
+  "inventories": [],
+  "limits": {
+    "max_queries": 0,
+    "max_reads": 1
+  },
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "ca692f9e7470ffa6de6e697156204b02827f8918c736f8d21cda9ee9602e104d",
+      "checked_at": "2026-09-21T15:24:44.614640+00:00",
+      "id": "603507-h1-primary",
+      "identity": "603507:1225506358",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225506358.PDF",
+      "succeeded": true,
+      "tool_reference": "Exact retained CNINFO bytes from Git c08c73662dc64dd1ebb361f1f671ac9e96846f5a; original source run 35603425130"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "603507-h1-primary"
+      ],
+      "id": "COMPLETE_H1_FINANCIAL_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:603507",
+  "seed_publications": [
+    {
+      "evidence_id": "934dcdd2-0a9c-5cba-a408-731c29307b7f",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "6b00ff0f518dd763b1b6fec1e7850ad20d791dfd",
+        "path": "research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "0e4d4c425f0dd526976924ab276ed16b08863193",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe"
+      }
+    }
+  ],
+  "started_at": "2026-09-21T15:24:44.396172+00:00",
+  "ticker": "603507",
+  "valid_until": "2026-09-22T14:40:13.080094+00:00"
+}
