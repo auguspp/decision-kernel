@@ -1,0 +1,76 @@
+{
+  "kind": "RETAINED_EXECUTION_DIAGNOSIS_NOT_REPAIRED_RESEARCH",
+  "original_run_id": 35569495879,
+  "original_work_commit": "24363a85ea585101224e3739a2d127737e142be5",
+  "original_code_commit": "b15357cf71129ca9483a7278d8c06b3c211c0344",
+  "artifact_id": 10625675582,
+  "artifact_bytes": 192730,
+  "artifact_sha256": "a42224bd3a060d8288bb38ab92407ac3c9a18db2aab9ff408bcec43f490cc48c",
+  "retained_originals": {
+    "pre-model-output.txt": {
+      "bytes": 13567,
+      "sha256": "81723ae6148f3df114948b2618a9c3512f26df0e22068093be2ea2676bbda4b0",
+      "git_blob": "636d84b3d7b3d1614667e1dd1f6b127b1b0184d7"
+    },
+    "host-receipt.json": {
+      "bytes": 3661,
+      "sha256": "fb626811e68e43d7b5cb0590dec87b15718827e18a7bba996bc1792098f7c8df",
+      "git_blob": "ad2ae92702cb514ec9b340a0a6ea394aa95b877f"
+    },
+    "input.json": {
+      "bytes": 7720,
+      "sha256": "da51f4b1f459fe96e128faf6905d1934dd10470197f268ae025575b9e958d184",
+      "git_blob": "64c4f4e35fd556621f2272c462ea938fc4f0952d"
+    },
+    "candidate.json": {
+      "bytes": 4790,
+      "sha256": "19dbb95c2f4187131b7076ff4ec5b97e280cf5cc517b65fcf7116b50475e6098",
+      "git_blob": "828f4f0e079e78f78554d23670a89096ec11be75"
+    },
+    "validation.json": {
+      "bytes": 449,
+      "sha256": "5fab39e5011afd0be77bb01fa055ac858d50c80483ef97e967bd7709d57e1e2b",
+      "git_blob": "098f64bbed4dd54e899b59ad852bbd3bcd993dc6"
+    }
+  },
+  "application_errors": [
+    {
+      "location": [
+        "material_claims",
+        15,
+        "kind"
+      ],
+      "type": "enum"
+    },
+    {
+      "location": [
+        "material_claims",
+        16,
+        "kind"
+      ],
+      "type": "enum"
+    },
+    {
+      "location": [
+        "material_claims",
+        17,
+        "kind"
+      ],
+      "type": "enum"
+    }
+  ],
+  "reported_engineering_amounts_cny": {
+    "revenue": "102257912.29",
+    "product_cost": "62602360.06",
+    "segment_cost": "82337790.71"
+  },
+  "arithmetic_cny": {
+    "product_revenue_less_cost": "39655552.23",
+    "segment_revenue_less_cost": "19920121.58",
+    "unexplained_cost_dimension_difference": "19735430.65"
+  },
+  "scope": "Same retained 2026H1 PDF only. Different disclosure dimensions are not silently reconciled. Engineering assets/liabilities are blank, not zero. Model output is unchanged; review is separate.",
+  "research_execution_allowed": false,
+  "new_model_calls": 0,
+  "investment_authority": "NONE"
+}
