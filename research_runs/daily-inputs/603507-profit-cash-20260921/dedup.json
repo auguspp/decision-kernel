@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-09-21T15:24:42.264820+00:00",
+  "formal_inputs": [
+    {
+      "case_id": "601952.SH",
+      "execution_id": "p0-suken-api-20260910-v2",
+      "git_blob": "1965c0e718ca1ba41e875d8c8f84e9ed402e2294",
+      "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/input.json",
+      "question": "按苏垦农发2026年半年报的经营披露，它通过自产种植、种业、粮食购销和加工等哪些业务承担粮价变化？哪些投入、购粮成本、价格或风险披露会抵消简单的粮价上涨受益解释？由此能否形成一个值得继续核验的经济问题？不解释9月行情，不假定当前业务未发生后续变化。"
+    },
+    {
+      "case_id": "600036.SH",
+      "execution_id": "p0-4b-cmb-20260910-aa9ea8d2-v1",
+      "git_blob": "492df7254696f0a19bdd0ce8a51bc4f4ac765cb1",
+      "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/input.json",
+      "question": "Does the September 8 saved management-departure notice itself add decision-relevant evidence to the monitoring questions in its frozen research context, or warrant further research? Assess the actual notice, not current company health or current office-holders."
+    },
+    {
+      "case_id": "600598.SH",
+      "execution_id": "p0-sector-600598-20260910-materiality-v1",
+      "git_blob": "dc9b6875be52348b82e89de9cb6e70ed96055dc6",
+      "path": "research_runs/candidates/sector-origin/600598-materiality-20260910/input.json",
+      "question": "Continue the same Sector-origin600598 question after explicit Human feedback and permission. Use newly acquired annual profit-base and June2026 tax-notice evidence to assess the economic importance of land-contracting versus product sales and whether tax-adjusted earning power merits priority research. Check accessible later issuer evidence within the bounded budget, but distinguish confirmed historical event, current-period source gaps, recurring uncertainty and market WHY. Do not frame an already-published but unread report as a future market trigger or call this a full current-company/valuation review."
+    },
+    {
+      "case_id": "600184.SH",
+      "execution_id": "stock-business-1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea-source-recovery-v1",
+      "git_blob": "ea3e3ec04b6ed08f9ec0be1271772514e011587c",
+      "path": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/source-recovery-v1/input.json",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。"
+    },
+    {
+      "case_id": "300183.SZ",
+      "execution_id": "stock-business-914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2",
+      "git_blob": "e304e14a22fe09dfc44cd4c04ec885042cde7a99",
+      "path": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/input.json",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。"
+    },
+    {
+      "case_id": "603353.SH",
+      "execution_id": "stock-business-abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e-source-successor-continuation-v1",
+      "git_blob": "b3d4368b4bc84c700fab5c63b7da4dbefbfca973",
+      "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/input.json",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。"
+    },
+    {
+      "case_id": "300711.SZ",
+      "execution_id": "stock-business-c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd-source-successor-continuation-v1",
+      "git_blob": "c4f43132019d037ab3b7ca43b807b8d7d543e10e",
+      "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/input.json",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。"
+    },
+    {
+      "case_id": "300711.SZ",
+      "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+      "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+      "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+      "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？"
+    },
+    {
+      "case_id": "300711.SZ",
+      "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+      "git_blob": "3cff654bd890235c99d90d6627146d575902abbd",
+      "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
+      "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？"
+    },
+    {
+      "case_id": "000920.SZ",
+      "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c-report-continuation-v1",
+      "git_blob": "64c4f4e35fd556621f2272c462ea938fc4f0952d",
+      "path": "research_runs/candidates/stock-report-continuations/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/v1/input.json",
+      "question": "承接沃顿原膜业务利润与现金问题，限定于已保存的2026H1报告：膜分离工程的收入确认方式、合同履约成本与收款披露，是否支持将集团营运资金占用归因于该业务？逐项区分有原页依据的机制、仅集团层面成立的金额、不能分配的差额与必要反证；复用r3已闭合的集团利润桥，不重复把它当新发现。"
+    }
+  ],
+  "new_model_calls": 0,
+  "prior_interactive_notes": [
+    {
+      "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+      "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+      "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+      "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+    },
+    {
+      "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
+      "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
+      "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+      "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
+    }
+  ],
+  "scope": "All formal input files in current bounded work tree; not all-branch/chat semantic exhaustiveness",
+  "work_commit": "24363a85ea585101224e3739a2d127737e142be5"
+}
