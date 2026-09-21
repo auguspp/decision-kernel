@@ -1,0 +1,97 @@
+{
+  "record_kind": "INTERACTIVE_PRELIMINARY_RESEARCH_NOTE_NOT_EXECUTION_INPUT",
+  "compiled_at": "2026-09-21T11:53:05.226392+00:00",
+  "main": "cb0d3f74624b2a9397b11423d404bcac5cdb0f0b",
+  "reading": "40985e4e629ba821d0f553abc03e3d35af3ff3d3",
+  "work_ref_commit": "24363a85ea585101224e3739a2d127737e142be5",
+  "market_session": "2026-09-21",
+  "source_run_id": 35588490572,
+  "batch_id": "fca76b9008d02c59d630071773fb23f9301945ea375a183ebbc98ab1469a4df7",
+  "stock_artifact": {
+    "id": 10633229345,
+    "bytes": 3307320,
+    "sha256": "08697e11810d40b49cecece98a2f5db7ba290483d24e226ba7d7d721b1979460",
+    "zip_crc": "PASS",
+    "meaning": "existing uploaded artifact rechecked; not a new market run"
+  },
+  "report": {
+    "path": "reading/stock-reading.json",
+    "bytes": 91703,
+    "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094",
+    "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+    "projection_hash": "9c60e3ee61ea82c71369f2659f86fc51c1d43d940070e1aa9c9763e5e13ab5c3"
+  },
+  "all_observations": [
+    {
+      "thscode": "603507.SH",
+      "company_name": "振江股份",
+      "status": "CONTRACT_CHECKED_RAW_READING",
+      "eligible_for_shadow_reading": true,
+      "excluded_reasons": [],
+      "input_failure": null
+    },
+    {
+      "thscode": "002285.SZ",
+      "company_name": "世联行",
+      "status": "CONTRACT_CHECKED_RAW_READING",
+      "eligible_for_shadow_reading": true,
+      "excluded_reasons": [],
+      "input_failure": null
+    },
+    {
+      "thscode": "688205.SH",
+      "company_name": "德科立",
+      "status": "DATA_QUALIFICATION_FAILED",
+      "eligible_for_shadow_reading": false,
+      "excluded_reasons": [],
+      "input_failure": {
+        "category": "DATA_QUALIFICATION_FAILED",
+        "phase": "INPUT_QUALIFICATION",
+        "provider_business_code": null,
+        "reason_code": "REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW",
+        "scope": "ISSUER_LOCAL",
+        "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
+      }
+    },
+    {
+      "thscode": "301155.SZ",
+      "company_name": "海力风电",
+      "status": "CONDITIONS_NOT_MET",
+      "eligible_for_shadow_reading": false,
+      "excluded_reasons": [
+        "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
+      ],
+      "input_failure": null
+    },
+    {
+      "thscode": "000560.SZ",
+      "company_name": "我爱我家",
+      "status": "CONTRACT_CHECKED_RAW_READING",
+      "eligible_for_shadow_reading": true,
+      "excluded_reasons": [],
+      "input_failure": null
+    },
+    {
+      "thscode": "002792.SZ",
+      "company_name": "通宇通讯",
+      "status": "CONTRACT_CHECKED_RAW_READING",
+      "eligible_for_shadow_reading": true,
+      "excluded_reasons": [],
+      "input_failure": null
+    }
+  ],
+  "source_verification_priority": "603507.SH",
+  "execution_selection": null,
+  "formal_admission": "NOT_PERFORMED",
+  "research_execution": "NOT_EXECUTED",
+  "full_current_financial_reports_acquired": 0,
+  "external_model_calls": 0,
+  "new_market_calls": 0,
+  "new_production_source_runs": 0,
+  "daily_slots_consumed": 0,
+  "human_acceptance": "NOT_ESTABLISHED",
+  "investment_authority": "NONE",
+  "dedup_scope": "four main code searches; explicitly limited execution catalog; pinned stock-questions directory and R statuses; not exhaustive semantic history",
+  "registration": "NOT_REGISTERED_AT_COMPILATION",
+  "publication": "NOT_PUBLISHED_AT_COMPILATION"
+}
