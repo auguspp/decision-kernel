@@ -369,6 +369,94 @@ def stock_review_scope(payload, observations=None, observation_status='NOT_READ'
             'meaning': 'OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION',
             **model.AUTHORITY}
 
+
+def _recorded_batch_review(collector, payload, scope, work):
+    """Project a saved same-batch review; never infer it from ticker or a label.
+
+    The execution has already been revalidated by collect. Its original review
+    is still fetched by exact identity. An optional review gap does not discard
+    a valid saved result or overwrite the independent baseline observation.
+    """
+    absent = {'status': 'NO_MATCHING_SAVED_DAILY_REVIEW', 'items': [],
+              'reviewed_object_count': None, 'selected_question_count': None,
+              'research_execution_allowed': False, **model.AUTHORITY}
+    if not scope.get('batch_id'):
+        return absent
+    try:
+        matches = []
+        for item in work['items']:
+            if item['status'] not in {'VALIDATED_FUNNEL_RESULT', 'VALIDATED_EXECUTION_GAP'}:
+                continue
+            def saved(name):
+                return identity._json(collector.files[item['sources'][name]['read_path']])
+            launch = saved('launch.json')
+            daily = launch.get('daily_scope')
+            if not isinstance(daily, dict) or daily.get('batch_id') != scope['batch_id']:
+                continue
+            model.check(item.get('host_receipt_present') is True,
+                        'Recorded batch review missing host receipt')
+            host = saved('host-receipt.json')
+            packet = saved('input.json')
+            model.check(host.get('daily_scope') == daily
+                        and daily['execution_id'] == item['execution_id'] == launch['id']
+                        and daily['source_run_id'] == scope['source_run_id']
+                        and daily['market_session'] == scope['market_session']
+                        and daily['question_source'] == launch['question_source']
+                        and daily['reading_source'] in packet['source_refs']
+                        and daily['reading_source']['ref'] == packet['current_state_commit']
+                        and daily['reading_hash'] == packet['current_state_reading_hash'],
+                        'Recorded batch review execution binding differs')
+            matches.append((item, daily, packet))
+        if not matches:
+            return absent
+        model.check(len(matches) == 1, 'Recorded batch review ambiguous')
+        item, daily, packet = matches[0]
+        spec = daily['batch_review_source']
+        model.check(spec['purpose'] == 'DAILY_STOCK_BATCH_REVIEW'
+                    and spec in packet['source_refs'], 'Recorded batch review source differs')
+        read_path = 'sources/git/' + spec['git_blob'] + '/' + PurePosixPath(spec['path']).name
+        shared = _legacy_sources(payload)
+        for row in work['items']:
+            shared.update(s['read_path'] for s in row.get('sources', {}).values())
+            if row.get('question_source'):
+                shared.add(row['question_source']['read_path'])
+        model.check(len(shared | {read_path}) <= stock_reader.MAX_STOCK_SOURCE_FILES,
+                    'Recorded batch review source-file bound')
+        _reserve(collector, reads=2, new_files=1, extra_bytes=identity.MAX_BYTES)
+        raw = identity._checked_source(spec, lambda source: collector.api.file(source['path'], source['ref']))
+        review = identity._json(raw)
+        meta = collector.api.get('git/commits/' + spec['ref'])
+        model.check(meta['sha'] == spec['ref']
+                    and model.clock(review['reviewed_at']) <= model.clock(meta['committer']['date'])
+                    <= model.clock(packet['selected_at']), 'Recorded batch review clock differs')
+        from .stock_daily_question import REVIEW_DISPOSITIONS
+        rows = review['items']
+        model.check(set(review) == {'reading_source', 'question_source', 'batch_id', 'reviewed_at', 'items'}
+                    and review['reading_source'] == daily['reading_source']
+                    and review['question_source'] == daily['question_source']
+                    and review['batch_id'] == scope['batch_id']
+                    and rows == daily['reviewed_items']
+                    and isinstance(rows, list)
+                    and [r['thscode'] for r in rows] == [r['thscode'] for r in scope['items']]
+                    and all(set(r) == {'thscode', 'disposition', 'reason'}
+                            and r['disposition'] in REVIEW_DISPOSITIONS
+                            and isinstance(r['reason'], str) and r['reason'].strip() for r in rows)
+                    and [r['thscode'] for r in rows if r['disposition'] == 'SELECTED_NEW_DISTINCT_QUESTION']
+                    == [item['thscode']], 'Recorded batch review full scope differs')
+        source = {'repository': model.REPOSITORY, 'ref': spec['ref'], 'path': spec['path'],
+                  **collector.retain(read_path, raw)}
+        return {**absent, 'status': 'MATCHED_SAVED_DAILY_REVIEW', 'batch_id': scope['batch_id'],
+                'market_session': scope['market_session'], 'reviewed_at': review['reviewed_at'],
+                'reviewed_object_count': len(rows), 'selected_question_count': 1,
+                'items': deepcopy(rows), 'source': source,
+                'execution': {k: deepcopy(item[k]) for k in ('execution_id', 'thscode', 'question_id',
+                    'status', 'pre_present', 'quick_present', 'candidate_hash')},
+                'meaning': 'SAVED_ROUTING_REVIEW_AND_EXECUTION_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE'}
+    except ERRORS as exc:
+        return {**absent, 'status': 'UNAVAILABLE_OR_REJECTED', 'error_type': type(exc).__name__,
+                'meaning': 'BATCH_REVIEW_READ_GAP_NOT_ABSENCE_OF_REVIEW_OR_RESEARCH'}
+
+
 def _text(value):
     result = html.escape(str(value), quote=True).replace('\n', ' ').replace('\r', ' ')
     for char in '`[]()|*_!':
@@ -378,8 +466,28 @@ def _text(value):
 
 def render(report):
     lines = ['# 日常候选检查范围与已执行的问题研究', '',
-             '这是保存结果的读取，不是本次执行研究。历史终态、资料失败、尚未检查和Human请求分开；不自动继承接受。', '',
-             '## 当前保存Stock批次', '']
+             '这是保存结果的读取，不是本次执行研究。历史终态、资料失败、尚未检查和Human请求分开；不自动继承接受。', '']
+    recorded = report.get('recorded_batch_review', {})
+    if recorded.get('status') == 'MATCHED_SAVED_DAILY_REVIEW':
+        lines += ['## 本批已记录的审阅与执行', '',
+                  '已逐项记录 ' + _text(recorded['reviewed_object_count']) + ' 个对象的处置；选择 '
+                  + _text(recorded['selected_question_count']) + ' 个具体问题执行。不是全公司研究完成或Human接受。']
+        labels = {'SELECTED_NEW_DISTINCT_QUESTION': '已选择具体问题，执行记录见下方',
+                  'NOT_SELECTED': '本批未选择执行', 'NO_DISTINCT_QUESTION': '未声明不同的新问题',
+                  'EXISTING_RESEARCH': '接续已有研究', 'SOURCE_UNAVAILABLE': '必要资料不可用',
+                  'ORIGINAL_PRICE_DISPOSITION_ONLY': '保留原价格条件处置', 'DATA_UNAVAILABLE': '数据资格缺口'}
+        for row in recorded['items']:
+            lines.append('- ' + _text(row['thscode']) + '：' + labels[row['disposition']] + '。' + _text(row['reason']))
+        execution = recorded['execution']
+        stages = 'Pre / Quick' if execution['quick_present'] else ('Pre' if execution['pre_present'] else '未保存阶段结果')
+        lines += ['', '对应执行：' + _text(execution['status']) + '；已保存阶段：' + stages + '。原结果与局限见下方。',
+                  '[本批原审阅记录](../../' + recorded['source']['read_path'] + ')', '',
+                  '## 原始价格观察与首次业务状态', '',
+                  '下列baseline字段与上方具体问题分开：NOT_STARTED不表示该证券没有已执行的问题；原观察草稿不是新的执行待办。', '']
+    else:
+        if recorded.get('status') == 'UNAVAILABLE_OR_REJECTED':
+            lines += ['本批审阅关联暂不可核验；不能据此说没有审阅。已保存问题结果仍独立列在下方。', '']
+        lines += ['## 当前保存Stock批次', '']
     scope = report['stock_review_scope']
     lines.append('市场日：' + _text(scope.get('market_session')) + '；' + _text(scope['status']))
     for row in scope['items']:
@@ -410,7 +518,7 @@ def render(report):
     return '\n'.join(lines)
 
 
-def _seal(collector, baseline, work, scope, before_readme):
+def _seal(collector, baseline, work, scope, before_readme, *, recorded=None):
     # Full rows are retained in REPORT. The original 192KiB root index stays
     # a small hash-bound entry point, not a duplicate of every source.
     summary = {key: deepcopy(work[key]) for key in
@@ -421,6 +529,9 @@ def _seal(collector, baseline, work, scope, before_readme):
                    scope_coverage=('FULL_DECLARED_ROWS_IN_SAME_READING_DETAILS' if work.get('structured')
                                    else 'NOT_MATERIALIZED_READ_GAP'),
                    new_research_execution='NOT_EXECUTED', **model.AUTHORITY)
+    if recorded is not None:
+        summary['recorded_batch_review'] = {k: recorded[k] for k in
+            ('status', 'reviewed_object_count', 'selected_question_count')}
     if work['status'] != 'UNAVAILABLE_OR_REJECTED':
         summary['execution_count'] = len(work['items'])
         summary['rejected_execution_count'] = sum(i['status'] == 'UNAVAILABLE_OR_REJECTED' for i in work['items'])
@@ -434,6 +545,9 @@ def _seal(collector, baseline, work, scope, before_readme):
     index = model.read_package_bytes(result)
     navigation = ('\n## 日常候选检查与具体问题研究\n\n读取状态：' + _text(work['status']) + '。'
                   '未审阅不等于没有问题；旧结果首次展示不算新研究。\n')
+    if recorded is not None and recorded['status'] == 'MATCHED_SAVED_DAILY_REVIEW':
+        navigation += ('本批已记录 ' + str(recorded['reviewed_object_count']) + ' 个对象的逐项处置，'
+                       + str(recorded['selected_question_count']) + ' 个具体问题已有执行记录；原baseline状态不替代该结果。\n')
     if work.get('details'):
         navigation += '\n[查看本批完整处置、已执行问题的原结果及来源缺口](' + DETAIL + ')\n'
     readme = before_readme + navigation.encode()
@@ -461,14 +575,16 @@ def attach(collector, baseline):
         scope = {'status': 'STOCK_SCOPE_UNAVAILABLE', 'items': [], 'meaning': 'NOT_ZERO_QUESTIONS'}
     try:
         work = collect(collector, baseline)
+        recorded = _recorded_batch_review(collector, baseline, scope, work)
         report = {'format': 'reviewed-question-reading-v1', 'question_work': work,
-                  'stock_review_scope': scope, 'research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
+                  'stock_review_scope': scope, 'recorded_batch_review': recorded,
+                  'research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
         detail = render(report).encode()
         body = model.json_bytes(report)
         _reserve(collector, new_files=2, extra_bytes=len(body) + len(detail))
         work = {**work, 'details': collector.retain(DETAIL, detail),
                 'structured': collector.retain(REPORT, body)}
-        return _seal(collector, baseline, work, scope, before_files['README.md'])
+        return _seal(collector, baseline, work, scope, before_files['README.md'], recorded=recorded)
     except ERRORS as exc:
         collector.files, collector.sources = before_files, before_sources
         labels = {'Question publication reserve': 'PUBLICATION_API_BUDGET',
