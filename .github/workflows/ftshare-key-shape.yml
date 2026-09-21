@@ -1,0 +1,35 @@
+name: ftshare-key-shape
+
+on:
+  push:
+    branches:
+      - probe/ftshare-20260921
+
+permissions:
+  contents: read
+
+jobs:
+  shape:
+    runs-on: ubuntu-latest
+    env:
+      FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+    steps:
+      - name: Report non-secret key shape only
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          k=os.environ.get("FTSHARE_API_KEY","")
+          d={
+            "present": bool(k),
+            "length": len(k),
+            "trimmed_length": len(k.strip()),
+            "has_leading_or_trailing_whitespace": k != k.strip(),
+            "contains_whitespace": any(c.isspace() for c in k),
+            "contains_newline": "\n" in k or "\r" in k,
+            "wrapped_in_single_quotes": len(k)>=2 and k[0]==k[-1]=="'",
+            "wrapped_in_double_quotes": len(k)>=2 and k[0]==k[-1]=='"',
+            "ascii_only": all(ord(c)<128 for c in k),
+          }
+          print(json.dumps(d, sort_keys=True))
+          PY
