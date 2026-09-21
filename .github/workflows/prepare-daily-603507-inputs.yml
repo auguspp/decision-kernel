@@ -1,0 +1,41 @@
+name: prepare-daily-603507-inputs
+on:
+  push:
+    branches: [work/daily-source-import-check-20260921]
+    paths: [.github/workflows/prepare-daily-603507-inputs.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: d8b0cfbcd5241b41bbeff75e401c63ec22f12647
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install original dependencies
+        run: python -m pip install -e '.[documents,feeds,research-api]'
+      - name: Bind actual saved material and run original no-spend preparation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_MAIN: d8b0cfbcd5241b41bbeff75e401c63ec22f12647
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_MAIN"
+          git fetch --no-tags --depth=1 origin f5b3238cfa410fa076367ce9d49224b5517c5d2f
+          git show f5b3238cfa410fa076367ce9d49224b5517c5d2f:eval/stage_daily_603507_inputs.py > "$RUNNER_TEMP/stage-inputs.py"
+          PYTHONPATH="$PWD/src" python "$RUNNER_TEMP/stage-inputs.py"
+      - name: Preserve prepared inputs and actual failures
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-603507-inputs-${{ github.run_id }}
+          path: material-output/
+          if-no-files-found: warn
+          retention-days: 30
