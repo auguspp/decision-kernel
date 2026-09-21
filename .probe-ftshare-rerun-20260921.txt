@@ -1,0 +1,1 @@
+rerun after FTSHARE_API_KEY configured
