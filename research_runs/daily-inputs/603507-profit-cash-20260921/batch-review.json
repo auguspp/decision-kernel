@@ -1,0 +1,52 @@
+{
+  "batch_id": "fca76b9008d02c59d630071773fb23f9301945ea375a183ebbc98ab1469a4df7",
+  "items": [
+    {
+      "disposition": "SELECTED_NEW_DISTINCT_QUESTION",
+      "reason": "完整报告已具备，首次正式执行已声明的有限利润/现金问题；原交互底稿和未知保留。",
+      "thscode": "603507.SH"
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "reason": "世联亏损与回款问题保留；完整必要正文尚未在这条资料链中核验，本日不执行。",
+      "thscode": "002285.SZ"
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "reason": "原公司行为窗口价格转换能力缺口保留，非经营否决。",
+      "thscode": "688205.SH"
+    },
+    {
+      "disposition": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+      "reason": "保留原20日价格条件未满足的处置，非经营否决。",
+      "thscode": "301155.SZ"
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "reason": "我爱我家收入/转租收益与现金问题保留；本期必要完整原件未取得，不因首页省略而漏审。",
+      "thscode": "000560.SZ"
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "reason": "通宇收入、毛利与利润问题保留；必要完整正文未取得，不凭二手摘要启动。",
+      "thscode": "002792.SZ"
+    }
+  ],
+  "question_source": {
+    "git_blob": "fc52aee3bf922644287171e61e772778d1196ab1",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "a17dcb961b4078106ab9e19c09172b94a26f97ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "f452e0d3b75b002f5f4bac1af6aa931ceb40e8c2ad736323ea32b3c328dbd80a"
+  },
+  "reading_source": {
+    "git_blob": "a5499c7dddff49b04ed6ad8d6fe68be6ea634a8b",
+    "path": "current-state.json",
+    "purpose": "SAVED_QUESTION_READING",
+    "ref": "461df14b32dae4a2073b2707c74113def2231ebc",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "3f088821be115c4cf90dd3a10afbfc64b6e2712b91c4143e0e938f16f2d9263b"
+  },
+  "reviewed_at": "2026-09-21T15:24:48.219771+00:00"
+}
