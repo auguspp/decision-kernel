@@ -1,0 +1,37 @@
+{
+  "code_commit": "ff6acfd856ceb6f58d6bb6c52a394414029429c2",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "operation": "REBUILD_RETAINED_PDF_ONLY",
+  "original_failure": {
+    "git_blob": "f45c0d6d004cc67145218df27dc43de11169c4b0",
+    "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/failure.json",
+    "purpose": "ORIGINAL_SOURCE_REPRESENTATION_FAILURE",
+    "ref": "75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2e29dfe9c00f591dec9231197b07fac204ad9fa4fab188d8ed605fb3fa01ebff"
+  },
+  "original_pdf": {
+    "bytes": 1262185,
+    "git_blob": "87b56650d5ec01935e94e97d9e60ad986cb378d1",
+    "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/source.pdf",
+    "purpose": "PUBLIC_REPORT_SOURCE_ONLY",
+    "ref": "7ec7eee11ac61aecdf05940904631a47cc07436a",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728"
+  },
+  "original_prepare": {
+    "git_blob": "1ff1968388e4393cbb4c2a5f6591376533105780",
+    "path": "research_runs/sources/public-reports/27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728/prepare.json",
+    "purpose": "ORIGINAL_SOURCE_RESERVATION",
+    "ref": "14d2efc0fd2f741bf6496721823a42028b40eae2",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "890156d755d07bea8e8c75f465b7c0d76f9263a953bc795001f9ab63947adca4"
+  },
+  "research_authority": "NONE",
+  "run_id": "35555745579",
+  "signal_transition_authority": "NONE",
+  "source_requests": 0,
+  "started_at": "2026-09-21T02:55:27.479307+00:00",
+  "trigger_label": "woton-h1-representation-ready"
+}
