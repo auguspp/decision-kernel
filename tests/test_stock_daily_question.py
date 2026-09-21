@@ -264,9 +264,21 @@ def test_daily_native_gates_preserve_original_routes_and_before_egress_reservati
 def test_daily_checked_main_policy_and_disabled_request_match_recorded_scope():
     assert json.loads((ROOT / daily.POLICY_PATH).read_bytes()) == daily.POLICY
     request = json.loads((ROOT / daily.REQUEST).read_bytes())
-    assert request["enabled"] is False and request["mode"] == daily.MODE
+    # The original disabled template has now been explicitly activated for one
+    # reviewed question. Configuration state is not Research/launch acceptance.
+    assert request["enabled"] is True and request["mode"] == daily.MODE
     assert request["permission"] == daily.PERMISSION and request["approved_egress_hash"] is None
-    assert all(request[key] is None for key in ("question_source", "context_source", "preflight_source", *daily.EXTRA_SOURCES))
+    assert daily.base_request(request)["mode"] == host.QUESTION_MODE
+    for key in ("question_source", "context_source", "preflight_source", *daily.EXTRA_SOURCES):
+        spec = request[key]
+        assert set(spec) == {"repository", "ref", "path", "git_blob", "sha256", "purpose"}
+        assert spec["repository"] == once.REPO and reading.SHA.fullmatch(spec["ref"])
+        assert reading.SHA.fullmatch(spec["git_blob"]) and len(spec["sha256"]) == 64
+        assert spec["path"].startswith("research_runs/daily-inputs/603507-profit-cash-20260921/")
+    assert request["question_source"]["purpose"] == "REVIEWED_RADAR_QUESTION"
+    assert request["context_source"]["purpose"] == "MODEL_CONTEXT"
+    assert request["preflight_source"]["purpose"] == "PRE_EXECUTION_SOURCE_PREFLIGHT"
+    assert all(request[key]["purpose"] == purpose for key, purpose in daily.EXTRA_SOURCES.items())
     assert daily.POLICY["provider"] == {"name": "DEEPSEEK_OFFICIAL", "base_url": "https://api.deepseek.com",
         "model": "deepseek-flash", "credential_binding": "DEEPSEEK_API_KEY", "reasoning": {"effort": "none"}}
 
