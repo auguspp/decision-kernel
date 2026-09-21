@@ -377,7 +377,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
+      "ref": "cb0d3f74624b2a9397b11423d404bcac5cdb0f0b",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -426,7 +426,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "EXISTING_BASELINE_STATE_PRESENT",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "603507.SH"
       },
       {
@@ -463,7 +463,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "EXISTING_BASELINE_STATE_PRESENT",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "002285.SZ"
       },
       {
@@ -571,7 +571,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "EXISTING_BASELINE_STATE_PRESENT",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "000560.SZ"
       },
       {
@@ -608,7 +608,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "EXISTING_BASELINE_STATE_PRESENT",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "002792.SZ"
       }
     ],
@@ -625,7 +625,7 @@
       "scope_complete": false,
       "unavailable_issuers": 1
     },
-    "question_review_required_count": 0,
+    "question_review_required_count": 4,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
