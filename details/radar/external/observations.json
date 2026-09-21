@@ -1,17 +1,17 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "800c32e2910547c99da9f32a16f960ed46b7b6beda27b8fc931abacdc16692de",
+    "base_reading_hash": "d7a47276b8cde2de693c891d969b470a166c0fc02e21c9f46ce3bbbb3acef664",
     "company_context_status": "SAME_READING_SAVED_CONTEXT",
     "company_source": {
-      "bytes": 863176,
-      "git_blob": "342e3258bb34c8705bec71d4a8237da85278f9ee",
+      "bytes": 3213610,
+      "git_blob": "d93b466867d716d0af6958d9c54c97d0a78de9df",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "d883c7a23d43827c232d5ffffef271bd04093236e21a1e2277bc23b779b4f3fb"
+      "sha256": "fbc9b17a90d15e7e1853f202a65e95464b44a995fd7d254967f3ecb8bd1eb9ca"
     },
     "config_hash": "5c772ab9e8b67f0916bd2fa493231e676988a6a6d846c823c3188425bf9b6bf5",
-    "generated_at": "2026-09-20T16:54:13.890428+00:00",
+    "generated_at": "2026-09-21T00:17:32.958795+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -378,7 +378,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-20T16:54:13.890428+00:00",
+              "cutoff": "2026-09-21T00:17:32.958795+00:00",
               "field_gaps": [
                 {
                   "amount_reconciled": true,
@@ -1150,7 +1150,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "c34b280ce40311b5737d582d5ecbc8876eb462f6142df19baf84653ef3948a8d"
+            "projection_hash": "6120d782e7626314e0449e8d4a432a98eb3e144f946f3c1a504f6aac190fd084"
           },
           {
             "projection": {
@@ -1480,7 +1480,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-20T16:54:13.890428+00:00",
+              "cutoff": "2026-09-21T00:17:32.958795+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -2239,7 +2239,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "574d7909ea5285eb81158a8a9a9a39d309fe1154fd1c415a2661069fc99d5249"
+            "projection_hash": "34cd9c7b2c33d00bc2bb79c6e5939c98b4a2c0505be8b703d915e67f83d01df5"
           },
           {
             "projection": {
@@ -2569,7 +2569,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-20T16:54:13.890428+00:00",
+              "cutoff": "2026-09-21T00:17:32.958795+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -3328,7 +3328,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "037dfeface33bb4084823e36fcb6b03f34ebbf17820d2f1baf9d325c4060e424"
+            "projection_hash": "7c6826834ce46be3ff96b4d1de514cd5ab3eb070a57abd20d97b145f36da1e38"
           }
         ],
         "status": "SAVED_SAMPLE_REBUILT"
@@ -3380,10 +3380,118 @@
         "result": {
           "projection": {
             "automatic_admission": false,
-            "companies": [],
+            "companies": [
+              {
+                "automatic_admission": false,
+                "business_linkage": "NOT_ESTABLISHED",
+                "matches": [
+                  {
+                    "matched_names": [
+                      "亿纬锂能"
+                    ],
+                    "observation_id": "cdc29598703f5279762c6eebfcf7ebd32b62f4dd5a90667ad8913cec4872ee6b"
+                  }
+                ],
+                "qualification": "CONTEXT_ONLY",
+                "question_status": "NOT_FORMED",
+                "research": {
+                  "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+                  "on_demand_archives": [
+                    {
+                      "archive": {
+                        "format": "RETAINED_FILES"
+                      },
+                      "body_materialized_in_reading": false,
+                      "case": "300014.SZ",
+                      "id": "radar-300014-lc-cost-pass-through-question-20260920",
+                      "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+                      "purpose_note": "Same bounded lithium comparative archive: 2025 issuer disclosures support a draft question about cost savings retained versus passed to customers, inventory timing and cash conversion. All-material cost share is not lithium-specific exposure. Current 2026H1 primary bodies, relevant updates and PDF custody remain incomplete; no formal admission/Pre/Quick/Deep, current benefit acceptance, COMMITTED, Human acceptance, Odds, Action or Watch. On-demand locator only.",
+                      "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+                      "read_policy": "ON_DEMAND_ARCHIVE",
+                      "source": {
+                        "bytes": 10171,
+                        "git_blob": "1574df575c88fdc78a42afc0025f53549c4f10a4",
+                        "path": "docs/readings/lc-exposure-questions-2026-09-20/workpaper.md",
+                        "ref": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+                        "repository": "auguspp/decision-kernel",
+                        "sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f"
+                      },
+                      "use": "RETAINED_RESEARCH_DOCUMENT"
+                    }
+                  ],
+                  "references": [],
+                  "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+                  "status": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+                  "stock_business_read_status": "READ_OK",
+                  "stock_business_states": []
+                },
+                "source_names": [
+                  "亿纬锂能"
+                ],
+                "thscode": "300014.SZ"
+              },
+              {
+                "automatic_admission": false,
+                "business_linkage": "NOT_ESTABLISHED",
+                "matches": [
+                  {
+                    "matched_names": [
+                      "国科微"
+                    ],
+                    "observation_id": "7d18a0afa2cc110ceb8f5fd6e1d8c90ca1993e3950dc08e9ee52e04ceef6e4e6"
+                  }
+                ],
+                "qualification": "CONTEXT_ONLY",
+                "question_status": "NOT_FORMED",
+                "research": {
+                  "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+                  "references": [],
+                  "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+                  "status": "UNKNOWN_WITHIN_READ_SCOPE",
+                  "stock_business_read_status": "READ_OK",
+                  "stock_business_states": []
+                },
+                "source_names": [
+                  "国科微"
+                ],
+                "thscode": "300672.SZ"
+              },
+              {
+                "automatic_admission": false,
+                "business_linkage": "NOT_ESTABLISHED",
+                "matches": [
+                  {
+                    "matched_names": [
+                      "中国移动"
+                    ],
+                    "observation_id": "b8490fdc6aa3ba1ca5525db5d8dd4f2610efd76a92c080dc93ac232f2d4ef44c"
+                  },
+                  {
+                    "matched_names": [
+                      "中国移动"
+                    ],
+                    "observation_id": "af7cc7659b4ecda5bd6c738b824c669dfdcf7fef93597b36a7dd88ac9c506754"
+                  }
+                ],
+                "qualification": "CONTEXT_ONLY",
+                "question_status": "NOT_FORMED",
+                "research": {
+                  "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+                  "references": [],
+                  "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+                  "status": "UNKNOWN_WITHIN_READ_SCOPE",
+                  "stock_business_read_status": "READ_OK",
+                  "stock_business_states": []
+                },
+                "source_names": [
+                  "中国移动"
+                ],
+                "thscode": "600941.SH"
+              }
+            ],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "a0ce92f0a8e4de95f33ae894598e5d7e430d87e28afe698ce36323b8daf336de",
-            "cutoff": "2026-09-20T16:54:13.890428+00:00",
+            "company_reading_hash": "c5fe7a1c948ba5aa9a643f3ba1ce6c3b2bdeeb23a83138e71800e52adb2015ea",
+            "cutoff": "2026-09-21T00:17:32.958795+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -13090,7 +13198,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "2dd412c74150c1f81fb2eedfa2b553953f7760f51338377999ad2c34f6fe8f0a"
+          "projection_hash": "f0d33eddc0d7516fb1945f595b82387315e85ac2000ac93f0f49bc0e548f0e57"
         },
         "status": "SAVED_SAMPLE_REBUILT"
       }
@@ -13099,5 +13207,5 @@
     "signal_transition_authority": "NONE",
     "version": "saved-external-radar-reading-v1"
   },
-  "projection_hash": "bc00e229f6be0550c716680ac8ce6bebdc0917161ed8e25fbedd38e95a488194"
+  "projection_hash": "dd26f575efe4255d7527a51e875352a9871a8e9186c86de47fb83d2927da6a89"
 }
