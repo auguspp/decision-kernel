@@ -1,0 +1,34 @@
+{
+  "status": "CONDITIONAL_ARITHMETIC_NOT_PRIMARY_INPUT_VERIFIED",
+  "security": "603507.SH",
+  "currency": "CNY",
+  "unit": "yuan",
+  "inputs": {
+    "parent_net_2026H1": "149833033.71",
+    "parent_net_2025H1": "15693493.01",
+    "adjusted_parent_net_2026H1": "97005857.01",
+    "adjusted_parent_net_2025H1": "77690277.54"
+  },
+  "results": {
+    "parent_net_delta": "134139540.70",
+    "adjusted_parent_delta": "19315579.47",
+    "net_minus_adjusted_2026H1": "52827176.70",
+    "net_minus_adjusted_2025H1": "-61996784.53",
+    "net_minus_adjusted_delta": "114823961.23",
+    "difference_share_of_parent_delta_pct": "85.60038347440084831004643510",
+    "bridge_residual": "0.00"
+  },
+  "formulas": {
+    "N": "parent_net - adjusted_parent_net",
+    "delta_parent": "delta_adjusted + delta_N",
+    "share": "100 * delta_N / delta_parent"
+  },
+  "not_established": [
+    "original-PDF/page accuracy",
+    "the amount attributable to foreign exchange or hedging",
+    "cash realization",
+    "sustainability",
+    "economic acceptance"
+  ],
+  "no_change_to_original_observation": true
+}
