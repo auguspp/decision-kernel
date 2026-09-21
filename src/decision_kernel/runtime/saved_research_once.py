@@ -309,6 +309,32 @@ def _provider_error_diagnostic(exc):
     return result
 
 
+def _application_validation_diagnostic(exc, output_type):
+    """Bounded native validation locations, never rejected values or messages."""
+    from pydantic import ValidationError
+    from ..research_funnel import ResearchClaim
+    if not isinstance(exc, ValidationError) or output_type not in (PreResearchResult, QuickResearchResult):
+        return {}
+    fields = set(output_type.model_fields) | set(ResearchClaim.model_fields)
+    codes = {"enum", "missing", "extra_forbidden", "value_error", "uuid_parsing",
+             "uuid_type", "string_type", "string_too_short", "tuple_type", "too_short",
+             "datetime_type", "datetime_from_date_parsing", "timezone_aware", "int_parsing"}
+    errors = exc.errors(include_url=False, include_context=False, include_input=False)
+    rows = []
+    for error in errors[:20]:
+        location = error["loc"]
+        path = [part if (type(part) is int and 0 <= part <= 1_000_000)
+                or (type(part) is str and part in fields) else "REDACTED"
+                for part in location[:4]]
+        if len(location) > 4:
+            path.append("TRUNCATED")
+        rows.append({"type": error["type"] if error["type"] in codes else "OTHER_VALIDATION_ERROR",
+                     "loc": path})
+    return {"status": "REJECTED_BY_ORIGINAL_MODEL", "error_count": exc.error_count(),
+            "errors": rows, "omitted_error_count": max(0, exc.error_count() - len(rows)),
+            "scope": "FIELD_LOCATIONS_ONLY_NOT_ECONOMIC_REVIEW"}
+
+
 def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None, bound_context=None,
                base_url=BASE_URL, model=MODEL, api_key_env="SUB2API_API_KEY",
                provider="SUB2API", extra_parameters=None):
@@ -367,6 +393,13 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
     with (out / (stage + "-model-input.json")).open("xb") as f:
         f.write(body.encode())
     try:
+        # Keep the exact post-adapter format; hashes alone are not a wire transcript.
+        record["phase"] = "REQUEST_RETENTION"
+        format_path = stage + "-output-format.json"
+        with (out / format_path).open("xb") as f:
+            f.write(raw(output_format))
+        record["output_format_file"] = format_path
+        record["phase"] = "RESPONSE"
         api_key = os.environ.get(api_key_env)
         require(bool(api_key), "model connection required")
         with OpenAI(api_key=api_key, base_url=base_url, max_retries=0,
@@ -389,6 +422,13 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
         return parsed
     except Exception as exc:
         record.update(status="FAILED", error_type=type(exc).__name__, **_provider_error_diagnostic(exc))
+        if record["phase"] == "APPLICATION_VALIDATION":
+            try:
+                diagnostic = _application_validation_diagnostic(exc, output_type)
+            except Exception:
+                diagnostic = {"status": "DIAGNOSTIC_UNAVAILABLE"}
+            if diagnostic:
+                record["application_validation"] = diagnostic
         raise
     finally:
         record["finished_at"] = now()
