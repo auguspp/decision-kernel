@@ -39,10 +39,13 @@ only after the original validated CONTINUE_TO_QUICK. Before each stage, recheck
 main/request/permission, parent and child bytes, input admission, exact prompt
 and egress identity. Approval expires2026-09-23T00:00:00Z, with no auto-extension.
 
-The appended isolated job in the existing Stock workflow accepts only the exact
+An isolated step in the existing Stock research job accepts only the exact
 `woton-h1-analysis-ready` label on #297 by auguspp, main, attempt1. The label is
 transport, not authority; runtime verifies the separately recorded Human scope.
-The original workflow bytes/jobs/inputs remain intact. No Brief/task change,
+The four-job inventory, source-only jobs and dispatch inputs remain intact.
+The original research-job condition adds this explicit label branch; the legacy
+baseline step is explicitly dispatch-only. Existing artifact retention is reused.
+No Brief/task change,
 new daily slot, market call, automatic Deep, investment or Human acceptance.
 
 Native Git retains source context, preflight, input, reservation/launch, original

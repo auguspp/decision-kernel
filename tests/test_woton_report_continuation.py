@@ -179,7 +179,7 @@ def test_real_pdf_whole_context_and_unknown_publication():
 def test_actual_provider_adapter_parameters_and_no_fallback(tmp_path,monkeypatch):
     args,_,_,_,_,_,_,_,_=setup(tmp_path,monkeypatch)
     captured=[]
-    def model_call(stage,prompt,model,out,usage,**options):
+    def model_call(stage,prompt,output_type,out,usage,**options):
         captured.append((stage,options));return pre(prompt)
     monkeypatch.setattr(w.once,'model_call',model_call)
     result=w.run(**{**args,'call':None})
@@ -205,14 +205,17 @@ def test_wrong_event_cannot_trigger_runtime(key):
 
 def test_same_workflow_isolated_exact_label_and_original_jobs_unchanged():
     text=Path('.github/workflows/stock-business-research.yml').read_text()
-    original, job=text.split('  continue-woton-report:\n',1)
-    assert w.once.blob(original[:-1].encode()) == 'f0738d65648d398e12483a89c384336bf8f4b17a'
-    assert "github.event.label.name == 'woton-h1-analysis-ready'" in job
+    original_tail=text.split('\n  deepseek-compatibility:\n',1)[1]
+    assert w.once.blob(original_tail.encode()) == '4f62ac1c1c5979ac80c226659932994f4ee53c65'
+    step=text.split('      - name: One approved Woton same-question report continuation\n',1)[1].split('      - name:',1)[0]
+    assert "github.event.label.name == 'woton-h1-analysis-ready'" in step
     assert 'group: stock-business-first-v0' in text and 'cancel-in-progress: false' in text
-    assert 'secrets.DEEPSEEK_API_KEY' in job and 'SUB2API' not in job and 'HITHINK' not in job
-    assert 'decision_kernel.runtime.woton_report_continuation' in job
-    assert 'workflow_dispatch' not in job and 'run_attempt == 1' in job
-    assert text.count('  continue-woton-report:')==1
+    assert 'secrets.DEEPSEEK_API_KEY' in step and 'SUB2API' not in step and 'HITHINK' not in step
+    assert 'decision_kernel.runtime.woton_report_continuation' in step
+    assert '--output run-output' in step and 'timeout-minutes: 20' in step
+    assert '  continue-woton-report:' not in text
+    legacy=text.split('      - name: Original Stock validation, business sources, admission and Pre with necessary Quick\n',1)[1].split('        env:',1)[0]
+    assert "github.event_name == 'workflow_dispatch'" in legacy
 
 
 @pytest.mark.parametrize('name', ['prepare.json','input.json','launch.json','candidate.json','host-receipt.json'])
