@@ -178,6 +178,23 @@
         "bytes": 14279,
         "sha256": "cfc59e29f95245567bbedbccaed5987c6c54db9483e92a1dc352a5246aefdd39"
       }
+    },
+    {
+      "id": "p0-000920-continuation-failure-review-20260921",
+      "case": "000920.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "One approved same-question Pre call returned text but failed APPLICATION_VALIDATION; original EXECUTION_GAP and raw output remain unchanged, no Quick or retry. Separate source-page review corrects blank engineering assets/liabilities and distinguishes over-time revenue disclosure from unallocated working capital; product and report-segment engineering costs differ by19735430.65CNY. Not validated Pre/WAIT, Full Research, COMMITTED, Human acceptance or investment authority. Eight-file on-demand archive; original PDF/context remain at precise prior Git refs.",
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "archive_source": {
+        "path": "docs/readings/000920-continuation-review-2026-09-21/README.md",
+        "ref": "2a3c429aabca6f0b398b973df66fe94bb235de94",
+        "git_blob": "10a6379da4c5d0a2949f9ee70377eeee0d715f88",
+        "bytes": 8771,
+        "sha256": "7cd20f5de72676d669d223cd163b8535be1fba8ced5930ca298e2484c023b074"
+      }
     }
   ],
   "historical_handoffs": [
