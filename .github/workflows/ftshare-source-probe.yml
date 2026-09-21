@@ -1,0 +1,232 @@
+name: ftshare-source-probe
+
+on:
+  push:
+    branches:
+      - probe/ftshare-20260921
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Probe FTShare without exposing credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ftshare-probe
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, os, re, urllib.error, urllib.parse, urllib.request
+          from pathlib import Path
+
+          OUT = Path("ftshare-probe")
+          KEY = os.environ.get("FTSHARE_API_KEY", "")
+          BASE = "https://market.ft.tech"
+          GATEWAY = BASE + "/gateway"
+          EXPECTED_WOTON = {
+              "ticker": "000920.SZ",
+              "report_date": "2026-08-21",
+              "pdf_bytes": 1262185,
+              "pdf_sha256": "27c74e31c8aaf5a38d27b688f0841d81797816420b591647bfb6763e485b7728",
+          }
+          report = {
+              "probe": "FTSHARE_SOURCE_REUSE_PROBE_V0",
+              "target": EXPECTED_WOTON,
+              "api_key_present": bool(KEY),
+              "requests": [],
+              "woton_candidates": [],
+              "pdf_attempts": [],
+          }
+
+          def headers(auth=True):
+              h = {"Accept": "*/*", "User-Agent": "decision-kernel-ftshare-probe/0"}
+              if auth and KEY:
+                  h["FTSHARE_API_KEY"] = KEY
+                  h["X-Client-Name"] = "decision-kernel-probe"
+              return h
+
+          def fetch(url, *, auth=True, binary=False, label):
+              req = urllib.request.Request(url, headers=headers(auth), method="GET")
+              item = {"label": label, "url": url, "auth_header_used": bool(auth and KEY)}
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as resp:
+                      body = resp.read()
+                      item.update(http_status=resp.status, bytes=len(body),
+                                  content_type=resp.headers.get("Content-Type"),
+                                  sha256=hashlib.sha256(body).hexdigest())
+                  if binary:
+                      return item, body
+                  try:
+                      parsed = json.loads(body.decode("utf-8"))
+                      item["json_top_type"] = type(parsed).__name__
+                      return item, parsed
+                  except Exception as exc:
+                      item["decode_error"] = type(exc).__name__
+                      return item, None
+              except urllib.error.HTTPError as exc:
+                  body = exc.read()
+                  item.update(http_status=exc.code, bytes=len(body),
+                              content_type=exc.headers.get("Content-Type") if exc.headers else None,
+                              sha256=hashlib.sha256(body).hexdigest())
+                  try:
+                      item["error_json"] = json.loads(body.decode("utf-8"))
+                  except Exception:
+                      item["error_preview"] = body[:300].decode("utf-8", "replace")
+                  return item, None
+              except Exception as exc:
+                  item.update(error_type=type(exc).__name__, error=str(exc)[:240])
+                  return item, None
+              finally:
+                  report["requests"].append(item)
+
+          def walk(obj):
+              if isinstance(obj, dict):
+                  yield obj
+                  for v in obj.values():
+                      yield from walk(v)
+              elif isinstance(obj, list):
+                  for v in obj:
+                      yield from walk(v)
+
+          def add_candidates(source, payload):
+              if payload is None:
+                  return
+              for row in walk(payload):
+                  code = str(row.get("stock_code") or row.get("sec_code") or row.get("symbol") or "")
+                  title = str(row.get("announcement_title") or row.get("title") or "")
+                  ah = row.get("url_hash")
+                  aid = row.get("announcement_id")
+                  at = row.get("announcement_time") or row.get("publish_date") or row.get("date")
+                  if ("000920" in code or "沃顿" in str(row.get("stock_name") or row.get("sec_name") or "")):
+                      report["woton_candidates"].append({
+                          "source": source, "code": code, "title": title,
+                          "announcement_id": aid, "url_hash": ah, "time": at,
+                          "adjunct_type": row.get("adjunct_type"),
+                          "adjunct_size": row.get("adjunct_size"),
+                          "status": row.get("status"),
+                      })
+
+          # Public/documented report-announcement route. Current official handler does not attach a key.
+          q = urllib.parse.urlencode({"date":"20260821","sec_code":"000920","page":1,"page_size":200})
+          _, payload = fetch(GATEWAY + "/api/v1/market/data/report-announcements/list?" + q,
+                             auth=False, label="report-announcement-list-public")
+          add_candidates("report-announcement-list-public", payload)
+
+          # Keyed official stock-announcements route.
+          if KEY:
+              q = urllib.parse.urlencode({"stock_code":"000920.SZ","type":"stock","page":1,"page_size":200})
+              _, payload = fetch(GATEWAY + "/api/v2/market/data/announcements/stock-announcements?" + q,
+                                 auth=True, label="stock-announcements-keyed")
+              add_candidates("stock-announcements-keyed", payload)
+
+              # A few low-volume structured-data checks relevant to Kernel reuse.
+              for label, endpoint, params in [
+                  ("cashflow-stock-code",
+                   "/api/v2/market/data/finance/cashflow-stock-code",
+                   {"stock_code":"000920","stock_name":1}),
+                  ("stock-holder-nums",
+                   "/api/v1/market/data/holder/stock-holder-nums",
+                   {"stock_code":"000920.SZ"}),
+                  ("stock-capital-flows",
+                   "/api/v1/market/data/stock-capital-flows",
+                   {"date":"20260918","time":"1530","symbol":"000920.SZ","page":1,"page_size":5}),
+              ]:
+                  _, data = fetch(GATEWAY + endpoint + "?" + urllib.parse.urlencode(params),
+                                  auth=True, label=label)
+                  if data is not None:
+                      report.setdefault("structured", {})[label] = {
+                          "top_type": type(data).__name__,
+                          "top_keys": sorted(data.keys())[:30] if isinstance(data, dict) else None,
+                      }
+
+          # Candidate summary endpoint (if report-announcement list supplied an ID).
+          ids = []
+          hashes = []
+          for c in report["woton_candidates"]:
+              if c.get("announcement_id"):
+                  ids.append(str(c["announcement_id"]))
+              h = c.get("url_hash")
+              if isinstance(h, str) and re.fullmatch(r"[0-9a-f]{64}", h):
+                  hashes.append(h)
+          for aid in list(dict.fromkeys(ids))[:5]:
+              q = urllib.parse.urlencode({"announcement_id": aid})
+              _, data = fetch(GATEWAY + "/api/v2/market/data/report-announcements/summary?" + q,
+                              auth=False, label="report-announcement-summary-public")
+              if isinstance(data, dict):
+                  d = data.get("data")
+                  if isinstance(d, dict):
+                      report.setdefault("summaries", []).append({
+                          "announcement_id": aid,
+                          "title": d.get("announcement_title"),
+                          "time": d.get("announcement_time"),
+                          "status": d.get("status"),
+                          "summary_chars": len(d.get("summary") or ""),
+                      })
+
+          # Community-discovered + plausible official PDF routes, bounded to at most 2 hashes.
+          for h in list(dict.fromkeys(hashes))[:2]:
+              urls = [
+                  BASE + "/data/api/v1/market/data/announcements/stock-announcements/" + h,
+                  GATEWAY + "/api/v1/market/data/announcements/stock-announcements/" + h,
+                  GATEWAY + "/api/v2/market/data/announcements/stock-announcements/" + h,
+              ]
+              for url in urls:
+                  item, body = fetch(url, auth=bool(KEY), binary=True, label="announcement-pdf")
+                  result = {k:item.get(k) for k in ("url","http_status","bytes","content_type","sha256","error_type")}
+                  if body is not None:
+                      result["pdf_magic"] = body.startswith(b"%PDF")
+                      result["matches_known_woton_bytes"] = len(body) == EXPECTED_WOTON["pdf_bytes"]
+                      result["matches_known_woton_sha256"] = hashlib.sha256(body).hexdigest() == EXPECTED_WOTON["pdf_sha256"]
+                      if body.startswith(b"%PDF"):
+                          (OUT / f"{h}.pdf").write_bytes(body)
+                  report["pdf_attempts"].append(result)
+                  if body is not None and body.startswith(b"%PDF"):
+                      break
+
+          # Redact any accidental key occurrence before persistence.
+          raw = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True)
+          if KEY:
+              raw = raw.replace(KEY, "[REDACTED]")
+          (OUT / "report.json").write_text(raw + "\n", encoding="utf-8")
+          print(raw)
+          PY
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "## FTShare bounded source probe" >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          if [ -f ftshare-probe/report.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          d=json.load(open("ftshare-probe/report.json", encoding="utf-8"))
+          print(f"- API key present: `{d.get('api_key_present')}`")
+          print(f"- Woton candidates: `{len(d.get('woton_candidates', []))}`")
+          print(f"- PDF attempts: `{len(d.get('pdf_attempts', []))}`")
+          ok=[x for x in d.get('pdf_attempts',[]) if x.get('pdf_magic')]
+          print(f"- Valid PDF responses: `{len(ok)}`")
+          print(f"- Exact known Woton PDF match: `{any(x.get('matches_known_woton_sha256') for x in ok)}`")
+          for x in d.get("requests", []):
+              print(f"- {x.get('label')}: HTTP `{x.get('http_status','N/A')}`, bytes `{x.get('bytes','N/A')}`")
+          PY
+          else
+            echo "- Probe report missing." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload probe evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ftshare-source-probe
+          path: ftshare-probe/
+          if-no-files-found: error
+          retention-days: 7
