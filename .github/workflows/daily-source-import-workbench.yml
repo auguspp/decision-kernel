@@ -1,0 +1,34 @@
+name: daily-source-import-workbench
+on:
+  push:
+    branches: [work/daily-source-import-check-20260921]
+    paths: [.github/workflows/daily-source-import-workbench.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: d762500fbccbf8bc5dac6dd0f36d51f76a025329
+          persist-credentials: false
+      - name: Preserve exact source and required parser wheels for offline checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = d762500fbccbf8bc5dac6dd0f36d51f76a025329
+          out="$RUNNER_TEMP/source-export"
+          mkdir -p "$out/wheels"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git ls-tree -r HEAD > "$out/tree.txt"
+          git rev-parse HEAD > "$out/commit.txt"
+          python -m pip download --no-deps --dest "$out/wheels" pypdf==6.16.2 openai==3.11.0
+          sha256sum "$out/source.tar" > "$out/sha256.txt"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: daily-source-import-exact-source
+          path: ${{ runner.temp }}/source-export/
+          if-no-files-found: error
+          retention-days: 7
