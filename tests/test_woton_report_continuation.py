@@ -85,7 +85,14 @@ def test_real_scope_permission_and_separate_fixed_child():
     assert req['limits']['max_pre_calls'] == req['limits']['max_quick_calls'] == 1
     assert not w.PREFIX.startswith(w.intake.PREFIX)
     assert w.PARENT in w.EXECUTION and req['question']
-    assert not json.loads(Path('research_runs/stock-daily-question-request.json').read_text())['enabled']
+    # The Woton one-shot never supplies authority to the later daily request.
+    # Daily activation has its own original permission; do not freeze its old
+    # disabled deployment state as a permanent Woton contract.
+    daily_request = json.loads(Path('research_runs/stock-daily-question-request.json').read_text())
+    assert daily_request['permission'] != req['permission']
+    assert daily_request['mode'] != req['mode']
+    assert all(not spec['path'].startswith(w.PREFIX) for spec in daily_request.values()
+               if isinstance(spec, dict) and 'path' in spec)
 
 
 @pytest.mark.parametrize('route,stages', [('WAIT_FOR_TRIGGER',['pre']), ('STOP',['pre']),
