@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-21T10:25:05.913875+00:00",
+    "finished_at": "2026-09-21T10:33:55.647934+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-22T10:25:05.913875+00:00",
-    "started_at": "2026-09-21T10:24:40.639818+00:00"
+    "recheck_after": "2026-09-22T10:33:55.647934+00:00",
+    "started_at": "2026-09-21T10:33:36.540334+00:00"
   },
   "code_commit": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-21T10:25:05.913875+00:00",
+  "generated_at": "2026-09-21T10:33:55.647934+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-21T10:24:51.876280+00:00",
+      "checks_at": "2026-09-21T10:33:46.411718+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -509,7 +509,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "47b1bf6c38705a88d3addba0dc1efbda9c58bbfac63f4de505e3a53b8b9d0bd9"
         },
-        "source_checked_at": "2026-09-21T10:24:51.517714+00:00",
+        "source_checked_at": "2026-09-21T10:33:46.107246+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -532,7 +532,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-21T10:24:43.663867+00:00",
+      "checks_at": "2026-09-21T10:33:39.078575+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -658,7 +658,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "28b0b58fd4fd9023325ef8893e2722f7d175bdebd2c6dc54c809cd7a49492b7e"
         },
-        "source_checked_at": "2026-09-21T10:24:43.663843+00:00",
+        "source_checked_at": "2026-09-21T10:33:39.078552+00:00",
         "state_archive": {
           "artifact_id": 10633526413,
           "artifact_name": "sector-radar-state-bundle",
@@ -708,210 +708,208 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-21T10:24:50.472842+00:00",
+      "checks_at": "2026-09-21T10:33:44.953836+00:00",
       "gaps": [
-        "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
-      "health": "IN_PROGRESS",
+      "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
         "archive": {
-          "artifact_id": 10542641491,
-          "artifact_name": "stock-reading-35334355692-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35334355692/artifacts/10542641491",
-          "bytes": 3266288,
-          "expires_at": "2026-12-17T10:22:25Z",
-          "git_blob": "6108ff817610009d6fd9bf4200ad4ed807c3180d",
+          "artifact_id": 10633229345,
+          "artifact_name": "stock-reading-35588490572-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35588490572/artifacts/10633229345",
+          "bytes": 3307320,
+          "expires_at": "2026-12-20T10:23:34Z",
+          "git_blob": "fcd8f20c5aa78e882fa89bc927d9b549d5f546c8",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-09-18T10:22:24Z",
+            "created_at": "2026-09-21T10:23:33Z",
             "event": "workflow_dispatch",
-            "head_sha": "542cd178f12e904d26f89d7b85f3806825485cda",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35334355692",
-            "id": 35334355692,
+            "head_sha": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35588490572",
+            "id": 35588490572,
             "operation": null,
             "path": ".github/workflows/hithink-stock-dump-trial.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-09-18T10:22:24Z",
+            "run_started_at": "2026-09-21T10:23:33Z",
             "status": "completed",
-            "updated_at": "2026-09-18T10:30:43Z"
+            "updated_at": "2026-09-21T10:33:22Z"
           },
-          "read_path": "sources/artifacts/f59e0c6f307f30461bfba9d5644a3a21c67eccef44f774e3df55161635d3f1a5.zip",
+          "read_path": "sources/artifacts/08697e11810d40b49cecece98a2f5db7ba290483d24e226ba7d7d721b1979460.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "f59e0c6f307f30461bfba9d5644a3a21c67eccef44f774e3df55161635d3f1a5"
+          "sha256": "08697e11810d40b49cecece98a2f5db7ba290483d24e226ba7d7d721b1979460"
         },
-        "capture_hash": "d267002ba329dad0c84dc83fb4d9e790926dda7d507a4c8e7b9e8c5646552e97",
+        "capture_hash": "84f8bc0430e53789db46ad8c7fcb730989ca38d8389f4358e4c5ed489cbcdae5",
         "coverage": {
-          "conditions_not_met_issuers": 3,
+          "conditions_not_met_issuers": 1,
           "dispositioned_issuers": 6,
           "evaluated_issuers": 5,
           "not_evaluated_issuers": 0,
           "planned_issuers": 6,
-          "price_path_checked_issuers": 4,
-          "qualified_issuers": 2,
+          "price_path_checked_issuers": 5,
+          "qualified_issuers": 4,
           "scope_complete": false,
           "unavailable_issuers": 1
         },
-        "current_member_union_count": 108,
+        "current_member_union_count": 86,
         "details": {
           "market-binding.json": {
             "bytes": 295,
-            "git_blob": "30ee997035f5c2c104f1f91718caa3611aa2c43e",
-            "read_path": "details/stock/35334355692/market-binding.json",
+            "git_blob": "b6699c9d6e6c5ea978129c3c962b64037b37847a",
+            "read_path": "details/stock/35588490572/market-binding.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "d809f35e3725631ab821508c01bfd58e3fc7ae07646748ae16fa0e7a2736eca6"
+            "sha256": "af242fa47d49e6d3bcd602ea6a75d8f82d994d7110e046de79900712c2a89810"
           },
           "market-context-binding.json": {
             "bytes": 337,
-            "git_blob": "2dd7dbd99a3cc88c888d9438845154373da4c332",
-            "read_path": "details/stock/35334355692/market-context-binding.json",
+            "git_blob": "5b48f440f7437857ef338b960b889767bc353689",
+            "read_path": "details/stock/35588490572/market-context-binding.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "f128de567152da238aaa8ac97627b35af6a02788a293cbd6edc1ca8c065cf7b0"
+            "sha256": "854c57a6da1e4e1de211a1094b60c2163f76b020b3b4371938d5a321134358d9"
           },
           "reading/index.html": {
-            "bytes": 73479,
-            "git_blob": "735edd3b11277f8ecb1d45a0f2715d88f6e7f34f",
-            "read_path": "details/stock/35334355692/reading/index.html",
+            "bytes": 81618,
+            "git_blob": "dcebd73fd2f0ed61f967ade9fc8fe3a6ddef9e97",
+            "read_path": "details/stock/35588490572/reading/index.html",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "5320e20bf116011a87fc94214ab43442b01353dc63d5e491ada18a172d123e47"
+            "sha256": "8fbbd49d64132bdeb44176c7ec9c0fff42ea3ff78144bc67f635e9cc4a30ff8a"
           },
           "reading/inputs/sector-result.json": {
-            "bytes": 89223,
-            "git_blob": "08abf3f2342ccbd3f8e6afa607288ded35aac176",
-            "read_path": "details/stock/35334355692/reading/inputs/sector-result.json",
+            "bytes": 132652,
+            "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+            "read_path": "details/stock/35588490572/reading/inputs/sector-result.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "3f27c701c4ec1e1485c545fe1a0f8558caf516920e4c9f7335d06093561db594"
+            "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
           },
           "reading/stock-reading.json": {
-            "bytes": 78241,
-            "git_blob": "269ddf468ddb6e7c748013ec8779bf39f39ec712",
-            "read_path": "details/stock/35334355692/reading/stock-reading.json",
+            "bytes": 91703,
+            "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+            "read_path": "details/stock/35588490572/reading/stock-reading.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "ef55fcba55a45db6484b8b5b7e909c18be4e48d6b0318f6572a52b16140305f9"
+            "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
           },
           "verification.json": {
             "bytes": 870,
-            "git_blob": "d105bdcbd3de18ab3cd01a8536d76322c1153f95",
-            "read_path": "details/stock/35334355692/verification.json",
+            "git_blob": "7a3208ce2d77292958a33adb7e167c6e8f03d0e0",
+            "read_path": "details/stock/35588490572/verification.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "7b77e67aec943cf0c08ad6463c5adf1c6b6b3b92cc448b9b99295f88c742a907"
+            "sha256": "a7b1ea9dbbfe9990480a89917b20357939df4d54cf05fb153a26e8d0a3ed2897"
           }
         },
         "dispositions": [
           {
             "business_benefit_status": "NOT_ESTABLISHED",
             "business_linkage_status": "UNKNOWN",
-            "company_name": "道明光学",
-            "excluded_reasons": [
-              "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
-            ],
+            "company_name": "振江股份",
+            "excluded_reasons": [],
             "input_failure": null,
-            "market_expression_status": "NOT_ESTABLISHED",
-            "status": "CONDITIONS_NOT_MET",
-            "thscode": "002632.SZ"
+            "market_expression_status": "OBSERVED",
+            "status": "CONTRACT_CHECKED_RAW_READING",
+            "thscode": "603507.SH"
           },
           {
             "business_benefit_status": "NOT_ESTABLISHED",
             "business_linkage_status": "UNKNOWN",
-            "company_name": "金健米业",
+            "company_name": "世联行",
+            "excluded_reasons": [],
+            "input_failure": null,
+            "market_expression_status": "OBSERVED",
+            "status": "CONTRACT_CHECKED_RAW_READING",
+            "thscode": "002285.SZ"
+          },
+          {
+            "business_benefit_status": "NOT_ESTABLISHED",
+            "business_linkage_status": "UNKNOWN",
+            "company_name": "德科立",
             "excluded_reasons": [],
             "input_failure": {
               "category": "DATA_QUALIFICATION_FAILED",
               "phase": "INPUT_QUALIFICATION",
               "provider_business_code": null,
-              "reason_code": "CURRENT_QUOTE_HISTORY_MISMATCH",
+              "reason_code": "REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW",
               "scope": "ISSUER_LOCAL",
               "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
             },
             "market_expression_status": "NOT_ESTABLISHED",
             "status": "DATA_QUALIFICATION_FAILED",
-            "thscode": "600127.SH"
+            "thscode": "688205.SH"
           },
           {
             "business_benefit_status": "NOT_ESTABLISHED",
             "business_linkage_status": "UNKNOWN",
-            "company_name": "*ST航图",
+            "company_name": "海力风电",
             "excluded_reasons": [
-              "RISK_OR_NEW_LISTING_NAME_LABEL"
+              "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
             ],
             "input_failure": null,
             "market_expression_status": "NOT_ESTABLISHED",
             "status": "CONDITIONS_NOT_MET",
-            "thscode": "688066.SH"
+            "thscode": "301155.SZ"
           },
           {
             "business_benefit_status": "NOT_ESTABLISHED",
             "business_linkage_status": "UNKNOWN",
-            "company_name": "沃顿科技",
+            "company_name": "我爱我家",
             "excluded_reasons": [],
             "input_failure": null,
             "market_expression_status": "OBSERVED",
             "status": "CONTRACT_CHECKED_RAW_READING",
-            "thscode": "000920.SZ"
+            "thscode": "000560.SZ"
           },
           {
             "business_benefit_status": "NOT_ESTABLISHED",
             "business_linkage_status": "UNKNOWN",
-            "company_name": "深粮控股",
-            "excluded_reasons": [
-              "FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE"
-            ],
-            "input_failure": null,
-            "market_expression_status": "NOT_ESTABLISHED",
-            "status": "CONDITIONS_NOT_MET",
-            "thscode": "000019.SZ"
-          },
-          {
-            "business_benefit_status": "NOT_ESTABLISHED",
-            "business_linkage_status": "UNKNOWN",
-            "company_name": "松发股份",
+            "company_name": "通宇通讯",
             "excluded_reasons": [],
             "input_failure": null,
             "market_expression_status": "OBSERVED",
             "status": "CONTRACT_CHECKED_RAW_READING",
-            "thscode": "603268.SH"
+            "thscode": "002792.SZ"
           }
         ],
         "issuer_universe": "BOUNDED_SURFACED_SECTOR_BREADTH_LEADERS_NOT_ALL_A_SHARES",
         "live_stock_qualification": "NOT_ESTABLISHED",
-        "market_session": "2026-09-18",
-        "observed_at": "2026-09-18T10:30:36.937617Z",
-        "omitted_eligible_codes": [],
-        "projection_hash": "48b1c3a69b8bf75af55b629b956e0ab6695fc0437b544be16e27dc6aef84a815",
+        "market_session": "2026-09-21",
+        "observed_at": "2026-09-21T10:33:15.802544Z",
+        "omitted_eligible_codes": [
+          "000560.SZ"
+        ],
+        "projection_hash": "9c60e3ee61ea82c71369f2659f86fc51c1d43d940070e1aa9c9763e5e13ab5c3",
         "run": {
           "conclusion": "success",
-          "created_at": "2026-09-18T10:22:24Z",
+          "created_at": "2026-09-21T10:23:33Z",
           "event": "workflow_dispatch",
-          "head_sha": "542cd178f12e904d26f89d7b85f3806825485cda",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35334355692",
-          "id": 35334355692,
+          "head_sha": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35588490572",
+          "id": 35588490572,
           "operation": null,
           "path": ".github/workflows/hithink-stock-dump-trial.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-18T10:22:24Z",
+          "run_started_at": "2026-09-21T10:23:33Z",
           "status": "completed",
-          "updated_at": "2026-09-18T10:30:43Z"
+          "updated_at": "2026-09-21T10:33:22Z"
         },
         "run_metadata": {
-          "bytes": 14186,
-          "git_blob": "1ed48f653b6150007dbbac33a9a5ba21306cc629",
-          "read_path": "details/stock/35334355692/run.json",
+          "bytes": 14559,
+          "git_blob": "07ca83821bfa3cc39a48d098c0ed8dfb2824a7dc",
+          "read_path": "details/stock/35588490572/run.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "7aad4c2cbc5c40035c215bb5168090079c42647347ac18914f2f3a73a30c2a7f"
+          "sha256": "af61d41342bda2f1ac0610ad78eef343d6f17399bae888f7a189e1ce8f20ca1b"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-21T10:24:50.472821+00:00",
+        "source_checked_at": "2026-09-21T10:33:44.953819+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
-          "000920.SZ",
-          "603268.SH"
+          "603507.SH",
+          "002285.SZ",
+          "002792.SZ"
         ],
-        "unreviewed_member_count": 108,
+        "unreviewed_member_count": 86,
         "validation": "EXISTING_PURE_READING_VALIDATOR_AND_CAPTURE_INVENTORY_NOT_NEW_LIVE_RUN"
       },
       "latest_attempt": {
-        "conclusion": null,
+        "conclusion": "success",
         "created_at": "2026-09-21T10:23:33Z",
         "event": "workflow_dispatch",
         "head_sha": "59e2b3d02c4b03c75acfc2ef6c49557fc4ae623b",
@@ -921,8 +919,8 @@
         "path": ".github/workflows/hithink-stock-dump-trial.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-21T10:23:33Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-21T10:23:37Z"
+        "status": "completed",
+        "updated_at": "2026-09-21T10:33:22Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
@@ -931,12 +929,12 @@
     }
   },
   "pending": [],
-  "reading_hash": "63943e098a2483ca40a150d2f4b62182335ba47ddeb869dc40850c006a50f263",
+  "reading_hash": "54811b46ebd4a2a0ea5f011e37b4cb0f67da3c8895f1b1c838856cb6c2d1d1c3",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "35588493137",
+    "run_id": "35589369171",
     "trigger_run_id": "35588490572",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
@@ -2652,96 +2650,72 @@
       "attempt_classification_status": "PARTIAL_OR_UNAVAILABLE",
       "attempt_query_scope": "NEWEST_TEN_EXACT_WORKFLOW_INVOCATIONS_NOT_ALL_HISTORY",
       "counts": {
-        "NOT_STARTED": 0,
-        "PRE_EXECUTION_FAILURE": 2,
+        "NOT_STARTED": 4,
+        "PRE_EXECUTION_FAILURE": 0,
         "RETAINED_NO_RESEARCH_RESULT": 0,
         "VALIDATED_EXECUTION_GAP": 0,
         "VALIDATED_FUNNEL_CANDIDATE": 0
       },
       "items": [
         {
-          "candidate_output_prefix": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/",
-          "company_name": "沃顿科技",
-          "error_code": null,
-          "error_type": "CninfoPdfHttpError",
-          "execution_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c",
-          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
-          "finished_at": "2026-09-18T10:31:13.111492+00:00",
+          "candidate_output_prefix": "research_runs/candidates/stock-business/0cc161c4036528a29836f247374fd9d989b15d2b8f5526e7212f60ba3f7a9db1/",
+          "execution_id": "stock-business-0cc161c4036528a29836f247374fd9d989b15d2b8f5526e7212f60ba3f7a9db1",
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
-          "origin_market_session": "2026-09-18",
           "question_kind": "FIRST_BUSINESS_BASELINE",
           "registered_current_handoff": false,
           "research_authority": "NONE",
           "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
           "signal_transition_authority": "NONE",
-          "sources": {
-            "failure": {
-              "bytes": 776,
-              "git_blob": "531b5e21ed15928f2abf2550b0800dc666b47ffb",
-              "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/failure.json",
-              "read_path": "sources/git/531b5e21ed15928f2abf2550b0800dc666b47ffb/failure.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "24363a85ea585101224e3739a2d127737e142be5",
-              "repository": "auguspp/decision-kernel",
-              "sha256": "42a78809d2665bfe8124c575866a01e03140861b8e13cd40e72e7e0e4141fa3a"
-            },
-            "selection": {
-              "bytes": 17411,
-              "git_blob": "f0efbab42adde8af50977c7f51f75087e518a0df",
-              "path": "research_runs/candidates/stock-business/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/prepare.json",
-              "read_path": "sources/git/f0efbab42adde8af50977c7f51f75087e518a0df/prepare.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "24363a85ea585101224e3739a2d127737e142be5",
-              "repository": "auguspp/decision-kernel",
-              "sha256": "a9d5cf785c2421e05b48e17a2ed3fd2d9db32eab7ec218f907dd409cd4ef6f73"
-            }
-          },
-          "status": "PRE_EXECUTION_FAILURE",
+          "sources": {},
+          "status": "NOT_STARTED",
           "terminal_state": null,
-          "thscode": "000920.SZ"
+          "thscode": "603507.SH"
         },
         {
-          "candidate_output_prefix": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/",
-          "company_name": "松发股份",
-          "error_code": null,
-          "error_type": "CninfoPdfHttpError",
-          "execution_id": "stock-business-0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5",
-          "failure_status": "SOURCE_OR_INPUT_PREPARATION_INCOMPLETE",
-          "finished_at": "2026-09-18T10:31:26.538175+00:00",
+          "candidate_output_prefix": "research_runs/candidates/stock-business/b74852d9a302ccad1458c7385fd45f86c8746bb02c9b4f074d01d1546e646a37/",
+          "execution_id": "stock-business-b74852d9a302ccad1458c7385fd45f86c8746bb02c9b4f074d01d1546e646a37",
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
-          "origin_market_session": "2026-09-18",
           "question_kind": "FIRST_BUSINESS_BASELINE",
           "registered_current_handoff": false,
           "research_authority": "NONE",
           "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
           "signal_transition_authority": "NONE",
-          "sources": {
-            "failure": {
-              "bytes": 776,
-              "git_blob": "15b505bc0c87cfb9857fe38754134026b4c80f04",
-              "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/failure.json",
-              "read_path": "sources/git/15b505bc0c87cfb9857fe38754134026b4c80f04/failure.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "24363a85ea585101224e3739a2d127737e142be5",
-              "repository": "auguspp/decision-kernel",
-              "sha256": "4dc555f7422f7433be0c8cbce246d79749306a1911e3bac3dfb9802f50876f65"
-            },
-            "selection": {
-              "bytes": 14568,
-              "git_blob": "054c51495a3160a0aa16099c56ce46e334ba8057",
-              "path": "research_runs/candidates/stock-business/0ead75f0c1905275f83f9499e0fc176eaecd438e68a875e193ae3573a63babb5/prepare.json",
-              "read_path": "sources/git/054c51495a3160a0aa16099c56ce46e334ba8057/prepare.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "24363a85ea585101224e3739a2d127737e142be5",
-              "repository": "auguspp/decision-kernel",
-              "sha256": "0b069ea0a16677c4bcde496eac4c9a99347dac1025926d12c83e7c3a42c333c3"
-            }
-          },
-          "status": "PRE_EXECUTION_FAILURE",
+          "sources": {},
+          "status": "NOT_STARTED",
           "terminal_state": null,
-          "thscode": "603268.SH"
+          "thscode": "002285.SZ"
+        },
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/e5430dd999ebddc746d84eac107f788e92e160b43c19cbefd016c51107eaf20c/",
+          "execution_id": "stock-business-e5430dd999ebddc746d84eac107f788e92e160b43c19cbefd016c51107eaf20c",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null,
+          "thscode": "000560.SZ"
+        },
+        {
+          "candidate_output_prefix": "research_runs/candidates/stock-business/bd53c45e2b82dd56fda599185280a6265339e14d02a617d8cee15bce9b81065e/",
+          "execution_id": "stock-business-bd53c45e2b82dd56fda599185280a6265339e14d02a617d8cee15bce9b81065e",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "registered_current_handoff": false,
+          "research_authority": "NONE",
+          "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+          "signal_transition_authority": "NONE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null,
+          "thscode": "002792.SZ"
         }
       ],
       "latest_compatibility_attempt": {
