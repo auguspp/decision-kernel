@@ -1,0 +1,55 @@
+name: prepare-daily-activation-pr
+on:
+  push:
+    branches: [work/daily-source-import-check-20260921]
+    paths: [.github/workflows/prepare-daily-activation-pr.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 6d7462ec98daa1b0a072560cb6ed234d670649de
+          persist-credentials: false
+      - name: Adjust only the two historical disabled-state assertions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,hashlib,os,base64,json
+          base='6d7462ec98daa1b0a072560cb6ed234d670649de';branch='activate/daily-603507-question'
+          def git(*args):
+              return subprocess.run(['git',*args],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True).stdout.strip()
+          def blob(p):
+              raw=Path(p).read_bytes();return hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          assert git('rev-parse','HEAD')==base and git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          assert blob('research_runs/stock-daily-question-request.json')=='69147e2f7030ea89b0b3b22b6d454e20b9bd8ebe'
+          p=Path('tests/test_stock_daily_question.py');s=p.read_text()
+          assert blob(p)=='3e362fb6facdae91210237fe4073820a5793d164'
+          old='    assert request["enabled"] is False and request["mode"] == daily.MODE\n    assert request["permission"] == daily.PERMISSION and request["approved_egress_hash"] is None\n    assert all(request[key] is None for key in ("question_source", "context_source", "preflight_source", *daily.EXTRA_SOURCES))'
+          new='    # The original disabled template has now been explicitly activated for one\n    # reviewed question. Configuration state is not Research/launch acceptance.\n    assert request["enabled"] is True and request["mode"] == daily.MODE\n    assert request["permission"] == daily.PERMISSION and request["approved_egress_hash"] is None\n    assert daily.base_request(request)["mode"] == host.QUESTION_MODE\n    for key in ("question_source", "context_source", "preflight_source", *daily.EXTRA_SOURCES):\n        spec = request[key]\n        assert set(spec) == {"repository", "ref", "path", "git_blob", "sha256", "purpose"}\n        assert spec["repository"] == once.REPO and reading.SHA.fullmatch(spec["ref"])\n        assert reading.SHA.fullmatch(spec["git_blob"]) and len(spec["sha256"]) == 64\n        assert spec["path"].startswith("research_runs/daily-inputs/603507-profit-cash-20260921/")\n    assert request["question_source"]["purpose"] == "REVIEWED_RADAR_QUESTION"\n    assert request["context_source"]["purpose"] == "MODEL_CONTEXT"\n    assert request["preflight_source"]["purpose"] == "PRE_EXECUTION_SOURCE_PREFLIGHT"\n    assert all(request[key]["purpose"] == purpose for key, purpose in daily.EXTRA_SOURCES.items())'
+          assert s.count(old)==1;p.write_text(s.replace(old,new))
+          p=Path('tests/test_woton_report_continuation.py');s=p.read_text()
+          assert blob(p)=='811b0211a1bc667ea9015cee986cdb39ec463b7e'
+          old="    assert not json.loads(Path('research_runs/stock-daily-question-request.json').read_text())['enabled']"
+          new="    # The Woton one-shot never supplies authority to the later daily request.\n    # Daily activation has its own original permission; do not freeze its old\n    # disabled deployment state as a permanent Woton contract.\n    daily_request = json.loads(Path('research_runs/stock-daily-question-request.json').read_text())\n    assert daily_request['permission'] != req['permission']\n    assert daily_request['mode'] != req['mode']\n    assert all(not spec['path'].startswith(w.PREFIX) for spec in daily_request.values()\n               if isinstance(spec, dict) and 'path' in spec)"
+          assert s.count(old)==1;p.write_text(s.replace(old,new))
+          expected={'tests/test_stock_daily_question.py':'ce039286f1f3fb7f0b91f8cb4d929426dc8b7193','tests/test_woton_report_continuation.py':'cbc083aef93d8003e4db46e6ef49f86b1105bc6a'}
+          assert set(git('diff','--name-only').splitlines())==set(expected)
+          assert all(blob(p)==h for p,h in expected.items())
+          git('diff','--check');git('add','--',*expected)
+          git('-c','user.name=github-actions[bot]','-c','user.email=41898282+github-actions[bot]@users.noreply.github.com','commit','-m','test: validate activated daily request and independent Woton authority')
+          os.environ['GIT_CONFIG_COUNT']='1';os.environ['GIT_CONFIG_KEY_0']='http.https://github.com/.extraheader'
+          os.environ['GIT_CONFIG_VALUE_0']='AUTHORIZATION: basic '+base64.b64encode(('x-access-token:'+os.environ['GH_TOKEN']).encode()).decode()
+          assert git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          result=subprocess.run(['git','push','origin','HEAD:refs/heads/'+branch],capture_output=True,text=True)
+          print('PUSH_STATUS',result.returncode)
+          if result.returncode: raise RuntimeError('Native push failed; inspect remote before another write')
+          print(json.dumps({'commit':git('rev-parse','HEAD'),'files':expected}))
+          PY
