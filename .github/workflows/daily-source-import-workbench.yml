@@ -24,7 +24,7 @@ jobs:
           git archive --format=tar HEAD > "$out/source.tar"
           git ls-tree -r HEAD > "$out/tree.txt"
           git rev-parse HEAD > "$out/commit.txt"
-          python -m pip download --no-deps --dest "$out/wheels" pypdf==6.16.2 openai==3.11.0
+          python -m pip download --only-binary=:all: --python-version 313 --implementation cp --platform manylinux2014_x86_64 --platform manylinux_2_28_x86_64 --dest "$out/wheels" pypdf==6.16.2 openai==3.11.0
           sha256sum "$out/source.tar" > "$out/sha256.txt"
       - uses: actions/upload-artifact@v7
         with:
