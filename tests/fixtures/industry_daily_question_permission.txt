@@ -1,0 +1,17 @@
+## Human批准：Industry 日常研究采用扩展；DeepSeek费用不再作为施工约束 — 2026-09-22
+
+Human 本轮原话：
+> 同意，另外不需要考虑 deepseek 的额度，我已经设好限制了，你就当无限额度使用就行
+
+此批准承接5777854394的采用方案及上一轮明确询问：将已审阅、资料合格的Industry问题纳入现有日常研究通道，与Stock共用原有总额度、到期日及已消费记录，不新增配额、不自动Deep，必要资料和更新预检必须通过。Main Construction获得这个范围的实现及合格输入执行授权，不需要再为相同来源类型逐项请求同意。
+
+### 前瞻性执行范围
+允许Research交互层从正常保存、身份/时间/原件可核对的Industry原生批次中，审阅完整声明范围，明确一个未消费的公司经济问题、why_now、经济暴露/重要性依据、反证和必要来源；沿原reviewed_question_input、同一Stock question host、原启动时admission执行Pre，只有validated Pre要求CONTINUE_TO_QUICK才执行Quick。Industry不必伪装成Stock合格候选，不共用Stock Price Gate。市场表达、资金流和会员持仓不自动成为公司Evidence。
+
+原5748820065及历史policy/失败/slots/days/question roots不改写。扩展为新增可核验许可，复用同一work ref及原10个市场日、每市场日最多1次的初始运行观察安排，最早2026-09-18、原到期2026-10-20T00:00:00Z，已消费记录继续计入；这些是本次获同意的灰度运行/重复消费边界，不是DeepSeek余额或费用限制，不另建Industry配额。必要来源可用原STATIC或经原完整预检的LATEST_INVENTORY；不得把所需更新降成STATIC。
+
+DeepSeek的成本、余额或假设的调用额度不再是项目内部停工/反复请示/降低必要研究质量的理由。Human报告已在账户设置限制；本记录不声称工具已核验该账户配置或服务商存在真正无限容量。按实际研究需要使用既有官方DeepSeek；仍保留单次请求大小/输出/超时、明确阶段终止、失败不自动重试、平台实际速率与账户限制、敏感材料隔离和同问题去重。解除费用顾虑不是无限循环、任意扩大发送数据或自动Deep/投资操作的授权。
+
+沿用DEEPSEEK_OFFICIAL及现有模型/密钥绑定、无模型工具、完整公开发行人PDF范围；每次实际外发仍须真实必要正文、来源保管、时点、准入及公开材料摘要核对。文档数量/大小属于完整表示与安全边界，不是按余额裁剪材料。缺来源时保存缺口，不能拿合成许可/假preflight/旧Stock价格资格凑运行。
+
+当前开工M=b16a87084034d6205f73f16e452c5b38a740dc48、R=fbfefd053fcdf018a65c1c0da6796804450df3f7。本评论本身没有修改runtime请求、触发任务或调用模型；后续通过正常完整CI/PR/main/publisher验收接入。#513旧失败保留；P1顺序不变。AI Investment Authority=NONE。
