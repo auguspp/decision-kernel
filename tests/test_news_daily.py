@@ -87,7 +87,7 @@ def test_empty_windows_are_not_source_failure_or_complete_news_coverage(tmp_path
 def test_repeated_capture_time_does_not_create_new_article_versions(tmp_path):
     _, _, first = captured(tmp_path / 'one')
     _, _, second = captured(tmp_path / 'two', clock=lambda: '2026-09-21T04:00:00+00:00')
-    ids = lambda r: [x['version_id'] for x in r['projection']['news']['projection']['observations']]
+    ids = lambda r: sorted(x['version_id'] for x in r['projection']['news']['projection']['observations'])
     assert ids(first) == ids(second)
     assert first['projection']['captured_through'] != second['projection']['captured_through']
 
