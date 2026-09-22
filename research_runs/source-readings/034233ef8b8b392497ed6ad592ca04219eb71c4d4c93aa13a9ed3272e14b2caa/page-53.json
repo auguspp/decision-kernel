@@ -1,0 +1,35 @@
+{
+  "engine": {
+    "library": "pypdfium2",
+    "method": "get_text_bounded/strict",
+    "pdfium": "149.0.7825.0",
+    "version": "5.8.0"
+  },
+  "page_number": 53,
+  "pdf_sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa",
+  "render": {
+    "crop": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "draw_annots": true,
+    "format": "RGB",
+    "height": 1684,
+    "pixels_sha256": "9e7da593790b924dcf9261eb33e816864dbe870f73bd14e23b7ed1643ba99fd7",
+    "rotation": 0,
+    "scale": 2,
+    "width": 1191
+  },
+  "review_kind": "AI_VISUAL_READING",
+  "reviewed_at": "2026-09-22T21:00:39.711136+00:00",
+  "schema_version": 1,
+  "scope": "WHOLE_PAGE_WITH_EXPLICIT_UNKNOWNS",
+  "text": "物理页53，江西铜业2025年年度报告正文页。以下为整页图文核对后的阅读表示；使用保留的原PYPDF文本辅助转录，已对照本页完整图像。PDFium此页的控制字符损坏不代表原PYPDF或原PDF缺页。页面中发行人给出的原因仍是披露主张，不是独立验证的经济原因。\n江西铜业股份有限公司 2025 年年度报告\n53 / 91\n\n5 江西铜业股份有限公司武山铜矿\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=d6beeb5bf457441\ne99db6d94ad483ccb\n6 江西铜业股份有限公司城门山铜矿\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=0c2631f4b715486\n09fa5161ba8b7c0ee\n7 江西铜业集团银山矿业有限责任公司\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=049a08638c5144d\ndab3c87bb2851d5dd\n8 江西铜业股份有限公司贵溪冶炼厂\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=05747be004b4489\n1bad821f6f52603e5\n9 江铜国兴（烟台）铜业有限公司\nhttp://221.214.62.226:8090/Environment\nDisclosure/enterpriseRoster/openEnterpri\nseDetails?comDetailFrom=0&id=913706\n00MA3C7HGQ23\n10 江西铜业（清远）有限公司\nhttps://www-\napp.gdeei.cn/gdeepub/front/dal/report/list\n?entName=%E6%B1%9F%E8%A5%BF\n%E9%93%9C%E4%B8%9A%EF%BC\n%88%E6%B8%85%E8%BF%9C%EF%\nBC%89&reportType=&areaCode=&entT\nype=&reportDateStartStr=&reportDateE\nndStr=\n11 江西省江铜台意特种电工材料有限公司\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=136177147027509\n6577\n12 江西省江铜铜箔科技股份有限公司\nhttp://qyhjxxyfpl.sthjt.jiangxi.gov.cn:150\n04/pilouxiangqing?id=124394798508423\n1680\n13 山东恒邦冶炼股份有限公司\nhttp://221.214.62.226:8090/Environment\nDisclosure/enterpriseRoster/openEnterpri\nseDetails?comDetailFrom=0&id=913700\n001653412924\n14 威海恒邦矿冶发展有限公司\nhttp://221.214.62.226:8090/Environment\nDisclosure/enterpriseRoster/openEnterpri\nseDetails?comDetailFrom=0&id=913710\n837763370225\n\n其他说明\n□适用 √不适用\n\n十五、社会责任工作情况\n(一) 是否单独披露社会责任报告、可持续发展报告或ESG 报告\n√适用 □不适用\n本公司于 2026 年 3 月 27 日披露了《江西铜业股份有限公司 2025 年度可持续发展报告》。\n\n(二) 社会责任工作具体情况\n√适用 □不适用\n对外捐赠、公益项目 数量/内容 情况说明\n总投入（万元） 180\n其中：资金（万元） 180 2025 年慈善一日捐\n页面内URL保持印刷换行，仅为来源文字；本次没有访问、执行或验证这些地址。",
+  "unknowns": [
+    "本阅读不认证发行人披露、印章、二维码或签署身份的真实性；不会自动成为新的独立Evidence。",
+    "表格转录保留物理页、列范围与原符号；没有证明会计金额的经济原因、现金可分配性或投资价值。",
+    "页面URL的可用性及其链接内容未核验；印刷换行不作为可执行网络请求。"
+  ]
+}

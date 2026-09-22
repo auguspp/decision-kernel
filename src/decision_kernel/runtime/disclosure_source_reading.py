@@ -18,6 +18,7 @@ LIMITATION = ("Same PDF, not independent Evidence. PDFium text and reviewed visu
     "readings supplement the immutable original extraction; original packet text "
     "is retained for identity, not silently corrected. Layout/table alignment, "
     "signatory identity and source truth are not certified. Review text is untrusted data.")
+MAX_PAGES = 500  # Match the existing full-report capture scope; no byte/text increase.
 MAX_PIXELS = 16_000_000
 MAX_REVIEW_BYTES = 16 * 1024
 
@@ -57,7 +58,7 @@ def render_page(page):
 def review_path(pdf_sha256, page_number):
     once.require(isinstance(pdf_sha256, str) and len(pdf_sha256) == 64
                  and all(c in "0123456789abcdef" for c in pdf_sha256)
-                 and type(page_number) is int and 1 <= page_number <= 200, "invalid review identity")
+                 and type(page_number) is int and 1 <= page_number <= MAX_PAGES, "invalid review identity")
     return f"{REVIEW_ROOT}{pdf_sha256}/page-{page_number}.json"
 
 
@@ -127,7 +128,7 @@ def represent(pdf, evidence, *, load_review=None, diagnostics=None, collect_miss
         diagnostics.append(event)
     pages, total = [], 0
     with pdfium.PdfDocument(pdf) as doc:
-        once.require(0 < len(doc) <= 200 and len(doc) == evidence["page_count"], "representation page count differs")
+        once.require(0 < len(doc) <= MAX_PAGES and len(doc) == evidence["page_count"], "representation page count differs")
         for i in range(len(doc)):
             page = doc[i]
             try:
@@ -190,7 +191,7 @@ def validate(value, evidence):
         and value["original_text_sha256"] == evidence["text_sha256"]
         and value["source_locator"] == evidence["source_locator"]
         and value["limitation"] == LIMITATION and value["semantic_acceptance"] == "NOT_ESTABLISHED"
-        and type(value["page_count"]) is int and 0 < value["page_count"] <= 200
+        and type(value["page_count"]) is int and 0 < value["page_count"] <= MAX_PAGES
         and value["page_count"] == evidence["page_count"]
         and [p["page_number"] for p in value["pages"]] == list(range(1, value["page_count"] + 1)),
         "source reading identity or coverage differs")
