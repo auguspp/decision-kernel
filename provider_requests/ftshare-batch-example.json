@@ -1,0 +1,17 @@
+{
+  "market": {
+    "ticker": "603507.SH",
+    "session": "2026-09-21",
+    "sw_code": "801736.SI",
+    "sw_name": "风电设备",
+    "concept_code": "BK0595",
+    "concept_name": "风能",
+    "contracts": {"LC": "LC2610.GFE", "CU": "CU2610.SHF", "RB": "RB2610.SHF"}
+  },
+  "company": {
+    "year": 2026,
+    "report_type": "q2",
+    "start_date": "2026-01-01",
+    "end_date": "2026-09-21"
+  }
+}
