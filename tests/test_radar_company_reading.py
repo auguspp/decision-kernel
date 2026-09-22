@@ -253,7 +253,7 @@ def test_no_new_scheduler_or_secret_and_manual_source_keeps_original_boundary():
     source_workflow = Path('.github/workflows/radar-institutional-source.yml').read_text()
     publisher = Path('.github/workflows/current-state-read-entry.yml').read_text()
     assert 'schedule:' not in source_workflow and 'workflow_run:' not in source_workflow
-    assert 'radar-institutional-source]' in publisher and '--include-radar-discovery' in publisher
+    assert 'radar-institutional-source, radar-newsnow-daily]' in publisher and '--include-radar-discovery' in publisher
     assert 'schedule:' not in publisher and 'workflow_dispatch:' not in publisher
     assert 'secrets.' not in publisher and 'ref: ${{ github.sha }}' in publisher
 
