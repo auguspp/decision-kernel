@@ -150,12 +150,76 @@ a global field redefinition or alteration of the provider's original response.
 Balance still requires a real successful sample; the whole financial family is
 not accepted as fully complete merely because other inputs or tests succeeded.
 
+## Company events through the original source entry
+
+`stock_research_sources.prepare_company_event_context` prepares three fixed inputs:
+major contracts, holder counts and named holder increases/decreases. Use the
+existing CLI with `--mode company-events --ticker 603507.SH --start-date
+2026-01-01 --end-date 2026-09-21 --output <new-directory>`. The window selects
+publication dates, not signing/holding dates, and does not establish historical
+availability. Output is secondary `company-event-context.json` and a safely
+escaped Markdown reading, not automatic Research, primary custody or a Brief.
+The original 448KiB context ceiling remains; oversized output is not clipped.
+
+Reuse Decision: THIN_ADAPTER. Reuse the existing strict JSON/decimal/clock and
+no-redirect primitives, original source entry, and original safe Markdown text
+renderer. The official/public FTShare Skill by-symbol handler
+06e6f4b30cb6323c4d72a9966135e00ed0107bcc and SDK endpoint registry
+e8e58b7ad51428751089d6127dce2b6e76aad513 were inspected. Field contracts are
+major-contract-by-date (291fae266386257bd1a13e9ce5dfe3ba52dd319f), holder-nums
+(59154a100e138314a6c62b666b45bdafad29a22b), and stock-share-chg
+(f306da4915545a1253dfe2916c400a5119a5aaad). Existing MIT/dependency review applies;
+no SDK/pandas dependency or new provider/event/scheduler framework is added.
+
+Contracts use a six-digit symbol and pageNum/pageSize/total/pages/records;
+named changes use qualified stock_code with items/total_items/total_pages;
+holder-count single-issuer mode is one complete history response, not paginated.
+Bounds remain 2MiB per response, at most four 200-row pages (or 800 holder-count
+rows in one response), one issuer and a publication window no wider than 366 days.
+Raw pages, request/HTTP/provider status, true retrieval times and row identities
+are retained. Missing, malformed, unauthorized, rate-limited and empty results
+remain separate. Credential only comes from the named runner environment and
+goes to fixed official routes; no redirect, retry, paid upgrade or all-market
+query. Auth/entitlement/rate stops prevent later family requests. Existing price,
+PDF, model, Research admission, budgets and production schedules are untouched.
+
+Contract amount keeps the provider yuan label with currency unverified; it is
+not revenue, profit or cash. Holder counts are not named holder trades or fund
+flows. Named changes preserve publication and change dates separately; their
+quantity unit and completion remain unverified, not used in arithmetic. Provider
+price fields are retained original data, not qualified Market observations.
+Unknown/corrected/other-period data is never silently converted to a new event.
+
+### Actual input and bounded offline repair
+
+Run35677062431 used producer951807b88453e9dc7043d454caffe0f9db44f038;
+artifact10673871181 is 4735987bytes, SHA256
+22356a0d3586b41a01a31f79bcdbcd80daa3eed2ff5c46e32a3f0eb9d1ec0428.
+Three requests, each HTTP200/provider200, no retries or model/PDF/market calls:
+contracts returned an explicit empty list; holder counts returned42 historical
+records, four published in the requested 2026-01-01..2026-09-21 window; named
+changes returned148 rows, all published before that window. None proves absence
+of disclosures outside the provider return.
+
+The first producer rejected change trade_code `603507.SH` because the Skill
+shows bare `603507`. Original failure and original responses remain at archive
+86dccb87f4e1c61dcea23c08d3fadf94a68e5a11,
+`research_runs/ftshare/603507-events-20260922/original/`. The adapter now accepts
+only the exact requested qualified code or the documented exact bare code for
+that route; wrong exchanges, arbitrary suffixes and different securities fail.
+Replaying the same three raw responses and original retrieval clocks through
+the final source entry produces four count records and two explicit empty
+windows, with zero new requests. This is an offline interpretation repair, not
+a second live success or a rewritten first run. Non-empty contract records and
+current named changes still require a real positive sample; the current verified
+consumer is operator source preparation, not unattended daily adoption.
+
 ## Remaining staged consumers
 
 | Family | Existing consumer / state | Remaining acceptance |
 |---|---|---|
 | Financial | Source-preparation context implemented; real partial anchor above | Successful balance and complete intended use; no automatic Research admission |
-| Company Event | Not implemented; existing event/question inputs next | Contracts and holder changes with source/time/scope; not a new event ontology |
+| Company Event | Three fixed inputs connected to original source preparation; real sample and offline repair above | Non-empty contract/current change sample and intended daily use; other event families only with a real consumer |
 | Market Expression | Not implemented; existing Stock price/flow observation | Same security/session/adjustment/units comparison before any default-provider replacement |
 | Sector/Concept | Not implemented; existing Sector/Concept Radar | Actual constituents/date/provider identity through existing semantics |
 | Industry/Futures | Not implemented; existing Industry variable input | LC/CU/RB first; contract/units/warehouse/roll/PIT explicit |
