@@ -49,7 +49,7 @@ def check_request(value, clock):
     for row in reports:
         once.require(set(row) == {'period', 'announcement_date', 'cninfo_locator', 'sina_id'}
             and re.fullmatch(r'20[0-9]{2}(?:FY|H1)', row['period'])
-            and re.fullmatch(r'[0-9]{1,20}', row['sina_id']),n 'REPORT_PLAN_REPORT')
+            and re.fullmatch(r'[0-9]{1,20}', row['sina_id']), 'REPORT_PLAN_REPORT')
         day = date.fromisoformat(row['announcement_date'])
         end = date(int(row['period'][:4]), 6, 30) if row['period'].endswith('H1') else date(int(row['period'][:4]), 12, 31)
         once.require(end <= day <= now.date() and day.isoformat() == row['announcement_date'], 'REPORT_PLAN_DATE')
