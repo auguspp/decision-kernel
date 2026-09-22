@@ -348,19 +348,69 @@ def prepare_report_discovery(*, ticker, announcement_date, period, issuer_name, 
         (output / "report-discovery.json").write_bytes(once.raw(result))
 
 
+def prepare_financial_context(*, ticker, year, report_type, output,
+                              report_form="合并未调整", fetch=None, clock=once.now):
+    """Existing source-preparation consumer; no primary-custody or egress grant."""
+    from . import ftshare_financial as financial
+    result = financial.prepare(ticker=ticker, year=year, report_type=report_type,
+        report_form=report_form, output=output, clock=clock,
+        **({"fetch": fetch} if fetch is not None else {}))
+    once.require(len(financial.raw_json(result)) <= CONTEXT_BYTES,
+                 "full financial context too large; no clipping")
+    lines = ["# 财务资料输入 · " + ticker, "",
+        "这是次级数据资料，不是已执行研究、原件核验或投资结论。", "",
+        f"报告期：{year} {report_type}；报表口径：{report_form}。",
+        "利润/现金为年初至报告期末累计数，不是单季数。供应商披露日仅有日期精度。", "",
+        "| 数据族 | 本期可用状态 |", "|---|---|"]
+    for family, item in result["families"].items():
+        lines.append(f"| {family} | {item['status']} |")
+    lines += ["", "## 已返回的本期金额（人民币元，未替代原件核对）", "",
+              "| 字段 | 供应商口径 | 金额 |", "|---|---|---|"]
+    for family in financial.METRICS:
+        item = result["families"][family]
+        if item["status"] != "SECONDARY_CONTEXT_READY":
+            continue
+        for field, metric in item["records"][0]["metrics"].items():
+            lines.append(f"| {family}.{field} | {metric['label']} | " +
+                         (metric["value"] if metric["value"] is not None else "未知") + " |")
+    lines += ["", "预告/快报保留原字段；未核清的单位与利润归属不用于数值对比。",
+        "parcomp_n_profit保留原名，不自动解释为归母或扣非。",
+        "完整原响应、分页、期间排除与逐行来源在同目录JSON中；未返回不等于发行人没有披露。",
+        "正式研究仍须原问题、原件、去重、外发和预算校验。", ""]
+    (output / "financial-context.md").write_text("\n".join(lines), encoding="utf-8")
+    return result
+
+
 def main(argv=None):
-    """Explicit operator source-discovery entry; no defaults or recurring calls."""
+    """Explicit source preparation only; no automatic daily execution."""
     import argparse
-    parser = argparse.ArgumentParser(description="Locate one report through FTShare and original CNINFO; no PDF or Research")
+    parser = argparse.ArgumentParser(description="Prepare report discovery or secondary financial context; no Research")
+    parser.add_argument("--mode", choices=["report-discovery", "financial"], default="report-discovery")
     parser.add_argument("--ticker", required=True)
-    parser.add_argument("--announcement-date", required=True, type=date.fromisoformat)
-    parser.add_argument("--period", required=True)
-    parser.add_argument("--issuer-name", required=True)
+    parser.add_argument("--announcement-date", type=date.fromisoformat)
+    parser.add_argument("--period")
+    parser.add_argument("--issuer-name")
+    parser.add_argument("--year", type=int)
+    parser.add_argument("--report-type", choices=["q1", "q2", "q3", "annual"])
+    parser.add_argument("--report-form", choices=["合并未调整", "合并调整"], default="合并未调整")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
-    result = prepare_report_discovery(**vars(args))
+    if args.mode == "financial":
+        if args.year is None or args.report_type is None or any(
+                v is not None for v in (args.announcement_date, args.period, args.issuer_name)):
+            parser.error("financial mode requires year/report-type and no report-discovery inputs")
+        result = prepare_financial_context(ticker=args.ticker, year=args.year, report_type=args.report_type,
+                                          report_form=args.report_form, output=args.output)
+        success = "FINANCIAL_CONTEXT_PREPARED_NOT_ADMITTED"
+    else:
+        if any(v is None for v in (args.announcement_date, args.period, args.issuer_name)) or any(
+                v is not None for v in (args.year, args.report_type)):
+            parser.error("report discovery requires announcement-date/period/issuer-name and no financial inputs")
+        result = prepare_report_discovery(ticker=args.ticker, announcement_date=args.announcement_date,
+            period=args.period, issuer_name=args.issuer_name, output=args.output)
+        success = "OFFICIAL_REPORT_LOCATED_NOT_ACQUIRED"
     print(result["status"])
-    return 0 if result["status"] == "OFFICIAL_REPORT_LOCATED_NOT_ACQUIRED" else 1
+    return 0 if result["status"] == success else 1
 
 
 if __name__ == "__main__":
