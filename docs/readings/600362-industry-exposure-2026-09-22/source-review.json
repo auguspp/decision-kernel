@@ -1,0 +1,143 @@
+{
+  "meaning": "RESEARCHER_SOURCE_REVIEW_NOT_RUNTIME_PREFLIGHT_OR_EXECUTION_PERMISSION",
+  "review_date": "2026-09-22",
+  "review_timezone": "Asia/Shanghai",
+  "code_commit": "b16a87084034d6205f73f16e452c5b38a740dc48",
+  "reading_commit": "fbfefd053fcdf018a65c1c0da6796804450df3f7",
+  "case_id": "600362.SH",
+  "issuer_name": "江西铜业股份有限公司",
+  "question_id": "jiangxi-copper-net-economic-exposure",
+  "question_status": "QUESTION_FORMED_NOT_PREPARED_OR_ADMITTED",
+  "selection": "RESEARCHER_COPPER_CHAIN_SAMPLE_NOT_SAVED_STOCK_CANDIDATE_OR_PERFORMANCE_RANK",
+  "industry_source": {
+    "run_id": 35726184042,
+    "attempt": 1,
+    "event": "workflow_dispatch",
+    "source_code_commit": "9b2dbe5f95dc5678a7734c3660c32e635a9724fa",
+    "artifact_id": 10693013951,
+    "zip_bytes": 10520,
+    "zip_sha256": "e29facb5bc0df3a736067f27f037e172e2c1ef7d8bb0a58c04c72235c2bd35c0",
+    "crc_and_unique_entries_checked": true,
+    "body_file": "basis.json",
+    "body_bytes": 67224,
+    "body_sha256": "e75992feb0250f837eb76467bec3e6d4dec1c9e45d9f23befdb4719fd105db13",
+    "capture_hash": "a1c6b2d538fdf5e1bec4b08887a85d1a8bc3b4659be600be016e2bdd9947de63",
+    "receipt": {
+      "params": {},
+      "path": "/api/futures/basis/main-continuous-latest",
+      "received_at": "2026-09-22T12:16:33.879363+00:00",
+      "representation": "RETAINED_HTTP_BODY",
+      "requested_at": "2026-09-22T12:16:31.615758+00:00",
+      "response_bytes": 67224,
+      "response_sha256": "e75992feb0250f837eb76467bec3e6d4dec1c9e45d9f23befdb4719fd105db13",
+      "status": "CAPTURED_HTTP_RESPONSE"
+    },
+    "scope": "TWO_EXACT_CU_ROWS_SELECTED_FROM_144_RETURNED_ROWS_NOT_FULL_COMPANY_UNIVERSE_REVIEW",
+    "raw_rows": [
+      {
+        "thscode": "CUZL.SHF",
+        "ticker": "cu9999",
+        "name": "沪铜主连",
+        "variety_name": "沪铜",
+        "reference_site": "上海",
+        "updated_at": "2026.09.22 11:03:36",
+        "spot_publish_date": "2026-09-22",
+        "spot_indicator_id": "2981535",
+        "spot_price": 112735,
+        "converted_spot_price": 112735,
+        "close_price": 111320,
+        "settle_price": 111220,
+        "close_basis": 1415,
+        "settle_basis": 1515,
+        "close_basis_rate": 1.26,
+        "settle_basis_rate": 1.34,
+        "default_value": "Y",
+        "average_close_basis": -16.45,
+        "average_settle_basis": 19.65
+      },
+      {
+        "thscode": "CUZL.SHF",
+        "ticker": "cu9999",
+        "name": "沪铜主连",
+        "variety_name": "沪铜",
+        "reference_site": "华东",
+        "updated_at": "2026.09.22 10:41:10",
+        "spot_publish_date": "2026-09-22",
+        "spot_indicator_id": "25471",
+        "spot_price": 112760,
+        "converted_spot_price": 112590,
+        "close_price": 111320,
+        "settle_price": 111220,
+        "close_basis": 1270,
+        "settle_basis": 1370,
+        "close_basis_rate": 1.13,
+        "settle_basis_rate": 1.22,
+        "default_value": "N",
+        "average_close_basis": -11.9,
+        "average_settle_basis": 21.86
+      }
+    ],
+    "qualified_use": "RETAINED_SOURCE_OBSERVATION_FOR_QUESTION_FORMATION_ONLY",
+    "unestablished": [
+      "units",
+      "continuous_contract_delivery_month",
+      "close_trade_date",
+      "company_contract_equivalence",
+      "comparable_multiday_change",
+      "business_benefit"
+    ]
+  },
+  "issuer_sources": [
+    {
+      "title": "江西铜业股份有限公司2025年年度报告",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+      "announcement_id": "1225034758",
+      "locator_date": "2026-03-27",
+      "report_period": "2025",
+      "representation": "WEB_PDF_PARSED_TEXT_AND_SELECTED_VISUAL_PAGES",
+      "visual_pages_zero_based": [
+        0,
+        11,
+        14
+      ],
+      "load_bearing_pages_zero_based": [
+        11,
+        14
+      ],
+      "use": "HISTORICAL_PROCUREMENT_AND_PRODUCTION_SCOPE_BASELINE_NOT_2026_REALIZED_EFFECT",
+      "local_original_pdf_bytes": null,
+      "pdf_sha256": null,
+      "complete_pypdf_read": false,
+      "limitations": [
+        "Original download did not succeed in local environment; no raw custody claim.",
+        "Full report not read page-by-page; later attempted visual hedge-note pages were not retrieved.",
+        "2025 own-concentrate production includes First Quantum equity output; no consolidation/self-sufficiency inference."
+      ]
+    },
+    {
+      "title": "江西铜业股份有限公司关于召开2026年半年度业绩说明会的公告",
+      "locator": "https://epaper.cs.com.cn/zgzqb/html/2026-09/09/nw.D110000zgzqb_20260909_8-B027.htm",
+      "representation": "SEARCH_INDEX_EXCERPT_ONLY_DIRECT_PAGE_READ_FAILED",
+      "use": "REPORT_AVAILABILITY_LEAD_NOT_HALF_YEAR_REPORT_BODY",
+      "reported_half_year_publication_date": "2026-08-26",
+      "report_body_verified": false,
+      "pdf_sha256": null
+    }
+  ],
+  "required_before_current_economic_quantification": [
+    "complete_2025_annual_original",
+    "complete_2026H1_original_and_relevant_corrections",
+    "comparable_segment_volume_and_equity_scope",
+    "pricing_hedging_and_working_capital_bridge",
+    "indicator_unit_period_and_contract_mapping"
+  ],
+  "admission_gaps": [
+    "NECESSARY_COMPANY_BODY_AND_CUSTODY_INCOMPLETE",
+    "EXISTING_DAILY_POLICY_AND_BINDING_ARE_STOCK_ONLY"
+  ],
+  "research_funnel_invoked": false,
+  "paid_model_calls": 0,
+  "odds_recomputed": false,
+  "investment_authority": "NONE",
+  "human_acceptance": "NOT_ESTABLISHED"
+}
