@@ -1,0 +1,57 @@
+name: ftshare-cnequity-verification
+on:
+  push:
+    branches: [work/ftshare-cnequity-verification-20260922]
+    paths: [.github/workflows/ftshare-cnequity-verification.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: e460c601835341466392c0667fcf26f0d82e231e
+          path: kernel
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          repository: rootSunc/CNEquity
+          ref: 1650e384a3fd1f67a70144a489acc91432f1df27
+          path: cnequity
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install base and native lake query dependencies only
+        run: python -m pip install -e ./kernel polars==1.44.2 duckdb==1.5.5 pyarrow==25.0.1
+      - name: Record exact producer and native source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir evidence
+          git -C kernel rev-parse HEAD > evidence/kernel.sha
+          git -C cnequity rev-parse HEAD > evidence/cnequity.sha
+          git -C kernel archive --format=tar HEAD > evidence/source.tar
+          python -m pip list --format=json > evidence/packages.json
+          printf 'workflow_sha=%s\nrun_id=%s\nattempt=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > evidence/run.txt
+          cat > evidence/request.json <<'JSON'
+          {"version":"kernel-provider-batch-v1","market_start":"2026-09-18","market_end":"2026-09-21","event_start":"2026-01-01","year":2026,"report_type":"q2","issuers":["603507.SH","002285.SZ","000560.SZ","002792.SZ","688205.SH","301155.SZ"],"reports":[{"ticker":"603507.SH","issuer_name":"振江股份","announcement_date":"2026-08-26","period":"2026H1"}],"sectors":["881280"],"concepts":["BK1024"],"futures":["LC2611.GFE","CU2611.SHF","RB2701.SHF"],"build_lake":true}
+          JSON
+      - name: Run combined source consumers once, not Research or trading
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/kernel/src:$GITHUB_WORKSPACE/cnequity/src"
+          python -m decision_kernel.runtime.provider_batch --request evidence/request.json --output evidence/batch
+      - name: Retain actual raw inputs, native lake, failures and code
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ftshare-cnequity-${{ github.run_id }}
+          path: evidence/
+          retention-days: 30
+          if-no-files-found: error
