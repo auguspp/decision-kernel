@@ -226,6 +226,16 @@ def cffex_rows(variety, raw, receipt):
             continue
         if cells[0].strip() in {'交易日', '交易日期', '日期'}:
             continue
+        # The exchange export has a two-row header, not an undated data row.
+        # Match both complete rows only at the start; never skip unknown records.
+        if (index == 1 and tuple(c.strip() for c in records[0]) == (
+                '交易日', '合约', '排名', '成交量排名', '', '',
+                '持买单量排名', '', '', '持卖单量排名', '', '')
+                and tuple(c.strip() for c in cells) == (
+                    '', '', '', '会员简称', '成交量', '比上一交易日增减',
+                    '会员简称', '持买单量', '比上一交易日增减',
+                    '会员简称', '持卖单量', '比上一交易日增减')):
+            continue
         require(len(cells) >= 12, 'CFFEX_ROW_SHAPE_INVALID')
         row_date = cells[0].strip().replace('-', '').replace('/', '')
         require(row_date == target.replace('-', ''), 'CFFEX_DATE_DIFFERS')
