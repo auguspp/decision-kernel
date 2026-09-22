@@ -1,0 +1,75 @@
+name: ftshare-company-events-verification
+on:
+  push:
+    branches: [work/ftshare-company-events-verification-20260922]
+    paths: [.github/workflows/ftshare-company-events-verification.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 951807b88453e9dc7043d454caffe0f9db44f038
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install original base only
+        run: python -m pip install -e .
+      - name: Retain exact code and clean source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '951807b88453e9dc7043d454caffe0f9db44f038'
+          mkdir -p run-output/identity
+          git rev-parse HEAD > run-output/identity/code-sha.txt
+          git ls-tree -r HEAD > run-output/identity/tree.txt
+          printf 'run_id=%s\nattempt=%s\nevent_sha=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA" > run-output/identity/run.txt
+          python -m pip list --format=json > run-output/identity/packages.json
+          git archive HEAD > run-output/source.tar
+      - name: Capture three fixed company inputs once
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from datetime import date
+          from pathlib import Path
+          from decision_kernel.runtime.ftshare_company_events import prepare
+          value = prepare(ticker='603507.SH', start_date=date(2026,1,1), end_date=date(2026,9,21), output=Path('run-output/603507-events'))
+          print(value['status'])
+          for family, item in value['families'].items():
+              print(family, item['status'], len(item['records']))
+          PY
+      - name: Retain original responses in create-only archive branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f run-output/603507-events/company-event-context.json
+          archive='archive/ftshare-company-events-20260922'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -b "$archive"
+          mkdir -p research_runs/ftshare/603507-events-20260922
+          cp -R run-output/603507-events research_runs/ftshare/603507-events-20260922/original
+          cp -R run-output/identity research_runs/ftshare/603507-events-20260922/identity
+          git add research_runs/ftshare/603507-events-20260922
+          git commit -m 'data: retain original bounded company event inputs including failures'
+          git rev-parse HEAD > run-output/archive-commit.txt
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$archive"
+          unset auth
+      - name: Upload raw evidence and source
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ftshare-company-events-${{ github.run_id }}
+          path: run-output/
+          if-no-files-found: error
+          retention-days: 30
