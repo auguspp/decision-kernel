@@ -31,6 +31,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+@hithink_http.inbox_calendar_timeout_recovery()
 def main(
     argv: Sequence[str] | None = None,
     *,
