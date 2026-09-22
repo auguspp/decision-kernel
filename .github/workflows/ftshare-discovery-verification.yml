@@ -1,0 +1,94 @@
+name: ftshare-discovery-verification
+on:
+  push:
+    branches: [work/ftshare-discovery-verification-20260922]
+    paths: [.github/workflows/ftshare-discovery-verification.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 1c71f9dbe65563511cbc2149cadda4b7d23ee0cf
+          persist-credentials: false
+      - name: Restore two transfer discrepancies to exact locally tested bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, json, hashlib, os, base64
+          branch='feat/ftshare-report-discovery'
+          base='1c71f9dbe65563511cbc2149cadda4b7d23ee0cf'
+          def git(*args):
+              return subprocess.run(['git',*args],check=True,capture_output=True,text=True).stdout.strip()
+          def blob(p):
+              b=Path(p).read_bytes();return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          assert git('rev-parse','HEAD')==base
+          assert git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          original={
+            'src/decision_kernel/runtime/stock_research_sources.py':'e5cf023a43d0a8fababb918acc6fc045e3e2a6ec',
+            'tests/fixtures/ftshare/000920-20260821.json':'857a27e4d7bbc89e7e88695be4effe235fe99973'}
+          assert all(blob(p)==h for p,h in original.items())
+          p=Path('src/decision_kernel/runtime/stock_research_sources.py')
+          old='matches = [row for period, row in reports if period == latest_period and row.published_at == latest]'
+          assert p.read_text().count(old)==1
+          p.write_text(p.read_text().replace(old,'matches = [row for row in current if row.published_at == latest]'))
+          p=Path('tests/fixtures/ftshare/000920-20260821.json')
+          v=json.loads(p.read_bytes());row=v['data']['records'][6]
+          assert row['announcement_id']=='1225486935'
+          row.update(url_hash='74656fdcdcd14572a2377d7904f30e6bff05fc3d3e4bba5061367a5fadbdce46',adjunct_size=122,updated_at='2026-08-21 05:50:57',processed_at='2026-08-21 05:50:57')
+          p.write_bytes(json.dumps(v,ensure_ascii=False,separators=(',',':')).encode())
+          expected={
+            'src/decision_kernel/runtime/stock_research_sources.py':'5e74b21a2c90baf51f23f252f26bf79c935eccbb',
+            'src/decision_kernel/runtime/ftshare_discovery.py':'2762b1595cf062cf3236161816a6a86dc3eda208',
+            'tests/test_ftshare_discovery.py':'90d32fbd5d9fcd80318a0e06d3a64a6f7b02633c',
+            'tests/fixtures/ftshare/000920-20260821.json':'6474cbf62407d53e0f2f89e11afc966d8a6f5a2d',
+            'tests/fixtures/ftshare/603507-20260826.json':'5196b31345fa4009903d5ce8fd051b0e174d4d8b'}
+          assert all(blob(p)==h for p,h in expected.items())
+          assert set(git('diff','--name-only').splitlines())==set(original)
+          git('diff','--check');git('add','--',*original)
+          git('-c','user.name=github-actions[bot]','-c','user.email=41898282+github-actions[bot]@users.noreply.github.com','commit','-m','fix: restore exact tested source and historical fixture bytes')
+          os.environ['GIT_CONFIG_COUNT']='1'
+          os.environ['GIT_CONFIG_KEY_0']='http.https://github.com/.extraheader'
+          os.environ['GIT_CONFIG_VALUE_0']='AUTHORIZATION: basic '+base64.b64encode(('x-access-token:'+os.environ['GH_TOKEN']).encode()).decode()
+          assert git('ls-remote','origin','refs/heads/'+branch).split()[0]==base
+          git('push','origin','HEAD:refs/heads/'+branch)
+          Path('verification-output').mkdir()
+          Path('verification-output/transfer.json').write_text(json.dumps({'before':original,'after':expected,'code_commit':git('rev-parse','HEAD'),'development_workflow_not_for_main':True},indent=2))
+          PY
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install original package only
+        run: python -m pip install -e '.[documents]'
+      - name: Two declared issuer/date discoveries through the actual source preparation function
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from datetime import date
+          import json, subprocess
+          from decision_kernel.runtime.stock_research_sources import prepare_report_discovery
+          outcomes=[]
+          for ticker,day,name,expected in [('000920',21,'沃顿科技','1225486931'),('603507',26,'振江股份','1225506358')]:
+              result=prepare_report_discovery(ticker=ticker,announcement_date=date(2026,8,day),period='2026H1',issuer_name=name,output=Path('verification-output')/ticker)
+              outcomes.append({'ticker':ticker,'status':result['status'],'expected_announcement_id':expected,'actual_id':result.get('official_report',{}).get('announcement_id'),'model_calls':result['model_calls'],'pdf_calls':result['pdf_calls']})
+          Path('verification-output/acceptance.json').write_text(json.dumps({'code_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'outcomes':outcomes,'new_market_calls':0,'automatic_retry':False},ensure_ascii=False,indent=2))
+          assert all(o['status']=='OFFICIAL_REPORT_LOCATED_NOT_ACQUIRED' and o['actual_id']==o['expected_announcement_id'] and o['model_calls']==o['pdf_calls']==0 for o in outcomes), outcomes
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ftshare-discovery-verification-${{ github.run_id }}
+          path: verification-output/
+          if-no-files-found: warn
+          retention-days: 30
