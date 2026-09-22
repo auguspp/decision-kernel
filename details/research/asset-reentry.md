@@ -329,7 +329,6 @@
   - [原保存材料](../../sources/git/fc52aee3bf922644287171e61e772778d1196ab1/question.json)
 - [按需恢复：stock-603507-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 - [按需恢复：stock-603507-profit-hedging-cash-20260921](https://github.com/auguspp/decision-kernel/blob/6eacd1fe5963514948cbcf0a516a13098286fe14/docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-21；[原观察](../radar/company-reading.json)。不是新事件。
 - 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
 ## 世联行 002285.SZ
@@ -337,7 +336,7 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002285-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-21 / 2026-09-17；[原观察](../radar/company-reading.json)。不是新事件。
+- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-17；[原观察](../radar/company-reading.json)。不是新事件。
 - 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
 ## 我爱我家 000560.SZ
@@ -345,7 +344,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-000560-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-21；[原观察](../radar/company-reading.json)。不是新事件。
 - 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
 ## 通宇通讯 002792.SZ
@@ -353,5 +351,4 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-21；[原观察](../radar/company-reading.json)。不是新事件。
 - 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。

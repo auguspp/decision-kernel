@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "6a8b9c0662a18e5636f7ada3dd4f5e8227c26be0085f1daf4f9f421e739d9e38",
+    "base_reading_hash": "e377cbf6664f57532d10fc9c05ee5d94c2825d9acc0102803c29641c07626f4c",
     "companies": [
       {
         "archives": [],
@@ -251,7 +251,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "b45302e62e0afe3682d9ea5a1f24250f4e193a2f6b8e5f16fae59de84c29fa75",
+        "association_id": "cc233a75a2b61db2212c4b33fdcec41a390401810e7b27e6ed4b43fc49b9798e",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -285,13 +285,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -1112,7 +1112,7 @@
             }
           }
         ],
-        "association_id": "1a8dd92965b068c4f427bd1acd06b1dfcb95d1346577f1013447d8418e95d3a8",
+        "association_id": "b89b56b2028610d65378ef9a78ce698da4ed31131f244f0ac05802783ddd3260",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1146,13 +1146,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -1334,7 +1334,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "a5648f89805ebc469396faabba5b110a97a01cd10b07c390d441f0d08f0cd3c1",
+        "association_id": "2586208c3f53232ea1e2d4c1edab661771dc4192083c7d1976cc0aff28a1146e",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1368,13 +1368,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -1765,7 +1765,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "92d071835255f69374183916800ecb4bebeb613e66a1982627c5f77c2396acec",
+        "association_id": "a2b7ed29e3aa52e6a9877fd89b29a0b4667394b03420dcf58a6a16d4a2ac0a49",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1823,13 +1823,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -2026,7 +2026,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "076afe119131d68101dcbc14bcd0adc375a597744a5a1dcb687c93a7c01fb96c",
+        "association_id": "a6bc79151a14f257db92893a44cb793f71923319ad021b884237664c308bbc0f",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2084,13 +2084,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -2183,7 +2183,7 @@
           }
         ],
         "assets": [],
-        "association_id": "9a4499002d819e805399fbabad9e19f2b342c39c81ebedcba00d5b4f77e3cc7e",
+        "association_id": "2d3aa8b3e2367a2c1021356f55ee966e6eab6fcf47f1ab64a6425b0045795d84",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2265,13 +2265,13 @@
                 "source_observed_at": "2026-09-18T14:18:52.651149Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -2346,7 +2346,7 @@
           }
         ],
         "assets": [],
-        "association_id": "28f22c9b369f51188e2d83825d72529ca1c273e9d5af03af4ea40abb2371fe26",
+        "association_id": "631a062a5c3783a9887199315ec1da30f561cd27d7018700b73686372e1e28c4",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2380,13 +2380,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           }
         ],
@@ -2798,80 +2798,14 @@
             }
           }
         ],
-        "association_id": "f6d8e9f62915664500134dc32e8514378d30c0b2e26f646472c9f4619518488f",
+        "association_id": "764406ed75694e339acb0497e08e74a2d32a5f74e2662f92698b04d69eac0cbe",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [
           {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "BROAD_881",
-                "group_key": "881280.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-21",
-                "retained_leader": {
-                  "daily_return": "0.094214876033057851239669421",
-                  "name": "振江股份",
-                  "thscode": "603507.SH",
-                  "ticker": "603507",
-                  "turnover": "562388550"
-                },
-                "sector_name": "风电设备",
-                "sector_thscode": "881280.TI",
-                "source": {
-                  "bytes": 132652,
-                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
-                  "read_path": "details/sector/35587558977/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
-                },
-                "source_observed_at": "2026-09-21T10:23:08.832651Z",
-                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
-              },
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881280.TI",
-                "group_on_homepage": true,
-                "is_primary": false,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-21",
-                "retained_leader": {
-                  "daily_return": "0.094214876033057851239669421",
-                  "name": "振江股份",
-                  "thscode": "603507.SH",
-                  "ticker": "603507",
-                  "turnover": "562388550"
-                },
-                "sector_name": "风电零部件",
-                "sector_thscode": "884308.TI",
-                "source": {
-                  "bytes": 132652,
-                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
-                  "read_path": "details/sector/35587558977/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
-                },
-                "source_observed_at": "2026-09-21T10:23:08.832651Z",
-                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
-              }
-            ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
-            "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
-            }
-          },
-          {
             "kind": "SAVED_STOCK_DISPOSITION",
-            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "lane_health": "IN_PROGRESS",
             "market_session": "2026-09-21",
             "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
             "record": {
@@ -2926,7 +2860,7 @@
           }
         ],
         "assets": [],
-        "association_id": "cf0ec7abcc1e33efaae9550981d37666191d458447589a512743d6a2303bd16a",
+        "association_id": "ea7febdfa308b99827d0b9f07c8b70e81a6892f4d08b941dffab31760c5da229",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2935,32 +2869,6 @@
             "kind": "SAVED_RADAR_ORIGINS",
             "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
             "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881153.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-21",
-                "retained_leader": {
-                  "daily_return": "0.100346020761245674740484429",
-                  "name": "世联行",
-                  "thscode": "002285.SZ",
-                  "ticker": "002285",
-                  "turnover": "859237550"
-                },
-                "sector_name": "房地产服务",
-                "sector_thscode": "884248.TI",
-                "source": {
-                  "bytes": 132652,
-                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
-                  "read_path": "details/sector/35587558977/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
-                },
-                "source_observed_at": "2026-09-21T10:23:08.832651Z",
-                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
-              },
               {
                 "kind": "INSTITUTIONAL_WINDOWS",
                 "market_session": "2026-09-17",
@@ -3018,18 +2926,18 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
+            "projection_hash": "22c6941a47a1542cb2b531074932b8725f4dd1b3211b2c435da8717449b16257",
             "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
+              "bytes": 3272043,
+              "git_blob": "7a21a923a6422ad2df149116782bde18f440610d",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
+              "sha256": "120c4dd204aaa4ef1bf9dae1abd87166e491c6b39a3b50850ff0bda5e2ffd794"
             }
           },
           {
             "kind": "SAVED_STOCK_DISPOSITION",
-            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "lane_health": "IN_PROGRESS",
             "market_session": "2026-09-21",
             "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
             "record": {
@@ -3084,54 +2992,14 @@
           }
         ],
         "assets": [],
-        "association_id": "1cbf0178873124e281c8d63f5d243f8ca9250c66b22f56c2e225d9d3066dbf58",
+        "association_id": "ce11ebd52553852db3332d9428554fd6b101c33096448de6c6e98b36230f8963",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [
           {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881153.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-21",
-                "retained_leader": {
-                  "daily_return": "0.1",
-                  "name": "我爱我家",
-                  "thscode": "000560.SZ",
-                  "ticker": "000560",
-                  "turnover": "1304403940"
-                },
-                "sector_name": "房地产服务",
-                "sector_thscode": "884248.TI",
-                "source": {
-                  "bytes": 132652,
-                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
-                  "read_path": "details/sector/35587558977/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
-                },
-                "source_observed_at": "2026-09-21T10:23:08.832651Z",
-                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
-              }
-            ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
-            "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
-            }
-          },
-          {
             "kind": "SAVED_STOCK_DISPOSITION",
-            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "lane_health": "IN_PROGRESS",
             "market_session": "2026-09-21",
             "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
             "record": {
@@ -3186,54 +3054,14 @@
           }
         ],
         "assets": [],
-        "association_id": "4a6a2c9ed4d02fe40f2e4627e571ab5a0b2d3d7dbfb540da2ca4bfd7ec0d9a1a",
+        "association_id": "90177bf129087adc64c0bd44c8066ed416415743a0c40f069e26880f72d5b4e2",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [
           {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881129.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-21",
-                "retained_leader": {
-                  "daily_return": "0.1",
-                  "name": "通宇通讯",
-                  "thscode": "002792.SZ",
-                  "ticker": "002792",
-                  "turnover": "2334817500"
-                },
-                "sector_name": "通信网络设备及器件",
-                "sector_thscode": "884262.TI",
-                "source": {
-                  "bytes": 132652,
-                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
-                  "read_path": "details/sector/35587558977/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
-                },
-                "source_observed_at": "2026-09-21T10:23:08.832651Z",
-                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
-              }
-            ],
-            "projection_hash": "eee892749728c3cd9bcac35303a33c94f05d384e4f8a3c767aab94774a7b8ecf",
-            "source": {
-              "bytes": 3229450,
-              "git_blob": "2ec15b4aaf10bba1088a579606eed5447f92d563",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "7a143fa8d813daf7b9a87edf47131dfc8a5e6c28adb266dde65580d3e11e0ac2"
-            }
-          },
-          {
             "kind": "SAVED_STOCK_DISPOSITION",
-            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "lane_health": "IN_PROGRESS",
             "market_session": "2026-09-21",
             "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
             "record": {
@@ -3271,7 +3099,7 @@
       "with_saved_observations": 11,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-22T10:13:54.578524+00:00",
+    "generated_at": "2026-09-22T10:26:22.005441+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3285,5 +3113,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "7c8a2cf3436038cb8b845f9a9e0a93ed9267c257e018f1a8eeaa3760de2a2be6"
+  "projection_hash": "9d269f198c57c7866a51efbba5d232101948774bd624c27fba8c46f3489557ec"
 }
