@@ -39,7 +39,7 @@ transport failure, provider rejection, malformed data and identity/time errors
 remain separate. No retries, redirects, fallback hosts or arbitrary endpoints.
 The public list handler uses no API key; this connection does not inspect,
 print or persist any environment credential. A 403 stops, not a subscription
-upgrade or a bypass. Other FTShare families have their own future auth contracts.
+upgrade or a bypass. Other FTShare families use their own documented auth contract.
 
 `announcement_time` remains raw provider text with timezone UNKNOWN. It is not
 silently equated with CNINFO's aware timestamp, nor used to backdate availability.
@@ -78,15 +78,87 @@ Offline tests use these real FTShare bytes and simulated CNINFO responses
 through the original normalizer. Live provider/official-directory acceptance
 must be recorded separately in #490; CI alone does not satisfy it.
 
-## Remaining staged consumers (not implemented by this first slice)
+## Financial input through the same source-preparation entry
 
-| Family | Next existing consumer | Required acceptance |
+`stock_research_sources.prepare_financial_context` consumes the five fixed
+families in `ftshare_financial`: balance, income, cashflow, forecast and express.
+It produces inspectable `financial-context.json` and `financial-context.md`, plus
+all bounded raw returns and capture records. This is operator-invoked secondary
+Question/Research context, NOT an automatically enabled daily request, primary
+custody, a Research result or a new egress permission. Required original issuer
+materials and the existing admission/budget/continuation rules remain required.
+
+```sh
+python -m decision_kernel.runtime.stock_research_sources \
+  --mode financial --ticker 603507.SH --year 2026 --report-type q2 \
+  --output run-output/603507-financial
+```
+
+Use the already configured `FTSHARE_API_KEY` through the runner environment;
+never put the value in commands, files or messages. Only the fixed official
+FTShare host and exact financial route/parameter set receive the credential.
+No redirects, retry, alternate host, subscription upgrade or all-market query.
+A reflected credential is rejected before retaining the response. Authentication,
+entitlement and rate-limit stops prevent later family requests in that attempt.
+An independent family's transport failure remains visible without discarding
+other valid families. No network or environment access occurs on import.
+
+The provider's stock_code mode returns one issuer's periods. The adapter does
+not pretend that year/report_type filters this server mode: it retains up to
+four complete 200-row pages per family, then explicitly selects year/period/form.
+The per-response limit is 2MiB; original whole-context limit stays 448KiB. Failed
+pagination cannot qualify a partial family, and oversized context is not clipped.
+Amounts use decimal strings; null remains UNKNOWN. Balance is period-end stock,
+while income/cashflow are year-to-date, not isolated quarterly observations.
+Adjusted/unadjusted consolidated forms stay distinct. Multiple matching versions
+require review instead of silently picking one. Provider publish dates keep DAY
+precision and UNKNOWN timezone; historical availability is not inferred from
+these dates or from today's retrieval. Forecast and express remain respectively
+forecast and preliminary data, not final actuals; uncertain units/attribution
+remain unmapped original fields, not inputs to forecast-versus-actual arithmetic.
+
+Reuse evidence for this slice: existing FTShare discovery strict JSON, no-redirect,
+clock and error primitives; original source entry and byte bounds. Actual official
+SDK implementation inspected: `src/ftshare/base.py` blob
+abc230cb1a3ab40ac36cfec15e0bbb573671deb8 and `src/ftshare/apis/stock.py` blob
+e1133fabaef87ed1b216e71bbe66770ac74016c8. Its fixed header and stock-code semantics
+are reused without adding the SDK's pandas dependency to core. Official Skill
+income/balance/cashflow field contracts were checked, not treated as infallible.
+
+### Real partial acceptance anchor, not a synthetic all-green sample
+
+Run35674021253 used code9d2b4dd7a861c9e40e92cda762e0a9ace553e243 for
+603507.SH /2026q2. Five requests, no retries: balance had TRANSPORT_FAILURE;
+income and cashflow each returned43 rows with an eligible target-period row;
+forecast returned14 rows including the target; express returned one2022annual
+row, so target2026q2 is NOT RETURNED. It is not proof the issuer never disclosed
+an express report. No PDF/model/market call was made. The original raw ZIP is
+artifact10672795706,4740529bytes,SHA256
+3785dcef6293304f52abad8d5c275f703b1e846cf674bc382e2012935a60062a.
+Later offline consumer replay must keep these actual response bytes/clocks and
+failure, and must not be described as another live request or a repaired balance.
+
+Twelve selected monetary fields reconcile to retained issuer calculations at
+6eacd1fe5963514948cbcf0a516a13098286fe14,
+`docs/readings/603507-profit-hedging-cash-2026-09-21/calculations.json`, blob
+c5022a9d1c533033fc7fa31b3b518a63fb5c1b37. This scoped comparison reuses already
+reviewed issuer material; it is not a full financial-statement audit.
+The Skill labels parcomp_n_profit as ex-item parent profit, but this real return
+149833033.7100 matches retained parent net, NOT ex-item parent97005857.01.
+Therefore the adapter retains this field unmapped. One example does not authorize
+a global field redefinition or alteration of the provider's original response.
+Balance still requires a real successful sample; the whole financial family is
+not accepted as fully complete merely because other inputs or tests succeeded.
+
+## Remaining staged consumers
+
+| Family | Existing consumer / state | Remaining acceptance |
 |---|---|---|
-| Financial | Question/Research structured context | Same issuer/report period/publish clock; original-report cross-check; units/unknowns explicit |
-| Company Event | Existing event/question inputs | Contracts and holder changes with source/time/scope; not a new event ontology |
-| Market Expression | Existing Stock price/flow observation | Same security/session/adjustment/units comparison before any default-provider replacement |
-| Sector/Concept | Existing Sector/Concept Radar | Actual constituents/date/provider identity through existing semantics |
-| Industry/Futures | Existing Industry variable input | LC/CU/RB first; contract/units/warehouse/roll/PIT explicit |
+| Financial | Source-preparation context implemented; real partial anchor above | Successful balance and complete intended use; no automatic Research admission |
+| Company Event | Not implemented; existing event/question inputs next | Contracts and holder changes with source/time/scope; not a new event ontology |
+| Market Expression | Not implemented; existing Stock price/flow observation | Same security/session/adjustment/units comparison before any default-provider replacement |
+| Sector/Concept | Not implemented; existing Sector/Concept Radar | Actual constituents/date/provider identity through existing semantics |
+| Industry/Futures | Not implemented; existing Industry variable input | LC/CU/RB first; contract/units/warehouse/roll/PIT explicit |
 
 NewsNow/feed, Institutional Radar and original issuer-PDF acquisition stay in
 place where this account's FTShare scope does not cover them. No paid tier,
