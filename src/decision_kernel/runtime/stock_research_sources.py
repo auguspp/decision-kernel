@@ -422,6 +422,13 @@ def prepare_company_event_context(*, ticker, start_date, end_date, output,
 
 def main(argv=None):
     """Explicit source preparation only; no automatic daily execution."""
+    import sys
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    if "--mode" in arguments:
+        position = arguments.index("--mode")
+        if len(arguments) > position + 1 and arguments[position + 1] == "batch":
+            from .provider_batch import main as batch_main
+            return batch_main(arguments[:position] + arguments[position + 2:])
     import argparse
     parser = argparse.ArgumentParser(description="Prepare report discovery or secondary financial context; no Research")
     parser.add_argument("--mode", choices=["report-discovery", "financial", "company-events"], default="report-discovery")

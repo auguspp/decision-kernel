@@ -15,6 +15,9 @@ dependencies = [
 decision-kernel = "decision_kernel.cli:main"
 
 [project.optional-dependencies]
+cnequity = [
+  "cnequity==0.11.0",
+]
 research-api = [
   "openai==3.11.0",
 ]
@@ -35,6 +38,7 @@ dump-study = [
   "pyarrow==25.0.1",
 ]
 dev = [
+  "cnequity==0.11.0",
   "openai==3.11.0",
   "pytest==9.1.1",
   "pytest-xdist==3.8.0",
