@@ -11,7 +11,7 @@ from datetime import date
 import os
 from pathlib import Path
 import re
-from urllib.parse import quote, unquote, urlsplit
+from urllib.parse import quote, unquote, urljoin, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
 import requests
@@ -49,7 +49,7 @@ def check_request(value, clock):
     for row in reports:
         once.require(set(row) == {'period', 'announcement_date', 'cninfo_locator', 'sina_id'}
             and re.fullmatch(r'20[0-9]{2}(?:FY|H1)', row['period'])
-            and re.fullmatch(r'[0-9]{1,20}', row['sina_id']), 'REPORT_PLAN_REPORT')
+            and re.fullmatch(r'[0-9]{1,20}', row['sina_id']),n 'REPORT_PLAN_REPORT')
         day = date.fromisoformat(row['announcement_date'])
         end = date(int(row['period'][:4]), 6, 30) if row['period'].endswith('H1') else date(int(row['period'][:4]), 12, 31)
         once.require(end <= day <= now.date() and day.isoformat() == row['announcement_date'], 'REPORT_PLAN_DATE')
@@ -104,8 +104,12 @@ def sina_locator(raw, row, subject, issuer_name):
     expected_path = f'/211.154.219.97:9494/MRGG/{suffix}/{day.year}/{day.year}-{day.month}/{day.isoformat()}/{row["sina_id"]}.PDF'
     links = set()
     for tag in soup.find_all('a', href=True):
-        url = tag['href']
+        url = urljoin('https://vip.stock.finance.sina.com.cn/', tag['href'])
         parts = urlsplit(url)
+        # Same host/path only: explicit HTTPS upgrade, never follow a redirect.
+        if parts.scheme == 'http' and parts.netloc == 'file.finance.sina.com.cn':
+            url = urlunsplit(parts._replace(scheme='https'))
+            parts = urlsplit(url)
         if (parts.scheme == 'https' and parts.netloc == 'file.finance.sina.com.cn'
             and unquote(parts.path) == expected_path and not parts.query and not parts.fragment):
             links.add(url)
@@ -134,10 +138,11 @@ def _store(retain, name, raw):
 
 
 def acquire_reports(plan, output, check, *, fetch=public_get, discover=sources.prepare_report_discovery,
-                    clock=once.now, save=None):
+                    clock=once.now, save=None, receipt=None):
     """At most one declared official route and one independent mirror per report."""
-    result = {'status': 'SOURCE_GAPS', 'reports': [], 'requests': [], 'model_calls': 0,
-              'research_executions': 0, 'automatic_retry': False, **reading.AUTHORITY}
+    result = {} if receipt is None else receipt
+    result.update({'status': 'SOURCE_GAPS', 'reports': [], 'requests': [], 'model_calls': 0,
+                   'research_executions': 0, 'automatic_retry': False, **reading.AUTHORITY})
     def get(url, name, limit):
         check()
         item = {'url': url, 'requested_at': clock(), 'status': 'TRANSPORT_UNAVAILABLE', 'body': None}
@@ -186,7 +191,7 @@ def acquire_reports(plan, output, check, *, fetch=public_get, discover=sources.p
                     page = f'https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id={row["sina_id"]}&stockid={plan["subject"][:6]}'
                     html = get(page, prefix + '-page.html', MAX_HTML)
                     locator = sina_locator(html, row, plan['subject'], plan['issuer_name'])
-                    route['page_url'] = page
+                    route.update(page_url=page, link_policy='ACTUAL_PAGE_LINK_RELATIVE_RESOLUTION_AND_SAME_HOST_HTTPS_UPGRADE_ONLY')
                 route['locator'] = locator
                 raw = get(locator, prefix + '-source.pdf', MAX_PDF)
                 route.update(status='ORIGINAL_BYTES_RETAINED_NOT_YET_PARSED', bytes=len(raw), pdf_sha256=once.sha(raw))
@@ -257,7 +262,7 @@ def run(*, api, code, output, clock=once.now, fetch=public_get, discover=sources
             check()
             return _store(retain, name, raw)
         save.uncertain = lambda: retain.uncertain
-        result.update(acquire_reports(plan, output, check, fetch=fetch, discover=discover, clock=clock, save=save))
+        acquire_reports(plan, output, check, fetch=fetch, discover=discover, clock=clock, save=save, receipt=result)
         result.update(plan=plan, acquisition_finished_at=clock())
         check()
         result['source_manifest'] = retain.save('source.json', result)
