@@ -1,0 +1,18 @@
+{
+  "provider-batch.json": {
+    "bytes": 136524,
+    "sha256": "1043602730619054d3b49a0dbc91ed7ec9961b37b444dd01843117a1c69b360f"
+  },
+  "provider-batch.md": {
+    "bytes": 975,
+    "sha256": "f8bc0daaf93744a32b665c4be981fd69f2ea4880b26fa4f12f27f3f7d901f3dc"
+  },
+  "retained-inputs.zip": {
+    "bytes": 293788,
+    "sha256": "e0559ad80a6550a26080dedc862bb9a4569e76100738cc7ea0f6e9ca55a02a3d"
+  },
+  "identity.json": {
+    "bytes": 235,
+    "sha256": "2d08f9362bba44f5df5d0fdb13c49b2c584476385aad1802f2a1d6a94309c9ee"
+  }
+}
