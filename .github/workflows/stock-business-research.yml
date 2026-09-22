@@ -402,3 +402,47 @@ jobs:
           path: source-output/
           if-no-files-found: warn
           retention-days: 30
+
+  prepare-declared-report-sources:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event_name == 'issues' && github.event.action == 'labeled' &&
+      github.event.issue.number == 297 && !github.event.issue.pull_request &&
+      github.event.sender.login == 'auguspp' &&
+      github.event.label.name == 'declared-report-sources-ready'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    permissions:
+      contents: write
+      actions: read
+      issues: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Install existing report source dependencies
+        run: python -m pip install -e '.[documents,feeds]'
+      - name: Prepare only the exact declared public reports
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_ACTION: ${{ github.event.action }}
+          SOURCE_ISSUE: ${{ github.event.issue.number }}
+          SOURCE_LABEL: ${{ github.event.label.name }}
+          SOURCE_SENDER: ${{ github.event.sender.login }}
+          SOURCE_IS_PR: ${{ toJSON(github.event.issue.pull_request != null) }}
+        run: >-
+          python -m decision_kernel.runtime.declared_report_sources
+          --code-commit "$GITHUB_SHA" --output declared-report-output
+      - name: Preserve declared report bytes and explicit source gaps
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: declared-report-sources-${{ github.run_id }}-${{ github.run_attempt }}
+          path: declared-report-output/
+          if-no-files-found: error
+          retention-days: 30
