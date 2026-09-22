@@ -1,0 +1,72 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -15,6 +15,9 @@
+ decision-kernel = "decision_kernel.cli:main"
+ 
+ [project.optional-dependencies]
++cnequity = [
++  "cnequity==0.11.0",
++]
+ research-api = [
+   "openai==3.11.0",
+ ]
+@@ -35,6 +38,7 @@
+   "pyarrow==25.0.1",
+ ]
+ dev = [
++  "cnequity==0.11.0",
+   "openai==3.11.0",
+   "pytest==9.1.1",
+   "pytest-xdist==3.8.0",
+--- a/src/decision_kernel/runtime/stock_research_sources.py
++++ b/src/decision_kernel/runtime/stock_research_sources.py
+@@ -422,6 +422,13 @@
+ 
+ def main(argv=None):
+     """Explicit source preparation only; no automatic daily execution."""
++    import sys
++    arguments = list(sys.argv[1:] if argv is None else argv)
++    if "--mode" in arguments:
++        position = arguments.index("--mode")
++        if len(arguments) > position + 1 and arguments[position + 1] == "batch":
++            from .provider_batch import main as batch_main
++            return batch_main(arguments[:position] + arguments[position + 2:])
+     import argparse
+     parser = argparse.ArgumentParser(description="Prepare report discovery or secondary financial context; no Research")
+     parser.add_argument("--mode", choices=["report-discovery", "financial", "company-events"], default="report-discovery")
+--- a/src/decision_kernel/runtime/ftshare_market_inputs.py
++++ b/src/decision_kernel/runtime/ftshare_market_inputs.py
+@@ -56,7 +56,9 @@
+             require(re.fullmatch(r'[0-9]{8}', value) is not None, 'REQUEST_DATE_INVALID')
+             date.fromisoformat(value[:4] + '-' + value[4:6] + '-' + value[6:])
+     if 'start_date' in params:
+-        require(str(params['start_date']) <= str(params['end_date']), 'WINDOW_REVERSED')
++        first = datetime.strptime(str(params['start_date']), '%Y%m%d').date()
++        final = datetime.strptime(str(params['end_date']), '%Y%m%d').date()
++        require(0 <= (final - first).days <= 40, 'WINDOW_REVERSED_OR_TOO_WIDE')
+     if route in {'stock', 'flow'}:
+         symbol = params['code' if route == 'stock' else 'symbol']
+         require(isinstance(symbol, str) and re.fullmatch(r'(?:6[0-9]{5}\.SH|[03][0-9]{5}\.SZ)', symbol), 'SECURITY_INVALID')
+@@ -113,8 +115,8 @@
+         require(isinstance(rows, list) and len(rows) <= 4096, 'CONSTITUENTS_INVALID')
+         return rows, len(rows), 1
+     if route in PAGED:
+-        # Eastmoney board API uses items pagination; other reviewed routes use records.
+-        items = route == 'concept_prices'
++        # Retain documented items and observed records envelopes separately.
++        items = route == 'concept_prices' and 'items' in data and 'records' not in data
+         rows, total, pages = (data.get(k) for k in
+                              (('items', 'total_items', 'total_pages') if items else ('records', 'total', 'pages')))
+         if not items:
+@@ -126,8 +128,10 @@
+         return rows, total, pages
+     rows = data.get('items')
+     require(isinstance(rows, list) and len(rows) <= 4096, 'ROWS_INVALID')
++    if route in {'sw_members', 'futures_prices'}:
++        require(type(data.get('total')) is int and data['total'] == len(rows), 'HISTORY_INCOMPLETE')
+     if route == 'futures_prices':
+-        require(type(data.get('total')) is int and data['total'] == len(rows) and len(rows) <= 64, 'HISTORY_INCOMPLETE')
++        require(len(rows) <= 64, 'HISTORY_INCOMPLETE')
+     return rows, len(rows), 1
+ 
+ 
