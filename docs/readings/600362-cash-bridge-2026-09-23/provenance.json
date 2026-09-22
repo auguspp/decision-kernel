@@ -1,0 +1,61 @@
+{
+  "artifact_id": 10706728112,
+  "checked_at": "2026-09-22T23:19:32.640179+00:00",
+  "files": {
+    "calculations.json": {
+      "bytes": 5339,
+      "git_blob": "eb63809516d17c4c97879a3467a467eba5f72ca8",
+      "sha256": "e265a955c669e538eccfc09f6177701fe42deeedc4d82850015d63966b0bbfa9"
+    },
+    "reconcile.py": {
+      "bytes": 5376,
+      "git_blob": "81b8a071ffeea3a45234e1a36b29b3a92a5187ea",
+      "sha256": "a423a0f7f1b3c45ee202f327865dd8f8cc48c9e95ef6341be9d04857c5beabff"
+    },
+    "workpaper.md": {
+      "bytes": 7942,
+      "git_blob": "c0c532a7a0ba6666e8b62fe1b948a10336ef87f1",
+      "sha256": "568eaa59b9f923a00964674cf858f76ce443cb691d3b978fafacceb92d95a358"
+    }
+  },
+  "formal_execution": "NOT_EXECUTED",
+  "investment_authority": "NONE",
+  "main": "a1a42eb44cf462bb7890d078817699582fa9eae8",
+  "model_calls": 0,
+  "original_extraction_sha256": "4a4ff9c14a66888e1762f104f2f89b21ccec7ef84dddadf1d0cde59362b16bf1",
+  "original_source_commit": "91d2f316be950482469f48917c1ddec40dd6bc42",
+  "page_reviews": [
+    {
+      "height": 1684,
+      "physical_page": 154,
+      "pixels_rgb_sha256": "c156f4418aa8359e7612b24dc39310a60065e9d4d2c9b306fdd99186d642e4f7",
+      "printed_page": 96,
+      "render": "PDFium scale2 whole page; no OCR",
+      "review": "ACTUALLY_VIEWED_THIS_TURN",
+      "width": 1191
+    },
+    {
+      "height": 1684,
+      "physical_page": 165,
+      "pixels_rgb_sha256": "ff458fe94212331ca90e79c39374d7cdff2f5529043867bdb4e9ce3d43d073ea",
+      "printed_page": 107,
+      "render": "PDFium scale2 whole page; no OCR",
+      "review": "ACTUALLY_VIEWED_THIS_TURN",
+      "width": 1191
+    },
+    {
+      "height": 1684,
+      "physical_page": 166,
+      "pixels_rgb_sha256": "4168820346c09a4d7acef1ef4ce016b1554553b14bb92131dee3fe3a85c49f1b",
+      "printed_page": 108,
+      "render": "PDFium scale2 whole page; no OCR",
+      "review": "ACTUALLY_VIEWED_THIS_TURN",
+      "width": 1191
+    }
+  ],
+  "pdf_sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb",
+  "reading": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+  "registration": "INCOMPLETE",
+  "source_reacquisitions": 0,
+  "source_run_id": 35754054446
+}

@@ -1,0 +1,211 @@
+{
+  "H1_cost": {
+    "construction_services": 136453632,
+    "industry_and_other_nontrade": 230685032579,
+    "other": 695151035,
+    "trade": 57750971573
+  },
+  "H1_gross_margin_fraction": {
+    "construction_services": "0.3428319149893232894844442895",
+    "industry_and_other_nontrade": "0.06873891789288148589581249362",
+    "other": "0.1064511956574623658698187722",
+    "trade": "0.01207452863083145537074006357"
+  },
+  "H1_gross_profit": {
+    "construction_services": 71185228,
+    "industry_and_other_nontrade": 17027490806,
+    "other": 82815464,
+    "trade": 705838426
+  },
+  "H1_revenue": {
+    "construction_services": 207638860,
+    "industry_and_other_nontrade": 247712523385,
+    "other": 777966499,
+    "trade": 58456809999
+  },
+  "balance_dates": [
+    "2026-06-30",
+    "2025-12-31"
+  ],
+  "cash_and_equivalents": [
+    27437264230,
+    14959025454
+  ],
+  "cash_reconciliation_inputs": {
+    "asset_disposal_loss": [
+      6082121,
+      5324132
+    ],
+    "asset_impairment": [
+      2881045213,
+      782641135
+    ],
+    "credit_impairment": [
+      23497011,
+      160597643
+    ],
+    "deferred_income_amortization": [
+      -32361851,
+      -35192272
+    ],
+    "deferred_tax_asset_increase": [
+      -440277042,
+      -248214070
+    ],
+    "deferred_tax_liability_decrease": [
+      -13874911,
+      -17285250
+    ],
+    "fair_value_gain_adjustment": [
+      -3182537965,
+      307000273
+    ],
+    "financial_expense": [
+      1450007570,
+      1242880810
+    ],
+    "group_net_profit": [
+      9500773307,
+      4417391454
+    ],
+    "intangibles_amortization": [
+      199908026,
+      196166749
+    ],
+    "inventory_decrease_or_increase": [
+      648784432,
+      -7827695974
+    ],
+    "investment_income_adjustment": [
+      -1531544635,
+      -191537382
+    ],
+    "operating_payables_increase": [
+      1782295414,
+      7913612150
+    ],
+    "operating_receivables_increase": [
+      -7367120878,
+      -5507965675
+    ],
+    "ppe_and_investment_property_depreciation": [
+      1528934382,
+      1289512975
+    ],
+    "rou_depreciation": [
+      82750580,
+      92425540
+    ],
+    "special_reserve_increase": [
+      277870219,
+      291743561
+    ]
+  },
+  "checks": [
+    {
+      "computed": 5814230993,
+      "difference": 0,
+      "disclosed_or_reconciled": 5814230993,
+      "name": "2026H1_group_profit_to_ocf"
+    },
+    {
+      "computed": 2871405799,
+      "difference": 0,
+      "disclosed_or_reconciled": 2871405799,
+      "name": "2025H1_group_profit_to_ocf"
+    },
+    {
+      "computed": 2942825194,
+      "difference": 0,
+      "disclosed_or_reconciled": 2942825194,
+      "name": "ocf_change_bridge"
+    },
+    {
+      "computed": 307154938743,
+      "difference": 0,
+      "disclosed_or_reconciled": 307154938743,
+      "name": "H1_revenue_parts"
+    },
+    {
+      "computed": 289267608819,
+      "difference": 0,
+      "disclosed_or_reconciled": 289267608819,
+      "name": "H1_cost_parts"
+    },
+    {
+      "computed": 17887329924,
+      "difference": 0,
+      "disclosed_or_reconciled": 17887329924,
+      "name": "H1_gross_profit_parts"
+    },
+    {
+      "computed": 83889267548,
+      "difference": 0,
+      "disclosed_or_reconciled": 83889267548,
+      "name": "2026-06-30_monetary_funds_perimeter"
+    },
+    {
+      "computed": 34544135761,
+      "difference": 0,
+      "disclosed_or_reconciled": 34544135761,
+      "name": "2025-12-31_monetary_funds_perimeter"
+    },
+    {
+      "computed": 49345131787,
+      "difference": 0,
+      "disclosed_or_reconciled": 49345131787,
+      "name": "monetary_funds_increase_split"
+    },
+    {
+      "computed": 6876043904,
+      "difference": 0,
+      "disclosed_or_reconciled": 6876043904,
+      "name": "H1_net_acquisition_cash"
+    }
+  ],
+  "currency": "CNY",
+  "excluded_margin_and_restricted_funds": [
+    56452003318,
+    19585110307
+  ],
+  "excluded_share_of_monetary_funds_increase": "0.7471232049827578262700243054",
+  "increase_split": {
+    "cash_and_equivalents": 12478238776,
+    "excluded_margin_and_restricted": 36866893011
+  },
+  "limitations": [
+    "No inference of mining profit from the nontrade gross-profit bucket.",
+    "The three operating adjustments are cash-flow disclosures, not raw balance-sheet differences or all working capital.",
+    "No parent-only or parent-attributable numerator is mixed into group cash reconciliation.",
+    "Cash-equivalent classification is not proof of distributable cash, net cash or permanent illiquidity.",
+    "Investment-income adjustment in the cash bridge is not assumed to equal the P&L investment-income line.",
+    "No report-correction inventory, full input/admission, Pre/Quick, valuation, Odds or investment judgment is certified."
+  ],
+  "monetary_funds": [
+    83889267548,
+    34544135761
+  ],
+  "ocf_change_bridge": {
+    "group_profit_change": 5083381853,
+    "other_reconciliation_change": -2626565126,
+    "three_operating_adjustments_change": 486008467
+  },
+  "other_profit_to_cash_adjustments": [
+    1249498718,
+    3876063844
+  ],
+  "perimeter": "CONSOLIDATED_GROUP",
+  "period_columns": [
+    "2026H1",
+    "2025H1"
+  ],
+  "qualification": "ARITHMETIC_CHECK_ONLY_NOT_RESEARCH_ADMISSION_OR_TRUTH_CERTIFICATION",
+  "reported_ocf": [
+    5814230993,
+    2871405799
+  ],
+  "three_disclosed_operating_adjustments": [
+    -4936041032,
+    -5422049499
+  ]
+}
