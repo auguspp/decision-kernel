@@ -70,7 +70,15 @@ def decode(raw):
         return result
     def invalid(_):
         raise ValueError('CONTEXT_NONFINITE_JSON')
-    return json.loads(raw.decode('utf-8-sig'), parse_float=Decimal,
+    def bounded_decimal(text):
+        value = Decimal(text)
+        require(len(text) <= 96 and len(value.as_tuple().digits) <= 64
+                and -30 <= value.as_tuple().exponent <= 30, 'CONTEXT_DECIMAL_SIZE')
+        return value
+    def bounded_int(text):
+        require(len(text.lstrip('-')) <= 30, 'CONTEXT_INTEGER_SIZE')
+        return int(text)
+    return json.loads(raw.decode('utf-8-sig'), parse_float=bounded_decimal, parse_int=bounded_int,
                       parse_constant=invalid, object_pairs_hook=unique)
 
 
@@ -115,7 +123,9 @@ def number(value, *, integer=False, nonnegative=False):
         n = Decimal(text)
     except InvalidOperation:
         return None, 'INVALID'
-    if not n.is_finite() or abs(n) > Decimal('1e15') or (nonnegative and n < 0):
+    if (not n.is_finite() or len(n.as_tuple().digits) > 64
+            or not -30 <= n.as_tuple().exponent <= 30
+            or n.copy_abs() > Decimal('1e15') or (nonnegative and n < 0)):
         return None, 'INVALID'
     if integer and n != n.to_integral_value():
         return None, 'INVALID'
