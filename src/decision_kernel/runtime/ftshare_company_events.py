@@ -81,7 +81,8 @@ def page_rows(value, family, page):
     require(isinstance(body, dict), "PARSE_FAILURE")
     if family == "contracts":
         rows, total, pages = (body.get(k) for k in ("records", "total", "pages"))
-        require(body.get("pageNum") == page and body.get("pageSize") == PAGE_SIZE,
+        require(type(body.get("pageNum")) is int and type(body.get("pageSize")) is int
+                and body["pageNum"] == page and body["pageSize"] == PAGE_SIZE,
                 "PAGINATION_MISMATCH")
     else:
         rows, total, pages = (body.get(k) for k in ("items", "total_items", "total_pages"))
@@ -142,7 +143,11 @@ def capture_family(*, family, ticker, output, fetch=request_page, clock=discover
             expected = total, pages
             field = {"contracts": "security_code", "holder_counts": "stock_code", "holder_changes": "trade_code"}[family]
             for index, row in enumerate(page):
-                require(isinstance(row, dict) and row.get(field) == (ticker if family == "holder_counts" else ticker[:6]),
+                # Documented bare trade_code and observed exact exchange-qualified form.
+                # Never strip arbitrary suffixes or accept the wrong exchange.
+                allowed = {ticker, ticker[:6]} if family == "holder_changes" else {
+                    ticker if family == "holder_counts" else ticker[:6]}
+                require(isinstance(row, dict) and isinstance(row.get(field), str) and row[field] in allowed,
                         "IDENTITY_MISMATCH")
                 digest = hashlib.sha256(raw_json(row)).hexdigest()
                 require(digest not in seen, "DUPLICATE_RECORD")
@@ -174,7 +179,10 @@ def day(value):
 
 def window_context(capture, *, start_date, end_date):
     """Select by publication date, NOT signing/holding date or historical PIT."""
+    require(type(start_date) is date and type(end_date) is date and start_date <= end_date,
+            "REQUEST_IDENTITY_OR_WINDOW")
     family = capture["family"]
+    require(family in ROUTES, "REQUEST_IDENTITY")
     result = {"family": family, "capture_status": capture["status"], "status": "SOURCE_UNAVAILABLE",
               "records": [], "excluded_outside_window": 0}
     if capture["status"] not in {"COMPLETE", "EMPTY"}:
