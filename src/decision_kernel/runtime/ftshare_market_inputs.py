@@ -56,7 +56,9 @@ def validate_request(route, params):
             require(re.fullmatch(r'[0-9]{8}', value) is not None, 'REQUEST_DATE_INVALID')
             date.fromisoformat(value[:4] + '-' + value[4:6] + '-' + value[6:])
     if 'start_date' in params:
-        require(str(params['start_date']) <= str(params['end_date']), 'WINDOW_REVERSED')
+        first = datetime.strptime(str(params['start_date']), '%Y%m%d').date()
+        final = datetime.strptime(str(params['end_date']), '%Y%m%d').date()
+        require(0 <= (final - first).days <= 40, 'WINDOW_REVERSED_OR_TOO_WIDE')
     if route in {'stock', 'flow'}:
         symbol = params['code' if route == 'stock' else 'symbol']
         require(isinstance(symbol, str) and re.fullmatch(r'(?:6[0-9]{5}\.SH|[03][0-9]{5}\.SZ)', symbol), 'SECURITY_INVALID')
@@ -113,8 +115,8 @@ def unpack(route, obj, page):
         require(isinstance(rows, list) and len(rows) <= 4096, 'CONSTITUENTS_INVALID')
         return rows, len(rows), 1
     if route in PAGED:
-        # Eastmoney board API uses items pagination; other reviewed routes use records.
-        items = route == 'concept_prices'
+        # Retain documented items and observed records envelopes separately.
+        items = route == 'concept_prices' and 'items' in data and 'records' not in data
         rows, total, pages = (data.get(k) for k in
                              (('items', 'total_items', 'total_pages') if items else ('records', 'total', 'pages')))
         if not items:
@@ -126,8 +128,10 @@ def unpack(route, obj, page):
         return rows, total, pages
     rows = data.get('items')
     require(isinstance(rows, list) and len(rows) <= 4096, 'ROWS_INVALID')
+    if route in {'sw_members', 'futures_prices'}:
+        require(type(data.get('total')) is int and data['total'] == len(rows), 'HISTORY_INCOMPLETE')
     if route == 'futures_prices':
-        require(type(data.get('total')) is int and data['total'] == len(rows) and len(rows) <= 64, 'HISTORY_INCOMPLETE')
+        require(len(rows) <= 64, 'HISTORY_INCOMPLETE')
     return rows, len(rows), 1
 
 
