@@ -54,6 +54,8 @@ class Collector(base.Collector):
             payload = attach_questions(self, payload)
             from .stock_batch_disposition import attach as attach_disposition
             payload = attach_disposition(self, payload)
+            from .research_reentry_reading import attach as attach_reentry
+            payload = attach_reentry(self, payload)
         if payload['research'].get('on_demand_archives'):
             from .research_archive_index import navigation
             raw = self.files['README.md'] + navigation(payload['research']['on_demand_archives']).encode()
