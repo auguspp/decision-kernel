@@ -49,6 +49,9 @@ class Collector(base.Collector):
             if getattr(self, "include_external_radar", False):
                 from .external_radar_reading import attach as attach_external
                 payload = attach_external(self, payload)
+        if getattr(self, "include_daily_news", False):
+            from .news_daily_reading import attach as attach_daily_news
+            payload = attach_daily_news(self, payload)
         if getattr(self, "include_reviewed_questions", False):
             from .reviewed_question_reading import attach as attach_questions
             payload = attach_questions(self, payload)
@@ -126,6 +129,7 @@ def main(argv=None) -> int:
     parser.add_argument("--include-concept-detail", action="store_true")
     parser.add_argument("--include-external-radar", action="store_true")
     parser.add_argument("--include-reviewed-questions", action="store_true")
+    parser.add_argument("--include-daily-news", action="store_true")
     args = parser.parse_args(argv)
     model.check(not args.include_concept_detail or args.include_concept_discovery,
                 "concept detail reading requires the existing concept source")
@@ -157,6 +161,7 @@ def main(argv=None) -> int:
         collector.include_concept_detail = args.include_concept_detail
         collector.include_external_radar = args.include_external_radar
         collector.include_reviewed_questions = args.include_reviewed_questions
+        collector.include_daily_news = args.include_daily_news
         refresh = {
             "workflow": ".github/workflows/current-state-read-entry.yml",
             "run_id": os.environ.get("GITHUB_RUN_ID"),

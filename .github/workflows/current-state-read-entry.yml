@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
     types: [requested, completed]
     branches: [main]
 
@@ -37,6 +37,11 @@ jobs:
           github.event.workflow_run.actor.login == 'auguspp') ||
          (github.event.workflow_run.name == 'saved-disclosure-research' &&
           github.event.workflow_run.event == 'push'))) ||
+       (github.event.workflow_run.name == 'radar-newsnow-daily' &&
+        github.event.workflow_run.path == '.github/workflows/radar-newsnow-daily.yml' &&
+        github.event.workflow_run.run_attempt == 1 &&
+        github.event.action == 'completed' &&
+        github.event.workflow_run.event == 'workflow_run') ||
        (github.event.workflow_run.name != 'kernel-tests' &&
         github.event.workflow_run.name != 'saved-disclosure-research' &&
         github.event.workflow_run.name != 'stock-business-research' &&
@@ -73,6 +78,7 @@ jobs:
           --include-concept-discovery
           --include-concept-detail
           --include-external-radar
+          --include-daily-news
           --include-reviewed-questions
           --publish
       - name: Explain a failed reading publication
