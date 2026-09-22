@@ -1,0 +1,78 @@
+name: provider-batch-contracts
+on:
+  push:
+    branches: [work/provider-batch-20260922]
+    paths: [.github/workflows/provider-batch-contracts.yml]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: bea775c9a6c42ea6363d0b27eab58cf37b053f98
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Capture fixed representative requests without retries or models
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          OUT: ${{ runner.temp }}/provider-batch
+        run: |
+          python - <<'PY'
+          import json,os,hashlib,urllib.request,urllib.parse,urllib.error
+          from pathlib import Path
+          from datetime import datetime,timezone
+          root=Path(os.environ['OUT']);root.mkdir()
+          key=os.environ['FTSHARE_API_KEY'];base='https://market.ft.tech/gateway/api/v1/market/data/'
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self,*args,**kwargs):return None
+          opener=urllib.request.build_opener(NoRedirect());events=[]
+          def get(label,path,params):
+              event={'label':label,'path':path,'params':params,'started_at':datetime.now(timezone.utc).isoformat(),'http_status':None,'status':'TRANSPORT_FAILURE'};events.append(event)
+              url=base+path+'?'+urllib.parse.urlencode(params)
+              req=urllib.request.Request(url,headers={'FTSHARE_API_KEY':key,'Accept':'application/json','Accept-Encoding':'identity','User-Agent':'decision-kernel/provider-batch-acceptance-v1'})
+              try:
+                  try:r=opener.open(req,timeout=20)
+                  except urllib.error.HTTPError as e:r=e
+                  with r:
+                      if r.geturl()!=url:raise ValueError('REDIRECT_REJECTED')
+                      raw=r.read(2097153)
+                      if len(raw)>2097152:raise ValueError('RESPONSE_TOO_LARGE')
+                      if key.encode() in raw:raise ValueError('CREDENTIAL_REFLECTION_REJECTED')
+                      event.update(http_status=r.status,received_at=datetime.now(timezone.utc).isoformat(),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),file=label+'.json',status='RETAINED_HTTP_RESPONSE')
+                      (root/(label+'.json')).write_bytes(raw)
+                  data=json.loads(raw)
+                  if event['http_status'] in (401,403,429):return None
+                  return data.get('data',data) if isinstance(data,dict) else data
+              except Exception as e:
+                  event['error_type']=type(e).__name__;return None
+              finally:
+                  (root/'captures.json').write_text(json.dumps(events,ensure_ascii=False,indent=2))
+          get('stock','stock-history-list',{'trade_date':'20260921','code':'603507.SH','page':1,'page_size':200})
+          get('flow','eastmoney-stock-flow',{'symbol':'603507.SH','trade_date':'20260921','page':1,'page_size':200})
+          get('sw_members','sw-industry/constituent-history',{'stock_code':'603507'})
+          get('sw_overview','sw-industry/overview',{'date':'20260921','industry_name':'风电设备','page':1,'page_size':200})
+          boards=get('concept_catalog','eastmoney-concept-boards',{})
+          if isinstance(boards,list):
+              found=[r for r in boards if isinstance(r,dict) and r.get('name')=='风能']
+              if len(found)==1 and isinstance(found[0].get('code'),str):
+                  code=found[0]['code']
+                  get('concept_members','eastmoney-board-constituents',{'board_code':code})
+                  get('concept_history','eastmoney-board-daily-ohlc',{'board_code':code,'start_date':'2026-09-21','end_date':'2026-09-21','page':1,'page_size':200})
+          get('futures_list','futures/futures-lists',{})
+          for variety in ['LC','CU','RB']:
+              get(variety+'_base','futures/futures-base-data',{'symbol':variety,'trade_date':20260921})
+              get(variety+'_warehouse','futures/fut-wsr',{'symbol':variety,'trade_date':20260921,'page':1,'page_size':200})
+          (root/'identity.json').write_text(json.dumps({'run':os.environ['GITHUB_RUN_ID'],'code':os.environ['GITHUB_SHA'],'provider_requests':len(events),'model_calls':0,'retries':0},indent=2))
+          print(json.dumps([{'label':e['label'],'status':e['status'],'http':e['http_status']} for e in events]))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: provider-batch-contracts-${{ github.run_id }}
+          path: ${{ runner.temp }}/provider-batch/
+          retention-days: 30
