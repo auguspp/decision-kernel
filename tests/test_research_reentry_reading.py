@@ -236,3 +236,31 @@ def test_radar_failure_rolls_back_all_associations_but_keeps_independent_assets(
     assert all(not row['saved_observations'] for row in result['projection']['companies'])
     assert len(result['projection']['companies']) == 2
     assert any(g['kind']=='radar_discovery' for g in result['projection']['read_gaps'])
+
+
+def test_nested_markdown_links_resolve_to_the_original_pinned_package_paths():
+    import posixpath
+    from urllib.parse import unquote
+    files={}; item=record(files)
+    link=r._detail_link(item['source'])
+    assert link.startswith('../../sources/git/')
+    assert posixpath.normpath(posixpath.join(posixpath.dirname(r.DETAIL), unquote(link))) == item['source']['read_path']
+    assert '(' + link + ')' in r.render(r.build(package([item]), files))
+    with pytest.raises(ValueError, match='pinned'):
+        r._detail_link({**item['source'], 'read_path':'other/file.md'})
+
+
+def test_original_question_and_watch_prerequisite_are_visible_not_only_ids():
+    files={}; item=record(files)
+    question={'thscode':CODE, 'execution_id':'test-question', 'question':'原现金转换问题',
+              'known_unknowns':['原尚未解决的现金桥'], 'terminal_reason':'原有界停止理由',
+              'sources':{}, **m.AUTHORITY}
+    path='details/research/reviewed-questions.json'
+    raw=m.json_bytes({'question_work':{'items':[question]}}); files[path]=raw
+    baseline=package([item], reviewed_question_work={'structured':r._meta(path,raw)})
+    add_watch(baseline,files)
+    report=r.build(baseline,files); page=r.render(report)
+    assert '原现金转换问题' in page and '原有界停止理由' in page
+    assert '原尚未解决的现金桥' in page
+    assert '原业务前提' in page and '原价格条件记录' in page
+    assert report['projection']['new_attention_events'] == 0

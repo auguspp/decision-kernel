@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import json
+import posixpath
 import re
 from urllib.parse import quote
 
@@ -244,37 +245,73 @@ def build(baseline: dict, files: dict[str, bytes]) -> dict:
     return result
 
 
+def _detail_link(source: dict) -> str:
+    """Resolve a package-root source from the actual nested Markdown directory."""
+    path = model.safe_path(source['read_path'])
+    model.check(source.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT'
+                and path.startswith(('details/', 'sources/git/')), 're-entry link must stay pinned')
+    return quote(posixpath.relpath(path, posixpath.dirname(DETAIL)), safe='/')
+
+
 def render(report: dict) -> str:
     from .reviewed_question_reading import _text
     p = report['projection']
     model.check(report['projection_hash'] == canonical_hash(p), 're-entry report hash differs')
+    labels = {
+        'RECOVER_MISSING_RETAINED_BYTES': '先恢复缺失的已存原件，不能把读取缺口当作研究失效',
+        'RECONCILE_EXISTING_METHOD_REVIEW': '先读原方法复核及其适用版本，不直接沿用旧结论',
+        'PRICE_INPUT_UNAVAILABLE_NOT_THESIS_FAILURE': '原价格输入不可用；这不是经营判断被否定',
+        'REVIEW_SAVED_PRICE_CONDITION_AND_RESEARCH_PREREQUISITES': '原价格条件已触及，先复核旧研究前提',
+        'COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH': '把保存观察与旧问题、关键假设对照后再决定是否研究',
+        'RECOVER_REGISTERED_ARCHIVE': '先按明确定位恢复旧研究正文',
+        'WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE': '原价格条件尚未触及；不代表已检查全部经营变化',
+        'NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE': '本读取没有关联观察；不等于已经核实无变化',
+    }
     lines = ['# 旧研究再进入：先找回，再解释变化', '',
         '仅关联同一读取包内的已有材料与保存观察；不启动研究、不判断thesis是否改变、不继承Human接受。',
         '按各原件日期阅读；保存的价格触界不是今天的新提醒，未关联变化不等于已检查且无变化。', '']
     for row in p['companies']:
-        lines += ['## ' + _text(row['thscode']), '', '下一步：' + _text(row['next_step']), '']
+        names = [o.get('record', {}).get('company_name') for o in row['saved_observations']]
+        if row['saved_watch']:
+            names.append(row['saved_watch'].get('company_name'))
+        names = list(dict.fromkeys(n for n in names if isinstance(n, str) and n))
+        title = (' / '.join(names) + ' ' if names else '') + row['thscode']
+        lines += ['## ' + _text(title), '', '下一步：' + _text(labels[row['next_step']]), '']
         for item in row['assets']:
             label = item.get('id') or item.get('record', {}).get('execution_id') or item['kind']
             lines += ['- ' + _text(label) + '：' + _text(item['kind']) + ' / '
                       + _text(item['source_check']['status'])]
+            if item.get('purpose_note'):
+                lines.append('  - 原用途说明：' + _text(item['purpose_note']))
+            saved = item.get('record', {})
+            for key, heading in (('question', '原问题'), ('why_now', '当时为何检查'),
+                                 ('terminal_reason', '原停止理由'), ('known_unknowns', '原关键未知')):
+                if saved.get(key):
+                    lines.append('  - ' + heading + '：' + _text(saved[key]))
             sources = ([item.get('source')] if item['kind'] == 'PURPOSE_REFERENCE' else
-                       list(item.get('record', {}).get('sources', {}).values()))
+                       list(saved.get('sources', {}).values()))
+            if saved.get('question_source'):
+                sources.append(saved['question_source'])
             for source in sources:
-                if isinstance(source, dict) and isinstance(source.get('read_path'), str):
-                    try:
-                        path = model.safe_path(source['read_path'])
-                        model.check(source.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT',
-                                    're-entry link must stay pinned')
-                        lines.append('  - [原保存材料](' + quote(path, safe='/') + ')')
-                    except ERRORS:
-                        lines.append('  - 原材料入口未核验。')
+                try:
+                    lines.append('  - [原保存材料](' + _detail_link(source) + ')')
+                except ERRORS:
+                    lines.append('  - 原材料入口未核验。')
         for archive in row['archives']:
             lines.append('- [按需恢复：' + _text(archive['record']['id']) + '](' + archive['url']
                          + ')；只有定位，本页没有恢复正文。')
-        lines += ['- 关联保存观察组：' + str(len(row['saved_observations'])) + '；不是新事件数。']
+        for observation in row['saved_observations']:
+            dates = ([o.get('market_session', 'UNKNOWN') for o in observation['origins']]
+                     if observation['kind'] == 'SAVED_RADAR_ORIGINS'
+                     else [observation.get('market_session', 'UNKNOWN')])
+            lines.append('- 原保存观察：' + _text(observation['kind']) + '；市场日：'
+                         + _text(' / '.join(dict.fromkeys(str(d) for d in dates)))
+                         + '；[原观察](' + _detail_link(observation['source']) + ')。不是新事件。')
         if row['saved_watch']:
             w = row['saved_watch']
-            lines += ['- 原价格条件状态：' + _text(w['status']) + '；原观察时间：' + _text(w['observed_at'])]
+            lines += ['- 原价格条件状态：' + _text(w['status']) + '；原观察时间：' + _text(w['observed_at']),
+                      '- 原业务前提：' + _text(w.get('prerequisite', 'UNKNOWN')),
+                      '- [原价格条件记录](' + _detail_link(w['source_report']) + ')；不是新的行情复核或买入指令。']
         lines += ['']
     if p['read_gaps']:
         lines += ['## 读取范围缺口', '', '部分来源未提供或未能核验；不能据此宣称全部thesis无需复核。', '']
