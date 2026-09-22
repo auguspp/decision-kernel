@@ -1,0 +1,55 @@
+name: ftshare-financial-verification
+on:
+  push:
+    branches: [work/ftshare-financial-verification-20260922]
+    paths: [.github/workflows/ftshare-financial-verification.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 9d2b4dd7a861c9e40e92cda762e0a9ace553e243
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install original base only
+        run: python -m pip install -e .
+      - name: Retain exact implementation identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '9d2b4dd7a861c9e40e92cda762e0a9ace553e243'
+          mkdir -p run-output/identity
+          git rev-parse HEAD > run-output/identity/code-sha.txt
+          git ls-tree -r HEAD > run-output/identity/tree.txt
+          git archive HEAD > run-output/source.tar
+          python -m pip list --format=json > run-output/identity/packages.json
+          printf 'run=%s\nevent=%s\nattempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ATTEMPT" > run-output/identity/run.txt
+      - name: Prepare five financial families for the retained issuer
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from decision_kernel.runtime.ftshare_financial import prepare
+          result = prepare(ticker='603507.SH', year=2026, report_type='q2',
+                           output=Path('run-output/603507-2026q2'))
+          print(result['status'])
+          for name, family in result['families'].items():
+              print(name, family['status'])
+          PY
+      - name: Retain original financial responses and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ftshare-financial-live-${{ github.run_id }}
+          path: run-output/
+          if-no-files-found: error
+          retention-days: 30
