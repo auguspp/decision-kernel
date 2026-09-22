@@ -167,7 +167,10 @@ def test_request_and_source_job_do_not_activate_old_research_or_add_secrets():
     assert s.once.sha(body) == plan['permission']['body_sha256']
     assert s.check_request(plan, lambda: AT) == plan
     workflow = (ROOT / '.github/workflows/stock-business-research.yml').read_text()
-    old_jobs, job = workflow.split('  prepare-declared-report-sources:', 1)
+    before, rest = workflow.split('\n  prepare-declared-report-sources:', 1)
+    job, after = rest.split('\n  deepseek-compatibility:', 1)
+    old_jobs = before + '\n  deepseek-compatibility:' + after
+    assert s.once.blob(old_jobs.encode()) == 'a11ac91386317f4d2868a3e9acf004daa857f284'
     assert s.LABEL not in old_jobs and 'secrets.' not in job
     assert "types: [labeled]" in old_jobs and 'schedule:' not in workflow
     assert "group: stock-business-first-v0" in old_jobs
