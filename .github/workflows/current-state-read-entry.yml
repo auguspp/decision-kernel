@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-industry-breadth]
     types: [requested, completed]
     branches: [main]
 
@@ -42,6 +42,11 @@ jobs:
         github.event.workflow_run.run_attempt == 1 &&
         github.event.action == 'completed' &&
         github.event.workflow_run.event == 'workflow_run') ||
+       (github.event.workflow_run.name == 'radar-industry-breadth' &&
+        github.event.workflow_run.path == '.github/workflows/radar-industry-breadth.yml' &&
+        github.event.workflow_run.run_attempt == 1 &&
+        github.event.action == 'completed' &&
+        github.event.workflow_run.event == 'workflow_run') ||
        (github.event.workflow_run.name != 'kernel-tests' &&
         github.event.workflow_run.name != 'saved-disclosure-research' &&
         github.event.workflow_run.name != 'stock-business-research' &&
@@ -78,6 +83,7 @@ jobs:
           --include-concept-discovery
           --include-concept-detail
           --include-external-radar
+          --include-industry-breadth
           --include-daily-news
           --include-reviewed-questions
           --publish
