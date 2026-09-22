@@ -1,0 +1,66 @@
+name: provider-request-correction
+on:
+  push:
+    branches: [work/ftshare-cnequity-verification-20260922]
+    paths: [.github/workflows/provider-request-correction.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: e460c601835341466392c0667fcf26f0d82e231e
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install original runtime and explicitly pinned CNEquity
+        run: python -m pip install -e '.[feeds,documents,research-api]' 'cnequity @ git+https://github.com/rootSunc/CNEquity.git@1650e384a3fd1f67a70144a489acc91432f1df27'
+      - name: Retain explicit producer parameter correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir evidence
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('src/decision_kernel/runtime/ftshare_market_inputs.py')
+          s=p.read_text()
+          for old,new in [('"adjust_kind": "None"','"adjust_kind": "none"'),('"start_date": start, "end_date": end','"start_date": a.strftime("%Y%m%d"), "end_date": b.strftime("%Y%m%d")')]:
+              assert s.count(old)==1
+              s=s.replace(old,new)
+          p.write_text(s)
+          PY
+          git diff -- src/decision_kernel/runtime/ftshare_market_inputs.py > evidence/producer-parameter-correction.patch
+          git rev-parse HEAD > evidence/base-code.sha
+          python -m pip list --format=json > evidence/packages.json
+          printf 'workflow_sha=%s\nrun_id=%s\nattempt=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > evidence/run.txt
+      - name: Seven corrected data requests only, no successful family repeated
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from decision_kernel.runtime import ftshare_market_inputs as m
+          from decision_kernel.runtime.ftshare_financial import raw_json
+          from decision_kernel.runtime import cnequity_bridge as c
+          c.native()
+          specs=[('stock_bars',t) for t in ['603507.SH','002285.SZ','000560.SZ','002792.SZ','688205.SH','301155.SZ']]+[('concept_bars','BK1024')]
+          out={}
+          for kind,ident in specs:
+              p=Path('evidence/corrections')/kind/ident
+              saved=m.capture(kind=kind,identity=ident,start='2026-09-18',end='2026-09-21',output=p)
+              out[kind+'/'+ident]={'status':saved['status'],'requests':len(saved['requests'])}
+          Path('evidence/correction-summary.json').write_bytes(raw_json(out))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: provider-corrected-inputs-${{ github.run_id }}
+          path: evidence/
+          retention-days: 30
+          if-no-files-found: error
