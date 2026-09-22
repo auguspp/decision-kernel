@@ -90,8 +90,9 @@ def test_exact_security_overlap_retains_names_and_opposite_windows():
     # This composition test supplies a separately validated source projection.
     institution['projection_hash'] = canonical_hash(institution['projection'])
     p = compose(args)['projection']; row = p['companies'][0]
-    assert p['coverage']['distinct_companies'] == 5 and row['name_status'] == 'SOURCE_NAMES_DIFFER_NOT_RESOLVED'
+    assert p['coverage']['distinct_companies'] == 5 and p['coverage']['overlap_companies'] == 1
     assert len(row['origins']) == 2 and len(row['source_names']) == 2
+    assert row['name_status'] == 'SOURCE_NAMES_DIFFER_NOT_RESOLVED'
     assert [v['institution_net_cny'] for v in row['origins'][1]['observations']] == ['1250000.125', '-3000000.50']
     assert any('不相加' in q for q in row['questions'])
 
@@ -210,7 +211,7 @@ def test_actual_capture_replay_and_existing_collector_retention_join(tmp_path):
 
 @pytest.mark.parametrize('kind', ['failed', 'running', 'expired', 'digest', 'wrong_sha', 'rerun', 'future', 'foreign'])
 def test_latest_invalid_attempt_never_falls_back_and_sector_survives(tmp_path, kind):
-    api, run, artifact = source_fixture(tmp_path); col = collector(api, tmp_path)
+    api, run, artifact = source_fixture(tmp_path)
     listing = api.responses['actions/workflows/radar-institutional-source.yml/runs?branch=main&per_page=20']
     listing['workflow_runs'].append(dict(run, id=19, created_at='2026-09-17T20:00:00Z'))
     listing['total_count'] = 2
@@ -252,7 +253,7 @@ def test_no_new_scheduler_or_secret_and_manual_source_keeps_original_boundary():
     source_workflow = Path('.github/workflows/radar-institutional-source.yml').read_text()
     publisher = Path('.github/workflows/current-state-read-entry.yml').read_text()
     assert 'schedule:' not in source_workflow and 'workflow_run:' not in source_workflow
-    assert 'radar-institutional-source, radar-newsnow-daily, radar-industry-breadth]' in publisher and '--include-radar-discovery' in publisher
+    assert 'radar-institutional-source, radar-newsnow-daily]' in publisher and '--include-radar-discovery' in publisher
     assert 'schedule:' not in publisher and 'workflow_dispatch:' not in publisher
     assert 'secrets.' not in publisher and 'ref: ${{ github.sha }}' in publisher
 

@@ -12,7 +12,7 @@ def text():
 
 def test_watch_reuses_existing_inbox_dispatch_secret_and_job_not_a_new_scheduler():
     value = text()
-    trigger = value.split("on:\n", 1)[1].split("\npermissions:\n", 1)[0]
+    trigger = value.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
     assert "workflow_dispatch:" in trigger
     assert "schedule:" not in trigger and "cron:" not in trigger
     assert "HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}" in value
@@ -45,7 +45,7 @@ def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_wa
     # #427 institutional and the approved concept saved-source refresh extend
     # the original sources. P1-3/4 add explicit native News/Industry listeners;
     # no arbitrary workflow or new clock.
-    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-industry-breadth]" in value
+    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-industry-breadth, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]" in value
     assert value.count("    workflows:") == 1
     assert "types: [requested, completed]" in value
     assert "branches: [main]" in value
