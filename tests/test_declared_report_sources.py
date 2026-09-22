@@ -132,6 +132,9 @@ def test_failures_do_not_spend_model_or_reset_history(tmp_path, monkeypatch, fau
         assert not calls and not api.writes
     if fault in {'prepare_lost', 'pdf_lost'}:
         assert result['mutation_uncertain'] and len(calls) == (0 if fault == 'prepare_lost' else 1)
+        if fault == 'pdf_lost':
+            assert result['requests'][0]['sha256'] == s.once.sha(raw)
+            assert result['reports'][0]['routes'][0]['pdf_sha256'] == s.once.sha(raw)
     if fault in {'wrong_issuer', 'wrong_period', 'parse_failure'}:
         assert api.versions[api.head][old.PREFIX + '2026H1-cninfo-source.pdf'] == raw
     assert not any('/candidates/' in name for name in api.writes)
@@ -170,3 +173,59 @@ def test_request_and_source_job_do_not_activate_old_research_or_add_secrets():
     assert "group: stock-business-first-v0" in old_jobs
     assert 'declared-report-output/' in job and "[documents,feeds]" in job
     assert 'research-api' not in job and "github.event.issue.number == 297" in job
+
+
+@pytest.mark.parametrize('scheme', ['http:', ''])
+def test_real_page_link_may_be_protocol_relative_or_same_host_https_upgraded(monkeypatch, scheme):
+    plan, _, _ = setup(monkeypatch)
+    link = scheme + '//file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-8/2026-08-26/12535637.PDF'
+    actual = s.sina_locator(html(plan, link), plan['reports'][0], plan['subject'], plan['issuer_name'])
+    assert actual == ('https:' + link.split(':', 1)[1] if scheme else 'https:' + link)
+
+
+@pytest.mark.parametrize('partial', [False, True])
+def test_original_requests_boundary_is_credential_free_bounded_and_non_retrying(monkeypatch, partial):
+    calls = []
+    url = 'https://static.cninfo.com.cn/finalpage/2026-08-26/1234567890.PDF'
+    class Response:
+        status_code = 200
+        headers = {'Content-Length': '3'}
+        def __init__(self): self.url = url
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def iter_content(self, size):
+            yield b'abc'
+            if partial: raise requests.exceptions.ReadTimeout('synthetic')
+    class Session:
+        trust_env = True
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def get(self, target, **kw):
+            calls.append((target, kw))
+            assert self.trust_env is False and target == url
+            assert kw == {'timeout': (15, 60), 'stream': True, 'allow_redirects': False,
+                          'headers': {'Accept-Encoding': 'identity'}}
+            return Response()
+    monkeypatch.setattr(s.requests, 'Session', Session)
+    if partial:
+        with pytest.raises(s.SourceFetchError) as caught: s.public_get(url, 100)
+        assert caught.value.body == b'abc' and caught.value.status == 200
+    else:
+        assert s.public_get(url, 100) == (200, b'abc')
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize('field', ['GITHUB_REPOSITORY', 'GITHUB_REF', 'GITHUB_SHA', 'GITHUB_WORKFLOW',
+    'GITHUB_RUN_ATTEMPT', 'GITHUB_RUN_ID', 'GITHUB_EVENT_NAME', 'SOURCE_ACTION', 'SOURCE_ISSUE',
+    'SOURCE_LABEL', 'SOURCE_SENDER', 'SOURCE_IS_PR'])
+def test_native_source_identity_rejected_before_any_git_or_public_io(tmp_path, monkeypatch, field):
+    env = {'GITHUB_REPOSITORY': s.once.REPO, 'GITHUB_REF': 'refs/heads/main', 'GITHUB_SHA': CODE,
+        'GITHUB_WORKFLOW': 'stock-business-research', 'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_RUN_ID': '42',
+        'GITHUB_EVENT_NAME': 'issues', 'SOURCE_ACTION': 'labeled', 'SOURCE_ISSUE': '297',
+        'SOURCE_LABEL': s.LABEL, 'SOURCE_SENDER': 'auguspp', 'SOURCE_IS_PR': 'false'}
+    for key, value in env.items(): monkeypatch.setenv(key, value)
+    monkeypatch.setenv(field, 'wrong')
+    def forbid(*args, **kw): raise AssertionError('rejected event reached Git')
+    monkeypatch.setattr(s, 'GitHubAPI', forbid)
+    with pytest.raises(ValueError): s.main(['--code-commit', CODE, '--output', str(tmp_path/'out')])
+    assert not (tmp_path/'out').exists()
