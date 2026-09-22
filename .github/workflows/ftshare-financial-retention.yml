@@ -1,0 +1,111 @@
+name: ftshare-financial-retention
+on:
+  push:
+    branches: [work/ftshare-financial-verification-20260922]
+    paths: [.github/workflows/ftshare-financial-retention.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  retain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: a4e0e4d7e2f40d021183753e68c07676f141eea5
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing transport extra
+        run: python -m pip install -e '.[feeds]'
+      - name: Restore exact saved responses and retain through existing Git objects
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, json, os, subprocess
+          from pathlib import Path
+          from urllib.error import URLError
+          from decision_kernel.runtime import current_state as reading
+          from decision_kernel.runtime.current_state_delivery import GitHubAPI
+          from decision_kernel.runtime import ftshare_financial as f
+          from decision_kernel.runtime.stock_research_sources import prepare_financial_context
+          code='a4e0e4d7e2f40d021183753e68c07676f141eea5'
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==code
+          api=GitHubAPI(os.environ['GH_TOKEN'],max_calls=60)
+          run=api.get('actions/runs/35674021253')
+          assert run['head_sha']=='b13e66ef4be28310488d6707b8c2a7aa80fef6ed'
+          assert run['head_branch']=='work/ftshare-financial-verification-20260922'
+          assert run['run_attempt']==1 and run['status']=='completed' and run['conclusion']=='success'
+          artifact=api.get('actions/artifacts/10672795706')
+          assert artifact['digest']=='sha256:3785dcef6293304f52abad8d5c275f703b1e846cf674bc382e2012935a60062a'
+          original=reading.unpack_archive(api.archive(artifact),artifact,run)
+          prefix='603507-2026q2/'
+          saved={k[len(prefix):]:v for k,v in original.items() if k.startswith(prefix)}
+          expected={'financial-context.json'}|{n+'/capture.json' for n in f.ROUTES}|{n+'/page-1.json' for n in ['income','cashflow','forecast','express']}
+          assert set(saved)==expected and len(saved)==10
+          original_context=json.loads(saved['financial-context.json'])
+          captures={n:json.loads(saved[n+'/capture.json']) for n in f.ROUTES}
+          times=[original_context['started_at']]
+          for family,c in captures.items():
+              times.append(c['started_at'])
+              for e in c['requests']:
+                  times.append(e['started_at'])
+                  if 'retrieved_at' in e:times.append(e['retrieved_at'])
+              times.append(c['finished_at'])
+          times.append(original_context['finished_at'])
+          times=iter(times)
+          def offline(family,params):
+              c=captures[family];e=c['requests'][params['page']-1]
+              assert params==e['parameters']
+              if c['status']=='TRANSPORT_FAILURE' and 'path' not in e:
+                  raise URLError('retained failure, no network request')
+              raw=saved[family+'/'+e['path']]
+              assert len(raw)==e['bytes'] and reading.sha256(raw)==e['sha256']
+              return e['http_status'],raw
+          output=Path('run-output/replayed-context')
+          result=prepare_financial_context(ticker='603507.SH',year=2026,report_type='q2',
+              output=output,fetch=offline,clock=lambda:next(times))
+          assert next(times,None) is None and result['status']=='PARTIAL_FINANCIAL_CONTEXT'
+          assert result['families']['balance']['capture_status']=='TRANSPORT_FAILURE'
+          assert result['families']['express']['status']=='TARGET_PERIOD_NOT_RETURNED'
+          files={'original/'+k:v for k,v in saved.items()}
+          for name in ['financial-context.json','financial-context.md']:
+              files['projection/'+name]=(output/name).read_bytes()
+          metadata={'kind':'RETAINED_FTSHARE_SECONDARY_INPUT_NOT_RESEARCH','live_run':35674021253,
+              'artifact_id':10672795706,'artifact_digest':artifact['digest'],
+              'live_code':'9d2b4dd7a861c9e40e92cda762e0a9ace553e243','projection_code':code,
+              'retained_at':f.discovery.now(),'provider_calls_this_run':0,'model_calls_this_run':0,
+              'original_failure_preserved':True,'historical_clocks_not_rewritten':True,
+              'files':{n:{'bytes':len(b),'sha256':reading.sha256(b),'git_blob':reading.blob_sha(b)} for n,b in files.items()}}
+          files['retention.json']=f.raw_json(metadata)
+          base='6d72b6da467bee79053730a87d3ec33d6fd515fe'
+          base_tree=api.get('git/commits/'+base)['tree']['sha']
+          root='research_runs/ftshare/603507-2026q2-20260922/'
+          entries=[]
+          for name,raw in sorted(files.items()):
+              blob=api.write('git/blobs',{'content':base64.b64encode(raw).decode(),'encoding':'base64'})
+              assert blob['sha']==reading.blob_sha(raw)
+              entries.append({'path':root+name,'mode':'100644','type':'blob','sha':blob['sha']})
+          tree=api.write('git/trees',{'base_tree':base_tree,'tree':entries})
+          commit=api.write('git/commits',{'message':'retain: exact FTShare financial inputs and offline context; balance failure preserved',
+              'tree':tree['sha'],'parents':[base]})
+          for name,raw in files.items():
+              assert api.file(root+name,commit['sha'])==raw
+          receipt={'commit':commit['sha'],'tree':tree['sha'],'parent':base,'root':root,
+              'files':metadata['files'],'readback':'ALL_13_FILES_BYTE_EQUAL',
+              'provider_calls':0,'model_calls':0,'api_calls':api.calls}
+          Path('run-output/retention-receipt.json').write_bytes(f.raw_json(receipt))
+          print(json.dumps({'commit':commit['sha'],'status':'ALL_13_FILES_BYTE_EQUAL','provider_calls':0}))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ftshare-financial-retention-${{ github.run_id }}
+          path: run-output/
+          if-no-files-found: error
+          retention-days: 30
