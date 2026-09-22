@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+import sys
 import os
 import time
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
-from datetime import date, datetime, timedelta
+from contextvars import ContextVar
+from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 from threading import Lock
 from typing import Any
@@ -158,6 +161,96 @@ def _sector_request_spacing() -> Iterator[None]:
             _sector_request_finished_at = time.monotonic()
 
 
+# #513: explicit Inbox-only recovery, never a global transport retry policy.
+_calendar_recovery: ContextVar[dict | None] = ContextVar("inbox_calendar_recovery", default=None)
+CALENDAR_RETRY_BACKOFF_SECONDS = 1.0
+CALENDAR_RETRY_START_BUDGET_SECONDS = 30.0
+
+
+@contextmanager
+def inbox_calendar_timeout_recovery() -> Iterator[None]:
+    """One batch scope; nested callers share rather than reset its failure latch."""
+    if _calendar_recovery.get() is not None:
+        yield
+        return
+    token = _calendar_recovery.set({})
+    try:
+        yield
+    finally:
+        _calendar_recovery.reset(token)
+
+
+def _calendar_timeout_cause(exc: BaseException) -> bool:
+    # The native wrapper preserves the exception object. Never classify by text.
+    cause = exc.__cause__ if isinstance(exc, HithinkRuntimeError) else None
+    return isinstance(cause, TimeoutError) or (
+        isinstance(cause, URLError) and not isinstance(cause, HTTPError)
+        and isinstance(cause.reason, TimeoutError)
+    )
+
+
+def _calendar_attempt_log(record: dict) -> None:
+    # Only locally constructed fields, not credentials or upstream error strings.
+    # GitHub owns durable run/job log retention; this is not Market/Research state.
+    print("HITHINK_CALENDAR_ATTEMPT " + json.dumps(record, sort_keys=True),
+          file=sys.stderr, flush=True)
+
+
+def _recover_inbox_calendar(*, api_key: str, shanghai_date: date,
+                            timeout_seconds: float, scope: dict) -> Mapping[str, Any]:
+    if "failure" in scope:
+        raise HithinkRuntimeError("Inbox calendar dependency failed; no further attempt in this batch") from scope["failure"]
+    if (type(timeout_seconds) not in (int, float) or not math.isfinite(timeout_seconds)
+            or not 0 < timeout_seconds <= 10):
+        raise HithinkRuntimeError("Inbox calendar recovery timeout must be finite and in (0, 10]")
+    if os.environ.get(HITHINK_SECTOR_PACING_ENV, ""):
+        raise HithinkRuntimeError("Inbox calendar recovery cannot change Sector pacing semantics")
+    identity = (api_key, shanghai_date, timeout_seconds)  # In-memory only; never logged.
+    if "identity" in scope and scope["identity"] != identity:
+        raise HithinkRuntimeError("Inbox calendar recovery identity changed within the batch")
+    scope["identity"] = identity
+    started = time.monotonic()
+    deadline = started + CALENDAR_RETRY_START_BUDGET_SECONDS
+    for attempt in (1, 2):
+        budget = min(timeout_seconds, deadline - time.monotonic())
+        if budget <= 0:
+            raise HithinkRuntimeError("Inbox calendar retry start budget exhausted") from scope.get("failure")
+        record = {"policy": "inbox-calendar-timeout-once-v1", "attempt": attempt,
+            "max_attempts": 2, "provider": "HITHINK", "method": "GET",
+            "source_url": HITHINK_BASE_URL + HITHINK_CALENDAR_PATH,
+            "requested_shanghai_date": shanghai_date.isoformat(),
+            "requested_at": datetime.now(timezone.utc).isoformat(),
+            "timeout_ms": round(budget * 1000), "status": "REQUEST_STARTED",
+            "fallback_provider": None, "investment_authority": "NONE"}
+        _calendar_attempt_log(record)
+        try:
+            envelope = _request_hithink_json(api_key=api_key, path=HITHINK_CALENDAR_PATH,
+                                            params={}, timeout_seconds=budget)
+            sessions = normalize_hithink_calendar(envelope)
+        except (HithinkRuntimeError, ValueError) as exc:
+            scope["failure"] = exc
+            retry = (attempt == 1 and _calendar_timeout_cause(exc)
+                     and deadline - time.monotonic() > CALENDAR_RETRY_BACKOFF_SECONDS)
+            _calendar_attempt_log({**record, "finished_at": datetime.now(timezone.utc).isoformat(),
+                "status": "TIMEOUT" if _calendar_timeout_cause(exc) else "NON_RETRYABLE_FAILURE",
+                "error_type": type(exc).__name__, "retry_scheduled": retry,
+                "backoff_ms": 1000 if retry else 0})
+            if not retry:
+                raise
+            time.sleep(CALENDAR_RETRY_BACKOFF_SECONDS)
+        else:
+            scope.pop("failure", None)
+            _calendar_attempt_log({**record, "finished_at": datetime.now(timezone.utc).isoformat(),
+                "status": "NORMALIZED_CALENDAR_NOT_PRICE_QUALIFICATION", "retry_scheduled": False,
+                "session_count": len(sessions), "first_session": sessions[0].isoformat(),
+                "last_session": sessions[-1].isoformat(),
+                "normalized_sessions_sha256": hashlib.sha256(
+                    "\n".join(d.isoformat() for d in sessions).encode()).hexdigest(),
+                "digest_representation": "NORMALIZED_DATE_LIST_NOT_RAW_HTTP_BYTES"})
+            return envelope
+    raise AssertionError("calendar attempt loop exhausted without a terminal result")
+
+
 @lru_cache(maxsize=8)
 def _request_hithink_calendar(
     *,
@@ -173,6 +266,10 @@ def _request_hithink_calendar(
     are never cached. Exceptions are not cached by ``lru_cache``.
     """
 
+    scope = _calendar_recovery.get()
+    if scope is not None:
+        return _recover_inbox_calendar(api_key=api_key, shanghai_date=shanghai_date,
+                                      timeout_seconds=timeout_seconds, scope=scope)
     del shanghai_date
     return _request_hithink_json(
         api_key=api_key,
