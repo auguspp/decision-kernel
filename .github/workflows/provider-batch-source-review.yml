@@ -1,0 +1,33 @@
+name: provider-batch-source-review
+on:
+  push:
+    branches: [work/provider-batch-20260922]
+    paths: [.github/workflows/provider-batch-source-review.yml]
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: bea775c9a6c42ea6363d0b27eab58cf37b053f98
+          persist-credentials: false
+      - name: Export source only; no provider or model requests
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/review"
+          git archive HEAD > "$RUNNER_TEMP/review/kernel.tar"
+          git clone --depth 1 https://github.com/rootSunc/CNEquity.git "$RUNNER_TEMP/cne"
+          test "$(git -C "$RUNNER_TEMP/cne" rev-parse HEAD)" = 1650e384a3fd1f67a70144a489acc91432f1df27
+          git -C "$RUNNER_TEMP/cne" archive HEAD > "$RUNNER_TEMP/review/cnequity.tar"
+          git clone --depth 1 https://github.com/FTShare-Lab/FTShare-skill.git "$RUNNER_TEMP/ftskill"
+          git -C "$RUNNER_TEMP/ftskill" rev-parse HEAD > "$RUNNER_TEMP/review/ftshare-skill-sha.txt"
+          git -C "$RUNNER_TEMP/ftskill" archive HEAD > "$RUNNER_TEMP/review/ftshare-skill.tar"
+          sha256sum "$RUNNER_TEMP/review/"* > "$RUNNER_TEMP/review/SHA256SUMS"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: provider-source-review-${{ github.run_id }}
+          path: ${{ runner.temp }}/review/
+          retention-days: 30
