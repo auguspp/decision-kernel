@@ -270,3 +270,98 @@ def recheck(context, *, api, code_commit, clock):
             if page["method"] == "AI_VISUAL_READING":
                 once.require(load(value["pdf_sha256"], page["page_number"]) ==
                     (page["review"], page["review_source"]), "Stock main visual reading changed")
+
+
+def prepare_report_discovery(*, ticker, announcement_date, period, issuer_name, output,
+                             discover=None, fetch=None, clock=once.now):
+    """FTShare lead -> original CNINFO identity/locator; no PDF/model/custody.
+
+    Separate from capture's legacy all-post-report contract. The caller declares
+    one reporting period/date. Neither a provider timestamp without a timezone
+    nor url_hash is promoted to primary evidence or a guessed PDF URL.
+    """
+    from . import ftshare_discovery as ftshare
+    once.require(isinstance(period, str) and re.fullmatch(r"20[0-9]{2}(H1|FY)", period),
+                 "report discovery period invalid")
+    once.require(isinstance(issuer_name, str) and bool(issuer_name.strip()), "report discovery issuer missing")
+    once.require(type(announcement_date) is date, "report discovery date invalid")
+    end = date(int(period[:4]), 6, 30) if period.endswith("H1") else date(int(period[:4]), 12, 31)
+    once.require(end <= announcement_date, "report discovery period follows publication")
+    once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents),
+                 "unsafe report discovery output")
+    output.mkdir(parents=True, exist_ok=False)
+    result = {"kind": "REPORT_DISCOVERY_NOT_CUSTODY", "status": "INCOMPLETE",
+              "ticker": ticker, "period": period, "started_at": clock(),
+              "source_custody": "NOT_ESTABLISHED", "research_execution_allowed": False,
+              "model_calls": 0, "pdf_calls": 0, "official_queries": [], **reading.AUTHORITY}
+    try:
+        discovered = (discover or ftshare.discover)(ticker=ticker, announcement_date=announcement_date,
+                                                  output=output / "ftshare", clock=clock)
+        result["discovery_status"] = discovered["status"]
+        once.require(discovered["status"] == "COMPLETE", "FTShare discovery not complete")
+        candidates = []
+        for row in discovered["announcements"]:
+            match = report_match(row["title"], issuer_name)
+            if match and match[1] == period[:4] and ((match[2] == "半年度") == period.endswith("H1")):
+                candidates.append(row)
+        once.require(len(candidates) == 1, "full report discovery missing or ambiguous")
+        lead = candidates[0]
+        result["ftshare_lead"] = lead
+        def query(method, url, form=None):
+            once.require(url in {cninfo.CNINFO_STOCK_MAP_URL, cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL}
+                         and len(result["official_queries"]) < 48, "official discovery query scope exceeded")
+            event = {"method": method, "url": url, "form": form, "started_at": clock(),
+                     "representation": "DECODED_RETURN_NOT_WIRE_BYTES", "status": "FAILED"}
+            result["official_queries"].append(event)
+            try:
+                body = cninfo._request_json(url=url, method=method, form=form, timeout_seconds=20)
+                raw = once.raw(body)
+                once.require(len(raw) <= 8 * 1024 * 1024, "official discovery response too large")
+                name = f"cninfo-query-{len(result['official_queries'])}.json"
+                (output / name).write_bytes(raw)
+                event.update(status="SUCCEEDED", path=name, sha256=once.sha(raw), bytes=len(raw))
+                return body
+            finally:
+                event["finished_at"] = clock()
+        batch = (fetch or cninfo.fetch_cninfo_disclosures)(stock_code=ticker,
+            start_date=announcement_date, end_date=announcement_date,
+            get_json=lambda url: query("GET", url), post_json=lambda url, form: query("POST", url, form))
+        matches = [r for r in batch.announcements if r.announcement_id == lead["announcement_id"]]
+        once.require(batch.stock_code == ticker and batch.start_date == batch.end_date == announcement_date
+                     and len(matches) == 1, "official report identity differs")
+        row = matches[0]
+        once.require(row.stock_code == ticker and row.org_id == batch.org_id and row.title == lead["title"]
+                     and row.published_at is not None and row.published_at <= reading.clock(clock())
+                     and row.published_at.astimezone(SHANGHAI_TZ).date() == announcement_date,
+                     "official report identity or time differs")
+        result.update(status="OFFICIAL_REPORT_LOCATED_NOT_ACQUIRED",
+            official_report={**asdict(row), "published_at": row.published_at.isoformat()},
+            provider_time_relation="NOT_EQUATED_WITH_CNINFO_CLOCK")
+        return result
+    except Exception as exc:
+        result.update(status="DISCOVERY_UNAVAILABLE", error_type=type(exc).__name__)
+        if isinstance(exc, once.TrialError):
+            result["error_code"] = exc.code
+        return result
+    finally:
+        result["finished_at"] = clock()
+        (output / "report-discovery.json").write_bytes(once.raw(result))
+
+
+def main(argv=None):
+    """Explicit operator source-discovery entry; no defaults or recurring calls."""
+    import argparse
+    parser = argparse.ArgumentParser(description="Locate one report through FTShare and original CNINFO; no PDF or Research")
+    parser.add_argument("--ticker", required=True)
+    parser.add_argument("--announcement-date", required=True, type=date.fromisoformat)
+    parser.add_argument("--period", required=True)
+    parser.add_argument("--issuer-name", required=True)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args(argv)
+    result = prepare_report_discovery(**vars(args))
+    print(result["status"])
+    return 0 if result["status"] == "OFFICIAL_REPORT_LOCATED_NOT_ACQUIRED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
