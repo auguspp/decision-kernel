@@ -1,9 +1,9 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "ce885d3fc0bf7f5c4c64f083afedcce9e22e8b46fa3c11c033bc33e34850f9b3",
+    "base_reading_hash": "cdafaddcd10aeac6e62d7290416b8382b410cf9b92a224a2d681d04f54974d7a",
     "economic_review": "NOT_PERFORMED",
-    "generated_at": "2026-09-22T11:17:11.588843+00:00",
+    "generated_at": "2026-09-22T12:17:04.510409+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6744,37 +6744,37 @@
       },
       "native": {
         "archive": {
-          "artifact_id": 10688449279,
-          "artifact_name": "industry-breadth-35715869823-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35715869823/artifacts/10688449279",
-          "bytes": 10557,
-          "expires_at": "2026-10-22T10:25:28Z",
-          "git_blob": "a8dbfa49a9d925706ba552a600ee69552c596242",
+          "artifact_id": 10693013951,
+          "artifact_name": "industry-breadth-35726184042-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35726184042/artifacts/10693013951",
+          "bytes": 10520,
+          "expires_at": "2026-10-22T12:16:34Z",
+          "git_blob": "b82193ed65defdeaeead97b7f0e29d1cde294151",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-09-22T10:25:13Z",
-            "event": "workflow_run",
-            "head_sha": "5027b3e122ff070b9ddabd069421995fa714c3bf",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35715869823",
-            "id": 35715869823,
+            "created_at": "2026-09-22T12:16:16Z",
+            "event": "workflow_dispatch",
+            "head_sha": "9b2dbe5f95dc5678a7734c3660c32e635a9724fa",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35726184042",
+            "id": 35726184042,
             "operation": null,
             "path": ".github/workflows/radar-industry-breadth.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-09-22T10:25:13Z",
+            "run_started_at": "2026-09-22T12:16:16Z",
             "status": "completed",
-            "updated_at": "2026-09-22T10:25:33Z"
+            "updated_at": "2026-09-22T12:16:43Z"
           },
-          "read_path": "sources/artifacts/9089c8a41001939213ad6fafed94bb92bfcefa2e0e092827f1ffce1c4d47e87e.zip",
+          "read_path": "sources/artifacts/e29facb5bc0df3a736067f27f037e172e2c1ef7d8bb0a58c04c72235c2bd35c0.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "9089c8a41001939213ad6fafed94bb92bfcefa2e0e092827f1ffce1c4d47e87e"
+          "sha256": "e29facb5bc0df3a736067f27f037e172e2c1ef7d8bb0a58c04c72235c2bd35c0"
         },
         "capture": {
           "attempted_requests": 1,
           "automatic_admission": false,
-          "capture_hash": "b5dc66008f0361a6b24017def17323c38390d58a9b6ae270011d4dd7b01d2bb2",
+          "capture_hash": "a1c6b2d538fdf5e1bec4b08887a85d1a8bc3b4659be600be016e2bdd9947de63",
           "error_type": null,
-          "finished_at": "2026-09-22T10:25:28.427925+00:00",
+          "finished_at": "2026-09-22T12:16:33.885136+00:00",
           "http_status": 200,
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
@@ -6784,11 +6784,11 @@
           "receipt": {
             "params": {},
             "path": "/api/futures/basis/main-continuous-latest",
-            "received_at": "2026-09-22T10:25:28.422331+00:00",
+            "received_at": "2026-09-22T12:16:33.879363+00:00",
             "representation": "RETAINED_HTTP_BODY",
-            "requested_at": "2026-09-22T10:25:26.308085+00:00",
-            "response_bytes": 67214,
-            "response_sha256": "557547a1f2e9c371a7f1b3423638d401b4ae86375ede839c3ac97ebd9e2d0541",
+            "requested_at": "2026-09-22T12:16:31.615758+00:00",
+            "response_bytes": 67224,
+            "response_sha256": "e75992feb0250f837eb76467bec3e6d4dec1c9e45d9f23befdb4719fd105db13",
             "status": "CAPTURED_HTTP_RESPONSE"
           },
           "research_authority": "NONE",
@@ -6797,12 +6797,12 @@
           "version": "industry-breadth-snapshot-v1",
           "workflow": {
             "attempt": 1,
-            "code_commit": "5027b3e122ff070b9ddabd069421995fa714c3bf",
-            "event": "workflow_run",
+            "code_commit": "9b2dbe5f95dc5678a7734c3660c32e635a9724fa",
+            "event": "workflow_dispatch",
             "ref": "refs/heads/main",
             "repository": "auguspp/decision-kernel",
-            "run_id": 35715869823,
-            "trigger_run_id": 35714758428,
+            "run_id": 35726184042,
+            "trigger_run_id": null,
             "workflow": ".github/workflows/radar-industry-breadth.yml"
           }
         },
@@ -6810,17 +6810,17 @@
         "capture_age_status": "RECENT_CAPTURE",
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-09-22T10:25:13Z",
-          "event": "workflow_run",
-          "head_sha": "5027b3e122ff070b9ddabd069421995fa714c3bf",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35715869823",
-          "id": 35715869823,
+          "created_at": "2026-09-22T12:16:16Z",
+          "event": "workflow_dispatch",
+          "head_sha": "9b2dbe5f95dc5678a7734c3660c32e635a9724fa",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35726184042",
+          "id": 35726184042,
           "operation": null,
           "path": ".github/workflows/radar-industry-breadth.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-22T10:25:13Z",
+          "run_started_at": "2026-09-22T12:16:16Z",
           "status": "completed",
-          "updated_at": "2026-09-22T10:25:33Z"
+          "updated_at": "2026-09-22T12:16:43Z"
         },
         "snapshot": {
           "projection": {
@@ -6860,30 +6860,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "116.40",
-                  "average_settle_basis": "116.07",
-                  "close_basis": 133,
-                  "close_basis_rate": "4.09",
-                  "close_price": 3117,
-                  "converted_spot_price": 3250,
+                  "average_close_basis": "116.61",
+                  "average_settle_basis": "116.26",
+                  "close_basis": 146,
+                  "close_basis_rate": "4.48",
+                  "close_price": 3114,
+                  "converted_spot_price": 3260,
                   "default_value": "Y",
                   "name": "螺纹钢主连",
                   "reference_site": "上海",
-                  "settle_basis": 142,
-                  "settle_basis_rate": "4.37",
-                  "settle_price": 3108,
+                  "settle_basis": 139,
+                  "settle_basis_rate": "4.26",
+                  "settle_price": 3121,
                   "spot_indicator_id": "20868",
-                  "spot_price": 3250,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": 3260,
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "RBZL.SHF",
                   "ticker": "rb9999",
-                  "updated_at": "2026.09.21 19:52:12",
+                  "updated_at": "2026.09.22 19:32:35",
                   "variety_name": "螺纹钢"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 0,
-                "spot_age_days_at_capture": 1,
-                "version_id": "f3f6820e1dfd79ea8be672604b819f792df8f668debd57060c3046a147ba9e72"
+                "spot_age_days_at_capture": 0,
+                "version_id": "9796a22da6e01c9ac03fe00768d057cc1620909c5315697e366931956b48ff2e"
               },
               {
                 "identity": {
@@ -6938,30 +6938,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "19.87",
-                  "average_settle_basis": "20.03",
-                  "close_basis": "-5.0",
-                  "close_basis_rate": "-0.70",
-                  "close_price": "715.0",
-                  "converted_spot_price": "710.0",
+                  "average_close_basis": "19.75",
+                  "average_settle_basis": "19.92",
+                  "close_basis": "-3.3",
+                  "close_basis_rate": "-0.47",
+                  "close_price": "708.0",
+                  "converted_spot_price": "704.7",
                   "default_value": "Y",
                   "name": "铁矿石主连",
                   "reference_site": "青岛港",
-                  "settle_basis": "-5.5",
-                  "settle_basis_rate": "-0.77",
-                  "settle_price": "715.5",
+                  "settle_basis": "-6.8",
+                  "settle_basis_rate": "-0.97",
+                  "settle_price": "711.5",
                   "spot_indicator_id": "2911136",
-                  "spot_price": "683.0",
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": "678.0",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "IZL.DCE",
                   "ticker": "i9999",
-                  "updated_at": "2026.09.21 21:20:12",
+                  "updated_at": "2026.09.22 19:05:58",
                   "variety_name": "铁矿石"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 2,
-                "spot_age_days_at_capture": 1,
-                "version_id": "3eacccca2d6bad6bf58aa193afa404d0c0c3faf69fb2c54110efa114dc635a69"
+                "spot_age_days_at_capture": 0,
+                "version_id": "9c1752eb5f25a29a77ee3b10daee7b655ce9bdf8e363245b7b3b21877833fcae"
               },
               {
                 "identity": {
@@ -6977,30 +6977,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "36.94",
-                  "average_settle_basis": "37.10",
-                  "close_basis": "12.2",
-                  "close_basis_rate": "1.68",
-                  "close_price": "715.0",
-                  "converted_spot_price": "727.2",
+                  "average_close_basis": "36.86",
+                  "average_settle_basis": "37.02",
+                  "close_basis": "12.8",
+                  "close_basis_rate": "1.77",
+                  "close_price": "708.0",
+                  "converted_spot_price": "720.8",
                   "default_value": "N",
                   "name": "铁矿石主连",
                   "reference_site": "曹妃甸港",
-                  "settle_basis": "11.7",
-                  "settle_basis_rate": "1.61",
-                  "settle_price": "715.5",
+                  "settle_basis": "9.3",
+                  "settle_basis_rate": "1.29",
+                  "settle_price": "711.5",
                   "spot_indicator_id": "2911091",
-                  "spot_price": "699.0",
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": "693.0",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "IZL.DCE",
                   "ticker": "i9999",
-                  "updated_at": "2026.09.21 20:50:36",
+                  "updated_at": "2026.09.22 19:05:58",
                   "variety_name": "铁矿石"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 3,
-                "spot_age_days_at_capture": 1,
-                "version_id": "a5a8716382818e0baa927f7c908a9efeaf3b434173de8ceb1ca4bc154ab056ec"
+                "spot_age_days_at_capture": 0,
+                "version_id": "9f19aca5b18854239557971dc7e020917243dc79ce35f52bb8139d9881ba19f7"
               },
               {
                 "identity": {
@@ -7016,30 +7016,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "163.54",
-                  "average_settle_basis": "162.80",
-                  "close_basis": 535,
-                  "close_basis_rate": "26.01",
-                  "close_price": 1523,
-                  "converted_spot_price": 2058,
+                  "average_close_basis": "165.53",
+                  "average_settle_basis": "164.79",
+                  "close_basis": "539.8",
+                  "close_basis_rate": "26.23",
+                  "close_price": "1518.5",
+                  "converted_spot_price": "2058.3",
                   "default_value": "Y",
                   "name": "焦煤主连",
                   "reference_site": "甘其毛都",
-                  "settle_basis": 543,
-                  "settle_basis_rate": "26.40",
-                  "settle_price": 1515,
+                  "settle_basis": "529.8",
+                  "settle_basis_rate": "25.74",
+                  "settle_price": "1528.5",
                   "spot_indicator_id": "4085268",
-                  "spot_price": 1977,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": "1977.0",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "JMZL.DCE",
                   "ticker": "jm9999",
-                  "updated_at": "2026.09.21 18:10:30",
+                  "updated_at": "2026.09.22 18:10:30",
                   "variety_name": "焦煤"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 4,
-                "spot_age_days_at_capture": 1,
-                "version_id": "faeb278e00ddb00db36ab4c1bae5d9259a469d758e7e5e39fb5f47989648b673"
+                "spot_age_days_at_capture": 0,
+                "version_id": "c5ede806e1feadf3b440e418bd79895b88cfa4982b7c7c08402ea3f3b2c11b31"
               },
               {
                 "identity": {
@@ -7055,8 +7055,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-166.41",
-                  "average_settle_basis": "-167.64",
+                  "average_close_basis": "-164.48",
+                  "average_settle_basis": "-165.68",
                   "close_basis": 206,
                   "close_basis_rate": "9.41",
                   "close_price": 1984,
@@ -7078,7 +7078,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 5,
                 "spot_age_days_at_capture": 0,
-                "version_id": "8d219a7173abc91d7aa3990026f393ace9a57d2c12a9f721ab36667fc955fbb5"
+                "version_id": "3e2cf6845fba500be3a014636560b7ab2fe45133ccd703ef1c88e2fd605435f4"
               },
               {
                 "identity": {
@@ -7094,8 +7094,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-219.61",
-                  "average_settle_basis": "-220.80",
+                  "average_close_basis": "-218.79",
+                  "average_settle_basis": "-219.95",
                   "close_basis": -54,
                   "close_basis_rate": "-2.80",
                   "close_price": 1984,
@@ -7117,7 +7117,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 6,
                 "spot_age_days_at_capture": 0,
-                "version_id": "7bc3a2c3e680a0cb729bc774283a5984c5e337e3ac5017717c632e9ad03281ab"
+                "version_id": "378f4be44f067619bcd25d71ed00c6be494276b8f87929148968370f49211960"
               },
               {
                 "identity": {
@@ -7179,8 +7179,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "1035.67",
-                  "average_settle_basis": "1035.16",
+                  "average_close_basis": "1037.96",
+                  "average_settle_basis": "1037.43",
                   "close_basis": 1455,
                   "close_basis_rate": "9.57",
                   "close_price": 13745,
@@ -7202,7 +7202,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 8,
                 "spot_age_days_at_capture": 0,
-                "version_id": "21a1f35df7f1623af4e6bc4912062c9a59f9d98b8b096454581700eb9fe94b71"
+                "version_id": "a5958ef6de744cd19d23325f68294900e8388ab6b47832c400fd1bdfe8c34b70"
               },
               {
                 "identity": {
@@ -7296,30 +7296,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "9.45",
-                  "average_settle_basis": "9.25",
-                  "close_basis": 12,
-                  "close_basis_rate": "0.36",
-                  "close_price": 3308,
-                  "converted_spot_price": 3320,
+                  "average_close_basis": "9.28",
+                  "average_settle_basis": "9.08",
+                  "close_basis": 11,
+                  "close_basis_rate": "0.33",
+                  "close_price": 3299,
+                  "converted_spot_price": 3310,
                   "default_value": "Y",
                   "name": "热卷主连",
                   "reference_site": "上海",
-                  "settle_basis": 15,
-                  "settle_basis_rate": "0.45",
-                  "settle_price": 3305,
+                  "settle_basis": 3,
+                  "settle_basis_rate": "0.09",
+                  "settle_price": 3307,
                   "spot_indicator_id": "20892",
-                  "spot_price": 3320,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": 3310,
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "HCZL.SHF",
                   "ticker": "hc9999",
-                  "updated_at": "2026.09.21 19:52:34",
+                  "updated_at": "2026.09.22 19:32:58",
                   "variety_name": "热卷"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 11,
-                "spot_age_days_at_capture": 1,
-                "version_id": "56d1c0c07a4d2ed67553b513f78a7869acaeb5b47f75b84220968a2291ca512f"
+                "spot_age_days_at_capture": 0,
+                "version_id": "31cf1fc5376f649f2ad84c77462693ee2d7fd0aa3572f5e59efac82787e28c71"
               },
               {
                 "identity": {
@@ -7374,30 +7374,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "8.24",
-                  "average_settle_basis": "6.81",
-                  "close_basis": 80,
-                  "close_basis_rate": "1.32",
-                  "close_price": 5990,
+                  "average_close_basis": "8.22",
+                  "average_settle_basis": "6.92",
+                  "close_basis": 76,
+                  "close_basis_rate": "1.25",
+                  "close_price": 5994,
                   "converted_spot_price": 6070,
                   "default_value": "Y",
                   "name": "硅铁主连",
                   "reference_site": "宁夏",
-                  "settle_basis": 18,
-                  "settle_basis_rate": "0.30",
-                  "settle_price": 6052,
+                  "settle_basis": 66,
+                  "settle_basis_rate": "1.09",
+                  "settle_price": 6004,
                   "spot_indicator_id": "4789784",
                   "spot_price": 5720,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "SFZL.CZC",
                   "ticker": "SF9999",
-                  "updated_at": "2026.09.21 21:20:12",
+                  "updated_at": "2026.09.22 18:52:10",
                   "variety_name": "硅铁"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 13,
-                "spot_age_days_at_capture": 1,
-                "version_id": "3b2b84bb575491e60ca7c4ec4bcdd9325721778b1ae993724a04eacc0ab064f8"
+                "spot_age_days_at_capture": 0,
+                "version_id": "f61bb2e03d4db5389826f0d3d1b72f013634c6713ffc25ca483ecb698e02205e"
               },
               {
                 "identity": {
@@ -7413,30 +7413,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "97.27",
-                  "average_settle_basis": "99.14",
-                  "close_basis": 26,
-                  "close_basis_rate": "0.75",
-                  "close_price": 3444,
-                  "converted_spot_price": 3470,
+                  "average_close_basis": "96.78",
+                  "average_settle_basis": "98.59",
+                  "close_basis": 71,
+                  "close_basis_rate": "2.04",
+                  "close_price": 3409,
+                  "converted_spot_price": 3480,
                   "default_value": "Y",
                   "name": "线材主连",
                   "reference_site": "天津",
-                  "settle_basis": 37,
-                  "settle_basis_rate": "1.07",
-                  "settle_price": 3433,
+                  "settle_basis": 54,
+                  "settle_basis_rate": "1.55",
+                  "settle_price": 3426,
                   "spot_indicator_id": "9122296",
-                  "spot_price": 3470,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": 3480,
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "WRZL.SHF",
                   "ticker": "wr9999",
-                  "updated_at": "2026.09.21 19:52:23",
+                  "updated_at": "2026.09.22 19:32:46",
                   "variety_name": "线材"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 14,
-                "spot_age_days_at_capture": 1,
-                "version_id": "d6aa713034f170253ec86f4e2974cac6a83e0b10ef275f67a81bc50a492ed638"
+                "spot_age_days_at_capture": 0,
+                "version_id": "43e61fdf328815686b712078622804d92da4d62a8c87be7cce460f71f4011c83"
               },
               {
                 "identity": {
@@ -7491,30 +7491,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "113.88",
-                  "average_settle_basis": "110.94",
-                  "close_basis": 132,
-                  "close_basis_rate": "2.22",
-                  "close_price": 5808,
+                  "average_close_basis": "113.82",
+                  "average_settle_basis": "110.96",
+                  "close_basis": 104,
+                  "close_basis_rate": "1.75",
+                  "close_price": 5836,
                   "converted_spot_price": 5940,
                   "default_value": "Y",
                   "name": "锰硅主连",
                   "reference_site": "天津",
-                  "settle_basis": 102,
-                  "settle_basis_rate": "1.72",
-                  "settle_price": 5838,
+                  "settle_basis": 112,
+                  "settle_basis_rate": "1.89",
+                  "settle_price": 5828,
                   "spot_indicator_id": "2959498",
                   "spot_price": 5750,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "SMZL.CZC",
                   "ticker": "SM9999",
-                  "updated_at": "2026.09.21 21:20:12",
+                  "updated_at": "2026.09.22 18:52:10",
                   "variety_name": "锰硅"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 16,
-                "spot_age_days_at_capture": 1,
-                "version_id": "92dd7ccff1951d28dd58e652fb0797fa188e4a0a181ffc991eb13f3d6997e65f"
+                "spot_age_days_at_capture": 0,
+                "version_id": "16b6384046f200551841ee923b8b98104a1bec8b3e98cdbbfd2870de85439543"
               },
               {
                 "identity": {
@@ -7530,30 +7530,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "251.23",
-                  "average_settle_basis": "248.29",
-                  "close_basis": 342,
-                  "close_basis_rate": "5.56",
-                  "close_price": 5808,
+                  "average_close_basis": "251.57",
+                  "average_settle_basis": "248.71",
+                  "close_basis": 314,
+                  "close_basis_rate": "5.11",
+                  "close_price": 5836,
                   "converted_spot_price": 6150,
                   "default_value": "N",
                   "name": "锰硅主连",
                   "reference_site": "广西",
-                  "settle_basis": 312,
-                  "settle_basis_rate": "5.07",
-                  "settle_price": 5838,
+                  "settle_basis": 322,
+                  "settle_basis_rate": "5.24",
+                  "settle_price": 5828,
                   "spot_indicator_id": "2959495",
                   "spot_price": 5800,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "SMZL.CZC",
                   "ticker": "SM9999",
-                  "updated_at": "2026.09.21 21:20:12",
+                  "updated_at": "2026.09.22 18:52:10",
                   "variety_name": "锰硅"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 17,
-                "spot_age_days_at_capture": 1,
-                "version_id": "7fae4fba7554b1d58ad065304c77686f9890a05cd8c2df348da8c99f6d4ac59e"
+                "spot_age_days_at_capture": 0,
+                "version_id": "cfa40965edc15fbc5ff6e122a70f38f9fa20bbe3e858d38a00da3bf69c924a84"
               },
               {
                 "identity": {
@@ -7842,8 +7842,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "93.01",
-                  "average_settle_basis": "94.30",
+                  "average_close_basis": "95.88",
+                  "average_settle_basis": "97.36",
                   "close_basis": 620,
                   "close_basis_rate": "15.03",
                   "close_price": 3505,
@@ -7865,7 +7865,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 25,
                 "spot_age_days_at_capture": 0,
-                "version_id": "89fd4006a39622646c6873709e665fd17ed45cc831d4e5e0396b3bf4ced40b6c"
+                "version_id": "3bec47e454942e4180e6d0c60dbf038d4a9056734a875fc4cb94fdfc193964e9"
               },
               {
                 "identity": {
@@ -8076,8 +8076,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "288.48",
-                  "average_settle_basis": "292.86",
+                  "average_close_basis": "290.82",
+                  "average_settle_basis": "295.34",
                   "close_basis": 766,
                   "close_basis_rate": "11.70",
                   "close_price": 5784,
@@ -8099,7 +8099,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 31,
                 "spot_age_days_at_capture": 0,
-                "version_id": "d0d7315ce6a477a56f428cf42d18fccd7c11231e231729d0223dc87251fa743d"
+                "version_id": "88f38996a7d9dea90107c417306b638c14d692ae0f42a69348c0cad0f29479e9"
               },
               {
                 "identity": {
@@ -8193,8 +8193,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "132.31",
-                  "average_settle_basis": "133.08",
+                  "average_close_basis": "136.46",
+                  "average_settle_basis": "137.32",
                   "close_basis": 1131,
                   "close_basis_rate": "16.13",
                   "close_price": 5879,
@@ -8216,7 +8216,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 34,
                 "spot_age_days_at_capture": 0,
-                "version_id": "db4eda21b6e2d3470fa97aacb6a758051488a5389b019853d9bd8f2c9f05be34"
+                "version_id": "352c048172ce80556132e240df688caf7989d4d5d2db258cc36a64f1bc2f63e8"
               },
               {
                 "identity": {
@@ -8271,30 +8271,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-140.63",
-                  "average_settle_basis": "-137.61",
-                  "close_basis": -350,
-                  "close_basis_rate": "-1.90",
-                  "close_price": 18800,
-                  "converted_spot_price": 18450,
+                  "average_close_basis": "-139.21",
+                  "average_settle_basis": "-136.40",
+                  "close_basis": -415,
+                  "close_basis_rate": "-2.24",
+                  "close_price": 18965,
+                  "converted_spot_price": 18550,
                   "default_value": "N",
                   "name": "橡胶主连",
                   "reference_site": "上海",
-                  "settle_basis": -375,
-                  "settle_basis_rate": "-2.03",
-                  "settle_price": 18825,
+                  "settle_basis": -410,
+                  "settle_basis_rate": "-2.21",
+                  "settle_price": 18960,
                   "spot_indicator_id": "4321828",
-                  "spot_price": 18350,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": 18450,
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "RUZL.SHF",
                   "ticker": "ru9999",
-                  "updated_at": "2026.09.21 18:27:48",
+                  "updated_at": "2026.09.22 18:27:49",
                   "variety_name": "橡胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 36,
-                "spot_age_days_at_capture": 1,
-                "version_id": "e5aabc3a22d2e3c5facb6a5a4899b7af15cd0252f636593becb73a5c102a2546"
+                "spot_age_days_at_capture": 0,
+                "version_id": "b51c13f853524b0d7e0761c3b3387caf33d8f63c9064d683c5f974bd42c0a4db"
               },
               {
                 "identity": {
@@ -8310,30 +8310,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-320.60",
-                  "average_settle_basis": "-317.89",
-                  "close_basis": -800,
-                  "close_basis_rate": "-4.44",
-                  "close_price": 18800,
-                  "converted_spot_price": 18000,
+                  "average_close_basis": "-321.81",
+                  "average_settle_basis": "-319.30",
+                  "close_basis": -815,
+                  "close_basis_rate": "-4.49",
+                  "close_price": 18965,
+                  "converted_spot_price": 18150,
                   "default_value": "Y",
                   "name": "橡胶主连",
                   "reference_site": "云南",
-                  "settle_basis": -825,
-                  "settle_basis_rate": "-4.58",
-                  "settle_price": 18825,
+                  "settle_basis": -810,
+                  "settle_basis_rate": "-4.46",
+                  "settle_price": 18960,
                   "spot_indicator_id": "4321834",
-                  "spot_price": 18000,
-                  "spot_publish_date": "2026-09-21",
+                  "spot_price": 18150,
+                  "spot_publish_date": "2026-09-22",
                   "thscode": "RUZL.SHF",
                   "ticker": "ru9999",
-                  "updated_at": "2026.09.21 18:27:49",
+                  "updated_at": "2026.09.22 18:27:49",
                   "variety_name": "橡胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 37,
-                "spot_age_days_at_capture": 1,
-                "version_id": "d9ac3e8c741748a9a7538f2cbeafdccc24b04fb4d22da3b0aaed305638d4d4ea"
+                "spot_age_days_at_capture": 0,
+                "version_id": "81c16f7ec3b104defa48d72e9ec43e72b8a43e94280c66f62b102f0793d40207"
               },
               {
                 "identity": {
@@ -8349,8 +8349,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-45.86",
-                  "average_settle_basis": "-46.71",
+                  "average_close_basis": "-45.67",
+                  "average_settle_basis": "-46.53",
                   "close_basis": -32,
                   "close_basis_rate": "-1.85",
                   "close_price": 1762,
@@ -8372,7 +8372,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 38,
                 "spot_age_days_at_capture": 0,
-                "version_id": "26fac2727dadc7e555a95b4bb23000a8b37b7536aba8e939d75bcd271f41f66e"
+                "version_id": "07abcfc468d71768862f588782bf824cba97328627ef4a6bffb44941045846c6"
               },
               {
                 "identity": {
@@ -8466,8 +8466,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "419.78",
-                  "average_settle_basis": "422.12",
+                  "average_close_basis": "420.69",
+                  "average_settle_basis": "422.94",
                   "close_basis": 691,
                   "close_basis_rate": "7.68",
                   "close_price": 8304,
@@ -8489,7 +8489,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 41,
                 "spot_age_days_at_capture": 0,
-                "version_id": "eca9c9877266e0787681b8e88c56a3949656ebb920b22aa341f11f5271ff2476"
+                "version_id": "cd14197109a9d7e1511fcfed8570a596b9eed10a1d8ecb2dff46c4659897fa76"
               },
               {
                 "identity": {
@@ -8544,8 +8544,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "168.93",
-                  "average_settle_basis": "173.10",
+                  "average_close_basis": "171.28",
+                  "average_settle_basis": "175.59",
                   "close_basis": 628,
                   "close_basis_rate": "6.19",
                   "close_price": 9522,
@@ -8567,7 +8567,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 43,
                 "spot_age_days_at_capture": 0,
-                "version_id": "44c6c516c7ed8132c95d2be6617b07bb652de3ae89d3d4171e0e2963f91b63fb"
+                "version_id": "8bc5a97e18a32369c4951576c7b2462559da097cda9ba64230d3eff809ccdab6"
               },
               {
                 "identity": {
@@ -8583,8 +8583,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-118.68",
-                  "average_settle_basis": "-114.51",
+                  "average_close_basis": "-116.17",
+                  "average_settle_basis": "-111.86",
                   "close_basis": 323,
                   "close_basis_rate": "3.28",
                   "close_price": 9522,
@@ -8606,7 +8606,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 44,
                 "spot_age_days_at_capture": 0,
-                "version_id": "728cc438794d1a39cc181a5d7f2052f6c709db36cb0fe8ae3eee8732f415edc1"
+                "version_id": "297ab6212b78f0c472eac91ae02fbf598c38f927fbcbf6b0ee1b2a62cd6a6b37"
               },
               {
                 "identity": {
@@ -8778,8 +8778,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-122.95",
-                  "average_settle_basis": "-123.42",
+                  "average_close_basis": "-122.69",
+                  "average_settle_basis": "-123.10",
                   "close_basis": -87,
                   "close_basis_rate": "-1.87",
                   "close_price": 4757,
@@ -8801,7 +8801,7 @@
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 49,
                 "spot_age_days_at_capture": 0,
-                "version_id": "d9e5038b4d1b1de673c37d639d3c18b9929a44cdce58b943b05f96d4b944bb53"
+                "version_id": "18b618cc2a0d6cd632b3689b20dcbce94e7c6c7ef92e8258b546470ba621e292"
               },
               {
                 "identity": {
@@ -13508,20 +13508,20 @@
             ],
             "signal_transition_authority": "NONE",
             "source": {
-              "bytes": 67214,
+              "bytes": 67224,
               "params": {},
               "path": "/api/futures/basis/main-continuous-latest",
-              "provider_timestamp": 1790072727842,
-              "received_at": "2026-09-22T10:25:28.422331+00:00",
+              "provider_timestamp": 1790079393280,
+              "received_at": "2026-09-22T12:16:33.879363+00:00",
               "representation": "RETAINED_HTTP_BODY",
-              "requested_at": "2026-09-22T10:25:26.308085+00:00",
-              "sha256": "557547a1f2e9c371a7f1b3423638d401b4ae86375ede839c3ac97ebd9e2d0541"
+              "requested_at": "2026-09-22T12:16:31.615758+00:00",
+              "sha256": "e75992feb0250f837eb76467bec3e6d4dec1c9e45d9f23befdb4719fd105db13"
             },
             "status": "BREADTH_CONTEXT_RETAINED",
             "units_and_ratio_scale": "RAW_PROVIDER_FIELDS_NOT_UNIFORMLY_ESTABLISHED",
             "version": "industry-breadth-snapshot-v1"
           },
-          "projection_hash": "f2aeac61b826be50e6c4b9a06611686c6cc618336847191bef6faba67b36c708"
+          "projection_hash": "822bcbe53316ae3de73f627f252ec34cb3f3d091f3243eb728a92b43713ae6d7"
         },
         "status": "SAVED_NATIVE_SNAPSHOT"
       }
@@ -13529,5 +13529,5 @@
     "signal_transition_authority": "NONE",
     "version": "industry-breadth-snapshot-v1"
   },
-  "projection_hash": "1b50ddee7663817010ef75ce43bbf491e0ac6f924ceaa7e53c5b42266f10d416"
+  "projection_hash": "82edc45adf1a08a73040d2c62c69623335f2e8b8a3d214861a7068bfe00a9774"
 }
