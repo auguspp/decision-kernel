@@ -1,0 +1,57 @@
+name: provider-batch-completion
+on:
+  push:
+    branches: [work/provider-batch-20260922]
+    paths: [.github/workflows/provider-batch-completion.yml]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 9118b939e81791d6a5599034cb537c3a5a82ac99
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e .
+      - name: Finish named missing contracts; no unchanged-query retry
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          OUT: ${{ runner.temp }}/provider-completion
+        run: |
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          from datetime import datetime,timezone
+          from decision_kernel.runtime.ftshare_market_inputs import capture
+          root=Path(os.environ['OUT']);root.mkdir()
+          paged={'page':1,'page_size':200}
+          requests=[
+            ('sw_members','sw_members',{'industry_code':'801736.SI'}),
+            ('sw_metrics','sw_metrics',{'industry_code':'801736.SI','start_date':'20260921','end_date':'20260921',**paged}),
+            ('concept_prices','concept_prices',{'board_code':'BK0595','start_date':'20260921','end_date':'20260921',**paged}),
+          ]
+          start=int(datetime(2026,9,1,tzinfo=timezone.utc).timestamp()*1000)
+          end=int(datetime(2026,9,21,23,59,59,tzinfo=timezone.utc).timestamp()*1000)
+          for variety,contract in [('LC','LC2610.GFE'),('CU','CU2610.SHF'),('RB','RB2610.SHF')]:
+              requests.append((variety+'_base','futures_base',{'symbol':contract,'trade_date':'20260921'}))
+              requests.append((variety+'_prices','futures_prices',{'symbol':contract,'interval':'daily','start':start,'end':end,'limit':64}))
+          results=[]
+          for label,route,params in requests:
+              result=capture(route,params,root/label)
+              results.append({'label':label,'route':route,'status':result['status']})
+              if result['status'] in {'AUTHENTICATION_UNAVAILABLE','AUTHENTICATION_FAILED','ENTITLEMENT_DENIED','RATE_LIMITED','CREDENTIAL_REFLECTION_REJECTED','REDIRECT_REJECTED'}:break
+          (root/'results.json').write_text(json.dumps(results,indent=2))
+          (root/'identity.json').write_text(json.dumps({'code':'9118b939e81791d6a5599034cb537c3a5a82ac99','run':os.environ['GITHUB_RUN_ID'],'workflow_commit':os.environ['GITHUB_SHA'],'model_calls':0,'retries':0},indent=2))
+          print(json.dumps(results))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: provider-batch-completion-${{ github.run_id }}
+          path: ${{ runner.temp }}/provider-completion/
+          retention-days: 30
