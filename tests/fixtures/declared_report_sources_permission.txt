@@ -1,0 +1,15 @@
+## P1-4 来源接续／施工前复用与本次取件范围 — 2026-09-22
+
+Human 本轮原话：“你继续吧，我们现在应该有很多管道来获取中报的，实在不行你还能启用 datasinking”。承接已批准5778160521、已交付#516及5779056601；不是重新请求Industry或DeepSeek费用许可。
+
+固定开工M=ab289698dede044cfb6219a01e2e741ac70d0fa9、R=efb4abf840884204a887855ac60ed41e91da7cfb。当前需要取得江西铜业600362.SH的2025年度及2026H1完整报告并保存原件，续作原问题jiangxi-copper-net-economic-exposure。报告及必要更正仍是原问题的必要范围；本次两份报告的取件不冒称完成全更新库存、准入或Research。
+
+实际新定位：新浪2025年报页面id12021454已正常读取，页面“下载公告”给出file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-3/2026-03-27/12021454.PDF；2026H1页面id12535637来自搜索索引，公告日2026-08-26，实际页面尚未取得。巨潮2025年报原locator为https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF；不猜2026H1巨潮ID或新浪下载URL。当前容器DNS失败，网页工具不能保存这些完整PDF bytes；这是本执行环境缺口，不是报告不存在或全部上游失效。
+
+Reuse Check：内部实读AGENTS、RESEARCH-ENTRY、CI-MAINLINE、stock_research_sources的完整prepare_report_discovery/capture、woton_report_custody的普通requests/原PDF解析/Retainer、原stock-business-research工作流及2026-09-20-report-priority-and-reuse回执。已有FTShare→CNINFO定位和公共PDF解析足够；原远端source-only开关却只绑定沃顿或两只旧失败公司，不能更换旧对象复活许可。官方层复用requests Session/stream/no-redirect、BeautifulSoup链接解析、原生Git/Actions artifact及原授权检查；重新读取其官方文档。外部层复用本仓库已有FTShare Skill精确handler/SDK和pypdf/PyGithub审阅，不新造接口客户端。DataSinking历史成功为无登录公开预览DOM/PRE，其转换文本不是原PDF或独立Evidence；本轮网站打开失败且没有已连接插件，不能声称已取得或已启用。
+
+Reuse Decision: REUSE + THIN_ADAPTER。拟在原stock-business-research同一工作流/并发组增加显式的已声明报告source-only接点，复用原FTShare官方定位、普通公共GET、完整PDFparser、原create-only Retainer。不是新scheduler/provider/数据库，也不复制每家公司专用下载器。源计划固定本次证券/两报告/日期和已知新浪页面ID：已知巨潮原件优先；未知H1先走原FTShare→官方身份定位；必要时独立尝试原新浪公告页面提取的匹配PDF链接。每条路线最多一次，原有分页有界；无自动重试、伪装头、登录/付费绕过、任意URL或猜公告ID。官方与镜像失败/身份/时间分别保留，不把新浪包成巨潮同字节。
+
+同一已声明取件批次先创建源尝试记录，原件先保留再解析，重复触发不得重取；所有完整/部分结果留在该次artifact与原work ref的来源目录，不使用Research slot或问题launch。本次取件上限两份完整报告、每PDF16MiB；不截断页文或因解析失败丢PDF。DataSinking若恢复正常公开访问，可作为明确第三方阅读辅助；服务正文的再分发权不由客户端许可证推定。
+
+普通PR完整CI/精确head审阅/独立main CI/正常publisher通过后，允许用原issues运输机制的独立source-only固定标签启动这次取件；标签不是许可、不能启动旧Research job，CLI仍复核实际main/原评论和请求。仅来源GET/Git原件留存，无行情/Research模型/Pre/Quick/Odds/交易，也不改动原Woton/失败来源入口或旧失败。工程接点和两份真实报告取得分开验收；尚未预填成功。

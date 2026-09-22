@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "enabled": true,
+  "mode": "DECLARED_PUBLIC_REPORT_SOURCES_ONLY",
+  "permission": {
+    "comment_id": 5779349629,
+    "body_sha256": "53f9a89a1feefb8eead6d41e66197705bd2ab59ba71d55e684d7cd4761d1ab8f",
+    "created_at": "2026-09-22T15:35:09Z"
+  },
+  "batch_id": "600362-financial-20260922",
+  "subject": "600362.SH",
+  "issuer_name": "江西铜业",
+  "question_id": "jiangxi-copper-net-economic-exposure",
+  "execute_before": "2026-10-20T00:00:00Z",
+  "reports": [
+    {
+      "period": "2025FY",
+      "announcement_date": "2026-03-27",
+      "cninfo_locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+      "sina_id": "12021454"
+    },
+    {
+      "period": "2026H1",
+      "announcement_date": "2026-08-26",
+      "cninfo_locator": null,
+      "sina_id": "12535637"
+    }
+  ]
+}
