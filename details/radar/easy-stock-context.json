@@ -1,0 +1,36 @@
+{
+  "projection": {
+    "automatic_admission": false,
+    "base_reading_hash": "15ea07d1d59f6ed7f63701f2521dd18a98796bfab9367e41c4880091cd629f63",
+    "generated_at": "2026-09-22T11:17:12.006687+00:00",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "model_calls": 0,
+    "new_attention_events": 0,
+    "odds_recomputed": false,
+    "research_authority": "NONE",
+    "research_executions": 0,
+    "section": {
+      "latest_attempt": {
+        "conclusion": "success",
+        "created_at": "2026-09-22T10:25:13Z",
+        "event": "workflow_run",
+        "head_sha": "5027b3e122ff070b9ddabd069421995fa714c3bf",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35715869823",
+        "id": 35715869823,
+        "operation": null,
+        "path": ".github/workflows/radar-industry-breadth.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-09-22T10:25:13Z",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:25:33Z"
+      },
+      "result": null,
+      "status": "PUBLIC_JOB_NOT_PRESENT_IN_SELECTED_RUN",
+      "whole_workflow_conclusion": "success"
+    },
+    "signal_transition_authority": "NONE",
+    "version": "easy-stock-public-context-v1"
+  },
+  "projection_hash": "6df1a20d3e80f052e0d7e268ee6fff49cf06d76cf87ded9e2310f3d9806a9eb2"
+}
