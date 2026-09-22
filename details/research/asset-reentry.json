@@ -1,0 +1,3289 @@
+{
+  "projection": {
+    "automatic_admission": false,
+    "base_reading_hash": "36e152bb1256e33da7985f617aac8820db05d561a59afc6d1e114c5f6b62d934",
+    "companies": [
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600276.SH",
+            "id": "odds-hengrui-provisional",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "42.93元Human参考价的原provisional/ordinal结果，非canonical数值；原行情失败保留。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 4295,
+              "git_blob": "8e3048b0b14d39fb2577f5b4427721407031e091",
+              "path": "docs/readings/hengrui-600276-research-odds-2026-09-11/provisional-odds.json",
+              "read_path": "sources/git/8e3048b0b14d39fb2577f5b4427721407031e091/provisional-odds.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "49b7fc999953977832afef67420fd693797e451d",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "0e4c587449ab454f261ff24616c84173721ec139c8ab38f32693ba142be0fcc8"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_ODDS_DOCUMENT"
+          },
+          {
+            "case": "600276.SH",
+            "id": "600276-hengrui-research-commit-20260917",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "#321 Acceptance 6 historical Human-origin migration: freezes the retained final Round3 Hengrui Belief into schema-v2 COMMITTED Research without ValuationBasis, numerical Scenario or probability. model_risk remains NOT_ESTABLISHED; retained Git migration records prove historical declarations, not current company-source truth. No Market/canonical Odds, Human acceptance, Action/watch or Investment Authority is established by this commit operation.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 783,
+              "git_blob": "a3147841eeacb65c8cb4d4827bb7082e95bb6f63",
+              "path": "docs/readings/600276-hengrui-research-commit-2026-09-17/commit.json",
+              "read_path": "sources/git/a3147841eeacb65c8cb4d4827bb7082e95bb6f63/commit.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "4755d25e63dfe5d91f31d514342e4cc0f16115a2",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "08bb7d471162faf6948a2af579fde91f2897c0cb9a89d90f9cfe0ce8e9bb07bd"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_PACKAGE"
+          },
+          {
+            "case": "600276.SH",
+            "id": "600276-hengrui-human-price-conditional-odds-20260917",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "#321 Acceptance 6 typed Human-price round-trip: exact retained 42.93 CNY HUMAN_SUPPLIED_PROVISIONAL_PRICE / CONTEXT_ONLY is evaluated against the later frozen Research as PRE_RESEARCH_RETROSPECTIVE_REFERENCE_NOT_PIT. Four legacy terminal-value ranges are represented only by their eight lower/upper endpoints; no midpoint and no old 30/50/20 probability is revived. Cardinal probability/weighted aggregate, Market qualification, canonical Odds, Human acceptance by this operation, Action/watch and Investment Authority remain NOT_ESTABLISHED/NONE.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 13867,
+              "git_blob": "764132afe2a69514a7d620fc9207cb2497598022",
+              "path": "docs/readings/600276-hengrui-conditional-odds-2026-09-17/result.json",
+              "read_path": "sources/git/764132afe2a69514a7d620fc9207cb2497598022/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "4755d25e63dfe5d91f31d514342e4cc0f16115a2",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "ef7b664dcebdff2e9688f1c96e47f5c3b4aea69462929f4fe65a2738fd902fc2"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_PROVISIONAL_ODDS_CHECKPOINT"
+          },
+          {
+            "case": "600276.SH",
+            "id": "odds-hengrui-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "9/12接受条件分布用于决策准备，不是买入决定或成交；39.6复核与37–38首笔讨论分开，未启用监控。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 5655,
+              "git_blob": "8673b08d3a36e8cabc33e1fb51627bc65d674e3a",
+              "path": "docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md",
+              "read_path": "sources/git/8673b08d3a36e8cabc33e1fb51627bc65d674e3a/600276-hengrui-human-first-entry-2026-09-12.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "49b7fc999953977832afef67420fd693797e451d",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "114bcc74c5d8ee00a933fa6979c70c788ae94093ce9b4559cb13bfd0d619ab46"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          }
+        ],
+        "association_id": "04422a05bf34687ca8f2e6368f8ed2c715bd61c30657d6ec498242332f3ca4b5",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": {
+          "action_authority": "NONE",
+          "company_name": "恒瑞医药",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 600276.SH",
+          "market_timestamp": "2026-09-21T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "hengrui-reunderwrite-39_6",
+            "kind": "RE_UNDERWRITE",
+            "label": "around CNY39.6 assumption recheck",
+            "lower_price": null,
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "POINT_AT_OR_BELOW",
+            "signed_distance_to_upper_cny": "6.44",
+            "signed_distance_to_upper_fraction_of_current": "0.13987836663770634231103388357949609035621198957428323197219808861859252823631625",
+            "upper_price": "39.6"
+          },
+          "observed_at": "2026-09-21T08:20:38.700385Z",
+          "prerequisite": "Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.",
+          "price": "46.04",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "registry_reference_id": "odds-hengrui-human",
+            "source_git_blob": "8673b08d3a36e8cabc33e1fb51627bc65d674e3a",
+            "source_path": "docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md",
+            "source_ref": "49b7fc999953977832afef67420fd693797e451d",
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          "source_report": {
+            "bytes": 11981,
+            "git_blob": "bf033044dc0abe39b121edd01a9425bd672fa29c",
+            "read_path": "details/inbox/35577379423/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c45b08b2230e1fd2db1756dc5cbf053aca1c14ff5f55baa96260c785ede45737"
+          },
+          "status": "ACTIVE_ODDS_WATCH",
+          "ticker": "600276.SH",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "3730e6a9b76d1b809eeec9c2c816a23cb912143ddb5a5fba2ff769e7c575c06e"
+        },
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600276.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600184.SH",
+            "id": "odds-guangdian-historical",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "19.98元原provisional/ordinal结果；后来估值桥受挑战，旧梯度不可直接使用，NOT_ACCEPTED_YET不等于拒绝。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 3238,
+              "git_blob": "895ba811d96750d02a4f0d7c08358b5e7fed3088",
+              "path": "docs/readings/600184-electro-optic-provisional-odds-2026-09-13.json",
+              "read_path": "sources/git/895ba811d96750d02a4f0d7c08358b5e7fed3088/600184-electro-optic-provisional-odds-2026-09-13.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "9cd072a8e8b5ec1b5fd88e7bfcf9e1d6ae2cd21a",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "4f0b2068bfa7dd91f304b51d45a1453c667d47042437c665d6c518cd242bf747"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_ODDS_DOCUMENT"
+          },
+          {
+            "case": "600184.SH",
+            "id": "odds-guangdian-challenge",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "保留十倍单位勘误和估值桥挑战；不创造新的买价或替代模型，不激活旧first-entry梯度。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 4227,
+              "git_blob": "174e02ecc48eb851324b830798f996c0f6705a02",
+              "path": "docs/readings/600184-research-method-review-2026-09-13.md",
+              "read_path": "sources/git/174e02ecc48eb851324b830798f996c0f6705a02/600184-research-method-review-2026-09-13.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "49b7fc999953977832afef67420fd693797e451d",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "dbca28fbb0031adbe0b123f242b23ff664c8e0d10dfc66b33dec2b7165d21f61"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          }
+        ],
+        "association_id": "5ebd39382cc8568b44830b8904084a8bc85682b3669777fc5a418971915991df",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600184.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600967.SH",
+            "id": "odds-neimeng-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "独立Human-origin研究/临时Odds接受；14.98元WEAK/FRAGILE，首笔未method-ready；不修复旧Stock资格失败，无投资决定或监控。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 6390,
+              "git_blob": "a978904caa4fc3ba66ce33f0bcfce471a48d8f56",
+              "path": "docs/decisions/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md",
+              "read_path": "sources/git/a978904caa4fc3ba66ce33f0bcfce471a48d8f56/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "49b7fc999953977832afef67420fd693797e451d",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "4a650bcfaea736de757a385c2c88845c27ac28a83cd800594dac2fef52231ee5"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          }
+        ],
+        "association_id": "393861dd24f1ec320e33776a6c2c5490102b190370a0e206ec13cc95fd36e824",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "物联网",
+                "concept_thscode": "885312.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+                "membership_request_index": 3,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:09.149291Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600967.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "002674.SZ",
+            "id": "odds-xingye-revision",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "9/14修订Research/临时条件分析；旧业务与新业务分轴，方法改变不是单纯价格重算。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 9362,
+              "git_blob": "454fcdc441bc060e106dbec6ecf9f961ae0258dc",
+              "path": "docs/readings/002674-xingye-full-research-revision-2026-09-14.md",
+              "read_path": "sources/git/454fcdc441bc060e106dbec6ecf9f961ae0258dc/002674-xingye-full-research-revision-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "8e045ef755ade568aaad33d50a5a36aae04b19ed",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "ba240adc79a0705b3e8fa6626be65ad9280ac2b2e058b733e954fdedf7154bbe"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          {
+            "case": "002674.SZ",
+            "id": "odds-xingye-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "接受修订Research及provisional first-entry review用于决策准备；无投资决定/Action/监控；原跨案例期限假设不扩大为公司专属授权。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 4550,
+              "git_blob": "f66451fce807058045f510016de1d60b68413c42",
+              "path": "docs/decisions/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
+              "read_path": "sources/git/f66451fce807058045f510016de1d60b68413c42/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "8e045ef755ade568aaad33d50a5a36aae04b19ed",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "56940cc5292e69c39197e80a0d88de0bc61217ff72d41c2e4be48c3afdb21da7"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          }
+        ],
+        "association_id": "3667028462c0f8c44a00499a9b978289b1f245476a2cd9f145a91b5409bca302",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": {
+          "action_authority": "NONE",
+          "company_name": "兴业科技",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 002674.SZ",
+          "market_timestamp": "2026-09-21T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "xingye-reunderwrite-15_17",
+            "kind": "RE_UNDERWRITE",
+            "label": "CNY15–17 re-underwrite",
+            "lower_price": "15",
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "RANGE_AT_OR_BELOW_UPPER",
+            "signed_distance_to_upper_cny": "3.2",
+            "signed_distance_to_upper_fraction_of_current": "0.15841584158415841584158415841584158415841584158415841584158415841584158415841584",
+            "upper_price": "17"
+          },
+          "observed_at": "2026-09-21T08:20:38.700385Z",
+          "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
+          "price": "20.2",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "registry_reference_id": "odds-xingye-human",
+            "source_git_blob": "f66451fce807058045f510016de1d60b68413c42",
+            "source_path": "docs/decisions/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
+            "source_ref": "8e045ef755ade568aaad33d50a5a36aae04b19ed",
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          "source_report": {
+            "bytes": 11981,
+            "git_blob": "bf033044dc0abe39b121edd01a9425bd672fa29c",
+            "read_path": "details/inbox/35577379423/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c45b08b2230e1fd2db1756dc5cbf053aca1c14ff5f55baa96260c785ede45737"
+          },
+          "status": "ACTIVE_ODDS_WATCH",
+          "ticker": "002674.SZ",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "3730e6a9b76d1b809eeec9c2c816a23cb912143ddb5a5fba2ff769e7c575c06e"
+        },
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002674.SZ"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600598.SH",
+            "id": "odds-beidahuang-provisional",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "12.33元（2026-09-15完成交易日）public context的provisional/ordinal reverse-underwriting；复用税制续作Research不重开Belief。3年10%仅工作敏感性，10.0–10.7为条件首笔复核区；cardinal/canonical Odds、Human接受、仓位、watch均未建立。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 11399,
+              "git_blob": "3611fa961ce09596849c3054e0edf3630e013e54",
+              "path": "docs/readings/600598-beidahuang-odds-2026-09-16/provisional-odds.json",
+              "read_path": "sources/git/3611fa961ce09596849c3054e0edf3630e013e54/provisional-odds.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "cc95a4fb42f332f8384dd2240647e61fa36fd49f",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "c26aa86d85dc39b9e6fcf95d97c7a2ca856f16a8f52e0085f5f0180429363807"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_ODDS_DOCUMENT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "odds-beidahuang-profit-led-revision",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "同12.33元价格与冻结Research下的估值解释修订：21–23x为核心市场表达、24x仅上沿；当前9.6–10.6亿元利润带无增长证据，12.33主要预付未证明的利润增长。9.8–10.3为条件首笔复核、9.3–9.6为更优Odds复核；非Human接受/Action/watch。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 5423,
+              "git_blob": "d35934f5f4ef27a225c7d7928e5ee7634dab3878",
+              "path": "docs/readings/600598-beidahuang-odds-revision-2026-09-16/provisional-odds-revision.json",
+              "read_path": "sources/git/d35934f5f4ef27a225c7d7928e5ee7634dab3878/provisional-odds-revision.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "daf25acbda3a764c73ffad1a5de89bc365e6d924",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "a45e30e6d0dfcf9141f6e34aeccf8b3d4af56f0762e5ee21d2f42fb374c2cf69"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_ODDS_DOCUMENT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "odds-beidahuang-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "9/16 Human明确接受BA2 provisional/ordinal Odds用于决策准备：21–23x为核心估值、12.33主要预付未证明利润增长，11.0–11.3/9.8–10.3/9.3–9.6分别为重审/条件首笔复核/更优Odds复核。接受不扩大为买入决定、永久公司专属10%门槛、仓位、Action或watch。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 3918,
+              "git_blob": "f25f25cadd7018563f0a6394cbe7958337428765",
+              "path": "docs/decisions/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
+              "read_path": "sources/git/f25f25cadd7018563f0a6394cbe7958337428765/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "e8f51d75111a29bbe62dc7eb160725e722542145",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "fbcf3ef2870111197e7a45a47b2e7461bfbf8c7479a6d543086d08ef6d88ce61"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "sector-600598-materiality-20260910",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "Human许可后Sector来源的有限Pre/Quick，税后盈利问题待深化；最终H1仍有正文核验缺口，非全景研究/新Odds/自动Deep或Human决定。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 7269,
+              "git_blob": "fda17f439ddb03323de60b6a77dac1bd8974dd02",
+              "path": "research_runs/candidates/sector-origin/600598-materiality-20260910/README.md",
+              "read_path": "sources/git/fda17f439ddb03323de60b6a77dac1bd8974dd02/README.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "822c5c725df2d1e5d66768b3b06bc9ddfef93a2e",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "241b0ffafbd0823155789014a8cff5e1548c25680dd21dcbbe0f847457b77146"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "600598-materiality-20260910-typed-progress",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "#321 typed remote round-trip acceptance only: wraps the exact 2026-09-10 DEEPEN_REQUIRED workpaper bytes as RETAINED_PROGRESS_NOT_COMMITTED. The later 600598-tax-regime-continuation-20260916 successor already exists; this historical checkpoint does not supersede or reopen it, add Evidence, execute continuation, establish Human acceptance, Odds, Action or Investment Authority.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 519,
+              "git_blob": "74e3e76113f642a71e583777625615f9c848b6ac",
+              "path": "docs/readings/600598-beidahuang-historical-progress-roundtrip-2026-09-16/progress.json",
+              "read_path": "sources/git/74e3e76113f642a71e583777625615f9c848b6ac/progress.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "1f11d4853d11ba204760a5b620d80edcdf40026f",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "78a6d9f7286a8a60d72ffa13ccd8a9e5642705afcefc6587ad5c1ce9d930b433"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_RESEARCH_PROGRESS_CHECKPOINT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "600598-tax-regime-continuation-20260916",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "承接原sector-600598-materiality-20260910的DEEPEN_REQUIRED，仅重开税制/税后盈利/现金桥：最终2026H1与14.10亿元实际补缴已闭合，新增经常性税负量级收敛但精确税基仍UNKNOWN；非新Odds、Human接受、监控或投资决定。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 11653,
+              "git_blob": "b9cfdc9c82e9adfdcb4773243f769a299db5877e",
+              "path": "docs/readings/600598-beidahuang-tax-regime-continuation-2026-09-16/README.md",
+              "read_path": "sources/git/b9cfdc9c82e9adfdcb4773243f769a299db5877e/README.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "fefff5b49ecfbe4f5cfb4aa62cf29f6f9f26aa03",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "308453e29233bd6fd6423c3efd5fcbe211e3962c73d82788b6e0c441d2751b66"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          {
+            "case": "600598.SH",
+            "id": "600598-research-commit-20260917",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "#321 real-company Research-only round-trip: mechanically freezes the retained 2026-09-16 tax-regime Belief with later-reacquired EXTRACTED_VALUES/PARTIAL evidence custody. Model risk remains NOT_ESTABLISHED; no valuation horizon, numerical Scenario or probability is created. COMMITTED Research does not establish current Market/Odds, Human acceptance, Action/watch or Investment Authority.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 783,
+              "git_blob": "8e40fae835eb3f295238e050515e5bd1a52a5287",
+              "path": "docs/readings/600598-beidahuang-research-commit-2026-09-17/commit.json",
+              "read_path": "sources/git/8e40fae835eb3f295238e050515e5bd1a52a5287/commit.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "b116981dde58efe3132cdcd477ec93ed0066ddae",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "c4201b36788285c75ba703cd3ecadd40b4962232c11c4fd751fff4f58cddc572"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_PACKAGE"
+          }
+        ],
+        "association_id": "709a817766621996fe4160e87701539767850fe8a33f080f270d6aec107da38e",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": {
+          "action_authority": "NONE",
+          "company_name": "北大荒",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 600598.SH",
+          "market_timestamp": "2026-09-21T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "beidahuang-reunderwrite-11_0_11_3",
+            "kind": "RE_UNDERWRITE",
+            "label": "CNY11.0–11.3 re-underwrite",
+            "lower_price": "11.0",
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "RANGE_AT_OR_BELOW_UPPER",
+            "signed_distance_to_upper_cny": "1.52",
+            "signed_distance_to_upper_fraction_of_current": "0.11856474258970358814352574102964118564742589703588143525741029641185647425897036",
+            "upper_price": "11.3"
+          },
+          "observed_at": "2026-09-21T08:20:38.700385Z",
+          "prerequisite": "BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.",
+          "price": "12.82",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "registry_reference_id": "odds-beidahuang-human",
+            "source_git_blob": "f25f25cadd7018563f0a6394cbe7958337428765",
+            "source_path": "docs/decisions/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
+            "source_ref": "e8f51d75111a29bbe62dc7eb160725e722542145",
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          "source_report": {
+            "bytes": 11981,
+            "git_blob": "bf033044dc0abe39b121edd01a9425bd672fa29c",
+            "read_path": "details/inbox/35577379423/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c45b08b2230e1fd2db1756dc5cbf053aca1c14ff5f55baa96260c785ede45737"
+          },
+          "status": "ACTIVE_ODDS_WATCH",
+          "ticker": "600598.SH",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "3730e6a9b76d1b809eeec9c2c816a23cb912143ddb5a5fba2ff769e7c575c06e"
+        },
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600598.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "603353.SH",
+            "id": "stock-603353-34807883332-terminal-challenge",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "仅针对run34807883332原候选：历史失败与本轮状态混淆，旧终局理由受挑战；不改原Funnel，不是Human接受或新执行。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 6868,
+              "git_blob": "0ae65c1103b45454d74f0ee9556c9f143c7f9ba4",
+              "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
+              "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          },
+          {
+            "case": "603353.SH",
+            "id": "stock-603353-34807883332-business-review-addendum",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "run34807883332同材料追加业务审阅：有限经营依据、反证和下一问题；原终局理由仍受挑战，不覆盖候选/不新增Funnel、Human接受、Odds或监控。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 11048,
+              "git_blob": "ea2062655e659ba89b7cdf1c9f5f10ab381850e7",
+              "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
+              "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          }
+        ],
+        "association_id": "fc2fa39ab03977ab11b810c71c6a9ff7e9a51d9add7b8eff11fe547f9aeb659d",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "603353.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "300711.SZ",
+            "id": "stock-300711-34807883332-terminal-challenge",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "仅针对run34807883332原候选：历史失败与本轮状态混淆，旧终局理由受挑战；不改原Funnel，不是Human接受或新执行。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 6868,
+              "git_blob": "0ae65c1103b45454d74f0ee9556c9f143c7f9ba4",
+              "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
+              "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          },
+          {
+            "case": "300711.SZ",
+            "id": "stock-300711-34807883332-business-review-addendum",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "run34807883332同材料追加业务审阅：有限经营依据、反证和下一问题；原终局理由仍受挑战，不覆盖候选/不新增Funnel、Human接受、Odds或监控。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 11048,
+              "git_blob": "ea2062655e659ba89b7cdf1c9f5f10ab381850e7",
+              "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
+              "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          {
+            "kind": "SAVED_QUESTION",
+            "record": {
+              "candidate_hash": "16e5f9ea2fc5a7bba2e19b0b9aefd8529a97a1bfdc6d92b9b469b3e860fb9f61",
+              "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/",
+              "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+              "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+              "finished_at": "2026-09-19T23:35:03.209731+00:00",
+              "gap_reason": "PermissionDeniedError",
+              "host_receipt_present": true,
+              "human_attention_authority": "NONE",
+              "investment_authority": "NONE",
+              "known_counterevidence": [
+                "原研究已记录募集资金及现金管理事实，不能把再次读取包装为新的资金事件。",
+                "保荐人无异议不是现金自由使用或投资回报的证明；审批与实际执行可能不同。"
+              ],
+              "known_unknowns": [
+                "2026年9月19日实际划款及各项目最新投入未检查；本题不裁定当前资金余额或当前经营状态。",
+                "本题不估计全公司自由现金额、项目盈利或买卖价值，也不撤销旧研究的终局理由挑战。",
+                "既有索引和保存研究不是全仓问题历史穷尽；若发现同一经济问题已执行，回原宿主，不换key重跑。"
+              ],
+              "new_research_execution": "NOT_EXECUTED",
+              "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+              "original_platform_task_id": "35476493146",
+              "pre_present": false,
+              "predecessor_execution_id": null,
+              "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+              "question_id": "restricted-proceeds-internal-transfer-2026h1",
+              "question_source": {
+                "bytes": 4916,
+                "git_blob": "725af6706ee92fd19075fe75fbc27c11983fb7ff",
+                "path": "docs/readings/300711-question-execution-2026-09-19/question.json",
+                "read_path": "sources/git/725af6706ee92fd19075fe75fbc27c11983fb7ff/question.json",
+                "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                "ref": "61e2d1a86770188feb5e8c342932ae3031101860",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "b4833ecd8bec0b120a3dcd0d1679402425d5f29332da7186fd9dd23bce6020a2"
+              },
+              "quick_present": false,
+              "registered_current_handoff": false,
+              "research_authority": "NONE",
+              "research_cutoff": "2026-09-19T23:34:50.045443+00:00",
+              "revision": 2,
+              "role": "ROOT",
+              "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+              "signal_transition_authority": "NONE",
+              "source_reading_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+              "sources": {
+                "admission.json": {
+                  "bytes": 1694,
+                  "git_blob": "52b48b4869c74ab12e57859732b6d0370e66a486",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/admission.json",
+                  "read_path": "sources/git/52b48b4869c74ab12e57859732b6d0370e66a486/admission.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "01e7a250daa75fd9f1cd0b4eaecf27d5d16d6d7a4d1f91adfa7f3db90caf9f74"
+                },
+                "candidate.json": {
+                  "bytes": 5097,
+                  "git_blob": "49f0b297006a97003f69b4f522d55e8e6cc8775c",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/candidate.json",
+                  "read_path": "sources/git/49f0b297006a97003f69b4f522d55e8e6cc8775c/candidate.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "c6186f10fd5f958d3bb8533108c88c837cc9b9cfd5fdf5e98d4a1d4f6247fc77"
+                },
+                "host-receipt.json": {
+                  "bytes": 1830,
+                  "git_blob": "a49280db99f5a5ab4c47c085af5ac07fb71c4505",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/host-receipt.json",
+                  "read_path": "sources/git/a49280db99f5a5ab4c47c085af5ac07fb71c4505/host-receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "0c815b472db2d7b0780d17b6454fe3644e5b302bd9dc3c1f3656952c237f723d"
+                },
+                "input.json": {
+                  "bytes": 8098,
+                  "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+                  "read_path": "sources/git/0ebfafc5b20fb65edf364d6e61d7a92f1a550c08/input.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
+                },
+                "launch.json": {
+                  "bytes": 933,
+                  "git_blob": "c97872eb173e028aed531e77241bfab5bc1ac959",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/launch.json",
+                  "read_path": "sources/git/c97872eb173e028aed531e77241bfab5bc1ac959/launch.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "99f00a761c0923f1d4492062f5f303307bf2d3ac7ea1d6bb540bdd83bb049e50"
+                },
+                "prepare.json": {
+                  "bytes": 1558,
+                  "git_blob": "444833cb8aa73e3fa74aeb1fa90bd2c369c88e37",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/prepare.json",
+                  "read_path": "sources/git/444833cb8aa73e3fa74aeb1fa90bd2c369c88e37/prepare.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "ce39e7ccd25d4abcb6b421985603558ee623eda17322b17be6330ad99d711d38"
+                },
+                "receipt.json": {
+                  "bytes": 2326,
+                  "git_blob": "902302515e469a0c4d5451100974c9e197850b9d",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/receipt.json",
+                  "read_path": "sources/git/902302515e469a0c4d5451100974c9e197850b9d/receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "f297bcf71035be8e8e6f01fa009dad000d9e1bcf41f5ac72d16c2e1f732d5e89"
+                },
+                "validation.json": {
+                  "bytes": 455,
+                  "git_blob": "f9c8e26f87bee13763598d86778b6edd10791c01",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/validation.json",
+                  "read_path": "sources/git/f9c8e26f87bee13763598d86778b6edd10791c01/validation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "5ba0b4928ffccd08270a14502454096974e91976e5118f825d4bf275d1cf9877"
+                }
+              },
+              "status": "VALIDATED_EXECUTION_GAP",
+              "terminal_reason": null,
+              "terminal_stage": null,
+              "terminal_state": null,
+              "thscode": "300711.SZ",
+              "validation_hash": "0b0b52439bd1de9262aa9eef5ffef386d144f22e336cacd6c6fc2786a07fe764",
+              "validation_scope": "SAVED_CANDIDATE_CONSISTENCY_NOT_LIVE_ADMISSION_OR_SOURCE_TRUTH",
+              "why_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不是以涨幅、标签数量或接口验收需要认定投资优先级。"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 9,
+              "status": "RETAINED_BYTES_VERIFIED"
+            }
+          },
+          {
+            "kind": "SAVED_QUESTION",
+            "record": {
+              "candidate_hash": "658c1d15686eed3d1671218ad211061df9a37c520efa2ee24287af0f2de02f3c",
+              "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/",
+              "completion": "COMPLETE",
+              "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+              "finished_at": "2026-09-20T02:55:22.205034+00:00",
+              "gap_reason": null,
+              "host_receipt_present": true,
+              "human_attention_authority": "NONE",
+              "investment_authority": "NONE",
+              "known_counterevidence": [
+                "原研究已记录募集资金及现金管理事实，不能把再次读取包装为新的资金事件。",
+                "保荐人无异议不是现金自由使用或投资回报的证明；审批与实际执行可能不同。"
+              ],
+              "known_unknowns": [
+                "2026年9月19日实际划款及各项目最新投入未检查；本题不裁定当前资金余额或当前经营状态。",
+                "本题不估计全公司自由现金额、项目盈利或买卖价值，也不撤销旧研究的终局理由挑战。",
+                "既有索引和保存研究不是全仓问题历史穷尽；若发现同一经济问题已执行，回原宿主，不换key重跑。"
+              ],
+              "new_research_execution": "NOT_EXECUTED",
+              "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+              "original_platform_task_id": "35485210755",
+              "pre_present": true,
+              "predecessor_execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+              "predecessor_sources": {
+                "admission": {
+                  "git_blob": "52b48b4869c74ab12e57859732b6d0370e66a486",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/admission.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_ADMISSION",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "01e7a250daa75fd9f1cd0b4eaecf27d5d16d6d7a4d1f91adfa7f3db90caf9f74"
+                },
+                "candidate": {
+                  "git_blob": "49f0b297006a97003f69b4f522d55e8e6cc8775c",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/candidate.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_CANDIDATE",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "c6186f10fd5f958d3bb8533108c88c837cc9b9cfd5fdf5e98d4a1d4f6247fc77"
+                },
+                "host_receipt": {
+                  "git_blob": "a49280db99f5a5ab4c47c085af5ac07fb71c4505",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/host-receipt.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_HOST",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "0c815b472db2d7b0780d17b6454fe3644e5b302bd9dc3c1f3656952c237f723d"
+                },
+                "input": {
+                  "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_INPUT",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
+                },
+                "launch": {
+                  "git_blob": "c97872eb173e028aed531e77241bfab5bc1ac959",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/launch.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_LAUNCH",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "99f00a761c0923f1d4492062f5f303307bf2d3ac7ea1d6bb540bdd83bb049e50"
+                },
+                "receipt": {
+                  "git_blob": "902302515e469a0c4d5451100974c9e197850b9d",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/receipt.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_RECEIPT",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "f297bcf71035be8e8e6f01fa009dad000d9e1bcf41f5ac72d16c2e1f732d5e89"
+                },
+                "validation": {
+                  "git_blob": "f9c8e26f87bee13763598d86778b6edd10791c01",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/validation.json",
+                  "purpose": "QUESTION_TECHNICAL_PREDECESSOR_VALIDATION",
+                  "ref": "135d705898f1f32aff4beab85742362d7c1cbad5",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "5ba0b4928ffccd08270a14502454096974e91976e5118f825d4bf275d1cf9877"
+                }
+              },
+              "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+              "question_id": "restricted-proceeds-internal-transfer-2026h1",
+              "question_source": {
+                "bytes": 4916,
+                "git_blob": "725af6706ee92fd19075fe75fbc27c11983fb7ff",
+                "path": "docs/readings/300711-question-execution-2026-09-19/question.json",
+                "read_path": "sources/git/725af6706ee92fd19075fe75fbc27c11983fb7ff/question.json",
+                "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                "ref": "61e2d1a86770188feb5e8c342932ae3031101860",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "b4833ecd8bec0b120a3dcd0d1679402425d5f29332da7186fd9dd23bce6020a2"
+              },
+              "quick_present": false,
+              "registered_current_handoff": false,
+              "research_authority": "NONE",
+              "research_cutoff": "2026-09-20T02:54:52.704035+00:00",
+              "revision": 2,
+              "role": "TECHNICAL_CONTINUATION",
+              "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+              "signal_transition_authority": "NONE",
+              "source_reading_commit": "ead15d17e82f9487f76e78194b465331b64bb87d",
+              "sources": {
+                "admission.json": {
+                  "bytes": 1746,
+                  "git_blob": "fe07ceb1b92513c2b89bd02e3e2cce9a35033724",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/admission.json",
+                  "read_path": "sources/git/fe07ceb1b92513c2b89bd02e3e2cce9a35033724/admission.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "8a99bf71d7e68fde384b15c20c40f1bf41b1eb99f8bbad57559e6506e9fb627f"
+                },
+                "candidate.json": {
+                  "bytes": 18540,
+                  "git_blob": "9e304368441ba9b3414a155b94721a79bf9c507f",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/candidate.json",
+                  "read_path": "sources/git/9e304368441ba9b3414a155b94721a79bf9c507f/candidate.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "d8aa68c1bd85c5a5d6fcc4d0e8c8e9e7ef44ef97d02128372742832fdfc0d0be"
+                },
+                "funnel.json": {
+                  "bytes": 16871,
+                  "git_blob": "d3b5486ae8a174220bc5ce2ea0503493f5a284d8",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/funnel.json",
+                  "read_path": "sources/git/d3b5486ae8a174220bc5ce2ea0503493f5a284d8/funnel.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "4c5aff2bf92d4b0c50142303a785946395aaae0610fdfa18b97ee24f8b95a65b"
+                },
+                "host-receipt.json": {
+                  "bytes": 2602,
+                  "git_blob": "e494a9e5213588e6f275b592d6815ab53a8b2eaa",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/host-receipt.json",
+                  "read_path": "sources/git/e494a9e5213588e6f275b592d6815ab53a8b2eaa/host-receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "8f810a38dcf308959793ed17db98f4e46fc52f96217f50a20bec2a5c50f0ff33"
+                },
+                "input.json": {
+                  "bytes": 11626,
+                  "git_blob": "3cff654bd890235c99d90d6627146d575902abbd",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
+                  "read_path": "sources/git/3cff654bd890235c99d90d6627146d575902abbd/input.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6"
+                },
+                "launch.json": {
+                  "bytes": 5115,
+                  "git_blob": "6f44ca6da6c0966e93e1fb555b382641172269b1",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/launch.json",
+                  "read_path": "sources/git/6f44ca6da6c0966e93e1fb555b382641172269b1/launch.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "4845ce98764b3d1e00118aff3af0354d1cbc3a70cc34c149211b5f96167dcb4c"
+                },
+                "prepare.json": {
+                  "bytes": 1584,
+                  "git_blob": "a3678b240d13582474dddfa0082430309f25c8dd",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/prepare.json",
+                  "read_path": "sources/git/a3678b240d13582474dddfa0082430309f25c8dd/prepare.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "1665cdc3c64ff0d16da8dd16cadb6dfa80df396136ad732102e6298037f2b79d"
+                },
+                "receipt.json": {
+                  "bytes": 2229,
+                  "git_blob": "11bae98081b1d82e10c3360863793014caca8fc3",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/receipt.json",
+                  "read_path": "sources/git/11bae98081b1d82e10c3360863793014caca8fc3/receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "35f3b0cae5358f08eae8c18d45d55b0725979ee531530801e34196d423f2cb4d"
+                },
+                "validation.json": {
+                  "bytes": 17570,
+                  "git_blob": "a702faa3510672a17f7a4a250d4925551c91a123",
+                  "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/validation.json",
+                  "read_path": "sources/git/a702faa3510672a17f7a4a250d4925551c91a123/validation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "3a9a28662dfd9725bc64220b5ed13afcde7f4569b69e1075961efc677f0ab9b2"
+                }
+              },
+              "status": "VALIDATED_FUNNEL_RESULT",
+              "terminal_reason": "本次为PRE阶段限定性资金性质核查：三份已保存官方披露在用途约束、内部划转与专户管理上已给出可核验的一致口径（专户不得用作其它用途、不存在暂时补流、增资属募投实施方式），因此“余额/内部划转是否等同可自由分配现金或新增经营现金流”这一问题在历史披露层面已有可用结论，无需立即进入Quick/DEEPEN；但FALSIFICATION_TEST所要求的关键判别项（是否解除用途限制、是否存在集团外经营现金来源、9月19日实际划款与当前投入）在本次范围内缺失，且本题不裁定当前余额或当前经营状态，故待触发条件（出现解除用途限制或新资金用途披露、实际划款/投入进展披露）后再行判别。本次为测试性输入，不强行进入Quick或DEEPEN。",
+              "terminal_stage": "PRE_RESEARCH",
+              "terminal_state": "WAIT_FOR_TRIGGER",
+              "thscode": "300711.SZ",
+              "validation_hash": "5e86a90be099cf7920ade60158e1777646bb8f00715b95acfb2ea71acccde686",
+              "validation_scope": "SAVED_CANDIDATE_CONSISTENCY_NOT_LIVE_ADMISSION_OR_SOURCE_TRUTH",
+              "why_now": "已有通讯设备市场表达候选及经营初读；原研究提过募资余额但未单独裁定资金用途约束与集团内划转口径。错误地把指定用途筹资或内部转款当作经营现金会扭曲股东经济桥，因此提出限定历史资金性质问题。不是以涨幅、标签数量或接口验收需要认定投资优先级。"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 10,
+              "status": "RETAINED_BYTES_VERIFIED"
+            }
+          }
+        ],
+        "association_id": "aac50b38a32a048ca0573abc145c7e8a8a500fb9e8854b3c3bec41e805b9ca32",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "智能电网",
+                "concept_thscode": "885311.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+                "membership_request_index": 1,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:17:25.907438Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "300711.SZ"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "601952.SH",
+            "id": "suken-api-v2-34548590855",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "9月11日完成的Sector来源保存半年报选页Pre/Quick，原Funnel WAIT_FOR_TRIGGER；限定业务映射已审阅，非全景研究、新Odds或Human判断。原v1失败保留；补充资料未核验不等于尚未披露；单次API成功不代表日常研究已上线。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 7561,
+              "git_blob": "b80885780fee7dae8ff4292397b8aeb499bb8e52",
+              "path": "docs/readings/suken-api-2026-09-11.md",
+              "read_path": "sources/git/b80885780fee7dae8ff4292397b8aeb499bb8e52/suken-api-2026-09-11.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "c1b85c741784c45b4cb890d80d41666bfa31b401f3b37862f8757f8cf07a6609"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          }
+        ],
+        "association_id": "de35b4ce7689c43558f7f46790c2c2cfa7700f679c97f79fa470925950799efb",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "601952.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600036.SH",
+            "id": "incremental-cmb-aa9ea8d2-pre",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "限定保存公告的实际Pre WAIT；非当前公司全景、非新Odds或Human判断。Disclosure origin不替代Sector origin。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 4783,
+              "git_blob": "f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c",
+              "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/README.md",
+              "read_path": "sources/git/f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c/README.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "3c385ac1510295ae1c1f2b92f5ae19c2323d4607",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "07cd9754fb81e44b17def77fb569ef4fdb3a38614e89c47d52adc5cc071f1440"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          }
+        ],
+        "association_id": "36092c3279ea3f936547ad832726073130687fee181cb7f391cbb27eb108c97e",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600036.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "603986.SH",
+            "id": "incremental-603986-0b74408c-preflight-failure",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "来源预检失败，Research未执行、Funnel未到达；不是完成WAIT或新增待深化。保留精确失败和无自动重试边界。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 2775,
+              "git_blob": "56d4f68dbf92fec23ade24ca6158aed7febf3acc",
+              "path": "research_runs/candidates/incremental-disclosures/0b74408c05170420834289e641a8ca0a61fe5524ed74184dd71823beb1c5f6e9/failure.json",
+              "read_path": "sources/git/56d4f68dbf92fec23ade24ca6158aed7febf3acc/failure.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "195dcfe710c62c3796fef4d19e68cadd05a8d84d",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "e8974a5157ae1546debe2f5dcbf82199ec57aab339bfbcaccec8e5696ad96079"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RESEARCH_PRE_EXECUTION_FAILURE"
+          },
+          {
+            "case": "603986.SH",
+            "id": "gigadevice-baseline",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "原完整数值基线；是否仍为生产输入另外从 workflow 的显式配置读取，不表示 Human 接受其概率。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 33013,
+              "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+              "path": "research_cases/603986-gigadevice-deep-research-v2.json",
+              "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_CALCULATION_BASELINE"
+          },
+          {
+            "case": "603986.SH",
+            "id": "gigadevice-method",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "方法实验没有授权移除生产 Inbox；不改写原概率或 Odds。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 37527,
+              "git_blob": "6210d53f74356c9baac3d8f8c5a44574326a83fc",
+              "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          },
+          {
+            "case": "603986.SH",
+            "id": "gigadevice-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "冻结的条件决定；历史分布 NON-DRIVING。Action 未执行状态只属于该 checkpoint，不能推断后续成交。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 10911,
+              "git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
+              "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
+              "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          }
+        ],
+        "association_id": "79fd81f358c0ddbc32656b41193c3baedc4050335f559fd79e4e8255502c4d1c",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "物联网",
+                "concept_thscode": "885312.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+                "membership_request_index": 3,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:09.149291Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": {
+          "action_authority": "NONE",
+          "company_name": "兆易创新",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 603986.SH",
+          "market_timestamp": "2026-09-21T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "gigadevice-assumption-recheck-350",
+            "kind": "ASSUMPTION_RECHECK",
+            "label": "around CNY350 pre-entry assumption review",
+            "lower_price": null,
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "POINT_AT_OR_BELOW",
+            "signed_distance_to_upper_cny": "41.71",
+            "signed_distance_to_upper_fraction_of_current": "0.10648183605218146077455260269076612800285925812463301932552143167138954839039085",
+            "upper_price": "350"
+          },
+          "observed_at": "2026-09-21T08:20:38.700385Z",
+          "prerequisite": "Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.",
+          "price": "391.71",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "registry_reference_id": "gigadevice-human",
+            "source_git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
+            "source_path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
+            "source_ref": null,
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          "source_report": {
+            "bytes": 11981,
+            "git_blob": "bf033044dc0abe39b121edd01a9425bd672fa29c",
+            "read_path": "details/inbox/35577379423/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c45b08b2230e1fd2db1756dc5cbf053aca1c14ff5f55baa96260c785ede45737"
+          },
+          "status": "ACTIVE_ODDS_WATCH",
+          "ticker": "603986.SH",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "3730e6a9b76d1b809eeec9c2c816a23cb912143ddb5a5fba2ff769e7c575c06e"
+        },
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "603986.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "002050.SZ",
+            "id": "sanhua-baseline",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "原计算基线；与 Human 使用的核心业务方法背景分开。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 19588,
+              "git_blob": "925f9875b6f8d814f95537af61214068188beb11",
+              "path": "research_cases/002050-sanhua-deep-research-v1.json",
+              "read_path": "sources/git/925f9875b6f8d814f95537af61214068188beb11/002050-sanhua-deep-research-v1.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "f809cb4aad763bbd719c5d6929306e5c810af0f869cee4f15a7420fa742ea58f"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_CALCULATION_BASELINE"
+          },
+          {
+            "case": "002050.SZ",
+            "id": "sanhua-method",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "零 schema 方法补充，不是自动替代生产输入的授权。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 37347,
+              "git_blob": "41d6effe2c45fd1f17133f0ad38d844d82c134d9",
+              "path": "docs/dogfood/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_path": "sources/git/41d6effe2c45fd1f17133f0ad38d844d82c134d9/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "cc981439bb3c7f7c9ac3f81ad5e3580a4b195872940bd1eca4ac362c74a932ad"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          },
+          {
+            "case": "002050.SZ",
+            "id": "sanhua-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "条件首笔约30元，非机械订单；旧总公司概率不是该决定的驱动依据。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 9548,
+              "git_blob": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
+              "path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
+              "read_path": "sources/git/0c7739cb5a376be9cc722e37f6acd168dca9704e/002050-sanhua-human-decision-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "f7d638b9913c3aa878249c939cee6c1b3db582f3664b391d5ab86498396d51bd"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          {
+            "case": "002050.SZ",
+            "id": "sanhua-horizon",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "后续 Human 时间范围补充，不能回写此前 checkpoint 或冒充已执行 Action。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 4961,
+              "git_blob": "ccc66895c2aaf29b78630208b95e0ca11655362f",
+              "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
+              "read_path": "sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "9ef5d905f8a9c61cd69a320db0270f0665ca827f7351b2f80743ab5b04a5c595"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_METHOD_SUPPLEMENT"
+          }
+        ],
+        "association_id": "f49f6c1670f965295b615a41e9c1f44b57bd2d01b0a86db299125b379d29e02b",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": {
+          "action_authority": "NONE",
+          "company_name": "三花智控",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 002050.SZ",
+          "market_timestamp": "2026-09-21T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "sanhua-first-entry-around-30",
+            "kind": "CONDITIONAL_FIRST_ENTRY_CONDITION",
+            "label": "around CNY30 first-tranche condition",
+            "lower_price": null,
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "POINT_AT_OR_BELOW",
+            "signed_distance_to_upper_cny": "6.18",
+            "signed_distance_to_upper_fraction_of_current": "0.17081260364842454394693200663349917081260364842454394693200663349917081260364842",
+            "upper_price": "30"
+          },
+          "observed_at": "2026-09-21T08:20:38.700385Z",
+          "prerequisite": "Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.",
+          "price": "36.18",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "registry_reference_id": "sanhua-human",
+            "source_git_blob": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
+            "source_path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
+            "source_ref": null,
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          },
+          "source_report": {
+            "bytes": 11981,
+            "git_blob": "bf033044dc0abe39b121edd01a9425bd672fa29c",
+            "read_path": "details/inbox/35577379423/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c45b08b2230e1fd2db1756dc5cbf053aca1c14ff5f55baa96260c785ede45737"
+          },
+          "status": "ACTIVE_ODDS_WATCH",
+          "ticker": "002050.SZ",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "3730e6a9b76d1b809eeec9c2c816a23cb912143ddb5a5fba2ff769e7c575c06e"
+        },
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002050.SZ"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "300750.SZ",
+            "id": "catl-qualified-exit",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "宁德旧通用数值资格退出的具体依据；不机械推广到兆易或三花。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 20960,
+              "git_blob": "597ca0310acbf5eee371aae2d3b9dc8b0f188e56",
+              "path": "docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md",
+              "read_path": "sources/git/597ca0310acbf5eee371aae2d3b9dc8b0f188e56/catl-full-research-reunderwrite-2026-09-04.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "720869e56f66402b3520ac55113687e49211bfb3075a4303fa83f954d07603da"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "EXPLICIT_QUALIFICATION_EXIT_REFERENCE"
+          },
+          {
+            "case": "300750.SZ",
+            "id": "catl-historical",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "保留历史机械/采集用途；生产配置另行读取，不能因本文件存在恢复资格。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 6285,
+              "git_blob": "514fdb991504abdd23e814dc77fdcbd6f0e2e22c",
+              "path": "dogfood/300750-catl.json",
+              "read_path": "sources/git/514fdb991504abdd23e814dc77fdcbd6f0e2e22c/300750-catl.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "98f96c22cd2e839a7ea67d48feffbb02643cc87fa1891d7470ace668503ba035"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_MECHANICS_NOT_CURRENT_NUMERICAL_INPUT"
+          },
+          {
+            "case": "300750.SZ",
+            "id": "300750-catl-real-research-commit-roundtrip-20260916",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "#321 typed remote round-trip acceptance only: replays the exact historical dogfood/300750-catl.json ResearchCommitPackage through the existing commit-only retainer and archives the exact COMMITTED output. This validates commit/archive identity only; the existing CATL qualification-exit remains in force, historical illustrative scenario probabilities are not calibrated/current, and this does not establish current Research truth/Belief, Human acceptance, Market/Odds/Action/watch or Investment Authority.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 783,
+              "git_blob": "c75e6007f3a503baeec139b7640d22d8a3ac9fcb",
+              "path": "docs/readings/300750-catl-research-commit-roundtrip-2026-09-16/commit.json",
+              "read_path": "sources/git/c75e6007f3a503baeec139b7640d22d8a3ac9fcb/commit.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "e3603bf9805a7c21bebaa5cac9df8d7127801f6b",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "f7b189c885f13e5a95c6da67ca4a2252d67eeba155fac31bb9ac65ed6982e68e"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HISTORICAL_RESEARCH_COMMIT_CHECKPOINT"
+          }
+        ],
+        "association_id": "aa1aacad8a20f0dc1c5021e77359917728c4a9f1f8bad3c7bb76b84c685f4048",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "300750.SZ"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600233.SH",
+            "id": "yto-research",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "既有完整研究包，非本次新研究或新的 Human 采用判断。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 40000,
+              "git_blob": "ae9bfce4dd3cfbedddb4be84075238d867f58529",
+              "path": "research_cases/600233-yto-deep-research-v2.json",
+              "read_path": "sources/git/ae9bfce4dd3cfbedddb4be84075238d867f58529/600233-yto-deep-research-v2.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "570ee45f07f9f2ea3d1bf3d0afbb086af59c7ac6333787c6619630b515fb5c60"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_PACKAGE"
+          },
+          {
+            "case": "600233.SH",
+            "id": "yto-method",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "现有方法补充；不自动取得新 Odds 或投资权限。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 25122,
+              "git_blob": "2b58294ace63f3fe682c70f889a457f4b518c1a2",
+              "path": "docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_path": "sources/git/2b58294ace63f3fe682c70f889a457f4b518c1a2/yto-decision-hygiene-zero-schema-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "423630c5310c2c1ac35f9f00e06031bccc808e192ef9b8691bb6bf1f57b537fb"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          }
+        ],
+        "association_id": "07a1868b2f35836f8026f58cd0870c5209abee5edc7df7de55bf2403affca2dd",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600233.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "000333.SZ",
+            "id": "midea-method",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "方法对照的用途独立保留，不是新概率或投资决定。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 30078,
+              "git_blob": "68e24d4db265517e2b4d75fdc24353621e566c59",
+              "path": "docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md",
+              "read_path": "sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "b8282b3dfcb9ac5580f5411cd1dc291d8683e18ade76937a8b3681bd35540f11"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_SUPPLEMENT"
+          }
+        ],
+        "association_id": "b49c91cb041be5ecb37bd87138ea9c23b4390319739c1b9c2a4e4a5b07a7e3b6",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "智能电网",
+                "concept_thscode": "885311.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+                "membership_request_index": 1,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:17:25.907438Z"
+              },
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "物联网",
+                "concept_thscode": "885312.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+                "membership_request_index": 3,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:09.149291Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "000333.SZ"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "600549.SH",
+            "id": "xiamen-negative-control",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "研究方法负对照，不将其登记成当前投资待办。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 25760,
+              "git_blob": "d9acd593cf4a07c3a811282ec9b646a535b21840",
+              "path": "docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
+              "read_path": "sources/git/d9acd593cf4a07c3a811282ec9b646a535b21840/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "dc01da848e763716153b0f9d5d0c89a6b4d457dfc46d72c779f6342bce6b86c9"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "METHOD_NEGATIVE_CONTROL"
+          }
+        ],
+        "association_id": "a05e310b6128eb300f3a9f2e621056fa0fa3ff95cbb69143388f7c3580b2fedd",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "600549.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "688277.SH",
+            "id": "tinavi-research",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "已完成 public-diligence 的保留记录，不重新运行旧 Quick。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 22890,
+              "git_blob": "9b7248d5b34a7a0eb89805abdff0e64da9a485ec",
+              "path": "docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md",
+              "read_path": "sources/git/9b7248d5b34a7a0eb89805abdff0e64da9a485ec/tinavi-full-research-zero-schema-2026-09-04.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "adbb5f66d979011b696dfc94ae04286e2062472041f6b1a7a985d33514661b03"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          {
+            "case": "688277.SH",
+            "id": "tinavi-human",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "WATCH/NO_ACTION 冻结记录，非本次投资指令。",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 5884,
+              "git_blob": "04655814a52d28b50d4d0e3dcbdac666c22b71df",
+              "path": "docs/decisions/688277-tinavi-human-watch-2026-09-04.md",
+              "read_path": "sources/git/04655814a52d28b50d4d0e3dcbdac666c22b71df/688277-tinavi-human-watch-2026-09-04.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "108c4645890a26f6ccfc326dea83fbdbb4ddad39",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "5dd14a0b8efafc98dfa16933036bd00fe7b56458ea21b82f458fb0cf580a413c"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "HUMAN_DECISION_CHECKPOINT"
+          }
+        ],
+        "association_id": "95c4fd149660ee12375c8f9f2c8a848f64dfdbda8dfda2b28ba09d7d48e910a7",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "688277.SH"
+      },
+      {
+        "archives": [],
+        "assets": [
+          {
+            "case": "002281.SZ",
+            "id": "002281-accelink-full-research-20260917-v1",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "User-requested, AI-drafted Full Research v3 as of 2026-09-17: business and financial evidence, frozen pre-expectation Builder, actual Challenger/reconciliation, and bounded profit/cash/price arithmetic. First-entry case NOT METHOD-READY; quoted price CONTEXT_ONLY; no calibrated probability, canonical Odds, Kernel COMMITTED, Human acceptance, Action/watch, or Investment Authority. Full original-source custody remains PARTIAL.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 2130,
+              "git_blob": "50982ed0c0f1c5f06941ec8252dc1c5ffcb64d64",
+              "path": "docs/readings/002281-accelink-full-research-2026-09-17/README.md",
+              "read_path": "sources/git/50982ed0c0f1c5f06941ec8252dc1c5ffcb64d64/README.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "76da7794a13e3357653619f2007c7a15af275ce1d26a1b6fa41ade1d44cedfd9"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          }
+        ],
+        "association_id": "e084f947636fc452c385c3e45f2d2b6c20594e1fbc3d6074025134cabcb3a49a",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002281.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "300183.SZ",
+              "id": "radar-300183-eastsoft-review2-20260919",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Same-question interactive continuation of the retained Eastsoft delivery-profit-cash review: new H1 fee-coverage sensitivity, contract-asset impairment/cash counterevidence and remaining-obligation recognition limits. Conditions are not forecasts; latest customer and complete disclosure updates remain unavailable. Not new Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch. RETAINED_FILES with exact predecessor in workpaper; body recovered on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11690,
+                "git_blob": "40c2a9aa4e7d53038f113883a8a589eb03dfdfd9",
+                "path": "docs/readings/radar-eastsoft-delivery-cash-review-2-2026-09-19/workpaper.md",
+                "ref": "41dc250b63ce87950d11560d304cc3f3a8fa14d3",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "5f2617522b211f40abac5a3d59e85fff3d065b5c4a16dd8776c06a4e046f6a53"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/41dc250b63ce87950d11560d304cc3f3a8fa14d3/docs/readings/radar-eastsoft-delivery-cash-review-2-2026-09-19/workpaper.md"
+          }
+        ],
+        "assets": [
+          {
+            "case": "300183.SZ",
+            "id": "radar-300183-eastsoft-progress-20260919",
+            "kind": "PURPOSE_REFERENCE",
+            "purpose_note": "2026-09-19 bounded interactive review of the retained 2026-09-13 Pre/Quick: restores the original WAIT and adds gross-profit, working-capital cash and goodwill-headroom arithmetic on saved filings. Current trigger refresh remains incomplete. Not new Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch.",
+            "qualification": "EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION",
+            "source": {
+              "bytes": 10072,
+              "git_blob": "e2ae22709d858e242c97ad816e9a28b57a1a92a2",
+              "path": "docs/readings/radar-question-review-2026-09-19/300183/workpaper.md",
+              "read_path": "sources/git/e2ae22709d858e242c97ad816e9a28b57a1a92a2/workpaper.md",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "ref": "250efdc82567f9988d43cadae0a5b715e50d85da",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "7404c93ec7819be5ba33e94f20af56184c87846104a2e6dd9d7e3a6d638c35a3"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 1,
+              "status": "RETAINED_BYTES_VERIFIED"
+            },
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          }
+        ],
+        "association_id": "b28420b140d0d06412b26e7256c12daa3d9fcdb56c8e98adcadb8bbdc1cc9a40",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "智能电网",
+                "concept_thscode": "885311.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+                "membership_request_index": 1,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:17:25.907438Z"
+              },
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "物联网",
+                "concept_thscode": "885312.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+                "membership_request_index": 3,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:09.149291Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "300183.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "72b98ca4fe4dea23d8cf46d1c462eaf8e690d90020a53e9686eb54d3ad0201a6",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "module-profit-cash-source-review"
+              },
+              "body_materialized_in_reading": false,
+              "case": "300638.SZ",
+              "id": "radar-300638-fibocom-progress-20260919",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "2026-09-19 bounded interactive question/source checkpoint: issuer business identity and a profit-to-cash question; 2026H1 primary financial PDF not acquired and conflicting secondary cash-flow units not adopted. Not completed Pre/Quick, business WAIT/DROP, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch. Body is explicitly ON_DEMAND_ARCHIVE: locator only in daily reading; use the existing same-R archive reader before claiming body recovery.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 6567,
+                "git_blob": "29db720caf59245b28a91b692d24c763d02caa07",
+                "path": "docs/readings/radar-question-review-2026-09-19/300638/workpaper.md",
+                "ref": "250efdc82567f9988d43cadae0a5b715e50d85da",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "02ffaee82bfc5b3b14f8e44d36465506f22f1e45eda328acf3718bf6b3b5fdd7"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/250efdc82567f9988d43cadae0a5b715e50d85da/docs/readings/radar-question-review-2026-09-19/300638/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "3ec903ba6e1008e1ef08e74596e1504b8d5a25c581cae2df2896d0a43f3abb73",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "module-profit-cash-source-review"
+              },
+              "body_materialized_in_reading": false,
+              "case": "300638.SZ",
+              "id": "radar-300638-fibocom-progress2-20260919",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Revision2 of module-profit-cash-source-review, linked to retained revision1. Bounded interactive analysis of historical June29 acquisition and March18 accounting announcements read through the official web viewer: control versus economic ownership, cash/capital allocation and conditional profit undertaking. Current closing/payment, 2026H1 financial body and binary source PDF retention remain unverified/not acquired. Not automatic Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Watch or investment authority. ON_DEMAND_ARCHIVE locator only; recover this explicit revision before reuse.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 8647,
+                "git_blob": "a67befbe62538bd5f4c7376a444206ffea6c641c",
+                "path": "docs/readings/radar-fibocom-profit-cash-progress-2-2026-09-19/workpaper.md",
+                "ref": "f75ed7c5c338aa8497b042380d2c53bd6df6f495",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "34b7a8047b03e86be4e75433a99615aa8b6dc0db070487a639d1c45804606ece"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/f75ed7c5c338aa8497b042380d2c53bd6df6f495/docs/readings/radar-fibocom-profit-cash-progress-2-2026-09-19/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "f8b6f9be5e1bcdfe6445bc634890400ec7d069b2ec4daedecef6f004bbae694e",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "module-profit-cash-source-review"
+              },
+              "body_materialized_in_reading": false,
+              "case": "300638.SZ",
+              "id": "radar-300638-fibocom-progress3-20260919",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Revision3 of the same retained profit-to-cash question, linked to revision2. Bounded interactive review of the official 2026Q1 financial key table and April23 temporary idle-proceeds announcement; distinguishes operating cash conversion, internal fund use and conditional acquisition capital allocation. Q1 does not substitute for unacquired H1; issuer explanation is not verified cause and the RMB500m limit is not actual drawdown. Raw source PDF custody, current closing/payment, Full Research, automatic Pre/Quick, COMMITTED, Human acceptance, Odds and Watch are not established. ON_DEMAND_ARCHIVE locator only; recover this exact revision before reuse.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 8560,
+                "git_blob": "321dd5545fa3250d9abc1b7c73279ffcd9828b86",
+                "path": "docs/readings/radar-fibocom-profit-cash-progress-3-2026-09-19/workpaper.md",
+                "ref": "04eb44d37680195caa0de4635f0df02415c975ca",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "614dcff38ec32a53699d7cd5a485a5c6fbdead820f9b7c4f369b70c8410e15a0"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/04eb44d37680195caa0de4635f0df02415c975ca/docs/readings/radar-fibocom-profit-cash-progress-3-2026-09-19/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "8c1638ae5e5ac1c37677815bbca1f37f3db36796bf02ed8e877b3cca49ab58ed",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "智能电网",
+                "concept_thscode": "885311.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+                "membership_request_index": 1,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:17:25.907438Z"
+              },
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "物联网",
+                "concept_thscode": "885312.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+                "membership_request_index": 3,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:09.149291Z"
+              },
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "移动支付",
+                "concept_thscode": "885333.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:18:52.299000Z",
+                "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
+                "membership_request_index": 5,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:18:52.651149Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "300638.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "002460.SZ",
+              "id": "radar-002460-lc-spread-inventory-question-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Bounded interactive lithium case: 2025 issuer segment disclosures support a draft question about selling-price/input-cost/inventory mismatch after the saved LC observation. Current 2026H1 primary bodies and updates through2026-09-20 remain unacquired; no current materiality qualification, formal Question admission, Pre/Quick/Deep, COMMITTED, Human acceptance, Odds, Action or Watch. Raw PDF custody incomplete. Shared four-file comparative archive; on-demand locator only.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 10171,
+                "git_blob": "1574df575c88fdc78a42afc0025f53549c4f10a4",
+                "path": "docs/readings/lc-exposure-questions-2026-09-20/workpaper.md",
+                "ref": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/51365aae52e13cdec153ecb0cb4ab79de7d96836/docs/readings/lc-exposure-questions-2026-09-20/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "3e1afef34c4ce55778c962b01b77d05ce5ffa2fba8111f55b0cf837146bc0b43",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECOVER_REGISTERED_ARCHIVE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002460.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "300014.SZ",
+              "id": "radar-300014-lc-cost-pass-through-question-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Same bounded lithium comparative archive: 2025 issuer disclosures support a draft question about cost savings retained versus passed to customers, inventory timing and cash conversion. All-material cost share is not lithium-specific exposure. Current 2026H1 primary bodies, relevant updates and PDF custody remain incomplete; no formal admission/Pre/Quick/Deep, current benefit acceptance, COMMITTED, Human acceptance, Odds, Action or Watch. On-demand locator only.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 10171,
+                "git_blob": "1574df575c88fdc78a42afc0025f53549c4f10a4",
+                "path": "docs/readings/lc-exposure-questions-2026-09-20/workpaper.md",
+                "ref": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/51365aae52e13cdec153ecb0cb4ab79de7d96836/docs/readings/lc-exposure-questions-2026-09-20/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "73fef8de1bbfbb20b6dff19076634a7c4bb0f309add69c43f623bf6c2ab9fb99",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+                "business_linkage": "NOT_ESTABLISHED",
+                "concept_name": "智能电网",
+                "concept_thscode": "885311.TI",
+                "historical_membership": "NOT_ESTABLISHED",
+                "history_status": "EXACT_WINDOW_CHECKED",
+                "kind": "CONCEPT_CURRENT_MEMBER",
+                "market_session": "2026-09-18",
+                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+                "membership_request_index": 1,
+                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 359430,
+                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+                  "read_path": "details/concept-detail/35355234987/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+                },
+                "source_observed_at": "2026-09-18T14:17:25.907438Z"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "300014.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-membrane-profit-cash-source-review-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "2026-09-20 bounded source/question review of the saved six-row Stock batch. Official historical 2025 revenue and July contract text narrow the membrane profit/cash question; necessary 2026H1 official body/raw PDF and current issuer-update coverage remain incomplete. DRAFT / NOT_ADMITTED / NOT_EXECUTED; not Pre/Quick, business WAIT/DROP, COMMITTED, Human acceptance, Odds, Action or Watch. Seven retained files include exact source status, inventory, scope and all six candidate dispositions. ON_DEMAND_ARCHIVE locator only; recover this exact archive before claiming its body was read.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 4996,
+                "git_blob": "1839c09e9b4a7d574e2e46186f04423c476964a5",
+                "path": "docs/readings/000920-question-review-2026-09-20/workpaper.md",
+                "ref": "062f9761224e3aecfa9e314222d5069e79a351be",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "071d8048df1b4f4c76729ffd927dd1d587f57af6a8c0e35a36eadfebfd686191"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/062f9761224e3aecfa9e314222d5069e79a351be/docs/readings/000920-question-review-2026-09-20/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-source-access-and-dedup-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Follow-up to the 2026-09-20 Woton source/question draft. Normal browser checks still acquired no official PDF or complete current disclosure inventory; issuer report directories were outdated. Bounded relation review of retained inputs, 529 local refs and visible GitHub discussions found no additional formal Woton question, while substantive overlap with the failed baseline remains. Continue the same draft; NEW_DISTINCT_QUESTION is not assigned. Seven files retain access observations, exact dedup scope and pending interface reuse. NOT_ADMITTED / NOT_EXECUTED; no Pre/Quick, business WAIT/DROP, Human acceptance or automatic supersession. Recover this exact archive before citing its body.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 3911,
+                "git_blob": "07a090b69403e124fab36443bd3076ce215b2268",
+                "path": "docs/readings/000920-source-review-continuation-2026-09-20/README.md",
+                "ref": "02a8f8f2c1aadca8287c1f68ebbb6be2f7d8ac7e",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "d7fafc72d5612e23533e1d97e87c9682a857cd1ff920dd1196464e7a3fca5917"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/02a8f8f2c1aadca8287c1f68ebbb6be2f7d8ac7e/docs/readings/000920-source-review-continuation-2026-09-20/README.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-reports-only-profit-cash-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Human scope 5750493197 prioritizes financial reports and pauses other announcement acquisition. Bounded continuation of the original Woton root using the acquired 2026H1 Sina issuer-report PDF: p104 profit-to-operating-cash reconciliation and p16 membrane product/engineering facts; volume/price/mix and segment cash attribution remain unresolved. First typed progress checkpoint, not a new distinct question or formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance, Odds, Action or Watch. ON_DEMAND_ARCHIVE locator only; exact body recovery is separate. Source PDFs/service full text are not included in the two-file progress directory.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 7194,
+                "git_blob": "b61066823d813e543729002c031c452d14549787",
+                "path": "docs/readings/000920-reports-only-progress-2026-09-20/workpaper.md",
+                "ref": "7e992b3ce83993897930076f64da0eb9cf2035f6",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "838523e30028189484e3dbc7cd00efbe0202030e1cc94aa785d99e6893875b9a"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/7e992b3ce83993897930076f64da0eb9cf2035f6/docs/readings/000920-reports-only-progress-2026-09-20/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "f44b5d5609882c2003f6bee759ce0222eafac332ac6b3fc0572bc32d5409cbdc",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-reports-only-working-capital-20260920",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Second typed progress checkpoint on the original Woton question using the already-retained 2026H1 Sina PDF. Six inventory categories reconcile exactly to the operating-cash inventory adjustment; receivable/bill balances explain the direction difference but do not establish cash receipts. Endorsed-bill asset/liability changes are kept together; detailed operating-receivable cash reconciliation and segment attribution remain UNKNOWN. This is separate financial work, not a result of the concurrent CNINFO source probe, formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance or Odds. Three-file archive contains the workpaper and current/predecessor progress descriptors, not source PDFs. Recover the exact body separately.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11510,
+                "git_blob": "0692a0df16345dafcab2b6690874a21f283cb90d",
+                "path": "docs/readings/000920-working-capital-progress-2026-09-20/workpaper.md",
+                "ref": "3ba635649edadafcd7715ab0e469e1a751dfe5cd",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c346523d2d3d6416aebd7bc12805d8676b234bd0657ef0d2155590e074df6cc4"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/3ba635649edadafcd7715ab0e469e1a751dfe5cd/docs/readings/000920-working-capital-progress-2026-09-20/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-h1-original-pdf-custody-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Retained source-preparation working note for the original Woton financial question: exact original Sina H1 PDF, source attempt35550930725 and preserved representation failure. This one-file on-demand note locates raw PDF/prepare/failure bytes; it does not materialize them in the daily reading or declare repair success, CNINFO byte equivalence, new Question, Pre/Quick, financial Research completion, Human acceptance or model-egress permission. Representation repair is a separate zero-source-GET operation; old question/r2/failures remain.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 6507,
+                "git_blob": "f1d709062517854e3eec300cd12541066a7cf2dc",
+                "path": "docs/readings/woton-original-source-custody-20260921/README.md",
+                "ref": "e9d116bd4f20f6f9a3ed6f2e299fe2a97f9c577b",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "48e3287c7c366f313933d720999b8f0e7defd589bbf41a894dd76ad2da8022ae"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/e9d116bd4f20f6f9a3ed6f2e299fe2a97f9c577b/docs/readings/woton-original-source-custody-20260921/README.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "expected_sha256": "fbc34d8edd768a4fd499225dc76894bceca098062d9ae393bf1d350a775822f4",
+                "format": "RESEARCH_PROGRESS",
+                "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-reports-only-profit-bridge-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Third same-question typed progress checkpoint using the retained 2026H1 issuer PDF: six-product gross profit and both H1 group gross-profit-to-parent-net-profit bridges reconcile exactly. Parent profit growth includes a minority-allocation effect; the tax-adjustment note has an unallocated551260.96-yuan discrepancy. Per-product expenses/tax/cash and prior receivable-cash attribution remain UNKNOWN. Interactive financial work, not new Pre/Quick, Full Research, COMMITTED, Human acceptance, model-egress permission or investment authority. Three-file progress archive only; raw PDF has separate native custody. Recover this exact revision on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 14279,
+                "git_blob": "771502c279982e6e6c3d7ff95ed0928a46cbbe73",
+                "path": "docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md",
+                "ref": "69305a766eb2cc4b09a6b1a6d4008625e54b8a3d",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "cfc59e29f95245567bbedbccaed5987c6c54db9483e92a1dc352a5246aefdd39"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/69305a766eb2cc4b09a6b1a6d4008625e54b8a3d/docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000920.SZ",
+              "id": "p0-000920-continuation-failure-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "One approved same-question Pre call returned text but failed APPLICATION_VALIDATION; original EXECUTION_GAP and raw output remain unchanged, no Quick or retry. Separate source-page review corrects blank engineering assets/liabilities and distinguishes over-time revenue disclosure from unallocated working capital; product and report-segment engineering costs differ by19735430.65CNY. Not validated Pre/WAIT, Full Research, COMMITTED, Human acceptance or investment authority. Eight-file on-demand archive; original PDF/context remain at precise prior Git refs.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 8771,
+                "git_blob": "10a6379da4c5d0a2949f9ee70377eeee0d715f88",
+                "path": "docs/readings/000920-continuation-review-2026-09-21/README.md",
+                "ref": "2a3c429aabca6f0b398b973df66fe94bb235de94",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "7cd20f5de72676d669d223cd163b8535be1fba8ced5930ca298e2484c023b074"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/2a3c429aabca6f0b398b973df66fe94bb235de94/docs/readings/000920-continuation-review-2026-09-21/README.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "760358e5e4e819c0079221b743c37d889eeb32ecdb954b49a61337e732db70f8",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "RECOVER_REGISTERED_ARCHIVE",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "000920.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "603507.SH",
+              "id": "stock-603507-financial-question-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11153,
+                "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+                "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+                "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md"
+          },
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "603507.SH",
+              "id": "stock-603507-profit-hedging-cash-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "Same-question primary-page continuation: FTShare discovery led to retained CNINFO 215-page H1 PDF. Two-period profit and cash bridges reconcile; hedge disclosure inconsistency and sustainability remain unresolved. Two-file workpaper/calculation archive; large original PDF has separate exact Git custody. Not Pre/Quick, formal admission, Human acceptance or Odds.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 9519,
+                "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
+                "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
+                "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/6eacd1fe5963514948cbcf0a516a13098286fe14/docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md"
+          }
+        ],
+        "assets": [
+          {
+            "kind": "SAVED_QUESTION",
+            "record": {
+              "candidate_hash": "75d72a7996390daec61ec652f502c833195a8ef5232e31d79b1d173df8e6ae92",
+              "candidate_output_prefix": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/",
+              "completion": "COMPLETE",
+              "execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
+              "finished_at": "2026-09-21T15:46:58.630478+00:00",
+              "gap_reason": null,
+              "host_receipt_present": true,
+              "human_attention_authority": "NONE",
+              "investment_authority": "NONE",
+              "known_counterevidence": [
+                "原交互审阅提示扣非利润也增长，不能将归母增长全部当作一次性。",
+                "经营现金的同比改善与资本占用变化有关，不能等同已产生同额股东自由现金。"
+              ],
+              "known_unknowns": [
+                "报告后变化不在本次STATIC范围内。",
+                "逐工具套保与外币经营敞口对应、营运资本改善的持续性、维持性资本开支仍未建立。",
+                "此问题已有交互底稿；本次正式Pre不是全新经济发现或Full Research。"
+              ],
+              "new_research_execution": "NOT_EXECUTED",
+              "next_discriminating_search": "本次仅使用已保存完整半年报验证上述有限问题；需要其他关键材料时明确其名称与影响后停止，不自动抓取、重试或深化。",
+              "original_platform_task_id": "35620959045",
+              "pre_present": true,
+              "predecessor_execution_id": null,
+              "question": "在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。",
+              "question_id": "profit-growth-cash-conversion-2026h1",
+              "question_source": {
+                "bytes": 4352,
+                "git_blob": "fc52aee3bf922644287171e61e772778d1196ab1",
+                "path": "research_runs/daily-inputs/603507-profit-cash-20260921/question.json",
+                "read_path": "sources/git/fc52aee3bf922644287171e61e772778d1196ab1/question.json",
+                "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                "ref": "a17dcb961b4078106ab9e19c09172b94a26f97ac",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "f452e0d3b75b002f5f4bac1af6aa931ceb40e8c2ad736323ea32b3c328dbd80a"
+              },
+              "quick_present": true,
+              "registered_current_handoff": false,
+              "research_authority": "NONE",
+              "research_cutoff": "2026-09-21T15:44:33.659776+00:00",
+              "revision": 1,
+              "role": "ROOT",
+              "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
+              "signal_transition_authority": "NONE",
+              "source_reading_commit": "461df14b32dae4a2073b2707c74113def2231ebc",
+              "sources": {
+                "admission.json": {
+                  "bytes": 1694,
+                  "git_blob": "bc7f33dee5d280638067a30c8cf5137b4db65d49",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/admission.json",
+                  "read_path": "sources/git/bc7f33dee5d280638067a30c8cf5137b4db65d49/admission.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "90e377ec7dced714680af936a1d8a29ad7363f4c696427044c7751abe1ee2844"
+                },
+                "candidate.json": {
+                  "bytes": 39534,
+                  "git_blob": "1c0a04ec40e2a60202e1ddc6f45a916077a23ce1",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/candidate.json",
+                  "read_path": "sources/git/1c0a04ec40e2a60202e1ddc6f45a916077a23ce1/candidate.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "3e68596c3c396d400a11440508b630975249f892a44971321aa8fc62882a1e0f"
+                },
+                "funnel.json": {
+                  "bytes": 38277,
+                  "git_blob": "d19cbb927586df4c9ca32bd715bed8277338e041",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/funnel.json",
+                  "read_path": "sources/git/d19cbb927586df4c9ca32bd715bed8277338e041/funnel.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "b04ff7890b6e37a5ac33d78531faa510543861eb913881c0db1e259231d17ef7"
+                },
+                "host-receipt.json": {
+                  "bytes": 8083,
+                  "git_blob": "ceef41a4247a02b018e7a5afef081637da1b29ca",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/host-receipt.json",
+                  "read_path": "sources/git/ceef41a4247a02b018e7a5afef081637da1b29ca/host-receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "d2f9d2fbe4e0be79adf9740131cabecc01f46ee3a8659d1ff4e376296436bb52"
+                },
+                "input.json": {
+                  "bytes": 9567,
+                  "git_blob": "c0b69b9f4919f31ab1b1ac9fb5f6756f66e38ed5",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/input.json",
+                  "read_path": "sources/git/c0b69b9f4919f31ab1b1ac9fb5f6756f66e38ed5/input.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "99a80f2aba8f740b02f3110ca6ac84961664517983cbe7802a59cac4ae043d02"
+                },
+                "launch.json": {
+                  "bytes": 5347,
+                  "git_blob": "60f796016c5aeb06953a3040ee0686f9ffa9c331",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/launch.json",
+                  "read_path": "sources/git/60f796016c5aeb06953a3040ee0686f9ffa9c331/launch.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "9ca7396d29858b05e235d33d7ef76764e7c862600b27a8ac06545a55b07cee01"
+                },
+                "prepare.json": {
+                  "bytes": 1554,
+                  "git_blob": "2f7db72e68f133506de20ee5074b8c2ba414fe78",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/prepare.json",
+                  "read_path": "sources/git/2f7db72e68f133506de20ee5074b8c2ba414fe78/prepare.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "07fea13b06875a6fc09310708c2fdb0e8a12147c6f80da139620e196d382315c"
+                },
+                "receipt.json": {
+                  "bytes": 2597,
+                  "git_blob": "6d0efbab9c300c8449c8858ed3f1e161e5e499b7",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/receipt.json",
+                  "read_path": "sources/git/6d0efbab9c300c8449c8858ed3f1e161e5e499b7/receipt.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "d79f60b382c937064d71418c39515ca7fe6fbd6d4505f2df8bf47f5103f94f54"
+                },
+                "validation.json": {
+                  "bytes": 39382,
+                  "git_blob": "366ba3400860a506c26aad94f043319a2cb02bb5",
+                  "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/validation.json",
+                  "read_path": "sources/git/366ba3400860a506c26aad94f043319a2cb02bb5/validation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "ref": "67c0d61194713806769d07c86981c2222ac5acfd",
+                  "repository": "auguspp/decision-kernel",
+                  "sha256": "f63ff62247ab36dbe924850e43420f14a86b913e4fa084a3d517a20086630463"
+                }
+              },
+              "status": "VALIDATED_FUNNEL_RESULT",
+              "terminal_reason": "在本次唯一 admitted 证据包（2026年半年报及其2025年同期比较列）内，两个并列问题已获得可支撑的有界结论：其一，「经营盈利改善」在扣非口径（97,005,857.01元、+24.86%、扣非ROE 3.14%→3.76%）上有直接证据支持，但归母口径+854.75%的跃升不能整体读作经常性经营盈利改善，因其中约5,283万元为非经常性损益、最大单项6,150.67万元为金融资产/负债公允价值变动与处置损益；其二，「股东现金创造同步改善」仅在现金流量表经营净额由-1.22亿元转为+3.66亿元这一层面得到支持，而同期购建长期资产支付现金5.25亿元高于经营净流入，且筹资净流入3.39亿元（含租赁融资款3.51亿元）、长期借款增97.71%，因此不能认定已形成同额可自由支配给股东的现金。所需的核心结构性事实已可直接读取，剩余未决项（逐工具套保归因、维持性与扩张性资本开支划分、回款改善与保理/买断结构的对应、存货跌价与释放的关系）属于需要新的事实来源才能显著压缩的问题：本次范围内无法通过重新解读同一份半年报解决，而应等待下一次披露窗口（三季报或新的临时公告）提供可区分的增量事实。故在本次 STATIC 已保存范围内，选择 WAIT_FOR_TRIGGER，而非在信息无增量的情况下 DEEPEN（该阶段在本次范围内不会带来可信的新信息，只会放大口径歧义），也非 STOP（两个有界子问题各自已获支持性证据，问题并未被否定）。本结论不构成任何价格、预期或交易判断。",
+              "terminal_stage": "QUICK_RESEARCH",
+              "terminal_state": "WAIT_FOR_TRIGGER",
+              "thscode": "603507.SH",
+              "validation_hash": "b351a3596f6da5b91c5c5986d759c1eaa4efa31a0d181c72a94036dc39d0dd6f",
+              "validation_scope": "SAVED_CANDIDATE_CONSISTENCY_NOT_LIVE_ADMISSION_OR_SOURCE_TRUTH",
+              "why_now": "2026-09-21正常已保存Stock批次中，振江通过原价格观察；必要完整中报已经取得并核验。价格只是问题来路，不证明业务受益。本次是原初步问题的首次正式有界执行，而不是重跑任何已消费研究。"
+            },
+            "source_check": {
+              "gaps": [],
+              "meaning": "BYTE_IDENTITY_ONLY_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+              "reference_count": 10,
+              "status": "RETAINED_BYTES_VERIFIED"
+            }
+          }
+        ],
+        "association_id": "ce2de276c092538919e3c35c7823145ab333e9ca99596eb02e89d959dc0a20d7",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "family": "BROAD_881",
+                "group_key": "881280.TI",
+                "group_on_homepage": true,
+                "is_primary": true,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-21",
+                "retained_leader": {
+                  "daily_return": "0.094214876033057851239669421",
+                  "name": "振江股份",
+                  "thscode": "603507.SH",
+                  "ticker": "603507",
+                  "turnover": "562388550"
+                },
+                "sector_name": "风电设备",
+                "sector_thscode": "881280.TI",
+                "source": {
+                  "bytes": 132652,
+                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+                  "read_path": "details/sector/35587558977/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
+                },
+                "source_observed_at": "2026-09-21T10:23:08.832651Z",
+                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
+              },
+              {
+                "family": "GRANULAR_884",
+                "group_key": "881280.TI",
+                "group_on_homepage": true,
+                "is_primary": false,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-21",
+                "retained_leader": {
+                  "daily_return": "0.094214876033057851239669421",
+                  "name": "振江股份",
+                  "thscode": "603507.SH",
+                  "ticker": "603507",
+                  "turnover": "562388550"
+                },
+                "sector_name": "风电零部件",
+                "sector_thscode": "884308.TI",
+                "source": {
+                  "bytes": 132652,
+                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+                  "read_path": "details/sector/35587558977/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
+                },
+                "source_observed_at": "2026-09-21T10:23:08.832651Z",
+                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          },
+          {
+            "kind": "SAVED_STOCK_DISPOSITION",
+            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "market_session": "2026-09-21",
+            "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
+            "record": {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "振江股份",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "603507.SH"
+            },
+            "source": {
+              "bytes": 91703,
+              "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+              "read_path": "details/stock/35588490572/reading/stock-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "603507.SH"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "002285.SZ",
+              "id": "stock-002285-financial-question-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11153,
+                "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+                "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+                "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "dbbf6f705ef4b55f47cdf6155f555554035eb47502999526f30716ea3f725a2b",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "family": "GRANULAR_884",
+                "group_key": "881153.TI",
+                "group_on_homepage": true,
+                "is_primary": true,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-21",
+                "retained_leader": {
+                  "daily_return": "0.100346020761245674740484429",
+                  "name": "世联行",
+                  "thscode": "002285.SZ",
+                  "ticker": "002285",
+                  "turnover": "859237550"
+                },
+                "sector_name": "房地产服务",
+                "sector_thscode": "884248.TI",
+                "source": {
+                  "bytes": 132652,
+                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+                  "read_path": "details/sector/35587558977/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
+                },
+                "source_observed_at": "2026-09-21T10:23:08.832651Z",
+                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
+              },
+              {
+                "kind": "INSTITUTIONAL_WINDOWS",
+                "market_session": "2026-09-17",
+                "observations": [
+                  {
+                    "institution_buy_count": 0,
+                    "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                    "institution_net_cny": "-1100779.0",
+                    "institution_sell_count": 1,
+                    "range_days": 3,
+                    "source_row": {
+                      "buy_value": "100974244.37",
+                      "change": "0.100418",
+                      "concept_list": [
+                        {
+                          "name": "租售同权"
+                        },
+                        {
+                          "name": "物业管理"
+                        },
+                        {
+                          "name": "特色小镇"
+                        }
+                      ],
+                      "hot_money_net_value": -12105991,
+                      "hot_rank": 137,
+                      "limit_reason": "房地产服务+大资管+珠海国资",
+                      "name": "世联行",
+                      "net_rate": "0.04479968",
+                      "net_value": "29128590.77",
+                      "org_buy_num": 0,
+                      "org_net_rate": "-0.00169299",
+                      "org_net_value": "-1100779.0",
+                      "org_sell_num": 1,
+                      "range_days": 3,
+                      "sell_value": "71845653.6",
+                      "thscode": "002285.SZ",
+                      "ticker": "002285"
+                    },
+                    "source_row_index": 16,
+                    "window_end": "2026-09-17"
+                  }
+                ],
+                "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+                "publication_time": "UNKNOWN",
+                "source": {
+                  "bytes": 37710,
+                  "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+                  "read_path": "details/institutional/35296479748/observation.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+                },
+                "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+                "source_observed_at": "2026-09-18T01:44:14.379291Z",
+                "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          },
+          {
+            "kind": "SAVED_STOCK_DISPOSITION",
+            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "market_session": "2026-09-21",
+            "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
+            "record": {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "世联行",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "002285.SZ"
+            },
+            "source": {
+              "bytes": 91703,
+              "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+              "read_path": "details/stock/35588490572/reading/stock-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002285.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "000560.SZ",
+              "id": "stock-000560-financial-question-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11153,
+                "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+                "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+                "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "3d8df607ae1382a31b78948ba67f5f92737c7d7762ee3de19d0431aea46d94b0",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "family": "GRANULAR_884",
+                "group_key": "881153.TI",
+                "group_on_homepage": true,
+                "is_primary": true,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-21",
+                "retained_leader": {
+                  "daily_return": "0.1",
+                  "name": "我爱我家",
+                  "thscode": "000560.SZ",
+                  "ticker": "000560",
+                  "turnover": "1304403940"
+                },
+                "sector_name": "房地产服务",
+                "sector_thscode": "884248.TI",
+                "source": {
+                  "bytes": 132652,
+                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+                  "read_path": "details/sector/35587558977/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
+                },
+                "source_observed_at": "2026-09-21T10:23:08.832651Z",
+                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          },
+          {
+            "kind": "SAVED_STOCK_DISPOSITION",
+            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "market_session": "2026-09-21",
+            "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
+            "record": {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "我爱我家",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "000560.SZ"
+            },
+            "source": {
+              "bytes": 91703,
+              "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+              "read_path": "details/stock/35588490572/reading/stock-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "000560.SZ"
+      },
+      {
+        "archives": [
+          {
+            "record": {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "002792.SZ",
+              "id": "stock-002792-financial-question-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11153,
+                "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+                "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+                "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            "status": "REGISTERED_LOCATOR_NOT_BODY_RECOVERED",
+            "url": "https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md"
+          }
+        ],
+        "assets": [],
+        "association_id": "290af13e4e6d0b90344248828506111b553c2812ab3ab219cb70c2abfa1e7bfe",
+        "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
+        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "family": "GRANULAR_884",
+                "group_key": "881129.TI",
+                "group_on_homepage": true,
+                "is_primary": true,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-21",
+                "retained_leader": {
+                  "daily_return": "0.1",
+                  "name": "通宇通讯",
+                  "thscode": "002792.SZ",
+                  "ticker": "002792",
+                  "turnover": "2334817500"
+                },
+                "sector_name": "通信网络设备及器件",
+                "sector_thscode": "884262.TI",
+                "source": {
+                  "bytes": 132652,
+                  "git_blob": "03a32564da6163861df8bf0d10c7f29db575f550",
+                  "read_path": "details/sector/35587558977/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "27443f063cbc617f7e170e38cbb742d669ce0604153fe9a7db8e1f947b2e33c1"
+                },
+                "source_observed_at": "2026-09-21T10:23:08.832651Z",
+                "source_result_hash": "86a51fa76466d95c108f314458fe59183ab991c288a6439630956d0f9318b0b7"
+              }
+            ],
+            "projection_hash": "8a317df6087bec4ac304fb6de0a8622594ace55d516265d09978407b1e351316",
+            "source": {
+              "bytes": 3229463,
+              "git_blob": "0ed056ce89eb8d3cd7891ee9e2eb7203a0019b1d",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "873c3b7cbe66ae6670721f238c9a950f93e75163655d0d8aed898b4f2ff3c943"
+            }
+          },
+          {
+            "kind": "SAVED_STOCK_DISPOSITION",
+            "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+            "market_session": "2026-09-21",
+            "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
+            "record": {
+              "business_benefit_status": "NOT_ESTABLISHED",
+              "business_linkage_status": "UNKNOWN",
+              "company_name": "通宇通讯",
+              "excluded_reasons": [],
+              "input_failure": null,
+              "market_expression_status": "OBSERVED",
+              "status": "CONTRACT_CHECKED_RAW_READING",
+              "thscode": "002792.SZ"
+            },
+            "source": {
+              "bytes": 91703,
+              "git_blob": "9615134b111a5a874e74a3004474bd44bda73d6b",
+              "read_path": "details/stock/35588490572/reading/stock-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "ace5206c2636c8f5a3ce530065b4af2379ea064f0b63697c3aedce8331f55094"
+            }
+          }
+        ],
+        "saved_watch": null,
+        "semantic_comparison": "NOT_PERFORMED_BY_READING",
+        "thscode": "002792.SZ"
+      }
+    ],
+    "coverage": {
+      "all_theses_checked": false,
+      "archive_locators": 18,
+      "assets": 44,
+      "companies": 26,
+      "complete_research_history": false,
+      "read_gap_count": 0,
+      "unavailable_assets": 0,
+      "with_saved_observations": 11,
+      "with_saved_watch": 5
+    },
+    "generated_at": "2026-09-22T05:35:37.768845+00:00",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "market_requests": 0,
+    "model_calls": 0,
+    "new_attention_events": 0,
+    "new_research_executions": 0,
+    "odds_recomputed": false,
+    "read_gaps": [],
+    "research_authority": "NONE",
+    "semantics": "RECOVER_EXISTING_RESEARCH_BEFORE_REVIEW_NOT_AUTOMATIC_THESIS_MONITORING",
+    "signal_transition_authority": "NONE",
+    "version": "research-asset-reentry-reading-v1"
+  },
+  "projection_hash": "15a44885bcb0c9f43bbc256408ea98a8ccbd5c99fe000abcbf8f4d6f5ac13fbd"
+}
