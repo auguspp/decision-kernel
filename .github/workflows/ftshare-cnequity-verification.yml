@@ -24,8 +24,8 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Install base and native lake query dependencies only
-        run: python -m pip install -e ./kernel polars==1.44.2 duckdb==1.5.5 pyarrow==25.0.1
+      - name: Install original source-entry extras and native lake query dependencies
+        run: python -m pip install -e './kernel[feeds,documents,research-api]' polars==1.44.2 duckdb==1.5.5 pyarrow==25.0.1
       - name: Record exact producer and native source identity
         shell: bash
         run: |
