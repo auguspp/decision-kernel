@@ -1,0 +1,40 @@
+name: provider-batch-patch
+on:
+  push:
+    branches: [work/provider-batch-20260922]
+    paths: [.github/workflows/provider-batch-patch.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 19ce74e8fee4a01f1dbde1b3e8960cc54f180102
+          path: review
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/provider-batch-cnequity
+          path: target
+      - name: Apply exact reviewed patch on expected head
+        working-directory: target
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 36e4faed5f4371ae72000ccae4c8171e904e1524
+          git apply --check ../review/work/provider-batch-adjustments.patch
+          git apply ../review/work/provider-batch-adjustments.patch
+          python - <<'PY'
+          import subprocess
+          expected={'pyproject.toml','src/decision_kernel/runtime/stock_research_sources.py','src/decision_kernel/runtime/ftshare_market_inputs.py'}
+          assert set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())==expected
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pyproject.toml src/decision_kernel/runtime/stock_research_sources.py src/decision_kernel/runtime/ftshare_market_inputs.py
+          git commit -m 'feat: connect original source CLI and optional native lake dependency'
+          git push origin HEAD:refs/heads/feat/provider-batch-cnequity
+          git rev-parse HEAD
