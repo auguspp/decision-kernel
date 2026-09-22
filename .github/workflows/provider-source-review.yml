@@ -1,0 +1,49 @@
+name: provider-source-review
+on:
+  push:
+    branches: [work/provider-source-review-20260922]
+    paths: [.github/workflows/provider-source-review.yml]
+permissions:
+  contents: read
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: bea775c9a6c42ea6363d0b27eab58cf37b053f98
+          path: kernel
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          repository: rootSunc/CNEquity
+          ref: 1650e384a3fd1f67a70144a489acc91432f1df27
+          path: cnequity
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          repository: FTShare-Lab/FTShare-skill
+          ref: 53e8a69b3442596dc91caab97fb06615c1a05cde
+          path: ftshare
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Retain pinned public sources and offline query dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p review/wheels
+          for r in kernel cnequity ftshare; do
+            git -C "$r" rev-parse HEAD > "review/$r.sha"
+            git -C "$r" archive --format=tar HEAD > "review/$r.tar"
+          done
+          python -m pip download --only-binary=:all: --dest review/wheels 'polars>=1,<2' 'duckdb>=1,<2' 'pyarrow==25.0.1' 'pytest==9.1.1' 'pytest-xdist==3.8.0' 'pypdfium2==5.8.0' 'beautifulsoup4==4.14.3' 'feedparser==6.0.14' 'requests==2.34.2'
+          (cd review && sha256sum *.tar *.sha > source-sha256.txt)
+      - uses: actions/upload-artifact@v7
+        with:
+          name: provider-sources-${{ github.run_id }}
+          path: review/
+          retention-days: 7
+          if-no-files-found: error
