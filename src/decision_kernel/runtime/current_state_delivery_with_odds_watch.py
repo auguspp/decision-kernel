@@ -52,6 +52,9 @@ class Collector(base.Collector):
         if getattr(self, "include_industry_breadth", False):
             from .industry_breadth_reading import attach as attach_industry_breadth
             payload = attach_industry_breadth(self, payload)
+        if getattr(self, "include_easy_stock_context", False):
+            from .easy_stock_reading import attach as attach_public_context
+            payload = attach_public_context(self, payload)
         if getattr(self, "include_daily_news", False):
             from .news_daily_reading import attach as attach_daily_news
             payload = attach_daily_news(self, payload)
@@ -134,6 +137,7 @@ def main(argv=None) -> int:
     parser.add_argument("--include-reviewed-questions", action="store_true")
     parser.add_argument("--include-daily-news", action="store_true")
     parser.add_argument("--include-industry-breadth", action="store_true")
+    parser.add_argument("--include-easy-stock-context", action="store_true")
     args = parser.parse_args(argv)
     model.check(not args.include_concept_detail or args.include_concept_discovery,
                 "concept detail reading requires the existing concept source")
@@ -169,6 +173,7 @@ def main(argv=None) -> int:
         collector.include_reviewed_questions = args.include_reviewed_questions
         collector.include_daily_news = args.include_daily_news
         collector.include_industry_breadth = args.include_industry_breadth
+        collector.include_easy_stock_context = args.include_easy_stock_context
         refresh = {
             "workflow": ".github/workflows/current-state-read-entry.yml",
             "run_id": os.environ.get("GITHUB_RUN_ID"),

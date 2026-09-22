@@ -84,6 +84,7 @@ jobs:
           --include-concept-detail
           --include-external-radar
           --include-industry-breadth
+          --include-easy-stock-context
           --include-daily-news
           --include-reviewed-questions
           --publish
