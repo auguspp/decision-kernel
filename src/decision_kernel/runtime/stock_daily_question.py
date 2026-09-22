@@ -62,8 +62,10 @@ def label_transport(env):
 
 
 def check_policy(api, code, request, clock):
-    once.require(identity._json(api.file(POLICY_PATH, code)) == POLICY
-                 and request["permission"] == PERMISSION, "DAILY_POLICY_CHANGED")
+    once.require(identity._json(api.file(POLICY_PATH, code)) == POLICY, "DAILY_POLICY_CHANGED")
+    if request["permission"] != PERMISSION:
+        from . import industry_daily_question as industry
+        industry.check_policy(api, code, request, clock)
     once.require(admission.clock(PERMISSION["created_at"]) <= admission.clock(clock())
                  < admission.clock(POLICY["execute_before"]), "DAILY_POLICY_EXPIRED_OR_NOT_STARTED")
 
@@ -167,6 +169,9 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
     Never fetch issuer websites or send batch/custody bodies to the model. The
     metadata reader stays at512KiB; PDF bytes use the existing32MiB total budget.
     """
+    if request["permission"] != PERMISSION:
+        from . import industry_daily_question as industry
+        return industry.bind(api, request, q, packet, context, clock, archives=archives)
     once.require(all(c["mode"] == "STATIC" and c["planned_queries"] == []
                      for c in q["required_classes"]), "DAILY_REQUIRES_DECLARED_STATIC_SOURCES")
     rs = q["reading_source"]
@@ -218,6 +223,17 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
                          for r in review["items"])
                  and [r["thscode"] for r in review["items"] if r["disposition"] == "SELECTED_NEW_DISTINCT_QUESTION"]
                  == [packet.case_id], "DAILY_FULL_BATCH_REVIEW_REQUIRED")
+    packet, total = bind_custody(api, request, packet, context, clock, archives=archives)
+    return packet, state, {"market_session": market_day, "batch_id": scope["batch_id"],
+        "source_run_id": origin["id"], "reading_source": rs, "reading_hash": state["reading_hash"],
+        "batch_review_source": request["batch_review_source"], "reviewed_items": review["items"],
+        "source_custody_source": request["source_custody_source"], "pdf_bytes": total,
+        "source_proof": "RETAINED_PDF_BYTES_AND_PAGES_NOT_ISSUER_OR_ECONOMIC_TRUTH_CERTIFICATION"}
+
+
+def bind_custody(api, request, packet, context, clock, *, archives=None):
+    """Original daily public-PDF checks, shared without a fake Stock origin."""
+    selected_clock = lambda: packet.selected_at.isoformat()
     custody_raw, saved_at = _source(api, request["source_custody_source"], EXTRA_SOURCES["source_custody_source"], selected_clock)
     custody = identity._json(custody_raw)
     docs = context["issuer_documents"]
@@ -297,11 +313,8 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
     refs.extend(custody[k] for k in ("inventory_source", "journal_source"))
     packet = ExternalResearchInputPacket.model_validate({**packet.model_dump(mode="json"),
         "source_refs": [r.model_dump(mode="json") if hasattr(r, "model_dump") else r for r in refs]})
-    return packet, state, {"market_session": market_day, "batch_id": scope["batch_id"],
-        "source_run_id": origin["id"], "reading_source": rs, "reading_hash": state["reading_hash"],
-        "batch_review_source": request["batch_review_source"], "reviewed_items": review["items"],
-        "source_custody_source": request["source_custody_source"], "pdf_bytes": total,
-        "source_proof": "RETAINED_PDF_BYTES_AND_PAGES_NOT_ISSUER_OR_ECONOMIC_TRUTH_CERTIFICATION"}
+    return packet, total
+
 
 
 def work_tree(api):
@@ -351,7 +364,8 @@ def capacity(api, commit, rows, state, packet):
             declarations.add((source["ref"], source["path"], source["git_blob"], source["sha256"]))
     # The original legacy reader selects these exact four files for current
     # qualified securities, including their existing recovery/successor children.
-    codes = [r["thscode"] for r in state["lanes"]["stock"]["last_qualified_result"]["dispositions"]
+    stock_result = state["lanes"].get("stock", {}).get("last_qualified_result")
+    codes = [r["thscode"] for r in (stock_result["dispositions"] if stock_result is not None else [])
              if r["status"] == "CONTRACT_CHECKED_RAW_READING" and r.get("input_failure") is None and intake.supported(r["thscode"])]
     legacy_rows = intake.inventory(api, commit) if commit is not None else {}
     for code in codes:

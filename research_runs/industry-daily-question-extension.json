@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "permission": {
+    "comment_id": 5778160521,
+    "body_sha256": "45364363eccca62a115d35ea1212f02f9c2fa918b85cb4c7ad8ca3fd50677e1c",
+    "created_at": "2026-09-22T14:17:34Z"
+  },
+  "origin_kind": "INDUSTRY_VARIABLE_OBSERVATION",
+  "batch_review_purpose": "DAILY_INDUSTRY_BATCH_REVIEW",
+  "shared_policy_path": "research_runs/stock-daily-question-policy.json",
+  "shared_consumption_prefix": "research_runs/daily-stock-questions-v0/",
+  "required_source_modes": [
+    "STATIC",
+    "LATEST_INVENTORY"
+  ],
+  "model_cost_policy": "HUMAN_MANAGED_ACCOUNT_NO_ADDITIONAL_PROJECT_MONETARY_CEILING",
+  "automatic_retry": false,
+  "automatic_deep": false,
+  "investment_authority": "NONE"
+}
