@@ -64,6 +64,9 @@ def _next_step(row: dict) -> str:
         return 'RECOVER_MISSING_RETAINED_BYTES'
     if any(a.get('use') == 'METHOD_SUPPLEMENT' for a in row['assets']):
         return 'RECONCILE_EXISTING_METHOD_REVIEW'
+    # A saved observation/price condition cannot substitute for the old body.
+    if row['archives'] and not row['assets']:
+        return 'RECOVER_REGISTERED_ARCHIVE'
     watch = row.get('saved_watch')
     if watch and watch['status'] == 'PRICE_UNAVAILABLE_NOT_QUIET':
         return 'PRICE_INPUT_UNAVAILABLE_NOT_THESIS_FAILURE'
@@ -71,8 +74,6 @@ def _next_step(row: dict) -> str:
         return 'REVIEW_SAVED_PRICE_CONDITION_AND_RESEARCH_PREREQUISITES'
     if row['saved_observations']:
         return 'COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH'
-    if row['archives'] and not row['assets']:
-        return 'RECOVER_REGISTERED_ARCHIVE'
     if watch and watch['status'] == 'ACTIVE_ODDS_WATCH':
         return 'WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE'
     return 'NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE'
@@ -285,9 +286,15 @@ def render(report: dict) -> str:
                 lines.append('  - 原用途说明：' + _text(item['purpose_note']))
             saved = item.get('record', {})
             for key, heading in (('question', '原问题'), ('why_now', '当时为何检查'),
-                                 ('terminal_reason', '原停止理由'), ('known_unknowns', '原关键未知')):
+                                 ('terminal_reason', '原模型停止理由（历史输出，不代表复核认可）'),
+                                 ('known_unknowns', '原关键未知')):
                 if saved.get(key):
-                    lines.append('  - ' + heading + '：' + _text(saved[key]))
+                    value = saved[key]
+                    if key == 'known_unknowns' and isinstance(value, list):
+                        lines.append('  - ' + heading + '：')
+                        lines.extend('    - ' + _text(part) for part in value)
+                    else:
+                        lines.append('  - ' + heading + '：' + _text(value))
             sources = ([item.get('source')] if item['kind'] == 'PURPOSE_REFERENCE' else
                        list(saved.get('sources', {}).values()))
             if saved.get('question_source'):
