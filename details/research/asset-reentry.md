@@ -305,9 +305,9 @@
 - [按需恢复：p0-000920-reports-only-profit-bridge-20260921](https://github.com/auguspp/decision-kernel/blob/69305a766eb2cc4b09a6b1a6d4008625e54b8a3d/docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 - [按需恢复：p0-000920-continuation-failure-review-20260921](https://github.com/auguspp/decision-kernel/blob/2a3c429aabca6f0b398b973df66fe94bb235de94/docs/readings/000920-continuation-review-2026-09-21/README.md)；只有定位，本页没有恢复正文。
 
-## 振江股份 603507.SH
+## 603507.SH
 
-下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d：SAVED&#95;QUESTION / RETAINED&#95;BYTES&#95;VERIFIED
   - 原问题：在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。
@@ -329,26 +329,22 @@
   - [原保存材料](../../sources/git/fc52aee3bf922644287171e61e772778d1196ab1/question.json)
 - [按需恢复：stock-603507-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 - [按需恢复：stock-603507-profit-hedging-cash-20260921](https://github.com/auguspp/decision-kernel/blob/6eacd1fe5963514948cbcf0a516a13098286fe14/docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
-## 世联行 002285.SZ
+## 002285.SZ
 
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002285-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-17；[原观察](../radar/company-reading.json)。不是新事件。
-- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
-## 我爱我家 000560.SZ
+## 000560.SZ
 
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-000560-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。
 
-## 通宇通讯 002792.SZ
+## 002792.SZ
 
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-21；[原观察](../stock/35588490572/reading/stock-reading.json)。不是新事件。

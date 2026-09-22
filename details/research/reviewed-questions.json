@@ -504,69 +504,15 @@
     "work_ref": "research-work/stock-business-v0"
   },
   "recorded_batch_review": {
-    "batch_id": "fca76b9008d02c59d630071773fb23f9301945ea375a183ebbc98ab1469a4df7",
-    "execution": {
-      "candidate_hash": "75d72a7996390daec61ec652f502c833195a8ef5232e31d79b1d173df8e6ae92",
-      "execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
-      "pre_present": true,
-      "question_id": "profit-growth-cash-conversion-2026h1",
-      "quick_present": true,
-      "status": "VALIDATED_FUNNEL_RESULT",
-      "thscode": "603507.SH"
-    },
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
-    "items": [
-      {
-        "disposition": "SELECTED_NEW_DISTINCT_QUESTION",
-        "reason": "完整报告已具备，首次正式执行已声明的有限利润/现金问题；原交互底稿和未知保留。",
-        "thscode": "603507.SH"
-      },
-      {
-        "disposition": "NOT_SELECTED",
-        "reason": "世联亏损与回款问题保留；完整必要正文尚未在这条资料链中核验，本日不执行。",
-        "thscode": "002285.SZ"
-      },
-      {
-        "disposition": "DATA_UNAVAILABLE",
-        "reason": "原公司行为窗口价格转换能力缺口保留，非经营否决。",
-        "thscode": "688205.SH"
-      },
-      {
-        "disposition": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "reason": "保留原20日价格条件未满足的处置，非经营否决。",
-        "thscode": "301155.SZ"
-      },
-      {
-        "disposition": "NOT_SELECTED",
-        "reason": "我爱我家收入/转租收益与现金问题保留；本期必要完整原件未取得，不因首页省略而漏审。",
-        "thscode": "000560.SZ"
-      },
-      {
-        "disposition": "NOT_SELECTED",
-        "reason": "通宇收入、毛利与利润问题保留；必要完整正文未取得，不凭二手摘要启动。",
-        "thscode": "002792.SZ"
-      }
-    ],
-    "market_session": "2026-09-21",
-    "meaning": "SAVED_ROUTING_REVIEW_AND_EXECUTION_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE",
+    "items": [],
     "research_authority": "NONE",
     "research_execution_allowed": false,
-    "reviewed_at": "2026-09-21T15:24:48.219771+00:00",
-    "reviewed_object_count": 6,
-    "selected_question_count": 1,
+    "reviewed_object_count": null,
+    "selected_question_count": null,
     "signal_transition_authority": "NONE",
-    "source": {
-      "bytes": 2111,
-      "git_blob": "cba5572b19dc0b8fbb896e4c427c45b763f76f0b",
-      "path": "research_runs/daily-inputs/603507-profit-cash-20260921/batch-review.json",
-      "read_path": "sources/git/cba5572b19dc0b8fbb896e4c427c45b763f76f0b/batch-review.json",
-      "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "fcb0d1f352103a9e7af2b917b31f11d025fcd37c",
-      "repository": "auguspp/decision-kernel",
-      "sha256": "4ecea56800ecabac48e83f7ec537b35fbff2b6ccb39b644c50da1320b36c7ec0"
-    },
-    "status": "MATCHED_SAVED_DAILY_REVIEW"
+    "status": "NO_MATCHING_SAVED_DAILY_REVIEW"
   },
   "research_authority": "NONE",
   "research_execution": "NOT_EXECUTED",
@@ -598,163 +544,198 @@
   "signal_transition_authority": "NONE",
   "stock_review_scope": {
     "automatic_research_execution": false,
-    "batch_id": "fca76b9008d02c59d630071773fb23f9301945ea375a183ebbc98ab1469a4df7",
+    "batch_id": "3c7f694faa321dae08e6434626bb78b3f1f40c19defbabc0d1e8e9669443e933",
     "data_unavailable_count": 1,
     "existing_baseline_gap_count": 0,
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "items": [
       {
-        "company_name": "振江股份",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-0cc161c4036528a29836f247374fd9d989b15d2b8f5526e7212f60ba3f7a9db1",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "BROAD_881",
-            "name": "风电设备",
-            "thscode": "881280.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“风电设备”中，振江股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "振江股份",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "603507.SH"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "603507.SH"
-      },
-      {
-        "company_name": "世联行",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-b74852d9a302ccad1458c7385fd45f86c8746bb02c9b4f074d01d1546e646a37",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "GRANULAR_884",
-            "name": "房地产服务",
-            "thscode": "884248.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“房地产服务”中，世联行的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "世联行",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "002285.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "002285.SZ"
-      },
-      {
-        "company_name": "德科立",
+        "company_name": "凯华材料",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
-            "family": "GRANULAR_884",
-            "name": "通信网络设备及器件",
-            "thscode": "884262.TI"
+            "family": "BROAD_881",
+            "name": "半导体",
+            "thscode": "881121.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“通信网络设备及器件”中，德科立的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“半导体”中，凯华材料的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "德科立",
+          "company_name": "凯华材料",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "920526.BJ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": false,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "920526.BJ"
+      },
+      {
+        "company_name": "视涯科技-UW",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "光学光电子",
+            "thscode": "881122.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“光学光电子”中，视涯科技-UW的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "视涯科技-UW",
           "excluded_reasons": [],
           "input_failure": {
-            "category": "DATA_QUALIFICATION_FAILED",
-            "phase": "INPUT_QUALIFICATION",
-            "provider_business_code": null,
-            "reason_code": "REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW",
+            "category": "REQUEST_FAILED",
+            "phase": "CORPORATE_ACTIONS",
+            "provider_business_code": 3002,
+            "reason_code": "PROVIDER_BUSINESS_REQUEST_FAILED",
             "scope": "ISSUER_LOCAL",
             "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
           },
           "market_expression_status": "NOT_ESTABLISHED",
-          "status": "DATA_QUALIFICATION_FAILED",
-          "thscode": "688205.SH"
+          "status": "REQUEST_FAILED",
+          "thscode": "688781.SH"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
         "review_status": "DATA_UNAVAILABLE_NOT_PRICE_REJECTED",
-        "thscode": "688205.SH"
+        "thscode": "688781.SH"
       },
       {
-        "company_name": "海力风电",
+        "company_name": "新华文轩",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": null,
+        "existing_research_relation": {
+          "execution_id": "stock-business-72f709fa5c55fe3a284ccf17611f5b07d3f5a9b7b2e5bd8eaa9caf7815d2b8b0",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "出版",
+            "thscode": "884176.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“出版”中，新华文轩的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "新华文轩",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "601811.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "601811.SH"
+      },
+      {
+        "company_name": "乐鑫科技",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-ad2d46d85a1b4eade1cdf805307e6e86e044ad864013b1158affdebf1df0650f",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
             "family": "BROAD_881",
-            "name": "风电设备",
-            "thscode": "881280.TI"
+            "name": "半导体",
+            "thscode": "881121.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“风电设备”中，海力风电的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“半导体”中，乐鑫科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "海力风电",
-          "excluded_reasons": [
-            "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
-          ],
+          "company_name": "乐鑫科技",
+          "excluded_reasons": [],
           "input_failure": null,
-          "market_expression_status": "NOT_ESTABLISHED",
-          "status": "CONDITIONS_NOT_MET",
-          "thscode": "301155.SZ"
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "688018.SH"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "thscode": "301155.SZ"
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "688018.SH"
       },
       {
-        "company_name": "我爱我家",
+        "company_name": "伟时电子",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": {
-          "execution_id": "stock-business-e5430dd999ebddc746d84eac107f788e92e160b43c19cbefd016c51107eaf20c",
+          "execution_id": "stock-business-5e8a28c121db942162f81439075fd028920b845b17f605f9f8c5e488a5c54960",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "光学光电子",
+            "thscode": "881122.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“光学光电子”中，伟时电子的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "伟时电子",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "605218.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "605218.SH"
+      },
+      {
+        "company_name": "内蒙新华",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-959798ebbffbb82b0b3d4972533892fe07eedd298c9c134baffd9e8bd4ab9df1",
           "question_kind": "FIRST_BUSINESS_BASELINE",
           "sources": {},
           "status": "NOT_STARTED",
@@ -764,85 +745,48 @@
         "origin_directions": [
           {
             "family": "GRANULAR_884",
-            "name": "房地产服务",
-            "thscode": "884248.TI"
+            "name": "出版",
+            "thscode": "884176.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“房地产服务”中，我爱我家的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“出版”中，内蒙新华的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "我爱我家",
+          "company_name": "内蒙新华",
           "excluded_reasons": [],
           "input_failure": null,
           "market_expression_status": "OBSERVED",
           "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "000560.SZ"
+          "thscode": "603230.SH"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
         "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "000560.SZ"
-      },
-      {
-        "company_name": "通宇通讯",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-bd53c45e2b82dd56fda599185280a6265339e14d02a617d8cee15bce9b81065e",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "GRANULAR_884",
-            "name": "通信网络设备及器件",
-            "thscode": "884262.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“通信网络设备及器件”中，通宇通讯的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "通宇通讯",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "002792.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "002792.SZ"
+        "thscode": "603230.SH"
       }
     ],
-    "market_session": "2026-09-21",
+    "market_session": "2026-09-22",
     "meaning": "OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION",
     "original_coverage": {
-      "conditions_not_met_issuers": 1,
+      "conditions_not_met_issuers": 0,
       "dispositioned_issuers": 6,
       "evaluated_issuers": 5,
       "not_evaluated_issuers": 0,
       "planned_issuers": 6,
       "price_path_checked_issuers": 5,
-      "qualified_issuers": 4,
+      "qualified_issuers": 5,
       "scope_complete": false,
       "unavailable_issuers": 1
     },
-    "question_review_required_count": 4,
+    "question_review_required_count": 5,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
-    "source_run_id": 35588490572,
+    "source_run_id": 35715883291,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "IN_PROGRESS"
+    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
   }
 }
