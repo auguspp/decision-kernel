@@ -381,21 +381,71 @@ def prepare_financial_context(*, ticker, year, report_type, output,
     return result
 
 
+def prepare_company_event_context(*, ticker, start_date, end_date, output,
+                                  fetch=None, clock=once.now):
+    """Original source entry consumes company events, not automatic Research."""
+    from . import ftshare_company_events as events
+    from .reviewed_question_reading import _text as _md
+    result = events.prepare(ticker=ticker, start_date=start_date, end_date=end_date,
+        output=output, clock=clock, **({"fetch": fetch} if fetch is not None else {}))
+    once.require(len(events.raw_json(result)) <= CONTEXT_BYTES,
+                 "full company event context too large; no clipping")
+    lines = ["# 公司事件资料 · " + ticker, "",
+        "次级资料，不是原件核验、已执行研究或投资信号。",
+        f"公告日期窗口：{start_date} 至 {end_date}；不是当时已知信息的回放。", "",
+        "| 数据族 | 状态 | 窗口内记录数 |", "|---|---|---|"]
+    for family, item in result["families"].items():
+        lines.append(f"| {family} | {item['status']} | {len(item['records'])} |")
+    for family, item in result["families"].items():
+        if item["status"] != "SECONDARY_CONTEXT_READY":
+            continue
+        lines += ["", "## " + family, "", "| 公告日 | 事件/观察 | 来源页/行 |", "|---|---|---|"]
+        for record in item["records"]:
+            row = record["provider_fields"]
+            if family == "contracts":
+                description = f"{row.get('contract_name') or '合同名称未知'}；金额 {record['contract_amount']['value'] or '未知'}（供应商元，币种未核清）"
+            elif family == "holder_counts":
+                description = f"持有人统计日 {record['report_date']}；股东人数 {record['holder_count']}"
+            else:
+                description = f"{record['holder_name']}；{record['direction']}；{record['change_start_date']} 至 {record['change_end_date']}；完成状态未核实"
+            lines.append(f"| {record['publish_date']} | {_md(description)} | {family}/{record['raw_page']} 第{record['row_index'] + 1}行 |")
+    lines += ["", "合同不等于收入或回款；人数变化不等于具体股东增减持。",
+        "增减持保留原始数量，单位未核清不运算；原返回中的价格不是合格行情。",
+        "空窗口不等于公司没有事件；原始返回、取得时点及失败详见同目录JSON。",
+        "这份资料不会自动授予研究、通知或投资权限。", ""]
+    rendered = "\n".join(lines)
+    once.require(len(rendered.encode("utf-8")) <= CONTEXT_BYTES,
+                 "full company event reading too large; no clipping")
+    (output / "company-event-context.md").write_text(rendered, encoding="utf-8")
+    return result
+
+
 def main(argv=None):
     """Explicit source preparation only; no automatic daily execution."""
     import argparse
     parser = argparse.ArgumentParser(description="Prepare report discovery or secondary financial context; no Research")
-    parser.add_argument("--mode", choices=["report-discovery", "financial"], default="report-discovery")
+    parser.add_argument("--mode", choices=["report-discovery", "financial", "company-events"], default="report-discovery")
     parser.add_argument("--ticker", required=True)
     parser.add_argument("--announcement-date", type=date.fromisoformat)
     parser.add_argument("--period")
     parser.add_argument("--issuer-name")
+    parser.add_argument("--start-date", type=date.fromisoformat)
+    parser.add_argument("--end-date", type=date.fromisoformat)
     parser.add_argument("--year", type=int)
     parser.add_argument("--report-type", choices=["q1", "q2", "q3", "annual"])
     parser.add_argument("--report-form", choices=["合并未调整", "合并调整"], default="合并未调整")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
-    if args.mode == "financial":
+    if args.mode == "company-events":
+        if args.start_date is None or args.end_date is None or any(v is not None for v in
+                (args.year, args.report_type, args.announcement_date, args.period, args.issuer_name)):
+            parser.error("company-events requires start/end-date only")
+        result = prepare_company_event_context(ticker=args.ticker, start_date=args.start_date,
+            end_date=args.end_date, output=args.output)
+        success = "COMPANY_CONTEXT_PREPARED_NOT_ADMITTED"
+    elif args.start_date is not None or args.end_date is not None:
+        parser.error("start/end-date requires company-events mode")
+    elif args.mode == "financial":
         if args.year is None or args.report_type is None or any(
                 v is not None for v in (args.announcement_date, args.period, args.issuer_name)):
             parser.error("financial mode requires year/report-type and no report-discovery inputs")
