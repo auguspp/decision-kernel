@@ -65,7 +65,7 @@ def choose(batch, *, checked_at: str, issuer_name=None):
     latest_period = max(period for period, _ in reports)
     current = [row for period, row in reports if period == latest_period]
     latest = max(row.published_at for row in current)
-    matches = [row for period, row in reports if period == latest_period and row.published_at == latest]
+    matches = [row for row in current if row.published_at == latest]
     once.require(len(matches) == 1, "latest business report ambiguous")
     report = matches[0]
     # A revised report must not erase risks disclosed since its original version.
