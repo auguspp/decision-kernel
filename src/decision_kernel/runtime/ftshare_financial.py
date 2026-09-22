@@ -55,6 +55,12 @@ def decode(raw):
 def request_page(family, parameters):
     """Use only the existing named secret, on the documented fixed FTShare host."""
     require(family in ROUTES, "FINANCIAL_ROUTE_INVALID")
+    require(isinstance(parameters, dict) and set(parameters) == {"stock_code", "page", "page_size"}
+            and isinstance(parameters["stock_code"], str)
+            and re.fullmatch(r"(?:6[0-9]{5}\.SH|[03][0-9]{5}\.SZ)", parameters["stock_code"])
+            and type(parameters["page"]) is int and 1 <= parameters["page"] <= MAX_PAGES
+            and type(parameters["page_size"]) is int and parameters["page_size"] == PAGE_SIZE,
+            "REQUEST_IDENTITY")
     key = os.environ.get("FTSHARE_API_KEY")
     require(isinstance(key, str) and bool(key) and key.isascii()
             and all(32 < ord(c) < 127 for c in key), "AUTHENTICATION_UNAVAILABLE")
@@ -130,6 +136,12 @@ def capture_family(*, family, ticker, output, fetch=request_page, clock=discover
             event.update(http_status=status, retrieved_at=received, path=name, bytes=len(raw),
                 sha256=hashlib.sha256(raw).hexdigest(), status="RAW_RESPONSE_RETAINED")
             if status != 200:
+                try:
+                    error_body = decode(raw)
+                    if isinstance(error_body, dict) and type(error_body.get("code")) is int:
+                        event["provider_status"] = error_body["code"]
+                except (ValueError, TypeError, UnicodeError):
+                    pass
                 raise DataError({401: "AUTHENTICATION_FAILED", 403: "ENTITLEMENT_DENIED",
                     404: "HTTP_NOT_FOUND", 429: "RATE_LIMITED"}.get(status, "HTTP_REJECTED"))
             value = decode(raw)
@@ -175,6 +187,8 @@ def period_context(capture, *, year, report_type, report_form="合并未调整")
         "period_end": date(year, *REPORT_TYPES[report_type]).isoformat(),
         "period_semantics": "POINT_IN_TIME" if family == "balance" else "YEAR_TO_DATE_NOT_SINGLE_QUARTER",
         "requested_report_form": report_form if family in METRICS else "NOT_APPLICABLE",
+        "measurement_kind": {"forecast": "FORECAST_NOT_ACTUAL", "express": "PRELIMINARY_NOT_FINAL"}.get(
+            family, "PROVIDER_FINANCIAL_STATEMENT"),
         "capture_status": capture["status"], "status": "SOURCE_UNAVAILABLE", "records": [],
         "excluded_other_periods": 0, "excluded_other_forms": 0,
         "source_authority": "PROVIDER_SECONDARY_DATA_NOT_PRIMARY_EVIDENCE"}
@@ -211,11 +225,11 @@ def period_context(capture, *, year, report_type, report_form="合并未调整")
                 value = row.get(field)
                 require(value is None or type(value) in {int, Decimal, str}, "METRIC_TYPE_INVALID")
                 if value is not None:
-                    require(re.fullmatch(r"-?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?", str(value)) is not None, "METRIC_TYPE_INVALID")
+                    require(len(str(value)) <= 128 and re.fullmatch(r"-?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?", str(value)) is not None, "METRIC_TYPE_INVALID")
                     require(Decimal(str(value)).is_finite(), "METRIC_TYPE_INVALID")
                 metrics[field] = {"label": label, "unit": "CNY", "value": None if value is None else str(value),
                                   "status": "UNKNOWN" if value is None else "PROVIDER_REPORTED_NOT_VERIFIED"}
-            selected.append({**record, "publish_date": published, "publish_time_precision": "DAY",
+            selected.append({**json.loads(raw_json(record)), "publish_date": published, "publish_time_precision": "DAY",
                 "publish_timezone": "UNKNOWN", "historical_available_at": "NOT_ESTABLISHED",
                 "available_at": record["retrieved_at"], "report_form": form,
                 "metrics": metrics,
