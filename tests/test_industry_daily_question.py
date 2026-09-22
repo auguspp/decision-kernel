@@ -182,15 +182,20 @@ def test_invalid_industry_inputs_never_reserve_or_call_model(tmp_path, monkeypat
 
 def test_shared_stock_day_consumption_cannot_be_reset_by_industry(tmp_path, monkeypatch):
     c = setup_industry(tmp_path, monkeypatch)
-    ref = "e" * 40
+    # "e" * 40 already stores MODEL_CONTEXT in setup_question. Use a distinct
+    # immutable history identity so this test reaches the shared-day gate.
+    ref = once.sha(b"synthetic-existing-stock-consumption")[:40]
+    assert ref not in c.api.files
     c.api.heads[intake.WORK_REF] = ref
     marker = {"policy": daily.POLICY, "market_session": "2026-09-18", "execution_id": "stock-question-" + "a" * 64}
     c.api.files[ref] = {daily.PREFIX + "slots/01/prepare.json": once.raw(marker),
                        daily.PREFIX + "days/2026-09-18/prepare.json": once.raw(marker)}
+    before = deepcopy(c.api.files)
     result = host.run_question(**c.args)
     assert result["status"] == "NOT_EXECUTED", result
     assert result["error_code"] == "DAILY_MARKET_DAY_ALREADY_CONSUMED", result
-    assert c.calls == []
+    assert not result["formal_research_started"] and c.calls == [] and c.writes == []
+    assert c.api.files == before
 
 
 def test_policy_is_additive_and_original_request_not_activated_for_industry():
