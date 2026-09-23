@@ -75,9 +75,19 @@ class DiscoveryInput(KernelModel):
 
 
 class ResearchClaim(KernelModel):
-    statement: str = Field(min_length=1)
+    # Descriptions explain existing contracts to schema consumers; they add no
+    # validators, fields or serialized values and do not certify economic truth.
+    statement: str = Field(min_length=1, description=(
+        "State the observation or reasoning and its source scope. FACT means a supplied "
+        "source observation, not an inferred cause. Never relabel INFERENCE or ASSUMPTION "
+        "as FACT to satisfy a route; a source citation does not turn inference into fact."
+    ))
     kind: ResearchClaimKind
-    evidence_artifact_ids: tuple[UUID, ...] = ()
+    evidence_artifact_ids: tuple[UUID, ...] = Field(default=(), description=(
+        "FACT and MARKET_CONTEXT require at least one supplied Evidence ID. Use only "
+        "the trusted host evidence_ids allowlist, not nested document IDs. Identify the "
+        "underlying document/page in statement when citing an admitted bundle."
+    ))
 
     @model_validator(mode="after")
     def validate_evidence_requirement(self) -> "ResearchClaim":
@@ -97,12 +107,20 @@ class PreResearchResult(KernelModel):
     basic_business_role: str = Field(min_length=1)
     potential_fundamental_driver: str = Field(min_length=1)
     current_market_expectation_hypothesis: str = Field(min_length=1)
-    material_claims: tuple[ResearchClaim, ...] = Field(min_length=1)
+    material_claims: tuple[ResearchClaim, ...] = Field(min_length=1, description=(
+        "Keep observations, inferences and assumptions honestly labelled. "
+        "CONTINUE_TO_QUICK requires at least one evidenced FACT; not all claims must be facts."
+    ))
     obvious_contradiction: str | None = None
     largest_unknown: str = Field(min_length=1)
     next_discriminating_search: str = Field(min_length=1)
     route: PreResearchRoute
-    route_reason: str = Field(min_length=1)
+    route_reason: str = Field(min_length=1, description=(
+        "Explain the chosen route without forcing advancement. CONTINUE_TO_QUICK requires "
+        "at least one evidenced FACT plus nonblank largest_unknown and next_discriminating_search. "
+        "WAIT_FOR_TRIGGER names the missing evidence and trigger; STOP explains the stopping "
+        "condition. A required-source or technical failure is not a completed business WAIT."
+    ))
     schema_version: int = Field(default=1, ge=1)
 
     @model_validator(mode="after")
@@ -130,14 +148,48 @@ class QuickResearchResult(KernelModel):
     current_industry_state: str | None = None
     market_expectation_hypothesis: str = Field(min_length=1)
     current_expression_or_leadership: str | None = None
-    supporting_claims: tuple[ResearchClaim, ...] = ()
-    contradictory_claims: tuple[ResearchClaim, ...] = ()
-    evidence_authority_assessment: str = Field(min_length=1)
-    variant_perception: str | None = None
+    supporting_claims: tuple[ResearchClaim, ...] = Field(default=(), description=(
+        "For DEEPEN this group must be nonempty and EVERY claim must be FACT or "
+        "MARKET_CONTEXT with nonempty evidence_artifact_ids. Preserve inference and "
+        "assumptions as labelled reasoning in the narrative fields, never relabel them "
+        "as facts. WAIT_FOR_TRIGGER and STOP do not impose this all-factual group condition."
+    ))
+    contradictory_claims: tuple[ResearchClaim, ...] = Field(default=(), description=(
+        "For DEEPEN this group must also be nonempty and EVERY claim must be FACT or "
+        "MARKET_CONTEXT with nonempty evidence_artifact_ids. Do not discard counterevidence "
+        "to pass validation. Explain inferred implications separately in narrative fields. "
+        "WAIT_FOR_TRIGGER and STOP do not impose this all-factual group condition."
+    ))
+    evidence_authority_assessment: str = Field(min_length=1, description=(
+        "Separate source identity and declared-scope preflight from economic truth and "
+        "whole-issuer coverage. Describe actual missing evidence, not an invented source "
+        "failure because internal host receipts were not included in model context. "
+        "A checked report-correction inventory is not all subsequent announcements."
+    ))
+    variant_perception: str | None = Field(default=None, description=(
+        "DEEPEN requires a nonblank plausible differentiated hypothesis, its basis and a "
+        "way to test it. Do not invent market consensus. If none can be established, use "
+        "null and explain the limitation in market_expectation_hypothesis and route_reason; "
+        "saying 'no variant established' is not a positive variant. A tentative hypothesis "
+        "must be labelled tentative, not presented as a verified market mispricing."
+    ))
     unresolved_questions: tuple[str, ...] = Field(min_length=1)
-    next_discriminating_evidence: tuple[str, ...] = Field(min_length=1)
+    next_discriminating_evidence: tuple[str, ...] = Field(min_length=1, description=(
+        "Distinguish analysis possible now with available sources from evidence requiring "
+        "a future publication or event. Name the observation that would change the view. "
+        "A future periodic report is a future trigger, not evidence already available now."
+    ))
     route: QuickResearchRoute
-    route_reason: str = Field(min_length=1)
+    route_reason: str = Field(min_length=1, description=(
+        "For DEEPEN both evidence groups must be nonempty, every grouped claim must be "
+        "evidenced FACT or MARKET_CONTEXT, and variant_perception must be nonblank and "
+        "plausible. Explain useful discriminating work possible now; missing quantitative "
+        "closure alone does not mandate DEEPEN. Future disclosure alone supports "
+        "WAIT_FOR_TRIGGER, not immediate research availability. STOP requires a stated "
+        "stopping reason. Keep UNKNOWN and technical/source gaps honest; never rewrite "
+        "claim kinds or manufacture evidence to obtain a route. DEEPEN is not permission "
+        "for automatic Deep or any investment action."
+    ))
     schema_version: int = Field(default=1, ge=1)
 
     @model_validator(mode="after")

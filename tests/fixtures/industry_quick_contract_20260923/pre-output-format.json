@@ -1,0 +1,177 @@
+{
+  "name": "AdmittedOutput",
+  "schema": {
+    "$defs": {
+      "PreResearchRoute": {
+        "enum": [
+          "CONTINUE_TO_QUICK",
+          "WAIT_FOR_TRIGGER",
+          "STOP"
+        ],
+        "title": "PreResearchRoute",
+        "type": "string"
+      },
+      "ResearchClaim": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_artifact_ids": {
+            "default": [],
+            "items": {
+              "enum": [
+                "9962c189-38a8-5376-accc-60215ff5bec6"
+              ],
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Artifact Ids",
+            "type": "array"
+          },
+          "kind": {
+            "$ref": "#/$defs/ResearchClaimKind"
+          },
+          "statement": {
+            "minLength": 1,
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "kind",
+          "evidence_artifact_ids"
+        ],
+        "title": "ResearchClaim",
+        "type": "object"
+      },
+      "ResearchClaimKind": {
+        "enum": [
+          "FACT",
+          "INFERENCE",
+          "ASSUMPTION",
+          "MARKET_CONTEXT"
+        ],
+        "title": "ResearchClaimKind",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "as_of": {
+        "format": "date-time",
+        "title": "As Of",
+        "type": "string"
+      },
+      "basic_business_role": {
+        "minLength": 1,
+        "title": "Basic Business Role",
+        "type": "string"
+      },
+      "current_expression_or_leadership": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Current Expression Or Leadership"
+      },
+      "current_market_expectation_hypothesis": {
+        "minLength": 1,
+        "title": "Current Market Expectation Hypothesis",
+        "type": "string"
+      },
+      "discovery_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "title": "Discovery Id",
+        "type": "string"
+      },
+      "economic_direction": {
+        "minLength": 1,
+        "title": "Economic Direction",
+        "type": "string"
+      },
+      "largest_unknown": {
+        "minLength": 1,
+        "title": "Largest Unknown",
+        "type": "string"
+      },
+      "material_claims": {
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "minItems": 1,
+        "title": "Material Claims",
+        "type": "array"
+      },
+      "next_discriminating_search": {
+        "minLength": 1,
+        "title": "Next Discriminating Search",
+        "type": "string"
+      },
+      "obvious_contradiction": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Obvious Contradiction"
+      },
+      "potential_fundamental_driver": {
+        "minLength": 1,
+        "title": "Potential Fundamental Driver",
+        "type": "string"
+      },
+      "route": {
+        "$ref": "#/$defs/PreResearchRoute"
+      },
+      "route_reason": {
+        "minLength": 1,
+        "title": "Route Reason",
+        "type": "string"
+      },
+      "schema_version": {
+        "default": 1,
+        "minimum": 1,
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "what_is_this": {
+        "minLength": 1,
+        "title": "What Is This",
+        "type": "string"
+      },
+      "why_surfaced_now": {
+        "minLength": 1,
+        "title": "Why Surfaced Now",
+        "type": "string"
+      }
+    },
+    "required": [
+      "discovery_id",
+      "as_of",
+      "what_is_this",
+      "economic_direction",
+      "why_surfaced_now",
+      "current_expression_or_leadership",
+      "basic_business_role",
+      "potential_fundamental_driver",
+      "current_market_expectation_hypothesis",
+      "material_claims",
+      "obvious_contradiction",
+      "largest_unknown",
+      "next_discriminating_search",
+      "route",
+      "route_reason",
+      "schema_version"
+    ],
+    "title": "AdmittedOutput",
+    "type": "object"
+  },
+  "type": "json_schema"
+}

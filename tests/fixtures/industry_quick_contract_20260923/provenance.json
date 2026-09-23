@@ -1,0 +1,36 @@
+{
+  "artifact_id": 10732853090,
+  "artifact_sha256": "d1a6f74e9dd38802a262bf2d741e763ed57ec07e25a4777a272e60f78c520164",
+  "code_commit": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
+  "files": {
+    "candidate.json": {
+      "bytes": 18956,
+      "git_blob": "0d2219f5deb4541b3fe65296355bdc090c8418ff",
+      "sha256": "fabe4ae5988fa11552f47c2fbabc12048f2dd460631bcb8660f702ff4fd0d9c6"
+    },
+    "input.json": {
+      "bytes": 10121,
+      "git_blob": "b14769bc71c80a726460b471fa5710efdfb2c648",
+      "sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db"
+    },
+    "pre-output-format.json": {
+      "bytes": 4232,
+      "git_blob": "294eaac919770b3b596d9a00536b6a2782888a9e",
+      "sha256": "af1e26a0dbc5c8768afbbce7243063f9088339aa379733bc69c9973d12269a9e"
+    },
+    "quick-model-output.txt": {
+      "bytes": 16106,
+      "git_blob": "7c776eab7cfae3a7c6a37db828d221b05e86fb31",
+      "sha256": "3fee82af3c0167cc2afc44795f4e72a5b4ac76416d6abc410029a468c86e4c99"
+    },
+    "quick-output-format.json": {
+      "bytes": 5442,
+      "git_blob": "e9c64dea18dba3e37427df9fd053c50153cee562",
+      "sha256": "3c919786e2dbbe0afdc1cf51d3601cb8146b142c38dcdffa63d5f08983d07bef"
+    }
+  },
+  "meaning": "Exact rejected provider output and saved partial result; not economic or Human acceptance. Tests must not rewrite these bytes.",
+  "repository": "auguspp/decision-kernel",
+  "run_id": 35819538967,
+  "work_commit": "4b9988f20aa41810c6818d101e2bdb37cf139bde"
+}
