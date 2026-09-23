@@ -25,6 +25,45 @@ MODE = "FROZEN_REVIEWED_QUESTION_QUICK_CONTINUATION"
 SOURCE_SCOPE = "ORIGINAL_RESEARCH_CUTOFF_NO_NEW_SOURCES"
 
 
+def recheck_checkpoint_reviews(context, *, api, code, clock):
+    """Read actual retained review notes, not just construct a lazy loader.
+
+    The admitted parent binds the complete representation and original PDF.
+    Reuse that checkpoint; compare the same-PDF note inventory and every note
+    against current main without re-downloading or re-reading the entire PDF.
+    This checks retained interpretation identity, never economic source truth.
+    """
+    from . import disclosure_source_reading as pages
+    full.recheck_pages(context, api=api, code=code, clock=clock)
+    trees = {}
+    def tree(ref):
+        if ref not in trees:
+            trees[ref] = previous._tree(api, ref)
+        return trees[ref]
+    for doc in context['issuer_documents']:
+        value = doc.get('page_reading')
+        if not full.referenced_reading(value):
+            continue
+        load = full.replay_loader(api, code, value, clock)
+        prefix = pages.REVIEW_ROOT + doc['pdf_sha256'] + '/'
+        inventories = [{p: r for p, r in tree(ref).items() if p.startswith(prefix)}
+                       for ref in (value['review_commit'], code)]
+        before, current = inventories
+        once.require(set(before) == set(current), 'QUICK_REVIEW_INVENTORY_CHANGED')
+        for path, row in sorted(before.items()):
+            match = re.fullmatch(re.escape(prefix) + r'page-([1-9][0-9]*)\.json', path)
+            once.require(match is not None and 1 <= int(match[1]) <= doc['page_count']
+                and all(r.get('type') == 'blob' and r.get('mode') == '100644'
+                        and type(r.get('size')) is int and 0 < r['size'] <= pages.MAX_REVIEW_BYTES
+                        and reading.SHA.fullmatch(r.get('sha', ''))
+                        for r in (row, current[path]))
+                and row['sha'] == current[path]['sha'], 'QUICK_REVIEW_BLOB_CHANGED')
+            note, spec = load(doc['pdf_sha256'], int(match[1]))
+            once.require(spec['git_blob'] == row['sha']
+                and note['pdf_sha256'] == doc['pdf_sha256'] and note['page_number'] == int(match[1]),
+                'QUICK_REVIEW_READBACK_DIFFERS')
+
+
 def check_request(request):
     once.require(set(request) == {"schema_version", "enabled", "mode", "permission",
                                   "predecessor", "source_scope"}
@@ -121,7 +160,7 @@ def load_checkpoint(api, code, request, clock):
                                       ticker=parent.ticker, allowed=True)
     if bound is not None:
         bound.check_packet(packet, context)
-        full.recheck_pages(context, api=api, code=code, clock=clock)
+        recheck_checkpoint_reviews(context, api=api, code=code, clock=clock)
     else:
         once.require(once.sha(once.raw(context)) == spec["sha256"], "QUICK_CONTEXT_CHANGED")
     from .stock_question_host import _question_context

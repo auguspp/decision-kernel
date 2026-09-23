@@ -62,6 +62,15 @@ def setup(tmp_path, monkeypatch):
     # Bind the existing parent input, not an invented approval for the new child.
     files[CODE][once.identity.CATALOG_PATH] = once.raw({'schema_version': 1, 'inputs': [
         {**once.identity.input_key(parent).as_dict(), 'input': admitted['input_source']}]})
+    # Small synthetic Git inventory using one existing real note. The continuation
+    # must actually read both versions; the original full-PDF checks stay separate.
+    from decision_kernel.runtime import disclosure_source_reading as pages
+    context = json.loads(resume.full.unpack(saved('source.json'), ticker=parent.ticker))
+    doc = next(d for d in context['issuer_documents'] if resume.full.referenced_reading(d.get('page_reading')))
+    note_path = pages.review_path(doc['pdf_sha256'], 100)
+    note = (Path(__file__).parents[1] / note_path).read_bytes()
+    files.setdefault(doc['page_reading']['review_commit'], {})[note_path] = note
+    files[CODE][note_path] = note
     specs = {key: once.source_ref(root + name, WORK, saved(name), purpose)
              for key, (name, purpose) in resume.previous.PREDECESSOR_FILES.items()}
     comment = {'id': 123, 'body': 'SYNTHETIC explicit corrective Quick, not real permission.',
