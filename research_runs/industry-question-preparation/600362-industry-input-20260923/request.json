@@ -1,0 +1,51 @@
+{
+  "approved_egress_hash": null,
+  "batch_review_source": {
+    "git_blob": "dd958d019a08df72dab4a537b6adc5c7c5450845",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/review.json",
+    "purpose": "DAILY_INDUSTRY_BATCH_REVIEW",
+    "ref": "52e731f1d8c548ab2dc6681187a8ee7d64f3b358",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "b985133da09b5d0c9539b4d990573e5aa9af5b9cc269c0f126f4dfc4c76b5855"
+  },
+  "context_source": {
+    "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+  },
+  "enabled": true,
+  "mode": "BOUNDED_DAILY_REVIEWED_STOCK_QUESTION",
+  "permission": {
+    "body_sha256": "45364363eccca62a115d35ea1212f02f9c2fa918b85cb4c7ad8ca3fd50677e1c",
+    "comment_id": 5778160521,
+    "created_at": "2026-09-22T14:17:34Z"
+  },
+  "preflight_source": {
+    "git_blob": "f36f55f22029679c8b0256a52c1c9923a2f3429d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/preflight.json",
+    "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+    "ref": "3b85b865ba61c2a29b24ff7981869363324d6d5c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3"
+  },
+  "question_source": {
+    "git_blob": "d7ad7ef93b2cd3aecc85dee920567cb099dba85d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "c492cf1d31ff5187dbe863d00ebd8e5fc420fc23",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b77f1d21c47eb4642ac369e33e9ca4d6fa2d99531087c28fad5f0671c4365c"
+  },
+  "schema_version": 1,
+  "source_custody_source": {
+    "git_blob": "a26a79608d7d2919e30a9aa5a3170ed2e7c5bc82",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/custody.json",
+    "purpose": "DAILY_PUBLIC_PDF_CUSTODY",
+    "ref": "9bc8f6f91c6626add57d64a7aa2e536a56206fe2",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "defe789f9f1b3c40e651b041c3163f05261779c57f46a9c2fbb309beadd5ba32"
+  }
+}
