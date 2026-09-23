@@ -201,7 +201,12 @@ def test_shared_stock_day_consumption_cannot_be_reset_by_industry(tmp_path, monk
 def test_policy_is_additive_and_original_request_not_activated_for_industry():
     assert json.loads((ROOT / industry.EXTENSION_PATH).read_bytes()) == industry.EXTENSION
     request = json.loads((ROOT / daily.REQUEST).read_bytes())
-    assert request["permission"] == daily.PERMISSION
-    assert request["batch_review_source"]["purpose"] == daily.EXTRA_SOURCES["batch_review_source"]
+    # Deployment may now select either explicitly approved family. The extension
+    # still shares the unchanged Stock consumption policy; a request is not a run.
+    assert json.loads((ROOT / daily.POLICY_PATH).read_bytes()) == daily.POLICY
+    purpose = request["batch_review_source"]["purpose"]
+    permissions = {daily.EXTRA_SOURCES["batch_review_source"]: daily.PERMISSION,
+                   industry.PURPOSE: industry.PERMISSION}
+    assert request["permission"] == permissions[purpose]
     assert industry.EXTENSION["shared_consumption_prefix"] == daily.PREFIX
     assert industry.EXTENSION["model_cost_policy"] == "HUMAN_MANAGED_ACCOUNT_NO_ADDITIONAL_PROJECT_MONETARY_CEILING"

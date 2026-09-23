@@ -147,6 +147,8 @@ def test_render_escapes_saved_review_text(tmp_path, monkeypatch):
 
 
 def test_rejected_question_files_still_consume_the_shared_budget(tmp_path, monkeypatch):
+    # Keep the original 32-file accounting geometry; production limits have separate boundary tests.
+    monkeypatch.setattr(reader.stock_reader, 'MAX_STOCK_SOURCE_FILES', 32)
     case, c, baseline = setup(tmp_path, monkeypatch)
     files = case.api.files[case.api.heads[intake.WORK_REF]]
     # Nine core files plus one declaration for the good root, and 22 retained
