@@ -68,11 +68,11 @@ def load_sample(api, spec, out):
         packet, candidate, checked = single.read_saved_result(z.read('input.json'), z.read('candidate.json'))
         once.require(once.sha(z.read('input.json')) == spec['input_sha256']
                      and canonical_hash(candidate) == spec['candidate_hash'], 'EVAL_OLD_RESULT_IDENTITY')
-        original = once.identity._json(z.read('pre-model-input.json'))
+        original = codec._json(z.read('pre-model-input.json'), codec.REQUEST_BYTES)
         context = original['public_context']
         plain = once.raw(context)
         once.require(once.sha(plain) == spec['context_sha256']
-                     and context == once.identity._json(z.read('quick-model-input.json'))['public_context'],
+                     and context == codec._json(z.read('quick-model-input.json'), codec.REQUEST_BYTES)['public_context'],
                      'EVAL_COMPLETE_CONTEXT')
         source = next(s.model_dump(mode='json') for s in packet.source_refs if s.purpose == 'MODEL_CONTEXT')
         stored = once.identity._checked_source(source, lambda s: api.file(s['path'], s['ref']))
@@ -82,7 +82,7 @@ def load_sample(api, spec, out):
         full._context(plain, spec['ticker'])
         once.require([d['page_count'] for d in context['issuer_documents']] == spec['pages'], 'EVAL_PAGE_SCOPE')
         discovery = candidate.discovery
-        once.require(once.pre_prompt(packet, discovery, context) == original, 'EVAL_ORIGINAL_PROMPT_DIFFERENT')
+        once.require(once.raw(once.pre_prompt(packet, discovery, context)) == once.raw(original), 'EVAL_ORIGINAL_PROMPT_DIFFERENT')
         put(out / 'original-input.json', z.read('input.json'))
         put(out / 'original-source.json', stored)
         put(out / 'source-identity.json', {**spec, 'source': source,
@@ -187,6 +187,7 @@ def send_one(prompt, output_type, arm, out):
         record.update(status='STRUCTURE_VALID_NOT_QUALITY_ACCEPTANCE', phase='COMPLETE')
         put(out / 'parsed.json', result)
     except Exception as exc:
+        result = None
         record.update(status='FAILED', error_type=type(exc).__name__, **once._provider_error_diagnostic(exc))
         if record['phase'] == 'APPLICATION_VALIDATION':
             record['validation'] = once._application_validation_diagnostic(exc, output_type)
