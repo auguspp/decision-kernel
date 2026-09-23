@@ -220,6 +220,13 @@ def _markdown_text(value: object) -> str:
     return text
 
 
+def _markdown_lane(value: str) -> str:
+    """Keep safe machine labels legible without allowing source Markdown."""
+    if re.fullmatch(r"[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*", value):
+        return value
+    return _markdown_text(value)
+
+
 def _render_research_markdown(
     ticker: str,
     handoffs: Sequence[ResearchAttentionHandoff],
@@ -235,7 +242,7 @@ def _render_research_markdown(
         *[f"- {_markdown_text(reason)}" for reason in reasons],
         "",
         f"**当前状态：** `DEEPEN_REQUIRED` · {_research_state(decision)}",
-        f"**发现来源：** {_markdown_text(' / '.join(lanes))}",
+        f"**发现来源：** {' / '.join(_markdown_lane(lane) for lane in lanes)}",
         "",
         "<details>",
         "<summary>深入查看</summary>",
@@ -245,7 +252,7 @@ def _render_research_markdown(
         result = handoff
         lines.extend(
             [
-                f"### {_markdown_text(result.discovery.source_lane)}",
+                f"### {_markdown_lane(result.discovery.source_lane)}",
                 "",
                 f"**触发：** {_markdown_text(result.discovery.why_now)}",
                 "",

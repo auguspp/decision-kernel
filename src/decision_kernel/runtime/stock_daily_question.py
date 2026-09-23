@@ -339,7 +339,7 @@ def work_tree(api):
 
 
 def capacity(api, commit, rows, state, packet):
-    """Reserve the original reader's32 files/8 executions against the real tree.
+    """Reserve the shared reader's bounded files/executions against the real tree.
 
     This is a pre-spend representation check, not a future publisher success
     receipt; the publisher retains its own original API and byte checks.
@@ -357,7 +357,7 @@ def capacity(api, commit, rows, state, packet):
                      and reading.SHA.fullmatch(row.get("sha", "")),
                      "DAILY_QUESTION_TREE_INVALID")
         groups.add(path.rsplit("/", 1)[0] + "/")
-        if parts[-1] in reader.CORE:
+        if parts[-1] in reader.RETAINED_FILES:
             files.add((row["sha"], parts[-1]))
             if path == packet.candidate_output_prefix + parts[-1]:
                 current_names.add(parts[-1])
@@ -380,11 +380,13 @@ def capacity(api, commit, rows, state, packet):
                              and type(row.get("size")) is int and 0 <= row["size"] <= identity.MAX_BYTES,
                              "DAILY_LEGACY_TREE_INVALID")
                 files.add((row["sha"], PurePosixPath(path).name))
+    from .single_quick_contract import METHOD_VERSION
+    planned = reader.SINGLE_CORE if packet.method_version == METHOD_VERSION else reader.CORE
     is_new = packet.candidate_output_prefix not in groups
     source = next(r for r in packet.source_refs if r.purpose == "REVIEWED_RADAR_QUESTION")
     declaration = (source.ref, source.path, source.git_blob, source.sha256)
     once.require(len(groups) + int(is_new) <= reader.MAX_EXECUTIONS
-                 and len(files) + len(declarations) + len(reader.CORE - current_names)
+                 and len(files) + len(declarations) + len(planned - current_names)
                  + int(declaration not in declarations)
                  <= stock_reader.MAX_STOCK_SOURCE_FILES, "DAILY_READING_CAPACITY_UNAVAILABLE")
 

@@ -31,8 +31,12 @@ CHILD = 'technical-continuation-v1'
 DETAIL = 'details/research/reviewed-questions.md'
 REPORT = 'details/research/reviewed-questions.json'
 CORE = {'prepare.json', 'input.json', 'candidate.json', 'validation.json',
-        'host-receipt.json', 'launch.json', 'funnel.json', 'receipt.json', 'admission.json',
-        'research-attention.json', 'full-commission.json', *once.MODEL_OUTPUT_NAMES}
+        'host-receipt.json', 'launch.json', 'funnel.json', 'receipt.json', 'admission.json'}
+# Preserve the historical nine-file accounting contract. New method artifacts
+# extend the readable inventory, not every old execution's reservation budget.
+SINGLE_CORE = (CORE - {'funnel.json'}) | {
+    'research-attention.json', 'full-commission.json', *once.MODEL_OUTPUT_NAMES}
+RETAINED_FILES = CORE | SINGLE_CORE
 MAX_EXECUTIONS = 16  # Saved roots/children, not permission for more executions.
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError)
 
@@ -181,6 +185,11 @@ def _describe(prefix, data, question_raw):
         model.check(launch.get('research_method') == single.METHOD_VERSION
                     and isinstance(launch.get('method_permission'), dict), 'Question method approval binding missing')
         model.check('host-receipt.json' in data, 'Question single Quick delivery receipt missing')
+        model.check(host.get('mutation_uncertain') is False
+                    and host.get('formal_research_started') is True
+                    and host.get('automatic_retry') is False
+                    and host.get('phase') == 'COMPLETE',
+                    'Question single Quick delivery not confirmed')
         outputs = host.get('model_output_sources')
         model.check(isinstance(outputs, dict) and {'model-usage.json', 'candidate-before-validation.json'} <= set(outputs),
                     'Question single Quick retention incomplete')
@@ -253,7 +262,7 @@ def collect(collector, payload):
     if not groups:
         return {'status': 'NO_RETAINED_QUESTION_ROOTS_WITHIN_SCOPE', 'work_commit': commit,
                 'items': [], 'scope': PREFIX, 'new_research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
-    wanted = {p + n for p, names in groups.items() for n in names & CORE}
+    wanted = {p + n for p, names in groups.items() for n in names & RETAINED_FILES}
     legacy = _legacy_sources(payload)
     projected = {'sources/git/' + metadata[p]['sha'] + '/' + PurePosixPath(p).name for p in wanted}
     model.check(len(legacy | projected) <= stock_reader.MAX_STOCK_SOURCE_FILES,
@@ -287,14 +296,14 @@ def collect(collector, payload):
                 stored = collector.retain('sources/git/' + spec['git_blob'] + '/' + PurePosixPath(spec['path']).name, raw)
                 qcache[key] = (raw, {'repository': model.REPOSITORY, 'ref': spec['ref'],
                                     'path': spec['path'], **stored})
-            data = {n: cache[prefix + n] for n in names & CORE}
+            data = {n: cache[prefix + n] for n in names & RETAINED_FILES}
             item = _describe(prefix, data, qcache[key][0])
             if item['role'] != 'ROOT' and 'predecessor_sources' in item:
                 for ps in item['predecessor_sources'].values():
                     model.check(ps['path'].startswith(PREFIX) and ps['path'] in cache,
                                 'Question predecessor outside retained scope')
                     identity._checked_source(ps, lambda s: cache[s['path']])
-            item['sources'] = {n: references[prefix + n] for n in sorted(names & CORE)}
+            item['sources'] = {n: references[prefix + n] for n in sorted(names & RETAINED_FILES)}
             item['question_source'] = qcache[key][1]
             items.append(item)
         except ERRORS as exc:

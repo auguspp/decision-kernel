@@ -1,7 +1,8 @@
-"""One reviewed replay-equivalence pair; no artifact code or receipt rewriting.
+"""Explicit reviewed replay-equivalence maps; no artifact code or receipt rewriting.
 
-#479: #478 changed root-index formatting in two shared files, neither operation
-is used by detail replay. The other fifteen captured files are byte-identical.
+#479 covered #478 root formatting. #530 additionally changes only the
+project_handoffs display function in current_state; detail replay never calls it.
+All other captured files remain byte-identical for this additional transition.
 See docs/concept-detail-replay-compatibility-v1.md for the evidence and limits.
 """
 from __future__ import annotations
@@ -31,13 +32,18 @@ HISTORICAL_IMPLEMENTATION = MappingProxyType({
     'runtime/sector_radar_audit.py': 'a92ef7350f824656cd40572d6d94a97b98fbf7b72461ab6c3064955e11693517',
     'runtime/theme_radar_probe.py': '2f48bff34c64e24090250ea00b7101c0cd4c07be1e718fdfeaa92fbdc61b4a56',
 })
-REPLAY_IMPLEMENTATION = MappingProxyType({
+PRE_SINGLE_QUICK_IMPLEMENTATION = MappingProxyType({
     **HISTORICAL_IMPLEMENTATION,
     'runtime/current_state.py': 'e31f54cdef58e3566429e5cccbf87cc459c323d35ae217d68a330ccc3ae0b032',
     'runtime/current_state_delivery.py': '71445a002f5302534e372e8ca7273768b6519cddd54a4d5f532a148b94e09117',
 })
+REPLAY_IMPLEMENTATION = MappingProxyType({
+    **PRE_SINGLE_QUICK_IMPLEMENTATION,
+    'runtime/current_state.py': '1faa6925d05debe4b0f22e5574eb365de4d36380036fd50b110c8e541ad22845',
+})
 CURRENT = 'CURRENT_IMPLEMENTATION'
 HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
+PRE_SINGLE_QUICK = 'REVIEWED_HISTORICAL_EQUIVALENCE_530'
 
 
 def verify(output: Path) -> tuple[dict, str]:
@@ -51,14 +57,15 @@ def verify(output: Path) -> tuple[dict, str]:
     installed = capture._implementation()
     if receipt.get('implementation') == installed:
         return capture.verify(output), CURRENT
-    capture.require(receipt.get('implementation') == HISTORICAL_IMPLEMENTATION
+    historical = receipt.get('implementation')
+    capture.require(historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION)
                     and installed == REPLAY_IMPLEMENTATION,
                     'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED')
     # Bind only this invocation's identity expectation, after validating BOTH
     # complete maps. Never assign to capture._implementation or rewrite a receipt.
     bindings = dict(capture.verify.__globals__)
-    bindings['_implementation'] = lambda: dict(HISTORICAL_IMPLEMENTATION)
+    bindings['_implementation'] = lambda: dict(historical)
     verifier = FunctionType(capture.verify.__code__, bindings,
                             capture.verify.__name__, capture.verify.__defaults__,
                             capture.verify.__closure__)
-    return verifier(output), HISTORICAL
+    return verifier(output), (HISTORICAL if historical == HISTORICAL_IMPLEMENTATION else PRE_SINGLE_QUICK)
