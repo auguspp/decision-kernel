@@ -43,6 +43,12 @@ reports, current market qualification or fresh whole-issuer coverage. A task
 that needs a newer evidence window is NOT this continuation. Historical source
 qualification and current execution authority must not share a fabricated clock.
 
+Referenced same-PDF notes are actually loaded, not merely passed through a lazy
+loader constructor. Reuse the original note loaders and pinned Git trees to
+compare original/current note inventory, blobs, bodies and clocks, including
+at the send boundary. This preserves interpretation identity without reacquiring
+PDFs or claiming a new independent economic review.
+
 ## Only the failed stage
 
 No Pre model call occurs. The original pre.json is retained with an explicit
@@ -63,7 +69,7 @@ establish the existing send hook; it is not a network request or Pre execution.
 The only provider call permitted by this mode is Quick on the exact preserved
 Pre and complete original context.
 
-## Validation and remaining product work
+## Validation and actual configuration
 
 Real original input, candidate, context, question, preflight, admission, launch
 and receipts are negative checkpoint fixtures with byte/hash provenance. Native
@@ -72,7 +78,15 @@ Tests cover changed sources/clock/identity, no Pre call, honest retry accounting
 current permission and write races, repeated signals, another Quick failure,
 full-source wire and original-reader parent/child round trips.
 
-Default daily requests retain their original mode. Engineering/CI approval does
-not itself activate a corrective request. Activation, one actual native run,
-semantic/financial review, registry and normal Brief delivery are separate
-facts, not pre-certified by this document. No automatic Deep, Odds or trades.
+The daily request now selects this explicit corrective mode, bound to the
+seven exact parent files and recorded continuation scope #297/5791078723.
+Its fixture records this deployment without requiring future deployments to
+keep the same ticker. Original daily-policy tests retain their source and
+permission assertions on the exact archived parent when corrective mode is
+selected; current corrective configuration and the exact saved activation have
+separate checks. No assertion about daily quotas or source safety is removed.
+
+Activation, one actual native run, semantic/financial review, registry and normal
+Brief delivery are separate facts, not pre-certified by this document or CI.
+Only after exact-head CI, normal merge, independent main CI and publisher/readback
+may the existing daily label be used once. No automatic Deep, Odds or trades.

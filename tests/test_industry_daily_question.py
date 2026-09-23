@@ -200,7 +200,8 @@ def test_shared_stock_day_consumption_cannot_be_reset_by_industry(tmp_path, monk
 
 def test_policy_is_additive_and_original_request_not_activated_for_industry():
     assert json.loads((ROOT / industry.EXTENSION_PATH).read_bytes()) == industry.EXTENSION
-    request = json.loads((ROOT / daily.REQUEST).read_bytes())
+    from test_quick_checkpoint_activation import checked_daily_configuration
+    request = checked_daily_configuration(ROOT)
     # Deployment may now select either explicitly approved family. The extension
     # still shares the unchanged Stock consumption policy; a request is not a run.
     assert json.loads((ROOT / daily.POLICY_PATH).read_bytes()) == daily.POLICY

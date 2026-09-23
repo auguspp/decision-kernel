@@ -1,0 +1,11 @@
+## 本次已冻结 Quick 接续的执行范围登记 — 2026-09-23
+
+Human 在当前施工对话中连续要求“继续吧”“继续”，承接已批准 RM-20260923-r3、#523 的完成回执5790267373及 Quick-only 施工说明5790359520。按这一已有指示继续完成当前故障恢复，不另索同范围批准。本评论是助手对现有指示及执行对象的记录，不是伪造一次新的独立 Human 审阅或投资批准。
+
+本次仅在 #525 完整精确版本 CI、正常合并、独立主干 CI 和正常发布读回通过后，沿原 stock_question_host / saved_research_once / create-only Retainer 执行一次 Quick-only 接续。固定前件为 run35819538967、work commit4b9988f20aa41810c6818d101e2bdb37cf139bde、原问题 jiangxi-copper-net-economic-exposure、原 execution stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14。
+
+保留原 cutoff2026-09-23T04:44:29.795878Z、完整财报上下文和有效 Pre（hash cbe003b6122f6897da19f5fc47d2bb82b14d906eec38276d5aeab485c2ed772e）。使用现有官方 DeepSeek 连接及原完整输入边界；新格式采用 #523 已部署的事实/推断/路由说明。只调用 Quick，不重新调用 Pre，不重新获取 PDF，不增加新来源，不把过期预检改写为当前检查。
+
+本次使用原稳定根的 technical-continuation-v1 子目录，保留全部旧失败、slot02/day2026-09-22，当前主干、许可原文、前件和补读记录在发送前重新核对。重复触发不得产生第二次调用；写入不确定则停止追加，必要的原文、结果和失败分别保留。它不是普通 daily 新问题，不新占或清空原交易日额度，不自动重试、Deep、Odds、Human接受、待办或交易。
+
+配置登记和 CI 不等于已经执行；实际模型调用、结果资格及正常交付以随后真实原件另行记录。当前仍是 P1-4/P1-Q 同一施工项，#524 及其他延期范围不启动。

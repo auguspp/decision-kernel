@@ -264,7 +264,8 @@ def test_daily_native_gates_preserve_original_routes_and_before_egress_reservati
 def test_daily_checked_main_policy_and_disabled_request_match_recorded_scope():
     from decision_kernel.runtime import industry_daily_question as industry
     assert json.loads((ROOT / daily.POLICY_PATH).read_bytes()) == daily.POLICY
-    request = json.loads((ROOT / daily.REQUEST).read_bytes())
+    from test_quick_checkpoint_activation import checked_daily_configuration
+    request = checked_daily_configuration(ROOT)
     # Deployment can select either existing approved family, without freezing
     # yesterday's ticker/path as permanent policy. Configuration is not a run.
     assert request["enabled"] is True and request["mode"] == daily.MODE
