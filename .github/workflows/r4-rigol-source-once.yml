@@ -1,0 +1,95 @@
+name: R4 Rigol normal-question source preparation
+on:
+  push:
+    branches: [ops/r4-rigol-source-once-20260924]
+permissions:
+  contents: read
+jobs:
+  source:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 2971d00145e0980238429c4995d783fa3d280ef1
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[documents,feeds]'
+      - name: Existing CNINFO client and complete PDF extractor only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 2971d00145e0980238429c4995d783fa3d280ef1
+          test "$(git rev-parse HEAD^{tree})" = 3e242b7c6f16c6d89c6540f7d465cd0eaa4abc3b
+          python - <<'PY'
+          from dataclasses import asdict
+          from datetime import date
+          from pathlib import Path
+          import json, os, re
+          from decision_kernel.runtime import cninfo_http as cn, saved_research_once as once
+          from decision_kernel.runtime import stock_research_sources as sources
+          from decision_kernel.runtime.disclosure_source_reading import text_ok
+          from decision_kernel.adapters.pdf_text import extract_pdf_text
+          out=Path('r4-rigol-source'); out.mkdir(exist_ok=False)
+          receipt={'authority':'https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5804878332','code_commit':'2971d00145e0980238429c4995d783fa3d280ef1','workflow_commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'ticker':'688337','period':'2026H1','status':'INCOMPLETE','started_at':once.now(),'source_scope':'FULL_2026_H1_WITH_COMPARATIVE_COLUMNS_AND_DECLARED_REPORT_CORRECTIONS_ONLY','query_window':['2026-08-01','2026-09-24'],'queries':[],'documents':[],'model_calls':0,'automatic_retry':False,'fallback':False,'research_execution_allowed':False}
+          def query(method,url,form=None):
+              assert url in {cn.CNINFO_STOCK_MAP_URL,cn.CNINFO_ANNOUNCEMENT_QUERY_URL}
+              assert len(receipt['queries'])<10
+              e={'method':method,'url':url,'form':form,'started_at':once.now(),'status':'FAILED'}; receipt['queries'].append(e)
+              try:
+                  value=cn._request_json(url=url,method=method,form=form,timeout_seconds=30)
+                  raw=once.raw(value); name='query-'+str(len(receipt['queries']))+'.json'
+                  (out/name).write_bytes(raw)
+                  e.update(status='SUCCEEDED',path=name,bytes=len(raw),sha256=once.sha(raw),representation='DECODED_HTTP_RETURN_NOT_WIRE_BYTES')
+                  return value
+              finally: e['finished_at']=once.now()
+          try:
+              batch=cn.fetch_cninfo_disclosures(stock_code='688337',start_date=date(2026,8,1),end_date=date(2026,9,24),get_json=lambda u:query('GET',u),post_json=lambda u,f:query('POST',u,f))
+              rows=[{**asdict(r),'published_at':r.published_at.isoformat() if r.published_at else None} for r in batch.announcements]
+              (out/'inventory.json').write_bytes(once.raw({'stock_code':batch.stock_code,'org_id':batch.org_id,'start_date':batch.start_date.isoformat(),'end_date':batch.end_date.isoformat(),'announcements':rows}))
+              receipt['inventory_finished_at']=once.now()
+              reports=[]
+              for r in batch.announcements:
+                  m=sources.report_match(r.title,'普源精电')
+                  if m and m[1]=='2026' and m[2]=='半年度': reports.append(r)
+              assert reports and all(r.published_at for r in reports), 'FULL_REPORT_UNAVAILABLE'
+              newest=max(r.published_at for r in reports); candidates=[r for r in reports if r.published_at==newest]
+              assert len(candidates)==1,'AMBIGUOUS_REPORT_VERSION'
+              chosen=candidates[0]; relevant=[chosen]; correction_rows=[]
+              for r in batch.announcements:
+                  if r.announcement_id==chosen.announcement_id: continue
+                  if re.search(r'更正|修订|补充|会计差错|追溯调整',r.title) and re.search(r'报告|财务|会计|业绩',r.title):
+                      relevant.append(r);correction_rows.append(r.announcement_id)
+              assert len(relevant)<=4,'DECLARED_CORRECTION_BODY_SCOPE_EXCEEDED'
+              receipt['selected_report_id']=chosen.announcement_id;receipt['correction_body_ids']=correction_rows
+              receipt['other_announcement_titles_not_body_reviewed']=[r.title for r in batch.announcements if r not in relevant]
+              for i,r in enumerate(relevant):
+                  d={'announcement_id':r.announcement_id,'title':r.title,'locator':r.source_locator,'published_at':r.published_at.isoformat(),'started_at':once.now(),'status':'INCOMPLETE'};receipt['documents'].append(d)
+                  pdf=cn.fetch_cninfo_pdf_bytes(source_locator=r.source_locator,max_bytes=16*1024*1024,timeout_seconds=60)
+                  d['retrieved_at']=once.now(); name=f'document-{i}.pdf';(out/name).write_bytes(pdf)
+                  d.update(pdf=name,bytes=len(pdf),pdf_sha256=once.sha(pdf))
+                  p=extract_pdf_text(pdf,max_pdf_bytes=16*1024*1024,max_pages=500,max_extracted_chars=1000000)
+                  first=re.sub(r'\s+','',''.join(v.text for v in p.pages[:10]))
+                  assert '688337' in first and '普源精电' in first,'PRINTED_SECURITY_IDENTITY'
+                  if i==0:assert '2026年半年度报告' in first,'PRINTED_REPORT_PERIOD'
+                  extraction={'pdf_sha256':p.pdf_sha256,'text_sha256':p.text_sha256,'page_count':p.page_count,'pages':[{'page_number':v.page_number,'text':v.text} for v in p.pages]}
+                  en=f'document-{i}-extraction.json';(out/en).write_bytes(once.raw(extraction))
+                  d.update(extraction=en,page_count=p.page_count,text_sha256=p.text_sha256,unreadable_pages=[v.page_number for v in p.pages if not text_ok(v.text)],finished_at=once.now(),status='COMPLETE_ORIGINAL_NOT_RESEARCH')
+              receipt['status']='ORIGINALS_RETAINED_IN_ARTIFACT_NOT_RESEARCH'
+          except Exception as e:
+              receipt.update(error_type=type(e).__name__,error_code=getattr(e,'code',None))
+          finally:
+              receipt['finished_at']=once.now();(out/'source-receipt.json').write_bytes(once.raw(receipt))
+              print(json.dumps({'status':receipt['status'],'queries':len(receipt['queries']),'documents':len(receipt['documents']),'error_type':receipt.get('error_type')}))
+          if receipt['status']!='ORIGINALS_RETAINED_IN_ARTIFACT_NOT_RESEARCH': raise SystemExit(2)
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: r4-rigol-source-${{ github.run_id }}
+          path: r4-rigol-source/
+          if-no-files-found: error
+          retention-days: 30
