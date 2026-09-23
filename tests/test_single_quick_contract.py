@@ -278,3 +278,15 @@ def test_handoff_tampering_is_rejected(damage):
     with pytest.raises(DomainValidationError):
         verify_full_handoff(FullResearchHandoff.model_validate(value),
             input_raw=args["input_raw"], candidate_raw=args["candidate_raw"])
+
+
+def test_real_counterevidence_can_be_retained_without_a_forced_group_shape():
+    packet, candidate = synthetic()
+    value = candidate.model_dump(mode="json")
+    observation = deepcopy(value["assessment"]["claims"][0])
+    observation["statement"] = "SYNTHETIC contrary reported observation; do not discard it"
+    value["assessment"]["claims"].append(observation)
+    parsed = SingleQuickCandidate.model_validate(value)
+    assert len(parsed.assessment.claims) == 3
+    assert validate_single_quick(packet=packet, candidate=parsed).status == "VALIDATED_QUICK_RESULT"
+    assert "Having no established contrary FACT is permitted" in QuickAssessment.model_json_schema()["properties"]["counterevidence_review"]["description"]
