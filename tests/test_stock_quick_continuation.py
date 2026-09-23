@@ -45,7 +45,7 @@ def setup(tmp_path, monkeypatch):
     original = json.loads(saved('original-request.json'))
     question = json.loads(saved('question.json'))
     root = parent.candidate_output_prefix
-    files = {CODE: {once.identity.CATALOG_PATH: once.raw({'schema_version': 1, 'inputs': []})},
+    files = {CODE: {},
              WORK: {root + name: saved(name) for name, _ in resume.previous.PREDECESSOR_FILES.values()},
              parent.code_commit: {daily.REQUEST: once.raw(original)}}
     files[WORK][root + 'prepare.json'] = saved('prepare.json')
@@ -58,6 +58,10 @@ def setup(tmp_path, monkeypatch):
     put(question['reading_source'], once.raw({'lanes': {}}))
     admitted = json.loads(saved('admission.json'))
     put(admitted['input_source'], saved('input.json'))
+    # The original identity gate intentionally requires a nonempty pinned scope.
+    # Bind the existing parent input, not an invented approval for the new child.
+    files[CODE][once.identity.CATALOG_PATH] = once.raw({'schema_version': 1, 'inputs': [
+        {**once.identity.input_key(parent).as_dict(), 'input': admitted['input_source']}]})
     specs = {key: once.source_ref(root + name, WORK, saved(name), purpose)
              for key, (name, purpose) in resume.previous.PREDECESSOR_FILES.items()}
     comment = {'id': 123, 'body': 'SYNTHETIC explicit corrective Quick, not real permission.',
@@ -142,7 +146,7 @@ def test_native_host_reuses_expired_but_frozen_source_scope_without_pre_or_new_d
     c = setup(tmp_path, monkeypatch)
     before = deepcopy(c.files)
     result = host.run_question(**c.args)
-    assert result['status'] == 'VALIDATED_FUNNEL_RESULT', result
+    assert result['status'] == 'VALIDATED_FUNNEL_RESULT', json.dumps(result, ensure_ascii=False)
     assert c.calls == ['quick'] and result['pre_model_calls'] == 0
     assert result['quick_model_attempts'] == 1 and c.page_checks == [CODE, CODE]
     for ref, body in before.items(): assert c.files[ref] == body
@@ -231,7 +235,8 @@ def test_launch_race_or_uncertain_mutation_does_not_call_provider(tmp_path, monk
         return result
     monkeypatch.setattr(once.Retainer, 'native', write)
     result = host.run_question(**c.args)
-    assert not c.calls and result['status'] in {'NOT_EXECUTED', 'EXECUTION_GAP'}, result
+    assert any(path.endswith('/launch.json') for path in c.writes), json.dumps(result, ensure_ascii=False)
+    assert not c.calls and result['status'] in {'NOT_EXECUTED', 'EXECUTION_GAP'}, json.dumps(result, ensure_ascii=False)
     if damage == 'uncertain-launch':
         assert result['mutation_uncertain']
         assert c.writes[-1].endswith('/launch.json')
@@ -247,9 +252,19 @@ def test_second_quick_failure_retains_parent_and_cannot_trigger_another_call(tmp
     c.args['call'] = failed
     before = deepcopy(c.files[WORK])
     result = host.run_question(**c.args)
-    assert result['status'] == 'EXECUTION_GAP', result
+    assert result['status'] == 'EXECUTION_GAP', json.dumps(result, ensure_ascii=False)
     assert c.calls == ['quick'] and c.files[WORK] == before
     count = len(c.writes); c.args['output'] = tmp_path / 'again'
     again = host.run_question(**c.args)
     assert again['status'] == 'EXISTING_QUESTION_REUSED_NO_EXECUTION', again
     assert c.calls == ['quick'] and len(c.writes) == count
+
+
+def test_empty_execution_catalogue_is_still_rejected_before_spending(tmp_path, monkeypatch):
+    c = setup(tmp_path, monkeypatch)
+    c.files[CODE][once.identity.CATALOG_PATH] = once.raw({'schema_version': 1, 'inputs': []})
+    before = deepcopy(c.files)
+    result = host.run_question(**c.args)
+    assert result['status'] == 'NOT_EXECUTED', json.dumps(result, ensure_ascii=False)
+    assert result['error_code'] == 'EXECUTION_SCOPE_INVALID_OR_INCOMPLETE'
+    assert not c.calls and not c.writes and c.files == before
