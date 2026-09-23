@@ -186,3 +186,16 @@ def test_original_external_method_marker_still_uses_legacy_stages(tmp_path):
     assert calls == ["pre"] and checked.status.value == "VALIDATED_FUNNEL_RESULT"
     assert candidate.schema_version == 1 and candidate.pre_research is not None
     assert "method_version" not in once.initial_prompt(packet, discovery, context)
+
+
+@pytest.mark.parametrize("legacy_method", ["research-funnel-v1", "RESEARCH_METHOD_V1"])
+def test_new_prompt_cannot_silently_select_legacy_pre(tmp_path, legacy_method):
+    packet, discovery, context = case()
+    packet = packet.model_copy(update={"method_version": legacy_method})
+    calls = []
+    with pytest.raises(ValueError, match="SINGLE_QUICK_INPUT_CONTRACT"):
+        once.research(packet, discovery, context, tmp_path,
+                      call=lambda *args: calls.append(args))
+    with pytest.raises(ValueError, match="RESEARCH_METHOD_PROMPT_MISMATCH"):
+        once.initial_prompt(packet, discovery, context)
+    assert calls == [] and not list(tmp_path.glob("pre*"))

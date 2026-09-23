@@ -469,6 +469,9 @@ def initial_prompt(packet, discovery, context, *, bound_context=None):
     """
     require(packet.method_version in {"research-funnel-v1", "RESEARCH_METHOD_V1", single_quick.METHOD_VERSION},
             "RESEARCH_METHOD_UNSUPPORTED")
+    require((packet.method_version == single_quick.METHOD_VERSION)
+            == (packet.prompt_version == single_quick.PROMPT_VERSION),
+            "RESEARCH_METHOD_PROMPT_MISMATCH")
     prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
     if packet.method_version == single_quick.METHOD_VERSION:
         require(packet.schema_version == 1 and packet.prompt_version == single_quick.PROMPT_VERSION,
@@ -517,7 +520,8 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
     """
     require(packet.method_version in {"research-funnel-v1", "RESEARCH_METHOD_V1", single_quick.METHOD_VERSION},
             "RESEARCH_METHOD_UNSUPPORTED")
-    single = packet.method_version == single_quick.METHOD_VERSION
+    single = (packet.method_version == single_quick.METHOD_VERSION
+              or packet.prompt_version == single_quick.PROMPT_VERSION)
     if single:
         packet, discovery = _single_input(packet, discovery)
     if call is None and bound_context is not None:
