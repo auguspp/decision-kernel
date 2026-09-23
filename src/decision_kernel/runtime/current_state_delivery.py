@@ -19,7 +19,7 @@ from pathlib import Path
 import requests
 
 from . import current_state as model
-from .external_research_identity import project_registered_handoffs, MAX_READING_BYTES
+from .external_research_identity import project_registered_handoffs
 
 MAX_RUNS = 20
 MAX_API_CALLS = 180
@@ -108,24 +108,6 @@ class GitHubAPI:
         model.safe_path(path)
         model.check(model.SHA.fullmatch(ref) is not None, "file reads require exact commit")
         data = self.get("contents/" + urllib.parse.quote(path, safe="/") + "?ref=" + ref)
-        # GitHub omits inline content above 1 MB. Follow the blob identity from
-        # this exact path/ref, not a download_url or another provider. The existing
-        # 8 MiB JSON response bound covers a 4 MiB base64 blob with margin.
-        if data.get("type") == "file" and data.get("encoding") == "none":
-            size, digest = data.get("size"), data.get("sha", "")
-            model.check(type(size) is int and 0 < size <= MAX_READING_BYTES
-                        and model.SHA.fullmatch(digest) is not None
-                        and data.get("path") == path and data.get("content") == ""
-                        and not data.get("submodule_git_url") and not data.get("target"),
-                        "GitHub large file metadata invalid")
-            blob = self.get("git/blobs/" + digest)
-            model.check(blob.get("sha") == digest and type(blob.get("size")) is int
-                        and blob["size"] == size and blob.get("encoding") == "base64",
-                        "GitHub large file blob metadata differs")
-            raw = base64.b64decode("".join(blob["content"].splitlines()), validate=True)
-            model.check(len(raw) == size and model.blob_sha(raw) == digest,
-                        "GitHub large file bytes differ")
-            return raw
         model.check(data.get("type") == "file" and data.get("encoding") == "base64", "source is not a bounded text file")
         raw = base64.b64decode(data["content"], validate=False)
         model.check(model.blob_sha(raw) == data["sha"], "GitHub file blob differs")
@@ -647,8 +629,7 @@ class Collector:
                           "terminal_state": None, "finished_at": None,
                           "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
                           "registered_current_handoff": False,
-                          **model.AUTHORITY, **lineage,
-                          "sources": {"packet": packet_source}})
+                          **model.AUTHORITY, **lineage, "sources": {"packet": packet_source}})
 
         def sort_key(item: dict):
             stamp = item.get("finished_at")

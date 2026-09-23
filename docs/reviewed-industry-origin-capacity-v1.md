@@ -18,11 +18,15 @@ reviewed batch and host admission still bind. This is a storage allowance,
 not permission and not a model prompt. Other source purposes and default
 execution/authorization JSON remain at their original512KiB boundary.
 
-GitHub Contents omits inline base64 above1MB. The existing GitHubAPI.file uses
-that exact path/ref metadata to request its exact native Git blob, up to4MiB.
+GitHub Contents omits inline base64 above1MB. A thin subclass of the existing
+GitHubAPI, used only by source preparation and the original question host,
+requests the exact native Git blob for this Industry path/ref, up to4MiB.
 It validates path/type/size/SHA, strict base64, decoded bytes and Git blob identity;
 no returned download URL is followed and no credentials go to another host.
 Original inline reads and the existing8MiB API JSON budget remain unchanged.
+The shared capture/publisher client stays byte-identical: its unrelated change
+would invalidate historical capture fingerprints. No historical fingerprint
+or compatibility map is changed to make these tests pass.
 The4MiB choice leaves representation growth room inside that proven transport
 budget; unbounded untrusted JSON would remove memory/CPU protection without
 solving source admission. This is not a provider's token limit.

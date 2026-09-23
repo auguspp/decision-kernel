@@ -80,6 +80,14 @@ def two_report_case(tmp_path, monkeypatch):
     plan["predecessor_sources"] = [prior]
     plan["titles"] = {"2025FY": title, "2026H1": c.context["issuer_documents"][0]["title"]}
     c.api.files[c.args["code"]][prep.REQUEST] = once.raw(plan)
+    # Real source preparation requires an existing work ref. Keep the original
+    # model-host fixture's no-work-ref case for its own tests, not this one.
+    work = "9d" * 20
+    c.api.heads[prep.WORK_REF] = work
+    c.api.files[work] = {}
+    stamp = reading.clock(c.args["clock"]()).replace(microsecond=0) + timedelta(seconds=1)
+    c.args["clock"] = lambda: stamp.isoformat()
+    c.commits[work] = {"sha": work, "committer": {"date": stamp.isoformat()}}
     c.api.writes = c.writes
     return c, plan
 
@@ -110,9 +118,9 @@ def test_source_only_roundtrip_reaches_original_prepare_or_retains_correction_ga
     assert result["model_calls"] == result["research_executions"] == result["pdf_acquisitions"] == 0
     assert c.calls == [] and not result["mutation_uncertain"]
     if correction:
-        assert result["error_code"] == "INDUSTRY_REPORT_CORRECTION_BODY_REVIEW_REQUIRED", result
+        assert result["error_code"] == "INDUSTRY_REPORT_CORRECTION_BODY_REVIEW_REQUIRED", json.dumps(result, ensure_ascii=False)
         assert "inventory_source" in result and "request_source" not in result
     else:
-        assert result["status"] == "INPUT_FILES_RETAINED_NOT_ADMITTED", result
+        assert result["status"] == "INPUT_FILES_RETAINED_NOT_ADMITTED", json.dumps(result, ensure_ascii=False)
         assert result["main_request_activated"] is False and result["formal_admission"] is False
         assert "diagnostics_source" in result

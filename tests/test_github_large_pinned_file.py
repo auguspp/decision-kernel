@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from decision_kernel.runtime import current_state_delivery as delivery
+from decision_kernel.runtime import pinned_reading_file as delivery
 from decision_kernel.runtime import saved_research_once as once
 from decision_kernel.runtime.external_research_identity import MAX_READING_BYTES
 
@@ -73,3 +73,10 @@ def test_original_small_inline_read_stays_single_request():
     api, raw, path, ref, meta, blob, calls = fixture(100)
     meta.update(encoding="base64", content=blob["content"])
     assert api.file(path, ref) == raw and len(calls) == 1
+
+
+def test_only_research_entry_points_adopt_extension_not_historical_capture_client():
+    from decision_kernel.runtime import current_state_delivery as original
+    from decision_kernel.runtime import industry_question_preparation as prep, stock_question_host as host
+    assert prep.GitHubAPI is host.GitHubAPI is delivery.GitHubAPI
+    assert delivery.GitHubAPI.__bases__ == (original.GitHubAPI,)

@@ -25,7 +25,7 @@ from . import external_research_admission as admission, cninfo_http as cninfo
 from .stock_research_host import authorize, head
 from .stock_research_intake import WORK_REF, security
 from .stock_question_host import question_execution
-from .current_state_delivery import GitHubAPI
+from .pinned_reading_file import GitHubAPI
 
 REQUEST = "research_runs/industry-question-preparation-request.json"
 MODE = "PREPARE_RETAINED_INDUSTRY_QUESTION_INPUT"
