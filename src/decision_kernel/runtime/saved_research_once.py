@@ -27,6 +27,7 @@ from ..research_funnel import (DiscoveryInput, PreResearchResult, QuickResearchR
                               validate_pre_research_transition)
 from . import external_research_admission as admission
 from . import external_research_identity as identity
+from . import single_quick_contract as single_quick
 from .external_research_execution import (ExternalResearchInputPacket, ExternalResearchCandidate,
     ResearchExecutionReceipt, ResearchToolEvent, validate_external_research_candidate)
 
@@ -229,7 +230,8 @@ def admitted_output_type(output_type, evidence_ids):
     before its raw response is retained. Original transitions reject that raw
     response after retention; neither this helper nor a provider certifies it.
     """
-    require(output_type in (PreResearchResult, QuickResearchResult), "unsupported original output model")
+    require(output_type in (PreResearchResult, QuickResearchResult, single_quick.QuickAssessment),
+            "unsupported original output model")
     require(isinstance(evidence_ids, list) and evidence_ids
             and all(isinstance(value, str) for value in evidence_ids), "invalid admitted Evidence IDs")
     try:
@@ -272,6 +274,12 @@ def response_parameters(body, output_format, *, model=MODEL, extra_parameters=No
 
 def model_request(context, output_type, *, max_prompt_bytes, model=MODEL, extra_parameters=None):
     """Original byte/schema checks and request parameters, without a send or key."""
+    if output_type is single_quick.QuickAssessment:
+        require(context.get("stage") == "QUICK"
+                and context.get("method_version") == single_quick.METHOD_VERSION
+                and context.get("prompt_version") == single_quick.PROMPT_VERSION
+                and not ({"pre_research", "pre_research_hash"} & set(context)),
+                "SINGLE_QUICK_WIRE_CONTRACT")
     body = raw(context).decode()
     require(len(SYSTEM.encode()) + len(body.encode()) <= max_prompt_bytes, "model input byte budget")
     request_type = admitted_output_type(output_type, context.get("evidence_ids"))
@@ -313,9 +321,11 @@ def _application_validation_diagnostic(exc, output_type):
     """Bounded native validation locations, never rejected values or messages."""
     from pydantic import ValidationError
     from ..research_funnel import ResearchClaim
-    if not isinstance(exc, ValidationError) or output_type not in (PreResearchResult, QuickResearchResult):
+    if not isinstance(exc, ValidationError) or output_type not in (PreResearchResult, QuickResearchResult, single_quick.QuickAssessment):
         return {}
     fields = set(output_type.model_fields) | set(ResearchClaim.model_fields)
+    if output_type is single_quick.QuickAssessment:
+        fields |= set(single_quick.Investigation.model_fields)
     codes = {"enum", "missing", "extra_forbidden", "value_error", "uuid_parsing",
              "uuid_type", "string_type", "string_too_short", "tuple_type", "too_short",
              "datetime_type", "datetime_from_date_parsing", "timezone_aware", "int_parsing"}
@@ -330,7 +340,8 @@ def _application_validation_diagnostic(exc, output_type):
             path.append("TRUNCATED")
         rows.append({"type": error["type"] if error["type"] in codes else "OTHER_VALIDATION_ERROR",
                      "loc": path})
-    return {"status": "REJECTED_BY_ORIGINAL_MODEL", "error_count": exc.error_count(),
+    return {"status": ("REJECTED_BY_SINGLE_QUICK_MODEL" if output_type is single_quick.QuickAssessment
+                       else "REJECTED_BY_ORIGINAL_MODEL"), "error_count": exc.error_count(),
             "errors": rows, "omitted_error_count": max(0, exc.error_count() - len(rows)),
             "scope": "FIELD_LOCATIONS_ONLY_NOT_ECONOMIC_REVIEW"}
 
@@ -339,6 +350,8 @@ def model_call(stage, context, output_type, out, usage, *, max_prompt_bytes=None
                base_url=BASE_URL, model=MODEL, api_key_env="SUB2API_API_KEY",
                provider="SUB2API", extra_parameters=None):
     """Reuse the official SDK. No model tools, retries, defaults or fallback route."""
+    if output_type is single_quick.QuickAssessment:
+        require(stage == "quick", "SINGLE_QUICK_STAGE")
     # Resolve the unchanged default at call time; explicit Stock opt-in is separate.
     if bound_context is None:
         if max_prompt_bytes is None:
@@ -448,17 +461,72 @@ def pre_prompt(packet, discovery, context, *, bound_context=None):
         "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts], **scope}
 
 
+def initial_prompt(packet, discovery, context, *, bound_context=None):
+    """One method-selected request; no fabricated Pre result or second model.
+
+    Existing hosts keep their original Pre prompt until explicitly migrated.
+    Method selection does not grant source, execution or spending permission.
+    """
+    require(packet.method_version in {"research-funnel-v1", single_quick.METHOD_VERSION},
+            "RESEARCH_METHOD_UNSUPPORTED")
+    prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
+    if packet.method_version == single_quick.METHOD_VERSION:
+        require(packet.schema_version == 1 and packet.prompt_version == single_quick.PROMPT_VERSION,
+                "SINGLE_QUICK_INPUT_CONTRACT")
+        prompt.update(stage="QUICK", method_version=single_quick.METHOD_VERSION,
+                      prompt_version=single_quick.PROMPT_VERSION)
+    return prompt
+
+
+def _single_input(packet, discovery):
+    """Check known input inconsistencies before spending, not source admission.
+
+    The final candidate still uses the shared identity/receipt validator.
+    No synthetic receipt or pre-stage result is constructed for this check.
+    """
+    packet = ExternalResearchInputPacket.model_validate(packet.model_dump(mode="json"))
+    discovery = DiscoveryInput.model_validate(discovery.model_dump(mode="json"))
+    require(packet.schema_version == 1 and packet.method_version == single_quick.METHOD_VERSION
+            and packet.prompt_version == single_quick.PROMPT_VERSION, "SINGLE_QUICK_INPUT_CONTRACT")
+    require((discovery.ticker, discovery.security_id, discovery.source_lane, discovery.as_of)
+            == (packet.ticker, packet.security_id, packet.source_lane, packet.research_cutoff),
+            "SINGLE_QUICK_DISCOVERY_IDENTITY")
+    evidence = {e.id: e for e in packet.seed_evidence_artifacts}
+    require({s.evidence_artifact_id for s in discovery.source_lineage} == set(evidence)
+            and all((s.source_locator, s.available_at)
+                    == (evidence[s.evidence_artifact_id].source_locator,
+                        evidence[s.evidence_artifact_id].available_at)
+                    for s in discovery.source_lineage)
+            and all(eid in evidence for claim in discovery.factual_observations
+                    for eid in claim.evidence_artifact_ids), "SINGLE_QUICK_DISCOVERY_LINEAGE")
+    require(sum(s.purpose == "MODEL_CONTEXT" for s in packet.source_refs) == 1,
+            "SINGLE_QUICK_CONTEXT_INVENTORY")
+    # The existing receipt counts context + model return as two OTHER_READs.
+    require("OTHER_READ" in packet.allowed_tools and packet.budget.max_tool_calls >= 2
+            and packet.budget.max_source_reads >= 2, "SINGLE_QUICK_KNOWN_BUDGET")
+    return packet, discovery
+
+
 def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None,
              provider_event_prefix="SUB2API_RESPONSES",
              model_or_executor="trusted Python + Sub2API Responses / gpt-6-astra"):
-    """Original stage models and transitions; never force a route or repair output."""
+    """Shared execution/retention loop; one Quick or the unchanged legacy stages.
+
+    A selected method is not admission. Native hosts still own permission,
+    source custody, create-only reservations, deduplication and publication.
+    """
+    require(packet.method_version in {"research-funnel-v1", single_quick.METHOD_VERSION},
+            "RESEARCH_METHOD_UNSUPPORTED")
+    single = packet.method_version == single_quick.METHOD_VERSION
+    if single:
+        packet, discovery = _single_input(packet, discovery)
     if call is None and bound_context is not None:
         from functools import partial
         call = partial(model_call, bound_context=bound_context)
     call = call or model_call
     began, monotonic_start = clock(), time.monotonic()
     events, usage = [], []
-    pre = quick = None
+    pre = quick = assessment = None
     completion, failure, stage = "COMPLETE", None, "ADMISSION"
     def event(kind, target, status, note):
         events.append(ResearchToolEvent(sequence=len(events)+1, kind=kind, target=target,
@@ -474,20 +542,35 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         else:
             from .stock_full_input_bridge import require_bound
             require_bound(bound_context).check_packet(packet, context)
-        prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
-        stage = "PRE"
-        pre = call("pre", prompt, PreResearchResult, out, usage)
-        event("OTHER_READ", provider_event_prefix + ":PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
-        validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
-        with (out / "pre.json").open("xb") as f:
-            f.write(raw(pre))
-        if pre.route.value == "CONTINUE_TO_QUICK":
-            require(time.monotonic() - monotonic_start < 600, "no time left for Quick")
+        prompt = initial_prompt(packet, discovery, context, bound_context=bound_context)
+        if single:
             stage = "QUICK"
-            prompt.update(stage="QUICK", pre_research=pre.model_dump(mode="json"), pre_research_hash=canonical_hash(pre))
-            quick = call("quick", prompt, QuickResearchResult, out, usage)
-            event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.")
-        stage = "QUICK" if quick else "PRE"
+            assessment = call("quick", prompt, single_quick.QuickAssessment, out, usage)
+            require(isinstance(assessment, single_quick.QuickAssessment), "SINGLE_QUICK_OUTPUT_TYPE")
+            # Preserve the first parsed output too, before lineage revalidation.
+            # The SDK already saves the public raw response before parsing it.
+            with (out / "quick-before-validation.json").open("xb") as f:
+                f.write(raw(assessment))
+            assessment = single_quick.QuickAssessment.model_validate(assessment.model_dump(mode="json"))
+            allowed = {e.id for e in packet.seed_evidence_artifacts}
+            require(all(eid in allowed for claim in assessment.claims
+                        for eid in claim.evidence_artifact_ids), "SINGLE_QUICK_CLAIM_LINEAGE")
+            event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED",
+                  "Single model output, not primary-source Evidence; no Pre was executed.")
+        else:
+            stage = "PRE"
+            pre = call("pre", prompt, PreResearchResult, out, usage)
+            event("OTHER_READ", provider_event_prefix + ":PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
+            validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
+            with (out / "pre.json").open("xb") as f:
+                f.write(raw(pre))
+            if pre.route.value == "CONTINUE_TO_QUICK":
+                require(time.monotonic() - monotonic_start < 600, "no time left for Quick")
+                stage = "QUICK"
+                prompt.update(stage="QUICK", pre_research=pre.model_dump(mode="json"), pre_research_hash=canonical_hash(pre))
+                quick = call("quick", prompt, QuickResearchResult, out, usage)
+                event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.")
+            stage = "QUICK" if quick else "PRE"
     except Exception as exc:
         completion = "INCOMPLETE_BUDGET" if isinstance(exc, TimeoutError) else "INCOMPLETE_TECHNICAL_FAILURE"
         failure = exc.code if isinstance(exc, TrialError) else type(exc).__name__
@@ -495,7 +578,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         # Invalid raw partial stages stay as raw files; never publish a completed
         # WAIT/STOP as an incomplete candidate or a Quick without validated Pre.
         pre = pre if pre and pre.route.value == "CONTINUE_TO_QUICK" else None
-        quick = None
+        quick = assessment = None
     finished = clock()
     dispositions = [{"source_locator": locator(s.model_dump()), "opened": True,
         "used_as_evidence": True, "disposition": "Retained public context supplied to model; restricted source scope.",
@@ -510,14 +593,20 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         last_completed_stage=stage if completion == "COMPLETE" else "ADMISSION_OR_RETAINED_PARTIAL",
         stop_or_failure_reason=failure, model_or_executor=model_or_executor,
         model_exact_version=None, platform_task_id=os.environ.get("GITHUB_RUN_ID"), private_chain_of_thought_recorded=False)
-    candidate = ExternalResearchCandidate(input_hash=canonical_hash(packet), completion=completion,
-        discovery=discovery, pre_research=pre, quick_research=quick, receipt=receipt,
-        explicit_action_summary=("No model tools; at most Pre and conditional Quick. No Deep or investment authority.",))
+    if single:
+        candidate = single_quick.SingleQuickCandidate(input_hash=canonical_hash(packet), completion=completion,
+            discovery=discovery, assessment=assessment, receipt=receipt,
+            explicit_action_summary=("At most one Quick; actual calls recorded separately. No Pre, model tools, retry, Full or investment authority.",))
+    else:
+        candidate = ExternalResearchCandidate(input_hash=canonical_hash(packet), completion=completion,
+            discovery=discovery, pre_research=pre, quick_research=quick, receipt=receipt,
+            explicit_action_summary=("No model tools; at most Pre and conditional Quick. No Deep or investment authority.",))
     with (out / "model-usage.json").open("xb") as f:
         f.write(raw(usage))
     with (out / "candidate-before-validation.json").open("xb") as f:
         f.write(raw(candidate))
-    result = validate_external_research_candidate(packet=packet, candidate=candidate)
+    validate = single_quick.validate_single_quick if single else validate_external_research_candidate
+    result = validate(packet=packet, candidate=candidate)
     return candidate, result, usage
 
 
