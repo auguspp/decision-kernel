@@ -1,0 +1,93 @@
+{
+  "arm": "S1",
+  "automatic_retries": 0,
+  "fallback": false,
+  "finished_at": "2026-09-23T23:26:24.427224+00:00",
+  "format_sha256": "9fcfceb2107a7805b88923bcb7ac0fd3e6ca918a910504db30e8590a525cd389",
+  "max_output_tokens": 6000,
+  "monetary_cap": null,
+  "output_sha256": "f5ad76dd62d1aba5af1b8ce64b2ad67acc6d6b48bc7782cf3eaa6a4a9e59e0d1",
+  "output_text_retained": true,
+  "phase": "COMPLETE",
+  "physical_sends": 1,
+  "pre_send": {
+    "decoded_bytes": 898366,
+    "decoded_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+    "meaning": "PRE_SEND_BYTE_CHECK_NOT_DELIVERY_RESEARCH_OR_PROVIDER_ACCEPTANCE",
+    "policy": "R4_2_EXACT_SAVED_INPUT_SUB2API",
+    "request_bytes": 938810,
+    "request_sha256": "0939614c8d8c6f83297a85bdf4bb3eed8c1306491958034235cbae6e25eecd73",
+    "ticker": "600362"
+  },
+  "prompt_sha256": "445595d59a29c3b307544e206d6964dad46ecd819b81699e39f1eb9a7831377d",
+  "provider": "SUB2API",
+  "provider_base_url": "https://ai.6600600.xyz/v1",
+  "provider_status": "completed",
+  "reasoning": "PROVIDER_DEFAULT_NOT_FROZEN",
+  "requested_model": "gpt-6-astra",
+  "response_id": "resp_0862ee27a7f45036016ab45fd3041c87d09ea127ab89904d84",
+  "response_received": true,
+  "returned_model": "gpt-6-astra",
+  "stage": "QUICK",
+  "started_at": "2026-09-23T23:25:04.782706+00:00",
+  "status": "STRUCTURE_VALID_NOT_QUALITY_ACCEPTANCE",
+  "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+  "usage": {
+    "attribution": {
+      "items": {
+        "msg_0862ee27a7f45036016ab45fd310a487d09f5835cf38f62292": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "content": [
+            {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 288265,
+              "output_tokens": 0
+            }
+          ],
+          "input_tokens": 288265,
+          "output_tokens": 0
+        },
+        "msg_0862ee27a7f45036016ab45fdad19487d0b3e3a92884bda0f6": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "content": [
+            {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 2,
+              "output_tokens": 2322
+            }
+          ],
+          "input_tokens": 2,
+          "output_tokens": 2322
+        }
+      },
+      "request_fields": {
+        "instructions": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "input_tokens": 265,
+          "output_tokens": 0
+        },
+        "text.format": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "input_tokens": 763,
+          "output_tokens": 0
+        }
+      }
+    },
+    "input_tokens": 289295,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 2322,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 291617
+  }
+}

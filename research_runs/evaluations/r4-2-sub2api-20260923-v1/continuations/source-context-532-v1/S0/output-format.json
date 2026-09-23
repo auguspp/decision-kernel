@@ -1,0 +1,188 @@
+{
+  "name": "AdmittedOutput",
+  "schema": {
+    "$defs": {
+      "Investigation": {
+        "additionalProperties": false,
+        "description": "A falsifiable commission, not a prescribed investigation procedure.",
+        "properties": {
+          "available_work": {
+            "description": "Concrete discriminating work possible now, not merely a future disclosure. Do not prescribe agent count, filenames, passes or a mandatory reasoning order.",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Available Work",
+            "type": "string"
+          },
+          "decision_test": {
+            "description": "Explain how different findings could change or refute the assessment. Full is allowed to replace the question and discover additional unknowns.",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Decision Test",
+            "type": "string"
+          },
+          "question": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Question",
+            "type": "string"
+          },
+          "why_material": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Why Material",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "why_material",
+          "available_work",
+          "decision_test"
+        ],
+        "title": "Investigation",
+        "type": "object"
+      },
+      "QuickRoute": {
+        "enum": [
+          "STOP",
+          "WAIT_FOR_TRIGGER",
+          "FULL_CANDIDATE"
+        ],
+        "title": "QuickRoute",
+        "type": "string"
+      },
+      "ResearchClaim": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_artifact_ids": {
+            "default": [],
+            "description": "FACT and MARKET_CONTEXT require at least one supplied Evidence ID. Use only the trusted host evidence_ids allowlist, not nested document IDs. Identify the underlying document/page in statement when citing an admitted bundle.",
+            "items": {
+              "enum": [
+                "9962c189-38a8-5376-accc-60215ff5bec6"
+              ],
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Artifact Ids",
+            "type": "array"
+          },
+          "kind": {
+            "$ref": "#/$defs/ResearchClaimKind"
+          },
+          "statement": {
+            "description": "State the observation or reasoning and its source scope. FACT means a supplied source observation, not an inferred cause. Never relabel INFERENCE or ASSUMPTION as FACT to satisfy a route; a source citation does not turn inference into fact.",
+            "minLength": 1,
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "kind",
+          "evidence_artifact_ids"
+        ],
+        "title": "ResearchClaim",
+        "type": "object"
+      },
+      "ResearchClaimKind": {
+        "enum": [
+          "FACT",
+          "INFERENCE",
+          "ASSUMPTION",
+          "MARKET_CONTEXT"
+        ],
+        "title": "ResearchClaimKind",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "claims": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "title": "Claims",
+        "type": "array"
+      },
+      "counterevidence_review": {
+        "description": "State the actual counterevidence review scope, adverse information, strongest alternative explanation and unexamined areas. Having no established contrary FACT is permitted; not checked is not ruled out. Keep inference honestly labelled.",
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Counterevidence Review",
+        "type": "string"
+      },
+      "explanation": {
+        "description": "Readable answer to what is worth attention and why: observation/why now, company economic connection and potential materiality, current evidence and existing-research relation when supplied. These are outcome responsibilities, not mandatory headings, reasoning order or a miniature Full Research report.",
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Explanation",
+        "type": "string"
+      },
+      "investigation": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Investigation"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "route": {
+        "description": "LIMITED S0 EXPERIMENT ONLY, not a production method. Keep the ordinary single-Quick outcome responsibilities. FULL_CANDIDATE additionally requires a nonblank plausible differentiated hypothesis with its basis in route_reason, and both supporting and contradictory claims classified FACT or MARKET_CONTEXT with admitted evidence IDs. Do not relabel inference or invent contrary facts to satisfy this rule. Explain which evidence serves each side in counterevidence_review. STOP and WAIT retain their ordinary meanings; missing current required sources remains a host gap. This text replaces only the S1 statement that variant and contrary fact are not mandatory.",
+        "enum": [
+          "STOP",
+          "WAIT_FOR_TRIGGER",
+          "FULL_CANDIDATE"
+        ],
+        "title": "QuickRoute",
+        "type": "string"
+      },
+      "route_reason": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Route Reason",
+        "type": "string"
+      },
+      "unknowns": {
+        "default": [],
+        "items": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "title": "Unknowns",
+        "type": "array"
+      },
+      "wait_trigger": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Wait Trigger"
+      }
+    },
+    "required": [
+      "explanation",
+      "claims",
+      "counterevidence_review",
+      "unknowns",
+      "route",
+      "route_reason",
+      "investigation",
+      "wait_trigger"
+    ],
+    "title": "AdmittedOutput",
+    "type": "object"
+  },
+  "strict": true,
+  "type": "json_schema"
+}

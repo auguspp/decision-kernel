@@ -1,0 +1,34 @@
+{
+  "arms": [
+    "S0",
+    "S1"
+  ],
+  "authority": "https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5804459106",
+  "automatic_retry": false,
+  "code_commit": "1667b196b2910565482927babb0c47cc79fe0259",
+  "corrected_field": "host_source_checks",
+  "experiment": "r4-2-sub2api-20260923-v1",
+  "fallback": false,
+  "hosted_calls": 0,
+  "max_new_calls": 2,
+  "meaning": "HISTORICAL_SOURCE_WINDOW_NOT_CURRENT_ADMISSION_OR_PRODUCTION_RESEARCH",
+  "model": "gpt-6-astra",
+  "monetary_cap": null,
+  "new_financial_fetches": 0,
+  "original_context_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+  "original_cutoff": "2026-09-23T04:44:29.795878+00:00",
+  "parent_commit": "f0c9104c9dbc2b2fbdcf90b7b75bb024827509b2",
+  "preflight_source": {
+    "git_blob": "f36f55f22029679c8b0256a52c1c9923a2f3429d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/preflight.json",
+    "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+    "ref": "3b85b865ba61c2a29b24ff7981869363324d6d5c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3"
+  },
+  "prior_receipt_sha256": "7000185b646722222fe0dc01a7ee41e5914006bb60ec8bbb6b8202d080406511",
+  "prior_requests_started": 8,
+  "production_activation": false,
+  "provider": "SUB2API",
+  "runtime": "2971d00145e0980238429c4995d783fa3d280ef1"
+}

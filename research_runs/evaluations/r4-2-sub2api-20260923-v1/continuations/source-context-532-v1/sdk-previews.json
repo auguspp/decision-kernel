@@ -1,0 +1,20 @@
+{
+  "S0": {
+    "decoded_bytes": 898366,
+    "decoded_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+    "meaning": "PRE_SEND_BYTE_CHECK_NOT_DELIVERY_RESEARCH_OR_PROVIDER_ACCEPTANCE",
+    "policy": "R4_2_EXACT_SAVED_INPUT_SUB2API",
+    "request_bytes": 938913,
+    "request_sha256": "341f75ab87016c125e6e68a9ffbcdd671d49b59f429ef1779d009d817d8dac73",
+    "ticker": "600362"
+  },
+  "S1": {
+    "decoded_bytes": 898366,
+    "decoded_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+    "meaning": "PRE_SEND_BYTE_CHECK_NOT_DELIVERY_RESEARCH_OR_PROVIDER_ACCEPTANCE",
+    "policy": "R4_2_EXACT_SAVED_INPUT_SUB2API",
+    "request_bytes": 938810,
+    "request_sha256": "0939614c8d8c6f83297a85bdf4bb3eed8c1306491958034235cbae6e25eecd73",
+    "ticker": "600362"
+  }
+}

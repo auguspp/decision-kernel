@@ -1,0 +1,106 @@
+{
+  "format": "host-source-check-context-v1",
+  "interpretation": "The host has checked these exact saved source-preflight records and their input binding. The native host still rechecks actual admission before sending. REQUIRED_SOURCE_CLASS entries in known_unknowns are source requirements, not assertions that checks were not done. The results below apply only to their declared queries, source identities and time window; they do not certify source truth, complete outside coverage or current freshness. Do not convert unseen collector notes into business STOP/WAIT or repeat a recorded check merely because the collection happened outside the model. Assess the actual supplied evidence and its limits. No listed lead is not proof of no events. Referenced material is not necessarily supplied in full here. These records grant no new tool, Full or investment authority.",
+  "inventories": [
+    {
+      "class_id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "finished_at": "2026-09-23T03:21:20.086581+00:00",
+      "id": "financial-updates",
+      "leads": [
+        {
+          "authority": "PRIMARY",
+          "body_id": "report-1",
+          "decision_relevant": true,
+          "identity": "600362:1225505938",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF",
+          "primary_identity": "600362:1225505938",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF"
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "report-0",
+          "decision_relevant": true,
+          "identity": "600362:1225034758",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+          "primary_identity": "600362:1225034758",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF"
+        }
+      ],
+      "planned_queries": [
+        "CNINFO:600362:2026-03-27:2026-09-23:financial-report-corrections"
+      ],
+      "query_events": [
+        {
+          "checked_at": "2026-09-23T03:21:20.086581+00:00",
+          "query": "CNINFO:600362:2026-03-27:2026-09-23:financial-report-corrections",
+          "status": "SUCCEEDED",
+          "tool_reference": "https://github.com/auguspp/decision-kernel/blob/b001090b6263ce3902c8a94e6fb2be906cd5e209/research_runs/industry-question-preparation/600362-industry-input-20260923/inventory.json"
+        }
+      ],
+      "started_at": "2026-09-23T03:21:02.149557+00:00"
+    }
+  ],
+  "meaning": "DECLARED_SCOPE_COLLECTION_RECORDS_NOT_ECONOMIC_EVIDENCE_OR_EXECUTION_PERMISSION",
+  "preflight_source": {
+    "git_blob": "f36f55f22029679c8b0256a52c1c9923a2f3429d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/preflight.json",
+    "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+    "ref": "3b85b865ba61c2a29b24ff7981869363324d6d5c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3"
+  },
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa",
+      "checked_at": "2026-09-23T03:21:20.086466+00:00",
+      "id": "report-0",
+      "identity": "600362:1225034758",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+      "succeeded": true,
+      "tool_reference": "EXACT_RETAINED_GIT_AND_ARTIFACT_BYTE_READ:https://github.com/auguspp/decision-kernel/blob/8cda868842384bcb0e14b22f81eb3ac5348acdec/research_runs/sources/declared-reports/600362-financial-20260922/2025FY-cninfo-source.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb",
+      "checked_at": "2026-09-23T03:21:20.077524+00:00",
+      "id": "report-1",
+      "identity": "600362:1225505938",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF",
+      "succeeded": true,
+      "tool_reference": "EXACT_RETAINED_GIT_AND_ARTIFACT_BYTE_READ:https://github.com/auguspp/decision-kernel/blob/8ebc0a2c3ea0017398d6629d87830400c35c0163/research_runs/sources/declared-reports/600362-financial-20260922/2026H1-cninfo-source.pdf"
+    }
+  ],
+  "recorded_window": {
+    "finished_at": "2026-09-23T03:21:22.027535+00:00",
+    "started_at": "2026-09-23T03:21:01.350438+00:00",
+    "valid_until": "2026-09-23T05:21:22.027535+00:00"
+  },
+  "required_classes": [
+    {
+      "body_ids": [
+        "report-0"
+      ],
+      "id": "FULL_ANNUAL_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [
+        "report-1"
+      ],
+      "id": "FULL_INTERIM_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [],
+      "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "inventory_id": "financial-updates",
+      "mode": "LATEST_INVENTORY"
+    }
+  ],
+  "status": "BOUND_SOURCE_PREFLIGHT_RECORDS_VALIDATED"
+}
