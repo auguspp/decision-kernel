@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-09-23T03:21:24.000515+00:00",
+  "context": {
+    "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+  },
+  "documents": [
+    {
+      "announcement_id": "1225034758",
+      "bytes": 3593578,
+      "page_count": 262,
+      "pdf_sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa",
+      "pdf_source": {
+        "git_blob": "3f5d865dccd3b42f71f15b24839029e6f8c24c6e",
+        "path": "research_runs/sources/declared-reports/600362-financial-20260922/2025FY-cninfo-source.pdf",
+        "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+        "ref": "8cda868842384bcb0e14b22f81eb3ac5348acdec",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa"
+      }
+    },
+    {
+      "announcement_id": "1225505938",
+      "bytes": 1047816,
+      "page_count": 216,
+      "pdf_sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb",
+      "pdf_source": {
+        "git_blob": "97690de3f23cd7b57ec3073c55ae0bd27f0d6a23",
+        "path": "research_runs/sources/declared-reports/600362-financial-20260922/2026H1-cninfo-source.pdf",
+        "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+        "ref": "8ebc0a2c3ea0017398d6629d87830400c35c0163",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb"
+      }
+    }
+  ],
+  "format": "DECLARED_REPORTS_SAME_PDF_CUSTODY_V1",
+  "source_artifact": {
+    "digest": "sha256:b9789d1d126bd08ee05af3ca6a467a6c748e209ec275ff8c4e8c7b6c3996292f",
+    "head_sha": "5150776a11c052158aa817f857c1b660346405ab",
+    "id": 10706728112,
+    "name": "declared-report-sources-35754054446-1",
+    "size_in_bytes": 4671633
+  },
+  "source_import": "jiangxi-copper-financial-20260922",
+  "source_run_id": 35754054446,
+  "ticker": "600362"
+}
