@@ -50,19 +50,16 @@ def without_descriptions(value):
 def historical_wire_without_descriptions(monkeypatch):
     """Test-only reconstruction of the exact old wire, never a production fallback.
 
-    The retained Pre/Quick formats independently prove that descriptions are the
-    only wire difference. Use the SAME SDK builder, then restore current metadata.
+    Both the legacy host's direct schemas and the SDK's request-local subclass
+    must use the same historical descriptions. Keep classes, validators and the
+    original SDK builder intact; restore current metadata after this scope.
     """
-    original = once.admitted_output_type
-    def historical(output_type, evidence_ids):
-        described = original(output_type, evidence_ids)
-        class AdmittedOutput(described):
-            @classmethod
-            def model_json_schema(cls, *args, **kwargs):
-                return without_descriptions(super().model_json_schema(*args, **kwargs))
-        return AdmittedOutput
     with monkeypatch.context() as patch:
-        patch.setattr(once, 'admitted_output_type', historical)
+        for model in (PreResearchResult, QuickResearchResult):
+            original = model.model_json_schema.__func__
+            def historical(cls, *args, _original=original, **kwargs):
+                return without_descriptions(_original(cls, *args, **kwargs))
+            patch.setattr(model, 'model_json_schema', classmethod(historical))
         yield
 
 
@@ -266,6 +263,8 @@ def test_current_host_rejects_frozen_egress_approval_after_wire_guidance_changes
     args, api = fixture[:2]
     before = deepcopy(api.files)
     calls, writes = fixture[6:8]
+    # Continuation setup retains its failed parent; only NEW activity is forbidden.
+    prior_calls, prior_writes = list(calls), list(writes)
     result = execute(**args)
     assert result['status'] == 'NOT_EXECUTED', result
     assert result['error_code'] in {
@@ -273,4 +272,4 @@ def test_current_host_rejects_frozen_egress_approval_after_wire_guidance_changes
         'QUESTION_CONTINUATION_PUBLIC_EGRESS_NOT_APPROVED',
     }, result
     assert not result['formal_research_started']
-    assert not calls and not writes and api.files == before
+    assert calls == prior_calls and writes == prior_writes and api.files == before
