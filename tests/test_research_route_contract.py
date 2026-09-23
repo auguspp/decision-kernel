@@ -46,6 +46,26 @@ def without_descriptions(value):
     return value
 
 
+@contextmanager
+def historical_wire_without_descriptions(monkeypatch):
+    """Test-only reconstruction of the exact old wire, never a production fallback.
+
+    The retained Pre/Quick formats independently prove that descriptions are the
+    only wire difference. Use the SAME SDK builder, then restore current metadata.
+    """
+    original = once.admitted_output_type
+    def historical(output_type, evidence_ids):
+        described = original(output_type, evidence_ids)
+        class AdmittedOutput(described):
+            @classmethod
+            def model_json_schema(cls, *args, **kwargs):
+                return without_descriptions(super().model_json_schema(*args, **kwargs))
+        return AdmittedOutput
+    with monkeypatch.context() as patch:
+        patch.setattr(once, 'admitted_output_type', historical)
+        yield
+
+
 def prompt_for(stage):
     candidate, packet = saved('candidate.json'), saved('input.json')
     prompt = {
@@ -231,3 +251,26 @@ def test_real_rejected_text_is_retained_before_application_validation(tmp_path, 
     assert usage[0]['application_validation']['status'] == 'REJECTED_BY_ORIGINAL_MODEL'
     assert 'SYNTHETIC_NO_NETWORK_CREDENTIAL' not in json.dumps(usage)
     assert saved('candidate.json')['quick_research'] is None
+
+
+@pytest.mark.parametrize('mode', ['question', 'continuation'])
+def test_current_host_rejects_frozen_egress_approval_after_wire_guidance_changes(
+        tmp_path, monkeypatch, mode):
+    from test_stock_question_host import setup_question
+    from test_stock_question_continuation import setup_continuation
+    from decision_kernel.runtime import stock_question_host as host
+    setup = setup_question if mode == 'question' else setup_continuation
+    execute = host.run_question if mode == 'question' else deepseek.run_continuation
+    with historical_wire_without_descriptions(monkeypatch):
+        fixture = setup(tmp_path, monkeypatch)
+    args, api = fixture[:2]
+    before = deepcopy(api.files)
+    calls, writes = fixture[6:8]
+    result = execute(**args)
+    assert result['status'] == 'NOT_EXECUTED', result
+    assert result['error_code'] in {
+        'QUESTION_PUBLIC_EGRESS_NOT_APPROVED',
+        'QUESTION_CONTINUATION_PUBLIC_EGRESS_NOT_APPROVED',
+    }, result
+    assert not result['formal_research_started']
+    assert not calls and not writes and api.files == before

@@ -15,6 +15,7 @@ from decision_kernel.runtime import stock_question_continuation as cont
 from decision_kernel.runtime import stock_research_intake as intake
 from decision_kernel.runtime import stock_research_sources as sources
 from test_stock_question_activation import prepared_inputs, CODE
+from test_research_route_contract import historical_wire_without_descriptions
 
 ROOT = Path(__file__).parents[1]
 MATERIAL = ROOT / "docs/readings/300711-question-continuation-2026-09-20"
@@ -115,12 +116,16 @@ def real_inputs():
     return request, api, q, packet, discovery, context, checks, pred
 
 
-def test_real_continuation_material_prepares_and_computes_deepseek_egress():
+def test_real_continuation_material_prepares_and_computes_deepseek_egress(monkeypatch):
     request, api, q, packet, discovery, context, checks, pred = real_inputs()
     receipt = reviewed.prepare(
         question_source=request["question_source"], checked_at=CHECKED_AT, **checks)
     sources.recheck(context, api=api, code_commit=CODE, clock=lambda: CHECKED_AT)
-    digest = cont.egress_hash(packet, discovery, context)
+    current_digest = cont.egress_hash(packet, discovery, context)
+    # Rebuild the frozen approved wire without inheriting its approval for new metadata.
+    with historical_wire_without_descriptions(monkeypatch):
+        digest = cont.egress_hash(packet, discovery, context)
+    assert current_digest != request["approved_egress_hash"]
     assert receipt["status"] == "QUESTION_INPUT_PREPARED_NOT_EXECUTED"
     assert q["question_id"] == "restricted-proceeds-internal-transfer-2026h1"
     assert packet.execution_id == pred["child_execution_id"]
@@ -150,6 +155,7 @@ def test_real_continuation_material_prepares_and_computes_deepseek_egress():
             "child_execution_id": pred["child_execution_id"],
             "preflight_ref": PREFLIGHT_REF,
             "approved_egress_hash_candidate": digest,
+            "current_egress_hash": current_digest, "current_format_approved": False,
             "provider": cont.PROVIDER,
             "model": once.DEEPSEEK_MODEL,
             "network_calls": 0,

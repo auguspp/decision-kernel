@@ -8,6 +8,7 @@ import pytest
 from decision_kernel.runtime import saved_research_once as once
 from test_saved_research_once import pre, quick
 from test_saved_research_raw_retention import prompt_for
+from test_research_route_contract import historical_wire_without_descriptions
 
 REVIEW = Path('docs/readings/000920-continuation-review-2026-09-21')
 
@@ -116,8 +117,17 @@ def test_real_invalid_output_over_original_sdk_wire_keeps_exact_constraints(tmp_
     check_wire(provider, prompt, once.PreResearchResult, usage, seen, tmp_path)
     if provider == 'DEEPSEEK_OFFICIAL':
         historical = json.loads((REVIEW / 'host-receipt.json').read_bytes())['provider_usage'][0]
-        assert usage[0]['output_format_sha256'] == historical['output_format_sha256']
-        assert usage[0]['output_model_schema_sha256'] == historical['output_model_schema_sha256']
+        # New descriptions legitimately change format hashes; reconstruct the old
+        # wire with the same SDK rather than rewriting the historical receipt.
+        with historical_wire_without_descriptions(monkeypatch):
+            _, old_schema, old_format, _ = once.model_request(
+                prompt, once.PreResearchResult, max_prompt_bytes=524288,
+                model=once.DEEPSEEK_MODEL, extra_parameters={'reasoning': {'effort': 'none'}})
+        old_format = {k: v for k, v in old_format.items() if k != 'strict'}
+        assert once.sha(once.raw(old_format)) == historical['output_format_sha256']
+        assert once.sha(once.raw(old_schema)) == historical['output_model_schema_sha256']
+        assert usage[0]['output_format_sha256'] != historical['output_format_sha256']
+        assert usage[0]['output_model_schema_sha256'] != historical['output_model_schema_sha256']
         assert usage[0]['system_sha256'] == historical['system_sha256']
     assert usage[0]['application_validation']['errors'] == [
         {'type': 'enum', 'loc': ['material_claims', i, 'kind']} for i in (15, 16, 17)]

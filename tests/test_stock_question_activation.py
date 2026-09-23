@@ -15,6 +15,7 @@ from decision_kernel.runtime import stock_question_host as host
 from decision_kernel.runtime import stock_research_sources as sources
 from decision_kernel.runtime.external_research_admission import AdmissionRejected
 from test_reviewed_question_real_corpus import replay_checks
+from test_research_route_contract import historical_wire_without_descriptions
 
 ROOT = Path(__file__).parents[1]
 MATERIAL = ROOT / "docs/readings/300711-question-execution-2026-09-19"
@@ -72,7 +73,7 @@ def prepared_inputs(checked_at=CHECKED_AT):
     return request, api, result
 
 
-def test_real_activation_material_passes_original_prepare_and_sdk_preview():
+def test_real_activation_material_passes_original_prepare_and_sdk_preview(monkeypatch):
     request, api, (question, packet, discovery, context, checks) = prepared_inputs()
     receipt = reviewed.prepare(question_source=request["question_source"],
                                checked_at=CHECKED_AT, **checks)
@@ -80,7 +81,11 @@ def test_real_activation_material_passes_original_prepare_and_sdk_preview():
     assert receipt["status"] == "QUESTION_INPUT_PREPARED_NOT_EXECUTED"
     assert not receipt["research_execution_allowed"] and not receipt["funnel_invoked"]
     assert question["revision"] == 2 and question["predecessor"] is not None
-    assert host.question_egress_hash(packet, discovery, context) == request["approved_egress_hash"] == EGRESS
+    current_digest = host.question_egress_hash(packet, discovery, context)
+    # Exact historical approval remains reproducible, not reusable for the new format.
+    with historical_wire_without_descriptions(monkeypatch):
+        assert host.question_egress_hash(packet, discovery, context) == request["approved_egress_hash"] == EGRESS
+    assert current_digest != EGRESS
     assert len(context["issuer_documents"]) == 3
     assert sum(d["page_count"] for d in context["issuer_documents"]) == 17
     permission = request["permission"]
@@ -102,6 +107,7 @@ def test_real_activation_material_passes_original_prepare_and_sdk_preview():
             "original_checked_at": CHECKED_AT, "permission_comment": permission["comment_id"],
             "question_id": question["question_id"], "execution_id": packet.execution_id,
             "approved_egress_hash": EGRESS, "receipt": receipt,
+            "current_egress_hash": current_digest, "current_format_approved": False,
             "context_bytes": len(once.raw(context)), "prompt_bytes": len(body.encode()),
             "output_format_sha256": once.sha(once.raw(output_format)),
             "network_calls": 0, "model_calls": 0, "launch_writes": 0,
