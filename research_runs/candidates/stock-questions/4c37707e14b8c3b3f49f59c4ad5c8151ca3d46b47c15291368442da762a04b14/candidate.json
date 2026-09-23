@@ -1,0 +1,237 @@
+{
+  "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+  "discovery": {
+    "as_of": "2026-09-23T04:44:29.795878Z",
+    "contradiction_or_mapping_warning": "分开自有矿山与第一量子权益产量，核对外购矿TC/RC及加工转嫁，并从合并利润勾稽到现金和受限保证金；若无法识别净暴露，不用总产量乘铜价推断股东利润。",
+    "current_market_expression": null,
+    "discovery_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+    "economic_direction": "已声明的有限经济问题，方向未定；不从来路标签或价格推断受益。",
+    "factual_observations": [
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "statement": "已保存的公开正文用于核验这个问题；原件与表示的范围限制仍保留。"
+      }
+    ],
+    "known_stop_or_downgrade_condition": "必要正文或技术失败不得称业务WAIT；不强制Quick、Deep或投资决定。",
+    "next_discriminating_search": "先用完整2025年报及2026H1区分资源、冶炼、贸易和套保，再检验合并利润—现金、受限资金和权益投资桥；缺失归因保持UNKNOWN。",
+    "schema_version": 1,
+    "security_id": "SSE:600362",
+    "source_lane": "REVIEWED_RADAR_QUESTION",
+    "source_lineage": [
+      {
+        "available_at": "2026-09-23T04:44:29.795878Z",
+        "evidence_artifact_id": "9962c189-38a8-5376-accc-60215ff5bec6",
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/3a8cdcb04a98892d6948738963aa29c07c59dc9c/research_runs/industry-question-preparation/600362-industry-input-20260923/context.json"
+      }
+    ],
+    "supporting_securities": [],
+    "ticker": "600362",
+    "why_now": "把9月22日已留存铜链观察落实为已有净经济敞口问题的首次正式审阅；不把单日快照、资金流或会员持仓当作公司基本面变化。"
+  },
+  "explicit_action_summary": [
+    "No model tools; at most Pre and conditional Quick. No Deep or investment authority."
+  ],
+  "input_hash": "e4c1ad0da89182b2f4cceb129f5928247c94dd9690f2d58fcaf178402f19ad42",
+  "pre_research": {
+    "as_of": "2026-09-23T04:44:29.795878Z",
+    "basic_business_role": "按2025年报正文，本集团主要业务涵盖铜和黄金的采选、冶炼与加工，并具备集勘探、采矿、选矿、冶炼、加工于一体的完整产业链；公司100%所有权的五座在产矿山为德兴铜矿、永平铜矿、城门山铜矿、武山铜矿、银山矿业(2025年报第12页)。江西铜业同时是加拿大第一量子矿业公司(First Quantum)最大股东，按18.47%权益法核算(2025年报第218页；2026H1第173页)。恒邦股份为控股子公司，持股36.50%。",
+    "current_expression_or_leadership": null,
+    "current_market_expectation_hypothesis": "在已留存来源内无法识别当前市场对江西铜业股东利润与现金的预期水平或定价假设；来源仅含发行人自述的行业趋势判断(如2025年报第37页对2026年矿端偏紧、TC维持低位的描述)，该判断属发行人披露主张而非市场预期证据。对\"市场当前如何给铜价弹性定价\"这一问题保持UNKNOWN，不作推断。",
+    "discovery_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+    "economic_direction": "多头方向：铜价与冶炼加工费均创历史高位/极端低位；江铜2026H1归母净利润86.32亿元(+106.77%)，利润总额123.83亿元(+128.37%)，2025全年归母71.30亿元(+2.41%)但2026H1单半年已超2025全年。利润同比大增与铜价上移方向一致；但同期归母扣非增速低于归母，且衍生金融工具投资损失、存货跌价损失与经营现金流波动构成反向证据，说明价格上行未等比例落到股东现金。",
+    "largest_unknown": "铜价与基差变化如何按比例分配至股东利润与现金，以及外购矿加工费、价格转嫁、套保与营运资金占用各自抵消多少，这一净敞口的量化仍为UNKNOWN。以下均未在已留存来源内闭合：①自产矿与第一量子权益产量各自的单位成本、资源税、权益法调整与实际利润归属；②TC/RC负值下的实际采购结算与冶炼端盈亏归属；③套保覆盖比率、被套期项目与套期工具的到期错配程度；④存货与期货保证金占用的现金影响的可回收性与时序；⑤第一量子权益法核算下其他综合收益大幅波动与股东现金之间的关系。该缺口无法用总产量乘价格补足。",
+    "material_claims": [
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按已留存2025年年度报告的合并利润表，2025年归属于母公司股东的净利润为71.30亿元，较2024年重述后的69.62亿元增长2.41%；但经营活动现金流量净额为-69.14亿元，上年同期为+24.28亿元，同比变动-384.78%。(2025年报第7页、第17页、第107页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "发行人在2025年报中把经营活动现金流净额转负变动说明为\"因价格上涨存货资金占用增加所致\"；该说明为披露主张，不是独立验证的经济原因。(2025年报第18页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报，\"自产铜精矿含铜\"2025年为26.99万吨(同比+35.15%)，且该统计口径含第一量子当年权益产量；同页\"自有矿山\"矿石原材料成本占比22.22%，境外采购占比65.95%。(2025年报第15页、第27页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，\"自产铜精矿含铜\"2026H1为13.64万吨(同比+37.36%)，其中第一量子2026H1权益产量3.64万吨(按18.47%股权比例合并)、公司自有矿山1-6月产量10万吨；即自有矿山与权益口径需分开读取。(2026H1第13页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，2026H1归属于上市公司股东的净利润为86.32亿元，同比增长106.77%；归属于上市公司股东的扣除非经常性损益的净利润为75.56亿元，同比增长73.73%；两者增速存在差异。(2026H1第6页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，2026H1投资收益为-15.40亿元(同比变动-1175.46%)、公允价值变动收益为+31.83亿元(同比变动+1136.66%)，发行人将变动分别归因于\"衍生金融工具投资损失增加\"与\"衍生金融工具公允价值变动\"；资产减值损失-28.81亿元，发行人归因于\"存货跌价损失增加\"。(2026H1第15-16页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报，2025年投资收益为-24.12亿元，发行人归因于\"衍生金融工具投资损失增加\"；公允价值变动收益为-25.14亿元，归因于\"衍生金融工具公允价值变动\"。(2025年报第17-18页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报披露的行业与原料价格信息，2025年TC现货价格下半年维持在-50到-40美元/吨区间；2025年全年沪铜均价80,695元/吨(同比+7.52%)，LME铜3个月均价9,976美元/吨(同比+7.63%)。(2025年报第13页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，2026H1铜精矿产量增速-2.4%，TC/RC持续下行最低至-124.45美元/吨；2026上半年LME铜3个月均价13,137美元/吨(较2025年均价约+39%)，沪铜主力均价101,817元/吨(较2025年均价约+31%)。(2026H1第11-12页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "INFERENCE",
+        "statement": "按2025年报，2025年自产铜精矿含铜26.99万吨与阴极铜产量238.04万吨之间存在巨大数量差，且外购原料包括境外采购；因此不能以总产量乘铜价直接推断股东利润的铜价弹性。(2025年报第15页、第27页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报，2025年\"未指定为套期关系的衍生工具-商品期货合约\"当期变动为-18.18亿元、对当期利润影响-51.41亿元；\"有效套期保值的衍生工具-商品期货合约\"当期变动-6.12亿元、影响-26.99亿元；临时定价安排影响-37.91亿元。上述科目构成对铜价上行名义收益的对冲项。(2025年报第11页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报，2025年存货账面价值由448.53亿元增至681.88亿元(+52.02%)，发行人说明为\"金属价格上涨及备货增加\"；其他应收款由48.74亿元增至109.29亿元(+124.22%)，说明为\"金属价格上涨期货保证金增加\"；受限资产合计由232.52亿元升至260.97亿元。(2025年报第24-26页、第181页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，2026H1经营活动现金流量净额为+58.14亿元(上年同期+28.71亿元，+102.49%)，与2025全年为负形成方向差异；发行人将其归因于\"销售商品、提供劳务收到的现金增加\"。(2026H1第15页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2025年报，第一量子按权益法核算，2025年长期股权投资账面价值由期初152.94亿元降至年末145.58亿元，年内确认权益法投资损失-1,569万元、其他综合收益调整-7.20亿元。(2025年报第168页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "FACT",
+        "statement": "按2026年半年度报告，2026年3月4日完成对SolGold的收购，购买日之前原持股12.14%按公允价值重新计量确认投资收益6.727亿元，该收益计入2026H1利润，属非经营性来源而非铜价传导。(2026H1第124页、第168-169页)"
+      },
+      {
+        "evidence_artifact_ids": [
+          "9962c189-38a8-5376-accc-60215ff5bec6"
+        ],
+        "kind": "INFERENCE",
+        "statement": "在已留存来源范围内，未能将铜价/基差变动量与江西铜业股东利润、现金之间建立可量化的净弹性关系；TC/RC的现金实际结算金额、自有矿山与权益产量在利润中的分部勾稽、套保覆盖比率与营运资金占用的现金影响仍未闭合。(2025年报第13页、第17-18页、第27页；2026H1第12页、第15-16页)"
+      }
+    ],
+    "next_discriminating_search": "核对后续定期报告及财务报告附注中：分开列示自有五矿产量与第一量子权益产量的单位成本与利润归属；外购矿TC/RC的实际结算口径与冶炼分部毛利；套期保值明细表中的被套期数量、覆盖率与到期结构；存货/期货保证金与其他应收款的现金影响分解；以及合并净利润到经营活动现金流的完整调节表。目的是判断铜价上行能否在净额上穿透到股东利润与现金，以及有多大比例被TC/RC、套保与营运资金占用抵消。",
+    "obvious_contradiction": "反证据、非支持性事实均须保留：第一，铜价同比上行而2025年归母净利润仅+2.41%，与\"价格上涨直接推升股东利润\"的直觉不符，且同期扣非净利润为91.48亿元(高于归母71.30亿元)，表明非经常性项目(含套保衍生损益)大幅拉低归母；第二，2025年经营活动现金流净额为-69.14亿元，与利润为正方向相反；第三，2026H1归母增速106.77%高于扣非增速73.73%，且该期投资收益为负(-15.40亿元)而公允价值变动为正(+31.83亿元)，两科目方向相反，说明套保头寸与现货价格不一致；第四，2025年报说明\"自产铜精矿含铜\"含第一量子权益产量，而2026H1自产口径中自有矿山仅10万吨、权益3.64万吨，两期口径构成不可直接对比的隐患；第五，总产量与铜价相乘不构成股东利润推断的证据，因为阴极铜产量238.04万吨远大于自产矿26.99万吨，中间环节依赖外购矿、贸易与加工。",
+    "potential_fundamental_driver": "第一，自有矿山产量与第一量子权益产量的价格弹性：2026H1\"自产铜精矿含铜\"13.64万吨(+37.36%)，但注意其中含第一量子权益产量3.64万吨、公司自有矿山仅10万吨(2026H1第13页)，口径改变直接决定谁承担价格变动。第二，外购矿TC/RC：2025年报披露2025年下半年TC现货为-50至-40美元/吨(第13页)；2026H1披露TC/RC最低降至-124.45美元/吨(第12页)，加工费负值加深对冶炼端利润是明确负向驱动。第三，套保与衍生金融工具损益：2025年投资收益-24.12亿元、公允价值变动收益-25.14亿元(2025年报第17页)，2026H1投资收益-15.40亿元、公允价值变动收益+31.83亿元(2026H1第15页)，构成对价格上行名义利润的对冲项。第四，营运资金占用：2025年经营活动现金流净额为-69.14亿元，报告归因于\"价格上涨存货资金占用增加\"(2025年报第18页)。",
+    "route": "CONTINUE_TO_QUICK",
+    "route_reason": "已留存2025年报与2026H1两份完整正文，可支持对\"铜价经自有矿山/权益敞口影响股东利润与现金、以及被TC/RC与套保抵消程度\"这一问题形成初步结构判断：价格上行方向明确但归母、扣非、经营现金流与套保损益方向不一致，且2025-2026H1口径存在差异。证据足以支撑进入QUICK做一次有边界的下一次披露核对，但也存在明确最大未知(净敞口量化未闭合)。未选WAIT：所需限定语料(两份财报全文)已具备且可读，不存在需等待新触发条件的证据缺失情形。未选STOP：问题本身具备可分辨的净经济敞口，且现有证据已给出正反两个方向的可检验信号。",
+    "schema_version": 1,
+    "what_is_this": "针对江西铜业(600362)的正式预研调用，考察铜价与期现基差变化通过自有矿山产量与第一量子权益产量对股东利润与现金的传导，以及外购矿TC/RC、价格转嫁、套保与营运资金占用对上述传导的抵消程度。核验对象为已留存的2025年年度报告(公告1225034758)与2026年半年度报告(公告1225505938)全文。",
+    "why_surfaced_now": "按前置问题将9月22日已留存的铜链观察落实为对江西铜业\"铜价与基差如何经自有矿山及权益资源敞口影响股东利润与现金、多少被TC/RC与套保抵消\"这一已有净经济敞口问题的首次正式审阅；已具备2025年报与2026H1两份已留存的公开全文作为最低验证语料，不将单日快照、资金流或会员持仓视作基本面变化。"
+  },
+  "quick_research": null,
+  "receipt": {
+    "completion": "INCOMPLETE_TECHNICAL_FAILURE",
+    "elapsed_minutes_observed": 2,
+    "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+    "finished_at": "2026-09-23T04:48:51.282443Z",
+    "input_hash": "e4c1ad0da89182b2f4cceb129f5928247c94dd9690f2d58fcaf178402f19ad42",
+    "last_completed_stage": "ADMISSION_OR_RETAINED_PARTIAL",
+    "model_exact_version": null,
+    "model_or_executor": "trusted Python + DeepSeek Responses / deepseek-flash",
+    "platform_task_id": "35819538967",
+    "private_chain_of_thought_recorded": false,
+    "research_cutoff": "2026-09-23T04:44:29.795878Z",
+    "search_queries_used": 0,
+    "source_dispositions": [
+      {
+        "disposition": "Retained public context supplied to model; restricted source scope.",
+        "evidence_artifact_id": "9962c189-38a8-5376-accc-60215ff5bec6",
+        "opened": true,
+        "source_locator": "https://github.com/auguspp/decision-kernel/blob/3a8cdcb04a98892d6948738963aa29c07c59dc9c/research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+        "used_as_evidence": true
+      }
+    ],
+    "source_reads_used": 2,
+    "started_at": "2026-09-23T04:47:11.642745Z",
+    "stop_or_failure_reason": "ValidationError",
+    "technical_retries_used": 0,
+    "tool_calls_used": 3,
+    "tool_events": [
+      {
+        "kind": "OTHER_READ",
+        "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+        "observed_at": "2026-09-23T04:47:11.642771Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 1,
+        "status": "SUCCEEDED",
+        "target": "https://github.com/auguspp/decision-kernel/blob/3a8cdcb04a98892d6948738963aa29c07c59dc9c/research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "Model output, not primary-source Evidence.",
+        "observed_at": "2026-09-23T04:48:01.087711Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 2,
+        "status": "SUCCEEDED",
+        "target": "DEEPSEEK_RESPONSES:PRE",
+        "technical_retry": false
+      },
+      {
+        "kind": "OTHER_READ",
+        "note": "No retry or route repair. Per-stage files/usage record whether public output was retained; missing output is UNKNOWN.",
+        "observed_at": "2026-09-23T04:48:51.282221Z",
+        "platform_reference": null,
+        "query_count": 0,
+        "record_kind": "EXECUTOR_ACTION_SUMMARY",
+        "sequence": 3,
+        "status": "FAILED",
+        "target": "EXECUTOR:QUICK",
+        "technical_retry": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "supplemental_evidence_artifacts": []
+}
