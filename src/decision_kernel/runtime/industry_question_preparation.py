@@ -110,10 +110,20 @@ def classify_update(row, known):
     """Declared report-correction scope, not an all-events or title-truth assertion."""
     if row.announcement_id in known:
         return "BOUND_ORIGINAL_REPORT"
-    if (re.search(r"年(?:半年度|年度)报告", row.title) and not re.search(r"摘要|董事会|监事会|审计|核查|意见", row.title)) \
+    if (re.search(r"(?:半年度|年度)报告", row.title) and not re.search(r"摘要|董事会|监事会|审计|核查|意见", row.title)) \
             or re.search(r"更正|修订|补充|会计差错|追溯调整", row.title):
         return "REQUIRES_BODY_REVIEW"
     return "OUTSIDE_DECLARED_REPORT_CORRECTION_SCOPE"
+
+
+
+def check_inventory_window(batch, plan, ticker, known):
+    """A query omitting known reports in its own window is not a no-correction proof."""
+    once.require(batch.stock_code == ticker and batch.start_date == date.fromisoformat(plan["updates_start"])
+        and batch.end_date == date.fromisoformat(plan["updates_end"])
+        and set(known) <= {r.announcement_id for r in batch.announcements},
+        "INDUSTRY_UPDATE_INVENTORY_INCOMPLETE")
+
 
 
 def make_review(plan, question_source, context_source, rs, section, reviewed_at, case_id):
@@ -253,6 +263,7 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
             end_date=date.fromisoformat(plan["updates_end"]), get_json=lambda url: query_json("GET", url),
             post_json=lambda url, form: query_json("POST", url, form))
         known = {d["announcement_id"]: (d, reads[i]) for i, d in enumerate(docs)}
+        check_inventory_window(batch, plan, custody["ticker"], known)
         leads, unresolved = [], []
         for row in batch.announcements:
             once.require(row.stock_code == custody["ticker"] and row.published_at is not None
@@ -276,7 +287,8 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
         inventory = {"ticker": custody["ticker"], "start_date": plan["updates_start"], "end_date": plan["updates_end"],
             "scope": "TWO_FINANCIAL_REPORTS_AND_POSSIBLE_CORRECTIONS_NOT_ALL_EVENTS",
             "announcements": [{**asdict(r), "published_at": r.published_at.isoformat()} for r in batch.announcements],
-            "unresolved_ids": [r["announcement_id"] for r in unresolved], "events": receipt["query_events"]}
+            "unresolved_ids": [r["announcement_id"] for r in unresolved],
+            "lead_dispositions": leads, "events": receipt["query_events"]}
         inv_source = save("inventory.json", inventory, "RECORDED_FINANCIAL_UPDATE_INVENTORY")
         receipt["inventory_source"] = inv_source
         once.require(not unresolved, "INDUSTRY_REPORT_CORRECTION_BODY_REVIEW_REQUIRED")
@@ -290,7 +302,8 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
                 + [{"id": UPDATE, "mode": "LATEST_INVENTORY", "body_ids": [], "inventory_id": "financial-updates"}],
             "inventories": [{"id": "financial-updates", "class_id": UPDATE, "started_at": inv_start, "finished_at": inv_end,
                 "planned_queries": [query], "query_events": [{"query": query, "status": "SUCCEEDED",
-                    "tool_reference": once.locator(inv_source), "checked_at": inv_end}], "leads": leads}],
+                    "tool_reference": once.locator(inv_source), "checked_at": inv_end}],
+                "leads": [lead for lead in leads if lead["decision_relevant"]]}],
             "limits": {"max_queries": 1, "max_reads": 4}, "seed_publications": [{
                 "evidence_id": str(uuid5(NAMESPACE_URL, eid + ":" + cs["sha256"])), "kind": "GIT_COMMIT", "source": cs}],
             "notes": "真实原件读回和声明范围目录；不是全事件覆盖、经济判断或Research执行许可。"}
@@ -302,9 +315,22 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
         rev = save("review.json", review, industry.PURPOSE)
         request = request_template(qs, cs, ps, rev, cus)
         proposed = save("request.json", request, "PROPOSED_DAILY_REQUEST_NOT_MAIN_ACTIVATION")
-        receipt.update(status="INPUT_FILES_RETAINED_NOT_ADMITTED", request_source=proposed,
-            question_source=qs, context_source=cs, preflight_source=ps,
-            main_request_activated=False, formal_admission=False)
+        receipt.update(request_source=proposed, question_source=qs, context_source=cs, preflight_source=ps,
+                       main_request_activated=False, formal_admission=False)
+        # Exercise the ORIGINAL input/source/consumption gates before activation,
+        # without an execution reservation, model SDK or reusable admission token.
+        from .stock_question_host import _question_inputs
+        q, packet, _, decoded, checks = _question_inputs(api=api, code=code,
+            request=daily.base_request(request), clock=clock, allow_full=True)
+        packet, actual_state, _ = daily.bind(api, request, q, packet, decoded, clock, archives={})
+        prepared = reviewed.prepare(question_source=qs, checked_at=clock(),
+            **{**checks, "input_raw": once.raw(packet)})
+        work, rows = daily.work_tree(api)
+        daily.capacity(api, work, rows, actual_state, packet)
+        diagnostic = save("diagnostics.json", {"input_prepare": prepared,
+            "reader_capacity_checked_at": clock(), "research_execution_allowed": False,
+            "model_calls": 0, "reservation_writes": 0}, "PREPARATION_DIAGNOSTICS_NOT_EXECUTION")
+        receipt.update(status="INPUT_FILES_RETAINED_NOT_ADMITTED", diagnostics_source=diagnostic)
     except Exception as exc:
         receipt.update(error_type=type(exc).__name__, error_code=getattr(exc, "code", None))
     finally:
