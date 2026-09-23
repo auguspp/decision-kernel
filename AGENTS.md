@@ -14,6 +14,26 @@ A method version is not a schema or runtime version. Do not change serialized me
 
 The entry is a Research/Decision Rehearsal operating protocol, not a replacement for Kernel validators. Preserve PIT, exact source identity, historical versions, and Human authority. Evidence changes Belief; price changes Odds. Unknown causes stay UNKNOWN.
 
+## Reconcile Before Continuing — premise-change impact review
+
+Human-adopted on 2026-09-23; authority and rationale: [#297 comment5792890835](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5792890835). This is a standing collaboration principle alongside Reuse First, not a new runtime or approval system.
+
+**Manage what no longer holds, not only what to do next.** When a material premise changes, review its impact and reconcile affected plans before further committing to the affected path. Triggers include changed product acceptance, research policy, architecture boundaries, priorities, demonstrated source/tool capabilities, permission assumptions, or a real failure that would require an unapproved permanent stage or recovery path. A proposed idea or suspected invalidation is not an established fact, adopted policy, implementation or activation.
+
+Restore the current approved #297 direction, exact main and relevant Issue/PR/execution records; pin read-model/work versions separately when state claims require them. Check direct dependencies and evidenced downstream effects across roadmap, active/queued PRs, overlapping or superseded requirements, method/entry instructions, execution permissions, delivery/readers and CI/history obligations. State the inspected scope, unaffected areas and UNKNOWNs. Do not require a whole-repository audit for ordinary edits or already-approved fixes.
+
+**“Continue” preserves the most recent explicit, still-valid objective, scope, budget and stop conditions.** When approval covers an ordered multi-item scope, proceed within it without asking again for each PR, file or routine technical choice. It does not authorize a new permanent stage/state owner, material scope or acceptance change, extra external access or spend, weakened source/identity/CI rules, or a paused/superseded path. Pause only affected new commitments when authority or premises are unresolved; reconcile in-flight calls/writes before any recovery. This principle itself neither cancels running work nor blocks unrelated authorized work.
+
+Use a short receipt in the original Issue/PR/#297: **old premise -> new evidence/instruction -> affected objects -> disposition -> authority and next step**. Reuse existing KEEP / CONSOLIDATE / RETIRE / DEFER review language and record concrete updates, successors or remaining gaps; do not introduce new runtime enums, queues, databases, agents, watchers or per-step approval gates for this discipline.
+
+Requirements Management owns product scope, priority and acceptance reconciliation. Main Construction supplies actual dependency, implementation/run-state and maintenance-cost evidence and implements approved changes. The interaction layer translates this into a clear Human choice: user benefit, simpler/do-nothing alternatives, lasting seam/test/recovery cost, and whether the next step remains within approval. Human should not have to inspect code or infer architecture decisions from PR counts and green CI.
+
+For an approved change, reconcile the current entry summary and affected Issue/PR status or successor links under existing write authority and concurrency checks; do not leave an obsolete title/top-level NEXT pointing at retired work while only appending a buried comment. Preserve deferred/blocked requirements and do not equate Open with execution permission or Closed with implementation success. Report unresolved state/permission conflicts rather than batch-closing, merging or activating by inference.
+
+Every new formal boundary must justify its handoff, recovery, compatibility and test cost. Prefer reuse or fewer boundaries where semantics permit. File counts, adapter counts, test counts and CI duration are investigation signals, not automatic architectural verdicts or approval thresholds. Review must be proportional to actual impact: no unrelated redesign/retest, no speculative framework, and no automatic relaxation of the current complete CI contract.
+
+Obsolete plans do not make historical facts obsolete. Preserve source/Evidence, Research/Odds versions, failed attempts, consumption records and Human words. A new policy does not retroactively validate an old failure, grant a retry, inherit Human acceptance or create investment authority. Verify that adopted changes are actually reflected at the relevant current entry; recording this principle alone does not prove it has been followed.
+
 ## Reuse First — required external prior-art check
 
 For engineering work that would add a non-unique capability, a pre-construction Reuse Check must explicitly cover all three layers before implementation:
