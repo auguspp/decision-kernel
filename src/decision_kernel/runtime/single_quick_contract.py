@@ -64,7 +64,16 @@ class QuickAssessment(KernelModel):
         "not checked is not ruled out. Keep inference honestly labelled."
     ))
     unknowns: tuple[Text, ...] = ()
-    route: QuickRoute
+    route: QuickRoute = Field(description=(
+        "STOP means no worthwhile further work within the declared scope. "
+        "WAIT_FOR_TRIGGER requires a specific future wait_trigger. FULL_CANDIDATE "
+        "requires investigation (question, why_material, available_work, decision_test) "
+        "and at least one FACT or MARKET_CONTEXT claim with evidence_artifact_ids. "
+        "Explain a real company connection and work possible now; unknowns alone are "
+        "not a reason to escalate. Neither an established variant nor a contrary FACT "
+        "is mandatory. Required-source or technical failure is a host execution gap, "
+        "not a completed business WAIT or STOP."
+    ))
     route_reason: Text
     investigation: Investigation | None = None
     wait_trigger: Text | None = None
