@@ -36,7 +36,7 @@ UPDATE = "FINANCIAL_REPORT_CORRECTION_CHECK"
 
 
 def check_plan(plan, clock):
-    once.require(set(plan) == {"schema_version", "enabled", "mode", "permission", "id", "profile",
+    once.require(set(plan) - {"resume_from"} == {"schema_version", "enabled", "mode", "permission", "id", "profile",
         "reading_commit", "market_session", "origin_thscode", "titles", "question",
         "predecessor_sources", "updates_start", "updates_end", "execute_before"}
         and plan["schema_version"] == 1 and plan["enabled"] is True and plan["mode"] == MODE
@@ -58,7 +58,74 @@ def check_plan(plan, clock):
     once.require(reading.clock(plan["permission"]["created_at"]) <= now < reading.clock(plan["execute_before"])
         and date.fromisoformat(plan["updates_start"]) <= date.fromisoformat(plan["updates_end"]) <= now.date()
         and date.fromisoformat(plan["market_session"]) <= now.date(), "INDUSTRY_PREPARATION_CLOCK")
+    if "resume_from" in plan:
+        check_continuation_shape(plan)
     return plan
+
+
+def check_continuation_shape(plan):
+    """One explicit pre-I/O plan-format repair, not a general resume policy."""
+    value = plan["resume_from"]
+    once.require(isinstance(value, dict) and set(value) == {"kind", "run", "artifact", "prepare_source", "receipt_sha256"}
+        and value["kind"] == "SINGLE_PRE_IO_PLAN_REPAIR", "INDUSTRY_CONTINUATION_SHAPE")
+    run, artifact, source = value["run"], value["artifact"], value["prepare_source"]
+    once.require(set(run) == {"id", "path", "head_branch", "head_sha", "event"}
+        and type(run["id"]) is int and run["id"] > 0 and reading.SHA.fullmatch(run["head_sha"])
+        and run["path"] == ".github/workflows/stock-business-research.yml"
+        and run["head_branch"] == "main" and run["event"] == "issues"
+        and set(artifact) == {"id", "name", "size_in_bytes", "digest", "head_sha"}
+        and type(artifact["id"]) is int and artifact["id"] > 0
+        and type(artifact["size_in_bytes"]) is int and 0 < artifact["size_in_bytes"] <= 128 * 1024
+        and artifact["name"] == f"declared-report-sources-{run['id']}-1"
+        and artifact["head_sha"] == run["head_sha"]
+        and re.fullmatch(r"sha256:[0-9a-f]{64}", artifact["digest"])
+        and re.fullmatch(r"[0-9a-f]{64}", value["receipt_sha256"])
+        and source["path"] == PREFIX + plan["id"] + "/prepare.json"
+        and source["purpose"] == "ORIGINAL_FAILED_INPUT_PREPARATION", "INDUSTRY_CONTINUATION_IDENTITY")
+    return value
+
+
+def check_continuation(api, plan, work, tree, clock):
+    """Prove a retained failure had no query/model execution and no later writes."""
+    value = check_continuation_shape(plan)
+    source = value["prepare_source"]
+    prefix = PREFIX + plan["id"] + "/"
+    once.require({p for p in tree if p.startswith(prefix)} == {source["path"]},
+                 "INDUSTRY_CONTINUATION_HAS_LATER_OUTPUT")
+    run, files = imports._archive(api, value, {}, expected_conclusion="failure")
+    once.require(set(files) == {"prepare.json", "preparation-receipt.json"}
+        and all(len(b) <= identity.MAX_BYTES for b in files.values())
+        and once.sha(files["preparation-receipt.json"]) == value["receipt_sha256"],
+        "INDUSTRY_CONTINUATION_FAILURE_BYTES")
+    original, saved_at = daily._source(api, source, "ORIGINAL_FAILED_INPUT_PREPARATION", clock)
+    row = tree[source["path"]]
+    once.require(original == files["prepare.json"] == api.file(source["path"], work)
+        and row.get("sha") == once.blob(original) and row.get("size") == len(original)
+        and row.get("mode") == "100644" and row.get("type") == "blob",
+        "INDUSTRY_CONTINUATION_PREPARE_CHANGED")
+    prepared = identity._json(original)
+    failed = identity._json(files["preparation-receipt.json"])
+    base_plan = {k: v for k, v in plan.items() if k != "resume_from"}
+    once.require(set(prepared) == {"plan", "code_commit", "started_at", "run_id", "event", *reading.AUTHORITY}
+        and set(failed) == {"status", "code_commit", "started_at", "finished_at", "model_calls",
+            "research_executions", "pdf_acquisitions", "query_events", "mutation_uncertain",
+            "error_type", "error_code", *reading.AUTHORITY}
+        and once.raw(prepared["plan"]) == once.raw(base_plan)
+        == once.raw(identity._json(api.file(REQUEST, run["head_sha"])))
+        and prepared["code_commit"] == failed["code_commit"] == run["head_sha"]
+        and prepared["run_id"] == str(run["id"]) and prepared["event"] == run["event"]
+        and failed["status"] == "PREPARATION_INCOMPLETE" and failed["error_type"] == "TrialError"
+        and failed["error_code"] == "DECLARED_IMPORT_RUN_CLOCK_OR_MAIN_PLAN"
+        and failed["mutation_uncertain"] is False and failed["query_events"] == []
+        and all(type(failed[k]) is int and failed[k] == 0 for k in ("model_calls", "research_executions", "pdf_acquisitions"))
+        and all(all(record.get(k) == v for k, v in reading.AUTHORITY.items()) for record in (prepared, failed)),
+        "INDUSTRY_CONTINUATION_NOT_ZERO_IO_PLAN_FAILURE")
+    once.require(reading.clock(run["run_started_at"]) <= reading.clock(failed["started_at"])
+        <= reading.clock(prepared["started_at"]) <= reading.clock(failed["finished_at"])
+        <= reading.clock(run["updated_at"]) <= reading.clock(clock())
+        and reading.clock(run["run_started_at"]) <= reading.clock(saved_at) <= reading.clock(failed["finished_at"]),
+        "INDUSTRY_CONTINUATION_ORIGINAL_CLOCK")
+    return {"parent": value, "failure_receipt": failed, "checked_at": clock()}
 
 
 def request_template(question_source, context_source, preflight_source, review_source, custody_source):
@@ -164,16 +231,20 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
         check()
         work, tree = daily.work_tree(api)
         prefix = PREFIX + plan["id"] + "/"
-        if any(path.startswith(prefix) for path in tree):
+        existing = {path for path in tree if path.startswith(prefix)}
+        continuation = "resume_from" in plan
+        if existing and (not continuation or existing != {prefix + "prepare.json"}):
             receipt["status"] = "EXISTING_PREPARATION_NOT_REPEATED"
             return receipt
         once.require(work is not None, "INDUSTRY_PREPARATION_WORK_REF_MISSING")
+        proof = check_continuation(api, plan, work, tree, clock) if continuation else None
         retain = retainer_factory(api, {"prefix": prefix, "id": plan["id"], "work_ref": WORK_REF}, code, output)
-        retain.save("prepare.json", {"plan": plan, "code_commit": code, "started_at": clock(),
-            "run_id": os.environ.get("GITHUB_RUN_ID"), "event": os.environ.get("GITHUB_EVENT_NAME"), **reading.AUTHORITY})
+        if not continuation:
+            retain.save("prepare.json", {"plan": plan, "code_commit": code, "started_at": clock(),
+                "run_id": os.environ.get("GITHUB_RUN_ID"), "event": os.environ.get("GITHUB_EVENT_NAME"), **reading.AUTHORITY})
         def save(name, value, purpose):
             check()
-            once.require(re.fullmatch(r"(?:context|question|preflight|review|custody|request|inventory|diagnostics|update-query-[0-9]+)\.json", name),
+            once.require(re.fullmatch(r"(?:context|question|preflight|review|custody|request|inventory|diagnostics|continuation|update-query-[0-9]+)\.json", name),
                          "INDUSTRY_PREPARATION_WRITE_SCOPE")
             data = value if isinstance(value, bytes) else once.raw(value)
             once.require(len(data) <= identity.MAX_BYTES, "INDUSTRY_PREPARATION_FILE_SIZE")
@@ -193,6 +264,12 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
             retain.uncertain = False
             retain.writes.append(spec)
             return spec
+        if continuation:
+            # CREATE-only: a concurrent/second signal cannot claim this repair twice.
+            receipt["continuation_source"] = save("continuation.json", {
+                "plan": plan, "code_commit": code, "started_at": clock(), "proof": proof,
+                "run_id": os.environ.get("GITHUB_RUN_ID"), "event": os.environ.get("GITHUB_EVENT_NAME"),
+                "automatic_retry": False, **reading.AUTHORITY}, "EXPLICIT_INPUT_PREPARATION_CONTINUATION")
         registry = identity._json(api.file(imports.IMPORTS_PATH, code))
         profile = registry["imports"][plan["profile"]]
         custody = {"format": adopted.CUSTODY, "source_import": plan["profile"],

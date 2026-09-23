@@ -42,6 +42,32 @@
     "why_now": "把9月22日已留存铜链观察落实为已有净经济敞口问题的首次正式审阅；不把单日快照、资金流或会员持仓当作公司基本面变化。"
   },
   "reading_commit": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+  "resume_from": {
+    "artifact": {
+      "digest": "sha256:f3bff05916dfe65fc4afbae8b8359e252134787956ee10660474a20e02d64028",
+      "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+      "id": 10727752005,
+      "name": "declared-report-sources-35805284606-1",
+      "size_in_bytes": 2755
+    },
+    "kind": "SINGLE_PRE_IO_PLAN_REPAIR",
+    "prepare_source": {
+      "git_blob": "8706b856680a7ac786f98d375c9871f4019c1337",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/prepare.json",
+      "purpose": "ORIGINAL_FAILED_INPUT_PREPARATION",
+      "ref": "d0d6c6e5ca99fc8fdd77ff882615f8fb19335f38",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "e5ac108f674d294e597eb00b07d8dbd16eea53097ada431f8fa856862548a322"
+    },
+    "receipt_sha256": "e3750e2bc9463fdbd4b14bb7705a80f3b7e1f530bf5d3e20305a92ff6d9ba50c",
+    "run": {
+      "event": "issues",
+      "head_branch": "main",
+      "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+      "id": 35805284606,
+      "path": ".github/workflows/stock-business-research.yml"
+    }
+  },
   "schema_version": 1,
   "titles": {
     "2025FY": "江西铜业股份有限公司2025年年度报告",
