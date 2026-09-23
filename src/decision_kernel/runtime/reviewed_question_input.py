@@ -130,8 +130,25 @@ def _prepare(*, question_source: dict, input_raw: bytes, preflight_raw: bytes,
              and admission.text(relation["note"]), "QUESTION_RESEARCH_RELATION_INVALID")
     for spec in admission.items(relation["source_refs"], empty=True):
         prior_source(spec)
-    # Continuation is not a fresh invocation with a new key. Its original host is required.
-    _require(relation["kind"] == "NEW_DISTINCT_QUESTION", "QUESTION_CONTINUATION_REQUIRES_ORIGINAL_HOST")
+    # A declared complete Industry input may continue saved interactive analysis
+    # for its FIRST formal invocation. This is input qualification, not permission.
+    # The original catalogue and host's create-only question/day records still
+    # reject any prior formal attempt. Default/other continuation kinds stay closed.
+    retained_initial = False
+    if (relation["kind"] == "CONTINUE_ANALYSIS" and relation["source_refs"]
+        and all(s["purpose"] == "RETAINED_ANALYSIS_PREDECESSOR" for s in relation["source_refs"])
+        and packet.prompt_version == "reviewed-question-stock-v0"
+        and any(o["kind"] == "INDUSTRY_VARIABLE_OBSERVATION"
+                and o["qualification"] == "QUALIFIED_FOR_DECLARED_SCOPE" for o in origins)):
+        from . import reviewed_full_input as full
+        contexts = [s for s in refs if s["purpose"] == "MODEL_CONTEXT"]
+        if len(contexts) == 1:
+            stored = identity._checked_source(contexts[0], load)
+            if identity._json(stored).get("policy") == full.POLICY:
+                full.unpack(stored, ticker=packet.ticker)
+                retained_initial = True
+    _require(relation["kind"] == "NEW_DISTINCT_QUESTION" or retained_initial,
+             "QUESTION_CONTINUATION_REQUIRES_ORIGINAL_HOST")
 
     if q["predecessor"] is None:
         _require(q["revision"] == 1, "QUESTION_PREDECESSOR_REQUIRED")

@@ -156,6 +156,42 @@ class ReviewedFullContext(BoundFullContext):
             "meaning": "SDK_PRE_REQUEST_BUILT_NO_NETWORK_NOT_ADMISSION"})
 
 
+PAGE_REFERENCE = "SAME_PDF_REPLAY_REFERENCE_V1"
+
+
+def referenced_reading(value):
+    return isinstance(value, dict) and value.get("policy") == PAGE_REFERENCE
+
+
+def replay_loader(api, code, value, clock):
+    """Frozen note identity plus current-main equality; never current-main retiming."""
+    from . import disclosure_source_reading as pages
+    once.require(set(value) == {"policy", "reading_hash", "review_commit"}
+        and value["policy"] == PAGE_REFERENCE
+        and pages.read.SHA.fullmatch(value["review_commit"])
+        and isinstance(value["reading_hash"], str) and len(value["reading_hash"]) == 64
+        and all(c in "0123456789abcdef" for c in value["reading_hash"]), "FULL_QUESTION_REPLAY_REFERENCE")
+    # Commit metadata is immutable and shared only within this loader. Notes and
+    # the mutable main authorization are still read and checked on every re-entry.
+    metadata = {}
+    class CommitReuse:
+        file = staticmethod(api.file)
+        @staticmethod
+        def get(path):
+            if path.startswith("git/commits/"):
+                if path not in metadata: metadata[path] = api.get(path)
+                return metadata[path]
+            return api.get(path)
+    prior = pages.main_review_loader(CommitReuse(), value["review_commit"], clock)
+    current = pages.main_review_loader(CommitReuse(), code, clock)
+    def load(digest, number):
+        old, new = prior(digest, number), current(digest, number)
+        once.require(old is not None and new is not None and old[0] == new[0],
+                     "FULL_QUESTION_TRUSTED_REVIEW_CHANGED")
+        return old
+    return load
+
+
 def recheck_pages(context, *, api, code, clock):
     """Preserve original review commit; current main must contain identical notes.
 
@@ -167,6 +203,9 @@ def recheck_pages(context, *, api, code, clock):
     for doc in context["issuer_documents"]:
         value = doc.get("page_reading")
         if value is None:
+            continue
+        if referenced_reading(value):
+            replay_loader(api, code, value, clock)  # Full bytes replayed by custody, not a hash-only admission.
             continue
         pages.validate(value, {"pdf_sha256": doc["pdf_sha256"],
             "text_sha256": doc["original_text_sha256"], "page_count": doc["page_count"],

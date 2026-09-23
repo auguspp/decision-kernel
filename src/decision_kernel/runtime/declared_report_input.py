@@ -187,12 +187,21 @@ def bind_or_legacy(api, request, packet, context, clock, *, archives=None):
         else:
             once.require(doc["reading_method"] == "BOUND_SAME_PDF_READING", "DECLARED_CUSTODY_REPRESENTATION")
             value = doc["page_reading"]
-            notes = {p["page_number"]: (p["review"], p["review_source"])
-                     for p in value["pages"] if p["method"] == "AI_VISUAL_READING"}
+            by_reference = full.referenced_reading(value)
+            if by_reference:
+                load_review = full.replay_loader(api, packet.code_commit, value, selected_clock)
+            else:
+                notes = {p["page_number"]: (p["review"], p["review_source"])
+                         for p in value["pages"] if p["method"] == "AI_VISUAL_READING"}
+                load_review = lambda digest, number: notes.get(number) if digest == doc["pdf_sha256"] else None
             replayed = pages.represent(pdf, {"pdf_sha256": doc["pdf_sha256"], "text_sha256": e["text_sha256"],
-                "source_locator": doc["source_locator"], "page_count": parsed.page_count},
-                load_review=lambda digest, number: notes.get(number) if digest == doc["pdf_sha256"] else None)
-            once.require(replayed == value and value["pages"] == doc["pages"], "DECLARED_CUSTODY_PAGE_REPLAY_DIFFERS")
+                "source_locator": doc["source_locator"], "page_count": parsed.page_count}, load_review=load_review)
+            if by_reference:
+                once.require(replayed["reading_hash"] == value["reading_hash"]
+                    and doc["pages"] == [{"page_number": p["page_number"], "text": p["text"]} for p in replayed["pages"]],
+                    "DECLARED_CUSTODY_PAGE_REPLAY_DIFFERS")
+            else:
+                once.require(replayed == value and value["pages"] == doc["pages"], "DECLARED_CUSTODY_PAGE_REPLAY_DIFFERS")
         refs.extend((expected_pdf, extraction_spec))
     refs.extend(request[k] for k in daily.EXTRA_SOURCES)
     refs.extend((profile["manifest_source"], once.source_ref(imports.IMPORTS_PATH, packet.code_commit,
