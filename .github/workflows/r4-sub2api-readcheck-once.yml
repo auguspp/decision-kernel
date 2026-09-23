@@ -1,0 +1,27 @@
+name: R4 Sub2API read-only connection check
+on:
+  push:
+    branches: [ops/r4-2-sub2api-readcheck-20260923]
+permissions:
+  contents: read
+jobs:
+  check:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: One model-list GET, no inference or financial text
+        env:
+          SUB2API_API_KEY: ${{ secrets.SUB2API_API_KEY }}
+        run: python experiments/sub2api_readcheck_once.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: sub2api-readcheck-${{ github.run_id }}
+          path: sub2api-readcheck/
+          if-no-files-found: error
+          retention-days: 30
