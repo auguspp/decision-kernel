@@ -250,7 +250,8 @@ jobs:
       github.event_name == 'issues' && github.event.action == 'labeled' &&
       github.event.issue.number == 297 && !github.event.issue.pull_request &&
       github.event.sender.login == 'auguspp' &&
-      github.event.label.name == 'declared-report-sources-ready'
+      (github.event.label.name == 'declared-report-sources-ready' ||
+       github.event.label.name == 'industry-question-input-ready')
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -275,9 +276,14 @@ jobs:
           SOURCE_LABEL: ${{ github.event.label.name }}
           SOURCE_SENDER: ${{ github.event.sender.login }}
           SOURCE_IS_PR: ${{ toJSON(github.event.issue.pull_request != null) }}
-        run: >-
-          python -m decision_kernel.runtime.declared_report_sources
-          --code-commit "$GITHUB_SHA" --output declared-report-output
+        run: |
+          if [ "$SOURCE_LABEL" = industry-question-input-ready ]; then
+            python -m decision_kernel.runtime.industry_question_preparation \
+              --code-commit "$GITHUB_SHA" --output declared-report-output
+          else
+            python -m decision_kernel.runtime.declared_report_sources \
+              --code-commit "$GITHUB_SHA" --output declared-report-output
+          fi
       - name: Preserve declared report bytes and explicit source gaps
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

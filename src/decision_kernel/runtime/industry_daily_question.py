@@ -17,6 +17,7 @@ from . import industry_breadth_reading as breadth_reader
 from . import saved_research_once as once
 from . import stock_daily_question as daily
 from .radar_company_reading import retained_bytes
+from .reviewed_full_input import LIMITS as FULL_INPUT_LIMITS
 
 PURPOSE = "DAILY_INDUSTRY_BATCH_REVIEW"
 EXTENSION_PATH = "research_runs/industry-daily-question-extension.json"
@@ -27,6 +28,7 @@ EXTENSION = {"schema_version": 1, "permission": PERMISSION,
     "origin_kind": "INDUSTRY_VARIABLE_OBSERVATION", "batch_review_purpose": PURPOSE,
     "shared_policy_path": daily.POLICY_PATH, "shared_consumption_prefix": daily.PREFIX,
     "required_source_modes": ["STATIC", "LATEST_INVENTORY"],
+    "complete_input": FULL_INPUT_LIMITS,
     "model_cost_policy": "HUMAN_MANAGED_ACCOUNT_NO_ADDITIONAL_PROJECT_MONETARY_CEILING",
     "automatic_retry": False, "automatic_deep": False, "investment_authority": "NONE"}
 DISPOSITIONS = {"SELECTED_FOR_QUESTION", "CONTEXT_ONLY", "DATA_UNAVAILABLE",
@@ -156,7 +158,8 @@ def bind(api, request, q, packet, context, clock, *, archives=None):
                  and exposure["falsification_test"] == q["falsification_test"]
                  and exposure["use"] == "QUESTION_FORMATION_NOT_QUANTIFIED_BENEFIT",
                  "INDUSTRY_COMPANY_EXPOSURE_DECLARATION_REQUIRED")
-    packet, total = daily.bind_custody(api, request, packet, context, clock, archives=cache)
+    from .declared_report_input import bind_or_legacy
+    packet, total = bind_or_legacy(api, request, packet, context, clock, archives=cache)
     return packet, state, {"market_session": day, "batch_id": review["batch_id"],
         "source_run_id": section["latest_attempt"]["id"], "reading_source": rs,
         "reading_hash": state["reading_hash"], "batch_review_source": request["batch_review_source"],

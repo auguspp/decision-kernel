@@ -77,6 +77,96 @@
           "purpose": "RETAINED_CAPTURE_DATA"
         }
       }
+    },
+    "jiangxi-copper-financial-20260922": {
+      "enabled": true,
+      "format": "DECLARED_PUBLIC_REPORT_CAPTURE_V1",
+      "case_id": "600362.SH",
+      "capture_code": "5150776a11c052158aa817f857c1b660346405ab",
+      "run": {
+        "id": 35754054446,
+        "path": ".github/workflows/stock-business-research.yml",
+        "head_branch": "main",
+        "head_sha": "5150776a11c052158aa817f857c1b660346405ab",
+        "event": "issues"
+      },
+      "artifact": {
+        "id": 10706728112,
+        "name": "declared-report-sources-35754054446-1",
+        "size_in_bytes": 4671633,
+        "digest": "sha256:b9789d1d126bd08ee05af3ca6a467a6c748e209ec275ff8c4e8c7b6c3996292f",
+        "head_sha": "5150776a11c052158aa817f857c1b660346405ab"
+      },
+      "manifest_source": {
+        "git_blob": "93bd0cc2ca9ba55f1bc0626a44683bd0ca3fc77f",
+        "path": "research_runs/sources/declared-reports/600362-financial-20260922/source.json",
+        "purpose": "source.json",
+        "ref": "91d2f316be950482469f48917c1ddec40dd6bc42",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "36f3917a5c9c4f1bb42e2fc4566e7795c1d3d033c3d64f2e1ab5020d9cd8f7b0"
+      },
+      "files": {
+        "2025FY-cninfo-extraction.json": {
+          "bytes": 483890,
+          "sha256": "08b251a71b17756ec8a64ff2a01bc2c17756aedebd98502d43f8351b6f591851",
+          "git_blob": "0433e78f7e430dd7e69cfe579d988bdc2e751c5b"
+        },
+        "2025FY-cninfo-source.pdf": {
+          "bytes": 3593578,
+          "sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa",
+          "git_blob": "3f5d865dccd3b42f71f15b24839029e6f8c24c6e"
+        },
+        "2026H1-cninfo-discovery/cninfo-query-1.json": {
+          "bytes": 205,
+          "sha256": "15e3055583d739666493d39359c38e625e08981055984ce3d2869965775e28b8",
+          "git_blob": "9f315cb29eb967d7ce46a47f177ba6038be6ef25"
+        },
+        "2026H1-cninfo-discovery/cninfo-query-2.json": {
+          "bytes": 9224,
+          "sha256": "58c7987d0a5779425cdc24525d2458b14d523ddad782b80996cc444d3369927b",
+          "git_blob": "bbeb0f8c6e7b610109b48fbad602d39cce796102"
+        },
+        "2026H1-cninfo-discovery/ftshare/discovery.json": {
+          "bytes": 4647,
+          "sha256": "786980d2be6bd9078fb751440dbe61b3405044b39dba0f80d3b9f77c689d1144",
+          "git_blob": "02f79f91251d43e308ff04264be9acb823fa7a15"
+        },
+        "2026H1-cninfo-discovery/ftshare/page-1.json": {
+          "bytes": 5402,
+          "sha256": "2f25a01a7e392353c98d5cb5861221e913195c59ea4ebafea04816fdb3425202",
+          "git_blob": "9ee935cafc5f0bb098ab23206db30c2f5eeba1ba"
+        },
+        "2026H1-cninfo-discovery/report-discovery.json": {
+          "bytes": 2681,
+          "sha256": "7abbe98b1340b52838049140657c8e941736c7546ddb53417fa92c4988ae4e6e",
+          "git_blob": "9ce509c129265230d75becd841e30bca9cf4f059"
+        },
+        "2026H1-cninfo-extraction.json": {
+          "bytes": 394170,
+          "sha256": "4a4ff9c14a66888e1762f104f2f89b21ccec7ef84dddadf1d0cde59362b16bf1",
+          "git_blob": "374717778b139a15d31d0b42039779e25dc8b044"
+        },
+        "2026H1-cninfo-source.pdf": {
+          "bytes": 1047816,
+          "sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb",
+          "git_blob": "97690de3f23cd7b57ec3073c55ae0bd27f0d6a23"
+        },
+        "git/prepare.json": {
+          "bytes": 1212,
+          "sha256": "f73bcecddd0ced7cbaefc9dcca96c654e4e2dce2bd5bfa1613672eef7a933fc6",
+          "git_blob": "98bf0be776f717d6fb14b3526638514ee7acd9af"
+        },
+        "git/source.json": {
+          "bytes": 9537,
+          "sha256": "36f3917a5c9c4f1bb42e2fc4566e7795c1d3d033c3d64f2e1ab5020d9cd8f7b0",
+          "git_blob": "93bd0cc2ca9ba55f1bc0626a44683bd0ca3fc77f"
+        },
+        "source-receipt.json": {
+          "bytes": 10012,
+          "sha256": "4c0c45a37e9dc417dee870c5e143c9ab698f58222d47b68f5f3c8f75e8bd4a5e",
+          "git_blob": "6a7a4164e5082ac1c23c426a73f42395ecf00253"
+        }
+      }
     }
   }
 }
