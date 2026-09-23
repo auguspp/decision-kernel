@@ -1,0 +1,45 @@
+{
+  "authority": "https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5796637317",
+  "automatic_retry": false,
+  "code_commit": "cc336116d175d0c37d8ab4f16e4c5aae5bc2c29b",
+  "experiment": "r4-2-sub2api-20260923-v1",
+  "hosted_calls": 0,
+  "human_words": "你用 sub2api 吧，预算不设限",
+  "investment_authority": "NONE",
+  "max_model_calls": 8,
+  "model": "gpt-6-astra",
+  "monetary_cap": null,
+  "new_financial_source_fetches": 0,
+  "paid_evaluator_calls": 0,
+  "production_activation": false,
+  "provider": "SUB2API",
+  "provider_base_url": "https://ai.6600600.xyz/v1",
+  "runtime_base": "f956ea490ede8f31fe82fae4a1dc7f43c94d1a6d",
+  "samples": [
+    {
+      "archive_sha256": "d1a6f74e9dd38802a262bf2d741e763ed57ec07e25a4777a272e60f78c520164",
+      "artifact_id": 10732853090,
+      "candidate_hash": "fb7890f96979320d492f235caa215e3d1e0ef955cb21addf53d7debb7e2540da",
+      "context_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+      "input_sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db",
+      "pages": [
+        262,
+        216
+      ],
+      "run_id": 35819538967,
+      "ticker": "600362"
+    },
+    {
+      "archive_sha256": "a88c3948a2983605ba34841c23556e07cef52b316ba67d477e81cd38e3806745",
+      "artifact_id": 10649281888,
+      "candidate_hash": "75d72a7996390daec61ec652f502c833195a8ef5232e31d79b1d173df8e6ae92",
+      "context_sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe",
+      "input_sha256": "99a80f2aba8f740b02f3110ca6ac84961664517983cbe7802a59cac4ae043d02",
+      "pages": [
+        215
+      ],
+      "run_id": 35620959045,
+      "ticker": "603507"
+    }
+  ]
+}

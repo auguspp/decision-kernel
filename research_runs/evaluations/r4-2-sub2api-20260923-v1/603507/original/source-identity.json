@@ -1,0 +1,24 @@
+{
+  "archive_sha256": "a88c3948a2983605ba34841c23556e07cef52b316ba67d477e81cd38e3806745",
+  "artifact_id": 10649281888,
+  "candidate_hash": "75d72a7996390daec61ec652f502c833195a8ef5232e31d79b1d173df8e6ae92",
+  "context_sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe",
+  "historical_validation_status": "VALIDATED_FUNNEL_RESULT",
+  "input_sha256": "99a80f2aba8f740b02f3110ca6ac84961664517983cbe7802a59cac4ae043d02",
+  "meaning": "IMMUTABLE_REPLAY_NOT_CURRENT_SOURCE_ADMISSION",
+  "original_cutoff": "2026-09-21T15:44:33.659776+00:00",
+  "original_execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
+  "pages": [
+    215
+  ],
+  "run_id": 35620959045,
+  "source": {
+    "git_blob": "6b00ff0f518dd763b1b6fec1e7850ad20d791dfd",
+    "path": "research_runs/daily-inputs/603507-profit-cash-20260921/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "0e4d4c425f0dd526976924ab276ed16b08863193",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe"
+  },
+  "ticker": "603507"
+}
