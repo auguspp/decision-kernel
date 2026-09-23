@@ -60,7 +60,7 @@ class QuickAssessment(KernelModel):
     claims: tuple[ResearchClaim, ...] = ()
     counterevidence_review: Text = Field(description=(
         "State the actual counterevidence review scope, adverse information, strongest "
-        "alternative explanation and unexamined areas. No known contrary FACT is allowed; "
+        "alternative explanation and unexamined areas. Having no established contrary FACT is permitted; "
         "not checked is not ruled out. Keep inference honestly labelled."
     ))
     unknowns: tuple[Text, ...] = ()
