@@ -29,6 +29,11 @@ def corrected_prompt(packet, discovery, context, preflight):
     return prompt
 
 
+def check_previous_prompt(prompt, previous_raw):
+    expected = once.raw({k:v for k,v in prompt.items() if k != 'host_source_checks'})
+    once.require(previous_raw == expected, 'PREVIOUS_PROMPT_DIFFERENT')
+
+
 def run_pair(prompt, out, *, send=None):
     send = send or pilot.send_one
     records = []
@@ -64,8 +69,7 @@ def main():
     preflight = once.identity._checked_source(spec, lambda s: api.file(s['path'], s['ref']))
     prompt = corrected_prompt(packet, discovery, context, preflight)
     old_prompt = api.file(ROOT + 'continuations/permission-retry-1/600362/S1/prompt.json', PARENT)
-    once.require(once.raw(once.identity._json(old_prompt)) == once.raw(
-        {k:v for k,v in prompt.items() if k != 'host_source_checks'}), 'PREVIOUS_PROMPT_DIFFERENT')
+    check_previous_prompt(prompt, old_prompt)
     # All checks and both real SDK previews precede any launch or credential use.
     previews = {arm: pilot.preview(prompt, pilot.parameters(prompt, pilot.single.QuickAssessment, arm))
                 for arm in ARMS}
