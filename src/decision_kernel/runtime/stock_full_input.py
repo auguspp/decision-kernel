@@ -73,27 +73,27 @@ def _context(raw, ticker):
     return value
 
 
-def pack(raw: bytes, *, ticker: str) -> bytes:
+def _pack(raw: bytes, *, ticker: str, policy, check_context) -> bytes:
     """Keep EVERY original JSON byte, including repeated text, metadata and clocks."""
-    _context(raw, ticker)
+    check_context(raw, ticker)
     compressed = zlib.compress(raw, level=9)
-    envelope = {"schema_version": 1, "policy": POLICY, "ticker": ticker,
+    envelope = {"schema_version": 1, "policy": policy, "ticker": ticker,
         "encoding": "zlib+base64", "decoded_bytes": len(raw), "decoded_sha256": _sha(raw),
         "compressed_sha256": _sha(compressed),
         "data": base64.b64encode(compressed).decode("ascii")}
     stored = _raw(envelope)
     _require(len(stored) <= STORED_BYTES, "full-input storage bound; no clipping")
-    _require(unpack(stored, ticker=ticker) == raw, "full-input pack round-trip differs")
+    _require(_unpack(stored, ticker=ticker, policy=policy, check_context=check_context) == raw, "full-input pack round-trip differs")
     return stored
 
 
-def unpack(stored: bytes, *, ticker: str) -> bytes:
+def _unpack(stored: bytes, *, ticker: str, policy, check_context) -> bytes:
     """Bound decompression BEFORE allocation; reject trailing or concatenated streams."""
     envelope = _json(stored, STORED_BYTES)
     _require(set(envelope) == {"schema_version", "policy", "ticker", "encoding",
         "decoded_bytes", "decoded_sha256", "compressed_sha256", "data"}
         and type(envelope["schema_version"]) is int and envelope["schema_version"] == 1
-        and envelope["policy"] == POLICY and envelope["ticker"] == ticker and ticker in TICKERS
+        and envelope["policy"] == policy and envelope["ticker"] == ticker
         and envelope["encoding"] == "zlib+base64"
         and type(envelope["decoded_bytes"]) is int and 0 < envelope["decoded_bytes"] <= DECODED_BYTES
         and type(envelope["data"]) is str and _raw(envelope) == stored,
@@ -106,8 +106,18 @@ def unpack(stored: bytes, *, ticker: str) -> bytes:
     _require(decoder.eof and not decoder.unused_data and not decoder.unconsumed_tail
         and len(raw) == envelope["decoded_bytes"] and _sha(raw) == envelope["decoded_sha256"],
         "full-input decoded identity differs")
-    _context(raw, ticker)
+    check_context(raw, ticker)
     return raw
+
+
+def pack(raw: bytes, *, ticker: str) -> bytes:
+    """Legacy Stock contract, byte-identical and still limited to its two tickers."""
+    return _pack(raw, ticker=ticker, policy=POLICY, check_context=_context)
+
+
+def unpack(stored: bytes, *, ticker: str) -> bytes:
+    _require(ticker in TICKERS, "full-input envelope differs")
+    return _unpack(stored, ticker=ticker, policy=POLICY, check_context=_context)
 
 
 def checked_unpack(spec: dict, load, *, ticker: str) -> bytes:
@@ -129,6 +139,7 @@ class FinalRequestCheck:
     ticker: str
     expected_url: str
     parameters_raw: bytes
+    policy: str = POLICY
 
     @classmethod
     def build(cls, decoded_raw, *, ticker, expected_url, parameters):
@@ -174,7 +185,7 @@ class FinalRequestCheck:
             wire = request.content
             actual = _json(wire, REQUEST_BYTES)
             _require(_raw(actual) == self.parameters_raw, "full-input actual SDK request differs")
-            receipt.update(policy=POLICY, ticker=self.ticker,
+            receipt.update(policy=self.policy, ticker=self.ticker,
                 decoded_bytes=len(self.decoded_raw), decoded_sha256=_sha(self.decoded_raw),
                 request_bytes=len(wire), request_sha256=_sha(wire),
                 meaning="PRE_SEND_BYTE_CHECK_NOT_DELIVERY_RESEARCH_OR_PROVIDER_ACCEPTANCE")

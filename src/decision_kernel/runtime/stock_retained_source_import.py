@@ -102,6 +102,28 @@ def load(api, code, custody, cache):
                  and profile["case_id"][:6] == custody["ticker"]
                  and custody["source_run_id"] == profile["run"]["id"]
                  and custody["source_artifact"] == profile["artifact"], "DAILY_IMPORT_PROFILE_BINDING")
+    run, files = _archive(api, profile, cache)
+    converted = project(profile, files)
+    receipt = identity._json(files["receipt.json"])
+    once.require(reading.clock(run["run_started_at"]) <= reading.clock(receipt["started_at"])
+                 <= reading.clock(receipt["finished_at"]) <= reading.clock(run["updated_at"])
+                 <= reading.clock(custody["checked_at"]), "DAILY_IMPORT_RUN_CLOCK")
+    # Small metadata uses the original checked reader. PDF bytes are independently
+    # bound to exact Git by #492 in the caller; no second PDF body download.
+    for name, spec in profile["files"].items():
+        if name == receipt["pdf"]["path"]:
+            once.require(len(custody["documents"]) == 1
+                         and custody["documents"][0]["pdf_source"] == {
+                             k: v for k, v in spec.items() if k != "bytes"},
+                         "DAILY_IMPORT_PDF_REFERENCE")
+        else:
+            actual, _ = _source(api, spec, spec["purpose"], lambda: custody["checked_at"])
+            once.require(actual == files[name], "DAILY_IMPORT_GIT_COPY_DIFFERS")
+    return converted
+
+
+def _archive(api, profile, cache):
+    """Shared native artifact qualification; format adapters keep their own contracts."""
     run = api.get("actions/runs/" + str(profile["run"]["id"]))
     once.require(all(run.get(k) == v for k, v in profile["run"].items())
                  and run.get("repository", {}).get("full_name") == once.REPO
@@ -124,20 +146,4 @@ def load(api, code, custody, cache):
     if key not in cache:
         cache[key] = reading.unpack_archive(api.archive(artifact), artifact, run)
     files = cache[key]
-    converted = project(profile, files)
-    receipt = identity._json(files["receipt.json"])
-    once.require(reading.clock(run["run_started_at"]) <= reading.clock(receipt["started_at"])
-                 <= reading.clock(receipt["finished_at"]) <= reading.clock(run["updated_at"])
-                 <= reading.clock(custody["checked_at"]), "DAILY_IMPORT_RUN_CLOCK")
-    # Small metadata uses the original checked reader. PDF bytes are independently
-    # bound to exact Git by #492 in the caller; no second PDF body download.
-    for name, spec in profile["files"].items():
-        if name == receipt["pdf"]["path"]:
-            once.require(len(custody["documents"]) == 1
-                         and custody["documents"][0]["pdf_source"] == {
-                             k: v for k, v in spec.items() if k != "bytes"},
-                         "DAILY_IMPORT_PDF_REFERENCE")
-        else:
-            actual, _ = _source(api, spec, spec["purpose"], lambda: custody["checked_at"])
-            once.require(actual == files[name], "DAILY_IMPORT_GIT_COPY_DIFFERS")
-    return converted
+    return run, files

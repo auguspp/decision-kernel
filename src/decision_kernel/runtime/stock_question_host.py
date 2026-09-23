@@ -93,7 +93,7 @@ def _question_context(context, packet, preflight):
     once.require(seen == set(reads), "QUESTION_REQUIRED_BODIES_NOT_ALL_SUPPLIED")
 
 
-def _question_inputs(*, api, code, request, clock):
+def _question_inputs(*, api, code, request, clock, allow_full=False):
     """Construct a NEW input from declared sources, not rewrite a frozen packet.
 
     Like the original Stock host, code and selection clocks are bound at runtime.
@@ -111,9 +111,13 @@ def _question_inputs(*, api, code, request, clock):
     once.require(q["security_id"] == intake.security(q["case_id"])
                  and q["ticker"] == q["case_id"][:6], "QUESTION_SECURITY_MISMATCH")
     context_raw = identity._checked_source(cs, load)
-    context = identity._json(context_raw)
-    once.require(once.raw(context) == context_raw and len(context_raw) <= sources.CONTEXT_BYTES,
-                 "QUESTION_CONTEXT_REPRESENTATION_OR_SIZE")
+    from . import reviewed_full_input as full_input
+    from . import industry_daily_question as industry
+    context, bound = full_input.load_context(cs, lambda _: context_raw, ticker=q["ticker"],
+        allowed=allow_full is True and request["permission"] == industry.PERMISSION)
+    if bound is None:
+        once.require(once.raw(context) == context_raw and len(context_raw) <= sources.CONTEXT_BYTES,
+                     "QUESTION_CONTEXT_REPRESENTATION_OR_SIZE")
     pf_raw = identity._checked_source(ps, load)
     pf = admission.check_preflight(pf_raw, checked_at=clock())
     rs = q["reading_source"]
@@ -191,6 +195,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
     daily_retainers, daily_reservations = [], []
     daily_archives = {}
     daily_scope, egress = None, None
+    bound = None
     reserved = False
     try:
         request = identity._json(api.file(request_path, code))
@@ -198,7 +203,12 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         if daily:
             daily_policy.check_policy(api, code, request, clock)
         q, packet, discovery, context, checks = _question_inputs(api=api, code=code,
-            request=daily_policy.base_request(request) if daily else request, clock=clock)
+            request=daily_policy.base_request(request) if daily else request, clock=clock, allow_full=daily)
+        if daily:
+            from . import reviewed_full_input as full_input, industry_daily_question as industry
+            decoded, bound = full_input.load_context(request["context_source"], checks["load"],
+                ticker=packet.ticker, allowed=request["permission"] == industry.PERMISSION)
+            once.require(decoded == context, "FULL_QUESTION_CONTEXT_CHANGED")
         base_packet = packet
         if daily:
             packet, daily_state, daily_scope = daily_policy.bind(api, request, q, packet, context, clock,
@@ -226,12 +236,18 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                         exact = identity._checked_source(source, checks["load"])
                         once.require(api.file(source["path"], current) == exact, "DAILY_RESERVATION_CHANGED")
             prepared = reviewed.prepare(question_source=request["question_source"], checked_at=clock(), **checks)
-            once.require(identity._checked_source(request["context_source"], checks["load"]) == once.raw(context),
-                         "QUESTION_CONTEXT_CHANGED_BEFORE_EGRESS")
+            if bound is None:
+                once.require(identity._checked_source(request["context_source"], checks["load"]) == once.raw(context),
+                             "QUESTION_CONTEXT_CHANGED_BEFORE_EGRESS")
+                sources.recheck(context, api=api, code_commit=code, clock=clock)
+            else:
+                bound.recheck(checks["load"])
+                bound.check_packet(packet, context)
+                # Daily custody above already replays original PDFs and current-main notes.
             _question_context(context, packet, identity._json(checks["preflight_raw"]))
-            sources.recheck(context, api=api, code_commit=code, clock=clock)
             if daily:
-                digest = deepseek.egress_hash(packet, discovery, context)
+                digest = (bound.egress_hash(packet, discovery, context) if bound is not None
+                          else deepseek.egress_hash(packet, discovery, context))
                 once.require(egress in {None, digest}, "DAILY_PUBLIC_EGRESS_CHANGED")
                 egress = digest  # Authority comes from checked main policy, not this digest.
             else:
@@ -241,7 +257,11 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
             return prepared
         prepared = recheck()
         # Preview uses the SAME SDK request builder, before any reservation/spend.
-        if daily:
+        if bound is not None:
+            bound = bound.preview(packet, discovery, context)
+            result["full_input"] = {**bound.record(), "pre_request_sha256": bound.pre_request_sha256,
+                                    "pre_prompt_sha256": bound.pre_prompt_sha256}
+        elif daily:
             deepseek._deepseek_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult)
         else:
             once.model_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult,
@@ -284,7 +304,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
             result["daily_reservations"] = daily_reservations
         retain.save("prepare.json", prepared)
         reserved = True
-        retain.save("source.json", context)
+        retain.save("source.json", context if bound is None else bound.stored_raw)
         ins = retain.save("input.json", checks["input_raw"])
         launch_checks = {**checks, "input_source": ins, "expected_key": identity.input_key(packet).as_dict(),
                          "now": clock, "checked_at": clock()}
@@ -317,7 +337,8 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 once.require((stage, model) in {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult)}
                              and prompt == expected, "QUESTION_MODEL_PROMPT_CHANGED")
                 if daily:
-                    fn = call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES,
+                    fn = call or partial(once.model_call,
+                        **({"max_prompt_bytes": STOCK_PROMPT_BYTES} if bound is None else {"bound_context": bound}),
                         base_url=once.DEEPSEEK_BASE_URL, model=once.DEEPSEEK_MODEL,
                         api_key_env="DEEPSEEK_API_KEY", provider=deepseek.PROVIDER,
                         extra_parameters={"reasoning": deepseek.REASONING})
@@ -326,6 +347,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 return fn(stage, prompt, model, out, usage)
             result.update(phase="RESEARCH", formal_research_started=True)
             return once.research(packet, discovery, context, output, call=guarded, clock=clock,
+                **({"bound_context": bound} if bound is not None else {}),
                 **({"provider_event_prefix": deepseek.PROVIDER_EVENT_PREFIX,
                     "model_or_executor": deepseek.MODEL_OR_EXECUTOR} if daily else {}))
         report, outcome = admission.execute_after_admission(executor=execute, **launch_checks)

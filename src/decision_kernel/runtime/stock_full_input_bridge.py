@@ -94,7 +94,8 @@ class BoundFullContext:
 
 
 def require_bound(value):
-    once.require(type(value) is BoundFullContext, "full input requires explicit bound context")
+    from .reviewed_full_input import ReviewedFullContext
+    once.require(type(value) in {BoundFullContext, ReviewedFullContext}, "full input requires explicit bound context")
     return value
 
 

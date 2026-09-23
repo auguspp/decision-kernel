@@ -13,6 +13,12 @@
     "STATIC",
     "LATEST_INVENTORY"
   ],
+  "complete_input": {
+    "policy": "REVIEWED_INDUSTRY_FULL_INPUT_ZLIB_V1",
+    "stored_bytes": 524288,
+    "decoded_bytes": 1572864,
+    "request_bytes": 2097152
+  },
   "model_cost_policy": "HUMAN_MANAGED_ACCOUNT_NO_ADDITIONAL_PROJECT_MONETARY_CEILING",
   "automatic_retry": false,
   "automatic_deep": false,
