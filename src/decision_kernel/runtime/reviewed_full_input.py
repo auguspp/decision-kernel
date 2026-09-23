@@ -133,10 +133,10 @@ class ReviewedFullContext(BoundFullContext):
                          "FULL_QUESTION_SINGLE_REQUEST_CHANGED")
         return hook
 
-    def egress_hash(self, packet, discovery, context):
+    def egress_hash(self, packet, discovery, context, *, source_preflight=None):
         self.check_packet(packet, context)
         if packet.method_version == once.single_quick.METHOD_VERSION:
-            prompt = once.initial_prompt(packet, discovery, context)
+            prompt = once.initial_prompt(packet, discovery, context, source_preflight=source_preflight)
             prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
             parameters = _parameters(prompt, once.single_quick.QuickAssessment)
             return once.canonical_hash({"method_version": packet.method_version,
@@ -146,6 +146,7 @@ class ReviewedFullContext(BoundFullContext):
                 "budget": packet.budget, "endpoint": once.DEEPSEEK_BASE_URL,
                 "parameters": {k: v for k, v in parameters.items() if k != "input"},
                 "max_model_calls": 1})
+        once.require(source_preflight is None, "SOURCE_CHECK_CONTEXT_REQUIRES_SINGLE_QUICK")
         once.require(packet.method_version == "research-funnel-v1", "RESEARCH_METHOD_UNSUPPORTED")
         prompt = once.pre_prompt(packet, discovery, context)
         prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
@@ -157,13 +158,13 @@ class ReviewedFullContext(BoundFullContext):
             "quick_schema": once.QuickResearchResult.model_json_schema(),
             "quick": "ONLY_ORIGINAL_VALIDATED_PRE_AND_ITS_HASH_ADDED_IF_CONTINUE_TO_QUICK"})
 
-    def preview(self, packet, discovery, context):
+    def preview(self, packet, discovery, context, *, source_preflight=None):
         """Real SDK request construction before reservation; transport cannot run."""
         from openai import OpenAI, DefaultHttpxClient
         self.check_packet(packet, context)
         single = packet.method_version == once.single_quick.METHOD_VERSION
         output_type = once.single_quick.QuickAssessment if single else once.PreResearchResult
-        prompt = once.initial_prompt(packet, discovery, context)
+        prompt = once.initial_prompt(packet, discovery, context, source_preflight=source_preflight)
         parameters = _parameters(prompt, output_type)
         receipt = {}
         check = self.request_check("quick" if single else "pre", prompt, output_type, parameters).hook(receipt)

@@ -469,7 +469,7 @@ def pre_prompt(packet, discovery, context, *, bound_context=None):
         "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts], **scope}
 
 
-def initial_prompt(packet, discovery, context, *, bound_context=None):
+def initial_prompt(packet, discovery, context, *, bound_context=None, source_preflight=None):
     """One method-selected request; no fabricated Pre result or second model.
 
     Existing hosts keep their original Pre prompt until explicitly migrated.
@@ -480,12 +480,16 @@ def initial_prompt(packet, discovery, context, *, bound_context=None):
     require((packet.method_version == single_quick.METHOD_VERSION)
             == (packet.prompt_version == single_quick.PROMPT_VERSION),
             "RESEARCH_METHOD_PROMPT_MISMATCH")
+    require(source_preflight is None or packet.method_version == single_quick.METHOD_VERSION,
+            "SOURCE_CHECK_CONTEXT_REQUIRES_SINGLE_QUICK")
     prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
     if packet.method_version == single_quick.METHOD_VERSION:
         require(packet.schema_version == 1 and packet.prompt_version == single_quick.PROMPT_VERSION,
                 "SINGLE_QUICK_INPUT_CONTRACT")
         prompt.update(stage="QUICK", method_version=single_quick.METHOD_VERSION,
                       prompt_version=single_quick.PROMPT_VERSION)
+        if source_preflight is not None:
+            prompt["host_source_checks"] = admission.prompt_source_checks(packet, source_preflight)
     return prompt
 
 
@@ -519,6 +523,7 @@ def _single_input(packet, discovery):
 
 
 def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None,
+             source_preflight=None,
              provider_event_prefix="SUB2API_RESPONSES",
              model_or_executor="trusted Python + Sub2API Responses / gpt-6-astra"):
     """Shared execution/retention loop; one Quick or the unchanged legacy stages.
@@ -554,7 +559,8 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         else:
             from .stock_full_input_bridge import require_bound
             require_bound(bound_context).check_packet(packet, context)
-        prompt = initial_prompt(packet, discovery, context, bound_context=bound_context)
+        prompt = initial_prompt(packet, discovery, context, bound_context=bound_context,
+                                source_preflight=source_preflight)
         if single:
             stage = "QUICK"
             assessment = call("quick", prompt, single_quick.QuickAssessment, out, usage)
