@@ -1,0 +1,61 @@
+{
+  "scope": "OFFLINE_ARTIFACT_AND_CI_AUDIT_NOT_ECONOMIC_ACCEPTANCE",
+  "execution": {
+    "run_id": 35933341133,
+    "attempt": 1,
+    "job_id": 107424719483,
+    "conclusion": "success",
+    "code": "1667b196b2910565482927babb0c47cc79fe0259",
+    "workflow_commit": "3a6f1380eaf43bca5d7e33e44369f164358b53d9",
+    "runtime_main": "2971d00145e0980238429c4995d783fa3d280ef1",
+    "new_physical_requests": 2,
+    "prior_physical_requests": 8,
+    "lifetime_physical_requests": 10,
+    "total_input_tokens": 578604,
+    "total_output_tokens": 4983,
+    "account_bill": "UNKNOWN"
+  },
+  "raw_archive": {
+    "artifact_id": 10782426059,
+    "bytes": 872489,
+    "sha256": "5883eee0ceb9db0d48ec1f3cb73c66a3c57e2299e4fc0b87b5c7c1944aa38e6e",
+    "unique_members": 25,
+    "crc": "PASS",
+    "remote_retained_files": 21,
+    "raw_result_commit": "3303e7aee191e0fced35c89b3d6c7d6fadfb9ba2",
+    "independently_rebuilt_subtree": "0629852d61beef89f0b95f023b54b623b9fec0f7",
+    "remote_subtree_read_back": "0629852d61beef89f0b95f023b54b623b9fec0f7"
+  },
+  "request_checks": {
+    "same_original_context": true,
+    "context_bytes": 898366,
+    "context_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+    "host_checks_bytes": 5024,
+    "host_checks_sha256": "7b45c618fbf3b5383ff3f791f96a786595371a18ebdf56017baa035b541560a5",
+    "s0_s1_prompt_byte_identity": true,
+    "schema_difference": "route.description only",
+    "actual_sdk_preview_send_hashes_match": true,
+    "raw_output_hashes_and_parsed_semantics_match": true,
+    "sent_json_schema_validation": "PASS_BOTH",
+    "claim_evidence_allowlist": "PASS_BOTH"
+  },
+  "outputs": [
+    {"arm":"S0","route":"FULL_CANDIDATE","input_tokens":289309,"output_tokens":2661,"characters":4234,"request_bytes":938913,"sha256":"6bcef6e93831f8187882c471fbf2098a0d42ba12c4ed7dd03d4ab3b6968eef45"},
+    {"arm":"S1","route":"FULL_CANDIDATE","input_tokens":289295,"output_tokens":2322,"characters":3674,"request_bytes":938810,"sha256":"f5ad76dd62d1aba5af1b8ce64b2ad67acc6d6b48bc7782cf3eaa6a4a9e59e0d1"}
+  ],
+  "ci": {
+    "run_id": 35932717515,
+    "artifact_id": 10782430054,
+    "sha256": "b71912c1b679a018e07efdbff175b9fca1548030604c6735fb0edad4ec61b629",
+    "tests_passed": 6167,
+    "main_test_identities_preserved": 6109,
+    "added_relative_to_main": 58,
+    "removed": 0,
+    "failure_error_skip": [0,0,0],
+    "packages_equal_main": true,
+    "actual_collection_and_junit_checked": true,
+    "event_sha": "24c6a9d25bb0804fc708862b842f49c3fa712d71",
+    "attempt": 1,
+    "meaning": "ISOLATED_EXPERIMENT_FULL_CI_NOT_NEW_MAIN_OR_PRODUCT_ACCEPTANCE"
+  }
+}
