@@ -4,6 +4,12 @@ Version: research-decision-handoff-v1.3 · 2026-09-20
 Status: HUMAN-APPROVED PROCESS DISCIPLINE / NO KERNEL SCHEMA OR RUNTIME CHANGE  
 Scope: ChatGPT、外部研究者与仓库会话中的公司研究、估值、Odds、第一笔讨论及其质疑复核。Investment authority = NONE。
 
+## 2026-09-23 当前成果边界（R4-0）
+
+先按[Quick / Full成果与交接边界](research-outcome-contract-v1.md)解释本入口和v3方法。**固定验收标准，不固定研究路径**：以下A–F式顺序、角色、轮数、章节与底稿文件名是基线策略，不是强制算法；经济结构、来源纪律、实际反驳、重要问题去向和诚实留存的成果责任继续有效。Full可推翻Quick或重构问题，不以UNKNOWN数量下降认证质量。
+
+旧序列化方法、Pre/Quick/失败/hash、问题根/day/slot/Human记录仍按原合同解释。单次Quick迁移只在新合同及原宿主/保存/读取/Brief端到端接通并获准后启用；本文不激活生产请求或#525。下文历史默认启停说明不代表当前运行状态，实际以固定main配置及同R回执为准。现有价格单变/档案恢复不强制重跑Quick。
+
 ## 0. 新聊天先恢复什么
 
 Repository: `auguspp/decision-kernel`。每次新研究或接续先解析 `main` 一次，固定为 M；本文件、方法和当前案例更正说明均按 M 读取。旧研究按其明确记录的历史 commit/path/blob 读取，不混成同一时点。保留本次 M 与读取结果。
