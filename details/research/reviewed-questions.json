@@ -11,6 +11,20 @@
         "candidate_output_prefix": "research_runs/candidates/stock-questions/4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14/",
         "completion": "INCOMPLETE_TECHNICAL_FAILURE",
         "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+        "existing_research_relation": {
+          "kind": "CONTINUE_ANALYSIS",
+          "note": "延续已保存交互底稿的同一问题；此前未有正式宿主launch，本次是首次正式研究调用。",
+          "source_refs": [
+            {
+              "git_blob": "c0c532a7a0ba6666e8b62fe1b948a10336ef87f1",
+              "path": "docs/readings/600362-cash-bridge-2026-09-23/workpaper.md",
+              "purpose": "RETAINED_ANALYSIS_PREDECESSOR",
+              "ref": "6729218c6400a07b2f73beb1d2e53fa556152707",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "568eaa59b9f923a00964674cf858f76ce443cb691d3b978fafacceb92d95a358"
+            }
+          ]
+        },
         "finished_at": "2026-09-23T04:48:51.282443+00:00",
         "gap_reason": "ValidationError",
         "host_receipt_present": true,
@@ -29,6 +43,9 @@
         ],
         "new_research_execution": "NOT_EXECUTED",
         "next_discriminating_search": "先用完整2025年报及2026H1区分资源、冶炼、贸易和套保，再检验合并利润—现金、受限资金和权益投资桥；缺失归因保持UNKNOWN。",
+        "origin_kinds": [
+          "INDUSTRY_VARIABLE_OBSERVATION"
+        ],
         "original_platform_task_id": "35819538967",
         "pre_present": true,
         "predecessor_execution_id": null,
@@ -149,6 +166,28 @@
         "candidate_output_prefix": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/",
         "completion": "COMPLETE",
         "execution_id": "stock-question-c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d",
+        "existing_research_relation": {
+          "kind": "NEW_DISTINCT_QUESTION",
+          "note": "相对已消费正式研究的初次独立问题根；已有9月21日交互问题/有限底稿全部引用并复用，不伪称新的知识发现。完整既有work树及其正式input按证券核对未见603507执行；不重开沃顿或广哈，不宣称穷尽所有聊天的语义历史。",
+          "source_refs": [
+            {
+              "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+              "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+              "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+              "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+            },
+            {
+              "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
+              "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
+              "purpose": "RETAINED_INTERACTIVE_QUESTION_REVIEW",
+              "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
+            }
+          ]
+        },
         "finished_at": "2026-09-21T15:46:58.630478+00:00",
         "gap_reason": null,
         "host_receipt_present": true,
@@ -165,6 +204,9 @@
         ],
         "new_research_execution": "NOT_EXECUTED",
         "next_discriminating_search": "本次仅使用已保存完整半年报验证上述有限问题；需要其他关键材料时明确其名称与影响后停止，不自动抓取、重试或深化。",
+        "origin_kinds": [
+          "SECTOR_LEADER"
+        ],
         "original_platform_task_id": "35620959045",
         "pre_present": true,
         "predecessor_execution_id": null,
@@ -295,6 +337,28 @@
         "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/",
         "completion": "INCOMPLETE_TECHNICAL_FAILURE",
         "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
+        "existing_research_relation": {
+          "kind": "NEW_DISTINCT_QUESTION",
+          "note": "原FIRST_BUSINESS_BASELINE及9/14追加审阅已经涉及经营增长、毛利、收现和募资事实。本题不重做这些问题、不解除旧执行或争议；沿用revision1未执行的限定资金性质问题和同一question_id。revision2补充显式执行接线范围，不把原prepare回执变成许可，不生成新消费根。执行权限只来自另行核对的主干请求。",
+          "source_refs": [
+            {
+              "git_blob": "0ae65c1103b45454d74f0ee9556c9f143c7f9ba4",
+              "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
+              "purpose": "EXISTING_RESEARCH_RELATION",
+              "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
+            },
+            {
+              "git_blob": "ea2062655e659ba89b7cdf1c9f5f10ab381850e7",
+              "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
+              "purpose": "EXISTING_RESEARCH_RELATION",
+              "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
+            }
+          ]
+        },
         "finished_at": "2026-09-19T23:35:03.209731+00:00",
         "gap_reason": "PermissionDeniedError",
         "host_receipt_present": true,
@@ -311,6 +375,9 @@
         ],
         "new_research_execution": "NOT_EXECUTED",
         "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+        "origin_kinds": [
+          "SECTOR_LEADER"
+        ],
         "original_platform_task_id": "35476493146",
         "pre_present": false,
         "predecessor_execution_id": null,
@@ -431,6 +498,28 @@
         "candidate_output_prefix": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/",
         "completion": "COMPLETE",
         "execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec-technical-continuation-v1",
+        "existing_research_relation": {
+          "kind": "NEW_DISTINCT_QUESTION",
+          "note": "原FIRST_BUSINESS_BASELINE及9/14追加审阅已经涉及经营增长、毛利、收现和募资事实。本题不重做这些问题、不解除旧执行或争议；沿用revision1未执行的限定资金性质问题和同一question_id。revision2补充显式执行接线范围，不把原prepare回执变成许可，不生成新消费根。执行权限只来自另行核对的主干请求。",
+          "source_refs": [
+            {
+              "git_blob": "0ae65c1103b45454d74f0ee9556c9f143c7f9ba4",
+              "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
+              "purpose": "EXISTING_RESEARCH_RELATION",
+              "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
+            },
+            {
+              "git_blob": "ea2062655e659ba89b7cdf1c9f5f10ab381850e7",
+              "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
+              "purpose": "EXISTING_RESEARCH_RELATION",
+              "ref": "9fb100ac330d06a3448c4ddf2a16fa12fbe6abae",
+              "repository": "auguspp/decision-kernel",
+              "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
+            }
+          ]
+        },
         "finished_at": "2026-09-20T02:55:22.205034+00:00",
         "gap_reason": null,
         "host_receipt_present": true,
@@ -447,6 +536,9 @@
         ],
         "new_research_execution": "NOT_EXECUTED",
         "next_discriminating_search": "只使用已保存的1225486854、1225486857和1225554527完整原件，核对受限募资、内部划转和对外实际支出；不搜索新公告。问题声明自身不授予执行许可，只有另行绑定的主干请求和原准入允许原Pre及必要Quick。",
+        "origin_kinds": [
+          "SECTOR_LEADER"
+        ],
         "original_platform_task_id": "35485210755",
         "pre_present": true,
         "predecessor_execution_id": "stock-question-fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec",
@@ -673,7 +765,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "d1b34eb89615c03fd4ea83b030ee7c3588eee483",
+      "ref": "f956ea490ede8f31fe82fae4a1dc7f43c94d1a6d",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
