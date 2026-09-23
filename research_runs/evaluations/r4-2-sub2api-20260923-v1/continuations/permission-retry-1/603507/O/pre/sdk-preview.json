@@ -1,0 +1,9 @@
+{
+  "decoded_bytes": 454515,
+  "decoded_sha256": "8f87b903b2912cbd558d84442e80fff0f4cc1aaefea26eb306cdb2bfff7b1ebe",
+  "meaning": "PRE_SEND_BYTE_CHECK_NOT_DELIVERY_RESEARCH_OR_PROVIDER_ACCEPTANCE",
+  "policy": "R4_2_EXACT_SAVED_INPUT_SUB2API",
+  "request_bytes": 477229,
+  "request_sha256": "48878e76253b61c8eecb9fa7e97feff0182e126e0fb6b91c4bfd553e7834bd76",
+  "ticker": "603507"
+}

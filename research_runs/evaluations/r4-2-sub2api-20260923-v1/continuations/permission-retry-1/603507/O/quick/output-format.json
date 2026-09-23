@@ -1,0 +1,238 @@
+{
+  "name": "AdmittedOutput",
+  "schema": {
+    "$defs": {
+      "QuickResearchRoute": {
+        "enum": [
+          "DEEPEN",
+          "WAIT_FOR_TRIGGER",
+          "STOP"
+        ],
+        "title": "QuickResearchRoute",
+        "type": "string"
+      },
+      "ResearchClaim": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_artifact_ids": {
+            "default": [],
+            "description": "FACT and MARKET_CONTEXT require at least one supplied Evidence ID. Use only the trusted host evidence_ids allowlist, not nested document IDs. Identify the underlying document/page in statement when citing an admitted bundle.",
+            "items": {
+              "enum": [
+                "934dcdd2-0a9c-5cba-a408-731c29307b7f"
+              ],
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Artifact Ids",
+            "type": "array"
+          },
+          "kind": {
+            "$ref": "#/$defs/ResearchClaimKind"
+          },
+          "statement": {
+            "description": "State the observation or reasoning and its source scope. FACT means a supplied source observation, not an inferred cause. Never relabel INFERENCE or ASSUMPTION as FACT to satisfy a route; a source citation does not turn inference into fact.",
+            "minLength": 1,
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "kind",
+          "evidence_artifact_ids"
+        ],
+        "title": "ResearchClaim",
+        "type": "object"
+      },
+      "ResearchClaimKind": {
+        "enum": [
+          "FACT",
+          "INFERENCE",
+          "ASSUMPTION",
+          "MARKET_CONTEXT"
+        ],
+        "title": "ResearchClaimKind",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "as_of": {
+        "format": "date-time",
+        "title": "As Of",
+        "type": "string"
+      },
+      "business_model": {
+        "minLength": 1,
+        "title": "Business Model",
+        "type": "string"
+      },
+      "contradictory_claims": {
+        "default": [],
+        "description": "For DEEPEN this group must also be nonempty and EVERY claim must be FACT or MARKET_CONTEXT with nonempty evidence_artifact_ids. Do not discard counterevidence to pass validation. Explain inferred implications separately in narrative fields. WAIT_FOR_TRIGGER and STOP do not impose this all-factual group condition.",
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "title": "Contradictory Claims",
+        "type": "array"
+      },
+      "current_expression_or_leadership": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Current Expression Or Leadership"
+      },
+      "current_industry_state": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Current Industry State"
+      },
+      "discovery_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "title": "Discovery Id",
+        "type": "string"
+      },
+      "economic_role": {
+        "minLength": 1,
+        "title": "Economic Role",
+        "type": "string"
+      },
+      "evidence_authority_assessment": {
+        "description": "Separate source identity and declared-scope preflight from economic truth and whole-issuer coverage. Describe actual missing evidence, not an invented source failure because internal host receipts were not included in model context. A checked report-correction inventory is not all subsequent announcements.",
+        "minLength": 1,
+        "title": "Evidence Authority Assessment",
+        "type": "string"
+      },
+      "industry_supply_demand_variables": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Industry Supply Demand Variables",
+        "type": "array"
+      },
+      "major_profit_drivers": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Major Profit Drivers",
+        "type": "array"
+      },
+      "market_expectation_hypothesis": {
+        "minLength": 1,
+        "title": "Market Expectation Hypothesis",
+        "type": "string"
+      },
+      "next_discriminating_evidence": {
+        "description": "Distinguish analysis possible now with available sources from evidence requiring a future publication or event. Name the observation that would change the view. A future periodic report is a future trigger, not evidence already available now.",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Next Discriminating Evidence",
+        "type": "array"
+      },
+      "pre_research_hash": {
+        "maxLength": 64,
+        "minLength": 64,
+        "title": "Pre Research Hash",
+        "type": "string"
+      },
+      "route": {
+        "$ref": "#/$defs/QuickResearchRoute"
+      },
+      "route_reason": {
+        "description": "For DEEPEN both evidence groups must be nonempty, every grouped claim must be evidenced FACT or MARKET_CONTEXT, and variant_perception must be nonblank and plausible. Explain useful discriminating work possible now; missing quantitative closure alone does not mandate DEEPEN. Future disclosure alone supports WAIT_FOR_TRIGGER, not immediate research availability. STOP requires a stated stopping reason. Keep UNKNOWN and technical/source gaps honest; never rewrite claim kinds or manufacture evidence to obtain a route. DEEPEN is not permission for automatic Deep or any investment action.",
+        "minLength": 1,
+        "title": "Route Reason",
+        "type": "string"
+      },
+      "schema_version": {
+        "default": 1,
+        "minimum": 1,
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "segment_mix": {
+        "minLength": 1,
+        "title": "Segment Mix",
+        "type": "string"
+      },
+      "supporting_claims": {
+        "default": [],
+        "description": "For DEEPEN this group must be nonempty and EVERY claim must be FACT or MARKET_CONTEXT with nonempty evidence_artifact_ids. Preserve inference and assumptions as labelled reasoning in the narrative fields, never relabel them as facts. WAIT_FOR_TRIGGER and STOP do not impose this all-factual group condition.",
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "title": "Supporting Claims",
+        "type": "array"
+      },
+      "unresolved_questions": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Unresolved Questions",
+        "type": "array"
+      },
+      "value_chain_position": {
+        "minLength": 1,
+        "title": "Value Chain Position",
+        "type": "string"
+      },
+      "variant_perception": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "DEEPEN requires a nonblank plausible differentiated hypothesis, its basis and a way to test it. Do not invent market consensus. If none can be established, use null and explain the limitation in market_expectation_hypothesis and route_reason; saying 'no variant established' is not a positive variant. A tentative hypothesis must be labelled tentative, not presented as a verified market mispricing.",
+        "title": "Variant Perception"
+      }
+    },
+    "required": [
+      "discovery_id",
+      "pre_research_hash",
+      "as_of",
+      "business_model",
+      "segment_mix",
+      "economic_role",
+      "major_profit_drivers",
+      "industry_supply_demand_variables",
+      "value_chain_position",
+      "current_industry_state",
+      "market_expectation_hypothesis",
+      "current_expression_or_leadership",
+      "supporting_claims",
+      "contradictory_claims",
+      "evidence_authority_assessment",
+      "variant_perception",
+      "unresolved_questions",
+      "next_discriminating_evidence",
+      "route",
+      "route_reason",
+      "schema_version"
+    ],
+    "title": "AdmittedOutput",
+    "type": "object"
+  },
+  "strict": true,
+  "type": "json_schema"
+}

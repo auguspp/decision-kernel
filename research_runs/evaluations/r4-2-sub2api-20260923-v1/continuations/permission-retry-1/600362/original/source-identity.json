@@ -1,0 +1,25 @@
+{
+  "archive_sha256": "d1a6f74e9dd38802a262bf2d741e763ed57ec07e25a4777a272e60f78c520164",
+  "artifact_id": 10732853090,
+  "candidate_hash": "fb7890f96979320d492f235caa215e3d1e0ef955cb21addf53d7debb7e2540da",
+  "context_sha256": "babf9b709345311f18d8f73872058b3e5140822e76a96c2bcbb0d381288a3014",
+  "historical_validation_status": "EXECUTION_GAP",
+  "input_sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db",
+  "meaning": "IMMUTABLE_REPLAY_NOT_CURRENT_SOURCE_ADMISSION",
+  "original_cutoff": "2026-09-23T04:44:29.795878+00:00",
+  "original_execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+  "pages": [
+    262,
+    216
+  ],
+  "run_id": 35819538967,
+  "source": {
+    "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+  },
+  "ticker": "600362"
+}
