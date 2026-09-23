@@ -1,0 +1,21 @@
+{
+  "purpose": "ONE_READ_ONLY_CONNECTION_DIAGNOSTIC",
+  "model_generation_requests": 0,
+  "financial_materials_sent": false,
+  "automatic_retry": false,
+  "fallback": false,
+  "started_at": "2026-09-23T15:03:26.177269+00:00",
+  "url": "https://ai.6600600.xyz/v1/models",
+  "requested_model": "gpt-6-astra",
+  "run_id": "35878725912",
+  "http_status": 200,
+  "body_sha256": "acb7333badc9fb809c92c623507a14b1e2f7d9ea240bd5d17c8260479fda2b2c",
+  "body_bytes_read": 1137,
+  "content_type": "application/json; charset=utf-8",
+  "request_id": "c4938f04-e0a6-44e1-a950-315d56c708dd",
+  "json_object": true,
+  "status": "MODEL_LIST_READ",
+  "model_count": 9,
+  "requested_model_present": true,
+  "finished_at": "2026-09-23T15:03:27.686129+00:00"
+}
