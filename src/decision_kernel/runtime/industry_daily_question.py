@@ -49,9 +49,9 @@ def _native(api, state, rs, clock, archives):
     spec = state["research"]["industry_breadth"]["details"]["json"]
     once.require(spec["read_path"] == breadth_reader.REPORT, "INDUSTRY_REPORT_PATH")
     raw = api.file(spec["read_path"], rs["ref"])
-    once.require(len(raw) <= identity.MAX_BYTES, "INDUSTRY_REPORT_SIZE")
+    once.require(len(raw) <= identity.MAX_READING_BYTES, "INDUSTRY_REPORT_SIZE")
     retained_bytes({spec["read_path"]: raw}, spec)
-    report = identity._json(raw)
+    report = identity._json(raw, max_bytes=identity.MAX_READING_BYTES)
     once.require(report["projection_hash"] == canonical_hash(report["projection"]),
                  "INDUSTRY_REPORT_HASH")
     section = report["projection"]["sections"]["native"]

@@ -31,7 +31,7 @@ def no_network(monkeypatch):
 class API:
     """Synthetic Git edge using the real failure bytes, not a live-run claim."""
     def __init__(self):
-        self.plan = json.loads(Path(prep.REQUEST).read_bytes())
+        self.plan = json.loads((FIXTURES / "industry-input-plan-before-origin-resume.json").read_bytes())
         self.resume = self.plan["resume_from"]
         self.prepared = (FIXTURES / "industry-input-failure-20260923-prepare.json").read_bytes()
         self.receipt = (FIXTURES / "industry-input-failure-20260923-receipt.json").read_bytes()
