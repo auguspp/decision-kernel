@@ -342,6 +342,7 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-000560-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
+- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-23；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 002792.SZ
 
