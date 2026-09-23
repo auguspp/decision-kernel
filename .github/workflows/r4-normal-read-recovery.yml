@@ -1,0 +1,41 @@
+name: R4 normal-input pinned read recovery
+on:
+  push:
+    branches: [ops/r4-normal-read-recovery-20260924]
+permissions:
+  contents: read
+jobs:
+  recover:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 2971d00145e0980238429c4995d783fa3d280ef1
+          persist-credentials: false
+      - name: Archive existing exact code and saved reading only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 2971d00145e0980238429c4995d783fa3d280ef1
+          test "$(git rev-parse HEAD^{tree})" = 3e242b7c6f16c6d89c6540f7d465cd0eaa4abc3b
+          mkdir -p "$RUNNER_TEMP/r4-normal-recovery"
+          OUT="$RUNNER_TEMP/r4-normal-recovery"
+          git archive --format=tar.gz HEAD > "$OUT/main.tar.gz"
+          git ls-tree -rz HEAD > "$OUT/main-tree.bin"
+          git fetch --no-tags --depth=1 origin 31ad7b8b74b014006b76af78a51a6e3d73a1ab91
+          git archive --format=tar.gz 31ad7b8b74b014006b76af78a51a6e3d73a1ab91 README.md current-state.json details > "$OUT/reading-details.tar.gz"
+          git ls-tree -rz 31ad7b8b74b014006b76af78a51a6e3d73a1ab91 > "$OUT/reading-tree.bin"
+          git fetch --no-tags --depth=1 origin 4b9988f20aa41810c6818d101e2bdb37cf139bde
+          git archive --format=tar.gz 4b9988f20aa41810c6818d101e2bdb37cf139bde research_runs/candidates/stock-questions > "$OUT/question-history.tar.gz"
+          git ls-tree -rz 4b9988f20aa41810c6818d101e2bdb37cf139bde > "$OUT/work-tree.bin"
+          printf 'main=2971d00145e0980238429c4995d783fa3d280ef1\nreading=31ad7b8b74b014006b76af78a51a6e3d73a1ab91\nwork=4b9988f20aa41810c6818d101e2bdb37cf139bde\nrun=%s\nattempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > "$OUT/identity.txt"
+          cd "$OUT"
+          sha256sum *.tar.gz *tree.bin > sha256.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: r4-normal-read-recovery-${{ github.run_id }}
+          path: ${{ runner.temp }}/r4-normal-recovery/
+          if-no-files-found: error
+          retention-days: 30
