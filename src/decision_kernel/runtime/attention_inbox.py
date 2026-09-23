@@ -10,7 +10,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
-from typing import TextIO
+from typing import TYPE_CHECKING, TextIO
+
+if TYPE_CHECKING:
+    from .external_research_execution import ExternalResearchInputPacket
+    from .single_quick_contract import SingleQuickCandidate
 
 from ..deep_research import DeepResearchPackage
 from ..live import run_live_deep_research_package, run_live_research_commit_package
@@ -28,28 +32,96 @@ from .inbox import (
 
 @dataclass(frozen=True)
 class ResearchAttentionHandoff:
-    """Harness-only display wrapper around an existing Research Funnel result.
+    """Presentation wrapper for explicit legacy or single-Quick results.
 
-    `company_name` is presentation metadata only. The embedded `ResearchFunnelResult` continues
-    to own PIT lineage, Research routing and investment-authority semantics. This wrapper is not a
-    KernelModel and adds no new state machine or canonical case state.
+    The original versioned validators own identity/lineage and route shape.
+    This wrapper grants no admission, semantic acceptance or investment power;
+    registration still checks the exact saved execution and source bytes.
     """
 
-    research_funnel: ResearchFunnelResult
+    research_funnel: ResearchFunnelResult | None = None
     company_name: str | None = None
+    single_quick_input: ExternalResearchInputPacket | None = None
+    single_quick_candidate: SingleQuickCandidate | None = None
+
+    def __post_init__(self):
+        from .single_quick_contract import validate_single_quick
+        single = self.single_quick_input is not None or self.single_quick_candidate is not None
+        if single:
+            if self.research_funnel is not None or self.single_quick_input is None or self.single_quick_candidate is None:
+                raise ValueError("Mixed or incomplete Research attention versions")
+            checked = validate_single_quick(packet=self.single_quick_input, candidate=self.single_quick_candidate)
+            if checked.status != "VALIDATED_QUICK_RESULT":
+                raise ValueError("Execution gap is not a business attention handoff")
+        elif self.research_funnel is None:
+            raise ValueError("Research attention result missing")
+
+    @property
+    def discovery(self):
+        return self.single_quick_candidate.discovery if self.single_quick_candidate is not None else self.research_funnel.discovery
+
+    @property
+    def terminal_state(self):
+        if self.single_quick_candidate is None:
+            return self.research_funnel.terminal_state
+        from .single_quick_contract import validate_single_quick
+        return validate_single_quick(packet=self.single_quick_input, candidate=self.single_quick_candidate).terminal_state
+
+    @property
+    def terminal_reason(self):
+        return self.single_quick_candidate.assessment.route_reason if self.single_quick_candidate is not None else self.research_funnel.terminal_reason
+
+    @property
+    def explanation(self):
+        return self.single_quick_candidate.assessment.explanation if self.single_quick_candidate is not None else self.terminal_reason
+
+    @property
+    def largest_unknown(self):
+        if self.single_quick_candidate is not None:
+            return "；".join(self.single_quick_candidate.assessment.unknowns) or "本次未列出；不证明所有未知均已解决"
+        return self.research_funnel.pre_research.largest_unknown
+
+    @property
+    def next_discriminating_search(self):
+        if self.single_quick_candidate is not None:
+            a = self.single_quick_candidate.assessment
+            return a.investigation.available_work if a.investigation else (a.wait_trigger or a.route_reason)
+        return self.research_funnel.pre_research.next_discriminating_search
+
+    @property
+    def identity_material(self):
+        if self.single_quick_candidate is None:
+            return self.research_funnel.model_dump(mode="json")
+        return {"input": self.single_quick_input.model_dump(mode="json"),
+                "candidate": self.single_quick_candidate.model_dump(mode="json")}
 
     @property
     def ticker(self) -> str:
-        ticker = self.research_funnel.discovery.ticker
+        ticker = self.discovery.ticker
         if ticker is None or not ticker.strip():
             raise ValueError("ticker-centric Research attention requires discovery.ticker")
         return ticker.strip()
 
 
 def parse_research_attention_handoff(raw: str) -> ResearchAttentionHandoff:
-    payload = json.loads(raw)
+    from .external_research_identity import _json
+    payload = _json(raw.encode("utf-8"))
     if not isinstance(payload, dict):
         raise ValueError("Research attention handoff must be a JSON object")
+
+    if payload.get("format") == "single-quick-attention-v1":
+        from .single_quick_contract import read_saved_result, SingleQuickCandidate
+        from .saved_research_once import raw as encode
+        if set(payload) - {"format", "input", "candidate", "company_name"}:
+            raise ValueError("Unsupported single Quick attention fields")
+        packet, candidate, _ = read_saved_result(encode(payload["input"]), encode(payload["candidate"]))
+        if not isinstance(candidate, SingleQuickCandidate):
+            raise ValueError("Single Quick attention requires its explicit result version")
+        name = payload.get("company_name")
+        if name is not None and (not isinstance(name, str) or not name.strip()):
+            raise ValueError("Research attention company_name must be non-empty when supplied")
+        return ResearchAttentionHandoff(company_name=name.strip() if name else None,
+            single_quick_input=packet, single_quick_candidate=candidate)
 
     if "research_funnel" not in payload:
         return ResearchAttentionHandoff(
@@ -75,9 +147,10 @@ def parse_research_attention_handoff(raw: str) -> ResearchAttentionHandoff:
 
 
 def serialize_research_attention_handoff(handoff: ResearchAttentionHandoff) -> str:
-    payload: dict[str, object] = {
-        "research_funnel": handoff.research_funnel.model_dump(mode="json"),
-    }
+    handoff.__post_init__()
+    payload: dict[str, object] = ({"research_funnel": handoff.research_funnel.model_dump(mode="json")}
+        if handoff.single_quick_candidate is None else
+        {"format": "single-quick-attention-v1", **handoff.identity_material})
     if handoff.company_name is not None:
         payload["company_name"] = handoff.company_name
     return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
@@ -104,7 +177,7 @@ def _group_actionable_research(
 ) -> tuple[tuple[str, tuple[ResearchAttentionHandoff, ...]], ...]:
     grouped: dict[str, list[ResearchAttentionHandoff]] = {}
     for handoff in handoffs:
-        if handoff.research_funnel.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED:
+        if handoff.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED:
             continue
         grouped.setdefault(_ticker_key(handoff.ticker), []).append(handoff)
     return tuple((ticker, tuple(items)) for ticker, items in grouped.items())
@@ -140,44 +213,51 @@ def _unique(values: Sequence[str]) -> tuple[str, ...]:
     return tuple(ordered)
 
 
+def _markdown_text(value: object) -> str:
+    text = escape(str(value), quote=True).replace("\n", " ").replace("\r", " ")
+    for char in "`[]()|*_!":
+        text = text.replace(char, "&#" + str(ord(char)) + ";")
+    return text
+
+
 def _render_research_markdown(
     ticker: str,
     handoffs: Sequence[ResearchAttentionHandoff],
     decision: DecisionSpineResult | None,
 ) -> str:
     name = _company_name(ticker, handoffs, decision)
-    reasons = _unique(tuple(item.research_funnel.terminal_reason for item in handoffs))
-    lanes = _unique(tuple(item.research_funnel.discovery.source_lane for item in handoffs))
+    reasons = _unique(tuple(item.explanation for item in handoffs))
+    lanes = _unique(tuple(item.discovery.source_lane for item in handoffs))
     lines = [
-        f"## {name} {ticker}",
+        f"## {_markdown_text(name)} {_markdown_text(ticker)}",
         "",
         "**为什么值得看**",
-        *[f"- {reason}" for reason in reasons],
+        *[f"- {_markdown_text(reason)}" for reason in reasons],
         "",
         f"**当前状态：** `DEEPEN_REQUIRED` · {_research_state(decision)}",
-        f"**发现来源：** {' / '.join(lanes)}",
+        f"**发现来源：** {_markdown_text(' / '.join(lanes))}",
         "",
         "<details>",
         "<summary>深入查看</summary>",
         "",
     ]
     for handoff in handoffs:
-        result = handoff.research_funnel
+        result = handoff
         lines.extend(
             [
-                f"### {result.discovery.source_lane}",
+                f"### {_markdown_text(result.discovery.source_lane)}",
                 "",
-                f"**触发：** {result.discovery.why_now}",
+                f"**触发：** {_markdown_text(result.discovery.why_now)}",
                 "",
                 "**已确认观察**",
                 *[
-                    f"- {observation.statement}"
+                    f"- {_markdown_text(observation.statement)}"
                     for observation in result.discovery.factual_observations
                 ],
                 "",
-                f"**最大疑点：** {result.pre_research.largest_unknown}",
+                f"**最大疑点：** {_markdown_text(result.largest_unknown)}",
                 "",
-                f"**下一步验证：** {result.pre_research.next_discriminating_search}",
+                f"**下一步验证：** {_markdown_text(result.next_discriminating_search)}",
                 "",
             ]
         )
@@ -185,7 +265,7 @@ def _render_research_markdown(
             lines.extend(
                 [
                     "**映射 / 反证警告：** "
-                    + result.discovery.contradiction_or_mapping_warning,
+                    + _markdown_text(result.discovery.contradiction_or_mapping_warning),
                     "",
                 ]
             )
@@ -220,8 +300,8 @@ def _render_research_html(
         return escape(str(value), quote=True)
 
     name = _company_name(ticker, handoffs, decision)
-    reasons = _unique(tuple(item.research_funnel.terminal_reason for item in handoffs))
-    lanes = _unique(tuple(item.research_funnel.discovery.source_lane for item in handoffs))
+    reasons = _unique(tuple(item.explanation for item in handoffs))
+    lanes = _unique(tuple(item.discovery.source_lane for item in handoffs))
     price = ""
     existing = ""
     if decision is not None:
@@ -238,7 +318,7 @@ def _render_research_html(
 
     details: list[str] = []
     for handoff in handoffs:
-        result = handoff.research_funnel
+        result = handoff
         observations = "".join(
             f"<li>{text(item.statement)}</li>"
             for item in result.discovery.factual_observations
@@ -253,8 +333,8 @@ def _render_research_html(
             <section><h3>{text(result.discovery.source_lane)}</h3>
               <p><b>触发：</b>{text(result.discovery.why_now)}</p>
               <p><b>已确认观察</b></p><ul>{observations}</ul>
-              <p><b>最大疑点：</b>{text(result.pre_research.largest_unknown)}</p>
-              <p><b>下一步验证：</b>{text(result.pre_research.next_discriminating_search)}</p>
+              <p><b>最大疑点：</b>{text(result.largest_unknown)}</p>
+              <p><b>下一步验证：</b>{text(result.next_discriminating_search)}</p>
               {warning}
             </section>
             """
@@ -289,12 +369,15 @@ def _background_markdown(handoffs: Sequence[ResearchAttentionHandoff]) -> str:
         "",
     ]
     for handoff in handoffs:
-        result = handoff.research_funnel
+        result = handoff
         name = handoff.company_name or handoff.ticker
         lines.append(
-            f"- **{name} {handoff.ticker}** — `{result.terminal_state.value}` — "
-            f"{result.terminal_reason}"
+            f"- **{_markdown_text(name)} {_markdown_text(handoff.ticker)}** — `{result.terminal_state.value}` — "
+            f"{_markdown_text(result.terminal_reason)}"
         )
+        if handoff.single_quick_candidate is not None:
+            lines += ["  - 为什么值得看：" + _markdown_text(handoff.explanation),
+                      "  - 下一步／触发：" + _markdown_text(handoff.next_discriminating_search)]
     lines.extend(["", "</details>", ""])
     return "\n".join(lines)
 
@@ -304,8 +387,11 @@ def _background_html(handoffs: Sequence[ResearchAttentionHandoff]) -> str:
         return ""
     rows = "".join(
         f"<li><strong>{escape(item.company_name or item.ticker)} {escape(item.ticker)}</strong> — "
-        f"{escape(item.research_funnel.terminal_state.value)} — "
-        f"{escape(item.research_funnel.terminal_reason)}</li>"
+        f"{escape(item.terminal_state.value)} — "
+        f"{escape(item.terminal_reason)}"
+        + ("<p>为什么值得看：" + escape(item.explanation) + "</p><p>下一步／触发："
+           + escape(item.next_discriminating_search) + "</p>"
+           if item.single_quick_candidate is not None else "") + "</li>"
         for item in handoffs
     )
     return (
@@ -331,7 +417,7 @@ def render_attention_inbox_markdown(
     background = tuple(
         item
         for item in research_handoffs
-        if item.research_funnel.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED
+        if item.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED
     )
     base = render_decision_inbox_markdown(filtered_decisions, generated_at=generated_at)
     base_lines = base.splitlines()
@@ -400,7 +486,7 @@ def render_attention_inbox_html(
     background = tuple(
         item
         for item in research_handoffs
-        if item.research_funnel.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED
+        if item.terminal_state is not ResearchFunnelTerminalState.DEEPEN_REQUIRED
     )
     base_attention = sum(item.human_surface.attention_eligible for item in filtered_decisions)
     base_quiet = len(filtered_decisions) - base_attention
@@ -540,7 +626,7 @@ def main(
         )
         print(
             "ATTENTION INBOX: "
-            f"{sum(item.research_funnel.terminal_state is ResearchFunnelTerminalState.DEEPEN_REQUIRED for item in handoffs)} research attention / "
+            f"{sum(item.terminal_state is ResearchFunnelTerminalState.DEEPEN_REQUIRED for item in handoffs)} research attention / "
             f"{sum(item.human_surface.attention_eligible for item in decisions)} decision wake / "
             f"{len(handoffs)} research handoffs / {len(decisions)} researched cases",
             file=stdout,

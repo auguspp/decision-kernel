@@ -74,7 +74,11 @@ def base_request(request):
     from . import stock_question_host as host
     expected = {"schema_version", "enabled", "mode", "permission", "question_source",
                 "context_source", "preflight_source", "approved_egress_hash", *EXTRA_SOURCES}
-    once.require(set(request) == expected and request["approved_egress_hash"] is None,
+    single = host.selected_method(request) == "single-quick-v1"
+    if single:
+        expected |= {"research_method", "method_permission"}
+    once.require(set(request) == expected
+                 and (isinstance(request["approved_egress_hash"], str) if single else request["approved_egress_hash"] is None),
                  "DAILY_REQUEST_SHAPE")
     return {**{k: v for k, v in request.items() if k not in EXTRA_SOURCES}, "mode": host.QUESTION_MODE}
 

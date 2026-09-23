@@ -34,12 +34,12 @@ def head(api, ref):
     return result["sha"]
 
 
-def authorize(api, code, request, *, request_path=REQUEST, mode=intake.QUESTION_KIND):
+def authorize(api, code, request, *, request_path=REQUEST, mode=intake.QUESTION_KIND, permission_key="permission"):
     once.require(head(api, "main") == code and request.get("schema_version") == 1
                  and request.get("enabled") is True
                  and request.get("mode") == mode, "Stock research not enabled on exact main")
     once.require(identity._json(api.file(request_path, code)) == request, "Stock request is not exact trusted main")
-    p = request["permission"]
+    p = request[permission_key]
     comment = api._call("GET", "issues/comments/" + str(int(p["comment_id"]))).json()
     once.require(comment["id"] == p["comment_id"]
                  and comment["issue_url"] == "https://api.github.com/repos/" + once.REPO + "/issues/297"
