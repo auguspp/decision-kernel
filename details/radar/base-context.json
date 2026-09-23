@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-23T10:26:38.758906+00:00",
+    "finished_at": "2026-09-23T10:27:41.686863+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-24T10:26:38.758906+00:00",
-    "started_at": "2026-09-23T10:26:17.395171+00:00"
+    "recheck_after": "2026-09-24T10:27:41.686863+00:00",
+    "started_at": "2026-09-23T10:27:21.866394+00:00"
   },
   "code_commit": "836bd463e5bd53eb8840a9e0ea3798a4fb6cd358",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-23T10:26:38.758906+00:00",
+  "generated_at": "2026-09-23T10:27:41.686863+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-23T10:26:28.907326+00:00",
+      "checks_at": "2026-09-23T10:27:32.693149+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -509,7 +509,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4b1a3b387b77844b4bd0a64ae5958f8f0be29752cdb15a24177d1525f2a8ac8d"
         },
-        "source_checked_at": "2026-09-23T10:26:28.660211+00:00",
+        "source_checked_at": "2026-09-23T10:27:32.472368+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -532,7 +532,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-23T10:26:20.738207+00:00",
+      "checks_at": "2026-09-23T10:27:24.820732+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -658,7 +658,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4e6468de76e228b8f395812dc162f59497ca891d395b8767d4381b4a56016421"
         },
-        "source_checked_at": "2026-09-23T10:26:20.738189+00:00",
+        "source_checked_at": "2026-09-23T10:27:24.820705+00:00",
         "state_archive": {
           "artifact_id": 10744526415,
           "artifact_name": "sector-radar-state-bundle",
@@ -708,12 +708,12 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-23T10:26:27.557303+00:00",
+      "checks_at": "2026-09-23T10:27:31.360589+00:00",
       "gaps": [
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
-      "health": "QUEUED",
+      "health": "IN_PROGRESS",
       "last_qualified_result": {
         "archive": {
           "artifact_id": 10689300716,
@@ -898,7 +898,7 @@
           "sha256": "f464bc01e87efd03ac532759841f4d555a3480d1a83a65945861c861097ce528"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-23T10:26:27.557286+00:00",
+        "source_checked_at": "2026-09-23T10:27:31.360567+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "920526.BJ",
@@ -919,8 +919,8 @@
         "path": ".github/workflows/hithink-stock-dump-trial.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-23T10:26:17Z",
-        "status": "queued",
-        "updated_at": "2026-09-23T10:26:17Z"
+        "status": "in_progress",
+        "updated_at": "2026-09-23T10:26:21Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
@@ -929,13 +929,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "dcb6333e1d89c7f4fcacab334a1598424bf052b259e5463e1c338c9b49b0f7db",
+  "reading_hash": "f75cb53f319c4f30ae856ac6f769399aa4659bbab31213a176bb2c64a9106f7a",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "35848766786",
-    "trigger_run_id": "35847506413",
+    "run_id": "35848821854",
+    "trigger_run_id": "35848766791",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
