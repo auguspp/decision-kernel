@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "9af38e92dca697d55596cf26f25436cdc7128ece2a0f1c86941a8a52b0a06434",
+    "base_reading_hash": "d16bcd8d4cc95d58191b4eb236df482c4f73f66d1a035cc345795e9e723118b1",
     "companies": [
       {
         "archives": [],
@@ -251,7 +251,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "ea158b564c1a9b2ffe6274346d9e74bc01c40f759ec2e80b74a4d03e4e0c502e",
+        "association_id": "2ada934c2f9832909ca0e0f561287854c6e10c320abcba9c237b49d21ee67067",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -285,13 +285,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -656,7 +656,7 @@
               "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
               "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
             },
@@ -680,7 +680,7 @@
               "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
               "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
             },
@@ -693,7 +693,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "c417bdd5ccd5ef817736e585b7fa562869b9c9bc08ad70b20f7f956efba29541",
+        "association_id": "88293386747206b70b1cc85ce022e5a9d10fb237d6801541e87d6f6e53fa97d5",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -717,7 +717,7 @@
               "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
               "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
             },
@@ -741,7 +741,7 @@
               "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
               "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
             },
@@ -1112,7 +1112,7 @@
             }
           }
         ],
-        "association_id": "7ce129579fd96134c97d874f6eda60083cf9cb12c1b4acc20cce9454bfb6868d",
+        "association_id": "46bcef6141d162d7db8cec8259e563f4a7ae71e67eb9ccdec82f76d8f64d294b",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1146,13 +1146,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -1175,7 +1175,7 @@
               "path": "docs/readings/suken-api-2026-09-11.md",
               "read_path": "sources/git/b80885780fee7dae8ff4292397b8aeb499bb8e52/suken-api-2026-09-11.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "c1b85c741784c45b4cb890d80d41666bfa31b401f3b37862f8757f8cf07a6609"
             },
@@ -1188,7 +1188,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "d89db30bbe81710f1ecd4e3d07b2c4f6dd8c837c2f7e08427943f9b6e215feb5",
+        "association_id": "45ba2709c74c23b424ec8ae5fd15725c816833a8eed135c197c255ef876d4464",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1273,7 +1273,7 @@
               "path": "research_cases/603986-gigadevice-deep-research-v2.json",
               "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
             },
@@ -1297,7 +1297,7 @@
               "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
             },
@@ -1321,7 +1321,7 @@
               "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
               "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
             },
@@ -1334,7 +1334,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "df47f3acd7ee92300f1e77bf5b8fa85a002d0d40c7ee3a600982d8461e6307c0",
+        "association_id": "cda4182c6d75310ae8310be712294375c3a064fde411596a580fe8e60b042600",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1368,13 +1368,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -1447,7 +1447,7 @@
               "path": "research_cases/002050-sanhua-deep-research-v1.json",
               "read_path": "sources/git/925f9875b6f8d814f95537af61214068188beb11/002050-sanhua-deep-research-v1.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "f809cb4aad763bbd719c5d6929306e5c810af0f869cee4f15a7420fa742ea58f"
             },
@@ -1471,7 +1471,7 @@
               "path": "docs/dogfood/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/41d6effe2c45fd1f17133f0ad38d844d82c134d9/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "cc981439bb3c7f7c9ac3f81ad5e3580a4b195872940bd1eca4ac362c74a932ad"
             },
@@ -1495,7 +1495,7 @@
               "path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
               "read_path": "sources/git/0c7739cb5a376be9cc722e37f6acd168dca9704e/002050-sanhua-human-decision-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "f7d638b9913c3aa878249c939cee6c1b3db582f3664b391d5ab86498396d51bd"
             },
@@ -1519,7 +1519,7 @@
               "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
               "read_path": "sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "9ef5d905f8a9c61cd69a320db0270f0665ca827f7351b2f80743ab5b04a5c595"
             },
@@ -1532,7 +1532,7 @@
             "use": "HUMAN_METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "95ba6cce7466335547bcbcced211653ccf8f5eeaebbd84cdc0d479ab5e5d6834",
+        "association_id": "3b37080040f9bd5ef9cbe5d1dee02add6acd52000d0960388832b443df2d1f02",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1606,7 +1606,7 @@
               "path": "docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md",
               "read_path": "sources/git/597ca0310acbf5eee371aae2d3b9dc8b0f188e56/catl-full-research-reunderwrite-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "720869e56f66402b3520ac55113687e49211bfb3075a4303fa83f954d07603da"
             },
@@ -1630,7 +1630,7 @@
               "path": "dogfood/300750-catl.json",
               "read_path": "sources/git/514fdb991504abdd23e814dc77fdcbd6f0e2e22c/300750-catl.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "98f96c22cd2e839a7ea67d48feffbb02643cc87fa1891d7470ace668503ba035"
             },
@@ -1667,7 +1667,7 @@
             "use": "HISTORICAL_RESEARCH_COMMIT_CHECKPOINT"
           }
         ],
-        "association_id": "9111df8c48b7e6fbf7b665ec68d8aa01cd2d4090850d0cf8996fbe8f11aed2a9",
+        "association_id": "9d67f0a149c18230af9b0d392f6cadcf09363d782b9c452b4bbedc429e3790d8",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1691,7 +1691,7 @@
               "path": "research_cases/600233-yto-deep-research-v2.json",
               "read_path": "sources/git/ae9bfce4dd3cfbedddb4be84075238d867f58529/600233-yto-deep-research-v2.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "570ee45f07f9f2ea3d1bf3d0afbb086af59c7ac6333787c6619630b515fb5c60"
             },
@@ -1715,7 +1715,7 @@
               "path": "docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/2b58294ace63f3fe682c70f889a457f4b518c1a2/yto-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "423630c5310c2c1ac35f9f00e06031bccc808e192ef9b8691bb6bf1f57b537fb"
             },
@@ -1728,7 +1728,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "6d6a7bc8d3f5dc2fe779cf67c985d4d9100edeff21e5246cfd9163c5f52f315f",
+        "association_id": "9e12e4f5e8006ffc1e780364f077dcb944c47f4b06e9196f927de6ac193dffe9",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1752,7 +1752,7 @@
               "path": "docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md",
               "read_path": "sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "b8282b3dfcb9ac5580f5411cd1dc291d8683e18ade76937a8b3681bd35540f11"
             },
@@ -1765,7 +1765,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "a10b541067152e0470576a41d40046e493a2dec1ec4fa852b32b9eb5bd2b3a9d",
+        "association_id": "bb0a48245173cb84dce013a36cc51ed1a3985e30374d03cdf23c66ef38961d2e",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1823,13 +1823,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -1852,7 +1852,7 @@
               "path": "docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
               "read_path": "sources/git/d9acd593cf4a07c3a811282ec9b646a535b21840/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "dc01da848e763716153b0f9d5d0c89a6b4d457dfc46d72c779f6342bce6b86c9"
             },
@@ -1865,7 +1865,7 @@
             "use": "METHOD_NEGATIVE_CONTROL"
           }
         ],
-        "association_id": "48b960bdf9d0c553355c91ce34f8c4118aa9dc3bdaa6bdea36731b07c79be91e",
+        "association_id": "86e2de08bb2731f0fbd677060c07b824e9ee095cc3463d5b7d4b3ce3f7547099",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1889,7 +1889,7 @@
               "path": "docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md",
               "read_path": "sources/git/9b7248d5b34a7a0eb89805abdff0e64da9a485ec/tinavi-full-research-zero-schema-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "adbb5f66d979011b696dfc94ae04286e2062472041f6b1a7a985d33514661b03"
             },
@@ -1913,7 +1913,7 @@
               "path": "docs/decisions/688277-tinavi-human-watch-2026-09-04.md",
               "read_path": "sources/git/04655814a52d28b50d4d0e3dcbdac666c22b71df/688277-tinavi-human-watch-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "78b951c32a46851f276c2381196391232d375522",
+              "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
               "repository": "auguspp/decision-kernel",
               "sha256": "5dd14a0b8efafc98dfa16933036bd00fe7b56458ea21b82f458fb0cf580a413c"
             },
@@ -1926,7 +1926,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "89cd1c16dbfed7541a9adac18b4a972b57e1768bd44792de102dd9e5a0606bd8",
+        "association_id": "0a1be117ecab3753a9085cfddba3a24513212450eeee9a9e5062b4d2fe83763b",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2026,7 +2026,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "150f26d16ff2939316d1999db35d537068f9fde0f951ad717c7d2fd9e9221965",
+        "association_id": "6e9e5b56168c6fae129f0130a757f45dac993f266ab016ba63afb47f0797296b",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2084,13 +2084,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -2183,7 +2183,7 @@
           }
         ],
         "assets": [],
-        "association_id": "45f3930391601f2ed4cf9d776199f2ba4f10e1daf9bbddc3a3fdb758f18a2fa9",
+        "association_id": "719db4c0868d49082e9304972c5d1ce01cfcf865c7b6bf85081e5993f6df5c4a",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2265,13 +2265,13 @@
                 "source_observed_at": "2026-09-18T14:18:52.651149Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -2346,7 +2346,7 @@
           }
         ],
         "assets": [],
-        "association_id": "16644488bdf7a99af845d9a31c8f6b362d6a947ed62aeb64542ac1606955ff54",
+        "association_id": "f75ff061f383f8e3bff836b4ff435d9f2c634ed98a7826cf35a0f60bf06469f4",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2380,13 +2380,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -2836,7 +2836,7 @@
           }
         ],
         "assets": [],
-        "association_id": "8d98f2c57a5d5024d146f71049e7f2b3e12250a2df79ec9770b3faabd4d5e36e",
+        "association_id": "2dad9f5092735b2732be6e97084f1d2c5b68e51121cce0522fb48cea193b1cd5",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2902,13 +2902,13 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "a7165ca70c9e99119909d08eb8cb4e15f8f3351f7e0300a02f83452a5bd7f12d",
+            "projection_hash": "47e4752ee1b7263ceaa059e55e2ea0c61424155d045705e499803a3db0abb149",
             "source": {
               "bytes": 3290005,
-              "git_blob": "957789781fbb82934e1feed16d985cbf6ababcda",
+              "git_blob": "cd26dd04926fdbe734a7d53ac0ce6357a41935b7",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "50405081158e13e3e7f216878965cea0ceafecbb8b9256ed73b72ec885f7c3fb"
+              "sha256": "d5a16ef0f57bbf684efeef39a6259fcf720063169eef4fc643e7527a0eff09db"
             }
           }
         ],
@@ -3004,7 +3004,7 @@
       "with_saved_observations": 8,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-23T03:22:58.436864+00:00",
+    "generated_at": "2026-09-23T04:41:44.236662+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3018,5 +3018,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "506396548e21fda855580612f7ac48b985f416c83a266993669d26f8c7bc01ba"
+  "projection_hash": "3780a8e20072574d4a10dbf4e0cc815fb06e7cf2141491583aa7261b66bbdfbe"
 }
