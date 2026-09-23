@@ -17,6 +17,7 @@ import signal
 import subprocess
 import time
 from datetime import datetime, timedelta, timezone
+from dataclasses import dataclass
 from pathlib import Path
 from uuid import NAMESPACE_URL, UUID, uuid5
 
@@ -448,7 +449,68 @@ def pre_prompt(packet, discovery, context, *, bound_context=None):
         "public_context": context, "evidence_ids": [str(e.id) for e in packet.seed_evidence_artifacts], **scope}
 
 
+@dataclass(frozen=True)
+class QuickCheckpoint:
+    """Exact saved Pre for one corrective Quick, not execution permission.
+
+    The native host must bind these original files to the failed run, recheck
+    current authorization and reserve the fixed child before calling research.
+    Bytes rather than mutable model instances keep the checkpoint immutable.
+    """
+    input_raw: bytes
+    candidate_raw: bytes
+    input_source_raw: bytes
+    candidate_source_raw: bytes
+
+    def sources(self):
+        return [identity._json(self.input_source_raw), identity._json(self.candidate_source_raw)]
+
+    def restore(self, packet, discovery):
+        specs = self.sources()
+        for spec, body, name in zip(specs, (self.input_raw, self.candidate_raw),
+                                    ("input.json", "candidate.json"), strict=True):
+            require(type(body) is bytes and spec["purpose"] == "QUICK_RESUME_PARENT_" + name.split(".")[0].upper(),
+                    "QUICK_CHECKPOINT_SOURCE_PURPOSE")
+            identity._checked_source(spec, lambda _: body)
+        parent = ExternalResearchInputPacket.model_validate(identity._json(self.input_raw))
+        prior = ExternalResearchCandidate.model_validate(identity._json(self.candidate_raw))
+        checked = validate_external_research_candidate(packet=parent, candidate=prior)
+        require(checked.status.value == "EXECUTION_GAP"
+                and prior.completion.value == "INCOMPLETE_TECHNICAL_FAILURE"
+                and checked.gap_reason == "ValidationError"
+                and prior.pre_research is not None and prior.quick_research is None
+                and not prior.supplemental_evidence_artifacts,
+                "QUICK_CHECKPOINT_NOT_VALIDATED_PRE_GAP")
+        require(prior.pre_research.route.value == "CONTINUE_TO_QUICK"
+                and raw(discovery) == raw(prior.discovery), "QUICK_CHECKPOINT_PRE_BINDING")
+        require(re.fullmatch(r"research_runs/candidates/stock-questions/[0-9a-f]{64}/", parent.candidate_output_prefix)
+                and specs[0]["ref"] == specs[1]["ref"]
+                and all(spec["path"] == parent.candidate_output_prefix + name
+                        for spec, name in zip(specs, ("input.json", "candidate.json"), strict=True)),
+                "QUICK_CHECKPOINT_PARENT_SCOPE")
+        expected = parent.model_dump(mode="json")
+        expected.update(execution_id=parent.execution_id + "-technical-continuation-v1",
+            candidate_output_prefix=parent.candidate_output_prefix + "technical-continuation-v1/",
+            code_commit=packet.code_commit,
+            source_refs=expected["source_refs"] + specs,
+            budget={**expected["budget"], "max_technical_retries": 1})
+        # Preserve original cutoff, question, evidence, source scope and Pre.
+        require(raw(packet) == raw(ExternalResearchInputPacket.model_validate(expected)),
+                "QUICK_CHECKPOINT_INPUT_CHANGED")
+        return prior.pre_research
+
+    def record(self):
+        parent = identity._json(self.input_raw)
+        prior = identity._json(self.candidate_raw)
+        return {"mode": "FROZEN_QUICK_ONLY_CONTINUATION", "parent_execution_id": parent["execution_id"],
+            "parent_input_hash": canonical_hash(ExternalResearchInputPacket.model_validate(parent)),
+            "pre_research_hash": canonical_hash(PreResearchResult.model_validate(prior["pre_research"])),
+            "research_cutoff": parent["research_cutoff"], "sources": self.sources(),
+            "pre_model_calls": 0, "source_freshness": "ORIGINAL_CUTOFF_NOT_RECHECKED_AS_CURRENT"}
+
+
 def research(packet, discovery, context, out, *, call=None, clock=now, bound_context=None,
+             quick_checkpoint=None,
              provider_event_prefix="SUB2API_RESPONSES",
              model_or_executor="trusted Python + Sub2API Responses / gpt-6-astra"):
     """Original stage models and transitions; never force a route or repair output."""
@@ -456,13 +518,17 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         from functools import partial
         call = partial(model_call, bound_context=bound_context)
     call = call or model_call
+    if quick_checkpoint is not None:
+        require(type(quick_checkpoint) is QuickCheckpoint, "QUICK_CHECKPOINT_TYPE")
+        restored_pre = quick_checkpoint.restore(packet, discovery)
     began, monotonic_start = clock(), time.monotonic()
     events, usage = [], []
     pre = quick = None
     completion, failure, stage = "COMPLETE", None, "ADMISSION"
-    def event(kind, target, status, note):
+    def event(kind, target, status, note, *, technical_retry=False):
         events.append(ResearchToolEvent(sequence=len(events)+1, kind=kind, target=target,
-            status=status, observed_at=clock(), record_kind="EXECUTOR_ACTION_SUMMARY", note=note))
+            status=status, observed_at=clock(), record_kind="EXECUTOR_ACTION_SUMMARY",
+            note=note, technical_retry=technical_retry))
     # Actual supplied retained context is read by the trusted host, not an invented
     # model web visit. Model responses count conservatively as OTHER_READ as well.
     for spec in packet.source_refs:
@@ -476,8 +542,18 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
             require_bound(bound_context).check_packet(packet, context)
         prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
         stage = "PRE"
-        pre = call("pre", prompt, PreResearchResult, out, usage)
-        event("OTHER_READ", provider_event_prefix + ":PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
+        if quick_checkpoint is None:
+            pre = call("pre", prompt, PreResearchResult, out, usage)
+            event("OTHER_READ", provider_event_prefix + ":PRE", "SUCCEEDED", "Model output, not primary-source Evidence.")
+        else:
+            pre = restored_pre
+            reused = quick_checkpoint.record()
+            event("OTHER_READ", locator(quick_checkpoint.sources()[1]), "SUCCEEDED",
+                  "Previously validated Pre read from the exact checkpoint; no new Pre model call.")
+            with (out / "pre-reuse.json").open("xb") as f:
+                f.write(raw(reused))
+            prompt["continuation_scope"] = {k: reused[k] for k in
+                ("mode", "research_cutoff", "pre_model_calls", "source_freshness")}
         validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
         with (out / "pre.json").open("xb") as f:
             f.write(raw(pre))
@@ -486,12 +562,17 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
             stage = "QUICK"
             prompt.update(stage="QUICK", pre_research=pre.model_dump(mode="json"), pre_research_hash=canonical_hash(pre))
             quick = call("quick", prompt, QuickResearchResult, out, usage)
-            event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.")
+            if quick_checkpoint is not None:
+                from ..research_funnel import validate_funnel_transition
+                validate_funnel_transition(discovery, pre, quick, packet.seed_evidence_artifacts)
+            event("OTHER_READ", provider_event_prefix + ":QUICK", "SUCCEEDED", "Model output, not primary-source Evidence.",
+                  technical_retry=quick_checkpoint is not None)
         stage = "QUICK" if quick else "PRE"
     except Exception as exc:
         completion = "INCOMPLETE_BUDGET" if isinstance(exc, TimeoutError) else "INCOMPLETE_TECHNICAL_FAILURE"
         failure = exc.code if isinstance(exc, TrialError) else type(exc).__name__
-        event("OTHER_READ", "EXECUTOR:" + stage, "FAILED", "No retry or route repair. Per-stage files/usage record whether public output was retained; missing output is UNKNOWN.")
+        event("OTHER_READ", "EXECUTOR:" + stage, "FAILED", "No retry or route repair. Per-stage files/usage record whether public output was retained; missing output is UNKNOWN.",
+              technical_retry=quick_checkpoint is not None and stage == "QUICK")
         # Invalid raw partial stages stay as raw files; never publish a completed
         # WAIT/STOP as an incomplete candidate or a Quick without validated Pre.
         pre = pre if pre and pre.route.value == "CONTINUE_TO_QUICK" else None
@@ -505,14 +586,17 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
         started_at=began, finished_at=finished, research_cutoff=packet.research_cutoff,
         completion=completion, tool_events=tuple(events), source_dispositions=tuple(dispositions),
         tool_calls_used=len(events), search_queries_used=0,
-        source_reads_used=sum(e.status.value == "SUCCEEDED" for e in events), technical_retries_used=0,
+        source_reads_used=sum(e.status.value == "SUCCEEDED" for e in events),
+        technical_retries_used=sum(e.technical_retry for e in events),
         elapsed_minutes_observed=math.ceil(time.monotonic()-monotonic_start) // 60 + 1,
         last_completed_stage=stage if completion == "COMPLETE" else "ADMISSION_OR_RETAINED_PARTIAL",
         stop_or_failure_reason=failure, model_or_executor=model_or_executor,
         model_exact_version=None, platform_task_id=os.environ.get("GITHUB_RUN_ID"), private_chain_of_thought_recorded=False)
     candidate = ExternalResearchCandidate(input_hash=canonical_hash(packet), completion=completion,
         discovery=discovery, pre_research=pre, quick_research=quick, receipt=receipt,
-        explicit_action_summary=("No model tools; at most Pre and conditional Quick. No Deep or investment authority.",))
+        explicit_action_summary=(("Reused exact validated Pre; one corrective Quick at original cutoff. No new Pre, source acquisition, Deep or investment authority."
+            if quick_checkpoint is not None else
+            "No model tools; at most Pre and conditional Quick. No Deep or investment authority."),))
     with (out / "model-usage.json").open("xb") as f:
         f.write(raw(usage))
     with (out / "candidate-before-validation.json").open("xb") as f:

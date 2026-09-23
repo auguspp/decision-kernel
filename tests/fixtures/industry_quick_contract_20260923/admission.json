@@ -1,0 +1,39 @@
+{
+  "authority": "NONE",
+  "checked_at": "2026-09-23T04:47:11.338377+00:00",
+  "checks": {
+    "canonical_input_hash": "COMPUTED",
+    "exact_input_readback": "PASS",
+    "identity_postcheck": "PASS",
+    "identity_precheck": "PASS",
+    "input_model_validation": "PASS",
+    "seed_publication": "PASS",
+    "source_preflight": "PASS"
+  },
+  "execution_key": {
+    "canonical_input_hash": "e4c1ad0da89182b2f4cceb129f5928247c94dd9690f2d58fcaf178402f19ad42",
+    "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14"
+  },
+  "finished_at": "2026-09-23T04:47:11.642510+00:00",
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_attention_authority": "NONE",
+  "identity_scope_hash": "8e76b6ad75150759b4b7c3ab96785f0ec27f18cab04c226b615ab6c07765441a",
+  "input_file_sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db",
+  "input_source": {
+    "git_blob": "b14769bc71c80a726460b471fa5710efdfb2c648",
+    "path": "research_runs/candidates/stock-questions/4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14/input.json",
+    "purpose": "input.json",
+    "ref": "59d71bf838aeac0f13fb57c9d8994715c8f62509",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db"
+  },
+  "investment_authority": "NONE",
+  "preflight_sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3",
+  "proof_scope": "TRUSTED_ADAPTER_RECORDS_NOT_GLOBAL_LOCK_OR_HARD_SANDBOX",
+  "reason": "RESEARCH_EXECUTION_ALLOWED",
+  "research_authority": "NONE",
+  "research_execution_allowed": true,
+  "schema_version": 1,
+  "status": "NOT_EXECUTED"
+}

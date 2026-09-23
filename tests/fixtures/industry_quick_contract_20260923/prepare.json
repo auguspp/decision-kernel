@@ -1,0 +1,30 @@
+{
+  "catalog_sha256": "91deb7b071113cc9c4d29b6f3fb98d1f328545f5bd398e9db81ac938de075445",
+  "current_state_commit": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+  "current_state_reading_hash": "92e9029b2767a0061639e9cb723be8d8aa1ac1fb86ded0f3b0af43602435e40c",
+  "dedup_scope": "EXPLICIT_CATALOG_QUESTION_IDS_NOT_GLOBAL_SEMANTIC_DEDUP",
+  "execution_key": {
+    "canonical_input_hash": "e4c1ad0da89182b2f4cceb129f5928247c94dd9690f2d58fcaf178402f19ad42",
+    "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14"
+  },
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_acceptance": "NOT_ESTABLISHED",
+  "input_file_sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db",
+  "investment_authority": "NONE",
+  "preflight_sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3",
+  "qualification": "DECLARATION_AND_SOURCE_BINDING_NOT_ECONOMIC_TRUTH_OR_QUESTION_QUALITY",
+  "question_id": "jiangxi-copper-net-economic-exposure",
+  "question_source": {
+    "git_blob": "d7ad7ef93b2cd3aecc85dee920567cb099dba85d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "c492cf1d31ff5187dbe863d00ebd8e5fc420fc23",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b77f1d21c47eb4642ac369e33e9ca4d6fa2d99531087c28fad5f0671c4365c"
+  },
+  "remote_writes": 0,
+  "research_execution_allowed": false,
+  "revision": 1,
+  "status": "QUESTION_INPUT_PREPARED_NOT_EXECUTED"
+}

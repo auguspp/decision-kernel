@@ -184,6 +184,13 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
     if daily:
         from . import stock_daily_question as daily_policy
         from . import stock_question_continuation as deepseek
+        from . import stock_quick_continuation as quick_resume
+        try:
+            deployed = identity._json(api.file(daily_policy.REQUEST, code))
+        except (ValueError, KeyError, TypeError, OSError, RuntimeError):
+            deployed = {}  # The original path records this request-read failure.
+        if isinstance(deployed, dict) and deployed.get("mode") == quick_resume.MODE:
+            return quick_resume.run(api=api, code=code, output=output, call=call, clock=clock)
     request_path = daily_policy.REQUEST if daily else QUESTION_REQUEST
     mode = daily_policy.MODE if daily else QUESTION_MODE
     once.require(not output.is_symlink() and not any(p.is_symlink() for p in output.parents), "QUESTION_UNSAFE_OUTPUT")
