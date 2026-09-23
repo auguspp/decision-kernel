@@ -6,6 +6,8 @@ The historical Stock codec/tickers and default small-input path remain separate.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass, replace
+
 from . import stock_full_input as full
 from . import saved_research_once as once
 from . import external_research_identity as identity
@@ -70,8 +72,11 @@ def _parameters(prompt, output_type):
         extra_parameters={"reasoning": {"effort": "none"}})
 
 
+@dataclass(frozen=True)
 class ReviewedFullContext(BoundFullContext):
     """Reuse original immutable binding and send hook; never the old Stock scope."""
+    single_quick_prompt_sha256: str | None = None
+    single_quick_request_sha256: str | None = None
     @classmethod
     def load(cls, spec, load, *, ticker):
         once.require(spec.get("purpose") == "MODEL_CONTEXT", "FULL_QUESTION_SOURCE_PURPOSE")
@@ -99,7 +104,8 @@ class ReviewedFullContext(BoundFullContext):
         return {**super().record(), "policy": POLICY}
 
     def request_check(self, stage, prompt, output_type, parameters):
-        once.require((stage, output_type) in {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult)}
+        once.require((stage, output_type) in {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult),
+                                              ("quick", once.single_quick.QuickAssessment)}
                      and prompt["stage"] == stage.upper(), "FULL_QUESTION_STAGE")
         self.check_plain(prompt["public_context"])
         expected = _parameters(prompt, output_type)
@@ -110,8 +116,37 @@ class ReviewedFullContext(BoundFullContext):
         return full.FinalRequestCheck(self.decoded_raw, self.ticker,
             once.DEEPSEEK_BASE_URL + "/responses", prepared, policy=POLICY)
 
+    def send_hook(self, stage, prompt, output_type, parameters, receipt):
+        if output_type is not once.single_quick.QuickAssessment:
+            once.require(self.single_quick_request_sha256 is None
+                         and self.single_quick_prompt_sha256 is None,
+                         "FULL_QUESTION_LEGACY_PREVIEW_REQUIRED")
+            return super().send_hook(stage, prompt, output_type, parameters, receipt)
+        once.require(self.single_quick_prompt_sha256 is not None
+                     and self.single_quick_request_sha256 is not None
+                     and once.sha(once.raw(prompt)) == self.single_quick_prompt_sha256,
+                     "FULL_QUESTION_SINGLE_PREVIEW_REQUIRED")
+        check = self.request_check(stage, prompt, output_type, parameters).hook(receipt)
+        def hook(request):
+            check(request)
+            once.require(receipt["request_sha256"] == self.single_quick_request_sha256,
+                         "FULL_QUESTION_SINGLE_REQUEST_CHANGED")
+        return hook
+
     def egress_hash(self, packet, discovery, context):
         self.check_packet(packet, context)
+        if packet.method_version == once.single_quick.METHOD_VERSION:
+            prompt = once.initial_prompt(packet, discovery, context)
+            prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
+            parameters = _parameters(prompt, once.single_quick.QuickAssessment)
+            return once.canonical_hash({"method_version": packet.method_version,
+                "prompt_version": packet.prompt_version, "quick_prompt": prompt,
+                "full_input": self.record(),
+                "source_refs": [s.model_dump(mode="json") for s in packet.source_refs],
+                "budget": packet.budget, "endpoint": once.DEEPSEEK_BASE_URL,
+                "parameters": {k: v for k, v in parameters.items() if k != "input"},
+                "max_model_calls": 1})
+        once.require(packet.method_version == "research-funnel-v1", "RESEARCH_METHOD_UNSUPPORTED")
         prompt = once.pre_prompt(packet, discovery, context)
         prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
         parameters = _parameters(prompt, once.PreResearchResult)
@@ -126,10 +161,12 @@ class ReviewedFullContext(BoundFullContext):
         """Real SDK request construction before reservation; transport cannot run."""
         from openai import OpenAI, DefaultHttpxClient
         self.check_packet(packet, context)
-        prompt = once.pre_prompt(packet, discovery, context)
-        parameters = _parameters(prompt, once.PreResearchResult)
+        single = packet.method_version == once.single_quick.METHOD_VERSION
+        output_type = once.single_quick.QuickAssessment if single else once.PreResearchResult
+        prompt = once.initial_prompt(packet, discovery, context)
+        parameters = _parameters(prompt, output_type)
         receipt = {}
-        check = self.request_check("pre", prompt, once.PreResearchResult, parameters).hook(receipt)
+        check = self.request_check("quick" if single else "pre", prompt, output_type, parameters).hook(receipt)
         class PreparedLocally(BaseException):
             pass
         def inspect(request):
@@ -152,6 +189,13 @@ class ReviewedFullContext(BoundFullContext):
             else:
                 raise once.TrialError("FULL_QUESTION_PREVIEW_UNEXPECTED_RETURN")
         once.require(bool(receipt), "FULL_QUESTION_PREVIEW_NOT_CHECKED")
+        if single:
+            return replace(self, single_quick_prompt_sha256=once.sha(once.raw(prompt)),
+                           single_quick_request_sha256=receipt["request_sha256"],
+                           pre_prompt_sha256=None, pre_request_sha256=None)
+        once.require(self.single_quick_request_sha256 is None
+                     and self.single_quick_prompt_sha256 is None,
+                     "FULL_QUESTION_LEGACY_PREVIEW_REQUIRED")
         return self.prepared({**receipt, "prompt_sha256": once.sha(once.raw(prompt)),
             "meaning": "SDK_PRE_REQUEST_BUILT_NO_NETWORK_NOT_ADMISSION"})
 
