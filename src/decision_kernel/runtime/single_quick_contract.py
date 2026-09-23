@@ -246,6 +246,7 @@ class FullResearchHandoff(KernelModel):
     research_cutoff: AwareDateTime
     original_question: str
     proposed_investigation: Investigation
+    input_known_unknowns: tuple[str, ...]
     open_unknowns: tuple[str, ...]
     source_refs: tuple[ResearchInputSourceRef, ...]
     execution_authority: Literal["NONE"] = "NONE"
@@ -278,7 +279,8 @@ def build_full_handoff(
         execution_id=packet.execution_id, security_id=packet.security_id,
         research_cutoff=packet.research_cutoff, original_question=packet.research_question,
         proposed_investigation=assessment.investigation,
-        open_unknowns=packet.known_unknowns + assessment.unknowns,
+        input_known_unknowns=packet.known_unknowns,
+        open_unknowns=assessment.unknowns,
         source_refs=packet.source_refs,
     )
 
