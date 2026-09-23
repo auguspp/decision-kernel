@@ -1,0 +1,229 @@
+{
+  "name": "AdmittedOutput",
+  "schema": {
+    "$defs": {
+      "QuickResearchRoute": {
+        "enum": [
+          "DEEPEN",
+          "WAIT_FOR_TRIGGER",
+          "STOP"
+        ],
+        "title": "QuickResearchRoute",
+        "type": "string"
+      },
+      "ResearchClaim": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_artifact_ids": {
+            "default": [],
+            "items": {
+              "enum": [
+                "9962c189-38a8-5376-accc-60215ff5bec6"
+              ],
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Artifact Ids",
+            "type": "array"
+          },
+          "kind": {
+            "$ref": "#/$defs/ResearchClaimKind"
+          },
+          "statement": {
+            "minLength": 1,
+            "title": "Statement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement",
+          "kind",
+          "evidence_artifact_ids"
+        ],
+        "title": "ResearchClaim",
+        "type": "object"
+      },
+      "ResearchClaimKind": {
+        "enum": [
+          "FACT",
+          "INFERENCE",
+          "ASSUMPTION",
+          "MARKET_CONTEXT"
+        ],
+        "title": "ResearchClaimKind",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "as_of": {
+        "format": "date-time",
+        "title": "As Of",
+        "type": "string"
+      },
+      "business_model": {
+        "minLength": 1,
+        "title": "Business Model",
+        "type": "string"
+      },
+      "contradictory_claims": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "title": "Contradictory Claims",
+        "type": "array"
+      },
+      "current_expression_or_leadership": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Current Expression Or Leadership"
+      },
+      "current_industry_state": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Current Industry State"
+      },
+      "discovery_id": {
+        "maxLength": 255,
+        "minLength": 1,
+        "title": "Discovery Id",
+        "type": "string"
+      },
+      "economic_role": {
+        "minLength": 1,
+        "title": "Economic Role",
+        "type": "string"
+      },
+      "evidence_authority_assessment": {
+        "minLength": 1,
+        "title": "Evidence Authority Assessment",
+        "type": "string"
+      },
+      "industry_supply_demand_variables": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Industry Supply Demand Variables",
+        "type": "array"
+      },
+      "major_profit_drivers": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Major Profit Drivers",
+        "type": "array"
+      },
+      "market_expectation_hypothesis": {
+        "minLength": 1,
+        "title": "Market Expectation Hypothesis",
+        "type": "string"
+      },
+      "next_discriminating_evidence": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Next Discriminating Evidence",
+        "type": "array"
+      },
+      "pre_research_hash": {
+        "maxLength": 64,
+        "minLength": 64,
+        "title": "Pre Research Hash",
+        "type": "string"
+      },
+      "route": {
+        "$ref": "#/$defs/QuickResearchRoute"
+      },
+      "route_reason": {
+        "minLength": 1,
+        "title": "Route Reason",
+        "type": "string"
+      },
+      "schema_version": {
+        "default": 1,
+        "minimum": 1,
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "segment_mix": {
+        "minLength": 1,
+        "title": "Segment Mix",
+        "type": "string"
+      },
+      "supporting_claims": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/ResearchClaim"
+        },
+        "title": "Supporting Claims",
+        "type": "array"
+      },
+      "unresolved_questions": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Unresolved Questions",
+        "type": "array"
+      },
+      "value_chain_position": {
+        "minLength": 1,
+        "title": "Value Chain Position",
+        "type": "string"
+      },
+      "variant_perception": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Variant Perception"
+      }
+    },
+    "required": [
+      "discovery_id",
+      "pre_research_hash",
+      "as_of",
+      "business_model",
+      "segment_mix",
+      "economic_role",
+      "major_profit_drivers",
+      "industry_supply_demand_variables",
+      "value_chain_position",
+      "current_industry_state",
+      "market_expectation_hypothesis",
+      "current_expression_or_leadership",
+      "supporting_claims",
+      "contradictory_claims",
+      "evidence_authority_assessment",
+      "variant_perception",
+      "unresolved_questions",
+      "next_discriminating_evidence",
+      "route",
+      "route_reason",
+      "schema_version"
+    ],
+    "title": "AdmittedOutput",
+    "type": "object"
+  },
+  "type": "json_schema"
+}
