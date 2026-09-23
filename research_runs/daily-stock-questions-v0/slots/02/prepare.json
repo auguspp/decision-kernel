@@ -1,0 +1,1003 @@
+{
+  "automatic_retry": false,
+  "batch_id": "f8d764b980f6fdfe49c3f60a62b48d636ccd08b0d125514ae9cc7409534cb4f1",
+  "batch_review_source": {
+    "git_blob": "dd958d019a08df72dab4a537b6adc5c7c5450845",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/review.json",
+    "purpose": "DAILY_INDUSTRY_BATCH_REVIEW",
+    "ref": "52e731f1d8c548ab2dc6681187a8ee7d64f3b358",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "b985133da09b5d0c9539b4d990573e5aa9af5b9cc269c0f126f4dfc4c76b5855"
+  },
+  "code_commit": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
+  "economic_exposure": {
+    "case_id": "600362.SH",
+    "context_source": {
+      "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+    },
+    "counterevidence": "总产量包含外购原料和权益口径，不能等同并表自有矿山敞口。；贸易和加工价格转嫁及套保可抵消名义价格上行。；利润、公允价值调节、经营性应收和保证金占用可能使股东现金不同于收入增长。",
+    "falsification_test": "分开自有矿山与第一量子权益产量，核对外购矿TC/RC及加工转嫁，并从合并利润勾稽到现金和受限保证金；若无法识别净暴露，不用总产量乘铜价推断股东利润。",
+    "materiality_basis": "已保存年报与中报披露自产铜精矿、外购矿定价、工业/贸易及现金流；先审这些实际业务，不以价格或资金流替代经济重要性。",
+    "mechanism": "铜报价只是观察来路；公司资源开采、冶炼加工、贸易和权益投资具有不同价格与资本占用机制。",
+    "security_id": "SSE:600362",
+    "use": "QUESTION_FORMATION_NOT_QUANTIFIED_BENEFIT"
+  },
+  "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+  "extension_permission": {
+    "body_sha256": "45364363eccca62a115d35ea1212f02f9c2fa918b85cb4c7ad8ca3fd50677e1c",
+    "comment_id": 5778160521,
+    "created_at": "2026-09-22T14:17:34Z"
+  },
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "market_session": "2026-09-22",
+  "origin_kind": "INDUSTRY_VARIABLE_OBSERVATION",
+  "origin_source": {
+    "git_blob": "4c6ad30f55edceaf06d4b68993fa82b075b1415f",
+    "path": "details/radar/industry-breadth.json",
+    "purpose": "SAVED_INDUSTRY_BATCH_ORIGIN",
+    "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "55c3d0f9605a89045ae64578abbc9866aa921eb112ba50054eaf8a4e577f50b7"
+  },
+  "pdf_bytes": 4641394,
+  "policy": {
+    "automatic_deep": false,
+    "automatic_retry": false,
+    "execute_before": "2026-10-20T00:00:00Z",
+    "first_market_session": "2026-09-18",
+    "investment_authority": "NONE",
+    "max_attempts_per_market_day": 1,
+    "max_context_bytes": 458752,
+    "max_documents": 4,
+    "max_market_days": 10,
+    "max_output_tokens": 6000,
+    "max_pdf_bytes": 33554432,
+    "max_prompt_bytes": 524288,
+    "mode": "BOUNDED_DAILY_REVIEWED_STOCK_QUESTION",
+    "permission": {
+      "body_sha256": "6f45cf4378304c70fe734d2b080fd24115a6056966f60be5ec66dd5e27fb93f5",
+      "comment_id": 5748820065,
+      "created_at": "2026-09-20T09:00:30Z"
+    },
+    "provider": {
+      "base_url": "https://api.deepseek.com",
+      "credential_binding": "DEEPSEEK_API_KEY",
+      "model": "deepseek-flash",
+      "name": "DEEPSEEK_OFFICIAL",
+      "reasoning": {
+        "effort": "none"
+      }
+    },
+    "required_source_modes": [
+      "STATIC"
+    ],
+    "retained_source_file_bytes": 524288,
+    "schema_version": 1
+  },
+  "question_source": {
+    "git_blob": "d7ad7ef93b2cd3aecc85dee920567cb099dba85d",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "c492cf1d31ff5187dbe863d00ebd8e5fc420fc23",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "61b77f1d21c47eb4642ac369e33e9ca4d6fa2d99531087c28fad5f0671c4365c"
+  },
+  "reading_hash": "92e9029b2767a0061639e9cb723be8d8aa1ac1fb86ded0f3b0af43602435e40c",
+  "reading_source": {
+    "git_blob": "2b950f38e0d8002eef1d58ffcc7226414314171f",
+    "path": "current-state.json",
+    "purpose": "SAVED_QUESTION_READING",
+    "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "00b85bb68278df1863ef2b2f8745a86821be49756a1d6133c380f4315308662c"
+  },
+  "research_authority": "NONE",
+  "reserved_at": "2026-09-23T04:46:04.006785+00:00",
+  "reviewed_items": [
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9796a22da6e01c9ac03fe00768d057cc1620909c5315697e366931956b48ff2e",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 0
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "56f4ccacf0c709394739574bd1e2db94550fba8a22e757230134b435b204d1af",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 1
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9c1752eb5f25a29a77ee3b10daee7b655ce9bdf8e363245b7b3b21877833fcae",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 2
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9f19aca5b18854239557971dc7e020917243dc79ce35f52bb8139d9881ba19f7",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 3
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "c5ede806e1feadf3b440e418bd79895b88cfa4982b7c7c08402ea3f3b2c11b31",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 4
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "3e2cf6845fba500be3a014636560b7ab2fe45133ccd703ef1c88e2fd605435f4",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 5
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "378f4be44f067619bcd25d71ed00c6be494276b8f87929148968370f49211960",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 6
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9bb3768da0ed7da455d0b23091575e9d0e4b34b33e32a578bda9a25ebffb22ea",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 7
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "a5958ef6de744cd19d23325f68294900e8388ab6b47832c400fd1bdfe8c34b70",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 8
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "6e5cf3326ee8192b0827a46948a4d847a13bc04b09917ee81492bb42403b3219",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 9
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "769e37e363322061ba5590c3a1a73fec85bb6bf256910feff0db0cdbab5d10b2",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 10
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "31cf1fc5376f649f2ad84c77462693ee2d7fd0aa3572f5e59efac82787e28c71",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 11
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "48eb1bdd8069a08238f930127ab1adc19112856fab986249fe9372362c6dfbd5",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 12
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "f61bb2e03d4db5389826f0d3d1b72f013634c6713ffc25ca483ecb698e02205e",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 13
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "43e61fdf328815686b712078622804d92da4d62a8c87be7cce460f71f4011c83",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 14
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "97b9654f221550a3c2c9f11817efef704f40dce8e8027afe7b7ac048ce7ca13b",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 15
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "16b6384046f200551841ee923b8b98104a1bec8b3e98cdbbfd2870de85439543",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 16
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "cfa40965edc15fbc5ff6e122a70f38f9fa20bbe3e858d38a00da3bf69c924a84",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 17
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "b439a86a4bd1b06a9bc1f0feeaf077eadf3d84fb34f0245a75f8fa280ff68b09",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 18
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "c8d75708d68ad6ad2506cccdf083048a483a7301dfa4d15966e87e8d164ce377",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 19
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "bb7cdb0649e44b336f86583845690532c7183abf956e3ba7150ea597d6329a54",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 20
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "e7e6230956dccaa2f148909a93ca147afde0bc99c678a94ea685856f5ac6d26b",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 21
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "1b3d04320ef70a1b0de1c1c1bfbf302ef2e30196ebbcc143823ae956290e50b4",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 22
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "712b9f2e81e81b6384560550db2009e314cd8add9b12014b4967875e8ea0613a",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 23
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "3efb629441bd50170fb49934355f41eef87a04842a20d51a0fa5b067ff1636b1",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 24
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "3bec47e454942e4180e6d0c60dbf038d4a9056734a875fc4cb94fdfc193964e9",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 25
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "621af62cf0b5df705885dda5d8703e89d8720624c2f5d7aa0831229ab7b2fc7b",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 26
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "128c5424470f2ab124ccad180ea5034136bbb8cd1f83f08d54be6fb051ffa1f5",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 27
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d67d1fc4eeda6a36b5bc4d5fefdeab4559f8470fa045c94bb9d88b074abad38d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 28
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "11cd9c4f240fb8cf2032127801c634041dfab69066a4878085293ecce5af693d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 29
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "cde53cbcedfca8e93b9f14025271efc41d57e1aa949579951d701dcb6a799394",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 30
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "88f38996a7d9dea90107c417306b638c14d692ae0f42a69348c0cad0f29479e9",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 31
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9e33a05920384eda9c2628467c58b107eb2d5de30e5dd8b00ccf489a86b75c3a",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 32
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "abd2a9f09b56008b7fef25ffa6b3cfe180ccf0b2f2e494f0ffea86f536522752",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 33
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "352c048172ce80556132e240df688caf7989d4d5d2db258cc36a64f1bc2f63e8",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 34
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "269a36469a15a3c06b58caeacf623a63010eb8142199aa530eb62d4c5997d98d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 35
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "b51c13f853524b0d7e0761c3b3387caf33d8f63c9064d683c5f974bd42c0a4db",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 36
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "81c16f7ec3b104defa48d72e9ec43e72b8a43e94280c66f62b102f0793d40207",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 37
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "07abcfc468d71768862f588782bf824cba97328627ef4a6bffb44941045846c6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 38
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d63b4803f75e093da8ae9261505a34dc2c6230ef2d3a2ac8ef1d6c044b31ba71",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 39
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "f2259bdfbeeb2bacdf54389fc580978d6826c3eb97073c3f4a402629edba4393",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 40
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "cd14197109a9d7e1511fcfed8570a596b9eed10a1d8ecb2dff46c4659897fa76",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 41
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "e7cd421687c28dbe1e5b8aeca36165cfbdeb71dab7d000ef9608db9f5f30ff6b",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 42
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "8bc5a97e18a32369c4951576c7b2462559da097cda9ba64230d3eff809ccdab6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 43
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "297ab6212b78f0c472eac91ae02fbf598c38f927fbcbf6b0ee1b2a62cd6a6b37",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 44
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "bdd806428c20031060755cfd721e25037d94152eeb25cdc8d3c846aeaad8851c",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 45
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "1c7b94dcee1b42f6b204950e2ba3776557946e4dfafdf8f69adf229f13d90117",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 46
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "3430c3f509ebbd5f89168c7790be304606be032458b80031e1b55f25cb40870f",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 47
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "f25a82dab9c6c73d5f6070658524f57d1e94d78e33ed346311d41d88bc95e23d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 48
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "18b618cc2a0d6cd632b3689b20dcbce94e7c6c7ef92e8258b546470ba621e292",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 49
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d0985aae1daa2e0a9c597e365a406e137207e0bf29c816e99c1fc1556e3cb310",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 50
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "19dd2509ad92306e26ca20368c5b39b75e5bc3156635000d949eebcc69b89845",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 51
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "0a3b87f18217bcb76daf22329e04ca7bc0e1b3cbde158f523116e8c43771debc",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 52
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "a2c4b724321d678ee80fcb9325c142cf9999e351205a86941a136a32280f249d",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 53
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "7deb04418758ed50c28be12f2e2ac0db4d7c682bae2410d3d0cbd67859f4acb6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 54
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "a052186236d53e3347f45fc0d0e7f2512f2ff2c91f8bf98eeb28f7a3ea19fc4a",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 55
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "574ced2c274d097fcb61a73265bac5b7c7c6b73164efb03a09a09496d1b29430",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 56
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "fed1a74c717f6f1ba0b538a70fad730dec5a2bb1ff726682386b15b5e7b5a031",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 57
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "75da19ffe3a591d967e73a8356c87b005cf1852a7f6a379cfe757731e239ba6c",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 58
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d2b04584d2cfc5daa8cfe8e30e789d3724b1b9a4e9d17839e7e49e8d01974d93",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 59
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "86ad518dce25960d2f61fb9e664f9c95e765d3c188a44e5d841fe9dcf78aa4e0",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 60
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "c3f55bc831f0bdd63aae2b6b92b745bac7c8eee1368c0933aeaac489ae49070c",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 61
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "dc8ee8dc488b54bc780c4f70c13ba4f43158d131338578cfb130254d93c34ca9",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 62
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "60fabd14daffe624ec185d1235974d3f8145384d55de55724666a43303d10d34",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 63
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "78761dbadd5d5c56fdf7c60eff92364d4b8d472326095e32e50104667a950bf6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 64
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "315a29e8055699d68a352a9b4afe69818be46c0d1fc1c64a1703833c3610f0d0",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 65
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "7185b83075eba150ac9615dde651f15db80528ee96fa8f2af215c3905cb6696e",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 66
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "990e099c4dcc0cbb21d7a6a8bf8e69a52932b3d6485a3b135b142b95c2ea4970",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 67
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "ad6f960a7dbd5b5d4c13255d900a2d48759bca5e26c5ece39ab299f481256eda",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 68
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "3c78803de251477399af67f8aa58c9491624b6dd3cf2d4c7e1097216419104ba",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 69
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9aac3823387e029391351dfecfc110406cb7df330ec5c97c9db7e030d9873a71",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 70
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d8f44ffd5dd557c2ef48698a4b6a7e4742a23fd24f03742ecf87dafd47636a2c",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 71
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "1650cc764ffef7af6b05c160d77c8e7fae4d2b8ba468568517bf26d6f629e4d4",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 72
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "69d1684dcace2be93db50dc75a0c18cec540829def82170a706ccdd4004f3eb0",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 73
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "68548f7780a911cf79c55bffe03de81afd4d70a57fefcf6a46181b68c6e9e92e",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 74
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "cbc8e637e7519e5afa59a7f8dfb511de77e3104df57d43400910f50242513f4e",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 75
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "467f13eb2babea66698dcd9cc88956c8c49fb8d7345f960841dadb51637241a6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 76
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d6131d611334a2a2ed79e1ef9bb1ee8bc589ea5f0ad2e7498c64885e3b928892",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 77
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "e76f6ade0c31e8b6419add4a5e612221de9e5a4365e9c65c42402645e0302efe",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 78
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "134d89a1ea9eee529c276fb75398d1aed63b30b7d4fd15c40f40e71f962e95b2",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 79
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "62eea27167d9a8c362f8650d5719ef484a1a7dd51f9f7e6442cc16d98c790b5d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 80
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "114b6d9e72bbe6f78d4d0ae7fdd1cc03eacc39700413e0b252feba4b73618339",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 81
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "76beeeecaed9123edc8971adde1d6357d5ac3940d62a1c45892870e2cb845641",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 82
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9f8f658f4678841392139d3f9146a6d6cb2aaac6a17449bfa8e82f70a4913929",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 83
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "ca62321f9d471d243e532f9d1c00f38a0cbde85e871839e7f9862b5a3d93460b",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 84
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "0159eb9148db5aa8ec35c08907c751a39d4eedc143505c806b033fb315b9fe6d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 85
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "84fe38d258d6781bdfd4bf85605589c3b638778abef2c704b0d588908df10e79",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 86
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "19bf50bdb3f96a2ea2925b6bb29963b9674b35fcc5aa7130580b0eea96985ece",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 87
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "e42f1870b74e2eefbf56f34a20666b6e8c71fe51d3c9257c7312af2ead82da90",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 88
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "2bc36ac1f4cf82b5404ef4bd62dd5c98501568958a67eeb56c0af5ddf1b66ef6",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 89
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "3450f04a99cc994b17ac37b6eef47a5aee63b532406ecd7e8165f07257fc971c",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 90
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "faf6e8fabaebb841dd1e0e99c261a992a4bbb0af5b82cca021c19d91a14b3b26",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 91
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "60ea0d4f07a5565d821036bbfbc948d6dd16783460b18af60ed2454f13adaa1f",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 92
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "43d0bb11686227095f14a7a86252dac13c4ff38f6897ff24487dafd200b951ef",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 93
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "69ce66b55f595b1a9b4a6fb13afb2c89d5bf591b854d2ae120f1799275b60b1c",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 94
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "724da54652bf31fb217369f690c2978676ee412736a9d704fc400a78065657fc",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 95
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "dd533cd0c25208f16e31bcdd2fce41b7dea67b9b57f35918d600cefa6065ea7d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 96
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "07e49bd30db71515c3c0f9aa767d9cb50de2586b579f61e33977770e818d17bd",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 97
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "53cae0dd0c8811bc047eab51df2201c58cf4dce81afe63eacc0a2ec4e7ec93d3",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 98
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "bd11f4f4bff9da10eafb3413b1304b6be64d8c4586fee8c8755693daaaaeb83d",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 99
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "6c511e5eb2093a097d4cfc008990e771f215b23cd0efd8ef8815b804dea2795f",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 100
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "7912b43549149012343a4eb973be91b83ef4be465761e76ab4db6f53fd80a874",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 101
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "6f4cb77b3509149202fac65a016c034f2f510ba536307b18c6b2cb3e934a6775",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 102
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "ad08d0c4ad95d95905693b1fbe86d1ab5127b463d5f42963d94ad6f570a34557",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 103
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "c49d106061141087161f944fe0823c65be3a0e9a0e91d2db01085a586405d0ff",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 104
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "26f623c9479cd8c7211b6ec082a78afd3d59e2aa41d0a3becd44973ff134dcfd",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 105
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "1a5fec7018c3aca9e86e17969230e746c33a3b9d1471b3576ae571abfa3b0596",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 106
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "d9fc702098e70020733dc11e3bd8c68e5a5753078dc01742500082ff26e4a614",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 107
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "3c965685f7f7c8b9d121ce9871d16e748c216ea3ffe2764a8264fc24d7a4a7af",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 108
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "37f79c0e4b9f7bf03de470465aad1f77083dfadb0033abbaaf9923b9bd352806",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 109
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "505577643919016491f0030fc5c47cc235e7e7cc20b3d6cccb17e73c64c10764",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 110
+    },
+    {
+      "disposition": "SELECTED_FOR_QUESTION",
+      "raw_sha256": "3b07a1f2ba3cae2cabd63b42a1486f36f68b515f2e8cb4da8b4c16a2693e250a",
+      "reason": "仅用于已声明的铜链净经济敞口问题；不是公司受益证据或涨跌原因。",
+      "source_row": 111
+    },
+    {
+      "disposition": "SELECTED_FOR_QUESTION",
+      "raw_sha256": "90c44afc3a99a1edfdf045f921341c89711cb46df98ca411a814e14930631ba7",
+      "reason": "仅用于已声明的铜链净经济敞口问题；不是公司受益证据或涨跌原因。",
+      "source_row": 112
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "65f582ae48e868954545a181e6ec2b30d6cb7e88a0df090b81997dffac6c9922",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 113
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "28f49845321a4674916ee7aa2d617814f207da350be181783e20c8f84abd569a",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 114
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "5b766c6ead427af19c2948a55f224104dc58c8ea4b057295248a05fdefcf05ad",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 115
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "c1d0b19fe35ffeffa898a90a9a33690c8b67fbf0ae1151af2b5ac81bb9e5ac96",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 116
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9dbe38a99f67aa134873006595c21d8f2fc76a4b2c0720947ddef29d31db7fd9",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 117
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "dc48863323b69046187f4dd4a6fbc55925528564f7aeaa86d0f72e2eafde57a3",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 118
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "aef3d754ef7335b883935b0e8cdca7ca9f590c04bccacd9a7651ebfd9323bc6a",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 119
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "4bd102f848971d6a5337c27da47a710e92e5ff5c541dc9d1db5039674bec6c08",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 120
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "a3e6184d6d262158c02a8e689d454c2a15bf7da03069b30bb7fd8f4b467a0dd4",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 121
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "9af364277415e1627c5972ec53686cffff30a9369233552d5b6b13800ee73890",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 122
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "af1824f7fe4fe08118820c90928d9828c26e10e68a57ae8e720323f67f5deedc",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 123
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "e0252598abaca379fe2b342da766f7b582f4def0223046c0913c310881349c17",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 124
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "7eaf83ba904060d46f566179dcb3d05f45bd684a42a776a8b4168bfa108a563c",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 125
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "34aeee8ec36a534f71cefd763217323b2093bad7fd4f26352fb712a164344c36",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 126
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "0b3bb70924517245e8c4a791b066d783513c234adb8fc69f4bc0a32165950b9a",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 127
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "883946158376597de1a45f891f75cab3bf8849357f709475730caa94336c4a25",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 128
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "7168e8d875a80d43398799baec583d8ffed9b9d91d157aed203166ef35eba7c8",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 129
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "db5c1dce31515ad9b177bbda351148da1f92f04284e0533056ebdb61ae6eca37",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 130
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "76df319f62130d6e84e9369e7ae9b59ccf100fb936b9af4a61a7eadf1fb6d093",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 131
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "55e95590b18e8d23ee800aa22ec562786fddee0207604cfea1ead382129f3dc5",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 132
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "8aad56874ab206e13e7bda75a0d4756be31a74919f4b900bca959f1f8d4228ae",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 133
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "ca58f2d30e9ad4745a1f8c57375155118bbb37bb9e05f18f1e7f9b8b9cc1b869",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 134
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "a83aea881e64d32be37eb9b42f71010e258660368da84a7c584225a6b2967c07",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 135
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "76be3389077c5db69a462015fd3beb0f4b4f115cc606b2ef7e1e5545ae45da24",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 136
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "744353036307886516818fe5d044b040bf58f01d5b8887efcc58951cbd9585a1",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 137
+    },
+    {
+      "disposition": "NOT_SELECTED",
+      "raw_sha256": "25e747d7238c9a008b9ef7b683670b4357da7a0fb38c18f89a4ca3a4df784e9b",
+      "reason": "本次有界铜链研究未展开该品种公司经济暴露；不表示无机会。",
+      "source_row": 138
+    },
+    {
+      "disposition": "CONTEXT_ONLY",
+      "raw_sha256": "f5f96485eff4162a7b9ce634d9f3a459de2262bda884637b128f2fbcc78c6b39",
+      "reason": "本行没有本次铜链问题需要的合格产业观察口径；不是无市场变化。",
+      "source_row": 139
+    },
+    {
+      "disposition": "CONTEXT_ONLY",
+      "raw_sha256": "a8277b91ddff822aedfd0a127f0f35918e3a09b3f432666cb6b470bd883a1ce8",
+      "reason": "本行没有本次铜链问题需要的合格产业观察口径；不是无市场变化。",
+      "source_row": 140
+    },
+    {
+      "disposition": "CONTEXT_ONLY",
+      "raw_sha256": "b95ca41e110d9bb82bbef50152534777defe10aa0c9f4be154e36b30fc5dba94",
+      "reason": "本行没有本次铜链问题需要的合格产业观察口径；不是无市场变化。",
+      "source_row": 141
+    },
+    {
+      "disposition": "CONTEXT_ONLY",
+      "raw_sha256": "58ade6556e782f092b9d5819a3d1ebadd5976fac2dee6b68d614188d6a0748a7",
+      "reason": "本行没有本次铜链问题需要的合格产业观察口径；不是无市场变化。",
+      "source_row": 142
+    },
+    {
+      "disposition": "DATA_UNAVAILABLE",
+      "raw_sha256": "007680744f63c63e9bdb1f2f379d407dd256f6bad9f1615bd9f7ef8a3dbe0c37",
+      "reason": "本行报价日期不同，保留原日期；不并入所选市场日。",
+      "source_row": 143
+    }
+  ],
+  "selected_observations": [
+    {
+      "raw_sha256": "3b07a1f2ba3cae2cabd63b42a1486f36f68b515f2e8cb4da8b4c16a2693e250a",
+      "source_row": 111
+    },
+    {
+      "raw_sha256": "90c44afc3a99a1edfdf045f921341c89711cb46df98ca411a814e14930631ba7",
+      "source_row": 112
+    }
+  ],
+  "shared_day_anchor": {
+    "conclusion": "success",
+    "created_at": "2026-09-22T10:13:06Z",
+    "event": "workflow_dispatch",
+    "head_sha": "5027b3e122ff070b9ddabd069421995fa714c3bf",
+    "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35714758428",
+    "id": 35714758428,
+    "operation": null,
+    "path": ".github/workflows/sector-radar-shadow.yml",
+    "run_attempt": 1,
+    "run_started_at": "2026-09-22T10:13:06Z",
+    "status": "completed",
+    "updated_at": "2026-09-22T10:25:10Z"
+  },
+  "signal_transition_authority": "NONE",
+  "source_custody_source": {
+    "git_blob": "a26a79608d7d2919e30a9aa5a3170ed2e7c5bc82",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/custody.json",
+    "purpose": "DAILY_PUBLIC_PDF_CUSTODY",
+    "ref": "9bc8f6f91c6626add57d64a7aa2e536a56206fe2",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "defe789f9f1b3c40e651b041c3163f05261779c57f46a9c2fbb309beadd5ba32"
+  },
+  "source_proof": "RETAINED_INDUSTRY_BYTES_AND_PUBLIC_PDFS_NOT_ECONOMIC_TRUTH",
+  "source_run_id": 35726184042
+}
