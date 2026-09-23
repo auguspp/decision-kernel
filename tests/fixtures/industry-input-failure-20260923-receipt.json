@@ -1,0 +1,17 @@
+{
+  "code_commit": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+  "error_code": "DECLARED_IMPORT_RUN_CLOCK_OR_MAIN_PLAN",
+  "error_type": "TrialError",
+  "finished_at": "2026-09-23T01:11:58.168460+00:00",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "model_calls": 0,
+  "mutation_uncertain": false,
+  "pdf_acquisitions": 0,
+  "query_events": [],
+  "research_authority": "NONE",
+  "research_executions": 0,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-23T01:11:55.089015+00:00",
+  "status": "PREPARATION_INCOMPLETE"
+}

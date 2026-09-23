@@ -125,7 +125,9 @@ def load(api, code, custody, clock, cache):
     manifest, receipt, records = project(profile, files)
     actual, saved_at = daily._source(api, profile["manifest_source"], "source.json", clock)
     once.require(actual == files["git/source.json"]
-        and api.file(capture.REQUEST, profile["capture_code"]) == once.raw(manifest["plan"])
+        # The trusted plan's original bytes need not have our JSON key order.
+        # Strict decoding + canonical bytes preserve types and array order.
+        and once.raw(identity._json(api.file(capture.REQUEST, profile["capture_code"]))) == once.raw(manifest["plan"])
         and reading.clock(run["run_started_at"]) <= reading.clock(manifest["started_at"])
         <= reading.clock(receipt["finished_at"]) <= reading.clock(run["updated_at"])
         <= reading.clock(custody["checked_at"]) <= reading.clock(clock())

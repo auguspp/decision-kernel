@@ -122,13 +122,18 @@ def load(api, code, custody, cache):
     return converted
 
 
-def _archive(api, profile, cache):
-    """Shared native artifact qualification; format adapters keep their own contracts."""
+def _archive(api, profile, cache, *, expected_conclusion="success"):
+    """Read exact native bytes; failed input preparation needs an explicit caller.
+
+    Original Research/source consumers retain the success-only default. This
+    helper grants neither recovery nor source admission from a failed archive.
+    """
+    once.require(expected_conclusion in {"success", "failure"}, "DAILY_IMPORT_EXPECTED_CONCLUSION")
     run = api.get("actions/runs/" + str(profile["run"]["id"]))
     once.require(all(run.get(k) == v for k, v in profile["run"].items())
                  and run.get("repository", {}).get("full_name") == once.REPO
                  and run.get("head_repository", {}).get("full_name") == once.REPO
-                 and run.get("status") == "completed" and run.get("conclusion") == "success"
+                 and run.get("status") == "completed" and run.get("conclusion") == expected_conclusion
                  and run.get("run_attempt") == 1, "DAILY_IMPORT_RUN_IDENTITY")
     listing = api.get(f"actions/runs/{run['id']}/artifacts?per_page=100")
     once.require(len(listing["artifacts"]) == listing["total_count"] <= 100,
