@@ -152,6 +152,66 @@ def _sources(packet):
     return [r.model_dump(mode="json") for r in packet.source_refs]
 
 
+def prompt_source_checks(packet, preflight_raw: bytes) -> dict:
+    """Project bound collection records, not a second gate or economic Evidence.
+
+    The native host already calls prepare/launch admission at its live clock.
+    Recheck this immutable projection at the packet cutoff so preview, approval
+    and actual send use identical bytes; no fresh-source claim is manufactured.
+    No loader, network, model, execution authority or serialized input mutation.
+    """
+    p = check_preflight(preflight_raw, checked_at=packet.research_cutoff.isoformat())
+    require(all(p[k] == getattr(packet, k) for k in ("case_id", "ticker", "security_id")),
+            "INPUT_REJECTED")
+    require(clock(p["finished_at"]) <= packet.selected_at <= packet.research_cutoff,
+            "INPUT_REJECTED")
+    refs = [s for s in _sources(packet) if s["purpose"] == PREFLIGHT_PURPOSE]
+    require(len(refs) == 1 and identity._checked_source(refs[0], lambda _: preflight_raw) == preflight_raw,
+            "PREFLIGHT_INPUT_BINDING_MISMATCH")
+    declarations = [MARKER.fullmatch(s) for s in packet.known_unknowns
+                    if s.startswith("REQUIRED_SOURCE_CLASS:")]
+    require(declarations and all(declarations), "INPUT_REQUIRED_CLASSES_UNDECLARED")
+    required = [(m[1], m[2]) for m in declarations]
+    require(len(required) == len({k for k, _ in required})
+            and set(required) == {(c["id"], c["mode"]) for c in p["required_classes"]},
+            "SOURCE_PREFLIGHT_INCOMPLETE")
+
+    def fields(row, names):
+        return {k: row[k] for k in names if k in row}
+
+    # Do not send free-form collector notes or unrelated extra fields. Query
+    # terms/locators are source metadata, never instructions to execute or fetch.
+    return {
+        "format": "host-source-check-context-v1",
+        "status": "BOUND_SOURCE_PREFLIGHT_RECORDS_VALIDATED",
+        "meaning": "DECLARED_SCOPE_COLLECTION_RECORDS_NOT_ECONOMIC_EVIDENCE_OR_EXECUTION_PERMISSION",
+        "interpretation": (
+            "The host has checked these exact saved source-preflight records and their input binding. "
+            "The native host still rechecks actual admission before sending. REQUIRED_SOURCE_CLASS "
+            "entries in known_unknowns are source requirements, not assertions that checks were not done. "
+            "The results below apply only to their declared queries, source identities and time window; "
+            "they do not certify source truth, complete outside coverage or current freshness. "
+            "Do not convert unseen collector notes into business STOP/WAIT or repeat a recorded check "
+            "merely because the collection happened outside the model. Assess the actual supplied "
+            "evidence and its limits. No listed lead is not proof of no events. Referenced material "
+            "is not necessarily supplied in full here. These records grant no new tool, Full or investment authority."
+        ),
+        "preflight_source": refs[0],
+        "recorded_window": fields(p, ("started_at", "finished_at", "valid_until")),
+        "required_classes": [fields(c, ("id", "mode", "body_ids", "inventory_id"))
+                             for c in p["required_classes"]],
+        "reads": [fields(v, ("id", "identity", "locator", "authority", "kind", "succeeded",
+                             "checked_at", "body_sha256", "tool_reference")) for v in p["reads"]],
+        "inventories": [{
+            **fields(v, ("id", "class_id", "started_at", "finished_at", "planned_queries")),
+            "query_events": [fields(e, ("query", "status", "checked_at", "tool_reference"))
+                             for e in v["query_events"]],
+            "leads": [fields(e, ("identity", "locator", "authority", "decision_relevant", "body_id",
+                                 "primary_identity", "primary_locator")) for e in v["leads"]],
+        } for v in p["inventories"]],
+    }
+
+
 def _publication_checks(packet, preflight, load, commit) -> None:
     """Minimal supported seed: exact retained Git file with proved publication.
 

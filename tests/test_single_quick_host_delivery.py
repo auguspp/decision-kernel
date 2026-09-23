@@ -54,10 +54,11 @@ def setup_single(tmp_path, monkeypatch, route='FULL_CANDIDATE', lane=None, inval
         'comment_id': 2, 'body_sha256': once.sha(permission['body'].encode()), 'created_at': permission['created_at']})
     request['approved_egress_hash'] = '0' * 64
     base = daily.base_request(request) if lane else request
-    _, packet, discovery, ctx, _ = host._question_inputs(api=api, code=args['code'], request=base, clock=args['clock'], allow_full=bool(lane))
+    _, packet, discovery, ctx, checks = host._question_inputs(api=api, code=args['code'], request=base, clock=args['clock'], allow_full=bool(lane))
     if lane:
         packet, _, _ = daily.bind(api, request, q, packet, ctx, args['clock'])
-    request['approved_egress_hash'] = host.single_egress_hash(packet, discovery, ctx, daily=bool(lane))
+    request['approved_egress_hash'] = host.single_egress_hash(packet, discovery, ctx, daily=bool(lane),
+        source_preflight=checks["preflight_raw"])
     path = daily.REQUEST if lane else host.QUESTION_REQUEST
     api.files[args['code']][path] = once.raw(request)
     def call(stage, prompt, model, output, usage):

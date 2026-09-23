@@ -49,11 +49,11 @@ def selected_method(request):
     return single.METHOD_VERSION
 
 
-def single_egress_hash(packet, discovery, context, *, daily=False, bound=None):
+def single_egress_hash(packet, discovery, context, *, daily=False, bound=None, source_preflight=None):
     """Same prepared inputs, explicit one-call contract; digest is not permission."""
     if bound is not None:
-        return bound.egress_hash(packet, discovery, context)
-    prompt = once.initial_prompt(packet, discovery, context)
+        return bound.egress_hash(packet, discovery, context, source_preflight=source_preflight)
+    prompt = once.initial_prompt(packet, discovery, context, source_preflight=source_preflight)
     prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
     return canonical_hash({"prompt": prompt,
         "source_refs": [s.model_dump(mode="json") for s in packet.source_refs],
@@ -245,6 +245,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
             decoded, bound = full_input.load_context(request["context_source"], checks["load"],
                 ticker=packet.ticker, allowed=request["permission"] == industry.PERMISSION)
             once.require(decoded == context, "FULL_QUESTION_CONTEXT_CHANGED")
+        prompt_options = {"source_preflight": checks["preflight_raw"]} if is_single else {}
         base_packet = packet
         if daily:
             packet, daily_state, daily_scope = daily_policy.bind(api, request, q, packet, context, clock,
@@ -285,7 +286,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 # Daily custody above already replays original PDFs and current-main notes.
             _question_context(context, packet, identity._json(checks["preflight_raw"]))
             if is_single:
-                digest = single_egress_hash(packet, discovery, context, daily=daily, bound=bound)
+                digest = single_egress_hash(packet, discovery, context, daily=daily, bound=bound, **prompt_options)
                 once.require(request["approved_egress_hash"] == digest
                              and egress in {None, digest}, "QUESTION_SINGLE_EGRESS_NOT_APPROVED")
                 egress = digest
@@ -302,18 +303,20 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         prepared = recheck()
         # Preview uses the SAME SDK request builder, before any reservation/spend.
         if bound is not None:
-            bound = bound.preview(packet, discovery, context)
+            bound = bound.preview(packet, discovery, context, **prompt_options)
             result["full_input"] = {**bound.record(), **(
                 {"single_quick_request_sha256": bound.single_quick_request_sha256,
                  "single_quick_prompt_sha256": bound.single_quick_prompt_sha256} if is_single else
                 {"pre_request_sha256": bound.pre_request_sha256, "pre_prompt_sha256": bound.pre_prompt_sha256})}
         elif daily:
-            deepseek._deepseek_request(once.initial_prompt(packet, discovery, context),
+            deepseek._deepseek_request(once.initial_prompt(packet, discovery, context, **prompt_options),
                                       single.QuickAssessment if is_single else once.PreResearchResult)
         else:
-            once.model_request(once.initial_prompt(packet, discovery, context),
+            once.model_request(once.initial_prompt(packet, discovery, context, **prompt_options),
                                single.QuickAssessment if is_single else once.PreResearchResult,
                                max_prompt_bytes=STOCK_PROMPT_BYTES)
+        if is_single:
+            result["source_check_context"] = admission.prompt_source_checks(packet, checks["preflight_raw"])
         try:
             work_head = head(api, intake.WORK_REF)
         except GitHubReadError as exc:
@@ -364,7 +367,8 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
             "code_commit": code, "question_source": request["question_source"],
             "approved_egress_hash": egress, "permission": request["permission"],
             "automatic_retry": False,
-            **({"research_method": single.METHOD_VERSION, "method_permission": request["method_permission"]} if is_single else {}),
+            **({"research_method": single.METHOD_VERSION, "method_permission": request["method_permission"],
+                "source_check_context": result["source_check_context"]} if is_single else {}),
             **({"provider": daily_policy.POLICY["provider"], "daily_scope": daily_scope,
                 "daily_reservations": daily_reservations} if daily else {})})
         recheck()
@@ -376,7 +380,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 live = admission.assess_admission(**{**launch_checks, "checked_at": clock()})
                 once.require(live["research_execution_allowed"], live["reason"])
                 identity._checked_source(launch, checks["load"])
-                expected = once.initial_prompt(packet, discovery, context)
+                expected = once.initial_prompt(packet, discovery, context, **prompt_options)
                 if stage == "quick" and not is_single:
                     pre = once.PreResearchResult.model_validate(prompt["pre_research"])
                     once.validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
@@ -396,7 +400,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                     fn = call or partial(once.model_call, max_prompt_bytes=STOCK_PROMPT_BYTES)
                 return fn(stage, prompt, model, out, usage)
             result.update(phase="RESEARCH", formal_research_started=True)
-            return once.research(packet, discovery, context, output, call=guarded, clock=clock,
+            return once.research(packet, discovery, context, output, call=guarded, clock=clock, **prompt_options,
                 **({"bound_context": bound} if bound is not None else {}),
                 **({"provider_event_prefix": deepseek.PROVIDER_EVENT_PREFIX,
                     "model_or_executor": deepseek.MODEL_OR_EXECUTOR} if daily else {}))

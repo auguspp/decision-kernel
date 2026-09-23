@@ -34,12 +34,13 @@ def test_native_complete_industry_input_through_sdk_retainer_publisher_reader(tm
     c = setup_single(tmp_path, monkeypatch, lane='industry')
     c.case.context['source_limitations'] += ' Synthetic full body retained, not truncated.' * 14000
     seal_full(c.case)
-    _, p, d, context, _ = host._question_inputs(api=c.api, code=c.args['code'],
+    _, p, d, context, checks = host._question_inputs(api=c.api, code=c.args['code'],
         request=daily.base_request(c.request), clock=c.args['clock'], allow_full=True)
     p, _, _ = daily.bind(c.api, c.request, c.q, p, context, c.args['clock'])
     _, bound = full.load_context(c.request['context_source'],
         lambda s: c.api.file(s['path'], s['ref']), ticker=p.ticker, allowed=True)
-    c.request['approved_egress_hash'] = host.single_egress_hash(p, d, context, bound=bound, daily=True)
+    c.request['approved_egress_hash'] = host.single_egress_hash(p, d, context, bound=bound, daily=True,
+        source_preflight=checks["preflight_raw"])
     c.api.files[c.args['code']][daily.REQUEST] = once.raw(c.request)
     seen, texts = [], []
     def transport(request):
@@ -50,6 +51,8 @@ def test_native_complete_industry_input_through_sdk_retainer_publisher_reader(tm
         assert prompt['public_context'] == context
         assert prompt['stage'] == 'QUICK' and prompt['method_version'] == single.METHOD_VERSION
         assert not {'pre_research', 'pre_research_hash'} & set(prompt)
+        assert prompt['host_source_checks'] == host.admission.prompt_source_checks(p, checks['preflight_raw'])
+        assert prompt['host_source_checks']['preflight_source']['sha256'] == once.sha(checks['preflight_raw'])
         assert body['model'] == once.DEEPSEEK_MODEL and body['reasoning'] == {'effort':'none'}
         assert body['tools'] == [] and body['store'] is False and body['max_output_tokens'] == 6000
         text = '{"route":' if route == 'INVALID' else assessment(prompt, route).model_dump_json()
