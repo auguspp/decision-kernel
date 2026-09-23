@@ -35,6 +35,21 @@
 
 读取状态：READ&#95;OK
 
+### 600362.SH / ROOT
+铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？
+
+处置：VALIDATED&#95;EXECUTION&#95;GAP；原终态：None
+原完成时间：2026-09-23T04:48:51.282443+00:00；Human接受：未由本读取建立。
+声明的未知：当前净自产资源敏感度、套保覆盖及利润归属未完全量化。；期现基差不是冶炼加工费。；保证金及受限资金释放条件和业务归属仍需核对。；当前范围为两份财报及其可能更正；其他临时公告按Human财报优先要求暂缓，未声称全事件覆盖。
+[admission.json](../../sources/git/f16fae57eddfc44a1c74ce20cef6842be85e304d/admission.json)
+[candidate.json](../../sources/git/0d2219f5deb4541b3fe65296355bdc090c8418ff/candidate.json)
+[host-receipt.json](../../sources/git/ead06177b537082c9c19a8eb0e7c2c3b6f804258/host-receipt.json)
+[input.json](../../sources/git/b14769bc71c80a726460b471fa5710efdfb2c648/input.json)
+[launch.json](../../sources/git/89e35dd67bfb99b28019198daf1932d90b949794/launch.json)
+[prepare.json](../../sources/git/6e09175b6a3455ceadbb572fe39081c9e77566bf/prepare.json)
+[receipt.json](../../sources/git/e397675421ec7e6352708a20cd57538fd1c51628/receipt.json)
+[validation.json](../../sources/git/5553f0360db7a527b47b7f153714f95ab71cecab/validation.json)
+
 ### 603507.SH / ROOT
 在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。
 

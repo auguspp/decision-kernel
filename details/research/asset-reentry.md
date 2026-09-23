@@ -348,3 +348,25 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
+
+## 600362.SH
+
+下一步：本读取没有关联观察；不等于已经核实无变化
+
+- stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14：SAVED&#95;QUESTION / RETAINED&#95;BYTES&#95;VERIFIED
+  - 原问题：铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？
+  - 当时为何检查：把9月22日已留存铜链观察落实为已有净经济敞口问题的首次正式审阅；不把单日快照、资金流或会员持仓当作公司基本面变化。
+  - 原关键未知：
+    - 当前净自产资源敏感度、套保覆盖及利润归属未完全量化。
+    - 期现基差不是冶炼加工费。
+    - 保证金及受限资金释放条件和业务归属仍需核对。
+    - 当前范围为两份财报及其可能更正；其他临时公告按Human财报优先要求暂缓，未声称全事件覆盖。
+  - [原保存材料](../../sources/git/f16fae57eddfc44a1c74ce20cef6842be85e304d/admission.json)
+  - [原保存材料](../../sources/git/0d2219f5deb4541b3fe65296355bdc090c8418ff/candidate.json)
+  - [原保存材料](../../sources/git/ead06177b537082c9c19a8eb0e7c2c3b6f804258/host-receipt.json)
+  - [原保存材料](../../sources/git/b14769bc71c80a726460b471fa5710efdfb2c648/input.json)
+  - [原保存材料](../../sources/git/89e35dd67bfb99b28019198daf1932d90b949794/launch.json)
+  - [原保存材料](../../sources/git/6e09175b6a3455ceadbb572fe39081c9e77566bf/prepare.json)
+  - [原保存材料](../../sources/git/e397675421ec7e6352708a20cd57538fd1c51628/receipt.json)
+  - [原保存材料](../../sources/git/5553f0360db7a527b47b7f153714f95ab71cecab/validation.json)
+  - [原保存材料](../../sources/git/d7ad7ef93b2cd3aecc85dee920567cb099dba85d/question.json)
