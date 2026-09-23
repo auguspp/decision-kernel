@@ -1,0 +1,54 @@
+name: R4 source-check context exact transfer
+on:
+  push:
+    branches: [ops/r4-source-check-transfer-20260924]
+permissions:
+  contents: write
+jobs:
+  transfer:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: f956ea490ede8f31fe82fae4a1dc7f43c94d1a6d
+          persist-credentials: false
+      - name: Transfer the reviewed patch only; never execute repository scripts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = f956ea490ede8f31fe82fae4a1dc7f43c94d1a6d
+          test "$(git rev-parse HEAD^{tree})" = bc193a8d1cddf855eeb479ecf1a8c0b74214b8d5
+          python - <<'PYTHON'
+          import base64, hashlib, json, os, subprocess, zlib
+          from pathlib import Path
+          chunks = [('40a49788b4bc1c34c218ecc6922db59ca973132d', 5500), ('e93a36156a595aac93a5996104effa9103f5c545', 1500), ('ca1695f56856d3ecd5a311af774b7a75abc9d805', 1500), ('7d352aa1231d61171dcb37c01368ccfff548e5b3', 1500), ('5ce170a21fdfe83756c26d4ddc433973b37c2395', 1500), ('1be4da96d7ce4c046171dd6d58dd1077c8c30018', 1500), ('859063dfbfe1c3ae5278d57847dc8a8fb11b8cec', 1500), ('3c420585bb84b5cb0cacd8bd02564f9930cd78a9', 1500), ('6e7db496ab84a7f2583d8f17182fc0f8ed4cd88c', 842)]
+          data = bytearray()
+          for sha, size in chunks:
+              value = json.loads(subprocess.check_output(['gh', 'api', 'repos/auguspp/decision-kernel/git/blobs/' + sha]))
+              assert value['sha'] == sha and value['encoding'] == 'base64'
+              body = base64.b64decode(value['content'])
+              assert len(body) == size
+              assert hashlib.sha1(f'blob {size}\0'.encode() + body).hexdigest() == sha
+              data.extend(body)
+          assert len(data) == 16842
+          assert hashlib.sha256(data).hexdigest() == '373312d7166dd417744aaa3896675006f555d53f7caa655415aea1806f5aeec5'
+          patch = zlib.decompress(data)
+          assert len(patch) == 55889
+          assert hashlib.sha256(patch).hexdigest() == '4d4362545281f17f7f921808f320acee215b26649ba02d16b46c2c8694c16b02'
+          (Path(os.environ['RUNNER_TEMP']) / 'source-check.patch').write_bytes(patch)
+          PYTHON
+          git -c core.hooksPath=/dev/null apply --index --whitespace=error "$RUNNER_TEMP/source-check.patch"
+          python - <<'PYTHON'
+          import subprocess
+          expected = ['docs/single-quick-contract-v1.md', 'src/decision_kernel/runtime/external_research_admission.py', 'src/decision_kernel/runtime/reviewed_full_input.py', 'src/decision_kernel/runtime/saved_research_once.py', 'src/decision_kernel/runtime/stock_question_host.py', 'tests/fixtures/host_source_check_context/README.md', 'tests/fixtures/host_source_check_context/input.json', 'tests/fixtures/host_source_check_context/preflight.json', 'tests/test_saved_research_raw_retention.py', 'tests/test_single_quick_host_delivery.py', 'tests/test_single_quick_native_sdk_delivery.py', 'tests/test_source_check_context.py', 'tests/test_source_check_context_host.py', 'tests/test_source_check_sdk_isolation.py']
+          actual = subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).splitlines()
+          assert actual == expected
+          PYTHON
+          test "$(git write-tree)" = 3e242b7c6f16c6d89c6540f7d465cd0eaa4abc3b
+          git -c core.hooksPath=/dev/null -c user.name=auguspp -c user.email=83357964+auguspp@users.noreply.github.com commit -m 'fix: pass validated source-check facts to single Quick without changing evidence' -m 'Human continuation #297/5803944775 after R4-2 pilot. Reuse admission/host/SDK; preserve clocks, source identity, full text, egress and historical results. New metadata is not Evidence or permission. No activation or live research. Exact patch and full tree checked; full PR/main CI and publication still required.'
+          git -c core.hooksPath=/dev/null -c 'credential.helper=!gh auth git-credential' push --force-with-lease=refs/heads/fix/r4-source-check-context-20260924: origin HEAD:refs/heads/fix/r4-source-check-context-20260924
+          printf 'CODE_COMMIT=%s\nCODE_TREE=%s\n' "$(git rev-parse HEAD)" "$(git rev-parse HEAD^{tree})"
