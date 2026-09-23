@@ -207,7 +207,7 @@ def test_inventory_and_original_shared_capacity_fail_closed(tmp_path, monkeypatc
     if damage == 'source-limit':
         research = deepcopy(baseline['research'])
         research['stock_business_work'] = {'items': [
-            {'sources': {str(i): {'read_path': f'sources/git/legacy-{i}/input.json'} for i in range(32)}}]}
+            {'sources': {str(i): {'read_path': f'sources/git/legacy-{i}/input.json'} for i in range(legacy.MAX_STOCK_SOURCE_FILES)}}]}
         baseline = model.assemble(code_commit=baseline['code_commit'], checked_at=baseline['generated_at'],
             check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
             research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])

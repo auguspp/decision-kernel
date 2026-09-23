@@ -84,7 +84,7 @@ def test_continuation_request_stays_structurally_bound_to_consumed_predecessor()
     assert type(artifact["id"]) is int and artifact["id"] > 0
     assert type(artifact["size_in_bytes"]) is int and artifact["size_in_bytes"] > 0
     assert isinstance(artifact["name"], str) and artifact["name"]
-    assert artifact["digest"].startswith("sha256:") and lowercase_hex(artifact["digest"][7:], 64)
+    assert artifact["digest"].startswith("sha256:") and lowercase_hex(artifact['digest'][7:], 64)
     assert lowercase_hex(artifact["head_sha"], 40)
 
     items = request["items"]
@@ -148,7 +148,7 @@ def test_original_host_accepts_continuation_session_identity_without_reopening_o
 def test_reader_preserves_accepted_bounds_and_failed_work_ref():
     root = Path(__file__).parents[1]
     text = (root / "src/decision_kernel/runtime/stock_research_reading.py").read_text()
-    assert "EXTRA_API_CALLS = 72" in text and "MAX_STOCK_SOURCE_FILES = 32" in text
+    assert "EXTRA_API_CALLS = 576" in text and "MAX_STOCK_SOURCE_FILES = 256" in text
     assert "failed_work_ref = binding['predecessor_successor_selection']['ref']" in text
     assert "continuation_request['failed_successor_work_commit'] == failed_work_ref" in text
     assert "continuation_reading['research']['stock_business_work']['work_commit'] == failed_work_ref" in text

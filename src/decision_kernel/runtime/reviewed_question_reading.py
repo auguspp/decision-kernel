@@ -31,7 +31,7 @@ DETAIL = 'details/research/reviewed-questions.md'
 REPORT = 'details/research/reviewed-questions.json'
 CORE = {'prepare.json', 'input.json', 'candidate.json', 'validation.json',
         'host-receipt.json', 'launch.json', 'funnel.json', 'receipt.json', 'admission.json'}
-MAX_EXECUTIONS = 8
+MAX_EXECUTIONS = 16  # Saved roots/children, not permission for more executions.
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError)
 
 
