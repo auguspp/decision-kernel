@@ -1,0 +1,118 @@
+{
+  "case_id": "600362.SH",
+  "finished_at": "2026-09-23T03:21:22.027535+00:00",
+  "inventories": [
+    {
+      "class_id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "finished_at": "2026-09-23T03:21:20.086581+00:00",
+      "id": "financial-updates",
+      "leads": [
+        {
+          "authority": "PRIMARY",
+          "body_id": "report-1",
+          "decision_relevant": true,
+          "identity": "600362:1225505938",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF",
+          "primary_identity": "600362:1225505938",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF",
+          "relevance_note": "BOUND_ORIGINAL_REPORT; 当前仅检查两份完整财报及可能更正，不声称其他事件已审阅。"
+        },
+        {
+          "authority": "PRIMARY",
+          "body_id": "report-0",
+          "decision_relevant": true,
+          "identity": "600362:1225034758",
+          "locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+          "primary_identity": "600362:1225034758",
+          "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+          "relevance_note": "BOUND_ORIGINAL_REPORT; 当前仅检查两份完整财报及可能更正，不声称其他事件已审阅。"
+        }
+      ],
+      "planned_queries": [
+        "CNINFO:600362:2026-03-27:2026-09-23:financial-report-corrections"
+      ],
+      "query_events": [
+        {
+          "checked_at": "2026-09-23T03:21:20.086581+00:00",
+          "query": "CNINFO:600362:2026-03-27:2026-09-23:financial-report-corrections",
+          "status": "SUCCEEDED",
+          "tool_reference": "https://github.com/auguspp/decision-kernel/blob/b001090b6263ce3902c8a94e6fb2be906cd5e209/research_runs/industry-question-preparation/600362-industry-input-20260923/inventory.json"
+        }
+      ],
+      "started_at": "2026-09-23T03:21:02.149557+00:00"
+    }
+  ],
+  "limits": {
+    "max_queries": 1,
+    "max_reads": 4
+  },
+  "notes": "真实原件读回和声明范围目录；不是全事件覆盖、经济判断或Research执行许可。",
+  "provenance": "RECORDED_TOOL_RETURNS",
+  "reads": [
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa",
+      "checked_at": "2026-09-23T03:21:20.086466+00:00",
+      "id": "report-0",
+      "identity": "600362:1225034758",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225034758.PDF",
+      "succeeded": true,
+      "tool_reference": "EXACT_RETAINED_GIT_AND_ARTIFACT_BYTE_READ:https://github.com/auguspp/decision-kernel/blob/8cda868842384bcb0e14b22f81eb3ac5348acdec/research_runs/sources/declared-reports/600362-financial-20260922/2025FY-cninfo-source.pdf"
+    },
+    {
+      "authority": "PRIMARY",
+      "body_sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb",
+      "checked_at": "2026-09-23T03:21:20.077524+00:00",
+      "id": "report-1",
+      "identity": "600362:1225505938",
+      "kind": "BODY",
+      "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505938.PDF",
+      "succeeded": true,
+      "tool_reference": "EXACT_RETAINED_GIT_AND_ARTIFACT_BYTE_READ:https://github.com/auguspp/decision-kernel/blob/8ebc0a2c3ea0017398d6629d87830400c35c0163/research_runs/sources/declared-reports/600362-financial-20260922/2026H1-cninfo-source.pdf"
+    }
+  ],
+  "required_classes": [
+    {
+      "body_ids": [
+        "report-0"
+      ],
+      "id": "FULL_ANNUAL_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [
+        "report-1"
+      ],
+      "id": "FULL_INTERIM_REPORT",
+      "inventory_id": null,
+      "mode": "STATIC"
+    },
+    {
+      "body_ids": [],
+      "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "inventory_id": "financial-updates",
+      "mode": "LATEST_INVENTORY"
+    }
+  ],
+  "schema_version": 1,
+  "security_id": "SSE:600362",
+  "seed_publications": [
+    {
+      "evidence_id": "9962c189-38a8-5376-accc-60215ff5bec6",
+      "kind": "GIT_COMMIT",
+      "source": {
+        "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+        "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+        "purpose": "MODEL_CONTEXT",
+        "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+      }
+    }
+  ],
+  "started_at": "2026-09-23T03:21:01.350438+00:00",
+  "ticker": "600362",
+  "valid_until": "2026-09-23T05:21:22.027535+00:00"
+}
