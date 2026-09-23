@@ -1,0 +1,32 @@
+name: R4 code read once
+on:
+  push:
+    branches: [ops/r4-code-read-d1b34eb-20260923]
+permissions:
+  contents: read
+jobs:
+  export:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: d1b34eb89615c03fd4ea83b030ee7c3588eee483
+          persist-credentials: false
+      - name: Archive exact tracked code, never execute repository scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = d1b34eb89615c03fd4ea83b030ee7c3588eee483
+          mkdir -p "$RUNNER_TEMP/r4-code"
+          git archive --format=tar HEAD | gzip -n > "$RUNNER_TEMP/r4-code/source.tar.gz"
+          git ls-tree -r -z HEAD > "$RUNNER_TEMP/r4-code/tree.bin"
+          printf 'code=%s\nevent=%s\nrun=%s\nattempt=%s\n' "$(git rev-parse HEAD)" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > "$RUNNER_TEMP/r4-code/identity.txt"
+          sha256sum "$RUNNER_TEMP/r4-code/source.tar.gz" > "$RUNNER_TEMP/r4-code/sha256.txt"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: r4-code-d1b34eb-${{ github.run_id }}
+          path: ${{ runner.temp }}/r4-code/
+          if-no-files-found: error
+          retention-days: 1
