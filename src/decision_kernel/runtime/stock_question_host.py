@@ -22,7 +22,8 @@ from . import external_research_identity as identity
 from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_research_sources as sources
-from .current_state_delivery import GitHubAPI, GitHubReadError
+from .current_state_delivery import GitHubReadError
+from .pinned_reading_file import GitHubAPI
 from .external_research_execution import ExternalResearchInputPacket
 from .stock_research_host import authorize, head, STOCK_PROMPT_BYTES
 

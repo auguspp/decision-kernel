@@ -1,0 +1,27 @@
+{
+  "code_commit": "d21fb0e4d074926e81c0fca221b28324010b2a65",
+  "context_bytes": 898366,
+  "continuation_source": {
+    "git_blob": "18cbefe75e81d16248a38e079ff05f7fdf58b09f",
+    "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/continuation.json",
+    "purpose": "EXPLICIT_INPUT_PREPARATION_CONTINUATION",
+    "ref": "6ab6fe8adbce6311ba2f5ff75fa7c947eeecb4f7",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "0ac09cd3b852fcbfb07da22fea8b1303b4a56077cd91f7435b62143692ecb432"
+  },
+  "error_code": "INDUSTRY_REPORT_SIZE",
+  "error_type": "TrialError",
+  "finished_at": "2026-09-23T01:54:47.171546+00:00",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "model_calls": 0,
+  "mutation_uncertain": false,
+  "pdf_acquisitions": 0,
+  "query_events": [],
+  "research_authority": "NONE",
+  "research_executions": 0,
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-23T01:54:10.383919+00:00",
+  "status": "PREPARATION_INCOMPLETE",
+  "stored_context_bytes": 363885
+}

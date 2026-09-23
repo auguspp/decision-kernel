@@ -25,7 +25,7 @@ from . import external_research_admission as admission, cninfo_http as cninfo
 from .stock_research_host import authorize, head
 from .stock_research_intake import WORK_REF, security
 from .stock_question_host import question_execution
-from .current_state_delivery import GitHubAPI
+from .pinned_reading_file import GitHubAPI
 
 REQUEST = "research_runs/industry-question-preparation-request.json"
 MODE = "PREPARE_RETAINED_INDUSTRY_QUESTION_INPUT"
@@ -56,7 +56,7 @@ def check_plan(plan, clock):
         "INDUSTRY_PREPARATION_QUESTION")
     now = reading.clock(clock())
     once.require(reading.clock(plan["permission"]["created_at"]) <= now < reading.clock(plan["execute_before"])
-        and date.fromisoformat(plan["updates_start"]) <= date.fromisoformat(plan["updates_end"]) <= now.date()
+        and date.fromisoformat(plan["updates_start"]) <= date.fromisoformat(plan["updates_end"] ) <= now.date()
         and date.fromisoformat(plan["market_session"]) <= now.date(), "INDUSTRY_PREPARATION_CLOCK")
     if "resume_from" in plan:
         check_continuation_shape(plan)
@@ -66,6 +66,9 @@ def check_plan(plan, clock):
 def check_continuation_shape(plan):
     """One explicit pre-I/O plan-format repair, not a general resume policy."""
     value = plan["resume_from"]
+    from . import industry_preparation_reentry as reentry
+    if isinstance(value, dict) and value.get("kind") == reentry.KIND:
+        return reentry.shape(plan)
     once.require(isinstance(value, dict) and set(value) == {"kind", "run", "artifact", "prepare_source", "receipt_sha256"}
         and value["kind"] == "SINGLE_PRE_IO_PLAN_REPAIR", "INDUSTRY_CONTINUATION_SHAPE")
     run, artifact, source = value["run"], value["artifact"], value["prepare_source"]
@@ -88,6 +91,9 @@ def check_continuation_shape(plan):
 def check_continuation(api, plan, work, tree, clock):
     """Prove a retained failure had no query/model execution and no later writes."""
     value = check_continuation_shape(plan)
+    from . import industry_preparation_reentry as reentry
+    if value["kind"] == reentry.KIND:
+        return reentry.check(api, plan, work, tree, clock)
     source = value["prepare_source"]
     prefix = PREFIX + plan["id"] + "/"
     once.require({p for p in tree if p.startswith(prefix)} == {source["path"]},
@@ -233,7 +239,10 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
         prefix = PREFIX + plan["id"] + "/"
         existing = {path for path in tree if path.startswith(prefix)}
         continuation = "resume_from" in plan
-        if existing and (not continuation or existing != {prefix + "prepare.json"}):
+        from . import industry_preparation_reentry as reentry
+        context_resume = continuation and plan["resume_from"]["kind"] == reentry.KIND
+        expected = {prefix + n for n in ("prepare.json", "continuation.json", "context.json")} if context_resume else {prefix + "prepare.json"}
+        if existing and (not continuation or existing != expected):
             receipt["status"] = "EXISTING_PREPARATION_NOT_REPEATED"
             return receipt
         once.require(work is not None, "INDUSTRY_PREPARATION_WORK_REF_MISSING")
@@ -244,7 +253,7 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
                 "run_id": os.environ.get("GITHUB_RUN_ID"), "event": os.environ.get("GITHUB_EVENT_NAME"), **reading.AUTHORITY})
         def save(name, value, purpose):
             check()
-            once.require(re.fullmatch(r"(?:context|question|preflight|review|custody|request|inventory|diagnostics|continuation|update-query-[0-9]+)\.json", name),
+            once.require(re.fullmatch(r"(?:context|question|preflight|review|custody|request|inventory|diagnostics|continuation|origin-continuation|update-query-[0-9]+)\.json", name),
                          "INDUSTRY_PREPARATION_WRITE_SCOPE")
             data = value if isinstance(value, bytes) else once.raw(value)
             once.require(len(data) <= identity.MAX_BYTES, "INDUSTRY_PREPARATION_FILE_SIZE")
@@ -266,7 +275,7 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
             return spec
         if continuation:
             # CREATE-only: a concurrent/second signal cannot claim this repair twice.
-            receipt["continuation_source"] = save("continuation.json", {
+            receipt["continuation_source"] = save(reentry.MARKER if context_resume else "continuation.json", {
                 "plan": plan, "code_commit": code, "started_at": clock(), "proof": proof,
                 "run_id": os.environ.get("GITHUB_RUN_ID"), "event": os.environ.get("GITHUB_EVENT_NAME"),
                 "automatic_retry": False, **reading.AUTHORITY}, "EXPLICIT_INPUT_PREPARATION_CONTINUATION")
@@ -276,16 +285,22 @@ def run(*, api, code, output, clock=once.now, fetch=cninfo.fetch_cninfo_disclosu
             "ticker": profile["case_id"][:6], "checked_at": clock(), "source_run_id": profile["run"]["id"],
             "source_artifact": profile["artifact"]}
         profile, files, records = adopted.load(api, code, custody, clock, {})
-        docs, custody["documents"] = make_documents(profile, files, records, plan, api, code, clock)
-        context = {"issuer_documents": docs, "source_limitations":
-            "完整2025年报和2026H1及同PDF阅读。公告日仅DAY精度，午夜非首次可得时间。"
-            "报告更正目录单独按已声明窗口检查；其他临时公告依Human财报优先范围暂缓。"
-            "产业报价仅是问题来路，不是公司Evidence。全部页正文保留；图像表阅读不认证经济真相。"}
-        plain = once.raw(context)
-        packed = full.pack(plain, ticker=custody["ticker"])
-        receipt["context_bytes"] = len(plain)
-        receipt["stored_context_bytes"] = len(packed)
-        cs = save("context.json", packed, "MODEL_CONTEXT")
+        if context_resume:
+            context, custody["documents"], cs, bound = reentry.retained_context(api, plan, profile, records, clock)
+            docs = context["issuer_documents"]
+            receipt.update(context_bytes=len(bound.decoded_raw), stored_context_bytes=len(bound.stored_raw),
+                           reused_context_source=cs)
+        else:
+            docs, custody["documents"] = make_documents(profile, files, records, plan, api, code, clock)
+            context = {"issuer_documents": docs, "source_limitations":
+                "完整2025年报和2026H1及同PDF阅读。公告日仅DAY精度，午夜非首次可得时间。"
+                "报告更正目录单独按已声明窗口检查；其他临时公告依Human财报优先范围暂缓。"
+                "产业报价仅是问题来路，不是公司Evidence。全部页正文保留；图像表阅读不认证经济真相。"}
+            plain = once.raw(context)
+            packed = full.pack(plain, ticker=custody["ticker"])
+            receipt["context_bytes"] = len(plain)
+            receipt["stored_context_bytes"] = len(packed)
+            cs = save("context.json", packed, "MODEL_CONTEXT")
         custody["context"] = cs
         rs_raw = api.file("current-state.json", plan["reading_commit"])
         rs = once.source_ref("current-state.json", plan["reading_commit"], rs_raw, "SAVED_QUESTION_READING")

@@ -44,29 +44,13 @@
   "reading_commit": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
   "resume_from": {
     "artifact": {
-      "digest": "sha256:c4f7601a6ecf1a92b90cbc367ac9b822871cc7efc40f2eb0afec2e6ec880ff9f",
-      "head_sha": "d21fb0e4d074926e81c0fca221b28324010b2a65",
-      "id": 10728662647,
-      "name": "declared-report-sources-35808185505-1",
-      "size_in_bytes": 278046
+      "digest": "sha256:f3bff05916dfe65fc4afbae8b8359e252134787956ee10660474a20e02d64028",
+      "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+      "id": 10727752005,
+      "name": "declared-report-sources-35805284606-1",
+      "size_in_bytes": 2755
     },
-    "context_source": {
-      "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
-      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
-      "purpose": "MODEL_CONTEXT",
-      "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
-      "repository": "auguspp/decision-kernel",
-      "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
-    },
-    "continuation_source": {
-      "git_blob": "18cbefe75e81d16248a38e079ff05f7fdf58b09f",
-      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/continuation.json",
-      "purpose": "EXPLICIT_INPUT_PREPARATION_CONTINUATION",
-      "ref": "6ab6fe8adbce6311ba2f5ff75fa7c947eeecb4f7",
-      "repository": "auguspp/decision-kernel",
-      "sha256": "0ac09cd3b852fcbfb07da22fea8b1303b4a56077cd91f7435b62143692ecb432"
-    },
-    "kind": "SINGLE_RETAINED_CONTEXT_ORIGIN_REPAIR",
+    "kind": "SINGLE_PRE_IO_PLAN_REPAIR",
     "prepare_source": {
       "git_blob": "8706b856680a7ac786f98d375c9871f4019c1337",
       "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/prepare.json",
@@ -75,12 +59,12 @@
       "repository": "auguspp/decision-kernel",
       "sha256": "e5ac108f674d294e597eb00b07d8dbd16eea53097ada431f8fa856862548a322"
     },
-    "receipt_sha256": "e0b1d2ce1d696aa99d7c5e627746718287028714efed299cec125bd42b1b2197",
+    "receipt_sha256": "e3750e2bc9463fdbd4b14bb7705a80f3b7e1f530bf5d3e20305a92ff6d9ba50c",
     "run": {
       "event": "issues",
       "head_branch": "main",
-      "head_sha": "d21fb0e4d074926e81c0fca221b28324010b2a65",
-      "id": 35808185505,
+      "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+      "id": 35805284606,
       "path": ".github/workflows/stock-business-research.yml"
     }
   },

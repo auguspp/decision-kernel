@@ -23,6 +23,10 @@ from .external_research_execution import (
 CATALOG_PATH = "research_runs/execution-inputs.json"
 MAX_INPUTS = 64
 MAX_BYTES = 512 * 1024
+# Published observation reports are not executable input packets or model prompts.
+MAX_READING_BYTES = 4 * 1024 * 1024
+INDUSTRY_ORIGIN_PATH = "details/radar/industry-breadth.json"
+INDUSTRY_ORIGIN_PURPOSE = "SAVED_INDUSTRY_BATCH_ORIGIN"
 REPOSITORY = "auguspp/decision-kernel"
 
 
@@ -37,8 +41,9 @@ def require(condition: bool, code: str) -> None:
         raise ExecutionIdentityError(code)
 
 
-def _json(raw: bytes) -> dict:
-    require(isinstance(raw, bytes) and len(raw) <= MAX_BYTES, "EXECUTION_INPUT_SIZE_INVALID")
+def _json(raw: bytes, *, max_bytes: int = MAX_BYTES) -> dict:
+    require(type(max_bytes) is int and 0 < max_bytes <= MAX_READING_BYTES, "EXECUTION_JSON_BOUND_INVALID")
+    require(isinstance(raw, bytes) and len(raw) <= max_bytes, "EXECUTION_INPUT_SIZE_INVALID")
     def unique(pairs):
         result = {}
         for key, value in pairs:
@@ -97,8 +102,12 @@ def _checked_source(spec: dict, load: Callable[[dict], bytes]) -> bytes:
             and re.fullmatch(r"[0-9a-f]{40}", spec.get("ref", "")) is not None
             and re.fullmatch(r"[0-9a-f]{40}", spec.get("git_blob", "")) is not None,
             "EXECUTION_SOURCE_NOT_PINNED")
+    # A purpose/path-specific storage allowance is not source admission. The
+    # original native replay, clocks and host permission must still pass.
+    limit = (MAX_READING_BYTES if path == INDUSTRY_ORIGIN_PATH
+             and spec.get("purpose") == INDUSTRY_ORIGIN_PURPOSE else MAX_BYTES)
     raw = load(spec)
-    require(isinstance(raw, bytes) and len(raw) <= MAX_BYTES, "EXECUTION_INPUT_SIZE_INVALID")
+    require(isinstance(raw, bytes) and len(raw) <= limit, "EXECUTION_INPUT_SIZE_INVALID")
     blob = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
     require(blob == spec["git_blob"], "EXECUTION_SOURCE_BLOB_MISMATCH")
     if "sha256" in spec:
@@ -115,9 +124,8 @@ class ExecutionScope:
         return tuple(sorted({k.canonical_input_hash for k in self.keys if k.execution_id == execution_id}))
 
     def require_unambiguous(self, key: ExecutionKey) -> None:
-        hashes = self.hashes(key.execution_id)
         # Check the whole set before choosing either input; never first/last wins.
-        require(len(hashes) <= 1, "EXECUTION_ID_CONFLICT")
+        require(len(self.hashes(key.execution_id)) <= 1, "EXECUTION_ID_CONFLICT")
         require(key in self.keys, "EXECUTION_INPUT_NOT_IN_SCOPE")
 
     def conflicts(self) -> list[dict]:
