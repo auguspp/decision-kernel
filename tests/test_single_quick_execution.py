@@ -171,3 +171,18 @@ def test_original_admission_refusal_cannot_reach_new_loop(monkeypatch):
         "research_execution_allowed": False, "reason": "SOURCE_PREFLIGHT_INCOMPLETE"})
     report, result = once.admission.execute_after_admission(executor=lambda *_: calls.append(1), input_raw=b"{}")
     assert not calls and result is None and report["research_execution_allowed"] is False
+
+
+def test_original_external_method_marker_still_uses_legacy_stages(tmp_path):
+    # This is the real legacy marker used by the prepared disclosure input,
+    # not an alias invented to evade the new method/schema checks.
+    packet, discovery, context = fixture()
+    packet = packet.model_copy(update={"method_version": "RESEARCH_METHOD_V1"})
+    calls = []
+    def call(stage, prompt, *args):
+        calls.append(stage)
+        return pre(prompt)
+    candidate, checked, _ = once.research(packet, discovery, context, tmp_path, call=call)
+    assert calls == ["pre"] and checked.status.value == "VALIDATED_FUNNEL_RESULT"
+    assert candidate.schema_version == 1 and candidate.pre_research is not None
+    assert "method_version" not in once.initial_prompt(packet, discovery, context)

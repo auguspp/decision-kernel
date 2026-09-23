@@ -123,9 +123,19 @@ def test_old_egress_and_pre_preview_cannot_authorize_single_quick():
 
 
 @pytest.mark.parametrize("damage", ["prompt", "preview-digest", "model", "destination", "repeat"])
-def test_single_actual_send_check_fails_closed(damage):
+def test_single_actual_send_check_fails_closed(damage, monkeypatch):
     import httpx2 as httpx
+    import openai
+    captured = []
+    original_client = openai.DefaultHttpxClient
+    def capture(**kwargs):
+        hooks = kwargs.get("event_hooks", {})
+        kwargs["event_hooks"] = {**hooks, "request": [lambda request: captured.append(request),
+                                                     *hooks.get("request", [])]}
+        return original_client(**kwargs)
+    monkeypatch.setattr(openai, "DefaultHttpxClient", capture)
     p, d, context, bound = full_case(100); bound = bound.preview(p, d, context)
+    assert len(captured) == 1  # SDK request hook ran; its transport never ran.
     prompt = once.initial_prompt(p, d, context)
     parameters = full._parameters(prompt, single.QuickAssessment)
     if damage == "prompt": prompt["question"] += " changed"
@@ -136,7 +146,10 @@ def test_single_actual_send_check_fails_closed(damage):
         return
     hook = bound.send_hook("quick", prompt, single.QuickAssessment, parameters, {})
     url = "https://invalid.example/responses" if damage == "destination" else once.DEEPSEEK_BASE_URL + "/responses"
-    request = httpx.Request("POST", url, json={**parameters, "stream": True})
+    # Replay the actual SDK-built bytes, not a differently encoded httpx JSON.
+    # Do not weaken production byte equality to semantic JSON equality.
+    request = httpx.Request("POST", url, content=captured[0].content,
+                           headers={"Content-Type": "application/json"})
     if damage == "repeat":
         hook(request)
     with pytest.raises(ValueError): hook(request)

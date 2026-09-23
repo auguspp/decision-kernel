@@ -467,7 +467,7 @@ def initial_prompt(packet, discovery, context, *, bound_context=None):
     Existing hosts keep their original Pre prompt until explicitly migrated.
     Method selection does not grant source, execution or spending permission.
     """
-    require(packet.method_version in {"research-funnel-v1", single_quick.METHOD_VERSION},
+    require(packet.method_version in {"research-funnel-v1", "RESEARCH_METHOD_V1", single_quick.METHOD_VERSION},
             "RESEARCH_METHOD_UNSUPPORTED")
     prompt = pre_prompt(packet, discovery, context, bound_context=bound_context)
     if packet.method_version == single_quick.METHOD_VERSION:
@@ -515,7 +515,7 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
     A selected method is not admission. Native hosts still own permission,
     source custody, create-only reservations, deduplication and publication.
     """
-    require(packet.method_version in {"research-funnel-v1", single_quick.METHOD_VERSION},
+    require(packet.method_version in {"research-funnel-v1", "RESEARCH_METHOD_V1", single_quick.METHOD_VERSION},
             "RESEARCH_METHOD_UNSUPPORTED")
     single = packet.method_version == single_quick.METHOD_VERSION
     if single:

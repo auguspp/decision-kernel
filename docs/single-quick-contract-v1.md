@@ -4,7 +4,7 @@
 
 ## 版本与责任
 
-输入复用ExternalResearchInputPacket schema 1，显式绑定`method_version=single-quick-v1`和`prompt_version=single-quick-outcomes-v1`。新候选schema 2；旧research-funnel-v1候选schema 1仍由原模型/验证器解释。raw读取检查明确版本组合；未知/混合版本、重复JSON key拒绝，不尝试另一parser。不修改任何旧字段、哈希、预算或消费台账。
+输入复用ExternalResearchInputPacket schema 1，显式绑定`method_version=single-quick-v1`和`prompt_version=single-quick-outcomes-v1`。新候选schema 2；旧research-funnel-v1候选schema 1仍由原模型/验证器解释。raw读取检查明确版本组合；未知/混合版本、重复JSON key拒绝，不尝试另一parser。不修改任何旧字段、哈希、预算或消费台账。原共享执行器另保留已存在的`RESEARCH_METHOD_V1`旧公告方法标识，不因新入口迁移将原合法任务拒绝，也不把未知新方法自动降级。
 
 QuickAssessment是模型内容，不含模型自算hash/cutoff/许可。主解释覆盖why-now、公司联系/重要性、既有研究关系等责任，形式自由；结构化claims继续复用ResearchClaim。反证检查说明、未知、业务route/理由和必要的下一步分开，不将Pre和Quick原字段全集拼接。
 
@@ -30,9 +30,17 @@ SingleQuickCandidate由宿主生成，复用Discovery、Receipt、Evidence及已
 
 机器起源始终为QUICK_RESEARCH_CANDIDATE，不变成HUMAN_ORIGIN_DIRECT_DEEP；不生成Full结果或ResearchCommitPackage、不建立新Evidence、不执行其中任何文字。
 
+### r4.1：Hosted研究者边界共用，来源证明分开
+
+依据[#297/5793148239](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5793148239)，`FullResearchHandoff`是已实现的**Quick-origin证明适配件，不是最终Hosted接口**。R4-1后续交接接线必须使用同一`FullResearchCommission`承载Quick-origin与Human Direct Full，不能把本适配件的必填Quick字段强加给所有委托。共享委托的具体运行合同与两个来源的接入本切片尚未实现，不预称可运行。
+
+共享的Full级意义是对象/证券、问题及有界范围、为什么现在调查、来源/context与cutoff、既有Research/前驱关系、实际执行身份与获准权限/预算、显式research_origin及其证明。Quick-origin核对合格FULL_CANDIDATE的精确前驱；Human-origin核对Human原请求/权限，不造Discovery/Pre/Quick或假FULL_CANDIDATE。来源证明不能因共用而擦除，研究者不需重演上游推理路径。
+
+两种来源采用同一成果责任、来源/PIT/原件留存、GitHub写回、Research版本和Kernel用途资格，后续适用时再走原Odds/Odds Book；Human接受不跨版本或来源自动继承。R4-2.5首例可以使用任一合格来源，但应证明另一来源不需要第二引擎或第二成果合同。这里不建立provider/plugin注册器、队列、调度器或自动执行权限。
+
 ## 剩余端到端接点
 
-原宿主的新方法选择/批准、完整source custody及问题/day/slot去重、原Retainer对新原文/usage/候选的远端留存、identity/promotion正式入口、reviewed_question_reading/current-state/publisher及正常Brief仍需接入并实际验收。新执行未启用，#525请求/分支未合入；局部SDK测试不能声称正常Brief已送达。
+原宿主的新方法选择/批准、完整source custody及问题/day/slot去重、原Retainer对新原文/usage/候选的远端留存、identity/promotion正式入口、reviewed_question_reading/current-state/publisher及正常Brief仍需接入并实际验收。上述共享Full委托也须在研究者接点稳定前完成；新执行未启用，#525请求/分支未合入，局部SDK测试不能声称正常Brief已送达。
 
 后续沿原链接入，不复制执行器或常态双跑。新方法不产生新问题根/额度；参数变化不继承旧批准；回退保留新reader、所有产物和消费记录。语义重复、实质新证据及显式续作的前驱处理由原宿主承担，不由低层模块假定已解决。
 
