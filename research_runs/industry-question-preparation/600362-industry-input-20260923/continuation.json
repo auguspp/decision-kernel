@@ -1,0 +1,135 @@
+{
+  "automatic_retry": false,
+  "code_commit": "d21fb0e4d074926e81c0fca221b28324010b2a65",
+  "event": "issues",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "plan": {
+    "enabled": true,
+    "execute_before": "2026-09-23T23:00:00Z",
+    "id": "600362-industry-input-20260923",
+    "market_session": "2026-09-22",
+    "mode": "PREPARE_RETAINED_INDUSTRY_QUESTION_INPUT",
+    "origin_thscode": "CUZL.SHF",
+    "permission": {
+      "body_sha256": "45364363eccca62a115d35ea1212f02f9c2fa918b85cb4c7ad8ca3fd50677e1c",
+      "comment_id": 5778160521,
+      "created_at": "2026-09-22T14:17:34Z"
+    },
+    "predecessor_sources": [
+      {
+        "git_blob": "c0c532a7a0ba6666e8b62fe1b948a10336ef87f1",
+        "path": "docs/readings/600362-cash-bridge-2026-09-23/workpaper.md",
+        "purpose": "RETAINED_ANALYSIS_PREDECESSOR",
+        "ref": "6729218c6400a07b2f73beb1d2e53fa556152707",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "568eaa59b9f923a00964674cf858f76ce443cb691d3b978fafacceb92d95a358"
+      }
+    ],
+    "profile": "jiangxi-copper-financial-20260922",
+    "question": {
+      "falsification_test": "分开自有矿山与第一量子权益产量，核对外购矿TC/RC及加工转嫁，并从合并利润勾稽到现金和受限保证金；若无法识别净暴露，不用总产量乘铜价推断股东利润。",
+      "known_counterevidence": [
+        "总产量包含外购原料和权益口径，不能等同并表自有矿山敞口。",
+        "贸易和加工价格转嫁及套保可抵消名义价格上行。",
+        "利润、公允价值调节、经营性应收和保证金占用可能使股东现金不同于收入增长。"
+      ],
+      "known_unknowns": [
+        "当前净自产资源敏感度、套保覆盖及利润归属未完全量化。",
+        "期现基差不是冶炼加工费。",
+        "保证金及受限资金释放条件和业务归属仍需核对。",
+        "当前范围为两份财报及其可能更正；其他临时公告按Human财报优先要求暂缓，未声称全事件覆盖。"
+      ],
+      "materiality_basis": "已保存年报与中报披露自产铜精矿、外购矿定价、工业/贸易及现金流；先审这些实际业务，不以价格或资金流替代经济重要性。",
+      "mechanism": "铜报价只是观察来路；公司资源开采、冶炼加工、贸易和权益投资具有不同价格与资本占用机制。",
+      "next_discriminating_search": "先用完整2025年报及2026H1区分资源、冶炼、贸易和套保，再检验合并利润—现金、受限资金和权益投资桥；缺失归因保持UNKNOWN。",
+      "question": "铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？",
+      "question_id": "jiangxi-copper-net-economic-exposure",
+      "why_now": "把9月22日已留存铜链观察落实为已有净经济敞口问题的首次正式审阅；不把单日快照、资金流或会员持仓当作公司基本面变化。"
+    },
+    "reading_commit": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+    "resume_from": {
+      "artifact": {
+        "digest": "sha256:f3bff05916dfe65fc4afbae8b8359e252134787956ee10660474a20e02d64028",
+        "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+        "id": 10727752005,
+        "name": "declared-report-sources-35805284606-1",
+        "size_in_bytes": 2755
+      },
+      "kind": "SINGLE_PRE_IO_PLAN_REPAIR",
+      "prepare_source": {
+        "git_blob": "8706b856680a7ac786f98d375c9871f4019c1337",
+        "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/prepare.json",
+        "purpose": "ORIGINAL_FAILED_INPUT_PREPARATION",
+        "ref": "d0d6c6e5ca99fc8fdd77ff882615f8fb19335f38",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "e5ac108f674d294e597eb00b07d8dbd16eea53097ada431f8fa856862548a322"
+      },
+      "receipt_sha256": "e3750e2bc9463fdbd4b14bb7705a80f3b7e1f530bf5d3e20305a92ff6d9ba50c",
+      "run": {
+        "event": "issues",
+        "head_branch": "main",
+        "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+        "id": 35805284606,
+        "path": ".github/workflows/stock-business-research.yml"
+      }
+    },
+    "schema_version": 1,
+    "titles": {
+      "2025FY": "江西铜业股份有限公司2025年年度报告",
+      "2026H1": "江西铜业股份有限公司2026年半年度报告"
+    },
+    "updates_end": "2026-09-23",
+    "updates_start": "2026-03-27"
+  },
+  "proof": {
+    "checked_at": "2026-09-23T01:54:12.854725+00:00",
+    "failure_receipt": {
+      "code_commit": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+      "error_code": "DECLARED_IMPORT_RUN_CLOCK_OR_MAIN_PLAN",
+      "error_type": "TrialError",
+      "finished_at": "2026-09-23T01:11:58.168460+00:00",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "model_calls": 0,
+      "mutation_uncertain": false,
+      "pdf_acquisitions": 0,
+      "query_events": [],
+      "research_authority": "NONE",
+      "research_executions": 0,
+      "signal_transition_authority": "NONE",
+      "started_at": "2026-09-23T01:11:55.089015+00:00",
+      "status": "PREPARATION_INCOMPLETE"
+    },
+    "parent": {
+      "artifact": {
+        "digest": "sha256:f3bff05916dfe65fc4afbae8b8359e252134787956ee10660474a20e02d64028",
+        "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+        "id": 10727752005,
+        "name": "declared-report-sources-35805284606-1",
+        "size_in_bytes": 2755
+      },
+      "kind": "SINGLE_PRE_IO_PLAN_REPAIR",
+      "prepare_source": {
+        "git_blob": "8706b856680a7ac786f98d375c9871f4019c1337",
+        "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/prepare.json",
+        "purpose": "ORIGINAL_FAILED_INPUT_PREPARATION",
+        "ref": "d0d6c6e5ca99fc8fdd77ff882615f8fb19335f38",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "e5ac108f674d294e597eb00b07d8dbd16eea53097ada431f8fa856862548a322"
+      },
+      "receipt_sha256": "e3750e2bc9463fdbd4b14bb7705a80f3b7e1f530bf5d3e20305a92ff6d9ba50c",
+      "run": {
+        "event": "issues",
+        "head_branch": "main",
+        "head_sha": "6c454c30986cf74af5b1b7d82d0ba7292a083bef",
+        "id": 35805284606,
+        "path": ".github/workflows/stock-business-research.yml"
+      }
+    }
+  },
+  "research_authority": "NONE",
+  "run_id": "35808185505",
+  "signal_transition_authority": "NONE",
+  "started_at": "2026-09-23T01:54:12.854748+00:00"
+}
