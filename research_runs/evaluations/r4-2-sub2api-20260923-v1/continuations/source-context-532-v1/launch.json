@@ -1,0 +1,13 @@
+{
+  "automatic_retry": false,
+  "code_commit": "1667b196b2910565482927babb0c47cc79fe0259",
+  "continuation": {
+    "authority": "https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5804459106",
+    "kind": "CORRECTED_SOURCE_STATUS_VALIDATION",
+    "parent_commit": "f0c9104c9dbc2b2fbdcf90b7b75bb024827509b2",
+    "prior_requests_started": 8
+  },
+  "id": "r4-2-sub2api-20260923-v1",
+  "run_id": "35933341133",
+  "started_at": "2026-09-23T23:23:31.921857+00:00"
+}
