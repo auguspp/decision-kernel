@@ -1,0 +1,82 @@
+{
+  "case_id": "600362.SH",
+  "declared_at": "2026-09-23T03:20:59.072799+00:00",
+  "existing_research_relation": {
+    "kind": "CONTINUE_ANALYSIS",
+    "note": "延续已保存交互底稿的同一问题；此前未有正式宿主launch，本次是首次正式研究调用。",
+    "source_refs": [
+      {
+        "git_blob": "c0c532a7a0ba6666e8b62fe1b948a10336ef87f1",
+        "path": "docs/readings/600362-cash-bridge-2026-09-23/workpaper.md",
+        "purpose": "RETAINED_ANALYSIS_PREDECESSOR",
+        "ref": "6729218c6400a07b2f73beb1d2e53fa556152707",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "568eaa59b9f923a00964674cf858f76ce443cb691d3b978fafacceb92d95a358"
+      }
+    ]
+  },
+  "falsification_test": "分开自有矿山与第一量子权益产量，核对外购矿TC/RC及加工转嫁，并从合并利润勾稽到现金和受限保证金；若无法识别净暴露，不用总产量乘铜价推断股东利润。",
+  "format": "reviewed-radar-question-v0",
+  "known_counterevidence": [
+    "总产量包含外购原料和权益口径，不能等同并表自有矿山敞口。",
+    "贸易和加工价格转嫁及套保可抵消名义价格上行。",
+    "利润、公允价值调节、经营性应收和保证金占用可能使股东现金不同于收入增长。"
+  ],
+  "known_unknowns": [
+    "当前净自产资源敏感度、套保覆盖及利润归属未完全量化。",
+    "期现基差不是冶炼加工费。",
+    "保证金及受限资金释放条件和业务归属仍需核对。",
+    "当前范围为两份财报及其可能更正；其他临时公告按Human财报优先要求暂缓，未声称全事件覆盖。"
+  ],
+  "next_discriminating_search": "先用完整2025年报及2026H1区分资源、冶炼、贸易和套保，再检验合并利润—现金、受限资金和权益投资桥；缺失归因保持UNKNOWN。",
+  "origins": [
+    {
+      "kind": "INDUSTRY_VARIABLE_OBSERVATION",
+      "observed_at": "2026-09-22T12:16:33.879363+00:00",
+      "qualification": "QUALIFIED_FOR_DECLARED_SCOPE",
+      "qualification_reason": "核对原批次、日期与原始行；仅为净经济暴露问题来路，不推断受益。",
+      "source": {
+        "git_blob": "4c6ad30f55edceaf06d4b68993fa82b075b1415f",
+        "path": "details/radar/industry-breadth.json",
+        "purpose": "SAVED_INDUSTRY_BATCH_ORIGIN",
+        "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "55c3d0f9605a89045ae64578abbc9866aa921eb112ba50054eaf8a4e577f50b7"
+      }
+    }
+  ],
+  "predecessor": null,
+  "question": "铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？",
+  "question_id": "jiangxi-copper-net-economic-exposure",
+  "reading_source": {
+    "git_blob": "2b950f38e0d8002eef1d58ffcc7226414314171f",
+    "path": "current-state.json",
+    "purpose": "SAVED_QUESTION_READING",
+    "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "00b85bb68278df1863ef2b2f8745a86821be49756a1d6133c380f4315308662c"
+  },
+  "required_classes": [
+    {
+      "id": "FULL_ANNUAL_REPORT",
+      "mode": "STATIC",
+      "planned_queries": []
+    },
+    {
+      "id": "FULL_INTERIM_REPORT",
+      "mode": "STATIC",
+      "planned_queries": []
+    },
+    {
+      "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "mode": "LATEST_INVENTORY",
+      "planned_queries": [
+        "CNINFO:600362:2026-03-27:2026-09-23:financial-report-corrections"
+      ]
+    }
+  ],
+  "revision": 1,
+  "security_id": "SSE:600362",
+  "ticker": "600362",
+  "why_now": "把9月22日已留存铜链观察落实为已有净经济敞口问题的首次正式审阅；不把单日快照、资金流或会员持仓当作公司基本面变化。"
+}
