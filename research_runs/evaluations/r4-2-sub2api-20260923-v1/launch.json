@@ -1,0 +1,11 @@
+{
+  "automatic_retry": false,
+  "code_commit": "cc336116d175d0c37d8ab4f16e4c5aae5bc2c29b",
+  "continuation": {
+    "authority": "https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5796637317",
+    "kind": "ISOLATED_EVALUATION"
+  },
+  "id": "r4-2-sub2api-20260923-v1",
+  "run_id": "35877859341",
+  "started_at": "2026-09-23T14:56:39.665410+00:00"
+}
