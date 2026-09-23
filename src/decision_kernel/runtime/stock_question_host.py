@@ -22,6 +22,7 @@ from . import external_research_identity as identity
 from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_research_sources as sources
+from . import single_quick_contract as single
 from .current_state_delivery import GitHubReadError
 from .pinned_reading_file import GitHubAPI
 from .external_research_execution import ExternalResearchInputPacket
@@ -34,6 +35,34 @@ QUESTION_BUDGET = {"max_tool_calls": 6, "max_search_queries": 0, "max_source_rea
     "max_technical_retries": 0, "max_elapsed_minutes": 15,
     **{k + "_enforcement": "SOFT_EXECUTOR" for k in
        ("tool_calls", "search_queries", "source_reads", "technical_retries", "elapsed_time")}}
+
+
+def selected_method(request):
+    """Explicit trusted-request selection, never inherited from an old approval."""
+    if "research_method" not in request:
+        once.require("method_permission" not in request, "QUESTION_METHOD_PERMISSION_WITHOUT_METHOD")
+        return "research-funnel-v1"
+    once.require(request["research_method"] == single.METHOD_VERSION
+                 and isinstance(request.get("method_permission"), dict)
+                 and set(request["method_permission"]) == {"comment_id", "body_sha256", "created_at"}
+                 and request["method_permission"] != request["permission"], "QUESTION_NEW_METHOD_PERMISSION_REQUIRED")
+    return single.METHOD_VERSION
+
+
+def single_egress_hash(packet, discovery, context, *, daily=False, bound=None):
+    """Same prepared inputs, explicit one-call contract; digest is not permission."""
+    if bound is not None:
+        return bound.egress_hash(packet, discovery, context)
+    prompt = once.initial_prompt(packet, discovery, context)
+    prompt["binding"]["as_of"] = "HOST_ASSIGNED_RESEARCH_CUTOFF"
+    return canonical_hash({"prompt": prompt,
+        "source_refs": [s.model_dump(mode="json") for s in packet.source_refs],
+        "budget": packet.budget, "system_sha256": once.sha(once.SYSTEM.encode()),
+        "model": once.DEEPSEEK_MODEL if daily else once.MODEL,
+        "endpoint": once.DEEPSEEK_BASE_URL if daily else once.BASE_URL,
+        "reasoning": {"effort": "none"} if daily else None,
+        "max_output_tokens": once.MAX_OUTPUT_TOKENS, "max_prompt_bytes": STOCK_PROMPT_BYTES,
+        "output_schema": single.QuickAssessment.model_json_schema()})
 
 
 def question_execution(security_id, question_id):
@@ -101,8 +130,10 @@ def _question_inputs(*, api, code, request, clock, allow_full=False):
     Question, preflight, primary context and public-egress approval are pre-saved.
     """
     from . import reviewed_question_input as reviewed
+    method = selected_method(request)
+    extra = {"research_method", "method_permission"} if method == single.METHOD_VERSION else set()
     once.require(set(request) == {"schema_version", "enabled", "mode", "permission",
-        "question_source", "context_source", "preflight_source", "approved_egress_hash"},
+        "question_source", "context_source", "preflight_source", "approved_egress_hash", *extra},
         "QUESTION_REQUEST_SHAPE")
     load = lambda s: api.file(s["path"], s["ref"])
     qs, cs, ps = (request[k] for k in ("question_source", "context_source", "preflight_source"))
@@ -152,7 +183,7 @@ def _question_inputs(*, api, code, request, clock, allow_full=False):
             *["KNOWN_COUNTEREVIDENCE:" + x for x in q["known_counterevidence"]],
             "EXISTING_RESEARCH_RELATION:" + q["existing_research_relation"]["note"]])),
         next_discriminating_search=q["next_discriminating_search"],
-        method_version="research-funnel-v1", prompt_version="reviewed-question-stock-v0",
+        method_version=method, prompt_version=(single.PROMPT_VERSION if method == single.METHOD_VERSION else "reviewed-question-stock-v0"),
         allowed_tools=["OTHER_READ"], candidate_output_prefix=prefix, budget=QUESTION_BUDGET)
     _question_context(context, packet, pf)
     discovery = DiscoveryInput(discovery_id=eid, source_lane=packet.source_lane,
@@ -198,9 +229,13 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
     daily_scope, egress = None, None
     bound = None
     reserved = False
+    is_single = False
     try:
         request = identity._json(api.file(request_path, code))
         authorize(api, code, request, request_path=request_path, mode=mode)
+        is_single = selected_method(request) == single.METHOD_VERSION
+        if is_single:
+            authorize(api, code, request, request_path=request_path, mode=mode, permission_key="method_permission")
         if daily:
             daily_policy.check_policy(api, code, request, clock)
         q, packet, discovery, context, checks = _question_inputs(api=api, code=code,
@@ -222,6 +257,9 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         def recheck():
             nonlocal egress
             authorize(api, code, request, request_path=request_path, mode=mode)
+            if is_single:
+                once.require(selected_method(request) == single.METHOD_VERSION, "QUESTION_METHOD_CHANGED")
+                authorize(api, code, request, request_path=request_path, mode=mode, permission_key="method_permission")
             if daily:
                 daily_policy.check_policy(api, code, request, clock)
                 rebound, state, scope = daily_policy.bind(api, request, q, base_packet, context, clock,
@@ -246,7 +284,12 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 bound.check_packet(packet, context)
                 # Daily custody above already replays original PDFs and current-main notes.
             _question_context(context, packet, identity._json(checks["preflight_raw"]))
-            if daily:
+            if is_single:
+                digest = single_egress_hash(packet, discovery, context, daily=daily, bound=bound)
+                once.require(request["approved_egress_hash"] == digest
+                             and egress in {None, digest}, "QUESTION_SINGLE_EGRESS_NOT_APPROVED")
+                egress = digest
+            elif daily:
                 digest = (bound.egress_hash(packet, discovery, context) if bound is not None
                           else deepseek.egress_hash(packet, discovery, context))
                 once.require(egress in {None, digest}, "DAILY_PUBLIC_EGRESS_CHANGED")
@@ -260,12 +303,16 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         # Preview uses the SAME SDK request builder, before any reservation/spend.
         if bound is not None:
             bound = bound.preview(packet, discovery, context)
-            result["full_input"] = {**bound.record(), "pre_request_sha256": bound.pre_request_sha256,
-                                    "pre_prompt_sha256": bound.pre_prompt_sha256}
+            result["full_input"] = {**bound.record(), **(
+                {"single_quick_request_sha256": bound.single_quick_request_sha256,
+                 "single_quick_prompt_sha256": bound.single_quick_prompt_sha256} if is_single else
+                {"pre_request_sha256": bound.pre_request_sha256, "pre_prompt_sha256": bound.pre_prompt_sha256})}
         elif daily:
-            deepseek._deepseek_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult)
+            deepseek._deepseek_request(once.initial_prompt(packet, discovery, context),
+                                      single.QuickAssessment if is_single else once.PreResearchResult)
         else:
-            once.model_request(once.pre_prompt(packet, discovery, context), once.PreResearchResult,
+            once.model_request(once.initial_prompt(packet, discovery, context),
+                               single.QuickAssessment if is_single else once.PreResearchResult,
                                max_prompt_bytes=STOCK_PROMPT_BYTES)
         try:
             work_head = head(api, intake.WORK_REF)
@@ -317,6 +364,7 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
             "code_commit": code, "question_source": request["question_source"],
             "approved_egress_hash": egress, "permission": request["permission"],
             "automatic_retry": False,
+            **({"research_method": single.METHOD_VERSION, "method_permission": request["method_permission"]} if is_single else {}),
             **({"provider": daily_policy.POLICY["provider"], "daily_scope": daily_scope,
                 "daily_reservations": daily_reservations} if daily else {})})
         recheck()
@@ -328,15 +376,16 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
                 live = admission.assess_admission(**{**launch_checks, "checked_at": clock()})
                 once.require(live["research_execution_allowed"], live["reason"])
                 identity._checked_source(launch, checks["load"])
-                expected = once.pre_prompt(packet, discovery, context)
-                if stage == "quick":
+                expected = once.initial_prompt(packet, discovery, context)
+                if stage == "quick" and not is_single:
                     pre = once.PreResearchResult.model_validate(prompt["pre_research"])
                     once.validate_pre_research_transition(discovery, pre, packet.seed_evidence_artifacts)
                     once.require(pre.route.value == "CONTINUE_TO_QUICK", "QUESTION_QUICK_NOT_QUALIFIED")
                     expected.update(stage="QUICK", pre_research=pre.model_dump(mode="json"),
                                     pre_research_hash=canonical_hash(pre))
-                once.require((stage, model) in {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult)}
-                             and prompt == expected, "QUESTION_MODEL_PROMPT_CHANGED")
+                allowed = ({("quick", single.QuickAssessment)} if is_single else
+                           {("pre", once.PreResearchResult), ("quick", once.QuickResearchResult)})
+                once.require((stage, model) in allowed and prompt == expected, "QUESTION_MODEL_PROMPT_CHANGED")
                 if daily:
                     fn = call or partial(once.model_call,
                         **({"max_prompt_bytes": STOCK_PROMPT_BYTES} if bound is None else {"bound_context": bound}),
@@ -356,15 +405,29 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         once.require(outcome is not None, report["reason"])
         candidate, validation, usage = outcome
         result["phase"] = "RETENTION"
-        retain.save("candidate.json", candidate)
+        candidate_source = retain.save("candidate.json", candidate)
         retain.save("receipt.json", candidate.receipt)
         retain.save("validation.json", validation)
-        if validation.funnel_result is not None:
+        if not is_single and validation.funnel_result is not None:
             retain.save("funnel.json", validation.funnel_result)
-        result.update(status=validation.status.value, phase="COMPLETE", provider_usage=usage,
+        status = validation.status if is_single else validation.status.value
+        if is_single and status == "VALIDATED_QUICK_RESULT":
+            from .attention_inbox import ResearchAttentionHandoff, serialize_research_attention_handoff
+            attention = ResearchAttentionHandoff(single_quick_input=packet, single_quick_candidate=candidate)
+            retain.save("research-attention.json", serialize_research_attention_handoff(attention).encode())
+            if candidate.assessment.route is single.QuickRoute.FULL_CANDIDATE:
+                from . import full_research_commission as commissions
+                commission = commissions.from_quick(
+                    input_source={**ins, "purpose": "SINGLE_QUICK_INPUT"},
+                    candidate_source={**candidate_source, "purpose": "SINGLE_QUICK_CANDIDATE"},
+                    question_source=request["question_source"], input_raw=checks["input_raw"],
+                    candidate_raw=once.raw(candidate),
+                    question_raw=identity._checked_source(request["question_source"], checks["load"]))
+                retain.save("full-commission.json", commission)
+        result.update(status=status, phase="COMPLETE", provider_usage=usage,
                       candidate_hash=canonical_hash(candidate), validation_hash=canonical_hash(validation))
         retain.save("README.md", (f"# {packet.case_id} 问题式研究候选\n\n{packet.research_question}\n\n"
-            f"原验证器：{validation.status.value}。未语义接受、未登记当前handoff、未自动发布。\n"
+            f"原验证器：{status}。未语义接受、未登记当前handoff、未自动发布。\n"
             "本问题及材料范围以input/source为准；准备、执行、Human判断和投资决定分别留存。\n").encode())
     except Exception as exc:
         result.update(status="EXECUTION_INCOMPLETE" if result["formal_research_started"] else "NOT_EXECUTED",
@@ -377,6 +440,13 @@ def run_question(*, api, code, output, clock=once.now, call=None, daily=False):
         result.update(finished_at=clock(), mutation_uncertain=uncertain)
         if reserved and not uncertain:
             try:
+                if is_single and result["formal_research_started"]:
+                    outputs = {}
+                    for name in sorted(once.MODEL_OUTPUT_NAMES):
+                        path = output / name
+                        if path.exists():
+                            outputs[name] = retain.save(name, path.read_bytes(), existing_local=True)
+                    result["model_output_sources"] = outputs
                 retain.save("host-receipt.json", result)
             except Exception:
                 result.update(status="RETENTION_INCOMPLETE", mutation_uncertain=retain.uncertain)
@@ -405,7 +475,7 @@ def main(argv=None):
     result = run_question(api=GitHubAPI(os.environ["GH_TOKEN"], max_calls=1024),
                           code=args.code_commit, output=args.output, daily=args.daily_reviewed_question)
     print(once.raw(result).decode())
-    return 0 if result["status"] in {"VALIDATED_FUNNEL_RESULT", "EXISTING_QUESTION_REUSED_NO_EXECUTION"} else 2
+    return 0 if result["status"] in {"VALIDATED_FUNNEL_RESULT", "VALIDATED_QUICK_RESULT", "EXISTING_QUESTION_REUSED_NO_EXECUTION"} else 2
 
 
 if __name__ == "__main__":

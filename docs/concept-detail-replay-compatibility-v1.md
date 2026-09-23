@@ -97,3 +97,22 @@ that the compact root is still at most 192 KiB and Woton financial r2 remains
 available. Keep source failures and archived history intact. A successful
 workflow alone does not establish these results. Review by the implementing
 model is a same-model review, not independent Human or economic acceptance.
+
+
+## R4-1 / PR #530：研究交接展示的追加兼容
+
+单Quick接线只改`current_state.project_handoffs`中的两处对象投影：
+`parsed.research_funnel`改为共享无权限wrapper，哈希材料改用`parsed.identity_material`。
+旧v1的identity_material仍是原Funnel完整model_dump；新v2不伪造Funnel。
+该函数不在concept detail的capture/plan/replay路径内。当前17项捕获指纹中，
+相对PR529只有`runtime/current_state.py`从`e31f54cd...`变为`1faa6925...`；
+其余16文件相同。完整哈希保存在原compat模块，不用前缀比较。
+
+原HISTORICAL_IMPLEMENTATION完整保留，原REPLAY快照保留为
+PRE_SINGLE_QUICK_IMPLEMENTATION；只有这两个精确旧映射在新精确安装映射下
+允许复用原校验器。不是忽略current_state文件、任意版本白名单或动态接受当前代码。
+来源原件、capture_hash、请求/计划/clock/结果重建、错误传播和不改receipt全部保持。
+旧#478与PR529来源分别标记原模式及REVIEWED_HISTORICAL_EQUIVALENCE_530；
+直接原capture.verify仍严格拒绝旧实现，新增回归覆盖这一区分及旧handoff哈希不变。
+
+这只是本次必要的历史读取兼容；不是新的概念取数、扩大覆盖或方法有效性认证。

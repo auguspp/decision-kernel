@@ -19,6 +19,7 @@ from . import reviewed_question_input as reviewed
 from . import saved_research_once as once
 from . import stock_research_intake as intake
 from . import stock_research_reading as stock_reader
+from . import single_quick_contract as single
 from .read_blob_reuse import pending_blob_writes
 from .external_research_execution import (
     ExternalResearchInputPacket, ExternalResearchCandidate,
@@ -31,6 +32,11 @@ DETAIL = 'details/research/reviewed-questions.md'
 REPORT = 'details/research/reviewed-questions.json'
 CORE = {'prepare.json', 'input.json', 'candidate.json', 'validation.json',
         'host-receipt.json', 'launch.json', 'funnel.json', 'receipt.json', 'admission.json'}
+# Preserve the historical nine-file accounting contract. New method artifacts
+# extend the readable inventory, not every old execution's reservation budget.
+SINGLE_CORE = (CORE - {'funnel.json'}) | {
+    'research-attention.json', 'full-commission.json', *once.MODEL_OUTPUT_NAMES}
+RETAINED_FILES = CORE | SINGLE_CORE
 MAX_EXECUTIONS = 16  # Saved roots/children, not permission for more executions.
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError)
 
@@ -114,6 +120,8 @@ def _describe(prefix, data, question_raw):
                 'Question reservation differs')
     item = {'thscode': code, 'question_id': q['question_id'], 'revision': q['revision'],
             'question': q['question'], 'why_now': q['why_now'],
+            'origin_kinds': list(dict.fromkeys(o['kind'] for o in q['origins'])),
+            'existing_research_relation': deepcopy(q['existing_research_relation']),
             'known_unknowns': q['known_unknowns'], 'known_counterevidence': q['known_counterevidence'],
             'next_discriminating_search': q['next_discriminating_search'],
             'execution_id': eid, 'candidate_output_prefix': prefix,
@@ -132,7 +140,6 @@ def _describe(prefix, data, question_raw):
     model.check({'input.json', 'validation.json', 'launch.json'} <= set(data),
                 'Question candidate missing bound input or validation')
     packet = ExternalResearchInputPacket.model_validate(identity._json(data['input.json']))
-    candidate = ExternalResearchCandidate.model_validate(identity._json(data['candidate.json']))
     model.check(packet.source_lane == reviewed.LANE and packet.case_id == code
                 and packet.security_id == q['security_id'] and packet.ticker == q['ticker']
                 and packet.execution_id == eid and packet.candidate_output_prefix == prefix
@@ -147,10 +154,12 @@ def _describe(prefix, data, question_raw):
                 and launch['code_commit'] == packet.code_commit
                 and launch['question_source'] == prep['question_source']
                 and launch['automatic_retry'] is False, 'Question launch differs')
-    checked = validate_external_research_candidate(packet=packet, candidate=candidate)
+    packet, candidate, checked = single.read_saved_result(data['input.json'], data['candidate.json'])
+    is_single = isinstance(candidate, single.SingleQuickCandidate)
+    status = checked.status if is_single else checked.status.value
     model.check(identity._json(data['validation.json']) == checked.model_dump(mode='json'),
                 'Question saved validation differs')
-    funnel = checked.funnel_result
+    funnel = None if is_single else checked.funnel_result
     if 'funnel.json' in data:
         model.check(funnel is not None
                     and identity._json(data['funnel.json']) == funnel.model_dump(mode='json'),
@@ -165,30 +174,86 @@ def _describe(prefix, data, question_raw):
                     and host['code_commit'] == packet.code_commit
                     and host['candidate_hash'] == checked.candidate_hash
                     and host['validation_hash'] == canonical_hash(checked)
-                    and host['status'] == checked.status.value
+                    and host['status'] == status
                     and all(host.get(k) == v for k, v in model.AUTHORITY.items())
                     and host['registered_current_handoff'] is False,
                     'Question host receipt differs')
         item['host_receipt_present'] = True
     else:
         item['host_receipt_present'] = False
+    if is_single:
+        model.check(launch.get('research_method') == single.METHOD_VERSION
+                    and isinstance(launch.get('method_permission'), dict), 'Question method approval binding missing')
+        model.check('host-receipt.json' in data, 'Question single Quick delivery receipt missing')
+        model.check(host.get('mutation_uncertain') is False
+                    and host.get('formal_research_started') is True
+                    and host.get('automatic_retry') is False
+                    and host.get('phase') == 'COMPLETE',
+                    'Question single Quick delivery not confirmed')
+        outputs = host.get('model_output_sources')
+        model.check(isinstance(outputs, dict) and {'model-usage.json', 'candidate-before-validation.json'} <= set(outputs),
+                    'Question single Quick retention incomplete')
+        usage = host.get('provider_usage')
+        model.check(isinstance(usage, list) and len(usage) <= 1 and once.raw(usage) == data['model-usage.json'],
+                    'Question single Quick usage differs')
+        if checked.status == 'VALIDATED_QUICK_RESULT':
+            model.check(len(usage) == 1 and usage[0].get('output_text_retained') is True
+                        and 'quick-model-output.txt' in outputs, 'Question successful Quick raw output missing')
+            model.check(single.QuickAssessment.model_validate(identity._json(data['quick-model-output.txt']))
+                        == candidate.assessment, 'Question Quick content differs from first raw output')
+        for event in usage:
+            if event.get('output_text_retained') is True:
+                model.check('quick-model-output.txt' in data
+                            and once.sha(data['quick-model-output.txt']) == event.get('output_sha256'),
+                            'Question first model output identity differs')
+        if outputs:
+            for name, source in outputs.items():
+                model.check(name in once.MODEL_OUTPUT_NAMES and source['path'] == prefix + name
+                            and name in data, 'Question raw output binding missing')
+                identity._checked_source(source, lambda _: data[name])
+        if checked.status == 'VALIDATED_QUICK_RESULT':
+            from .attention_inbox import parse_research_attention_handoff
+            model.check('research-attention.json' in data, 'Question readable handoff missing')
+            attention = parse_research_attention_handoff(data['research-attention.json'].decode())
+            model.check(attention.single_quick_input == packet and attention.single_quick_candidate == candidate,
+                        'Question readable handoff differs')
+            if candidate.assessment.route is single.QuickRoute.FULL_CANDIDATE:
+                from . import full_research_commission as commissions
+                model.check('full-commission.json' in data, 'Question Full commission missing')
+                commission = commissions.FullResearchCommission.model_validate(identity._json(data['full-commission.json']))
+                parents = {prefix + 'input.json': data['input.json'], prefix + 'candidate.json': data['candidate.json'],
+                           prep['question_source']['path']: question_raw}
+                commissions.verify(commission, load=lambda ref: parents[ref['path']])
+            else:
+                model.check('full-commission.json' not in data, 'Non-Full result has Full commission')
+        else:
+            model.check('research-attention.json' not in data and 'full-commission.json' not in data,
+                        'Question execution gap cannot carry completed handoff')
     if prefix != root:
         pred = launch['predecessor']
         model.check(pred['execution_id'] == item['predecessor_execution_id']
                     and isinstance(pred.get('sources'), dict), 'Question predecessor missing')
         item['predecessor_sources'] = deepcopy(pred['sources'])
-    item.update(status='VALIDATED_FUNNEL_RESULT' if funnel else 'VALIDATED_EXECUTION_GAP',
+    item.update(status=('VALIDATED_QUICK_RESULT' if is_single and checked.status == 'VALIDATED_QUICK_RESULT' else
+                        'VALIDATED_FUNNEL_RESULT' if funnel else 'VALIDATED_EXECUTION_GAP'),
                 completion=checked.completion.value, candidate_hash=checked.candidate_hash,
                 validation_hash=canonical_hash(checked), source_reading_commit=packet.current_state_commit,
                 research_cutoff=packet.research_cutoff.isoformat(),
                 finished_at=candidate.receipt.finished_at.isoformat(),
                 original_platform_task_id=candidate.receipt.platform_task_id,
-                terminal_state=funnel.terminal_state.value if funnel else None,
-                terminal_stage=funnel.terminal_stage.value if funnel else None,
-                terminal_reason=funnel.terminal_reason if funnel else None,
+                terminal_state=(checked.terminal_state.value if checked.terminal_state else None) if is_single else (funnel.terminal_state.value if funnel else None),
+                terminal_stage=("QUICK" if candidate.assessment else None) if is_single else (funnel.terminal_stage.value if funnel else None),
+                terminal_reason=checked.terminal_reason if is_single else (funnel.terminal_reason if funnel else None),
                 gap_reason=checked.gap_reason,
-                pre_present=candidate.pre_research is not None,
-                quick_present=candidate.quick_research is not None)
+                pre_present=False if is_single else candidate.pre_research is not None,
+                quick_present=candidate.assessment is not None if is_single else candidate.quick_research is not None)
+    if is_single:
+        a = candidate.assessment
+        item.update(method_version=single.METHOD_VERSION, pre_state='NOT_APPLICABLE',
+                    explanation=a.explanation if a else None,
+                    current_unknowns=list(a.unknowns) if a else list(packet.known_unknowns),
+                    counterevidence_review=a.counterevidence_review if a else None,
+                    next_work=(a.investigation.available_work if a.investigation else a.wait_trigger) if a else None)
     return item
 
 
@@ -197,7 +262,7 @@ def collect(collector, payload):
     if not groups:
         return {'status': 'NO_RETAINED_QUESTION_ROOTS_WITHIN_SCOPE', 'work_commit': commit,
                 'items': [], 'scope': PREFIX, 'new_research_execution': 'NOT_EXECUTED', **model.AUTHORITY}
-    wanted = {p + n for p, names in groups.items() for n in names & CORE}
+    wanted = {p + n for p, names in groups.items() for n in names & RETAINED_FILES}
     legacy = _legacy_sources(payload)
     projected = {'sources/git/' + metadata[p]['sha'] + '/' + PurePosixPath(p).name for p in wanted}
     model.check(len(legacy | projected) <= stock_reader.MAX_STOCK_SOURCE_FILES,
@@ -231,14 +296,14 @@ def collect(collector, payload):
                 stored = collector.retain('sources/git/' + spec['git_blob'] + '/' + PurePosixPath(spec['path']).name, raw)
                 qcache[key] = (raw, {'repository': model.REPOSITORY, 'ref': spec['ref'],
                                     'path': spec['path'], **stored})
-            data = {n: cache[prefix + n] for n in names & CORE}
+            data = {n: cache[prefix + n] for n in names & RETAINED_FILES}
             item = _describe(prefix, data, qcache[key][0])
             if item['role'] != 'ROOT' and 'predecessor_sources' in item:
                 for ps in item['predecessor_sources'].values():
                     model.check(ps['path'].startswith(PREFIX) and ps['path'] in cache,
                                 'Question predecessor outside retained scope')
                     identity._checked_source(ps, lambda s: cache[s['path']])
-            item['sources'] = {n: references[prefix + n] for n in sorted(names & CORE)}
+            item['sources'] = {n: references[prefix + n] for n in sorted(names & RETAINED_FILES)}
             item['question_source'] = qcache[key][1]
             items.append(item)
         except ERRORS as exc:
@@ -386,7 +451,7 @@ def _recorded_batch_review(collector, payload, scope, work):
     try:
         matches = []
         for item in work['items']:
-            if item['status'] not in {'VALIDATED_FUNNEL_RESULT', 'VALIDATED_EXECUTION_GAP'}:
+            if item['status'] not in {'VALIDATED_FUNNEL_RESULT', 'VALIDATED_QUICK_RESULT', 'VALIDATED_EXECUTION_GAP'}:
                 continue
             def saved(name):
                 return identity._json(collector.files[item['sources'][name]['read_path']])
@@ -456,7 +521,7 @@ def _recorded_batch_review(collector, payload, scope, work):
                 'reviewed_object_count': len(rows), 'selected_question_count': 1,
                 'items': deepcopy(rows), 'source': source,
                 'execution': {k: deepcopy(item[k]) for k in ('execution_id', 'thscode', 'question_id',
-                    'status', 'pre_present', 'quick_present', 'candidate_hash')},
+                    'status', 'pre_present', 'quick_present', 'candidate_hash', 'pre_state') if k in item},
                 'meaning': 'SAVED_ROUTING_REVIEW_AND_EXECUTION_NOT_ECONOMIC_OR_HUMAN_ACCEPTANCE'}
     except ERRORS as exc:
         return {**absent, 'status': 'UNAVAILABLE_OR_REJECTED', 'error_type': type(exc).__name__,
@@ -485,7 +550,8 @@ def render(report):
         for row in recorded['items']:
             lines.append('- ' + _text(row['thscode']) + '：' + labels[row['disposition']] + '。' + _text(row['reason']))
         execution = recorded['execution']
-        stages = 'Pre / Quick' if execution['quick_present'] else ('Pre' if execution['pre_present'] else '未保存阶段结果')
+        stages = ('Quick（该方法不设 Pre）' if execution.get('pre_state') == 'NOT_APPLICABLE' and execution['quick_present']
+                  else 'Pre / Quick' if execution['quick_present'] else ('Pre' if execution['pre_present'] else '未保存阶段结果'))
         lines += ['', '对应执行：' + _text(execution['status']) + '；已保存阶段：' + stages + '。原结果与局限见下方。',
                   '[本批原审阅记录](../../' + recorded['source']['read_path'] + ')', '',
                   '## 原始价格观察与首次业务状态', '',
@@ -514,6 +580,17 @@ def render(report):
                   _text(item.get('question', '未取得可验证的问题正文')), '',
                   '处置：' + _text(item['status']) + '；原终态：' + _text(item.get('terminal_state')),
                   '原完成时间：' + _text(item.get('finished_at')) + '；Human接受：未由本读取建立。']
+        if item.get('pre_state') == 'NOT_APPLICABLE':
+            lines += ['方法：单次 Quick；该方法不设 Pre。',
+                      '原问题来路：' + ' / '.join(_text(x) for x in item.get('origin_kinds', [])),
+                      '为什么现在：' + _text(item.get('why_now')),
+                      '旧研究关系：' + _text(item.get('existing_research_relation', {}).get('note'))]
+            if item.get('explanation'):
+                lines += ['为什么值得看：' + _text(item['explanation']),
+                          '反证与检查范围：' + _text(item['counterevidence_review']),
+                          '当前未解：' + ('；'.join(_text(x) for x in item['current_unknowns']) or '未列出；不证明全部解决')]
+                if item.get('next_work'):
+                    lines += ['下一步：' + _text(item['next_work'])]
         if item.get('terminal_reason'):
             lines += ['原模型/验证器理由（不是独立经济真值认证）：' + _text(item['terminal_reason'])]
         if item.get('known_unknowns'):
@@ -554,6 +631,14 @@ def _seal(collector, baseline, work, scope, before_readme, *, recorded=None):
     if recorded is not None and recorded['status'] == 'MATCHED_SAVED_DAILY_REVIEW':
         navigation += ('本批已记录 ' + str(recorded['reviewed_object_count']) + ' 个对象的逐项处置，'
                        + str(recorded['selected_question_count']) + ' 个具体问题已有执行记录；原baseline状态不替代该结果。\n')
+    readable = [i for i in work.get('items', [])
+                if i.get('method_version') == single.METHOD_VERSION and i.get('explanation')]
+    # Original foreground attention budget; all results remain in same-R details.
+    for item in readable[:3]:
+        navigation += ('\n**' + _text(item['thscode']) + ' / ' + _text(item['terminal_state']) + '**：'
+                           + _text(item['explanation']) + '\n')
+    if len(readable) > 3:
+        navigation += '\n另有 ' + str(len(readable) - 3) + ' 项可读单 Quick 留在完整详情；仅首页省略，不是过滤或没有研究。\n'
     if work.get('details'):
         navigation += '\n[查看本批完整处置、已执行问题的原结果及来源缺口](' + DETAIL + ')\n'
     readme = before_readme + navigation.encode()

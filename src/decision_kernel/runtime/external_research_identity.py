@@ -81,7 +81,12 @@ def read_bound_execution(input_raw: bytes, candidate_raw: bytes, expected: Execu
     """Read/validate one historical pair, without granting promotion eligibility."""
     packet = ExternalResearchInputPacket.model_validate(_json(input_raw))
     require(input_key(packet) == expected, "EXECUTION_INPUT_BINDING_MISMATCH")
-    candidate = ExternalResearchCandidate.model_validate(_json(candidate_raw))
+    value = _json(candidate_raw)
+    if packet.method_version == "single-quick-v1" or value.get("schema_version") == 2:
+        from .single_quick_contract import read_saved_result
+        return read_saved_result(input_raw, candidate_raw)
+    require(packet.prompt_version != "single-quick-outcomes-v1", "EXECUTION_METHOD_VERSION_MISMATCH")
+    candidate = ExternalResearchCandidate.model_validate(value)
     require(candidate.receipt.execution_id == expected.execution_id
             and candidate.input_hash == candidate.receipt.input_hash == expected.canonical_input_hash,
             "EXECUTION_RECEIPT_BINDING_MISMATCH")
@@ -163,7 +168,7 @@ def require_promotion(input_raw: bytes, candidate_raw: bytes, expected: Executio
     require(isinstance(scope, ExecutionScope), "EXECUTION_SCOPE_REQUIRED")
     scope.require_unambiguous(expected)
     _, _, validation = read_bound_execution(input_raw, candidate_raw, expected)
-    require(validation.status is ExternalResearchValidationStatus.VALIDATED_FUNNEL_RESULT,
+    require(validation.status in {ExternalResearchValidationStatus.VALIDATED_FUNNEL_RESULT, "VALIDATED_QUICK_RESULT"},
             "EXECUTION_GAP")
     return validation
 
@@ -183,7 +188,13 @@ def check_handoff_registration(raw: bytes, binding: dict, scope: ExecutionScope,
         _checked_source(binding["candidate"], load), key, scope)
     from .attention_inbox import parse_research_attention_handoff
     parsed = parse_research_attention_handoff(raw.decode("utf-8"))
-    require(parsed.research_funnel == validation.funnel_result, "EXECUTION_HANDOFF_RESULT_MISMATCH")
+    if parsed.single_quick_candidate is not None:
+        require(input_key(parsed.single_quick_input) == key
+                and canonical_hash(parsed.single_quick_candidate) == validation.candidate_hash
+                and getattr(validation, "schema_version", 1) == 2, "EXECUTION_HANDOFF_RESULT_MISMATCH")
+    else:
+        require(getattr(validation, "schema_version", 1) == 1
+                and parsed.research_funnel == validation.funnel_result, "EXECUTION_HANDOFF_RESULT_MISMATCH")
     return key
 
 
@@ -214,10 +225,10 @@ def project_registered_handoffs(entries: list[dict], load: Callable[[dict], tupl
     for entry in entries:
         try:
             raw, _ = cached(entry["source"])
-            funnel = parse_research_attention_handoff(raw.decode("utf-8")).research_funnel
+            funnel = parse_research_attention_handoff(raw.decode("utf-8"))
             binding = entry.get("external_execution")
             tracked = funnel.discovery.discovery_id in known_ids
-            if binding is not None or tracked:
+            if binding is not None or tracked or funnel.single_quick_candidate is not None:
                 require(scope is not None, scope_error or "EXECUTION_SCOPE_REQUIRED")
                 if tracked:
                     require(len(scope.hashes(funnel.discovery.discovery_id)) <= 1, "EXECUTION_ID_CONFLICT")

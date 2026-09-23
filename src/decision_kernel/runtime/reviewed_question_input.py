@@ -137,7 +137,8 @@ def _prepare(*, question_source: dict, input_raw: bytes, preflight_raw: bytes,
     retained_initial = False
     if (relation["kind"] == "CONTINUE_ANALYSIS" and relation["source_refs"]
         and all(s["purpose"] == "RETAINED_ANALYSIS_PREDECESSOR" for s in relation["source_refs"])
-        and packet.prompt_version == "reviewed-question-stock-v0"
+        and ((packet.method_version, packet.prompt_version) == ("single-quick-v1", "single-quick-outcomes-v1")
+             or packet.prompt_version == "reviewed-question-stock-v0")
         and any(o["kind"] == "INDUSTRY_VARIABLE_OBSERVATION"
                 and o["qualification"] == "QUALIFIED_FOR_DECLARED_SCOPE" for o in origins)):
         from . import reviewed_full_input as full

@@ -336,9 +336,9 @@ def project_handoffs(entries: list[dict], load: Callable[[dict], tuple[bytes, di
         try:
             raw, source = load(entry["source"])
             parsed = parse_research_attention_handoff(raw.decode())
-            funnel = parsed.research_funnel
+            funnel = parsed
             identity = canonical_hash({"path": source["path"], "sha256": sha256(raw),
-                                       "funnel": funnel.model_dump(mode="json")})
+                                       "funnel": parsed.identity_material})
             check(identity not in seen, "duplicate exact handoff reference")
             seen.add(identity)
             row = {"request_id": identity, "discovery_id": funnel.discovery.discovery_id,

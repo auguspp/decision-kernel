@@ -95,7 +95,7 @@ def main(
         odds_watch.write_watch(report=report, output_dir=args.odds_watch_output)
 
         research_attention = sum(
-            item.research_funnel.terminal_state
+            item.terminal_state
             is attention_inbox.ResearchFunnelTerminalState.DEEPEN_REQUIRED
             for item in handoffs
         )
