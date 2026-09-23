@@ -1,0 +1,51 @@
+name: R4 exact PR530 correction transfer
+on:
+  push:
+    branches: [ops/r4-pr530-fix-transport-20260923]
+permissions:
+  contents: write
+jobs:
+  transfer:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 5f0770c84bdf2a22c7fd49c939f760a2e55b2653
+          persist-credentials: false
+      - name: Apply only the exact reviewed patch; no repository code execution
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 5f0770c84bdf2a22c7fd49c939f760a2e55b2653
+          test "$(git rev-parse HEAD^{tree})" = f774ab13fea7ef08be7cf434a13c0382baa942fd
+          gh api repos/auguspp/decision-kernel/git/blobs/79a37096a2198120b6b8c72b90b63f5fe0749317 > "$RUNNER_TEMP/fixed-blob.json"
+          python - <<'PY'
+          import base64, hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          value = json.loads((root/'fixed-blob.json').read_text())
+          assert value['sha'] == '79a37096a2198120b6b8c72b90b63f5fe0749317'
+          assert value['encoding'] == 'base64'
+          data = base64.b64decode(value['content'])
+          assert len(data) == 20193
+          assert hashlib.sha256(data).hexdigest() == 'b2997415aed68f859bba5dfd3bdd566cda00695ddd97b8b063d17f3c99c17ae2'
+          (root/'corrections.patch').write_bytes(data)
+          PY
+          git -c core.hooksPath=/dev/null apply --index --whitespace=error "$RUNNER_TEMP/corrections.patch"
+          git diff --cached --name-only > "$RUNNER_TEMP/changed.txt"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          actual = (Path(os.environ['RUNNER_TEMP'])/'changed.txt').read_text().splitlines()
+          expected = ['docs/concept-detail-replay-compatibility-v1.md', 'src/decision_kernel/runtime/attention_inbox.py', 'src/decision_kernel/runtime/concept_detail_compat.py', 'src/decision_kernel/runtime/reviewed_question_reading.py', 'src/decision_kernel/runtime/stock_daily_question.py', 'tests/test_single_quick_integration_regressions.py']
+          assert actual == expected
+          PY
+          test "$(git write-tree)" = bc193a8d1cddf855eeb479ecf1a8c0b74214b8d5
+          git -c core.hooksPath=/dev/null -c user.name=auguspp -c user.email=83357964+auguspp@users.noreply.github.com commit -m 'fix: preserve legacy replay and capacity while verifying single Quick delivery' -m 'AI-assisted R4-1 correction under #530/5795609163. Exact six-file patch and target tree verified. Preserve all previous test assertions; add18 regressions. No production activation, financial sources, model or Hosted calls. Full exact-head CI and review still required.'
+          test "$(git rev-parse HEAD^{tree})" = bc193a8d1cddf855eeb479ecf1a8c0b74214b8d5
+          git -c core.hooksPath=/dev/null -c 'credential.helper=!gh auth git-credential' push --force-with-lease=refs/heads/ops/r4-pr530-fixed-object-20260923: origin HEAD:refs/heads/ops/r4-pr530-fixed-object-20260923
+          printf 'CODE_COMMIT=%s\nCODE_TREE=%s\n' "$(git rev-parse HEAD)" "$(git rev-parse HEAD^{tree})"
