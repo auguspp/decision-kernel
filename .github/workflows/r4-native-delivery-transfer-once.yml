@@ -1,0 +1,59 @@
+name: R4 native delivery source transfer once
+on:
+  push:
+    branches: [ops/r4-native-delivery-transfer-20260923]
+    paths: [.github/workflows/r4-native-delivery-transfer-once.yml, '.github/ops/r4-native-delivery/**']
+permissions:
+  contents: write
+jobs:
+  transfer:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Verify fixed patch and create only the reviewed feature ref
+        shell: bash
+        env:
+          BASE: d1b34eb89615c03fd4ea83b030ee7c3588eee483
+          TREE: f774ab13fea7ef08be7cf434a13c0382baa942fd
+          FEATURE: refs/heads/feat/r4-native-single-quick-delivery-20260923
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/ops/r4-native-delivery-transfer-20260923
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          python - <<'PY'
+          import hashlib, lzma, os
+          from pathlib import Path
+          source = Path('.github/ops/r4-native-delivery')
+          data = b''.join((source / ('part' + str(i))).read_bytes() for i in range(6))
+          assert len(data) == 25728
+          assert hashlib.sha256(data).hexdigest() == '687f0a3111eaf3908717b63e3d547a1da0eb04b444e3393bb41969eff903582c'
+          patch = lzma.decompress(data, memlimit=64 * 1024 * 1024)
+          assert len(patch) == 103593
+          assert hashlib.sha256(patch).hexdigest() == 'c51f20327050ebc6afdee93079f2ef95676200f677aa2cb5afe11e0597041ff0'
+          Path(os.environ['RUNNER_TEMP'], 'r4-native-delivery.patch').write_bytes(patch)
+          PY
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$BASE"
+          test -z "$(git ls-remote origin "$FEATURE")"
+          git fetch --no-tags --depth=1 origin "$BASE"
+          git checkout --detach "$BASE"
+          test "$(git rev-parse HEAD)" = "$BASE"
+          git apply --check --index "$RUNNER_TEMP/r4-native-delivery.patch"
+          git apply --index "$RUNNER_TEMP/r4-native-delivery.patch"
+          test "$(git write-tree)" = "$TREE"
+          test "$(git diff --cached --name-only | wc -l | tr -d ' ')" = 16
+          if git diff --cached --name-only | grep -E '^(\.github/|research_runs/|pyproject\.toml$|current_state/)'; then exit 1; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          COMMIT=$(printf '%s\n\n%s\n' 'feat: connect shared single Quick to native retention, reading and Brief' 'AI-assisted R4-1 engineering under #297/5794764206. Exact inspected patch and tree; original permissions/source/day-slot/retention and history preserved. Shared non-executing Full commission supports both origins. No production activation or model/source/Hosted calls. Temporary transport is not part of this tree. Full exact-head CI and review still required.' | git commit-tree "$TREE" -p "$BASE")
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$BASE"
+          # An explicit empty expected value requires this ref NOT to exist.
+          # This is create-only; no existing branch or main can be overwritten.
+          git push --force-with-lease="$FEATURE:" origin "$COMMIT:$FEATURE"
+          test "$(git ls-remote origin "$FEATURE" | cut -f1)" = "$COMMIT"
+          printf 'FEATURE_COMMIT=%s\nTREE=%s\nBASE=%s\n' "$COMMIT" "$TREE" "$BASE"
+          printf 'PATCH_SHA256=c51f20327050ebc6afdee93079f2ef95676200f677aa2cb5afe11e0597041ff0\n'
