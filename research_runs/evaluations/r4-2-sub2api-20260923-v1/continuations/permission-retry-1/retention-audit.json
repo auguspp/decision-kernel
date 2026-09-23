@@ -1,0 +1,12 @@
+{
+  "result_commit": "f87033f58669c49f370025c6e3b9dd17991c5b18",
+  "subtree": "009c69253bf72c541c903d00bc21f7fe5aa354c7",
+  "files": 53,
+  "native_git_tree_matches_remote": true,
+  "excluded_artifact_only": [
+    "diagnostics/execution.log",
+    "diagnostics/identity.txt",
+    "diagnostics/packages.json",
+    "publication.json"
+  ]
+}

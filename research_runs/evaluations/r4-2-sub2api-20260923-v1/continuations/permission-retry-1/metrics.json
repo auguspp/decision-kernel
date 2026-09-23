@@ -1,0 +1,44 @@
+{
+  "record_reconciliation": "PASS",
+  "all7_output_schemas": "PASS",
+  "all7_raw_parsed_semantic_equality": "PASS",
+  "timestamp_normalizations": [
+    {
+      "stage": "600362/O/pre/",
+      "field": "as_of",
+      "raw": "2026-09-23T04:44:29.795878+00:00",
+      "parsed": "2026-09-23T04:44:29.795878Z",
+      "same_instant": true
+    },
+    {
+      "stage": "603507/O/pre/",
+      "field": "as_of",
+      "raw": "2026-09-21T15:44:33.659776+00:00",
+      "parsed": "2026-09-21T15:44:33.659776Z",
+      "same_instant": true
+    },
+    {
+      "stage": "603507/O/quick/",
+      "field": "as_of",
+      "raw": "2026-09-21T15:44:33.659776+00:00",
+      "parsed": "2026-09-21T15:44:33.659776Z",
+      "same_instant": true
+    }
+  ],
+  "all7_preview_send_receipts_equal": "PASS",
+  "requests_new": 7,
+  "requests_lifetime_including403": 8,
+  "reported_input_tokens": 1447288,
+  "reported_output_tokens": 18167,
+  "reported_total_tokens": 1465455,
+  "by_arm": {
+    "O": {"calls": 3, "input": 581198, "output": 8979, "total": 590177},
+    "S0": {"calls": 2, "input": 433059, "output": 4369, "total": 437428},
+    "S1": {"calls": 2, "input": 433031, "output": 4819, "total": 437850}
+  },
+  "zhenjiang_input_reduction_O_to_S0_percent": "50.50574195921369896603866116",
+  "zhenjiang_input_reduction_O_to_S1_percent": "50.51050989687631969703161824",
+  "account_bill": "UNKNOWN",
+  "cost_saving": "NOT_INFERRED_FROM_TOKEN_COUNTS",
+  "audit_development_note": "Initial raw-vs-parsed dictionary equality was too strict for legacy ISO +00:00 to Z serialization. Three timestamps denote identical instants; all other fields match, raw bytes/hashes remain intact. This is an offline auditor correction, not a failed production/model call."
+}
