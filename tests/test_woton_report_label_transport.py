@@ -66,13 +66,16 @@ def test_issue_events_cannot_be_classified_as_original_research_modes(active):
         return {'workflow_runs':[run],'total_count':1} if 'workflows/' in endpoint else {
             'jobs':jobs,'total_count':len(jobs)}
     result=reader.attempts(SimpleNamespace(api=SimpleNamespace(get=get,calls=0,max_calls=252),files={}))
-    assert all(result[k] is None for k in ('latest_execution_attempt',
-        'latest_source_preparation_attempt','latest_compatibility_attempt'))
-    if active=='retain-public-report-source':
-        assert result['latest_report_source_attempt']['event']=='issues'
+    # The later daily label is an approved Research transport. Classification
+    # remains invocation metadata, not source qualification or Research acceptance.
+    assert all(result[k] is None for k in ('latest_source_preparation_attempt','latest_compatibility_attempt'))
+    if active in {'retain-public-report-source', 'research-stock-business'}:
+        expected = 'latest_report_source_attempt' if active == 'retain-public-report-source' else 'latest_execution_attempt'
+        other = 'latest_execution_attempt' if active == 'retain-public-report-source' else 'latest_report_source_attempt'
+        assert result[expected]['event'] == 'issues' and result[other] is None
         assert not result['unclassified_invocations']
     else:
-        assert result['latest_report_source_attempt'] is None
+        assert result['latest_report_source_attempt'] is None and result['latest_execution_attempt'] is None
         assert result['attempt_classification_status']=='PARTIAL_OR_UNAVAILABLE'
 
 

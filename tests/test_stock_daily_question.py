@@ -262,23 +262,28 @@ def test_daily_native_gates_preserve_original_routes_and_before_egress_reservati
 
 
 def test_daily_checked_main_policy_and_disabled_request_match_recorded_scope():
+    from decision_kernel.runtime import industry_daily_question as industry
     assert json.loads((ROOT / daily.POLICY_PATH).read_bytes()) == daily.POLICY
     request = json.loads((ROOT / daily.REQUEST).read_bytes())
-    # The original disabled template has now been explicitly activated for one
-    # reviewed question. Configuration state is not Research/launch acceptance.
+    # Deployment can select either existing approved family, without freezing
+    # yesterday's ticker/path as permanent policy. Configuration is not a run.
     assert request["enabled"] is True and request["mode"] == daily.MODE
-    assert request["permission"] == daily.PERMISSION and request["approved_egress_hash"] is None
+    review_purpose = request["batch_review_source"]["purpose"]
+    permissions = {daily.EXTRA_SOURCES["batch_review_source"]: daily.PERMISSION,
+                   industry.PURPOSE: industry.PERMISSION}
+    assert request["permission"] == permissions[review_purpose] and request["approved_egress_hash"] is None
     assert daily.base_request(request)["mode"] == host.QUESTION_MODE
     for key in ("question_source", "context_source", "preflight_source", *daily.EXTRA_SOURCES):
         spec = request[key]
         assert set(spec) == {"repository", "ref", "path", "git_blob", "sha256", "purpose"}
         assert spec["repository"] == once.REPO and reading.SHA.fullmatch(spec["ref"])
         assert reading.SHA.fullmatch(spec["git_blob"]) and len(spec["sha256"]) == 64
-        assert spec["path"].startswith("research_runs/daily-inputs/603507-profit-cash-20260921/")
+        assert spec["path"].startswith("research_runs/") and reading.safe_path(spec["path"]) == spec["path"]
     assert request["question_source"]["purpose"] == "REVIEWED_RADAR_QUESTION"
     assert request["context_source"]["purpose"] == "MODEL_CONTEXT"
     assert request["preflight_source"]["purpose"] == "PRE_EXECUTION_SOURCE_PREFLIGHT"
-    assert all(request[key]["purpose"] == purpose for key, purpose in daily.EXTRA_SOURCES.items())
+    purposes = {**daily.EXTRA_SOURCES, "batch_review_source": review_purpose}
+    assert all(request[key]["purpose"] == purpose for key, purpose in purposes.items())
     assert daily.POLICY["provider"] == {"name": "DEEPSEEK_OFFICIAL", "base_url": "https://api.deepseek.com",
         "model": "deepseek-flash", "credential_binding": "DEEPSEEK_API_KEY", "reasoning": {"effort": "none"}}
 

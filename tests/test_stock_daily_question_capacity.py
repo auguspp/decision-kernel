@@ -92,6 +92,8 @@ def retain_case_files(case, prefix, names):
 
 
 def test_shared_file_capacity_includes_legacy_and_complete_new_result(tmp_path, monkeypatch):
+    # Retain this small accounting fixture; production-capacity boundaries are tested separately.
+    monkeypatch.setattr(daily.stock_reader, "MAX_STOCK_SOURCE_FILES", 32)
     case = setup_daily(tmp_path, monkeypatch)
     for key in ("1", "2"):
         retain_case_files(case, reader.PREFIX + key * 64 + "/", reader.CORE)
@@ -109,6 +111,8 @@ def test_shared_file_capacity_includes_legacy_and_complete_new_result(tmp_path, 
 
 
 def test_current_partial_root_reserves_its_remaining_core_files(tmp_path, monkeypatch):
+    # Retain this small accounting fixture; production-capacity boundaries are tested separately.
+    monkeypatch.setattr(daily.stock_reader, "MAX_STOCK_SOURCE_FILES", 32)
     case = setup_daily(tmp_path, monkeypatch)
     for key in ("1", "2", "3"):
         retain_case_files(case, reader.PREFIX + key * 64 + "/", reader.CORE)
@@ -121,7 +125,7 @@ def test_current_partial_root_reserves_its_remaining_core_files(tmp_path, monkey
 
 def test_partial_executions_count_toward_original_eight_execution_bound(tmp_path, monkeypatch):
     case = setup_daily(tmp_path, monkeypatch)
-    for key in range(1, 9):
+    for key in range(1, reader.MAX_EXECUTIONS + 1):
         retain_case_files(case, reader.PREFIX + f"{key:064x}/", ("prepare.json",))
     packet, state = capacity_input(case)
     commit, rows = view(case)

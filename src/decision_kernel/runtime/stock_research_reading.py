@@ -21,10 +21,11 @@ from . import stock_source_successor as successor
 from . import stock_source_successor_continuation as continuation
 
 
-# Preserve the already accepted #360 Stock-reader capacity. Continuation must fit
-# inside it; this repair neither raises nor narrows the publication boundary.
-EXTRA_API_CALLS = 72
-MAX_STOCK_SOURCE_FILES = 32
+# Shared history-reading capacity, calibrated for the approved daily trial.
+# Allow a read and publication per retained file plus metadata overhead; this
+# changes neither Research permissions nor the day/question consumption ledger.
+EXTRA_API_CALLS = 576
+MAX_STOCK_SOURCE_FILES = 256
 
 
 def call_limit(api):
@@ -64,16 +65,19 @@ def attempts(collector):
                 and len(rows) == jobs['total_count'] and len(rows) <= 100
                 and all(isinstance(j, dict) and j.get('run_id') == run['id']
                         and j.get('name') in {'research-stock-business', 'prepare-stock-sources',
-                                               'deepseek-compatibility', 'retain-public-report-source'} for j in rows)
+                                               'deepseek-compatibility', 'retain-public-report-source',
+                                               'prepare-declared-report-sources'} for j in rows)
                 and len({j['name'] for j in rows}) == len(rows), 'Stock invocation jobs incomplete or ambiguous')
             active = [j['name'] for j in rows if j.get('conclusion') != 'skipped']
-            if active == ['research-stock-business'] and run['event'] in {'workflow_run', 'workflow_dispatch'}:
+            if active == ['research-stock-business'] and run['event'] in {'workflow_run', 'workflow_dispatch', 'issues'}:
                 key = 'latest_execution_attempt'
             elif active == ['prepare-stock-sources'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_source_preparation_attempt'
             elif active == ['deepseek-compatibility'] and run['event'] == 'workflow_dispatch':
                 key = 'latest_compatibility_attempt'
             elif active == ['retain-public-report-source'] and run['event'] in {'workflow_dispatch', 'issues'}:
+                key = 'latest_report_source_attempt'
+            elif active == ['prepare-declared-report-sources'] and run['event'] == 'issues':
                 key = 'latest_report_source_attempt'
             else:
                 raise ValueError('Stock invocation mode not established')
