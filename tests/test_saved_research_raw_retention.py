@@ -22,8 +22,8 @@ def format_converter(monkeypatch):
         def type_to_text_format_param(model):
             return {'type': 'json_schema', 'strict': True, 'name': model.__name__,
                     'schema': model.model_json_schema()}
-    monkeypatch.setitem(sys.modules, 'openai.lib._parsing._responses', SimpleNamespace(
-        type_to_text_format_param=type_to_text_format_param))
+        monkeypatch.setitem(sys.modules, 'openai.lib._parsing._responses', SimpleNamespace(
+            type_to_text_format_param=type_to_text_format_param))
     return type_to_text_format_param
 
 

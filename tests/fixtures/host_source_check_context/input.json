@@ -1,0 +1,184 @@
+{
+  "allowed_tools": [
+    "OTHER_READ"
+  ],
+  "budget": {
+    "elapsed_time_enforcement": "SOFT_EXECUTOR",
+    "max_elapsed_minutes": 15,
+    "max_search_queries": 0,
+    "max_source_reads": 4,
+    "max_technical_retries": 0,
+    "max_tool_calls": 6,
+    "search_queries_enforcement": "SOFT_EXECUTOR",
+    "source_reads_enforcement": "SOFT_EXECUTOR",
+    "technical_retries_enforcement": "SOFT_EXECUTOR",
+    "tool_calls_enforcement": "SOFT_EXECUTOR"
+  },
+  "candidate_output_prefix": "research_runs/candidates/stock-questions/4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14/",
+  "case_id": "600362.SH",
+  "code_commit": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
+  "current_state_commit": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+  "current_state_reading_hash": "92e9029b2767a0061639e9cb723be8d8aa1ac1fb86ded0f3b0af43602435e40c",
+  "execution_id": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+  "known_unknowns": [
+    "当前净自产资源敏感度、套保覆盖及利润归属未完全量化。",
+    "期现基差不是冶炼加工费。",
+    "保证金及受限资金释放条件和业务归属仍需核对。",
+    "当前范围为两份财报及其可能更正；其他临时公告按Human财报优先要求暂缓，未声称全事件覆盖。",
+    "REQUIRED_SOURCE_CLASS:FULL_ANNUAL_REPORT:STATIC",
+    "REQUIRED_SOURCE_CLASS:FULL_INTERIM_REPORT:STATIC",
+    "REQUIRED_SOURCE_CLASS:FINANCIAL_REPORT_CORRECTION_CHECK:LATEST_INVENTORY",
+    "FALSIFICATION_TEST:分开自有矿山与第一量子权益产量，核对外购矿TC/RC及加工转嫁，并从合并利润勾稽到现金和受限保证金；若无法识别净暴露，不用总产量乘铜价推断股东利润。",
+    "KNOWN_COUNTEREVIDENCE:总产量包含外购原料和权益口径，不能等同并表自有矿山敞口。",
+    "KNOWN_COUNTEREVIDENCE:贸易和加工价格转嫁及套保可抵消名义价格上行。",
+    "KNOWN_COUNTEREVIDENCE:利润、公允价值调节、经营性应收和保证金占用可能使股东现金不同于收入增长。",
+    "EXISTING_RESEARCH_RELATION:延续已保存交互底稿的同一问题；此前未有正式宿主launch，本次是首次正式研究调用。"
+  ],
+  "method_version": "research-funnel-v1",
+  "next_discriminating_search": "先用完整2025年报及2026H1区分资源、冶炼、贸易和套保，再检验合并利润—现金、受限资金和权益投资桥；缺失归因保持UNKNOWN。",
+  "prompt_version": "reviewed-question-stock-v0",
+  "research_cutoff": "2026-09-23T04:44:29.795878Z",
+  "research_question": "铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？",
+  "schema_version": 1,
+  "security_id": "SSE:600362",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-23T04:44:29.795878Z",
+      "content_hash": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3",
+      "extracted_structured_values": null,
+      "id": "9962c189-38a8-5376-accc-60215ff5bec6",
+      "idempotency_key": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14:2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3",
+      "license_terms_note": "Approved retained public question context; primary-read declarations are not truth certification.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-23T01:54:45Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/3a8cdcb04a98892d6948738963aa29c07c59dc9c/research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-23T04:44:29.795878Z",
+      "schema_version": 1,
+      "source_identifier": "stock-question-4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/3a8cdcb04a98892d6948738963aa29c07c59dc9c/research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "selected_at": "2026-09-23T04:44:29.795878Z",
+  "source_lane": "REVIEWED_RADAR_QUESTION",
+  "source_refs": [
+    {
+      "git_blob": "d7ad7ef93b2cd3aecc85dee920567cb099dba85d",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/question.json",
+      "purpose": "REVIEWED_RADAR_QUESTION",
+      "ref": "c492cf1d31ff5187dbe863d00ebd8e5fc420fc23",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "61b77f1d21c47eb4642ac369e33e9ca4d6fa2d99531087c28fad5f0671c4365c"
+    },
+    {
+      "git_blob": "9e47d0ad5b58d54a311a061a06d9efb21482475d",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/context.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "3a8cdcb04a98892d6948738963aa29c07c59dc9c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "2ada563c570192cbcd125f1b2ef4721259393835ed3530c496407aad6f6740b3"
+    },
+    {
+      "git_blob": "f36f55f22029679c8b0256a52c1c9923a2f3429d",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "3b85b865ba61c2a29b24ff7981869363324d6d5c",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "61b092519d88d4607f24229a9bac1421108e0c9dcc43817e3ac46fc591a405a3"
+    },
+    {
+      "git_blob": "2b950f38e0d8002eef1d58ffcc7226414314171f",
+      "path": "current-state.json",
+      "purpose": "SAVED_QUESTION_READING",
+      "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "00b85bb68278df1863ef2b2f8745a86821be49756a1d6133c380f4315308662c"
+    },
+    {
+      "git_blob": "4c6ad30f55edceaf06d4b68993fa82b075b1415f",
+      "path": "details/radar/industry-breadth.json",
+      "purpose": "SAVED_INDUSTRY_BATCH_ORIGIN",
+      "ref": "c32fdf6c9d6349cfe7f82ef8b9dd18cc1ed850ac",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "55c3d0f9605a89045ae64578abbc9866aa921eb112ba50054eaf8a4e577f50b7"
+    },
+    {
+      "git_blob": "c0c532a7a0ba6666e8b62fe1b948a10336ef87f1",
+      "path": "docs/readings/600362-cash-bridge-2026-09-23/workpaper.md",
+      "purpose": "RETAINED_ANALYSIS_PREDECESSOR",
+      "ref": "6729218c6400a07b2f73beb1d2e53fa556152707",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "568eaa59b9f923a00964674cf858f76ce443cb691d3b978fafacceb92d95a358"
+    },
+    {
+      "git_blob": "3f5d865dccd3b42f71f15b24839029e6f8c24c6e",
+      "path": "research_runs/sources/declared-reports/600362-financial-20260922/2025FY-cninfo-source.pdf",
+      "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+      "ref": "8cda868842384bcb0e14b22f81eb3ac5348acdec",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "034233ef8b8b392497ed6ad592ca04219eb71c4d4c93aa13a9ed3272e14b2caa"
+    },
+    {
+      "git_blob": "0433e78f7e430dd7e69cfe579d988bdc2e751c5b",
+      "path": "research_runs/sources/declared-reports/600362-financial-20260922/2025FY-cninfo-extraction.json",
+      "purpose": "DECLARED_REPORT_SOURCE_NOT_ADMISSION",
+      "ref": "35deaf3def2df0d958d68fb19db398ba561b3f10",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "08b251a71b17756ec8a64ff2a01bc2c17756aedebd98502d43f8351b6f591851"
+    },
+    {
+      "git_blob": "97690de3f23cd7b57ec3073c55ae0bd27f0d6a23",
+      "path": "research_runs/sources/declared-reports/600362-financial-20260922/2026H1-cninfo-source.pdf",
+      "purpose": "RETAINED_PUBLIC_ISSUER_PDF",
+      "ref": "8ebc0a2c3ea0017398d6629d87830400c35c0163",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "9c9b7c9efe8f51b16d52c1872bd770a44f0a5107998d648db63cd9633ba6d4eb"
+    },
+    {
+      "git_blob": "374717778b139a15d31d0b42039779e25dc8b044",
+      "path": "research_runs/sources/declared-reports/600362-financial-20260922/2026H1-cninfo-extraction.json",
+      "purpose": "DECLARED_REPORT_SOURCE_NOT_ADMISSION",
+      "ref": "90b80fc4234f95f7dc6c2a8d326228923816e70b",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4a4ff9c14a66888e1762f104f2f89b21ccec7ef84dddadf1d0cde59362b16bf1"
+    },
+    {
+      "git_blob": "dd958d019a08df72dab4a537b6adc5c7c5450845",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/review.json",
+      "purpose": "DAILY_INDUSTRY_BATCH_REVIEW",
+      "ref": "52e731f1d8c548ab2dc6681187a8ee7d64f3b358",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "b985133da09b5d0c9539b4d990573e5aa9af5b9cc269c0f126f4dfc4c76b5855"
+    },
+    {
+      "git_blob": "a26a79608d7d2919e30a9aa5a3170ed2e7c5bc82",
+      "path": "research_runs/industry-question-preparation/600362-industry-input-20260923/custody.json",
+      "purpose": "DAILY_PUBLIC_PDF_CUSTODY",
+      "ref": "9bc8f6f91c6626add57d64a7aa2e536a56206fe2",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "defe789f9f1b3c40e651b041c3163f05261779c57f46a9c2fbb309beadd5ba32"
+    },
+    {
+      "git_blob": "93bd0cc2ca9ba55f1bc0626a44683bd0ca3fc77f",
+      "path": "research_runs/sources/declared-reports/600362-financial-20260922/source.json",
+      "purpose": "source.json",
+      "ref": "91d2f316be950482469f48917c1ddec40dd6bc42",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "36f3917a5c9c4f1bb42e2fc4566e7795c1d3d033c3d64f2e1ab5020d9cd8f7b0"
+    },
+    {
+      "git_blob": "8daac1fc2b3133cb82c7e2b3057993e9b0b9b4fd",
+      "path": "research_runs/stock-retained-source-imports.json",
+      "purpose": "REVIEWED_RETAINED_SOURCE_IMPORT",
+      "ref": "f22ed4ffc150592be0a82bda1de5042a9100d5d8",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "497672864887e491d68ec9fcf3fb7b07cf66f36e2c8fac79c00bc7cb6b80df05"
+    }
+  ],
+  "ticker": "600362",
+  "untrusted_test_material": null
+}

@@ -67,3 +67,28 @@ Quick适配复用#527的精确`FullResearchHandoff`证明，并实际绑定原Qu
 复用原`_validate_candidate_identity`的公共字段检查；不复制预算/Receipt/工具/来源处置校验。该私有接点的依赖由回归保护，后续改共享接口时须同时覆盖v1/v2。外部复用Pydantic当前明确分派/验证和既有依赖；[官方版本分派说明](https://docs.pydantic.dev/latest/concepts/unions/)、[模型复制与验证](https://docs.pydantic.dev/latest/concepts/models/)，以及#523/5789661998已审SDK实现。不增加框架或依赖，不向provider发送联合类型或擅自假定真实模型质量等价。
 
 本地仅定向诊断：当前Python/SDK安装与固定CI不同；临时schema转换替身仅存在于工作目录之外，不进入仓库或CI。完整CI必须安装原固定SDK并运行新增的真实SDK＋模拟HTTP/SSE原宿主用例，不能skip；它仍不证明真实模型质量或费用。每次PR/main实际结果和正常publisher逐次记录，失败保留。
+
+## R4-2：将已核验的来源状态传给模型
+
+两材料实测（#526/5798347406）发现：原宿主保留更正目录检查和准入记录，
+模型却只收到 REQUIRED_SOURCE_CLASS 声明，因此将没看到核验结果误当作业务停止理由。
+这不是新来源、第二次 Pre 或取消来源要求。
+
+原问题宿主的新单 Quick 现在将 `host_source_checks` 附在同一个请求中，
+复用原 `check_preflight`、精确来源绑定、实际 prepare/launch/admission。
+其中 `host-source-check-context-v1` 是来源元数据表示版本，不是新的研究阶段或结果合同；
+原 single-quick 的方法、成果 schema 和 outcome prompt 版本保持。
+记录范围、时钟、原件引用、query events 和主来源读取关系进入同一个外发摘要及最终 SDK 字节检查。
+原财报 `public_context`、种子 Evidence、声明未知、历史输入和旧 Pre/Quick 结果不改。
+旧外发摘要不能授权新增元数据；当前生产 request 未自动更新或启用。
+
+只投影已绑定的记录，排除 collector 的自由 notes 与无关额外字段。
+记录成立不认证来源内容真伪、经济判断、全事件覆盖或当前新鲜度；
+无命中只代表声明查询范围内的记录。模型不需要因为收集发生在宿主而重复检查，
+但实质证据不足仍须如实解释。真实来源失败或时点失效仍由原准入在调用前拒绝。
+预检在原 cutoff 下的纯投影不替代发送前的当前时钟核验，不授予工具/Full/投资权限。
+
+元数据同样保存在原 launch 和最终 host receipt，完整实际模型输入继续保存在原运行附件；
+不新增保存文件、登记库或常态恢复路径。旧方法请求在未明确迁移时逐字节保持原样。
+本次改动没有改写历史实验输出，也没有运行修改输入后的质量复测或新日常任务；
+工程验收、模型理解改善与首条正常 Brief 的实际使用分别记录。
