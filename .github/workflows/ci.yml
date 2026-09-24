@@ -23,7 +23,7 @@ jobs:
       CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
@@ -33,7 +33,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/ci-content-scope.py select --report-dir "$RUNNER_TEMP/kernel-ci"
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         if: steps.scope.outputs.scope != 'content'
         with:
           python-version: "3.12"
@@ -63,14 +63,28 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_ci_content_scope.py 2>&1 | tee "$CI_REPORT_DIR/content-tests.log"
           python3 .github/scripts/ci-content-scope.py check --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/content-check.log"
-      - name: Record full test collection
+      - name: Verify exact PR full-suite reuse after real installation
+        id: reuse
         if: steps.scope.outputs.scope != 'content'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/ci-merge-reuse.py --report-dir "$CI_REPORT_DIR"
+      - name: Main merge smoke checks
+        if: steps.reuse.outputs.reuse == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_ci_merge_reuse.py tests/test_ci_contract.py \
+            tests/test_external_research_identity.py tests/test_external_research_admission.py \
+            --junitxml="$CI_REPORT_DIR/main-smoke.xml" 2>&1 | tee "$CI_REPORT_DIR/main-smoke.log"
+      - name: Record full test collection
+        if: steps.scope.outputs.scope != 'content' && steps.reuse.outputs.reuse != 'true'
         shell: bash
         run: |
           set -euo pipefail
           python -m pytest --collect-only -q > "$CI_REPORT_DIR/collection.txt"
       - name: Test
-        if: steps.scope.outputs.scope != 'content'
+        if: steps.scope.outputs.scope != 'content' && steps.reuse.outputs.reuse != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -80,7 +94,7 @@ jobs:
             --junitxml="$CI_REPORT_DIR/pytest.xml" 2>&1 | tee "$CI_REPORT_DIR/pytest.log"
       - name: Upload CI diagnostics
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: kernel-ci-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/kernel-ci/

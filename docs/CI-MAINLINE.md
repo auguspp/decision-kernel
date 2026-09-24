@@ -4,24 +4,25 @@ Updated: 2026-09-24. Engineering only; Investment Authority = NONE.
 
 ## 当前职责
 
-Human 已授权按新架构拆、删、优化 CI；继续授权与本轮范围见 [#354/5812645340](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5812645340)。产品仍按 AGENTS / 最新 #297，不新增模型调用、治理平台或生产调度。
+Human 已授权按新架构拆、删、优化 CI；[当前同树减负范围](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5813511726)。产品仍按 AGENTS / 最新 #297，不新增模型调用、生产日程、治理平台或状态中心。
 
-**CI 保护当前有效行为与历史兼容性，不永久保护每一代施工步骤。** 保留历史不等于永远重跑所有历史脚手架。改动、PR、CI、合并、发布、研究接受是不同事实；本页描述执行合同，不预填验收成功。
+**CI 保护当前有效行为与历史兼容性，不永久保护每一代施工步骤。** 保留历史不等于永远重跑全部历史脚手架。改动、PR、CI、合并、发布、研究接受是不同事实；实际完成状态读 #354 最新回执。
 
-## 两条验证路径，一个稳定检查
+## 一个稳定检查，按实际范围验证
 
 `kernel-tests` / `test` 名称不变，PR与main都产生实际检查，不使用顶层 paths-ignore。
 
-- **文字路径**：仅根 README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1，以及新增 `docs/readings/**/*.md`。只接受普通非执行文件的新增/修改；既有研究原件修改、删除、改名或特殊mode仍走完整路径。
-- **完整路径**：src、tests/fixtures、workflow、依赖、registry/JSON、研究计算脚本、其他未审查路径及混合改动。`full-research-method-v3.md`有实际历史回放测试消费者，不因扩展名为md就进入文字路径。文字路径不代表所有研究保存都已加速。
+**文字路径（#545/#546）**：仅根 README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1，以及新增 `docs/readings/**/*.md`。普通非执行文件的新增/修改才可进入；完整 Git base→head raw/NUL 差异，不靠最后一个commit或平台300文件子集。要求精确base存在本仓库main/push/attempt1成功CI，不能藏掉同SHA更新的失败/进行中记录。未知、混合、删除、改名、特殊mode回full。文字路径不安装工程环境、不收集全库、不执行全量pytest；真实stdlib回归与提交文字UTF-8/非空/NUL/冲突检查，明确 `NOT_RUN_CONTENT_ONLY`。不认证链接、事实、计算、研究质量或Human接受。新增代码消费者依赖这些文字入口时须同步审查范围。
 
-分流使用完整 Git base→head raw/NUL差异，关闭rename折叠，不受平台300文件path过滤上限影响。PR比较event base/head；push比较event before→sha，不能只看最后一个commit。checkout必须等于本次代码SHA。差异/基线读取失败或范围不明回full，不能生成内容成功。
+**工程 PR**：始终保留完整验证。src、tests/fixtures、workflow、依赖、registry/JSON、研究计算、既有研究原件修改及未审查路径，不因扩展名像文档就免检。`full-research-method-v3.md`仍有真实回放消费者。
 
-文字路径还要求**精确base SHA存在本仓库main/push/attempt1成功CI**，且同SHA较新的失败/进行中运行不能被旧绿灯掩盖。使用原生gh只读查询；它不是未验证代码的免检通道。成功的文字CI维持未变代码的可信基线，后续文字提交可依次继承；不是在新环境重跑全套的声明。新增代码消费者依赖这些文字入口时须同步审查此范围。
+**干净主干合并**：重新安装真实工程环境后，只有一个两父merge且push的before精确等于第一父、merge tree精确等于本次owned PR head，才尝试复用该PR全量。核对实际最新PR CI的身份/attempt1/success、本次已合并PR、唯一未过期artifact的SHA256/CRC、完整collection与JUnit逐项一致/无失败或跳过、精确Python/runner镜像与架构/实际安装包集合。参数名转换复用当前pytest JUnit writer，不把参数里的`::`当层级。下载产物只作数据，不解包执行。读后再核最新PR，较新失败或读取不确定回full。
 
-文字路径不安装工程依赖、不收集全库、不执行全量pytest；运行本分流的stdlib回归，并检查实际commit中的UTF-8、非空、无NUL/未解冲突。源码不执行，来源链接不联网；不认证链接有效、事实、计算、研究方法质量或Human接受。保存scope.json、content-check.json和真实日志，明确 `FULL_SUITE=NOT_RUN_CONTENT_ONLY`，不伪造全量JUnit。
+不接受文字成功或其他复用结果作为PR full证明；不扫历史找一个绿灯。CI工作流、分流/复用器及其测试、pyproject本次改变时主干必须full，所以此机制首次部署也不得自证免检。squash、rebase、多commit push、不同merge tree、脏tracked文件、环境改变/缺失、旧artifact格式/损坏均回full。当前仅支持证据最直接的普通merge，不伪装覆盖所有合并方式。
 
-## 完整路径保持的合同
+复用成功的main仍运行真实CI失败传播与Research身份/准入小型回归；任何失败直接失败，不再补跑全量换绿。产物明确 `scope=merge_reuse` / `FULL_SUITE=REUSED_NOT_RERUN`，保留精确PR/run/artifact/tree/测试数量，当前执行结果为独立 `main-smoke.xml`，不伪造当前全量JUnit。主干安装兼容性仍实际验证，PR的base-only测试仍保留；不是当前main再次运行每项测试的声明。
+
+## 完整路径与权限不变
 
 ```sh
 python -m pip install -e '.[dev]'
@@ -30,20 +31,18 @@ python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
   --durations=100 --durations-min=1.0 --junitxml=pytest.xml
 ```
 
-原Test脚本不变；本地默认串行。无skip/xfail/continue-on-error或失败worker重启，pipefail保证真实失败；60秒只是CI stall诊断。每次完整路径都真实安装，即使pip缓存命中；独立base-only isolated/no-cache安装和真实pass/fail/worker-crash回归保留。PIT、身份/来源、权限、create-only/不确定写入、旧格式读回、有效Odds计算继续验证。
+原full Test shell不变，本地默认串行。无skip/xfail/continue-on-error或worker重启；pipefail保证失败，60秒只作CI stall诊断。完整路径真实安装，即使pip缓存命中；base-only isolated/no-cache安装及真实pass/fail/worker-crash回归保留。PIT、身份/来源、权限、create-only/不确定写入、旧格式读回、有效Odds计算继续覆盖。
 
-CI仅contents/actions read，无业务secrets，不保留checkout credentials。actions read仅用于核对base CI；GH_TOKEN不进入内容文件。完整路径保持原collection、JUnit、pytest日志和环境；两条路径均有code/event/run身份和scope，上传到原 `kernel-ci-<run>-<attempt>`，always/30天。早期失败可能没有完整产物，仍是失败。
+CI仅contents/actions read，无业务secrets，不保留checkout credentials；GH_TOKEN只进入只读基线/PR核验步骤，不进入测试或内容。固定原已验收三个官方Action的commit，避免浮动Action版本被当相同执行环境。原并发不变：同PR过期head可替换，main每run独立。
 
-原并发不变：同PR过期head可替换，main每run独立组。现有发布器/来源准入收到的成功含义是“本次范围验证成功”：full，或可信main基线上的代码不变加内容检查；不能把后者描述为本SHA全量重测。publisher仍验证保存产物，来源/模型仍须原显式权限；没有改变其触发/写入/研究权限。
+保留原 `kernel-ci-<run>-<attempt>` diagnostics，always/30天，当前身份、环境和实际范围分开。早期失败可能没有完整产物，仍是失败。发布器/源准入收到的成功含义为“本次范围验证成功”：full、可信main基线上的文字检查，或精确PR full加实际main检查；不能声称后两者是本SHA全量重测。生产触发/保存产物验证/显式source-model权限均不改变。
 
-## 进度与接续
+## 进度、复用、回滚
 
-[#544](https://github.com/auguspp/decision-kernel/pull/544)已经完成资源去重与固定Suken旧启动器退役：同PR并发、pip下载缓存、四个action-history输入准备共享；原请求、失败/成果、共享runtime与行为测试保留。30个现役workflow文件不是156个历史Actions登记。真实基线和慢样本见 [首切片回执](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5812515561)，没有显著端到端提速结论。
+[#544](https://github.com/auguspp/decision-kernel/pull/544)已完成PR并发/pip缓存/四个Stock输入准备去重与固定Suken旧启动器退役；原请求/失败/成果/共享runtime保留。[#545](https://github.com/auguspp/decision-kernel/pull/545)/[#546](https://github.com/auguspp/decision-kernel/pull/546)真实文字PR/main为7/11秒job，不含排队/发布，也不是完整引擎提速。更早[31-workflow初审](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)与失败/慢样本继续保留。
 
-本轮分流已由 [#545](https://github.com/auguspp/decision-kernel/pull/545) 正常合并。工程验收、实际文字路径与正常发布读回分别记录在该PR和#354最新回执；不得用一类通过替代另一类。后续纯文字改动按上方范围执行，不再人为要求全库pytest；混合或未知变更仍full。
+本次同树路径须分别完成实现PR/full main与后继真实工程merge复用验收；未实跑不能宣称节省。用途registry/计算专门消费者、旧执行义务、publisher/intake空转仍待后续处理。
 
-下一重点仍是用途registry/计算档案各自的消费者验证、代码同树PR/main双份全量、已消费旧编排义务及publisher/intake空转。它们没有在本次被自动退役；不为快通道再造通用selector、scheduler或新状态中心。
+Reuse Decision: REUSE + THIN_ADAPTER。原生Git/gh/Actions/pytest/stdlib；[官方artifact](https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts)、[Git diff](https://git-scm.com/docs/git-diff)及已实读[fkirc@v5.3.2同树实现](https://github.com/fkirc/skip-duplicate-actions/blob/v5.3.2/src/main.ts)。其直接按旧tree/success跳过不含本次PR/full/env资格，因此只复用同树思想，不接入通用扫描/取消/skip策略。无新依赖/workflow/service；详细比选在原#354。
 
-Reuse Decision: REUSE + THIN_ADAPTER。使用原Git/gh/Actions与stdlib；[Git raw/-z](https://git-scm.com/docs/git-diff)、[Actions条件和过滤限制](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)、实读[dorny/paths-filter@v3 git实现](https://github.com/dorny/paths-filter/blob/v3/src/git.ts)提供差异与失败模式经验，不新增Node Action/依赖/深历史扫描。完整审计沿用[初审原件](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)和#354。
-
-回滚走普通PR，不直接写main/force-push，不删除历史证据/运行记录，不动生产日程。无论路径如何，CI成功都不是经济真理或投资授权。
+回滚走普通PR，不直写main/force-push，不删除历史证据/run，不动生产日程。写入不确定先对账；CI成功不是经济真理或投资授权。
