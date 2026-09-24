@@ -1,0 +1,41 @@
+{
+  "approved_egress_hash": "e60e3f52e7c1fca919d43d5be16561e5cd476acb03f967f1edd8c9e82a3c0fd4",
+  "context_source": {
+    "git_blob": "62c24a0c3e5f76d09384439f0dcc6a8e459ed8b2",
+    "path": "research_runs/normal-question-preparation/688337-20260924/context.json",
+    "purpose": "MODEL_CONTEXT",
+    "ref": "aecb004596d811a8d5a68bf17a271e744bddda33",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463"
+  },
+  "enabled": true,
+  "method_permission": {
+    "body_sha256": "0820f91d8a78ac5b035a92941e012acf191019ffab360c433600261aaa13e9b7",
+    "comment_id": 5804971139,
+    "created_at": "2026-09-24T00:01:31Z"
+  },
+  "mode": "REVIEWED_RADAR_QUESTION",
+  "permission": {
+    "body_sha256": "82f11c3e663841952c5bc4bd90d154ee95fdeb972d381b91e56beba15aa27aee",
+    "comment_id": 5804967978,
+    "created_at": "2026-09-24T00:01:15Z"
+  },
+  "preflight_source": {
+    "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7",
+    "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+    "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+    "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d"
+  },
+  "question_source": {
+    "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+    "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+  },
+  "research_method": "single-quick-v1",
+  "schema_version": 1
+}
