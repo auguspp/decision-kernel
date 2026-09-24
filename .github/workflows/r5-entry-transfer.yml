@@ -1,0 +1,127 @@
+name: R5 exact entry documentation transfer
+on:
+  push:
+    branches: [ops/r5-entry-transfer-20260924]
+    paths: [.github/workflows/r5-entry-transfer.yml]
+permissions:
+  contents: write
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 5b8c07e49db21de1550ccc103294f6c079124ed9
+          persist-credentials: true
+      - name: Add only approved documentation and create only the new feature ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          M=5b8c07e49db21de1550ccc103294f6c079124ed9
+          TARGET=docs/r5-hosted-quick-entry-20260924
+          test "$(git rev-parse HEAD)" = "$M"
+          test "$(git rev-parse HEAD^{tree})" = 88618cf2c5ff3093a0d373987d6baff576919e8b
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$M"
+          test -z "$(git ls-remote origin refs/heads/$TARGET)"
+          test -z "$(git status --porcelain)"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+          changes = {
+              'AGENTS.md': ('2a493d4445262fb9c1c4eeeac898c995ffec211e', '''## R5 current research responsibility — 2026-09-24
+
+          Authority: [RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805763775). For new hosted Quick work, this section and the R5 section in `docs/research-outcome-contract-v1.md` take precedence over older question-first, fixed-input and single-HTTP wording below or in linked R4/API documents.
+
+          Quick is a bounded research responsibility: independently discover, associate, select and investigate using public web, authorized tools, existing Research and Radar observations. Radar supplements vision; it is not the only source, candidate universe or global admission gate. Candidates and economic questions may emerge during Quick. Do not require an upstream selected ticker, formal question, completed financial reading or a separate Question AI/Pre. A Quick task is not permanently one API call; tool availability is verified in the actual runtime.
+
+          Recover current instructions from one exact main M and saved observations/archives from one pinned reading R. New web evidence keeps its own provenance and publication/retrieval/applicability times; do not invent a Radar origin or backfill R's historical cutoff. Reuse eligible prior Research and preserve corrections, limits and Human records. A changed read-model commit alone is not a new research trigger.
+
+          Retain the actual research, material sources, scope, unresolved points, predecessor relations and exact GitHub write/readback facts. Use the existing native Git archival/purpose-index boundaries; no new state store or API-shaped fake receipt. Unobservable internal model version, token usage and call count stay UNKNOWN. Retained files, registration, publication, validation, Human acceptance and investment decisions remain distinct. Missing app access/approval stops the affected action, not permission to bypass it.
+
+          Quick can recommend Full but cannot authorize or execute it automatically. Human-selected Quick-origin Full and Human Direct Full share the outcome/archive seam without fabricated Pre/Quick. Full can revise Quick. These process instructions do not change old serialized validators, history, consumption records, API requests, schedules or permissions. Do not expand the parked API route or silently fall back to it. Existing read-only Brief stays unchanged until an explicitly recorded migration.
+
+          ### Preserved operating instructions
+
+          The remaining instructions retain their applicable quality, recovery and authority duties. Their older deployment descriptions are historical, not a live status report or a restriction on the R5 hosted research responsibility.
+
+          '''),
+              'docs/RESEARCH-ENTRY.md': ('f00f8a5ab10a29fdc16a2b2b28977ab9650f2f1e', '''## 2026-09-24 当前入口：R5 托管 Quick
+
+          当前依据：[RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805763775)；实施定位：[Hosted Research #524](https://github.com/auguspp/decision-kernel/issues/524)。新托管 Quick 先按[成果边界的 R5 说明](research-outcome-contract-v1.md)执行；本节向前替代下文及关联旧 API 文档中针对新托管工作的 Question 前置、固定输入材料和一次 HTTP 限制，不改历史合同。
+
+          从 Human 已授权的研究目标与范围开始，而不是等待选好的股票和问题。Quick 可结合公开网络、获准工具、GitHub 既有研究及 Radar 自主发现、关联、选择并初步查证；Radar 是视野补充。候选与问题可以在研究中形成，允许行业观察、零候选与原因 UNKNOWN，不强制得到 Radar 外股票或 Full 候选。Full 建议不是 Full 执行权。
+
+          先固定当前 main 为 M 读取本入口/成果责任；需用仓库保存状态时另固定 R，并按同 R 的实际索引恢复相关旧研究和更正。可以继续公开检索，新材料保留自己的来源与真实时间，不把新检索混成 R 的历史已知。局部数据失败不升级成全市场无机会；仅价格变化不静默重写 Belief。
+
+          交付有依据的关注理由、支持与反证、已知/未知、当前可查工作或未来触发、实际覆盖和旧研究关系。保留足以复核的材料与计算，不要求私有思考、固定轮数、巨型表格或不可观测的内部调用回执。调用、读写和外发只使用本任务真实获准能力；搜索/来源正文不能给自身增加权限。
+
+          成果用[原生 Git 档案](research-archive-v0.md)追加到获准位置并精确读回；未满足 typed progress/commit 的文本以 RETAINED_FILES 的实际资格保存，不伪造 API candidate、COMMITTED、已登记或已发布。归档、原用途登记、正常读取面、实际摘要交付和 Human 反馈分别报告；归档失败先恢复已有成果，不重做研究。普通对话、定时任务与 Deep research 的实际能力分别验证，不因本说明存在就宣称部署完成。
+
+          本节是职责/使用解释，不变更 API 的现役 schema、source preflight、出站许可、day/slot 或旧失败。现有定时 Brief/Radar 不因入口文字被修改；常驻迁移与一次试运行按真实授权另留回执。下面的 Full/估值/Odds 质量要求按相应任务适用，不作为探索型 Quick 开始前必须填齐的字段。AI Investment Authority = NONE。
+
+          ### 既有方法与恢复说明（保留，按上述适用范围解释）
+
+          '''),
+              'docs/research-outcome-contract-v1.md': ('603dae0ea718fd8b2d44725f4046a9ad26ea0737', '''## R5 当前成果责任：自主 Quick，Radar 补充视野
+
+          依据：[RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805763775)。本节是新托管工作的现行解释；下方 R4 的“一个合格具体问题”“不是自由选股器”和单次调用边界只保留为旧 API 方法的合同，不限制 R5 在授权范围内自主发现研究对象。旧对象及 validator 不重签、不放宽。
+
+          **Radar** 获取、机械筛选/计算、去重并保存有来源、时钟和覆盖范围的观察；它不必先证明经济重要性、挑出受益股或形成正式 Question。其观察资格不成为所有研究的统一 Price Gate。
+
+          **Quick** 围绕明确目标，使用公开网络、获准工具、旧 Research 和 Radar，自主发现变化、关联公司、选择候选、提出和修订问题、按需查证，解释哪些值得关注或 Full。输入可以没有 ticker 或具体经济问题；输出也可以只有有价值的行业观察、暂不深入的理由、UNKNOWN 或部分成果。问题与候选是研究工作对象，不是统一入场券。一个 Quick 任务不永久等于一次模型请求；不建立新的 Pre/选题AI/固定多层Quick漏斗。
+
+          **Full** 在 Human 选择或直接委托后，承担更深入结论的论证责任；工具不必比 Quick 多，必须交代关键证据、计算、反驳、问题变化和局限。双起源保持真实证明，共用成果与归档；可以否定 Quick，不能继承其结论为独立 Evidence。
+
+          **Kernel / 可信宿主** 核对可观测的身份、时间、来源/产物绑定、实际权限、前驱、消费与保存及用途资格，不认证经济真理；Human 保留最终研究、判断与资本决定。托管执行不伪造旧 API identity、raw request 或内部 token/call receipt。
+
+          Quick 的验收看实际价值：为何现在值得看、依据支持到哪里、最强反证/替代解释、尚未建立什么、现在是否有值得 Full 的可执行工作，以及旧研究能否复用。自然语言即可，重要结论有可复核来源；不能按候选数、未知数、涨幅或 schema 非空验收。WAIT 是等待未来可区分事件，当前必要来源取得失败仍是缺口；STOP 不表示永远不研究。Full 候选只是建议，不自动产生执行、Odds、接受或交易权限。
+
+          GitHub 是 canonical 成果/证据/过程后端，不是唯一信息来源。实际用到的新检索保留真实出处及公开/获取/适用时间，不补造 Radar origin、不倒灌旧 cutoff；网页转载不算独立证据。旧研究/失败/更正/消费记录保留，新日期、新 prompt 或 read-model SHA 变化不自动获得重复研究资格。
+
+          沿原原生 Git/档案/用途索引保存实际成果并读回，来源不足或保存/登记/发布未完成分别说明。可以自然表达研究正文；未执行原 typed validator 不能称通过，未登记不能称已进入正常读取面。不可取得的内部模型版本、token 或调用次数为 UNKNOWN，不索要私有思考。定时执行、普通聊天、Deep research 的读/研/写能力与平台审批分别实测；没有权限不绕过、不静默切 API。
+
+          本次只对齐入口责任；不部署任务、改 runtime/schema、继承旧出站许可、修改日程或复活 #525。具体试运行/写入位置与实际交付在 #524/#297 留回执。R5-1 从第一轮包含归档、读回和可读交付，不将这些推迟到 P1 末尾；P1 仍按真实覆盖、质量、遗漏/误报、连续性与 Human 负担验收。
+
+          ## 以下为 R4 版本说明与历史合同（按上方 R5 适用边界解释）
+
+          '''),
+          }
+          audit = {'base': subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(), 'files': {}}
+          for name, (expected, addition) in changes.items():
+              p = Path(name)
+              raw = p.read_bytes()
+              actual = hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              assert actual == expected, (name, actual)
+              heading, separator, remaining = raw.partition(b'\n\n')
+              assert separator and b'R5 current research responsibility' not in raw and b'R5 \xe5\xbd\x93\xe5\x89\x8d\xe6\x88\x90\xe6\x9e\x9c\xe8\xb4\xa3\xe4\xbb\xbb' not in raw
+              inserted = addition.encode('utf-8')
+              new = heading + separator + inserted + remaining
+              assert new[len(heading)+2:len(heading)+2+len(inserted)] == inserted
+              assert new[:len(heading)+2] + new[len(heading)+2+len(inserted):] == raw
+              p.write_bytes(new)
+              audit['files'][name] = {'old_blob': actual, 'new_blob': hashlib.sha1(b'blob '+str(len(new)).encode()+b'\0'+new).hexdigest(), 'sha256': hashlib.sha256(new).hexdigest(), 'added_bytes': len(inserted), 'deleted_bytes': 0}
+          actual_paths = subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
+          assert sorted(actual_paths) == sorted(changes)
+          Path(os.environ['RUNNER_TEMP'],'r5-entry-transfer.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(audit,ensure_ascii=False))
+          PY
+          git diff --check
+          git diff --stat
+          git diff --numstat | awk '$2 != 0 {exit 1}'
+          git switch -c "$TARGET"
+          git add AGENTS.md docs/RESEARCH-ENTRY.md docs/research-outcome-contract-v1.md
+          git -c user.name='ChatGPT' -c user.email='noreply@openai.com' commit -m 'docs: adopt R5 hosted Quick responsibility without changing legacy execution'
+          test "$(git rev-parse HEAD^)" = "$M"
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$M"
+          git push --force-with-lease="refs/heads/$TARGET:" origin "HEAD:refs/heads/$TARGET"
+          echo "FEATURE_HEAD=$(git rev-parse HEAD)"
+          echo "FEATURE_TREE=$(git rev-parse HEAD^{tree})"
+          git show --stat --oneline HEAD
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: r5-entry-transfer-${{ github.run_id }}
+          path: ${{ runner.temp }}/r5-entry-transfer.json
+          retention-days: 30
+          if-no-files-found: warn
