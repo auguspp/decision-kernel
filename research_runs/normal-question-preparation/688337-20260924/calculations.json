@@ -1,0 +1,19 @@
+{
+  "source_pdf_sha256": "270adcca370bf047b1af3e54d64e78a11496549d7c720c15dc8c7f2114e2ed5a",
+  "expense_bridge_cny": {
+    "current": "222424748.28",
+    "prior": "216597694.92",
+    "delta": "5827053.36",
+    "delta_wan_cny": "582.705336",
+    "raw_output_claim_wan_cny": "582.11",
+    "corrected_rounded_wan_cny": "582.71",
+    "page": 28
+  },
+  "gross_profit_cny": {
+    "current": "266037455.75",
+    "prior": "196615506.60",
+    "delta": "69421949.15"
+  },
+  "cfo_minus_all_capex_cny": "-24326956.22",
+  "meaning": "ARITHMETIC_SOURCE_SPOT_CHECK_NOT_FULL_OR_OWNER_FCF_OR_ECONOMIC_CAUSAL_CERTIFICATION"
+}

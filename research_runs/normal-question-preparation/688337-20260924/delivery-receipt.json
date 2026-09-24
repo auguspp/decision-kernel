@@ -1,0 +1,23 @@
+{
+  "main": "5b8c07e49db21de1550ccc103294f6c079124ed9",
+  "reading": "8fc9733a0f1ba0a514b10989a0c99fdc9737096e",
+  "work": "fad48e9455ced9f0de4548a5950fc105aa725cda",
+  "candidate_prefix": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/",
+  "candidate_hash": "9d8d9eb526adbd2edb6034cef1fe41ad78d6c751d880e82a5bb792691baec304",
+  "research_run": 35938160978,
+  "model_calls": 1,
+  "provider": "SUB2API",
+  "requested_model": "gpt-6-astra",
+  "returned_model": "NOT_SEPARATELY_RETAINED",
+  "tokens": {"input": 131059, "output": 2444},
+  "bill": "UNKNOWN",
+  "publication_workflow_run": 35938981971,
+  "publication_job_conclusion": "failure",
+  "publication_ref_status": "ADVANCED_AND_INDEPENDENTLY_READ_BACK",
+  "postcheck_failure": "CACHED_MUTABLE_REF_READ_AFTER_SUCCESSFUL_PUBLICATION",
+  "automatic_publication": "NOT_OBSERVED",
+  "daily_review_association": "NO_MATCHING_SAVED_DAILY_REVIEW",
+  "human_feedback": "NOT_RECEIVED",
+  "full_execution": "NOT_RUN",
+  "p1_acceptance": "NOT_COMPLETE"
+}
