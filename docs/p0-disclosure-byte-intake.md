@@ -1,5 +1,13 @@
 # P0-4B: exact saved packet intake, not another research engine
 
+## Current status — 2026-09-24
+
+The CI-triggered `incremental-disclosure-intake.yml` starter is retired under [#354/5814933547](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5814933547). Its fixed request expired on September 10 and its selected packet/plan are already retained. Editing `disclosure-intake-request.json` no longer launches an intake. No replacement trigger or automatic retry is added; reactivating this old operation requires explicit authorization.
+
+The shared `incremental_disclosure_intake` module, its byte/FIFO/identity/create-only/failure tests, original request and work history remain. Existing Research/read-model consumers of its helpers and the `saved-disclosure-research` workflow are unchanged. Retention is not Research acceptance. The sections below preserve the historical P0 deployment and are not current launch instructions.
+
+## Historical P0 deployment
+
 Approved roadmap: Issue #297. This is the unfinished byte-transfer part of #300, using its existing FIFO, reservation and archive validators. The next fixed request is CATL's September 8 packet, not a retry of the failed September 5 GigaDevice request. Native Scheduled remains deferred.
 
 ## Reuse and scope
