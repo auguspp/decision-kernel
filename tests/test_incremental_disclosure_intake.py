@@ -162,11 +162,10 @@ def test_native_cli_uses_fixed_repo_no_shell_and_no_overwrite_sha(monkeypatch):
     assert len(calls) == 1
 
 
-def test_workflow_reacts_only_to_changed_explicit_request_and_successful_main_ci():
-    raw = Path(".github/workflows/incremental-disclosure-intake.yml").read_text()
-    assert "workflow_run:" in raw and "event == 'push'" in raw and "conclusion == 'success'" in raw
-    assert "run_attempt == 1" in raw and "fetch-depth: 2" in raw
-    assert "git diff --quiet HEAD^1 HEAD -- research_runs/disclosure-intake-request.json" in raw
-    assert "persist-credentials: false" in raw and "cancel-in-progress: false" in raw
-    assert "secrets." not in raw and "workflow_dispatch:" not in raw and "schedule:" not in raw
-    assert "actions: read" in raw and "actions: write" not in raw
+def test_retired_intake_starter_is_not_replaced_by_another_workflow():
+    workflows = Path(".github/workflows")
+    assert not (workflows / "incremental-disclosure-intake.yml").exists()
+    for path in (*workflows.glob("*.yml"), *workflows.glob("*.yaml")):
+        raw = path.read_text()
+        assert "-m decision_kernel.runtime.incremental_disclosure_intake" not in raw
+        assert "research_runs/disclosure-intake-request.json" not in raw

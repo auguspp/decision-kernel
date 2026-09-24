@@ -41,9 +41,11 @@ CI仅contents/actions/pull-requests read，无业务secrets，不保留checkout 
 
 [#544](https://github.com/auguspp/decision-kernel/pull/544)已完成PR并发/pip缓存/四个Stock输入准备去重与固定Suken旧启动器退役；原请求/失败/成果/共享runtime保留。[#545](https://github.com/auguspp/decision-kernel/pull/545)/[#546](https://github.com/auguspp/decision-kernel/pull/546)真实文字PR/main为7/11秒job，不含排队/发布，也不是完整引擎提速。更早[31-workflow初审](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)与失败/慢样本继续保留。
 
-本次同树路径已由[#547](https://github.com/auguspp/decision-kernel/pull/547)合并；真实适用范围CI和发布验收读该PR及#354最新回执，不预填后继复用成功。#548首次实际main回退PR_MERGE_ASSOCIATION，另有镜像差异；这暴露了对run内PR字段的错误依赖，关联读取修正不放松环境门禁，也不重跑原样本。用途registry/计算专门消费者、其他旧执行义务、publisher/intake空转仍待后续处理。
+本次同树路径已由[#547](https://github.com/auguspp/decision-kernel/pull/547)合并；真实适用范围CI和发布验收读该PR及#354最新回执，不预填后继复用成功。#548首次实际main回退PR_MERGE_ASSOCIATION，另有镜像差异；这暴露了对run内PR字段的错误依赖，关联读取修正不放松环境门禁，也不重跑原样本。用途registry/计算专门消费者、其他旧执行义务、publisher空转仍待后续处理；intake启动器退役见下。
 
 固定旧 Sector recovery 启动器按[#354/5813736504](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5813736504)退役：删除 `sector-recovery-once.yml` 及其专属启动shell测试，收紧pacing的现役workflow检查。9月11日run34566950303是已消费且失败的历史尝试，不称恢复成功；原tag、请求、失败run、capture-sector-recovery.py与全部回放/时钟/数据校验保留。正常Sector日程/128请求预算/20秒节奏不变。原30个workflow文件变29个，不删除Actions历史记录。
+
+旧 CI 后继 `incremental-disclosure-intake.yml` 按[#354/5814933547](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5814933547)退役，workflow文件29→28；不再每次成功main CI开机检查已过期且已有留存的固定请求，也不把检查搬入publisher/CI或新增手动入口。以后单改 `disclosure-intake-request.json` 不再自动入库；恢复旧操作须重新明确授权。共享intake模块仍有历史/现役读写消费者，全部保留，原请求、工作分支和历史证据不动；saved-disclosure-research及正常publisher触发不变。适用CI、正常发布与无intake后继实跑的验收分别读#354，不预填省时。
 
 
 Reuse Decision: REUSE + THIN_ADAPTER。原生Git/gh/Actions/pytest/stdlib；[官方artifact](https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts)、[Git diff](https://git-scm.com/docs/git-diff)及已实读[fkirc@v5.3.2同树实现](https://github.com/fkirc/skip-duplicate-actions/blob/v5.3.2/src/main.ts)。其直接按旧tree/success跳过不含本次PR/full/env资格，因此只复用同树思想，不接入通用扫描/取消/skip策略。无新依赖/workflow/service；详细比选在原#354。
