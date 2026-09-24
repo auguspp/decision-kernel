@@ -25,7 +25,9 @@ POLICY = (WORKFLOW, '.github/scripts/ci-content-scope.py',
           'tests/test_ci_content_scope.py', 'tests/test_ci_resource_efficiency.py',
           'tests/test_ci_merge_reuse.py', 'pyproject.toml',
           '.github/workflows/ci-contracts-v2.yml', '.github/ci-v2-research.txt',
-          'tests/test_ci_v2.py')
+          'tests/test_ci_v2.py', '.github/scripts/ci-matrix.py',
+          '.github/workflows/ci-prepare.yml', '.github/workflows/ci-full-v2.yml',
+          '.github/actions/ci-python/action.yml', 'tests/test_ci_matrix.py')
 SHA = re.compile(r'[0-9a-f]{40}')
 MAX_ZIP = 8 * 1024 * 1024
 MAX_EXPANDED = 32 * 1024 * 1024
@@ -131,10 +133,17 @@ def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
         require(proof['reuse'] is False and proof['reason'] == 'PR_ALWAYS_FULL', 'INHERITED_RESULT')
         require(json.loads(archive.read('environment.json')) == current, 'ENVIRONMENT_CHANGED')
         collection, xml = archive.read('collection.txt').decode(), archive.read('pytest.xml')
-        partitioned = scope.get('full_suite') == 'EXECUTED_PARTITIONED_V2'
+        matrix = scope.get('full_suite') == 'EXECUTED_MATRIX_V2'
+        partitioned = matrix or scope.get('full_suite') == 'EXECUTED_PARTITIONED_V2'
         require(('partition.json' in archive.namelist()) == partitioned, 'PARTITION_MARKER')
         if partitioned:
             plan = json.loads(archive.read('partition.json'))
+            require(('shards' in plan) == matrix, 'MATRIX_MARKER')
+            if matrix:
+                remaining = matrix_remaining(collection, plan['paths'],
+                    [(archive.read(f'shard-{i}.zip'), a) for i, a in enumerate(plan['shards'], 1)],
+                    identity, current, plan['timing_sha256'])
+                require(remaining == archive.read('remaining.xml'), 'SHARD_RESULT_CHANGED')
             rebuilt = partition_junit(collection, plan['paths'], archive.read('remaining.xml'),
                 archive.read('domain-source.zip'), plan['artifact'], identity, current)
             require(rebuilt == xml, 'PARTITION_RESULT_CHANGED')
@@ -195,39 +204,42 @@ def partition_junit(collection: str, paths: list[str], remaining_xml: bytes,
     return combined_xml
 
 
-def partition_operation(root: Path, out: Path, operation: str) -> None:
-    identity = dict(line.split('=', 1) for line in (out / 'identity.txt').read_text().splitlines())
-    require(git(root, 'rev-parse', 'HEAD') == identity['code_sha']
-            and not command(root, 'git', 'diff', '--name-only', 'HEAD', '--'), 'CHECKOUT_CHANGED')
-    paths = (root / '.github/ci-v2-research.txt').read_text().splitlines()
-    collection = (out / 'collection.txt').read_text()
-    partition_nodes(collection, paths)
-    require(all((root / p).is_file() and not (root / p).is_symlink() for p in paths), 'DOMAIN_PATHS')
-    if operation == 'partition':
-        (out / 'remaining-args.txt').write_text(''.join('--ignore=' + p + '\n' for p in paths))
-        return
-    # Same run only. Missing, failed, truncated or foreign domain evidence fails;
-    # do not rerun that domain in the old job to manufacture a green result.
-    payload = api(root, f"actions/runs/{identity['run_id']}/artifacts?per_page=100")
-    require(payload['total_count'] == len(payload['artifacts']), 'INCOMPLETE_ARTIFACT_LIST')
-    candidates = [a for a in payload['artifacts']
-                  if a['name'] == f"kernel-ci-v2-{identity['run_id']}-{identity['attempt']}"]
-    require(len(candidates) == 1, 'NO_UNIQUE_DOMAIN_ARTIFACT')
-    artifact = candidates[0]
-    require(type(artifact.get('id')) is int and artifact['id'] > 0
-            and artifact.get('expired') is False, 'DOMAIN_ARTIFACT_IDENTITY')
-    raw = command(root, 'gh', 'api', f"repos/{REPO}/actions/artifacts/{artifact['id']}/zip")
-    current = json.loads((out / 'environment.json').read_text())
-    xml = partition_junit(collection, paths, (out / 'remaining.xml').read_bytes(), raw, artifact, identity, current)
-    (out / 'domain-source.zip').write_bytes(raw)
-    (out / 'partition.json').write_text(json.dumps(dict(paths=paths, artifact=artifact), sort_keys=True, indent=2) + '\n')
-    (out / 'pytest.xml').write_bytes(xml)
-    scope = json.loads((out / 'scope.json').read_text())
-    require(scope['scope'] == 'full' and scope['code_sha'] == identity['code_sha']
-            and scope['event'] == identity['event'], 'NOT_FULL_PR_SCOPE')
-    scope['full_suite'] = 'EXECUTED_PARTITIONED_V2'
-    (out / 'scope.json').write_text(json.dumps(scope, sort_keys=True, indent=2) + '\n')
-    print('FULL_SUITE=EXECUTED_PARTITIONED_V2 TESTS=' + str(passed_test_set(collection, xml)))
+def matrix_remaining(collection: str, paths: list[str], sources: list[tuple[bytes, dict]],
+                     identity: dict, current: dict, timing_sha256: str) -> bytes:
+    """Four real shards must exactly cover the remaining current obligations.
+
+    Scheduling belongs to GitHub matrix/needs; assignment belongs to pytest-split.
+    This function only verifies the declared executions and their retained bytes.
+    """
+    _, remaining = partition_nodes(collection, paths)
+    require(len(sources) == 4, 'SHARD_COUNT')
+    require(isinstance(timing_sha256, str) and re.fullmatch(r'[0-9a-f]{64}', timing_sha256), 'SHARD_TIMING')
+    combined = ET.Element('testsuites')
+    for group, (raw, artifact) in enumerate(sources, 1):
+        require(type(artifact.get('id')) is int and artifact['id'] > 0
+                and artifact.get('expired') is False
+                and artifact['name'] == f"kernel-ci-shard-{group}-{identity['run_id']}-{identity['attempt']}"
+                and str(artifact['workflow_run']['id']) == identity['run_id']
+                and artifact['workflow_run']['head_sha'] == identity['code_sha'], 'SHARD_ARTIFACT_IDENTITY')
+        with verified_archive(raw, artifact) as z:
+            source = dict(line.split('=', 1) for line in z.read('identity.txt').decode().splitlines())
+            require(all(source.get(k) == identity[k] for k in ('code_sha', 'event', 'run_id', 'attempt')), 'SHARD_IDENTITY')
+            require(json.loads(z.read('environment.json')) == current, 'SHARD_ENVIRONMENT')
+            info = json.loads(z.read('shard.json'))
+            require(type(info['group']) is int and info['group'] == group
+                    and type(info['splits']) is int and info['splits'] == 4
+                    and info['timing_sha256'] == timing_sha256
+                    and info['scope'] == 'remaining-shard-v2' and info['merge_eligible'] is False, 'SHARD_PLAN')
+            selected = z.read('selected-collection.txt').decode()
+            xml = z.read('shard.xml')
+            count = passed_test_set(selected, xml)
+            require(type(info['test_count']) is int and info['test_count'] == count, 'SHARD_COUNT')
+            for suite in ET.fromstring(xml).findall('.//testsuite'):
+                suite.set('name', f'remaining-shard-{group}')
+                combined.append(suite)
+    merged = ET.tostring(combined, encoding='utf-8')
+    passed_test_set('\n'.join(remaining), merged)  # Exact union and uniqueness, not counts only.
+    return merged
 
 
 def select(root: Path, report_dir: Path, env: dict, current: dict, *, read=api, download=None) -> dict:
@@ -296,12 +308,8 @@ def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report-dir', required=True, type=Path)
-    parser.add_argument('--operation', choices=('select', 'partition', 'assemble'), default='select')
     args = parser.parse_args()
     root = Path.cwd()
-    if args.operation != 'select':
-        partition_operation(root, args.report_dir, args.operation)
-        return
     current = environment(root, args.report_dir, os.environ)
     (args.report_dir / 'environment.json').write_text(json.dumps(current, sort_keys=True, indent=2) + '\n')
     report = select(root, args.report_dir, os.environ, current)

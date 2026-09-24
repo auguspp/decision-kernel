@@ -20,25 +20,25 @@ WORKFLOW = ROOT / ".github/workflows/ci.yml"
 
 
 def _test_job() -> str:
-    return WORKFLOW.read_text(encoding="utf-8").split("  test:\n", 1)[1].split("  judgment-timeline:", 1)[0]
+    return (ROOT / ".github/workflows/ci-prepare.yml").read_text(encoding="utf-8")
 
 
 def _test_script() -> str:
-    step = _test_job().split("      - name: Test\n", 1)[1].split("      - name:", 1)[0]
+    step = (ROOT / ".github/workflows/ci-full-v2.yml").read_text().split("      - name: Test\n", 1)[1].split("      - name:", 1)[0]
     return textwrap.dedent(step.split("        run: |\n", 1)[1])
 
 
 def test_ci_keeps_complete_union_without_worker_retries():
     command = " ".join(_test_script().replace("\\\n", " ").splitlines()[1:]).split("2>&1", 1)[0]
-    assert shlex.split(command) == [
-        "python", "-m", "pytest", "-q", "-n", "4", "--dist=loadfile", "--max-worker-restart=0",
-        "@$CI_REPORT_DIR/remaining-args.txt",
-        "-o", "faulthandler_timeout=60", "-o", "faulthandler_exit_on_timeout=true",
-        "--durations=100", "--durations-min=1.0", "--junitxml=$CI_REPORT_DIR/remaining.xml",
-    ]
+    args = shlex.split(command)
+    assert "--max-worker-restart=0" in args and "--splits" in args
+    assert args[:3] == ["python", "-m", "pytest"]
+    assert not {"-k", "-m", "--deselect", "--lf"} & set(args[3:])
+    assert "--durations-path" in args and "-c" in args
     job = _test_job()
-    assert "python -m pytest --collect-only -q" in job
-    assert "--operation partition" in job and "--operation assemble" in job
+    assert "python -m pytest -c pyproject.toml --collect-only -q" in job
+    assert "ci-matrix.py prepare" in job
+    assert "ci-matrix.py finalize" in WORKFLOW.read_text()
     assert "continue-on-error" not in job
     assert "set -euo pipefail" in _test_script()
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
@@ -74,7 +74,7 @@ def test_parallel_dependency_is_dev_only_and_local_default_stays_serial():
 
 def test_ci_diagnostics_are_retained_on_failure_and_do_not_replace_the_test_result():
     job = _test_job()
-    upload = job.split("      - name: Upload CI diagnostics\n", 1)[1]
+    upload = WORKFLOW.read_text().split("      - name: Upload CI diagnostics\n", 1)[1]
     assert "if: always()" in upload
     assert "actions/upload-artifact@" in upload
     assert "kernel-ci-${{ github.run_id }}-${{ github.run_attempt }}" in upload
@@ -90,7 +90,8 @@ def test_actual_ci_command_propagates_test_and_worker_failure(tmp_path, outcome)
     report = tmp_path / "reports"
     report.mkdir()
     (report / "remaining-args.txt").write_text("")
-    (tmp_path / "pytest.ini").write_text("[pytest]\n", encoding="utf-8")
+    (report / "durations-hint.json").write_text("{}")
+    (tmp_path / "pyproject.toml").write_text("[tool.pytest.ini_options]\n", encoding="utf-8")
     body = {
         "pass": "    assert True\n",
         "fail": "    assert False, 'SYNTHETIC_CI_FAILURE'\n",
@@ -100,13 +101,14 @@ def test_actual_ci_command_propagates_test_and_worker_failure(tmp_path, outcome)
     env = os.environ.copy()
     env.pop("PYTEST_ADDOPTS", None)
     env["CI_REPORT_DIR"] = str(report)
+    env["CI_SHARD"] = "1"
     completed = subprocess.run(
         ["bash", "-c", _test_script()], cwd=tmp_path, env=env,
         text=True, capture_output=True, timeout=90, check=False,
     )
     assert completed.returncode == (0 if outcome == "pass" else 1), completed.stdout + completed.stderr
     assert (report / "pytest.log").is_file()
-    suites = ET.parse(report / "remaining.xml").getroot().findall("testsuite")
+    suites = ET.parse(report / "shard.xml").getroot().findall("testsuite")
     assert sum(int(s.attrib["tests"]) for s in suites) == 1
     assert sum(int(s.attrib["skipped"]) for s in suites) == 0
     failures = sum(int(s.attrib["failures"]) + int(s.attrib["errors"]) for s in suites)
@@ -252,7 +254,7 @@ def test_draft_ready_transition_keeps_complete_engineering_gate():
     events = workflow.split('  pull_request:\n', 1)[1].split('  push:\n', 1)[0]
     for action in ('opened', 'synchronize', 'reopened', 'ready_for_review', 'converted_to_draft'):
         assert action in events
-    for label in ('Verify exact PR full-suite reuse after real installation', 'Record full test collection', 'Test'):
+    for label in ('Verify exact PR full-suite reuse after real installation', 'Record full test collection'):
         step = _test_job().split('      - name: '+label+'\n', 1)[1].split('      - name:', 1)[0]
         assert "steps.scope.outputs.scope != 'draft_feedback'" in step
     assert 'continue-on-error' not in workflow and 'pull_request_target' not in workflow

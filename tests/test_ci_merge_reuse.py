@@ -45,7 +45,7 @@ class MergeReuseTests(unittest.TestCase):
         self.report = self.root / '.git/reports'
         self.report.mkdir()
         (self.report/'packages.json').write_text('[{"name":"pytest","version":"synthetic"}]')
-        self.current = S['environment'](self.root, self.report, self.env)
+        self.current = S['environment'](self.root,self.report,self.env)
         self.run = dict(id=10, head_sha=self.pr_head, event='pull_request', name='kernel-tests',
             path=S['WORKFLOW'], head_repository={'full_name':S['REPO']}, run_attempt=1,
             status='completed', conclusion='success', pull_requests=[dict(number=5,
@@ -245,21 +245,22 @@ class MergeReuseTests(unittest.TestCase):
         self.assertFalse(result['reuse']);self.assertNotIn('PRIVATE',json.dumps(result))
 
     def test_workflow_keeps_install_full_fallback_and_separate_smoke_result(self):
-        text=(ROOT/'.github/workflows/ci.yml').read_text()
+        text=(ROOT/'.github/workflows/ci-prepare.yml').read_text()
         install=text.split('      - name: Install\n',1)[1].split('\n      - ',1)[0]
         self.assertNotIn('reuse',install)
-        for label in ('Record full test collection','Test'):
+        for label in ('Record full test collection',):
             step=text.split('      - name: '+label+'\n',1)[1].split('\n      - ',1)[0]
             self.assertIn("steps.reuse.outputs.reuse != 'true'",step)
         smoke=text.split('      - name: Main merge smoke checks\n',1)[1].split('\n      - ',1)[0]
         self.assertIn('set -euo pipefail',smoke);self.assertIn('main-smoke.xml',smoke)
         self.assertNotIn('continue-on-error',text)
         self.assertNotIn('secrets.',text)
+        text += (ROOT/'.github/actions/ci-python/action.yml').read_text()
         for name in ['checkout','setup-python','upload-artifact']:
             self.assertRegex(text,r'actions/'+name+r'@[0-9a-f]{40}')
 
     def test_actual_smoke_script_failure_propagates_without_full_rerun(self):
-        text=(ROOT/'.github/workflows/ci.yml').read_text()
+        text=(ROOT/'.github/workflows/ci-prepare.yml').read_text()
         step=text.split('      - name: Main merge smoke checks\n',1)[1].split('\n      - ',1)[0]
         script=textwrap.dedent(step.split('        run: |\n',1)[1])
         # Run the exact real shell/pytest command over only synthetic files, outside ROOT.

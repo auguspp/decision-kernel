@@ -16,17 +16,13 @@ def test_only_same_pr_heads_share_a_cancellable_ci_group():
     assert '\n  push:\n    branches: [main]\n' in text
 
 
-def test_cache_reuses_pip_downloads_not_an_environment_or_a_test_result():
-    text = (ROOT / '.github/workflows/ci.yml').read_text(encoding='utf-8')
-    setup = text.split('      - uses: actions/setup-python@', 1)[1].split('      - name: Install\n', 1)[0]
-    assert '          cache: pip\n' in setup
-    assert '          cache-dependency-path: pyproject.toml\n' in setup
-    install = text.split('      - name: Install\n', 1)[1].split('      - name:', 1)[0]
-    assert "run: python -m pip install -e '.[dev]'" in install
-    assert "if: steps.scope.outputs.scope != 'content'" in install
-    assert 'cache-hit' not in text  # Full runs still install even on a cache hit.
-    assert 'actions/cache@' not in text and '.venv' not in text
-    # The existing real isolated base-only installation stays independently cold.
-    base = (ROOT / 'tests/test_external_research_minimal_install.py').read_text(encoding='utf-8')
+def test_installer_always_installs_and_does_not_reuse_an_environment_or_result():
+    action = (ROOT / '.github/actions/ci-python/action.yml').read_text()
+    assert 'actions/setup-python@' in action and 'astral-sh/setup-uv@' in action
+    assert 'enable-cache: false' in action
+    assert 'uv pip install --system --python "$pythonLocation/bin/python"' in action
+    assert 'cache-hit' not in action and '.venv' not in action
+    # This existing genuinely isolated pip installation remains an independent contract.
+    base = (ROOT / 'tests/test_external_research_minimal_install.py').read_text()
     assert '"--no-cache-dir", "--retries", "0"' in base
     assert '"--isolated", "install"' in base

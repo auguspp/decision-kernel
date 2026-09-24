@@ -12,107 +12,47 @@ permissions:
   pull-requests: read
 
 # Only obsolete heads of the SAME PR supersede one another.
-# Main uses a unique group: even queued independent main runs must survive.
+# Independent main runs keep their own identity, including queued runs.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # V2 owns these tests; the other job verifies the disjoint full union.
+  prepare:
+    uses: ./.github/workflows/ci-prepare.yml
   contracts-v2:
+    needs: prepare
+    if: needs.prepare.outputs.scope == 'full'
     uses: ./.github/workflows/ci-contracts-v2.yml
+  remaining-v2:
+    needs: prepare
+    if: needs.prepare.outputs.scope == 'full'
+    uses: ./.github/workflows/ci-full-v2.yml
   test:
+    needs: [prepare, contracts-v2, remaining-v2]
+    if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     env:
       CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-          fetch-depth: 2
-      - name: Select full, content, or draft-only feedback
-        id: scope
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/ci-content-scope.py select --report-dir "$RUNNER_TEMP/kernel-ci"
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
-        if: steps.scope.outputs.scope != 'content'
+      - uses: ./.github/actions/ci-python
+        if: needs.prepare.outputs.scope == 'full'
         with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: pyproject.toml
-      - name: Install
-        if: steps.scope.outputs.scope != 'content'
-        run: python -m pip install -e '.[dev]'
-      - name: Record exact code and environment
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$CI_CODE_SHA"
-          CI_REPORT_DIR="$RUNNER_TEMP/kernel-ci"
-          printf 'CI_REPORT_DIR=%s\n' "$CI_REPORT_DIR" >> "$GITHUB_ENV"
-          mkdir -p "$CI_REPORT_DIR"
-          printf 'code_sha=%s\nevent_sha=%s\nevent=%s\nrun_id=%s\nattempt=%s\n' \
-            "$CI_CODE_SHA" "$GITHUB_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
-            | tee "$CI_REPORT_DIR/identity.txt"
-          python --version > "$CI_REPORT_DIR/python.txt"
-          getconf _NPROCESSORS_ONLN > "$CI_REPORT_DIR/cpu-count.txt"
-          python -m pip list --format=json > "$CI_REPORT_DIR/packages.json"
-      - name: Validate content without installing the engineering environment
-        if: steps.scope.outputs.scope == 'content'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m unittest discover -s tests -p test_ci_content_scope.py 2>&1 | tee "$CI_REPORT_DIR/content-tests.log"
-          python3 .github/scripts/ci-content-scope.py check --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/content-check.log"
-      - name: Draft feedback only - not merge validation
-        if: steps.scope.outputs.scope == 'draft_feedback'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python .github/scripts/ci-content-scope.py draft --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/draft-feedback.log"
-      - name: Verify exact PR full-suite reuse after real installation
-        id: reuse
-        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback'
+          extras: ci-contracts
+      - name: Verify required jobs and their complete execution
         env:
+          CI_NEEDS: ${{ toJSON(needs) }}
           GH_TOKEN: ${{ github.token }}
-        run: python .github/scripts/ci-merge-reuse.py --report-dir "$CI_REPORT_DIR"
-      - name: Main merge smoke checks
-        if: steps.reuse.outputs.reuse == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pytest -q tests/test_ci_merge_reuse.py tests/test_ci_contract.py \
-            tests/test_external_research_identity.py tests/test_external_research_admission.py \
-            --junitxml="$CI_REPORT_DIR/main-smoke.xml" 2>&1 | tee "$CI_REPORT_DIR/main-smoke.log"
-      - name: Record full test collection
-        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pytest --collect-only -q > "$CI_REPORT_DIR/collection.txt"
-          python .github/scripts/ci-merge-reuse.py --operation partition --report-dir "$CI_REPORT_DIR"
-      - name: Test
-        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
-            @"$CI_REPORT_DIR/remaining-args.txt" \
-            -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
-            --durations=100 --durations-min=1.0 \
-            --junitxml="$CI_REPORT_DIR/remaining.xml" 2>&1 | tee "$CI_REPORT_DIR/pytest.log"
-      - name: Verify complete disjoint contract execution
-        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python .github/scripts/ci-merge-reuse.py --operation assemble --report-dir "$CI_REPORT_DIR"
+        run: python3 .github/scripts/ci-matrix.py finalize --report-dir "$RUNNER_TEMP/kernel-ci"
       - name: Upload CI diagnostics
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: kernel-ci-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/kernel-ci/
