@@ -11,6 +11,36 @@ source identity, run, market date and actual observation clocks are not relabell
 The map's own hash is not original-source authentication. `verify(map, source)`
 rebuilds derived fields; the existing caller remains responsible for raw replay.
 
+
+## Same-primary supplement continuity — 2026-09-24
+
+Continues #364 / comment5810294908. The existing publisher already replays a
+primary and at most one latest supplement, but the map previously used only the
+primary. It now passes the retained verified supplement to the same map builder.
+No additional GitHub/source requests, capture workflow, schedule or budget is
+introduced. The acquisition fingerprints and original company reading are intact.
+
+`build(primary)` retains the original v1 result. Explicit
+`build(primary, supplement=supplement)` produces
+`concept-observation-map-with-supplement-v2`: it requires exact base projection,
+market day, original cutoff, plan/selected codes and per-detail request identity.
+Primary and supplemental acquisition clocks remain separate. One supplied
+supplement is not every historical batch and repeated reading adds no observations.
+Wrong-root or malformed verified input makes a visible map gap, preserving the
+source/company data. A failed or unavailable supplement is not read and its status
+remains visible; it is never replaced by an older success.
+
+Membership inclusion and all acquired 5/20/60-session paths are recomputed across
+the actually acquired union. Quiet/negative paths survive; failed details remain
+incomplete, not unexamined or zero activity. Planning excludes the supplied acquired
+codes but remains non-executable; earlier offsets are not inferred to have run.
+The 9/18 retained primary/supplement example has six histories out of 390 and
+384 unexamined details, not new 9/24 coverage. The complete catalogue, broader
+multi-day acquisition, all-batch history and daily operation are still separate
+unfinished work. No economic interpretation, Research or investment authority is
+created. Normal exact-head/main CI and publisher readback must be evidenced in
+#364/#297 rather than inferred from this note.
+
 ## What changes for the reader
 
 Known nonempty current member sets are organized by exact set inclusion.
