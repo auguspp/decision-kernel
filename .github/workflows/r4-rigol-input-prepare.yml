@@ -1,0 +1,56 @@
+name: R4 Rigol normal-question input preparation
+on:
+  push:
+    branches: [ops/r4-rigol-input-prepare-20260924]
+permissions:
+  contents: write
+  actions: read
+  issues: read
+jobs:
+  prepare:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 2971d00145e0980238429c4995d783fa3d280ef1
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[documents,feeds,research-api]'
+      - name: Prepare exact original sources and new question without generation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 2971d00145e0980238429c4995d783fa3d280ef1
+          test "$(git rev-parse HEAD^{tree})" = 3e242b7c6f16c6d89c6540f7d465cd0eaa4abc3b
+          gh api repos/auguspp/decision-kernel/git/blobs/7c0c69018ef2c611083a1264759e0f390d0871c5 > "$RUNNER_TEMP/preparer-blob.json"
+          python - <<'PY'
+          import base64,hashlib,json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP']);v=json.loads((p/'preparer-blob.json').read_bytes())
+          assert v['sha']=='7c0c69018ef2c611083a1264759e0f390d0871c5' and v['encoding']=='base64'
+          raw=base64.b64decode(v['content']);assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==v['sha']
+          old=b"m[1:] == ('2026','"+'半年度'.encode()+b"')"
+          new=b"(m[1],m[2]) == ('2026','"+'半年度'.encode()+b"')"
+          assert raw.count(old)==1
+          raw=raw.replace(old,new)
+          compile(raw,'rigol_prepare.py','exec')
+          (p/'rigol_prepare.py').write_bytes(raw)
+          print('PREPARATION_SCRIPT_SHA256='+hashlib.sha256(raw).hexdigest())
+          PY
+          python "$RUNNER_TEMP/rigol_prepare.py" 2>&1 | tee rigol-preparation.log
+      - name: Preserve source, input and failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: r4-rigol-input-${{ github.run_id }}
+          path: |
+            rigol-preparation/
+            rigol-preparation.log
+          if-no-files-found: error
+          retention-days: 30
