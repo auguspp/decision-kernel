@@ -1,0 +1,105 @@
+name: CI scope and preparation
+on:
+  workflow_call:
+    outputs:
+      scope:
+        description: Exact validation scope; full, content, draft_feedback, or merge_reuse.
+        value: ${{ jobs.prepare.outputs.scope }}
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    outputs:
+      scope: ${{ steps.result.outputs.scope }}
+    env:
+      CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Select full, content, or draft-only feedback
+        id: scope
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/ci-content-scope.py select --report-dir "$RUNNER_TEMP/kernel-ci"
+      - name: Install
+        if: steps.scope.outputs.scope != 'content'
+        uses: ./.github/actions/ci-python
+        with:
+          extras: dev
+      - name: Record exact code and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CI_CODE_SHA"
+          CI_REPORT_DIR="$RUNNER_TEMP/kernel-ci"
+          printf 'CI_REPORT_DIR=%s\n' "$CI_REPORT_DIR" >> "$GITHUB_ENV"
+          mkdir -p "$CI_REPORT_DIR"
+          printf 'code_sha=%s\nevent_sha=%s\nevent=%s\nrun_id=%s\nattempt=%s\n' \
+            "$CI_CODE_SHA" "$GITHUB_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            | tee "$CI_REPORT_DIR/identity.txt"
+          python --version > "$CI_REPORT_DIR/python.txt"
+          getconf _NPROCESSORS_ONLN > "$CI_REPORT_DIR/cpu-count.txt"
+          python -m pip list --format=json > "$CI_REPORT_DIR/packages.json"
+      - name: Validate content without installing the engineering environment
+        if: steps.scope.outputs.scope == 'content'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_ci_content_scope.py 2>&1 | tee "$CI_REPORT_DIR/content-tests.log"
+          python3 .github/scripts/ci-content-scope.py check --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/content-check.log"
+      - name: Draft feedback only - not merge validation
+        if: steps.scope.outputs.scope == 'draft_feedback'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .github/scripts/ci-content-scope.py draft --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/draft-feedback.log"
+      - name: Verify exact PR full-suite reuse after real installation
+        id: reuse
+        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/ci-merge-reuse.py --report-dir "$CI_REPORT_DIR"
+      - name: Main merge smoke checks
+        if: steps.reuse.outputs.reuse == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_ci_merge_reuse.py tests/test_ci_contract.py \
+            tests/test_external_research_identity.py tests/test_external_research_admission.py \
+            --junitxml="$CI_REPORT_DIR/main-smoke.xml" 2>&1 | tee "$CI_REPORT_DIR/main-smoke.log"
+      - name: Record full test collection
+        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -c pyproject.toml --collect-only -q > "$CI_REPORT_DIR/collection.txt"
+      - name: Prepare native pytest arguments and optional duration hint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/ci-matrix.py prepare --report-dir "$CI_REPORT_DIR"
+      - name: Return validated scope
+        id: result
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          scope = json.loads((Path(os.environ['CI_REPORT_DIR']) / 'scope.json').read_text())['scope']
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('scope=' + scope + '\n')
+          PY
+      - name: Upload preparation diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: kernel-ci-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/kernel-ci/
+          if-no-files-found: warn
+          retention-days: 30

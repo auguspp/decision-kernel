@@ -1,0 +1,69 @@
+name: Remaining current contracts
+on:
+  workflow_call:
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4]
+    env:
+      CI_CODE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      CI_SHARD: ${{ matrix.group }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Restore this run's preparation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          printf 'CI_REPORT_DIR=%s\n' "$RUNNER_TEMP/kernel-ci-shard" >> "$GITHUB_ENV"
+          python3 .github/scripts/ci-matrix.py restore --report-dir "$RUNNER_TEMP/kernel-ci-shard"
+      - uses: ./.github/actions/ci-python
+        with:
+          extras: dev
+          constraints: ${{ runner.temp }}/kernel-ci-shard/constraints.txt
+      - name: Record actual shard environment
+        run: |
+          python -m pip list --format=json > "$CI_REPORT_DIR/packages.json"
+          python - <<'PY'
+          import json, os, runpy
+          from pathlib import Path
+          out = Path(os.environ['CI_REPORT_DIR'])
+          check = runpy.run_path('.github/scripts/ci-merge-reuse.py')
+          actual = check['environment'](Path.cwd(), out, os.environ)
+          assert actual == json.loads((out / 'environment.json').read_text()), 'SHARD_ENVIRONMENT'
+          PY
+      - name: Collect this shard
+        run: |
+          python -m pytest -c pyproject.toml --collect-only -q @"$CI_REPORT_DIR/remaining-args.txt" \
+            --splits 4 --group "$CI_SHARD" --splitting-algorithm duration_based_chunks \
+            --durations-path "$CI_REPORT_DIR/durations-hint.json" > "$CI_REPORT_DIR/selected-collection.txt"
+      - name: Test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -c pyproject.toml -q -n 2 --dist=loadfile --max-worker-restart=0 \
+            @"$CI_REPORT_DIR/remaining-args.txt" --splits 4 --group "$CI_SHARD" \
+            --splitting-algorithm duration_based_chunks --durations-path "$CI_REPORT_DIR/durations-hint.json" \
+            -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
+            --durations=20 --durations-min=1.0 \
+            --junitxml="$CI_REPORT_DIR/shard.xml" 2>&1 | tee "$CI_REPORT_DIR/pytest.log"
+      - name: Verify shard result without claiming full success
+        run: python .github/scripts/ci-matrix.py shard-result --group "$CI_SHARD" --report-dir "$CI_REPORT_DIR"
+      - name: Upload shard diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: kernel-ci-shard-${{ matrix.group }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/kernel-ci-shard/
+          if-no-files-found: warn
+          retention-days: 30
