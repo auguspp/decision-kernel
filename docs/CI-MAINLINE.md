@@ -2,26 +2,26 @@
 
 Updated: 2026-09-24. Engineering only; Investment Authority = NONE.
 
-## 当前原则
+## 当前职责
 
-Human 已明确授权按新架构全面审阅 CI，能拆则拆、能删则删、该优化就优化。复用 [#354](https://github.com/auguspp/decision-kernel/issues/354) 管有界整顿；产品架构仍读 AGENTS / 最新 #297。不新增治理平台、生产调度或模型调用。
+Human 已授权按新架构拆、删、优化 CI；继续授权与本轮范围见 [#354/5812645340](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5812645340)。产品仍按 AGENTS / 最新 #297，不新增模型调用、治理平台或生产调度。
 
-**CI 保护仍有效的产品行为与历史兼容性，不永久保护每一代施工步骤。** 旧“全部历史测试永远 blocking”是可修订工程策略，不是不可修改原则；但架构变化也不证明旧 reader 已无人使用。拆分须按实际依赖、当前成果合同与失败传播作判断，不能凭测试数或文件名删除。
+**CI 保护当前有效行为与历史兼容性，不永久保护每一代施工步骤。** 保留历史不等于永远重跑所有历史脚手架。改动、PR、CI、合并、发布、研究接受是不同事实；本页描述执行合同，不预填验收成功。
 
-当前实施见 [#544](https://github.com/auguspp/decision-kernel/pull/544)；PR/测试/合并/发布状态必须从实际 run 读取。本页不是预填的验收结果。后续有界 CI 优化无需 Human 为每个文件重复授权；扩大运行、删除历史数据或外部付费权限另论。
+## 两条验证路径，一个稳定检查
 
-## 已实现的改动范围
+`kernel-tests` / `test` 名称不变，PR与main都产生实际检查，不使用顶层 paths-ignore。
 
-- 原生 concurrency：只有同一 PR 的过期 head 相互替换；main 使用每 run 唯一组，避免连 pending main 也被新 run 挤掉。未改生产 concurrency。
-- 现有 setup-python 复用 pip 下载缓存，key 依赖 pyproject.toml；每次仍执行真实安装，不缓存虚拟环境或测试结果。base-only isolated/no-cache 安装保留。
-- action-history 四个 tamper 复用一次真实、禁网络、验证过的 capture 准备；每例独立复制文件、解析 report、执行原 verify。正向/partial/fatal/transport 测试不改。复用 #443/#444，不建 fixture 框架。
-- 删除固定旧试验入口 `.github/workflows/saved-research-once.yml`。原入口仅 manual、无日常调度，全历史两次运行 `34490271156`（失败，9/10）与 `34548590855`（成功，9/11）均已结束；原 v2 请求 blob `25ba54cfe5283feb30b2f2c0b3ff788aec2d826c` 不改。publisher 不订阅此入口；原请求、失败/成果、共享 runtime 和全部行为测试保留。原 prepared-disclosure 负向 workflow 断言随退役更新，不允许借退役激活裸旧 CLI。
+- **文字路径**：仅根 README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1，以及新增 `docs/readings/**/*.md`。只接受普通非执行文件的新增/修改；既有研究原件修改、删除、改名或特殊mode仍走完整路径。
+- **完整路径**：src、tests/fixtures、workflow、依赖、registry/JSON、研究计算脚本、其他未审查路径及混合改动。`full-research-method-v3.md`有实际历史回放测试消费者，不因扩展名为md就进入文字路径。文字路径不代表所有研究保存都已加速。
 
-这是资源去重与首个执行入口退役，不是全库 suite 分层完成。基线 31 个当前 workflow 文件，本切片删除 1 个后为 30；Actions 的 156 个历史登记不是 156 个现役文件。不得删除 run/log 美化库存。
+分流使用完整 Git base→head raw/NUL差异，关闭rename折叠，不受平台300文件path过滤上限影响。PR比较event base/head；push比较event before→sha，不能只看最后一个commit。checkout必须等于本次代码SHA。差异/基线读取失败或范围不明回full，不能生成内容成功。
 
-## 当前执行与失败合同
+文字路径还要求**精确base SHA存在本仓库main/push/attempt1成功CI**，且同SHA较新的失败/进行中运行不能被旧绿灯掩盖。使用原生gh只读查询；它不是未验证代码的免检通道。成功的文字CI维持未变代码的可信基线，后续文字提交可依次继承；不是在新环境重跑全套的声明。新增代码消费者依赖这些文字入口时须同步审查此范围。
 
-**本切片仍执行完整 tests。** 本地默认串行；CI 明确使用：
+文字路径不安装工程依赖、不收集全库、不执行全量pytest；运行本分流的stdlib回归，并检查实际commit中的UTF-8、非空、无NUL/未解冲突。源码不执行，来源链接不联网；不认证链接有效、事实、计算、研究方法质量或Human接受。保存scope.json、content-check.json和真实日志，明确 `FULL_SUITE=NOT_RUN_CONTENT_ONLY`，不伪造全量JUnit。
+
+## 完整路径保持的合同
 
 ```sh
 python -m pip install -e '.[dev]'
@@ -30,28 +30,20 @@ python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
   --durations=100 --durations-min=1.0 --junitxml=pytest.xml
 ```
 
-保留 PIT、身份/来源、权限、create-only/不确定写入、历史读回、Odds 算术等有效合同。PR checkout 实际 head、main checkout 本次 SHA，比较 git rev-parse HEAD；event SHA 单独保留。CI contents read-only、无 production secrets、不保留 checkout credentials。Test 使用 pipefail，不靠 skip/xfail/continue-on-error/retry 换绿，不重启崩溃 worker。60 秒是 CI stall 诊断边界，不是业务 SLA。
+原Test脚本不变；本地默认串行。无skip/xfail/continue-on-error或失败worker重启，pipefail保证真实失败；60秒只是CI stall诊断。每次完整路径都真实安装，即使pip缓存命中；独立base-only isolated/no-cache安装和真实pass/fail/worker-crash回归保留。PIT、身份/来源、权限、create-only/不确定写入、旧格式读回、有效Odds计算继续验证。
 
-完整 collection、JUnit、pytest log、identity、环境保留在 `kernel-ci-<run>-<attempt>`，always 上传、30 天。早期失败可能没有完整 JUnit，仍是失败。原 synthetic pass/fail/worker-crash 继续真实执行 Test 脚本。静态资源检查不证明平台已发生取消或缓存命中。
+CI仅contents/actions read，无业务secrets，不保留checkout credentials。actions read仅用于核对base CI；GH_TOKEN不进入内容文件。完整路径保持原collection、JUnit、pytest日志和环境；两条路径均有code/event/run身份和scope，上传到原 `kernel-ci-<run>-<attempt>`，always/30天。早期失败可能没有完整产物，仍是失败。
 
-第一切片保持 exact-head PR CI、正常审阅合并、独立 main CI、正常 publisher/readback 的过渡验收边界。后续按变更影响决定验收范围：改缓存不需要重新证明研究质量；改发布消费者则必须验发布。未知/混合变更先回全量，不能悄悄改变 downstream 对 kernel-tests 的成功定义。
+原并发不变：同PR过期head可替换，main每run独立组。现有发布器/来源准入收到的成功含义是“本次范围验证成功”：full，或可信main基线上的代码不变加内容检查；不能把后者描述为本SHA全量重测。publisher仍验证保存产物，来源/模型仍须原显式权限；没有改变其触发/写入/研究权限。
 
-## 接下来拆什么、保留什么
+## 进度与接续
 
-| 处置 | 对象与边界 |
-| --- | --- |
-| CONSOLIDATE 优先 | 内容与代码 CI 分流：纯文字、含计算脚本的研究档案、用途 registry、运行配置不能混为 docs。先明确内容/索引消费者和稳定 required check，unknown/mixed/code/fixture/workflow 回 full；不直接 paths-ignore 全 docs。 |
-| RETIRE 逐项 | 已停用的 Pre→Quick 编排、冻结 ticker/日期的重复部署断言、一次性修复启动器。先核调用者、活动 run 与旧格式读回；删旧执行义务，不删原始证据或仍复用的 reader/validator。其他 API/source/recovery workflow 没有整体删除授权推论。 |
-| CONSOLIDATE 接续 | intake 每次 main CI 成功启动再查 request diff 的空转；publisher 的代码重建/索引发布/观察更新触发。保留可信成功代码、显式请求与不确定写入边界，不在优化中关闭日常产品。 |
-| KEEP | 当前 Radar/Stock 机械观察、当前成果合同、有效负向安全测试、独立 base-only 安装。最慢不等于最该删。Timeline 已退出普通 CI，不重复清理。 |
-| DEFER | 无证据增加矩阵/worker、通用 selector/scheduler、自动性能治理。不得为瘦 CI 再造胖 CI。 |
+[#544](https://github.com/auguspp/decision-kernel/pull/544)已经完成资源去重与固定Suken旧启动器退役：同PR并发、pip下载缓存、四个action-history输入准备共享；原请求、失败/成果、共享runtime与行为测试保留。30个现役workflow文件不是156个历史Actions登记。真实基线和慢样本见 [首切片回执](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5812515561)，没有显著端到端提速结论。
 
-## 测量、复用与历史
+本轮分流由普通PR走完整工程验收，再由真实纯文字改动验证文字路径、失败传播与正常发布，不能用静态条件代替平台实跑。实际状态读#354最新回执。
 
-审计基线 main `0f644425dd3710551893625ab2eb3d9d2bc1d363`，CI `35984202408` / job `107582921346`，真实 artifact `10801701260` 已核对 SHA256/CRC/identity/JUnit：6189 唯一 tests、365 模块、0 failure/error/skip；pytest195.92s，job237s（install26s、collection8s、Test196s）。747.741 testcase-seconds / 4 CPU，理想均分约186.94s：继续调 scheduler 不是主要空间。并行 testcase 秒不能当作 wall-time 节省；冷缓存/热缓存与托管 runner 波动须区分，不预填提速。
+下一重点仍是用途registry/计算档案各自的消费者验证、代码同树PR/main双份全量、已消费旧编排义务及publisher/intake空转。它们没有在本次被自动退役；不为快通道再造通用selector、scheduler或新状态中心。
 
-Reuse Decision: REUSE / CONSOLIDATE。内部用原 CI/fixture 模式与失败回归；官方用 [GitHub concurrency](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)、[setup-python pip cache 实现](https://github.com/actions/setup-python/blob/main/src/cache-distributions/pip-cache.ts) 和 [使用说明](https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md)。无新依赖；pytest-xdist/loadfile 的公共实现审查复用 #354 历史记录。路径拆分须遵守 [required-check/过滤语义](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)。
+Reuse Decision: REUSE + THIN_ADAPTER。使用原Git/gh/Actions与stdlib；[Git raw/-z](https://git-scm.com/docs/git-diff)、[Actions条件和过滤限制](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)、实读[dorny/paths-filter@v3 git实现](https://github.com/dorny/paths-filter/blob/v3/src/git.ts)提供差异与失败模式经验，不新增Node Action/依赖/深历史扫描。完整审计沿用[初审原件](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)和#354。
 
-[31-workflow/耗时初审原件](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md) 中 saved-research-once 的暂缓处置已被本次后续实读与退役替代；其他未实测对象仍不得冒充已签收。[旧 CI 入口](https://github.com/auguspp/decision-kernel/blob/0f644425dd3710551893625ab2eb3d9d2bc1d363/docs/CI-MAINLINE.md) 与 #354 保存更早基线/失败/清理记录，不因策略修订而改写。
-
-回滚走普通 PR，不直接写 main、不 force-push、不动旧请求/证据/生产日程。远端写入不确定时先读回对账，不重发求绿。保留历史，不把 CI 成功解释为经济真理或投资权限。
+回滚走普通PR，不直接写main/force-push，不删除历史证据/运行记录，不动生产日程。无论路径如何，CI成功都不是经济真理或投资授权。
