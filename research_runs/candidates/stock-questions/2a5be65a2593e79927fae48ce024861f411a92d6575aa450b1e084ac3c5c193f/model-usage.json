@@ -1,0 +1,82 @@
+[
+  {
+    "finished_at": "2026-09-24T00:24:46.584960+00:00",
+    "input_sha256": "e6eef87beb74f9e33adae948a4f1813d5f5306bf41796f1feb6568e9be8e8709",
+    "max_output_tokens": 6000,
+    "output_format_file": "quick-output-format.json",
+    "output_format_sha256": "7af01dd348a5092a3e416e358b81a431f61c038576d966da6f9966cfd58843e9",
+    "output_model_schema_sha256": "21e50e72174f32d8bcca67cad6563e732c41a2999ca6cf7ddfe44a1927bb0a5e",
+    "output_sha256": "6ab6e9daf94bfe3fe0e16c1ac1d03d409a528a23cc5606f4585873ef21be14ff",
+    "output_text_retained": true,
+    "phase": "COMPLETE",
+    "provider": "SUB2API",
+    "provider_base_url": "https://ai.6600600.xyz/v1",
+    "provider_status": "completed",
+    "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+    "requested_model": "gpt-6-astra",
+    "response_id": "resp_08f0e215fa85d772016ab46d80d54887d0a687bdca172c0098",
+    "response_received": true,
+    "stage": "quick",
+    "started_at": "2026-09-24T00:23:25.996485+00:00",
+    "status": "completed",
+    "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+    "usage": {
+      "attribution": {
+        "items": {
+          "msg_08f0e215fa85d772016ab46d80dc9087d0b81d86b6fc9a0d01": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 130026,
+                "output_tokens": 0
+              }
+            ],
+            "input_tokens": 130026,
+            "output_tokens": 0
+          },
+          "msg_08f0e215fa85d772016ab46d8533dc87d0aeec1423c3234e60": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "content": [
+              {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "input_tokens": 2,
+                "output_tokens": 2444
+              }
+            ],
+            "input_tokens": 2,
+            "output_tokens": 2444
+          }
+        },
+        "request_fields": {
+          "instructions": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 265,
+            "output_tokens": 0
+          },
+          "text.format": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 766,
+            "output_tokens": 0
+          }
+        }
+      },
+      "input_tokens": 131059,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 2444,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 133503
+    }
+  }
+]
