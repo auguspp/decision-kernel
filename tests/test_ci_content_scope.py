@@ -217,12 +217,16 @@ class ContentScopeTests(unittest.TestCase):
         self.assertIn('\n  test:\n', text)
         self.assertNotIn('paths-ignore:', text)
         self.assertIn("CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}", text)
-        for label in ('      - uses: actions/setup-python@', '      - name: Install\n',
-                      '      - name: Record full test collection\n', '      - name: Test\n'):
-            step = text.split(label, 1)[1].split('\n      - ', 1)[0]
+        prepare = (ROOT / '.github/workflows/ci-prepare.yml').read_text()
+        for label in ('      - name: Install\n', '      - name: Record full test collection\n'):
+            step = prepare.split(label, 1)[1].split('\n      - ', 1)[0]
             self.assertIn("if: steps.scope.outputs.scope != 'content'", step)
-        self.assertIn("if: steps.scope.outputs.scope == 'content'", text)
-        self.assertIn("python3 -m unittest discover -s tests -p test_ci_content_scope.py", text)
+        for job in ('contracts-v2', 'remaining-v2'):
+            block = text.split('  ' + job + ':\n', 1)[1].split('    uses:', 1)[0]
+            self.assertIn("if: needs.prepare.outputs.scope == 'full'", block)
+        self.assertIn("if: needs.prepare.outputs.scope == 'full'", text.split('  test:\n', 1)[1])
+        self.assertIn("if: steps.scope.outputs.scope == 'content'", prepare)
+        self.assertIn("python3 -m unittest discover -s tests -p test_ci_content_scope.py", prepare)
         self.assertIn('contents: read\n  actions: read', text)
         self.assertNotIn('secrets.', text)
 
