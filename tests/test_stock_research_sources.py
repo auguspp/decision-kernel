@@ -128,12 +128,10 @@ def test_same_pdf_alternate_representation_receives_original_locator(tmp_path,mo
     assert (args['output']/(once.sha(pdf)+'-extraction.json')).exists()
 
 
-def test_finite_prompt_bound_defaults_and_original_one_shot_guard():
+def test_finite_prompt_bound_defaults_remain_shared():
     import inspect
     assert inspect.signature(once.model_call).parameters['max_prompt_bytes'].default is None
     assert once.MAX_PROMPT_BYTES==128*1024
-    for changed in ({'ticker':'600184'},{'schema_version':2}):
-        with pytest.raises((ValueError,KeyError)): once.checked_request(changed)
 
 
 def test_report_revision_does_not_erase_intervening_risk():

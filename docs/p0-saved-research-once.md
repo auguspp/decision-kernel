@@ -1,5 +1,13 @@
 # P0 下一真实案例：苏垦农发的业务映射，不再重跑宿主 smoke
 
+## 当前状态 — 2026-09-24
+
+固定苏垦一次性任务的workflow已由#544退役；其专属执行代码按[#354/5816112755](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5816112755)一并退出当前模块。`saved_research_once`仍保留其他宿主使用的模型循环、输出校验与create-only留存，不再提供固定公司的请求检查、采集、run或main。直接`python -m decision_kernel.runtime.saved_research_once`明确非零退出，没有替代启动器。
+
+原请求、候选分支、v1失败、v2结果和消费标记不变；原代码/测试可从[精确历史026a7195](https://github.com/auguspp/decision-kernel/tree/026a7195f4d0ad3ccac121c9de92fbe18e5bd4b5)恢复用于历史检查，不是恢复源站/模型调用权限。共享提交时钟、SDK、原文先保存及写入不确定检查继续有效。以下各节是历史部署与修复记录，不是当前启动说明。
+
+## 历史部署与验收记录
+
 需求入口 #297；市场来源为 #310 已保存的2026-09-09两成员比较。苏垦601952的近期价格领先与北大荒的主要成交载体用途不同；本次解释前者的业务暴露，不重复北大荒Quick，不消费或改排公告FIFO。
 
 ## 运行范围

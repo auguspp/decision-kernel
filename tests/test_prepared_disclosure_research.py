@@ -240,7 +240,7 @@ def test_module_has_no_production_trigger_and_legacy_request_is_unchanged():
         workflow=path.read_text()
         assert 'decision_kernel.runtime.saved_research_once' not in workflow
         assert 'prepared_disclosure_research' not in workflow
-    assert json.loads(Path(once.REQUEST_PATH).read_bytes())["id"]=='p0-suken-api-20260910-v2'
+    assert json.loads(Path('research_runs/api-once-request.json').read_bytes())["id"]=='p0-suken-api-20260910-v2'
 
 
 @pytest.mark.parametrize("name", ["launch.json", "candidate.json"])
