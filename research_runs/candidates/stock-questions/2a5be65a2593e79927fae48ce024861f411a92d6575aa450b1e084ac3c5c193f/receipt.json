@@ -1,0 +1,54 @@
+{
+  "completion": "COMPLETE",
+  "elapsed_minutes_observed": 2,
+  "execution_id": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f",
+  "finished_at": "2026-09-24T00:24:46.585506Z",
+  "input_hash": "236daa30be4390924a746c9f305d537908905bdc6748408afb6e710e8808d9a3",
+  "last_completed_stage": "QUICK",
+  "model_exact_version": null,
+  "model_or_executor": "trusted Python + Sub2API Responses / gpt-6-astra",
+  "platform_task_id": "35938160978",
+  "private_chain_of_thought_recorded": false,
+  "research_cutoff": "2026-09-24T00:23:10.977773Z",
+  "search_queries_used": 0,
+  "source_dispositions": [
+    {
+      "disposition": "Retained public context supplied to model; restricted source scope.",
+      "evidence_artifact_id": "db885345-2da8-54b9-833b-6bb3d919cfd5",
+      "opened": true,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/aecb004596d811a8d5a68bf17a271e744bddda33/research_runs/normal-question-preparation/688337-20260924/context.json",
+      "used_as_evidence": true
+    }
+  ],
+  "source_reads_used": 2,
+  "started_at": "2026-09-24T00:23:24.600813Z",
+  "stop_or_failure_reason": null,
+  "technical_retries_used": 0,
+  "tool_calls_used": 2,
+  "tool_events": [
+    {
+      "kind": "OTHER_READ",
+      "note": "Retained context read by the host for the executor; actual API delivery is separately logged, not a fresh source-site visit.",
+      "observed_at": "2026-09-24T00:23:24.600826Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 1,
+      "status": "SUCCEEDED",
+      "target": "https://github.com/auguspp/decision-kernel/blob/aecb004596d811a8d5a68bf17a271e744bddda33/research_runs/normal-question-preparation/688337-20260924/context.json",
+      "technical_retry": false
+    },
+    {
+      "kind": "OTHER_READ",
+      "note": "Single model output, not primary-source Evidence; no Pre was executed.",
+      "observed_at": "2026-09-24T00:24:46.585470Z",
+      "platform_reference": null,
+      "query_count": 0,
+      "record_kind": "EXECUTOR_ACTION_SUMMARY",
+      "sequence": 2,
+      "status": "SUCCEEDED",
+      "target": "SUB2API_RESPONSES:QUICK",
+      "technical_retry": false
+    }
+  ]
+}
