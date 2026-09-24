@@ -350,6 +350,37 @@
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 
+## 普源精电 688337.SH
+
+下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
+
+- stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f：SAVED&#95;QUESTION / RETAINED&#95;BYTES&#95;VERIFIED
+  - 原问题：普源精电2026H1收入及扣非盈利改善、合并经营现金仍为负：仪器和解决方案增长、毛利与费用结构及营运资本分别支持或限制什么经营改善判断，现在是否有值得进一步查证的实质问题？
+  - 当时为何检查：2026-09-23正常仪器仪表/Stock观察将普源精电带入本批审阅；完整中报出现盈利改善与经营现金不同步的可核对问题。这是已有公开财报在新正常观察下首次正式审阅，不声称财报今天才发布或证明当日上涨原因。
+  - 原模型停止理由（历史输出，不代表复核认可）：已存在有来源的经营改善和现金转化分化，且与公司核心仪器及解决方案业务直接相关。现有报表附注能开展有区分力的利润—现金及主体口径核对，因此值得列为进一步研究候选；不是因为未知事项多而升级，也不构成自动启动或投资判断。
+  - 原关键未知：
+    - 产品/解决方案增长对合并可持续利润与现金的精确贡献未建立。
+    - 库存及客户回款的业务归属、释放时点和可持续性尚不确定。
+    - 报告期后其他临时公告、当前价格预期和多年估值不在本题范围；不能宣称无事件或市场误价。
+  - [原保存材料](../../sources/git/45c3e6049819ce402363e25a1e0f14cafa288b95/admission.json)
+  - [原保存材料](../../sources/git/4a2a2047e2f79a94b3f7cdd1664d94c2a0755e30/candidate-before-validation.json)
+  - [原保存材料](../../sources/git/4a2a2047e2f79a94b3f7cdd1664d94c2a0755e30/candidate.json)
+  - [原保存材料](../../sources/git/f5d92a108798561058fc742430382a32982b50da/full-commission.json)
+  - [原保存材料](../../sources/git/1625c12eccb77bfa7a506deab641e5582a6157a5/host-receipt.json)
+  - [原保存材料](../../sources/git/2fd42717c4329113554a489d9cd5f320e944cdff/input.json)
+  - [原保存材料](../../sources/git/a21af8496e8bd6b681de432479092da8a9b869f6/launch.json)
+  - [原保存材料](../../sources/git/6592e3e8ab6e14e1d33c55496c850de14108fb60/model-usage.json)
+  - [原保存材料](../../sources/git/492dc1b8ffcfbf773acf2621f0533bd4ad5a841f/prepare.json)
+  - [原保存材料](../../sources/git/d371dd67ac865bd8ef2c317911ed87d551d92f04/quick-before-validation.json)
+  - [原保存材料](../../sources/git/3614d0636cf5ebf6371b89a425efaed6d41fb3c0/quick-model-output.txt)
+  - [原保存材料](../../sources/git/acaa490bf50c5891006b95042b83a1f23b126fca/quick-output-format.json)
+  - [原保存材料](../../sources/git/0393c597488a9abea54032218878e1898911a09e/receipt.json)
+  - [原保存材料](../../sources/git/901278687c33f3a9a4fd6bfaa26bb4dd1d534f6a/research-attention.json)
+  - [原保存材料](../../sources/git/e4ee65a72a3d16827dedb7c98f2c98d43d84a2a2/validation.json)
+  - [原保存材料](../../sources/git/4d9e87eddbd62dfea817606bd4b68f63834d5fea/question.json)
+- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-23；[原观察](../radar/company-reading.json)。不是新事件。
+- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-23；[原观察](../stock/35848784152/reading/stock-reading.json)。不是新事件。
+
 ## 600362.SH
 
 下一步：本读取没有关联观察；不等于已经核实无变化

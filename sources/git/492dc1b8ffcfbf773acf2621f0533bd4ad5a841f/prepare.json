@@ -1,0 +1,30 @@
+{
+  "catalog_sha256": "91deb7b071113cc9c4d29b6f3fb98d1f328545f5bd398e9db81ac938de075445",
+  "current_state_commit": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+  "current_state_reading_hash": "8d0e61f3b7f2f95824ac08530bc7954cc325b3a400cf56c7903e166173912107",
+  "dedup_scope": "EXPLICIT_CATALOG_QUESTION_IDS_NOT_GLOBAL_SEMANTIC_DEDUP",
+  "execution_key": {
+    "canonical_input_hash": "236daa30be4390924a746c9f305d537908905bdc6748408afb6e710e8808d9a3",
+    "execution_id": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f"
+  },
+  "formal_research_budget_used": 0,
+  "funnel_invoked": false,
+  "human_acceptance": "NOT_ESTABLISHED",
+  "input_file_sha256": "32b6c192599d71d8e40264e113fcfadac282e9380b63d929c1265d11708bcb0d",
+  "investment_authority": "NONE",
+  "preflight_sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d",
+  "qualification": "DECLARATION_AND_SOURCE_BINDING_NOT_ECONOMIC_TRUTH_OR_QUESTION_QUALITY",
+  "question_id": "rigol-h1-growth-profit-cash-conversion",
+  "question_source": {
+    "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+    "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+  },
+  "remote_writes": 0,
+  "research_execution_allowed": false,
+  "revision": 1,
+  "status": "QUESTION_INPUT_PREPARED_NOT_EXECUTED"
+}

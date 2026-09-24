@@ -1,0 +1,235 @@
+{
+  "execution_authority": "NONE",
+  "execution_budget": null,
+  "execution_id": null,
+  "investment_authority": "NONE",
+  "known_limitations": [
+    "产品/解决方案增长对合并可持续利润与现金的精确贡献未建立。",
+    "库存及客户回款的业务归属、释放时点和可持续性尚不确定。",
+    "报告期后其他临时公告、当前价格预期和多年估值不在本题范围；不能宣称无事件或市场误价。",
+    "REQUIRED_SOURCE_CLASS:FULL_INTERIM_REPORT:STATIC",
+    "REQUIRED_SOURCE_CLASS:FINANCIAL_REPORT_CORRECTION_CHECK:LATEST_INVENTORY",
+    "FALSIFICATION_TEST:若扣非改善主要由真实毛利额和费用杠杆支持，不能因经营现金为负就否定全部经营改善；若现金缺口由存货/应收/合同负债等占用而非可持续现金收益解释，不能把利润增长说成已兑现股东现金。分别核对金融投资收益、公允价值、汇兑、资本开支及母公司/合并口径；无法识别产品和子公司归因时保持未知。",
+    "KNOWN_COUNTEREVIDENCE:中报页6/28经营现金净额仍为负，不能仅据归母净利增长认定现金创造。",
+    "KNOWN_COUNTEREVIDENCE:中报页22整体毛利率略降；研发费用率下降而研发费用金额增加，不能说削减研发带来全部利润。",
+    "KNOWN_COUNTEREVIDENCE:中报页7/29非经常金融收益存在；页174存货、应收和合同负债变动有现金占用。",
+    "KNOWN_COUNTEREVIDENCE:扣非从亏损转正和毛利额增加又反驳全部增长仅靠非经常项目的解释；不得只写悲观一侧。",
+    "EXISTING_RESEARCH_RELATION:在固定W的全部候选input及当前R范围检查未见688337正式研究；保留检视范围，不声称穷尽全部聊天。6对象选择及旧工作核对记录已保存。本次是正常观察触发的新问题，不重复江西/振江实验。",
+    "各仪器类别、解决方案及SPQ对合并毛利、扣非利润和经营现金的精确贡献。",
+    "新增库存的订单覆盖、库龄、产品及子公司归属，以及何时销售和回款。",
+    "逾期应收的客户性质、期后回款和相较历史正常季节性的变化。",
+    "母公司与合并现金差异中，内部交易抵销、海外业务及耐数电子分别贡献多少。",
+    "费用杠杆能否跨期维持，当前低资本开支是否代表长期维护及扩张需求。",
+    "报告期后其他公告、当前市场预期及长期估值不在本次范围；不据此宣称无事件或存在误价。"
+  ],
+  "origin": {
+    "handoff": {
+      "candidate_hash": "9d8d9eb526adbd2edb6034cef1fe41ad78d6c751d880e82a5bb792691baec304",
+      "execution_authority": "NONE",
+      "execution_id": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f",
+      "input_hash": "236daa30be4390924a746c9f305d537908905bdc6748408afb6e710e8808d9a3",
+      "input_known_unknowns": [
+        "产品/解决方案增长对合并可持续利润与现金的精确贡献未建立。",
+        "库存及客户回款的业务归属、释放时点和可持续性尚不确定。",
+        "报告期后其他临时公告、当前价格预期和多年估值不在本题范围；不能宣称无事件或市场误价。",
+        "REQUIRED_SOURCE_CLASS:FULL_INTERIM_REPORT:STATIC",
+        "REQUIRED_SOURCE_CLASS:FINANCIAL_REPORT_CORRECTION_CHECK:LATEST_INVENTORY",
+        "FALSIFICATION_TEST:若扣非改善主要由真实毛利额和费用杠杆支持，不能因经营现金为负就否定全部经营改善；若现金缺口由存货/应收/合同负债等占用而非可持续现金收益解释，不能把利润增长说成已兑现股东现金。分别核对金融投资收益、公允价值、汇兑、资本开支及母公司/合并口径；无法识别产品和子公司归因时保持未知。",
+        "KNOWN_COUNTEREVIDENCE:中报页6/28经营现金净额仍为负，不能仅据归母净利增长认定现金创造。",
+        "KNOWN_COUNTEREVIDENCE:中报页22整体毛利率略降；研发费用率下降而研发费用金额增加，不能说削减研发带来全部利润。",
+        "KNOWN_COUNTEREVIDENCE:中报页7/29非经常金融收益存在；页174存货、应收和合同负债变动有现金占用。",
+        "KNOWN_COUNTEREVIDENCE:扣非从亏损转正和毛利额增加又反驳全部增长仅靠非经常项目的解释；不得只写悲观一侧。",
+        "EXISTING_RESEARCH_RELATION:在固定W的全部候选input及当前R范围检查未见688337正式研究；保留检视范围，不声称穷尽全部聊天。6对象选择及旧工作核对记录已保存。本次是正常观察触发的新问题，不重复江西/振江实验。"
+      ],
+      "investment_authority": "NONE",
+      "method_version": "single-quick-v1",
+      "open_unknowns": [
+        "各仪器类别、解决方案及SPQ对合并毛利、扣非利润和经营现金的精确贡献。",
+        "新增库存的订单覆盖、库龄、产品及子公司归属，以及何时销售和回款。",
+        "逾期应收的客户性质、期后回款和相较历史正常季节性的变化。",
+        "母公司与合并现金差异中，内部交易抵销、海外业务及耐数电子分别贡献多少。",
+        "费用杠杆能否跨期维持，当前低资本开支是否代表长期维护及扩张需求。",
+        "报告期后其他公告、当前市场预期及长期估值不在本次范围；不据此宣称无事件或存在误价。"
+      ],
+      "origin": "QUICK_RESEARCH_CANDIDATE",
+      "original_question": "普源精电2026H1收入及扣非盈利改善、合并经营现金仍为负：仪器和解决方案增长、毛利与费用结构及营运资本分别支持或限制什么经营改善判断，现在是否有值得进一步查证的实质问题？",
+      "proposed_investigation": {
+        "available_work": "利用现有合并利润表及费用、税项附注量化毛利额、费用杠杆、金融净收益和汇兑的增量贡献；将现金调节表与应收逾期结构、原材料及库存商品、返点及客户预收款对应，区分营运资本、受限资金释放和投资现金；比较母公司与合并报表、主要子公司及内部应收披露，确定哪些产品或主体归因能成立、哪些只能给出边界。可同时检验收入确认政策与解决方案验收模式是否足以解释现金时差，但不把政策本身当作实际回款证据。",
+        "decision_test": "若剔除金融净收益并分离汇兑、税项后，利润改善仍主要由毛利额和费用杠杆支持，应保留经营改善判断；若改善主要依赖不可重复费用下降或无法对应的会计因素，则降低持续性判断。若现金差额可由正常增长备货与结算时差解释，且逾期结构不显示明显恶化，应削弱现金质量担忧；若库存、逾期应收及预收下降显示更高且持久的资金需求，则否定增长已形成可持续现金收益的说法。若公开数据不能完成产品或子公司归因，应保留未知而非强行分配，亦可据发现重新界定研究问题。",
+        "question": "普源精电本期扣非改善中可持续经营贡献有多大，新增仪器及解决方案收入是否伴随更高的营运资本需求，母公司与合并现金分化能否由可识别的业务和抵销关系解释？",
+        "why_material": "毛利额增加约6942万元与存货现金占用约7065万元同时出现，二者均显著大于2305万元扣非净利润。不同解释会改变对增长质量、资金需求及现金转化能力的判断，而非仅调整报表措辞。"
+      },
+      "quick_candidate_source": {
+        "git_blob": "4a2a2047e2f79a94b3f7cdd1664d94c2a0755e30",
+        "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/candidate.json",
+        "purpose": "SINGLE_QUICK_CANDIDATE",
+        "ref": "75ae4fb6165ea16af904e42b6da6ab6d408a9168",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "698f8dbc436257c4c9ba1e5431b87dc461c802ecc52c556a3bf87e878fd06a72"
+      },
+      "quick_input_source": {
+        "git_blob": "2fd42717c4329113554a489d9cd5f320e944cdff",
+        "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/input.json",
+        "purpose": "SINGLE_QUICK_INPUT",
+        "ref": "00612a9eb9d9cd4eece0919342a89a9041de5b22",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "32b6c192599d71d8e40264e113fcfadac282e9380b63d929c1265d11708bcb0d"
+      },
+      "research_cutoff": "2026-09-24T00:23:10.977773Z",
+      "schema_version": 1,
+      "security_id": "SSE:688337",
+      "source_refs": [
+        {
+          "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+          "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+          "purpose": "REVIEWED_RADAR_QUESTION",
+          "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+        },
+        {
+          "git_blob": "62c24a0c3e5f76d09384439f0dcc6a8e459ed8b2",
+          "path": "research_runs/normal-question-preparation/688337-20260924/context.json",
+          "purpose": "MODEL_CONTEXT",
+          "ref": "aecb004596d811a8d5a68bf17a271e744bddda33",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463"
+        },
+        {
+          "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7",
+          "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+          "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+          "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d"
+        },
+        {
+          "git_blob": "415f487744491542f806aeeb4553f440f647d209",
+          "path": "current-state.json",
+          "purpose": "CURRENT_STATE_READING",
+          "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "2fdf92fdd9873e12e0774477de0d905f19df0f339a21530f844df3eee7039dc3"
+        },
+        {
+          "git_blob": "d68a07fb644c0af87169fcec60e5f41a2603b3a7",
+          "path": "details/stock/35848784152/reading/stock-reading.json",
+          "purpose": "NORMAL_STOCK_OBSERVATION",
+          "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "8db7978f2ce8032ef6f8edb9ca2d8db30fc8584e7881d8acc1055d115097fc9e"
+        },
+        {
+          "git_blob": "b7e90c5a11ca7788ee41ed6f5468f0e8de470220",
+          "path": "research_runs/normal-question-preparation/688337-20260924/normal-batch-review.json",
+          "purpose": "NORMAL_BATCH_REVIEW",
+          "ref": "82e8f5fe6a1bfa792af7738edbd1643d2a08b6b1",
+          "repository": "auguspp/decision-kernel",
+          "sha256": "36f585e84152a936884c153e719808bc3ee67b287d51d3af46b0804ea98769f0"
+        }
+      ]
+    },
+    "question_source": {
+      "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+      "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+      "purpose": "REVIEWED_RADAR_QUESTION",
+      "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+    },
+    "research_origin": "QUICK_RESEARCH_CANDIDATE"
+  },
+  "outcome_contract": "research-outcome-contract-v1",
+  "permission_source": null,
+  "predecessor_relation": "在固定W的全部候选input及当前R范围检查未见688337正式研究；保留检视范围，不声称穷尽全部聊天。6对象选择及旧工作核对记录已保存。本次是正常观察触发的新问题，不重复江西/振江实验。",
+  "prior_research": [
+    {
+      "git_blob": "b7e90c5a11ca7788ee41ed6f5468f0e8de470220",
+      "path": "research_runs/normal-question-preparation/688337-20260924/normal-batch-review.json",
+      "purpose": "NORMAL_BATCH_REVIEW",
+      "ref": "82e8f5fe6a1bfa792af7738edbd1643d2a08b6b1",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "36f585e84152a936884c153e719808bc3ee67b287d51d3af46b0804ea98769f0"
+    }
+  ],
+  "question": "普源精电本期扣非改善中可持续经营贡献有多大，新增仪器及解决方案收入是否伴随更高的营运资本需求，母公司与合并现金分化能否由可识别的业务和抵销关系解释？",
+  "question_id": "rigol-h1-growth-profit-cash-conversion",
+  "research_cutoff": "2026-09-24T00:23:10.977773Z",
+  "schema_version": 1,
+  "scope": "利用现有合并利润表及费用、税项附注量化毛利额、费用杠杆、金融净收益和汇兑的增量贡献；将现金调节表与应收逾期结构、原材料及库存商品、返点及客户预收款对应，区分营运资本、受限资金释放和投资现金；比较母公司与合并报表、主要子公司及内部应收披露，确定哪些产品或主体归因能成立、哪些只能给出边界。可同时检验收入确认政策与解决方案验收模式是否足以解释现金时差，但不把政策本身当作实际回款证据。",
+  "security_id": "SSE:688337",
+  "seed_evidence_artifacts": [
+    {
+      "available_at": "2026-09-24T00:23:10.977773Z",
+      "content_hash": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463",
+      "extracted_structured_values": null,
+      "id": "db885345-2da8-54b9-833b-6bb3d919cfd5",
+      "idempotency_key": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f:b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463",
+      "license_terms_note": "Approved retained public question context; primary-read declarations are not truth certification.",
+      "permitted_excerpt": null,
+      "published_at": "2026-09-24T00:05:00Z",
+      "raw_storage_ref": "https://github.com/auguspp/decision-kernel/blob/aecb004596d811a8d5a68bf17a271e744bddda33/research_runs/normal-question-preparation/688337-20260924/context.json",
+      "replayability_level": "PARTIAL",
+      "report_period_end": null,
+      "retention_mode": "FULL_ARTIFACT",
+      "retrieved_at": "2026-09-24T00:23:10.977773Z",
+      "schema_version": 1,
+      "source_identifier": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f",
+      "source_location": null,
+      "source_locator": "https://github.com/auguspp/decision-kernel/blob/aecb004596d811a8d5a68bf17a271e744bddda33/research_runs/normal-question-preparation/688337-20260924/context.json",
+      "source_type": "SAVED_RESEARCH_OBSERVATION"
+    }
+  ],
+  "source_refs": [
+    {
+      "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+      "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+      "purpose": "REVIEWED_RADAR_QUESTION",
+      "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+    },
+    {
+      "git_blob": "62c24a0c3e5f76d09384439f0dcc6a8e459ed8b2",
+      "path": "research_runs/normal-question-preparation/688337-20260924/context.json",
+      "purpose": "MODEL_CONTEXT",
+      "ref": "aecb004596d811a8d5a68bf17a271e744bddda33",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463"
+    },
+    {
+      "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7",
+      "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d"
+    },
+    {
+      "git_blob": "415f487744491542f806aeeb4553f440f647d209",
+      "path": "current-state.json",
+      "purpose": "CURRENT_STATE_READING",
+      "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "2fdf92fdd9873e12e0774477de0d905f19df0f339a21530f844df3eee7039dc3"
+    },
+    {
+      "git_blob": "d68a07fb644c0af87169fcec60e5f41a2603b3a7",
+      "path": "details/stock/35848784152/reading/stock-reading.json",
+      "purpose": "NORMAL_STOCK_OBSERVATION",
+      "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "8db7978f2ce8032ef6f8edb9ca2d8db30fc8584e7881d8acc1055d115097fc9e"
+    },
+    {
+      "git_blob": "b7e90c5a11ca7788ee41ed6f5468f0e8de470220",
+      "path": "research_runs/normal-question-preparation/688337-20260924/normal-batch-review.json",
+      "purpose": "NORMAL_BATCH_REVIEW",
+      "ref": "82e8f5fe6a1bfa792af7738edbd1643d2a08b6b1",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "36f585e84152a936884c153e719808bc3ee67b287d51d3af46b0804ea98769f0"
+    }
+  ],
+  "ticker": "688337",
+  "why_now": "毛利额增加约6942万元与存货现金占用约7065万元同时出现，二者均显著大于2305万元扣非净利润。不同解释会改变对增长质量、资金需求及现金转化能力的判断，而非仅调整报表措辞。"
+}

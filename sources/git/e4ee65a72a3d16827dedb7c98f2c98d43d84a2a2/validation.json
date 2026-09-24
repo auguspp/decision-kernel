@@ -1,0 +1,14 @@
+{
+  "candidate_hash": "9d8d9eb526adbd2edb6034cef1fe41ad78d6c751d880e82a5bb792691baec304",
+  "completion": "COMPLETE",
+  "gap_reason": null,
+  "human_attention_authority": "NONE",
+  "input_hash": "236daa30be4390924a746c9f305d537908905bdc6748408afb6e710e8808d9a3",
+  "investment_authority": "NONE",
+  "schema_version": 2,
+  "signal_transition_authority": "NONE",
+  "status": "VALIDATED_QUICK_RESULT",
+  "terminal_reason": "已存在有来源的经营改善和现金转化分化，且与公司核心仪器及解决方案业务直接相关。现有报表附注能开展有区分力的利润—现金及主体口径核对，因此值得列为进一步研究候选；不是因为未知事项多而升级，也不构成自动启动或投资判断。",
+  "terminal_state": "DEEPEN_REQUIRED",
+  "validation_scope": "IDENTITY_LINEAGE_ROUTE_SHAPE_NOT_RESEARCH_QUALITY"
+}

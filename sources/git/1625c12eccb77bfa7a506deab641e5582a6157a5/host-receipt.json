@@ -1,0 +1,227 @@
+{
+  "automatic_retry": false,
+  "candidate_hash": "9d8d9eb526adbd2edb6034cef1fe41ad78d6c751d880e82a5bb792691baec304",
+  "code_commit": "5b8c07e49db21de1550ccc103294f6c079124ed9",
+  "execution_id": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f",
+  "finished_at": "2026-09-24T00:24:56.346259+00:00",
+  "formal_research_started": true,
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "model_output_sources": {
+    "candidate-before-validation.json": {
+      "git_blob": "4a2a2047e2f79a94b3f7cdd1664d94c2a0755e30",
+      "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/candidate-before-validation.json",
+      "purpose": "candidate-before-validation.json",
+      "ref": "0aa8fbe1911c90ddb206dbdf8adeaf40ae9647e3",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "698f8dbc436257c4c9ba1e5431b87dc461c802ecc52c556a3bf87e878fd06a72"
+    },
+    "model-usage.json": {
+      "git_blob": "6592e3e8ab6e14e1d33c55496c850de14108fb60",
+      "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/model-usage.json",
+      "purpose": "model-usage.json",
+      "ref": "756df2b2122821047410b3e1ad9356f124dc43f1",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "afad2b6771138616512fd0ccced93b18d38c323072b171700ccf647471c074a1"
+    },
+    "quick-before-validation.json": {
+      "git_blob": "d371dd67ac865bd8ef2c317911ed87d551d92f04",
+      "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/quick-before-validation.json",
+      "purpose": "quick-before-validation.json",
+      "ref": "ab5e1b5487a2d8ef004f0272d08164267ef7f15a",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "85a1e2777dd4a298dce9998a2f0905e4851c6646021941cb9da9376d27dea15f"
+    },
+    "quick-model-output.txt": {
+      "git_blob": "3614d0636cf5ebf6371b89a425efaed6d41fb3c0",
+      "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/quick-model-output.txt",
+      "purpose": "quick-model-output.txt",
+      "ref": "1c710459b700bed26ccd061b4df64ba67ce88704",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "6ab6e9daf94bfe3fe0e16c1ac1d03d409a528a23cc5606f4585873ef21be14ff"
+    },
+    "quick-output-format.json": {
+      "git_blob": "acaa490bf50c5891006b95042b83a1f23b126fca",
+      "path": "research_runs/candidates/stock-questions/2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f/quick-output-format.json",
+      "purpose": "quick-output-format.json",
+      "ref": "bc7e4d854e7f04278aa8e6b2af7890de6112f732",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "7af01dd348a5092a3e416e358b81a431f61c038576d966da6f9966cfd58843e9"
+    }
+  },
+  "mutation_uncertain": false,
+  "phase": "COMPLETE",
+  "provider_usage": [
+    {
+      "finished_at": "2026-09-24T00:24:46.584960+00:00",
+      "input_sha256": "e6eef87beb74f9e33adae948a4f1813d5f5306bf41796f1feb6568e9be8e8709",
+      "max_output_tokens": 6000,
+      "output_format_file": "quick-output-format.json",
+      "output_format_sha256": "7af01dd348a5092a3e416e358b81a431f61c038576d966da6f9966cfd58843e9",
+      "output_model_schema_sha256": "21e50e72174f32d8bcca67cad6563e732c41a2999ca6cf7ddfe44a1927bb0a5e",
+      "output_sha256": "6ab6e9daf94bfe3fe0e16c1ac1d03d409a528a23cc5606f4585873ef21be14ff",
+      "output_text_retained": true,
+      "phase": "COMPLETE",
+      "provider": "SUB2API",
+      "provider_base_url": "https://ai.6600600.xyz/v1",
+      "provider_status": "completed",
+      "reference_contract": "ADMITTED_EVIDENCE_IDS_V1",
+      "requested_model": "gpt-6-astra",
+      "response_id": "resp_08f0e215fa85d772016ab46d80d54887d0a687bdca172c0098",
+      "response_received": true,
+      "stage": "quick",
+      "started_at": "2026-09-24T00:23:25.996485+00:00",
+      "status": "completed",
+      "system_sha256": "107d199b554c65813bba6b138c9c0254ca792111e1fab2a34027b17695684f35",
+      "usage": {
+        "attribution": {
+          "items": {
+            "msg_08f0e215fa85d772016ab46d80dc9087d0b81d86b6fc9a0d01": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 130026,
+                  "output_tokens": 0
+                }
+              ],
+              "input_tokens": 130026,
+              "output_tokens": 0
+            },
+            "msg_08f0e215fa85d772016ab46d8533dc87d0aeec1423c3234e60": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "content": [
+                {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 2,
+                  "output_tokens": 2444
+                }
+              ],
+              "input_tokens": 2,
+              "output_tokens": 2444
+            }
+          },
+          "request_fields": {
+            "instructions": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 265,
+              "output_tokens": 0
+            },
+            "text.format": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0,
+              "input_tokens": 766,
+              "output_tokens": 0
+            }
+          }
+        },
+        "input_tokens": 131059,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2444,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 133503
+      }
+    }
+  ],
+  "question_id": "rigol-h1-growth-profit-cash-conversion",
+  "question_kind": "REVIEWED_RADAR_QUESTION",
+  "registered_current_handoff": false,
+  "research_authority": "NONE",
+  "revision": 1,
+  "semantic_acceptance": "NOT_ESTABLISHED",
+  "signal_transition_authority": "NONE",
+  "source_check_context": {
+    "format": "host-source-check-context-v1",
+    "interpretation": "The host has checked these exact saved source-preflight records and their input binding. The native host still rechecks actual admission before sending. REQUIRED_SOURCE_CLASS entries in known_unknowns are source requirements, not assertions that checks were not done. The results below apply only to their declared queries, source identities and time window; they do not certify source truth, complete outside coverage or current freshness. Do not convert unseen collector notes into business STOP/WAIT or repeat a recorded check merely because the collection happened outside the model. Assess the actual supplied evidence and its limits. No listed lead is not proof of no events. Referenced material is not necessarily supplied in full here. These records grant no new tool, Full or investment authority.",
+    "inventories": [
+      {
+        "class_id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+        "finished_at": "2026-09-24T00:05:12.843182+00:00",
+        "id": "financial-updates",
+        "leads": [
+          {
+            "authority": "PRIMARY",
+            "body_id": "report-0",
+            "decision_relevant": true,
+            "identity": "688337:1225502922",
+            "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+            "primary_identity": "688337:1225502922",
+            "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF"
+          }
+        ],
+        "planned_queries": [
+          "CNINFO:688337:2026-08-01:2026-09-24:financial-report-corrections"
+        ],
+        "query_events": [
+          {
+            "checked_at": "2026-09-24T00:05:12.843165+00:00",
+            "query": "CNINFO:688337:2026-08-01:2026-09-24:financial-report-corrections",
+            "status": "SUCCEEDED",
+            "tool_reference": "https://github.com/auguspp/decision-kernel/blob/e27fab1d1a7c8003089e276d3588bf0c1dab8471/research_runs/normal-question-preparation/688337-20260924/preflight-inventory.json"
+          }
+        ],
+        "started_at": "2026-09-24T00:05:03.131888+00:00"
+      }
+    ],
+    "meaning": "DECLARED_SCOPE_COLLECTION_RECORDS_NOT_ECONOMIC_EVIDENCE_OR_EXECUTION_PERMISSION",
+    "preflight_source": {
+      "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7",
+      "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d"
+    },
+    "reads": [
+      {
+        "authority": "PRIMARY",
+        "body_sha256": "270adcca370bf047b1af3e54d64e78a11496549d7c720c15dc8c7f2114e2ed5a",
+        "checked_at": "2026-09-24T00:05:12.843165+00:00",
+        "id": "report-0",
+        "identity": "688337:1225502922",
+        "kind": "BODY",
+        "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+        "succeeded": true,
+        "tool_reference": "https://github.com/auguspp/decision-kernel/blob/c2a9c464dee68892a82aa562129536523412a24b/research_runs/normal-question-preparation/688337-20260924/document-0.pdf"
+      }
+    ],
+    "recorded_window": {
+      "finished_at": "2026-09-24T00:05:12.843182+00:00",
+      "started_at": "2026-09-24T00:05:03.131888+00:00",
+      "valid_until": "2026-09-24T04:05:12.843182+00:00"
+    },
+    "required_classes": [
+      {
+        "body_ids": [
+          "report-0"
+        ],
+        "id": "FULL_INTERIM_REPORT",
+        "inventory_id": null,
+        "mode": "STATIC"
+      },
+      {
+        "body_ids": [
+          "report-0"
+        ],
+        "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+        "inventory_id": "financial-updates",
+        "mode": "LATEST_INVENTORY"
+      }
+    ],
+    "status": "BOUND_SOURCE_PREFLIGHT_RECORDS_VALIDATED"
+  },
+  "started_at": "2026-09-24T00:23:08.093059+00:00",
+  "status": "VALIDATED_QUICK_RESULT",
+  "thscode": "688337.SH",
+  "validation_hash": "c8870f0e7a7cd7dd9552c2d9467e81459186cb6145756b9b697ec88149c2672a"
+}

@@ -1,0 +1,106 @@
+{
+  "approved_egress_hash": "e60e3f52e7c1fca919d43d5be16561e5cd476acb03f967f1edd8c9e82a3c0fd4",
+  "automatic_retry": false,
+  "code_commit": "5b8c07e49db21de1550ccc103294f6c079124ed9",
+  "id": "stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f",
+  "input_hash": "236daa30be4390924a746c9f305d537908905bdc6748408afb6e710e8808d9a3",
+  "method_permission": {
+    "body_sha256": "0820f91d8a78ac5b035a92941e012acf191019ffab360c433600261aaa13e9b7",
+    "comment_id": 5804971139,
+    "created_at": "2026-09-24T00:01:31Z"
+  },
+  "permission": {
+    "body_sha256": "82f11c3e663841952c5bc4bd90d154ee95fdeb972d381b91e56beba15aa27aee",
+    "comment_id": 5804967978,
+    "created_at": "2026-09-24T00:01:15Z"
+  },
+  "question_source": {
+    "git_blob": "4d9e87eddbd62dfea817606bd4b68f63834d5fea",
+    "path": "research_runs/normal-question-preparation/688337-20260924/question.json",
+    "purpose": "REVIEWED_RADAR_QUESTION",
+    "ref": "78f834beb9bf6ed61c9e74074fa2c9622ab46af9",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "d3fb6824e33391d5b4bea8938d0d20fde6aff4edf98db78f8de514a13482e03c"
+  },
+  "research_method": "single-quick-v1",
+  "source_check_context": {
+    "format": "host-source-check-context-v1",
+    "interpretation": "The host has checked these exact saved source-preflight records and their input binding. The native host still rechecks actual admission before sending. REQUIRED_SOURCE_CLASS entries in known_unknowns are source requirements, not assertions that checks were not done. The results below apply only to their declared queries, source identities and time window; they do not certify source truth, complete outside coverage or current freshness. Do not convert unseen collector notes into business STOP/WAIT or repeat a recorded check merely because the collection happened outside the model. Assess the actual supplied evidence and its limits. No listed lead is not proof of no events. Referenced material is not necessarily supplied in full here. These records grant no new tool, Full or investment authority.",
+    "inventories": [
+      {
+        "class_id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+        "finished_at": "2026-09-24T00:05:12.843182+00:00",
+        "id": "financial-updates",
+        "leads": [
+          {
+            "authority": "PRIMARY",
+            "body_id": "report-0",
+            "decision_relevant": true,
+            "identity": "688337:1225502922",
+            "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+            "primary_identity": "688337:1225502922",
+            "primary_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF"
+          }
+        ],
+        "planned_queries": [
+          "CNINFO:688337:2026-08-01:2026-09-24:financial-report-corrections"
+        ],
+        "query_events": [
+          {
+            "checked_at": "2026-09-24T00:05:12.843165+00:00",
+            "query": "CNINFO:688337:2026-08-01:2026-09-24:financial-report-corrections",
+            "status": "SUCCEEDED",
+            "tool_reference": "https://github.com/auguspp/decision-kernel/blob/e27fab1d1a7c8003089e276d3588bf0c1dab8471/research_runs/normal-question-preparation/688337-20260924/preflight-inventory.json"
+          }
+        ],
+        "started_at": "2026-09-24T00:05:03.131888+00:00"
+      }
+    ],
+    "meaning": "DECLARED_SCOPE_COLLECTION_RECORDS_NOT_ECONOMIC_EVIDENCE_OR_EXECUTION_PERMISSION",
+    "preflight_source": {
+      "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7",
+      "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+      "purpose": "PRE_EXECUTION_SOURCE_PREFLIGHT",
+      "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+      "repository": "auguspp/decision-kernel",
+      "sha256": "4424b7e183756d4fc92caabaa581d8ab83cf609d9d06b89fac786390b1db524d"
+    },
+    "reads": [
+      {
+        "authority": "PRIMARY",
+        "body_sha256": "270adcca370bf047b1af3e54d64e78a11496549d7c720c15dc8c7f2114e2ed5a",
+        "checked_at": "2026-09-24T00:05:12.843165+00:00",
+        "id": "report-0",
+        "identity": "688337:1225502922",
+        "kind": "BODY",
+        "locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+        "succeeded": true,
+        "tool_reference": "https://github.com/auguspp/decision-kernel/blob/c2a9c464dee68892a82aa562129536523412a24b/research_runs/normal-question-preparation/688337-20260924/document-0.pdf"
+      }
+    ],
+    "recorded_window": {
+      "finished_at": "2026-09-24T00:05:12.843182+00:00",
+      "started_at": "2026-09-24T00:05:03.131888+00:00",
+      "valid_until": "2026-09-24T04:05:12.843182+00:00"
+    },
+    "required_classes": [
+      {
+        "body_ids": [
+          "report-0"
+        ],
+        "id": "FULL_INTERIM_REPORT",
+        "inventory_id": null,
+        "mode": "STATIC"
+      },
+      {
+        "body_ids": [
+          "report-0"
+        ],
+        "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+        "inventory_id": "financial-updates",
+        "mode": "LATEST_INVENTORY"
+      }
+    ],
+    "status": "BOUND_SOURCE_PREFLIGHT_RECORDS_VALIDATED"
+  }
+}
