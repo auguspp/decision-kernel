@@ -1,98 +1,69 @@
 # CI mainline / CI 施工接续入口
 
-Updated: 2026-09-24. Engineering only; Investment Authority = NONE.
+Updated: 2026-09-25. Engineering only; Investment Authority = NONE.
 
-## 当前目标与接手
+## 当前方向：先交付最小可运行 v2，不继续扩建 legacy
 
-Human已授权本会话接手CI优化；接手[5816705697](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5816705697)，#553收口[5817104078](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5817104078)，本轮继续与Reuse Check[5817228684](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5817228684)。目标是缩短正常施工的同步等待、减少无效执行和永久维护义务，不是保持测试数只增不减。
+Human已同意先重建当前验证责任，再用成熟组件优化执行，并指示开工。当前授权/Reuse Check见[#354/5818204474](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5818204474)。前驱完整入口在`526ca0dc2827d6783b255019572614b35ea681f5`；成熟轮子审计见[#354/5817811217](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5817811217)。旧说明、失败、源件、成果与Human原话留在原Git/Issue，不重写历史。
 
-本轮实施前基线main `3306e75cb1dcc200abf8a14938d50011acf0e271`：#553全量6126项、pytest336.23秒/job379秒；main原精确复用后job48秒。日历辅助函数3次准备减1次没有证明全量提速，不能继续把小型去重当等待问题的主要终点。原入口全文及旧方案留在该精确Git前驱。实际新PR/main/发布结果读#354与对应PR，不在本文预填通过或性能。
+先决定今天要保护什么，再决定怎样跑快。复用有效旧测试，不从零重写好测试；也不默认6133项都有永久进入v2的权利。产品范围/能力退役仍按AGENTS和最新#297，不为CI擅自关闭业务能力。CI不认证研究质量、经济真理、实际跨会话恢复或Human接受。
 
-产品范围仍按AGENTS/最新#297；不扩大来源、模型、生产日程、状态中心或投资权限。CI不认证经济真理、研究质量或Human接受。
+本切片实施前基线：#554 PR `36022927971`，6133+80subtests，337.61秒pytest/383秒job；同tree main `36023936003`，245.09秒/287秒；均pip缓存命中。不同运行的差异不是优化因果证据。最新结果看#354/精确PR产物，本文不预填PASS或节省秒数。
 
-## 施工纪律：等待只锁依赖边界
+## 当前合同图与首个可运行组
 
-CI queued/in_progress只阻塞依赖其结果的合并、采用和后继操作，不冻结已授权的独立工作。可以读调用关系、检查测试/fixture、准备隔离patch、做不依赖当前结果的验证；不得修改正在验收的head而沿用旧结果。尽量完成一个有意义的切片再提交，不为每个机械文件修改启动一次full。
+| 当前责任 | 第一组覆盖与原测试复用 | 尚未迁移的责任 |
+|---|---|---|
+| 未完成研究可保存、追加和恢复，不自动commit或续跑 | `test_research_progress.py` | 真实托管会话交付/恢复不是CI能代证 |
+| Research-only冻结与读回；缺概率/估值/模型风险不伪造成Odds或接受 | `test_research_commit_only.py`、`test_research_only_commit_v2.py`、`test_research_model_risk_unknown_v2.py`、`test_generic_research_commit.py` | 其他Odds/Market/Decision合同仍由legacy保护 |
+| 按固定读取包与显式记录恢复原始档案；身份/字节/完整性/权限不漂移 | `test_research_archive.py`、`test_research_archive_index.py` | 其余publisher/来源/研究准入与传递消费仍待审 |
+| CI实际执行集合完整且失败正确传播 | 复用原collection/JUnit校验函数；正式结果资格仍保留 | 后续分片的全组并集/互斥与最终聚合未实施 |
 
-多轮工程编辑优先保持同一Draft PR：先得到反馈继续编辑，准备审查合并时转Ready。不要为逃避已有失败把Ready转Draft并宣称通过，也不要反复切换阶段制造运行。已经完整准备好的小切片可直接开正式PR。不要转换别人的PR或Research草稿。
+七个研究模块在#554实际collection中共240项。`.github/ci-v2-research.txt`是pytest原生参数文件，不是自建测试registry、动态selector或性能配额。只列当前模块；新增组先说明当前合同和覆盖缺口，不因名称/年代含replay、repair或tamper删除。
 
-不要短间隔轮询、扩展无关审计或制造假忙。真正没有独立工作时，说明已完成项、待验精确run/head与停止边界；不承诺本轮结束后继续。不自动授权叠PR、取消运行、Re-run或生产操作。
+## v2执行与证据边界
 
-写入先发现当前实际工具、读目标并检查本次授权，再执行必要动作。工具存在不等于远端必有权限；未发现/未调用不等于无权限。按当前会话和file/comment/PR/dispatch分别区分不可用、需审批、明确拒绝、参数/SHA冲突、网络失败、不确定和成功。不要探针写入；用已授权正常写入与读回验证。明确安全/权限拒绝停止对应动作，不换工具/包装绕过；不确定先对账，不重复写。只有确实缺能力或需Human批准才要求转运。
+原`ci.yml`只新增本地`workflow_call`调用；主体在`ci-contracts-v2.yml`，与legacy job并行，不等待legacy完成才反馈。它没有独立schedule/dispatch或发布入口，不使用业务secrets，不继承写入权限。原“只能一个workflow文件”是#554布局选择，不是永久Kernel语义。
 
-## 生命周期：流程退役必须同时处置专属CI
+复用现有内容资格判定；可信纯文字变更由原content gate负责，v2明确NOT_RUN_CONTENT_ONLY，不安装工程依赖。其他范围先运行本组，不声称已覆盖全部受影响测试。环境使用现有`feeds`加仅含既有pytest的`ci-contracts` extra；不安装整个dev，不引入新发行包，不提前迁移uv。
 
-**CI保护当前合同与必要历史读回，不永久保护每一代施工步骤。** 每次ADD/CHANGE/CONSOLIDATE/RETIRE在同一PR按能力/合同组检查runtime/workflow、专属tests/fixtures、部署断言和CI例外、共享守卫及历史reader。复用现有PR说明，不新增registry或逐测试元数据平台。
-
-- 专属执行对象退役：对应测试、专属fixture和CI例外同时退役；未处置则退役未完成。
-- 共享行为有现役调用：保留或合并保护，不随旧入口整组删除。
-- 旧成果仍须读取：保留最小必要格式/身份/重建兼容；只有reader足以保护实际责任时才退役旧executor模拟。
-
-新增测试说明当前合同、覆盖缺口和退出条件；不要求一加一删。真实历史事故是风险证据，不因年代或名称含replay/tamper就删除。UNKNOWN继续待审，不能按“每条链三项”等配额砍关键失败覆盖。继续用现有collection/JUnit/durations观察数量、模块、job墙钟和累计case时间；累计时间不等于并行墙钟。
-
-## 验证按阶段分开，正式合并仍有完整证据
-
-保留唯一workflow `kernel-tests` / job `test`，不新增第二工作流、触发服务或测试结果缓存，不用顶层paths-ignore。pull_request显式订阅opened、synchronize、reopened、ready_for_review和converted_to_draft；push仍只main。GitHub默认不包含Ready事件，所以不能省略该订阅。
-
-### 已有文字路径
-
-仅README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1及新增docs/readings/**/*.md。完整Git base→head raw/NUL差异；普通非执行文件新增/修改；精确base须有本仓库main/push/attempt1成功CI，较新失败/进行中/未知不能由旧绿灯覆盖。混合、删除、改名、特殊模式及未审路径不作为文字免检。
-
-不安装工程环境、不全库collection或pytest；实际stdlib回归与UTF-8/非空/NUL/冲突检查，明确NOT_RUN_CONTENT_ONLY。不认证链接、计算或研究真理，消费者改变须重审范围。文字失败或基线缺口不会通过Draft降级成反馈成功。
-
-### 草稿反馈：不是合并门禁、不是受影响测试全集
-
-仅真实pull_request事件、draft严格为布尔true、本仓库head/base、base为main、head/base SHA与原完整Git差异相符时适用。Ready/正式PR/main、缺失或不匹配元数据、fork、空/未读差异、删除/改名/特殊模式仍按full处理。任何.github/、tests/test_ci_*、pyproject/依赖或全局pytest配置变化仍full；首次部署不能自证免检。
-
-复用四个已有main smoke文件（CI实际失败/复用、external Research身份和准入）加上直接变动的现存test_*.py；对改变的src/**/*.py做非执行语法检查。使用pytest原生文件参数，不建依赖图、不猜传递影响。改动一个慢测试文件仍可能慢；此反馈也可能漏掉未选测试中的失败，明确没有覆盖非Python资源或间接依赖的全部影响。
-
-产物scope=draft_feedback、FULL_SUITE=NOT_RUN_DRAFT_FEEDBACK，写draft-feedback.json/xml/log，不生成当前完整collection.txt/pytest.xml，merge_eligible=false。失败真实传播，不补跑/重试换绿。当前完整证据reader严格要求scope=full，因此草稿成功不能被主干复用当作完整PR成功。
-
-### 正式工程PR
-
-**转Ready必须触发新的当前head完整验证，即使SHA没有变化。** 非草稿opened/synchronize/reopened照常full。src/tests/fixtures/workflow/依赖/registry/JSON/计算/旧研究原件及未审路径，不按扩展名免检；full-research-method-v3.md仍有消费者。获准退役可以减少当前集合，不等于旧测试永久保留。
-
-合并前确认当前PR不是draft、精确head及本次正式验证的实际scope、全量collection/JUnit、最新run和原审查。不能只看“有一个绿色test”，不能把草稿反馈、旧head或较早成功当放行。转换Ready不授予产品/Research/来源或投资权限。本仓库现有合并程序仍由这些证据约束，本轮不改branch protection/ruleset。
-
-### 干净main merge
-
-先真实安装，再限定单一两父merge、push.before=第一父、merge tree=本次owned PR head。核最新PR CI/attempt1/success、精确commit关联已合并PR、唯一未过期artifact的SHA256/CRC、完整collection=JUnit逐项身份、无失败/跳过、实际Python/runner镜像/架构/安装包。ZIP只作数据，不执行；读后再核最新PR。草稿、文字和继承结果均不是PR full证明。
-
-CI工作流、分流/复用器及其测试、pyproject变化时main仍full。squash/rebase/多提交push、不同tree、脏tracked文件、环境变化/缺失、旧格式/坏产物或不确定均full。复用时main另跑真实smoke，失败即失败，不补跑full换绿。标记scope=merge_reuse、FULL_SUITE=REUSED_NOT_RERUN及原PR/run/artifact/tree/数量；当前执行单存main-smoke.xml，不伪造本SHA全量JUnit。
-
-## 完整执行、诊断与权限
+本地/CI同一命令：
 
 ```sh
-python -m pip install -e '.[dev]'
-python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
-  -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
-  --durations=100 --durations-min=1.0 --junitxml=pytest.xml
+python -m pip install -e '.[ci-contracts,feeds]'
+python -m pytest -q @.github/ci-v2-research.txt
 ```
 
-完整Test shell不变，本地默认串行；无skip/xfail/continue-on-error、worker重启或为变绿重跑。pipefail传播失败，60秒仅作stall诊断。缓存仅下载，每次真实安装。base-only isolated/no-cache安装和真实pass/fail/worker-crash继续。PIT、来源/证券身份、权限、create-only/写入不确定、必要历史读回、有效Odds计算继续覆盖。
+CI另保存实际环境、精确代码/run/attempt、独立collection、JUnit与执行日志。`passed_test_set`只核本次声明集合完整且无failure/error/skip，复用原full reader的同一逻辑；它不证明scope、来源或权限。v2产物命名`kernel-ci-v2-<run>-<attempt>`，结果明确`research-continuity-v2 / NOT_RUN_DOMAIN_ONLY / merge_eligible=false`，不生成伪全仓collection/pytest.xml。原full reader仍必须先验证PR/full/环境/ZIP资格，不能拿domain成功代替。
 
-CI仅contents/actions/pull-requests read，不用业务secrets或持久checkout credentials。GH_TOKEN仅进只读基线/PR核验，不进测试/内容。commits/{merge}/pulls空/歧义/满页/不匹配回full，不猜PR号。官方Action保持原固定commit；仅同PR运行可相互替换，main每run独立。
+本轮是第一组迁移实证，**并行重复240项是临时成本，不是已删除5893项**。全库legacy暂时继续，不skip/ignore未裁定风险。首组实证后，下一切片须根据真实结果裁定接替对应反馈/正式合同范围，或退回/退出；不得以“继续观察”无限增加双轨组。迁移正式集合时，要使全部必要合同由明确执行组覆盖，不要求旧布局/旧命令字符串永远不变。
 
-kernel-ci-<run>-<attempt> diagnostics继续always/30天，身份/环境/执行范围分开记录。早期失败无完整产物仍失败；success只说明该范围验证成功，不证明所有SHA全量重测、来源/模型接受或研究质量。
+## 正式放行暂不改变
 
-## Reuse选择、成本与退出
+- 保留`kernel-tests` / `test`及原PR事件/同PR过期head替换；独立main run不互相取消。v2单组绿灯不授权merge；合并仍检查精确head的整个最新workflow与原正式完整产物，不能只看一个绿色job。
+- 可信文字路径仍仅原allowlist及新增研究Markdown；精确base须为本仓库最新成功main/push/attempt1。完整base→head raw/NUL diff、status/mode、旧原件编辑处置不变；缺证回full，不按扩展名放行。
+- 原Draft反馈暂保留，明确非全部影响集；Ready即使同SHA仍新跑正式完整验证。CI/依赖/全局配置/未知/删除/特殊模式仍full。不要转换别人的Research草稿，不因失败把Ready降为Draft求绿。
+- 主干复用仍先真实安装，限定干净两父merge及精确owned PR同tree；核最新attempt1/full/非继承结果、唯一有效ZIP的大小/SHA256/CRC、collection=JUnit与实际Python/镜像/架构/安装包，读后再核最新PR。CI策略改变、环境缺失/变化或不确定回full；main实际smoke失败不能重跑换绿。
+- 本组workflow/参数文件/专属CI测试加入原POLICY失效边界，首次部署及后续策略改动不能自证免检。正常publisher只消费原合格main结果；CI成功、发布、研究接受和投资决定分别验收。
 
-[GitHub原生PR事件](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)和[Draft/Ready阶段](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/changing-the-stage-of-a-pull-request)已提供不可合并草稿与正式验证的分界；当前只加薄事件/反馈适配，复用Git差异、pytest显式路径与原full证据reader。沿用#354既有fkirc/path-filter审查，不再造一般选择框架。Reuse Decision: REUSE。
+原完整执行仍为`python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0`，带原60秒stall诊断、durations和JUnit。原Test shell、失败/worker-crash传播、本地默认串行及独立base-only冷安装继续；没有新skip/xfail、continue-on-error或结果缓存。
 
-[testmon正式合同](https://www.testmon.org/)要求先建跟踪库，且不自动跟踪静态资产/外部服务；[Pants增量目标](https://www.pantsbuild.org/stable/docs/using-pants/advanced-target-selection)需要相应依赖建模。这两者不是永久否决，但本仓库JSON/YAML/PDF/子进程/动态导入及跟踪开销、漏选边界未完成实证，不能直接接管正式放行。数次全绿不是无漏检证明；不新增外部云服务或上传代码/覆盖数据。
+## 生命周期与孤儿检查
 
-本轮减少的是草稿编辑期间重复full的次数，不是让最终工程PR免full，也不声称整套CI v2重建完成。反馈路径复用四个核心文件，新增回归本身也有成本；使用真实草稿反馈耗时、Ready全量、一次切片实际同步等待与维护差异验收，不用测试数量代替收益。
+每次ADD/CHANGE/CONSOLIDATE/RETIRE在同PR按能力组检查runtime/workflow、专属tests/fixtures、部署断言/CI例外、缓存/参数文件引用、共享守卫及历史reader。专属执行对象退役而CI未处置，退役未完成；共享现役保护保留，历史责任能由reader承担时不永久重演旧executor。UNKNOWN保持待审，不用“一加一删”或每链固定测试数配额。
 
-若Draft反馈不被实际使用、持续接近全量成本，或后续更合适方案替代：同一PR退出draft范围分支、对应步骤、事件例外及专属测试，保留原正式full/文字/main复用和历史记录。禁止形成永久双轨CI。
+结构性孤儿先用现有引用搜索、pytest原生收集及成熟静态工具发现。参数文件引用已删模块应失败，不回退到更小集合；语义孤儿由能力生命周期审查裁定，不能仅凭零引用自动删除手动入口或历史reader。v2的workflow调用、参数文件、extra和专属wiring测试同生命周期；被替换/退出时同步删除，共享`passed_test_set`仍有full消费者则保留。不新建扫描服务或逐测试元数据平台。
 
-## 已完成与历史定位
+## 成熟组件与后继
 
-| 切片 | 已落实与历史定位 |
-|---|---|
-| #544–546 | PR旧运行/pip/Stock输入去重，Suken launcher退役；文字PR/main job7/11秒。原31-workflow审计在b3a3546560010f3683b02ec931f372ab714f2687的本文。 |
-| #547–550 | 精确PR→main复用，#548关联失败与镜像差异保留、#549薄修；#550 PR310/main54秒，非同机固定收益。旧Sector/intake启动器退役，28个workflow；单改旧intake请求不再搬材料，恢复须授权。 |
-| #551 | 6225→6137、净88测试/1167行；旧Sector脚本在fdb9104c1722fe250f44742e5129665b36c2889b。原PDF eval/verifier字节保留，metadata/Woton共享守卫保留；run34566950303失败且已消耗，不重跑。 |
-| #552 | 固定Suken executor退出共享模块，6137→6125/净371行；shared model/SDK/Retainer继续，原请求/失败不变。旧代码在026a7195f4d0ad3ccac121c9de92fbe18e5bd4b5；PR204.28秒、main复用40秒，后者不归因删测试。 |
-| #553 | 当前前驱3306e75；日历3次plan减1次，6126测试。三项协作纪律已落地；PR336.23秒/main复用48秒，未证明全量提速。 |
+Reuse First三层已查：内部七组测试/原scope/full reader；[pytest原生参数文件](https://pytest.org/en/stable/how-to/usage.html)及[GitHub本地可复用工作流](https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows)；外部七轮子完整审计沿用5817811217。Reuse Decision: REUSE / 既有完整性原语薄拆分。
 
-#354保持OPEN。Stock/PDF重复准备、旧API固定部署、publisher重建及registry/计算按消费者验证仍待审。非默认API不等于已获准整条关闭；现役Stock/Question共享宿主不整组退役。回滚走正常PR，不直写main/force-push、不删历史证据/run、不改生产日程。旧#297被拦截通知不重试。
+`pytest-split`是后续执行布局首选实验，待代表性v2集合确定后比较同集合1×4、4×1、2×4、4×2；不自写分片器。uv只对照安装层，testmon仅shadow；dorny不代替可信baseline/mode，fkirc同树绿灯不代替full资格。actionlint/zizmor用于普通静态能力，先实扫并量测；本PR不声称已部署这些组件。缩减验证集合与同集合执行提速分别记账。
+
+至少记录tests/subtests、安装/收集/执行墙钟、job与事件到完成、runner数量、sum(job秒)/60、cache命中、PR/main及新增维护量。少量样本只报告实值和范围，不把累计testcase当wall/CPU，不拿快旧主干样本冒充新收益。
+
+## 协作与历史接点
+
+CI只阻塞依赖其结果的合并/采用边界；独立授权工作继续，不短轮询、不假忙、不为每个机械文件改动跑full，无独立工作时留精确run/head，不承诺后台。工具先实际发现与核本次授权，区分不可用/需批准/明确拒绝/冲突/不确定/成功；未发现不等于无权限，明确拒绝不绕过，不确定先读回，不做探针写入。
+
+#544–550资源/文字分流/精确复用、#551–552净退役100测试/1538行、#553日历准备去重及纪律、#554草稿分层均在前驱入口和原PR留存。#554主干全量已核成功，但其正常publisher/完整读回及真实Draft收益仍须按实际回执分别确认。回滚走正常PR，不直写main/force-push、不删证据/run、不改生产日程；旧#297拦截不重试。#354保持OPEN；v2全域重建未完成。

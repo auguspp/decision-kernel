@@ -22,7 +22,9 @@ WORKFLOW = '.github/workflows/ci.yml'
 POLICY = (WORKFLOW, '.github/scripts/ci-content-scope.py',
           '.github/scripts/ci-merge-reuse.py', 'tests/test_ci_contract.py',
           'tests/test_ci_content_scope.py', 'tests/test_ci_resource_efficiency.py',
-          'tests/test_ci_merge_reuse.py', 'pyproject.toml')
+          'tests/test_ci_merge_reuse.py', 'pyproject.toml',
+          '.github/workflows/ci-contracts-v2.yml', '.github/ci-v2-research.txt',
+          'tests/test_ci_v2.py')
 SHA = re.compile(r'[0-9a-f]{40}')
 MAX_ZIP = 8 * 1024 * 1024
 MAX_EXPANDED = 32 * 1024 * 1024
@@ -73,6 +75,33 @@ def latest_pr_run(payload: dict, head: str) -> dict:
     return run
 
 
+def passed_test_set(collection_text: str, junit_xml: bytes) -> int:
+    """Check only set completeness and failures, not scope/provenance/authority.
+
+    Both legacy full evidence and a v2 domain reuse this same existing check.
+    A complete domain is NOT a full repository proof.
+    """
+    collection = [line for line in collection_text.splitlines()
+                  if line.startswith('tests/') and '::' in line]
+    expected = set()
+    # Reuse the installed pytest writer's address conversion: params may contain '::'.
+    from _pytest.junitxml import mangle_test_address
+    for node in collection:
+        names = mangle_test_address(node)
+        expected.add(('.'.join(names[:-1]), names[-1]))
+    require(bool(expected) and len(expected) == len(collection), 'COLLECTION_IDENTITY')
+    root = ET.fromstring(junit_xml)
+    suites = root.findall('.//testsuite')
+    cases = root.findall('.//testcase')
+    require(bool(suites) and all(int(s.get(k, '-1')) == 0 for s in suites
+            for k in ('errors', 'failures', 'skipped')), 'FULL_SUITE_NOT_PASSED')
+    require(all(root.find('.//' + tag) is None for tag in ('failure', 'error', 'skipped')),
+            'TESTCASE_NOT_PASSED')
+    actual = {(c.attrib['classname'], c.attrib['name']) for c in cases}
+    require(len(actual) == len(cases) and actual == expected, 'COLLECTION_JUNIT_MISMATCH')
+    return len(actual)
+
+
 def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
     require(0 < len(raw) == artifact['size_in_bytes'] <= MAX_ZIP, 'ARCHIVE_SIZE')
     require('sha256:' + hashlib.sha256(raw).hexdigest() == artifact['digest'], 'ARCHIVE_DIGEST')
@@ -93,25 +122,7 @@ def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
         proof = json.loads(archive.read('merge-reuse.json'))
         require(proof['reuse'] is False and proof['reason'] == 'PR_ALWAYS_FULL', 'INHERITED_RESULT')
         require(json.loads(archive.read('environment.json')) == current, 'ENVIRONMENT_CHANGED')
-        collection = [line for line in archive.read('collection.txt').decode().splitlines()
-                      if line.startswith('tests/') and '::' in line]
-        expected = set()
-        # Reuse the installed pytest writer's address conversion: params may contain '::'.
-        from _pytest.junitxml import mangle_test_address
-        for node in collection:
-            names = mangle_test_address(node)
-            expected.add(('.'.join(names[:-1]), names[-1]))
-        require(bool(expected) and len(expected) == len(collection), 'COLLECTION_IDENTITY')
-        root = ET.fromstring(archive.read('pytest.xml'))
-        suites = root.findall('.//testsuite')
-        cases = root.findall('.//testcase')
-        require(bool(suites) and all(int(s.get(k, '-1')) == 0 for s in suites
-                for k in ('errors', 'failures', 'skipped')), 'FULL_SUITE_NOT_PASSED')
-        require(all(root.find('.//' + tag) is None for tag in ('failure', 'error', 'skipped')),
-                'TESTCASE_NOT_PASSED')
-        actual = {(c.attrib['classname'], c.attrib['name']) for c in cases}
-        require(len(actual) == len(cases) and actual == expected, 'COLLECTION_JUNIT_MISMATCH')
-        return len(actual)
+        return passed_test_set(archive.read('collection.txt').decode(), archive.read('pytest.xml'))
 
 
 def select(root: Path, report_dir: Path, env: dict, current: dict, *, read=api, download=None) -> dict:

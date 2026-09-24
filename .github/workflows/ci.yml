@@ -18,6 +18,9 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # Transitional v2 domain: no dependency on legacy completion, no new trigger.
+  contracts-v2:
+    uses: ./.github/workflows/ci-contracts-v2.yml
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
