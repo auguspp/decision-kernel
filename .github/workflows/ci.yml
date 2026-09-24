@@ -2,6 +2,7 @@ name: kernel-tests
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
   push:
     branches: [main]
 
@@ -29,7 +30,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 2
-      - name: Select full or narrowly qualified content validation
+      - name: Select full, content, or draft-only feedback
         id: scope
         env:
           GH_TOKEN: ${{ github.token }}
@@ -64,9 +65,15 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_ci_content_scope.py 2>&1 | tee "$CI_REPORT_DIR/content-tests.log"
           python3 .github/scripts/ci-content-scope.py check --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/content-check.log"
+      - name: Draft feedback only - not merge validation
+        if: steps.scope.outputs.scope == 'draft_feedback'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .github/scripts/ci-content-scope.py draft --report-dir "$CI_REPORT_DIR" 2>&1 | tee "$CI_REPORT_DIR/draft-feedback.log"
       - name: Verify exact PR full-suite reuse after real installation
         id: reuse
-        if: steps.scope.outputs.scope != 'content'
+        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback'
         env:
           GH_TOKEN: ${{ github.token }}
         run: python .github/scripts/ci-merge-reuse.py --report-dir "$CI_REPORT_DIR"
@@ -79,13 +86,13 @@ jobs:
             tests/test_external_research_identity.py tests/test_external_research_admission.py \
             --junitxml="$CI_REPORT_DIR/main-smoke.xml" 2>&1 | tee "$CI_REPORT_DIR/main-smoke.log"
       - name: Record full test collection
-        if: steps.scope.outputs.scope != 'content' && steps.reuse.outputs.reuse != 'true'
+        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
         shell: bash
         run: |
           set -euo pipefail
           python -m pytest --collect-only -q > "$CI_REPORT_DIR/collection.txt"
       - name: Test
-        if: steps.scope.outputs.scope != 'content' && steps.reuse.outputs.reuse != 'true'
+        if: steps.scope.outputs.scope != 'content' && steps.scope.outputs.scope != 'draft_feedback' && steps.reuse.outputs.reuse != 'true'
         shell: bash
         run: |
           set -euo pipefail

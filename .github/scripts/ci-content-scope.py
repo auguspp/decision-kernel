@@ -1,4 +1,4 @@
-"""Narrow prose CI gate. Native Git/gh only; no test-result cache or runtime state."""
+"""Prose validation and draft-only feedback. Native Git/pytest; no impact graph."""
 from __future__ import annotations
 
 import json
@@ -127,10 +127,84 @@ def check_content(root: Path, report: dict) -> list[dict]:
     return checked
 
 
+# Early feedback only. This is not a dependency/impact graph or merge evidence.
+DRAFT_SMOKE = (
+    'tests/test_ci_merge_reuse.py', 'tests/test_ci_contract.py',
+    'tests/test_external_research_identity.py', 'tests/test_external_research_admission.py',
+)
+
+
+def draft_feedback_scope(report: dict, payload: dict) -> dict:
+    """Only an explicit owned draft may replace a full iteration with feedback."""
+    try:
+        pr = payload['pull_request']
+        if not (report['scope'] == 'full' and report['event'] == 'pull_request'
+                and report['reason'] == 'NON_PROSE_OR_EMPTY_CHANGE' and report['changes']
+                and payload['action'] in ('opened', 'synchronize', 'reopened', 'converted_to_draft')
+                and pr['draft'] is True and pr['head']['repo']['full_name'] == REPO
+                and pr['base']['repo']['full_name'] == REPO and pr['base']['ref'] == 'main'
+                and pr['head']['sha'] == report['code_sha'] and pr['base']['sha'] == report['base_sha']):
+            return report
+        for row in report['changes']:
+            path = row['path']
+            p = PurePosixPath(path)
+            if (str(p) != path or p.is_absolute() or '..' in p.parts
+                    or any(ord(c) < 32 for c in path) or row['status'] not in ('A', 'M')
+                    or row['new_mode'] != '100644' or row['old_mode'] not in ('000000', '100644')
+                    or path.startswith(('.github/', 'tests/test_ci_'))
+                    or p.name in ('pyproject.toml', 'conftest.py', 'pytest.ini', 'tox.ini',
+                                  'setup.cfg', 'setup.py', 'uv.lock', 'poetry.lock', 'Pipfile', 'Pipfile.lock')
+                    or p.name.startswith('requirements')):
+                return report
+        return {**report, 'scope': 'draft_feedback', 'reason': 'OWNED_DRAFT_NOT_MERGE_VALIDATION',
+                'full_suite': 'NOT_RUN_DRAFT_FEEDBACK'}
+    except (KeyError, TypeError, AttributeError):
+        return report
+
+
+def draft_feedback(root: Path, report: dict, report_dir: Path) -> int:
+    """Use pytest's explicit paths; imports/resources may affect unselected tests."""
+    import sys
+    if report['scope'] != 'draft_feedback' or not report['changes']:
+        raise ValueError('not a draft feedback plan')
+    head, base = report['code_sha'], report['base_sha']
+    if (not SHA.fullmatch(head) or not SHA.fullmatch(base)
+            or command(root, 'git', 'rev-parse', 'HEAD').decode().strip() != head
+            or changes(root, base, head) != report['changes']
+            or command(root, 'git', 'diff', '--name-only', 'HEAD', '--')):
+        raise ValueError('draft checkout or diff changed')
+    targets = list(DRAFT_SMOKE)
+    for row in report['changes']:
+        path = row['path']
+        if path.startswith('tests/') and PurePosixPath(path).match('test_*.py') and path not in targets:
+            targets.append(path)
+    result = dict(scope='draft_feedback', code_sha=head, base_sha=base, test_paths=targets,
+                  full_suite='NOT_RUN_DRAFT_FEEDBACK', merge_eligible=False, exit_code=None,
+                  coverage='FIXED_SMOKE_AND_DIRECTLY_CHANGED_TEST_FILES_NOT_ALL_AFFECTED_TESTS')
+    output = report_dir / 'draft-feedback.json'
+    output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+    # Syntax only; no source execution, pycache writes or fixture-file compilation.
+    for row in report['changes']:
+        path = row['path']
+        if path.startswith('src/') and path.endswith('.py'):
+            compile(command(root, 'git', 'show', head + ':' + path), path, 'exec')
+    completed = subprocess.run([sys.executable, '-m', 'pytest', '-q',
+        '--junitxml=' + str(report_dir / 'draft-feedback.xml'), *targets], cwd=root, check=False)
+    result['exit_code'] = completed.returncode
+    output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+    summary = ('Draft feedback only: FULL_SUITE=NOT_RUN_DRAFT_FEEDBACK. '
+               'Ready for review must run the complete engineering suite before merge.\n')
+    print(summary, flush=True)
+    if os.environ.get('GITHUB_STEP_SUMMARY'):
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as handle:
+            handle.write(summary)
+    return completed.returncode
+
+
 def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('operation', choices=('select', 'check'))
+    parser.add_argument('operation', choices=('select', 'check', 'draft'))
     parser.add_argument('--report-dir', type=Path, required=True)
     args = parser.parse_args()
     root = Path.cwd()
@@ -139,10 +213,17 @@ def main() -> None:
     if args.operation == 'select':
         report = select(root, os.environ['GITHUB_EVENT_NAME'], os.environ.get('CI_BASE_SHA', ''),
                         os.environ['CI_CODE_SHA'])
+        try:
+            payload = json.loads(Path(os.environ.get('GITHUB_EVENT_PATH', '')).read_text())
+        except (OSError, ValueError):
+            payload = {}
+        report = draft_feedback_scope(report, payload)
         plan.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
             output.write('scope=' + report['scope'] + '\n')
         print('CI_SCOPE=' + report['scope'] + ' REASON=' + report['reason'])
+    elif args.operation == 'draft':
+        raise SystemExit(draft_feedback(root, json.loads(plan.read_text(encoding='utf-8')), args.report_dir))
     else:
         report = json.loads(plan.read_text(encoding='utf-8'))
         checked = check_content(root, report)
