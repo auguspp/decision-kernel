@@ -6,7 +6,7 @@ import pytest
 from decision_kernel.identity import canonical_hash
 from decision_kernel.runtime import stock_radar_reading as stock
 from decision_kernel.runtime import theme_radar_probe as theme
-from test_stock_radar_reading import prepared, ROOT
+from test_stock_radar_reading import ROOT
 from test_stock_radar_capture import setup
 from test_hithink_stock_reading_integration import contract_provider
 from test_sector_radar_audit import prohibit_network
@@ -21,9 +21,7 @@ def offline(monkeypatch):
 
 
 def inputs(at=MONDAY, *, calendar_mode=None):
-    state,ledger,association,_,_,_=prepared()
-    plan=stock.prepare_stock_reading(ROOT,state,ledger,association,observed_at=at)
-    _,_,base,_=contract_provider()
+    state,plan,base,_=contract_provider(observed_at=at)
     calls=[]
     def response(path,params):
         calls.append((path,dict(params)))
@@ -195,3 +193,30 @@ def test_rehashed_new_completed_session_cannot_reuse_prior_success(tmp_path):
     r['capture_hash']=canonical_hash({k:v for k,v in r.items() if k!='capture_hash'})
     (out/'capture.json').write_bytes(mod['data'](r))
     with pytest.raises(ValueError):mod['verify'](out)
+
+
+def test_calendar_fixture_builds_once_per_clock_and_keeps_responses_isolated(monkeypatch):
+    # Protect the current helper contract, not a cached plan or a wall-time quota.
+    original = stock.prepare_stock_reading
+    prepared_clocks = []
+
+    def tracked(*args, **kwargs):
+        prepared_clocks.append(kwargs['observed_at'])
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(stock, 'prepare_stock_reading', tracked)
+    _, first_plan, first, first_calls = inputs(MONDAY, calendar_mode='truncated')
+    _, second_plan, second, second_calls = inputs(SATURDAY)
+    assert prepared_clocks == [MONDAY, SATURDAY]
+    assert first_plan is not second_plan
+    first_body = first(stock.HITHINK_CALENDAR_PATH, {})
+    assert second_calls == []
+    second_body = second(stock.HITHINK_CALENDAR_PATH, {})
+    assert first_body['data']['timestamp'] == int(MONDAY.timestamp()*1000)
+    assert second_body['data']['timestamp'] == int(SATURDAY.timestamp()*1000)
+    assert len(first_body['data']['item']) + 3 == len(second_body['data']['item'])
+    first_body['data']['item'].clear()
+    again = first(stock.HITHINK_CALENDAR_PATH, {})
+    assert len(again['data']['item']) + 3 == len(second_body['data']['item'])
+    assert first_calls == [(stock.HITHINK_CALENDAR_PATH, {})] * 2
+    assert second_calls == [(stock.HITHINK_CALENDAR_PATH, {})]
