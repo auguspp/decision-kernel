@@ -17,8 +17,8 @@ def offline(monkeypatch):
     prohibit_network(monkeypatch)
 
 
-def contract_provider(*, missing_quote=False):
-    state,ledger,association,plan,base,_=prepared()
+def contract_provider(*, missing_quote=False, observed_at=NOW):
+    state,ledger,association,plan,base,_=prepared(observed_at=observed_at)
     saved={};calls=[]
     def request(path,params):
         calls.append((path,dict(params)))
