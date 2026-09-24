@@ -14,6 +14,8 @@ from decision_kernel.identity import canonical_hash, canonical_json
 from . import concept_radar as source
 
 VERSION = 'concept-observation-map-v1'
+SUPPLEMENT_VERSION = 'concept-observation-map-with-supplement-v2'
+SUPPLEMENT_SCOPE = 'PRIMARY_PLUS_ONE_VERIFIED_SUPPLEMENT_NOT_ALL_BATCHES'
 POLICY = {
     'grouping': 'EXACT_OBSERVED_NONEMPTY_MEMBER_SET_INCLUSION_ONLY',
     'partial_overlap': 'DO_NOT_COLLAPSE_OR_TAKE_TRANSITIVE_CLOSURE',
@@ -26,8 +28,8 @@ AUTHORITY = {**source.AUTHORITY, 'new_market_requests': 0, 'model_calls': 0,
              'automatic_dispatch': False, 'research_priority_established': False}
 
 
-def build(report):
-    """Compose one verified source, not a cross-date universe or an economic map."""
+def build(report, *, supplement=None):
+    """Join already-replayed same-root observations; never acquire missing data."""
     source.render(report)  # Original identity/policy/authority guard; not raw replay.
     p = report['projection']
     rows = p['concepts']
@@ -40,6 +42,11 @@ def build(report):
     source.require(len(details) == len(p['details']) <= source.MAX_DETAILS
                    and set(details) == set(p['detail_selected_codes']) <= set(codes),
                    'MAP_DETAIL_SCOPE_DIFFERS')
+    owners = {code: p for code in details}
+    if supplement is not None:
+        additions = _supplement_details(report, supplement)
+        details.update(additions)
+        owners.update({code: supplement['projection'] for code in additions})
     memberships = {}
     for code, d in details.items():
         members = d['current_membership']
@@ -72,7 +79,7 @@ def build(report):
                 'additional_members_beyond_representative': 0,
                 'membership_hash': details[c]['current_membership']['constituent_set_hash'],
                 'membership_captured_at': details[c]['current_membership']['captured_at'],
-                'membership_observed_at': p['requests'][details[c]['membership_request_index']]['received_at'],
+                'membership_observed_at': owners[c]['requests'][details[c]['membership_request_index']]['received_at'],
                 'other_maximal_containers': [r for r in roots if r != root and memberships[c] <= memberships[r]]}
                 for c in contained]})
     unresolved = sorted(set(details) - set(memberships))
@@ -84,7 +91,7 @@ def build(report):
     universe = []
     for c in sorted(codes):
         r, d = by_code[c], details.get(c)
-        source.require(r['detail_acquisition'] == ('SELECTED' if d is not None else 'DEFERRED_NOT_ACQUIRED'),
+        source.require(r['detail_acquisition'] == ('SELECTED' if c in p['detail_selected_codes'] else 'DEFERRED_NOT_ACQUIRED'),
                        'MAP_DETAIL_DISPOSITION_DIFFERS')
         universe.append({'thscode': c, 'name': r['name'], 'daily_return': r['daily_return'],
             'daily_benchmark_excess': r['daily_benchmark_excess'],
@@ -94,6 +101,12 @@ def build(report):
             'gaps': deepcopy(d['gaps']) if d else [],
             'detail_disposition': 'NOT_ACQUIRED' if d is None else 'INCOMPLETE' if c in incomplete else 'ACQUIRED',
             'member_count': len(memberships[c]) if c in memberships else None})
+        if supplement is not None and d is not None:
+            owner = owners[c]
+            universe[-1]['detail_source'] = {
+                'kind': 'PRIMARY' if owner is p else 'SUPPLEMENT',
+                'projection_hash': report['projection_hash'] if owner is p else supplement['projection_hash'],
+                'started_at': owner['started_at'], 'observed_at': owner['as_of']}
     projection = {'version': VERSION, 'policy': deepcopy(POLICY),
         'source_projection_hash': report['projection_hash'],
         'source_catalog_hash': p['concept_catalog_hash'], 'market_session': p['market_session'],
@@ -112,11 +125,64 @@ def build(report):
             'actual_new_pages_executed': 0, 'full_multiday_coverage': len(known_histories) == len(rows),
             'member_breadth_acquired': False, 'economic_themes_established': False},
         **AUTHORITY}
+    if supplement is not None:
+        sp = supplement['projection']
+        projection.update(version=SUPPLEMENT_VERSION, supplement={
+            'projection_hash': supplement['projection_hash'], 'plan_hash': sp['plan_hash'],
+            'started_at': sp['started_at'], 'observed_at': sp['as_of'],
+            'detail_codes': [d['thscode'] for d in sp['details']], 'scope': SUPPLEMENT_SCOPE})
+        projection['coverage'].update(primary_details=len(p['details']),
+            supplemental_details=len(sp['details']), cumulative_all_batches=False)
     return {'projection': projection, 'projection_hash': canonical_hash(projection)}
 
 
-def verify(value, original_report):
-    source.require(value == build(original_report), 'MAP_REBUILD_DIFFERS')
+def _supplement_details(report, supplement):
+    # Identity/lineage guards complement, never replace, the caller's raw replay.
+    from . import concept_detail_supplement as detail
+    p, sp = report['projection'], supplement['projection']
+    source.require(supplement['projection_hash'] == canonical_hash(sp)
+        and sp['version'] == detail.VERSION and sp['policy'] == detail.POLICY
+        and all(sp.get(k) == v for k, v in detail.AUTHORITY.items())
+        and sp['base_projection_hash'] == report['projection_hash']
+        and sp['base_observed_at'] == p['as_of'] and sp['market_session'] == p['market_session'],
+        'MAP_SUPPLEMENT_IDENTITY_DIFFERS')
+    start, end = source._clock(sp['started_at']), source._clock(sp['as_of'])
+    source.require(source._clock(p['as_of']) <= start <= end
+        and start.astimezone(source.SHANGHAI_TZ).date().isoformat() == p['market_session']
+        and end.astimezone(source.SHANGHAI_TZ).date().isoformat() == p['market_session'],
+        'MAP_SUPPLEMENT_CLOCK_DIFFERS')
+    rows = sp['details']; codes = [d['thscode'] for d in rows]
+    missing = sorted(set(r['thscode'] for r in p['concepts']) - set(p['detail_selected_codes']))
+    source.require(0 < len(codes) == len(set(codes)) <= detail.MAX_DETAILS
+        and set(codes) <= set(missing), 'MAP_SUPPLEMENT_SCOPE_DIFFERS')
+    plan = detail.plan(report, offset=missing.index(codes[0]))
+    source.require(codes == plan['plan']['selected_codes'] and sp['plan_hash'] == plan['plan_hash'],
+                   'MAP_SUPPLEMENT_PLAN_DIFFERS')
+    requests = sp['requests']; last = start
+    source.require(isinstance(requests, list) and len(requests) == 2 * len(rows),
+                   'MAP_SUPPLEMENT_REQUEST_SCOPE_DIFFERS')
+    names = {r['thscode']: r['name'] for r in p['concepts']}
+    for n, d in enumerate(rows):
+        source.require(d['name'] == names[d['thscode']], 'MAP_SUPPLEMENT_NAME_DIFFERS')
+        for j, kind in enumerate(('history', 'membership')):
+            i = d[kind + '_request_index']
+            source.require(type(i) is int and i == 2 * n + j, 'MAP_SUPPLEMENT_REQUEST_INDEX_DIFFERS')
+            req = requests[i]
+            asked, received = source._clock(req['requested_at']), source._clock(req['received_at'])
+            source.require(last <= asked <= received <= end
+                and req['path'] == (source.probe.HISTORY if kind == 'history' else source.probe.MEMBERS)
+                and req['params'].get('thscode') == d['thscode'], 'MAP_SUPPLEMENT_REQUEST_BINDING_DIFFERS')
+            last = received
+        source.require((d['path'] is not None) == (d['history_status'] == 'EXACT_WINDOW_CHECKED'),
+                       'MAP_SUPPLEMENT_HISTORY_STATUS_DIFFERS')
+        if d['path'] is not None:
+            source.require(d['path']['history_window_end'] == p['market_session'],
+                           'MAP_SUPPLEMENT_HISTORY_WINDOW_DIFFERS')
+    return {d['thscode']: d for d in rows}
+
+
+def verify(value, original_report, *, supplement=None):
+    source.require(value == build(original_report, supplement=supplement), 'MAP_REBUILD_DIFFERS')
     return {'status': 'CONCEPT_MAP_REBUILT_FROM_SUPPLIED_SOURCE',
             'projection_hash': value['projection_hash'], 'new_market_requests': 0}
 
@@ -129,7 +195,7 @@ def page(value, *, expected_source_hash, offset):
     source.require(expected_source_hash == p['source_projection_hash'], 'MAP_SOURCE_SELECTOR_DIFFERS')
     source.require(type(offset) is int and 0 <= offset <= len(codes)
                    and (offset == len(codes) or offset % source.MAX_DETAILS == 0), 'MAP_PAGE_OFFSET_REJECTED')
-    return _page(tuple(codes), expected_source_hash, value['projection_hash'], offset)
+    return _page(tuple(codes), expected_source_hash, value['projection_hash'], offset, p['version'])
 
 
 def pages(value, *, expected_source_hash):
@@ -139,12 +205,12 @@ def pages(value, *, expected_source_hash):
     source.require(expected_source_hash == p['source_projection_hash'], 'MAP_SOURCE_SELECTOR_DIFFERS')
     codes, digest = tuple(p['unexamined_codes']), value['projection_hash']
     for offset in range(0, len(codes), source.MAX_DETAILS):
-        yield _page(codes, expected_source_hash, digest, offset)
+        yield _page(codes, expected_source_hash, digest, offset, p['version'])
 
 
-def _page(codes, expected_source_hash, digest, offset):
+def _page(codes, expected_source_hash, digest, offset, version=VERSION):
     selected = list(codes[offset:offset + source.MAX_DETAILS])
-    return {'version': VERSION, 'source_projection_hash': expected_source_hash,
+    return {'version': version, 'source_projection_hash': expected_source_hash,
             'map_hash': digest, 'offset': offset, 'codes': selected,
             'next_offset': offset + len(selected) if offset + len(selected) < len(codes) else None,
             'remaining_after_page': len(codes) - offset - len(selected),
@@ -154,7 +220,7 @@ def _page(codes, expected_source_hash, digest, offset):
 
 def _validate(value):
     p = value['projection']
-    source.require(value['projection_hash'] == canonical_hash(p) and p['version'] == VERSION
+    source.require(value['projection_hash'] == canonical_hash(p) and p['version'] in {VERSION, SUPPLEMENT_VERSION}
                    and p['policy'] == POLICY and all(p.get(k) == v for k, v in AUTHORITY.items()),
                    'MAP_IDENTITY_DIFFERS')
 
@@ -184,6 +250,10 @@ def _render(value):
         '<section><h2>先看重叠，再看各自趋势</h2>',
         f'<p>可验证成员的 {coverage["membership_count"]} 个详情，对应 {coverage["maximal_observed_member_sets"]} 个最大观测成员集合。'
         '部分重叠不会合并；成员缺失不会当成空集。各请求并非同时取得。</p>']
+    if p['version'] == SUPPLEMENT_VERSION:
+        out.append('<p class="notice">已合并同一主来源的一个已验证补充批次；补充取得截止 '
+            + e(p['supplement']['observed_at'])
+            + '。各来源时钟分别保留；不是全部批次、跨日连续采集或新增市场扫描。</p>')
     for group in p['groups']:
         root = by_code[group['representative']]
         out.append(f'<details open><summary>{e(root["name"])} · {e(root["thscode"])} · {group["member_count"]} 家，关联 {len(group["detail_codes"])} 个指数详情</summary>')
