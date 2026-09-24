@@ -28,15 +28,17 @@ def _test_script() -> str:
     return textwrap.dedent(step.split("        run: |\n", 1)[1])
 
 
-def test_ci_keeps_one_full_suite_without_filtering_or_worker_retries():
+def test_ci_keeps_complete_union_without_worker_retries():
     command = " ".join(_test_script().replace("\\\n", " ").splitlines()[1:]).split("2>&1", 1)[0]
     assert shlex.split(command) == [
         "python", "-m", "pytest", "-q", "-n", "4", "--dist=loadfile", "--max-worker-restart=0",
+        "@$CI_REPORT_DIR/remaining-args.txt",
         "-o", "faulthandler_timeout=60", "-o", "faulthandler_exit_on_timeout=true",
-        "--durations=100", "--durations-min=1.0", "--junitxml=$CI_REPORT_DIR/pytest.xml",
+        "--durations=100", "--durations-min=1.0", "--junitxml=$CI_REPORT_DIR/remaining.xml",
     ]
     job = _test_job()
     assert "python -m pytest --collect-only -q" in job
+    assert "--operation partition" in job and "--operation assemble" in job
     assert "continue-on-error" not in job
     assert "set -euo pipefail" in _test_script()
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
@@ -87,6 +89,7 @@ def test_ci_diagnostics_are_retained_on_failure_and_do_not_replace_the_test_resu
 def test_actual_ci_command_propagates_test_and_worker_failure(tmp_path, outcome):
     report = tmp_path / "reports"
     report.mkdir()
+    (report / "remaining-args.txt").write_text("")
     (tmp_path / "pytest.ini").write_text("[pytest]\n", encoding="utf-8")
     body = {
         "pass": "    assert True\n",
@@ -103,7 +106,7 @@ def test_actual_ci_command_propagates_test_and_worker_failure(tmp_path, outcome)
     )
     assert completed.returncode == (0 if outcome == "pass" else 1), completed.stdout + completed.stderr
     assert (report / "pytest.log").is_file()
-    suites = ET.parse(report / "pytest.xml").getroot().findall("testsuite")
+    suites = ET.parse(report / "remaining.xml").getroot().findall("testsuite")
     assert sum(int(s.attrib["tests"]) for s in suites) == 1
     assert sum(int(s.attrib["skipped"]) for s in suites) == 0
     failures = sum(int(s.attrib["failures"]) + int(s.attrib["errors"]) for s in suites)

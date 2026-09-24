@@ -5,6 +5,7 @@ Downloaded diagnostics are parsed as data, never extracted or executed.
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
 import hashlib
 import io
 import json
@@ -102,7 +103,9 @@ def passed_test_set(collection_text: str, junit_xml: bytes) -> int:
     return len(actual)
 
 
-def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
+@contextmanager
+def verified_archive(raw: bytes, artifact: dict):
+    """Reuse the same bounded, digest-checked ZIP reader; never extract code."""
     require(0 < len(raw) == artifact['size_in_bytes'] <= MAX_ZIP, 'ARCHIVE_SIZE')
     require('sha256:' + hashlib.sha256(raw).hexdigest() == artifact['digest'], 'ARCHIVE_DIGEST')
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
@@ -113,6 +116,11 @@ def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
         require(all(not PurePosixPath(n).is_absolute() and '..' not in PurePosixPath(n).parts
                     and '\\' not in n for n in names), 'ARCHIVE_PATH')
         require(archive.testzip() is None, 'ARCHIVE_CRC')
+        yield archive
+
+
+def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
+    with verified_archive(raw, artifact) as archive:
         identity = dict(line.split('=', 1) for line in archive.read('identity.txt').decode().splitlines())
         require(identity['code_sha'] == run['head_sha'] and identity['event'] == 'pull_request'
                 and identity['run_id'] == str(run['id']) and identity['attempt'] == '1', 'PR_IDENTITY')
@@ -122,7 +130,104 @@ def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
         proof = json.loads(archive.read('merge-reuse.json'))
         require(proof['reuse'] is False and proof['reason'] == 'PR_ALWAYS_FULL', 'INHERITED_RESULT')
         require(json.loads(archive.read('environment.json')) == current, 'ENVIRONMENT_CHANGED')
-        return passed_test_set(archive.read('collection.txt').decode(), archive.read('pytest.xml'))
+        collection, xml = archive.read('collection.txt').decode(), archive.read('pytest.xml')
+        partitioned = scope.get('full_suite') == 'EXECUTED_PARTITIONED_V2'
+        require(('partition.json' in archive.namelist()) == partitioned, 'PARTITION_MARKER')
+        if partitioned:
+            plan = json.loads(archive.read('partition.json'))
+            rebuilt = partition_junit(collection, plan['paths'], archive.read('remaining.xml'),
+                archive.read('domain-source.zip'), plan['artifact'], identity, current)
+            require(rebuilt == xml, 'PARTITION_RESULT_CHANGED')
+        return passed_test_set(collection, xml)
+
+
+def partition_nodes(collection: str, paths: list[str]) -> tuple[list[str], list[str]]:
+    """Partition a full collection by explicit migrated files, not inferred impact."""
+    require(isinstance(paths, list) and bool(paths) and len(paths) == len(set(paths)), 'DOMAIN_PATHS')
+    require(all(isinstance(p, str) and re.fullmatch(r'tests/(?:[A-Za-z0-9_]+/)*test_[A-Za-z0-9_]+\.py', p)
+                for p in paths), 'DOMAIN_PATHS')
+    nodes = [n for n in collection.splitlines() if n.startswith('tests/') and '::' in n]
+    require(bool(nodes) and len(nodes) == len(set(nodes)), 'COLLECTION_IDENTITY')
+    domain = [n for n in nodes if n.split('::', 1)[0] in paths]
+    remaining = [n for n in nodes if n.split('::', 1)[0] not in paths]
+    require({n.split('::', 1)[0] for n in domain} == set(paths), 'DOMAIN_PATH_HAS_NO_TESTS')
+    require(bool(remaining), 'NO_REMAINING_TESTS')
+    return domain, remaining
+
+
+def partition_junit(collection: str, paths: list[str], remaining_xml: bytes,
+                    domain_raw: bytes, artifact: dict, identity: dict, current: dict) -> bytes:
+    """Full proof = fresh disjoint executions in this run; no historical fallback."""
+    domain, remaining = partition_nodes(collection, paths)
+    passed_test_set('\n'.join(remaining), remaining_xml)
+    require(type(artifact.get('id')) is int and artifact['id'] > 0
+            and artifact.get('expired') is False
+            and artifact['name'] == f"kernel-ci-v2-{identity['run_id']}-{identity['attempt']}"
+            and str(artifact['workflow_run']['id']) == identity['run_id']
+            and artifact['workflow_run']['head_sha'] == identity['code_sha'], 'DOMAIN_ARTIFACT_IDENTITY')
+    with verified_archive(domain_raw, artifact) as z:
+        source = dict(line.split('=', 1) for line in z.read('identity.txt').decode().splitlines())
+        require(all(source.get(k) == identity[k] for k in ('code_sha', 'event', 'run_id', 'attempt'))
+                and source.get('scope') == 'research-continuity-v2', 'DOMAIN_EXECUTION_IDENTITY')
+        environment = json.loads(z.read('environment.json'))
+        require({k: v for k, v in environment.items() if k != 'packages'} ==
+                {k: v for k, v in current.items() if k != 'packages'}, 'DOMAIN_ENVIRONMENT')
+        # The lighter installation may omit packages, never silently change shared versions.
+        require(bool(environment['packages']) and all(current['packages'].get(k) == v
+                for k, v in environment['packages'].items()), 'DOMAIN_PACKAGES')
+        result = json.loads(z.read('domain-result.json'))
+        require(result['scope'] == 'research-continuity-v2' and result['complete_domain'] == 'PASS'
+                and result['code_sha'] == identity['code_sha'] and result['merge_eligible'] is False
+                and result['full_suite'] == 'NOT_RUN_DOMAIN_ONLY'
+                and type(result['test_count']) is int and result['test_count'] == len(domain), 'DOMAIN_RESULT')
+        domain_xml = z.read('domain.xml')
+        passed_test_set(z.read('domain-collection.txt').decode(), domain_xml)
+        passed_test_set('\n'.join(domain), domain_xml)
+    # Preserve original testcase IDs, failures and measured suite times. This is
+    # explicitly a multi-job JUnit aggregate, never a fictitious single pytest run.
+    combined = ET.Element('testsuites')
+    for label, xml in (('research-continuity-v2', domain_xml), ('remaining-current-contracts', remaining_xml)):
+        for suite in ET.fromstring(xml).findall('.//testsuite'):
+            suite.set('name', label)
+            combined.append(suite)
+    combined_xml = ET.tostring(combined, encoding='utf-8')
+    passed_test_set(collection, combined_xml)  # Union complete; duplicates fail.
+    return combined_xml
+
+
+def partition_operation(root: Path, out: Path, operation: str) -> None:
+    identity = dict(line.split('=', 1) for line in (out / 'identity.txt').read_text().splitlines())
+    require(git(root, 'rev-parse', 'HEAD') == identity['code_sha']
+            and not command(root, 'git', 'diff', '--name-only', 'HEAD', '--'), 'CHECKOUT_CHANGED')
+    paths = (root / '.github/ci-v2-research.txt').read_text().splitlines()
+    collection = (out / 'collection.txt').read_text()
+    partition_nodes(collection, paths)
+    require(all((root / p).is_file() and not (root / p).is_symlink() for p in paths), 'DOMAIN_PATHS')
+    if operation == 'partition':
+        (out / 'remaining-args.txt').write_text(''.join('--ignore=' + p + '\n' for p in paths))
+        return
+    # Same run only. Missing, failed, truncated or foreign domain evidence fails;
+    # do not rerun that domain in the old job to manufacture a green result.
+    payload = api(root, f"actions/runs/{identity['run_id']}/artifacts?per_page=100")
+    require(payload['total_count'] == len(payload['artifacts']), 'INCOMPLETE_ARTIFACT_LIST')
+    candidates = [a for a in payload['artifacts']
+                  if a['name'] == f"kernel-ci-v2-{identity['run_id']}-{identity['attempt']}"]
+    require(len(candidates) == 1, 'NO_UNIQUE_DOMAIN_ARTIFACT')
+    artifact = candidates[0]
+    require(type(artifact.get('id')) is int and artifact['id'] > 0
+            and artifact.get('expired') is False, 'DOMAIN_ARTIFACT_IDENTITY')
+    raw = command(root, 'gh', 'api', f"repos/{REPO}/actions/artifacts/{artifact['id']}/zip")
+    current = json.loads((out / 'environment.json').read_text())
+    xml = partition_junit(collection, paths, (out / 'remaining.xml').read_bytes(), raw, artifact, identity, current)
+    (out / 'domain-source.zip').write_bytes(raw)
+    (out / 'partition.json').write_text(json.dumps(dict(paths=paths, artifact=artifact), sort_keys=True, indent=2) + '\n')
+    (out / 'pytest.xml').write_bytes(xml)
+    scope = json.loads((out / 'scope.json').read_text())
+    require(scope['scope'] == 'full' and scope['code_sha'] == identity['code_sha']
+            and scope['event'] == identity['event'], 'NOT_FULL_PR_SCOPE')
+    scope['full_suite'] = 'EXECUTED_PARTITIONED_V2'
+    (out / 'scope.json').write_text(json.dumps(scope, sort_keys=True, indent=2) + '\n')
+    print('FULL_SUITE=EXECUTED_PARTITIONED_V2 TESTS=' + str(passed_test_set(collection, xml)))
 
 
 def select(root: Path, report_dir: Path, env: dict, current: dict, *, read=api, download=None) -> dict:
@@ -191,8 +296,12 @@ def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report-dir', required=True, type=Path)
+    parser.add_argument('--operation', choices=('select', 'partition', 'assemble'), default='select')
     args = parser.parse_args()
     root = Path.cwd()
+    if args.operation != 'select':
+        partition_operation(root, args.report_dir, args.operation)
+        return
     current = environment(root, args.report_dir, os.environ)
     (args.report_dir / 'environment.json').write_text(json.dumps(current, sort_keys=True, indent=2) + '\n')
     report = select(root, args.report_dir, os.environ, current)
