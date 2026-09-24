@@ -1,0 +1,90 @@
+name: R4 Rigol explicit saved-result publication
+on:
+  push:
+    branches: [ops/r4-rigol-saved-publication-20260924]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: current-state-read-entry-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 5b8c07e49db21de1550ccc103294f6c079124ed9
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[feeds]'
+      - name: Original Collector and atomic publisher with actual refresh identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 5b8c07e49db21de1550ccc103294f6c079124ed9
+          test "$(git rev-parse HEAD^{tree})" = 88618cf2c5ff3093a0d373987d6baff576919e8b
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from decision_kernel.runtime import current_state as model
+          from decision_kernel.runtime import current_state_delivery as base
+          from decision_kernel.runtime.current_state_delivery_with_odds_watch import Collector
+          from decision_kernel.runtime.read_blob_reuse import GitHubReadReuseAPI
+          from decision_kernel.runtime.stock_research_reading import EXTRA_API_CALLS
+          from decision_kernel.runtime import reviewed_question_reading as qr
+          M='5b8c07e49db21de1550ccc103294f6c079124ed9'
+          W='fad48e9455ced9f0de4548a5950fc105aa725cda'
+          out=Path('saved-publication');out.mkdir(exist_ok=False)
+          api=GitHubReadReuseAPI(os.environ['GH_TOKEN'],max_calls=base.MAX_API_CALLS+EXTRA_API_CALLS)
+          audit={'authority':'https://github.com/auguspp/decision-kernel/issues/533#issuecomment-5805277489','code_commit':M,'actual_workflow':'.github/workflows/r4-rigol-saved-publication.yml','actual_workflow_commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'event':os.environ['GITHUB_EVENT_NAME'],'model_calls':0,'market_calls':0,'status':'INCOMPLETE'}
+          try:
+              assert api.get('git/ref/heads/main')['object']['sha']==M
+              assert api.get('git/ref/heads/research-work/stock-business-v0')['object']['sha']==W
+              run=api.get('actions/runs/35938160978')
+              assert (run['head_sha'],run['head_branch'],run['event'],run['status'],run['conclusion'],run['run_attempt'])==(M,'main','workflow_dispatch','completed','success',1)
+              prior=api.get('git/ref/heads/'+model.READ_REF)['object']['sha']
+              previous=json.loads(api.file('current-state.json',prior));model.validate_read_package(previous)
+              audit['prior_reading']=prior
+              c=Collector(api,M,Path.cwd(),previous,prior)
+              for key in ('radar_discovery','concept_discovery','concept_detail','external_radar','industry_breadth','easy_stock_context','daily_news','reviewed_questions'):
+                  setattr(c,'include_'+key,True)
+              refresh={'workflow':audit['actual_workflow'],'run_id':os.environ['GITHUB_RUN_ID'],'attempt':os.environ['GITHUB_RUN_ATTEMPT'],'event':os.environ['GITHUB_EVENT_NAME'],'trigger_run_id':'35938160978','publication_status':'BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE','mode':'EXPLICIT_SAVED_RESULT_PUBLICATION_NOT_AUTOMATIC_WORKFLOW_RUN'}
+              payload=c.collect(refresh);model.validate_read_package(payload)
+              report=json.loads(c.files[qr.REPORT]);items=report['question_work']['items']
+              matched=[i for i in items if i.get('question_id')=='rigol-h1-growth-profit-cash-conversion']
+              assert len(matched)==1
+              item=matched[0]
+              assert item['status']=='VALIDATED_QUICK_RESULT' and item['pre_state']=='NOT_APPLICABLE' and item['quick_present']
+              assert item['candidate_hash']=='9d8d9eb526adbd2edb6034cef1fe41ad78d6c751d880e82a5bb792691baec304'
+              assert item['completion']=='COMPLETE' and item['terminal_state']=='DEEPEN_REQUIRED'
+              assert item['explanation'] and item['next_work'] and item['sources']['candidate.json']['ref']==W
+              for path,raw in c.files.items():
+                  p=out/'reading'/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
+              (out/'rigol-item.json').write_text(json.dumps(item,ensure_ascii=False,sort_keys=True,indent=2)+'\n')
+              audit.update(status='COLLECTED_NOT_PUBLISHED',reading_hash=payload['reading_hash'],files=len(c.files),bytes=sum(map(len,c.files.values())),work_commit=W,candidate_hash=item['candidate_hash'])
+              (out/'audit.json').write_text(json.dumps(audit,sort_keys=True,indent=2)+'\n')
+              commit=base.publish(api,c.files,prior,M,payload['reading_hash'])
+              assert api.get('git/ref/heads/'+model.READ_REF)['object']['sha']==commit
+              assert api.file(qr.REPORT,commit)==c.files[qr.REPORT]
+              assert api.file('README.md',commit)==c.files['README.md']
+              audit.update(status='PUBLISHED_AND_READ_BACK_NOT_HUMAN_FEEDBACK',reading_commit=commit,blob_reuse_hits=api.blob_reuse_hits)
+              print('READ_ENTRY_COMMIT='+commit)
+          except Exception as e:
+              audit.update(error_type=type(e).__name__);raise
+          finally:
+              (out/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,sort_keys=True,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: r4-rigol-saved-publication-${{ github.run_id }}
+          path: saved-publication/
+          if-no-files-found: error
+          retention-days: 30
