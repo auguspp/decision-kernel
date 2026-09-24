@@ -1,0 +1,77 @@
+{
+  "case_id": "688337.SH",
+  "declared_at": "2026-09-24T00:05:01.581364+00:00",
+  "existing_research_relation": {
+    "kind": "NEW_DISTINCT_QUESTION",
+    "note": "在固定W的全部候选input及当前R范围检查未见688337正式研究；保留检视范围，不声称穷尽全部聊天。6对象选择及旧工作核对记录已保存。本次是正常观察触发的新问题，不重复江西/振江实验。",
+    "source_refs": [
+      {
+        "git_blob": "b7e90c5a11ca7788ee41ed6f5468f0e8de470220",
+        "path": "research_runs/normal-question-preparation/688337-20260924/normal-batch-review.json",
+        "purpose": "NORMAL_BATCH_REVIEW",
+        "ref": "82e8f5fe6a1bfa792af7738edbd1643d2a08b6b1",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "36f585e84152a936884c153e719808bc3ee67b287d51d3af46b0804ea98769f0"
+      }
+    ]
+  },
+  "falsification_test": "若扣非改善主要由真实毛利额和费用杠杆支持，不能因经营现金为负就否定全部经营改善；若现金缺口由存货/应收/合同负债等占用而非可持续现金收益解释，不能把利润增长说成已兑现股东现金。分别核对金融投资收益、公允价值、汇兑、资本开支及母公司/合并口径；无法识别产品和子公司归因时保持未知。",
+  "format": "reviewed-radar-question-v0",
+  "known_counterevidence": [
+    "中报页6/28经营现金净额仍为负，不能仅据归母净利增长认定现金创造。",
+    "中报页22整体毛利率略降；研发费用率下降而研发费用金额增加，不能说削减研发带来全部利润。",
+    "中报页7/29非经常金融收益存在；页174存货、应收和合同负债变动有现金占用。",
+    "扣非从亏损转正和毛利额增加又反驳全部增长仅靠非经常项目的解释；不得只写悲观一侧。"
+  ],
+  "known_unknowns": [
+    "产品/解决方案增长对合并可持续利润与现金的精确贡献未建立。",
+    "库存及客户回款的业务归属、释放时点和可持续性尚不确定。",
+    "报告期后其他临时公告、当前价格预期和多年估值不在本题范围；不能宣称无事件或市场误价。"
+  ],
+  "next_discriminating_search": "先用完整中报和比较列核对收入—毛利—费用—扣非桥及净利润—营运资本—经营现金桥；区分母公司/合并、非经常损益及全额资本开支，再决定具体可查证工作、未来触发或结束本题。",
+  "origins": [
+    {
+      "kind": "SECTOR_LEADER",
+      "observed_at": "2026-09-23T10:35:22.706775Z",
+      "qualification": "QUALIFIED_FOR_DECLARED_SCOPE",
+      "qualification_reason": "原保存的合格价格观察及仪器仪表来路，只用于提出公司问题，不证明基本面受益。",
+      "source": {
+        "git_blob": "d68a07fb644c0af87169fcec60e5f41a2603b3a7",
+        "path": "details/stock/35848784152/reading/stock-reading.json",
+        "purpose": "NORMAL_STOCK_OBSERVATION",
+        "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "8db7978f2ce8032ef6f8edb9ca2d8db30fc8584e7881d8acc1055d115097fc9e"
+      }
+    }
+  ],
+  "predecessor": null,
+  "question": "普源精电2026H1收入及扣非盈利改善、合并经营现金仍为负：仪器和解决方案增长、毛利与费用结构及营运资本分别支持或限制什么经营改善判断，现在是否有值得进一步查证的实质问题？",
+  "question_id": "rigol-h1-growth-profit-cash-conversion",
+  "reading_source": {
+    "git_blob": "415f487744491542f806aeeb4553f440f647d209",
+    "path": "current-state.json",
+    "purpose": "CURRENT_STATE_READING",
+    "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "2fdf92fdd9873e12e0774477de0d905f19df0f339a21530f844df3eee7039dc3"
+  },
+  "required_classes": [
+    {
+      "id": "FULL_INTERIM_REPORT",
+      "mode": "STATIC",
+      "planned_queries": []
+    },
+    {
+      "id": "FINANCIAL_REPORT_CORRECTION_CHECK",
+      "mode": "LATEST_INVENTORY",
+      "planned_queries": [
+        "CNINFO:688337:2026-08-01:2026-09-24:financial-report-corrections"
+      ]
+    }
+  ],
+  "revision": 1,
+  "security_id": "SSE:688337",
+  "ticker": "688337",
+  "why_now": "2026-09-23正常仪器仪表/Stock观察将普源精电带入本批审阅；完整中报出现盈利改善与经营现金不同步的可核对问题。这是已有公开财报在新正常观察下首次正式审阅，不声称财报今天才发布或证明当日上涨原因。"
+}
