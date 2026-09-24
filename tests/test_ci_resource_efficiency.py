@@ -23,7 +23,8 @@ def test_cache_reuses_pip_downloads_not_an_environment_or_a_test_result():
     assert '          cache-dependency-path: pyproject.toml\n' in setup
     install = text.split('      - name: Install\n', 1)[1].split('      - name:', 1)[0]
     assert "run: python -m pip install -e '.[dev]'" in install
-    assert 'if:' not in install and 'cache-hit' not in text
+    assert "if: steps.scope.outputs.scope != 'content'" in install
+    assert 'cache-hit' not in text  # Full runs still install even on a cache hit.
     assert 'actions/cache@' not in text and '.venv' not in text
     # The existing real isolated base-only installation stays independently cold.
     base = (ROOT / 'tests/test_external_research_minimal_install.py').read_text(encoding='utf-8')
