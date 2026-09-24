@@ -1,0 +1,66 @@
+name: R4 Rigol reconcile current issue entries
+on:
+  push:
+    branches: [ops/r4-rigol-entry-reconcile-20260924]
+permissions:
+  contents: read
+  issues: write
+jobs:
+  reconcile:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Update two current entry summaries while retaining complete old bodies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir entry-reconciliation
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          P=Path('entry-reconciliation');root='repos/auguspp/decision-kernel/'
+          marker='<!-- CURRENT-R4-RIGOL-20260924 -->'
+          def get(path):
+              r=subprocess.run(['gh','api',root+path],capture_output=True,timeout=45,check=True)
+              return json.loads(r.stdout)
+          def save(n,v): (P/n).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+          assert get('git/ref/heads/main')['object']['sha']=='5b8c07e49db21de1550ccc103294f6c079124ed9'
+          assert get('git/ref/heads/read-model/current-state')['object']['sha']=='8fc9733a0f1ba0a514b10989a0c99fdc9737096e'
+          shared='''**第一条正常观察的新公司问题已完成单Quick、原留存、同版本读取和本轮可读Brief；尚不是无人值守日常闭环验收。** 普源精电688337，正常2026-09-23仪器仪表/Stock来路，完整205页中报及限定更正核验。新研究run35938160978仅一次Sub2API Quick，Full候选不自动执行Full。
+
+          M=`5b8c07e49db21de1550ccc103294f6c079124ed9`，W=`fad48e9455ced9f0de4548a5950fc105aa725cda`，R=`8fc9733a0f1ba0a514b10989a0c99fdc9737096e`。#533只修改一项原生配置，完整PR及独立main均6109通过，旧用例/来源/失败/消费记录保持。新结果、原文和非执行Full委托已保存。
+
+          **当前真实缺口：** 研究结束后的自动发布未观测到；本次复用原发布器显式完成发布，后检查误用旧缓存导致job失败，独立读取确认R已前移，没有重跑研究或刷绿灯。正式daily批次审阅关联尚未匹配，六对象处置在原问题引用中可追溯。原输出小算术勘误582.11→582.71万元已追加，原文不改。
+
+          **下一项收敛到自动发布、批次关联和实际Brief反馈。** 不重开单Quick/SDK/宿主/reader迁移，不再重跑江西、振江或普源样本。原生19:15晚间Brief任务保持；自然送达、Human反馈和5–10实际交易日未预填。R4-2产品出口、R4-2.5及P1仍未整体签收。
+
+          [主施工/本轮Brief](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805389707) · [完整回执](https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5805386142) · [质量/交付档案](https://github.com/auguspp/decision-kernel/blob/77853709ba6b9b1065f61a69ccadac622df257e7/research_runs/normal-question-preparation/688337-20260924/quality-review.md)
+
+          r4.1顺序保持：R4-2真实日常价值→有界Hosted Full验证→News→Re-entry→Concept持续覆盖→机构/研报→P1产品验收；P1后有界复盘→#351面板。#525/#502停放、#531不合生产，#524/#509及P2不启动。既有Sub2API/无金额上限不等于无限调用或自动Full权限。'''
+          shared='\n'.join(line.strip() for line in shared.splitlines())
+          plan={297:('执行路线图｜r4.1：首条正常Quick已交付；自动发布与批次关联待收口','# 当前施工入口｜RM-20260923-r4.1'),526:('P1 单Quick｜普源正常新问题已留存/可读；自动日常交付待验收','# 单Quick当前实施与产品验收状态')}
+          audit={'run_id':os.environ['GITHUB_RUN_ID'],'authority':'#297/5805389707','changes':[],'model_calls':0,'repository_content_writes':0}
+          try:
+              for number,(title,heading) in plan.items():
+                  old=get('issues/'+str(number));assert marker not in old['body'],'ENTRY_ALREADY_RECONCILED_NO_REPEAT'
+                  save(str(number)+'-before.json',old)
+                  body=heading+'\n\n'+marker+'\n\n'+shared+'\n\n<details>\n<summary>历史入口原文（完整保留；旧当前状态与NEXT不覆盖上方）</summary>\n\n'+old['body']+'\n\n</details>\n'
+                  check=get('issues/'+str(number));assert check['body']==old['body'] and check['updated_at']==old['updated_at'],'CONCURRENT_ISSUE_CHANGE'
+                  data=json.dumps({'title':title,'body':body},ensure_ascii=False).encode()
+                  record={'issue':number,'old_body_sha256':hashlib.sha256(old['body'].encode()).hexdigest(),'new_body_sha256':hashlib.sha256(body.encode()).hexdigest(),'status':'WRITE_ABOUT_TO_START'};audit['changes'].append(record);save('audit.json',audit)
+                  r=subprocess.run(['gh','api','--method','PATCH',root+'issues/'+str(number),'--input','-'],input=data,capture_output=True,timeout=60)
+                  assert r.returncode==0,'ISSUE_WRITE_UNCERTAIN_NO_RETRY'
+                  after=get('issues/'+str(number));assert after['body']==body and after['title']==title
+                  assert old['body'] in after['body'];record['status']='UPDATED_READ_BACK_OLD_BODY_RETAINED';save(str(number)+'-after.json',after)
+          finally:save('audit.json',audit)
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: r4-rigol-entry-${{ github.run_id }}
+          path: entry-reconciliation/
+          if-no-files-found: error
+          retention-days: 30
