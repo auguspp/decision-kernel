@@ -15,6 +15,9 @@ dependencies = [
 decision-kernel = "decision_kernel.cli:main"
 
 [project.optional-dependencies]
+ci-contracts = [
+  "pytest==9.1.1",
+]
 cnequity = [
   "cnequity==0.11.0",
 ]
