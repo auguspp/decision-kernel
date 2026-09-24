@@ -12,7 +12,8 @@ simonlin1212/Vibe-Research@7f3a08b85451b54c762898789e2dcaa5d7d2ec98:
 `.agents/skills/data-access/scripts/sources/eastmoney.py::board_fund_flow`
 and `.agents/skills/data-access/scripts/tests/test_eastmoney.py` (pagination
 regression blob3a84126e237fc681deece74306de78492fc2cc63). Reuse its concept query,
-today/5d/10d field mapping and actual-page-size lesson. The 496/100 regression
+today/5d/10d field mapping, actual-page-size lesson and current `EM_PUSH2_HOSTS`
+ordering (`push2delay.eastmoney.com` before `push2.eastmoney.com`). The 496/100 regression
 was an industry sample/test, NOT today's number of concepts. A catalogue entry
 or unit test is not proof of live availability or field semantics.
 
@@ -58,9 +59,10 @@ old Concept/Industry readers' latest-run selection. No existing workflow changes
 
 The whole attempt permits at most32 requests, a180-second next-request start
 budget,1MiB per HTTP response and4096 reported rows per window. Fresh isolated
-sessions carry no environment/netrc credentials, redirects or fallback hosts.
-HTTP/transport/contract failure stops this provider; no retry or continuation
-into another window hides it. A retained failure can have a successful workflow
+sessions carry no environment/netrc credentials or redirects. Version v2 fixes
+this bounded adapter to Vibe's current first push2 host `push2delay.eastmoney.com`;
+it does not implement an in-run host cascade or automatic retry. HTTP/transport/
+contract failure still stops this provider and cannot be hidden by another window. A retained failure can have a successful workflow
 receipt while observation status remains PARTIAL_OR_UNAVAILABLE. A hard timeout
 without sealed observation is an execution failure, not empty market activity.
 
@@ -78,8 +80,11 @@ replay and safe display. Full exact-head PR CI, independent main CI and ordinary
 code publication require actual receipts, not this document. No old test or
 source/replay fingerprint is changed by this slice.
 
-The first live trial must retain its real result or failure and run/artifact
-identity. Ordinary GitHub retention/index discoverability and repeated daily
+The first live v1 trial `35983118410/attempt1` retained its real failure: the
+then-fixed `push2.eastmoney.com` today/page1 request returned HTTP 502, so zero
+rows were qualified and WHY remained UNKNOWN. That evidence motivated v2's
+minimal host correction rather than a retry framework. The next fresh v2 trial
+must retain its own result or failure and run/artifact identity. Ordinary GitHub retention/index discoverability and repeated daily
 operation are separate follow-ups through existing mechanisms. This file does
 NOT activate a normal current-state source consumer, establish live full
 coverage, close all-batch continuity or claim research usefulness. Broad snapshot

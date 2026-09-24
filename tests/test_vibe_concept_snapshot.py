@@ -228,7 +228,9 @@ def test_explicit_execution_binding(field, value, tmp_path):
     assert not (tmp_path/'never').exists()
 
 
-def test_http_uses_original_isolated_session_and_no_redirects(monkeypatch):
+def test_http_uses_vibe_primary_host_original_isolated_session_and_no_redirects(monkeypatch):
+    assert s.VERSION == 'vibe-concept-snapshot-v2'
+    assert s.URL == 'https://push2delay.eastmoney.com/api/qt/clist/get'
     spec = s.request_spec('today', 1); raw = body(spec, total=1)
     url = requests.Request('GET', s.URL, params=spec['params']).prepare().url
     class Response:

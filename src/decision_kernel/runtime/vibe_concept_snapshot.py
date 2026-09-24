@@ -1,8 +1,8 @@
 """Vibe-derived, bounded Eastmoney concept snapshots; never historical price paths.
 
-Protocol/period fields and actual-page-size lesson adapted from
-simonlin1212/Vibe-Research@7f3a08b85451b54c762898789e2dcaa5d7d2ec98,
-.agents/skills/data-access/scripts/sources/eastmoney.py::board_fund_flow.
+Protocol/period fields, actual-page-size lesson and current primary push2 host
+adapted from simonlin1212/Vibe-Research@7f3a08b85451b54c762898789e2dcaa5d7d2ec98,
+.agents/skills/data-access/scripts/{common.py,sources/eastmoney.py}.
 MIT, Copyright (c) 2026 simonlin1212; full notice in docs/vibe-concept-snapshot.md.
 Reuse Kernel's HTTP isolation, safe JSON, Decimal and canonical identity helpers.
 """
@@ -24,10 +24,10 @@ from . import easy_stock_context as common
 from .hithink_dump_trial import _session, _check_response
 from .sector_radar_audit import _check_safe_json
 
-VERSION = 'vibe-concept-snapshot-v1'
+VERSION = 'vibe-concept-snapshot-v2'
 UPSTREAM = '7f3a08b85451b54c762898789e2dcaa5d7d2ec98'
 WORKFLOW = '.github/workflows/vibe-concept-snapshot.yml'
-URL = 'https://push2.eastmoney.com/api/qt/clist/get'
+URL = 'https://push2delay.eastmoney.com/api/qt/clist/get'
 # Vibe field map, not independently certified exchange definitions.
 PERIODS = {'today': ('f3', 'f62', 'f184'), '5d': ('f109', 'f164', 'f165'),
            '10d': ('f160', 'f174', 'f175')}
