@@ -192,13 +192,10 @@ def test_existing_activity_checker_accepts_explicit_extra_peers():
     assert c['check_activity'](read,peers=c['PEERS']|{path})==[1] and len(calls)==10
 
 
-def test_manual_workflow_keeps_permissions_and_original_budget():
-    text=Path('.github/workflows/sector-recovery-once.yml').read_text()
-    assert 'schedule:' not in text and 'pull_request:' not in text and 'push:' not in text
-    assert 'timeout-minutes: 150' in text and 'timeout-minutes: 140' in text
-    assert text.count('secrets.HITHINK_FINANCE_API_KEY')==1 and 'SUB2API' not in text
-    assert 'sector-radar-prospective-state' in text and 'digest-mismatch: error' in text
-    assert 'persist-credentials: false' in text and '--method PATCH' not in text
+def test_consumed_recovery_has_no_launcher_and_normal_budget_is_unchanged():
+    assert not Path('.github/workflows/sector-recovery-once.yml').exists()
+    for path in Path('.github/workflows').glob('*.yml'):
+        assert 'capture-sector-recovery.py' not in path.read_text()
     from decision_kernel.runtime.sector_radar_audit import MAX_REQUESTS
     assert MAX_REQUESTS==128
 
@@ -207,51 +204,3 @@ def test_manual_workflow_keeps_permissions_and_original_budget():
 def test_live_capture_refuses_clock_injection(tmp_path, clock):
     with pytest.raises(ValueError, match="LIVE_CLOCK_OVERRIDE_REJECTED"):
         r.collect(tmp_path, None, {}, api_key="synthetic-private", **{clock: lambda: 1})
-
-
-def test_native_claim_shell_stops_duplicate_before_spending(tmp_path):
-    import os, subprocess, sys, textwrap
-    workflow = Path('.github/workflows/sector-recovery-once.yml').read_text()
-    shell = textwrap.dedent(workflow.split('        run: |\n', 1)[1].split('\n  capture:', 1)[0])
-    helper = '''import json, os, pathlib, sys
-name = pathlib.Path(sys.argv[0]).name
-args = sys.argv[1:]
-root = pathlib.Path(os.environ['MOCK_GH_ROOT'])
-if name == 'jq':
-    if '-cn' in args:
-        print(json.dumps({'request_id':args[args.index('request_id')+1], 'run_id':args[args.index('run_id')+1], 'authorization_comment_id':5628923881}))
-    else:
-        value = json.load(sys.stdin); tag = args[args.index('--arg')+2]
-        sys.exit(0 if value['object'] == {'type':'tag','sha':tag} else 1)
-else:
-    with (root/'calls').open('a') as f: f.write(json.dumps(args)+'\\n')
-    path = next(a for a in args if a.startswith('repos/'))
-    if path.endswith('/git/tags'):
-        message = next(a[8:] for a in args if a.startswith('message='))
-        assert json.loads(message)['authorization_comment_id'] == 5628923881
-        print('d'*40)
-    elif path.endswith('/git/refs'):
-        try: (root/'claimed').open('x').close()
-        except FileExistsError: sys.exit(1)
-        print('{}')
-    elif '/git/ref/tags/' in path:
-        print(json.dumps({'object':{'type':'tag','sha':'d'*40}}))
-    else: raise AssertionError(path)
-'''
-    for name in ('gh', 'jq'):
-        path = tmp_path / name
-        path.write_text('#!' + sys.executable + '\n' + helper)
-        path.chmod(0o755)
-    env = {**os.environ, 'PATH': str(tmp_path) + os.pathsep + os.environ['PATH'],
-        'MOCK_GH_ROOT': str(tmp_path), 'GITHUB_REPOSITORY': r.REPO,
-        'GITHUB_RUN_ID': '123', 'GITHUB_SHA': 'a'*40, 'GITHUB_OUTPUT': str(tmp_path/'outputs'),
-        'GITHUB_STEP_SUMMARY': str(tmp_path/'summary')}
-    first = subprocess.run(['bash', '-c', shell], env=env, capture_output=True, text=True)
-    assert first.returncode == 0, first.stderr
-    output = (tmp_path/'outputs').read_text()
-    assert output == 'launch_sha=' + 'd'*40 + '\n'
-    duplicate = subprocess.run(['bash', '-c', shell], env=env, capture_output=True, text=True)
-    assert duplicate.returncode != 0 and (tmp_path/'outputs').read_text() == output
-    calls = [json.loads(line) for line in (tmp_path/'calls').read_text().splitlines()]
-    assert len(calls) == 5 and calls[-1][3].endswith('/git/refs')
-    assert not any('HiThink' in str(call) or 'dispatch' in str(call) for call in calls)
