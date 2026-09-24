@@ -40,7 +40,7 @@ CI仅contents/actions read，无业务secrets，不保留checkout credentials。
 
 [#544](https://github.com/auguspp/decision-kernel/pull/544)已经完成资源去重与固定Suken旧启动器退役：同PR并发、pip下载缓存、四个action-history输入准备共享；原请求、失败/成果、共享runtime与行为测试保留。30个现役workflow文件不是156个历史Actions登记。真实基线和慢样本见 [首切片回执](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5812515561)，没有显著端到端提速结论。
 
-本轮分流由普通PR走完整工程验收，再由真实纯文字改动验证文字路径、失败传播与正常发布，不能用静态条件代替平台实跑。实际状态读#354最新回执。
+本轮分流已由 [#545](https://github.com/auguspp/decision-kernel/pull/545) 正常合并。工程验收、实际文字路径与正常发布读回分别记录在该PR和#354最新回执；不得用一类通过替代另一类。后续纯文字改动按上方范围执行，不再人为要求全库pytest；混合或未知变更仍full。
 
 下一重点仍是用途registry/计算档案各自的消费者验证、代码同树PR/main双份全量、已消费旧编排义务及publisher/intake空转。它们没有在本次被自动退役；不为快通道再造通用selector、scheduler或新状态中心。
 
