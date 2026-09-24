@@ -101,7 +101,7 @@ jobs:
           metrics = dict(code_sha=os.environ['BENCH_CODE_SHA'], harness_sha=os.environ['BENCH_HARNESS_SHA'], run_id=os.environ['GITHUB_RUN_ID'],
               attempt=os.environ['GITHUB_RUN_ATTEMPT'], layout=os.environ['BENCH_LAYOUT'], splits=int(os.environ['BENCH_SPLITS']),
               group=int(os.environ['BENCH_GROUP']), workers=int(os.environ['BENCH_WORKERS']), cache_hit=os.environ.get('BENCH_CACHE_HIT', ''),
-              duration_sha256=hashlib.sha256((out/'durations.json').read_bytes()).hexdigest(), scope='BENCHMARK_REMAINING_ONLY', merge_eligible=False)
+              duration_sha256=hashlib.sha256((out/'durations.json').read_bytes()).hexdigest(), scope='BENCHMARK_REMAINING_ONLY', merge_eligible=False, rootdir_policy='EXPLICIT_PROJECT_CONFIG')
           def run(name, command):
               started = time.perf_counter()
               with (out / (name + '.log')).open('wb') as log:
@@ -111,7 +111,7 @@ jobs:
               if result.returncode:
                   print((out / (name + '.log')).read_text()[-12000:])
                   raise SystemExit(result.returncode)
-          run('full_collection', [sys.executable, '-m', 'pytest', '--collect-only', '-q'])
+          run('full_collection', [sys.executable, '-m', 'pytest', '-c', 'pyproject.toml', '--collect-only', '-q'])
           full = (out/'full_collection.log').read_text()
           paths = Path('.github/ci-v2-research.txt').read_text().splitlines()
           domain, remaining = reader['partition_nodes'](full, paths)
@@ -119,9 +119,13 @@ jobs:
           args = ['@' + str(out/'remaining.txt')]
           if metrics['splits'] > 1:
               args += ['--splits', str(metrics['splits']), '--group', str(metrics['group']), '--splitting-algorithm', 'duration_based_chunks', '--durations-path', str(out/'durations.json')]
-          run('selected_collection', [sys.executable, '-m', 'pytest', '--collect-only', '-q', *args])
+          run('selected_collection', [sys.executable, '-m', 'pytest', '-c', 'pyproject.toml', '--collect-only', '-q', *args])
+          selected_nodes = [n for n in (out/'selected_collection.log').read_text().splitlines() if n.startswith('tests/') and '::' in n]
+          assert selected_nodes and len(selected_nodes) == len(set(selected_nodes)) and set(selected_nodes) <= set(remaining), 'ROOT_OR_SELECTION_IDENTITY'
+          metrics['matched_duration_nodes'] = sum(n in json.loads((out/'durations.json').read_text()) for n in selected_nodes)
+          assert metrics['matched_duration_nodes'] > 0, 'NO_DURATION_HINT_MATCH'
           workers = [] if metrics['workers'] == 1 else ['-n', str(metrics['workers']), '--dist=loadfile', '--max-worker-restart=0']
-          run('execution', [sys.executable, '-m', 'pytest', '-q', *args, *workers, '-o', 'faulthandler_timeout=60', '-o', 'faulthandler_exit_on_timeout=true',
+          run('execution', [sys.executable, '-m', 'pytest', '-c', 'pyproject.toml', '-q', *args, *workers, '-o', 'faulthandler_timeout=60', '-o', 'faulthandler_exit_on_timeout=true',
               '--durations=30', '--junitxml=' + str(out/'result.xml')])
           count = reader['passed_test_set']((out/'selected_collection.log').read_text(), (out/'result.xml').read_bytes())
           metrics.update(executed_tests=count, selected_identity_sha256=hashlib.sha256((out/'selected_collection.log').read_bytes()).hexdigest(), selected_set_passed=True)
@@ -184,5 +188,48 @@ jobs:
           path: |
             ${{ runner.temp }}/ci-workflow-audit/*.log
             ${{ runner.temp }}/ci-workflow-audit/metrics.json
+          retention-days: 30
+          if-no-files-found: error
+  collect-results:
+    needs: [execution, workflow-audit]
+    if: always() && github.repository == 'auguspp/decision-kernel' && github.head_ref == 'ci/20260925-v2-shard-benchmark' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Preserve this experiment and its failed predecessor as raw data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          out = Path(os.environ['RUNNER_TEMP']) / 'benchmark-packet'
+          out.mkdir()
+          def get(path):
+              return subprocess.check_output(['gh', 'api', 'repos/auguspp/decision-kernel/' + path], timeout=60)
+          for run in ['36035887604', os.environ['GITHUB_RUN_ID']]:
+              folder = out / run; folder.mkdir()
+              payload = json.loads(get('actions/runs/' + run + '/artifacts?per_page=100'))
+              assert payload['total_count'] == len(payload['artifacts'])
+              (folder/'artifacts.json').write_text(json.dumps(payload, indent=2))
+              (folder/'jobs.json').write_bytes(get('actions/runs/' + run + '/jobs?per_page=100'))
+              (folder/'run.json').write_bytes(get('actions/runs/' + run))
+              for artifact in payload['artifacts']:
+                  if not artifact['name'].startswith(('ci-benchmark-' + run + '-', 'ci-workflow-audit-' + run)):
+                      continue
+                  assert type(artifact['id']) is int and artifact['id'] > 0 and not artifact['expired']
+                  raw = get('actions/artifacts/' + str(artifact['id']) + '/zip')
+                  assert len(raw) == artifact['size_in_bytes'] and 'sha256:' + hashlib.sha256(raw).hexdigest() == artifact['digest']
+                  (folder/(str(artifact['id']) + '.zip')).write_bytes(raw)
+          (out/'needs.json').write_text(os.environ['NEEDS_JSON'])
+          print('Raw benchmark data only; producer conclusions and failed predecessor are preserved.')
+          PY
+      - name: Retain one bounded audit packet
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ci-benchmark-packet-${{ github.run_id }}
+          path: ${{ runner.temp }}/benchmark-packet/
           retention-days: 30
           if-no-files-found: error
