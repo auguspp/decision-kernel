@@ -1,5 +1,8 @@
 """Real planner/capture/replayer; synthetic histories and events; no live calls."""
 import copy
+from pathlib import Path
+import runpy
+import shutil
 from datetime import datetime, time, timedelta
 
 import pytest
@@ -35,6 +38,29 @@ def scenario(tmp_path,monkeypatch,*,failure=3002,partial=False):
         return body
     report=run(reference_inputs=None,transport=request)
     return mod,out,report,calls,pauses
+
+
+@pytest.fixture(scope='module')
+def partial_history_capture_baseline(tmp_path_factory):
+    """Retain one real partial capture as immutable input, never a cached verdict."""
+    with pytest.MonkeyPatch.context() as patch:
+        prohibit_network(patch)
+        root=tmp_path_factory.mktemp('stock-action-history-baseline')
+        mod,out,report,_,_=scenario(root,patch)
+        assert report['status']==mod['PARTIAL']
+        rebuilt=mod['verify'](out)
+        assert rebuilt['network_calls']==0 and rebuilt['coverage']==report['coverage']
+        return out
+
+
+@pytest.fixture
+def partial_history_capture_copy(tmp_path,partial_history_capture_baseline):
+    """Each tamper owns its files, report and real replay callable."""
+    out=tmp_path/'reading'
+    shutil.copytree(partial_history_capture_baseline,out)
+    root=Path(__file__).resolve().parents[1]
+    mod=runpy.run_path(str(root/'.github/scripts/capture-stock-reading.py'))
+    return mod,out,mod['read'](out/'capture.json')
 
 
 @pytest.mark.parametrize('partial',[False,True])
@@ -73,8 +99,8 @@ def test_history_request_does_not_retry_or_isolate_batch_fatal_codes(tmp_path,mo
 
 
 @pytest.mark.parametrize('tamper',['add_from','remove_to','change_to','inject_recent_event'])
-def test_replayer_binds_exact_history_request_and_full_retained_event_list(tmp_path,monkeypatch,tamper):
-    mod,out,r,_,_=scenario(tmp_path,monkeypatch)
+def test_replayer_binds_exact_history_request_and_full_retained_event_list(partial_history_capture_copy,tamper):
+    mod,out,r=partial_history_capture_copy
     entry=[e for e in r['requests'] if e['path']==own.ACTIONS][1]
     if tamper=='add_from': entry['params']['from']='2026-06-01'
     elif tamper=='remove_to': del entry['params']['to']

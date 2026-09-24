@@ -1,95 +1,103 @@
 # CI mainline / CI 施工接续入口
 
-Version: ci-mainline-v1 / 2026-09-15. Engineering only; Investment Authority = NONE.
+Version: ci-mainline-v2 / 2026-09-24. Engineering only; Investment Authority = NONE.
 
-## 从这里恢复，而不是接着旧聊天猜
+## 当前授权与方向
 
-先重新固定 current main，读取本页、`.github/workflows/ci.yml`、`pyproject.toml`，再读 [#354 最新回执](https://github.com/auguspp/decision-kernel/issues/354)。代码进入 PR、合并、main CI 成功、正常 publisher 成功是不同阶段；本页不是某个未来 run 的成功证明。
+Human 2026-09-24 明确要求：思路调整后全面分析 CI，哪些可拆、可删，该优化就优化。复用 [#354](https://github.com/auguspp/decision-kernel/issues/354) 管这次有界整顿，不另建治理平台。当前产品架构仍以 AGENTS / 最新 #297 的 R5.1 为准；本页不启动 Radar、模型实验、Full 或任何新定时。
 
-Human 已将两个过长的施工会话交给当前 Main Construction，并明确要求先完成 CI，再接续后续项目。原话及范围在 [接手授权](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5678344365)；主线顺序记录在 [#297](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5678384813)。CI 收口不等于 #354 全仓架构审阅或 P0 使用验收完成。不要因为换聊天就重复已经合并的 #378/#381/#383/#385。
+**CI 保护当前仍需承担的行为与兼容性，不永久保护每一代施工步骤。** 旧的“每次改动必须重跑全部历史测试”是可以随依赖证据修订的工程策略，不是 Kernel 的不可修改原则。反过来，R5.1 也不意味着旧数据不再需要读回、API 模块已无人调用，或可以凭文件名删除安全检查。
 
-## 一套测试，两种执行方式
+本轮先实施低风险资源优化；测试分层、默认路径退役仍按下面的对象与证据推进。没有实施并验证前，**实际 blocking 命令仍运行完整 tests**，不得把路线图写成已缩减覆盖。后续已获准的有界 CI 优化不需要 Human 为每个文件重复授权；扩大运行/数据删除/外部费用权限另论。
 
-安装仍用 `python -m pip install -e '.[dev]'`。本地默认 `python -m pytest -q` 仍是串行；并行与 stalled-test fail-fast 只由 CI 的显式命令启用：
+## 恢复与真实验收
+
+固定 current main，读取本页、`.github/workflows/ci.yml`、`pyproject.toml` 和 #354 最新回执。PR、exact-head CI、正常合并、独立 main CI、正常 publisher/readback 是不同事实；只有修改会影响发布边界时，才把发布语义作为该变更的验收对象，不把 CI 当研究质量或 Human 接受的证明。当前已有 publisher 会由成功 main CI 自然触发，本切片未删除它。
+
+第一切片的验收保留旧的 exact-head PR、独立 main CI 与正常 publisher/readback 边界，不能由本页预填完成。保留首次失败，不以 rerun/skip/xfail/continue-on-error 换绿。后续若拆 suite，须先确定稳定 required-check 和 downstream 消费者合同，再改变触发语义。
+
+## 精确审计基线
+
+代码 `0f644425dd3710551893625ab2eb3d9d2bc1d363`；main CI `35984202408` / job `107582921346`；artifact `10801701260`。
+
+真实下载 ZIP 301380 bytes，SHA256 `41bca64455f449ab76a3b1a98ea5c66fae340075f1c86015808e6e4149319c2f`。CRC、identity、JUnit 已核对：6189 个唯一 testcase，365 个模块，0 failure/error/skip。pytest 195.92 秒；JUnit 累计 747.741 testcase-seconds；runner 4 CPU。四 worker 的理想均分下界约 186.94 秒，进一步调 scheduler 的空间不是主要问题。
+
+Job 实测 237 秒：安装 26 秒，独立 collection 8 秒，Test 196 秒，其余约 7 秒。单一托管样本，不是 SLA，也不是改动后的提速证据。
+
+| 测试模块 | cases | 累计 testcase 秒 |
+| --- | ---: | ---: |
+| stock_reading_calendar | 17 | 51.438 |
+| stock_discovery_page | 28 | 50.606 |
+| stock_action_history_capture | 10 | 50.597 |
+| woton_report_representation | 25 | 46.932 |
+| stock_reading_reconciliation | 34 | 42.218 |
+| stock_radar_capture | 29 | 38.990 |
+| stock_company_coverage_v2 | 13 | 35.087 |
+| stock_issuer_isolation | 29 | 31.669 |
+| stock_radar_reading | 32 | 29.870 |
+| stock_sector_raw_retention | 7 | 26.926 |
+
+前十共 404.333 testcase-seconds；并行时间不能逐项相加成 wall-time 节省。Stock 抓取/回放仍在使用，不能为追求少测试而删掉。`saved_research_once` 的 45 个测试在该样本仅约 2.9 秒：旧测试的维护负担和耗时负担必须分开判断。
+
+## KEEP / CONSOLIDATE / RETIRE / DEFER
+
+| 对象 | 当前处置 | 具体边界与接续 |
+| --- | --- | --- |
+| PIT、来源/证券身份、权限、历史读回、create-only/不确定写入、Odds 算术 | KEEP | 属于持续有效产品合同；保留真实失败传播和反例，不靠日志齐全替代。 |
+| 同一 PR 已被新 head 取代的 CI | CONSOLIDATE | 原生 concurrency，只取消同一 PR 的旧运行；main 采用每 run 唯一组，不丢独立或 pending main。 |
+| 每次开发安装的重复下载 | CONSOLIDATE | 原生 setup-python pip cache，key 依赖 pyproject；每次仍真实安装，不缓存环境/测试结果；base-only isolated/no-cache 安装不变。冷/热命中收益分别实测。 |
+| action-history 四个 tamper 的相同上游 capture | CONSOLIDATE | 复用 #443/#444 的不可变输入模式；每例独立文件、report 和真实 verify，正向/partial/fatal/transport 测试不改。 |
+| 文档/研究档案/索引变动一律全工程验收 | CONSOLIDATE，下一结构切片 | 分开纯文字、含计算代码的研究材料、用途 registry、运行配置。先审消费者与对应内容/索引校验；unknown/mixed/code/fixture/workflow 改动回 full。不得直接 paths-ignore 全 docs。 |
+| 已退役 Pre→Quick 编排、冻结试验和一次性修复的重复部署断言 | RETIRE 候选，尚未删除 | 先证明入口已停用、调用者已迁移、旧格式读回仍有覆盖。删旧执行义务/重复 literal，不删原始证据、失败、冻结输入和仍被复用的 reader/validator。 |
+| main CI 成功后无条件启动 intake | CONSOLIDATE，待触发合同审阅 | 现有 job 已按 request diff 限制实际工作，但仍每次启动 runner。后继应保留可信成功代码与显式请求变动绑定，不能变成任意 push 执行。 |
+| current-state publisher 与 kernel-tests 的绑定 | CONSOLIDATE，待消费者审阅 | 区分代码重建、索引发布、观察更新；不在本切片断开 publisher，也不取消 requested 可见性或把失败当无变化。 |
+| 判断研究推理是否严格走固定角色/轮次/Pre | RETIRE 默认工程义务 | R5.1 按成果/证据/交接验收研究；旧序列化格式的兼容测试仍须留在适当层。CI 不认证经济真理。 |
+| base-only 安装、full collection/JUnit、失败日志、4-worker loadfile | KEEP 当前实现 | collection 仅 8 秒，尚不足以承担另建身份采集机制的成本。缓存不替代任何执行结果。 |
+| 任意增加矩阵/worker、通用选择器/调度框架、自动性能报警 | DEFER | 不为精简 CI 另造一套胖 CI；没有当前收益证据不建设。 |
+
+### Workflow 盘点范围
+
+精确 main 的 `.github/workflows` 是 **31 个文件**，不是 Actions API 返回的 156 个历史登记。历史登记中存在当前 tree 已没有的临时施工入口；不能把它们全部算作现役，也不删历史 run/log 来美容。
+
+下表覆盖 31 个当前文件的去向；未逐项核验实时使用的对象保留 DEFER，不把库存盘点冒充全部运行验收。
+
+| 当前文件（省略 .yml） | 处置 |
+| --- | --- |
+| ci | KEEP；本切片优化资源，不改执行覆盖。 |
+| current-state-read-entry；incremental-disclosure-intake | CONSOLIDATE 候选；已读完整触发/步骤，CI fan-out 如上。 |
+| stock-business-research；saved-disclosure-research；saved-research-once；sub2api-codex-validator-smoke | DEFER 删除、优先审退休 API 执行入口。stock-business 包含来源保管/修复与多种旧研究模式，不能整个删；saved-research-once 仍被一个 prepared-disclosure 测试直接读 workflow。 |
+| sector-radar-shadow；hithink-stock-dump-trial；stock-reading-after-sector；sector-member-reading；radar-concept-source；radar-concept-detail；radar-industry-breadth；radar-institutional-source；radar-newsnow-daily；vibe-concept-snapshot | DEFER 配置改动；在用或正在验收的机械观察/读取层不能因 hosted Quick 更强而整体删除。各真实运行/调度合同仍以对应入口为准。 |
+| decision-inbox；apply-disclosure-assessment | DEFER；用户交付/写入边界需独立检查，不能当 CI 杂项删除。 |
+| judgment-timeline | KEEP 手动阅读面；先前清理已让它退出普通 CI，不重复施工。 |
+| cninfo-announcement-source-probe；economic-release-discovery；economic-source-capture；mineru-pdf-capability-probe；sanhua-relation-acquisition；sanhua-source-acquisition；sector-public-history-probe；sector-radar-historical-study；sector-recovery-once；stock-field-source-study；live-dogfood | DEFER 逐个退役审阅；区分可复用获取/诊断和已消费一次性执行。旧公司名、once/probe 字样本身不是删除证据。 |
+
+## 当前执行合同
+
+本地 `python -m pytest -q` 默认仍串行；CI 明确使用：
 
 ```sh
+python -m pip install -e '.[dev]'
 python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
   -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true \
   --durations=100 --durations-min=1.0 --junitxml=pytest.xml
 ```
 
-所有 tests 都在同一 blocking `test` job 中，不按改动路径筛选，不用 `-k`/marker/ignore 排除慢测试，不增加 skip/xfail，不重启崩溃 worker，不设置 continue-on-error。`loadfile` 将同文件的测试交给同一 worker；现有 fixture 缓存是进程内的，mutable association 仍逐调用复制，plan 仍通过当时的真实 callable 重建。不能把缓存结果当成测试通过。
+PR checkout 实际 head，main checkout 本次 SHA，并比较 `git rev-parse HEAD`；event SHA 单独保留。contents read-only，不给 CI production secrets，不保留 checkout credentials。Test 使用 pipefail，卡死在 60 秒先留栈后失败，不重启 worker。60 秒是 CI deadlock 诊断边界，不是业务 SLA；真实合法慢项必须依据实测审阅。
 
-CI 额外复用 pytest 9.1 的内建 faulthandler：单项测试（含 fixture setup/teardown）超过 60 秒时先向 pytest log 输出线程栈，再退出该卡死进程。这个 60 秒只属于 CI deadlock 诊断/fail-fast；不改变本地默认 pytest，也不是业务 timeout、性能 SLA、skip 或自动重试。当前已接受 main 的慢项约为个位数秒，因此该边界用于识别异常 stall，而不是把正常慢测试切掉；若真实合法测试未来需要超过该值，应基于实测重新审阅，不能静默放宽或绕过。
+`kernel-ci-<run>-<attempt>` 30 天保留 identity、环境、full collection、JUnit 和 pytest log，always 上传。早期安装失败或 stall 可能没有完整 JUnit，仍是失败。原 synthetic pass/fail/worker-crash 测试继续真实执行工作流 Test 脚本；缓存和资源策略的静态回归不是平台实测取消/命中证明。
 
-新增依赖仅为 dev 中精确固定的 `pytest-xdist`；faulthandler 属于 pytest 内建能力，不新增依赖。不进入 base、Research、documents、feeds 或 production extras。真实 base-only 安装/CLI 检查继续运行，不降为 import-name grep，也不通过复用开发虚拟环境冒充 clean install。它自身保留 isolated/no-cache/no-retry 安装边界。
+## Reuse Check 与回滚
 
-## 身份、失败与证据
+Reuse Decision: **REUSE / CONSOLIDATE**。内部复用原 ci.yml、test_ci_contract、#443/#444 fixture 模式；官方复用 GitHub concurrency 和现有 setup-python 的 pip cache；公共实现检查 actions/setup-python 的 `src/cache-distributions/pip-cache.ts` 及 `docs/advanced-usage.md`，历史 pytest-xdist/loadfile 审阅复用 #354 已保留记录。没有新依赖、选择器、scheduler 或生产 cache。
 
-PR 测试显式 checkout `github.event.pull_request.head.sha`，main push 使用 `github.sha`，并用 `git rev-parse HEAD` 实际比较；event SHA 单独留存，不与被测试代码 SHA 混为一谈。测试权限只读、不继承 production secrets、不保留 checkout credentials。
+来源：
+- [GitHub concurrency：包括 pending 替换与条件取消](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)
+- [setup-python cache 实现](https://github.com/actions/setup-python/blob/main/src/cache-distributions/pip-cache.ts)
+- [setup-python usage](https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md)
+- [路径过滤与 required-check 语义](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)
 
-每个 CI run 的 `kernel-ci-<run>-<attempt>` artifact 保留 30 天，包含代码/event/run 身份、Python/包版本、CPU 数、pytest 完整 collection、JUnit XML 与 pytest 日志。这是 CI 诊断附件，不是 canonical Research/Radar/Market 状态，不进入 production restore 发现路径。上载使用 always；测试命令的 pipefail 保证 tee 不会吞掉失败。checkout/install 早期失败可能没有完整附件；stalled test 在 JUnit 最终写入前被 faulthandler 终止时也可能没有 `pytest.xml`，但 `pytest.log` 应保留触发时的线程栈。这仍是失败，不是 quiet success。
+回滚通过普通 PR 撤销本切片 workflow/fixture/资源回归，不直接写 main，不 force-push，不动旧请求/证据或生产日程。发生不确定远端写入先读回对账；保留失败，不通过新入口绕过权限。不得把缓存命中、测试数减少或一次更快的 runner 当成产品验收。
 
-`tests/test_ci_contract.py` 既检查命令/依赖/权限边界，也在临时目录用工作流的实际 Test 脚本运行明确的 synthetic pass/fail/worker-crash 样本，验证退出码与 JUnit，禁止用模拟的全项目 PASS 代替它。Judgment Timeline 已退出普通 main CI，只有显式 main `workflow_dispatch` 才生成其只读附件；原 publisher 仍走正常路径。
+## 历史入口保留
 
-## 已完成清理与保留理由
-
-| 范围 | 处置 | 理由 / 边界 |
-|---|---|---|
-| PIT、身份、来源、权限、fail-closed、replay/retention 等 active contracts | KEEP blocking | 它们是持续有效的工程/认知边界，不能为速度删除或抽样。 |
-| Stock 共享不可变测试准备 | CONSOLIDATE，复用 #381 | 减少重复准备，不缓存被测 plan，不共享可变测试结果。 |
-| consumed direct successor 的历史 receipt 重复 literal | RETIRE 重复断言，复用 #383 | 保留 disabled/scope/hash 等结构契约；冻结 JSON、文档、Git 历史不改。 |
-| consumed continuation 的历史 receipt 重复 literal | RETIRE 重复断言，复用 #385 | 保留 failed-work/predecessor/source binding 与现有 continuation 安全契约；不退役执行权限检查。 |
-| base-only 安装与 isolated CLI 执行 | KEEP blocking | 基线约 6.69 秒，但它证明 dev extras 没有泄漏为基础依赖，不能只按耗时退役。 |
-| 多核执行、JUnit、artifact 传输、stalled-test thread dump | REUSE | 使用 pytest-xdist、pytest 内建 faulthandler、GitHub 原生能力；不自建 scheduler/watchdog/registry/分片协议。 |
-| pip cache、changed-file 筛选、fast/slow suite | DEFER | 安装不是当前主瓶颈；路径筛选/拆 suite 仍缺少净收益与隔离证据。无需靠减少 blocking coverage 换速度。 |
-| 其他历史 one-shot 测试、production workflow 整理 | DEFER 至 #354 对应审阅 | 名称包含 once 或历史日期不等于可删除；仍在使用的 admission/recovery 合同继续有效。 |
-
-## 复用依据与已知基线
-
-[施工前 Reuse Check](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5678398231) 覆盖仓库内部、官方工具、公共 GitHub prior art。实际检查 pytest-xdist v3.8.0 的 [依赖/许可证](https://github.com/pytest-dev/pytest-xdist/blob/v3.8.0/pyproject.toml)、[loadfile 实现](https://github.com/pytest-dev/pytest-xdist/blob/v3.8.0/src/xdist/scheduler/loadfile.py) 和 [运行/worker restart 说明](https://pytest-xdist.readthedocs.io/en/stable/distribution.html)，而非只看 star 数。官方 [setup-python pip cache](https://github.com/actions/setup-python#caching-packages-dependencies) 已比较，本切片未采用。2026-09-16 的真实 #384 双次 hang 进一步复用 pytest 9.1 内建 `faulthandler_timeout` / `faulthandler_exit_on_timeout`，不引入新的 timeout/watchdog plugin。
-
-接手前精确基线：main `e6ab50663532745feb390978843072628a562845`；run `34952643776` / test job `104326855801`；实际 **3314 passed in 468.54s**，安装约 12 秒。早先 746.03、441.91、459.83 秒等不同 run 不能混成稳定 benchmark。新增 CI 回归预计增加 7 个测试；最终以 exact-head collection/JUnit 对账为准，不能只检查测试总数。
-
-收口必须有：未删除既有测试的 diff、完整清单与执行结果、真实失败传播回归、exact-head PR CI、合并后的独立 main CI、正常 publisher 和结果读回。速度只按实际样本报告，托管 runner 波动不包装为保证；本页不会预填尚未完成的运行。
-
-## 2026-09-19 第二轮实测：四 worker 与诊断体积修正
-
-随着 Radar / Research / Odds 等新能力进入同一 blocking suite，main `eb64d63a164f50c4d4bcb4a9ff9821f49f409054` 已达到 4213 tests。run `35410366885` 的 pytest 为 **4213 passed / 344.79s**；安装约12秒、collection约9秒，pytest 再次成为主耗时。该 runner 报告4 CPU，而 #387 仍只使用2 workers，因此“更多 worker”从原 DEFER 条件重新进入有界实测，而不是凭 test 数量直接拆 suite。
-
-PR #442 在保持完整 test identity、fail-closed、`loadfile` 与 `--max-worker-restart=0` 不变的前提下，保留三个独立 exact-head 样本：
-
-| workers | run | pytest | 结果 |
-| ---: | --- | ---: | --- |
-| 2 | 35412336901 | 334.82s | 4213 passed；0 failure/error/skip |
-| 3 | 35412499474 | 314.83s | 4213 passed；0 failure/error/skip |
-| 4 | 35412508707 | 299.51s | 4213 passed；0 failure/error/skip |
-
-三份实际 JUnit 各含4213个唯一 testcase，**testcase 集合完全相同**；执行顺序因 xdist 不同不作为身份差异。托管 runner 分别来自不同 Azure region，因此这些秒数是实际样本而非受控同机 benchmark；四 worker 的首个样本相对同轮二 worker 低约10.5%，且未出现 worker restart/crash。最终采用4 workers，仍由后续 exact-head 与独立 main CI 提供第二层实证；若实际 main 证明不稳定，按普通 reviewed PR 回滚，不通过 skip/retry 掩盖。
-
-同一 PR 还修正两处 pytest 自动参数 ID：8MiB+ feed body 和512KiB+ Research progress body的**输入字节与断言完全不变**，只增加短语义 `ids`。实际诊断原件从 main run35410366885 的 `collection.txt` **9,386,728 bytes** / `pytest.xml` **9,555,747 bytes**，降到本轮 **473,881 / 约642.9KiB**；最长 collection 行从8,388,709字符降到16,485。ZIP因重复文本压缩本来很强，因此压缩包降幅较小；此改动的主要收益是 collection/JUnit/诊断可读性与传输解析负担，不冒充 pytest 主耗时优化。
-
-这一轮仍不启用 changed-file selection、marker、skip/xfail、fast/slow suite、自建 sharding、test-result cache 或 continue-on-error。Stock capture/replay 的重复完整 synthetic preparation 仍是下一候选，只允许复用不可变 upstream/baseline；被测 validator、mutable plan 和结果不得缓存。
-
-
-## 2026-09-20：Judgment Timeline 退出普通 main CI
-
-Human 在真实使用中确认，每次 main push 都重新发布同一组选定历史 Judgment Timeline 会制造 Actions Summary / artifact 噪音。该阅读面仍有价值，但它不是每次代码变更的测试产物。
-
-因此此切片只调整交付触发，不改变 Timeline 的历史来源、投影语义或完整 blocking suite：
-
-- `kernel-tests` 删除 `Judgment timeline attachment` job；PR/main CI 不再自动生成 Timeline artifact；
-- 新的 `.github/workflows/judgment-timeline.yml` 仅接受显式 `workflow_dispatch`，并只在本仓库 main 上执行；
-- 继续复用原生成器、固定 source commit 校验、只读权限、无业务 secrets/cache、GitHub 官方 artifact 上传与30天保留；
-- 构建 receipt 改为绑定专用 workflow 与 `workflow_dispatch`，仍验证实际 checkout HEAD 等于本次 `GITHUB_SHA`；
-- Timeline 的手动生成不是新 Judgment、Human exposure、Outcome、Research 或 production acceptance。
-
-这项清理不通过减少测试覆盖换速度；普通 CI 的 `test` job 命令、collection/JUnit、失败传播和诊断 artifact 均保持原合同。真实手动 artifact 发布是独立验收事实，不能由 PR CI 静态测试冒充。
-
-## 诊断与回滚
-
-并行异常先读本 run 的失败/环境/collection/JUnit/pytest log，不自动重跑生产。若单项测试超过 60 秒，先使用 faulthandler 留下的线程栈定位 blocking call；不要用 Re-run 把首次 stall 擦掉。串行诊断使用同一精确代码、同一 extras，去掉 `-n 4 --dist=loadfile --max-worker-restart=0`，运行原完整 pytest 命令；保留身份和诊断附件。遇到失败不以添加 skip/xfail 或减少测试换绿灯。
-
-需要代码回滚时，通过普通 reviewed PR 撤销这次 CI 配置及其专属回归/依赖改动；不改 #381/#383/#385、冻结 request、历史证据或任何 production workflow。回滚本身也必须通过真实 CI。不要直接在 main 写回旧文件，也不要 force-push。
-
-CI 验收完成后，按届时最新 main、#297 与项目交接继续，不自动合并其他 open PR、不启动 CNINFO/Radar/Research 来证明 CI 成功。自然运行、真人使用和投资判断各自验收。
+2026-09-15 至 09-20 的完整旧说明、基线和 #378/#381/#383/#385/#387/#442–444/Timeline 清理记录见 [本页前驱版本](https://github.com/auguspp/decision-kernel/blob/0f644425dd3710551893625ab2eb3d9d2bc1d363/docs/CI-MAINLINE.md) 和 #354。它们是已发生的证据，不因当前策略修订而失效；不再把旧 DEFER 或“永不拆 suite”措辞当成本次新授权的否决条件。

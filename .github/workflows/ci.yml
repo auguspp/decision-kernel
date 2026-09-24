@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# Only obsolete heads of the SAME PR supersede one another.
+# Main uses a unique group: even queued independent main runs must survive.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
       - name: Install
         run: python -m pip install -e '.[dev]'
       - name: Record exact code and environment
