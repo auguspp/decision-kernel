@@ -1,4 +1,4 @@
-"""Offline tests of bounded Responses wiring, never real research/provider proof."""
+"""Offline tests of shared Responses wiring, never real research/provider proof."""
 from datetime import datetime, timedelta, timezone
 import json
 from copy import deepcopy
@@ -172,153 +172,6 @@ def test_oversized_payload_is_rejected_before_provider_import(tmp_path):
     assert list(tmp_path.iterdir())==[]
 
 
-@pytest.mark.parametrize("backdated,prior_problem", [
-    (None, None), ("preflight.json", None), ("input.json", None),
-    (None, "missing"), (None, "corrupt"), (None, "already_executed"),
-])
-def test_full_host_uses_original_gate_and_retains_exact_input_before_model(tmp_path, monkeypatch, backdated, prior_problem):
-    """Fake I/O only; actual packet/admission/Funnel/receipt models execute."""
-    from decision_kernel.runtime import current_state_delivery as delivery
-    original_request=json.loads((Path(__file__).parents[1]/w.REQUEST_PATH).read_text())
-    p,_,_=fixture(); code="a"*40; reading_ref="c"*40
-    market=b"Synthetic retained comparison 14.48 24.91 9.87 15.52; PRIVATE_HUMAN_NOTE_NOT_FOR_MODEL"
-    original_request["market_source"]=w.source_ref("market.md","b"*40,market,"market")
-    p_raw=w.raw(p); old_spec=w.source_ref("old-input.json","b"*40,p_raw,"old")
-    catalog={"schema_version":1,"inputs":[{**w.identity.input_key(p).as_dict(),"input":old_spec}]}
-    reading={"schema_version":1};reading["reading_hash"]=canonical_hash(reading)
-    files={code:{w.identity.CATALOG_PATH:w.raw(catalog)},"b"*40:{"market.md":market,"old-input.json":p_raw},
-        reading_ref:{"current-state.json":w.raw(reading)}}
-    # Fixture bindings only; the real source checker and admission still execute.
-    previous = w.raw({"status":"NOT_EXECUTED", "phase":"INPUT_PREPARATION",
-        "formal_research_started":prior_problem == "already_executed", "mutation_uncertain":False,
-        "note":"PREVIOUS_PRIVATE_NOTE_NOT_FOR_MODEL"})
-    continuation = deepcopy(w.APPROVED_CONTINUATION)
-    old_prefix = "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/"
-    prior_spec = w.source_ref(old_prefix+"host-receipt.json", "e"*40, previous, "PREVIOUS_FAILED_EXECUTION")
-    continuation["source"] = prior_spec
-    original_request["continuation"] = continuation
-    monkeypatch.setattr(w, "APPROVED_CONTINUATION", continuation)
-    old_files = {prior_spec["path"]:previous, old_prefix+"launch.json":w.raw({"id":continuation["execution_id"]})}
-    files[prior_spec["ref"]] = dict(old_files)
-    heads={"main":code,"read-model/current-state":reading_ref, original_request["work_ref"]:prior_spec["ref"]}
-    commits={}; mutations=[]; model_prompts=[]
-    # Real Git clocks have whole seconds; the old mock's microseconds hid the bug.
-    stamp = (datetime.now(timezone.utc)-timedelta(minutes=1)).replace(microsecond=261214)
-    sleeps = []
-    def clock():
-        nonlocal stamp
-        stamp += timedelta(milliseconds=10)
-        return stamp.isoformat()
-    def sleep(seconds):
-        nonlocal stamp
-        sleeps.append(seconds)
-        stamp += timedelta(seconds=seconds)
-    monkeypatch.setattr(w, "now", clock)
-    monkeypatch.setattr(w.time, "sleep", sleep)
-    class API:
-        def __init__(self,token): self.calls=0
-        def get(self,path):
-            self.calls+=1
-            if path.startswith("git/ref/heads/"):
-                name=path.removeprefix("git/ref/heads/")
-                if name not in heads: raise delivery.GitHubReadError("GitHub HTTP 404")
-                return {"object":{"sha":heads[name]}}
-            if path.startswith("git/commits/"):
-                return commits[path.removeprefix("git/commits/")]
-            raise AssertionError(path)
-        def _call(self,method,path):
-            assert method=="GET"; data=self.get(path); return SimpleNamespace(json=lambda:data)
-        def file(self,path,ref):
-            self.calls+=1
-            if (path,ref) == (prior_spec["path"],prior_spec["ref"]):
-                if prior_problem == "missing": raise delivery.GitHubReadError("GitHub HTTP 404")
-                if prior_problem == "corrupt": return b"{}"
-            return files[ref][path]
-    def native(self,method,endpoint,body):
-        mutations.append((method,endpoint,body))
-        if endpoint=="git/refs":
-            name=body["ref"].removeprefix("refs/heads/");heads[name]=body["sha"]
-            return {"ref":body["ref"],"object":{"sha":body["sha"]}}
-        assert method=="PUT" and endpoint.startswith("contents/"), endpoint
-        assert "sha" not in body and body["branch"]==original_request["work_ref"]
-        path=endpoint.removeprefix("contents/")
-        before=heads[body["branch"]]
-        if path in files[before]:
-            self.uncertain=True
-            raise ValueError("existing create-only file; do not retry")
-        new=f"{len(mutations):040x}"; new_files=dict(files[before]);new_files[path]=w.base64.b64decode(body["content"])
-        files[new]=new_files;heads[body["branch"]]=new
-        committed = datetime.fromisoformat(w.now()).replace(microsecond=0)
-        if backdated and path.endswith("/"+backdated):
-            committed -= timedelta(seconds=2)  # Actual bad order must still fail.
-        commits[new]={"sha":new,"committer":{"date":committed.isoformat()}}
-        return {"commit":{"sha":new},"content":{"sha":w.blob(new_files[path])}}
-    def acquire(request,out):
-        return {"source_url":request["source_url"],"retrieved_at":w.now(),"pdf_sha256":"f"*64,
-            "pages":[{"page_number":11,"text":"Synthetic public body. All results are mocked fixtures."}]}
-    def call(stage,prompt,model,out,usage):
-        assert stage=="pre"
-        assert any(name.endswith("/input.json") for name in files[heads[original_request["work_ref"]]])
-        model_prompts.append(prompt)
-        assert "PRIVATE_HUMAN_NOTE_NOT_FOR_MODEL" not in json.dumps(prompt)
-        assert "PREVIOUS_PRIVATE_NOTE_NOT_FOR_MODEL" not in json.dumps(prompt)
-        assert continuation["authorization"] not in json.dumps(prompt)
-        return pre(prompt)
-    monkeypatch.setattr(delivery,"GitHubAPI",API)
-    monkeypatch.setattr(w.Retainer,"native",native)
-    monkeypatch.setattr(w,"acquire",acquire)
-    monkeypatch.setattr(w,"model_call",call)
-    monkeypatch.setenv("GH_TOKEN","synthetic-only")
-    monkeypatch.setenv("GITHUB_RUN_ATTEMPT","1")
-    monkeypatch.setenv("GITHUB_REF","refs/heads/main")
-    exit_code = w.run(original_request,code,tmp_path/"first")
-    local = tmp_path/"first"
-    assert all(files[heads[original_request["work_ref"]]][k] == v for k,v in old_files.items())
-    launch = json.loads((local/"launch.json").read_bytes())
-    host = json.loads((local/"host-receipt.json").read_bytes())
-    assert launch["continuation"] == host["continuation"] == continuation
-    assert launch["id"] == "p0-suken-api-20260910-v2" and launch["automatic_retry"] is False
-    if prior_problem:
-        assert exit_code == 2 and host["status"] == "NOT_EXECUTED"
-        assert host["phase"] == "PREDECESSOR_CHECK" and host["formal_research_started"] is False
-        assert not (local/"source.json").exists() and model_prompts == []
-        assert w.run(original_request,code,tmp_path/"repeat") == 2 and model_prompts == []
-        return
-    prepared_raw = (local/"input-preparation.json").read_bytes()
-    prepared = json.loads(prepared_raw)
-    assert prior_spec in prepared["source_refs"]
-    assert prepared["research_cutoff"].split(".")[-1] != "000000+00:00"
-    prepare_report = json.loads((local/"prepare.json").read_bytes())
-    prepare_path = original_request["prefix"]+"prepare.json"
-    assert files[heads[original_request["work_ref"]]][prepare_path] == (local/"prepare.json").read_bytes()
-    assert prepare_report["input_file_sha256"] == w.sha(prepared_raw)
-    if backdated:
-        expected = ("PREFLIGHT_NOT_COMMITTED_BEFORE_SELECTION" if backdated == "preflight.json"
-                    else "INPUT_COMMIT_CLOCK_INVALID")
-        report = prepare_report if backdated == "preflight.json" else json.loads((local/"admission.json").read_bytes())
-        assert report["reason"] == expected and not report["research_execution_allowed"]
-        host = json.loads((local/"host-receipt.json").read_bytes())
-        assert host["status"] == "NOT_EXECUTED" and host["formal_research_started"] is False
-        if backdated == "preflight.json":
-            assert host["error_code"] == expected
-            assert not (local/"input.json").exists()
-        assert exit_code == 2 and model_prompts == [] and not (local/"candidate.json").exists()
-        assert w.run(original_request,code,tmp_path/"repeat")==2 and model_prompts == []
-        return
-    assert exit_code == 0
-    assert prepared_raw == (local/"input.json").read_bytes()
-    assert prepare_report["reason"] == "INPUT_READY_TO_COMMIT_NOT_EXECUTION_ADMISSION"
-    assert not prepare_report["research_execution_allowed"]
-    assert len(sleeps) == 2 and all(0 < n <= 1 for n in sleeps)
-    result=json.loads((tmp_path/"first"/"validation.json").read_text())
-    assert result["status"]=="VALIDATED_FUNNEL_RESULT" and len(model_prompts)==1
-    adm=json.loads((tmp_path/"first"/"admission.json").read_text())
-    assert adm["reason"]=="RESEARCH_EXECUTION_ALLOWED"
-    assert heads["main"]==code
-    assert w.run(original_request,code,tmp_path/"repeat")==2
-    assert len(model_prompts)==1
-
-
 @pytest.mark.parametrize("stage,output_type,make_result", [
     ("pre", PreResearchResult, pre), ("quick", QuickResearchResult, quick)])
 @pytest.mark.parametrize("foreign_reference", [False, True])
@@ -440,27 +293,17 @@ def test_bad_commit_clock_never_writes_or_retries(tmp_path, monkeypatch, failure
     assert (tmp_path/"preflight.json").read_bytes() == data
 
 
-def test_actual_old_commit_still_fails_original_order_check():
-    # Values from run34490271156 / commit72ecf07; no old record is corrected.
-    with pytest.raises(w.admission.AdmissionRejected, match="PREFLIGHT_NOT_COMMITTED_BEFORE_SELECTION"):
-        w.admission.require(w.admission.clock("2026-09-10T14:37:59.261214+00:00")
-                            <= w.admission.clock("2026-09-10T14:37:59Z"),
-                            "PREFLIGHT_NOT_COMMITTED_BEFORE_SELECTION")
-
-
-@pytest.mark.parametrize("change", ["v1", "v3", "old_prefix", "authorization", "source_ref", "source_blob"])
-def test_only_the_explicit_authorized_successor_is_selectable(change):
-    request = json.loads((Path(__file__).parents[1]/w.REQUEST_PATH).read_text())
-    assert w.checked_request(request) == request
-    if change in {"v1", "v3"}:
-        request["id"] = "p0-suken-api-20260910-"+change
-    elif change == "old_prefix":
-        request["prefix"] = request["prefix"].replace("-v2/", "-v1/")
-    elif change == "authorization":
-        request["continuation"]["authorization"] = "not-authorized"
-    elif change == "source_ref":
-        request["continuation"]["source"]["ref"] = "a"*40
-    else:
-        request["continuation"]["source"]["git_blob"] = "a"*40
-    with pytest.raises(w.TrialError, match="unapproved"):
-        w.checked_request(request)
+def test_retired_fixed_case_cli_fails_without_launch_or_output(tmp_path):
+    import os
+    import subprocess
+    import sys
+    assert not any(hasattr(w, name) for name in ("run", "main", "acquire", "checked_request"))
+    assert not hasattr(w.Retainer, "begin")
+    out = tmp_path / "retired"
+    env = {k: v for k, v in os.environ.items()
+           if k not in {"GH_TOKEN", "GITHUB_TOKEN", "SUB2API_API_KEY", "DEEPSEEK_API_KEY"}}
+    result = subprocess.run(
+        [sys.executable, "-m", w.__name__, "--code-commit", "a" * 40, "--output", str(out)],
+        capture_output=True, text=True, timeout=10, check=False, env=env)
+    assert result.returncode == 1 and "SAVED_ONE_SHOT_RETIRED" in result.stderr
+    assert not out.exists()

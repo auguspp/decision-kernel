@@ -1,19 +1,17 @@
-"""One approved saved-source Pre/Quick, using original admission and Funnel.
+"""Shared Research model loop and create-only retention; no fixed-case launcher.
 
-A manual trial, not an agent framework or daily scheduler. The model has no
-execution tools: it returns original model-shaped data. Trusted Python owns the
-stage transition, receipt, validation and create-only candidate retention.
+The consumed Suken one-shot is retired. Its request, results and original code
+remain in Git history. Existing hosts still own admission, source/permission
+checks and invocation; this module does not create a replacement execution lane.
 """
 from __future__ import annotations
 
-import argparse
 import base64
 import hashlib
 import json
 import math
 import os
 import re
-import signal
 import subprocess
 import time
 from datetime import datetime, timedelta, timezone
@@ -32,21 +30,10 @@ from .external_research_execution import (ExternalResearchInputPacket, ExternalR
     ResearchExecutionReceipt, ResearchToolEvent, validate_external_research_candidate)
 
 REPO = "auguspp/decision-kernel"
-REQUEST_PATH = "research_runs/api-once-request.json"
 BASE_URL = "https://ai.6600600.xyz/v1"
 MODEL = "gpt-6-astra"
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 DEEPSEEK_MODEL = "deepseek-flash"
-# One explicitly authorized successor, not automatic retry/resume policy.
-APPROVED_CONTINUATION = {
-    "execution_id": "p0-suken-api-20260910-v1", "run_id": 34490271156,
-    "source": {"repository": REPO, "ref": "2722e676e0a7c273fd60b6c388a2941f5c1fc284",
-        "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v1/host-receipt.json",
-        "git_blob": "d7f52a24207a41ac9b52f991c48576318bd2021e",
-        "sha256": "1fd80d7bcd20dedc10024adce3841a36508930238993bb1309a598a339c78f76",
-        "purpose": "PREVIOUS_FAILED_EXECUTION"},
-    "authorization": "https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5621532088",
-}
 MAX_SOURCE_BYTES = 16 * 1024 * 1024
 # Full saved multi-document packet plus labelled reading representations; still
 # checked before SDK use, including the output schema. Not a daily spending quota.
@@ -115,21 +102,8 @@ def locator(spec):
     return f"https://github.com/{REPO}/blob/{spec['ref']}/{spec['path']}"
 
 
-def checked_request(request):
-    # This trial's approved object is not selectable by a model or dispatch input.
-    require(request["schema_version"] == 1 and request["ticker"] == "601952", "unapproved request")
-    require(request["id"] == "p0-suken-api-20260910-v2", "unapproved execution")
-    require(request["work_ref"] == "research-candidate/p0-suken-api-20260910", "unapproved work ref")
-    require(request["prefix"] == "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/", "unapproved prefix")
-    require(request.get("continuation") == APPROVED_CONTINUATION, "unapproved continuation")
-    require(request["source_url"] == "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-8/2026-08-19/12502187.PDF", "unapproved source URL")
-    require(request["pages"] == [7, 11, 12, 13, 14, 19, 20, 21, 24], "source scope changed")
-    require(request["market_source"]["repository"] == REPO, "wrong market repository")
-    return request
-
-
 class Retainer:
-    """Native gh create-only writes to this one trial prefix; never main."""
+    """Native gh create-only writes to the caller's checked prefix; never main."""
     def __init__(self, api, request, code, out):
         self.api, self.request, self.code, self.out = api, request, code, out
         self.uncertain = False
@@ -146,19 +120,6 @@ class Retainer:
         result = identity._json(p.stdout)
         self.uncertain = False
         return result
-
-    def begin(self):
-        from .current_state_delivery import GitHubReadError
-        try:
-            self.api.get("git/ref/heads/" + self.request["work_ref"])
-        except GitHubReadError as exc:
-            if str(exc) != "GitHub HTTP 404":
-                raise
-            self.native("POST", "git/refs", {"ref": "refs/heads/" + self.request["work_ref"], "sha": self.code})
-        # No SHA parameter: an existing launch marker rejects repeat spending.
-        return self.save("launch.json", {"id": self.request["id"], "code_commit": self.code,
-            "run_id": os.environ.get("GITHUB_RUN_ID"), "started_at": now(), "automatic_retry": False,
-            "continuation": self.request["continuation"]})
 
     def save(self, name, value, *, existing_local=False):
         require(name in OUTPUT_NAMES, "write outside fixed candidate files")
@@ -200,33 +161,6 @@ class Retainer:
     def local(self, name, data):
         with (self.out / name).open("xb") as f:
             f.write(data)
-
-
-def acquire(request, out):
-    """One public GET + existing PDF extractor. No credential, OCR or fallback."""
-    import requests
-    began = now()
-    with requests.get(request["source_url"], timeout=(15, 60), stream=True, allow_redirects=False) as r:
-        require(r.status_code == 200, f"primary PDF HTTP {r.status_code}; no fallback")
-        parts, total = [], 0
-        for part in r.iter_content(64 * 1024):
-            total += len(part)
-            require(total <= MAX_SOURCE_BYTES, "primary PDF byte limit")
-            parts.append(part)
-    pdf = b"".join(parts)
-    with (out / "source.pdf").open("xb") as f:
-        f.write(pdf)  # retained in the existing Actions artifact, even on later failure.
-    parsed = extract_pdf_text(pdf, max_pdf_bytes=MAX_SOURCE_BYTES, max_pages=200,
-                              max_extracted_chars=1_000_000)
-    require(parsed.page_count == 192 and "601952" in parsed.pages[0].text
-            and "2026" in parsed.pages[0].text and "半年度报告" in parsed.pages[0].text,
-            "primary document identity differs")
-    pages = [{"page_number": p.page_number, "text": p.text} for p in parsed.pages if p.page_number in request["pages"]]
-    require(len(pages) == len(request["pages"]) and all(p["text"].strip() for p in pages), "required pages unavailable")
-    require(all(not any(ord(c) < 32 and c not in "\n\r\t" for c in p["text"]) for p in pages), "source text damaged")
-    return {"source_url": request["source_url"], "retrieval_started_at": began,
-        "retrieved_at": now(), "pdf_sha256": parsed.pdf_sha256, "page_count": parsed.page_count,
-        "pages": pages, "scope": "Issuer-authored H1 report via Sina mirror; selected pages only, not whole-report reading or later-update inventory. Tables with ambiguous extraction remain UNKNOWN."}
 
 
 def admitted_output_type(output_type, evidence_ids):
@@ -628,163 +562,5 @@ def research(packet, discovery, context, out, *, call=None, clock=now, bound_con
     return candidate, result, usage
 
 
-def run(request, code, out):
-    from .current_state_delivery import GitHubAPI
-    checked_request(request)
-    require(os.environ.get("GITHUB_RUN_ATTEMPT") == "1", "rerun rejected")
-    require(os.environ.get("GITHUB_REF") == "refs/heads/main", "main-only manual trial")
-    api = GitHubAPI(os.environ["GH_TOKEN"])
-    current = lambda: api._call("GET", "git/ref/heads/main").json()["object"]["sha"]
-    require(current() == code, "main moved")
-    out.mkdir(parents=True, exist_ok=False)
-    retain = Retainer(api, request, code, out)
-    host = {"status": "NOT_EXECUTED", "phase": "RESERVATION", "formal_research_started": False, "code_commit": code, "started_at": now(), "investment_authority": "NONE"}
-    host["continuation"] = request["continuation"]
-    try:
-        retain.begin()
-        host["phase"] = "PREDECESSOR_CHECK"
-        predecessor = request["continuation"]["source"]
-        previous = identity._json(identity._checked_source(predecessor, lambda s: api.file(s["path"], s["ref"])))
-        require(previous["status"] == "NOT_EXECUTED" and previous["phase"] == "INPUT_PREPARATION"
-                and previous["formal_research_started"] is False and previous["mutation_uncertain"] is False,
-                "predecessor is not the preserved pre-research failure")
-        host["phase"] = "SOURCE_PREFLIGHT"
-        pf_start = now()
-        market_spec = request["market_source"]
-        market = identity._checked_source(market_spec, lambda s: api.file(s["path"], s["ref"]))
-        # The compact observation was independently reviewed in #310. Do not send
-        # the original reading's prose, feedback or any unrelated private record.
-        for number in ("14.48", "24.91", "9.87", "15.52"):
-            require(number.encode() in market, "market observation differs")
-        captured = acquire(request, out)
-        host["market_source"] = {**market_spec, "sha256": sha(market)}
-        market_origin = {**host["market_source"], "purpose": "SAVED_SECTOR_DISCOVERY_ORIGIN"}
-        context = {"market_observation": request["market_observation"], "issuer_report": captured,
-                   "source_limitations": request["source_limitations"]}
-        require(len(raw(context)) < MAX_PROMPT_BYTES - 16000, "source exceeds approved model context; no silent clipping")
-        context_source = retain.save("source.json", context)
-        context_source["purpose"] = "MODEL_CONTEXT"
-        meta = api.get("git/commits/" + context_source["ref"])
-        eid = uuid5(NAMESPACE_URL, request["id"] + ":public-context:" + context_source["sha256"])
-        seed = EvidenceArtifact(id=eid, source_type="SAVED_RESEARCH_OBSERVATION", source_identifier=request["id"],
-            source_locator=locator(context_source), published_at=meta["committer"]["date"], available_at=now(),
-            retrieved_at=now(), content_hash=context_source["sha256"], idempotency_key=request["id"]+":public-context",
-            retention_mode="FULL_ARTIFACT", replayability_level="PARTIAL", raw_storage_ref=locator(context_source),
-            license_terms_note="Full retained context, not full source/market universe. PDF in same-run artifact. Issuer-authored report via a mirror; no source-truth certification.")
-        pf_end = now()
-        pf = {"schema_version": 1, "provenance": "RECORDED_TOOL_RETURNS", "case_id": "601952.SH", "ticker": "601952",
-            "security_id": "SSE:601952", "started_at": pf_start, "finished_at": pf_end,
-            "valid_until": (datetime.fromisoformat(pf_end)+timedelta(minutes=45)).isoformat(),
-            "reads": [{"id": "h1", "identity": "601952:2026H1:SINA_ISSUER_PDF", "locator": request["source_url"],
-                "tool_reference": "GITHUB_ACTIONS:"+os.environ.get("GITHUB_RUN_ID", "UNKNOWN")+":source.pdf",
-                "authority": "PRIMARY", "kind": "BODY", "succeeded": True, "checked_at": captured["retrieved_at"],
-                "body_sha256": captured["pdf_sha256"]}],
-            "required_classes": [{"id": "SAVED_H1_BUSINESS_REPORT", "mode": "STATIC", "body_ids": ["h1"], "inventory_id": None}],
-            "inventories": [], "limits": {"max_queries": 0, "max_reads": 1},
-            "seed_publications": [{"evidence_id": str(eid), "kind": "GIT_COMMIT", "source": context_source}],
-            "notes": "Accessibility and declared issuer identity only. Existing parser is not semantic truth certification. STATIC H1 business mapping, not latest-disclosure completeness."}
-        pf_source = retain.save("preflight.json", pf)
-        pf_source["purpose"] = admission.PREFLIGHT_PURPOSE
-        host["phase"] = "INPUT_PREPARATION"
-        r = api._call("GET", "git/ref/heads/read-model/current-state").json()["object"]["sha"]
-        reading = identity._json(api.file("current-state.json", r))
-        from .current_state import sealed
-        sealed(reading, "reading_hash")
-        selected, cutoff = now(), now()
-        packet = ExternalResearchInputPacket(execution_id=request["id"], case_id="601952.SH", ticker="601952", security_id="SSE:601952",
-            source_lane="SECTOR_SAVED_MEMBER_READING", selected_at=selected, research_cutoff=cutoff,
-            code_commit=code, current_state_commit=r, current_state_reading_hash=reading["reading_hash"],
-            source_refs=(context_source, pf_source, market_origin, predecessor), seed_evidence_artifacts=(seed,), research_question=request["question"],
-            known_unknowns=("REQUIRED_SOURCE_CLASS:SAVED_H1_BUSINESS_REPORT:STATIC", *request["known_unknowns"]),
-            next_discriminating_search="仅用已冻结半年报业务、经营与风险披露区分自产、加工和购销的价格暴露；缺项留UNKNOWN。",
-            method_version="research-funnel-v1", prompt_version="saved-responses-once-v1", allowed_tools=("OTHER_READ",),
-            candidate_output_prefix=request["prefix"], budget={"max_tool_calls": 6, "max_search_queries": 0, "max_source_reads": 4,
-                "max_technical_retries": 0, "max_elapsed_minutes": 15,
-                **{k+"_enforcement": "SOFT_EXECUTOR" for k in ("tool_calls", "search_queries", "source_reads", "technical_retries", "elapsed_time")}})
-        catalogue_raw = api.file(identity.CATALOG_PATH, code)
-        cs = source_ref(identity.CATALOG_PATH, code, catalogue_raw, "CURRENT_CODE_EXECUTION_SCOPE")
-        checks = dict(input_raw=raw(packet), preflight_raw=raw(pf), catalog_source=cs,
-            load=lambda s: api.file(s["path"], s["ref"]), commit=lambda ref: api.get("git/commits/"+ref),
-            current_code=current, now=now, checked_at=now())
-        # Diagnostic prospective bytes, not the admitted/committed input.json.
-        retain.local("input-preparation.json", checks["input_raw"])
-        ready = admission.assess_admission(**checks)
-        retain.save("prepare.json", ready)
-        require(ready["reason"] == "INPUT_READY_TO_COMMIT_NOT_EXECUTION_ADMISSION", ready["reason"])
-        ins = retain.save("input.json", packet)
-        discovery = DiscoveryInput(discovery_id=request["id"], source_lane=packet.source_lane,
-            ticker=packet.ticker, security_id=packet.security_id, economic_direction="种植产业链的实际粮价收益与成本暴露待核验",
-            as_of=packet.research_cutoff,
-            factual_observations=({"statement": request["selection_reason"], "evidence_artifact_ids": (eid,)},),
-            source_lineage=({"evidence_artifact_id": eid, "source_locator": seed.source_locator, "available_at": seed.available_at},),
-            why_now=request["selection_reason"], current_market_expression=request["market_observation"]["reading"],
-            contradiction_or_mapping_warning="价格领先不是基本面因果；H1经营信息不证明9月行情原因。",
-            next_discriminating_search=packet.next_discriminating_search,
-            known_stop_or_downgrade_condition="若没有可辨识的业务/经济问题则原Pre停下；必要来源或执行缺口不包装WAIT。")
-        checks.update(input_source=ins, expected_key=identity.input_key(packet).as_dict(), checked_at=now())
-        def execute(input_raw, key):
-            host.update(phase="RESEARCH", formal_research_started=True)
-            require(key == identity.input_key(packet).as_dict() and input_raw == raw(packet), "callback identity differs")
-            return research(packet, discovery, context, out)
-        report, executed = admission.execute_after_admission(executor=execute, **checks)
-        host["phase"] = "RETENTION"
-        retain.save("admission.json", report)
-        if executed is None:
-            host["reason"] = report["reason"]
-            return 2
-        candidate, result, usage = executed
-        retain.save("candidate.json", candidate)
-        retain.save("receipt.json", candidate.receipt)
-        retain.save("validation.json", result)
-        if result.funnel_result is not None:
-            retain.save("funnel.json", result.funnel_result)
-        host.update(status=result.status.value, model_calls=usage, canonical_input_hash=canonical_hash(packet),
-            candidate_hash=canonical_hash(candidate), validation_hash=canonical_hash(result),
-            semantic_acceptance="PENDING_INDEPENDENT_REVIEW", automatic_retry=False)
-        pre = candidate.pre_research
-        summary = "# 苏垦农发：Sector 来源 API 候选（尚待语义审阅）\n\n" + request["selection_reason"]
-        summary += "\n\n研究问题："+request["question"]+"\n\n原验证器："+result.status.value
-        if pre:
-            summary += "\n\nPre："+pre.route.value+"\n\n"+pre.route_reason
-        if candidate.quick_research:
-            q = candidate.quick_research
-            summary += "\n\nQuick："+q.route.value+"\n\n"+q.route_reason
-        summary += "\n\n不自动Deep、不更新Odds/Belief或投资Action。未发布到current-state不算Daily Brief接通。\n"
-        retain.save("README.md", summary.encode())
-        return 0 if result.status.value == "VALIDATED_FUNNEL_RESULT" else 2
-    except Exception as exc:
-        host.update(status="EXECUTION_INCOMPLETE" if host["formal_research_started"] else "NOT_EXECUTED", error_type=type(exc).__name__, error_code=exc.code if isinstance(exc, TrialError) else type(exc).__name__)
-        # No guessed why, no source-output echo that could disclose a credential.
-        if not retain.uncertain and not (out / "failure.json").exists():
-            retain.save("failure.json", {"status": host["status"], "error_type": type(exc).__name__, "error_code": host["error_code"], "phase": host["phase"], "automatic_retry": False})
-        return 2
-    finally:
-        host.update(finished_at=now(), github_read_api_calls=api.calls, retained_files=retain.writes,
-                    mutation_uncertain=retain.uncertain)
-        if not retain.uncertain:
-            retain.save("host-receipt.json", host)
-        else:
-            retain.local("host-receipt.json", raw(host))
-        print(json.dumps({k: host[k] for k in ("status", "code_commit", "finished_at")}, ensure_ascii=False))
-
-
-def main(argv=None):
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--code-commit", required=True)
-    p.add_argument("--output", required=True, type=Path)
-    args = p.parse_args(argv)
-    request = identity._json(Path(REQUEST_PATH).read_bytes())
-    # Wall timer includes source preparation, API calls and retention. It is not
-    # a monetary cap, and expiry leaves the create-only marker to block revival.
-    def timeout(*_):
-        raise TimeoutError("one-shot wall budget")
-    signal.signal(signal.SIGALRM, timeout)
-    signal.alarm(15 * 60)
-    try:
-        return run(request, args.code_commit, args.output)
-    finally:
-        signal.alarm(0)
-
-
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit("SAVED_ONE_SHOT_RETIRED: shared helpers only; no replacement launch")

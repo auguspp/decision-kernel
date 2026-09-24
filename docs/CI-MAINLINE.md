@@ -43,7 +43,7 @@ CI仅contents/actions/pull-requests read，不用业务secrets、不保留checko
 
 #548/#550已删Sector一次性和旧intake启动器，现有workflow文件为28。旧intake请求单独修改不再自动搬运材料，没有替代触发；共享入库模块/工作分支/原请求/失败保留。恢复旧操作须明确授权。#544的原始[31-workflow审计](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)留在历史。
 
-本轮按#354/5815419873进一步退役**执行义务**：
+#551按#354/5815419873进一步退役**执行义务**：
 
 | 对象 | 当前处置 | 保留什么 |
 |---|---|---|
@@ -54,6 +54,10 @@ Sector的历史脚本及原测试可从[退役前精确提交fdb9104c](https://g
 
 旧PDF试验按[#297/5740713728](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5740713728)不再建设；原`eval/`脚本仅保留为历史试验/离线核验资料，不再是这些模式的现役云端入口，也不承诺旧试验在每次新依赖环境中重跑。later Woton candidate和metadata模式、共享HTTP/PDF解析/留存守卫不变。不存在新的探针运行许可。
 
-这批预期-89旧测试/+1边界测试。真实数量、CI、merge、发布结果读#354及对应PR，不在合并前预填。全量清单覆盖368模块不代表逐条语义审查；没有“过半已经过时”的结论。后续优先审旧API编排/固定部署和重复集成准备，保留真正必要的旧成果读回；publisher重建和registry/计算按消费者验证尚待处理。
+#551实际6225→6137，PR全量通过；main复用后实跑80项、job41秒，正常发布/读回完成，见[#354/5815714318](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5815714318)。这不是删除88项让全量引擎只需41秒；完整清单也不代表剩余测试已逐条证明必要。
+
+当前按[#354/5816112755](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5816112755)完成固定苏垦任务的代码退役：`saved_research_once`去掉固定请求/前驱、`checked_request/acquire/run/main`及`Retainer.begin`，保留模块名与共享`model_call/research/Retainer.save/native/local`实现。旧`-m`入口明确非零退出，不建立替代worker。原`api-once-request.json`、候选分支、失败和消费记录不动；原执行器/测试可在[精确前驱026a7195](https://github.com/auguspp/decision-kernel/tree/026a7195f4d0ad3ccac121c9de92fbe18e5bd4b5)恢复作历史检查，不授权重新采集/研究。移除13项固定任务/旧手写时序断言，新增1项真实CLI退出检查；共享时钟、SDK与输出留存测试保留，通用prompt预算测试不再依赖旧任务。实际CI/合并/发布结果读#354及对应PR，不以本文预填。现役Stock/Question等共享宿主没有被整组宣布退役。
+
+后续优先审旧API编排/固定部署和重复集成准备，保留真正必要的旧成果读回；publisher重建和registry/计算按消费者验证尚待处理。
 
 Reuse Decision: REUSE原生Git历史、已有共享守卫与CI，不加依赖/工作流/选择器。既有官方Git/Actions及外部skip/filter比选见#354历史；删除已退役义务不需要另一套过滤平台。回滚走正常PR，不直写main/force-push，不删除原证据或运行，不改生产日程。写入不确定先对账；CI、发布、Research质量、Human接受和投资决策各自独立。
