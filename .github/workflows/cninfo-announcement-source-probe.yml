@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       probe-kind:
-        description: "Existing metadata/PDF probes or fixed Woton H1 report candidate"
+        description: "Existing metadata probe or fixed Woton H1 report candidate"
         type: choice
-        options: [announcement, pdf-transport, pdf-download-endpoint, exchange-pdf-source, woton-h1-cninfo-candidate]
+        options: [announcement, woton-h1-cninfo-candidate]
         default: announcement
       code-sha:
         description: "Required for PDF modes: exact reviewed main SHA at dispatch"
@@ -40,7 +40,7 @@ jobs:
           test "$GITHUB_REF" = "refs/heads/main"
           test "$GITHUB_RUN_ATTEMPT" = "1"
           case "$PROBE_KIND" in
-            ""|announcement|pdf-transport|pdf-download-endpoint|exchange-pdf-source|woton-h1-cninfo-candidate) ;;
+            ""|announcement|woton-h1-cninfo-candidate) ;;
             *) exit 1 ;;
           esac
           if [ "$PROBE_KIND" != "" ] && [ "$PROBE_KIND" != "announcement" ]; then
@@ -79,30 +79,6 @@ jobs:
           assert result["market_state_writes"] == result["events_created"] == 0
           print("CNINFO source probe record verified; this is not production acceptance.")
           PY
-      - name: Compare the six fixed official static-PDF request slots
-        if: inputs.probe-kind == 'pdf-transport'
-        env:
-          EXPECTED_CODE_SHA: ${{ inputs.code-sha }}
-        run: python eval/cninfo_pdf_transport_probe.py --output cninfo-pdf-transport-probe
-      - name: Verify retained static-PDF probe bytes without new requests
-        if: inputs.probe-kind == 'pdf-transport'
-        run: python eval/cninfo_pdf_transport_probe.py --output cninfo-pdf-transport-probe --verify-only
-      - name: Probe the official CNINFO announcement-download endpoint
-        if: inputs.probe-kind == 'pdf-download-endpoint'
-        env:
-          EXPECTED_CODE_SHA: ${{ inputs.code-sha }}
-        run: python eval/cninfo_pdf_download_endpoint_probe.py --output cninfo-pdf-download-endpoint-probe
-      - name: Verify retained download-endpoint probe bytes without new requests
-        if: inputs.probe-kind == 'pdf-download-endpoint'
-        run: python eval/cninfo_pdf_download_endpoint_probe.py --output cninfo-pdf-download-endpoint-probe --verify-only
-      - name: Probe exchange-official disclosure sources and PDF bytes
-        if: inputs.probe-kind == 'exchange-pdf-source'
-        env:
-          EXPECTED_CODE_SHA: ${{ inputs.code-sha }}
-        run: python eval/exchange_official_pdf_source_probe.py --output exchange-official-pdf-source-probe
-      - name: Verify retained exchange-source probe without new requests
-        if: inputs.probe-kind == 'exchange-pdf-source'
-        run: python eval/exchange_official_pdf_source_probe.py --output exchange-official-pdf-source-probe --verify-only
       - name: Query and retain the fixed Woton H1 report candidate
         if: inputs.probe-kind == 'woton-h1-cninfo-candidate'
         env:
@@ -116,15 +92,15 @@ jobs:
         id: evidence
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.probe-kind == 'pdf-transport' && 'cninfo-pdf-transport-probe' || inputs.probe-kind == 'pdf-download-endpoint' && 'cninfo-pdf-download-endpoint-probe' || inputs.probe-kind == 'exchange-pdf-source' && 'exchange-official-pdf-source-probe' || inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-source-probe' }}-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ inputs.probe-kind == 'pdf-transport' && 'cninfo-pdf-transport-probe' || inputs.probe-kind == 'pdf-download-endpoint' && 'cninfo-pdf-download-endpoint-probe' || inputs.probe-kind == 'exchange-pdf-source' && 'exchange-official-pdf-source-probe' || inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-probe' }}/
+          name: ${{ inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-source-probe' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-probe' }}/
           if-no-files-found: error
           retention-days: 30
       - name: Publish diagnostic summary
         if: always()
         env:
           ARTIFACT_URL: ${{ steps.evidence.outputs.artifact-url }}
-          PROBE_DIR: ${{ inputs.probe-kind == 'pdf-transport' && 'cninfo-pdf-transport-probe' || inputs.probe-kind == 'pdf-download-endpoint' && 'cninfo-pdf-download-endpoint-probe' || inputs.probe-kind == 'exchange-pdf-source' && 'exchange-official-pdf-source-probe' || inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-probe' }}
+          PROBE_DIR: ${{ inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-probe' }}
         run: |
           if [ -f "$PROBE_DIR/summary.md" ]; then
             cat "$PROBE_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"

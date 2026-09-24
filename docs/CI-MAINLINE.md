@@ -2,27 +2,25 @@
 
 Updated: 2026-09-24. Engineering only; Investment Authority = NONE.
 
-## 当前职责
+## 当前职责与审查标准
 
-Human 已授权按新架构拆、删、优化 CI；[当前同树减负范围](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5813511726)。产品仍按 AGENTS / 最新 #297，不新增模型调用、生产日程、治理平台或状态中心。
+Human 已授权拆、删、优化CI，并明确要求审查测试本身是否仍有用；当前测试减负见[#354/5815419873](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5815419873)。产品仍按AGENTS/最新#297。不增加来源/模型调用、日程或状态中心。
 
-**CI 保护当前有效行为与历史兼容性，不永久保护每一代施工步骤。** 保留历史不等于永远重跑全部历史脚手架。改动、PR、CI、合并、发布、研究接受是不同事实；实际完成状态读 #354 最新回执。
+**CI保护当前有效行为与必要的历史读回，不永久保护每一代施工步骤。保留历史不等于保留全部历史执行器。** 测试数量不设只增不减的目标，也不按“过半过时”设删除配额。按实际用途区分：现役行为、历史格式/身份兼容、已退役执行实验、仍待审查。删除执行测试须同时核对它的真实调用者和现役入口；共享函数仍在使用时保留相应测试。旧代码/测试可以在精确Git历史中保留，不要求每次改动重新模拟当年的完整施工。不要用skip、ignore列表、另一套夜间回归或动态依赖框架掩盖没有作出的退役判断。
 
 ## 一个稳定检查，按实际范围验证
 
-`kernel-tests` / `test` 名称不变，PR与main都产生实际检查，不使用顶层 paths-ignore。
+`kernel-tests` / `test`名称不变，PR/main都产生实际检查，不使用顶层paths-ignore。
 
-**文字路径（#545/#546）**：仅根 README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1，以及新增 `docs/readings/**/*.md`。普通非执行文件的新增/修改才可进入；完整 Git base→head raw/NUL 差异，不靠最后一个commit或平台300文件子集。要求精确base存在本仓库main/push/attempt1成功CI，不能藏掉同SHA更新的失败/进行中记录。未知、混合、删除、改名、特殊mode回full。文字路径不安装工程环境、不收集全库、不执行全量pytest；真实stdlib回归与提交文字UTF-8/非空/NUL/冲突检查，明确 `NOT_RUN_CONTENT_ONLY`。不认证链接、事实、计算、研究质量或Human接受。新增代码消费者依赖这些文字入口时须同步审查范围。
+**文字路径（#545/#546）**：仅根README/AGENTS、本文、RESEARCH-ENTRY、research-outcome-contract-v1，以及新增`docs/readings/**/*.md`。普通非执行文件新增/修改；完整Git base→head raw/NUL差异，不靠最后一次提交或平台300文件子集。精确base须有本仓库main/push/attempt1成功CI，较新失败/进行中/未知不能被旧绿灯掩盖。混合、删除、改名、特殊mode及未知回full。此路径不安装工程环境、不收集全库、不执行全量pytest，实际执行stdlib回归和文字UTF-8/非空/NUL/冲突检查，明确`NOT_RUN_CONTENT_ONLY`。不认证链接、事实、计算、研究质量或Human接受。新增消费者依赖这些文件时同步审查分流范围。
 
-**工程 PR**：始终保留完整验证。src、tests/fixtures、workflow、依赖、registry/JSON、研究计算、既有研究原件修改及未审查路径，不因扩展名像文档就免检。`full-research-method-v3.md`仍有真实回放消费者。
+**工程PR**：执行当前有效的完整测试集合。src、tests/fixtures、workflow、依赖、registry/JSON、计算、既有研究原件修改及未审路径不按扩展名免检。完整不等于已退役测试永不减少；`full-research-method-v3.md`等仍有实际消费者。
 
-**干净主干合并**：重新安装真实工程环境后，只有一个两父merge且push的before精确等于第一父、merge tree精确等于本次owned PR head，才尝试复用该PR全量。核对实际最新PR CI的身份/attempt1/success、精确merge commit原生关联的本次已合并PR、唯一未过期artifact的SHA256/CRC、完整collection与JUnit逐项一致/无失败或跳过、精确Python/runner镜像与架构/实际安装包集合。参数名转换复用当前pytest JUnit writer，不把参数里的`::`当层级。下载产物只作数据，不解包执行。读后再核最新PR，较新失败或读取不确定回full。
+**干净主干合并**：真实安装工程环境后，只有单一两父merge、push.before=第一父、merge tree=本次owned PR head才尝试复用该PR全量。检查最新PR CI/attempt1/success、精确commit原生关联的已合并PR、唯一未过期artifact的SHA256/CRC、完整collection与JUnit逐项相符且无失败/跳过、精确Python/runner镜像/架构/实际安装包。参数名转换复用pytest JUnit writer。下载ZIP只作数据，不解包执行；读后再核最新PR，较新失败或不确定回full。
 
-不接受文字成功或其他复用结果作为PR full证明；不扫历史找一个绿灯。CI工作流、分流/复用器及其测试、pyproject本次改变时主干必须full，所以此机制首次部署也不得自证免检。squash、rebase、多commit push、不同merge tree、脏tracked文件、环境改变/缺失、旧artifact格式/损坏均回full。当前仅支持证据最直接的普通merge，不伪装覆盖所有合并方式。
+文字成功或其他继承结果不能充当PR full证明。CI工作流、分流/复用器及其测试、pyproject改变时main必须full；首次部署不能自证免检。squash、rebase、多提交push、不同tree、脏tracked文件、环境变化/缺失、旧格式或坏产物均回full。复用main仍实跑小型回归；失败直接失败，不补跑全量换绿。产物明确`scope=merge_reuse`、`FULL_SUITE=REUSED_NOT_RERUN`，绑定精确PR/run/artifact/tree/数量；当前执行单存`main-smoke.xml`，不伪造本SHA全量JUnit。
 
-复用成功的main仍运行真实CI失败传播与Research身份/准入小型回归；任何失败直接失败，不再补跑全量换绿。产物明确 `scope=merge_reuse` / `FULL_SUITE=REUSED_NOT_RERUN`，保留精确PR/run/artifact/tree/测试数量，当前执行结果为独立 `main-smoke.xml`，不伪造当前全量JUnit。主干安装兼容性仍实际验证，PR的base-only测试仍保留；不是当前main再次运行每项测试的声明。
-
-## 完整路径与权限不变
+## 完整路径与权限
 
 ```sh
 python -m pip install -e '.[dev]'
@@ -31,23 +29,31 @@ python -m pytest -q -n 4 --dist=loadfile --max-worker-restart=0 \
   --durations=100 --durations-min=1.0 --junitxml=pytest.xml
 ```
 
-原full Test shell不变，本地默认串行。无skip/xfail/continue-on-error或worker重启；pipefail保证失败，60秒只作CI stall诊断。完整路径真实安装，即使pip缓存命中；base-only isolated/no-cache安装及真实pass/fail/worker-crash回归保留。PIT、身份/来源、权限、create-only/不确定写入、旧格式读回、有效Odds计算继续覆盖。
+本地默认串行；无skip/xfail/continue-on-error、worker重启或为变绿重跑。pipefail传播失败；60秒仅用于CI stall诊断。缓存只复用下载，每次真实安装。base-only isolated/no-cache安装及真实pass/fail/worker-crash回归保留。PIT、来源/证券身份、权限、create-only/写入不确定、现役历史读回和有效Odds计算继续覆盖。
 
-CI仅contents/actions/pull-requests read，无业务secrets，不保留checkout credentials；GH_TOKEN只进入只读基线/PR核验步骤，不进入测试或内容。run.pull_requests合并后可能为空，改用commits/{merge}/pulls的精确关联并读回PR；关联列表为空、歧义、达到单页上限或不匹配仍full，不猜PR号。固定原已验收三个官方Action的commit，避免浮动Action版本被当相同执行环境。原并发不变：同PR过期head可替换，main每run独立。
+CI仅contents/actions/pull-requests read，不用业务secrets、不保留checkout credentials。GH_TOKEN仅进入只读基线/PR核验，不进测试/内容。用`commits/{merge}/pulls`而非可能清空的run.pull_requests；空/歧义/单页满/不匹配回full，不猜PR号。三个原已验官方Action固定commit；同PR旧head可替换，main每run独立。
 
-保留原 `kernel-ci-<run>-<attempt>` diagnostics，always/30天，当前身份、环境和实际范围分开。早期失败可能没有完整产物，仍是失败。发布器/源准入收到的成功含义为“本次范围验证成功”：full、可信main基线上的文字检查，或精确PR full加实际main检查；不能声称后两者是本SHA全量重测。生产触发/保存产物验证/显式source-model权限均不改变。
+原`kernel-ci-<run>-<attempt>` diagnostics继续always/30天，身份、环境、验证范围分开记录。早期失败没有完整产物仍是失败。下游成功含义为“本次范围验证成功”，不是声称每个SHA都全量重测；现役来源/模型权限和原件验证不由此改变。
 
-## 进度、复用、回滚
+## 已实施、退役与后续
 
-[#544](https://github.com/auguspp/decision-kernel/pull/544)已完成PR并发/pip缓存/四个Stock输入准备去重与固定Suken旧启动器退役；原请求/失败/成果/共享runtime保留。[#545](https://github.com/auguspp/decision-kernel/pull/545)/[#546](https://github.com/auguspp/decision-kernel/pull/546)真实文字PR/main为7/11秒job，不含排队/发布，也不是完整引擎提速。更早[31-workflow初审](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)与失败/慢样本继续保留。
+[#544](https://github.com/auguspp/decision-kernel/pull/544)：PR过期运行/pip下载/Stock重复准备去重，固定Suken旧启动器退役。共享runtime及原件保留；没有完整引擎提速结论。
 
-本次同树路径已由[#547](https://github.com/auguspp/decision-kernel/pull/547)合并；真实适用范围CI和发布验收读该PR及#354最新回执，不预填后继复用成功。#548首次实际main回退PR_MERGE_ASSOCIATION，另有镜像差异；这暴露了对run内PR字段的错误依赖，关联读取修正不放松环境门禁，也不重跑原样本。用途registry/计算专门消费者、其他旧执行义务、publisher空转仍待后续处理；intake启动器退役见下。
+[#545/#546](https://github.com/auguspp/decision-kernel/pull/546)：真实文字PR/main job为7/11秒。[#547/#549](https://github.com/auguspp/decision-kernel/pull/549)实现并修正同树复用；#548因PR关联回退、另有镜像差异，原样本不重写。[#550](https://github.com/auguspp/decision-kernel/pull/550)已取得首个真实命中：PR全量6225项，job310秒；main另外实跑80项，job54秒。不含排队/发布，不是同机基准或固定省时承诺。停止扩展复用器，以正常使用核收益。
 
-固定旧 Sector recovery 启动器按[#354/5813736504](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5813736504)退役：删除 `sector-recovery-once.yml` 及其专属启动shell测试，收紧pacing的现役workflow检查。9月11日run34566950303是已消费且失败的历史尝试，不称恢复成功；原tag、请求、失败run、capture-sector-recovery.py与全部回放/时钟/数据校验保留。正常Sector日程/128请求预算/20秒节奏不变。原30个workflow文件变29个，不删除Actions历史记录。
+#548/#550已删Sector一次性和旧intake启动器，现有workflow文件为28。旧intake请求单独修改不再自动搬运材料，没有替代触发；共享入库模块/工作分支/原请求/失败保留。恢复旧操作须明确授权。#544的原始[31-workflow审计](https://github.com/auguspp/decision-kernel/blob/b3a3546560010f3683b02ec931f372ab714f2687/docs/CI-MAINLINE.md)留在历史。
 
-旧 CI 后继 `incremental-disclosure-intake.yml` 按[#354/5814933547](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5814933547)退役，workflow文件29→28；不再每次成功main CI开机检查已过期且已有留存的固定请求，也不把检查搬入publisher/CI或新增手动入口。以后单改 `disclosure-intake-request.json` 不再自动入库；恢复旧操作须重新明确授权。共享intake模块仍有历史/现役读写消费者，全部保留，原请求、工作分支和历史证据不动；saved-disclosure-research及正常publisher触发不变。适用CI、正常发布与无intake后继实跑的验收分别读#354，不预填省时。
+本轮按#354/5815419873进一步退役**执行义务**：
 
+| 对象 | 当前处置 | 保留什么 |
+|---|---|---|
+| 已无现役调用的`capture-sector-recovery.py` | 脚本退出main；移除32项专属模拟测试 | 两项共享peer/正常预算检查、正常Sector/采用与读回模块、原请求/tag/失败；原代码/测试在下方精确历史 |
+| 三种旧PDF探索模式`pdf-transport`、`pdf-download-endpoint`、`exchange-pdf-source` | 删除workflow选项、命令及57项专属实验测试；增加一项真实shell退役边界回归 | 所有原eval脚本/离线verifier字节不变；Woton使用的native_identity/session测试及原始结果/失败保留 |
 
-Reuse Decision: REUSE + THIN_ADAPTER。原生Git/gh/Actions/pytest/stdlib；[官方artifact](https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts)、[Git diff](https://git-scm.com/docs/git-diff)及已实读[fkirc@v5.3.2同树实现](https://github.com/fkirc/skip-duplicate-actions/blob/v5.3.2/src/main.ts)。其直接按旧tree/success跳过不含本次PR/full/env资格，因此只复用同树思想，不接入通用扫描/取消/skip策略。无新依赖/workflow/service；详细比选在原#354。
+Sector的历史脚本及原测试可从[退役前精确提交fdb9104c](https://github.com/auguspp/decision-kernel/tree/fdb9104c1722fe250f44742e5129665b36c2889b)恢复用于历史检查，不是重新调用源站的授权。9月11日run34566950303失败且已消耗，不能改称成功。
 
-回滚走普通PR，不直写main/force-push，不删除历史证据/run，不动生产日程。写入不确定先对账；CI成功不是经济真理或投资授权。
+旧PDF试验按[#297/5740713728](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5740713728)不再建设；原`eval/`脚本仅保留为历史试验/离线核验资料，不再是这些模式的现役云端入口，也不承诺旧试验在每次新依赖环境中重跑。later Woton candidate和metadata模式、共享HTTP/PDF解析/留存守卫不变。不存在新的探针运行许可。
+
+这批预期-89旧测试/+1边界测试。真实数量、CI、merge、发布结果读#354及对应PR，不在合并前预填。全量清单覆盖368模块不代表逐条语义审查；没有“过半已经过时”的结论。后续优先审旧API编排/固定部署和重复集成准备，保留真正必要的旧成果读回；publisher重建和registry/计算按消费者验证尚待处理。
+
+Reuse Decision: REUSE原生Git历史、已有共享守卫与CI，不加依赖/工作流/选择器。既有官方Git/Actions及外部skip/filter比选见#354历史；删除已退役义务不需要另一套过滤平台。回滚走正常PR，不直写main/force-push，不删除原证据或运行，不改生产日程。写入不确定先对账；CI、发布、Research质量、Human接受和投资决策各自独立。
