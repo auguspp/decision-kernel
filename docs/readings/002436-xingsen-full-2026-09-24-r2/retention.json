@@ -1,0 +1,74 @@
+{
+  "record_kind": "NATIVE_GIT_RETAINED_FILES_RECEIPT_NOT_KERNEL_COMMIT",
+  "record_date": "2026-09-24",
+  "timezone": "Asia/Singapore",
+  "security": "002436.SZ",
+  "method_main_commit": "6d19d253a8b47a0729416b0247dc93fa8e8f6991",
+  "artifact_commit": "ebb15d54d4029d516bdc23e43dd6c78c3398dfb8",
+  "artifact_tree": "4d3da9bf4629d03e9738b9c27e99c87e12595dc3",
+  "archive_directory": "docs/readings/002436-xingsen-full-2026-09-24-r2",
+  "branch": "research/002436-xingsen-full-r2-20260924",
+  "self_reference_note": "This receipt is added after the exact five-file artifact commit. Its own resulting commit and PR number must be read from the actual GitHub response, not guessed here.",
+  "predecessor": {
+    "commit": "a4cb0c0b44970ef3b96f0f570107093e7a1eb7ae",
+    "directory": "docs/readings/002436-xingsen-full-2026-09-24",
+    "pull_request": 536,
+    "relation": "REUNDERWRITTEN_SUCCESSOR_WITH_EXPLICIT_PARTIAL_REUSE_NOT_PRICE_ONLY",
+    "files_actually_read": ["report.md", "calculations.py", "pre_expectation_view.md"],
+    "human_feedback": "https://github.com/auguspp/decision-kernel/issues/524#issuecomment-5808199281",
+    "old_files_overwritten": false,
+    "old_human_acceptance_inherited": false
+  },
+  "files": [
+    {"path": "README.md", "git_blob": "b76d35f5562f5a862c42b13caf71fb64cbfae221", "bytes": 3123},
+    {"path": "report.md", "git_blob": "2f03a2189f653ff24fb4a3a35f45a66213e5ba31", "bytes": 36404},
+    {"path": "reconciliation.md", "git_blob": "307fc1224df56b61938f32eeb3f214c130d31646", "bytes": 11565},
+    {"path": "calculations.py", "git_blob": "4736268048464702423ad018a5a5e3ea1b985370", "bytes": 12710, "sha256": "a2e35bf79dce09d68112e616c184fb8bdc64038529c9dc5e8dabf2d1788b4442"},
+    {"path": "calculations.json", "git_blob": "c31ef6c3cdffb7cfeee575c3c70b4e329b7b7a84", "bytes": 9699, "sha256": "51910f041604de0cbe560fb18a49f78968f22fa588fa5debd98df8cb36d5798b"}
+  ],
+  "actual_verification": {
+    "target_directory_at_M": "404 before creation; new archive did not replace an existing directory",
+    "remote_directory_at_artifact_commit": "READ_BACK; all five expected blob IDs and sizes observed",
+    "readme": "FULL_CONTENT_READ_BACK_AT_EXACT_COMMIT",
+    "report": "EXACT_COMMIT_LINES_1_42_AND_195_273_REQUESTED; second tool response truncated after key operating-world, UNKNOWN and stop sections; not claimed as full local byte comparison",
+    "reconciliation": "EXACT_COMMIT_LINES_59_160_READ_BACK; includes closure, stopping and computation evidence",
+    "calculations": "ACTUALLY_EXECUTED_AND_RERUN; output identical by SHA256; local Git blob IDs match remote created blobs and exact-commit directory",
+    "checks_passed": ["product revenue and cost sums", "parent plus minority equals consolidated net income", "pretax less tax equals consolidated net income", "17 signed NI-to-CFO summands including net income", "cash roll-forward", "2025 quarterly revenue and parent net income totals", "project capital component sums"],
+    "conditional_project_rows": 48,
+    "external_PDFs": "KEY_PAGES_VISUALLY_CHECKED; original full PDF bytes not retained in this archive",
+    "source_exposure": "Predecessor price and broker forecasts were seen during recovery; no claim of market blindness",
+    "source_novelty": "Mostly newly acquired or analysed in this session, already public before predecessor cutoff; not represented as all new company events",
+    "independent_context_review": "NOT_RUN",
+    "kernel_typed_validators": "NOT_RUN"
+  },
+  "qualifications": {
+    "archive": "RETAINED_FILES",
+    "typed_research_commit": "NOT_CREATED",
+    "full_valuation_sufficiency": "NOT_ESTABLISHED",
+    "human_research_acceptance": "NOT_ESTABLISHED",
+    "odds": "NOT_RUN",
+    "investment_decision": "NOT_MADE",
+    "investment_authority": "NONE",
+    "watch_or_schedule_created": false
+  },
+  "registration": {
+    "status": "REGISTRATION_INCOMPLETE",
+    "main_registry_modified": false,
+    "normal_publication": "PUBLICATION_PENDING",
+    "reading_R": null,
+    "note": "Exact native archive and PR are distinct from reviewed main-purpose registration and normal publisher visibility. The following is a proposed existing-registry reference, not an applied registry entry or a new registry.",
+    "proposed_existing_registry_reference": {
+      "id": "002436-xingsen-full-r2-20260924",
+      "case": "002436.SZ",
+      "use": "RETAINED_RESEARCH_DOCUMENT",
+      "purpose_note": "Human-direct Full successor to a4cb0c0. New H1 cash/ownership/project-capital work, substantive reconciliation and bounded stopping. Read README errata with report and reconciliation. RETAINED_FILES only; no typed COMMITTED, Human acceptance, Odds, Watch or investment authority.",
+      "source": {
+        "path": "docs/readings/002436-xingsen-full-2026-09-24-r2/README.md",
+        "ref": "ebb15d54d4029d516bdc23e43dd6c78c3398dfb8",
+        "git_blob": "b76d35f5562f5a862c42b13caf71fb64cbfae221"
+      },
+      "archive": {"format": "RETAINED_FILES"}
+    }
+  },
+  "stopping_record": "report.md section 11 and reconciliation.md sections 4-5 distinguish answered bounded questions, current unlocated documents, unidentified commercial variables, future facts and justified historical-analysis deferrals. Neither file retention nor an UNKNOWN count certifies research sufficiency."
+}
