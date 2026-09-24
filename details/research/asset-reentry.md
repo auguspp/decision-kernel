@@ -350,6 +350,12 @@
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 
+## 002436.SZ
+
+下一步：先按明确定位恢复旧研究正文
+
+- [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
+
 ## 普源精电 688337.SH
 
 下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
