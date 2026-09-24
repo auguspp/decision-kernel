@@ -1,0 +1,214 @@
+{
+  "dedup_limit": "Declared repository candidate inputs and current reading, not all chats",
+  "existing_work": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+  "items": [
+    {
+      "business_rejection": false,
+      "company_name": "华远控股",
+      "disposition": "NOT_SELECTED_THIS_ONE_CASE_FINANCIALS_UNREVIEWED",
+      "omitted_by_display_budget": false,
+      "price_eligible": true,
+      "thscode": "600743.SH"
+    },
+    {
+      "business_rejection": false,
+      "company_name": "普源精电",
+      "disposition": "SELECTED_FOR_ONE_BOUNDED_QUESTION",
+      "omitted_by_display_budget": false,
+      "price_eligible": true,
+      "thscode": "688337.SH"
+    },
+    {
+      "business_rejection": false,
+      "company_name": "国芯科技",
+      "disposition": "NOT_SELECTED_THIS_ONE_CASE_FINANCIALS_UNREVIEWED",
+      "omitted_by_display_budget": false,
+      "price_eligible": true,
+      "thscode": "688262.SH"
+    },
+    {
+      "business_rejection": false,
+      "company_name": "华丽家族",
+      "disposition": "DATA_GAP_NOT_BUSINESS_REJECTION",
+      "omitted_by_display_budget": false,
+      "price_eligible": false,
+      "thscode": "600503.SH"
+    },
+    {
+      "business_rejection": false,
+      "company_name": "莱伯泰科",
+      "disposition": "NOT_SELECTED_THIS_ONE_CASE_FINANCIALS_UNREVIEWED",
+      "omitted_by_display_budget": true,
+      "price_eligible": true,
+      "thscode": "688056.SH"
+    },
+    {
+      "business_rejection": false,
+      "company_name": "泰凌微",
+      "disposition": "NOT_SELECTED_THIS_ONE_CASE_FINANCIALS_UNREVIEWED",
+      "omitted_by_display_budget": true,
+      "price_eligible": true,
+      "thscode": "688591.SH"
+    }
+  ],
+  "market_session": "2026-09-23",
+  "mode": "SUPERVISED_NORMAL_ORIGIN_NOT_AUTOMATIC_DAILY_ALLOCATION",
+  "origin": {
+    "git_blob": "d68a07fb644c0af87169fcec60e5f41a2603b3a7",
+    "path": "details/stock/35848784152/reading/stock-reading.json",
+    "purpose": "NORMAL_STOCK_OBSERVATION",
+    "ref": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+    "repository": "auguspp/decision-kernel",
+    "sha256": "8db7978f2ce8032ef6f8edb9ca2d8db30fc8584e7881d8acc1055d115097fc9e"
+  },
+  "prior_inputs_inspected": [
+    {
+      "case_id": "601952.SH",
+      "question": "按苏垦农发2026年半年报的经营披露，它通过自产种植、种业、粮食购销和加工等哪些业务承担粮价变化？哪些投入、购粮成本、价格或风险披露会抵消简单的粮价上涨受益解释？由此能否形成一个值得继续核验的经济问题？不解释9月行情，不假定当前业务未发生后续变化。",
+      "source": {
+        "git_blob": "1965c0e718ca1ba41e875d8c8f84e9ed402e2294",
+        "path": "research_runs/candidates/601952.SH/p0-suken-api-20260910-v2/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "778c48602f79ff99b5b871b59864c1b3b296acd6711bab50fb6fe060df232bf6"
+      }
+    },
+    {
+      "case_id": "600036.SH",
+      "question": "Does the September 8 saved management-departure notice itself add decision-relevant evidence to the monitoring questions in its frozen research context, or warrant further research? Assess the actual notice, not current company health or current office-holders.",
+      "source": {
+        "git_blob": "492df7254696f0a19bdd0ce8a51bc4f4ac765cb1",
+        "path": "research_runs/candidates/incremental-disclosures/aa9ea8d22fab770546fcc4b010f71be65dd353bed2fd69693424278640c81199/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "907ef1af1a118e2d8aa660ced38c6dd19e8a4c93e8e0584ca53c678656f31bf4"
+      }
+    },
+    {
+      "case_id": "600598.SH",
+      "question": "Continue the same Sector-origin600598 question after explicit Human feedback and permission. Use newly acquired annual profit-base and June2026 tax-notice evidence to assess the economic importance of land-contracting versus product sales and whether tax-adjusted earning power merits priority research. Check accessible later issuer evidence within the bounded budget, but distinguish confirmed historical event, current-period source gaps, recurring uncertainty and market WHY. Do not frame an already-published but unread report as a future market trigger or call this a full current-company/valuation review.",
+      "source": {
+        "git_blob": "dc9b6875be52348b82e89de9cb6e70ed96055dc6",
+        "path": "research_runs/candidates/sector-origin/600598-materiality-20260910/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "d1acfba7c4990d160c11eb2cf2cdee5fdf0463d98e0cf77dccc7610e50949a7e"
+      }
+    },
+    {
+      "case_id": "600184.SH",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。",
+      "source": {
+        "git_blob": "ea3e3ec04b6ed08f9ec0be1271772514e011587c",
+        "path": "research_runs/candidates/stock-business/1fa9680c0a01301f02b36e740009dec4e3eb68c1cdfb734428511b6e097cc1ea/source-recovery-v1/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "6e20bf87be0e84ff79fe47c693905648973b0be2d8086e11e82836c0fd51081f"
+      }
+    },
+    {
+      "case_id": "300183.SZ",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。",
+      "source": {
+        "git_blob": "e304e14a22fe09dfc44cd4c04ec885042cde7a99",
+        "path": "research_runs/candidates/stock-business/914d501f4c29cbfd07f6a13a6453a4f02218c2898ef76eb2e5a02361551a24c2/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "1d2065ba4f7d8fa6f43d8f14b00c6a57fc4212c0c4057766148959a35e0baa8b"
+      }
+    },
+    {
+      "case_id": "603353.SH",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。",
+      "source": {
+        "git_blob": "b3d4368b4bc84c700fab5c63b7da4dbefbfca973",
+        "path": "research_runs/candidates/stock-business/abb2949fd17018c4266c36feec7ab3fd97238a16e852b3a7ac9dedd2687fff3e/source-successor-continuation-v1/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "d0c7fdaed54982a417e6345bcec7dad6aab052b96f55b0ea71c4b7603dc8b5a5"
+      }
+    },
+    {
+      "case_id": "300711.SZ",
+      "question": "核验公司主营业务与触发板块的真实联系，收入、利润和现金流如何暴露；列明支持、反证、替代解释和UNKNOWN。价格强势不证明业务受益，本次不是全公司Deep、涨价原因认证或投资建议。",
+      "source": {
+        "git_blob": "c4f43132019d037ab3b7ca43b807b8d7d543e10e",
+        "path": "research_runs/candidates/stock-business/c935a863f0e2a88b6e1a7410eae34ea47079b82e54e3aedca48682b6aa39c5dd/source-successor-continuation-v1/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "923902351f58161f25b5a6d3753dc76244412e75a3082510ba3fa4f34cf5629b"
+      }
+    },
+    {
+      "case_id": "600362.SH",
+      "question": "铜价格与基差变化有多少通过自有矿山和权益资源敞口影响江西铜业股东利润与现金，又有多少被外购矿加工费、价格转嫁、套保与营运资金占用抵消？",
+      "source": {
+        "git_blob": "b14769bc71c80a726460b471fa5710efdfb2c648",
+        "path": "research_runs/candidates/stock-questions/4c37707e14b8c3b3f49f59c4ad5c8151ca3d46b47c15291368442da762a04b14/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "2626a4237beb14f674ae0e304466558ad5011730054ef9318410e57efbe0c5db"
+      }
+    },
+    {
+      "case_id": "603507.SH",
+      "question": "在完整2026年半年报及其中2025年同期比较列范围内，振江归母利润增长和经营现金转正，是否足以支持经营盈利与股东现金创造同步改善？区分扣非与非经常性变化、营运资本及资本支出，交付有证据的有限判断和剩余限制，不要求逐工具穷尽套保归因或预测长期盈利。",
+      "source": {
+        "git_blob": "c0b69b9f4919f31ab1b1ac9fb5f6756f66e38ed5",
+        "path": "research_runs/candidates/stock-questions/c8a5e4108cf3fd1b345d44f2fd089555fd13d838752bc194810ffafb0fc9864d/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "99a80f2aba8f740b02f3110ca6ac84961664517983cbe7802a59cac4ae043d02"
+      }
+    },
+    {
+      "case_id": "300711.SZ",
+      "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+      "source": {
+        "git_blob": "0ebfafc5b20fb65edf364d6e61d7a92f1a550c08",
+        "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "42cec7ce48b2d7d88727c2da487e774edf02c73ac01f0c4570480eaaa5216851"
+      }
+    },
+    {
+      "case_id": "300711.SZ",
+      "question": "在2026年半年报募集资金专项报告、8月子公司增资公告及9月8日保荐跟踪报告的已披露范围内，广哈通信的募资余额和向全资子公司划转资金，能否等同集团可自由分配现金或新增经营现金流？应如何区分批准额度、内部划转与实际募投项目支出？",
+      "source": {
+        "git_blob": "3cff654bd890235c99d90d6627146d575902abbd",
+        "path": "research_runs/candidates/stock-questions/fd57f37c13cddeecfd66307f9dade8053c6b1f88b14bafe822583e651e6a87ec/technical-continuation-v1/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "c79eff4ada2b3f6f9c1aba27ed183d357ec6cbfe014dc33e1020b1aedb386ce6"
+      }
+    },
+    {
+      "case_id": "000920.SZ",
+      "question": "承接沃顿原膜业务利润与现金问题，限定于已保存的2026H1报告：膜分离工程的收入确认方式、合同履约成本与收款披露，是否支持将集团营运资金占用归因于该业务？逐项区分有原页依据的机制、仅集团层面成立的金额、不能分配的差额与必要反证；复用r3已闭合的集团利润桥，不重复把它当新发现。",
+      "source": {
+        "git_blob": "64c4f4e35fd556621f2272c462ea938fc4f0952d",
+        "path": "research_runs/candidates/stock-report-continuations/66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c/v1/input.json",
+        "purpose": "PRIOR_RESEARCH_INPUT",
+        "ref": "4b9988f20aa41810c6818d101e2bdb37cf139bde",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "da51f4b1f459fe96e128faf6905d1934dd10470197f268ae025575b9e958d184"
+      }
+    }
+  ],
+  "reading_commit": "31ad7b8b74b014006b76af78a51a6e3d73a1ab91",
+  "reviewed_at": "2026-09-24T00:04:58.299556+00:00",
+  "selected": "688337.SH",
+  "selection_reason": "Normal instrument breadth and a disclosed profit/cash divergence; price does not establish cause. Other five companies not silently discarded or falsely financially reviewed."
+}
