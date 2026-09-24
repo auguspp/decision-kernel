@@ -1,5 +1,21 @@
 # Decision Kernel — repository working instructions
 
+## R5 current research responsibility — 2026-09-24
+
+Authority: [RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805763775). For new hosted Quick work, this section and the R5 section in `docs/research-outcome-contract-v1.md` take precedence over older question-first, fixed-input and single-HTTP wording below or in linked R4/API documents.
+
+Quick is a bounded research responsibility: independently discover, associate, select and investigate using public web, authorized tools, existing Research and Radar observations. Radar supplements vision; it is not the only source, candidate universe or global admission gate. Candidates and economic questions may emerge during Quick. Do not require an upstream selected ticker, formal question, completed financial reading or a separate Question AI/Pre. A Quick task is not permanently one API call; tool availability is verified in the actual runtime.
+
+Recover current instructions from one exact main M and saved observations/archives from one pinned reading R. New web evidence keeps its own provenance and publication/retrieval/applicability times; do not invent a Radar origin or backfill R's historical cutoff. Reuse eligible prior Research and preserve corrections, limits and Human records. A changed read-model commit alone is not a new research trigger.
+
+Retain the actual research, material sources, scope, unresolved points, predecessor relations and exact GitHub write/readback facts. Use the existing native Git archival/purpose-index boundaries; no new state store or API-shaped fake receipt. Unobservable internal model version, token usage and call count stay UNKNOWN. Retained files, registration, publication, validation, Human acceptance and investment decisions remain distinct. Missing app access/approval stops the affected action, not permission to bypass it.
+
+Quick can recommend Full but cannot authorize or execute it automatically. Human-selected Quick-origin Full and Human Direct Full share the outcome/archive seam without fabricated Pre/Quick. Full can revise Quick. These process instructions do not change old serialized validators, history, consumption records, API requests, schedules or permissions. Do not expand the parked API route or silently fall back to it. Existing read-only Brief stays unchanged until an explicitly recorded migration.
+
+### Preserved operating instructions
+
+The remaining instructions retain their applicable quality, recovery and authority duties. Their older deployment descriptions are historical, not a live status report or a restriction on the R5 hosted research responsibility.
+
 For company Research, valuation, Odds, first-entry discussion, or a challenge to those results, first read `docs/RESEARCH-ENTRY.md` at one exact current `main` commit. Follow its linked case-review notices before reusing an old conclusion. Do not substitute chat memory, a branch draft, or a saved report for this read.
 
 For current Quick/Full outcome and handoff responsibilities, read `docs/research-outcome-contract-v1.md` at the same commit. This R4-0 interpretation takes precedence over procedural wording below: fix the acceptance standard, not the reasoning path. The v3 order, agent roles, pass counts and template filenames are reusable baseline policy, not mandatory private reasoning or output structure. Economic decomposition, evidence discipline, substantive challenge, material question disposition and honest retention remain required. This interpretation does not change old serialized contracts, enable single-Quick production, revive #525 or authorize model experiments.
