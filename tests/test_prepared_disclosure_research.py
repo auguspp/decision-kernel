@@ -232,8 +232,14 @@ def test_private_authorization_source_is_never_model_context(tmp_path, monkeypat
 
 def test_module_has_no_production_trigger_and_legacy_request_is_unchanged():
     from pathlib import Path
-    workflow=Path('.github/workflows/saved-research-once.yml').read_text()
-    assert 'prepared_disclosure_research' not in workflow
+    # The frozen Suken launcher is retired; its input and shared readers remain.
+    assert not Path('.github/workflows/saved-research-once.yml').exists()
+    workflows=list(Path('.github/workflows').glob('*.yml'))
+    assert workflows
+    for path in workflows:
+        workflow=path.read_text()
+        assert 'decision_kernel.runtime.saved_research_once' not in workflow
+        assert 'prepared_disclosure_research' not in workflow
     assert json.loads(Path(once.REQUEST_PATH).read_bytes())["id"]=='p0-suken-api-20260910-v2'
 
 
