@@ -20,20 +20,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {layout: single4, splits: 1, group: 1, workers: 4}
-          - {layout: four1, splits: 4, group: 1, workers: 1}
-          - {layout: four1, splits: 4, group: 2, workers: 1}
-          - {layout: four1, splits: 4, group: 3, workers: 1}
-          - {layout: four1, splits: 4, group: 4, workers: 1}
-          - {layout: two4, splits: 2, group: 1, workers: 4}
-          - {layout: two4, splits: 2, group: 2, workers: 4}
-          - {layout: four2, splits: 4, group: 1, workers: 2}
-          - {layout: four2, splits: 4, group: 2, workers: 2}
-          - {layout: four2, splits: 4, group: 3, workers: 2}
-          - {layout: four2, splits: 4, group: 4, workers: 2}
+          - {layout: single4, splits: 1, group: 1, workers: 4, sample: 2}
+          - {layout: four2, splits: 4, group: 1, workers: 2, sample: 2}
+          - {layout: four2, splits: 4, group: 2, workers: 2, sample: 2}
+          - {layout: four2, splits: 4, group: 3, workers: 2, sample: 2}
+          - {layout: four2, splits: 4, group: 4, workers: 2, sample: 2}
+          - {layout: single4, splits: 1, group: 1, workers: 4, sample: 3}
+          - {layout: four2, splits: 4, group: 1, workers: 2, sample: 3}
+          - {layout: four2, splits: 4, group: 2, workers: 2, sample: 3}
+          - {layout: four2, splits: 4, group: 3, workers: 2, sample: 3}
+          - {layout: four2, splits: 4, group: 4, workers: 2, sample: 3}
+          - {layout: four4, splits: 4, group: 1, workers: 4, sample: 1}
+          - {layout: four4, splits: 4, group: 2, workers: 4, sample: 1}
+          - {layout: four4, splits: 4, group: 3, workers: 4, sample: 1}
+          - {layout: four4, splits: 4, group: 4, workers: 4, sample: 1}
     env:
       BENCH_CODE_SHA: 24ed9aa6499b053e79c4a928625449868216b41a
       BENCH_HARNESS_SHA: ${{ github.event.pull_request.head.sha }}
+      BENCH_SAMPLE: ${{ matrix.sample }}
       BENCH_LAYOUT: ${{ matrix.layout }}
       BENCH_SPLITS: ${{ matrix.splits }}
       BENCH_GROUP: ${{ matrix.group }}
@@ -99,7 +103,7 @@ jobs:
           environment = reader['environment'](Path.cwd(), out, os.environ)
           (out / 'environment.json').write_text(json.dumps(environment, sort_keys=True, indent=2))
           metrics = dict(code_sha=os.environ['BENCH_CODE_SHA'], harness_sha=os.environ['BENCH_HARNESS_SHA'], run_id=os.environ['GITHUB_RUN_ID'],
-              attempt=os.environ['GITHUB_RUN_ATTEMPT'], layout=os.environ['BENCH_LAYOUT'], splits=int(os.environ['BENCH_SPLITS']),
+              attempt=os.environ['GITHUB_RUN_ATTEMPT'], sample=int(os.environ['BENCH_SAMPLE']), cpu_count=int(subprocess.check_output(['getconf', '_NPROCESSORS_ONLN'])), layout=os.environ['BENCH_LAYOUT'], splits=int(os.environ['BENCH_SPLITS']),
               group=int(os.environ['BENCH_GROUP']), workers=int(os.environ['BENCH_WORKERS']), cache_hit=os.environ.get('BENCH_CACHE_HIT', ''),
               duration_sha256=hashlib.sha256((out/'durations.json').read_bytes()).hexdigest(), scope='BENCHMARK_REMAINING_ONLY', merge_eligible=False, rootdir_policy='EXPLICIT_PROJECT_CONFIG')
           def run(name, command):
@@ -122,7 +126,8 @@ jobs:
           run('selected_collection', [sys.executable, '-m', 'pytest', '-c', 'pyproject.toml', '--collect-only', '-q', *args])
           selected_nodes = [n for n in (out/'selected_collection.log').read_text().splitlines() if n.startswith('tests/') and '::' in n]
           assert selected_nodes and len(selected_nodes) == len(set(selected_nodes)) and set(selected_nodes) <= set(remaining), 'ROOT_OR_SELECTION_IDENTITY'
-          metrics['matched_duration_nodes'] = sum(n in json.loads((out/'durations.json').read_text()) for n in selected_nodes)
+          hints = json.loads((out/'durations.json').read_text())
+          metrics['matched_duration_nodes'] = sum(n in hints for n in selected_nodes)
           assert metrics['matched_duration_nodes'] > 0, 'NO_DURATION_HINT_MATCH'
           workers = [] if metrics['workers'] == 1 else ['-n', str(metrics['workers']), '--dist=loadfile', '--max-worker-restart=0']
           run('execution', [sys.executable, '-m', 'pytest', '-c', 'pyproject.toml', '-q', *args, *workers, '-o', 'faulthandler_timeout=60', '-o', 'faulthandler_exit_on_timeout=true',
@@ -136,62 +141,118 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: ci-benchmark-${{ github.run_id }}-${{ matrix.layout }}-${{ matrix.group }}
+          name: ci-benchmark-${{ github.run_id }}-${{ matrix.layout }}-${{ matrix.sample }}-${{ matrix.group }}
           path: ${{ runner.temp }}/ci-benchmark/
           retention-days: 30
           if-no-files-found: error
-  workflow-audit:
+  installation:
     if: github.repository == 'auguspp/decision-kernel' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'ci/20260925-v2-shard-benchmark' && github.run_attempt == 1
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        installer: [pip, uv]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: 24ed9aa6499b053e79c4a928625449868216b41a
           persist-credentials: false
-      - name: Install fixed static analyzers
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        if: matrix.installer == 'uv'
+        with:
+          version: '0.12.17'
+          enable-cache: 'false'
+          download-from-astral-mirror: 'false'
+      - name: Recover fixed installed-version reference
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/ci-workflow-audit/bin"
-          cd "$RUNNER_TEMP/ci-workflow-audit/bin"
-          curl --fail --location --max-time 60 -o actionlint.tar.gz https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
-          echo '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  actionlint.tar.gz' | sha256sum -c -
-          tar -xzf actionlint.tar.gz actionlint
-          curl --fail --location --max-time 60 -o zizmor.tar.gz https://github.com/zizmorcore/zizmor/releases/download/v1.30.1/zizmor-x86_64-unknown-linux-gnu.tar.gz
-          echo 'e65324f4430c2717591937edcec90ccbefaf14c174f8ec9415e03ca875b46e1a  zizmor.tar.gz' | sha256sum -c -
-          tar -xzf zizmor.tar.gz
-      - name: Scan without automatically rewriting policy
-        run: |
-          python3 - <<'PY'
-          import json, os, subprocess, time
+          mkdir -p "$RUNNER_TEMP/ci-install-benchmark"
+          gh api repos/auguspp/decision-kernel/actions/artifacts/10824825453/zip > "$RUNNER_TEMP/ci-install-benchmark/reference.zip"
+          python - <<'CHECK'
+          import json, os, runpy
           from pathlib import Path
-          out = Path(os.environ['RUNNER_TEMP']) / 'ci-workflow-audit'
-          binaries = out / 'bin'
-          # Tools report findings as findings, not failed research or changed authority.
-          report = dict(code_sha='24ed9aa6499b053e79c4a928625449868216b41a', run_id=os.environ['GITHUB_RUN_ID'], scope='READ_ONLY_WORKFLOW_AUDIT', merge_eligible=False)
-          for name, args in [('actionlint', ['-oneline']), ('zizmor', ['--offline', '--strict-collection', '--format=json', '.github/workflows'])]:
-              candidates = [p for p in binaries.rglob(name) if p.is_file()]
-              assert len(candidates) == 1, candidates
-              start = time.perf_counter()
-              with (out / (name + '.log')).open('wb') as stream:
-                  result = subprocess.run([str(candidates[0]), *args], stdout=stream, stderr=subprocess.STDOUT)
-              report[name] = dict(exit_code=result.returncode, seconds=time.perf_counter()-start)
-          (out/'metrics.json').write_text(json.dumps(report, indent=2))
-          print(json.dumps(report, indent=2))
-          # Nonzero findings remain visible in artifacts; this measurement isn't a release gate.
-          PY
-      - name: Preserve raw findings and scan timings
+          out = Path(os.environ['RUNNER_TEMP'])/'ci-install-benchmark'
+          reader = runpy.run_path('.github/scripts/ci-merge-reuse.py')
+          meta = dict(size_in_bytes=430823, digest='sha256:a671ecaa1435c1e0151daa4b415c2b79be158bb242308ccd9b7cb5111ef1daae')
+          with reader['verified_archive']((out/'reference.zip').read_bytes(), meta) as z:
+              reference = json.loads(z.read('environment.json'))
+          (out/'reference-environment.json').write_text(json.dumps(reference, sort_keys=True))
+          versions = reference['packages']
+          (out/'constraints.txt').write_text(''.join(k+'=='+v+'\n' for k,v in sorted(versions.items()) if k not in ('pip','decision-kernel')))
+          CHECK
+      - name: Measure three cold and warm fresh installations
+        env:
+          INSTALLER: ${{ matrix.installer }}
+          HARNESS_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'MEASURE'
+          import json, os, re, shutil, subprocess, sys, time
+          from pathlib import Path
+          out = Path(os.environ['RUNNER_TEMP'])/'ci-install-benchmark'
+          installer = os.environ['INSTALLER']
+          cache = out/'controlled-cache'
+          ref = json.loads((out/'reference-environment.json').read_text())
+          expected = {k:v for k,v in ref['packages'].items() if k != 'pip'}
+          report = dict(code_sha='24ed9aa6499b053e79c4a928625449868216b41a', harness_sha=os.environ['HARNESS_SHA'],
+              run_id=os.environ['GITHUB_RUN_ID'], attempt=os.environ['GITHUB_RUN_ATTEMPT'], installer=installer,
+              python=sys.version, scope='INSTALL_BENCHMARK_ONLY', merge_eligible=False, rows=[],
+              cache_scope='CONTROLLED_LOCAL_DOWNLOAD_CACHE_NOT_GITHUB_RESTORE_BENCHMARK')
+          if installer == 'uv': report['uv_version'] = subprocess.check_output(['uv','--version']).decode().strip()
+          def size(path): return sum(p.stat().st_size for p in path.rglob('*') if p.is_file()) if path.exists() else 0
+          for sample in range(1,4):
+              shutil.rmtree(cache, ignore_errors=True)
+              for state in ('cold','warm'):
+                  target = out/(str(sample)+'-'+state)
+                  before = time.perf_counter()
+                  subprocess.run([sys.executable,'-m','venv',str(target)],check=True)
+                  venv_seconds = time.perf_counter()-before
+                  python = str(target/'bin/python')
+                  env = {**os.environ,'PIP_CACHE_DIR':str(cache),'UV_CACHE_DIR':str(cache),'PIP_DISABLE_PIP_VERSION_CHECK':'1','UV_PYTHON_DOWNLOADS':'never'}
+                  env.pop('GH_TOKEN',None)
+                  cmd = [python,'-m','pip','install'] if installer=='pip' else ['uv','pip','install','--python',python]
+                  cmd += ['-c',str(out/'constraints.txt'),'-e','.[dev]']
+                  row = dict(sample=sample,state=state,cache_bytes_before=size(cache),venv_seconds=venv_seconds)
+                  start=time.perf_counter()
+                  with (out/(str(sample)+'-'+state+'.log')).open('wb') as log:
+                      result=subprocess.run(cmd,env=env,stdout=log,stderr=subprocess.STDOUT)
+                  row.update(install_seconds=time.perf_counter()-start,exit_code=result.returncode,cache_bytes_after=size(cache))
+                  report['rows'].append(row)
+                  (out/'metrics.json').write_text(json.dumps(report,indent=2))
+                  if result.returncode: raise SystemExit(result.returncode)
+                  inventory = json.loads(subprocess.check_output([python,'-m','pip','list','--format=json']))
+                  actual = {re.sub(r'[-_.]+','-',x['name']).lower():x['version'] for x in inventory}
+                  (out/(str(sample)+'-'+state+'-packages.json')).write_text(json.dumps(actual,sort_keys=True))
+                  row['pip_seed_version']=actual.pop('pip')
+                  assert actual == expected, 'INSTALLED_RUNTIME_PACKAGES_DIFFER'
+                  row['matched_runtime_packages']=len(actual)
+                  start=time.perf_counter()
+                  with (out/(str(sample)+'-'+state+'-contracts.log')).open('wb') as log:
+                      checked=subprocess.run([python,'-m','pytest','-c','pyproject.toml','-q','@.github/ci-v2-research.txt'],env=env,stdout=log,stderr=subprocess.STDOUT)
+                  row.update(contract_seconds=time.perf_counter()-start,contract_exit_code=checked.returncode)
+                  (out/'metrics.json').write_text(json.dumps(report,indent=2))
+                  if checked.returncode: raise SystemExit(checked.returncode)
+                  shutil.rmtree(target)
+          print(json.dumps(report,indent=2))
+          MEASURE
+      - name: Preserve installation metrics and raw logs
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: ci-workflow-audit-${{ github.run_id }}
+          name: ci-install-benchmark-${{ github.run_id }}-${{ matrix.installer }}
           path: |
-            ${{ runner.temp }}/ci-workflow-audit/*.log
-            ${{ runner.temp }}/ci-workflow-audit/metrics.json
+            ${{ runner.temp }}/ci-install-benchmark/*.json
+            ${{ runner.temp }}/ci-install-benchmark/*.txt
+            ${{ runner.temp }}/ci-install-benchmark/*.log
           retention-days: 30
           if-no-files-found: error
   collect-results:
-    needs: [execution, workflow-audit]
+    needs: [execution, installation]
     if: always() && github.repository == 'auguspp/decision-kernel' && github.head_ref == 'ci/20260925-v2-shard-benchmark' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -208,7 +269,7 @@ jobs:
           out.mkdir()
           def get(path):
               return subprocess.check_output(['gh', 'api', 'repos/auguspp/decision-kernel/' + path], timeout=60)
-          for run in ['36035887604', os.environ['GITHUB_RUN_ID']]:
+          for run in ['36035887604', '36037362383', os.environ['GITHUB_RUN_ID']]:
               folder = out / run; folder.mkdir()
               payload = json.loads(get('actions/runs/' + run + '/artifacts?per_page=100'))
               assert payload['total_count'] == len(payload['artifacts'])
@@ -216,7 +277,7 @@ jobs:
               (folder/'jobs.json').write_bytes(get('actions/runs/' + run + '/jobs?per_page=100'))
               (folder/'run.json').write_bytes(get('actions/runs/' + run))
               for artifact in payload['artifacts']:
-                  if not artifact['name'].startswith(('ci-benchmark-' + run + '-', 'ci-workflow-audit-' + run)):
+                  if not artifact['name'].startswith(('ci-benchmark-' + run + '-', 'ci-workflow-audit-' + run, 'ci-install-benchmark-' + run + '-')):
                       continue
                   assert type(artifact['id']) is int and artifact['id'] > 0 and not artifact['expired']
                   raw = get('actions/artifacts/' + str(artifact['id']) + '/zip')
