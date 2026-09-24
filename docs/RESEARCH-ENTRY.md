@@ -1,5 +1,13 @@
 # Research / Odds / First Entry — 统一执行入口
 
+## 2026-09-24 R5.1：可修订指引与连续性验收
+
+当前架构指引：[ARCH-20260924-continuity-v1](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-5806130438)；当前施工/验收：[RM-20260924-r5.1](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5806149428)。这是“可替换研究者、持久历史、最小必要保障”的当前默认，可因新证据或 Human 目标修订或推翻；不是 Kernel 只能剩日志的终局。沿原 Reconcile Before Continuing 保留前提变化与历史，不重写旧结论/失败。
+
+P1 同时验研究价值与跨会话连续性。真实 Quick 成果产生后，至少一个独立会话应仅凭项目入口、精确 GitHub 定位及获准范围恢复关键判断、依据/计算、UNKNOWN、修订关系与 Human 接受边界，不让 Human 粘贴旧报告。直达恢复、正常入口可发现性、实际交付分别验收；同会话复述或失败诊断不是研究恢复成功。无变化复用，有新证据/方法挑战才有界续接，价格变化不改 Belief，读取缺口不当 NO_CHANGE；无自然增量则保留未验证。复用既有档案/索引，不新建 Memory/Trajectory 或强制文件树。
+
+实际工具执行沿同 M 的 AGENTS 能力纪律和 [#524/5806243062 的有范围成功记录](https://github.com/auguspp/decision-kernel/issues/524#issuecomment-5806243062)：先发现当前工具、读取真实目标，前提齐备就执行获准动作并精确读回，不由通用只读文档或旧失败推断当前能力。交互/定时、文件/评论分别实测；明确安全/权限拒绝停止受影响动作，不换包装绕过。此说明不重跑旧 pilot、不创建任务，不代表定时闭环已通过；实际停点读 #297/#524 最新回执。
+
 ## 2026-09-24 当前入口：R5 托管 Quick
 
 当前依据：[RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5805763775)；实施定位：[Hosted Research #524](https://github.com/auguspp/decision-kernel/issues/524)。新托管 Quick 先按[成果边界的 R5 说明](research-outcome-contract-v1.md)执行；本节向前替代下文及关联旧 API 文档中针对新托管工作的 Question 前置、固定输入材料和一次 HTTP 限制，不改历史合同。
