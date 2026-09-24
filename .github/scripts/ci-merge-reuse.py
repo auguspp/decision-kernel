@@ -42,7 +42,7 @@ def git(root: Path, *args: str) -> str:
     return command(root, 'git', *args).decode().strip()
 
 
-def api(root: Path, path: str) -> dict:
+def api(root: Path, path: str) -> dict | list:
     return json.loads(command(root, 'gh', 'api', f'repos/{REPO}/{path}'))
 
 
@@ -138,8 +138,13 @@ def select(root: Path, report_dir: Path, env: dict, current: dict, *, read=api, 
                 'ENVIRONMENT_IDENTITY_MISSING')
         query = f'actions/workflows/ci.yml/runs?head_sha={pr_head}&event=pull_request&per_page=100'
         run = latest_pr_run(read(root, query), pr_head)
-        prs = [p for p in run['pull_requests'] if p['head']['sha'] == pr_head
-               and p['base']['sha'] == base and p['base']['ref'] == 'main']
+        # Run.pull_requests can be empty after merge. Query the exact commit's
+        # native association instead; never guess from a branch or commit message.
+        linked = read(root, f'commits/{head}/pulls?per_page=100')
+        require(isinstance(linked, list) and len(linked) < 100, 'INCOMPLETE_PR_LIST')
+        prs = [p for p in linked if p['merge_commit_sha'] == head
+               and p['head']['sha'] == pr_head and p['base']['sha'] == base
+               and p['base']['ref'] == 'main']
         require(len(prs) == 1, 'PR_MERGE_ASSOCIATION')
         pr = read(root, 'pulls/' + str(prs[0]['number']))
         require(pr['merged'] is True and pr['merge_commit_sha'] == head

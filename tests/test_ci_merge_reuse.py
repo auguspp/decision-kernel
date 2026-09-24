@@ -52,7 +52,7 @@ class MergeReuseTests(unittest.TestCase):
             head={'sha':self.pr_head}, base={'sha':self.base,'ref':'main'})])
         self.pr = dict(number=5, merged=True, merge_commit_sha=self.head,
             head={'sha':self.pr_head,'repo':{'full_name':S['REPO']}},
-            base={'ref':'main','repo':{'full_name':S['REPO']}})
+            base={'ref':'main','sha':self.base,'repo':{'full_name':S['REPO']}})
         self.files = {
             'identity.txt':f'code_sha={self.pr_head}\nevent=pull_request\nrun_id=10\nattempt=1\n',
             'environment.json':json.dumps(self.current),
@@ -90,6 +90,7 @@ class MergeReuseTests(unittest.TestCase):
     def read(self, root, path):
         self.assertEqual(root,self.root);self.calls.append(path)
         if '/runs?' in path:return {'total_count':len(self.runs),'workflow_runs':self.runs}
+        if path==f'commits/{self.head}/pulls?per_page=100':return [self.pr]
         if path=='pulls/5':return self.pr
         if path=='actions/runs/10/artifacts?per_page=100':
             return {'total_count':len(self.artifacts),'artifacts':self.artifacts}
@@ -107,6 +108,24 @@ class MergeReuseTests(unittest.TestCase):
         self.assertEqual(result['full_suite'],'REUSED_NOT_RERUN')
         self.assertEqual(sum('/runs?' in p for p in self.calls),2)
         self.assertFalse((self.report/'pytest.xml').exists())
+
+    def test_empty_run_association_uses_exact_merge_commit_not_branch_or_message(self):
+        self.run['pull_requests']=[]
+        result=self.select()
+        self.assertTrue(result['reuse'],result)
+        self.assertEqual(result['source']['pr'],5)
+        self.assertIn(f'commits/{self.head}/pulls?per_page=100',self.calls)
+
+    def test_empty_ambiguous_or_incomplete_commit_association_stays_full(self):
+        read=self.read
+        for linked in [[],[self.pr,self.pr],[self.pr]*100,{'items':[self.pr]},
+                       [{**self.pr,'merge_commit_sha':'0'*40}]]:
+            with self.subTest(linked_count=len(linked)):
+                def changed(root,path):
+                    return linked if path.startswith('commits/') else read(root,path)
+                result=S['select'](self.root,self.report,self.env,self.current,read=changed,
+                                   download=lambda root,aid:self.raw)
+                self.assertFalse(result['reuse'])
 
     def test_class_and_parameter_separators_use_real_pytest_junit_identity(self):
         self.files['collection.txt']='tests/test_synthetic.py::Case::test_one[value::with::separators]\n'

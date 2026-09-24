@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
   actions: read
+  pull-requests: read
 
 # Only obsolete heads of the SAME PR supersede one another.
 # Main uses a unique group: even queued independent main runs must survive.
