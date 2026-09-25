@@ -127,6 +127,29 @@ def test_read_and_publication_api_reserve_remains_finite():
     assert legacy.call_limit(SimpleNamespace(max_calls=100)) == 100
 
 
+CURRENT_STOCK_BUSINESS_JOBS = ['research-stock-business', 'prepare-stock-sources',
+    'deepseek-compatibility', 'prepare-declared-report-sources']
+
+
+def stock_business_attempt(active, event, conclusion, *, historical_source_job=False, incomplete=False):
+    run = {'id': 42, 'event': event, 'path': '.github/workflows/stock-business-research.yml',
+        'head_branch': 'main', 'run_attempt': 1, 'head_sha': 'a' * 40,
+        'head_repository': {'full_name': once.REPO}, 'created_at': '2026-09-23T03:00:00Z',
+        'updated_at': '2026-09-23T03:01:00Z', 'status': 'completed', 'conclusion': conclusion}
+    names = list(CURRENT_STOCK_BUSINESS_JOBS)
+    if historical_source_job:
+        names.append('retain-public-report-source')
+    if active == 'unknown':
+        names.append('unknown')
+    selected = {active} if active != 'both' else {'research-stock-business', 'prepare-declared-report-sources'}
+    jobs = [{'run_id': 42, 'name': n, 'conclusion': conclusion if n in selected else 'skipped'} for n in names]
+    def get(path):
+        if 'workflows/' in path:
+            return {'workflow_runs': [run], 'total_count': 1}
+        return {'jobs': jobs, 'total_count': len(jobs) + int(incomplete)}
+    return legacy.attempts(SimpleNamespace(api=SimpleNamespace(get=get, calls=0, max_calls=756), files={}))
+
+
 @pytest.mark.parametrize('active,event,conclusion,expected', [
     ('prepare-declared-report-sources', 'issues', 'success', 'latest_report_source_attempt'),
     ('prepare-declared-report-sources', 'issues', 'failure', 'latest_report_source_attempt'),
@@ -137,20 +160,8 @@ def test_read_and_publication_api_reserve_remains_finite():
     ('both', 'issues', 'success', None),
     ('incomplete', 'issues', 'success', None),
 ])
-def test_existing_five_job_workflow_classification_never_promotes_sources(active, event, conclusion, expected):
-    run = {'id': 42, 'event': event, 'path': '.github/workflows/stock-business-research.yml',
-        'head_branch': 'main', 'run_attempt': 1, 'head_sha': 'a' * 40,
-        'head_repository': {'full_name': once.REPO}, 'created_at': '2026-09-23T03:00:00Z',
-        'updated_at': '2026-09-23T03:01:00Z', 'status': 'completed', 'conclusion': conclusion}
-    names = ['research-stock-business', 'prepare-stock-sources', 'deepseek-compatibility',
-             'retain-public-report-source', 'prepare-declared-report-sources']
-    if active == 'unknown': names.append('unknown')
-    selected = {active} if active != 'both' else {'research-stock-business', 'prepare-declared-report-sources'}
-    jobs = [{'run_id': 42, 'name': n, 'conclusion': conclusion if n in selected else 'skipped'} for n in names]
-    def get(path):
-        if 'workflows/' in path: return {'workflow_runs': [run], 'total_count': 1}
-        return {'jobs': jobs, 'total_count': len(jobs) + int(active == 'incomplete')}
-    result = legacy.attempts(SimpleNamespace(api=SimpleNamespace(get=get, calls=0, max_calls=756), files={}))
+def test_current_four_job_workflow_classification_never_promotes_sources(active, event, conclusion, expected):
+    result = stock_business_attempt(active, event, conclusion, incomplete=active == 'incomplete')
     keys = ['latest_execution_attempt', 'latest_source_preparation_attempt',
             'latest_compatibility_attempt', 'latest_report_source_attempt']
     if expected:
@@ -159,4 +170,13 @@ def test_existing_five_job_workflow_classification_never_promotes_sources(active
     else:
         assert result['attempt_classification_status'] == 'PARTIAL_OR_UNAVAILABLE'
     assert all(result[k] is None for k in keys if k != expected)
+    assert result['preparation_result_semantics'] == 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'
+
+
+def test_retired_woton_source_job_remains_readable_as_historical_attempt():
+    result = stock_business_attempt('retain-public-report-source', 'issues', 'success',
+                                    historical_source_job=True)
+    assert result['latest_report_source_attempt']['id'] == 42
+    assert result['latest_report_source_attempt']['conclusion'] == 'success'
+    assert not result['unclassified_invocations']
     assert result['preparation_result_semantics'] == 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'
