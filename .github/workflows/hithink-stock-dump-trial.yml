@@ -1,8 +1,15 @@
 name: hithink-stock-dump-trial
+run-name: >-
+  ${{ inputs.trial-purpose || 'stock-dump' }} | sector=${{ inputs.stock-market-run-id || 'none' }} | page=${{ inputs.stock-discovery-page || 'base' }} | recovery=${{ inputs.recovery-key || 'none' }}
 
 on:
   workflow_dispatch:
     inputs:
+      recovery-key:
+        description: Optional reconciliation intent identity; never changes data qualification
+        type: string
+        required: false
+        default: ''
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
