@@ -293,6 +293,7 @@ def live_source(output: Path, market_session: date) -> dict[str, Any]:
         client.close()
 
 def build_observation(source: dict[str, Any], market_session: date) -> dict[str, Any]:
+    source = _jsonable(source)
     require(isinstance(source, dict)
             and source.get("source_kind") == "ELTDX_TDX_7709"
             and source.get("package_version") == ELTDX_VERSION
