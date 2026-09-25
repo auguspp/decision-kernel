@@ -135,3 +135,169 @@ jobs:
             echo
             echo 'Do not Re-run this successor. A failed or uncertain dispatch is not permission to issue a duplicate handoff.'
           } >> "$GITHUB_STEP_SUMMARY"
+
+  dispatch-tdx-concept:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event.workflow_run.name == 'sector-radar-shadow' &&
+      (github.event.workflow_run.event == 'schedule' ||
+       github.event.workflow_run.event == 'workflow_dispatch') &&
+      github.event.workflow_run.status == 'completed' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.run_attempt == 1 &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Classify exact Sector origin for TDX
+        id: tdx-origin
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM_NAME: ${{ github.event.workflow_run.name }}
+          UPSTREAM_PATH: ${{ github.event.workflow_run.path }}
+          UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
+          UPSTREAM_STATUS: ${{ github.event.workflow_run.status }}
+          UPSTREAM_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          UPSTREAM_HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          UPSTREAM_JOBS_JSON: ${{ runner.temp }}/sector-upstream-jobs-tdx.json
+        shell: bash
+        run: |
+          if [ "$UPSTREAM_EVENT" = "workflow_dispatch" ]; then
+            gh api \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "repos/$GITHUB_REPOSITORY/actions/runs/$UPSTREAM_RUN_ID/jobs?per_page=100&page=1" \
+              > "$UPSTREAM_JOBS_JSON"
+          fi
+          python - <<'PY'
+          import os, runpy
+          mod = runpy.run_path('.github/scripts/check-stock-daily-successor.py',
+                               run_name='tdx_daily_successor_reuse')
+          run_id, origin = mod['validate_successor'](os.environ)
+          allowed = mod['handoff_allowed'](origin)
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as stream:
+              stream.write(f'sector_run_id={run_id}\n')
+              stream.write(f'sector_origin={origin}\n')
+              stream.write('tdx_input_allowed=' + ('true' if allowed else 'false') + '\n')
+          print(f'TDX daily handoff origin={origin}; allowed={allowed}')
+          PY
+      - name: Require exact result-bearing Sector input for TDX
+        id: tdx-input
+        if: steps.tdx-origin.outputs.tdx_input_allowed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUCCESSOR_CHECK_MODE: stock-input
+          UPSTREAM_NAME: ${{ github.event.workflow_run.name }}
+          UPSTREAM_PATH: ${{ github.event.workflow_run.path }}
+          UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
+          UPSTREAM_STATUS: ${{ github.event.workflow_run.status }}
+          UPSTREAM_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          UPSTREAM_HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          UPSTREAM_JOBS_JSON: ${{ runner.temp }}/sector-upstream-jobs-tdx.json
+          UPSTREAM_RUN_AUDIT: ${{ runner.temp }}/sector-tdx-input
+        shell: bash
+        run: |
+          mkdir "$UPSTREAM_RUN_AUDIT"
+          gh run download "$UPSTREAM_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "sector-radar-run-$UPSTREAM_RUN_ID" \
+            --dir "$UPSTREAM_RUN_AUDIT"
+          python .github/scripts/check-stock-daily-successor.py
+      - name: Extract exact completed Sector session for TDX
+        id: tdx-session
+        if: steps.tdx-input.outputs.stock_input_ready == 'true'
+        env:
+          UPSTREAM_RUN_AUDIT: ${{ runner.temp }}/sector-tdx-input
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          operations = json.loads(
+              (Path(os.environ['UPSTREAM_RUN_AUDIT']) / 'operations.json').read_text()
+          )
+          session = operations.get('latest_completed_session')
+          direct = operations.get('direct_next_session')
+          if (
+              operations.get('state_update_status') != 'APPENDED_NEW_COMPLETED_SESSION'
+              or not isinstance(session, str)
+              or re.fullmatch(r'20\d{2}-\d{2}-\d{2}', session) is None
+              or direct != session
+          ):
+              raise SystemExit('EXACT_NEW_COMPLETED_SECTOR_SESSION_REQUIRED')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as stream:
+              stream.write(f'market_session={session}\n')
+          print(f'MARKET_SESSION={session}')
+          PY
+      - name: Require successor code is still current main
+        if: steps.tdx-input.outputs.stock_input_ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODE_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          current="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')"
+          if [ "$current" != "$CODE_SHA" ]; then
+            echo "::error::main advanced after this workflow_run successor started; do not dispatch TDX against an ambiguous code SHA"
+            exit 1
+          fi
+      - name: Dispatch existing TDX concept snapshot once
+        if: steps.tdx-input.outputs.stock_input_ready == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}
+          MARKET_SESSION: ${{ steps.tdx-session.outputs.market_session }}
+          CODE_SHA: ${{ github.sha }}
+          SECTOR_RUN_ID: ${{ steps.tdx-origin.outputs.sector_run_id }}
+          SECTOR_ORIGIN: ${{ steps.tdx-origin.outputs.sector_origin }}
+        shell: bash
+        run: |
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN; do not fall back to GITHUB_TOKEN because downstream workflow_run publication would be suppressed"
+            exit 1
+          fi
+          python - <<'PY' > "$RUNNER_TEMP/tdx-concept-dispatch.json"
+          import json, os
+          print(json.dumps({
+              'ref': 'main',
+              'inputs': {
+                  'market-session': os.environ['MARKET_SESSION'],
+                  'code-sha': os.environ['CODE_SHA'],
+              },
+          }, separators=(',', ':')))
+          PY
+          gh api --method POST \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/tdx-concept-snapshot.yml/dispatches" \
+            --input "$RUNNER_TEMP/tdx-concept-dispatch.json"
+          {
+            echo '### TDX Concept daily successor handoff'
+            echo
+            printf 'Eligible result-bearing Sector run %s with origin %s supplied completed market session %s.\n\n' "$SECTOR_RUN_ID" "$SECTOR_ORIGIN" "$MARKET_SESSION"
+            printf 'One existing tdx-concept-snapshot workflow_dispatch was requested on current main %s.\n\n' "$CODE_SHA"
+            echo 'The TDX workflow remains responsible for exact-main/main-CI admission, source-date equality, source capture, offline replay and artifact retention. The existing current-state publisher remains responsible for read-model publication.'
+            echo
+            echo 'This successor adds no second clock and makes no TDX/Eastmoney request itself. Recovery/adoption or same-session Sector no-op does not dispatch TDX.'
+            echo
+            echo 'Do not Re-run this successor. A failed or uncertain dispatch is not permission to issue a duplicate handoff.'
+          } >> "$GITHUB_STEP_SUMMARY"
