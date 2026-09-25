@@ -113,7 +113,7 @@ def test_identical_monthly_mirror_rows_deduplicate_but_conflicts_reject():
 
 
 def test_memory_public_table_has_own_timestamp_and_unknown_currency():
-    raw=b'<div class="tab_time">Last Update: Sep.14 2026 18:10 (GMT+8)</div><table><tr><th>Daily High</th><th>Session Average</th></tr><tbody id="tb_NowFlashSpotPrice"><tr><td>TLC 128Gb</td><td>12</td><td>10</td><td>12</td><td>10</td><td>11</td><td>-0.5%</td></tr><tr><td>TLC 256Gb</td><td>22</td><td>20</td><td>22</td><td>20</td><td>21</td><td>0%</td></tr></tbody></table>'
+    raw=b'<div class="tab_time">Last Update: Sep.14 2026 18:10 (GMT+8)</div><table><tr><th>Daily High</th><th>Session Average</th></tr><tbody id="tb_NationalFlashSpotPrice"><tr><td>TLC 128Gb</td><td>12</td><td>10</td><td>12</td><td>10</td><td>11</td><td>-0.5%</td></tr><tr><td>TLC 256Gb</td><td>22</td><td>20</td><td>22</td><td>20</td><td>21</td><td>0%</td></tr></tbody></table>'
     result,_=s.memory(raw)
     assert result[0]['unit']=='UNKNOWN_SOURCE_CURRENCY'
     assert result[0]['latest']['period']=='2026-09-14T18:10:00+08:00'
@@ -197,3 +197,20 @@ def test_previous_report_reader_checks_exact_hash(tmp_path):
             'bytes':len(raw),'sha256':m.sha256(raw),'git_blob':m.blob_sha(raw)}}}}}
     actual,status=r.previous(Collector())
     assert actual==value and status.startswith('EXACT_PREVIOUS_READING_')
+
+
+def test_official_energy_quantities_use_monthly_and_cumulative_periods():
+    title='2026年8月份能源生产情况'
+    prose='8月份，规上工业原煤产量3.6亿吨，同比下降7.7%。1—8月份，规上工业原煤产量30.6亿吨，同比下降3.3%。8月份，规上工业原油产量1843万吨，同比增长0.8%。1—8月份，规上工业原油产量14500万吨，同比增长0.9%。8月份，规上工业天然气产量200亿立方米，同比增长3.1%。8月份，规上工业发电量9000亿千瓦时，同比增长4.1%。'
+    values,_=s.official('nbs-energy',page(title,prose),title)
+    assert len(values)==6
+    assert values[0]['basis']=='MONTHLY_OUTPUT'
+    assert values[1]['basis']=='YEAR_TO_DATE_OUTPUT'
+    assert values[0]['latest']['reported_yoy_pct']=='-7.7'
+
+
+def test_same_provider_other_series_cannot_substitute_for_requested_logistics():
+    record={'id':'logistics','url':s.EM,'params':{**s.EM_SPECS['logistics'],'pageNumber':'1','pageSize':'30','sortColumns':'REPORT_DATE','sortTypes':'-1','source':'WEB','client':'WEB'},'status':'CAPTURED'}
+    s.validate_source_record(record)
+    record['params']['filter']='(INDICATOR_ID="OTHER")'
+    with pytest.raises(ValueError): s.validate_source_record(record)

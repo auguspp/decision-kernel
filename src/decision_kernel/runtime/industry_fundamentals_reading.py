@@ -22,7 +22,7 @@ def previous(c):
         raw = c.api.file(m.safe_path(ref['read_path']), c.previous_commit)
         m.check(len(raw) == ref['bytes'] and m.sha256(raw) == ref['sha256'] and m.blob_sha(raw) == ref['git_blob'],
                 'previous industrial reading bytes differ')
-        report = source.decode(raw); m.sealed(report, 'projection_hash')
+        report = source.decode(raw); m.check(report['projection_hash'] == canonical_hash(report['projection']), 'previous industry hash differs')
         value = report['projection']
         m.check(value['observation']['version'] == source.VERSION, 'previous industrial version differs')
         return value, 'EXACT_PREVIOUS_READING_' + c.previous_commit

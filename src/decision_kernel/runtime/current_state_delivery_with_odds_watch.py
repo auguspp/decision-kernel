@@ -52,6 +52,8 @@ class Collector(base.Collector):
         if getattr(self, "include_industry_breadth", False):
             from .industry_breadth_reading import attach as attach_industry_breadth
             payload = attach_industry_breadth(self, payload)
+            from .industry_fundamentals_reading import attach as attach_industrial
+            payload = attach_industrial(self, payload)
         if getattr(self, "include_easy_stock_context", False):
             from .easy_stock_reading import attach as attach_public_context
             payload = attach_public_context(self, payload)

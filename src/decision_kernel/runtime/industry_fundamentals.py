@@ -120,12 +120,66 @@ def series(family, label, unit, basis, points, **extra):
             'points': ordered, 'latest': ordered[-1], **extra}
 
 
+def energy_fields(content, period):
+    # Explicit quantities in the official energy release; first monthly and YTD
+    # paragraphs remain different bases. No image reading or guessed values.
+    output = []
+    patterns = (
+        ('原煤产量', r'原煤产量'), ('原油产量', r'原油产量'),
+        ('原油加工量', r'原油加工量'), ('天然气产量', r'天然气产量'),
+        ('发电量', r'发电量'),
+    )
+    for label, pattern in patterns:
+        matches = list(re.finditer(pattern + r'([\d.]+)(亿吨|万吨|亿立方米|亿千瓦时)[，,]同比(增长|下降)([\d.]+)%', content))
+        for match in matches[:2]:
+            prefix = content[max(0,match.start()-45):match.start()]
+            cumulative = bool(re.search(r'1[—－–-]\d{1,2}月份?[^。]*$', prefix))
+            point = {'period': period, 'value': number(match[1]),
+                     'reported_yoy_pct': str(Decimal(match[4]) * (-1 if match[3]=='下降' else 1))}
+            if cumulative: point['period_start'] = period[:4] + '-01'
+            output.append(series('nbs-energy', label, match[2],
+                'YEAR_TO_DATE_OUTPUT' if cumulative else 'MONTHLY_OUTPUT', [point]))
+    m.check(len(output) >= 5, 'official energy quantity fields missing')
+    return output
+
+
+def pmi_tables(article):
+    specs = (
+        ('制造业', ('PMI','生产','新订单','原材料库存','从业人员','供应商配送时间')),
+        ('制造业', ('新出口订单','进口','采购量','主要原材料购进价格','出厂价格','产成品库存','在手订单','生产经营活动预期')),
+        ('非制造业', ('商务活动','新订单','投入品价格','销售价格','从业人员','业务活动预期')),
+        ('非制造业', ('新出口订单','在手订单','存货','供应商配送时间')),
+    )
+    tables = article.find_all('table')
+    if not tables: return []
+    m.check(len(tables) == 4, 'PMI table inventory changed')
+    output = []
+    for table_, (scope, labels) in zip(tables, specs):
+        header = text(table_.get_text())
+        m.check(all(label in header for label in labels), 'PMI table headings changed')
+        buckets = {label: [] for label in labels}
+        for row in rows(table_):
+            match = re.fullmatch(r'(20\d{2})年(\d{1,2})月', row[0]) if row else None
+            if not match: continue
+            m.check(len(row) == len(labels)+1, 'PMI table row width changed')
+            period = date(int(match[1]),int(match[2]),1).strftime('%Y-%m')
+            for label, cell in zip(labels,row[1:]):
+                m.check(number(cell) is not None, 'PMI numeric observation missing')
+                buckets[label].append({'period': period,'value': number(cell)})
+        m.check(all(2 <= len(v) <= 24 for v in buckets.values()), 'PMI monthly history bound')
+        output += [series('nbs-pmi',scope+'/'+label,'指数点','MONTHLY_DIFFUSION_INDEX',points)
+                   for label,points in buckets.items()]
+    return output
+
+
 def official(family, raw, title):
     soup, article = body(raw)
     content = text(article.get_text(' ', strip=True))
     period = period_from_title(title)
     output = []
-    if family in {'nbs-industry', 'nbs-energy'}:
+    if family == 'nbs-energy':
+        output = energy_fields(content, period)
+    elif family == 'nbs-industry':
         tables = [t for t in article.find_all('table')
                   if '同比增长' in text(t.get_text()) and '绝对量' in text(t.get_text())]
         m.check(bool(tables), 'monthly production table header changed')
@@ -167,6 +221,9 @@ def official(family, raw, title):
                 point = {'period': period, 'value': number(value), 'reported_change_pp': str(change),
                          'prior_value_derived_from_reported_change': str(Decimal(value) - change)}
                 output.append(series(family, category + '/' + label, '指数点', 'MONTHLY_DIFFUSION_INDEX', [point]))
+        historical = pmi_tables(article)
+        if historical:
+            output = historical
         m.check(len(output) >= 3, 'PMI source field shape changed')
     elif family == 'nbs-profit':
         for table in article.find_all('table'):
@@ -214,7 +271,11 @@ def official(family, raw, title):
     # Publication clock is optional, never inferred from the URL or fetch clock.
     stamp = re.search(r'\b(20\d{2})/(\d{2})/(\d{2})\s+(\d{2}:\d{2})', soup.get_text(' ', strip=True))
     publication = f'{stamp[1]}-{stamp[2]}-{stamp[3]}T{stamp[4]}:00+08:00' if stamp else None
-    return output, {'publication_at': publication, 'release_title': title,
+    unique = {}
+    for item in output:
+        m.check(item['id'] not in unique or unique[item['id']] == item, 'official same-period metric conflict')
+        unique[item['id']] = item
+    return list(unique.values()), {'publication_at': publication, 'release_title': title,
                     'scope': 'NBS_PUBLISHED_STATISTICS_COMPARABLE_SCOPE_NOT_COMPANY_FINANCIALS'}
 
 
@@ -241,7 +302,7 @@ def cars(raw):
                     if value is None:
                         continue
                     point = {'period': date(year, month, 1).strftime('%Y-%m'), 'value': value}
-                    if isinstance(previous, list) and len(previous) == 4 and number(previous[pos]) not in (None, '0'):
+                    if isinstance(previous, list) and len(previous) == 4 and number(previous[pos]) is not None and Decimal(number(previous[pos])) != 0:
                         point['computed_yoy_pct'] = str((Decimal(value) / Decimal(number(previous[pos])) - 1) * 100)
                     buckets[name].append(point)
         output += [series('cpca', category + '/' + name, '万辆', 'MONTHLY_CPCA', points)
@@ -278,7 +339,7 @@ def eastmoney(family, raw):
 def memory(raw):
     soup = BeautifulSoup(raw, 'html.parser')
     output = []
-    for tbody_id, category in (('tb_NowDramSpotPrice', 'DRAM'), ('tb_NowFlashSpotPrice', 'NAND')):
+    for tbody_id, category in (('tb_NationalDramSpotPrice', 'DRAM'), ('tb_NationalFlashSpotPrice', 'NAND')):
         node = soup.find(id=tbody_id)
         if node is None:
             continue
@@ -401,6 +462,13 @@ def render(report, comparison=None):
         '机械观察，不自动认定产业拐点或公司受益；统计期、来源更新时间和取得时间分别保留。',
         '月度数量、累计财务、期末存量、扩散指数及现货报价不能混排；同比不是环比，价格不是利润。',
         f"本次状态：{report['status']}；来源族 {report['coverage']['available_families']}/{len(FAMILIES)}；序列 {len(report['series'])}。", '']
+    featured = [x for x in report['series'] if x['basis'] != 'YEAR_TO_DATE_OUTPUT' and any(k in x['label'] for k in ('新订单','原材料库存','在手订单','规上工业/','狭义乘用车/','集成电路','工业机器人','BDTI','物流业景气'))]
+    lines += ['## 本次可读线索（不解释原因）', '']
+    for item in featured[:24]:
+        last = item['latest']; prior = item['points'][-2] if len(item['points']) > 1 else None
+        delta = {k:v for k,v in last.items() if k.startswith(('reported_', 'computed_'))}
+        lines.append('- ' + esc(item['label']) + '：' + esc(last['period']) + '，' + esc(last['value']) + ' ' + esc(item['unit']) + ('；前期 ' + esc(prior['period']) + ' ' + esc(prior['value']) if prior else '') + ('；' + esc(delta) if delta else ''))
+    lines += ['', '全部序列在下面逐源列出；首页不是采集或研究准入范围。', '']
     if comparison:
         kinds = {}
         for c in comparison['changes']:
@@ -458,6 +526,7 @@ def capture(output, identity, *, get=None, now=None):
                 else:
                     with session.get(url, params=params, timeout=(7, 12), allow_redirects=False, stream=True) as response:
                         status = response.status_code
+                        record['http_status'] = status
                         m.check(status == 200, 'public source HTTP not successful')
                         chunks, size = [], 0
                         for chunk in response.iter_content(65536):
@@ -511,6 +580,30 @@ def capture(output, identity, *, get=None, now=None):
     return result
 
 
+def validate_source_record(record):
+    key = record['id']
+    if 'url' not in record:
+        m.check(key in FAMILIES and record['status'] == 'NOT_FOUND_IN_BOUNDED_RELEASE_CATALOG', 'invalid missing source receipt')
+        return
+    url, params = record['url'], record.get('params')
+    if key.startswith('catalog-'):
+        index = int(key.removeprefix('catalog-'))
+        m.check(0 <= index <= 2 and url == (NBS,NBS+'index_1.html',NBS+'index_2.html')[index] and params == {}, 'catalog receipt differs')
+    elif key in PROFILES:
+        m.check(re.search(PROFILES[key],record.get('title') or '') is not None and params == {}, 'official release contract differs')
+        m.check(url.startswith(NBS) and '/t20' in url, 'official release source differs')
+    elif key in EM_SPECS:
+        expected = {**EM_SPECS[key], 'pageNumber':'1','pageSize':'30','sortColumns':'REPORT_DATE',
+                    'sortTypes':'-1','source':'WEB','client':'WEB'}
+        m.check(url == EM and params == expected, 'statistical series request identity differs')
+    elif key == 'cpca':
+        m.check(url == CPCA and params == {'charttype':'1'}, 'CPCA category request differs')
+    elif key == 'memory':
+        m.check(url == MEMORY and params == {}, 'memory source request differs')
+    else:
+        raise ValueError('unreviewed source record')
+
+
 def replay(files, identity, *, cutoff):
     receipt = decode(files['capture.json']); m.sealed(receipt, 'capture_hash')
     validate_identity(receipt['identity'])
@@ -522,7 +615,9 @@ def replay(files, identity, *, cutoff):
         raw = files[m.safe_path(name)]
         m.check(len(raw) == meta['bytes'] and m.sha256(raw) == meta['sha256'], 'industrial captured bytes changed')
     m.check(len(receipt['records']) <= MAX_REQUESTS, 'industrial request inventory bound')
+    m.check(len({r['id'] for r in receipt['records']}) == len(receipt['records']), 'duplicate industrial request identity')
     for record in receipt['records']:
+        validate_source_record(record)
         if record.get('url'):
             allowed_url(record['url'])
             m.check(m.clock(record['requested_at']) <= m.clock(record['received_at']) <= m.clock(receipt['cutoff']), 'industrial request clocks differ')
