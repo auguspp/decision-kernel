@@ -1,0 +1,9 @@
+# 9/24 Sector 补采：指数准备结果已取得，完整生产未通过
+
+2026-09-25 实际取得的9/24完成日指数输入，从9/23原状态推进计算；不是9/24当时已知。Source run36113627698/attempt1；source code f09a4f444e8a9ad25af258e888e0b9fa10cb037d。
+
+原审计ZIP824854bytes、SHA256 fd343eaf142e0a428cfc46f1fde3b9d22d9d080d34f95860b3d89320e4015e18；原manifest 1c78947cc29464e07478240684e9195049a4940fc245de79d1c995d008b2c1f2。使用既有validator和replayer验证MATCHED_REJECTED，preparation是原包相同字节的已完成指数准备结果；不是整个run成功、最终Sector result、股票资格或生产恢复权威。
+
+27份成员表为9/25取得的当前成员，不冒充9/24历史PIT。全市场snapshot第一页面时间9/25，与目标完成日9/24不同；无逐股票市场日证明，保留拒绝。不覆盖旧失败、不改state/ledger、不触发Stock。Quick可把有范围的指数观察作为线索自行研究，不据此认定经营受益。AI Investment Authority=NONE。
+
+原始ZIP在本Git目录独立保存，不冒称普通read-model已经物化或ON_DEMAND reader已验；本次研究从精确Git commit读取准备结果。

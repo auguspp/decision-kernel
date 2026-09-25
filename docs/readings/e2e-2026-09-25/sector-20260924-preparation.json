@@ -1,0 +1,751 @@
+{
+  "acquisition_plan": {
+    "all_market_snapshot_required": true,
+    "budget_semantics": "OPERATIONS_SAFETY_BUDGET_ONLY_NOT_A_SIGNAL_OR_RANKING_THRESHOLD",
+    "candidate_count": 21,
+    "candidate_thscodes": [
+      "881175.TI",
+      "881144.TI",
+      "881139.TI",
+      "881182.TI",
+      "881178.TI",
+      "881280.TI",
+      "881174.TI",
+      "881266.TI",
+      "884245.TI",
+      "884244.TI",
+      "884271.TI",
+      "884140.TI",
+      "884132.TI",
+      "884172.TI",
+      "884308.TI",
+      "884021.TI",
+      "884192.TI",
+      "884005.TI",
+      "884136.TI",
+      "884237.TI",
+      "884142.TI"
+    ],
+    "distinct_membership_request_count": 27,
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "market_session": "2026-09-24",
+    "max_membership_requests": 32,
+    "membership_requests": [
+      {
+        "name": "养殖业",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881102.TI"
+      },
+      {
+        "name": "通用设备",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881117.TI"
+      },
+      {
+        "name": "纺织制造",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881135.TI"
+      },
+      {
+        "name": "服装家纺",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881136.TI"
+      },
+      {
+        "name": "家居用品",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881139.TI"
+      },
+      {
+        "name": "医疗器械",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE"
+        ],
+        "thscode": "881144.TI"
+      },
+      {
+        "name": "文化传媒",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881164.TI"
+      },
+      {
+        "name": "厨卫电器",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE"
+        ],
+        "thscode": "881174.TI"
+      },
+      {
+        "name": "医疗服务",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881175.TI"
+      },
+      {
+        "name": "教育",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE"
+        ],
+        "thscode": "881178.TI"
+      },
+      {
+        "name": "石油加工贸易",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881180.TI"
+      },
+      {
+        "name": "美容护理",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881182.TI"
+      },
+      {
+        "name": "橡胶制品",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE"
+        ],
+        "thscode": "881266.TI"
+      },
+      {
+        "name": "风电设备",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881280.TI"
+      },
+      {
+        "name": "海洋捕捞",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884005.TI"
+      },
+      {
+        "name": "油品石化贸易",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884021.TI"
+      },
+      {
+        "name": "其他纺织",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884132.TI"
+      },
+      {
+        "name": "鞋帽及其他",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884136.TI"
+      },
+      {
+        "name": "其他家居用品",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884140.TI"
+      },
+      {
+        "name": "文娱用品",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884142.TI"
+      },
+      {
+        "name": "电视广播",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884172.TI"
+      },
+      {
+        "name": "仪器仪表",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884192.TI"
+      },
+      {
+        "name": "瓷砖地板",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884237.TI"
+      },
+      {
+        "name": "医疗研发外包",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884244.TI"
+      },
+      {
+        "name": "其他医疗服务",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884245.TI"
+      },
+      {
+        "name": "个护用品",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884271.TI"
+      },
+      {
+        "name": "风电零部件",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884308.TI"
+      }
+    ],
+    "plan_hash": "95882cba09f0233f84fa14629a0113ff37972a834c83831da8a6b3cbf07620ae",
+    "status": "READY_FOR_CURRENT_BREADTH_ENRICHMENT"
+  },
+  "artifact_semantics": "PURE_PROSPECTIVE_SHADOW_COMPOSITION_AUDIT_ONLY",
+  "benchmark_thscode": "000300.SH",
+  "broad_entries": {
+    "as_of_session": "2026-09-24",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_AND_PERSISTENT_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.1342570953110333137791855579",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0930074252790304616647926714",
+        "horizon_20_rank": "7",
+        "horizon_20_rating": 92,
+        "horizon_5_excess_return": "0.0773891225041758942448726660",
+        "horizon_5_rank": "2",
+        "horizon_5_rating": 98,
+        "horizon_60_excess_return": "0.3303102983274630824422083250",
+        "horizon_60_rating": 98,
+        "name": "医疗服务",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "80",
+        "thscode": "881175.TI",
+        "top_quartile_20d_persistence_sessions": 4,
+        "turnover_pulse_5_vs_prior_20": "1.342906086450349957061277713"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0787554289853609451257914378",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0543606150108607482682022704",
+        "horizon_20_rank": "31",
+        "horizon_20_rating": 66,
+        "horizon_5_excess_return": "0.0568350028801657694292044360",
+        "horizon_5_rank": "3",
+        "horizon_5_rating": 97,
+        "horizon_60_excess_return": "0.1386476103092532978041986750",
+        "horizon_60_rating": 71,
+        "name": "医疗器械",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "51",
+        "thscode": "881144.TI",
+        "top_quartile_20d_persistence_sessions": 0,
+        "turnover_pulse_5_vs_prior_20": "1.200764385805846644976059461"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0468388307236122504190054208",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0835656632626728969426220274",
+        "horizon_20_rank": "10",
+        "horizon_20_rating": 89,
+        "horizon_5_excess_return": "0.0506588265789691506518035380",
+        "horizon_5_rank": "5",
+        "horizon_5_rating": 95,
+        "horizon_60_excess_return": "0.1590282381662194277227124100",
+        "horizon_60_rating": 78,
+        "name": "家居用品",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 39,
+        "rank_change_5_sessions_20d": "29",
+        "thscode": "881139.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "1.307211262792922362920665740"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0505931720123272631321623764",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0734693495786733252614504164",
+        "horizon_20_rank": "12",
+        "horizon_20_rating": 87,
+        "horizon_5_excess_return": "0.0457632017775069967056441200",
+        "horizon_5_rank": "9",
+        "horizon_5_rating": 90,
+        "horizon_60_excess_return": "0.1132551554774033073056175430",
+        "horizon_60_rating": 64,
+        "name": "美容护理",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 17,
+        "rank_change_5_sessions_20d": "46",
+        "thscode": "881182.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.295408312495894369154929713"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0157983745131115670758993658",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.1080594793081856215007904824",
+        "horizon_20_rank": "4",
+        "horizon_20_rating": 96,
+        "horizon_5_excess_return": "0.0402244408287140294021887580",
+        "horizon_5_rank": "12",
+        "horizon_5_rating": 87,
+        "horizon_60_excess_return": "0.3456743828271534048736228510",
+        "horizon_60_rating": 99,
+        "name": "教育",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 46,
+        "rank_change_5_sessions_20d": "2",
+        "thscode": "881178.TI",
+        "top_quartile_20d_persistence_sessions": 11,
+        "turnover_pulse_5_vs_prior_20": "1.078698308617726343761586394"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0352241717520171004025669708",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0946313819563826334954412954",
+        "horizon_20_rank": "6",
+        "horizon_20_rating": 93,
+        "horizon_5_excess_return": "0.0217136914289745934957705130",
+        "horizon_5_rank": "41",
+        "horizon_5_rating": 55,
+        "horizon_60_excess_return": "0.0376368413726501615547167862",
+        "horizon_60_rating": 26,
+        "name": "风电设备",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 8,
+        "rank_change_5_sessions_20d": "8",
+        "thscode": "881280.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.380386591135257744750126650"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0802250517591490155378498381",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0917621966248946425718103144",
+        "horizon_20_rank": "8",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0537952405566951731729058830",
+        "horizon_5_rank": "4",
+        "horizon_5_rating": 96,
+        "horizon_60_excess_return": "0.1910179327367842375507314780",
+        "horizon_60_rating": 87,
+        "name": "厨卫电器",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 6,
+        "rank_change_5_sessions_20d": "63",
+        "thscode": "881174.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "0.8630329877264944486608391085"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.0039268253313209837700426332",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0836872348693779725567239944",
+        "horizon_20_rank": "9",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0110808916090127841219252860",
+        "horizon_5_rank": "58",
+        "horizon_5_rating": 36,
+        "horizon_60_excess_return": "0.0497454878015898769733447434",
+        "horizon_60_rating": 32,
+        "name": "橡胶制品",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 34,
+        "rank_change_5_sessions_20d": "-1",
+        "thscode": "881266.TI",
+        "top_quartile_20d_persistence_sessions": 19,
+        "turnover_pulse_5_vs_prior_20": "1.279983327484949718140886537"
+      }
+    ],
+    "family": "BROAD_881",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-23",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+  "granular_entries": {
+    "as_of_session": "2026-09-24",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_AND_PERSISTENT_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.2285622828188869188136261929",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1808503172394716197440595054",
+        "horizon_20_rank": "3",
+        "horizon_20_rating": 98,
+        "horizon_5_excess_return": "0.1977197885248774397500072350",
+        "horizon_5_rank": "1",
+        "horizon_5_rating": 99,
+        "horizon_60_excess_return": "0.3058635115705908338992721540",
+        "horizon_60_rating": 95,
+        "name": "其他医疗服务",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "217",
+        "thscode": "884245.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "2.016250146282939908946408747"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_AND_PERSISTENT_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.1603053156387094383227927317",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1075120422593573607187116964",
+        "horizon_20_rank": "18",
+        "horizon_20_rating": 92,
+        "horizon_5_excess_return": "0.0702765228698817594412929830",
+        "horizon_5_rank": "7",
+        "horizon_5_rating": 96,
+        "horizon_60_excess_return": "0.4165000975472353795163847790",
+        "horizon_60_rating": 99,
+        "name": "医疗研发外包",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "204",
+        "thscode": "884244.TI",
+        "top_quartile_20d_persistence_sessions": 4,
+        "turnover_pulse_5_vs_prior_20": "1.317134283048152655428760745"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_AND_PERSISTENT_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0763285592564385507102897218",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1294491388770046577780869294",
+        "horizon_20_rank": "7",
+        "horizon_20_rating": 96,
+        "horizon_5_excess_return": "0.0663827993849232212672381990",
+        "horizon_5_rank": "9",
+        "horizon_5_rating": 96,
+        "horizon_60_excess_return": "0.2244488283376749429262585650",
+        "horizon_60_rating": 91,
+        "name": "个护用品",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 18,
+        "rank_change_5_sessions_20d": "55",
+        "thscode": "884271.TI",
+        "top_quartile_20d_persistence_sessions": 5,
+        "turnover_pulse_5_vs_prior_20": "1.648941395507327438771237700"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0389505044597962218310789398",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0811783867878159589380749634",
+        "horizon_20_rank": "38",
+        "horizon_20_rating": 83,
+        "horizon_5_excess_return": "0.0609971747259520004805028360",
+        "horizon_5_rank": "13",
+        "horizon_5_rating": 94,
+        "horizon_60_excess_return": "0.1311460083891432688413651040",
+        "horizon_60_rating": 64,
+        "name": "其他家居用品",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 39,
+        "rank_change_5_sessions_20d": "44",
+        "thscode": "884140.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.327571629484651328694163340"
+      },
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-09-24",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0492833031833669962622624998",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0783702626238055282968703704",
+        "horizon_20_rank": "42",
+        "horizon_20_rating": 81,
+        "horizon_5_excess_return": "0.0558375620634373595249708510",
+        "horizon_5_rank": "18",
+        "horizon_5_rating": 92,
+        "horizon_60_excess_return": "0.1138254473833382852218682540",
+        "horizon_60_rating": 59,
+        "name": "其他纺织",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 39,
+        "rank_change_5_sessions_20d": "78",
+        "thscode": "884132.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.343824816672967387540440261"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0232056225675447724404467358",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1164626659488248964386201014",
+        "horizon_20_rank": "13",
+        "horizon_20_rating": 94,
+        "horizon_5_excess_return": "0.0352886559362419718246342600",
+        "horizon_5_rank": "47",
+        "horizon_5_rating": 79,
+        "horizon_60_excess_return": "0.2057297361987401721422161210",
+        "horizon_60_rating": 87,
+        "name": "电视广播",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 19,
+        "rank_change_5_sessions_20d": "11",
+        "thscode": "884172.TI",
+        "top_quartile_20d_persistence_sessions": 10,
+        "turnover_pulse_5_vs_prior_20": "1.244086548326813082460782690"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0377721560537400804169828138",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1155632976373842826293708414",
+        "horizon_20_rank": "14",
+        "horizon_20_rating": 93,
+        "horizon_5_excess_return": "0.0264092320084261120558545820",
+        "horizon_5_rank": "83",
+        "horizon_5_rating": 64,
+        "horizon_60_excess_return": "0.0495911988488907639348224782",
+        "horizon_60_rating": 34,
+        "name": "风电零部件",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 8,
+        "rank_change_5_sessions_20d": "18",
+        "thscode": "884308.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.723933017007764066662437626"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.0050786358744816068889389212",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1088075160466533967292817904",
+        "horizon_20_rank": "16",
+        "horizon_20_rating": 93,
+        "horizon_5_excess_return": "0.0064679411261871088312118330",
+        "horizon_5_rank": "146",
+        "horizon_5_rating": 37,
+        "horizon_60_excess_return": "0.0707204093913651316634805723",
+        "horizon_60_rating": 42,
+        "name": "油品石化贸易",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 29,
+        "rank_change_5_sessions_20d": "-1",
+        "thscode": "884021.TI",
+        "top_quartile_20d_persistence_sessions": 16,
+        "turnover_pulse_5_vs_prior_20": "1.213601680565171463479686837"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0827859619532062615128371902",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1079765228304136629838495844",
+        "horizon_20_rank": "17",
+        "horizon_20_rating": 92,
+        "horizon_5_excess_return": "0.0949631688322111395615950900",
+        "horizon_5_rank": "2",
+        "horizon_5_rating": 99,
+        "horizon_60_excess_return": "0.0802606932494814764345661040",
+        "horizon_60_rating": 47,
+        "name": "仪器仪表",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 7,
+        "rank_change_5_sessions_20d": "111",
+        "thscode": "884192.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "1.499041437866541718210095314"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.0721408947496164342788874992",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1074937202589779220686460854",
+        "horizon_20_rank": "19",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "-0.0139032341517689873084242886",
+        "horizon_5_rank": "214",
+        "horizon_5_rating": 8,
+        "horizon_60_excess_return": "0.3268310973263646652858509570",
+        "horizon_60_rating": 96,
+        "name": "海洋捕捞",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 47,
+        "rank_change_5_sessions_20d": "-16",
+        "thscode": "884005.TI",
+        "top_quartile_20d_persistence_sessions": 25,
+        "turnover_pulse_5_vs_prior_20": "0.5128316375218389395366767533"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0426899784004702936672349688",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1067651488145596325225790864",
+        "horizon_20_rank": "21",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0580068989328641794127139090",
+        "horizon_5_rank": "17",
+        "horizon_5_rating": 92,
+        "horizon_60_excess_return": "0.1535496582152185549891366950",
+        "horizon_60_rating": 72,
+        "name": "鞋帽及其他",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 37,
+        "rank_change_5_sessions_20d": "26",
+        "thscode": "884136.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "0.9663799680317302418212092245"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0519908157804352517080668038",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0999904866006701978232062014",
+        "horizon_20_rank": "22",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0422031021014072470404424550",
+        "horizon_5_rank": "34",
+        "horizon_5_rating": 85,
+        "horizon_60_excess_return": "0.2122766090667677275593888590",
+        "horizon_60_rating": 88,
+        "name": "瓷砖地板",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 39,
+        "rank_change_5_sessions_20d": "48",
+        "thscode": "884237.TI",
+        "top_quartile_20d_persistence_sessions": 5,
+        "turnover_pulse_5_vs_prior_20": "1.648185372522553295585466735"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-09-24",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0582822056630375595400714588",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0988099904557480565975619084",
+        "horizon_20_rank": "23",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0528842792197931262268386090",
+        "horizon_5_rank": "20",
+        "horizon_5_rating": 91,
+        "horizon_60_excess_return": "0.1930128188632517761740934610",
+        "horizon_60_rating": 86,
+        "name": "文娱用品",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 44,
+        "rank_change_5_sessions_20d": "64",
+        "thscode": "884142.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "1.120858078334897675592848333"
+      }
+    ],
+    "family": "GRANULAR_884",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-23",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "human_attention_authority": "NONE",
+  "input_market_state_hash": "6d950e7a8166e6e52e8312c757c83efd5ec036c61a8c48f003e13a291980f357",
+  "investment_authority": "NONE",
+  "latest_cached_session": "2026-09-23",
+  "market_session": "2026-09-24",
+  "next_completed_session_after_state": "2026-09-24",
+  "output_market_state_hash": "6bf81c8f3cfa538b306b172e3b1d2db2666c29d75f81c8e3a7e0de05074db129",
+  "parent_hint_mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+  "preparation_hash": "7ce713f467a47a2ca741f392dd27c7ad0f9ed3486c087ef449cf14e804d8794a",
+  "prepared_at": "2026-09-25T08:34:20.017747Z",
+  "qualified_snapshot_hash": "7b94937c34d3993da1656c3e029e97d26e42b7d2c51f8d8f759369ad479de687",
+  "schema_version": 1,
+  "state_update_status": "APPENDED_NEW_COMPLETED_SESSION"
+}
