@@ -127,7 +127,7 @@ def test_successor_reuses_one_daily_sector_clock_for_stock_and_tdx_without_new_s
     assert "steps.tdx-origin.outputs.sector_origin" in raw
     assert "'market-session': os.environ['MARKET_SESSION']" in raw
     assert "'code-sha': os.environ['CODE_SHA']" in raw
-    dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1]
+    dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1].split("\n  dispatch-tdx-concept:", 1)[0]
     assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in dispatch
     assert raw.count("GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}") == 2
     assert "GH_TOKEN: ${{ github.token }}" not in dispatch
