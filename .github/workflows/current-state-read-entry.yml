@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-industry-breadth, radar-concept-detail, tdx-concept-snapshot, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
     types: [requested, completed]
     branches: [main]
 
