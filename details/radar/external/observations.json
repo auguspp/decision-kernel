@@ -1,17 +1,17 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "e7a23a05da969e9d1408aebf15ea306fdb4b5a7f3f5a3f1b97d426d1b84f4adb",
+    "base_reading_hash": "76ce502ecd21c704453ac06724324d7c4dca520c1fadaeb187e5f1557ecd4cdf",
     "company_context_status": "SAME_READING_SAVED_CONTEXT",
     "company_source": {
       "bytes": 3301615,
-      "git_blob": "7bb60764db5b8f4f194ab9c1f1f47ec8ce042bfb",
+      "git_blob": "82c657164cb401df30e60102cf93acc01349421e",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "fc0c6d676197dda8b44f10ad30b485b83db247c23bf3bcae1181f8dfa729c6fe"
+      "sha256": "88cd99a8108535a09aafc80d2c33279526ee8e0d6a989f42196537af53e4c91c"
     },
     "config_hash": "5c772ab9e8b67f0916bd2fa493231e676988a6a6d846c823c3188425bf9b6bf5",
-    "generated_at": "2026-09-25T03:44:33.869981+00:00",
+    "generated_at": "2026-09-25T04:49:49.153559+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -378,7 +378,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-25T03:44:33.869981+00:00",
+              "cutoff": "2026-09-25T04:49:49.153559+00:00",
               "field_gaps": [
                 {
                   "amount_reconciled": true,
@@ -1150,7 +1150,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "6b43888bb2549b1d2fc00b4652c8db922476bad82ae10927234075207e037a56"
+            "projection_hash": "1db572af83337f49f1b549b0f9fce27b351fc6acb0c22b4696f55e379dd8b00b"
           },
           {
             "projection": {
@@ -1480,7 +1480,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-25T03:44:33.869981+00:00",
+              "cutoff": "2026-09-25T04:49:49.153559+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -2239,7 +2239,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "3f3b074b674e965348b7758aaa5ce3a2564731398b32a2ac38ad7a95236505a6"
+            "projection_hash": "09d30af1e94ea79dd9fcd4374c1c3972428fed46a9b709a487f78ca21b2a36fe"
           },
           {
             "projection": {
@@ -2569,7 +2569,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-25T03:44:33.869981+00:00",
+              "cutoff": "2026-09-25T04:49:49.153559+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -3328,7 +3328,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "be381e2da68b5f534562222c69eab86ca9b34f5c91c35190007aaa6942585673"
+            "projection_hash": "efaad115338160ec350d511da69d8843007b70dc8690f6cc260389fd73ee10e6"
           }
         ],
         "status": "SAVED_SAMPLE_REBUILT"
@@ -3490,8 +3490,8 @@
               }
             ],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "e25e32f1953ae9a552a60590c8a0e0f76a9d8649c70954e1e99d8bb0658eb105",
-            "cutoff": "2026-09-25T03:44:33.869981+00:00",
+            "company_reading_hash": "e141c6ccc99373c3ebb38dda11a2ad36d610c75c8e8db9ec38f8e1787430a5b8",
+            "cutoff": "2026-09-25T04:49:49.153559+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -13198,7 +13198,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "c7ce5771f94fe710d4d98209aca0f0ca683d1dcf7084d48b00d234a7ec5370ad"
+          "projection_hash": "b59c1db511aba7003a5c4b2ffaed44f0c48813ed86b1574884acf2eab3d04f1c"
         },
         "status": "SAVED_SAMPLE_REBUILT"
       }
@@ -13207,5 +13207,5 @@
     "signal_transition_authority": "NONE",
     "version": "saved-external-radar-reading-v1"
   },
-  "projection_hash": "d4221d11dfc67e472316da39b0ecd3b1efbcfbfde2acad9b56524289ffffb547"
+  "projection_hash": "d9b1a49852ecfaac8d572fc9831b79658987feb7d431c288eaf83092bc52e5b7"
 }
