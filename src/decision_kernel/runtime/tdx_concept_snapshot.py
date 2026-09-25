@@ -484,7 +484,9 @@ def capture(
         status = "CAPTURED_TDX_CONCEPT_SNAPSHOT"
     except TdxConceptError as exc:
         reason, failure_type = str(exc), type(exc).__name__
-    except (OSError, TimeoutError, RuntimeError, ValueError, TypeError, KeyError) as exc:
+    except Exception as exc:
+        # Third-party eltdx has its own finite transport/protocol exception
+        # classes. Retain only the exception type, never remote text/attributes.
         reason, failure_type = "SOURCE_UNAVAILABLE_OR_REJECTED", type(exc).__name__
     finished = _clock(now())
     require(finished >= started, "FINISH_CLOCK_REJECTED")
