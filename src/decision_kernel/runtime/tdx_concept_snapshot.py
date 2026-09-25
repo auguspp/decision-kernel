@@ -407,32 +407,35 @@ def build_observation(source: dict[str, Any], market_session: date) -> dict[str,
 def render(result: dict[str, Any]) -> str:
     projection = result["projection"]
     require(result.get("projection_hash") == canonical_hash(projection), "OBSERVATION_HASH_REJECTED")
+    def text(value: Any) -> str:
+        value = "UNKNOWN" if value is None else str(value)
+        return (value.replace("\\r", " ").replace("\\n", " ")
+                .replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                .replace("|", "&#124;"))
     lines = [
         "# TDX 概念市场横截面",
         "",
-        f"状态：{projection['status']}",
+        f"状态：{text(projection['status'])}",
         "",
         "通达信 source-native 概念口径；不映射或冒充东方财富 BK / 同花顺 TI。",
         "1/5/10 日均由已完成交易日收盘序列本地计算；价格变化只属于 Market Expression。",
         "Eastmoney/Vibe 已退为 best-effort secondary；本结果不依赖东财成功。",
         "原始 7709 frame 未由 eltdx board helper 暴露；保留其 source-native 模型、板块资料文件及精确 hash。",
         "",
-        f"目标交易日：{projection['market_session']}；板块资料日：{projection['prepared_date']}",
+        f"目标交易日：{text(projection['market_session'])}；板块资料日：{text(projection['prepared_date'])}",
         f"目录：{projection['catalog_count']}；5日覆盖：{projection['coverage']['history_5d_rows']}；10日覆盖：{projection['coverage']['history_10d_rows']}",
-        f"实际主站：{projection['chosen_host']}；eltdx：{projection['package_version']}",
+        f"实际主站：{text(projection['chosen_host'])}；eltdx：{text(projection['package_version'])}",
         "",
         "| 代码 | 名称 | 当日% | 5日% | 10日% |",
         "|---|---|---:|---:|---:|",
     ]
     for row in projection["observations"]:
         periods = row["periods"]
-        def shown(value: Any) -> str:
-            return "UNKNOWN" if value is None else str(value)
         lines.append("| " + " | ".join([
-            row["code"], row["name"],
-            shown(periods["today"]["change_percent"]),
-            shown(periods["5d"]["change_percent"]),
-            shown(periods["10d"]["change_percent"]),
+            text(row["code"]), text(row["name"]),
+            text(periods["today"]["change_percent"]),
+            text(periods["5d"]["change_percent"]),
+            text(periods["10d"]["change_percent"]),
         ]) + " |")
     lines += [
         "",
