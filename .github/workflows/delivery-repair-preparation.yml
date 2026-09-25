@@ -3,50 +3,52 @@ on:
   push:
     branches: [diagnostic/delivery-repair-20260925]
 permissions:
-  contents: write
+  contents: read
   actions: read
 jobs:
-  prepare:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: d50b9c99406cb01b11fcb77265198a82361886df
           persist-credentials: false
-          path: prep
-      - uses: actions/checkout@v7
-        with:
-          ref: b89dc93c23ab1a795ef389c7a2561bd6b76e90c9
-          persist-credentials: false
-          path: repo
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Prepare corrected literal test and normal policy entry
-        working-directory: repo
-        run: python ../prep/.github/scripts/patch-recovery-result-gate.py
-      - name: Test revised orchestration and original validation
-        working-directory: repo
-        run: |
-          python -m pip install -e '.[ci-contracts,feeds]' PyYAML
-          python -m pytest -q tests/test_radar_delivery_reconciliation.py tests/test_stock_daily_successor_result_gate.py tests/test_stock_daily_successor.py tests/test_sector_delivery_continuity.py
-      - name: Save tested blobs without branch updates
-        working-directory: repo
+      - run: python -m pip install -e '.[ci-contracts,feeds]'
+      - name: Verify complete CI archive and real no-duplicate recovery plan
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import base64, hashlib, json, subprocess
+          import json, os, runpy
           from pathlib import Path
-          paths = ['tests/test_stock_daily_successor_result_gate.py', '.github/scripts/reconcile-radar-delivery.py', 'tests/test_radar_delivery_reconciliation.py', 'docs/sector-radar-scheduled-production.md']
-          entries = []
-          for path in paths:
-              raw = Path(path).read_bytes()
-              data = json.dumps({'content':base64.b64encode(raw).decode(),'encoding':'base64'})
-              reply = subprocess.run(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'], input=data,text=True,capture_output=True,check=True)
-              sha = json.loads(reply.stdout)['sha']
-              assert sha == hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
-              entries.append({'path':path,'mode':'100644','type':'blob','sha':sha})
-          print('CORRECTION_TREE_ENTRIES=' + json.dumps(entries))
-          subprocess.run(['git','diff','--stat'],check=True)
+          from datetime import datetime, timezone
+          from decision_kernel.runtime.current_state_delivery import GitHubAPI
+          head = 'd50b9c99406cb01b11fcb77265198a82361886df'
+          api = GitHubAPI(os.environ['GH_TOKEN'], max_calls=240)
+          run = api.get('actions/runs/36133419629')
+          assert run['head_sha'] == head and run['run_attempt'] == 1
+          assert run['event'] == 'pull_request' and run['status'] == 'completed' and run['conclusion'] == 'success'
+          metadata = api.get('actions/runs/36133419629/artifacts?per_page=100')
+          assert metadata['total_count'] == len(metadata['artifacts'])
+          items = [a for a in metadata['artifacts'] if a['name'] == 'kernel-ci-36133419629-1']
+          assert len(items) == 1 and not items[0]['expired']
+          artifact = items[0]
+          raw = api.archive(artifact)
+          checker = runpy.run_path('.github/scripts/ci-merge-reuse.py')
+          with checker['verified_archive'](raw, artifact) as z:
+              env = json.loads(z.read('environment.json'))
+          assert env['tree'] == '5a2c8c449cce9c97cd597431a86da96f05b3b329'
+          count = checker['full_evidence'](raw, artifact, run, env)
+          print('VERIFIED_RECOVERY_FULL_CI=' + json.dumps({'run':run['id'],'head':head,'artifact_id':artifact['id'],'bytes':len(raw),'digest':artifact['digest'],'tests':count,'environment':'actual recorded CI, not this verifier environment'}))
+          code = runpy.run_path('.github/scripts/reconcile-radar-delivery.py', run_name='readonly_reconciliation_verification')
+          os.environ['GITHUB_SHA'] = 'b236080c424689183c30b7cebe88769b851875ea'
+          now = datetime.now(timezone.utc)
+          result = code['choose'](code['collect'](api, Path.cwd(), now), now)
+          assert result['status'] == 'UP_TO_DATE_WITH_ISSUER_GAPS' and result['action'] is None
+          assert result['sector_run_id'] == 36122381294 and result['stock_parent'] == '36122381294'
+          print('FINAL_REAL_READONLY_RECONCILIATION=' + json.dumps(result))
           PY
