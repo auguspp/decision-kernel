@@ -41,7 +41,10 @@ MISSED_ADOPT_STEP = "Adopt exact 2026-09-14 missed-session checkpoint"
 MISSED_VERIFY_STEP = "Verify 2026-09-14 missed-session adoption exact offline match"
 RECOVERY_ADOPT_STEP = "Adopt exact recovery checkpoint into original Sector lineage"
 RECOVERY_VERIFY_STEP = "Verify recovery adoption exact offline match"
-ELIGIBLE_ORIGINS = frozenset({"GITHUB_SCHEDULE", "WORKFLOW_DISPATCH_PRODUCE"})
+BACKFILL_REFERENCE_STEP = "Bind 2026-09-24 exchange closure evidence"
+ELIGIBLE_ORIGINS = frozenset({
+    "GITHUB_SCHEDULE", "WORKFLOW_DISPATCH_PRODUCE", "WORKFLOW_DISPATCH_BACKFILL",
+})
 RESULT_STATUSES = frozenset({
     "APPENDED_COMPLETED_SESSION_QUIET",
     "APPENDED_COMPLETED_SESSION_WITH_SHADOW_CANDIDATES",
@@ -166,6 +169,8 @@ def classify_workflow_dispatch(path: str) -> str:
     if produce_ok:
         if any(adoption_success):
             raise SuccessorCheckError("UPSTREAM_DISPATCH_OPERATION_AMBIGUOUS")
+        if outcomes.get(BACKFILL_REFERENCE_STEP) == "success":
+            return "WORKFLOW_DISPATCH_BACKFILL"
         return "WORKFLOW_DISPATCH_PRODUCE"
     if sum(adoption_success) == 1:
         if (
