@@ -109,23 +109,48 @@ def test_missing_and_invalid_values_never_become_zero(tmp_path, value, status):
     assert p['coverage']['today']['missing_or_invalid_values'] == 1
 
 
-@pytest.mark.parametrize('status', [401, 403, 429, 500])
-def test_http_failure_stops_provider_without_retry_or_other_periods(tmp_path, status):
+@pytest.mark.parametrize('status', [401, 403, 429])
+def test_http_policy_failure_stops_without_host_fallback(tmp_path, status):
     def fetch(spec):
         raise DumpTrialError('HTTP_REJECTED', http_status=status)
     p, files, calls = run(tmp_path, fetch)
-    assert len(calls) == 1 and p['stop_reason'] == 'SOURCE_ERROR'
+    assert len(calls) == 1 and p['stop_reason'] == 'SOURCE_ERROR' and p['host_fallbacks'] == 0
     assert not p['observations']
     assert json.loads(files['capture.json'])['records'][0]['http_status'] == status
     assert set(files) == {'plan.json', 'capture.json', 'observation.json', 'summary.md'}
 
 
-def test_transport_failure_after_good_page_does_not_erase_it(tmp_path):
+def test_http_5xx_tries_second_fixed_host_once_then_stops(tmp_path):
+    def fetch(spec):
+        raise DumpTrialError('HTTP_REJECTED', http_status=502)
+    p, files, calls = run(tmp_path, fetch)
+    assert len(calls) == 2 and [c['host_index'] for c in calls] == [0, 1]
+    assert p['stop_reason'] == 'SOURCE_ERROR' and p['host_fallbacks'] == 1 and not p['observations']
+    records = json.loads(files['capture.json'])['records']
+    assert [r['status'] for r in records] == ['HOST_FALLBACK', 'SOURCE_ERROR']
+    assert [r['http_status'] for r in records] == [502, 502]
+
+
+def test_first_host_502_second_host_success_is_explicit_and_replayable(tmp_path):
+    def fetch(spec):
+        if spec['period'] == '5d' and spec['host_index'] == 0:
+            raise DumpTrialError('HTTP_REJECTED', http_status=502)
+        return body(spec, total=1)
+    p, files, calls = run(tmp_path, fetch)
+    assert p['status'] == 'MATCHED_REPORTED_CATALOGS' and p['host_fallbacks'] == 1
+    assert [(c['period'], c['host_index']) for c in calls] == [('today', 0), ('5d', 0), ('5d', 1), ('10d', 0)]
+    records = json.loads(files['capture.json'])['records']
+    assert records[1]['status'] == 'HOST_FALLBACK' and records[1]['http_status'] == 502
+    assert records[2]['status'] == 'BODY_RETAINED' and records[2]['request']['host_index'] == 1
+
+
+def test_transport_failure_after_good_page_uses_second_host_then_preserves_prior_page(tmp_path):
     def fetch(spec):
         if spec['page'] == 2: raise requests.Timeout()
         return body(spec)
     p, _, calls = run(tmp_path, fetch)
-    assert len(calls) == 2 and len(p['observations']) == 100
+    assert len(calls) == 3 and [c['host_index'] for c in calls] == [0, 0, 1]
+    assert len(p['observations']) == 100 and p['host_fallbacks'] == 1
     assert p['stop_reason'] == 'SOURCE_ERROR'
 
 
@@ -158,13 +183,14 @@ def resign(files, mutate):
     return files
 
 
-@pytest.mark.parametrize('case', ['query', 'page', 'raw', 'clock', 'elapsed', 'run', 'retry', 'stop', 'authority'])
+@pytest.mark.parametrize('case', ['query', 'page', 'host', 'raw', 'clock', 'elapsed', 'run', 'retry', 'stop', 'authority'])
 def test_rehashed_custody_tampering_is_rejected(tmp_path, case):
     _, files, _ = run(tmp_path, lambda spec: body(spec, total=1))
     def mutate(saved):
         r = saved['records'][0]
         if case == 'query': r['request']['params']['fs'] = 'm:90+t:2'
         if case == 'page': r['request']['page'] = 2
+        if case == 'host': r['request']['host_index'] = 1
         if case == 'raw': r['sha256'] = '0' * 64
         if case == 'clock': r['received_at'] = '2026-09-25T00:00:00+00:00'
         if case == 'elapsed': r['elapsed_ms'] = 180000
@@ -228,11 +254,12 @@ def test_explicit_execution_binding(field, value, tmp_path):
     assert not (tmp_path/'never').exists()
 
 
-def test_http_uses_vibe_primary_host_original_isolated_session_and_no_redirects(monkeypatch):
-    assert s.VERSION == 'vibe-concept-snapshot-v2'
-    assert s.URL == 'https://push2delay.eastmoney.com/api/qt/clist/get'
-    spec = s.request_spec('today', 1); raw = body(spec, total=1)
-    url = requests.Request('GET', s.URL, params=spec['params']).prepare().url
+def test_http_uses_fixed_vibe_host_order_original_isolated_session_and_no_redirects(monkeypatch):
+    assert s.VERSION == 'vibe-concept-snapshot-v3'
+    assert s.URLS == ('https://push2delay.eastmoney.com/api/qt/clist/get',
+                      'https://push2.eastmoney.com/api/qt/clist/get')
+    spec = s.request_spec('today', 1, 0); raw = body(spec, total=1)
+    url = requests.Request('GET', spec['url'], params=spec['params']).prepare().url
     class Response:
         status_code = 200
         headers = {'Content-Length': str(len(raw)), 'Content-Encoding': 'identity'}
@@ -244,12 +271,13 @@ def test_http_uses_vibe_primary_host_original_isolated_session_and_no_redirects(
         def __enter__(self): return self
         def __exit__(self, *args): pass
         def get(self, target, **kwargs):
-            assert target == s.URL and kwargs['allow_redirects'] is False
+            assert target == spec['url'] and kwargs['allow_redirects'] is False
             assert kwargs['timeout'] == (10,20) and kwargs['stream'] is True
             assert 'Authorization' not in kwargs['headers'] and 'Cookie' not in kwargs['headers']
             return Response()
     monkeypatch.setattr(s, '_session', lambda: Session())
     assert s.request_raw(spec) == raw
+    assert s.request_spec('today', 1, 1)['url'] == s.URLS[1]
     bad = deepcopy(spec); bad['url'] = 'https://elsewhere/'
     with pytest.raises(ValueError): s.request_raw(bad)
 

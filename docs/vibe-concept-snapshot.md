@@ -57,12 +57,15 @@ provider secrets, model call or write permission. Its own workflow/artifact
 identity prevents a new BK format or skipped source job from poisoning the
 old Concept/Industry readers' latest-run selection. No existing workflow changes.
 
-The whole attempt permits at most32 requests, a180-second next-request start
-budget,1MiB per HTTP response and4096 reported rows per window. Fresh isolated
-sessions carry no environment/netrc credentials or redirects. Version v2 fixes
-this bounded adapter to Vibe's current first push2 host `push2delay.eastmoney.com`;
-it does not implement an in-run host cascade or automatic retry. HTTP/transport/
-contract failure still stops this provider and cannot be hidden by another window. A retained failure can have a successful workflow
+The whole attempt permits at most32 **HTTP attempts** including host fallbacks,
+a180-second next-request start budget,1MiB per HTTP response and4096 reported
+rows per window. Fresh isolated
+sessions carry no environment/netrc credentials or redirects. Version v3 keeps
+Vibe's fixed host order explicit: `push2delay.eastmoney.com` first, then
+`push2.eastmoney.com` only once for the **same logical page** when the first host
+returns 5xx or a bounded transport error. Both attempts retain their own URL,
+clock and failure/success status. 401/403/429 and body/contract/parse failures
+still stop immediately. This is not an unbounded retry/backoff or provider framework. A retained failure can have a successful workflow
 receipt while observation status remains PARTIAL_OR_UNAVAILABLE. A hard timeout
 without sealed observation is an execution failure, not empty market activity.
 
@@ -83,8 +86,13 @@ source/replay fingerprint is changed by this slice.
 The first live v1 trial `35983118410/attempt1` retained its real failure: the
 then-fixed `push2.eastmoney.com` today/page1 request returned HTTP 502, so zero
 rows were qualified and WHY remained UNKNOWN. That evidence motivated v2's
-minimal host correction rather than a retry framework. The next fresh v2 trial
-must retain its own result or failure and run/artifact identity. Ordinary GitHub retention/index discoverability and repeated daily
+minimal host correction rather than a retry framework. The fresh v2 trial
+`36086589813/attempt1` then proved materially more: `today` returned 504/504
+across six pages, `5d` returned its first 100/504, and `5d` page2 received HTTP
+502; fail-closed stopped before `10d`. WHY beyond that observed 502 remains
+UNKNOWN. This is the evidence for v3's one bounded second-host attempt, with the
+first failure kept rather than hidden. The next fresh v3 trial must retain its
+own result or failure and run/artifact identity. Ordinary GitHub retention/index discoverability and repeated daily
 operation are separate follow-ups through existing mechanisms. This file does
 NOT activate a normal current-state source consumer, establish live full
 coverage, close all-batch continuity or claim research usefulness. Broad snapshot
