@@ -1,6 +1,7 @@
 """Counterexamples migrated from local B; reference fixtures are not live evidence."""
 import copy
 from datetime import timedelta
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -8,7 +9,7 @@ from bs4 import BeautifulSoup
 
 from decision_kernel.identity import canonical_hash
 from decision_kernel.runtime import stock_radar_reading as stock
-from test_stock_radar_reading import prepared, synthetic_references, observe, NOW
+from test_stock_radar_reading import prepared, synthetic_references, observe, NOW, _prepared_upstream
 from test_stock_radar_capture import setup
 from test_sector_radar_audit import prohibit_network
 
@@ -18,9 +19,28 @@ def offline(monkeypatch):
     prohibit_network(monkeypatch)
 
 
-def test_missing_supplied_reference_cannot_be_certified_as_independent_reference():
-    state,_,_,plan,_,_=prepared()
-    code=plan['issuers'][0]['thscode']
+@pytest.fixture
+def reference_case():
+    """Fresh reference/bar inputs; no stock plan, observation, or verdict cache.
+
+    The reference contract owns per-stock identity/time/value checks. The
+    observation contract owns cross-stock scope and calls into this validator;
+    those integrations remain below instead of repeating them for every field.
+    Retire this fixture with the supplied-reference contract, not by its age.
+    """
+    state = _prepared_upstream()[0]
+    code = '002714.SZ'
+    bars = {day: {'close_price': str(Decimal(10) + Decimal('0.5') * i),
+                  'volume': '100', 'turnover': str(10000 + i * 10)}
+            for i, day in enumerate(state.sessions[-61:])}
+    refs = synthetic_references(state, [code])
+    # Every negative case starts from a valid input, not an unrelated failure.
+    stock._qualify_references(code, state.sessions[-61:], bars, refs, NOW)
+    return state, code, bars, refs
+
+
+def test_missing_supplied_reference_cannot_be_certified_as_independent_reference(reference_case):
+    state,code,_,_=reference_case
     with pytest.raises(stock.StockReadingInputError) as exc:
         stock._qualify_references(code,state.sessions[-61:],{},None,NOW)
     assert exc.value.category=='DATA_INSUFFICIENT'
@@ -45,10 +65,18 @@ def test_undocumented_prev_price_does_not_replace_required_current_quote():
 @pytest.mark.parametrize('kind',['missing_window','short_window','missing_latest','identity','day','order','reference_break',
     'close','volume','turnover','nontrading','future','unfinished','reversed','latest_mismatch','latest_identity',
     'latest_day','latest_future','latest_early','nan','float','bool','null','extra_identity'])
-def test_b_reference_boundaries_remain_fail_closed(kind):
-    state,_,_,plan,response,_=prepared()
-    codes=[r['thscode'] for r in plan['issuers']]
-    refs=synthetic_references(state,codes);code=codes[0]
+def test_b_reference_boundaries_remain_fail_closed(kind, reference_case):
+    if kind == 'extra_identity':
+        # This is an observation-level scope rule, not a per-stock field rule.
+        state,_,_,plan,response,calls=prepared()
+        codes=[r['thscode'] for r in plan['issuers']]
+        refs=synthetic_references(state,codes)
+        refs['windows']['000001.SZ']=copy.deepcopy(refs['windows'][codes[0]])
+        with pytest.raises(ValueError, match='unplanned stock identities'):
+            stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)
+        assert not calls
+        return
+    state,code,bars,refs=reference_case
     rows=refs['windows'][code];r=rows[20];q=refs['latest_quotes'][code]
     if kind=='missing_window':del refs['windows'][code]
     elif kind=='short_window':rows.pop(20)
@@ -71,9 +99,24 @@ def test_b_reference_boundaries_remain_fail_closed(kind):
     elif kind=='float':r['prev_price']=19.5
     elif kind=='bool':r['prev_price']=True
     elif kind=='null':r['prev_price']=None
-    else:refs['windows']['000001.SZ']=copy.deepcopy(rows)
+    else:raise AssertionError('unhandled reference mutation: ' + kind)
     with pytest.raises(ValueError):
+        stock._qualify_references(code,state.sessions[-61:],bars,refs,NOW)
+
+
+def test_reference_failure_propagates_through_real_observation():
+    """Keep real planner/observer integration; do not replace it with a mock."""
+    state,_,_,plan,response,_=prepared()
+    codes=[r['thscode'] for r in plan['issuers']]
+    refs=synthetic_references(state,codes)
+    report=stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)
+    assert report['projection']['surfaced_stocks']
+    assert report['projection']['live_stock_qualification']=='NOT_ESTABLISHED'
+    refs['windows'][codes[0]][20]['prev_price']='1'
+    with pytest.raises(stock.StockReadingInputError) as exc:
         stock.observe_stock_reading(plan,state,request_json=response,observed_at=NOW,reference_inputs=refs)
+    assert exc.value.category=='DATA_QUALIFICATION_FAILED'
+    assert exc.value.reason_code=='PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW'
 
 
 def test_reference_and_source_origin_cannot_be_relabelled_live_before_requests(tmp_path):
