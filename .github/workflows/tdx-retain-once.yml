@@ -5,18 +5,12 @@ on:
     paths: [.github/workflows/tdx-retain-once.yml]
 permissions:
   contents: read
+  actions: read
 jobs:
-  retain:
+  inspect:
     if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
-    permissions:
-      contents: write
-      actions: read
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
-    env:
-      SOURCE_CODE: 1aa0098eec22ae46e7723eb2b96618d62ab9ece3
-      ARCHIVE_BRANCH: archive/tdx-concept-36096006542
-      ARCHIVE_PATH: docs/readings/tdx-concept-2026-09-24-36096006542
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,125 +19,30 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Install existing offline reader dependencies only
-        run: python -m pip install -e '.[feeds]'
-      - name: Download and verify existing GitHub artifacts using the existing client
+      - run: python -m pip install -e '.[feeds]'
+      - name: Inspect the original archive; do not retrieve market data
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import json, os, hashlib, pathlib, xml.etree.ElementTree as ET
+          import os,json,pathlib
           from decision_kernel.runtime.current_state_delivery import GitHubAPI
           from decision_kernel.runtime import current_state as model
-          api = GitHubAPI(os.environ['GH_TOKEN'], max_calls=12)
-          out = pathlib.Path(os.environ['RUNNER_TEMP'])/'tdx-retained'
-          out.mkdir()
-          proof = {'source_calls': 0, 'downloads': []}
-          specs = [
-              (36096006542,10846812870,'dfc7d328189249ce65c54abdd181c7694d4b43c208bdb84e9cd2a5590ec728e6','source','1aa0098eec22ae46e7723eb2b96618d62ab9ece3','workflow_dispatch'),
-              (36095622265,10846998650,'9a57691759b9101c0d5b1b127f280816c137249d09d14e8a069415bc4d5da9db','pr_ci','1924e685c3eb941c8f35480039d240a72c9152f9','pull_request'),
-              (36095931202,10847781336,'16f0f610f27ab4948dbb98bb7bafd4b7589242dc2f2320225f5bcf8bb3f8894b','main_ci','1aa0098eec22ae46e7723eb2b96618d62ab9ece3','push'),
-          ]
-          for rid, aid, digest, label, sha, event in specs:
-              run=api.get(f'actions/runs/{rid}')
-              assert run['id']==rid and run['head_sha']==sha and run['event']==event
-              assert run['run_attempt']==1 and run['status']=='completed' and run['conclusion']=='success'
-              assert run['path']==('.github/workflows/tdx-concept-snapshot.yml' if label=='source' else '.github/workflows/ci.yml')
-              art=api.get(f'actions/artifacts/{aid}')
-              assert art['workflow_run']['id']==rid and art['digest']=='sha256:'+digest
-              raw=api.archive(art)
-              files=model.unpack_archive(raw,art,run)
-              record={'kind':label,'run_id':rid,'artifact_id':aid,'head_sha':sha,'event':event,'attempt':1,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'files':{p:len(b) for p,b in files.items()}}
-              if label=='source':
-                  expected={'plan.json','capture.json','source.json','observation.json','summary.md','source-files/.eltdx_board_cache.json','source-files/infoharbor_block.dat','source-files/tdxhy.cfg','source-files/security_list.json'}
-                  assert set(files)==expected
-                  payload=out/'payload';payload.mkdir()
-                  for p,b in files.items():
-                      dest=payload/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(b)
-                  (out/'source-artifact.zip').write_bytes(raw)
-              else:
-                  record['junit']={}
-                  for name,b in files.items():
-                      if name.endswith('.xml'):
-                          root=ET.fromstring(b); cases=list(root.iter('testcase'))
-                          record['junit'][name]={'testcases':len(cases),'failures':len(list(root.iter('failure'))),'errors':len(list(root.iter('error'))),'skipped':len(list(root.iter('skipped')))}
-                  if label=='pr_ci':
-                      assert any(v=={'testcases':6057,'failures':0,'errors':0,'skipped':0} for v in record['junit'].values())
-              proof['downloads'].append(record)
-          proof['github_api_calls']=api.calls
-          (out/'verification.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
-          print('ARTIFACT_VERIFICATION='+json.dumps(proof,ensure_ascii=False,sort_keys=True))
-          PY
-      - name: Replay exact saved models and check source identities offline
-        run: |
-          python - <<'PY'
-          import os,json,pathlib,socket,hashlib,requests
-          from datetime import datetime,timezone,timedelta
           from decision_kernel.runtime import tdx_concept_snapshot as tdx
-          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'tdx-retained';root=out/'payload'
-          def forbidden(*a,**kw): raise AssertionError('No network in retained-source replay')
-          socket.socket.connect=forbidden;socket.create_connection=forbidden;requests.Session.request=forbidden
-          cap=json.loads((root/'capture.json').read_text())
-          expected={'GITHUB_REPOSITORY':'auguspp/decision-kernel','GITHUB_WORKFLOW':'tdx-concept-snapshot','GITHUB_REF':'refs/heads/main','GITHUB_EVENT_NAME':'workflow_dispatch','GITHUB_RUN_ID':'36096006542','GITHUB_RUN_ATTEMPT':'1','GITHUB_SHA':os.environ['SOURCE_CODE']}
-          result=tdx.replay(root,expected_execution=expected);p=result['projection']
-          assert cap['capture_hash']=='8b0bd5c531c305389b736a50380bb99224078d051366e3af97753d90643ca2f8'
-          assert result['projection_hash']=='82db6b4587ae76bcfa9c5716d818ee31f90ca657975fc53f21cc3807d221c39e'
-          src=json.loads((root/'source.json').read_text())
-          headers=[]
-          for line in (root/'source-files/infoharbor_block.dat').read_bytes().decode('gb18030').splitlines():
-              if line.startswith('#GN_'):
-                  fields=line.split(',');headers.append((fields[2].strip(),fields[0][4:].strip()))
-          catalog=[(x['board_code'],x['board_name']) for x in src['boards']]
-          assert headers==catalog and len({x[0] for x in catalog})==len(catalog)
-          sequences=[];started=datetime.fromisoformat(cap['started_at']);tz=timezone(timedelta(hours=8))
-          for row in src['boards']:
-              assert row['full_code']==row['snapshot']['exchange']+row['snapshot']['code']
-              assert row['board_code']==row['snapshot']['code']
-              times=[datetime.fromisoformat(b['time']).astimezone(tz) for b in row['bars']]
-              assert len({t.date() for t in times})==len(times)
-              assert all(t.hour==15 and t.minute==t.second==t.microsecond==0 and t<started for t in times)
-              sequences.append([t.date().isoformat() for t in times])
-          assert all(x==sequences[0] for x in sequences)
-          proof=json.loads((out/'verification.json').read_text())
-          proof.update({'capture_hash':cap['capture_hash'],'projection_hash':result['projection_hash'],'market_session':p['market_session'],'catalog_count':p['catalog_count'],'coverage':p['coverage'],'catalog_matches_retained_GN_headers':True,'snapshot_identity_matches_each_board':True,'daily_rows_have_distinct_aligned_dates_and_closed_before_capture':True,'source_calls_during_replay':0,'effective_membership_vintage':'NOT_ESTABLISHED','same_day_definition_update':'NOT_ESTABLISHED','natural_daily_schedule':'NOT_ENABLED_BY_THIS_ARCHIVE'})
-          (out/'verification.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
-          lines=['# TDX Concept 主源：2026-09-24 保存观察','',
-          '来源 run36096006542/attempt1；代码 '+os.environ['SOURCE_CODE']+'。',
-          '本页是已经取得的源观察归档，不是新的行情抓取、Quick、Full 或投资判断。','',
-          '## 可恢复的内容','',
-          f"TDX 概念目录 {p['catalog_count']} 个；1/5/10 日收盘窗口；市场日 {p['market_session']}。",
-          '[全部概念与1/5/10日观察](payload/summary.md) · [结构化结果](payload/observation.json) · [源模型](payload/source.json)',
-          '[原始Actions附件ZIP](source-artifact.zip) · [原capture](payload/capture.json) · [本次离线校验](verification.json)','',
-          '## 当前来源选择与边界','',
-          'TDX/eltdx 是新 Concept 横截面的 primary 来源；Vibe/Eastmoney 是 secondary/best-effort，不是隐式失败回退。旧 Eastmoney/HiThink 原件保留，不映射 BK/TI/TDX 身份。',
-          '这份结果是 2026-09-24 收盘观察，取得于次日；不是 9/25 盘中行情。',
-          'prepared_date 是 eltdx 准备标签，代码取自握手日期字段或本机日期；不是板块文件的发布日或生效成员版本证明。文件是本次取得的字节，不证明历史PIT成员。',
-          '目录完整只相对保存的 infoharbor_block.dat 中 GN 分类；不是独立全市场概念穷尽。目录与源模型逐项相同，全部快照证券身份一致，日K日期唯一、对齐且在实际取得前收盘。',
-          '重放校验 identity/time/source/计算一致性，不证明经济真理、行情实时性或长期可用率。1/5/10 是日K条目间区间；连续交易日完整性没有独立交易所日历复核。',
-          '完整7709原始wire frames未由board helper提供；保留第三方解析模型、实际源文件和其hash。source-files/security_list.json 是eltdx派生名单，不冒充原始协议响应。',
-          '没有启用每日定时；本页进入ON_DEMAND_ARCHIVE后只是正常入口可发现，不等于后续每日自动取得、Quick已消费或Human接受。','',
-          'Evidence changes Belief. Price changes Odds. AI Investment Authority=NONE.','']
-          (out/'README.md').write_text('\n'.join(lines),encoding='utf-8')
-          print('TDX_RETAINED_PROOF='+json.dumps({k:proof[k] for k in ('market_session','catalog_count','coverage','capture_hash','projection_hash')},ensure_ascii=False,sort_keys=True))
+          api=GitHubAPI(os.environ['GH_TOKEN'],max_calls=4)
+          run=api.get('actions/runs/36096006542')
+          art=api.get('actions/artifacts/10846812870')
+          raw=api.archive(art);files=model.unpack_archive(raw,art,run)
+          cap=json.loads(files['capture.json'])
+          listed=set(cap['files']);actual=set(files)-{'capture.json'}
+          print('TDX_ARCHIVE_INVENTORY='+json.dumps({'run':run['id'],'artifact':art['id'],'files':{k:len(v) for k,v in files.items()},'missing_from_zip':sorted(listed-actual),'extra_in_zip':sorted(actual-listed),'source_capture_status':cap['status'],'market_session':cap['market_session'],'source_calls':0},ensure_ascii=False,sort_keys=True))
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'tdx-inspection';root.mkdir()
+          for k,v in files.items():
+              p=root/k;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(v)
+          try:
+              r=tdx.replay(root)
+          except ValueError as e:
+              print('POST_UPLOAD_REPLAY_REJECTED='+str(e))
+          else:
+              print('POST_UPLOAD_REPLAY_STATUS='+r.get('projection',r).get('status','UNKNOWN'))
           PY
-      - name: Append native Git archive and retire this temporary workflow
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          git fetch origin "refs/heads/$ARCHIVE_BRANCH"
-          test "$(git rev-parse FETCH_HEAD)" = "$GITHUB_SHA"
-          test "$(git diff --name-only "$SOURCE_CODE" "$GITHUB_SHA")" = '.github/workflows/tdx-retain-once.yml'
-          git checkout -B "$ARCHIVE_BRANCH" "$GITHUB_SHA"
-          test ! -e "$ARCHIVE_PATH"
-          mkdir -p "$ARCHIVE_PATH"
-          cp -a "$RUNNER_TEMP/tdx-retained/." "$ARCHIVE_PATH/"
-          git rm .github/workflows/tdx-retain-once.yml
-          git add -- "$ARCHIVE_PATH"
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'archive: retain exact TDX source and offline verification; retire one-shot workflow'
-          git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin "HEAD:refs/heads/$ARCHIVE_BRANCH"
-          echo "ARCHIVE_COMMIT=$(git rev-parse HEAD)"
-          echo "README_BLOB=$(git rev-parse "HEAD:$ARCHIVE_PATH/README.md")"
-          wc -c "$ARCHIVE_PATH/README.md"
-          sha256sum "$ARCHIVE_PATH/README.md"
-          git status --short
