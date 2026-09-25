@@ -8,7 +8,7 @@ import pytest
 import requests
 
 from decision_kernel.runtime import declared_report_sources as s
-from test_woton_report_custody import API, Retainer, synthetic_pdf, c as old, CODE
+from test_woton_report_custody import API, Retainer, synthetic_pdf, CODE
 
 ROOT = Path(__file__).parents[1]
 AT = '2026-09-22T16:00:00Z'
@@ -26,13 +26,10 @@ def setup(monkeypatch):
     plan = json.loads((ROOT / s.REQUEST).read_bytes())
     plan['reports'] = [plan['reports'][1]]
     plan['reports'][0]['cninfo_locator'] = 'https://static.cninfo.com.cn/finalpage/2026-08-26/1234567890.PDF'
-    # Reuse the existing native-Git simulator, with test-only independent scope.
-    monkeypatch.setattr(old, 'SCOPE', plan)
-    monkeypatch.setattr(old, 'PERMISSION', plan['permission'])
-    monkeypatch.setattr(old, 'REQUEST', s.REQUEST)
-    monkeypatch.setattr(old, 'PREFIX', s.ROOT + plan['batch_id'] + '/')
+    # Reuse the generic native-Git simulator; no retired Woton writer state.
     monkeypatch.setattr(s.once, 'now', lambda: AT)
-    api = API()
+    api = API(request_path=s.REQUEST, scope=plan, permission=plan['permission'],
+              prefix=s.ROOT + plan['batch_id'] + '/')
     api.comment['body'] = (ROOT / 'tests/fixtures/declared_report_sources_permission.txt').read_text()
     raw = synthetic_pdf(pages=2, title='600362 2026 ABCDE')
     return plan, api, raw
@@ -54,7 +51,7 @@ def test_large_public_pdf_is_retained_before_parsing_without_research_and_not_re
     calls = []
     def fetch(url, limit):
         calls.append(url)
-        assert old.PREFIX + 'prepare.json' in api.versions[api.head]
+        assert api.prefix + 'prepare.json' in api.versions[api.head]
         return 200, raw
     result = execute(tmp_path, api, fetch)
     assert result['status'] == 'DECLARED_REPORTS_RETAINED_NOT_RESEARCH', result
@@ -136,7 +133,7 @@ def test_failures_do_not_spend_model_or_reset_history(tmp_path, monkeypatch, fau
             assert result['requests'][0]['sha256'] == s.once.sha(raw)
             assert result['reports'][0]['routes'][0]['pdf_sha256'] == s.once.sha(raw)
     if fault in {'wrong_issuer', 'wrong_period', 'parse_failure'}:
-        assert api.versions[api.head][old.PREFIX + '2026H1-cninfo-source.pdf'] == raw
+        assert api.versions[api.head][api.prefix + '2026H1-cninfo-source.pdf'] == raw
     assert not any('/candidates/' in name for name in api.writes)
 
 
