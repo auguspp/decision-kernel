@@ -1,0 +1,51 @@
+name: retained-evidence-check
+on:
+  push:
+    branches: [diagnostic/inbox-sector-evidence-20260925]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 769d31f0618732d32806e685c9ab5e60dcd828f4
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest==9.1.1
+      - name: Verify CI bytes and inspect retained Sector failure without any source call
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import io,json,hashlib,runpy,zipfile
+          from pathlib import Path
+          r=runpy.run_path('.github/scripts/ci-merge-reuse.py');root=Path.cwd()
+          run=r['api'](root,'actions/runs/36114640540')
+          assert run['head_sha']=='769d31f0618732d32806e685c9ab5e60dcd828f4' and run['status']=='completed' and run['conclusion']=='success' and run['run_attempt']==1
+          meta=r['api'](root,'actions/artifacts/10855136041')
+          raw=r['command'](root,'gh','api','repos/auguspp/decision-kernel/actions/artifacts/10855136041/zip')
+          assert hashlib.sha256(raw).hexdigest()=='b3633df11c82a125f33ceca86f879dc25733b4f9356c74bb7bd53c178bc42e2d'
+          with r['verified_archive'](raw,meta) as z:
+              env=json.loads(z.read('environment.json'))
+              count=r['full_evidence'](raw,meta,run,env)
+              print('INBOX_FULL_PROOF',json.dumps({'tests':count,'identity':z.read('identity.txt').decode(),'scope':json.loads(z.read('scope.json')),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}))
+          raw=r['command'](root,'gh','api','repos/auguspp/decision-kernel/actions/artifacts/10854970574/zip')
+          assert len(raw)==824854 and hashlib.sha256(raw).hexdigest()=='fd343eaf142e0a428cfc46f1fde3b9d22d9d080d34f95860b3d89320e4015e18'
+          with zipfile.ZipFile(io.BytesIO(raw)) as z:
+              assert z.testzip() is None
+              print('SECTOR_FILES',json.dumps(z.namelist()))
+              for name in z.namelist():
+                  if name.endswith(('operations.json','manifest.json')):
+                      print('RETAINED',name,z.read(name).decode()[:20000])
+              names=[n for n in z.namelist() if n.endswith('.json') and ('response' in n or 'request' in n)]
+              for name in names[-5:]:
+                  body=z.read(name).decode()
+                  print('SOURCE_TAIL',name,'BYTES',len(body),'PREFIX',body[:3500],'SUFFIX',body[-1000:])
+          print('NO_MARKET_CALLS_NO_STATE_WRITES_NO_RERUN; artifacts parsed as data only')
+          PY
