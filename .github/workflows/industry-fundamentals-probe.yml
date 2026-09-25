@@ -2,14 +2,14 @@ name: industry-fundamentals-probe
 on:
   push:
     branches: [diagnostic/industry-fundamentals-20260925]
-    paths: [.github/workflows/industry-fundamentals-probe.yml, '.github/scripts/*industrial-release.py']
+    paths: [.github/workflows/industry-fundamentals-probe.yml]
 permissions:
-  contents: write
+  contents: read
   actions: read
 jobs:
-  prepare:
+  verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
         with:
@@ -17,41 +17,24 @@ jobs:
           path: prep
       - uses: actions/checkout@v7
         with:
-          ref: dae7d7084ee95cc7e875a0bd520ffc8a19f00f65
+          ref: f2da085b99accb24e00cb5803a9a4467170aabb0
           persist-credentials: false
           path: repo
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Prepare exact industrial slice
-        working-directory: repo
-        run: |
-          python ../prep/.github/scripts/finish-industrial-release.py
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('src/decision_kernel/runtime/industry_fundamentals.py')
-          s=p.read_text()
-          old="cumulative = bool(re.search(r'1[—－–-]\\d{1,2}月份?', prefix))"
-          new="cumulative = bool(re.search(r'1[—－–-]\\d{1,2}月份?[^。]*$', prefix))"
-          assert old in s
-          p.write_text(s.replace(old,new,1))
-          PY
-      - name: Test public observations and original industry contracts
-        working-directory: repo
-        run: |
-          python -m pip install -e '.[dev]'
-          python -m pytest -q tests/test_industry_fundamentals.py tests/test_industry_breadth.py tests/test_industry_daily_question.py
-      - name: Verify exact original source bytes and store tested blobs only
+      - working-directory: repo
+        run: python -m pip install -e '.[ci-contracts,feeds]'
+      - name: Verify exact original full CI identity and complete test set
         working-directory: repo
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python ../prep/.github/scripts/qualify-industrial-release.py
+        run: python ../prep/.github/scripts/verify-industrial-ci.py
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: industry-preparation-${{ github.run_id }}
+          name: industry-ci-verification-${{ github.run_id }}
           path: |
-            qualification.json
-            industry.patch
-            prepared-code.zip
+            ci-verification.json
+            verified-ci.zip
           retention-days: 14
