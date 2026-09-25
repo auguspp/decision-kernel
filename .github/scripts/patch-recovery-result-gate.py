@@ -1,0 +1,44 @@
+from pathlib import Path
+import textwrap
+
+p = Path('tests/test_stock_daily_successor_result_gate.py')
+s = p.read_text()
+a = s.index('def test_workflow_downloads_only_exact_upstream_audit_before_pat_dispatch():')
+b = s.index('\ndef test_result_gate_revalidates_dispatched_produce_identity', a)
+replacement = '''def test_workflow_downloads_only_exact_upstream_audit_before_pat_dispatch():
+    # Reconciliation replaces the old dispatcher; original validator tests stay.
+    import yaml
+    raw = WORKFLOW.read_text(encoding="utf-8")
+    job = yaml.safe_load(raw)["jobs"]["reconcile-deliveries"]
+    steps = {s.get("name"): s for s in job["steps"] if "name" in s}
+    gate = steps["Reconcile qualified deliveries and previous intents"]
+    intent = steps["Retain exact dispatch intent before any POST"]
+    dispatch = steps["Dispatch only the missing stage once"]
+    assert gate["env"]["GH_TOKEN"] == "${{ github.token }}"
+    assert gate["run"] == "python .github/scripts/reconcile-radar-delivery.py plan"
+    assert intent["with"]["path"] == "radar-reconcile/plan.json"
+    assert "steps.intent.outcome == 'success'" in dispatch["if"]
+    assert dispatch["env"]["GH_TOKEN"] == "${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}"
+    assert raw.index("Reconcile qualified deliveries") < raw.index("Retain exact dispatch intent") < raw.index("Dispatch only the missing")
+    helper = (ROOT / ".github/scripts/reconcile-radar-delivery.py").read_text()
+    assert 'collector.lane("sector")' in helper
+    assert 'action["inputs"]["stock-market-run-id"]' in helper
+    assert "DISPATCH_UNCERTAIN" in helper and "/rerun" not in helper
+    assert "HITHINK_FINANCE_API_KEY" not in helper
+'''
+p.write_text(s[:a] + replacement + '\n\n' + s[b:])
+p = Path('.github/scripts/reconcile-radar-delivery.py')
+s = p.read_text()
+old = 'if saved.get("status") == NOOP or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", []):'
+assert s.count(old) == 1
+new = 'if (saved.get("status") not in {"APPENDED_COMPLETED_SESSION_QUIET", "APPENDED_COMPLETED_SESSION_WITH_SHADOW_CANDIDATES"}\n                or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", [])):'
+p.write_text(s.replace(old, new))
+p = Path('tests/test_radar_delivery_reconciliation.py')
+s = p.read_text()
+s += '\n\n@pytest.mark.parametrize("status", ["VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT", "ADOPTED_RECOVERY", "UNKNOWN"])\ndef test_non_result_origins_never_dispatch_stock(status):\n    data = snapshot()\n    data["stock_parent"] = "8"\n    data["sector"]["last_qualified_result"]["status"] = status\n    result = module().choose(data, NOW)\n    assert result["status"] == "RESULT_BEARING_SECTOR_DELIVERY_UNAVAILABLE"\n    assert result["action"] is None\n'
+p.write_text(s)
+p = Path('docs/sector-radar-scheduled-production.md')
+s = p.read_text()
+first, rest = s.split('\n', 1)
+note = '\n\n## Current recovery policy — 2026-09-25\n\nThe Human-authorized [daily delivery reconciliation](radar-delivery-recovery-v1.md) supersedes the manual-only recovery statements below within its explicit finite bounds. The external 18:13 primary clock stays unchanged; the original successor now rechecks after completion and at maintenance backstops. Missing Stock can be resumed; classified temporary source failure can get at most two additional attempts. Permanent qualification/history/permission gaps remain visible in [system health #581](https://github.com/auguspp/decision-kernel/issues/581). This does not establish arbitrary historical PIT backfill or a proven unattended natural-failure success rate. Earlier policy and failures below remain historical.\n'
+p.write_text(first + note + '\n' + rest)
