@@ -114,7 +114,11 @@ def test_incomplete_activity_visibility_fails_without_retry(payload):
         calls.append(url); return payload
     with pytest.raises(mod['CheckError']):
         mod['check_activity'](read)
-    assert len(calls) == 1
+    # Count drift gets one narrower observation, which is also incomplete here.
+    # Malformed input still stops immediately; the same query is never retried.
+    drift = isinstance(payload, dict) and type(payload.get('total_count')) is int and payload.get('workflow_runs') == []
+    assert len(calls) == (2 if drift else 1)
+    assert len(set(calls)) == len(calls)
 
 
 def test_metadata_http_failure_has_one_attempt_and_no_token_diagnostic(monkeypatch, capsys, tmp_path):
