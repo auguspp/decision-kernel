@@ -63,14 +63,10 @@ def _prepared_upstream():
     return state, ledger, association
 
 
-def prepared(*, observed_at=NOW):
-    """Prepare once at the caller clock; provider bytes retain their own clocks."""
-    state, ledger, frozen_association = _prepared_upstream()
-    association = copy.deepcopy(frozen_association)
-    plan = stock.prepare_stock_reading(ROOT, state, ledger, association, observed_at=observed_at)
+def _stock_response(state, codes):
+    """Build only the synthetic provider boundary; never prepare a Stock plan."""
     base = SyntheticProvider(SimpleNamespace(market_state=state), session=FRIDAY)
     calls = []
-    codes = [r['thscode'] for r in plan['issuers']]
 
     def response(path, params):
         calls.append((path, params))
@@ -91,6 +87,15 @@ def prepared(*, observed_at=NOW):
                     {'date_ms':ms(day,0,0),'close_price':str(Decimal(10)+Decimal('0.5')*i),
                      'volume':'100','turnover':str(10000+i*10)} for i,day in enumerate(state.sessions[-61:])]}}
         return base(path, params)
+    return response, calls
+
+
+def prepared(*, observed_at=NOW):
+    """Prepare once at the caller clock; provider bytes retain their own clocks."""
+    state, ledger, frozen_association = _prepared_upstream()
+    association = copy.deepcopy(frozen_association)
+    plan = stock.prepare_stock_reading(ROOT, state, ledger, association, observed_at=observed_at)
+    response, calls = _stock_response(state, [r['thscode'] for r in plan['issuers']])
     return state, ledger, association, plan, response, calls
 
 
