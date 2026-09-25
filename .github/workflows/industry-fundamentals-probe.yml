@@ -4,6 +4,7 @@ on:
     branches: [diagnostic/industry-fundamentals-20260925]
 permissions:
   contents: read
+  actions: read
 jobs:
   inspect:
     runs-on: ubuntu-24.04
@@ -16,83 +17,101 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e '.[feeds]'
-      - name: Inspect exact upstream and bounded public responses without credentials
+      - name: Inspect bounded official industry contracts
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import ast, hashlib, json, time
+          import hashlib,json,os,re
           from pathlib import Path
-          from datetime import datetime, timezone
+          from datetime import datetime,timezone
+          from urllib.parse import urljoin
           import requests
           from bs4 import BeautifulSoup
+          from decision_kernel.runtime.current_state_delivery import GitHubAPI
+          from decision_kernel.runtime.current_state import unpack_archive
+          api=GitHubAPI(os.environ['GH_TOKEN'])
+          art=api.get('actions/artifacts/10869756298'); run=api.get('actions/runs/36146335949')
+          originals=unpack_archive(api.archive(art),art,run)
           root=Path('industrial-probe'); root.mkdir()
+          (root/'original-probe.json').write_bytes(originals['probe.json'])
           session=requests.Session(); session.trust_env=False
-          session.headers.update({'User-Agent':'Mozilla/5.0 DecisionKernel-public-industry','Accept-Encoding':'identity'})
+          session.headers.update({'User-Agent':'Mozilla/5.0 DecisionKernel-public-industry','Accept-Encoding':'identity','Origin':'https://data.stats.gov.cn','Referer':'https://data.stats.gov.cn/dg/website/page.html#/pc/national/monthData'})
           records=[]
-          def read(key,url,params=None,headers=None):
-              record={'id':key,'url':url,'params':params or {},'requested_at':datetime.now(timezone.utc).isoformat()}
+          base='https://data.stats.gov.cn/dg/website/publicrelease/web/external/'
+          def read(key,url,params=None,body=None):
+              if len(records)>=32: raise ValueError('PROBE_REQUEST_LIMIT')
+              record={'id':key,'url':url,'params':params,'body':body,'requested_at':datetime.now(timezone.utc).isoformat()}
               try:
-                  with session.get(url,params=params,headers=headers,timeout=(7,12),allow_redirects=False,stream=True) as r:
+                  with session.request('POST' if body is not None else 'GET',url,params=params,json=body,timeout=(7,15),stream=True,allow_redirects=False) as r:
                       record['http_status']=r.status_code
-                      if r.status_code != 200: raise ValueError('HTTP_'+str(r.status_code))
+                      if r.status_code!=200: raise ValueError('HTTP_'+str(r.status_code))
                       parts=[]; size=0
-                      for part in r.iter_content(65536):
-                          size+=len(part)
-                          if size>2*1024*1024: raise ValueError('BODY_LIMIT')
-                          parts.append(part)
+                      for chunk in r.iter_content(65536):
+                          size+=len(chunk)
+                          if size>4*1024*1024: raise ValueError('BODY_LIMIT')
+                          parts.append(chunk)
                       raw=b''.join(parts)
                   (root/(key+'.body')).write_bytes(raw)
-                  record.update(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
-                  try: data=json.loads(raw)
-                  except (ValueError,UnicodeError): data=None
-                  record['kind']='JSON' if data is not None else 'HTML_OR_TEXT'
-                  if isinstance(data,dict): record['top_keys']=list(data)[:15]
-                  if data is not None: record['sample']=json.dumps(data,ensure_ascii=False)[:2300]
-                  else:
-                      soup=BeautifulSoup(raw,'html.parser')
-                      for node in soup(['script','style','nav','footer']): node.decompose()
-                      record['sample']=soup.get_text(' ',strip=True)[:2300]
-                      record['links']=[{'text':a.get_text(' ',strip=True),'href':a.get('href')} for a in soup.find_all('a',href=True) if len(a.get_text(' ',strip=True))>15][:12]
-                  record['status']='CAPTURED_NOT_YET_QUALIFIED'
-              except Exception as exc:
-                  record.update(status='UNAVAILABLE',error_type=type(exc).__name__)
-                  if isinstance(exc,ValueError): record['error_code']=str(exc)[:60]
-                  data=None
+                  record.update(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),status='CAPTURED')
+                  try: value=json.loads(raw)
+                  except (ValueError,UnicodeError): value=None
+              except Exception as e:
+                  value=None; record.update(status='UNAVAILABLE',error_type=type(e).__name__)
               record['received_at']=datetime.now(timezone.utc).isoformat(); records.append(record)
-              print('SOURCE_PROBE='+json.dumps(record,ensure_ascii=False),flush=True)
-              return data
-          upstream='0191689d57c667b7c7a198fd0cf97316837ef311'
-          read('akshare-macro-source',f'https://raw.githubusercontent.com/akfamily/akshare/{upstream}/akshare/economic/macro_china.py')
-          tree=ast.parse((root/'akshare-macro-source.body').read_text())
-          wanted={'macro_china_pmi','macro_china_gyyzj','macro_china_industrial_production_yoy','macro_china_consumer_goods_retail','macro_china_qyspjg','macro_china_lpi_index','macro_china_bdi_index','macro_china_bdti_index','macro_china_shanghai_shipping_index','macro_china_electricity','macro_china_society_electricity','macro_china_freight_index','macro_china_cpi','macro_china_ppi','macro_china_pmi_yearly','macro_china_new_financial_credit'}
-          print('UPSTREAM_FUNCTIONS='+json.dumps([n.name for n in tree.body if isinstance(n,ast.FunctionDef)],ensure_ascii=False))
-          count=0
-          for fn in tree.body:
-              if not isinstance(fn,ast.FunctionDef) or fn.name not in wanted: continue
-              values={}
-              for node in fn.body:
-                  if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name):
-                      try: values[node.targets[0].id]=ast.literal_eval(node.value)
-                      except (ValueError,TypeError): pass
-              print('UPSTREAM_CONTRACT='+json.dumps({'function':fn.name,'doc':ast.get_docstring(fn),'url':values.get('url'),'params':values.get('params')},ensure_ascii=False),flush=True)
-              if count>=10: continue
-              url=values.get('url'); params=values.get('params')
-              if url=='https://datacenter-web.eastmoney.com/api/data/v1/get' and isinstance(params,dict):
-                  params=dict(params,pageSize='30'); params.pop('callback',None)
-                  read(fn.name,url,params); count+=1
-              elif isinstance(params,dict) and 'attr_id' in params:
-                  read(fn.name,'https://datacenter-api.jin10.com/reports/list_v2',params,{'x-app-id':'rU6QIu7JHe2gOUeR','x-csrf-token':'x-csrf-token','x-version':'1.0.0'}); count+=1
-          read('cpca-total','http://data.cpcadata.com/api/chartlist',{'charttype':'1'})
-          read('nbs-releases','https://www.stats.gov.cn/sj/zxfb/')
-          read('shipping-home','https://www.sse.net.cn/home')
-          read('memory-market','https://www.dramexchange.com/')
-          read('trendforce-releases','https://www.trendforce.com/presscenter/news')
-          endpoint='https://data.stats.gov.cn/dg/website/publicrelease/web/external/new/queryIndexTreeAsync'
-          headers={'Origin':'https://data.stats.gov.cn','Referer':'https://data.stats.gov.cn/dg/website/page.html#/pc/national/monthData'}
-          first=read('nbs-root',endpoint,{'pid':'','code':'1'},headers)
-          if isinstance(first,dict) and isinstance(first.get('data'),list) and first['data']:
-              rid=first['data'][0].get('_id')
-              if isinstance(rid,str) and len(rid)<100: read('nbs-month-catalog',endpoint,{'pid':rid,'code':'1'},headers)
-          (root/'probe.json').write_text(json.dumps({'upstream':upstream,'records':records,'source_truth_accepted':False,'production_writes':0,'model_calls':0},ensure_ascii=False,indent=2))
+              print('REQUEST='+json.dumps(record,ensure_ascii=False),flush=True)
+              return value
+          def nodes(value):
+              rows=(value or {}).get('data',[])
+              if not isinstance(rows,list): return []
+              return [r for r in rows if isinstance(r,dict) and isinstance(r.get('_id'),str) and re.fullmatch('[a-f0-9]{32}',r['_id'])]
+          def show(label,rows):
+              print('CATALOG='+json.dumps({'path':label,'nodes':[{k:r.get(k) for k in ('name','_name','_id','isLeaf')} for r in rows]},ensure_ascii=False),flush=True)
+          top=nodes(json.loads(originals['nbs-month-catalog.body'])); show('月度',top)
+          leaves=[]
+          for node in top:
+              name=re.sub(r'\s+','',node.get('name',''))
+              if name not in {'工业','能源','采购经理指数'}: continue
+              children=nodes(read('tree-'+node['_id'],base+'new/queryIndexTreeAsync',{'pid':node['_id'],'code':1})); show(name,children)
+              for child in children:
+                  label=child.get('name','')
+                  if child.get('isLeaf'): leaves.append((name+'/'+label,child['_id']))
+                  elif any(word in label for word in ('产品产量','经济效益','主要指标','采购','能源产品')):
+                      subs=nodes(read('tree-'+child['_id'],base+'new/queryIndexTreeAsync',{'pid':child['_id'],'code':1})); show(name+'/'+label,subs)
+                      leaves.extend((name+'/'+label+'/'+sub.get('name',''),sub['_id']) for sub in subs if sub.get('isLeaf'))
+          print('LEAVES='+json.dumps(leaves,ensure_ascii=False),flush=True)
+          wanted=[item for item in leaves if any(k in item[0] for k in ('产品产量','采购经理','经济效益','主要经济','能源生产'))]
+          if not wanted: wanted=leaves[:6]
+          for i,(label,cid) in enumerate(wanted[:6]):
+              obj=read('indicators-'+str(i),base+'new/queryIndicatorsByCid',{'cid':cid,'dt':'','name':''})
+              rows=(obj or {}).get('data',{}).get('list',[])
+              print('INDICATORS='+json.dumps({'path':label,'cid':cid,'total':len(rows),'rows':rows[:5]},ensure_ascii=False),flush=True)
+              selected=[r for r in rows if any(k in json.dumps(r,ensure_ascii=False) for k in ('新订单','原材料库存','产成品库存','产量','利润','存货','营业收入'))][:12]
+              if not selected: selected=rows[:5]
+              ids=[r['_id'] for r in selected if re.fullmatch('[a-f0-9]{32}',str(r.get('_id')))]
+              if ids:
+                  data=read('data-'+str(i),base+'stream/esData',body={'cid':cid,'indicatorIds':ids,'daCatalogId':'','das':[{'text':'全国','value':'000000000000'}],'showType':'1','rootId':'fc982599aa684be7969d7b90b1bd0e84','dts':['202508MM-202608MM']})
+                  print('DATA_SAMPLE='+json.dumps({'path':label,'indicators':selected,'result':data},ensure_ascii=False)[:16000],flush=True)
+          soup=BeautifulSoup(originals['memory-market.body'],'html.parser')
+          for i,table in enumerate(soup.find_all('table')):
+              text=table.get_text(' ',strip=True)
+              if 'Session Average' not in text: continue
+              print('MEMORY_TABLE='+json.dumps({'index':i,'attrs':table.attrs,'html':str(table)[:7500],'before':str(table.find_previous(['h2','h3','div']))[:1200]},ensure_ascii=False),flush=True)
+          txt=soup.get_text(' ',strip=True)
+          print('MEMORY_UNITS='+json.dumps(re.findall('.{0,100}(?:USD|US\$|U.S.|Currency|currency|Unit).{0,150}',txt)[:10],ensure_ascii=False))
+          ns=BeautifulSoup(originals['nbs-releases.body'],'html.parser')
+          seen=set()
+          for a in ns.find_all('a',href=True):
+              title=a.get_text(' ',strip=True); url=urljoin('https://www.stats.gov.cn/sj/zxfb/',a['href'])
+              if url in seen or not url.startswith('https://www.stats.gov.cn/sj/zxfb/'): continue
+              seen.add(url)
+              if not any(k in title for k in ('采购经理指数','工业增加值','能源生产','工业企业利润','中旬流通领域')): continue
+              key='release-'+str(len(records)); read(key,url)
+              if not (root/(key+'.body')).exists(): continue
+              page=BeautifulSoup((root/(key+'.body')).read_bytes(),'html.parser')
+              content=page.select_one('.TRS_Editor') or page.select_one('.view.TRS_UEDITOR') or page
+              print('RELEASE_TABLES='+json.dumps({'title':title,'url':url,'content_class':content.get('class'),'text':content.get_text(' ',strip=True)[:6500],'tables':[[[c.get_text(' ',strip=True) for c in tr.find_all(['td','th'])] for tr in t.find_all('tr')][:8] for t in content.find_all('table')][:4]},ensure_ascii=False),flush=True)
+          (root/'probe.json').write_text(json.dumps(records,ensure_ascii=False,indent=2))
           PY
       - uses: actions/upload-artifact@v7
         if: always()
