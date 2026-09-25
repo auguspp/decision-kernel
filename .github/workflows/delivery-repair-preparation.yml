@@ -17,13 +17,13 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: python -m pip install -e '.[dev]'
+      - run: python -m pip install -e '.[ci-contracts,feeds]'
       - name: Verify actual complete CI ZIP and original product reader
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import io, json, os, runpy, zipfile
+          import json, os, runpy
           from pathlib import Path
           from decision_kernel.runtime.current_state_delivery import GitHubAPI, Collector
           from decision_kernel.runtime.current_state import _reading_navigation
@@ -34,8 +34,8 @@ jobs:
           assert run['event'] == 'pull_request' and run['conclusion'] == 'success'
           metadata = api.get('actions/runs/36130477570/artifacts?per_page=100')
           assert metadata['total_count'] == len(metadata['artifacts'])
-          artifacts = [a for a in metadata['artifacts'] if a['name'] == 'kernel-ci-results-36130477570-1']
-          assert len(artifacts) == 1 and not artifacts[0]['expired'], [a['name'] for a in metadata['artifacts']]
+          artifacts = [a for a in metadata['artifacts'] if a['name'] == 'kernel-ci-36130477570-1']
+          assert len(artifacts) == 1 and not artifacts[0]['expired']
           artifact = artifacts[0]
           raw = api.archive(artifact)
           check = runpy.run_path('.github/scripts/ci-merge-reuse.py')
