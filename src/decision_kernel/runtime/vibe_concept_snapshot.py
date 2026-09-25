@@ -1,6 +1,6 @@
 """Vibe-derived, bounded Eastmoney concept snapshots; never historical price paths.
 
-Protocol/period fields, actual-page-size lesson and current primary push2 host
+Protocol/period fields, actual-page-size lesson and bounded push2 host order
 adapted from simonlin1212/Vibe-Research@7f3a08b85451b54c762898789e2dcaa5d7d2ec98,
 .agents/skills/data-access/scripts/{common.py,sources/eastmoney.py}.
 MIT, Copyright (c) 2026 simonlin1212; full notice in docs/vibe-concept-snapshot.md.
@@ -24,10 +24,12 @@ from . import easy_stock_context as common
 from .hithink_dump_trial import _session, _check_response
 from .sector_radar_audit import _check_safe_json
 
-VERSION = 'vibe-concept-snapshot-v2'
+VERSION = 'vibe-concept-snapshot-v3'
 UPSTREAM = '7f3a08b85451b54c762898789e2dcaa5d7d2ec98'
 WORKFLOW = '.github/workflows/vibe-concept-snapshot.yml'
-URL = 'https://push2delay.eastmoney.com/api/qt/clist/get'
+PATH = '/api/qt/clist/get'
+URLS = ('https://push2delay.eastmoney.com' + PATH, 'https://push2.eastmoney.com' + PATH)
+URL = URLS[0]
 # Vibe field map, not independently certified exchange definitions.
 PERIODS = {'today': ('f3', 'f62', 'f184'), '5d': ('f109', 'f164', 'f165'),
            '10d': ('f160', 'f174', 'f175')}
@@ -37,6 +39,8 @@ AUTHORITY = dict(common.AUTHORITY)
 require = common.require
 ERRORS = (ValueError, TypeError, KeyError, OSError, RuntimeError, OverflowError,
           UnicodeError, requests.RequestException)
+TRANSPORT_FALLBACK_ERRORS = {'ConnectionError', 'ConnectTimeout', 'ReadTimeout', 'Timeout',
+                             'ProxyError', 'SSLError', 'ChunkedEncodingError'}
 
 
 def encoded(value):
@@ -59,23 +63,25 @@ def execution_identity(value):
     return dict(value)
 
 
-def request_spec(period, page):
-    require(period in PERIODS and type(page) is int and 1 <= page <= MAX_REQUESTS, 'REQUEST_SCOPE')
-    return {'period': period, 'page': page, 'url': URL, 'params': {
+def request_spec(period, page, host_index=0):
+    require(period in PERIODS and type(page) is int and 1 <= page <= MAX_REQUESTS
+        and type(host_index) is int and 0 <= host_index < len(URLS), 'REQUEST_SCOPE')
+    return {'period': period, 'page': page, 'host_index': host_index, 'url': URLS[host_index], 'params': {
         'pn': str(page), 'pz': '200', 'po': '0', 'np': '1', 'fltt': '2', 'invt': '2',
         'fid': 'f12', 'fs': 'm:90+t:3',
         'fields': ','.join(('f12', 'f14', *PERIODS[period]))}}
 
 
 def request_raw(spec):
-    require(spec == request_spec(spec['period'], spec['page']), 'REQUEST_DIFFERS')
+    require(spec == request_spec(spec['period'], spec['page'], spec['host_index']), 'REQUEST_DIFFERS')
+    target = spec['url']
     with _session() as session:
-        with session.get(URL, params=spec['params'], stream=True, allow_redirects=False,
+        with session.get(target, params=spec['params'], stream=True, allow_redirects=False,
                 timeout=(10, 20), headers={'Accept-Encoding': 'identity',
                     'User-Agent': 'Mozilla/5.0 DecisionKernel-concept-context',
                     'Referer': 'https://data.eastmoney.com/'}) as response:
             length = _check_response(response)
-            expected = requests.Request('GET', URL, params=spec['params']).prepare().url
+            expected = requests.Request('GET', target, params=spec['params']).prepare().url
             require(response.url == expected and (length is None or length <= MAX_BODY), 'HTTP_DESTINATION_OR_SIZE')
             chunks, size = [], 0
             for part in response.iter_content(chunk_size=65536):
@@ -84,13 +90,25 @@ def request_raw(spec):
     return b''.join(chunks)
 
 
+def _fallbackable_error(exc):
+    status = getattr(exc, 'http_status', None)
+    return (type(status) is int and 500 <= status <= 599) or type(exc).__name__ in TRANSPORT_FALLBACK_ERRORS
+
+
+def _fallbackable_record(record):
+    status = record.get('http_status')
+    return (type(status) is int and 500 <= status <= 599) or (
+        status is None and record.get('error_type') in TRANSPORT_FALLBACK_ERRORS)
+
+
 def plan(execution, started_at):
     common.clock(started_at)
     return {'version': VERSION, 'upstream_commit': UPSTREAM,
         'execution': execution_identity(execution), 'started_at': started_at,
-        'periods': list(PERIODS), 'request_templates': [request_spec(p, 1) for p in PERIODS],
+        'periods': list(PERIODS), 'source_hosts': list(URLS),
+        'request_templates': [request_spec(p, 1, 0) for p in PERIODS],
         'max_requests': MAX_REQUESTS, 'max_rows_per_period': MAX_ROWS,
-        'max_seconds': MAX_SECONDS, 'max_body_bytes': MAX_BODY,
+        'max_seconds': MAX_SECONDS, 'max_body_bytes': MAX_BODY, 'max_host_attempts_per_page': len(URLS),
         'selection': 'SOURCE_CODE_ORDER_NOT_TOP_GAINERS', 'retry_count': 0, **AUTHORITY}
 
 
@@ -145,38 +163,51 @@ def capture(output, execution, *, transport=request_raw, clock=now, monotonic=ti
     started = clock(); p = plan(execution, started); states = _states()
     root.mkdir(parents=True, exist_ok=False)
     (root / 'plan.json').write_bytes(encoded(p))
-    records, stop = [], 'COMPLETE'
+    records, stop, fallback_count = [], 'COMPLETE', 0
     begin = monotonic(); previous = common.clock(started)
     for period in PERIODS:
         for page in range(1, MAX_REQUESTS + 1):
-            elapsed = round((monotonic() - begin) * 1000)
-            require(elapsed >= 0, 'MONOTONIC_REVERSED')
-            if len(records) >= MAX_REQUESTS or elapsed >= MAX_SECONDS * 1000:
-                stop = 'REQUEST_BUDGET' if len(records) >= MAX_REQUESTS else 'TIME_BUDGET'; break
-            spec = request_spec(period, page)
-            record = {'request': spec, 'elapsed_ms': elapsed, 'requested_at': clock(),
-                'received_at': None, 'http_status': None, 'status': 'SOURCE_ERROR',
-                'body_file': None, 'bytes': None, 'sha256': None, 'error_type': None}
-            require(previous <= common.clock(record['requested_at']), 'CAPTURE_CLOCK_REVERSED')
             done = False
-            try:
-                raw = transport(spec); record['received_at'] = clock(); record['http_status'] = 200
-                require(isinstance(raw, bytes) and 0 < len(raw) <= MAX_BODY, 'BODY_BUDGET')
-                _check_safe_json(common.decode(raw))
-                filename = f'{period}-{page}.json'
-                with (root / filename).open('xb') as stream:
-                    stream.write(raw)
-                record.update(body_file=filename, bytes=len(raw), sha256=sha256(raw).hexdigest(), status='BODY_RETAINED')
-                done = _consume(states[period], raw, spec, filename)
-            except ERRORS as exc:
-                record.update(received_at=clock(), error_type=type(exc).__name__)
-                status = getattr(exc, 'http_status', None)
-                if type(status) is int and 100 <= status <= 599:
-                    record['http_status'] = status
-                record['status'] = 'BODY_REJECTED' if record['body_file'] else 'SOURCE_ERROR'
-                stop = record['status']
-            require(previous <= common.clock(record['requested_at']) <= common.clock(record['received_at']), 'CAPTURE_CLOCK_REVERSED')
-            previous = common.clock(record['received_at']); records.append(record)
+            for host_index in range(len(URLS)):
+                elapsed = round((monotonic() - begin) * 1000)
+                require(elapsed >= 0, 'MONOTONIC_REVERSED')
+                if len(records) >= MAX_REQUESTS or elapsed >= MAX_SECONDS * 1000:
+                    stop = 'REQUEST_BUDGET' if len(records) >= MAX_REQUESTS else 'TIME_BUDGET'
+                    break
+                spec = request_spec(period, page, host_index)
+                record = {'request': spec, 'elapsed_ms': elapsed, 'requested_at': clock(),
+                    'received_at': None, 'http_status': None, 'status': 'SOURCE_ERROR',
+                    'body_file': None, 'bytes': None, 'sha256': None, 'error_type': None}
+                require(previous <= common.clock(record['requested_at']), 'CAPTURE_CLOCK_REVERSED')
+                try:
+                    raw = transport(spec); record['received_at'] = clock(); record['http_status'] = 200
+                    require(isinstance(raw, bytes) and 0 < len(raw) <= MAX_BODY, 'BODY_BUDGET')
+                    _check_safe_json(common.decode(raw))
+                    filename = f'{period}-{page}.json'
+                    with (root / filename).open('xb') as stream:
+                        stream.write(raw)
+                    record.update(body_file=filename, bytes=len(raw), sha256=sha256(raw).hexdigest(),
+                                  status='BODY_RETAINED')
+                    done = _consume(states[period], raw, spec, filename)
+                except ERRORS as exc:
+                    record.update(received_at=clock(), error_type=type(exc).__name__)
+                    status = getattr(exc, 'http_status', None)
+                    if type(status) is int and 100 <= status <= 599:
+                        record['http_status'] = status
+                    can_fallback = (record['body_file'] is None and host_index + 1 < len(URLS)
+                                    and _fallbackable_error(exc))
+                    if can_fallback:
+                        record['status'] = 'HOST_FALLBACK'
+                        fallback_count += 1
+                    else:
+                        record['status'] = 'BODY_REJECTED' if record['body_file'] else 'SOURCE_ERROR'
+                        stop = record['status']
+                require(previous <= common.clock(record['requested_at']) <= common.clock(record['received_at']),
+                        'CAPTURE_CLOCK_REVERSED')
+                previous = common.clock(record['received_at']); records.append(record)
+                if stop != 'COMPLETE' or done or record['status'] == 'BODY_RETAINED':
+                    break
+                sleep(0.25)
             if stop != 'COMPLETE' or done:
                 break
             sleep(0.25)
@@ -185,15 +216,13 @@ def capture(output, execution, *, transport=request_raw, clock=now, monotonic=ti
     finished = clock(); require(previous <= common.clock(finished), 'CAPTURE_CLOCK_REVERSED')
     saved = {'version': VERSION, 'plan_hash': canonical_hash(p), 'execution': p['execution'],
         'started_at': started, 'finished_at': finished, 'elapsed_ms': round((monotonic() - begin) * 1000),
-        'records': records, 'stop_reason': stop, 'retry_count': 0, **AUTHORITY}
+        'records': records, 'stop_reason': stop, 'retry_count': 0, 'host_fallback_count': fallback_count, **AUTHORITY}
     saved['capture_hash'] = canonical_hash(saved)
     (root / 'capture.json').write_bytes(encoded(saved))
     result = replay(read_files(root), expected_execution=p['execution'])
     (root / 'observation.json').write_bytes(encoded(result))
     (root / 'summary.md').write_text(render(result), encoding='utf-8')
     return result
-
-
 def replay(files, *, expected_execution):
     require(isinstance(files, dict) and {'plan.json', 'capture.json'} <= set(files)
         and len(files) <= MAX_REQUESTS + 4 and all(isinstance(b, bytes) and 0 < len(b) <= 4 * MAX_BODY for b in files.values())
@@ -204,26 +233,36 @@ def replay(files, *, expected_execution):
         and saved['version'] == VERSION and saved['plan_hash'] == canonical_hash(p)
         and saved['capture_hash'] == canonical_hash({k: v for k, v in saved.items() if k != 'capture_hash'})
         and type(saved['retry_count']) is int and saved['retry_count'] == 0
+        and type(saved.get('host_fallback_count')) is int and saved['host_fallback_count'] >= 0
         and canonical_json({k: saved.get(k) for k in AUTHORITY}) == canonical_json(AUTHORITY), 'CAPTURE_IDENTITY')
     start, end = common.clock(saved['started_at']), common.clock(saved['finished_at'])
     require(start <= end and type(saved['elapsed_ms']) is int and saved['elapsed_ms'] >= 0, 'CAPTURE_CLOCKS')
     records = saved['records']; require(isinstance(records, list) and len(records) <= MAX_REQUESTS, 'REQUEST_COUNT')
-    states, names, cursor, previous, elapsed, terminal = _states(), {'plan.json', 'capture.json'}, 0, start, 0, None
+    states, names, cursor, host_index = _states(), {'plan.json', 'capture.json'}, 0, 0
+    previous, elapsed, terminal, fallback_count = start, 0, None, 0
     periods = list(PERIODS)
-    for i, record in enumerate(records):
+    for record in records:
         require(cursor < len(periods) and terminal is None, 'REQUEST_AFTER_STOP')
         period = periods[cursor]; state = states[period]
-        spec = request_spec(period, state['pages'] + 1)
+        spec = request_spec(period, state['pages'] + 1, host_index)
         require(record['request'] == spec and type(record['elapsed_ms']) is int
             and elapsed <= record['elapsed_ms'] < MAX_SECONDS * 1000, 'REQUEST_OR_BUDGET_DIFFERS')
-        require(previous <= common.clock(record['requested_at']) <= common.clock(record['received_at']) <= end, 'REQUEST_CLOCKS')
+        require(previous <= common.clock(record['requested_at']) <= common.clock(record['received_at']) <= end,
+                'REQUEST_CLOCKS')
         previous, elapsed = common.clock(record['received_at']), record['elapsed_ms']
-        require(record['http_status'] is None or (type(record['http_status']) is int and 100 <= record['http_status'] <= 599), 'HTTP_STATUS')
+        require(record['http_status'] is None or (type(record['http_status']) is int
+            and 100 <= record['http_status'] <= 599), 'HTTP_STATUS')
         filename = record['body_file']
         if filename is None:
-            require(record['status'] == 'SOURCE_ERROR' and record['bytes'] is None and record['sha256'] is None
+            require(record['bytes'] is None and record['sha256'] is None
                 and isinstance(record['error_type'], str) and record['error_type'].isidentifier(), 'FAILURE_RECORD')
-            terminal = 'SOURCE_ERROR'; continue
+            if record['status'] == 'HOST_FALLBACK':
+                require(host_index == 0 and _fallbackable_record(record), 'HOST_FALLBACK_NOT_JUSTIFIED')
+                host_index = 1; fallback_count += 1
+                continue
+            require(record['status'] == 'SOURCE_ERROR', 'FAILURE_RECORD')
+            terminal = 'SOURCE_ERROR'
+            continue
         require(filename == f'{period}-{spec["page"]}.json' and filename in files and record['http_status'] == 200
             and type(record['bytes']) is int and len(files[filename]) == record['bytes']
             and sha256(files[filename]).hexdigest() == record['sha256'], 'RAW_IDENTITY')
@@ -231,13 +270,15 @@ def replay(files, *, expected_execution):
         try:
             done = _consume(state, files[filename], spec, filename)
         except ERRORS as exc:
-            require(record['status'] == 'BODY_REJECTED' and record['error_type'] == type(exc).__name__, 'PARSE_FAILURE_DIFFERS')
+            require(record['status'] == 'BODY_REJECTED' and record['error_type'] == type(exc).__name__,
+                    'PARSE_FAILURE_DIFFERS')
             terminal = 'BODY_REJECTED'
         else:
             require(record['status'] == 'BODY_RETAINED' and record['error_type'] is None, 'BODY_STATUS')
+            host_index = 0
             if done:
                 cursor += 1
-    require(saved['elapsed_ms'] >= elapsed, 'ELAPSED_CLOCKS')
+    require(saved['elapsed_ms'] >= elapsed and fallback_count == saved['host_fallback_count'], 'ELAPSED_OR_FALLBACK_COUNT')
     if terminal is None:
         terminal = ('COMPLETE' if cursor == len(periods) else 'REQUEST_BUDGET' if len(records) == MAX_REQUESTS
                     else 'TIME_BUDGET' if saved['elapsed_ms'] >= MAX_SECONDS * 1000 else None)
@@ -247,7 +288,8 @@ def replay(files, *, expected_execution):
         'missing_or_invalid_values': sum(len(r['field_gaps']) for r in s['rows'])} for period, s in states.items()}
     result = common.seal({'version': VERSION, 'execution': p['execution'], 'upstream_commit': UPSTREAM,
         'capture_hash': saved['capture_hash'], 'started_at': saved['started_at'], 'finished_at': saved['finished_at'],
-        'attempted_requests': len(records), 'stop_reason': terminal, 'coverage': coverage,
+        'attempted_requests': len(records), 'host_fallbacks': fallback_count, 'source_hosts': list(URLS),
+        'stop_reason': terminal, 'coverage': coverage,
         'status': 'MATCHED_REPORTED_CATALOGS' if all(s['complete'] for s in states.values()) else 'PARTIAL_OR_UNAVAILABLE',
         'observations': _summary(states), 'kind': 'MARKET_EXPRESSION', 'qualification': 'CONTEXT_ONLY',
         'taxonomy': 'EASTMONEY_CONCEPT_BK_NOT_HITHINK_TI', 'source_trade_date': None,
@@ -262,8 +304,6 @@ def replay(files, *, expected_execution):
         require(files['summary.md'] == render(result).encode(), 'DERIVED_SUMMARY_DIFFERS'); names.add('summary.md')
     require(names == set(files), 'UNBOUND_FILES')
     return result
-
-
 def render(result):
     p = result['projection']
     require(result['projection_hash'] == canonical_hash(p), 'OBSERVATION_HASH')
@@ -276,7 +316,7 @@ def render(result):
         '总数匹配只检验已返回目录；分时分页不是原子快照，也不认证全市场独立穷尽。',
         '资金字段是来源定义，不是公司现金流；不生成候选、评分、Research或投资权限。', '',
         '获取区间：' + text(p['started_at']) + ' → ' + text(p['finished_at']),
-        '实际请求：' + str(p['attempted_requests']) + '；停止：' + text(p['stop_reason']), '',
+        '实际请求：' + str(p['attempted_requests']) + '；主机回退：' + str(p['host_fallbacks']) + '；停止：' + text(p['stop_reason']), '',
         '| 窗口 | 已返回 | 来源宣称总数 | 总数匹配 | 缺失/无效值 |', '|---|---:|---:|---|---:|']
     for period, c in p['coverage'].items():
         lines.append('| ' + ' | '.join(text(v) for v in (period, c['returned_rows'], c['upstream_total_claim'], c['matched_reported_catalog'], c['missing_or_invalid_values'])) + ' |')
