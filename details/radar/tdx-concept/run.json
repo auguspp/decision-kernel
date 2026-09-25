@@ -20,13 +20,13 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748/artifacts",
-  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748/cancel",
-  "check_suite_id": 97754995396,
-  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAWwqbaxA",
-  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/97754995396",
+  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/artifacts",
+  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/cancel",
+  "check_suite_id": 97821802335,
+  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAWxqI_Xw",
+  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/97821802335",
   "conclusion": "success",
-  "created_at": "2026-09-25T05:32:45Z",
+  "created_at": "2026-09-25T10:24:45Z",
   "display_title": "tdx-concept-snapshot",
   "event": "workflow_dispatch",
   "head_branch": "main",
@@ -39,10 +39,10 @@
       "email": "noreply@github.com",
       "name": "GitHub"
     },
-    "id": "6b7ca113df3791304effbd4440e7098eacda37d8",
-    "message": "Merge pull request #571 from auguspp/feat/tdx-concept-reading-20260925\n\nfix: retain TDX Concept source in pinned read model",
-    "timestamp": "2026-09-25T05:29:51Z",
-    "tree_id": "fd641ec4c81fbffdcc02d5cb97c0e4880480688b"
+    "id": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
+    "message": "Merge pull request #579: qualify 9/24 Sector backfill across 9/25 exchange closure\n\nHuman-authorized 9/24 backfill. Exact head addcde4e0a62da9c72d2fa1d34b0ceb9e2b8773f passed full CI 36121719211. Default Sector path remains strict; bounded backfill binds official SSE/SZSE 2026-09-25 closure evidence and preserves provider data-ready vs market-session semantics. Historical concept-detail compatibility maps retained. Main CI, publisher, fresh backfill and downstream acceptance remain separate.",
+    "timestamp": "2026-09-25T10:05:13Z",
+    "tree_id": "aa0dad4898e1a677ad1e9786e0e4617e99877a64"
   },
   "head_repository": {
     "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -112,13 +112,13 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "head_sha": "6b7ca113df3791304effbd4440e7098eacda37d8",
-  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36099009748",
-  "id": 36099009748,
-  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748/jobs",
-  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748/logs",
+  "head_sha": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
+  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36123834891",
+  "id": 36123834891,
+  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/jobs",
+  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/logs",
   "name": "tdx-concept-snapshot",
-  "node_id": "WFR_kwLOUK1L0c8AAAAIZ6ss1A",
+  "node_id": "WFR_kwLOUK1L0c8AAAAIaSX6Cw",
   "path": ".github/workflows/tdx-concept-snapshot.yml",
   "previous_attempt_url": null,
   "pull_requests": [],
@@ -191,10 +191,10 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748/rerun",
+  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/rerun",
   "run_attempt": 1,
-  "run_number": 2,
-  "run_started_at": "2026-09-25T05:32:45Z",
+  "run_number": 3,
+  "run_started_at": "2026-09-25T10:24:45Z",
   "status": "completed",
   "triggering_actor": {
     "avatar_url": "https://avatars.githubusercontent.com/u/83357964?v=4",
@@ -217,8 +217,8 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "updated_at": "2026-09-25T05:34:21Z",
-  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36099009748",
+  "updated_at": "2026-09-25T10:25:52Z",
+  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891",
   "workflow_id": 366667291,
   "workflow_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/workflows/366667291"
 }

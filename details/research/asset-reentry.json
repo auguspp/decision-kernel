@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "29af9e92e7e54797edad09ba60c258c193f0f06c3ba604a95b36f835fe8326d7",
+    "base_reading_hash": "21b05ef8c49124fa5b7dc282d534bb434cd0aa660fa3fe3bfbdd182f979a13df",
     "companies": [
       {
         "archives": [],
@@ -654,7 +654,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "cf5e5e80b80d04d18c678b92d7393db197363db8b07322336f91e8893cc28503",
+        "association_id": "ecf88cf4311ee789f5f089f6c44447f6b98e71b92515fb2efe30c53f58c3a0b4",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -690,13 +690,13 @@
                 "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
               }
             ],
-            "projection_hash": "cf8fea78af8d372a3c6a5b217c8c4fc5231abce6db800b66ad2ba2702426c582",
+            "projection_hash": "5456ce203f4787735619e068a8c6839a35b00bb669029703c62fa6312312dd69",
             "source": {
-              "bytes": 275531,
-              "git_blob": "5ca2f3800f5731c2c39559f1064d41333e127e80",
+              "bytes": 275530,
+              "git_blob": "619a36b4b58443657da214ad283d3d54afdbc4c3",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "ba7c9d81b9407a3557af32f33aa716081659a7be3e21837cd062d173d48e9111"
+              "sha256": "9055a949b77f05a056c77f767a3821b9dea7199df60cb83810533c7b5a593745"
             }
           }
         ],
@@ -3229,7 +3229,7 @@
       "with_saved_observations": 2,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-25T10:25:30.205812+00:00",
+    "generated_at": "2026-09-25T10:26:40.079062+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3248,5 +3248,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "821ca138fe00fe821dff11ce31a7074305596d8af85a4c89761401edead7fe39"
+  "projection_hash": "02403dd93772310c89667232a75a2a9ab6d9d5273ea29f656a68df9adf481018"
 }
