@@ -1,9 +1,9 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "cdd07b3b50145a9bde7e1d87e7d20dab422d45b7094c547b40c5081b21ec57c8",
+    "base_reading_hash": "5be6e179198293025853fefaee1b6d0996b8556e8e208f257ea00f58227f9810",
     "economic_review": "NOT_PERFORMED",
-    "generated_at": "2026-09-25T08:34:44.948574+00:00",
+    "generated_at": "2026-09-25T08:46:24.595348+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6744,37 +6744,37 @@
       },
       "native": {
         "archive": {
-          "artifact_id": 10800999869,
-          "artifact_name": "industry-breadth-35985968436-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35985968436/artifacts/10800999869",
-          "bytes": 10628,
-          "expires_at": "2026-10-24T10:13:40Z",
-          "git_blob": "5eb140e2f766a1d673fcab2bc027a2a0cd139df7",
+          "artifact_id": 10854336423,
+          "artifact_name": "industry-breadth-36114671457-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36114671457/artifacts/10854336423",
+          "bytes": 10552,
+          "expires_at": "2026-10-25T08:45:51Z",
+          "git_blob": "c74a11cb989994c32016b1b9071e3fa58e33cd80",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-09-24T10:13:25Z",
+            "created_at": "2026-09-25T08:45:36Z",
             "event": "workflow_run",
-            "head_sha": "0f644425dd3710551893625ab2eb3d9d2bc1d363",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35985968436",
-            "id": 35985968436,
+            "head_sha": "f09a4f444e8a9ad25af258e888e0b9fa10cb037d",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36114671457",
+            "id": 36114671457,
             "operation": null,
             "path": ".github/workflows/radar-industry-breadth.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-09-24T10:13:25Z",
+            "run_started_at": "2026-09-25T08:45:36Z",
             "status": "completed",
-            "updated_at": "2026-09-24T10:13:53Z"
+            "updated_at": "2026-09-25T08:45:59Z"
           },
-          "read_path": "sources/artifacts/3a2d6a203f283c5deec1aaa868d1c26f8dd19078d71c16b9f7d6c4a4a973d4a3.zip",
+          "read_path": "sources/artifacts/b59d1394547fb8251ba4c4d32e1647e4a6d1ef2567d8de5d217274f050ff25f0.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "3a2d6a203f283c5deec1aaa868d1c26f8dd19078d71c16b9f7d6c4a4a973d4a3"
+          "sha256": "b59d1394547fb8251ba4c4d32e1647e4a6d1ef2567d8de5d217274f050ff25f0"
         },
         "capture": {
           "attempted_requests": 1,
           "automatic_admission": false,
-          "capture_hash": "7841c82810881c1bdecc0012e62f6f21eef280388a3e5d8c3cff10561a63c85b",
+          "capture_hash": "88d522117dfbb57ff399c59ea0adac06be7a3494d9acd204747c77eafc81707c",
           "error_type": null,
-          "finished_at": "2026-09-24T10:13:40.488067+00:00",
+          "finished_at": "2026-09-25T08:45:51.052606+00:00",
           "http_status": 200,
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
@@ -6784,11 +6784,11 @@
           "receipt": {
             "params": {},
             "path": "/api/futures/basis/main-continuous-latest",
-            "received_at": "2026-09-24T10:13:40.483626+00:00",
+            "received_at": "2026-09-25T08:45:51.048275+00:00",
             "representation": "RETAINED_HTTP_BODY",
-            "requested_at": "2026-09-24T10:13:38.169546+00:00",
+            "requested_at": "2026-09-25T08:45:48.717611+00:00",
             "response_bytes": 67275,
-            "response_sha256": "db346499e31be7fc04cc31723767a1766eb0f8f746fdd4d6383f388d19d1dd3f",
+            "response_sha256": "c36e7a335784e9cc1f4c1471dd66c296e089c492305c61c62ea7996d77d3633f",
             "status": "CAPTURED_HTTP_RESPONSE"
           },
           "research_authority": "NONE",
@@ -6797,12 +6797,12 @@
           "version": "industry-breadth-snapshot-v1",
           "workflow": {
             "attempt": 1,
-            "code_commit": "0f644425dd3710551893625ab2eb3d9d2bc1d363",
+            "code_commit": "f09a4f444e8a9ad25af258e888e0b9fa10cb037d",
             "event": "workflow_run",
             "ref": "refs/heads/main",
             "repository": "auguspp/decision-kernel",
-            "run_id": 35985968436,
-            "trigger_run_id": 35985939145,
+            "run_id": 36114671457,
+            "trigger_run_id": 36113627698,
             "workflow": ".github/workflows/radar-industry-breadth.yml"
           }
         },
@@ -6810,17 +6810,17 @@
         "capture_age_status": "RECENT_CAPTURE",
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-09-24T10:13:25Z",
+          "created_at": "2026-09-25T08:45:36Z",
           "event": "workflow_run",
-          "head_sha": "0f644425dd3710551893625ab2eb3d9d2bc1d363",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35985968436",
-          "id": 35985968436,
+          "head_sha": "f09a4f444e8a9ad25af258e888e0b9fa10cb037d",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36114671457",
+          "id": 36114671457,
           "operation": null,
           "path": ".github/workflows/radar-industry-breadth.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-24T10:13:25Z",
+          "run_started_at": "2026-09-25T08:45:36Z",
           "status": "completed",
-          "updated_at": "2026-09-24T10:13:53Z"
+          "updated_at": "2026-09-25T08:45:59Z"
         },
         "snapshot": {
           "projection": {
@@ -6860,30 +6860,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "116.73",
-                  "average_settle_basis": "116.40",
-                  "close_basis": 147,
-                  "close_basis_rate": "4.51",
-                  "close_price": 3113,
+                  "average_close_basis": "116.84",
+                  "average_settle_basis": "116.51",
+                  "close_basis": 142,
+                  "close_basis_rate": "4.36",
+                  "close_price": 3118,
                   "converted_spot_price": 3260,
                   "default_value": "Y",
                   "name": "螺纹钢主连",
                   "reference_site": "上海",
-                  "settle_basis": 143,
-                  "settle_basis_rate": "4.39",
-                  "settle_price": 3117,
+                  "settle_basis": 149,
+                  "settle_basis_rate": "4.57",
+                  "settle_price": 3111,
                   "spot_indicator_id": "20868",
                   "spot_price": 3260,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "RBZL.SHF",
                   "ticker": "rb9999",
-                  "updated_at": "2026.09.23 19:20:44",
+                  "updated_at": "2026.09.24 19:37:41",
                   "variety_name": "螺纹钢"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 0,
                 "spot_age_days_at_capture": 1,
-                "version_id": "bbacfbc7b3d989dc280a93339ea864437863fa9e008f708c18ea9a1a95800ec2"
+                "version_id": "000c1da1a66d70eb6c13a72f5cebddcd6dd9f7a09048eade53816e02297456c9"
               },
               {
                 "identity": {
@@ -6921,7 +6921,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 1,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "c80aa54075f9fdf44826071cbd385989b81e1678cfbc9289f27c969773770028"
               },
               {
@@ -6938,30 +6938,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "19.62",
-                  "average_settle_basis": "19.78",
-                  "close_basis": "-6.3",
-                  "close_basis_rate": "-0.89",
-                  "close_price": "712.0",
+                  "average_close_basis": "19.49",
+                  "average_settle_basis": "19.66",
+                  "close_basis": "-7.8",
+                  "close_basis_rate": "-1.10",
+                  "close_price": "713.5",
                   "converted_spot_price": "705.7",
                   "default_value": "Y",
                   "name": "铁矿石主连",
                   "reference_site": "青岛港",
-                  "settle_basis": "-7.8",
-                  "settle_basis_rate": "-1.10",
-                  "settle_price": "713.5",
+                  "settle_basis": "-5.8",
+                  "settle_basis_rate": "-0.82",
+                  "settle_price": "711.5",
                   "spot_indicator_id": "2911136",
                   "spot_price": "679.0",
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "IZL.DCE",
                   "ticker": "i9999",
-                  "updated_at": "2026.09.23 19:13:00",
+                  "updated_at": "2026.09.24 19:56:29",
                   "variety_name": "铁矿石"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 2,
                 "spot_age_days_at_capture": 1,
-                "version_id": "510e2d3df8cea950113d123f29b4ea5e5f654df0b847024a02ac06835cf1922b"
+                "version_id": "821da20fe91002f096869d204a96949acdd424e1a55459388eb1afa5f92c9013"
               },
               {
                 "identity": {
@@ -6977,30 +6977,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "36.78",
-                  "average_settle_basis": "36.94",
-                  "close_basis": "12.0",
-                  "close_basis_rate": "1.66",
-                  "close_price": "712.0",
+                  "average_close_basis": "36.70",
+                  "average_settle_basis": "36.87",
+                  "close_basis": "10.5",
+                  "close_basis_rate": "1.45",
+                  "close_price": "713.5",
                   "converted_spot_price": "724.0",
                   "default_value": "N",
                   "name": "铁矿石主连",
                   "reference_site": "曹妃甸港",
-                  "settle_basis": "10.5",
-                  "settle_basis_rate": "1.45",
-                  "settle_price": "713.5",
+                  "settle_basis": "12.5",
+                  "settle_basis_rate": "1.73",
+                  "settle_price": "711.5",
                   "spot_indicator_id": "2911091",
                   "spot_price": "696.0",
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "IZL.DCE",
                   "ticker": "i9999",
-                  "updated_at": "2026.09.23 19:13:00",
+                  "updated_at": "2026.09.24 19:56:29",
                   "variety_name": "铁矿石"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 3,
                 "spot_age_days_at_capture": 1,
-                "version_id": "7906eb16f76c07bdcc4aeb48a54c51a0ba2ad8d52440cc048048f65abd70eed6"
+                "version_id": "82319143e0a8e0d92b751fe3c2a2f02063c4e76aa3fc7b9b13ed058d21b45c5a"
               },
               {
                 "identity": {
@@ -7016,8 +7016,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "167.26",
-                  "average_settle_basis": "166.43",
+                  "average_close_basis": "169.02",
+                  "average_settle_basis": "168.23",
                   "close_basis": 549,
                   "close_basis_rate": "26.69",
                   "close_price": 1509,
@@ -7038,8 +7038,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 4,
-                "spot_age_days_at_capture": 0,
-                "version_id": "ce1e192766f8636bf1ece4790a443ab1c1ee03e6a9a03d1d41b068de2746aeec"
+                "spot_age_days_at_capture": 1,
+                "version_id": "f18915411c20c9108267d57c8390c168a6c3c518ee10e60c99580cc0e19a4364"
               },
               {
                 "identity": {
@@ -7077,7 +7077,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 5,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "1dfad596f9a85551945985032111da7041fb44d7dc1e2833e952176b8ee81271"
               },
               {
@@ -7094,8 +7094,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-216.76",
-                  "average_settle_basis": "-217.89",
+                  "average_close_basis": "-216.72",
+                  "average_settle_basis": "-217.85",
                   "close_basis": "-44.5",
                   "close_basis_rate": "-2.31",
                   "close_price": "1974.5",
@@ -7116,8 +7116,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 6,
-                "spot_age_days_at_capture": 0,
-                "version_id": "0a018846999fc9c75619a7620cb7bee9a4f27a942bdad56fce7ce6f2eeab0fad"
+                "spot_age_days_at_capture": 1,
+                "version_id": "967c26dce807f5793cf332a0264e953d03ab3289d579b8e860dd699e2df07d34"
               },
               {
                 "identity": {
@@ -7162,7 +7162,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 7,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d21e5a2b6f4d0365a338793f0de5d33063eae0f6e965774f41de3b42b707db1f"
               },
               {
@@ -7179,8 +7179,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "1039.78",
-                  "average_settle_basis": "1039.19",
+                  "average_close_basis": "1041.72",
+                  "average_settle_basis": "1041.44",
                   "close_basis": 1385,
                   "close_basis_rate": "9.11",
                   "close_price": 13815,
@@ -7201,8 +7201,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 8,
-                "spot_age_days_at_capture": 0,
-                "version_id": "4f76ed9021fe9feae0c341db3f2d7a78766ea3607c546404a73ec5a235f667fc"
+                "spot_age_days_at_capture": 1,
+                "version_id": "fa469601e65cafe28dbb954ce796e2230fa1bab29ab453e170f09c84e85d9ca5"
               },
               {
                 "identity": {
@@ -7240,7 +7240,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 9,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "71a2a62135110c7993891c16f93d4bf890612274dc4d5047a8d04ceb98031c06"
               },
               {
@@ -7279,7 +7279,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 10,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "5e5a0fb7d53cc8614eed58cb9eb5e0c1d60978f39d9e22ae66df885b5a73d945"
               },
               {
@@ -7296,30 +7296,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "9.07",
-                  "average_settle_basis": "8.89",
-                  "close_basis": -1,
-                  "close_basis_rate": "-0.03",
-                  "close_price": 3301,
+                  "average_close_basis": "8.90",
+                  "average_settle_basis": "8.71",
+                  "close_basis": 2,
+                  "close_basis_rate": "0.06",
+                  "close_price": 3298,
                   "converted_spot_price": 3300,
                   "default_value": "Y",
                   "name": "热卷主连",
                   "reference_site": "上海",
-                  "settle_basis": -4,
-                  "settle_basis_rate": "-0.12",
-                  "settle_price": 3304,
+                  "settle_basis": 7,
+                  "settle_basis_rate": "0.21",
+                  "settle_price": 3293,
                   "spot_indicator_id": "20892",
                   "spot_price": 3300,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "HCZL.SHF",
                   "ticker": "hc9999",
-                  "updated_at": "2026.09.23 19:21:06",
+                  "updated_at": "2026.09.24 19:38:04",
                   "variety_name": "热卷"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 11,
                 "spot_age_days_at_capture": 1,
-                "version_id": "ab495c6a119df5a291b321e3c9d2814785063425028678fdf76aab43af764773"
+                "version_id": "95db44fa37d1e8b591f24d474d615eae1abe6c4c224ab497199d4d4d0d82958a"
               },
               {
                 "identity": {
@@ -7357,7 +7357,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 12,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e649112baaddeacf9fcc27aa3f75d1242c8bcc8d0fb58f3b16d119be1f70ba9f"
               },
               {
@@ -7374,8 +7374,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "8.60",
-                  "average_settle_basis": "7.26",
+                  "average_close_basis": "9.08",
+                  "average_settle_basis": "7.73",
                   "close_basis": 58,
                   "close_basis_rate": "0.96",
                   "close_price": 6012,
@@ -7396,8 +7396,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 13,
-                "spot_age_days_at_capture": 0,
-                "version_id": "c50fad3f0efd95e08fef202a557159a73974d87a3abcac7817b4895184e0bdfe"
+                "spot_age_days_at_capture": 1,
+                "version_id": "fc35035eac0f72cf74422cf465f40e0341f9ba616a5cd16645943178bfdd131b"
               },
               {
                 "identity": {
@@ -7413,30 +7413,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "96.39",
-                  "average_settle_basis": "98.15",
-                  "close_basis": 88,
-                  "close_basis_rate": "2.53",
-                  "close_price": 3392,
+                  "average_close_basis": "95.98",
+                  "average_settle_basis": "97.65",
+                  "close_basis": 120,
+                  "close_basis_rate": "3.45",
+                  "close_price": 3360,
                   "converted_spot_price": 3480,
                   "default_value": "Y",
                   "name": "线材主连",
                   "reference_site": "天津",
-                  "settle_basis": 75,
-                  "settle_basis_rate": "2.16",
-                  "settle_price": 3405,
+                  "settle_basis": 103,
+                  "settle_basis_rate": "2.96",
+                  "settle_price": 3377,
                   "spot_indicator_id": "9122296",
                   "spot_price": 3480,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "WRZL.SHF",
                   "ticker": "wr9999",
-                  "updated_at": "2026.09.23 19:20:55",
+                  "updated_at": "2026.09.24 19:37:52",
                   "variety_name": "线材"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 14,
                 "spot_age_days_at_capture": 1,
-                "version_id": "d456ea007c3b088fa1579df68b6a57c9546345751e1174bdf9c6cd1277ab9450"
+                "version_id": "b28a99da278d0d36cadd369aa705af1f3b5a6196c162df523a4b93aa5e7c0f2d"
               },
               {
                 "identity": {
@@ -7474,7 +7474,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 15,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "3bc5aa1c39062a1aba3c4113ac6421112377594d6c6df16efa07a36f409c021d"
               },
               {
@@ -7491,8 +7491,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "113.90",
-                  "average_settle_basis": "111.02",
+                  "average_close_basis": "114.18",
+                  "average_settle_basis": "111.31",
                   "close_basis": 144,
                   "close_basis_rate": "2.40",
                   "close_price": 5846,
@@ -7513,8 +7513,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 16,
-                "spot_age_days_at_capture": 0,
-                "version_id": "17d94c703877f97c21c49f0ae16a4d7b07e86686d54375f9bb132fe4a9674ec5"
+                "spot_age_days_at_capture": 1,
+                "version_id": "08c7cbfb94fc5504ad470c515c3e3da89366349412cfbf882554b2fa927cfd70"
               },
               {
                 "identity": {
@@ -7530,8 +7530,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "251.89",
-                  "average_settle_basis": "249.01",
+                  "average_close_basis": "252.37",
+                  "average_settle_basis": "249.50",
                   "close_basis": 304,
                   "close_basis_rate": "4.94",
                   "close_price": 5846,
@@ -7552,8 +7552,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 17,
-                "spot_age_days_at_capture": 0,
-                "version_id": "581a72be31ba09962da17c5b4d5d056a0099d58bccd7437e456f34b6a7d3ff92"
+                "spot_age_days_at_capture": 1,
+                "version_id": "b782b868909b843714388b73ae54ec6fd427df6b7401bf1af3c6e0e20fe372e0"
               },
               {
                 "identity": {
@@ -7591,7 +7591,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 18,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "c7338b771344938e82f2cc99d5149398754935c9c77699633212324562fbf5d1"
               },
               {
@@ -7630,7 +7630,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 19,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "8ff8b4802b04fe1b9725ba17d9b3c2ae971aaac5c3dde588cde69fc93ff9c6fb"
               },
               {
@@ -7669,7 +7669,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 20,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "0dc9d2b577c38bdf9fa79da48ea877d61f6c567ab61ab4c50f7dbe574125ab77"
               },
               {
@@ -7708,7 +7708,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 21,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "9b0bbe968560e61c93d41b64f45d0044c6166dda0c0cb48b0a20578a7af513b4"
               },
               {
@@ -7747,7 +7747,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 22,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "f247172484573fff426873e1d49f620ff6523c1f3cfde015b2531b5135cd624b"
               },
               {
@@ -7786,7 +7786,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 23,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6acbb9e0c8fe652f33ab1a06a7202752046e724f9b0a837f923c40da4d0c447e"
               },
               {
@@ -7825,7 +7825,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 24,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "a9e930a6a85520cca976eed53f19d142ef9d1005fd869d2f4009bb2869181058"
               },
               {
@@ -7842,8 +7842,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "99.26",
-                  "average_settle_basis": "100.52",
+                  "average_close_basis": "102.62",
+                  "average_settle_basis": "104.29",
                   "close_basis": 742,
                   "close_basis_rate": "17.44",
                   "close_price": 3513,
@@ -7864,8 +7864,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 25,
-                "spot_age_days_at_capture": 0,
-                "version_id": "1bbbedb37442542babf2d8cb359410c0a27da2224852c7333e68a8d72fbf35c9"
+                "spot_age_days_at_capture": 1,
+                "version_id": "acff85659f063da65d19fc3bc6f1701ac50532658c8404121a290fd3eae3710f"
               },
               {
                 "identity": {
@@ -7903,7 +7903,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 26,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d124b79cbcb180fa4b3d3963ab3042cda4a5e6b6517afeb0b7c8cfcec82d8a35"
               },
               {
@@ -7920,30 +7920,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "97.77",
-                  "average_settle_basis": "100.38",
-                  "close_basis": 166,
-                  "close_basis_rate": "3.87",
-                  "close_price": 4117,
-                  "converted_spot_price": 4283,
+                  "average_close_basis": "98.57",
+                  "average_settle_basis": "101.57",
+                  "close_basis": 242,
+                  "close_basis_rate": "5.27",
+                  "close_price": 4363,
+                  "converted_spot_price": 4605,
                   "default_value": "Y",
                   "name": "燃油主连",
                   "reference_site": "新加坡",
-                  "settle_basis": 167,
-                  "settle_basis_rate": "3.89",
-                  "settle_price": 4116,
+                  "settle_basis": 348,
+                  "settle_basis_rate": "7.57",
+                  "settle_price": 4257,
                   "spot_indicator_id": "9138369",
-                  "spot_price": 4283,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 4605,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "FUZL.SHF",
                   "ticker": "fu9999",
-                  "updated_at": "2026.09.24 07:04:51",
+                  "updated_at": "2026.09.25 07:04:52",
                   "variety_name": "燃油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 27,
                 "spot_age_days_at_capture": 1,
-                "version_id": "5306ab6fb47ed82fb747948c6dd607e36a0077f3c7d70180fc4f9b48e00b2d21"
+                "version_id": "bb9a7f0f25882edab1374ba70b7aed60380ea77166817398db0527bf5b72d420"
               },
               {
                 "identity": {
@@ -7981,7 +7981,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 28,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b3c17255fdded7112cce973dbb6756d041d38c588a39a84622274723473fa3da"
               },
               {
@@ -8020,7 +8020,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 29,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "a65457da37252dc4af3237533229a99a4f17a84146039d6e76687a62c6feab12"
               },
               {
@@ -8059,7 +8059,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 30,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "dbcdab97656369c54f265283e0bcd80ed407af50310d5bbada8a738610bf0098"
               },
               {
@@ -8076,30 +8076,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "294.20",
-                  "average_settle_basis": "298.14",
-                  "close_basis": 1042,
-                  "close_basis_rate": "15.93",
-                  "close_price": 5498,
+                  "average_close_basis": "298.67",
+                  "average_settle_basis": "303.42",
+                  "close_basis": 1284,
+                  "close_basis_rate": "19.63",
+                  "close_price": 5256,
                   "converted_spot_price": 6540,
                   "default_value": "Y",
                   "name": "沥青主连",
                   "reference_site": "华东",
-                  "settle_basis": 893,
-                  "settle_basis_rate": "13.65",
-                  "settle_price": 5647,
+                  "settle_basis": 1484,
+                  "settle_basis_rate": "22.69",
+                  "settle_price": 5056,
                   "spot_indicator_id": "4163702",
                   "spot_price": 6540,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "BUZL.SHF",
                   "ticker": "bu9999",
-                  "updated_at": "2026.09.23 18:04:58",
+                  "updated_at": "2026.09.24 18:04:41",
                   "variety_name": "沥青"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 31,
                 "spot_age_days_at_capture": 1,
-                "version_id": "e50900abf7bcd11ea3280cadeebb0659e6dbd0c5e229770ae3adddadcd86d495"
+                "version_id": "91c83b94628715499005daf00593339f0200d0260f2ddc67f515fcb51a5bfa01"
               },
               {
                 "identity": {
@@ -8137,7 +8137,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 32,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "fdc2b70d0d6637d618ba216c90d7553f5e8af7bd8d6b38e26a6e8ba69f9c4ca7"
               },
               {
@@ -8176,7 +8176,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 33,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "fa929a913e55eab35e08ec6c6ba2302efd59d21004e444a0f17c57cc66ed6a47"
               },
               {
@@ -8193,8 +8193,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "141.05",
-                  "average_settle_basis": "141.75",
+                  "average_close_basis": "145.44",
+                  "average_settle_basis": "146.61",
                   "close_basis": 1159,
                   "close_basis_rate": "16.48",
                   "close_price": 5876,
@@ -8215,8 +8215,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 34,
-                "spot_age_days_at_capture": 0,
-                "version_id": "d2646e28bf5400120040426fffed6510b8a5fd78bad670ed4afb70a89975f138"
+                "spot_age_days_at_capture": 1,
+                "version_id": "b4bf938251b95e8eaa4db2a57e72f328b97935bf8b5e4329a5178037ad382ee4"
               },
               {
                 "identity": {
@@ -8254,7 +8254,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 35,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "be6e576b956e3e49622e3290314a18a09d6a6b309590e9d99b91d2bbe9c018c6"
               },
               {
@@ -8271,30 +8271,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-138.12",
-                  "average_settle_basis": "-133.77",
-                  "close_basis": -405,
-                  "close_basis_rate": "-2.13",
-                  "close_price": 19455,
-                  "converted_spot_price": 19050,
+                  "average_close_basis": "-136.82",
+                  "average_settle_basis": "-131.82",
+                  "close_basis": -400,
+                  "close_basis_rate": "-2.08",
+                  "close_price": 19600,
+                  "converted_spot_price": 19200,
                   "default_value": "N",
                   "name": "橡胶主连",
                   "reference_site": "上海",
-                  "settle_basis": -70,
-                  "settle_basis_rate": "-0.37",
-                  "settle_price": 19120,
+                  "settle_basis": -225,
+                  "settle_basis_rate": "-1.17",
+                  "settle_price": 19425,
                   "spot_indicator_id": "4321828",
-                  "spot_price": 18950,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 19100,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "RUZL.SHF",
                   "ticker": "ru9999",
-                  "updated_at": "2026.09.23 18:27:50",
+                  "updated_at": "2026.09.24 18:27:50",
                   "variety_name": "橡胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 36,
                 "spot_age_days_at_capture": 1,
-                "version_id": "056d2c7468c209fff84e4c1be6c96b1d0a24522f8894a3c78fead0765aa1c186"
+                "version_id": "3422b80d12aee264c8311603bbbc167fa9e0776211bd57f191eef9eaa86f96ff"
               },
               {
                 "identity": {
@@ -8310,30 +8310,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-323.53",
-                  "average_settle_basis": "-319.50",
-                  "close_basis": -855,
-                  "close_basis_rate": "-4.60",
-                  "close_price": 19455,
-                  "converted_spot_price": 18600,
+                  "average_close_basis": "-325.06",
+                  "average_settle_basis": "-320.38",
+                  "close_basis": -850,
+                  "close_basis_rate": "-4.53",
+                  "close_price": 19600,
+                  "converted_spot_price": 18750,
                   "default_value": "Y",
                   "name": "橡胶主连",
                   "reference_site": "云南",
-                  "settle_basis": -520,
-                  "settle_basis_rate": "-2.80",
-                  "settle_price": 19120,
+                  "settle_basis": -675,
+                  "settle_basis_rate": "-3.60",
+                  "settle_price": 19425,
                   "spot_indicator_id": "4321834",
-                  "spot_price": 18600,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 18750,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "RUZL.SHF",
                   "ticker": "ru9999",
-                  "updated_at": "2026.09.23 18:27:50",
+                  "updated_at": "2026.09.24 18:27:50",
                   "variety_name": "橡胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 37,
                 "spot_age_days_at_capture": 1,
-                "version_id": "ba3521cf62af168a85bebd07a29ae39148aca6036599599f1458b28a79c1a829"
+                "version_id": "8d5baf82627e0557a724d3f8f80b97838a578b96769e5df887dd0cdbc2c80663"
               },
               {
                 "identity": {
@@ -8349,8 +8349,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-45.35",
-                  "average_settle_basis": "-46.23",
+                  "average_close_basis": "-45.01",
+                  "average_settle_basis": "-45.92",
                   "close_basis": -28,
                   "close_basis_rate": "-1.62",
                   "close_price": 1758,
@@ -8371,8 +8371,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 38,
-                "spot_age_days_at_capture": 0,
-                "version_id": "0ab72d20f9271243cd0cf3232fef91a75f71d2f11739616c2b3720a890ff9334"
+                "spot_age_days_at_capture": 1,
+                "version_id": "990c1afe6e299110a14324052cdca1f2070173e98769525e0c356eda1f249111"
               },
               {
                 "identity": {
@@ -8410,7 +8410,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 39,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b473b676b7f04fbee46197c705713757866f6a50a60697813c4d5691a97677e1"
               },
               {
@@ -8449,7 +8449,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 40,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "fd9ef8bcf8b8d45800f5ae842194d2f058dc6ee3047f68255009d30492c12470"
               },
               {
@@ -8466,8 +8466,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "421.94",
-                  "average_settle_basis": "423.91",
+                  "average_close_basis": "422.85",
+                  "average_settle_basis": "425.14",
                   "close_basis": 659,
                   "close_basis_rate": "7.34",
                   "close_price": 8316,
@@ -8488,8 +8488,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 41,
-                "spot_age_days_at_capture": 0,
-                "version_id": "2476b06a4c8e2bc83634957db5c2334dd572ca29b225fdb1ac867aac441ce29d"
+                "spot_age_days_at_capture": 1,
+                "version_id": "e84d520be9183727976d353c0c17ab19eb74114fbda0a96e30317ddd133f2273"
               },
               {
                 "identity": {
@@ -8527,7 +8527,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 42,
-                "spot_age_days_at_capture": 1,
+                "spot_age_days_at_capture": 2,
                 "version_id": "fe0a1720e54d8876f3dbc7bc5555d2f27f488b68a9331a36442f7f824085a975"
               },
               {
@@ -8544,8 +8544,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "174.10",
-                  "average_settle_basis": "178.47",
+                  "average_close_basis": "176.44",
+                  "average_settle_basis": "181.47",
                   "close_basis": 580,
                   "close_basis_rate": "5.63",
                   "close_price": 9730,
@@ -8566,8 +8566,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 43,
-                "spot_age_days_at_capture": 0,
-                "version_id": "7df1eb835217c069f54a1535e2cafccfd3ad25fb4ee814178c0ea976ad959831"
+                "spot_age_days_at_capture": 1,
+                "version_id": "e5e2d4e95b4b43554494595faf89f7264a9fc2c9adc6ad87a6fed577730d4bca"
               },
               {
                 "identity": {
@@ -8583,8 +8583,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-113.19",
-                  "average_settle_basis": "-108.82",
+                  "average_close_basis": "-111.11",
+                  "average_settle_basis": "-106.08",
                   "close_basis": 215,
                   "close_basis_rate": "2.16",
                   "close_price": 9730,
@@ -8605,8 +8605,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 44,
-                "spot_age_days_at_capture": 0,
-                "version_id": "f16760b7369aa2fa36a8915e8d2fe664eaa5d6e7d0e11c4c8920a0b46f6fc467"
+                "spot_age_days_at_capture": 1,
+                "version_id": "1a4caac6f2c968ae3be318f3dfbdbff5b181f620c0aa38552cb724cb91f3c304"
               },
               {
                 "identity": {
@@ -8644,7 +8644,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 45,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "3107e2149d752d0e7752f77a45e958c4992dc23b0ecfce1889c64b3ccb0e87e0"
               },
               {
@@ -8661,8 +8661,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "377.29",
-                  "average_settle_basis": "376.87",
+                  "average_close_basis": "380.84",
+                  "average_settle_basis": "380.84",
                   "close_basis": 963,
                   "close_basis_rate": "10.47",
                   "close_price": 8235,
@@ -8683,8 +8683,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 46,
-                "spot_age_days_at_capture": 0,
-                "version_id": "c11ef62249a338c0e2e55461768240d6aa05fc16771534648cf2b5f3288f7138"
+                "spot_age_days_at_capture": 1,
+                "version_id": "6e10e169f9fde4417bdb9bebf2b9f2cd024d324c21cb3fe7a84396fd3bea54fe"
               },
               {
                 "identity": {
@@ -8700,30 +8700,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "317.44",
-                  "average_settle_basis": "320.03",
-                  "close_basis": 1297,
-                  "close_basis_rate": "16.84",
-                  "close_price": 6403,
-                  "converted_spot_price": 7700,
+                  "average_close_basis": "320.84",
+                  "average_settle_basis": "324.03",
+                  "close_basis": 1114,
+                  "close_basis_rate": "14.28",
+                  "close_price": 6686,
+                  "converted_spot_price": 7800,
                   "default_value": "N",
                   "name": "LPG主连",
                   "reference_site": "广州",
-                  "settle_basis": 1301,
-                  "settle_basis_rate": "16.90",
-                  "settle_price": 6399,
+                  "settle_basis": 1256,
+                  "settle_basis_rate": "16.10",
+                  "settle_price": 6544,
                   "spot_indicator_id": "5028354",
-                  "spot_price": 7700,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 7800,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "PGZL.DCE",
                   "ticker": "pg9999",
-                  "updated_at": "2026.09.24 08:00:10",
+                  "updated_at": "2026.09.24 18:02:38",
                   "variety_name": "LPG"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 47,
                 "spot_age_days_at_capture": 1,
-                "version_id": "e4569ec169bd93f7ce8b63dbc56dc0ce71acc6f2acfc18bdc65995f91501e0e2"
+                "version_id": "18b3eee7e5b252ad7b0a25a473acddebbb3b5b820fc1b22e7bf268c8c93d46b9"
               },
               {
                 "identity": {
@@ -8761,7 +8761,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 48,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "07cb910ad454bcc09d460d2917514cb5a8245171be60c1caafae39a37e4f6370"
               },
               {
@@ -8778,8 +8778,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-122.51",
-                  "average_settle_basis": "-122.88",
+                  "average_close_basis": "-122.22",
+                  "average_settle_basis": "-122.60",
                   "close_basis": -101,
                   "close_basis_rate": "-2.16",
                   "close_price": 4798,
@@ -8800,8 +8800,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 49,
-                "spot_age_days_at_capture": 0,
-                "version_id": "d69f71a03c858c0fca9bd33a383e3056e586842baaf62ee8ab1b84d8125cfc2b"
+                "spot_age_days_at_capture": 1,
+                "version_id": "6142d9b4dde9f7271c5fe2e860a1c04bdf636d1222ff418f2b7106991a7f99c4"
               },
               {
                 "identity": {
@@ -8839,7 +8839,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 50,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "8e957f07c110658e5e1a9e145f9e661e901da674f876f6d9b47c75104e07f062"
               },
               {
@@ -8856,30 +8856,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "115.68",
-                  "average_settle_basis": "118.23",
-                  "close_basis": -81,
-                  "close_basis_rate": "-1.53",
-                  "close_price": 5385,
-                  "converted_spot_price": 5304,
+                  "average_close_basis": "115.31",
+                  "average_settle_basis": "118.36",
+                  "close_basis": -154,
+                  "close_basis_rate": "-2.80",
+                  "close_price": 5657,
+                  "converted_spot_price": 5503,
                   "default_value": "Y",
                   "name": "低硫燃油主连",
                   "reference_site": "新加坡",
-                  "settle_basis": -60,
-                  "settle_basis_rate": "-1.14",
-                  "settle_price": 5364,
+                  "settle_basis": -40,
+                  "settle_basis_rate": "-0.72",
+                  "settle_price": 5543,
                   "spot_indicator_id": "9138373",
-                  "spot_price": 5304,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 5503,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "LUZL.INE",
                   "ticker": "lu9999",
-                  "updated_at": "2026.09.24 07:04:57",
+                  "updated_at": "2026.09.25 07:04:58",
                   "variety_name": "低硫燃油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 51,
                 "spot_age_days_at_capture": 1,
-                "version_id": "107de8ca5b15304b7f7420f9f694ff41a4a36d84b602bfb3def88e013b641f50"
+                "version_id": "e09575b7964238fea3260757f5b0730332f9ee93ac4331f76cfe537ef3cc488e"
               },
               {
                 "identity": {
@@ -8895,30 +8895,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-74.79",
-                  "average_settle_basis": "-68.58",
-                  "close_basis": -555,
-                  "close_basis_rate": "-3.44",
-                  "close_price": 16725,
-                  "converted_spot_price": 16170,
+                  "average_close_basis": "-77.52",
+                  "average_settle_basis": "-70.52",
+                  "close_basis": -587,
+                  "close_basis_rate": "-3.56",
+                  "close_price": 17100,
+                  "converted_spot_price": 16513,
                   "default_value": "Y",
                   "name": "20号胶主连",
                   "reference_site": "青岛",
-                  "settle_basis": -210,
-                  "settle_basis_rate": "-1.30",
-                  "settle_price": 16380,
+                  "settle_basis": -382,
+                  "settle_basis_rate": "-2.32",
+                  "settle_price": 16895,
                   "spot_indicator_id": "3058218",
-                  "spot_price": 16170,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 16513,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "NRZL.INE",
                   "ticker": "nr9999",
-                  "updated_at": "2026.09.23 18:27:55",
+                  "updated_at": "2026.09.24 18:27:55",
                   "variety_name": "20号胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 52,
                 "spot_age_days_at_capture": 1,
-                "version_id": "aece120a42ad651a1df48d0c2528c08473c4c6b7270270cccb6f29092d2ae59c"
+                "version_id": "ecbfc3447f48ada3dff3ddba6fbf9bb05e18012126ea12d71b9eaa3cd20a3f05"
               },
               {
                 "identity": {
@@ -8934,30 +8934,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "493.67",
-                  "average_settle_basis": "494.88",
-                  "close_basis": 1820,
-                  "close_basis_rate": "17.93",
-                  "close_price": 8330,
+                  "average_close_basis": "498.88",
+                  "average_settle_basis": "500.61",
+                  "close_basis": 1519,
+                  "close_basis_rate": "14.97",
+                  "close_price": 8631,
                   "converted_spot_price": 10150,
                   "default_value": "N",
                   "name": "聚丙烯主连",
                   "reference_site": "上海",
-                  "settle_basis": 1747,
-                  "settle_basis_rate": "17.21",
-                  "settle_price": 8403,
+                  "settle_basis": 1657,
+                  "settle_basis_rate": "16.33",
+                  "settle_price": 8493,
                   "spot_indicator_id": "10232923",
                   "spot_price": 10150,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "PPZL.DCE",
                   "ticker": "pp9999",
-                  "updated_at": "2026.09.23 20:44:02",
+                  "updated_at": "2026.09.24 20:44:03",
                   "variety_name": "聚丙烯"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 53,
                 "spot_age_days_at_capture": 1,
-                "version_id": "cf94f77f311433d015a868b0aa6cba7473349304316cb8bb2b328eb35bcd2f26"
+                "version_id": "9d2f418591a2dbc833a43268876ae8ee5158b12c0eab4f020f2510acd318cae0"
               },
               {
                 "identity": {
@@ -8995,7 +8995,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 54,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "12a9620eec2fabb5073f6a8b385d28f4dbba137963f083fe39d13ce27fc97657"
               },
               {
@@ -9012,30 +9012,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "201.18",
-                  "average_settle_basis": "209.94",
-                  "close_basis": 240,
-                  "close_basis_rate": "1.56",
-                  "close_price": 15160,
-                  "converted_spot_price": 15400,
+                  "average_close_basis": "200.14",
+                  "average_settle_basis": "210.22",
+                  "close_basis": -80,
+                  "close_basis_rate": "-0.51",
+                  "close_price": 15680,
+                  "converted_spot_price": 15600,
                   "default_value": "Y",
                   "name": "合成橡胶主连",
                   "reference_site": "中石化华北",
-                  "settle_basis": 570,
-                  "settle_basis_rate": "3.70",
-                  "settle_price": 14830,
+                  "settle_basis": 225,
+                  "settle_basis_rate": "1.44",
+                  "settle_price": 15375,
                   "spot_indicator_id": "3012016",
-                  "spot_price": 15400,
-                  "spot_publish_date": "2026-09-23",
+                  "spot_price": 15600,
+                  "spot_publish_date": "2026-09-24",
                   "thscode": "BRZL.SHF",
                   "ticker": "br9999",
-                  "updated_at": "2026.09.23 20:28:06",
+                  "updated_at": "2026.09.24 20:28:07",
                   "variety_name": "合成橡胶"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 55,
                 "spot_age_days_at_capture": 1,
-                "version_id": "228d563c4dba8295be99e03b872ed25b86e0ee20c98c6dc0892ed6bac7d64abc"
+                "version_id": "81684f146e2ccc5366e60fc5f795ba9ad72bc56e0bf0ad8496c700104e2469fa"
               },
               {
                 "identity": {
@@ -9073,7 +9073,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 56,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "83e2b0d3a2950ecb81ea72bae3d1c831f2d68fa53a9b5161b5ff976a60ebbf2a"
               },
               {
@@ -9090,8 +9090,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-85.29",
-                  "average_settle_basis": "-85.96",
+                  "average_close_basis": "-85.00",
+                  "average_settle_basis": "-85.64",
                   "close_basis": -21,
                   "close_basis_rate": "-0.45",
                   "close_price": 4718,
@@ -9112,8 +9112,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 57,
-                "spot_age_days_at_capture": 0,
-                "version_id": "bd509dfdaae388150ea7f927a3c747c7ddda88b1d0a2483c3f979bdfdba2c1b8"
+                "spot_age_days_at_capture": 1,
+                "version_id": "ec0f7b17ac59ecd2c04181d218b2126974e446ec7fb3007725edfc4c82ef4ceb"
               },
               {
                 "identity": {
@@ -9151,7 +9151,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 58,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "054bd77f94dd3129958e6a766cb4ce714ac5a1f501825cdcf237a70c4db0ac00"
               },
               {
@@ -9190,7 +9190,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 59,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "91a1ef063d8ac4302d2ce781b4853f5ec713dd3c39fbffc10fb99a74b5bef6c3"
               },
               {
@@ -9207,8 +9207,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "2.39",
-                  "average_settle_basis": "0.89",
+                  "average_close_basis": "3.04",
+                  "average_settle_basis": "1.48",
                   "close_basis": 108,
                   "close_basis_rate": "5.47",
                   "close_price": 1867,
@@ -9229,8 +9229,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 60,
-                "spot_age_days_at_capture": 0,
-                "version_id": "1680d5fa9022340604ee2c2e3d2cd0175065c3f8b68fd398f3d6c36b81351c53"
+                "spot_age_days_at_capture": 1,
+                "version_id": "56e22ff09095f2688674054c0d7a5be0992c9b3514e4a42e5c20ea908981b5c7"
               },
               {
                 "identity": {
@@ -9246,8 +9246,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "173.90",
-                  "average_settle_basis": "175.95",
+                  "average_close_basis": "173.47",
+                  "average_settle_basis": "175.80",
                   "close_basis": 314,
                   "close_basis_rate": "3.22",
                   "close_price": 9414,
@@ -9268,8 +9268,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 61,
-                "spot_age_days_at_capture": 0,
-                "version_id": "ff8dfe9160f3de1a3c0c8c11caf068e4428721d1c10a8f5e6b2f0002f9550c0e"
+                "spot_age_days_at_capture": 1,
+                "version_id": "6a6a2b9ad65b3662f7b5d8f938a6d02817effbe19dcff97c76e70d9df6f642d9"
               },
               {
                 "identity": {
@@ -9307,7 +9307,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 62,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "a35f0bd27ef7cf9c2968a861b6b409083a2eb3df319e8a1471eba99aa3a2918e"
               },
               {
@@ -9324,8 +9324,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "307.13",
-                  "average_settle_basis": "310.47",
+                  "average_close_basis": "309.21",
+                  "average_settle_basis": "312.79",
                   "close_basis": 564,
                   "close_basis_rate": "6.45",
                   "close_price": 8186,
@@ -9346,8 +9346,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 63,
-                "spot_age_days_at_capture": 0,
-                "version_id": "dba20fd988d6cb1a3f76c532bb9cc54c017ea8763e6220a01428fe455cac62c7"
+                "spot_age_days_at_capture": 1,
+                "version_id": "d7e5774da9ca9cc295573dbf6b50f0eafbe56c2058fba36e9fadac56fd5e8bd1"
               },
               {
                 "identity": {
@@ -9385,7 +9385,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 64,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "f4eece987bd92d666952cb36de007fc9f8b01d1879101176c6ad1c9d30bbbb92"
               },
               {
@@ -9424,7 +9424,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 65,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "740b95aff40cc38e69d94ba1616d68a498e157492d16669a26a2f2b1a989e268"
               },
               {
@@ -9463,7 +9463,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 66,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "9d3171c986c3e6ed67cbce4fb498823d4e79735e47a2146ad985e3232b3dcf66"
               },
               {
@@ -9502,7 +9502,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 67,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "7302b1cd1a0eec733af66a381ebcd69a343e9e6d935bc80ae64e62a461ebc193"
               },
               {
@@ -9541,7 +9541,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 68,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "57c526c4ae2457f296374114f8befcd8e7a6d547e23b93be521f95e67b6b766a"
               },
               {
@@ -9580,7 +9580,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 69,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "79bf9d35bf03e4d9ebd36df5b8ec4d7a2ca53bf0f5068e6bb2bb705931d4aca9"
               },
               {
@@ -9619,7 +9619,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 70,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6878b600368e876216d27d29eef9afb49d9870fa6ad243938c6b97d728c20a69"
               },
               {
@@ -9658,7 +9658,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 71,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "1977bb0cecdde55a71dd631b76be5b69c529dd04f6521cb17f1c879626a2ddda"
               },
               {
@@ -9697,7 +9697,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 72,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "9a3061b1cf0e6abe8deb2ebc1b3dab1f686b2b9a4cf8827d5a743c5adc45bea4"
               },
               {
@@ -9736,7 +9736,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 73,
-                "spot_age_days_at_capture": 1,
+                "spot_age_days_at_capture": 2,
                 "version_id": "62325f6d9dd7184858831cd3252c1d1d1e031ca9b9ba72a94df2862f56954b2a"
               },
               {
@@ -9775,7 +9775,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 74,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "abda7d5f4f7453ff58c10ff0e569f3daed458a5648be05a9baea100eb6a43c7c"
               },
               {
@@ -9814,7 +9814,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 75,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "47e92f206b328d589f6a5a8b595252c96a0ddb735d6379bdadbcbcc0c6be26c5"
               },
               {
@@ -9853,7 +9853,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 76,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "7ef91ed24ca7195239702f99b97337034f1f8e4b4ab023d5d905a3cd6c928e8f"
               },
               {
@@ -9892,7 +9892,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 77,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "5ca517e393b8ab9c887ffbcd007e082edcef5f26636f542d8a20075310e74f1d"
               },
               {
@@ -9931,7 +9931,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 78,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "124e4a8544d63bc445b133f1c8433954ba1068ccccb98c504a102992ae082010"
               },
               {
@@ -9970,7 +9970,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 79,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "2d935fe17a8fdbb3e09020007e72330c8f008b487af3811793a32bc3fa2f2dc9"
               },
               {
@@ -10009,7 +10009,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 80,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "152014d5e9fef14086b5533ca8b5bcd1226d3c98fb65361d6dd2e584e31f0df6"
               },
               {
@@ -10048,7 +10048,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 81,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "46f358f05424f2cfeb0aef41709df93bed5f62c102d2901db004784e5bf43695"
               },
               {
@@ -10087,7 +10087,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 82,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "629b5541496cf0ec56bd37c80b22f659a366005f35778a7ce23409c15da4cdb8"
               },
               {
@@ -10126,7 +10126,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 83,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d745cde031a61d8d5bb9130acf429df5a8e3f82a221671e91d5fc2c3e9eb88ae"
               },
               {
@@ -10165,7 +10165,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 84,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "f8f1de69ffef428c2a873290a6b5af40f6dfe67715a7931856b8f57c2af9fefb"
               },
               {
@@ -10182,30 +10182,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-298.01",
-                  "average_settle_basis": "-311.21",
-                  "close_basis": -45,
-                  "close_basis_rate": "-0.42",
+                  "average_close_basis": "-297.46",
+                  "average_settle_basis": "-310.81",
+                  "close_basis": 125,
+                  "close_basis_rate": "1.16",
                   "close_price": 10655,
-                  "converted_spot_price": 10610,
+                  "converted_spot_price": 10780,
                   "default_value": "Y",
                   "name": "生猪主连",
                   "reference_site": "河南",
-                  "settle_basis": -115,
-                  "settle_basis_rate": "-1.08",
-                  "settle_price": 10725,
+                  "settle_basis": 125,
+                  "settle_basis_rate": "1.16",
+                  "settle_price": 10655,
                   "spot_indicator_id": "4320937",
-                  "spot_price": 10610,
-                  "spot_publish_date": "2026-09-24",
+                  "spot_price": 10780,
+                  "spot_publish_date": "2026-09-25",
                   "thscode": "LHZL.DCE",
                   "ticker": "lh9999",
-                  "updated_at": "2026.09.24 15:52:46",
+                  "updated_at": "2026.09.25 08:53:19",
                   "variety_name": "生猪"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 85,
                 "spot_age_days_at_capture": 0,
-                "version_id": "4df30e4717f173f6ac945c980ff570b85e814d0078fbfbb29bab901bb8ca2997"
+                "version_id": "9c88f72fd0146745525036ff277ab7f91320a3d5ef8955407c97cf1277a9cd71"
               },
               {
                 "identity": {
@@ -10243,7 +10243,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 86,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "4030734b7ea2531a41b2eba9df77d048bff36b2bbec9ec0f2a72bec257fd2629"
               },
               {
@@ -10282,7 +10282,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 87,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "f20cf1dd1b473e1bec8c941506215d653c62f1a1a37aa951af6a194212034841"
               },
               {
@@ -10321,7 +10321,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 88,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "4d93452f85aea99f54a45b8da691a979e9b7fc5c0b0c47aeddc07b5ef1772523"
               },
               {
@@ -10360,7 +10360,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 89,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "3b97ec973dcb89ae0c793ec5a5c2af064668e49cbb1a54b0593219c96e575cdd"
               },
               {
@@ -10399,7 +10399,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 90,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "94569f12fa2cbc255272074eba58613bd65626cda51a24f031b9bca5d4d95371"
               },
               {
@@ -10438,7 +10438,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 91,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "5190793bffbf9ab3b0750c5baa24453f19339b36f4f8b89eebdc8ed7931fb4e1"
               },
               {
@@ -10477,7 +10477,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 92,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "eb1d217e4b13b22d92d3fce8c215847dfbb44da7db473abb516b4e130e5ee08e"
               },
               {
@@ -10516,7 +10516,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 93,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "ecc340f6697a553e550e42220e97df609f6c14e0a72c848bc0839414791ef5fc"
               },
               {
@@ -10555,7 +10555,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 94,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "1b73e7164791a2e09acd0231a8e49b0eaa3119bfddc4aad14a8a3a9d08594eb0"
               },
               {
@@ -10594,7 +10594,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 95,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "f554094501c668bfd16b43d782b3ee6dd5dc77e62837cabddd0ff903a363e669"
               },
               {
@@ -10633,7 +10633,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 96,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "08db3ce1ceffaf705a3161c3c57428f24d2e4392a1e1acb6af3ba31d4cd26925"
               },
               {
@@ -10672,7 +10672,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 97,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "0ab41df88f49bb1f08f96d5597baf5333c1f1ef1f2b7d8b05928b9632730a185"
               },
               {
@@ -10711,7 +10711,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 98,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "a2e2eb6b4df31c542bdc40b065f634e0353074924e281d2f096dff919e220246"
               },
               {
@@ -10750,7 +10750,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 99,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "c82cc60cfcd05f7896080536ed82080200fed37eaad01374572467932c7d2d4c"
               },
               {
@@ -10796,7 +10796,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 100,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b41a4c0654d7f1e8995921596552aaae5f50970b0a3f85ba048034d9a8cc6421"
               },
               {
@@ -10842,7 +10842,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 101,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "8f2e8b3feb41e3892ddd4bd7065f60398ec9a922cb577c3723eb4f4e92c8effc"
               },
               {
@@ -10888,7 +10888,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 102,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "ffc9d5d54ec335a92b27eda759720874071fcafe7e13d9f3b0202fa38ea0d593"
               },
               {
@@ -10934,7 +10934,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 103,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "57dd903bc436af5d86c46b42f0c59755d86a92bf0445af78c677af2aca7828d8"
               },
               {
@@ -10980,7 +10980,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 104,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "2eaa01355dd875452cffd047bd0a9a9d8be988bad9e0ee601e365db16952bb46"
               },
               {
@@ -11026,7 +11026,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 105,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "26630d6023c376d9ebc1aa62d09e65d6d791e20544bf54c4a199b24e62924565"
               },
               {
@@ -11072,7 +11072,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 106,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d4b2556160743f21f7ff86ee8fff2e59a888fe217842910e477758aad62da812"
               },
               {
@@ -11118,7 +11118,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 107,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "76a5eb19882080f80285df34f7a452cfb749a290f346863b9daa6168520497be"
               },
               {
@@ -11157,7 +11157,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 108,
-                "spot_age_days_at_capture": 1,
+                "spot_age_days_at_capture": 2,
                 "version_id": "6730a6fb34362e26084e209e4c81b5b968382c0106452b9c3ec06c54dd96ec65"
               },
               {
@@ -11196,7 +11196,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 109,
-                "spot_age_days_at_capture": 1,
+                "spot_age_days_at_capture": 2,
                 "version_id": "c9cfff90c351c2ed76c22e075f0905739d84a8a02aa0c390d7531f07ff4ef839"
               },
               {
@@ -11235,7 +11235,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 110,
-                "spot_age_days_at_capture": 344,
+                "spot_age_days_at_capture": 345,
                 "version_id": "e9b92d7b2fa7ebff6089e33679fca27ccca839352fe2802f98ad28aaee36a8d5"
               },
               {
@@ -11274,7 +11274,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 111,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "1456fe5f2a6618e6f0bcb65a093a76f8e33b84bee8d12bbcedd03d09b153cf2a"
               },
               {
@@ -11313,7 +11313,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 112,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6b25decd5970bfb028f3b8f3a8f3e4115d7c4df43a38dbd9d00e1ab5b9671772"
               },
               {
@@ -11352,7 +11352,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 113,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "c2d3475730d837c6c87fa0ad539ef4ea87abeb6202640947e6152b24354361ba"
               },
               {
@@ -11391,7 +11391,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 114,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "4b84431aac05e932c3b82ecb93ae55dd1e773c50647a35d8e0d3502f6e749419"
               },
               {
@@ -11430,7 +11430,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 115,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "db7702a826783216857c739f2b0dc1cbae8e6c081aaa1a65316d693f6ea692ec"
               },
               {
@@ -11469,7 +11469,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 116,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d1bc9aff48a12b659d205c2626159be3502cd8f7dd3276ea7e02bee67ef840dd"
               },
               {
@@ -11508,7 +11508,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 117,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "c16cc8db2dbc7c8782c9cc218de3a284a6a51fbc838df73e64f03668d8bc1ed1"
               },
               {
@@ -11547,7 +11547,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 118,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "aac1e1fc6b777cf223ce43b78cde6fbfd0e62925ac4729957c4060fb80705d45"
               },
               {
@@ -11586,7 +11586,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 119,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6321079e610a9911422f2b87eecce147b094dfba9e5cc13a9a9cd9fd90834bd3"
               },
               {
@@ -11625,7 +11625,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 120,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e0bccaf348f460b2afb39fb199f6b867283a4918f8afddd70132a1e6e31dd17a"
               },
               {
@@ -11664,7 +11664,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 121,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e0c547f740432c973c3cad47bdfdb8539ed0bc99069d27ed916cf6e664d98ae1"
               },
               {
@@ -11703,7 +11703,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 122,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6d42f3aae69dacc84ecd74af89d9d46ca5842f5455eda98533cc1b8f0da551af"
               },
               {
@@ -11742,7 +11742,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 123,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "5bad14c7e9c85117d0668c125dffb0839e8be2314b24d1ff126137e30af7fe0f"
               },
               {
@@ -11781,7 +11781,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 124,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e8431d5919e2af6ca3512b7c8d1fb43e7f17303b0ccaf700e43ef0ae7182f442"
               },
               {
@@ -11820,7 +11820,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 125,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "7a82902eeb765cd0fc955697e6b2ad692bc3a18704cb50fbce70da30b70edcff"
               },
               {
@@ -11859,7 +11859,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 126,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e6973e8a488f115d178c963fae3b0bbb0a7b8ab2da26312233a16dcdc287c54f"
               },
               {
@@ -11898,7 +11898,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 127,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "1c9b77091b80b72281773a724cd4d3ea4b101b4060b231e7da46843dd8532e05"
               },
               {
@@ -11937,7 +11937,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 128,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "ad58ab0b49bea4ea385cb4ba1eed8f6e786db2b1bcac08ec0f70a9eac3677af8"
               },
               {
@@ -11976,7 +11976,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 129,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "27779321c9a39daef67e94fe1be93232ddfffbf5fdbfed504d0b73aa3bc0cda3"
               },
               {
@@ -12015,7 +12015,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 130,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "95bc1869c60027534f44451278aabdad1c93084b08f5b4a908046462ed97811e"
               },
               {
@@ -12054,7 +12054,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 131,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "8eba17972a6d27caff1428a5516bdd329d11fc73939b86d5e06fc33404766245"
               },
               {
@@ -12093,7 +12093,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 132,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "64fac64f75571d1de4c0248f71f22d9a0c3c8fb8dadc76cb29f2928c863a02f1"
               },
               {
@@ -12132,7 +12132,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 133,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "3ef1ace4f2ef678afb11a5d1748866ab84edd6e71ffbbbd004867e2d9c148b24"
               },
               {
@@ -12171,7 +12171,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 134,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6b4a7bb69f821a552b76a4e3b629d549099f7d0a56427fc18cb1c36d4970d386"
               },
               {
@@ -12188,8 +12188,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-3.61",
-                  "average_settle_basis": "-3.65",
+                  "average_close_basis": "-3.58",
+                  "average_settle_basis": "-3.64",
                   "close_basis": "-0.76",
                   "close_basis_rate": "-0.08",
                   "close_price": "924.76",
@@ -12210,8 +12210,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 135,
-                "spot_age_days_at_capture": 0,
-                "version_id": "66b8fa32ba95ad19d6cb31f39fe5ce10993ce882c9b014ac26051c270f4a9b82"
+                "spot_age_days_at_capture": 1,
+                "version_id": "2a695ee24178c78b93d28d02a8f49b897e1f69677c41d7cfd94f5a7b566a13a8"
               },
               {
                 "identity": {
@@ -12249,7 +12249,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 136,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e2ca84b765efb73b9c92983a9e009ac546099268d400f7bd74faf9fe931f8135"
               },
               {
@@ -12288,7 +12288,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 137,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "7c65b10f8e6d2baf6eb3c24fcb7470395f5937768ed40cd1ab70fc350fba6d2e"
               },
               {
@@ -12327,7 +12327,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 138,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "313adee0a0e82619a2e014fe9b8314564abee114975c68639d406a64a41c463c"
               },
               {
@@ -12366,7 +12366,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 139,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "3fdc7925c297b13232d63967ac4395cbe2f0ec159e163a6641853dff2f4cdcf4"
               },
               {
@@ -12405,7 +12405,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 140,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "cd56384c443c8919c059893a713a2896929df48d85ac5ab5e5a949553fa4f404"
               },
               {
@@ -12444,7 +12444,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 141,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "70f75a4c54e66143731bb09c27690ab4b9451f0af30d82647b9284bdefda9f11"
               },
               {
@@ -12483,7 +12483,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 142,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b2e77692c86c6eab2327ec9512942700dc2f5e0cb2a34845b54ebaf0aaa5dcdb"
               },
               {
@@ -12522,7 +12522,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 143,
-                "spot_age_days_at_capture": 3,
+                "spot_age_days_at_capture": 4,
                 "version_id": "5c81a160f7a4906b4878362cc1f3cc90294a6208ae0e7d6d1ab31ee04d84a003"
               }
             ],
@@ -13511,17 +13511,17 @@
               "bytes": 67275,
               "params": {},
               "path": "/api/futures/basis/main-continuous-latest",
-              "provider_timestamp": 1790244819810,
-              "received_at": "2026-09-24T10:13:40.483626+00:00",
+              "provider_timestamp": 1790325950502,
+              "received_at": "2026-09-25T08:45:51.048275+00:00",
               "representation": "RETAINED_HTTP_BODY",
-              "requested_at": "2026-09-24T10:13:38.169546+00:00",
-              "sha256": "db346499e31be7fc04cc31723767a1766eb0f8f746fdd4d6383f388d19d1dd3f"
+              "requested_at": "2026-09-25T08:45:48.717611+00:00",
+              "sha256": "c36e7a335784e9cc1f4c1471dd66c296e089c492305c61c62ea7996d77d3633f"
             },
             "status": "BREADTH_CONTEXT_RETAINED",
             "units_and_ratio_scale": "RAW_PROVIDER_FIELDS_NOT_UNIFORMLY_ESTABLISHED",
             "version": "industry-breadth-snapshot-v1"
           },
-          "projection_hash": "2ad8e0d42492ba571ddc4d84c87639e249fd65f1f84e9c3b05b41f774f4233e1"
+          "projection_hash": "a90089813d344183d702e46264d478b10b1e6479afcc0e407670dfc99c12c0f2"
         },
         "status": "SAVED_NATIVE_SNAPSHOT"
       }
@@ -13529,5 +13529,5 @@
     "signal_transition_authority": "NONE",
     "version": "industry-breadth-snapshot-v1"
   },
-  "projection_hash": "7fcb9bc277f8c7a50917ffe02c99ff39507ab3775e9676028694462d96e8b0d2"
+  "projection_hash": "63ecde2653d0ca48b60b110af87d5452bdcf6c7909a314543bacebc7dc61731a"
 }
