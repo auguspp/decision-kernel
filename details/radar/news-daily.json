@@ -1,8 +1,8 @@
 {
   "projection": {
-    "association_as_of": "2026-09-25T10:06:40.846726+00:00",
+    "association_as_of": "2026-09-25T10:09:32.255953+00:00",
     "automatic_admission": false,
-    "base_reading_hash": "2a3db83fc9dd8fde2913f364eb34beda5f0a40b97829310c0974d6fc71088212",
+    "base_reading_hash": "d4e5bb70fee25d9ed65ec583c698774619a1c7c95148bb0e5cbeff7c39c3ebeb",
     "capture": {
       "projection": {
         "automatic_admission": false,
@@ -27,8 +27,8 @@
             "automatic_admission": false,
             "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "194057b2ce394431b735699958dd9c67f19a847d3fba79f40e10bc42dff8cf58",
-            "cutoff": "2026-09-25T10:06:40.788425+00:00",
+            "company_reading_hash": "d4c24daee9d081d9073fbc2598e0390e13c013d3ffcc074b355a4adeae8306a7",
+            "cutoff": "2026-09-25T10:09:32.146105+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -9803,7 +9803,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "1151a53475498921e731e6e26b3a3b93c6183daaec488d70be8d6148c669a20d"
+          "projection_hash": "5cf531527469858d3a61287987d06c11788980745c7783de5bb4cfe5d721f36a"
         },
         "research_authority": "NONE",
         "research_executions": 0,
@@ -9937,14 +9937,14 @@
           "workflow": ".github/workflows/radar-newsnow-daily.yml"
         }
       },
-      "projection_hash": "e09cbe293ad32da64a487fda39574d444b6a589786fd50d626bd10c54ba89aa7"
+      "projection_hash": "74838dee2004558dd404224a54ee809f047ecb8d2d143581800ee754ee34eb56"
     },
     "company_source": {
-      "bytes": 172536,
-      "git_blob": "e0edf2d88d6a8a5ac12a684c809cdd8d2828c28a",
+      "bytes": 172526,
+      "git_blob": "56c739ee85681acd44fe969a6c431c7098f7c3ab",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "c6a75f38fe10fa383ac548355d938b4c83f0cecb23458749b2cbb899ffdf3e38"
+      "sha256": "097c77ee2ef557ce0bf125d7816600c344cd220f14420633bc05a24848417173"
     },
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
@@ -10004,5 +10004,5 @@
       "status": "WINDOWS_CAPTURED"
     }
   },
-  "projection_hash": "9542cd1e2ba7f64510d96da311f96921ef61c969a4f1fbdf519f6aeeca1a1eeb"
+  "projection_hash": "c3b8213fa61add86da245c7d35e1c01fe5a20b5432c06ccb5887534b97b30ee3"
 }
