@@ -1,0 +1,18 @@
+{
+  "calendar_hash": "ff5cacdecd3579733d01a3a5bc196cc15ad027884f8677fdba45f16590d2adee",
+  "closed_dates": [
+    "2026-09-25"
+  ],
+  "closed_interval_basis": "EXPLICIT_EXCHANGE_CLOSURE_AFTER_COMPLETED_SESSION",
+  "closure_evidence": [
+    "https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml",
+    "https://www.szse.cn/www/disclosure/notice/general/t20260917_622911.html"
+  ],
+  "comparison_session": "2026-09-24",
+  "observed_at": "2026-09-25T10:09:09.133567+00:00",
+  "per_security_market_session": "NOT_PROVEN_BY_PAGE_TIMESTAMP",
+  "production_qualification": "BOUNDED_REFERENCE_ALLOWED_BY_EXPLICIT_EXCHANGE_CLOSURE",
+  "provider_timestamp_semantics": "PROVIDER_DATA_READY_TIME_NOT_MARKET_SESSION",
+  "qualified_benchmark_hash": "0ce9712c9fbfc06c374ea628e9e3cf3b00fd19013bd674afbe5fdcc2f6a6765e",
+  "semantics": "OBSERVED_STOCK_QUOTES_FOR_OFFLINE_RECONCILIATION_NOT_PER_SECURITY_SESSION_PROOF"
+}
