@@ -7,7 +7,7 @@ import pytest
 
 from test_sector_radar_audit import prohibit_network
 from test_stock_market_expression import _one_unknown_plan
-from test_stock_radar_capture import setup, stock_environment
+from test_stock_radar_capture import code, setup, stock_environment
 from test_stock_radar_reading import NOW, ROOT, synthetic_references
 
 
@@ -44,16 +44,23 @@ def test_sector_context_capture_and_replay_keep_exact_supplied_bytes(tmp_path, r
 
 @pytest.mark.parametrize('raw', [b'{}', b'not json', '{}', b'null'])
 def test_mismatched_sector_bytes_fail_before_any_transport_or_output(tmp_path, raw):
-    _, _, _, _, _, _, result = _one_unknown_plan()
-    _, _, out, calls, _, run = setup(tmp_path)
-    with pytest.raises(ValueError):
-        run(sector_result=result, sector_result_raw=raw)
+    # Byte/parsed-value agreement is checked before state loading. This sentinel
+    # is not a qualified Sector result; the two real capture/replay cases above
+    # retain that separate integration responsibility.
+    mod = code()
+    result = {'synthetic_preflight': True}
+    out, calls = tmp_path/'reading', []
+    reason = 'Expecting value' if raw == b'not json' else 'raw Sector context'
+    with pytest.raises(ValueError, match=reason):
+        mod['capture'](ROOT, tmp_path/'unused-state', out, observed_at=NOW,
+            transport=lambda *args: calls.append(args), workflow={'test':'raw-preflight'},
+            sector_result=result, sector_result_raw=raw)
     assert calls == []
     assert not out.exists()
 
 
 def test_live_cli_passes_original_sector_bytes_not_a_reserialized_copy(tmp_path, monkeypatch):
-    mod, _, _, _, _, _ = setup(tmp_path)
+    mod = code()  # CLI routing needs no synthetic market plan or state bundle.
     env = stock_environment()
     for key, value in env.items():
         monkeypatch.setenv(key, str(value))

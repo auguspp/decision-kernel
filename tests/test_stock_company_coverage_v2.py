@@ -18,7 +18,7 @@ from decision_kernel.runtime import stock_radar_reading as stock
 from decision_kernel.runtime import hithink_stock_reading as own
 from test_hithink_stock_reading_integration import contract_provider
 from test_sector_radar_audit import prohibit_network
-from test_stock_radar_capture import setup, stock_environment
+from test_stock_radar_capture import code, setup, stock_environment
 from test_stock_radar_reading import ROOT, NOW
 from test_stock_issuer_isolation import rehash_capture
 
@@ -187,14 +187,16 @@ def test_rehashed_capture_cannot_relabel_v2_as_historical_v1(tmp_path):
 
 
 @pytest.mark.parametrize('value',['latest','../../arbitrary.json',None,{}])
-def test_unknown_company_manifest_is_rejected(tmp_path, value):
-    mod, _, _, _, _, _ = setup(tmp_path)
+def test_unknown_company_manifest_is_rejected(value):
+    mod = code()
+    for valid in (stock.COMPANY_MANIFEST, V2):
+        assert mod['company_scope'](valid) == valid
     with pytest.raises(ValueError, match='exact reviewed'):
         mod['company_scope'](value)
 
 
 def test_normal_live_cli_uses_v2_annotation_and_sector_result_without_new_user_input(tmp_path, monkeypatch):
-    mod, _, _, _, _, _ = setup(tmp_path)
+    mod = code()  # CLI routing needs no synthetic market plan or state bundle.
     env = stock_environment()
     for key,value in env.items():
         monkeypatch.setenv(key, str(value))
