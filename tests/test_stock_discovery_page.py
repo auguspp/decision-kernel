@@ -16,7 +16,7 @@ from decision_kernel.runtime import radar_stock_candidates as pool
 from decision_kernel.runtime import hithink_stock_reading as own
 from decision_kernel.runtime.sector_parent_hints import load_sector_parent_hints
 from decision_kernel.runtime.sector_radar_persistence import write_sector_radar_persistent_bundle
-from test_stock_radar_reading import prepared, ROOT, NOW
+from test_stock_radar_reading import _prepared_upstream, _stock_response, ROOT, NOW
 from test_stock_market_expression import _active_rows, _group, _leader, _sector_result
 from test_sector_radar_audit import prohibit_network
 
@@ -27,7 +27,10 @@ def offline(monkeypatch):
 
 
 def setup(shown=0):
-    state, ledger, association, _, base, calls = prepared()
+    state, ledger, frozen_association = _prepared_upstream()
+    association = deepcopy(frozen_association)
+    # Discovery owns its plan below; do not build an unrelated Stock-first plan.
+    base, calls = _stock_response(state, ())
     groups = [_group(state, family, row, leaders=[_leader(f'600{n:03d}.SH', f'Synthetic {n}')
               for n in range(i*5, i*5+5)]) for i, (family, row) in enumerate(_active_rows(state, ledger)[:3])]
     result = _sector_result(state, ledger, groups=groups)
