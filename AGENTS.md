@@ -1,5 +1,13 @@
 # Decision Kernel — repository working instructions
 
+## Next-phase construction and continuous learning — 2026-09-26
+
+For next-phase planning, module construction, architecture reuse or workbench changes, first read [NEXT-PHASE-CONSTRUCTION](docs/NEXT-PHASE-CONSTRUCTION.md) at the same exact main M, then the current #297 execution receipt. It owns the versioned 0→A→B→C→D delivery plan, cross-cutting Learning Loop L, module-level principles P01–P10 and the six-item kickoff/delivery record. Reuse existing Issue/PR records; do not create another requirements or policy engine.
+
+The already-approved architecture, modularity and learning direction remain adopted. H1–H5 in that plan are explicitly pending Human choices until an exact successor records acceptance; proposed privacy topology, hosting, added spend, morning delivery and parallel product implementation are not silently authorized. Unresolved choices block only their dependent actions. Current R5.1/R5-5, existing resources, tasks and acceptance boundaries continue; a documentation merge is not a production cutover or completed product.
+
+Before each module, apply internal/official/external Reuse First and record actual scope, ownership, compatibility, privacy, failure behavior, validation and exit cost. Shared records remain canonical; optional modules must be replaceable without erasing personal history. Learning distinguishes retained feedback, candidate method changes, accepted/effective lessons, actual later adoption and measured improvement; retrieve relevant accepted lessons through existing entries and never promote source text, unreviewed personal-bias claims or future outcomes into authority. Ordinary engineering fixes use existing authorization; material method/authority changes still require their explicit acceptance.
+
 ## Current architecture and acceptance — R5.1 / 2026-09-24
 
 Read the current adopted [ARCH-20260924-continuity-v1](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-5806130438) and [RM-20260924-r5.1](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5806149428), then the latest #297/#524 execution receipt. This is a revisable working direction: replaceable researchers, durable research/decision history, and the minimum necessary consistency/authority safeguards. It is not a promise that Kernel must become only logs or that all explicit procedures are obsolete. New evidence or Human objectives may supersede it through the existing Reconcile Before Continuing process; preserve the old evidence, failures, methods and Human words.
@@ -14,7 +22,8 @@ Authority: [RM-20260924-r5](https://github.com/auguspp/decision-kernel/issues/29
 
 Quick is a bounded research responsibility: independently discover, associate, select and investigate using public web, authorized tools, existing Research and Radar observations. Radar supplements vision; it is not the only source, candidate universe or global admission gate. Candidates and economic questions may emerge during Quick. Do not require an upstream selected ticker, formal question, completed financial reading or a separate Question AI/Pre. A Quick task is not permanently one API call; tool availability is verified in the actual runtime.
 
-Recover current instructions from one exact main M and saved observations/archives from one pinned reading R. New web evidence keeps its own provenance and publication/retrieval/applicability times; do not invent a Radar origin or backfill R's historical cutoff. Reuse eligible prior Research and preserve corrections, limits and Human records. A changed read-model commit alone is not a new research trigger.
+Recover current instructions from one exact main M and saved observations/archives from one pinned reading R. New web evidence keeps its own provenance and publication/retrieval/applicability times; do not invent a Radar origin or backfill R's historical cutoff. Reuse eligible prior Research and preserve corrections, limits and Human records.
+A changed read-model commit alone is not a new research trigger.
 
 Retain the actual research, material sources, scope, unresolved points, predecessor relations and exact GitHub write/readback facts. Use the existing native Git archival/purpose-index boundaries; no new state store or API-shaped fake receipt. Unobservable internal model version, token usage and call count stay UNKNOWN. Retained files, registration, publication, validation, Human acceptance and investment decisions remain distinct. Missing app access/approval stops the affected action, not permission to bypass it.
 
