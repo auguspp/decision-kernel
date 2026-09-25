@@ -93,7 +93,8 @@ def choose(snapshot, now):
                   "target": local.date().isoformat(), "inputs": {"operation": "produce"}}
     else:
         out["pending_delivery"] = {"lane": "stock", "target": str(saved["run"]["id"])}
-        if saved.get("status") == NOOP or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", []):
+        if (saved.get("status") not in {"APPENDED_COMPLETED_SESSION_QUIET", "APPENDED_COMPLETED_SESSION_WITH_SHADOW_CANDIDATES"}
+                or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", [])):
             return dict(out, status="RESULT_BEARING_SECTOR_DELIVERY_UNAVAILABLE")
         stock_lane = snapshot["stock"]
         stock = stock_lane.get("last_qualified_result") or {}
