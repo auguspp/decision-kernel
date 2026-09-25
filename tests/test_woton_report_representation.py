@@ -21,6 +21,7 @@ def api():
     for data in files.values(): value.blobs[c.once.blob(data)] = data
     return value
 
+@pytest.fixture(scope='module')
 def completed_snapshot():
     value = api(); pdf = (FIXTURE/'source.pdf').read_bytes(); extraction = c.once.raw(c.parse_original(pdf))
     text_ref, marker_ref, source_ref = 'c' * 40, 'd' * 40, 'e' * 40
@@ -57,8 +58,8 @@ def test_original_downloaded_pdf_hash_and_actual_company_identity_layout():
     assert '000920' not in parsed['pages'][0]['text'] and '沃顿科技股份有限公司' in parsed['pages'][0]['text']
     assert '000920' in parsed['pages'][5]['text'] and '股票代码' in parsed['pages'][5]['text']
 
-def test_completed_repair_lineage_still_recovers_exact_original():
-    value, source = completed_snapshot(); pdf, text, manifest = c.recover(value, source)
+def test_completed_repair_lineage_still_recovers_exact_original(completed_snapshot):
+    value, source = deepcopy(completed_snapshot); pdf, text, manifest = c.recover(value, source)
     assert pdf == (FIXTURE/'source.pdf').read_bytes() and len(text['pages']) == 133
     assert manifest['representation_repair']['source_requests'] == 0
     assert manifest['representation_repair']['original_failure'] == r.FAILURE_SOURCE and value.writes == []
@@ -76,8 +77,8 @@ def test_printed_identity_remains_bounded_and_rejects_missing_fields(monkeypatch
     with pytest.raises(ValueError, match='REPORT_PRINTED_IDENTITY'): c.parse_original(pdf)
 
 @pytest.mark.parametrize('kind', ['original-failure','clock','source-count','pdf-ref','marker-path','marker-prepare','marker-authority','marker-operation'])
-def test_rehashed_repair_claims_cannot_change_original_source_or_authority(kind):
-    value, source = deepcopy(completed_snapshot()); manifest = json.loads(value.file(source['path'], source['ref'])); repair = manifest['representation_repair']
+def test_rehashed_repair_claims_cannot_change_original_source_or_authority(completed_snapshot, kind):
+    value, source = deepcopy(completed_snapshot); manifest = json.loads(value.file(source['path'], source['ref'])); repair = manifest['representation_repair']
     if kind == 'original-failure': repair['original_failure']['sha256'] = '0' * 64
     elif kind == 'clock': manifest['requested_at'] = '2026-09-21T01:28:00Z'
     elif kind == 'source-count': repair['source_requests'] = 1
