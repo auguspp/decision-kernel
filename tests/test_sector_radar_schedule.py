@@ -88,7 +88,7 @@ def test_one_production_path_has_dispatch_only_trigger_and_existing_publication_
         assert 'if: success()' in step(name)
     assert 'if: always()' in step('Upload complete run audit')
     assert 'continue-on-error' not in raw
-    assert 'cancel-in-progress: false' in raw and 'timeout-minutes: 25' in raw
+    assert 'cancel-in-progress: false' in raw and 'timeout-minutes: 20' in raw
     assert '--stock-reference-closed-date "2026-09-25"' in raw
     assert 'sse.com.cn/disclosure/announcement/general' in raw
     assert 'szse.cn/www/disclosure/notice/general' in raw
