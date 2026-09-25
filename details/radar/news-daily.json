@@ -1,8 +1,8 @@
 {
   "projection": {
-    "association_as_of": "2026-09-25T09:27:27.206623+00:00",
+    "association_as_of": "2026-09-25T10:06:40.846726+00:00",
     "automatic_admission": false,
-    "base_reading_hash": "a01cc927bc90dc531ce90b0dd8aad627b611238eef4746df326cac6114641606",
+    "base_reading_hash": "2a3db83fc9dd8fde2913f364eb34beda5f0a40b97829310c0974d6fc71088212",
     "capture": {
       "projection": {
         "automatic_admission": false,
@@ -27,8 +27,8 @@
             "automatic_admission": false,
             "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "cutoff": "2026-09-25T09:27:26.847226+00:00",
+            "company_reading_hash": "194057b2ce394431b735699958dd9c67f19a847d3fba79f40e10bc42dff8cf58",
+            "cutoff": "2026-09-25T10:06:40.788425+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -9803,7 +9803,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "d399af6480aea1b6b058757342273e6bfe2672dfc9d7eafa25aef53fbb7ebe50"
+          "projection_hash": "1151a53475498921e731e6e26b3a3b93c6183daaec488d70be8d6148c669a20d"
         },
         "research_authority": "NONE",
         "research_executions": 0,
@@ -9937,14 +9937,14 @@
           "workflow": ".github/workflows/radar-newsnow-daily.yml"
         }
       },
-      "projection_hash": "b5fd94013c0f354f2f61f1bd7b60b39e1307bc00535547859bce4ff0df2bcf1b"
+      "projection_hash": "e09cbe293ad32da64a487fda39574d444b6a589786fd50d626bd10c54ba89aa7"
     },
     "company_source": {
-      "bytes": 3301615,
-      "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
+      "bytes": 172536,
+      "git_blob": "e0edf2d88d6a8a5ac12a684c809cdd8d2828c28a",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
+      "sha256": "c6a75f38fe10fa383ac548355d938b4c83f0cecb23458749b2cbb899ffdf3e38"
     },
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
@@ -10004,5 +10004,5 @@
       "status": "WINDOWS_CAPTURED"
     }
   },
-  "projection_hash": "8b6d5d1ff2c16ca7448ea96e16376000d3d074df1a55fd8c1566b163c5aa4081"
+  "projection_hash": "9542cd1e2ba7f64510d96da311f96921ef61c969a4f1fbdf519f6aeeca1a1eeb"
 }

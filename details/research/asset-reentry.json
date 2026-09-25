@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "524c5c9ecc4b9f9f47f45b6eafbfe2ba049582463347b81fc3ab85ea3650d3fc",
+    "base_reading_hash": "6697c9b2964eed540d46947392a172bd7673f9b2791a2930510b999a138870c9",
     "companies": [
       {
         "archives": [],
@@ -251,50 +251,11 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "ebad42a7f90fa83201997c9e6ed9fe105ef27e96bd04727e67480f01697cff9c",
+        "association_id": "65118879f75a77876102aa0554c843706f696496d92c957d22e8a7fce8714691",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
-        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "物联网",
-                "concept_thscode": "885312.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-                "membership_request_index": 3,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:09.149291Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "600967.SH"
@@ -656,7 +617,7 @@
               "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
               "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
             },
@@ -680,7 +641,7 @@
               "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
               "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
             },
@@ -693,7 +654,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "b481ca0d5ae9dc9ab47042c6806d05ff8607129525b0c1eaaa62b83788cc6810",
+        "association_id": "923fc44715c58a68393a266eb9562457dda2d0cde8b752f231aaef5b413ac215",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -717,7 +678,7 @@
               "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
               "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
             },
@@ -741,7 +702,7 @@
               "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
               "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
             },
@@ -1162,50 +1123,11 @@
             }
           }
         ],
-        "association_id": "bed93997281a44003bd5f2438680da07afd481cb31489473e9bb8566d9ffc258",
+        "association_id": "a4cebd00f4d3dfc7733356940e1cfae25b937ec89c46e136ddb21aa96876d2dc",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "智能电网",
-                "concept_thscode": "885311.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-                "membership_request_index": 1,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:17:25.907438Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "300711.SZ"
@@ -1225,7 +1147,7 @@
               "path": "docs/readings/suken-api-2026-09-11.md",
               "read_path": "sources/git/b80885780fee7dae8ff4292397b8aeb499bb8e52/suken-api-2026-09-11.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "c1b85c741784c45b4cb890d80d41666bfa31b401f3b37862f8757f8cf07a6609"
             },
@@ -1238,7 +1160,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "f7013f78012438b0bb7fa4e4e5c6185828c37c7661d7ab889bfc72031e236db5",
+        "association_id": "b9ed915dde1751dbc5cc4a04210a8b16520334153895daf62112b72a70c09bee",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1323,7 +1245,7 @@
               "path": "research_cases/603986-gigadevice-deep-research-v2.json",
               "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
             },
@@ -1347,7 +1269,7 @@
               "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
             },
@@ -1371,7 +1293,7 @@
               "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
               "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
             },
@@ -1384,50 +1306,11 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "9e49f26cf76463731f55115d36351c1a4cb5ed20ec3583d93e6478d2f5546662",
+        "association_id": "9dff26aaa479ca6f6febfadca732abea02a1ec81907a99df7ff4f67eb1825915",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "物联网",
-                "concept_thscode": "885312.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-                "membership_request_index": 3,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:09.149291Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
           "company_name": "兆易创新",
@@ -1497,7 +1380,7 @@
               "path": "research_cases/002050-sanhua-deep-research-v1.json",
               "read_path": "sources/git/925f9875b6f8d814f95537af61214068188beb11/002050-sanhua-deep-research-v1.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "f809cb4aad763bbd719c5d6929306e5c810af0f869cee4f15a7420fa742ea58f"
             },
@@ -1521,7 +1404,7 @@
               "path": "docs/dogfood/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/41d6effe2c45fd1f17133f0ad38d844d82c134d9/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "cc981439bb3c7f7c9ac3f81ad5e3580a4b195872940bd1eca4ac362c74a932ad"
             },
@@ -1545,7 +1428,7 @@
               "path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
               "read_path": "sources/git/0c7739cb5a376be9cc722e37f6acd168dca9704e/002050-sanhua-human-decision-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "f7d638b9913c3aa878249c939cee6c1b3db582f3664b391d5ab86498396d51bd"
             },
@@ -1569,7 +1452,7 @@
               "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
               "read_path": "sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "9ef5d905f8a9c61cd69a320db0270f0665ca827f7351b2f80743ab5b04a5c595"
             },
@@ -1582,7 +1465,7 @@
             "use": "HUMAN_METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "df5eac6a3c0d247ea9ba49d4e1200d477045e6f96281e9257d5e760e1c33f264",
+        "association_id": "5d19a1e7e8603d5d8f1cccda3421a23960504e427ffb788ee1553a7655d91683",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1656,7 +1539,7 @@
               "path": "docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md",
               "read_path": "sources/git/597ca0310acbf5eee371aae2d3b9dc8b0f188e56/catl-full-research-reunderwrite-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "720869e56f66402b3520ac55113687e49211bfb3075a4303fa83f954d07603da"
             },
@@ -1680,7 +1563,7 @@
               "path": "dogfood/300750-catl.json",
               "read_path": "sources/git/514fdb991504abdd23e814dc77fdcbd6f0e2e22c/300750-catl.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "98f96c22cd2e839a7ea67d48feffbb02643cc87fa1891d7470ace668503ba035"
             },
@@ -1717,7 +1600,7 @@
             "use": "HISTORICAL_RESEARCH_COMMIT_CHECKPOINT"
           }
         ],
-        "association_id": "eeb853965c13166f8f25b413e6ed3868b757db075a7fc728f58f95fabeea589e",
+        "association_id": "2213cd1a0b5cc71f89529298b61d58c98e19b7fd5476f18b254becd48e971d8b",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1741,7 +1624,7 @@
               "path": "research_cases/600233-yto-deep-research-v2.json",
               "read_path": "sources/git/ae9bfce4dd3cfbedddb4be84075238d867f58529/600233-yto-deep-research-v2.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "570ee45f07f9f2ea3d1bf3d0afbb086af59c7ac6333787c6619630b515fb5c60"
             },
@@ -1765,7 +1648,7 @@
               "path": "docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md",
               "read_path": "sources/git/2b58294ace63f3fe682c70f889a457f4b518c1a2/yto-decision-hygiene-zero-schema-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "423630c5310c2c1ac35f9f00e06031bccc808e192ef9b8691bb6bf1f57b537fb"
             },
@@ -1778,7 +1661,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "bfa9dd0cfa74f3cfa162c8c5204d96080dd0de36ea30ee244bd914efd939808a",
+        "association_id": "7475ada95e8529ab3ef8491b81dd17be9b77620473f4553216fb03902bf93896",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1802,7 +1685,7 @@
               "path": "docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md",
               "read_path": "sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "b8282b3dfcb9ac5580f5411cd1dc291d8683e18ade76937a8b3681bd35540f11"
             },
@@ -1815,74 +1698,11 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "6a2ddb0bc283d23d363e9407ecc939153258d561261b499dc26837b883ddb3cb",
+        "association_id": "8c5dfcd332ea3641a9505d8f96ada96bae290d49914faa706d97bdb755429a57",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "智能电网",
-                "concept_thscode": "885311.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-                "membership_request_index": 1,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:17:25.907438Z"
-              },
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "物联网",
-                "concept_thscode": "885312.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-                "membership_request_index": 3,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:09.149291Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "000333.SZ"
@@ -1902,7 +1722,7 @@
               "path": "docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
               "read_path": "sources/git/d9acd593cf4a07c3a811282ec9b646a535b21840/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "dc01da848e763716153b0f9d5d0c89a6b4d457dfc46d72c779f6342bce6b86c9"
             },
@@ -1915,7 +1735,7 @@
             "use": "METHOD_NEGATIVE_CONTROL"
           }
         ],
-        "association_id": "ebb438baaa015a5315735fa571ab6c8078ca319da448df1c3acf6fd36e31f395",
+        "association_id": "c08ebcdeb25e6a9ec190461e75e3422a11ff7418bc61251f16e958120c21c1b6",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1939,7 +1759,7 @@
               "path": "docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md",
               "read_path": "sources/git/9b7248d5b34a7a0eb89805abdff0e64da9a485ec/tinavi-full-research-zero-schema-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "adbb5f66d979011b696dfc94ae04286e2062472041f6b1a7a985d33514661b03"
             },
@@ -1963,7 +1783,7 @@
               "path": "docs/decisions/688277-tinavi-human-watch-2026-09-04.md",
               "read_path": "sources/git/04655814a52d28b50d4d0e3dcbdac666c22b71df/688277-tinavi-human-watch-2026-09-04.md",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "ref": "c94f49ba3ad20730fd049f6077a5871ace1f7d5b",
+              "ref": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
               "repository": "auguspp/decision-kernel",
               "sha256": "5dd14a0b8efafc98dfa16933036bd00fe7b56458ea21b82f458fb0cf580a413c"
             },
@@ -1976,7 +1796,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "f99a962eb78ec38a60014af5765c44255be1fdc26d94979eceeff3ab2aac7eec",
+        "association_id": "8f54adaf039917e2cfc6751aa3e031dd54292ff1fc331cea376bfad2cd51aa47",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2076,74 +1896,11 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "0058a6b359735ec697c1a3864a4fd399e9764dd145bf2c05c32fe21fe5468d24",
+        "association_id": "782f127dacb3172d2100eca4a3c810a981d70d9f9fda49042b189dbbf80097f2",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
-        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "智能电网",
-                "concept_thscode": "885311.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-                "membership_request_index": 1,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:17:25.907438Z"
-              },
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "物联网",
-                "concept_thscode": "885312.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-                "membership_request_index": 3,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:09.149291Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "300183.SZ"
@@ -2233,98 +1990,11 @@
           }
         ],
         "assets": [],
-        "association_id": "10582076f4aef6db7bdebe90330ce2ee9b6ad63940a94011dc6ee33333839e19",
+        "association_id": "0b36f55a88d760f0cdf31982a628dc0506c6009e709fe88bb81d4242bd93e749",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "智能电网",
-                "concept_thscode": "885311.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-                "membership_request_index": 1,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:17:25.907438Z"
-              },
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "物联网",
-                "concept_thscode": "885312.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-                "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-                "membership_request_index": 3,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:09.149291Z"
-              },
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "移动支付",
-                "concept_thscode": "885333.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:18:52.299000Z",
-                "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
-                "membership_request_index": 5,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:18:52.651149Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "300638.SZ"
@@ -2396,50 +2066,11 @@
           }
         ],
         "assets": [],
-        "association_id": "c75f109e290164eb7e5f1a8d703ace0c09941db595a06e3ffb50bea5223e0b8b",
+        "association_id": "dd2d7e785534fa0ac3b9a3a10a043439c90171fad23006b001d4202142e0b31b",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-                "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-                "business_linkage": "NOT_ESTABLISHED",
-                "concept_name": "智能电网",
-                "concept_thscode": "885311.TI",
-                "historical_membership": "NOT_ESTABLISHED",
-                "history_status": "EXACT_WINDOW_CHECKED",
-                "kind": "CONCEPT_CURRENT_MEMBER",
-                "market_session": "2026-09-18",
-                "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-                "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-                "membership_request_index": 1,
-                "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 359430,
-                  "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-                  "read_path": "details/concept-detail/35355234987/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-                },
-                "source_observed_at": "2026-09-18T14:17:25.907438Z"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "300014.SZ"
@@ -2911,82 +2542,11 @@
           }
         ],
         "assets": [],
-        "association_id": "60658579a942d9dc15744a97dd99bf1fa945cef8e70ba5d64a0ea7f221b67bca",
+        "association_id": "b82dd3072ef312667f196f29f4ac57da00a00de97eb72c2bc2ba00ebe4ca1c68",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "kind": "INSTITUTIONAL_WINDOWS",
-                "market_session": "2026-09-17",
-                "observations": [
-                  {
-                    "institution_buy_count": 0,
-                    "institution_fields_status": "SUPPLIER_REPORTED_NET",
-                    "institution_net_cny": "-1100779.0",
-                    "institution_sell_count": 1,
-                    "range_days": 3,
-                    "source_row": {
-                      "buy_value": "100974244.37",
-                      "change": "0.100418",
-                      "concept_list": [
-                        {
-                          "name": "租售同权"
-                        },
-                        {
-                          "name": "物业管理"
-                        },
-                        {
-                          "name": "特色小镇"
-                        }
-                      ],
-                      "hot_money_net_value": -12105991,
-                      "hot_rank": 137,
-                      "limit_reason": "房地产服务+大资管+珠海国资",
-                      "name": "世联行",
-                      "net_rate": "0.04479968",
-                      "net_value": "29128590.77",
-                      "org_buy_num": 0,
-                      "org_net_rate": "-0.00169299",
-                      "org_net_value": "-1100779.0",
-                      "org_sell_num": 1,
-                      "range_days": 3,
-                      "sell_value": "71845653.6",
-                      "thscode": "002285.SZ",
-                      "ticker": "002285"
-                    },
-                    "source_row_index": 16,
-                    "window_end": "2026-09-17"
-                  }
-                ],
-                "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
-                "publication_time": "UNKNOWN",
-                "source": {
-                  "bytes": 37710,
-                  "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
-                  "read_path": "details/institutional/35296479748/observation.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
-                },
-                "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
-                "source_observed_at": "2026-09-18T01:44:14.379291Z",
-                "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
-              }
-            ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
-            "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "002285.SZ"
@@ -3020,7 +2580,7 @@
           }
         ],
         "assets": [],
-        "association_id": "9044ee23df6d8c6f0fad3723ed4d298f564b1c11f65b953f1c78e23fb4b0f08f",
+        "association_id": "82bd6f331a63ea9ad6909756442b463dbf58457cbdf0492774469f259b705a8f",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -3082,13 +2642,13 @@
                 "source_result_hash": "d1fb9a228f715bd5928ddbab6556148ab5e0565e74190fe2ec926eb65a728c4f"
               }
             ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
+            "projection_hash": "194057b2ce394431b735699958dd9c67f19a847d3fba79f40e10bc42dff8cf58",
             "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
+              "bytes": 172536,
+              "git_blob": "e0edf2d88d6a8a5ac12a684c809cdd8d2828c28a",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
+              "sha256": "c6a75f38fe10fa383ac548355d938b4c83f0cecb23458749b2cbb899ffdf3e38"
             }
           }
         ],
@@ -3473,7 +3033,7 @@
             }
           }
         ],
-        "association_id": "6d55339e4497388cecd823a19475729fb0950a926da27248baa527b3fdba5c56",
+        "association_id": "7661ab91b65882a5330f317f6c720140a0f8e225091e4680bb29b3322f5b2d5f",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -3509,13 +3069,13 @@
                 "source_result_hash": "d1fb9a228f715bd5928ddbab6556148ab5e0565e74190fe2ec926eb65a728c4f"
               }
             ],
-            "projection_hash": "a5b270d77f6e423433c8c7c9ff040b7cf2acb94b60b10facb041a14f47bb84d5",
+            "projection_hash": "194057b2ce394431b735699958dd9c67f19a847d3fba79f40e10bc42dff8cf58",
             "source": {
-              "bytes": 3301615,
-              "git_blob": "ece21af9e6fb2a2dd6d04cc0349b6923b3fb5e0d",
+              "bytes": 172536,
+              "git_blob": "e0edf2d88d6a8a5ac12a684c809cdd8d2828c28a",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "bfc888cbbfc92741ac5842472870c669787809277d5b0350acb3cd74c5dd2ae5"
+              "sha256": "c6a75f38fe10fa383ac548355d938b4c83f0cecb23458749b2cbb899ffdf3e38"
             }
           },
           {
@@ -3732,10 +3292,10 @@
       "complete_research_history": false,
       "read_gap_count": 1,
       "unavailable_assets": 0,
-      "with_saved_observations": 10,
+      "with_saved_observations": 2,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-25T09:27:35.786287+00:00",
+    "generated_at": "2026-09-25T10:06:47.518963+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3754,5 +3314,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "0a0fc0aae7e759192a9b442916a571459d417341f7c5207af4fe473cef91bab1"
+  "projection_hash": "c56a84510e590d79e68d796a7b0a47508f2b92f10bb3ffe2e10fbbce6ef3cb42"
 }

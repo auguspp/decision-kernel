@@ -36,12 +36,11 @@
 
 ## 600967.SH
 
-下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - odds-neimeng-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：独立Human-origin研究/临时Odds接受；14.98元WEAK/FRAGILE，首笔未method-ready；不修复旧Stock资格失败，无投资决定或监控。
   - [原保存材料](../../sources/git/a978904caa4fc3ba66ce33f0bcfce471a48d8f56/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 兴业科技 002674.SZ
 
@@ -141,7 +140,6 @@
   - [原保存材料](../../sources/git/11bae98081b1d82e10c3360863793014caca8fc3/receipt.json)
   - [原保存材料](../../sources/git/a702faa3510672a17f7a4a250d4925551c91a123/validation.json)
   - [原保存材料](../../sources/git/725af6706ee92fd19075fe75fbc27c11983fb7ff/question.json)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 601952.SH
 
@@ -175,7 +173,6 @@
 - gigadevice-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：冻结的条件决定；历史分布 NON-DRIVING。Action 未执行状态只属于该 checkpoint，不能推断后续成交。
   - [原保存材料](../../sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 - 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-25T09:25:28.195384Z
 - 原业务前提：Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.
 - [原价格条件记录](../inbox/36118325348/odds-watch/watch.json)；不是新的行情复核或买入指令。
@@ -232,7 +229,6 @@
 - midea-method：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：方法对照的用途独立保留，不是新概率或投资决定。
   - [原保存材料](../../sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 600549.SH
 
@@ -263,13 +259,12 @@
 
 ## 300183.SZ
 
-下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - radar-300183-eastsoft-progress-20260919：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：2026-09-19 bounded interactive review of the retained 2026-09-13 Pre/Quick: restores the original WAIT and adds gross-profit, working-capital cash and goodwill-headroom arithmetic on saved filings. Current trigger refresh remains incomplete. Not new Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch.
   - [原保存材料](../../sources/git/e2ae22709d858e242c97ad816e9a28b57a1a92a2/workpaper.md)
 - [按需恢复：radar-300183-eastsoft-review2-20260919](https://github.com/auguspp/decision-kernel/blob/41dc250b63ce87950d11560d304cc3f3a8fa14d3/docs/readings/radar-eastsoft-delivery-cash-review-2-2026-09-19/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 300638.SZ
 
@@ -278,7 +273,6 @@
 - [按需恢复：radar-300638-fibocom-progress-20260919](https://github.com/auguspp/decision-kernel/blob/250efdc82567f9988d43cadae0a5b715e50d85da/docs/readings/radar-question-review-2026-09-19/300638/workpaper.md)；只有定位，本页没有恢复正文。
 - [按需恢复：radar-300638-fibocom-progress2-20260919](https://github.com/auguspp/decision-kernel/blob/f75ed7c5c338aa8497b042380d2c53bd6df6f495/docs/readings/radar-fibocom-profit-cash-progress-2-2026-09-19/workpaper.md)；只有定位，本页没有恢复正文。
 - [按需恢复：radar-300638-fibocom-progress3-20260919](https://github.com/auguspp/decision-kernel/blob/04eb44d37680195caa0de4635f0df02415c975ca/docs/readings/radar-fibocom-profit-cash-progress-3-2026-09-19/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 002460.SZ
 
@@ -291,7 +285,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：radar-300014-lc-cost-pass-through-question-20260920](https://github.com/auguspp/decision-kernel/blob/51365aae52e13cdec153ecb0cb4ab79de7d96836/docs/readings/lc-exposure-questions-2026-09-20/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 000920.SZ
 
@@ -335,7 +328,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002285-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-17；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 000560.SZ
 
