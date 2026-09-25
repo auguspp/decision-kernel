@@ -1,8 +1,15 @@
 name: sector-radar-shadow
+run-name: >-
+  sector-radar-shadow | operation=${{ inputs.operation || 'produce' }} | recovery=${{ inputs.recovery-key || 'none' }}
 
 on:
   workflow_dispatch:
     inputs:
+      recovery-key:
+        description: Optional reconciliation intent identity; never changes data qualification
+        type: string
+        required: false
+        default: ''
       operation:
         description: Sector operation
         required: true

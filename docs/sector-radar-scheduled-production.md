@@ -1,5 +1,10 @@
 # Sector Radar P0-1：每日自动生产，不扩展判断权限
 
+## Current recovery policy — 2026-09-25
+
+The Human-authorized [daily delivery reconciliation](radar-delivery-recovery-v1.md) supersedes the manual-only recovery statements below within its explicit finite bounds. The external 18:13 primary clock stays unchanged; the original successor now rechecks after completion and at maintenance backstops. Missing Stock can be resumed; classified temporary source failure can get at most two additional attempts. Permanent qualification/history/permission gaps remain visible in [system health #581](https://github.com/auguspp/decision-kernel/issues/581). This does not establish arbitrary historical PIT backfill or a proven unattended natural-failure success rate. Earlier policy and failures below remain historical.
+
+
 > **2026-09-15 current trigger supersession.** 本文件下方保留的是原 GitHub native `schedule` 的设计、失败史与验收证据，不能删除或改写成“从未使用过 schedule”。当前生产 workflow 已在外部定时链完成实证后退役 native `schedule:` 入口；`sector-radar-shadow.yml` 当前只接受 `workflow_dispatch`。日常名义时钟由 Human 已配置的 cron-job.org 工作日北京时间 18:13 任务承担，调用现有 `workflow_dispatch operation=produce`，GitHub 继续承载执行、状态、证据与恢复。外部任务在 repo 退役 PR 的 exact-head CI、独立 main CI 与正常 publisher/readback 全部通过前保持 Inactive；最终 Enable 是 Human UI 动作。历史 `event=schedule` run 仍是可读取/可验证证据，runtime/current-state 不因换钟而重写历史。当前验收与 Reuse 证据以 #297 的 2026-09-15 Daily Trigger Reliability receipts 为准。
 
 ## 以下为原 native schedule 的历史设计与验收记录

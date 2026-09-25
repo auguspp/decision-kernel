@@ -166,3 +166,13 @@ def test_old_missing_stock_does_not_disappear_when_new_day_succeeds():
     result = mod.retain_unresolved(waiting, current)
     assert result['open_gap'] and result['unresolved_deliveries'][0]['target'] == '10'
     assert mod.retain_unresolved(result, dict(current, stock_parent='10'))['unresolved_deliveries'] == []
+
+
+@pytest.mark.parametrize("status", ["VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT", "ADOPTED_RECOVERY", "UNKNOWN"])
+def test_non_result_origins_never_dispatch_stock(status):
+    data = snapshot()
+    data["stock_parent"] = "8"
+    data["sector"]["last_qualified_result"]["status"] = status
+    result = module().choose(data, NOW)
+    assert result["status"] == "RESULT_BEARING_SECTOR_DELIVERY_UNAVAILABLE"
+    assert result["action"] is None
