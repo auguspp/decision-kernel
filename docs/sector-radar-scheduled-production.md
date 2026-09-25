@@ -63,3 +63,7 @@ Human 最终确认的名义时点：**每周一至周五北京时间 18:13，UTC
 第一次自然运行失败就保留原失败，调查真实原因；不 Re-run，不手动替代。未触发、触发延迟、失败和成功但未验收是不同状态。没有自动 gap recovery、补触发器或第二 provider。本项不承诺后台代查，也不要求用户搬运日志。
 
 **SHADOW OBSERVATION ONLY；Human Attention / Research / Investment authority = NONE。** scheduled success 不等于市场结论正确；quiet 不等于市场没有重要变化。没有新 market-state reader、Research、Daily Brief、全市场 Stock Surprise 或其他平台。
+
+## 2026-09-25 — Reading continuity repair
+
+Latest attempt, verified same-session state check and result-bearing delivery are separate. After a verified no-op, the collector inspects only its existing bounded run page and retains the first validated predecessor with the same market session, market-state hash and event-ledger hash. Corruption stops the search; another day is never borrowed. The original result and summary are retained in the same new read-model commit, with the later validation recorded separately. This does not dispatch, replay source calls, create events or repair missing source inputs.

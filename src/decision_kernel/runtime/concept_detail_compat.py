@@ -48,6 +48,12 @@ POST_SECTOR_BACKFILL_IMPLEMENTATION = MappingProxyType({
     'runtime/hithink_sector_breadth_http.py': '92f24b05d7baea252d67ae83d2caaab84eb12f57adfa03818bac046ab2aa294a',
     'runtime/sector_radar_audit.py': '1cdf284024b114b05d6fdfeeed99d4550d2b5d59b8b69676c1962660b5ac1e07',
 })
+POST_DELIVERY_CONTINUITY_IMPLEMENTATION = MappingProxyType({
+    **POST_SECTOR_BACKFILL_IMPLEMENTATION,
+    'runtime/current_state.py': '887d63c472be6e2e47ac7b75589a5cd8f41d57271b036700fe161dc6a34a4248',
+    'runtime/current_state_delivery.py': '906ec5c154c7be0353444fd07e3e3d4a2b56fe99034879c6ed15ea65db1de35e',
+})
+PRIOR_DELIVERY = 'REVIEWED_PRIOR_DELIVERY_IMPLEMENTATION'
 CURRENT = 'CURRENT_IMPLEMENTATION'
 HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
 PRE_SINGLE_QUICK = 'REVIEWED_HISTORICAL_EQUIVALENCE_530'
@@ -66,8 +72,10 @@ def verify(output: Path) -> tuple[dict, str]:
         return capture.verify(output), CURRENT
     historical = receipt.get('implementation')
     capture.require(
-        historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION)
-        and installed in (REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION),
+        historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION,
+                       REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION)
+        and installed in (REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION,
+                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION),
         'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED',
     )
     # Bind only this invocation's identity expectation, after validating BOTH
@@ -77,4 +85,6 @@ def verify(output: Path) -> tuple[dict, str]:
     verifier = FunctionType(capture.verify.__code__, bindings,
                             capture.verify.__name__, capture.verify.__defaults__,
                             capture.verify.__closure__)
-    return verifier(output), (HISTORICAL if historical == HISTORICAL_IMPLEMENTATION else PRE_SINGLE_QUICK)
+    label = (HISTORICAL if historical == HISTORICAL_IMPLEMENTATION else
+             PRE_SINGLE_QUICK if historical == PRE_SINGLE_QUICK_IMPLEMENTATION else PRIOR_DELIVERY)
+    return verifier(output), label

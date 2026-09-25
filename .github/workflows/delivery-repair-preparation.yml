@@ -3,56 +3,69 @@ on:
   push:
     branches: [diagnostic/delivery-repair-20260925]
 permissions:
-  contents: read
+  contents: write
   actions: read
 jobs:
-  verify:
+  prepare:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: b5c8aebd97eef21a67abc2eef4805c7ab93305d0
           persist-credentials: false
+          path: prep
+      - uses: actions/checkout@v7
+        with:
+          ref: b236080c424689183c30b7cebe88769b851875ea
+          persist-credentials: false
+          path: repo
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: python -m pip install -e '.[ci-contracts,feeds]'
-      - name: Verify actual complete CI ZIP and original product reader
+      - name: Prepare existing recovery composition
+        working-directory: repo
+        run: python ../prep/.github/scripts/prepare-radar-recovery.py
+      - name: Test recovery, original TDX and source contracts
+        working-directory: repo
+        run: |
+          python -m pip install -e '.[dev]'
+          python -m pytest -q tests/test_radar_delivery_reconciliation.py tests/test_stock_daily_successor.py tests/test_sector_radar_schedule.py tests/test_sector_request_pacing.py tests/test_sector_radar_publication_gate.py tests/test_current_state_delivery.py
+      - name: Check actual current artifacts without dispatch or Issue writes
+        working-directory: repo
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
           import json, os, runpy
           from pathlib import Path
-          from decision_kernel.runtime.current_state_delivery import GitHubAPI, Collector
-          from decision_kernel.runtime.current_state import _reading_navigation
-          head = 'b5c8aebd97eef21a67abc2eef4805c7ab93305d0'
-          api = GitHubAPI(os.environ['GH_TOKEN'], max_calls=160)
-          run = api.get('actions/runs/36130477570')
-          assert run['head_sha'] == head and run['run_attempt'] == 1
-          assert run['event'] == 'pull_request' and run['conclusion'] == 'success'
-          metadata = api.get('actions/runs/36130477570/artifacts?per_page=100')
-          assert metadata['total_count'] == len(metadata['artifacts'])
-          artifacts = [a for a in metadata['artifacts'] if a['name'] == 'kernel-ci-36130477570-1']
-          assert len(artifacts) == 1 and not artifacts[0]['expired']
-          artifact = artifacts[0]
-          raw = api.archive(artifact)
-          check = runpy.run_path('.github/scripts/ci-merge-reuse.py')
-          with check['verified_archive'](raw, artifact) as z:
-              env = json.loads(z.read('environment.json'))
-          assert env['tree'] == '52e4a42b8f5c910cf6b1576309987b21ec20e376'
-          count = check['full_evidence'](raw, artifact, run, env)
-          print('VERIFIED_FULL_CI=' + json.dumps({'run_id':run['id'], 'head':head, 'artifact_id':artifact['id'], 'digest':artifact['digest'], 'bytes':len(raw), 'passed':count, 'environment':'recorded CI environment; not this verifier runner environment'}))
-          c = Collector(api, head, Path.cwd())
-          sector = c.lane('sector')
-          saved = sector['last_qualified_result']
-          assert saved['run']['id'] == 36122381294 and saved['candidate_count'] == 21, sector
-          assert sector['latest_state_validation']['run']['id'] == 36122768750, sector
-          assert saved['groups']['all_groups'] == 14
-          summary_path = saved['details']['summary.md']['read_path']
-          assert summary_path in c.files and b'87' in c.files[summary_path]
-          navigation = '\n'.join(_reading_navigation({'research':{}, 'lanes':{'sector':sector}}, str))
-          assert summary_path in navigation and '不重发事件' in navigation
-          print('ACTUAL_READER_PASS=' + json.dumps({'latest_attempt':sector['latest_attempt']['id'], 'latest_state_validation':sector['latest_state_validation']['run']['id'], 'result_run':saved['run']['id'], 'market_session':saved['market_session'], 'groups':saved['groups'], 'summary_path':summary_path, 'files_retained':len(c.files), 'source_calls':0,'production_writes':0}))
+          from datetime import datetime, timezone
+          from decision_kernel.runtime.current_state_delivery import GitHubAPI
+          m = runpy.run_path('.github/scripts/reconcile-radar-delivery.py', run_name='recovery_readonly_probe')
+          os.environ['GITHUB_SHA'] = 'b236080c424689183c30b7cebe88769b851875ea'
+          api = GitHubAPI(os.environ['GH_TOKEN'], max_calls=240)
+          now = datetime.now(timezone.utc)
+          result = m['choose'](m['collect'](api, Path.cwd(), now), now)
+          print('ACTUAL_RECONCILIATION=' + json.dumps(result))
+          assert result['status'] == 'UP_TO_DATE_WITH_ISSUER_GAPS' and result['action'] is None
+          PY
+      - name: Store tested blobs only
+        working-directory: repo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, subprocess
+          from pathlib import Path
+          paths = ['.github/scripts/reconcile-radar-delivery.py', '.github/workflows/stock-reading-after-sector.yml', '.github/workflows/sector-radar-shadow.yml', '.github/workflows/hithink-stock-dump-trial.yml', 'tests/test_radar_delivery_reconciliation.py', 'tests/test_stock_daily_successor.py', 'docs/radar-delivery-recovery-v1.md']
+          entries = []
+          for path in paths:
+              raw = Path(path).read_bytes()
+              data = json.dumps({'content':base64.b64encode(raw).decode(), 'encoding':'base64'})
+              reply = subprocess.run(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=data,text=True,capture_output=True,check=True)
+              sha = json.loads(reply.stdout)['sha']
+              assert sha == hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              entries.append({'path':path,'mode':'100644','type':'blob','sha':sha})
+          print('RECOVERY_TREE_ENTRIES=' + json.dumps(entries))
+          subprocess.run(['git','add','--',*paths],check=True)
+          subprocess.run(['git','diff','--cached','--stat'],check=True)
           PY
