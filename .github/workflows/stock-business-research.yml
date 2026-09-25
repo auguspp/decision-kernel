@@ -68,7 +68,7 @@ jobs:
        (github.event_name == 'issues' && github.event.action == 'labeled' &&
         github.event.issue.number == 297 && !github.event.issue.pull_request &&
         github.event.sender.login == 'auguspp' &&
-         github.event.label.name == 'daily-stock-question-ready')
+         github.event.label.name == 'daily-stock-question-ready'))
     runs-on: ubuntu-24.04
     timeout-minutes: 160
     permissions:
