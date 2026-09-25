@@ -356,6 +356,7 @@
 
 - [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
 
 ## 普源精电 688337.SH
 
