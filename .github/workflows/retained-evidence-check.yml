@@ -12,50 +12,32 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: d10459d478cdc6ea6a8feaa24dad35031f4f71f1
+          ref: 8a6dc40e61f0f1c75b9ec8d7199183a98bdb085a
           persist-credentials: false
-      - name: Prepare exact textual changes as unreferenced Git blobs only
+      - name: Prepare exact test changes as unreferenced Git blobs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
           import ast,base64,hashlib,json,subprocess
           from pathlib import Path
-          def api(path,body=None):
-              cmd=['gh','api','repos/auguspp/decision-kernel/'+path]
-              if body is not None:cmd+=['-X','POST','--input','-']
-              return json.loads(subprocess.run(cmd,input=None if body is None else json.dumps(body).encode(),stdout=subprocess.PIPE,check=True).stdout)
-          def load(path,sha):
-              b=Path(path).read_bytes()
-              assert hashlib.sha1(('blob '+str(len(b))+'\0').encode()+b).hexdigest()==sha
-              return b.decode()
           files={}
-          path='src/decision_kernel/runtime/attention_inbox_with_odds_watch.py'
-          text=base64.b64decode(api('git/blobs/39451fae4827ac8629b808469bdcd101e9668a22')['content']).decode()
-          assert text.count('odds_watch.render_summary(report)')==1
-          text=text.replace('odds_watch.render_summary(report)','odds_watch.render_markdown(report)')
-          ast.parse(text);files[path]=text
-          path='.github/workflows/decision-inbox.yml'
-          text=load(path,'f3315414365c573f67ef420aae370be082394188')
-          start=text.index('          # Human-facing Decision inputs are deliberately curated.')
-          end=text.index('          # Research-attention inputs are curated separately.',start)
-          block='          # R5 daily attention uses only explicitly enabled typed Watch boundaries.\n          # Legacy packages remain in Git and shadow sampling, not daily Odds wakes.\n          decision_packages=(\n          )\n\n'
-          text=text[:start]+block+text[end:];files[path]=text
-          path='tests/test_decision_inbox_curated_inputs.py'
-          text=load(path,'a420fd503c8fc56fadc953a7a897dd78e94fff8f')
-          start=text.index('    expected_current_inputs = {');end=text.index('    decision_inputs = ',start)
-          text=text[:start]+'    expected_current_inputs = set()  # R5: no automatic legacy probability wake.\n'+text[end:]
-          ast.parse(text);files[path]=text
-          path='tests/test_inbox_price_gap_delivery.py'
-          text=load(path,'bdf3e69899dab296c548ccb20a0e03ca79429284')
-          extra="\n\n@pytest.mark.parametrize('unavailable', [False, True])\ndef test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_path, unavailable):\n    def forbidden(*a, **k): pytest.fail('legacy Odds must not execute')\n    monkeypatch.setattr(app.attention_inbox, '_run_research_package', forbidden)\n    calls = []\n    def open_(request, timeout):\n        path = urlsplit(request.full_url).path; calls.append(path)\n        if path == h.HITHINK_CALENDAR_PATH:\n            return Response(_calendar_envelope(SESSIONS))\n        if unavailable:\n            raise HTTPError(request.full_url, 429, SECRET, {}, None)\n        body = _history_envelope(SESSIONS)\n        body['data']['thscode'] = parse_qs(urlsplit(request.full_url).query)['thscode'][0]\n        return Response(body)\n    monkeypatch.setattr(h, 'urlopen', open_)\n    assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0\n    report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')\n    assert report['watch']['price_gap_count'] == (5 if unavailable else 0)\n    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 5)\n    text = (tmp_path/'summary.md').read_text()\n    assert '旧研究包自动Odds试算未启用' in text\n    assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text\n    assert 'Research Funnel' not in text\n    assert '今天没有需要你关注' not in text\n"
-          text+=extra;ast.parse(text);files[path]=text
-          files['docs/inbox-r5-watch-only.md']='# R5 daily Inbox: no legacy automatic Odds wakes\n\nReal repaired run36115433506 obtained all five Watch prices but still emitted an old Moutai ACCEPTABLE_ODDS wake from four curated legacy probability packages. That is separate from the five currently enabled Human price conditions. Human requested correcting Inbox misreports after R5 and a real complete run.\n\nReuse the existing empty curated-list convention and original typed Watch renderer. Production decision_packages is now empty; explicit historical CLI package processing and historical bytes/tests remain, but no daily automatic legacy Odds is emitted. Watch thresholds/configuration/registry, source qualification, authority and independent shadow/disclosure scopes are unchanged. Daily research comes from Hosted Quick/Full and Brief; no price trigger never means no research opportunity. A later real run must verify the new output; earlier misleading output is preserved.\n'
-          result=[]
-          for path,text in files.items():
-              raw=text.encode();blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(raw).decode()})['sha']
-              assert blob==hashlib.sha1(('blob '+str(len(raw))+'\0').encode()+raw).hexdigest()
-              result.append({'path':path,'sha':blob,'bytes':len(raw)})
-          print('PREPARED_BLOBS_ONLY',json.dumps(result))
-          print('No production refs, market calls, task, schedule or permission changes. Formal PR validation is separate.')
+          specs=[('tests/test_current_state.py','6fbf197a059b1b6ac12e6a3c693ab83a6ca25cc9'),('tests/test_sanhua_full_research_v1.py','458f4a5dea2feec4b04a7609f4aa358a93579a9c')]
+          for path,sha in specs:
+              raw=Path(path).read_bytes()
+              assert hashlib.sha1(('blob '+str(len(raw))+'\0').encode()+raw).hexdigest()==sha
+              text=raw.decode()
+              if path.endswith('test_current_state.py'):
+                  old='    assert "research_cases/603986-gigadevice-deep-research-v2.json" in production\n    assert "research_cases/002050-sanhua-deep-research-v1.json" in production\n'
+                  new='    # R5 retires automatic legacy Odds, not stored research or Human history.\n    assert production == []\n'
+              else:
+                  old='    # The current workflow deliberately uses the same frozen Research in three\n    # separate Harness contexts: Human Inbox, non-authoritative Surprise Radar\n    # history sampling, and official-disclosure acquisition. None of these\n    # occurrences creates another investment-authority or Human-wake policy.\n    assert workflow.count(path) == 3\n'
+                  new='    # R5 retains only non-authoritative shadow and disclosure uses.\n    # Daily typed Watch does not re-run this legacy probability package.\n    assert workflow.count(path) == 2\n    decision_block = workflow.split("decision_packages=(", 1)[1].split(")", 1)[0]\n    assert path not in decision_block\n'
+              assert text.count(old)==1
+              text=text.replace(old,new);ast.parse(text)
+              data=text.encode()
+              result=json.loads(subprocess.run(['gh','api','-X','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=json.dumps({'encoding':'base64','content':base64.b64encode(data).decode()}).encode(),stdout=subprocess.PIPE,check=True).stdout)
+              files[path]=result['sha']
+          print('TEST_BLOBS',json.dumps(files))
+          print('History, registry/authority checks and production validators retained. No ref or source writes.')
           PY
