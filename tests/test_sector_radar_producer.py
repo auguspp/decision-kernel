@@ -601,7 +601,9 @@ def test_one_new_session_quiet_run_appends_without_breadth_calls(
         state_directory=tmp_path / "state",
         output_directory=tmp_path / "run",
         api_key="fixture-secret",
-        fetch_calendar=lambda **kwargs: calendar(NEXT_SESSION),
+        fetch_calendar=lambda **kwargs: tuple(
+            day for day in calendar(NEXT_SESSION) if day.weekday() < 5
+        ),
         fetch_catalog=lambda **kwargs: catalog(),
         fetch_snapshot=lambda **kwargs: snapshot(
             restored.market_state,
@@ -675,6 +677,57 @@ def test_one_new_session_fetches_exact_candidate_plan_and_appends_events(
     assert outcome.operations.membership_request_count == 2
     assert (tmp_path / "run" / "result.json").is_file()
     assert (tmp_path / "run" / "summary.md").is_file()
+
+
+def test_explicit_exchange_closure_reference_is_forwarded_to_all_market(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    candidate_selector(monkeypatch)
+    restored = resolution()
+    observed = datetime.combine(NEXT_SESSION + timedelta(days=3), time(16), tzinfo=SHANGHAI)
+    closed = NEXT_SESSION + timedelta(days=3)
+    calls = []
+
+    def fetch_all_market(**kwargs):
+        calls.append(kwargs)
+        reference = kwargs["reference_context"]
+        reference.validate()
+        assert reference.market_session == NEXT_SESSION
+        assert reference.closed_dates == (closed,)
+        assert callable(kwargs["received_at"])
+        return SimpleNamespace(points=all_market_points())
+
+    outcome = run_sector_radar_producer(
+        resolution=restored,
+        parent_hints=parent_hints(),
+        context=context(observed),
+        state_directory=tmp_path / "state",
+        output_directory=tmp_path / "run",
+        api_key="fixture-secret",
+        fetch_calendar=lambda **kwargs: tuple(
+            day for day in calendar(NEXT_SESSION) if day.weekday() < 5
+        ),
+        fetch_catalog=lambda **kwargs: catalog(),
+        fetch_snapshot=lambda **kwargs: snapshot(
+            restored.market_state,
+            session=NEXT_SESSION,
+            same_session=False,
+        ),
+        fetch_membership=lambda **kwargs: membership(kwargs["sector_thscode"]),
+        fetch_all_market=fetch_all_market,
+        stock_reference_closed_dates=(closed,),
+        stock_reference_evidence=("https://www.sse.com.cn/official-closure",),
+        now=lambda: observed,
+        sleep=lambda seconds: None,
+    )
+
+    assert outcome.status == PRODUCER_STATUS_APPENDED_WITH_CANDIDATES
+    assert len(calls) == 1
+    reference = json.loads((tmp_path / "run" / "stock-reference.json").read_text())
+    assert reference["comparison_session"] == NEXT_SESSION.isoformat()
+    assert reference["closed_dates"] == [closed.isoformat()]
+    assert reference["production_qualification"] == "BOUNDED_REFERENCE_ALLOWED_BY_EXPLICIT_EXCHANGE_CLOSURE"
 
 
 def test_more_than_one_completed_session_after_state_fails_before_market_fetch(

@@ -29,14 +29,20 @@ def inventory(root):
     return {p.name: p.read_bytes() for p in root.iterdir()}
 
 
-def test_reviewed_pair_is_complete_and_only_root_formatting_files_differ():
-    assert capture._implementation() == compat.REPLAY_IMPLEMENTATION
+def test_reviewed_pair_is_complete_and_only_reviewed_non_replay_files_differ():
+    assert capture._implementation() == compat.POST_SECTOR_BACKFILL_IMPLEMENTATION
     assert len(compat.HISTORICAL_IMPLEMENTATION) == len(compat.REPLAY_IMPLEMENTATION) == 17
+    assert len(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION) == 17
     assert {k for k in compat.HISTORICAL_IMPLEMENTATION
             if compat.HISTORICAL_IMPLEMENTATION[k] != compat.REPLAY_IMPLEMENTATION[k]} == {
         'runtime/current_state.py', 'runtime/current_state_delivery.py'}
+    assert {k for k in compat.REPLAY_IMPLEMENTATION
+            if compat.REPLAY_IMPLEMENTATION[k] != compat.POST_SECTOR_BACKFILL_IMPLEMENTATION[k]} == {
+        'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}
     with pytest.raises(TypeError):
         compat.HISTORICAL_IMPLEMENTATION['extra'] = '0' * 64
+    with pytest.raises(TypeError):
+        compat.POST_SECTOR_BACKFILL_IMPLEMENTATION['extra'] = '0' * 64
 
 
 def test_current_capture_still_uses_original_verifier_and_remains_unchanged(tmp_path):

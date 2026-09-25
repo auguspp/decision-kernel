@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - produce
+          - backfill-2026-09-24
           - adopt-recovery-2026-09-10
           - adopt-missed-session-2026-09-14
 
@@ -49,7 +50,10 @@ jobs:
             exit 1
           fi
       - name: Check HiThink secret
-        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
+        if: >-
+          github.event_name != 'workflow_dispatch' ||
+          inputs.operation == 'produce' ||
+          inputs.operation == 'backfill-2026-09-24'
         env:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
         shell: bash
@@ -59,7 +63,10 @@ jobs:
             exit 1
           fi
       - name: Restore cache acceleration copy
-        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
+        if: >-
+          github.event_name != 'workflow_dispatch' ||
+          inputs.operation == 'produce' ||
+          inputs.operation == 'backfill-2026-09-24'
         id: state-cache
         uses: actions/cache/restore@v6
         with:
@@ -159,20 +166,42 @@ jobs:
             --state-dir decision-state/sector-radar \
             --output sector-radar-run
       - name: Check shared-Key activity once before acquisition
-        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
+        if: >-
+          github.event_name != 'workflow_dispatch' ||
+          inputs.operation == 'produce' ||
+          inputs.operation == 'backfill-2026-09-24'
         id: key-activity
         env:
           GITHUB_TOKEN: ${{ github.token }}
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/check-sector-scheduled-activity.py
+      - name: Bind 2026-09-24 exchange closure evidence
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'backfill-2026-09-24'
+        run: |
+          {
+            echo 'closed_date=2026-09-25'
+            echo 'sse=https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml'
+            echo 'szse=https://www.szse.cn/www/disclosure/notice/general/t20260917_622911.html'
+          } >> "$GITHUB_OUTPUT"
+        id: stock-reference
       - name: Run independent Sector Radar shadow producer
-        if: github.event_name != 'workflow_dispatch' || inputs.operation == 'produce'
+        if: >-
+          github.event_name != 'workflow_dispatch' ||
+          inputs.operation == 'produce' ||
+          inputs.operation == 'backfill-2026-09-24'
         env:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          OPERATION: ${{ inputs.operation }}
           # Conservative per-process spacing, not a verified provider quota.
           HITHINK_SECTOR_REQUEST_PACING: "1"
         shell: bash
         run: |
+          stock_reference_args=()
+          if [ "$OPERATION" = "backfill-2026-09-24" ]; then
+            stock_reference_args+=(--stock-reference-closed-date "2026-09-25")
+            stock_reference_args+=(--stock-reference-evidence "https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml")
+            stock_reference_args+=(--stock-reference-evidence "https://www.szse.cn/www/disclosure/notice/general/t20260917_622911.html")
+          fi
           python -m decision_kernel.runtime.sector_radar_producer run \
             --repository "${GITHUB_REPOSITORY}" \
             --workflow-path .github/workflows/sector-radar-shadow.yml \
@@ -183,16 +212,17 @@ jobs:
             --artifact-available "${{ steps.state-artifact.outputs.artifact_available }}" \
             --state-directory decision-state/sector-radar \
             --artifact-directory restored-artifact/sector-radar \
-            --output-directory sector-radar-run
+            --output-directory sector-radar-run \
+            "${stock_reference_args[@]}"
       - name: Verify exact offline replay before publication
         id: replay-check
-        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/verify-sector-radar-publication.py
       - name: Render read-only saved-state context
         id: context-view
-        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: |
@@ -202,7 +232,7 @@ jobs:
             --output sector-radar-run/context
       - name: Package joint economic and company reading
         id: joint-reading
-        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/build-sector-radar-reading.py

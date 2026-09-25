@@ -59,10 +59,15 @@ def write_dispatch_jobs(path: Path, profile: str) -> Path:
         "Verify 2026-09-14 missed-session adoption exact offline match": "skipped",
         "Adopt exact recovery checkpoint into original Sector lineage": "skipped",
         "Verify recovery adoption exact offline match": "skipped",
+        "Bind 2026-09-24 exchange closure evidence": "skipped",
     }
     if profile == "produce":
         outcomes["Run independent Sector Radar shadow producer"] = "success"
         outcomes["Verify exact offline replay before publication"] = "success"
+    elif profile == "backfill":
+        outcomes["Run independent Sector Radar shadow producer"] = "success"
+        outcomes["Verify exact offline replay before publication"] = "success"
+        outcomes["Bind 2026-09-24 exchange closure evidence"] = "success"
     elif profile == "missed-adoption":
         outcomes["Adopt exact 2026-09-14 missed-session checkpoint"] = "success"
         outcomes["Verify 2026-09-14 missed-session adoption exact offline match"] = "success"
@@ -209,6 +214,13 @@ def test_workflow_dispatch_requires_exact_successful_produce_step_evidence(tmp_p
     )) == (499, "WORKFLOW_DISPATCH_PRODUCE")
     assert mod["handoff_allowed"]("WORKFLOW_DISPATCH_PRODUCE") is True
 
+    backfill = write_dispatch_jobs(tmp_path / "backfill.json", "backfill")
+    assert mod["validate_successor"](environment(
+        UPSTREAM_EVENT="workflow_dispatch",
+        UPSTREAM_JOBS_JSON=str(backfill),
+    )) == (499, "WORKFLOW_DISPATCH_BACKFILL")
+    assert mod["handoff_allowed"]("WORKFLOW_DISPATCH_BACKFILL") is True
+
     for profile in ("missed-adoption", "recovery-adoption"):
         recovery = write_dispatch_jobs(tmp_path / f"{profile}.json", profile)
         assert mod["validate_successor"](environment(
@@ -239,6 +251,7 @@ def test_dispatch_classifier_is_pinned_to_existing_sector_step_contract():
         "MISSED_VERIFY_STEP",
         "RECOVERY_ADOPT_STEP",
         "RECOVERY_VERIFY_STEP",
+        "BACKFILL_REFERENCE_STEP",
     ):
         assert f"- name: {mod[key]}" in sector
 

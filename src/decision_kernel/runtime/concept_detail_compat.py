@@ -2,7 +2,9 @@
 
 #479 covered #478 root formatting. #530 additionally changes only the
 project_handoffs display function in current_state; detail replay never calls it.
-All other captured files remain byte-identical for this additional transition.
+#579 changes only the stock-reference / Sector-audit surfaces whose hashes are
+inherited by the broad implementation fingerprint; concept-detail replay never
+calls those Sector paths. Historical maps remain immutable.
 See docs/concept-detail-replay-compatibility-v1.md for the evidence and limits.
 """
 from __future__ import annotations
@@ -41,6 +43,11 @@ REPLAY_IMPLEMENTATION = MappingProxyType({
     **PRE_SINGLE_QUICK_IMPLEMENTATION,
     'runtime/current_state.py': '1faa6925d05debe4b0f22e5574eb365de4d36380036fd50b110c8e541ad22845',
 })
+POST_SECTOR_BACKFILL_IMPLEMENTATION = MappingProxyType({
+    **REPLAY_IMPLEMENTATION,
+    'runtime/hithink_sector_breadth_http.py': '92f24b05d7baea252d67ae83d2caaab84eb12f57adfa03818bac046ab2aa294a',
+    'runtime/sector_radar_audit.py': '1cdf284024b114b05d6fdfeeed99d4550d2b5d59b8b69676c1962660b5ac1e07',
+})
 CURRENT = 'CURRENT_IMPLEMENTATION'
 HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
 PRE_SINGLE_QUICK = 'REVIEWED_HISTORICAL_EQUIVALENCE_530'
@@ -58,9 +65,11 @@ def verify(output: Path) -> tuple[dict, str]:
     if receipt.get('implementation') == installed:
         return capture.verify(output), CURRENT
     historical = receipt.get('implementation')
-    capture.require(historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION)
-                    and installed == REPLAY_IMPLEMENTATION,
-                    'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED')
+    capture.require(
+        historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION)
+        and installed in (REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION),
+        'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED',
+    )
     # Bind only this invocation's identity expectation, after validating BOTH
     # complete maps. Never assign to capture._implementation or rewrite a receipt.
     bindings = dict(capture.verify.__globals__)

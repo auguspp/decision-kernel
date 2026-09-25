@@ -82,11 +82,15 @@ def test_pre_single_quick_capture_replays_only_exact_reviewed_map(tmp_path, dama
     assert inventory(root) == before and capture._implementation is fn
 
 
-def test_additional_compatibility_changes_only_the_handoff_projection_file():
+def test_additional_compatibility_changes_only_reviewed_non_replay_files():
     assert len(compat.PRE_SINGLE_QUICK_IMPLEMENTATION) == len(compat.REPLAY_IMPLEMENTATION) == 17
+    assert len(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION) == 17
     assert {k for k in compat.REPLAY_IMPLEMENTATION
             if compat.REPLAY_IMPLEMENTATION[k] != compat.PRE_SINGLE_QUICK_IMPLEMENTATION[k]} == {'runtime/current_state.py'}
-    assert capture._implementation() == compat.REPLAY_IMPLEMENTATION
+    assert {k for k in compat.REPLAY_IMPLEMENTATION
+            if compat.REPLAY_IMPLEMENTATION[k] != compat.POST_SECTOR_BACKFILL_IMPLEMENTATION[k]} == {
+        'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}
+    assert capture._implementation() == compat.POST_SECTOR_BACKFILL_IMPLEMENTATION
 
 
 def test_legacy_handoff_projection_identity_and_lane_remain_exact():

@@ -7,7 +7,7 @@ import re
 import tempfile
 from collections.abc import Callable, Mapping
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -65,10 +65,12 @@ _ROUTES = {
 }
 _OUTPUT_FILES = (
     "operations.json", "operations.md", "same-session-validation.json",
-    "observations.json", "preparation.json", "preparation.md", "result.json", "summary.md",
+    "observations.json", "preparation.json", "preparation.md", "stock-reference.json",
+    "result.json", "summary.md",
 )
 _STATE_FILES = ("market-state.json", "candidate-events.json", "manifest.json")
 _INPUT_FILES = ("market-state.json", "candidate-events.json", "parent-hints.json", "context.json", "resolution.json")
+_OPTIONAL_INPUT_FILES = ("stock-reference.json",)
 _SOURCE_FILES = (
     "identity.py", "adapters/hithink.py", "adapters/hithink_index.py",
     "runtime/hithink_http.py", "runtime/hithink_index_http.py",
@@ -166,7 +168,7 @@ def _check_request(path: str, params: Mapping[str, str]) -> dict[str, str]:
 
 def _allowed_file(name: str) -> bool:
     return isinstance(name, str) and (
-        name in {f"inputs/{item}" for item in _INPUT_FILES}
+        name in {f"inputs/{item}" for item in (*_INPUT_FILES, *_OPTIONAL_INPUT_FILES)}
         or name in {f"expected/state/{item}" for item in _STATE_FILES}
         or name in {f"expected/output/{item}" for item in _OUTPUT_FILES}
         or re.fullmatch(r"responses/[0-9]{4}\.json", name) is not None
@@ -394,6 +396,8 @@ def run_audited_sector_radar_producer(
     *, resolution: SectorRadarPersistenceResolution, parent_hints: Any,
     parent_hints_json: str, context: Any, state_directory: Path,
     output_directory: Path, api_key: str | None,
+    stock_reference_closed_dates: tuple[date, ...] = (),
+    stock_reference_evidence: tuple[str, ...] = (),
     request_json: _Request | None = None,
     provenance: str = LIVE_PROVENANCE,
     now: Callable[[], datetime] | None = None,
@@ -425,6 +429,18 @@ def run_audited_sector_radar_producer(
         )
     recorder = _Recorder(output_directory / "input-audit", provenance=provenance, credential=api_key, capture_now=capture_now)
     _save_inputs(recorder, resolution, parent_hints_json, context)
+    if bool(stock_reference_closed_dates) != bool(stock_reference_evidence):
+        raise SectorRadarAuditError("stock reference closure dates and evidence must be paired")
+    if stock_reference_closed_dates:
+        recorder.add(
+            "inputs/stock-reference.json",
+            _domain_bytes({
+                "schema_version": 1,
+                "semantics": "EXPLICIT_EXCHANGE_CLOSURE_FOR_BOUNDED_STOCK_REFERENCE",
+                "closed_dates": [day.isoformat() for day in stock_reference_closed_dates],
+                "evidence": list(stock_reference_evidence),
+            }),
+        )
     with tempfile.TemporaryDirectory(prefix="sector-radar-audit-stage-") as temporary:
         staged_state = Path(temporary) / "state"
         try:
@@ -433,6 +449,8 @@ def run_audited_sector_radar_producer(
                 resolution=resolution, parent_hints=parent_hints, context=context,
                 state_directory=staged_state, output_directory=output_directory,
                 api_key=api_key, now=recorded_now,
+                stock_reference_closed_dates=stock_reference_closed_dates,
+                stock_reference_evidence=stock_reference_evidence,
                 membership_request_delay_seconds=0.25 if provenance == LIVE_PROVENANCE else 0.0,
                 **_fetchers(recorder.request(transport), qualification_clock=recorded_now),
             )
@@ -608,6 +626,29 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
 
     manifest = validate_sector_radar_input_audit(root)
     context, hints, resolution = _restore_audit_inputs(root)
+    reference_path = root / "inputs" / "stock-reference.json"
+    stock_reference_closed_dates: tuple[date, ...] = ()
+    stock_reference_evidence: tuple[str, ...] = ()
+    if reference_path.is_file():
+        reference = _fields(
+            json.loads(reference_path.read_text(encoding="utf-8")),
+            {"schema_version", "semantics", "closed_dates", "evidence"},
+            "stock reference input",
+        )
+        if (
+            reference["schema_version"] != 1
+            or reference["semantics"] != "EXPLICIT_EXCHANGE_CLOSURE_FOR_BOUNDED_STOCK_REFERENCE"
+            or not isinstance(reference["closed_dates"], list)
+            or not isinstance(reference["evidence"], list)
+        ):
+            raise SectorRadarAuditError("stock reference input is invalid")
+        try:
+            stock_reference_closed_dates = tuple(date.fromisoformat(item) for item in reference["closed_dates"])
+        except (TypeError, ValueError):
+            raise SectorRadarAuditError("stock reference closure date is invalid") from None
+        if any(not isinstance(item, str) or not item for item in reference["evidence"]):
+            raise SectorRadarAuditError("stock reference evidence is invalid")
+        stock_reference_evidence = tuple(reference["evidence"])
     request_index = 0
     clock_index = 0
 
@@ -639,6 +680,8 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
                 resolution=resolution, parent_hints=hints, context=context,
                 state_directory=state_dir, output_directory=output_dir,
                 api_key="OFFLINE_REPLAY_NO_CREDENTIAL", now=now,
+                stock_reference_closed_dates=stock_reference_closed_dates,
+                stock_reference_evidence=stock_reference_evidence,
                 membership_request_delay_seconds=0.0,
                 **_fetchers(request, qualification_clock=now),
             )
