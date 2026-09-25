@@ -22,7 +22,8 @@ def previous(c):
         raw = c.api.file(m.safe_path(ref['read_path']), c.previous_commit)
         m.check(len(raw) == ref['bytes'] and m.sha256(raw) == ref['sha256'] and m.blob_sha(raw) == ref['git_blob'],
                 'previous industrial reading bytes differ')
-        report = source.decode(raw); m.check(report['projection_hash'] == canonical_hash(report['projection']), 'previous industry hash differs')
+        report = source.decode(raw)
+        m.check(report['projection_hash'] == canonical_hash(report['projection']), 'previous industry hash differs')
         value = report['projection']
         m.check(value['observation']['version'] == source.VERSION, 'previous industrial version differs')
         return value, 'EXACT_PREVIOUS_READING_' + c.previous_commit
@@ -45,11 +46,12 @@ def native(c):
         'run_id': run['id'], 'attempt': run['run_attempt'], 'trigger_run_id': None}
     source.validate_identity(identity)
     m.check(run.get('head_repository', {}).get('full_name') == m.REPOSITORY, 'foreign industrial head')
+    m.check(m.clock(run['created_at']) <= m.clock(run['updated_at']) <= m.clock(c.now()),
+            'industrial run clock differs')
     state = {'latest_attempt': m.concise_run(run), 'observation': None}
     if run['status'] != 'completed':
         return {**state, 'status': 'AWAITING_JOB_NOT_QUIET'}
-    # Read the exact first attempt's job, not whole-workflow green: independent
-    # public industrial capture survives a legacy commodity-basis sibling failure.
+    # Independent public capture survives a failed legacy commodity-basis sibling.
     page = c.api.get(f"actions/runs/{run['id']}/attempts/1/jobs?per_page=100")
     m.check(page['total_count'] == len(page['jobs']), 'industrial job query incomplete')
     jobs = [j for j in page['jobs'] if j['name'] == 'industrial-fundamentals']
@@ -57,6 +59,8 @@ def native(c):
         return {**state, 'status': 'NEW_INDUSTRIAL_JOB_NOT_RUN'}
     m.check(len(jobs) == 1, 'industrial job duplicate')
     job = jobs[0]
+    m.check(job.get('run_id') == run['id'] and job.get('head_sha') == run['head_sha']
+            and job.get('run_attempt') == 1, 'industrial job identity differs')
     state['job'] = {'id': job['id'], 'status': job['status'], 'conclusion': job['conclusion'],
                     'workflow_conclusion': run['conclusion']}
     if job['status'] != 'completed' or job['conclusion'] != 'success':
@@ -68,8 +72,25 @@ def native(c):
     observation, receipt = source.replay(files, identity, cutoff=c.now())
     return {**state, 'status': observation['status'], 'observation': observation,
             'archive': archive, 'capture_hash': receipt['capture_hash'],
-            'validation': 'EXACT_ORIGINAL_BYTES_AND_PURE_REBUILD_NOT_SOURCE_TRUTH',
-            'source_calls': 0}
+            'validation': 'EXACT_ORIGINAL_BYTES_AND_PURE_REBUILD_NOT_SOURCE_TRUTH', 'source_calls': 0}
+
+
+def select_display(current, old=None):
+    """Publication is not a new source capture and cannot consume its increment."""
+    old = old or {}
+    observation = current.get('observation')
+    available = bool(observation and observation['coverage']['available_families'] > 0)
+    if not available:
+        return {'observation': old.get('observation'),
+                'observation_is_prior': old.get('observation') is not None,
+                'last_capture_hash': old.get('last_capture_hash'),
+                'comparison': old.get('comparison'),
+                'comparison_status': 'PRIOR_CAPTURE_ONLY_CURRENT_UNAVAILABLE'}
+    same_capture = current.get('capture_hash') == old.get('last_capture_hash') and old.get('observation') is not None
+    return {'observation': observation, 'observation_is_prior': False,
+            'last_capture_hash': current['capture_hash'],
+            'comparison': old.get('comparison') if same_capture else source.compare(observation, old.get('observation')),
+            'comparison_status': 'SAME_CAPTURE_INCREMENT_PRESERVED' if same_capture else 'NEW_CAPTURE_COMPARED'}
 
 
 def attach(c, baseline):
@@ -81,13 +102,10 @@ def attach(c, baseline):
     except ERRORS as exc:
         c.files, c.archive_cache = before
         current = {'status': 'INDUSTRIAL_READING_REJECTED_NOT_QUIET', 'error_type': type(exc).__name__, 'observation': None}
-    observation = current['observation']
-    prior_observation = (old or {}).get('observation')
-    display = observation or prior_observation
-    comparison = source.compare(observation, prior_observation) if observation else None
+    selection = select_display(current, old)
+    display, comparison = selection['observation'], selection['comparison']
     value = {'version': source.VERSION, 'generated_at': c.now(), 'current': current,
-             'observation': display, 'observation_is_prior': observation is None and display is not None,
-             'previous_status': previous_status, 'comparison': comparison,
+             **selection, 'previous_status': previous_status,
              'baseline_reading_hash': baseline['reading_hash'], **source.AUTHORITY}
     report = {'projection': value}; report['projection_hash'] = canonical_hash(value)
     text = source.render(display, comparison) if display else '# 产业雷达\n\n尚无可恢复产业观察，不是没有产业变化。\n'
@@ -101,6 +119,7 @@ def attach(c, baseline):
         'source_cutoff': display['cutoff'] if display else None,
         'uses_prior_observation': value['observation_is_prior'], 'previous_status': previous_status,
         'latest_attempt': current.get('latest_attempt'), 'capture_hash': current.get('capture_hash'),
+        'comparison_status': selection['comparison_status'],
         'meaning': 'INDUSTRIAL_OBSERVATIONS_NOT_INFLECTION_OR_COMPANY_BENEFIT', **source.AUTHORITY}
     payload = m.assemble(code_commit=c.code_commit, checked_at=c.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
