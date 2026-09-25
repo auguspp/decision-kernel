@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "7d47e92adf1af7dd4bef1c31df0867d7107ef044",
+      "ref": "92cf2a527f97add190769d114159a4629a0bd78d",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -1022,13 +1022,7 @@
         "company_name": "华远控股",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-565d742c345b6bcb8a09c97e69374817b89cc61673e3b2cb7b1a827ce08b78ad",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
+        "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1052,20 +1046,14 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
         "thscode": "600743.SH"
       },
       {
         "company_name": "普源精电",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-eca60cc62c780b38c559cd6cefa1f75cdaa2542e1e9ce81d925dd32c9561dfac",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
+        "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1089,20 +1077,14 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
         "thscode": "688337.SH"
       },
       {
         "company_name": "国芯科技",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-dee643715d992d18c0a04cfae37d3a316845bd567c48dd78e484c473b3b00d01",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
+        "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1126,7 +1108,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
         "thscode": "688262.SH"
       },
       {
@@ -1171,13 +1153,7 @@
         "company_name": "莱伯泰科",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-10c50c313142a7a9aee3feebb1fb9624a835a6c41951e7fbe6db6643bdb35e33",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
+        "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1201,20 +1177,14 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
         "thscode": "688056.SH"
       },
       {
         "company_name": "泰凌微",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-f45dda6ae8bccb7d47a145261a2ebfeb26632e0744b95b889557a25ed961cd15",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
+        "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1238,7 +1208,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
         "thscode": "688591.SH"
       }
     ],
@@ -1255,7 +1225,7 @@
       "scope_complete": false,
       "unavailable_issuers": 1
     },
-    "question_review_required_count": 5,
+    "question_review_required_count": 0,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",

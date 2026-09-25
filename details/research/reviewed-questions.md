@@ -12,22 +12,17 @@
 ## 当前保存Stock批次
 
 市场日：2026-09-23；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
-- 华远控股 600743.SH：QUESTION&#95;REVIEW&#95;REQUIRED
-  - 原首次业务研究状态：NOT&#95;STARTED
+- 华远控股 600743.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
   - 观察问题草稿：来源方向“房地产”中，华远控股的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 普源精电 688337.SH：QUESTION&#95;REVIEW&#95;REQUIRED
-  - 原首次业务研究状态：NOT&#95;STARTED
+- 普源精电 688337.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
   - 观察问题草稿：来源方向“仪器仪表”中，普源精电的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 国芯科技 688262.SH：QUESTION&#95;REVIEW&#95;REQUIRED
-  - 原首次业务研究状态：NOT&#95;STARTED
+- 国芯科技 688262.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
   - 观察问题草稿：来源方向“数字芯片设计”中，国芯科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 - 华丽家族 600503.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
   - 观察问题草稿：来源方向“房地产”中，华丽家族的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 莱伯泰科 688056.SH：QUESTION&#95;REVIEW&#95;REQUIRED
-  - 原首次业务研究状态：NOT&#95;STARTED
+- 莱伯泰科 688056.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
   - 观察问题草稿：来源方向“仪器仪表”中，莱伯泰科的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 泰凌微 688591.SH：QUESTION&#95;REVIEW&#95;REQUIRED
-  - 原首次业务研究状态：NOT&#95;STARTED
+- 泰凌微 688591.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
   - 观察问题草稿：来源方向“数字芯片设计”中，泰凌微的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 
 观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。

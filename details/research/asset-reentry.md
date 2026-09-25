@@ -408,3 +408,7 @@
   - [原保存材料](../../sources/git/e397675421ec7e6352708a20cd57538fd1c51628/receipt.json)
   - [原保存材料](../../sources/git/5553f0360db7a527b47b7f153714f95ab71cecab/validation.json)
   - [原保存材料](../../sources/git/d7ad7ef93b2cd3aecc85dee920567cb099dba85d/question.json)
+
+## 读取范围缺口
+
+部分来源未提供或未能核验；不能据此宣称全部thesis无需复核。
