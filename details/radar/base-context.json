@@ -58,79 +58,78 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-25T08:54:00.712861+00:00",
+    "finished_at": "2026-09-25T08:54:57.821869+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-09-26T08:54:00.712861+00:00",
-    "started_at": "2026-09-25T08:53:42.164432+00:00"
+    "recheck_after": "2026-09-26T08:54:57.821869+00:00",
+    "started_at": "2026-09-25T08:54:38.733735+00:00"
   },
   "code_commit": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-25T08:54:00.712861+00:00",
+  "generated_at": "2026-09-25T08:54:57.821869+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-25T08:53:53.798217+00:00",
+      "checks_at": "2026-09-25T08:54:49.890323+00:00",
       "gaps": [
-        "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
-      "health": "LATEST_ATTEMPT_FAILED",
+      "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
         "archive": {
-          "artifact_id": 10797169567,
+          "artifact_id": 10854877861,
           "artifact_name": "decision-inbox",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35974653704/artifacts/10797169567",
-          "bytes": 10195,
-          "expires_at": "2026-10-08T08:21:18Z",
-          "git_blob": "08fffc5d085fd907618a227822246a995dee9c15",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36115433506/artifacts/10854877861",
+          "bytes": 10398,
+          "expires_at": "2026-10-09T08:54:34Z",
+          "git_blob": "f8caea58708aa62faf27787474bf10be01c5ba36",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-09-24T08:20:24Z",
+            "created_at": "2026-09-25T08:54:04Z",
             "event": "workflow_dispatch",
-            "head_sha": "89a7d6d0faa3d332d444a63c24269eabfac96900",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35974653704",
-            "id": 35974653704,
+            "head_sha": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36115433506",
+            "id": 36115433506,
             "operation": null,
             "path": ".github/workflows/decision-inbox.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-09-24T08:20:24Z",
+            "run_started_at": "2026-09-25T08:54:04Z",
             "status": "completed",
-            "updated_at": "2026-09-24T08:21:23Z"
+            "updated_at": "2026-09-25T08:54:41Z"
           },
-          "read_path": "sources/artifacts/8d05fce7eccdfb7d908bab062a5470b22d44039f1d8617164781974b5f26140a.zip",
+          "read_path": "sources/artifacts/cce9adf101ee97d16e229bce3a068669486f68e5d9b2caf063da420f7f896708.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "8d05fce7eccdfb7d908bab062a5470b22d44039f1d8617164781974b5f26140a"
+          "sha256": "cce9adf101ee97d16e229bce3a068669486f68e5d9b2caf063da420f7f896708"
         },
         "details": {
           "index.html": {
-            "bytes": 9223,
-            "git_blob": "e0659b156f136b033f3031a428836e8b1e25502c",
-            "read_path": "details/inbox/35974653704/index.html",
+            "bytes": 9422,
+            "git_blob": "fcdb718f49efc907296c697c2abf500c25b87faf",
+            "read_path": "details/inbox/36115433506/index.html",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "309ba00171910de2fe640b79c3053ccc92891734478bde9e4a1ed8be7e9b0de4"
+            "sha256": "db4cb3c487e3310ab0f08279ba60194ff66de59cf4487bc18c02befd64e03eb4"
           },
           "odds-watch/summary.md": {
-            "bytes": 1873,
-            "git_blob": "fb303c7422ebea04b4607124d178b26056314d00",
-            "read_path": "details/inbox/35974653704/odds-watch/summary.md",
+            "bytes": 1874,
+            "git_blob": "04aea37ce14a0856805fc50411ad025f8abdbe26",
+            "read_path": "details/inbox/36115433506/odds-watch/summary.md",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "e7f4362b1c6fff957554c5cf881eefe55947ffeefec65bb654b9b00eca3aa486"
+            "sha256": "365f817220ca7abb70be522cbe10d315c79f87e31e7769dbae5c85077c506dea"
           },
           "odds-watch/watch.json": {
-            "bytes": 11497,
-            "git_blob": "4beff3afb08cf01d144cc06da840f3b5e4aedb93",
-            "read_path": "details/inbox/35974653704/odds-watch/watch.json",
+            "bytes": 11985,
+            "git_blob": "c51bbd31cd38b9a7ac9839a0b5e66f95bd04c6f4",
+            "read_path": "details/inbox/36115433506/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "d55f2e81c46bcbe76eddbedc8d22fd75e337ce2080f79b5a112c64570dda93b3"
+            "sha256": "7da9da09e7d6cc2a605dfc4cda762f2ece38289752c1b92f1ffa8d94420bdf40"
           },
           "summary.md": {
-            "bytes": 3717,
-            "git_blob": "dbc43accf17b282f2a25d4d65aaa87ea60989a5f",
-            "read_path": "details/inbox/35974653704/summary.md",
+            "bytes": 3893,
+            "git_blob": "0e443b4842bfcbc6b3be985ae49801fd58adc6ee",
+            "read_path": "details/inbox/36115433506/summary.md",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "7a0f4319fbb1ffadbc0aef5bdd24047bf4247901384cec49098759d5c5f0cf5a"
+            "sha256": "8117a5f14c09f7f550ce80cfc27dc637560cc3a1c230a050dfaaa2ed8b8f181a"
           }
         },
         "limitation": "Markdown/HTML retained as untrusted historical output; no inferred quiet or accepted probability",
@@ -144,20 +143,20 @@
             "path": "decision_inputs/odds-watch-v0.json",
             "read_path": "sources/git/e119dd5136e7e86a9aef16938c642470b9f83926/odds-watch-v0.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "89a7d6d0faa3d332d444a63c24269eabfac96900",
+            "ref": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
             "repository": "auguspp/decision-kernel",
             "sha256": "00e7fe5657cd29894fcb6bb38dc183949dbb7122edf779840960e79ccd5783f3"
           },
           "meaning": "READ_ONLY_PRICE_CONDITION_ATTENTION_NOT_REVALIDATED_DECISION_SPINE_ODDS_OR_ACTION",
           "registry_source": {
-            "bytes": 45626,
-            "git_blob": "8d564ebd52f52596b562493a1d92e2c526d1b906",
+            "bytes": 47786,
+            "git_blob": "59d9440c91add6055db0d5955f3161588916aeb2",
             "path": "current_state/registry.json",
-            "read_path": "sources/git/8d564ebd52f52596b562493a1d92e2c526d1b906/registry.json",
+            "read_path": "sources/git/59d9440c91add6055db0d5955f3161588916aeb2/registry.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "89a7d6d0faa3d332d444a63c24269eabfac96900",
+            "ref": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
             "repository": "auguspp/decision-kernel",
-            "sha256": "48fe22d5f4f3b95515446f09e9db573b2f2ecf28668a7d91dd7c3573f3f5e072"
+            "sha256": "239c2437f2948bd4f2719f09e93542513fc6344f862e5b0ab38a4a1265be12c1"
           },
           "report": {
             "watch": {
@@ -207,18 +206,28 @@
                 {
                   "action_authority": "NONE",
                   "company_name": "兴业科技",
+                  "currency": "CNY",
                   "human_attention_authority": "NONE",
                   "investment_authority": "NONE",
-                  "market_data_source": null,
-                  "market_timestamp": null,
-                  "next_unreached_condition": null,
-                  "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
-                  "price": null,
-                  "price_convention": null,
-                  "price_gap": {
-                    "error_type": "HithinkRuntimeError",
-                    "meaning": "PRICE_UNKNOWN_NO_TRIGGER_INFERRED"
+                  "market_data_source": "HiThink Financial-API raw daily close | 002674.SZ",
+                  "market_timestamp": "2026-09-24T15:00:00+08:00",
+                  "next_unreached_condition": {
+                    "attention_triggered": false,
+                    "condition_state": "ABOVE_CONDITION",
+                    "id": "xingye-reunderwrite-15_17",
+                    "kind": "RE_UNDERWRITE",
+                    "label": "CNY15–17 re-underwrite",
+                    "lower_price": "15",
+                    "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+                    "shape": "RANGE_AT_OR_BELOW_UPPER",
+                    "signed_distance_to_upper_cny": "3.42",
+                    "signed_distance_to_upper_fraction_of_current": "0.16748285994123408423114593535749265426052889324191968658178256611165523996082272",
+                    "upper_price": "17"
                   },
+                  "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
+                  "price": "20.42",
+                  "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_gap": null,
                   "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
@@ -230,7 +239,7 @@
                     "source_ref": "8e045ef755ade568aaad33d50a5a36aae04b19ed",
                     "use": "HUMAN_DECISION_CHECKPOINT"
                   },
-                  "status": "PRICE_UNAVAILABLE_NOT_QUIET",
+                  "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "002674.SZ",
                   "triggered_conditions": [],
                   "watch_enabled": true
@@ -468,79 +477,54 @@
                 "NO_POSITION_SIZE_OR_ORDER_AUTHORITY",
                 "NO_AUTOMATIC_ODDS_OR_RESEARCH_SUPERSESSION"
               ],
-              "observed_at": "2026-09-24T08:20:34.539055Z",
+              "observed_at": "2026-09-25T08:54:16.451493Z",
               "price_contract": "QUALIFIED_LATEST_COMPLETED_A_SHARE_RAW_CLOSE_VIA_EXISTING_HITHINK_RUNTIME",
-              "price_gap_count": 1,
-              "registry_hash": "5328c627198078c49bf2e69d969e9d03b22a167304fdf0c69dd1b6319a8cad5d",
+              "price_gap_count": 0,
+              "registry_hash": "9a824597115aba0d1800aa4336f10a554fbf4fdf38c70fbbb3c505ca9d3ea445",
               "semantics": "READ_ONLY_PRICE_CONDITION_ATTENTION_NOT_ODDS_STATE_OR_ACTION",
               "version": "odds-watch-v0"
             },
-            "watch_hash": "99c90454d57b56dac84251d93f9239ca69fc32ae5e757ec38917b3c9c101773a"
+            "watch_hash": "b3174117f39ee4a2b5d9c95df81ca3784fff8ced13fdf20a634200bee0918dd2"
           },
           "status": "TYPED_ODDS_WATCH_READ_OK"
         },
         "run": {
           "conclusion": "success",
-          "created_at": "2026-09-24T08:20:24Z",
+          "created_at": "2026-09-25T08:54:04Z",
           "event": "workflow_dispatch",
-          "head_sha": "89a7d6d0faa3d332d444a63c24269eabfac96900",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35974653704",
-          "id": 35974653704,
+          "head_sha": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36115433506",
+          "id": 36115433506,
           "operation": null,
           "path": ".github/workflows/decision-inbox.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-24T08:20:24Z",
+          "run_started_at": "2026-09-25T08:54:04Z",
           "status": "completed",
-          "updated_at": "2026-09-24T08:21:23Z"
+          "updated_at": "2026-09-25T08:54:41Z"
         },
         "run_metadata": {
-          "bytes": 14146,
-          "git_blob": "ccbba10219c798bd53701b79774f67eec9edd877",
-          "read_path": "details/inbox/35974653704/run.json",
+          "bytes": 14167,
+          "git_blob": "2f8c5684b46d26dc1c7058376f3d92c2bc3661e3",
+          "read_path": "details/inbox/36115433506/run.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "a0467a4e160a96d577f03e1a1ae36528825d8cbd363558ea06578661760607dd"
+          "sha256": "d66439b321a98a19022f98b7859f52298a81756cb46a71c73bcfe77ace6194e9"
         },
-        "source_checked_at": "2026-09-25T08:53:53.533782+00:00",
+        "source_checked_at": "2026-09-25T08:54:49.886051+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
-        "conclusion": "failure",
-        "created_at": "2026-09-25T08:20:21Z",
+        "conclusion": "success",
+        "created_at": "2026-09-25T08:54:04Z",
         "event": "workflow_dispatch",
-        "head_sha": "2606e7f8ceed06d25c6ca13cf783ffb6778436b7",
-        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36112372925",
-        "id": 36112372925,
+        "head_sha": "d10459d478cdc6ea6a8feaa24dad35031f4f71f1",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36115433506",
+        "id": 36115433506,
         "operation": null,
         "path": ".github/workflows/decision-inbox.yml",
         "run_attempt": 1,
-        "run_started_at": "2026-09-25T08:20:21Z",
+        "run_started_at": "2026-09-25T08:54:04Z",
         "status": "completed",
-        "updated_at": "2026-09-25T08:21:03Z"
-      },
-      "latest_job_check": {
-        "delivery_job_succeeded": false,
-        "head_sha": "2606e7f8ceed06d25c6ca13cf783ffb6778436b7",
-        "inbox_conclusion": "failure",
-        "inbox_job_id": 107998534644,
-        "meaning": "SAVED_DELIVERY_JOB_ONLY_NOT_REVALIDATED_ODDS",
-        "run_attempt": 1,
-        "run_id": 36112372925,
-        "sibling_jobs": [
-          {
-            "conclusion": "skipped",
-            "id": 107998536146,
-            "name": "disclosures",
-            "status": "completed"
-          }
-        ],
-        "source": {
-          "bytes": 6069,
-          "git_blob": "68e18064c600bfc65bfb811b836d5fa08c35652a",
-          "read_path": "details/inbox/36112372925/attempt-1-jobs.json",
-          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "2af0144e1e3dce43366e4396b7433bf9fbfad0eb985d745c46a4bcf58412ce75"
-        },
-        "workflow_conclusion": "failure"
+        "updated_at": "2026-09-25T08:54:41Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
@@ -548,7 +532,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-25T08:53:45.413085+00:00",
+      "checks_at": "2026-09-25T08:54:41.752217+00:00",
       "gaps": [
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"
       ],
@@ -676,7 +660,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "4e6468de76e228b8f395812dc162f59497ca891d395b8767d4381b4a56016421"
         },
-        "source_checked_at": "2026-09-25T08:53:45.413062+00:00",
+        "source_checked_at": "2026-09-25T08:54:41.752193+00:00",
         "state_archive": {
           "artifact_id": 10744526415,
           "artifact_name": "sector-radar-state-bundle",
@@ -759,7 +743,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-25T08:53:52.275442+00:00",
+      "checks_at": "2026-09-25T08:54:48.659724+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -948,7 +932,7 @@
           "sha256": "1ed4f15f424a64090f0e47709a7c9ec03d22479d871ccf8c697793e0ca5c228d"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-25T08:53:52.275420+00:00",
+        "source_checked_at": "2026-09-25T08:54:48.659706+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "600743.SH",
@@ -979,13 +963,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "25aa96c030af0d272d311e75a755170e7bf61fd330d0acf953f12c61b10ae508",
+  "reading_hash": "e976fbd471732b97c3614a8e2dabe51d503c0ff639ca8137319efe0d76ca3f8f",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "36115382014",
-    "trigger_run_id": "36115310680",
+    "run_id": "36115436555",
+    "trigger_run_id": "36115433506",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
