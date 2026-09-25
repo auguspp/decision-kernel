@@ -1,4 +1,4 @@
-本次读取状态：NEW_INDUSTRIAL_JOB_NOT_RUN
+本次读取状态：AWAITING_JOB_NOT_QUIET
 
 # 产业雷达
 

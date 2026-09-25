@@ -1,36 +1,36 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "baseline_reading_hash": "207beb5025c6c920b35bd3aca23377cc22d025825f4bb5b33569d2b625230dc1",
+    "baseline_reading_hash": "853cb588e133bd9e1f46330afdafb3dd6ea643e1bcff69016a2934be65c5bdcf",
     "business_benefit_established": false,
     "comparison": null,
     "comparison_status": "PRIOR_CAPTURE_ONLY_CURRENT_UNAVAILABLE",
     "current": {
       "latest_attempt": {
-        "conclusion": "success",
-        "created_at": "2026-09-25T10:26:16Z",
-        "event": "workflow_run",
-        "head_sha": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
-        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36123971130",
-        "id": 36123971130,
+        "conclusion": null,
+        "created_at": "2026-09-25T15:14:42Z",
+        "event": "workflow_dispatch",
+        "head_sha": "90f8687f1fd39747469f6163a659766a4ef36b20",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36152854666",
+        "id": 36152854666,
         "operation": null,
         "path": ".github/workflows/radar-industry-breadth.yml",
         "run_attempt": 1,
-        "run_started_at": "2026-09-25T10:26:16Z",
-        "status": "completed",
-        "updated_at": "2026-09-25T10:27:08Z"
+        "run_started_at": "2026-09-25T15:14:42Z",
+        "status": "in_progress",
+        "updated_at": "2026-09-25T15:14:49Z"
       },
       "observation": null,
-      "status": "NEW_INDUSTRIAL_JOB_NOT_RUN"
+      "status": "AWAITING_JOB_NOT_QUIET"
     },
-    "generated_at": "2026-09-25T15:14:02.781649+00:00",
+    "generated_at": "2026-09-25T15:15:26.008859+00:00",
     "investment_authority": "NONE",
     "last_capture_hash": null,
     "observation": null,
     "observation_is_prior": false,
-    "previous_status": "NO_PREVIOUS_CAPTURE",
+    "previous_status": "PREVIOUS_CAPTURE_UNAVAILABLE_NOT_NO_CHANGE",
     "research_authority": "NONE",
     "version": "industry-fundamentals-v1"
   },
-  "projection_hash": "0ad6148ae2d78d7eaad991cf3ab93aa7970da40d0eabfb6c26c5ddbd642de912"
+  "projection_hash": "178c87c0d50f82739bcff6ab093f7135d8bd2c0b6125ef7a0602733c6b08a739"
 }
