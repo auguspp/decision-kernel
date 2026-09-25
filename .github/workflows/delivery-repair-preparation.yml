@@ -8,64 +8,83 @@ permissions:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: b89dc93c23ab1a795ef389c7a2561bd6b76e90c9
           persist-credentials: false
-          path: prep
-      - uses: actions/checkout@v7
-        with:
-          ref: b236080c424689183c30b7cebe88769b851875ea
-          persist-credentials: false
-          path: repo
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Prepare existing recovery composition
-        working-directory: repo
-        run: python ../prep/.github/scripts/prepare-radar-recovery.py
-      - name: Test recovery, original TDX and source contracts
-        working-directory: repo
-        run: |
-          python -m pip install -e '.[dev]'
-          python -m pytest -q tests/test_radar_delivery_reconciliation.py tests/test_stock_daily_successor.py tests/test_sector_radar_schedule.py tests/test_sector_request_pacing.py tests/test_sector_radar_publication_gate.py tests/test_current_state_delivery.py
-      - name: Check actual current artifacts without dispatch or Issue writes
-        working-directory: repo
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Reconcile superseded dispatch assertion and preserve explicit eligible results
         run: |
           python - <<'PY'
-          import json, os, runpy
           from pathlib import Path
-          from datetime import datetime, timezone
-          from decision_kernel.runtime.current_state_delivery import GitHubAPI
-          m = runpy.run_path('.github/scripts/reconcile-radar-delivery.py', run_name='recovery_readonly_probe')
-          os.environ['GITHUB_SHA'] = 'b236080c424689183c30b7cebe88769b851875ea'
-          api = GitHubAPI(os.environ['GH_TOKEN'], max_calls=240)
-          now = datetime.now(timezone.utc)
-          result = m['choose'](m['collect'](api, Path.cwd(), now), now)
-          print('ACTUAL_RECONCILIATION=' + json.dumps(result))
-          assert result['status'] == 'UP_TO_DATE_WITH_ISSUER_GAPS' and result['action'] is None
+          p = Path('tests/test_stock_daily_successor_result_gate.py')
+          s = p.read_text()
+          a = s.index('def test_workflow_downloads_only_exact_upstream_audit_before_pat_dispatch():')
+          b = s.index('\ndef test_result_gate_revalidates_dispatched_produce_identity', a)
+          replacement = '''def test_workflow_downloads_only_exact_upstream_audit_before_pat_dispatch():
+              # The old shell-only dispatcher is replaced, not run in parallel.
+              # Original validator tests above still bind hashes, run and source.
+              import yaml
+              raw = WORKFLOW.read_text(encoding="utf-8")
+              job = yaml.safe_load(raw)["jobs"]["reconcile-deliveries"]
+              steps = {s.get("name"): s for s in job["steps"] if "name" in s}
+              gate = steps["Reconcile qualified deliveries and previous intents"]
+              intent = steps["Retain exact dispatch intent before any POST"]
+              dispatch = steps["Dispatch only the missing stage once"]
+              assert gate["env"]["GH_TOKEN"] == "${{ github.token }}"
+              assert gate["run"] == "python .github/scripts/reconcile-radar-delivery.py plan"
+              assert intent["with"]["path"] == "radar-reconcile/plan.json"
+              assert "steps.intent.outcome == 'success'" in dispatch["if"]
+              assert dispatch["env"]["GH_TOKEN"] == "${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}"
+              assert raw.index("Reconcile qualified deliveries") < raw.index("Retain exact dispatch intent") < raw.index("Dispatch only the missing")
+              helper = (ROOT / ".github/scripts/reconcile-radar-delivery.py").read_text()
+              assert 'collector.lane("sector")' in helper
+              assert 'action["inputs"]["stock-market-run-id"]' in helper
+              assert "DISPATCH_UNCERTAIN" in helper and "/rerun" not in helper
+              assert "HITHINK_FINANCE_API_KEY" not in helper
+          '''
+          import textwrap
+          p.write_text(s[:a] + textwrap.dedent(replacement).replace('\n    #', '\n    #') + '\n\n' + s[b:])
+          p = Path('.github/scripts/reconcile-radar-delivery.py')
+          s = p.read_text()
+          old = 'if saved.get("status") == NOOP or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", []):'
+          assert s.count(old) == 1
+          new = 'if (saved.get("status") not in {"APPENDED_COMPLETED_SESSION_QUIET", "APPENDED_COMPLETED_SESSION_WITH_SHADOW_CANDIDATES"}\n                or "SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY" in lane.get("gaps", [])):'
+          p.write_text(s.replace(old, new))
+          p = Path('tests/test_radar_delivery_reconciliation.py')
+          s = p.read_text()
+          s += '\n\n@pytest.mark.parametrize("status", ["VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT", "ADOPTED_RECOVERY", "UNKNOWN"])\ndef test_non_result_origins_never_dispatch_stock(status):\n    data = snapshot()\n    data["stock_parent"] = "8"\n    data["sector"]["last_qualified_result"]["status"] = status\n    result = module().choose(data, NOW)\n    assert result["status"] == "RESULT_BEARING_SECTOR_DELIVERY_UNAVAILABLE"\n    assert result["action"] is None\n'
+          p.write_text(s)
+          p = Path('docs/sector-radar-scheduled-production.md')
+          s = p.read_text()
+          first, rest = s.split('\n', 1)
+          note = '\n\n## Current recovery policy — 2026-09-25\n\nThe Human-authorized [daily delivery reconciliation](radar-delivery-recovery-v1.md) supersedes the manual-only recovery statements below within its explicit finite bounds. The external 18:13 primary clock stays unchanged; the original successor now rechecks after completion and at maintenance backstops. Missing Stock can be resumed; classified temporary source failure can get at most two additional attempts. Permanent qualification/history/permission gaps remain visible in [system health #581](https://github.com/auguspp/decision-kernel/issues/581). This does not establish arbitrary historical PIT backfill or a proven unattended natural-failure success rate. Earlier policy and failures below remain historical.\n'
+          p.write_text(first + note + '\n' + rest)
           PY
-      - name: Store tested blobs only
-        working-directory: repo
+      - name: Test revised orchestration and original validation
+        run: |
+          python -m pip install -e '.[ci-contracts,feeds]' PyYAML
+          python -m pytest -q tests/test_radar_delivery_reconciliation.py tests/test_stock_daily_successor_result_gate.py tests/test_stock_daily_successor.py tests/test_sector_delivery_continuity.py
+      - name: Save tested blobs without branch updates
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
           import base64, hashlib, json, subprocess
           from pathlib import Path
-          paths = ['.github/scripts/reconcile-radar-delivery.py', '.github/workflows/stock-reading-after-sector.yml', '.github/workflows/sector-radar-shadow.yml', '.github/workflows/hithink-stock-dump-trial.yml', 'tests/test_radar_delivery_reconciliation.py', 'tests/test_stock_daily_successor.py', 'docs/radar-delivery-recovery-v1.md']
+          paths = ['tests/test_stock_daily_successor_result_gate.py', '.github/scripts/reconcile-radar-delivery.py', 'tests/test_radar_delivery_reconciliation.py', 'docs/sector-radar-scheduled-production.md']
           entries = []
           for path in paths:
               raw = Path(path).read_bytes()
-              data = json.dumps({'content':base64.b64encode(raw).decode(), 'encoding':'base64'})
-              reply = subprocess.run(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=data,text=True,capture_output=True,check=True)
+              data = json.dumps({'content':base64.b64encode(raw).decode(),'encoding':'base64'})
+              reply = subprocess.run(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'], input=data,text=True,capture_output=True,check=True)
               sha = json.loads(reply.stdout)['sha']
               assert sha == hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
               entries.append({'path':path,'mode':'100644','type':'blob','sha':sha})
-          print('RECOVERY_TREE_ENTRIES=' + json.dumps(entries))
-          subprocess.run(['git','add','--',*paths],check=True)
-          subprocess.run(['git','diff','--cached','--stat'],check=True)
+          print('CORRECTION_TREE_ENTRIES=' + json.dumps(entries))
+          subprocess.run(['git','diff','--stat'],check=True)
           PY
