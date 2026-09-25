@@ -210,10 +210,10 @@ def test_wrong_event_cannot_trigger_runtime(key):
     with pytest.raises(ValueError):w.check_environment(e,'a'*40)
 
 
-def test_same_workflow_isolated_exact_label_and_original_jobs_unchanged():
+def test_same_workflow_keeps_continuation_after_expired_source_writer_retirement():
     text=Path('.github/workflows/stock-business-research.yml').read_text()
-    original_tail=text.split('\n  deepseek-compatibility:\n',1)[1]
-    assert w.once.blob(original_tail.encode()) == '4f62ac1c1c5979ac80c226659932994f4ee53c65'
+    assert 'retain-public-report-source' not in text and 'retain-report-source' not in text
+    assert 'woton-h1-source-ready' not in text and 'woton-h1-representation-ready' not in text
     step=text.split('      - name: One approved Woton same-question report continuation\n',1)[1].split('      - name:',1)[0]
     assert "github.event.label.name == 'woton-h1-analysis-ready'" in step
     assert 'group: stock-business-first-v0' in text and 'cancel-in-progress: false' in text
