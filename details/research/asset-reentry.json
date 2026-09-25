@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "e1b5dc4d138ada4a18ed96dfe40c63ee5a1df7562e1495527a0e50bb98a0e124",
+    "base_reading_hash": "9cb618c486e3d83be0da516148377b378ac7d83c94bc0233a6c228d341da5413",
     "companies": [
       {
         "archives": [],
@@ -2966,35 +2966,11 @@
             }
           }
         ],
-        "association_id": "f6b237477e070d99744dbae41737214cec7adbe204739682829ebb7f0c6930d7",
+        "association_id": "ba54e3356ded29af5f205cd8ced7e061175329182c2de3483d24edb8696b6e85",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
-        "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
+        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_STOCK_DISPOSITION",
-            "lane_health": "IN_PROGRESS",
-            "market_session": "2026-09-23",
-            "meaning": "HISTORICAL_DISPOSITION_NOT_NEW_PRICE_QUALIFICATION",
-            "record": {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "普源精电",
-              "excluded_reasons": [],
-              "input_failure": null,
-              "market_expression_status": "OBSERVED",
-              "status": "CONTRACT_CHECKED_RAW_READING",
-              "thscode": "688337.SH"
-            },
-            "source": {
-              "bytes": 96261,
-              "git_blob": "d68a07fb644c0af87169fcec60e5f41a2603b3a7",
-              "read_path": "details/stock/35848784152/reading/stock-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "8db7978f2ce8032ef6f8edb9ca2d8db30fc8584e7881d8acc1055d115097fc9e"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "688337.SH"
@@ -3185,10 +3161,10 @@
       "complete_research_history": false,
       "read_gap_count": 1,
       "unavailable_assets": 0,
-      "with_saved_observations": 1,
+      "with_saved_observations": 0,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-25T11:08:36.447387+00:00",
+    "generated_at": "2026-09-25T11:16:47.857259+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3207,5 +3183,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "0af889cc7df9fd53d722f23fa544457885a6bb0cb8034f2c5ae07626c03a011f"
+  "projection_hash": "23a0c2d9294685416913951447542e4341c7e0453ca1bd05203d620dcff2d47b"
 }

@@ -349,9 +349,9 @@
 - [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
 
-## 普源精电 688337.SH
+## 688337.SH
 
-下一步：把保存观察与旧问题、关键假设对照后再决定是否研究
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - stock-question-2a5be65a2593e79927fae48ce024861f411a92d6575aa450b1e084ac3c5c193f：SAVED&#95;QUESTION / RETAINED&#95;BYTES&#95;VERIFIED
   - 原问题：普源精电2026H1收入及扣非盈利改善、合并经营现金仍为负：仪器和解决方案增长、毛利与费用结构及营运资本分别支持或限制什么经营改善判断，现在是否有值得进一步查证的实质问题？
@@ -377,7 +377,6 @@
   - [原保存材料](../../sources/git/901278687c33f3a9a4fd6bfaa26bb4dd1d534f6a/research-attention.json)
   - [原保存材料](../../sources/git/e4ee65a72a3d16827dedb7c98f2c98d43d84a2a2/validation.json)
   - [原保存材料](../../sources/git/4d9e87eddbd62dfea817606bd4b68f63834d5fea/question.json)
-- 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-23；[原观察](../stock/35848784152/reading/stock-reading.json)。不是新事件。
 
 ## 600362.SH
 

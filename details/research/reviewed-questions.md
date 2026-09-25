@@ -11,19 +11,19 @@
 
 ## 当前保存Stock批次
 
-市场日：2026-09-23；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
-- 华远控股 600743.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“房地产”中，华远控股的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 普源精电 688337.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“仪器仪表”中，普源精电的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 国芯科技 688262.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“数字芯片设计”中，国芯科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 华丽家族 600503.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
-  - 观察问题草稿：来源方向“房地产”中，华丽家族的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 莱伯泰科 688056.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“仪器仪表”中，莱伯泰科的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 泰凌微 688591.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“数字芯片设计”中，泰凌微的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+市场日：2026-09-24；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
+- 皓宸医疗 002622.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
+  - 观察问题草稿：来源方向“医疗服务”中，皓宸医疗的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- N百瑞吉 920201.BJ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
+  - 观察问题草稿：来源方向“医疗器械”中，N百瑞吉的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 龙竹科技 920445.BJ：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
+  - 观察问题草稿：来源方向“家居用品”中，龙竹科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 贝瑞基因 000710.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“医疗服务”中，贝瑞基因的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 采纳股份 301122.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“医疗器械”中，采纳股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 天振股份 301356.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“家居用品”中，天振股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 
 观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。
 
