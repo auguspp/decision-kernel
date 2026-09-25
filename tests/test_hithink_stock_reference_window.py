@@ -103,11 +103,53 @@ def test_pre_close_later_weekday_and_missing_weekday_calendar_tail_fail(observed
 
 def test_missing_weekday_is_not_accepted_as_a_holiday():
     # The same rule rejects a stale Thursday anchor before a Friday holiday;
-    # this slice does not pretend calendar omission proves holiday closure.
+    # calendar omission by itself remains insufficient.
     ref = context()
     with pytest.raises(HithinkRuntimeError):
         replace(ref, trading_sessions=SESSIONS[:-1],
                 benchmark=replace(ref.benchmark, market_session=SESSIONS[-2])).validate()
+
+
+def test_explicit_exchange_closure_qualifies_data_ready_clock_without_relabeling_session():
+    ref = context()
+    closed = FRIDAY
+    observed = datetime(2026, 9, 4, 8, tzinfo=timezone.utc)
+    qualified = replace(
+        ref,
+        trading_sessions=SESSIONS[:-1],
+        benchmark=replace(ref.benchmark, market_session=SESSIONS[-2]),
+        observed_at=observed,
+        closed_dates=(closed,),
+        closure_evidence=(
+            "https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml",
+            "https://www.szse.cn/www/disclosure/notice/general/t20260917_622911.html",
+        ),
+    )
+    qualified.validate_ready_time(ms(closed, 16), received_at=observed)
+    evidence = qualified.evidence()
+    assert evidence["comparison_session"] == SESSIONS[-2].isoformat()
+    assert evidence["closed_dates"] == [closed.isoformat()]
+    assert evidence["closed_interval_basis"] == "EXPLICIT_EXCHANGE_CLOSURE_AFTER_COMPLETED_SESSION"
+    assert evidence["per_security_market_session"] == "NOT_PROVEN_BY_PAGE_TIMESTAMP"
+    assert evidence["production_qualification"] == "BOUNDED_REFERENCE_ALLOWED_BY_EXPLICIT_EXCHANGE_CLOSURE"
+
+
+def test_explicit_closure_requires_exact_gap_and_evidence():
+    ref = context()
+    observed = datetime(2026, 9, 4, 8, tzinfo=timezone.utc)
+    base = replace(
+        ref,
+        trading_sessions=SESSIONS[:-1],
+        benchmark=replace(ref.benchmark, market_session=SESSIONS[-2]),
+        observed_at=observed,
+    )
+    for changed in (
+        replace(base, closed_dates=(FRIDAY,)),
+        replace(base, closure_evidence=("https://www.sse.com.cn/example",)),
+        replace(base, closed_dates=(date(2026, 9, 3),), closure_evidence=("https://www.sse.com.cn/example",)),
+    ):
+        with pytest.raises(HithinkRuntimeError):
+            changed.validate()
 
 
 @pytest.mark.parametrize("timestamp", [
