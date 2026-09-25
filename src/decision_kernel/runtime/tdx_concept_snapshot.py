@@ -177,6 +177,8 @@ def _inventory(root: Path) -> dict[str, dict[str, Any]]:
     for path in sorted(p for p in root.rglob("*") if p.is_file()):
         require(not path.is_symlink(), "UNSAFE_PATH")
         name = path.relative_to(root).as_posix()
+        if name == "capture.json":
+            continue
         require(name in allowed, "FILE_SCOPE_REJECTED")
         raw = path.read_bytes()
         total += len(raw)
