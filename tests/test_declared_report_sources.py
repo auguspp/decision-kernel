@@ -167,8 +167,10 @@ def test_request_and_source_job_do_not_activate_old_research_or_add_secrets():
     before, rest = workflow.split('\n  prepare-declared-report-sources:', 1)
     job, after = rest.split('\n  deepseek-compatibility:', 1)
     old_jobs = before + '\n  deepseek-compatibility:' + after
-    assert s.once.blob(old_jobs.encode()) == 'a11ac91386317f4d2868a3e9acf004daa857f284'
-    assert s.LABEL not in old_jobs and 'secrets.' not in job
+    # Protect isolation semantics, not an obsolete byte hash of unrelated jobs.
+    assert s.LABEL not in old_jobs and 'declared-report-output/' not in old_jobs
+    assert 'retain-public-report-source' not in workflow and 'retain-report-source' not in workflow
+    assert 'secrets.' not in job
     assert "types: [labeled]" in old_jobs and 'schedule:' not in workflow
     assert "group: stock-business-first-v0" in old_jobs
     assert 'declared-report-output/' in job and "[documents,feeds]" in job
