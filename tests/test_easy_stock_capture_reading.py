@@ -4,6 +4,7 @@ from datetime import timedelta
 import io
 import json
 from pathlib import Path
+import re
 import socket
 import zipfile
 
@@ -231,14 +232,19 @@ def test_no_run_budget_and_html_are_explicit(tmp_path):
     assert '<script>' not in r.render({'status':'<script>unsafe</script>', 'result':None})
 
 
-def test_public_job_reuses_original_clock_and_has_no_source_secrets():
+@pytest.mark.parametrize('job_name,module', [('public-context','easy_stock_capture'),
+                                            ('industrial-fundamentals','industry_fundamentals')])
+def test_public_job_reuses_original_clock_and_has_no_source_secrets(job_name,module):
     path=Path('.github/workflows/radar-industry-breadth.yml')
-    text=path.read_text();job=text.split('\n  public-context:\n',1)[1]
+    text=path.read_text()
+    # Select exactly this job, not all later sibling jobs' CI preflights.
+    tail=text.split('\n  '+job_name+':\n',1)[1]
+    job=re.split(r'\n  [a-z][a-z0-9-]*:\n',tail,maxsplit=1)[0]
     assert 'workflow_run:' in text and 'workflows: [sector-radar-shadow]' in text
     assert 'cron:' not in text and '\n  push:' not in text
     assert 'secrets.' not in job and 'HITHINK' not in job and 'contents: write' not in text
     assert 'persist-credentials: false' in job and 'head_sha="$GITHUB_SHA"' in job
-    assert 'python -m decision_kernel.runtime.easy_stock_capture' in job
+    assert 'python -m decision_kernel.runtime.'+module in job
     assert 'GH_TOKEN:' in job.split('- name: Install',1)[0]
     assert 'GH_TOKEN:' not in job.split('- name: Install',1)[1]
     pub=Path('.github/workflows/current-state-read-entry.yml').read_text()
