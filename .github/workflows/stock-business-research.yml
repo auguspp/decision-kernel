@@ -9,10 +9,6 @@ on:
         description: Exact successful saved Stock reading run, never latest
         type: string
         required: false
-      retain-report-source:
-        description: Retain only the explicitly approved Woton H1 original PDF; no Research or model credentials
-        type: boolean
-        default: false
       reviewed-question:
         description: Run only the separately enabled and approved main question request; never legacy recovery
         type: boolean
@@ -60,7 +56,6 @@ concurrency:
 jobs:
   research-stock-business:
     if: >-
-      !inputs.retain-report-source &&
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
       ((github.event_name == 'workflow_dispatch' &&
@@ -295,7 +290,6 @@ jobs:
 
   deepseek-compatibility:
     if: >-
-      !inputs.retain-report-source &&
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
       github.event_name == 'workflow_dispatch' && inputs.deepseek-compat &&
@@ -348,61 +342,8 @@ jobs:
           retention-days: 30
 
 
-  retain-public-report-source:
-    if: >-
-      github.repository == 'auguspp/decision-kernel' &&
-      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      ((github.event_name == 'workflow_dispatch' && inputs.retain-report-source &&
-        inputs.code-sha == github.sha && !inputs.source-stock-run-id &&
-        !inputs.reviewed-question && !inputs.daily-reviewed-question &&
-        !inputs.reviewed-question-continuation && !inputs.deepseek-compat &&
-        !inputs.recover-sources && !inputs.prepare-sources &&
-        !inputs.source-successor && !inputs.source-successor-continuation) ||
-       (github.event_name == 'issues' && github.event.action == 'labeled' &&
-        github.event.issue.number == 297 && !github.event.issue.pull_request &&
-        github.event.sender.login == 'auguspp' &&
-        (github.event.label.name == 'woton-h1-source-ready' ||
-         github.event.label.name == 'woton-h1-representation-ready')))
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      contents: write
-      issues: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
-        with:
-          python-version: '3.12'
-      - name: Install existing source dependencies only
-        run: python -m pip install -e '.[documents,feeds]'
-      - name: Retain and read back the exact public issuer report without Research
-        env:
-          GH_TOKEN: ${{ github.token }}
-          EXPECTED_CODE_SHA: ${{ inputs.code-sha || github.sha }}
-          REPORT_INPUTS: ${{ toJSON(inputs) }}
-          REPORT_EVENT_ACTION: ${{ github.event.action }}
-          REPORT_ISSUE_NUMBER: ${{ github.event.issue.number }}
-          REPORT_LABEL: ${{ github.event.label.name }}
-          REPORT_SENDER: ${{ github.event.sender.login }}
-          REPORT_IS_PULL_REQUEST: ${{ toJSON(github.event.issue.pull_request != null) }}
-        run: >-
-          python -m decision_kernel.runtime.woton_report_custody
-          --code-commit "$EXPECTED_CODE_SHA" --output report-source-output
-      - name: Preserve original report and all partial source failures
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: stock-report-source-${{ github.run_id }}-${{ github.run_attempt }}
-          path: report-source-output/
-          if-no-files-found: error
-          retention-days: 30
-
   prepare-stock-sources:
     if: >-
-      !inputs.retain-report-source &&
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
       github.event_name == 'workflow_dispatch' && inputs.prepare-sources &&
