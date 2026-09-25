@@ -1,0 +1,61 @@
+name: delivery-repair-preparation
+on:
+  push:
+    branches: [diagnostic/delivery-repair-20260925]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          path: prep
+      - uses: actions/checkout@v7
+        with:
+          ref: 96655870a7a7253cba981f6cc77fdc4aa887f34d
+          persist-credentials: false
+          path: repo
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Prepare bounded reader patch
+        working-directory: repo
+        run: python ../prep/.github/scripts/prepare-delivery-repair.py
+      - name: Test real reader and historical compatibility without credentials
+        working-directory: repo
+        run: |
+          python -m pip install -e '.[test]'
+          python -m pytest -q tests/test_sector_delivery_continuity.py tests/test_current_state.py tests/test_current_state_delivery.py tests/test_concept_detail_compat.py tests/test_concept_detail_compat_reading.py tests/test_single_quick_integration_regressions.py
+      - name: Store only changed blobs, no production ref update
+        working-directory: repo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, subprocess
+          from pathlib import Path
+          paths = ['src/decision_kernel/runtime/current_state.py', 'src/decision_kernel/runtime/current_state_delivery.py', 'src/decision_kernel/runtime/concept_detail_compat.py', 'tests/test_concept_detail_compat.py', 'tests/test_single_quick_integration_regressions.py', 'tests/test_sector_delivery_continuity.py', 'docs/concept-detail-replay-compatibility-v1.md', 'docs/sector-radar-scheduled-production.md']
+          entries = []
+          for path in paths:
+              raw = Path(path).read_bytes()
+              assert len(raw) < 250000
+              data = json.dumps({'content': base64.b64encode(raw).decode(), 'encoding':'base64'})
+              result = subprocess.run(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'], input=data, text=True, capture_output=True, check=True)
+              blob = json.loads(result.stdout)['sha']
+              assert blob == hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              entries.append({'path':path,'mode':'100644','type':'blob','sha':blob})
+          print('PREPARED_TREE_ENTRIES='+json.dumps(entries))
+          subprocess.run(['git','add','--',*paths],check=True)
+          subprocess.run(['git','diff','--cached','--stat'],check=True)
+          Path('../reader.patch').write_bytes(subprocess.check_output(['git','diff','--cached','--binary']))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: prepared-reader-patch
+          path: reader.patch
+          if-no-files-found: warn
