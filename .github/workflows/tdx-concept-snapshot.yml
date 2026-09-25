@@ -99,6 +99,7 @@ jobs:
         with:
           name: tdx-concept-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/tdx-concept/
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 30
       - name: Publish scoped source summary
