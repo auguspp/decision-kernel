@@ -116,3 +116,25 @@ PRE_SINGLE_QUICK_IMPLEMENTATION；只有这两个精确旧映射在新精确安�
 直接原capture.verify仍严格拒绝旧实现，新增回归覆盖这一区分及旧handoff哈希不变。
 
 这只是本次必要的历史读取兼容；不是新的概念取数、扩大覆盖或方法有效性认证。
+
+
+## 2026-09-25 — #579 Sector backfill fingerprint transition
+
+PR #579 changes two modules that are inherited into the broad concept-detail implementation fingerprint:
+`runtime/hithink_sector_breadth_http.py` and `runtime/sector_radar_audit.py`.
+The change adds an explicit exchange-closure qualification path for a bounded
+Sector/Stock backfill and records/replays that optional Sector audit input.
+
+Concept-detail capture/replay does not call the all-market Sector stock-reference
+path or the Sector audit producer. Its source requests, base Concept payload,
+inventory, clocks, hashes, request ordering, report rebuild and authority checks
+remain unchanged. Therefore the old retained concept-detail receipts remain
+eligible only through the existing reviewed historical maps; their bytes and
+historical implementation fingerprints are not rewritten.
+
+`POST_SECTOR_BACKFILL_IMPLEMENTATION` is a new installed-side fingerprint map.
+It equals the previously reviewed `REPLAY_IMPLEMENTATION` except for those two
+Sector-only file hashes. The compatibility verifier still requires an exact known
+historical receipt map and an exact reviewed installed map before it privately
+binds the historical fingerprint for that one verification invocation. It does not
+mutate the module, receipt, archive, Research state, or source evidence.
