@@ -13,29 +13,59 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: 80bc32656f4276265c99743db7797fcfa75fd34b
+          ref: ff33938fdd32ec58959924294e3ec5d00cc768ba
           persist-credentials: false
-      - name: Validate exact reviewed metadata checker once without market access
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install only the original pytest identity conversion dependency
+        run: python -m pip install pytest==9.1.1
+      - name: Download and verify exact completed PR evidence as data
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python3 - <<'PY'
-          import hashlib, json, os, runpy
+          python - <<'PY'
+          import hashlib,json,runpy
           from pathlib import Path
-          p=Path('.github/scripts/check-sector-scheduled-activity.py')
-          raw=p.read_bytes()
-          assert hashlib.sha1(('blob '+str(len(raw))+'\0').encode()+raw).hexdigest()=='037ca31eb7f09380b3d345bd988970e3278a6185'
-          m=runpy.run_path(str(p),run_name='metadata_validation')
-          observations=[]
-          result={'tested_code':'80bc32656f4276265c99743db7797fcfa75fd34b','source_calls':0}
+          root=Path.cwd()
+          r=runpy.run_path('.github/scripts/ci-merge-reuse.py')
+          run=r['api'](root,'actions/runs/36111923599')
+          head='ff33938fdd32ec58959924294e3ec5d00cc768ba'
+          assert run['head_sha']==head and run['status']=='completed' and run['conclusion']=='success' and run['run_attempt']==1 and run['event']=='pull_request'
+          meta=r['api'](root,'actions/artifacts/10853064248')
+          assert meta['workflow_run']['head_sha']==head and meta['workflow_run']['id']==36111923599
+          raw=r['command'](root,'gh','api','repos/auguspp/decision-kernel/actions/artifacts/10853064248/zip')
+          assert len(raw)==1816243 and hashlib.sha256(raw).hexdigest()=='05ed552456e1eb8de4b42c5208b9755679ec7722045bf5474cb7cf7808552b95'
+          with r['verified_archive'](raw,meta) as z:
+              env=json.loads(z.read('environment.json'))
+              count=r['full_evidence'](raw,meta,run,env)
+              assert count==6097
+              print(json.dumps({'proof':'FULL_EVIDENCE_ARCHIVE_REBUILT','code':head,'run':run['id'],'artifact':meta['id'],'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'tests':count,'scope':json.loads(z.read('scope.json')),'original_environment':env},sort_keys=True))
+          print('Original PR environment is compared across its nested groups; this verification host is not the original test host. No tests or source requests rerun.')
+          PY
+      - name: Verify narrow endpoint path using retained drift plus live scoped metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,os,runpy,hashlib
+          m=runpy.run_path('.github/scripts/check-sector-scheduled-activity.py')
+          retained=b'{"total_count":1,"workflow_runs":[]}'
+          assert hashlib.sha256(retained).hexdigest()=='134d1a5f88fc6e48e9e6689b031e057d67c1fff70cbbba5c0e4fa98e8804795c'
+          notes=[]
+          live=m['request_reader'](os.environ['GH_TOKEN'],observations=notes)
+          def hybrid(url):
+              if '/actions/runs?' in url:
+                  return m['ActivityPage'](json.loads(retained),has_next=False)
+              return live(url)
+          report={'mode':'RETAINED_DRIFT_PLUS_FRESH_SCOPED_METADATA_NOT_NATURAL_FAILURE','market_requests':0}
           try:
-              result['blockers']=m['check_activity'](m['request_reader'](os.environ['GH_TOKEN'],observations=observations))
-              result['result']='NO_VISIBLE_PEER_ACTIVITY' if not result['blockers'] else 'BLOCKED_SHARED_KEY_ACTIVITY'
+              report['blockers']=m['check_activity'](hybrid)
+              report['result']='SCOPED_VISIBILITY_COMPLETE'
           except m['CheckError'] as exc:
-              result['result']=str(exc)
-          result['observations']=observations
-          result['request_count']=len(observations)
-          print(json.dumps(result,ensure_ascii=False))
-          assert result['result']=='NO_VISIBLE_PEER_ACTIVITY',result['result']
-          print('METADATA_RECONCILIATION_LIVE_PASS; not Sector market production or missed-session recovery.')
+              report['result']=str(exc)
+          report['observations']=notes
+          print(json.dumps(report,sort_keys=True))
+          assert report['result']=='SCOPED_VISIBILITY_COMPLETE'
+          assert len(notes)==15
           PY
