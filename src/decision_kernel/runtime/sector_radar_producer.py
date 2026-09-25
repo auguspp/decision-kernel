@@ -842,6 +842,8 @@ def run_sector_radar_producer(
     fetch_snapshot: Callable[..., Any] | None = None,
     fetch_membership: Callable[..., Any] | None = None,
     fetch_all_market: Callable[..., Any] | None = None,
+    stock_reference_closed_dates: tuple[date, ...] = (),
+    stock_reference_evidence: tuple[str, ...] = (),
     now: _Now | None = None,
     sleep: Callable[[float], None] = time.sleep,
     membership_request_delay_seconds: float = (
@@ -854,6 +856,10 @@ def run_sector_radar_producer(
     if membership_request_delay_seconds < 0:
         raise SectorRadarProducerError(
             "membership request delay must be non-negative"
+        )
+    if bool(stock_reference_closed_dates) != bool(stock_reference_evidence):
+        raise SectorRadarProducerError(
+            "stock reference closure dates and evidence must be paired"
         )
     now = now or (lambda: datetime.now(timezone.utc))
     fetch_calendar = fetch_calendar or hithink_http.fetch_hithink_trading_calendar
@@ -1046,10 +1052,35 @@ def run_sector_radar_producer(
                     api_key=api_key,
                 )
             )
-        all_market = fetch_all_market(
-            market_session=preparation.market_session,
-            api_key=api_key,
-        )
+        stock_reference = None
+        if stock_reference_closed_dates:
+            stock_reference = hithink_sector_breadth_http.HithinkStockSnapshotReference(
+                trading_sessions=sessions,
+                benchmark=snapshot,
+                observed_at=context.observed_at,
+                closed_dates=stock_reference_closed_dates,
+                closure_evidence=stock_reference_evidence,
+            )
+            reference_payload = stock_reference.evidence()
+            _write_text_atomic(
+                output_directory / "stock-reference.json",
+                json.dumps(
+                    json.loads(canonical_json(reference_payload)),
+                    ensure_ascii=False,
+                    indent=2,
+                    sort_keys=True,
+                ) + "\n",
+            )
+        all_market_kwargs = {
+            "market_session": preparation.market_session,
+            "api_key": api_key,
+        }
+        if stock_reference is not None:
+            all_market_kwargs.update(
+                reference_context=stock_reference,
+                received_at=now,
+            )
+        all_market = fetch_all_market(**all_market_kwargs)
         constituent_points = all_market.points
     elif preparation.acquisition_plan.status != PREPARATION_QUIET:
         raise SectorRadarProducerError(
@@ -1181,6 +1212,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=SECTOR_RADAR_PARENT_HINTS_PATH,
     )
+    run.add_argument(
+        "--stock-reference-closed-date",
+        action="append",
+        default=[],
+        help="Explicit exchange closure date used only for a bounded post-session stock reference.",
+    )
+    run.add_argument(
+        "--stock-reference-evidence",
+        action="append",
+        default=[],
+        help="Stable source locator identifying the exchange closure evidence.",
+    )
     return parser
 
 
@@ -1257,6 +1300,13 @@ def main(
             expected_workflow=context.workflow_path,
             expected_parent_hint_mapping_hash=parent_hints.mapping_hash,
         )
+        try:
+            stock_reference_closed_dates = tuple(
+                date.fromisoformat(value) for value in args.stock_reference_closed_date
+            )
+        except ValueError as exc:
+            raise SectorRadarProducerError("stock reference closure date is invalid") from exc
+        stock_reference_evidence = tuple(args.stock_reference_evidence)
         outcome = run_audited_sector_radar_producer(
             resolution=resolution,
             parent_hints=parent_hints,
@@ -1265,6 +1315,8 @@ def main(
             state_directory=args.state_directory,
             output_directory=output_directory,
             api_key=os.environ.get(hithink_http.HITHINK_API_KEY_ENV),
+            stock_reference_closed_dates=stock_reference_closed_dates,
+            stock_reference_evidence=stock_reference_evidence,
         )
     except (OSError, ValueError, RuntimeError) as exc:
         completed_at = datetime.now(timezone.utc)
