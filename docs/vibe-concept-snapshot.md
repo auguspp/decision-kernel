@@ -1,3 +1,22 @@
+# Current disposition — SECONDARY / BEST-EFFORT after TDX adoption (2026-09-25)
+
+Human explicitly approved: “那就做吧，东财退二线去”. Current authority and
+probe evidence are recorded in #364 comments 5826719708 / 5826769197 and
+`docs/tdx-concept-snapshot.md`.
+
+For new completed-session Concept cross-section work, the default source is
+`.github/workflows/tdx-concept-snapshot.yml` using source-native TDX/eltdx
+1/5/10-day close-to-close observations. This Vibe/Eastmoney workflow remains
+available only as **SECONDARY / BEST-EFFORT** comparison or historical evidence.
+It is not an implicit fallback, is not required for a TDX result, and does not
+receive a v4 retry/backoff/provider-framework expansion.
+
+Everything below is preserved as historical implementation/evidence. In
+particular, v1/v2/v3 runs, raw pages, failures and the BK taxonomy retain their
+original identity; none are rewritten as TDX data.
+
+---
+
 # Vibe concept snapshot — R5-4 bounded source reuse
 
 Authority: #297 comment5811035673 and #364 comment5811149133. Human asked this
