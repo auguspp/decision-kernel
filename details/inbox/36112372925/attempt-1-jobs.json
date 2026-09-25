@@ -1,0 +1,180 @@
+{
+  "jobs": [
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/107998534644",
+      "completed_at": "2026-09-25T08:21:02Z",
+      "conclusion": "failure",
+      "created_at": "2026-09-25T08:20:23Z",
+      "head_branch": "main",
+      "head_sha": "2606e7f8ceed06d25c6ca13cf783ffb6778436b7",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36112372925/job/107998534644",
+      "id": 107998534644,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "name": "inbox",
+      "node_id": "CR_kwDOUK1L0c8AAAAZJTbb9A",
+      "run_attempt": 1,
+      "run_id": 36112372925,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36112372925",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000003455,
+      "runner_name": "GitHub Actions 1000003455",
+      "started_at": "2026-09-25T08:20:25Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-09-25T08:20:26Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-09-25T08:20:26Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:28Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "started_at": "2026-09-25T08:20:26Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:28Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "started_at": "2026-09-25T08:20:28Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:33Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 4,
+          "started_at": "2026-09-25T08:20:28Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:33Z",
+          "conclusion": "success",
+          "name": "Check HiThink secret",
+          "number": 5,
+          "started_at": "2026-09-25T08:20:33Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "failure",
+          "name": "Build Attention Inbox",
+          "number": 6,
+          "started_at": "2026-09-25T08:20:33Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "skipped",
+          "name": "Capture Surprise Radar market-history shadow",
+          "number": 7,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "success",
+          "name": "Record disclosure request scope",
+          "number": 8,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "success",
+          "name": "Publish Human summary",
+          "number": 9,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "skipped",
+          "name": "Upload mobile HTML snapshot",
+          "number": 10,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "skipped",
+          "name": "Upload typed Odds Watch",
+          "number": 11,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "success",
+          "name": "Upload market-history shadow inputs",
+          "number": 12,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "skipped",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 23,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 24,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-25T08:20:59Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "started_at": "2026-09-25T08:20:59Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/107998534644",
+      "workflow_name": "decision-inbox"
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/107998536146",
+      "completed_at": "2026-09-25T08:20:23Z",
+      "conclusion": "skipped",
+      "created_at": "2026-09-25T08:20:23Z",
+      "head_branch": "main",
+      "head_sha": "2606e7f8ceed06d25c6ca13cf783ffb6778436b7",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36112372925/job/107998536146",
+      "id": 107998536146,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "name": "disclosures",
+      "node_id": "CR_kwDOUK1L0c8AAAAZJTbh0g",
+      "run_attempt": 1,
+      "run_id": 36112372925,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36112372925",
+      "runner_group_id": null,
+      "runner_group_name": null,
+      "runner_id": null,
+      "runner_name": null,
+      "started_at": "2026-09-25T08:20:23Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/107998536146",
+      "workflow_name": "decision-inbox"
+    }
+  ],
+  "total_count": 2
+}
