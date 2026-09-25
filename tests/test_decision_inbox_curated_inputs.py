@@ -40,12 +40,7 @@ def test_scheduled_human_inbox_uses_attention_composition_and_curated_inputs() -
     assert "python -m decision_kernel.runtime.attention_inbox" in inbox_step
     assert "decision-kernel build-inbox" not in inbox_step
 
-    expected_current_inputs = {
-        "dogfood/600519-moutai.json",
-        "dogfood/601088-shenhua.json",
-        "research_cases/603986-gigadevice-deep-research-v2.json",
-        "research_cases/002050-sanhua-deep-research-v1.json",
-    }
+    expected_current_inputs = set()  # R5: no automatic legacy probability wake.
     decision_inputs = set(_bash_array_entries(inbox_step, "decision_packages"))
 
     assert decision_inputs == expected_current_inputs
