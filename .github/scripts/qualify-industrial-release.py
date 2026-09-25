@@ -1,4 +1,4 @@
-import base64,hashlib,json,os,subprocess
+import base64,hashlib,json,os,subprocess,zipfile
 from pathlib import Path
 from datetime import datetime,timezone
 from bs4 import BeautifulSoup
@@ -18,7 +18,7 @@ for family,name in (('cpca','cpca-total.body'),('logistics','macro_china_lpi_ind
 for record in json.loads(second['probe.json']):
     if not record['id'].startswith('release-'): continue
     name=record['id']+'.body'; raw=second[name]
-    soup=BeautifulSoup(raw,'html.parser'); title=s.text(soup.select_one('.detail-title').get_text())
+    soup=BeautifulSoup(raw,'html.parser'); title=s.text(soup.title.get_text()).removesuffix('-国家统计局')
     family=next((key for key,pattern in s.PROFILES.items() if __import__('re').search(pattern,title)),None)
     if family:
         files[name]=raw
@@ -30,9 +30,11 @@ for family,section in result['sections'].items():
     sample=[{'label':x['label'],'latest':x['latest'],'unit':x['unit'],'points':len(x['points'])} for x in result['series'] if x['family']==family][:4]
     print('FAMILY='+json.dumps({'family':family,'section':section,'sample':sample},ensure_ascii=False),flush=True)
 Path('../qualification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
+paths=['src/decision_kernel/runtime/industry_fundamentals.py','src/decision_kernel/runtime/industry_fundamentals_reading.py','src/decision_kernel/runtime/current_state_delivery_with_odds_watch.py','.github/workflows/radar-industry-breadth.yml','tests/test_industry_fundamentals.py','docs/industry-fundamentals-v1.md']
+with zipfile.ZipFile('../prepared-code.zip','w',compression=zipfile.ZIP_DEFLATED) as z:
+    for path in paths: z.write(path,path)
 assert result['coverage']['available_families']==10, result['sections']
 assert set(links)==set(s.PROFILES), links
-paths=['src/decision_kernel/runtime/industry_fundamentals.py','src/decision_kernel/runtime/industry_fundamentals_reading.py','src/decision_kernel/runtime/current_state_delivery_with_odds_watch.py','.github/workflows/radar-industry-breadth.yml','tests/test_industry_fundamentals.py','docs/industry-fundamentals-v1.md']
 entries=[]
 for path in paths:
     raw=Path(path).read_bytes()
@@ -43,8 +45,3 @@ for path in paths:
 print('INDUSTRY_TREE_ENTRIES='+json.dumps(entries),flush=True)
 subprocess.run(['git','add','--',*paths],check=True)
 Path('../industry.patch').write_bytes(subprocess.check_output(['git','diff','--cached','--binary']))
-# Include changed source for independent local engineering inspection; no provider
-# credentials or downloaded source instructions are part of this code ZIP.
-import zipfile
-with zipfile.ZipFile('../prepared-code.zip','w',compression=zipfile.ZIP_DEFLATED) as z:
-    for path in paths: z.write(path,path)
