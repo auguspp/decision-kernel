@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "baseline_reading_hash": "1524a9c75858f733aa1f2a0d1249625cb33d594756513f59ebf3c78eb9024dbc",
+    "baseline_reading_hash": "92ef3f0f58fcc9d8bd0c59728dd90db1dbeb012d4736f80e7ab1996fafc2bed8",
     "business_benefit_established": false,
     "comparison": {
       "changes": [
@@ -2171,7 +2171,7 @@
       "missing_previous_series": [],
       "unchanged_count": 0
     },
-    "comparison_status": "NEW_CAPTURE_COMPARED",
+    "comparison_status": "SAME_CAPTURE_INCREMENT_PRESERVED",
     "current": {
       "archive": {
         "artifact_id": 10871499580,
@@ -12982,7 +12982,7 @@
       "status": "AVAILABLE",
       "validation": "EXACT_ORIGINAL_BYTES_AND_PURE_REBUILD_NOT_SOURCE_TRUTH"
     },
-    "generated_at": "2026-09-25T15:16:37.452269+00:00",
+    "generated_at": "2026-09-25T16:35:16.050718+00:00",
     "investment_authority": "NONE",
     "last_capture_hash": "04e29366d5d6f32122617a7ac288d3b1124a7c949cae6e2dfeebc44cf9e2ae66",
     "observation": {
@@ -23744,9 +23744,9 @@
       "version": "industry-fundamentals-v1"
     },
     "observation_is_prior": false,
-    "previous_status": "PREVIOUS_CAPTURE_UNAVAILABLE_NOT_NO_CHANGE",
+    "previous_status": "EXACT_PREVIOUS_READING_a0de0cef9ee5bc31f2f8b51cccf5e2084aba28bf",
     "research_authority": "NONE",
     "version": "industry-fundamentals-v1"
   },
-  "projection_hash": "8980a4d2298d7f6f172a38ead1b5ee7a4919db23237db9cb10694327abed9203"
+  "projection_hash": "09456ad5c1a68937bf1fb1f5578e31a373dfbbe6118a73c08bc430287148f118"
 }
