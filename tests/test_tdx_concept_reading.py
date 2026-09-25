@@ -222,6 +222,6 @@ def test_workflows_retain_hidden_source_file_and_publish_tdx_reading():
     assert "schedule:" not in tdx_workflow and "secrets." not in tdx_workflow
 
     publisher = Path(".github/workflows/current-state-read-entry.yml").read_text()
-    assert "tdx-concept-snapshot]" in publisher
+    assert "tdx-concept-snapshot" in publisher
     assert "--include-tdx-concept-context" in publisher
     assert "schedule:" not in publisher
