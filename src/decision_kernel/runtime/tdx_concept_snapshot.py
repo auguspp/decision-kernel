@@ -115,7 +115,10 @@ def _jsonable(value: Any) -> Any:
         return value.isoformat()
     if isinstance(value, bytes):
         return {"encoding": "hex", "value": value.hex()}
-    if isinstance(value, (str, int, float, bool)) or value is None:
+    if isinstance(value, float):
+        require(value == value and value not in {float("inf"), float("-inf")}, "NONFINITE_FLOAT_REJECTED")
+        return Decimal(str(value))
+    if isinstance(value, (str, int, bool, Decimal)) or value is None:
         return value
     return str(value)
 
@@ -474,7 +477,7 @@ def capture(
     reason = None
     failure_type = None
     try:
-        source = source_fn(output, target)
+        source = _jsonable(source_fn(output, target))
         # Bind the retained board-file bytes after live acquisition.
         source["source_file_records"] = _file_records(output)
         observation = build_observation(source, target)
