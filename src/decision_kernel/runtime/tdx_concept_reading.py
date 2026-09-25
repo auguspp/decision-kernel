@@ -202,8 +202,9 @@ def attach(collector, baseline):
              + str(section["status"])
              + "；读取缺口不等于零概念变化。\n"
     )
-    if line not in tail:
-        tail += line.encode()
+    encoded_line = line.encode()
+    if encoded_line not in tail:
+        tail += encoded_line
 
     replacements = {
         "current-state.json": model.read_package_bytes(payload),
