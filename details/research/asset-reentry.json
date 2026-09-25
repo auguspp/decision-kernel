@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "0a1bc12e48aa2740ee1de131b7a18acdb99cfd1fa345a2a8dbbd1ef98e60e18d",
+    "base_reading_hash": "29af9e92e7e54797edad09ba60c258c193f0f06c3ba604a95b36f835fe8326d7",
     "companies": [
       {
         "archives": [],
@@ -654,11 +654,52 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "923fc44715c58a68393a266eb9562457dda2d0cde8b752f231aaef5b413ac215",
+        "association_id": "cf5e5e80b80d04d18c678b92d7393db197363db8b07322336f91e8893cc28503",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [],
+        "saved_observations": [
+          {
+            "kind": "SAVED_RADAR_ORIGINS",
+            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
+            "origins": [
+              {
+                "family": "GRANULAR_884",
+                "group_key": "881180.TI",
+                "group_on_homepage": false,
+                "is_primary": true,
+                "kind": "SECTOR_LEADER",
+                "market_session": "2026-09-24",
+                "retained_leader": {
+                  "daily_return": "-0.0445598096474150984209387843",
+                  "name": "和顺石油",
+                  "thscode": "603353.SH",
+                  "ticker": "603353",
+                  "turnover": "460625500"
+                },
+                "sector_name": "油品石化贸易",
+                "sector_thscode": "884021.TI",
+                "source": {
+                  "bytes": 436364,
+                  "git_blob": "3d37c6da74faea05a3c321530d0b89c9bb82fad2",
+                  "read_path": "details/sector/36122381294/result.json",
+                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+                  "sha256": "1992f8dce9640f880285055378c00eeb630b57bd479196f477ffa273b34e57ce"
+                },
+                "source_observed_at": "2026-09-25T10:24:20.331698Z",
+                "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
+              }
+            ],
+            "projection_hash": "cf8fea78af8d372a3c6a5b217c8c4fc5231abce6db800b66ad2ba2702426c582",
+            "source": {
+              "bytes": 275531,
+              "git_blob": "5ca2f3800f5731c2c39559f1064d41333e127e80",
+              "read_path": "details/radar/company-reading.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "ba7c9d81b9407a3557af32f33aa716081659a7be3e21837cd062d173d48e9111"
+            }
+          }
+        ],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "603353.SH"
@@ -2580,78 +2621,11 @@
           }
         ],
         "assets": [],
-        "association_id": "ce1f8d14a62ccb42c139e8f528e228641f8e4bca6c3b36e62649f8d459b512b3",
+        "association_id": "70d58c21751e3778aa26a74a4791b3af4e5bfbc9a59c47c70796307abb477536",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "BROAD_881",
-                "group_key": "881153.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-23",
-                "retained_leader": {
-                  "daily_return": "0.099715099715099715099715100",
-                  "name": "我爱我家",
-                  "thscode": "000560.SZ",
-                  "ticker": "000560",
-                  "turnover": "1210342790"
-                },
-                "sector_name": "房地产",
-                "sector_thscode": "881153.TI",
-                "source": {
-                  "bytes": 261847,
-                  "git_blob": "9c76fda5e9d4c695d05886fc3638a2d1ed4dfa8e",
-                  "read_path": "details/sector/35847506413/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "3f32add02c67a3a0735c14cd2d3a7ae861e38afe434ea8cf4f8d60d6bcb01b00"
-                },
-                "source_observed_at": "2026-09-23T10:25:51.797517Z",
-                "source_result_hash": "d1fb9a228f715bd5928ddbab6556148ab5e0565e74190fe2ec926eb65a728c4f"
-              },
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881153.TI",
-                "group_on_homepage": true,
-                "is_primary": false,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-23",
-                "retained_leader": {
-                  "daily_return": "0.099715099715099715099715100",
-                  "name": "我爱我家",
-                  "thscode": "000560.SZ",
-                  "ticker": "000560",
-                  "turnover": "1210342790"
-                },
-                "sector_name": "房地产服务",
-                "sector_thscode": "884248.TI",
-                "source": {
-                  "bytes": 261847,
-                  "git_blob": "9c76fda5e9d4c695d05886fc3638a2d1ed4dfa8e",
-                  "read_path": "details/sector/35847506413/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "3f32add02c67a3a0735c14cd2d3a7ae861e38afe434ea8cf4f8d60d6bcb01b00"
-                },
-                "source_observed_at": "2026-09-23T10:25:51.797517Z",
-                "source_result_hash": "d1fb9a228f715bd5928ddbab6556148ab5e0565e74190fe2ec926eb65a728c4f"
-              }
-            ],
-            "projection_hash": "f1baedc8bf47761b945c8522e469846ccbebd20d095434200599965d72ee54ce",
-            "source": {
-              "bytes": 172522,
-              "git_blob": "ea7d400f714c9625a78e541b3cbc12add05f238b",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "27742c53b8345b3519e5a2b6faba83c2901c656a6e34203a2cdcc82a3085e69b"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "000560.SZ"
@@ -3033,51 +3007,11 @@
             }
           }
         ],
-        "association_id": "c0a2566337fc155d4741ff53e7fc905f26a0c1bef3396fb4f70b301f259c89d4",
+        "association_id": "9beb4152ec16772622280e0be9b234089b9ce4369f2978a11e8a650bada75d3e",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881117.TI",
-                "group_on_homepage": true,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-23",
-                "retained_leader": {
-                  "daily_return": "0.2",
-                  "name": "普源精电",
-                  "thscode": "688337.SH",
-                  "ticker": "688337",
-                  "turnover": "753270320"
-                },
-                "sector_name": "仪器仪表",
-                "sector_thscode": "884192.TI",
-                "source": {
-                  "bytes": 261847,
-                  "git_blob": "9c76fda5e9d4c695d05886fc3638a2d1ed4dfa8e",
-                  "read_path": "details/sector/35847506413/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "3f32add02c67a3a0735c14cd2d3a7ae861e38afe434ea8cf4f8d60d6bcb01b00"
-                },
-                "source_observed_at": "2026-09-23T10:25:51.797517Z",
-                "source_result_hash": "d1fb9a228f715bd5928ddbab6556148ab5e0565e74190fe2ec926eb65a728c4f"
-              }
-            ],
-            "projection_hash": "f1baedc8bf47761b945c8522e469846ccbebd20d095434200599965d72ee54ce",
-            "source": {
-              "bytes": 172522,
-              "git_blob": "ea7d400f714c9625a78e541b3cbc12add05f238b",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "27742c53b8345b3519e5a2b6faba83c2901c656a6e34203a2cdcc82a3085e69b"
-            }
-          },
           {
             "kind": "SAVED_STOCK_DISPOSITION",
             "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
@@ -3295,7 +3229,7 @@
       "with_saved_observations": 2,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-25T10:13:50.374597+00:00",
+    "generated_at": "2026-09-25T10:25:30.205812+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3314,5 +3248,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "4dd8a1d844281fa5ae0ae70636ad6141c05c1f2d1c7cc8bcb4592bfeb847fd54"
+  "projection_hash": "821ca138fe00fe821dff11ce31a7074305596d8af85a4c89761401edead7fe39"
 }

@@ -95,6 +95,7 @@
 - stock-603353-34807883332-business-review-addendum：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：run34807883332同材料追加业务审阅：有限经营依据、反证和下一问题；原终局理由仍受挑战，不覆盖候选/不新增Funnel、Human接受、Odds或监控。
   - [原保存材料](../../sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md)
+- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-24；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 300711.SZ
 
@@ -334,7 +335,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-000560-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-23；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 002792.SZ
 
@@ -378,7 +378,6 @@
   - [原保存材料](../../sources/git/901278687c33f3a9a4fd6bfaa26bb4dd1d534f6a/research-attention.json)
   - [原保存材料](../../sources/git/e4ee65a72a3d16827dedb7c98f2c98d43d84a2a2/validation.json)
   - [原保存材料](../../sources/git/4d9e87eddbd62dfea817606bd4b68f63834d5fea/question.json)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-23；[原观察](../radar/company-reading.json)。不是新事件。
 - 原保存观察：SAVED&#95;STOCK&#95;DISPOSITION；市场日：2026-09-23；[原观察](../stock/35848784152/reading/stock-reading.json)。不是新事件。
 
 ## 600362.SH
