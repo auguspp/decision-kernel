@@ -1,6 +1,6 @@
 # TDX / eltdx concept snapshot — primary current cross-section source
 
-Status: PRIMARY SOURCE IMPLEMENTED / FIRST LIVE MAIN SOURCE ACCEPTED; PINNED READ-MODEL RETENTION IN FOLLOW-UP.
+Status: PRIMARY SOURCE / LIVE MAIN / PINNED READ-MODEL RETENTION ACCEPTED; DAILY HANDOFF USES EXISTING SECTOR CLOCK.
 Authority: Human 2026-09-25 “那就做吧，东财退二线去”; Reconcile #364
 comments 5826719708 and 5826769197. This changes the current supplemental
 Concept cross-section source, not the existing HiThink `radar-concept-source`
@@ -55,10 +55,14 @@ evidence. Its cause is UNKNOWN; it is not erased by later success.
 
 ## Completed-session contract
 
-`.github/workflows/tdx-concept-snapshot.yml` is manual-only and requires:
+`.github/workflows/tdx-concept-snapshot.yml` remains a `workflow_dispatch` capture contract, so it keeps the same manual fallback and never owns a second clock. Routine daily invocation is handed from the existing `stock-reading-after-sector.yml` `workflow_run` successor after one successful result-bearing `sector-radar-shadow` production. The successor reuses the exact Sector run/job classifier and retained audit, takes `market-session` from the sealed Sector `operations.json.latest_completed_session`, and uses the already-existing `DAILY_CHAIN_DISPATCH_TOKEN` to request the TDX workflow once. Recovery/adoption and same-session no-op Sector runs do not create a TDX dispatch.
+
+The capture workflow still requires:
 - exact `main` / attempt1 / `code-sha`;
 - a successful independent main `ci.yml` push run for that exact SHA;
 - an explicit completed A-share `market-session`.
+
+The daily successor itself makes no TDX/Eastmoney call, does not infer a trade date from wall clock, and adds no `schedule:`. If main advances after the successor starts, it stops before dispatch rather than binding an ambiguous code SHA. The TDX capture then independently rechecks exact main/CI and source-session equality.
 
 The source probes the packaged TDX host list with a 1.5s TCP bound, then permits
 at most three distinct protocol connection attempts and uses the first successful
@@ -157,3 +161,10 @@ This reading seam performs zero TDX/Eastmoney calls and creates no new source,
 Research, Odds, Decision, Action or investment authority. A missing, failed,
 expired or unreplayable newest artifact is an explicit reading gap, not zero
 Concept activity.
+
+
+## Daily handoff boundary
+
+The nominal daily clock remains the already-adopted Sector trigger path (currently the Human-managed workday 18:13 Asia/Shanghai external dispatch). TDX does not gain its own cron. One successful result-bearing Sector production may hand the same completed session to both the existing Stock successor and TDX, but the two jobs are independent: Stock shared-key activity cannot suppress TDX and a TDX failure cannot relabel Sector/Stock success.
+
+The handoff is event plumbing, not a source success claim. If Sector fails, performs a recovery/adoption, or validates an already-current same session, no new TDX run is fabricated. If the TDX child fails its exact-main/main-CI/source-date contract, the existing publisher exposes the gap rather than searching an older green child. R5-5 must measure those actual missing days instead of repairing them with same-day manual duplicates.
