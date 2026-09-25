@@ -1231,6 +1231,6 @@
     "signal_transition_authority": "NONE",
     "source_run_id": 35848784152,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
+    "stock_lane_health": "IN_PROGRESS"
   }
 }
