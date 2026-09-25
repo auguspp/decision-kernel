@@ -1,0 +1,35 @@
+{
+  "qualification": "CONDITIONAL_ARITHMETIC_ON_RETAINED_INPUTS_NOT_FORECAST_OR_ODDS",
+  "security": "002436.SZ",
+  "currency": "CNY",
+  "unit": "100000000_CNY",
+  "q1_parent_profit_yi": "0.1874469413",
+  "q2_parent_profit_yi": "0.9176304061",
+  "h1_parent_profit_yi": "1.1050773474",
+  "rows": [
+    {
+      "broker": "SPDB International",
+      "retained_rounded_2026_forecast_yi": "3.2",
+      "required_h2_parent_profit_yi": "2.0949226526",
+      "required_h2_average_quarter_yi": "1.0474613263",
+      "average_relative_to_actual_q2": "1.1414849805945199923339811396426"
+    },
+    {
+      "broker": "Kaiyuan",
+      "retained_rounded_2026_forecast_yi": "5.16",
+      "required_h2_parent_profit_yi": "4.0549226526",
+      "required_h2_average_quarter_yi": "2.0274613263",
+      "average_relative_to_actual_q2": "2.2094530791725472663585052055960"
+    }
+  ],
+  "h1_cfo_minus_cash_capex_yi": "-7.2318955844",
+  "limits": [
+    "Rounded broker targets do not gain precision from subtraction.",
+    "Average quarter is not a quarterly trajectory or seasonal forecast.",
+    "No EPS year/currency/share-basis equivalence or vintage revision is validated.",
+    "CFO minus cash capex is not parent FCFE.",
+    "Inputs were recovered from prior research, not freshly audited issuer statements."
+  ],
+  "investment_authority": "NONE",
+  "odds_recomputed": false
+}
