@@ -25,7 +25,7 @@ concurrency:
 jobs:
   producer:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     env:
       TZ: Asia/Shanghai
     steps:
@@ -216,21 +216,13 @@ jobs:
             "${stock_reference_args[@]}"
       - name: Verify exact offline replay before publication
         id: replay-check
-        if: >-
-          success() &&
-          (github.event_name != 'workflow_dispatch' ||
-           inputs.operation == 'produce' ||
-           inputs.operation == 'backfill-2026-09-24')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/verify-sector-radar-publication.py
       - name: Render read-only saved-state context
         id: context-view
-        if: >-
-          success() &&
-          (github.event_name != 'workflow_dispatch' ||
-           inputs.operation == 'produce' ||
-           inputs.operation == 'backfill-2026-09-24')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: |
@@ -240,11 +232,7 @@ jobs:
             --output sector-radar-run/context
       - name: Package joint economic and company reading
         id: joint-reading
-        if: >-
-          success() &&
-          (github.event_name != 'workflow_dispatch' ||
-           inputs.operation == 'produce' ||
-           inputs.operation == 'backfill-2026-09-24')
+        if: success() && (github.event_name != 'workflow_dispatch' || inputs.operation == 'produce' || inputs.operation == 'backfill-2026-09-24')
         env:
           HITHINK_FINANCE_API_KEY: ""
         run: python .github/scripts/build-sector-radar-reading.py
