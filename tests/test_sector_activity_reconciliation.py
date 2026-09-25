@@ -2,7 +2,6 @@
 
 No market source, live API, scheduler or skipped source qualification.
 """
-import hashlib
 import json
 import runpy
 from pathlib import Path
@@ -69,7 +68,7 @@ def test_real_count_drift_requires_all_scoped_statuses(monkeypatch, blocker_stat
         status = query['status'][0]
         if path.endswith('/actions/runs'):
             # Exact real diagnostic body; do not assert an unproved race cause.
-            return Response(b'{"total_count":1,"workflow_runs":[]}\n' if status == 'queued' else empty())
+            return Response(b'{"total_count":1,"workflow_runs":[]}' if status == 'queued' else empty())
         if path.endswith('/live-dogfood.yml/runs') and status == blocker_status:
             return Response({'total_count': 1, 'workflow_runs': [row(901, target+'@refs/heads/main', status)]})
         return Response(empty())
@@ -79,7 +78,7 @@ def test_real_count_drift_requires_all_scoped_statuses(monkeypatch, blocker_stat
     assert len(calls) == 2 + len(mod['PEERS'])*len(mod['ACTIVE'])
     assert len(set(calls)) == len(calls)  # no broad-query retry/poll
     assert observations[1]['total_count'] == 1 and observations[1]['returned_rows'] == 0
-    assert observations[1]['body_sha256'] == hashlib.sha256(b'{"total_count":1,"workflow_runs":[]}\n').hexdigest()
+    assert observations[1]['body_sha256'] == '134d1a5f88fc6e48e9e6689b031e057d67c1fff70cbbba5c0e4fa98e8804795c'
     for peer in mod['PEERS']:
         assert {parse_qs(urlsplit(u).query)['status'][0] for u in calls if '/'+peer.split('/')[-1]+'/runs?' in u} == set(mod['ACTIVE'])
     assert 'PRIVATE-CANARY' not in json.dumps(observations)
@@ -195,6 +194,6 @@ def test_failure_receipt_survives_before_market_output(monkeypatch, tmp_path, ca
     text = capsys.readouterr().out
     assert 'GITHUB_SCOPED_ACTIVITY_RESPONSE_INCOMPLETE' in text
     assert '"total_count": 1' in text and '"returned_rows": 0' in text
-    assert (tmp_path/'summary.md').read_text() == text.rstrip('\n')+'\n' or (tmp_path/'summary.md').read_text() == text[:-1]
+    assert text == (tmp_path/'summary.md').read_text()+'\n'
     assert 'PRIVATE-CANARY' not in text
     assert len(calls) == 2
