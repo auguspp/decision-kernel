@@ -2,7 +2,7 @@ name: industry-fundamentals-probe
 on:
   push:
     branches: [diagnostic/industry-fundamentals-20260925]
-    paths: [.github/workflows/industry-fundamentals-probe.yml]
+    paths: [.github/workflows/industry-fundamentals-probe.yml, '.github/scripts/*industrial-release.py']
 permissions:
   contents: write
   actions: read
