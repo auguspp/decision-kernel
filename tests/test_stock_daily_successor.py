@@ -14,6 +14,7 @@ WORKFLOW = ROOT / ".github/workflows/stock-reading-after-sector.yml"
 HELPER = ROOT / ".github/scripts/check-stock-daily-successor.py"
 SECTOR_WORKFLOW = ROOT / ".github/workflows/sector-radar-shadow.yml"
 STOCK_WORKFLOW = ROOT / ".github/workflows/hithink-stock-dump-trial.yml"
+TDX_WORKFLOW = ROOT / ".github/workflows/tdx-concept-snapshot.yml"
 RESEARCH_WORKFLOW = ROOT / ".github/workflows/stock-business-research.yml"
 CURRENT_STATE_WORKFLOW = ROOT / ".github/workflows/current-state-read-entry.yml"
 STOCK_CAPTURE = ROOT / ".github/scripts/capture-stock-reading.py"
@@ -91,7 +92,7 @@ def write_dispatch_jobs(path: Path, profile: str) -> Path:
     return path
 
 
-def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader():
+def test_successor_reuses_one_daily_sector_clock_for_stock_and_tdx_without_new_schedule():
     raw = WORKFLOW.read_text(encoding="utf-8")
     trigger = raw.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
     assert "workflow_run:" in trigger
@@ -114,15 +115,21 @@ def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader(
     assert "persist-credentials: false" in raw
     assert "cancel-in-progress: false" in raw and "timeout-minutes: 5" in raw
     assert raw.count("hithink-stock-dump-trial.yml/dispatches") == 1
-    assert raw.count("gh api --method POST") == 1
+    assert raw.count("tdx-concept-snapshot.yml/dispatches") == 1
+    assert raw.count("gh api --method POST") == 2
     assert "actions/runs/$UPSTREAM_RUN_ID/jobs?per_page=100&page=1" in raw
     assert "UPSTREAM_JOBS_JSON" in raw
     assert '"trial-purpose": "stock-reading"' in raw
     assert '"stock-market-run-id": os.environ["MARKET_RUN_ID"]' in raw
     assert "steps.preflight.outputs.market_run_id" in raw
     assert "steps.preflight.outputs.sector_origin" in raw
+    assert "steps.tdx-origin.outputs.sector_run_id" in raw
+    assert "steps.tdx-origin.outputs.sector_origin" in raw
+    assert "'market-session': os.environ['MARKET_SESSION']" in raw
+    assert "'code-sha': os.environ['CODE_SHA']" in raw
     dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1]
     assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in dispatch
+    assert raw.count("GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}") == 2
     assert "GH_TOKEN: ${{ github.token }}" not in dispatch
     assert 'Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN' in dispatch
     assert 'do not fall back to GITHUB_TOKEN' in dispatch
@@ -130,6 +137,34 @@ def test_successor_is_one_daily_sector_handoff_not_a_new_clock_or_market_reader(
     assert "gh run watch" not in raw
     assert "HITHINK_FINANCE_API_KEY" not in raw and "secrets.HITHINK_FINANCE_API_KEY" not in raw
     assert "/rerun" not in raw and "sleep(" not in raw and "while " not in raw
+
+
+
+def test_tdx_daily_handoff_reuses_exact_sector_result_and_existing_capture_contract():
+    successor = WORKFLOW.read_text(encoding="utf-8")
+    tdx = TDX_WORKFLOW.read_text(encoding="utf-8")
+    block = successor.split("  dispatch-tdx-concept:\n", 1)[1]
+
+    assert "needs: dispatch-stock-reading" not in block
+    assert "SUCCESSOR_CHECK_MODE: stock-input" in block
+    assert "check-stock-daily-successor.py" in block
+    assert '"sector-radar-run-$UPSTREAM_RUN_ID"' in block
+    assert "latest_completed_session" in block
+    assert "direct_next_session" in block
+    assert "APPENDED_NEW_COMPLETED_SESSION" in block
+    assert "Require successor code is still current main" in block
+    assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in block
+    assert "HITHINK_FINANCE_API_KEY" not in block
+    assert "secrets.HITHINK_FINANCE_API_KEY" not in block
+    assert "schedule:" not in block
+
+    trigger = tdx.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger
+    assert "schedule:" not in trigger and "workflow_run:" not in trigger
+    assert "market-session:" in trigger and "code-sha:" in trigger
+    assert 'test "$EXPECTED_CODE" = "$GITHUB_SHA"' in tdx
+    assert "actions/workflows/ci.yml/runs" in tdx
+    assert "include-hidden-files: true" in tdx
 
 
 def test_exact_successor_identity_accepts_native_schedule_and_separate_code_sha():
