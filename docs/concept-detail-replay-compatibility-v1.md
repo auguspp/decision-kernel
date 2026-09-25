@@ -138,3 +138,8 @@ Sector-only file hashes. The compatibility verifier still requires an exact know
 historical receipt map and an exact reviewed installed map before it privately
 binds the historical fingerprint for that one verification invocation. It does not
 mutate the module, receipt, archive, Research state, or source evidence.
+
+
+## 2026-09-25 — Same-session delivery continuity
+
+The new installed map changes only current_state.py navigation text and current_state_delivery.py Sector result selection. Concept-detail replay does not call Collector.lane or this navigation. All historical maps remain immutable; exact prior REPLAY and POST_SECTOR_BACKFILL maps are also readable under the unchanged verifier. Unknown hashes still fail. This is saved-result reading, not new source qualification or production replay.

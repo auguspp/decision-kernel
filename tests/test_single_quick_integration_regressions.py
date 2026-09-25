@@ -90,7 +90,7 @@ def test_additional_compatibility_changes_only_reviewed_non_replay_files():
     assert {k for k in compat.REPLAY_IMPLEMENTATION
             if compat.REPLAY_IMPLEMENTATION[k] != compat.POST_SECTOR_BACKFILL_IMPLEMENTATION[k]} == {
         'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}
-    assert capture._implementation() == compat.POST_SECTOR_BACKFILL_IMPLEMENTATION
+    assert capture._implementation() == compat.POST_DELIVERY_CONTINUITY_IMPLEMENTATION
 
 
 def test_legacy_handoff_projection_identity_and_lane_remain_exact():

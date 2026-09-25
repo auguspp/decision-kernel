@@ -342,7 +342,7 @@ class Collector:
             details = {n: self.retain(prefix + n, files[n]) for n in (
                 "context/context.json", "operations.json", "publication-verification.json")}
             # Original summary is explicitly original; current renderer not backdated.
-            for name in ("summary.md", "context/index.html", "result.json"):
+            for name in ("summary.md", "context/index.html", "result.json", "stock-reference.json"):
                 if name in files:
                     details[name] = self.retain(prefix + name, files[name])
             result["state_archive"] = state_ref
@@ -365,8 +365,38 @@ class Collector:
         return {**result, "run": model.concise_run(run), "archive": archive_ref, "details": details,
                 "source_checked_at": self.now(), "run_metadata": run_reference}
 
+    def sector_result_after_validation(self, runs: list[dict], checked: dict) -> tuple[dict, dict | None]:
+        """A verified same-session no-op must not erase its result-bearing predecessor.
+
+        This is reading selection, never restore or a new event. Every inspected
+        archive still passes saved_product; corruption stops, not older fallback.
+        """
+        noop = "VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT"
+        if checked.get("status") != noop:
+            return checked, None
+        identity = ("market_session", "market_state_hash", "event_ledger_hash")
+        expected = tuple(checked[key] for key in identity)
+        boundary = (model.clock(checked["run"]["created_at"]), checked["run"]["id"])
+        eligible = [r for r in runs if model.select_runs([r], "sector")[1] is not None]
+        model.check(len(eligible) <= MAX_RUNS, "Sector delivery scan bound")
+        for run in sorted(eligible, key=lambda r: (model.clock(r["created_at"]), r["id"]), reverse=True):
+            if (model.clock(run["created_at"]), run["id"]) >= boundary:
+                continue
+            prior = self.saved_product("sector", run)
+            if prior["market_session"] != checked["market_session"]:
+                break  # Never carry another market day as this day's changes.
+            model.check(tuple(prior[key] for key in identity) == expected,
+                        "same-session Sector result/state continuity differs")
+            if prior["status"] == noop:
+                continue
+            model.check("result.json" in prior["details"] and "summary.md" in prior["details"],
+                        "result-bearing Sector delivery is incomplete")
+            return prior, checked
+        return checked, checked
+
     def lane(self, lane: str) -> dict:
         latest, qualified, failure, query_complete = None, None, None, False
+        state_validation = None
         try:
             runs, query_complete = self.runs(lane)
             latest, successful = model.select_runs(runs, lane)
@@ -390,6 +420,8 @@ class Collector:
             if successful:
                 # Exactly one chosen success. A rejected archive never triggers older search.
                 qualified = self.saved_product(lane, successful)
+                if lane == "sector":
+                    qualified, state_validation = self.sector_result_after_validation(runs, qualified)
             else:
                 failure = "NO_SUCCESS_IN_BOUNDED_QUERY"
         except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, zipfile.BadZipFile) as exc:
@@ -410,6 +442,11 @@ class Collector:
                 if latest and latest["id"] == qualified["run"]["id"]:
                     result["gaps"] = [gap for gap in result["gaps"]
                                       if gap != "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"]
+        if state_validation is not None:
+            result["latest_state_validation"] = state_validation
+            result["delivery_selection"] = "SAME_SESSION_RESULT_PRESERVED_NOT_NEW_EVENT"
+            if qualified["run"]["id"] == state_validation["run"]["id"]:
+                result["gaps"].append("SAME_SESSION_RESULT_NOT_FOUND_IN_BOUNDED_QUERY")
         result["query_scope"] = f"newest {MAX_RUNS} runs of exact workflow on main; not an all-history audit"
         return result
 

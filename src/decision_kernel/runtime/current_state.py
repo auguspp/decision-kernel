@@ -516,6 +516,9 @@ def _reading_navigation(payload: dict, text: Callable[[Any], str]) -> list[str]:
         lines += ["", "股票：本读取没有可用保存结果，不是零候选。"]
     if sector:
         details = sector.get("details", {})
+        validation = payload["lanes"].get("sector", {}).get("latest_state_validation")
+        if validation:
+            lines += ["", "最新成功运行只做同交易日状态校验；下方保留原结果及来源，不重发事件。"]
         lines += ["", f"板块保存市场日：{text(sector.get('market_session') or 'UNKNOWN')}。",
                   "新进入条件、仍处于强状态、已退出与未覆盖不是一回事；持续状态可查看，不据此重发新事件。",
                   link("全部新变化与被首页省略的组", details.get("summary.md")) + " / "
