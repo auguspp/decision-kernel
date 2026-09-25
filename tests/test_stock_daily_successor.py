@@ -97,52 +97,37 @@ def write_dispatch_jobs(path: Path, profile: str) -> Path:
     return path
 
 
-def test_successor_reuses_one_daily_sector_clock_for_stock_and_tdx_without_new_schedule():
+def test_successor_reconciles_deliveries_without_a_second_source_clock():
+    import yaml
     raw = WORKFLOW.read_text(encoding="utf-8")
-    trigger = raw.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
-    assert "workflow_run:" in trigger
-    assert "workflows: [sector-radar-shadow]" in trigger
-    assert "types: [completed]" in trigger and "branches: [main]" in trigger
-    assert "schedule:" not in trigger and "workflow_dispatch:" not in trigger and "push:" not in trigger
-    for required in (
-        "github.event.workflow_run.event == 'schedule'",
-        "github.event.workflow_run.event == 'workflow_dispatch'",
-        "github.event.workflow_run.status == 'completed'",
-        "github.event.workflow_run.conclusion == 'success'",
-        "github.event.workflow_run.run_attempt == 1",
-        "github.event.workflow_run.head_branch == 'main'",
-        "github.event.workflow_run.head_repository.full_name == github.repository",
-        "github.run_attempt == 1",
-    ):
-        assert required in raw
-    assert "github.event.workflow_run.head_sha == github.sha" not in raw
-    assert "contents: read" in raw and "actions: read" in raw and "actions: write" not in raw
-    assert "persist-credentials: false" in raw
-    assert "cancel-in-progress: false" in raw and "timeout-minutes: 5" in raw
-    assert raw.count("hithink-stock-dump-trial.yml/dispatches") == 1
+    parsed = yaml.safe_load(raw)
+    trigger = parsed.get("on", parsed.get(True))
+    assert trigger["workflow_run"]["workflows"] == ["sector-radar-shadow", "hithink-stock-dump-trial", "decision-inbox"]
+    assert trigger["workflow_run"]["types"] == ["completed"]
+    assert {row["cron"] for row in trigger["schedule"]} == {"35 10 * * 1-5", "5 11,13 * * 1-5"}
+    assert trigger["workflow_dispatch"]["inputs"]["mode"]["default"] == "audit"
+    assert "push" not in trigger
+    jobs = parsed["jobs"]
+    assert set(jobs) == {"reconcile-deliveries", "dispatch-tdx-concept"}
+    job = jobs["reconcile-deliveries"]
+    assert job["concurrency"] == {"group": "radar-delivery-reconciliation", "cancel-in-progress": False}
+    assert job["permissions"] == {"contents": "read", "actions": "read", "issues": "write"}
+    steps = {step.get("name"): step for step in job["steps"] if "name" in step}
+    intent = "Retain exact dispatch intent before any POST"
+    dispatch = "Dispatch only the missing stage once"
+    assert raw.index(intent) < raw.index(dispatch)
+    assert "steps.intent.outcome == 'success'" in steps[dispatch]["if"]
+    assert steps[dispatch]["env"]["GH_TOKEN"] == "${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}"
+    assert "do not fall back to GITHUB_TOKEN" in steps[dispatch]["run"]
+    assert "github.event.workflow_run.head_repository.full_name == github.repository" in job["if"]
+    assert "github.run_attempt == 1" in job["if"]
     assert raw.count("tdx-concept-snapshot.yml/dispatches") == 1
-    assert raw.count("gh api --method POST") == 2
-    assert "actions/runs/$UPSTREAM_RUN_ID/jobs?per_page=100&page=1" in raw
-    assert "UPSTREAM_JOBS_JSON" in raw
-    assert '"trial-purpose": "stock-reading"' in raw
-    assert '"stock-market-run-id": os.environ["MARKET_RUN_ID"]' in raw
-    assert "steps.preflight.outputs.market_run_id" in raw
-    assert "steps.preflight.outputs.sector_origin" in raw
-    assert "steps.tdx-origin.outputs.sector_run_id" in raw
-    assert "steps.tdx-origin.outputs.sector_origin" in raw
-    assert "'market-session': os.environ['MARKET_SESSION']" in raw
-    assert "'code-sha': os.environ['CODE_SHA']" in raw
-    dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1].split("\n  dispatch-tdx-concept:", 1)[0]
-    assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in dispatch
-    assert raw.count("GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}") == 2
-    assert "GH_TOKEN: ${{ github.token }}" not in dispatch
-    assert 'Missing repository secret DAILY_CHAIN_DISPATCH_TOKEN' in dispatch
-    assert 'do not fall back to GITHUB_TOKEN' in dispatch
+    assert "Classify exact Sector origin for TDX" in raw
+    assert "HITHINK_FINANCE_API_KEY" not in raw
+    assert "/rerun" not in raw and "gh run watch" not in raw
     assert "stock-business-research.yml/dispatches" not in raw
-    assert "gh run watch" not in raw
-    assert "HITHINK_FINANCE_API_KEY" not in raw and "secrets.HITHINK_FINANCE_API_KEY" not in raw
-    assert "/rerun" not in raw and "sleep(" not in raw and "while " not in raw
-
+    assert "schedule:" not in SECTOR_WORKFLOW.read_text().split("permissions:", 1)[0]
+    assert "schedule:" not in STOCK_WORKFLOW.read_text().split("permissions:", 1)[0]
 
 
 def test_tdx_daily_handoff_reuses_exact_sector_result_and_existing_capture_contract():

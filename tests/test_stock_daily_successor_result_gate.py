@@ -101,23 +101,26 @@ def test_missing_malformed_or_wrong_exact_sector_result_fails_closed(tmp_path, p
 
 
 def test_workflow_downloads_only_exact_upstream_audit_before_pat_dispatch():
+    # Reconciliation replaces the old dispatcher; original validator tests stay.
+    import yaml
     raw = WORKFLOW.read_text(encoding="utf-8")
-    gate = raw.split("- name: Require exact result-bearing Sector input for Stock", 1)[1].split(
-        "- name: Dispatch existing bounded Stock reading once", 1
-    )[0]
-    dispatch = raw.split("- name: Dispatch existing bounded Stock reading once", 1)[1]
-    assert 'gh run download "$UPSTREAM_RUN_ID"' in gate
-    assert '--name "sector-radar-run-$UPSTREAM_RUN_ID"' in gate
-    assert '--dir "$UPSTREAM_RUN_AUDIT"' in gate
-    assert "SUCCESSOR_CHECK_MODE: stock-input" in gate
-    assert "GH_TOKEN: ${{ github.token }}" in gate
-    assert "DAILY_CHAIN_DISPATCH_TOKEN" not in gate
-    assert "latest" not in gate.lower() and "/rerun" not in gate
-    assert "steps.stock-input.outputs.stock_input_ready == 'true'" in dispatch
-    assert "GH_TOKEN: ${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}" in dispatch
-    assert raw.index("Require exact result-bearing Sector input for Stock") < raw.index(
-        "Dispatch existing bounded Stock reading once"
-    )
+    job = yaml.safe_load(raw)["jobs"]["reconcile-deliveries"]
+    steps = {s.get("name"): s for s in job["steps"] if "name" in s}
+    gate = steps["Reconcile qualified deliveries and previous intents"]
+    intent = steps["Retain exact dispatch intent before any POST"]
+    dispatch = steps["Dispatch only the missing stage once"]
+    assert gate["env"]["GH_TOKEN"] == "${{ github.token }}"
+    assert gate["run"] == "python .github/scripts/reconcile-radar-delivery.py plan"
+    assert intent["with"]["path"] == "radar-reconcile/plan.json"
+    assert "steps.intent.outcome == 'success'" in dispatch["if"]
+    assert dispatch["env"]["GH_TOKEN"] == "${{ secrets.DAILY_CHAIN_DISPATCH_TOKEN }}"
+    assert raw.index("Reconcile qualified deliveries") < raw.index("Retain exact dispatch intent") < raw.index("Dispatch only the missing")
+    helper = (ROOT / ".github/scripts/reconcile-radar-delivery.py").read_text()
+    assert 'collector.lane("sector")' in helper
+    assert 'action["inputs"]["stock-market-run-id"]' in helper
+    assert "DISPATCH_UNCERTAIN" in helper and "/rerun" not in helper
+    assert "HITHINK_FINANCE_API_KEY" not in helper
+
 
 
 def test_result_gate_revalidates_dispatched_produce_identity(tmp_path):

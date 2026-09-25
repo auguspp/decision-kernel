@@ -1,0 +1,15 @@
+# Daily Radar delivery reconciliation — 2026-09-25
+
+Human authority: #297/5831654154 and fixed operational health #581. This supersedes the old manual-only recovery policy only within the bounds below; old failures and policies remain historical. The R5 architecture is unchanged.
+
+The existing stock-reading-after-sector workflow now compares saved qualified state with actual Stock completion. The former one-shot Stock dispatcher is retired, not left running in parallel. TDX keeps its existing independent exact-parent job. Completion events for Sector/Stock/Inbox recheck after shared-Key work ends. Maintenance-only checks at weekday18:35/19:05/21:05 supplement, not replace, the external18:13 primary clock; GitHub schedule can be delayed and is not an SLA.
+
+A current verified same-session no-op retains its original result-bearing predecessor through #580. Matching completed Stock, including an explicit partial result, is not fetched again. If no Stock exists, one original stock-reading dispatch binds the precise Sector run. New child titles bind parent/page/intent. If an attempt already exists but has not produced a validated result, the system reports the gap instead of blindly duplicating it.
+
+A missing after-close Sector invocation or a classified transient failure can receive a fresh produce attempt. At most3 source attempts per after-close day (original plus2 recovery) are observed. Only original transport TIMEOUT/URL_ERROR/HTTP502/503/504 and definite pre-acquisition metadata/shared-Key failure qualify.401/403/429, unknown failures, invalid data, corrupt archives and multi-day recovery requirements remain visible engineering work. Weekday checks request calendar-qualified production; they never fabricate a trading session. Generic historical membership/PIT backfill is not established.
+
+All reconcilers serialize on one job concurrency group. They recheck active Key users before planning and before POST; it is bounded observation, not an atomic provider lock. An immutable intent artifact is uploaded before POST. No matching child means uncertainty: do not resend. A verified receipt proving no POST happened after a changed precheck permits a later plan. No rerun endpoint, retry loop or source credential is used in the reconciler. The source workflows still validate exact inputs, clocks, raw data, existing budgets, replay and publication.
+
+#581 retains machine health and unresolved delivery identities. A later day succeeding cannot erase an older missing Stock parent. The Brief reads this status separately from Research and never assigns the Human data repair work. A transient incident can recover automatically; permanent data/permission failures require Main Construction. Live audit success proves idempotent use of current saved results, not that all future failures or historical gaps will be recoverable.
+
+No new provider, package dependency, database, generic scheduler, Research execution, automatic Full/Odds/Watch or trading. Native GitHub history and original artifacts remain canonical. The actual dispatch, child completion, normal publication and useful daily research are distinct acceptance facts.
