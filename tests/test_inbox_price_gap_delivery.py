@@ -1,5 +1,5 @@
 """Real Inbox/Watch composition with bounded source failure injection."""
-from datetime import datetime
+from datetime import datetime, timedelta
 import io
 import json
 from pathlib import Path
@@ -13,7 +13,10 @@ from test_hithink_history_window import _sessions, _calendar_envelope, _history_
 from test_inbox_calendar_recovery import Response
 
 ROOT = Path(__file__).resolve().parents[1]
-OBSERVED = datetime(2026, 8, 28, 16, 30, tzinfo=SHANGHAI)
+# The second retained research package was created on September 2. Its synthetic
+# market must follow that cutoff; never weaken production PIT checks for a test.
+OBSERVED = datetime(2026, 9, 11, 16, 30, tzinfo=SHANGHAI)
+SESSIONS = tuple(day + timedelta(days=14) for day in _sessions())
 SECRET = 'gap-test-secret-never-render'
 
 
@@ -47,12 +50,12 @@ def test_one_price_gap_preserves_other_real_decisions_and_watch_without_retry(mo
         path = urlsplit(request.full_url).path
         if path == h.HITHINK_CALENDAR_PATH:
             calls.append('calendar')
-            return Response(_calendar_envelope(_sessions()))
+            return Response(_calendar_envelope(SESSIONS))
         ticker = parse_qs(urlsplit(request.full_url).query)['thscode'][0]
         calls.append(ticker)
         if ticker == failed_ticker:
             raise URLError(TimeoutError(SECRET))
-        body = _history_envelope(_sessions()); body['data']['thscode'] = ticker
+        body = _history_envelope(SESSIONS); body['data']['thscode'] = ticker
         return Response(body)
     monkeypatch.setattr(h, 'urlopen', open_)
     out = io.StringIO()
@@ -83,7 +86,7 @@ def test_account_rejection_cannot_repeat_via_next_ticker(monkeypatch, tmp_path, 
     def open_(request, timeout):
         path = urlsplit(request.full_url).path; calls.append(path)
         if path == h.HITHINK_CALENDAR_PATH:
-            return Response(_calendar_envelope(_sessions()))
+            return Response(_calendar_envelope(SESSIONS))
         raise HTTPError(request.full_url, code, SECRET, {}, None)
     monkeypatch.setattr(h, 'urlopen', open_)
     assert app.main(arguments(tmp_path), stdout=io.StringIO()) == 0
