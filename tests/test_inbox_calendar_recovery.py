@@ -203,9 +203,16 @@ def test_original_inbox_and_typed_watch_with_real_adapters_not_mocked_decisions(
         assert calls.count(h.HITHINK_CALENDAR_PATH) == 2
         assert calls.count(h.HITHINK_HISTORY_PATH) == 6
     else:
-        with pytest.raises(h.HithinkRuntimeError): app.main(args)
+        # The source still fails after two attempts; delivery now retains gaps.
+        assert app.main(args) == 0
         assert calls == [h.HITHINK_CALENDAR_PATH] * 2
-        assert not (tmp_path/'inbox.html').exists() and not (tmp_path/'watch').exists()
+        report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
+        assert report['watch']['price_gap_count'] == report['watch']['active_case_count']
+        assert report['watch']['attention_case_count'] == 0
+        assert all(row['price'] is None for row in report['watch']['active_cases'])
+        assert '完成 0/1' in (tmp_path/'summary.md').read_text()
+        assert '无法判断 5' in (tmp_path/'inbox.html').read_text()
+        assert '今天没有需要你关注的东西' not in (tmp_path/'summary.md').read_text()
     assert old.read_bytes() == b'original historical success, not today'
 
 
