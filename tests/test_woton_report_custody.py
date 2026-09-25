@@ -136,8 +136,9 @@ class Retainer(c.once.Retainer):
 
 
 
-def _reader_snapshot(monkeypatch, pdf):
-    use_synthetic(monkeypatch, pdf)
+@pytest.fixture(scope='module')
+def reader_snapshot():
+    pdf = (Path(__file__).parent/'fixtures/woton_original/source.pdf').read_bytes()
     api = API()
     extraction = c.once.raw(c.parse_original(pdf))
     pdf_ref, text_ref, manifest_ref = 'c' * 40, 'd' * 40, 'e' * 40
@@ -164,8 +165,8 @@ def test_writer_surface_is_retired_but_reader_identity_remains():
     assert not any(hasattr(c, name) for name in ('run', 'main', 'acquire', 'check_environment'))
 
 
-def test_reader_roundtrip_uses_exact_retained_bytes(monkeypatch, pdf):
-    api, source, expected = _reader_snapshot(monkeypatch, pdf)
+def test_reader_roundtrip_uses_exact_retained_bytes(reader_snapshot):
+    api, source, expected = deepcopy(reader_snapshot)
     got, parsed, manifest = c.recover(api, source)
     assert got == expected and parsed['page_count'] == 133 and '半年度报告' in parsed['pages'][0]['text']
     assert manifest['status'] == c.COMPLETE and api.writes == []
@@ -181,8 +182,8 @@ def test_actual_parser_rejects_wrong_original_or_incomplete_representation(monke
 
 
 @pytest.mark.parametrize('kind', ['body', 'size', 'blob', 'path', 'envelope', 'manifest-authority'])
-def test_reader_rejects_rehashed_or_mismatched_custody(monkeypatch, pdf, kind):
-    api, source, _ = _reader_snapshot(monkeypatch, pdf)
+def test_reader_rejects_rehashed_or_mismatched_custody(reader_snapshot, kind):
+    api, source, pdf = deepcopy(reader_snapshot)
     import json
     manifest = json.loads(api.file(source['path'], source['ref']))
     if kind == 'manifest-authority':
