@@ -238,6 +238,7 @@ def test_workflow_is_manual_read_only_keyless_and_pins_eltdx():
     assert "market-session:" in text and "code-sha:" in text
     assert "actions/workflows/ci.yml/runs" in text
     assert "tdx_concept_snapshot replay" in text
+    assert "include-hidden-files: true" in text
 
 
 def test_vibe_stays_available_but_documented_secondary():

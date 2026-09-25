@@ -1,6 +1,6 @@
 # TDX / eltdx concept snapshot — primary current cross-section source
 
-Status: IMPLEMENTATION / LIVE MAIN ACCEPTANCE PENDING.
+Status: PRIMARY SOURCE IMPLEMENTED / FIRST LIVE MAIN SOURCE ACCEPTED; PINNED READ-MODEL RETENTION IN FOLLOW-UP.
 Authority: Human 2026-09-25 “那就做吧，东财退二线去”; Reconcile #364
 comments 5826719708 and 5826769197. This changes the current supplemental
 Concept cross-section source, not the existing HiThink `radar-concept-source`
@@ -135,3 +135,25 @@ license/source decision.
 No eltdx source code is copied into Decision Kernel by this adapter. The
 workflow installs the pinned wheel and Kernel only owns its thin source
 identity/time/retention semantics.
+
+
+## Normal read-model retention
+
+The source workflow's local replay happens before artifact upload. GitHub's
+`actions/upload-artifact` excludes hidden files by default, while this contract
+binds `source-files/.eltdx_board_cache.json`. Therefore the normal artifact path
+explicitly sets `include-hidden-files: true`; without that file, later replay
+must fail closed even if the original source job was locally successful.
+
+The existing `current-state-read-entry` publisher listens to completed main
+`tdx-concept-snapshot` attempts. It selects only the newest attempt, never
+searches backwards for an older green run, downloads the exact artifact, and
+replays it with trusted installed Kernel code. The pinned read-model retains the
+exact source ZIP plus compact `observation.json`, `summary.md`, capture receipt
+and run metadata. It does not duplicate the large source model/file payload
+outside that exact ZIP.
+
+This reading seam performs zero TDX/Eastmoney calls and creates no new source,
+Research, Odds, Decision, Action or investment authority. A missing, failed,
+expired or unreplayable newest artifact is an explicit reading gap, not zero
+Concept activity.
