@@ -21,102 +21,41 @@ jobs:
           python3 - <<'PY'
           import ast,base64,hashlib,json,subprocess
           from pathlib import Path
+          def api(path,body=None):
+              cmd=['gh','api','repos/auguspp/decision-kernel/'+path]
+              if body is not None:cmd+=['-X','POST','--input','-']
+              return json.loads(subprocess.run(cmd,input=None if body is None else json.dumps(body).encode(),stdout=subprocess.PIPE,check=True).stdout)
           def load(path,sha):
               b=Path(path).read_bytes()
               assert hashlib.sha1(('blob '+str(len(b))+'\0').encode()+b).hexdigest()==sha
               return b.decode()
-          def once(text,old,new):
-              assert text.count(old)==1,(old,text.count(old))
-              return text.replace(old,new,1)
           files={}
           path='src/decision_kernel/runtime/attention_inbox_with_odds_watch.py'
-          text=load(path,'0d7a4b9a6096bbcb7ee9d83e13b9e8ba0d076cea')
-          text=once(text,'nargs="+"','nargs="*"')
-          old='    text = (f"原有研究包价格复核：完成 {completed}/{planned}，无法判断 {len(gaps)}。"\n            f"Watch：已启用 {active}，已完成判断 {checked}；"'
-          new='    text = (f"原有研究包价格复核：完成 {completed}/{planned}，无法判断 {len(gaps)}。"\n            if planned else "旧研究包自动Odds试算未启用。")\n    text += (f"Watch：已启用 {active}，已完成判断 {checked}；"'
-          text=once(text,old,new)
-          insertion='''        # R5 daily output is the original typed Watch, not old probability wakes.
-                  if not args.packages and not handoffs:
-                      summary = ("# Decision Inbox · 已启用价格条件\\n\\n"
-                                 + odds_watch.render_markdown(report)
-                                 + "\\n日常研究增量见 Hosted Quick 与晚间 Brief；本页不生成新Odds或投资决定。\\n")
-                      page = ('<!doctype html><html lang="zh-CN"><meta charset="utf-8">'
-                              '<title>Decision Inbox</title><body><header><h1>已启用价格条件</h1></header>'
-                              '<pre>' + escape(summary) + '</pre></body></html>')
-          '''
-          # The YAML literal keeps Python's first line at eight spaces; normalize
-          # only this explicit prepared snippet, not the original source file.
-          lines=insertion.splitlines()
-          insertion=lines[0]+'\n'+'\n'.join(line[10:] if line.startswith('          ') else line for line in lines[1:])+'\n'
-          text=once(text,'        # These are presentation-only legacy empty-state phrases, not decisions.',insertion+'        # These are presentation-only legacy empty-state phrases, not decisions.')
+          text=base64.b64decode(api('git/blobs/39451fae4827ac8629b808469bdcd101e9668a22')['content']).decode()
+          assert text.count('odds_watch.render_summary(report)')==1
+          text=text.replace('odds_watch.render_summary(report)','odds_watch.render_markdown(report)')
           ast.parse(text);files[path]=text
           path='.github/workflows/decision-inbox.yml'
           text=load(path,'f3315414365c573f67ef420aae370be082394188')
           start=text.index('          # Human-facing Decision inputs are deliberately curated.')
           end=text.index('          # Research-attention inputs are curated separately.',start)
-          text=text[:start]+'''          # R5 daily attention uses only explicitly enabled typed Watch boundaries.
-                    # The four legacy packages remain in Git/history and shadow sampling,
-                    # but no longer create daily Odds/Decision wakes from old probabilities.
-                    decision_packages=(
-                    )
-
-          '''.replace('\n          ','\n')+text[end:]
-          # Restore the intended workflow block indentation after the first line.
-          block=text[text.index('          # R5 daily attention'):text.index('          # Research-attention inputs')]
-          assert 'decision_packages=(' in block
-          files[path]=text
+          block='          # R5 daily attention uses only explicitly enabled typed Watch boundaries.\n          # Legacy packages remain in Git and shadow sampling, not daily Odds wakes.\n          decision_packages=(\n          )\n\n'
+          text=text[:start]+block+text[end:];files[path]=text
           path='tests/test_decision_inbox_curated_inputs.py'
           text=load(path,'a420fd503c8fc56fadc953a7a897dd78e94fff8f')
-          old='''    expected_current_inputs = {
-                  "dogfood/600519-moutai.json",
-                  "dogfood/601088-shenhua.json",
-                  "research_cases/603986-gigadevice-deep-research-v2.json",
-                  "research_cases/002050-sanhua-deep-research-v1.json",
-              }'''
-          old=old.splitlines()[0]+'\n'+'\n'.join(line[10:] for line in old.splitlines()[1:])
-          text=once(text,old,'    expected_current_inputs = set()  # R5: historical packages are not daily wake authority.')
+          start=text.index('    expected_current_inputs = {');end=text.index('    decision_inputs = ',start)
+          text=text[:start]+'    expected_current_inputs = set()  # R5: no automatic legacy probability wake.\n'+text[end:]
           ast.parse(text);files[path]=text
           path='tests/test_inbox_price_gap_delivery.py'
           text=load(path,'bdf3e69899dab296c548ccb20a0e03ca79429284')
-          extra='''
-          @pytest.mark.parametrize('unavailable', [False, True])
-          def test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_path, unavailable):
-              def forbidden(*a, **k): pytest.fail('legacy Odds must not execute')
-              monkeypatch.setattr(app.attention_inbox, '_run_research_package', forbidden)
-              calls = []
-              def open_(request, timeout):
-                  path = urlsplit(request.full_url).path; calls.append(path)
-                  if path == h.HITHINK_CALENDAR_PATH:
-                      return Response(_calendar_envelope(SESSIONS))
-                  if unavailable:
-                      raise HTTPError(request.full_url, 429, SECRET, {}, None)
-                  body = _history_envelope(SESSIONS)
-                  body['data']['thscode'] = parse_qs(urlsplit(request.full_url).query)['thscode'][0]
-                  return Response(body)
-              monkeypatch.setattr(h, 'urlopen', open_)
-              assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0
-              report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
-              assert report['watch']['price_gap_count'] == (5 if unavailable else 0)
-              assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 5)
-              text = (tmp_path/'summary.md').read_text()
-              assert '旧研究包自动Odds试算未启用' in text
-              assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text
-              assert 'Research Funnel' not in text
-              assert '今天没有需要你关注' not in text
-          '''
-          text+='\n'+'\n'.join(line[10:] if line.startswith('          ') else line for line in extra.splitlines())+'\n'
-          ast.parse(text);files[path]=text
-          files['docs/inbox-r5-watch-only.md']='''# R5 daily Inbox: no legacy automatic Odds wakes
-          
-          Real repaired run36115433506 obtained all five Watch prices but still emitted an old Moutai ACCEPTABLE_ODDS wake from four curated legacy probability packages. That is a different route from the currently enabled five explicit Human price conditions. Human requested fixing Inbox misreports after R5 and a real full run.
-          
-          Reuse the existing empty curated-list convention and original typed Watch renderer. Production decision_packages is now empty; optional explicit historical CLI package processing and all historical bytes/tests remain, but no daily automatic legacy Odds is emitted. Watch thresholds, configuration, registry, source qualification, authority and independent shadow/disclosure scopes are unchanged. Daily research comes from Hosted Quick/Full and Brief; the absence of a price trigger never means no research opportunity. A real later run must verify this product output; earlier misleading output is preserved, not rewritten.
-          '''
+          extra="\n\n@pytest.mark.parametrize('unavailable', [False, True])\ndef test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_path, unavailable):\n    def forbidden(*a, **k): pytest.fail('legacy Odds must not execute')\n    monkeypatch.setattr(app.attention_inbox, '_run_research_package', forbidden)\n    calls = []\n    def open_(request, timeout):\n        path = urlsplit(request.full_url).path; calls.append(path)\n        if path == h.HITHINK_CALENDAR_PATH:\n            return Response(_calendar_envelope(SESSIONS))\n        if unavailable:\n            raise HTTPError(request.full_url, 429, SECRET, {}, None)\n        body = _history_envelope(SESSIONS)\n        body['data']['thscode'] = parse_qs(urlsplit(request.full_url).query)['thscode'][0]\n        return Response(body)\n    monkeypatch.setattr(h, 'urlopen', open_)\n    assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0\n    report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')\n    assert report['watch']['price_gap_count'] == (5 if unavailable else 0)\n    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 5)\n    text = (tmp_path/'summary.md').read_text()\n    assert '旧研究包自动Odds试算未启用' in text\n    assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text\n    assert 'Research Funnel' not in text\n    assert '今天没有需要你关注' not in text\n"
+          text+=extra;ast.parse(text);files[path]=text
+          files['docs/inbox-r5-watch-only.md']='# R5 daily Inbox: no legacy automatic Odds wakes\n\nReal repaired run36115433506 obtained all five Watch prices but still emitted an old Moutai ACCEPTABLE_ODDS wake from four curated legacy probability packages. That is separate from the five currently enabled Human price conditions. Human requested correcting Inbox misreports after R5 and a real complete run.\n\nReuse the existing empty curated-list convention and original typed Watch renderer. Production decision_packages is now empty; explicit historical CLI package processing and historical bytes/tests remain, but no daily automatic legacy Odds is emitted. Watch thresholds/configuration/registry, source qualification, authority and independent shadow/disclosure scopes are unchanged. Daily research comes from Hosted Quick/Full and Brief; no price trigger never means no research opportunity. A later real run must verify the new output; earlier misleading output is preserved.\n'
           result=[]
           for path,text in files.items():
-              raw=text.encode()
-              blob=json.loads(subprocess.run(['gh','api','-X','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=json.dumps({'encoding':'base64','content':base64.b64encode(raw).decode()}).encode(),stdout=subprocess.PIPE,check=True).stdout)['sha']
+              raw=text.encode();blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(raw).decode()})['sha']
+              assert blob==hashlib.sha1(('blob '+str(len(raw))+'\0').encode()+raw).hexdigest()
               result.append({'path':path,'sha':blob,'bytes':len(raw)})
-              if path.endswith('.yml'):print('WORKFLOW_PATCH',text[text.index('          # R5 daily attention'):text.index('          # Research-attention inputs')])
           print('PREPARED_BLOBS_ONLY',json.dumps(result))
+          print('No production refs, market calls, task, schedule or permission changes. Formal PR validation is separate.')
           PY
