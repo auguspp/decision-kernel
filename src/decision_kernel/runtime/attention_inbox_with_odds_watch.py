@@ -24,7 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="python -m decision_kernel.runtime.attention_inbox_with_odds_watch",
         description="Render the existing Attention Inbox plus a bounded typed Odds Watch artifact.",
     )
-    parser.add_argument("packages", nargs="+", type=Path)
+    parser.add_argument("packages", nargs="*", type=Path)
     parser.add_argument("--research-attention", action="append", default=[], type=Path)
     parser.add_argument("--output", type=Path, default=Path("decision-inbox/index.html"))
     parser.add_argument("--summary", type=Path, default=Path("decision-inbox/summary.md"))
@@ -41,8 +41,9 @@ def coverage_text(planned: int, completed: int, gaps: list[str], report: dict) -
     triggered = watch["attention_case_count"]
     checked = active - unknown
     text = (f"原有研究包价格复核：完成 {completed}/{planned}，无法判断 {len(gaps)}。"
-            f"Watch：已启用 {active}，已完成判断 {checked}；"
-            f"确认触界 {triggered}，未触界 {checked - triggered}，无法判断 {unknown}。")
+            if planned else "旧研究包自动Odds试算未启用。")
+    text += (f"Watch：已启用 {active}，已完成判断 {checked}；"
+             f"确认触界 {triggered}，未触界 {checked - triggered}，无法判断 {unknown}。")
     if gaps or unknown:
         text += " 本次为部分可用交付；缺口不等于未触界，也不要求你手工核价。"
     return text
@@ -124,6 +125,15 @@ def main(
         )
         coverage = coverage_text(len(args.packages), len(decisions), gaps, report)
         degraded = bool(gaps or report["watch"]["price_gap_count"])
+        # R5 production has no legacy Decision packages. Render the existing
+        # typed Watch rather than computing wakes from historical probabilities.
+        if not args.packages and not handoffs:
+            summary = ("# Decision Inbox · 已启用价格条件\n\n"
+                       + odds_watch.render_markdown(report)
+                       + "\n日常研究增量由 Hosted Quick 与晚间 Brief 交付；本页不生成新Odds或投资决定。\n")
+            page = ("<!doctype html><html lang=\"zh-CN\"><meta charset=\"utf-8\">"
+                    "<title>Decision Inbox</title><body><header><h1>已启用价格条件</h1></header>"
+                    "<pre>" + escape(summary) + "</pre></body></html>")
         # These are presentation-only legacy empty-state phrases, not decisions.
         # Scope their assertions even when all requested prices were available.
         for before, after in (

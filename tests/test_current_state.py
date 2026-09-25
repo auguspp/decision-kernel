@@ -215,8 +215,8 @@ def test_tinavi_real_frozen_handoff_is_retained_as_resolved_not_daily_pending():
 def test_production_purposes_are_separate_from_method_and_human_records():
     registry = json.loads(Path(delivery.REGISTRY_PATH).read_text())
     production = read.configured_paths(Path(read.WORKFLOWS["inbox"]).read_text(), "decision_packages")
-    assert "research_cases/603986-gigadevice-deep-research-v2.json" in production
-    assert "research_cases/002050-sanhua-deep-research-v1.json" in production
+    # R5 retires automatic legacy Odds, not stored research or Human history.
+    assert production == []
     assert "dogfood/300750-catl.json" not in production
     for case in ("603986.SH", "002050.SZ"):
         uses = {r["use"] for r in registry["references"] if r["case"] == case}

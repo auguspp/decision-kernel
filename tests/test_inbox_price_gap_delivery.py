@@ -125,3 +125,29 @@ def test_coverage_does_not_claim_five_prices_checked_when_one_is_missing():
     text = app.coverage_text(4, 4, [], report)
     assert '已完成判断 4' in text and '未触界 4，无法判断 1' in text
     assert '确认触界 0' in text and '部分可用交付' in text
+
+
+@pytest.mark.parametrize('unavailable', [False, True])
+def test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_path, unavailable):
+    def forbidden(*a, **k): pytest.fail('legacy Odds must not execute')
+    monkeypatch.setattr(app.attention_inbox, '_run_research_package', forbidden)
+    calls = []
+    def open_(request, timeout):
+        path = urlsplit(request.full_url).path; calls.append(path)
+        if path == h.HITHINK_CALENDAR_PATH:
+            return Response(_calendar_envelope(SESSIONS))
+        if unavailable:
+            raise HTTPError(request.full_url, 429, SECRET, {}, None)
+        body = _history_envelope(SESSIONS)
+        body['data']['thscode'] = parse_qs(urlsplit(request.full_url).query)['thscode'][0]
+        return Response(body)
+    monkeypatch.setattr(h, 'urlopen', open_)
+    assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0
+    report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
+    assert report['watch']['price_gap_count'] == (5 if unavailable else 0)
+    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 5)
+    text = (tmp_path/'summary.md').read_text()
+    assert '旧研究包自动Odds试算未启用' in text
+    assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text
+    assert 'Research Funnel' not in text
+    assert '今天没有需要你关注' not in text
