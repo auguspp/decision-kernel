@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -63,6 +63,8 @@ class HithinkStockSnapshotReference:
     trading_sessions: tuple[date, ...]
     benchmark: HithinkQualifiedIndexSnapshotBatch
     observed_at: datetime
+    closed_dates: tuple[date, ...] = ()
+    closure_evidence: tuple[str, ...] = ()
 
     @property
     def market_session(self) -> date:
@@ -91,17 +93,46 @@ class HithinkStockSnapshotReference:
         if latest_completed_a_share_session(sessions, observed_at=self.observed_at) != session:
             raise HithinkRuntimeError("stock reference benchmark/calendar session disagreement")
         local = self.observed_at.astimezone(SHANGHAI_TZ)
+        closures = self.closed_dates
+        if (
+            not isinstance(closures, tuple)
+            or any(type(day) is not date or day.weekday() >= 5 for day in closures)
+            or closures != tuple(sorted(set(closures)))
+        ):
+            raise HithinkRuntimeError("stock reference explicit exchange closures are invalid")
+        if (
+            not isinstance(self.closure_evidence, tuple)
+            or any(not isinstance(item, str) or not item.strip() or len(item) > 2048
+                   for item in self.closure_evidence)
+        ):
+            raise HithinkRuntimeError("stock reference closure evidence is invalid")
+        if bool(closures) != bool(self.closure_evidence):
+            raise HithinkRuntimeError("stock reference closure dates and evidence must be paired")
+
         if local.date() == session:
             if local.time() < STOCK_REFERENCE_NOT_BEFORE:
                 raise HithinkRuntimeError("stock reference capture is before 15:30 completed-session boundary")
-        elif not (
+        elif (
             session.weekday() == 4
             and local.weekday() in (5, 6)
             and 1 <= (local.date() - session).days <= 2
+            and not closures
         ):
-            raise HithinkRuntimeError(
-                "stock reference weekday gap or unfinished session; calendar absence is not holiday evidence"
+            pass
+        else:
+            gap_weekdays = tuple(
+                session + timedelta(days=offset)
+                for offset in range(1, (local.date() - session).days + 1)
+                if (session + timedelta(days=offset)).weekday() < 5
             )
+            if (
+                not gap_weekdays
+                or closures != gap_weekdays
+                or any(day in sessions for day in closures)
+            ):
+                raise HithinkRuntimeError(
+                    "stock reference weekday gap requires exact explicit exchange-closure evidence"
+                )
 
     def validate_received_at(self, received_at: datetime) -> None:
         self.validate()
@@ -137,10 +168,20 @@ class HithinkStockSnapshotReference:
             "closed_interval_basis": (
                 "SAME_SESSION_AFTER_1530"
                 if self.observed_at.astimezone(SHANGHAI_TZ).date() == self.market_session
-                else "FRIDAY_TO_SATURDAY_OR_SUNDAY_ONLY"
+                else (
+                    "EXPLICIT_EXCHANGE_CLOSURE_AFTER_COMPLETED_SESSION"
+                    if self.closed_dates
+                    else "FRIDAY_TO_SATURDAY_OR_SUNDAY_ONLY"
+                )
             ),
+            "closed_dates": [day.isoformat() for day in self.closed_dates],
+            "closure_evidence": list(self.closure_evidence),
             "per_security_market_session": "NOT_PROVEN_BY_PAGE_TIMESTAMP",
-            "production_qualification": "NOT_ESTABLISHED",
+            "production_qualification": (
+                "BOUNDED_REFERENCE_ALLOWED_BY_EXPLICIT_EXCHANGE_CLOSURE"
+                if self.closed_dates
+                else "NOT_ESTABLISHED"
+            ),
         }
 
 
