@@ -1,0 +1,36 @@
+{
+  "projection": {
+    "automatic_research_routing": false,
+    "baseline_reading_hash": "207beb5025c6c920b35bd3aca23377cc22d025825f4bb5b33569d2b625230dc1",
+    "business_benefit_established": false,
+    "comparison": null,
+    "comparison_status": "PRIOR_CAPTURE_ONLY_CURRENT_UNAVAILABLE",
+    "current": {
+      "latest_attempt": {
+        "conclusion": "success",
+        "created_at": "2026-09-25T10:26:16Z",
+        "event": "workflow_run",
+        "head_sha": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36123971130",
+        "id": 36123971130,
+        "operation": null,
+        "path": ".github/workflows/radar-industry-breadth.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-09-25T10:26:16Z",
+        "status": "completed",
+        "updated_at": "2026-09-25T10:27:08Z"
+      },
+      "observation": null,
+      "status": "NEW_INDUSTRIAL_JOB_NOT_RUN"
+    },
+    "generated_at": "2026-09-25T15:14:02.781649+00:00",
+    "investment_authority": "NONE",
+    "last_capture_hash": null,
+    "observation": null,
+    "observation_is_prior": false,
+    "previous_status": "NO_PREVIOUS_CAPTURE",
+    "research_authority": "NONE",
+    "version": "industry-fundamentals-v1"
+  },
+  "projection_hash": "0ad6148ae2d78d7eaad991cf3ab93aa7970da40d0eabfb6c26c5ddbd642de912"
+}
