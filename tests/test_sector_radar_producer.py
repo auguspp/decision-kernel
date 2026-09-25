@@ -601,7 +601,9 @@ def test_one_new_session_quiet_run_appends_without_breadth_calls(
         state_directory=tmp_path / "state",
         output_directory=tmp_path / "run",
         api_key="fixture-secret",
-        fetch_calendar=lambda **kwargs: calendar(NEXT_SESSION),
+        fetch_calendar=lambda **kwargs: tuple(
+            day for day in calendar(NEXT_SESSION) if day.weekday() < 5
+        ),
         fetch_catalog=lambda **kwargs: catalog(),
         fetch_snapshot=lambda **kwargs: snapshot(
             restored.market_state,
