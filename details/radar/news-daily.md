@@ -1,6 +1,6 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-09-25T10:25:01.280795+00:00；状态：WINDOWS&#95;CAPTURED
+原采集截止：2026-09-25T10:26:48.611243+00:00；状态：WINDOWS&#95;CAPTURED
 这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。
 
@@ -203,5 +203,5 @@
 - [白宫欢迎国宴，哪些企业家坐主桌？](https://www.thepaper.cn/newsDetail_forward_34148989) · thepaper
 - [小浪花逛世赛丨学技能有未来，这场大赛释放的信号或许藏着未来行业的方向](https://www.thepaper.cn/newsDetail_forward_34142209) · thepaper
 
-[本批原始ZIP](../../sources/artifacts/bb656052cf06f8e5e93ff0ab47c1f33de36a0860be6c01b2acdda034952f2870.zip)
+[本批原始ZIP](../../sources/artifacts/8e3df8229e2a7885f365892cac82416d446729e4e495da3a449b7d5d61ac3b3e.zip)
 [结构化窗口与版本](news-daily.json)

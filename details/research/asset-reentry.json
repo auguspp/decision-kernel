@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "21b05ef8c49124fa5b7dc282d534bb434cd0aa660fa3fe3bfbdd182f979a13df",
+    "base_reading_hash": "3a6baecbd3de490be942c444215cb68fb9625d8d5b2af28cb1c252988eced8f5",
     "companies": [
       {
         "archives": [],
@@ -654,52 +654,11 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "ecf88cf4311ee789f5f089f6c44447f6b98e71b92515fb2efe30c53f58c3a0b4",
+        "association_id": "923fc44715c58a68393a266eb9562457dda2d0cde8b752f231aaef5b413ac215",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881180.TI",
-                "group_on_homepage": false,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-24",
-                "retained_leader": {
-                  "daily_return": "-0.0445598096474150984209387843",
-                  "name": "和顺石油",
-                  "thscode": "603353.SH",
-                  "ticker": "603353",
-                  "turnover": "460625500"
-                },
-                "sector_name": "油品石化贸易",
-                "sector_thscode": "884021.TI",
-                "source": {
-                  "bytes": 436364,
-                  "git_blob": "3d37c6da74faea05a3c321530d0b89c9bb82fad2",
-                  "read_path": "details/sector/36122381294/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "1992f8dce9640f880285055378c00eeb630b57bd479196f477ffa273b34e57ce"
-                },
-                "source_observed_at": "2026-09-25T10:24:20.331698Z",
-                "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
-              }
-            ],
-            "projection_hash": "5456ce203f4787735619e068a8c6839a35b00bb669029703c62fa6312312dd69",
-            "source": {
-              "bytes": 275530,
-              "git_blob": "619a36b4b58443657da214ad283d3d54afdbc4c3",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "9055a949b77f05a056c77f767a3821b9dea7199df60cb83810533c7b5a593745"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "603353.SH"
@@ -3226,10 +3185,10 @@
       "complete_research_history": false,
       "read_gap_count": 1,
       "unavailable_assets": 0,
-      "with_saved_observations": 2,
+      "with_saved_observations": 1,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-25T10:26:40.079062+00:00",
+    "generated_at": "2026-09-25T10:27:42.051119+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3248,5 +3207,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "02403dd93772310c89667232a75a2a9ab6d9d5273ea29f656a68df9adf481018"
+  "projection_hash": "fda9129cb9bd1ef7f6b7e80b3360688e282acb859175fe911d6bedabbd6474c6"
 }
