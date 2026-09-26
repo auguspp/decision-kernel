@@ -33,6 +33,11 @@ def test_normal_reading_retains_relay_supplement_without_replacing_primary(tmp_p
     relay_art={"id":901,"name":f"smart-money-relay-{run['id']}-1",
                "size_in_bytes":len(relay_raw),"digest":"sha256:"+sha256(relay_raw).hexdigest(),
                "expired":False,"workflow_run":{"id":run["id"],"head_sha":run["head_sha"]}}
+    jobs_key=f"actions/runs/{run['id']}/attempts/1/jobs?per_page=100"
+    relay_job={"name":"capture-tushare-relay","id":43,"head_sha":run["head_sha"],
+               "run_id":run["id"],"run_attempt":1,"status":"completed","conclusion":"success"}
+    col.api.responses[jobs_key]["jobs"].append(relay_job)
+    col.api.responses[jobs_key]["total_count"]+=1
     key=f"actions/runs/{run['id']}/artifacts?per_page=100"
     col.api.responses[key]["artifacts"].append(relay_art)
     col.api.responses[key]["total_count"]+=1
@@ -45,6 +50,7 @@ def test_normal_reading_retains_relay_supplement_without_replacing_primary(tmp_p
     result=reading.attach(col,base)
     sm=result["research"]["smart_money"]
     assert sm["status"]=="READY" and sm["relay_status"]=="READY"
+    assert sm["relay_retained_status"]=="READY"
     assert "relay" in sm["details"]
     saved=json.loads(col.files["details/radar/smart-money/relay.json"])
     assert saved["reading_relation"]=="CURRENT_SOURCE_RUN"
