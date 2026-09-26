@@ -1,0 +1,81 @@
+name: sm-final-readback-check
+on:
+  push:
+    branches: [work/sm-final-readback-20260926]
+    paths: [.github/workflows/sm-final-readback-check.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: sm-final-readback-check
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 02d30ccd472ebf3533fd229c8fae6a0eadddc106
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing reading dependencies
+        run: python -m pip install -e '.[feeds,documents]'
+      - name: Read saved sources once without publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, re, subprocess, traceback
+          from datetime import datetime, timezone
+          from decision_kernel.runtime import current_state_delivery as base
+          from decision_kernel.runtime import current_state_delivery_with_odds_watch as cli
+          M='02d30ccd472ebf3533fd229c8fae6a0eadddc106'
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==M
+          assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'sm-final-readback';root.mkdir()
+          events=[];original=base.GitHubAPI._call
+          def diagnostic(self,method,endpoint,body=None):
+              assert method=='GET','DIAGNOSTIC_READ_ONLY'
+              record={'method':method,'endpoint':endpoint,'at':datetime.now(timezone.utc).isoformat()}
+              events.append(record)
+              try:
+                  result=original(self,method,endpoint,body)
+                  record.update(status=result.status_code,bytes=len(result.content),calls=self.calls)
+                  return result
+              except Exception as exc:
+                  label=exc.args[0] if len(exc.args)==1 and isinstance(exc.args[0],str) else ''
+                  safe=label if re.fullmatch(r'GitHub HTTP [0-9]{3}|GitHub transport unavailable|artifact transport unavailable|GitHub request budget exhausted',label) else 'UNCLASSIFIED'
+                  record.update(error_type=type(exc).__name__,safe_code=safe,calls=self.calls,
+                      stack=[{'file':pathlib.Path(f.filename).name,'line':f.lineno,'function':f.name} for f in traceback.extract_tb(exc.__traceback__)])
+                  print(json.dumps(record),flush=True)
+                  raise
+              finally:
+                  (root/'read-events.json').write_text(json.dumps(events,indent=2))
+          base.GitHubAPI._call=diagnostic
+          args=['--code-commit',M,'--output',str(root/'reading'),'--include-radar-discovery','--include-concept-discovery','--include-concept-detail','--include-external-radar','--include-industry-breadth','--include-easy-stock-context','--include-tdx-concept-context','--include-daily-news','--include-smart-money','--include-reviewed-questions']
+          result=cli.main(args)
+          summary={'code_commit':M,'exit_code':result,'requests':len(events),'finished_at':datetime.now(timezone.utc).isoformat(),'publication_writes':0,'source_calls':0}
+          if result==0:
+              value=json.loads((root/'reading/current-state.json').read_bytes())
+              summary['smart_money']=value['research'].get('smart_money')
+              summary['files']={str(p.relative_to(root/'reading')):p.stat().st_size for p in (root/'reading').rglob('*') if p.is_file()}
+          (root/'diagnosis.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
+          print(json.dumps(summary,ensure_ascii=False),flush=True)
+          raise SystemExit(result)
+          PY
+      - name: Retain exact installed code
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/sm-final-readback"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/sm-final-readback/source.zip"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: sm-final-readback-${{ github.run_id }}-1
+          path: ${{ runner.temp }}/sm-final-readback/
+          retention-days: 30
+          if-no-files-found: error
