@@ -6,7 +6,7 @@ from hashlib import sha256
 from decision_kernel.runtime import smart_money_reading as reading
 from decision_kernel.runtime import smart_money_relay as relay_capture
 from decision_kernel.runtime import tushare_relay as relay
-from test_smart_money_continuity import setup_reader
+from test_smart_money_capture import setup_reader
 
 def relay_result(api,params,clock):
     raw=json.dumps({"code":0,"msg":"ok","data":{"fields":["api","value"],
