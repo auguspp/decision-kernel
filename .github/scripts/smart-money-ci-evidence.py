@@ -28,14 +28,16 @@ with R['verified_archive'](raw,artifact) as z:
     environment=json.loads(z.read('environment.json'));scope=json.loads(z.read('scope.json'))
     assert identity['code_sha']==head and identity['run_id']==str(rid) and identity['attempt']=='1'
     assert identity['event']==run['event'] and environment['tree']==expected_tree
+    reuse=None
     if run['event']=='pull_request':
         count=R['full_evidence'](raw,artifact,run,environment);kind='EXACT_PR_FULL'
     elif scope['scope']=='merge_reuse':
-        smoke=z.read('smoke.xml') if 'smoke.xml' in z.namelist() else None
         import xml.etree.ElementTree as ET
-        assert smoke is not None
-        xml=ET.fromstring(smoke);assert all(xml.find('.//'+tag) is None for tag in ['failure','error','skipped'])
-        count=len(xml.findall('.//testcase'));kind='MAIN_REUSE_WITH_ACTUAL_SMOKE'
+        xml=ET.fromstring(z.read('main-smoke.xml'))
+        assert all(xml.find('.//'+tag) is None for tag in ['failure','error','skipped'])
+        count=len(xml.findall('.//testcase'));assert count>0
+        reuse=json.loads(z.read('merge-reuse.json'));assert reuse['reuse'] is True
+        kind='MAIN_REUSE_WITH_ACTUAL_SMOKE'
     else:
         collection=z.read('collection.txt').decode();xml=z.read('pytest.xml');plan=json.loads(z.read('partition.json'))
         remaining=R['matrix_remaining'](collection,plan['paths'],[(z.read(f'shard-{i}.zip'),a) for i,a in enumerate(plan['shards'],1)],identity,environment,plan['timing_sha256'])
@@ -45,7 +47,7 @@ with R['verified_archive'](raw,artifact) as z:
         count=R['passed_test_set'](collection,xml);kind='EXACT_MAIN_FULL'
     proof={'kind':kind,'run':rid,'head':head,'tree':expected_tree,'artifact':artifact['id'],
            'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'tests_verified':count,
-           'scope':scope,'identity':identity,'archive_files':z.namelist(),'source_calls':0,
+           'scope':scope,'identity':identity,'reuse_record':reuse,'archive_files':z.namelist(),'source_calls':0,
            'executed_artifact_code':False,'validation_environment':'ARCHIVED_CI_ENVIRONMENT_AND_PARTITIONS_NOT_THIS_RUNNER_REUSE'}
     (out/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2))
     print('EXACT_CI_EVIDENCE',json.dumps(proof,ensure_ascii=False))
