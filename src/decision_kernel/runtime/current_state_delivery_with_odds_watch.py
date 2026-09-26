@@ -165,6 +165,7 @@ def main(argv=None) -> int:
         from .read_blob_reuse import GitHubReadReuseAPI
         api_class = GitHubReadReuseAPI
     api = api_class(os.environ["GH_TOKEN"], max_calls=base.MAX_API_CALLS + EXTRA_API_CALLS)
+    failure_stage = "PRIOR_READING"
     prior_commit = None
     previous = None
     try:
@@ -194,13 +195,16 @@ def main(argv=None) -> int:
             "trigger_run_id": os.environ.get("TRIGGER_RUN_ID"),
             "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
         }
+        failure_stage = "COLLECTION"
         payload = collector.collect(refresh)
+        failure_stage = "LOCAL_EXPORT"
         args.output.mkdir(parents=True, exist_ok=False)
         for path, raw in collector.files.items():
             target = args.output / path
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
         if args.publish:
+            failure_stage = "PUBLICATION"
             commit = base.publish(
                 api, collector.files, prior_commit, args.code_commit, payload["reading_hash"]
             )
@@ -224,6 +228,15 @@ def main(argv=None) -> int:
         RuntimeError, requests.RequestException,
     ) as exc:
         print("READ_ENTRY_PUBLICATION_FAILED: " + type(exc).__name__)
+        # Only locally generated static transport labels; never exception bodies,
+        # raw URLs, credentials, or untrusted provider messages.
+        import re
+        label = exc.args[0] if type(exc) is base.GitHubReadError and len(exc.args) == 1 else None
+        safe = label if isinstance(label, str) and re.fullmatch(
+            r"GitHub HTTP [0-9]{3}|GitHub transport unavailable|artifact transport unavailable", label
+        ) else "UNCLASSIFIED"
+        print(json.dumps({"failure_stage": failure_stage, "safe_code": safe,
+                          "api_calls": api.calls if type(api.calls) is int else None}))
         return 2
 
 

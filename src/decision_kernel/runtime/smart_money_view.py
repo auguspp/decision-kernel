@@ -362,11 +362,45 @@ def render(overview,hist,*,failure=None):
     return '\n'.join(lines)+'\n'
 
 
+def browser_chunks(chunks, meta):
+    """Display-only projection; authoritative history chunks remain byte-identical.
+
+    The browser never consumes the record identity hash. Keeping a second copy
+    of that high-entropy field inflated the offline page beyond its 30 MiB cap.
+    Preserve every record and every displayed/provenance field; original chunks
+    retain the omitted id and have their own immutable references and digests.
+    """
+    import base64
+    import io
+    projected = []
+    for ref in meta['chunks']:
+        original = chunks[ref['name']]
+        s.require(len(original) == ref['bytes'] <= MAX_CHUNK
+                  and sha256(original).hexdigest() == ref['sha256'], 'HISTORY_CHUNK_IDENTITY')
+        with gzip.GzipFile(fileobj=io.BytesIO(original)) as stream:
+            raw = stream.read(min(ref['expanded_bytes'] + 1, MAX_EXPANDED + 1))
+        s.require(len(raw) == ref['expanded_bytes'] <= MAX_EXPANDED, 'HISTORY_EXPANSION_BOUND')
+        rows = json.loads(raw)
+        s.require(isinstance(rows, list) and len(rows) == ref['rows'], 'HISTORY_CHUNK_ROWS')
+        for row in rows:
+            row['data'].pop('id')
+        raw = s.encoded(rows)
+        data = gzip.compress(raw, mtime=0)
+        s.require(len(data) <= MAX_CHUNK, 'SNAPSHOT_CHUNK_BOUND')
+        projected.append({'ref': {'name': ref['name'], 'rows': len(rows),
+                                 'bytes': len(data), 'expanded_bytes': len(raw),
+                                 'sha256': sha256(data).hexdigest()},
+                          'original_ref': ref,
+                          'base64': base64.b64encode(data).decode()})
+    return projected
+
+
 def browser(overview,chunks,meta,origins):
     """Self-contained searchable reading; gzip is data, no source code executed."""
     import base64
     manifest={'overview':overview,'history':meta,'origins':origins,
-              'chunks':[{'ref':r,'base64':base64.b64encode(chunks[r['name']]).decode()} for r in meta['chunks']]}
+              'projection':'DISPLAY_RECORDS_WITHOUT_UNUSED_ID; ORIGINAL_HISTORY_CHUNKS_UNCHANGED',
+              'chunks':browser_chunks(chunks,meta)}
     raw=json.dumps(manifest,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     script=r'''
 'use strict';
@@ -384,6 +418,7 @@ function render(){
     card.append(node('p',`${r.family} | 观察/报告期 ${d.date} | 披露 ${d.disclosed||'UNKNOWN'} | 首次取得 ${r.first_seen} | 此版本最近原件 ${r.last_seen}`));
     const detail=node('details'); detail.append(node('summary','原值、参与者和来源定位（不是买卖建议）'));
     detail.append(node('pre',JSON.stringify({values:d.values,actor_id:d.actor_id,source_rows:d.source_rows,origin:pack.origins[r.origin],source_version:d.version},null,2)));
+    if(r.withdrawn_from_source_snapshot_at)card.append(node('p',`历史记录：已从来源当前快照撤出（${r.withdrawn_from_source_snapshot_at}）；不等于清仓。`));
     card.append(detail);$('results').append(card);
   }
   $('prev').disabled=page===0;$('next').disabled=b>=filtered.length;
@@ -434,7 +469,7 @@ init().catch(e=>{$('health').textContent='读取失败：'+e.message+'。不是�
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-%s'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
 <title>聪明钱公开行为 · 双向阅读</title><style>body{font:16px/1.7 system-ui;max-width:1100px;margin:auto;padding:24px}article{border-top:1px solid #bbb;padding:12px 0}input,select,button{font:inherit;padding:8px;max-width:100%%}input{width:55%%}pre{white-space:pre-wrap;overflow-wrap:anywhere}h3{overflow-wrap:anywhere}@media(max-width:600px){body{padding:12px}input{width:94%%}}</style></head><body>
 <h1>聪明钱观察：公司与参与者双向检索</h1><p id="health">正在展开本文件内的数据，不发网络请求。</p>
-<p>输入公司、代码、营业部、游资标签、具名持有人或调研机构。名称匹配不是身份认证；同名个人不自动合并。北向为公开成交/季度持股，不是实时净买入。记录日期不一定是取得日，榜单缺席不证明退出。</p>
+<p>此页为完整记录的显示投影；省略未展示的记录ID，原始身份与完整字段仍在同版历史分块中。输入公司、代码、营业部、游资标签、具名持有人或调研机构。名称匹配不是身份认证；同名个人不自动合并。北向为公开成交/季度持股，不是实时净买入。记录日期不一定是取得日，榜单缺席不证明退出。</p>
 <label>检索 <input id="query" placeholder="公司 / 代码 / 游资标签 / 具名持有人" disabled></label>
 <label>观察面 <select id="family" disabled><option value="">全部独立观察面</option></select></label>
 <p id="count"></p><button id="prev" disabled>上一页</button> <button id="next" disabled>下一页</button><main id="results"></main>
