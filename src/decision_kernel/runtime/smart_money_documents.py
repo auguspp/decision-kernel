@@ -55,12 +55,21 @@ def pdf_spec(report_id, begin, end):
             'provider':'EM','url':'https://pdf.dfcfw.com/pdf/H3_'+report_id+'_1.pdf','params':{}}
 
 
-def select_reports(rows):
-    """Finite two-per-broker coverage, not a company recommendation/ranking."""
+def select_reports(rows, *, legacy=False):
+    """At most two dated reports per broker/issuer pair, not a recommendation."""
+    if legacy:
+        # Exact original selection for retained request receipts. The old
+        # broker-only scope is never relabelled a comparable issuer pair.
+        groups={}
+        for r in rows:
+            if not any(v is not None for v in r['values']['eps_slots']):continue
+            group=groups.setdefault(r['actor_id'],[])
+            if len(group)<2:group.append(r)
+        return [r for group in list(groups.values())[:MAX_PDFS//2] for r in group][:MAX_PDFS]
     groups={}
-    for r in rows:
+    for r in sorted(rows,key=lambda x:(x['disclosed'],x['values']['report_id']),reverse=True):
         if not any(v is not None for v in r['values']['eps_slots']):continue
-        group=groups.setdefault(r['actor_id'],[])
+        group=groups.setdefault((r['actor_id'],r['ticker']),[])
         if len(group)<2:group.append(r)
     chosen=[]
     for group in list(groups.values())[:MAX_PDFS//2]:chosen.extend(group)
@@ -101,7 +110,15 @@ def reported_revisions(raw, report):
                     'old_original_report':'NOT_INDEPENDENTLY_RECOVERED','pdf_sha256':sha256(raw).hexdigest(),
                     'page':i+1,'quote':m[0],'source_list_publication_date':report['disclosed']})
     unique={s.canonical_hash(x):x for x in found}
-    return {'report_id':report['values']['report_id'],'status':'REPORTED_COMPARABLE_REVISION' if unique else 'NO_QUALIFIED_REVISION_PATTERN',
+    # Header/footer text can disagree with a distributor's listing date. Keep
+    # the observed claims; do not infer the document's first public availability.
+    date_claims=sorted(set(re.findall(r'(20\d{2})年(\d{1,2})月(\d{1,2})日',
+        ''.join(text[:200]+text[-150:] for text in pages))))
+    header_dates=[f'{int(y):04d}-{int(m):02d}-{int(d):02d}' for y,m,d in date_claims]
+    return {'layout_selected_text_dates':header_dates,
+            'publication_alignment':('TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED'
+                if header_dates and any(x!=report['disclosed'] for x in header_dates)
+                else 'NOT_INDEPENDENTLY_CERTIFIED'),'report_id':report['values']['report_id'],'status':'REPORTED_COMPARABLE_REVISION' if unique else 'NO_QUALIFIED_REVISION_PATTERN',
             'revisions':list(unique.values()),'pages_inspected':min(3,len(reader.pages)),
             'pdf_pages':len(reader.pages),'pdf_sha256':sha256(raw).hexdigest(),
             'meaning':'QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE'}

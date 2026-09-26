@@ -34,6 +34,33 @@ def choose(previous,today,today_count,event):
     return 'SKIP_NONTRANSIENT_GAPS'
 
 
+def pending_publication(runs,current_id,accepted_source_id,artifacts):
+    """Reconcile an earlier unconsumed capture before spending on another one.
+
+    Metadata-only skip attempts do not hide an earlier raw capture. Return an
+    exact run locator, not permission to rerun it or silently choose old success.
+    """
+    if len({r['id'] for r in runs})!=len(runs):raise ValueError('DUPLICATE_SOURCE_RUN')
+    own=[r for r in runs if r['id']==current_id]
+    if len(own)!=1:raise ValueError('CURRENT_RUN_NOT_DISCOVERED')
+    older=sorted((r for r in runs if r['created_at']<own[0]['created_at']),
+                 key=lambda r:(r['created_at'],r['id']),reverse=True)
+    for r in older:
+        if r['id']==accepted_source_id:return None
+        if r['status']!='completed':return r['id']
+        inventory=artifacts(r['id'])
+        values=inventory['artifacts']
+        if type(inventory['total_count']) is not int or inventory['total_count']!=len(values):
+            raise ValueError('PRIOR_ARTIFACT_SCOPE_INCOMPLETE')
+        name=f"smart-money-{r['id']}-1"
+        found=[a for a in values if a['name']==name]
+        if len(found)>1:raise ValueError('DUPLICATE_PRIOR_CAPTURE')
+        if found:return r['id']
+    if len(runs)>=30 and accepted_source_id is not None:
+        raise ValueError('UNRECONCILED_SOURCE_HISTORY_RANGE')
+    return None
+
+
 def main():
     from decision_kernel.runtime import current_state as m
     from decision_kernel.runtime import smart_money_sources as s, smart_money_capture as capture
@@ -71,6 +98,16 @@ def main():
     today_runs=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00')).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat()==today]
     if len(runs)==30 and len(today_runs)==30:raise ValueError('DAILY_RUN_SCOPE_INCOMPLETE')
     decision=choose(previous,today,len(today_runs),env['GITHUB_EVENT_NAME'])
+    repair=env.get('REPAIR_PENDING','false')=='true'
+    if repair:
+        if env['GITHUB_EVENT_NAME']!='workflow_dispatch' or not env.get('EXPECTED_CODE') or not previous:
+            raise ValueError('EXPLICIT_REPAIR_REQUIRES_PINNED_MAIN_AND_PRIOR_STATE')
+        if len(today_runs)<=3 and previous.get('unresolved'):decision='RUN_EXPLICIT_PENDING_REPAIR'
+    pending_source=None
+    if decision.startswith('RUN_'):
+        pending_source=pending_publication(runs,ident['run_id'],(previous or {}).get('last_source_run_id'),
+            lambda rid:get(f'actions/runs/{rid}/artifacts',{'per_page':100}))
+        if pending_source is not None:decision='SKIP_AWAITING_PRIOR_CAPTURE_READING'
     blockers=[];activity_status='NOT_CHECKED_NO_CAPTURE'
     if decision.startswith('RUN_'):
         activity=runpy.run_path('.github/scripts/check-sector-scheduled-activity.py')
@@ -85,12 +122,13 @@ def main():
     control={'version':s.VERSION,'run_id':ident['run_id'],'code_commit':expected,'event':ident['event'],
              'checked_at':clock.isoformat(),'target_date':today,'decision':decision,'today_invocations':len(today_runs),
              'prior_reading':reading,'prior_read_status':read_status,'hithink_activity':activity_status,
-             'blockers':blockers,'skip_hithink':skip_ht,'pending_delivery_count':len((previous or {}).get('unresolved',[])),
+             'pending_source_run_id':pending_source,'blockers':blockers,'skip_hithink':skip_ht,'pending_delivery_count':len((previous or {}).get('unresolved',[])),
              'investment_authority':'NONE'}
     (root/'control.json').write_text(json.dumps(control,ensure_ascii=False,indent=2))
     with open(env['GITHUB_OUTPUT'],'a') as f:
         print('run_capture='+str(decision.startswith('RUN_')).lower(),file=f)
         print('skip_hithink='+str(skip_ht).lower(),file=f)
+        print('repair_pending='+str(repair or decision=='RUN_BOUNDED_RECOVERY').lower(),file=f)
     print(json.dumps(control,ensure_ascii=False))
 
 
