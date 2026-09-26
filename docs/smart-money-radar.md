@@ -35,6 +35,10 @@
 - `reportapi.eastmoney.com/report/list`；正文仅 `pdf.dfcfw.com/pdf/H3_<已取得报告ID>_1.pdf`。
 - `www3.hkexnews.hk/sdw/search/mutualmarket.aspx?t=sh|sz`；历史查询只提交原公共页面的固定表单和请求季度，不绕鉴权、不换代理。
 
+第三方 Tushare Relay 作为**独立补充来源**，不进入上述来源的身份替换链，也不冒充官方 Tushare。正式主机固定为 `https://pcd.mobcvb.cn/tushare/pro`，凭据只从 repository secret `TUSHARE_PROXY_API_KEY` 发送为 `X-API-Key`。首个生产 supplement 只在本 Smart Money 主采已有完成交易日后读取 `hm_list / hm_detail / report_rc / top_list / top_inst`；原始响应、request-id/cache、实际字段与 relay host 单独留存。现役 12 个 canonical family、历史变化和原来源均不被覆盖。
+
+Relay 的 `upstream_pool_exhausted` 与 HTTP200/`code=1,msg=timeout` 只按已验语义等待30秒再试一次；仍失败保留 `TEMPORARY_QUEUE_GAP` 给下一自然运行。明确 `data_source_unavailable`、401/403、参数错误不按排队重试；429保留 Retry-After 并停止，不切旧host或明文备用host。完整来源层级与跨模块职责见 [Data Source Orchestration v1](data-source-orchestration-v1.md)。
+
 当前披露规则一手依据（2026-09-26重读）：
 
 - SSE《调整沪港通交易信息披露机制》：https://www.sse.com.cn/lawandrules/sselawsrules2025/global/hkexsc/c/c_20250613_10781806.shtml 。2024-08-19生效的北向成交/持股字段频率分开；现行列示不支持旧每日买卖差假设。

@@ -9,6 +9,11 @@ on:
         description: 'Reviewed exact current main; leave empty only for normal scheduled code identity'
         required: false
         type: string
+      relay-only:
+        description: 'Explicitly capture only the Relay supplement, reusing the exact retained primary calendar'
+        required: false
+        default: false
+        type: boolean
       repair-pending:
         description: 'Explicitly repair retained incomplete partitions using this reviewed main; do not reacquire completed scopes'
         required: false
@@ -25,6 +30,11 @@ jobs:
     if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 28
+    outputs:
+      run_capture: ${{ steps.control.outputs.run_capture }}
+      run_relay: ${{ steps.control.outputs.run_relay }}
+      relay_source_run_id: ${{ steps.control.outputs.relay_source_run_id }}
+      relay_source_artifact_id: ${{ steps.control.outputs.relay_source_artifact_id }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -41,6 +51,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           EXPECTED_CODE: ${{ inputs.code-sha }}
           REPAIR_PENDING: ${{ inputs.repair-pending }}
+          RELAY_ONLY: ${{ inputs.relay-only }}
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python .github/scripts/smart-money-control.py
@@ -87,5 +98,58 @@ jobs:
         with:
           name: smart-money-control-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/smart-money-control/
+          retention-days: 30
+          if-no-files-found: warn
+  capture-tushare-relay:
+    needs: capture-smart-money
+    if: needs.capture-smart-money.result == 'success' && needs.capture-smart-money.outputs.run_relay == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing source and document dependencies
+        run: python -m pip install -e '.[feeds,documents]'
+      - name: Download this run's exact control
+        uses: actions/download-artifact@v8
+        with:
+          name: smart-money-control-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-relay-control
+          digest-mismatch: error
+      - name: Download exact previously retained primary capture
+        if: needs.capture-smart-money.outputs.relay_source_artifact_id != ''
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.capture-smart-money.outputs.relay_source_artifact_id }}
+          run-id: ${{ needs.capture-smart-money.outputs.relay_source_run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/smart-money
+          digest-mismatch: error
+      - name: Download exact primary capture from this run
+        if: needs.capture-smart-money.outputs.relay_source_artifact_id == ''
+        uses: actions/download-artifact@v8
+        with:
+          name: smart-money-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money
+          digest-mismatch: error
+      - name: Capture bounded Tushare Relay supplement
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+        run: |
+          python -m decision_kernel.runtime.smart_money_relay \
+            --source-capture "$RUNNER_TEMP/smart-money" \
+            --control "$RUNNER_TEMP/smart-money-relay-control/control.json" \
+            --output "$RUNNER_TEMP/smart-money-relay"
+      - name: Retain Relay originals and explicit queue gaps
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: smart-money-relay-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-relay/
           retention-days: 30
           if-no-files-found: warn

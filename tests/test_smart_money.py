@@ -332,8 +332,14 @@ def test_workflow_lifecycle_source_scope_and_reader_link():
     text=Path('.github/workflows/radar-smart-money.yml').read_text()
     assert "'20 9 * * 1-5'" in text and "'10 12 * * 1-5'" in text
     assert 'contents: write' not in text and 'workflow_run:' not in text
-    source=text.split('- name: Capture public participants',1)[1].split('- name: Rebuild originals',1)[0]
+    primary=text.split('  capture-smart-money:',1)[1].split('  capture-tushare-relay:',1)[0]
+    source=primary.split('- name: Capture public participants',1)[1].split('- name: Rebuild originals',1)[0]
     assert 'GH_TOKEN' not in source and 'FTSHARE_API_KEY' in source
-    after=text.split('- name: Rebuild originals',1)[1]
-    assert 'secrets.' not in after
+    after=primary.split('- name: Rebuild originals',1)[1]
+    assert 'TUSHARE_PROXY_API_KEY' not in primary and 'secrets.' not in after
+    relay=text.split('  capture-tushare-relay:',1)[1]
+    assert 'needs: capture-smart-money' in relay
+    assert 'TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}' in relay
+    assert 'actions/download-artifact@v8' in relay and 'digest-mismatch: error' in relay
+    assert 'HITHINK_FINANCE_API_KEY' not in relay and 'FTSHARE_API_KEY' not in relay
     assert 'radar-smart-money' in Path('.github/workflows/current-state-read-entry.yml').read_text()
