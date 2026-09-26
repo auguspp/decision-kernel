@@ -14,6 +14,11 @@ on:
         required: false
         default: false
         type: boolean
+      relay-reports-only:
+        description: 'With relay-only: repair only seven dated forecast pages; do not repeat other Relay interfaces'
+        required: false
+        default: false
+        type: boolean
       repair-pending:
         description: 'Explicitly repair retained incomplete partitions using this reviewed main; do not reacquire completed scopes'
         required: false
@@ -52,6 +57,7 @@ jobs:
           EXPECTED_CODE: ${{ inputs.code-sha }}
           REPAIR_PENDING: ${{ inputs.repair-pending }}
           RELAY_ONLY: ${{ inputs.relay-only }}
+          RELAY_REPORTS_ONLY: ${{ inputs.relay-reports-only }}
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python .github/scripts/smart-money-control.py

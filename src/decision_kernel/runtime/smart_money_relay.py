@@ -25,7 +25,9 @@ APIS = ("hm_list", "hm_detail", "report_rc", "top_list", "top_inst")
 AUTHORITY = {**s.AUTHORITY, "source_role": "SECONDARY_SUPPLEMENT_NOT_PRIMARY_REPLACEMENT"}
 MAX_RAW = 20 * 1024 * 1024
 
-def plan(market_session: str | None, *, revision: int = 1, as_of: str | None = None) -> list[dict]:
+def plan(market_session: str | None, *, revision: int = 1, as_of: str | None = None,
+         reports_only: bool = False) -> list[dict]:
+    s.require(type(reports_only) is bool and (not reports_only or revision == 3), "RELAY_REPORT_SCOPE")
     if market_session is None:
         return []
     day = s.day(market_session).strftime("%Y%m%d")
@@ -41,13 +43,20 @@ def plan(market_session: str | None, *, revision: int = 1, as_of: str | None = N
         {"api": "top_inst", "params": {"trade_date": day, "limit": "5000"},
          "meaning": "INSTITUTIONAL_SEAT_CROSSCHECK_NOT_IDENTIFIABLE_FUND"},
     ]
-    s.require(type(revision) is int and revision in {1, 2}, "RELAY_PLAN_REVISION")
-    if revision == 2:
+    s.require(type(revision) is int and revision in {1, 2, 3}, "RELAY_PLAN_REVISION")
+    if revision >= 2:
         end = s.day(as_of)
         specs[0]["params"]["limit"] = "1000"
         specs[1]["params"]["limit"] = "2000"
         specs[2]["params"] = {"start_date": (end - timedelta(days=6)).strftime("%Y%m%d"),
                               "end_date": end.strftime("%Y%m%d"), "limit": "3000"}
+    if revision == 3:
+        # This relay rejects a range without report_date. Preserve the same
+        # seven-day objective using seven independently qualified daily pages.
+        reports = [{**specs[2], "params": {
+            "report_date": (end - timedelta(days=i)).strftime("%Y%m%d"),
+            "limit": "3000"}} for i in range(7)]
+        specs = reports if reports_only else specs[:2] + reports + specs[3:]
     return specs
 
 
@@ -98,10 +107,11 @@ def _manifest_hash(value: dict) -> str:
 
 def capture(output: Path, identity: dict, market_session: str | None, *,
             request=relay.request, clock=relay.now, revision: int = 1,
-            source_capture: dict | None = None) -> dict:
-    if revision == 2:
+            source_capture: dict | None = None, reports_only: bool = False) -> dict:
+    s.require(type(reports_only) is bool and (not reports_only or revision == 3), "RELAY_REPORT_SCOPE")
+    if revision in {2, 3}:
         return capture_checkpointed(output, identity, market_session, source_capture,
-                                    request=request, clock=clock)
+                                    request=request, clock=clock, revision=revision, reports_only=reports_only)
     s.require(revision == 1, "RELAY_PLAN_REVISION")
     primary.validate_identity(identity)
     output = Path(output)
@@ -151,7 +161,8 @@ def capture(output: Path, identity: dict, market_session: str | None, *,
     return result
 
 
-def capture_checkpointed(output, identity, market_session, source_capture, *, request, clock):
+def capture_checkpointed(output, identity, market_session, source_capture, *, request, clock,
+                         revision=2, reports_only=False):
     primary.validate_identity(identity)
     output = Path(output)
     s.require(not output.exists() and not any(p.is_symlink() for p in (output, *output.parents)),
@@ -159,16 +170,18 @@ def capture_checkpointed(output, identity, market_session, source_capture, *, re
     started = clock()
     validate_binding(source_capture, market_session, started)
     as_of = s.clock(started).astimezone(s.ZONE).date().isoformat()
-    specs = plan(market_session, revision=2, as_of=as_of)
+    specs = plan(market_session, revision=revision, as_of=as_of, reports_only=reports_only)
     output.mkdir(parents=True)
     records = [{"index": index, "spec": spec, "status": "NOT_ATTEMPTED", "attempts": []}
                for index, spec in enumerate(specs)]
-    manifest = {"version": VERSION, "plan_revision": 2, "identity": identity,
+    manifest = {"version": VERSION, "plan_revision": revision, "identity": identity,
                 "market_session": market_session, "as_of_date": as_of,
                 "source_capture": source_capture, "started_at": started,
                 "finished_at": started, "records": records, "execution_complete": False,
                 "authority": AUTHORITY, "relay_host": relay.PRO,
                 "retry_wait_seconds": relay.RETRY_WAIT_SECONDS}
+    if revision == 3:
+        manifest["reports_only"] = reports_only
     def checkpoint():
         manifest["finished_at"] = clock()
         manifest["capture_hash"] = _manifest_hash(manifest)
@@ -278,16 +291,23 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
     begin, finish = s.clock(manifest["started_at"]), s.clock(manifest["finished_at"])
     s.require(begin <= finish <= s.clock(cutoff), "RELAY_CAPTURE_CLOCK")
     revision = manifest.get("plan_revision", 1)
-    s.require(type(revision) is int and revision in {1, 2}, "RELAY_PLAN_REVISION")
-    if revision == 2:
+    s.require(type(revision) is int and revision in {1, 2, 3}, "RELAY_PLAN_REVISION")
+    if revision >= 2:
         validate_binding(manifest["source_capture"], manifest.get("market_session"), manifest["started_at"])
         s.require(manifest["as_of_date"] == begin.astimezone(s.ZONE).date().isoformat(), "RELAY_ASOF_DATE")
         s.require(type(manifest.get("execution_complete")) is bool, "RELAY_EXECUTION_MARKER")
-    expected = plan(manifest.get("market_session"), revision=revision, as_of=manifest.get("as_of_date"))
+    reports_only = manifest.get("reports_only", False)
+    if revision == 3:
+        s.require(type(manifest.get("reports_only")) is bool, "RELAY_REPORT_SCOPE")
+    else:
+        s.require("reports_only" not in manifest, "RELAY_LEGACY_SCOPE")
+    expected = plan(manifest.get("market_session"), revision=revision,
+                    as_of=manifest.get("as_of_date"), reports_only=reports_only)
     records = manifest.get("records")
     s.require(isinstance(records, list) and len(records) == len(expected), "RELAY_RECORD_COUNT")
     expected_files = {"capture.json"}
     families = {}
+    report_pages = []
     unresolved = []
     stopped = None
     not_started = False
@@ -305,14 +325,14 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
         status = record.get("status")
         if not attempts:
             allowed = {"CREDENTIAL_UNAVAILABLE"}
-            if revision == 2:
+            if revision >= 2:
                 allowed |= {"REQUEST_RECEIPT_UNAVAILABLE", "NOT_ATTEMPTED", "NOT_ATTEMPTED_SERVICE_STOP"}
             s.require(status in allowed, "RELAY_EMPTY_ATTEMPT_STATUS")
             rows = []
         else:
             s.require(status == attempts[-1]["classification"], "RELAY_FINAL_STATUS")
             rows = []
-        if revision == 2:
+        if revision >= 2:
             if stopped:
                 s.require(not attempts and status in {"NOT_ATTEMPTED_SERVICE_STOP", "NOT_ATTEMPTED"},
                           "RELAY_REQUEST_AFTER_SERVICE_STOP")
@@ -324,6 +344,7 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
             not_started = not_started or status == "NOT_ATTEMPTED"
             if manifest["execution_complete"]:
                 s.require(status != "NOT_ATTEMPTED", "RELAY_COMPLETE_WITH_UNATTEMPTED")
+        first_gap = len(unresolved)
         interpretation = None
         interpretation_error = None
         if status == "SUCCESS":
@@ -343,7 +364,7 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
         source_fields = sorted({key for row in rows
                                 for key in ("source", "provider", "data_source")
                                 if row.get(key) not in (None, "")})
-        families[spec["api"]] = {"status": status, "rows": rows, "row_count": len(rows),
+        item = {"status": status, "rows": rows, "row_count": len(rows),
                                  "meaning": spec["meaning"], "source_fields_present": source_fields,
                                  "interpretation": ({k: v for k, v in interpretation.items()
                                                      if k not in {"rows", "row_count"}}
@@ -355,15 +376,24 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
                                  "attempts": [{k: v for k, v in a.items()
                                                if k not in {"body", "bytes", "sha256"}}
                                               for a in attempts]}
+        if revision == 3 and spec["api"] == "report_rc":
+            report_pages.append({"request_index": index,
+                                 "report_date": spec["params"]["report_date"], **item})
+            for gap in unresolved[first_gap:]:
+                gap["report_date"] = spec["params"]["report_date"]
+        else:
+            families[spec["api"]] = item
+    if report_pages:
+        families["report_rc"] = combine_report_pages(report_pages)
     s.require(expected_files == set(files) - {"summary.json", "summary.md"}, "RELAY_FILE_SCOPE")
-    if revision == 2 and not manifest["execution_complete"]:
+    if revision >= 2 and not manifest["execution_complete"]:
         unresolved.append({"api":"execution", "status":"CAPTURE_CHECKPOINT_NOT_FINAL"})
     succeeded = sum(v["interpretation"] is not None for v in families.values())
     overall = ("NO_COMPLETED_SESSION" if not families
                else "READY" if succeeded == len(families) and not unresolved
                else "PARTIAL_WITH_EXPLICIT_GAPS" if succeeded
                else "UNAVAILABLE_NOT_QUIET")
-    return {"version": VERSION, "status": overall,
+    result = {"version": VERSION, "status": overall,
             "plan_revision": revision, "source_capture": manifest.get("source_capture"),
             "execution_complete": manifest.get("execution_complete"),
             "as_of_date": manifest.get("as_of_date"),
@@ -371,17 +401,67 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
             "market_session": manifest.get("market_session"), "cutoff": manifest["finished_at"],
             "relay_host": relay.PRO, "families": families, "unresolved": unresolved,
             "capture_hash": manifest["capture_hash"], "identity": identity, **AUTHORITY}
+    if revision == 3:
+        result["reports_only"] = reports_only
+    return result
+
+
+def combine_report_pages(pages):
+    """Concatenate dated pages, preserving offsets and independent failures.
+
+    Each retained record is still a report/target-period row, not a unique
+    report or a confirmed revision. No page's count is a market denominator.
+    """
+    rows, metadata, qualified, origins = [], [], [], []
+    for page in pages:
+        offset = len(rows)
+        rows.extend(page["rows"])
+        metadata.append({**{k: v for k, v in page.items() if k != "rows"}, "row_offset": offset})
+        interpretation = page["interpretation"] or {}
+        qualified.extend(offset + i for i in interpretation.get("qualified_row_indexes", []))
+        origins.extend({"request_index": page["request_index"], "row_index": i,
+                        "report_date": page["report_date"]} for i in range(page["row_count"]))
+    interpreted = [p for p in pages if p["interpretation"] is not None]
+    complete = all(p["status"] == "SUCCESS" and p["interpretation"] is not None for p in pages)
+    issues = [{"report_date": p["report_date"], "status": p["status"],
+               "interpretation_error": p["interpretation_error"],
+               "issues": (p["interpretation"] or {}).get("issues", [])}
+              for p in pages if p["status"] != "SUCCESS" or p["interpretation"] is None
+              or p["interpretation"]["issues"]]
+    counts = [p["recorded_http_attempt_count"] for p in pages]
+    return {"status": "SUCCESS" if complete else "PARTIAL_DAILY_PAGES" if interpreted
+            else "UNAVAILABLE_DAILY_PAGES", "rows": rows, "row_count": len(rows),
+            "meaning": pages[0]["meaning"], "pages": metadata, "row_origins": origins,
+            "source_fields_present": sorted({f for p in pages for f in p["source_fields_present"]}),
+            "interpretation": {"qualified_row_count": len(qualified),
+                "qualified_row_indexes": qualified, "issues": issues,
+                "qualification": "WITH_EXPLICIT_GAPS" if issues else "BOUNDED_DAILY_PAGES_QUALIFIED",
+                "coverage": {"complete_market": False, "requested_dates": [p["report_date"] for p in pages],
+                    "interpreted_dates": [p["report_date"] for p in interpreted],
+                    "status": "INDEPENDENT_SINGLE_PAGES_NOT_COMPLETE_MARKET"}}
+                if interpreted else None,
+            "interpretation_error": None, "receipt_error_type": None,
+            "recorded_http_attempt_count": None if None in counts else sum(counts),
+            "attempts": [{"report_date": p["report_date"], **a} for p in pages for a in p["attempts"]]}
+
 
 def render(result: dict) -> str:
     lines = ["## Tushare Relay 补充来源", "",
              f"状态 {result['status']}；市场日 {result.get('market_session') or 'UNKNOWN'}；"
              f"取得截止 {result['cutoff']}。第三方中转，不是官方Tushare或聪明钱评分。", "",
              "| 接口 | 取得状态 | 解析行数 | 日期/身份合格行数 |", "|---|---|---:|---:|"]
+    if result.get("reports_only"):
+        lines += ["本次仅修复七个报告日；未请求游资名录、游资明细或龙虎榜。此前补充仍按原取得日单独保留。", ""]
     for api in APIS:
         item = result["families"].get(api)
         if item:
             qualified = (item.get("interpretation") or {}).get("qualified_row_count", "UNKNOWN")
             lines.append(f"| {api} | {item['status']} | {item['row_count']} | {qualified} |")
+    reports = result["families"].get("report_rc", {})
+    if reports.get("pages"):
+        lines += ["", "报告日分别取得；每行仍是报告的一个预测期，不是独立新事件。", "",
+                  "| 报告日 | 状态 | 保存行数 |", "|---|---|---:|"]
+        lines += [f"| {p['report_date']} | {p['status']} | {p['row_count']} |" for p in reports["pages"]]
     if result["unresolved"]:
         lines += ["", "缺口：" + "；".join(f"{x['api']}={x['status']}"
                                            for x in result["unresolved"])]
@@ -411,8 +491,11 @@ def main(argv=None):
                   observation["identity"]["code_commit"] == selected.get("head_sha") and
                   observation["capture_hash"] == selected.get("capture_hash"), "RELAY_PRIOR_CAPTURE_BINDING")
     market_session = max(observation["trading_sessions"], default=None)
-    result = capture(args.output, identity, market_session, revision=2,
-                     source_capture=source_binding(observation))
+    reports_only = control.get("relay_reports_only", False)
+    s.require(type(reports_only) is bool and (not reports_only or
+              control.get("decision") == "SKIP_RELAY_ONLY_REUSE_CAPTURE"), "RELAY_REPORT_CONTROL")
+    result = capture(args.output, identity, market_session, revision=3,
+                     source_capture=source_binding(observation), reports_only=reports_only)
     print(json.dumps({k: result[k] for k in ("status", "market_session", "capture_hash", "unresolved")},
                      ensure_ascii=False))
     return 0
