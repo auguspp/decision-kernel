@@ -1,7 +1,7 @@
 {
   "calendar_enumerated_through": "2026-09-24",
   "calendar_pending_since": null,
-  "capture_hash": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb",
+  "capture_hash": "04af8525dbc62f769fcde7ec685614e4671f0cd9f608e53f3d329acea4c71934",
   "completed_partitions": [
     {
       "begin": "2026-09-18",
@@ -110,14 +110,14 @@
     },
     {
       "begin": "2026-06-28",
-      "cutoff": "2026-09-26T03:07:20.373445+00:00",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
       "end": "2026-09-26",
       "family": "north_holdings",
       "partition": "SH"
     },
     {
       "begin": "2026-06-28",
-      "cutoff": "2026-09-26T03:07:20.373445+00:00",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
       "end": "2026-09-26",
       "family": "north_holdings",
       "partition": "SZ"
@@ -191,50 +191,49 @@
       "end": "2026-09-26",
       "family": "executives",
       "partition": "disclosures"
-    }
-  ],
-  "cutoff": "2026-09-26T03:07:20.373445+00:00",
-  "last_source_run_id": 36213198566,
-  "late_confirmation_complete": true,
-  "meaning": "SAVED_DELIVERY_PROGRESS_NOT_SOURCE_TRUTH",
-  "policy_stops": [],
-  "target_date": "2026-09-26",
-  "unresolved": [
-    {
-      "begin": "2026-06-28",
-      "end": "2026-09-26",
-      "failure": "HKEX_REQUESTED_QUARTER_NOT_RETURNED",
-      "family": "north_holdings",
-      "partition": "SH@2026-03-31"
     },
     {
       "begin": "2026-06-28",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
       "end": "2026-09-26",
-      "failure": "HKEX_REQUESTED_QUARTER_NOT_RETURNED",
-      "family": "north_holdings",
-      "partition": "SZ@2026-03-31"
-    },
-    {
-      "begin": "2026-06-28",
-      "end": "2026-09-26",
-      "failure": "SOURCE_BUSY",
       "family": "activity",
       "partition": "disclosures"
     },
     {
       "begin": "2026-06-28",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
       "end": "2026-09-26",
-      "failure": "PAGE_COUNTERS",
       "family": "holder_changes",
       "partition": "disclosures"
     },
     {
       "begin": "2026-06-28",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
       "end": "2026-09-26",
-      "failure": "PAGE_COUNTERS",
       "family": "repurchases",
       "partition": "disclosures"
+    },
+    {
+      "begin": "2026-06-28",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
+      "end": "2026-09-26",
+      "family": "north_holdings",
+      "partition": "SH@2026-03-31"
+    },
+    {
+      "begin": "2026-06-28",
+      "cutoff": "2026-09-26T04:13:24.513864+00:00",
+      "end": "2026-09-26",
+      "family": "north_holdings",
+      "partition": "SZ@2026-03-31"
     }
   ],
+  "cutoff": "2026-09-26T04:13:24.513864+00:00",
+  "last_source_run_id": 36217120177,
+  "late_confirmation_complete": true,
+  "meaning": "SAVED_DELIVERY_PROGRESS_NOT_SOURCE_TRUTH",
+  "policy_stops": [],
+  "target_date": "2026-09-26",
+  "unresolved": [],
   "version": "smart-money-observation-v1"
 }
