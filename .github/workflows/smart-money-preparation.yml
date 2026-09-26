@@ -66,13 +66,11 @@ jobs:
           socket.socket.connect=deny;socket.getaddrinfo=deny
           root=Path(os.environ['RUNNER_TEMP'])/'smart-money-probe'
           with zipfile.ZipFile(root/'10527564199.zip') as z, tempfile.TemporaryDirectory() as temp:
-              p=Path(temp)
-              names=[n for n in z.namelist() if n.startswith('payload/')]
-              assert len(names)==8
+              p=Path(temp);names=[n for n in z.namelist() if n.startswith('payload/')];assert len(names)==8
               for name in names:
                   leaf=name.removeprefix('payload/');assert '/' not in leaf
                   (p/leaf).write_bytes(z.read(name))
-              before={n: (p/n).read_bytes() for n in (x.name for x in p.iterdir())}
+              before={x.name:x.read_bytes() for x in p.iterdir()}
               report,label=c.verify(p)
               assert before=={n:(p/n).read_bytes() for n in before}
               assert json.loads(z.read('verification.json'))=={k:report[k] for k in ('status','capture_hash')}
@@ -80,8 +78,10 @@ jobs:
               (root/'legacy-replay.json').write_text(json.dumps(out,indent=2));print('LEGACY_REPLAY',json.dumps(out))
           PY
       - name: Test source history recovery and existing company reading
-        run: |
-          python -m pytest -q tests/test_smart_money.py tests/test_smart_money_reading.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/smart-money-probe/junit.xml"
+        run: python -m pytest -q tests/test_smart_money.py tests/test_smart_money_reading.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/smart-money-probe/junit.xml"
+      - name: Inspect retained samples and actual headless rendering
+        if: always()
+        run: python .github/scripts/smart-money-offline-acceptance.py
       - name: Retain reviewed source identity
         if: always()
         run: |
