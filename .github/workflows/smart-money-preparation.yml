@@ -14,7 +14,7 @@ jobs:
   prepare:
     if: github.ref == 'refs/heads/work/smart-money-20260926' && github.run_attempt == 1
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v7
         with:
@@ -23,48 +23,31 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Verify finite offline acceptance
+      - name: Verify bounded inspection scope
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python - <<'PY'
           from datetime import datetime, timezone
           assert datetime.now(timezone.utc)<datetime(2026,9,28,tzinfo=timezone.utc)
           PY
-          mkdir -p "$RUNNER_TEMP/smart-money-probe"
-      - name: Install existing test dependencies
-        run: python -m pip install -e '.[dev]'
-      - name: Download exact previous acceptance data without new source acquisition
+      - name: Install existing CI evidence reader
+        run: python -m pip install -e '.[ci-contracts]'
+      - name: Download and verify exact completed PR full evidence
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          python - <<'PY'
-          import hashlib,json,os,subprocess,zipfile,io
-          from pathlib import Path
-          endpoint='repos/auguspp/decision-kernel/actions/artifacts/10896200983'
-          digest='f26d8dd4da59d5d08c78ea6530799524654fa4e9dcbeb13414bf8a6c2d3ea357'
-          meta=json.loads(subprocess.check_output(['gh','api',endpoint]))
-          assert not meta['expired'] and meta['workflow_run']['id']==36211546103 and meta['digest']=='sha256:'+digest
-          raw=subprocess.check_output(['gh','api',endpoint+'/zip'])
-          assert len(raw)==meta['size_in_bytes']==27645972 and hashlib.sha256(raw).hexdigest()==digest
-          z=zipfile.ZipFile(io.BytesIO(raw));assert z.testzip() is None
-          root=Path(os.environ['RUNNER_TEMP'])/'smart-money-probe';(root/'previous-acceptance.zip').write_bytes(raw)
-          print('EXACT_PRIOR_ARCHIVE',digest,len(raw),z.namelist())
-          PY
-      - name: Test complete source history and optional failure contracts
-        run: python -m pytest -q tests/test_smart_money.py tests/test_smart_money_reading.py tests/test_smart_money_edges.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/smart-money-probe/junit.xml"
-      - name: Verify actual browser DOM and retained original evidence
-        if: always()
-        run: python .github/scripts/smart-money-offline-acceptance.py
-      - name: Retain reviewed source identity
+          EVIDENCE_RUN: '36212117656'
+          EVIDENCE_HEAD: '5c2a31e1d1166fafc1020d9af6ecd8196487f720'
+        run: python .github/scripts/smart-money-ci-evidence.py
+      - name: Retain verification identity
         if: always()
         run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/smart-money-probe/code-sha.txt"
-          rm -f "$RUNNER_TEMP/smart-money-probe/previous-acceptance.zip"
-      - name: Upload scoped acceptance
+          mkdir -p "$RUNNER_TEMP/smart-money-evidence"
+          git rev-parse HEAD > "$RUNNER_TEMP/smart-money-evidence/verification-code-sha.txt"
+      - name: Upload original CI archive and inspection proof
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: smart-money-preparation-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/smart-money-probe/
+          name: smart-money-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-evidence/
           retention-days: 30
           if-no-files-found: warn
