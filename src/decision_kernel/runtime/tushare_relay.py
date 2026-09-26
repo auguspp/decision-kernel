@@ -100,7 +100,7 @@ def _http_get(api: str, params: dict[str, str], key: str, *, clock: Callable[[],
     client.trust_env = False
     requested_at = clock()
     try:
-        with client.get(url, params=params, headers=headers, timeout=(10, 35),
+        with client.get(url, params=params, headers=headers, timeout=(10, 30),
                         allow_redirects=False, stream=True) as response:
             prepared = requests.Request("GET", url, params=params).prepare().url
             require(response.url == prepared, "DESTINATION_CHANGED")
@@ -143,11 +143,16 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
             result = transport(api, p, credential, clock=clock)
             require(set(result) == {"http_status", "raw", "requested_at", "received_at", "headers"},
                     "TRANSPORT_CONTRACT")
-            body = decode(result["raw"])
-            classification = classify(result["http_status"], body)
-            attempts.append({**result, "attempt": attempt_no, "classification": classification,
-                             "business_code": body.get("code"), "business_error": body.get("error"),
-                             "business_msg": body.get("msg") or body.get("message")})
+            try:
+                body = decode(result["raw"])
+                classification = classify(result["http_status"], body)
+                attempts.append({**result, "attempt": attempt_no, "classification": classification,
+                                 "business_code": body.get("code"), "business_error": body.get("error"),
+                                 "business_msg": body.get("msg") or body.get("message")})
+            except RelayError as exc:
+                attempts.append({**result, "attempt": attempt_no, "classification": "MALFORMED_RESPONSE",
+                                 "business_code": None, "business_error": str(exc),
+                                 "business_msg": None})
         except requests.Timeout:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
                              "requested_at": clock(), "received_at": clock(), "headers": {},
@@ -158,6 +163,11 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
                              "requested_at": clock(), "received_at": clock(), "headers": {},
                              "classification": "TRANSPORT_CONNECTION", "business_code": None,
                              "business_error": "TRANSPORT_CONNECTION", "business_msg": None})
+        except requests.RequestException:
+            attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
+                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "classification": "TRANSPORT_ERROR", "business_code": None,
+                             "business_error": "TRANSPORT_ERROR", "business_msg": None})
         result = attempts[-1]
         if result["classification"] != "TEMPORARY_QUEUE" or attempt_no == 2:
             break
