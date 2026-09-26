@@ -121,6 +121,34 @@ def read_run(c,selected,*,follow_control=False):
             'capture_hash':manifest['capture_hash'],'job_id':job['id'],'job_conclusion':job['conclusion']}
 
 
+def restore_deferred_documents(c,old,obs):
+    """Migrate only already-retained forecast originals, never fetch new PDFs."""
+    if not old or old['history'].get('forecast_documents'):
+        return
+    if any(p['family']=='forecasts' for p in obs['partitions']):
+        return
+    rows=[r for r in old['history']['records'] if r['family']=='forecasts']
+    if not rows:return
+    try:
+        keys={r['origin'] for r in rows}
+        eligible=[(k,v) for k,v in old['origins'].items() if k in keys]
+        m.check(bool(eligible),'forecast origin absent')
+        key,origin=max(eligible,key=lambda kv:m.clock(kv[1]['cutoff']))
+        # Exact recorded prior origin, not a search for a conveniently green run.
+        saved=read_run(c,origin['run'],follow_control=False)
+        prior=saved.get('observation')
+        m.check(prior is not None and prior['capture_hash']==key
+                and m.clock(prior['cutoff'])<=m.clock(obs['cutoff']),
+                'forecast origin binding differs')
+        documents=deepcopy(prior.get('forecast_documents',[]))
+        for doc in documents:
+            doc.update(origin_capture_hash=key,origin_cutoff=prior['cutoff'])
+        old['history']['forecast_documents']=documents
+        old['history']['forecast_document_recovery']='EXACT_RETAINED_ORIGIN_REPLAY_NOT_NEW_PDF_ACQUISITION'
+    except ERRORS as exc:
+        old['history']['forecast_document_recovery']='RETAINED_DOCUMENT_CONTEXT_GAP_'+type(exc).__name__
+
+
 def _attach(c,baseline):
     old,prior_status=previous(c)
     before=dict(c.files),dict(c.archive_cache),dict(c.sources)
@@ -139,6 +167,7 @@ def _attach(c,baseline):
         return assemble(c,baseline,research,{},'\n聪明钱历史读取暂不可用，原件定位仍保留；不把缺口重置成新基线或无活动。\n')
     obs=current.get('observation');origins=deepcopy((old or {}).get('origins',{}))
     if obs:
+        restore_deferred_documents(c,old,obs)
         hist=view.history(obs,(old or {}).get('history'))
         overview=view.summarize(obs,hist);state=view.state(obs,(old or {}).get('state'))
         origins[obs['capture_hash']]={'reading_commit':None,'archive':current['archive'],
