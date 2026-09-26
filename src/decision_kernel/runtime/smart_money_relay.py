@@ -101,11 +101,15 @@ def _validate_attempt(item: dict, files: dict[str, bytes], *, first, finish):
     raw = files[item["body"]]
     s.require(len(raw) == item["bytes"] and sha256(raw).hexdigest() == item["sha256"],
               "RELAY_BODY_IDENTITY")
+    if item["classification"] == "MALFORMED_RESPONSE":
+        try:
+            relay.decode(raw)
+        except relay.RelayError as exc:
+            s.require(str(exc) == item["business_error"], "RELAY_MALFORMED_REASON")
+            return None
+        raise s.SourceError("RELAY_MALFORMED_BECAME_VALID")
     body = relay.decode(raw)
     expected = relay.classify(item["http_status"], body)
-    if item["classification"] == "MALFORMED_RESPONSE":
-        # A malformed envelope was retained, but cannot be interpreted as success.
-        expected = "MALFORMED_RESPONSE"
     s.require(expected == item["classification"], "RELAY_CLASSIFICATION")
     return body
 
