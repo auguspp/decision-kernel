@@ -4,20 +4,22 @@
 
 新取得、同期修订和已知未变分别保留；再次发布同一采集不算新事件。
 
+**本次新采集未取得，以下保留旧日期与旧来源。** AWAITING_CURRENT_CAPTURE
+
 | 独立观察面 | 已保存记录/公司 | 当前覆盖 | 原统计/事件日期 |
 |---|---:|---|---|
+| 机构调研活动 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
+| 高管实际持股变动 | 3226 / 641 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-24 |
+| 研报与预期版本 | 3250 / 1560 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-28—2026-09-24 |
+| 股东披露增减持区间 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
+| 具名个人与机构报告期持股 | 111862 / 5610 | COMPLETE_PROVIDER_SCOPES；2/2批 | 2026-03-31—2026-06-30 |
 | 游资标签公开轨迹 | 237 / 116 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
 | 龙虎榜机构席位 | 183 / 103 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
-| 原始营业部席位 | 2815 / 186 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
-| 北向成交（非净流入） | 5 / 0 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
-| 具名个人与机构报告期持股 | 111862 / 5610 | COMPLETE_PROVIDER_SCOPES；2/2批 | 2026-03-31—2026-06-30 |
 | 北向季度持股 | 2269 / 2269 | PARTIAL_OR_UNAVAILABLE；2/4批 | 2026-06-30—2026-06-30 |
-| 机构调研活动 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
-| 研报与预期版本 | 3250 / 1560 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-28—2026-09-24 |
-| 高管实际持股变动 | 3226 / 641 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-24 |
-| 股东披露增减持区间 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
-| 公司回购计划与执行 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
+| 北向成交（非净流入） | 5 / 0 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
 | 定增与战略资本发行 | 51 / 50 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-15 |
+| 公司回购计划与执行 | 0 / 0 | PARTIAL_OR_UNAVAILABLE；0/1批 | None—None |
+| 原始营业部席位 | 2815 / 186 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-24 |
 
 来源表中另有 160 条NQ记录，已逐条保留范围外处置，不伪装成沪深北股票。
 
