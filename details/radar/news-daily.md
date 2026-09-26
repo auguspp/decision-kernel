@@ -1,6 +1,6 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-09-25T10:26:48.611243+00:00；状态：WINDOWS&#95;CAPTURED
+原采集截止：2026-09-26T21:09:28.894518+00:00；状态：WINDOWS&#95;CAPTURED
 这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。
 
@@ -9,7 +9,7 @@
 | cls | OBSERVATIONS&#95;NORMALIZED | 30 |
 | wallstreetcn | OBSERVATIONS&#95;NORMALIZED | 30 |
 | fastbull | OBSERVATIONS&#95;NORMALIZED | 30 |
-| jin10 | OBSERVATIONS&#95;NORMALIZED | 27 |
+| jin10 | OBSERVATIONS&#95;NORMALIZED | 30 |
 | mktnews | OBSERVATIONS&#95;NORMALIZED | 30 |
 | gelonghui | OBSERVATIONS&#95;NORMALIZED | 15 |
 | thepaper | OBSERVATIONS&#95;NORMALIZED | 20 |
@@ -18,190 +18,197 @@
 
 名称匹配不认证证券或业务受益；未命中不代表没有相关公司。
 
+### 恒辉安防 300952.SZ
+- 恒辉安防&#40;300952&#41;：下半年盈利有望逐步修复（gelonghui）
+旧研究定位保留在同版本公司阅读；经济联系和具体问题仍待审阅，不自动启动Pre。
+
 ## 原窗口标题（不是新增事件清单）
 
-- [财联社9月25日电，现货白银向上触及65美元/盎司，日内上涨1.83%。](https://www.cls.cn/detail/2493065) · cls
-- [香港交易所旗下衍生产品结算所将于11月起接纳中国国债、政策性金融债及财政部债券作为非现金抵押品](https://www.cls.cn/detail/2493064) · cls
-- [财联社9月25日电，现货黄金向上触及4300美元，日内上涨0.65%。](https://www.cls.cn/detail/2493063) · cls
-- [财联社9月25日电，印度国家证券存管有限公司&#40;NSDL&#41;数据显示，全球基金在前一交易日净卖出452亿卢比的印度股票。](https://www.cls.cn/detail/2493062) · cls
-- [消息人士：美联储计划提高银行监管门槛](https://www.cls.cn/detail/2493061) · cls
-- [北约秘书长：欧洲目前没有独立开展军事行动的能力](https://www.cls.cn/detail/2493060) · cls
-- [日本财务大臣片山皋月：高市早苗“并非再通胀主义者”](https://www.cls.cn/detail/2493051) · cls
-- [华尔街面对利率新格局 5%美债收益率或成常态甚至下限](https://www.cls.cn/detail/2493050) · cls
-- [财联社9月25日电，欧元/瑞郎涨幅扩大至0.3%，报0.9451，触及日内高点。](https://www.cls.cn/detail/2493049) · cls
-- [财联社9月25日电，美联储威廉姆斯表示，美联储应确保冲击不会变得根深蒂固。](https://www.cls.cn/detail/2493048) · cls
-- [财联社9月25日电，乌克兰总统泽连斯基称，乌克兰在夜间打击了俄罗斯两座炼油厂。](https://www.cls.cn/detail/2493047) · cls
-- [财联社9月25日电，纽约联储行长WILLIAMS表示不能忽视持续的供应冲击。](https://www.cls.cn/detail/2493046) · cls
-- [财联社9月25日电，英国央行总裁贝利称，能源价格高企持续的时间越长，就越难维持不加息的立场。](https://www.cls.cn/detail/2493045) · cls
-- [财联社9月25日电，英国央行总裁贝利称，目前我们看到，能源价格的传导效应相当有限，但现在下结论还为时过早。](https://www.cls.cn/detail/2493044) · cls
-- [以太坊涨至2700美元上方 过去24小时涨超2%](https://www.cls.cn/detail/2493043) · cls
-- [财联社9月25日电，克里姆林宫称俄罗斯、美国和乌克兰之间的会谈可能很快举行，乌克兰三方会谈尚未确定日期。](https://www.cls.cn/detail/2493042) · cls
-- [财联社9月25日电，日本首相高市早苗表示，特朗普在峰会会晤中表示，日元疲软正给美国贸易带来压力。](https://www.cls.cn/detail/2493041) · cls
-- [财联社9月25日电，腾讯控股于9月25日回购231,000股，耗资1.003亿港元。](https://www.cls.cn/detail/2493040) · cls
-- [财联社9月25日电，受高市早苗言论影响，美元/日元下跌0.8%至157.67。高市早苗表示，没有和特朗普讨论货币政策或财政政策。](https://www.cls.cn/detail/2493038) · cls
-- [工信部：中国与挪威主管部门间第二次卫星网络协调会谈顺利举行](https://www.cls.cn/detail/2493037) · cls
-- [财联社9月25日电，据报道，日本首相高市早苗告知特朗普日元被低估是个问题。](https://www.cls.cn/detail/2493036) · cls
-- [伊朗总统：伊朗不想拥有核武器 愿推进与美谈判](https://www.cls.cn/detail/2493035) · cls
-- [财联社9月25日电，ICE数据显示，荷兰近月批发天然气价格下跌5.07%，至每兆瓦时71.30欧元。](https://www.cls.cn/detail/2493034) · cls
-- [财联社9月25日电，香港交易所信息显示，摩根士丹利在哔哩哔哩-WH股的持股比例于09月22日从6.61%升至7.45%。](https://www.cls.cn/detail/2493033) · cls
-- [财联社9月25日电，香港交易所信息显示，贝莱德（BlackRock）在比亚迪股份H股的持股比例于09月22日从7.05%降至6.74%。](https://www.cls.cn/detail/2493021) · cls
-- [财联社9月25日电，香港交易所信息显示，纽约梅隆银行在名创优品H股的持股比例于09月23日从10.56%升至11.06%。](https://www.cls.cn/detail/2493022) · cls
-- [财联社9月25日电，香港交易所信息显示，贝莱德（BlackRock）在恒瑞医药H股的持股比例于09月22日从6.56%升至7.32%。](https://www.cls.cn/detail/2493023) · cls
-- [财联社9月25日电，香港交易所信息显示，贝莱德（BlackRock）在工商银行H股的持股比例于09月22日从5.01%降至4.94%。](https://www.cls.cn/detail/2493024) · cls
-- [财联社9月25日电，香港交易所信息显示，纽约梅隆银行在名创优品H股的持股比例于09月23日从10.56%升至11.06%。](https://www.cls.cn/detail/2493025) · cls
-- [财联社9月25日电，香港交易所信息显示，贝莱德（BlackRock）在小米集团-WH股的持股比例于09月22日从5.01%降至4.98%，卖出的平均股价为26.4908港元。](https://www.cls.cn/detail/2493026) · cls
-- [现货白银上触65美元/盎司，日内涨1.85%。](https://wallstreetcn.com/livenews/3170743) · wallstreetcn
-- [奕境X9上市24小时大定突破9157台](https://wallstreetcn.com/livenews/3170742) · wallstreetcn
-- [港交所旗下衍生产品结算所将于11月起接纳中国国债、政策性金融债及财政部债券作为非现金抵押品](https://wallstreetcn.com/livenews/3170741) · wallstreetcn
-- [现货黄金向上触及4300美元，日内上涨0.65%。](https://wallstreetcn.com/livenews/3170740) · wallstreetcn
-- [报道：美联储计划提高银行监管门槛](https://wallstreetcn.com/livenews/3170739) · wallstreetcn
-- [日本财务大臣片山皋月：日本首相高市早苗“并非再通胀主义者”。  高市早苗非常尊重日本央行的独立性。  债券收益率上升是全球趋势，而且是暂时的。  对日元将毫不犹豫地采取大胆行动。](https://wallstreetcn.com/livenews/3170738) · wallstreetcn
-- [华尔街面对利率新格局 5%美债收益率或成常态甚至下限](https://wallstreetcn.com/livenews/3170737) · wallstreetcn
-- [欧元兑瑞郎涨幅扩大至0.3%，报0.9451，触及日内高点。](https://wallstreetcn.com/livenews/3170736) · wallstreetcn
-- [乌克兰总统泽连斯基：乌克兰连夜袭击了俄罗斯的两家炼油厂。](https://wallstreetcn.com/livenews/3170735) · wallstreetcn
-- [美国纽约联储主席威廉姆斯：不能忽视持续的供给冲击。  美国劳动力市场并非通胀压力的来源。  关税通常不会导致持续性通货膨胀。  美联储应确保冲击不会变得根深蒂固。  目前尚未看到人工智能对生产率的影响。](https://wallstreetcn.com/livenews/3170734) · wallstreetcn
-- [克里姆林宫：俄罗斯、美国和乌克兰之间的会谈可能很快举行，但尚未确定日期。](https://wallstreetcn.com/livenews/3170733) · wallstreetcn
-- [英国央行行长贝利：人工智能可能成为负供给冲击时代中的正面冲击。  目前能源价格传导相当温和，但仍处于早期阶段。  高能源价格持续时间越长，维持不加息立场就越困难。  确实会将抵押贷款利率上升纳入考量。](https://wallstreetcn.com/livenews/3170732) · wallstreetcn
-- [工信部：中国与挪威主管部门间第二次卫星网络协调会谈顺利举行](https://wallstreetcn.com/livenews/3170731) · wallstreetcn
-- [美元兑日元日内一度下跌0.8%至157.67。](https://wallstreetcn.com/livenews/3170730) · wallstreetcn
-- [日本首相高市早苗：告知特朗普日元被低估是个问题。  没有和特朗普讨论货币政策或财政政策。](https://wallstreetcn.com/livenews/3170729) · wallstreetcn
-- [伊朗总统：伊朗不想拥有核武器 愿推进与美谈判](https://wallstreetcn.com/livenews/3170728) · wallstreetcn
-- [据ICE数据显示，荷兰近月批发天然气价格下跌5.07%，至每兆瓦时71.30欧元。](https://wallstreetcn.com/livenews/3170727) · wallstreetcn
-- [通航换解封，美伊被曝探讨阶段性协议](https://wallstreetcn.com/livenews/3170726) · wallstreetcn
-- [俄通报国家杜马选举最终结果](https://wallstreetcn.com/livenews/3170725) · wallstreetcn
-- [纳斯达克100指数期货涨0.6%，至盘中高点。](https://wallstreetcn.com/livenews/3170724) · wallstreetcn
-- [布伦特原油日内跌超2%，跌破98美元/桶；WTI原油日内跌幅达2.5%，报92.24美元/桶。](https://wallstreetcn.com/livenews/3170723) · wallstreetcn
-- [IMF：2026年全球AI投资规模或突破2万亿美元，成为增长重要驱动力](https://wallstreetcn.com/livenews/3170722) · wallstreetcn
-- [据伊拉克国家通讯社，伊拉克纳杰夫机场暂停所有往返伊朗的航班。](https://wallstreetcn.com/livenews/3170721) · wallstreetcn
-- [现货白银日内涨幅达1.00%，现报64.49美元/盎司。](https://wallstreetcn.com/livenews/3170720) · wallstreetcn
-- [瑞声科技：9月25日斥资785.77万港元回购20万股](https://wallstreetcn.com/livenews/3170719) · wallstreetcn
-- [欧盟天然气协调小组将于10月8日再次召开会议。](https://wallstreetcn.com/livenews/3170718) · wallstreetcn
-- [乌克兰总统泽连斯基：美国提议与乌克兰和俄罗斯举行“技术会议”。  美国提议阿联酋作为美乌俄三方会谈地点。](https://wallstreetcn.com/livenews/3170717) · wallstreetcn
-- [交通运输部：9月24日全社会跨区域人员流动量22850.9万人次](https://wallstreetcn.com/livenews/3170716) · wallstreetcn
-- [港股收盘：恒生指数跌1.01%，恒生科技指数跌1.13%。网易跌超3%，小米集团跌超2%，阿里巴巴跌超1%。](https://wallstreetcn.com/livenews/3170715) · wallstreetcn
-- [美股盘前，光通信股普涨，Lumentum、康宁均涨超1%。](https://wallstreetcn.com/livenews/3170714) · wallstreetcn
-- [现货白银向上触及65美元/盎司，日内涨1.81%。](https://www.fastbull.com/cn/fastshort/4295347_1_1) · fastbull
-- [欧盟委员会发言人：意大利更新了欧盟“欧洲安全行动”（SAFE）防务贷款计划，金额略高于80亿欧元。](https://www.fastbull.com/cn/fastshort/4295346_212_1) · fastbull
-- [穆迪评级确认福冈市A1评级，展望稳定。](https://www.fastbull.com/cn/fastshort/4295344_212_1) · fastbull
-- [欧元兑美元EUR/USD站上1.14，日内涨0.24%。](https://www.fastbull.com/cn/fastshort/4295341_1_1) · fastbull
-- [欧盟委员会发言人：匈牙利寻求获得54亿欧元的欧盟“欧洲安全行动”（SAFE）计划贷款。](https://www.fastbull.com/cn/fastshort/4295340_212_1) · fastbull
-- [纽约期金日内涨1%，现报4341.27美元/盎司。](https://www.fastbull.com/cn/fastshort/4295338_212_1) · fastbull
-- [纽约期银日内涨2%，现报65.28美元/盎司。](https://www.fastbull.com/cn/fastshort/4295336_212_1) · fastbull
-- [现货黄金突破4300美元/盎司，日内涨0.59%。](https://www.fastbull.com/cn/fastshort/4295333_1_1) · fastbull
-- [印度国家证券存管有限公司&#40;NSDL&#41;数据显示，全球基金在前一交易日净卖出452亿卢比的印度股票。](https://www.fastbull.com/cn/fastshort/4295332_204_1) · fastbull
-- [美国纽约联储主席威廉姆斯：目前尚未看到人工智能（AI）对生产力产生影响。](https://www.fastbull.com/cn/fastshort/4295330_212_1) · fastbull
-- [市场消息：伊拉克埃尔比勒机场与苏莱曼尼亚机场自周五起暂停伊朗航班运营。](https://www.fastbull.com/cn/fastshort/4295329_212_1) · fastbull
-- [北约秘书长：欧洲目前没有独立开展军事行动的能力。](https://www.fastbull.com/cn/fastshort/4295328_204_1) · fastbull
-- [消息人士称，美联储计划提高银行监管门槛。](https://www.fastbull.com/cn/fastshort/4295327_212_1) · fastbull
-- [塞尔维亚7月实际工资同比增长9.0%。](https://www.fastbull.com/cn/fastshort/4295315_212_1) · fastbull
-- [日本财务大臣片山皋月：防卫费占GDP的2%“还不够”。](https://www.fastbull.com/cn/fastshort/4295311_212_1) · fastbull
-- [日本财务大臣片山皋月：在日元问题上，不会犹豫采取果断行动。](https://www.fastbull.com/cn/fastshort/4295310_212_1) · fastbull
-- [日本财务大臣片山皋月：债券收益率上升是全球性趋势，且是暂时的。](https://www.fastbull.com/cn/fastshort/4295309_212_1) · fastbull
-- [日本财务大臣片山皋月：高市非常尊重日本央行的独立性。](https://www.fastbull.com/cn/fastshort/4295308_212_1) · fastbull
-- [欧元兑瑞郎延续涨势，上涨0.3%至日内高点0.9451。](https://www.fastbull.com/cn/fastshort/4295303_212_1) · fastbull
-- [美国纽约联储主席威廉姆斯：美联储应确保冲击不会变得根深蒂固。](https://www.fastbull.com/cn/fastshort/4295299_212_1) · fastbull
-- [美国纽约联储主席威廉姆斯：关税通常不会引发持续性通胀。](https://www.fastbull.com/cn/fastshort/4295298_212_1) · fastbull
-- [乌克兰总统泽连斯基：乌克兰已袭击俄罗斯在乌里扬诺夫斯克的防务企业。](https://www.fastbull.com/cn/fastshort/4295296_1_1) · fastbull
-- [美国纽约联储主席威廉姆斯：美国劳动力市场并非通胀压力的来源。](https://www.fastbull.com/cn/fastshort/4295295_212_1) · fastbull
-- [美联储官员威廉姆斯：不能无视持续的供给冲击。](https://www.fastbull.com/cn/fastshort/4295293_212_1) · fastbull
-- [瑞士央行行长施莱格尔：今年仍有可能降息，具体取决于外部环境以及可信的赤字削减路径。](https://www.fastbull.com/cn/fastshort/4295291_1_1) · fastbull
-- [瑞士央行行长施莱格尔：不能等到第二轮通胀效应的全部证据显现。](https://www.fastbull.com/cn/fastshort/4295289_1_1) · fastbull
-- [瑞士央行行长施莱格尔：瑞士通胀上升主要由于汽油产品。](https://www.fastbull.com/cn/fastshort/4295286_1_1) · fastbull
-- [瑞士央行行长Schlegel：预计未来几个季度瑞士经济将保持温和增长。通胀压力略高于6月份。](https://www.fastbull.com/cn/fastshort/4295285_212_1) · fastbull
-- [英国央行行长贝利：不能等到第二轮通胀效应的全部证据显现。](https://www.fastbull.com/cn/fastshort/4295284_212_1) · fastbull
-- [匈牙利央行行库拉利：今年仍有可能降息，具体取决于外部环境以及可信的赤字削减路径。](https://www.fastbull.com/cn/fastshort/4295283_212_1) · fastbull
-- [现货白银向上触及65美元/盎司，日内涨1.81%。](https://flash.jin10.com/detail/20260925182244445800) · jin10
-- [卡塔尔首相兼外交大臣在纽约与伊朗总统讨论了推动降级局势以及为对话创造适宜条件所作的努力。](https://flash.jin10.com/detail/20260925182109549800) · jin10
-- [伊拉克下调巴士拉中重质原油价格 吸引买家采购](https://flash.jin10.com/detail/20260925182010145800) · jin10
-- [欧盟委员会发言人：匈牙利寻求获得54亿欧元的欧盟“欧洲安全行动”（SAFE）计划贷款。](https://flash.jin10.com/detail/20260925181910075800) · jin10
-- [欧元兑美元EUR/USD站上1.14，日内涨0.24%。](https://flash.jin10.com/detail/20260925181905155800) · jin10
-- [CPI不是衡量通胀的最佳指标 亚洲实物需求能托住金价吗？&#124; Live分析更新中](https://flash.jin10.com/detail/20260925181735870800) · jin10
-- [日本财务大臣片山皋月：高市早苗不是通货膨胀政策的推动者。](https://flash.jin10.com/detail/20260925181629150800) · jin10
-- [香港交易所旗下衍生产品结算所将于11月起接纳中国国债、政策性金融债及财政部债券作为非现金抵押品](https://flash.jin10.com/detail/20260925181322544800) · jin10
-- [现货黄金突破4300美元/盎司，日内涨0.59%。](https://flash.jin10.com/detail/20260925180858674800) · jin10
-- [据悉又有两个伊拉克机场将暂停伊朗航班](https://flash.jin10.com/detail/20260925180732219800) · jin10
-- [消息人士：美联储计划提高银行监管门槛](https://flash.jin10.com/detail/20260925180537298800) · jin10
-- [金十图示：2026年09月25日（周五）亚太市场股市指数](https://flash.jin10.com/detail/20260925180248466800) · jin10
-- [据路透社：消息人士称，美联储计划提高银行监管门槛。](https://flash.jin10.com/detail/20260925180217643800) · jin10
-- [日本财务大臣片山皋月：防卫费占GDP的2%“还不够”。](https://flash.jin10.com/detail/20260925180050679800) · jin10
-- [日本财务大臣片山皋月：高市非常尊重日本央行的独立性。](https://flash.jin10.com/detail/20260925180044956800) · jin10
-- [日本财务大臣片山皋月：债券收益率上升是全球性趋势，且是暂时的。](https://flash.jin10.com/detail/20260925180041918800) · jin10
-- [日本财务大臣片山皋月：在日元问题上，不会犹豫采取果断行动。](https://flash.jin10.com/detail/20260925180038149800) · jin10
-- [日本首相高市早苗：希望在半导体和人工智能等17个战略领域中，我能成为国内投资的关键推动者。](https://flash.jin10.com/detail/20260925175952261800) · jin10
-- [金十数据整理：特朗普过去24小时都忙了什么？（2026-09-25）](https://flash.jin10.com/detail/20260925175839253800) · jin10
-- [索马里邦特兰海事警察部队表示，8月遭索马里海盗劫持的美国制裁油轮“SIBU 1”号已获救。](https://flash.jin10.com/detail/20260925175308545800) · jin10
-- [美联储威廉姆斯：美联储应确保冲击不会变得根深蒂固。](https://flash.jin10.com/detail/20260925175019668800) · jin10
-- [美联储威廉姆斯：美国劳动力市场并非通胀压力的来源。](https://flash.jin10.com/detail/20260925175013128800) · jin10
-- [美联储威廉姆斯：关税通常不会引发持续性通胀。](https://flash.jin10.com/detail/20260925175007441800) · jin10
-- [克里姆林宫：现在谈论特使德米特里耶夫访问美国的结果还为时尚早。](https://flash.jin10.com/detail/20260925174958116800) · jin10
-- [乌克兰总统泽连斯基：乌克兰已袭击俄罗斯在乌里扬诺夫斯克的防务企业。](https://flash.jin10.com/detail/20260925174824040800) · jin10
-- [欧洲央行执委会突迎人事巨震！施纳贝尔提前离任引爆核心权力博弈](https://flash.jin10.com/detail/20260925174436109800) · jin10
-- [美联储威廉姆斯：无法忽视持续的供应冲击。](https://flash.jin10.com/detail/20260925174332416800) · jin10
-- [Spot silver reached $65/oz, up 1.81% intraday.](https://mktnews.net/flashDetail.html?id=01a0d816-d404-7118-8699-7fc8ee37b879) · mktnews
-- [Iraq cuts Basra medium and heavy crude prices to attract buyers](https://mktnews.net/flashDetail.html?id=01a0d814-8103-7118-8699-722c624593fe) · mktnews
-- [European Commission spokesperson said Hungary is seeking a €5.4 billion loan under the EU&#x27;s &quot;European Security Action&quot; &#40;SAFE&#41; programme.](https://mktnews.net/flashDetail.html?id=01a0d813-9026-7118-8699-69df26355263) · mktnews
-- [EUR/USD rose above 1.14, gaining 0.24% on the day.](https://mktnews.net/flashDetail.html?id=01a0d813-7c7f-7118-8699-6402130ceeb9) · mktnews
-- [Japan&#x27;s finance minister Katayama said Sanae Takaichi is not a proponent of inflationary policy.](https://mktnews.net/flashDetail.html?id=01a0d811-20f7-7118-8699-5f856a9fb5cc) · mktnews
-- [HKEX clearing houses to accept Bond Connect and MOF offshore bonds as non-cash collateral from Nov 2026, pending approval](https://mktnews.net/flashDetail.html?id=01a0d80e-5a0a-7118-8699-5479c7c266c4) · mktnews
-- [Spot gold broke above $4,300/oz, up 0.59% intraday.](https://mktnews.net/flashDetail.html?id=01a0d80a-362f-7118-8699-4babffb8dd6d) · mktnews
-- [Erbil and Sulaymaniyah airports to suspend Iranian flights from Friday: Reuters](https://mktnews.net/flashDetail.html?id=01a0d808-f227-7118-8699-405c46d02882) · mktnews
-- [Sources: Fed plans to raise asset thresholds that trigger stricter bank regulation](https://mktnews.net/flashDetail.html?id=01a0d807-412c-7118-8699-3d78b876c22a) · mktnews
-- [Sources told Refinitiv the Federal Reserve plans to raise regulatory thresholds for banks.](https://mktnews.net/flashDetail.html?id=01a0d804-193a-7118-8699-307669dcaa19) · mktnews
-- [Japan&#x27;s finance minister Katayama said defense spending at 2% of GDP is &quot;still not enough&quot;.](https://mktnews.net/flashDetail.html?id=01a0d802-c9db-7118-8699-2b3db29fa04b) · mktnews
-- [Japan&#x27;s finance minister Katayama said Takaichi strongly respects the Bank of Japan&#x27;s independence.](https://mktnews.net/flashDetail.html?id=01a0d802-b974-7118-8699-205c647791c6) · mktnews
-- [Japan&#x27;s finance minister Satsuki Katayama said rising bond yields are a global trend and temporary.](https://mktnews.net/flashDetail.html?id=01a0d802-a7df-7118-8699-1fe313209b39) · mktnews
-- [Japan&#x27;s finance minister KATAYAMA said he will not hesitate to take decisive action on the yen.](https://mktnews.net/flashDetail.html?id=01a0d802-9079-7118-8699-1780bb54c10c) · mktnews
-- [Japan&#x27;s prime minister TAKAICHI said she hopes to be a key driver of domestic investment across 17 strategic sectors, including semiconductors and artificial intelligence.](https://mktnews.net/flashDetail.html?id=01a0d801-e7bd-7118-8699-08ddd1d12e97) · mktnews
-- [Puntland Maritime Police Force said the US-sanctioned tanker &quot;SIBU 1&quot;, seized by Somali pirates in August, has been rescued.](https://mktnews.net/flashDetail.html?id=01a0d7fb-c2e4-7118-8699-065106bf475d) · mktnews
-- [Williams said the Fed should ensure the shock does not become entrenched.](https://mktnews.net/flashDetail.html?id=01a0d7f9-26ac-7118-8698-ffbc837085a0) · mktnews
-- [Fed&#x27;s Williams: US labor market is not the source of inflationary pressure.](https://mktnews.net/flashDetail.html?id=01a0d7f9-1ce7-7118-8698-f6f93d096d8e) · mktnews
-- [Federal Reserve&#x27;s Williams said tariffs typically do not cause persistent inflation.](https://mktnews.net/flashDetail.html?id=01a0d7f8-f8f8-7118-8698-eb4817afab9f) · mktnews
-- [The Kremlin said it is too early to discuss the outcome of special envoy Dmitriev&#x27;s visit to the United States.](https://mktnews.net/flashDetail.html?id=01a0d7f8-d21d-7118-8698-e5ec338fc8ec) · mktnews
-- [ZELENSKIY said Ukraine has struck a Russian defence firm in Ulyanovsk.](https://mktnews.net/flashDetail.html?id=01a0d7f7-7175-7118-8698-dd2ee5a580a9) · mktnews
-- [Federal Reserve&#x27;s Williams said persistent supply shocks cannot be ignored.](https://mktnews.net/flashDetail.html?id=01a0d7f2-fd8c-7118-8698-d020a7f81d2f) · mktnews
-- [Swiss National Bank chairman Schlegel said a rate cut this year remains possible, conditional on the external environment and a credible path to deficit reduction.](https://mktnews.net/flashDetail.html?id=01a0d7f1-adc8-7118-8698-ce91da13c938) · mktnews
-- [Swiss National Bank Chair Schlegel said the bank cannot wait for full evidence of second-round inflation effects to emerge.](https://mktnews.net/flashDetail.html?id=01a0d7f1-90e6-7118-8698-c381c25a62d8) · mktnews
-- [Swiss National Bank Chairman Schlegel said inflationary pressure is slightly higher than in June.](https://mktnews.net/flashDetail.html?id=01a0d7ed-f064-7118-8698-bdc9a2bca7c1) · mktnews
-- [Swiss National Bank Chairman Schlegel said Swiss inflation rises were mainly driven by gasoline products.](https://mktnews.net/flashDetail.html?id=01a0d7ed-e6aa-7118-8698-b42f6a61ab79) · mktnews
-- [Bank of England governor Bailey said the central bank has indeed factored in rising mortgage rates.](https://mktnews.net/flashDetail.html?id=01a0d7ea-667e-7118-8698-a9b3288b1374) · mktnews
-- [Kremlin says envoy Kirill Dmitriev is holding talks with US negotiating counterparts during a visit to the United States, focusing on potential economic cooperation.](https://mktnews.net/flashDetail.html?id=01a0d7ea-46a2-7118-8698-a65f22f22b68) · mktnews
-- [Kremlin says a trilateral meeting between the US, Russia and Ukraine could take place in the near future, but no specifics have been provided.](https://mktnews.net/flashDetail.html?id=01a0d7ea-1e8f-7118-8698-9e3def3bcfb1) · mktnews
-- [Bank of England Governor BAILEY said pass-through from energy prices to inflation is currently quite weak but remains at an early stage.](https://mktnews.net/flashDetail.html?id=01a0d7e9-f985-7118-8698-91d7f273fb6f) · mktnews
-- [元亨燃气&#40;00332.HK&#41;完成配售合共6545万股](https://www.gelonghui.com/news/5318144) · gelonghui
-- [赤子城科技&#40;09911.HK&#41;9月25日耗资197.2万港元回购21.6万股](https://www.gelonghui.com/news/5318143) · gelonghui
-- [中国石油化工股份&#40;00386.HK&#41;9月25日耗资2378.99万港元回购537.6万股](https://www.gelonghui.com/news/5318142) · gelonghui
-- [贪玩&#40;09890.HK&#41;9月25日耗资9.5万港元回购10万股](https://www.gelonghui.com/news/5318141) · gelonghui
-- [创科实业&#40;00669.HK&#41;9月25日耗资1111.86万港元回购8.8万股](https://www.gelonghui.com/news/5318140) · gelonghui
-- [中国波顿&#40;03318.HK&#41;9月25日耗资100.4万港元回购30.4万股](https://www.gelonghui.com/news/5318139) · gelonghui
-- [北森控股&#40;09669.HK&#41;9月25日耗资6.3万港元回购2万股](https://www.gelonghui.com/news/5318138) · gelonghui
-- [药师帮&#40;09885.HK&#41;9月25日耗资38.86万港元回购11.52万股](https://www.gelonghui.com/news/5318137) · gelonghui
-- [信义能源&#40;03868.HK&#41;9月25日耗资154.44万港元回购198万股](https://www.gelonghui.com/news/5318136) · gelonghui
-- [海吉亚医疗&#40;06078.HK&#41;9月25日耗资300万港元回购31.18万股](https://www.gelonghui.com/news/5318135) · gelonghui
-- [大象未来集团&#40;02309.HK&#41;盈喜：预计2026财年纯利不多于1.2亿港元 同比转亏为盈](https://www.gelonghui.com/news/5318134) · gelonghui
-- [天能动力&#40;00819.HK&#41;9月25日耗资121.84万港元回购32.2万股](https://www.gelonghui.com/news/5318133) · gelonghui
-- [腾讯控股&#40;00700.HK&#41;9月25日耗资1.003亿港元回购23.1万股](https://www.gelonghui.com/news/5318132) · gelonghui
-- [永升服务&#40;01995.HK&#41;9月25日耗资33.85万港元回购20万股](https://www.gelonghui.com/news/5318131) · gelonghui
-- [名创优品&#40;09896.HK&#41;9月25日耗资173万港元回购10万股](https://www.gelonghui.com/news/5318130) · gelonghui
-- [习近平同美国总统特朗普会谈](https://www.thepaper.cn/newsDetail_forward_34147373) · thepaper
-- [大外交·现场｜访美第二日：从“五军仪仗队”到国宴的历史细节](https://www.thepaper.cn/newsDetail_forward_34148411) · thepaper
-- [大国外交进行时丨特朗普：这是一次“伟大的会晤”](https://www.thepaper.cn/newsDetail_forward_34147964) · thepaper
-- [澎湃读报丨主要央媒头版聚焦“中美元首华盛顿会晤”](https://www.thepaper.cn/newsDetail_forward_34147905) · thepaper
-- [油价调控再出手！国家半年四次压缩成品油涨幅，本轮涨幅砍半](https://www.thepaper.cn/newsDetail_forward_34142908) · thepaper
-- [新华社：亚运失利再度暴露中国男乒过度依赖王楚钦，阵容深度不足](https://www.thepaper.cn/newsDetail_forward_34148949) · thepaper
-- [澎湃回声｜泰康人寿已向患结肠癌男子理赔付款，此前称系“遗传性疾病”拒赔付](https://www.thepaper.cn/newsDetail_forward_34142641) · thepaper
-- [“平平”“福双”将赴美，助力深化新一轮大熊猫保护国际合作](https://www.thepaper.cn/newsDetail_forward_34146662) · thepaper
-- [决赛田忌赛马？王楚钦：运动员只是执行者，不要揣测教练意图](https://www.thepaper.cn/newsDetail_forward_34142942) · thepaper
-- [云南高院指令再审“家暴离婚被驳回”案：再审审查期间丈夫持刀重伤岳父母，足以证明感情已破裂](https://www.thepaper.cn/newsDetail_forward_34143631) · thepaper
-- [多家企业开启13天长假：有6人小公司，也有“民企500强”](https://www.thepaper.cn/newsDetail_forward_34142205) · thepaper
-- [联大发言遭多国代表离场抗议，内塔尼亚胡急了：懦夫！](https://www.thepaper.cn/newsDetail_forward_34148350) · thepaper
-- [王皓回应丢冠：男乒正处于新老交替，要给年轻队员试错空间](https://www.thepaper.cn/newsDetail_forward_34144357) · thepaper
-- [中国队战胜日本队，实现亚运女团六连冠](https://www.thepaper.cn/newsDetail_forward_34140550) · thepaper
-- [国乒男团不敌东道主日本队，无缘亚运乒乓首金](https://www.thepaper.cn/newsDetail_forward_34140481) · thepaper
-- [上海迪士尼致歉，明确使用盲杖入园无须报备](https://www.thepaper.cn/newsDetail_forward_34142415) · thepaper
-- [评论｜国乒需要一个“松岛辉空”](https://www.thepaper.cn/newsDetail_forward_34143778) · thepaper
-- [张本智和：松岛辉空逼着我前进](https://www.thepaper.cn/newsDetail_forward_34143252) · thepaper
-- [白宫欢迎国宴，哪些企业家坐主桌？](https://www.thepaper.cn/newsDetail_forward_34148989) · thepaper
-- [小浪花逛世赛丨学技能有未来，这场大赛释放的信号或许藏着未来行业的方向](https://www.thepaper.cn/newsDetail_forward_34142209) · thepaper
+- [四川宜宾市长宁县发生3.9级地震 震源深度5公里](https://www.cls.cn/detail/2493332) · cls
+- [俄外长：西方为遏制俄罗斯而摧毁欧洲安全体系](https://www.cls.cn/detail/2493330) · cls
+- [以军袭击加沙多地 致多人死伤](https://www.cls.cn/detail/2493329) · cls
+- [以军称空袭黎南部真主党一处武器储存设施](https://www.cls.cn/detail/2493326) · cls
+- [福建罗源县碧里乡发生滑坡泥石流险情 3人暂未联系上](https://www.cls.cn/detail/2493324) · cls
+- [伊朗总统：不再信任同美国的对话](https://www.cls.cn/detail/2493323) · cls
+- [巴布亚新几内亚发生5.6级地震](https://www.cls.cn/detail/2493321) · cls
+- [【电报解读】海外光刻胶涨价潮起，国产验证周期从1-2年缩至6-12月，机构看好海外涨价提升国产光刻胶导入动力，国内产品正由成熟制程向KrF、ArF加速突破，这家公司相关产品已陆续通过国内多家客户的验证](https://www.cls.cn/detail/2493318) · cls
+- [刚果（金）小型飞机坠毁事故已致17人死亡](https://www.cls.cn/detail/2493320) · cls
+- [韩国首尔航空航班乘客行李冒烟 疑似充电宝起火](https://www.cls.cn/detail/2493317) · cls
+- [财联社9月26日电，伊拉克总理办公室表示，伊拉克与美国进行谈判，以豁免部分伊拉克机场对伊朗航空公司的限制。放宽对伊朗航空公司的限制将使伊拉克能够恢复出于人道主义需求的航班。](https://www.cls.cn/detail/2493316) · cls
+- [财联社9月26日电，美国总统特朗普表示，拒绝伊朗的提议。](https://www.cls.cn/detail/2493314) · cls
+- [雅典老城区爆炸事故致6死3伤](https://www.cls.cn/detail/2493312) · cls
+- [财联社9月26日电，据伊朗方面消息，伊朗最高安全委员会否认伊朗因禁止伊朗航班而计划军事行动。](https://www.cls.cn/detail/2493310) · cls
+- [中国驻泰国使馆提醒在泰中国公民防范强降雨及洪涝灾害](https://www.cls.cn/detail/2493306) · cls
+- [财联社9月26日电，金田据称已表达对收购澳大利亚最大黄金矿商Northern Star Resources的收购兴趣。](https://www.cls.cn/detail/2493305) · cls
+- [财联社9月26日电，特朗普重申伊朗不能拥有核武器。](https://www.cls.cn/detail/2493304) · cls
+- [9月26日周六《新闻联播》要闻26条](https://www.cls.cn/detail/2493303) · cls
+- [印尼客轮倾覆事故死亡人数升至64人](https://www.cls.cn/detail/2493301) · cls
+- [全国秋粮收获近两成](https://www.cls.cn/detail/2493300) · cls
+- [山西省省长：要加速扭转煤炭产量下滑趋势](https://www.cls.cn/detail/2493299) · cls
+- [财联社9月26日电，巴基斯坦西北部德拉伊斯梅尔汗发生爆炸，造成11人遇难，30人受伤。](https://www.cls.cn/detail/2493297) · cls
+- [财联社9月26日电，伦敦希思罗机场第三条跑道的建成时间据悉将推迟至2039年。](https://www.cls.cn/detail/2493296) · cls
+- [财联社9月26日电，挪威天然气运输系统运营商Gassco将其对9月25日至28日计划天然气停运规模的预估从此前的470万立方米上调至550万立方米。](https://www.cls.cn/detail/2493295) · cls
+- [财联社9月26日电，克里姆林宫表示，俄罗斯总统普京与塞尔维亚总统武契奇通电话，双方讨论了乌克兰局势及能源合作问题。](https://www.cls.cn/detail/2493292) · cls
+- [泰国多地强降雨致交通受阻 政府启动24小时游客援助机制](https://www.cls.cn/detail/2493291) · cls
+- [外交部就人工智能问题答记者问](https://www.cls.cn/detail/2493289) · cls
+- [水利部和中国气象局联合发布橙色山洪灾害气象预警](https://www.cls.cn/detail/2493288) · cls
+- [财联社9月26日电，伊朗总统佩泽希齐扬在接受采访时表示，也门发生的事件与伊朗无关。](https://www.cls.cn/detail/2493286) · cls
+- [国产火箭总装周期缩至15天](https://www.cls.cn/detail/2493277) · cls
+- [伊朗总统：不再信任同美国的对话](https://wallstreetcn.com/livenews/3171008) · wallstreetcn
+- [美国总统特朗普：美国不会给AI“踩刹车”。](https://wallstreetcn.com/livenews/3171006) · wallstreetcn
+- [德国内政部长：这波涌入潮并非由人道主义紧急情况引发，而是受虚假信息误导所致。  当当局认定存在与人道主义紧急情况无关的特殊事态时，应启动遣返快速程序。](https://wallstreetcn.com/livenews/3171005) · wallstreetcn
+- [伊拉克总理办公室：伊拉克正与美国谈判，请求为部分伊拉克机场免除针对伊朗航空公司的限制措施。](https://wallstreetcn.com/livenews/3171004) · wallstreetcn
+- [伊朗总统：已与最高领袖协调](https://wallstreetcn.com/livenews/3171000) · wallstreetcn
+- [目前在美国纽约出席联合国相关会议的伊朗外长阿拉格齐及其随行代表团计划于下周二返回伊朗。（塔斯尼姆通讯社）](https://wallstreetcn.com/livenews/3170998) · wallstreetcn
+- [据伊朗最高国家安全委员会：否认有关伊朗计划针对近期航空限制措施采取军事报复行动的说法。  正严肃推进与相关国家的谈判，以解除某些被非法实施的航空限制措施。  针对特定机场，我们掌握多种非军事反制手段，必要时将予以实施，当然，我们希望事态不至于发展到那一步。（伊朗媒体IRIB）](https://wallstreetcn.com/livenews/3170994) · wallstreetcn
+- [欧盟拟大力增加卫星发射，寻域外发射场](https://wallstreetcn.com/livenews/3170993) · wallstreetcn
+- [美媒称以总理曾获袭击警告但为促以沙建交未打击哈马斯](https://wallstreetcn.com/livenews/3170992) · wallstreetcn
+- [伊朗：与土耳其、巴基斯坦的航班仍然处于运营状态。（伊朗媒体IRIB）](https://wallstreetcn.com/livenews/3170987) · wallstreetcn
+- [美国总统特朗普重申，伊朗不可以拥有核武器。](https://wallstreetcn.com/livenews/3170986) · wallstreetcn
+- [阿塞拜疆签署总价值超过100亿美元的投资协议](https://wallstreetcn.com/livenews/3170995) · wallstreetcn
+- [山西省省长：要加速扭转煤炭产量下滑趋势](https://wallstreetcn.com/livenews/3170983) · wallstreetcn
+- [理想汽车官微抽奖罗永浩中奖，奖品为iPhone17 Pro Max，网友调侃：以为是P的](https://wallstreetcn.com/livenews/3170982) · wallstreetcn
+- [英国伦敦希思罗机场第三条跑道将推迟至2039年建成。](https://wallstreetcn.com/livenews/3170980) · wallstreetcn
+- [乌克兰称袭击俄罗斯南部伊尔斯基炼油厂](https://wallstreetcn.com/livenews/3170984) · wallstreetcn
+- [亚投行拟扩大印度水务融资，厄尔尼诺持续加剧](https://wallstreetcn.com/livenews/3170991) · wallstreetcn
+- [泰国多地强降雨致交通受阻 政府启动24小时游客援助机制](https://wallstreetcn.com/livenews/3170979) · wallstreetcn
+- [外交部：关于人工智能表述问题，中方重视美方立场也尊重美方提法](https://wallstreetcn.com/livenews/3170978) · wallstreetcn
+- [王毅谈习近平主席对美国进行国事访问](https://wallstreetcn.com/livenews/3170977) · wallstreetcn
+- [新华社评论员：共同构建“基于尊重、公平、对等的建设性战略稳定关系”](https://wallstreetcn.com/livenews/3170976) · wallstreetcn
+- [伊朗总统佩泽希齐扬：也门发生的事件与伊朗无关。（半岛电视台）](https://wallstreetcn.com/livenews/3170975) · wallstreetcn
+- [2026中秋档票房破2亿](https://wallstreetcn.com/livenews/3170974) · wallstreetcn
+- [瑞士央行行长关注炎热天气对食品价格通胀的影响](https://wallstreetcn.com/livenews/3170997) · wallstreetcn
+- [国产火箭总装周期缩至15天](https://wallstreetcn.com/livenews/3170973) · wallstreetcn
+- [普京说没理由与欧洲发生军事冲突](https://wallstreetcn.com/livenews/3170972) · wallstreetcn
+- [伊朗外长：美以袭击致5000余人丧生](https://wallstreetcn.com/livenews/3170971) · wallstreetcn
+- [巴斯夫确认就潜在收购赢创开展探索性谈判](https://wallstreetcn.com/livenews/3170970) · wallstreetcn
+- [沙特主导的联军称拦截也门胡塞武装导弹和无人机](https://wallstreetcn.com/livenews/3170969) · wallstreetcn
+- [中美达成八点成果共识](https://wallstreetcn.com/livenews/3170968) · wallstreetcn
+- [伊朗革命卫队海军高级指挥官向特朗普发出挑战，要求美方派遣军舰靠近霍尔木兹海峡，以证明美国对该水道的控制权。他：“如果再次爆发战争，我们毫无疑问会打击他们的船只和驱逐舰，哪怕是在印度洋。”。](https://www.fastbull.com/cn/fastshort/4296582_212_1) · fastbull
+- [加拿大总理卡尼：越南是加拿大在东盟最大的贸易伙伴。本周，我们进一步深化了这一伙伴关系，旨在为加拿大企业在这个全球增长最快的消费市场之一开拓更多机遇。](https://www.fastbull.com/cn/fastshort/4296580_1_1) · fastbull
+- [伊朗武装部队发言人：霍尔木兹海峡处于伊朗的控制之下。任何试图在伊朗指定航线之外通行的船只，均无法获得安全保障。](https://www.fastbull.com/cn/fastshort/4296579_212_1) · fastbull
+- [匈牙利或要求超级富豪缴纳更高财富税。](https://www.fastbull.com/cn/fastshort/4296576_214_1) · fastbull
+- [伊朗总统：在谈判期间两次遭袭后，伊朗“不再”信任美国。](https://www.fastbull.com/cn/fastshort/4296574_212_1) · fastbull
+- [英国财政大臣希利：正在倾听各方对燃油价格飙升的担忧。](https://www.fastbull.com/cn/fastshort/4296573_212_1) · fastbull
+- [伊朗与俄罗斯在俄举行第三次文化委员会会议。](https://www.fastbull.com/cn/fastshort/4296572_212_1) · fastbull
+- [伊朗总统抵达德黑兰时表示，他的飞机被迫在阿尔及利亚降落加油，在那里停留了约两个小时后，才继续飞往纽约。](https://www.fastbull.com/cn/fastshort/4296571_212_1) · fastbull
+- [市场消息：欧盟委员会主席冯德莱恩宣布为非洲流离失所者和全球危机救助提供7.1亿欧元援助。](https://www.fastbull.com/cn/fastshort/4296569_1_1) · fastbull
+- [也门政府军方发言人：伊朗革命卫队正在也门境内将伊朗制造的武器改装为制导导弹并提供给胡塞武装，这对民用航空构成了直接威胁。](https://www.fastbull.com/cn/fastshort/4296563_212_1) · fastbull
+- [孟加拉国首次发行主权债券，目标融资最高10亿美元。](https://www.fastbull.com/cn/fastshort/4296561_212_1) · fastbull
+- [特朗普：超过1000亿美元正投资于美国汽车行业。](https://www.fastbull.com/cn/fastshort/4296559_212_1) · fastbull
+- [伊朗革命卫队网络部队：在霍尔木兹海峡听到爆炸声。](https://www.fastbull.com/cn/fastshort/4296558_212_1) · fastbull
+- [美国总统特朗普：批准了新的燃油经济性标准，废除了拜登的电动汽车强制令。](https://www.fastbull.com/cn/fastshort/4296556_1_1) · fastbull
+- [特朗普：我已批准新的燃油经济性标准。](https://www.fastbull.com/cn/fastshort/4296555_212_1) · fastbull
+- [伊朗总统办公室周六表示，伊朗总统在纽约出席第81届联合国大会后已返回德黑兰。](https://www.fastbull.com/cn/fastshort/4296553_212_1) · fastbull
+- [美国总统特朗普：美国经通胀调整后的家庭收入中位数现已达到历史最高水平；美国的贫困率也降至有记录以来的最低点。2026年美国商品出口有望创下历史新高，数以万亿美元计的新投资正源源不断地涌入美国。如果换作其他人担任总统，媒体定会对此大肆报道。](https://www.fastbull.com/cn/fastshort/4296551_1_1) · fastbull
+- [伊朗总统佩泽希齐扬：我们和也门均未参与针对沙特输油管道的袭击。以色列实施这一行动以激化紧张局势并挑起争端的可能性不容排除。](https://www.fastbull.com/cn/fastshort/4296549_1_1) · fastbull
+- [印度外长苏杰生：和平本身就是道路。](https://www.fastbull.com/cn/fastshort/4296548_214_1) · fastbull
+- [俄罗斯外长拉夫罗夫：在委内瑞拉问题上，他们（美国）声称马杜罗是毒贩，政权必须更迭。但结果却是，他们把委内瑞拉的石油产业变成了美委两国共同所有。伊朗被指控支持恐怖主义长达47年。然而在后来的谈判中，美国人却提议与伊朗共同控制霍尔木兹海峡。因此，我们明白，美国的国家利益本质上是极其自私的。](https://www.fastbull.com/cn/fastshort/4296546_212_1) · fastbull
+- [俄罗斯外长拉夫罗夫：我们无意与欧洲开战，这种说法纯属无稽之谈，荒谬至极。真正在为与我们开战做准备的，是欧洲。他们每天都在确认，最迟到2030年，欧洲人必须做好战争准备。要知道，这可能会成为一个自我实现的预言，因为他们现在正投入巨额资金用于武器生产。普京曾明确表示，如果他们攻击我们，我们绝不会退缩。他还补充说，那将是一场截然不同的战争，而且会非常短暂。](https://www.fastbull.com/cn/fastshort/4296543_212_1) · fastbull
+- [特朗普：周日将前往芝加哥地区出席总统杯高尔夫赛。](https://www.fastbull.com/cn/fastshort/4296542_212_1) · fastbull
+- [国际货币基金组织：计划未来数周与加蓬举行更多会谈。](https://www.fastbull.com/cn/fastshort/4296541_212_1) · fastbull
+- [印度外长：我们坚信，实现持久（加沙地区）和平必须依靠“两国方案”。](https://www.fastbull.com/cn/fastshort/4296536_212_1) · fastbull
+- [据华盛顿邮报：美俄联手剔除了全球AI武器公约中关于“人类监督”的条款。](https://www.fastbull.com/cn/fastshort/4296532_1_1) · fastbull
+- [英国首相伯纳姆表示，维持公共财政稳定至关重要。](https://www.fastbull.com/cn/fastshort/4296520_212_1) · fastbull
+- [泽连斯基：许多情报机构掌握的信息显示，俄罗斯想要扩大冲突，将波及更多国家。也许是其他地区。这就是为什么我们需要共同防御，预防性地行动。正是为此，我们正在与伙伴们讨论更严厉的制裁。](https://www.fastbull.com/cn/fastshort/4296519_212_1) · fastbull
+- [泽连斯基：9月，俄罗斯发射了超过2730架喷气动力“沙赫德”，其中超过1500架被击落或压制。不幸的是，仍有相当一部分达到了目标。但我们乌克兰人将一步步加强防御。](https://www.fastbull.com/cn/fastshort/4296518_212_1) · fastbull
+- [乌克兰总统泽连斯基：明年，俄罗斯计划仅在喷气式无人机和巡飞弹的生产上就投入120亿美元。](https://www.fastbull.com/cn/fastshort/4296516_1_1) · fastbull
+- [俄罗斯国防部：今天，我们在本国领空及黑海上空拦截并摧毁了105架无人机。](https://www.fastbull.com/cn/fastshort/4296515_212_1) · fastbull
+- [伊朗外交部：伊朗外长阿拉格齐在纽约会见了土耳其外长菲丹，两国外长就双边关系以及地区和国际局势发展交换了意见。](https://flash.jin10.com/detail/20260927050107713800) · jin10
+- [加拿大总理卡尼：越南是加拿大在东盟最大的贸易伙伴。本周，我们进一步深化了这一伙伴关系，旨在为加拿大企业在这个全球增长最快的消费市场之一开拓更多机遇。](https://flash.jin10.com/detail/20260927045759129800) · jin10
+- [圣路易斯联储：截至9月18日的一周内，金融市场的压力较前一周略有下降。圣路易斯联储金融压力指数录得-0.91，而前一周为-0.85。（0代表金融市场处于正常状况；数值低于0表明压力低于平均水平）](https://flash.jin10.com/detail/20260927043802612800) · jin10
+- [匈牙利或要求超级富豪缴纳更高财富税](https://flash.jin10.com/detail/20260927043541367800) · jin10
+- [德国和俄罗斯外长4年来首次举行会谈 俄外长称“无新进展”](https://flash.jin10.com/detail/20260927042902612800) · jin10
+- [市场消息：欧盟委员会主席冯德莱恩宣布为非洲流离失所者和全球危机救助提供7.1亿欧元援助。](https://flash.jin10.com/detail/20260927041920342800) · jin10
+- [伊朗武装部队发言人：任何试图在霍尔木兹海峡偏离我方指定航线航行的船只，其安全将无法得到保障。](https://flash.jin10.com/detail/20260927041237025800) · jin10
+- [美国交通部长达菲：美国汽车工人的重大胜利即将在周一揭晓。](https://flash.jin10.com/detail/20260927040958047800) · jin10
+- [伊朗武装部队：美国人绝无可能干预霍尔木兹海峡的管理；若其进行干预，将面临我们的打击。](https://flash.jin10.com/detail/20260927040913735800) · jin10
+- [据法新社：刚果民主共和国西南部发生空难，造成17人遇难，其中包括该国两名最高级别的军事司法官员。](https://flash.jin10.com/detail/20260927040349740800) · jin10
+- [阿曼外交大臣：反对以色列针对多个阿拉伯国家的袭击。](https://flash.jin10.com/detail/20260927040241855800) · jin10
+- [阿曼外交大臣：我们支持海湾国家为维护主权所采取的各项措施。](https://flash.jin10.com/detail/20260927040139880800) · jin10
+- [前五角大楼官员称伊朗用力过猛却成效有限 美以伊博弈将迎来变化](https://flash.jin10.com/detail/20260927035814566800) · jin10
+- [市场消息：孟加拉国计划首次发行主权债券，目标融资金额最高10亿美元。](https://flash.jin10.com/detail/20260927033944559800) · jin10
+- [沙特外交大臣：必须确保霍尔木兹海峡等国际水道航行自由](https://flash.jin10.com/detail/20260927033253775800) · jin10
+- [特朗普：批准新的燃油经济性标准 废除拜登时代的电动汽车强制令](https://flash.jin10.com/detail/20260927031908923800) · jin10
+- [美国总统特朗普：批准了新的燃油经济性标准，废除了拜登的电动汽车强制令。](https://flash.jin10.com/detail/20260927031550189800) · jin10
+- [特朗普称美国经济“史上最佳” 批评媒体和民主党不愿承认](https://flash.jin10.com/detail/20260927031306217800) · jin10
+- [美国总统特朗普：商业活动蒸蒸日上，美国人的收入达到前所未有的水平，贫困率降至历史最低，出口也在激增！“假新闻”媒体和“蠢民主党人”痛恨这些报告和这些破纪录的数据。](https://flash.jin10.com/detail/20260927030058388800) · jin10
+- [美国总统特朗普：美国经通胀调整后的家庭收入中位数现已达到历史最高水平；美国的贫困率也降至有记录以来的最低点。2026年美国商品出口有望创下历史新高，数以万亿美元计的新投资正源源不断地涌入美国。如果换作其他人担任总统，媒体定会对此大肆报道。](https://flash.jin10.com/detail/20260927030025573800) · jin10
+- [伊朗总统佩泽希齐扬：我们和也门均未参与针对沙特输油管道的袭击。以色列实施这一行动以激化紧张局势并挑起争端的可能性不容排除。](https://flash.jin10.com/detail/20260927025914915800) · jin10
+- [据沙特媒体哈达斯（Alhadath）：也门武装部队称，胡塞武装使用的防空武器对航空安全构成严重威胁。胡塞武装正使用伊朗制防空武器，从荷台达向红海南部空域的飞行航线发起攻击。](https://flash.jin10.com/detail/20260927025847092800) · jin10
+- [印度外长：呼吁确保航运和海员安全](https://flash.jin10.com/detail/20260927025658030800) · jin10
+- [伊朗总统佩泽希齐扬：以色列总理内塔尼亚胡没能击败加沙，又怎么能推翻伊朗政权？](https://flash.jin10.com/detail/20260927025146875800) · jin10
+- [俄罗斯外长拉夫罗夫：与德国外长瓦德富尔的会晤未产生任何新进展。](https://flash.jin10.com/detail/20260927025016076800) · jin10
+- [阿曼外交大臣：与伊朗外长讨论了海峡的通行自由](https://flash.jin10.com/detail/20260927024931719800) · jin10
+- [伊拉克表示已就美元现钞运输与美国达成共识](https://flash.jin10.com/detail/20260927024420044800) · jin10
+- [据伊朗塔斯尼姆通讯社：伊朗总统佩泽希齐扬表示，不会允许霍尔木兹海峡开放供美国武器运输。](https://flash.jin10.com/detail/20260927023855036800) · jin10
+- [利比亚国家石油公司：原油流动将逐渐恢复到正常水平。](https://flash.jin10.com/detail/20260927023754644800) · jin10
+- [利比亚国家石油公司：利比亚重新开启沙拉拉-扎维耶（Sharara-Zawiya）输油管道阀门，恢复原油输送。](https://flash.jin10.com/detail/20260927023712088800) · jin10
+- [Carney said Vietnam is Canada’s largest ASEAN trading partner and that this week Canada further deepened the partnership to expand market access for Canadian firms in one of the world’s fastest‑growing consumer markets.](https://mktnews.net/flashDetail.html?id=01a0df82-cd28-7118-86aa-82785cd31f6f) · mktnews
+- [St. Louis Fed: In the week to Sep 18 the Financial Stress Index fell to -0.91 from -0.85 a week earlier; 0 indicates normal conditions and negative values indicate below-average stress.](https://mktnews.net/flashDetail.html?id=01a0df70-8cfa-7118-86aa-798f52a9b72e) · mktnews
+- [Hungary may require ultra-rich to pay higher wealth tax](https://mktnews.net/flashDetail.html?id=01a0df6e-6c49-7118-86aa-70f39fbee47b) · mktnews
+- [Germany, Russia foreign ministers hold first talks in four years; Lavrov says no new progress](https://mktnews.net/flashDetail.html?id=01a0df68-6341-7118-86aa-6bc9e1611356) · mktnews
+- [European Commission President Von der Leyen announced €710m in aid for displaced people in Africa and global crisis relief.](https://mktnews.net/flashDetail.html?id=01a0df5f-63e6-7118-86aa-62bbe17b4eec) · mktnews
+- [U.S. Secretary of Transportation Duffy said a major victory for U.S. autoworkers will be announced on Monday.](https://mktnews.net/flashDetail.html?id=01a0df56-dcf4-7118-86aa-5b617375def3) · mktnews
+- [Bangladesh plans first sovereign bond issuance, targeting up to $1 bln in proceeds.](https://mktnews.net/flashDetail.html?id=01a0df3b-2150-7118-86aa-55b67ec91589) · mktnews
+- [Saudi foreign minister says freedom of navigation in Strait of Hormuz and key shipping lanes must be ensured](https://mktnews.net/flashDetail.html?id=01a0df34-f6b1-7118-86aa-4a7f3b419481) · mktnews
+- [Trump approves new fuel-economy standards, rescinds Biden-era EV mandate](https://mktnews.net/flashDetail.html?id=01a0df28-5c76-7118-86aa-4659fc40c33a) · mktnews
+- [U.S. President Trump approved new fuel-economy standards and rescinded the Biden administration&#x27;s electric-vehicle mandate.](https://mktnews.net/flashDetail.html?id=01a0df25-41b3-7118-86aa-3fdd752390b1) · mktnews
+- [Trump says U.S. economy &#x27;best ever&#x27;; cites record real income, low poverty, rising exports](https://mktnews.net/flashDetail.html?id=01a0df22-ee6f-7118-86aa-32789f0ced97) · mktnews
+- [US President Trump said business activity is booming, household incomes have reached unprecedented levels, the poverty rate is at historic lows, and exports are surging.](https://mktnews.net/flashDetail.html?id=01a0df17-aeaf-7118-86aa-2c240e5b4eb2) · mktnews
+- [US President Trump said real median household income has reached a record high and the poverty rate has fallen to its lowest on record. He said US goods exports are expected to hit a new high in 2026 and that trillions of dollars of new investment are flowing into the US.](https://mktnews.net/flashDetail.html?id=01a0df17-345f-7118-86aa-2291e632dbc3) · mktnews
+- [Iranian President PEZESHKIAN said Iran and Yemen did not take part in the attack on a Saudi oil pipeline, and that the possibility Israel carried out the operation to inflame tensions and provoke disputes cannot be ruled out.](https://mktnews.net/flashDetail.html?id=01a0df16-1617-7118-86aa-1ad6911b1398) · mktnews
+- [India foreign minister Jaishankar: Peace is the path](https://mktnews.net/flashDetail.html?id=01a0df14-1108-7118-86aa-129129835741) · mktnews
+- [Russia&#x27;s foreign minister LAVROV said his meeting with Germany&#x27;s foreign minister WADEPHUL produced no new progress.](https://mktnews.net/flashDetail.html?id=01a0df0d-d594-7118-86aa-0d7a04134376) · mktnews
+- [Oman FM says discussed freedom of navigation in Strait of Hormuz with Iran FM](https://mktnews.net/flashDetail.html?id=01a0df0d-2f02-7118-86aa-05237ef9f593) · mktnews
+- [Libya&#x27;s National Oil Corporation said crude flows will gradually return to normal levels.](https://mktnews.net/flashDetail.html?id=01a0df02-819a-7118-86a9-fffa91b41e70) · mktnews
+- [Libya&#x27;s National Oil Corporation said it reopened valves on the Sharara-Zawiya oil pipeline and has resumed crude flows.](https://mktnews.net/flashDetail.html?id=01a0df01-dc0d-7118-86a9-f596ed13baeb) · mktnews
+- [cenc measured a magnitude 3.9 earthquake at 02:31 on Sept 27 in Changning County, Yibin, Sichuan, China; focal depth 5 km.](https://mktnews.net/flashDetail.html?id=01a0df00-c604-7118-86a9-edf88e60e751) · mktnews
+- [US media: Boeing 737 MAX software bug may impair navigation](https://mktnews.net/flashDetail.html?id=01a0defc-de28-7118-86a9-e55f23802497) · mktnews
+- [Israeli strikes hit multiple Gaza sites, cause casualties](https://mktnews.net/flashDetail.html?id=01a0def5-4122-7118-86a9-de6192151783) · mktnews
+- [The Washington Post reports the U.S. and Russia jointly removed the &quot;human oversight&quot; clause from a global AI weapons convention.](https://mktnews.net/flashDetail.html?id=01a0def2-72ff-7118-86a9-d4885a8de829) · mktnews
+- [Wall Street Journal reports a senior Federal Aviation Administration official said the agency is probing a software anomaly and assessing whether it could create unsafe flight conditions.](https://mktnews.net/flashDetail.html?id=01a0def0-fc0e-7118-86a9-cac690e8eda3) · mktnews
+- [The Wall Street Journal, citing sources, reported UNITED AIRLINES and Southwest Airlines have told Boeing &#40;BA.N&#41; they want new 737 MAX deliveries fitted with the older software rather than the updated version which sources say is defective.](https://mktnews.net/flashDetail.html?id=01a0def0-da4e-7118-86a9-c5d1a07f0336) · mktnews
+- [The Wall Street Journal reported Boeing said engineers are developing a software update to address the problem.](https://mktnews.net/flashDetail.html?id=01a0def0-3666-7118-86a9-be26aa5b9c29) · mktnews
+- [The Wall Street Journal reports a document shows Boeing told 737 MAX operators in August that the software issue did not constitute a safety risk.](https://mktnews.net/flashDetail.html?id=01a0def0-08f9-7118-86a9-b0b7daa1aca0) · mktnews
+- [Wall Street Journal reports a software fault could prevent pilots from using the automatic flight guidance system in certain landing scenarios.](https://mktnews.net/flashDetail.html?id=01a0deef-d895-7118-86a9-ac1db4022b36) · mktnews
+- [Wall Street Journal reports a new Boeing 737 MAX software glitch has raised safety concerns.](https://mktnews.net/flashDetail.html?id=01a0deef-a42d-7118-86a9-a0e1dc94c5f9) · mktnews
+- [Lavrov says West has destroyed European security architecture to contain Russia](https://mktnews.net/flashDetail.html?id=01a0dee9-94ca-7118-86a9-99e3e8546e54) · mktnews
+- [Nine Dragons Paper&#40;02689.HK&#41;：New projects strengthen pulp and paper integration; first dividend in nearly three years](https://www.gelonghui.com/news/5318218) · gelonghui
+- [恒瑞医药&#40;600276&#41;2026年中报点评：增长动能切换 创新与国际化加速](https://www.gelonghui.com/news/5318217) · gelonghui
+- [麒盛科技&#40;603610&#41;：与海外核心客户续签协议 国内深入布局](https://www.gelonghui.com/news/5318216) · gelonghui
+- [玖龙纸业&#40;02689.HK&#41;：新项目强化浆纸一体布局；派发近三年首次股息](https://www.gelonghui.com/news/5318215) · gelonghui
+- [华测检测&#40;300012&#41;2026年半年报点评：业绩稳健增长 国际化布局进入收获期](https://www.gelonghui.com/news/5318214) · gelonghui
+- [恒辉安防&#40;300952&#41;：下半年盈利有望逐步修复](https://www.gelonghui.com/news/5318213) · gelonghui
+- [乖宝宠物&#40;301498&#41;26H1业绩点评：盈利能力阶段性承压 主动调整夯实品牌长期优势](https://www.gelonghui.com/news/5318212) · gelonghui
+- [上海电影&#40;601595&#41;2026年半年报点评：电影业务承压 关注IP商业化与产融结合](https://www.gelonghui.com/news/5318211) · gelonghui
+- [九龙仓置业&#40;01997.HK&#41;：核心资产禀赋凸出 稳健派息支撑长期价值](https://www.gelonghui.com/news/5318210) · gelonghui
+- [理想汽车-W&#40;2015.HK&#41;：全新理想i9上市 36.98万元定价超预期](https://www.gelonghui.com/news/5318209) · gelonghui
+- [归创通桥&#40;02190.HK&#41;9月25日耗资115.7万港元回购5.4万股](https://www.gelonghui.com/news/5318196) · gelonghui
+- [吉辉控股&#40;08027.HK&#41;：林智深获委任为独立非执行董事](https://www.gelonghui.com/news/5318195) · gelonghui
+- [阿卡迈盘初飙升超16%，Anthropic大单引爆股价](https://www.gelonghui.com/news/5318194) · gelonghui
+- [美银：将AMD目标价上调至720美元](https://www.gelonghui.com/news/5318193) · gelonghui
+- [齐合环保&#40;00976.HK&#41;董事会会议延期 继续停牌 ](https://www.gelonghui.com/news/5318192) · gelonghui
+- [知名音乐人刘欢病逝，享年63岁](https://www.thepaper.cn/newsDetail_forward_34154106) · thepaper
+- [中美达成八点成果共识](https://www.thepaper.cn/newsDetail_forward_34155814) · thepaper
+- [纪念｜刘欢走了，“我和你”都会记得](https://www.thepaper.cn/newsDetail_forward_34154729) · thepaper
+- [言短意长｜被网暴的符文迪、韩雅平，把“恶意”甩在了身后](https://www.thepaper.cn/newsDetail_forward_34150971) · thepaper
+- [马上评｜全款买房被爽约，开发商“一房二卖”也应担责](https://www.thepaper.cn/newsDetail_forward_34156911) · thepaper
+- [王楚钦：打到第四局，那个疼痛有一点受不了](https://www.thepaper.cn/newsDetail_forward_34156819) · thepaper
+- [本世纪首次打进四强！中国U23男足战胜泰国队，晋级半决赛](https://www.thepaper.cn/newsDetail_forward_34155396) · thepaper
+- [纪念刘欢｜他的课总是座无虚席，老校长至今记得那句“当老师是一生的”](https://www.thepaper.cn/newsDetail_forward_34155681) · thepaper
+- [国庆假期潮州一民宿一晚155元涨到1486元？市监局：“涨价近十倍”的结论与实际情况不符](https://www.thepaper.cn/newsDetail_forward_34154650) · thepaper
+- [言短意长｜领导公开手机号只是起点，民意连通不能止步于此](https://www.thepaper.cn/newsDetail_forward_34155815) · thepaper
+- [“动漫组合”亚运混双夺冠，中国队包揽金银牌](https://www.thepaper.cn/newsDetail_forward_34156607) · thepaper
+- [直播丨刘欢63岁人生谢幕：大河向东流，歌魂永不朽](https://www.thepaper.cn/newsDetail_forward_34154261) · thepaper
+- [他是音乐顽童，一个千古难遇的人｜《甄嬛传》编曲孟可忆刘欢](https://www.thepaper.cn/newsDetail_forward_34155380) · thepaper
+- [刘欢在跨年舞台上完成最后一次公开演出，“祝大家2026平安健康”](https://www.thepaper.cn/newsDetail_forward_34155066) · thepaper
+- [中国音乐家协会发文悼念刘欢：他的逝世是中国音乐界的重大损失](https://www.thepaper.cn/newsDetail_forward_34155907) · thepaper
+- [张本智和爆冷不敌伊朗老将，日本队无缘亚运会乒乓球男单四强](https://www.thepaper.cn/newsDetail_forward_34156367) · thepaper
+- [刘欢逝世：回顾他横跨四十年的音乐传奇](https://www.thepaper.cn/newsDetail_forward_34154433) · thepaper
+- [七嘴八舌｜文化出海需要更多“周深式开口”](https://www.thepaper.cn/newsDetail_forward_34116351) · thepaper
+- [国际关系学院悼念校友刘欢：心在梦在从头来，少年壮志不言愁](https://www.thepaper.cn/newsDetail_forward_34157290) · thepaper
+- [非常满意！孙颖莎：混双项目最重要的是信任](https://www.thepaper.cn/newsDetail_forward_34157034) · thepaper
 
-[本批原始ZIP](../../sources/artifacts/8e3df8229e2a7885f365892cac82416d446729e4e495da3a449b7d5d61ac3b3e.zip)
+[本批原始ZIP](../../sources/artifacts/f66e89ae3d87d4ff6018e8ec2621301a4d8c36a973688e087a14b518f99a7af5.zip)
 [结构化窗口与版本](news-daily.json)
