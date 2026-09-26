@@ -96,7 +96,8 @@ def _institutional(collector, cutoff):
         root = Path(directory)
         for name, raw in payload.items():
             (root / name).write_bytes(raw)
-        replay = capture.verify(root)
+        from .institutional_radar_compat import verify
+        replay, compatibility = verify(root)
     model.check(json.loads(files['verification.json']) == {k: replay[k] for k in ('status', 'capture_hash')},
                 'Institutional original replay receipt differs')
     report = json.loads(payload['observation.json'])
@@ -108,7 +109,7 @@ def _institutional(collector, cutoff):
     status.update(status='VERIFIED_SAVED_INSTITUTIONAL_SOURCE', archive=archive, details=details,
                   market_session=report['projection']['market_session'],
                   source_observed_at=report['projection']['origin']['requests'][-1]['received_at'],
-                  projection_hash=report['projection_hash'], replay=replay,
+                  projection_hash=report['projection_hash'], replay=replay, compatibility=compatibility,
                   meaning='ORIGINAL_BYTES_REBUILT_NOT_EXCHANGE_TRUTH_OR_RESEARCH; NOT_A_NEW_MARKET_SCAN')
     return report, details['observation.json'], status
 
