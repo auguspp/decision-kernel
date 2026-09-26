@@ -11,7 +11,7 @@ import json
 
 from ..identity import canonical_hash
 from . import current_state as m, current_state_delivery as delivery
-from . import smart_money_sources as s, smart_money_capture as capture, smart_money_view as view
+from . import smart_money_sources as s, smart_money_capture as capture, smart_money_view as view\nfrom . import smart_money_relay as relay_supplement
 from .institutional_radar_reading import _reserve, ERRORS
 
 PREFIX='details/radar/smart-money/'
@@ -46,7 +46,12 @@ def previous(c):
         origins=overview['origins']
         for origin in origins.values():
             if origin.get('reading_commit') is None:origin['reading_commit']=prior_commit
-        return {'history':hist,'overview':overview,'state':state,'origins':origins},'EXACT_PREVIOUS_'+prior_commit
+        relay_value=None
+        if refs.get('relay'):
+            _reserve(c,calls=1,files=0)
+            relay_value=json.loads(read_bound(c,refs['relay'],prior_commit))
+        return {'history':hist,'overview':overview,'state':state,'origins':origins,
+                'relay':relay_value},'EXACT_PREVIOUS_'+prior_commit
     except ERRORS as exc:
         return None,'PREVIOUS_UNAVAILABLE_'+type(exc).__name__
 
@@ -95,6 +100,18 @@ def reconcile_pending_attempt(c, run):
     return attempt, [diagnostic]
 
 
+def read_relay(c, artifacts, run, identity):
+    matches=[a for a in artifacts if a['name']==f"smart-money-relay-{run['id']}-1"]
+    if not matches:
+        return None
+    m.check(len(matches)==1,'smart-money relay artifact duplicate')
+    files,archive=c.archive(matches[0],run)
+    result=relay_supplement.replay(files,identity=identity,cutoff=c.now())
+    m.check(result['identity']==identity and result['relay_host'].startswith('https://pcd.mobcvb.cn/'),
+            'smart-money relay identity')
+    return {'result':result,'archive':archive}
+
+
 def read_run(c,selected,*,follow_control=False):
     _reserve(c,calls=6,files=2)
     run=c.api.get('actions/runs/'+str(selected['id']))
@@ -117,6 +134,8 @@ def read_run(c,selected,*,follow_control=False):
     m.check(job.get('head_sha')==run['head_sha'] and job.get('run_id')==run['id'] and job.get('run_attempt')==1,
             'smart-money job identity')
     artifacts=c.artifacts(run)
+    relay_info=read_relay(c,artifacts,run,identity)
+    status['relay']=relay_info
     controls=[a for a in artifacts if a['name']==f"smart-money-control-{run['id']}-1"]
     control=None
     if controls:
@@ -215,8 +234,24 @@ def _attach(c,baseline):
         research['smart_money']={'status':current['status'],'previous_status':prior_status,
             'meaning':'NO_READABLE_SMART_MONEY_OBSERVATION_NOT_ZERO_ACTIVITY',**s.AUTHORITY}
         return assemble(c,baseline,research,{},'\n聪明钱观察尚不可读；不是没有资本行为。\n')
+    relay_info=current.get('relay')
+    relay_value=(deepcopy(relay_info['result']) if relay_info
+                 else deepcopy((old or {}).get('relay')))
+    if relay_value is not None:
+        if relay_info:
+            relay_value['archive']=relay_info['archive']
+            relay_value['reading_relation']='CURRENT_SOURCE_RUN'
+        else:
+            relay_value['reading_relation']='PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT'
+        overview['relay_supplement']={
+            'status':relay_value['status'],'market_session':relay_value.get('market_session'),
+            'cutoff':relay_value['cutoff'],'relay_host':relay_value['relay_host'],
+            'family_coverage':{api:{'status':item['status'],'row_count':item['row_count']}
+                               for api,item in relay_value.get('families',{}).items()},
+            'reading_relation':relay_value['reading_relation'],
+            'meaning':'SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE'}
     chunks,meta=view.encode_chunks(hist)
-    _reserve(c,files=len(chunks)+5)
+    _reserve(c,files=len(chunks)+6)
     refs={}
     for ref in meta['chunks']:
         ref['reference']=c.retain(PREFIX+ref['name'],chunks[ref['name']])
@@ -230,7 +265,11 @@ def _attach(c,baseline):
     refs['overview']=c.retain(PREFIX+'overview.json',m.json_bytes(overview))
     refs['history']=c.retain(PREFIX+'history.json',m.json_bytes(meta))
     refs['state']=c.retain(PREFIX+'state.json',m.json_bytes(state))
+    if relay_value is not None:
+        refs['relay']=c.retain(PREFIX+'relay.json',m.json_bytes(relay_value))
     text=view.render(overview,hist,failure=current['status'] if obs is None and current['status']!='NO_NEW_CAPTURE_REQUIRED' else None)
+    if relay_value is not None:
+        text += '\n' + relay_supplement.render(relay_value)
     refs['markdown']=c.retain('details/radar/smart-money.md',text.encode())
     browser_status = 'DISPLAY_PROJECTION_COMPLETE'
     try:
@@ -253,6 +292,7 @@ def _attach(c,baseline):
     research['smart_money']={'status':current['status'],'details':refs,'source_cutoff':overview['cutoff'],
         'target_date':overview['target_date'],'latest_attempt':current.get('latest_attempt'),
         'browser_status':browser_status,
+        'relay_status':relay_value['status'] if relay_value is not None else 'NOT_PRESENT_LEGACY_OR_NOT_RUN',
         'capture_hash':hist['capture_hash'],'uses_prior_observation':obs is None,
         'pending_delivery_count':len(state['unresolved']),'reading_freshness':reading_freshness,
         'capture_age_hours':f"{age:.2f}",
