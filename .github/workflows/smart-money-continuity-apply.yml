@@ -10,151 +10,69 @@ concurrency:
   group: smart-money-continuity-apply
   cancel-in-progress: false
 jobs:
-  apply-reviewed-patch:
+  inspect-remaining-public-fields:
     if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/work/smart-money-continuity-20260926' && github.run_attempt == 1
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: write
-      actions: read
-    env:
-      BASE: ce940c5be23d3de065a89d56eba294afc5853075
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ce940c5be23d3de065a89d56eba294afc5853075
-          fetch-depth: 0
+          ref: 64f3d9619ee9ac5e5fe531766551f4060cc9872a
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Apply exact retained changes without ref writes
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python - <<'PY'
-          import base64,gzip,hashlib,io,json,os,pathlib,subprocess,zipfile
-          from datetime import datetime,timezone
-          assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
-          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['BASE']
-          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity';root.mkdir()
-          data=subprocess.check_output(['gh','api','repos/auguspp/decision-kernel/actions/artifacts/10896389488/zip'])
-          assert len(data)==23600805 and hashlib.sha256(data).hexdigest()=='5949bfde6a4e9c49593feb4bbc5d003d00e11ba280448054254f582258b09287'
-          with zipfile.ZipFile(io.BytesIO(data)) as z:
-              assert z.testzip() is None
-              (root/'initial.patch').write_bytes(z.read('candidate.patch'))
-              (root/'production.zip').write_bytes(z.read('production.zip'))
-          subprocess.run(['git','apply','--3way','--index',str(root/'initial.patch')],check=True)
-          parts=[]
-          for sha in ('1e76c817654e3d7c0ec9b3c88d8dca8523855849','d20aff2d5a8dc3e221ad2d93d94e96892c15031b','469fe8d5430bdc89fcad5c90819f9baad5874e5c','957f68bec01636594bc929ad78426f34f668b791','9a742e8956b0d9cd6feed190f6583f2279b1c1ca','eb2d775e89578251437595fafb488e24fd94fc41','7b7e1460ed383c68808f721b42b510fb2df3da70'):
-              obj=json.loads(subprocess.check_output(['gh','api','repos/auguspp/decision-kernel/git/blobs/'+sha]))
-              raw=base64.b64decode(obj['content'])
-              assert obj['sha']==sha and hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==sha
-              parts.append(raw)
-          patch=gzip.decompress(b''.join(parts))
-          assert len(patch)==28450 and hashlib.sha256(patch).hexdigest()=='41efbfc3005f516db7e32fa4806ef58688b0220ba996338152f4587b373ab655'
-          (root/'followup.patch').write_bytes(patch)
-          subprocess.run(['git','apply','--unidiff-zero','--index',str(root/'followup.patch')],check=True)
-          reader=pathlib.Path('src/decision_kernel/runtime/smart_money_reading.py').read_text()
-          assert 'smart-money canonical composition binding' in reader and 'smart-money root summary binding' not in reader
-          allowed={'.github/scripts/smart-money-control.py','.github/workflows/radar-smart-money.yml','docs/smart-money-continuity-live-fixes.md','src/decision_kernel/runtime/smart_money_capture.py','src/decision_kernel/runtime/smart_money_documents.py','src/decision_kernel/runtime/smart_money_reading.py','src/decision_kernel/runtime/smart_money_sources.py','src/decision_kernel/runtime/smart_money_view.py','tests/test_radar_company_reading.py','tests/test_smart_money_capture.py','tests/test_smart_money_continuity.py','tests/test_smart_money_live_regressions.py'}
-          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
-          assert set(paths)==allowed
-          (root/'paths.json').write_text(json.dumps(paths))
-          data=(root/'production.zip').read_bytes()
-          assert len(data)==17647490 and hashlib.sha256(data).hexdigest()=='246843ac886cdc055ec37950f01a9dca6a6c5ee696bc1ae887ff4bc57947bc52'
-          PY
-      - name: Install existing dependencies
-        run: python -m pip install -e '.[dev]'
-      - name: Check scoped regressions without credentials
-        run: |
-          set -euo pipefail
-          python -m pytest -q tests/test_smart_money*.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/continuity/scoped-junit.xml" | tee "$RUNNER_TEMP/continuity/scoped-tests.log"
-      - name: Replay original 204-request production capture without network
-        run: |
-          python - <<'PY'
-          import json,os,pathlib,zipfile
-          from decision_kernel.runtime import smart_money_capture as c,smart_money_sources as s,smart_money_view as v
-          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity'
-          with zipfile.ZipFile(root/'production.zip') as z:
-              assert z.testzip() is None
-              files={i.filename:z.read(i) for i in z.infolist() if not i.is_dir()}
-          m=s.decode(files['capture.json']);o=c.replay(files,m['identity'],cutoff=s.now())
-          assert o['source_calls_during_replay']==0 and o['capture_hash']==m['capture_hash']
-          h=v.history(o);summary=v.summarize(o,h)
-          (root/'production-replay.json').write_bytes(s.encoded(summary))
-          (root/'production-replay.md').write_text(v.render(summary,h))
-          print(json.dumps({'status':o['status'],'records':len(h['records']),'requests':o['requests'],'unresolved':o['unresolved']},ensure_ascii=False))
-          PY
-      - name: Inspect three corrected public first pages and original HKEX form script
+      - run: python -m pip install -e '.[feeds]'
+      - name: Inspect one changed activity contract and one actual browser-form session
         run: |
           python - <<'PY'
           import hashlib,json,os,pathlib
-          import requests
           from datetime import datetime,timezone
+          from bs4 import BeautifulSoup
           from decision_kernel.runtime.hithink_dump_trial import _session
-          from decision_kernel.runtime import smart_money_sources as s,smart_money_capture as c
+          from decision_kernel.runtime import smart_money_sources as s,smart_money_documents as d
           assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
-          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity';records=[];stop=False
-          for family in ('activity','holder_changes','repurchases'):
-              if stop:break
-              req=s.spec(family,'disclosures','2026-06-28','2026-09-26');entry={'request':req,'requested_at':s.now()}
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'remaining';root.mkdir();items=[]
+          def get(client,name,url,params=None,form=None):
+              a={'name':name,'url':url,'params':params,'method':'POST' if form else 'GET','started':s.now()}
               try:
-                  status,raw=c.request_raw(req);name='qualification-'+family+'.body';(root/name).write_bytes(raw)
-                  entry.update(status=status,body=name,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
-                  if status in {401,403,429}:stop=True
-              except Exception as exc:entry['error_type']=type(exc).__name__
-              entry['received_at']=s.now();records.append(entry)
-          url='https://www3.hkexnews.hk/sdw/search/js/search_form.js?v=1640057418154'
-          entry={'url':url,'requested_at':s.now()}
-          try:
-              with _session() as client:
-                  with client.get(url,timeout=(10,20),allow_redirects=False,stream=True,headers={'Accept-Encoding':'identity'}) as r:
-                      assert r.url==url
+                  with client.request(a['method'],url,params=params,data=form,timeout=(10,25),allow_redirects=False,stream=True,headers={'Accept-Encoding':'identity','User-Agent':'Mozilla/5.0 DecisionKernel-SmartMoney/1'}) as response:
                       chunks=[];n=0
-                      for ch in r.iter_content(65536):
-                          n+=len(ch);assert n<=2*1024*1024;chunks.append(ch)
-                      raw=b''.join(chunks);(root/'hkex-search-form.js.body').write_bytes(raw)
-                      entry.update(status=r.status_code,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
-          except Exception as exc:entry['error_type']=type(exc).__name__
-          entry['received_at']=s.now();records.append(entry)
-          (root/'public-qualification.json').write_text(json.dumps(records,ensure_ascii=False,indent=2))
+                      for chunk in response.iter_content(65536):
+                          n+=len(chunk);assert n<=4*1024*1024;chunks.append(chunk)
+                      body=b''.join(chunks);(root/(name+'.body')).write_bytes(body)
+                      a.update(status=response.status_code,bytes=n,sha256=hashlib.sha256(body).hexdigest(),final_url=response.url)
+                      a['finished']=s.now();items.append(a)
+                      return response.status_code,body
+              except Exception as exc:
+                  a.update(error_type=type(exc).__name__,finished=s.now());items.append(a);return None,b''
+          q=s.spec('activity','disclosures','2026-06-28','2026-09-26');q['params']['columns']='ALL'
+          with _session() as client:
+              status,raw=get(client,'activity-all',q['url'],q['params'])
+              if status==200:
+                  try:
+                      value=s.decode(raw);rows,count,pages=s.page_data(value,q)
+                      print('ACTIVITY_ALL',len(rows),count,pages,sorted(rows[0]) if rows else [])
+                      (root/'activity-scope.json').write_text(json.dumps({'rows':len(rows),'total':count,'pages':pages,'first_fields':sorted(rows[0]) if rows else []}))
+                  except Exception as exc:print('ACTIVITY_PARSE',type(exc).__name__,str(exc)[:80])
+          with _session() as client:
+              status,raw=get(client,'hkex-session-get',d.HKEX,{'t':'sh'})
+              if status==200:
+                  try:
+                      form=d.post_form(raw,'SH','2026-03-31')
+                      # This is the exact public form with its own session cookies,
+                      # not a guessed hidden-field mutation or alternate endpoint.
+                      status,result=get(client,'hkex-session-march',d.HKEX,{'t':'sh'},form)
+                      h=BeautifulSoup(result,'html.parser')
+                      print('HKEX_RESULT',status,[x.get_text(' ',strip=True) for x in h.select('h2.ccass-heading')])
+                      (root/'hkex-scope.json').write_text(json.dumps({'status':status,'heading':[x.get_text(' ',strip=True) for x in h.select('h2.ccass-heading')],'cookie_count':len(client.cookies)}))
+                  except Exception as exc:print('HKEX_PARSE',type(exc).__name__,str(exc)[:80])
+          (root/'manifest.json').write_text(json.dumps(items,ensure_ascii=False,indent=2))
           PY
-      - name: Create unreferenced tested candidate objects only
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity';paths=json.loads((root/'paths.json').read_text())
-          def api(path,body):
-              return json.loads(subprocess.check_output(['gh','api','--method','POST','repos/auguspp/decision-kernel/'+path,'--input','-'],input=json.dumps(body).encode()))
-          elements=[];manifest=[]
-          for path in paths:
-              raw=pathlib.Path(path).read_bytes();sha=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
-              result=api('git/blobs',{'content':raw.decode(),'encoding':'utf-8'});assert result['sha']==sha
-              mode=subprocess.check_output(['git','ls-files','--stage',path],text=True).split()[0]
-              elements.append({'path':path,'mode':mode,'type':'blob','sha':sha})
-              manifest.append({'path':path,'bytes':len(raw),'git_blob':sha,'sha256':hashlib.sha256(raw).hexdigest()})
-          base_tree=subprocess.check_output(['git','rev-parse',os.environ['BASE']+'^{tree}'],text=True).strip()
-          tree=api('git/trees',{'base_tree':base_tree,'tree':elements})
-          local=subprocess.check_output(['git','write-tree'],text=True).strip();assert tree['sha']==local
-          commit=api('git/commits',{'message':'fix: complete Smart Money continuity and first production source corrections','tree':local,'parents':[os.environ['BASE']]})
-          (root/'candidate.json').write_text(json.dumps({'commit':commit['sha'],'parent':os.environ['BASE'],'tree':local,'files':manifest,'refs_modified':False},indent=2))
-          print('CANDIDATE_COMMIT='+commit['sha'])
-          PY
-      - name: Export source and evidence
-        if: always()
-        run: |
-          mkdir -p "$RUNNER_TEMP/continuity"
-          tree=$(git write-tree)
-          git archive --format=zip "$tree" > "$RUNNER_TEMP/continuity/source.zip"
-          git diff --cached --binary --full-index > "$RUNNER_TEMP/continuity/candidate.patch"
-          git rev-parse HEAD > "$RUNNER_TEMP/continuity/base.txt"
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: smart-money-continuity-${{ github.run_id }}-1
-          path: ${{ runner.temp }}/continuity/
+          name: smart-money-remaining-${{ github.run_id }}-1
+          path: ${{ runner.temp }}/remaining/
           retention-days: 30
           if-no-files-found: error
