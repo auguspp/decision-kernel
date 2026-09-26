@@ -15,74 +15,57 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install requests
-      - name: Retest queued endpoints after 30 seconds
+      - name: Retest queued endpoints after 30 seconds including business timeout
         env:
           TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
         run: |
           python - <<'PY'
           import json, os, pathlib, time, requests
           from datetime import datetime, timezone
-
-          key = os.environ["TUSHARE_PROXY_API_KEY"]
-          base = "https://pcd.mobcvb.cn/tushare/pro"
-          session = requests.Session()
-          session.trust_env = False
-          headers = {"X-API-Key": key}
-          cases = [
-              ("hm_detail", {"trade_date": "20260924", "limit": "5"}),
-              ("report_rc", {"ts_code": "000651.SZ", "report_date": "20260924", "limit": "5"}),
+          key=os.environ["TUSHARE_PROXY_API_KEY"]
+          base="https://pcd.mobcvb.cn/tushare/pro"
+          s=requests.Session(); s.trust_env=False
+          h={"X-API-Key":key}
+          cases=[
+            ("hm_detail",{"trade_date":"20260924","limit":"5"}),
+            ("report_rc",{"ts_code":"000651.SZ","report_date":"20260924","limit":"5"}),
           ]
-          results = []
-          for name, params in cases:
-              attempts = []
-              for attempt in (1, 2):
-                  if attempt == 2:
-                      time.sleep(30)
-                  r = session.get(
-                      f"{base}/{name}",
-                      params=params,
-                      headers=headers,
-                      timeout=30,
-                      allow_redirects=False,
-                  )
-                  try:
-                      body = r.json()
-                  except Exception:
-                      body = {}
-                  data = body.get("data") if isinstance(body, dict) else {}
-                  items = data.get("items") if isinstance(data, dict) else None
-                  attempts.append({
-                      "attempt": attempt,
-                      "http": r.status_code,
-                      "code": body.get("code") if isinstance(body, dict) else None,
-                      "error": body.get("error") if isinstance(body, dict) else None,
-                      "msg": body.get("msg") if isinstance(body, dict) else None,
-                      "message": body.get("message") if isinstance(body, dict) else None,
-                      "count": body.get("count") if isinstance(body, dict) else None,
-                      "rows": len(items) if isinstance(items, list) else None,
-                      "request_id": r.headers.get("X-Request-ID"),
-                      "x_cache": r.headers.get("X-Cache"),
-                  })
-                  if r.status_code == 200 and isinstance(body, dict) and body.get("code", 0) in (0, None):
-                      break
-                  if not (
-                      r.status_code in (502, 503, 504)
-                      or (isinstance(body, dict) and body.get("error") == "upstream_pool_exhausted")
-                  ):
-                      break
-              results.append({"api": name, "params": params, "attempts": attempts})
-
-          out = pathlib.Path(os.environ["RUNNER_TEMP"]) / "queue30"
-          out.mkdir()
-          (out / "report.json").write_text(
-              json.dumps({
-                  "checked_at": datetime.now(timezone.utc).isoformat(),
-                  "wait_seconds": 30,
-                  "results": results,
-              }, ensure_ascii=False, indent=2),
-              encoding="utf-8",
-          )
-          print(json.dumps(results, ensure_ascii=False, indent=2))
+          results=[]
+          for name,params in cases:
+            attempts=[]
+            for attempt in (1,2):
+              if attempt==2: time.sleep(30)
+              r=s.get(f"{base}/{name}",params=params,headers=h,timeout=35,allow_redirects=False)
+              try:b=r.json()
+              except Exception:b={}
+              d=b.get("data") if isinstance(b,dict) else {}
+              items=d.get("items") if isinstance(d,dict) else None
+              attempts.append({
+                "attempt":attempt,"http":r.status_code,
+                "code":b.get("code") if isinstance(b,dict) else None,
+                "error":b.get("error") if isinstance(b,dict) else None,
+                "msg":b.get("msg") if isinstance(b,dict) else None,
+                "message":b.get("message") if isinstance(b,dict) else None,
+                "count":b.get("count") if isinstance(b,dict) else None,
+                "rows":len(items) if isinstance(items,list) else None,
+                "request_id":r.headers.get("X-Request-ID"),
+                "x_cache":r.headers.get("X-Cache")
+              })
+              if r.status_code==200 and isinstance(b,dict) and b.get("code",0) in (0,None):
+                break
+              transient=(
+                r.status_code in (502,503,504)
+                or (isinstance(b,dict) and b.get("error")=="upstream_pool_exhausted")
+                or (isinstance(b,dict) and b.get("code")==1 and b.get("msg")=="timeout")
+              )
+              if not transient: break
+            results.append({"api":name,"params":params,"attempts":attempts})
+          out=pathlib.Path(os.environ["RUNNER_TEMP"])/"queue30"; out.mkdir()
+          (out/"report.json").write_text(json.dumps({
+            "checked_at":datetime.now(timezone.utc).isoformat(),
+            "wait_seconds":30,"client_timeout_seconds":35,"results":results
+          },ensure_ascii=False,indent=2),encoding="utf-8")
+          print(json.dumps(results,ensure_ascii=False,indent=2))
           PY
       - uses: actions/upload-artifact@v7
         if: always()
