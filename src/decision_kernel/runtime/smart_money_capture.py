@@ -254,8 +254,11 @@ def _parse_partition(records, files, scope):
         except (ValueError,KeyError,TypeError,IndexError) as exc:
             failure=exc.args[0] if type(exc)is s.SourceError else type(exc).__name__;break
     dedup,conflicts=s.economic_rows(rows)
+    source_version_conflicts=conflicts
     if scope['family']=='activity':
-        try:dedup=s.aggregate_activity(dedup)
+        try:
+            dedup=s.aggregate_activity(dedup)
+            dedup,conflicts=s.economic_rows(dedup)
         except (ValueError,KeyError,TypeError):
             failure='ACTIVITY_EVENT_CONFLICT';dedup=[]
     complete=bool(records and failure is None and pages is not None and len(records)==max(1,pages)
@@ -267,6 +270,9 @@ def _parse_partition(records, files, scope):
             'status':'QUALIFIED_SOURCE_SCOPE' if complete else 'PARTIAL_OR_UNAVAILABLE',
             'complete':complete,'provider_total':total,'provider_pages':pages,'returned_rows':received,
             'normalized_rows':len(dedup),'duplicate_page_rows':duplicate_raw,'conflicting_identities':conflicts,
+            'source_version_conflicts':source_version_conflicts,
+            'ambiguous_disclosure_groups':sum(r['values'].get('disclosure_date_status')=='MULTIPLE_SOURCE_DATES_NOT_RESOLVED' for r in dedup),
+            'field_gap_rows':sum(bool(r['values'].get('field_gaps')) for r in dedup),
             'row_errors':errors,'excluded_rows':excluded,'failure':failure,'rows':dedup,'source_disclosure_counts':source_counts,
             'coverage_meaning':'PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS'}
 

@@ -74,7 +74,9 @@ def history(observation, prior=None):
             current_keys={(p['family'],r['id'],r['version']) for r in p['rows']}
             periods={r['date'] for r in p['rows']} or {p['partition']}
             for key,retained in store.items():
-                if key[0]==p['family'] and retained['data']['date'] in periods and key not in current_keys:
+                same_partition=(p['family']!='north_holdings' or
+                    retained['partition'].split('@')[0]==p['partition'].split('@')[0])
+                if key[0]==p['family'] and same_partition and retained['data']['date'] in periods and key not in current_keys:
                     retained['withdrawn_from_source_snapshot_at']=observation['cutoff']
         for raw in p['rows']:
             key=p['family'],raw['id'],raw['version']
@@ -98,15 +100,29 @@ def history(observation, prior=None):
     from datetime import timedelta
     floor=(s.day(observation['target_date'])-timedelta(days=100)).isoformat()
     quarters=set(s.periods(s.day(observation['target_date'])))
+    def visible_date(r):
+        d=r['data'];claims=d['values'].get('disclosure_date_claims',[])
+        return max([d['date'],d.get('disclosed') or '',*[x for x in claims if x]])
+    # Current disclosure windows can legitimately describe much older events.
+    # Do not discard a newly disclosed event by its historical activity date.
     rows=[r for r in store.values() if (r['family']=='holdings' and r['data']['date'] in quarters)
-          or (r['family']=='north_holdings') or (r['family']!='holdings' and r['data']['date']>=floor)]
+          or (r['family']=='north_holdings') or (r['family']!='holdings' and visible_date(r)>=floor)]
     s.require(len(rows)<=MAX_RECORDS,'HISTORY_RECORD_BOUND')
     rows.sort(key=lambda x:(x['family'],x['data']['date'],x['data']['ticker'] or '',x['data']['id'],x['data']['version']))
     coverage=deepcopy(prior.get('coverage',{}))
     for part in observation['partitions']:
         coverage[part['family']+'|'+part['partition']]={'complete':part['complete'],'cutoff':observation['cutoff'],
             'origin':current_hash,'begin':part['begin'],'end':part['end']}
+    documents=deepcopy(prior.get('forecast_documents',[]))
+    by_report={d['report_id']:d for d in documents}
+    for doc in observation.get('forecast_documents',[]):
+        retained=deepcopy(doc)
+        retained['origin_capture_hash']=current_hash
+        retained['origin_cutoff']=observation['cutoff']
+        by_report[doc['report_id']]=retained
     return {'version':s.VERSION,'projection_revision':s.PROJECTION_REVISION,
+            'forecast_documents':list(by_report.values()),
+            'forecast_document_recovery':prior.get('forecast_document_recovery'),
             'reinterpretation':reinterpret,'capture_hash':current_hash,'cutoff':observation['cutoff'],
             'coverage':coverage,
             'records':rows,'changes':dict(changes),'change_examples':examples,
@@ -256,6 +272,8 @@ def summarize(obs,hist):
             'earliest_period':min((r['date'] for r in rows),default=None),'latest_period':max((r['date'] for r in rows),default=None),
             'current_rows':sum(p['normalized_rows'] for p in parts),
             'out_of_scope_rows':sum(len(p.get('excluded_rows',[])) for p in parts),'deferred':deferred,
+            'ambiguous_disclosure_groups':sum(r['values'].get('disclosure_date_status')=='MULTIPLE_SOURCE_DATES_NOT_RESOLVED' for r in rows),
+            'field_gap_rows':sum(bool(r['values'].get('field_gaps')) for r in rows),
             'partitions':[compact_part(p) for p in parts]}
         families[f]['unresolved_partitions']=sum(g.get('family')==f for g in obs['unresolved'])
         if families[f]['unresolved_partitions'] and families[f]['status']=='COMPLETE_PROVIDER_SCOPES':
@@ -282,7 +300,8 @@ def summarize(obs,hist):
             'not_inferred':['TRADING_DATE','CURRENT_HOLDING','TOP_TEN_ABSENCE_AS_EXIT','CORPORATE_ACTION_ADJUSTED_NET_BUY']},
         'north_holding_comparisons':{'comparable_nonzero_pairs':len(north),'examples':north[:20],
                                     'meaning':'QUARTERLY_SHARES_NOT_DAILY_NET_BUY'},
-        'forecast_documents':obs.get('forecast_documents',[]),
+        'forecast_documents':hist.get('forecast_documents',obs.get('forecast_documents',[])),
+        'forecast_document_recovery':hist.get('forecast_document_recovery'),
         'seat_label_binding':'VENDOR_LABELS_AND_ORIGINAL_SEATS_SEPARATE; NO_UNPROVEN_PERSON_JOIN',
         'first_seen_meaning':'NEWLY_INGESTED_MAY_HAVE_BEEN_PUBLIC_BEFORE; NOT_ALL_EVENTS_OCCUR_TODAY',**s.AUTHORITY}
 
@@ -325,12 +344,17 @@ def render(overview,hist,*,failure=None):
     for doc in overview['forecast_documents']:
         for r in doc.get('revisions',[]):
             lines.append(f"- {md(r['actor_name'])} / {r['ticker']} / {r['target_year']}归母净利：原文前值 {r['old_as_quoted']} → {r['new']} {md(r['unit'])}；第{r['page']}页；旧报告未独立复验。")
+    if overview.get('forecast_document_recovery'):
+        lines.append('研报正文接续：'+md(overview['forecast_document_recovery'])+'；每份保留原采集截止，不冒称本批新读。')
     lines += ['', '## 覆盖缺口与解释边界','',
               '游资名称是供应商标签；原始营业部单独保留，未凭金额相等认证某自然人。1日/3日重叠榜不相加，未再次上榜不推断持有或退出。',
               '北向成交额不等于净流入；HKEX季度CCASS数量不是实时仓位，也不是某一个外资机构。',
               '自然人同名只允许查找关联，不能自动跨公司合并为同一牛散。前十大之外的持股不在观察范围，榜单消失不等于清仓。',
               '回购方案金额和累计实施分开；回购用途不证明已注销。定增认购对价或购买资产不等于收到现金。',
               '各日期分别表示报告期、公开行为日、披露日、取得日。新进入本库不是新建仓。所有数据只是研究线索。','']
+    for f,v in overview['families'].items():
+        if v.get('ambiguous_disclosure_groups') or v.get('field_gap_rows'):
+            lines.append(f"- {TITLES[f]}：{v.get('ambiguous_disclosure_groups',0)}组披露日期有多个来源声明；{v.get('field_gap_rows',0)}条有局部字段缺口。原记录仍可读，不认定唯一发布日期或已完成日。")
     for g in overview['unresolved']:
         lines.append(f"- 未解决：{md(g.get('family'))} / {md(g.get('partition'))} / {md(g.get('begin'))}—{md(g.get('end'))}：{md(g.get('failure') or 'ROW_OR_IDENTITY_QUALIFICATION')}。")
     lines += ['', '[公司/参与者双向检索](smart-money/browse.html) · [结构化概览与来源定位](smart-money/overview.json) · [完整历史数据分块目录](smart-money/history.json)',

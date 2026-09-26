@@ -16,7 +16,7 @@ from zoneinfo import ZoneInfo
 from ..identity import canonical_hash, canonical_json
 
 VERSION = 'smart-money-observation-v1'
-PROJECTION_REVISION = 'smart-money-projection-2'
+PROJECTION_REVISION = 'smart-money-projection-3'
 REQUEST_REVISION = 2
 WORKFLOW = '.github/workflows/radar-smart-money.yml'
 ZONE = ZoneInfo('Asia/Shanghai')
@@ -395,10 +395,15 @@ def normalize(rawrow, request, index, request_index, envelope=None):
     if f=='repurchases':
         code=ticker(r.get('DIM_SCODE'));scheme=text(r.get('REPURCODE'),required=True)
         pub=_date_field(r,'UPD',end,required=True);require(day(request['begin'])<=day(pub),'REPURCHASE_UPDATE_WINDOW')
+        finish_raw=text(r.get('FINISHDATE'))
+        finish_day=day(finish_raw).isoformat() if finish_raw else None
+        future_finish=bool(finish_day and day(finish_day)>day(end))
         vals={'scheme_id':scheme,'phase_code':text(r.get('REPURPROGRESS')),
               'planned_min_cny':number(r.get('REPURAMOUNTLOWER')),'planned_max_cny':number(r.get('REPURAMOUNTLIMIT')),
               'executed_cumulative_cny':number(r.get('REPURAMOUNT')),'executed_cumulative_shares':number(r.get('REPURNUM')),
-              'start':_date_field(r,'REPURSTARTDATE',end),'actual_finish':_date_field(r,'FINISHDATE',end),
+              'start':_date_field(r,'REPURSTARTDATE',end),'actual_finish':None if future_finish else finish_day,
+              'finish_date_raw':finish_raw,
+              'field_gaps':['FUTURE_FINISH_FIELD_NOT_ACTUAL_COMPLETION'] if future_finish else [],
               'planned_deadline_raw':text(r.get('REPURENDDATE')),
               'purpose':text(r.get('REPUROBJECTIVE')),'actual_cancelled_shares':None,
               'identity':'ISSUER_BUYBACK','meaning':'CUMULATIVE_SCHEME_NOT_ADDITIVE_DISCLOSURES'}
@@ -453,17 +458,32 @@ def aggregate_activity(rows):
                       'disclosure_id':r['values']['disclosure_id'],'form':r['values']['form'],
                       'roster':[],'participants_count':None,'distinct_institutions':None,
                       'identity':'ATTENTION_NOT_CAPITAL_INVESTMENT'},'source_rows':[]})
-        require(g['ticker']==r['ticker'] and g['date']==r['date'] and g['disclosed']==r['disclosed'],
+        require(g['ticker']==r['ticker'] and g['date']==r['date'],
                 'ACTIVITY_EVENT_CONFLICT')
+        # One returned activity may have several publication-date claims. Keep
+        # all claims and source rows, not a fabricated earliest-public timestamp.
+        claims=g['values'].setdefault('disclosure_date_claims',[])
+        if r['disclosed'] not in claims:claims.append(r['disclosed'])
         g['source_rows'].extend(r['source_rows'])
         scope=r['values'].get('roster_scope','PARTICIPANT_DETAIL')
+        require(g['values'].get('roster_scope',scope)==scope,'ACTIVITY_ROSTER_SCOPE_CONFLICT')
         g['values']['roster_scope']=scope
-        g['values']['provider_reported_institution_entries']=r['values'].get('provider_reported_institution_entries')
+        counts=g['values'].setdefault('reported_institution_entry_claims',[])
+        count=r['values'].get('provider_reported_institution_entries')
+        if count not in counts:counts.append(count)
         g['values']['roster'].append({'actor_id':r['actor_id'],'name':r['actor_name'],
             'institution_code':r['values']['institution_code'],
             'institution_type':r['values']['institution_type'],
             'participant_text':r['values']['participants']})
     for g in groups.values():
+        claims=g['values']['disclosure_date_claims']
+        claims.sort(key=lambda x:x or '')
+        g['disclosed']=claims[0] if len(claims)==1 else None
+        g['values']['disclosure_date_status']=('SINGLE_SOURCE_DATE_CLAIM' if len(claims)==1
+                                               else 'MULTIPLE_SOURCE_DATES_NOT_RESOLVED')
+        counts=g['values']['reported_institution_entry_claims']
+        counts.sort(key=lambda x:x or '')
+        g['values']['provider_reported_institution_entries']=counts[0] if len(counts)==1 else None
         roster={canonical_hash(r):r for r in g['values']['roster']}
         g['values']['roster']=list(roster.values())
         codes={r['institution_code'] for r in roster.values() if r['institution_code']}
