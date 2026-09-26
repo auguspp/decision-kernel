@@ -83,7 +83,7 @@ def test_new_failed_source_keeps_actual_prior_data_and_cutoff(tmp_path):
 def test_missing_previous_blob_preserves_recovery_locator_not_empty_baseline(tmp_path):
     col,b,*_=setup(tmp_path);result=r.attach(col,b);refs=preserve_as_previous(col,result)
     del col.api.responses['git/blobs/'+refs['history']['git_blob']]
-    result=r.attach(col,b);sm=result['research']['smart_money']
+    result=r.attach(col,result);sm=result['research']['smart_money']
     assert sm['status']=='HISTORY_RECOVERY_GAP'
     assert sm['prior_retained_entry']['commit']=='b'*40
     assert sm['prior_retained_entry']['entry']['details']==refs
