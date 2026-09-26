@@ -16,6 +16,8 @@ from zoneinfo import ZoneInfo
 from ..identity import canonical_hash, canonical_json
 
 VERSION = 'smart-money-observation-v1'
+PROJECTION_REVISION = 'smart-money-projection-2'
+REQUEST_REVISION = 2
 WORKFLOW = '.github/workflows/radar-smart-money.yml'
 ZONE = ZoneInfo('Asia/Shanghai')
 HT = 'https://fuyao.aicubes.cn/api/a-share/'
@@ -109,18 +111,19 @@ def ticker(value, market=None):
     value = text(value, required=True)
     if re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', value):
         code,suffix=value.split('.')
-        allowed={'SH':code[0] in '569','SZ':code[0] in '0123','BJ':code[0] in '48' or code.startswith('92')}
+        allowed={'SH':code[0] in '56' or code.startswith('900'),'SZ':code[0] in '0123','BJ':code[0] in '48' or code.startswith('92')}
         require(allowed[suffix],'SECURITY_EXCHANGE_CONFLICT')
         if market is not None:require({'SHANGHAI':'SH','SHENZHEN':'SZ','BEIJING':'BJ'}.get(market)==suffix,'SECURITY_MARKET_CONFLICT')
         return value
     require(re.fullmatch(r'\d{6}', value) is not None, 'SECURITY_CODE')
+    require(market is None or market in {'SHANGHAI','SHENZHEN','BEIJING'}, 'SECURITY_MARKET_UNRESOLVED')
     suffix = {'SHANGHAI':'SH', 'SHENZHEN':'SZ', 'BEIJING':'BJ'}.get(market)
     if suffix is None:
         if value[0] == '6': suffix = 'SH'
         elif value[0] in '03': suffix = 'SZ'
         elif value[0] in '48' or value.startswith('92'): suffix = 'BJ'
     require(suffix is not None, 'SECURITY_EXCHANGE_UNRESOLVED')
-    return value + '.' + suffix
+    return ticker(value + '.' + suffix, market)
 
 
 def periods(asof):
@@ -130,11 +133,13 @@ def periods(asof):
     return (prior.isoformat(), end.isoformat())
 
 
-def spec(family, partition, begin, end, page=1):
+def spec(family, partition, begin, end, page=1, *, revision=REQUEST_REVISION):
     require(family in FAMILIES and type(page) is int and 1 <= page <= MAX_PAGES, 'SOURCE_SCOPE')
     first, last = day(begin), day(end)
     require(first <= last and (last-first).days <= 366, 'SOURCE_WINDOW')
+    require(type(revision) is int and revision in (1,2), 'REQUEST_REVISION')
     base = {'family': family, 'partition': partition, 'begin': begin, 'end': end, 'page': page}
+    if revision==2:base['contract_revision']=2
     if family in {'hot_money','institutional'}:
         require(page == 1 and first <= day(partition) <= last, 'BOARD_SCOPE')
         return {**base, 'provider':'HT', 'url': HT+'special-data/dragon-tiger-list',
@@ -149,7 +154,9 @@ def spec(family, partition, begin, end, page=1):
         parts=partition.split('@');require(parts[0] in {'SH','SZ'} and len(parts)<=2 and page==1,'HKEX_SCOPE')
         if len(parts)==2:require(parts[1] in periods(last),'HKEX_HISTORICAL_PERIOD')
         from .smart_money_documents import HKEX
-        return {**base,'provider':'HKEX','url':HKEX,'params':{'t':parts[0].lower()},
+        query = ({'query_asof':min(last,day(parts[1])+timedelta(days=30)).isoformat()}
+                 if revision>=2 and len(parts)==2 else {})
+        return {**base,**query,'provider':'HKEX','url':HKEX,'params':{'t':parts[0].lower()},
                 'method':'POST' if len(parts)==2 else 'GET'}
     if family == 'executives':
         return {**base, 'provider':'FT', 'url':FT+'holder/stock-ggmx',
@@ -174,8 +181,15 @@ def spec(family, partition, begin, end, page=1):
     }
     if family=='holdings': require(day(partition) <= last and partition in periods(last), 'HOLDER_PERIOD')
     report, columns, sort, order, where = configs[family]
+    if family=='activity' and revision>=2:
+        # Existing AKShare event-summary protocol avoids scanning each
+        # participant as a separate event. Roster breadth remains explicit.
+        report,columns='RPT_ORG_SURVEYNEW','ALL'
+        sort,order='NOTICE_DATE,SUM,RECEIVE_START_DATE,SECURITY_CODE','-1,-1,-1,1'
+        where='(NUMBERNEW="1")'+where
+    size=500 if revision==2 and family in {'activity','holder_changes','repurchases'} else PAGE_SIZE
     return {**base, 'provider':'EM', 'url':EM, 'params':{'reportName':report, 'columns':columns,
-        'sortColumns':sort,'sortTypes':order,'pageSize':str(PAGE_SIZE),'pageNumber':str(page),
+        'sortColumns':sort,'sortTypes':order,'pageSize':str(size),'pageNumber':str(page),
         'source':'WEB','client':'WEB','filter':where}}
 
 
@@ -270,14 +284,19 @@ def normalize(rawrow, request, index, request_index, envelope=None):
                 seat=text(x.get('name'),required=True);values={k+'_cny':number(x.get(k)) for k in ('buy','sell','net')}
                 if all(values[k] is not None for k in ('buy_cny','sell_cny','net_cny')):
                     require(abs(Decimal(values['buy_cny'])-Decimal(values['sell_cny'])-Decimal(values['net_cny']))<=Decimal('0.02'),'SEAT_ARITHMETIC')
-                identity=canonical_hash([seat,values])
+                anonymous=seat in {'机构专用','深股通专用','沪股通专用'}
+                identity=canonical_hash([seat,side,n] if anonymous else [seat,values])
                 if identity in unique:
                     unique[identity]['values']['shown_on'].append(side)
                     unique[identity]['source_rows'].append([request_index,index,side,n])
                     continue
                 values.update(window_days=None, window_status='SOURCE_DID_NOT_RETURN_WINDOW', shown_on=[side],
                               identity='BROKERAGE_SEAT_NOT_BENEFICIAL_OWNER', holding='NOT_INFERRED')
-                item=_entry(f,[code,part,group,seat],code,None,'SEAT:'+seat,seat,part,None,values,[request_index,index,side,n])
+                if anonymous:
+                    values.update(identity='ANONYMOUS_DISCLOSED_SEAT_ROW',anonymous_row=True,
+                                  independent_actor_count=None,additive_across_sides=False)
+                item=_entry(f,[code,part,group,seat,*([side,n] if anonymous else [])],code,None,
+                            'SEAT_LABEL:'+seat if anonymous else 'SEAT:'+seat,seat,part,None,values,[request_index,index,side,n])
                 unique[identity]=item
         for item in unique.values():
             item['version']=canonical_hash({k:v for k,v in item.items() if k not in {'source_rows','version'}})
@@ -313,15 +332,25 @@ def normalize(rawrow, request, index, request_index, envelope=None):
               'name_match_group':canonical_hash(name),'current_holding':'NOT_ESTABLISHED',
               'nominee':text(r.get('HOLDER_NAME'))=='香港中央结算有限公司'}
         require(vals['shares'] is not None and Decimal(vals['shares'])>=0,'HOLDING_AMOUNT')
-        return [_entry(f,[code,holder_key,report],code,text(r.get('SECURITY_NAME_ABBR')),actor,name,report,published,vals,ref)]
+        # A provider ID can represent multiple named accounts; a missing ID
+        # cannot turn two equal names/ranks into one actual natural person.
+        account=[name,vals['share_class']] if hid else [name,vals['share_class'],vals['rank']]
+        vals['account_identity']='SOURCE_NAMED_ACCOUNT' if hid else 'UNRESOLVED_PERSON_RANKED_ROW'
+        return [_entry(f,[code,holder_key,report,*account],code,text(r.get('SECURITY_NAME_ABBR')),actor,name,report,published,vals,ref)]
     if f=='activity':
         code=ticker(r.get('SECUCODE'));require(code[:6]==r.get('SECURITY_CODE'),'SECURITY_IDENTITY')
         published=_date_field(r,'NOTICE_DATE',end,required=True);when=_date_field(r,'RECEIVE_START_DATE',end,required=True)
         require(day(request['begin'])<=day(published) and when<=published,'ACTIVITY_WINDOW')
         doc=text(r.get('URL'));obj=text(r.get('OBJECT_CODE'));name=text(r.get('RECEIVE_OBJECT'))
-        event=canonical_hash([code,doc,when,r.get('RECEIVE_END_DATE')]) if doc else None
+        summary=request['params'].get('reportName')=='RPT_ORG_SURVEYNEW'
+        event=canonical_hash([code,doc,when,r.get('RECEIVE_END_DATE')]) if doc else (
+            canonical_hash([code,when,r.get('RECEIVE_END_DATE'),r.get('RECEIVE_TIME_EXPLAIN'),
+                            r.get('RECEIVE_WAY_EXPLAIN'),r.get('RECEIVE_PLACE')]) if summary else None)
         actor='EM:ORG:'+obj if obj else 'UNRESOLVED:'+canonical_hash([code,event,name])
-        vals={'event_id':event,'event_identity':'DISCLOSURE_AND_DATE_GROUP' if event else 'NOT_ESTABLISHED',
+        vals={'event_id':event,'event_identity':('DISCLOSURE_AND_DATE_GROUP' if doc else
+              'PROVIDER_REPORTED_ACTIVITY_GROUP' if summary else 'NOT_ESTABLISHED'),
+              'roster_scope':'SUMMARY_REPRESENTATIVE_NOT_COMPLETE_ROSTER' if summary else 'PARTICIPANT_DETAIL',
+              'provider_reported_institution_entries':number(r.get('SUM')) if summary else None,
               'disclosure_id':doc,'institution_code':obj,'institution_type':text(r.get('ORG_TYPE')),
               'form':text(r.get('RECEIVE_WAY_EXPLAIN')),'participants':text(r.get('INVESTIGATORS')),
               'institution_identity':'PROVIDER_CODE' if obj else 'UNRESOLVED_GENERIC_OR_TEXT',
@@ -345,8 +374,10 @@ def normalize(rawrow, request, index, request_index, envelope=None):
               'amount_cny':number(r.get('change_amount')),'average_cny':number(r.get('avg_price')),
               'position':text(r.get('position')),'relation':text(r.get('relation')),
               'reason':text(r.get('change_reason')),'after_shares':number(r.get('shares_after')),
+              'related_executive_name':text(r.get('executive_name')),
               'identity':'ISSUER_SCOPED_NAME_NO_CROSS_ISSUER_PERSON_MERGE','phase':'REPORTED_EXECUTION_NOT_PLAN'}
-        return [_entry(f,[code,person,when,r.get('change_shares'),r.get('change_amount')],code,text(r.get('stock_name')),
+        return [_entry(f,[code,person,when,r.get('change_shares'),r.get('change_amount'),
+                         r.get('executive_name'),r.get('position'),r.get('relation')],code,text(r.get('stock_name')),
                        'ISSUER_PERSON:'+code+':'+person,person,when,pub,vals,ref)]
     if f=='holder_changes':
         # Keep actual inspected provider fields: the aggregate quantity unit is
@@ -425,6 +456,9 @@ def aggregate_activity(rows):
         require(g['ticker']==r['ticker'] and g['date']==r['date'] and g['disclosed']==r['disclosed'],
                 'ACTIVITY_EVENT_CONFLICT')
         g['source_rows'].extend(r['source_rows'])
+        scope=r['values'].get('roster_scope','PARTICIPANT_DETAIL')
+        g['values']['roster_scope']=scope
+        g['values']['provider_reported_institution_entries']=r['values'].get('provider_reported_institution_entries')
         g['values']['roster'].append({'actor_id':r['actor_id'],'name':r['actor_name'],
             'institution_code':r['values']['institution_code'],
             'institution_type':r['values']['institution_type'],
@@ -435,7 +469,8 @@ def aggregate_activity(rows):
         codes={r['institution_code'] for r in roster.values() if r['institution_code']}
         g['values']['known_institution_codes']=len(codes)
         g['values']['unresolved_roster_rows']=sum(not r['institution_code'] for r in roster.values())
-        if all(r['institution_code'] for r in roster.values()):
+        if (g['values'].get('roster_scope')=='PARTICIPANT_DETAIL'
+                and all(r['institution_code'] for r in roster.values())):
             g['values']['distinct_institutions']=len(codes)
         g['version']=canonical_hash({k:v for k,v in g.items() if k not in {'source_rows','version'}})
     return list(groups.values())

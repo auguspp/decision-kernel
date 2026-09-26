@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+from contextlib import nullcontext
 from datetime import timedelta
 from hashlib import sha256
 import json
@@ -49,24 +50,26 @@ def validate_identity(value):
     return value
 
 
-def request_raw(spec):
+def request_raw(spec, *, public_session=None):
     """Credentials are used only on their one reviewed host; no redirects/proxy."""
     if spec['family']=='calendar': s.require(spec==s.calendar_spec(),'REQUEST_SPEC')
     elif spec['family']=='forecast_pdf':s.require(spec==docs.pdf_spec(spec['partition'],spec['begin'],spec['end']),'REQUEST_SPEC')
     elif spec['family']=='north_holdings' and '@' in spec['partition']:
-        base=s.spec(*(spec[k] for k in ('family','partition','begin','end','page')))
+        base=s.spec(*(spec[k] for k in ('family','partition','begin','end','page')),revision=spec.get('contract_revision',1))
         s.require({k:v for k,v in spec.items() if k not in {'form','form_source'}}==base,'HKEX_POST_SPEC')
         s.require(re.fullmatch('raw-[0-9]{4}\\.body',spec['form_source']) is not None,'HKEX_FORM_SOURCE')
         s.require(spec['form'].get('__EVENTTARGET')=='btnSearch' and
-                  spec['form'].get('txtShareholdingDate')==spec['partition'].split('@')[1].replace('-','/'),'HKEX_POST_DATE')
-    else: s.require(spec==s.spec(*(spec[k] for k in ('family','partition','begin','end','page'))),'REQUEST_SPEC')
+                  spec['form'].get('txtShareholdingDate')==spec.get('query_asof',spec['partition'].split('@')[1]).replace('-','/'),'HKEX_POST_DATE')
+    else: s.require(spec==s.spec(*(spec[k] for k in ('family','partition','begin','end','page')),revision=spec.get('contract_revision',1)),'REQUEST_SPEC')
     header={'Accept-Encoding':'identity','User-Agent':'Mozilla/5.0 DecisionKernel-SmartMoney/1', 'Accept':'application/json'}
     secrets=[]
     if spec['provider'] in KEYS:
         envname,hname=KEYS[spec['provider']]; key=os.environ.get(envname,'')
         s.require(bool(key) and key.isascii() and all(32<ord(c)<127 for c in key),'CREDENTIAL_UNAVAILABLE')
         header[hname]=key;secrets.append(key.encode())
-    with _session() as client:
+    s.require(public_session is None or spec['provider']=='HKEX','PUBLIC_SESSION_SCOPE')
+    context=nullcontext(public_session) if public_session is not None else _session()
+    with context as client:
         with client.request(spec.get('method','GET'),spec['url'],params=spec['params'],
                         **({'data':spec['form']} if spec.get('method')=='POST' else {}),headers=header,stream=True,
                         timeout=(10,25),allow_redirects=False) as response:
@@ -83,7 +86,7 @@ def request_raw(spec):
             return response.status_code,raw
 
 
-def make_plan(asof, calendar_value, previous=None):
+def make_plan(asof, calendar_value, previous=None, *, track_calendar=True, pending_only=False):
     """Look back on real trading sessions; known missed dates are never forgotten."""
     cutoff=s.clock(asof); end=cutoff.astimezone(s.ZONE).date(); start=end-timedelta(days=90)
     trade_days=[];calendar_error=None
@@ -97,6 +100,14 @@ def make_plan(asof, calendar_value, previous=None):
     else: calendar_error='CALENDAR_UNAVAILABLE'
     previous=previous or {}
     s.require(not previous or previous.get('version')==s.VERSION,'PREVIOUS_PLAN_VERSION')
+    enumerated = previous.get('calendar_enumerated_through') if track_calendar else None
+    pending_since = previous.get('calendar_pending_since') if track_calendar else None
+    if enumerated is not None:
+        s.require(s.day(enumerated) <= end, 'FUTURE_CALENDAR_PROGRESS')
+    if pending_since is not None:
+        s.require(s.day(pending_since) <= end, 'FUTURE_CALENDAR_GAP')
+    if calendar_error and track_calendar:
+        pending_since = pending_since or previous.get('target_date') or end.isoformat()
     pending=previous.get('unresolved',[])
     s.require(isinstance(pending,list) and len(pending)<=4096,'PENDING_SCOPE')
     missed=[]
@@ -114,10 +125,24 @@ def make_plan(asof, calendar_value, previous=None):
         # sessions after its last actual check, not merely the latest window.
         prior_cutoff=previous.get('cutoff')
         if prior_cutoff:
-            prior_day=s.clock(prior_cutoff).astimezone(s.ZONE).date().isoformat()
             s.require(s.clock(prior_cutoff)<=cutoff,'FUTURE_PREVIOUS_CHECK')
+        # Attempt time is NOT coverage. Preserve the last successfully enumerated
+        # session across arbitrarily many partial/failed daily captures.
+        anchor = enumerated
+        if anchor:
+            missed.extend(d for d in known if anchor < d <= latest.isoformat())
+        if pending_since:
+            missed.extend(d for d in known if pending_since <= d <= latest.isoformat())
+        if not anchor and not pending_since and prior_cutoff:
+            prior_day=s.clock(prior_cutoff).astimezone(s.ZONE).date().isoformat()
             missed.extend(d for d in known if prior_day<d<=latest.isoformat())
         trade_days=sorted((set(trade_days)|set(missed)) & known)
+        # The finite tail is retained separately below; enumerated != delivered.
+        enumerated=latest.isoformat()
+        if pending_since and pending_since < min(known):
+            calendar_error='CALENDAR_RECOVERY_RANGE_NOT_COVERED'
+        else:
+            pending_since=None
     partitions=[]
     for f in s.FAMILIES:
         if f in {'hot_money','institutional','seats','northbound'}:
@@ -147,7 +172,21 @@ def make_plan(asof, calendar_value, previous=None):
             deferred.append({**p,'previous_cutoff':old['cutoff'],'reason':'QUARTER_BASELINE_REUSED_WITH_EXPLICIT_AGE'})
         else:active.append(p)
     partitions=active
-    return {'deferred_partitions':deferred,'asof':asof,'target_date':end.isoformat(),'partitions':partitions,'calendar_error':calendar_error,
+    if pending_only and previous:
+        needed={(g.get('family'),g.get('partition')) for g in pending}
+        needed.update(('north_holdings',p.split('@')[0]) for f,p in list(needed)
+                      if f=='north_holdings' and isinstance(p,str) and '@' in p)
+        active=[]
+        for p in partitions:
+            prior_complete=next((old for old in completed if old['family']==p['family'] and
+                old['partition']==p['partition'] and old['begin']<=p['begin'] and old['end']>=p['end']),None)
+            if (p['family'],p['partition']) in needed or prior_complete is None:active.append(p)
+            else:deferred.append({**p,'previous_cutoff':previous['cutoff'],
+                                  'reason':'SAVED_PARTITION_REUSED_IN_EXPLICIT_PENDING_REPAIR'})
+        partitions=active
+    return {**({'calendar_enumerated_through':enumerated, 'calendar_pending_since':pending_since,
+                'pending_only':pending_only} if track_calendar else {}),
+            'deferred_partitions':deferred,'asof':asof,'target_date':end.isoformat(),'partitions':partitions,'calendar_error':calendar_error,
             'trading_sessions':trade_days[:20],'unprocessed_trading_sessions':trade_days[20:],
             'prior_unresolved':pending,'scope':'LATEST_TWO_ENDED_REPORT_PERIODS_AND_90D_DISCLOSURES; INITIAL_FIVE_SESSIONS_PLUS_KNOWN_GAPS'}
 
@@ -157,6 +196,8 @@ def _http_reason(status, raw):
     try:
         obj=s.decode(raw)
         if isinstance(obj,dict) and obj.get('code') in STOP_CODES: return 'BUSINESS_'+str(obj['code'])
+        if isinstance(obj,dict) and obj.get('success') is False and obj.get('code')==9701:
+            return 'SOURCE_BUSY'
     except (ValueError,TypeError): pass
     return None
 
@@ -167,15 +208,16 @@ def payload(raw, request):
 
 def _parse_partition(records, files, scope):
     """Pure original-byte reconstruction; never trust recorded success/counts."""
-    rows=[];total=pages=None;received=0;errors=[];seen_raw=set();duplicate_raw=0;failure=None;page_fingerprints=set();source_counts=[]
+    rows=[];total=pages=None;received=0;errors=[];excluded=[];seen_raw=set();duplicate_raw=0;failure=None;page_fingerprints=set();source_counts=[]
     for n,record in enumerate(records,1):
-        expected=s.spec(scope['family'],scope['partition'],scope['begin'],scope['end'],n)
+        expected=s.spec(scope['family'],scope['partition'],scope['begin'],scope['end'],n,
+                        revision=record['request'].get('contract_revision',1))
         if expected.get('method')=='POST':
             source=record['request'].get('form_source','')
             s.require(re.fullmatch('raw-[0-9]{4}\\.body',source) is not None,'HKEX_FORM_SOURCE')
             s.require(int(source[4:8])<record['index'],'HKEX_FORM_CHRONOLOGY')
             channel,period=expected['partition'].split('@')
-            expected={**expected,'form_source':source,'form':docs.post_form(files[source],channel,period)}
+            expected={**expected,'form_source':source,'form':docs.post_form(files[source],channel,expected.get('query_asof',period))}
         s.require(record['request']==expected,'PAGE_PLAN_DIFFERS')
         if record['body'] is None:
             failure=record['error'];break
@@ -196,6 +238,15 @@ def _parse_partition(records, files, scope):
                 fingerprint=canonical_hash(row)
                 if fingerprint in seen_raw: duplicate_raw+=1
                 seen_raw.add(fingerprint)
+                # The provider's whole-market holder table also returns NQ
+                # securities. They are outside this exchange-scoped reader,
+                # retained with a counted disposition, never silently remapped.
+                if (scope['family']=='holdings' and isinstance(row,dict) and
+                    re.fullmatch(r'\d{6}\.NQ',str(row.get('SECUCODE',''))) and
+                    row['SECUCODE'][:6]==row.get('SECURITY_CODE')):
+                    excluded.append({'source_row':[record['index'],i],
+                        'security':row['SECUCODE'],'reason':'OUTSIDE_SH_SZ_BJ_SCOPE_NQ'})
+                    continue
                 try: rows.extend(s.normalize(row,expected,i,record['index'],obj))
                 except (ValueError,KeyError,TypeError,IndexError) as exc:
                     reason=exc.args[0] if type(exc) is s.SourceError else type(exc).__name__
@@ -208,14 +259,15 @@ def _parse_partition(records, files, scope):
         except (ValueError,KeyError,TypeError):
             failure='ACTIVITY_EVENT_CONFLICT';dedup=[]
     complete=bool(records and failure is None and pages is not None and len(records)==max(1,pages)
-                  and received==total and not errors and conflicts==0)
+                  and received==total and not errors and conflicts==0 and duplicate_raw==0)
+    if duplicate_raw and failure is None: failure='DUPLICATE_SOURCE_ROWS'
     if not records: failure='NOT_ATTEMPTED'
     elif failure is None and pages is not None and len(records)<max(1,pages): failure='PAGE_OR_TIME_BUDGET'
     return {'family':scope['family'],'partition':scope['partition'],'begin':scope['begin'],'end':scope['end'],
             'status':'QUALIFIED_SOURCE_SCOPE' if complete else 'PARTIAL_OR_UNAVAILABLE',
             'complete':complete,'provider_total':total,'provider_pages':pages,'returned_rows':received,
             'normalized_rows':len(dedup),'duplicate_page_rows':duplicate_raw,'conflicting_identities':conflicts,
-            'row_errors':errors,'failure':failure,'rows':dedup,'source_disclosure_counts':source_counts,
+            'row_errors':errors,'excluded_rows':excluded,'failure':failure,'rows':dedup,'source_disclosure_counts':source_counts,
             'coverage_meaning':'PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS'}
 
 
@@ -245,7 +297,7 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
     records=manifest['records'];s.require(isinstance(records,list) and len(records)<=s.MAX_REQUESTS,'REQUEST_BUDGET')
     names={'capture.json'};prior=begin;totalbytes=0
     for i,record in enumerate(records):
-        s.require(record['index']==i,'REQUEST_INDEX')
+        s.require(type(record['index'])is int and record['index']==i,'REQUEST_INDEX')
         prior=_validate_record(record,files,prior,finish)
         if record['body'] is not None:names.add(record['body']);totalbytes+=record['bytes']
     s.require(names==set(files) and totalbytes<=s.MAX_TOTAL_RAW,'CAPTURE_FILE_SCOPE')
@@ -254,7 +306,14 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
     if records[0]['body'] is not None and _http_reason(records[0]['http_status'],files[records[0]['body']]) is None:
         try: cal=s.decode(files[records[0]['body']])
         except (ValueError,TypeError): pass
-    plan=make_plan(manifest['started_at'],cal,manifest.get('previous_state'))
+    tracked='calendar_enumerated_through' in manifest['plan']
+    s.require(tracked == ('calendar_pending_since' in manifest['plan']), 'CALENDAR_PLAN_FIELDS')
+    if not tracked:
+        s.require(not any(k in (manifest.get('previous_state') or {}) for k in ('calendar_enumerated_through','calendar_pending_since')), 'LEGACY_PLAN_WITH_NEW_STATE')
+    revision=manifest.get('request_revision',1)
+    s.require(type(revision) is int and revision in (1,2),'REQUEST_REVISION')
+    plan=make_plan(manifest['started_at'],cal,manifest.get('previous_state'),track_calendar=tracked,
+                   pending_only=manifest.get('repair_pending',False))
     s.require(plan==manifest['plan'],'CAPTURE_PLAN_DIFFERS')
     expected_order=[(p['family'],p['partition']) for p in plan['partitions']]
     groups={};last=-1;stopped=set();pdf_records=[]
@@ -268,6 +327,7 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
             pdf_records.append(record)
         elif record is not records[0]:
             s.require(not pdf_records,'SOURCE_AFTER_PDF')
+            s.require(request.get('contract_revision',1)==revision,'MIXED_REQUEST_REVISION')
             pair=request['family'],request['partition'];s.require(pair in expected_order,'UNPLANNED_PARTITION')
             pos=expected_order.index(pair);s.require(pos>=last,'PARTITION_ORDER');last=pos
             groups.setdefault(pair,[]).append(record)
@@ -280,7 +340,9 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
         elif record['error'] in {'CREDENTIAL_REFLECTION','DESTINATION_CHANGED'}:stopped.add(provider)
     partitions=[_parse_partition(groups.get((p['family'],p['partition']),[]),files,p) for p in plan['partitions']]
     report_rows=[r for p in partitions if p['family']=='forecasts' for r in p['rows']]
-    selected_pdfs=docs.select_reports(report_rows)
+    legacy_selection=manifest.get('pdf_selection','BROKER_ORDER_V1')=='BROKER_ORDER_V1'
+    s.require(manifest.get('pdf_selection','BROKER_ORDER_V1') in {'BROKER_ORDER_V1','ISSUER_BROKER_V2'},'PDF_SELECTION_POLICY')
+    selected_pdfs=docs.select_reports(report_rows,legacy=legacy_selection)
     s.require(len(pdf_records)<=len(selected_pdfs),'UNPLANNED_PDF_COUNT')
     pdf_results=[]
     for i,r in enumerate(selected_pdfs):
@@ -310,7 +372,7 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
                           for f in ('hot_money','institutional','seats','northbound'))
     for gap in plan['prior_unresolved']:
         family,part=gap.get('family'),gap.get('partition')
-        if part=='CALENDAR_UNAVAILABLE' and plan['trading_sessions']:
+        if part=='CALENDAR_UNAVAILABLE' and plan['trading_sessions'] and not plan['calendar_error']:
             continue
         candidates=[p for p in partitions if p['family']==family and p['partition']==part]
         covered=any(p['complete'] and
@@ -320,18 +382,36 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
             and g.get('begin')==gap.get('begin') and g.get('end')==gap.get('end') for g in unresolved)
         if not covered and not same_current:
             unresolved.append(gap)
-    return {'version':s.VERSION,'target_date':plan['target_date'],'cutoff':manifest['finished_at'],
+    return {'version':s.VERSION,'projection_revision':s.PROJECTION_REVISION,'request_revision':revision,
+            'target_date':plan['target_date'],'cutoff':manifest['finished_at'],
+            'calendar_enumerated_through':(plan.get('calendar_enumerated_through') or
+                (max(plan['trading_sessions'],default=None) if plan['calendar_error'] is None else None)),
+            'calendar_pending_since':plan.get('calendar_pending_since'),
             'trading_sessions':plan['trading_sessions'],'partitions':partitions,'unresolved':unresolved,
             'policy_stops':sorted(stopped),
             'deferred_partitions':plan['deferred_partitions'],
-            'forecast_documents':pdf_results,'pdf_selection_scope':'AT_MOST_TWO_LATEST_PER_FIRST_SIX_RETURNED_BROKERS_WITH_EPS_NOT_FULL_REPORT_COVERAGE',
+            'forecast_documents':pdf_results,'pdf_selection_scope':('BROKER_ORDER_V1_RETAINED_NOT_ISSUER_COMPARABLE' if legacy_selection else 'ISSUER_BROKER_V2_MAX_12_NOT_FULL_REPORT_COVERAGE'),
             'capture_hash':manifest['capture_hash'],'requests':len(records),'source_calls_during_replay':0,
             'status':'READY' if not unresolved else 'PARTIAL_WITH_EXPLICIT_GAPS' if available else 'UNAVAILABLE_NOT_QUIET',
             'available_partitions':available,'identity':manifest['identity'], **s.AUTHORITY}
 
 
-def capture(output, execution, *, previous_state=None, skip_hithink=False, transport=request_raw,
+def capture(output, execution, *, previous_state=None, skip_hithink=False, repair_pending=False, transport=request_raw,
             clock=s.now, monotonic=time.monotonic, sleep=time.sleep):
+    options=dict(previous_state=previous_state,skip_hithink=skip_hithink,
+                 repair_pending=repair_pending,clock=clock,monotonic=monotonic,sleep=sleep)
+    if transport is not request_raw:
+        return _capture(output,execution,transport=transport,**options)
+    # One public HKEX search session for its GET/stateful POST. No credential is
+    # sent to HKEX or copied to the other providers, and cookies are not saved.
+    with _session() as public:
+        def send(req):
+            return request_raw(req,public_session=public if req['provider']=='HKEX' else None)
+        return _capture(output,execution,transport=send,**options)
+
+
+def _capture(output, execution, *, previous_state=None, skip_hithink=False, repair_pending=False, transport=request_raw,
+             clock=s.now, monotonic=time.monotonic, sleep=time.sleep):
     validate_identity(execution);output=Path(output)
     s.require(not output.exists() and not any(p.is_symlink() for p in (output,*output.parents)),'OUTPUT_EXISTS_OR_SYMLINK')
     output.mkdir(parents=True)
@@ -341,7 +421,8 @@ def capture(output, execution, *, previous_state=None, skip_hithink=False, trans
         stopped.update((previous_state or {}).get('policy_stops',[]))
     s.require(stopped <= {'HT','FT','EM','HKEX'},'PRIOR_POLICY_STOPS')
     manifest={'version':s.VERSION,'identity':execution,'started_at':start,'finished_at':None,
-              'previous_state':deepcopy(previous_state),'records':records,'authority':s.AUTHORITY}
+              'previous_state':deepcopy(previous_state),'records':records,'authority':s.AUTHORITY,
+              'request_revision':s.REQUEST_REVISION,'pdf_selection':'ISSUER_BROKER_V2','repair_pending':repair_pending}
     def save():
         manifest['finished_at']=clock()
         manifest['capture_hash']=canonical_hash({k:v for k,v in manifest.items() if k!='capture_hash'})
@@ -381,7 +462,7 @@ def capture(output, execution, *, previous_state=None, skip_hithink=False, trans
     if record['body'] is not None and _http_reason(record['http_status'],files[record['body']]) is None:
         try: cal=s.decode(files[record['body']])
         except (ValueError,TypeError): pass
-    manifest['plan']=make_plan(start,cal,previous_state);save()
+    manifest['plan']=make_plan(start,cal,previous_state,pending_only=repair_pending);save()
     for part in manifest['plan']['partitions']:
         total=pages=None
         for page in range(1,s.MAX_PAGES+1):
@@ -392,7 +473,7 @@ def capture(output, execution, *, previous_state=None, skip_hithink=False, trans
                 parent=next((r for r in records if r['request']['family']=='north_holdings' and
                              r['request']['partition']==channel and r['body'] and r['http_status']==200),None)
                 if parent is None:break
-                try:req={**req,'form_source':parent['body'],'form':docs.post_form(files[parent['body']],channel,period)}
+                try:req={**req,'form_source':parent['body'],'form':docs.post_form(files[parent['body']],channel,req.get('query_asof',period))}
                 except (ValueError,KeyError,TypeError):break
             rec=get(req)
             if rec['body'] is None or _http_reason(rec['http_status'],files[rec['body']]):break
@@ -403,8 +484,8 @@ def capture(output, execution, *, previous_state=None, skip_hithink=False, trans
                 if page>=max(1,pages):break
             except (ValueError,KeyError,TypeError):break
     report_records=[r for r in records if r['request']['family']=='forecasts']
-    scope=next(p for p in manifest['plan']['partitions'] if p['family']=='forecasts')
-    report_part=_parse_partition(report_records,files,scope)
+    scope=next((p for p in manifest['plan']['partitions'] if p['family']=='forecasts'),None)
+    report_part=_parse_partition(report_records,files,scope) if scope else {'rows':[]}
     for r in docs.select_reports(report_part['rows']):
         if len(records)>=s.MAX_REQUESTS:break
         get(docs.pdf_spec(r['values']['report_id'],scope['begin'],scope['end']))
@@ -423,12 +504,13 @@ def main(argv=None):
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--previous-state',type=Path)
     parser.add_argument('--skip-hithink',action='store_true')
+    parser.add_argument('--repair-pending',action='store_true')
     args=parser.parse_args(argv)
     previous=None
     if args.previous_state:
         raw=args.previous_state.read_bytes();s.require(len(raw)<=512*1024,'PREVIOUS_STATE_SIZE')
         previous=json.loads(raw)
-    result=capture(args.output,identity(os.environ),previous_state=previous,skip_hithink=args.skip_hithink)
+    result=capture(args.output,identity(os.environ),previous_state=previous,skip_hithink=args.skip_hithink,repair_pending=args.repair_pending)
     print(json.dumps({k:result[k] for k in ('version','status','target_date','capture_hash','requests','available_partitions','unresolved')},ensure_ascii=False))
     return 0
 

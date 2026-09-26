@@ -9,6 +9,11 @@ on:
         description: 'Reviewed exact current main; leave empty only for normal scheduled code identity'
         required: false
         type: string
+      repair-pending:
+        description: 'Explicitly repair retained incomplete partitions using this reviewed main; do not reacquire completed scopes'
+        required: false
+        default: false
+        type: boolean
 permissions:
   contents: read
   actions: read
@@ -35,6 +40,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           EXPECTED_CODE: ${{ inputs.code-sha }}
+          REPAIR_PENDING: ${{ inputs.repair-pending }}
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python .github/scripts/smart-money-control.py
@@ -44,12 +50,14 @@ jobs:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
           FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
           SKIP_HITHINK: ${{ steps.control.outputs.skip_hithink }}
+          REPAIR_PENDING: ${{ steps.control.outputs.repair_pending }}
         run: |
           args=()
           if [ -f "$RUNNER_TEMP/smart-money-previous-state.json" ]; then
             args+=(--previous-state "$RUNNER_TEMP/smart-money-previous-state.json")
           fi
           if [ "$SKIP_HITHINK" = 'true' ]; then args+=(--skip-hithink); fi
+          if [ "$REPAIR_PENDING" = 'true' ]; then args+=(--repair-pending); fi
           python -m decision_kernel.runtime.smart_money_capture --output "$RUNNER_TEMP/smart-money" "${args[@]}"
       - name: Rebuild originals offline without source credentials
         if: steps.control.outputs.run_capture == 'true' && success()

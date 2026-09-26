@@ -41,8 +41,13 @@ def state(observation, old=None):
             completed[p['family'],p['partition']]['cutoff']=observation['cutoff']
     return {'version':s.VERSION,'target_date':observation['target_date'],
             'cutoff':observation['cutoff'],'capture_hash':observation['capture_hash'],
-            'late_confirmation_complete':(s.clock(observation['cutoff']).astimezone(s.ZONE).hour>=19 or
-                max(observation['trading_sessions'],default='')<observation['target_date']),
+            'last_source_run_id':observation['identity']['run_id'],
+            'calendar_enumerated_through':observation.get('calendar_enumerated_through'),
+            'calendar_pending_since':observation.get('calendar_pending_since'),
+            'late_confirmation_complete':bool(observation['trading_sessions'] and
+                observation.get('calendar_enumerated_through') and
+                (s.clock(observation['cutoff']).astimezone(s.ZONE).hour>=19 or
+                 max(observation['trading_sessions'])<observation['target_date'])),
             'unresolved':observation['unresolved'],'policy_stops':observation.get('policy_stops',[]),
             'completed_partitions':list(completed.values()),
             'meaning':'SAVED_DELIVERY_PROGRESS_NOT_SOURCE_TRUTH'}
@@ -51,23 +56,37 @@ def state(observation, old=None):
 def history(observation, prior=None):
     """An older quarter/failed family never turns into a current zero position."""
     prior=prior or {}; current_hash=observation['capture_hash']
-    if prior.get('capture_hash')==current_hash:
+    if prior.get('capture_hash')==current_hash and prior.get('projection_revision')==s.PROJECTION_REVISION:
         return deepcopy(prior)
+    reinterpret=bool(prior.get('capture_hash')==current_hash and prior.get('projection_revision')!=s.PROJECTION_REVISION)
+    if reinterpret:
+        prior=deepcopy(prior)
+        prior['records']=[r for r in prior['records'] if r['origin']!=current_hash]
     store={(r['family'],r['data']['id'],r['data']['version']):deepcopy(r) for r in prior.get('records',[])}
     old_ids=defaultdict(set)
     for f,i,v in store:old_ids[f,i].add(v)
     first=not prior.get('capture_hash');changes=Counter();examples=[]
     for p in observation['partitions']:
+        if p['complete'] and p['family'] in {'holdings','north_holdings'}:
+            # An authoritative replacement of this source snapshot may remove a
+            # row. Keep its historical bytes, but do not keep presenting it as
+            # a member of the corrected current snapshot (or infer a sale).
+            current_keys={(p['family'],r['id'],r['version']) for r in p['rows']}
+            periods={r['date'] for r in p['rows']} or {p['partition']}
+            for key,retained in store.items():
+                if key[0]==p['family'] and retained['data']['date'] in periods and key not in current_keys:
+                    retained['withdrawn_from_source_snapshot_at']=observation['cutoff']
         for raw in p['rows']:
             key=p['family'],raw['id'],raw['version']
             if key in store:
                 # Stable rows retain their original provenance and bytes. The current
                 # family capture records how recently they were checked.
-                if len(old_ids.get(key[:2],()))>1:
-                    store[key]['last_seen']=observation['cutoff']
+                store[key]['last_seen']=observation['cutoff']
+                store[key].pop('withdrawn_from_source_snapshot_at',None)
                 changes['UNCHANGED']+=1
                 continue
-            tag=('BASELINE_FIRST_OBSERVED' if first else 'SOURCE_VERSION_CHANGED'
+            tag=('REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT' if reinterpret else
+                 'BASELINE_FIRST_OBSERVED' if first else 'SOURCE_VERSION_CHANGED'
                  if old_ids.get(key[:2]) else 'NEWLY_OBSERVED_NOT_NEWLY_OCCURRED')
             entry={'family':p['family'],'partition':p['partition'],'data':deepcopy(raw),
                    'origin':current_hash,'first_seen':observation['cutoff'],'last_seen':observation['cutoff'],'change':tag}
@@ -87,7 +106,8 @@ def history(observation, prior=None):
     for part in observation['partitions']:
         coverage[part['family']+'|'+part['partition']]={'complete':part['complete'],'cutoff':observation['cutoff'],
             'origin':current_hash,'begin':part['begin'],'end':part['end']}
-    return {'version':s.VERSION,'capture_hash':current_hash,'cutoff':observation['cutoff'],
+    return {'version':s.VERSION,'projection_revision':s.PROJECTION_REVISION,
+            'reinterpretation':reinterpret,'capture_hash':current_hash,'cutoff':observation['cutoff'],
             'coverage':coverage,
             'records':rows,'changes':dict(changes),'change_examples':examples,
             'first_baseline':first,'display_retention':'100D_EVENTS_AND_TWO_ENDED_QUARTERS; OLDER_IMMUTABLE_GIT_HISTORY_UNCHANGED',
@@ -138,22 +158,22 @@ def decode_chunks(meta, chunks):
 def latest_rows(hist,family):
     byid={}
     for r in hist['records']:
-        if r['family']!=family:continue
+        if r['family']!=family or r.get('withdrawn_from_source_snapshot_at'):continue
         # Same-id content conflicts within a capture remain concurrent; no
         # silent numeric comparison/aggregation of those records.
         old=byid.setdefault(r['data']['id'],[])
         old.append(r)
     out=[]
     for group in byid.values():
-        at=max(r['last_seen'] for r in group)
-        out.extend(r['data'] for r in group if r['last_seen']==at)
+        at=max(s.clock(r['last_seen']) for r in group)
+        out.extend(r['data'] for r in group if s.clock(r['last_seen'])==at)
     return out
 
 
 def holdings_changes(hist,family='holdings'):
     groups=defaultdict(dict);conflicts=set()
     for r in latest_rows(hist,family):
-        key=r['ticker'],r['actor_id'],r['values'].get('share_class')
+        key=r['ticker'],r['actor_id'],r['actor_name'],r['values'].get('share_class')
         if r['date'] in groups[key]:conflicts.add(key)
         groups[key][r['date']]=r
     output=[]
@@ -175,30 +195,40 @@ def top_ten_transitions(hist):
     rows=latest_rows(hist,'holdings');quarters=sorted({r['date'] for r in rows})[-2:]
     if len(quarters)<2 or not all(hist.get('coverage',{}).get('holdings|'+p,{}).get('complete') for p in quarters):
         return {'status':'ABSENCE_COMPARISON_UNQUALIFIED','entries':[],'departures':[]}
-    bycompany=defaultdict(lambda:defaultdict(dict))
+    bycompany=defaultdict(lambda:defaultdict(dict));ambiguous=set()
     for r in rows:
-        if r['date'] in quarters:bycompany[r['ticker']][r['date']][r['actor_id']]=r
+        if r['date'] in quarters:
+            records=bycompany[r['ticker']][r['date']]
+            key=(r['actor_id'],r['actor_name'],r['values'].get('share_class'))
+            if key in records:ambiguous.add(r['ticker'])
+            records[key]=r
     entries=[];departures=[]
     for code,periods in bycompany.items():
+        if code in ambiguous:continue
         if not all(p in periods for p in quarters):continue
         old,new=(periods[p] for p in quarters)
         for key in new.keys()-old.keys():
-            r=new[key];entries.append({'ticker':code,'actor_name':r['actor_name'],'actor_id':key,
+            r=new[key];entries.append({'ticker':code,'actor_name':r['actor_name'],'actor_id':r['actor_id'],
                 'period':quarters[1],'prior_period':quarters[0],'shares':r['values']['shares'],
                 'meaning':'NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE'})
         for key in old.keys()-new.keys():
-            r=old[key];departures.append({'ticker':code,'actor_name':r['actor_name'],'actor_id':key,
+            r=old[key];departures.append({'ticker':code,'actor_name':r['actor_name'],'actor_id':r['actor_id'],
                 'period':quarters[1],'prior_period':quarters[0],
                 'meaning':'ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO'})
-    return {'status':'COMPARABLE_PROVIDER_QUARTERS_NOT_COMPLETE_BENEFICIAL_OWNERSHIP','entries':entries,'departures':departures}
+    return {'status':('CONCURRENT_SNAPSHOT_VERSIONS_NOT_COMPARABLE' if ambiguous else
+        'COMPARABLE_PROVIDER_QUARTERS_NOT_COMPLETE_BENEFICIAL_OWNERSHIP'),
+        'ambiguous_companies':sorted(ambiguous),'entries':entries,'departures':departures}
 
 
 def attention_counts(hist,target):
     from datetime import timedelta
-    last=s.day(target);a=(last-timedelta(days=30)).isoformat();b=(last-timedelta(days=90)).isoformat()
+    last=s.day(target);a=(last-timedelta(days=29)).isoformat();b=(last-timedelta(days=89)).isoformat()
+    coverage=hist.get('coverage',{}).get('activity|disclosures',{})
+    comparable=bool(coverage.get('complete') and coverage.get('begin','9999')<=b
+                    and coverage.get('end','')>=target)
     groups={}
     for r in latest_rows(hist,'activity'):
-        if r['date']<b or not r['values'].get('event_id'):continue
+        if not b<=r['date']<=target or not r['values'].get('event_id'):continue
         g=groups.setdefault(r['ticker'],{'ticker':r['ticker'],'company':r['company'],'events_30d':0,
             'events_previous_60d':0,'known_org_codes':set(),'unresolved_roster_rows':0})
         g['events_30d' if r['date']>=a else 'events_previous_60d']+=1
@@ -206,8 +236,9 @@ def attention_counts(hist,target):
         g['unresolved_roster_rows']+=r['values']['unresolved_roster_rows']
     for g in groups.values():
         g['known_distinct_org_codes_90d']=len(g.pop('known_org_codes'))
+        g['count_qualification']='COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS' if comparable else 'OBSERVED_LOWER_BOUND'
         g['recent_vs_prior_monthly_rate']=(str(Decimal(g['events_30d'])*2/Decimal(g['events_previous_60d']))
-            if g['events_previous_60d'] else None)
+            if comparable and g['events_previous_60d'] else None)
         g['meaning']='COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE'
     return list(groups.values())
 
@@ -223,9 +254,14 @@ def summarize(obs,hist):
             'status':('DEFERRED_WITH_EXPLICIT_LAST_CAPTURE' if deferred and not parts else
                       'NOT_ACQUIRED' if not parts else 'COMPLETE_PROVIDER_SCOPES' if all(p['complete'] for p in parts) else 'PARTIAL_OR_UNAVAILABLE'),
             'earliest_period':min((r['date'] for r in rows),default=None),'latest_period':max((r['date'] for r in rows),default=None),
-            'current_rows':sum(p['normalized_rows'] for p in parts),'deferred':deferred,
+            'current_rows':sum(p['normalized_rows'] for p in parts),
+            'out_of_scope_rows':sum(len(p.get('excluded_rows',[])) for p in parts),'deferred':deferred,
             'partitions':[compact_part(p) for p in parts]}
+        families[f]['unresolved_partitions']=sum(g.get('family')==f for g in obs['unresolved'])
+        if families[f]['unresolved_partitions'] and families[f]['status']=='COMPLETE_PROVIDER_SCOPES':
+            families[f]['status']='CURRENT_SCOPES_AVAILABLE_WITH_HISTORICAL_GAPS'
         if f=='activity':
+            families[f]['roster_coverage']='PROVIDER_EVENT_SUMMARIES_NOT_ALL_PARTICIPANT_ROWS'
             families[f]['event_groups']=sum(r['values'].get('event_id') is not None for r in rows)
             families[f]['unidentified_event_rows']=sum(r['values'].get('event_id') is None for r in rows)
             families[f]['known_institution_codes']=len({t['institution_code'] for r in rows for t in r['values']['roster'] if t['institution_code']})
@@ -238,7 +274,7 @@ def summarize(obs,hist):
         'status':obs['status'],'families':families,'unresolved':obs['unresolved'],
         'increment_counts':hist['changes'],'first_baseline':hist['first_baseline'],
         'top_ten_changes':{'status':transitions['status'],'entries':len(transitions['entries']),
-            'departures':len(transitions['departures']),'entry_examples':transitions['entries'][:30],
+            'departures':len(transitions['departures']),'ambiguous_companies':transitions.get('ambiguous_companies',[]),'entry_examples':transitions['entries'][:30],
             'departure_examples':transitions['departures'][:20]},
         'institutional_attention':{'companies':len(attention),'examples':attention[:30],
             'scope':'COMPLETE_LOOKUP_REBUILDS_ALL_COMPANIES_FROM_SAME_SAVED_ROWS'},
@@ -263,6 +299,8 @@ def render(overview,hist,*,failure=None):
     lines += ['| 独立观察面 | 已保存记录/公司 | 当前覆盖 | 原统计/事件日期 |', '|---|---:|---|---|']
     for f,v in overview['families'].items():
         lines.append(f"| {v['title']} | {v['saved_records']} / {v['companies']} | {v['status']}；{v['complete_partitions']}/{v['current_partitions']}批 | {v['earliest_period']}—{v['latest_period']} |")
+    if overview['families']['holdings'].get('out_of_scope_rows'):
+        lines += ['', '来源表中另有 '+str(overview['families']['holdings']['out_of_scope_rows'])+' 条NQ记录，已逐条保留范围外处置，不伪装成沪深北股票。']
     lines += ['', '## 可直接继续研究的公开线索','', '以下按来源时间/原始顺序展示，不是投资排名；全部记录可按公司或参与者检索。','']
     for f in ('hot_money','institutional','executives','repurchases','placements'):
         rr=latest_rows(hist,f);latest=max((r['date'] for r in rr),default='')
@@ -282,7 +320,7 @@ def render(overview,hist,*,failure=None):
     for r in overview['holding_comparisons']['examples'][:8]:
         lines.append(f"- {md(r['actor'])} / {md(r['ticker'])}：{r['prior_period']} {r['previous_shares']}股 → {r['period']} {r['shares']}股；差 {r['change_shares']}股。")
     lines += ['', '### 机构调研与预测','',
-              '调研按公司、披露文件和活动日期组合分组；机构明细行不当事件数，泛称投资者不当已识别机构。',
+              '调研按来源已披露活动分组；事件摘要覆盖与参与者明细覆盖分开。原披露文件未给出时保留来源时间/方式分组，不认证实际场次。代表机构一行不等于完整名单，泛称投资者不当已识别机构。',
               '研报EPS相对槽位不自动认定目标年/币种/股本口径；只有正文明确同时列示的新旧同指标，才显示为“券商在该文声称的修订”，不是已独立找回旧报告。']
     for doc in overview['forecast_documents']:
         for r in doc.get('revisions',[]):
@@ -344,8 +382,19 @@ async function init(){
   for(const ch of pack.chunks){
     const bytes=Uint8Array.from(atob(ch.base64),c=>c.charCodeAt(0));
     if(bytes.length!==ch.ref.bytes)throw Error('保存数据长度不符');
-    const buf=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
-    if(buf.byteLength!==ch.ref.expanded_bytes)throw Error('保存数据展开长度不符');
+    if(!globalThis.crypto?.subtle?.digest)throw Error('当前环境缺少安全摘要能力');
+    const digest=new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',bytes));
+    const hex=Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
+    if(hex!==ch.ref.sha256)throw Error('保存数据SHA256不符');
+    if(!Number.isSafeInteger(ch.ref.expanded_bytes)||ch.ref.expanded_bytes<0||ch.ref.expanded_bytes>268435456)throw Error('展开预算无效');
+    const reader=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')).getReader();
+    const pieces=[];let count=0;
+    try{
+      while(true){const {done,value}=await reader.read();if(done)break;count+=value.length;
+        if(count>ch.ref.expanded_bytes){await reader.cancel();throw Error('展开超出声明长度');}pieces.push(value);}
+    }finally{reader.releaseLock();}
+    if(count!==ch.ref.expanded_bytes)throw Error('保存数据展开长度不符');
+    const buf=new Uint8Array(count);let offset=0;for(const piece of pieces){buf.set(piece,offset);offset+=piece.length;}
     const part=JSON.parse(new TextDecoder().decode(buf));
     if(part.length!==ch.ref.rows)throw Error('保存数据行数不符');records.push(...part);
   }

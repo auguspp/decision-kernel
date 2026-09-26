@@ -59,6 +59,11 @@ def native(c):
     m.check(len({r['id'] for r in runs})==len(runs),'smart-money duplicate runs')
     if not runs:return {'status':'NOT_RUN','observation':None}
     selected=max(runs,key=lambda r:(m.clock(r['created_at']),r['id']))
+    return read_run(c,selected,follow_control=True)
+
+
+def read_run(c,selected,*,follow_control=False):
+    _reserve(c,calls=6,files=2)
     run=c.api.get('actions/runs/'+str(selected['id']))
     m.check(all(run[k]==selected[k] for k in ('id','head_sha','event','run_attempt')),'smart-money run changed')
     identity={'repository':run.get('repository',{}).get('full_name'),'workflow':run['path'],
@@ -87,6 +92,18 @@ def native(c):
         status['control']=control;status['control_archive']=origin
     captures=[a for a in artifacts if a['name']==f"smart-money-{run['id']}-1"]
     if not captures:
+        pending=(control or {}).get('pending_source_run_id')
+        if follow_control and control and control['decision']=='SKIP_AWAITING_PRIOR_CAPTURE_READING' and pending:
+            m.check(type(pending)is int and pending>0 and pending!=run['id'],'smart-money invalid prior capture locator')
+            bound=c.api.get('actions/runs/'+str(pending))
+            m.check(bound['id']==pending and m.clock(bound['created_at'])<m.clock(run['created_at']),
+                    'smart-money prior capture chronology')
+            recovered=read_run(c,bound,follow_control=False)
+            recovered['source_run']=recovered.get('source_run',recovered.get('latest_attempt'))
+            recovered['latest_attempt']=m.concise_run(run)
+            recovered['control']=control
+            recovered['reading_relation']='EXACT_UNCONSUMED_CAPTURE_BOUND_BY_CONTROL_NOT_SILENT_SUCCESS_FALLBACK'
+            return recovered
         return {**status,'status':('NO_NEW_CAPTURE_REQUIRED' if control and control['decision']=='SKIP_ALREADY_DELIVERED'
                                   else 'CAPTURE_NOT_SAVED_NOT_QUIET')}
     m.check(len(captures)==1,'smart-money capture duplicate')
@@ -95,6 +112,8 @@ def native(c):
     observation=capture.replay(files,identity,cutoff=c.now())
     m.check(m.clock(run['created_at'])<=m.clock(manifest['started_at'])<=m.clock(manifest['finished_at'])
             <=m.clock(run['updated_at']),'smart-money capture clock binding')
+    # A checkpoint from a failed job may yield useful partial facts but cannot
+    # erase missing deliveries or be promoted into complete source qualification.
     if job['conclusion']!='success':
         observation['status']='PARTIAL_FAILED_EXECUTION'
         observation['unresolved'].append({'family':'execution','partition':str(run['id']),'failure':'CAPTURE_JOB_FAILED'})
@@ -123,7 +142,7 @@ def _attach(c,baseline):
         hist=view.history(obs,(old or {}).get('history'))
         overview=view.summarize(obs,hist);state=view.state(obs,(old or {}).get('state'))
         origins[obs['capture_hash']]={'reading_commit':None,'archive':current['archive'],
-            'run':current['latest_attempt'],'capture_hash':obs['capture_hash'],'cutoff':obs['cutoff']}
+            'run':current.get('source_run',current['latest_attempt']),'capture_hash':obs['capture_hash'],'cutoff':obs['cutoff']}
     elif old:
         hist=old['history'];overview=deepcopy(old['overview']);state=old['state']
     else:
