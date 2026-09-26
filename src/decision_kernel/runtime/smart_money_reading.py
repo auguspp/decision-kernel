@@ -11,7 +11,8 @@ import json
 
 from ..identity import canonical_hash
 from . import current_state as m, current_state_delivery as delivery
-from . import smart_money_sources as s, smart_money_capture as capture, smart_money_view as view\nfrom . import smart_money_relay as relay_supplement
+from . import smart_money_sources as s, smart_money_capture as capture, smart_money_view as view
+from . import smart_money_relay as relay_supplement
 from .institutional_radar_reading import _reserve, ERRORS
 
 PREFIX='details/radar/smart-money/'
