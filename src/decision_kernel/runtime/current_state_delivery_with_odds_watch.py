@@ -70,6 +70,9 @@ class Collector(base.Collector):
             payload = attach_disposition(self, payload)
             from .research_reentry_reading import attach as attach_reentry
             payload = attach_reentry(self, payload)
+        if getattr(self, "include_smart_money", False):
+            from .smart_money_reading import attach as attach_smart_money
+            payload = attach_smart_money(self, payload)
         if payload['research'].get('on_demand_archives'):
             from .research_archive_index import navigation
             raw = self.files['README.md'] + navigation(payload['research']['on_demand_archives']).encode()
@@ -141,6 +144,7 @@ def main(argv=None) -> int:
     parser.add_argument("--include-external-radar", action="store_true")
     parser.add_argument("--include-reviewed-questions", action="store_true")
     parser.add_argument("--include-daily-news", action="store_true")
+    parser.add_argument("--include-smart-money", action="store_true")
     parser.add_argument("--include-industry-breadth", action="store_true")
     parser.add_argument("--include-easy-stock-context", action="store_true")
     parser.add_argument("--include-tdx-concept-context", action="store_true")
@@ -178,6 +182,7 @@ def main(argv=None) -> int:
         collector.include_external_radar = args.include_external_radar
         collector.include_reviewed_questions = args.include_reviewed_questions
         collector.include_daily_news = args.include_daily_news
+        collector.include_smart_money = args.include_smart_money
         collector.include_industry_breadth = args.include_industry_breadth
         collector.include_easy_stock_context = args.include_easy_stock_context
         collector.include_tdx_concept_context = args.include_tdx_concept_context
