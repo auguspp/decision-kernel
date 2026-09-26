@@ -43,7 +43,7 @@ async function waitFor(predicate) {
   assert.fail('App did not settle within the bounded local test');
 }
 let instance = 0;
-async function withApp(run) {
+async function withApp(run, fixture = {}) {
   const ids = Object.fromEntries(['nav', 'modules', 'detail', 'content', 'heading', 'subtitle', 'refresh', 'identity']
     .map(id => [id, new Node('div')]));
   const calls = [], completions = [], overrides = new Map();
@@ -71,9 +71,9 @@ async function withApp(run) {
         signal_transition_authority: 'NONE', human_attention_authority: 'NONE',
         research_authority: 'NONE', investment_authority: 'NONE',
         research: {first: descriptor(ref, 'first'), second: descriptor(ref, 'second')}});
-    } else if (url.endsWith('/issues/575')) result = json({number: 575, comments: 0,
+    } else if (url.endsWith('/issues/575')) result = json({number: 575, comments: fixture.comments?.length || 0,
       html_url: `https://github.com/${REPO}/issues/575`});
-    else if (url.includes('/issues/575/comments?')) result = json([]);
+    else if (url.includes('/issues/575/comments?')) result = json(fixture.comments || []);
     else if (url.endsWith('/issues/581')) result = json({number: 581, title: 'Fixture', body: 'Synthetic health',
       html_url: `https://github.com/${REPO}/issues/581`, updated_at: '2026-09-25T00:00:00Z'});
     else {
@@ -82,7 +82,7 @@ async function withApp(run) {
     }
     completions.push(url); return result;
   };
-  const globals = {document: {getElementById: id => ids[id], createElement: tag => new Node(tag),
+  const globals = {document: {head: new Node('head'), getElementById: id => ids[id], createElement: tag => new Node(tag),
     createTextNode: text => new Node('#text', text)}, fetch: fetcher};
   const saved = Object.fromEntries(Object.keys(globals).map(k => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
   try {
@@ -97,8 +97,9 @@ async function withApp(run) {
       const item = find(ids.content, n => n.tagName === 'button' && n.textContent === `读取 · docs/odds-${name}.txt`);
       assert.ok(item, name); return item.onclick();
     };
+    const initialText = ids.content.textContent;
     tab('Odds / Watch');
-    await run({ids, tab, select, calls, completions, overrides, file, body,
+    await run({initialText, ids, tab, select, calls, completions, overrides, file, body,
       setRef(ref) { activeRef = ref; }, refresh: () => ids.refresh.onclick()});
   } finally {
     for (const key of Object.keys(globals)) {
@@ -154,5 +155,32 @@ test('equal-length corruption shows integrity failure, no original and no copy-s
     assert.ok(ids.detail.textContent.includes('FILE_INTEGRITY_MISMATCH'));
     assert.ok(!ids.detail.textContent.includes(body(R1, 'second')));
     assert.ok(!find(ids.detail, n => n.tagName === 'button'));
+  });
+});
+
+// The actual saved manual-heading case previously disappeared from the main view.
+// This is a bounded source fragment fixture, not a live research invocation.
+test('manual Quick is visible as research, not lost under nonstandard supplements', async () => {
+  const text = '## MANUAL E2E HOSTED QUICK 2026-09-25\n\n# 实际研究交付\n\n## 结论\n\n这是可选Full建议，不是买入建议；原因仍有UNKNOWN。\n\n## 范围\n\n未开展Full。';
+  await withApp(async ({ids, tab, initialText}) => {
+    assert.ok(initialText.includes('手动 Quick'));
+    assert.ok(initialText.includes('结论开头 · 原文摘录'));
+    assert.ok(initialText.includes('这是可选Full建议，不是买入建议；原因仍有UNKNOWN。'));
+    assert.ok(!initialText.includes('本次读取范围没有可识别的 Quick'));
+    tab('注意力');
+    assert.ok(ids.content.textContent.includes('未开展Full。'));
+    assert.ok(ids.identity.textContent.includes('北京时间'));
+  }, {comments: [{id: 5829920878, body: text,
+    html_url: `https://github.com/${REPO}/issues/575#issuecomment-5829920878`,
+    created_at: '2026-09-25T09:14:34Z', updated_at: '2026-09-25T09:14:34Z'}]});
+});
+test('untrusted text stays literal in paragraph display; no HTML/image execution nodes', async () => {
+  await withApp(async ({ids, overrides, tab}) => {
+    const url = `https://api.github.com/repos/${REPO}/issues/581`;
+    overrides.set(url, () => json({number:581,title:'Health',body:'# Test\n\n<script>bad()</script><img src=x onerror=bad()>',
+      updated_at:'2026-09-25T00:00:00Z',html_url:`https://github.com/${REPO}/issues/581`}));
+    await ids.refresh.onclick(); tab('系统健康');
+    assert.ok(ids.content.textContent.includes('<script>bad()</script>'));
+    assert.ok(!find(ids.content,n=>['script','img','iframe'].includes(n.tagName)));
   });
 });
