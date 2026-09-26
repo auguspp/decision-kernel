@@ -2,7 +2,7 @@
 
 日期：2026-09-26。Authority：#297/5845050149。Human要求把已购第三方 Tushare Relay 接入并重新梳理现有数据源。本文是工程编排合同，不是第二需求库、数据真伪评分或自动 provider router。Evidence changes Belief；Price changes Odds；Data != Evidence != Judgment != Decision。
 
-**部署状态：本文描述已授权的目标职责。Relay增量仍在#593 Draft，尚未完成主干合并、正常发布和真实消费验收；下文“正式补充/生产接点”不是上线回执。**
+**部署与验收：本文是已授权并实现的来源职责及运行合同；实际PR、main、发布、来源和消费状态分别以#593最新回执为准。下文“正式补充/生产接点”本身不是上线或全市场完整性证明。**
 
 ## 1. 三层必须分开
 
@@ -62,12 +62,12 @@ upstream_pool_exhausted 以及 HTTP 200 / code=1,msg=timeout 按供应商说明�
 
 ## 5. 第一生产接点
 
-radar-smart-money 保留现有主采不变，在同一合格 capture run 后追加一个**独立可失败的 Relay supplement artifact**。它只消费主采已确认的最近完成交易日，不自己猜交易日。
+radar-smart-money 保留现有主采不变，在同一合格 capture run 后追加一个**独立可失败的 Relay supplement artifact**。它只消费主采已确认的最近完成交易日，不自己猜交易日。显式`relay-only`维护沿第8节复用精确已保存主采原件，不为新增补充重复请求原12类来源。
 
 初始固定接口：
 - hm_list：正式名录，__probe=0；
 - hm_detail：该完成交易日的游资明细；
-- report_rc：该日公开结构化预测修订；
+- report_rc：本次实际取得日及此前6个日历日的结构化预测记录；报告日与目标季度分别保留，不把记录自动命名为修订；
 - top_list / top_inst：龙虎榜交叉检查。
 
 每个接口单独保存原响应和请求/排队回执；一个接口排队不吞其他接口。Relay supplement 不写进现有 137k canonical Smart Money history，不重命名原来源，不成为综合“聪明钱分数”。正常 publisher 把 supplement 的结构化结果和原 artifact locator 放进同一 research.smart_money details，Hosted Quick 可按需读取。
@@ -87,10 +87,25 @@ Relay 关闭或质量下降时，删除其 caller、secret引用、专属 tests 
 
 同名重复列、错误API、矛盾count或业务错误不能变成有效表；日期或证券身份有问题的行保留原值及行号，不进入合格行。机构`side`空值保留为字段缺口，不猜买榜/卖榜，也不丢掉可用的金额和营业部资料。不同上榜原因、重叠窗口、机构专用与具名身份仍不合并。
 
-官方hm_list单次1000、hm_detail单次2000、report_rc单次3000，top_list/top_inst单次10000；Relay请求limit=5000不证明它突破了上游限制。解释采用请求limit与官方单次界限中较小者作为截断警告，不自行追加请求或宣称全量。返回count大于保存行数另报缺口；count相等也不是全市场完整证明。空页不是没有资本行为。
+官方hm_list单次1000、hm_detail单次2000、report_rc单次3000，top_list/top_inst单次10000；旧Relay请求limit=5000不证明它突破了上游限制。新计划分别使用1000/2000/3000，两个龙虎榜接口维持5000。解释采用请求limit与官方单次界限中较小者作为截断警告，不自行追加请求或宣称全量。返回count大于保存行数另报缺口；count相等也不是全市场完整证明。空页不是没有资本行为。
 
 真实旧复测36230932993/artifact10901553881：44份原body的bytes/SHA256及外ZIP CRC已核。两个龙虎榜接口各5行是受限样本；top_inst这5行side均空，金额/身份/日期仍可读。该次hm_list/hm_detail/report_rc为排队失败，不用后来的复测成功改写它；这不是本轮新取数或完整生产验收。
 
-官方接口合同：Tushare文档311、312、292、106、107。report_rc官方更新时钟为交易日21:15与次日09:15；旧Relay capability文本另称19—22点，二者是不同声明。现有17:20/20:10执行与预测更新时间并不等价。迟到窗口、真正分页、服务级鉴权/限流停止和免重复主采的补取仍属采集侧待完成事项，不能由本次离线解释签收。
+官方接口合同：Tushare文档311、312、292、106、107。report_rc官方更新时钟为交易日21:15与次日09:15；旧Relay capability文本另称19—22点，二者是不同声明。现有17:20/20:10执行与预测更新时间并不等价。这一阶段仅交付离线解释。迟到窗口、服务级停止和免重复主采的补取由第8节后继实现；真正分页以及更广市场完整性仍未由单页返回建立。
 
 此解释仅使用原件与标准库和既有canonical工具；不新增HTTP实现、凭证入口、provider路由、定时或费用。退出时随Relay消费者一并移除解释模块及专属回归，保留原件、旧解释和研究引用。
+
+
+## 8. 原客户端保留与有界采集接续（计划revision 2）
+
+**Reuse Decision: KEEP原有限HTTP客户端，THIN_ADAPTER既有capture/control/reader。** `tushare_relay.py`继续使用原blob `d2ee02a81648eafe7204a47e7f8e41b56c3c48fd`，不替换请求、地址、凭证、TLS或重试实现。上次平台拦截的新客户端没有重试或移到别处重建。旧“必须更换客户端才能继续”的前提由实际职责分离及测试撤销，不把一次被拦截的动作扩大成GitHub全仓没有写权限。
+
+现有采集器在第一次请求前、每个接口后、完成时保存manifest检查点。401/403/429、明确鉴权/限流状态或无法取得安全请求回执时，停止本服务本轮后续接口；已取得原件保留，未调用项明确标记，异常消息和反射凭证不公开。无法取得请求回执时实际HTTP次数UNKNOWN，不填0。旧客户端的单次30秒临时队列重试不扩大为重复轮询。
+
+新`plan_revision=2`只影响后继采集：report_rc查询实际取得日及此前6个日历日，交易榜单仍查询经主采确认的交易日。实际报告期、披露日、取得日和中转更新时间互不替代。manifest绑定精确主采identity/capture_hash/cutoff/trading_sessions；新补充属于当前执行身份，旧主采保持原运行/代码/截止。旧无revision的manifest及其单日请求按revision1原样重放，原hash不重命名。
+
+维护输入`relay-only=true`必须是显式workflow_dispatch、给出当前已通过独立main CI的`code-sha`，有固定R内原state，并且不同时请求`repair-pending`。现有控制器只选该state明确登记的`last_source_run_id`，核其原件artifact唯一性、run/head/digest/大小/时间；原生download-artifact以精确artifact ID和run ID取得。Relay实际执行前再次离线重放原件；正常publisher再次核新旧身份、主采日历与补充manifest。不改原canonical history，不把旧价格或交易日标为新取得。
+
+原主采每日三次调用上限不放宽。Relay-only额外按当天**实际已启动Relay job**计数，跨代码版本不归零，累计最多3次；未开始、skipped或仅主采控制的run不是已做Relay请求。库存/身份读取不完整时停止，而不是重置配额。原有两次工作日日程和并发隔离保持，不新增午夜/晨间任务。
+
+正常采集使用同run主原件，显式维护使用上述唯一旧原件。源作业、正常发布、固定R读取与有用研究消费必须分别实测；fixture、成功退出或300余项相关回归不能代替这些。单页达到上限、返回日期/字段缺口、机构side未知、未公开身份与自然可靠性继续可见。关闭Relay时一起移除其caller、专属解释/reader/control分支、workflow接点与测试，保留旧原件、历史解释及研究引用；原12族继续运行。

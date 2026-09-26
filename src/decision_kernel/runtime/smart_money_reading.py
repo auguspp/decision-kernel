@@ -149,6 +149,32 @@ def read_run(c,selected,*,follow_control=False):
         status['control']=control;status['control_archive']=origin
     captures=[a for a in artifacts if a['name']==f"smart-money-{run['id']}-1"]
     if not captures:
+        reuse=(control or {}).get('decision')=='SKIP_RELAY_ONLY_REUSE_CAPTURE'
+        if follow_control and reuse:
+            declared=control.get('relay_source') or {}
+            pending=declared.get('run_id')
+            m.check(type(pending)is int and pending>0 and pending!=run['id'],
+                    'smart-money relay reuse source locator')
+            bound=c.api.get('actions/runs/'+str(pending))
+            m.check(bound['id']==pending and bound['head_sha']==declared.get('head_sha') and
+                    m.clock(bound['created_at'])<m.clock(run['created_at']),
+                    'smart-money relay reuse chronology')
+            recovered=read_run(c,bound,follow_control=False)
+            obs=recovered.get('observation')
+            m.check(obs is not None and obs['capture_hash']==declared.get('capture_hash'),
+                    'smart-money relay reuse capture binding')
+            source_archive=recovered['archive']
+            m.check(source_archive['artifact_id']==declared.get('artifact_id') and
+                    source_archive['sha256']==declared.get('digest','').removeprefix('sha256:') and
+                    source_archive['bytes']==declared.get('bytes'), 'smart-money relay reuse archive binding')
+            context=status['_relay_context']
+            context.update(market_session=max(obs['trading_sessions'],default=None),
+                           primary_capture=relay_supplement.source_binding(obs), requires_reuse_binding=True)
+            recovered.update(source_run=recovered.get('source_run',recovered.get('latest_attempt')),
+                latest_attempt=m.concise_run(run), control=control, control_archive=status.get('control_archive'),
+                _relay_context=context, reading_relation='EXACT_REUSED_PRIMARY_CALENDAR_NOT_NEW_MARKET_CAPTURE',
+                run_metadata_reads=metadata_reads+recovered.get('run_metadata_reads',[]))
+            return recovered
         pending=(control or {}).get('pending_source_run_id')
         if follow_control and control and control['decision']=='SKIP_AWAITING_PRIOR_CAPTURE_READING' and pending:
             m.check(type(pending)is int and pending>0 and pending!=run['id'],'smart-money invalid prior capture locator')
@@ -176,6 +202,7 @@ def read_run(c,selected,*,follow_control=False):
         observation['status']='PARTIAL_FAILED_EXECUTION'
         observation['unresolved'].append({'family':'execution','partition':str(run['id']),'failure':'CAPTURE_JOB_FAILED'})
     status['_relay_context']['market_session']=max(observation['trading_sessions'],default=None)
+    status['_relay_context']['primary_capture']=relay_supplement.source_binding(observation)
     return {**status,'status':observation['status'],'observation':observation,'archive':archive,
             'capture_hash':manifest['capture_hash'],'job_id':job['id'],'job_conclusion':job['conclusion']}
 
@@ -323,6 +350,11 @@ def current_relay(c, context):
             <=m.clock(manifest['finished_at'])<=m.clock(run['updated_at']),
             'smart-money relay run clock binding')
     m.check(result['market_session']==context['market_session'],'smart-money relay calendar differs')
+    if context.get('requires_reuse_binding'):
+        m.check(result.get('plan_revision')==2,'smart-money relay reuse needs explicit source binding')
+    if result.get('plan_revision')==2:
+        m.check(result.get('source_capture')==context.get('primary_capture'),
+                'smart-money relay source capture differs')
     if conclusion!='success':
         result=deepcopy(result)
         result['status']='PARTIAL_FAILED_EXECUTION'

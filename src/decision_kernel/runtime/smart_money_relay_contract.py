@@ -78,7 +78,11 @@ def qualify(body: dict, spec: dict, *, received_at: str) -> dict:
         issues.append({"code": "POSSIBLE_TRUNCATION", "boundary": min(cap, limit)})
     if count is not None and count > len(rows):
         issues.append({"code": "COUNT_EXCEEDS_SAVED_ROWS", "reported_count": count})
-    allowed_day = _day(params[date_field]) if date_field else None
+    if api == "report_rc" and "report_date" not in params:
+        first_day, last_day = _day(params["start_date"]), _day(params["end_date"])
+        s.require(0 <= (last_day - first_day).days <= 6, "RELAY_REPORT_WINDOW_BOUND")
+    else:
+        first_day = last_day = _day(params[date_field]) if date_field else None
     received_day = s.clock(received_at).astimezone(s.ZONE).date()
     valid_indexes, row_gaps, field_gaps = [], [], []
     for index, row in enumerate(rows):
@@ -87,7 +91,7 @@ def qualify(body: dict, spec: dict, *, received_at: str) -> dict:
             if date_field:
                 try:
                     day = _day(row[date_field])
-                    if day != allowed_day:
+                    if not first_day <= day <= last_day:
                         problems.append("REQUEST_DATE_MISMATCH")
                     if day > received_day:
                         problems.append("FUTURE_DISCLOSURE_DATE")
