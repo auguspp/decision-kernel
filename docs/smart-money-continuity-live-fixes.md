@@ -69,3 +69,29 @@ capture must separately validate the corrected page requests. Temporary patch
 assembly is confined to its expiring work branch and excluded from the product
 PR; remove it after use. Retire changed source-specific tests with the source,
 preserve shared readers and all historical failures/archives.
+
+## Public protocol delta verified after the full-capture replay
+
+The 90-day participant-detail endpoint returns 80,933 rows at its supported 50-row
+page size; asking 500/1000 returns business9701, not a permission denial. The
+existing AKShare event-summary protocol RPT_ORG_SURVEYNEW returns 5,586 disclosed
+activity groups in 12 pages at500. Revision2 uses that distinct event scope,
+retains its reported institution-entry count and representative label, and never
+claims a full named participant roster or independently certified event count.
+Legacy detail bodies keep their original interpretation. Source/page counts and
+row-level gaps remain separate; full participant coverage is still incomplete.
+
+The same public HKEX form with session continuity returned December31 for a
+March31 query, but March31 for an April30 query. The search date is an as-of
+availability date, not the target holdings period. New requests retain both, use
+a deterministic target+30-day query bounded by capture date, and still require
+the returned holdings heading to equal the target quarter. No date is relabelled
+and the extra query date is not claimed as publication date. The public session
+is closed after collection, cookies are never persisted, and other providers'
+credentials remain isolated. Old form requests are replayed unchanged.
+
+Evidence: preparation36215930160, artifact10897492295, SHA256
+46bd280bc0a45bf94505079a0806665ed7431363a0b92cdd89b507f571fb2e57;
+original public HKEX search_form.js in artifact10897636240. The JS itself only
+validates the date; it was read, not executed. Formal source recovery follows
+normal CI/merge. No additional source provider or standing workload is created.

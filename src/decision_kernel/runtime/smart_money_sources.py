@@ -154,7 +154,9 @@ def spec(family, partition, begin, end, page=1, *, revision=REQUEST_REVISION):
         parts=partition.split('@');require(parts[0] in {'SH','SZ'} and len(parts)<=2 and page==1,'HKEX_SCOPE')
         if len(parts)==2:require(parts[1] in periods(last),'HKEX_HISTORICAL_PERIOD')
         from .smart_money_documents import HKEX
-        return {**base,'provider':'HKEX','url':HKEX,'params':{'t':parts[0].lower()},
+        query = ({'query_asof':min(last,day(parts[1])+timedelta(days=30)).isoformat()}
+                 if revision>=2 and len(parts)==2 else {})
+        return {**base,**query,'provider':'HKEX','url':HKEX,'params':{'t':parts[0].lower()},
                 'method':'POST' if len(parts)==2 else 'GET'}
     if family == 'executives':
         return {**base, 'provider':'FT', 'url':FT+'holder/stock-ggmx',
@@ -179,6 +181,12 @@ def spec(family, partition, begin, end, page=1, *, revision=REQUEST_REVISION):
     }
     if family=='holdings': require(day(partition) <= last and partition in periods(last), 'HOLDER_PERIOD')
     report, columns, sort, order, where = configs[family]
+    if family=='activity' and revision>=2:
+        # Existing AKShare event-summary protocol avoids scanning each
+        # participant as a separate event. Roster breadth remains explicit.
+        report,columns='RPT_ORG_SURVEYNEW','ALL'
+        sort,order='NOTICE_DATE,SUM,RECEIVE_START_DATE,SECURITY_CODE','-1,-1,-1,1'
+        where='(NUMBERNEW="1")'+where
     size=500 if revision==2 and family in {'activity','holder_changes','repurchases'} else PAGE_SIZE
     return {**base, 'provider':'EM', 'url':EM, 'params':{'reportName':report, 'columns':columns,
         'sortColumns':sort,'sortTypes':order,'pageSize':str(size),'pageNumber':str(page),
@@ -334,9 +342,15 @@ def normalize(rawrow, request, index, request_index, envelope=None):
         published=_date_field(r,'NOTICE_DATE',end,required=True);when=_date_field(r,'RECEIVE_START_DATE',end,required=True)
         require(day(request['begin'])<=day(published) and when<=published,'ACTIVITY_WINDOW')
         doc=text(r.get('URL'));obj=text(r.get('OBJECT_CODE'));name=text(r.get('RECEIVE_OBJECT'))
-        event=canonical_hash([code,doc,when,r.get('RECEIVE_END_DATE')]) if doc else None
+        summary=request['params'].get('reportName')=='RPT_ORG_SURVEYNEW'
+        event=canonical_hash([code,doc,when,r.get('RECEIVE_END_DATE')]) if doc else (
+            canonical_hash([code,when,r.get('RECEIVE_END_DATE'),r.get('RECEIVE_TIME_EXPLAIN'),
+                            r.get('RECEIVE_WAY_EXPLAIN'),r.get('RECEIVE_PLACE')]) if summary else None)
         actor='EM:ORG:'+obj if obj else 'UNRESOLVED:'+canonical_hash([code,event,name])
-        vals={'event_id':event,'event_identity':'DISCLOSURE_AND_DATE_GROUP' if event else 'NOT_ESTABLISHED',
+        vals={'event_id':event,'event_identity':('DISCLOSURE_AND_DATE_GROUP' if doc else
+              'PROVIDER_REPORTED_ACTIVITY_GROUP' if summary else 'NOT_ESTABLISHED'),
+              'roster_scope':'SUMMARY_REPRESENTATIVE_NOT_COMPLETE_ROSTER' if summary else 'PARTICIPANT_DETAIL',
+              'provider_reported_institution_entries':number(r.get('SUM')) if summary else None,
               'disclosure_id':doc,'institution_code':obj,'institution_type':text(r.get('ORG_TYPE')),
               'form':text(r.get('RECEIVE_WAY_EXPLAIN')),'participants':text(r.get('INVESTIGATORS')),
               'institution_identity':'PROVIDER_CODE' if obj else 'UNRESOLVED_GENERIC_OR_TEXT',
@@ -442,6 +456,9 @@ def aggregate_activity(rows):
         require(g['ticker']==r['ticker'] and g['date']==r['date'] and g['disclosed']==r['disclosed'],
                 'ACTIVITY_EVENT_CONFLICT')
         g['source_rows'].extend(r['source_rows'])
+        scope=r['values'].get('roster_scope','PARTICIPANT_DETAIL')
+        g['values']['roster_scope']=scope
+        g['values']['provider_reported_institution_entries']=r['values'].get('provider_reported_institution_entries')
         g['values']['roster'].append({'actor_id':r['actor_id'],'name':r['actor_name'],
             'institution_code':r['values']['institution_code'],
             'institution_type':r['values']['institution_type'],
@@ -452,7 +469,8 @@ def aggregate_activity(rows):
         codes={r['institution_code'] for r in roster.values() if r['institution_code']}
         g['values']['known_institution_codes']=len(codes)
         g['values']['unresolved_roster_rows']=sum(not r['institution_code'] for r in roster.values())
-        if all(r['institution_code'] for r in roster.values()):
+        if (g['values'].get('roster_scope')=='PARTICIPANT_DETAIL'
+                and all(r['institution_code'] for r in roster.values())):
             g['values']['distinct_institutions']=len(codes)
         g['version']=canonical_hash({k:v for k,v in g.items() if k not in {'source_rows','version'}})
     return list(groups.values())

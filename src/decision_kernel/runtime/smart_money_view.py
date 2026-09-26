@@ -261,6 +261,7 @@ def summarize(obs,hist):
         if families[f]['unresolved_partitions'] and families[f]['status']=='COMPLETE_PROVIDER_SCOPES':
             families[f]['status']='CURRENT_SCOPES_AVAILABLE_WITH_HISTORICAL_GAPS'
         if f=='activity':
+            families[f]['roster_coverage']='PROVIDER_EVENT_SUMMARIES_NOT_ALL_PARTICIPANT_ROWS'
             families[f]['event_groups']=sum(r['values'].get('event_id') is not None for r in rows)
             families[f]['unidentified_event_rows']=sum(r['values'].get('event_id') is None for r in rows)
             families[f]['known_institution_codes']=len({t['institution_code'] for r in rows for t in r['values']['roster'] if t['institution_code']})
@@ -319,7 +320,7 @@ def render(overview,hist,*,failure=None):
     for r in overview['holding_comparisons']['examples'][:8]:
         lines.append(f"- {md(r['actor'])} / {md(r['ticker'])}：{r['prior_period']} {r['previous_shares']}股 → {r['period']} {r['shares']}股；差 {r['change_shares']}股。")
     lines += ['', '### 机构调研与预测','',
-              '调研按公司、披露文件和活动日期组合分组；机构明细行不当事件数，泛称投资者不当已识别机构。',
+              '调研按来源已披露活动分组；事件摘要覆盖与参与者明细覆盖分开。原披露文件未给出时保留来源时间/方式分组，不认证实际场次。代表机构一行不等于完整名单，泛称投资者不当已识别机构。',
               '研报EPS相对槽位不自动认定目标年/币种/股本口径；只有正文明确同时列示的新旧同指标，才显示为“券商在该文声称的修订”，不是已独立找回旧报告。']
     for doc in overview['forecast_documents']:
         for r in doc.get('revisions',[]):

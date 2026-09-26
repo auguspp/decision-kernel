@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+from contextlib import nullcontext
 from datetime import timedelta
 from hashlib import sha256
 import json
@@ -49,7 +50,7 @@ def validate_identity(value):
     return value
 
 
-def request_raw(spec):
+def request_raw(spec, *, public_session=None):
     """Credentials are used only on their one reviewed host; no redirects/proxy."""
     if spec['family']=='calendar': s.require(spec==s.calendar_spec(),'REQUEST_SPEC')
     elif spec['family']=='forecast_pdf':s.require(spec==docs.pdf_spec(spec['partition'],spec['begin'],spec['end']),'REQUEST_SPEC')
@@ -58,7 +59,7 @@ def request_raw(spec):
         s.require({k:v for k,v in spec.items() if k not in {'form','form_source'}}==base,'HKEX_POST_SPEC')
         s.require(re.fullmatch('raw-[0-9]{4}\\.body',spec['form_source']) is not None,'HKEX_FORM_SOURCE')
         s.require(spec['form'].get('__EVENTTARGET')=='btnSearch' and
-                  spec['form'].get('txtShareholdingDate')==spec['partition'].split('@')[1].replace('-','/'),'HKEX_POST_DATE')
+                  spec['form'].get('txtShareholdingDate')==spec.get('query_asof',spec['partition'].split('@')[1]).replace('-','/'),'HKEX_POST_DATE')
     else: s.require(spec==s.spec(*(spec[k] for k in ('family','partition','begin','end','page')),revision=spec.get('contract_revision',1)),'REQUEST_SPEC')
     header={'Accept-Encoding':'identity','User-Agent':'Mozilla/5.0 DecisionKernel-SmartMoney/1', 'Accept':'application/json'}
     secrets=[]
@@ -66,7 +67,9 @@ def request_raw(spec):
         envname,hname=KEYS[spec['provider']]; key=os.environ.get(envname,'')
         s.require(bool(key) and key.isascii() and all(32<ord(c)<127 for c in key),'CREDENTIAL_UNAVAILABLE')
         header[hname]=key;secrets.append(key.encode())
-    with _session() as client:
+    s.require(public_session is None or spec['provider']=='HKEX','PUBLIC_SESSION_SCOPE')
+    context=nullcontext(public_session) if public_session is not None else _session()
+    with context as client:
         with client.request(spec.get('method','GET'),spec['url'],params=spec['params'],
                         **({'data':spec['form']} if spec.get('method')=='POST' else {}),headers=header,stream=True,
                         timeout=(10,25),allow_redirects=False) as response:
@@ -214,7 +217,7 @@ def _parse_partition(records, files, scope):
             s.require(re.fullmatch('raw-[0-9]{4}\\.body',source) is not None,'HKEX_FORM_SOURCE')
             s.require(int(source[4:8])<record['index'],'HKEX_FORM_CHRONOLOGY')
             channel,period=expected['partition'].split('@')
-            expected={**expected,'form_source':source,'form':docs.post_form(files[source],channel,period)}
+            expected={**expected,'form_source':source,'form':docs.post_form(files[source],channel,expected.get('query_asof',period))}
         s.require(record['request']==expected,'PAGE_PLAN_DIFFERS')
         if record['body'] is None:
             failure=record['error'];break
@@ -395,6 +398,20 @@ def rebuild(manifest, files, *, expected_identity=None, cutoff=None):
 
 def capture(output, execution, *, previous_state=None, skip_hithink=False, repair_pending=False, transport=request_raw,
             clock=s.now, monotonic=time.monotonic, sleep=time.sleep):
+    options=dict(previous_state=previous_state,skip_hithink=skip_hithink,
+                 repair_pending=repair_pending,clock=clock,monotonic=monotonic,sleep=sleep)
+    if transport is not request_raw:
+        return _capture(output,execution,transport=transport,**options)
+    # One public HKEX search session for its GET/stateful POST. No credential is
+    # sent to HKEX or copied to the other providers, and cookies are not saved.
+    with _session() as public:
+        def send(req):
+            return request_raw(req,public_session=public if req['provider']=='HKEX' else None)
+        return _capture(output,execution,transport=send,**options)
+
+
+def _capture(output, execution, *, previous_state=None, skip_hithink=False, repair_pending=False, transport=request_raw,
+             clock=s.now, monotonic=time.monotonic, sleep=time.sleep):
     validate_identity(execution);output=Path(output)
     s.require(not output.exists() and not any(p.is_symlink() for p in (output,*output.parents)),'OUTPUT_EXISTS_OR_SYMLINK')
     output.mkdir(parents=True)
@@ -456,7 +473,7 @@ def capture(output, execution, *, previous_state=None, skip_hithink=False, repai
                 parent=next((r for r in records if r['request']['family']=='north_holdings' and
                              r['request']['partition']==channel and r['body'] and r['http_status']==200),None)
                 if parent is None:break
-                try:req={**req,'form_source':parent['body'],'form':docs.post_form(files[parent['body']],channel,period)}
+                try:req={**req,'form_source':parent['body'],'form':docs.post_form(files[parent['body']],channel,req.get('query_asof',period))}
                 except (ValueError,KeyError,TypeError):break
             rec=get(req)
             if rec['body'] is None or _http_reason(rec['http_status'],files[rec['body']]):break

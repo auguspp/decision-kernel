@@ -89,3 +89,47 @@ def test_legacy_plan_shape_stays_legacy_and_new_watermarks_explicit():
     new=c.make_plan(NOW,cal)
     assert not any(k in old for k in ('calendar_enumerated_through','calendar_pending_since','pending_only'))
     assert new['calendar_enumerated_through']=='2026-09-24' and new['pending_only'] is False
+
+
+def test_hkex_query_asof_and_report_period_are_separate():
+    r=s.spec('north_holdings','SH@2026-03-31','2026-06-28','2026-09-26')
+    assert r['partition']=='SH@2026-03-31' and r['query_asof']=='2026-04-30'
+    old=s.spec('north_holdings','SH@2026-03-31','2026-06-28','2026-09-26',revision=1)
+    assert 'query_asof' not in old
+
+
+def test_activity_summary_never_certifies_representative_roster_as_complete():
+    r=s.spec('activity','disclosures','2026-06-28','2026-09-26')
+    assert r['params']['reportName']=='RPT_ORG_SURVEYNEW'
+    assert s.spec('activity','disclosures','2026-06-28','2026-09-26',revision=1)['params']['reportName']=='RPT_ORG_SURVEY'
+    row={'SECUCODE':'600499.SH','SECURITY_CODE':'600499','NOTICE_DATE':'2026-09-24',
+         'RECEIVE_START_DATE':'2026-09-21','RECEIVE_WAY_EXPLAIN':'线上',
+         'OBJECT_CODE':'A','RECEIVE_OBJECT':'甲机构','SUM':45}
+    item=s.normalize(row,r,0,0)[0]
+    event=s.aggregate_activity([item])[0]
+    assert event['values']['provider_reported_institution_entries']=='45'
+    assert event['values']['known_institution_codes']==1
+    assert event['values']['distinct_institutions'] is None
+    assert event['values']['event_identity']=='PROVIDER_REPORTED_ACTIVITY_GROUP'
+
+
+def test_live_capture_uses_one_closed_public_session_without_changing_injected_transport(monkeypatch):
+    from decision_kernel.runtime import smart_money_capture as c
+    class Session:
+        closed=False
+        def __enter__(self):return self
+        def __exit__(self,*args):self.closed=True
+    session=Session();seen=[]
+    monkeypatch.setattr(c,'_session',lambda:session)
+    def raw(req,*,public_session=None):
+        seen.append((req,public_session));return 200,b'{}'
+    monkeypatch.setattr(c,'request_raw',raw)
+    def fake_capture(*args,transport,**kwargs):
+        transport({'provider':'HKEX'});transport({'provider':'HKEX'});transport({'provider':'EM'})
+        return 'fixture'
+    monkeypatch.setattr(c,'_capture',fake_capture)
+    assert c.capture('unused',{},transport=raw)=='fixture'
+    assert [x[1] for x in seen]==[session,session,None] and session.closed
+    seen.clear();session.closed=False
+    assert c.capture('unused',{},transport=lambda req:raw(req))=='fixture'
+    assert [x[1] for x in seen]==[None,None,None] and not session.closed
