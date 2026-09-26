@@ -32,11 +32,11 @@ jobs:
           PY
       - name: Install existing CI evidence reader
         run: python -m pip install -e '.[ci-contracts]'
-      - name: Download and verify exact completed PR full evidence
+      - name: Download and verify exact completed main evidence
         env:
           GH_TOKEN: ${{ github.token }}
-          EVIDENCE_RUN: '36212117656'
-          EVIDENCE_HEAD: '5c2a31e1d1166fafc1020d9af6ecd8196487f720'
+          EVIDENCE_RUN: '36212441314'
+          EVIDENCE_HEAD: '063f7620f04ca21840f63aebb832517f8c3f8db9'
         run: python .github/scripts/smart-money-ci-evidence.py
       - name: Retain verification identity
         if: always()
