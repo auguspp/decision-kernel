@@ -401,6 +401,12 @@ def browser(overview,chunks,meta,origins):
     manifest={'overview':overview,'history':meta,'origins':origins,
               'projection':'DISPLAY_RECORDS_WITHOUT_UNUSED_ID; ORIGINAL_HISTORY_CHUNKS_UNCHANGED',
               'chunks':browser_chunks(chunks,meta)}
+    return render_browser(manifest)
+
+
+def render_browser(manifest):
+    """Render only our local display projection; source strings remain text."""
+    import base64
     raw=json.dumps(manifest,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     script=r'''
 'use strict';
@@ -408,6 +414,9 @@ const pack=JSON.parse(document.getElementById('payload').textContent);
 let records=[], filtered=[], page=0;const pageSize=40;
 const $=id=>document.getElementById(id);
 function node(tag,text){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;}
+function queryButton(text){
+  const b=node('button',text);b.type='button';b.onclick=()=>{$('query').value=text;$('family').value='';search();};return b;
+}
 function render(){
   $('results').replaceChildren();
   const a=page*pageSize,b=Math.min(a+pageSize,filtered.length);
@@ -415,9 +424,25 @@ function render(){
   for(const r of filtered.slice(a,b)){
     const d=r.data, card=node('article');
     card.append(node('h3',[d.company||d.ticker||'市场',d.ticker,d.actor_name||'来源身份未确定'].filter(Boolean).join(' · ')));
-    card.append(node('p',`${r.family} | 观察/报告期 ${d.date} | 披露 ${d.disclosed||'UNKNOWN'} | 首次取得 ${r.first_seen} | 此版本最近原件 ${r.last_seen}`));
+    if(r.relay){
+      card.append(node('p',`${pack.relay.titles[r.family]} | 来源日期 ${d.date||'UNKNOWN'} | 预测期 ${d.values.quarter||'不适用/未提供'} | 取得截止 ${r.cutoff}`));
+      card.append(node('p','第三方补充；仅已保存行的日期/身份合格，不代表全市场、真实人物或买卖判断。'));
+    }else{
+      card.append(node('p',`${r.family} | 观察/报告期 ${d.date} | 披露 ${d.disclosed||'UNKNOWN'} | 首次取得 ${r.first_seen} | 此版本最近原件 ${r.last_seen}`));
+    }
+    const navigation=node('p');
+    for(const value of [...new Set([d.ticker,d.actor_name].filter(Boolean))])navigation.append(queryButton(value));
+    card.append(navigation);
     const detail=node('details'); detail.append(node('summary','原值、参与者和来源定位（不是买卖建议）'));
-    detail.append(node('pre',JSON.stringify({values:d.values,actor_id:d.actor_id,source_rows:d.source_rows,origin:pack.origins[r.origin],source_version:d.version},null,2)));
+    detail.append(node('pre',JSON.stringify({values:d.values,actor_id:d.actor_id,source_rows:d.source_rows,origin:r.relay?pack.relay.origins[r.origin]:pack.origins[r.origin],source_version:d.version,field_gaps:r.field_gaps},null,2)));
+    if(r.relay){
+      const link=node('a','同版补充JSON与原件定位');link.href=r.document;detail.append(link);
+      detail.append(node('p',r.pointer+'；源行定位与原ZIP见上方。'));
+      if(r.associations.length){
+        detail.append(node('p','来源显式关联字符串（生效日与真人身份未建立；点选只做文字检索）：'));
+        for(const label of r.associations)detail.append(queryButton(label));
+      }
+    }
     if(r.withdrawn_from_source_snapshot_at)card.append(node('p',`历史记录：已从来源当前快照撤出（${r.withdrawn_from_source_snapshot_at}）；不等于清仓。`));
     card.append(detail);$('results').append(card);
   }
@@ -425,12 +450,16 @@ function render(){
 }
 function search(){
   const q=$('query').value.trim().toLocaleLowerCase(),family=$('family').value;
+  // Only an exact disclosed security code links company-name searches. No
+  // participant alias, directory-to-trade, or cross-source money matching.
+  const codes=new Set(q?records.filter(r=>r.data.ticker &&
+    [r.data.company,r.data.ticker].filter(Boolean).some(x=>String(x).toLocaleLowerCase().includes(q))).map(r=>r.data.ticker):[]);
   filtered=records.filter(r=>{
     if(family && r.family!==family)return false;
     if(!q)return true;
     const d=r.data;
-    const text=[d.ticker,d.company,d.actor_name,d.actor_id,d.values.subscription_objects,...(d.values.roster||[]).flatMap(x=>[x.name,x.institution_code])].join(' ').toLocaleLowerCase();
-    return text.includes(q);
+    const text=[d.ticker,d.company,d.actor_name,d.actor_id,d.values.subscription_objects,...(r.associations||[]),...(d.values.roster||[]).flatMap(x=>[x.name,x.institution_code])].join(' ').toLocaleLowerCase();
+    return codes.has(d.ticker)||text.includes(q);
   }).reverse();page=0;render();
 }
 async function init(){
@@ -458,6 +487,16 @@ async function init(){
     if(part.length!==ch.ref.rows)throw Error('保存数据行数不符');records.push(...part);
   }
   if(records.length!==pack.history.record_count)throw Error('完整记录数不符');
+  if(pack.relay){
+    const info=$('relay-health');
+    info.append(node('p',`Relay补充：${pack.relay.records.length}条合格显示行（不是报告/机构数）；旧补充保留自己的取得时钟。`));
+    const limits=node('details');limits.append(node('summary','补充来源、日期覆盖及全部限制'));
+    limits.append(node('pre',JSON.stringify({reading:pack.relay.reading,sources:pack.relay.origins},null,2)));info.append(limits);
+    for(const [id,title] of Object.entries(pack.relay.titles)){
+      const o=node('option',title);o.value=id;$('family').append(o);
+    }
+    for(const record of pack.relay.records)records.push(record);
+  }
   $('query').disabled=false;$('family').disabled=false;search();
 }
 $('query').addEventListener('input',search);$('family').addEventListener('change',search);
@@ -470,9 +509,119 @@ init().catch(e=>{$('health').textContent='读取失败：'+e.message+'。不是�
 <title>聪明钱公开行为 · 双向阅读</title><style>body{font:16px/1.7 system-ui;max-width:1100px;margin:auto;padding:24px}article{border-top:1px solid #bbb;padding:12px 0}input,select,button{font:inherit;padding:8px;max-width:100%%}input{width:55%%}pre{white-space:pre-wrap;overflow-wrap:anywhere}h3{overflow-wrap:anywhere}@media(max-width:600px){body{padding:12px}input{width:94%%}}</style></head><body>
 <h1>聪明钱观察：公司与参与者双向检索</h1><p id="health">正在展开本文件内的数据，不发网络请求。</p>
 <p>此页为完整记录的显示投影；省略未展示的记录ID，原始身份与完整字段仍在同版历史分块中。输入公司、代码、营业部、游资标签、具名持有人或调研机构。名称匹配不是身份认证；同名个人不自动合并。北向为公开成交/季度持股，不是实时净买入。记录日期不一定是取得日，榜单缺席不证明退出。</p>
+<section id="relay-health"></section>
+<p><a href="../smart-money.md">同版摘要与全部限制</a> · <a href="history.json">主资料原件目录</a></p>
 <label>检索 <input id="query" placeholder="公司 / 代码 / 游资标签 / 具名持有人" disabled></label>
 <label>观察面 <select id="family" disabled><option value="">全部独立观察面</option></select></label>
 <p id="count"></p><button id="prev" disabled>上一页</button> <button id="next" disabled>下一页</button><main id="results"></main>
 <script id="payload" type="application/json">%s</script><script>%s</script></body></html>'''%(digest,raw,script)
     s.require(len(page.encode())<30*1024*1024,'BROWSER_OUTPUT_BOUND')
     return page
+
+
+RELAY_TITLES = {
+    'hm_list': 'Relay · 公开游资标签与显式关联',
+    'hm_detail': 'Relay · 游资标签明细',
+    'report_rc': 'Relay · 券商预测期记录',
+    'top_list': 'Relay · 龙虎榜对照',
+    'top_inst': 'Relay · 机构席位对照',
+}
+
+
+def relay_projection(supplements, reading):
+    """Project already-qualified saved rows, not another source or identity engine.
+
+    Each input is (same-reading JSON filename, retained value). The previous
+    companion contributes only non-report families; a narrow repair never
+    relabels old acquisition or silently mixes earlier forecasts into its window.
+    """
+    records, origins, titles = [], {}, {}
+    names = set()
+    for document, value in supplements:
+        s.require(document in {'relay.json', 'relay-previous.json'} and document not in names,
+                  'RELAY_DISPLAY_DOCUMENT')
+        names.add(document)
+        s.require(value['source_role'] == 'SECONDARY_SUPPLEMENT_NOT_PRIMARY_REPLACEMENT'
+                  and value['investment_authority'] == 'NONE', 'RELAY_DISPLAY_AUTHORITY')
+        s.clock(value['cutoff'])
+        for api, item in value['families'].items():
+            s.require(api in RELAY_TITLES, 'RELAY_DISPLAY_FAMILY')
+            if document == 'relay-previous.json' and api == 'report_rc':
+                continue
+            family = 'relay:' + api
+            titles[family] = RELAY_TITLES[api]
+            key = document + ':' + api
+            interpretation = item.get('interpretation') or {}
+            origins[key] = {
+                'document': document, 'api': api, 'identity': value['identity'],
+                'capture_hash': value['capture_hash'], 'cutoff': value['cutoff'],
+                'reading_relation': value.get('reading_relation'),
+                'relay_host': value['relay_host'], 'source_role': value['source_role'],
+                'archive': value.get('archive'), 'status': item['status'],
+                'meaning': item['meaning'], 'unresolved': value['unresolved'],
+                'qualification': {k: v for k, v in interpretation.items()
+                                  if k != 'qualified_row_indexes'},
+                'interpretation_error': item.get('interpretation_error'),
+                'pages': item.get('pages'), 'attempts': item.get('attempts'),
+            }
+            rows = item['rows']
+            indexes = interpretation.get('qualified_row_indexes', [])
+            s.require(isinstance(rows, list) and item['row_count'] == len(rows)
+                      and isinstance(indexes, list)
+                      and all(type(i) is int and 0 <= i < len(rows) for i in indexes)
+                      and len(indexes) == len(set(indexes))
+                      and len(indexes) == interpretation.get('qualified_row_count', 0),
+                      'RELAY_DISPLAY_QUALIFIED_ROWS')
+            for index in indexes:
+                row = rows[index]
+                actor_field = {'hm_list': 'name', 'hm_detail': 'hm_name',
+                               'report_rc': 'org_name', 'top_inst': 'exalter'}.get(api)
+                associations = row.get('orgs' if api == 'hm_list' else 'hm_orgs')
+                if isinstance(associations, str):
+                    try:
+                        parsed = json.loads(associations)
+                    except (ValueError, TypeError):
+                        parsed = None
+                    associations = parsed if isinstance(parsed, list) else [associations]
+                if not isinstance(associations, list):
+                    associations = []
+                associations = [x for x in associations if isinstance(x, str) and x.strip()]
+                source_rows = {'saved_row_index': index}
+                if 'row_origins' in item:
+                    s.require(len(item['row_origins']) == len(rows), 'RELAY_DISPLAY_ROW_ORIGINS')
+                    source_rows['original'] = item['row_origins'][index]
+                when = row.get('report_date' if api == 'report_rc' else 'trade_date')
+                records.append({
+                    'family': family, 'relay': True, 'origin': key, 'document': document,
+                    'pointer': f"/families/{api}/rows/{index}", 'cutoff': value['cutoff'],
+                    'associations': associations,
+                    'field_gaps': [g for g in interpretation.get('field_gaps', [])
+                                   if g['row_index'] == index],
+                    'data': {'ticker': row.get('ts_code'),
+                             'company': row.get('name') if api != 'hm_list' else None,
+                             'actor_name': row.get(actor_field) if actor_field else None,
+                             'actor_id': None, 'date': when, 'disclosed': when,
+                             'values': deepcopy(row), 'source_rows': source_rows,
+                             'version': None},
+                })
+    return {'records': records, 'origins': origins, 'titles': titles,
+            'reading': deepcopy(reading)}
+
+
+def enrich_browser(page, supplements, reading):
+    """Reuse our verified local page's compressed primary payload without replay.
+
+    Called only after the primary browser and supplement JSON were retained.
+    No archive, source request, arbitrary HTML execution or second search index.
+    The caller isolates any failure from the original page and canonical JSON.
+    """
+    marker = '<script id="payload" type="application/json">'
+    s.require(page.count(marker) == 1, 'RELAY_DISPLAY_PRIMARY_PAYLOAD')
+    raw, separator, _ = page.split(marker, 1)[1].partition('</script>')
+    s.require(bool(separator), 'RELAY_DISPLAY_PRIMARY_PAYLOAD')
+    manifest = json.loads(raw)
+    s.require(manifest.get('projection') ==
+              'DISPLAY_RECORDS_WITHOUT_UNUSED_ID; ORIGINAL_HISTORY_CHUNKS_UNCHANGED',
+              'RELAY_DISPLAY_PRIMARY_PROJECTION')
+    manifest['relay'] = relay_projection(supplements, reading)
+    return render_browser(manifest)
