@@ -14,7 +14,7 @@ jobs:
   prepare:
     if: github.ref == 'refs/heads/work/smart-money-20260926' && github.run_attempt == 1
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
@@ -23,23 +23,71 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Verify bounded public preparation
+      - name: Verify finite offline acceptance
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python - <<'PY'
           from datetime import datetime, timezone
-          assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
+          assert datetime.now(timezone.utc)<datetime(2026,9,28,tzinfo=timezone.utc)
           PY
-      - name: Install existing dependencies
-        run: python -m pip install -e '.[feeds]'
-      - name: Read observed public navigation and report originals
-        run: python .github/scripts/smart-money-source-probe-final.py
-      - name: Retain exact preparation code
+          mkdir -p "$RUNNER_TEMP/smart-money-probe"
+      - name: Install existing test and source dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Download exact existing archives for inspection only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,subprocess,zipfile,io
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'smart-money-probe'
+          expected=[(10527564199,35296479748,'49f6e2752a91b845d015b54bc678df850f66243fc3909c5e84f6b06e5971f9d2'),(10893279859,36205967276,'f4466c6e9999e1895ba4d3bbd46bc212ddd0ac3ada85f956362704dad7b57cf0'),(10893294994,36206174933,'199b10e967db501494c4cbbba4a3d5f0d9b2816273e20e93b336a3a54523b011'),(10894571810,36207379104,'8e0dc82d00d4abb8fe0690d41946012848dfcd14eba79e98b5d678aef01e0caa')]
+          results=[]
+          for aid,rid,digest in expected:
+              endpoint=f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/artifacts/{aid}"
+              meta=json.loads(subprocess.check_output(['gh','api',endpoint]))
+              assert not meta['expired'] and meta['workflow_run']['id']==rid and meta['digest']=='sha256:'+digest
+              raw=subprocess.check_output(['gh','api',endpoint+'/zip'])
+              assert len(raw)==meta['size_in_bytes'] and len(raw)<32*1024*1024 and hashlib.sha256(raw).hexdigest()==digest
+              z=zipfile.ZipFile(io.BytesIO(raw));assert z.testzip() is None
+              assert len(z.namelist())==len(set(z.namelist()))
+              (root/f'{aid}.zip').write_bytes(raw)
+              result={'artifact':aid,'run':rid,'sha256':digest,'bytes':len(raw),'files':z.namelist()}
+              results.append(result);print('EXACT_ARCHIVE',json.dumps(result,ensure_ascii=False))
+          (root/'archives-verified.json').write_text(json.dumps(results,ensure_ascii=False,indent=2))
+          PY
+      - name: Verify original institutional bytes under reviewed compatibility
+        run: |
+          python - <<'PY'
+          import json,os,socket,zipfile,tempfile
+          from pathlib import Path
+          from decision_kernel.runtime import institutional_radar_compat as c
+          def deny(*a,**k):raise AssertionError('No source calls permitted')
+          socket.socket.connect=deny;socket.getaddrinfo=deny
+          root=Path(os.environ['RUNNER_TEMP'])/'smart-money-probe'
+          with zipfile.ZipFile(root/'10527564199.zip') as z, tempfile.TemporaryDirectory() as temp:
+              p=Path(temp)
+              names=[n for n in z.namelist() if n.startswith('payload/')]
+              assert len(names)==8
+              for name in names:
+                  leaf=name.removeprefix('payload/');assert '/' not in leaf
+                  (p/leaf).write_bytes(z.read(name))
+              before={n: (p/n).read_bytes() for n in (x.name for x in p.iterdir())}
+              report,label=c.verify(p)
+              assert before=={n:(p/n).read_bytes() for n in before}
+              assert json.loads(z.read('verification.json'))=={k:report[k] for k in ('status','capture_hash')}
+              out={'compatibility':label,'report':report,'original_bytes_unchanged':True}
+              (root/'legacy-replay.json').write_text(json.dumps(out,indent=2));print('LEGACY_REPLAY',json.dumps(out))
+          PY
+      - name: Test source history recovery and existing company reading
+        run: |
+          python -m pytest -q tests/test_smart_money.py tests/test_smart_money_reading.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/smart-money-probe/junit.xml"
+      - name: Retain reviewed source identity
         if: always()
         run: |
-          mkdir -p "$RUNNER_TEMP/smart-money-probe"
-          git archive --format=zip HEAD > "$RUNNER_TEMP/smart-money-probe/implementation.zip"
-      - name: Upload actual preparation, not production acceptance
+          git rev-parse HEAD > "$RUNNER_TEMP/smart-money-probe/code-sha.txt"
+          git diff --stat > "$RUNNER_TEMP/smart-money-probe/local-diff.txt"
+      - name: Upload acceptance evidence not production results
         if: always()
         uses: actions/upload-artifact@v7
         with:
