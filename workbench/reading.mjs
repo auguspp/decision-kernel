@@ -4,6 +4,8 @@
  */
 export const REPO = 'auguspp/decision-kernel';
 export const READ_REF = 'read-model/current-state';
+// Actual saved news (~534KB) and sector context (~815KB) exceed the old 512KiB cap.
+export const FILE_LIMIT = 1024 * 1024;
 const API = `https://api.github.com/repos/${REPO}`;
 const RAW = `https://raw.githubusercontent.com/${REPO}`;
 const AUTHORITY = ['signal_transition_authority', 'human_attention_authority',
@@ -122,9 +124,9 @@ export async function openPinnedReading(ref, fetcher = globalThis.fetch) {
     const known = byPath.get(descriptor?.read_path);
     require(known && known.sha256 === descriptor.sha256 && known.bytes === descriptor.bytes,
       'UNREGISTERED_FILE');
-    require(Number.isSafeInteger(known.bytes) && known.bytes >= 0 && known.bytes <= 512 * 1024 &&
+    require(Number.isSafeInteger(known.bytes) && known.bytes >= 0 && known.bytes <= FILE_LIMIT &&
       HASH.test(known.sha256 || ''), 'UNSUPPORTED_FILE_DESCRIPTOR');
-    const raw = await bytes(`${RAW}/${ref}/${escapedPath(known.read_path)}`, fetcher, 512 * 1024);
+    const raw = await bytes(`${RAW}/${ref}/${escapedPath(known.read_path)}`, fetcher, FILE_LIMIT);
     require(raw.byteLength === known.bytes && await sha256(raw) === known.sha256, 'FILE_INTEGRITY_MISMATCH');
     return Object.freeze({text: decoder.decode(raw), ref, path: known.read_path,
       url: fileUrl(ref, known.read_path), sha256: known.sha256,

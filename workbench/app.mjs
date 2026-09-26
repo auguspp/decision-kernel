@@ -1,17 +1,19 @@
-import {REPO, openReading, readQuick, readHealth, loadModules, resumeText, fileUrl, references} from './reading.mjs';
+import {newsPage, marketsPage} from './news-markets.mjs';
+import {FILE_LIMIT, REPO, openReading, readQuick, readHealth, loadModules, resumeText, fileUrl, references} from './reading.mjs';
 import {locations, referenceMatches, watchSummary, watchState, companyName, companyMatches} from './presentation.mjs';
 import {localTime, recordsView, outline, paragraphs, documentView, useLabel, companyStatus, priceCondition, marketEntries, attentionView, companyMaterials, watchOrigin, attentionResume, bookProfile, displayDecimal, humanValue, humanGap, researchReading, previewSource} from './product.mjs';
 
 // Ordinary replaceable views; all retained source strings are text, never HTML.
-const labels = {attention: '注意力', research: '研究', odds: 'Odds / Watch', markets: '市场观察', health: '系统健康'};
+const labels = {attention: '注意力', research: '研究', odds: 'Odds / Watch', markets: '市场观察', news: '新闻', health: '系统健康'};
 const hints = {attention: '先看已保存的研究增量与复核事项，再打开依据。不是新一轮全球扫描。',
   research: '按已登记公司找回研究、条件与更正。研究过不等于持有。',
   odds: '保存的价格条件和业务前提，不重算 Odds，不构成买卖指令。',
+  news: '阅读原新闻窗口，筛选来源；已有资料不冒充新事件或Quick解释。',
   markets: '观察日期与页面读取时间分别保留；没有覆盖不等于没有变化。',
   health: '只展示实际读取范围和失败；不从绿色任务或标题推断研究质量。'};
 const enabled = new Set(Object.keys(labels));
 let companyQuery = '', selectedAttention = null, selectedCompany = null, bookPage = 0;
-let previews = new Map();
+let previews = new Map(), renderGeneration = 0;
 let selected = 'attention', results = {}, reading = null, assets = null, detailGeneration = 0;
 const $ = id => document.getElementById(id);
 function el(tag, text, className) {
@@ -194,7 +196,7 @@ function quickCard() { return researchRecords(); }
 function sourceRow(item, current, displayName = null) {
   const row = el('div', undefined, 'ref');
   const title = item.path || item.read_path;
-  const readable = Number.isSafeInteger(item.bytes) && item.bytes >= 0 && item.bytes <= 512 * 1024 && !/\.zip$/i.test(item.read_path);
+  const readable = Number.isSafeInteger(item.bytes) && item.bytes >= 0 && item.bytes <= FILE_LIMIT && !/\.zip$/i.test(item.read_path);
   if (readable) row.append(button(`读取 · ${displayName || title}`, () => readDetail(item, current), 'source-button'));
   else row.append(el('span', `${title}（本页不内嵌此附件）`));
   row.append(el('div', `${locations(item).join(' / ')} · ${item.bytes ?? '未知'} bytes`, 'small muted'));
@@ -248,6 +250,7 @@ async function readDetail(descriptor, current = reading, context = null) {
   }
 }
 function render(keepDetail = false) {
+  ++renderGeneration;
   // The catalogue completing is not a new selection. Do not cancel an original
   // the user opened while the optional catalogue was loading.
   if (!keepDetail) { ++detailGeneration; $('detail').replaceChildren(); }
@@ -269,28 +272,27 @@ function render(keepDetail = false) {
     const originals = disclosure('全部 Odds 原件与定位');
     showRefs(originals, item => /odds/i.test(`${item.path} ${item.read_path}`)); target.append(originals);
   }
-  if (selected === 'markets') {
-    if (!reading) target.append(gap('市场观察', results.reading?.reason));
+  if (selected === 'news' || selected === 'markets') {
+    if (!reading) target.append(gap(labels[selected], results.reading?.reason));
     else {
-      for (const name of ['sector', 'stock']) {
-        const lane = reading.payload.lanes[name], panel = card(name === 'sector' ? '板块观察' : '个股观察',
-          `原市场日：${lane?.last_qualified_result?.market_session || '未提供'}；运行状态：${lane?.health || '未知'}`);
-        panel.append(el('p', `覆盖缺口：${lane?.gaps?.join('；') || '请按原件核对，未作全市场完备性认证。'}`, 'small'));
-        panel.append(folded('运行与版本详情', value(lane ? {latest_attempt: lane.latest_attempt} : {gap: 'NOT_PROVIDED'}))); target.append(panel);
+      const current = reading, generation = renderGeneration;
+      const context = {reading: current,
+        active: () => current === reading && generation === renderGeneration,
+        onRead: source => readDetail(source, current), onCompany: code => goCompany(code),
+        ui: {el, card, button, link, notice, folded, disclosure, dataTable}};
+      (selected === 'news' ? newsPage : marketsPage)(target, context);
+      if (selected === 'markets') {
+        const summaries = card('概念与其他市场材料', '保留原观察日期与范围；未解释的原因仍是未知。');
+        for (const entry of marketEntries(current).filter(e => ['概念观察', '板块变化'].includes(e.label))) {
+          summaries.append(el('h4', entry.label));
+          if (entry.source) summaries.append(button('阅读已保存摘要', () => readDetail(entry.source, current, {title: entry.label})));
+          else summaries.append(el('p', entry.gap, 'small'));
+        }
+        target.append(summaries);
       }
-      const summaries = card('按主题阅读市场材料', '以下沿用各原件的观察日与覆盖范围；强弱不等于公司受益，未解释的原因保持未知。');
-      const entries = el('div', undefined, 'product-market');
-      for (const entry of marketEntries(reading)) {
-        const row = el('div'); row.append(el('strong', entry.label));
-        if (entry.source) {
-          const current = reading;
-          row.append(button('阅读已保存摘要', () => readDetail(entry.source, current)), link('固定原件', fileUrl(current.ref, entry.source.read_path)));
-        } else row.append(el('p', entry.gap, 'small'));
-        entries.append(row);
-      }
-      summaries.append(entries); target.append(summaries);
-      const more = el('details'); more.append(el('summary', '全部市场原件与定位'));
-      showRefs(more, item => locations(item).some(place => /^lanes\.(sector|stock)\./.test(place)) || /radar\//.test(item.read_path)); target.append(more);
+      const more = disclosure('其他已保存材料与原件定位');
+      showRefs(more, item => locations(item).some(place => /^lanes\.(sector|stock)\./.test(place)) || /radar\//.test(item.read_path));
+      target.append(more);
     }
   }
   if (selected === 'health') {
@@ -304,7 +306,7 @@ function render(keepDetail = false) {
   }
 }
 async function refresh() {
-  $('refresh').disabled = true; ++detailGeneration; reading = null; assets = null; selectedAttention = null; selectedCompany = null; previews = new Map(); bookPage = 0; results = {};
+  $('refresh').disabled = true; ++detailGeneration; ++renderGeneration; reading = null; assets = null; selectedAttention = null; selectedCompany = null; previews = new Map(); bookPage = 0; results = {};
   $('detail').replaceChildren(); $('content').replaceChildren(card('正在读取', '只读取 GitHub 已保存结果，不启动采集、研究或任务。'));
   $('identity').textContent = '读取中…';
   try {
