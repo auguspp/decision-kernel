@@ -232,10 +232,27 @@ def _attach(c,baseline):
     refs['state']=c.retain(PREFIX+'state.json',m.json_bytes(state))
     text=view.render(overview,hist,failure=current['status'] if obs is None and current['status']!='NO_NEW_CAPTURE_REQUIRED' else None)
     refs['markdown']=c.retain('details/radar/smart-money.md',text.encode())
-    refs['browser']=c.retain(PREFIX+'browse.html',view.browser(overview,chunks,meta,origins).encode())
+    browser_status = 'DISPLAY_PROJECTION_COMPLETE'
+    try:
+        browser_bytes = view.browser(overview,chunks,meta,origins).encode()
+    except s.SourceError as exc:
+        if str(exc) != 'BROWSER_OUTPUT_BOUND':
+            raise
+        # A display size limit must not roll back qualified observations/state.
+        # Keep the original cap, all canonical chunks, and an honest navigation.
+        browser_status = 'DISPLAY_SIZE_LIMIT_CANONICAL_DATA_RETAINED'
+        browser_bytes = ("<!doctype html><html lang='zh-CN'><meta charset='utf-8'>"
+                         "<title>聪明钱完整资料已保留</title><h1>完整资料已保存</h1>"
+                         "<p>本次离线检索页超过显示大小限制，不代表采集失败或没有行为。"
+                         "全部记录、原始身份和来源仍可在以下同版入口读取。</p>"
+                         "<p><a href='../smart-money.md'>摘要与限制</a> · "
+                         "<a href='overview.json'>结构化概览</a> · "
+                         "<a href='history.json'>全部历史分块</a></p></html>").encode()
+    refs['browser']=c.retain(PREFIX+'browse.html',browser_bytes)
     research=deepcopy(baseline['research'])
     research['smart_money']={'status':current['status'],'details':refs,'source_cutoff':overview['cutoff'],
         'target_date':overview['target_date'],'latest_attempt':current.get('latest_attempt'),
+        'browser_status':browser_status,
         'capture_hash':hist['capture_hash'],'uses_prior_observation':obs is None,
         'pending_delivery_count':len(state['unresolved']),'reading_freshness':reading_freshness,
         'capture_age_hours':f"{age:.2f}",
