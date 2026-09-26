@@ -192,3 +192,65 @@ test('copied recovery carries immutable R, exact source/version and no fabricate
   assert.throws(() => attentionResume('main', item, null), /UNPINNED_COMMIT/);
   assert.throws(() => attentionResume(point, item, {thscode: '603986.SH', assets: []}), /ITEM_COMPANY_MISMATCH/);
 });
+
+// Human-first projections: representations change, not source records/authority.
+import {bookProfile, displayDecimal, humanValue, humanGap, researchReading} from './product.mjs';
+test('book separates research prose, receipts, calculations and version-specific responses', () => {
+  const c = {thscode:'600276.SH', archives:[], assets:[
+    {use:'RETAINED_RESEARCH_DOCUMENT'}, {use:'RETAINED_RESEARCH_PACKAGE'},
+    {use:'HUMAN_DECISION_CHECKPOINT'}, {use:'RETAINED_ODDS_DOCUMENT'}, {use:'METHOD_SUPPLEMENT'}]};
+  const before = JSON.stringify(c), p = bookProfile(c);
+  assert.equal(p.research.length,1); assert.equal(p.receipts.length,1); assert.equal(p.odds.length,1);
+  assert.match(p.responseLabel,/历史回应/); assert.match(p.caution,/适用版本/);
+  assert.equal(p.currentResearch,undefined); assert.equal(p.accepted,undefined); assert.equal(JSON.stringify(c),before);
+});
+test('a receipt alone does not acquire a Full result or a current conclusion', () => {
+  const p = bookProfile({assets:[{use:'RETAINED_RESEARCH_PACKAGE'}],archives:[]});
+  assert.equal(p.research.length,0); assert.match(p.researchLabel,/正文需另查/);
+  assert.match(p.responseLabel,/未登记/); assert.match(p.oddsLabel,/未登记/);
+  assert.equal(bookProfile({assets:[{use:'FUTURE_ROLE'}]}).odds.length,0);
+});
+test('missing body and malformed catalogue entries remain visible coverage gaps', () => {
+  const p = bookProfile({assets:[null,{use:'RETAINED_RESEARCH_DOCUMENT',source_check:{gaps:[{}]}}]});
+  assert.equal(p.unreadable,2); assert.match(p.caution,/缺口/);
+});
+test('decimal display is exact on ordinary prices and does not mutate original fractions', () => {
+  assert.equal(displayDecimal('44.8600'),'44.86'); assert.equal(displayDecimal('0'),'0');
+  assert.equal(displayDecimal('123456789012345678901234.125'),'≈ 123456789012345678901234.13');
+  assert.equal(displayDecimal('-0.08688562776613091078',{percent:true}),'≈ −8.69%');
+  assert.equal(displayDecimal('0.5',{percent:true}),'50%');
+  assert.equal(displayDecimal('2.000',{places:0}),'2');
+});
+test('rounding never turns small nonzero values into zero or invents unknown units', () => {
+  assert.equal(displayDecimal('0.000001'),'<0.01');
+  assert.equal(displayDecimal('-0.000001',{percent:true}),'绝对值 <0.01%（负值）');
+  for (const v of [null,undefined,'']) assert.equal(displayDecimal(v),'未提供');
+  for (const v of ['NaN','1e-100',{},Infinity,'0'.repeat(161)]) assert.equal(displayDecimal(v),'数值口径待核对');
+  assert.throws(()=>displayDecimal('3',{places:7}),/PRECISION/);
+});
+test('human value labels expose unknown and historical acceptance without upgrading it', () => {
+  assert.equal(humanValue('NOT_ESTABLISHED'),'未建立'); assert.match(humanValue('ACCEPTED'),/仅原版本/);
+  assert.match(humanValue('FUTURE_UNRECOGNIZED_STATUS'),/未翻译/);
+  assert.equal(humanValue('2026-09-24'),'2026-09-24');
+  assert.match(humanGap('请求读取缺口：EXECUTION_ID_CONFLICT · '+point),/身份存在冲突/);
+  assert.match(humanGap('HTTP_503'),/不能据此判断/);
+});
+test('authored reading sections retain exact qualifications, support and title', () => {
+  const text='# 原研究\n\n## 1. 结论\n\n仅在条件成立时可比较。\n\n## 关键反证\n\n现金转化未验证。\n\n## 范围\n\n不是当前分析。';
+  const p=researchReading(text);
+  assert.equal(p.title,'原研究'); assert.equal(p.excerpt,'仅在条件成立时可比较。');
+  assert.deepEqual(p.important.map(s=>s.text),['现金转化未验证。','不是当前分析。']);
+});
+test('fenced conclusions never become previews and unrecognized formats stay unsummarized', () => {
+  assert.equal(researchReading('```md\n## 结论\nBUY\n```').excerpt,null);
+  assert.equal(researchReading('正文，没有单列结论').excerpt,null);
+  assert.equal(researchReading('## MANUAL E2E HOSTED QUICK 2026-09-25').title,'手动 Quick · 2026-09-25');
+});
+import {previewSource} from './product.mjs';
+test('excerpt selection requires one prose source, never latest of multiple versions', () => {
+  const a={use:'RETAINED_RESEARCH_DOCUMENT',source:{read_path:'sources/a.md',bytes:12}};
+  assert.equal(previewSource(bookProfile({assets:[a]})),a.source);
+  assert.equal(previewSource(bookProfile({assets:[a,{...a,id:'newest'}]})),null);
+  assert.equal(previewSource(bookProfile({assets:[{...a,source:{read_path:'sources/commit.json',bytes:12}}]})),null);
+  assert.equal(previewSource(bookProfile({assets:[{...a,source:{read_path:'sources/a.md',bytes:524289}}]})),null);
+});
