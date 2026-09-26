@@ -393,6 +393,7 @@ def attach_relay(c, primary, current, old):
     before=dict(c.files),dict(c.archive_cache),dict(c.sources)
     locator=deepcopy((old or {}).get('relay_reference'))
     value=None
+    display_supplements=[]
     current_status='NOT_PRESENT_LEGACY_OR_NOT_RUN'
     previous_status='NOT_NEEDED_NO_PRIOR_SUPPLEMENT'
     diagnostic={}
@@ -439,6 +440,7 @@ def attach_relay(c, primary, current, old):
             value['current_run_status']=current_status
             sm['relay_reports_only']=value.get('reports_only',False)
             refs['relay']=c.retain(PREFIX+'relay.json',m.json_bytes(value))
+            display_supplements.append(('relay.json',value))
             overview['relay_supplement']={
                 'status':value['status'],'current_run_status':current_status,
                 'market_session':value.get('market_session'),'cutoff':value['cutoff'],
@@ -464,6 +466,7 @@ def attach_relay(c, primary, current, old):
                                 companion_note+=f"\n- {api}：{item['status']}；保存{item['row_count']}行。"
                         ref=c.retain(PREFIX+'relay-previous.json',m.json_bytes(prior))
                         refs['relay_previous']=ref
+                        display_supplements.append(('relay-previous.json',prior))
                         sm['relay_companion_retained_entry']=None
                         note+=companion_note+'\n'
                     except ERRORS as exc:
@@ -474,6 +477,29 @@ def attach_relay(c, primary, current, old):
                     note+='\n此前其他补充未取得可恢复定位；未检查不等于没有行为。\n'
         overview['relay_reading']={'current_status':current_status,'previous_status':previous_status,
                                    'diagnostics':diagnostic}
+        # An optional display failure cannot discard either qualified JSON or
+        # the original primary browser. Reuse its compressed payload, not 137k
+        # source rows or another source/archive request.
+        sm['relay_browser_status']='PRIMARY_DISPLAY_UNAVAILABLE_JSON_RETAINED'
+        if sm['browser_status']=='DISPLAY_PROJECTION_COMPLETE':
+            saved_display=dict(c.files),dict(c.archive_cache),dict(c.sources)
+            ref=refs['browser']
+            try:
+                raw=c.files[ref['read_path']]
+                m.check(m.blob_sha(raw)==ref['git_blob'],'smart-money browser bytes')
+                enriched=view.enrich_browser(raw.decode(),display_supplements,
+                                             overview['relay_reading']).encode()
+                m.check(sum(map(len,c.files.values()))-len(raw)+len(enriched)
+                        <=delivery.MAX_RETAINED_OUTPUT,'smart-money browser retained bound')
+                del c.files[ref['read_path']]
+                replacement=c.retain(ref['read_path'],enriched)
+                refs['browser']=replacement
+                sm['relay_browser_status']='QUALIFIED_SAVED_ROWS_SEARCHABLE'
+            except ERRORS as exc:
+                c.files,c.archive_cache,c.sources=map(dict,saved_display)
+                sm['relay_browser_status']='DISPLAY_GAP_PRIMARY_AND_RELAY_JSON_RETAINED'
+                diagnostic['browser_error_type']=type(exc).__name__
+        note+='\n补充双向检索：'+sm['relay_browser_status']+'；原始补充JSON独立保留。\n'
         # These two files were built locally in this call, not yet published.
         # Replace only their exact primary bytes within this rollback boundary.
         for key,raw in (('overview',m.json_bytes(overview)),
