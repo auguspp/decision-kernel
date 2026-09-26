@@ -1,6 +1,6 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "16.98",
+  "capture_age_hours": "17.30",
   "capture_hash": "04af8525dbc62f769fcde7ec685614e4671f0cd9f608e53f3d329acea4c71934",
   "current_reading": {
     "control": {
@@ -47,7 +47,7 @@
       "status": "completed",
       "updated_at": "2026-09-26T13:02:56Z"
     },
-    "previous_status": "EXACT_PREVIOUS_f9a557848f0814930b0afc749a70a1855e42bfb8",
+    "previous_status": "EXACT_PREVIOUS_b4e157fd2e6b59c62041d5ae50c0ea4c123c4572",
     "run_metadata_reads": [],
     "status": "READY",
     "uses_prior_observation": false
@@ -2052,6 +2052,14 @@
     ],
     "departure_examples": [
       {
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000001.SZ"
+      },
+      {
         "actor_id": "EM:HOLDER:10196008",
         "actor_name": "中国证券金融股份有限公司",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
@@ -2060,24 +2068,16 @@
         "ticker": "000001.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:510300",
-        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "ticker": "000001.SZ"
-      },
-      {
-        "actor_id": "EM:HOLDER:510300",
-        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "actor_id": "EM:HOLDER:10506881",
+        "actor_name": "中央汇金资产管理有限责任公司",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "ticker": "000002.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:10506881",
-        "actor_name": "中央汇金资产管理有限责任公司",
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2148,16 +2148,16 @@
         "ticker": "000009.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000010.SZ:盛媛媛",
-        "actor_name": "盛媛媛",
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:陈瑞钦",
+        "actor_name": "陈瑞钦",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "ticker": "000010.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000010.SZ:陈瑞钦",
-        "actor_name": "陈瑞钦",
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:盛媛媛",
+        "actor_name": "盛媛媛",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2172,16 +2172,16 @@
         "ticker": "000010.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000011.SZ:高克",
-        "actor_name": "高克",
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:麦富容",
+        "actor_name": "麦富容",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "ticker": "000011.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000011.SZ:麦富容",
-        "actor_name": "麦富容",
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:高克",
+        "actor_name": "高克",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2204,8 +2204,8 @@
         "ticker": "000014.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000014.SZ:陈晓跃",
-        "actor_name": "陈晓跃",
+        "actor_id": "EM:HOLDER:10059032",
+        "actor_name": "BARCLAYS BANK PLC",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2234,15 +2234,6 @@
         "ticker": "000001.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000002.SZ:陈淑新",
-        "actor_name": "陈淑新",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "2.61716E+7",
-        "ticker": "000002.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:000002.SZ:吕强",
         "actor_name": "吕强",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2261,6 +2252,15 @@
         "ticker": "000002.SZ"
       },
       {
+        "actor_id": "EM:ISSUER_NAME:000002.SZ:陈淑新",
+        "actor_name": "陈淑新",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2.61716E+7",
+        "ticker": "000002.SZ"
+      },
+      {
         "actor_id": "EM:ISSUER_NAME:000006.SZ:施清荣",
         "actor_name": "施清荣",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2268,15 +2268,6 @@
         "prior_period": "2026-03-31",
         "shares": "6.2043E+6",
         "ticker": "000006.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:000007.SZ:李丁聪",
-        "actor_name": "李丁聪",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "3.5105E+6",
-        "ticker": "000007.SZ"
       },
       {
         "actor_id": "EM:HOLDER:10000422073",
@@ -2288,13 +2279,13 @@
         "ticker": "000007.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000008.SZ:王卫兵",
-        "actor_name": "王卫兵",
+        "actor_id": "EM:ISSUER_NAME:000007.SZ:李丁聪",
+        "actor_name": "李丁聪",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "7.637E+6",
-        "ticker": "000008.SZ"
+        "shares": "3.5105E+6",
+        "ticker": "000007.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000008.SZ:郭俊锋",
@@ -2303,6 +2294,15 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "17003249",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:王卫兵",
+        "actor_name": "王卫兵",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7.637E+6",
         "ticker": "000008.SZ"
       },
       {
@@ -2324,6 +2324,15 @@
         "ticker": "000009.SZ"
       },
       {
+        "actor_id": "EM:HOLDER:10005340",
+        "actor_name": "新余瑞达投资有限公司",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7022333",
+        "ticker": "000010.SZ"
+      },
+      {
         "actor_id": "EM:ISSUER_NAME:000010.SZ:唐小晖",
         "actor_name": "唐小晖",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2342,13 +2351,13 @@
         "ticker": "000010.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:10005340",
-        "actor_name": "新余瑞达投资有限公司",
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:王瑾",
+        "actor_name": "王瑾",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "7022333",
-        "ticker": "000010.SZ"
+        "shares": "1.63E+6",
+        "ticker": "000011.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000011.SZ:王道虎",
@@ -2357,15 +2366,6 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "2433551",
-        "ticker": "000011.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:000011.SZ:王瑾",
-        "actor_name": "王瑾",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "1.63E+6",
         "ticker": "000011.SZ"
       },
       {
@@ -2378,12 +2378,12 @@
         "ticker": "000012.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000014.SZ:李星达",
-        "actor_name": "李星达",
+        "actor_id": "EM:HOLDER:10137791",
+        "actor_name": "J.P.Morgan Securities PLC-自有资金",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "9.646E+5",
+        "shares": "1098792",
         "ticker": "000014.SZ"
       },
       {
@@ -2393,6 +2393,15 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "9.636E+5",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000014.SZ:李星达",
+        "actor_name": "李星达",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "9.646E+5",
         "ticker": "000014.SZ"
       },
       {
@@ -2414,13 +2423,13 @@
         "ticker": "000014.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:10137791",
-        "actor_name": "J.P.Morgan Securities PLC-自有资金",
+        "actor_id": "EM:ISSUER_NAME:000016.SZ:曲辰",
+        "actor_name": "曲辰",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "1098792",
-        "ticker": "000014.SZ"
+        "shares": "7044808",
+        "ticker": "000016.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000016.SZ:张玉香",
@@ -2441,13 +2450,13 @@
         "ticker": "000016.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000016.SZ:曲辰",
-        "actor_name": "曲辰",
+        "actor_id": "EM:ISSUER_NAME:000017.SZ:徐胜利",
+        "actor_name": "徐胜利",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "7044808",
-        "ticker": "000016.SZ"
+        "shares": "2.5369E+6",
+        "ticker": "000017.SZ"
       },
       {
         "actor_id": "EM:HOLDER:77012413",
@@ -2456,15 +2465,6 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "2602402",
-        "ticker": "000017.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:000017.SZ:徐胜利",
-        "actor_name": "徐胜利",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "2.5369E+6",
         "ticker": "000017.SZ"
       },
       {
@@ -2477,12 +2477,12 @@
         "ticker": "000019.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000020.SZ:陈惜如",
-        "actor_name": "陈惜如",
+        "actor_id": "EM:HOLDER:10429689",
+        "actor_name": "高盛公司有限责任公司",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "1.5605E+6",
+        "shares": "1616017",
         "ticker": "000020.SZ"
       }
     ],
