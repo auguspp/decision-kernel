@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "e373e6aeeaca2c76f185c90e276861d5c347226d0bc26956f564deede85991f1",
+    "base_reading_hash": "a1e68e0ac97ba8235a6f0b3a566df79093efb8b89934fa981352bfec4e88e2e1",
     "companies": [
       {
         "automatic_admission": false,
@@ -873,12 +873,69 @@
             },
             "source_observed_at": "2026-09-25T10:24:20.331698Z",
             "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
+          },
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 4,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "1665404.38",
+                "institution_sell_count": 4,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "99752156.51",
+                  "change": "0.040175",
+                  "concept_list": [
+                    {
+                      "name": "工业母机"
+                    },
+                    {
+                      "name": "注册制次新股"
+                    },
+                    {
+                      "name": "人形机器人"
+                    }
+                  ],
+                  "hot_money_net_value": "4499812.03",
+                  "hot_rank": 534,
+                  "name": "洛轴股份",
+                  "net_rate": "0.00789224",
+                  "net_value": "6165216.41",
+                  "org_buy_num": 4,
+                  "org_net_rate": "0.00213192",
+                  "org_net_value": "1665404.38",
+                  "org_sell_num": 4,
+                  "range_days": 1,
+                  "sell_value": "93586940.1",
+                  "thscode": "301699.SZ",
+                  "ticker": "301699"
+                },
+                "source_row_index": 11,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
           "来源方向“风电设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“风电零部件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“风电零部件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。",
+          "两种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1194,11 +1251,67 @@
             },
             "source_observed_at": "2026-09-25T10:24:20.331698Z",
             "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
+          },
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 4,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-10695035.56",
+                "institution_sell_count": 4,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "176968700.72",
+                  "change": "-0.017774",
+                  "concept_list": [
+                    {
+                      "name": "注册制次新股"
+                    },
+                    {
+                      "name": "共封装光学(CPO)"
+                    },
+                    {
+                      "name": "芯片概念"
+                    }
+                  ],
+                  "hot_rank": 460,
+                  "name": "电科思仪",
+                  "net_rate": "-0.01217422",
+                  "net_value": "-14304032.65",
+                  "org_buy_num": 4,
+                  "org_net_rate": "-0.00910259",
+                  "org_net_value": "-10695035.56",
+                  "org_sell_num": 4,
+                  "range_days": 1,
+                  "sell_value": "191272733.37",
+                  "thscode": "301689.SZ",
+                  "ticker": "301689"
+                },
+                "source_row_index": 25,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“仪器仪表”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“仪器仪表”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。",
+          "两种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -5911,7 +6024,7 @@
                 "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
                 "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "212f44120dad02119a94d07b76561b2fb6207a19",
+                "ref": "325318113711c79ec880bbcb99c5cc346ad6c24c",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
               },
@@ -5928,7 +6041,7 @@
                 "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
                 "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "212f44120dad02119a94d07b76561b2fb6207a19",
+                "ref": "325318113711c79ec880bbcb99c5cc346ad6c24c",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
               },
@@ -6087,6 +6200,2952 @@
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "603908.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 4,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "211537557.65",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "374968516.15",
+                  "change": "0.069018",
+                  "concept_list": [
+                    {
+                      "name": "固态电池"
+                    },
+                    {
+                      "name": "磷化工"
+                    },
+                    {
+                      "name": "PCB概念"
+                    }
+                  ],
+                  "hot_money_net_value": "-47580683.67",
+                  "hot_rank": 217,
+                  "name": "瑞丰高材",
+                  "net_rate": "0.08841988",
+                  "net_value": "143890336.98",
+                  "org_buy_num": 4,
+                  "org_net_rate": "0.12998876",
+                  "org_net_value": "211537557.65",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "231078179.17",
+                  "thscode": "300243.SZ",
+                  "ticker": "300243"
+                },
+                "source_row_index": 0,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "瑞丰高材"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300243.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 4,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "36160927.13",
+                "institution_sell_count": 4,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "152957176.66",
+                  "change": "0.176326",
+                  "concept_list": [
+                    {
+                      "name": "电子纸"
+                    },
+                    {
+                      "name": "5G"
+                    },
+                    {
+                      "name": "MiniLED"
+                    }
+                  ],
+                  "hot_rank": 229,
+                  "name": "秋田微",
+                  "net_rate": "0.04752219",
+                  "net_value": "38556854.66",
+                  "org_buy_num": 4,
+                  "org_net_rate": "0.04456915",
+                  "org_net_value": "36160927.13",
+                  "org_sell_num": 4,
+                  "range_days": 1,
+                  "sell_value": 114400322,
+                  "thscode": "300939.SZ",
+                  "ticker": "300939"
+                },
+                "source_row_index": 1,
+                "window_end": "2026-09-17"
+              },
+              {
+                "institution_buy_count": 5,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "20994906.75",
+                "institution_sell_count": 5,
+                "range_days": 3,
+                "source_row": {
+                  "buy_value": "234110188.61",
+                  "change": "0.176326",
+                  "concept_list": [
+                    {
+                      "name": "电子纸"
+                    },
+                    {
+                      "name": "5G"
+                    },
+                    {
+                      "name": "MiniLED"
+                    }
+                  ],
+                  "hot_rank": 229,
+                  "name": "秋田微",
+                  "net_rate": "0.01702739",
+                  "net_value": "20994906.75",
+                  "org_buy_num": 5,
+                  "org_net_rate": "0.01702739",
+                  "org_net_value": "20994906.75",
+                  "org_sell_num": 5,
+                  "range_days": 3,
+                  "sell_value": "213115281.86",
+                  "thscode": "300939.SZ",
+                  "ticker": "300939"
+                },
+                "source_row_index": 6,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "秋田微"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300939.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "30934886.03",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "133568457.69",
+                  "change": "0.200088",
+                  "concept_list": [
+                    {
+                      "name": "人造肉"
+                    },
+                    {
+                      "name": "宠物经济"
+                    },
+                    {
+                      "name": "合成生物"
+                    }
+                  ],
+                  "hot_money_net_value": "10474881.45",
+                  "hot_rank": 171,
+                  "limit_reason": "新型烟草+营养健康+香精配料",
+                  "name": "华宝股份",
+                  "net_rate": "0.01423729",
+                  "net_value": "11678389.62",
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.03771316",
+                  "org_net_value": "30934886.03",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "121890068.07",
+                  "thscode": "300741.SZ",
+                  "ticker": "300741"
+                },
+                "source_row_index": 2,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "华宝股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300741.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 3,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "28812452.2",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "84369078.55",
+                  "change": "-0.086294",
+                  "concept_list": [
+                    {
+                      "name": "国产操作系统"
+                    },
+                    {
+                      "name": "财税数字化"
+                    },
+                    {
+                      "name": "华为鲲鹏"
+                    }
+                  ],
+                  "hot_money_net_value": "5423031.0",
+                  "hot_rank": 141,
+                  "name": "中新赛克",
+                  "net_rate": "0.02639088",
+                  "net_value": "19022112.39",
+                  "org_buy_num": 3,
+                  "org_net_rate": "0.03997379",
+                  "org_net_value": "28812452.2",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": "65346966.16",
+                  "thscode": "002912.SZ",
+                  "ticker": "002912"
+                },
+                "source_row_index": 3,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中新赛克"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002912.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "24425449.77",
+                "institution_sell_count": 3,
+                "range_days": 3,
+                "source_row": {
+                  "buy_value": "683385226.64",
+                  "change": "0.056604",
+                  "concept_list": [
+                    {
+                      "name": "液冷服务器"
+                    },
+                    {
+                      "name": "消费电子概念"
+                    },
+                    {
+                      "name": "柔性屏(折叠屏)"
+                    }
+                  ],
+                  "hot_money_net_value": "981660.09",
+                  "hot_rank": 406,
+                  "name": "和胜股份",
+                  "net_rate": "0.05004419",
+                  "net_value": "140903611.03",
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.00867509",
+                  "org_net_value": "24425449.77",
+                  "org_sell_num": 3,
+                  "range_days": 3,
+                  "sell_value": "542481615.61",
+                  "thscode": "002824.SZ",
+                  "ticker": "002824"
+                },
+                "source_row_index": 4,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "和胜股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002824.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "24265805.6",
+                "institution_sell_count": 0,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "581698664.97",
+                  "change": "0.09854",
+                  "concept_list": [
+                    {
+                      "name": "减速器"
+                    },
+                    {
+                      "name": "华为汽车"
+                    },
+                    {
+                      "name": "汽车拆解概念"
+                    }
+                  ],
+                  "hot_money_net_value": "90583332.85",
+                  "hot_rank": 8,
+                  "limit_reason": "哪吒重整关联+整车业务+汽车零部件",
+                  "name": "山子高科",
+                  "net_rate": "0.15142419",
+                  "net_value": "393534209.38",
+                  "org_buy_num": 1,
+                  "org_net_rate": "0.00933700",
+                  "org_net_value": "24265805.6",
+                  "org_sell_num": 0,
+                  "range_days": 1,
+                  "sell_value": "188164455.59",
+                  "thscode": "000981.SZ",
+                  "ticker": "000981"
+                },
+                "source_row_index": 5,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "山子高科"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000981.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "2.047791E+7",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 400119816,
+                  "change": "0.100108",
+                  "concept_list": [
+                    {
+                      "name": "苹果概念"
+                    },
+                    {
+                      "name": "消费电子概念"
+                    },
+                    {
+                      "name": "芯片概念"
+                    }
+                  ],
+                  "hot_money_net_value": "-37101050",
+                  "hot_rank": 75,
+                  "limit_reason": "拟参投硅臻芯片+AI算力+电声元器件+苹果概念",
+                  "name": "共达电声",
+                  "net_rate": "0.12592949",
+                  "net_value": 182722673,
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.01411304",
+                  "org_net_value": "20477910",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": 217397143,
+                  "thscode": "002655.SZ",
+                  "ticker": "002655"
+                },
+                "source_row_index": 7,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "共达电声"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002655.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "14735511.28",
+                "institution_sell_count": 0,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "82483885.18",
+                  "change": "0.082426",
+                  "concept_list": [],
+                  "hot_money_net_value": "10524442.17",
+                  "hot_rank": 569,
+                  "name": "腾信精密",
+                  "net_rate": "-0.01650020",
+                  "net_value": "-12576586.42",
+                  "org_buy_num": 1,
+                  "org_net_rate": "0.01933266",
+                  "org_net_value": "14735511.28",
+                  "org_sell_num": 0,
+                  "range_days": 1,
+                  "sell_value": "95060471.6",
+                  "thscode": "920298.BJ",
+                  "ticker": "920298"
+                },
+                "source_row_index": 8,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "腾信精密"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
+        "thscode": "920298.BJ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "5826409.44",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "107098485.92",
+                  "change": "0.100162",
+                  "concept_list": [
+                    {
+                      "name": "装配式建筑"
+                    },
+                    {
+                      "name": "水利"
+                    },
+                    {
+                      "name": "地下管网"
+                    }
+                  ],
+                  "hot_money_net_value": "-4773264.0",
+                  "hot_rank": 105,
+                  "limit_reason": "PCB刀具+核电工程+岩土固化",
+                  "name": "中岩大地",
+                  "net_rate": "0.00823875",
+                  "net_value": "5886963.32",
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.00815401",
+                  "org_net_value": "5826409.44",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "101211522.6",
+                  "thscode": "003001.SZ",
+                  "ticker": "003001"
+                },
+                "source_row_index": 9,
+                "window_end": "2026-09-17"
+              },
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-8918968.0",
+                "institution_sell_count": 3,
+                "range_days": 3,
+                "source_row": {
+                  "buy_value": "144582359.32",
+                  "change": "0.100162",
+                  "concept_list": [
+                    {
+                      "name": "装配式建筑"
+                    },
+                    {
+                      "name": "水利"
+                    },
+                    {
+                      "name": "地下管网"
+                    }
+                  ],
+                  "hot_money_net_value": "4442039.0",
+                  "hot_rank": 105,
+                  "limit_reason": "PCB刀具+核电工程+岩土固化",
+                  "name": "中岩大地",
+                  "net_rate": "0.01585443",
+                  "net_value": "16590268.4",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.00852338",
+                  "org_net_value": "-8918968.0",
+                  "org_sell_num": 3,
+                  "range_days": 3,
+                  "sell_value": "127992090.92",
+                  "thscode": "003001.SZ",
+                  "ticker": "003001"
+                },
+                "source_row_index": 23,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "单日和三日席位净额方向不同：先核对各区间披露与事件时间；不相加、不倒算前两日。",
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中岩大地"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "003001.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "2836724.94",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "150802799.79",
+                  "change": "0.042683",
+                  "concept_list": [
+                    {
+                      "name": "无线耳机"
+                    },
+                    {
+                      "name": "芯片概念"
+                    },
+                    {
+                      "name": "先进封装"
+                    }
+                  ],
+                  "hot_money_net_value": -10577287,
+                  "hot_rank": 97,
+                  "name": "实益达",
+                  "net_rate": "-0.03183742",
+                  "net_value": "-37309717.48",
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.00242066",
+                  "org_net_value": "2836724.94",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "188112517.27",
+                  "thscode": "002137.SZ",
+                  "ticker": "002137"
+                },
+                "source_row_index": 10,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "实益达"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002137.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "1517794.06",
+                "institution_sell_count": 0,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 15982533,
+                  "change": "-0.099291",
+                  "concept_list": [
+                    {
+                      "name": "芯片概念"
+                    },
+                    {
+                      "name": "固态电池"
+                    },
+                    {
+                      "name": "ST板块"
+                    }
+                  ],
+                  "hot_money_net_value": "-1775491.0",
+                  "hot_rank": 1109,
+                  "name": "*ST皇庭",
+                  "net_rate": "-0.10330481",
+                  "net_value": "-18270194.94",
+                  "org_buy_num": 1,
+                  "org_net_rate": "0.00858203",
+                  "org_net_value": "1517794.06",
+                  "org_sell_num": 0,
+                  "range_days": 1,
+                  "sell_value": "34252727.94",
+                  "thscode": "000056.SZ",
+                  "ticker": "000056"
+                },
+                "source_row_index": 12,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "*ST皇庭"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000056.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "1342486.0",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 313424014,
+                  "change": "0.099125",
+                  "concept_list": [
+                    {
+                      "name": "互联网金融"
+                    },
+                    {
+                      "name": "网红经济"
+                    },
+                    {
+                      "name": "拼多多概念"
+                    }
+                  ],
+                  "hot_money_net_value": 46370267,
+                  "hot_rank": 111,
+                  "limit_reason": "跨境电商+中报扭亏",
+                  "name": "跨境通",
+                  "net_rate": "0.19877167",
+                  "net_value": 214461581,
+                  "org_buy_num": 0,
+                  "org_net_rate": "0.00124427",
+                  "org_net_value": "1342486.0",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": 98962433,
+                  "thscode": "002640.SZ",
+                  "ticker": "002640"
+                },
+                "source_row_index": 13,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "跨境通"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002640.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "1078329.09",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "20987208.83",
+                  "change": "-0.052997",
+                  "concept_list": [],
+                  "hot_rank": 1805,
+                  "name": "百迈科",
+                  "net_rate": "0.01892657",
+                  "net_value": "2665896.35",
+                  "org_buy_num": 1,
+                  "org_net_rate": "0.00765561",
+                  "org_net_value": "1078329.09",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "18321312.48",
+                  "thscode": "920268.BJ",
+                  "ticker": "920268"
+                },
+                "source_row_index": 14,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "百迈科"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
+        "thscode": "920268.BJ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "256110.58",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "189203230.04",
+                  "change": "0.044757",
+                  "concept_list": [
+                    {
+                      "name": "风电"
+                    },
+                    {
+                      "name": "绿色电力"
+                    },
+                    {
+                      "name": "海工装备"
+                    }
+                  ],
+                  "hot_money_net_value": "4764409.04",
+                  "hot_rank": 95,
+                  "name": "天顺风能",
+                  "net_rate": "0.00313844",
+                  "net_value": "6511823.75",
+                  "org_buy_num": 2,
+                  "org_net_rate": "0.00012344",
+                  "org_net_value": "256110.58",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "182691406.29",
+                  "thscode": "002531.SZ",
+                  "ticker": "002531"
+                },
+                "source_row_index": 15,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "天顺风能"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002531.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-1100779.0",
+                "institution_sell_count": 1,
+                "range_days": 3,
+                "source_row": {
+                  "buy_value": "100974244.37",
+                  "change": "0.100418",
+                  "concept_list": [
+                    {
+                      "name": "租售同权"
+                    },
+                    {
+                      "name": "物业管理"
+                    },
+                    {
+                      "name": "特色小镇"
+                    }
+                  ],
+                  "hot_money_net_value": -12105991,
+                  "hot_rank": 137,
+                  "limit_reason": "房地产服务+大资管+珠海国资",
+                  "name": "世联行",
+                  "net_rate": "0.04479968",
+                  "net_value": "29128590.77",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.00169299",
+                  "org_net_value": "-1100779.0",
+                  "org_sell_num": 1,
+                  "range_days": 3,
+                  "sell_value": "71845653.6",
+                  "thscode": "002285.SZ",
+                  "ticker": "002285"
+                },
+                "source_row_index": 16,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "on_demand_archives": [
+            {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "002285.SZ",
+              "id": "stock-002285-financial-question-review-20260921",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 11153,
+                "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
+                "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
+                "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            }
+          ],
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "世联行"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002285.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-1341000.0",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "22063500",
+                  "change": "0.2",
+                  "concept_list": [
+                    {
+                      "name": "数字孪生"
+                    },
+                    {
+                      "name": "水利"
+                    },
+                    {
+                      "name": "光伏建筑一体化"
+                    }
+                  ],
+                  "hot_rank": 301,
+                  "limit_reason": "复牌+控制权变更+溢价转让+电力服务",
+                  "name": "经纬股份",
+                  "net_rate": "0.53428047",
+                  "net_value": "14256000",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.05025744",
+                  "org_net_value": "-1341000.0",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "7807500.0",
+                  "thscode": "301390.SZ",
+                  "ticker": "301390"
+                },
+                "source_row_index": 17,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "经纬股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "301390.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-2042631.56",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 191480838,
+                  "change": "0.199808",
+                  "concept_list": [
+                    {
+                      "name": "仿制药一致性评价"
+                    },
+                    {
+                      "name": "创新药"
+                    },
+                    {
+                      "name": "CRO概念"
+                    }
+                  ],
+                  "hot_money_net_value": 144697256,
+                  "hot_rank": 168,
+                  "limit_reason": "呼吸用药+集采放量+皮肤科学+业绩增长",
+                  "name": "金石亚药",
+                  "net_rate": "0.19823001",
+                  "net_value": "109498593.44",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.00369786",
+                  "org_net_value": "-2042631.56",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "81982244.56",
+                  "thscode": "300434.SZ",
+                  "ticker": "300434"
+                },
+                "source_row_index": 18,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "金石亚药"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300434.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-2486060.16",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "129101284.01",
+                  "change": "0.099985",
+                  "concept_list": [
+                    {
+                      "name": "CRO概念"
+                    },
+                    {
+                      "name": "仿制药一致性评价"
+                    },
+                    {
+                      "name": "减肥药"
+                    }
+                  ],
+                  "hot_money_net_value": "4708367.49",
+                  "hot_rank": 79,
+                  "name": "万邦医药",
+                  "net_rate": "-0.00094417",
+                  "net_value": "-1237741.01",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.00189641",
+                  "org_net_value": "-2486060.16",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "130339025.02",
+                  "thscode": "301520.SZ",
+                  "ticker": "301520"
+                },
+                "source_row_index": 19,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "万邦医药"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "301520.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 3,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-3057229.0",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "88626047.56",
+                  "change": "-0.099656",
+                  "concept_list": [
+                    {
+                      "name": "海南自贸区"
+                    },
+                    {
+                      "name": "免税店"
+                    },
+                    {
+                      "name": "光伏建筑一体化"
+                    }
+                  ],
+                  "hot_money_net_value": "-528460.0",
+                  "hot_rank": 430,
+                  "name": "海南发展",
+                  "net_rate": "-0.29575363",
+                  "net_value": "-185868356.01",
+                  "org_buy_num": 3,
+                  "org_net_rate": "-0.00486466",
+                  "org_net_value": "-3057229.0",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "274494403.57",
+                  "thscode": "002163.SZ",
+                  "ticker": "002163"
+                },
+                "source_row_index": 20,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "海南发展"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002163.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-3655715.0",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 151292795,
+                  "change": "0.100068",
+                  "concept_list": [
+                    {
+                      "name": "5G"
+                    },
+                    {
+                      "name": "6G概念"
+                    },
+                    {
+                      "name": "共封装光学(CPO)"
+                    }
+                  ],
+                  "hot_money_net_value": "-5279018.0",
+                  "hot_rank": 191,
+                  "limit_reason": "光模块+移动通信+购置液冷",
+                  "name": "世嘉科技",
+                  "net_rate": "0.00797148",
+                  "net_value": "6029068.24",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.00483349",
+                  "org_net_value": "-3655715.0",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": "145263726.76",
+                  "thscode": "002796.SZ",
+                  "ticker": "002796"
+                },
+                "source_row_index": 21,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "世嘉科技"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002796.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-7882905.86",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "22779034.09",
+                  "change": "-0.009608",
+                  "concept_list": [],
+                  "hot_rank": 1816,
+                  "name": "维琪科技",
+                  "net_rate": "-0.13622542",
+                  "net_value": "-22602299.29",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.04751075",
+                  "org_net_value": "-7882905.86",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "45381333.38",
+                  "thscode": "920176.BJ",
+                  "ticker": "920176"
+                },
+                "source_row_index": 22,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "维琪科技"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
+        "thscode": "920176.BJ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-9524855.73",
+                "institution_sell_count": 1,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "26534796.54",
+                  "change": "-0.084763",
+                  "concept_list": [
+                    {
+                      "name": "华为汽车"
+                    },
+                    {
+                      "name": "一体化压铸"
+                    },
+                    {
+                      "name": "小米汽车"
+                    }
+                  ],
+                  "hot_money_net_value": "6884643.88",
+                  "hot_rank": 854,
+                  "name": "瑞鹄模具",
+                  "net_rate": "-0.02133367",
+                  "net_value": "-5042325.84",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.04029890",
+                  "org_net_value": "-9524855.73",
+                  "org_sell_num": 1,
+                  "range_days": 1,
+                  "sell_value": "31577122.38",
+                  "thscode": "002997.SZ",
+                  "ticker": "002997"
+                },
+                "source_row_index": 24,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "瑞鹄模具"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002997.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-13326720.97",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "229377767.24",
+                  "change": "0.079208",
+                  "concept_list": [
+                    {
+                      "name": "海南自贸区"
+                    },
+                    {
+                      "name": "参股银行"
+                    },
+                    {
+                      "name": "网约车"
+                    }
+                  ],
+                  "hot_money_net_value": "31753701.56",
+                  "hot_rank": 157,
+                  "name": "海马汽车",
+                  "net_rate": "0.13270616",
+                  "net_value": "116952175.78",
+                  "org_buy_num": 1,
+                  "org_net_rate": "-0.01512189",
+                  "org_net_value": "-13326720.97",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": "112425591.46",
+                  "thscode": "000572.SZ",
+                  "ticker": "000572"
+                },
+                "source_row_index": 26,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "海马汽车"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000572.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-14452686.04",
+                "institution_sell_count": 1,
+                "range_days": 3,
+                "source_row": {
+                  "buy_value": "167626125.99",
+                  "change": "-0.093288",
+                  "concept_list": [
+                    {
+                      "name": "旅游概念"
+                    },
+                    {
+                      "name": "国企改革"
+                    },
+                    {
+                      "name": "文化传媒概念"
+                    }
+                  ],
+                  "hot_money_net_value": "14350109.19",
+                  "hot_rank": 6,
+                  "name": "桂林旅游",
+                  "net_rate": "-0.02533696",
+                  "net_value": "-55679372.98",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.00657671",
+                  "org_net_value": "-14452686.04",
+                  "org_sell_num": 1,
+                  "range_days": 3,
+                  "sell_value": "223305498.97",
+                  "thscode": "000978.SZ",
+                  "ticker": "000978"
+                },
+                "source_row_index": 27,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "桂林旅游"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000978.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-25789209",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "199819773.88",
+                  "change": "0.102326",
+                  "concept_list": [
+                    {
+                      "name": "新能源汽车"
+                    },
+                    {
+                      "name": "一带一路"
+                    },
+                    {
+                      "name": "中俄贸易概念"
+                    }
+                  ],
+                  "hot_money_net_value": 19851088,
+                  "hot_rank": 26,
+                  "limit_reason": "汽车整车+A0车型+海外布局",
+                  "name": "众泰汽车",
+                  "net_rate": "0.04388943",
+                  "net_value": "63353058.88",
+                  "org_buy_num": 1,
+                  "org_net_rate": "-0.01786613",
+                  "org_net_value": -25789209,
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": 136466715,
+                  "thscode": "000980.SZ",
+                  "ticker": "000980"
+                },
+                "source_row_index": 28,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "众泰汽车"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000980.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-30822399.31",
+                "institution_sell_count": 4,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": 58681892,
+                  "change": "0.00156",
+                  "concept_list": [
+                    {
+                      "name": "跨境电商"
+                    },
+                    {
+                      "name": "三胎概念"
+                    },
+                    {
+                      "name": "IP经济(谷子经济)"
+                    }
+                  ],
+                  "hot_money_net_value": 13592593,
+                  "hot_rank": 424,
+                  "name": "洪兴股份",
+                  "net_rate": "-0.00821115",
+                  "net_value": "-3039448.31",
+                  "org_buy_num": 1,
+                  "org_net_rate": "-0.08326750",
+                  "org_net_value": "-30822399.31",
+                  "org_sell_num": 4,
+                  "range_days": 1,
+                  "sell_value": "61721340.31",
+                  "thscode": "001209.SZ",
+                  "ticker": "001209"
+                },
+                "source_row_index": 29,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "洪兴股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "001209.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-59411732.35",
+                "institution_sell_count": 3,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "534389516.92",
+                  "change": "0.042239",
+                  "concept_list": [
+                    {
+                      "name": "PCB概念"
+                    },
+                    {
+                      "name": "先进封装"
+                    },
+                    {
+                      "name": "共封装光学(CPO)"
+                    }
+                  ],
+                  "hot_money_net_value": "7348711.71",
+                  "hot_rank": 9,
+                  "name": "中京电子",
+                  "net_rate": "0.00744970",
+                  "net_value": "27182730.94",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.01628238",
+                  "org_net_value": "-59411732.35",
+                  "org_sell_num": 3,
+                  "range_days": 1,
+                  "sell_value": "507206785.98",
+                  "thscode": "002579.SZ",
+                  "ticker": "002579"
+                },
+                "source_row_index": 30,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中京电子"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002579.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-61446373.66",
+                "institution_sell_count": 2,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "255788916.44",
+                  "change": "-0.003141",
+                  "concept_list": [
+                    {
+                      "name": "光刻胶"
+                    },
+                    {
+                      "name": "锂电池概念"
+                    },
+                    {
+                      "name": "氟化工概念"
+                    }
+                  ],
+                  "hot_money_net_value": "33846014.33",
+                  "hot_rank": 11,
+                  "name": "西陇科学",
+                  "net_rate": "-0.06513827",
+                  "net_value": "-170028009.74",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.02354030",
+                  "org_net_value": "-61446373.66",
+                  "org_sell_num": 2,
+                  "range_days": 1,
+                  "sell_value": "425816926.18",
+                  "thscode": "002584.SZ",
+                  "ticker": "002584"
+                },
+                "source_row_index": 31,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "西陇科学"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002584.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 2,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-66238614.11",
+                "institution_sell_count": 4,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "195419914.13",
+                  "change": "0.086179",
+                  "concept_list": [
+                    {
+                      "name": "玉米"
+                    },
+                    {
+                      "name": "转基因"
+                    },
+                    {
+                      "name": "粮食概念"
+                    }
+                  ],
+                  "hot_money_net_value": "20074145.92",
+                  "hot_rank": 109,
+                  "name": "神农种业",
+                  "net_rate": "-0.04450142",
+                  "net_value": "-87534848.83",
+                  "org_buy_num": 2,
+                  "org_net_rate": "-0.03367473",
+                  "org_net_value": "-66238614.11",
+                  "org_sell_num": 4,
+                  "range_days": 1,
+                  "sell_value": "282954762.96",
+                  "thscode": "300189.SZ",
+                  "ticker": "300189"
+                },
+                "source_row_index": 32,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "神农种业"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300189.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 0,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-150749265.38",
+                "institution_sell_count": 5,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "188963851.83",
+                  "change": "3.738041",
+                  "concept_list": [],
+                  "hot_rank": 14,
+                  "name": "沈鼓集团",
+                  "net_rate": "0.01752008",
+                  "net_value": "38214586.45",
+                  "org_buy_num": 0,
+                  "org_net_rate": "-0.06911340",
+                  "org_net_value": "-150749265.38",
+                  "org_sell_num": 5,
+                  "range_days": 1,
+                  "sell_value": "150749265.38",
+                  "thscode": "601091.SH",
+                  "ticker": "601091"
+                },
+                "source_row_index": 33,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "沈鼓集团"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "601091.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "kind": "INSTITUTIONAL_WINDOWS",
+            "market_session": "2026-09-17",
+            "observations": [
+              {
+                "institution_buy_count": 1,
+                "institution_fields_status": "SUPPLIER_REPORTED_NET",
+                "institution_net_cny": "-2141729038.33",
+                "institution_sell_count": 5,
+                "range_days": 1,
+                "source_row": {
+                  "buy_value": "1337498685.83",
+                  "change": "0.144359",
+                  "concept_list": [
+                    {
+                      "name": "科创次新股"
+                    },
+                    {
+                      "name": "芯片概念"
+                    },
+                    {
+                      "name": "先进封装"
+                    }
+                  ],
+                  "hot_money_net_value": "937234756.05",
+                  "hot_rank": 162,
+                  "name": "沐曦股份",
+                  "net_rate": "-0.14135210",
+                  "net_value": "-1014205320.73",
+                  "org_buy_num": 1,
+                  "org_net_rate": "-0.29849763",
+                  "org_net_value": "-2141729038.33",
+                  "org_sell_num": 5,
+                  "range_days": 1,
+                  "sell_value": "2351704006.56",
+                  "thscode": "688802.SH",
+                  "ticker": "688802"
+                },
+                "source_row_index": 34,
+                "window_end": "2026-09-17"
+              }
+            ],
+            "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 37710,
+              "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+              "read_path": "details/institutional/35296479748/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+            },
+            "source_labels": "CONCEPTS_AND_REASONS_UNVERIFIED_NOT_BUSINESS_EVIDENCE",
+            "source_observed_at": "2026-09-18T01:44:14.379291Z",
+            "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "该区间机构席位活动是否伴随可核实的经营、公告或预期变化？净额方向本身不能解释机构动机。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "沐曦股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-09-24",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 92229,
+            "git_blob": "db6bd1e69eb72ce3325dc4ec31a191e93fd132d6",
+            "read_path": "details/stock/36127712583/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "14f214e0a2e9975ef1e85d9c1f5d79c531a60868584fc335e7636c8db9065cdc"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "688802.SH"
       }
     ],
     "concept_context": {
@@ -6103,27 +9162,27 @@
       "concept_overlap_existing_companies": 0,
       "concept_radar": false,
       "cumulative_all_batches": false,
-      "distinct_companies": 87,
+      "distinct_companies": 118,
       "full_concept_trend_radar": false,
-      "institution_only_companies": 0,
-      "institutional_companies": 0,
-      "multi_source_companies": 0,
+      "institution_only_companies": 31,
+      "institutional_companies": 33,
+      "multi_source_companies": 2,
       "new_research_executions": 0,
       "ongoing_without_event": false,
-      "overlap_companies": 0,
+      "overlap_companies": 2,
       "primary_concept_companies": 0,
-      "registered_archive_only_companies": 0,
+      "registered_archive_only_companies": 1,
       "sector_companies": 87,
       "supplement_only_companies": 0,
       "supplement_overlap_existing_companies": 0,
       "supplemental_concept_companies": 0,
-      "unsupported_stock_business_research_companies": 3,
-      "with_registered_archive_locator": 0,
+      "unsupported_stock_business_research_companies": 6,
+      "with_registered_archive_locator": 1,
       "with_saved_research_context": 1,
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-26T02:03:43.520377+00:00",
+    "generated_at": "2026-09-26T02:52:19.583970+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6155,7 +9214,7 @@
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
         "pending_blob_writes": 2,
-        "retained_file_count": 110,
+        "retained_file_count": 121,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
       "concept_detail": {
@@ -6166,8 +9225,105 @@
         "status": "UNAVAILABLE_OR_REJECTED"
       },
       "institutional": {
-        "error_type": "InstitutionalSourceError",
-        "failed_stage": "PAYLOAD_REPLAY",
+        "archive": {
+          "artifact_id": 10527564199,
+          "artifact_name": "institutional-radar-35296479748-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/35296479748/artifacts/10527564199",
+          "bytes": 2995041,
+          "expires_at": "2026-10-18T01:44:14Z",
+          "git_blob": "444cff043791e5af1d6956977f7ac6992b733a34",
+          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+          "origin_run": {
+            "conclusion": "success",
+            "created_at": "2026-09-18T01:43:31Z",
+            "event": "workflow_dispatch",
+            "head_sha": "a659b4a6eca38d453a2153d6067dd731e206ec0d",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/35296479748",
+            "id": 35296479748,
+            "operation": null,
+            "path": ".github/workflows/radar-institutional-source.yml",
+            "run_attempt": 1,
+            "run_started_at": "2026-09-18T01:43:31Z",
+            "status": "completed",
+            "updated_at": "2026-09-18T01:44:19Z"
+          },
+          "read_path": "sources/artifacts/49f6e2752a91b845d015b54bc678df850f66243fc3909c5e84f6b06e5971f9d2.zip",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "sha256": "49f6e2752a91b845d015b54bc678df850f66243fc3909c5e84f6b06e5971f9d2"
+        },
+        "compatibility": "REVIEWED_SECTOR_ONLY_CHANGE_579",
+        "details": {
+          "capture.json": {
+            "bytes": 2929,
+            "git_blob": "9dd69c28f2c9cdd08b6438e9025d661523070d23",
+            "read_path": "details/institutional/35296479748/capture.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "be241819f09053f97dad5e6f766581197a62e1ed6b4add4a659c3e6f82eb5e16"
+          },
+          "index.html": {
+            "bytes": 58296,
+            "git_blob": "dbd824c69635b043dca8f0b54cca714bd2bf0e6d",
+            "read_path": "details/institutional/35296479748/index.html",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "884c84aed6fd09566a775809b322d7646a66d2c812630153244648a2cefbc1d8"
+          },
+          "observation.json": {
+            "bytes": 37710,
+            "git_blob": "e6709ee4b5efa5f6ca095d68d4b6d4163d9adf56",
+            "read_path": "details/institutional/35296479748/observation.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "3d5536afdf6e9ce38a574795f6f299ceb4a7301a21c585bffd871a6d184beb0e"
+          },
+          "plan.json": {
+            "bytes": 879,
+            "git_blob": "686d5aed3aa6871b37ba261886e79b4579be010f",
+            "read_path": "details/institutional/35296479748/plan.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "563b498889bdfd74f095bd6f8f05a9c8c1e99c7a8da2dd5593f67fa5c5513a9a"
+          },
+          "request-1.json": {
+            "bytes": 103,
+            "git_blob": "e0481a44739d26ea962c33e776e79afffeafef2e",
+            "read_path": "details/institutional/35296479748/request-1.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "6e6d19df7ec51102b0a3eb7756d02c7d24c05eb43b647d5f1e6344a7b92c8527"
+          },
+          "request-2.json": {
+            "bytes": 150,
+            "git_blob": "9b594885373ab596d6cd3ad74690bef32936ceb6",
+            "read_path": "details/institutional/35296479748/request-2.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "49359201b64e2258abe2e8b42d5edf30dda86c5224cb2f6ea976ad707fe9bcb1"
+          },
+          "response-1.json": {
+            "bytes": 10814,
+            "git_blob": "0ef0f56ab017cf1e7b1a8fd638769fdb5a46e407",
+            "read_path": "details/institutional/35296479748/response-1.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "1ec84b6925b1aa8b688de07f79de079d5cce77682859399ff8fce8c1373c1359"
+          },
+          "response-2.json": {
+            "bytes": 14980,
+            "git_blob": "195f01fd97ae7d76060ec858556355299d9fb869",
+            "read_path": "details/institutional/35296479748/response-2.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "1758392482171a8f86ddc649e1b6af73cb29ef55935490f3db34d5737b8e8e5a"
+          },
+          "run.json": {
+            "bytes": 14093,
+            "git_blob": "b7170affefc1e047ab8ab9844a9bdd1c3d37084b",
+            "read_path": "details/institutional/35296479748/run.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "c3b4f0cfa1eea8c8fe0e69d04736dae172bd061a9a5e120937453078b46d835a"
+          },
+          "verification.json": {
+            "bytes": 145,
+            "git_blob": "add6891e435ecc51f4b96c85a4b868bf113b0a51",
+            "read_path": "details/institutional/35296479748/verification.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "6e86d96f7b709c55907442805b15fef571b4f826b88c0a33dfb7e744bff169bd"
+          }
+        },
         "latest_attempt": {
           "conclusion": "success",
           "created_at": "2026-09-18T01:43:31Z",
@@ -6182,8 +9338,27 @@
           "status": "completed",
           "updated_at": "2026-09-18T01:44:19Z"
         },
-        "meaning": "SOURCE_READ_GAP_NOT_ZERO_ACTIVITY; NO_OLDER_SUCCESS_FALLBACK",
-        "status": "UNAVAILABLE_OR_REJECTED"
+        "market_session": "2026-09-17",
+        "meaning": "ORIGINAL_BYTES_REBUILT_NOT_EXCHANGE_TRUTH_OR_RESEARCH; NOT_A_NEW_MARKET_SCAN",
+        "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+        "query_scope": "NEWEST_TWENTY_MAIN_INVOCATIONS_NOT_ALL_HISTORY",
+        "replay": {
+          "automatic_research_routing": false,
+          "capture_hash": "dc643194cdb77ef6528e1698b46afba0a86dee482f3aafcfb6720d2da12616fe",
+          "company_count": 33,
+          "events_created": 0,
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_state_writes": 0,
+          "network_calls": 0,
+          "odds_recomputed": false,
+          "projection_hash": "c750bded96fbc4e89443c1a203c2b8cebd429f834024ac71b508ea247634275b",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "status": "ORIGINAL_INSTITUTIONAL_BODIES_AND_READING_REBUILT"
+        },
+        "source_observed_at": "2026-09-18T01:44:14.379291Z",
+        "status": "VERIFIED_SAVED_INSTITUTIONAL_SOURCE"
       },
       "sector": {
         "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
@@ -6201,5 +9376,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "390a7cf2ef94ebc3c8c1d997e4bee06f280894e6130510f9a536eeaf2339569c"
+  "projection_hash": "ce550b758d0a5bdebae1c57aa742812b6463a9e6fd5fd27610dadb7c4b972afb"
 }
