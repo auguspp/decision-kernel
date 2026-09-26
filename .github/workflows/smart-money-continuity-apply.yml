@@ -1,0 +1,110 @@
+name: smart-money-continuity-apply
+on:
+  push:
+    branches: [work/smart-money-continuity-20260926]
+    paths: [.github/workflows/smart-money-continuity-apply.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: smart-money-continuity-apply
+  cancel-in-progress: false
+jobs:
+  verify-retained-recovery:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/work/smart-money-continuity-20260926' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 62fc68e5e44a6a8462313c55e9750085b15eb2db
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Apply exact reviewed ordinary-file patch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64,hashlib,json,os,pathlib,subprocess
+          from datetime import datetime,timezone
+          assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()=='62fc68e5e44a6a8462313c55e9750085b15eb2db'
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'checked';root.mkdir()
+          def blob(sha):
+              b=json.loads(subprocess.check_output(['gh','api','repos/auguspp/decision-kernel/git/blobs/'+sha]))
+              raw=base64.b64decode(b['content'])
+              assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==b['sha']==sha
+              return raw
+          (root/'runtime.patch').write_bytes(blob('9d45151cdb1fdc1c157c89d2f8a7bc8c3eb36f6c'))
+          subprocess.run(['git','apply','--unidiff-zero','--index',str(root/'runtime.patch')],check=True)
+          for path,sha in (('tests/test_smart_money_disclosure_dates.py','8bc4826073f9a12d0ad50c99e0f2425515a8d61d'),('docs/smart-money-full-recovery-2026-09-26.md','a46410d2022dfc838bdf1d3f61c10105ea2f4510')):
+              pathlib.Path(path).write_bytes(blob(sha));subprocess.run(['git','add',path],check=True)
+          expected={'smart_money_capture.py':'bdd243c72ae759e4f78326db59dc831ae845deb5','smart_money_reading.py':'9371b5e301eeb4979df0bd3934fcceaeb4bfa9c8','smart_money_sources.py':'8680d2ae90b15e8191542f23a54c6452925017a5','smart_money_view.py':'a5d115593179f2cf15a0038588bc486785321fde'}
+          for name,sha in expected.items():
+              assert subprocess.check_output(['git','hash-object','src/decision_kernel/runtime/'+name],text=True).strip()==sha
+          for aid,name,sha in ((10896403657,'first.zip','246843ac886cdc055ec37950f01a9dca6a6c5ee696bc1ae887ff4bc57947bc52'),(10897997413,'recovery.zip','fa190a28cff1de25a93b43324e1a4aa46a7eb536261df20932f710860fd93b43')):
+              data=subprocess.check_output(['gh','api',f'repos/auguspp/decision-kernel/actions/artifacts/{aid}/zip'])
+              assert hashlib.sha256(data).hexdigest()==sha;(root/name).write_bytes(data)
+          PY
+      - run: python -m pip install -e '.[dev]'
+      - name: Verify ordinary regressions and original bytes offline
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_smart_money*.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/checked/junit.xml" | tee "$RUNNER_TEMP/checked/tests.log"
+          python - <<'PY'
+          import json,os,pathlib,zipfile
+          from decision_kernel.runtime import smart_money_capture as c,smart_money_sources as s,smart_money_view as v
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'checked';hist=None
+          for name in ('first.zip','recovery.zip'):
+              with zipfile.ZipFile(root/name) as z:
+                  assert z.testzip() is None
+                  files={i.filename:z.read(i) for i in z.infolist() if not i.is_dir()}
+              m=s.decode(files['capture.json']);obs=c.replay(files,m['identity'],cutoff=s.now())
+              assert obs['source_calls_during_replay']==0
+              hist=v.history(obs,hist)
+          summary=v.summarize(obs,hist)
+          assert obs['status']=='READY' and not obs['unresolved'] and obs['requests']==22
+          assert summary['families']['activity']['saved_records']==5584
+          assert summary['families']['north_holdings']['saved_records']==8416
+          assert summary['families']['repurchases']['saved_records']==567
+          assert summary['families']['activity']['ambiguous_disclosure_groups']==2
+          assert summary['families']['repurchases']['field_gap_rows']==1
+          assert len(summary['forecast_documents'])==12
+          (root/'recovery-summary.json').write_bytes(s.encoded(summary))
+          (root/'recovery-summary.md').write_text(v.render(summary,hist))
+          PY
+      - name: Publish tested content blobs only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'checked'
+          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert len(paths)==6 and all(p.startswith(('src/decision_kernel/runtime/smart_money_','tests/test_smart_money_disclosure_dates.py','docs/smart-money-full-recovery-2026-09-26.md')) for p in paths)
+          entries=[]
+          for p in paths:
+              raw=pathlib.Path(p).read_bytes();sha=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              result=json.loads(subprocess.check_output(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=json.dumps({'content':raw.decode(),'encoding':'utf-8'}).encode()))
+              assert result['sha']==sha;entries.append({'path':p,'sha':sha,'mode':'100644','type':'blob'})
+          tree=subprocess.check_output(['git','write-tree'],text=True).strip()
+          (root/'blobs.json').write_text(json.dumps({'entries':entries,'tree':tree,'base':'62fc68e5e44a6a8462313c55e9750085b15eb2db','refs_modified':False},indent=2))
+          # No refs/PRs/trees/workflows modified. Normal connector performs PR.
+          PY
+      - name: Export source and evidence
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/checked"
+          git archive --format=zip "$(git write-tree)" > "$RUNNER_TEMP/checked/source.zip"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: smart-money-final-reading-${{ github.run_id }}-1
+          path: ${{ runner.temp }}/checked/
+          retention-days: 30
+          if-no-files-found: error
