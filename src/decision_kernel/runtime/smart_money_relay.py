@@ -1,1 +1,202 @@
-"""Supplement existing Smart Money with a bounded third-party Tushare Relay lane.\n\nThe existing HiThink/FTShare/Eastmoney/HKEX capture remains authoritative for\nits own semantics. This supplement is independently replayable and never merges\nvendor identities or amounts into the canonical Smart Money history.\n"""\nfrom __future__ import annotations\n\nimport argparse\nfrom copy import deepcopy\nfrom hashlib import sha256\nimport json\nimport os\nfrom pathlib import Path\nimport re\n\nfrom ..identity import canonical_hash\nfrom . import smart_money_capture as primary\nfrom . import smart_money_sources as s\nfrom . import tushare_relay as relay\n\nVERSION = "smart-money-relay-supplement-v1"\nAPIS = ("hm_list", "hm_detail", "report_rc", "top_list", "top_inst")\nAUTHORITY = {**s.AUTHORITY, "source_role": "SECONDARY_SUPPLEMENT_NOT_PRIMARY_REPLACEMENT"}\nMAX_RAW = 20 * 1024 * 1024\n\ndef plan(market_session: str | None) -> list[dict]:\n    if market_session is None:\n        return []\n    day = s.day(market_session).strftime("%Y%m%d")\n    return [\n        {"api": "hm_list", "params": {"__probe": "0", "limit": "5000"},\n         "meaning": "VENDOR_HOT_MONEY_DIRECTORY_NOT_PERSON_IDENTITY"},\n        {"api": "hm_detail", "params": {"trade_date": day, "limit": "5000"},\n         "meaning": "VENDOR_HOT_MONEY_DETAIL_NOT_COMPLETE_HOLDING"},\n        {"api": "report_rc", "params": {"report_date": day, "limit": "5000"},\n         "meaning": "STRUCTURED_BROKER_FORECAST_CONTEXT_NOT_MODEL_TRUTH"},\n        {"api": "top_list", "params": {"trade_date": day, "limit": "5000"},\n         "meaning": "DRAGON_TIGER_CROSSCHECK_NOT_ACTOR_CERTIFICATION"},\n        {"api": "top_inst", "params": {"trade_date": day, "limit": "5000"},\n         "meaning": "INSTITUTIONAL_SEAT_CROSSCHECK_NOT_IDENTIFIABLE_FUND"},\n    ]\n\ndef _encoded(value) -> bytes:\n    return (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode()\n\ndef _manifest_hash(value: dict) -> str:\n    return canonical_hash({k: v for k, v in value.items() if k != "capture_hash"})\n\ndef capture(output: Path, identity: dict, market_session: str | None, *,\n            request=relay.request, clock=relay.now) -> dict:\n    primary.validate_identity(identity)\n    output = Path(output)\n    s.require(not output.exists() and not any(p.is_symlink() for p in (output, *output.parents)),\n              "OUTPUT_EXISTS_OR_SYMLINK")\n    output.mkdir(parents=True)\n    started = clock()\n    specs = plan(market_session)\n    records = []\n    raw_total = 0\n    credential = os.environ.get(relay.SECRET_ENV, "")\n    for index, spec in enumerate(specs):\n        if not credential:\n            records.append({"index": index, "spec": spec, "status": "CREDENTIAL_UNAVAILABLE",\n                            "attempts": []})\n            continue\n        result = request(spec["api"], spec["params"], key=credential, clock=clock)\n        attempts = []\n        for attempt in result["attempts"]:\n            raw = attempt.get("raw")\n            item = {k: deepcopy(v) for k, v in attempt.items() if k != "raw"}\n            if raw is not None:\n                s.require(isinstance(raw, bytes) and len(raw) <= relay.MAX_BODY, "RELAY_BODY_SIZE")\n                raw_total += len(raw)\n                s.require(raw_total <= MAX_RAW, "RELAY_TOTAL_SIZE")\n                name = f"raw-{index:02d}-{attempt['attempt']}.json"\n                (output / name).write_bytes(raw)\n                item.update(body=name, bytes=len(raw), sha256=sha256(raw).hexdigest())\n            else:\n                item.update(body=None, bytes=None, sha256=None)\n            attempts.append(item)\n        records.append({"index": index, "spec": spec, "status": result["status"],\n                        "attempts": attempts})\n    manifest = {"version": VERSION, "identity": identity, "market_session": market_session,\n                "started_at": started, "finished_at": clock(), "records": records,\n                "authority": AUTHORITY, "relay_host": relay.PRO,\n                "retry_wait_seconds": relay.RETRY_WAIT_SECONDS}\n    manifest["capture_hash"] = _manifest_hash(manifest)\n    (output / "capture.json").write_bytes(_encoded(manifest))\n    files = {p.name: p.read_bytes() for p in output.iterdir() if p.is_file()}\n    result = replay(files, identity=identity, cutoff=manifest["finished_at"])\n    (output / "summary.json").write_bytes(_encoded(result))\n    (output / "summary.md").write_text(render(result), encoding="utf-8")\n    return result\n\ndef _validate_attempt(item: dict, files: dict[str, bytes], *, first, finish):\n    required = {"attempt", "http_status", "requested_at", "received_at", "headers",\n                "classification", "business_code", "business_error", "business_msg",\n                "body", "bytes", "sha256"}\n    s.require(set(item) == required, "RELAY_ATTEMPT_FIELDS")\n    req, rec = s.clock(item["requested_at"]), s.clock(item["received_at"])\n    s.require(first <= req <= rec <= finish, "RELAY_CLOCKS")\n    if item["body"] is None:\n        s.require(item["bytes"] is None and item["sha256"] is None, "RELAY_BODY_RECEIPT")\n        return None\n    raw = files[item["body"]]\n    s.require(len(raw) == item["bytes"] and sha256(raw).hexdigest() == item["sha256"],\n              "RELAY_BODY_IDENTITY")\n    body = relay.decode(raw)\n    s.require(relay.classify(item["http_status"], body) == item["classification"],\n              "RELAY_CLASSIFICATION")\n    return body\n\ndef replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:\n    s.require("capture.json" in files, "RELAY_CAPTURE_MISSING")\n    manifest = json.loads(files["capture.json"])\n    s.require(manifest.get("version") == VERSION and manifest.get("authority") == AUTHORITY,\n              "RELAY_CAPTURE_VERSION")\n    primary.validate_identity(manifest["identity"])\n    s.require(manifest["identity"] == identity and manifest.get("relay_host") == relay.PRO,\n              "RELAY_CAPTURE_IDENTITY")\n    s.require(manifest.get("retry_wait_seconds") == relay.RETRY_WAIT_SECONDS, "RELAY_RETRY_POLICY")\n    s.require(manifest.get("capture_hash") == _manifest_hash(manifest), "RELAY_CAPTURE_HASH")\n    begin, finish = s.clock(manifest["started_at"]), s.clock(manifest["finished_at"])\n    s.require(begin <= finish <= s.clock(cutoff), "RELAY_CAPTURE_CLOCK")\n    expected = plan(manifest.get("market_session"))\n    records = manifest.get("records")\n    s.require(isinstance(records, list) and len(records) == len(expected), "RELAY_RECORD_COUNT")\n    expected_files = {"capture.json"}\n    families = {}\n    unresolved = []\n    for index, (record, spec) in enumerate(zip(records, expected, strict=True)):\n        s.require(record.get("index") == index and record.get("spec") == spec, "RELAY_PLAN_DIFFERS")\n        attempts = record.get("attempts")\n        s.require(isinstance(attempts, list) and len(attempts) <= 2, "RELAY_ATTEMPTS")\n        bodies = []\n        for attempt_no, item in enumerate(attempts, 1):\n            s.require(item.get("attempt") == attempt_no, "RELAY_ATTEMPT_ORDER")\n            body = _validate_attempt(item, files, first=begin, finish=finish)\n            if item.get("body") is not None:\n                expected_files.add(item["body"])\n            bodies.append(body)\n        status = record.get("status")\n        if not attempts:\n            s.require(status == "CREDENTIAL_UNAVAILABLE", "RELAY_EMPTY_ATTEMPT_STATUS")\n            rows = []\n        else:\n            s.require(status == attempts[-1]["classification"], "RELAY_FINAL_STATUS")\n            if status == "SUCCESS":\n                rows = relay.rows(bodies[-1])\n            else:\n                rows = []\n                unresolved.append({"api": spec["api"], "status": status,\n                                   "business_error": attempts[-1].get("business_error")})\n        source_fields = sorted({key for row in rows for key in ("source", "provider", "data_source")\n                                if row.get(key) not in (None, "")})\n        families[spec["api"]] = {"status": status, "rows": rows, "row_count": len(rows),\n                                 "meaning": spec["meaning"], "source_fields_present": source_fields,\n                                 "attempts": [{k: v for k, v in a.items()\n                                               if k not in {"body", "bytes", "sha256"}} for a in attempts]}\n    s.require(expected_files == set(files) - {"summary.json", "summary.md"}, "RELAY_FILE_SCOPE")\n    succeeded = sum(v["status"] == "SUCCESS" for v in families.values())\n    overall = ("NO_COMPLETED_SESSION" if not families else "READY" if succeeded == len(families)\n               else "PARTIAL_WITH_EXPLICIT_GAPS" if succeeded else "UNAVAILABLE_NOT_QUIET")\n    return {"version": VERSION, "status": overall,\n            "market_session": manifest.get("market_session"), "cutoff": manifest["finished_at"],\n            "relay_host": relay.PRO, "families": families, "unresolved": unresolved,\n            "capture_hash": manifest["capture_hash"], "identity": identity, **AUTHORITY}\n\ndef render(result: dict) -> str:\n    lines = ["## Tushare Relay 补充来源", "",\n             f"状态 {result['status']}；市场日 {result.get('market_session') or 'UNKNOWN'}；"\n             f"取得截止 {result['cutoff']}。第三方中转，不是官方Tushare或聪明钱评分。", "",\n             "| 接口 | 状态 | 行数 |", "|---|---|---:|"]\n    for api in APIS:\n        item = result["families"].get(api)\n        if item:\n            lines.append(f"| {api} | {item['status']} | {item['row_count']} |")\n    if result["unresolved"]:\n        lines += ["", "缺口：" + "；".join(f"{x['api']}={x['status']}" for x in result["unresolved"])]\n    lines += ["", "upstream_pool_exhausted / 业务 timeout 只等待30秒再试一次；仍失败留到下一自然运行。",\n              "Relay 行为与既有 HiThink/FTShare/Eastmoney/HKEX 来源并列，不静默替代。", ""]\n    return "\n".join(lines)\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument("--source-capture", type=Path, required=True)\n    parser.add_argument("--output", type=Path, required=True)\n    args = parser.parse_args(argv)\n    primary_files = {p.name: p.read_bytes() for p in args.source_capture.iterdir() if p.is_file()}\n    manifest = s.decode(primary_files["capture.json"])\n    identity = manifest["identity"]\n    observation = primary.replay(primary_files, identity, cutoff=relay.now())\n    market_session = max(observation["trading_sessions"], default=None)\n    result = capture(args.output, identity, market_session)\n    print(json.dumps({k: result[k] for k in ("status", "market_session", "capture_hash", "unresolved")},\n                     ensure_ascii=False))\n    return 0\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n
+"""Replayable Tushare Relay supplement for the existing Smart Money capture.
+
+The primary HiThink/FTShare/Eastmoney/HKEX history remains unchanged.  Relay
+rows are retained beside it with their own source identity and explicit gaps.
+"""
+from __future__ import annotations
+
+import argparse
+from copy import deepcopy
+from hashlib import sha256
+import json
+import os
+from pathlib import Path
+
+from ..identity import canonical_hash
+from . import smart_money_capture as primary
+from . import smart_money_sources as s
+from . import tushare_relay as relay
+
+VERSION = "smart-money-relay-supplement-v1"
+APIS = ("hm_list", "hm_detail", "report_rc", "top_list", "top_inst")
+AUTHORITY = {**s.AUTHORITY, "source_role": "SECONDARY_SUPPLEMENT_NOT_PRIMARY_REPLACEMENT"}
+MAX_RAW = 20 * 1024 * 1024
+
+def plan(market_session: str | None) -> list[dict]:
+    if market_session is None:
+        return []
+    day = s.day(market_session).strftime("%Y%m%d")
+    return [
+        {"api": "hm_list", "params": {"__probe": "0", "limit": "5000"},
+         "meaning": "VENDOR_HOT_MONEY_DIRECTORY_NOT_PERSON_IDENTITY"},
+        {"api": "hm_detail", "params": {"trade_date": day, "limit": "5000"},
+         "meaning": "VENDOR_HOT_MONEY_DETAIL_NOT_COMPLETE_HOLDING"},
+        {"api": "report_rc", "params": {"report_date": day, "limit": "5000"},
+         "meaning": "STRUCTURED_BROKER_FORECAST_CONTEXT_NOT_MODEL_TRUTH"},
+        {"api": "top_list", "params": {"trade_date": day, "limit": "5000"},
+         "meaning": "DRAGON_TIGER_CROSSCHECK_NOT_ACTOR_CERTIFICATION"},
+        {"api": "top_inst", "params": {"trade_date": day, "limit": "5000"},
+         "meaning": "INSTITUTIONAL_SEAT_CROSSCHECK_NOT_IDENTIFIABLE_FUND"},
+    ]
+
+def _manifest_hash(value: dict) -> str:
+    return canonical_hash({k: v for k, v in value.items() if k != "capture_hash"})
+
+def capture(output: Path, identity: dict, market_session: str | None, *,
+            request=relay.request, clock=relay.now) -> dict:
+    primary.validate_identity(identity)
+    output = Path(output)
+    s.require(not output.exists() and not any(p.is_symlink() for p in (output, *output.parents)),
+              "OUTPUT_EXISTS_OR_SYMLINK")
+    output.mkdir(parents=True)
+    started = clock()
+    specs = plan(market_session)
+    records = []
+    raw_total = 0
+    credential = os.environ.get(relay.SECRET_ENV, "")
+    for index, spec in enumerate(specs):
+        if not credential:
+            records.append({"index": index, "spec": spec, "status": "CREDENTIAL_UNAVAILABLE",
+                            "attempts": []})
+            continue
+        result = request(spec["api"], spec["params"], key=credential, clock=clock)
+        attempts = []
+        for attempt in result["attempts"]:
+            raw = attempt.get("raw")
+            item = {k: deepcopy(v) for k, v in attempt.items() if k != "raw"}
+            if raw is not None:
+                s.require(isinstance(raw, bytes) and len(raw) <= relay.MAX_BODY, "RELAY_BODY_SIZE")
+                raw_total += len(raw)
+                s.require(raw_total <= MAX_RAW, "RELAY_TOTAL_SIZE")
+                name = f"raw-{index:02d}-{attempt['attempt']}.json"
+                (output / name).write_bytes(raw)
+                item.update(body=name, bytes=len(raw), sha256=sha256(raw).hexdigest())
+            else:
+                item.update(body=None, bytes=None, sha256=None)
+            attempts.append(item)
+        records.append({"index": index, "spec": spec, "status": result["status"],
+                        "attempts": attempts})
+    manifest = {"version": VERSION, "identity": identity, "market_session": market_session,
+                "started_at": started, "finished_at": clock(), "records": records,
+                "authority": AUTHORITY, "relay_host": relay.PRO,
+                "retry_wait_seconds": relay.RETRY_WAIT_SECONDS}
+    manifest["capture_hash"] = _manifest_hash(manifest)
+    (output / "capture.json").write_bytes(s.encoded(manifest))
+    files = {p.name: p.read_bytes() for p in output.iterdir() if p.is_file()}
+    result = replay(files, identity=identity, cutoff=manifest["finished_at"])
+    (output / "summary.json").write_bytes(s.encoded(result))
+    (output / "summary.md").write_text(render(result), encoding="utf-8")
+    return result
+
+def _validate_attempt(item: dict, files: dict[str, bytes], *, first, finish):
+    required = {"attempt", "http_status", "requested_at", "received_at", "headers",
+                "classification", "business_code", "business_error", "business_msg",
+                "body", "bytes", "sha256"}
+    s.require(set(item) == required, "RELAY_ATTEMPT_FIELDS")
+    requested, received = s.clock(item["requested_at"]), s.clock(item["received_at"])
+    s.require(first <= requested <= received <= finish, "RELAY_CLOCKS")
+    if item["body"] is None:
+        s.require(item["bytes"] is None and item["sha256"] is None, "RELAY_BODY_RECEIPT")
+        return None
+    raw = files[item["body"]]
+    s.require(len(raw) == item["bytes"] and sha256(raw).hexdigest() == item["sha256"],
+              "RELAY_BODY_IDENTITY")
+    body = relay.decode(raw)
+    expected = relay.classify(item["http_status"], body)
+    if item["classification"] == "MALFORMED_RESPONSE":
+        # A malformed envelope was retained, but cannot be interpreted as success.
+        expected = "MALFORMED_RESPONSE"
+    s.require(expected == item["classification"], "RELAY_CLASSIFICATION")
+    return body
+
+def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
+    s.require("capture.json" in files, "RELAY_CAPTURE_MISSING")
+    manifest = s.decode(files["capture.json"])
+    s.require(manifest.get("version") == VERSION and manifest.get("authority") == AUTHORITY,
+              "RELAY_CAPTURE_VERSION")
+    primary.validate_identity(manifest["identity"])
+    s.require(manifest["identity"] == identity and manifest.get("relay_host") == relay.PRO,
+              "RELAY_CAPTURE_IDENTITY")
+    s.require(manifest.get("retry_wait_seconds") == relay.RETRY_WAIT_SECONDS, "RELAY_RETRY_POLICY")
+    s.require(manifest.get("capture_hash") == _manifest_hash(manifest), "RELAY_CAPTURE_HASH")
+    begin, finish = s.clock(manifest["started_at"]), s.clock(manifest["finished_at"])
+    s.require(begin <= finish <= s.clock(cutoff), "RELAY_CAPTURE_CLOCK")
+    expected = plan(manifest.get("market_session"))
+    records = manifest.get("records")
+    s.require(isinstance(records, list) and len(records) == len(expected), "RELAY_RECORD_COUNT")
+    expected_files = {"capture.json"}
+    families = {}
+    unresolved = []
+    for index, (record, spec) in enumerate(zip(records, expected, strict=True)):
+        s.require(record.get("index") == index and record.get("spec") == spec, "RELAY_PLAN_DIFFERS")
+        attempts = record.get("attempts")
+        s.require(isinstance(attempts, list) and len(attempts) <= 2, "RELAY_ATTEMPTS")
+        bodies = []
+        for attempt_no, item in enumerate(attempts, 1):
+            s.require(item.get("attempt") == attempt_no, "RELAY_ATTEMPT_ORDER")
+            body = _validate_attempt(item, files, first=begin, finish=finish)
+            if item.get("body") is not None:
+                expected_files.add(item["body"])
+            bodies.append(body)
+        status = record.get("status")
+        if not attempts:
+            s.require(status == "CREDENTIAL_UNAVAILABLE", "RELAY_EMPTY_ATTEMPT_STATUS")
+            rows = []
+        else:
+            s.require(status == attempts[-1]["classification"], "RELAY_FINAL_STATUS")
+            rows = relay.rows(bodies[-1]) if status == "SUCCESS" else []
+        if status != "SUCCESS":
+            unresolved.append({"api": spec["api"], "status": status,
+                               "business_error": attempts[-1].get("business_error") if attempts else status})
+        source_fields = sorted({key for row in rows
+                                for key in ("source", "provider", "data_source")
+                                if row.get(key) not in (None, "")})
+        families[spec["api"]] = {"status": status, "rows": rows, "row_count": len(rows),
+                                 "meaning": spec["meaning"], "source_fields_present": source_fields,
+                                 "attempts": [{k: v for k, v in a.items()
+                                               if k not in {"body", "bytes", "sha256"}}
+                                              for a in attempts]}
+    s.require(expected_files == set(files) - {"summary.json", "summary.md"}, "RELAY_FILE_SCOPE")
+    succeeded = sum(v["status"] == "SUCCESS" for v in families.values())
+    overall = ("NO_COMPLETED_SESSION" if not families
+               else "READY" if succeeded == len(families)
+               else "PARTIAL_WITH_EXPLICIT_GAPS" if succeeded
+               else "UNAVAILABLE_NOT_QUIET")
+    return {"version": VERSION, "status": overall,
+            "market_session": manifest.get("market_session"), "cutoff": manifest["finished_at"],
+            "relay_host": relay.PRO, "families": families, "unresolved": unresolved,
+            "capture_hash": manifest["capture_hash"], "identity": identity, **AUTHORITY}
+
+def render(result: dict) -> str:
+    lines = ["## Tushare Relay 补充来源", "",
+             f"状态 {result['status']}；市场日 {result.get('market_session') or 'UNKNOWN'}；"
+             f"取得截止 {result['cutoff']}。第三方中转，不是官方Tushare或聪明钱评分。", "",
+             "| 接口 | 状态 | 行数 |", "|---|---|---:|"]
+    for api in APIS:
+        item = result["families"].get(api)
+        if item:
+            lines.append(f"| {api} | {item['status']} | {item['row_count']} |")
+    if result["unresolved"]:
+        lines += ["", "缺口：" + "；".join(f"{x['api']}={x['status']}"
+                                           for x in result["unresolved"])]
+    lines += ["", "临时排队/业务 timeout 只等待30秒再试一次；仍失败留到下一自然运行。",
+              "Relay 行为与既有 HiThink/FTShare/Eastmoney/HKEX 来源并列，不静默替代。", ""]
+    return "\n".join(lines)
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-capture", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    primary_files = {p.name: p.read_bytes() for p in args.source_capture.iterdir() if p.is_file()}
+    manifest = s.decode(primary_files["capture.json"])
+    identity = manifest["identity"]
+    observation = primary.replay(primary_files, identity, cutoff=relay.now())
+    market_session = max(observation["trading_sessions"], default=None)
+    result = capture(args.output, identity, market_session)
+    print(json.dumps({k: result[k] for k in ("status", "market_session", "capture_hash", "unresolved")},
+                     ensure_ascii=False))
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
