@@ -52,7 +52,10 @@ def previous(c):
         relay_reference=({'commit':prior_commit,'reference':refs['relay']} if refs.get('relay')
                          else item.get('relay_prior_retained_entry'))
         return {'history':hist,'overview':overview,'state':state,'origins':origins,
-                'relay_reference':relay_reference},'EXACT_PREVIOUS_'+prior_commit
+                'relay_reference':relay_reference,
+                'relay_reports_only':item.get('relay_reports_only',False),
+                'relay_companion_reference':({'commit':prior_commit,'reference':refs['relay_previous']}
+                    if refs.get('relay_previous') else item.get('relay_companion_retained_entry'))},'EXACT_PREVIOUS_'+prior_commit
     except ERRORS as exc:
         return None,'PREVIOUS_UNAVAILABLE_'+type(exc).__name__
 
@@ -147,6 +150,7 @@ def read_run(c,selected,*,follow_control=False):
         control=json.loads(files['control.json'])
         m.check(control['run_id']==run['id'] and control['code_commit']==run['head_sha'], 'smart-money control identity')
         status['control']=control;status['control_archive']=origin
+        status['_relay_context']['reports_only']=control.get('relay_reports_only',False)
     captures=[a for a in artifacts if a['name']==f"smart-money-{run['id']}-1"]
     if not captures:
         reuse=(control or {}).get('decision')=='SKIP_RELAY_ONLY_REUSE_CAPTURE'
@@ -351,10 +355,12 @@ def current_relay(c, context):
             'smart-money relay run clock binding')
     m.check(result['market_session']==context['market_session'],'smart-money relay calendar differs')
     if context.get('requires_reuse_binding'):
-        m.check(result.get('plan_revision')==2,'smart-money relay reuse needs explicit source binding')
-    if result.get('plan_revision')==2:
+        m.check(result.get('plan_revision') in {2,3},'smart-money relay reuse needs explicit source binding')
+    if result.get('plan_revision') in {2,3}:
         m.check(result.get('source_capture')==context.get('primary_capture'),
                 'smart-money relay source capture differs')
+    m.check(result.get('reports_only',False)==context.get('reports_only',False),
+            'smart-money relay report scope differs')
     if conclusion!='success':
         result=deepcopy(result)
         result['status']='PARTIAL_FAILED_EXECUTION'
@@ -431,6 +437,7 @@ def attach_relay(c, primary, current, old):
         note='\n## Tushare Relay 补充读取\n\n当前读取：'+current_status+'；历史补充：'+previous_status+'。主资料独立保留。\n'
         if value is not None:
             value['current_run_status']=current_status
+            sm['relay_reports_only']=value.get('reports_only',False)
             refs['relay']=c.retain(PREFIX+'relay.json',m.json_bytes(value))
             overview['relay_supplement']={
                 'status':value['status'],'current_run_status':current_status,
@@ -440,6 +447,31 @@ def attach_relay(c, primary, current, old):
                                    for api,item in value['families'].items()},
                 'meaning':'SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE'}
             note+='\n'+relay_supplement.render(value)
+            if value.get('reports_only'):
+                companion=deepcopy((old or {}).get('relay_companion_reference') or
+                    (None if (old or {}).get('relay_reports_only') else locator))
+                sm['relay_companion_retained_entry']=companion
+                if companion:
+                    saved=dict(c.files),dict(c.archive_cache),dict(c.sources)
+                    try:
+                        prior=prior_relay(c,companion)
+                        m.check(not prior.get('reports_only',False),'smart-money companion must be full-scope capture')
+                        companion_note='\n### 前次其他Relay补充（未重采）\n\n'
+                        companion_note+='原取得截止 '+prior['cutoff']+'；[此前完整原件解释](smart-money/relay-previous.json)。\n'
+                        companion_note+='旧report_rc错误属于此前尝试，不覆盖上面的新报告日结果。\n'
+                        for api,item in prior['families'].items():
+                            if api!='report_rc':
+                                companion_note+=f"\n- {api}：{item['status']}；保存{item['row_count']}行。"
+                        ref=c.retain(PREFIX+'relay-previous.json',m.json_bytes(prior))
+                        refs['relay_previous']=ref
+                        sm['relay_companion_retained_entry']=None
+                        note+=companion_note+'\n'
+                    except ERRORS as exc:
+                        c.files,c.archive_cache,c.sources=map(dict,saved)
+                        diagnostic['companion_error_type']=type(exc).__name__
+                        note+='\n此前其他补充本次读取有缺口；精确旧版本定位仍保留，新报告结果不受影响。\n'
+                else:
+                    note+='\n此前其他补充未取得可恢复定位；未检查不等于没有行为。\n'
         overview['relay_reading']={'current_status':current_status,'previous_status':previous_status,
                                    'diagnostics':diagnostic}
         # These two files were built locally in this call, not yet published.

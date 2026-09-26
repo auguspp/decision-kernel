@@ -160,6 +160,8 @@ def main():
             raise ValueError('EXPLICIT_REPAIR_REQUIRES_PINNED_MAIN_AND_PRIOR_STATE')
         if len(today_runs)<=3 and previous.get('unresolved'):decision='RUN_EXPLICIT_PENDING_REPAIR'
     relay_only=env.get('RELAY_ONLY','false')=='true'
+    reports_only=env.get('RELAY_REPORTS_ONLY','false')=='true'
+    if reports_only and not relay_only:raise ValueError('REPORTS_ONLY_REQUIRES_RELAY_ONLY')
     relay_source=None;relay_count=None
     if relay_only:
         if env['GITHUB_EVENT_NAME']!='workflow_dispatch' or not env.get('EXPECTED_CODE') or repair or not previous:
@@ -195,6 +197,7 @@ def main():
              'investment_authority':'NONE'}
     if relay_only:
         control.update(relay_only=True,relay_source=relay_source,relay_jobs_started_today=relay_count)
+    if reports_only:control['relay_reports_only']=True
     (root/'control.json').write_text(json.dumps(control,ensure_ascii=False,indent=2))
     with open(env['GITHUB_OUTPUT'],'a') as f:
         print('run_capture='+str(decision.startswith('RUN_')).lower(),file=f)
