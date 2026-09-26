@@ -1,6 +1,6 @@
 import {REPO, openReading, readQuick, readHealth, loadModules, resumeText, fileUrl, references} from './reading.mjs';
 import {locations, referenceMatches, watchSummary, companyName, companyMatches} from './presentation.mjs';
-import {localTime, recordsView, outline, paragraphs, documentView, useLabel, companyStatus, priceCondition, marketEntries} from './product.mjs';
+import {localTime, recordsView, outline, paragraphs, documentView, useLabel, companyStatus, priceCondition, marketEntries, attentionView, companyMaterials, watchOrigin, attentionResume} from './product.mjs';
 
 // Ordinary replaceable views; all retained source strings are text, never HTML.
 const labels = {attention: '注意力', research: '研究', odds: 'Odds / Watch', markets: '市场观察', health: '系统健康'};
@@ -10,7 +10,7 @@ const hints = {attention: '先看已保存的研究增量与复核事项，再�
   markets: '观察日期与页面读取时间分别保留；没有覆盖不等于没有变化。',
   health: '只展示实际读取范围和失败；不从绿色任务或标题推断研究质量。'};
 const enabled = new Set(Object.keys(labels));
-let companyQuery = '';
+let companyQuery = '', selectedAttention = null;
 let selected = 'attention', results = {}, reading = null, assets = null, detailGeneration = 0;
 const $ = id => document.getElementById(id);
 function el(tag, text, className) {
@@ -69,7 +69,8 @@ function documentBody(file) {
   }
   node.append(folded('完整原始 JSON 与其他字段', file.text)); return node;
 }
-function goCompany(code) {
+function goCompany(code, item = null) {
+  selectedAttention = item;
   companyQuery = code; enabled.add('research'); selected = 'research'; nav(); render();
 }
 // Scoped additions only: do not replace the user's Sites root/layout/CSP.
@@ -94,6 +95,61 @@ for (const [id, label] of Object.entries(labels)) if (id !== 'attention') {
     nav(); render();
   };
   wrapper.append(input, document.createTextNode(` ${label}`)); $('modules').append(wrapper);
+}
+function continuationControls(item, company, current) {
+  const controls = el('div', undefined, 'product-actions');
+  const request = el('pre'); request.hidden = true;
+  const copy = button('复制事项接续（未写回）', async () => {
+    if (current !== reading) return;
+    try {
+      request.textContent = attentionResume(current.ref, item, company);
+      try { await navigator.clipboard.writeText(request.textContent); copy.textContent = '已复制；尚未回应或写回'; }
+      catch { request.hidden = false; copy.textContent = '请复制下方定位文字；尚未写回'; }
+    } catch (error) { request.hidden = false; request.textContent = `定位不完整：${error.message}`; }
+  });
+  controls.append(copy, request); return controls;
+}
+function itemContext(item, current, company = null) {
+  const node = card(`当前事项 · ${item.label}`, item.reason);
+  node.append(el('p', `原观察时间：${localTime(item.at)}；旧处置不代表新版本已经接受。`, 'small'));
+  const source = item.kind === 'watch' ? watchOrigin(item, company) : item.source;
+  if (source) node.append(sourceRow(source, current, item.kind === 'watch' ? '精确原条件与回应' : '精确原请求'));
+  else node.append(el('p', '原条件需与公司用途目录的记录ID和blob匹配；未匹配前不替换成最新文件。', 'small'));
+  if (item.resolution) node.append(sourceRow(item.resolution, current, '此版本已登记的处置'));
+  node.append(continuationControls(item, company, current), folded('事项身份与原始状态', value({id: item.id,
+    reading: current.ref, state: item.state, observation_time: item.at, original: item.original})));
+  return node;
+}
+function attentionCard() {
+  if (!reading) return gap('事项导航', results.reading?.reason);
+  const current = reading, view = attentionView(current.payload, watchSummary(current.payload));
+  const panel = card('事项导航', '明确请求、价格条件和历史处置分开。只覆盖已登记材料；点击或已读不会改变处置状态。');
+  const groups = [
+    ['明确待你回应', view.requests, '本次可读登记中没有明确待回应项；不是全局无需判断。'],
+    ['原价格已触界，待复核', view.review, '本次可判断的已登记价格观察没有触界项。'],
+    ['等待原登记条件', view.waiting, '本次没有可确认的等待条件。'],
+    ['已有处置记录', view.history, '本次没有可恢复的明确处置绑定。'],
+    ['其他登记研究背景', view.background, '']
+  ];
+  for (const [label, items, empty] of groups) {
+    if (!items.length && !empty) continue;
+    const group = el('details'); group.open = (label === '明确待你回应' || label === '原价格已触界，待复核') && items.length > 0;
+    group.append(el('summary', `${label}（${items.length}）`));
+    if (!items.length) group.append(el('p', view.gaps.length ? '存在读取或覆盖缺口；0项不是已确认全部无事。' : empty, 'small'));
+    for (const item of items) {
+      const row = el('div', undefined, 'ref'); row.append(el('h4', item.label), el('p', item.reason));
+      row.append(el('p', `原观察：${localTime(item.at)}`, 'small'));
+      row.append(button('恢复这个事项', () => {
+        if (current !== reading) return;
+        if (item.code) goCompany(item.code, item);
+        else { ++detailGeneration; $('detail').replaceChildren(itemContext(item, current)); }
+      })); group.append(row);
+    }
+    panel.append(group);
+  }
+  if (view.gaps.length) panel.append(folded('读取与覆盖缺口（不是交给你的待办）', view.gaps.join('\n'), true));
+  panel.append(el('p', '新Quick仍在下方作为研究资讯；未建立完整持续回应队列、持仓或日历，不能用这里的数量替代。', 'small'));
+  return panel;
 }
 function watchCard() {
   if (!reading) return gap('价格复核', results.reading?.reason);
@@ -181,9 +237,13 @@ async function loadCompanies() {
   const current = reading; assets = {status: 'LOADING'};
   try { const result = await current.readAssets(); if (current === reading) assets = {status: 'READ', value: result}; }
   catch (error) { if (current === reading) assets = {status: 'GAP', reason: error.message}; }
-  if (current === reading && selected === 'research') render();
+  if (current === reading && selected === 'research') render(true);
 }
 function companyView(target) {
+  if (reading && selectedAttention) {
+    const company = assets?.status === 'READ' ? assets.value.companies.find(c => c.thscode === selectedAttention.code) : null;
+    target.append(itemContext(selectedAttention, reading, company));
+  }
   if (!reading) { target.append(gap('公司研究目录', results.reading?.reason)); return; }
   if (!assets) { target.append(card('公司研究目录', '正在读取已保存的关联目录…')); loadCompanies(); return; }
   if (assets.status === 'LOADING') { target.append(card('公司研究目录', '正在核对目录原件…')); return; }
@@ -203,12 +263,15 @@ function companyView(target) {
       detail.append(el('p', '这些是历史材料。是否接受、是否仍有效，以原记录和适用更正为准。', 'small'));
       detail.append(folded('原状态与接受边界', value({next_step: company.next_step, human_acceptance: company.human_acceptance})));
       if (input.value.trim()) detail.open = true;
-      for (const asset of company.assets) {
+      for (const group of companyMaterials(company)) {
+        detail.append(el('h4', group.label));
+        for (const asset of group.items) {
         const block = el('div', undefined, 'ref');
         block.append(el('strong', useLabel(asset)), el('p', asset.purpose_note || '用途说明未提供'));
         block.append(folded('登记标识与资格原值', value({id: asset.id, use: asset.use, qualification: asset.qualification})));
         for (const source of references(asset)) block.append(sourceRow(source, current, (source.path || source.read_path).split('/').at(-1)));
         detail.append(block);
+        }
       }
       if (company.archives.length) {
         const archive = el('details'); archive.append(el('summary', `研究档案（${company.archives.length}）`));
@@ -218,7 +281,9 @@ function companyView(target) {
       list.append(detail);
     }
   }
-  input.oninput = () => { companyQuery = input.value; filter(); }; filter(); target.append(panel);
+  input.oninput = () => { companyQuery = input.value; filter(); }; filter();
+  if (selectedAttention) panel.append(el('p', '上方接续只绑定当前所选事项；手动搜索其他公司不会把该事项的回应转移给其他公司。', 'small'));
+  target.append(panel);
 }
 async function readDetail(descriptor, current = reading) {
   const generation = ++detailGeneration;
@@ -241,12 +306,15 @@ async function readDetail(descriptor, current = reading) {
       link('检查固定原件定位', fileUrl(current.ref, descriptor.read_path)));
   }
 }
-function render() {
-  ++detailGeneration; $('detail').replaceChildren(); $('content').replaceChildren();
+function render(keepDetail = false) {
+  // The catalogue completing is not a new selection. Do not cancel an original
+  // the user opened while the optional catalogue was loading.
+  if (!keepDetail) { ++detailGeneration; $('detail').replaceChildren(); }
+  $('content').replaceChildren();
   $('heading').textContent = labels[selected]; $('subtitle').textContent = hints[selected];
   const target = $('content');
   if (selected === 'attention') {
-    target.append(quickCard(), watchCard(), folded('尚未覆盖的事项',
+    target.append(attentionCard(), quickCard(), watchCard(), folded('尚未覆盖的事项',
       '持续待回应队列、持仓上下文和日历尚未接通；不能将未接通当作0项。建议开展Full不等于已委托，页面不自动启动研究。'));
   }
   if (selected === 'research') {
@@ -290,7 +358,7 @@ function render() {
   }
 }
 async function refresh() {
-  $('refresh').disabled = true; ++detailGeneration; reading = null; assets = null; results = {};
+  $('refresh').disabled = true; ++detailGeneration; reading = null; assets = null; selectedAttention = null; results = {};
   $('detail').replaceChildren(); $('content').replaceChildren(card('正在读取', '只读取 GitHub 已保存结果，不启动采集、研究或任务。'));
   $('identity').textContent = '读取中…';
   try {

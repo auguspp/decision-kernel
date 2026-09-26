@@ -70,13 +70,19 @@ async function withApp(run, fixture = {}) {
         reading_hash: 'd'.repeat(64), lanes: {}, checks: {},
         signal_transition_authority: 'NONE', human_attention_authority: 'NONE',
         research_authority: 'NONE', investment_authority: 'NONE',
-        research: {first: descriptor(ref, 'first'), second: descriptor(ref, 'second')}});
+        research: {first: descriptor(ref, 'first'), second: descriptor(ref, 'second')},
+        ...(fixture.payload?.(ref) || {})});
     } else if (url.endsWith('/issues/575')) result = json({number: 575, comments: fixture.comments?.length || 0,
       html_url: `https://github.com/${REPO}/issues/575`});
     else if (url.includes('/issues/575/comments?')) result = json(fixture.comments || []);
     else if (url.endsWith('/issues/581')) result = json({number: 581, title: 'Fixture', body: 'Synthetic health',
       html_url: `https://github.com/${REPO}/issues/581`, updated_at: '2026-09-25T00:00:00Z'});
-    else {
+    else if (fixture.files && url.startsWith(`https://raw.githubusercontent.com/${REPO}/`)) {
+      const relative = url.slice(`https://raw.githubusercontent.com/${REPO}/`.length);
+      const ref = relative.slice(0, 40), path = relative.slice(41);
+      const text = fixture.files(ref)[path];
+      assert.notEqual(text, undefined, `Unexpected fixture source: ${path}`); result = new Response(text);
+    } else {
       const match = url.match(/\/([ab]{40})\/docs\/odds-(first|second)\.txt$/);
       assert.ok(match, `Unexpected transport: ${url}`); result = new Response(body(match[1], match[2]));
     }
@@ -183,4 +189,98 @@ test('untrusted text stays literal in paragraph display; no HTML/image execution
     assert.ok(ids.content.textContent.includes('<script>bad()</script>'));
     assert.ok(!find(ids.content,n=>['script','img','iframe'].includes(n.tagName)));
   });
+});
+
+function continuityFixture() {
+  const texts = {'original.json': '{"note":"synthetic request"}', 'response.md': '## 既有回应\n\n仅针对原版本，不是新接受。',
+    'research.md': '# 原研究\n\n保留研究假设。', 'correction.md': '# 方法更正\n\n旧梯度不得自动激活。'};
+  const source = (name, ref) => ({read_path: `sources/${name}`, path: name, ref,
+    git_blob: 'e'.repeat(40), bytes: Buffer.byteLength(texts[name]), sha256: hash(texts[name])});
+  const rows = ref => {
+    const old = {request_id: '1'.repeat(64), security_id: '600276.SH', ticker: '600276',
+      as_of: '2026-09-01T01:00:00Z', terminal_state: 'DEEPEN_REQUIRED', reason: '旧版请求',
+      source: source('original.json', ref), resolution: source('response.md', ref)};
+    const active = {...old, request_id: '2'.repeat(64), reason: '新版明确请求；不是沿用旧版接受。', resolution: null};
+    return {old, active};
+  };
+  const company = ref => ({thscode: '600276.SH', saved_watch: {company_name: '恒瑞医药'},
+    archives: [], human_acceptance: 'REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED', assets: [
+      {id: 'original-research', use: 'RETAINED_RESEARCH_PACKAGE', source: source('research.md', ref)},
+      {id: 'human-old', use: 'HUMAN_DECISION_CHECKPOINT', source: source('response.md', ref)},
+      {id: 'correction', use: 'RESEARCH_CORRECTION', source: source('correction.md', ref)}]});
+  const catalogue = ref => JSON.stringify({projection: {automatic_admission: false, companies: [company(ref)]}});
+  return {
+    payload(ref) {
+      const {active, old} = rows(ref), text = catalogue(ref);
+      return {pending: [active], research: {
+        handoffs: {active: [active], resolved_history: [old], background: [], gaps: [],
+          registration_scope: 'EXPLICIT_INPUTS_ONLY_NOT_ALL_RESEARCH_OR_ALL_MARKET'},
+        asset_reentry: {structured: {read_path: 'details/research/asset-reentry.json', bytes: Buffer.byteLength(text), sha256: hash(text)}}}};
+    },
+    files(ref) { return Object.fromEntries([...Object.entries(texts).map(([name, text]) => [`sources/${name}`, text]),
+      ['details/research/asset-reentry.json', catalogue(ref)]]); }
+  };
+}
+
+test('actual controller: pending item to same-company correction/original/response and exact copy; refreshing does not carry old selection', async () => {
+  await withApp(async ({ids, tab, calls, setRef, refresh}) => {
+    tab('注意力');
+    assert.ok(ids.content.textContent.includes('明确待你回应（1）'));
+    assert.ok(ids.content.textContent.includes('已有处置记录（1）'));
+    const open = find(ids.content, n => n.tagName === 'button' && n.textContent === '恢复这个事项');
+    open.onclick();
+    await waitFor(() => ids.content.textContent.includes('先看更正与方法限制'));
+    assert.ok(ids.content.textContent.includes('新版明确请求'));
+    const text = ids.content.textContent;
+    assert.ok(text.indexOf('先看更正与方法限制') < text.indexOf('已有研究与条件版本'));
+    assert.ok(text.indexOf('已有研究与条件版本') < text.indexOf('你的历史回应（不转移接受）'));
+    const original = find(ids.content, n => n.tagName === 'button' && n.textContent === '读取 · 精确原请求');
+    await original.onclick(); assert.ok(ids.detail.textContent.includes('synthetic request'));
+    const reply = find(ids.content, n => n.tagName === 'button' && n.textContent === '读取 · response.md');
+    await reply.onclick(); assert.ok(ids.detail.textContent.includes('仅针对原版本，不是新接受。'));
+    const copy = find(ids.content, n => n.tagName === 'button' && n.textContent === '复制事项接续（未写回）');
+    await copy.onclick();
+    assert.ok(ids.content.textContent.includes('新的回应尚未提供'));
+    assert.ok(ids.content.textContent.includes('2'.repeat(64)));
+    assert.ok(ids.content.textContent.includes(`/blob/${R1}/sources/response.md`));
+    assert.ok(ids.content.textContent.includes('明确')); // no click-based closure
+    setRef(R2); await refresh();
+    assert.ok(!ids.content.textContent.includes('当前事项 ·'));
+    assert.ok(!ids.content.textContent.includes('reading_commit'));
+    assert.equal(ids.detail.textContent, ''); tab('注意力');
+    assert.ok(ids.content.textContent.includes('明确待你回应（1）'));
+    assert.ok(calls.filter(u => u.includes('/sources/')).every(u => u.includes(`/${R1}/`)));
+  }, continuityFixture());
+});
+
+test('actual controller: Quick outage does not hide a registered request; history opens its own bound resolution', async () => {
+  await withApp(async ({ids, overrides, refresh, tab}) => {
+    overrides.set(`https://api.github.com/repos/${REPO}/issues/575`, () => new Response('', {status: 503}));
+    await refresh(); tab('注意力');
+    assert.ok(ids.content.textContent.includes('明确待你回应（1）'));
+    assert.ok(ids.content.textContent.includes('研究更新：本次未取得'));
+    const group = find(ids.content, n => n.tagName === 'details' && n.children[0]?.textContent === '已有处置记录（1）');
+    find(group, n => n.tagName === 'button' && n.textContent === '恢复这个事项').onclick();
+    const originalReply = find(ids.content, n => n.tagName === 'button' && n.textContent === '读取 · 此版本已登记的处置');
+    assert.ok(originalReply); await originalReply.onclick();
+    assert.ok(ids.detail.textContent.includes('仅针对原版本，不是新接受。'));
+    assert.ok(!find(ids.content, n => n.tagName === 'button' && n.textContent === '标记已处理'));
+  }, continuityFixture());
+});
+
+test('actual controller: catalogue error preserves the selected original and a response read failure never invents closure', async () => {
+  await withApp(async ({ids, overrides, tab}) => {
+    overrides.set(`https://raw.githubusercontent.com/${REPO}/${R1}/details/research/asset-reentry.json`, () => new Response('', {status: 503}));
+    tab('注意力');
+    const group = find(ids.content, n => n.tagName === 'details' && n.children[0]?.textContent === '已有处置记录（1）');
+    find(group, n => n.tagName === 'button').onclick();
+    await waitFor(() => ids.content.textContent.includes('公司研究目录：本次未取得'));
+    const original = find(ids.content, n => n.tagName === 'button' && n.textContent === '读取 · 精确原请求');
+    await original.onclick(); assert.ok(ids.detail.textContent.includes('synthetic request'));
+    overrides.set(`https://raw.githubusercontent.com/${REPO}/${R1}/sources/response.md`, () => new Response('', {status: 503}));
+    const reply = find(ids.content, n => n.tagName === 'button' && n.textContent === '读取 · 此版本已登记的处置');
+    await reply.onclick(); assert.ok(ids.detail.textContent.includes('HTTP_503'));
+    tab('注意力'); assert.ok(ids.content.textContent.includes('已有处置记录（1）'));
+    assert.ok(ids.content.textContent.includes('明确待你回应（1）'));
+  }, continuityFixture());
 });
