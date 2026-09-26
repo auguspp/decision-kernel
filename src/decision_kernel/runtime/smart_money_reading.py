@@ -21,7 +21,6 @@ QUERY='actions/workflows/radar-smart-money.yml/runs?branch=main&per_page=20'
 def read_bound(c,ref,commit):
     m.check(m.SHA.fullmatch(commit) is not None,'smart-money previous commit required')
     m.safe_path(ref['read_path'])
-    # Blob may exceed Contents API's inline-size limit; it remains exact data.
     value=c.api.get('git/blobs/'+ref['git_blob'])
     m.check(value['sha']==ref['git_blob'] and value['encoding']=='base64','smart-money blob identity')
     data=base64.b64decode(value['content'])
@@ -96,8 +95,6 @@ def native(c):
     observation=capture.replay(files,identity,cutoff=c.now())
     m.check(m.clock(run['created_at'])<=m.clock(manifest['started_at'])<=m.clock(manifest['finished_at'])
             <=m.clock(run['updated_at']),'smart-money capture clock binding')
-    # A checkpoint from a failed job may yield useful partial facts but cannot
-    # erase missing deliveries or be promoted into complete source qualification.
     if job['conclusion']!='success':
         observation['status']='PARTIAL_FAILED_EXECUTION'
         observation['unresolved'].append({'family':'execution','partition':str(run['id']),'failure':'CAPTURE_JOB_FAILED'})
@@ -105,13 +102,12 @@ def native(c):
             'capture_hash':manifest['capture_hash'],'job_id':job['id'],'job_conclusion':job['conclusion']}
 
 
-def attach(c,baseline):
-    m.validate_read_package(baseline)
+def _attach(c,baseline):
     old,prior_status=previous(c)
-    before=dict(c.files),dict(c.archive_cache)
+    before=dict(c.files),dict(c.archive_cache),dict(c.sources)
     try:current=native(c)
     except ERRORS as exc:
-        c.files,c.archive_cache=before
+        c.files,c.archive_cache,c.sources=before
         current={'status':'CURRENT_READING_REJECTED_'+type(exc).__name__,'observation':None}
     if old is None and prior_status.startswith('PREVIOUS_UNAVAILABLE_'):
         old_entry=(c.previous or {}).get('research',{}).get('smart_money',{})
@@ -161,6 +157,23 @@ def attach(c,baseline):
         'family_coverage':{f:{k:v[k] for k in ('status','saved_records','companies','latest_period')} for f,v in overview['families'].items()},
         'meaning':'PUBLIC_BEHAVIOR_NOT_SMARTNESS_OR_BUY_SELL_SIGNAL',**s.AUTHORITY}
     return assemble(c,baseline,research,{},'\n[聪明钱：游资、北向、具名持股与资本行为](details/radar/smart-money.md)；独立观察与缺口，不是综合荐股分。\n')
+
+
+def attach(c,baseline):
+    """A large/failed optional view must not suppress Sector, Watch or Research."""
+    m.validate_read_package(baseline)
+    before=dict(c.files),dict(c.archive_cache),dict(c.sources)
+    try:
+        return _attach(c,baseline)
+    except ERRORS as exc:
+        c.files,c.archive_cache,c.sources=before
+        old_entry=(c.previous or {}).get('research',{}).get('smart_money',{})
+        locator=old_entry.get('prior_retained_entry') or (
+            {'commit':c.previous_commit,'entry':old_entry} if old_entry.get('details') else None)
+        research=deepcopy(baseline['research'])
+        research['smart_money']={'status':'OPTIONAL_PUBLICATION_GAP','error_type':type(exc).__name__,
+            'prior_retained_entry':locator,'meaning':'OTHER_LANES_PRESERVED; NO_EMPTY_HISTORY_REBASE',**s.AUTHORITY}
+        return assemble(c,baseline,research,{},'\n聪明钱本次交付有缺口，其他阅读保留；旧历史定位未删除，不代表无资本活动。\n')
 
 
 def assemble(c,baseline,research,files,note):
