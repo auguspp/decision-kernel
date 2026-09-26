@@ -1,8 +1,8 @@
 {
   "projection": {
-    "association_as_of": "2026-09-26T12:55:35.988174+00:00",
+    "association_as_of": "2026-09-26T12:59:07.778988+00:00",
     "automatic_admission": false,
-    "base_reading_hash": "f537364fa50380e0877ecb2f57709ead1a107f256f32f5172b2a4fdb7eac0c37",
+    "base_reading_hash": "02212166400dcbf0ef3ac53a4d28171abbc4e047c8388d4ed2e1d69675a019b8",
     "capture": {
       "projection": {
         "automatic_admission": false,
@@ -27,8 +27,8 @@
             "automatic_admission": false,
             "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "d01603e02c10456d01009953ea3325c13bc849f2aeb81a5ecda384594e13958d",
-            "cutoff": "2026-09-26T12:55:35.861248+00:00",
+            "company_reading_hash": "2e37bda08b388063efb73c7d2aca93c29674071401d4f69c21ec3fd606a58c32",
+            "cutoff": "2026-09-26T12:59:07.683969+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -9882,7 +9882,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "31cdbd5e44ead9f163cfef02b96d1272ad552457dc41af2c20cea2a2e9958780"
+          "projection_hash": "498f0de9c2f7d432c7f2a2c40d01569095250bd49e39c7268041d29ecfcdac66"
         },
         "research_authority": "NONE",
         "research_executions": 0,
@@ -10016,14 +10016,14 @@
           "workflow": ".github/workflows/radar-newsnow-daily.yml"
         }
       },
-      "projection_hash": "5fda6df2f599fcf26d81fb64915859e89466c0f733461c897ac9ff3ad5c58176"
+      "projection_hash": "b57d2f2de25f723ad6da686e01642c00fba6c0e999a969b5d5e2b3ba6467a9e3"
     },
     "company_source": {
       "bytes": 415865,
-      "git_blob": "1087f8844eadc46b681ef7a1262d9d63b3e7bc8f",
+      "git_blob": "621e6fe64b098fb0febeed32f3cf078d41b0156d",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "f36be97712246c23e50824c7fccb234c1e3e9e670d26ef7bf32bca061c710b81"
+      "sha256": "52ff4266f7f6339228e9fbfeaf7712339e970ce869955a08e3a3aaa85c4d82ef"
     },
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
@@ -10083,5 +10083,5 @@
       "status": "WINDOWS_CAPTURED"
     }
   },
-  "projection_hash": "f81b0b5b8dfb5de6e8529a3c175658400e3dde5e7f141acced1f602d4f8f7e57"
+  "projection_hash": "8ca6fe5e30cc5aa83b3fa05006128e663e01ba73bf2ac58016bb6634e24fac6c"
 }
