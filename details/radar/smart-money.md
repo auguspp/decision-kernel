@@ -135,3 +135,5 @@ Relay 行为与既有 HiThink/FTShare/Eastmoney/HKEX 来源并列，不静默替
 - hm_list：SUCCESS；保存117行。
 - top_inst：SUCCESS；保存43行。
 - top_list：SUCCESS；保存63行。
+
+补充双向检索：QUALIFIED_SAVED_ROWS_SEARCHABLE；原始补充JSON独立保留。
