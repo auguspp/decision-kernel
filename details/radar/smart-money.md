@@ -4,22 +4,20 @@
 
 新取得、同期修订和已知未变分别保留；再次发布同一采集不算新事件。
 
-**本次新采集未取得，以下保留旧日期与旧来源。** AWAITING_CURRENT_CAPTURE
-
 | 独立观察面 | 已保存记录/公司 | 当前覆盖 | 原统计/事件日期 |
 |---|---:|---|---|
-| 机构调研活动 | 5584 / 2959 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-01-01—2026-09-24 |
-| 高管实际持股变动 | 3226 / 641 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-29—2026-09-24 |
-| 研报与预期版本 | 3250 / 1560 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-28—2026-09-24 |
-| 股东披露增减持区间 | 1376 / 678 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-24 |
-| 具名个人与机构报告期持股 | 111862 / 5610 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-03-31—2026-06-30 |
 | 游资标签公开轨迹 | 237 / 116 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-09-18—2026-09-24 |
 | 龙虎榜机构席位 | 183 / 103 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-09-18—2026-09-24 |
-| 北向季度持股 | 8416 / 4311 | COMPLETE_PROVIDER_SCOPES；4/4批 | 2026-03-31—2026-06-30 |
-| 北向成交（非净流入） | 5 / 0 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-09-18—2026-09-24 |
-| 定增与战略资本发行 | 51 / 50 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-29—2026-09-15 |
-| 公司回购计划与执行 | 567 / 551 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-04-30—2026-09-25 |
 | 原始营业部席位 | 2815 / 186 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-09-18—2026-09-24 |
+| 北向成交（非净流入） | 5 / 0 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-09-18—2026-09-24 |
+| 具名个人与机构报告期持股 | 111862 / 5610 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-03-31—2026-06-30 |
+| 北向季度持股 | 8416 / 4311 | COMPLETE_PROVIDER_SCOPES；4/4批 | 2026-03-31—2026-06-30 |
+| 机构调研活动 | 5584 / 2959 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-01-01—2026-09-24 |
+| 研报与预期版本 | 3250 / 1560 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-28—2026-09-24 |
+| 高管实际持股变动 | 3226 / 641 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-29—2026-09-24 |
+| 股东披露增减持区间 | 1376 / 678 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-24 |
+| 公司回购计划与执行 | 567 / 551 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-04-30—2026-09-25 |
+| 定增与战略资本发行 | 51 / 50 | DEFERRED_WITH_EXPLICIT_LAST_CAPTURE；0/0批 | 2026-06-29—2026-09-15 |
 
 ## 可直接继续研究的公开线索
 
@@ -97,4 +95,23 @@ Radar发现，Quick解释；无自动Full、Odds、买卖或仓位权限。
 
 ## Tushare Relay 补充读取
 
-当前读取：NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT；历史补充：NOT_NEEDED_NO_PRIOR_SUPPLEMENT。主资料独立保留。
+当前读取：PARTIAL_WITH_EXPLICIT_GAPS；历史补充：NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE。主资料独立保留。
+
+## Tushare Relay 补充来源
+
+状态 PARTIAL_WITH_EXPLICIT_GAPS；市场日 2026-09-24；取得截止 2026-09-26T12:02:57.399327+00:00。第三方中转，不是官方Tushare或聪明钱评分。
+
+| 接口 | 取得状态 | 解析行数 | 日期/身份合格行数 |
+|---|---|---:|---:|
+| hm_list | SUCCESS | 117 | 117 |
+| hm_detail | TEMPORARY_QUEUE | 0 | UNKNOWN |
+| report_rc | INVALID_PARAMS | 0 | UNKNOWN |
+| top_list | SUCCESS | 63 | 63 |
+| top_inst | SUCCESS | 43 | 43 |
+
+缺口：hm_detail=TEMPORARY_QUEUE；report_rc=INVALID_PARAMS；top_inst=SOURCE_INTERPRETATION_GAP
+
+临时排队/业务 timeout 只等待30秒再试一次；仍失败留到下一自然运行。
+合格只指所收单页的日期/身份解释，不代表全市场、全部分页或经济正确；空结果不是没有行为。
+完整字段、来源声明、逐行缺口及原件定位见 [补充原件解释](smart-money/relay.json)。
+Relay 行为与既有 HiThink/FTShare/Eastmoney/HKEX 来源并列，不静默替代。
