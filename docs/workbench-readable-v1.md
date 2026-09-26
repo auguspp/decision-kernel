@@ -33,3 +33,62 @@ This is Node plus minimal DOM sinks and synthetic transports, not a real browser
 Sites should update app.mjs and add product.mjs, keeping the current root route, compatibility URL, owner-only policy, layout and CSP. No old index.html replacement. New styling is scoped/native text and adds no network endpoint. Validate the actual touched paths in one host update: manual Quick visible with full limits, company link/search, original/receipt distinction, conditional results with prerequisites, market-summary opening, and phone readability. Do not repeat unavailable diagnostic probes or ask for a new Site. Preserve current live rollback and return real version/diff.
 
 No new dependency, recurring fee, producer, model call, notification, workflow or data write. Optional product projection and its tests retire with the workbench; historical research/decisions, #585 reader protections and other consumers do not. Ordinary PR rollback only. Engineering regression of this real display omission is not proof that the research Learning Loop has improved.
+
+## Successor: attention and response continuity (A1/A2, 2026-09-26)
+
+Authority: #297/5847200266, following #297/5847120007 and Human's explicit
+mainline instruction after Smart Money v1.1. Base M c99c0508d550c620b33cbbb334db46a91c24c886.
+This is a bounded workbench increment, not completion of all A2/personal context.
+The Smart Money branch stays closed. Do not change its sources, schedules or gaps.
+
+The existing Attention page now distinguishes explicitly registered pending
+handoffs, saved price triggers requiring review, waiting price conditions, and
+exactly bound historical dispositions. Quick remains separate research content.
+Missing/duplicate/contradictory request identities and unavailable prices are
+visible coverage gaps, not extra Human chores. A zero visible count never claims
+complete personal/workflow coverage. No prose classifier or new task-state store.
+
+Selecting an item carries its exact request id or registered Watch identity into
+the existing company catalogue. Corrections/method restrictions, original research
+and condition versions, historical Human checkpoints, and other material are
+ordered by existing purpose fields. Same-company grouping is not supersession or
+transfer of acceptance. Original request and resolution remain distinct byte-checked
+sources at the same R, even when the optional company catalogue is unavailable.
+An old Watch with a null source_ref is resolved only by its exact registry id,
+source path and original Git blob; it is not replaced with today's same-named file.
+
+Copying a continuation produces a recovery request with immutable R, exact item,
+original observation clock, source hashes, linked disposition and company versions.
+It explicitly contains no new Human response. There is no send/close/accept button,
+automatic comment write, browser credential, persistent private draft or position
+inference. A real later response still uses the existing interactive GitHub comment
+protocol: restore the target, reconcile duplicates/uncertain writes, preserve the
+actual words and exact readback. Engineering approval is not investment acceptance.
+
+Catalogue completion no longer clears an original the user opened while the
+catalogue was loading. Actual navigation or an R refresh still invalidates stale
+reads; refresh clears selected-item context rather than mixing the old request
+with new research. All rendered source text remains literal textContent.
+
+Reuse: existing project_handoffs/external identity isolation, watchSummary,
+readAssets/readFile, purpose references, resumeText, DOM/controller tests and the
+original response protocol. WHATWG details/summary semantics were rechecked; the
+json-viewer/Luna/gptme comparison recorded above remains applicable to this exact
+native display/one-owner scope. No new library, renderer, index, state schema or
+writer service. Remove these projections and their tests with the optional
+workbench; do not erase source histories or shared reader protections.
+
+Local checks cover malformed sources, same-security different-version requests,
+conflicting inventories, saved trigger/wait/unknown separation, exact Watch origin,
+copy without fabricated response, Quick/catalogue failure isolation, real controller
+navigation and cross-R refresh. Synthetic replies are fixtures, not real Human
+acceptance. A malformed null pending row and catalogue/render race were found and
+fixed during these tests; the original transport/hash/stale-response guards were
+not weakened. CI, host deployment, actual new Human response and later independent
+recovery remain separate acceptance records, not implications of tests passing.
+
+Sites handoff: replace only app.mjs and product.mjs together; leave index.html,
+reading.mjs, presentation.mjs, root route, old links, owner-only access and CSP intact.
+Keep the current deployed rollback. Check grouped Attention, item-to-company,
+original/resolution reading, copy text, delayed catalogue, missing data and phone
+readability on the host. The repository merge alone is not a Sites deployment.

@@ -87,3 +87,108 @@ test('labels describe history rather than current status, holdings, or accepted 
   assert.equal(useLabel({use:'FUTURE_UNKNOWN_TYPE'}),'FUTURE_UNKNOWN_TYPE');
   assert.ok(companyStatus({next_step:'WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE'}).includes('仍需重审'));
 });
+
+// Synthetic authority/identity cases; no Human investment response is created.
+import {attentionView, companyMaterials, watchOrigin, attentionResume} from './product.mjs';
+import {watchSummary} from './presentation.mjs';
+const point = 'e'.repeat(40), checksum = 'f'.repeat(64);
+const retained = (path = 'request.json') => ({read_path: `sources/${path}`, path, bytes: 12,
+  sha256: checksum, git_blob: point, repository: 'auguspp/decision-kernel'});
+const handoff = (id = '1'.repeat(64)) => ({request_id: id, security_id: '600276.SH', ticker: '600276',
+  as_of: '2026-09-01T01:00:00Z', terminal_state: 'DEEPEN_REQUIRED', reason: '<script>not authority</script>',
+  source: retained(), resolution: null});
+const requestPayload = (active = [], resolved = [], background = [], gaps = []) => ({pending: active,
+  research: {handoffs: {active, resolved_history: resolved, background, gaps,
+    registration_scope: 'EXPLICIT_INPUTS_ONLY_NOT_ALL_RESEARCH_OR_ALL_MARKET'}}});
+const noWatch = {available: true, rows: []};
+
+test('only explicit active version is pending; resolution of another version does not close it', () => {
+  const pending = handoff(), old = {...handoff('2'.repeat(64)), resolution: retained('old-response.md')};
+  const p = requestPayload([pending], [old]);
+  p.research.quick = {title: 'Full建议', human_acceptance: 'yes'};
+  const before = JSON.stringify(p), v = attentionView(p, noWatch);
+  assert.equal(v.requests.length, 1); assert.equal(v.history.length, 1);
+  assert.equal(v.requests[0].resolution, null); assert.equal(v.history[0].resolution.read_path, 'sources/old-response.md');
+  assert.equal(v.requests[0].reason, '<script>not authority</script>');
+  assert.equal(JSON.stringify(p), before);
+});
+
+test('missing, partial and conflicting request inventories never become a clean zero', () => {
+  assert.ok(attentionView({}, noWatch).gaps.length);
+  const v = attentionView(requestPayload([], [], [], [{status: 'EXECUTION_ID_CONFLICT'}]), noWatch);
+  assert.equal(v.requests.length, 0); assert.match(v.gaps.join(), /EXECUTION_ID_CONFLICT/);
+  const duplicate = attentionView(requestPayload([handoff()], [{...handoff(), resolution: retained('response.md')}]), noWatch);
+  assert.equal(duplicate.requests.length, 0); assert.equal(duplicate.history.length, 0); assert.ok(duplicate.gaps.length);
+  const mismatch = requestPayload([handoff()]); mismatch.pending = [];
+  assert.match(attentionView(mismatch, noWatch).gaps.join(), /摘要与登记明细不一致/);
+});
+
+test('malformed resolution or source stays a gap, not historical acceptance or a new pending item', () => {
+  for (const row of [null, {...handoff(), source: retained('../escape')},
+    {...handoff(), source: {...retained(), repository: 'elsewhere/repo'}},
+    {...handoff(), as_of: '2026-09-01'}, {...handoff(), resolution: retained('response.md')},
+    {...handoff(), terminal_state: 'WAIT'}]) {
+    const v = attentionView(requestPayload([row]), noWatch);
+    assert.equal(v.requests.length, 0); assert.ok(v.gaps.length);
+  }
+  const invalid = attentionView(requestPayload([], [handoff()]), noWatch);
+  assert.equal(invalid.history.length, 0); assert.ok(invalid.gaps.length);
+});
+
+function savedWatch(ticker, extra = {}) {
+  return {ticker, company_name: ticker, watch_enabled: true, status: 'ACTIVE_ODDS_WATCH', price: '50',
+    market_timestamp: '2026-09-24T15:00:00+08:00', currency: 'CNY', triggered_conditions: [],
+    next_unreached_condition: {id: 'original-boundary', upper_price: '40', attention_triggered: false, condition_state: 'ABOVE_CONDITION'},
+    source: {registry_reference_id: 'human-checkpoint', source_path: 'decision.md', source_git_blob: point, source_ref: null}, ...extra};
+}
+function withWatches(items) {
+  return {...requestPayload(), lanes: {inbox: {last_qualified_result: {odds_watch: {report: {
+    watch: {active_cases: items, active_case_count: items.length}}}}}}};
+}
+test('saved price facts are separated from requests and price/read gaps do not become Human chores', () => {
+  const p = withWatches([savedWatch('600276.SH'), savedWatch('603986.SH', {triggered_conditions: [{id: 'review', attention_triggered: true}]}),
+    savedWatch('002674.SZ', {price: null, price_gap: 'READ_FAILED'})]);
+  const before = JSON.stringify(p), v = attentionView(p, watchSummary(p));
+  assert.equal(v.waiting.length, 1); assert.equal(v.review.length, 1); assert.equal(v.requests.length, 0);
+  assert.equal(v.waiting[0].original.price, '50'); assert.match(v.gaps.join(), /不是待你补数据的请求/);
+  assert.equal(JSON.stringify(p), before);
+  const repeated = withWatches([savedWatch('600276.SH'), savedWatch('600276.SH')]);
+  assert.equal(attentionView(repeated, watchSummary(repeated)).waiting.length, 0);
+});
+
+test('company material order uses explicit purpose, never a new current or accepted version', () => {
+  const company = {assets: [
+    {id: 'human-old', use: 'HUMAN_DECISION_CHECKPOINT'}, {id: 'latest-file', use: 'RETAINED_RESEARCH_DOCUMENT'},
+    {id: 'note', use: 'METHOD_SUPPLEMENT'}, {id: 'x', use: 'UNKNOWN_ROLE'},
+    {id: 'human-method', use: 'HUMAN_METHOD_SUPPLEMENT'}, {id: 'negative', use: 'METHOD_NEGATIVE_CONTROL'}]};
+  const before = JSON.stringify(company), groups = companyMaterials(company);
+  assert.deepEqual(groups.map(g => g.items[0].id), ['note', 'latest-file', 'human-old', 'x']);
+  assert.deepEqual(groups[0].items.map(a => a.id), ['note', 'human-method', 'negative']);
+  assert.equal(useLabel(company.assets[1]), '已有研究正文');
+  assert.equal(useLabel(company.assets[2]), '方法补充与更正');
+  assert.equal(JSON.stringify(company), before);
+});
+
+test('watch source requires exact registry id, blob, path and security; null ref is not guessed', () => {
+  const p = withWatches([savedWatch('600276.SH')]), item = attentionView(p, watchSummary(p)).waiting[0];
+  const source = retained('decision.md'), company = {thscode: '600276.SH', assets: [{id: 'human-checkpoint', source}]};
+  assert.equal(watchOrigin(item, company), source);
+  assert.equal(watchOrigin(item, {...company, thscode: '603986.SH'}), null);
+  assert.equal(watchOrigin(item, {...company, assets: [...company.assets, ...company.assets]}), null);
+  const nextVersion = {...company, assets: [{id: 'human-checkpoint', source: {...source, git_blob: 'a'.repeat(40)}}]};
+  assert.equal(watchOrigin(item, nextVersion), null);
+});
+
+test('copied recovery carries immutable R, exact source/version and no fabricated answer', () => {
+  const item = attentionView(requestPayload([handoff()]), noWatch).requests[0];
+  const text = attentionResume(point, item, {thscode: '600276.SH', assets: [
+    {id: 'old-response', use: 'HUMAN_DECISION_CHECKPOINT', source: retained('decision.md')}]});
+  assert.match(text, /新的回应尚未提供/); assert.match(text, /不要凭此文本新增回应/);
+  const context = JSON.parse(text.slice(text.indexOf('{')));
+  assert.equal(context.item_id, item.id); assert.equal(context.source.sha256, checksum);
+  assert.ok(context.reading.includes(`/blob/${point}/current-state.json`));
+  assert.ok(context.related_versions[0].source.includes(`/blob/${point}/`));
+  assert.equal(context.registered_resolution, null); assert.equal(context.watch_conditions, null);
+  assert.throws(() => attentionResume('main', item, null), /UNPINNED_COMMIT/);
+  assert.throws(() => attentionResume(point, item, {thscode: '603986.SH', assets: []}), /ITEM_COMPANY_MISMATCH/);
+});
