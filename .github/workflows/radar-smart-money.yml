@@ -1,0 +1,83 @@
+name: radar-smart-money
+on:
+  schedule:
+    - cron: '20 9 * * 1-5'
+    - cron: '10 12 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      code-sha:
+        description: 'Reviewed exact current main; leave empty only for normal scheduled code identity'
+        required: false
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: radar-smart-money
+  cancel-in-progress: false
+jobs:
+  capture-smart-money:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing source and document dependencies
+        run: python -m pip install -e '.[feeds,documents]'
+      - name: Validate current main and exact prior delivery
+        id: control
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python .github/scripts/smart-money-control.py
+      - name: Capture public participants and capital behavior
+        if: steps.control.outputs.run_capture == 'true'
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          SKIP_HITHINK: ${{ steps.control.outputs.skip_hithink }}
+        run: |
+          args=()
+          if [ -f "$RUNNER_TEMP/smart-money-previous-state.json" ]; then
+            args+=(--previous-state "$RUNNER_TEMP/smart-money-previous-state.json")
+          fi
+          if [ "$SKIP_HITHINK" = 'true' ]; then args+=(--skip-hithink); fi
+          python -m decision_kernel.runtime.smart_money_capture --output "$RUNNER_TEMP/smart-money" "${args[@]}"
+      - name: Rebuild originals offline without source credentials
+        if: steps.control.outputs.run_capture == 'true' && success()
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from decision_kernel.runtime import smart_money_capture as c
+          root=Path(os.environ['RUNNER_TEMP'])/'smart-money'
+          files={p.name:p.read_bytes() for p in root.iterdir()}
+          result=c.replay(files,c.identity(os.environ),cutoff=c.s.now())
+          print(json.dumps({'status':result['status'],'requests':result['requests'],
+            'capture_hash':result['capture_hash'],'unresolved':result['unresolved'],
+            'source_calls_during_replay':result['source_calls_during_replay']},ensure_ascii=False))
+          PY
+      - name: Retain exact source bytes and partial checkpoints
+        if: always() && steps.control.outputs.run_capture == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: smart-money-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Retain actual delivery preflight
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: smart-money-control-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-control/
+          retention-days: 30
+          if-no-files-found: warn
