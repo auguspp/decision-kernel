@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
     types: [requested, completed]
     branches: [main]
 
@@ -68,8 +68,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing package
-        # Existing feeds extra supplies the pinned requests client. No feeds run.
-        run: python -m pip install -e '.[feeds]'
+        # Existing extras supply HTTP and deterministic original-PDF replay, not dev tools.
+        run: python -m pip install -e '.[feeds,documents]'
       - name: Verify saved products and publish read-only ref
         env:
           GH_TOKEN: ${{ github.token }}
@@ -87,6 +87,7 @@ jobs:
           --include-easy-stock-context
           --include-tdx-concept-context
           --include-daily-news
+          --include-smart-money
           --include-reviewed-questions
           --publish
       - name: Explain a failed reading publication

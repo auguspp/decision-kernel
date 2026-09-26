@@ -42,10 +42,9 @@ def test_watch_summary_is_human_attention_only_and_missing_watch_is_not_quiet():
 
 def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_watch_aware_reader():
     value = READ_WORKFLOW.read_text(encoding="utf-8")
-    # #427 institutional and the approved concept saved-source refresh extend
-    # the original sources. P1-3/4 add explicit native News/Industry listeners;
-    # no arbitrary workflow or new clock.
-    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]" in value
+    # Approved saved-source listeners include the independently authorized Smart
+    # Money delivery (#586). The publisher still has no clock or source secrets.
+    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]" in value
     assert value.count("    workflows:") == 1
     assert "types: [requested, completed]" in value
     assert "branches: [main]" in value
@@ -53,6 +52,7 @@ def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_wa
     assert "python -m decision_kernel.runtime.current_state_delivery_with_odds_watch" in value
     assert "--code-commit \"$READ_CODE_COMMIT\"" in value
     assert "--include-radar-discovery" in value
+    assert "--include-smart-money" in value
     assert "--publish" in value
     assert "workflow_dispatch:" not in value
     assert "schedule:" not in value and "cron:" not in value
