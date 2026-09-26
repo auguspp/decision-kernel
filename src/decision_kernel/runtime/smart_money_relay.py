@@ -84,7 +84,10 @@ def capture(output: Path, identity: dict, market_session: str | None, *,
     (output / "capture.json").write_bytes(s.encoded(manifest))
     files = {p.name: p.read_bytes() for p in output.iterdir() if p.is_file()}
     result = replay(files, identity=identity, cutoff=manifest["finished_at"])
-    (output / "summary.json").write_bytes(s.encoded(result))
+    compact={k:deepcopy(v) for k,v in result.items() if k!="families"}
+    compact["families"]={api:{k:deepcopy(v) for k,v in item.items() if k!="rows"}
+                         for api,item in result["families"].items()}
+    (output / "summary.json").write_bytes(s.encoded(compact))
     (output / "summary.md").write_text(render(result), encoding="utf-8")
     return result
 
