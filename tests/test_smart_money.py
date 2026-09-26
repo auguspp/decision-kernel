@@ -280,10 +280,21 @@ def test_gzip_history_and_browse_roundtrip_escape_sources(tmp_path):
 
 
 def test_unrelated_later_success_does_not_erase_uncovered_historical_gap(tmp_path):
+    # Outside the bounded one-year recovery capability; later success cannot erase it.
+    old={'version':s.VERSION,'unresolved':[{'family':'activity','partition':'disclosures',
+         'begin':'2024-01-01','end':'2024-02-01','failure':'TRANSPORT_TIMEOUT'}]}
+    obs,_=captured(tmp_path,previous=old)
+    assert any(g.get('begin')=='2024-01-01' for g in obs['unresolved'])
+
+
+def test_actual_expanded_disclosure_query_can_close_covered_old_gap(tmp_path):
     old={'version':s.VERSION,'unresolved':[{'family':'activity','partition':'disclosures',
          'begin':'2026-01-01','end':'2026-02-01','failure':'TRANSPORT_TIMEOUT'}]}
-    obs,_=captured(tmp_path,previous=old)
-    assert any(g.get('begin')=='2026-01-01' for g in obs['unresolved'])
+    obs,files=captured(tmp_path,previous=old)
+    part=next(p for p in obs['partitions'] if p['family']=='activity')
+    assert part['begin']=='2026-01-01' and part['complete']
+    assert not any(g.get('family')=='activity' for g in obs['unresolved'])
+    assert c.replay(files,IDENT,cutoff=NOW)==obs
 
 
 def test_known_calendar_gap_can_close_but_retains_exact_dated_gaps(tmp_path):
