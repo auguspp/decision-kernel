@@ -1,10 +1,9 @@
 """Temporary production evidence reader; original source data is never executable."""
-import base64,hashlib,io,json,os,subprocess,socket,tempfile,zipfile,shutil
+import base64,hashlib,io,json,os,subprocess,socket,zipfile,shutil,re
 from pathlib import Path
 from bs4 import BeautifulSoup
 from decision_kernel.runtime import current_state as m
 from decision_kernel.runtime import smart_money_capture as capture, smart_money_view as view
-from decision_kernel.runtime import smart_money_sources as s
 
 repo='auguspp/decision-kernel';out=Path(os.environ['RUNNER_TEMP'])/'smart-money-product-evidence';out.mkdir(exist_ok=True)
 rid=int(os.environ['SOURCE_RUN']);expected=os.environ['SOURCE_HEAD'];R=os.environ['READING_COMMIT']
@@ -21,10 +20,12 @@ raw=subprocess.check_output(['gh','api',f"repos/{repo}/actions/artifacts/{a['id'
 assert len(raw)==a['size_in_bytes'] and 'sha256:'+m.sha256(raw)==a['digest']
 (out/'source-original.zip').write_bytes(raw)
 z=zipfile.ZipFile(io.BytesIO(raw));assert z.testzip() is None and len(z.namelist())==len(set(z.namelist()))
-assert all('/' not in n and n in {'capture.json','verification.json'} or '/' not in n and n.startswith('raw-') and n.endswith('.body') for n in z.namelist())
-files={n:z.read(n) for n in z.namelist() if n!='verification.json'}
-manifest=json.loads(files['capture.json']);assert manifest['execution']['code_commit']==expected
-root=api('contents/current-state.json?ref='+R);package=json.loads(base64.b64decode(root['content']));m.validate_read_package(package)
+assert all('/' not in n and (n=='capture.json' or n.startswith('raw-') and n.endswith('.body')) for n in z.namelist())
+files={n:z.read(n) for n in z.namelist()};manifest=json.loads(files['capture.json'])
+assert manifest['identity']['code_commit']==expected
+root=api('contents/current-state.json?ref='+R)
+if root.get('encoding')!='base64':root=api('git/blobs/'+root['sha'])
+package=json.loads(base64.b64decode(root['content']));m.validate_read_package(package)
 entry=package['research']['smart_money'];assert entry['capture_hash']==manifest['capture_hash']
 refs=entry['details'];overview=json.loads(blob(refs['overview']));meta=json.loads(blob(refs['history']))
 chunks={r['name']:blob(r['reference']) for r in meta['chunks']};page=blob(refs['browser']);markdown=blob(refs['markdown'])
@@ -33,7 +34,7 @@ chunks={r['name']:blob(r['reference']) for r in meta['chunks']};page=blob(refs['
 os.environ.pop('GH_TOKEN',None)
 def deny(*a,**k):raise AssertionError('No source/network calls during replay')
 socket.socket.connect=deny;socket.getaddrinfo=deny
-obs=capture.replay(files,manifest['execution'],cutoff=run['updated_at']);hist=view.decode_chunks(meta,chunks)
+obs=capture.replay(files,manifest['identity'],cutoff=run['updated_at']);hist=view.decode_chunks(meta,chunks)
 assert obs['capture_hash']==entry['capture_hash'] and hist['capture_hash']==entry['capture_hash']
 queries=['章盟主','葛卫东','章建平','徐开东','高毅','000651','002902']
 examples={q:[r['data'] for r in hist['records'] if q in ' '.join(str(r['data'].get(k,'')) for k in ['ticker','company','actor_name'])][-8:] for q in queries}
@@ -46,30 +47,35 @@ proof={'source_run':rid,'head':expected,'R':R,'artifact':a['id'],'zip_bytes':len
 print('PRODUCT_EVIDENCE',json.dumps(proof,ensure_ascii=False))
 for q,data in examples.items():print('ACTUAL_QUERY',q,json.dumps(data,ensure_ascii=False))
 (out/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2))
-# Instrument a local COPY only. Actual product bytes above remain unmodified.
+tests=[('章盟主','hot_money'),('000651',''),('葛卫东','holdings'),('','north_holdings'),('__NO_SUCH_PARTICIPANT__','')]
+def matches(record,q,family):
+    if family and record['family']!=family:return False
+    d=record['data'];values=d['values'];parts=[d.get('ticker'),d.get('company'),d.get('actor_name'),d.get('actor_id'),values.get('subscription_objects')]
+    for person in values.get('roster',[]):parts.extend([person.get('name'),person.get('institution_code')])
+    return q.lower() in ' '.join('' if x is None else str(x) for x in parts).lower()
+expected_counts=[sum(matches(r,q,f) for r in hist['records']) for q,f in tests]
+# Instrument a local COPY only. Saved product bytes above remain unchanged.
 script='''
 (async function(){
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  for(let i=0;i<600 && document.getElementById('query').disabled;i++)await sleep(50);
  const q=document.getElementById('query'),f=document.getElementById('family'),results=[];
- function test(value,family){q.value=value;f.value=family;q.dispatchEvent(new Event('input'));results.push({query:value,family,count:document.getElementById('count').textContent,articles:document.querySelectorAll('article').length});}
- test('章盟主','hot_money');test('000651','');test('葛卫东','holdings');test('','north_holdings');
+ for(const [value,family] of TESTS){q.value=value;f.value=family;q.dispatchEvent(new Event('input'));results.push({query:value,family,count:document.getElementById('count').textContent,articles:document.querySelectorAll('article').length});}
  const p=document.createElement('pre');p.id='acceptance-proof';p.textContent=JSON.stringify({ready:!q.disabled,health:document.getElementById('health').textContent,results,innerWidth,scrollWidth:document.documentElement.scrollWidth});document.body.append(p);
 })();
-'''
+'''.replace('TESTS',json.dumps(tests,ensure_ascii=False))
 hash64=base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
-text=page.decode().replace("; style-src", " 'sha256-"+hash64+"'; style-src",1).replace('</body>','<script>'+script+'</script></body>')
+text=page.decode().replace('; style-src'," 'sha256-"+hash64+"'; style-src",1).replace('</body>','<script>'+script+'</script></body>')
 copy=out/'instrumented-browser.html';copy.write_text(text)
 chrome=shutil.which('google-chrome') or shutil.which('chromium');assert chrome
 browser_proofs=[]
 for width in [1280,390]:
     p=subprocess.run([chrome,'--headless','--no-sandbox','--disable-gpu','--no-proxy-server','--host-resolver-rules=MAP * ~NOTFOUND',
         '--virtual-time-budget=45000',f'--window-size={width},900','--dump-dom',copy.as_uri()],capture_output=True,text=True,timeout=90)
-    dom=BeautifulSoup(p.stdout,'html.parser');node=dom.find(id='acceptance-proof')
-    assert p.returncode==0 and node is not None
+    dom=BeautifulSoup(p.stdout,'html.parser');node=dom.find(id='acceptance-proof');assert p.returncode==0 and node is not None
     result=json.loads(node.get_text());assert result['ready'] and not result['health'].startswith('读取失败：')
-    assert all(x['articles']>0 for x in result['results'])
+    for actual,wanted in zip(result['results'],expected_counts,strict=True):
+        assert int(re.search(r'匹配 (\d+) 条',actual['count']).group(1))==wanted and actual['articles']==min(40,wanted)
     result['requested_width']=width;result['page_overflow']=result['scrollWidth']>result['innerWidth'];browser_proofs.append(result)
-    (out/f'browser-{width}.html').write_text(p.stdout)
-    print('ACTUAL_BROWSER',json.dumps(result,ensure_ascii=False))
+    (out/f'browser-{width}.html').write_text(p.stdout);print('ACTUAL_BROWSER',json.dumps(result,ensure_ascii=False))
 (out/'browser-proof.json').write_text(json.dumps(browser_proofs,ensure_ascii=False,indent=2))
