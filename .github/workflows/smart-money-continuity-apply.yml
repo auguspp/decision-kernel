@@ -1,0 +1,147 @@
+name: smart-money-continuity-apply
+on:
+  push:
+    branches: [work/smart-money-continuity-20260926]
+    paths: [.github/workflows/smart-money-continuity-apply.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: smart-money-continuity-apply
+  cancel-in-progress: false
+jobs:
+  apply-reviewed-patch:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/work/smart-money-continuity-20260926' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    env:
+      BASE: ce940c5be23d3de065a89d56eba294afc5853075
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ce940c5be23d3de065a89d56eba294afc5853075
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Apply exact retained patch and preserve current composition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, gzip, hashlib, json, os, pathlib, subprocess
+          from datetime import datetime, timezone
+          assert datetime.now(timezone.utc) < datetime(2026,9,27,tzinfo=timezone.utc)
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['BASE']
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity';root.mkdir()
+          parts=[]
+          for sha in ('ea50a7670dc6116d6221aa7e855d38c16def08c9','f80bd6e8ada75e2b55fd6d2fd56dd0e7a1ef8e93','d136c671afad73ed2b55a6d2ca02ce7cabc3b23a'):
+              obj=json.loads(subprocess.check_output(['gh','api','repos/auguspp/decision-kernel/git/blobs/'+sha]))
+              assert obj['sha']==sha and obj['encoding']=='base64'
+              raw=base64.b64decode(obj['content']);assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==sha
+              parts.append(raw)
+          patch=gzip.decompress(b''.join(parts))
+          assert len(patch)==56587 and hashlib.sha256(patch).hexdigest()=='9c84ecb09959d8c9bc7df42a1aa87b900591d88219c0b2e99a2c25373edbd604'
+          target=root/'reviewed.patch';target.write_bytes(patch)
+          subprocess.run(['git','apply','--3way','--index',str(target)],check=True)
+          # New calendar watermarks must not reject old captures. Legacy plan
+          # fields reproduce the already-deployed planner, never rewrite bytes.
+          path=pathlib.Path('src/decision_kernel/runtime/smart_money_capture.py');text=path.read_text()
+          edits=[
+              ('def make_plan(asof, calendar_value, previous=None):','def make_plan(asof, calendar_value, previous=None, *, track_calendar=True):'),
+              ("    enumerated = previous.get('calendar_enumerated_through')\n    pending_since = previous.get('calendar_pending_since')", "    enumerated = previous.get('calendar_enumerated_through') if track_calendar else None\n    pending_since = previous.get('calendar_pending_since') if track_calendar else None"),
+              ("    if calendar_error:\n        pending_since = pending_since or previous.get('target_date') or end.isoformat()", "    if calendar_error and track_calendar:\n        pending_since = pending_since or previous.get('target_date') or end.isoformat()"),
+              ("    return {'calendar_enumerated_through':enumerated, 'calendar_pending_since':pending_since,", "    return {**({'calendar_enumerated_through':enumerated, 'calendar_pending_since':pending_since} if track_calendar else {}),"),
+              ("    plan=make_plan(manifest['started_at'],cal,manifest.get('previous_state'))", "    tracked='calendar_enumerated_through' in manifest['plan']\n    s.require(tracked == ('calendar_pending_since' in manifest['plan']), 'CALENDAR_PLAN_FIELDS')\n    if not tracked:\n        s.require(not any(k in (manifest.get('previous_state') or {}) for k in ('calendar_enumerated_through','calendar_pending_since')), 'LEGACY_PLAN_WITH_NEW_STATE')\n    plan=make_plan(manifest['started_at'],cal,manifest.get('previous_state'),track_calendar=tracked)"),
+              ("'calendar_enumerated_through':plan['calendar_enumerated_through']", "'calendar_enumerated_through':plan.get('calendar_enumerated_through')"),
+              ("'calendar_pending_since':plan['calendar_pending_since']", "'calendar_pending_since':plan.get('calendar_pending_since')"),
+          ]
+          for a,b in edits:
+              assert text.count(a)==1,a
+              text=text.replace(a,b)
+          path.write_text(text)
+          reader=pathlib.Path('src/decision_kernel/runtime/smart_money_reading.py').read_text()
+          assert 'smart-money canonical composition binding' in reader
+          assert 'smart-money root summary binding' not in reader
+          subprocess.run(['git','add','src/decision_kernel/runtime/smart_money_capture.py'],check=True)
+          allowed={'.github/scripts/smart-money-control.py','src/decision_kernel/runtime/smart_money_capture.py','src/decision_kernel/runtime/smart_money_documents.py','src/decision_kernel/runtime/smart_money_reading.py','src/decision_kernel/runtime/smart_money_sources.py','src/decision_kernel/runtime/smart_money_view.py','tests/test_radar_company_reading.py','tests/test_smart_money_capture.py','tests/test_smart_money_continuity.py'}
+          changed=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert set(changed)==allowed
+          (root/'paths.json').write_text(json.dumps(changed))
+          (root/'candidate.patch').write_bytes(subprocess.check_output(['git','diff','--cached','--binary','--full-index']))
+          # Download only the already completed first production result, not
+          # another source capture. Preserve exact raw data and its old code.
+          rid=36213198566; aid=10896403657
+          run=json.loads(subprocess.check_output(['gh','api',f'repos/auguspp/decision-kernel/actions/runs/{rid}']))
+          assert run['head_sha']=='325318113711c79ec880bbcb99c5cc346ad6c24c' and run['run_attempt']==1 and run['conclusion']=='success'
+          data=subprocess.check_output(['gh','api',f'repos/auguspp/decision-kernel/actions/artifacts/{aid}/zip'])
+          assert len(data)==17647490 and hashlib.sha256(data).hexdigest()=='246843ac886cdc055ec37950f01a9dca6a6c5ee696bc1ae887ff4bc57947bc52'
+          (root/'production.zip').write_bytes(data)
+          PY
+      - name: Install original development dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Test reconciled code without credentials
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_smart_money*.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/continuity/scoped-junit.xml" | tee "$RUNNER_TEMP/continuity/scoped-tests.log"
+      - name: Reconstruct actual prior production capture without network
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,zipfile
+          from decision_kernel.runtime import smart_money_capture as c, smart_money_sources as s, smart_money_view as v
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity'
+          with zipfile.ZipFile(root/'production.zip') as archive:
+              assert archive.testzip() is None
+              files={i.filename:archive.read(i) for i in archive.infolist() if not i.is_dir()}
+          manifest=s.decode(files['capture.json'])
+          report=c.replay(files,manifest['identity'],cutoff=s.now())
+          assert report['source_calls_during_replay']==0 and report['capture_hash']==manifest['capture_hash']
+          hist=v.history(report);summary=v.summarize(report,hist)
+          (root/'production-replay.json').write_bytes(s.encoded(summary))
+          print(json.dumps({'status':report['status'],'records':len(hist['records']),'requests':report['requests'],'unresolved':report['unresolved']},ensure_ascii=False))
+          PY
+      - name: Create unreferenced candidate Git objects only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          from datetime import datetime,timezone
+          assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'continuity';paths=json.loads((root/'paths.json').read_text())
+          def api(path,body):
+              return json.loads(subprocess.check_output(['gh','api','--method','POST','repos/auguspp/decision-kernel/'+path,'--input','-'],input=json.dumps(body).encode()))
+          elements=[];manifest=[]
+          for path in paths:
+              raw=pathlib.Path(path).read_bytes();expected=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              obj=api('git/blobs',{'content':raw.decode(),'encoding':'utf-8'});assert obj['sha']==expected
+              elements.append({'path':path,'mode':'100644','type':'blob','sha':expected})
+              manifest.append({'path':path,'bytes':len(raw),'git_blob':expected,'sha256':hashlib.sha256(raw).hexdigest()})
+          base_tree=subprocess.check_output(['git','rev-parse',os.environ['BASE']+'^{tree}'],text=True).strip()
+          tree=api('git/trees',{'base_tree':base_tree,'tree':elements})
+          local=subprocess.check_output(['git','write-tree'],text=True).strip();assert tree['sha']==local
+          commit=api('git/commits',{'message':'fix: preserve Smart Money missing dates, current snapshots and unconsumed captures','tree':local,'parents':[os.environ['BASE']]})
+          (root/'candidate.json').write_text(json.dumps({'commit':commit['sha'],'parent':os.environ['BASE'],'tree':local,'files':manifest,'refs_modified':False},indent=2))
+          print('CANDIDATE_COMMIT='+commit['sha'])
+          # No refs, PRs, workflow dispatches or main updates in this worker.
+          PY
+      - name: Export source and evidence, including failures
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/continuity"
+          tree=$(git write-tree)
+          git archive --format=zip "$tree" > "$RUNNER_TEMP/continuity/source.zip"
+          git diff --cached --binary --full-index > "$RUNNER_TEMP/continuity/candidate.patch"
+          git rev-parse HEAD > "$RUNNER_TEMP/continuity/base.txt"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: smart-money-continuity-${{ github.run_id }}-1
+          path: ${{ runner.temp }}/continuity/
+          retention-days: 30
+          if-no-files-found: error
