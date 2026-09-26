@@ -1,6 +1,6 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "0.05",
+  "capture_age_hours": "1.03",
   "capture_hash": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb",
   "current_reading": {
     "control": {
@@ -34,7 +34,7 @@
       "status": "completed",
       "updated_at": "2026-09-26T03:08:37Z"
     },
-    "previous_status": "NO_PREVIOUS_CAPTURE",
+    "previous_status": "EXACT_PREVIOUS_a0f3517ff63adcc4e8ca6c9a359716d65e9e3ab8",
     "status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "uses_prior_observation": false
   },
@@ -50,6 +50,7 @@
       "event_groups": 0,
       "known_institution_codes": 0,
       "latest_period": null,
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -58,7 +59,8 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
-          "failure": "PROVIDER_DATA_UNAVAILABLE",
+          "excluded_rows": [],
+          "failure": "SOURCE_BUSY",
           "family": "activity",
           "normalized_rows": 0,
           "partition": "disclosures",
@@ -70,43 +72,48 @@
           "status": "PARTIAL_OR_UNAVAILABLE"
         }
       ],
+      "roster_coverage": "PROVIDER_EVENT_SUMMARIES_NOT_ALL_PARTICIPANT_ROWS",
       "saved_records": 0,
       "status": "PARTIAL_OR_UNAVAILABLE",
       "title": "机构调研活动",
       "unidentified_event_rows": 0,
+      "unresolved_partitions": 1,
       "unresolved_roster_rows": 0
     },
     "executives": {
       "companies": 641,
-      "complete_partitions": 0,
+      "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 3218,
+      "current_rows": 3226,
       "deferred": [],
       "earliest_period": "2026-06-29",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
-          "complete": false,
-          "conflicting_identities": 24,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": null,
           "family": "executives",
-          "normalized_rows": 3218,
+          "normalized_rows": 3226,
           "partition": "disclosures",
           "provider_pages": 17,
           "provider_total": 3263,
           "returned_rows": 3263,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3218,
-      "status": "PARTIAL_OR_UNAVAILABLE",
-      "title": "高管实际持股变动"
+      "saved_records": 3226,
+      "status": "COMPLETE_PROVIDER_SCOPES",
+      "title": "高管实际持股变动",
+      "unresolved_partitions": 0
     },
     "forecasts": {
       "companies": 1560,
@@ -116,6 +123,7 @@
       "deferred": [],
       "earliest_period": "2026-06-28",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -124,6 +132,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": null,
           "family": "forecasts",
           "normalized_rows": 3250,
@@ -138,7 +147,8 @@
       ],
       "saved_records": 3250,
       "status": "COMPLETE_PROVIDER_SCOPES",
-      "title": "研报与预期版本"
+      "title": "研报与预期版本",
+      "unresolved_partitions": 0
     },
     "holder_changes": {
       "companies": 0,
@@ -148,6 +158,7 @@
       "deferred": [],
       "earliest_period": null,
       "latest_period": null,
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -156,6 +167,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": "PAGE_COUNTERS",
           "family": "holder_changes",
           "normalized_rows": 0,
@@ -170,25 +182,1149 @@
       ],
       "saved_records": 0,
       "status": "PARTIAL_OR_UNAVAILABLE",
-      "title": "股东披露增减持区间"
+      "title": "股东披露增减持区间",
+      "unresolved_partitions": 1
     },
     "holdings": {
       "companies": 5610,
-      "complete_partitions": 0,
+      "complete_partitions": 2,
       "current_partitions": 2,
       "current_rows": 111862,
       "deferred": [],
       "earliest_period": "2026-03-31",
       "latest_period": "2026-06-30",
       "named_individual_provider_rows": 47871,
+      "out_of_scope_rows": 160,
       "partitions": [
         {
           "begin": "2026-06-28",
-          "complete": false,
-          "conflicting_identities": 4,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                227
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                228
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                229
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                230
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                231
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                232
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                233
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                234
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                235
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400293.NQ",
+              "source_row": [
+                50,
+                236
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                237
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                238
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                239
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                240
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                241
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                242
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                243
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                244
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                245
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400294.NQ",
+              "source_row": [
+                50,
+                246
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                247
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                248
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                249
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                250
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                251
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                252
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                253
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                254
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                255
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400295.NQ",
+              "source_row": [
+                50,
+                256
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                257
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                258
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                259
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                260
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                261
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                262
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                263
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                264
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                265
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400296.NQ",
+              "source_row": [
+                50,
+                266
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                267
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                268
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                269
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                270
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                271
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                272
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                273
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                274
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                275
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400297.NQ",
+              "source_row": [
+                50,
+                276
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                277
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                278
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                279
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                280
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                281
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                282
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                283
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                284
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                285
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400298.NQ",
+              "source_row": [
+                50,
+                286
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                287
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                288
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                289
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                290
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                291
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                292
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                293
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                294
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                295
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400299.NQ",
+              "source_row": [
+                50,
+                296
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                297
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                298
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                299
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                300
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                301
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                302
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                303
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                304
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                305
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400300.NQ",
+              "source_row": [
+                50,
+                306
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                307
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                308
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                309
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                310
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                311
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                312
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                313
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                314
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                315
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400301.NQ",
+              "source_row": [
+                50,
+                316
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                317
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                318
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                319
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                320
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                321
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                322
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                323
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                324
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                325
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400302.NQ",
+              "source_row": [
+                50,
+                326
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                327
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                328
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                329
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                330
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                331
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                332
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                333
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                334
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                335
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400303.NQ",
+              "source_row": [
+                50,
+                336
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                337
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                338
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                339
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                340
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                341
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                342
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                343
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                344
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                345
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400304.NQ",
+              "source_row": [
+                50,
+                346
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                347
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                348
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                349
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                350
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                351
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                352
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                353
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                354
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                355
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400305.NQ",
+              "source_row": [
+                50,
+                356
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                357
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                358
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                359
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                360
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                361
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                362
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                363
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                364
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                365
+              ]
+            },
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400306.NQ",
+              "source_row": [
+                50,
+                366
+              ]
+            }
+          ],
           "failure": null,
           "family": "holdings",
           "normalized_rows": 55715,
@@ -196,998 +1332,179 @@
           "provider_pages": 56,
           "provider_total": 55855,
           "returned_rows": 55855,
-          "row_errors": [
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                227
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                228
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                229
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                230
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                231
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                232
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                233
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                234
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                235
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                236
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                237
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                238
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                239
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                240
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                241
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                242
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                243
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                244
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                245
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                246
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                247
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                248
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                249
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                250
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                251
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                252
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                253
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                254
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                255
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                256
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                257
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                258
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                259
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                260
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                261
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                262
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                263
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                264
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                265
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                266
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                267
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                268
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                269
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                270
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                271
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                272
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                273
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                274
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                275
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                276
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                277
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                278
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                279
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                280
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                281
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                282
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                283
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                284
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                285
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                286
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                287
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                288
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                289
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                290
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                291
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                292
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                293
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                294
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                295
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                296
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                297
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                298
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                299
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                300
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                301
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                302
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                303
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                304
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                305
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                306
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                307
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                308
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                309
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                310
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                311
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                312
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                313
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                314
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                315
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                316
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                317
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                318
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                319
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                320
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                321
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                322
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                323
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                324
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                325
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                326
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                327
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                328
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                329
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                330
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                331
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                332
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                333
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                334
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                335
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                336
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                337
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                338
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                339
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                340
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                341
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                342
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                343
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                344
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                345
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
+          "row_errors": [],
+          "source_disclosure_counts": [],
+          "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "begin": "2026-06-28",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-09-26",
+          "excluded_rows": [
+            {
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
+              "source_row": [
+                106,
                 346
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 347
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 348
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 349
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 350
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 351
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 352
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 353
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 354
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400051.NQ",
               "source_row": [
-                50,
+                106,
                 355
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 356
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 357
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 358
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 359
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 360
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 361
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 362
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 363
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 364
               ]
             },
             {
-              "reason": "SECURITY_CODE",
+              "reason": "OUTSIDE_SH_SZ_BJ_SCOPE_NQ",
+              "security": "400054.NQ",
               "source_row": [
-                50,
+                106,
                 365
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                50,
-                366
               ]
             }
           ],
-          "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
-        },
-        {
-          "begin": "2026-06-28",
-          "complete": false,
-          "conflicting_identities": 4,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-26",
           "failure": null,
           "family": "holdings",
           "normalized_rows": 56147,
@@ -1195,155 +1512,15 @@
           "provider_pages": 57,
           "provider_total": 56167,
           "returned_rows": 56167,
-          "row_errors": [
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                346
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                347
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                348
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                349
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                350
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                351
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                352
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                353
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                354
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                355
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                356
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                357
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                358
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                359
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                360
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                361
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                362
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                363
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                364
-              ]
-            },
-            {
-              "reason": "SECURITY_CODE",
-              "source_row": [
-                106,
-                365
-              ]
-            }
-          ],
+          "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
       "saved_records": 111862,
-      "status": "PARTIAL_OR_UNAVAILABLE",
+      "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "具名个人与机构报告期持股",
+      "unresolved_partitions": 0,
       "verified_famous_investor_identity": "NOT_CERTIFIED_FROM_NAME_OR_TOP_TEN_APPEARANCE"
     },
     "hot_money": {
@@ -1354,6 +1531,7 @@
       "deferred": [],
       "earliest_period": "2026-09-18",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-09-18",
@@ -1362,6 +1540,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-18",
+          "excluded_rows": [],
           "failure": null,
           "family": "hot_money",
           "normalized_rows": 42,
@@ -1385,6 +1564,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-21",
+          "excluded_rows": [],
           "failure": null,
           "family": "hot_money",
           "normalized_rows": 42,
@@ -1408,6 +1588,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-22",
+          "excluded_rows": [],
           "failure": null,
           "family": "hot_money",
           "normalized_rows": 49,
@@ -1431,6 +1612,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-23",
+          "excluded_rows": [],
           "failure": null,
           "family": "hot_money",
           "normalized_rows": 51,
@@ -1454,6 +1636,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-24",
+          "excluded_rows": [],
           "failure": null,
           "family": "hot_money",
           "normalized_rows": 53,
@@ -1473,7 +1656,8 @@
       ],
       "saved_records": 237,
       "status": "COMPLETE_PROVIDER_SCOPES",
-      "title": "游资标签公开轨迹"
+      "title": "游资标签公开轨迹",
+      "unresolved_partitions": 0
     },
     "institutional": {
       "companies": 103,
@@ -1483,6 +1667,7 @@
       "deferred": [],
       "earliest_period": "2026-09-18",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-09-18",
@@ -1491,6 +1676,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-18",
+          "excluded_rows": [],
           "failure": null,
           "family": "institutional",
           "normalized_rows": 33,
@@ -1514,6 +1700,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-21",
+          "excluded_rows": [],
           "failure": null,
           "family": "institutional",
           "normalized_rows": 40,
@@ -1537,6 +1724,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-22",
+          "excluded_rows": [],
           "failure": null,
           "family": "institutional",
           "normalized_rows": 38,
@@ -1560,6 +1748,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-23",
+          "excluded_rows": [],
           "failure": null,
           "family": "institutional",
           "normalized_rows": 33,
@@ -1583,6 +1772,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-24",
+          "excluded_rows": [],
           "failure": null,
           "family": "institutional",
           "normalized_rows": 39,
@@ -1602,16 +1792,18 @@
       ],
       "saved_records": 183,
       "status": "COMPLETE_PROVIDER_SCOPES",
-      "title": "龙虎榜机构席位"
+      "title": "龙虎榜机构席位",
+      "unresolved_partitions": 0
     },
     "north_holdings": {
-      "companies": 4308,
+      "companies": 2269,
       "complete_partitions": 2,
       "current_partitions": 4,
       "current_rows": 4308,
       "deferred": [],
       "earliest_period": "2026-06-30",
       "latest_period": "2026-06-30",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -1620,6 +1812,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
           "normalized_rows": 2039,
@@ -1638,6 +1831,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": "HKEX_REQUESTED_QUARTER_NOT_RETURNED",
           "family": "north_holdings",
           "normalized_rows": 0,
@@ -1656,6 +1850,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
           "normalized_rows": 2269,
@@ -1674,6 +1869,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": "HKEX_REQUESTED_QUARTER_NOT_RETURNED",
           "family": "north_holdings",
           "normalized_rows": 0,
@@ -1686,9 +1882,10 @@
           "status": "PARTIAL_OR_UNAVAILABLE"
         }
       ],
-      "saved_records": 4308,
+      "saved_records": 2269,
       "status": "PARTIAL_OR_UNAVAILABLE",
-      "title": "北向季度持股"
+      "title": "北向季度持股",
+      "unresolved_partitions": 2
     },
     "northbound": {
       "companies": 0,
@@ -1698,6 +1895,7 @@
       "deferred": [],
       "earliest_period": "2026-09-18",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-09-18",
@@ -1706,6 +1904,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-18",
+          "excluded_rows": [],
           "failure": null,
           "family": "northbound",
           "normalized_rows": 1,
@@ -1724,6 +1923,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-21",
+          "excluded_rows": [],
           "failure": null,
           "family": "northbound",
           "normalized_rows": 1,
@@ -1742,6 +1942,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-22",
+          "excluded_rows": [],
           "failure": null,
           "family": "northbound",
           "normalized_rows": 1,
@@ -1760,6 +1961,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-23",
+          "excluded_rows": [],
           "failure": null,
           "family": "northbound",
           "normalized_rows": 1,
@@ -1778,6 +1980,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-24",
+          "excluded_rows": [],
           "failure": null,
           "family": "northbound",
           "normalized_rows": 1,
@@ -1792,7 +1995,8 @@
       ],
       "saved_records": 5,
       "status": "COMPLETE_PROVIDER_SCOPES",
-      "title": "北向成交（非净流入）"
+      "title": "北向成交（非净流入）",
+      "unresolved_partitions": 0
     },
     "placements": {
       "companies": 50,
@@ -1802,6 +2006,7 @@
       "deferred": [],
       "earliest_period": "2026-06-29",
       "latest_period": "2026-09-15",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -1810,6 +2015,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": null,
           "family": "placements",
           "normalized_rows": 51,
@@ -1824,7 +2030,8 @@
       ],
       "saved_records": 51,
       "status": "COMPLETE_PROVIDER_SCOPES",
-      "title": "定增与战略资本发行"
+      "title": "定增与战略资本发行",
+      "unresolved_partitions": 0
     },
     "repurchases": {
       "companies": 0,
@@ -1834,6 +2041,7 @@
       "deferred": [],
       "earliest_period": null,
       "latest_period": null,
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-06-28",
@@ -1842,6 +2050,7 @@
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-26",
+          "excluded_rows": [],
           "failure": "PAGE_COUNTERS",
           "family": "repurchases",
           "normalized_rows": 0,
@@ -1856,201 +2065,243 @@
       ],
       "saved_records": 0,
       "status": "PARTIAL_OR_UNAVAILABLE",
-      "title": "公司回购计划与执行"
+      "title": "公司回购计划与执行",
+      "unresolved_partitions": 1
     },
     "seats": {
       "companies": 186,
-      "complete_partitions": 0,
+      "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 2520,
+      "current_rows": 2815,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "latest_period": "2026-09-24",
+      "out_of_scope_rows": 0,
       "partitions": [
         {
           "begin": "2026-09-18",
-          "complete": false,
-          "conflicting_identities": 20,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-18",
+          "excluded_rows": [],
           "failure": null,
           "family": "seats",
-          "normalized_rows": 410,
+          "normalized_rows": 453,
           "partition": "2026-09-18",
           "provider_pages": 1,
           "provider_total": 50,
           "returned_rows": 50,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         },
         {
           "begin": "2026-09-21",
-          "complete": false,
-          "conflicting_identities": 30,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-21",
+          "excluded_rows": [],
           "failure": null,
           "family": "seats",
-          "normalized_rows": 487,
+          "normalized_rows": 557,
           "partition": "2026-09-21",
           "provider_pages": 1,
           "provider_total": 60,
           "returned_rows": 60,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         },
         {
           "begin": "2026-09-22",
-          "complete": false,
-          "conflicting_identities": 28,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-22",
+          "excluded_rows": [],
           "failure": null,
           "family": "seats",
-          "normalized_rows": 549,
+          "normalized_rows": 599,
           "partition": "2026-09-22",
           "provider_pages": 1,
           "provider_total": 66,
           "returned_rows": 66,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         },
         {
           "begin": "2026-09-23",
-          "complete": false,
-          "conflicting_identities": 24,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-23",
+          "excluded_rows": [],
           "failure": null,
           "family": "seats",
-          "normalized_rows": 557,
+          "normalized_rows": 619,
           "partition": "2026-09-23",
           "provider_pages": 1,
           "provider_total": 67,
           "returned_rows": 67,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         },
         {
           "begin": "2026-09-24",
-          "complete": false,
-          "conflicting_identities": 28,
+          "complete": true,
+          "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
           "end": "2026-09-24",
+          "excluded_rows": [],
           "failure": null,
           "family": "seats",
-          "normalized_rows": 517,
+          "normalized_rows": 587,
           "partition": "2026-09-24",
           "provider_pages": 1,
           "provider_total": 63,
           "returned_rows": 63,
           "row_errors": [],
           "source_disclosure_counts": [],
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 2520,
-      "status": "PARTIAL_OR_UNAVAILABLE",
-      "title": "原始营业部席位"
+      "saved_records": 2815,
+      "status": "COMPLETE_PROVIDER_SCOPES",
+      "title": "原始营业部席位",
+      "unresolved_partitions": 0
     }
   },
-  "first_baseline": true,
+  "first_baseline": false,
   "first_seen_meaning": "NEWLY_INGESTED_MAY_HAVE_BEEN_PUBLIC_BEFORE; NOT_ALL_EVENTS_OCCUR_TODAY",
   "forecast_documents": [
     {
+      "layout_selected_text_dates": [
+        "2026-09-24",
+        "2026-09-23"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 28,
       "pdf_sha256": "98cccd6fb2b288b680d3c8ef26d14d943346fad6418e3aee2224110f69b6c808",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609241829865327",
       "revisions": [],
       "source_row": 192,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-23"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 3,
       "pdf_sha256": "3b9597852adabd843f8291d2f8b9f07445b263b5eb07c55504eb9d766303ec45",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609231829803542",
       "revisions": [],
       "source_row": 193,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-24"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 4,
       "pdf_sha256": "d9e6f9fb64b2e320d46abc0e9c445e37d32bd4f90da63e440d650d87817759f6",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609241829864359",
       "revisions": [],
       "source_row": 194,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-23",
+        "2026-09-22"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 27,
       "pdf_sha256": "d1353bcb2f4277e63e0979a3d18d86d953d45e1318e5e8d246b947388d792c35",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609231829780296",
       "revisions": [],
       "source_row": 195,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-07-17"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "3ecaae68809a470cf1fc67e9c7ca696a1b3aa2474a8408dfdb5adb71c34c2139",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609241829864215",
       "revisions": [],
       "source_row": 196,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "d6e35dcb0588735f31d37305d493a6807ee0abee33adef2ca3984bf06912c582",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609241829863571",
       "revisions": [],
       "source_row": 197,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-24"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "75a3e08061658755de6f2f71d49d675040695243efbcecafb901a00322f83d69",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609241829856726",
       "revisions": [],
       "source_row": 198,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-24"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "0a1c14c1c89769e500e06a93781a48754ecdf9966609d780cdbc4fdb15189132",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609241829856631",
       "revisions": [],
       "source_row": 199,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
+      "layout_selected_text_dates": [],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 27,
       "pdf_sha256": "1e15d20f1c0fa84e6e79215d087f86773fa7b27f7dc83febc0a7d66042fc4b61",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202609241829856211",
       "revisions": [],
       "source_row": 200,
@@ -2062,10 +2313,15 @@
       "status": "PDF_SOURCE_UNAVAILABLE"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-22",
+        "2026-09-23"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 6,
       "pdf_sha256": "6af1c6c389bd2851541d975af7f114577526a6ce32ee6f4cf9f6c18e9b0a9eeb",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609241829832284",
       "revisions": [
         {
@@ -2130,10 +2386,15 @@
       "status": "REPORTED_COMPARABLE_REVISION"
     },
     {
+      "layout_selected_text_dates": [
+        "2026-09-22",
+        "2026-09-23"
+      ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
       "pages_inspected": 3,
       "pdf_pages": 6,
       "pdf_sha256": "658195b4f8ed9e90408c8ef344c3108acc43aa9c39c45fa5332ac1dfb903af2b",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609241829832275",
       "revisions": [
         {
@@ -2180,8 +2441,21 @@
     }
   ],
   "holding_comparisons": {
-    "comparable_nonzero_pairs": 19276,
+    "comparable_nonzero_pairs": 19180,
     "examples": [
+      {
+        "actor": "深圳市博睿财智控股有限公司",
+        "actor_id": "EM:HOLDER:10060967",
+        "change_shares": "5.10E+6",
+        "company": "平安银行",
+        "disclosed": "2026-08-15",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-06-30",
+        "previous_shares": "6.982E+7",
+        "prior_period": "2026-03-31",
+        "shares": "7.492E+7",
+        "ticker": "000001.SZ"
+      },
       {
         "actor": "香港中央结算有限公司",
         "actor_id": "EM:HOLDER:10671586",
@@ -2209,19 +2483,6 @@
         "ticker": "000001.SZ"
       },
       {
-        "actor": "深圳市博睿财智控股有限公司",
-        "actor_id": "EM:HOLDER:10060967",
-        "change_shares": "5.10E+6",
-        "company": "平安银行",
-        "disclosed": "2026-08-15",
-        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
-        "period": "2026-06-30",
-        "previous_shares": "6.982E+7",
-        "prior_period": "2026-03-31",
-        "shares": "7.492E+7",
-        "ticker": "000001.SZ"
-      },
-      {
         "actor": "中国建设银行股份有限公司-华泰柏瑞中证红利低波动交易型开放式指数证券投资基金",
         "actor_id": "EM:HOLDER:512890",
         "change_shares": "10748800",
@@ -2233,6 +2494,32 @@
         "prior_period": "2026-03-31",
         "shares": "82870993",
         "ticker": "000001.SZ"
+      },
+      {
+        "actor": "香港中央结算有限公司",
+        "actor_id": "EM:HOLDER:10671586",
+        "change_shares": "-857211",
+        "company": "万科A",
+        "disclosed": "2026-08-28",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-06-30",
+        "previous_shares": "147049855",
+        "prior_period": "2026-03-31",
+        "shares": "146192644",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor": "中国银行股份有限公司-招商沪深300地产等权重指数分级证券投资基金",
+        "actor_id": "EM:HOLDER:150207",
+        "change_shares": "43222700",
+        "company": "万科A",
+        "disclosed": "2026-08-28",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-06-30",
+        "previous_shares": "60563618",
+        "prior_period": "2026-03-31",
+        "shares": "103786318",
+        "ticker": "000002.SZ"
       },
       {
         "actor": "武汉盛隆创业投资有限公司",
@@ -2274,55 +2561,16 @@
         "ticker": "000002.SZ"
       },
       {
-        "actor": "中国银行股份有限公司-招商沪深300地产等权重指数分级证券投资基金",
-        "actor_id": "EM:HOLDER:150207",
-        "change_shares": "43222700",
-        "company": "万科A",
-        "disclosed": "2026-08-28",
-        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
-        "period": "2026-06-30",
-        "previous_shares": "60563618",
-        "prior_period": "2026-03-31",
-        "shares": "103786318",
-        "ticker": "000002.SZ"
-      },
-      {
-        "actor": "香港中央结算有限公司",
-        "actor_id": "EM:HOLDER:10671586",
-        "change_shares": "-857211",
-        "company": "万科A",
-        "disclosed": "2026-08-28",
-        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
-        "period": "2026-06-30",
-        "previous_shares": "147049855",
-        "prior_period": "2026-03-31",
-        "shares": "146192644",
-        "ticker": "000002.SZ"
-      },
-      {
-        "actor": "中国工商银行股份有限公司-南方中证全指房地产交易型开放式指数证券投资基金",
-        "actor_id": "EM:HOLDER:512200",
-        "change_shares": "-3.8707E+6",
+        "actor": "廖晔",
+        "actor_id": "EM:ISSUER_NAME:000006.SZ:廖晔",
+        "change_shares": "499999",
         "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "1.12966E+7",
+        "previous_shares": "11406204",
         "prior_period": "2026-03-31",
-        "shares": "7.4259E+6",
-        "ticker": "000006.SZ"
-      },
-      {
-        "actor": "香港中央结算有限公司",
-        "actor_id": "EM:HOLDER:10671586",
-        "change_shares": "-6725965",
-        "company": "深振业A",
-        "disclosed": "2026-08-26",
-        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
-        "period": "2026-06-30",
-        "previous_shares": "15033581",
-        "prior_period": "2026-03-31",
-        "shares": "8307616",
+        "shares": "11906203",
         "ticker": "000006.SZ"
       },
       {
@@ -2339,29 +2587,29 @@
         "ticker": "000006.SZ"
       },
       {
-        "actor": "深圳市资本运营集团有限公司",
-        "actor_id": "EM:HOLDER:10086488",
-        "change_shares": "-5589900",
+        "actor": "彭海生",
+        "actor_id": "EM:ISSUER_NAME:000006.SZ:彭海生",
+        "change_shares": "1.666E+5",
         "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "203356775",
+        "previous_shares": "8.2114E+6",
         "prior_period": "2026-03-31",
-        "shares": "197766875",
+        "shares": "8.378E+6",
         "ticker": "000006.SZ"
       },
       {
-        "actor": "傅华文",
-        "actor_id": "EM:ISSUER_NAME:000006.SZ:傅华文",
-        "change_shares": "1.980E+4",
+        "actor": "中国工商银行股份有限公司-南方中证全指房地产交易型开放式指数证券投资基金",
+        "actor_id": "EM:HOLDER:512200",
+        "change_shares": "-3.8707E+6",
         "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "4.23311E+6",
+        "previous_shares": "1.12966E+7",
         "prior_period": "2026-03-31",
-        "shares": "4.25291E+6",
+        "shares": "7.4259E+6",
         "ticker": "000006.SZ"
       },
       {
@@ -2378,55 +2626,55 @@
         "ticker": "000006.SZ"
       },
       {
-        "actor": "彭海生",
-        "actor_id": "EM:ISSUER_NAME:000006.SZ:彭海生",
-        "change_shares": "1.666E+5",
+        "actor": "傅华文",
+        "actor_id": "EM:ISSUER_NAME:000006.SZ:傅华文",
+        "change_shares": "1.980E+4",
         "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "8.2114E+6",
+        "previous_shares": "4.23311E+6",
         "prior_period": "2026-03-31",
-        "shares": "8.378E+6",
+        "shares": "4.25291E+6",
         "ticker": "000006.SZ"
       },
       {
-        "actor": "廖晔",
-        "actor_id": "EM:ISSUER_NAME:000006.SZ:廖晔",
-        "change_shares": "499999",
+        "actor": "深圳市资本运营集团有限公司",
+        "actor_id": "EM:HOLDER:10086488",
+        "change_shares": "-5589900",
         "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "11406204",
+        "previous_shares": "203356775",
         "prior_period": "2026-03-31",
-        "shares": "11906203",
+        "shares": "197766875",
         "ticker": "000006.SZ"
       },
       {
-        "actor": "李瑜鸿",
-        "actor_id": "EM:ISSUER_NAME:000007.SZ:李瑜鸿",
-        "change_shares": "2.500E+4",
-        "company": "全新好",
+        "actor": "香港中央结算有限公司",
+        "actor_id": "EM:HOLDER:10671586",
+        "change_shares": "-6725965",
+        "company": "深振业A",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "4.37435E+6",
+        "previous_shares": "15033581",
         "prior_period": "2026-03-31",
-        "shares": "4.39935E+6",
-        "ticker": "000007.SZ"
+        "shares": "8307616",
+        "ticker": "000006.SZ"
       },
       {
-        "actor": "重庆简然私募证券投资基金管理有限公司-简然善屯FOF4号私募证券投资基金",
-        "actor_id": "EM:HOLDER:78238340",
-        "change_shares": "-6.348E+5",
+        "actor": "北京锐毅端信私募基金管理有限公司-锐毅优选三号私募证券投资基金",
+        "actor_id": "EM:HOLDER:78237755",
+        "change_shares": "-6000000",
         "company": "全新好",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "8.9499E+6",
+        "previous_shares": "15322195",
         "prior_period": "2026-03-31",
-        "shares": "8.3151E+6",
+        "shares": "9322195",
         "ticker": "000007.SZ"
       },
       {
@@ -2443,16 +2691,16 @@
         "ticker": "000007.SZ"
       },
       {
-        "actor": "北京锐毅端信私募基金管理有限公司-锐毅优选三号私募证券投资基金",
-        "actor_id": "EM:HOLDER:78237755",
-        "change_shares": "-6000000",
+        "actor": "李瑜鸿",
+        "actor_id": "EM:ISSUER_NAME:000007.SZ:李瑜鸿",
+        "change_shares": "2.500E+4",
         "company": "全新好",
         "disclosed": "2026-08-26",
         "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
         "period": "2026-06-30",
-        "previous_shares": "15322195",
+        "previous_shares": "4.37435E+6",
         "prior_period": "2026-03-31",
-        "shares": "9322195",
+        "shares": "4.39935E+6",
         "ticker": "000007.SZ"
       },
       {
@@ -2469,6 +2717,19 @@
         "ticker": "000007.SZ"
       },
       {
+        "actor": "重庆简然私募证券投资基金管理有限公司-简然善屯FOF4号私募证券投资基金",
+        "actor_id": "EM:HOLDER:78238340",
+        "change_shares": "-6.348E+5",
+        "company": "全新好",
+        "disclosed": "2026-08-26",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-06-30",
+        "previous_shares": "8.9499E+6",
+        "prior_period": "2026-03-31",
+        "shares": "8.3151E+6",
+        "ticker": "000007.SZ"
+      },
+      {
         "actor": "李素云",
         "actor_id": "EM:ISSUER_NAME:000008.SZ:李素云",
         "change_shares": "-400000",
@@ -2482,19 +2743,6 @@
         "ticker": "000008.SZ"
       },
       {
-        "actor": "魏龙平",
-        "actor_id": "EM:ISSUER_NAME:000008.SZ:魏龙平",
-        "change_shares": "1375500",
-        "company": "神州高铁",
-        "disclosed": "2026-08-29",
-        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
-        "period": "2026-06-30",
-        "previous_shares": "7725366",
-        "prior_period": "2026-03-31",
-        "shares": "9100866",
-        "ticker": "000008.SZ"
-      },
-      {
         "actor": "香港中央结算有限公司",
         "actor_id": "EM:HOLDER:10671586",
         "change_shares": "-12024990",
@@ -2505,6 +2753,19 @@
         "previous_shares": "45296815",
         "prior_period": "2026-03-31",
         "shares": "33271825",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor": "魏龙平",
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:魏龙平",
+        "change_shares": "1375500",
+        "company": "神州高铁",
+        "disclosed": "2026-08-29",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-06-30",
+        "previous_shares": "7725366",
+        "prior_period": "2026-03-31",
+        "shares": "9100866",
         "ticker": "000008.SZ"
       },
       {
@@ -2581,7 +2842,7 @@
     ]
   },
   "increment_counts": {
-    "BASELINE_FIRST_OBSERVED": 125634
+    "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT": 125937
   },
   "institutional_attention": {
     "companies": 0,
@@ -2648,62 +2909,451 @@
   "stock_price_gate_required": false,
   "target_date": "2026-09-26",
   "top_ten_changes": {
-    "departure_examples": [],
-    "departures": 0,
-    "entries": 0,
-    "entry_examples": [],
-    "status": "ABSENCE_COMPARISON_UNQUALIFIED"
+    "ambiguous_companies": [
+      "000573.SZ",
+      "002012.SZ",
+      "002269.SZ",
+      "002851.SZ"
+    ],
+    "departure_examples": [
+      {
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000001.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10196008",
+        "actor_name": "中国证券金融股份有限公司",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000001.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10506881",
+        "actor_name": "中央汇金资产管理有限责任公司",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:510310",
+        "actor_name": "中国建设银行股份有限公司-易方达沪深300交易型开放式指数发起式证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10506881",
+        "actor_name": "中央汇金资产管理有限责任公司",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000006.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10339495",
+        "actor_name": "法国巴黎银行-自有资金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000007.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10000422073",
+        "actor_name": "共青城汇富欣然投资合伙企业(有限合伙)",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000007.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:陈春飞",
+        "actor_name": "陈春飞",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:赵睿",
+        "actor_name": "赵睿",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:张晓",
+        "actor_name": "张晓",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:510500",
+        "actor_name": "中国农业银行股份有限公司-中证500交易型开放式指数证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000009.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:陈瑞钦",
+        "actor_name": "陈瑞钦",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:盛媛媛",
+        "actor_name": "盛媛媛",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:王飞",
+        "actor_name": "王飞",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:麦富容",
+        "actor_name": "麦富容",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000011.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:高克",
+        "actor_name": "高克",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000011.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000012.SZ:李新强",
+        "actor_name": "李新强",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000012.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10047572",
+        "actor_name": "UBS AG",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10059032",
+        "actor_name": "BARCLAYS BANK PLC",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000014.SZ"
+      }
+    ],
+    "departures": 14269,
+    "entries": 14297,
+    "entry_examples": [
+      {
+        "actor_id": "EM:HOLDER:70428875",
+        "actor_name": "瑞众人寿保险有限责任公司-万能产品",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7.010991E+7",
+        "ticker": "000001.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:70428864",
+        "actor_name": "瑞众人寿保险有限责任公司-自有资金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "87334148",
+        "ticker": "000001.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000002.SZ:吕强",
+        "actor_name": "吕强",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2.97409E+7",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000002.SZ:陈淑新",
+        "actor_name": "陈淑新",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2.61716E+7",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000002.SZ:徐小雅",
+        "actor_name": "徐小雅",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "30475236",
+        "ticker": "000002.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000006.SZ:施清荣",
+        "actor_name": "施清荣",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "6.2043E+6",
+        "ticker": "000006.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000007.SZ:李丁聪",
+        "actor_name": "李丁聪",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "3.5105E+6",
+        "ticker": "000007.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10000422073",
+        "actor_name": "汇富欣然投资(南京)合伙企业(有限合伙)",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "33873262",
+        "ticker": "000007.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:王卫兵",
+        "actor_name": "王卫兵",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7.637E+6",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:周永杰",
+        "actor_name": "周永杰",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "8.5067E+6",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:郭俊锋",
+        "actor_name": "郭俊锋",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "17003249",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:71076813",
+        "actor_name": "安信证券资管-农业银行-安信资管创赢31号集合资产管理计划",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "8.4676E+6",
+        "ticker": "000009.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10005340",
+        "actor_name": "新余瑞达投资有限公司",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7022333",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:唐小晖",
+        "actor_name": "唐小晖",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1.34895E+7",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:徐礼州",
+        "actor_name": "徐礼州",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "4.4165E+6",
+        "ticker": "000010.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:王瑾",
+        "actor_name": "王瑾",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1.63E+6",
+        "ticker": "000011.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:王道虎",
+        "actor_name": "王道虎",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2433551",
+        "ticker": "000011.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10004863",
+        "actor_name": "GUOTAI JUNAN SECURITIES (HONGKONG) LIMITED",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "27691468",
+        "ticker": "000012.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10137791",
+        "actor_name": "J.P.Morgan Securities PLC-自有资金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1098792",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000014.SZ:姚伟",
+        "actor_name": "姚伟",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1.12E+6",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10071181",
+        "actor_name": "高盛国际-自有资金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1157568",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:320016",
+        "actor_name": "中国建设银行股份有限公司-诺安多策略混合型证券投资基金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "9.636E+5",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000014.SZ:李星达",
+        "actor_name": "李星达",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "9.646E+5",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000016.SZ:张玉香",
+        "actor_name": "张玉香",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "9.5E+6",
+        "ticker": "000016.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000016.SZ:曲辰",
+        "actor_name": "曲辰",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "7044808",
+        "ticker": "000016.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000016.SZ:王景峰",
+        "actor_name": "王景峰",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "6E+6",
+        "ticker": "000016.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000017.SZ:徐胜利",
+        "actor_name": "徐胜利",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2.5369E+6",
+        "ticker": "000017.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:77012413",
+        "actor_name": "深圳中华自行车(集团)股份有限公司破产企业财产处置专用账户",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2602402",
+        "ticker": "000017.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:012708",
+        "actor_name": "中国建设银行股份有限公司-东方红中证东方红红利低波动指数证券投资基金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "3.8665E+6",
+        "ticker": "000019.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10429689",
+        "actor_name": "高盛公司有限责任公司",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1616017",
+        "ticker": "000020.SZ"
+      }
+    ],
+    "status": "CONCURRENT_SNAPSHOT_VERSIONS_NOT_COMPARABLE"
   },
   "unresolved": [
-    {
-      "begin": "2026-09-18",
-      "end": "2026-09-18",
-      "failure": null,
-      "family": "seats",
-      "partition": "2026-09-18"
-    },
-    {
-      "begin": "2026-09-21",
-      "end": "2026-09-21",
-      "failure": null,
-      "family": "seats",
-      "partition": "2026-09-21"
-    },
-    {
-      "begin": "2026-09-22",
-      "end": "2026-09-22",
-      "failure": null,
-      "family": "seats",
-      "partition": "2026-09-22"
-    },
-    {
-      "begin": "2026-09-23",
-      "end": "2026-09-23",
-      "failure": null,
-      "family": "seats",
-      "partition": "2026-09-23"
-    },
-    {
-      "begin": "2026-09-24",
-      "end": "2026-09-24",
-      "failure": null,
-      "family": "seats",
-      "partition": "2026-09-24"
-    },
-    {
-      "begin": "2026-06-28",
-      "end": "2026-09-26",
-      "failure": null,
-      "family": "holdings",
-      "partition": "2026-03-31"
-    },
-    {
-      "begin": "2026-06-28",
-      "end": "2026-09-26",
-      "failure": null,
-      "family": "holdings",
-      "partition": "2026-06-30"
-    },
     {
       "begin": "2026-06-28",
       "end": "2026-09-26",
@@ -2721,15 +3371,8 @@
     {
       "begin": "2026-06-28",
       "end": "2026-09-26",
-      "failure": "PROVIDER_DATA_UNAVAILABLE",
+      "failure": "SOURCE_BUSY",
       "family": "activity",
-      "partition": "disclosures"
-    },
-    {
-      "begin": "2026-06-28",
-      "end": "2026-09-26",
-      "failure": null,
-      "family": "executives",
       "partition": "disclosures"
     },
     {

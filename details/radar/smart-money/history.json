@@ -3,7 +3,7 @@
   "change_examples": [
     {
       "actor_name": "佛山系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "3d09f239c7d0eb988d237208400dc559f3ad4ff43136119c21adb398ff53d005",
@@ -11,7 +11,7 @@
     },
     {
       "actor_name": "成都系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "ed6172b03d056cc0fd4e95131b90fc7fc523ead2394e5931c3ffade0b74ef170",
@@ -19,7 +19,7 @@
     },
     {
       "actor_name": "成都系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "c439662118531ae7ca3f85f786c8dbc1ca87e3b758ed4107b078eb096435224c",
@@ -27,7 +27,7 @@
     },
     {
       "actor_name": "成都系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "cd24478cff981121eefc0f70cfc7fbb5c90b2c128b5ee676e2bdb3d3b7777807",
@@ -35,7 +35,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "80b385d6fdce91308cae09c784d4c30ab95cb568c6508f0021ccd150bcf04e3d",
@@ -43,7 +43,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "d8c5e2eea2a9c9020370d6258fbfaed711681914a91d7161b4ec82b008cdba74",
@@ -51,7 +51,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "caf1b40dff0b7e033b530019ca68dd88d6892b07bd3d6485d60554b30907a43d",
@@ -59,7 +59,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "f6e69b70079b0c0acf2c8a75f601d20f1b13052717c568f15a117746a727d6ad",
@@ -67,7 +67,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "c40872a925c9f7322b075b1984f048104931186ace6f11462ae7639dfc5cb850",
@@ -75,7 +75,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "eac521ccf796ba827a3d3deb13c13b9746adc2b84ab14ea5a4ebd92363c02bf9",
@@ -83,7 +83,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "97cb422da9b2acd803b2f95cc25153df30a98cc2ab1b59ae085b7231f1c8e860",
@@ -91,7 +91,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "bc797e6acb579e3ff6ed219cdc685eec1449dee311d0b8bc8439de31aa509795",
@@ -99,7 +99,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "a882df89f4dfc5b936eabdc822a60430e61a5938247aabc3558136ca17fa020b",
@@ -107,7 +107,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "80a70d8bd3fe86b7ce4e3211e76a3a0593919d635fc6dd11565fe2c101f81dee",
@@ -115,7 +115,7 @@
     },
     {
       "actor_name": "中山东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "a5dfc0757c00cb06bdaf77786c928ac632bfb6bfe665a292ca25c39c29b07d39",
@@ -123,7 +123,7 @@
     },
     {
       "actor_name": "中山东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "62d6d7ee52ea9c6b55d4039c83835d2c18f8830b9e2183f1ac87ef744afedef2",
@@ -131,7 +131,7 @@
     },
     {
       "actor_name": "中山东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "2ecd5250edff6b6069a28561df18475f1f4d1ae49b08364dd416baef6642f594",
@@ -139,7 +139,7 @@
     },
     {
       "actor_name": "玉兰路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "64520d4e1b0f0cbe18e11ab103f9de5b4f2d1f9c08bef752205cad2283abc9ec",
@@ -147,7 +147,7 @@
     },
     {
       "actor_name": "低位挖掘",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "3ac31b981a39adfbb3638624e3ea1d871b9046dd82a36b81c44d4763dc233482",
@@ -155,7 +155,7 @@
     },
     {
       "actor_name": "深南东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "16be05c85b7fa30a2dae76d028adcace7b5ba5da66690fa59a98a4a9fd0cacce",
@@ -163,7 +163,7 @@
     },
     {
       "actor_name": "孙哥",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "fba6b1f81768ccd9da0d77ccee03b0e8cb10f85d698bab4fb870d1fc8d35be8f",
@@ -171,7 +171,7 @@
     },
     {
       "actor_name": "毛老板",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "a8c4aee4e85e2267acfedadef2962faac4195025dea55f98aeeedbf3ab3e7f5a",
@@ -179,7 +179,7 @@
     },
     {
       "actor_name": "涅盘重升",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "f2d107e0abec1b5ab84b5bd34574351936e95247516822a7ecffb8a25aefda4b",
@@ -187,7 +187,7 @@
     },
     {
       "actor_name": "欢乐海岸",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "f54c1219faa0c094d6fb8b991026af7cbdc329fa0c5d3bcc25fa1547765321ee",
@@ -195,7 +195,7 @@
     },
     {
       "actor_name": "思明南路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "419dd7063aa7342972cff8fdd69c64f6c291395462a68d7124f9256aa2ab80b4",
@@ -203,7 +203,7 @@
     },
     {
       "actor_name": "交易猿",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "ab6a858e2438aab661cc4c27085397f227838a81c975bc55793b8caa2b46f880",
@@ -211,7 +211,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "fe05238f04baa9c65fbadcda4f4014c763e5b6c8881dbe2284bdb35f7454c417",
@@ -219,7 +219,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "2ae35125f74f869a44ee5de222459bc160a31e80e9c501d4697d3d78d71189e5",
@@ -227,7 +227,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "fa5ae64be32ef199fd4abcca34a05914b67d51fcdaa0c818b6510d3958ccfca2",
@@ -235,7 +235,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "88d4653e3a60d2231eacf1ab5e7d8406d3430d3fdc5fa986c9381c719a779621",
@@ -243,7 +243,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "3501e5248326c6049ee0ad9fd0c6cd921d41f23c4e303705a86ad8dd555e9151",
@@ -251,7 +251,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "087932e2ea0307b6dbff5f20a1766621f122bb8b82d9b0ca731b2ffb964a8184",
@@ -259,7 +259,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "baeefcd5f7eb112289b0a4c82fc1cfb0455a43b1d57f0e3936f6428f21803d41",
@@ -267,7 +267,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "d8ece4107c107488da1b2798d41c14bfb18bbfd4c570c829ed7cc0a9645d723f",
@@ -275,7 +275,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "8cd0696a75a704288159277051309f0e926768d78bdafe5f4fb338f0c0044668",
@@ -283,7 +283,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "13d1706f1504bd7acd961e299a92e4cb04154613104103129188f7a2c8d625fd",
@@ -291,7 +291,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "3729f1c0a67cc132863833342074d153b0d1e48388cbaf950ba42f327e4b41cd",
@@ -299,7 +299,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "3534076aa63c0d7ee8cd2a0826381c04763e2ffa74d9ecb78652b804224f03a8",
@@ -307,7 +307,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "2b15332b551a25de6f6b9cadb81b2896f02ccf4d7d535567066f9e8a2e6ceda9",
@@ -315,7 +315,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "396a34ec452a077c07d4202814ca9669c8d1bcd60113b540c00d96c7dd22e846",
@@ -323,7 +323,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "045f281d694a61a0e5b6acfdc3931d26dd9013e01dee453667602c3a73292065",
@@ -331,7 +331,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-18",
       "family": "hot_money",
       "id": "e1d308781913e52837ab011b7878d8245f66ca7872e260485eb13cb4cb9d7219",
@@ -339,7 +339,7 @@
     },
     {
       "actor_name": "宁波桑田路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "e808802241f0b3f7b34633d2e748aae120f9f58bfae38b335f28c19ed97ab16e",
@@ -347,7 +347,7 @@
     },
     {
       "actor_name": "宁波桑田路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "603833b996b0487e875d6868406f6ec88efd61741978aaf7b062dbb0fca666c1",
@@ -355,7 +355,7 @@
     },
     {
       "actor_name": "成都系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "9134e429db294238443887a046343fcc7a580cc3f4400947437c6e4714c67f43",
@@ -363,7 +363,7 @@
     },
     {
       "actor_name": "成都系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "3aaa73409d30683fc61363e8d34a50941cafdface9a7e8965dc88fa5c6d44dae",
@@ -371,7 +371,7 @@
     },
     {
       "actor_name": "南京帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "c1d8094267e9867f67cee9e7c39c82d767cad2c03f5cce3236a684be6b70c186",
@@ -379,7 +379,7 @@
     },
     {
       "actor_name": "上塘路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "a065e1309072ce3576fbbc7d17403ac0be609f1e810b17127abccbd2d6281307",
@@ -387,7 +387,7 @@
     },
     {
       "actor_name": "玉兰路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "c848a57b80c253add8808dd602af89887e9e2e7a751a58b54ad1e59cd3921c49",
@@ -395,7 +395,7 @@
     },
     {
       "actor_name": "低位挖掘",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "4f8d7fe890bab241901732354b589503facdb49a47bf173f47995ec1407123bf",
@@ -403,7 +403,7 @@
     },
     {
       "actor_name": "瑞鹤仙",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "c5f6b03294744e4882cea16d2fbaa9a602185ea22240d7c68b55bccbc9b67921",
@@ -411,7 +411,7 @@
     },
     {
       "actor_name": "bike770",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "670fa9d7a6713f5a15e5c3d7cda7259df2b6ab93f819a77174ae3d6152564929",
@@ -419,7 +419,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "b56715b86326870387452a82e25bda18304e9522ccc2165d1edd3e2c44f6fb05",
@@ -427,7 +427,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "1c4db63f692c9296de31bae05bd6353c3998a486f9b695e662de2c5eb294b2a1",
@@ -435,7 +435,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "d673cd7c3788e25e0b2d2602538111df93b18bf80c337f0dcd2f8082d1ff8137",
@@ -443,7 +443,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "e673758e8109e64da607a8ef602cd3410181f5ddcd7d0ba185dd28354dc41ea8",
@@ -451,7 +451,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "f3f4fe824c17d9a03b2345b788323f83237127e9b0bc2f8b3dc8a889dd31a4f3",
@@ -459,7 +459,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "cb59a085fb245bb1ff7993ce7946d903f5744cf9fa59849f4263f3aae84348fe",
@@ -467,7 +467,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "c96514ce07cb9d7a5d977f4deb81db16df1a4a066dd74864f081eacc3a96bacb",
@@ -475,7 +475,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "bccc2697cfbba5845292e5ca3f372d269c29df0fedf83281d9b4e739e277243b",
@@ -483,7 +483,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "e9565a7d51f7c8e97e1bd557158ae3ae1a1c2e98306a8240c97fb8f553b2d049",
@@ -491,7 +491,7 @@
     },
     {
       "actor_name": "敢死队",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "0b5740045e49618ea6f06a76392ae4173ef06623ab63aaa5a88e7a5f5fccf02b",
@@ -499,7 +499,7 @@
     },
     {
       "actor_name": "新生代",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "959c22bd1110bd190b8b2cc5eec3525b2eefbe0c590dce4d4be0f1956fd77e25",
@@ -507,7 +507,7 @@
     },
     {
       "actor_name": "深南东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "6b22c9bb1ce22a7e57afc56ff5b03924da6e1081f92dd299201e72258a7f746a",
@@ -515,7 +515,7 @@
     },
     {
       "actor_name": "深南东路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "619545407dfa4593fecf12e7d4d30f7ebc92466c6e39fc9087724a038ded8099",
@@ -523,7 +523,7 @@
     },
     {
       "actor_name": "思明南路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "72780797276b851d49856c1be9651c317dc1580238ccf41d283274c02a3da7e5",
@@ -531,7 +531,7 @@
     },
     {
       "actor_name": "思明南路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "e9c77e0316e9c3426728781b695026bee015e206d4fea9d39c6d5058eb4c4015",
@@ -539,7 +539,7 @@
     },
     {
       "actor_name": "北京帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "323b4722503c27db60881db16a85c5d862e2766431773bc6cba8ee1d15b21477",
@@ -547,7 +547,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "6286ece1c412e1893b7b80463ad4cdc7c64f8f6d5a08cf3a4c40a02d9d947c8e",
@@ -555,7 +555,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "33f0b5c05e35d5ee3a424003fa241c1ee009eb1c0de2594f2660d37b478ad7c7",
@@ -563,7 +563,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "e6f97ddf00995fe74a68067346a50ff53cde14d557e32b2d18316f7a9ef86e52",
@@ -571,7 +571,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "edb2e75d0e7a8fd0916e599b5b05c28a33840738fd8e178c51b580d6c2b8a37e",
@@ -579,7 +579,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "0e603138af8f5bf7c3867ae83a11249aa7da9980391dadd31e6e3e192ac26f3a",
@@ -587,7 +587,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "b825a115973c78a990d4f70331a5cf04e1aea9ac2b0f4f001c48edfdbc14d31c",
@@ -595,7 +595,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "bf4540e489c4134a55cc834794f7b8ba0c258ec28192bb19ceb704b7a73b7adc",
@@ -603,7 +603,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "30265fd2336b35c1c46ea1cac55d9a0dd2c83e0cfcf01d1c2e30122c66db6930",
@@ -611,7 +611,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "d51eeb59720304087d6715814f354afccf37e4b73242fab188d5a5f749fd9cec",
@@ -619,7 +619,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "7046d7b29af78c407c7fd4758e3daf8134c617c37b51db5936c44dd0d51940ba",
@@ -627,7 +627,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "9b9f0d67965a53fdae6cff9875099cd9d31dc8dcf9b30583436971c86ce1d616",
@@ -635,7 +635,7 @@
     },
     {
       "actor_name": "杭州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "f695b3d6b5d448c85101dcf11750d35253de6b04756c721b4a0f9c09e1f4ff8d",
@@ -643,7 +643,7 @@
     },
     {
       "actor_name": "三板组",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "0777be6f295a7fd4a5ff7e5d295f8c593ead385ed35565368daf0b79c78b0e46",
@@ -651,7 +651,7 @@
     },
     {
       "actor_name": "山东帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "05fab6ad54b665c07df972d7a78098ccca6348bb904aeaa2e31d0bb966a8b62a",
@@ -659,7 +659,7 @@
     },
     {
       "actor_name": "孙哥",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "9c4220a22a2e92fb64b2b9cec558db74cd74dc7a2b13196cff20e3e1369e7180",
@@ -667,7 +667,7 @@
     },
     {
       "actor_name": "佛山系",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-21",
       "family": "hot_money",
       "id": "86343c9ddabb0b7af9d892315957baec92b2274e7a0c224f10f19b2d1d9b9d42",
@@ -675,7 +675,7 @@
     },
     {
       "actor_name": "南京帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "26f8b283297fe13038e9fed87290e378d006408afde55e29750d6bfec0f37737",
@@ -683,7 +683,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "2abe7821cddb2d249a276fd528cbdbcbeb57ff2592f89ccb2b7a216a5d2722c2",
@@ -691,7 +691,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "33828b7b80a5f2dc1d11cc365aec25a0eb80ebddf94f4825b6335bcca0d97670",
@@ -699,7 +699,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "211dff5efe2602fb2bfeb264f0036faf272baf32f3901736f2fd2727c867e8f4",
@@ -707,7 +707,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "72581ee92c99d2d49d56ece128e0be682969695f04be89df67a948ecbb492eed",
@@ -715,7 +715,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "6f0deebf5075c3b61443fdbe14e70c58af144d4efdd2712d12cf90213e99265d",
@@ -723,7 +723,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "92a7e5dd81d941d7c926d032ed45769956567aef0bad8f302807b943fb73f637",
@@ -731,7 +731,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "cee93ffd5e0620395ab0f94c319959fcb102e600cdbb6170b94b43a332a1fcce",
@@ -739,7 +739,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "12014529502e53f7b53c69567e278231ee2cbd5cb2f5a7ec7cf55cbd8a9d9061",
@@ -747,7 +747,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "e2fa3cb3fef0458ea3b21bd5af09d65164aeb60e1643ffd1aa174064cef1a767",
@@ -755,7 +755,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "559bcf2ab469fe3fbe5fa1808dde91825c2fa712b79612a811ca9dbb97c2f0ec",
@@ -763,7 +763,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "3ef644627198e505ff556d78617aa6ea65da213851169516909f0d34bf918190",
@@ -771,7 +771,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "22ddddd1a5f27dfe7b061988dd8f270d41bfc7eedacb12e6ab73f809432742a3",
@@ -779,7 +779,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "adbdd19f1847c0820293c44d341bee4d0ecb4a34c711ff486612843d4c0bfdd2",
@@ -787,7 +787,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "5b93b5e9387454f70ca30101ff15f26c96acde132ee9b36e1b37b439b571961a",
@@ -795,7 +795,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "52899e101e85a10a68476deae614f2806782afd6236c4b11d2ac3068402b20a6",
@@ -803,7 +803,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "2c902649e11630e89466c1ff406d5f3380ca3a47c2f85574afce058ba99b20fa",
@@ -811,7 +811,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "37a913452cf3dcbc721961515c5c54ff5dd7cfa0f296eb4879d056af3b49bf7a",
@@ -819,7 +819,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "508427ee283fcc8ade32675ed1ebd4c763eeb807241f21301b59ac09a87983e9",
@@ -827,7 +827,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "e3555e8d9108cd446b8746ded6edfaffef1012fc351b4fda8db1c60592d2536b",
@@ -835,7 +835,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "a8e84d9ebe41ead673a5ce7da4d923af24d57c2254b74062db4423336c7a0e54",
@@ -843,7 +843,7 @@
     },
     {
       "actor_name": "T王",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "1e7ea738fad12d509ee810aab605a431c459d0f9f574e8a8e16c02df52bc45fa",
@@ -851,7 +851,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "583d14d61e28098077e2c3f645195264db84b31f4f1fa920cb8a0412fac42427",
@@ -859,7 +859,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "99f426dbc9b0e03b52c32676916ed786b4ef1af3bb90d120465ae6bf8faf7b13",
@@ -867,7 +867,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "3843eefb2a6a4eafbc011abb847bc97c5609fce65f9a45d0dbb7237a929203e1",
@@ -875,7 +875,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "ff9d8aa936d6ed3810322bef2ec924e7310703c2ed8e48e2210c7f47ad821edd",
@@ -883,7 +883,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "dbddb8a29e02185af20eefe755ef2ea3af9d149eb36bbf0677347971d5ee1059",
@@ -891,7 +891,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "570a9e2e7e7d503802b0d874ff9883665e2ca93c4c71562bf68c95cd96caf7e0",
@@ -899,7 +899,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "3e5ce013a431232176b58ac130e6ca920e626ad18ddbfd131e64aaf8f36c50da",
@@ -907,7 +907,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "da271290a40ce2b978b9c63a7c78865c2db2c719efee0a4ca47092234ecd5d2c",
@@ -915,7 +915,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "28471b3dca1a66a3df9c2e08000aa83417c3b98f9157552091b42b21ab0db6f7",
@@ -923,7 +923,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "834b8d5cd1807bf6cd2d802b0e60d5187891a6c19f4333c1b8748e1ad6cd84ea",
@@ -931,7 +931,7 @@
     },
     {
       "actor_name": "温州帮",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "5a7b632c7ea978cb9097dbb7ab39d2e5044a61a9dafc6e7c39e6d687e7eba792",
@@ -939,7 +939,7 @@
     },
     {
       "actor_name": "宁波桑田路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "11a67d269a1112409332e9bbfc0b5f20a630935bb89a98dfe84af39391a35d75",
@@ -947,7 +947,7 @@
     },
     {
       "actor_name": "思明南路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "add63fc03c9076972b0411a974ca8aed3725bc0b788598ef1f6cefd13f845cac",
@@ -955,7 +955,7 @@
     },
     {
       "actor_name": "思明南路",
-      "change": "BASELINE_FIRST_OBSERVED",
+      "change": "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT",
       "date": "2026-09-22",
       "family": "hot_money",
       "id": "668f0b0de17d1d2c8e1244ac1aa57552b9cd46ab47885dab835fa977b0b002df",
@@ -963,232 +963,232 @@
     }
   ],
   "changes": {
-    "BASELINE_FIRST_OBSERVED": 125634
+    "REINTERPRETED_SAME_SOURCE_NOT_NEW_EVENT": 125937
   },
   "chunks": [
     {
-      "bytes": 449443,
-      "expanded_bytes": 2891400,
+      "bytes": 467644,
+      "expanded_bytes": 3067891,
       "name": "data-executives-0000.json.gz",
       "reference": {
-        "bytes": 449443,
-        "git_blob": "e0d334501f59502d56db661f8cf396272620d7e7",
+        "bytes": 467644,
+        "git_blob": "77396cdb7703d24947939c0edf63a6b00d37ff6e",
         "read_path": "details/radar/smart-money/data-executives-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "aa5f77cd06347568bbf7466325e5cc74f5e5613ae7a0fea930b32d1267287388"
+        "sha256": "d1d7c5de452f1ac4792736b3f66f6b00c4e312982df2be990dca2009de2bcc3c"
       },
-      "rows": 3218,
-      "sha256": "aa5f77cd06347568bbf7466325e5cc74f5e5613ae7a0fea930b32d1267287388"
+      "rows": 3226,
+      "sha256": "d1d7c5de452f1ac4792736b3f66f6b00c4e312982df2be990dca2009de2bcc3c"
     },
     {
-      "bytes": 533856,
-      "expanded_bytes": 3201888,
+      "bytes": 534681,
+      "expanded_bytes": 3253888,
       "name": "data-forecasts-0000.json.gz",
       "reference": {
-        "bytes": 533856,
-        "git_blob": "a5cf440bf0f6912880739caf904c0eb1e26a7cec",
+        "bytes": 534681,
+        "git_blob": "355c926340678b69453194f22faeced9c5675fa1",
         "read_path": "details/radar/smart-money/data-forecasts-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "c7751a3396e9a565b63be4c942ee6622da14534bd5fd48e954dee78ce7f55b1c"
+        "sha256": "3f046eeb4287149c80bdc04c67586310dba31f660bba06dc8f2afdeca2e73ece"
       },
       "rows": 3250,
-      "sha256": "c7751a3396e9a565b63be4c942ee6622da14534bd5fd48e954dee78ce7f55b1c"
+      "sha256": "3f046eeb4287149c80bdc04c67586310dba31f660bba06dc8f2afdeca2e73ece"
     },
     {
-      "bytes": 2761125,
-      "expanded_bytes": 15044881,
+      "bytes": 2782426,
+      "expanded_bytes": 15963496,
       "name": "data-holdings-2026-03-31-0000.json.gz",
       "reference": {
-        "bytes": 2761125,
-        "git_blob": "bbcb960b10829e8703bca432cb4d92f440571f1e",
+        "bytes": 2782426,
+        "git_blob": "9e710781caab7da5063152a65d337bec3a896212",
         "read_path": "details/radar/smart-money/data-holdings-2026-03-31-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "2a9c2f88e955325e0984fbd96941a9b4d7290f5f5200ea8092b9dabf43d8d788"
+        "sha256": "be129be03b25580c23add19b324658e44365eefc407a4fb879b8f38e9b242027"
       },
       "rows": 15000,
-      "sha256": "2a9c2f88e955325e0984fbd96941a9b4d7290f5f5200ea8092b9dabf43d8d788"
+      "sha256": "be129be03b25580c23add19b324658e44365eefc407a4fb879b8f38e9b242027"
     },
     {
-      "bytes": 2767752,
-      "expanded_bytes": 15029276,
+      "bytes": 2788516,
+      "expanded_bytes": 15957161,
       "name": "data-holdings-2026-03-31-0001.json.gz",
       "reference": {
-        "bytes": 2767752,
-        "git_blob": "8ac9e354da2b8974c8d19f9b1e2bcbe41259c3a0",
+        "bytes": 2788516,
+        "git_blob": "c623cf8e4f7a7bbdb4c6feb967823d997f153a61",
         "read_path": "details/radar/smart-money/data-holdings-2026-03-31-0001.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "eb3bc7abc00d01f444ebc7728b9f4180585d749b44fdef9d45297ea77f928ce0"
+        "sha256": "d581cdb50a71ebcd8d95dafc186b656220bddbcc35ad10e99a085a7ac3747d2d"
       },
       "rows": 15000,
-      "sha256": "eb3bc7abc00d01f444ebc7728b9f4180585d749b44fdef9d45297ea77f928ce0"
+      "sha256": "d581cdb50a71ebcd8d95dafc186b656220bddbcc35ad10e99a085a7ac3747d2d"
     },
     {
-      "bytes": 2764383,
-      "expanded_bytes": 15072291,
+      "bytes": 2783420,
+      "expanded_bytes": 15985692,
       "name": "data-holdings-2026-03-31-0002.json.gz",
       "reference": {
-        "bytes": 2764383,
-        "git_blob": "e4fd2a96f6d0c2e414897bfe05b2a17ba7e9f8c5",
+        "bytes": 2783420,
+        "git_blob": "4f79e06082f13428de2447e60815958c60314dcb",
         "read_path": "details/radar/smart-money/data-holdings-2026-03-31-0002.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "ecd0970ccb00f1a4fc6e9ceea8ad5ef3751ad8c17f98601082d1a6f056746d85"
+        "sha256": "a1a650a904ca971205847626b981275fa2c307d25f1998436b7db26a052ddc8a"
       },
       "rows": 15000,
-      "sha256": "ecd0970ccb00f1a4fc6e9ceea8ad5ef3751ad8c17f98601082d1a6f056746d85"
+      "sha256": "a1a650a904ca971205847626b981275fa2c307d25f1998436b7db26a052ddc8a"
     },
     {
-      "bytes": 1985037,
-      "expanded_bytes": 10770208,
+      "bytes": 1998736,
+      "expanded_bytes": 11430297,
       "name": "data-holdings-2026-03-31-0003.json.gz",
       "reference": {
-        "bytes": 1985037,
-        "git_blob": "7656c65d99ad35093777ff515b0a14d84d6bafe1",
+        "bytes": 1998736,
+        "git_blob": "a13a1a16839223d1bf91e226691ac30af9e557c6",
         "read_path": "details/radar/smart-money/data-holdings-2026-03-31-0003.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "e5eeafd45a1d34d0b10b53c75d4c1cb7470c5fe1641acd26ff4bd4d188a725de"
+        "sha256": "dec0af4f96e505fa5001a20dc30686b531fd6c4068c9df1c4d4eadc32f76db9e"
       },
       "rows": 10715,
-      "sha256": "e5eeafd45a1d34d0b10b53c75d4c1cb7470c5fe1641acd26ff4bd4d188a725de"
+      "sha256": "dec0af4f96e505fa5001a20dc30686b531fd6c4068c9df1c4d4eadc32f76db9e"
     },
     {
-      "bytes": 2764912,
-      "expanded_bytes": 15029864,
+      "bytes": 2786257,
+      "expanded_bytes": 15950512,
       "name": "data-holdings-2026-06-30-0000.json.gz",
       "reference": {
-        "bytes": 2764912,
-        "git_blob": "a744c000a0dd19db5982a24190b7ec11887d9342",
+        "bytes": 2786257,
+        "git_blob": "9e19ccd3d21831de8ffbab5fb324e66f97072070",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "0b39ca317972df92ba3aece125cf7ecc6a6d045458e947b1b3ccced83c648e60"
+        "sha256": "925d743decd0743935d6f7dfb04ae9d94afcd4cf3a864985228c4a15bc508665"
       },
       "rows": 15000,
-      "sha256": "0b39ca317972df92ba3aece125cf7ecc6a6d045458e947b1b3ccced83c648e60"
+      "sha256": "925d743decd0743935d6f7dfb04ae9d94afcd4cf3a864985228c4a15bc508665"
     },
     {
-      "bytes": 2761849,
-      "expanded_bytes": 15017099,
+      "bytes": 2782788,
+      "expanded_bytes": 15945553,
       "name": "data-holdings-2026-06-30-0001.json.gz",
       "reference": {
-        "bytes": 2761849,
-        "git_blob": "851ba6ad647639cb7a08759d1ebc7886256475d2",
+        "bytes": 2782788,
+        "git_blob": "9a313332b1b2fe5396a2e6cc6b2cc7c5ec877ad0",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0001.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "0a2534803980107eb8d2ad1d18d728b77e0808cbeb8ee64fe3961be837d9f05a"
+        "sha256": "ae993a32f203d266bd74fe98696a0b149db0bdceb4002c486fc82808083e9324"
       },
       "rows": 15000,
-      "sha256": "0a2534803980107eb8d2ad1d18d728b77e0808cbeb8ee64fe3961be837d9f05a"
+      "sha256": "ae993a32f203d266bd74fe98696a0b149db0bdceb4002c486fc82808083e9324"
     },
     {
-      "bytes": 2764272,
-      "expanded_bytes": 15073211,
+      "bytes": 2785043,
+      "expanded_bytes": 15988323,
       "name": "data-holdings-2026-06-30-0002.json.gz",
       "reference": {
-        "bytes": 2764272,
-        "git_blob": "ded58b333af93f444a592780eed203e6a1067a8e",
+        "bytes": 2785043,
+        "git_blob": "871c02409e33224dfaa284d8dd30d3c21431ddc5",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0002.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "712d830113861de4674fdfd230591b2357a98fd557a78ef63d1ea5a988f10309"
+        "sha256": "590ad404375f417aa688045f79c1e6d4050535a423569234a96d55d0e1c6aa09"
       },
       "rows": 15000,
-      "sha256": "712d830113861de4674fdfd230591b2357a98fd557a78ef63d1ea5a988f10309"
+      "sha256": "590ad404375f417aa688045f79c1e6d4050535a423569234a96d55d0e1c6aa09"
     },
     {
-      "bytes": 2066568,
-      "expanded_bytes": 11200376,
+      "bytes": 2080853,
+      "expanded_bytes": 11887672,
       "name": "data-holdings-2026-06-30-0003.json.gz",
       "reference": {
-        "bytes": 2066568,
-        "git_blob": "e180173caa2e794d2d8a48188323b3ef99c001b8",
+        "bytes": 2080853,
+        "git_blob": "e4b8241d40de2a921fa985d721144e4b0a6e7b00",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0003.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "bedc7595bc4d10d913f453bf39c348a1b39e0fd36144a62f1b1ad9f1d6320c20"
+        "sha256": "bbe793a0bbc19310089cfeb9e91c9806d59e3abd88be6cd1179e96c3008b77dc"
       },
       "rows": 11147,
-      "sha256": "bedc7595bc4d10d913f453bf39c348a1b39e0fd36144a62f1b1ad9f1d6320c20"
+      "sha256": "bbe793a0bbc19310089cfeb9e91c9806d59e3abd88be6cd1179e96c3008b77dc"
     },
     {
-      "bytes": 30719,
-      "expanded_bytes": 183983,
+      "bytes": 30713,
+      "expanded_bytes": 187775,
       "name": "data-hot_money-0000.json.gz",
       "reference": {
-        "bytes": 30719,
-        "git_blob": "fc2188a091a4bd2b12b476233ebcb7190ada8a9c",
+        "bytes": 30713,
+        "git_blob": "0c9d3eb79d1a0b21171b924f504760a845b3b142",
         "read_path": "details/radar/smart-money/data-hot_money-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "2154625c5f15948262b451d74cdee6d27fc3223c86ddc35d9ca11ec3cc946b2f"
+        "sha256": "21f193f9ea9b86bd5f19afe9a09e99b0f3c8d7523d7ff3fc188f7d0ff00f6098"
       },
       "rows": 237,
-      "sha256": "2154625c5f15948262b451d74cdee6d27fc3223c86ddc35d9ca11ec3cc946b2f"
+      "sha256": "21f193f9ea9b86bd5f19afe9a09e99b0f3c8d7523d7ff3fc188f7d0ff00f6098"
     },
     {
-      "bytes": 20973,
-      "expanded_bytes": 135229,
+      "bytes": 21005,
+      "expanded_bytes": 138157,
       "name": "data-institutional-0000.json.gz",
       "reference": {
-        "bytes": 20973,
-        "git_blob": "aa426efe5fe2be76579d6bc9f6190f06342e005d",
+        "bytes": 21005,
+        "git_blob": "25d15ccd91ed18505dcc70256f1cf1d1576a8c82",
         "read_path": "details/radar/smart-money/data-institutional-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "e7c8cb107707af3f14be2486d8979c917676faafacb0561ff348f5748e277e7f"
+        "sha256": "3d2cbcda3c3ae82bba2399171b2d92f037a69570a3cb4a73ffeb1cffd8b3f737"
       },
       "rows": 183,
-      "sha256": "e7c8cb107707af3f14be2486d8979c917676faafacb0561ff348f5748e277e7f"
+      "sha256": "3d2cbcda3c3ae82bba2399171b2d92f037a69570a3cb4a73ffeb1cffd8b3f737"
     },
     {
-      "bytes": 545970,
-      "expanded_bytes": 4040207,
+      "bytes": 547356,
+      "expanded_bytes": 4253904,
       "name": "data-north_holdings-0000.json.gz",
       "reference": {
-        "bytes": 545970,
-        "git_blob": "108413fef4be61e37e49b7854f97d7aa2c66c8a5",
+        "bytes": 547356,
+        "git_blob": "485c9148a6fdb47df2f0b134edb716be3a5bbd9e",
         "read_path": "details/radar/smart-money/data-north_holdings-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "18cdc737d2695f5c7fc9d4967e16f5ba7726a4cde2e390f2fdc37a208147294b"
+        "sha256": "01f247ba77439d3416ea6cee2df6fe13256819af930e7ca92ae006e86d2168ca"
       },
       "rows": 4308,
-      "sha256": "18cdc737d2695f5c7fc9d4967e16f5ba7726a4cde2e390f2fdc37a208147294b"
+      "sha256": "01f247ba77439d3416ea6cee2df6fe13256819af930e7ca92ae006e86d2168ca"
     },
     {
-      "bytes": 1090,
-      "expanded_bytes": 4131,
+      "bytes": 1103,
+      "expanded_bytes": 4211,
       "name": "data-northbound-0000.json.gz",
       "reference": {
-        "bytes": 1090,
-        "git_blob": "9823c602acb40f80ac76f95734a07c119e2264d3",
+        "bytes": 1103,
+        "git_blob": "195cfb208b98c733d35d2c5373f88a9db6609f71",
         "read_path": "details/radar/smart-money/data-northbound-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "9f6d2edc7b66e73b3b6627648f6e4ca02c1976f80ffe976d9b85a7401de9c354"
+        "sha256": "36bf7a7599bdeb3920ef7afa3f080b3162a5c9dd9774727b5d727300d82e6722"
       },
       "rows": 5,
-      "sha256": "9f6d2edc7b66e73b3b6627648f6e4ca02c1976f80ffe976d9b85a7401de9c354"
+      "sha256": "36bf7a7599bdeb3920ef7afa3f080b3162a5c9dd9774727b5d727300d82e6722"
     },
     {
-      "bytes": 19361,
-      "expanded_bytes": 110530,
+      "bytes": 19422,
+      "expanded_bytes": 111346,
       "name": "data-placements-0000.json.gz",
       "reference": {
-        "bytes": 19361,
-        "git_blob": "f069154eadc503f51628984bd0378fb9c5f0ce40",
+        "bytes": 19422,
+        "git_blob": "a4652d9a59558ba34d11d65e59a3bb944f9132f3",
         "read_path": "details/radar/smart-money/data-placements-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "e5a121dfff557ec01064a169bcfc8d4ed18fb776b5b832793b45712b3e83d61a"
+        "sha256": "a7b3671e58ce2ffd7a8b7b88f487f71c03e39eb3daa6439814316a944f1bf029"
       },
       "rows": 51,
-      "sha256": "e5a121dfff557ec01064a169bcfc8d4ed18fb776b5b832793b45712b3e83d61a"
+      "sha256": "a7b3671e58ce2ffd7a8b7b88f487f71c03e39eb3daa6439814316a944f1bf029"
     },
     {
-      "bytes": 302264,
-      "expanded_bytes": 2279671,
+      "bytes": 344967,
+      "expanded_bytes": 2631899,
       "name": "data-seats-0000.json.gz",
       "reference": {
-        "bytes": 302264,
-        "git_blob": "dbfdf25819ef2960f250491fcc71bf3abfff75cd",
+        "bytes": 344967,
+        "git_blob": "9d0639468d5f2151337a4404c0e301a912f3b75e",
         "read_path": "details/radar/smart-money/data-seats-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "159c16af2f5a5c394c7a262c8fc2a9f7be3fb0e4080ef2fe36fe30d8c5663ff4"
+        "sha256": "076d891cfe97aed41663ce0c40615ca503f7cabca0a2bbb8a2f94ff8252e6529"
       },
-      "rows": 2520,
-      "sha256": "159c16af2f5a5c394c7a262c8fc2a9f7be3fb0e4080ef2fe36fe30d8c5663ff4"
+      "rows": 2815,
+      "sha256": "076d891cfe97aed41663ce0c40615ca503f7cabca0a2bbb8a2f94ff8252e6529"
     }
   ],
   "coverage": {
@@ -1201,7 +1201,7 @@
     },
     "executives|disclosures": {
       "begin": "2026-06-28",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-26",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
@@ -1222,14 +1222,14 @@
     },
     "holdings|2026-03-31": {
       "begin": "2026-06-28",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-26",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "holdings|2026-06-30": {
       "begin": "2026-06-28",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-26",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
@@ -1383,35 +1383,35 @@
     },
     "seats|2026-09-18": {
       "begin": "2026-09-18",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-18",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "seats|2026-09-21": {
       "begin": "2026-09-21",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-21",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "seats|2026-09-22": {
       "begin": "2026-09-22",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-22",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "seats|2026-09-23": {
       "begin": "2026-09-23",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-23",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "seats|2026-09-24": {
       "begin": "2026-09-24",
-      "complete": false,
+      "complete": true,
       "cutoff": "2026-09-26T03:07:20.373445+00:00",
       "end": "2026-09-24",
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
@@ -1419,8 +1419,10 @@
   },
   "cutoff": "2026-09-26T03:07:20.373445+00:00",
   "display_retention": "100D_EVENTS_AND_TWO_ENDED_QUARTERS; OLDER_IMMUTABLE_GIT_HISTORY_UNCHANGED",
-  "first_baseline": true,
-  "record_count": 125634,
+  "first_baseline": false,
+  "projection_revision": "smart-money-projection-2",
+  "record_count": 125937,
+  "reinterpretation": true,
   "removed_from_current_display_not_deleted_history": 0,
   "version": "smart-money-observation-v1"
 }
