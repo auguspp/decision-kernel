@@ -177,12 +177,15 @@ def attach(c,baseline):
 
 
 def assemble(c,baseline,research,files,note):
+    # Existing optional readers append Markdown while advancing canonical JSON.
+    # The README prefix therefore legitimately has an earlier check timestamp.
+    # Bind to the exact in-memory JSON, not a newly rendered Markdown prefix.
+    m.check(json.loads(c.files['current-state.json']) == baseline,
+            'smart-money canonical composition binding')
     payload=m.assemble(code_commit=c.code_commit,checked_at=c.now(),check_started_at=baseline['checks']['started_at'],
         lanes=baseline['lanes'],research=research,capabilities=baseline['capability_gaps'],refresh_identity=baseline['refresh'])
-    root=c.files['README.md'];original=m.render_summary(baseline).encode()
-    m.check(root.startswith(original),'smart-money root summary binding')
     replacements={**files,'current-state.json':m.read_package_bytes(payload),
-                  'README.md':m.render_summary(payload).encode()+root[len(original):]+note.encode()}
+                  'README.md':c.files['README.md']+note.encode()}
     m.check(sum(len(v) for k,v in c.files.items() if k not in replacements)+sum(map(len,replacements.values()))
             <=delivery.MAX_RETAINED_OUTPUT,'smart-money retained byte bound')
     _reserve(c,replacements=replacements);c.files.update(replacements)
