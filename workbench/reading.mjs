@@ -79,6 +79,8 @@ function deepFreeze(value) {
   return value;
 }
 async function sha256(raw) {
+  require(typeof globalThis.crypto?.subtle?.digest === 'function',
+    'WEB_CRYPTO_UNAVAILABLE：当前环境无法执行 SHA-256 校验；目录与原件未通过核验。请在支持 Web Crypto 的安全上下文中复验，不要跳过校验。');
   return Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256', raw)),
     b => b.toString(16).padStart(2, '0')).join('');
 }
