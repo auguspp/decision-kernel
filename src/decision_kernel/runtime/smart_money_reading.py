@@ -47,12 +47,12 @@ def previous(c):
         origins=overview['origins']
         for origin in origins.values():
             if origin.get('reading_commit') is None:origin['reading_commit']=prior_commit
-        relay_value=None
-        if refs.get('relay'):
-            _reserve(c,calls=1,files=0)
-            relay_value=json.loads(read_bound(c,refs['relay'],prior_commit))
+        # Optional supplement bytes are read only after the primary package is
+        # safely assembled. A missing supplement must not erase primary history.
+        relay_reference=({'commit':prior_commit,'reference':refs['relay']} if refs.get('relay')
+                         else item.get('relay_prior_retained_entry'))
         return {'history':hist,'overview':overview,'state':state,'origins':origins,
-                'relay':relay_value},'EXACT_PREVIOUS_'+prior_commit
+                'relay_reference':relay_reference},'EXACT_PREVIOUS_'+prior_commit
     except ERRORS as exc:
         return None,'PREVIOUS_UNAVAILABLE_'+type(exc).__name__
 
@@ -134,27 +134,11 @@ def read_run(c,selected,*,follow_control=False):
     job=matches[0]
     m.check(job.get('head_sha')==run['head_sha'] and job.get('run_id')==run['id'] and job.get('run_attempt')==1,
             'smart-money job identity')
-    relay_jobs=[j for j in jobs['jobs'] if j['name']=='capture-tushare-relay']
-    m.check(len(relay_jobs)<=1,'smart-money relay job duplicate')
-    relay_job=relay_jobs[0] if relay_jobs else None
-    if relay_job is None:
-        relay_job_status='NOT_PRESENT_LEGACY_RUN'
-    else:
-        m.check(relay_job.get('head_sha')==run['head_sha'] and relay_job.get('run_id')==run['id']
-                and relay_job.get('run_attempt')==1,'smart-money relay job identity')
-        conclusion=relay_job.get('conclusion')
-        relay_job_status=({'success':'JOB_SUCCEEDED','skipped':'NOT_RUN_WITHOUT_PRIMARY_CAPTURE'}
-                          .get(conclusion,'JOB_'+str(conclusion or relay_job.get('status')).upper()))
-        status['relay_job']={'id':relay_job['id'],'conclusion':conclusion,'status':relay_job.get('status')}
     artifacts=c.artifacts(run)
-    relay_info=read_relay(c,artifacts,run,identity)
-    if relay_info is not None:
-        relay_info['job_status']=relay_job_status
-        relay_job_status='SAVED_'+relay_info['result']['status']
-    elif relay_job_status=='JOB_SUCCEEDED':
-        relay_job_status='JOB_SUCCEEDED_ARTIFACT_MISSING'
-    status['relay']=relay_info
-    status['relay_status']=relay_job_status
+    # Keep this internal context out of serialized primary observations. The
+    # optional archive is not allowed to spend the primary publication budget.
+    status['_relay_context']={'jobs':jobs['jobs'],'artifacts':artifacts,
+                              'run':run,'identity':identity}
     controls=[a for a in artifacts if a['name']==f"smart-money-control-{run['id']}-1"]
     control=None
     if controls:
@@ -191,6 +175,7 @@ def read_run(c,selected,*,follow_control=False):
     if job['conclusion']!='success':
         observation['status']='PARTIAL_FAILED_EXECUTION'
         observation['unresolved'].append({'family':'execution','partition':str(run['id']),'failure':'CAPTURE_JOB_FAILED'})
+    status['_relay_context']['market_session']=max(observation['trading_sessions'],default=None)
     return {**status,'status':observation['status'],'observation':observation,'archive':archive,
             'capture_hash':manifest['capture_hash'],'job_id':job['id'],'job_conclusion':job['conclusion']}
 
@@ -253,25 +238,9 @@ def _attach(c,baseline):
         research['smart_money']={'status':current['status'],'previous_status':prior_status,
             'meaning':'NO_READABLE_SMART_MONEY_OBSERVATION_NOT_ZERO_ACTIVITY',**s.AUTHORITY}
         return assemble(c,baseline,research,{},'\n聪明钱观察尚不可读；不是没有资本行为。\n')
-    relay_info=current.get('relay')
-    relay_current_status=current.get('relay_status','NOT_PRESENT_LEGACY_RUN')
-    relay_value=(deepcopy(relay_info['result']) if relay_info
-                 else deepcopy((old or {}).get('relay')))
-    if relay_value is not None:
-        if relay_info:
-            relay_value['archive']=relay_info['archive']
-            relay_value['reading_relation']='CURRENT_SOURCE_RUN'
-        else:
-            relay_value['reading_relation']='PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT'
-        relay_value['current_run_status']=relay_current_status
-        overview['relay_supplement']={
-            'status':relay_value['status'],'current_run_status':relay_current_status,
-            'market_session':relay_value.get('market_session'),
-            'cutoff':relay_value['cutoff'],'relay_host':relay_value['relay_host'],
-            'family_coverage':{api:{'status':item['status'],'row_count':item['row_count']}
-                               for api,item in relay_value.get('families',{}).items()},
-            'reading_relation':relay_value['reading_relation'],
-            'meaning':'SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE'}
+    # Never carry an old derived READY summary after its optional bytes fail.
+    overview.pop('relay_supplement',None)
+    overview.pop('relay_reading',None)
     chunks,meta=view.encode_chunks(hist)
     _reserve(c,files=len(chunks)+6)
     refs={}
@@ -287,11 +256,7 @@ def _attach(c,baseline):
     refs['overview']=c.retain(PREFIX+'overview.json',m.json_bytes(overview))
     refs['history']=c.retain(PREFIX+'history.json',m.json_bytes(meta))
     refs['state']=c.retain(PREFIX+'state.json',m.json_bytes(state))
-    if relay_value is not None:
-        refs['relay']=c.retain(PREFIX+'relay.json',m.json_bytes(relay_value))
     text=view.render(overview,hist,failure=current['status'] if obs is None and current['status']!='NO_NEW_CAPTURE_REQUIRED' else None)
-    if relay_value is not None:
-        text += '\n' + relay_supplement.render(relay_value)
     refs['markdown']=c.retain('details/radar/smart-money.md',text.encode())
     browser_status = 'DISPLAY_PROJECTION_COMPLETE'
     try:
@@ -310,22 +275,166 @@ def _attach(c,baseline):
                          "<a href='overview.json'>结构化概览</a> · "
                          "<a href='history.json'>全部历史分块</a></p></html>").encode()
     refs['browser']=c.retain(PREFIX+'browse.html',browser_bytes)
+    context=current.get('_relay_context') or {}
+    optional_pending=bool((old or {}).get('relay_reference') or
+        any(j.get('name')=='capture-tushare-relay' for j in context.get('jobs',[])) or
+        any(a.get('name','').startswith('smart-money-relay-') for a in context.get('artifacts',[])))
     research=deepcopy(baseline['research'])
     research['smart_money']={'status':current['status'],'details':refs,'source_cutoff':overview['cutoff'],
         'target_date':overview['target_date'],'latest_attempt':current.get('latest_attempt'),
         'browser_status':browser_status,
-        'relay_status':(relay_value['status'] if relay_info is not None
-                        else relay_current_status if relay_current_status not in
-                        {'NOT_PRESENT_LEGACY_RUN','NOT_RUN_WITHOUT_PRIMARY_CAPTURE'}
-                        else relay_value['status'] if relay_value is not None
-                        else 'NOT_PRESENT_LEGACY_OR_NOT_RUN'),
-        'relay_retained_status':relay_value['status'] if relay_value is not None else None,
+        'relay_status':'OPTIONAL_RELAY_NOT_CHECKED' if optional_pending else 'NOT_PRESENT_LEGACY_OR_NOT_RUN',
+        'relay_retained_status':None,
+        'relay_prior_retained_entry':deepcopy((old or {}).get('relay_reference')),
         'capture_hash':hist['capture_hash'],'uses_prior_observation':obs is None,
         'pending_delivery_count':len(state['unresolved']),'reading_freshness':reading_freshness,
         'capture_age_hours':f"{age:.2f}",
         'family_coverage':{f:{k:v[k] for k in ('status','saved_records','companies','latest_period')} for f,v in overview['families'].items()},
         'meaning':'PUBLIC_BEHAVIOR_NOT_SMARTNESS_OR_BUY_SELL_SIGNAL',**s.AUTHORITY}
-    return assemble(c,baseline,research,{},'\n[聪明钱：游资、北向、具名持股与资本行为](details/radar/smart-money.md)；独立观察与缺口，不是综合荐股分。\n')
+    primary=assemble(c,baseline,research,{},'\n[聪明钱：游资、北向、具名持股与资本行为](details/radar/smart-money.md)；独立观察与缺口，不是综合荐股分。\n')
+    return attach_relay(c,primary,current,old)
+
+
+def current_relay(c, context):
+    """Read one same-run supplement, without relaxing its source contracts."""
+    run,identity=context['run'],context['identity']
+    jobs=[j for j in context['jobs'] if j['name']=='capture-tushare-relay']
+    artifacts=[a for a in context['artifacts'] if a['name']==f"smart-money-relay-{run['id']}-1"]
+    m.check(len(jobs)<=1 and len(artifacts)<=1,'smart-money relay duplicate')
+    if not jobs:
+        m.check(not artifacts,'smart-money relay artifact without job')
+        return None,'NOT_PRESENT_LEGACY_OR_NOT_RUN'
+    job=jobs[0]
+    m.check(job.get('head_sha')==run['head_sha'] and job.get('run_id')==run['id']
+            and job.get('run_attempt')==1,'smart-money relay job identity')
+    conclusion=job.get('conclusion')
+    state=({'success':'JOB_SUCCEEDED_ARTIFACT_MISSING','skipped':'NOT_RUN_WITHOUT_PRIMARY_CAPTURE'}
+           .get(conclusion,'JOB_'+str(conclusion or job.get('status')).upper()))
+    if not artifacts:
+        return None,state
+    m.check(job.get('status')=='completed' and conclusion in {'success','failure','cancelled','timed_out'},
+            'smart-money relay artifact job state')
+    m.check(context.get('market_session') is not None,'smart-money relay primary calendar missing')
+    _reserve(c,calls=1,files=2)
+    saved=read_relay(c,artifacts,run,identity)
+    result=saved['result']
+    manifest=s.decode(c.archive_cache[artifacts[0]['id']][0]['capture.json'])
+    m.check(m.clock(run['created_at'])<=m.clock(manifest['started_at'])
+            <=m.clock(manifest['finished_at'])<=m.clock(run['updated_at']),
+            'smart-money relay run clock binding')
+    m.check(result['market_session']==context['market_session'],'smart-money relay calendar differs')
+    if conclusion!='success':
+        result=deepcopy(result)
+        result['status']='PARTIAL_FAILED_EXECUTION'
+        result['unresolved'].append({'api':'execution','status':'CAPTURE_JOB_'+conclusion.upper()})
+    result.update(archive=saved['archive'],reading_relation='CURRENT_SOURCE_RUN')
+    return result,result['status']
+
+
+def prior_relay(c, locator):
+    _reserve(c,calls=1,files=1)
+    result=json.loads(read_bound(c,locator['reference'],locator['commit']))
+    m.check(result['version']==relay_supplement.VERSION
+            and result['relay_host']==relay_supplement.relay.PRO,'smart-money prior relay source')
+    capture.validate_identity(result['identity'])
+    m.check(all(result.get(k)==v for k,v in relay_supplement.AUTHORITY.items()),
+            'smart-money prior relay authority')
+    m.check(m.clock(result['cutoff'])<=m.clock(c.now()),'smart-money prior relay future')
+    # Verify the existing consumer shape, not economic truth or source coverage.
+    relay_supplement.render(result)
+    result['reading_relation']='PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT'
+    return result
+
+
+def attach_relay(c, primary, current, old):
+    """Transactional optional reading after a fully valid primary package.
+
+    Only the exact current archive and explicit prior locator may be read. On
+    rejection restore optional retained files, never API counters or old facts.
+    """
+    before=dict(c.files),dict(c.archive_cache),dict(c.sources)
+    locator=deepcopy((old or {}).get('relay_reference'))
+    value=None
+    current_status='NOT_PRESENT_LEGACY_OR_NOT_RUN'
+    previous_status='NOT_NEEDED_NO_PRIOR_SUPPLEMENT'
+    diagnostic={}
+    context=current.get('_relay_context')
+    if context is not None:
+        try:
+            value,current_status=current_relay(c,context)
+            if value is not None:
+                relay_supplement.render(value)
+        except ERRORS as exc:
+            c.files,c.archive_cache,c.sources=map(dict,before)
+            value=None
+            current_status='CURRENT_RELAY_READING_GAP'
+            diagnostic['current_error_type']=type(exc).__name__
+    elif current.get('status') not in {'NOT_RUN','NO_NEW_CAPTURE_REQUIRED'}:
+        current_status='NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT'
+    if value is None and locator is not None:
+        try:
+            value=prior_relay(c,locator)
+            previous_status='EXACT_PREVIOUS_SUPPLEMENT'
+        except ERRORS as exc:
+            c.files,c.archive_cache,c.sources=map(dict,before)
+            previous_status='PREVIOUS_RELAY_READING_GAP'
+            diagnostic['previous_error_type']=type(exc).__name__
+    elif value is not None:
+        previous_status='NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE'
+    if value is None and not diagnostic and locator is None and current_status=='NOT_PRESENT_LEGACY_OR_NOT_RUN':
+        return primary
+    try:
+        research=deepcopy(primary['research']);sm=research['smart_money']
+        display_status=current_status
+        if current_status=='NOT_PRESENT_LEGACY_OR_NOT_RUN' and locator is not None:
+            display_status=('PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT' if value is not None
+                            else 'PREVIOUS_RELAY_READING_GAP')
+        sm.update(relay_status=display_status,relay_previous_status=previous_status,
+                  relay_current_run_id=context['run']['id'] if context is not None else None,
+                  relay_retained_status=value['status'] if value is not None else None,
+                  relay_prior_retained_entry=locator if value is None else None,
+                  relay_reading_diagnostics=diagnostic)
+        refs=sm['details']
+        overview=json.loads(c.files[refs['overview']['read_path']])
+        note='\n## Tushare Relay 补充读取\n\n当前读取：'+current_status+'；历史补充：'+previous_status+'。主资料独立保留。\n'
+        if value is not None:
+            value['current_run_status']=current_status
+            refs['relay']=c.retain(PREFIX+'relay.json',m.json_bytes(value))
+            overview['relay_supplement']={
+                'status':value['status'],'current_run_status':current_status,
+                'market_session':value.get('market_session'),'cutoff':value['cutoff'],
+                'relay_host':value['relay_host'],'reading_relation':value['reading_relation'],
+                'family_coverage':{api:{'status':item['status'],'row_count':item['row_count']}
+                                   for api,item in value['families'].items()},
+                'meaning':'SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE'}
+            note+='\n'+relay_supplement.render(value)
+        overview['relay_reading']={'current_status':current_status,'previous_status':previous_status,
+                                   'diagnostics':diagnostic}
+        # These two files were built locally in this call, not yet published.
+        # Replace only their exact primary bytes within this rollback boundary.
+        for key,raw in (('overview',m.json_bytes(overview)),
+                        ('markdown',c.files[refs['markdown']['read_path']]+note.encode())):
+            ref=refs[key]
+            m.check(m.blob_sha(c.files[ref['read_path']])==ref['git_blob'],'smart-money local primary bytes')
+            del c.files[ref['read_path']]
+            refs[key]=c.retain(ref['read_path'],raw)
+        return assemble(c,primary,research,{},'')
+    except ERRORS as exc:
+        c.files,c.archive_cache,c.sources=map(dict,before)
+        # The primary was already assembled and validated. Optional formatting,
+        # budget or retention failure cannot turn it into an unavailable lane.
+        research=deepcopy(primary['research'])
+        research['smart_money'].update(relay_status='OPTIONAL_RELAY_PUBLICATION_GAP',
+            relay_retained_status=None,relay_prior_retained_entry=locator,
+            relay_reading_diagnostics={**diagnostic,'publication_error_type':type(exc).__name__})
+        try:
+            return assemble(c,primary,research,{},'')
+        except ERRORS:
+            c.files,c.archive_cache,c.sources=map(dict,before)
+            # Even diagnostics must fit the original budget. The already-valid
+            # primary still explicitly marks this supplement as NOT_CHECKED and
+            # retains its prior locator; do not spend its reserve again.
+            return primary
 
 
 def attach(c,baseline):
