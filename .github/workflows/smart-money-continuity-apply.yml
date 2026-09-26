@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e '.[feeds]'
-      - name: Inspect one changed activity contract and one actual browser-form session
+      - name: Read official protocol event summary and after-quarter historical form
         run: |
           python - <<'PY'
           import hashlib,json,os,pathlib
@@ -41,32 +41,23 @@ jobs:
                       for chunk in response.iter_content(65536):
                           n+=len(chunk);assert n<=4*1024*1024;chunks.append(chunk)
                       body=b''.join(chunks);(root/(name+'.body')).write_bytes(body)
-                      a.update(status=response.status_code,bytes=n,sha256=hashlib.sha256(body).hexdigest(),final_url=response.url)
-                      a['finished']=s.now();items.append(a)
+                      a.update(status=response.status_code,bytes=n,sha256=hashlib.sha256(body).hexdigest(),final_url=response.url,finished=s.now());items.append(a)
                       return response.status_code,body
               except Exception as exc:
                   a.update(error_type=type(exc).__name__,finished=s.now());items.append(a);return None,b''
-          q=s.spec('activity','disclosures','2026-06-28','2026-09-26');q['params']['columns']='ALL'
+          q=s.spec('activity','disclosures','2026-06-28','2026-09-26');q['params'].update(columns='ALL',pageSize='50')
           with _session() as client:
-              status,raw=get(client,'activity-all',q['url'],q['params'])
-              if status==200:
-                  try:
-                      value=s.decode(raw);rows,count,pages=s.page_data(value,q)
-                      print('ACTIVITY_ALL',len(rows),count,pages,sorted(rows[0]) if rows else [])
-                      (root/'activity-scope.json').write_text(json.dumps({'rows':len(rows),'total':count,'pages':pages,'first_fields':sorted(rows[0]) if rows else []}))
-                  except Exception as exc:print('ACTIVITY_PARSE',type(exc).__name__,str(exc)[:80])
+              status,raw=get(client,'activity-detail50',q['url'],q['params'])
+              if status not in (401,403,429):
+                  p=dict(q['params']);p.update(reportName='RPT_ORG_SURVEYNEW',pageSize='500',sortColumns='NOTICE_DATE,SUM,RECEIVE_START_DATE,SECURITY_CODE',sortTypes='-1,-1,-1,1',filter='(NUMBERNEW="1")(IS_SOURCE="1")(NOTICE_DATE>=\'2026-06-28\')(NOTICE_DATE<=\'2026-09-26\')')
+                  get(client,'activity-events500',q['url'],p)
           with _session() as client:
               status,raw=get(client,'hkex-session-get',d.HKEX,{'t':'sh'})
               if status==200:
-                  try:
-                      form=d.post_form(raw,'SH','2026-03-31')
-                      # This is the exact public form with its own session cookies,
-                      # not a guessed hidden-field mutation or alternate endpoint.
-                      status,result=get(client,'hkex-session-march',d.HKEX,{'t':'sh'},form)
-                      h=BeautifulSoup(result,'html.parser')
-                      print('HKEX_RESULT',status,[x.get_text(' ',strip=True) for x in h.select('h2.ccass-heading')])
-                      (root/'hkex-scope.json').write_text(json.dumps({'status':status,'heading':[x.get_text(' ',strip=True) for x in h.select('h2.ccass-heading')],'cookie_count':len(client.cookies)}))
-                  except Exception as exc:print('HKEX_PARSE',type(exc).__name__,str(exc)[:80])
+                  form=d.post_form(raw,'SH','2026-04-30')
+                  status,result=get(client,'hkex-query-april30',d.HKEX,{'t':'sh'},form)
+                  h=BeautifulSoup(result,'html.parser')
+                  print('HKEX_RESULT',status,[x.get_text(' ',strip=True) for x in h.select('h2.ccass-heading')])
           (root/'manifest.json').write_text(json.dumps(items,ensure_ascii=False,indent=2))
           PY
       - uses: actions/upload-artifact@v7
