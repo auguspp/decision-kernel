@@ -158,10 +158,14 @@ test('saved price facts are separated from requests and price/read gaps do not b
 
 test('company material order uses explicit purpose, never a new current or accepted version', () => {
   const company = {assets: [
-    {id: 'human-old', use: 'HUMAN_DECISION_CHECKPOINT'}, {id: 'latest-file', use: 'RETAINED_RESEARCH_PACKAGE'},
-    {id: 'note', use: 'RESEARCH_CORRECTION'}, {id: 'x', use: 'UNKNOWN_ROLE'}]};
+    {id: 'human-old', use: 'HUMAN_DECISION_CHECKPOINT'}, {id: 'latest-file', use: 'RETAINED_RESEARCH_DOCUMENT'},
+    {id: 'note', use: 'METHOD_SUPPLEMENT'}, {id: 'x', use: 'UNKNOWN_ROLE'},
+    {id: 'human-method', use: 'HUMAN_METHOD_SUPPLEMENT'}, {id: 'negative', use: 'METHOD_NEGATIVE_CONTROL'}]};
   const before = JSON.stringify(company), groups = companyMaterials(company);
   assert.deepEqual(groups.map(g => g.items[0].id), ['note', 'latest-file', 'human-old', 'x']);
+  assert.deepEqual(groups[0].items.map(a => a.id), ['note', 'human-method', 'negative']);
+  assert.equal(useLabel(company.assets[1]), '已有研究正文');
+  assert.equal(useLabel(company.assets[2]), '方法补充与更正');
   assert.equal(JSON.stringify(company), before);
 });
 

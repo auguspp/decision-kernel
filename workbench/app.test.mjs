@@ -205,9 +205,9 @@ function continuityFixture() {
   };
   const company = ref => ({thscode: '600276.SH', saved_watch: {company_name: '恒瑞医药'},
     archives: [], human_acceptance: 'REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED', assets: [
-      {id: 'original-research', use: 'RETAINED_RESEARCH_PACKAGE', source: source('research.md', ref)},
+      {id: 'original-research', use: 'RETAINED_RESEARCH_DOCUMENT', source: source('research.md', ref)},
       {id: 'human-old', use: 'HUMAN_DECISION_CHECKPOINT', source: source('response.md', ref)},
-      {id: 'correction', use: 'RESEARCH_CORRECTION', source: source('correction.md', ref)}]});
+      {id: 'correction', use: 'METHOD_SUPPLEMENT', source: source('correction.md', ref)}]});
   const catalogue = ref => JSON.stringify({projection: {automatic_admission: false, companies: [company(ref)]}});
   return {
     payload(ref) {
