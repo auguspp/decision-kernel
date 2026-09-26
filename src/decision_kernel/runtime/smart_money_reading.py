@@ -62,17 +62,52 @@ def native(c):
     return read_run(c,selected,follow_control=True)
 
 
+def reconcile_pending_attempt(c, run):
+    """One native attempt read for pending metadata; no polling or source calls.
+
+    The run-level response may precede the completed attempt response. Never
+    promote success from a notification, collection row, or another attempt.
+    Identity conflicts or a failed read remain an explicit reading gap.
+    """
+    if run['status'] == 'completed':
+        return run, []
+    m.check(type(run['run_attempt']) is int and run['run_attempt'] == 1,
+            'smart-money pending attempt identity')
+    _reserve(c, calls=1, files=0)
+    endpoint = f"actions/runs/{run['id']}/attempts/1"
+    attempt = c.api.get(endpoint)
+    fields = ('id', 'head_sha', 'head_branch', 'path', 'event', 'run_attempt', 'created_at')
+    m.check(all(attempt.get(k) == run.get(k) for k in fields),
+            'smart-money attempt metadata identity differs')
+    for field in ('repository', 'head_repository'):
+        m.check(attempt.get(field, {}).get('full_name') == run.get(field, {}).get('full_name'),
+                'smart-money attempt repository differs')
+    m.check(m.clock(run['created_at']) <= m.clock(run['updated_at'])
+            <= m.clock(attempt['updated_at']) <= m.clock(c.now()),
+            'smart-money attempt metadata clocks differ')
+    m.check(attempt['status'] in {'queued', 'in_progress', 'waiting', 'requested',
+                                'pending', 'completed'}, 'smart-money attempt status unknown')
+    diagnostic = {'run_id': run['id'], 'attempt': 1, 'endpoint': endpoint,
+                  'run_status': run['status'], 'run_updated_at': run['updated_at'],
+                  'attempt_status': attempt['status'], 'attempt_updated_at': attempt['updated_at'],
+                  'checked_at': c.now(), 'reads': 1,
+                  'meaning': 'SAME_IDENTITY_ATTEMPT_READ_NOT_STATUS_INFERENCE_OR_RETRY'}
+    return attempt, [diagnostic]
+
+
 def read_run(c,selected,*,follow_control=False):
     _reserve(c,calls=6,files=2)
     run=c.api.get('actions/runs/'+str(selected['id']))
     m.check(all(run[k]==selected[k] for k in ('id','head_sha','event','run_attempt')),'smart-money run changed')
+    run, metadata_reads = reconcile_pending_attempt(c, run)
     identity={'repository':run.get('repository',{}).get('full_name'),'workflow':run['path'],
               'ref':'refs/heads/'+str(run['head_branch']),'event':run['event'],'code_commit':run['head_sha'],
               'run_id':run['id'],'attempt':run['run_attempt']}
     capture.validate_identity(identity)
     m.check(run.get('head_repository',{}).get('full_name')==m.REPOSITORY,'smart-money foreign source')
     m.check(m.clock(run['created_at'])<=m.clock(run['updated_at'])<=m.clock(c.now()),'smart-money run clock')
-    status={'latest_attempt':m.concise_run(run),'observation':None}
+    status={'latest_attempt':m.concise_run(run),'observation':None,
+            'run_metadata_reads':metadata_reads}
     if run['status']!='completed':return {**status,'status':'AWAITING_CURRENT_CAPTURE'}
     jobs=c.api.get(f"actions/runs/{run['id']}/attempts/1/jobs?per_page=100")
     m.check(jobs['total_count']==len(jobs['jobs']),'smart-money incomplete jobs')
@@ -102,6 +137,7 @@ def read_run(c,selected,*,follow_control=False):
             recovered['source_run']=recovered.get('source_run',recovered.get('latest_attempt'))
             recovered['latest_attempt']=m.concise_run(run)
             recovered['control']=control
+            recovered['run_metadata_reads']=metadata_reads+recovered.get('run_metadata_reads',[])
             recovered['reading_relation']='EXACT_UNCONSUMED_CAPTURE_BOUND_BY_CONTROL_NOT_SILENT_SUCCESS_FALLBACK'
             return recovered
         return {**status,'status':('NO_NEW_CAPTURE_REQUIRED' if control and control['decision']=='SKIP_ALREADY_DELIVERED'
@@ -189,6 +225,7 @@ def _attach(c,baseline):
     overview.update(reading_freshness=reading_freshness,capture_age_hours=f"{age:.2f}",
         origins=origins,current_reading={'status':current['status'],
         'latest_attempt':current.get('latest_attempt'),'control':current.get('control'),
+        'run_metadata_reads':current.get('run_metadata_reads',[]),
         'uses_prior_observation':obs is None,'previous_status':prior_status})
     refs['overview']=c.retain(PREFIX+'overview.json',m.json_bytes(overview))
     refs['history']=c.retain(PREFIX+'history.json',m.json_bytes(meta))
