@@ -113,7 +113,7 @@ def read_relay(c, artifacts, run, identity):
 
 
 def read_run(c,selected,*,follow_control=False):
-    _reserve(c,calls=6,files=2)
+    _reserve(c,calls=8,files=3)
     run=c.api.get('actions/runs/'+str(selected['id']))
     m.check(all(run[k]==selected[k] for k in ('id','head_sha','event','run_attempt')),'smart-money run changed')
     run, metadata_reads = reconcile_pending_attempt(c, run)
@@ -133,9 +133,27 @@ def read_run(c,selected,*,follow_control=False):
     job=matches[0]
     m.check(job.get('head_sha')==run['head_sha'] and job.get('run_id')==run['id'] and job.get('run_attempt')==1,
             'smart-money job identity')
+    relay_jobs=[j for j in jobs['jobs'] if j['name']=='capture-tushare-relay']
+    m.check(len(relay_jobs)<=1,'smart-money relay job duplicate')
+    relay_job=relay_jobs[0] if relay_jobs else None
+    if relay_job is None:
+        relay_job_status='NOT_PRESENT_LEGACY_RUN'
+    else:
+        m.check(relay_job.get('head_sha')==run['head_sha'] and relay_job.get('run_id')==run['id']
+                and relay_job.get('run_attempt')==1,'smart-money relay job identity')
+        conclusion=relay_job.get('conclusion')
+        relay_job_status=({'success':'JOB_SUCCEEDED','skipped':'NOT_RUN_WITHOUT_PRIMARY_CAPTURE'}
+                          .get(conclusion,'JOB_'+str(conclusion or relay_job.get('status')).upper()))
+        status['relay_job']={'id':relay_job['id'],'conclusion':conclusion,'status':relay_job.get('status')}
     artifacts=c.artifacts(run)
     relay_info=read_relay(c,artifacts,run,identity)
+    if relay_info is not None:
+        relay_info['job_status']=relay_job_status
+        relay_job_status='SAVED_'+relay_info['result']['status']
+    elif relay_job_status=='JOB_SUCCEEDED':
+        relay_job_status='JOB_SUCCEEDED_ARTIFACT_MISSING'
     status['relay']=relay_info
+    status['relay_status']=relay_job_status
     controls=[a for a in artifacts if a['name']==f"smart-money-control-{run['id']}-1"]
     control=None
     if controls:
@@ -235,6 +253,7 @@ def _attach(c,baseline):
             'meaning':'NO_READABLE_SMART_MONEY_OBSERVATION_NOT_ZERO_ACTIVITY',**s.AUTHORITY}
         return assemble(c,baseline,research,{},'\n聪明钱观察尚不可读；不是没有资本行为。\n')
     relay_info=current.get('relay')
+    relay_current_status=current.get('relay_status','NOT_PRESENT_LEGACY_RUN')
     relay_value=(deepcopy(relay_info['result']) if relay_info
                  else deepcopy((old or {}).get('relay')))
     if relay_value is not None:
@@ -243,8 +262,10 @@ def _attach(c,baseline):
             relay_value['reading_relation']='CURRENT_SOURCE_RUN'
         else:
             relay_value['reading_relation']='PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT'
+        relay_value['current_run_status']=relay_current_status
         overview['relay_supplement']={
-            'status':relay_value['status'],'market_session':relay_value.get('market_session'),
+            'status':relay_value['status'],'current_run_status':relay_current_status,
+            'market_session':relay_value.get('market_session'),
             'cutoff':relay_value['cutoff'],'relay_host':relay_value['relay_host'],
             'family_coverage':{api:{'status':item['status'],'row_count':item['row_count']}
                                for api,item in relay_value.get('families',{}).items()},
@@ -292,7 +313,12 @@ def _attach(c,baseline):
     research['smart_money']={'status':current['status'],'details':refs,'source_cutoff':overview['cutoff'],
         'target_date':overview['target_date'],'latest_attempt':current.get('latest_attempt'),
         'browser_status':browser_status,
-        'relay_status':relay_value['status'] if relay_value is not None else 'NOT_PRESENT_LEGACY_OR_NOT_RUN',
+        'relay_status':(relay_value['status'] if relay_info is not None
+                        else relay_current_status if relay_current_status not in
+                        {'NOT_PRESENT_LEGACY_RUN','NOT_RUN_WITHOUT_PRIMARY_CAPTURE'}
+                        else relay_value['status'] if relay_value is not None
+                        else 'NOT_PRESENT_LEGACY_OR_NOT_RUN'),
+        'relay_retained_status':relay_value['status'] if relay_value is not None else None,
         'capture_hash':hist['capture_hash'],'uses_prior_observation':obs is None,
         'pending_delivery_count':len(state['unresolved']),'reading_freshness':reading_freshness,
         'capture_age_hours':f"{age:.2f}",
