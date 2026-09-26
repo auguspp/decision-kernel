@@ -1,4 +1,4 @@
-"""The publisher runtime must install its existing HTTP dependency, not rely on dev CI."""
+"""Publisher installs existing runtime extras, never relying on a dev environment."""
 import ast
 from pathlib import Path
 import tomllib
@@ -8,8 +8,10 @@ def test_publisher_installs_existing_runtime_extra_instead_of_dev_environment():
     project = tomllib.loads(Path("pyproject.toml").read_text())
     dependencies = project["project"]["optional-dependencies"]["feeds"]
     assert "requests==2.34.2" in dependencies
+    documents = project["project"]["optional-dependencies"]["documents"]
+    assert any(d.startswith("pypdf==") for d in documents)
     workflow = Path(".github/workflows/current-state-read-entry.yml").read_text()
-    assert "python -m pip install -e '.[feeds]'" in workflow
+    assert "python -m pip install -e '.[feeds,documents]'" in workflow
     assert ".[dev]" not in workflow
     assert "schedule:" not in workflow and "workflow_dispatch:" not in workflow
 
