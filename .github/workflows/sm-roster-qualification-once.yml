@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e '.[feeds]'
-      - name: Three fixed public source checks, no research or credential access
+      - name: Two explicit-field page-size checks, no retry or credentials
         shell: bash
         run: |
           set -euo pipefail
@@ -33,11 +33,13 @@ jobs:
           out.mkdir()
           url='https://datacenter-web.eastmoney.com/api/data/v1/get'
           receipts=[]
-          for i,(begin,page) in enumerate([('2026-06-28',1),('2026-06-28',2),('2026-09-01',1)]):
+          for i,size in enumerate((50,500)):
               p={'sortColumns':'NOTICE_DATE,RECEIVE_START_DATE,SECURITY_CODE,NUMBERNEW',
-                 'sortTypes':'-1,-1,1,-1','pageSize':'500','pageNumber':str(page),
-                 'reportName':'RPT_ORG_SURVEY','columns':'ALL','source':'WEB','client':'WEB',
-                 'filter':f'(IS_SOURCE="1")(NOTICE_DATE>=\'{begin}\')(NOTICE_DATE<=\'2026-09-26\')'}
+                 'sortTypes':'-1,-1,1,-1','pageSize':str(size),'pageNumber':'1',
+                 'reportName':'RPT_ORG_SURVEY',
+                 'columns':'SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,NOTICE_DATE,RECEIVE_START_DATE,RECEIVE_OBJECT,RECEIVE_PLACE,RECEIVE_WAY_EXPLAIN,INVESTIGATORS,RECEPTIONIST,ORG_TYPE',
+                 'source':'WEB','client':'WEB',
+                 'filter':'(IS_SOURCE="1")(NOTICE_DATE>=\'2026-06-28\')(NOTICE_DATE<=\'2026-09-26\')'}
               item={'index':i,'url':url,'params':p,'requested_at':datetime.now(timezone.utc).isoformat()}
               stop=False
               try:
