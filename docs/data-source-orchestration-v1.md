@@ -2,6 +2,8 @@
 
 日期：2026-09-26。Authority：#297/5845050149。Human要求把已购第三方 Tushare Relay 接入并重新梳理现有数据源。本文是工程编排合同，不是第二需求库、数据真伪评分或自动 provider router。Evidence changes Belief；Price changes Odds；Data != Evidence != Judgment != Decision。
 
+**部署状态：本文描述已授权的目标职责。Relay增量仍在#593 Draft，尚未完成主干合并、正常发布和真实消费验收；下文“正式补充/生产接点”不是上线回执。**
+
 ## 1. 三层必须分开
 
 **原始/官方发布者**拥有其公开原件与字段：CNINFO/交易所/公司披露、NBS、HKEX、CFFEX、CPCA、DRAMeXchange 等。它们的原文、统计期间和修订时钟不能因为下游 API 更方便而消失。
@@ -77,3 +79,18 @@ stk_surv 与 research_report 暂不做全市场定时扫描：它们更适合 Ho
 Relay 关闭或质量下降时，删除其 caller、secret引用、专属 tests 与 supplement reader；现有 HiThink/FTShare/Eastmoney/HKEX/NBS/TDX 等不受影响。已保存 relay 原件、历史 read-model 与研究引用保留，不改写为从未存在。
 
 没有新增持续订阅费用（Human已自行取得该服务）；没有新增数据库、provider registry、scheduler、评分、自动Full/Odds/交易。
+
+
+## 7. 已保存原件的解释合同（2026-09-26增量）
+
+补充表格的取得状态、可解析行、日期/证券身份合格行和覆盖缺口分别保留。既有请求客户端及原始capture hash不改写；新的`interpretation_revision`只表示同一原件的后继解释，不是新采集。小数复用原有Decimal/canonical表示，原JSON字节不变；新增列和envelope/data/row各层实际source/provider声明不丢弃，不把中转名冒充独立上游。
+
+同名重复列、错误API、矛盾count或业务错误不能变成有效表；日期或证券身份有问题的行保留原值及行号，不进入合格行。机构`side`空值保留为字段缺口，不猜买榜/卖榜，也不丢掉可用的金额和营业部资料。不同上榜原因、重叠窗口、机构专用与具名身份仍不合并。
+
+官方hm_list单次1000、hm_detail单次2000、report_rc单次3000，top_list/top_inst单次10000；Relay请求limit=5000不证明它突破了上游限制。解释采用请求limit与官方单次界限中较小者作为截断警告，不自行追加请求或宣称全量。返回count大于保存行数另报缺口；count相等也不是全市场完整证明。空页不是没有资本行为。
+
+真实旧复测36230932993/artifact10901553881：44份原body的bytes/SHA256及外ZIP CRC已核。两个龙虎榜接口各5行是受限样本；top_inst这5行side均空，金额/身份/日期仍可读。该次hm_list/hm_detail/report_rc为排队失败，不用后来的复测成功改写它；这不是本轮新取数或完整生产验收。
+
+官方接口合同：Tushare文档311、312、292、106、107。report_rc官方更新时钟为交易日21:15与次日09:15；旧Relay capability文本另称19—22点，二者是不同声明。现有17:20/20:10执行与预测更新时间并不等价。迟到窗口、真正分页、服务级鉴权/限流停止和免重复主采的补取仍属采集侧待完成事项，不能由本次离线解释签收。
+
+此解释仅使用原件与标准库和既有canonical工具；不新增HTTP实现、凭证入口、provider路由、定时或费用。退出时随Relay消费者一并移除解释模块及专属回归，保留原件、旧解释和研究引用。

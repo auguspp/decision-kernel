@@ -16,6 +16,7 @@ from ..identity import canonical_hash
 from . import smart_money_capture as primary
 from . import smart_money_sources as s
 from . import tushare_relay as relay
+from . import smart_money_relay_contract as table_contract
 
 VERSION = "smart-money-relay-supplement-v1"
 APIS = ("hm_list", "hm_detail", "report_rc", "top_list", "top_inst")
@@ -114,7 +115,7 @@ def _validate_attempt(item: dict, files: dict[str, bytes], *, first, finish):
     body = relay.decode(raw)
     expected = relay.classify(item["http_status"], body)
     s.require(expected == item["classification"], "RELAY_CLASSIFICATION")
-    return body
+    return s.decode(raw)
 
 def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
     s.require("capture.json" in files, "RELAY_CAPTURE_MISSING")
@@ -151,7 +152,20 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
             rows = []
         else:
             s.require(status == attempts[-1]["classification"], "RELAY_FINAL_STATUS")
-            rows = relay.rows(bodies[-1]) if status == "SUCCESS" else []
+            rows = []
+        interpretation = None
+        interpretation_error = None
+        if status == "SUCCESS":
+            try:
+                interpretation = table_contract.qualify(
+                    bodies[-1], spec, received_at=attempts[-1]["received_at"])
+                rows = interpretation["rows"]
+            except s.SourceError as exc:
+                interpretation_error = str(exc)
+            if interpretation_error or interpretation["issues"]:
+                unresolved.append({"api": spec["api"], "status": "SOURCE_INTERPRETATION_GAP",
+                                   "business_error": interpretation_error,
+                                   "issues": interpretation["issues"] if interpretation else []})
         if status != "SUCCESS":
             unresolved.append({"api": spec["api"], "status": status,
                                "business_error": attempts[-1].get("business_error") if attempts else status})
@@ -160,16 +174,21 @@ def replay(files: dict[str, bytes], *, identity: dict, cutoff: str) -> dict:
                                 if row.get(key) not in (None, "")})
         families[spec["api"]] = {"status": status, "rows": rows, "row_count": len(rows),
                                  "meaning": spec["meaning"], "source_fields_present": source_fields,
+                                 "interpretation": ({k: v for k, v in interpretation.items()
+                                                     if k not in {"rows", "row_count"}}
+                                                    if interpretation else None),
+                                 "interpretation_error": interpretation_error,
                                  "attempts": [{k: v for k, v in a.items()
                                                if k not in {"body", "bytes", "sha256"}}
                                               for a in attempts]}
     s.require(expected_files == set(files) - {"summary.json", "summary.md"}, "RELAY_FILE_SCOPE")
-    succeeded = sum(v["status"] == "SUCCESS" for v in families.values())
+    succeeded = sum(v["interpretation"] is not None for v in families.values())
     overall = ("NO_COMPLETED_SESSION" if not families
-               else "READY" if succeeded == len(families)
+               else "READY" if succeeded == len(families) and not unresolved
                else "PARTIAL_WITH_EXPLICIT_GAPS" if succeeded
                else "UNAVAILABLE_NOT_QUIET")
     return {"version": VERSION, "status": overall,
+            "interpretation_revision": table_contract.REVISION,
             "market_session": manifest.get("market_session"), "cutoff": manifest["finished_at"],
             "relay_host": relay.PRO, "families": families, "unresolved": unresolved,
             "capture_hash": manifest["capture_hash"], "identity": identity, **AUTHORITY}
@@ -178,15 +197,18 @@ def render(result: dict) -> str:
     lines = ["## Tushare Relay 补充来源", "",
              f"状态 {result['status']}；市场日 {result.get('market_session') or 'UNKNOWN'}；"
              f"取得截止 {result['cutoff']}。第三方中转，不是官方Tushare或聪明钱评分。", "",
-             "| 接口 | 状态 | 行数 |", "|---|---|---:|"]
+             "| 接口 | 取得状态 | 解析行数 | 日期/身份合格行数 |", "|---|---|---:|---:|"]
     for api in APIS:
         item = result["families"].get(api)
         if item:
-            lines.append(f"| {api} | {item['status']} | {item['row_count']} |")
+            qualified = (item.get("interpretation") or {}).get("qualified_row_count", "UNKNOWN")
+            lines.append(f"| {api} | {item['status']} | {item['row_count']} | {qualified} |")
     if result["unresolved"]:
         lines += ["", "缺口：" + "；".join(f"{x['api']}={x['status']}"
                                            for x in result["unresolved"])]
     lines += ["", "临时排队/业务 timeout 只等待30秒再试一次；仍失败留到下一自然运行。",
+              "合格只指所收单页的日期/身份解释，不代表全市场、全部分页或经济正确；空结果不是没有行为。",
+              "完整字段、来源声明、逐行缺口及原件定位见 [补充原件解释](smart-money/relay.json)。",
               "Relay 行为与既有 HiThink/FTShare/Eastmoney/HKEX 来源并列，不静默替代。", ""]
     return "\n".join(lines)
 

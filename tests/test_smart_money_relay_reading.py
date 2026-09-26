@@ -12,10 +12,10 @@ from decision_kernel.runtime import smart_money_relay as relay_capture
 from decision_kernel.runtime import tushare_relay as relay
 from test_smart_money_capture import setup_reader
 from test_smart_money_reading import preserve_as_previous
+from test_smart_money_relay import sample_body
 
 def relay_result(api,params,clock):
-    raw=json.dumps({"code":0,"msg":"ok","data":{"fields":["api","value"],
-                    "items":[[api,1]]},"count":1},separators=(",",":")).encode()
+    raw=json.dumps(sample_body(api,params),separators=(",",":")).encode()
     return {"api":api,"params":{k:str(v) for k,v in params.items()},"status":"SUCCESS","attempts":[
         {"attempt":1,"http_status":200,"raw":raw,"requested_at":clock(),"received_at":clock(),
          "headers":{"X-Request-ID":"r"},"classification":"SUCCESS","business_code":0,
