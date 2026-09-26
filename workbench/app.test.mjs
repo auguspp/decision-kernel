@@ -104,7 +104,7 @@ async function withApp(run, fixture = {}) {
       assert.ok(item, name); return item.onclick();
     };
     const initialText = ids.content.textContent;
-    tab('Odds / Watch');
+    if (fixture.initialTab !== false) tab('Odds / Watch');
     await run({initialText, ids, tab, select, calls, completions, overrides, file, body,
       setRef(ref) { activeRef = ref; }, refresh: () => ids.refresh.onclick()});
   } finally {
@@ -210,6 +210,7 @@ function continuityFixture() {
       {id: 'correction', use: 'METHOD_SUPPLEMENT', source: source('correction.md', ref)}]});
   const catalogue = ref => JSON.stringify({projection: {automatic_admission: false, companies: [company(ref)]}});
   return {
+    initialTab: false,
     payload(ref) {
       const {active, old} = rows(ref), text = catalogue(ref);
       return {pending: [active], research: {
@@ -283,4 +284,129 @@ test('actual controller: catalogue error preserves the selected original and a r
     tab('注意力'); assert.ok(ids.content.textContent.includes('已有处置记录（1）'));
     assert.ok(ids.content.textContent.includes('明确待你回应（1）'));
   }, continuityFixture());
+});
+
+function visibleText(node) {
+  if (node?.hidden) return '';
+  if (node?.tagName === 'details' && !node.open) return visibleText(node.children[0]);
+  return (node?.text || '') + (node?.children || []).map(visibleText).join('');
+}
+function bookFixture(count = 1, copies = 1, mismatch = false) {
+  const corpus = {};
+  const companies = Array.from({length:count}, (_, i) => {
+    const ticker = String(600100 + i) + '.SH', path=`sources/paper-${i}.md`;
+    corpus[path] = `# 已保存研究 ${i}\n\n## 结论\n\n这是第 ${i} 篇原文，经营条件仍待验证。\n\n## 限制\n\n没有接受记录；不是当前判断。`;
+    const source = {read_path:path, bytes:Buffer.byteLength(corpus[path]), sha256:hash(corpus[path]),git_blob:'e'.repeat(40)};
+    return {thscode:ticker, archives:[], assets:Array.from({length:copies},(_,j)=>({id:`paper-${i}-${j}`,
+      use:'RETAINED_RESEARCH_DOCUMENT', purpose_note:'已保存的原研究；不是新结论。',source})),
+      saved_watch: {ticker:mismatch?'999999.SZ':ticker, company_name:`样本公司 ${i}`,status:'ACTIVE_ODDS_WATCH',watch_enabled:true,
+        price:'31.12000000000',currency:'CNY',market_timestamp:'2026-09-24T15:00:00+08:00',triggered_conditions:[],
+        next_unreached_condition:{upper_price:'25',kind:'RE_UNDERWRITE',attention_triggered:false,condition_state:'ABOVE_CONDITION'}}};
+  });
+  const catalogue = JSON.stringify({projection:{automatic_admission:false,companies}});
+  return {initialTab:false,payload:()=>({research:{asset_reentry:{structured:{read_path:'details/research/asset-reentry.json',
+    bytes:Buffer.byteLength(catalogue),sha256:hash(catalogue)}}}}),
+    files:()=>({...corpus,'details/research/asset-reentry.json':catalogue})};
+}
+
+test('research book is a native table with verified authored excerpt, not visible paths/hashes', async () => {
+  await withApp(async({ids,tab,calls})=>{
+    tab('研究'); await waitFor(()=>visibleText(ids.content).includes('这是第 0 篇原文'));
+    assert.ok(find(ids.content,n=>n.tagName==='table'));
+    assert.ok(find(ids.content,n=>n.tagName==='th' && n.scope==='col'));
+    const visible=visibleText(ids.content);
+    assert.ok(!visible.includes('sources/')); assert.ok(!visible.includes('e'.repeat(40)));
+    assert.ok(!visible.includes('RETAINED_RESEARCH_DOCUMENT')); assert.ok(visible.includes('不代表现时结论'));
+    assert.equal(calls.filter(u=>u.endsWith('/sources/paper-0.md')).length,1);
+    await find(ids.content,n=>n.tagName==='button' && n.textContent==='打开这份正文').onclick();
+    assert.ok(visibleText(ids.detail).includes('没有接受记录；不是当前判断。'));
+    assert.ok(!visibleText(ids.detail).includes('sha256')); assert.ok(ids.detail.textContent.includes('sha256'));
+  },bookFixture());
+});
+
+test('book pagination bounds automatic saved-prose reads and filtering searches beyond page one', async () => {
+  await withApp(async({ids,tab,calls})=>{
+    tab('研究'); await waitFor(()=>visibleText(ids.content).includes('这是第 9 篇原文'));
+    assert.equal(calls.filter(u=>/\/sources\/paper-\d+\.md$/.test(u)).length,10);
+    assert.ok(!calls.some(u=>u.endsWith('/paper-10.md')));
+    const input=find(ids.content,n=>n.tagName==='input' && n.type==='search');
+    input.value='600111'; input.oninput();
+    await waitFor(()=>visibleText(ids.content).includes('这是第 11 篇原文'));
+    assert.ok(!visibleText(ids.content).includes('样本公司 0'));
+    assert.equal(calls.filter(u=>/\/sources\/paper-\d+\.md$/.test(u)).length,11);
+  },bookFixture(12));
+});
+
+test('multiple narrative versions stay explicit without an automatic newest excerpt', async () => {
+  await withApp(async({ids,tab,calls})=>{
+    tab('研究'); await waitFor(()=>visibleText(ids.content).includes('多份正文并存'));
+    assert.equal(calls.filter(u=>u.includes('/sources/')).length,0);
+    find(ids.content,n=>n.tagName==='button' && n.textContent==='样本公司 0').onclick();
+    assert.ok(visibleText(ids.content).includes('已有研究与历史'));
+    assert.ok(visibleText(ids.content).includes('2 份更正')===false);
+    assert.ok(!visibleText(ids.content).includes('sources/'));
+    assert.ok(!find(ids.content,n=>n.tagName==='button' && /开始Quick|开始Full|买入|卖出/.test(n.textContent)));
+  },bookFixture(1,2));
+});
+
+test('late excerpt completion preserves an explicitly opened original and stays bound to R', async () => {
+  await withApp(async({ids,tab,overrides,calls})=>{
+    const d=deferred(), fixture=bookFixture();
+    const source=`https://raw.githubusercontent.com/${REPO}/${R1}/sources/paper-0.md`;
+    overrides.set(source,()=>d.promise);
+    tab('研究'); await waitFor(()=>calls.includes(source));
+    find(ids.content,n=>n.tagName==='button' && n.textContent==='样本公司 0').onclick();
+    const open=find(ids.content,n=>n.tagName==='button' && n.textContent==='阅读已有研究正文');
+    overrides.set(source,()=>new Response(fixture.files(R1)['sources/paper-0.md']));
+    await open.onclick(); const before=ids.detail.textContent;
+    d.resolve(new Response(fixture.files(R1)['sources/paper-0.md']));
+    await waitFor(()=>ids.content.textContent.includes('这是第 0 篇原文'));
+    assert.equal(ids.detail.textContent,before);
+  },bookFixture());
+});
+
+test('old-R preview failure cannot populate the refreshed book or hide the new result', async () => {
+  await withApp(async({ids,tab,overrides,calls,setRef,refresh})=>{
+    const d=deferred(), old=`https://raw.githubusercontent.com/${REPO}/${R1}/sources/paper-0.md`;
+    overrides.set(old,()=>d.promise);
+    tab('研究'); await waitFor(()=>calls.includes(old));
+    setRef(R2); await refresh(); await waitFor(()=>visibleText(ids.content).includes('这是第 0 篇原文'));
+    d.resolve(new Response('',{status:503})); await pause(3);
+    assert.ok(!ids.content.textContent.includes('提要读取诊断'));
+    assert.ok(calls.includes(`https://raw.githubusercontent.com/${REPO}/${R2}/sources/paper-0.md`));
+    assert.ok(!ids.detail.textContent);
+  },bookFixture());
+});
+
+test('Odds book never displays a foreign-security price or condition under another company', async () => {
+  await withApp(async({ids,tab})=>{
+    tab('Odds / Watch'); await waitFor(()=>visibleText(ids.content).includes('赔率账本'));
+    const text=visibleText(ids.content);
+    assert.ok(text.includes('未取得可用价格')); assert.ok(!text.includes('31.12'));
+    assert.ok(!text.includes('25 CNY')); assert.ok(text.includes('未重新计算'));
+  },bookFixture(1,1,true));
+});
+
+test('Attention has one condition navigation, no repeated full Watch card, and human-readable gaps', async () => {
+  await withApp(async({ids,tab})=>{
+    tab('注意力'); const text=visibleText(ids.content);
+    assert.ok(!text.includes('已登记的价格复核'));
+    assert.ok(text.includes('读取与覆盖缺口'));
+    assert.ok(!text.includes('EXECUTION_ID_CONFLICT'));
+    assert.ok(!text.includes('reading_commit'));
+  },continuityFixture());
+});
+
+test('excerpt arrival updates only its cell, preserving the search input and opened disclosures', async () => {
+  await withApp(async({ids,tab,overrides,calls})=>{
+    const d=deferred(),fixture=bookFixture(),url=`https://raw.githubusercontent.com/${REPO}/${R1}/sources/paper-0.md`;
+    overrides.set(url,()=>d.promise);tab('研究');await waitFor(()=>calls.includes(url));
+    const input=find(ids.content,n=>n.tagName==='input' && n.type==='search');
+    input.value='600100';input.oninput();
+    const evidence=find(ids.content,n=>n.tagName==='details' && n.children[0]?.textContent==='目录依据与覆盖');evidence.open=true;
+    d.resolve(new Response(fixture.files(R1)['sources/paper-0.md']));
+    await waitFor(()=>visibleText(ids.content).includes('这是第 0 篇原文'));
+    assert.equal(find(ids.content,n=>n.tagName==='input' && n.type==='search'),input);
+    assert.equal(input.value,'600100');assert.equal(evidence.open,true);
+  },bookFixture());
 });

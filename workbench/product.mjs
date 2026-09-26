@@ -69,7 +69,14 @@ export function useLabel(asset) { return useNames[asset.use] || asset.use || '�
 export function companyStatus(company) {
   const known = {
     WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE: '已保存价格复核条件；业务前提仍需重审',
-    RECOVER_PRIOR_RESEARCH_BEFORE_NEW_WORK: '开展新研究前，先恢复已有研究'
+    RECOVER_PRIOR_RESEARCH_BEFORE_NEW_WORK: '开展新研究前，先恢复已有研究',
+    RECOVER_MISSING_RETAINED_BYTES: '部分已登记原件尚不可读，先恢复缺失材料',
+    RECONCILE_EXISTING_METHOD_REVIEW: '已有方法更正；复用旧结论前先核对适用范围',
+    RECOVER_REGISTERED_ARCHIVE: '已有研究档案可找回，正文尚未在本页取得',
+    PRICE_INPUT_UNAVAILABLE_NOT_THESIS_FAILURE: '价格输入不可用，不能据此认定原研究失效',
+    REVIEW_SAVED_PRICE_CONDITION_AND_RESEARCH_PREREQUISITES: '原价格条件需要复核，同时核对业务前提',
+    COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH: '已有观察可与原研究对照，本页尚未作新分析',
+    NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE: '本次未关联新的观察；不代表业务没有变化'
   };
   return known[company.next_step] || '已有资料可继续阅读；当前处置请查原记录';
 }
@@ -259,4 +266,101 @@ export function attentionResume(ref, item, company) {
     '这是恢复请求，新的回应尚未提供；打开、复制或建议Full不等于接受、拒绝、已委托或已处理。\n' +
     '若我随后明确给出回应，再沿现有GitHub回应协议查重、绑定具体原版本、保留原话并精确读回；不要凭此文本新增回应。\n' +
     '不自动Full、重算Odds、启用Watch、推断持仓或交易。原件缺失就说明缺口，不换成最新版本冒充。\n\n' + JSON.stringify(context, null, 2);
+}
+
+/** Human projections reuse exact records; they never select an economically
+ * current version or transfer acceptance from another record of the company. */
+const researchUses = new Set(['RETAINED_RESEARCH_DOCUMENT', 'HISTORICAL_RESEARCH_PROGRESS_CHECKPOINT']);
+const oddsUses = new Set(['RETAINED_ODDS_DOCUMENT', 'HISTORICAL_PROVISIONAL_ODDS_CHECKPOINT',
+  'HISTORICAL_CALCULATION_REPORT', 'HISTORICAL_CALCULATION_BASELINE']);
+export function bookProfile(company) {
+  const rawAssets = Array.isArray(company?.assets) ? company.assets : [];
+  const assets = rawAssets.filter(a => a && typeof a === 'object' && !Array.isArray(a));
+  const unreadable = rawAssets.length - assets.length + assets.filter(a => a.source_check?.gaps?.length).length;
+  const corrections = companyMaterials({assets}).find(g => g.label === '先看更正与方法限制')?.items || [];
+  const research = assets.filter(a => researchUses.has(a.use));
+  const odds = assets.filter(a => oddsUses.has(a.use));
+  const responses = assets.filter(a => a.use === 'HUMAN_DECISION_CHECKPOINT');
+  const receipts = assets.filter(a => ['RETAINED_RESEARCH_PACKAGE', 'HISTORICAL_RESEARCH_COMMIT_CHECKPOINT'].includes(a.use));
+  return {company, research, odds, responses, receipts, corrections, assets, unreadable,
+    researchLabel: research.length ? `${research.length} 份研究正文或进展` : receipts.length ? '已保存研究回执，正文需另查' :
+      company?.archives?.length ? '有研究档案可恢复' : '已有资料，研究正文未登记',
+    caution: unreadable ? '部分登记或原件不完整，阅读覆盖存在缺口' : corrections.length ? `${corrections.length} 份更正或方法限制；先核适用版本` : '未登记方法更正；不代表已复核',
+    responseLabel: responses.length ? `${responses.length} 份历史回应，适用范围见原文` : '本目录未登记回应',
+    oddsLabel: odds.length ? `${odds.length} 份历史测算，逐版查看` : '本目录未登记测算'};
+}
+
+/** Display rounding only, using decimal digits instead of IEEE-754 arithmetic.
+ * Percent applies ONLY to an explicitly defined fraction, never to generic data.
+ * A rounded nonzero is not displayed as zero. Exact originals remain available. */
+export function displayDecimal(value, {places = 2, percent = false} = {}) {
+  if (!Number.isInteger(places) || places < 0 || places > 6) throw new Error('DISPLAY_PRECISION');
+  if (value === null || value === undefined || value === '') return '未提供';
+  const text = typeof value === 'number' && Number.isFinite(value) ? String(value) : value;
+  if (typeof text !== 'string' || text.length > 160 || !/^-?\d+(?:\.\d+)?$/.test(text)) return '数值口径待核对';
+  const negative = text.startsWith('-'), [integer, fraction = ''] = text.replace(/^-/, '').split('.');
+  let digits = BigInt(integer + fraction), scale = fraction.length - (percent ? 2 : 0);
+  let approximate = false;
+  if (scale > places) {
+    const divisor = 10n ** BigInt(scale - places), remainder = digits % divisor;
+    digits = digits / divisor + (remainder * 2n >= divisor ? 1n : 0n); approximate = remainder !== 0n;
+  } else digits *= 10n ** BigInt(places - scale);
+  const suffix = percent ? '%' : '';
+  if (!digits && approximate) return `${negative ? '绝对值 ' : ''}<${places ? '0.' + '0'.repeat(places - 1) + '1' : '1'}${suffix}${negative ? '（负值）' : ''}`;
+  const rendered = digits.toString().padStart(places + 1, '0');
+  const whole = places ? rendered.slice(0, -places) : rendered;
+  const rest = places ? rendered.slice(-places).replace(/0+$/, '') : '';
+  return `${approximate ? '≈ ' : ''}${negative && digits ? '−' : ''}${whole}${rest ? '.' + rest : ''}${suffix}`;
+}
+
+const visibleValues = {
+  NONE: '未建立', NOT_ESTABLISHED: '未建立', NOT_RECORDED: '未记录', NOT_ACCEPTED_YET: '尚未接受',
+  ACCEPTED: '原记录已接受（仅原版本与范围）', REJECTED: '原记录已拒绝（仅原版本与范围）',
+  COMMITTED: '研究已冻结保存', NOT_COMMITTED: '尚未冻结', NOT_PUBLISHED: '尚未发布',
+  HUMAN_SUPPLIED_PROVISIONAL_PRICE: '你提供的参考价（暂定）', CONTEXT_ONLY: '仅作背景参考',
+  PRE_RESEARCH_RETROSPECTIVE_REFERENCE_NOT_PIT: '参考价早于研究；属于事后条件对照',
+  NOT_CANONICAL: '非正式数值 Odds', ORDINAL_ONLY: '仅定性比较，未建立数值概率',
+  PROVISIONAL: '暂定结果', PROVISIONAL_ORDINAL: '暂定的定性比较',
+  RESEARCH_ONLY: '仅保存研究，未建立 Odds', NOT_READY: '尚不具备条件'
+};
+export function humanValue(value) {
+  if (value === null || value === undefined || value === '') return '未提供';
+  if (typeof value === 'boolean') return value ? '是（原记录）' : '否（原记录）';
+  if (Object.hasOwn(visibleValues, value)) return visibleValues[value];
+  if (typeof value === 'string' && /^[A-Z][A-Z0-9_ /:-]{3,}$/.test(value)) return '原口径未翻译，请展开原值核对';
+  return String(value);
+}
+export function humanGap(value) {
+  const text = String(value || '读取未完成');
+  if (text.includes('EXECUTION_ID_CONFLICT')) return '部分研究请求的身份存在冲突，待回应覆盖不完整。';
+  if (/FILE_INTEGRITY_MISMATCH|CONFLICTING_FILE_DESCRIPTOR/.test(text)) return '资料校验不一致，本次没有展示该原件；历史记录未被改写。';
+  if (/HTTP_\d+|Failed to fetch|fetch failed|AbortError|aborted/.test(text)) return '本次连接或读取未完成，不能据此判断没有新内容。';
+  if (text.includes('ASSET_INDEX_NOT_REGISTERED')) return '本次读取包没有登记公司目录；已有原件仍可查看。';
+  if (text.includes('WEB_CRYPTO_UNAVAILABLE')) return '当前浏览器无法核对原件，未跳过校验。';
+  if (/^[A-Z_0-9]+$/.test(text)) return '本次资料或格式不满足读取条件，请查看诊断。';
+  return text;
+}
+
+/** Navigation over the author's sections, not a new summary or research result.
+ * Original titles/content/order remain intact. Unknown structures stay full text. */
+export function researchReading(text) {
+  const sections = outline(text);
+  const normalize = title => title.replace(/^(?:\d+[.、)）:]\s*|[一二三四五六七八九十]+[、.：:]\s*)/, '').trim();
+  const conclusion = sections.find(s => /^(结论|研究结论|本轮结论|摘要|Summary|Conclusion)$/i.test(normalize(s.title)));
+  const important = sections.filter(s => /^(?:重要)?(?:范围|覆盖范围|限制|研究限制|风险|关键风险|反证|关键反证|未知|UNKNOWN|未解决问题|适用边界|scope|limitations|risks|counterevidence)(?:[：:｜|\s].*)?$/i.test(normalize(s.title)));
+  const heading = sections.find(s => s.level === 1)?.title;
+  const role = recordRole(text);
+  const opening = sections.find(s => s.level > 1 && s.text && !/^```|^~~~/.test(s.text));
+  return {title: heading || (role.date ? `${role.label} · ${role.date}` : null), sections, important,
+    opening: opening ? {title: opening.title, text: opening.text.split(/\n\s*\n/)[0]} : null,
+    excerpt: conclusion?.text.split(/\n\s*\n/)[0] || null};
+}
+
+/** One unambiguous prose record is eligible for a reading excerpt. Multiple
+ * versions, JSON receipts and unresolved locators are never resolved by recency. */
+export function previewSource(profile) {
+  if (profile.research.length !== 1) return null;
+  const source = profile.research[0].source;
+  return source && /\.(md|txt)$/i.test(source.read_path || '') &&
+    Number.isSafeInteger(source.bytes) && source.bytes >= 0 && source.bytes <= 512 * 1024 ? source : null;
 }
