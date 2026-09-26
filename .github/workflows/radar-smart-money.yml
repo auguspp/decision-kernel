@@ -24,7 +24,7 @@ jobs:
   capture-smart-money:
     if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
     runs-on: ubuntu-latest
-    timeout-minutes: 28
+    timeout-minutes: 32
     steps:
       - uses: actions/checkout@v7
         with:
@@ -73,6 +73,22 @@ jobs:
             'capture_hash':result['capture_hash'],'unresolved':result['unresolved'],
             'source_calls_during_replay':result['source_calls_during_replay']},ensure_ascii=False))
           PY
+      - name: Capture third-party Tushare Relay supplement
+        if: steps.control.outputs.run_capture == 'true' && success()
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+        run: |
+          python -m decision_kernel.runtime.smart_money_relay \
+            --source-capture "$RUNNER_TEMP/smart-money" \
+            --output "$RUNNER_TEMP/smart-money-relay"
+      - name: Retain Tushare Relay supplement and queue gaps
+        if: always() && steps.control.outputs.run_capture == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: smart-money-relay-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-relay/
+          retention-days: 30
+          if-no-files-found: warn
       - name: Retain exact source bytes and partial checkpoints
         if: always() && steps.control.outputs.run_capture == 'true'
         uses: actions/upload-artifact@v7
