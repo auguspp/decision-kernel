@@ -10,10 +10,13 @@ concurrency:
   group: sm-final-readback-check
   cancel-in-progress: false
 jobs:
-  diagnose:
-    if: github.repository == 'auguspp/decision-kernel' && github.run_attempt == 1
+  verify:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/work/sm-final-readback-20260926' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
     steps:
       - uses: actions/checkout@v7
         with:
@@ -22,56 +25,82 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Install existing reading dependencies
-        run: python -m pip install -e '.[feeds,documents]'
-      - name: Read saved sources once without publication
+      - name: Apply exact reviewed patch and download already saved inputs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python - <<'PY'
-          import json, os, pathlib, re, subprocess, traceback
-          from datetime import datetime, timezone
-          from decision_kernel.runtime import current_state_delivery as base
-          from decision_kernel.runtime import current_state_delivery_with_odds_watch as cli
-          M='02d30ccd472ebf3533fd229c8fae6a0eadddc106'
-          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==M
+          import base64,hashlib,json,os,pathlib,subprocess
+          from datetime import datetime,timezone
           assert datetime.now(timezone.utc)<datetime(2026,9,27,tzinfo=timezone.utc)
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()=='02d30ccd472ebf3533fd229c8fae6a0eadddc106'
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'sm-final-readback';root.mkdir()
-          events=[];original=base.GitHubAPI._call
-          def diagnostic(self,method,endpoint,body=None):
-              assert method=='GET','DIAGNOSTIC_READ_ONLY'
-              record={'method':method,'endpoint':endpoint,'at':datetime.now(timezone.utc).isoformat()}
-              events.append(record)
-              try:
-                  result=original(self,method,endpoint,body)
-                  record.update(status=result.status_code,bytes=len(result.content),calls=self.calls)
-                  return result
-              except Exception as exc:
-                  label=exc.args[0] if len(exc.args)==1 and isinstance(exc.args[0],str) else ''
-                  safe=label if re.fullmatch(r'GitHub HTTP [0-9]{3}|GitHub transport unavailable|artifact transport unavailable|GitHub request budget exhausted',label) else 'UNCLASSIFIED'
-                  record.update(error_type=type(exc).__name__,safe_code=safe,calls=self.calls,
-                      stack=[{'file':pathlib.Path(f.filename).name,'line':f.lineno,'function':f.name} for f in traceback.extract_tb(exc.__traceback__)])
-                  print(json.dumps(record),flush=True)
-                  raise
-              finally:
-                  (root/'read-events.json').write_text(json.dumps(events,indent=2))
-          base.GitHubAPI._call=diagnostic
-          args=['--code-commit',M,'--output',str(root/'reading'),'--include-radar-discovery','--include-concept-discovery','--include-concept-detail','--include-external-radar','--include-industry-breadth','--include-easy-stock-context','--include-tdx-concept-context','--include-daily-news','--include-smart-money','--include-reviewed-questions']
-          result=cli.main(args)
-          summary={'code_commit':M,'exit_code':result,'requests':len(events),'finished_at':datetime.now(timezone.utc).isoformat(),'publication_writes':0,'source_calls':0}
-          if result==0:
-              value=json.loads((root/'reading/current-state.json').read_bytes())
-              summary['smart_money']=value['research'].get('smart_money')
-              summary['files']={str(p.relative_to(root/'reading')):p.stat().st_size for p in (root/'reading').rglob('*') if p.is_file()}
-          (root/'diagnosis.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
-          print(json.dumps(summary,ensure_ascii=False),flush=True)
-          raise SystemExit(result)
+          def blob(sha):
+              obj=json.loads(subprocess.check_output(['gh','api','repos/auguspp/decision-kernel/git/blobs/'+sha]))
+              raw=base64.b64decode(obj['content']);assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==sha
+              return raw
+          patch=blob('0510158c6defd94fcc8c56d2afd39d4d74067a7a')
+          assert len(patch)==6916 and hashlib.sha256(patch).hexdigest()=='4a6a1f5276c034dd365ff1f697df9e9b5c983c9e341b115b940eb178e4826e99'
+          (root/'reviewed.patch').write_bytes(patch)
+          subprocess.run(['git','apply','--check',str(root/'reviewed.patch')],check=True)
+          subprocess.run(['git','apply','--index',str(root/'reviewed.patch')],check=True)
+          for path,sha in [('tests/test_smart_money_browser_delivery.py','289f386f507345f97c1040e77812b47d1dd2c393'),('docs/smart-money-display-bound-fix.md','0b446bf78df44d582264ab000695ba34921ac7d8')]:
+              target=pathlib.Path(path);assert not target.exists();target.write_bytes(blob(sha));subprocess.run(['git','add',path],check=True)
+          for aid,name,size,digest in [(10896403657,'first.zip',17647490,'246843ac886cdc055ec37950f01a9dca6a6c5ee696bc1ae887ff4bc57947bc52'),(10897997413,'repair.zip',1366421,'fa190a28cff1de25a93b43324e1a4aa46a7eb536261df20932f710860fd93b43')]:
+              raw=subprocess.check_output(['gh','api',f'repos/auguspp/decision-kernel/actions/artifacts/{aid}/zip'])
+              assert len(raw)==size and hashlib.sha256(raw).hexdigest()==digest
+              (root/name).write_bytes(raw)
           PY
-      - name: Retain exact installed code
+      - name: Install existing test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Run related regressions without credentials
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_smart_money*.py tests/test_institutional_radar_compat.py tests/test_radar_company_reading.py --junitxml="$RUNNER_TEMP/sm-final-readback/scoped.xml" | tee "$RUNNER_TEMP/sm-final-readback/scoped.log"
+      - name: Rebuild original full data and complete display without network
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,zipfile
+          from decision_kernel.runtime import smart_money_capture as c,smart_money_sources as s,smart_money_view as v
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'sm-final-readback';history=None
+          for name in ('first.zip','repair.zip'):
+              with zipfile.ZipFile(root/name) as z:
+                  assert z.testzip() is None
+                  files={i.filename:z.read(i) for i in z.infolist() if not i.is_dir()}
+              manifest=s.decode(files['capture.json']);obs=c.replay(files,manifest['identity'],cutoff=s.now())
+              assert obs['source_calls_during_replay']==0
+              history=v.history(obs,history)
+          chunks,meta=v.encode_chunks(history);overview=v.summarize(obs,history)
+          page=v.browser(overview,chunks,meta,{}).encode()
+          assert len(history['records'])==137572 and not obs['unresolved'] and len(page)<30*1024*1024
+          (root/'full-browser.html').write_bytes(page)
+          (root/'replay-overview.json').write_bytes(s.encoded(overview))
+          (root/'browser-check.json').write_text(json.dumps({'records':len(history['records']),'browser_bytes':len(page),'browser_sha256':hashlib.sha256(page).hexdigest(),'original_chunks':len(chunks),'original_compressed_bytes':sum(map(len,chunks.values())),'source_calls':0,'unresolved':obs['unresolved']},indent=2))
+          PY
+      - name: Store verified ordinary blobs only, no branch or main writes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'sm-final-readback'
+          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert len(paths)==5 and all(not p.startswith('.github/') for p in paths)
+          expected={'src/decision_kernel/runtime/smart_money_view.py':'e083621f9cbebc703941236a51f83efe8acec57d','src/decision_kernel/runtime/smart_money_reading.py':'53a838be62f95f9844696f6244bd073e920c9a32','src/decision_kernel/runtime/current_state_delivery_with_odds_watch.py':'5ad35b9dc9dc5544f56ea365cc5fcb6895293c78','tests/test_smart_money_browser_delivery.py':'289f386f507345f97c1040e77812b47d1dd2c393','docs/smart-money-display-bound-fix.md':'0b446bf78df44d582264ab000695ba34921ac7d8'}
+          assert set(paths)==set(expected);entries=[]
+          for path in paths:
+              raw=pathlib.Path(path).read_bytes();sha=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest();assert sha==expected[path]
+              result=json.loads(subprocess.check_output(['gh','api','--method','POST','repos/auguspp/decision-kernel/git/blobs','--input','-'],input=json.dumps({'content':raw.decode(),'encoding':'utf-8'}).encode()))
+              assert result['sha']==sha
+              entries.append({'path':path,'mode':'100644','type':'blob','sha':sha,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+          (root/'candidate.json').write_text(json.dumps({'parent':'02d30ccd472ebf3533fd229c8fae6a0eadddc106','base_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),'tree':subprocess.check_output(['git','write-tree'],text=True).strip(),'entries':entries,'refs_modified':False},indent=2))
+          PY
+      - name: Retain source and actual evidence
         if: always()
         run: |
           mkdir -p "$RUNNER_TEMP/sm-final-readback"
-          git archive --format=zip HEAD > "$RUNNER_TEMP/sm-final-readback/source.zip"
+          git archive --format=zip "$(git write-tree)" > "$RUNNER_TEMP/sm-final-readback/source.zip"
+          git diff --cached --binary --full-index > "$RUNNER_TEMP/sm-final-readback/candidate.patch"
       - uses: actions/upload-artifact@v7
         if: always()
         with:
