@@ -27,7 +27,8 @@ def test_workbench_reading_contracts():
         assert syntax.returncode == 0, syntax.stdout + syntax.stderr
     result = subprocess.run([node, "--test", "--test-reporter=tap",
                              str(root / "workbench" / "reading.test.mjs"),
-                             str(root / "workbench" / "environment.test.mjs")],
+                             str(root / "workbench" / "environment.test.mjs"),
+                             str(root / "workbench" / "app.test.mjs")],
                             cwd=root, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stdout + result.stderr
     # Node 23+ defaults to spec even with piped stdout. Select TAP explicitly.
