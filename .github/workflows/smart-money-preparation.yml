@@ -1,0 +1,73 @@
+name: smart-money-preparation
+on:
+  push:
+    branches: [work/smart-money-20260926]
+    paths: [.github/workflows/smart-money-preparation.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: smart-money-preparation
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/work/smart-money-20260926' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Check bounded preparation and source activity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python - <<'PY'
+          from datetime import datetime, timezone
+          assert datetime.now(timezone.utc) < datetime(2026,9,27,tzinfo=timezone.utc)
+          PY
+          python .github/scripts/check-sector-scheduled-activity.py
+      - name: Install existing dependencies
+        run: python -m pip install -e '.[feeds]'
+      - name: Capture reviewed source samples only
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+        run: python .github/scripts/smart-money-source-probe.py
+      - name: Retain reviewed implementation and legacy exact source
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/smart-money-probe"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/smart-money-probe/implementation.zip"
+          gh api repos/auguspp/decision-kernel/actions/artifacts/10527564199/zip > "$RUNNER_TEMP/smart-money-probe/legacy-institutional.zip"
+          python - <<'PY'
+          import hashlib, json, os, zipfile
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'smart-money-probe'/'legacy-institutional.zip'
+          raw=p.read_bytes()
+          assert hashlib.sha256(raw).hexdigest()=='49f6e2752a91b845d015b54bc678df850f66243fc3909c5e84f6b06e5971f9d2'
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              names=z.namelist()
+              receipt=json.loads(z.read('payload/capture.json'))
+              print('LEGACY_IMPLEMENTATION',json.dumps(receipt['implementation'],sort_keys=True))
+              print('LEGACY_IDENTITY',receipt['capture_hash'],receipt['status'])
+          PY
+      - name: Upload actual preparation, not production acceptance
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: smart-money-preparation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/smart-money-probe/
+          retention-days: 30
+          if-no-files-found: warn
