@@ -3,6 +3,7 @@
  */
 import {REPO, commit, fileUrl, readNewsExecution} from './reading.mjs';
 import {localTime} from './product.mjs';
+import {newsRefreshControl} from './news-refresh.mjs';
 export const NEWS_WORKFLOW_URL = `https://github.com/${REPO}/actions/workflows/radar-newsnow-daily.yml`;
 const hash = v => typeof v === 'string' && /^[a-f0-9]{64}$/.test(v);
 function require(ok, reason) { if (!ok) throw new Error(reason); }
@@ -89,7 +90,9 @@ function check(reading) {
 }
 export function newsUpdateControls(target,ctx) {
   const {reading,ui,active}=ctx, {el,button,link,folded}=ui;
-  const panel=el('section',undefined,'human-material');
+  target.append(newsRefreshControl(ctx));
+  const panel=el('details',undefined,'human-material');
+  panel.append(el('summary','其他更新方式与最近采集记录'));
   panel.append(el('h4','按需更新新闻'),el('p','在 GitHub 确认运行（选择 main），或复制请求交给本项目对话执行。打开链接、复制和查状态都不会启动采集。','small'),
     link('到 GitHub 更新新闻',NEWS_WORKFLOW_URL),requestControl('复制新闻更新请求（未触发）',()=>newsRefreshRequest(reading),ctx));
   const status=el('div');status.setAttribute('role','status');let busy=false;

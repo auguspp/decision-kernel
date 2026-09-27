@@ -100,7 +100,7 @@ export function newsPage(target, ctx) {
   const saved=reading.payload.research?.daily_news, descriptor=saved?.details?.json;
   const panel=card('新闻 · 已保存窗口','按来源与关键词阅读。标题是原报道表述；尚未合并为已核实事件，也未关联新的 Quick 解读。'); target.append(panel);
   newsUpdateControls(panel,ctx);
-  panel.append(notice('本页不直接执行采集或 Quick；更新入口与下方已保存新闻分别展示。'));
+  panel.append(notice('刷新只采集新闻；下方仍是当前保存版本。研究请加入待 Quick，页面不会自动开展研究。'));
   if (saved?.status === 'STALE_CAPTURE_NOT_TODAY_NEWS') panel.append(notice('这个保存窗口已陈旧，不代表今天的新消息。'));
   if (!descriptor) { panel.append(notice('新闻窗口本次不可读，不代表没有新闻。'),folded('实际来源状态',JSON.stringify(saved||{},null,2))); return; }
   const content=el('div'); panel.append(content,disclosure('窗口依据与完整原件',button('阅读保存窗口原件',()=>onRead(descriptor)),
