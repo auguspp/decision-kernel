@@ -23,7 +23,7 @@ def test_workbench_reading_contracts():
     assert int(version.lstrip("v").split(".")[0]) >= 20
     for name in ("app.mjs", "reading.mjs", "presentation.mjs", "product.mjs", "news-markets.mjs", "on-demand.mjs",
                  "quick-inbox.mjs", "quick-inbox-ui.mjs", "server/quick-inbox-handler.mjs",
-                 "news-refresh.mjs", "server/news-refresh-handler.mjs", "server/routes.mjs"):
+                 "news-refresh.mjs", "server/news-refresh-handler.mjs", "server/owner-identity.mjs", "server/routes.mjs"):
         syntax = subprocess.run([node, "--check", str(root / "workbench" / name)],
                                 capture_output=True, text=True, timeout=10)
         assert syntax.returncode == 0, syntax.stdout + syntax.stderr
@@ -35,7 +35,8 @@ def test_workbench_reading_contracts():
                              str(root / "workbench" / "news-markets.test.mjs"),
                              str(root / "workbench" / "on-demand.test.mjs"),
                              str(root / "workbench" / "quick-inbox.test.mjs"),
-                             str(root / "workbench" / "news-refresh.test.mjs")],
+                             str(root / "workbench" / "news-refresh.test.mjs"),
+                             str(root / "workbench" / "owner-identity.test.mjs")],
                             cwd=root, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stdout + result.stderr
     # Node 23+ defaults to spec even with piped stdout. Select TAP explicitly.
