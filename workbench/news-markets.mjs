@@ -2,6 +2,7 @@
  * Same-R registered bytes only. Source titles and dates remain claims, not facts.
  */
 import {fileUrl} from './reading.mjs';
+import {newsUpdateControls, requestControl, sectorQuickRequest} from './on-demand.mjs';
 import {localTime, displayDecimal} from './product.mjs';
 const sources = {cls:'财联社', wallstreetcn:'华尔街见闻', fastbull:'FastBull', jin10:'金十数据', mktnews:'MKTNews', gelonghui:'格隆汇', thepaper:'澎湃新闻'};
 const families = {BROAD_881:'一级行业', GRANULAR_884:'细分行业'};
@@ -97,7 +98,8 @@ export function newsPage(target, ctx) {
   const {reading, ui, active, onRead, onCompany}=ctx, {el,card,button,link,notice,folded,disclosure}=ui;
   const saved=reading.payload.research?.daily_news, descriptor=saved?.details?.json;
   const panel=card('新闻 · 已保存窗口','按来源与关键词阅读。标题是原报道表述；尚未合并为已核实事件，也未关联新的 Quick 解读。'); target.append(panel);
-  panel.append(notice('“读取最新保存结果”只更新页面。网页重新采集与一键 Quick 尚未接通；下方复制只准备研究请求。'));
+  newsUpdateControls(panel,ctx);
+  panel.append(notice('本页不直接执行采集或 Quick；更新入口与下方已保存新闻分别展示。'));
   if (saved?.status === 'STALE_CAPTURE_NOT_TODAY_NEWS') panel.append(notice('这个保存窗口已陈旧，不代表今天的新消息。'));
   if (!descriptor) { panel.append(notice('新闻窗口本次不可读，不代表没有新闻。'),folded('实际来源状态',JSON.stringify(saved||{},null,2))); return; }
   const content=el('div'); panel.append(content,disclosure('窗口依据与完整原件',button('阅读保存窗口原件',()=>onRead(descriptor)),
@@ -163,12 +165,14 @@ export function marketsPage(target,ctx) {
       function draw(){
         const rows=view.rows.filter(r=>(!select.value||r.family===select.value) && `${r.name} ${r.code}`.includes(input.value.trim()));
         page=Math.min(page,Math.max(0,Math.ceil(rows.length/20)-1));
-        const heads=['行业','5 / 20 / 60交易日涨跌幅','20日相对基准收益差','原观察状态'];
+        const heads=['行业','5 / 20 / 60交易日涨跌幅','20日相对基准收益差','原观察状态','研究接续'];
         const {wrapper,body}=dataTable(`筛选 ${rows.length} 项 · 第 ${page+1} / ${Math.max(1,Math.ceil(rows.length/20))} 页；百分数仅格式化原值，不重算信号`,heads);
         for(const row of rows.slice(page*20,page*20+20)) {
           const tr=el('tr'),values=[`${row.name} · ${families[row.family]}`,row.returns.join(' / '),row.excess,
             `${row.active?'满足原价格观察条件':'未满足原价格观察条件'}${row.weakening?'；近期走弱':''}。${row.path}`];
-          values.forEach((v,i)=>{const td=el('td',v);td.setAttribute('data-label',heads[i]);tr.append(td);});body.append(tr);
+          values.forEach((v,i)=>{const td=el('td',v);td.setAttribute('data-label',heads[i]);tr.append(td);});
+          const action=el('td');action.setAttribute('data-label','研究接续');
+          action.append(requestControl('复制行业 Quick 请求（未启动）',()=>sectorQuickRequest(reading,descriptor,view,row),ctx));tr.append(action);body.append(tr);
         }
         box.replaceChildren(wrapper);if(!rows.length)box.append(el('p','当前筛选没有匹配行业。'));pager(box,page,rows.length,20,n=>{page=n;draw();},ui);
       }

@@ -226,3 +226,32 @@ export function resumeText(ref, descriptor) {
   const url = fileUrl(ref, descriptor.read_path);
   return `请从当前项目研究入口恢复以下已保存材料，先读适用更正并说明实际范围，不自动开展Full、重算Odds或交易。\n固定读取版本：${ref}\n原件：${url}\n这是阅读/接续请求，不是接受研究或投资决定。`;
 }
+
+/** One explicit, independent status observation; never a dispatch or a timer.
+ * The bounded list can expose an in-flight/failing attempt absent from pinned R.
+ * It does not prove publication, full history, or owner authorization to execute.
+ */
+export async function readNewsExecution(fetcher = globalThis.fetch) {
+  const data = await json(`${API}/actions/workflows/radar-newsnow-daily.yml/runs?branch=main&per_page=20`, fetcher);
+  const observedAt = new Date().toISOString(), rows = data?.workflow_runs;
+  require(Array.isArray(rows) && rows.length <= 20 && Number.isSafeInteger(data.total_count) &&
+    data.total_count >= rows.length && (rows.length > 0 || data.total_count === 0), 'INCOMPLETE_NEWS_RUN_LIST');
+  require(new Set(rows.map(r => r?.id)).size === rows.length, 'DUPLICATE_NEWS_RUN');
+  for (const r of rows) {
+    require(r && Number.isSafeInteger(r.id) && r.id > 0 &&
+      r.html_url === `https://github.com/${REPO}/actions/runs/${r.id}` &&
+      r.path === '.github/workflows/radar-newsnow-daily.yml' && r.head_branch === 'main' &&
+      r.repository?.full_name === REPO && r.head_repository?.full_name === REPO &&
+      SHA.test(r.head_sha || '') && Number.isSafeInteger(r.run_attempt) && r.run_attempt > 0 &&
+      ['workflow_dispatch', 'workflow_run'].includes(r.event) && validClock(r.created_at) &&
+      validClock(r.updated_at) && Date.parse(r.updated_at) >= Date.parse(r.created_at) &&
+      Date.parse(r.updated_at) <= Date.parse(observedAt) && typeof r.status === 'string' &&
+      (r.conclusion === null || typeof r.conclusion === 'string'), 'UNQUALIFIED_NEWS_RUN');
+  }
+  const latest = [...rows].sort((a,b) => Date.parse(b.created_at) - Date.parse(a.created_at) || b.id - a.id)[0];
+  // Return only explicit run metadata, never logs, credentials, or inferred stages.
+  const pick = r => r ? Object.fromEntries(['id','html_url','path','head_sha','event','run_attempt',
+    'created_at','updated_at','status','conclusion'].map(k => [k,r[k]])) : null;
+  return deepFreeze({latest: pick(latest), observedAt, independentOfReading: true,
+    scope: 'LATEST_CREATED_IN_BOUNDED_MAIN_QUERY_NOT_ALL_RUNNING_JOBS', count: rows.length});
+}
