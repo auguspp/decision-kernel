@@ -35,10 +35,6 @@ async function fixture() {
       assert.fail('unexpected raw URL '+url);
     }
     assert.ok(String(url).startsWith(API+'/'));
-    if (u.pathname.endsWith('/git/ref/heads/main')) {
-      assert.equal(options.headers.Authorization,undefined);
-      return json({ref:'refs/heads/main',object:{type:'commit',sha:state.main}});
-    }
     if (u.pathname.endsWith('/git/ref/heads/'+READ_REF)) {
       assert.equal(options.headers?.Authorization,undefined);
       if (!state.publish) return json({error:'no reading'},503);
@@ -111,6 +107,8 @@ test('caller cannot select workflow/repository/ref/inputs or pass oversized requ
 test('prepare is read-only, checks all native active statuses and returns an owner-bound expiring permit',async()=>{
   const f=await fixture(),t=await f.prepare();assert.equal(t.permit.previous_number,7);assert.equal(t.permit.code,M);assert.match(t.signature,/^[a-f0-9]{64}$/);
   assert.equal(f.state.posts,0);assert.equal(f.state.calls.filter(c=>c.url.includes('status=')).length,5);
+  assert.equal(f.state.calls.some(c=>c.url.includes('/git/ref/heads/main')),false);
+  assert.ok(f.state.calls.filter(c=>c.url.startsWith(API+'/')).every(c=>c.headers?.Authorization==='Bearer synthetic-test-token'));
 });
 test('in-flight including older waiting work, failed CI, changed workflow and missing metadata each stop submission',async()=>{
   for(const mutate of [s=>{s.active=run({status:'waiting',conclusion:null});},s=>{s.ci[0].conclusion='failure';},
@@ -183,6 +181,19 @@ test('oversized upstream list and response clock contradictions fail before disp
   f.state.news[0].updated_at=new Date(T-5000).toISOString();f.state.news[0].padding='x'.repeat(1100000);assert.equal((await f.call({op:'prepare'})).kind,'blocked');assert.equal(f.state.posts,0);
 });
 
+test('Actions read 403 distinguishes authenticated rate limit from permission refusal without leaking body',async()=>{
+  for(const [remaining,code] of [['0','GITHUB_ACTIONS_RATE_LIMITED'],['4999','GITHUB_ACTIONS_READ_FORBIDDEN']]){
+    const f=await fixture();
+    const fetcher=async(u,o)=>{
+      if(String(u).includes('/actions/workflows/ci.yml/runs'))
+        return new Response(JSON.stringify({secret:'do-not-leak'}),{status:403,headers:{'Content-Type':'application/json','x-ratelimit-remaining':remaining}});
+      return f.fetcher(u,o);
+    };
+    const res=await handleNewsRefresh(request({op:'prepare'}),env(),{fetcher,now:()=>f.state.clock});
+    const body=await res.json();assert.equal(body.code,code);assert.ok(!JSON.stringify(body).includes('do-not-leak'));
+  }
+});
+
 // Minimal output sink: this tests event/data wiring, NOT a rendered browser.
 class Element {
   constructor(tag,text=''){this.tag=tag;this.text=String(text);this.children=[];this.disabled=false;}
@@ -238,9 +249,11 @@ test('separate Worker isolates may dispatch twice but bind the same unique nativ
   // Python tests execute the exact workflow guard for these two native numbers.
 });
 
-test('permit expiring during the second preflight stops before POST',async()=>{
-  const f=await fixture(),ticket=await f.prepare();let mainReads=0;
-  const fetcher=async(u,o)=>{const response=await f.fetcher(u,o);if(String(u).endsWith('/git/ref/heads/main')&&++mainReads===2)f.state.clock=T+120001;return response;};
+test('permit expiring during the second authenticated main-CI preflight stops before POST',async()=>{
+  const f=await fixture(),ticket=await f.prepare();let ciReads=0;
+  const fetcher=async(u,o)=>{const response=await f.fetcher(u,o);
+    if(String(u).includes('/actions/workflows/ci.yml/runs')&&++ciReads===2)f.state.clock=T+120001;
+    return response;};
   const r=await (await handleNewsRefresh(request({op:'submit',ticket,run_id:null}),env(),{fetcher,now:()=>f.state.clock})).json();
   assert.equal(r.code,'PERMIT_EXPIRED');assert.equal(f.state.posts,0);
 });
