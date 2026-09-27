@@ -1,4 +1,5 @@
 name: radar-global-market
+run-name: global-market / ${{ inputs.family }}
 on:
   workflow_dispatch:
     inputs:
