@@ -42,9 +42,9 @@ def test_watch_summary_is_human_attention_only_and_missing_watch_is_not_quiet():
 
 def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_watch_aware_reader():
     value = READ_WORKFLOW.read_text(encoding="utf-8")
-    # Approved saved-source listeners include Smart Money (#586) and B1's
-    # existing global-market source (#612). No publisher clock/source secrets.
-    assert "workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]" in value
+    # Existing B1 Relay (#612) and public (#614) captures are now both consumed.
+    # Listener order has no priority meaning; no publisher clock/source secrets.
+    assert "workflows: [radar-global-public, sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]" in value
     assert value.count("    workflows:") == 1
     assert "types: [requested, completed]" in value
     assert "branches: [main]" in value
