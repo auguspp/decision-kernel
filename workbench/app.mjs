@@ -1,15 +1,17 @@
+import {quickInboxPage, transferButton} from './quick-inbox-ui.mjs';
 import {newsPage, marketsPage} from './news-markets.mjs';
 import {FILE_LIMIT, REPO, openReading, readQuick, readHealth, loadModules, resumeText, fileUrl, references} from './reading.mjs';
 import {locations, referenceMatches, watchSummary, watchState, companyName, companyMatches} from './presentation.mjs';
 import {localTime, recordsView, outline, paragraphs, documentView, useLabel, companyStatus, priceCondition, marketEntries, attentionView, companyMaterials, watchOrigin, attentionResume, bookProfile, displayDecimal, humanValue, humanGap, researchReading, previewSource} from './product.mjs';
 
 // Ordinary replaceable views; all retained source strings are text, never HTML.
-const labels = {attention: '注意力', research: '研究', odds: 'Odds / Watch', markets: '市场观察', news: '新闻', health: '系统健康'};
+const labels = {attention: '注意力', research: '研究', odds: 'Odds / Watch', markets: '市场观察', news: '新闻', quickInbox: '待 Quick', health: '系统健康'};
 const hints = {attention: '先看已保存的研究增量与复核事项，再打开依据。不是新一轮全球扫描。',
   research: '按已登记公司找回研究、条件与更正。研究过不等于持有。',
   odds: '保存的价格条件和业务前提，不重算 Odds，不构成买卖指令。',
   news: '阅读原新闻窗口，筛选来源；已有资料不冒充新事件或Quick解释。',
   markets: '观察日期与页面读取时间分别保留；没有覆盖不等于没有变化。',
+  quickInbox: '集中保存选中的材料，交给网页版研究；不自动运行 Quick。',
   health: '只展示实际读取范围和失败；不从绿色任务或标题推断研究质量。'};
 const enabled = new Set(Object.keys(labels));
 let companyQuery = '', selectedAttention = null, selectedCompany = null, bookPage = 0;
@@ -261,6 +263,10 @@ function render(keepDetail = false) {
     target.append(attentionCard(), quickCard(), button('打开 Odds / Watch 查看全部原价格条件', () => { selected = 'odds'; nav(); render(); }), folded('尚未覆盖的事项',
       '持续待回应队列、持仓上下文和日历尚未接通；不能将未接通当作0项。建议开展Full不等于已委托，页面不自动启动研究。'));
   }
+  if (selected === 'quickInbox') {
+    const generation = renderGeneration;
+    quickInboxPage(target, {el, card, button, link, disclosure}, () => generation === renderGeneration);
+  }
   if (selected === 'research') {
     companyView(target);
     const other = el('details'); other.append(el('summary', '其他研究原件与定位'));
@@ -314,7 +320,7 @@ async function refresh() {
     reading = results.reading.status === 'READ' ? results.reading.value : null;
     $('identity').replaceChildren();
     if (reading) {
-      $('identity').append(el('span', `本页读取：${localTime(reading.checkedAt)} · 只读试用`),
+      $('identity').append(el('span', `本页读取：${localTime(reading.checkedAt)} · 已保存资料`),
         folded('来源版本与检查范围', `读取 R：${reading.ref}\n代码 M：${reading.payload.code_commit}\n原读取时间：${reading.checkedAt}\n${reading.validation}`));
       const recheck = Date.parse(reading.payload.checks?.recheck_after);
       if (!Number.isFinite(recheck) || Date.now() > recheck) $('identity').append(el('p', '读取包复查时点未知或已过期；不代表最新行情。本页不补跑生产。', 'gap'));
@@ -473,11 +479,19 @@ function bookView(target, odds = false) {
     detail.append(button('收起公司详情，回到账本', () => { selectedCompany = null; selectedAttention = null; render(); }),
       el('h3', `${bookCompanyName(c)} · 已有研究与历史`), el('p', companyStatus(c)), notice(profile.caution),
       el('p', '先看适用更正，再打开需要的版本；旧回应不转移到新版本。', 'small'));
+    const generation = renderGeneration;
+    detail.append(transferButton({el, button}, {kind:'company', reading:current.ref, subject:c.thscode, asset:null},
+      () => current === reading && generation === renderGeneration));
     if (c.saved_watch?.ticker === c.thscode) detail.append(el('p', priceCondition(c.saved_watch)),
       el('p', `原价格观察：${localTime(c.saved_watch.market_timestamp)}；不是当前行情。`, 'small'));
     for (const group of companyMaterials({assets: profile.assets})) {
       const section = el('section', undefined, 'human-material-group'); section.append(el('h4', group.label));
-      group.items.forEach((asset, i) => section.append(friendlySource(asset, current, i + 1))); detail.append(section);
+      group.items.forEach((asset, i) => {
+        section.append(friendlySource(asset, current, i + 1));
+        if (asset.source && typeof asset.id === 'string') section.append(transferButton({el, button},
+          {kind:'material', reading:current.ref, subject:c.thscode, asset:asset.id},
+          () => current === reading && generation === renderGeneration));
+      }); detail.append(section);
     }
     if (c.archives.length) {
       const archive = disclosure(`研究档案（${c.archives.length}）`);

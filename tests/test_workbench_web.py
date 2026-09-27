@@ -1,4 +1,4 @@
-"""Run the read-only browser consumer's dependency-free Node contract tests.
+"""Run saved-reading and explicit-transfer dependency-free Node contract tests.
 
 Node >=20 is required for this optional web module's development/test toolchain.
 No npm install, source transport, production workflow or model invocation.
@@ -21,7 +21,8 @@ def test_workbench_reading_contracts():
     version = subprocess.run([node, "--version"], capture_output=True, text=True,
                              check=True, timeout=10).stdout.strip()
     assert int(version.lstrip("v").split(".")[0]) >= 20
-    for name in ("app.mjs", "reading.mjs", "presentation.mjs", "product.mjs", "news-markets.mjs", "on-demand.mjs"):
+    for name in ("app.mjs", "reading.mjs", "presentation.mjs", "product.mjs", "news-markets.mjs", "on-demand.mjs",
+                 "quick-inbox.mjs", "quick-inbox-ui.mjs", "server/quick-inbox-handler.mjs"):
         syntax = subprocess.run([node, "--check", str(root / "workbench" / name)],
                                 capture_output=True, text=True, timeout=10)
         assert syntax.returncode == 0, syntax.stdout + syntax.stderr
@@ -31,7 +32,8 @@ def test_workbench_reading_contracts():
                              str(root / "workbench" / "app.test.mjs"),
                              str(root / "workbench" / "product.test.mjs"),
                              str(root / "workbench" / "news-markets.test.mjs"),
-                             str(root / "workbench" / "on-demand.test.mjs")],
+                             str(root / "workbench" / "on-demand.test.mjs"),
+                             str(root / "workbench" / "quick-inbox.test.mjs")],
                             cwd=root, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stdout + result.stderr
     # Node 23+ defaults to spec even with piped stdout. Select TAP explicitly.
