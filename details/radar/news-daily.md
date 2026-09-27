@@ -1,6 +1,6 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-09-27T04:45:44.447538+00:00；状态：WINDOWS&#95;CAPTURED
+原采集截止：2026-09-27T07:51:16.334101+00:00；状态：WINDOWS&#95;CAPTURED
 这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。
 
@@ -9,7 +9,7 @@
 | cls | OBSERVATIONS&#95;NORMALIZED | 30 |
 | wallstreetcn | OBSERVATIONS&#95;NORMALIZED | 30 |
 | fastbull | OBSERVATIONS&#95;NORMALIZED | 30 |
-| jin10 | OBSERVATIONS&#95;NORMALIZED | 30 |
+| jin10 | OBSERVATIONS&#95;NORMALIZED | 29 |
 | mktnews | OBSERVATIONS&#95;NORMALIZED | 30 |
 | gelonghui | OBSERVATIONS&#95;NORMALIZED | 15 |
 | thepaper | OBSERVATIONS&#95;NORMALIZED | 20 |
@@ -18,12 +18,42 @@
 
 名称匹配不认证证券或业务受益；未命中不代表没有相关公司。
 
+### 东方中科 002819.SZ
+- 东方中科：股票交易异常波动 提示相关风险事项（jin10）
+旧研究定位保留在同版本公司阅读；经济联系和具体问题仍待审阅，不自动启动Pre。
+
 ### 恒辉安防 300952.SZ
 - 恒辉安防&#40;300952&#41;：下半年盈利有望逐步修复（gelonghui）
 旧研究定位保留在同版本公司阅读；经济联系和具体问题仍待审阅，不自动启动Pre。
 
+### 中岩大地 003001.SZ
+- 中岩大地：拟收购并增资取得鑫寰宇60%股权（jin10）
+旧研究定位保留在同版本公司阅读；经济联系和具体问题仍待审阅，不自动启动Pre。
+
 ## 原窗口标题（不是新增事件清单）
 
+- [和达科技：股东及董事拟合计减持公司不超4.74%股份](https://www.cls.cn/detail/2493421) · cls
+- [财联社9月27日电，鸿蒙智行官微宣布，问界仍然是鸿蒙智行成员之一。问界新M8，由赛力斯与华为双方联合设计与开发。](https://www.cls.cn/detail/2493419) · cls
+- [通鼎互联：拟1亿元收购南京和本机电14.2984%股权](https://www.cls.cn/detail/2493417) · cls
+- [财联社9月27日电，万科表示，其子公司获得2亿元人民币的一年期贷款展期。](https://www.cls.cn/detail/2493416) · cls
+- [竞业达：实控人、董事长钱瑞解除留置](https://www.cls.cn/detail/2493412) · cls
+- [中国海警位黄岩岛附近海域组织维权执法管控演练](https://www.cls.cn/detail/2493410) · cls
+- [中科飞测：实控人的一致行动人拟减持不超0.28%股份](https://www.cls.cn/detail/2493409) · cls
+- [拉夫罗夫：“俄想与欧洲开战”的说法是无稽之谈](https://www.cls.cn/detail/2493408) · cls
+- [【风口研报·公司】厄尔尼诺催化豆粕价格上行，这家公司生物发酵饲料提价预期+产能增长形成共振，跨界光电芯片封装打开科技新曲线；供给侧监管持续+行业提价，这家公司不单具有行业β，还有AI赋能等看点](https://www.cls.cn/detail/2493385) · cls
+- [中国人民解放军南部战区位黄岩岛周边海空域组织海空联合演训](https://www.cls.cn/detail/2493406) · cls
+- [民调：默茨领导的联盟党支持率跌至议会选举期以来最低](https://www.cls.cn/detail/2493405) · cls
+- [韩正出席第81届联合国大会一般性辩论并发表讲话](https://www.cls.cn/detail/2493401) · cls
+- [潮州港首艘运载粮食外轮顺利直靠](https://www.cls.cn/detail/2493399) · cls
+- [【电报解读】特斯拉近几个月已将其Optimus人形机器人的产量提升约10倍！分析师强Call特斯拉机器人投资方向应当聚焦“强确定性”和“以量产为导向的技术升级方向”，这家公司已与特斯拉开展多年业务合作](https://www.cls.cn/detail/2493325) · cls
+- [中国秘鲁进境水果监管互认新模式首次在“钱凯—上海”海运航线中试点应用](https://www.cls.cn/detail/2493398) · cls
+- [阿曼称将继续努力保障霍尔木兹海峡通行安全](https://www.cls.cn/detail/2493397) · cls
+- [财联社9月27日电，伊朗称在重新开放霍尔木兹海峡的条件上绝不退让。](https://www.cls.cn/detail/2493396) · cls
+- [冰岛外长驳斥以总理道德懦夫言论](https://www.cls.cn/detail/2493393) · cls
+- [陈茂波：国家为香港发展提供更广阔舞台](https://www.cls.cn/detail/2493391) · cls
+- [美中航空遗产基金会主席：中美应彼此理解 求同存异 携手共进](https://www.cls.cn/detail/2493390) · cls
+- [哈萨克斯坦总统解除国防部长职务](https://www.cls.cn/detail/2493384) · cls
+- [淄博市具身智能机器人训练场投用](https://www.cls.cn/detail/2493383) · cls
 - [到2030年规模突破3000亿元 浙江全链条打造海洋清洁能源产业集群](https://www.cls.cn/detail/2493382) · cls
 - [俄外长说必须解决巴勒斯坦建国问题](https://www.cls.cn/detail/2493380) · cls
 - [财联社9月27日电，阿玛尼将与路威酩轩（LVMH）、欧莱雅开启股权出售谈判。](https://www.cls.cn/detail/2493379) · cls
@@ -32,28 +62,11 @@
 - [嘉陵江特大桥顺利合龙 阆中至营山通勤将缩至40分钟](https://www.cls.cn/detail/2493363) · cls
 - [利比亚主要输油管道恢复输送原油](https://www.cls.cn/detail/2493362) · cls
 - [中国移动、中国电信、中国联通，集中叫停“0元购机”](https://www.cls.cn/detail/2493361) · cls
-- [滹沱河供水工程正式向太原市供水 年引水能力可达3000万立方米](https://www.cls.cn/detail/2493360) · cls
-- [伊朗外长：等待调解方转达重开海峡计划美方最终意见](https://www.cls.cn/detail/2493359) · cls
-- [上海美国商会会长称中美关系降为在华企业第二大挑战](https://www.cls.cn/detail/2493358) · cls
-- [国务院安委办、应急管理部调度抽查5省市中秋假期安全防范暗访检查工作](https://www.cls.cn/detail/2493357) · cls
-- [俄德外长在俄乌冲突后首次会面](https://www.cls.cn/detail/2493356) · cls
-- [长三角铁路迎来返程高峰 预计今日发送旅客332万人次](https://www.cls.cn/detail/2493355) · cls
-- [华西至江淮阴雨模式持续 月底我国或迎下半年来最强冷空气](https://www.cls.cn/detail/2493352) · cls
-- [第48届世界技能大赛将于今晚闭幕](https://www.cls.cn/detail/2493354) · cls
-- [黑河（步行）口岸对外开放通过国家验收](https://www.cls.cn/detail/2493350) · cls
-- [古巴外长：美持续对古封锁是“集体惩罚”](https://www.cls.cn/detail/2493348) · cls
-- [俄外长：约旦河西岸局势正迅速恶化](https://www.cls.cn/detail/2493347) · cls
-- [俄称控制多个居民点 乌称发动多次进攻](https://www.cls.cn/detail/2493346) · cls
-- [中国人民解放军南部战区位黄岩岛周边海空域组织海空联合演训](https://www.cls.cn/detail/2493344) · cls
-- [欧盟承诺向撒哈拉以南非洲及巴勒斯坦等国提供逾7亿欧元援助](https://www.cls.cn/detail/2493343) · cls
-- [鄂尔多斯盆地探明千亿方深层煤层气田](https://www.cls.cn/detail/2493341) · cls
-- [大熊猫“平平”“福双”已启程赴美](https://www.cls.cn/detail/2493339) · cls
-- [沙特称霍尔木兹海峡须恢复至“战前状态”](https://www.cls.cn/detail/2493336) · cls
-- [特朗普称美国和古巴会达成协议](https://www.cls.cn/detail/2493335) · cls
-- [伊朗外长: 霍尔木兹海峡开放取决于伊方条件是否满足](https://www.cls.cn/detail/2493333) · cls
-- [四川宜宾市长宁县发生3.9级地震 震源深度5公里](https://www.cls.cn/detail/2493332) · cls
-- [俄外长：西方为遏制俄罗斯而摧毁欧洲安全体系](https://www.cls.cn/detail/2493330) · cls
-- [以军袭击加沙多地 致多人死伤](https://www.cls.cn/detail/2493329) · cls
+- [俄外长称俄想和欧洲开战是无稽之谈](https://wallstreetcn.com/livenews/3171026) · wallstreetcn
+- [韩正出席第81届联合国大会一般性辩论并发表讲话](https://wallstreetcn.com/livenews/3171025) · wallstreetcn
+- [阿曼称将继续努力保障霍尔木兹海峡通行安全](https://wallstreetcn.com/livenews/3171024) · wallstreetcn
+- [香港财政司司长陈茂波：国家为港发展提供更广阔舞台](https://wallstreetcn.com/livenews/3171023) · wallstreetcn
+- [我国启动研制商业航天育种专用卫星](https://wallstreetcn.com/livenews/3171022) · wallstreetcn
 - [接连发生失控事件，OpenAI再次暂停其最先进模型训练](https://wallstreetcn.com/livenews/3171021) · wallstreetcn
 - [火车票预约购票试点服务调整预约日期范围](https://wallstreetcn.com/livenews/3171020) · wallstreetcn
 - [利比亚主要输油管道恢复输送原油](https://wallstreetcn.com/livenews/3171019) · wallstreetcn
@@ -79,11 +92,24 @@
 - [阿塞拜疆签署总价值超过100亿美元的投资协议](https://wallstreetcn.com/livenews/3170995) · wallstreetcn
 - [山西省省长：要加速扭转煤炭产量下滑趋势](https://wallstreetcn.com/livenews/3170983) · wallstreetcn
 - [理想汽车官微抽奖罗永浩中奖，奖品为iPhone17 Pro Max，网友调侃：以为是P的](https://wallstreetcn.com/livenews/3170982) · wallstreetcn
-- [英国伦敦希思罗机场第三条跑道将推迟至2039年建成。](https://wallstreetcn.com/livenews/3170980) · wallstreetcn
-- [乌克兰称袭击俄罗斯南部伊尔斯基炼油厂](https://wallstreetcn.com/livenews/3170984) · wallstreetcn
-- [亚投行拟扩大印度水务融资，厄尔尼诺持续加剧](https://wallstreetcn.com/livenews/3170991) · wallstreetcn
-- [泰国多地强降雨致交通受阻 政府启动24小时游客援助机制](https://wallstreetcn.com/livenews/3170979) · wallstreetcn
-- [外交部：关于人工智能表述问题，中方重视美方立场也尊重美方提法](https://wallstreetcn.com/livenews/3170978) · wallstreetcn
+- [雷纳表示，英国工党在伯纳姆领导下比在斯塔默领导下处境更好。](https://www.fastbull.com/cn/fastshort/4296722_212_1) · fastbull
+- [英国住房大臣安吉拉·雷纳表示，她支持马哈茂德建立更公平的移民制度。](https://www.fastbull.com/cn/fastshort/4296718_212_1) · fastbull
+- [中国海警在黄岩岛附近维权执法管控演练。](https://www.fastbull.com/cn/fastshort/4296717_214_1) · fastbull
+- [据天空新闻：英国格洛斯特郡警方表示，多名男子因涉嫌违反爆炸物法被逮捕，此前费尔福德空军基地加强了安全措施。](https://www.fastbull.com/cn/fastshort/4296712_1_1) · fastbull
+- [拉夫罗夫：“俄想与欧洲开战”的说法是无稽之谈。](https://www.fastbull.com/cn/fastshort/4296711_204_1) · fastbull
+- [以色列国防军称，已击毙在10月7日袭击中绑架人质的武装分子。](https://www.fastbull.com/cn/fastshort/4296710_212_1) · fastbull
+- [民调：默茨领导的联盟党支持率跌至议会选举期以来最低。](https://www.fastbull.com/cn/fastshort/4296707_204_1) · fastbull
+- [市场消息：伊朗议会周日举行线上全体会议，继续审议一项反外国渗透法案。](https://www.fastbull.com/cn/fastshort/4296705_212_1) · fastbull
+- [哈萨克斯坦总统网27日发布消息说，总统托卡耶夫当天签署法令，任命艾多斯·梅尔扎赫梅托夫为新国防部长。](https://www.fastbull.com/cn/fastshort/4296702_212_1) · fastbull
+- [市场消息：以色列将对约旦河西岸实施“全面封锁”，直至下周六。](https://www.fastbull.com/cn/fastshort/4296699_212_1) · fastbull
+- [以色列国防军称，为回应爆炸性无人机袭击，已对真主党目标实施打击。](https://www.fastbull.com/cn/fastshort/4296697_212_1) · fastbull
+- [市场消息：沙特利雅得地区本周线下授课突然暂停，切换线上教学，教育部暂未发布官方说明。](https://www.fastbull.com/cn/fastshort/4296693_212_1) · fastbull
+- [阿曼称将继续努力保障霍尔木兹海峡通行安全。](https://www.fastbull.com/cn/fastshort/4296690_214_1) · fastbull
+- [伊朗称在重新开放霍尔木兹海峡的条件上绝不退让。](https://www.fastbull.com/cn/fastshort/4296686_212_1) · fastbull
+- [冰岛外长驳斥以总理道德懦夫言论。](https://www.fastbull.com/cn/fastshort/4296684_204_1) · fastbull
+- [俄罗斯国防部：防空系统昨晚在多个地区击落了96架乌克兰无人机。](https://www.fastbull.com/cn/fastshort/4296681_1_1) · fastbull
+- [美国能源部长赖特：美军正在协助石油、天然气和化肥通过霍尔木兹海峡，每天有近1300万桶石油经由霍尔木兹海峡运输。](https://www.fastbull.com/cn/fastshort/4296679_1_1) · fastbull
+- [加拿大外长：加拿大在伊朗问题上的立场是明确且毫不含糊的。伊朗是其所在地区和平与安全的主要威胁，决不能让其拥有核武器。](https://www.fastbull.com/cn/fastshort/4296673_212_1) · fastbull
 - [据哈萨克斯坦总统网消息，总统托卡耶夫27日签署总统令，解除科萨诺夫的国防部长职务。](https://www.fastbull.com/cn/fastshort/4296670_212_1) · fastbull
 - [俄外长：必须解决巴勒斯坦建国问题。](https://www.fastbull.com/cn/fastshort/4296664_214_1) · fastbull
 - [韩国今年超额税收收入预计将超过50万亿韩元。](https://www.fastbull.com/cn/fastshort/4296660_214_1) · fastbull
@@ -96,54 +122,57 @@
 - [玉渊潭天：中美关系，需要一个穿越时间的答案。](https://www.fastbull.com/cn/fastshort/4296643_214_1) · fastbull
 - [俄罗斯外长拉夫罗夫与德国外长瓦德富尔26日在纽约联合国总部举行简短会见。这是两国外长自2022年俄乌冲突以来的首次会见。](https://www.fastbull.com/cn/fastshort/4296641_212_1) · fastbull
 - [美国总统特朗普：我们拥有有史以来最出色的财务数据，而假新闻媒体却拒绝报道。](https://www.fastbull.com/cn/fastshort/4296636_1_1) · fastbull
-- [古巴外长：美持续对古封锁是“集体惩罚”。](https://www.fastbull.com/cn/fastshort/4296626_214_1) · fastbull
-- [俄外长：约旦河西岸局势正迅速恶化。](https://www.fastbull.com/cn/fastshort/4296624_214_1) · fastbull
-- [纽约原油暗盘跌破95美元，日内跌超1%。](https://www.fastbull.com/cn/fastshort/4296621_212_1) · fastbull
-- [美国总统特朗普：如果共和党获胜，所有成年人将获得5000美元红利，而民主党做不到这一点。](https://www.fastbull.com/cn/fastshort/4296617_1_1) · fastbull
-- [中国人民解放军南部战区位黄岩岛周边海空域组织海空联合演训。](https://www.fastbull.com/cn/fastshort/4296615_214_1) · fastbull
-- [欧盟承诺向撒哈拉以南非洲及巴勒斯坦等国提供逾7亿欧元援助。](https://www.fastbull.com/cn/fastshort/4296614_204_1) · fastbull
-- [美国财长贝森特：感谢英国、土耳其、阿曼和阿联酋政府，我们将继续通力合作。](https://www.fastbull.com/cn/fastshort/4296610_212_1) · fastbull
-- [美国财长贝森特：伊朗里亚尔的价值已跌至历史最低点。](https://www.fastbull.com/cn/fastshort/4296609_212_1) · fastbull
-- [美国财长贝森特：经济弃儿行动（经济封锁）在伊朗取得成效。](https://www.fastbull.com/cn/fastshort/4296608_212_1) · fastbull
-- [沙特称霍尔木兹海峡须恢复至“战前状态”。](https://www.fastbull.com/cn/fastshort/4296607_204_1) · fastbull
-- [特朗普称美国和古巴会达成协议。](https://www.fastbull.com/cn/fastshort/4296606_204_1) · fastbull
-- [市场资讯：自数小时前起，已有超过10枚伊朗巡航导弹和自杀式无人机从该国南部地区向霍尔木兹海峡南部违反禁令的船只发射。](https://www.fastbull.com/cn/fastshort/4296603_212_1) · fastbull
-- [阿曼外交大臣：阿曼将继续致力于保障霍尔木兹海峡的航行安全，敦促相关各方通过克制、对话和政治途径来解决分歧。](https://www.fastbull.com/cn/fastshort/4296602_212_1) · fastbull
-- [也门政府军指控胡塞武装使用伊朗提供的防空武器，对红海上空的民用和军用飞机构成威胁。](https://www.fastbull.com/cn/fastshort/4296601_212_1) · fastbull
-- [美国将下调汽车燃油经济性要求，油耗与排放或上升。](https://www.fastbull.com/cn/fastshort/4296599_214_1) · fastbull
-- [美媒：美俄联手修改AI武器协议，删除多项安全保障条款。](https://www.fastbull.com/cn/fastshort/4296598_214_1) · fastbull
-- [伊朗总统：对沙特阿拉伯、土耳其和巴基斯坦之间达成的协议表示欢迎。](https://www.fastbull.com/cn/fastshort/4296596_212_1) · fastbull
-- [伊朗总统：根据联合国决议，任何允许他国利用其领空对其他国家发动袭击的国家，均构成犯罪。地区国家采取的这一举措，构成了对战争的共谋。](https://www.fastbull.com/cn/fastshort/4296595_212_1) · fastbull
-- [到2030年规模突破3000亿元 浙江全链条打造海洋清洁能源产业集群](https://flash.jin10.com/detail/20260927124231840800) · jin10
-- [黄金投资者周报上新！](https://flash.jin10.com/detail/20260927122740013800) · jin10
-- [途家：中秋国庆宝藏小城民宿预订量同比增长超三成](https://flash.jin10.com/detail/20260927122702610800) · jin10
-- [我国启动研制商业航天育种专用卫星](https://flash.jin10.com/detail/20260927121732080800) · jin10
-- [一周展望：非农与PCE考验美联储利率路径，特朗普一句话再掀地缘波澜？](https://flash.jin10.com/detail/20260927120840508800) · jin10
-- [市场消息：阿玛尼将与路威酩轩（LVMH）、欧莱雅开启股权出售谈判。](https://flash.jin10.com/detail/20260927120542397800) · jin10
-- [俄外长：必须解决巴勒斯坦建国问题](https://flash.jin10.com/detail/20260927120507900800) · jin10
-- [独立报告：OpenAI智能体攻击联合国网站](https://flash.jin10.com/detail/20260927115530165800) · jin10
-- [在轨4个多月 神二十三乘组完成载荷进出舱等多项工作](https://flash.jin10.com/detail/20260927114508963800) · jin10
-- [日本外务省：日本首相高市早苗在与美国总统特朗普的通话中围绕包括经济安全在内的各项议题交换了意见。两国领导人再次确认了坚如磐石的日美同盟关系，并一致同意共同为地区及世界的和平与稳定作出贡献。](https://flash.jin10.com/detail/20260927113203266800) · jin10
-- [韩国今年超额税收收入预计将超过50万亿韩元](https://flash.jin10.com/detail/20260927112644515800) · jin10
-- [北方国际：与北方矿业存在业务协同，但不存在同业竞争关系](https://flash.jin10.com/detail/20260927111232619800) · jin10
-- [据韩联社：韩国总统李在明结束美墨之行启程回国。](https://flash.jin10.com/detail/20260927111146210800) · jin10
-- [日本外务省：美国总统特朗普和日本首相高市早苗于格林尼治时间周六12:00（北京时间周六20:00）进行了约20分钟的电话交谈。](https://flash.jin10.com/detail/20260927111010638800) · jin10
-- [Plus图表](https://flash.jin10.com/detail/20260927110137815800) · jin10
-- [嘉陵江特大桥顺利合龙 阆中至营山通勤将缩至40分钟](https://flash.jin10.com/detail/20260927105403397800) · jin10
-- [美中贸易全国委员会会长谭森：中美经贸关系至关重要、不可或缺](https://flash.jin10.com/detail/20260927103533327800) · jin10
-- [利比亚主要输油管道恢复输送原油](https://flash.jin10.com/detail/20260927102351389800) · jin10
-- [海湾地区原油出口量自战争爆发以来首次突破X000万桶/日](https://flash.jin10.com/detail/20260927101715099800) · jin10
-- [中国移动、中国电信、中国联通，集中叫停“0元购机”](https://flash.jin10.com/detail/20260927100853005800) · jin10
-- [上海美国商会会长：中美关系降为在华企业第二大挑战](https://flash.jin10.com/detail/20260927100352515800) · jin10
-- [国务院安委办、应急管理部调度抽查5省市中秋假期安全防范暗访检查工作](https://flash.jin10.com/detail/20260927095120553800) · jin10
-- [玉渊潭天：中美关系，需要一个穿越时间的答案](https://flash.jin10.com/detail/20260927095008444800) · jin10
-- [伊朗外长：不会在既定条件上向美国让步](https://flash.jin10.com/detail/20260927094308854800) · jin10
-- [长三角铁路迎来返程高峰，预计今日发送旅客332万人次](https://flash.jin10.com/detail/20260927093719178800) · jin10
-- [美国总统特朗普周日日程一览](https://flash.jin10.com/detail/20260927093627622800) · jin10
-- [LG电子携手英伟达，共推AI数据中心散热解决方案](https://flash.jin10.com/detail/20260927093611579800) · jin10
-- [据报道，伊朗再次在霍尔木兹海峡阿曼方的“非法航道”上布雷，报道称，其早些时候射入霍尔木兹海峡的导弹中，至少有一部分携带了水雷，目前尚不清楚伊朗共投放了多少枚此类水雷，也不清楚其布雷行动是否成功。（注：此消息在社交媒体上广泛传播，但尚未有伊朗方面主流媒体报道，请投资者注意甄别）](https://flash.jin10.com/detail/20260927093216666800) · jin10
-- [9折解锁2大VIP持仓新功能！](https://flash.jin10.com/detail/20260927091651122800) · jin10
-- [&lt;a href=&quot;https://www.jin10.com/activities/2026/9/year2/index.html&quot; target=&quot;&#95;blank&quot;&gt;&lt;img src=&quot;https://img.jin10.com/misc/26/09/Y4rS2FAvCkLx2GqxIGUnB.jpg/lite&quot; height=&quot;120&quot;/&gt;&lt;/a&gt;](https://flash.jin10.com/detail/20260927091649189800) · jin10
+- [万科A公布子公司贷款担保进展](https://flash.jin10.com/detail/20260927154441038800) · jin10
+- [ST万邦：股票交易异常波动 控股股东正筹划股份协议转让](https://flash.jin10.com/detail/20260927153811250800) · jin10
+- [东方中科：股票交易异常波动 提示相关风险事项](https://flash.jin10.com/detail/20260927153507510800) · jin10
+- [中国海警在黄岩岛附近维权执法管控演练](https://flash.jin10.com/detail/20260927153448047800) · jin10
+- [中岩大地：拟收购并增资取得鑫寰宇60%股权](https://flash.jin10.com/detail/20260927153321215800) · jin10
+- [据天空新闻：英国格洛斯特郡警方表示，军队的专业爆炸物处理小组正在检查多辆车辆。](https://flash.jin10.com/detail/20260927153201047800) · jin10
+- [据天空新闻：英国格洛斯特郡警方表示，多名男子因涉嫌违反爆炸物法被逮捕，此前费尔福德空军基地加强了安全措施。](https://flash.jin10.com/detail/20260927153120670800) · jin10
+- [2026国庆档新片预售票房破2000万](https://flash.jin10.com/detail/20260927152613994800) · jin10
+- [多地迎中秋返程客流高峰](https://flash.jin10.com/detail/20260927152229028800) · jin10
+- [民调：默茨领导的联盟党支持率跌至议会选举期以来最低](https://flash.jin10.com/detail/20260927151913803800) · jin10
+- [伊媒：纽约会谈背后，美国已将镐山问题与霍尔木兹海峡联系起来](https://flash.jin10.com/detail/20260927151830746800) · jin10
+- [潮州港首艘运载粮食外轮顺利直靠](https://flash.jin10.com/detail/20260927150650975800) · jin10
+- [哈萨克斯坦总统任命新国防部长](https://flash.jin10.com/detail/20260927145708932800) · jin10
+- [市场消息：以色列将对约旦河西岸实施“全面封锁”，直至下周六。](https://flash.jin10.com/detail/20260927144429363800) · jin10
+- [以色列国防军：以军对黎巴嫩南部多个地区的真主党目标实施打击，其中包括真主党曾用于向以军士兵发射爆炸性无人机和反坦克导弹的据点。此次打击发生在真主党于昨晚向在安全区执行任务的以军士兵发射了一架爆炸性无人机之后。](https://flash.jin10.com/detail/20260927143617846800) · jin10
+- [韩正出席第81届联合国大会一般性辩论并发表讲话](https://flash.jin10.com/detail/20260927143420262800) · jin10
+- [英媒：韩国正大力投入人工智能，力求实现全民覆盖](https://flash.jin10.com/detail/20260927142716297800) · jin10
+- [美国能源部长赖特： 特朗普决心阻止伊朗获得核武器。](https://flash.jin10.com/detail/20260927141319053800) · jin10
+- [阿曼称将继续努力保障霍尔木兹海峡通行安全](https://flash.jin10.com/detail/20260927141124284800) · jin10
+- [OpenAI与Anthropic首席执行官被传唤出席澳大利亚AI调查听证会](https://flash.jin10.com/detail/20260927140607158800) · jin10
+- [冰岛外长驳斥以总理道德懦夫言论](https://flash.jin10.com/detail/20260927140008850800) · jin10
+- [德黑兰证券指数重破720万点](https://flash.jin10.com/detail/20260927135919763800) · jin10
+- [南非一酒吧发生枪击事件致17人死亡](https://flash.jin10.com/detail/20260927135452319800) · jin10
+- [据伊通社（IRNA）：伊朗德兹富勒特别政府公关部门宣布，武装部队将于今天（周日）上午9点至10点在该县部分地区进行受控爆破，以处理弹药。呼吁市民不要轻信谣言，也无需恐慌。](https://flash.jin10.com/detail/20260927135423899800) · jin10
+- [俄罗斯国防部：防空系统昨晚在多个地区击落了96架乌克兰无人机。](https://flash.jin10.com/detail/20260927134701234800) · jin10
+- [美国能源部长赖特：美军正在协助石油、天然气和化肥通过霍尔木兹海峡，今天的日均运输量接近1300万桶。](https://flash.jin10.com/detail/20260927133818382800) · jin10
+- [据伊朗迈赫尔通讯社：伊朗外长阿拉格齐表示，他在联合国大会期间进行的所有会晤，都侧重于阐述德黑兰方面关于重开霍尔木兹海峡的条件。](https://flash.jin10.com/detail/20260927132428048800) · jin10
+- [亚投行行长邹加怡：为全球发展注入更多确定性](https://flash.jin10.com/detail/20260927132411323800) · jin10
+- [据伊朗劳工通讯社：美国驻联合国大使称，伊朗的外汇储备已经耗尽，该国获得美元的渠道也减少了。](https://flash.jin10.com/detail/20260927131758189800) · jin10
+- [China Coast Guard holds enforcement drills near Huangyan Island; vows stepped-up patrols](https://mktnews.net/flashDetail.html?id=01a0e1c9-da0e-7118-86ac-4f2ba26693d2) · mktnews
+- [Gloucestershire police said the Army&#x27;s specialist explosive ordnance disposal teams are examining multiple vehicles.](https://mktnews.net/flashDetail.html?id=01a0e1c7-3734-7118-86ac-42e80a1f8fd1) · mktnews
+- [Sky News reported Gloucestershire police said several men were arrested under the Explosives Act after security at RAF Fairford was tightened.](https://mktnews.net/flashDetail.html?id=01a0e1c6-a588-7118-86ac-3e8b73a0272b) · mktnews
+- [2026 National Day slate pre-sales top 20 mln yuan](https://mktnews.net/flashDetail.html?id=01a0e1c2-02dc-7118-86ac-32a9b914267e) · mktnews
+- [Mid-Autumn holiday return-travel peaks across many regions](https://mktnews.net/flashDetail.html?id=01a0e1be-9b85-7118-86ac-297247da644f) · mktnews
+- [Chaozhou port receives first directly‑berthed foreign vessel carrying soybeans](https://mktnews.net/flashDetail.html?id=01a0e1b0-4452-7118-86ac-21422cadd580) · mktnews
+- [Kazakh president appoints new defense minister](https://mktnews.net/flashDetail.html?id=01a0e1a7-63f4-7118-86ac-18315244ef58) · mktnews
+- [Israel will impose a &quot;complete lockdown&quot; on the West Bank until next Saturday.](https://mktnews.net/flashDetail.html?id=01a0e19b-b6f3-7118-86ac-16ffa067573e) · mktnews
+- [The Israel Defense Forces &#40;IDF&#41; said it struck multiple Hezbollah targets in southern Lebanon, including positions previously used to launch explosive drones and anti‑tank missiles at Israeli troops. The strikes followed Hezbollah firing an explosive drone at Israeli soldiers on duty in the security zone last night.](https://mktnews.net/flashDetail.html?id=01a0e194-3e3b-7118-86ac-0fb2471381e7) · mktnews
+- [Han Zheng addresses 81st UN General Assembly in New York](https://mktnews.net/flashDetail.html?id=01a0e192-858f-7118-86ac-0331410adc7f) · mktnews
+- [South Korea accelerates AI push aiming for universal access](https://mktnews.net/flashDetail.html?id=01a0e18c-2a27-7118-86ab-fc33e753f277) · mktnews
+- [US Energy Secretary Wright said Trump is determined to prevent Iran from obtaining nuclear weapons.](https://mktnews.net/flashDetail.html?id=01a0e17f-4295-7118-86ab-f0a883be3c6a) · mktnews
+- [Oman says it will continue efforts to safeguard Strait of Hormuz navigation](https://mktnews.net/flashDetail.html?id=01a0e17d-a3d1-7118-86ab-eacec936b6f3) · mktnews
+- [OpenAI and Anthropic CEOs subpoenaed to Australian Senate AI inquiry](https://mktnews.net/flashDetail.html?id=01a0e178-c4d9-7118-86ab-e6e79263e498) · mktnews
+- [Iceland foreign minister rebukes Netanyahu &#x27;moral cowards&#x27; comment](https://mktnews.net/flashDetail.html?id=01a0e173-67c2-7118-86ab-df50a0f1643b) · mktnews
+- [17 killed in South African bar shooting](https://mktnews.net/flashDetail.html?id=01a0e16e-5478-7118-86ab-d55a29afb11b) · mktnews
+- [Russian Defence Ministry said its air-defence systems shot down 96 Ukrainian drones overnight across multiple regions.](https://mktnews.net/flashDetail.html?id=01a0e167-1f5f-7118-86ab-cc6c7b02a815) · mktnews
+- [US Energy Secretary Wright said the US military is assisting shipments of oil, natural gas and fertilizer through the Strait of Hormuz; nearly 13 mln barrels per day transit the strait.](https://mktnews.net/flashDetail.html?id=01a0e15f-6f55-7118-86ab-c155e9636fde) · mktnews
+- [AIIB to double annual approved lending to about $20bn by 2030, president says](https://mktnews.net/flashDetail.html?id=01a0e152-9c5c-7118-86ab-bd2abe66b297) · mktnews
+- [Paul Chan: Mainland offers broader platform for Hong Kong development](https://mktnews.net/flashDetail.html?id=01a0e148-d60a-7118-86ab-b310eb485222) · mktnews
+- [Zibo opens embodied-intelligence robot training facility; 40+ units deployed across six industry scenarios](https://mktnews.net/flashDetail.html?id=01a0e13b-a3ed-7118-86ab-a8b4f8cde660) · mktnews
+- [Kazakh president dismisses defense minister](https://mktnews.net/flashDetail.html?id=01a0e12f-cc62-7118-86ab-a1c0eb11ad6f) · mktnews
 - [Zhejiang targets &gt;300 bln yuan marine clean‑energy industry by 2030, offshore wind &gt;10 GW](https://mktnews.net/flashDetail.html?id=01a0e12c-5250-7118-86ab-9b82191ae402) · mktnews
 - [China starts development of first commercial space‑breeding satellite](https://mktnews.net/flashDetail.html?id=01a0e115-4604-7118-86ab-968e89bfb66e) · mktnews
 - [Market sources say Armani will open talks with LVMH and L&#x27;Oréal on a stake sale.](https://mktnews.net/flashDetail.html?id=01a0e10a-5b3b-7118-86ab-88cdc9c563fd) · mktnews
@@ -152,28 +181,10 @@
 - [Shenzhou-23 crew over four months on orbit complete payload ingress/egress, multiple experiments](https://mktnews.net/flashDetail.html?id=01a0e0f7-b94f-7118-86ab-72da11c885fc) · mktnews
 - [South Korea excess tax revenue this year may exceed 50 tln won](https://mktnews.net/flashDetail.html?id=01a0e0e6-c033-7118-86ab-6c7481c0eb3c) · mktnews
 - [YONHAP said SOUTH KOREA&#x27;S LEE has ended his US-Mexico trip and departed for home.](https://mktnews.net/flashDetail.html?id=01a0e0d8-fa86-7118-86ab-6457a78476b9) · mktnews
-- [Japan&#x27;s Foreign Ministry said US President Trump and Japanese Prime Minister Takaichi spoke by phone for about 20 minutes at 1200 GMT Saturday &#40;2000 Beijing time&#41;.](https://mktnews.net/flashDetail.html?id=01a0e0d7-8463-7118-86ab-5db4bb760ce0) · mktnews
-- [Jialing River bridge closed; Langzhong–Yingshan commute to shrink to 40 minutes](https://mktnews.net/flashDetail.html?id=01a0e0c8-dbd5-7118-86ab-50bbdcec8a5d) · mktnews
-- [U.S.-China Business Council chair Tan Sen says US-China trade ties critical and indispensable](https://mktnews.net/flashDetail.html?id=01a0e0b7-deca-7118-86ab-4de0b7244448) · mktnews
-- [Libya&#x27;s main oil pipeline resumes crude flows](https://mktnews.net/flashDetail.html?id=01a0e0ad-2fa1-7118-86ab-40d2a610df52) · mktnews
-- [Shanghai AmCham president: US-China ties now firms&#x27; second-biggest challenge](https://mktnews.net/flashDetail.html?id=01a0e09a-ddcc-7118-86ab-3aad85493bea) · mktnews
-- [State Council work-safety office, Ministry of Emergency Management video spot-checks holiday safety inspections in five provinces/municipalities](https://mktnews.net/flashDetail.html?id=01a0e08f-81b2-7118-86ab-330bbf684530) · mktnews
-- [US-China ties need a durable, long-term solution](https://mktnews.net/flashDetail.html?id=01a0e08e-52d7-7118-86ab-2f8b54986dcd) · mktnews
-- [Iran foreign minister says will not yield to US on set conditions](https://mktnews.net/flashDetail.html?id=01a0e087-e949-7118-86ab-20399163ac34) · mktnews
-- [Yangtze River Delta railways face return peak; 3.32 mln passengers expected Sept 27](https://mktnews.net/flashDetail.html?id=01a0e082-997e-7118-86ab-1c6e50fa1dd7) · mktnews
-- [LG Electronics teams with NVIDIA to push AI data-center cooling solutions](https://mktnews.net/flashDetail.html?id=01a0e081-8908-7118-86ab-17d27af0f9e4) · mktnews
-- [Trump said the U.S. has its best-ever financial data and accused the fake-news media of refusing to report it.](https://mktnews.net/flashDetail.html?id=01a0e061-2664-7118-86ab-0fedbc363c9c) · mktnews
-- [RIA: Poll shows support for Merz-led CDU/CSU bloc falls to 19%.](https://mktnews.net/flashDetail.html?id=01a0e05f-625e-7118-86ab-016cd7bce84f) · mktnews
-- [Heihe &#40;pedestrian&#41; port passes national acceptance for opening to foreign traffic](https://mktnews.net/flashDetail.html?id=01a0e053-8326-7118-86aa-fcc028b0c3f3) · mktnews
-- [Cuban foreign minister says US blockade is &quot;collective punishment&quot;](https://mktnews.net/flashDetail.html?id=01a0e043-7ccb-7118-86aa-f26634479169) · mktnews
-- [Lavrov says West Bank situation rapidly deteriorating](https://mktnews.net/flashDetail.html?id=01a0e042-fcea-7118-86aa-e9de1b96da8f) · mktnews
-- [Axios: OpenAI and Anthropic probe tens of thousands of AI safety incidents](https://mktnews.net/flashDetail.html?id=01a0e042-86be-7118-86aa-e238e302bb9d) · mktnews
-- [Russia says it seized three settlements; Ukraine reports multiple attacks](https://mktnews.net/flashDetail.html?id=01a0e039-d894-7118-86aa-da5f3cf5d8ae) · mktnews
-- [Saudi says Strait of Hormuz must be restored to &quot;pre-conflict state&quot;](https://mktnews.net/flashDetail.html?id=01a0e038-819e-7118-86aa-d47e03611f80) · mktnews
-- [U.S. President Trump said if Republicans win, every adult would receive a $5,000 payout, and Democrats could not deliver that.](https://mktnews.net/flashDetail.html?id=01a0e037-6dec-7118-86aa-ca2a7a4df04e) · mktnews
-- [PLA Southern Theater Command conducts sea‑air drills around Scarborough Shoal](https://mktnews.net/flashDetail.html?id=01a0e02f-a178-7118-86aa-c13aca4ad145) · mktnews
-- [U.S. to lower vehicle fuel-economy standards; fuel use and emissions likely to rise](https://mktnews.net/flashDetail.html?id=01a0dfca-fac6-7118-86aa-beb484f65139) · mktnews
-- [Iran foreign minister says Strait of Hormuz reopening hinges on Iran&#x27;s conditions](https://mktnews.net/flashDetail.html?id=01a0dfb3-facc-7118-86aa-b30df1b515fe) · mktnews
+- [华纳药厂&#40;688799.SH&#41;：多名高管拟减持股份，合计最高减持 7 万股](https://www.gelonghui.com/news/5318222) · gelonghui
+- [醋化股份&#40;603968.SH&#41;：其余税款及滞纳金预计将于10月申报期完成纳税申报](https://www.gelonghui.com/news/5318221) · gelonghui
+- [彤程新材&#40;603650.SH&#41;：H股发行的最终价格为每股44.00港元](https://www.gelonghui.com/news/5318220) · gelonghui
+- [中科飞测&#40;688361.SH&#41;：实控人一致行动人小纳光拟减持不超0.28%股份](https://www.gelonghui.com/news/5318219) · gelonghui
 - [Nine Dragons Paper&#40;02689.HK&#41;：New projects strengthen pulp and paper integration; first dividend in nearly three years](https://www.gelonghui.com/news/5318218) · gelonghui
 - [恒瑞医药&#40;600276&#41;2026年中报点评：增长动能切换 创新与国际化加速](https://www.gelonghui.com/news/5318217) · gelonghui
 - [麒盛科技&#40;603610&#41;：与海外核心客户续签协议 国内深入布局](https://www.gelonghui.com/news/5318216) · gelonghui
@@ -185,30 +196,26 @@
 - [九龙仓置业&#40;01997.HK&#41;：核心资产禀赋凸出 稳健派息支撑长期价值](https://www.gelonghui.com/news/5318210) · gelonghui
 - [理想汽车-W&#40;2015.HK&#41;：全新理想i9上市 36.98万元定价超预期](https://www.gelonghui.com/news/5318209) · gelonghui
 - [归创通桥&#40;02190.HK&#41;9月25日耗资115.7万港元回购5.4万股](https://www.gelonghui.com/news/5318196) · gelonghui
-- [吉辉控股&#40;08027.HK&#41;：林智深获委任为独立非执行董事](https://www.gelonghui.com/news/5318195) · gelonghui
-- [阿卡迈盘初飙升超16%，Anthropic大单引爆股价](https://www.gelonghui.com/news/5318194) · gelonghui
-- [美银：将AMD目标价上调至720美元](https://www.gelonghui.com/news/5318193) · gelonghui
-- [齐合环保&#40;00976.HK&#41;董事会会议延期 继续停牌 ](https://www.gelonghui.com/news/5318192) · gelonghui
 - [马上评｜全款买房被爽约，开发商“一房二卖”也应担责](https://www.thepaper.cn/newsDetail_forward_34156911) · thepaper
 - [41岁刘一峰任浙大数学科学学院院长，系北大数学“黄金一代”成员](https://www.thepaper.cn/newsDetail_forward_34156909) · thepaper
 - [王楚钦：打到第四局，那个疼痛有一点受不了](https://www.thepaper.cn/newsDetail_forward_34156819) · thepaper
 - [中美达成八点成果共识](https://www.thepaper.cn/newsDetail_forward_34155814) · thepaper
-- [纪念｜刘欢走了，“我和你”都会记得](https://www.thepaper.cn/newsDetail_forward_34154729) · thepaper
 - [纪念刘欢｜他的课总是座无虚席，老校长至今记得那句“当老师是一生的”](https://www.thepaper.cn/newsDetail_forward_34155681) · thepaper
 - [本世纪首次打进四强！中国U23男足战胜泰国队，晋级半决赛](https://www.thepaper.cn/newsDetail_forward_34155396) · thepaper
 - [言短意长｜领导公开手机号只是起点，民意连通不能止步于此](https://www.thepaper.cn/newsDetail_forward_34155815) · thepaper
-- [国庆假期潮州一民宿一晚155元涨到1486元？市监局：“涨价近十倍”的结论与实际情况不符](https://www.thepaper.cn/newsDetail_forward_34154650) · thepaper
-- [“动漫组合”亚运混双夺冠，中国队包揽金银牌](https://www.thepaper.cn/newsDetail_forward_34156607) · thepaper
-- [一个千古难遇的人｜《甄嬛传》编曲孟可忆刘欢](https://www.thepaper.cn/newsDetail_forward_34155380) · thepaper
-- [刘欢在跨年舞台上完成最后一次公开演出，“祝大家2026平安健康”](https://www.thepaper.cn/newsDetail_forward_34155066) · thepaper
-- [中国音乐家协会发文悼念刘欢：他的逝世是中国音乐界的重大损失](https://www.thepaper.cn/newsDetail_forward_34155907) · thepaper
-- [张本智和爆冷不敌伊朗老将，日本队无缘亚运会乒乓球男单四强](https://www.thepaper.cn/newsDetail_forward_34156367) · thepaper
-- [大熊猫“平平”“福双”已启程赴美](https://www.thepaper.cn/newsDetail_forward_34158849) · thepaper
 - [山西一景区3000万元招NPC，是话题营销还是突围之计？澎湃记者实地调查](https://www.thepaper.cn/newsDetail_forward_34149469) · thepaper
-- [国际关系学院悼念校友刘欢：心在梦在从头来，少年壮志不言愁](https://www.thepaper.cn/newsDetail_forward_34157290) · thepaper
 - [世赛完赛时刻：一群二十出头青年的笑和泪](https://www.thepaper.cn/newsDetail_forward_34157509) · thepaper
+- [“动漫组合”亚运混双夺冠，中国队包揽金银牌](https://www.thepaper.cn/newsDetail_forward_34156607) · thepaper
+- [中国音乐家协会发文悼念刘欢：他的逝世是中国音乐界的重大损失](https://www.thepaper.cn/newsDetail_forward_34155907) · thepaper
+- [大熊猫“平平”“福双”已启程赴美](https://www.thepaper.cn/newsDetail_forward_34158849) · thepaper
+- [张本智和爆冷不敌伊朗老将，日本队无缘亚运会乒乓球男单四强](https://www.thepaper.cn/newsDetail_forward_34156367) · thepaper
+- [国际关系学院悼念校友刘欢：心在梦在从头来，少年壮志不言愁](https://www.thepaper.cn/newsDetail_forward_34157290) · thepaper
 - [非常满意！孙颖莎：混双项目最重要的是信任](https://www.thepaper.cn/newsDetail_forward_34157034) · thepaper
 - [那英成都演唱会唱起《弯弯的月亮》，缅怀她的良师益友刘欢](https://www.thepaper.cn/newsDetail_forward_34157280) · thepaper
+- [何赛飞腰伤复发仍坚持演出，谢幕时落泪作揖谢观众](https://www.thepaper.cn/newsDetail_forward_34156749) · thepaper
+- [曾因虐猫被拘留的博主“杰克辣条”在家门口遭持刀伤害？物业称有个人恩怨，警方表示如有需要会发布案情](https://www.thepaper.cn/newsDetail_forward_34143765) · thepaper
+- [王毅谈习近平主席对美国进行国事访问](https://www.thepaper.cn/newsDetail_forward_34156496) · thepaper
+- [以色列大选前曝重磅内幕：哈马斯发动致命袭击前，内塔尼亚胡曾无视安全警告](https://www.thepaper.cn/newsDetail_forward_34155694) · thepaper
 
-[本批原始ZIP](../../sources/artifacts/0475c163c13ae616106128643626938ef75fd5ad3fb35bde95799a8ce607370f.zip)
+[本批原始ZIP](../../sources/artifacts/f09a29ccfebee3569e072bfbea766422d9ec372cf244f7e5d8697ec73d9c35dc.zip)
 [结构化窗口与版本](news-daily.json)

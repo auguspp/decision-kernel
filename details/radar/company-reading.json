@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "dc9f7c226b12406774d214089f4ae87deee3d387eaf858a87d361530e8442a73",
+    "base_reading_hash": "197ced62a85e08e32309905eea153afd3f2bfea7569b77b61434c2657a8bb723",
     "companies": [
       {
         "automatic_admission": false,
@@ -6024,7 +6024,7 @@
                 "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
                 "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "637c8757029c59f03af5687664d528e7a73422c4",
+                "ref": "86c1d2075d3679ef1b92788e49674f7eaf4f77b2",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
               },
@@ -6041,7 +6041,7 @@
                 "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
                 "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "637c8757029c59f03af5687664d528e7a73422c4",
+                "ref": "86c1d2075d3679ef1b92788e49674f7eaf4f77b2",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
               },
@@ -9182,7 +9182,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-27T06:03:00.575683+00:00",
+    "generated_at": "2026-09-27T07:51:23.532951+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -9213,8 +9213,8 @@
           "updated_at": "2026-09-18T09:21:06Z"
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
-        "pending_blob_writes": 2,
-        "retained_file_count": 121,
+        "pending_blob_writes": 3,
+        "retained_file_count": 122,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
       "concept_detail": {
@@ -9376,5 +9376,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "dea0f28ffe2e2b084e7cb21666b6e03d1702f654253a5f20d3c8683b77ae39b0"
+  "projection_hash": "2a09f25b637acf72205d908512d4b955c545c6fbd0800ac7c2acbcf91af2c2f6"
 }
