@@ -68,7 +68,11 @@ def rebuild(files, run, family, cutoff):
         m.check(module.encoded(report) == files['summary.json'], 'Global market saved summary differs')
     if 'summary.md' in files:
         m.check(module.render(report).encode() == files['summary.md'], 'Global market saved text differs')
-    return report
+    # Source replay can retain Decimal metadata (for example Yahoo meta prices).
+    # Use its already-verified native canonical representation at this JSON seam:
+    # exact decimal strings, no float conversion, dropped fields or raw rewriting.
+    # Apply on fresh AND prior replay so later Git recovery compares like with like.
+    return json.loads(module.encoded(report))
 
 
 def bound(c, ref, commit):
