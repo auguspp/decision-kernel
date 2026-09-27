@@ -56,11 +56,17 @@ async function withApp(run, fixture = {}) {
   const body = (ref, name) => `${ref}:${texts[name]}`;
   const file = (ref, name) => `https://raw.githubusercontent.com/${REPO}/${ref}/docs/odds-${name}.txt`;
   const fetcher = async (url, options) => {
-    assert.equal(options.method, 'GET'); assert.equal(options.credentials, 'omit');
+    assert.equal(options.method, 'GET');
+    if (url !== '/api/read-model/current-state') assert.equal(options.credentials, 'omit');
     assert.equal(options.body, undefined); assert.equal(options.headers?.Authorization, undefined);
     calls.push(url);
     let result;
     if (overrides.has(url)) result = await overrides.get(url)();
+    else if (url === '/api/read-model/current-state') {
+      assert.equal(options.credentials,'same-origin');
+      assert.equal(options.headers?.['X-Decision-Kernel-Intent'],'read-model-ref');
+      result = json({ref:READ_REF,commit:activeRef});
+    }
     else if (url.endsWith(`/git/ref/heads/${READ_REF}`)) result = json({ref: `refs/heads/${READ_REF}`, object: {type: 'commit', sha: activeRef}});
     else if (url.endsWith('/current-state.json')) {
       const ref = url.split('/').at(-2);

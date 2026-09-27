@@ -23,7 +23,8 @@ def test_workbench_reading_contracts():
     assert int(version.lstrip("v").split(".")[0]) >= 20
     for name in ("app.mjs", "reading.mjs", "presentation.mjs", "product.mjs", "news-markets.mjs", "on-demand.mjs",
                  "quick-inbox.mjs", "quick-inbox-ui.mjs", "server/quick-inbox-handler.mjs",
-                 "news-refresh.mjs", "server/news-refresh-handler.mjs", "server/owner-identity.mjs", "server/routes.mjs"):
+                 "news-refresh.mjs", "server/news-refresh-handler.mjs", "server/owner-identity.mjs",
+                 "server/reading-ref-handler.mjs", "server/routes.mjs"):
         syntax = subprocess.run([node, "--check", str(root / "workbench" / name)],
                                 capture_output=True, text=True, timeout=10)
         assert syntax.returncode == 0, syntax.stdout + syntax.stderr

@@ -42,6 +42,30 @@ test('a batch resolves its movable reading ref exactly once', async () => {
   assert.ok(calls.slice(1).every(url => url.includes(`/${R}/`)));
   assert.match(reading.validation, /NOT_RECOMPUTED/);
 });
+test('Site mode resolves only the pointer through same-origin then keeps exact-R raw reads', async () => {
+  const calls=[];
+  const fetcher=async(url,options={})=>{
+    calls.push({url:String(url),options});
+    if(url==='/api/read-model/current-state'){
+      assert.equal(options.credentials,'same-origin');
+      assert.equal(options.headers?.['X-Decision-Kernel-Intent'],'read-model-ref');
+      return new Response(JSON.stringify({ref:READ_REF,commit:R}),{headers:{'Content-Type':'application/json'}});
+    }
+    assert.equal(options.credentials,'omit');assert.equal(options.headers,undefined);
+    return transport(fixture).fetcher(url,options);
+  };
+  const reading=await openReading(fetcher,'/api/read-model/current-state');
+  assert.equal(reading.ref,R);assert.equal((await reading.readFile(reading.references[0])).text,text);
+  assert.equal(calls.some(c=>c.url.includes('/git/ref/heads/')),false);
+  assert.ok(calls.slice(1).every(c=>c.url.includes(`/${R}/`)));
+});
+test('Site pointer endpoint is fixed and malformed pointers fail before raw reads', async () => {
+  await assert.rejects(()=>openReading(async()=>new Response(JSON.stringify({ref:READ_REF,commit:'main'}),{headers:{'Content-Type':'application/json'}}),
+    '/api/read-model/current-state'),/UNPINNED_COMMIT/);
+  await assert.rejects(()=>openReading(async()=>new Response('{}',{headers:{'Content-Type':'application/json'}}),
+    '/api/read-model/current-state'),/WRONG_READING_REF/);
+  await assert.rejects(()=>openReading(async()=>new Response('{}'),'/api/other'),/UNSUPPORTED_READING_REF_ENDPOINT/);
+});
 test('reading values and descriptor inventory cannot silently change in memory', async () => {
   const reading = await openReading(transport(fixture).fetcher);
   assert.throws(() => { reading.payload.code_commit = R; }, TypeError);
