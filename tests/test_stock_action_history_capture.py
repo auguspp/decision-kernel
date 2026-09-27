@@ -88,14 +88,21 @@ def test_uniform_history_requests_retain_events_and_rebuild_partial_result(tmp_p
     assert p['human_attention_authority']==p['research_authority']==p['investment_authority']=='NONE'
 
 
-@pytest.mark.parametrize('status',[4001,2001,5003])
+# Code classification lives in test_stock_issuer_isolation; keep one real recorder/replay.
+@pytest.mark.parametrize('status',[5003])
 def test_history_request_does_not_retry_or_isolate_batch_fatal_codes(tmp_path,monkeypatch,status):
     mod,out,r,calls,_=scenario(tmp_path,monkeypatch,failure=status)
     assert r['status']==mod['FAILED'] and r['failure_category']=='REQUEST_FAILED'
     requests=[e for e in r['requests'] if e['path']==own.ACTIONS]
     assert len(requests)==1
+    assert mod['read'](out/requests[0]['response_file'])['code']==status
+    assert r['reason_code']=='PROVIDER_BUSINESS_REQUEST_FAILED'
     assert not (out/'stock-reading.json').exists()
-    assert mod['verify'](out)['network_calls']==0
+    replay=mod['verify'](out)
+    assert replay['network_calls']==0
+    assert replay['status']=='RETAINED_INCOMPLETE_ATTEMPT_NOT_STOCK_SELECTION'
+    assert replay['reason_code']==r['reason_code']
+    assert replay['failure_replay']=='REPRODUCED_FROM_RETAINED_INPUTS'
 
 
 @pytest.mark.parametrize('tamper',['add_from','remove_to','change_to','inject_recent_event'])
