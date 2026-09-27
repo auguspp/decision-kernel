@@ -37,7 +37,8 @@ def test_workbench_reading_contracts():
                              str(root / "workbench" / "on-demand.test.mjs"),
                              str(root / "workbench" / "quick-inbox.test.mjs"),
                              str(root / "workbench" / "news-refresh.test.mjs"),
-                             str(root / "workbench" / "owner-identity.test.mjs")],
+                             str(root / "workbench" / "owner-identity.test.mjs"),
+                             str(root / "workbench" / "reading-ref.test.mjs")],
                             cwd=root, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stdout + result.stderr
     # Node 23+ defaults to spec even with piped stdout. Select TAP explicitly.
