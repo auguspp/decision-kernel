@@ -102,7 +102,7 @@ test('news failure remains a gap and not zero; missing source keeps other pages 
 test('market view renders saved industry returns; unrelated news is not fetched and missing global data stays explicit',async()=>{
   const f=sector(),text=JSON.stringify(f.report),root=el('div');let calls=0;
   marketsPage(root,{reading:{ref:R,payload:{lanes:{sector:{health:'LATEST_ATTEMPT_SUCCEEDED',last_qualified_result:{...f.saved,details:{'context/context.json':{...descriptor(text),read_path:'details/sector/1/context/context.json'}}}},stock:{health:'LATEST_ATTEMPT_SUCCEEDED',last_qualified_result:{market_session:'2026-09-24',dispositions:[]}}}},readFile:async()=>{calls++;return {text};}},ui,active:()=>true,onRead:()=>{},onCompany:()=>{}});
-  await tick(0);assert.match(root.textContent,/测试行业/);assert.match(root.textContent,/本包还没有可读全球市场资料/);assert.match(root.textContent,/美债\/国际利率、黄金原油、外汇、加密资产尚未接入/);assert.match(root.textContent,/不是全市场/);assert.equal(calls,1);
+  await tick(0);assert.match(root.textContent,/测试行业/);assert.match(root.textContent,/本包还没有可读全球市场资料/);assert.match(root.textContent,/不是市场没有变化/);assert.match(root.textContent,/不是全市场/);assert.equal(calls,1);
 });
 
 // Actual app wiring, existing reader, synthetic transport. No live browser claim.

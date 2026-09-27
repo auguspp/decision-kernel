@@ -70,16 +70,22 @@ def test_v1_two_family_prior_remains_recoverable_under_v2(tmp_path, monkeypatch)
     p.update(version=r.LEGACY_VERSION, families={f:p['families'][f] for f in ('indices', 'shibor')})
     p.pop('public_query')
     old = {'projection': p, 'projection_hash': canonical_hash(p)}
+    raw = m.json_bytes(old)
     meta = first['research']['global_market']
     meta.update(version=r.LEGACY_VERSION, projection_hash=old['projection_hash'])
-    meta['details']['json'] = c.retain(r.REPORT, m.json_bytes(old))
+    # Build a separate synthetic previous R, not an overwrite in one immutable
+    # Collector. Its descriptor must describe these exact legacy bytes.
+    meta['details']['json'] = {**meta['details']['json'], 'bytes': len(raw),
+                              'sha256': m.sha256(raw), 'git_blob': m.blob_sha(raw)}
     reseal(first)
-    previous(c, first)
+    prior_files = previous(c, first)
+    prior_files[r.REPORT] = raw
     add_public(c, tmp_path)
     r.attach(c, first)
     assert projection(c)['prior_read_gaps'] == []
     assert projection(c)['families']['indices']['latest_read_status'] == 'REUSED_RETAINED_CAPTURE'
     assert projection(c)['families']['treasury']['snapshot']['report']['available_values'] == 8
+    assert c.api.file(r.REPORT, c.previous_commit) == raw
 
 
 def test_public_query_failure_is_independent_of_relay_and_keeps_its_old_git_bytes(tmp_path, monkeypatch):
