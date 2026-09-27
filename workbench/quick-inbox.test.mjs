@@ -70,6 +70,34 @@ test('real unchanged reading transport verifies news bytes before an Inbox locat
   const c=await resolveSelection(select,ref=>openPinnedReading(ref,fetcher));assert.equal(c.source.sha256,d.sha256);assert.equal(calls,2);
   await assert.rejects(()=>resolveSelection(select,ref=>openPinnedReading(ref,async url=>new Response(url.endsWith('current-state.json')?JSON.stringify(state):text+'x'))),/INTEGRITY/);
 });
+test('handler rebuilds an add through authenticated Contents raw reads, never public raw transport',async()=>{
+  const body=(await readingFixture().readFile()).text,d={...source,bytes:Buffer.byteLength(body),sha256:sha(body)};
+  const state={...payload(),research:{daily_news:{details:{json:d}}}},t=transport(),contentCalls=[];
+  const fetcher=async(url,options={})=>{
+    if(String(url).startsWith(API+'/contents/')){
+      contentCalls.push({url:String(url),options});
+      assert.equal(options.headers.Authorization,'Bearer secret-fixture');
+      assert.equal(options.headers.Accept,'application/vnd.github.raw+json');
+      if(String(url).includes('/contents/current-state.json?'))return new Response(JSON.stringify(state));
+      if(String(url).includes('/contents/details/radar/news-daily.json?'))return new Response(body);
+      assert.fail('unexpected Contents read '+url);
+    }
+    return t.fetcher(url,options);
+  };
+  const r=await handleQuickInbox(post(addRequest),env,{fetcher});
+  assert.equal(r.status,201);assert.equal((await r.json()).saved,true);
+  assert.equal(contentCalls.length,2);assert.ok(contentCalls.every(c=>c.url.includes('?ref='+R)));
+  assert.equal(t.calls.some(c=>String(c.url).startsWith('https://raw.githubusercontent.com/')),false);
+});
+test('authenticated original 403 is explicit and causes no Inbox append',async()=>{
+  for(const [remaining,code] of [['0','GITHUB_CONTENTS_RATE_LIMITED'],['4999','GITHUB_CONTENTS_READ_FORBIDDEN']]){
+    const t=transport(),fetcher=async(url,options={})=>String(url).startsWith(API+'/contents/') ?
+      new Response('private upstream body',{status:403,headers:{'x-ratelimit-remaining':remaining}}) : t.fetcher(url,options);
+    const r=await handleQuickInbox(post(addRequest),env,{fetcher}),body=await r.json();
+    assert.equal(r.status,503);assert.equal(body.code,code);assert.equal(t.calls.filter(c=>c.options.method==='POST').length,0);
+    assert.ok(!JSON.stringify(body).includes('private upstream body'));
+  }
+});
 test('company and material resolve through the existing company catalogue; missing body cannot be called transferred',async()=>{
   const s={kind:'company',reading:R,subject:'600276.SH',asset:null},d={...source,read_path:'details/research/asset-reentry.json'};
   const r={ref:R,payload:{code_commit:M},references:[d],readAssets:async()=>({companies:[{thscode:s.subject,saved_watch:{ticker:s.subject,company_name:'测试公司'},assets:[{id:'a',use:'RETAINED_RESEARCH_DOCUMENT',source}]}]}),readFile:async()=>({text:'body'})};
@@ -171,6 +199,12 @@ test('transfer button does not write on load; parallel clicks share one submissi
     const root=transferButton(ui,select),b=find(root,n=>n.tagName==='button');assert.equal(calls,0);
     const first=b.onclick(),second=b.onclick();assert.equal(calls,1);resolve(Response.json({saved:true},{status:201}));await Promise.all([first,second]);
     assert.match(root.textContent,/没有启动研究/);assert.equal(b.disabled,true);
+  });
+});
+test('specific safe server failures remain visible instead of one generic save error',async()=>{
+  await globals(async()=>Response.json({saved:false,code:'GITHUB_CONTENTS_READ_FORBIDDEN'},{status:503}),async()=>{
+    const root=transferButton(ui,select);await find(root,n=>n.tagName==='button').onclick();
+    assert.match(root.textContent,/Contents: read/);assert.ok(!root.textContent.includes('已加入待 Quick'));
   });
 });
 test('uncertain/HTML response cannot paint saved, and late save cannot overwrite another view',async()=>{

@@ -2,7 +2,7 @@
  * Mount only behind the verified Sites identity edge; never expose a direct Worker URL.
  * Non-Inbox paths return null so the real host retains its original static fallback.
  */
-import {REPO, openPinnedReading, readInboxComments} from '../reading.mjs';
+import {REPO, openPinnedReading, readInboxComments, safePath, commit} from '../reading.mjs';
 import {INBOX, MARKER, selection, resolveSelection, contextValue, digest, inboxView, recordBody} from '../quick-inbox.mjs';
 export const SITE_ORIGIN='https://decision-kernel-progress.a278038654.chatgpt.site';
 const API=`https://api.github.com/repos/${REPO}`;
@@ -27,6 +27,35 @@ function authenticatedRead(fetcher,token) {
     const permitted=text===ROOT || /^\/comments\?per_page=100&page=[1-5]$/.test(text.slice(ROOT.length)) && text.startsWith(ROOT);
     if(!permitted || options.method && options.method!=='GET') throw new Error('OUTSIDE_INBOX_READ');
     return fetcher(url,{...options,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'decision-kernel-workbench',Authorization:`Bearer ${token}`}});
+  };
+}
+/** Exact-R source validation for writes uses authenticated Contents reads.
+ * The browser cannot choose repo/ref/path here: openPinnedReading generates the
+ * raw URL, this adapter accepts only this repository and a 40-hex commit.
+ */
+function authenticatedOriginalRead(fetcher,token) {
+  const rawOrigin='https://raw.githubusercontent.com', prefix=`/${REPO}/`;
+  return async (url,options={})=>{
+    const u=new URL(String(url));
+    if(u.origin!==rawOrigin || !u.pathname.startsWith(prefix) || u.search || u.hash ||
+      options.method && options.method!=='GET') throw new Error('OUTSIDE_PINNED_READING');
+    const rest=u.pathname.slice(prefix.length), slash=rest.indexOf('/');
+    if(slash<=0) throw new Error('OUTSIDE_PINNED_READING');
+    const ref=commit(rest.slice(0,slash));
+    let path;
+    try { path=safePath(rest.slice(slash+1).split('/').map(decodeURIComponent).join('/')); }
+    catch { throw new Error('OUTSIDE_PINNED_READING'); }
+    const encoded=path.split('/').map(encodeURIComponent).join('/');
+    const response=await fetcher(`${API}/contents/${encoded}?ref=${ref}`,{
+      method:'GET',redirect:'error',credentials:'omit',cache:'no-store',signal:options.signal,
+      headers:{Accept:'application/vnd.github.raw+json','X-GitHub-Api-Version':'2022-11-28',
+        'User-Agent':'decision-kernel-workbench',Authorization:`Bearer ${token}`}
+    });
+    if(response.status===403){
+      const code=response.headers.get('x-ratelimit-remaining')==='0'?'GITHUB_CONTENTS_RATE_LIMITED':'GITHUB_CONTENTS_READ_FORBIDDEN';
+      throw new Error(code);
+    }
+    return response;
   };
 }
 async function append(body,token,fetcher) {
@@ -101,8 +130,14 @@ export async function handleQuickInbox(request,env,options={}) {
     return json(200,{saved:true,reused:true,comment_id:replay[0].comment.id,url:replay[0].comment.html_url});
   }
   let context;
-  try {context=await resolveSelection(input.selection, options.openReading || (ref=>openPinnedReading(ref,fetcher)));}
-  catch{return json(422,{saved:false,code:'ORIGINAL_CONTEXT_UNAVAILABLE'});}
+  try {
+    const open=options.openReading || (ref=>openPinnedReading(ref,authenticatedOriginalRead(fetcher,token)));
+    context=await resolveSelection(input.selection,open);
+  } catch(error) {
+    if(['GITHUB_CONTENTS_RATE_LIMITED','GITHUB_CONTENTS_READ_FORBIDDEN'].includes(error?.message))
+      return json(503,{saved:false,code:error.message});
+    return json(422,{saved:false,code:'ORIGINAL_CONTEXT_UNAVAILABLE'});
+  }
   const key=await digest(JSON.stringify(contextValue(context))), prior=view.pending.find(r=>r.key===key);
   // A result receipt, even not yet byte-checked here, must not be mistaken for a fresh pending duplicate.
   if(prior && !prior.results.length)return json(200,{saved:true,reused:true,comment_id:prior.id,url:prior.url});

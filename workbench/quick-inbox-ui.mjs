@@ -24,7 +24,15 @@ export function transferButton(ui, value, active=()=>true) {
         status.textContent=result.reused?'未新增请求；请在待 Quick 核对原记录的当前状态。':'已保存到 GitHub；此次转存没有启动研究。';}
     } catch(error) {
       if(active()){
-        status.textContent=error.message==='SAVE_UNCONFIRMED_READ_INBOX_FIRST' ? '保存未确认，请先打开待 Quick 核对；不要重复点新的请求。' : '未确认保存。请核对站点接入与权限；材料没有转存到浏览器替代。';
+        const messages={
+          SAVE_UNCONFIRMED_READ_INBOX_FIRST:'保存未确认，请先打开待 Quick 核对；不要重复点新的请求。',
+          GITHUB_CONTENTS_READ_FORBIDDEN:'没有保存：站点无法认证读取固定 R。请确认 hosted PAT 已包含 Contents: read。',
+          GITHUB_CONTENTS_RATE_LIMITED:'没有保存：GitHub 认证读取达到限制；请稍后再试，不要连续重复点击。',
+          ORIGINAL_CONTEXT_UNAVAILABLE:'没有保存：当前固定 R 的原材料未能完整重建。',
+          INBOX_READ_INCOMPLETE:'没有保存：待 Quick 清单未完整读回，请先打开待 Quick 核对。',
+          GITHUB_WRITE_REJECTED:'没有保存：GitHub 拒绝写入 #601。'
+        };
+        status.textContent=messages[error.message] || `没有保存：站点返回 ${error.message || 'UNKNOWN'}。`;
         add.disabled=false;
       }
     } finally {busy=false;}
