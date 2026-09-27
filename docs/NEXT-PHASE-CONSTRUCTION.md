@@ -19,7 +19,7 @@ B1 的已批准完整目标：全球指数、利率/债市、黄金原油、外�
 
 首批交付是可运行采集与原件验证，**不是六大资产类别已齐、不是 Markets 已上线**。先按真实 API 字段和返回验证，再将本批保存结果及最新尝试缺口接入原 current-state/pinned-R/Markets；不要为来源尚未实测先写一屏伪行情，也不要将一个绿工作流当成来源完整覆盖。
 
-其他 B1 来源族保留在本主线：美债/国际利率、黄金原油、汇率、加密资产。继续按“内部复用→官方接口→成熟开源代码”选择最薄实现；不另造 provider framework。只在真实字段/权限缺口出现时调整受影响一族，不强制整组重跑。
+其他 B1 来源族保留在本主线：美债/国际利率、黄金原油、汇率、加密资产。继续按“内部复用→官方接口→外部 prior art”选择最薄实现；**外部 prior art 先查 #508 High-Relevance Living Prior Art，再查 #511 Capability Radar / candidate pool，已有重叠候选先复核当前 upstream / delta，只有仍有缺口才做新的 GitHub 搜索。** 未完成这一步，不以 `NEW_BUILD_JUSTIFIED` 收口；不另造 provider framework。只在真实字段/权限缺口出现时调整受影响一族，不强制整组重跑。
 
 ## 之后的顺序
 
