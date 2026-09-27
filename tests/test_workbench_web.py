@@ -22,7 +22,7 @@ def test_workbench_reading_contracts():
                              check=True, timeout=10).stdout.strip()
     assert int(version.lstrip("v").split(".")[0]) >= 20
     for name in ("app.mjs", "reading.mjs", "presentation.mjs", "product.mjs", "news-markets.mjs", "on-demand.mjs",
-                 "quick-inbox.mjs", "quick-inbox-ui.mjs", "server/quick-inbox-handler.mjs",
+                 "global-markets.mjs", "quick-inbox.mjs", "quick-inbox-ui.mjs", "server/quick-inbox-handler.mjs",
                  "news-refresh.mjs", "server/news-refresh-handler.mjs", "server/owner-identity.mjs",
                  "server/reading-ref-handler.mjs", "server/routes.mjs"):
         syntax = subprocess.run([node, "--check", str(root / "workbench" / name)],
@@ -34,6 +34,7 @@ def test_workbench_reading_contracts():
                              str(root / "workbench" / "app.test.mjs"),
                              str(root / "workbench" / "product.test.mjs"),
                              str(root / "workbench" / "news-markets.test.mjs"),
+                             str(root / "workbench" / "global-markets.test.mjs"),
                              str(root / "workbench" / "on-demand.test.mjs"),
                              str(root / "workbench" / "quick-inbox.test.mjs"),
                              str(root / "workbench" / "news-refresh.test.mjs"),
