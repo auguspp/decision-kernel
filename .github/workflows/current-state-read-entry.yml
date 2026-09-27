@@ -2,7 +2,7 @@ name: current-state-read-entry
 
 on:
   workflow_run:
-    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily]
+    workflows: [sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]
     types: [requested, completed]
     branches: [main]
 
@@ -88,6 +88,7 @@ jobs:
           --include-tdx-concept-context
           --include-daily-news
           --include-smart-money
+          --include-global-market
           --include-reviewed-questions
           --publish
       - name: Explain a failed reading publication
