@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "5b093aeb60d086fc1d16c8b02372a99fdc6bee99459fa0eb7a35604bc0db677d",
+    "base_reading_hash": "ea9ebd6b056080fb2973cb80b7c2ab03acd16f7599f44be85ebea7af4b6afd93",
     "companies": [
       {
         "automatic_admission": false,
@@ -6024,7 +6024,7 @@
                 "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
                 "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "cd8f0941810b348d642fa8ddad24b935a90ccce5",
+                "ref": "1a11cf966d404efbb840ce46907a976d1b4d553f",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
               },
@@ -6041,7 +6041,7 @@
                 "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
                 "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "cd8f0941810b348d642fa8ddad24b935a90ccce5",
+                "ref": "1a11cf966d404efbb840ce46907a976d1b4d553f",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
               },
@@ -9182,7 +9182,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-27T04:47:42.229881+00:00",
+    "generated_at": "2026-09-27T05:06:47.858409+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -9376,5 +9376,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "9e4d2eef67d12d69821ca55cf4444685e3371623e46d5b6588e14055bbe9eb48"
+  "projection_hash": "129add729a5c9a19f96ecb33d8d4e5ea7e35355028b59620c68b7ef32d085ca2"
 }
