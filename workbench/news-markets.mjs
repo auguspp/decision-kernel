@@ -1,3 +1,4 @@
+import {transferButton} from './quick-inbox-ui.mjs';
 /** Saved news/market views, not a researcher, quote provider, or command bridge.
  * Same-R registered bytes only. Source titles and dates remain claims, not facts.
  */
@@ -131,7 +132,7 @@ export function newsPage(target, ctx) {
           request.textContent=newsResume(reading.ref,descriptor,row);
           try { await navigator.clipboard.writeText(request.textContent); copy.textContent='已复制；需到 ChatGPT 提交，尚未启动'; }
           catch { request.hidden=false; copy.textContent='请复制下方请求；尚未启动'; }
-        }); actions.append(copy);
+        }); actions.append(transferButton(ui,{kind:'news',reading:reading.ref,subject:row.id,asset:null},active),copy);
         if (row.companies.length) for (const code of row.companies) actions.append(button(`查看名称命中公司的研究 · ${code}`,()=>onCompany(code)));
         article.append(actions,request,folded('来源与时间声明原值',JSON.stringify(row.original,null,2))); list.append(article);
       }
@@ -172,6 +173,7 @@ export function marketsPage(target,ctx) {
             `${row.active?'满足原价格观察条件':'未满足原价格观察条件'}${row.weakening?'；近期走弱':''}。${row.path}`];
           values.forEach((v,i)=>{const td=el('td',v);td.setAttribute('data-label',heads[i]);tr.append(td);});
           const action=el('td');action.setAttribute('data-label','研究接续');
+          action.append(transferButton(ui,{kind:'sector',reading:reading.ref,subject:row.code,asset:null},active));
           action.append(requestControl('复制行业 Quick 请求（未启动）',()=>sectorQuickRequest(reading,descriptor,view,row),ctx));tr.append(action);body.append(tr);
         }
         box.replaceChildren(wrapper);if(!rows.length)box.append(el('p','当前筛选没有匹配行业。'));pager(box,page,rows.length,20,n=>{page=n;draw();},ui);

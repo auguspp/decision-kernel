@@ -255,3 +255,39 @@ export async function readNewsExecution(fetcher = globalThis.fetch) {
   return deepFreeze({latest: pick(latest), observedAt, independentOfReading: true,
     scope: 'LATEST_CREATED_IN_BOUNDED_MAIN_QUERY_NOT_ALL_RUNNING_JOBS', count: rows.length});
 }
+
+/** Complete bounded native Inbox observation, independent of R. No clean zero on partial pages. */
+export async function readInboxComments(fetcher = globalThis.fetch) {
+  const root = `${API}/issues/601`;
+  const before = await json(root, fetcher);
+  const validIssue = v => v?.number === 601 && !v.pull_request && v.user?.id === 83357964 &&
+    v.html_url === `https://github.com/${REPO}/issues/601` && Number.isSafeInteger(v.comments) &&
+    v.comments >= 0 && v.comments <= 500 && validClock(v.updated_at);
+  require(validIssue(before), 'INBOX_UNAVAILABLE_OR_OVER_500_COMMENTS');
+  const rows = [], pages = Math.max(1,Math.ceil(before.comments/100));
+  for (let page=1;page<=pages;page++) {
+    const part=await json(`${root}/comments?per_page=100&page=${page}`,fetcher,2*1024*1024);
+    require(Array.isArray(part) && part.length<=100,'INVALID_INBOX_PAGE'); rows.push(...part);
+  }
+  const after=await json(root,fetcher);
+  require(validIssue(after) && after.comments===before.comments && after.updated_at===before.updated_at &&
+    rows.length===before.comments && new Set(rows.map(c=>c?.id)).size===rows.length,'INBOX_CHANGED_OR_PARTIAL');
+  for(const c of rows) require(Number.isSafeInteger(c?.id) && c.id>0 && typeof c.body==='string' && c.body.length<=16384 &&
+    c.html_url===`https://github.com/${REPO}/issues/601#issuecomment-${c.id}` &&
+    validClock(c.created_at) && validClock(c.updated_at) && Date.parse(c.updated_at)>=Date.parse(c.created_at), 'INVALID_INBOX_COMMENT');
+  rows.sort((a,b)=>a.id-b.id);
+  return deepFreeze({comments:rows,observedAt:new Date().toISOString(),independentOfReading:true});
+}
+
+/** A trusted Inbox receipt can refer to an already-retained Git document.
+ * Exact bytes only, not a new Research/acceptance assessment or a URL executor.
+ */
+export async function readQuickResult(locator, fetcher = globalThis.fetch) {
+  commit(locator?.commit); safePath(locator?.path);
+  require(locator.path.startsWith('docs/') && /\.(md|txt|json)$/.test(locator.path) &&
+    HASH.test(locator.sha256 || '') && Number.isSafeInteger(locator.bytes) &&
+    locator.bytes>0 && locator.bytes<=FILE_LIMIT,'INVALID_QUICK_RESULT');
+  const raw=await bytes(`${RAW}/${locator.commit}/${escapedPath(locator.path)}`,fetcher,FILE_LIMIT);
+  require(raw.byteLength===locator.bytes && await sha256(raw)===locator.sha256,'QUICK_RESULT_INTEGRITY_MISMATCH');
+  return Object.freeze({text:decoder.decode(raw),url:fileUrl(locator.commit,locator.path),validation:'SELECTED_FILE_BYTES_SHA256_MATCH'});
+}
