@@ -44,12 +44,13 @@ export function validateShape(value) {
   return value;
 }
 
-async function bytes(url, fetcher, limit) {
+async function bytes(url, fetcher, limit, request = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetcher(url, {method: 'GET', credentials: 'omit',
-      redirect: 'error', referrerPolicy: 'no-referrer', cache: 'no-store', signal: controller.signal});
+    const response = await fetcher(url, {method: 'GET', credentials: request.credentials || 'omit',
+      redirect: 'error', referrerPolicy: 'no-referrer', cache: 'no-store', signal: controller.signal,
+      ...(request.headers ? {headers: request.headers} : {})});
     require(response.ok, `HTTP_${response.status}`);
     const declared = response.headers.get('content-length');
     require(declared === null || Number(declared) <= limit, 'RESPONSE_TOO_LARGE');
@@ -71,8 +72,8 @@ async function bytes(url, fetcher, limit) {
     return result;
   } finally { clearTimeout(timer); }
 }
-async function json(url, fetcher, limit = 1024 * 1024) {
-  return JSON.parse(decoder.decode(await bytes(url, fetcher, limit)));
+async function json(url, fetcher, limit = 1024 * 1024, request = {}) {
+  return JSON.parse(decoder.decode(await bytes(url, fetcher, limit, request)));
 }
 function deepFreeze(value) {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
@@ -109,7 +110,14 @@ export function references(payload) {
   return [...found.values()];
 }
 
-export async function openReading(fetcher = globalThis.fetch) {
+export async function openReading(fetcher = globalThis.fetch, refEndpoint = null) {
+  if (refEndpoint !== null) {
+    require(typeof refEndpoint === 'string' && refEndpoint === '/api/read-model/current-state', 'UNSUPPORTED_READING_REF_ENDPOINT');
+    const pointer = await json(refEndpoint, fetcher, 8192, {credentials:'same-origin',
+      headers:{'X-Decision-Kernel-Intent':'read-model-ref'}});
+    require(pointer?.ref === READ_REF, 'WRONG_READING_REF');
+    return openPinnedReading(commit(pointer.commit), fetcher);
+  }
   const ref = await json(`${API}/git/ref/heads/${READ_REF}`, fetcher);
   require(ref.ref === `refs/heads/${READ_REF}` && ref.object?.type === 'commit', 'WRONG_READING_REF');
   return openPinnedReading(commit(ref.object.sha), fetcher);

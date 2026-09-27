@@ -316,7 +316,7 @@ async function refresh() {
   $('detail').replaceChildren(); $('content').replaceChildren(card('正在读取', '只读取 GitHub 已保存结果，不启动采集、研究或任务。'));
   $('identity').textContent = '读取中…';
   try {
-    results = await loadModules({reading: () => openReading(), quick: () => readQuick(), health: () => readHealth()});
+    results = await loadModules({reading: () => openReading(globalThis.fetch, '/api/read-model/current-state'), quick: () => readQuick(), health: () => readHealth()});
     reading = results.reading.status === 'READ' ? results.reading.value : null;
     $('identity').replaceChildren();
     if (reading) {
