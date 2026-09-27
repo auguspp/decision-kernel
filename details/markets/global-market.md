@@ -5,7 +5,7 @@ Shibor是人民币同业利率，不是美债。各原批次的范围声明不�
 最新尝试与最后可读批次分开；日期不统一成今日，空白或失败不等于没有变化。
 
 ## 国际指数
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36308774368
 # 全球指数 · 有限日线
@@ -30,7 +30,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/e20a2768b45571cbc42d52415e725c81675de3963831f504e1ee600939fa9e6e.zip)
 
 ## 人民币同业利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36309047326
 # 人民币同业利率 · Shibor
@@ -57,7 +57,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/907a92aa39c3aec4350c97bc7d731eea7a0072fc1ddf43074b71e2531d7daed5.zip)
 
 ## 美国国债期限利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36317799016
 # 美国国债期限利率
@@ -88,7 +88,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/fe37f402329742729280e1bdce05ed45056f4df9febd62e142b50d6b12ce4624.zip)
 
 ## ECB 外汇参考价
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36317890212
 # ECB 外汇参考价
@@ -115,7 +115,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/65f957dd995b5282cdaa3507920807ab18d2af2d89bc6e7d4902ed78c80d0d77.zip)
 
 ## 黄金与原油 · 供应商期货日线
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36317970476
 # 黄金与原油 · 供应商期货日线
@@ -143,7 +143,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/91b475ef30d4016e29dbb3d9b09dab76b29e79065a5bf749b272982b12324ffc.zip)
 
 ## Coinbase BTC / ETH 日线
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36318059164
 # Coinbase BTC / ETH 日线
