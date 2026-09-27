@@ -4,7 +4,7 @@
 最新尝试与最后可读批次分开；日期不统一成今日，空白或失败不等于没有变化。
 
 ## 国际指数
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36308774368
 # 全球指数 · 有限日线
@@ -29,7 +29,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/e20a2768b45571cbc42d52415e725c81675de3963831f504e1ee600939fa9e6e.zip)
 
 ## 人民币同业利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36309047326
 # 人民币同业利率 · Shibor
