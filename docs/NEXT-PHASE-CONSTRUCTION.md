@@ -1,49 +1,38 @@
-# 下一阶段施工方案 v3｜按需刷新、待 Quick 收件箱与网页版研究
+# 当前主施工计划 v4：B1 全球市场状态
 
-2026-09-27 · Requirements Management / Main Construction。
+2026-09-27。Human 已在独立新会话恢复样本后明确“好，开始做”。当前主线切到 B1，随后 B2；不继续展开 Sites 身份、bootstrap、通用代理或 WebGPT 直连。
 
-采用依据：[Human明确确认与RM回执](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5851292639)。Human同意「Site不直接调用当前WebGPT；一键转存待Quick，集中后在网页版操作」，并要求继续推进。本文是原方案的后继，不是全部重设计或功能已上线声明。
+## 当前接点
 
-## 保留基线，不重做已交付
+Quick Inbox 的真实选择→网页版研究→GitHub正文→结果关联，以及一个独立新会话仅凭入口和定位恢复，已形成有范围的实证。这个样本不等于 Human 接受研究，也不替代 R5-5 的持续使用/质量观察及其他未验范围。
 
-[完整v2](https://github.com/auguspp/decision-kernel/blob/372cbee049215057f8476069de91924d2de786b2/docs/NEXT-PHASE-CONSTRUCTION.md)与其链接的v1保留在精确Git。除本页明确改动外，v2的0→A→B→C→D、横向L、P01–P10、H1–H5、全站人类问题、信息层次、Reuse First、CI和退出责任继续适用。后继恢复须阅读有关基线，不把下面的施工摘要当完整方法。
+B1 的已批准完整目标：全球指数、利率/债市、黄金原油、外汇与加密资产的有限市场背景；分来源家族独立刷新。来源只报告观察、时点及覆盖，原因与公司经济映射交给 Research。价格变化不自动改 Belief，不执行 Full/Odds/Watch/交易。
 
-已交付#596事项/原版本/更正/历史回应接续，#598核心账本与原文阅读，#599新闻/市场阅读，#600原生更新/查询与复制接续全部保留，不反复装修、不重跑采集证明同一结论。源码/完整CI/main/正常读取发布不等于Sites采用、手机可读或Human接受。精确当前M/R、分支/PR和真正进展始终查#297。
+## 第一切片：先核真实来源，再接 Markets
 
-## 前提变化及处置
+复用现有 Tushare Relay 的 `index_global` / `shibor`，不替换原客户端、不引入新服务或凭证。详情见 [B1 source slice](global-market-context-v1.md)。
 
-原近期目标把「Site→合格Hosted Quick执行入口」放在主路径。新的Human选择是：**刷新直接执行；研究先转存，再由网页版ChatGPT/另行授权任务消费**。直接调用当前聊天并非接一个GitHub dispatch；不为这个目标继续造bridge、Agent/token、邮件/PR或轮询触发器。Published Agent/API研究执行仅为以后有真实净收益时的独立增强，不能再阻塞近期收口。
+- 指数：SPX、IXIC、HSI、HKTECH、N225、GDAXI，有限近日线。
+- 利率首块：人民币 Shibor 八期限；不冒充美债或全球债券收益率。
+- 两族独立手动运行，保留原响应、请求/收到时刻、来源日期、单位、缺口及可离线复验的摘要。
+- 未取得的市场状态/发布时钟保持 UNKNOWN；失败不清空旧结果，不推成没有变化。
 
-用户转交原Site只读核验：现部署v7是静态；平台支持Worker/hosted环境/身份header，当前没有服务端动作和GitHub写凭证。管理角色不是运行时身份；生产header可用性/防伪造和HTTPS出站未验。这修订旧“现场完全未知”，但不升级成已授权/已配置/已部署。现仍暂不交Sites、不发零散包。
+首批交付是可运行采集与原件验证，**不是六大资产类别已齐、不是 Markets 已上线**。先按真实 API 字段和返回验证，再将本批保存结果及最新尝试缺口接入原 current-state/pinned-R/Markets；不要为来源尚未实测先写一屏伪行情，也不要将一个绿工作流当成来源完整覆盖。
 
-## 当前优先级
+其他 B1 来源族保留在本主线：美债/国际利率、黄金原油、汇率、加密资产。继续按“内部复用→官方接口→成熟开源代码”选择最薄实现；不另造 provider framework。只在真实字段/权限缺口出现时调整受影响一族，不强制整组重跑。
 
-| 顺序 | 交付目标 | 实际边界 |
-|---|---|---|
-| 当前主批次 A2-Quick Inbox | 新闻/行业/公司/Research/Odds材料加入待Quick；一个GitHub收件箱、原定位保存/读回、批量接续与结果关联。 | 不启动研究、不修改旧DEEPEN_REQUIRED、不建新数据库或后台队列。先做同域路由与安全测试；Site身份/凭证和真实点击单独验。 |
-| A2-Refresh | 原Site owner点击→仅现役新闻刷新白名单→实际run→原publisher→同次资料读回；之后按批准范围复用其他刷新。 | 不重跑历史probe/backfill，不将前端读取改名为采集。凭证/owner/Origin、在途和提交不明须处理；刷新不隐式Quick。 |
-| 集中Sites采用 | 根据真实v7及宿主适配，合入所有未采用的阅读/收件箱/受控动作增量。 | 保留root/旧链接、owner-only、CSP（同域fetch只增self）、当前回退。非API走原fallback，API不能返回HTML。无需等所有全球来源/日历/长期需求完成。 |
-| A2连续性 + B1/B2 | 真实原话/原版本/再次恢复可穿插；明确关注/持有；全球来源族和有限研究日历逐步交付。 | 不制造Human回复/持仓/财报日期，不把局部入口受阻扩大成全局停工。 |
-| C→D，L贯穿 | 原跨期证据/预测比较、盲点驱动发现、多期限机会、成熟校准和后继真实采用。 | 保留原范围与反例，不另造学习/Agent/调度框架，不以清空backlog为目标。 |
+## 之后的顺序
 
-一次一个主工程功能批次。故障仅按真实依赖阻塞；严重误导、身份/权限或真实交付失败可抢占，普通想法回原台账。自然R5.1/R5-5日常链及既有资源/任务继续；不新增定时任务、不改变Brief时钟、不追加原P1验收前置。
+B1可用市场背景→B2有限近期研究日历；跨期Evidence/Prediction比较、多期限Opportunity与Reuse Radar继续为后续增强。日历日期需明确来源，事项/事件不自动成为 Human 待办或交易触发。
 
-## 待 Quick 的责任与共享记录
+持续使用中的 News/Quick Inbox/手机问题保留修复，但不再因历史标题或旧入口重新启动身份指纹施工。未自然发生的 Human 回应、研究接受、Full委托和长期使用验收保持原资格，不补造。
 
-正式入口[#601](https://github.com/auguspp/decision-kernel/issues/601)，合同和用法见[quick-inbox](quick-inbox.md)。它只保存Human选中的公开材料定位和后继结果关系；未知选中原因不编造。原正文留在原路径，客户端临时视图不成为第二事实库。
+## 保留历史与不变边界
 
-GitHub原生Issue/comments提供保存、时间和原评论身份；薄投影区分未有结果、已关联且字节可读的结果、移出。复制/浏览不清空，不伪造“运行中”。相同原上下文可合并待处理展示，但所有原请求ID保留；旧回应/旧结果不关闭后来新选版本。提交不确定先查原记录，不机械重试，不宣称原生comments是exactly-once。
+本 v4 向前取代 v3 的“继续集中 Sites 采用”作为当前 NEXT；旧实现、失败、来源、回退及未验事项不删除。
 
-消费从当前RESEARCH-ENTRY恢复，优先使用原材料/旧研究/更正并可自主查公开资料。可合并相关事项调查，但原请求逐项有实际去向；先保存Quick正文并读回，后追加原请求的结果定位。没有材料或没做完保留原因/UNKNOWN，不编报告或完成事件。Quick只建议Full，Human拥有委托、接受和资本决定。
+- [v3 人本工作台 / Quick Inbox / News Refresh 计划](https://github.com/auguspp/decision-kernel/blob/86c1d2075d3679ef1b92788e49674f7eaf4f77b2/docs/NEXT-PHASE-CONSTRUCTION.md)
+- [v1 A3–A5 / B1–B2 原范围](https://github.com/auguspp/decision-kernel/blob/bceb4b55488a10ba800b22f5798515bc42731635/docs/NEXT-PHASE-CONSTRUCTION.md)
+- 主执行入口仍是 #297。不改现有 Research/Odds/Human authority、全部CI/合并门禁或其他来源日程。
 
-## 权限与验收
-
-先前Actions:write仅能支持刷新；收件箱写评论另需单仓库Issues:write。当前只实现代码与受控离线测试，不因方案批准就创建令牌、改环境或外发私人数据。代码不要求Contents写。实际owner ID/token只在原Sites hosted配置，无需发到聊天。缺配置/身份直接拒绝，浏览器不持凭证、不能指定其他repo/Issue/workflow/ref。
-
-现阶段first-party Site能力依据用户转交核验＋官方资料；必须在实际handler验证可信身份、防伪造、非owner拒绝和生产出站后才激活写入口。任何新费用/账号/权限或隐私范围仍另行成立。全站保持Human-first：有用内容与时点/限制优先，精确机器信息下钻。
-
-工程仍依[CI-MAINLINE](CI-MAINLINE.md)：真实PR/head、正式full原件、正常merge、独立main复用/实跑smoke、正常publisher与固定读取分别验。不得弱化完整性、回头补造旧测试或把DOM测试当浏览器截图。一个空收件箱不是一次真实Human选择或Quick消费验收。
-
-普通源码更新可继续；Sites最后集中采用，不逐PR/逐按钮交接。退出模块时一并处置专属UI/handler/tests/config权限，保留历史原件、必要reader、研究/回应与共享保护。没有自动投资系统或第二研究引擎。
-
-当前执行与历史：#297；产品范围：#351；旧Odds合同：#349；旧研究/pilot/失败：#524原记录保持，不因新收件箱复活。v2及#596/#598/#599/#600的原文件、失败、授权和交付回执均保留于Git/原评论。更新当前导航，不重写历史。
+本次没有新增自动任务、Sites部署、权限、数据库或收费订阅。后续源工作流只在精确main通过CI后按本授权有界运行；实际成功/失败、保存/发布/手机显示分开验。
