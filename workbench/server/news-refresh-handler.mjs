@@ -74,18 +74,19 @@ const pick = r => Object.fromEntries(['id','run_number','head_sha','path','event
   'status','conclusion','html_url','created_at','updated_at'].map(k => [k, r[k]]));
 
 function client(fetcher, token) {
-  async function get(path, authenticated = true) {
-    // Paths are constructed only by the functions below, never from a source URL.
+  async function get(path) {
+    // All api.github.com preflight reads use the existing scoped token. Public unauthenticated
+    // API reads are IP-limited and unsafe on a shared Worker egress. Paths remain fixed here.
     const response = await fetcher(`${API}/${path}`, {method:'GET', redirect:'error', credentials:'omit',
       cache:'no-store', signal:AbortSignal.timeout(15000), headers:{Accept:'application/vnd.github+json',
         'X-GitHub-Api-Version':'2026-03-10', 'User-Agent':'decision-kernel-workbench',
-        ...(authenticated ? {Authorization:`Bearer ${token}`} : {})}});
-    check(response.ok, 'GITHUB_READ_UNAVAILABLE'); return jsonBody(response);
-  }
-  async function main() {
-    const ref = await get('git/ref/heads/main', false);
-    check(ref.ref === 'refs/heads/main' && ref.object?.type === 'commit' && SHA.test(ref.object.sha || ''), 'MAIN_UNCONFIRMED');
-    return ref.object.sha;
+        Authorization:`Bearer ${token}`}});
+    if (!response.ok) {
+      if (response.status === 403 && response.headers.get('x-ratelimit-remaining') === '0') fail('GITHUB_ACTIONS_RATE_LIMITED');
+      if (response.status === 403) fail('GITHUB_ACTIONS_READ_FORBIDDEN');
+      fail('GITHUB_READ_UNAVAILABLE');
+    }
+    return jsonBody(response);
   }
   async function workflow(code) {
     const response = await fetcher(`https://raw.githubusercontent.com/${REPO}/${code}/${WF_PATH}`, {
@@ -94,15 +95,21 @@ function client(fetcher, token) {
     const metadata = await get(`actions/workflows/${WORKFLOW}`);
     check(metadata.path === WF_PATH && metadata.state === 'active' && positive(metadata.id), 'WORKFLOW_UNAVAILABLE');
   }
-  return {get, main, workflow};
+  return {get, workflow};
+}
+async function currentMainCI(c, now) {
+  // ci.yml runs on every main push. The newest owned main push run therefore supplies both
+  // the exact current code identity and its independent CI state using Actions permission only.
+  const ci = runList(await c.get('actions/workflows/ci.yml/runs?branch=main&event=push&per_page=10'),
+    '.github/workflows/ci.yml', now(), 10).sort((a,b) => b.run_number - a.run_number)[0];
+  check(ci && ci.head_branch === 'main' && ci.event === 'push' && ci.run_attempt === 1 &&
+    ci.status === 'completed' && ci.conclusion === 'success', 'MAIN_CI_NOT_READY');
+  return ci;
 }
 async function snapshot(c, now) {
-  const code = await c.main();
+  const ci = await currentMainCI(c, now);
+  const code = ci.head_sha;
   await c.workflow(code);
-  const ci = runList(await c.get(`actions/workflows/ci.yml/runs?branch=main&event=push&head_sha=${code}&per_page=10`), '.github/workflows/ci.yml', now(), 10)
-    .sort((a,b) => b.run_number - a.run_number)[0];
-  check(ci && ci.head_sha === code && ci.head_branch === 'main' && ci.event === 'push' &&
-    ci.run_attempt === 1 && ci.status === 'completed' && ci.conclusion === 'success', 'MAIN_CI_NOT_READY');
   // Query each native unfinished status, not merely the twenty newest successes.
   for (const status of ACTIVE) {
     const data = await c.get(`${RUNS}?status=${status}&per_page=1`);
@@ -112,7 +119,8 @@ async function snapshot(c, now) {
   // No branch filter: run_number is a workflow-wide counter, not a main counter.
   const latest = runList(await c.get(`${RUNS}?per_page=20`), WF_PATH, now()).sort((a,b) => b.run_number - a.run_number)[0];
   check(latest && latest.status === 'completed' && latest.run_number < 999999999999999, 'NEWS_BASELINE_UNCONFIRMED');
-  check(await c.main() === code, 'MAIN_MOVED');
+  const after = await currentMainCI(c, now);
+  check(after.id === ci.id && after.head_sha === code && after.run_number === ci.run_number, 'MAIN_MOVED');
   return {code, previous_id:latest.id, previous_number:latest.run_number};
 }
 function permitValue(p) {
@@ -246,7 +254,8 @@ export async function handleNewsRefresh(request, env, options = {}) {
   } catch (error) {
     // Do not expose upstream response bodies, token headers or raw exception text.
     const allowed = new Set(['INVALID_PERMIT','PERMIT_EXPIRED','NEWS_ALREADY_IN_FLIGHT','MAIN_CI_NOT_READY',
-      'WORKFLOW_CHANGED','MAIN_MOVED','PRECONDITION_CHANGED','MULTIPLE_REQUEST_RUNS','TOO_MANY_PENDING_REQUESTS']);
+      'WORKFLOW_CHANGED','MAIN_MOVED','PRECONDITION_CHANGED','MULTIPLE_REQUEST_RUNS','TOO_MANY_PENDING_REQUESTS',
+      'GITHUB_ACTIONS_RATE_LIMITED','GITHUB_ACTIONS_READ_FORBIDDEN']);
     return reply(409, {kind:'blocked', code:allowed.has(error.message) ? error.message : 'CHECK_UNCONFIRMED'});
   }
 }
