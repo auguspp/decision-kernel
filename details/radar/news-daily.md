@@ -1,6 +1,6 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-09-27T07:51:16.334101+00:00；状态：WINDOWS&#95;CAPTURED
+原采集截止：2026-09-27T07:53:33.145906+00:00；状态：WINDOWS&#95;CAPTURED
 这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。
 
@@ -32,6 +32,7 @@
 
 ## 原窗口标题（不是新增事件清单）
 
+- [海思科：创新药HSK42360-Na片纳入突破性治疗药物程序](https://www.cls.cn/detail/2493423) · cls
 - [和达科技：股东及董事拟合计减持公司不超4.74%股份](https://www.cls.cn/detail/2493421) · cls
 - [财联社9月27日电，鸿蒙智行官微宣布，问界仍然是鸿蒙智行成员之一。问界新M8，由赛力斯与华为双方联合设计与开发。](https://www.cls.cn/detail/2493419) · cls
 - [通鼎互联：拟1亿元收购南京和本机电14.2984%股权](https://www.cls.cn/detail/2493417) · cls
@@ -61,7 +62,6 @@
 - [在轨4个多月 神二十三乘组完成载荷进出舱等多项工作](https://www.cls.cn/detail/2493364) · cls
 - [嘉陵江特大桥顺利合龙 阆中至营山通勤将缩至40分钟](https://www.cls.cn/detail/2493363) · cls
 - [利比亚主要输油管道恢复输送原油](https://www.cls.cn/detail/2493362) · cls
-- [中国移动、中国电信、中国联通，集中叫停“0元购机”](https://www.cls.cn/detail/2493361) · cls
 - [俄外长称俄想和欧洲开战是无稽之谈](https://wallstreetcn.com/livenews/3171026) · wallstreetcn
 - [韩正出席第81届联合国大会一般性辩论并发表讲话](https://wallstreetcn.com/livenews/3171025) · wallstreetcn
 - [阿曼称将继续努力保障霍尔木兹海峡通行安全](https://wallstreetcn.com/livenews/3171024) · wallstreetcn
@@ -181,6 +181,7 @@
 - [Shenzhou-23 crew over four months on orbit complete payload ingress/egress, multiple experiments](https://mktnews.net/flashDetail.html?id=01a0e0f7-b94f-7118-86ab-72da11c885fc) · mktnews
 - [South Korea excess tax revenue this year may exceed 50 tln won](https://mktnews.net/flashDetail.html?id=01a0e0e6-c033-7118-86ab-6c7481c0eb3c) · mktnews
 - [YONHAP said SOUTH KOREA&#x27;S LEE has ended his US-Mexico trip and departed for home.](https://mktnews.net/flashDetail.html?id=01a0e0d8-fa86-7118-86ab-6457a78476b9) · mktnews
+- [安徽建工&#40;600502.SH&#41;子公司发行可续期公司债券获准注册](https://www.gelonghui.com/news/5318223) · gelonghui
 - [华纳药厂&#40;688799.SH&#41;：多名高管拟减持股份，合计最高减持 7 万股](https://www.gelonghui.com/news/5318222) · gelonghui
 - [醋化股份&#40;603968.SH&#41;：其余税款及滞纳金预计将于10月申报期完成纳税申报](https://www.gelonghui.com/news/5318221) · gelonghui
 - [彤程新材&#40;603650.SH&#41;：H股发行的最终价格为每股44.00港元](https://www.gelonghui.com/news/5318220) · gelonghui
@@ -195,7 +196,6 @@
 - [上海电影&#40;601595&#41;2026年半年报点评：电影业务承压 关注IP商业化与产融结合](https://www.gelonghui.com/news/5318211) · gelonghui
 - [九龙仓置业&#40;01997.HK&#41;：核心资产禀赋凸出 稳健派息支撑长期价值](https://www.gelonghui.com/news/5318210) · gelonghui
 - [理想汽车-W&#40;2015.HK&#41;：全新理想i9上市 36.98万元定价超预期](https://www.gelonghui.com/news/5318209) · gelonghui
-- [归创通桥&#40;02190.HK&#41;9月25日耗资115.7万港元回购5.4万股](https://www.gelonghui.com/news/5318196) · gelonghui
 - [马上评｜全款买房被爽约，开发商“一房二卖”也应担责](https://www.thepaper.cn/newsDetail_forward_34156911) · thepaper
 - [41岁刘一峰任浙大数学科学学院院长，系北大数学“黄金一代”成员](https://www.thepaper.cn/newsDetail_forward_34156909) · thepaper
 - [王楚钦：打到第四局，那个疼痛有一点受不了](https://www.thepaper.cn/newsDetail_forward_34156819) · thepaper
@@ -217,5 +217,5 @@
 - [王毅谈习近平主席对美国进行国事访问](https://www.thepaper.cn/newsDetail_forward_34156496) · thepaper
 - [以色列大选前曝重磅内幕：哈马斯发动致命袭击前，内塔尼亚胡曾无视安全警告](https://www.thepaper.cn/newsDetail_forward_34155694) · thepaper
 
-[本批原始ZIP](../../sources/artifacts/f09a29ccfebee3569e072bfbea766422d9ec372cf244f7e5d8697ec73d9c35dc.zip)
+[本批原始ZIP](../../sources/artifacts/cca5d928aef8755ef267b58db76e327157e01fd8927cad0a68edc65d5d40648b.zip)
 [结构化窗口与版本](news-daily.json)
