@@ -122,7 +122,36 @@ def test_local_data_failure_does_not_suppress_later_stocks(monkeypatch, failure)
     assert len(calls) <= plan['maximum_request_count']
 
 
-@pytest.mark.parametrize('code',[3001,3002,3004])
+@pytest.mark.parametrize('provider_code,isolatable', [
+    (3001, True), (3002, True), (3004, True),
+    (1003, False), (2001, False), (2003, False), (4001, False),
+    (5001, False), (5003, False), (9999, False),
+])
+def test_provider_business_code_isolation_contract(provider_code, isolatable):
+    # The real predicate owns the code table; observer/capture propagation stays below.
+    error = stock.StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED',
+        thscode='000101.SZ', provider_code=provider_code)
+    original = vars(error).copy()
+    assert stock._isolatable_stock_error(error, '000101.SZ') is isolatable
+    assert vars(error) == original
+
+
+@pytest.mark.parametrize('field,value', [
+    ('thscode', None), ('thscode', '000102.SZ'),
+    ('provider_code', '3002'), ('provider_code', 3002.0), ('provider_code', None),
+    ('reason_code', 'TRANSPORT_REQUEST_FAILED'), ('category', 'UNREVIEWED_CATEGORY'),
+], ids=['shared-scope', 'other-issuer', 'string-code', 'float-code', 'missing-code',
+        'other-reason', 'other-category'])
+def test_isolation_requires_exact_issuer_integer_code_and_failure_kind(field, value):
+    error = stock.StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED',
+        thscode='000101.SZ', provider_code=3002)
+    assert stock._isolatable_stock_error(error, '000101.SZ') is True
+    setattr(error, field, value)
+    assert stock._isolatable_stock_error(error, '000101.SZ') is False
+
+
+# One real HISTORY propagation; all business codes are covered by the owning predicate.
+@pytest.mark.parametrize('code',[3002])
 def test_unavailable_history_skips_only_that_stock_and_does_not_fetch_its_quote(monkeypatch, code):
     state, plan, provider, calls = expanded_provider(monkeypatch, 2)
     bad = plan['issuers'][0]['thscode']
@@ -131,6 +160,8 @@ def test_unavailable_history_skips_only_that_stock_and_does_not_fetch_its_quote(
         return {'code':code,'data':None} if path == own.HISTORY and params['thscode'] == bad else body
     p = stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)['projection']
     assert p['coverage']['unavailable_issuers'] == p['coverage']['qualified_issuers'] == 1
+    failure = p['all_stock_observations'][0]['input_failure']
+    assert failure['provider_business_code'] == code and failure['phase'] == 'HISTORY'
     assert not any(path in {own.SNAPSHOT,own.ACTIONS}
                    and params.get('thscode',params.get('thscodes')) == bad for path,params in calls)
 
@@ -169,15 +200,18 @@ def test_failed_conditions_and_unavailable_have_separate_denominators(monkeypatc
     assert not p['surfaced_stocks']
 
 
-@pytest.mark.parametrize('code',[1003,2001,2003,4001,5001,9999])
+# Retain known-global and unknown-code propagation after an earlier successful issuer.
+@pytest.mark.parametrize('code',[4001,9999])
 def test_auth_limit_unknown_or_global_business_error_still_stops_batch(monkeypatch, code):
     state, plan, provider, calls = expanded_provider(monkeypatch, 3)
     bad = plan['issuers'][1]['thscode']
     def request(path, params):
         body = provider(path, params)
         return {'code':code,'data':None} if path == own.ACTIONS and params['thscode'] == bad else body
-    with pytest.raises(stock.StockReadingInputError, match='PROVIDER_BUSINESS_REQUEST_FAILED'):
+    with pytest.raises(stock.StockReadingInputError, match='PROVIDER_BUSINESS_REQUEST_FAILED') as error:
         stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)
+    assert error.value.provider_code == code and error.value.thscode == bad
+    assert error.value.category == 'REQUEST_FAILED'
     assert calls[-1] == (own.ACTIONS, own.action_params(bad,state.sessions))
     assert not any(path == own.HISTORY and params['thscode'] == plan['issuers'][2]['thscode']
                    for path,params in calls)
