@@ -31,7 +31,11 @@ export function refreshPresentation(result) {
       title:result.failed_sources ? '本次结果已保存，部分来源未取得' : '本次新闻结果已发布并读回',
       detail:`采集截止：${localTime(result.captured_through)}；${result.window_titles === null ? '没有可确认的标题数量' : `${result.window_titles} 条窗口标题（不是新增事件数）`}。未开展 Quick。`
     };
-    return {title:'采集任务成功，发布资料尚未确认', detail:'仍未从当前读取包读到同次完整原件，不把任务成功当作页面已经更新。'};
+    if (result.publication === 'browser_readback_required') return {
+      title:'本次新闻采集成功',
+      detail:'运行已成功；发布与正文由页面现有固定 R reader 核验。请读取最新保存结果，不把运行成功本身当作页面已更新。'
+    };
+    return {title:'采集任务成功，发布资料尚未确认', detail:'请读取最新保存结果确认发布；不自动再次采集。'};
   }
   return {title:'刷新状态未识别', detail:'没有确认完成；请检查本次更新，不自动重新提交。'};
 }
@@ -101,7 +105,7 @@ export function newsRefreshControl(ctx, fetcher = globalThis.fetch) {
     const view = refreshPresentation(state.result); status.append(el('p',view.title),el('p',view.detail));
     const r = state.result.run, id = r?.id || state.result.run_id, url = r?.html_url || state.result.run_url;
     if (safeRunURL(id,url)) status.append(link('查看本次运行',url));
-    if (state.result.publication === 'same_run_bytes_read') status.append(button('读取最新保存结果', () => {
+    if (['same_run_bytes_read','browser_readback_required'].includes(state.result.publication)) status.append(button('读取最新保存结果', () => {
       if (active()) document.getElementById('refresh')?.click(); // Existing immutable-reader refresh, not another dispatch.
     }));
     status.append(folded('本次更新的依据',JSON.stringify(state.result,null,2)));

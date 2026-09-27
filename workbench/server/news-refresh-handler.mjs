@@ -3,7 +3,7 @@
  * the deployed Worker has no unprotected alternate URL. The enable flag is NOT
  * a substitute for that deployment check. No secrets or caller identity leave it.
  */
-import {REPO, openReading} from '../reading.mjs';
+import {REPO} from '../reading.mjs';
 
 export const NEWS_REFRESH_PATH = '/api/actions/news-refresh';
 export const SITE_ORIGIN = 'https://decision-kernel-progress.a278038654.chatgpt.site';
@@ -156,26 +156,14 @@ async function findRun(c, p, now, runId = null) {
   check(rows.length <= 1, 'MULTIPLE_REQUEST_RUNS');
   return rows.length ? matching(rows[0], p) : null;
 }
-async function reportRun(r, p, fetcher, now) {
+function reportRun(r, p, now) {
   const base = {kind:'run', run:pick(r), observed_at:new Date(now()).toISOString(), publication:'not_checked'};
   if (r.head_sha !== p.code || r.run_number !== p.previous_number + 1 || r.run_attempt !== 1)
     return {...base, kind:'not_admitted'};
   if (r.status !== 'completed' || r.conclusion !== 'success') return base;
-  try {
-    const reading = await openReading(fetcher), saved = reading.payload.research?.daily_news;
-    const same = s => s && ['id','head_sha','path','event','run_attempt'].every(k => s[k] === r[k]) &&
-      s.status === 'completed' && s.conclusion === 'success';
-    if (!same(saved?.archive?.origin_run) || !same(saved?.latest_attempt)) return {...base, publication:'not_in_current_reading'};
-    check(HASH.test(saved.capture_hash || '') && clock(saved.captured_through) && Date.parse(saved.captured_through) <= now(), 'SAVED_CAPTURE_UNCONFIRMED');
-    const file = await reading.readFile(saved.details?.json), capture = JSON.parse(file.text)?.projection?.capture?.projection;
-    check(capture?.capture_hash === saved.capture_hash && capture.captured_through === saved.captured_through &&
-      Array.isArray(capture.source_outcomes) && capture.source_outcomes.length <= 16, 'SAVED_CAPTURE_UNCONFIRMED');
-    const rows = capture.news?.projection?.observations;
-    check(rows === undefined || Array.isArray(rows) && rows.length <= 480, 'SAVED_CAPTURE_UNCONFIRMED');
-    return {...base, publication:'same_run_bytes_read', reading_commit:reading.ref,
-      captured_through:saved.captured_through, window_titles:rows?.length ?? null,
-      failed_sources:capture.source_outcomes.filter(o => o.status !== 'OBSERVATIONS_NORMALIZED').length};
-  } catch { return {...base, publication:'read_unconfirmed'}; }
+  // Publication/body verification belongs to the existing browser pinned-R reader.
+  // Do not duplicate its GitHub ref/body reads in the Worker status path.
+  return {...base, publication:'browser_readback_required'};
 }
 
 /** At most one POST per same ticket in this isolate. Cross-isolate source safety
@@ -184,7 +172,7 @@ async function reportRun(r, p, fetcher, now) {
 const submissions = new Map();
 async function submit(p, c, env, fetcher, now) {
   const existing = await findRun(c, p, now);
-  if (existing) return reportRun(existing, p, fetcher, now);
+  if (existing) return reportRun(existing, p, now);
   const current = await snapshot(c, now);
   check(current.code === p.code && current.previous_id === p.previous_id && current.previous_number === p.previous_number, 'PRECONDITION_CHANGED');
   check(now() - p.issued_at <= 120000, 'PERMIT_EXPIRED');
@@ -241,7 +229,7 @@ export async function handleNewsRefresh(request, env, options = {}) {
     const p = await checkTicket(input.ticket, env, now(), input.op === 'submit');
     if (input.op === 'status') {
       const r = await findRun(c, p, now, input.run_id);
-      return reply(200, r ? await reportRun(r, p, fetcher, now) : {kind:'uncertain', code:'RUN_NOT_IDENTIFIED'});
+      return reply(200, r ? await reportRun(r, p, now) : {kind:'uncertain', code:'RUN_NOT_IDENTIFIED'});
     }
     for (const [key, value] of submissions) if (value.done && now() - value.at > 300000) submissions.delete(key);
     const key = input.ticket.signature;

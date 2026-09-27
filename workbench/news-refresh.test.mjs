@@ -163,18 +163,24 @@ test('run-number race and rerun remain not-admitted, not fresh success',async()=
     const r=await f.call({op:'status',ticket,run_id:101});assert.equal(r.kind,'not_admitted');assert.equal(r.publication,'not_checked');
   }
 });
-test('run failure and successful-but-unreadable publication are different, never quiet-market assertions',async()=>{
+test('run failure and successful capture remain distinct; successful status delegates publication to browser reader',async()=>{
   const f=await fixture(),ticket=await f.prepare();await f.call({op:'submit',ticket,run_id:null});const run=f.state.news[0];
   run.status='completed';run.conclusion='failure';let r=await f.call({op:'status',ticket,run_id:101});assert.equal(r.run.conclusion,'failure');assert.equal(r.publication,'not_checked');
-  run.conclusion='success';r=await f.call({op:'status',ticket,run_id:101});assert.equal(r.publication,'read_unconfirmed');
+  run.conclusion='success';const before=f.state.calls.length;r=await f.call({op:'status',ticket,run_id:101});
+  assert.equal(r.publication,'browser_readback_required');
+  const later=f.state.calls.slice(before).map(c=>c.url);
+  assert.equal(later.some(u=>u.includes('/git/ref/heads/'+READ_REF)),false);
+  assert.equal(later.some(u=>u.includes('/current-state.json')),false);
 });
-test('same-R original reader verifies result bytes and exact archive/latest-attempt linkage before publication claim',async()=>{
-  for(const options of [{},{partial:true},{wrongRun:true},{corrupt:true}]){
-    const f=await fixture(),ticket=await f.prepare();await f.call({op:'submit',ticket,run_id:null});publication(f.state,options);
-    const r=await f.call({op:'status',ticket,run_id:101});assert.equal(r.publication,options.wrongRun?'not_in_current_reading':options.corrupt?'read_unconfirmed':'same_run_bytes_read');
-    if(!options.wrongRun&&!options.corrupt){assert.equal(r.reading_commit,R);assert.equal(r.window_titles,0);assert.equal(r.failed_sources,options.partial?1:0);}
-    assert.equal(f.state.posts,1);
-  }
+test('Worker status never duplicates pinned-R body verification after a successful run',async()=>{
+  const f=await fixture(),ticket=await f.prepare();await f.call({op:'submit',ticket,run_id:null});publication(f.state);
+  const before=f.state.calls.length,r=await f.call({op:'status',ticket,run_id:101});
+  assert.equal(r.publication,'browser_readback_required');assert.equal(r.reading_commit,undefined);
+  const later=f.state.calls.slice(before);
+  assert.equal(later.filter(c=>c.url.includes('/actions/runs/101')).length,1);
+  assert.equal(later.some(c=>c.url.includes('/git/ref/heads/'+READ_REF)),false);
+  assert.equal(later.some(c=>c.url.includes('/current-state.json')),false);
+  assert.equal(later.some(c=>c.url.includes('/details/radar/news-daily.json')),false);
 });
 test('oversized upstream list and response clock contradictions fail before dispatch',async()=>{
   const f=await fixture();f.state.news[0].updated_at=new Date(T+1).toISOString();assert.equal((await f.call({op:'prepare'})).kind,'blocked');assert.equal(f.state.posts,0);
@@ -227,13 +233,14 @@ test('lost submit response and later status refusal retain the permit and never 
   const start=button(root,'刷新最新新闻');await start.onclick();assert.equal(start.disabled,true);assert.match(root.textContent,/不要重复提交/);
   await button(root,'检查本次更新').onclick();assert.equal(start.disabled,true);await start.onclick();assert.equal(calls,3);
 });
-test('published result offers original reader refresh only after same-run byte proof, not an automatic second dispatch',async()=>{
+test('successful run offers the existing browser reader refresh without a second dispatch',async()=>{
   const f=await fixture(),ctx=context(),root=newsRefreshControl(ctx,async(u,o)=>handleNewsRefresh(request(JSON.parse(o.body)),env(),{fetcher:f.fetcher,now:()=>T}));
-  await button(root,'刷新最新新闻').onclick();publication(f.state);await button(root,'检查本次更新').onclick();assert.match(root.textContent,/已发布并读回/);assert.ok(button(root,'读取最新保存结果'));assert.equal(f.state.posts,1);
+  await button(root,'刷新最新新闻').onclick();f.state.news[0].status='completed';f.state.news[0].conclusion='success';
+  await button(root,'检查本次更新').onclick();assert.match(root.textContent,/本次新闻采集成功/);assert.ok(button(root,'读取最新保存结果'));assert.equal(f.state.posts,1);
 });
-test('human status wording preserves source failures, no-new-event inference and no research completion',()=>{
-  const r=refreshPresentation({kind:'run',run:{status:'completed',conclusion:'success'},publication:'same_run_bytes_read',failed_sources:1,window_titles:0,captured_through:new Date(T).toISOString()});
-  assert.match(r.title,/部分来源/);assert.match(r.detail,/不是新增事件数/);assert.match(r.detail,/未开展 Quick/);
+test('human status wording keeps run success separate from browser publication verification',()=>{
+  const r=refreshPresentation({kind:'run',run:{status:'completed',conclusion:'success'},publication:'browser_readback_required'});
+  assert.match(r.title,/采集成功/);assert.match(r.detail,/固定 R reader/);assert.match(r.detail,/不把运行成功本身当作页面已更新/);
 });
 
 
