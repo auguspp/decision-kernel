@@ -1,4 +1,5 @@
 import {transferButton} from './quick-inbox-ui.mjs';
+import {globalMarketsPage} from './global-markets.mjs';
 /** Saved news/market views, not a researcher, quote provider, or command bridge.
  * Same-R registered bytes only. Source titles and dates remain claims, not facts.
  */
@@ -147,7 +148,8 @@ function pager(target,page,total,size,change,{el,button}) {
 }
 export function marketsPage(target,ctx) {
   const {reading,ui,active,onRead,onCompany}=ctx, {el,card,button,link,notice,folded,disclosure,dataTable}=ui;
-  target.append(card('市场 · 已覆盖观察','先看 A 股行业结构与个股观察。全球指数、债券、商品、外汇和加密资产的统一快照尚未接入此页；不是实时行情终端。'));
+  target.append(card('市场 · 已覆盖观察','国际指数与人民币同业利率的保存背景，以及 A 股行业结构和个股观察。各来源日期、覆盖和失败独立展示；不是实时行情终端。'));
+  globalMarketsPage(target,ctx);
   const lane=reading.payload.lanes?.sector, saved=lane?.last_qualified_result;
   const panel=card('A 股行业结构',`保存市场日：${day(saved?.market_session)?saved.market_session:'未知'}；基于原价格观察，不说明上涨原因。`); target.append(panel);
   if (lane?.health!=='LATEST_ATTEMPT_SUCCEEDED') panel.append(notice('最近板块更新未确认成功；以下若有数据，仍是上次保存结果。'));
