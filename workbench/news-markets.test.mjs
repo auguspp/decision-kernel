@@ -110,7 +110,11 @@ test('actual app exposes News and preserves exact-R reading after refresh',async
   const globals={document:{head:el('head'),createElement:el,createTextNode:t=>el('#text',t),getElementById:id=>ids[id]},navigator:{},fetch:async(url,options)=>{
     calls.push(url);assert.equal(options.method,'GET');assert.equal(options.body,undefined);
     let data;
-    if(url.includes('/git/ref/'))data={ref:'refs/heads/'+READ_REF,object:{type:'commit',sha:ref}};
+    if(url==='/api/read-model/current-state'){
+      assert.equal(options.credentials,'same-origin');assert.equal(options.headers?.['X-Decision-Kernel-Intent'],'read-model-ref');
+      data={ref:READ_REF,commit:ref};
+    }
+    else if(url.includes('/git/ref/'))data={ref:'refs/heads/'+READ_REF,object:{type:'commit',sha:ref}};
     else if(url.endsWith('/current-state.json'))data={schema_version:1,entry_ref:READ_REF,code_commit:'c'.repeat(40),reading_hash:H,...auth,lanes:{},
       semantics:'READ_ONLY_SAVED_RESULTS_AND_EXPLICIT_REQUESTS_NOT_RESTORE_AUTHORITY',checks:{},research:{daily_news:{...f.saved,details:{json:descriptor(bodies.get(ref))}}}};
     else if(url.endsWith('/issues/575'))data={number:575,html_url:`https://github.com/${REPO}/issues/575`,comments:0};

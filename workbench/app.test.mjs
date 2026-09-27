@@ -145,7 +145,8 @@ test('cross-R refresh clears detail and rejects late old-R response without mixi
     await old;
     assert.ok(ids.detail.textContent.includes(body(R2, 'second')));
     assert.ok(!ids.detail.textContent.includes(body(R1, 'first')));
-    assert.equal(calls.filter(url => url.includes('/git/ref/')).length, 2);
+    assert.equal(calls.filter(url => url === '/api/read-model/current-state').length, 2);
+    assert.equal(calls.filter(url => url.includes('/git/ref/')).length, 0);
     assert.ok(calls.includes(file(R1, 'first')) && calls.includes(file(R2, 'second')));
     assert.ok(!calls.includes(file(R2, 'first')) && !calls.includes(file(R1, 'second')));
   });
