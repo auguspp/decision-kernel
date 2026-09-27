@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:17'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 1
+    groups:
+      python-versions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(deps)'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:37'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 1
+    groups:
+      actions-versions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(actions)'

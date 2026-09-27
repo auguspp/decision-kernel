@@ -1,0 +1,80 @@
+name: workbench-source-bundle
+on:
+  workflow_dispatch:
+    inputs:
+      code-sha:
+        description: Exact reviewed current main SHA with successful independent main CI
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: workbench-source-bundle
+  cancel-in-progress: false
+jobs:
+  bundle:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Qualify exact main and export only saved source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api repos/auguspp/decision-kernel/git/ref/heads/main > "$RUNNER_TEMP/source-main-ref.json"
+          gh api -X GET repos/auguspp/decision-kernel/actions/workflows/ci.yml/runs \
+            -f branch=main -f head_sha="$GITHUB_SHA" -f event=push -f per_page=20 > "$RUNNER_TEMP/source-ci-runs.json"
+          python3 .github/scripts/workbench-source-bundle.py \
+            --main-ref "$RUNNER_TEMP/source-main-ref.json" --ci-runs "$RUNNER_TEMP/source-ci-runs.json" \
+            --output "$RUNNER_TEMP/workbench-source"
+      - name: Attest this source archive
+        id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: ${{ runner.temp }}/workbench-source/workbench-source.tar
+          create-storage-record: false
+      - name: Verify signature and exact origin; reject tampered bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/workbench-source"
+          cp "$BUNDLE_PATH" "$out/attestation.jsonl"
+          args=(--bundle "$out/attestation.jsonl" --repo auguspp/decision-kernel
+                --signer-workflow auguspp/decision-kernel/.github/workflows/workbench-source-bundle.yml
+                --source-ref refs/heads/main --source-digest "$GITHUB_SHA" --deny-self-hosted-runners --format json)
+          gh attestation verify "$out/workbench-source.tar" "${args[@]}" > "$out/verification.json"
+          cp "$out/workbench-source.tar" "$RUNNER_TEMP/tampered-workbench-source.tar"
+          printf x >> "$RUNNER_TEMP/tampered-workbench-source.tar"
+          if gh attestation verify "$RUNNER_TEMP/tampered-workbench-source.tar" "${args[@]}" > /dev/null 2>&1; then
+            echo '::error::Tampered source unexpectedly verified'
+            exit 1
+          fi
+          printf 'VALID_SIGNATURE_AND_EXACT_ORIGIN; TAMPERED_BYTES_REJECTED\n' > "$out/verification-status.txt"
+      - name: Retain bundle and diagnostics, not automatic adoption
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: workbench-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/workbench-source/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain consumer boundary
+        if: always()
+        shell: bash
+        run: |
+          printf 'Source export at %s.\n\nOnly verification-status.txt after a successful signature/origin check and rejected tampered copy establishes this scoped provenance check. Missing status is NOT verified. This is not a Sites deployment or host adapter; never overwrite the site from this source archive. Preserve owner-only, CSP, existing endpoints/Secret and rollback.\n' "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"

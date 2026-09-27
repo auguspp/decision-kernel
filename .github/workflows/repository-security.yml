@@ -1,0 +1,56 @@
+name: repository-security
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 3'
+permissions:
+  contents: read
+concurrency:
+  group: repository-security
+  cancel-in-progress: false
+jobs:
+  codeql:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Initialize static analysis only
+        uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+      - name: Analyze and publish this scan
+        uses: github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4
+        with:
+          category: /language:${{ matrix.language }}
+          output: ${{ runner.temp }}/codeql-results
+          upload: always
+          upload-database: false
+      - name: Keep original SARIF even if upload fails
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: codeql-${{ matrix.language }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/codeql-results/*.sarif
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain scope, not a security certification
+        if: always()
+        shell: bash
+        env:
+          LANGUAGE: ${{ matrix.language }}
+        run: |
+          printf 'Static analysis: %s at %s.\n\nRun success is not zero findings, absence of vulnerabilities, or Human acceptance. Inspect this run and original SARIF. No Research/source execution or historical alert export.\n' "$LANGUAGE" "$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
