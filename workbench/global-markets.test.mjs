@@ -72,3 +72,50 @@ test('navigation away prevents a late source read overwriting the new view',asyn
  const pending=globalMarketsPage(target,ctx);await Promise.resolve();active=false;target.replaceChildren(el('p','新页面'));resolve({text:JSON.stringify(f.root)});await pending;
  assert.equal(target.textContent,'新页面');
 });
+
+// V2 uses the unchanged #614 report shape, not a synthetic unified quote API.
+function six(){
+ const f=fixture(),p=f.root.projection;p.version=f.saved.version='global-market-reading-v2';p.public_query={unattributed_run_ids:[]};
+ const specs={treasury:['1MONTH','3MONTH','6MONTH','1YEAR','2YEAR','5YEAR','10YEAR','30YEAR'].map(t=>['UST:'+t,'ANNUAL_PERCENT']),
+  fx:['USD','CNY','JPY','GBP'].map(c=>['EUR/'+c,c+'_PER_EUR']),
+  commodities:[['GC=F','USD_PER_TROY_OUNCE'],['CL=F','USD_PER_BARREL'],['BZ=F','USD_PER_BARREL']],
+  crypto:[['BTC-USD','USD_PER_BTC'],['ETH-USD','USD_PER_ETH']]};
+ let id=1000;
+ for(const [family,rows] of Object.entries(specs)){
+  const run={...p.families.indices.snapshot.run,id:++id,path:'.github/workflows/radar-global-public.yml'};
+  const r={...structuredClone(p.families.indices.snapshot.report),version:'global-public-context-v1',family,as_of_date:'2026-09-26',
+   identity:{...p.families.indices.snapshot.report.identity,run_id:run.id,workflow:run.path},
+   vintage:'CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE',outcomes:[{id:family,status:'ROWS_NORMALIZED'}],
+   observations:rows.map(([symbol,unit])=>({symbol,unit,value:'101',previous_value:'100',source_date:'2026-09-25',previous_date:'2026-09-23',
+    change:family==='commodities'?null:'1.00',change_unit:family==='commodities'?null:family==='treasury'?'bp':'%',
+    price_kind:family==='commodities'?'VENDOR_FUTURE_DAILY_CLOSE_NOT_SPOT_OR_SETTLEMENT':'DATED_SOURCE_OBSERVATION',
+    change_scope:family==='commodities'?'NOT_COMPUTED_CONTRACT_ROLL_IDENTITY_UNKNOWN':'TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS'})),available_values:rows.length};
+  delete r.source;p.families[family]={latest_attempt:run,latest_read_status:'CAPTURE_READ',snapshot:{run,report:r,archive:{sha256:H,read_path:`sources/artifacts/${H}.zip`}}};
+ }
+ return f;
+}
+test('six-family report preserves source units, euro direction and futures no-return',()=>{
+ const f=six(),v=view(f);assert.deepEqual(v.families.map(g=>g.rows.length),[6,8,8,4,3,2]);
+ assert.match(v.families[2].rows[0].value,/%（年化）/);assert.equal(v.families[2].rows[0].change,'1 bp');
+ assert.match(v.families[3].rows[1].value,/CNY\/EUR/);assert.match(v.families[4].rows[0].value,/金衡盎司/);
+ assert.match(v.families[4].rows[0].change,/不计算/);assert.match(v.families[5].rows[0].value,/美元\/BTC/);
+});
+for(const damage of ['workflow','symbol','unit','return','vintage','date','count','omit-family'])test(`new public family rejects ${damage}`,()=>{
+ const f=six(),p=f.root.projection,r=p.families.commodities.snapshot.report;
+ if(damage==='workflow')r.identity.workflow='.github/workflows/radar-global-market.yml';
+ if(damage==='symbol')r.observations[0].symbol='SPX';if(damage==='unit')r.observations[0].unit='INDEX_POINTS';
+ if(damage==='return')r.observations[0].change='1';if(damage==='vintage')r.vintage='PIT_VERIFIED';
+ if(damage==='date')r.observations[0].source_date='2026-09-27';if(damage==='count')r.available_values=2;
+ if(damage==='omit-family')delete p.families.fx;assert.throws(()=>view(f),/UNCONFIRMED/);
+});
+test('new source null and failed query preserve original date and other families',()=>{
+ const f=six(),p=f.root.projection,r=p.families.treasury.snapshot.report;r.observations[0].value=null;r.observations[0].change=null;r.available_values--;
+ p.public_query.status='QUERY_UNAVAILABLE';p.families.crypto.latest_attempt={id:1111,run_attempt:1,conclusion:'failure'};
+ const v=view(f);assert.equal(v.queryGap,true);assert.equal(v.families[2].rows[0].missing,true);
+ assert.equal(v.families[2].rows[0].date,'2026-09-25');assert.equal(v.families[5].current,false);assert.equal(v.families[0].current,true);
+});
+test('six-family UI remains one saved read with explicit source conventions',async()=>{
+ const f=six(),target=el('main');let n=0;await globalMarketsPage(target,context(f,async()=>{n++;return{text:JSON.stringify(f.root)};}));
+ assert.equal(n,1);for(const word of ['美国财政部','欧洲央行','Yahoo','Coinbase','每1欧元','不是现货','不计算跨日收益'])assert.ok(target.textContent.includes(word),word);
+ assert.ok(!target.textContent.includes('美债/国际利率、黄金原油、外汇、加密资产尚未接入'));
+});
