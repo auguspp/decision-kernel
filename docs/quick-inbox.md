@@ -46,7 +46,7 @@
 
 `POST /api/quick-inbox` 只接受 add/remove。固定原Site origin、可信 Sites `oai-authenticated-user-id` 与预配置 owner比对、同源Origin、自定义intent头、JSON及尺寸限制。GET仅检查接点/清单读取，不采集/研究。浏览器从不接触 GitHub token，不接受任意仓库/Issue/文件/工作流目标；只有 #601 评论写路径。GitHub写成功后再GET同评论核body/user/Issue/URL，不能用HTTP201代替实际读回。
 
-启用前需要 hosted 配置：`DECISION_KERNEL_OWNER_USER_ID`、`DECISION_KERNEL_GITHUB_TOKEN`、`DECISION_KERNEL_ENABLE_INBOX=1`。不在聊天、代码或公开URL中填实际值。首版仅支持作为仓库owner写入的fine-grained PAT，单仓库 `Issues: write`；新闻刷新另外需要 `Actions: write`，不要求Contents写。GitHub App/其他bot作者须另核allowlist，不自动信任。
+启用前需要 hosted 配置：`DECISION_KERNEL_OWNER_USER_ID`、`DECISION_KERNEL_GITHUB_TOKEN`、`DECISION_KERNEL_ENABLE_INBOX=1`。不在聊天、代码或公开URL中填实际值。当前原站实际采用可由host adapter在单次owner请求内提供可信身份，不要求Human搬运raw id。fine-grained PAT仍只限本仓库：`Issues: write`用于#601、`Actions: write`用于新闻刷新、`Contents: read`用于固定R指针及待Quick写入前的原件重建；**不需要 Contents: write**。GitHub App/其他bot作者须另核allowlist，不自动信任。
 
 原Site CSP在接入时仅为同域fetch增加 `connect-src 'self'`，其余限制保留。仓库预览 index 同步只增加 connect-src self，并更正“绝不写入”的旧提示；无其他CSP或路由布局变化，不能拿它替代原host根页面/适配。要在真实Site确认边缘层丢弃伪造identity头、非owner拒绝、缺身份拒绝、凭证只在服务端、生产HTTPS到GitHub、无额外直连Worker绕过域名。通过这些核验后才设置enable。单元测试的注入header不证明平台已完成身份认证。
 

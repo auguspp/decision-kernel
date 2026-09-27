@@ -58,9 +58,12 @@ test('sector malformed row cannot enter display and mismatched horizon is unknow
   const f=sector();f.report.universes[0].rows[0].observation.horizon_20.sessions=5;assert.equal(sectorView(JSON.stringify(f.report),f.saved).rows[0].excess,'口径未知');
   f.report.universes[0].rows[0].observation.as_of_session='2026-09-25';const v=sectorView(JSON.stringify(f.report),f.saved);assert.equal(v.rows.length,0);assert.ok(v.gaps.length);
 });
-test('copied Quick request is exact data-only context and explicitly not started',()=>{
-  const f=news(),text=JSON.stringify(f.report),r=newsView(text,f.saved).rows[0];const copy=newsResume(R,descriptor(text),r);
-  assert.match(copy,/复制没有启动研究/);assert.match(copy,/不得自动 Full/);assert.match(copy,new RegExp(R));assert.match(copy,new RegExp(r.id));assert.throws(()=>newsResume('main',descriptor(text),r),/UNPINNED/);
+test('copied single-news fallback is a compact exact locator, not a duplicated source JSON blob',()=>{
+  const f=news(),text=JSON.stringify(f.report),d=descriptor(text),r=newsView(text,f.saved).rows[0],copy=newsResume(R,d,r);
+  assert.match(copy,/复制本身没有启动研究/);assert.match(copy,/不得自动 Full/);
+  assert.match(copy,new RegExp(`reading R: ${R}`));assert.match(copy,new RegExp(`read_path: ${d.read_path}`));assert.match(copy,new RegExp(r.id));
+  assert.ok(!copy.includes('publication_claims'));assert.ok(!copy.includes(r.url));assert.ok(!copy.trim().startsWith('{'));
+  assert.throws(()=>newsResume('main',d,r),/UNPINNED/);
 });
 test('registered file over old 512KiB limit reads bounded bytes; >1MiB and corrupt content fail closed',async()=>{
   const text='x'.repeat(600*1024), d=descriptor(text);
