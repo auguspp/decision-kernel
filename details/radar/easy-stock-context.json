@@ -1,8 +1,8 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "d9d0b69d17a24f9e0ccf4b447cf3a2c34cd0c58924f18d9543a49e11654be102",
-    "generated_at": "2026-09-27T02:27:04.396453+00:00",
+    "base_reading_hash": "22e114befee56ff32f87339be4c29c5822582e3b419ca105f7a9263fa64d8b10",
+    "generated_at": "2026-09-27T03:24:31.242402+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -37,7 +37,7 @@
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
         "sha256": "0933e6ec40b59d9d6be57382c336ac2a1dca85e930555890b51da4fd311259c1"
       },
-      "capture_age": "RECENT_CAPTURE_NOT_SOURCE_FRESHNESS",
+      "capture_age": "OLDER_THAN_36H",
       "job_id": 108130184419,
       "job_proof": {
         "bytes": 11322,
@@ -8202,5 +8202,5 @@
     "signal_transition_authority": "NONE",
     "version": "easy-stock-public-context-v1"
   },
-  "projection_hash": "572245b24fa9e9abdfcf4ce3107c1a32e3a7c0db80d315f650b179982a5198fc"
+  "projection_hash": "1d915c244e33c298f776081f4521cd89ba96f0e5025f10c5d4cf0146d57f596f"
 }
