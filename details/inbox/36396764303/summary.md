@@ -1,0 +1,43 @@
+# 本次读取覆盖
+
+旧研究包自动Odds试算未启用。Watch：已启用 5，已完成判断 5；确认触界 0，未触界 5，无法判断 0。
+
+
+
+# Decision Inbox · 已启用价格条件
+
+# Odds Watch v0
+
+观察时间：2026-09-28T08:20:36.673904Z
+
+**需要复核：0** · 价格缺口：0 · 活跃监控：5
+
+## 仍在等待原边界
+
+- **恒瑞医药 600276.SH** · CNY44.47 · 下一边界 `around CNY39.6 assumption recheck` · 距离上沿 CNY4.87
+- **兴业科技 002674.SZ** · CNY19.5 · 下一边界 `CNY15–17 re-underwrite` · 距离上沿 CNY2.5
+- **北大荒 600598.SH** · CNY12.36 · 下一边界 `CNY11.0–11.3 re-underwrite` · 距离上沿 CNY1.06
+- **三花智控 002050.SZ** · CNY35.44 · 下一边界 `around CNY30 first-tranche condition` · 距离上沿 CNY5.44
+- **兆易创新 603986.SH** · CNY358.51 · 下一边界 `around CNY350 pre-entry assumption review` · 距离上沿 CNY8.51
+
+<details>
+<summary>未启用价格触发（6）</summary>
+
+- **光电股份 600184.SH** · `CHALLENGED_NO_ACTIVE_TRIGGER` · Valuation bridge was challenged; old ladder must not reactivate from price alone.
+- **内蒙一机 600967.SH** · `EVIDENCE_REVIEW_ONLY_NO_PRICE_BOUNDARY` · Human accepted WEAK/FRAGILE Odds, but no method-ready first-entry price condition was established.
+- **贵州茅台 600519.SH** · `UNTYPED_HISTORY_NO_ACTIVE_TRIGGER` · Saved Inbox history was not typed-revalidated as current Odds.
+- **中国神华 601088.SH** · `UNTYPED_HISTORY_NO_ACTIVE_TRIGGER` · Saved Inbox history was not typed-revalidated as current Odds.
+- **宁德时代 300750.SZ** · `DEQUALIFIED_HISTORY_ONLY` · Current decision qualification exited; historical Odds are not an active trigger.
+- **招商银行 600036.SH** · `DEQUALIFIED_HISTORY_ONLY` · No current qualified watch boundary is established by the Odds backfill.
+
+</details>
+
+Watch hash: `07801f46097c1d162a81c686f437ed5850527b4c3a2841f6e5f93d1a29e122e7`
+
+_Price changes Odds; Evidence changes Belief. Watch allocates Human review attention only. Investment Authority = NONE._
+
+日常研究增量由 Hosted Quick 与晚间 Brief 交付；本页不生成新Odds或投资决定。
+
+## 公告覆盖
+
+本次未请求公告扫描（NOT_REQUESTED）；不代表没有公告，也不是来源获取失败。
