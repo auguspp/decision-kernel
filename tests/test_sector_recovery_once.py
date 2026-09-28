@@ -34,6 +34,8 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         '.github/workflows/sanhua-relation-acquisition.yml',
         'src/decision_kernel/runtime/sanhua_source_acquisition.py',
         'src/decision_kernel/runtime/sanhua_document_versions.py',
+        '.github/workflows/mineru-pdf-capability-probe.yml',
+        'eval/mineru_pdf_probe.py',
     ):
         assert not Path(retired_path).exists()
 
@@ -48,6 +50,8 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         'prepared_disclosure_research',
         'decision_kernel.runtime.sanhua_source_acquisition',
         'sanhua_source_acquisition capture',
+        'mineru-pdf-capability-probe',
+        'mineru_pdf_probe.py',
     ):
         assert retired not in combined
 
