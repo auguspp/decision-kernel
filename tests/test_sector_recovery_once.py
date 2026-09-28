@@ -38,6 +38,8 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         'eval/mineru_pdf_probe.py',
         '.github/workflows/sector-public-history-probe.yml',
         '.github/scripts/probe-sector-public-history.py',
+        '.github/workflows/sector-radar-historical-study.yml',
+        'src/decision_kernel/runtime/sector_radar_historical_study.py',
     ):
         assert not Path(retired_path).exists()
 
@@ -56,6 +58,8 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         'mineru_pdf_probe.py',
         'sector-public-history-probe',
         'probe-sector-public-history.py',
+        'sector-radar-historical-study',
+        'sector_radar_historical_study',
     ):
         assert retired not in combined
 
