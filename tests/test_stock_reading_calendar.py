@@ -1,5 +1,6 @@
 """Clock regressions through actual stock/capture/replay code; all market data synthetic."""
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from types import SimpleNamespace
 
 import pytest
 
@@ -53,12 +54,43 @@ def test_monday_plan_can_reach_real_calendar_check_without_rewriting_clock():
     assert all(r['stock_path']['history_session_count']==61 for r in p['surfaced_stocks'])
 
 
+def clock_state():
+    """Only the dated sessions consumed by the real clock contract; not a saved bundle."""
+    return SimpleNamespace(sessions=(date(2026,9,2), date(2026,9,3), date(2026,9,4)))
+
+
 @pytest.mark.parametrize('at,mode,reason',[
     (MONDAY,'truncated','STOCK_CALENDAR_COVERAGE_INSUFFICIENT'),
     (MONDAY,'missing_middle','STOCK_CALENDAR_STATE_WINDOW_DIFFERS'),
     (MONDAY.replace(hour=15),None,'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION'),
     (MONDAY.replace(hour=16),None,'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION'),
     (MONDAY+timedelta(days=1),None,'STOCK_STATE_NOT_LATEST_COMPLETED_SESSION'),
+])
+def test_calendar_coverage_window_and_completed_session_contract(at,mode,reason):
+    state=clock_state()
+    sessions=state.sessions
+    calendar=(*sessions, MONDAY.date(), (MONDAY+timedelta(days=1)).date())
+    close=datetime(2026,9,4,15,tzinfo=stock.SHANGHAI_TZ)
+    # Each counterexample starts from a fresh valid input, using the real helper
+    # and its real latest-completed-session dependency; neither verdict is mocked.
+    assert stock.check_observation_clock(state,MONDAY,calendar=calendar,
+        calendar_source_date=MONDAY.date()) == close
+    if mode=='truncated':calendar=calendar[:-3]
+    elif mode=='missing_middle':calendar=calendar[:1]+calendar[2:]
+    with pytest.raises(stock.StockReadingInputError,match=reason) as error:
+        stock.check_observation_clock(state,at,calendar=calendar,
+            calendar_source_date=at.date())
+    assert error.value.category == ('DATA_QUALIFICATION_FAILED' if mode=='missing_middle'
+                                    else 'DATA_INSUFFICIENT')
+    assert error.value.thscode is None and state.sessions == sessions
+
+
+# Retain real envelope/parser -> observer early-stop propagation for both
+# malformed calendars. Stale-session propagation remains in the close-crossing
+# observer and the negative capture/replay tests below, without another matrix.
+@pytest.mark.parametrize('at,mode,reason',[
+    (MONDAY,'truncated','STOCK_CALENDAR_COVERAGE_INSUFFICIENT'),
+    (MONDAY,'missing_middle','STOCK_CALENDAR_STATE_WINDOW_DIFFERS'),
 ])
 def test_calendar_not_weekday_decides_and_blocks_later_market_calls(at,mode,reason):
     state,plan,response,calls=inputs(at,calendar_mode=mode)
@@ -142,7 +174,8 @@ def test_close_crossing_is_rechecked_after_each_response():
 
 @pytest.mark.parametrize('at',[MONDAY.replace(tzinfo=None),datetime(2026,9,4,14,tzinfo=stock.SHANGHAI_TZ)])
 def test_unqualified_cutoff_still_fails_before_any_request(at):
-    state,_,_,_=inputs()
+    state=clock_state()
+    assert stock.check_observation_clock(state,MONDAY) == datetime(2026,9,4,15,tzinfo=stock.SHANGHAI_TZ)
     with pytest.raises(ValueError):stock.check_observation_clock(state,at)
 
 
