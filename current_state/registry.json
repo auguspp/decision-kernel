@@ -1,4 +1,5 @@
 {
+  "research_calendar": {"ref":"74691f486beb6e9f2e011bb8ce9af7d14f146a30","directory":"docs/readings/2026-09-28-b2-bls-calendar","calendar_hash":"dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978","blobs":{"calendar.json":"66f157227e2ca2d1720e3fc42686a8657053fe68","calendar.md":"ec0c4cd941fe19ef804393c387e7548579c8019a","request.json":"22d7d94d6d6f979e6c9a881e2271c24d39a1cff8","source.txt":"ca95e544a9264fd686245c4d0679a3ef0ee98e6f"}},
   "schema_version": 1,
   "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
   "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
