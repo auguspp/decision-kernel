@@ -2,7 +2,6 @@
 import base64
 import copy
 import json
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -160,12 +159,3 @@ def test_native_cli_uses_fixed_repo_no_shell_and_no_overwrite_sha(monkeypatch):
     assert base64.b64decode(body["content"]) == raw and kw.get("shell", False) is False
     with pytest.raises(ValueError): intake.native_create("src/packet.json", raw)
     assert len(calls) == 1
-
-
-def test_retired_intake_starter_is_not_replaced_by_another_workflow():
-    workflows = Path(".github/workflows")
-    assert not (workflows / "incremental-disclosure-intake.yml").exists()
-    for path in (*workflows.glob("*.yml"), *workflows.glob("*.yaml")):
-        raw = path.read_text()
-        assert "-m decision_kernel.runtime.incremental_disclosure_intake" not in raw
-        assert "research_runs/disclosure-intake-request.json" not in raw

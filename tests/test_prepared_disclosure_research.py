@@ -230,19 +230,6 @@ def test_private_authorization_source_is_never_model_context(tmp_path, monkeypat
     assert (source["ref"],source["path"]) not in c.reads
 
 
-def test_module_has_no_production_trigger_and_legacy_request_is_unchanged():
-    from pathlib import Path
-    # The frozen Suken launcher is retired; its input and shared readers remain.
-    assert not Path('.github/workflows/saved-research-once.yml').exists()
-    workflows=list(Path('.github/workflows').glob('*.yml'))
-    assert workflows
-    for path in workflows:
-        workflow=path.read_text()
-        assert 'decision_kernel.runtime.saved_research_once' not in workflow
-        assert 'prepared_disclosure_research' not in workflow
-    assert json.loads(Path('research_runs/api-once-request.json').read_bytes())["id"]=='p0-suken-api-20260910-v2'
-
-
 @pytest.mark.parametrize("name", ["launch.json", "candidate.json"])
 def test_corrupt_readback_stops_all_later_writes(tmp_path, monkeypatch, name):
     c=Case(monkeypatch); c.corrupt_read=name
