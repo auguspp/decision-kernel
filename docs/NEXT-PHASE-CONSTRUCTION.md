@@ -1,10 +1,12 @@
-# 当前施工入口：产品主线 B2
+# 当前施工入口：Brief Human-first 与 Concept Radar
 
-2026-09-28。AI-native 支线已在 #625 / #626 按有界范围收口，依已录 Human 授权返回产品主线。**当前执行顺序只以 [#297](https://github.com/auguspp/decision-kernel/issues/297) 与对应任务的最新有效回执为准。** 本页是恢复导航，不维护第二份进度清单。
+2026-09-28。AI-native 支线已在 #625 / #626 按有界范围收口。Human 对晚间 Brief 的直接使用反馈已在 #297 明确优先，当前主工程转入 #645；原 B2 与 Markets 采用保留并后移。**当前执行顺序只以 [#297](https://github.com/auguspp/decision-kernel/issues/297) 与对应任务的最新有效回执为准。** 本页是恢复导航，不维护第二份进度清单。
 
 ## 当前顺序与任务归属
 
-[#620 B2 有限近期研究日历](https://github.com/auguspp/decision-kernel/issues/620) 归 #351，是当前下一产品主工程；恢复原任务范围与最新施工回执。首切片代码与离线验用入口见 [research-calendar-v1](research-calendar-v1.md)，不从文件存在推断 B2 整体验收、固定 R 发布或页面采用。
+[#645 Brief Human-first / Concept Radar v2](https://github.com/auguspp/decision-kernel/issues/645) 归 #351，是当前优先产品工程。先改善真实 Brief 的市场结构阅读，再接实际可用的 Concept 多周期、生命周期、重叠与成员下钻；不以新增文档、提示词或短期横截面冒充完整v2。现用Brief的完整旧→新指令与有范围回放从[BRIEF-R5-v1.6](readings/2026-09-28-brief-human-first-instructions.md)进入，实际采用/未验状态读#645回执。
+
+#645首轮有界验收后再恢复[#620 B2](https://github.com/auguspp/decision-kernel/issues/620)和[#621 Markets原站采用](https://github.com/auguspp/decision-kernel/issues/621)的施工顺序。#644原稿、容量修复、未合并分支与失败证据保留，不重建、不从其开放状态推出当前优先；恢复时先读原PR最新回执。B2接口仍见[research-calendar-v1](research-calendar-v1.md)，不得预先签收发布、原站或完整B2。
 
 先读当前 M 的 [AGENTS](../AGENTS.md)，从 #297 进入当前任务，按任务路由取回适用规则、代码与证据。比较任务摘要和相关 commits/PR/run；旧摘要不证明功能未实现，新 SHA 也不自动授予新范围。涉及保存状态时再按 [current-state](current-state.md) 独立固定 R，M 不是 R。
 
@@ -29,6 +31,8 @@ GitHub 是 canonical 状态/证据/过程后端；Research 解释、Kernel 核�
 不新增日常采集、Quick/Full/Odds/Watch/交易，不停原 Brief 或获准任务，不自动合并依赖提案，不改 Sites PAT/隐私/持续费用。不以本导航创建 Memory、provider、Agent/DAG、CI 或审批框架。
 
 ## 历史计划，不作为当前待建清单
+
+- [本次重排前B2入口](https://github.com/auguspp/decision-kernel/blob/d8fedb169eaeaf825b45afb3602fe0c4d4390aa4/docs/NEXT-PHASE-CONSTRUCTION.md)：原范围与失败保留，当前Brief优先顺序以#297/#645为准。
 
 - [AI-native 支线导航](https://github.com/auguspp/decision-kernel/blob/1ef57be901243f683cb0cc15cedd3ed159fdd02e/docs/NEXT-PHASE-CONSTRUCTION.md)：保留原 AN1→AN-CI→AN2→AN3 顺序；收口以 #625 / #626 后继回执为准。
 - [支线前 v4 完整计划](https://github.com/auguspp/decision-kernel/blob/3843e13ae20941c0a20241d509eb02bf9f293ea0/docs/NEXT-PHASE-CONSTRUCTION.md)：保留 B1 第一切片及其阶段限制；已交付项不得重新列为 NEXT。
