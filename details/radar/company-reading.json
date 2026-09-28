@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "65b386078da158b3c892a4f1f77deb1d38d3c51fd44539c2c4d6eb18e2d69dae",
+    "base_reading_hash": "5edeadc682eb4860a1f1a0080a10d70a745f5d7e86d5f030df753bc307147ff9",
     "companies": [
       {
         "automatic_admission": false,
@@ -7150,7 +7150,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-28T13:56:34.719771+00:00",
+    "generated_at": "2026-09-28T15:39:26.138775+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -7344,5 +7344,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "0c31d749759866ebc9a9a6769b88697ec8823fda2ee240b6f6f858efb4e8e50f"
+  "projection_hash": "a327f663f1a69085f84a5b100125810d3b9309dd543d03f1bd86b4ac9939a0c6"
 }
