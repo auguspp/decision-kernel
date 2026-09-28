@@ -1,5 +1,11 @@
 # P0-4A Source Acquisition Bridge v0 — Sanhua only
 
+> **RETIRED CURRENT EXECUTION SURFACE — 2026-09-28.** This document is retained as historical design/acceptance evidence. The dedicated Sanhua source/relation one-shot workflows and their two case-specific runtime modules were removed from current main after consumer/run audit under #626. They were first-add-only writers and cannot legitimately run again after their frozen requests already exist. Do **not** recreate or dispatch them from this document.
+>
+> Frozen inputs remain at `.github/source-acquisition/sanhua-v0-20260909.json` and `.github/source-acquisition/sanhua-relation-v0-20260909.json`. Exact pre-retirement implementation is recoverable at `ac98e9b4e83b23b50cab3a72c6332b579c679d57`. Historical fulltext run `34316364031` / artifact `10090204888` retained the formal H1 original while reporting `RELEVANT_IR_MISSING_FROM_BOUNDED_INVENTORY`; its GitHub workflow conclusion was failure and remains failure. Historical relation run `34322709839` completed success as the separate follow-up. These facts are history, not current source freshness or permission to reacquire.
+>
+> Current Research/Human records for 002050.SZ are independent of this retired writer. Future source work must use the then-current generic source/Research path and fresh authority rather than resurrecting this one-shot. The commands and workflow descriptions below describe the historical v0 implementation only.
+
 This is a Harness source-package seam, not Research, Evidence admission, a new
 crawler, market-data collection, Human attention, or a company conclusion. The
 previous Sanhua preflight remains SOURCE_PREFLIGHT_INCOMPLETE / NOT_EXECUTED.
