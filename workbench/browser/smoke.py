@@ -122,7 +122,7 @@ DIGEST_OBSERVER = """(() => {
     window.__AN2_FETCHES.push(observation);
     const response = await originalFetch.apply(this, args);
     const id = response.headers.get('x-an2-response');
-    Object.assign(observation, {id, status: response.status});
+    Object.assign(observation, {id, status: response.status, url: response.url});
     if (id && response.body) owners.set(response.body, {id, chunks: []});
     return response;
   };
