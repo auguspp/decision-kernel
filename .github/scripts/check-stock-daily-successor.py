@@ -197,8 +197,7 @@ def validate_successor(env: Mapping[str, str]) -> tuple[int, str]:
         raise SuccessorCheckError("FRESH_MAIN_SUCCESSOR_REQUIRED")
     upstream_event = env.get("UPSTREAM_EVENT")
     if (
-        env.get("UPSTREAM_NAME") != SECTOR_WORKFLOW
-        or env.get("UPSTREAM_PATH") != SECTOR_PATH
+        env.get("UPSTREAM_PATH") != SECTOR_PATH
         or upstream_event not in {"schedule", "workflow_dispatch"}
         or env.get("UPSTREAM_STATUS") != "completed"
         or env.get("UPSTREAM_CONCLUSION") != "success"

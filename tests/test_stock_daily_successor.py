@@ -121,6 +121,9 @@ def test_successor_reconciles_deliveries_without_a_second_source_clock():
     assert "do not fall back to GITHUB_TOKEN" in steps[dispatch]["run"]
     assert "github.event.workflow_run.head_repository.full_name == github.repository" in job["if"]
     assert "github.run_attempt == 1" in job["if"]
+    tdx_job = jobs["dispatch-tdx-concept"]
+    assert "github.event.workflow_run.path == '.github/workflows/sector-radar-shadow.yml'" in tdx_job["if"]
+    assert "github.event.workflow_run.name == 'sector-radar-shadow'" not in tdx_job["if"]
     assert raw.count("tdx-concept-snapshot.yml/dispatches") == 1
     assert "Classify exact Sector origin for TDX" in raw
     assert "HITHINK_FINANCE_API_KEY" not in raw
@@ -165,6 +168,9 @@ def test_exact_successor_identity_accepts_native_schedule_and_separate_code_sha(
     # The existing Stock contract binds the immutable upstream artifact separately.
     assert mod["validate_successor"](environment(GITHUB_SHA="b" * 40)) == (499, "GITHUB_SCHEDULE")
     assert mod["validate_successor"](environment(UPSTREAM_HEAD_SHA="b" * 40)) == (499, "GITHUB_SCHEDULE")
+    assert mod["validate_successor"](environment(
+        UPSTREAM_NAME="sector-radar-shadow | operation=produce | recovery=none"
+    )) == (499, "GITHUB_SCHEDULE")
     invalid = (
         ("GITHUB_REPOSITORY", "other/repo"),
         ("GITHUB_REF", "refs/heads/other"),
@@ -172,7 +178,6 @@ def test_exact_successor_identity_accepts_native_schedule_and_separate_code_sha(
         ("GITHUB_EVENT_NAME", "workflow_dispatch"),
         ("GITHUB_RUN_ATTEMPT", "2"),
         ("GITHUB_SHA", "not-a-sha"),
-        ("UPSTREAM_NAME", "other"),
         ("UPSTREAM_PATH", ".github/workflows/other.yml"),
         ("UPSTREAM_EVENT", "push"),
         ("UPSTREAM_STATUS", "in_progress"),
