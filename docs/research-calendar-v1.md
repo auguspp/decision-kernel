@@ -109,3 +109,12 @@ python -m decision_kernel.runtime.research_calendar compare \
 这建立的是**可选双快照登记与同 R 阅读**，不是官方修订/取消链、完整多版本目录、Workbench 历史面板、Sites 或 Human 使用证明。现役 registry 不因工程测试自动追加前驱；真实后继须有自己的来源原件/实际核读时刻，并经正常变更显式登记。测试中的假设日期和核读标签只验证机械合同，不充当官方变化证据或生产样本。
 
 复用当前文档已保留的 #508/#511、#638–#641 审计；内部为原 source/retain、read_calendar/compare_calendars 和 publisher 调用/导航。官方合同补核 [GitHub Contents 精确 ref](https://docs.github.com/en/rest/repos/contents#get-repository-content)及上方 previousStartDate，无新库/日期算法/网络客户端或持续费用。退出时删除可选 predecessor 登记、比较接点/专属测试与说明；原当前快照、CLI 历史重放、来源原件与失败记录保留。完整 B2 验收仍归 #620。
+
+
+## 人可读近期列表：复用原用途引用，不另建日历后端
+
+原 `registry.references` 可登记唯一 `research-agenda`（`case=navigation`、`use=NAVIGATION_ONLY`），绑定 `docs/readings/` 下的有限核读Markdown及其blob。现役source负责同R原稿保管，现役Reading核bytes/SHA，日历面板复用product的outline/paragraphs投影为文本节点；不新增日期parser、事件schema、发布器或持仓推断。标题只用于排版，“依据与读取范围”可折叠；事件日期、缺口和原关注身份仍在正文第一层。
+
+这是人工编排的历史计划，不是结构化事件完整性或官网真实性认证。源站日期/公开日/核读钟/仅检索正文等限制由原稿诚实表达，页面不补日期、不检查发布、不调用链接或新模型。未来核读另存新稿、显式换引用；不能把仅换R或重绘页面称为新采集。没有引用的旧R保持原BLS阅读；冲突或读取失败只影响近期列表，不回退别的版本。原BLS四文件、核读、hash、compare及保管合同不变。
+
+本接点复用原#508/#511/#638催化日历范围与来源分层先例、现役用途索引和浏览器文本节点/Playwright。相比新增多源parser/后端字段，保留一份可直接阅读的Markdown只增加一个原source引用和薄展示；原来源/API/字节预算不加大。退出移除可选引用、agendaPage及其专属用例，保留历史稿、原日历和共享reader。真实内容读取、隔离浏览器、正常发布、Sites采用与Human使用仍分别验收；来源检索摘录不冒充完整原件。

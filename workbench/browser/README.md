@@ -35,7 +35,7 @@ an incomplete bundle is not a complete-checkout validation: some existing Node
 tests also read `.github/workflows/radar-newsnow-daily.yml`. Do not invent a
 replacement workflow fixture to turn missing-source failures green.
 
-## What the ten scenes prove
+## What the thirteen scenes prove
 
 Each scene uses a fresh context at 1360×900 and 390×844:
 
@@ -58,6 +58,11 @@ Each scene uses a fresh context at 1360×900 and 390×844:
    one-row window, even after its native digest completes.
 10. A legacy R without calendar registration is explicit absence, not no events;
     no calendar body is fetched and the stock panel remains available.
+11. Read an explicitly registered authored agenda, its visible source gaps and
+    unknown review dates, then its same-R original; source script stays inert.
+12. Reject an equal-length altered agenda with native SHA while original BLS
+    appointments and the stock panel remain available.
+13. A held old-R agenda cannot overwrite the new one after its digest completes.
 
 The fixtures follow existing controller/global-markets test shapes. Repeated
 `a`/`b`/`c` identities and all numeric quotes are **TEST_ONLY**, not actual Git
