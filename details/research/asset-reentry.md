@@ -95,7 +95,6 @@
 - stock-603353-34807883332-business-review-addendum：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：run34807883332同材料追加业务审阅：有限经营依据、反证和下一问题；原终局理由仍受挑战，不覆盖候选/不新增Funnel、Human接受、Odds或监控。
   - [原保存材料](../../sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md)
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-24；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 300711.SZ
 

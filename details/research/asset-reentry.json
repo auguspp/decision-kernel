@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "7373c8cd866d3be60a0616a072e1d7a350dc0177dab7e21af66062a7e65a797c",
+    "base_reading_hash": "77e2c3c46b5e90667ab594a356590d117827a2cf6f31c4d4cb4087ee0d3c7a10",
     "companies": [
       {
         "archives": [],
@@ -654,52 +654,11 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "bd570bde869f297a620e8f465db2d616540e1edc2e25abe5fd96638107c78a2e",
+        "association_id": "dbb3d69879be2ba4c54c20590c1d9dbb428f6dd17b84e151908609b04fcc947e",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
-        "saved_observations": [
-          {
-            "kind": "SAVED_RADAR_ORIGINS",
-            "meaning": "TICKER_ASSOCIATION_NOT_SAME_QUESTION_OR_NEW_TRIGGER",
-            "origins": [
-              {
-                "family": "GRANULAR_884",
-                "group_key": "881180.TI",
-                "group_on_homepage": false,
-                "is_primary": true,
-                "kind": "SECTOR_LEADER",
-                "market_session": "2026-09-24",
-                "retained_leader": {
-                  "daily_return": "-0.0445598096474150984209387843",
-                  "name": "和顺石油",
-                  "thscode": "603353.SH",
-                  "ticker": "603353",
-                  "turnover": "460625500"
-                },
-                "sector_name": "油品石化贸易",
-                "sector_thscode": "884021.TI",
-                "source": {
-                  "bytes": 436364,
-                  "git_blob": "3d37c6da74faea05a3c321530d0b89c9bb82fad2",
-                  "read_path": "details/sector/36122381294/result.json",
-                  "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                  "sha256": "1992f8dce9640f880285055378c00eeb630b57bd479196f477ffa273b34e57ce"
-                },
-                "source_observed_at": "2026-09-25T10:24:20.331698Z",
-                "source_result_hash": "ee3e54ede64e5ff4eab1d7989de5d3c0da195753422813cef0c70a3c84eab0b7"
-              }
-            ],
-            "projection_hash": "85b2754e1084a0bba0e3f35719adb4ef47b5e62125ba22c6920e5033d4004bcb",
-            "source": {
-              "bytes": 415866,
-              "git_blob": "b66f58a353601e220a59cc2e6355b1aad8821920",
-              "read_path": "details/radar/company-reading.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "d333d2b126a517df8a6254ebd30a54c3856b8f628a11b893a7931b6b64bf4e99"
-            }
-          }
-        ],
+        "saved_observations": [],
         "saved_watch": null,
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "603353.SH"
@@ -2583,7 +2542,7 @@
           }
         ],
         "assets": [],
-        "association_id": "30f1940eda2c6a07bd581da24a7ab6f0c6f422e7ed815533bd27b353502e55c5",
+        "association_id": "ebe34c01b2b5918cc24bb2cc52229630fac6aa12e03430f620ebc2cf758ee5e9",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2649,13 +2608,13 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "85b2754e1084a0bba0e3f35719adb4ef47b5e62125ba22c6920e5033d4004bcb",
+            "projection_hash": "8ab1ac0b95d06906189d4e8df7da5a5849b65b2ac961470ae69b5ff409fc8b64",
             "source": {
-              "bytes": 415866,
-              "git_blob": "b66f58a353601e220a59cc2e6355b1aad8821920",
+              "bytes": 320440,
+              "git_blob": "3b6afcc8d18dbca90e5f72b31baeff5aef594272",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "d333d2b126a517df8a6254ebd30a54c3856b8f628a11b893a7931b6b64bf4e99"
+              "sha256": "f24ffe32988f2092de76e3cfd3741231cab9744538bd625ee55c1c7d7ff114ff"
             }
           }
         ],
@@ -3273,10 +3232,10 @@
       "complete_research_history": false,
       "read_gap_count": 1,
       "unavailable_assets": 0,
-      "with_saved_observations": 2,
+      "with_saved_observations": 1,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-28T09:53:04.821652+00:00",
+    "generated_at": "2026-09-28T10:27:31.479878+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3295,5 +3254,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "508c5e94e1fac895903e224f7cde81f38df3f5d81647f612ef3c7e624db032bf"
+  "projection_hash": "eed9377b83d0a2b9493be693b21ba76c638613a732f59df897d16bec5e6e696c"
 }
