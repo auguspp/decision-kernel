@@ -315,8 +315,74 @@ def scene_markets_read_failure(page, data):
     return {'HTTP_503': 'local panel failure; stock remains'}
 
 
+def calendar_path(data, ref):
+    return json.loads(data.files[ref]['current-state.json'])['research']['calendar']['files']['calendar.json']['read_path']
+
+
+def scene_calendar_read(page, data):
+    tab(page, '市场观察')
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(3)
+    expect(page.locator('#content')).to_contain_text('2026-10-02T08:30:00-04:00')
+    expect(page.locator('#content')).to_contain_text('2026-10-02T20:30:00+08:00')
+    expect(page.locator('#content')).to_contain_text('预约；实际发布未检查')
+    page.get_by_text('日历依据与原件', exact=True).click()
+    page.get_by_role('button', name='阅读日历核读摘录', exact=True).click()
+    expect(page.locator('#detail')).to_contain_text('Employment Situation for September 2026')
+    assert page.evaluate('window.fixtureInjected === undefined')
+    return {'appointments':3, 'original_and_local_clocks':'visible', 'same_R_excerpt':'read', 'source_script':'inert text'}
+
+
+def scene_calendar_bad_body(page, data):
+    path = calendar_path(data, R1)
+    original = data.files[R1][path]
+    corrupted = original.replace(b'20:30', b'21:30', 1)
+    assert len(corrupted) == len(original) and corrupted != original
+    data.overrides[source_url(R1, path)] = (corrupted, 200)
+    tab(page, '市场观察')
+    expect(page.locator('#content')).to_contain_text('日历正文未能读完')
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(0)
+    page.get_by_text('日历读取诊断', exact=True).click()
+    expect(page.locator('#content')).to_contain_text('FILE_INTEGRITY_MISMATCH')
+    expect(page.get_by_role('button', name='TEST_ONLY 个股保留', exact=True)).to_be_visible()
+    expect(page.locator('#content')).to_contain_text('101 点')
+    return {'calendar_equal_length_tamper':'native digest rejected', 'other_markets':'preserved'}
+
+
+def scene_calendar_late_read(page, data):
+    url = source_url(R1, calendar_path(data, R1))
+    data.hold.add(url)
+    tab(page, '市场观察')
+    expect(page.locator('#content')).to_contain_text('正在读取固定版本日历')
+    data.ref = R2
+    page.get_by_role('button', name='读取最新保存结果', exact=True).click()
+    expect(page.locator('#refresh')).to_be_enabled()
+    expect(page.locator('#identity')).to_contain_text(R2)
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(1)
+    assert url in data.pending
+    release_and_wait_for_native_digest(page, data, url)
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(1)
+    expect(page.locator('#content')).not_to_contain_text('美国消费者价格指数')
+    return {'late_R1_three_rows':'cannot replace R2 one-row scope'}
+
+
+def scene_calendar_legacy_reading(page, data):
+    legacy = json.loads(data.files[R2]['current-state.json'])
+    del legacy['research']['calendar']
+    data.files[R2]['current-state.json'] = raw(legacy)
+    data.ref = R2
+    page.get_by_role('button', name='读取最新保存结果', exact=True).click()
+    expect(page.locator('#refresh')).to_be_enabled()
+    expect(page.locator('#identity')).to_contain_text(R2)
+    tab(page, '市场观察')
+    expect(page.locator('#content')).to_contain_text('本读取尚未接入研究日历')
+    expect(page.get_by_role('button', name='TEST_ONLY 个股保留', exact=True)).to_be_visible()
+    assert not any(r['url'].endswith('/calendar.json') for r in data.requests)
+    return {'legacy_R_without_calendar':'explicit absence, no calendar fetch, stock preserved'}
+
+
 SCENES = [scene_read_and_copy, scene_search_and_late_preview, scene_bad_body,
-          scene_new_reading_discards_old_detail, scene_markets_local_gap, scene_markets_read_failure]
+          scene_new_reading_discards_old_detail, scene_markets_local_gap, scene_markets_read_failure,
+          scene_calendar_read, scene_calendar_bad_body, scene_calendar_late_read, scene_calendar_legacy_reading]
 
 
 def main():
@@ -391,7 +457,7 @@ def main():
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
                             result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
                             assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
-                            if scene in (scene_search_and_late_preview, scene_markets_local_gap):
+                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
                         except Exception:
