@@ -272,3 +272,139 @@ def test_retained_real_reviewed_excerpt_replays_as_saved_not_as_live():
     assert len(result["events"]) == 3
     assert result["source"]["custody"] == "EXCERPT_BYTES_ONLY_NOT_ORIGINAL_HTTP_BODY"
     assert result["as_of"] == "2026-09-28T05:06:04.658134+00:00"
+
+
+# Pair comparisons reuse the original parser/retention contract, not fake events.
+def saved_pair(tmp_path, *, source=SOURCE, **changes):
+    from decision_kernel.runtime.research_calendar import compare_calendars
+    before, after = tmp_path / "before", tmp_path / "after"
+    first = save_calendar(before, SOURCE, **REQUEST)
+    second = save_calendar(after, source, **(REQUEST | {"as_of": "2026-09-28T07:00:00Z"} | changes))
+    kwargs = {"predecessor_hash": first["calendar_hash"], "successor_hash": second["calendar_hash"]}
+    return before, after, kwargs, compare_calendars
+
+
+def test_compare_preserves_explicit_predecessor_date_and_source_proof(tmp_path):
+    before, after, kwargs, compare = saved_pair(
+        tmp_path, source=SOURCE.replace(b"Friday, October 2,", b"Friday, October 9,"))
+    original = {p: p.read_bytes() for folder in (before, after) for p in folder.iterdir()}
+    result = compare(before, after, **kwargs)
+    event = next(row for row in result["events"] if row["event_id"] == "BLS:employment:2026-09")
+    assert event["change"] == "SOURCE_SCHEDULE_CHANGED"
+    assert event["predecessor_event"]["scheduled_date"] == "2026-10-02"
+    assert event["successor_event"]["scheduled_date"] == "2026-10-09"
+    for side in ("predecessor", "successor"):
+        assert result[side]["calendar_hash"] == kwargs[side + "_hash"]
+        assert event[side + "_event"]["source_sha256"] == result[side]["source"]["sha256"]
+        assert event[side + "_event"]["source_line"] == 2
+        assert event[side + "_event"]["release_observed"] == "NOT_CHECKED"
+    assert result["counts"]["UNCHANGED_SCHEDULE"] == 2
+    assert result["comparison_hash"] == canonical_hash({k: v for k, v in result.items() if k != "comparison_hash"})
+    assert compare(before, after, **kwargs) == result
+    assert {p: p.read_bytes() for p in original} == original
+    assert set(result["authority"].values()) == {"NONE"}
+    assert result["cancellation"] == "NOT_INFERRED_NO_EXPLICIT_CANCELLATION_SOURCE"
+
+
+@pytest.mark.parametrize("changes", [
+    {"local_timezone": "Europe/London"},
+    {"source": SOURCE.replace(b"Last Modified Date: February 18, 2026", b"Last Modified Date: February 19, 2026")},
+    {"source": b"\n" + SOURCE},
+])
+def test_compare_ignores_display_zone_metadata_and_source_line_changes(tmp_path, changes):
+    before, after, kwargs, compare = saved_pair(tmp_path, **changes)
+    result = compare(before, after, **kwargs)
+    assert result["counts"]["UNCHANGED_SCHEDULE"] == 3
+    assert result["counts"]["SOURCE_SCHEDULE_CHANGED"] == 0
+    assert all(not row["changed_schedule_fields"] for row in result["events"])
+
+
+@pytest.mark.parametrize("source,expected", [
+    (SOURCE.replace(b"08:30 AM", b"09:30 AM"), "SOURCE_SCHEDULE_CHANGED"),
+    (SOURCE.replace(b"08:30 AM ", b""), "TIME_PRECISION_CHANGED"),
+])
+def test_compare_time_change_and_precision_loss_are_distinct(tmp_path, source, expected):
+    before, after, kwargs, compare = saved_pair(tmp_path, source=source)
+    result = compare(before, after, **kwargs)
+    assert result["counts"][expected] == 3
+    if expected == "TIME_PRECISION_CHANGED":
+        assert all(row["successor_event"]["scheduled_at"] == "UNKNOWN" for row in result["events"])
+
+
+@pytest.mark.parametrize("changes", [
+    {"source": b"\n".join(line for line in SOURCE.split(b"\n") if b"Employment Situation" not in line)},
+    {"window_start": "2026-10-14", "window_end": "2026-10-25"},
+])
+def test_compare_missing_excerpt_or_narrower_window_never_means_cancelled(tmp_path, changes):
+    before, after, kwargs, compare = saved_pair(tmp_path, **changes)
+    result = compare(before, after, **kwargs)
+    row = next(row for row in result["events"] if row["event_id"] == "BLS:employment:2026-09")
+    assert row["change"] == "PREDECESSOR_ONLY"
+    assert row["successor_event"] is None
+    assert result["counts"]["SOURCE_SCHEDULE_CHANGED"] == 0
+    assert result["absence_meaning"] == "NOT_PRESENT_IN_SELECTED_EXCERPT_OR_WINDOW_NOT_CANCELLATION"
+
+
+def test_compare_reporting_period_is_identity_not_title_or_closest_date(tmp_path):
+    before, after, kwargs, compare = saved_pair(tmp_path, source=SOURCE.replace(b"September 2026", b"August 2026"))
+    result = compare(before, after, **kwargs)
+    assert result["counts"]["PREDECESSOR_ONLY"] == result["counts"]["SUCCESSOR_ONLY"] == 3
+    assert result["counts"]["SOURCE_SCHEDULE_CHANGED"] == 0
+    assert result["successor_only_meaning"] == "FIRST_SEEN_IN_THIS_PAIR_NOT_FIRST_ANNOUNCED"
+
+
+def test_compare_can_match_same_period_across_source_months(tmp_path):
+    source = b"November 2026\nFriday, November 6, 2026 08:30 AM Employment Situation for September 2026\nNOTE: All times on calendar are Eastern Time.\n"
+    before, after, kwargs, compare = saved_pair(tmp_path, source=source,
+        source_url="https://www.bls.gov/schedule/2026/11_sched_list.htm",
+        window_start="2026-11-01", window_end="2026-11-30")
+    result = compare(before, after, **kwargs)
+    row = next(row for row in result["events"] if row["event_id"] == "BLS:employment:2026-09")
+    assert row["change"] == "SOURCE_SCHEDULE_CHANGED"
+    assert row["successor_event"]["scheduled_at"].endswith("-05:00")
+    assert result["same_window"] is False
+
+
+@pytest.mark.parametrize("side", ["predecessor", "successor"])
+def test_compare_requires_independent_correct_hash_for_each_end(tmp_path, side):
+    before, after, kwargs, compare = saved_pair(tmp_path)
+    with pytest.raises(CalendarError, match="EXPECTED_HASH"):
+        compare(before, after, **(kwargs | {side + "_hash": "0" * 64}))
+    with pytest.raises(CalendarError, match="EXTERNAL_HASH_REQUIRED"):
+        compare(before, after, **(kwargs | {side + "_hash": None}))
+    with pytest.raises(CalendarError, match="EXTERNAL_HASH_REQUIRED"):
+        compare(before, after, **(kwargs | {side + "_hash": "bad"}))
+
+
+@pytest.mark.parametrize("side", ["before", "after"])
+def test_compare_replays_both_bundles_instead_of_trusting_stored_json(tmp_path, side):
+    before, after, kwargs, compare = saved_pair(tmp_path)
+    path = (before if side == "before" else after) / "source.txt"
+    path.write_bytes(path.read_bytes() + b"\n")
+    with pytest.raises(CalendarError, match="CALENDAR_BYTES"):
+        compare(before, after, **kwargs)
+
+
+@pytest.mark.parametrize("changes,reason", [
+    ({"reviewed_at": "2026-09-28T05:00:00Z"}, "REVERSED_CLOCK"),
+    ({"as_of": "2026-09-28T05:30:00Z"}, "REVERSED_CLOCK"),
+    ({"observation_kind": "REVIEWED_WEB_EXCERPT"}, "OBSERVATION_KIND_MISMATCH"),
+])
+def test_compare_rejects_reversed_clocks_and_synthetic_promotion(tmp_path, changes, reason):
+    before, after, kwargs, compare = saved_pair(tmp_path, **changes)
+    with pytest.raises(CalendarError, match=reason):
+        compare(before, after, **kwargs)
+
+
+def test_compare_rejects_self_predecessor_and_cli_is_read_only(tmp_path, capsys):
+    before, after, kwargs, compare = saved_pair(tmp_path)
+    with pytest.raises(CalendarError, match="SELF_PREDECESSOR"):
+        compare(before, before, predecessor_hash=kwargs["predecessor_hash"], successor_hash=kwargs["predecessor_hash"])
+    files = {p: p.read_bytes() for folder in (before, after) for p in folder.iterdir()}
+    assert main(["compare", str(before), str(after), "--predecessor-hash", kwargs["predecessor_hash"],
+                 "--successor-hash", kwargs["successor_hash"]]) == 0
+    assert json.loads(capsys.readouterr().out) == compare(before, after, **kwargs)
+    assert {p: p.read_bytes() for p in files} == files
+    with pytest.raises(SystemExit) as error:
+        main(["compare", str(before), str(after), "--predecessor-hash", kwargs["predecessor_hash"]])
+    assert error.value.code == 2
