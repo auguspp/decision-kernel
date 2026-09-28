@@ -118,7 +118,7 @@ def test_current_provider_calendar_can_end_at_prior_session_without_weekday_infe
         return value
     result=stock.observe_stock_reading(plan,state,request_json=current_source,observed_at=SATURDAY)
     assert result['projection']['surfaced_stocks']
-    assert p['market_session']=='2026-09-04'
+    assert result['projection']['market_session']=='2026-09-04'
     assert calls[0]==(stock.HITHINK_CALENDAR_PATH,{})
 
 
