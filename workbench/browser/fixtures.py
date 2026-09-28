@@ -55,6 +55,59 @@ def market_fixture():
         'projection_hash': 'e' * 64}
 
 
+def calendar_fixture(files, ref):
+    """TEST_ONLY normalized view shapes; not a new reviewed or admitted source.
+
+    The apparent REVIEWED_WEB_EXCERPT is a display-contract input only, like the
+    existing synthetic main/run identities. Backend synthetic rejection has its
+    own no-network tests. All source bytes remain intercepted fixture data.
+    """
+    source = ("# October 2026\n"
+        "Friday, October 2, 2026 08:30 AM Employment Situation for September 2026\n"
+        "Wednesday, October 14, 2026 08:30 AM Consumer Price Index for September 2026\n"
+        "Thursday, October 15, 2026 08:30 AM Producer Price Index for September 2026\n"
+        "NOTE: All times on calendar are Eastern Time.\n"
+        "TEST_ONLY <script>window.fixtureInjected=true</script>\n").encode()
+    digest = hashlib.sha256(source).hexdigest()
+    events = []
+    for line, (code, series, title, day) in enumerate([
+        ('employment', 'Employment Situation', '美国就业报告', '02'),
+        ('cpi', 'Consumer Price Index', '美国消费者价格指数', '14'),
+        ('ppi', 'Producer Price Index', '美国生产者价格指数', '15')], 2):
+        events.append({'event_id': f'BLS:{code}:2026-09', 'title': title, 'source_series': series,
+            'reporting_period': '2026-09', 'date_status': 'SCHEDULED', 'scheduled_date': f'2026-10-{day}',
+            'source_timezone': 'America/New_York', 'time_precision': 'MINUTE',
+            'scheduled_at': f'2026-10-{day}T08:30:00-04:00', 'local_scheduled_at': f'2026-10-{day}T20:30:00+08:00',
+            'source_line': line, 'source_sha256': digest, 'actual_release_at': 'UNKNOWN',
+            'release_observed': 'NOT_CHECKED', 'release_material_obtained': 'NOT_CHECKED',
+            'analysis': 'NOT_RUN', 'human_response': 'NOT_RECORDED'})
+    c = {'version': 'bls-research-calendar-v1', 'as_of': NOW, 'status': 'SCHEDULED_EVENTS_IN_WINDOW',
+        'coverage': 'THREE_BLS_SERIES_IN_REVIEWED_EXCERPT_NOT_COMPLETE_CALENDAR',
+        'company_events': 'NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE',
+        'window': {'start':'2026-09-28', 'end':'2026-10-25' if ref == R1 else '2026-10-10',
+                   'basis':'SOURCE_DATE', 'timezone':'America/New_York'},
+        'local_timezone':'Asia/Singapore', 'parsed_rows':3, 'excluded_outside_window':0 if ref == R1 else 2,
+        'events':events if ref == R1 else events[:1],
+        'source':{'url':'https://www.bls.gov/schedule/2026/10_sched_list.htm', 'reviewed_at':NOW,
+            'observation_kind':'REVIEWED_WEB_EXCERPT', 'custody':'EXCERPT_BYTES_ONLY_NOT_ORIGINAL_HTTP_BODY',
+            'retrieved_at':'UNKNOWN', 'published_at':'UNKNOWN', 'path':'source.txt', 'bytes':len(source), 'sha256':digest},
+        'authority':{key:'NONE' for key in ('research','human_attention','investment','execution')}}
+    c['calendar_hash'] = hashlib.sha256(json.dumps(c, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    originals = {'source.txt':source, 'calendar.json':raw(c),
+                 'calendar.md':'# TEST_ONLY 日历原件\n\n不是已发布或已接受。\n'.encode(),
+                 'request.json':raw({'meaning':'TEST_ONLY display fixture, not a production request'})}
+    refs = {}
+    for name, content in originals.items():
+        blob = descriptor(name, content)['git_blob']
+        path = f'sources/git/{blob}/{name}'
+        files[path] = content
+        refs[name] = descriptor(path, content)
+    return {**AUTHORITY, 'version':'research-calendar-reading-v1', 'status':'SAVED_REVIEWED_CALENDAR',
+            'meaning':'SAVED_APPOINTMENTS_NOT_RELEASE_OR_RESEARCH', 'calendar_hash':c['calendar_hash'],
+            'as_of':NOW, 'checked_at':NOW, 'source_commit':M, 'coverage':c['coverage'],
+            'window':c['window'], 'event_count':len(c['events']), 'files':refs}
+
+
 def fixture(ref=R1):
     """Fresh, small bytes per scenario. Synthetic reading_hash is shape-only."""
     files = {'sources/correction.md': '# TEST_ONLY 更正\n\n## 限制\n\n只适用于原版本；未知仍是 UNKNOWN。\n'.encode(),
@@ -94,5 +147,6 @@ def fixture(ref=R1):
             'asset_reentry': {'structured': descriptor(CATALOGUE, files[CATALOGUE])},
             'global_market': {'version': 'global-market-reading-v2', 'checked_at': NOW,
                 'projection_hash': market['projection_hash'], 'details': {'json': descriptor(MARKETS, files[MARKETS])}}}}
+    payload['research']['calendar'] = calendar_fixture(files, ref)
     files['current-state.json'] = raw(payload)
     return files
