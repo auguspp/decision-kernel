@@ -1,6 +1,6 @@
 # Isolated Workbench browser verification
 
-Owned by the AN2 slice of #625; calendar consumer scenes extend it under #620. This exercises the **actual** `workbench/index.html`
+Owned by the AN2 slice of #625; calendar consumer scenes extend it under #620 and saved Concept member scenes under #645. This exercises the **actual** `workbench/index.html`
 and its imported modules in Chromium. No replacement app, real account, secret,
 GitHub write, market acquisition, research call or Sites deployment is involved.
 The normal `kernel-tests` full/evidence/main/publisher contracts remain separate.
@@ -35,7 +35,7 @@ an incomplete bundle is not a complete-checkout validation: some existing Node
 tests also read `.github/workflows/radar-newsnow-daily.yml`. Do not invent a
 replacement workflow fixture to turn missing-source failures green.
 
-## What the ten scenes prove
+## What the scenes prove
 
 Each scene uses a fresh context at 1360×900 and 390×844:
 
@@ -58,6 +58,14 @@ Each scene uses a fresh context at 1360×900 and 390×844:
    one-row window, even after its native digest completes.
 10. A legacy R without calendar registration is explicit absence, not no events;
     no calendar body is fetched and the stock panel remains available.
+11. Search the complete synthetic Concept catalog, open its members, distinguish
+    qualified / conditions-not-met / unavailable / not-checked Stock states,
+    inspect exact shared-member counts with both denominators, and read an
+    existing same-R company document. Source markup stays literal text.
+12. Reject equal-length member-body tampering via actual Web Crypto while
+    preserving the original Concept quotes, calendar and independent Stock panel.
+13. Finish a held old-R membership response after refreshing and selecting a
+    new-R concept. The old members cannot replace the new reading or its detail.
 
 The fixtures follow existing controller/global-markets test shapes. Repeated
 `a`/`b`/`c` identities and all numeric quotes are **TEST_ONLY**, not actual Git

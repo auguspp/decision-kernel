@@ -108,6 +108,40 @@ def calendar_fixture(files, ref):
             'window':c['window'], 'event_count':len(c['events']), 'files':refs}
 
 
+
+def concept_fixture(files, ref):
+    """TEST_ONLY three concepts with overlapping source members and separate Stock states."""
+    auth = {k: 'NONE' for k in ('research_authority', 'odds_authority', 'action_authority', 'investment_authority')}
+    taxonomy = 'TDX_CATEGORY_CONCEPT_SOURCE_NATIVE_NOT_EASTMONEY_BK_OR_HITHINK_TI'
+    names = ['TEST_ONLY 概念甲', 'TEST_ONLY 概念乙', 'TEST_ONLY 概念丙']
+    rows = [{'code': str(i + 1) * 6, 'name': name, 'market_session': '2026-09-25',
+        'periods': {k: {'change_percent': '-1.25'} for k in ('today', '5d', '10d')}} for i, name in enumerate(names)]
+    observation = {'projection': {**auth, 'version': 'tdx-concept-snapshot-v1', 'taxonomy': taxonomy,
+        'kind': 'MARKET_EXPRESSION', 'qualification': 'CONTEXT_ONLY', 'market_session': '2026-09-25',
+        'catalog_count': 3, 'observations': rows}, 'projection_hash': '1' * 64}
+    groups = [['600000.SH', '600001.SH', '600002.SH', '600003.SH'] if ref == R1 else ['600000.SH'],
+              ['600000.SH', '600001.SH'], ['600003.SH']]
+    labels = ['TEST_ONLY 成员甲 <script>window.fixtureInjected=true</script>', 'TEST_ONLY 成员乙', 'TEST_ONLY 成员丙', 'TEST_ONLY 成员丁']
+    used = {t for group in groups for t in group}
+    securities = {f'60000{i}.SH': {'name': name, 'in_source_catalog': True} for i, name in enumerate(labels) if f'60000{i}.SH' in used}
+    members = {'projection': {**auth, 'version': 'tdx-concept-membership-v1', 'taxonomy': taxonomy,
+        'market_session': '2026-09-25', 'source_prepared_date': '2026-09-25', 'source_observed_at': NOW,
+        'observation_hash': observation['projection_hash'], 'capture_hash': '2' * 64, 'parser_version': '3.2.2',
+        'membership_time_basis': 'SAVED_SOURCE_PREPARATION_NOT_HISTORICAL_EFFECTIVE_MEMBERSHIP',
+        'historical_membership': 'NOT_ESTABLISHED', 'member_ranking': 'NOT_COMPUTED',
+        'business_benefit': 'NOT_ESTABLISHED', 'source_calls': 0, 'catalog_count': 3,
+        'relation_count': sum(map(len, groups)), 'securities': securities,
+        'concepts': [{'code': row['code'], 'name': row['name'], 'members': group} for row, group in zip(rows, groups)]},
+        'projection_hash': ('3' if ref == R1 else '4') * 64}
+    op, mp = 'details/radar/tdx-concept/observation.json', 'details/radar/tdx-concept/membership.json'
+    files[op], files[mp] = raw(observation), raw(members)
+    return {'status': 'VERIFIED_SAVED_TDX_CONCEPT_SOURCE', 'result': {
+        'projection_hash': observation['projection_hash'], 'market_session': '2026-09-25', 'catalog_count': 3},
+        'details': {'observation': descriptor(op, files[op])}, 'membership': {
+            'status': 'VERIFIED_SAVED_MEMBERSHIP', 'projection_hash': members['projection_hash'],
+            'catalog_count': 3, 'relation_count': sum(map(len, groups)), 'file': descriptor(mp, files[mp])}}
+
+
 def fixture(ref=R1):
     """Fresh, small bytes per scenario. Synthetic reading_hash is shape-only."""
     files = {'sources/correction.md': '# TEST_ONLY 更正\n\n## 限制\n\n只适用于原版本；未知仍是 UNKNOWN。\n'.encode(),
@@ -148,5 +182,9 @@ def fixture(ref=R1):
             'global_market': {'version': 'global-market-reading-v2', 'checked_at': NOW,
                 'projection_hash': market['projection_hash'], 'details': {'json': descriptor(MARKETS, files[MARKETS])}}}}
     payload['research']['calendar'] = calendar_fixture(files, ref)
+    payload['research']['tdx_concept_context'] = concept_fixture(files, ref)
+    payload['lanes']['stock']['last_qualified_result']['dispositions'] += [
+        {'thscode': '600001.SH', 'company_name': 'TEST_ONLY 条件不满足', 'status': 'CONDITIONS_NOT_MET'},
+        {'thscode': '600002.SH', 'company_name': 'TEST_ONLY 数据不可用', 'status': 'DATA_QUALIFICATION_FAILED'}]
     files['current-state.json'] = raw(payload)
     return files
