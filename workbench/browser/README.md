@@ -26,7 +26,7 @@ A process that launches successfully is not proof that its page can load.
 
 The output directory must be new and outside `workbench/`. The command exits
 nonzero on an assertion, environment failure, undeclared request, credential,
-JavaScript error or unexpected console failure. No scene reruns or automatic
+JavaScript error, unproven transport failure or unexpected console failure. No scene reruns or automatic
 retries. Playwright assertions wait for asynchronous UI state; that is not a
 rerun of a failed scene. Do not use Python `-O` (assertions are required).
 
@@ -66,6 +66,17 @@ reader/renderer and digest decisions remain in use. A narrow digest-completion
 observer delegates to the native `SubtleCrypto.digest` and returns its unchanged
 result; it only lets late-response assertions wait for real processing rather
 than accidentally passing before the response completes.
+
+A second passive tap observes the **original** Fetch stream reaching EOF; it
+never clones/tees a body, changes cache policy, replaces a verdict or suppresses
+a rejection. Each fulfilled response gets a test-only correlation header.
+Chromium can emit `net::ERR_ABORTED` even after complete stream consumption (see
+upstream https://github.com/microsoft/playwright/issues/42742; a report, not proof
+of this run). Such events are never discarded: the runner requires the exact
+response ID, HTTP 200, URL, actual EOF, byte count and SHA match before recording
+`STREAM_EOF_BYTES_SHA_MATCH_TERMINAL_EVENT_CONFLICT`. Any missing/mismatched proof
+or other failure still fails the run. UI assertions remain separately required.
+This is not a claim that arbitrary network errors are harmless.
 
 ## Evidence and CI scope
 

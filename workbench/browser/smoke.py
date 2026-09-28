@@ -40,17 +40,19 @@ class Inputs:
         self.requests, self.unexpected, self.responses = [], [], []
 
     def fulfil(self, route, body, status=200, content_type='application/json'):
-        self.responses.append({'url': route.request.url, 'status': status,
-                               'body_sha256': hashlib.sha256(body).hexdigest()})
+        response_id = str(len(self.responses) + 1)
+        self.responses.append({'id': response_id, 'url': route.request.url, 'status': status,
+                               'bytes': len(body), 'body_sha256': hashlib.sha256(body).hexdigest()})
         route.fulfill(status=status, body=body, content_type=content_type,
-                      headers={'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store'})
+                      headers={'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store',
+                               'Access-Control-Expose-Headers': 'X-AN2-Response', 'X-AN2-Response': response_id})
 
     def handle(self, route):
         request = route.request
         url = request.url
         self.requests.append({'method': request.method, 'url': url})
         try:
-            if request.method != 'GET' or any(k in request.headers for k in ('authorization', 'cookie')):
+            if request.method != 'GET' or any(k in request.all_headers() for k in ('authorization', 'cookie')):
                 raise ValueError('write or credential attempted')
             if url in self.hold:
                 self.pending.setdefault(url, []).append(route)
@@ -109,6 +111,40 @@ DIGEST_OBSERVER = """(() => {
       .map(b => b.toString(16).padStart(2, '0')).join(''));
     return answer;
   };
+  // Chromium can report ERR_ABORTED after a no-store stream reached EOF.
+  // Record actual consumer completion per unique fulfilled response, not URL.
+  // No clone/tee, cache change, invented result or swallowed stream rejection.
+  window.__AN2_CONSUMED = [];
+  const owners = new WeakMap(), originalFetch = window.fetch;
+  window.fetch = async function(...args) {
+    const response = await originalFetch.apply(this, args);
+    const id = response.headers.get('x-an2-response');
+    if (id && response.body) owners.set(response.body, {id, chunks: []});
+    return response;
+  };
+  const getReader = ReadableStream.prototype.getReader;
+  ReadableStream.prototype.getReader = function(...args) {
+    const reader = getReader.apply(this, args), owner = owners.get(this);
+    if (owner) owners.set(reader, owner);
+    return reader;
+  };
+  const read = ReadableStreamDefaultReader.prototype.read;
+  ReadableStreamDefaultReader.prototype.read = async function(...args) {
+    const result = await read.apply(this, args), owner = owners.get(this);
+    if (owner) {
+      if (!result.done) owner.chunks.push(new Uint8Array(result.value));
+      else {
+        owners.delete(this);
+        const bytes = new Uint8Array(owner.chunks.reduce((n,c) => n+c.length, 0));
+        let at = 0;
+        for (const chunk of owner.chunks) { bytes.set(chunk, at); at += chunk.length; }
+        native.call(crypto.subtle, 'SHA-256', bytes).then(hash =>
+          window.__AN2_CONSUMED.push({id: owner.id, bytes: bytes.length,
+            sha256: [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('')}));
+      }
+    }
+    return result;
+  };
 })();"""
 
 
@@ -119,6 +155,25 @@ def release_and_wait_for_native_digest(page, data, url):
     data.release(url)
     page.wait_for_function('([h,n]) => window.__AN2_NATIVE_DIGESTS.filter(x => x === h).length > n',
                            arg=[digest, before])
+
+def consumed_abort_diagnostics(page, data, failures):
+    """Only exact fulfilled HTTP200 + actual stream EOF/bytes/hash may explain an abort.
+
+    An upstream report is a lead, never evidence that this response was consumed.
+    All terminal events stay in summary.json; missing/corrupt bodies still fail.
+    """
+    explained = []
+    for failure in failures:
+        assert failure['failure'] == 'net::ERR_ABORTED', failure
+        response = next((r for r in data.responses if r['id'] == failure['response_id']), None)
+        assert response and response['status'] == 200 and response['url'] == failure['url'], failure
+        page.wait_for_function('(id) => window.__AN2_CONSUMED.some(r => r.id === id)', arg=response['id'])
+        consumed = page.evaluate('(id) => window.__AN2_CONSUMED.find(r => r.id === id)', response['id'])
+        assert consumed['bytes'] == response['bytes'] and consumed['sha256'] == response['body_sha256'], failure
+        explained.append({**failure, 'classification': 'STREAM_EOF_BYTES_SHA_MATCH_TERMINAL_EVENT_CONFLICT',
+                          'consumed': consumed})
+    return explained
+
 
 def tab(page, name):
     page.get_by_role('navigation').get_by_role('button', name=name, exact=True).click()
@@ -184,6 +239,7 @@ def scene_search_and_late_preview(page, data):
     expect(page.locator('#detail')).to_contain_text('合成正文 1')
     expect(page.locator('#detail')).not_to_contain_text('合成正文 0')
     expect(page.locator('.human-company')).to_contain_text('合成公司01')
+    page.get_by_text('切换研究对象', exact=True).click()
     expect(search).to_have_value('合成公司')
     return {'pagination': '12 companies / 2 pages', 'late_preview': 'does not replace chosen body'}
 
@@ -295,7 +351,10 @@ def main():
                         errors, console, failed = [], [], []
                         page.on('pageerror', lambda e: errors.append(str(e)))
                         page.on('console', lambda m: console.append({'type': m.type, 'text': m.text}))
-                        page.on('requestfailed', lambda r: failed.append({'url': r.url, 'failure': r.failure}))
+                        response_ids = {}
+                        page.on('response', lambda r: response_ids.update({r.request: r.headers.get('x-an2-response')}))
+                        page.on('requestfailed', lambda r: failed.append({'url': r.url, 'failure': r.failure,
+                            'response_id': response_ids.get(r)}))
                         try:
                             page.goto(ORIGIN + '/workbench/index.html')
                             expect(page.locator('#refresh')).to_be_enabled()
@@ -305,12 +364,16 @@ def main():
                             assert not data.pending, 'unreleased response'
                             assert not data.unexpected, data.unexpected
                             assert not errors, errors
-                            assert not failed, failed
+                            # Drain only this finite fixture transport, after UI assertions.
+                            # This is not the app-ready assertion or a retry of a scene.
+                            page.wait_for_load_state('networkidle', timeout=7000)
+                            result['terminal_event_diagnostics'] = consumed_abort_diagnostics(page, data, failed)
                             unexpected_console = [m for m in console if m['type'] == 'error' and
                                 not (scene is scene_markets_read_failure and '503' in m['text'])]
                             assert not unexpected_console, unexpected_console
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
-                            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+                            result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
+                            assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
                             if scene in (scene_search_and_late_preview, scene_markets_local_gap):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
@@ -323,7 +386,8 @@ def main():
                         finally:
                             result.update(responses=data.responses, seconds=round(time.monotonic() - start, 3), requests=data.requests,
                                 unexpected=data.unexpected, page_errors=errors, console=console, request_failures=failed,
-                                pending_routes=list(data.pending))
+                                pending_routes=list(data.pending),
+                                consumed_streams=page.evaluate('window.__AN2_CONSUMED || []'))
                             trace = args.output / f'{name}-failure-trace.zip' if result['status'] == 'FAIL' else None
                             context.tracing.stop(path=str(trace) if trace else None)
                             context.close()
