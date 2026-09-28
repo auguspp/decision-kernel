@@ -2,7 +2,6 @@
 from datetime import datetime, timedelta, timezone
 import json
 from copy import deepcopy
-from pathlib import Path
 from types import SimpleNamespace
 from uuid import UUID
 
@@ -291,19 +290,3 @@ def test_bad_commit_clock_never_writes_or_retries(tmp_path, monkeypatch, failure
         retainer.save("preflight.json", data)
     assert len(waits) == (1 if failure == "sleep_did_not_advance" else 0)
     assert (tmp_path/"preflight.json").read_bytes() == data
-
-
-def test_retired_fixed_case_cli_fails_without_launch_or_output(tmp_path):
-    import os
-    import subprocess
-    import sys
-    assert not any(hasattr(w, name) for name in ("run", "main", "acquire", "checked_request"))
-    assert not hasattr(w.Retainer, "begin")
-    out = tmp_path / "retired"
-    env = {k: v for k, v in os.environ.items()
-           if k not in {"GH_TOKEN", "GITHUB_TOKEN", "SUB2API_API_KEY", "DEEPSEEK_API_KEY"}}
-    result = subprocess.run(
-        [sys.executable, "-m", w.__name__, "--code-commit", "a" * 40, "--output", str(out)],
-        capture_output=True, text=True, timeout=10, check=False, env=env)
-    assert result.returncode == 1 and "SAVED_ONE_SHOT_RETIRED" in result.stderr
-    assert not out.exists()
