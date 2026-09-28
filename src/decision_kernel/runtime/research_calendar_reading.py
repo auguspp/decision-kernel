@@ -10,6 +10,7 @@ import re
 from tempfile import TemporaryDirectory
 
 from . import current_state as model
+from . import current_state_delivery as delivery
 from . import research_calendar as calendar
 
 VERSION = "research-calendar-reading-v1"
@@ -22,7 +23,8 @@ def read_registered(collector, config) -> dict:
     result = {"version": VERSION, "meaning": MEANING, **model.AUTHORITY}
     if config is None:
         return {**result, "status": "NOT_CONFIGURED"}
-    files_before, sources_before = dict(collector.files), dict(collector.sources)
+    files_before, sources_before = collector.files, collector.sources
+    stage = "REGISTRATION"
     try:
         model.check(isinstance(config, dict) and set(config) ==
                     {"ref", "directory", "calendar_hash", "blobs"}, "calendar registration fields")
@@ -36,7 +38,21 @@ def read_registered(collector, config) -> dict:
         model.check(isinstance(blobs, dict) and set(blobs) == calendar.FILES and
                     all(isinstance(b, str) and model.SHA.fullmatch(b) for b in blobs.values()),
                     "calendar complete registered inventory")
+        # Four explicit files get their own bounded source-cache scope, as in the
+        # existing optional readers. Do not enlarge or consume the baseline's 60
+        # source slots, change the real API counter, or borrow a new API allowance.
+        stage = "CAPACITY"
+        used = getattr(collector.api, "calls", None)
+        model.check(type(used) is int and used >= 0, "calendar API accounting")
+        paths = {"sources/git/" + blobs[name] + "/" + name for name in calendar.FILES}
+        pending = len(set(files_before) | paths | {"current-state.json", "README.md"})
+        model.check(used + len(calendar.FILES) + pending + 5 <= delivery.MAX_API_CALLS,
+                    "calendar publication reserve")
+        collector.files = dict(files_before)
+        collector.sources = {key: value for key, value in sources_before.items()
+                             if key in {(directory + "/" + name, ref) for name in calendar.FILES}}
         references = {}
+        stage = "SOURCE"
         with TemporaryDirectory(prefix="kernel-calendar-reading-") as tmp:
             folder = Path(tmp)
             for name in sorted(calendar.FILES):
@@ -53,7 +69,9 @@ def read_registered(collector, config) -> dict:
                             "calendar source descriptor")
                 (folder / name).write_bytes(raw)
                 references[name] = source
+            stage = "REPLAY"
             saved = calendar.read_calendar(folder, expected_hash=expected)
+        stage = "OBSERVATION"
         model.check(saved["source"]["observation_kind"] == "REVIEWED_WEB_EXCERPT",
                     "synthetic calendar is not a published observation")
         checked = collector.now()
@@ -63,9 +81,24 @@ def read_registered(collector, config) -> dict:
                 "coverage": saved["coverage"], "window": saved["window"],
                 "event_count": len(saved["events"]), "company_events": saved["company_events"]}
     except (ValueError, KeyError, TypeError, AttributeError, OSError, RuntimeError) as exc:
-        collector.files, collector.sources = files_before, sources_before
+        collector.files = files_before
+        # Only allowlisted local labels; never publish arbitrary exception text.
+        codes = {"calendar API accounting": "API_ACCOUNTING_UNAVAILABLE",
+                 "calendar publication reserve": "PUBLICATION_RESERVE",
+                 "source registry bound": "SOURCE_FILE_BUDGET",
+                 "reading retention batch limit": "RETENTION_BYTE_BUDGET",
+                 "registered frozen blob changed": "SOURCE_BLOB_MISMATCH"}
+        message = exc.args[0] if isinstance(exc, ValueError) and len(exc.args) == 1 else None
+        code = codes.get(message, "UNCLASSIFIED_READ_REJECTION") if type(message) is str else "UNCLASSIFIED_READ_REJECTION"
         return {**result, "status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
+                "diagnostic": {"stage": stage, "code": code,
+                               "baseline_source_count": len(sources_before)},
                 "limitation": "CALENDAR_READ_GAP_NOT_NO_EVENTS_OR_CANCELLATION"}
+
+    finally:
+        # Accepted bytes stay in the one reading inventory. The baseline cache is
+        # restored even on failure; real API requests are never rolled back.
+        collector.sources = sources_before
 
 
 def navigation(saved: dict) -> bytes:
