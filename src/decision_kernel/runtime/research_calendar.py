@@ -253,6 +253,78 @@ def read_calendar(folder: Path, *, expected_hash: str | None = None) -> dict:
     return calendar
 
 
+def compare_calendars(predecessor: Path, successor: Path, *,
+                      predecessor_hash: str, successor_hash: str) -> dict:
+    """Compare an explicitly chosen pair, not an inferred official revision chain.
+
+    Both external hashes are mandatory and both original bundles are replayed.
+    Only the existing series/period identity is matched. Absence in a selected
+    excerpt/window is not cancellation, and a changed view is not a new release.
+    This function reads only; hashes identify inputs independently of local paths.
+    """
+    for value in (predecessor_hash, successor_hash):
+        _require(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None,
+                 "COMPARISON_EXTERNAL_HASH_REQUIRED")
+    _require(predecessor_hash != successor_hash, "COMPARISON_SELF_PREDECESSOR")
+    before = read_calendar(predecessor, expected_hash=predecessor_hash)
+    after = read_calendar(successor, expected_hash=successor_hash)
+    _require(before["source"]["observation_kind"] == after["source"]["observation_kind"],
+             "COMPARISON_OBSERVATION_KIND_MISMATCH")
+    _require(_clock(before["source"]["reviewed_at"]) <= _clock(after["source"]["reviewed_at"])
+             and _clock(before["as_of"]) <= _clock(after["as_of"]),
+             "COMPARISON_REVERSED_CLOCK")
+
+    old = {event["event_id"]: event for event in before["events"]}
+    new = {event["event_id"]: event for event in after["events"]}
+    schedule_fields = ("scheduled_date", "scheduled_at", "time_precision", "source_timezone")
+    counts = {name: 0 for name in ("UNCHANGED_SCHEDULE", "SOURCE_SCHEDULE_CHANGED",
+                                  "TIME_PRECISION_CHANGED", "PREDECESSOR_ONLY", "SUCCESSOR_ONLY")}
+    entries = []
+    for identity in sorted(old.keys() | new.keys()):
+        previous, current = old.get(identity), new.get(identity)
+        changed_fields = []
+        if previous is None:
+            change = "SUCCESSOR_ONLY"  # Not proof of a newly announced event.
+        elif current is None:
+            change = "PREDECESSOR_ONLY"  # Not proof of cancellation or completion.
+        else:
+            changed_fields = [key for key in schedule_fields if previous[key] != current[key]]
+            if not changed_fields:
+                change = "UNCHANGED_SCHEDULE"
+            elif (previous["scheduled_date"] == current["scheduled_date"]
+                  and previous["time_precision"] != current["time_precision"]):
+                change = "TIME_PRECISION_CHANGED"  # UNKNOWN is not midnight.
+            else:
+                change = "SOURCE_SCHEDULE_CHANGED"
+        counts[change] += 1
+        entries.append({"event_id": identity, "change": change,
+                        "changed_schedule_fields": changed_fields,
+                        "predecessor_event": previous, "successor_event": current})
+
+    def descriptor(calendar: dict) -> dict:
+        return {key: calendar[key] for key in ("calendar_hash", "as_of", "source", "window",
+                                               "local_timezone", "coverage", "parsed_rows",
+                                               "excluded_outside_window")}
+
+    result = {
+        "version": "bls-research-calendar-comparison-v1",
+        "relation": "CALLER_SELECTED_PREDECESSOR_NOT_OFFICIAL_REVISION_CHAIN",
+        "predecessor": descriptor(before), "successor": descriptor(after),
+        "same_source_bytes": before["source"]["sha256"] == after["source"]["sha256"],
+        "same_window": before["window"] == after["window"],
+        "same_local_timezone": before["local_timezone"] == after["local_timezone"],
+        "counts": counts, "events": entries,
+        "absence_meaning": "NOT_PRESENT_IN_SELECTED_EXCERPT_OR_WINDOW_NOT_CANCELLATION",
+        "successor_only_meaning": "FIRST_SEEN_IN_THIS_PAIR_NOT_FIRST_ANNOUNCED",
+        "cancellation": "NOT_INFERRED_NO_EXPLICIT_CANCELLATION_SOURCE",
+        "actual_release": "NOT_CHECKED",
+        "authority": {"research": "NONE", "human_attention": "NONE",
+                      "investment": "NONE", "execution": "NONE"},
+    }
+    result["comparison_hash"] = canonical_hash(result)
+    return result
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -266,9 +338,17 @@ def main(argv: list[str] | None = None) -> int:
     verify = commands.add_parser("verify", help="Read back retained bytes, optionally against an external hash")
     verify.add_argument("folder", type=Path)
     verify.add_argument("--expected-hash")
+    compare = commands.add_parser("compare", help="Replay two explicitly pinned bundles; read-only differences")
+    compare.add_argument("predecessor", type=Path)
+    compare.add_argument("successor", type=Path)
+    compare.add_argument("--predecessor-hash", required=True)
+    compare.add_argument("--successor-hash", required=True)
     args = vars(parser.parse_args(argv))
     command = args.pop("command")
     try:
+        if command == "compare":
+            print(canonical_json(compare_calendars(**args)))
+            return 0
         if command == "build":
             source_path, output = args.pop("source"), args.pop("output")
             _safe_path(source_path)

@@ -45,7 +45,28 @@ python -m decision_kernel.runtime.research_calendar verify \
 
 报告期是 `YYYY-MM`，不当发布日期。预约过去仍是 SCHEDULED；实际发布、已取得发布材料、分析与 Human 回应各自保持未检查/未运行/未记录，不能由时钟或保存日历推断。无事件只表示已读摘录中的所选系列在该窗口没有记录，不表示全世界 quiet 或完整日历无事件。
 
-事件身份采用 BLS + 系列 + 报告期，不采用预约日期；改期能够保留同一事件身份、形成不同内容 hash。每个保存目录只增不改，旧日期不会被新调用覆盖。同一摘录重复/冲突身份拒绝而非选最新；**跨快照的显式前驱/取消/修订登记尚未实现**，不要把稳定 event_id 当成已经验收的完整改期链。
+事件身份采用 BLS + 系列 + 报告期，不采用预约日期；改期能够保留同一事件身份、形成不同内容 hash。每个保存目录只增不改，旧日期不会被新调用覆盖。同一摘录重复/冲突身份拒绝而非选最新；**跨快照的只读显式前驱比对见下节；取消来源和正式修订登记尚未实现**，不要把稳定 event_id 或比较报告当成已经验收的完整改期链。
+
+## 显式前驱比对：双端重放，不推断官方修订链
+
+`compare` 在原模块内消费调用者明确选定的两份四文件原件。两个外部 `calendar_hash` 均必填，必须由精确 Git/原回执独立取得，不能在读取时把同目录自报 hash 当作外部证明。两端均走原 `read_calendar`：重新解析摘录、核请求与 JSON/Markdown 字节，再核各自外部 hash。任一端不完整、损坏或不符即拒绝；同 hash 自前驱、反向核读/截止时钟、真实核读与合成来源混用也拒绝。
+
+```sh
+python -m decision_kernel.runtime.research_calendar compare \
+  /tmp/b2-before /tmp/b2-after \
+  --predecessor-hash "$PREDECESSOR_CALENDAR_HASH" \
+  --successor-hash "$SUCCESSOR_CALENDAR_HASH"
+```
+
+输出完整 canonical JSON，包含两端 hash、来源 URL/摘录 hash/核读时钟、窗口、报告期和原事件来源行，以及可复算的 `comparison_hash`。文件系统路径不参与身份，搬移原件后同一输入仍给同一报告。仅按既有 BLS＋系列＋报告期匹配，不用相似标题、最近日期或 mtime 猜前驱；允许同一报告期跨官方月份移动。
+
+匹配事件的 `SOURCE_SCHEDULE_CHANGED` 只表示两次已保存摘录中的原预约日期/时刻不同，保留前后值；同日 DATE_ONLY/MINUTE 切换为 `TIME_PRECISION_CHANGED`，UNKNOWN 不当午夜，也不把补齐时刻说成确定改期。本地展示时区、来源行号或 Last Modified Date 变化不单独构成预约变更。两端窗口和展示时区是否相同另列，不能把窗口变化隐藏成同覆盖比较。
+
+`PREDECESSOR_ONLY` 仅表示后端所选摘录/窗口里未见，**不是取消、已发布或已完成**；`SUCCESSOR_ONLY` 只是在本对首次见到，**不是首次公告**。两个来源的行与 hash 各自保留；输出不认证源站真实性，不因本次比较改变原预约/材料/研究/Human 状态，四项 authority 仍为 NONE。明确的取消来源、官方修订次序和完整多版本登记仍是后继，不从缺行或调用顺序推断。
+
+这是离线、只读的派生比较，不新增 bundle、数据库、自动挑最新、网络、publisher/registry 更新或页面历史面板。stdout 本身不是 create-only 归档；需要交接时，在原 Issue/PR 中保留报告和两份原件各自的精确 Git commit/path/hash。不同保存版本不得覆写，不能把比较哈希替代两端原件。原四文件格式、历史 hash 与 build/verify 输出合同不变。
+
+本增量复用上方已存 #508/#511/#638 的有限事件/历史审计，以及原 stable event_id、read_calendar 和 canonical_json/hash；官方增量核读 [Schema.org previousStartDate](https://schema.org/previousStartDate) 与 [EventStatusType](https://schema.org/EventStatusType)，采用前后日期保留和独立状态证据，不引入其格式/解析器。**THIN_ADAPTER**，无新增依赖、权限或持续费用。退出仅移除 compare 函数/CLI、对应增量测试和本入口；原 build/verify、四文件保存及现有 Workbench 消费保留。代码/测试交付与实际来源改期验用、固定 R/页面采用仍分别成立。
 
 ## 复用、成本与退出
 
