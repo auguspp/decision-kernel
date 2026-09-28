@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "680a9e8653611f2f01d4d782fc3347ec15a73c55cf355a37f3f21e58dfddba73",
+    "base_reading_hash": "bdf6a030cb28fe6ef2a5d167af5cfb63098f7d199ed1a30d2fd2cf779cc472e7",
     "companies": [
       {
         "archives": [],
@@ -2542,7 +2542,7 @@
           }
         ],
         "assets": [],
-        "association_id": "54be65b0850d584c114f0326f39edf805017a7a2151a2a0f8ce72de7a9f26d42",
+        "association_id": "c35c068aefe337642562c92ebd16fee43310cabf3fe3088564610cb6fbfe6ee1",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2608,13 +2608,13 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "a327f663f1a69085f84a5b100125810d3b9309dd543d03f1bd86b4ac9939a0c6",
+            "projection_hash": "5f20fecb3701445b8af0b56fe1b07c8f67d8bb38820a7c162b3782ecfd14c2b2",
             "source": {
               "bytes": 323389,
-              "git_blob": "82fd62f1edfb19fa54a2a7cd6904bc65832138e4",
+              "git_blob": "2c41def35944685abe22a9f872858bf08672e9bb",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "0b1ee53ffa231f5fde626070360e05d7b5075035f27eb37516a8d1feb4cfee22"
+              "sha256": "b29bef3498ab157c65ad8619521f09149eab4b63b90c9fbcdd7073c3870fead4"
             }
           }
         ],
@@ -3235,7 +3235,7 @@
       "with_saved_observations": 1,
       "with_saved_watch": 5
     },
-    "generated_at": "2026-09-28T15:39:48.639692+00:00",
+    "generated_at": "2026-09-28T17:44:45.720316+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3254,5 +3254,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "6cf0491df47834a402cc1b7cb08c847b6a58d5f729c938047ba977193515ee2f"
+  "projection_hash": "966e92c797e1e3a1bcfbf9f00e182188d78cb8eeefe4df11df536ebc01c10729"
 }
