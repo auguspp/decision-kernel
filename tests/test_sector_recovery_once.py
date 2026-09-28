@@ -29,6 +29,13 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
     assert not Path('.github/scripts/capture-sector-recovery.py').exists()
     assert not Path('.github/workflows/incremental-disclosure-intake.yml').exists()
     assert not Path('.github/workflows/saved-research-once.yml').exists()
+    for retired_path in (
+        '.github/workflows/sanhua-source-acquisition.yml',
+        '.github/workflows/sanhua-relation-acquisition.yml',
+        'src/decision_kernel/runtime/sanhua_source_acquisition.py',
+        'src/decision_kernel/runtime/sanhua_document_versions.py',
+    ):
+        assert not Path(retired_path).exists()
 
     combined = "\n".join(
         path.read_text() for path in (*workflows.glob('*.yml'), *workflows.glob('*.yaml'))
@@ -39,11 +46,23 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         'research_runs/disclosure-intake-request.json',
         'decision_kernel.runtime.saved_research_once',
         'prepared_disclosure_research',
+        'decision_kernel.runtime.sanhua_source_acquisition',
+        'sanhua_source_acquisition capture',
     ):
         assert retired not in combined
 
-    # Frozen input remains readable; no production launcher owns it.
+    # Frozen inputs remain readable; no production launcher owns them.
     assert json.loads(Path('research_runs/api-once-request.json').read_bytes())['id'] == 'p0-suken-api-20260910-v2'
+    sanhua = json.loads(Path('.github/source-acquisition/sanhua-v0-20260909.json').read_bytes())
+    relation = json.loads(Path('.github/source-acquisition/sanhua-relation-v0-20260909.json').read_bytes())
+    assert sanhua['approved_base'] == '15b74321c6d152b2984c11b556bbfb336c279509'
+    assert sanhua['plan']['security_id'] == relation['plan']['security_id'] == 'SZSE:002050'
+    assert relation['approved_base'] == 'b71ff68984a243f3aa397819336b7aaf7e586515'
+    assert relation['plan']['previous_fulltext'] == {
+        'artifact_id': 10090204888,
+        'relationship': 'REFERENCE_ONLY_NOT_REACQUISITION',
+        'run_id': 34316364031,
+    }
 
     from decision_kernel.runtime import saved_research_once as once
     assert not any(hasattr(once, name) for name in ('run', 'main', 'acquire', 'checked_request'))
