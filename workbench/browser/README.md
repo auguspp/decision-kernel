@@ -1,6 +1,6 @@
 # Isolated Workbench browser verification
 
-Owned by the AN2 slice of #625. This exercises the **actual** `workbench/index.html`
+Owned by the AN2 slice of #625; calendar consumer scenes extend it under #620. This exercises the **actual** `workbench/index.html`
 and its imported modules in Chromium. No replacement app, real account, secret,
 GitHub write, market acquisition, research call or Sites deployment is involved.
 The normal `kernel-tests` full/evidence/main/publisher contracts remain separate.
@@ -35,7 +35,7 @@ an incomplete bundle is not a complete-checkout validation: some existing Node
 tests also read `.github/workflows/radar-newsnow-daily.yml`. Do not invent a
 replacement workflow fixture to turn missing-source failures green.
 
-## What the six scenes prove
+## What the ten scenes prove
 
 Each scene uses a fresh context at 1360×900 and 390×844:
 
@@ -50,6 +50,14 @@ Each scene uses a fresh context at 1360×900 and 390×844:
 5. Preserve six synthetic index rows and a stock panel alongside explicit
    unavailable source families; no zero quote or completeness inference.
 6. A declared HTTP 503 affects only the global-market panel, not the stock panel.
+7. Read three saved calendar appointments with original/local clocks, then read
+   their same-R excerpt; embedded source script remains inert text.
+8. Reject an equal-length calendar-body change via native SHA-256 while other
+   market and stock panels remain readable.
+9. After refresh, a held old-R three-row calendar cannot replace the new-R
+   one-row window, even after its native digest completes.
+10. A legacy R without calendar registration is explicit absence, not no events;
+    no calendar body is fetched and the stock panel remains available.
 
 The fixtures follow existing controller/global-markets test shapes. Repeated
 `a`/`b`/`c` identities and all numeric quotes are **TEST_ONLY**, not actual Git
@@ -57,6 +65,9 @@ commits or financial observations. Descriptor sizes, SHA-256 and blob identities
 are calculated from the actual fixture bytes. Synthetic `reading_hash` and
 projection markers are shape inputs, not a claim that canonical hashes were
 recomputed (the existing consumer explicitly does not do that).
+Calendar fixtures also provide a REVIEWED_WEB_EXCERPT display shape solely as
+TEST_ONLY data; this is not source review, admission, or a publisher replay.
+The separate backend tests reject actually synthetic bundles from publication.
 
 `context.route` fulfils only declared GET requests. Unknown paths, writes and
 credential headers are aborted and fail the scene; service workers are blocked.
