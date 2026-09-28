@@ -33,6 +33,9 @@ class Collector(base.Collector):
         if archive_index:
             result["on_demand_archives"] = archive_index
         result["gaps"].extend(gaps)
+        if "research_calendar" in registry:
+            from .research_calendar_reading import read_registered
+            result["calendar"] = read_registered(self, registry["research_calendar"])
         return result
 
     def collect(self, refresh: dict) -> dict:
@@ -82,6 +85,12 @@ class Collector(base.Collector):
             model.check(sum(map(len, self.files.values())) - len(self.files['README.md']) + len(raw)
                         <= base.MAX_RETAINED_OUTPUT, "archive navigation exceeds retained byte budget")
             self.files['README.md'] = raw
+        if payload['research'].get('calendar'):
+            from .research_calendar_reading import navigation as calendar_navigation
+            note = calendar_navigation(payload['research']['calendar'])
+            model.check(sum(map(len, self.files.values())) + len(note) <= base.MAX_RETAINED_OUTPUT,
+                        "calendar navigation exceeds retained byte budget")
+            self.files['README.md'] += note
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:
