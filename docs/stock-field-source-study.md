@@ -1,49 +1,65 @@
-# Frozen stock-field source study
+# Frozen stock-field source study — execution retired
 
-Status: IMPLEMENTED SOURCE COLLECTION / LIVE EVIDENCE SEPARATELY REVIEWED / NO PRICE ACCEPTANCE.
+Status: **RETIRED_EXECUTION / HISTORICAL_SOURCE_EVIDENCE_RETAINED** under #626,
+2026-09-28. These fixed September 5 collection plans are not current source
+acquisition instructions or a production recovery path.
 
-## Purpose
+## Retired responsibility and surviving consumer
 
-The frozen run 33959190974 already provides the complete ten-session stock-file comparison. Do not download it again to make the result green. Use its exact offline report and four original input hashes to identify specific unanswered questions, then collect only relevant source evidence.
+The three fixed stock-field profiles and the single Muyuan H1 collection have
+already produced their bounded original attempts. Their workflow, capture code
+and dedicated simulation tests are retired together. This also removes the
+old path-filtered main-push trigger that could reacquire the fixed Muyuan filing
+when the shared source-study module changed. No source request or rerun is
+part of retirement.
 
-The first reviewed event-samples plan requested the 15 prior-close cases' event streams for 2026-09-04 and the largest turnover outlier's two-day unadjusted REST history, plus two issuer implementation-notice samples, 000408.SZ and 001316.SZ. Its actual source proof is `docs/stock-field-primary-source-proof-2026-09-05.md`; gross cash is not automatically the exchange ex-price deduction. This legacy CLI profile remains the default for compatibility, but the maintained workflow now explicitly uses the public-only remaining-listings profile.
+`stock_field_source_study.notice_query` remains at its existing import path,
+with its exact organization checks and query form unchanged, because
+`cninfo_announcement_probe` still consumes it as a legacy-form comparison.
+That probe, its seven current tests, production CNINFO transport and shared
+source/price/PIT validators are unchanged. The module has no collector or
+usable capture CLI; an old CLI invocation exits before acquisition/output.
+The existing shared retired-surface guard covers this boundary without a new
+test identity.
 
-PR #220 reuses the same collector and the existing CNINFO announcement-page normalizer for ten exact frozen-gap document leads. Eight suspension leads and two listing leads are intersected with actual missing identities, with unqueried gaps kept explicit. See `docs/stock-coverage-notice-study.md`. Actual run `33966231127` retained nine originals and one unresolved latest-date tie; `docs/stock-coverage-originals-proof-2026-09-05.md` preserves the INCOMPLETE result and the reviewed statements. Neither profile creates a trading-status database or excludes stocks.
+## Retained original attempts
 
-PR #222 adds remaining-listings for the eleven still-unobtained source leads, without repeating the nine prior successful PDFs. The exact previously reviewed 603448 full-original identity resolves that case only; old ambiguity behavior remains unchanged. Actual run `33967897334` obtained nine new originals while two exact keyword queries returned zero records, retaining INCOMPLETE. See `docs/stock-remaining-listings-proof-2026-09-05.md`. Issuance-stage documents are not automatically actual listing dates or trading-status intervals.
+| Historical scope | Original run / artifact | Original result and retained bodies |
+| --- | --- | --- |
+| Event samples / #218 | 33963949084 / 9968826124 | CAPTURE_COMPLETE_REVIEW_REQUIRED; 21 bodies, including two PDFs |
+| Coverage notices / #220 | 33966231127 / 9969513998 | INCOMPLETE_SOURCE_STUDY; 20 bodies, nine PDFs; 603448 latest-date ambiguity |
+| Remaining listings / #222 | 33967897334 / 9970021334 | INCOMPLETE_SOURCE_STUDY; 21 bodies, nine PDFs; 601091/920298 missing |
+| Muyuan H1 / #235 | 33999968354 / 9979191964 | ORIGINAL_CAPTURED_REVIEW_REQUIRED; three bodies including the exact full report |
 
-No signing endpoint, full stock snapshot, new Parquet download, current membership or sector-state endpoint is called. BSE's original block-trade records and the provider's turnover inclusion/precision contract remain separate evidence requirements; a REST history comparison alone cannot prove them.
+The retirement review downloaded all four original ZIPs, checked their metadata
+size/SHA256, ZIP CRC, report hashes and every manifested body's bytes/hash.
+The two failed/incomplete source runs remain failures. The field plans remain
+bound historically to frozen run 33959190974 and report hash
+`668073931733d725abecb39a579495ebaad18a21b91f9b558be6a32fb366d5ce`.
 
-## Reuse decision and primary contracts
+Existing interpretation and limits remain in the original proof documents:
+[event source proof](stock-field-primary-source-proof-2026-09-05.md),
+[coverage originals](stock-coverage-originals-proof-2026-09-05.md),
+[remaining listings](stock-remaining-listings-proof-2026-09-05.md), and
+[Muyuan source/economic review](muyuan-livestock-evidence-2026-09-06.md).
+Retirement does not re-perform the financial review or promote collected bodies
+to accepted prices, historical availability, trading-status intervals or truth.
 
-- HiThink's exact event/history endpoint specification: https://github.com/HiThink-Tech/Financial-API/blob/765513c2616030803ad80915ed65b205f425a942/docs/api/endpoints-prices.md ; blob c8d9cc7d636dbb944404328f0e254387afb80585.
-- Official factor implementation already reviewed, not reimplemented: https://github.com/HiThink-Tech/Financial-API/blob/765513c2616030803ad80915ed65b205f425a942/python/marketdb/calculations/adjustment.py ; blob df9e5d60ada6953b14452aff94f4c4c14137aa2f. It requires event inputs and does not establish original publication times.
-- CNINFO query contract was checked against the maintained AKShare adapter: https://github.com/akfamily/akshare/blob/8e95744b79ae22326308ccd2b4e62650c5b53c55/akshare/stock_feature/stock_disclosure_cninfo.py ; blob 2b964689cef6e72dae93beeaf86019a81586082d.
+## Exact history recovery
 
-The adapter exists. Its HTTP transport, repeated first-page request, all-page collection and DataFrame projection are not imported as an unbounded crawler. This fixed study uses Requests plus the same documented organization lookup and query fields, but HTTPS, one query per selected issuer, no pagination and original response retention. Reuse existing project safe-JSON, canonical identity, file-hash and Requests-session/response helpers. Coverage selection also reuses the existing CNINFO stock/org/date/ID normalizer. There is no new dependency, PDF parser, adjustment engine, scraping framework or review queue. PDF content review uses the already available pypdf tooling outside price acceptance.
+Use the original run's own code commit for its original semantics. The final
+pre-retirement implementations and instructions are also recoverable at
+`4bfa59d014c6e84dce53c6d44b0e013f7c0cc080`:
 
-## Source and output boundaries
+- [Stock collector and offline verifier](https://github.com/auguspp/decision-kernel/blob/4bfa59d014c6e84dce53c6d44b0e013f7c0cc080/src/decision_kernel/runtime/stock_field_source_study.py)
+- [Muyuan collector and offline verifier](https://github.com/auguspp/decision-kernel/blob/4bfa59d014c6e84dce53c6d44b0e013f7c0cc080/.github/scripts/capture-muyuan-filing.py)
+- [Original workflow](https://github.com/auguspp/decision-kernel/blob/4bfa59d014c6e84dce53c6d44b0e013f7c0cc080/.github/workflows/stock-field-source-study.yml)
+- [Original study instructions](https://github.com/auguspp/decision-kernel/blob/4bfa59d014c6e84dce53c6d44b0e013f7c0cc080/docs/stock-field-source-study.md)
 
-The CLI pins offline report hash `668073931733d725abecb39a579495ebaad18a21b91f9b558be6a32fb366d5ce` and verifies its nested inspection plus all four original file hashes. Output must be a new directory outside `decision-state`. Prior artifacts and prices are never overwritten. Current public-only invocation:
+Raw Actions artifacts retain their existing retention periods; this change
+neither deletes them nor promises permanent artifact storage. Historical source
+questions/UNKNOWNs remain recorded. A genuinely new acquisition need requires
+its own current scope and source qualification, not revival by editing this
+old launcher. The current production Stock path and its readers are not retired.
 
-```bash
-python -m decision_kernel.runtime.stock_field_source_study \
-  --profile remaining-listings --frozen /downloaded/run-33959190974 \
-  --output /new/stock-field-source-study
-```
-
-The operation records the exact source plan, original successful HTTP body bytes, public request parameters, request-start and processing-completion clocks, numeric HTTP status, file hashes and a hashed report. Completion clocks are actual capture bounds, not fabricated provider publication timestamps. No HTTP authorization, cookies, signing response, error body or usable signed URL is retained. A failing operation retains only safe exception class/status; response-shaped JSON provider errors can be retained as failed evidence, never as valid events. Requests are sequential, attempted once, have explicit timeouts, and disable redirects, environment credentials and proxy settings through the reused fresh-session helper.
-
-Budgets remain at most 24 requests, 8 MiB per body and 32 MiB retained bodies. The event profile has at most 21 requests: 15 events, one targeted history, one organization directory, two queries and at most two PDFs. The coverage profile has at most 21 public-only requests: one directory, ten queries and at most ten PDFs; it makes zero HiThink requests and ignores the provider credential. CNINFO originals require exact-code/org/date checks and a returned, validated `finalpage/date/numeric-id.PDF` path on the fixed public PDF origin. Empty/ambiguous/incomplete queries remain failures; no mirror or guessed PDF is substituted. Coverage's uniquely latest matching document is a review sample, not proof of an effective status interval.
-
-The remaining-listings profile allows at most 23 public-only requests, within those unchanged budgets. It requires explicit row code/org identity, a complete date window, full-document title suffix and a uniquely latest result, except that 603448 requires its exact previously reviewed original ID/title/date/URL. A missing or drifted reviewed identity is rejected rather than replaced. Old profiles retain their prior semantics and evidence.
-
-`CAPTURE_COMPLETE_REVIEW_REQUIRED` means the bounded requests returned structurally usable source bodies, not that all event dates/values or prices have been reconciled. An empty valid event response is retained, not treated as proof no event occurred. `INCOMPLETE_SOURCE_STUDY` remains nonzero. Both keep the original `DIFFERENCES_REQUIRE_REVIEW` and unconditional production qualification `NOT_ESTABLISHED`. Current event queries do not provide historical publication/availability evidence. The study does not alter acceptance, prices, denominators or detector thresholds.
-
-Injected transport must carry `SYNTHETIC_TEST_ONLY`. Synthetic PDF fixtures only test bounded container capture; they are not original notices or PDF extraction tests. Full repository tests run in CI; no live requests occur in those tests.
-
-## Workflow
-
-The separate `stock-field-source-study.yml` is a retained isolated study, not a daily producer or temporary repair workflow. It runs on fresh manual main dispatch or narrowly filtered main changes to this module/workflow. The original run's named artifact is downloaded using the maintained Actions downloader and is refused if the report/file hashes do not match. Its active remaining-listings profile has no HiThink secret; the previous source runs retain their exact old implementations and provenance. Original input and output hashes are checked offline before evidence upload. Artifacts last 90 days. No cache, production state, canonical Inbox, schedule, code-writing job or retry action is present. A documentation-only state sync does not trigger another collection.
-
-SHADOW OBSERVATION ONLY. HUMAN ATTENTION AUTHORITY = NONE. RESEARCH AUTHORITY = NONE. INVESTMENT AUTHORITY = NONE.
+Research / Human Attention / Investment Authority remain NONE for these studies.

@@ -40,6 +40,8 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         '.github/scripts/probe-sector-public-history.py',
         '.github/workflows/sector-radar-historical-study.yml',
         'src/decision_kernel/runtime/sector_radar_historical_study.py',
+        '.github/workflows/stock-field-source-study.yml',
+        '.github/scripts/capture-muyuan-filing.py',
     ):
         assert not Path(retired_path).exists()
 
@@ -60,6 +62,9 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         'probe-sector-public-history.py',
         'sector-radar-historical-study',
         'sector_radar_historical_study',
+        'stock-field-source-study',
+        'capture-muyuan-filing.py',
+        '-m decision_kernel.runtime.stock_field_source_study',
     ):
         assert retired not in combined
 
@@ -86,6 +91,18 @@ def test_retired_execution_surfaces_stay_absent_without_reviving_old_writers(tmp
         [sys.executable, '-m', once.__name__, '--code-commit', 'a' * 40, '--output', str(out)],
         capture_output=True, text=True, timeout=10, check=False, env=env)
     assert result.returncode == 1 and 'SAVED_ONE_SHOT_RETIRED' in result.stderr
+    assert not out.exists()
+
+    # Only the unchanged form helper remains consumed by the CNINFO probe.
+    from decision_kernel.runtime import stock_field_source_study as study
+    assert callable(study.notice_query)
+    assert not any(hasattr(study, name) for name in (
+        'build_plan', 'capture_sources', 'request_spec', 'notice_pdf', 'coverage_notice_pdf', 'main'))
+    result = subprocess.run(
+        [sys.executable, '-m', study.__name__, '--profile', 'remaining-listings',
+         '--frozen', str(tmp_path), '--output', str(out)],
+        capture_output=True, text=True, timeout=10, check=False, env=env)
+    assert result.returncode == 1 and 'FROZEN_STOCK_SOURCE_STUDY_RETIRED' in result.stderr
     assert not out.exists()
 
     from decision_kernel.runtime.sector_radar_audit import MAX_REQUESTS
