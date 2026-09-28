@@ -20,13 +20,13 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/artifacts",
-  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/cancel",
-  "check_suite_id": 97821802335,
-  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAWxqI_Xw",
-  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/97821802335",
+  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488/artifacts",
+  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488/cancel",
+  "check_suite_id": 98606754153,
+  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAW9WupaQ",
+  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/98606754153",
   "conclusion": "success",
-  "created_at": "2026-09-25T10:24:45Z",
+  "created_at": "2026-09-28T11:51:12Z",
   "display_title": "tdx-concept-snapshot",
   "event": "workflow_dispatch",
   "head_branch": "main",
@@ -39,10 +39,10 @@
       "email": "noreply@github.com",
       "name": "GitHub"
     },
-    "id": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
-    "message": "Merge pull request #579: qualify 9/24 Sector backfill across 9/25 exchange closure\n\nHuman-authorized 9/24 backfill. Exact head addcde4e0a62da9c72d2fa1d34b0ceb9e2b8773f passed full CI 36121719211. Default Sector path remains strict; bounded backfill binds official SSE/SZSE 2026-09-25 closure evidence and preserves provider data-ready vs market-session semantics. Historical concept-detail compatibility maps retained. Main CI, publisher, fresh backfill and downstream acceptance remain separate.",
-    "timestamp": "2026-09-25T10:05:13Z",
-    "tree_id": "aa0dad4898e1a677ad1e9786e0e4617e99877a64"
+    "id": "d8fedb169eaeaf825b45afb3602fe0c4d4390aa4",
+    "message": "Merge pull request #643: fix Sector dynamic run identity\n\nUse stable workflow path identity for Sector→Stock and Sector→TDX consumers after dynamic run-name adoption. PR CI 36416606110 passed. No schedule, provider, threshold, authority, notification, or retry semantics changed.",
+    "timestamp": "2026-09-28T11:39:54Z",
+    "tree_id": "de6c240fb29f833c902a2691531a1679b4ae2cbe"
   },
   "head_repository": {
     "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -112,13 +112,13 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "head_sha": "96655870a7a7253cba981f6cc77fdc4aa887f34d",
-  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36123834891",
-  "id": 36123834891,
-  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/jobs",
-  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/logs",
+  "head_sha": "d8fedb169eaeaf825b45afb3602fe0c4d4390aa4",
+  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36418137488",
+  "id": 36418137488,
+  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488/jobs",
+  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488/logs",
   "name": "tdx-concept-snapshot",
-  "node_id": "WFR_kwLOUK1L0c8AAAAIaSX6Cw",
+  "node_id": "WFR_kwLOUK1L0c8AAAAIerCtkA",
   "path": ".github/workflows/tdx-concept-snapshot.yml",
   "previous_attempt_url": null,
   "pull_requests": [],
@@ -191,10 +191,10 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891/rerun",
+  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488/rerun",
   "run_attempt": 1,
-  "run_number": 3,
-  "run_started_at": "2026-09-25T10:24:45Z",
+  "run_number": 4,
+  "run_started_at": "2026-09-28T11:51:12Z",
   "status": "completed",
   "triggering_actor": {
     "avatar_url": "https://avatars.githubusercontent.com/u/83357964?v=4",
@@ -217,8 +217,8 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "updated_at": "2026-09-25T10:25:52Z",
-  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36123834891",
+  "updated_at": "2026-09-28T11:52:20Z",
+  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36418137488",
   "workflow_id": 366667291,
   "workflow_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/workflows/366667291"
 }
