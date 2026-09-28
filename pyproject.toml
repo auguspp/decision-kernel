@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Small investment-decision cognition kernel extracted from Decision OS"
 requires-python = ">=3.12"
 dependencies = [
-  "pydantic==2.13.4",
+  "pydantic==2.13.5",
 ]
 
 [project.scripts]
@@ -25,18 +25,18 @@ cnequity = [
   "cnequity==0.11.0",
 ]
 research-api = [
-  "openai==3.11.0",
+  "openai==3.19.2",
 ]
 documents = [
-  "pypdf==6.16.2",
-  "pypdfium2==5.8.0",
+  "pypdf==6.19.0",
+  "pypdfium2==5.13.0",
 ]
 discovery = [
-  "beautifulsoup4==4.14.3",
+  "beautifulsoup4==4.15.0",
 ]
 feeds = [
   "feedparser==6.0.14",
-  "beautifulsoup4==4.14.3",
+  "beautifulsoup4==4.15.0",
   "requests==2.34.2",
 ]
 dump-study = [
@@ -46,13 +46,13 @@ dump-study = [
 dev = [
   "eltdx==3.2.2",
   "cnequity==0.11.0",
-  "openai==3.11.0",
+  "openai==3.19.2",
   "pytest==9.1.1",
   "pytest-xdist==3.8.0",
   "pytest-split==0.11.0",
-  "pypdf==6.16.2",
-  "pypdfium2==5.8.0",
-  "beautifulsoup4==4.14.3",
+  "pypdf==6.19.0",
+  "pypdfium2==5.13.0",
+  "beautifulsoup4==4.15.0",
   "feedparser==6.0.14",
   "requests==2.34.2",
   "pyarrow==25.0.1",
