@@ -64,7 +64,7 @@ python -m decision_kernel.runtime.research_calendar compare \
 
 `PREDECESSOR_ONLY` 仅表示后端所选摘录/窗口里未见，**不是取消、已发布或已完成**；`SUCCESSOR_ONLY` 只是在本对首次见到，**不是首次公告**。两个来源的行与 hash 各自保留；输出不认证源站真实性，不因本次比较改变原预约/材料/研究/Human 状态，四项 authority 仍为 NONE。明确的取消来源、官方修订次序和完整多版本登记仍是后继，不从缺行或调用顺序推断。
 
-这是离线、只读的派生比较，不新增 bundle、数据库、自动挑最新、网络、publisher/registry 更新或页面历史面板。stdout 本身不是 create-only 归档；需要交接时，在原 Issue/PR 中保留报告和两份原件各自的精确 Git commit/path/hash。不同保存版本不得覆写，不能把比较哈希替代两端原件。原四文件格式、历史 hash 与 build/verify 输出合同不变。
+此 CLI 是离线、只读的派生比较，自身不新增 bundle、数据库、自动挑最新、网络、publisher/registry 更新或页面历史面板。后续可选登记的发布端消费见下节。stdout 本身不是 create-only 归档；需要交接时，在原 Issue/PR 中保留报告和两份原件各自的精确 Git commit/path/hash。不同保存版本不得覆写，不能把比较哈希替代两端原件。原四文件格式、历史 hash 与 build/verify 输出合同不变。
 
 本增量复用上方已存 #508/#511/#638 的有限事件/历史审计，以及原 stable event_id、read_calendar 和 canonical_json/hash；官方增量核读 [Schema.org previousStartDate](https://schema.org/previousStartDate) 与 [EventStatusType](https://schema.org/EventStatusType)，采用前后日期保留和独立状态证据，不引入其格式/解析器。**THIN_ADAPTER**，无新增依赖、权限或持续费用。退出仅移除 compare 函数/CLI、对应增量测试和本入口；原 build/verify、四文件保存及现有 Workbench 消费保留。代码/测试交付与实际来源改期验用、固定 R/页面采用仍分别成立。
 
@@ -80,7 +80,7 @@ python -m decision_kernel.runtime.research_calendar compare \
 
 ## 第二切片：同一原件进入固定 R 与市场观察
 
-`current_state/registry.json` 的可选 `research_calendar` 只登记一份完整四文件目录：精确源 commit、目录、四个 Git blob 和独立 calendar hash。首份绑定 #638 的 `74691f486beb6e9f2e011bb8ce9af7d14f146a30`，不读新的 main 来替换旧摘录，也不把来源 M 当发布 R。后续新快照须另行保留、核读并在正常变更中显式更新登记；没有自动按时间挑最新或补造改期关系。
+`current_state/registry.json` 的可选 `research_calendar` 登记当前完整四文件目录，并可显式追加一个同格式 `predecessor`（见下节）：精确源 commit、目录、四个 Git blob 和独立 calendar hash。首份绑定 #638 的 `74691f486beb6e9f2e011bb8ce9af7d14f146a30`，不读新的 main 来替换旧摘录，也不把来源 M 当发布 R。后续新快照须另行保留、核读并在正常变更中显式更新登记；没有自动按时间挑最新或补造改期关系。
 
 `research_calendar_reading.read_registered` 复用现役 `Collector.source` 的 Git 读取、字节保管和来源额度，再调用原 `read_calendar` 重建/核对四文件与外部 hash。来源 ref/path/blob/bytes/SHA 和返回的同 R 描述符分别绑定。合成来源不能发布为可用观察；缺件、错误 hash、反向时钟或读取失败只产生本模块缺口，撤回本次未完成的派生保管，不删除 Git 历史、不改其他资料、不倒找旧成功。无新来源请求、权限、费用、定时任务或 CI 旁路。
 
@@ -93,3 +93,19 @@ python -m decision_kernel.runtime.research_calendar compare \
 复用依据延续上方 #508/#511 与 #638 的原审计；消费者直接沿现役 Collector/Reading 和 #630 浏览器 harness，未发现需更换上游实现的新证据。官方接口复核：[DOM textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)、[Playwright 请求拦截](https://playwright.dev/python/docs/network)。不新建视图框架、状态库、解析器或 provider。实际新浏览器场景与原失败按 #620/关联 PR 留存，隔离测试不是原 Sites/真实身份/实机验收。
 
 退出时同批移除本登记键、publisher 消费/导航接点、页面 import/面板、新专属测试与浏览器日历场景；保留原四文件档案和历史回执。CLI 与原日历的历史重放是独立能力，未获退役时不一并删除。新入口可缺失，不阻断原市场、研究或新闻阅读。
+
+## 可选前驱：同 R 原件保管与比较导航
+
+原 `research_calendar` 四字段（`ref`、`directory`、`calendar_hash`、`blobs`）仍表示当前选定快照；唯一新增可选键 `predecessor` 使用相同四字段，不能再嵌套前驱、列表或任意查询。两端分别绑定精确来源 commit、目录、完整四个 blob 和独立 calendar hash。没有默认从上一 R、mtime、最新提交或相似日期挑前驱；最多两份显式快照，不扫描完整历史。
+
+`read_registered` 先按原接点核当前快照。当前失败时不读取前驱替代；当前成功、但前驱缺件/坏字节/错误 hash、合成类别、反向来源时钟、自前驱或比较保管失败时，保留当前日历及原件，只将 `comparison.status` 标为 `UNAVAILABLE_OR_REJECTED`。字段未提供则为 `NOT_CONFIGURED`；显式 `null` 不是未配置。失败不等于没有改期或取消，不倒找较旧成功，不泄露外部异常正文，不回退实际 API 计数。
+
+双端成功后，直接调用原 `compare_calendars`；原 JSON 输出不加字段或改 hash，保存为 `details/research/calendar-comparison.json`，薄展示为同目录 `calendar-comparison.md`。原根 `research.calendar.comparison` 只登记 `SAVED_EXPLICIT_PREDECESSOR_COMPARISON`、独立检查时刻、比较 hash、当前 hash、前驱来源/四文件定位、分类计数与两个派生文件描述符，不将全部事件复制进根索引。当前日历的来源/核读时钟与四文件合同不变。
+
+所有八份输入（相同 blob 可共用原保管路径）和两份派生输出都通过现有 Collector 保管在同一 R。根 README 导航直接进入比较 Markdown/JSON，比较文档再用同 R 相对路径到两端原件；不是链接到新 main 或源站当前内容。读取仍应先固定 R、核根 hash，再核描述符 bytes/SHA256；复核比较时用两端独立 hash 重放原四文件。单个比较 hash 不能替代原件或证明官网真值。
+
+容量继续复用 #640 的四文件隔离，每次读取结束还原基线 source cache。读取前驱之前为其四次最多 GET、两份派生文件、当前已保管文件、根及发布元数据预留额度；原 60 来源/180 API 与总保管字节上限不增加。前驱或第二份派生写失败撤回本次可选保管，不删除已有当前文件、历史 Git 或其他模块材料。未改变原 publisher workflow/权限，也未新增状态所有者或自动采集。
+
+这建立的是**可选双快照登记与同 R 阅读**，不是官方修订/取消链、完整多版本目录、Workbench 历史面板、Sites 或 Human 使用证明。现役 registry 不因工程测试自动追加前驱；真实后继须有自己的来源原件/实际核读时刻，并经正常变更显式登记。测试中的假设日期和核读标签只验证机械合同，不充当官方变化证据或生产样本。
+
+复用当前文档已保留的 #508/#511、#638–#641 审计；内部为原 source/retain、read_calendar/compare_calendars 和 publisher 调用/导航。官方合同补核 [GitHub Contents 精确 ref](https://docs.github.com/en/rest/repos/contents#get-repository-content)及上方 previousStartDate，无新库/日期算法/网络客户端或持续费用。退出时删除可选 predecessor 登记、比较接点/专属测试与说明；原当前快照、CLI 历史重放、来源原件与失败记录保留。完整 B2 验收仍归 #620。
