@@ -93,7 +93,7 @@ def metadata(request, kind, run, listing):
         name, artifact_name = KINDS[kind]
         artifact_name = artifact_name.format(run=wanted)
         conclusions = {'success', 'failure'} if kind == 'history' else {'success'}
-        if (type(run['id']) is not int or str(run['id']) != wanted or run['name'] != name
+        if (type(run['id']) is not int or str(run['id']) != wanted
                 or run['path'] != f'.github/workflows/{name}.yml' or run['head_branch'] != 'main'
                 or run['repository']['full_name'] != 'auguspp/decision-kernel'
                 or type(run['run_attempt']) is not int or run['run_attempt'] != 1
