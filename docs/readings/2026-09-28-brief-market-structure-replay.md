@@ -58,7 +58,7 @@ TDX的change_percent已经是百分数：today为4正/265负，5d为24正/245负
 
 在本地实际下载文件上使用原identity.canonical_hash核根`reading_hash=36bd7b471cdd3123df9d961657c71061a3d3bf66b4a4a8086c941727e2264870`；三份详情均与根登记的bytes/SHA256/Git blob相符，并分别重算自身context_hash/projection_hash。没有重放全部供应商原ZIP或声称全R所有详情已读。原始行情正确性、公司业务受益和源站真值不由这些hash认证。
 
-本地环境是已下载文件的有界副本，不是完整Git checkout。原生任务更新前后，读取、增量、Watch、输出权限与9/25健康补充段落逐字比较；新旧完整prompt各自保存，可按原任务回退。没有新增Python/JS生产模块、自动化测试框架、数据采集、模型调用或模拟Human回应。
+本地环境是已下载文件的有界副本，不是完整Git checkout。本地新旧Instructions中的读取、增量、Watch、输出权限与9/25健康补充段落已逐字比较；实际原生任务采用另验；新旧完整prompt各自保存，可按原任务回退。没有新增Python/JS生产模块、自动化测试框架、数据采集、模型调用或模拟Human回应。
 
 本回放为同一助手按真实原件做的呈现检查，不叫独立评审、自然Brief运行或Human可用性签收。原工作台未在此修改/部署；自然下一份Brief、持续使用、完整Concept v2、20/60日与成员重叠继续在#645验收，不以本页登记替代。
 
