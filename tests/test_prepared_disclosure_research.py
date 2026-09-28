@@ -230,6 +230,7 @@ def test_private_authorization_source_is_never_model_context(tmp_path, monkeypat
     assert (source["ref"],source["path"]) not in c.reads
 
 
+@pytest.mark.parametrize("name", ["launch.json", "candidate.json"])
 def test_corrupt_readback_stops_all_later_writes(tmp_path, monkeypatch, name):
     c=Case(monkeypatch); c.corrupt_read=name
     result=c.run(tmp_path/"run")
