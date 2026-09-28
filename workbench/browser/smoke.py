@@ -115,10 +115,14 @@ DIGEST_OBSERVER = """(() => {
   // Record actual consumer completion per unique fulfilled response, not URL.
   // No clone/tee, cache change, invented result or swallowed stream rejection.
   window.__AN2_CONSUMED = [];
+  window.__AN2_FETCHES = [];
   const owners = new WeakMap(), originalFetch = window.fetch;
   window.fetch = async function(...args) {
+    const observation = {url: String(args[0]), status: null, id: null};
+    window.__AN2_FETCHES.push(observation);
     const response = await originalFetch.apply(this, args);
     const id = response.headers.get('x-an2-response');
+    Object.assign(observation, {id, status: response.status});
     if (id && response.body) owners.set(response.body, {id, chunks: []});
     return response;
   };
@@ -156,22 +160,32 @@ def release_and_wait_for_native_digest(page, data, url):
     page.wait_for_function('([h,n]) => window.__AN2_NATIVE_DIGESTS.filter(x => x === h).length > n',
                            arg=[digest, before])
 
-def consumed_abort_diagnostics(page, data, failures):
-    """Only exact fulfilled HTTP200 + actual stream EOF/bytes/hash may explain an abort.
+def qualify_consumption(data, consumed, fetches, failures):
+    """Check exact consumer evidence, including failures that arrived during cleanup.
 
-    An upstream report is a lead, never evidence that this response was consumed.
-    All terminal events stay in summary.json; missing/corrupt bodies still fail.
+    Successful Fetch bodies require actual EOF. Declared HTTP errors intentionally
+    stop at their status; this must not be called successful body consumption.
     """
+    by_id = {r['id']: r for r in data.responses}
+    seen = {r['id']: r for r in fetches}
+    assert len(seen) == len(fetches) and fetches, 'missing or duplicate Fetch response identity'
+    complete = {r['id']: r for r in consumed}
+    for observed in fetches:
+        response = by_id.get(observed['id'])
+        assert response and response['url'] == observed['url'] and response['status'] == observed['status'], observed
+        if response['status'] == 200:
+            body = complete.get(response['id'])
+            assert body and body['bytes'] == response['bytes'] and body['sha256'] == response['body_sha256'], observed
+        else:
+            assert data.overrides.get(response['url'], (None, None))[1] == response['status'], observed
     explained = []
     for failure in failures:
         assert failure['failure'] == 'net::ERR_ABORTED', failure
-        response = next((r for r in data.responses if r['id'] == failure['response_id']), None)
-        assert response and response['status'] == 200 and response['url'] == failure['url'], failure
-        page.wait_for_function('(id) => window.__AN2_CONSUMED.some(r => r.id === id)', arg=response['id'])
-        consumed = page.evaluate('(id) => window.__AN2_CONSUMED.find(r => r.id === id)', response['id'])
-        assert consumed['bytes'] == response['bytes'] and consumed['sha256'] == response['body_sha256'], failure
-        explained.append({**failure, 'classification': 'STREAM_EOF_BYTES_SHA_MATCH_TERMINAL_EVENT_CONFLICT',
-                          'consumed': consumed})
+        response = by_id.get(failure['response_id'])
+        assert response and response['id'] in seen and response['url'] == failure['url'], failure
+        explained.append({**failure, 'classification': (
+            'STREAM_EOF_BYTES_SHA_MATCH_TERMINAL_EVENT_CONFLICT' if response['status'] == 200 else
+            'DECLARED_HTTP_FAILURE_BODY_NOT_CONSUMED'), 'consumed': complete.get(response['id'])})
     return explained
 
 
@@ -364,10 +378,13 @@ def main():
                             assert not data.pending, 'unreleased response'
                             assert not data.unexpected, data.unexpected
                             assert not errors, errors
-                            # Drain only this finite fixture transport, after UI assertions.
-                            # This is not the app-ready assertion or a retry of a scene.
-                            page.wait_for_load_state('networkidle', timeout=7000)
-                            result['terminal_event_diagnostics'] = consumed_abort_diagnostics(page, data, failed)
+                            # Wait for actual Fetch consumption, not networkidle: the
+                            # reader rightly does not consume an HTTP 503 error body.
+                            page.wait_for_function("""() => window.__AN2_FETCHES.length > 0 &&
+                              window.__AN2_FETCHES.every(f => f.status !== null &&
+                                (f.status !== 200 || window.__AN2_CONSUMED.some(c => c.id === f.id)))""")
+                            qualify_consumption(data, page.evaluate('window.__AN2_CONSUMED'),
+                                                page.evaluate('window.__AN2_FETCHES'), failed)
                             unexpected_console = [m for m in console if m['type'] == 'error' and
                                 not (scene is scene_markets_read_failure and '503' in m['text'])]
                             assert not unexpected_console, unexpected_console
@@ -387,10 +404,19 @@ def main():
                             result.update(responses=data.responses, seconds=round(time.monotonic() - start, 3), requests=data.requests,
                                 unexpected=data.unexpected, page_errors=errors, console=console, request_failures=failed,
                                 pending_routes=list(data.pending),
-                                consumed_streams=page.evaluate('window.__AN2_CONSUMED || []'))
+                                consumed_streams=page.evaluate('window.__AN2_CONSUMED || []'),
+                                fetches=page.evaluate('window.__AN2_FETCHES || []'))
                             trace = args.output / f'{name}-failure-trace.zip' if result['status'] == 'FAIL' else None
                             context.tracing.stop(path=str(trace) if trace else None)
                             context.close()
+                            if result['status'] == 'PASS':
+                                try:
+                                    assert not data.unexpected and not errors
+                                    result['terminal_event_diagnostics'] = qualify_consumption(
+                                        data, result['consumed_streams'], result['fetches'], failed)
+                                except Exception:
+                                    result['status'] = 'FAIL'
+                                    result['error'] = traceback.format_exc()
                             report['scenes'].append(result)
                             print(name, result['status'], flush=True)
                         if 'ERR_BLOCKED_BY_ADMINISTRATOR' in result.get('error', ''):

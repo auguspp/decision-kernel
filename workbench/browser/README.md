@@ -76,14 +76,19 @@ of this run). Such events are never discarded: the runner requires the exact
 response ID, HTTP 200, URL, actual EOF, byte count and SHA match before recording
 `STREAM_EOF_BYTES_SHA_MATCH_TERMINAL_EVENT_CONFLICT`. Any missing/mismatched proof
 or other failure still fails the run. UI assertions remain separately required.
-This is not a claim that arbitrary network errors are harmless.
+Declared HTTP errors are separately recorded as status rejection, **not**
+successful body consumption; the product is not required to consume a 503 body.
+The runner waits for actual successful Fetch EOF, not `networkidle`, and checks
+terminal events again after context cleanup. This is not a claim that arbitrary
+network errors are harmless.
 
 ## Evidence and CI scope
 
 `summary.json` contains actual scene results, source/fixture hashes, Git head
 when available, browser/Playwright versions, requests/responses, console/errors,
-and elapsed scene times. Source hashes identify bytes actually exercised;
-`git_head=null` is explicit when there is no complete Git checkout. Success
+and elapsed scene times. Source hashes inventory the recorded checkout inputs;
+the request/response list identifies the bytes actually loaded. `git_head=null`
+is explicit when there is no complete Git checkout. Success
 keeps a few screenshots; failures retain screenshot, original traceback and a
 Playwright trace. Native tracing captures browser/network activity, **not** the
 `expect` assertions; the JSON report records scene outcomes separately.
