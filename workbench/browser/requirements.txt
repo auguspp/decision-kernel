@@ -1,0 +1,2 @@
+# Optional isolated Workbench verification only; not a runtime/full-pytest dependency.
+playwright==1.57.0
