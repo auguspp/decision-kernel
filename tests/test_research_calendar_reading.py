@@ -218,3 +218,182 @@ def test_retained_byte_limit_is_still_enforced_inside_isolated_calendar(monkeypa
     result = read_registered(c, CONFIG)
     assert result['diagnostic']['code'] == 'RETENTION_BYTE_BUDGET'
     assert c.api.calls == 1 and c.files is before_files and c.sources is before_sources
+
+
+# Fabricated pair fixtures exercise admission with a REVIEWED_WEB_EXCERPT label.
+# That label is a caller assertion, NOT proof of an actual official review. Both
+# source bodies carry a synthetic marker; none of these fixtures is published.
+def registered_pair(tmp_path, *, source=None, previous_changes=None, current_changes=None):
+    before_source = RAW['source.txt'] + b'\nSYNTHETIC_TEST_FIXTURE_NOT_REAL_OFFICIAL_REVIEW\n'
+    after_source = (before_source.replace(b'Friday, October 2,', b'Friday, October 9,')
+                    if source is None else source + b'\nSYNTHETIC_TEST_FIXTURE_NOT_REAL_OFFICIAL_REVIEW\n')
+    request = json.loads(RAW['request.json'])
+    mapping, configs = {}, []
+    for index, body, changes in ((1, before_source, previous_changes or {}),
+                                 (2, after_source, {'reviewed_at':'2026-09-28T06:00:00Z',
+                                                   'as_of':'2026-09-28T06:00:00Z', **(current_changes or {})})):
+        folder = tmp_path / str(index)
+        saved = calendar.save_calendar(folder, body, **(request | changes))
+        files = {name:(folder/name).read_bytes() for name in calendar.FILES}
+        config = {'ref':str(index)*40, 'directory':f'docs/readings/synthetic-calendar-{index}',
+                  'calendar_hash':saved['calendar_hash'],
+                  'blobs':{name:m.blob_sha(raw) for name,raw in files.items()}}
+        mapping.update({(config['directory']+'/'+name, config['ref']):raw for name,raw in files.items()})
+        configs.append(config)
+    c = SavedCollector()
+    def transport(path, ref):
+        c.api.calls += 1
+        c.api.requests.append({'path':path, 'ref':ref})
+        assert c.api.calls <= c.api.max_calls
+        return mapping[(path, ref)]
+    c.api.file = transport
+    return c, {**configs[1], 'predecessor':configs[0]}, mapping
+
+
+def assert_current_only(c, result):
+    assert result['status'] == STATUS and result['event_count'] == 3
+    assert result['comparison']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    assert result['comparison']['limitation'] == 'COMPARISON_GAP_NOT_NO_CHANGE_OR_CANCELLATION'
+    assert set(c.files) == {'unrelated'} | {s['read_path'] for s in result['files'].values()}
+    assert '前驱比较读取失败' in navigation(result).decode()
+
+
+def test_pair_retains_original_comparison_and_both_exact_sources_with_full_baseline(tmp_path):
+    from decision_kernel.runtime.research_calendar_reading import COMPARISON_STATUS, COMPARISON_PATHS
+    c, config, mapping = registered_pair(tmp_path)
+    c.sources = {(f'docs/old-{n}.md', '9'*40):(b'old', {}) for n in range(delivery.MAX_SOURCE_FILES)}
+    baseline = c.sources
+    result = read_registered(c, config)
+    comparison = result['comparison']
+    assert result['status'] == STATUS and comparison['status'] == COMPARISON_STATUS
+    assert comparison['counts']['SOURCE_SCHEDULE_CHANGED'] == 1
+    assert comparison['counts']['UNCHANGED_SCHEDULE'] == 2
+    assert c.sources is baseline and c.api.calls == 8 and len(c.calls) == 8
+    for snapshot, spec in ((result, config), (comparison['predecessor'], config['predecessor'])):
+        assert snapshot['source_commit'] == spec['ref'] and set(snapshot['files']) == calendar.FILES
+        for name, desc in snapshot['files'].items():
+            assert c.files[desc['read_path']] == mapping[(spec['directory']+'/'+name, spec['ref'])]
+    report = json.loads(c.files[comparison['files']['json']['read_path']])
+    original = calendar.compare_calendars(tmp_path/'1', tmp_path/'2',
+        predecessor_hash=config['predecessor']['calendar_hash'], successor_hash=config['calendar_hash'])
+    assert report == original and c.files[COMPARISON_PATHS['json']] == calendar._encoded(original)
+    assert comparison['comparison_hash'] == report['comparison_hash']
+    assert comparison['successor_hash'] == result['calendar_hash'] == report['successor']['calendar_hash']
+    assert all(comparison[k] == 'NONE' for k in m.AUTHORITY)
+    for desc in comparison['files'].values():
+        raw = c.files[desc['read_path']]
+        assert desc['bytes'] == len(raw) and desc['sha256'] == m.sha256(raw) and desc['git_blob'] == m.blob_sha(raw)
+    assert report['cancellation'] == 'NOT_INFERRED_NO_EXPLICIT_CANCELLATION_SOURCE'
+    note = navigation(result).decode()
+    assert all(path in note for path in COMPARISON_PATHS.values())
+    # Resolve the detail document's relative links in the same R, not in main.
+    import posixpath
+    import re
+    markdown = c.files[COMPARISON_PATHS['markdown']].decode()
+    links = re.findall(r'\[[^\]]+\]\(([^)]+)\)', markdown)
+    assert len(links) == 8
+    assert all(posixpath.normpath(posixpath.join('details/research', path)) in c.files for path in links)
+    assert '2026-10-02T08:30:00-04:00' in markdown and '2026-10-09T08:30:00-04:00' in markdown
+    assert 'SYNTHETIC_TEST_FIXTURE' not in markdown  # Raw source text is never interpolated.
+
+
+def test_single_snapshot_is_explicitly_uncompared_and_old_navigation_remains_readable():
+    c = SavedCollector(); result = read_registered(c, CONFIG)
+    assert result['comparison']['status'] == 'NOT_CONFIGURED' and c.api.calls == 4
+    assert '未登记显式前驱' in navigation(result).decode()
+    legacy = {key:value for key,value in result.items() if key != 'comparison'}
+    assert '未登记显式前驱' in navigation(legacy).decode()
+
+
+@pytest.mark.parametrize('change', [None, [], {'ref':'main'}, {'predecessor':CONFIG}, CONFIG])
+def test_invalid_or_self_predecessor_never_turns_into_unconfigured_or_fallback(change):
+    c = SavedCollector(); result = read_registered(c, {**CONFIG, 'predecessor':change})
+    assert_current_only(c, result)
+    assert c.api.calls == 4 and len(c.calls) == 4 and not c.sources
+
+
+@pytest.mark.parametrize('side', ['current', 'predecessor'])
+def test_each_external_hash_is_required_and_failed_current_never_reads_predecessor(tmp_path, side):
+    c, config, _ = registered_pair(tmp_path)
+    (config if side == 'current' else config['predecessor'])['calendar_hash'] = '0'*64
+    result = read_registered(c, config)
+    if side == 'current':
+        assert result['status'] == 'UNAVAILABLE_OR_REJECTED' and c.api.calls == 4
+        assert c.files == {'unrelated':b'kept'} and 'comparison' not in result
+    else:
+        assert_current_only(c, result)
+        assert c.api.calls == 8
+
+
+def test_corrupt_third_predecessor_member_preserves_current_without_refunding_requests(tmp_path):
+    c, config, mapping = registered_pair(tmp_path)
+    old = config['predecessor']; mapping[(old['directory']+'/request.json', old['ref'])] += b' '
+    result = read_registered(c, config)
+    assert_current_only(c, result)
+    assert c.api.calls == 7 and result['comparison']['diagnostic']['code'] == 'SOURCE_BLOB_MISMATCH'
+
+
+@pytest.mark.parametrize('changes,stage', [
+    ({'reviewed_at':'2026-09-28T07:00:00Z', 'as_of':'2026-09-28T07:00:00Z'}, 'COMPARISON'),
+    ({'observation_kind':'SYNTHETIC_TEST_ONLY'}, 'PREDECESSOR'),
+])
+def test_reverse_source_clock_or_synthetic_predecessor_cannot_be_promoted(tmp_path, changes, stage):
+    c, config, _ = registered_pair(tmp_path, previous_changes=changes)
+    result = read_registered(c, config)
+    assert_current_only(c, result)
+    assert result['comparison']['failed_stage'] == stage and c.api.calls == 8
+
+
+@pytest.mark.parametrize('used,ok', [(154,True), (155,False)])
+def test_pair_reserves_both_derived_outputs_before_predecessor_requests(tmp_path, used, ok):
+    from decision_kernel.runtime.research_calendar_reading import COMPARISON_STATUS
+    c, config, _ = registered_pair(tmp_path); c.api.calls = used
+    result = read_registered(c, config)
+    if ok:
+        assert result['comparison']['status'] == COMPARISON_STATUS and c.api.calls == used+8
+        assert c.api.calls + len(set(c.files)|{'current-state.json','README.md'}) + 5 == delivery.MAX_API_CALLS
+    else:
+        assert_current_only(c, result)
+        assert c.api.calls == used+4 and result['comparison']['diagnostic']['code'] == 'PUBLICATION_RESERVE'
+    assert delivery.MAX_SOURCE_FILES == 60 and delivery.MAX_API_CALLS == 180
+
+
+@pytest.mark.parametrize('source,change', [
+    (RAW['source.txt'], 'UNCHANGED_SCHEDULE'),
+    (RAW['source.txt'].replace(b'08:30 AM ',b''), 'TIME_PRECISION_CHANGED'),
+    (b'\n'.join(line for line in RAW['source.txt'].split(b'\n') if b'Employment Situation' not in line), 'PREDECESSOR_ONLY'),
+])
+def test_saved_comparison_keeps_original_precision_absence_and_unchanged_semantics(tmp_path, source, change):
+    c, config, _ = registered_pair(tmp_path, source=source)
+    result = read_registered(c, config); report = json.loads(c.files[result['comparison']['files']['json']['read_path']])
+    employment = next(row for row in report['events'] if row['event_id'] == 'BLS:employment:2026-09')
+    assert employment['change'] == change and report['actual_release'] == 'NOT_CHECKED'
+    markdown = c.files[result['comparison']['files']['markdown']['read_path']].decode()
+    assert '不证明官方修订链' in markdown
+    if change == 'PREDECESSOR_ONLY':
+        assert '仅前驱可见；非取消' in markdown and '本端摘录/窗口未见' in markdown
+    if change == 'TIME_PRECISION_CHANGED':
+        assert '时刻 UNKNOWN' in markdown and '时间精度变化' in markdown
+
+
+@pytest.mark.parametrize('mode', ['second_write_failure', 'byte_limit'])
+def test_comparison_retention_failure_rolls_back_only_optional_files(tmp_path, monkeypatch, mode):
+    from decision_kernel.runtime.research_calendar_reading import COMPARISON_PATHS
+    c, config, _ = registered_pair(tmp_path)
+    baseline = c.sources
+    if mode == 'second_write_failure':
+        original = c.retain
+        def failing(path, raw):
+            if path == COMPARISON_PATHS['markdown']:
+                raise RuntimeError('sensitive transport body must not leak')
+            return original(path, raw)
+        c.retain = failing
+    else:
+        # Both complete inputs fit, but the two-ended derived JSON is larger.
+        bound = max(p.stat().st_size for d in ('1','2') for p in (tmp_path/d).iterdir())
+        monkeypatch.setattr(calendar, 'MAX_SAVED_BYTES', bound)
+    result = read_registered(c, config)
+    assert_current_only(c, result)
+    assert result['comparison']['failed_stage'] == 'RETENTION'
+    assert c.api.calls == 8 and c.sources is baseline
+    assert 'sensitive' not in json.dumps(result) and not (set(COMPARISON_PATHS.values()) & set(c.files))
