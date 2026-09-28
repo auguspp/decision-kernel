@@ -380,9 +380,84 @@ def scene_calendar_legacy_reading(page, data):
     return {'legacy_R_without_calendar':'explicit absence, no calendar fetch, stock preserved'}
 
 
+
+def scene_concepts_read(page, data):
+    tab(page, '市场观察')
+    panel = page.get_by_role('heading', name='概念与成员', exact=True).locator('..')
+    expect(panel).to_contain_text('完整可用概念 3 项')
+    page.get_by_text('浏览全部概念与成员', exact=True).click()
+    search = page.get_by_role('searchbox', name='搜索概念', exact=True)
+    search.fill('概念甲')
+    expect(page.get_by_role('button', name='TEST_ONLY 概念乙 · 222222', exact=True)).to_have_count(0)
+    page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True).click()
+    expect(panel).to_contain_text('来源成员 4')
+    expect(panel).to_contain_text('通过原价格观察（2026-09-25）')
+    expect(panel).to_contain_text('原条件未满足（2026-09-25）')
+    expect(panel).to_contain_text('数据不可用，未作条件否决（2026-09-25）')
+    expect(panel).to_contain_text('不在本次已保存个股检查范围')
+    page.get_by_text('与其他概念共享的成员', exact=True).click()
+    expect(panel).to_contain_text('共享 2 位 · 本概念 2/4 · 对方 2/2')
+    expect(panel).to_contain_text('对方成员全部包含于本概念')
+    page.get_by_role('searchbox', name='搜索概念成员', exact=True).fill('600000')
+    expect(page.get_by_role('button', name='TEST_ONLY 成员乙 · 600001.SH', exact=True)).to_have_count(0)
+    assert page.evaluate('window.fixtureInjected === undefined')
+    page.get_by_role('button', name='TEST_ONLY 成员甲 <script>window.fixtureInjected=true</script> · 600000.SH', exact=True).click()
+    expect(page.locator('.human-company')).to_contain_text('合成公司00')
+    read_paper(page)
+    expect(page.locator('#detail')).to_contain_text('合成正文 0')
+    assert page.evaluate('window.fixtureInjected === undefined')
+    tab(page, '市场观察')
+    page.get_by_text('浏览全部概念与成员', exact=True).click()
+    page.get_by_role('searchbox', name='搜索概念', exact=True).fill('概念甲')
+    page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True).click()
+    page.get_by_text('与其他概念共享的成员', exact=True).click()
+    expect(page.locator('#content')).to_contain_text('共享 2 位 · 本概念 2/4 · 对方 2/2')
+    return {'concept_catalog': 'all three, searchable', 'members': 'four distinct Stock states',
+            'overlap': '2/4 and 2/2; identities not merged', 'company': 'existing same-R research reader', 'source_script': 'inert'}
+
+
+def scene_concepts_bad_members(page, data):
+    path = 'details/radar/tdx-concept/membership.json'
+    original = data.files[R1][path]
+    changed = original.replace(b'TEST_ONLY', b'FAKE_ONLY', 1)
+    assert len(changed) == len(original) and changed != original
+    data.overrides[source_url(R1, path)] = (changed, 200)
+    tab(page, '市场观察')
+    expect(page.locator('#content')).to_contain_text('成员资料未能取得或通过校验')
+    expect(page.locator('#content')).to_contain_text('完整可用概念 3 项')
+    page.get_by_text('浏览全部概念与成员', exact=True).click()
+    expect(page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True)).to_be_disabled()
+    page.get_by_text('成员读取诊断', exact=True).click()
+    expect(page.locator('#content')).to_contain_text('FILE_INTEGRITY_MISMATCH')
+    expect(page.get_by_role('button', name='TEST_ONLY 个股保留', exact=True)).to_be_visible()
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(3)
+    return {'equal_length_member_tamper': 'native digest rejected', 'concept_quotes_calendar_stock': 'preserved'}
+
+
+def scene_concepts_late_members(page, data):
+    url = source_url(R1, 'details/radar/tdx-concept/membership.json')
+    data.hold.add(url)
+    tab(page, '市场观察')
+    expect(page.locator('#content')).to_contain_text('正在读取保存的概念与成员')
+    data.ref = R2
+    page.get_by_role('button', name='读取最新保存结果', exact=True).click()
+    expect(page.locator('#refresh')).to_be_enabled()
+    expect(page.locator('#identity')).to_contain_text(R2)
+    expect(page.locator('#content')).to_contain_text('4 条关系')
+    page.get_by_text('浏览全部概念与成员', exact=True).click()
+    page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True).click()
+    expect(page.get_by_role('heading', name='TEST_ONLY 概念甲 · 来源成员 1', exact=True)).to_be_visible()
+    assert url in data.pending
+    release_and_wait_for_native_digest(page, data, url)
+    expect(page.get_by_role('heading', name='TEST_ONLY 概念甲 · 来源成员 1', exact=True)).to_be_visible()
+    expect(page.locator('#content')).not_to_contain_text('7 条关系')
+    return {'late_R1_members': 'cannot replace R2 catalogue or chosen member detail'}
+
+
 SCENES = [scene_read_and_copy, scene_search_and_late_preview, scene_bad_body,
           scene_new_reading_discards_old_detail, scene_markets_local_gap, scene_markets_read_failure,
-          scene_calendar_read, scene_calendar_bad_body, scene_calendar_late_read, scene_calendar_legacy_reading]
+          scene_calendar_read, scene_calendar_bad_body, scene_calendar_late_read, scene_calendar_legacy_reading,
+          scene_concepts_read, scene_concepts_bad_members, scene_concepts_late_members]
 
 
 def main():
@@ -457,7 +532,7 @@ def main():
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
                             result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
                             assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
-                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read):
+                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
                         except Exception:

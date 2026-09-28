@@ -168,3 +168,73 @@ Concept activity.
 The nominal daily clock remains the already-adopted Sector trigger path (currently the Human-managed workday 18:13 Asia/Shanghai external dispatch). TDX does not gain its own cron. One successful result-bearing Sector production may hand the same completed session to both the existing Stock successor and TDX, but the two jobs are independent: Stock shared-key activity cannot suppress TDX and a TDX failure cannot relabel Sector/Stock success.
 
 The handoff is event plumbing, not a source success claim. If Sector fails, performs a recovery/adoption, or validates an already-current same session, no new TDX run is fabricated. If the TDX child fails its exact-main/main-CI/source-date contract, the existing publisher exposes the gap rather than searching an older green child. R5-5 must measure those actual missing days instead of repairing them with same-day manual duplicates.
+
+
+## Saved Concept members in the existing reading and Workbench
+
+Under [Brief / Concept #645](https://github.com/auguspp/decision-kernel/issues/645),
+the normal reader optionally derives `tdx-concept-membership-v1` from the same
+successfully replayed source ZIP. The original capture module, policy, 15-bar
+observations, implementation fingerprints and historical files remain unchanged.
+This is a disposable read projection, not a second source or state owner.
+
+`tdx_concept_membership` uses the already adopted `eltdx==3.2.2` pure-file
+`BoardService._members_for` and `_infoharbor_headers` seams against an explicit
+temporary source directory. It never calls preparation, quote methods, a client,
+or current machine caches. Those private seams are version-bound and covered by
+installed-package no-network tests. The SDK owns member parsing/order; Kernel
+binds its result to the full observed Concept catalog, checks every declared
+member count, exact `(market, code)` security identity, retained file hashes and
+source-preparation clock. Missing security-list entries remain visible with an
+unknown name; they do not establish delisting or remove source members.
+
+The shared reader first performs its original strict archive replay, then
+retains one bounded `details/radar/tdx-concept/membership.json` at the same R.
+The original 1 MiB Workbench file limit and publication/API budget remain in
+force. Absent SDK, incompatible files, rejected membership or insufficient
+optional retention budget produce a member gap without discarding the valid
+short-horizon Concept observation. The source ZIP remains available; a member
+projection is not a claim of raw-wire custody or historical effective membership.
+
+The optional `concept` install extra is used by the existing publisher; `dev`
+installs the same pinned SDK for real parser tests. Base Kernel dependencies,
+existing source capture, provider access, token scope, trigger and all task
+schedules do not change. The personal non-commercial license boundary above
+continues; no upstream source code is copied.
+
+Workbench's market page reads the full observation and optional member projection
+through existing `Reading.readFile`, including native byte/SHA verification.
+It searches/pages the complete saved catalog, shows all source members in their
+original order, and links an exact security to the existing company reader.
+Existing Stock dispositions are joined only by exact security and keep their
+own market date: qualified price observation, conditions not met, unavailable,
+and outside the saved check scope are separate. No member/price state establishes
+business benefit, new Research, a holding, a watch or an investment action.
+
+Overlap is ordinary set intersection of the same saved membership. Each relation
+shows actual shared members and both denominators (`shared / selected members`,
+`shared / other members`); displaying by shared count is not an opportunity score.
+The two Concept identities are not merged. No shared members within this table
+is not a claim of economic independence. Search and page changes never fetch
+new source data; an old-R response cannot overwrite a newly selected reading.
+
+Reuse starts from the retained source audit above and
+[the existing direction-to-company prior-art record](radar-stock-discovery-pool-v1.md).
+The eltdx upstream inspected for this increment remains
+`d19ac86f2bae7565660a89baf94a3fcc531fac93`; the actual `boards.py` parser and
+`protocol/unit.py` market IDs were read. Python/JavaScript native sets and the
+existing text-only DOM/isolated Playwright harness supply relationship display
+and verification. This is REUSE + THIN_ADAPTER, not a replacement parser,
+provider framework or EasyStock fusion engine.
+
+**Still missing:** 20/60-day Concept paths and a qualified relative benchmark,
+long-horizon lifecycle, historical membership, leading-member ranking, and
+cross-taxonomy corroboration. A 15-bar archive cannot supply those paths, and
+Sector members cannot stand in for Concept members. Actual fixed-R adoption,
+browser results, Sites/phone use and overall #645 acceptance are recorded in
+that issue, not inferred from this documentation or from CI alone.
+
+To retire this extension, remove the optional reader/projection, its Workbench
+panel/import, dedicated tests/scenes and the no-longer-consumed install extra in
+one normal change. Keep original capture/replay, old archives, shared Stock and
+company readers, and historical receipts. No persistent state requires migration.

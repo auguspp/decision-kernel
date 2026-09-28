@@ -10,8 +10,12 @@ def test_publisher_installs_existing_runtime_extra_instead_of_dev_environment():
     assert "requests==2.34.2" in dependencies
     documents = project["project"]["optional-dependencies"]["documents"]
     assert any(d.startswith("pypdf==") for d in documents)
+    concept = project["project"]["optional-dependencies"]["concept"]
+    assert concept == ["eltdx==3.2.2"]
+    assert concept[0] in project["project"]["optional-dependencies"]["dev"]
+    assert not any(d.startswith("eltdx") for d in project["project"]["dependencies"])
     workflow = Path(".github/workflows/current-state-read-entry.yml").read_text()
-    assert "python -m pip install -e '.[feeds,documents]'" in workflow
+    assert "python -m pip install -e '.[feeds,documents,concept]'" in workflow
     assert ".[dev]" not in workflow
     assert "schedule:" not in workflow and "workflow_dispatch:" not in workflow
 

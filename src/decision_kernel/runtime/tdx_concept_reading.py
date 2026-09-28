@@ -112,6 +112,18 @@ def native(collector):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
         replay = tdx.replay(root, expected_execution=workflow)
+        membership = {"status": "UNAVAILABLE_OR_REJECTED", "meaning": "MEMBERSHIP_GAP_NOT_NO_MEMBERS"}
+        member_bytes = None
+        try:
+            from . import tdx_concept_membership as members
+            member_report = members.build(root, replay, receipt)
+            member_bytes = members.encoded(member_report)
+            membership = {"status": "VERIFIED_SAVED_MEMBERSHIP",
+                          "projection_hash": member_report["projection_hash"],
+                          "catalog_count": member_report["projection"]["catalog_count"],
+                          "relation_count": member_report["projection"]["relation_count"]}
+        except (ImportError, *ERRORS) as exc:
+            membership["error_type"] = type(exc).__name__
 
     report = json.loads(files["observation.json"])
     model.check(report == replay, "TDX Concept retained observation differs from replay")
@@ -125,8 +137,18 @@ def native(collector):
         "capture": collector.retain(PREFIX + "/capture.json", files["capture.json"]),
         "run": collector.retain(PREFIX + "/run.json", model.json_bytes(run)),
     }
+    if member_bytes is not None:
+        member_files_before = dict(collector.files)
+        try:
+            _reserve(collector, files=1)
+            membership["file"] = collector.retain(PREFIX + "/membership.json", member_bytes)
+        except ERRORS as exc:
+            collector.files = member_files_before
+            membership = {"status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
+                          "meaning": "MEMBERSHIP_GAP_NOT_NO_MEMBERS"}
     return {
         **state,
+        "membership": membership,
         "status": "VERIFIED_SAVED_TDX_CONCEPT_SOURCE",
         "result": {
             "market_session": projection["market_session"],
@@ -202,6 +224,8 @@ def attach(collector, baseline):
              + str(section["status"])
              + "；读取缺口不等于零概念变化。\n"
     )
+    if section.get("membership", {}).get("file"):
+        line += "\n[TDX 概念完整成员（同版本）](" + PREFIX + "/membership.json)；来源成员不是业务受益或持仓。\n"
     encoded_line = line.encode()
     if encoded_line not in tail:
         tail += encoded_line
