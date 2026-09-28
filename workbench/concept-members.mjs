@@ -109,7 +109,7 @@ export function conceptsPage(target,ctx){
       function drawMembers(){members.replaceChildren();const q=query.value.trim().toLowerCase();
         const rows=c.members.filter(t=>`${t} ${securities[t].name||''}`.toLowerCase().includes(q));
         pages(members,rows,25,part=>part.map(t=>{
-          const s=securities[t],row=el('div',undefined,'human-material');
+          const s=securities[t],row=el('div',undefined,'human-material ref');
           row.append(button(`${s.name||'名称未知'} · ${t}`,()=>{if(active())onCompany(t);}),
             el('p',s.in_source_catalog?stockStatus(t,reading.payload.lanes?.stock):'该成员未见于同包证券目录；不推断已退市'),
             el('p','业务受益需独立研究；本页没有新增研究结论。','small'));return row;
@@ -118,7 +118,7 @@ export function conceptsPage(target,ctx){
       const relationships=overlaps(membership,code);
       if(!relationships.length)related.append(el('p','在本份完整成员表内未发现共享成员；不是业务独立性证明。'));
       else pages(related,relationships,10,part=>part.map(r=>{
-        const row=el('div',undefined,'human-material');row.append(button(r.name,()=>select(r.code)),
+        const row=el('div',undefined,'human-material ref');row.append(button(r.name,()=>select(r.code)),
           el('p',`共享 ${r.shared.length} 位 · 本概念 ${r.shared.length}/${r.ownCount} · 对方 ${r.shared.length}/${r.otherCount}`),
           el('p',r.shared.length===r.ownCount && r.shared.length===r.otherCount?'成员集合相同，概念身份仍不同':
             r.shared.length===r.ownCount?'本概念成员全部包含于对方':r.shared.length===r.otherCount?'对方成员全部包含于本概念':'部分成员重叠'),
@@ -128,7 +128,7 @@ export function conceptsPage(target,ctx){
     function drawCatalog(){catalog.replaceChildren();const q=search.value.trim().toLowerCase();
       const rows=observation.rows.filter(c=>`${c.name} ${c.code}`.toLowerCase().includes(q));
       pages(catalog,rows,15,part=>part.map(c=>{
-        const row=el('div',undefined,'human-material'),choose=button(`${c.name} · ${c.code}`,()=>select(c.code));choose.disabled=!membership;
+        const row=el('div',undefined,'human-material ref'),choose=button(`${c.name} · ${c.code}`,()=>select(c.code));choose.disabled=!membership;
         row.append(choose,el('p',`当日 / 5日 / 10日：${['today','5d','10d'].map(k=>c.periods[k].change_percent===null?'未知':displayDecimal(c.periods[k].change_percent)+'%').join(' / ')}`));
         if(membership)row.append(el('p',`来源成员 ${membership.sets.get(c.code).size} 位；点击查看个股检查与重叠`,'small'));return row;
       }),ui);
