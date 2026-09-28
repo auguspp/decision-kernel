@@ -1,10 +1,10 @@
 # CI mainline / CI 施工接续入口
 
-Updated: 2026-09-25. Engineering only; Investment Authority = NONE.
+Updated: 2026-09-28. Engineering only; Investment Authority = NONE.
 
 ## 目标、授权与当前接点
 
-Human授权本CI线程按最终目标连续推进，不逐PR索批。目标是减少正常施工等待、永久验证义务和维护面，不是保持测试数只增不减，也不是再造CI管理平台。当前main、活动PR与未验事项先读[#354](https://github.com/auguspp/decision-kernel/issues/354)最新入口；不要仅凭本文历史样本重复已完成施工。
+Human授权本CI线程按最终目标连续推进，不逐PR索批。目标是减少正常施工等待、永久验证义务和维护面，不是保持测试数只增不减，也不是再造CI管理平台。当前main、活动PR与未验事项先读[#297](https://github.com/auguspp/decision-kernel/issues/297)，再进入其指向的当前任务；本轮AI-native范围归[#625](https://github.com/auguspp/decision-kernel/issues/625)，验证义务审计与后继回执归[#626](https://github.com/auguspp/decision-kernel/issues/626)。[#354](https://github.com/auguspp/decision-kernel/issues/354)是已收口CI v2的历史依据，不是当前施工队列；不要仅凭本文历史样本重复开工。
 
 v2-first与职责接替授权：5818204474、5818729891；成熟组件审计：5817811217；分片/安装实证：[#557/5823086442](https://github.com/auguspp/decision-kernel/issues/557#issuecomment-5823086442)；后继合同收敛范围：[#354/5824416309](https://github.com/auguspp/decision-kernel/issues/354#issuecomment-5824416309)。这些不扩大产品、Research、来源/模型、生产日程或投资权限。
 
@@ -48,11 +48,17 @@ prepare的真实包库存形成同run约束。每片核相同代码/run/attempt�
 
 只读contents/actions/pull-requests权限不变；GH_TOKEN只给范围/产物只读步骤，不给测试或来源文字。无业务secrets、持久checkout凭证或ZIP代码执行；诊断always保留30天。同PR过期head可由原生concurrency替代，独立main不互相取消。CI通过、发布、读回、研究接受和投资决定分别验收。
 
+## 工作台浏览器是独立证明，不是第五种full范围
+
+实际页面验证从[workbench/browser/README](../workbench/browser/README.md)恢复。#630已提供固定合成输入、桌面/窄屏真实浏览器、原生digest与失败证据；按该入口执行，不重新拼一套harness。适用改动需核其准确head的浏览器结果，普通full绿色不能替代它；无关PR不因此新增browser needs。
+
+路径过滤的浏览器workflow不作为全仓无条件required check；原生main护栏的配置提案、实际权限结果和采用状态归#625的对应回执，不在本页写成永久权限矩阵。CI、浏览器、发布、独立接手与Sites/实机继续分别验收。
+
 ## 按合同降低重复成本，不按年代删保护
 
 #559是明确示例：参考字段错误由原`_qualify_references`承担，23种字段反例直接执行它，每个反例先确认fresh正样本可通过；跨股票extra_identity仍归真实observer，另保留真实正常→参考不连续整链传播。没有缓存validator结果或mock掉失败；退出的是每个字段反例重复构建整链的义务，不是身份/时间/数值合同。测试数量不是成本替代指标。
 
-慢Stock/Woton组继续逐责任KEEP / CONSOLIDATE / RETIRE / DEFER，核真实消费者。Woton当前已先校验manifest/repair身份再重解析PDF，且有共享completed_snapshot；不能只因耗时或旧one-shot名称删除必要reader。没有业务退役授权时，不为CI擅自关闭能力。
+Stock/Woton历史例子不是当前待执行清单；按#297指向的任务逐责任KEEP / CONSOLIDATE / RETIRE / DEFER，核真实消费者和已采纳退出回执。必要历史reader、原件与失败保留，不让已退出writer/one-shot因旧文档重新复活。没有业务退役授权时，不为CI擅自关闭能力。后继retirement-first与合同下沉分开计账：更多便宜用例不是permanent test identities净退出；未审仍未审，不为探索数字扩成无限专项。
 
 每次ADD/CHANGE/CONSOLIDATE/RETIRE同PR处置runtime/workflow、专属tests/fixtures、参数/缓存/布局例外与引用。共享现役合同保留，旧成果需读时优先保留reader而非旧executor。#556时序partition/assemble执行入口已由#558原生needs替代，历史single/partition reader继续；#557实验已关闭未合并，不恢复无限shadow。新matrix、安装组件和本轮fixture也有同样退出责任。
 
@@ -62,8 +68,8 @@ prepare的真实包库存形成同run约束。每片核相同代码/run/attempt�
 
 分别记录test/subtest数、安装、独立collection、worker内部收集与执行、job及触发到完成、runner数、sum(job秒)/60、cache状态、PR/main和新增维护量。累计case不是wall或CPU；缩减重复义务、同集合执行提速、main结果复用必须分别记账。没有受控重复样本，不声称稳定百分比或漏选率。
 
-后续优先减少真实慢合同的重复准备与编排，而非增加更多快速旁路。actionlint/offline zizmor已有首次扫描但有发现，不是安全PASS；接入时用实测低成本，不为消告警改生产权限/触发。testmon仅有界shadow候选；dorny不替代可信baseline/mode，fkirc同树成功不替代full证据资格。
+后续范围从当前任务恢复，而非继续增加快速旁路。成熟工具的扫描、采用及未解决发现分别查其原件，不把历史候选默认当成已安装能力或安全PASS，不为消告警改生产权限/触发。testmon仅有界shadow候选；dorny不替代可信baseline/mode，fkirc同树成功不替代full证据资格。
 
 CI仅锁依赖结果的合并/采用边界；继续独立授权工作，不短轮询、不假忙、不承诺后台。先发现实际工具、核目标和本次授权；未发现不是无权限。明确拒绝停止对应动作，不绕过；不确定写入先读回，不重复写，旧#297安全拦截不重试。
 
-回滚走正常PR，不直写main/force-push、不删除历史Evidence/run。旧方案、失败和#544以来成果留在Git/Issue，不覆写为成功。#354保持OPEN；分片上线与分支实跑不等于全域义务审查或长期体验目标已经完成。
+回滚走正常PR，不直写main/force-push、不删除历史Evidence/run。旧方案、失败和#544以来成果留在Git/Issue，不覆写为成功。旧#354的收口及后继#626的实际范围分别保留；分片上线、有限退役和分支实跑不等于全仓语义审计、独立新上下文验收或长期体验目标已经完成。
