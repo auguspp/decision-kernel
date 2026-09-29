@@ -1,10 +1,10 @@
 name: b2-disclosure-appointments
-run-name: B2 six existing objects / 20260930 appointments
+run-name: B2 five unqueried objects / 20260930 appointments
 on:
   workflow_dispatch:
     inputs:
       code-sha:
-        description: 'Reviewed exact current main; six fixed objects, 20260930 only'
+        description: 'Reviewed exact current main; five unqueried objects, 20260930 only'
         required: true
         type: string
 permissions:
@@ -52,7 +52,7 @@ jobs:
           PY
       - name: Install existing feed dependencies
         run: python -m pip install -e '.[feeds]'
-      - name: Capture six fixed appointment requests using the unchanged Relay
+      - name: Capture five unqueried appointment requests using the unchanged Relay
         id: capture
         env:
           TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}

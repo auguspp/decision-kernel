@@ -1,0 +1,48 @@
+{
+  "finished_at": "2026-09-29T14:46:55.132826+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36585190686",
+    "GITHUB_SHA": "4f442f30e10abc0b3a64939c3c4fcd973859357a",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "official_appointment_qualified": false,
+  "outcomes": [
+    {
+      "code": "688277.SH",
+      "receipt": "688277.SH/receipt.json",
+      "status": "FIELD_OR_COVERAGE_GAP_RAW_RETAINED"
+    },
+    {
+      "code": "600276.SH",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    },
+    {
+      "code": "002674.SZ",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    },
+    {
+      "code": "600598.SH",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    },
+    {
+      "code": "002050.SZ",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    },
+    {
+      "code": "603986.SH",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    }
+  ],
+  "research_executed": false,
+  "status": "STOPPED_WITH_GAPS"
+}
