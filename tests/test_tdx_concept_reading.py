@@ -225,3 +225,51 @@ def test_workflows_retain_hidden_source_file_and_publish_tdx_reading():
     assert "tdx-concept-snapshot" in publisher
     assert "--include-tdx-concept-context" in publisher
     assert "schedule:" not in publisher
+
+
+def test_long_history_envelope_preserves_original_replay_and_fails_locally(tmp_path):
+    from test_tdx_concept_trend import capture_bundle
+    root, long_root, cap, observation, receipt, base_source = capture_bundle(tmp_path)
+    files = {"snapshot/" + p.relative_to(root).as_posix(): p.read_bytes()
+             for p in root.rglob("*") if p.is_file()}
+    files.update({"trend/" + p.name: p.read_bytes() for p in long_root.iterdir()})
+    col, base, _, _ = setup(tmp_path, files=files)
+    result = reading.attach(col, base)
+    section = result['research']['tdx_concept_context']
+    assert section['status'] == 'VERIFIED_SAVED_TDX_CONCEPT_SOURCE'
+    assert section['trend']['status'] == 'VERIFIED_SAVED_LONG_HISTORY'
+    desc = section['trend']['details']['trend.json']
+    assert json.loads(col.files[desc['read_path']])['projection']['coverage']['horizons']['60'] == 2
+    assert col.files[section['details']['observation']['read_path']] == (root/'observation.json').read_bytes()
+    assert result['lanes'] == base['lanes']
+    assert '5/20/60'.encode() in col.files['README.md']
+    broken = dict(files); broken['trend/source.json'] += b' '
+    other = tmp_path/'bad-long'; other.mkdir()
+    col, baseline_, _, _ = setup(other, files=broken)
+    section = reading.attach(col, baseline_)['research']['tdx_concept_context']
+    assert section['status'] == 'VERIFIED_SAVED_TDX_CONCEPT_SOURCE'
+    assert section['trend']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    assert 'details' not in section['trend']
+    assert not any('/trend/' in k for k in col.files)
+
+
+def test_old_flat_capture_never_claims_long_history(tmp_path):
+    col, base, _, _ = setup(tmp_path)
+    section = reading.attach(col, base)['research']['tdx_concept_context']
+    assert section['status'] == 'VERIFIED_SAVED_TDX_CONCEPT_SOURCE'
+    assert section['trend']['status'] == 'NOT_CAPTURED_LEGACY_SOURCE'
+    assert section['result']['coverage']['history_10d_rows'] == 2
+
+
+def test_explicit_failed_long_capture_keeps_failure_receipt_and_qualified_base(tmp_path):
+    from test_tdx_concept_trend import capture_bundle
+    from decision_kernel.runtime.tdx_concept_trend import BENCHMARK
+    root, long_root, cap, *_ = capture_bundle(tmp_path, lambda d: d['series'][BENCHMARK].update(bars=[]))
+    files = {'snapshot/'+p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}
+    files.update({'trend/'+p.name:p.read_bytes() for p in long_root.iterdir()})
+    col, base, _, _ = setup(tmp_path, files=files)
+    section = reading.attach(col, base)['research']['tdx_concept_context']
+    assert section['status'] == 'VERIFIED_SAVED_TDX_CONCEPT_SOURCE'
+    assert section['trend']['status'] == 'INCOMPLETE_LONG_HISTORY'
+    assert section['trend']['reason_code'] == 'TREND_BENCHMARK_UNAVAILABLE'
+    assert set(section['trend']['details']) == {'capture.json'}

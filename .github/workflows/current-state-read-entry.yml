@@ -68,8 +68,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing package
-        # Existing extras supply HTTP and deterministic original-PDF replay, not dev tools.
-        run: python -m pip install -e '.[feeds,documents]'
+        # Optional extras supply HTTP, original-PDF replay and saved-file TDX parsing, not dev tools.
+        run: python -m pip install -e '.[feeds,documents,concept]'
       - name: Verify saved products and publish read-only ref
         env:
           GH_TOKEN: ${{ github.token }}

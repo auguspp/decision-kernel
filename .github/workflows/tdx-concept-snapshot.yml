@@ -77,15 +77,15 @@ jobs:
         run: |
           python -m decision_kernel.runtime.tdx_concept_snapshot capture \
             --market-session "$MARKET_SESSION" \
-            --output "$RUNNER_TEMP/tdx-concept"
+            --output "$RUNNER_TEMP/tdx-concept/snapshot"
       - name: Replay retained source models and board files without source calls
         run: |
           python -m decision_kernel.runtime.tdx_concept_snapshot replay \
-            --output "$RUNNER_TEMP/tdx-concept"
+            --output "$RUNNER_TEMP/tdx-concept/snapshot"
           python - <<'PY'
           import json, os
           from pathlib import Path
-          root=Path(os.environ['RUNNER_TEMP'])/'tdx-concept'
+          root=Path(os.environ['RUNNER_TEMP'])/'tdx-concept'/'snapshot'
           cap=json.loads((root/'capture.json').read_text())
           if cap['status']=='CAPTURED_TDX_CONCEPT_SNAPSHOT':
               p=json.loads((root/'observation.json').read_text())['projection']
@@ -93,6 +93,17 @@ jobs:
               assert p['coverage']['eastmoney_required'] is False
               assert p['investment_authority']=='NONE'
           PY
+      - name: Capture and replay bounded long history on the same source host
+        env:
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          set -euo pipefail
+          python -m decision_kernel.runtime.tdx_concept_trend capture \
+            --base "$RUNNER_TEMP/tdx-concept/snapshot" --output "$RUNNER_TEMP/tdx-concept/trend"
+          python -m decision_kernel.runtime.tdx_concept_trend replay \
+            --base "$RUNNER_TEMP/tdx-concept/snapshot" --output "$RUNNER_TEMP/tdx-concept/trend"
+          # INCOMPLETE_LONG_HISTORY is a retained optional gap, never a successful trend.
+          # The original snapshot remains independently qualified; there is no retry.
       - name: Retain TDX source identity, source-native rows and explicit gaps
         if: always()
         uses: actions/upload-artifact@v7
@@ -105,8 +116,13 @@ jobs:
       - name: Publish scoped source summary
         if: always()
         run: |
-          if [ -f "$RUNNER_TEMP/tdx-concept/summary.md" ]; then
-            cat "$RUNNER_TEMP/tdx-concept/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$RUNNER_TEMP/tdx-concept/snapshot/summary.md" ]; then
+            cat "$RUNNER_TEMP/tdx-concept/snapshot/summary.md" >> "$GITHUB_STEP_SUMMARY"
           else
             echo 'No retained TDX source receipt. Inspect the failed step; not no market activity.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f "$RUNNER_TEMP/tdx-concept/trend/summary.md" ]; then
+            cat "$RUNNER_TEMP/tdx-concept/trend/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f "$RUNNER_TEMP/tdx-concept/trend/capture.json" ]; then
+            echo 'Long Concept history incomplete. Original snapshot has a separate result; see retained trend receipt.' >> "$GITHUB_STEP_SUMMARY"
           fi

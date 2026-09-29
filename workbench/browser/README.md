@@ -1,6 +1,6 @@
 # Isolated Workbench browser verification
 
-Owned by the AN2 slice of #625; calendar consumer scenes extend it under #620. This exercises the **actual** `workbench/index.html`
+Owned by the AN2 slice of #625; calendar consumer scenes extend it under #620 and saved Concept member scenes under #645. This exercises the **actual** `workbench/index.html`
 and its imported modules in Chromium. No replacement app, real account, secret,
 GitHub write, market acquisition, research call or Sites deployment is involved.
 The normal `kernel-tests` full/evidence/main/publisher contracts remain separate.
@@ -35,7 +35,7 @@ an incomplete bundle is not a complete-checkout validation: some existing Node
 tests also read `.github/workflows/radar-newsnow-daily.yml`. Do not invent a
 replacement workflow fixture to turn missing-source failures green.
 
-## What the thirteen scenes prove
+## What the scenes prove
 
 Each scene uses a fresh context at 1360×900 and 390×844:
 
@@ -58,11 +58,30 @@ Each scene uses a fresh context at 1360×900 and 390×844:
    one-row window, even after its native digest completes.
 10. A legacy R without calendar registration is explicit absence, not no events;
     no calendar body is fetched and the stock panel remains available.
-11. Read an explicitly registered authored agenda, its visible source gaps and
+11. Search the complete synthetic Concept catalog, open its members, distinguish
+    qualified / conditions-not-met / unavailable / not-checked Stock states,
+    inspect exact shared-member counts with both denominators, and read an
+    existing same-R company document. Source markup stays literal text.
+12. Reject equal-length member-body tampering via actual Web Crypto while
+    preserving the original Concept quotes, calendar and independent Stock panel.
+13. Finish a held old-R membership response after refreshing and selecting a
+    new-R concept. The old members cannot replace the new reading or its detail.
+14. Reject equal-length long-history body tampering while source quotes and
+    members remain readable; the digest failure cannot become a trend verdict.
+15. Complete an old-R long-history response after selecting a new-R reading;
+    the old phase cannot replace the new one, including after native digest EOF.
+16. An older reading without long-history registration retains short quotes and
+    members, reports the gap and does not fetch or invent a long path.
+17. Read an explicitly registered authored agenda, its visible source gaps and
     unknown review dates, then its same-R original; source script stays inert.
-12. Reject an equal-length altered agenda with native SHA while original BLS
+18. Reject an equal-length altered agenda with native SHA while original BLS
     appointments and the stock panel remain available.
-13. A held old-R agenda cannot overwrite the new one after its digest completes.
+19. A held old-R agenda cannot overwrite the new one after its digest completes.
+
+Concept scene11 also expands synthetic5/20/60 index/benchmark/excess values,
+positive-excess run length, strengthening/weakening and insufficient-history
+states. These are display fixtures, not actual source acquisition, arithmetic
+or acceptance of a real Concept lifecycle; backend replay is tested separately.
 
 The fixtures follow existing controller/global-markets test shapes. Repeated
 `a`/`b`/`c` identities and all numeric quotes are **TEST_ONLY**, not actual Git

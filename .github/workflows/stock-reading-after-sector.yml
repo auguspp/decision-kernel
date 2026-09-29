@@ -98,7 +98,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      github.event.workflow_run.name == 'sector-radar-shadow' &&
+      github.event.workflow_run.path == '.github/workflows/sector-radar-shadow.yml' &&
       (github.event.workflow_run.event == 'schedule' ||
        github.event.workflow_run.event == 'workflow_dispatch') &&
       github.event.workflow_run.status == 'completed' &&

@@ -121,6 +121,16 @@ def test_market_metadata_accepts_natural_sector_schedule_without_other_event_wid
         mod['metadata'](r,'market',run,listing)
 
 
+def test_market_metadata_uses_stable_workflow_path_not_dynamic_run_display_name():
+    mod=code();r=mod['intent'](environment(),AS_OF.isoformat());run,listing=remote('market')
+    run['name']='sector-radar-shadow | operation=produce | recovery=none'
+    binding=mod['metadata'](r,'market',run,listing)
+    assert binding['artifact_id']=='200' and binding['commit']=='b'*40
+    run['path']='.github/workflows/other.yml'
+    with pytest.raises(ValueError,match='identity'):
+        mod['metadata'](r,'market',run,listing)
+
+
 @pytest.mark.parametrize('kind',['source','market'])
 @pytest.mark.parametrize('change',['failed','foreign','future','expired','digest','duplicate','listing','commit'])
 def test_bad_remote_inputs_fail_before_download_or_market(kind,change):

@@ -1,3 +1,4 @@
+import {conceptsPage} from './concept-members.mjs';
 import {transferButton} from './quick-inbox-ui.mjs';
 import {globalMarketsPage} from './global-markets.mjs';
 import {calendarPage} from './research-calendar.mjs';
@@ -150,6 +151,7 @@ function pager(target,page,total,size,change,{el,button}) {
 export function marketsPage(target,ctx) {
   const {reading,ui,active,onRead,onCompany}=ctx, {el,card,button,link,notice,folded,disclosure,dataTable}=ui;
   target.append(card('市场 · 已覆盖观察','国际指数与人民币同业利率的保存背景，以及 A 股行业结构和个股观察。各来源日期、覆盖和失败独立展示；不是实时行情终端。'));
+  conceptsPage(target,ctx);
   calendarPage(target,ctx);
   globalMarketsPage(target,ctx);
   const lane=reading.payload.lanes?.sector, saved=lane?.last_qualified_result;
