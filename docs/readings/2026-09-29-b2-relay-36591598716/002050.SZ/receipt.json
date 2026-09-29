@@ -1,0 +1,61 @@
+{
+  "client_result": {
+    "api": "disclosure_date",
+    "attempts": [
+      {
+        "attempt": 1,
+        "body": "attempt-1.body",
+        "business_code": null,
+        "business_error": "upstream_pool_exhausted",
+        "business_msg": null,
+        "bytes": 46,
+        "classification": "TEMPORARY_QUEUE",
+        "headers": {
+          "X-Request-ID": "4541e488-f033-42c5-bc0b-24f70d80a147"
+        },
+        "http_status": 503,
+        "received_at": "2026-09-29T15:37:55.418458+00:00",
+        "requested_at": "2026-09-29T15:37:54.004227+00:00",
+        "sha256": "d02cd52a88b58c8ba349ed8fe4a4ed20a7e1b84eec3ba2e153564daa6af3e18f"
+      },
+      {
+        "attempt": 2,
+        "body": "attempt-2.body",
+        "business_code": null,
+        "business_error": "upstream_pool_exhausted",
+        "business_msg": null,
+        "bytes": 46,
+        "classification": "TEMPORARY_QUEUE",
+        "headers": {
+          "X-Request-ID": "1236cf16-7967-4725-b679-49dcde57c999"
+        },
+        "http_status": 503,
+        "received_at": "2026-09-29T15:38:29.818739+00:00",
+        "requested_at": "2026-09-29T15:38:25.419642+00:00",
+        "sha256": "d02cd52a88b58c8ba349ed8fe4a4ed20a7e1b84eec3ba2e153564daa6af3e18f"
+      }
+    ],
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "002050.SZ"
+    },
+    "status": "TEMPORARY_QUEUE"
+  },
+  "finished_at": "2026-09-29T15:38:29.819692+00:00",
+  "invoked_at": "2026-09-29T15:37:54.004151+00:00",
+  "request": {
+    "api": "disclosure_date",
+    "code": "002050.SZ",
+    "name": "三花智控",
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "002050.SZ"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "status": "TEMPORARY_QUEUE"
+}

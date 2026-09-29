@@ -1,0 +1,57 @@
+{
+  "client_result": {
+    "api": "disclosure_date",
+    "attempts": [
+      {
+        "attempt": 1,
+        "body": "attempt-1.body",
+        "business_code": 0,
+        "business_error": null,
+        "business_msg": null,
+        "bytes": 227,
+        "classification": "SUCCESS",
+        "headers": {
+          "X-Cache": "MISS",
+          "X-RateLimit-IP-Remaining": "199",
+          "X-RateLimit-Remaining": "199",
+          "X-Request-ID": "ee72ff04-6586-444d-9fd8-72cc5303094a"
+        },
+        "http_status": 200,
+        "received_at": "2026-09-29T15:37:46.993686+00:00",
+        "requested_at": "2026-09-29T15:37:36.787233+00:00",
+        "sha256": "ce3458ebfe3d553b22c1eebe92f553b69dd56a6993b1aa2394711c001cc11795"
+      }
+    ],
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "002674.SZ"
+    },
+    "status": "SUCCESS"
+  },
+  "finished_at": "2026-09-29T15:37:46.994662+00:00",
+  "invoked_at": "2026-09-29T15:37:36.787051+00:00",
+  "request": {
+    "api": "disclosure_date",
+    "code": "002674.SZ",
+    "name": "兴业科技",
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "002674.SZ"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "status": "EMPTY_RESPONSE_NOT_NO_APPOINTMENT",
+  "table": {
+    "coverage": "EMPTY_RESPONSE_NOT_NO_APPOINTMENT",
+    "date_qualification": "NOT_PERFORMED",
+    "issues": [],
+    "matching_row_indexes": [],
+    "missing_fields": [],
+    "revision_order": "NOT_INFERRED_NO_KEEP_LAST",
+    "rows": []
+  }
+}
