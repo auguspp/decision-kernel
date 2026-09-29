@@ -1,0 +1,59 @@
+{
+  "client_result": {
+    "api": "disclosure_date",
+    "attempts": [
+      {
+        "attempt": 1,
+        "body": "attempt-1.body",
+        "business_code": null,
+        "business_error": "upstream_pool_exhausted",
+        "business_msg": null,
+        "bytes": 46,
+        "classification": "TEMPORARY_QUEUE",
+        "headers": {
+          "X-Request-ID": "9788dab9-ca9d-4e0b-8ec8-1c744aa2c0e0"
+        },
+        "http_status": 503,
+        "received_at": "2026-09-29T15:03:32.389027+00:00",
+        "requested_at": "2026-09-29T15:03:30.033020+00:00",
+        "sha256": "d02cd52a88b58c8ba349ed8fe4a4ed20a7e1b84eec3ba2e153564daa6af3e18f"
+      },
+      {
+        "attempt": 2,
+        "body": null,
+        "business_code": null,
+        "business_error": "TRANSPORT_TIMEOUT",
+        "business_msg": null,
+        "bytes": null,
+        "classification": "TEMPORARY_QUEUE",
+        "headers": {},
+        "http_status": null,
+        "received_at": "2026-09-29T15:04:12.834693+00:00",
+        "requested_at": "2026-09-29T15:04:12.834675+00:00",
+        "sha256": null
+      }
+    ],
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "600276.SH"
+    },
+    "status": "TEMPORARY_QUEUE"
+  },
+  "finished_at": "2026-09-29T15:04:12.834702+00:00",
+  "invoked_at": "2026-09-29T15:03:30.032809+00:00",
+  "request": {
+    "api": "disclosure_date",
+    "code": "600276.SH",
+    "name": "恒瑞医药",
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "600276.SH"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "status": "TEMPORARY_QUEUE"
+}
