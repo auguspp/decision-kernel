@@ -36,7 +36,7 @@ def fixture():
     identity = dict(code_sha='a' * 40, event='pull_request', run_id='10', attempt='1')
     env = dict(tree='b' * 40, python='synthetic', packages={'pytest': 'synthetic'},
                machine='x86_64', platform='linux', runner_os='Linux', runner_arch='X64',
-               image_os='ubuntu', image_version='synthetic')
+               image_os='ubuntu24', image_version='20990101.1.0')
     paths = ['tests/test_domain.py']
     collection = 'tests/test_domain.py::test_domain\n' + ''.join(f'tests/test_part.py::test_{g}\n' for g in range(1, 5))
     source = ''.join(k + '=' + v + '\n' for k, v in identity.items())
@@ -114,9 +114,10 @@ def test_matrix_full_reader_rebuilds_inner_proof_not_only_aggregate_green():
         'partition.json': json.dumps(dict(paths=paths, artifact=metadata, shards=[a for _, a in shards], timing_sha256='c' * 64)),
         'collection.txt': collection, 'remaining.xml': remaining, 'domain-source.zip': domain, 'pytest.xml': merged,
         **{f'shard-{g}.zip': raw for g, (raw, _) in enumerate(shards, 1)}}
-    def read(f):
+    def read(f, *, fresh_execution=False):
         raw, a = bundle(f, 'kernel-ci-10-1', identity)
-        return R['full_evidence'](raw, a, dict(id=10, head_sha=identity['code_sha']), env)
+        return R['full_evidence'](raw, a, dict(id=10, head_sha=identity['code_sha']), env,
+                                  fresh_execution=fresh_execution)
     assert read(all_files) == 5
     for key in ('partition.json', 'domain-source.zip', 'shard-2.zip'):
         with pytest.raises((KeyError, ValueError)): read({k: v for k, v in all_files.items() if k != key})
@@ -124,6 +125,60 @@ def test_matrix_full_reader_rebuilds_inner_proof_not_only_aggregate_green():
         with pytest.raises(ValueError): read({**all_files, key: all_files[key] + b'changed'})
     bad = dict(all_files); bad['scope.json'] = bad['scope.json'].replace('EXECUTED_MATRIX_V2', 'EXECUTED_PARTITIONED_V2')
     with pytest.raises(ValueError): read(bad)
+
+    def observed(change=None, *, policy=True, missing=False):
+        native = deepcopy(files)
+        for member in native:
+            member['environment-actual.json'] = json.dumps(env)
+        actual = {**env, 'image_version': '20990108.1.0', **(change or {})}
+        native[0]['environment-actual.json'] = json.dumps(actual)
+        if missing:
+            del native[0]['environment-actual.json']
+        if not policy:  # Legacy full evidence must keep its original exact contract.
+            native[0]['environment.json'] = json.dumps(actual)
+        native_shards = pack(native)
+        result = deepcopy(all_files)
+        plan = json.loads(result['partition.json'])
+        plan['shards'] = [a for _, a in native_shards]
+        if policy:
+            plan['environment_policy'] = R['IMAGE_ROLLOUT']
+        result['partition.json'] = json.dumps(plan)
+        result.update({f'shard-{g}.zip': raw for g, (raw, _) in enumerate(native_shards, 1)})
+        return result
+
+    rollout = observed()
+    assert read(rollout, fresh_execution=True) == 5
+    unmarked = deepcopy(rollout)
+    unmarked_plan = json.loads(unmarked['partition.json']); del unmarked_plan['environment_policy']
+    unmarked['partition.json'] = json.dumps(unmarked_plan)
+    with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+        read(unmarked, fresh_execution=True)
+    with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+        read(rollout)  # Main/select defaults to strict reuse, including every actual image.
+    with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+        read(observed(policy=False), fresh_execution=True)
+    with pytest.raises(KeyError):
+        read(observed(missing=True), fresh_execution=True)
+    assert read(observed({'image_version': env['image_version']})) == 5
+    for key in ('tree', 'python', 'machine', 'platform', 'image_os', 'runner_os', 'runner_arch', 'packages'):
+        with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+            read(observed({key: {} if key == 'packages' else 'different'}), fresh_execution=True)
+    for version in (None, '', 'unknown'):
+        with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+            read(observed({'image_version': version}), fresh_execution=True)
+    unknown = deepcopy(rollout)
+    plan = json.loads(unknown['partition.json']); plan['environment_policy'] = 'UNKNOWN_POLICY'
+    unknown['partition.json'] = json.dumps(plan)
+    with pytest.raises(ValueError, match='UNKNOWN_ENVIRONMENT_POLICY'):
+        read(unknown, fresh_execution=True)
+    # Domain images may also rotate, but shared dependency versions never drift.
+    actual_domain = deepcopy(domain_files)
+    actual_domain['environment.json'] = json.dumps({**env, 'image_version': '20990108.1.0'})
+    native_domain, native_meta = bundle(actual_domain, 'kernel-ci-v2-10-1', identity)
+    both = deepcopy(rollout); plan = json.loads(both['partition.json']); plan['artifact'] = native_meta
+    both['partition.json'] = json.dumps(plan); both['domain-source.zip'] = native_domain
+    assert read(both, fresh_execution=True) == 5
+    assert not R['fresh_environment']({**env, 'unrecorded_extra': True}, env)
 
 
 def test_workflow_graph_uses_native_dependency_and_fixed_splitter_not_racing_reads():
@@ -151,3 +206,31 @@ def test_duration_input_is_only_a_hint_and_preserves_exact_node_addresses(monkey
     assert M['durations'](collection, xml('test_part', 'test_1')) == {'tests/test_part.py::test_1': 0.5}
     monkeypatch.setenv('CI_BASE_SHA', 'unknown')
     assert M['duration_hint']() == {}
+
+
+def test_shard_records_actual_environment_before_verification(tmp_path, monkeypatch):
+    workflow = yaml.load((ROOT / '.github/workflows/ci-full-v2.yml').read_text(), Loader=yaml.BaseLoader)
+    step = next(s for s in workflow['jobs']['shard']['steps']
+                if s.get('name') == 'Record actual shard environment')
+    script = step['run'].split("python - <<'PY'\n", 1)[1].rsplit('\nPY', 1)[0]
+    baseline = fixture()[1]
+    original = json.dumps(baseline).encode()
+    (tmp_path / 'environment.json').write_bytes(original)
+    monkeypatch.setenv('CI_REPORT_DIR', str(tmp_path))
+    for changed in ('image_version', 'python', None):
+        actual = deepcopy(baseline)
+        if changed:
+            actual[changed] = '20990108.1.0' if changed == 'image_version' else 'different'
+        monkeypatch.setattr(runpy, 'run_path', lambda _: {
+            'environment': lambda *args: actual, 'require': R['require'],
+            'fresh_environment': R['fresh_environment']})
+        if changed == 'python':
+            with pytest.raises(ValueError, match='SHARD_ENVIRONMENT'):
+                exec(compile(script, '<actual-workflow-environment-step>', 'exec'), {})
+        else:
+            exec(compile(script, '<actual-workflow-environment-step>', 'exec'), {})
+        assert json.loads((tmp_path / 'environment-actual.json').read_bytes()) == actual
+        assert (tmp_path / 'environment.json').read_bytes() == original
+    upload = next(s for s in workflow['jobs']['shard']['steps'] if s.get('name') == 'Upload shard diagnostics')
+    assert upload['if'] == 'always()'
+    assert upload['with']['path'] == '${{ runner.temp }}/kernel-ci-shard/'

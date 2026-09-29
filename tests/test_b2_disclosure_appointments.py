@@ -1,4 +1,4 @@
-"""Synthetic-only tests for the six-object caller, not live appointment acceptance."""
+"""Synthetic source-capture checks, not live CNINFO/date acceptance."""
 from copy import deepcopy
 from hashlib import sha256
 import json
@@ -6,6 +6,7 @@ from pathlib import Path
 import runpy
 
 import pytest
+import requests
 from decision_kernel.runtime import tushare_relay as relay
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,185 +15,159 @@ NOW = '2099-01-01T00:00:00+00:00'
 IDENTITY = {'test_only': 'SYNTHETIC_NOT_A_GITHUB_RUN'}
 
 
-def body(code, *, rows=None, fields=None):
-    fields = list(b2['FIELDS']) if fields is None else fields
-    row = {'ts_code': code, 'ann_date': '20990101', 'end_date': b2['PERIOD'],
-           'pre_date': '20990201', 'actual_date': None, 'modify_date': 'raw revision; not a clock'}
-    values = [[row.get(f) for f in fields]] if rows is None else rows
-    return json.dumps({'code': 0, 'provider': 'synthetic-only',
-                       'data': {'fields': fields, 'items': values}}, ensure_ascii=False).encode()
+def body(code):
+    # Fields deliberately stay raw; no positional mapping, date fill or certification.
+    return json.dumps({'prbookinfos': [{'code': code, 'first': '2099-02-01',
+        'actual': None, 'change1': None, 'change2': 'raw revision'}]}, ensure_ascii=False).encode()
 
 
-def client(raw_factory, *, http=200):
-    calls, waits = [], []
-    def request(api, params):
-        calls.append((api, deepcopy(params)))
-        def transport(a, p, k, *, clock):
-            return {'http_status': http, 'raw': raw_factory(p['ts_code']),
-                    'requested_at': NOW, 'received_at': NOW, 'headers': {'X-Request-ID': 'synthetic'}}
-        return relay.request(api, params, key='synthetic-b2-test-only',
-                             transport=transport, sleep=waits.append, clock=lambda: NOW)
-    return request, calls, waits
+def client(factory=body, *, http=200, complete=True, error=None):
+    calls = []
+    def request(params, *, clock):
+        calls.append(deepcopy(params))
+        return {'http_status': http, 'headers': {}, 'raw': factory(params['stockCode']),
+                'body_complete': complete, 'error_type': error,
+                'requested_at': clock(), 'received_at': clock()}
+    return request, calls
 
 
 def run(tmp_path, request):
     return b2['capture'](tmp_path / 'out', IDENTITY, request=request, clock=lambda: NOW)
 
 
-def test_four_unqueried_requests_retain_originals_and_nulls(tmp_path):
-    request, calls, waits = client(body)
+def test_six_public_requests_retain_raw_without_certifying_dates(tmp_path):
+    request, calls = client()
     result = run(tmp_path, request)
-    assert len(calls) == 4 and waits == []
-    assert [p['ts_code'] for _, p in calls] == [c[0] for c in b2['COMPANIES'][2:]]
-    assert all(a == 'disclosure_date' and p['end_date'] == '20260930'
-               and p['fields'] == ','.join(b2['FIELDS']) for a, p in calls)
+    assert [p['stockCode'] for p in calls] == [c[0][:6] for c in b2['COMPANIES']]
+    assert calls[0]['stockCode'] == '603986'
+    assert all(p['sectionTime'] == '2026-09-30' and p['pagesize'] == '100'
+               and p['pagenum'] == '1' for p in calls)
     assert result['status'] == 'CAPTURED_REQUIRES_SOURCE_REVIEW'
     assert result['official_appointment_qualified'] is False
-    for item in result['outcomes']:
-        d = tmp_path / 'out' / item['code']
+    for o in result['outcomes']:
+        d = tmp_path / 'out' / o['code']
         receipt = json.loads((d / 'receipt.json').read_bytes())
-        row = receipt['table']['rows'][0]
-        assert row['actual_date'] is None and row['modify_date'] == 'raw revision; not a clock'
-        assert receipt['table']['date_qualification'] == 'NOT_PERFORMED'
-        original = (d / 'attempt-1.body').read_bytes()
-        assert original == body(item['code'])
-        attempt = receipt['client_result']['attempts'][0]
-        assert attempt['sha256'] == sha256(original).hexdigest() and attempt['bytes'] == len(original)
-        assert attempt['headers']['X-Request-ID'] == 'synthetic'
+        original = (d / 'response.body').read_bytes()
+        assert original == body(o['code'][:6])
+        assert receipt['response']['sha256'] == sha256(original).hexdigest()
+        assert receipt['date_qualification'] == 'NOT_PERFORMED'
+        assert receipt['official_appointment_qualified'] is False
+        assert receipt['row_count'] == 1
     with pytest.raises(FileExistsError):
         run(tmp_path, request)
-    assert len(calls) == 4
+    assert len(calls) == 6
 
 
-def test_empty_response_is_not_absence_of_appointments(tmp_path):
-    request, calls, _ = client(lambda code: body(code, rows=[]))
+def test_empty_does_not_prove_no_appointment(tmp_path):
+    request, calls = client(lambda _: b'{"prbookinfos":[]}')
     result = run(tmp_path, request)
-    assert len(calls) == 4
+    assert len(calls) == 6
     assert all(o['status'] == 'EMPTY_RESPONSE_NOT_NO_APPOINTMENT' for o in result['outcomes'])
-    assert result['official_appointment_qualified'] is False
 
 
-def test_columns_use_names_and_revisions_are_not_deduplicated():
-    code = b2['COMPANIES'][2][0]
-    reversed_fields = list(reversed(b2['FIELDS']))
-    normal = b2['inspect_body'](body(code), code)
-    reversed_result = b2['inspect_body'](body(code, fields=reversed_fields), code)
-    assert normal == reversed_result
-    data = json.loads(body(code)); data['data']['items'] *= 2
-    result = b2['inspect_body'](json.dumps(data).encode(), code)
-    assert len(result['rows']) == 2 and result['matching_row_indexes'] == [0, 1]
-
-
-@pytest.mark.parametrize('http', [403, 429, 503])
-def test_failure_stops_remaining_company_requests(tmp_path, http):
-    def raw(code):
-        return b'{"code":1,"error":"upstream_timeout"}' if http == 503 else b'{"code":-1}'
-    request, calls, waits = client(raw, http=http)
+@pytest.mark.parametrize('http', [302, 401, 403, 429, 503])
+def test_non_success_retains_raw_and_stops_no_fallback(tmp_path, http):
+    request, calls = client(lambda _: b'{"error":"synthetic"}', http=http)
     result = run(tmp_path, request)
     assert len(calls) == 1 and result['status'] == 'STOPPED_WITH_GAPS'
-    assert waits == ([30] if http == 503 else [])
     assert all(o['status'] == 'NOT_QUERIED_AFTER_STOP' and o['receipt'] is None
                for o in result['outcomes'][1:])
-    assert (tmp_path / 'out' / b2['COMPANIES'][2][0] / 'attempt-1.body').exists()
+    assert (tmp_path / 'out' / '603986.SH' / 'response.body').read_bytes() == b'{"error":"synthetic"}'
 
 
-@pytest.mark.parametrize('bad', ['duplicate', 'wrong-api', 'business-error'])
-def test_bad_envelope_preserves_raw_without_qualifying(tmp_path, bad):
-    def raw(code):
-        data = json.loads(body(code))
-        if bad == 'duplicate':
-            data['data']['fields'][-1] = data['data']['fields'][0]
-        elif bad == 'wrong-api':
-            data['api_name'] = 'daily'
-        else:
-            data['error'] = 'unauthorized'
-        return json.dumps(data).encode()
-    request, calls, _ = client(raw)
+@pytest.mark.parametrize('raw', [b'{"prbookinfos":[],"prbookinfos":[]}',
+    b'{"prbookinfos":null}', b'{"prbookinfos":[42]}',
+    json.dumps({'prbookinfos': [{}] * 100}).encode()])
+def test_schema_or_coverage_gap_keeps_bytes(tmp_path, raw):
+    request, calls = client(lambda _: raw)
     result = run(tmp_path, request)
-    assert len(calls) == 1
-    assert result['outcomes'][0]['status'] == 'RESPONSE_REJECTED_RAW_RETAINED'
-    assert (tmp_path / 'out' / b2['COMPANIES'][2][0] / 'attempt-1.body').read_bytes() == raw(b2['COMPANIES'][2][0])
+    assert len(calls) == 1 and result['outcomes'][0]['status'] == 'RESPONSE_GAP_RAW_RETAINED'
+    assert (tmp_path / 'out' / '603986.SH' / 'response.body').read_bytes() == raw
 
 
-@pytest.mark.parametrize('gap', ['missing-actual', 'wrong-security', 'wrong-period', 'truncated'])
-def test_field_and_scope_gaps_are_not_silently_filled(tmp_path, gap):
-    def raw(code):
-        data = json.loads(body(code))
-        if gap == 'missing-actual':
-            data['data']['fields'].pop(-2); data['data']['items'][0].pop(-2)
-        elif gap == 'wrong-security':
-            data['data']['items'][0][0] = '999999.SZ'
-        elif gap == 'wrong-period':
-            data['data']['items'][0][2] = '20260630'
-        else:
-            data['count'] = 101
-        return json.dumps(data).encode()
-    request, calls, _ = client(raw)
+def test_partial_stream_and_missing_body_are_not_complete(tmp_path):
+    request, calls = client(lambda _: b'{"partial":', complete=False, error='ChunkedEncodingError')
     result = run(tmp_path, request)
-    assert len(calls) == 1
-    assert result['outcomes'][0]['status'] == 'FIELD_OR_COVERAGE_GAP_RAW_RETAINED'
-    receipt = json.loads((tmp_path / 'out' / b2['COMPANIES'][2][0] / 'receipt.json').read_bytes())
-    assert receipt['table']['issues'] and len(receipt['table']['rows']) == 1
+    assert len(calls) == 1 and result['status'] == 'STOPPED_WITH_GAPS'
+    receipt = json.loads((tmp_path / 'out' / '603986.SH' / 'receipt.json').read_bytes())
+    assert receipt['response']['body_complete'] is False
+    assert (tmp_path / 'out' / '603986.SH' / 'response.body').read_bytes() == b'{"partial":'
 
 
-def test_exception_is_retained_without_leaking_its_text(tmp_path):
-    def request(*args):
+def test_changed_scope_stops_before_effects(tmp_path, monkeypatch):
+    monkeypatch.setitem(b2['SCOPE'], 'sha256', '0' * 64)
+    request, calls = client()
+    with pytest.raises(relay.RelayError, match='B2_SCOPE_BYTES'):
+        run(tmp_path, request)
+    assert calls == [] and not (tmp_path / 'out').exists()
+
+
+def test_exception_message_not_retained(tmp_path):
+    def request(*args, **kwargs):
         raise RuntimeError('sensitive-url-not-to-be-serialized')
     result = run(tmp_path, request)
-    assert result['outcomes'][0]['status'] == 'CLIENT_EXCEPTION'
-    for p in (tmp_path / 'out').rglob('*'):
-        if p.is_file():
-            assert b'sensitive-url' not in p.read_bytes()
+    assert result['status'] == 'STOPPED_WITH_GAPS'
+    assert all(b'sensitive-url' not in p.read_bytes() for p in (tmp_path/'out').rglob('*') if p.is_file())
 
 
-def test_absent_credential_is_not_a_vendor_refusal(tmp_path, monkeypatch):
-    monkeypatch.delenv(relay.SECRET_ENV, raising=False)
-    result = run(tmp_path, relay.request)
-    assert result['outcomes'][0]['status'] == 'CREDENTIAL_UNAVAILABLE'
-    assert not list((tmp_path / 'out').rglob('*.body'))
+def test_transport_has_no_credentials_retry_redirect_or_cross_object_session():
+    calls = []
+    class Response:
+        status_code = 503
+        headers = {'Content-Type': 'application/json'}
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def iter_content(self, chunk_size): yield b'{"error":"synthetic"}'
+    class Session:
+        trust_env = True
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def post(self, url, **kwargs):
+            assert self.trust_env is False and url == b2['URL']
+            assert kwargs['allow_redirects'] is False and kwargs['stream'] is True
+            assert kwargs['timeout'] == (5, 15)
+            assert kwargs['headers'] == {'Accept': 'application/json', 'Accept-Encoding': 'identity'}
+            assert 'auth' not in kwargs and 'cookies' not in kwargs
+            calls.append(kwargs)
+            return Response()
+    result = b2['public_request']({'stockCode': '603986'}, clock=lambda: NOW, session_factory=Session)
+    assert len(calls) == 1 and result['http_status'] == 503
+    assert result['raw'] == b'{"error":"synthetic"}' and result['body_complete'] is True
+    with requests.Session() as original:
+        assert original.get_adapter('https://').max_retries.total == 0
 
 
-def test_manual_source_only_workflow_boundary():
-    source = (ROOT / '.github/workflows/b2-disclosure-appointments.yml').read_text()
-    assert 'workflow_dispatch:' in source and 'schedule:' not in source
-    assert 'contents: write' not in source and 'actions: write' not in source
-    assert "github.run_attempt == 1" in source and "github.actor == 'auguspp'" in source
-    assert 'persist-credentials: false' in source and 'cancel-in-progress: false' in source
-    assert b2['CLIENT_BLOB'] in source and 'head_sha=$EXPECTED_CODE' in source
-    assert "r['event'] == 'push'" in source and "r['conclusion'] == 'success'" in source
-    assert source.count('secrets.') == 1 and 'secrets.TUSHARE_PROXY_API_KEY' in source
-    assert 'current-state-read-entry' not in source and 'continue-on-error' not in source
+def test_stream_failure_preserves_prefix_without_exception_text():
+    class Response:
+        status_code = 200
+        headers = {}
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def iter_content(self, chunk_size):
+            yield b'{"prefix":'
+            raise requests.ConnectionError('not-for-serialization')
+    class Session:
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def post(self, *args, **kwargs): return Response()
+    result = b2['public_request']({}, clock=lambda: NOW, session_factory=Session)
+    assert result['raw'] == b'{"prefix":' and result['body_complete'] is False
+    assert result['error_type'] == 'ConnectionError' and 'not-for-serialization' not in str(result)
 
 
 def test_reflected_credential_cannot_be_archived(tmp_path, monkeypatch):
     monkeypatch.setenv(relay.SECRET_ENV, 'synthetic-sensitive-value')
     with pytest.raises(ValueError, match='B2_CREDENTIAL_REFLECTION'):
-        b2['save'](tmp_path / 'receipt.json', b'{"header":"synthetic-sensitive-value"}')
+        b2['save'](tmp_path / 'receipt.json', b'synthetic-sensitive-value')
     assert not (tmp_path / 'receipt.json').exists()
 
 
-def test_missing_modify_continues_only_original_unqueried_scope_and_stays_gap(tmp_path):
-    def raw(code):
-        value = json.loads(body(code))
-        value['data']['fields'].pop(); value['data']['items'][0].pop()
-        return json.dumps(value).encode()
-    request, calls, _ = client(raw)
-    result = run(tmp_path, request)
-    assert len(calls) == 4 and all(p['ts_code'] not in {'688277.SH', '600276.SH'} for _, p in calls)
-    assert result['status'] == 'CAPTURED_WITH_FIELD_GAPS'
-    assert result['official_appointment_qualified'] is False
-    assert all(o['status'] == 'FIELD_OR_COVERAGE_GAP_RAW_RETAINED' for o in result['outcomes'])
-    assert result['predecessor']['run_id'] == 36587228220
-    for o in result['outcomes']:
-        receipt = json.loads((tmp_path / 'out' / o['receipt']).read_bytes())
-        assert receipt['table']['missing_fields'] == ['modify_date']
-        assert 'modify_date' not in receipt['table']['rows'][0]
-        assert receipt['table']['date_qualification'] == 'NOT_PERFORMED'
-
-
-def test_changed_predecessor_stops_before_requests(tmp_path, monkeypatch):
-    monkeypatch.setitem(b2['PREDECESSOR'], 'sha256', '0' * 64)
-    request, calls, _ = client(body)
-    with pytest.raises(relay.RelayError, match='B2_PREDECESSOR_BYTES'):
-        run(tmp_path, request)
-    assert calls == [] and not (tmp_path / 'out').exists()
+def test_manual_workflow_keeps_main_gates_without_business_secrets():
+    source = (ROOT / '.github/workflows/b2-disclosure-appointments.yml').read_text()
+    assert 'workflow_dispatch:' in source and 'schedule:' not in source
+    assert 'contents: write' not in source and 'actions: write' not in source
+    assert "github.run_attempt == 1" in source and "github.actor == 'auguspp'" in source
+    assert 'persist-credentials: false' in source and 'cancel-in-progress: false' in source
+    assert 'head_sha=$EXPECTED_CODE' in source and "r['conclusion'] == 'success'" in source
+    assert 'secrets.' not in source and 'TUSHARE_PROXY_API_KEY' not in source
+    assert 'continue-on-error' not in source and 'current-state-read-entry' not in source

@@ -31,6 +31,7 @@ POLICY = (WORKFLOW, '.github/scripts/ci-content-scope.py',
 SHA = re.compile(r'[0-9a-f]{40}')
 MAX_ZIP = 8 * 1024 * 1024
 MAX_EXPANDED = 32 * 1024 * 1024
+IMAGE_ROLLOUT = 'OBSERVED_PER_JOB_IMAGE_ROLLOUT_V1'
 
 
 def require(ok: bool, reason: str) -> None:
@@ -60,6 +61,25 @@ def environment(root: Path, report_dir: Path, env: dict) -> dict:
                 image_os=env.get('ImageOS'), image_version=env.get('ImageVersion'),
                 runner_os=env.get('RUNNER_OS'), runner_arch=env.get('RUNNER_ARCH'),
                 packages=inventory)
+
+
+def fresh_environment(actual: dict, expected: dict) -> bool:
+    """Fresh executions may span a hosted-image rollout, never other recorded drift.
+
+    Both complete observations are retained. This is not VM byte equivalence or
+    permission to reuse an older result under a different image version.
+    """
+    required = ('tree', 'python', 'machine', 'platform', 'image_os', 'runner_os', 'runner_arch')
+    if not isinstance(actual, dict) or not isinstance(expected, dict) or actual.keys() != expected.keys():
+        return False
+    if any(not isinstance(d.get(k), str) or not d[k] for d in (actual, expected) for k in required):
+        return False
+    if any(not isinstance(d.get('image_version'), str) or
+           re.fullmatch(r'[0-9]{8}\.[0-9]+\.[0-9]+', d['image_version']) is None
+           for d in (actual, expected)):
+        return False
+    return ({k: v for k, v in actual.items() if k != 'image_version'} ==
+            {k: v for k, v in expected.items() if k != 'image_version'})
 
 
 def latest_pr_run(payload: dict, head: str) -> dict:
@@ -121,7 +141,7 @@ def verified_archive(raw: bytes, artifact: dict):
         yield archive
 
 
-def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
+def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict, *, fresh_execution: bool = False) -> int:
     with verified_archive(raw, artifact) as archive:
         identity = dict(line.split('=', 1) for line in archive.read('identity.txt').decode().splitlines())
         require(identity['code_sha'] == run['head_sha'] and identity['event'] == 'pull_request'
@@ -139,13 +159,18 @@ def full_evidence(raw: bytes, artifact: dict, run: dict, current: dict) -> int:
         if partitioned:
             plan = json.loads(archive.read('partition.json'))
             require(('shards' in plan) == matrix, 'MATRIX_MARKER')
+            policy = plan.get('environment_policy')
+            require(policy is None or matrix and policy == IMAGE_ROLLOUT, 'UNKNOWN_ENVIRONMENT_POLICY')
+            rollout = fresh_execution and policy == IMAGE_ROLLOUT
             if matrix:
                 remaining = matrix_remaining(collection, plan['paths'],
                     [(archive.read(f'shard-{i}.zip'), a) for i, a in enumerate(plan['shards'], 1)],
-                    identity, current, plan['timing_sha256'])
+                    identity, current, plan['timing_sha256'],
+                    observed_environments=policy == IMAGE_ROLLOUT, fresh_execution=rollout)
                 require(remaining == archive.read('remaining.xml'), 'SHARD_RESULT_CHANGED')
             rebuilt = partition_junit(collection, plan['paths'], archive.read('remaining.xml'),
-                archive.read('domain-source.zip'), plan['artifact'], identity, current)
+                archive.read('domain-source.zip'), plan['artifact'], identity, current,
+                fresh_execution=rollout)
             require(rebuilt == xml, 'PARTITION_RESULT_CHANGED')
         return passed_test_set(collection, xml)
 
@@ -165,7 +190,8 @@ def partition_nodes(collection: str, paths: list[str]) -> tuple[list[str], list[
 
 
 def partition_junit(collection: str, paths: list[str], remaining_xml: bytes,
-                    domain_raw: bytes, artifact: dict, identity: dict, current: dict) -> bytes:
+                    domain_raw: bytes, artifact: dict, identity: dict, current: dict, *,
+                    fresh_execution: bool = False) -> bytes:
     """Full proof = fresh disjoint executions in this run; no historical fallback."""
     domain, remaining = partition_nodes(collection, paths)
     passed_test_set('\n'.join(remaining), remaining_xml)
@@ -179,8 +205,10 @@ def partition_junit(collection: str, paths: list[str], remaining_xml: bytes,
         require(all(source.get(k) == identity[k] for k in ('code_sha', 'event', 'run_id', 'attempt'))
                 and source.get('scope') == 'research-continuity-v2', 'DOMAIN_EXECUTION_IDENTITY')
         environment = json.loads(z.read('environment.json'))
-        require({k: v for k, v in environment.items() if k != 'packages'} ==
-                {k: v for k, v in current.items() if k != 'packages'}, 'DOMAIN_ENVIRONMENT')
+        actual_meta = {k: v for k, v in environment.items() if k != 'packages'}
+        expected_meta = {k: v for k, v in current.items() if k != 'packages'}
+        require(fresh_environment(actual_meta, expected_meta) if fresh_execution else
+                actual_meta == expected_meta, 'DOMAIN_ENVIRONMENT')
         # The lighter installation may omit packages, never silently change shared versions.
         require(bool(environment['packages']) and all(current['packages'].get(k) == v
                 for k, v in environment['packages'].items()), 'DOMAIN_PACKAGES')
@@ -205,13 +233,15 @@ def partition_junit(collection: str, paths: list[str], remaining_xml: bytes,
 
 
 def matrix_remaining(collection: str, paths: list[str], sources: list[tuple[bytes, dict]],
-                     identity: dict, current: dict, timing_sha256: str) -> bytes:
+                     identity: dict, current: dict, timing_sha256: str, *,
+                     observed_environments: bool = False, fresh_execution: bool = False) -> bytes:
     """Four real shards must exactly cover the remaining current obligations.
 
     Scheduling belongs to GitHub matrix/needs; assignment belongs to pytest-split.
     This function only verifies the declared executions and their retained bytes.
     """
     _, remaining = partition_nodes(collection, paths)
+    require(not fresh_execution or observed_environments, 'SHARD_ACTUAL_ENVIRONMENT_REQUIRED')
     require(len(sources) == 4, 'SHARD_COUNT')
     require(isinstance(timing_sha256, str) and re.fullmatch(r'[0-9a-f]{64}', timing_sha256), 'SHARD_TIMING')
     combined = ET.Element('testsuites')
@@ -225,6 +255,10 @@ def matrix_remaining(collection: str, paths: list[str], sources: list[tuple[byte
             source = dict(line.split('=', 1) for line in z.read('identity.txt').decode().splitlines())
             require(all(source.get(k) == identity[k] for k in ('code_sha', 'event', 'run_id', 'attempt')), 'SHARD_IDENTITY')
             require(json.loads(z.read('environment.json')) == current, 'SHARD_ENVIRONMENT')
+            if observed_environments or 'environment-actual.json' in z.namelist():
+                actual = json.loads(z.read('environment-actual.json'))
+                require(fresh_environment(actual, current) if fresh_execution else
+                        actual == current, 'SHARD_ENVIRONMENT')
             info = json.loads(z.read('shard.json'))
             require(type(info['group']) is int and info['group'] == group
                     and type(info['splits']) is int and info['splits'] == 4
