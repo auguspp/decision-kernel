@@ -72,6 +72,11 @@ Each scene uses a fresh context at 1360×900 and 390×844:
     the old phase cannot replace the new one, including after native digest EOF.
 16. An older reading without long-history registration retains short quotes and
     members, reports the gap and does not fetch or invent a long path.
+17. Read an explicitly registered authored agenda, its visible source gaps and
+    unknown review dates, then its same-R original; source script stays inert.
+18. Reject an equal-length altered agenda with native SHA while original BLS
+    appointments and the stock panel remain available.
+19. A held old-R agenda cannot overwrite the new one after its digest completes.
 
 Concept scene11 also expands synthetic5/20/60 index/benchmark/excess values,
 positive-excess run length, strengthening/weakening and insufficient-history

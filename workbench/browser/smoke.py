@@ -18,7 +18,8 @@ import time
 import traceback
 
 from playwright.sync_api import expect, sync_playwright
-from fixtures import MARKETS, NOW, R1, R2, REPO, fixture, raw
+from fixtures import MARKETS, NOW, R1, R2, M, REPO, descriptor, fixture, raw
+from concept_stock import scenes as concept_stock_scenes
 
 ORIGIN = 'http://127.0.0.1:4173'
 API = f'https://api.github.com/repos/{REPO}'
@@ -515,12 +516,85 @@ def scene_concepts_legacy_trend(page, data):
     assert not any('/trend/' in r['url'] for r in data.requests)
     return {'legacy_R':'explicit long-history absence, no invented trend fetch; members readable'}
 
+def agenda_input(data, ref, label):
+    """TEST_ONLY display input, never a live review or Human follow declaration."""
+    body = (f'# TEST_ONLY {label}\n\n保存窗口：2026-09-28至2026-10-31。\n\n'
+        '## 公司预约（原件待复核）\n\n10:00；检索正文不是完整公告。明确关注不是持仓。\n\n'
+        '## 原研究复核条件\n\n时间未知，不补午夜；本记录不自动执行研究。\n\n'
+        '## 依据与读取范围\n\n<script>window.fixtureInjected=true</script>\n').encode()
+    source = descriptor('docs/readings/test-agenda.md', body)
+    path = 'sources/git/' + source['git_blob'] + '/test-agenda.md'
+    source.update(read_path=path, repository=REPO, ref=M)
+    root = json.loads(data.files[ref]['current-state.json'])
+    root['research']['records'] = [{'id':'research-agenda', 'case':'navigation', 'use':'NAVIGATION_ONLY',
+        'qualification':'EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION', 'source':source}]
+    data.files[ref][path] = body
+    data.files[ref]['current-state.json'] = raw(root)
+    return path
+
+
+def agenda_refresh(page, data, ref):
+    data.ref = ref
+    page.get_by_role('button', name='读取最新保存结果', exact=True).click()
+    expect(page.locator('#refresh')).to_be_enabled()
+    expect(page.locator('#identity')).to_contain_text(ref)
+    tab(page, '市场观察')
+
+
+def scene_agenda_read(page, data):
+    path = agenda_input(data, R2, '近期计划')
+    agenda_refresh(page, data, R2)
+    expect(page.get_by_role('heading', name='TEST_ONLY 近期计划', exact=True)).to_be_visible()
+    expect(page.locator('#content')).to_contain_text('原件待复核')
+    expect(page.locator('#content')).to_contain_text('时间未知，不补午夜')
+    page.get_by_text('依据与读取范围', exact=True).first.click()
+    assert page.evaluate('window.fixtureInjected === undefined')
+    page.get_by_role('button', name='阅读近期列表原稿', exact=True).click()
+    expect(page.locator('#detail')).to_contain_text('TEST_ONLY 近期计划')
+    assert any(r['url'] == source_url(R2, path) for r in data.requests)
+    expect(page.get_by_role('button', name='TEST_ONLY 个股保留', exact=True)).to_be_visible()
+    return {'agenda':'same-R human text and original read', 'limits':'visible', 'source_script':'inert'}
+
+
+def scene_agenda_bad_body(page, data):
+    path = agenda_input(data, R2, '近期计划')
+    body = data.files[R2][path]
+    changed = body.replace(b'10:00', b'11:00')
+    assert changed != body and len(changed) == len(body)
+    data.overrides[source_url(R2, path)] = (changed, 200)
+    agenda_refresh(page, data, R2)
+    expect(page.locator('#content')).to_contain_text('近期列表未能读完')
+    expect(page.locator('td[data-label="事件 / 报告期"]')).to_have_count(1)
+    expect(page.get_by_role('button', name='TEST_ONLY 个股保留', exact=True)).to_be_visible()
+    page.get_by_text('近期列表读取诊断', exact=True).click()
+    expect(page.locator('#content')).to_contain_text('FILE_INTEGRITY_MISMATCH')
+    return {'equal_length_tamper':'native SHA rejected', 'original_BLS_and_stock':'preserved'}
+
+
+def scene_agenda_late_read(page, data):
+    first = agenda_input(data, R1, '旧计划')
+    agenda_input(data, R2, '新计划')
+    url = source_url(R1, first)
+    data.hold.add(url)
+    agenda_refresh(page, data, R1)
+    expect(page.locator('#content')).to_contain_text('正在读取已保存的近期列表')
+    agenda_refresh(page, data, R2)
+    expect(page.get_by_role('heading', name='TEST_ONLY 新计划', exact=True)).to_be_visible()
+    assert url in data.pending
+    release_and_wait_for_native_digest(page, data, url)
+    expect(page.locator('#content')).not_to_contain_text('TEST_ONLY 旧计划')
+    return {'late_old_agenda':'cannot overwrite new R after actual native digest'}
+
+
 SCENES = [scene_read_and_copy, scene_search_and_late_preview, scene_bad_body,
           scene_new_reading_discards_old_detail, scene_markets_local_gap, scene_markets_read_failure,
           scene_calendar_read, scene_calendar_bad_body, scene_calendar_late_read, scene_calendar_legacy_reading,
           scene_concepts_read, scene_concepts_bad_members, scene_concepts_late_members,
-          scene_concepts_bad_trend, scene_concepts_late_trend, scene_concepts_legacy_trend]
+          scene_concepts_bad_trend, scene_concepts_late_trend, scene_concepts_legacy_trend,
+          scene_agenda_read, scene_agenda_bad_body, scene_agenda_late_read]
 
+
+SCENES += concept_stock_scenes(tab, release_and_wait_for_native_digest, source_url)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -594,7 +668,7 @@ def main():
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
                             result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
                             assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
-                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read):
+                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read, scene_agenda_read) or scene.__name__ in ('scene_concept_stock_dates', 'scene_concept_stock_late_selection'):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
                         except Exception:
