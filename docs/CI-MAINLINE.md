@@ -40,7 +40,17 @@ kernel-tests / ci.yml
 
 full先收集当前全部测试。已迁移文件通过原生--ignore仅从剩余执行分开，不从总义务移除；pytest-split负责分配，不决定哪些测试可以不跑。显式`-c pyproject.toml`固定rootdir。新增未知时长测试仍执行；时长缺失/过期/读取失败回默认权重，绝不是成功结果缓存。最多读取精确成功base及其明确复用的一个PR的时长，不扫描历史或自动写时长commit。
 
-prepare的真实包库存形成同run约束。每片核相同代码/run/attempt、Python/镜像/架构/包版本和同一时长快照；研究小环境只允许省包，不允许共享版本漂移。每片collection=JUnit、片间互斥、并集=剩余集合，再加研究组=完整集合。保留原始ZIP、collection/JUnit、环境和日志；聚合JUnit不冒充单一pytest进程。
+prepare的真实包库存形成同run约束。每片核相同代码/run/attempt、Python/操作系统标识/架构/包版本和同一时长快照；宿主镜像批次按下方新执行与严格复用规则分别处理；研究小环境只允许省包，不允许共享版本漂移。每片collection=JUnit、片间互斥、并集=剩余集合，再加研究组=完整集合。保留原始ZIP、collection/JUnit、环境和日志；聚合JUnit不冒充单一pytest进程。
+
+### 托管镜像轮换：新执行与复用分开（2026-09-30）
+
+本次有界修复适用于新产生的matrix完整证据，不改四种scope、四分片/研究组、权限或源任务。每片先额外保存原生`environment-actual.json`，保留prepare的`environment.json`不冒充本片实测；实际环境在不通过时也能由原always附件保存。新完整产物在原`partition.json`明确登记`OBSERVED_PER_JOB_IMAGE_ROLLOUT_V1`，没有标记的历史产物仍按原严格合同读。
+
+全新执行只允许有效、已记录的`image_version`批次不同；其他所有记录键及值（包括代码树、Python完整版本、系统标识、平台/架构和包版本）必须相同。研究小环境仍只允许省包，共享版本不得变化。四片/研究组都要实际通过，同run/attempt、完整集合、互斥并集和原ZIP校验不变。此合同不声称两个VM逐字节等价，也不把没有运行的测试当作已通过。
+
+`full_evidence(..., fresh_execution=True)`仅验本次新完整执行，且只有上述明确标记才允许镜像批次差异。`select`用于main复用时不传该参数：prepare与每片实际环境、研究组仍必须同当前main严格一致，混合镜像的旧结果不能复用，按原路径重新执行main全量。未知策略、缺实际环境、缺镜像身份、其他字段/依赖漂移及原生job失败全部拒绝。禁止补写旧失败附件、拼接不同run或rerun换绿。
+
+复用既有GitHub托管runner、原生needs与原完整证据读取，不建自有镜像/runner平台，也不增加付费资源。官方镜像通常按周更新，固定OS标签不等于固定镜像构建：[runner-images说明](https://github.com/actions/runner-images/blob/main/README.md)。本修复退出时同步处理当前writer/reader/专属反例，历史严格证据读取和源失败保留。
 
 最终`always()`仅保证检查执行，不把取消、失败、缺片或意外skipped算成成功。content/Draft/reuse/full分别核适用前置结果。无continue-on-error、worker重试或失败后补跑换绿；保留pipefail、worker crash传播与60秒stall诊断。
 

@@ -157,14 +157,17 @@ def finalize(out: Path, needs: dict) -> None:
     suffix = f"{expected['run_id']}-{expected['attempt']}"
     sources = [artifact(expected, f'kernel-ci-shard-{g}-{suffix}', payload['artifacts']) for g in range(1, 5)]
     timing = hashlib.sha256((out / 'durations-hint.json').read_bytes()).hexdigest()
-    remaining = R['matrix_remaining'](collection, paths, sources, expected, current, timing)
+    remaining = R['matrix_remaining'](collection, paths, sources, expected, current, timing,
+        observed_environments=True, fresh_execution=True)
     domain, a = artifact(expected, f'kernel-ci-v2-{suffix}', payload['artifacts'])
-    xml = R['partition_junit'](collection, paths, remaining, domain, a, expected, current)
+    xml = R['partition_junit'](collection, paths, remaining, domain, a, expected, current,
+        fresh_execution=True)
     for group, (raw, _) in enumerate(sources, 1):
         (out / f'shard-{group}.zip').write_bytes(raw)
     (out / 'remaining.xml').write_bytes(remaining)
     (out / 'domain-source.zip').write_bytes(domain)
-    json_write(out / 'partition.json', dict(paths=paths, artifact=a, shards=[a for _, a in sources], timing_sha256=timing))
+    json_write(out / 'partition.json', dict(paths=paths, artifact=a, shards=[a for _, a in sources], timing_sha256=timing,
+        environment_policy=R['IMAGE_ROLLOUT']))
     (out / 'pytest.xml').write_bytes(xml)
     json_write(out / 'durations.json', durations(collection, xml))
     scope['full_suite'] = 'EXECUTED_MATRIX_V2'
