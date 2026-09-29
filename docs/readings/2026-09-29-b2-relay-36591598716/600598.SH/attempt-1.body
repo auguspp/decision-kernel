@@ -1,0 +1,1 @@
+{"request_id":"94c0e15f-3b4a-49fb-9120-600bb93e3708","code":0,"msg":"","data":{"fields":["ts_code","ann_date","end_date","pre_date","actual_date","modify_date"],"items":[["600598.SH","20260924","20260930","20261029",null,null]]},"api_name":"disclosure_date","count":1,"detail":"..."}

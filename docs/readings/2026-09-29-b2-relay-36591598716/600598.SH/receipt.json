@@ -1,0 +1,68 @@
+{
+  "client_result": {
+    "api": "disclosure_date",
+    "attempts": [
+      {
+        "attempt": 1,
+        "body": "attempt-1.body",
+        "business_code": 0,
+        "business_error": null,
+        "business_msg": null,
+        "bytes": 283,
+        "classification": "SUCCESS",
+        "headers": {
+          "X-Cache": "MISS",
+          "X-RateLimit-IP-Remaining": "198",
+          "X-RateLimit-Remaining": "198",
+          "X-Request-ID": "8efaadd1-c299-46f2-bf1a-d4e05538d3ee"
+        },
+        "http_status": 200,
+        "received_at": "2026-09-29T15:37:54.002745+00:00",
+        "requested_at": "2026-09-29T15:37:46.995229+00:00",
+        "sha256": "83f617db8f7393c8b2ca312636e6298fcdbc820c793f0060bebfcedba4e80f36"
+      }
+    ],
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "600598.SH"
+    },
+    "status": "SUCCESS"
+  },
+  "finished_at": "2026-09-29T15:37:54.003678+00:00",
+  "invoked_at": "2026-09-29T15:37:46.995147+00:00",
+  "request": {
+    "api": "disclosure_date",
+    "code": "600598.SH",
+    "name": "北大荒",
+    "params": {
+      "end_date": "20260930",
+      "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+      "limit": "100",
+      "ts_code": "600598.SH"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "status": "BOUNDED_RESPONSE_NOT_COMPLETE_HISTORY",
+  "table": {
+    "coverage": "BOUNDED_RESPONSE_NOT_COMPLETE_HISTORY",
+    "date_qualification": "NOT_PERFORMED",
+    "issues": [],
+    "matching_row_indexes": [
+      0
+    ],
+    "missing_fields": [],
+    "revision_order": "NOT_INFERRED_NO_KEEP_LAST",
+    "rows": [
+      {
+        "actual_date": null,
+        "ann_date": "20260924",
+        "end_date": "20260930",
+        "modify_date": null,
+        "pre_date": "20261029",
+        "ts_code": "600598.SH"
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "finished_at": "2026-09-29T15:38:29.820125+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36591598716",
+    "GITHUB_SHA": "7c806b4e9edfd2572e92ea60cebad57cfc522735",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "official_appointment_qualified": false,
+  "outcomes": [
+    {
+      "code": "002674.SZ",
+      "receipt": "002674.SZ/receipt.json",
+      "status": "EMPTY_RESPONSE_NOT_NO_APPOINTMENT"
+    },
+    {
+      "code": "600598.SH",
+      "receipt": "600598.SH/receipt.json",
+      "status": "BOUNDED_RESPONSE_NOT_COMPLETE_HISTORY"
+    },
+    {
+      "code": "002050.SZ",
+      "receipt": "002050.SZ/receipt.json",
+      "status": "TEMPORARY_QUEUE"
+    },
+    {
+      "code": "603986.SH",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    }
+  ],
+  "predecessor": {
+    "path": "docs/readings/2026-09-29-b2-relay-36587228220/capture.json",
+    "run_id": 36587228220,
+    "sha256": "40f406ef7fcceabc14c09b5a74c3f300d8867d3e80ef4e9bc9f1053638b5d909"
+  },
+  "research_executed": false,
+  "status": "STOPPED_WITH_GAPS"
+}
