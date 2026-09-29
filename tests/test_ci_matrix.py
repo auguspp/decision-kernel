@@ -151,3 +151,29 @@ def test_duration_input_is_only_a_hint_and_preserves_exact_node_addresses(monkey
     assert M['durations'](collection, xml('test_part', 'test_1')) == {'tests/test_part.py::test_1': 0.5}
     monkeypatch.setenv('CI_BASE_SHA', 'unknown')
     assert M['duration_hint']() == {}
+
+
+def test_shard_records_actual_environment_before_strict_rejection(tmp_path, monkeypatch):
+    workflow = yaml.load((ROOT / '.github/workflows/ci-full-v2.yml').read_text(), Loader=yaml.BaseLoader)
+    step = next(s for s in workflow['jobs']['shard']['steps']
+                if s.get('name') == 'Record actual shard environment')
+    script = step['run'].split("python - <<'PY'\n", 1)[1].rsplit('\nPY', 1)[0]
+    baseline = fixture()[1]
+    original = json.dumps(baseline).encode()
+    (tmp_path / 'environment.json').write_bytes(original)
+    monkeypatch.setenv('CI_REPORT_DIR', str(tmp_path))
+    for changed in (True, False):
+        actual = deepcopy(baseline)
+        if changed:
+            actual['image_version'] = 'synthetic-other-image'
+        monkeypatch.setattr(runpy, 'run_path', lambda _: {'environment': lambda *args: actual})
+        if changed:
+            with pytest.raises(AssertionError, match='SHARD_ENVIRONMENT'):
+                exec(compile(script, '<actual-workflow-environment-step>', 'exec'), {})
+        else:
+            exec(compile(script, '<actual-workflow-environment-step>', 'exec'), {})
+        assert json.loads((tmp_path / 'environment-actual.json').read_bytes()) == actual
+        assert (tmp_path / 'environment.json').read_bytes() == original
+    upload = next(s for s in workflow['jobs']['shard']['steps'] if s.get('name') == 'Upload shard diagnostics')
+    assert upload['if'] == 'always()'
+    assert upload['with']['path'] == '${{ runner.temp }}/kernel-ci-shard/'

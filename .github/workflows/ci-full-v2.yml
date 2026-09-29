@@ -40,6 +40,8 @@ jobs:
           out = Path(os.environ['CI_REPORT_DIR'])
           check = runpy.run_path('.github/scripts/ci-merge-reuse.py')
           actual = check['environment'](Path.cwd(), out, os.environ)
+          # Keep the observed runner even when the strict baseline check fails.
+          (out / 'environment-actual.json').write_text(json.dumps(actual, sort_keys=True, indent=2) + '\n')
           assert actual == json.loads((out / 'environment.json').read_text()), 'SHARD_ENVIRONMENT'
           PY
       - name: Collect this shard
