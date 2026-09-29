@@ -19,6 +19,7 @@ import traceback
 
 from playwright.sync_api import expect, sync_playwright
 from fixtures import MARKETS, NOW, R1, R2, REPO, fixture, raw
+from concept_stock import scenes as concept_stock_scenes
 
 ORIGIN = 'http://127.0.0.1:4173'
 API = f'https://api.github.com/repos/{REPO}'
@@ -522,6 +523,8 @@ SCENES = [scene_read_and_copy, scene_search_and_late_preview, scene_bad_body,
           scene_concepts_bad_trend, scene_concepts_late_trend, scene_concepts_legacy_trend]
 
 
+SCENES += concept_stock_scenes(tab, release_and_wait_for_native_digest, source_url)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True, help='New evidence directory (must not exist)')
@@ -594,7 +597,7 @@ def main():
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
                             result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
                             assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
-                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read):
+                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read) or scene.__name__ in ('scene_concept_stock_dates', 'scene_concept_stock_late_selection'):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
                         except Exception:

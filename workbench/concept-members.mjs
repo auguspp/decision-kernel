@@ -1,5 +1,6 @@
 /** Same-R TDX observations and members. No source calls, research or saved state. */
 import {fileUrl} from './reading.mjs';
+import {makeStockComparisonLoader, mountStockComparison} from './concept-stock.mjs';
 import {displayDecimal, localTime} from './product.mjs';
 const TAXONOMY='TDX_CATEGORY_CONCEPT_SOURCE_NATIVE_NOT_EASTMONEY_BK_OR_HITHINK_TI';
 const HASH=/^[a-f0-9]{64}$/, TICKER=/^[0-9]{6}\.(SH|SZ|BJ)$/;
@@ -165,6 +166,7 @@ export function conceptsPage(target,ctx){
     try{if(results[2].status==='rejected')throw results[2].reason;
       if(results[2].value)trend=trendView(results[2].value.text,saved.trend,observation);
     }catch(e){trendError=e;}
+    const loadStock=makeStockComparisonLoader(reading);
     const search=el('input'),catalog=el('div'),detail=el('div');search.type='search';
     search.placeholder='搜索概念名称或代码';search.setAttribute('aria-label','搜索概念');
     body.replaceChildren(el('p',`保存市场日 ${observation.day} · 完整可用概念 ${observation.rows.length} 项`),
@@ -187,6 +189,8 @@ export function conceptsPage(target,ctx){
         el('p','以下按来源顺序列成员，不是领先成员排名。股价检查各有保存日期；进入公司页不等于已完成研究。'),query,members,
         disclosure('与其他概念共享的成员',el('p','按共享成员数展示关系，不是机会排序。两边分母分别列出，不合并概念身份。'),related));
       if(trend)detail.prepend(...trendDetail(trend.rows.get(code),el,disclosure));
+      const comparison=el('section');detail.insertBefore(comparison,query);
+      mountStockComparison(comparison,{...ctx,active:()=>active()&&detail.contains(comparison)},membership,code,loadStock);
       const securities=membership.data.securities;
       function drawMembers(){members.replaceChildren();const q=query.value.trim().toLowerCase();
         const rows=c.members.filter(t=>`${t} ${securities[t].name||''}`.toLowerCase().includes(q));
