@@ -1,16 +1,20 @@
-# 当前施工入口：Brief Human-first 与 Concept Radar
+# 当前施工入口：B2后端先行，Sites后续集中接入
 
-2026-09-28。AI-native 支线已在 #625 / #626 按有界范围收口。Human 对晚间 Brief 的直接使用反馈已在 #297 明确优先，当前主工程转入 #645；原 B2 与 Markets 采用保留并后移。**当前执行顺序只以 [#297](https://github.com/auguspp/decision-kernel/issues/297) 与对应任务的最新有效回执为准。** 本页是恢复导航，不维护第二份进度清单。
+2026-09-29。Human最新指令是先完成B2后端与可读取内容，之后在原Site编辑对话直接提出界面要求并集中接入。原话与范围对账见[#297/5888866896](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5888866896)。**当前执行顺序以[#297](https://github.com/auguspp/decision-kernel/issues/297)与对应任务的最新有效回执为准。** 本页只作导航，不维护第二份进度表。
 
 ## 当前顺序与任务归属
 
-[#645 Brief Human-first / Concept Radar v2](https://github.com/auguspp/decision-kernel/issues/645) 归 #351，是当前优先产品工程。先改善真实 Brief 的市场结构阅读，再接实际可用的 Concept 多周期、生命周期、重叠与成员下钻；不以新增文档、提示词或短期横截面冒充完整v2。现用Brief的完整旧→新指令与有范围回放从[BRIEF-R5-v1.6](readings/2026-09-28-brief-human-first-instructions.md)进入，实际采用/未验状态读#645回执。
+**主施工继续[#620 B2](https://github.com/auguspp/decision-kernel/issues/620)**：可靠公司事件及财报预约、明确对象依据、原研究复核条件、可恢复保存和稳定读取。优先现有原件、用途索引与发布链，缺口来自实际使用才补代码；“后端先行”不意味着新增数据库、provider、调度或日历框架。
 
-#645首轮有界验收后再恢复[#620 B2](https://github.com/auguspp/decision-kernel/issues/620)和[#621 Markets原站采用](https://github.com/auguspp/decision-kernel/issues/621)的施工顺序。#644原稿、容量修复、未合并分支与失败证据保留，不重建、不从其开放状态推出当前优先；恢复时先读原PR最新回执。B2接口仍见[research-calendar-v1](research-calendar-v1.md)，不得预先签收发布、原站或完整B2。
+#644的近期清单已正常合并、独立main、自然publisher及固定R原件／消费者读回，见[原交付](https://github.com/auguspp/decision-kernel/pull/644#issuecomment-5883938448)。旧分支、容量失败、安装超时与核读时钟保留，不把旧“未合并”恢复为当前任务。B2已有接口从[research-calendar-v1](research-calendar-v1.md)恢复；唯一`research-agenda`用途引用可显式切换到新保存稿，原BLS及旧稿不覆盖。实际登记／发布／来源资格以#620最新回执为准。
 
-先读当前 M 的 [AGENTS](../AGENTS.md)，从 #297 进入当前任务，按任务路由取回适用规则、代码与证据。比较任务摘要和相关 commits/PR/run；旧摘要不证明功能未实现，新 SHA 也不自动授予新范围。涉及保存状态时再按 [current-state](current-state.md) 独立固定 R，M 不是 R。
+**[#621 Sites](https://github.com/auguspp/decision-kernel/issues/621)暂缓主施工投入，交由原Site对话后续集中采用。** 不再为此反复搬通知、源码、验签或安装浏览器。已保存v18、现网v17及预览能力缺口的最后原生回执留在该Issue；没有新工具核查就不声称部署状态已刷新。Human可直接向原Site对话提出要求，不需要主施工批准或中转。暂缓不是取消其已有宿主／权限／回退与发布前页面检查。
 
-[#625 AI-native retrofit v1](https://github.com/auguspp/decision-kernel/issues/625) 与 [#626 AN-CI](https://github.com/auguspp/decision-kernel/issues/626) 留作已收口前驱：AN1 上下文恢复、AN-CI 验证义务收敛、AN2 隔离真实浏览器、AN3 有界收口与独立接手的实际证明按原回执读取。不要恢复旧“先完成支线再回 B2”的未验停点，也不把有界收口升级为所有外部条件 PASS。main 原生管理护栏的 403、Sites 真实身份/实机与长期观察等缺口仍保留原归属；不因继续主线绕过拒绝或无限扩支线。
+[#645 Brief Human-first / Concept Radar v2](https://github.com/auguspp/decision-kernel/issues/645)保留独立未验项。#646–#650已交付的Brief指令、概念总览／成员／比较／多周期读取不重建；真实长历史、自然Brief效果、未覆盖来源及实际使用仍分别验收，不作为B2前置。现用完整指令从[BRIEF-R5-v1.6](readings/2026-09-28-brief-human-first-instructions.md)恢复；不改任务、时钟与通知，不为验收手工补采。
+
+先读同M的[AGENTS](../AGENTS.md)，从#297恢复当前任务，按需取回适用协议、原件与代码；涉及保存结果才独立固定R。旧摘要不证明功能不存在，新SHA不授予新范围。代码、来源、读取发布、Site部署及Human使用分别成立，后端完成不补签整项产品验收。
+
+[#625 AI-native](https://github.com/auguspp/decision-kernel/issues/625)与[#626 AN-CI](https://github.com/auguspp/decision-kernel/issues/626)保留已收口前驱，不恢复旧“先支线再B2”。其原生管理403、外部身份／实机与长期观察的有界缺口继续原归属，不扩大为已通过，也不因此无限扩支线。
 
 ## 产品主线如何接续
 
@@ -32,7 +36,9 @@ GitHub 是 canonical 状态/证据/过程后端；Research 解释、Kernel 核�
 
 ## 历史计划，不作为当前待建清单
 
-- [本次重排前B2入口](https://github.com/auguspp/decision-kernel/blob/d8fedb169eaeaf825b45afb3602fe0c4d4390aa4/docs/NEXT-PHASE-CONSTRUCTION.md)：原范围与失败保留，当前Brief优先顺序以#297/#645为准。
+- [本次后端优先前的Brief／Concept入口](https://github.com/auguspp/decision-kernel/blob/e1bf4146d73b4aa2dbd0d6bc3882bed4a9b0a48f/docs/NEXT-PHASE-CONSTRUCTION.md)：保留先前顺序与#644旧停点，当前由#297/5888866896取代。
+
+- [本次重排前B2入口](https://github.com/auguspp/decision-kernel/blob/d8fedb169eaeaf825b45afb3602fe0c4d4390aa4/docs/NEXT-PHASE-CONSTRUCTION.md)：原范围与失败保留；其中当时的Brief优先顺序已由本页上方后继指令取代。
 
 - [AI-native 支线导航](https://github.com/auguspp/decision-kernel/blob/1ef57be901243f683cb0cc15cedd3ed159fdd02e/docs/NEXT-PHASE-CONSTRUCTION.md)：保留原 AN1→AN-CI→AN2→AN3 顺序；收口以 #625 / #626 后继回执为准。
 - [支线前 v4 完整计划](https://github.com/auguspp/decision-kernel/blob/3843e13ae20941c0a20241d509eb02bf9f293ea0/docs/NEXT-PHASE-CONSTRUCTION.md)：保留 B1 第一切片及其阶段限制；已交付项不得重新列为 NEXT。
