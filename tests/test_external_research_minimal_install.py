@@ -49,7 +49,7 @@ def test_external_research_cli_in_actual_base_only_install(
         "print(json.dumps({d.metadata['Name'].lower(): d.version for d in m.distributions()}))",
     ], cwd=tmp_path))
     assert inventory["decision-kernel"] == "0.1.0"
-    assert inventory["pydantic"] == "2.13.4"
+    assert inventory["pydantic"] == "2.13.5"
     assert not {"pytest", "requests", "feedparser", "beautifulsoup4", "pyarrow", "pypdf"} & inventory.keys()
     schema_file = tmp_path / "schema.json"
     _run([str(python), "-I", "-m", MODULE, "schema", "--output", str(schema_file)], cwd=tmp_path)

@@ -83,5 +83,5 @@ def test_symlink_and_shared_revision_fail_closed(tmp_path):
 
 def test_core_does_not_depend_on_lake_stack():
     config=tomllib.loads((Path(__file__).parents[1]/'pyproject.toml').read_text())['project']
-    assert config['dependencies']==['pydantic==2.13.4']
+    assert config['dependencies']==['pydantic==2.13.5']
     assert config['optional-dependencies']['cnequity']==['cnequity==0.11.0']

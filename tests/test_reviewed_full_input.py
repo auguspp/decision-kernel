@@ -174,6 +174,7 @@ def test_latest_inventory_is_still_required_not_downgraded_to_static(tmp_path, m
 @pytest.mark.parametrize("stage,output_type", [("PRE", once.PreResearchResult), ("QUICK", once.QuickResearchResult)])
 def test_actual_deepseek_sdk_wire_is_plain_and_checked_before_fake_transport(stage, output_type):
     from openai import OpenAI, DefaultHttpxClient, APIConnectionError
+    from httpx2 import ConnectError
     context = simple_context(600_000)
     stored = full.pack(once.raw(context), ticker="600362")
     spec = once.source_ref("research_runs/synthetic-full/source.json", "a" * 40, stored, "MODEL_CONTEXT")
@@ -189,12 +190,13 @@ def test_actual_deepseek_sdk_wire_is_plain_and_checked_before_fake_transport(sta
         def handle_request(self, request):
             assert receipt["request_sha256"] == once.sha(request.content)
             seen.append(request.content)
-            raise OSError("Intentional synthetic transport stop")
+            raise ConnectError("Intentional synthetic transport stop", request=request)
     with OpenAI(api_key="synthetic-not-a-secret", base_url=once.DEEPSEEK_BASE_URL, max_retries=0,
         http_client=DefaultHttpxClient(transport=NoNetwork(), follow_redirects=False, trust_env=False,
                                        event_hooks={"request": [gate]})) as client:
-        with pytest.raises(APIConnectionError):
+        with pytest.raises(APIConnectionError) as stopped:
             with client.responses.stream(**parameters) as stream: stream.get_final_response()
+    assert isinstance(stopped.value.__cause__, ConnectError)
     assert len(seen) == 1 and 512 * 1024 < receipt["request_bytes"] <= legacy.REQUEST_BYTES
     assert receipt["policy"] == full.POLICY
     actual = json.loads(seen[0])
