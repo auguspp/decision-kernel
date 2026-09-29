@@ -11,19 +11,19 @@
 
 ## 当前保存Stock批次
 
-市场日：2026-09-28；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
-- 赛伦生物 688163.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
-  - 观察问题草稿：来源方向“生物制品”中，赛伦生物的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 浩欧博 688656.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“体外诊断”中，浩欧博的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 江淮汽车 600418.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“汽车整车”中，江淮汽车的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 康希诺 688185.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“生物制品”中，康希诺的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 新产业 300832.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-  - 观察问题草稿：来源方向“体外诊断”中，新产业的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 众泰汽车 000980.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-  - 观察问题草稿：来源方向“汽车整车”中，众泰汽车的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+市场日：2026-09-29；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
+- 九阳股份 002242.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“小家电”中，九阳股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 特发服务 300917.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“房地产”中，特发服务的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 智飞生物 300122.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
+  - 观察问题草稿：来源方向“疫苗”中，智飞生物的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 小熊电器 002959.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“小家电”中，小熊电器的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 信达地产 600657.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“房地产”中，信达地产的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 金迪克 688670.SH：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
+  - 观察问题草稿：来源方向“疫苗”中，金迪克的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 
 观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。
 
