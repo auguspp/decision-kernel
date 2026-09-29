@@ -51,6 +51,20 @@ gh attestation verify workbench-source.tar \
   --deny-self-hosted-runners --format json
 ```
 
+### 受限采用环境：可选官方离线工具，不要求管理员安装
+
+#621 的实际采用环境曾缺少 `gh`，且 apt 的身份切换系统调用不可用；这表示原生命令没有执行，不是签名无效。不能省略验签、信任包内PASS、提升容器权限或反复安装来换绿。
+
+同一显式源码导出可以选择 `offline-verifier=true`，在现有获准联网runner准备 `offline-verifier/`：固定官方 `cli/cli` 2.101.0 Linux amd64发布压缩包（SHA256 `9bca2d1c16825f109907a23307628a2f0698fbf99662b73a5cf0b020293072b8`，来自官方Release asset565857134）、原生TUF取得的当前 `trusted_root.jsonl`、取得时点与辅助摘要。工具包在源码tar外；不成为站点运行依赖，不安装到系统路径，不改原项目/Secret。输入默认false，原导出/签名/权限/日程不变。
+
+生产端另用该未修改CLI、全新HOME、无token和不可用HTTP代理，执行原生离线配置并拒绝改坏字节。该配置测试不是隔离网络空间证明，更不是采用端已经验签。任一步失败保留实际失败；缺少材料或成功标记不得称工具已就绪。
+
+采用者通过获准GitHub连接独立核原run、artifact外层bytes/digest，并核官方CLI发布校验值；可信根必须经受信传输取得并固定其来源/哈希/取得时点，不能仅凭与待验包一起出现的自报SHA256SUMS建立根信任。联网准备端的原生TUF校验和采用端的签名验证分别记录；较早取得的根不证明后续未撤销。CLI/根能用于此前已固定的原源包，**M仍取那个原源包的获准版本，不能改为工具包生成时的main**。
+
+在允许执行官方用户态工具的Linux amd64采用环境，将已核CLI解到临时目录即可；无须apt、sudo、登录GitHub或提取PAT。保留上方仓库/workflow/ref/digest/runner约束，只给原命令增加 `--custom-trusted-root /已核路径/trusted_root.jsonl`，并用解出的 `bin/gh` 替代系统 `gh`。采用端必须实际返回成功并保留输出，再检查应用差异/页面与发布；明确禁执行或不允许传入工具时仍停止，不绕过策略。不把生产端输出替代采用端结果。
+
+官方依据：[离线验签](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/verify-attestations-offline)、[原生可信根导出](https://cli.github.com/manual/gh_attestation_trusted-root)、[官方预编译发行包](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#precompiled-binaries)。REUSE原导出与官方CLI，不自建密码学验证器/服务。停用时移除可选input/step与本段，原源码导出、签名及历史原件保留；不新增持续任务或费用。
+
 **这是可验来历的源代码包，不是 Sites 部署包或替换整站的授权。** 原站采用仍按 #621 核真实host adapter、差异、owner-only/CSP、同源入口、Secret、回退和手机页面。签名不能证明研究正确、来源时间正确、漏洞不存在、代码被Human接受或线上已部署；Kernel原领域验证不删除。30天附件不是永久档案；需要长期保管时按现有正式归档保存原字节与签名，不只存一个会过期的URL。
 
 ## 暂不引入与退出
