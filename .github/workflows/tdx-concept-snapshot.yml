@@ -106,7 +106,7 @@ jobs:
           # The original snapshot remains independently qualified; there is no retry.
       - name: Retain TDX source identity, source-native rows and explicit gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: tdx-concept-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/tdx-concept/

@@ -90,7 +90,7 @@ jobs:
       - name: Retain complete probe evidence
         if: always()
         id: evidence
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-source-probe' }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ inputs.probe-kind == 'woton-h1-cninfo-candidate' && 'cninfo-woton-h1-candidate-probe' || 'cninfo-announcement-probe' }}/

@@ -75,7 +75,7 @@ jobs:
       - name: Retain results and partial failures
         id: evidence
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: sector-member-reading-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/sector-member-reading/

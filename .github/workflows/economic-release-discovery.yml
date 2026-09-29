@@ -85,7 +85,7 @@ jobs:
       - name: Retain complete attempt evidence
         if: always()
         id: evidence
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: economic-release-discovery-${{ github.run_id }}-${{ github.run_attempt }}
           path: release-discovery-proof/
@@ -177,7 +177,7 @@ jobs:
       - name: Retain native source attempt
         id: rss-artifact
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: radar-feed-intake-${{ github.run_id }}-${{ github.run_attempt }}
           path: native-rss-intake/

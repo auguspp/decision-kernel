@@ -66,7 +66,7 @@ jobs:
           git ls-tree -r HEAD > "$RUNNER_TEMP/concept-radar/source-tree.txt"
       - name: Upload source observation and explicit gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: concept-radar-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/concept-radar/
