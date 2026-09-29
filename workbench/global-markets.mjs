@@ -95,9 +95,9 @@ export function globalMarketView(text,saved){
       require(r?.version===(isPublic?'global-public-context-v1':'global-market-context-v1')&&r.family===family&&authority(r.authority)&&
         r.source_calls_during_replay===0&&HASH.test(r.capture_hash)&&SHA.test(r.identity?.code_commit)&&
         r.identity?.repository==='auguspp/decision-kernel'&&r.identity.workflow===workflow&&
-        r.identity.ref==='refs/heads/main'&&r.identity.event==='workflow_dispatch'&&r.identity.attempt===1&&
+        r.identity.ref==='refs/heads/main'&&['workflow_dispatch','schedule'].includes(r.identity.event)&&r.identity.attempt===1&&
         r.identity.run_id===run?.id&&Number.isSafeInteger(run.id)&&run.id>0&&run.run_attempt===1&&
-        run.path===workflow&&run.head_branch==='main'&&run.event==='workflow_dispatch'&&run.status==='completed'&&run.head_sha===r.identity.code_commit&&
+        run.path===workflow&&run.head_branch==='main'&&run.event===r.identity.event&&run.status==='completed'&&run.head_sha===r.identity.code_commit&&
         clock(r.captured_from)&&clock(r.captured_through)&&Date.parse(r.captured_from)<=Date.parse(r.captured_through)&&
         Date.parse(r.captured_through)<=Date.parse(p.checked_at)&&Array.isArray(r.outcomes));
       group.snapshot=snap;

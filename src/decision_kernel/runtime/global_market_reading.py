@@ -41,7 +41,7 @@ def check_run(run, cutoff, workflow=source.WORKFLOW):
     m.check(run.get('repository', {}).get('full_name') == m.REPOSITORY
             and run.get('head_repository', {}).get('full_name') == m.REPOSITORY
             and run.get('path') == workflow and run.get('head_branch') == 'main'
-            and run.get('event') == 'workflow_dispatch'
+            and run.get('event') in {'workflow_dispatch', 'schedule'}
             and type(run.get('id')) is int and run['id'] > 0
             and type(run.get('run_attempt')) is int and run['run_attempt'] >= 1
             and m.SHA.fullmatch(run.get('head_sha', '')) is not None,

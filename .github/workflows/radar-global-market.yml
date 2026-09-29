@@ -1,6 +1,9 @@
 name: radar-global-market
-run-name: global-market / ${{ inputs.family }}
+run-name: global-market / ${{ inputs.family || (github.event.schedule == '17 0 * * *' && 'indices') || (github.event.schedule == '37 0 * * *' && 'shibor') }}
 on:
+  schedule:
+    - cron: '17 0 * * *'
+    - cron: '37 0 * * *'
   workflow_dispatch:
     inputs:
       code-sha:
@@ -40,7 +43,7 @@ jobs:
       - name: Confirm exact current main and its successful CI before any source call
         env:
           GH_TOKEN: ${{ github.token }}
-          EXPECTED_CODE: ${{ inputs.code-sha }}
+          EXPECTED_CODE: ${{ inputs.code-sha || (github.event_name == 'schedule' && github.sha) }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
@@ -67,7 +70,7 @@ jobs:
         id: capture
         env:
           TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
-          FAMILY: ${{ inputs.family }}
+          FAMILY: ${{ inputs.family || (github.event.schedule == '17 0 * * *' && 'indices') || (github.event.schedule == '37 0 * * *' && 'shibor') }}
           AS_OF: ${{ inputs.as-of-date }}
         run: |
           args=()
@@ -92,7 +95,7 @@ jobs:
         if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: global-market-${{ inputs.family }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: global-market-${{ inputs.family || (github.event.schedule == '17 0 * * *' && 'indices') || (github.event.schedule == '37 0 * * *' && 'shibor') }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/global-market/
           retention-days: 30
           if-no-files-found: warn

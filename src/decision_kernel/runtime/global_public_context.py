@@ -80,7 +80,7 @@ def validate_identity(item):
     require(isinstance(item, dict) and set(item) == {
         'repository', 'workflow', 'code_commit', 'ref', 'event', 'run_id', 'attempt'}, 'GP_IDENTITY')
     require(item['repository'] == REPOSITORY and item['workflow'] == WORKFLOW
-            and item['ref'] == 'refs/heads/main' and item['event'] == 'workflow_dispatch'
+            and item['ref'] == 'refs/heads/main' and item['event'] in {'workflow_dispatch', 'schedule'}
             and type(item['run_id']) is int and item['run_id'] > 0
             and type(item['attempt']) is int and item['attempt'] == 1
             and isinstance(item['code_commit'], str)

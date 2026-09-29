@@ -23,21 +23,21 @@ def no_network(monkeypatch):
     monkeypatch.setattr(socket, 'getaddrinfo', denied)
 
 
-def ready(tmp_path, monkeypatch, *, legacy=False):
+def ready(tmp_path, monkeypatch, *, legacy=False, event='workflow_dispatch'):
     c, baseline, _ = setup(monkeypatch)
     c.now = lambda: CHECKED
     c.previous = c.previous_commit = None
     monkeypatch.setenv(g.relay.SECRET_ENV, KEY)
     records = {}
     for family, run_id in [('indices', 901), ('shibor', 902)]:
-        identity = {**IDENTITY, 'run_id': run_id}
+        identity = {**IDENTITY, 'run_id': run_id, 'event': event}
         request, _, _ = request_fixture()
         root = tmp_path / family
         report = g.capture(root, identity, family, ASOF, request=request, now=lambda: NOW)
         files = saved(root)
         run = {'id': run_id, 'path': g.WORKFLOW, 'head_sha': identity['code_commit'],
                'head_branch': 'main', 'repository': {'full_name': m.REPOSITORY},
-               'head_repository': {'full_name': m.REPOSITORY}, 'event': 'workflow_dispatch',
+               'head_repository': {'full_name': m.REPOSITORY}, 'event': event,
                'run_attempt': 1, 'status': 'completed', 'conclusion': 'success',
                'created_at': '2026-09-27T07:59:00Z', 'updated_at': '2026-09-27T08:01:00Z',
                'display_title': 'radar-global-market' if legacy else 'global-market / ' + family}
@@ -75,8 +75,9 @@ def projection(c):
     return json.loads(c.files[r.REPORT])['projection']
 
 
-def test_two_families_replay_original_archives_in_same_R(tmp_path, monkeypatch):
-    c, baseline, records = ready(tmp_path, monkeypatch)
+@pytest.mark.parametrize('event', ['workflow_dispatch', 'schedule'])
+def test_two_families_replay_original_archives_in_same_R(tmp_path, monkeypatch, event):
+    c, baseline, records = ready(tmp_path, monkeypatch, event=event)
     old, old_files = deepcopy(baseline), dict(c.files)
     payload = r.attach(c, baseline)
     m.validate_read_package(payload)
@@ -215,6 +216,8 @@ def test_original_entry_and_publisher_opt_in_no_source_rerun():
     workflow = (ROOT/'.github/workflows/current-state-read-entry.yml').read_text()
     assert '--include-global-market' in workflow and 'radar-global-market' in workflow
     producer = (ROOT/'.github/workflows/radar-global-market.yml').read_text()
-    assert 'run-name: global-market / ${{ inputs.family }}' in producer
-    assert 'schedule:' not in producer and 'TUSHARE_PROXY_API_KEY' in producer
+    assert "run-name: global-market / ${{ inputs.family ||" in producer
+    assert "github.event.schedule == '17 0 * * *' && 'indices'" in producer
+    assert "github.event.schedule == '37 0 * * *' && 'shibor'" in producer
+    assert 'schedule:' in producer and 'TUSHARE_PROXY_API_KEY' in producer
     assert 'workflow_dispatch:' in producer
