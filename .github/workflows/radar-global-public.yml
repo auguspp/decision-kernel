@@ -84,7 +84,7 @@ jobs:
           PY
       - name: Retain original public responses and partial checkpoint
         if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: global-public-${{ inputs.family }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/global-public/

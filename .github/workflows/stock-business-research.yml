@@ -215,7 +215,7 @@ jobs:
             --daily-reviewed-question --code-commit "$EXPECTED_CODE_SHA" --output run-output
       - name: Preserve original sources, model outputs and partial failures
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: stock-business-research-${{ github.run_id }}-${{ github.run_attempt }}
           path: run-output/
@@ -265,7 +265,7 @@ jobs:
           fi
       - name: Preserve declared report bytes and explicit source gaps
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: declared-report-sources-${{ github.run_id }}-${{ github.run_attempt }}
           path: declared-report-output/
@@ -318,7 +318,7 @@ jobs:
           exit "$probe_status"
       - name: Retain synthetic DeepSeek compatibility evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: deepseek-compat-${{ github.run_id }}-${{ github.run_attempt }}
           path: deepseek-compat-output/
@@ -371,7 +371,7 @@ jobs:
             --output source-output --prepare-sources "${extra[@]}"
       - name: Preserve complete source preflight and partial failures
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: stock-source-preparation-${{ github.run_id }}-${{ github.run_attempt }}
           path: source-output/

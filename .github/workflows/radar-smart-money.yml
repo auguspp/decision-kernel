@@ -92,7 +92,7 @@ jobs:
           PY
       - name: Retain exact source bytes and partial checkpoints
         if: always() && steps.control.outputs.run_capture == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: smart-money-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/smart-money/
@@ -100,7 +100,7 @@ jobs:
           if-no-files-found: warn
       - name: Retain actual delivery preflight
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: smart-money-control-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/smart-money-control/
@@ -153,7 +153,7 @@ jobs:
             --output "$RUNNER_TEMP/smart-money-relay"
       - name: Retain Relay originals and explicit queue gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: smart-money-relay-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/smart-money-relay/
