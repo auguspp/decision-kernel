@@ -6,6 +6,11 @@ on:
         description: Exact reviewed current main SHA with successful independent main CI
         required: true
         type: string
+      offline-verifier:
+        description: Include official portable CLI and fresh trusted roots for an authorized offline consumer
+        required: false
+        default: false
+        type: boolean
 permissions:
   contents: read
 concurrency:
@@ -65,6 +70,52 @@ jobs:
             exit 1
           fi
           printf 'VALID_SIGNATURE_AND_EXACT_ORIGIN; TAMPERED_BYTES_REJECTED\n' > "$out/verification-status.txt"
+      - name: Prepare optional native offline verifier without host installation
+        if: inputs.offline-verifier
+        env:
+          CLI_VERSION: '2.101.0'
+          CLI_SHA256: '9bca2d1c16825f109907a23307628a2f0698fbf99662b73a5cf0b020293072b8'
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/workbench-source"
+          kit="$out/offline-verifier"
+          mkdir "$kit" "$RUNNER_TEMP/portable-gh" "$RUNNER_TEMP/offline-gh-home"
+          archive="gh_${CLI_VERSION}_linux_amd64.tar.gz"
+          url="https://github.com/cli/cli/releases/download/v${CLI_VERSION}/${archive}"
+          curl --fail --location --proto '=https' --proto-redir '=https' \
+            --connect-timeout 15 --max-time 180 --output "$kit/$archive" "$url"
+          printf '%s  %s\n' "$CLI_SHA256" "$kit/$archive" | sha256sum --check --strict -
+          tar -xzf "$kit/$archive" -C "$RUNNER_TEMP/portable-gh" \
+            "gh_${CLI_VERSION}_linux_amd64/bin/gh" "gh_${CLI_VERSION}_linux_amd64/LICENSE"
+          cli="$RUNNER_TEMP/portable-gh/gh_${CLI_VERSION}_linux_amd64/bin/gh"
+          clean=(env -i PATH=/usr/bin:/bin HOME="$RUNNER_TEMP/offline-gh-home"
+                 GH_PROMPT_DISABLED=1 GH_NO_UPDATE_NOTIFIER=1)
+          "${clean[@]}" "$cli" --version > "$kit/cli-version.txt"
+          # Native TUF-backed retrieval, not a root copied from the subject bundle.
+          "${clean[@]}" "$cli" attestation trusted-root > "$kit/trusted_root.jsonl"
+          test -s "$kit/trusted_root.jsonl"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' > "$kit/roots-retrieved-at.txt"
+          (cd "$kit" && sha256sum "$archive" trusted_root.jsonl > SHA256SUMS)
+          # No account/config/token. Reject HTTP(S) egress through closed proxies.
+          # This tests native offline configuration, not a network-namespace claim.
+          offline=("${clean[@]}" HTTP_PROXY=http://127.0.0.1:9
+                   HTTPS_PROXY=http://127.0.0.1:9 ALL_PROXY=http://127.0.0.1:9 NO_PROXY=)
+          args=(--bundle "$out/attestation.jsonl" --repo auguspp/decision-kernel
+                --signer-workflow auguspp/decision-kernel/.github/workflows/workbench-source-bundle.yml
+                --source-ref refs/heads/main --source-digest "$GITHUB_SHA"
+                --deny-self-hosted-runners --custom-trusted-root "$kit/trusted_root.jsonl" --format json)
+          "${offline[@]}" "$cli" attestation verify "$out/workbench-source.tar" "${args[@]}" \
+            > "$kit/producer-offline-verification.json" 2> "$kit/producer-offline-verification.stderr"
+          cp "$out/workbench-source.tar" "$RUNNER_TEMP/offline-tampered-source.tar"
+          printf x >> "$RUNNER_TEMP/offline-tampered-source.tar"
+          if "${offline[@]}" "$cli" attestation verify "$RUNNER_TEMP/offline-tampered-source.tar" "${args[@]}" \
+            > "$kit/tampered.stdout" 2> "$kit/tampered.stderr"; then
+            echo '::error::Offline verifier accepted altered source'
+            exit 1
+          fi
+          printf 'NATIVE_OFFLINE_CONFIGURATION_PASSED; TAMPERED_BYTES_REJECTED; CONSUMER_NOT_YET_VERIFIED\n' \
+            > "$kit/preparation-status.txt"
       - name: Retain bundle and diagnostics, not automatic adoption
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

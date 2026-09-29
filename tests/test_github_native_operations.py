@@ -110,9 +110,14 @@ def test_bundle_workflow_signs_and_verifies_real_bytes_with_bound_identity():
     text = (ROOT / ".github/workflows/workbench-source-bundle.yml").read_text()
     for required in ("attestations: write", "id-token: write", "--source-ref refs/heads/main",
                      '--source-digest "$GITHUB_SHA"', "--signer-workflow", "--deny-self-hosted-runners",
-                     'printf x >>', "TAMPERED_BYTES_REJECTED", "create-storage-record: false"):
+                     'printf x >>', "TAMPERED_BYTES_REJECTED", "create-storage-record: false",
+                     "if: inputs.offline-verifier", "default: false", "attestation trusted-root",
+                     "--custom-trusted-root", "env -i PATH=/usr/bin:/bin", "GH_PROMPT_DISABLED=1",
+                     "sha256sum --check --strict", "--connect-timeout 15 --max-time 180",
+                     "CONSUMER_NOT_YET_VERIFIED",
+                     "9bca2d1c16825f109907a23307628a2f0698fbf99662b73a5cf0b020293072b8"):
         assert required in text
-    for forbidden in ("schedule:", "push:", "pull_request:", "secrets.", "contents: write", "continue-on-error"):
+    for forbidden in ("schedule:", "push:", "pull_request:", "secrets.", "contents: write", "continue-on-error", "sudo", "apt-get", "gh auth login"):
         assert forbidden not in text
 
 
@@ -123,3 +128,37 @@ def test_dependabot_two_grouped_weekly_ecosystems_without_auto_merge():
     assert text.count("interval: weekly") == text.count("open-pull-requests-limit: 1") == 2
     assert text.count("patterns: ['*']") == 2
     assert "ignore:" not in text and "insecure-external-code-execution" not in text
+
+
+@pytest.mark.parametrize("download_failure", [False, True])
+def test_offline_tool_download_or_digest_failure_stops_before_execution(tmp_path, download_failure):
+    """Exercise real fail-fast shell/hash checks; no network or cryptographic fixture."""
+    import os
+    import sys
+    text = (ROOT / ".github/workflows/workbench-source-bundle.yml").read_text()
+    step = text.split("      - name: Prepare optional native offline verifier without host installation\n", 1)[1]
+    step = step.split("      - name: Retain bundle and diagnostics", 1)[0]
+    body = step.split("        run: |\n", 1)[1]
+    script = "\n".join(line[10:] for line in body.splitlines())
+    shim = tmp_path / "bin"
+    shim.mkdir()
+    # The test intercepts curl only; the actual shell and SHA-256 reject its bytes.
+    curl = shim / "curl"
+    curl.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
+                    + ("sys.exit(22)\n" if download_failure else
+                       "Path(sys.argv[sys.argv.index('--output')+1]).write_bytes(b'not an official CLI')\n"))
+    curl.chmod(0o755)
+    run = tmp_path / "run"
+    out = run / "workbench-source"
+    out.mkdir(parents=True)
+    original = out / "workbench-source.tar"
+    original.write_bytes(b"untouched original")
+    result = subprocess.run(["bash", "-c", script], capture_output=True, text=True, timeout=10,
+        env={"PATH": str(shim) + os.pathsep + os.defpath, "RUNNER_TEMP": str(run),
+             "CLI_VERSION": "2.101.0", "GITHUB_SHA": "a" * 40,
+             "CLI_SHA256": "9bca2d1c16825f109907a23307628a2f0698fbf99662b73a5cf0b020293072b8"})
+    assert result.returncode != 0
+    assert original.read_bytes() == b"untouched original"
+    assert not list((run / "portable-gh").iterdir())
+    assert not (out / "offline-verifier/trusted_root.jsonl").exists()
+    assert not (out / "offline-verifier/preparation-status.txt").exists()
