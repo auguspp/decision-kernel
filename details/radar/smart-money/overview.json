@@ -1,11 +1,28 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "24.23",
-  "capture_hash": "4b6c7f9e94a88d0e9cb9b971596401f0826b065eca438c279220f37026010fd9",
+  "capture_age_hours": "0.06",
+  "capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
   "current_reading": {
-    "control": null,
+    "control": {
+      "blockers": [],
+      "checked_at": "2026-09-29T18:02:59.594566+00:00",
+      "code_commit": "9b828f29566cfd4cc046a5143800cec546472f2e",
+      "decision": "RUN_INITIAL_OR_DAILY",
+      "event": "schedule",
+      "hithink_activity": "NO_VISIBLE_PEER",
+      "investment_authority": "NONE",
+      "pending_delivery_count": 0,
+      "pending_source_run_id": null,
+      "prior_read_status": "EXACT_PRIOR_STATE_READ",
+      "prior_reading": "ef90c83455afed69ae8d075309ad93f39c0f91b1",
+      "run_id": 36609235310,
+      "skip_hithink": false,
+      "target_date": "2026-09-30",
+      "today_invocations": 1,
+      "version": "smart-money-observation-v1"
+    },
     "latest_attempt": {
-      "conclusion": null,
+      "conclusion": "success",
       "created_at": "2026-09-29T18:02:46Z",
       "event": "schedule",
       "head_sha": "9b828f29566cfd4cc046a5143800cec546472f2e",
@@ -15,60 +32,47 @@
       "path": ".github/workflows/radar-smart-money.yml",
       "run_attempt": 1,
       "run_started_at": "2026-09-29T18:02:46Z",
-      "status": "in_progress",
-      "updated_at": "2026-09-29T18:02:50Z"
+      "status": "completed",
+      "updated_at": "2026-09-29T18:10:48Z"
     },
-    "previous_status": "EXACT_PREVIOUS_ef90c83455afed69ae8d075309ad93f39c0f91b1",
-    "run_metadata_reads": [
-      {
-        "attempt": 1,
-        "attempt_status": "in_progress",
-        "attempt_updated_at": "2026-09-29T18:02:50Z",
-        "checked_at": "2026-09-29T18:04:01.799603+00:00",
-        "endpoint": "actions/runs/36609235310/attempts/1",
-        "meaning": "SAME_IDENTITY_ATTEMPT_READ_NOT_STATUS_INFERENCE_OR_RETRY",
-        "reads": 1,
-        "run_id": 36609235310,
-        "run_status": "in_progress",
-        "run_updated_at": "2026-09-29T18:02:50Z"
-      }
-    ],
-    "status": "AWAITING_CURRENT_CAPTURE",
-    "uses_prior_observation": true
+    "previous_status": "EXACT_PREVIOUS_8b53b4a3c0e2faa2368c3515a28389e3afbfeea6",
+    "run_metadata_reads": [],
+    "status": "READY",
+    "uses_prior_observation": false
   },
-  "cutoff": "2026-09-28T17:50:32.189157+00:00",
+  "cutoff": "2026-09-29T18:09:30.081140+00:00",
   "families": {
     "activity": {
       "ambiguous_disclosure_groups": 2,
-      "companies": 2980,
+      "companies": 2999,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 5462,
+      "current_rows": 5447,
       "deferred": [],
       "earliest_period": "2026-01-01",
-      "event_groups": 5636,
+      "event_groups": 5698,
       "field_gap_rows": 0,
-      "known_institution_codes": 649,
-      "latest_period": "2026-09-28",
+      "known_institution_codes": 653,
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 2,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "activity",
           "field_gap_rows": 0,
-          "normalized_rows": 5462,
+          "normalized_rows": 5447,
           "partition": "disclosures",
           "provider_pages": 11,
-          "provider_total": 5464,
-          "returned_rows": 5464,
+          "provider_total": 5449,
+          "returned_rows": 5449,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 2,
@@ -76,129 +80,129 @@
         }
       ],
       "roster_coverage": "PROVIDER_EVENT_SUMMARIES_NOT_ALL_PARTICIPANT_ROWS",
-      "saved_records": 5636,
+      "saved_records": 5698,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "机构调研活动",
       "unidentified_event_rows": 0,
       "unresolved_partitions": 0,
-      "unresolved_roster_rows": 2556
+      "unresolved_roster_rows": 2589
     },
     "executives": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 647,
+      "companies": 655,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 3101,
+      "current_rows": 3072,
       "deferred": [],
       "earliest_period": "2026-06-29",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-24",
+      "latest_period": "2026-09-28",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "executives",
           "field_gap_rows": 0,
-          "normalized_rows": 3101,
+          "normalized_rows": 3072,
           "partition": "disclosures",
           "provider_pages": 16,
-          "provider_total": 3139,
-          "returned_rows": 3139,
+          "provider_total": 3111,
+          "returned_rows": 3111,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3290,
+      "saved_records": 3335,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "高管实际持股变动",
       "unresolved_partitions": 0
     },
     "forecasts": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 1568,
+      "companies": 1574,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 3240,
+      "current_rows": 3256,
       "deferred": [],
       "earliest_period": "2026-06-28",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "forecasts",
           "field_gap_rows": 0,
-          "normalized_rows": 3240,
+          "normalized_rows": 3256,
           "partition": "disclosures",
           "provider_pages": 33,
-          "provider_total": 3240,
-          "returned_rows": 3240,
+          "provider_total": 3256,
+          "returned_rows": 3256,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3286,
+      "saved_records": 3310,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "研报与预期版本",
       "unresolved_partitions": 0
     },
     "holder_changes": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 688,
+      "companies": 692,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 1345,
+      "current_rows": 1331,
       "deferred": [],
       "earliest_period": "2026-06-29",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "holder_changes",
           "field_gap_rows": 0,
-          "normalized_rows": 1345,
+          "normalized_rows": 1331,
           "partition": "disclosures",
           "provider_pages": 3,
-          "provider_total": 1345,
-          "returned_rows": 1345,
+          "provider_total": 1331,
+          "returned_rows": 1331,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 1420,
+      "saved_records": 1439,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "股东披露增减持区间",
       "unresolved_partitions": 0
@@ -211,16 +215,16 @@
       "current_rows": 0,
       "deferred": [
         {
-          "begin": "2026-07-01",
-          "end": "2026-09-29",
+          "begin": "2026-07-02",
+          "end": "2026-09-30",
           "family": "holdings",
           "partition": "2026-03-31",
           "previous_cutoff": "2026-09-26T03:07:20.373445+00:00",
           "reason": "QUARTER_BASELINE_REUSED_WITH_EXPLICIT_AGE"
         },
         {
-          "begin": "2026-07-01",
-          "end": "2026-09-29",
+          "begin": "2026-07-02",
+          "end": "2026-09-30",
           "family": "holdings",
           "partition": "2026-06-30",
           "previous_cutoff": "2026-09-26T03:07:20.373445+00:00",
@@ -241,43 +245,16 @@
     },
     "hot_money": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 135,
+      "companies": 151,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 236,
+      "current_rows": 250,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-21",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-21",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "hot_money",
-          "field_gap_rows": 0,
-          "normalized_rows": 42,
-          "partition": "2026-09-21",
-          "provider_pages": 1,
-          "provider_total": 20,
-          "returned_rows": 20,
-          "row_errors": [],
-          "source_disclosure_counts": [
-            {
-              "count": 58,
-              "stock_count": 53
-            }
-          ],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-22",
@@ -385,52 +362,52 @@
           ],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-09-29",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-09-29",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "hot_money",
+          "field_gap_rows": 0,
+          "normalized_rows": 56,
+          "partition": "2026-09-29",
+          "provider_pages": 1,
+          "provider_total": 17,
+          "returned_rows": 17,
+          "row_errors": [],
+          "source_disclosure_counts": [
+            {
+              "count": 64,
+              "stock_count": 61
+            }
+          ],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 278,
+      "saved_records": 334,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "游资标签公开轨迹",
       "unresolved_partitions": 0
     },
     "institutional": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 119,
+      "companies": 135,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 183,
+      "current_rows": 181,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-21",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-21",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "institutional",
-          "field_gap_rows": 0,
-          "normalized_rows": 40,
-          "partition": "2026-09-21",
-          "provider_pages": 1,
-          "provider_total": 40,
-          "returned_rows": 40,
-          "row_errors": [],
-          "source_disclosure_counts": [
-            {
-              "count": 40,
-              "stock_count": 38
-            }
-          ],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-22",
@@ -538,9 +515,36 @@
           ],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-09-29",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-09-29",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "institutional",
+          "field_gap_rows": 0,
+          "normalized_rows": 38,
+          "partition": "2026-09-29",
+          "provider_pages": 1,
+          "provider_total": 38,
+          "returned_rows": 38,
+          "row_errors": [],
+          "source_disclosure_counts": [
+            {
+              "count": 38,
+              "stock_count": 36
+            }
+          ],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 216,
+      "saved_records": 254,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "龙虎榜机构席位",
       "unresolved_partitions": 0
@@ -559,12 +563,12 @@
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -581,12 +585,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -603,12 +607,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -625,12 +629,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -660,31 +664,9 @@
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-21",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-21",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "northbound",
-          "field_gap_rows": 0,
-          "normalized_rows": 1,
-          "partition": "2026-09-21",
-          "provider_pages": 1,
-          "provider_total": 1,
-          "returned_rows": 1,
-          "row_errors": [],
-          "source_disclosure_counts": [],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-22",
@@ -772,19 +754,41 @@
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-09-29",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-09-29",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "northbound",
+          "field_gap_rows": 0,
+          "normalized_rows": 1,
+          "partition": "2026-09-29",
+          "provider_pages": 1,
+          "provider_total": 1,
+          "returned_rows": 1,
+          "row_errors": [],
+          "source_disclosure_counts": [],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 6,
+      "saved_records": 7,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "北向成交（非净流入）",
       "unresolved_partitions": 0
     },
     "placements": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 51,
+      "companies": 53,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 50,
+      "current_rows": 51,
       "deferred": [],
       "earliest_period": "2026-06-29",
       "field_gap_rows": 0,
@@ -793,52 +797,52 @@
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "placements",
           "field_gap_rows": 0,
-          "normalized_rows": 50,
+          "normalized_rows": 51,
           "partition": "disclosures",
           "provider_pages": 1,
-          "provider_total": 50,
-          "returned_rows": 50,
+          "provider_total": 51,
+          "returned_rows": 51,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 52,
+      "saved_records": 54,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "定增与战略资本发行",
       "unresolved_partitions": 0
     },
     "repurchases": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 554,
+      "companies": 558,
       "complete_partitions": 1,
       "current_partitions": 1,
       "current_rows": 566,
       "deferred": [],
       "earliest_period": "2026-04-30",
       "field_gap_rows": 1,
-      "latest_period": "2026-09-29",
+      "latest_period": "2026-09-30",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-01",
+          "begin": "2026-07-02",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-09-29",
+          "end": "2026-09-30",
           "excluded_rows": [],
           "failure": null,
           "family": "repurchases",
@@ -854,45 +858,23 @@
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 571,
+      "saved_records": 576,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "公司回购计划与执行",
       "unresolved_partitions": 0
     },
     "seats": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 214,
+      "companies": 234,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 2862,
+      "current_rows": 2906,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-28",
+      "latest_period": "2026-09-29",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-21",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-21",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "seats",
-          "field_gap_rows": 0,
-          "normalized_rows": 557,
-          "partition": "2026-09-21",
-          "provider_pages": 1,
-          "provider_total": 60,
-          "returned_rows": 60,
-          "row_errors": [],
-          "source_disclosure_counts": [],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-22",
@@ -980,9 +962,31 @@
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-09-29",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-09-29",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "seats",
+          "field_gap_rows": 0,
+          "normalized_rows": 601,
+          "partition": "2026-09-29",
+          "provider_pages": 1,
+          "provider_total": 65,
+          "returned_rows": 65,
+          "row_errors": [],
+          "source_disclosure_counts": [],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3315,
+      "saved_records": 3916,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "原始营业部席位",
       "unresolved_partitions": 0
@@ -1359,6 +1363,117 @@
       "report_id": "AP202609281829964266",
       "revisions": [],
       "source_row": 96,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 2,
+      "pdf_pages": 2,
+      "pdf_sha256": "331dacf5af6353c0645953b46fa42eb63cc85782a4913c7195db41f7950dc36a",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829998311",
+      "revisions": [],
+      "source_row": 91,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "3f48a3594feb6e841296fc6b3fc6f377670d6bcca60044f31e0e208521d32f77",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829996066",
+      "revisions": [],
+      "source_row": 92,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 2,
+      "pdf_pages": 2,
+      "pdf_sha256": "27582c074569a3e5eebae42f66c347a0017214841b3755d0f4e62beacba53883",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829995784",
+      "revisions": [],
+      "source_row": 93,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29",
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "384ab9828b00c21efbd4d28a2a10bcde568a956cf9043f6e5916f015fa027a1e",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829995593",
+      "revisions": [],
+      "source_row": 94,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "b6d6b990c287f619b01f5a9cae100fe7c9758ab9db716069c89623de718eda5e",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829995400",
+      "revisions": [],
+      "source_row": 95,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-07-27"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "2608a6a3fe4a9ccdc59ecac7cf427b334c3a56e75280c4a9c97e3aa568657cb2",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202607271827380430",
+      "revisions": [],
+      "source_row": 96,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "origin_cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 5,
+      "pdf_sha256": "92364bee7c8e26de7b2a8440393fe39f4e996921a001837050fe43dd917afe61",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609291829995154",
+      "revisions": [],
+      "source_row": 97,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     }
   ],
@@ -1764,342 +1879,342 @@
     ]
   },
   "increment_counts": {
-    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 776,
-    "SOURCE_VERSION_CHANGED": 25,
-    "UNCHANGED": 24665
+    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 853,
+    "SOURCE_VERSION_CHANGED": 11,
+    "UNCHANGED": 24617
   },
   "institutional_attention": {
-    "companies": 2881,
+    "companies": 2894,
     "examples": [
       {
-        "company": "招金黄金",
+        "company": "深天马A",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "000506.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "钒钛股份",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 4,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 3,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "8",
-        "ticker": "000629.SZ",
-        "unresolved_roster_rows": 1
-      },
-      {
-        "company": "京东方A",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 4,
-        "events_previous_60d": 10,
-        "known_distinct_org_codes_90d": 11,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.8",
-        "ticker": "000725.SZ",
-        "unresolved_roster_rows": 2
-      },
-      {
-        "company": "四川九洲",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "000801.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "炬申股份",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
+        "events_30d": 3,
         "events_previous_60d": 3,
         "known_distinct_org_codes_90d": 4,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.6666666666666666666666666667",
-        "ticker": "001202.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "德冠新材",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 2,
-        "events_previous_60d": 2,
-        "known_distinct_org_codes_90d": 3,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "2",
-        "ticker": "001378.SZ",
-        "unresolved_roster_rows": 1
+        "ticker": "000050.SZ",
+        "unresolved_roster_rows": 2
       },
       {
-        "company": "久立特材",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 2,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "2",
-        "ticker": "002318.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "皇氏集团",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "002329.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "融发核电",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "2",
-        "ticker": "002366.SZ",
-        "unresolved_roster_rows": 1
-      },
-      {
-        "company": "比亚迪",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 12,
-        "events_previous_60d": 2,
-        "known_distinct_org_codes_90d": 8,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "12",
-        "ticker": "002594.SZ",
-        "unresolved_roster_rows": 6
-      },
-      {
-        "company": "TCL智家",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 4,
-        "events_previous_60d": 5,
-        "known_distinct_org_codes_90d": 8,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "1.6",
-        "ticker": "002668.SZ",
-        "unresolved_roster_rows": 1
-      },
-      {
-        "company": "永东股份",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "002753.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "长缆科技",
+        "company": "农产品",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 2,
         "events_previous_60d": 3,
         "known_distinct_org_codes_90d": 4,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "1.333333333333333333333333333",
-        "ticker": "002879.SZ",
+        "ticker": "000061.SZ",
         "unresolved_roster_rows": 1
       },
       {
-        "company": "鼎龙股份",
+        "company": "深圳华强",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 7,
-        "known_distinct_org_codes_90d": 7,
+        "events_30d": 2,
+        "events_previous_60d": 6,
+        "known_distinct_org_codes_90d": 6,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.2857142857142857142857142857",
-        "ticker": "300054.SZ",
+        "recent_vs_prior_monthly_rate": "0.6666666666666666666666666667",
+        "ticker": "000062.SZ",
         "unresolved_roster_rows": 1
       },
       {
-        "company": "汇川技术",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 10,
-        "known_distinct_org_codes_90d": 4,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.2",
-        "ticker": "300124.SZ",
-        "unresolved_roster_rows": 7
-      },
-      {
-        "company": "依米康",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "2",
-        "ticker": "300249.SZ",
-        "unresolved_roster_rows": 1
-      },
-      {
-        "company": "华灿光电",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 2,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300323.SZ",
-        "unresolved_roster_rows": 1
-      },
-      {
-        "company": "联创股份",
+        "company": "新乡化纤",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 0,
         "events_previous_60d": 1,
         "known_distinct_org_codes_90d": 1,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300343.SZ",
+        "ticker": "000949.SZ",
         "unresolved_roster_rows": 0
       },
       {
-        "company": "楚天科技",
+        "company": "豪鹏科技",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 2,
+        "events_previous_60d": 4,
+        "known_distinct_org_codes_90d": 5,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "1",
+        "ticker": "001283.SZ",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "龙源电力",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "001289.SZ",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "好上好",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 2,
+        "events_previous_60d": 2,
+        "known_distinct_org_codes_90d": 3,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "2",
+        "ticker": "001298.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "广电运通",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 5,
+        "known_distinct_org_codes_90d": 5,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "002152.SZ",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "北化股份",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 1,
         "events_previous_60d": 1,
         "known_distinct_org_codes_90d": 1,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "2",
-        "ticker": "300358.SZ",
+        "ticker": "002246.SZ",
         "unresolved_roster_rows": 1
       },
       {
-        "company": "中赋科技",
+        "company": "中电鑫龙",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 1,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "2",
+        "ticker": "002298.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "沪电股份",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 6,
+        "events_previous_60d": 9,
+        "known_distinct_org_codes_90d": 14,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "1.333333333333333333333333333",
+        "ticker": "002463.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "涪陵榨菜",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 3,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 2,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "6",
+        "ticker": "002507.SZ",
+        "unresolved_roster_rows": 2
+      },
+      {
+        "company": "华源控股",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 0,
         "events_previous_60d": 2,
         "known_distinct_org_codes_90d": 2,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300692.SZ",
+        "ticker": "002787.SZ",
         "unresolved_roster_rows": 0
       },
       {
-        "company": "盛弘股份",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 7,
-        "known_distinct_org_codes_90d": 3,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300693.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "兆龙互连",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300913.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "商络电子",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 0,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0",
-        "ticker": "300975.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "中集车辆",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 3,
-        "known_distinct_org_codes_90d": 4,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.6666666666666666666666666667",
-        "ticker": "301039.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "冠龙节能",
+        "company": "集泰股份",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 1,
         "events_previous_60d": 1,
         "known_distinct_org_codes_90d": 1,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "2",
-        "ticker": "301151.SZ",
+        "ticker": "002909.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "宝莱特",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 1,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "2",
+        "ticker": "300246.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "英诺激光",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 1,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "2",
+        "ticker": "301021.SZ",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "同星科技",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 1,
+        "events_previous_60d": 2,
+        "known_distinct_org_codes_90d": 3,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "1",
+        "ticker": "301252.SZ",
         "unresolved_roster_rows": 0
+      },
+      {
+        "company": "鑫磊股份",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "301317.SZ",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "一博科技",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 3,
+        "events_previous_60d": 6,
+        "known_distinct_org_codes_90d": 5,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "1",
+        "ticker": "301366.SZ",
+        "unresolved_roster_rows": 4
       },
       {
         "company": "安培龙",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 1,
-        "events_previous_60d": 9,
-        "known_distinct_org_codes_90d": 7,
+        "events_previous_60d": 8,
+        "known_distinct_org_codes_90d": 6,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "0.2222222222222222222222222222",
+        "recent_vs_prior_monthly_rate": "0.25",
         "ticker": "301413.SZ",
         "unresolved_roster_rows": 2
-      },
-      {
-        "company": "达利凯普",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 2,
-        "known_distinct_org_codes_90d": 2,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "1",
-        "ticker": "301566.SZ",
-        "unresolved_roster_rows": 0
-      },
-      {
-        "company": "超研股份",
-        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 1,
-        "events_previous_60d": 1,
-        "known_distinct_org_codes_90d": 1,
-        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "2",
-        "ticker": "301602.SZ",
-        "unresolved_roster_rows": 1
       },
       {
         "company": "博实结",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 4,
-        "events_previous_60d": 6,
+        "events_previous_60d": 5,
         "known_distinct_org_codes_90d": 6,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "1.333333333333333333333333333",
+        "recent_vs_prior_monthly_rate": "1.6",
         "ticker": "301608.SZ",
-        "unresolved_roster_rows": 4
+        "unresolved_roster_rows": 3
       },
       {
-        "company": "浙江东方",
+        "company": "雅戈尔",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 5,
+        "events_previous_60d": 4,
+        "known_distinct_org_codes_90d": 7,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "2.5",
+        "ticker": "600177.SH",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "江山股份",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 2,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "4",
+        "ticker": "600389.SH",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "新五丰",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 2,
+        "known_distinct_org_codes_90d": 2,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "600975.SH",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "航民股份",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 2,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "600987.SH",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "常润股份",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 2,
+        "events_previous_60d": 7,
+        "known_distinct_org_codes_90d": 8,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0.5714285714285714285714285714",
+        "ticker": "603201.SH",
+        "unresolved_roster_rows": 1
+      },
+      {
+        "company": "龙旗科技",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 2,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "603341.SH",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "长裕集团",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 0,
+        "events_previous_60d": 1,
+        "known_distinct_org_codes_90d": 1,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0",
+        "ticker": "603407.SH",
+        "unresolved_roster_rows": 0
+      },
+      {
+        "company": "恒盛能源",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 1,
         "events_previous_60d": 1,
         "known_distinct_org_codes_90d": 1,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "2",
-        "ticker": "600120.SH",
+        "ticker": "605580.SH",
         "unresolved_roster_rows": 1
+      },
+      {
+        "company": "阿拉丁",
+        "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
+        "events_30d": 1,
+        "events_previous_60d": 3,
+        "known_distinct_org_codes_90d": 4,
+        "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
+        "recent_vs_prior_monthly_rate": "0.6666666666666666666666666667",
+        "ticker": "688179.SH",
+        "unresolved_roster_rows": 0
       }
     ],
     "scope": "COMPLETE_LOOKUP_REBUILDS_ALL_COMPANIES_FROM_SAME_SAVED_ROWS"
@@ -2463,6 +2578,51 @@
         "updated_at": "2026-09-28T17:56:16Z"
       }
     },
+    "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c": {
+      "archive": {
+        "artifact_id": 11053420680,
+        "artifact_name": "smart-money-36609235310-1",
+        "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36609235310/artifacts/11053420680",
+        "bytes": 5179307,
+        "expires_at": "2026-10-29T18:10:01Z",
+        "git_blob": "040d32dbbb1eba1ab3bcf57a751ca3e0ab99c3eb",
+        "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+        "origin_run": {
+          "conclusion": "success",
+          "created_at": "2026-09-29T18:02:46Z",
+          "event": "schedule",
+          "head_sha": "9b828f29566cfd4cc046a5143800cec546472f2e",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36609235310",
+          "id": 36609235310,
+          "operation": null,
+          "path": ".github/workflows/radar-smart-money.yml",
+          "run_attempt": 1,
+          "run_started_at": "2026-09-29T18:02:46Z",
+          "status": "completed",
+          "updated_at": "2026-09-29T18:10:48Z"
+        },
+        "read_path": "sources/artifacts/b242ab47f6e55e918a67e0b9f68ac8823f3584071443225d795ebc8ceb4ec8b0.zip",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "sha256": "b242ab47f6e55e918a67e0b9f68ac8823f3584071443225d795ebc8ceb4ec8b0"
+      },
+      "capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
+      "cutoff": "2026-09-29T18:09:30.081140+00:00",
+      "reading_commit": null,
+      "run": {
+        "conclusion": "success",
+        "created_at": "2026-09-29T18:02:46Z",
+        "event": "schedule",
+        "head_sha": "9b828f29566cfd4cc046a5143800cec546472f2e",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36609235310",
+        "id": 36609235310,
+        "operation": null,
+        "path": ".github/workflows/radar-smart-money.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-09-29T18:02:46Z",
+        "status": "completed",
+        "updated_at": "2026-09-29T18:10:48Z"
+      }
+    },
     "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb": {
       "archive": {
         "artifact_id": 10896403657,
@@ -2511,45 +2671,45 @@
   },
   "reading_freshness": "RECENT_CAPTURE_NOT_EACH_SOURCE_FRESHNESS",
   "relay_reading": {
-    "current_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
+    "current_status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "diagnostics": {},
-    "previous_status": "EXACT_PREVIOUS_SUPPLEMENT"
+    "previous_status": "NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE"
   },
   "relay_supplement": {
-    "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
-    "cutoff": "2026-09-28T17:56:12.498748+00:00",
+    "current_run_status": "PARTIAL_WITH_EXPLICIT_GAPS",
+    "cutoff": "2026-09-29T18:10:42.699619+00:00",
     "family_coverage": {
       "hm_detail": {
-        "row_count": 220,
-        "status": "SUCCESS"
+        "row_count": 0,
+        "status": "RATE_LIMIT"
       },
       "hm_list": {
         "row_count": 117,
         "status": "SUCCESS"
       },
       "report_rc": {
-        "row_count": 135,
-        "status": "PARTIAL_DAILY_PAGES"
+        "row_count": 0,
+        "status": "UNAVAILABLE_DAILY_PAGES"
       },
       "top_inst": {
         "row_count": 0,
-        "status": "MALFORMED_RESPONSE"
+        "status": "NOT_ATTEMPTED_SERVICE_STOP"
       },
       "top_list": {
         "row_count": 0,
-        "status": "MALFORMED_RESPONSE"
+        "status": "NOT_ATTEMPTED_SERVICE_STOP"
       }
     },
-    "market_session": "2026-09-28",
+    "market_session": "2026-09-29",
     "meaning": "SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE",
-    "reading_relation": "PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT",
+    "reading_relation": "CURRENT_SOURCE_RUN",
     "relay_host": "https://pcd.mobcvb.cn/tushare/pro",
     "status": "PARTIAL_WITH_EXPLICIT_GAPS"
   },
   "seat_label_binding": "VENDOR_LABELS_AND_ORIGINAL_SEATS_SEPARATE; NO_UNPROVEN_PERSON_JOIN",
   "status": "READY",
   "stock_price_gate_required": false,
-  "target_date": "2026-09-29",
+  "target_date": "2026-09-30",
   "top_ten_changes": {
     "ambiguous_companies": [
       "000573.SZ",
@@ -2559,6 +2719,14 @@
     ],
     "departure_examples": [
       {
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000001.SZ"
+      },
+      {
         "actor_id": "EM:HOLDER:10196008",
         "actor_name": "中国证券金融股份有限公司",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
@@ -2567,16 +2735,8 @@
         "ticker": "000001.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:510300",
-        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "ticker": "000001.SZ"
-      },
-      {
-        "actor_id": "EM:HOLDER:510300",
-        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
+        "actor_id": "EM:HOLDER:510310",
+        "actor_name": "中国建设银行股份有限公司-易方达沪深300交易型开放式指数发起式证券投资基金",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2591,8 +2751,8 @@
         "ticker": "000002.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:510310",
-        "actor_name": "中国建设银行股份有限公司-易方达沪深300交易型开放式指数发起式证券投资基金",
+        "actor_id": "EM:HOLDER:510300",
+        "actor_name": "中国工商银行股份有限公司-华泰柏瑞沪深300交易型开放式指数证券投资基金",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2623,6 +2783,14 @@
         "ticker": "000007.SZ"
       },
       {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:陈春飞",
+        "actor_name": "陈春飞",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000008.SZ"
+      },
+      {
         "actor_id": "EM:ISSUER_NAME:000008.SZ:张晓",
         "actor_name": "张晓",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
@@ -2639,20 +2807,20 @@
         "ticker": "000008.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000008.SZ:陈春飞",
-        "actor_name": "陈春飞",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "ticker": "000008.SZ"
-      },
-      {
         "actor_id": "EM:HOLDER:510500",
         "actor_name": "中国农业银行股份有限公司-中证500交易型开放式指数证券投资基金",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "ticker": "000009.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:王飞",
+        "actor_name": "王飞",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "ticker": "000010.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000010.SZ:陈瑞钦",
@@ -2665,14 +2833,6 @@
       {
         "actor_id": "EM:ISSUER_NAME:000010.SZ:盛媛媛",
         "actor_name": "盛媛媛",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "ticker": "000010.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:000010.SZ:王飞",
-        "actor_name": "王飞",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2711,8 +2871,8 @@
         "ticker": "000014.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000014.SZ:李文聪",
-        "actor_name": "李文聪",
+        "actor_id": "EM:ISSUER_NAME:000014.SZ:陈晓跃",
+        "actor_name": "陈晓跃",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
@@ -2723,15 +2883,6 @@
     "entries": 14297,
     "entry_examples": [
       {
-        "actor_id": "EM:HOLDER:70428875",
-        "actor_name": "瑞众人寿保险有限责任公司-万能产品",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "7.010991E+7",
-        "ticker": "000001.SZ"
-      },
-      {
         "actor_id": "EM:HOLDER:70428864",
         "actor_name": "瑞众人寿保险有限责任公司-自有资金",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2741,13 +2892,13 @@
         "ticker": "000001.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000002.SZ:徐小雅",
-        "actor_name": "徐小雅",
+        "actor_id": "EM:HOLDER:70428875",
+        "actor_name": "瑞众人寿保险有限责任公司-万能产品",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "30475236",
-        "ticker": "000002.SZ"
+        "shares": "7.010991E+7",
+        "ticker": "000001.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000002.SZ:吕强",
@@ -2768,6 +2919,15 @@
         "ticker": "000002.SZ"
       },
       {
+        "actor_id": "EM:ISSUER_NAME:000002.SZ:徐小雅",
+        "actor_name": "徐小雅",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "30475236",
+        "ticker": "000002.SZ"
+      },
+      {
         "actor_id": "EM:ISSUER_NAME:000006.SZ:施清荣",
         "actor_name": "施清荣",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2775,15 +2935,6 @@
         "prior_period": "2026-03-31",
         "shares": "6.2043E+6",
         "ticker": "000006.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:000007.SZ:李丁聪",
-        "actor_name": "李丁聪",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "3.5105E+6",
-        "ticker": "000007.SZ"
       },
       {
         "actor_id": "EM:HOLDER:10000422073",
@@ -2795,13 +2946,13 @@
         "ticker": "000007.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000008.SZ:郭俊锋",
-        "actor_name": "郭俊锋",
+        "actor_id": "EM:ISSUER_NAME:000007.SZ:李丁聪",
+        "actor_name": "李丁聪",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "17003249",
-        "ticker": "000008.SZ"
+        "shares": "3.5105E+6",
+        "ticker": "000007.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000008.SZ:周永杰",
@@ -2819,6 +2970,15 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "7.637E+6",
+        "ticker": "000008.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000008.SZ:郭俊锋",
+        "actor_name": "郭俊锋",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "17003249",
         "ticker": "000008.SZ"
       },
       {
@@ -2840,15 +3000,6 @@
         "ticker": "000010.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000010.SZ:徐礼州",
-        "actor_name": "徐礼州",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "4.4165E+6",
-        "ticker": "000010.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:000010.SZ:唐小晖",
         "actor_name": "唐小晖",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2858,13 +3009,13 @@
         "ticker": "000010.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000011.SZ:王道虎",
-        "actor_name": "王道虎",
+        "actor_id": "EM:ISSUER_NAME:000010.SZ:徐礼州",
+        "actor_name": "徐礼州",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "2433551",
-        "ticker": "000011.SZ"
+        "shares": "4.4165E+6",
+        "ticker": "000010.SZ"
       },
       {
         "actor_id": "EM:ISSUER_NAME:000011.SZ:王瑾",
@@ -2873,6 +3024,15 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "1.63E+6",
+        "ticker": "000011.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:000011.SZ:王道虎",
+        "actor_name": "王道虎",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2433551",
         "ticker": "000011.SZ"
       },
       {
@@ -2885,15 +3045,6 @@
         "ticker": "000012.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:000014.SZ:李星达",
-        "actor_name": "李星达",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "9.646E+5",
-        "ticker": "000014.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:000014.SZ:姚伟",
         "actor_name": "姚伟",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -2903,12 +3054,12 @@
         "ticker": "000014.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:10137791",
-        "actor_name": "J.P.Morgan Securities PLC-自有资金",
+        "actor_id": "EM:ISSUER_NAME:000014.SZ:李星达",
+        "actor_name": "李星达",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "1098792",
+        "shares": "9.646E+5",
         "ticker": "000014.SZ"
       },
       {
@@ -2918,6 +3069,15 @@
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "9.636E+5",
+        "ticker": "000014.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10137791",
+        "actor_name": "J.P.Morgan Securities PLC-自有资金",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "1098792",
         "ticker": "000014.SZ"
       },
       {
@@ -2957,21 +3117,21 @@
         "ticker": "000016.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:77012413",
-        "actor_name": "深圳中华自行车(集团)股份有限公司破产企业财产处置专用账户",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-06-30",
-        "prior_period": "2026-03-31",
-        "shares": "2602402",
-        "ticker": "000017.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:000017.SZ:徐胜利",
         "actor_name": "徐胜利",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
         "shares": "2.5369E+6",
+        "ticker": "000017.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:77012413",
+        "actor_name": "深圳中华自行车(集团)股份有限公司破产企业财产处置专用账户",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-06-30",
+        "prior_period": "2026-03-31",
+        "shares": "2602402",
         "ticker": "000017.SZ"
       },
       {
@@ -2984,12 +3144,12 @@
         "ticker": "000019.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:10429689",
-        "actor_name": "高盛公司有限责任公司",
+        "actor_id": "EM:ISSUER_NAME:000020.SZ:陈惜如",
+        "actor_name": "陈惜如",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-06-30",
         "prior_period": "2026-03-31",
-        "shares": "1616017",
+        "shares": "1.5605E+6",
         "ticker": "000020.SZ"
       }
     ],
