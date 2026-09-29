@@ -173,14 +173,15 @@ def test_month_boundary_dates_identity_and_existing_output_are_checked_before_ne
     with pytest.raises(ValueError):g.plan('arbitrary',ASOF)
 
 
-def test_workflow_is_finite_manual_main_ci_gated_and_credential_free():
+def test_workflow_is_finite_daily_main_ci_gated_and_credential_free():
     root=Path(__file__).resolve().parents[1]
     src=(root/'.github/workflows/radar-global-public.yml').read_text()
-    assert 'workflow_dispatch:' in src and 'schedule:' not in src and 'secrets.' not in src
+    assert 'workflow_dispatch:' in src and 'schedule:' in src and src.count('cron:') == 4 and 'secrets.' not in src
     assert 'contents: write' not in src and 'actions: write' not in src
     assert 'github.run_attempt == 1' in src and 'EXPECTED_CODE' in src and 'ci.yml' in src
     assert 'ref: ${{ github.sha }}' in src and 'persist-credentials: false' in src
-    assert 'global-public-${{ inputs.family }}-${{ github.run_id }}-${{ github.run_attempt }}' in src
+    assert 'name: global-public-${{ inputs.family ||' in src
+    assert "}}-${{ github.run_id }}-${{ github.run_attempt }}" in src
 
 
 def test_actual_http_adapter_uses_no_credentials_proxy_retry_or_redirect(monkeypatch):
@@ -214,3 +215,15 @@ def test_interrupted_checkpoint_replays_as_partial_not_completed(tmp_path):
     cap['capture_hash']=g.seal(cap);files['capture.json']=g.encoded(cap)
     report=g.replay(files,IDENT,TIME)
     assert report['status']=='PARTIAL' and report['available_values']==1
+
+
+@pytest.mark.parametrize("event", ["workflow_dispatch", "schedule"])
+def test_authorized_daily_identity_preserves_real_event(event):
+    candidate = {**IDENT, "event": event}
+    g.validate_identity(candidate)
+    assert candidate["event"] == event
+    for wrong in ("push", "pull_request", "workflow_run"):
+        with pytest.raises(ValueError):
+            g.validate_identity({**candidate, "event": wrong})
+    with pytest.raises(ValueError):
+        g.validate_identity({**candidate, "ref": "refs/heads/other"})

@@ -212,11 +212,23 @@ def test_family_is_explicit_and_no_generic_source_parameters():
     assert all(set(s["params"]) == {"ts_code", "start_date", "end_date"} for s in g.plan("indices", ASOF))
 
 
-def test_manual_workflow_is_read_only_main_only_and_has_no_schedule():
+def test_workflow_is_read_only_main_only_and_has_bounded_daily_schedule():
     source = (Path(__file__).resolve().parents[1] / ".github/workflows/radar-global-market.yml").read_text()
-    assert "workflow_dispatch:" in source and "schedule:" not in source
+    assert "workflow_dispatch:" in source and "schedule:" in source and source.count("cron:") == 2
     assert "contents: write" not in source and "actions: write" not in source
     assert "github.run_attempt == 1" in source and "refs/heads/main" in source
     assert "EXPECTED_CODE" in source and "head_sha" in source and "ci.yml" in source
     assert "TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}" in source
     assert "global-market-${{ inputs.family }}-${{ github.run_id }}-${{ github.run_attempt }}" in source
+
+
+@pytest.mark.parametrize("event", ["workflow_dispatch", "schedule"])
+def test_authorized_daily_identity_preserves_real_event(event):
+    candidate = {**IDENTITY, "event": event}
+    g.validate_identity(candidate)
+    assert candidate["event"] == event
+    for wrong in ("push", "pull_request", "workflow_run"):
+        with pytest.raises(ValueError):
+            g.validate_identity({**candidate, "event": wrong})
+    with pytest.raises(ValueError):
+        g.validate_identity({**candidate, "ref": "refs/heads/other"})

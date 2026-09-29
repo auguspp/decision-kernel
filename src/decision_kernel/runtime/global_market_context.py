@@ -66,7 +66,7 @@ def validate_identity(value):
     require(isinstance(value, dict) and set(value) == {
         "repository", "workflow", "ref", "event", "code_commit", "run_id", "attempt"}, "GM_IDENTITY")
     require(value["repository"] == REPOSITORY and value["workflow"] == WORKFLOW
-            and value["ref"] == "refs/heads/main" and value["event"] == "workflow_dispatch"
+            and value["ref"] == "refs/heads/main" and value["event"] in {"workflow_dispatch", "schedule"}
             and type(value["attempt"]) is int and value["attempt"] == 1
             and type(value["run_id"]) is int and value["run_id"] > 0
             and isinstance(value["code_commit"], str)
