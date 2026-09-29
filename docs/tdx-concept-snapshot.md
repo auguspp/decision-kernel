@@ -238,3 +238,106 @@ To retire this extension, remove the optional reader/projection, its Workbench
 panel/import, dedicated tests/scenes and the no-longer-consumed install extra in
 one normal change. Keep original capture/replay, old archives, shared Stock and
 company readers, and historical receipts. No persistent state requires migration.
+
+
+## Optional same-source 5/20/60 paths — Concept #645
+
+The same existing daily capture now packages the unchanged nine-file v1 tree
+under `snapshot/` and an optional `trend/` sibling. Old flat archives remain
+readable without a fake long-history result. No original capture fingerprint,
+1/5/10 calculation, member parser, clock owner, schedule or notification changes.
+No manual source dispatch is performed merely to obtain an acceptance sample.
+
+After the original snapshot is qualified, `tdx_concept_trend` connects once to
+that snapshot's already-selected adopted TDX host, with the same installed wheel,
+no fresh host probe/preparation and no source retry. The existing SDK's public
+`bars.get` requests one page of at most126 daily bars for every original Concept
+and `sh000300` (沪深300), with explicit `kind=index`, `adjust=None`, `all_pages=False`.
+This is one SDK batch, **not one network request**: it adds one history request
+per Concept plus the benchmark; concurrency is capped by the existing four
+connections. It does not introduce a second source workflow or data provider.
+
+The actual inspected upstream remains eltdx3.2.2 at
+`d19ac86f2bae7565660a89baf94a3fcc531fac93`: `api/bars.py`, `models/kline.py` and
+`docs/methods/7709-K线周期线.md`. SDK period and adjustment identities are checked;
+the extension retains the actual returned aware times and integer milli-closes,
+not reconstructed float prices. **Custody is explicitly extracted SDK fields,
+not full Kline models or raw7709 frames.** The original source models/files stay
+intact in `snapshot/`. This is a thin consumer of the already-adopted SDK, not a
+new protocol parser. The personal noncommercial license boundary above remains.
+
+The canonical source file binds actual acquisition clocks, installed wheel,
+selected host, request parameters and complete requested identities. Each usable
+Concept must match the same returned benchmark-session suffix, end on the source
+session, and match *every* date/close retained by its original short snapshot.
+There is no filling, calendar-day substitution, taxonomy fusion, stale-success
+fallback, or joining disparate histories. Returned benchmark dates establish the
+observed comparison grid, not independent exchange-calendar certification.
+Malformed benchmark/identity makes the optional projection unavailable; a bad
+Concept path stays visible with a local gap. A young Concept can retain available
+5/20-day paths without inventing60-day history or a long phase.
+
+Existing `sector_radar._return_over` and `_persistence` supply arithmetic:
+index return and benchmark return are separate fractions; excess is their
+difference.20-day excess acceleration is current20-day excess minus its value
+five observed sessions earlier. The positive20-day excess run and left-censor
+flag are retained; this is not the true age of a theme or an economic judgment.
+All historical comparisons are made from this acquisition's current catalogue,
+not a claim that the catalogue or a signal was known at the earlier date.
+
+### Explicit descriptive phases, not an investment score
+
+A phase requires a comparable60-day path, prior-session20-day excess and the
+five-session change of20-day excess. Otherwise it is UNKNOWN. With those inputs:
+
+- `EMERGING`:20-day excess has crossed from nonpositive to positive since the
+  preceding returned session. The label names this condition, not first discovery.
+- `STRENGTHENING`:20-day excess was already positive;5-day excess and20-day excess
+  acceleration are positive. It can still have a negative absolute return.
+- `MATURE_OR_DIVERGING`:20-day excess remains positive, but5-day excess is
+  nonpositive or20-day acceleration is negative. The displayed term is
+  强中分歧, **not proof of economic maturity**.
+- `PERSISTENT`:20-day excess remains positive without further acceleration under
+  the above partition.
+- `WEAKENING_OR_EXIT`: either20-day excess crossed out of positive territory, or
+  nonpositive20-day excess is still weakening. Separate reason codes and wording
+  distinguish an actual observed exit from continued weakness.
+- `NOT_POSITIVE`: no positive20-day state and no observed weakening under those
+  conditions. A short rebound is not called a long-term reversal.
+
+No opaque total, percentile rank, sector threshold or business benefit is added.
+Every original Concept remains available, including negative and unknown paths.
+This implements descriptive relative-price phases within #645; it neither changes
+Research Method nor creates a new admission, Watch or investment condition.
+
+### Retention, reading and failure
+
+The original8-minute job timeout,8MiB per-file,16MiB combined capture and1MiB
+per-Workbench-file limits remain. The source reserves room for derived files
+before retaining the optional history; exceeding the bound is an explicit gap.
+`INCOMPLETE_LONG_HISTORY` is a retained source failure with a reason and available
+inputs, **not a successful long path**, while the original snapshot may remain
+qualified. No `continue-on-error`, retry loop or fallback producer is added.
+
+Normal publisher supports both archive layouts and independently replays the
+original tree, member projection and optional history. Exact source identity,
+implementation and inventory hashes, run clocks and derived bytes must agree.
+Long-history tampering or optional retention failure leaves original quotes and
+members readable. The sameR carries compact `trend/trend.json`, `summary.md` and
+`capture.json`; the full extracted history stays in the exact source ZIP. A failed
+capture may retain only its receipt in the compact reading. No failed receipt is
+promoted into a phase; an old flat archive explicitly has no captured long path.
+
+Workbench reads the optional file using existing `Reading.readFile`/Web Crypto,
+shows phase and run-length wording, and expands index/benchmark/excess5/20/60-day
+values on demand. Source and comparison dates remain visible; oldR responses
+cannot overwrite a new reading. Members, overlaps and company research use the
+existing panel. Brief can follow the same fixedR README and detail references;
+native task adoption, actual source delivery and natural Brief use are separate
+facts, not inferred from this code or a synthetic browser run.
+
+Reuse/decision and current acceptance remain in #645, starting at
+[5881010177](https://github.com/auguspp/decision-kernel/issues/645#issuecomment-5881010177).
+Retiring this extension removes only the same-workflow history step, trend module,
+optional reader/renderer and dedicated tests/scenes together; preserve v1 replay,
+membership, original source/Research history and the legacy archive reader.
