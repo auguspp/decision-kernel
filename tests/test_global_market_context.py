@@ -219,7 +219,8 @@ def test_workflow_is_read_only_main_only_and_has_bounded_daily_schedule():
     assert "github.run_attempt == 1" in source and "refs/heads/main" in source
     assert "EXPECTED_CODE" in source and "head_sha" in source and "ci.yml" in source
     assert "TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}" in source
-    assert "global-market-${{ inputs.family }}-${{ github.run_id }}-${{ github.run_attempt }}" in source
+    assert "name: global-market-${{ inputs.family ||" in source
+    assert "}}-${{ github.run_id }}-${{ github.run_attempt }}" in source
 
 
 @pytest.mark.parametrize("event", ["workflow_dispatch", "schedule"])
