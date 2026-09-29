@@ -175,7 +175,7 @@
       },
       "read_policy": "ON_DEMAND_ARCHIVE",
       "archive_source": {
-        "path": "docs/readings/000920-profit-bridge-2026-09-21/workpaper.md",
+        "path": "docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md",
         "ref": "69305a766eb2cc4b09a6b1a6d4008625e54b8a3d",
         "git_blob": "771502c279982e6e6c3d7ff95ed0928a46cbbe73",
         "bytes": 14279,
