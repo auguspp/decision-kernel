@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "8ee597fad0ede7e263338a4f88e990e81356ebf194d12c66f4da0ec7ca9bace3",
+    "base_reading_hash": "63f000f85bc4e5d6fe6bde94f86b2e7cd7270a644b3d4682be87150f671e5dce",
     "companies": [
       {
         "automatic_admission": false,
@@ -52,7 +52,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -116,7 +116,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -180,7 +180,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -271,7 +271,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -335,7 +335,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -399,7 +399,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -463,7 +463,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -527,7 +527,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -591,7 +591,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -655,7 +655,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -746,7 +746,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -810,7 +810,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -874,7 +874,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -938,7 +938,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1002,7 +1002,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1066,7 +1066,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1130,7 +1130,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1221,7 +1221,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1285,7 +1285,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1349,7 +1349,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1413,7 +1413,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1477,7 +1477,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1541,7 +1541,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1605,7 +1605,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1669,7 +1669,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1733,7 +1733,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1797,7 +1797,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1861,7 +1861,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1925,7 +1925,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -1989,7 +1989,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2053,7 +2053,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2117,7 +2117,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2181,7 +2181,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2245,7 +2245,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2309,7 +2309,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2373,7 +2373,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2437,7 +2437,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2530,7 +2530,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2658,7 +2658,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2752,7 +2752,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2845,7 +2845,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -2938,7 +2938,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3032,7 +3032,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3126,7 +3126,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3209,7 +3209,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3342,7 +3342,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3435,7 +3435,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3528,7 +3528,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3621,7 +3621,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3715,7 +3715,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3797,7 +3797,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -3890,7 +3890,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4007,7 +4007,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4100,7 +4100,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4194,7 +4194,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4287,7 +4287,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4380,7 +4380,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4474,7 +4474,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4556,7 +4556,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4649,7 +4649,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4741,7 +4741,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4834,7 +4834,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -4927,7 +4927,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5034,7 +5034,7 @@
               "thscode": "000980.SZ"
             }
           ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5127,7 +5127,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5220,7 +5220,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5313,7 +5313,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5406,7 +5406,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5488,7 +5488,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5581,7 +5581,7 @@
         ],
         "stock": {
           "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "lane_health": "IN_PROGRESS",
           "market_session": "2026-09-28",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
           "source": {
@@ -5631,7 +5631,7 @@
       "with_saved_stock_disposition": 1
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-29T10:24:07.721208+00:00",
+    "generated_at": "2026-09-29T10:26:14.598910+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -5662,7 +5662,7 @@
           "updated_at": "2026-09-18T09:21:06Z"
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
-        "pending_blob_writes": 11,
+        "pending_blob_writes": 2,
         "retained_file_count": 117,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
@@ -5825,5 +5825,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "dfb06c4b1a96d2f0726ba10dfb91f59ab46b0b57a76c4ca6e2b0061915e115dc"
+  "projection_hash": "102f493d9679d15618c3e12209c8a5b2128f50f66f16de3a01e2c0017bb07623"
 }

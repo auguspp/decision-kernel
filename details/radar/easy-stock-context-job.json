@@ -1,327 +1,327 @@
 {
   "jobs": [
     {
-      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/108886845280",
-      "completed_at": "2026-09-28T10:26:59Z",
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/109362829386",
+      "completed_at": "2026-09-29T10:24:18Z",
       "conclusion": "success",
-      "created_at": "2026-09-28T10:26:40Z",
+      "created_at": "2026-09-29T10:23:35Z",
       "head_branch": "main",
-      "head_sha": "d16e014de05ed3b1405a9b6de2b98f689df4c196",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36409737214/job/108886845280",
-      "id": 108886845280,
-      "labels": [
-        "ubuntu-24.04"
-      ],
-      "name": "capture",
-      "node_id": "CR_kwDOUK1L0c8AAAAZWilnYA",
-      "run_attempt": 1,
-      "run_id": 36409737214,
-      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36409737214",
-      "runner_group_id": 0,
-      "runner_group_name": "GitHub Actions",
-      "runner_id": 1000004409,
-      "runner_name": "GitHub Actions 1000004409",
-      "started_at": "2026-09-28T10:26:43Z",
-      "status": "completed",
-      "steps": [
-        {
-          "completed_at": "2026-09-28T10:26:44Z",
-          "conclusion": "success",
-          "name": "Set up job",
-          "number": 1,
-          "started_at": "2026-09-28T10:26:43Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:45Z",
-          "conclusion": "success",
-          "name": "Run actions/checkout@v7",
-          "number": 2,
-          "started_at": "2026-09-28T10:26:44Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:45Z",
-          "conclusion": "success",
-          "name": "Run actions/setup-python@v7",
-          "number": 3,
-          "started_at": "2026-09-28T10:26:45Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:46Z",
-          "conclusion": "success",
-          "name": "Require exact independent main CI before source access",
-          "number": 4,
-          "started_at": "2026-09-28T10:26:45Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:53Z",
-          "conclusion": "success",
-          "name": "Install existing source dependencies",
-          "number": 5,
-          "started_at": "2026-09-28T10:26:46Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:56Z",
-          "conclusion": "success",
-          "name": "Capture one complete returned breadth snapshot",
-          "number": 6,
-          "started_at": "2026-09-28T10:26:53Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:57Z",
-          "conclusion": "success",
-          "name": "Retain original source attempt and explicit gaps",
-          "number": 7,
-          "started_at": "2026-09-28T10:26:56Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:57Z",
-          "conclusion": "success",
-          "name": "Post Run actions/setup-python@v7",
-          "number": 13,
-          "started_at": "2026-09-28T10:26:57Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:57Z",
-          "conclusion": "success",
-          "name": "Post Run actions/checkout@v7",
-          "number": 14,
-          "started_at": "2026-09-28T10:26:57Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:57Z",
-          "conclusion": "success",
-          "name": "Complete job",
-          "number": 15,
-          "started_at": "2026-09-28T10:26:57Z",
-          "status": "completed"
-        }
-      ],
-      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/108886845280",
-      "workflow_name": "radar-industry-breadth"
-    },
-    {
-      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/108886845363",
-      "completed_at": "2026-09-28T10:27:10Z",
-      "conclusion": "success",
-      "created_at": "2026-09-28T10:26:40Z",
-      "head_branch": "main",
-      "head_sha": "d16e014de05ed3b1405a9b6de2b98f689df4c196",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36409737214/job/108886845363",
-      "id": 108886845363,
-      "labels": [
-        "ubuntu-24.04"
-      ],
-      "name": "public-context",
-      "node_id": "CR_kwDOUK1L0c8AAAAZWilnsw",
-      "run_attempt": 1,
-      "run_id": 36409737214,
-      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36409737214",
-      "runner_group_id": 0,
-      "runner_group_name": "GitHub Actions",
-      "runner_id": 1000004407,
-      "runner_name": "GitHub Actions 1000004407",
-      "started_at": "2026-09-28T10:26:42Z",
-      "status": "completed",
-      "steps": [
-        {
-          "completed_at": "2026-09-28T10:26:43Z",
-          "conclusion": "success",
-          "name": "Set up job",
-          "number": 1,
-          "started_at": "2026-09-28T10:26:42Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:44Z",
-          "conclusion": "success",
-          "name": "Run actions/checkout@v7",
-          "number": 2,
-          "started_at": "2026-09-28T10:26:43Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:45Z",
-          "conclusion": "success",
-          "name": "Run actions/setup-python@v7",
-          "number": 3,
-          "started_at": "2026-09-28T10:26:44Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:45Z",
-          "conclusion": "success",
-          "name": "Require exact independent main CI before source access",
-          "number": 4,
-          "started_at": "2026-09-28T10:26:45Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:26:50Z",
-          "conclusion": "success",
-          "name": "Install existing source dependencies",
-          "number": 5,
-          "started_at": "2026-09-28T10:26:45Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:27:08Z",
-          "conclusion": "success",
-          "name": "Capture bounded public context",
-          "number": 6,
-          "started_at": "2026-09-28T10:26:50Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:27:08Z",
-          "conclusion": "success",
-          "name": "Upload public context original attempts",
-          "number": 7,
-          "started_at": "2026-09-28T10:27:08Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:27:09Z",
-          "conclusion": "success",
-          "name": "Post Run actions/setup-python@v7",
-          "number": 13,
-          "started_at": "2026-09-28T10:27:08Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:27:09Z",
-          "conclusion": "success",
-          "name": "Post Run actions/checkout@v7",
-          "number": 14,
-          "started_at": "2026-09-28T10:27:09Z",
-          "status": "completed"
-        },
-        {
-          "completed_at": "2026-09-28T10:27:09Z",
-          "conclusion": "success",
-          "name": "Complete job",
-          "number": 15,
-          "started_at": "2026-09-28T10:27:09Z",
-          "status": "completed"
-        }
-      ],
-      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/108886845363",
-      "workflow_name": "radar-industry-breadth"
-    },
-    {
-      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/108886845391",
-      "completed_at": "2026-09-28T10:27:19Z",
-      "conclusion": "success",
-      "created_at": "2026-09-28T10:26:40Z",
-      "head_branch": "main",
-      "head_sha": "d16e014de05ed3b1405a9b6de2b98f689df4c196",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36409737214/job/108886845391",
-      "id": 108886845391,
+      "head_sha": "e1bf4146d73b4aa2dbd0d6bc3882bed4a9b0a48f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36555280620/job/109362829386",
+      "id": 109362829386,
       "labels": [
         "ubuntu-24.04"
       ],
       "name": "industrial-fundamentals",
-      "node_id": "CR_kwDOUK1L0c8AAAAZWilnzw",
+      "node_id": "CR_kwDOUK1L0c8AAAAZdohYSg",
       "run_attempt": 1,
-      "run_id": 36409737214,
-      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36409737214",
+      "run_id": 36555280620,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36555280620",
       "runner_group_id": 0,
       "runner_group_name": "GitHub Actions",
-      "runner_id": 1000004410,
-      "runner_name": "GitHub Actions 1000004410",
-      "started_at": "2026-09-28T10:26:42Z",
+      "runner_id": 1000004650,
+      "runner_name": "GitHub Actions 1000004650",
+      "started_at": "2026-09-29T10:23:37Z",
       "status": "completed",
       "steps": [
         {
-          "completed_at": "2026-09-28T10:26:44Z",
+          "completed_at": "2026-09-29T10:23:40Z",
           "conclusion": "success",
           "name": "Set up job",
           "number": 1,
-          "started_at": "2026-09-28T10:26:43Z",
+          "started_at": "2026-09-29T10:23:38Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:26:45Z",
+          "completed_at": "2026-09-29T10:23:42Z",
           "conclusion": "success",
           "name": "Run actions/checkout@v7",
           "number": 2,
-          "started_at": "2026-09-28T10:26:44Z",
+          "started_at": "2026-09-29T10:23:40Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:26:46Z",
+          "completed_at": "2026-09-29T10:23:43Z",
           "conclusion": "success",
           "name": "Run actions/setup-python@v7",
           "number": 3,
-          "started_at": "2026-09-28T10:26:45Z",
+          "started_at": "2026-09-29T10:23:42Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:26:46Z",
+          "completed_at": "2026-09-29T10:23:45Z",
           "conclusion": "success",
           "name": "Require exact independent main CI before source access",
           "number": 4,
-          "started_at": "2026-09-28T10:26:46Z",
+          "started_at": "2026-09-29T10:23:43Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:26:51Z",
+          "completed_at": "2026-09-29T10:23:51Z",
           "conclusion": "success",
           "name": "Install existing source dependencies",
           "number": 5,
-          "started_at": "2026-09-28T10:26:46Z",
+          "started_at": "2026-09-29T10:23:45Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:27:16Z",
+          "completed_at": "2026-09-29T10:24:14Z",
           "conclusion": "success",
           "name": "Capture bounded industrial fundamentals independently",
           "number": 6,
-          "started_at": "2026-09-28T10:26:51Z",
+          "started_at": "2026-09-29T10:23:51Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:27:17Z",
+          "completed_at": "2026-09-29T10:24:15Z",
           "conclusion": "success",
           "name": "Retain independent industrial capture with per-source gaps",
           "number": 7,
-          "started_at": "2026-09-28T10:27:16Z",
+          "started_at": "2026-09-29T10:24:14Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:27:17Z",
+          "completed_at": "2026-09-29T10:24:15Z",
           "conclusion": "success",
           "name": "Post Run actions/setup-python@v7",
           "number": 13,
-          "started_at": "2026-09-28T10:27:17Z",
+          "started_at": "2026-09-29T10:24:15Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:27:17Z",
+          "completed_at": "2026-09-29T10:24:16Z",
           "conclusion": "success",
           "name": "Post Run actions/checkout@v7",
           "number": 14,
-          "started_at": "2026-09-28T10:27:17Z",
+          "started_at": "2026-09-29T10:24:15Z",
           "status": "completed"
         },
         {
-          "completed_at": "2026-09-28T10:27:17Z",
+          "completed_at": "2026-09-29T10:24:16Z",
           "conclusion": "success",
           "name": "Complete job",
           "number": 15,
-          "started_at": "2026-09-28T10:27:17Z",
+          "started_at": "2026-09-29T10:24:16Z",
           "status": "completed"
         }
       ],
-      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/108886845391",
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/109362829386",
+      "workflow_name": "radar-industry-breadth"
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/109362829522",
+      "completed_at": "2026-09-29T10:24:07Z",
+      "conclusion": "success",
+      "created_at": "2026-09-29T10:23:35Z",
+      "head_branch": "main",
+      "head_sha": "e1bf4146d73b4aa2dbd0d6bc3882bed4a9b0a48f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36555280620/job/109362829522",
+      "id": 109362829522,
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "name": "public-context",
+      "node_id": "CR_kwDOUK1L0c8AAAAZdohY0g",
+      "run_attempt": 1,
+      "run_id": 36555280620,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36555280620",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000004649,
+      "runner_name": "GitHub Actions 1000004649",
+      "started_at": "2026-09-29T10:23:37Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-09-29T10:23:38Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-09-29T10:23:38Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:40Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "started_at": "2026-09-29T10:23:38Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:40Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "started_at": "2026-09-29T10:23:40Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:41Z",
+          "conclusion": "success",
+          "name": "Require exact independent main CI before source access",
+          "number": 4,
+          "started_at": "2026-09-29T10:23:40Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:46Z",
+          "conclusion": "success",
+          "name": "Install existing source dependencies",
+          "number": 5,
+          "started_at": "2026-09-29T10:23:41Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:24:04Z",
+          "conclusion": "success",
+          "name": "Capture bounded public context",
+          "number": 6,
+          "started_at": "2026-09-29T10:23:46Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:24:05Z",
+          "conclusion": "success",
+          "name": "Upload public context original attempts",
+          "number": 7,
+          "started_at": "2026-09-29T10:24:04Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:24:05Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 13,
+          "started_at": "2026-09-29T10:24:05Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:24:05Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 14,
+          "started_at": "2026-09-29T10:24:05Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:24:05Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "started_at": "2026-09-29T10:24:05Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/109362829522",
+      "workflow_name": "radar-industry-breadth"
+    },
+    {
+      "check_run_url": "https://api.github.com/repos/auguspp/decision-kernel/check-runs/109362829694",
+      "completed_at": "2026-09-29T10:23:58Z",
+      "conclusion": "success",
+      "created_at": "2026-09-29T10:23:35Z",
+      "head_branch": "main",
+      "head_sha": "e1bf4146d73b4aa2dbd0d6bc3882bed4a9b0a48f",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36555280620/job/109362829694",
+      "id": 109362829694,
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "name": "capture",
+      "node_id": "CR_kwDOUK1L0c8AAAAZdohZfg",
+      "run_attempt": 1,
+      "run_id": 36555280620,
+      "run_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36555280620",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000004652,
+      "runner_name": "GitHub Actions 1000004652",
+      "started_at": "2026-09-29T10:23:38Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-09-29T10:23:40Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-09-29T10:23:39Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:42Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "started_at": "2026-09-29T10:23:40Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:42Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "started_at": "2026-09-29T10:23:42Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:43Z",
+          "conclusion": "success",
+          "name": "Require exact independent main CI before source access",
+          "number": 4,
+          "started_at": "2026-09-29T10:23:42Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:49Z",
+          "conclusion": "success",
+          "name": "Install existing source dependencies",
+          "number": 5,
+          "started_at": "2026-09-29T10:23:43Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:53Z",
+          "conclusion": "success",
+          "name": "Capture one complete returned breadth snapshot",
+          "number": 6,
+          "started_at": "2026-09-29T10:23:49Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:55Z",
+          "conclusion": "success",
+          "name": "Retain original source attempt and explicit gaps",
+          "number": 7,
+          "started_at": "2026-09-29T10:23:53Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:55Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 13,
+          "started_at": "2026-09-29T10:23:55Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:55Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 14,
+          "started_at": "2026-09-29T10:23:55Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-09-29T10:23:55Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "started_at": "2026-09-29T10:23:55Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/jobs/109362829694",
       "workflow_name": "radar-industry-breadth"
     }
   ],
