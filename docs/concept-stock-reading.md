@@ -51,18 +51,40 @@ Official primitives: [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaS
 and [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 No package, backend projection, external quote request or scheduler is added.
 
-The existing `workbench/browser/smoke.py` registers six scoped scenarios from
+The existing `workbench/browser/smoke.py` registers eight scoped scenarios from
 `concept_stock.py`: checked-subset reading/company drill-down, same-length tamper
 and no retry, old-R lateness, old-concept lateness, differing dates, and legacy
-absence. Each uses the original offline harness at desktop and narrow widths;
+absence, whole-catalog stage/search navigation, and short-only overview filtering.
+Each uses the original offline harness at desktop and narrow widths;
 all prior scenarios remain. Pure Node tests cover identity/coverage, exact decimal
 order, preserved non-qualified rows, explicit unknowns and lazy failure isolation.
 Synthetic scenes prove browser behavior, not source truth or natural delivery.
 
 On retirement remove concept-stock.mjs, its one Concept-page import/call, its Node
-tests, the six browser scenarios/import and this note together. Keep shared readers,
+tests, its scoped browser scenarios/import and this note together. Keep shared readers,
 original Stock qualification, source/member history and all prior failure records.
 Full-member leading ranks, natural long-history/Brief consumption, complete
 cross-source corroboration, Sites/phone and overall #645 acceptance remain separate.
 
 The existing `test_workbench_web.py` wrapper explicitly runs both Concept Node test files and syntax-checks both consumers; this also closes the previous omission of `concept-members.test.mjs` from its list. Backend test-identity counts do not count every nested Node case separately. Exact-head CI/browser, pinned-data checks, source adoption and actual Human use remain separate in #645.
+
+
+## Whole-catalog overview before drill-down
+
+The same Concept page now shows full-catalog up/down/flat/unknown counts for each
+original short window before the collapsed directory. Only an already-validated
+long-history body enables grouping by the existing `phaseText` descriptions;
+missing long history is not converted into invented phases. A new exit and an
+already weak path retain their distinct original reason labels. The two examples
+per group use source order, not rank; all grouped identities remain reachable.
+A native short-window selector and stage buttons filter the original complete
+directory; the former only filters saved return signs and never implies a phase.
+Search narrows that view,
+and “显示全部概念” clears both filters. These actions clear detached member details
+so an old asynchronous comparison cannot refill an unrelated selection. Summary
+denominators stay full-catalog, including unknowns, regardless of current search.
+Counts are overlapping concept entries, not independent opportunities. Signed
+zero stays flat and tiny decimal nonzero values retain their sign without a float
+conversion. No new phase policy, backend state, source read, dependency, schedule
+or authority is added. Retire these local summary/filter functions and their
+scoped tests together; keep the original phase, full directory and member readers.

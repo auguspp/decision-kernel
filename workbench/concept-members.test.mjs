@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {conceptView,membershipView,overlaps,stockStatus,trendView} from './concept-members.mjs';
+import {conceptView,membershipView,overlaps,stockStatus,trendView,conceptOverview} from './concept-members.mjs';
 const auth=Object.fromEntries(['research_authority','odds_authority','action_authority','investment_authority'].map(k=>[k,'NONE']));
 const tax='TDX_CATEGORY_CONCEPT_SOURCE_NATIVE_NOT_EASTMONEY_BK_OR_HITHINK_TI';
 export function fixture(){
@@ -72,4 +72,54 @@ for(const [name,damage] of [
   ['gap promoted',f=>f.trend.projection.observations[0].gap='SOURCE_FAILED']
 ])test('long-path rejection: '+name,()=>{
   const f=trendFixture();damage(f);assert.throws(()=>trendView(JSON.stringify(f.trend),f.savedTrend,conceptView(JSON.stringify(f.report),f.saved)));
+});
+
+
+test('overview counts the full source beyond the first page, preserving zero, negative zero and unknown',()=>{
+  const f=fixture(),before=JSON.stringify(f),o=conceptView(JSON.stringify(f.report),f.saved);
+  const values=['1','-2','0','-0.000',null,'0.'+'0'.repeat(350)+'1','-0.'+'0'.repeat(350)+'1'];
+  o.rows=Array.from({length:35},(_,i)=>({...o.rows[0],code:String(100000+i),periods:Object.fromEntries(
+    ['today','5d','10d'].map(k=>[k,{change_percent:values[i%values.length]}]))}));
+  const v=conceptOverview(o);assert.equal(v.total,35);assert.equal(v.groups,null);
+  for(const b of v.breadth){
+    assert.deepEqual([b.up,b.down,b.flat,b.unknown],[10,10,10,5]);
+    const ids=Object.values(b.codes).flat();assert.equal(ids.length,35);assert.equal(new Set(ids).size,35);
+    for(const side of ['up','down','flat','unknown'])assert.equal(b.codes[side].length,b[side]);
+  }
+  assert.equal(JSON.stringify(f),before);
+});
+
+test('overview reuses saved phases, keeps unknown and all identities, never short-return phase inference',()=>{
+  const f=trendFixture(),o=conceptView(JSON.stringify(f.report),f.saved),t=trendView(JSON.stringify(f.trend),f.savedTrend,o);
+  const before=JSON.stringify(f),v=conceptOverview(o,t);
+  assert.deepEqual(v.groups.map(g=>g.label),['持续强化','强中分歧','阶段未知']);
+  assert.deepEqual(v.groups.flatMap(g=>g.codes),['111111','222222','333333']);
+  // All short-period values are negative or unknown; they must not replace the saved phases.
+  assert.equal(v.breadth[0].down,2);assert.equal(v.breadth[0].unknown,1);
+  assert.equal(JSON.stringify(f),before);
+});
+
+test('overview examples keep source order while every grouped identity remains reachable',()=>{
+  const f=trendFixture(),o=conceptView(JSON.stringify(f.report),f.saved),t=trendView(JSON.stringify(f.trend),f.savedTrend,o);
+  for(const r of t.rows.values()){r.phase='STRENGTHENING';r.phase_reason='SAVED_DESCRIPTION';}
+  o.rows.reverse();const v=conceptOverview(o,t);
+  assert.deepEqual(v.groups[0].codes,['333333','222222','111111']);
+  assert.deepEqual(v.groups[0].examples,['TEST 3','TEST 2']);
+});
+
+test('overview distinguishes a new exit from an already weak path using the existing reason labels',()=>{
+  const f=trendFixture(),o=conceptView(JSON.stringify(f.report),f.saved),t=trendView(JSON.stringify(f.trend),f.savedTrend,o);
+  const a=t.rows.get('111111'),b=t.rows.get('222222');
+  a.phase=b.phase='WEAKENING_OR_EXIT';
+  a.phase_reason='TWENTY_DAY_EXCESS_EXITED_POSITIVE_STATE';
+  b.phase_reason='NONPOSITIVE_20D_EXCESS_STILL_WEAKENING_NOT_NEW_EXIT';
+  assert.deepEqual(conceptOverview(o,t).groups.map(g=>g.label),['20日相对强势条件已退出','相对走势仍弱，不是本次新退出','阶段未知']);
+});
+
+test('overview remains available without members or long history; unknown is not flat or quiet',()=>{
+  const f=fixture(),o=conceptView(JSON.stringify(f.report),f.saved);
+  for(const r of o.rows)for(const h of Object.values(r.periods))h.change_percent=null;
+  const v=conceptOverview(o);
+  assert.equal(v.groups,null);assert.equal(v.total,3);
+  for(const b of v.breadth)assert.deepEqual([b.up,b.down,b.flat,b.unknown],[0,0,0,3]);
 });
