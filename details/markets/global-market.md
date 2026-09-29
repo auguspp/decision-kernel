@@ -115,7 +115,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/943e1bfcb36b06fb7ff578c76aedc4946064d7ae41dc564616d27a896a0869e6.zip)
 
 ## 黄金与原油 · 供应商期货日线
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36596449889
 # 黄金与原油 · 供应商期货日线
@@ -143,7 +143,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/5e90a82ed61740ccf34e00eea0a0a902dc54b319e0e8b60b82705dfa064196f0.zip)
 
 ## Coinbase BTC / ETH 日线
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36596512923
 # Coinbase BTC / ETH 日线
