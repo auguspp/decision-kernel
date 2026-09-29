@@ -1,17 +1,17 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "15372410c240609892a2b76016d63061ab80dd57bead56aebb3d330914c2e92e",
+    "base_reading_hash": "87034fe40d0a40a5774ba2f0a095649c6aa0e4ab4bb3674c0b7a697fbfa868f5",
     "company_context_status": "SAME_READING_SAVED_CONTEXT",
     "company_source": {
-      "bytes": 323376,
-      "git_blob": "91f3cc35f63807815d4613fe3c04f7a8e4146bb6",
+      "bytes": 255102,
+      "git_blob": "2b9fdb985f0bbe1aa378f979c07272006c9f10dd",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "7d8d57d76da790105be76f2d54f7da693b25485d17580b74b55154ce58fa0e3b"
+      "sha256": "6b1961d40f00247a3280c654a29d33994df8ab8e54faef85143ec99ea1bbb0a9"
     },
     "config_hash": "5c772ab9e8b67f0916bd2fa493231e676988a6a6d846c823c3188425bf9b6bf5",
-    "generated_at": "2026-09-29T10:13:47.878734+00:00",
+    "generated_at": "2026-09-29T10:24:07.825322+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -378,7 +378,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-29T10:13:47.878734+00:00",
+              "cutoff": "2026-09-29T10:24:07.825322+00:00",
               "field_gaps": [
                 {
                   "amount_reconciled": true,
@@ -1150,7 +1150,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "4492097479870e0a83e470a5f7a60e7b7300fb07a39b6d89226c625b716d5c0a"
+            "projection_hash": "81eb24313bbb36ec229732bf484c03b41338f3d2985de50e20b50aff5291cbde"
           },
           {
             "projection": {
@@ -1480,7 +1480,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-29T10:13:47.878734+00:00",
+              "cutoff": "2026-09-29T10:24:07.825322+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -2239,7 +2239,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "f52ae28921d3edd9f3997dcf85b52dd0991baa77a392de3905ce0092607fe906"
+            "projection_hash": "64eb083dbfc9610ae1eae52046a043077cde8cc05cc8e967060473ace146a291"
           },
           {
             "projection": {
@@ -2569,7 +2569,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-09-29T10:13:47.878734+00:00",
+              "cutoff": "2026-09-29T10:24:07.825322+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -3328,7 +3328,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "aaf40d0f5f47ece591b82b78b9d44a609c23accee5ec36536bf18aa4492a2774"
+            "projection_hash": "659c1aa42b1d00e6a561d6eb27412f15d024069b76c5a3287ec58124b27cbe9f"
           }
         ],
         "status": "SAVED_SAMPLE_REBUILT"
@@ -3380,37 +3380,10 @@
         "result": {
           "projection": {
             "automatic_admission": false,
-            "companies": [
-              {
-                "automatic_admission": false,
-                "business_linkage": "NOT_ESTABLISHED",
-                "matches": [
-                  {
-                    "matched_names": [
-                      "中国船舶"
-                    ],
-                    "observation_id": "8835c013048f994ebc4b9470a34134cdb6f85a03fc4ebec7c8fa83f804964d05"
-                  }
-                ],
-                "qualification": "CONTEXT_ONLY",
-                "question_status": "NOT_FORMED",
-                "research": {
-                  "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-                  "references": [],
-                  "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-                  "status": "UNKNOWN_WITHIN_READ_SCOPE",
-                  "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
-                  "stock_business_states": []
-                },
-                "source_names": [
-                  "中国船舶"
-                ],
-                "thscode": "600150.SH"
-              }
-            ],
+            "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "c15e65995498ca7e18ccfcfc9777c4ebf53ae0629b98d722e463f31a7c1e79b1",
-            "cutoff": "2026-09-29T10:13:47.878734+00:00",
+            "company_reading_hash": "dfb06c4b1a96d2f0726ba10dfb91f59ab46b0b57a76c4ca6e2b0061915e115dc",
+            "cutoff": "2026-09-29T10:24:07.825322+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -13117,7 +13090,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "ff26dcbb24e2bc29d26d0c2ba8ae2df6dc8745961806518b3eb22d791d707e56"
+          "projection_hash": "e35a700df916ae99df4a8301b04ad2b90872940323c3333ea295ff3b505265ad"
         },
         "status": "SAVED_SAMPLE_REBUILT"
       }
@@ -13126,5 +13099,5 @@
     "signal_transition_authority": "NONE",
     "version": "saved-external-radar-reading-v1"
   },
-  "projection_hash": "5a5e11c2dd6aebe631daa9074041d678a79372b4da89dbabce78f2f5d2f2da47"
+  "projection_hash": "3aa63db6df844fb21130dbbff53cdc05867dbe8b9a7f9739ea9e54e683874047"
 }
