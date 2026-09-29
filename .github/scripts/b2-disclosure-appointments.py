@@ -1,4 +1,4 @@
-"""Capture six explicitly scoped B2 appointment responses with the original Relay.
+"""Capture the five unqueried B2 appointments; preserve the first capture failure.
 
 Source preparation only: no date certification, calendar/publisher mutation,
 provider fallback, research, notification, or investment authority.
@@ -32,6 +32,25 @@ SCOPE = {
 }
 CLIENT_BLOB = "d2ee02a81648eafe7204a47e7f8e41b56c3c48fd"
 WORKFLOW = ".github/workflows/b2-disclosure-appointments.yml"
+PREDECESSOR = {
+    "run_id": 36585190686,
+    "path": "docs/readings/2026-09-29-b2-relay-36585190686/capture.json",
+    "sha256": "3c17afd4e266a842a71667c9b68717fb87c08f1c0a4056c478300c3dac8a4053",
+}
+
+
+def unqueried_companies():
+    """Only this exact failed batch; never select a latest result or replay Tianavi."""
+    raw = (Path(__file__).resolve().parents[2] / PREDECESSOR["path"]).read_bytes()
+    relay.require(sha256(raw).hexdigest() == PREDECESSOR["sha256"], "B2_PREDECESSOR_BYTES")
+    prior = relay.decode(raw)
+    relay.require(prior["identity"]["GITHUB_RUN_ID"] == str(PREDECESSOR["run_id"])
+                  and prior["status"] == "STOPPED_WITH_GAPS"
+                  and [(o["code"], o["status"]) for o in prior["outcomes"]] ==
+                  [(COMPANIES[0][0], "FIELD_OR_COVERAGE_GAP_RAW_RETAINED")] +
+                  [(c[0], "NOT_QUERIED_AFTER_STOP") for c in COMPANIES[1:]],
+                  "B2_PREDECESSOR_SCOPE")
+    return COMPANIES[1:]
 
 
 def encoded(value):
@@ -79,19 +98,20 @@ def inspect_body(raw, code):
 
 
 def capture(output, identity, *, request=None, clock=relay.now):
-    """At most six original client calls; stop the remaining batch on any failure."""
+    """Only the five unqueried objects. A missing modification column stays a gap."""
     request = relay.request if request is None else request
+    pending = unqueried_companies()  # Before any directory or source effect.
     output = Path(output)
     output.mkdir()  # Fails before requests when this directory already exists.
     plan = [{"code": code, "name": name, "relationship": relation,
              "api": "disclosure_date", "params": {"ts_code": code, "end_date": PERIOD,
              "fields": ",".join(FIELDS), "limit": "100"}}
-            for code, name, relation in COMPANIES]
-    save(output / "plan.json", encoded({"identity": identity, "scope_source": SCOPE,
+            for code, name, relation in pending]
+    save(output / "plan.json", encoded({"identity": identity, "scope_source": SCOPE, "predecessor": PREDECESSOR,
          "original_client_blob": CLIENT_BLOB, "source_host": relay.BASE,
          "source_identity": "THIRD_PARTY_RELAY_NOT_OFFICIAL_TUSHARE_OR_EXCHANGE",
          "started_at": clock(), "requests": plan, "investment_authority": "NONE"}))
-    outcomes, stopped = [], False
+    outcomes, stopped, field_gap = [], False, False
     for spec in plan:
         code = spec["code"]
         outcome = {"code": code, "status": "NOT_QUERIED_AFTER_STOP", "receipt": None}
@@ -142,16 +162,22 @@ def capture(output, identity, *, request=None, clock=relay.now):
                     record["status"] = ("FIELD_OR_COVERAGE_GAP_RAW_RETAINED"
                                         if record["table"]["issues"] else
                                         record["table"]["coverage"])
-                    stopped = bool(record["table"]["issues"])
+                    table = record["table"]
+                    modification_only = (table["missing_fields"] == ["modify_date"]
+                                         and table["issues"] == ["MISSING_REQUESTED_FIELDS"])
+                    field_gap = field_gap or modification_only
+                    stopped = bool(table["issues"]) and not modification_only
         save(directory / "receipt.json", encoded(record))
         outcome.update(status=record["status"], receipt=f"{code}/receipt.json")
         outcomes.append(outcome)
     result = {"identity": identity, "finished_at": clock(), "outcomes": outcomes,
-              "status": "STOPPED_WITH_GAPS" if stopped else "CAPTURED_REQUIRES_SOURCE_REVIEW",
+              "status": "STOPPED_WITH_GAPS" if stopped else
+                        "CAPTURED_WITH_FIELD_GAPS" if field_gap else "CAPTURED_REQUIRES_SOURCE_REVIEW",
+              "predecessor": PREDECESSOR,
               "official_appointment_qualified": False, "research_executed": False,
               "investment_authority": "NONE"}
     save(output / "capture.json", encoded(result))
-    lines = ["# B2 六对象预约原始取得", "",
+    lines = ["# B2 余下五对象预约原始取得", "",
              "报告期：20260930。第三方 Relay；原日期/修正值在原响应，尚未认证官方预约。",
              "空返回不证明没有预约，未查询不记为零；没有自动改日历、Research、Watch 或持仓。", "",
              "| 证券 | 本次取得状态 |", "|---|---|"]
@@ -173,7 +199,7 @@ def main():
                  "GITHUB_RUN_ATTEMPT", "GITHUB_WORKFLOW_REF", "GITHUB_EVENT_NAME")}
     result = capture(args.output, identity)
     print(result["status"])  # No raw vendor text or credentials in the log.
-    return 1 if result["status"] == "STOPPED_WITH_GAPS" else 0
+    return 0 if result["status"] == "CAPTURED_REQUIRES_SOURCE_REVIEW" else 1
 
 
 if __name__ == "__main__":

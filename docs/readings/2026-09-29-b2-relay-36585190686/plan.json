@@ -1,0 +1,96 @@
+{
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36585190686",
+    "GITHUB_SHA": "4f442f30e10abc0b3a64939c3c4fcd973859357a",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "original_client_blob": "d2ee02a81648eafe7204a47e7f8e41b56c3c48fd",
+  "requests": [
+    {
+      "api": "disclosure_date",
+      "code": "688277.SH",
+      "name": "天智航",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "688277.SH"
+      },
+      "relationship": "FOLLOWED"
+    },
+    {
+      "api": "disclosure_date",
+      "code": "600276.SH",
+      "name": "恒瑞医药",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "600276.SH"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "api": "disclosure_date",
+      "code": "002674.SZ",
+      "name": "兴业科技",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "002674.SZ"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "api": "disclosure_date",
+      "code": "600598.SH",
+      "name": "北大荒",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "600598.SH"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "api": "disclosure_date",
+      "code": "002050.SZ",
+      "name": "三花智控",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "002050.SZ"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "api": "disclosure_date",
+      "code": "603986.SH",
+      "name": "兆易创新",
+      "params": {
+        "end_date": "20260930",
+        "fields": "ts_code,ann_date,end_date,pre_date,actual_date,modify_date",
+        "limit": "100",
+        "ts_code": "603986.SH"
+      },
+      "relationship": "ODDS_WATCH"
+    }
+  ],
+  "scope_source": {
+    "git_blob": "8016d8735c7b744173494579cb0eaba74b6450c6",
+    "path": "docs/readings/2026-09-29-research-agenda-r2.md",
+    "ref": "202e95fe35817d01a172d04a106c5b30a6fd4b0b",
+    "repository": "auguspp/decision-kernel"
+  },
+  "source_host": "https://pcd.mobcvb.cn",
+  "source_identity": "THIRD_PARTY_RELAY_NOT_OFFICIAL_TUSHARE_OR_EXCHANGE",
+  "started_at": "2026-09-29T14:46:48.115618+00:00"
+}
