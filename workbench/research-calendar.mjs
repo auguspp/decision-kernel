@@ -1,5 +1,6 @@
 /** Same-R saved appointments only. No provider fetch, reminders or research. */
 import {fileUrl} from './reading.mjs';
+import {outline, paragraphs} from './product.mjs';
 const hash = v => typeof v === 'string' && /^[a-f0-9]{64}$/.test(v);
 const day = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
   Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0,10) === v;
@@ -54,7 +55,46 @@ export function calendarView(text, saved, now = new Date()) {
   return {calendar:c, expired:today > c.window.end};
 }
 
+/** Read the one explicitly registered authored agenda. Dates remain source text,
+ * not a new event model, scheduler, inferred portfolio or browser-side research. */
+export function agendaPage(target, ctx) {
+  const {reading, ui, active, onRead} = ctx, {el, card, button, link, notice, disclosure, folded} = ui;
+  const records = reading.payload.research?.records ?? [], gaps = reading.payload.research?.gaps ?? [];
+  const malformed = !Array.isArray(records) || !Array.isArray(gaps);
+  const matches = Array.isArray(records) ? records.filter(r => r?.id === 'research-agenda') : [];
+  const rejected = malformed || gaps.some(g => g?.id === 'research-agenda');
+  if (!matches.length && !rejected) return; // Legacy readings retain their existing calendar.
+  const panel = card('近期事件与研究复核', '按保存稿的日期、范围和来源阅读；不是自动更新，也不创建待办。');
+  target.append(panel);
+  const record = matches[0], source = record?.source;
+  if (matches.length !== 1 || rejected || record.case !== 'navigation' || record.use !== 'NAVIGATION_ONLY' ||
+      record.qualification !== 'EXPLICIT_PURPOSE_REFERENCE_NOT_AUTOMATIC_SUPERSESSION' ||
+      !source || source.repository !== 'auguspp/decision-kernel' || !/^[a-f0-9]{40}$/.test(source.ref || '') ||
+      !/^docs\/readings\/[A-Za-z0-9_/-]+\.md$/.test(source.path || '')) {
+    panel.append(notice('近期列表登记不完整或有冲突；不改读其他版本，原日历仍可单独阅读。'));
+    return;
+  }
+  const body = el('div', '', 'product-reading');
+  body.append(el('p', '正在读取已保存的近期列表…')); panel.append(body);
+  Promise.resolve().then(() => reading.readFile(source)).then(file => {
+    if (!active()) return;
+    const sections = outline(file.text);
+    require(sections.some(s => s.text.trim()), 'AGENDA_EMPTY');
+    const nodes = sections.map(section => {
+      const box = el('section');
+      if (section.level) box.append(el('h4', section.title));
+      box.append(...paragraphs(section.text).map(text => el('p', text)));
+      return section.title === '依据与读取范围' ? disclosure(section.title, box) : box;
+    });
+    body.replaceChildren(...nodes, button('阅读近期列表原稿', () => onRead(source)),
+      link('固定版本原稿', fileUrl(reading.ref, source.read_path)));
+  }).catch(error => { if (active()) body.replaceChildren(
+    notice('近期列表未能读完；不是没有事件。原日历及其他市场材料仍可单独阅读。'),
+    folded('近期列表读取诊断', String(error.message))); });
+}
+
 export function calendarPage(target, ctx) {
+  agendaPage(target, ctx);
   const {reading, ui, active, onRead} = ctx, {el,card,button,link,notice,folded,disclosure,dataTable} = ui;
   const saved = reading.payload.research?.calendar, descriptor = saved?.files?.['calendar.json'];
   const panel = card('研究日历 · 有限预约', '仅阅读已保存的 BLS 日程摘录；页面刷新不会刷新来源，不触发研究、提醒或投资。');
