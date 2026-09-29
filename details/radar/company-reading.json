@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "95c2ae9764c64c7730f61a684ad4dbb96177cfe4cc3c2a6e5c518b419b357f6d",
+    "base_reading_hash": "9e4665facae4466625483aff0274a186d1153152d3957847d9f4bb670d767362",
     "companies": [
       {
         "automatic_admission": false,
@@ -7150,7 +7150,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-29T08:23:13.579409+00:00",
+    "generated_at": "2026-09-29T10:13:47.787190+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -7181,7 +7181,7 @@
           "updated_at": "2026-09-18T09:21:06Z"
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
-        "pending_blob_writes": 8,
+        "pending_blob_writes": 2,
         "retained_file_count": 117,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
@@ -7329,7 +7329,7 @@
         "status": "VERIFIED_SAVED_INSTITUTIONAL_SOURCE"
       },
       "sector": {
-        "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+        "lane_health": "IN_PROGRESS",
         "market_session": "2026-09-28",
         "source": {
           "bytes": 281507,
@@ -7344,5 +7344,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "7dc53d0dd139582d23fd1fd7bb8c0fe7e42bcf49831e290c6c4ddecfdf8a4d17"
+  "projection_hash": "c15e65995498ca7e18ccfcfc9777c4ebf53ae0629b98d722e463f31a7c1e79b1"
 }

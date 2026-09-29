@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-09-29T08:24:23.890828+00:00",
+    "checked_at": "2026-09-29T10:14:41.158430+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -2592,5 +2592,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "0c7d21581e484610b4fdf416f9f14600b90da7b4d2e7194cb99e5b99c687f5a9"
+  "projection_hash": "229c6b899028f06e577a975ad6b2e8d228c2684ec38ad54aba2f9bc8daa78e01"
 }
