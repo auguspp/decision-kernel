@@ -39,11 +39,11 @@ def run(tmp_path, request):
     return b2['capture'](tmp_path / 'out', IDENTITY, request=request, clock=lambda: NOW)
 
 
-def test_five_unqueried_requests_retain_originals_and_nulls(tmp_path):
+def test_four_unqueried_requests_retain_originals_and_nulls(tmp_path):
     request, calls, waits = client(body)
     result = run(tmp_path, request)
-    assert len(calls) == 5 and waits == []
-    assert [p['ts_code'] for _, p in calls] == [c[0] for c in b2['COMPANIES'][1:]]
+    assert len(calls) == 4 and waits == []
+    assert [p['ts_code'] for _, p in calls] == [c[0] for c in b2['COMPANIES'][2:]]
     assert all(a == 'disclosure_date' and p['end_date'] == '20260930'
                and p['fields'] == ','.join(b2['FIELDS']) for a, p in calls)
     assert result['status'] == 'CAPTURED_REQUIRES_SOURCE_REVIEW'
@@ -61,19 +61,19 @@ def test_five_unqueried_requests_retain_originals_and_nulls(tmp_path):
         assert attempt['headers']['X-Request-ID'] == 'synthetic'
     with pytest.raises(FileExistsError):
         run(tmp_path, request)
-    assert len(calls) == 5
+    assert len(calls) == 4
 
 
 def test_empty_response_is_not_absence_of_appointments(tmp_path):
     request, calls, _ = client(lambda code: body(code, rows=[]))
     result = run(tmp_path, request)
-    assert len(calls) == 5
+    assert len(calls) == 4
     assert all(o['status'] == 'EMPTY_RESPONSE_NOT_NO_APPOINTMENT' for o in result['outcomes'])
     assert result['official_appointment_qualified'] is False
 
 
 def test_columns_use_names_and_revisions_are_not_deduplicated():
-    code = b2['COMPANIES'][1][0]
+    code = b2['COMPANIES'][2][0]
     reversed_fields = list(reversed(b2['FIELDS']))
     normal = b2['inspect_body'](body(code), code)
     reversed_result = b2['inspect_body'](body(code, fields=reversed_fields), code)
@@ -93,7 +93,7 @@ def test_failure_stops_remaining_company_requests(tmp_path, http):
     assert waits == ([30] if http == 503 else [])
     assert all(o['status'] == 'NOT_QUERIED_AFTER_STOP' and o['receipt'] is None
                for o in result['outcomes'][1:])
-    assert (tmp_path / 'out' / b2['COMPANIES'][1][0] / 'attempt-1.body').exists()
+    assert (tmp_path / 'out' / b2['COMPANIES'][2][0] / 'attempt-1.body').exists()
 
 
 @pytest.mark.parametrize('bad', ['duplicate', 'wrong-api', 'business-error'])
@@ -111,7 +111,7 @@ def test_bad_envelope_preserves_raw_without_qualifying(tmp_path, bad):
     result = run(tmp_path, request)
     assert len(calls) == 1
     assert result['outcomes'][0]['status'] == 'RESPONSE_REJECTED_RAW_RETAINED'
-    assert (tmp_path / 'out' / b2['COMPANIES'][1][0] / 'attempt-1.body').read_bytes() == raw(b2['COMPANIES'][1][0])
+    assert (tmp_path / 'out' / b2['COMPANIES'][2][0] / 'attempt-1.body').read_bytes() == raw(b2['COMPANIES'][2][0])
 
 
 @pytest.mark.parametrize('gap', ['missing-actual', 'wrong-security', 'wrong-period', 'truncated'])
@@ -131,7 +131,7 @@ def test_field_and_scope_gaps_are_not_silently_filled(tmp_path, gap):
     result = run(tmp_path, request)
     assert len(calls) == 1
     assert result['outcomes'][0]['status'] == 'FIELD_OR_COVERAGE_GAP_RAW_RETAINED'
-    receipt = json.loads((tmp_path / 'out' / b2['COMPANIES'][1][0] / 'receipt.json').read_bytes())
+    receipt = json.loads((tmp_path / 'out' / b2['COMPANIES'][2][0] / 'receipt.json').read_bytes())
     assert receipt['table']['issues'] and len(receipt['table']['rows']) == 1
 
 
@@ -178,11 +178,11 @@ def test_missing_modify_continues_only_original_unqueried_scope_and_stays_gap(tm
         return json.dumps(value).encode()
     request, calls, _ = client(raw)
     result = run(tmp_path, request)
-    assert len(calls) == 5 and all(p['ts_code'] != '688277.SH' for _, p in calls)
+    assert len(calls) == 4 and all(p['ts_code'] not in {'688277.SH', '600276.SH'} for _, p in calls)
     assert result['status'] == 'CAPTURED_WITH_FIELD_GAPS'
     assert result['official_appointment_qualified'] is False
     assert all(o['status'] == 'FIELD_OR_COVERAGE_GAP_RAW_RETAINED' for o in result['outcomes'])
-    assert result['predecessor']['run_id'] == 36585190686
+    assert result['predecessor']['run_id'] == 36587228220
     for o in result['outcomes']:
         receipt = json.loads((tmp_path / 'out' / o['receipt']).read_bytes())
         assert receipt['table']['missing_fields'] == ['modify_date']

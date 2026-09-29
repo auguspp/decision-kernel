@@ -1,4 +1,4 @@
-"""Capture the five unqueried B2 appointments; preserve the first capture failure.
+"""Capture the four unqueried B2 appointments; preserve both prior source attempts.
 
 Source preparation only: no date certification, calendar/publisher mutation,
 provider fallback, research, notification, or investment authority.
@@ -33,24 +33,24 @@ SCOPE = {
 CLIENT_BLOB = "d2ee02a81648eafe7204a47e7f8e41b56c3c48fd"
 WORKFLOW = ".github/workflows/b2-disclosure-appointments.yml"
 PREDECESSOR = {
-    "run_id": 36585190686,
-    "path": "docs/readings/2026-09-29-b2-relay-36585190686/capture.json",
-    "sha256": "3c17afd4e266a842a71667c9b68717fb87c08f1c0a4056c478300c3dac8a4053",
+    "run_id": 36587228220,
+    "path": "docs/readings/2026-09-29-b2-relay-36587228220/capture.json",
+    "sha256": "40f406ef7fcceabc14c09b5a74c3f300d8867d3e80ef4e9bc9f1053638b5d909",
 }
 
 
 def unqueried_companies():
-    """Only this exact failed batch; never select a latest result or replay Tianavi."""
+    """Only this exact failed batch; never replay Tianavi or the Hengrui attempt."""
     raw = (Path(__file__).resolve().parents[2] / PREDECESSOR["path"]).read_bytes()
     relay.require(sha256(raw).hexdigest() == PREDECESSOR["sha256"], "B2_PREDECESSOR_BYTES")
     prior = relay.decode(raw)
     relay.require(prior["identity"]["GITHUB_RUN_ID"] == str(PREDECESSOR["run_id"])
                   and prior["status"] == "STOPPED_WITH_GAPS"
                   and [(o["code"], o["status"]) for o in prior["outcomes"]] ==
-                  [(COMPANIES[0][0], "FIELD_OR_COVERAGE_GAP_RAW_RETAINED")] +
-                  [(c[0], "NOT_QUERIED_AFTER_STOP") for c in COMPANIES[1:]],
+                  [(COMPANIES[1][0], "TEMPORARY_QUEUE")] +
+                  [(c[0], "NOT_QUERIED_AFTER_STOP") for c in COMPANIES[2:]],
                   "B2_PREDECESSOR_SCOPE")
-    return COMPANIES[1:]
+    return COMPANIES[2:]
 
 
 def encoded(value):
@@ -98,7 +98,7 @@ def inspect_body(raw, code):
 
 
 def capture(output, identity, *, request=None, clock=relay.now):
-    """Only the five unqueried objects. A missing modification column stays a gap."""
+    """Only the four unqueried objects. A missing modification column stays a gap."""
     request = relay.request if request is None else request
     pending = unqueried_companies()  # Before any directory or source effect.
     output = Path(output)
@@ -177,7 +177,7 @@ def capture(output, identity, *, request=None, clock=relay.now):
               "official_appointment_qualified": False, "research_executed": False,
               "investment_authority": "NONE"}
     save(output / "capture.json", encoded(result))
-    lines = ["# B2 余下五对象预约原始取得", "",
+    lines = ["# B2 余下四对象预约原始取得", "",
              "报告期：20260930。第三方 Relay；原日期/修正值在原响应，尚未认证官方预约。",
              "空返回不证明没有预约，未查询不记为零；没有自动改日历、Research、Watch 或持仓。", "",
              "| 证券 | 本次取得状态 |", "|---|---|"]
