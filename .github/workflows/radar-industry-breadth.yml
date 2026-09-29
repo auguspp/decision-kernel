@@ -64,7 +64,7 @@ jobs:
           --output "$RUNNER_TEMP/industry-breadth"
       - name: Retain original source attempt and explicit gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: industry-breadth-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/industry-breadth/
@@ -118,7 +118,7 @@ jobs:
           --output "$RUNNER_TEMP/easy-stock-context"
       - name: Upload public context original attempts
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: easy-stock-context-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/easy-stock-context/
@@ -172,7 +172,7 @@ jobs:
           --output "$RUNNER_TEMP/industry-fundamentals"
       - name: Retain independent industrial capture with per-source gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: industry-fundamentals-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/industry-fundamentals/

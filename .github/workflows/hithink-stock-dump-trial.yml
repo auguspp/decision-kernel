@@ -129,7 +129,7 @@ jobs:
       - name: Retain complete attempt evidence
         if: always()
         id: evidence
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: hithink-stock-dump-trial-${{ github.run_id }}-${{ github.run_attempt }}
           path: stock-dump-trial/
@@ -213,7 +213,7 @@ jobs:
       - name: Retain stock page and exact evidence including failures
         id: stock-evidence
         if: always() && steps.stock-intent.outputs.artifact_ready == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: stock-reading-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/stock-reading-run/
@@ -302,7 +302,7 @@ jobs:
       - name: Preserve bounded theme trial including any failure
         id: theme-evidence
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: theme-probe-trial-${{ github.run_id }}-${{ github.run_attempt }}
           path: theme-probe-trial/
@@ -454,7 +454,7 @@ jobs:
       - name: Publish only fully verified consumer history
         id: history-upload
         if: always() && steps.history-save.outcome == 'success'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: native-feed-history-${{ github.run_id }}-${{ github.run_attempt }}
           path: native-feed-acceptance/history-export/
@@ -463,7 +463,7 @@ jobs:
       - name: Preserve isolated acceptance including failed steps
         id: native-evidence
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: native-feed-acceptance-${{ github.run_id }}-${{ github.run_attempt }}
           path: native-feed-acceptance/

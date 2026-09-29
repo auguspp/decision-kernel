@@ -31,7 +31,7 @@ jobs:
       - name: Upload read-only timeline
         id: timeline-upload
         if: success()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: judgment-timeline-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/judgment-timeline/

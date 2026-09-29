@@ -246,7 +246,7 @@ jobs:
       - name: Upload complete run audit
         id: run-audit
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: sector-radar-run-${{ github.run_id }}
           path: sector-radar-run/
@@ -255,7 +255,7 @@ jobs:
       - name: Upload authoritative state bundle
         id: state-upload
         if: success()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: sector-radar-state-bundle
           path: decision-state/sector-radar/

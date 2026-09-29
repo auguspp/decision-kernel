@@ -85,7 +85,7 @@ jobs:
           git ls-tree -r HEAD > "$RUNNER_TEMP/concept-detail/source-tree.txt"
       - name: Retain bounded attempt
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: concept-detail-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/concept-detail/

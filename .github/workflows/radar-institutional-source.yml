@@ -68,7 +68,7 @@ jobs:
             > "$RUNNER_TEMP/institutional-radar/source-archive.sha256"
       - name: Upload source observation and explicit failures
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: institutional-radar-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/institutional-radar/

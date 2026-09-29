@@ -63,7 +63,7 @@ jobs:
       - name: Retain exact dispatch intent before any POST
         id: intent
         if: steps.plan.outputs.dispatch == 'true' && env.RECONCILE_MODE == 'execute'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: radar-reconcile-intent-${{ github.run_id }}
           path: radar-reconcile/plan.json
@@ -87,7 +87,7 @@ jobs:
         run: python .github/scripts/reconcile-radar-delivery.py report
       - name: Retain reconciliation and gaps
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: radar-reconcile-report-${{ github.run_id }}
           path: radar-reconcile/report.json
