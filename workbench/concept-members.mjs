@@ -82,6 +82,36 @@ function phaseText(row){
   if(row.phase_reason==='NONPOSITIVE_20D_EXCESS_STILL_WEAKENING_NOT_NEW_EXIT')return '相对走势仍弱，不是本次新退出';
   return PHASE_LABELS[row.phase];
 }
+/** Summarize already-validated full rows; never infer phases from short returns. */
+export function conceptOverview(observation,trend=null){
+  const breadth=['today','5d','10d'].map(period=>{
+    const count={period,up:0,down:0,flat:0,unknown:0,codes:{up:[],down:[],flat:[],unknown:[]}};
+    for(const row of observation.rows){
+      const value=row.periods[period].change_percent;
+      // Preserve signed decimal zero and arbitrarily small nonzero source values.
+      const side=value===null?'unknown':!/[1-9]/.test(value)?'flat':value.startsWith('-')?'down':'up';
+      count[side]++;count.codes[side].push(row.code);
+    }
+    return count;
+  });
+  let groups=null;
+  if(trend){
+    groups=[];
+    for(const phase of Object.keys(PHASE_LABELS)){
+      for(const original of observation.rows){
+        const row=trend.rows.get(original.code);
+        if(row.phase!==phase)continue;
+        const label=phaseText(row);
+        let group=groups.find(g=>g.label===label);
+        if(!group){group={label,codes:[],examples:[]};groups.push(group);}
+        group.codes.push(original.code);
+        if(group.examples.length<2)group.examples.push(original.name);
+      }
+    }
+  }
+  return {total:observation.rows.length,breadth,groups};
+}
+
 function trendDetail(row,el,disclosure){
   const pct=v=>v===null?'未知':displayDecimal(v,{percent:true});
   const title=el('p',phaseText(row));
@@ -167,11 +197,42 @@ export function conceptsPage(target,ctx){
       if(results[2].value)trend=trendView(results[2].value.text,saved.trend,observation);
     }catch(e){trendError=e;}
     const loadStock=makeStockComparisonLoader(reading);
-    const search=el('input'),catalog=el('div'),detail=el('div');search.type='search';
+    const overview=conceptOverview(observation,trend);let phaseFilter=null;
+    const search=el('input'),catalog=el('div'),detail=el('div'),filterStatus=el('p');search.type='search';
     search.placeholder='搜索概念名称或代码';search.setAttribute('aria-label','搜索概念');
     body.replaceChildren(el('p',`保存市场日 ${observation.day} · 完整可用概念 ${observation.rows.length} 项`),
       notice(trend?'长期走势以同期沪深300为基准；阶段是20日相对路径描述，不是业务受益或投资信号。':'本版本没有可读的20／60日相对走势；保留原当日、5日、10日行情，不把短期涨幅改名为完整趋势。'));
-    const browser=disclosure('浏览全部概念与成员',search,catalog,detail);body.append(browser);
+    const reset=button('显示全部概念',()=>applyFilter(null));
+    const browser=disclosure('浏览全部概念与成员',reset,search,filterStatus,catalog,detail);
+    const whole=el('section',undefined,'concept-overview');whole.setAttribute('aria-label','概念整体分布');
+    whole.append(el('h4','先看概念整体'),el('p',`以下统计完整目录 ${overview.total} 项；概念存在成员重叠，不是独立机会数。`));
+    const periodNames={today:'当日', '5d':'近5日', '10d':'近10日'};
+    for(const b of overview.breadth)whole.append(el('p',`${periodNames[b.period]}：上涨 ${b.up} · 下跌 ${b.down} · 平盘 ${b.flat} · 未知 ${b.unknown}`));
+    const shortFilter=el('select'),shortChoices=new Map();shortFilter.className='control';shortFilter.style.maxWidth='100%';
+    shortFilter.setAttribute('aria-label','按短期涨跌浏览概念');
+    const allOption=el('option','不限短期涨跌');allOption.value='';shortFilter.append(allOption);
+    for(const b of overview.breadth)for(const [side,label] of Object.entries({up:'上涨',down:'下跌',flat:'平盘',unknown:'未知'})){
+      const key=b.period+'.'+side,g={label:periodNames[b.period]+label,codes:b.codes[side]};shortChoices.set(key,g);
+      const option=el('option',`${g.label} · ${g.codes.length}/${overview.total} 项`);option.value=key;shortFilter.append(option);
+    }
+    shortFilter.onchange=()=>applyFilter(shortChoices.get(shortFilter.value)||null,shortFilter.value);
+    const shortLabel=el('label','按短期涨跌浏览 ');shortLabel.append(shortFilter);whole.append(shortLabel);
+    const phaseButtons=[];
+    if(overview.groups){
+      whole.append(el('p','按已保存的长期阶段展开；示例仅取原目录顺序，不是龙头或推荐。'));
+      for(const g of overview.groups){
+        const row=el('div',undefined,'human-material ref'),choose=button(`${g.label} · ${g.codes.length}/${overview.total} 项`,()=>applyFilter(g));
+        choose.setAttribute('aria-pressed','false');phaseButtons.push([choose,g]);
+        row.append(choose,el('p','来源顺序示例：'+g.examples.join('、'),'small'));whole.append(row);
+      }
+    }else whole.append(el('p','长期阶段尚未取得，不按短期涨跌分配阶段；请继续阅读完整短期目录。'));
+    body.append(whole,browser);
+    function applyFilter(group,shortKey=''){
+      if(!active())return;
+      phaseFilter=group;shortFilter.value=shortKey;search.value='';detail.replaceChildren();browser.open=true;
+      for(const [choose,g] of phaseButtons)choose.setAttribute('aria-pressed',String(g===group));
+      drawCatalog();search.focus();
+    }
     if(membership)body.insertBefore(el('p',`成员资料日 ${membership.data.source_prepared_date} · ${membership.data.relation_count} 条关系；不是这些日期之前的历史成员。`),browser);
     else body.insertBefore(notice('成员资料未能取得或通过校验；短期行情仍可读，不表示没有成员。'),browser);
     if(trend)body.append(el('p',`长期可比覆盖 5/20/60日：${['5','20','60'].map(k=>trend.data.coverage.horizons[k]).join('/')}；完整目录 ${observation.rows.length}。`),
@@ -212,13 +273,16 @@ export function conceptsPage(target,ctx){
       }),ui);
     }
     function drawCatalog(){catalog.replaceChildren();const q=search.value.trim().toLowerCase();
-      const rows=observation.rows.filter(c=>`${c.name} ${c.code}`.toLowerCase().includes(q));
+      const scope=phaseFilter?new Set(phaseFilter.codes):null;
+      const rows=observation.rows.filter(c=>(!scope||scope.has(c.code))&&`${c.name} ${c.code}`.toLowerCase().includes(q));
+      filterStatus.textContent=`当前目录：${phaseFilter?.label||'全部'} · ${rows.length}/${overview.total} 项`;
+      if(!rows.length)catalog.append(el('p','当前筛选没有匹配项；完整目录与未知项没有被删除。'));
       pages(catalog,rows,15,part=>part.map(c=>{
         const row=el('div',undefined,'human-material ref'),choose=button(`${c.name} · ${c.code}`,()=>select(c.code));choose.disabled=!membership;
         row.append(choose,el('p',`当日 / 5日 / 10日：${['today','5d','10d'].map(k=>c.periods[k].change_percent===null?'未知':displayDecimal(c.periods[k].change_percent)+'%').join(' / ')}`));
         if(trend)row.append(...trendDetail(trend.rows.get(c.code),el,disclosure));
         if(membership)row.append(el('p',`来源成员 ${membership.sets.get(c.code).size} 位；点击查看个股检查与重叠`,'small'));return row;
       }),ui);
-    }search.oninput=drawCatalog;drawCatalog();
+    }search.oninput=()=>{if(active()){detail.replaceChildren();drawCatalog();}};drawCatalog();
   }).catch(error=>{if(active())body.replaceChildren(notice('概念行情读取未完成；其他市场材料仍可读，不当作零变化。'),folded('概念读取诊断',String(error.message)));});
 }

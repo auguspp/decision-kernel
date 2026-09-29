@@ -147,5 +147,58 @@ def scenes(tab, release_and_wait_for_native_digest, source_url):
         expect(page.get_by_role('searchbox', name='搜索概念成员', exact=True)).to_be_visible()
         return {'legacy': 'no guessed file fetch; original members retained'}
 
+    def scene_concept_overview_filters(page, data):
+        install(data, R1)
+        page.get_by_role('button', name='读取最新保存结果', exact=True).click()
+        expect(page.locator('#refresh')).to_be_enabled()
+        tab(page, '市场观察')
+        whole = page.locator('.concept-overview')
+        expect(whole).to_be_visible()  # Outside the still-collapsed full directory.
+        expect(whole).to_contain_text('完整目录 3 项')
+        expect(whole).to_contain_text('当日：上涨 0 · 下跌 3 · 平盘 0 · 未知 0')
+        stronger = whole.get_by_role('button', name='持续强化 · 1/3 项', exact=True)
+        stronger.click()
+        expect(stronger).to_have_attribute('aria-pressed', 'true')
+        expect(page.get_by_text('当前目录：持续强化 · 1/3 项', exact=True)).to_be_visible()
+        page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True).click()
+        expect(page.locator('.concept-stock-comparison')).to_contain_text('已保存检查 3/4 位')
+        whole.get_by_role('button', name='阶段未知 · 1/3 项', exact=True).click()
+        expect(page.locator('.concept-stock-comparison')).to_have_count(0)
+        expect(page.get_by_role('button', name='TEST_ONLY 概念丙 · 333333', exact=True)).to_be_visible()
+        expect(page.get_by_role('button', name='TEST_ONLY 概念甲 · 111111', exact=True)).to_have_count(0)
+        query = page.get_by_role('searchbox', name='搜索概念', exact=True)
+        query.fill('NO_SUCH_CONCEPT')
+        expect(page.get_by_text('当前目录：阶段未知 · 0/3 项', exact=True)).to_be_visible()
+        expect(whole).to_contain_text('阶段未知 · 1/3 项')
+        page.get_by_role('button', name='显示全部概念', exact=True).click()
+        expect(query).to_have_value('')
+        expect(page.get_by_text('当前目录：全部 · 3/3 项', exact=True)).to_be_visible()
+        assert sum('/details/stock/1/' in r['url'] for r in data.requests) == 1
+        return {'overview': 'full denominator unchanged by stage/search; unknown reachable',
+                'drilldown': 'original checked-member consumer; filter clears old detail; one Stock read'}
+
+    def scene_concept_overview_short_only(page, data):
+        root = json.loads(data.files[R1]['current-state.json'])
+        saved = root['research']['tdx_concept_context']
+        trend_path = saved['trend']['details']['trend.json']['read_path']
+        saved['trend'] = {'status': 'NOT_CAPTURED_LEGACY_SOURCE'}
+        data.files[R1]['current-state.json'] = raw(root)
+        panel = selected(page)
+        whole = page.locator('.concept-overview')
+        expect(whole).to_contain_text('近5日：上涨 0 · 下跌 3 · 平盘 0 · 未知 0')
+        expect(whole).to_contain_text('长期阶段尚未取得')
+        expect(whole.get_by_role('button')).to_have_count(0)
+        expect(panel).to_contain_text('本版本未登记个股价格正文')
+        expect(page.get_by_role('searchbox', name='搜索概念成员', exact=True)).to_be_visible()
+        short_filter = whole.get_by_role('combobox', name='按短期涨跌浏览概念', exact=True)
+        short_filter.select_option('today.up')
+        expect(page.get_by_text('当前目录：当日上涨 · 0/3 项', exact=True)).to_be_visible()
+        short_filter.select_option('today.down')
+        expect(page.get_by_text('当前目录：当日下跌 · 3/3 项', exact=True)).to_be_visible()
+        expect(whole).to_contain_text('长期阶段尚未取得')
+        assert not any(trend_path in r['url'] for r in data.requests)
+        return {'legacy': 'short full-catalog counts survive; no fabricated phases or long-file request'}
+
     return [scene_concept_stock_read, scene_concept_stock_bad, scene_concept_stock_late_reading,
-            scene_concept_stock_late_selection, scene_concept_stock_dates, scene_concept_stock_legacy]
+            scene_concept_stock_late_selection, scene_concept_stock_dates, scene_concept_stock_legacy,
+            scene_concept_overview_filters, scene_concept_overview_short_only]
