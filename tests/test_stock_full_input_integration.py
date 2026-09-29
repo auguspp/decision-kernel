@@ -42,6 +42,7 @@ def test_original_model_call_limit_is_not_relaxed(tmp_path):
 @pytest.mark.parametrize("stage,output_type", [("PRE", PreResearchResult), ("QUICK", QuickResearchResult)])
 def test_pinned_original_sdk_final_wire_is_checked_without_any_network(monkeypatch, capsys, stage, output_type):
     from openai import OpenAI, DefaultHttpxClient, APIConnectionError
+    from httpx2 import ConnectError
     from openai.lib._parsing._responses import type_to_text_format_param
     def deny(*args, **kwargs): pytest.fail("test attempted real network")
     monkeypatch.setattr(socket.socket, "connect", deny)
@@ -68,13 +69,14 @@ def test_pinned_original_sdk_final_wire_is_checked_without_any_network(monkeypat
         def handle_request(self, request):
             assert receipt["request_bytes"] == len(request.content)
             delivered_to_fake.append(request.content)
-            raise OSError("intentional fake transport stop; no request sent")
+            raise ConnectError("intentional fake transport stop; no request sent", request=request)
     with OpenAI(api_key="synthetic-not-a-secret", base_url=once.BASE_URL, max_retries=0,
         http_client=DefaultHttpxClient(transport=NoNetwork(), follow_redirects=False,
             trust_env=False, event_hooks={"request": [gate.hook(receipt)]})) as client:
-        with pytest.raises(APIConnectionError):
+        with pytest.raises(APIConnectionError) as stopped:
             with client.responses.stream(**params) as stream:
                 stream.get_final_response()
+    assert isinstance(stopped.value.__cause__, ConnectError)
     assert len(delivered_to_fake) == 1
     assert 512 * 1024 < receipt["request_bytes"] <= full.REQUEST_BYTES
     actual = json.loads(delivered_to_fake[0])

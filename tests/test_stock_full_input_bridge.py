@@ -157,6 +157,7 @@ def test_bound_context_cannot_substitute_a_different_packet_or_source(tmp_path, 
 def test_original_model_call_full_plain_wire_checked_before_fake_transport(tmp_path, monkeypatch, stage):
     import openai
     from openai import APIConnectionError
+    from httpx2 import ConnectError
     args, api, calls, captures, writes, contexts = setup_full(tmp_path, monkeypatch)
     assert host.run_item(**args)["status"] == "VALIDATED_FUNNEL_CANDIDATE"
     packet, discovery, bound = saved_binding(args, api, contexts)
@@ -176,12 +177,13 @@ def test_original_model_call_full_plain_wire_checked_before_fake_transport(tmp_p
         def handle_request(self, request):
             assert usage[0]["pre_send"]["request_sha256"] == once.sha(request.content)
             received.append(request.content)
-            raise OSError("intentional SDK fake-transport stop")
+            raise ConnectError("intentional SDK fake-transport stop", request=request)
     monkeypatch.setattr(openai, "DefaultHttpxClient", lambda **kw: original_client(transport=DenyTransport(), **kw))
     monkeypatch.setenv("SUB2API_API_KEY", "synthetic-not-a-secret")
     output = tmp_path / "sdk"; output.mkdir()
-    with pytest.raises(APIConnectionError):
+    with pytest.raises(APIConnectionError) as stopped:
         once.model_call(stage, prompt, model, output, usage, bound_context=bound)
+    assert isinstance(stopped.value.__cause__, ConnectError)
     assert len(received) == 1 and usage[0]["response_received"] is False
     assert 512 * 1024 < usage[0]["pre_send"]["request_bytes"] <= full.REQUEST_BYTES
     actual = json.loads(received[0])
