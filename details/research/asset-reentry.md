@@ -69,9 +69,6 @@
 - odds-beidahuang-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：9/16 Human明确接受BA2 provisional/ordinal Odds用于决策准备：21–23x为核心估值、12.33主要预付未证明利润增长，11.0–11.3/9.8–10.3/9.3–9.6分别为重审/条件首笔复核/更优Odds复核。接受不扩大为买入决定、永久公司专属10%门槛、仓位、Action或watch。
   - [原保存材料](../../sources/git/f25f25cadd7018563f0a6394cbe7958337428765/600598-beidahuang-human-odds-acceptance-2026-09-16.md)
-- sector-600598-materiality-20260910：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
-  - 原用途说明：Human许可后Sector来源的有限Pre/Quick，税后盈利问题待深化；最终H1仍有正文核验缺口，非全景研究/新Odds/自动Deep或Human决定。
-  - [原保存材料](../../sources/git/fda17f439ddb03323de60b6a77dac1bd8974dd02/README.md)
 - 600598-materiality-20260910-typed-progress：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：#321 typed remote round-trip acceptance only: wraps the exact 2026-09-10 DEEPEN&#95;REQUIRED workpaper bytes as RETAINED&#95;PROGRESS&#95;NOT&#95;COMMITTED. The later 600598-tax-regime-continuation-20260916 successor already exists; this historical checkpoint does not supersede or reopen it, add Evidence, execute continuation, establish Human acceptance, Odds, Action or Investment Authority.
   - [原保存材料](../../sources/git/74e3e76113f642a71e583777625615f9c848b6ac/progress.json)
@@ -81,6 +78,7 @@
 - 600598-research-commit-20260917：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：#321 real-company Research-only round-trip: mechanically freezes the retained 2026-09-16 tax-regime Belief with later-reacquired EXTRACTED&#95;VALUES/PARTIAL evidence custody. Model risk remains NOT&#95;ESTABLISHED; no valuation horizon, numerical Scenario or probability is created. COMMITTED Research does not establish current Market/Odds, Human acceptance, Action/watch or Investment Authority.
   - [原保存材料](../../sources/git/8e40fae835eb3f295238e050515e5bd1a52a5287/commit.json)
+- [按需恢复：sector-600598-materiality-20260910](https://github.com/auguspp/decision-kernel/blob/822c5c725df2d1e5d66768b3b06bc9ddfef93a2e/research_runs/candidates/sector-origin/600598-materiality-20260910/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-28T08:20:36.673904Z
 - 原业务前提：BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.
 - [原价格条件记录](../inbox/36396764303/odds-watch/watch.json)；不是新的行情复核或买入指令。
