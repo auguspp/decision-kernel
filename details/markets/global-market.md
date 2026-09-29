@@ -30,7 +30,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/446bd4f0f0b189d4d9e334c8df5b8a4b300494f571a845c9299ac2e0e85ca010.zip)
 
 ## 人民币同业利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36596334415
 # 人民币同业利率 · Shibor
@@ -57,7 +57,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/94a0a54534957180df5fb5dccfcb1c21cc778652cb40ef1c238b4e499dc2de03.zip)
 
 ## 美国国债期限利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36596201469
 # 美国国债期限利率
@@ -88,7 +88,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/26290061bda370597b87fe5b6ed4408afd8791ffb2d9f03b0f6dc7db4acfcaab.zip)
 
 ## ECB 外汇参考价
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36596339571
 # ECB 外汇参考价
@@ -115,20 +115,20 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/943e1bfcb36b06fb7ff578c76aedc4946064d7ae41dc564616d27a896a0869e6.zip)
 
 ## 黄金与原油 · 供应商期货日线
-本次读取：CAPTURE_IN_PROGRESS
+本次读取：CAPTURE_READ
 
-最后可读批次run：36317970476
+最后可读批次run：36596449889
 # 黄金与原油 · 供应商期货日线
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-09-26；抓取截止：2026-09-27T12:08:10.310915+00:00
-状态：AVAILABLE；来源日期不替代抓取/发布时间。
+窗口截止：2026-09-28；抓取截止：2026-09-29T16:16:24.127744+00:00
+状态：PARTIAL；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| 黄金 · GC=F | 2026-09-25 | 4321.2001953125 | USD_PER_TROY_OUNCE | 2026-09-24 | UNKNOWN |
-| WTI原油 · CL=F | 2026-09-25 | 92.41000366210938 | USD_PER_BARREL | 2026-09-24 | UNKNOWN |
-| Brent原油 · BZ=F | 2026-09-25 | 97.44000244140625 | USD_PER_BARREL | 2026-09-24 | UNKNOWN |
+| 黄金 · GC=F | 2026-09-28 | UNKNOWN | USD_PER_TROY_OUNCE | 2026-09-25 | UNKNOWN |
+| WTI原油 · CL=F | 2026-09-28 | 92.5999984741211 | USD_PER_BARREL | 2026-09-25 | UNKNOWN |
+| Brent原油 · BZ=F | 2026-09-28 | 105.27999877929688 | USD_PER_BARREL | 2026-09-25 | UNKNOWN |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -140,22 +140,22 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - CL=F：ROWS_NORMALIZED
 - BZ=F：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/91b475ef30d4016e29dbb3d9b09dab76b29e79065a5bf749b272982b12324ffc.zip)
+[原始ZIP](../../sources/artifacts/5e90a82ed61740ccf34e00eea0a0a902dc54b319e0e8b60b82705dfa064196f0.zip)
 
 ## Coinbase BTC / ETH 日线
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：36318059164
+最后可读批次run：36596512923
 # Coinbase BTC / ETH 日线
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-09-26；抓取截止：2026-09-27T12:09:56.783622+00:00
+窗口截止：2026-09-28；抓取截止：2026-09-29T16:16:44.933036+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| BTC-USD | 2026-09-26 | 84416.65 | USD_PER_BTC | 2026-09-25 | 0.384716 % |
-| ETH-USD | 2026-09-26 | 2695.53 | USD_PER_ETH | 2026-09-25 | 0.153452 % |
+| BTC-USD | 2026-09-28 | 83456.74 | USD_PER_BTC | 2026-09-27 | -1.190356 % |
+| ETH-USD | 2026-09-28 | 2687.41 | USD_PER_ETH | 2026-09-27 | -0.030503 % |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -166,6 +166,6 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - BTC-USD：ROWS_NORMALIZED
 - ETH-USD：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/cdf51b49d6adf0b1550e4942456f7dfe459d0fe83a9f84b2e7b3aebb1a86fac7.zip)
+[原始ZIP](../../sources/artifacts/0088d1ea0e753e16df34e4dd4296eee4b58db0296fc7a927ae28c4fde0a83b5e.zip)
 
 六族均为有限来源背景，不代表全市场覆盖、实时行情或公司获益；没有自动启动Quick或Odds。
