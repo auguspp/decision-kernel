@@ -114,7 +114,7 @@ def concept_fixture(files, ref):
     auth = {k: 'NONE' for k in ('research_authority', 'odds_authority', 'action_authority', 'investment_authority')}
     taxonomy = 'TDX_CATEGORY_CONCEPT_SOURCE_NATIVE_NOT_EASTMONEY_BK_OR_HITHINK_TI'
     names = ['TEST_ONLY 概念甲', 'TEST_ONLY 概念乙', 'TEST_ONLY 概念丙']
-    rows = [{'code': str(i + 1) * 6, 'name': name, 'market_session': '2026-09-25',
+    rows = [{'code': str(i + 1) * 6, 'name': name, 'full_code': 'sh'+str(i+1)*6, 'market_session': '2026-09-25',
         'periods': {k: {'change_percent': '-1.25'} for k in ('today', '5d', '10d')}} for i, name in enumerate(names)]
     observation = {'projection': {**auth, 'version': 'tdx-concept-snapshot-v1', 'taxonomy': taxonomy,
         'kind': 'MARKET_EXPRESSION', 'qualification': 'CONTEXT_ONLY', 'market_session': '2026-09-25',
@@ -141,6 +141,44 @@ def concept_fixture(files, ref):
             'status': 'VERIFIED_SAVED_MEMBERSHIP', 'projection_hash': members['projection_hash'],
             'catalog_count': 3, 'relation_count': sum(map(len, groups)), 'file': descriptor(mp, files[mp])}}
 
+
+
+def concept_trend_fixture(files, saved, ref):
+    """TEST_ONLY presentation shapes, not a real history capture or phase computation."""
+    source = json.loads(files[saved['details']['observation']['read_path']])['projection']
+    coverage = {'horizons': {'5': 3, '20': 2, '60': 2}, 'phase_rows': 2, 'unavailable_rows': 0}
+    phases = ['STRENGTHENING' if ref == R1 else 'MATURE_OR_DIVERGING', 'WEAKENING_OR_EXIT', 'UNKNOWN']
+    rows = []
+    for i, c in enumerate(source['observations']):
+        row = {k: c[k] for k in ('code','name','full_code')}
+        row.update(phase=phases[i], phase_reason='TEST_ONLY_SAVED_OBSERVATION', gap=None,
+            history_points=126 if i<2 else 15, history_start='2026-04-01' if i<2 else '2026-09-07',
+            history_end='2026-09-25', previous_session='2026-09-24',
+            previous_20d_excess='0.01' if i<2 else None,
+            excess_acceleration_5_sessions_20d='0.01' if i==0 and ref==R1 else '-0.01' if i<2 else None,
+            positive_20d_excess_persistence_sessions=106 if i==0 else 0 if i==1 else None,
+            positive_20d_excess_run_started='2026-04-29' if i==0 else None,
+            positive_20d_excess_persistence_left_censored=True if i==0 else False if i==1 else None,
+            horizons={str(n): {'index_return':'0.03' if i==0 else '-0.01', 'benchmark_return':'0.01',
+                               'excess_return':'0.02' if i==0 else '-0.02'} if i<2 or n==5 else None for n in (5,20,60)})
+        rows.append(row)
+    p = {k: source[k] for k in ('taxonomy','kind','qualification','market_session',
+                               'research_authority','odds_authority','action_authority','investment_authority')}
+    p.update(version='tdx-concept-trend-v1',observation_hash=saved['result']['projection_hash'],
+        base_capture_hash='2'*64, source_hash='5'*64, source_observed_at=NOW, catalog_count=3,
+        benchmark={'full_code':'sh000300','source':'SAME_TDX_HOST','history_start':'2026-04-01',
+                   'history_end':'2026-09-25','history_points':126},
+        return_unit='FRACTION_NOT_PERCENT', source_calls_during_replay=0,
+        policy={'phase_basis':'DESCRIPTIVE_20D_EXCESS_NOT_INVESTMENT_SIGNAL',
+                'session_basis':'RETURNED_BENCHMARK_SESSIONS_NOT_EXCHANGE_CALENDAR',
+                'custody':'EXTRACTED_SDK_TIME_AND_INTEGER_CLOSE_NOT_RAW_WIRE'},
+        historical_universe='CURRENT_CATALOG_NOT_HISTORICAL_MEMBERSHIP',
+        trend_age='POSITIVE_20D_EXCESS_RUN_WITH_LEFT_CENSOR_NOT_THEME_LIFETIME',
+        coverage=coverage,observations=rows)
+    report={'projection':p, 'projection_hash':('6' if ref==R1 else '7')*64}
+    path='details/radar/tdx-concept/trend/trend.json';files[path]=raw(report)
+    saved['trend']={'status':'VERIFIED_SAVED_LONG_HISTORY','projection_hash':report['projection_hash'],
+                    'catalog_count':3,'coverage':coverage,'details':{'trend.json':descriptor(path,files[path])}}
 
 def fixture(ref=R1):
     """Fresh, small bytes per scenario. Synthetic reading_hash is shape-only."""
@@ -183,6 +221,7 @@ def fixture(ref=R1):
                 'projection_hash': market['projection_hash'], 'details': {'json': descriptor(MARKETS, files[MARKETS])}}}}
     payload['research']['calendar'] = calendar_fixture(files, ref)
     payload['research']['tdx_concept_context'] = concept_fixture(files, ref)
+    concept_trend_fixture(files, payload['research']['tdx_concept_context'], ref)
     payload['lanes']['stock']['last_qualified_result']['dispositions'] += [
         {'thscode': '600001.SH', 'company_name': 'TEST_ONLY 条件不满足', 'status': 'CONDITIONS_NOT_MET'},
         {'thscode': '600002.SH', 'company_name': 'TEST_ONLY 数据不可用', 'status': 'DATA_QUALIFICATION_FAILED'}]

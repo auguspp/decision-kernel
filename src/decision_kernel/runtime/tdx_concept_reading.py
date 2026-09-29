@@ -76,7 +76,13 @@ def native(collector):
     artifact = model.select_artifact(
         collector.artifacts(run), f"tdx-concept-{run['id']}-1"
     )
-    files, archive = collector.archive(artifact, run)
+    envelope, archive = collector.archive(artifact, run)
+    nested = "snapshot/capture.json" in envelope
+    files = {k[len("snapshot/"):]: v for k, v in envelope.items() if k.startswith("snapshot/")} if nested else envelope
+    long_files = {k[len("trend/"):]: v for k, v in envelope.items() if k.startswith("trend/")} if nested else {}
+    if nested:
+        model.check(all(k.startswith(("snapshot/", "trend/")) for k in envelope),
+                    "TDX Concept envelope scope differs")
     expected = {
         "capture.json",
         "plan.json",
@@ -112,6 +118,37 @@ def native(collector):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
         replay = tdx.replay(root, expected_execution=workflow)
+        long_state = {"status": "NOT_CAPTURED_LEGACY_SOURCE" if not nested else "UNAVAILABLE_OR_REJECTED",
+                      "meaning": "LONG_HISTORY_GAP_NOT_NO_TREND"}
+        long_outputs = {}
+        if long_files:
+            try:
+                from . import tdx_concept_trend as trend
+                model.check(set(long_files) <= trend.FILES and "capture.json" in long_files,
+                            "TDX long history file scope differs")
+                # Keep the old base tree unchanged: its strict inventory rejects siblings.
+                with tempfile.TemporaryDirectory(prefix="tdx-trend-read-") as long_directory:
+                    long_root = Path(long_directory)
+                    for name, raw in long_files.items():
+                        (long_root / name).write_bytes(raw)
+                    cap = json.loads(long_files["capture.json"])
+                    model.check(model.clock(run["created_at"]) <= model.clock(cap["started_at"])
+                                <= model.clock(cap["finished_at"]) <= model.clock(run["updated_at"]),
+                                "TDX long history run clock differs")
+                    long_report = trend.replay(long_root, replay, receipt, json.loads(files["source.json"]))
+                if "projection" in long_report:
+                    lp = long_report["projection"]
+                    long_state = {"status": "VERIFIED_SAVED_LONG_HISTORY",
+                                  "projection_hash": long_report["projection_hash"],
+                                  "catalog_count": lp["catalog_count"], "coverage": lp["coverage"]}
+                    long_outputs = {k: long_files[k] for k in ("trend.json", "summary.md", "capture.json")}
+                else:
+                    long_state.update(long_report)
+                    long_outputs = {"capture.json": long_files["capture.json"]}
+            except (ImportError, *ERRORS) as exc:
+                long_state["error_type"] = type(exc).__name__
+                long_outputs = {}
+
         membership = {"status": "UNAVAILABLE_OR_REJECTED", "meaning": "MEMBERSHIP_GAP_NOT_NO_MEMBERS"}
         member_bytes = None
         try:
@@ -146,8 +183,19 @@ def native(collector):
             collector.files = member_files_before
             membership = {"status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
                           "meaning": "MEMBERSHIP_GAP_NOT_NO_MEMBERS"}
+    if long_outputs:
+        before_long = dict(collector.files)
+        try:
+            _reserve(collector, files=len(long_outputs))
+            long_state["details"] = {name: collector.retain(PREFIX + "/trend/" + name, raw)
+                                     for name, raw in long_outputs.items()}
+        except ERRORS as exc:
+            collector.files = before_long
+            long_state = {"status": "UNAVAILABLE_OR_REJECTED", "error_type": type(exc).__name__,
+                          "meaning": "LONG_HISTORY_GAP_NOT_NO_TREND"}
     return {
         **state,
+        "trend": long_state,
         "membership": membership,
         "status": "VERIFIED_SAVED_TDX_CONCEPT_SOURCE",
         "result": {
@@ -226,6 +274,10 @@ def attach(collector, baseline):
     )
     if section.get("membership", {}).get("file"):
         line += "\n[TDX 概念完整成员（同版本）](" + PREFIX + "/membership.json)；来源成员不是业务受益或持仓。\n"
+    if section.get("trend", {}).get("status") == "VERIFIED_SAVED_LONG_HISTORY":
+        line += "\n[概念5/20/60日相对走势与阶段](" + PREFIX + "/trend/summary.md)；同期基准、持续天数与缺口分别保留，不是投资信号。\n"
+    elif section.get("details"):
+        line += "\n概念20/60日相对走势尚未取得或通过校验；原短期行情与成员独立保留。\n"
     encoded_line = line.encode()
     if encoded_line not in tail:
         tail += encoded_line

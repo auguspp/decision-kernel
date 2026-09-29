@@ -347,7 +347,19 @@ def test_existing_limited_research_bytes_recover_without_business_reclassificati
     import json
     registry = json.loads((Path(__file__).resolve().parents[1] / 'current_state/registry.json').read_bytes())
     registered = next(r for r in registry['references'] if r['id'] == 'sector-600598-materiality-20260910')
-    prefix = str(Path(registered['source']['path']).parent)
+    from decision_kernel.runtime import research_archive_index as index
+    from test_research_archive_index import reindex
+    assert registered['read_policy'] == index.POLICY
+    source = registered['archive_source']
+    eager, indexed, gaps = index.split(registry)
+    eager_ids = {r['id'] for r in eager['references']}
+    assert not gaps and registered['id'] not in eager_ids
+    assert {'research-agenda', '600598-tax-regime-continuation-20260916'} <= eager_ids
+    entry = next(r for r in indexed if r['id'] == registered['id'])
+    assert entry['source']['ref'] == '822c5c725df2d1e5d66768b3b06bc9ddfef93a2e'
+    assert entry['source']['git_blob'] == 'fda17f439ddb03323de60b6a77dac1bd8974dd02'
+    assert entry['body_materialized_in_reading'] is False
+    prefix = str(Path(source['path']).parent)
     original = Path(__file__).resolve().parents[1] / prefix
     files = {p.name: p.read_bytes() for p in original.iterdir() if p.is_file()}
     assert set(files) == {'README.md', 'input.json', 'preflight.json', 'candidate.json',
@@ -355,12 +367,16 @@ def test_existing_limited_research_bytes_recover_without_business_reclassificati
     # Real previously retained content/registration; synthetic Git transport and
     # synthetic reading projection. Not another issuer run or live HTTP claim.
     monkeypatch.setattr(sys.modules[__name__], 'PREFIX', prefix)
-    monkeypatch.setattr(sys.modules[__name__], 'A', registered['source']['ref'])
+    monkeypatch.setattr(sys.modules[__name__], 'A', source['ref'])
     api = API(files)
     api.record = deepcopy(registered)
     api.registry['references'] = [api.record]
-    api.refresh()
+    reindex(api)  # Existing on-demand projection, not an eager-body stand-in.
+    assert len(files['README.md']) == source['bytes']
+    assert model.sha256(files['README.md']) == source['sha256']
+    assert model.blob_sha(files['README.md']) == source['git_blob']
     result = runtime.recover_archive(api, reading_commit=R, record_id=registered['id'], output=tmp_path/'out')
+    assert result['source_materialization'] == 'RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY'
     assert result['original_use'] == registered['use']
     assert result['original_purpose_note'] == registered['purpose_note']
     assert result['qualification'] == 'RETAINED_FILES_NOT_REVALIDATED_RESEARCH'

@@ -66,6 +66,22 @@ Each scene uses a fresh context at 1360×900 and 390×844:
     preserving the original Concept quotes, calendar and independent Stock panel.
 13. Finish a held old-R membership response after refreshing and selecting a
     new-R concept. The old members cannot replace the new reading or its detail.
+14. Reject equal-length long-history body tampering while source quotes and
+    members remain readable; the digest failure cannot become a trend verdict.
+15. Complete an old-R long-history response after selecting a new-R reading;
+    the old phase cannot replace the new one, including after native digest EOF.
+16. An older reading without long-history registration retains short quotes and
+    members, reports the gap and does not fetch or invent a long path.
+17. Read an explicitly registered authored agenda, its visible source gaps and
+    unknown review dates, then its same-R original; source script stays inert.
+18. Reject an equal-length altered agenda with native SHA while original BLS
+    appointments and the stock panel remain available.
+19. A held old-R agenda cannot overwrite the new one after its digest completes.
+
+Concept scene11 also expands synthetic5/20/60 index/benchmark/excess values,
+positive-excess run length, strengthening/weakening and insufficient-history
+states. These are display fixtures, not actual source acquisition, arithmetic
+or acceptance of a real Concept lifecycle; backend replay is tested separately.
 
 The fixtures follow existing controller/global-markets test shapes. Repeated
 `a`/`b`/`c` identities and all numeric quotes are **TEST_ONLY**, not actual Git
