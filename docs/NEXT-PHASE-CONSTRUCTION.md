@@ -1,4 +1,4 @@
-# 当前施工入口：按原始C1/C2推进，先对账真实发现盲点
+# 当前施工入口：按原始C1/C2推进，接真实研究语义消费
 
 2026-09-29。Human最新指令是先完成B2后端与可读取内容，之后在原Site编辑对话直接提出界面要求并集中接入。原话与范围对账见[#297/5888866896](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5888866896)。**当前执行顺序以[#297](https://github.com/auguspp/decision-kernel/issues/297)与对应任务的最新有效回执为准。** 本页只作导航，不维护第二份进度表。
 
@@ -12,7 +12,9 @@
 
 C1包括纵向财报、IR/同业变化、机构活动与可比预期、Outside View、经营/竞争/现金资本桥及首版→挑战→修订→后续使用。[纵向比较消费者#675](https://github.com/auguspp/decision-kernel/pull/675#issuecomment-5910727507)已实现并发布，从正常固定R恢复两家真实档案并实际运行CLI；原件/期间/单位/口径与算术机制验收，不签完整经济解释、Human接受或全C1。C2按原P2-1–6明确盲点审计、行业拐点、早期变化、独立个股发现、公司业务证据和多周期领先/扩散角色的已交付、缺口与退出条件；不要求六个新引擎，也不以单样本签整条线。
 
-**当前C2：** 按[最新选择](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5910730861)对已保存21,120行作一次性完整分母/压力反例审计，见[有界派生审计](readings/c2-blindspot-audit-2026-09-30/README.md)。区分旧104日挑战与后继66日生产规则，区分覆盖、门槛和交付丢失；不改信号、不复活退役historical-study、不新建常驻runtime。原31MB文件仍Actions保管，到期与永久Git缺口明确；派生分析不冒充无损原件，不拆分绕过档案限额。已部署Brief fallback仍待自然消费，不能本地补签。
+**C2有界审计已收口：** 按[当时选择](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5910730861)对已保存21,120行作一次性完整分母/压力反例审计，见[有界派生审计](readings/c2-blindspot-audit-2026-09-30/README.md)及[发布/独立五文件恢复](https://github.com/auguspp/decision-kernel/pull/676#issuecomment-5911847344)。区分旧104日挑战与后继66日生产规则，区分覆盖、门槛和交付丢失；不改信号、不复活退役historical-study、不新建常驻runtime。原31MB文件仍Actions保管，到期与永久Git缺口明确；派生分析不冒充无损原件，不拆分绕过档案限额。已部署Brief fallback仍待自然消费，不能本地补签。
+
+**当前C1语义消费：** [后继范围](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5911984275)复用#675消费者完善具体经营→利润→现金资本解释，见[两例后继](readings/c-cash-bridge-semantic-review-2026-09-30/README.md)。原数值和源文件保留；不将R1已有的AT&S保理/BGA费用限制包装成R2首度发现。新增的是受支持的说明和既有明细复算，不新建框架、Full或投资权限。机构预期资格、IR/同业、参考案例、竞争/长期资本回报与自然使用仍逐项保留，不能由两例现金桥签全C。
 
 [#504机构/研报](https://github.com/auguspp/decision-kernel/issues/504)原来源、保管、按需索引和首次实际消费保留，不重建provider；摘要比较缺原模型/货币/股本/PIT资格时仍不称完整模型修订。按Reuse First依次读内部能力、官方合同、#508/#511已有成熟GitHub候选和当前相关实现，只补真实消费者所需的薄适配。
 
