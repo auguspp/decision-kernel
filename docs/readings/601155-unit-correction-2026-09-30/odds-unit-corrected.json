@@ -1,0 +1,114 @@
+{
+  "calculation_version": "xincheng-conditional-odds-gross-loss-v1",
+  "research_cutoff": "2026-09-30 09:06:40 Asia/Singapore",
+  "main_commit": "ee9ada68e896597b44aeb7566bae44c9c4221f54",
+  "reading_commit": "fdc326d6e8bcc5de2f63ef66a16cd40e08e0303a",
+  "reference_price": {
+    "value_cny": "13.01",
+    "date": "2026-09-29",
+    "source": "Investing.com historical completed close",
+    "qualification": "PUBLIC_COMPLETED_CLOSE_CONTEXT_ONLY_NOT_CANONICAL_MARKET"
+  },
+  "working_horizon_years": 3,
+  "working_hurdle_cagr": "0.10",
+  "terminal_value_needed_for_hurdle_cny_per_share": "17.31631000",
+  "worlds": [
+    {
+      "id": "W1_STRESS",
+      "description": "吾悦账面折价30%；存货+其他应收再损失15%；不计税盾/分红/降债",
+      "ip_discount": "0.30",
+      "development_extra_loss": "0.15",
+      "terminal_equity_cny_bn": "12.7379665",
+      "terminal_per_share_cny": "5.647205811076424027865055469",
+      "cumulative_return": "-0.5659334503400135259135237918",
+      "three_year_cagr": "-0.2428438753051735150815909739",
+      "max_reference_price_for_10pct_cagr": "4.242829309599116474729568346"
+    },
+    {
+      "id": "W2_SOFT_STABILIZATION",
+      "description": "吾悦账面折价25%；存货+其他应收再损失10%；不计税盾/分红/降债",
+      "ip_discount": "0.25",
+      "development_extra_loss": "0.10",
+      "terminal_equity_cny_bn": "23.271431",
+      "terminal_per_share_cny": "10.31707536483661167512127746",
+      "cumulative_return": "-0.2069888266843496022197327087",
+      "three_year_cagr": "-0.0743934153220687798637451227",
+      "max_reference_price_for_10pct_cagr": "7.751371423618791641713957521"
+    },
+    {
+      "id": "W3_BOUNDED_REPAIR",
+      "description": "吾悦账面折价20%；存货+其他应收再损失5%；不计税盾/分红/降债",
+      "ip_discount": "0.20",
+      "development_extra_loss": "0.05",
+      "terminal_equity_cny_bn": "33.8048955",
+      "terminal_per_share_cny": "14.98694491859679932237749944",
+      "cumulative_return": "0.151955796971314321474058374",
+      "three_year_cagr": "0.048283149559862139806007384",
+      "max_reference_price_for_10pct_cagr": "11.25991353763846680869834669"
+    },
+    {
+      "id": "W4_STRONG_REPAIR",
+      "description": "吾悦账面折价15%；存货+其他应收不再额外损失；不计税盾/分红/降债",
+      "ip_discount": "0.15",
+      "development_extra_loss": "0",
+      "terminal_equity_cny_bn": "44.33836",
+      "terminal_per_share_cny": "19.65681447235698696963372143",
+      "cumulative_return": "0.510900420626978245167849457",
+      "three_year_cagr": "0.147480412074784507446149325",
+      "max_reference_price_for_10pct_cagr": "14.76845565165814197568273586"
+    }
+  ],
+  "breakpoints_by_development_loss": [
+    {
+      "development_extra_loss": "0",
+      "max_ip_discount_to_clear_10pct_cagr": "0.1936594060735911346344690705"
+    },
+    {
+      "development_extra_loss": "0.05",
+      "max_ip_discount_to_clear_10pct_cagr": "0.1565483863911564670856764803"
+    },
+    {
+      "development_extra_loss": "0.10",
+      "max_ip_discount_to_clear_10pct_cagr": "0.1194373667087217995368838902"
+    },
+    {
+      "development_extra_loss": "0.15",
+      "max_ip_discount_to_clear_10pct_cagr": "0.08232634702628713198809130003"
+    }
+  ],
+  "breakpoints_by_ip_discount": [
+    {
+      "ip_discount": "0.15",
+      "max_development_extra_loss_to_clear_10pct_cagr": "0.05882269801152343377869618801"
+    },
+    {
+      "ip_discount": "0.20",
+      "max_development_extra_loss_to_clear_10pct_cagr": "-0.008542737414205282292483873689"
+    },
+    {
+      "ip_discount": "0.25",
+      "max_development_extra_loss_to_clear_10pct_cagr": "-0.07590817283993399836366393539"
+    },
+    {
+      "ip_discount": "0.30",
+      "max_development_extra_loss_to_clear_10pct_cagr": "-0.1432736082656627144348439971"
+    }
+  ],
+  "cardinal_probability": "NOT_ESTABLISHED",
+  "weighted_expected_value": "NOT_COMPUTED",
+  "canonical_odds": "NOT_ESTABLISHED",
+  "human_acceptance": "NOT_ESTABLISHED",
+  "investment_authority": "NONE",
+  "unit_correction": {
+    "recorded_at": "2026-09-30T10:33:49.260128+00:00",
+    "predecessor_archive": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+    "meaning": "UNIT_SCALE_CORRECTION_ONLY; original inputs actually use CNY100m and100m shares; retain original rounded assumptions",
+    "new_input_precision": false,
+    "investment_authority": "NONE",
+    "human_acceptance": "NOT_ESTABLISHED",
+    "source_full_report_reaudit": "NOT_PERFORMED",
+    "original_file": "odds.json",
+    "original_file_sha256": "d7cd4d493813023c7d2783d9cc90d63861717fa4b115c0b0332a65190a7be55c"
+  },
+  "unit_correction_version": "20260930-unit-scale-v1"
+}
