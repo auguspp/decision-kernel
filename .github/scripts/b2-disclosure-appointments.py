@@ -1,13 +1,13 @@
 """Selected registered securities -> bounded CNINFO capture and readable source fields.
 
 Reuse AKShare's reviewed query, existing custody and original source-only workflow.
-Selection is an explicit lookup, not a follow/holding or research acceptance decision.
+Appointments and announcement directories remain separate explicit lookups, not follow/holding or research acceptance.
 """
 from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from datetime import date
+from datetime import date, datetime
 from hashlib import sha1, sha256
 from html import escape
 import json
@@ -22,6 +22,11 @@ ROOT = Path(__file__).resolve().parents[2]
 URL = "https://www.cninfo.com.cn/new/information/getPrbookInfo"
 MAX_BODY = 256 * 1024
 MAX_COMPANIES = 6
+MAX_ANNOUNCEMENT_PAGES = 3
+ANNOUNCEMENT_URLS = {
+    "organization": "https://www.cninfo.com.cn/new/information/topSearch/query",
+    "announcements": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+}
 WORKFLOW = ".github/workflows/b2-disclosure-appointments.yml"
 CLIENT_BLOB = "d2ee02a81648eafe7204a47e7f8e41b56c3c48fd"
 # Source keys, not DataFrame positions; preserve values, absent keys and slot order.
@@ -58,10 +63,8 @@ def is_day(value):
         return False
 
 
-def plan_requests(reference_ids, period, registry_raw, code_commit):
+def select_references(reference_ids, registry_raw, code_commit):
     """Select only explicit IDs from the existing index; never scan all saved stocks."""
-    relay.require(is_day(period) and period[5:] in ("03-31", "06-30", "09-30", "12-31"),
-                  "B2_REPORT_PERIOD")
     relay.require(isinstance(reference_ids, list) and 1 <= len(reference_ids) <= MAX_COMPANIES
                   and all(isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", v)
                           for v in reference_ids), "B2_SELECTION_INPUT")
@@ -89,16 +92,9 @@ def plan_requests(reference_ids, period, registry_raw, code_commit):
         relay.require(isinstance(source, dict) and isinstance(source.get("path"), str)
                       and bool(source["path"]) and isinstance(selected.get("use"), str),
                       "B2_SELECTION_SOURCE")
-        # This locator is retained as data, never fetched/executed as an instruction.
-        market = {"SH": "sh", "SZ": "sz", "BJ": "bj"}[code[-2:]]
-        if code.endswith(".SH") and code.startswith(("688", "689")):
-            market = "shkcp"
-        plan.append({"code": code, "selection": deepcopy(selected),
-            "relationship": "NOT_INFERRED_FROM_SOURCE_SELECTION", "report_period": period,
-            "params": {"sectionTime": period, "firstTime": "", "lastTime": "",
-                "market": market, "stockCode": code[:6], "orderClos": "", "isDesc": "",
-                "pagesize": "100", "pagenum": "1"}})
-    relay.require(len({r["code"] for r in plan}) == len(plan), "B2_DUPLICATE_SECURITY")
+        # Source text is data, never execution permission.
+        plan.append(deepcopy(selected))
+    relay.require(len({r["case"] for r in plan}) == len(plan), "B2_DUPLICATE_SECURITY")
     scope = {"ref": code_commit, "path": "current_state/registry.json",
         "git_blob": sha1(f"blob {len(registry_raw)}\0".encode() + registry_raw).hexdigest(),
         "bytes": len(registry_raw), "sha256": sha256(registry_raw).hexdigest(),
@@ -106,6 +102,23 @@ def plan_requests(reference_ids, period, registry_raw, code_commit):
         "meaning": "EXPLICIT_SOURCE_LOOKUP_NOT_FOLLOW_HOLDING_OR_AUTOMATIC_ADMISSION"}
     return plan, scope
 
+
+def plan_requests(reference_ids, period, registry_raw, code_commit):
+    relay.require(is_day(period) and period[5:] in ("03-31", "06-30", "09-30", "12-31"),
+                  "B2_REPORT_PERIOD")
+    selected, scope = select_references(reference_ids, registry_raw, code_commit)
+    plan = []
+    for record in selected:
+        code = record["case"]
+        market = {"SH": "sh", "SZ": "sz", "BJ": "bj"}[code[-2:]]
+        if code.endswith(".SH") and code.startswith(("688", "689")):
+            market = "shkcp"
+        plan.append({"code": code, "selection": record,
+            "relationship": "NOT_INFERRED_FROM_SOURCE_SELECTION", "report_period": period,
+            "params": {"sectionTime": period, "firstTime": "", "lastTime": "",
+                "market": market, "stockCode": code[:6], "orderClos": "", "isDesc": "",
+                "pagesize": "100", "pagenum": "1"}})
+    return plan, scope
 
 def inspect_body(raw, code, period):
     """Mechanical request/field checks; not a complete history or date-truth verdict."""
@@ -149,8 +162,14 @@ def inspect_body(raw, code, period):
             "issues": list(dict.fromkeys(issues)), "revision_history_complete": False}
 
 
-def public_request(params, *, clock=relay.now, session_factory=requests.Session):
+def public_request(params, *, clock=relay.now, session_factory=requests.Session, kind="appointments"):
     """One POST, one fresh credential-free session; preserve complete/partial bytes."""
+    relay.require(kind in {"appointments", *ANNOUNCEMENT_URLS}, "B2_SOURCE_KIND")
+    endpoint = URL if kind == "appointments" else ANNOUNCEMENT_URLS[kind]
+    payload = {"params" if kind == "appointments" else "data": params}
+    headers = {"Accept": "application/json", "Accept-Encoding": "identity"}
+    if kind != "appointments":
+        headers.update({"User-Agent": "Mozilla/5.0", "Referer": "https://www.cninfo.com.cn/"})
     result = {"requested_at": clock(), "http_status": None, "headers": {},
               "raw": None, "body_complete": False, "error_type": None}
     chunks = []
@@ -158,8 +177,7 @@ def public_request(params, *, clock=relay.now, session_factory=requests.Session)
     try:
         with session_factory() as session:
             session.trust_env = False  # No netrc or environment proxy credentials.
-            with session.post(URL, params=params, headers={"Accept": "application/json",
-                    "Accept-Encoding": "identity"}, timeout=(5, 15),
+            with session.post(endpoint, **payload, headers=headers, timeout=(5, 15),
                     allow_redirects=False, stream=True) as response:
                 result["http_status"] = response.status_code
                 result["headers"] = {k: response.headers[k] for k in
@@ -182,12 +200,13 @@ def public_request(params, *, clock=relay.now, session_factory=requests.Session)
     return result
 
 
-def retention_directory(identity):
+def retention_directory(identity, kind="appointments"):
     """Proposed native Git destination, not evidence that files have been saved there."""
     run_id = identity.get("GITHUB_RUN_ID")
     relay.require(isinstance(run_id, str) and re.fullmatch(r"[1-9][0-9]{0,19}", run_id)
                   and identity.get("GITHUB_RUN_ATTEMPT") == "1", "B2_RETENTION_IDENTITY")
-    return f"docs/readings/b2-appointments-{run_id}-1"
+    relay.require(kind in {"appointments", "announcements"}, "B2_SOURCE_KIND")
+    return f"docs/readings/b2-{kind}-{run_id}-1"
 
 
 def readable_summary(result):
@@ -227,13 +246,15 @@ def readable_summary(result):
     return "\n".join(lines).encode("utf-8")
 
 
-def save_security_readings(output, result, plan_raw):
+def save_security_readings(output, result, plan_raw, *, kind="appointments", summary_builder=readable_summary):
     """Reuse flat RETAINED_FILES archives and explicit purpose references.
 
     Only local create-only output. No registry edits, commit lookup, source request
     or publication. The source ref stays invalid until native Git custody is read back.
     """
-    directory = retention_directory(result["identity"])
+    directory = retention_directory(result["identity"], kind)
+    purpose = (f"财报预约来源资料（{result['report_period']}）" if kind == "appointments" else
+               f"公告目录来源资料（{result['publication_window']['start']}至{result['publication_window']['end']}）")
     references = []
     for item in result["outcomes"]:
         target = output / item["code"]
@@ -244,12 +265,12 @@ def save_security_readings(output, result, plan_raw):
         view = {**result, "outcomes": [deepcopy(item)]}
         if view["outcomes"][0]["receipt"] is not None:
             view["outcomes"][0]["receipt"] = "receipt.json"
-        summary = readable_summary(view)
+        summary = summary_builder(view)
         save(target / "summary.md", summary)
         references.append({
-            "id": f"b2-appointments-{result['identity']['GITHUB_RUN_ID']}-1-{item['code'].replace('.', '-')}",
+            "id": f"b2-{kind}-{result['identity']['GITHUB_RUN_ID']}-1-{item['code'].replace('.', '-')}",
             "case": item["code"], "use": "NAVIGATION_ONLY",
-            "purpose_note": f"财报预约来源资料（{result['report_period']}）；原资料引用{item['reference_id']}。"
+            "purpose_note": f"{purpose}；原资料引用{item['reference_id']}。"
                             "仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
             "read_policy": "ON_DEMAND_ARCHIVE",
             "archive_source": {"path": f"{directory}/{item['code']}/summary.md", "ref": None,
@@ -331,12 +352,185 @@ def capture(output, identity, *, reference_ids, period, registry_raw=None,
     return result
 
 
+def announcement_summary(result):
+    """Directory metadata only: neither PDF custody nor an event-date extractor."""
+    def cell(value):
+        return escape(json.dumps(value, ensure_ascii=False), quote=False).replace("|", "&#124;").replace("`", "&#96;")
+    window = result["publication_window"]
+    lines = ["# 已选证券公告目录 · 标准通道结果", "",
+        f"公告日期窗口：{window['start']} 至 {window['end']}（Asia/Shanghai）。",
+        f"本次取得结束：{result['finished_at']}；状态：{result['status']}。",
+        "来源公告时间不是正文中的股东会、解禁、分红实施日；原件链接不是PDF已下载或已阅读。",
+        "显式选择仅用于本次目录查询，不建立关注、持仓、Watch、研究接受或提醒。", ""]
+    for item in result["outcomes"]:
+        lines += [f"## {item['code']}｜{item['status']}", "", f"选择依据：{item['reference_id']}。"]
+        if item["receipt"] is None:
+            lines += ["来源停止后未查询，不是空目录或没有公司事件。", ""]
+            continue
+        lines += [f"原请求和响应：{item['receipt']}；实际请求数：{len(item['requests'])}。",
+                  f"原始页形：{cell(item['page_shapes'])}。"]
+        if item["announcements"] is None:
+            lines += ["目录未完整取得或未通过一致性检查；已收到的原始页仍保留，公告数量未知，不记零。", ""]
+            continue
+        lines += [f"本窗口接口返回 {len(item['announcements'])} 条；不是该公司的完整历史或未来事件清单。", "",
+                  "| 公告ID | 来源公告时间 | 标题 | 原件定位（未下载） |", "|---|---|---|---|"]
+        for row in item["announcements"]:
+            lines.append("| " + " | ".join(cell(row[k]) for k in
+                ("announcement_id", "source_announcement_time", "title", "source_locator")) + " |")
+        lines.append("")
+    lines += ["## 读取限制", "", "机构身份沿原CNINFO解析；原JSON、空值、来源时间和查询时间分别保留。",
+        "本次最多每股一次组织码查询及三页公告，每页30条；页数截断、源失败和未查询分别记录。",
+        "不按标题推实施日期、取消、改期、研究优先级或投资结论，不去重改写原始页。",
+        "Git保存、按需登记、发布、原件恢复与PDF取得均需分别完成；Investment Authority=NONE。", ""]
+    return "\n".join(lines).encode("utf-8")
+
+
+def capture_announcements(output, identity, *, reference_ids, start_date, end_date,
+                          registry_raw=None, request=public_request, clock=relay.now):
+    """Reuse the original CNINFO batch resolver/parser with a bounded retained transport."""
+    from decision_kernel.runtime import cninfo_http as cninfo
+
+    relay.require(is_day(start_date) and is_day(end_date), "B2_PUBLICATION_WINDOW")
+    start, end = date.fromisoformat(start_date), date.fromisoformat(end_date)
+    started = clock()
+    observed = datetime.fromisoformat(started)
+    relay.require(observed.tzinfo is not None and 0 <= (end - start).days <= 366
+                  and end <= observed.astimezone(cninfo.SHANGHAI_TZ).date(), "B2_PUBLICATION_WINDOW")
+    registry_raw = (ROOT / "current_state/registry.json").read_bytes() if registry_raw is None else registry_raw
+    selected, scope = select_references(reference_ids, registry_raw, identity.get("GITHUB_SHA"))
+    retention_directory(identity, "announcements")
+    output = Path(output)
+    output.mkdir()
+    window = {"start": start_date, "end": end_date, "timezone": "Asia/Shanghai"}
+    plan_raw = encoded({"identity": identity, "scope_source": scope, "selections": selected,
+        "source_kind": "announcements", "source_endpoints": ANNOUNCEMENT_URLS,
+        "publication_window": window, "started_at": started,
+        "max_requests": len(selected) * (1 + MAX_ANNOUNCEMENT_PAGES), "page_size": 30,
+        "max_pages_per_security": MAX_ANNOUNCEMENT_PAGES, "retries": 0, "redirects": False,
+        "pdf_requests": 0, "investment_authority": "NONE"})
+    save(output / "plan.json", plan_raw)
+    outcomes, stopped = [], False
+    for chosen in selected:
+        code = chosen["case"]
+        item = {"code": code, "reference_id": chosen["id"], "registered_use": chosen["use"],
+                "status": "NOT_QUERIED_AFTER_STOP", "receipt": None, "requests": [], "page_shapes": [], "announcements": None}
+        if not stopped:
+            target = output / code
+            target.mkdir()
+
+            def retained_post(url, form):
+                kind = {cninfo.CNINFO_STOCK_MAP_URL: "organization",
+                        cninfo.CNINFO_ANNOUNCEMENT_QUERY_URL: "announcements"}.get(url)
+                relay.require(kind is not None, "B2_SOURCE_KIND")
+                # The original batch may request further pages; reject BEFORE that HTTP call.
+                relay.require(len(item["requests"]) < 1 + MAX_ANNOUNCEMENT_PAGES, "B2_DIRECTORY_PAGE_LIMIT")
+                form = dict(form)
+                if kind == "announcements":
+                    form["column"] = "szse"  # AKShare's reviewed combined SH/SZ/BJ query column.
+                ordinal = len(item["requests"]) + 1
+                record = {"kind": kind, "endpoint": ANNOUNCEMENT_URLS[kind],
+                          "method": "POST", "form": form, "invoked_at": clock()}
+                try:
+                    response = request(form, kind=kind, clock=clock)
+                except Exception as exc:
+                    response = {"http_status": None, "raw": None, "body_complete": False,
+                                "error_type": type(exc).__name__, "requested_at": record["invoked_at"],
+                                "received_at": clock()}
+                response = deepcopy(response)
+                raw = response.pop("raw")
+                response.update(body=None, bytes=None, sha256=None)
+                if raw is not None:
+                    relay.require(isinstance(raw, bytes) and len(raw) <= MAX_BODY, "B2_RAW_SIZE")
+                    name = f"query-{ordinal}.body"
+                    save(target / name, raw)
+                    response.update(body=name, bytes=len(raw), sha256=sha256(raw).hexdigest())
+                record["response"] = response
+                save(target / f"query-{ordinal}.json", encoded(record))
+                item["requests"].append(record)
+                relay.require(response["http_status"] == 200 and response["body_complete"]
+                              and not response["error_type"], "B2_DIRECTORY_SOURCE_GAP")
+                relay.require(isinstance(raw, bytes), "B2_DIRECTORY_RESPONSE_GAP")
+                # Reuse the same duplicate-key guard, retaining arrays for the original org resolver.
+                value = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=relay._unique,
+                    parse_constant=lambda _: (_ for _ in ()).throw(ValueError("NONFINITE_JSON")))
+                if kind == "announcements":
+                    relay.require(isinstance(value, dict) and value.get("error") in (None, "")
+                        and value.get("success", True) is True and value.get("ok", True) is True
+                        and (value.get("code") is None or type(value["code"]) is int and value["code"] == 0),
+                        "B2_DIRECTORY_RESPONSE_GAP")
+                    # Do not let the old parser's missing-row-identity convenience infer an identity.
+                    rows = value.get("announcements")
+                    relay.require(rows is None or isinstance(rows, list) and len(rows) <= 30,
+                                  "B2_DIRECTORY_RESPONSE_GAP")
+                    total = value.get("totalAnnouncement")
+                    item["page_shapes"].append({"query": ordinal,
+                        "table_kind": "NULL" if rows is None else "LIST", "reported_total": total,
+                        "returned_rows": None if rows is None else len(rows)})
+                    if "hasMore" in value:
+                        relay.require(type(total) is int and total >= 0 and type(value["hasMore"]) is bool
+                            and value["hasMore"] == (int(form["pageNum"]) * 30 < total),
+                            "B2_DIRECTORY_RESPONSE_GAP")
+                    for row in rows or []:
+                        relay.require(isinstance(row, dict) and row.get("secCode") == code[:6]
+                                      and row.get("orgId") == form["stock"].split(",", 1)[1],
+                                      "B2_DIRECTORY_IDENTITY_GAP")
+                return value
+
+            try:
+                batch = cninfo.fetch_cninfo_disclosures(stock_code=code[:6], start_date=start,
+                                                       end_date=end, post_json=retained_post)
+                rows = []
+                received_clock = datetime.fromisoformat(item["requests"][-1]["response"]["received_at"])
+                relay.require(received_clock.tzinfo is not None, "B2_DIRECTORY_WINDOW_GAP")
+                for row in batch.announcements:
+                    relay.require(row.published_at is None or (start <= row.published_at.date() <= end
+                                  and row.published_at <= received_clock), "B2_DIRECTORY_WINDOW_GAP")
+                    rows.append({"announcement_id": row.announcement_id, "stock_code": row.stock_code,
+                        "org_id": row.org_id, "title": row.title, "announcement_type": row.announcement_type,
+                        "source_announcement_time": row.published_at.isoformat() if row.published_at else None,
+                        "source_locator": row.source_locator})
+                item.update(announcements=rows, status=("EMPTY_DIRECTORY_NOT_NO_EVENTS" if not rows else
+                    "CAPTURED_WITH_FIELD_GAPS" if any(r["source_announcement_time"] is None for r in rows) else
+                    "CAPTURED_REQUIRES_SOURCE_REVIEW"))
+            except (ValueError, TypeError, KeyError, OverflowError, cninfo.CninfoRuntimeError) as exc:
+                # Only local finite labels/class names: never exception text supplied by sources.
+                limited = type(exc) is relay.RelayError and str(exc) == "B2_DIRECTORY_PAGE_LIMIT"
+                codes = {"B2_DIRECTORY_PAGE_LIMIT", "B2_DIRECTORY_SOURCE_GAP", "B2_DIRECTORY_RESPONSE_GAP",
+                         "B2_DIRECTORY_IDENTITY_GAP", "B2_DIRECTORY_WINDOW_GAP", "DUPLICATE_JSON_KEY"}
+                item.update(status="DIRECTORY_PAGE_LIMIT_RAW_RETAINED" if limited else "DIRECTORY_GAP_RAW_RETAINED",
+                            error_type=type(exc).__name__, gap_code=(str(exc) if type(exc) is relay.RelayError
+                                and str(exc) in codes else "CNINFO_RESPONSE_REJECTED"))
+                stopped = not limited
+            item["receipt"] = f"{code}/receipt.json"
+            save(target / "receipt.json", encoded({"selection": chosen, "publication_window": window,
+                "outcome": item, "finished_at": clock(), "pdf_status": "NOT_REQUESTED_LINKS_ONLY",
+                "event_dates": "NOT_EXTRACTED_FROM_BODY", "investment_authority": "NONE"}))
+        outcomes.append(item)
+    gaps = any(o["status"] != "CAPTURED_REQUIRES_SOURCE_REVIEW" for o in outcomes)
+    result = {"identity": identity, "source_kind": "announcements", "publication_window": window,
+        "outcomes": outcomes, "finished_at": clock(), "research_executed": False, "pdf_requests": 0,
+        "investment_authority": "NONE", "status": "STOPPED_WITH_GAPS" if stopped else
+        "CAPTURED_WITH_GAPS" if gaps else "CAPTURED_REQUIRES_SOURCE_REVIEW"}
+    save(output / "capture.json", encoded(result))
+    save(output / "summary.md", announcement_summary(result))
+    save_security_readings(output, result, plan_raw, kind="announcements", summary_builder=announcement_summary)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True)
     parser.add_argument("--reference-ids", required=True, help="Comma-separated explicit current registry IDs; max six securities")
-    parser.add_argument("--report-period", required=True, help="YYYY-MM-DD quarter end; no inferred current period")
+    parser.add_argument("--source-kind", choices=("appointments", "announcements"), default="appointments")
+    parser.add_argument("--report-period", default="", help="Required for appointments: YYYY-MM-DD quarter end")
+    parser.add_argument("--start-date", default="", help="Required for announcements: publication window start")
+    parser.add_argument("--end-date", default="", help="Required for announcements: publication window end")
     args = parser.parse_args()
+    if args.source_kind == "appointments":
+        if not args.report_period or args.start_date or args.end_date:
+            parser.error("appointments requires --report-period and no announcement dates")
+    elif not args.start_date or not args.end_date or args.report_period:
+        parser.error("announcements requires --start-date/--end-date and no report period")
     expected = "auguspp/decision-kernel/" + WORKFLOW + "@refs/heads/main"
     relay.require(os.environ.get("GITHUB_WORKFLOW_REF") == expected
                   and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
@@ -344,8 +538,10 @@ def main():
     identity = {key: os.environ.get(key) for key in
         ("GITHUB_REPOSITORY", "GITHUB_SHA", "GITHUB_REF", "GITHUB_RUN_ID",
          "GITHUB_RUN_ATTEMPT", "GITHUB_WORKFLOW_REF", "GITHUB_EVENT_NAME")}
-    result = capture(args.output, identity,
-        reference_ids=[v.strip() for v in args.reference_ids.split(",")], period=args.report_period)
+    reference_ids = [v.strip() for v in args.reference_ids.split(",")]
+    result = (capture(args.output, identity, reference_ids=reference_ids, period=args.report_period)
+              if args.source_kind == "appointments" else capture_announcements(args.output, identity,
+                  reference_ids=reference_ids, start_date=args.start_date, end_date=args.end_date))
     print(result["status"])
     # A completed bounded capture can contain explicit data gaps, never silent success.
     return 1 if result["status"] == "STOPPED_WITH_GAPS" else 0
