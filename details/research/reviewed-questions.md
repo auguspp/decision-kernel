@@ -11,19 +11,19 @@
 
 ## 当前保存Stock批次
 
-市场日：2026-09-29；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
-- 九阳股份 002242.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“小家电”中，九阳股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 特发服务 300917.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“房地产”中，特发服务的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 智飞生物 300122.SZ：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-  - 观察问题草稿：来源方向“疫苗”中，智飞生物的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 小熊电器 002959.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“小家电”中，小熊电器的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 信达地产 600657.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
-  - 观察问题草稿：来源方向“房地产”中，信达地产的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
-- 金迪克 688670.SH：ORIGINAL&#95;PRICE&#95;DISPOSITION&#95;ONLY
-  - 观察问题草稿：来源方向“疫苗”中，金迪克的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+市场日：2026-09-30；SAVED&#95;STOCK&#95;SCOPE&#95;WITH&#95;RESEARCH&#95;RELATIONS&#95;NOT&#95;FORMAL&#95;QUESTION&#95;REVIEW
+- 中船科技 600072.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“风电设备”中，中船科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 泰诺麦博-U 688806.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
+  - 观察问题草稿：来源方向“其他生物制品”中，泰诺麦博-U的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 福建水泥 600802.SH：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“水泥”中，福建水泥的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 威力传动 300904.SZ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“风电设备”中，威力传动的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- 三元基因 920344.BJ：RESEARCH&#95;CONTEXT&#95;UNAVAILABLE&#95;NOT&#95;NEW&#95;QUESTION
+  - 观察问题草稿：来源方向“其他生物制品”中，三元基因的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
+- XD海螺水 600585.SH：DATA&#95;UNAVAILABLE&#95;NOT&#95;PRICE&#95;REJECTED
+  - 观察问题草稿：来源方向“水泥”中，XD海螺水的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？
 
 观察问题草稿不是正式Question；已有来源失败不得换key重试，未提供正式审阅也不等于没有问题。
 
