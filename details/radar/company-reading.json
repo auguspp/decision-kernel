@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "97d294e12d8756afcb07c56ca26917f8733eb99c72612053fe49d1e4fd913f55",
+    "base_reading_hash": "bd35b62c6a6e847bc9a7b7e0d7d72b38359f824a3da3e7fa4e4d0c8364cad665",
     "companies": [
       {
         "automatic_admission": false,
@@ -2258,6 +2258,27 @@
                 "ref": "d13143a92b4c25bb38c9a46fc836309dba2af367",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "0de2710be919c78fec760efcec11f25d2b0930db5a95202235f865d62b1edb4a"
+              },
+              "use": "NAVIGATION_ONLY"
+            },
+            {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "601155.SH",
+              "id": "b2-pdf-36685884532-1-601155-SH",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "公告原文来源资料（1225512314）；原资料引用b2-announcements-36675839340-1-601155-SH。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 3055,
+                "git_blob": "3cbf6bc05160a27d091497f0fbf49f4464e32178",
+                "path": "docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md",
+                "ref": "e382453d09e54572ead47f23f553a5da87764d9f",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "6b49ff344dca357a388a63c80754f86d0943794fc597708007750f7afe9763f8"
               },
               "use": "NAVIGATION_ONLY"
             }
@@ -5774,7 +5795,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-30T08:23:52.795521+00:00",
+    "generated_at": "2026-09-30T09:08:09.476952+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -5787,7 +5808,7 @@
     "signal_transition_authority": "NONE",
     "source_status": {
       "concept": {
-        "api_calls_after_attempt": 95,
+        "api_calls_after_attempt": 97,
         "error_type": "ConceptSourceError",
         "failed_stage": "PAYLOAD_REPLAY",
         "latest_attempt": {
@@ -5805,8 +5826,8 @@
           "updated_at": "2026-09-18T09:21:06Z"
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
-        "pending_blob_writes": 8,
-        "retained_file_count": 117,
+        "pending_blob_writes": 3,
+        "retained_file_count": 118,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
       "concept_detail": {
@@ -5968,5 +5989,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "f04323a9a584a9d4e31dad789ddc50dcf310f1a3fc141f52b2f03a40d4ac433f"
+  "projection_hash": "0f1350f2e131ed5bc792e3cfe6d8d0ef28917e792ae72a0b39a225d367ec90d8"
 }
