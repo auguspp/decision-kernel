@@ -1,0 +1,24 @@
+{
+  "endpoint": "https://www.cninfo.com.cn/new/information/topSearch/query",
+  "form": {
+    "keyWord": "601155",
+    "maxNum": "10"
+  },
+  "invoked_at": "2026-09-30T05:01:03.345009+00:00",
+  "kind": "organization",
+  "method": "POST",
+  "response": {
+    "body": "query-1.body",
+    "body_complete": true,
+    "bytes": 146,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 05:01:07 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T05:01:07.174526+00:00",
+    "requested_at": "2026-09-30T05:01:03.345021+00:00",
+    "sha256": "38a1d6bd7c1bacfe1fd53b9857f5118c9432cb2dcbb58f01c024e5b2f50cac7f"
+  }
+}

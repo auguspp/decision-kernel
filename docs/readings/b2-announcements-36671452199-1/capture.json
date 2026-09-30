@@ -1,0 +1,102 @@
+{
+  "finished_at": "2026-09-30T05:01:08.086528+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36671452199",
+    "GITHUB_SHA": "cbb5cecbdee8739c089b942185a71ce453acc66e",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "outcomes": [
+    {
+      "announcements": [],
+      "code": "601155.SH",
+      "page_shapes": [
+        {
+          "query": 2,
+          "reported_total": 0,
+          "returned_rows": null,
+          "table_kind": "NULL"
+        }
+      ],
+      "receipt": "601155.SH/receipt.json",
+      "reference_id": "601155-xincheng-policy-full-20260930",
+      "registered_use": "RETAINED_RESEARCH_DOCUMENT",
+      "requests": [
+        {
+          "endpoint": "https://www.cninfo.com.cn/new/information/topSearch/query",
+          "form": {
+            "keyWord": "601155",
+            "maxNum": "10"
+          },
+          "invoked_at": "2026-09-30T05:01:03.345009+00:00",
+          "kind": "organization",
+          "method": "POST",
+          "response": {
+            "body": "query-1.body",
+            "body_complete": true,
+            "bytes": 146,
+            "error_type": null,
+            "headers": {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Wed, 30 Sep 2026 05:01:07 GMT"
+            },
+            "http_status": 200,
+            "received_at": "2026-09-30T05:01:07.174526+00:00",
+            "requested_at": "2026-09-30T05:01:03.345021+00:00",
+            "sha256": "38a1d6bd7c1bacfe1fd53b9857f5118c9432cb2dcbb58f01c024e5b2f50cac7f"
+          }
+        },
+        {
+          "endpoint": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+          "form": {
+            "category": "",
+            "column": "szse",
+            "isHLtitle": "true",
+            "pageNum": "1",
+            "pageSize": "30",
+            "plate": "",
+            "seDate": "2026-09-24~2026-09-30",
+            "searchkey": "",
+            "secid": "",
+            "sortName": "",
+            "sortType": "",
+            "stock": "601155,GD012027",
+            "tabName": "fulltext",
+            "trade": ""
+          },
+          "invoked_at": "2026-09-30T05:01:07.175872+00:00",
+          "kind": "announcements",
+          "method": "POST",
+          "response": {
+            "body": "query-2.body",
+            "body_complete": true,
+            "bytes": 165,
+            "error_type": null,
+            "headers": {
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Wed, 30 Sep 2026 05:01:08 GMT"
+            },
+            "http_status": 200,
+            "received_at": "2026-09-30T05:01:08.085047+00:00",
+            "requested_at": "2026-09-30T05:01:07.175880+00:00",
+            "sha256": "c2a890bbf3a6a53ab02ddc6c1794bf1c72ba45799fe9f59dcc5ba2cc18467114"
+          }
+        }
+      ],
+      "status": "EMPTY_DIRECTORY_NOT_NO_EVENTS"
+    }
+  ],
+  "pdf_requests": 0,
+  "publication_window": {
+    "end": "2026-09-30",
+    "start": "2026-09-24",
+    "timezone": "Asia/Shanghai"
+  },
+  "research_executed": false,
+  "source_kind": "announcements",
+  "status": "CAPTURED_WITH_GAPS"
+}
