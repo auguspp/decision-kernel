@@ -84,6 +84,14 @@ Full Research 请求仍按原有界范围自主完成，不把阶段保存变成
 
 复用原 `external_research_admission` 的声明式来源检查及 `save-progress/read-progress` 留存，不建立第二套准入框架。原 Stock `FIRST_BUSINESS_BASELINE` 的全部正文及历史执行合同仍保留。显式 reviewed-question 输入、`stock_question_host` 和 `stock_daily_question` 已有实现；当前 daily 请求默认关闭，仍有特定来源和执行绑定，不能称为任意公司均可自动运行。Inbox 例行六公司扫描默认关闭，与这些已实现能力分别记录；不得把旧失败改称新研究完成。
 
+## 0.5 Full 一次委托与任务级留存的优先解释（2026-09-30）
+
+Human 直接委托 Full，或在 Quick 后明确选择 Full，即形成**一次有边界的自主研究委托**。在原委托范围、实际权限与资源内，只要仍有可能实质改变本次判断、当前有合理推进办法的工作，研究者就应继续取证、分析、质疑和修正；阶段性报告、保存点、篇幅增长或已经回答部分子问题都不是停工点。不得把本轮仍可完成的高价值工作只列成“下一步建议”交回 Human，等待逐轮再说“继续”。真正停止须对应：本次问题已足够回答；当前公开证据已到边界或继续工作的边际价值不足；或真实工具、权限、预算、资源中断。具体判定以 [Quick / Full 成果与交接边界](research-outcome-contract-v1.md) 为准。
+
+**任务级留存也是同一次交付责任。** 一次 Research 已形成实质成果，且当前获准的 GitHub 写入/归档路径可用时，默认应在同一委托内按实际资格完成原件保存、精确读回、用途登记，并如实报告发布状态；不要求 Human 再说一次“存档”。“没有自动捕获所有聊天 / 没有自动上传每段聊天”只表示不存在后台把所有对话无差别写入仓库的通用机制，**不取消当前研究者对本任务成果的主动留存责任**。写入、CI、登记或 publisher 真正受阻时，保留已完成成果并准确报告 `NOT_SAVED / REGISTRATION_INCOMPLETE / PUBLICATION_PENDING` 等实际阶段，不静默跳过保存。
+
+留存资格和研究资格仍分开：不满足 typed progress/commit 的自然语言 Full 可按 `RETAINED_FILES` 保存；未建立 ResearchSnapshot 的结果不得为了运行 typed Odds 而补造 COMMITTED、概率、时钟或 Human 接受。Quick 仍可在其有界范围完成后建议 Full；本节不授权无限研究、跨会话自动重启、新费用、监控或交易。
+
 ## 1. 先确定在回答哪种问题
 
 区分多年经营价值/现金回报与短期催化/预期交易；两者可并列，不互相代替。先保存以下 decision-use context：证券与股类、Research cutoff、价格日期/来源/authority、估值终点、持有期、绝对或相对回报门槛、分红/税费、股本及单位、允许承担的损失约束。
@@ -92,7 +100,7 @@ Human 已明确的条件直接复用并引用原话。跨公司沿用三年/10%�
 
 没有合格行情时，可做明确标注的 CONTEXT_ONLY provisional analysis；不伪造 ObservedMarket、canonical Odds、Pre/Quick、Kernel COMMIT 或 validator PASS。#321 仍是另行安排的执行能力需求，本文不是其已实现证明。
 
-## 2. 有限轮次研究，不让 Human 反复充当研究主管
+## 2. 有界自主研究：一次委托内推进到有依据的停止点
 
 按 v3 留下六类成果：**经济结构与关键问题 → 实证分析 → 股东经济勾稽 → Challenger及裁定 → 独立估值/市场对照 → 交付留存**。这是一次请求内的研究动作，不是六个 Agent，也不是六次 Human 批准。
 
