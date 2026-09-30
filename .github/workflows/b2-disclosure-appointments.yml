@@ -1,5 +1,5 @@
 name: b2-disclosure-appointments
-run-name: B2 selected securities / ${{ inputs.report-period }} appointments
+run-name: B2 selected securities / ${{ inputs.source-kind }} / ${{ inputs.report-period }}${{ inputs.start-date }}
 on:
   workflow_dispatch:
     inputs:
@@ -11,9 +11,23 @@ on:
         description: 'Comma-separated current registry IDs, one per selected security, max six'
         required: true
         type: string
-      report-period:
-        description: 'Report period YYYY-MM-DD (quarter end), not a disclosure date'
+      source-kind:
+        description: 'One explicit source only; no automatic combined collection'
         required: true
+        type: choice
+        default: appointments
+        options: [appointments, announcements]
+      report-period:
+        description: 'Appointments only: required YYYY-MM-DD quarter end'
+        required: false
+        type: string
+      start-date:
+        description: 'Announcements only: required publication window start YYYY-MM-DD'
+        required: false
+        type: string
+      end-date:
+        description: 'Announcements only: required publication window end YYYY-MM-DD'
+        required: false
         type: string
 permissions:
   contents: read
@@ -60,21 +74,27 @@ jobs:
           PY
       - name: Install existing feed dependencies
         run: python -m pip install -e '.[feeds]'
-      - name: Capture explicitly selected CNINFO appointment requests without credentials
+      - name: Capture one explicitly selected CNINFO source without credentials
         id: capture
         env:
           B2_REFERENCE_IDS: ${{ inputs.reference-ids }}
           B2_REPORT_PERIOD: ${{ inputs.report-period }}
+          B2_SOURCE_KIND: ${{ inputs.source-kind }}
+          B2_START_DATE: ${{ inputs.start-date }}
+          B2_END_DATE: ${{ inputs.end-date }}
         run: >-
           python .github/scripts/b2-disclosure-appointments.py
           --output "$RUNNER_TEMP/b2-appointments"
           --reference-ids "$B2_REFERENCE_IDS"
           --report-period "$B2_REPORT_PERIOD"
+          --source-kind "$B2_SOURCE_KIND"
+          --start-date "$B2_START_DATE"
+          --end-date "$B2_END_DATE"
       - name: Retain originals and partial failures
         if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: b2-appointments-${{ github.run_id }}-${{ github.run_attempt }}
+          name: b2-${{ inputs.source-kind == 'announcements' && 'announcements' || 'appointments' }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/b2-appointments/
           retention-days: 30
           if-no-files-found: error

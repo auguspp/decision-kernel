@@ -262,12 +262,18 @@ def test_workflow_requires_selection_and_period_keeps_gates_and_uses_env_not_she
     w = yaml.load(source, Loader=yaml.BaseLoader)
     assert set(w['on']) == {'workflow_dispatch'}
     inputs = w['on']['workflow_dispatch']['inputs']
-    assert set(inputs) == {'code-sha','reference-ids','report-period'}
-    assert all(v['required'] == 'true' and 'default' not in v for v in inputs.values())
+    assert set(inputs) == {'code-sha','reference-ids','report-period','source-kind','start-date','end-date'}
+    assert all(inputs[k]['required'] == 'true' and 'default' not in inputs[k] for k in ('code-sha','reference-ids'))
+    assert inputs['source-kind']['default'] == 'appointments'
+    assert inputs['source-kind']['options'] == ['appointments','announcements']
+    assert all(inputs[k]['required'] == 'false' for k in ('report-period','start-date','end-date'))
     capture = next(s for s in w['jobs']['capture']['steps'] if s.get('id') == 'capture')
-    assert capture['env'] == {'B2_REFERENCE_IDS':'${{ inputs.reference-ids }}', 'B2_REPORT_PERIOD':'${{ inputs.report-period }}'}
+    assert capture['env'] == {'B2_REFERENCE_IDS':'${{ inputs.reference-ids }}', 'B2_REPORT_PERIOD':'${{ inputs.report-period }}',
+        'B2_SOURCE_KIND':'${{ inputs.source-kind }}', 'B2_START_DATE':'${{ inputs.start-date }}', 'B2_END_DATE':'${{ inputs.end-date }}'}
     assert '${{' not in capture['run'] and '--reference-ids "$B2_REFERENCE_IDS"' in capture['run']
-    assert '--report-period "$B2_REPORT_PERIOD"' in capture['run']
+    for flag, variable in [('report-period','B2_REPORT_PERIOD'),('source-kind','B2_SOURCE_KIND'),
+                           ('start-date','B2_START_DATE'),('end-date','B2_END_DATE')]:
+        assert f'--{flag} "${variable}"' in capture['run']
     assert 'contents: write' not in source and 'actions: write' not in source
     assert "github.run_attempt == 1" in source and "github.actor == 'auguspp'" in source
     assert 'persist-credentials: false' in source and 'cancel-in-progress: false' in source
@@ -275,7 +281,6 @@ def test_workflow_requires_selection_and_period_keeps_gates_and_uses_env_not_she
     assert 'secrets.' not in source and 'TUSHARE_PROXY_API_KEY' not in source
     assert 'continue-on-error' not in source and 'current-state-read-entry' not in source
     assert not {'COMPANIES', 'PERIOD', 'SCOPE'} & b2.keys()
-
 
 
 def test_per_security_reading_and_unbound_reference_preserve_original_batch(tmp_path):
@@ -334,8 +339,9 @@ def test_retention_run_identity_is_validated_before_source_or_output(tmp_path):
         assert calls == [] and not (tmp_path/'out').exists()
 
 
+@pytest.mark.parametrize('source_kind', ['appointments', 'announcements'])
 @pytest.mark.parametrize('http', [200, 403])
-def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_path, monkeypatch, http):
+def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_path, monkeypatch, http, source_kind):
     # Native API transport fixture only; the real archive reader and validators run unchanged.
     import socket
     def no_network(*args, **kwargs): raise AssertionError('no live source in standard archive test')
@@ -344,7 +350,11 @@ def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_pat
     fixture = runpy.run_path(str(ROOT/'tests/test_research_archive.py'))
     request, calls = client(lambda p: envelope(None) if p['stockCode']=='688001' else
                             envelope([row(p['stockCode'],p['sectionTime'])]), http=http)
-    result = run(tmp_path, request)
+    if source_kind == 'appointments':
+        result = run(tmp_path, request)
+    else:
+        request, calls = announcement_client(http=http, null_code='688001')
+        result = run_announcements(tmp_path, request)
     output = tmp_path/'out'
     proposal = json.loads((output/'registration-proposal.json').read_bytes())
     for index, record in enumerate(proposal['references']):
@@ -378,7 +388,7 @@ def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_pat
         assert receipt['continuation_status'] == 'NOT_EXECUTED' and receipt['remote_write'] is False
         assert {p.name:p.read_bytes() for p in (tmp_path/f'recovered-{index}'/'bundle').iterdir()} == files
         assert receipt['source_commit'] == fixture['A'] and receipt['reading_commit'] == fixture['R']
-    assert len(calls) == (1 if http == 403 else 4)
+    assert len(calls) == (1 if http == 403 else 4 if source_kind == 'appointments' else 8)
     assert result['status'] == ('STOPPED_WITH_GAPS' if http == 403 else 'CAPTURED_WITH_GAPS')
 
 
@@ -394,3 +404,179 @@ def test_source_archive_keeps_navigation_use_and_rejects_typed_progress(tmp_path
     record['archive'] = {'format':'RESEARCH_PROGRESS', 'expected_sha256':'c' * 64, 'question_id':'synthetic'}
     with pytest.raises(ValueError, match='source navigation cannot become typed research'):
         archive_index.project(record)
+
+
+# Source-only directory scenarios. Dates/tickers are synthetic, never a live source.
+PUBLICATION_MS = 4070847600000  # 2098-12-31 15:00 Asia/Shanghai.
+
+
+def announcement_client(*, http=200, total=1, null_code=None, damage=None):
+    calls = []
+    def request(form, *, kind, clock):
+        calls.append((kind, deepcopy(form)))
+        if kind == 'organization':
+            value = [{'code':form['keyWord'], 'orgId':'org-'+form['keyWord']}]
+        else:
+            code, org = form['stock'].split(',')
+            count = 0 if code == null_code else total
+            number, size = int(form['pageNum']), int(form['pageSize'])
+            begin = (number-1)*size
+            rows = [{'announcementId':str(i), 'secCode':code, 'orgId':org,
+                     'announcementTitle':'SYNTHETIC dividend / meeting, not an event date',
+                     'announcementTime':PUBLICATION_MS, 'announcementTypeName':'SYNTHETIC',
+                     'adjunctUrl':f'finalpage/2098-12-31/{i}.PDF'}
+                    for i in range(begin+1,min(begin+size,count)+1)]
+            value = {'totalAnnouncement':count,'announcements':None if code==null_code else rows,
+                     'hasMore':begin+len(rows)<count}
+            if damage: damage(value, number)
+        raw = json.dumps(value, ensure_ascii=False).encode()
+        return {'http_status':http,'raw':raw,'headers':{},'body_complete':True,'error_type':None,
+                'requested_at':clock(),'received_at':clock()}
+    return request, calls
+
+
+def run_announcements(tmp_path, request, *, ids=None, start='2098-12-31', end='2098-12-31'):
+    return b2['capture_announcements'](tmp_path/'out', IDENTITY,
+        reference_ids=ids or ['selected-'+str(i) for i in range(4)], start_date=start, end_date=end,
+        registry_raw=json.dumps(registry()).encode(), request=request, clock=lambda:NOW)
+
+
+def test_announcement_directory_uses_original_identity_and_batch_parser_with_raw_pages(tmp_path, monkeypatch):
+    from decision_kernel.runtime import cninfo_http as cninfo
+    original = cninfo.fetch_cninfo_disclosures
+    invocations = []
+    def tracked(**kwargs):
+        invocations.append(kwargs['stock_code']); return original(**kwargs)
+    monkeypatch.setattr(cninfo, 'fetch_cninfo_disclosures', tracked)
+    monkeypatch.setattr(cninfo, 'fetch_cninfo_pdf_bytes', lambda **_: pytest.fail('directory must not download PDFs'))
+    request, calls = announcement_client(total=35)
+    result = run_announcements(tmp_path, request, ids=['selected-0'])
+    assert result['status'] == 'CAPTURED_REQUIRES_SOURCE_REVIEW' and len(calls) == 3
+    assert invocations == ['600001'] and result['pdf_requests'] == 0 and result['research_executed'] is False
+    item = result['outcomes'][0]
+    assert len(item['announcements']) == 35 and item['announcements'][0]['announcement_id'] == '1'
+    assert item['announcements'][0]['source_locator'] == 'https://static.cninfo.com.cn/finalpage/2098-12-31/1.PDF'
+    target=tmp_path/'out/600001.SH'
+    assert {p.name for p in target.iterdir()} == {'plan.json','summary.md','receipt.json',
+        'query-1.body','query-1.json','query-2.body','query-2.json','query-3.body','query-3.json'}
+    for ordinal, record in enumerate(item['requests'],1):
+        raw=(target/f'query-{ordinal}.body').read_bytes()
+        assert record['response']['sha256'] == sha256(raw).hexdigest()
+        assert json.loads((target/f'query-{ordinal}.json').read_bytes()) == record
+        assert record['endpoint'].startswith('https://www.cninfo.com.cn/')
+    assert [f['pageNum'] for k,f in calls if k=='announcements'] == ['1','2']
+    assert all(f['column']=='szse' and f['category']=='' for k,f in calls if k=='announcements')
+    assert (target/'plan.json').read_bytes() == (tmp_path/'out/plan.json').read_bytes()
+    assert '原件链接不是PDF已下载' in (target/'summary.md').read_text()
+    proposal=json.loads((tmp_path/'out/registration-proposal.json').read_bytes())
+    assert proposal['directory']=='docs/readings/b2-announcements-123456789-1'
+    record=proposal['references'][0]
+    assert record['archive_source']['ref'] is None and record['use']=='NAVIGATION_ONLY'
+    assert record['read_policy']=='ON_DEMAND_ARCHIVE' and 'source' not in record
+    assert len(list(target.iterdir()))<=16
+    with pytest.raises(FileExistsError): run_announcements(tmp_path,request,ids=['selected-0'])
+    assert len(calls)==3
+
+
+def test_announcement_page_budget_preserves_partial_raw_and_does_not_infer_zero(tmp_path):
+    request,calls=announcement_client(total=95)
+    result=run_announcements(tmp_path,request,ids=['selected-0'])
+    assert len(calls)==4 and [f['pageNum'] for k,f in calls if k=='announcements']==['1','2','3']
+    item=result['outcomes'][0]
+    assert item['status']=='DIRECTORY_PAGE_LIMIT_RAW_RETAINED' and item['announcements'] is None
+    assert result['status']=='CAPTURED_WITH_GAPS'
+    assert len(json.loads((tmp_path/'out/600001.SH/query-4.body').read_bytes())['announcements'])==30
+    assert '公告数量未知，不记零' in (tmp_path/'out/600001.SH/summary.md').read_text()
+
+
+def test_announcement_null_and_empty_remain_distinct_raw_bounded_directory_results(tmp_path):
+    request,calls=announcement_client(total=0,null_code='688001')
+    result=run_announcements(tmp_path,request,ids=['selected-0','selected-1'])
+    assert len(calls)==4 and all(o['status']=='EMPTY_DIRECTORY_NOT_NO_EVENTS' for o in result['outcomes'])
+    assert json.loads((tmp_path/'out/600001.SH/query-2.body').read_bytes())['announcements']==[]
+    assert json.loads((tmp_path/'out/688001.SH/query-2.body').read_bytes())['announcements'] is None
+    assert [o['page_shapes'][0]['table_kind'] for o in result['outcomes']]==['LIST','NULL']
+
+
+@pytest.mark.parametrize('http',[302,403,429,503])
+def test_announcement_failure_stops_other_objects_without_fake_queries_or_secret_text(tmp_path,http):
+    request,calls=announcement_client(http=http)
+    result=run_announcements(tmp_path,request)
+    assert result['status']=='STOPPED_WITH_GAPS' and len(calls)==1
+    for item in result['outcomes'][1:]:
+        target=tmp_path/'out'/item['code']
+        assert item['announcements'] is None and item['receipt'] is None
+        assert {p.name for p in target.iterdir()}=={'plan.json','summary.md'}
+    assert (tmp_path/'out/600001.SH/query-1.body').exists()
+
+
+def test_announcement_original_parser_rejects_duplicate_ids_changed_totals_and_foreign_identity(tmp_path):
+    def duplicate(value,number):
+        if number==2: value['announcements'][0]['announcementId']='1'
+    def total_drift(value,number):
+        if number==2: value['totalAnnouncement']+=1
+    mutations=[duplicate,total_drift,
+        lambda v,n:v['announcements'][0].pop('secCode'),
+        lambda v,n:v['announcements'][0].update(secCode='600002'),
+        lambda v,n:v.update(success=False),
+        lambda v,n:v.update(hasMore=not v['hasMore']),
+        lambda v,n:v['announcements'][0].update(announcementTime=1)]
+    for i,mutate in enumerate(mutations):
+        folder=tmp_path/str(i);folder.mkdir()
+        request,calls=announcement_client(total=35,damage=mutate)
+        result=run_announcements(folder,request,ids=['selected-0','selected-1'])
+        assert result['status']=='STOPPED_WITH_GAPS'
+        assert result['outcomes'][0]['announcements'] is None
+        assert result['outcomes'][1]['status']=='NOT_QUERIED_AFTER_STOP'
+        assert (folder/'out/600001.SH/query-2.body').exists()
+        assert not (folder/'out/688001.SH/query-1.body').exists()
+
+
+def test_announcement_missing_publication_clock_is_unknown_not_midnight(tmp_path):
+    request,calls=announcement_client(damage=lambda v,n:v['announcements'][0].update(announcementTime=None))
+    result=run_announcements(tmp_path,request,ids=['selected-0'])
+    assert len(calls)==2 and result['status']=='CAPTURED_WITH_GAPS'
+    assert result['outcomes'][0]['announcements'][0]['source_announcement_time'] is None
+
+
+def test_announcement_invalid_window_fails_before_http_or_output(tmp_path):
+    for start,end in [('2099-01-02','2099-01-02'),('bad','2098-12-31'),('2098-12-31','2098-12-30'),
+                      ('2096-01-01','2098-12-31')]:
+        request,calls=announcement_client()
+        with pytest.raises(ValueError,match='B2_PUBLICATION_WINDOW'):
+            run_announcements(tmp_path,request,start=start,end=end)
+        assert calls==[] and not (tmp_path/'out').exists()
+
+
+def test_announcement_transport_is_fixed_https_form_without_cookies_credentials_or_redirects():
+    calls=[]
+    class Response:
+        status_code=200;headers={}
+        def __enter__(self):return self
+        def __exit__(self,*args):pass
+        def iter_content(self,chunk_size):yield b'[]'
+    class Session:
+        trust_env=True
+        def __enter__(self):return self
+        def __exit__(self,*args):pass
+        def post(self,url,**kwargs):
+            assert self.trust_env is False and kwargs['allow_redirects'] is False
+            assert 'data' in kwargs and 'params' not in kwargs
+            assert not {'Authorization','Cookie','X-API-Key'} & set(kwargs['headers'])
+            calls.append(url);return Response()
+    for kind in ('organization','announcements'):
+        b2['public_request']({},kind=kind,clock=lambda:NOW,session_factory=Session)
+    assert calls==list(b2['ANNOUNCEMENT_URLS'].values())
+    with pytest.raises(ValueError,match='B2_SOURCE_KIND'):
+        b2['public_request']({},kind='https://untrusted.invalid',session_factory=Session)
+    assert len(calls)==2
+
+
+def test_cli_source_modes_require_their_own_inputs_before_execution(tmp_path,monkeypatch):
+    import sys
+    base=['b2','--output',str(tmp_path/'out'),'--reference-ids','selected-0']
+    for suffix in [[],['--source-kind','announcements'],['--report-period',PERIOD,'--start-date','2098-12-31'],
+                   ['--source-kind','announcements','--start-date','2098-12-31','--end-date','2098-12-31','--report-period',PERIOD]]:
+        monkeypatch.setattr(sys,'argv',base+suffix)
+        with pytest.raises(SystemExit) as error:b2['main']()
+        assert error.value.code==2 and not (tmp_path/'out').exists()
