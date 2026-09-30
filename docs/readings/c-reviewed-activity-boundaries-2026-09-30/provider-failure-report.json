@@ -1,0 +1,142 @@
+{
+  "version": "reviewed-activity-census-v0",
+  "subject": "002436.SZ",
+  "input_hash": "c7b93ad9eba9da8af4acc59f5c1e81d7f1d98222be7c037f44e4ceceb4425839",
+  "question": "Does the retained failed activity request establish zero activity?",
+  "capture": {
+    "files": {
+      "capture.json": "capture",
+      "activity.body": "activity",
+      "reports.body": "reports"
+    },
+    "execution": {
+      "attempt": 1,
+      "code_commit": "a6a1d5f0c652d3012a0b408a97c491a76d1f18bc",
+      "event": "workflow_dispatch",
+      "ref": "refs/heads/main",
+      "repository": "auguspp/decision-kernel",
+      "run_id": 36089933785,
+      "workflow": ".github/workflows/institutional-context.yml"
+    }
+  },
+  "reviewed_at": "2026-09-30T14:54:50.360669+00:00",
+  "scope": {
+    "basis": "DISCLOSURE_DATE",
+    "begin": "2026-08-11",
+    "end": "2026-09-24",
+    "coverage": "SELECTED_EVIDENCE_ONLY",
+    "inventory_complete": true,
+    "selection_note": "Explicitly selected retained evidence, not all issuer activities or all disclosures in this window."
+  },
+  "sources": [
+    {
+      "id": "capture",
+      "subject": "002436.SZ",
+      "ref": "9330742c8b48f9c778d0518f11d397cbae0d49a3",
+      "path": "docs/readings/institutional-context-2026-09-25-36089933785/capture.json",
+      "git_blob": "4fef0f0effc893f1f06abdeca5e8fcdde9e7d02d",
+      "bytes": 2325,
+      "sha256": "3053312f88be4696511fb58969ea58744d821eea5cfaf20fc560897ab9dd9ad4",
+      "qualification": "PROVIDER_CAPTURE",
+      "published_at": null,
+      "acquired_at": null
+    },
+    {
+      "id": "activity",
+      "subject": "002436.SZ",
+      "ref": "9330742c8b48f9c778d0518f11d397cbae0d49a3",
+      "path": "docs/readings/institutional-context-2026-09-25-36089933785/activity.body",
+      "git_blob": "19af2aeddf35203c54a48021cc99d5ee41598d89",
+      "bytes": 89,
+      "sha256": "ea6528a2204b61a7ee34683a73ca00f8afdc86aadf3f765d4dae39bbfb19dbe7",
+      "qualification": "PROVIDER_CAPTURE",
+      "published_at": null,
+      "acquired_at": null
+    },
+    {
+      "id": "reports",
+      "subject": "002436.SZ",
+      "ref": "9330742c8b48f9c778d0518f11d397cbae0d49a3",
+      "path": "docs/readings/institutional-context-2026-09-25-36089933785/reports.body",
+      "git_blob": "16f780cc898fff4303f100a42249f446fd878859",
+      "bytes": 2888,
+      "sha256": "dab8ad13b138601ee5c53622b75a3a9110f47e73f23c8fd5d8781dcf693c6276",
+      "qualification": "PROVIDER_CAPTURE",
+      "published_at": null,
+      "acquired_at": null
+    }
+  ],
+  "source_gaps": [],
+  "records": [
+    {
+      "id": "failed-activity",
+      "status": "UNAVAILABLE",
+      "selected_content_hash": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "reviewed": {
+        "id": "failed-activity",
+        "source_id": "activity",
+        "kind": "UNAVAILABLE",
+        "disposition": "UNAVAILABLE",
+        "locator": {
+          "pointer": "/success"
+        },
+        "review_note": "HTTP200 with success=false/result=null/code9201 is a failed source, not a zero census."
+      }
+    }
+  ],
+  "events": [],
+  "entities": [],
+  "counts": {
+    "events": {
+      "observed_subset": null,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "PROVIDER_ACTIVITY_UNAVAILABLE",
+        "UNAVAILABLE:failed-activity"
+      ],
+      "issuer_window_total": null
+    },
+    "distinct_institutions": {
+      "observed_subset": null,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "PROVIDER_ACTIVITY_UNAVAILABLE",
+        "UNAVAILABLE:failed-activity"
+      ],
+      "issuer_window_total": null
+    },
+    "distinct_participants": {
+      "observed_subset": null,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "PROVIDER_ACTIVITY_UNAVAILABLE",
+        "UNAVAILABLE:failed-activity"
+      ],
+      "issuer_window_total": null
+    },
+    "participant_event_attendances": {
+      "observed_subset": null,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "PROVIDER_ACTIVITY_UNAVAILABLE",
+        "UNAVAILABLE:failed-activity"
+      ],
+      "issuer_window_total": null
+    }
+  },
+  "historical_availability": "NOT_ESTABLISHED_BY_RETRIEVAL",
+  "qualification": "REVIEWED_ASSIGNMENTS_NOT_AUTOMATIC_IDENTITY_OR_ECONOMIC_TRUTH",
+  "limitations": "Reviewed supplied-input census only. Source truth, original disclosure custody, historical availability, full C completion and Human acceptance are not established.",
+  "authority": {
+    "investment_authority": "NONE",
+    "human_acceptance": "NOT_ESTABLISHED",
+    "network_requests": 0,
+    "model_calls": 0,
+    "research_committed": false
+  },
+  "report_hash": "d07d3a4cff947a6cfbff59d257e2eb354d76751f289cadaf79d2e0447de181fd"
+}

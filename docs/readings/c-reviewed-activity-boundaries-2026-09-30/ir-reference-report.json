@@ -1,0 +1,167 @@
+{
+  "version": "reviewed-activity-census-v0",
+  "subject": "002436.SZ",
+  "input_hash": "24eeb56b57fe296446cdf35f31953c68744bc19828268b0b4fb62746058037d0",
+  "question": "What can the retained correction of IR record 2026-05-001 establish?",
+  "capture": null,
+  "reviewed_at": "2026-09-30T14:54:50.360669+00:00",
+  "scope": {
+    "basis": "EVENT_DATE",
+    "begin": "2026-05-01",
+    "end": "2026-05-31",
+    "coverage": "SELECTED_EVIDENCE_ONLY",
+    "inventory_complete": true,
+    "selection_note": "Explicitly selected retained evidence, not all issuer activities or all disclosures in this window."
+  },
+  "sources": [
+    {
+      "id": "ir",
+      "subject": "002436.SZ",
+      "ref": "649f2820b3139cef9c1dd6fa08f2fe6ee079f187",
+      "path": "docs/readings/002436-xingsen-full-2026-09-24-r2/reconciliation.md",
+      "git_blob": "307fc1224df56b61938f32eeb3f214c130d31646",
+      "bytes": 11565,
+      "sha256": "26c3d104f75e48df0e224b5a48ca283f5024915377ed5f4752cb9885138619a8",
+      "qualification": "RETAINED_RESEARCH",
+      "published_at": null,
+      "acquired_at": null
+    }
+  ],
+  "source_gaps": [],
+  "records": [
+    {
+      "id": "ir-correction",
+      "status": "SELECTED",
+      "selected_content_hash": "6e9e5465c9b72b0ba115b732d90a28ea1bc64a2cd78c2fb82e9118b6de0896e3",
+      "reviewed": {
+        "id": "ir-correction",
+        "source_id": "ir",
+        "kind": "RETAINED_REFERENCE",
+        "disposition": "SELECTED",
+        "locator": {
+          "quote": "report.md来源IR登记中的“镜像2026-05-11”是笔误。最后再打开原页面，显示公告日期、活动日期均为**2026-05-08**，时间15:00–16:00，编号2026-05-001。应以本项为准，不将05-11作为证据可得时间。正文经营事实不因此变化。原页面：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12305437&stockid=002436 。保留这一明示修正，避免恢复者默默继承错误日期。"
+        },
+        "event_assignment": "may-ir",
+        "variant": "corrected-r2",
+        "review_note": "One exact retained research paragraph correcting the date. Copies in later archives are not separate events."
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "may-ir",
+      "source_records": [
+        "ir-correction"
+      ],
+      "identity": "2026-05-001",
+      "event_date": "2026-05-08",
+      "disclosure_date": "2026-05-08",
+      "blockers": [],
+      "roster": {
+        "INSTITUTION": "UNKNOWN",
+        "PERSON": "UNKNOWN"
+      },
+      "attendance": [],
+      "reviewed": {
+        "id": "may-ir",
+        "records": [
+          "ir-correction"
+        ],
+        "identity_basis": "ORIGINAL_EVENT_ID",
+        "identity_namespace": "002436-issuer-ir-record-as-referenced",
+        "identity": {
+          "record_id": "ir-correction",
+          "binding": {
+            "value": "2026-05-001",
+            "locator": {
+              "quote": "report.md来源IR登记中的“镜像2026-05-11”是笔误。最后再打开原页面，显示公告日期、活动日期均为**2026-05-08**，时间15:00–16:00，编号2026-05-001。应以本项为准，不将05-11作为证据可得时间。正文经营事实不因此变化。原页面：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12305437&stockid=002436 。保留这一明示修正，避免恢复者默默继承错误日期。"
+            }
+          }
+        },
+        "event_date": {
+          "record_id": "ir-correction",
+          "binding": {
+            "value": "2026-05-08",
+            "locator": {
+              "quote": "report.md来源IR登记中的“镜像2026-05-11”是笔误。最后再打开原页面，显示公告日期、活动日期均为**2026-05-08**，时间15:00–16:00，编号2026-05-001。应以本项为准，不将05-11作为证据可得时间。正文经营事实不因此变化。原页面：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12305437&stockid=002436 。保留这一明示修正，避免恢复者默默继承错误日期。"
+            }
+          }
+        },
+        "disclosure_date": {
+          "record_id": "ir-correction",
+          "binding": {
+            "value": "2026-05-08",
+            "locator": {
+              "quote": "report.md来源IR登记中的“镜像2026-05-11”是笔误。最后再打开原页面，显示公告日期、活动日期均为**2026-05-08**，时间15:00–16:00，编号2026-05-001。应以本项为准，不将05-11作为证据可得时间。正文经营事实不因此变化。原页面：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12305437&stockid=002436 。保留这一明示修正，避免恢复者默默继承错误日期。"
+            }
+          }
+        },
+        "equivalence_note": "The paragraph refers to one numbered issuer IR event; source remains retained research, not original disclosure bytes.",
+        "selected_variant": "corrected-r2",
+        "variant_resolved": true,
+        "variant_note": "Use the explicitly corrected May8 reference, preserving the recorded earlier May11 error; do not backdate knowledge.",
+        "roster": {
+          "INSTITUTION": "UNKNOWN",
+          "PERSON": "UNKNOWN"
+        },
+        "roster_evidence": {
+          "INSTITUTION": null,
+          "PERSON": null
+        },
+        "roster_note": {
+          "INSTITUTION": "No institutional roster retained in this paragraph.",
+          "PERSON": "No participant roster retained in this paragraph."
+        },
+        "attendance": []
+      }
+    }
+  ],
+  "entities": [],
+  "counts": {
+    "events": {
+      "observed_subset": 1,
+      "selected_set_total": 1,
+      "qualification": "REVIEWED_SELECTED_SET_ONLY",
+      "blockers": [],
+      "issuer_window_total": null
+    },
+    "distinct_institutions": {
+      "observed_subset": 0,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "may-ir:UNKNOWN"
+      ],
+      "issuer_window_total": null
+    },
+    "distinct_participants": {
+      "observed_subset": 0,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "may-ir:UNKNOWN"
+      ],
+      "issuer_window_total": null
+    },
+    "participant_event_attendances": {
+      "observed_subset": 0,
+      "selected_set_total": null,
+      "qualification": "TOTAL_UNKNOWN",
+      "blockers": [
+        "may-ir:UNKNOWN"
+      ],
+      "issuer_window_total": null
+    }
+  },
+  "historical_availability": "NOT_ESTABLISHED_BY_RETRIEVAL",
+  "qualification": "REVIEWED_ASSIGNMENTS_NOT_AUTOMATIC_IDENTITY_OR_ECONOMIC_TRUTH",
+  "limitations": "Reviewed supplied-input census only. Source truth, original disclosure custody, historical availability, full C completion and Human acceptance are not established.",
+  "authority": {
+    "investment_authority": "NONE",
+    "human_acceptance": "NOT_ESTABLISHED",
+    "network_requests": 0,
+    "model_calls": 0,
+    "research_committed": false
+  },
+  "report_hash": "5f32dce5bca916b893d56c617c362dc979d003e2e66a735dd2e536512e1c94d2"
+}
