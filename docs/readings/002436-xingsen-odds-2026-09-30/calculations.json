@@ -1,0 +1,77 @@
+{
+  "security": "002436.SZ",
+  "company_name": "兴森科技",
+  "analysis_date": "2026-09-30",
+  "research_identity": {
+    "record_id": "c-longitudinal-xingsen-20260930",
+    "source_path": "docs/readings/c-longitudinal-xingsen-2026-09-30/README.md",
+    "source_ref": "83a40bfb408090015678d98bd192489db9226c3a",
+    "qualification": "RETAINED_RESEARCH_DOCUMENT_NOT_TYPED_COMMITTED"
+  },
+  "price_context": {
+    "price": "40.93",
+    "price_date": "2026-09-30",
+    "currency": "CNY",
+    "authority": "PUBLIC_MULTI_SOURCE_CONTEXT_ONLY",
+    "primary_source": "https://cn.investing.com/equities/circuit-tech-a-historical-data",
+    "cross_check_source": "https://www.hstong.com/quotes/30000-002436-SZ",
+    "cross_check_note": "HST shows 40.94; one-cent public-source discrepancy retained, no qualified ObservedMarket claimed."
+  },
+  "method": {
+    "posture": "PROVISIONAL_CONDITIONAL_ORDINAL",
+    "cardinal_probability": "NOT_ESTABLISHED",
+    "canonical_odds": "NOT_ESTABLISHED",
+    "horizon_years": "3",
+    "working_hurdle_cagr": "0.10",
+    "horizon_and_hurdle_authority": "ANALYST_SENSITIVITY_NOT_HUMAN_MANDATE",
+    "interim_distributions": "0",
+    "share_count": "1699673563",
+    "share_count_note": "Legal share count retained from latest Full; future issuance/dilution not embedded in this sensitivity."
+  },
+  "market_implied_requirements": [
+    {"terminal_pe_assumption": "30", "required_terminal_parent_profit_yi": "30.8648"},
+    {"terminal_pe_assumption": "35", "required_terminal_parent_profit_yi": "26.4556"},
+    {"terminal_pe_assumption": "40", "required_terminal_parent_profit_yi": "23.1486"}
+  ],
+  "conditional_cases": [
+    {
+      "id": "PUBLIC_HIGH_2028_PROFIT_HIGH_MULTIPLE",
+      "terminal_parent_profit_yi": "20.21",
+      "terminal_pe_assumption": "40",
+      "terminal_price": "47.5621",
+      "cumulative_return_from_reference_price": "0.162035",
+      "annualized_return_3y": "0.051332",
+      "max_starting_price_for_10pct_cagr": "35.7341"
+    },
+    {
+      "id": "PUBLIC_HIGH_2028_PROFIT_MID_MULTIPLE",
+      "terminal_parent_profit_yi": "20.21",
+      "terminal_pe_assumption": "30",
+      "terminal_price": "35.6716",
+      "cumulative_return_from_reference_price": "-0.128474",
+      "annualized_return_3y": "-0.044802",
+      "max_starting_price_for_10pct_cagr": "26.8006"
+    },
+    {
+      "id": "PUBLIC_LOW_2028_PROFIT_HIGH_MULTIPLE",
+      "terminal_parent_profit_yi": "11.4",
+      "terminal_pe_assumption": "40",
+      "terminal_price": "26.8287",
+      "cumulative_return_from_reference_price": "-0.344523",
+      "annualized_return_3y": "-0.131335",
+      "max_starting_price_for_10pct_cagr": "20.1568"
+    }
+  ],
+  "watch_boundaries": [
+    {"id": "xingsen-high-estimate-40x-35_73", "upper_price": "35.73", "meaning": "20.21亿元 terminal parent profit at 40x clears the 3y 10% analyst hurdle."},
+    {"id": "xingsen-high-estimate-30x-26_80", "upper_price": "26.80", "meaning": "20.21亿元 terminal parent profit at 30x clears the 3y 10% analyst hurdle."},
+    {"id": "xingsen-low-estimate-40x-20_16", "upper_price": "20.16", "meaning": "11.4亿元 terminal parent profit at 40x clears the 3y 10% analyst hurdle."}
+  ],
+  "authority": {
+    "human_acceptance": "NOT_RECORDED",
+    "watch_level": "L2_PROVISIONAL_ORDINAL",
+    "boundary_authority": "ANALYST_DERIVED",
+    "action_authority": "NONE",
+    "investment_authority": "NONE"
+  }
+}
