@@ -1,0 +1,25 @@
+{
+  "directory": "docs/readings/b2-pdf-36685884532-1",
+  "meaning": "BIND_ONE_VERIFIED_RETENTION_COMMIT_THEN_APPEND_EXPLICIT_REFERENCES; NEVER_REPLACE_ORIGINAL_RESEARCH_HUMAN_REFERENCES_OR_RESEARCH_AGENDA",
+  "references": [
+    {
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "archive_source": {
+        "bytes": 3055,
+        "git_blob": "3cbf6bc05160a27d091497f0fbf49f4464e32178",
+        "path": "docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md",
+        "ref": null,
+        "sha256": "6b49ff344dca357a388a63c80754f86d0943794fc597708007750f7afe9763f8"
+      },
+      "case": "601155.SH",
+      "id": "b2-pdf-36685884532-1-601155-SH",
+      "purpose_note": "公告原文来源资料（1225512314）；原资料引用b2-announcements-36675839340-1-601155-SH。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "use": "NAVIGATION_ONLY"
+    }
+  ],
+  "source_commit": "UNBOUND_REQUIRES_NATIVE_GIT_CUSTODY_READBACK",
+  "status": "PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED"
+}

@@ -1,0 +1,49 @@
+{
+  "announcement_id": "1225512314",
+  "directory_requests": 0,
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36685884532",
+    "GITHUB_SHA": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "max_pdf_bytes": 524288,
+  "max_pdf_requests": 1,
+  "reading_commit": "ae482e03f27c72dc1834f988f2e8097397830e27",
+  "redirects": false,
+  "retries": 0,
+  "scope_source": {
+    "bytes": 52438,
+    "git_blob": "c365d49e19eecf615f53692ef8bee6e113a3c2b8",
+    "meaning": "EXPLICIT_SOURCE_LOOKUP_NOT_FOLLOW_HOLDING_OR_AUTOMATIC_ADMISSION",
+    "path": "current_state/registry.json",
+    "ref": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
+    "selected_reference_ids": [
+      "b2-announcements-36675839340-1-601155-SH"
+    ],
+    "sha256": "05bce3ef277e3267e57177ef636508d0810c4e1305bc093f9fc69c898e4c046e"
+  },
+  "selection": {
+    "archive": {
+      "format": "RETAINED_FILES"
+    },
+    "archive_source": {
+      "bytes": 1806,
+      "git_blob": "c8213233bc311260102df7f7346c299db56d5c15",
+      "path": "docs/readings/b2-announcements-36675839340-1/601155.SH/summary.md",
+      "ref": "d13143a92b4c25bb38c9a46fc836309dba2af367",
+      "sha256": "0de2710be919c78fec760efcec11f25d2b0930db5a95202235f865d62b1edb4a"
+    },
+    "case": "601155.SH",
+    "id": "b2-announcements-36675839340-1-601155-SH",
+    "purpose_note": "公告目录来源资料（2026-08-26至2026-08-27）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+    "read_policy": "ON_DEMAND_ARCHIVE",
+    "use": "NAVIGATION_ONLY"
+  },
+  "source_kind": "pdf",
+  "started_at": "2026-09-30T07:49:26.020144+00:00"
+}
