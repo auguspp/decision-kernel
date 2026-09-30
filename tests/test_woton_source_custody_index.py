@@ -40,7 +40,7 @@ def test_woton_source_note_is_exact_on_demand_without_eager_budget_growth():
     assert b'75f3b7e88037d1eb8c2558b9a981ccb25d4dd17a' in note
     assert 'does not materialize' in note.decode()
     assert 'does not materialize' in row['purpose_note']
-    assert len(eager['references']) == 50  # Shared Odds Book correction notice adds no source request.
+    assert len(eager['references']) == 51  # New Xingsen Odds navigation reuses the shared Odds Book source; no new source request.
     specs = {(r['source'].get('ref', 'a' * 40), r['source']['path']) for r in eager['references']}
     assert len(specs) + 13 <= delivery.MAX_SOURCE_FILES == 60
     assert len(eager['references']) + len(deferred) == len(registry['references'])

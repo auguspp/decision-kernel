@@ -242,7 +242,7 @@ def test_real_comparisons_use_existing_on_demand_owner_without_eager_growth():
     root=Path(__file__).resolve().parents[1]
     registry=json.loads((root/'current_state/registry.json').read_text())
     eager,archives,gaps=split(registry)
-    assert not gaps and len(eager['references'])==50
+    assert not gaps and len(eager['references'])==51
     for case in ['accelink','xingsen']:
         row=next(x for x in archives if x['id']==f'c-longitudinal-{case}-20260930')
         validate(row)
