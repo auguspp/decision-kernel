@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "ce22fa79ac841dea11d31541c86e4c4faeb1378b",
+      "ref": "e42be5b1eb29b9caf0aec0dc78fc73a23d7c27c1",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -1228,6 +1228,6 @@
     "signal_transition_authority": "NONE",
     "source_run_id": 36555348389,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
+    "stock_lane_health": "IN_PROGRESS"
   }
 }
