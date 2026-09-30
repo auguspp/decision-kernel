@@ -203,15 +203,40 @@
     {
       "ticker": "002436.SZ",
       "company_name": "兴森科技",
-      "registry_reference_id": "c-longitudinal-xingsen-20260930",
-      "odds_level": "L0_NO_ODDS",
-      "boundary_authority": "NONE",
-      "watch_mode": "EVIDENCE_REOPEN",
-      "boundary_source_path": null,
-      "boundary_source_ref": null,
-      "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
-      "prerequisite": "Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.",
-      "conditions": []
+      "registry_reference_id": "odds-xingsen-provisional-20260930",
+      "odds_level": "L2_PROVISIONAL_ORDINAL",
+      "boundary_authority": "ANALYST_DERIVED",
+      "watch_mode": "PRICE_CONDITION",
+      "boundary_source_path": "docs/readings/002436-xingsen-odds-2026-09-30/odds.md",
+      "boundary_source_ref": "27992f2380695409cb927e32febcf48251fc3407",
+      "recompute_route": "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES",
+      "prerequisite": "Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.",
+      "conditions": [
+        {
+          "id": "xingsen-high-estimate-40x-35_73",
+          "kind": "ANALYST_HIGH_ESTIMATE_HIGH_MULTIPLE_REVIEW",
+          "shape": "POINT_AT_OR_BELOW",
+          "upper_price": "35.73",
+          "lower_price": null,
+          "label": "CNY35.73 high-public-profit / 40x analyst sensitivity"
+        },
+        {
+          "id": "xingsen-high-estimate-30x-26_80",
+          "kind": "ANALYST_HIGH_ESTIMATE_MID_MULTIPLE_REVIEW",
+          "shape": "POINT_AT_OR_BELOW",
+          "upper_price": "26.80",
+          "lower_price": null,
+          "label": "CNY26.80 high-public-profit / 30x analyst sensitivity"
+        },
+        {
+          "id": "xingsen-low-estimate-40x-20_16",
+          "kind": "ANALYST_LOW_ESTIMATE_HIGH_MULTIPLE_REVIEW",
+          "shape": "POINT_AT_OR_BELOW",
+          "upper_price": "20.16",
+          "lower_price": null,
+          "label": "CNY20.16 low-public-profit / 40x analyst sensitivity"
+        }
+      ]
     },
     {
       "ticker": "601155.SH",
