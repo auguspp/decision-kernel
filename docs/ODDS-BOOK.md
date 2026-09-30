@@ -6,6 +6,12 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 
 **先看：** 恒瑞、内蒙一机、兴业科技有范围不同的 Human 接受记录；北大荒 9/16 的**利润主导 BA2 provisional / ordinal Odds 已获 Human 接受用于决策准备**，但这不是买入决定，3年10%仍只是该精确 BA2 的计算框架而不是永久公司专属授权；光电旧估值桥受挑战，不能继续用旧梯度；三花、兆易有单独的条件投资决定，不能用旧 Inbox 的模型门槛替代。#349-C 已注册一个**有界、只读的价格条件 Watch v0**：只对恒瑞、兴业、北大荒、三花、兆易五个已有精确 Human/Odds 边界的对象读取合格“最新已完成交易日”价格，展示事实距离或触界复核；没有统一“接近”百分比，也不把触界升级成 BUY / ADD / SELL。其余对象继续保持 challenged / evidence-only / untyped / de-qualified 等非激活状态。
 
+## 2026-09-30 新城601155单位勘误：先读再用原计算
+
+原条件估值把亿元/亿股误标为CNY bn/billion shares。正确十亿口径：归母净资产62.47636、投资性房地产120.92、存货64.79568、其他应收24.95361、股数2.255622856；金额与股数同时除10，所以每股值、回报、CAGR和门槛均不变。保留原舍入精度，不能把单位纠错当作完整来源复核或经济判断更新；原件、截止时钟和未获Human接受状态不变。
+
+先按[不可变四文件单位后继](https://github.com/auguspp/decision-kernel/tree/f54c017c3d06fd46cf2a5da4949c0e461e5789e0/docs/readings/601155-unit-correction-2026-09-30)或用途记录`601155-unit-correction-20260930`恢复完整说明、两份派生JSON和verification。当前共用导航摘要不代表四文件已经读取；五页摘要未证明其他完整报表输入。原[六文件档案](https://github.com/auguspp/decision-kernel/tree/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930)不覆盖。本段不新增Watch、概率、买卖或投资权限。
+
 ## 1. 总表：最后登记的解释，不按文件时间裁定唯一“最新有效”
 
 价格均为对应结果当时的参考价，**非本日价格**；不自动代表本日行情。实际 Watch 价格/距离只存在于每日 typed `odds-watch/watch.json` 及其 fixed-reading 留存中，不回写本静态表。没有明确取代关系的模型与 Human 条件并存；接受范围、方法资格和行动分栏。A股用 `.SH/.SZ` 统一导航，原件的 `.SS` 等标识不回写。

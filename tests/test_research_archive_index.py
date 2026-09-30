@@ -267,9 +267,13 @@ def test_registered_fibocom_has_exact_original_progress_and_keeps_eastsoft_eager
     assert row['source']['bytes'] == 6567
     assert row['archive'] == {'format': 'RESEARCH_PROGRESS', 'expected_sha256': '72b98ca4fe4dea23d8cf46d1c462eaf8e690d90020a53e9686eb54d3ad0201a6', 'question_id': 'module-profit-cash-source-review'}
     assert len(eager['references']) == 50
-    correction = by_id['601155-unit-correction-20260930']
-    assert correction['use'] == 'METHOD_SUPPLEMENT'
+    notice = by_id['601155-unit-correction-notice-20260930']
+    assert notice['use'] == 'METHOD_SUPPLEMENT'
+    assert notice['source'] == by_id['odds-book']['source']
+    correction = next(r for r in indexed if r['id'] == '601155-unit-correction-20260930')
+    assert correction['use'] == 'NAVIGATION_ONLY'
     assert correction['archive'] == {'format': 'RETAINED_FILES'}
+    assert correction['body_materialized_in_reading'] is False
     assert correction['source']['ref'] == 'f54c017c3d06fd46cf2a5da4949c0e461e5789e0'
     assert correction['source']['git_blob'] == '8cbfedc8bf9828615eba4d55f78a577f036867cf'
     # Keep the exact historical binding above, without freezing the live index at one version.
