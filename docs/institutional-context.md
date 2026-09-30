@@ -51,6 +51,11 @@ relationship labels do not supply missing numeric qualifications. It leaves this
 raw projection unchanged; the [retained real boundary cases](readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)
 still refuse comparable forecast arithmetic.
 
+The offline [reviewed activity census](reviewed-activity-census-v0.md) separately
+checks supplied event/entity/roster assignments after replay. It does not change
+the raw unknown counts here, convert failed requests to zero, or claim that a
+selected evidence set is a complete issuer-window census.
+
 `context.json` is a deterministic projection, not a raw response. `capture.json`
 binds both planned source receipts to the exact main code/run/attempt and
 SHA256 of each raw body. `replay` validates that binding and recomputes the
