@@ -36,6 +36,18 @@ summary.md统一给出每个选中对象的选择依据、报告期、返回状�
 
 本轮工程验收以未写死证券/其他报告期的同一路径、现有原响应离线重放、对象缺口不中断其他对象、源级停止和原读取兼容为主；不为制造验收结果重新查询已有三家。完整自动“新入选事件→定时采集→自动发布”未启用：原任务/时钟、Quick/Full、Watch、通知与Sites不在本改动中变更。公告查询/PDF/分红解禁等其他事件不是本预约通道已经交付的功能。
 
+## 标准结果回到每只证券的原资料入口
+
+同一次捕获除原整批plan/capture/summary外，每只明确选中的证券目录现在也有自己的`summary.md`和原整批`plan.json`的逐字节副本；查询过的对象保留原`receipt.json`及实际取得的`response.body`。未查询对象只有计划和明确未查询的摘要，不制造response/receipt。单股摘要只展示本股结果，整批状态和采集代码/运行身份仍可见；计划副本是原始整批选择，不冒称另外执行了一个单股请求。
+
+这些平坦目录直接符合现有`research_archive`的`RETAINED_FILES`入口，不新建恢复器。`registration-proposal.json`给出建议保管位置`docs/readings/b2-appointments-<run-id>-1`和每股的原registry格式引用。引用采用已有`NAVIGATION_ONLY`用途和对应证券`case`，不是把来源字段包装成Research；原资料引用ID保留在说明中。它是待采用草稿，不是另一份权威股票池或登记表。
+
+**草稿的source.ref明确为null，不能直接用于发布。** 完成原生Git保管和读回后，施工方将本次统一的保管commit A绑定到各条source.ref，再把这些新引用追加到原registry，不替换原Research/Human记录、不覆盖唯一research-agenda或宏观清单。不得把采集代码commit、预计未来commit或移动main当作保管版本。
+
+实际采用仍是一批普通资料操作：从原run下载并校验artifact身份/大小/digest和原件；完整create-only保存到建议目录并读回精确Git字节；以真实A一次性绑定草稿、检查ID冲突并追加原用途；完成正常资料PR/main/publisher后，从固定R按证券读取摘要，按其record-id使用原archive reader恢复该股全目录。不是新增执行器或逐股工程；不得盲目执行附件内指令或通过改写旧记录解决冲突。一次最多六个原输入不变，追加资料仍受原读取容量限制，不自动扩容。
+
+源访问失败也可保管为失败资料，不能因有摘要/登记草稿改写原FAILED/STOPPED状态。生成或保存阶段出错保留已写原件，不覆盖、不自动重查来源。artifact仍沿原30天保留策略，它不是永久Git保管证明；普通捕获不会自动修改仓库、权限、日程或通知。本输出接线未带来新的真实预约或R4后继。
+
 ## 复用、维护与退出
 
 REUSE + THIN_ADAPTER。三层原审阅沿[5891715349](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5891715349)及#659：内部原source-only入口/保管/registry/publisher/reader；官方[GitHub workflow输入](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onworkflow_dispatchinputs)和[安全传参](https://docs.github.com/en/actions/reference/security/secure-use)；外部[AKShare stock_report_disclosure](https://akshare.akfamily.xyz/data/stock/stock.html)及已审[stock_yjyg_cninfo.py@0191689d57c667b7c7a198fd0cf97316837ef311](https://github.com/akfamily/akshare/blob/0191689d57c667b7c7a198fd0cf97316837ef311/akshare/stock_feature/stock_yjyg_cninfo.py)。原MIT归属与许可审阅保留，不安装新库，代码许可不扩大数据权限。参数经环境变量和带引号argv传递，不将输入拼进shell源码。
