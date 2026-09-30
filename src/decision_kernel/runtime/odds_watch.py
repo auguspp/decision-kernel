@@ -22,8 +22,20 @@ VERSION = "odds-watch-v0"
 SEMANTICS = "READ_ONLY_PRICE_CONDITION_ATTENTION_NOT_ODDS_STATE_OR_ACTION"
 CONFIG_SEMANTICS = "READ_ONLY_ODDS_WATCH_ATTENTION_NOT_ODDS_STATE_OR_ACTION"
 NO_PROXIMITY_POLICY = "NO_GLOBAL_PROXIMITY_THRESHOLD_REPORT_FACTUAL_DISTANCE_ONLY"
-MAX_ACTIVE_CASES = 8
-ACTIVE_STATES = {"ACTIVE_ODDS_WATCH", "NEEDS_REVIEW_NOW", "PRICE_UNAVAILABLE_NOT_QUIET"}
+MAX_ACTIVE_CASES = 24
+ACTIVE_STATES = {
+    "ACTIVE_ODDS_WATCH", "NEEDS_REVIEW_NOW", "PRICE_UNAVAILABLE_NOT_QUIET",
+    "EVIDENCE_REOPEN_WATCH",
+}
+ODDS_LEVELS = {
+    "L0_NO_ODDS",
+    "L1_ANALYST_SENSITIVITY",
+    "L2_PROVISIONAL_ORDINAL",
+    "L3_HUMAN_ACCEPTED_ODDS",
+    "L4_HUMAN_DECISION_BOUNDARY",
+}
+BOUNDARY_AUTHORITIES = {"NONE", "ANALYST_DERIVED", "HUMAN_ACCEPTED_ODDS", "HUMAN_DECISION"}
+WATCH_MODES = {"PRICE_CONDITION", "EVIDENCE_REOPEN"}
 INACTIVE_STATES = {
     "CHALLENGED_NO_ACTIVE_TRIGGER",
     "EVIDENCE_REVIEW_ONLY_NO_PRICE_BOUNDARY",
@@ -33,6 +45,8 @@ INACTIVE_STATES = {
 ROUTES = {
     "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
     "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
+    "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+    "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES",
 }
 SHAPES = {"POINT_AT_OR_BELOW", "RANGE_AT_OR_BELOW_UPPER"}
 AUTHORITY = {
@@ -86,9 +100,9 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
     authority = config["registration_authority"]
     if not isinstance(authority, dict) or authority.get("issue") != 349:
         raise ValueError("Odds Watch registration authority must bind #349")
-    if authority.get("comment_id") != 5694193765:
+    if authority.get("comment_id") != 5913035975:
         raise ValueError("Odds Watch registration authority comment differs")
-    if authority.get("meaning") != "HUMAN_AUTHORIZED_PROJECT_WATCH_REGISTRATION_NOT_INVESTMENT_AUTHORITY":
+    if authority.get("meaning") != "HUMAN_AUTHORIZED_GRADED_WATCH_REGISTRATION_NOT_INVESTMENT_AUTHORITY":
         raise ValueError("Odds Watch registration authority meaning differs")
     if config["approaching_policy"] != NO_PROXIMITY_POLICY:
         raise ValueError("Odds Watch must not invent a global proximity threshold")
@@ -113,7 +127,8 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
             raise ValueError("Odds Watch active case must be an object")
         required = {
             "ticker", "company_name", "registry_reference_id", "recompute_route",
-            "prerequisite", "conditions",
+            "prerequisite", "conditions", "odds_level", "boundary_authority",
+            "watch_mode", "boundary_source_path", "boundary_source_ref",
         }
         if set(case) != required:
             raise ValueError("Odds Watch active-case keys differ")
@@ -125,23 +140,46 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
         route = _require_string(case["recompute_route"], field="recompute_route")
         if route not in ROUTES:
             raise ValueError("Odds Watch recompute route unsupported")
+        odds_level = _require_string(case["odds_level"], field="odds_level")
+        boundary_authority = _require_string(case["boundary_authority"], field="boundary_authority")
+        watch_mode = _require_string(case["watch_mode"], field="watch_mode")
+        if odds_level not in ODDS_LEVELS or boundary_authority not in BOUNDARY_AUTHORITIES or watch_mode not in WATCH_MODES:
+            raise ValueError("Odds Watch maturity metadata unsupported")
         _require_string(case["prerequisite"], field="prerequisite")
         ref_id = _require_string(case["registry_reference_id"], field="registry_reference_id")
         ref = references.get(ref_id)
         if not isinstance(ref, dict) or ref.get("case") != ticker:
             raise ValueError("Odds Watch case does not match registry reference")
-        if ref.get("use") != "HUMAN_DECISION_CHECKPOINT":
-            raise ValueError("active Odds Watch requires an explicit Human checkpoint")
-        source = ref.get("source")
+        use = ref.get("use")
+        if odds_level in {"L3_HUMAN_ACCEPTED_ODDS", "L4_HUMAN_DECISION_BOUNDARY"}:
+            if use != "HUMAN_DECISION_CHECKPOINT":
+                raise ValueError("Human-level Odds Watch requires an explicit Human checkpoint")
+        elif use not in {"RETAINED_RESEARCH_DOCUMENT", "RETAINED_ODDS_DOCUMENT", "HUMAN_DECISION_CHECKPOINT"}:
+            raise ValueError("non-Human Odds Watch requires retained research/Odds identity")
+        source = ref.get("source") or ref.get("archive_source")
         if not isinstance(source, dict) or not isinstance(source.get("path"), str):
             raise ValueError("active Odds Watch registry source missing")
         blob = source.get("git_blob")
         if blob is not None and (not isinstance(blob, str) or len(blob) != 40):
             raise ValueError("active Odds Watch registry blob identity malformed")
+        boundary_path, boundary_ref = case["boundary_source_path"], case["boundary_source_ref"]
+        if boundary_path is None:
+            if boundary_ref is not None:
+                raise ValueError("Odds Watch boundary ref requires path")
+        else:
+            _require_string(boundary_path, field="boundary_source_path")
+            if not isinstance(boundary_ref, str) or len(boundary_ref) != 40:
+                raise ValueError("Odds Watch boundary source ref malformed")
 
         conditions = case["conditions"]
-        if not isinstance(conditions, list) or not conditions:
-            raise ValueError("active Odds Watch case requires at least one price condition")
+        if not isinstance(conditions, list):
+            raise ValueError("Odds Watch conditions must be a list")
+        if watch_mode == "EVIDENCE_REOPEN":
+            if conditions or odds_level != "L0_NO_ODDS" or boundary_authority != "NONE":
+                raise ValueError("evidence-only Watch cannot carry Odds price conditions")
+            continue
+        if odds_level == "L0_NO_ODDS" or not conditions:
+            raise ValueError("price Watch requires a non-L0 Odds level and price condition")
         upper_values: list[Decimal] = []
         condition_ids: set[str] = set()
         for condition in conditions:
@@ -216,14 +254,27 @@ def _condition_projection(condition: dict[str, Any], current_price: Decimal) -> 
 
 
 def _source_projection(reference: dict[str, Any]) -> dict[str, Any]:
-    source = reference["source"]
+    source = reference.get("source") or reference.get("archive_source")
+    if not isinstance(source, dict):
+        raise ValueError("Odds Watch registry source missing")
     return {
         "registry_reference_id": reference["id"],
         "use": reference["use"],
         "source_path": source["path"],
         "source_ref": source.get("ref"),
         "source_git_blob": source.get("git_blob"),
-        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
+    }
+
+
+def _boundary_source_projection(case: dict[str, Any]) -> dict[str, Any] | None:
+    path = case["boundary_source_path"]
+    if path is None:
+        return None
+    return {
+        "source_path": path,
+        "source_ref": case["boundary_source_ref"],
+        "meaning": "EXACT_BOUNDARY_SOURCE_NOT_HUMAN_ACCEPTANCE_UNLESS_BOUNDARY_AUTHORITY_SAYS_SO",
     }
 
 
@@ -247,16 +298,36 @@ def build_watch(
             "company_name": case["company_name"],
             "watch_enabled": True,
             "source": _source_projection(references[case["registry_reference_id"]]),
+            "boundary_source": _boundary_source_projection(case),
+            "odds_level": case["odds_level"],
+            "boundary_authority": case["boundary_authority"],
+            "watch_mode": case["watch_mode"],
             "recompute_route": case["recompute_route"],
             "prerequisite": case["prerequisite"],
             **AUTHORITY,
         }
+        if case["watch_mode"] == "EVIDENCE_REOPEN":
+            rows.append({
+                **base,
+                "status": "EVIDENCE_REOPEN_WATCH",
+                "price_fetch_performed": False,
+                "price": None,
+                "market_timestamp": None,
+                "market_data_source": None,
+                "price_convention": None,
+                "currency": "CNY",
+                "triggered_conditions": [],
+                "next_unreached_condition": None,
+                "price_gap": None,
+            })
+            continue
         try:
             market = fetch_market(thscode=case["ticker"], observed_at=observed_at)
         except price_error_types as exc:
             rows.append({
                 **base,
                 "status": "PRICE_UNAVAILABLE_NOT_QUIET",
+                "price_fetch_performed": True,
                 "price": None,
                 "market_timestamp": None,
                 "market_data_source": None,
@@ -279,6 +350,7 @@ def build_watch(
         rows.append({
             **base,
             "status": "NEEDS_REVIEW_NOW" if triggered else "ACTIVE_ODDS_WATCH",
+            "price_fetch_performed": True,
             "price": _text(price),
             "market_timestamp": market.market_timestamp.isoformat(),
             "market_data_source": market.market_data_source,
@@ -302,6 +374,8 @@ def build_watch(
     ]
     trigger_count = sum(row["status"] == "NEEDS_REVIEW_NOW" for row in rows)
     price_gap_count = sum(row["status"] == "PRICE_UNAVAILABLE_NOT_QUIET" for row in rows)
+    evidence_only_count = sum(row["status"] == "EVIDENCE_REOPEN_WATCH" for row in rows)
+    price_evaluated_count = sum(row["status"] in {"ACTIVE_ODDS_WATCH", "NEEDS_REVIEW_NOW"} for row in rows)
     payload = json.loads(canonical_json({
         "version": VERSION,
         "semantics": SEMANTICS,
@@ -313,6 +387,8 @@ def build_watch(
         "active_case_count": len(rows),
         "attention_case_count": trigger_count,
         "price_gap_count": price_gap_count,
+        "price_evaluated_case_count": price_evaluated_count,
+        "evidence_only_case_count": evidence_only_count,
         "active_cases": rows,
         "inactive_cases": inactive,
         "authority": AUTHORITY,
@@ -321,6 +397,8 @@ def build_watch(
             "PRICE_CHANGE_DOES_NOT_PROVE_BELIEF_UNCHANGED",
             "NO_GLOBAL_APPROACHING_THRESHOLD",
             "NO_POSITION_SIZE_OR_ORDER_AUTHORITY",
+            "WATCH_MEMBERSHIP_DOES_NOT_EQUAL_HUMAN_ACCEPTANCE",
+            "ODDS_LEVEL_AND_BOUNDARY_AUTHORITY_MUST_REMAIN_VISIBLE",
             "NO_AUTOMATIC_ODDS_OR_RESEARCH_SUPERSESSION",
         ],
     }))
@@ -336,19 +414,23 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         (
             f"**需要复核：{payload['attention_case_count']}** · "
-            f"价格缺口：{payload['price_gap_count']} · 活跃监控：{payload['active_case_count']}"
+            f"价格已判断：{payload.get('price_evaluated_case_count', 0)} · "
+            f"仅证据重开：{payload.get('evidence_only_case_count', 0)} · "
+            f"价格缺口：{payload['price_gap_count']} · 活跃观察：{payload['active_case_count']}"
         ),
         "",
     ]
     attention = [row for row in payload["active_cases"] if row["status"] == "NEEDS_REVIEW_NOW"]
     gaps = [row for row in payload["active_cases"] if row["status"] == "PRICE_UNAVAILABLE_NOT_QUIET"]
     quiet = [row for row in payload["active_cases"] if row["status"] == "ACTIVE_ODDS_WATCH"]
+    evidence_only = [row for row in payload["active_cases"] if row["status"] == "EVIDENCE_REOPEN_WATCH"]
     if attention:
         lines += ["## 需要 Human 复核", ""]
         for row in attention:
             lines += [
                 f"### {row['company_name']} {row['ticker']} · CNY{row['price']}",
                 f"- 状态：`{row['status']}`",
+                f"- Odds层级：`{row.get('odds_level', 'LEGACY_UNSPECIFIED')}` · 边界权限：`{row.get('boundary_authority', 'LEGACY_UNSPECIFIED')}`",
                 f"- 价格时点：`{row['market_timestamp']}`",
             ]
             for condition in row["triggered_conditions"]:
@@ -366,9 +448,19 @@ def render_markdown(report: dict[str, Any]) -> str:
         for row in quiet:
             next_condition = row["next_unreached_condition"]
             lines.append(
-                f"- **{row['company_name']} {row['ticker']}** · CNY{row['price']} · "
-                f"下一边界 `{next_condition['label']}` · "
+                f"- **{row['company_name']} {row['ticker']}** · "
+                f"`{row.get('odds_level', 'LEGACY_UNSPECIFIED')}` / "
+                f"`{row.get('boundary_authority', 'LEGACY_UNSPECIFIED')}` · "
+                f"CNY{row['price']} · 下一边界 `{next_condition['label']}` · "
                 f"距离上沿 CNY{next_condition['signed_distance_to_upper_cny']}"
+            )
+        lines.append("")
+    if evidence_only:
+        lines += ["## 仅证据／重开观察（无价格边界）", ""]
+        for row in evidence_only:
+            lines.append(
+                f"- **{row['company_name']} {row['ticker']}** · "
+                f"`{row.get('odds_level', 'L0_NO_ODDS')}` · {row['prerequisite']}"
             )
         lines.append("")
     if gaps:
@@ -419,12 +511,23 @@ def validate_report(report: dict[str, Any]) -> None:
     for row in active:
         if row.get("status") not in ACTIVE_STATES:
             raise ValueError("Odds Watch active status unsupported")
+        if "odds_level" in row and row.get("odds_level") not in ODDS_LEVELS:
+            raise ValueError("Odds Watch report Odds level unsupported")
+        if "boundary_authority" in row and row.get("boundary_authority") not in BOUNDARY_AUTHORITIES:
+            raise ValueError("Odds Watch report boundary authority unsupported")
+        if "watch_mode" in row and row.get("watch_mode") not in WATCH_MODES:
+            raise ValueError("Odds Watch report mode unsupported")
         if any(row.get(name) != "NONE" for name in AUTHORITY):
             raise ValueError("Odds Watch case gained authority")
         if row["status"] == "NEEDS_REVIEW_NOW" and not row.get("triggered_conditions"):
             raise ValueError("Odds Watch review state lacks a crossed condition")
         if row["status"] == "ACTIVE_ODDS_WATCH" and row.get("triggered_conditions"):
             raise ValueError("quiet Odds Watch case contains crossed conditions")
+        if row["status"] == "EVIDENCE_REOPEN_WATCH":
+            if row.get("watch_mode") != "EVIDENCE_REOPEN" or row.get("price") is not None or row.get("market_timestamp") is not None:
+                raise ValueError("evidence-only Watch cannot carry a market observation")
+            if row.get("price_fetch_performed") is not False or row.get("triggered_conditions") or row.get("next_unreached_condition") is not None:
+                raise ValueError("evidence-only Watch cannot carry price trigger state")
     for row in payload.get("inactive_cases", []):
         if row.get("state") not in INACTIVE_STATES or row.get("watch_enabled") is not False:
             raise ValueError("Odds Watch inactive safety state differs")

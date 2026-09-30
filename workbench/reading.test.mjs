@@ -235,15 +235,22 @@ function watchPayload(rows, count = rows.length) { return {lanes: {inbox: {last_
   odds_watch: {report: {watch: {active_cases: rows, active_case_count: count}}}}}}}; }
 test('five watches with one unread price are four evaluated, not five quiet', () => {
   const summary = watchSummary(watchPayload([watchItem(), watchItem(), watchItem(), watchItem(), watchItem({price: null})]));
-  assert.deepEqual(summary.counts, {enabled: 5, evaluated: 4, triggered: 0, unknown: 1, inactive: 0});
+  assert.deepEqual(summary.counts, {enabled: 5, evaluated: 4, triggered: 0, unknown: 1, evidenceOnly: 0, inactive: 0});
 });
 test('missing condition results, invalid price, inactive and triggered watches stay distinct', () => {
   const summary = watchSummary(watchPayload([watchItem({triggered_conditions: null}), watchItem({price: ''}),
     watchItem({watch_enabled: false}), watchItem({triggered_conditions: [{attention_triggered: true}]})], 3));
-  assert.deepEqual(summary.counts, {enabled: 3, evaluated: 1, triggered: 1, unknown: 2, inactive: 1});
+  assert.deepEqual(summary.counts, {enabled: 3, evaluated: 1, triggered: 1, unknown: 2, evidenceOnly: 0, inactive: 1});
   assert.equal(summary.countMismatch, false);
   assert.equal(watchSummary(watchPayload([], 5)).countMismatch, true);
   assert.equal(watchSummary({}).counts, null);
+});
+test('evidence-only watch stays enabled without pretending to evaluate a price', () => {
+  const item = watchItem({status:'EVIDENCE_REOPEN_WATCH', watch_mode:'EVIDENCE_REOPEN', odds_level:'L0_NO_ODDS',
+    boundary_authority:'NONE', price:null, market_timestamp:null, triggered_conditions:[], next_unreached_condition:null});
+  const summary = watchSummary(watchPayload([item]));
+  assert.equal(summary.rows[0].state, 'EVIDENCE_ONLY');
+  assert.deepEqual(summary.counts, {enabled:1, evaluated:0, triggered:0, unknown:0, evidenceOnly:1, inactive:0});
 });
 test('company search uses explicit saved identity and purpose, not inferred holdings', () => {
   const c = {thscode: '600276.SH', saved_watch: {company_name: '恒瑞医药'}, assets: [{id: 'research', purpose_note: '原研究'}]};

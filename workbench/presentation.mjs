@@ -5,7 +5,10 @@ export function referenceMatches(item, query) {
   return text.includes(query.trim().toLowerCase());
 }
 export function watchState(item) {
-  if (item?.watch_enabled !== true || item.status !== 'ACTIVE_ODDS_WATCH') return 'INACTIVE';
+  if (item?.watch_enabled !== true) return 'INACTIVE';
+  if (item.status === 'EVIDENCE_REOPEN_WATCH') return 'EVIDENCE_ONLY';
+  if (item.status === 'PRICE_UNAVAILABLE_NOT_QUIET') return 'UNKNOWN';
+  if (!['ACTIVE_ODDS_WATCH','NEEDS_REVIEW_NOW'].includes(item.status)) return 'INACTIVE';
   if (item.price_gap || item.price === null || item.price === undefined || item.price === '' ||
       !Number.isFinite(Number(item.price)) || Number(item.price) <= 0 ||
       typeof item.market_timestamp !== 'string' || !Number.isFinite(Date.parse(item.market_timestamp)) ||
@@ -19,14 +22,15 @@ export function watchSummary(payload) {
   const watch = payload?.lanes?.inbox?.last_qualified_result?.odds_watch?.report?.watch;
   if (!Array.isArray(watch?.active_cases)) return {available: false, rows: [], counts: null};
   const rows = watch.active_cases.map(item => ({item, state: watchState(item)}));
-  const counts = {enabled: 0, evaluated: 0, triggered: 0, unknown: 0, inactive: 0};
+  const counts = {enabled: 0, evaluated: 0, triggered: 0, unknown: 0, evidenceOnly: 0, inactive: 0};
   for (const row of rows) {
     if (row.state === 'INACTIVE') { counts.inactive++; continue; }
     counts.enabled++;
+    if (row.state === 'EVIDENCE_ONLY') { counts.evidenceOnly++; continue; }
     if (row.state === 'UNKNOWN') counts.unknown++;
     else { counts.evaluated++; if (row.state === 'TRIGGERED') counts.triggered++; }
   }
-  return {available: true, rows, counts, declared: watch.active_case_count,
+  return {available: true, rows, counts, observedAt: watch.observed_at || null, declared: watch.active_case_count,
     countMismatch: Number.isSafeInteger(watch.active_case_count) && watch.active_case_count !== counts.enabled};
 }
 export function companyName(company) { return company.saved_watch?.company_name || company.thscode; }

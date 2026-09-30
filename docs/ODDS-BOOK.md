@@ -4,7 +4,7 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 
 这不是持仓表、实时行情、第二套 Odds 状态或买卖清单。下面保留的是本次找到的实际输出、方法更正和 Human 记录。**保留 ≠ 当前有效 ≠ Human 接受 ≠ 投资决定 ≠ 成交。**
 
-**先看：** 恒瑞、内蒙一机、兴业科技有范围不同的 Human 接受记录；北大荒 9/16 的**利润主导 BA2 provisional / ordinal Odds 已获 Human 接受用于决策准备**，但这不是买入决定，3年10%仍只是该精确 BA2 的计算框架而不是永久公司专属授权；光电旧估值桥受挑战，不能继续用旧梯度；三花、兆易有单独的条件投资决定，不能用旧 Inbox 的模型门槛替代。#349-C 已注册一个**有界、只读的价格条件 Watch v0**：只对恒瑞、兴业、北大荒、三花、兆易五个已有精确 Human/Odds 边界的对象读取合格“最新已完成交易日”价格，展示事实距离或触界复核；没有统一“接近”百分比，也不把触界升级成 BUY / ADD / SELL。其余对象继续保持 challenged / evidence-only / untyped / de-qualified 等非激活状态。
+**先看：** Watch 现在是持续观察层，不再等同于 Human 已接受 Odds 的名单。运行安全上限从 8 扩到 24（只是批处理护栏，不是产品目标数量），并显式区分 `L0_NO_ODDS / L1_ANALYST_SENSITIVITY / L2_PROVISIONAL_ORDINAL / L3_HUMAN_ACCEPTED_ODDS / L4_HUMAN_DECISION_BOUNDARY` 与独立的 boundary authority。恒瑞、兴业、北大荒保留 Human-accepted Odds 边界；三花、兆易保留 Human decision boundary；兴森以 L0 Evidence/Reopen Watch 纳入但不取价；新城以 L2 provisional ordinal、ANALYST_DERIVED 条件边界纳入。进入 Watch 不创造 Human 接受、canonical Odds、Action、持仓或交易权限；没有统一“接近”百分比，价格触界只分配复核注意力。
 
 ## 2026-09-30 新城601155单位勘误：先读再用原计算
 

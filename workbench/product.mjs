@@ -81,6 +81,8 @@ export function companyStatus(company) {
   return known[company.next_step] || '已有资料可继续阅读；当前处置请查原记录';
 }
 export function priceCondition(item) {
+  if (item?.watch_mode === 'EVIDENCE_REOPEN' || item?.status === 'EVIDENCE_REOPEN_WATCH')
+    return '仅观察已保存研究的证据／重开条件；当前没有可用价格边界';
   const c = item?.next_unreached_condition;
   if (!c) return '下一价格条件未提供';
   const labels = {RE_UNDERWRITE: '业务前提复核', CONDITIONAL_FIRST_ENTRY_CONDITION: '首笔参与条件讨论'};
@@ -204,7 +206,7 @@ export function attentionView(payload, watch) {
         view.gaps.push('Watch证券身份缺失或重复；未合并不同条件。'); continue;
       }
       const row = {kind: 'watch', id: `watch:${item.ticker}:${item.source?.registry_reference_id || 'UNRESOLVED'}`,
-        code: item.ticker, label: item.company_name || item.ticker, at: item.market_timestamp,
+        code: item.ticker, label: item.company_name || item.ticker, at: item.market_timestamp || watch.observedAt,
         state, reason: priceCondition(item), source: null, resolution: null, original: item};
       if (state === 'UNKNOWN') view.gaps.push(`${row.label}：价格或触界结果无法判断，不是待你补数据的请求。`);
       else view[state === 'TRIGGERED' ? 'review' : 'waiting'].push(row);
@@ -253,7 +255,9 @@ export function attentionResume(ref, item, company) {
     source: source ? {url: fileUrl(ref, source.read_path), sha256: source.sha256, git_blob: source.git_blob} : null,
     registered_resolution: item.resolution ? {url: fileUrl(ref, item.resolution.read_path), sha256: item.resolution.sha256} : null,
     watch_conditions: item.kind === 'watch' ? {
-      source: original.source, next: original.next_unreached_condition, triggered: original.triggered_conditions,
+      source: original.source, boundary_source: original.boundary_source,
+      odds_level: original.odds_level, boundary_authority: original.boundary_authority, watch_mode: original.watch_mode,
+      next: original.next_unreached_condition, triggered: original.triggered_conditions,
       prerequisite: original.prerequisite
     } : null,
     company_catalogue: company ? fileUrl(ref, 'details/research/asset-reentry.json') : null,

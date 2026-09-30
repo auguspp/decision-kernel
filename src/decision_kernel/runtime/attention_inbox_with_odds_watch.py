@@ -39,11 +39,14 @@ def coverage_text(planned: int, completed: int, gaps: list[str], report: dict) -
     active = watch["active_case_count"]
     unknown = watch["price_gap_count"]
     triggered = watch["attention_case_count"]
-    checked = active - unknown
+    evidence_only = watch.get("evidence_only_case_count", 0)
+    price_cases = active - evidence_only
+    checked = watch.get("price_evaluated_case_count", price_cases - unknown)
     text = (f"原有研究包价格复核：完成 {completed}/{planned}，无法判断 {len(gaps)}。"
             if planned else "旧研究包自动Odds试算未启用。")
-    text += (f"Watch：已启用 {active}，已完成判断 {checked}；"
-             f"确认触界 {triggered}，未触界 {checked - triggered}，无法判断 {unknown}。")
+    text += (f"Watch：已启用 {active}（价格条件 {price_cases}，仅证据重开 {evidence_only}），"
+             f"已完成价格判断 {checked}；确认触界 {triggered}，"
+             f"未触界 {checked - triggered}，价格无法判断 {unknown}。")
     if gaps or unknown:
         text += " 本次为部分可用交付；缺口不等于未触界，也不要求你手工核价。"
     return text
@@ -128,11 +131,11 @@ def main(
         # R5 production has no legacy Decision packages. Render the existing
         # typed Watch rather than computing wakes from historical probabilities.
         if not args.packages and not handoffs:
-            summary = ("# Decision Inbox · 已启用价格条件\n\n"
+            summary = ("# Decision Inbox · Odds / Watch\n\n"
                        + odds_watch.render_markdown(report)
                        + "\n日常研究增量由 Hosted Quick 与晚间 Brief 交付；本页不生成新Odds或投资决定。\n")
             page = ("<!doctype html><html lang=\"zh-CN\"><meta charset=\"utf-8\">"
-                    "<title>Decision Inbox</title><body><header><h1>已启用价格条件</h1></header>"
+                    "<title>Decision Inbox</title><body><header><h1>Odds / Watch</h1></header>"
                     "<pre>" + escape(summary) + "</pre></body></html>")
         # These are presentation-only legacy empty-state phrases, not decisions.
         # Scope their assertions even when all requested prices were available.

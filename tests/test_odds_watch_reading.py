@@ -63,7 +63,7 @@ def watch_report():
     registry = json.loads(registry_raw)
     prices = {
         "600276.SH": "42.5", "002674.SZ": "18", "600598.SH": "12.33",
-        "002050.SZ": "31", "603986.SH": "360",
+        "002050.SZ": "31", "603986.SH": "360", "601155.SH": "20",
     }
     return odds_watch.build_watch(
         config=config,
@@ -151,7 +151,8 @@ def test_typed_watch_uses_origin_identity_when_later_registry_advances(tmp_path,
     typed = saved["odds_watch"]
     assert typed["status"] == "TYPED_ODDS_WATCH_READ_OK"
     assert typed["report"] == report
-    assert typed["report"]["watch"]["active_case_count"] == 5
+    assert typed["report"]["watch"]["active_case_count"] == 7
+    assert typed["report"]["watch"]["evidence_only_case_count"] == 1
     assert typed["config_source"]["ref"] == RUN_SHA
     assert typed["registry_source"]["ref"] == RUN_SHA
     assert typed["meaning"].endswith("NOT_REVALIDATED_DECISION_SPINE_ODDS_OR_ACTION")
