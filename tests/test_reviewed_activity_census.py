@@ -489,7 +489,7 @@ def test_unresolved_host_identity_does_not_block_visiting_population():
     assert c.build(value, files)['counts'] == expected
 
 
-def test_official_named_roster_positive_with_explicit_derivation_and_host_exclusion():
+def test_official_named_roster_positive_with_explicit_derivation_and_host_exclusion(monkeypatch):
     """Real selected disclosure, not a synthetic population or issuer-window census."""
     root = Path(__file__).resolve().parents[1] / 'docs/readings/c1-activity-positive-2026-09-30'
     mapping = json.loads((root / 'fact-mapping.json').read_bytes())
@@ -502,11 +502,53 @@ def test_official_named_roster_positive_with_explicit_derivation_and_host_exclus
     assert state.sha256(source) == mapping['derived_source_sha256']
     text = extracted.decode()
     for field in mapping['fields']:
-        assert text[field['extraction_character_start_0based']:field['extraction_character_end_exclusive']] == field['raw_spelling']
+        start, end = field['extraction_character_start_0based'], field['extraction_character_end_exclusive']
+        assert text[start:end] == field['raw_spelling']
+        assert text.count('\n', 0, start) + 1 == field['extraction_line_start_1based']
+        assert text.count('\n', 0, end - 1) + 1 == field['extraction_line_end_1based']
         assert c.selected(source, {'pointer': field['target_pointer']}) == field['reviewed_value']
     value = json.loads((root / 'census-input.json').read_bytes())
     assert value['sources'][0]['qualification'] == 'RETAINED_RESEARCH'
+
+    # Observe the actual consumer, not only the fields already listed in the map.
+    consumed_pointers = set()
+    original_selected = c.selected
+
+    def selected(raw, locator):
+        assert raw == source
+        result = original_selected(raw, locator)
+        if isinstance(result, str):
+            consumed_pointers.add(locator['pointer'])
+        return result
+
+    monkeypatch.setattr(c, 'selected', selected)
     report = c.build(value, {'reviewed-event': source})
+    mapped_pointers = [field['target_pointer'] for field in mapping['fields']]
+    assert len(mapped_pointers) == len(set(mapped_pointers)) == 29
+    assert consumed_pointers == set(mapped_pointers)
+
+    assignments = {item['entity_id']: item for item in mapping['entity_assignments']}
+    entities = {item['id']: item for item in value['entities']}
+    event, = value['events']
+    attendance = {item['entity_id']: item for item in event['attendance']}
+    assert len(assignments) == len(mapping['entity_assignments']) == 13
+    assert len(entities) == len(value['entities']) == 13
+    assert len(attendance) == len(event['attendance']) == 13
+    assert assignments.keys() == entities.keys() == attendance.keys()
+    for entity_id, assignment in assignments.items():
+        entity, edge = entities[entity_id], attendance[entity_id]
+        assert entity['kind'] == assignment['kind']
+        assert entity['names'] == [assignment['name']]
+        assert entity['namespace'] == assignment['namespace']
+        assert entity['identity_value'] == assignment['reviewed_identity_value']
+        assert entity['identity_basis'] == 'REVIEWED_EQUIVALENCE'
+        assert entity['identity_qualification'] == 'REVIEWED_RESOLVED'
+        assert assignment['identity_qualification'] == 'EVENT_SCOPED_REVIEWED_ASSIGNMENT_NOT_GLOBAL_IDENTITY'
+        assert edge['name']['binding']['value'] == assignment['name']
+        assert edge['role'] == assignment['role']
+        assert edge['role_evidence']['binding']['value'] == assignment['raw_role_evidence']
+        assert [item['binding']['value'] for item in edge.get('identity_evidence', [])] == assignment['raw_affiliation_or_job_evidence']
+
     assert report == json.loads((root / 'census-report.json').read_bytes())
     assert c.render(report).encode() == (root / 'census-report.md').read_bytes()
     assert {k: x['selected_set_total'] for k, x in report['counts'].items()} == {

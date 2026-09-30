@@ -67,6 +67,37 @@ def test_publish_exposes_only_complete_readback_verified_pair(tmp_path, monkeypa
 
 
 @requires_publication
+@pytest.mark.parametrize('interruption', [OSError, KeyboardInterrupt])
+def test_interruption_after_successful_rename_preserves_result_and_refuses_retry(
+        tmp_path, monkeypatch, interruption):
+    output = tmp_path / 'report'
+    original_rename = retention._rename_new_directory
+    published = []
+
+    def rename_then_interrupt(source, destination):
+        original_rename(source, destination)
+        assert contents(destination) == PAIR
+        published.append(target_snapshot(destination))
+        raise interruption('injected interruption after publication')
+
+    with monkeypatch.context() as patch:
+        patch.setattr(retention, '_rename_new_directory', rename_then_interrupt)
+        with pytest.raises(interruption, match='injected interruption after publication'):
+            retention._publish_report_files(output, PAIR)
+    assert len(published) == 1
+    assert target_snapshot(output) == published[0]
+    assert_no_staging(tmp_path)
+
+    def unexpected_write(*args):
+        pytest.fail('retry must refuse the committed result before staging writes')
+
+    with pytest.raises(FileExistsError):
+        retention._publish_report_files(output, PAIR, write_file=unexpected_write)
+    assert target_snapshot(output) == published[0]
+    assert_no_staging(tmp_path)
+
+
+@requires_publication
 @pytest.mark.parametrize('fail_on', [1, 2])
 @pytest.mark.parametrize('failure_point', ['before', 'partial', 'after'])
 def test_first_or_second_write_failure_leaves_no_output_and_retry_works(
