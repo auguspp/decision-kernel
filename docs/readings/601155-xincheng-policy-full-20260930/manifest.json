@@ -1,0 +1,22 @@
+{
+  "archive_id": "601155-xincheng-policy-full-20260930",
+  "case": "601155.SH",
+  "created_at": "2026-09-30 09:06:40 Asia/Singapore",
+  "main_commit": "ee9ada68e896597b44aeb7566bae44c9c4221f54",
+  "reading_commit": "fdc326d6e8bcc5de2f63ef66a16cd40e08e0303a",
+  "qualification": "RETAINED_FILES_NOT_COMMITTED_RESEARCH",
+  "files": [
+    {"name": "README.md", "bytes": 1560, "sha256": "b76f55a7541449a3c21c9882330613c7693c2433a66bfce11e81d3fe70fe6cab"},
+    {"name": "report.md", "bytes": 7591, "sha256": "22bccef260ff7f93f99d53cdd8e81e3840839ecf02435c3de29eade5d1fdd25a"},
+    {"name": "sources.md", "bytes": 2952, "sha256": "9751048b73c7e811a710f426da9af2872ac7502769ef26ffda5e954c828e82a1"},
+    {"name": "calculations.json", "bytes": 4543, "sha256": "56ee156507f908420cacf93da53c0c9fc0797fa20e63f7461876d249b9b3e9e9"},
+    {"name": "odds.md", "bytes": 3569, "sha256": "fa05f18a019db0c34722a5bda0c421012195c132955ce10f3bafe5c327bc2aa7"},
+    {"name": "odds.json", "bytes": 4078, "sha256": "9c0b842b5db4d7dcc4f7a0bfcef0e8a7cdace2ef5ed7b811b6c7685df5dc7e21"}
+  ],
+  "authority": {
+    "human_acceptance": "NOT_ESTABLISHED",
+    "investment_authority": "NONE",
+    "watch": "NOT_CREATED",
+    "action": "NOT_CREATED"
+  }
+}
