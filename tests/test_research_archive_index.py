@@ -266,7 +266,7 @@ def test_registered_fibocom_has_exact_original_progress_and_keeps_eastsoft_eager
     assert row['source']['git_blob'] == '29db720caf59245b28a91b692d24c763d02caa07'
     assert row['source']['bytes'] == 6567
     assert row['archive'] == {'format': 'RESEARCH_PROGRESS', 'expected_sha256': '72b98ca4fe4dea23d8cf46d1c462eaf8e690d90020a53e9686eb54d3ad0201a6', 'question_id': 'module-profit-cash-source-review'}
-    assert len(eager['references']) == 50
+    assert len(eager['references']) == 51
     notice = by_id['601155-unit-correction-notice-20260930']
     assert notice['use'] == 'METHOD_SUPPLEMENT'
     assert notice['source'] == by_id['odds-book']['source']

@@ -4,13 +4,23 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 
 这不是持仓表、实时行情、第二套 Odds 状态或买卖清单。下面保留的是本次找到的实际输出、方法更正和 Human 记录。**保留 ≠ 当前有效 ≠ Human 接受 ≠ 投资决定 ≠ 成交。**
 
-**先看：** Watch 现在是持续观察层，不再等同于 Human 已接受 Odds 的名单。运行安全上限从 8 扩到 24（只是批处理护栏，不是产品目标数量），并显式区分 `L0_NO_ODDS / L1_ANALYST_SENSITIVITY / L2_PROVISIONAL_ORDINAL / L3_HUMAN_ACCEPTED_ODDS / L4_HUMAN_DECISION_BOUNDARY` 与独立的 boundary authority。恒瑞、兴业、北大荒保留 Human-accepted Odds 边界；三花、兆易保留 Human decision boundary；兴森以 L0 Evidence/Reopen Watch 纳入但不取价；新城以 L2 provisional ordinal、ANALYST_DERIVED 条件边界纳入。进入 Watch 不创造 Human 接受、canonical Odds、Action、持仓或交易权限；没有统一“接近”百分比，价格触界只分配复核注意力。
+**先看：** Watch 现在是持续观察层，不再等同于 Human 已接受 Odds 的名单。运行安全上限从 8 扩到 24（只是批处理护栏，不是产品目标数量），并显式区分 `L0_NO_ODDS / L1_ANALYST_SENSITIVITY / L2_PROVISIONAL_ORDINAL / L3_HUMAN_ACCEPTED_ODDS / L4_HUMAN_DECISION_BOUNDARY` 与独立的 boundary authority。恒瑞、兴业、北大荒保留 Human-accepted Odds 边界；三花、兆易保留 Human decision boundary；**兴森已由 L0 升级为 L2 provisional ordinal / ANALYST_DERIVED**；新城同为 L2 provisional ordinal / ANALYST_DERIVED。进入 Watch 不创造 Human 接受、canonical Odds、Action、持仓或交易权限；没有统一“接近”百分比，价格触界只分配复核注意力。
 
 ## 2026-09-30 新城601155单位勘误：先读再用原计算
 
 原条件估值把亿元/亿股误标为CNY bn/billion shares。正确十亿口径：归母净资产62.47636、投资性房地产120.92、存货64.79568、其他应收24.95361、股数2.255622856；金额与股数同时除10，所以每股值、回报、CAGR和门槛均不变。保留原舍入精度，不能把单位纠错当作完整来源复核或经济判断更新；原件、截止时钟和未获Human接受状态不变。
 
 先按[不可变四文件单位后继](https://github.com/auguspp/decision-kernel/tree/f54c017c3d06fd46cf2a5da4949c0e461e5789e0/docs/readings/601155-unit-correction-2026-09-30)或用途记录`601155-unit-correction-20260930`恢复完整说明、两份派生JSON和verification。当前共用导航摘要不代表四文件已经读取；五页摘要未证明其他完整报表输入。原[六文件档案](https://github.com/auguspp/decision-kernel/tree/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930)不覆盖。本段不新增Watch、概率、买卖或投资权限。
+
+## 2026-09-30 兴森002436 provisional Odds：L0 → L2
+
+Human 本轮要求在已保存 R2 Full 基础上计算 Odds。新结果复用 R2 的经营/现金/资本约束，不重做 Full，也不把 R2 尚未闭合的 FC-BGA 客户单位经济、融资归属、稀释和 owner-cash 缺口补成概率。
+
+计算使用 9/30 公共历史行情 **40.93元**，另一公开行情页为40.94元；一分钱差异保留，因此仍是 `PUBLIC_MULTI_SOURCE_CONTEXT_ONLY`，不是 qualified ObservedMarket。3年、10% CAGR、30/35/40x 均明确为 analyst sensitivity，不是 Human company-specific mandate。
+
+在40.93元下，若三年后仍要求10% CAGR且中途分配为0，需要约 **30.86亿元@30x、26.46亿元@35x、23.15亿元@40x** 的归母利润。R2保留的两组公开卖方摘要中，高端2028归母约20.21亿元、低端约11.4亿元；它们不是完整模型或本研究预测。由此形成 analyst-derived Watch 复核层：**35.73 / 26.80 / 20.16元**。这些是指定利润×倍数×期限条件下的最高起始价敏感性，不是公允价值、Human接受买点或投资决定。
+
+完整原件：[兴森 provisional Odds][XS-O]；研究前驱：[兴森 R2][XS-R]。Cardinal probability / canonical Odds 仍为 NOT_ESTABLISHED，Human acceptance = NOT_RECORDED。
 
 ## 1. 总表：最后登记的解释，不按文件时间裁定唯一“最新有效”
 
@@ -21,6 +31,7 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 | 恒瑞医药 **600276.SH** | provisional / ordinal；原风险收益 MIXED；canonical 数值未建立 | 42.93元，9/10；Human supplied、CONTEXT_ONLY | 9/12接受条件价格分布用于决策准备；不是实际购入决定 | 39.6附近重审假设，37–38为条件首笔讨论；仍须核查产品现金、授权完整成本及净现金；**#349-C typed watch已注册，触界只要求Human复核** | [临时Odds][HR-O] / [接受范围][HR-H] / H1–H3 |
 | 内蒙一机 **600967.SH** | 已接受的 provisional / ordinal 为 WEAK / FRAGILE；首笔 NOT METHOD-READY | 14.98元，9/11；public CONTEXT_ONLY | 9/13接受 Research 与该 Odds；明确无投资决定 | 利润质量、现金可分配性和订单兑现需有新证据；没有可激活价格区间；**EVIDENCE_REVIEW_ONLY_NO_PRICE_BOUNDARY，价格watch不激活** | [接受与条件计算记录][NM-H] / N1 |
 | 兴业科技 **002674.SZ** | 修订后 provisional first-entry review；不把相近价格当旧模型被验证 | 18.61元，9/11；public CONTEXT_ONLY | 9/14接受修订研究及临时条件卡；无投资决定 | 15–17重审、13–13.5条件首笔复核；须核验旧业务衰减、InP规模经济及披露风险；**#349-C typed watch已注册，价格不能替代thesis复核** | [修订研究][XY-R] / [接受范围][XY-H] / X1–X2 |
+| 兴森科技 **002436.SZ** | 9/30新增 probability-free provisional / ordinal reverse-underwriting；不声称完整FCFE/DCF或校准概率 | 40.93元，9/30；PUBLIC_MULTI_SOURCE_CONTEXT_ONLY，另一公开页40.94；非qualified Market | NOT_RECORDED；不是REJECTED，也不是ACCEPTED | analyst-derived 35.73 / 26.80 / 20.16 分别对应高端公开利润摘要在40x、30x及低端摘要在40x时满足3年10%工作敏感性；**L2 typed Watch登记，不是买入梯度** | [兴森Odds][XS-O] / [兴森R2][XS-R] / XS1 |
 | 北大荒 **600598.SH** | 利润主导的 provisional / ordinal reverse-underwriting 修订：核心 terminal PE 收敛为21–23x，24x仅较好市场表达；当前9.6–10.6亿元正常化利润带无增长证据，12.33主要预付未证明的利润增长 | 12.33元，9/15完成交易日；PUBLIC_MULTI_SOURCE_CONTEXT_ONLY，非canonical market state；BA2未刷新价格 | **9/16 Human 接受 BA2 Odds/价格分布用于决策准备**；不是买入决定、仓位或永久公司专属10%授权 | 11.0–11.3重审；9.8–10.3条件首笔复核；9.3–9.6为更优Odds复核；新Evidence可使梯度失效；**#349-C typed watch已注册** | [修订Odds][BD-R] / [Human接受][BD-H] / [前版Odds][BD-O] / BA1–BA3 |
 | 光电股份 **600184.SH** | 原 UNFAVORABLE 是旧条件输出；研究/估值桥 CHALLENGED，旧梯度 NOT ACTION-READY | 19.98元，9/11；PUBLIC_NON_QUALIFIED_CONTEXT_ONLY | 原JSON为NOT_RECORDED；随后Human要求保留，当前NOT_ACCEPTED_YET，不是REJECTED | 先修经营/估值桥与单位、期限和完整下行；**CHALLENGED_NO_ACTIVE_TRIGGER，旧梯度不因价格激活** | [旧JSON][GD-O] / [方法勘误][GD-C] / [Human反馈][GD-H] / G1–G3 |
 | 三花智控 **002050.SZ** | 9/11保存Inbox为 INSUFFICIENT_ODDS；Human core-first条件另存 | 34.87元，9/11；保存HTML/Markdown，**本次未typed复验** | 9/3已有约30元条件首笔决定；不等于接受旧总公司概率 | 约30元且核心经营/现金/资本回报未坏；原模型≤29.56不是Human首笔；**#349-C只监控Human约30元条件，不使用29.56替代** | [保存输出][INBOX] / [Human条件][SH-H] / P1、P2 |
@@ -53,6 +64,7 @@ Version: odds-book-v0 / 2026-09-16。**NAVIGATION_ONLY / DECLARED_COVERAGE_BACKF
 | N1 | 9/13，内蒙一机 | 接受记录保留Research与14.98元WEAK/FRAGILE ordinal结论、条件要求及不采用数值Odds的理由 | **ACCEPTANCE_CHECKPOINT**；完整原Research输入/计算包尚未在本次盘点定位，不由此补造 |
 | X1 | 9/14，兴业科技 | 修订稿保留“可修复旧业务+期权”的旧解释被挑战，改为旧业务衰减×新业务独立成长 | **REINTERPRETATION / METHOD_CORRECTION**；原早期草稿完整包未定位，相近13元讨论不等于同一模型 |
 | X2 | 9/14，兴业科技 | Human接受修订研究及临时条件卡；原记录18.61参考价、13–13.5条件首笔复核 | **HUMAN_ACCEPTANCE_CHANGE**；公司专属三年10%门槛仍非单独Human确认，无投资决定或Action |
+| XS1 | 9/30，兴森科技 | Human在已保存R2 Full后明确要求计算Odds；用40.93 public close context做无概率反推，保留40.94交叉差异 | **PROVISIONAL_CONDITIONAL_ORDINAL / L2_ANALYST_DERIVED**；当前价要满足3年10%工作敏感性需约23.15亿元@40x至30.86亿元@30x终局归母；35.73/26.80/20.16仅为分析者复核层级，Human接受/Action均未建立 |
 | BA1 | 9/16，北大荒 | 复用已保存税制/税后现金续作，不重跑Pre/Quick；以9/15完成交易日12.33 public context做provisional reverse-underwriting并保存 | **PRICE_ONLY / PROVISIONAL / ORDINAL**；3年10%为工作敏感性而非Human专属要求；cardinal/canonical Odds、Human接受、仓位与watch均未建立 |
 | BA2 | 9/16，北大荒 | 同一12.33价格与冻结Research下，复核历史估值后把21–23x收敛为核心市场表达，24x降为较好上沿；同时将“9.6–10.6亿元利润带尚无增长证据”提升为主要Odds轴 | **VALUATION_INTERPRETATION / ODDS_REVISION / NOT_PRICE_ONLY**；12.33改判为主要预付未证明利润增长；9.8–10.3为条件首笔复核、9.3–9.6为更优Odds复核；生成时Human接受未建立 |
 | BA3 | 9/16，北大荒 | Human在紧接BA2后明确说“嗯，我现在同意了 odds”，接受该精确 provisional / ordinal Odds 与价格分布用于决策准备 | **HUMAN_ACCEPTANCE_CHANGE**；不重算Research/Odds/价格，不生成买入决定、仓位、Action或watch；BA2中的3年10%仍是被接受结果的计算框架，不自动升级为永久公司专属授权 |
@@ -64,7 +76,7 @@ H3的方法回放：[原回放与证明范围][REPLAY]。G3和B1的需求线索�
 
 读取基线：原A交付 M=`49b7fc999953977832afef67420fd693797e451d`、R=`49089753bdeb9a8660d2d74f4747dc749ce7a313`；施工前发现主干新增兴业档案，另固定 M2=`8e045ef755ade568aaad33d50a5a36aae04b19ed`。M→M2只有AGENTS及三份兴业/转型方法文档，不把它们伪装成原R已有内容。此书在 9/16 追加北大荒 BA1、BA2 与 BA3，并在 #349-C 新增 W1 Watch registration；各旧原件仍按原版本留存，不被Watch改写。
 
-原找回盘点覆盖十家公司；9/16 新增的是**实际新计算并留存的北大荒 Odds、其估值解释修订以及随后精确Human接受**，因此当前总表仍为十一家公司。这仍不是全仓白名单或全历史穷尽。不为凑满总表重算历史。
+原找回盘点覆盖十家公司；9/16 新增北大荒 Odds，9/30 新增兴森的真实 provisional conditional Odds；新城同日 provisional Odds 另在上方独立后继中保留，因此当前总表为十二家公司、并另有新城专门后继。这仍不是全仓白名单或全历史穷尽；新增内容来自实际研究/计算，不为凑数重算历史。
 
 | 覆盖层 | 已找到什么 | 尚未证明 / 后续处置 |
 |---|---|---|
@@ -99,7 +111,7 @@ H3的方法回放：[原回放与证明范围][REPLAY]。G3和B1的需求线索�
 
 ## 5. 跟踪处置与权限
 
-#349-C 的 Watch v0 已从“条件留存”进入**有界注册/运行能力**，但仍不是全仓自动watch。它只覆盖本书中五个有明确 Human/Odds 价格边界的对象：恒瑞、兴业科技、北大荒、三花智控、兆易创新。实现复用既有 `decision-inbox` 交易日调度与 HiThink 已完成交易日 raw close 资格；不新增高频poller、scheduler、provider或第二套Odds引擎。
+#349-C 的 Watch v0 已从“条件留存”进入**graded持续观察能力**，但仍不是全仓自动watch。当前active包括恒瑞、兴业科技、北大荒、三花智控、兆易创新，以及L2 analyst-derived的新城、兴森；不同层级不互相继承Human接受。实现复用既有 `decision-inbox` 交易日调度与 HiThink 已完成交易日 raw close 资格；运行护栏24只是批处理边界，不是产品名单限制；不新增高频poller、scheduler、provider或第二套Odds引擎。
 
 Watch 每次只产出 typed price-condition artifact：合格当前价、原Human边界、事实距离、已触及条件、下一未触及条件、前提与路由。**触界 = Human attention may be valuable，绝不等于 BUY / ADD / SELL。** 同一冻结Research且方法仍有效时，价格变化才可能走 `PRICE_ONLY_RECOMPUTE`；新Evidence、方法失效或thesis challenge继续走 `REUNDERWRITE_REQUIRED`。三花/兆易只使用Human原条件，不把旧模型29.56/330.69替代进去。
 
@@ -125,5 +137,7 @@ Watch不签署或撤回Human投资决定，不代表Kernel对研究真值作认�
 [INBOX]: https://github.com/auguspp/decision-kernel/blob/49089753bdeb9a8660d2d74f4747dc749ce7a313/details/inbox/34601025149/summary.md
 [HISTORY]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/handoffs/2026-09-03-radar-phase-next-conversation-handoff.md
 [CATL]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md
+[XS-O]: https://github.com/auguspp/decision-kernel/blob/d244c3427d112ad3c8623ab71aeb94408f202920/docs/readings/002436-xingsen-odds-2026-09-30/odds.md
+[XS-R]: https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/r2-report.md
 [BOOK]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/live-decision-book.md
 [REPLAY]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/dogfood/research-handoff-replay-2026-09-13.md

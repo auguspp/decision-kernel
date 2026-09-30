@@ -93,8 +93,8 @@ def test_account_rejection_cannot_repeat_via_next_ticker(monkeypatch, tmp_path, 
     assert calls == [h.HITHINK_CALENDAR_PATH, h.HITHINK_HISTORY_PATH]
     report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
     assert report['watch']['active_case_count'] == 7
-    assert report['watch']['price_gap_count'] == 6
-    assert report['watch']['evidence_only_case_count'] == 1
+    assert report['watch']['price_gap_count'] == 7
+    assert report['watch']['evidence_only_case_count'] == 0
     assert report['watch']['attention_case_count'] == 0
     assert '完成 0/2' in (tmp_path/'summary.md').read_text()
     assert SECRET not in (tmp_path/'summary.md').read_text()
@@ -148,9 +148,9 @@ def test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_p
     monkeypatch.setattr(h, 'urlopen', open_)
     assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0
     report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
-    assert report['watch']['price_gap_count'] == (6 if unavailable else 0)
-    assert report['watch']['evidence_only_case_count'] == 1
-    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 6)
+    assert report['watch']['price_gap_count'] == (7 if unavailable else 0)
+    assert report['watch']['evidence_only_case_count'] == 0
+    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 7)
     text = (tmp_path/'summary.md').read_text()
     assert '旧研究包自动Odds试算未启用' in text
     assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text
