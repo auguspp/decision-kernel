@@ -1,4 +1,4 @@
-# B2：已选证券的财报预约与公告目录标准通道
+# B2：已选证券的预约、公告目录与单PDF标准通道
 
 当前任务归[#620](https://github.com/auguspp/decision-kernel/issues/620)。2026-09-30 Human明确将重点从逐股特殊情况转为以后新入选个股的标准通道，原话及影响对账见[5901901617](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5901901617)。这是原来源入口的参数化接替，不是新日历平台。R4及全部历史来源、失败、研究问题和Human记录保留，个股缺口不再作为本次工程收口前提。
 
@@ -12,9 +12,10 @@
 |---|---|
 | `code-sha` | 已核对且通过独立main检查的当前代码commit；由施工方解析，不让Human搬SHA |
 | `reference-ids` | 原索引的显式引用ID，逗号分隔；一次最多六个不同证券，不默认查询全索引 |
-| `source-kind` | `appointments`（默认）或 `announcements`；一次只执行一个来源用途 |
+| `source-kind` | `appointments`（默认）、`announcements`或`pdf`；一次只执行一个来源用途 |
 | `report-period` | 仅预约模式必填：`YYYY-MM-DD`季度末，支持一季、半年、三季、年报；不是预计披露日期 |
 | `start-date` / `end-date` | 仅公告目录模式必填：`YYYY-MM-DD`来源公告日期窗口；不是正文里的事件实施日 |
+| `announcement-id` / `reading-commit` | 仅PDF模式必填：一个已保存公告ID及已发布的固定R；该R代码须等于本次已核main，选择记录须与其一致 |
 
 脚本`--reference-ids`必填；预约模式必须给`--report-period`且不得给公告日期，公告目录模式反之。条件缺参或混填在任何源请求前拒绝。以下预约市场/报告期合同只适用于`appointments`模式。没有默认六股票或20260930期间；旧code-sha-only调用不能重放原六股计划。SH/SZ/BJ按已审AKShare市场参数构造请求，科创板按688/689前缀而非某只股票特判；北交所路由仅有离线参数验证，不能声称已有真实返回。该公开源的可查报告期/覆盖依赖当前接口，不提供任意历史PIT保证。
 
@@ -36,7 +37,7 @@ summary.md统一给出每个选中对象的选择依据、报告期、返回状�
 
 真实取得后，仍经现有工具核源run/artifact及字节，将原件和summary按原生Git保存；在原研究/资料用途或唯一research-agenda引用中接入，并走既有publisher及固定R读取。原始输出不会自动提交仓库、改写R4、吞并原宏观清单或宣布已经发布；Git保管、用途登记、发布和正文实读分别完成。资料采用是正常数据操作，不再要求改caller/workflow/tests。移出显式本次选择即不请求该对象，不删除其历史。
 
-本轮工程验收以未写死证券/其他报告期的同一路径、现有原响应离线重放、对象缺口不中断其他对象、源级停止和原读取兼容为主；不为制造验收结果重新查询已有三家。完整自动“新入选事件→定时采集→自动发布”未启用：原任务/时钟、Quick/Full、Watch、通知与Sites不在本改动中变更。预约查询不代表公告目录或原件取得；公告目录模式见下节。PDF正文、分红/解禁实施日提取等仍不在本入口中执行。
+本轮工程验收以未写死证券/其他报告期的同一路径、现有原响应离线重放、对象缺口不中断其他对象、源级停止和原读取兼容为主；不为制造验收结果重新查询已有三家。完整自动“新入选事件→定时采集→自动发布”未启用：原任务/时钟、Quick/Full、Watch、通知与Sites不在本改动中变更。预约查询不代表公告目录或原件取得；公告目录模式见下节。单份PDF取得/文本提取见下节；分红/解禁实施日期判断仍不自动执行。
 
 ## 公告目录：复用原查询与解析，原始页先保存
 
@@ -51,6 +52,22 @@ summary.md统一给出每个选中对象的选择依据、报告期、返回状�
 **公告目录不是PDF保管或公司事件结论。** 本模式不请求PDF，不从标题抽取股东大会、解禁、分红实施或取消日期；来源公告时间不是上述日期。原件定位保留到后续按需阅读，原`fetch_cninfo_pdf_bytes`/PDF保管能力仍另行复用。标题及源内容仅作数据展示，不执行其中链接或指令。空值、失败和未查询不会因摘要生成变成“无事件”。源步骤也不自动登记、发布、通知、研究或Watch。
 
 目录模式复用同一逐证券保存/按需登记形状；建议目录为`docs/readings/b2-announcements-<run-id>-1`，每股平坦目录保存实际请求文件、receipt、plan和summary（满三页常规为11文件，沿原16文件恢复上限）。原捕获字节不覆盖。局部保存失败保留已写部分并失败退出，不重采来补造成功。原始来源页可读取与完整目录资格、PDF取得、研究解释分别成立。
+
+## 单PDF：只消费已保存目录，不重抓目录
+
+本模式的有界批准与复用记录见[#620/5906191442](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5906191442)。`pdf`只接受一个原公告目录的`NAVIGATION_ONLY / RETAINED_FILES / ON_DEMAND_ARCHIVE`引用ID，以及一个明确公告ID。不填预约报告期或目录窗口；其他模式不能混入PDF参数。新证券沿同一资料和参数入口，不改股票数组或另建单股脚本。
+
+施工方先解析已发布R，再传`reading-commit`；原`research_archive._record`实际校验R/current-state及同R registry，并要求所选记录与本次M registry相同、R声明code_commit=M。原GitHubAPI最多4次只读文件调用：R的读取包/registry、所选精确A处的summary/receipt。核摘要原绑定，从该原receipt匹配唯一公告ID和证券；只接受其中严格匹配ID、有效日期及CNINFO静态域的PDF定位，无任意URL输入、目录POST、默认摘要/完整报告选择或备用源。GitHub读取凭证仅给原GitHubAPI，原CNINFO getter另用其既有无凭证session；contents/actions仍仅read。
+
+调用原`fetch_cninfo_pdf_bytes`一次，**显式max_bytes=524288**；原传输继续无重试、无重定向、无代理/凭证与identity编码。返回合格完整PDF才进入原`DisclosurePdfCapture`，原objects及manifest在`primary-bodies/`保留。随后将同一字节复制为单股平坦目录的`source.pdf`，将原manifest逐字节复制为`capture-manifest.jsonl`，receipt明确原objects路径与平坦文件映射。清单中的path仍指原primary-bodies目录，不能当平坦目录相对路径；**不调用属于assessment packet语义的complete()，不生成P0完成标记**。
+
+原件保留后才调用原`extract_pdf_text`，同样显式max_pdf_bytes=524288，并以524288字符上限限定本模式提取；完整序列化的`extraction.json`也须不超过原每文件512KiB。超出时保留PDF和提取阶段缺口，不截断文本冒充完整结果。EXTRACTED、NO_TEXT、提取失败、提取结果未保留分别可见；NO_TEXT仍可能有非零完整PDF，不自动OCR。PDF只做数据保留和文本提取，不执行其中脚本/链接。
+
+源调用、原件保留、平坦复制、提取、提取文件保留分阶段记录。沿原有限失败诊断保留异常类别、已知reason_code/HTTP状态与本地拒绝标签；未观察到的原因/HTTP状态/字节为UNKNOWN或null，不填零、不把失败换成空返回。成功HTTP200来自原getter资格合同，不伪称另有原始HTTP头日志。getter_invocations计调用次数，网络可能在HTTP前失败，不能一律当作源站实际收到请求数。历史交互失败与旧目录pdf_requests=0不回写。保留失败可登记成失败资料，不能登记成原文取得成功。
+
+单股平坦目录最多7份基础文件：plan、原directory-receipt、receipt、summary，以及成功时的source.pdf、capture-manifest、extraction。维持原16文件和512KiB/文件恢复预算。另有原input-reading与primary-bodies输出用于来源/保留对账；不是第二状态库。沿原save_security_readings生成`docs/readings/b2-pdf-<run>-1`按需登记草稿，ref仍为null；真实A保管及读回后才绑定追加原registry，正常资料PR/CI/main/publisher之后再从固定R恢复。人工/交互式实际正文阅读用独立后继说明保存，不改原捕获的body_reading=NOT_PERFORMED。摘要不当完整报告，公告时间不当正文事件时间。
+
+内部getter、原保留器、pypdf适配器、档案读取器、registry和publisher均不变。官方[workflow输入与环境传参](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onworkflow_dispatchinputs)及既有[pypdf提取边界](https://pypdf.readthedocs.io/en/6.12.0/user/extract-text.html)为复用依据；只安装仓库已有documents extra，不增加依赖声明、平台、定时任务或权限。停止使用本模式时移除本caller分支/两项专属参数/专属测试/说明，原预约与目录功能及全部历史档案保持。
 
 ## 标准结果回到每只证券的原资料入口
 
