@@ -7,6 +7,7 @@ creates a Recommendation/Action, sizes a position, or grants Investment Authorit
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime
 from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
@@ -81,6 +82,33 @@ def _require_string(value: object, *, field: str) -> str:
     return value.strip()
 
 
+def _validate_maturity(level: str, authority: str, mode: str, route: str) -> None:
+    """Qualification and boundary origin are not inferred from membership."""
+    if level not in ODDS_LEVELS or authority not in BOUNDARY_AUTHORITIES or mode not in WATCH_MODES:
+        raise ValueError("Odds Watch maturity metadata unsupported")
+    if mode == "EVIDENCE_REOPEN":
+        if authority != "NONE" or route != "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER":
+            raise ValueError("evidence-only Watch cannot claim a price-boundary authority or route")
+        return
+    expected = {
+        "L1_ANALYST_SENSITIVITY": ("ANALYST_DERIVED", "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES"),
+        "L2_PROVISIONAL_ORDINAL": ("ANALYST_DERIVED", "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES"),
+        "L3_HUMAN_ACCEPTED_ODDS": ("HUMAN_ACCEPTED_ODDS", "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID"),
+        "L4_HUMAN_DECISION_BOUNDARY": ("HUMAN_DECISION", "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE"),
+    }
+    if expected.get(level) != (authority, route):
+        raise ValueError("Odds Watch level/authority/route mismatch; membership cannot upgrade Odds")
+
+
+def _validate_boundary_identity(path: object, ref: object) -> None:
+    if not isinstance(path, str) or not path or path.startswith("/") or "\\" in path:
+        raise ValueError("Odds Watch boundary source path malformed")
+    if any(part in {"", ".", ".."} for part in path.split("/")):
+        raise ValueError("Odds Watch boundary source path malformed")
+    if not isinstance(ref, str) or re.fullmatch(r"[0-9a-f]{40}", ref) is None:
+        raise ValueError("Odds Watch boundary source ref malformed")
+
+
 def load_json(path: Path) -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
@@ -143,8 +171,7 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
         odds_level = _require_string(case["odds_level"], field="odds_level")
         boundary_authority = _require_string(case["boundary_authority"], field="boundary_authority")
         watch_mode = _require_string(case["watch_mode"], field="watch_mode")
-        if odds_level not in ODDS_LEVELS or boundary_authority not in BOUNDARY_AUTHORITIES or watch_mode not in WATCH_MODES:
-            raise ValueError("Odds Watch maturity metadata unsupported")
+        _validate_maturity(odds_level, boundary_authority, watch_mode, route)
         _require_string(case["prerequisite"], field="prerequisite")
         ref_id = _require_string(case["registry_reference_id"], field="registry_reference_id")
         ref = references.get(ref_id)
@@ -160,25 +187,23 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
         if not isinstance(source, dict) or not isinstance(source.get("path"), str):
             raise ValueError("active Odds Watch registry source missing")
         blob = source.get("git_blob")
-        if blob is not None and (not isinstance(blob, str) or len(blob) != 40):
+        if blob is not None and (not isinstance(blob, str) or re.fullmatch(r"[0-9a-f]{40}", blob) is None):
             raise ValueError("active Odds Watch registry blob identity malformed")
         boundary_path, boundary_ref = case["boundary_source_path"], case["boundary_source_ref"]
         if boundary_path is None:
-            if boundary_ref is not None:
-                raise ValueError("Odds Watch boundary ref requires path")
+            if boundary_ref is not None or boundary_authority == "ANALYST_DERIVED":
+                raise ValueError("Odds Watch analyst boundary requires an exact source path/ref")
         else:
-            _require_string(boundary_path, field="boundary_source_path")
-            if not isinstance(boundary_ref, str) or len(boundary_ref) != 40:
-                raise ValueError("Odds Watch boundary source ref malformed")
+            _validate_boundary_identity(boundary_path, boundary_ref)
 
         conditions = case["conditions"]
         if not isinstance(conditions, list):
             raise ValueError("Odds Watch conditions must be a list")
         if watch_mode == "EVIDENCE_REOPEN":
-            if conditions or odds_level != "L0_NO_ODDS" or boundary_authority != "NONE":
+            if conditions or boundary_path is not None:
                 raise ValueError("evidence-only Watch cannot carry Odds price conditions")
             continue
-        if odds_level == "L0_NO_ODDS" or not conditions:
+        if not conditions:
             raise ValueError("price Watch requires a non-L0 Odds level and price condition")
         upper_values: list[Decimal] = []
         condition_ids: set[str] = set()
@@ -310,6 +335,7 @@ def build_watch(
             rows.append({
                 **base,
                 "status": "EVIDENCE_REOPEN_WATCH",
+                "evidence_evaluation_state": "NOT_PERFORMED_REOPEN_CONDITIONS_RETAINED_ONLY",
                 "price_fetch_performed": False,
                 "price": None,
                 "market_timestamp": None,
@@ -399,6 +425,7 @@ def build_watch(
             "NO_POSITION_SIZE_OR_ORDER_AUTHORITY",
             "WATCH_MEMBERSHIP_DOES_NOT_EQUAL_HUMAN_ACCEPTANCE",
             "ODDS_LEVEL_AND_BOUNDARY_AUTHORITY_MUST_REMAIN_VISIBLE",
+            "EVIDENCE_REOPEN_CONDITIONS_ARE_RETAINED_NOT_AUTOMATICALLY_EVALUATED",
             "NO_AUTOMATIC_ODDS_OR_RESEARCH_SUPERSESSION",
         ],
     }))
@@ -407,6 +434,8 @@ def build_watch(
 
 def render_markdown(report: dict[str, Any]) -> str:
     payload = report["watch"]
+    price_evaluated = sum(row["status"] in {"ACTIVE_ODDS_WATCH", "NEEDS_REVIEW_NOW"} for row in payload["active_cases"])
+    evidence_count = sum(row["status"] == "EVIDENCE_REOPEN_WATCH" for row in payload["active_cases"])
     lines = [
         "# Odds Watch v0",
         "",
@@ -414,8 +443,8 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         (
             f"**需要复核：{payload['attention_case_count']}** · "
-            f"价格已判断：{payload.get('price_evaluated_case_count', 0)} · "
-            f"仅证据重开：{payload.get('evidence_only_case_count', 0)} · "
+            f"价格已判断：{price_evaluated} · "
+            f"仅证据重开：{evidence_count} · "
             f"价格缺口：{payload['price_gap_count']} · 活跃观察：{payload['active_case_count']}"
         ),
         "",
@@ -456,7 +485,8 @@ def render_markdown(report: dict[str, Any]) -> str:
             )
         lines.append("")
     if evidence_only:
-        lines += ["## 仅证据／重开观察（无价格边界）", ""]
+        lines += ["## 仅证据／重开观察（无价格边界）", "",
+                  "本轮仅保留重开条件，未自动判断新证据是否满足；不计为未触界或价格缺失。", ""]
         for row in evidence_only:
             lines.append(
                 f"- **{row['company_name']} {row['ticker']}** · "
@@ -467,7 +497,10 @@ def render_markdown(report: dict[str, Any]) -> str:
         lines += ["## 价格资格缺口", ""]
         for row in gaps:
             lines.append(
-                f"- **{row['company_name']} {row['ticker']}** · `PRICE_UNAVAILABLE_NOT_QUIET` · 不推断 trigger"
+                f"- **{row['company_name']} {row['ticker']}** · "
+                f"`{row.get('odds_level', 'LEGACY_UNSPECIFIED')}` / "
+                f"`{row.get('boundary_authority', 'LEGACY_UNSPECIFIED')}` · "
+                "`PRICE_UNAVAILABLE_NOT_QUIET` · 不推断 trigger"
             )
         lines.append("")
     lines += [
@@ -508,15 +541,36 @@ def validate_report(report: dict[str, Any]) -> None:
     active = payload.get("active_cases")
     if not isinstance(active, list) or len(active) > MAX_ACTIVE_CASES:
         raise ValueError("Odds Watch report active-case bound differs")
+    # Old v0 reports remain readable without inventing grades. New metadata is
+    # all-or-none, so removing one qualification cannot silently make it legacy.
+    metadata = {"odds_level", "boundary_authority", "watch_mode", "boundary_source", "price_fetch_performed"}
+    graded = ("price_evaluated_case_count" in payload or "evidence_only_case_count" in payload
+              or any(isinstance(row, dict) and metadata.intersection(row) for row in active))
+    tickers: set[str] = set()
     for row in active:
-        if row.get("status") not in ACTIVE_STATES:
+        if not isinstance(row, dict) or row.get("status") not in ACTIVE_STATES:
             raise ValueError("Odds Watch active status unsupported")
-        if "odds_level" in row and row.get("odds_level") not in ODDS_LEVELS:
-            raise ValueError("Odds Watch report Odds level unsupported")
-        if "boundary_authority" in row and row.get("boundary_authority") not in BOUNDARY_AUTHORITIES:
-            raise ValueError("Odds Watch report boundary authority unsupported")
-        if "watch_mode" in row and row.get("watch_mode") not in WATCH_MODES:
-            raise ValueError("Odds Watch report mode unsupported")
+        if row.get("watch_enabled") is not True or row.get("ticker") in tickers:
+            raise ValueError("Odds Watch active identity/enablement differs")
+        tickers.add(row.get("ticker"))
+        if graded:
+            if not metadata.issubset(row):
+                raise ValueError("Odds Watch graded metadata incomplete")
+            _validate_maturity(row["odds_level"], row["boundary_authority"], row["watch_mode"], row.get("recompute_route"))
+            if row["odds_level"] in {"L3_HUMAN_ACCEPTED_ODDS", "L4_HUMAN_DECISION_BOUNDARY"}:
+                if row.get("source", {}).get("use") != "HUMAN_DECISION_CHECKPOINT":
+                    raise ValueError("Human-level Odds Watch requires an explicit Human checkpoint")
+            boundary = row["boundary_source"]
+            if boundary is not None:
+                if not isinstance(boundary, dict):
+                    raise ValueError("Odds Watch report boundary source malformed")
+                _validate_boundary_identity(boundary.get("source_path"), boundary.get("source_ref"))
+            elif row["boundary_authority"] == "ANALYST_DERIVED":
+                raise ValueError("Odds Watch analyst boundary source missing")
+            if row["watch_mode"] == "PRICE_CONDITION" and row["price_fetch_performed"] is not True:
+                raise ValueError("price Watch lacks actual price attempt")
+            if (row["watch_mode"] == "EVIDENCE_REOPEN") != (row["status"] == "EVIDENCE_REOPEN_WATCH"):
+                raise ValueError("Odds Watch mode/status mismatch")
         if any(row.get(name) != "NONE" for name in AUTHORITY):
             raise ValueError("Odds Watch case gained authority")
         if row["status"] == "NEEDS_REVIEW_NOW" and not row.get("triggered_conditions"):
@@ -524,10 +578,25 @@ def validate_report(report: dict[str, Any]) -> None:
         if row["status"] == "ACTIVE_ODDS_WATCH" and row.get("triggered_conditions"):
             raise ValueError("quiet Odds Watch case contains crossed conditions")
         if row["status"] == "EVIDENCE_REOPEN_WATCH":
-            if row.get("watch_mode") != "EVIDENCE_REOPEN" or row.get("price") is not None or row.get("market_timestamp") is not None:
+            if not graded or row.get("price") is not None or row.get("market_timestamp") is not None:
                 raise ValueError("evidence-only Watch cannot carry a market observation")
             if row.get("price_fetch_performed") is not False or row.get("triggered_conditions") or row.get("next_unreached_condition") is not None:
                 raise ValueError("evidence-only Watch cannot carry price trigger state")
+            if row.get("boundary_source") is not None or row.get("price_gap") is not None:
+                raise ValueError("evidence-only Watch cannot carry a price boundary or price gap")
+    counts = {
+        "active_case_count": len(active),
+        "attention_case_count": sum(row["status"] == "NEEDS_REVIEW_NOW" for row in active),
+        "price_gap_count": sum(row["status"] == "PRICE_UNAVAILABLE_NOT_QUIET" for row in active),
+    }
+    if graded:
+        counts.update(
+            price_evaluated_case_count=sum(row["status"] in {"ACTIVE_ODDS_WATCH", "NEEDS_REVIEW_NOW"} for row in active),
+            evidence_only_case_count=sum(row["status"] == "EVIDENCE_REOPEN_WATCH" for row in active),
+        )
+    for key, expected in counts.items():
+        if type(payload.get(key)) is not int or payload[key] != expected:
+            raise ValueError("Odds Watch report coverage counts differ")
     for row in payload.get("inactive_cases", []):
         if row.get("state") not in INACTIVE_STATES or row.get("watch_enabled") is not False:
             raise ValueError("Odds Watch inactive safety state differs")
