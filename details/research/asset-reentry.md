@@ -348,6 +348,13 @@
 - [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
 
+## 601155.SH
+
+下一步：先按明确定位恢复旧研究正文
+
+- [按需恢复：601155-xincheng-policy-full-20260930](https://github.com/auguspp/decision-kernel/blob/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930/README.md)；只有定位，本页没有恢复正文。
+- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-29；[原观察](../radar/company-reading.json)。不是新事件。
+
 ## 688337.SH
 
 下一步：本读取没有关联观察；不等于已经核实无变化
