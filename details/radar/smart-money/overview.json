@@ -1,43 +1,39 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "21.89",
+  "capture_age_hours": "23.84",
   "capture_hash": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c",
   "current_reading": {
-    "control": {
-      "blockers": [],
-      "checked_at": "2026-09-30T15:59:15.683116+00:00",
-      "code_commit": "1e095bae9f9fa11dbc255a3df1a7246d89db3877",
-      "decision": "SKIP_ALREADY_DELIVERED",
-      "event": "schedule",
-      "hithink_activity": "NOT_CHECKED_NO_CAPTURE",
-      "investment_authority": "NONE",
-      "pending_delivery_count": 0,
-      "pending_source_run_id": null,
-      "prior_read_status": "EXACT_PRIOR_STATE_READ",
-      "prior_reading": "fbfb461d237e7e631fcb8e981662aeb2c2ea4a36",
-      "run_id": 36740837199,
-      "skip_hithink": false,
-      "target_date": "2026-09-30",
-      "today_invocations": 2,
-      "version": "smart-money-observation-v1"
-    },
+    "control": null,
     "latest_attempt": {
-      "conclusion": "success",
-      "created_at": "2026-09-30T15:58:59Z",
+      "conclusion": null,
+      "created_at": "2026-09-30T17:58:29Z",
       "event": "schedule",
       "head_sha": "1e095bae9f9fa11dbc255a3df1a7246d89db3877",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36740837199",
-      "id": 36740837199,
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36755230971",
+      "id": 36755230971,
       "operation": null,
       "path": ".github/workflows/radar-smart-money.yml",
       "run_attempt": 1,
-      "run_started_at": "2026-09-30T15:58:59Z",
-      "status": "completed",
-      "updated_at": "2026-09-30T15:59:21Z"
+      "run_started_at": "2026-09-30T17:58:29Z",
+      "status": "in_progress",
+      "updated_at": "2026-09-30T17:58:33Z"
     },
-    "previous_status": "EXACT_PREVIOUS_cfd180ef34c6f1923496e99737b2ef9427fc5a3b",
-    "run_metadata_reads": [],
-    "status": "NO_NEW_CAPTURE_REQUIRED",
+    "previous_status": "EXACT_PREVIOUS_c0bb0a84af8f98d1f9f6373c3a4704e60844ddcf",
+    "run_metadata_reads": [
+      {
+        "attempt": 1,
+        "attempt_status": "in_progress",
+        "attempt_updated_at": "2026-09-30T17:58:33Z",
+        "checked_at": "2026-09-30T17:59:42.486707+00:00",
+        "endpoint": "actions/runs/36755230971/attempts/1",
+        "meaning": "SAME_IDENTITY_ATTEMPT_READ_NOT_STATUS_INFERENCE_OR_RETRY",
+        "reads": 1,
+        "run_id": 36755230971,
+        "run_status": "in_progress",
+        "run_updated_at": "2026-09-30T17:58:33Z"
+      }
+    ],
+    "status": "AWAITING_CURRENT_CAPTURE",
     "uses_prior_observation": true
   },
   "cutoff": "2026-09-29T18:09:30.081140+00:00",
@@ -2671,12 +2667,12 @@
   },
   "reading_freshness": "RECENT_CAPTURE_NOT_EACH_SOURCE_FRESHNESS",
   "relay_reading": {
-    "current_status": "NOT_RUN_WITHOUT_PRIMARY_CAPTURE",
+    "current_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
     "diagnostics": {},
     "previous_status": "EXACT_PREVIOUS_SUPPLEMENT"
   },
   "relay_supplement": {
-    "current_run_status": "NOT_RUN_WITHOUT_PRIMARY_CAPTURE",
+    "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
     "cutoff": "2026-09-29T18:10:42.699619+00:00",
     "family_coverage": {
       "hm_detail": {

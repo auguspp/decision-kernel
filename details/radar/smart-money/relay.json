@@ -28,7 +28,7 @@
   "as_of_date": "2026-09-30",
   "automatic_full": false,
   "capture_hash": "eada33909e15d0d22acf1a107c41726d9500181b0ca00e327e3913ee4507833d",
-  "current_run_status": "NOT_RUN_WITHOUT_PRIMARY_CAPTURE",
+  "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
   "cutoff": "2026-09-29T18:10:42.699619+00:00",
   "execution_complete": true,
   "families": {
