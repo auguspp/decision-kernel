@@ -1,5 +1,5 @@
 name: b2-disclosure-appointments
-run-name: B2 selected securities / ${{ inputs.source-kind }} / ${{ inputs.report-period }}${{ inputs.start-date }}
+run-name: B2 selected securities / ${{ inputs.source-kind }} / ${{ inputs.report-period }}${{ inputs.start-date }}${{ inputs.announcement-id }}
 on:
   workflow_dispatch:
     inputs:
@@ -16,7 +16,7 @@ on:
         required: true
         type: choice
         default: appointments
-        options: [appointments, announcements]
+        options: [appointments, announcements, pdf]
       report-period:
         description: 'Appointments only: required YYYY-MM-DD quarter end'
         required: false
@@ -27,6 +27,14 @@ on:
         type: string
       end-date:
         description: 'Announcements only: required publication window end YYYY-MM-DD'
+        required: false
+        type: string
+      announcement-id:
+        description: 'PDF only: one exact ID from the selected saved announcement directory'
+        required: false
+        type: string
+      reading-commit:
+        description: 'PDF only: pinned published R with this exact current code and selection'
         required: false
         type: string
 permissions:
@@ -74,9 +82,15 @@ jobs:
           PY
       - name: Install existing feed dependencies
         run: python -m pip install -e '.[feeds]'
-      - name: Capture one explicitly selected CNINFO source without credentials
+      - name: Install existing PDF extra for the explicit PDF mode
+        if: inputs.source-kind == 'pdf'
+        run: python -m pip install -e '.[documents]'
+      - name: Capture one explicitly selected CNINFO source without business credentials
         id: capture
         env:
+          GH_TOKEN: ${{ inputs.source-kind == 'pdf' && github.token || '' }}
+          B2_ANNOUNCEMENT_ID: ${{ inputs.announcement-id }}
+          B2_READING_COMMIT: ${{ inputs.reading-commit }}
           B2_REFERENCE_IDS: ${{ inputs.reference-ids }}
           B2_REPORT_PERIOD: ${{ inputs.report-period }}
           B2_SOURCE_KIND: ${{ inputs.source-kind }}
@@ -90,11 +104,13 @@ jobs:
           --source-kind "$B2_SOURCE_KIND"
           --start-date "$B2_START_DATE"
           --end-date "$B2_END_DATE"
+          --announcement-id "$B2_ANNOUNCEMENT_ID"
+          --reading-commit "$B2_READING_COMMIT"
       - name: Retain originals and partial failures
         if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: b2-${{ inputs.source-kind == 'announcements' && 'announcements' || 'appointments' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: b2-${{ inputs.source-kind }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/b2-appointments/
           retention-days: 30
           if-no-files-found: error
