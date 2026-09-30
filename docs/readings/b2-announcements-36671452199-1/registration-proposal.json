@@ -1,0 +1,25 @@
+{
+  "directory": "docs/readings/b2-announcements-36671452199-1",
+  "meaning": "BIND_ONE_VERIFIED_RETENTION_COMMIT_THEN_APPEND_EXPLICIT_REFERENCES; NEVER_REPLACE_ORIGINAL_RESEARCH_HUMAN_REFERENCES_OR_RESEARCH_AGENDA",
+  "references": [
+    {
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "archive_source": {
+        "bytes": 1321,
+        "git_blob": "25b4597eb15131b51ecbe81c60f1f8849b0b6b9e",
+        "path": "docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md",
+        "ref": null,
+        "sha256": "c9e74b09f03cdccbae7b5ac55086cc210ac5b484d63b089cf5ac5e99e57c8b03"
+      },
+      "case": "601155.SH",
+      "id": "b2-announcements-36671452199-1-601155-SH",
+      "purpose_note": "公告目录来源资料（2026-09-24至2026-09-30）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "use": "NAVIGATION_ONLY"
+    }
+  ],
+  "source_commit": "UNBOUND_REQUIRES_NATIVE_GIT_CUSTODY_READBACK",
+  "status": "PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED"
+}
