@@ -1,0 +1,87 @@
+{
+  "custody": {
+    "fixed_R_recovery": "NOT_ESTABLISHED",
+    "local_scratch": "VERIFIED",
+    "published": "NOT_ESTABLISHED",
+    "registered": "NOT_ESTABLISHED",
+    "repository_custody": "PENDING",
+    "repository_ref": null
+  },
+  "derived_review": {
+    "bytes": 3368,
+    "extraction_sha256": "ffa61276b8e6ff4c534300062b5b16b1772ac27db73657b467d940d51e865a45",
+    "git_blob": "59ef5ad5af1d781f9d02f8a486aca012bf4b1092",
+    "normalizations": [
+      "Chinese title date reviewed into ISO event-date field",
+      "Named visitor/host identities and institutions split into event-scoped entities",
+      "Source roster completeness explicitly reviewed; not guaranteed by parser"
+    ],
+    "path": "reviewed-event.json",
+    "qualification": "RETAINED_RESEARCH; NOT_ISSUER_DISCLOSURE_BYTES",
+    "sha256": "8f93891f89d1c4ed4be56b3a8621b37b2305e929e5edde921633904b2d60c37e",
+    "source_sha256": "0dec647fb1db47d010f52e98d886f21d8dbd482538030a676414610613276d76"
+  },
+  "disclosure_date_qualified": null,
+  "event_time_text": "15：00～16:30",
+  "event_time_zone": null,
+  "extractions": [
+    {
+      "bytes": 5906,
+      "command": "pdftotext -raw xingsen-2022-02-15-original.pdf xingsen-2022-02-15-raw.txt",
+      "git_blob": "560ed9f5c5f545e2c995e1aa52a8e4143a2e8d81",
+      "path": "xingsen-2022-02-15-raw.txt",
+      "qualification": "DERIVED_VERBATIM_EXTRACTION_NOT_ORIGINAL_BYTES",
+      "sha256": "ffa61276b8e6ff4c534300062b5b16b1772ac27db73657b467d940d51e865a45",
+      "tool_version": "pdftotext 25.03.0"
+    },
+    {
+      "bytes": 6498,
+      "command": "pdftotext -layout xingsen-2022-02-15-original.pdf xingsen-2022-02-15-layout.txt",
+      "git_blob": "006ba55bf25dcc391cba97f193120ba97a35fa45",
+      "path": "xingsen-2022-02-15-layout.txt",
+      "qualification": "DERIVED_LAYOUT_EXTRACTION_NOT_ORIGINAL_BYTES",
+      "sha256": "d20e82885a368b82f5e38936f80818bf685e4586c0380cb3bc537d8ce870303d",
+      "tool_version": "pdftotext 25.03.0"
+    }
+  ],
+  "issuer_name": "深圳市兴森快捷电路科技股份有限公司",
+  "issuer_ticker": "002436.SZ",
+  "original": {
+    "bytes": 117985,
+    "git_blob": "1e51c46c0c0ef7ab2f9b8ab055463d8de5b08936",
+    "path": "xingsen-2022-02-15-original.pdf",
+    "sha256": "0dec647fb1db47d010f52e98d886f21d8dbd482538030a676414610613276d76"
+  },
+  "original_event_date_text": "2022 年 2 月 15 日",
+  "original_event_number": "2022-02-001",
+  "published_at": null,
+  "qualification": "ORIGINAL_OFFICIAL_PDF_RETRIEVED_AND_LOCALLY_RETAINED; REPOSITORY_CUSTODY_PENDING",
+  "retrieval": {
+    "content_length_header": 117985,
+    "content_type": "application/pdf",
+    "file_write_completed_at_utc": "2026-09-30T17:21:37.343235+00:00",
+    "historical_availability": "NOT_ESTABLISHED_BY_RETRIEVAL",
+    "method": "One public HTTPS curl GET, --fail --location --max-time 30; no credentials or private input",
+    "notes": "Completed curl returned exit code 0. Original body was saved without transformation. Web extraction was used only to discover the public URL. Browser also opened the public PDF but did not supply retained bytes.",
+    "response_headers_file": "retrieval-headers.txt",
+    "status": 200,
+    "verified_at": "2026-09-30T17:26:23Z"
+  },
+  "reviewed_event_date": "2022-02-15",
+  "scope": "One selected historical event for a real positive C1 acceptance candidate, distinct from lost 2-institution/2-visitor candidate; no C2 feature, no provider trial rerun, no workflow dispatch, no model call, no Watch or trading action.",
+  "source_type": "Issuer investor-relations activity disclosure served by CNINFO",
+  "source_url": "https://static.cninfo.com.cn/finalpage/2022-02-16/1212383001.PDF",
+  "url_date_component": "2022-02-16",
+  "url_date_qualification": "URL path component only; not independently qualified disclosure timestamp. HTTP Last-Modified and embedded PDF creation date do not establish publication or historical availability.",
+  "visual_check": {
+    "bytes": 265102,
+    "command": "pdftoppm -f 1 -singlefile -scale-to 1600 -png xingsen-2022-02-15-original.pdf xingsen-2022-02-15-page1",
+    "findings": "Page 1 visually confirms issuer/code, event date/number, two named visitor institution lines with eight visitors, and a separate issuer-host field with three people. The fourth 兴证全球基金 visitor is 童兰, not 董兰 (an initial search result transcription was wrong).",
+    "git_blob": "caca3575b2b96a9b86ad23fbaffe81bd8bd2e233",
+    "path": "xingsen-2022-02-15-page1.png",
+    "qualification": "DERIVED_PAGE_RENDER_VISUALLY_REVIEWED",
+    "render_warning": "Poppler emitted nonfatal fontconfig writable-cache warnings. PNG exists and the relevant table is legible.",
+    "reviewed_at": "2026-09-30T17:26:23Z",
+    "sha256": "ca7d92381ba255a50fa32ad70c3357a5948a55f49a06f043fa905f3f9d544b3f"
+  }
+}
