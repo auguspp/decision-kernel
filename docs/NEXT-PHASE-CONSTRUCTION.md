@@ -4,6 +4,8 @@
 
 ## 当前顺序与任务归属
 
+**2026-09-30 Human纠偏：B2优先建立新入选个股的标准通道，不再逐家追挖当前六股的特殊情况。** 原话、KEEP/RETIRE/DEFER及最新实现接点见[#620/5901901617](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5901901617)。财报预约沿[原标准入口](b2-disclosure-appointments.md)使用显式资料引用和报告期输入，新增股票不改运行代码；空返回与缺字段作为对象级结果，真正来源/权限失败仍保留边界。旧R4及未补齐原件/改期缺口保留，但不作为通道工程的逐股收口任务。标准通道不等于自动启用新采集、监控或研究任务。
+
 **主施工继续[#620 B2](https://github.com/auguspp/decision-kernel/issues/620)**：可靠公司事件及财报预约、明确对象依据、原研究复核条件、可恢复保存和稳定读取。优先现有原件、用途索引与发布链，缺口来自实际使用才补代码；“后端先行”不意味着新增数据库、provider、调度或日历框架。
 
 #644的近期清单已正常合并、独立main、自然publisher及固定R原件／消费者读回，见[原交付](https://github.com/auguspp/decision-kernel/pull/644#issuecomment-5883938448)。旧分支、容量失败、安装超时与核读时钟保留，不把旧“未合并”恢复为当前任务。B2已有接口从[research-calendar-v1](research-calendar-v1.md)恢复；唯一`research-agenda`用途引用可显式切换到新保存稿，原BLS及旧稿不覆盖。实际登记／发布／来源资格以#620最新回执为准。
