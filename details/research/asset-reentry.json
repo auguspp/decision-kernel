@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "81f2ef68bb45cccb1eb3dd9dd281452fda4176de87e5ebe84c47d6b5c6545b2c",
+    "base_reading_hash": "720caf5b9ed3485e196777b383118ebda82fe140d00bed5ec79271f769a4f12a",
     "companies": [
       {
         "archives": [],
@@ -103,13 +103,15 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "5033572d6126bee9da454f86526307ea4219c7664c34717586f0fc1a2fe9d07d",
+        "association_id": "8465876e6d21bfeefe61c69e38dc94d8b4706dad31505087725aa92b7f1941d1",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
+          "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+          "boundary_source": null,
           "company_name": "恒瑞医药",
           "currency": "CNY",
           "human_attention_authority": "NONE",
@@ -129,17 +131,19 @@
             "signed_distance_to_upper_fraction_of_current": "0.16101694915254237288135593220338983050847457627118644067796610169491525423728814",
             "upper_price": "39.6"
           },
-          "observed_at": "2026-09-30T08:20:33.763018Z",
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.",
           "price": "47.2",
           "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
           "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
-            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
             "registry_reference_id": "odds-hengrui-human",
             "source_git_blob": "8673b08d3a36e8cabc33e1fb51627bc65d674e3a",
             "source_path": "docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md",
@@ -147,17 +151,18 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "600276.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "600276.SH"
@@ -312,13 +317,15 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "ed1ad3e3d902b4c23f9f718b8681361b8fbe7ebfc07dd1c4dc24d87475a75b22",
+        "association_id": "0d281e2fcdb1c0f2e0d7afcf81e0f81d50b984ef046e93cd9fe871d7e4861ae7",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
+          "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+          "boundary_source": null,
           "company_name": "兴业科技",
           "currency": "CNY",
           "human_attention_authority": "NONE",
@@ -338,17 +345,19 @@
             "signed_distance_to_upper_fraction_of_current": "0.14228052472250252270433905146316851664984863773965691220988900100908173562058527",
             "upper_price": "17"
           },
-          "observed_at": "2026-09-30T08:20:33.763018Z",
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
           "price": "19.82",
           "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
           "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
-            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
             "registry_reference_id": "odds-xingye-human",
             "source_git_blob": "f66451fce807058045f510016de1d60b68413c42",
             "source_path": "docs/decisions/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
@@ -356,17 +365,18 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "002674.SZ",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "002674.SZ"
@@ -545,13 +555,15 @@
             "use": "RETAINED_RESEARCH_PACKAGE"
           }
         ],
-        "association_id": "a6a3af7773083cdd7d61dbeeb889247674b416a636cb704820c8047128986442",
+        "association_id": "42a6cb7e34b582267e4eff36939c3dfa82c840fd38afd619c87a4d9b05a87437",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
+          "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+          "boundary_source": null,
           "company_name": "北大荒",
           "currency": "CNY",
           "human_attention_authority": "NONE",
@@ -571,17 +583,19 @@
             "signed_distance_to_upper_fraction_of_current": "0.10530482977038796516231195566112430720506730007917656373713380839271575613618369",
             "upper_price": "11.3"
           },
-          "observed_at": "2026-09-30T08:20:33.763018Z",
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.",
           "price": "12.63",
           "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
           "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
-            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
             "registry_reference_id": "odds-beidahuang-human",
             "source_git_blob": "f25f25cadd7018563f0a6394cbe7958337428765",
             "source_path": "docs/decisions/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
@@ -589,17 +603,18 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "600598.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "600598.SH"
@@ -1308,13 +1323,15 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "6b64413221ada950efbc12c3b8c562fdb4b5d6cff1267a2b9ec05f4387433f6a",
+        "association_id": "290e29d1deb1405e8f1fce57f6e459c2116c98d6aacbf7b031b113636a0a91ce",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
+          "boundary_authority": "HUMAN_DECISION",
+          "boundary_source": null,
           "company_name": "兆易创新",
           "currency": "CNY",
           "human_attention_authority": "NONE",
@@ -1334,17 +1351,19 @@
             "signed_distance_to_upper_fraction_of_current": "0.011020062164453235377225204860129980220401243289064707544504097202599604408024866",
             "upper_price": "350"
           },
-          "observed_at": "2026-09-30T08:20:33.763018Z",
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
           "prerequisite": "Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.",
           "price": "353.9",
           "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
           "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
-            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
             "registry_reference_id": "gigadevice-human",
             "source_git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
             "source_path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
@@ -1352,17 +1371,18 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "603986.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "603986.SH"
@@ -1467,13 +1487,15 @@
             "use": "HUMAN_METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "0a22501230f0c478238eb068354305bd2d02d93a414eb82ab3980600b991d212",
+        "association_id": "810ea0d3651fd2872831bb5057bac2d1b9a853526b34e961a0b3cbd58ca09e60",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
+          "boundary_authority": "HUMAN_DECISION",
+          "boundary_source": null,
           "company_name": "三花智控",
           "currency": "CNY",
           "human_attention_authority": "NONE",
@@ -1493,17 +1515,19 @@
             "signed_distance_to_upper_fraction_of_current": "0.15989918790254830579669560347241669000280033604032483898067768132175861103332400",
             "upper_price": "30"
           },
-          "observed_at": "2026-09-30T08:20:33.763018Z",
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
           "prerequisite": "Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.",
           "price": "35.71",
           "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
           "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
-            "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
             "registry_reference_id": "sanhua-human",
             "source_git_blob": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
             "source_path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
@@ -1511,17 +1535,18 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "002050.SZ",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "002050.SZ"
@@ -2187,12 +2212,85 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "cd7f8f282004e971e27ded7e8df0ce9c3345a934f4fdd2ff8556e330608627b6",
+        "association_id": "62d6794af3ce27ab95867fd7bcaab2373bdfe923f9b27b6ae7cd40870107cb01",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
-        "saved_watch": null,
+        "saved_watch": {
+          "action_authority": "NONE",
+          "boundary_authority": "ANALYST_DERIVED",
+          "boundary_source": {
+            "meaning": "EXACT_BOUNDARY_SOURCE_NOT_HUMAN_ACCEPTANCE_UNLESS_BOUNDARY_AUTHORITY_SAYS_SO",
+            "source_path": "docs/readings/601155-xincheng-policy-full-20260930/odds.md",
+            "source_ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67"
+          },
+          "company_name": "新城控股",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": "HiThink Financial-API raw daily close | 601155.SH",
+          "market_timestamp": "2026-09-30T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "xincheng-bounded-repair-11_26",
+            "kind": "ANALYST_BOUNDED_REPAIR_SENSITIVITY_REVIEW",
+            "label": "CNY11.26 bounded-repair analyst sensitivity",
+            "lower_price": null,
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "POINT_AT_OR_BELOW",
+            "signed_distance_to_upper_cny": "1.61",
+            "signed_distance_to_upper_fraction_of_current": "0.12509712509712509712509712509712509712509712509712509712509712509712509712509713",
+            "upper_price": "11.26"
+          },
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L2_PROVISIONAL_ORDINAL",
+          "prerequisite": "Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.",
+          "price": "12.87",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
+            "registry_reference_id": "601155-xincheng-policy-full-20260930",
+            "source_git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+            "source_path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+            "source_ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          "source_report": {
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+          },
+          "status": "NEEDS_REVIEW_NOW",
+          "ticker": "601155.SH",
+          "triggered_conditions": [
+            {
+              "attention_triggered": true,
+              "condition_state": "AT_OR_BELOW_POINT",
+              "id": "xincheng-strong-repair-14_77",
+              "kind": "ANALYST_STRONG_REPAIR_SENSITIVITY_REVIEW",
+              "label": "CNY14.77 strong-repair analyst sensitivity",
+              "lower_price": null,
+              "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+              "shape": "POINT_AT_OR_BELOW",
+              "signed_distance_to_upper_cny": "-1.90",
+              "signed_distance_to_upper_fraction_of_current": "-0.14763014763014763014763014763014763014763014763014763014763014763014763014763015",
+              "upper_price": "14.77"
+            }
+          ],
+          "watch_enabled": true,
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "PRICE_CONDITION"
+        },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "601155.SH"
       },
@@ -2833,7 +2931,7 @@
           }
         ],
         "assets": [],
-        "association_id": "a2aaa1d97a7ba75d168bdbc11e81e9b02ea65718d8ea14f81462d73c588aecaf",
+        "association_id": "b70509e8f73d9b0962c06bf9bae2c40829836427d9e27669a44cc935e441b235",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2899,13 +2997,13 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "1510c8649e32ab3ef356216756783bd956e49b5bbaaa365de5783fb4b115d8c9",
+            "projection_hash": "13f4c1bb1f791aa142df7b048d75f4de005e12de0d99e067895ea914851c86fd",
             "source": {
               "bytes": 275445,
-              "git_blob": "bff963d3c24188e2de1a51a0e8b688628894b262",
+              "git_blob": "abbdc9f3c88c7b69135d0f1ba460961438aa7afe",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "9cf79adff514dd96b321f7f9287dbd2aba69244335d55b486b218ac17bf39182"
+              "sha256": "a68a686f5269316a93bdcb12d570f494d81182f90cadb4d22d174949674fddac"
             }
           }
         ],
@@ -3143,12 +3241,55 @@
           }
         ],
         "assets": [],
-        "association_id": "67e9d3506fb0a4a3654c13a62620eaf97e438b9b4b6c551551ffded9d35d9ea0",
+        "association_id": "8a40f5ac4687dd247fd001c9c3c4936a50d9d417d1d3e5c7d5c634088b56d31f",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
-        "saved_watch": null,
+        "saved_watch": {
+          "action_authority": "NONE",
+          "boundary_authority": "NONE",
+          "boundary_source": null,
+          "company_name": "兴森科技",
+          "currency": "CNY",
+          "human_attention_authority": "NONE",
+          "investment_authority": "NONE",
+          "market_data_source": null,
+          "market_timestamp": null,
+          "next_unreached_condition": null,
+          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "odds_level": "L0_NO_ODDS",
+          "prerequisite": "Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.",
+          "price": null,
+          "price_convention": null,
+          "price_fetch_performed": false,
+          "price_gap": null,
+          "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
+          "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+          "research_authority": "NONE",
+          "signal_transition_authority": "NONE",
+          "source": {
+            "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
+            "registry_reference_id": "c-longitudinal-xingsen-20260930",
+            "source_git_blob": "99ec2d30e60d2aa876ca9873c4751b5e097c0990",
+            "source_path": "docs/readings/c-longitudinal-xingsen-2026-09-30/README.md",
+            "source_ref": "83a40bfb408090015678d98bd192489db9226c3a",
+            "use": "RETAINED_RESEARCH_DOCUMENT"
+          },
+          "source_report": {
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+          },
+          "status": "EVIDENCE_REOPEN_WATCH",
+          "ticker": "002436.SZ",
+          "triggered_conditions": [],
+          "watch_enabled": true,
+          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_mode": "EVIDENCE_REOPEN"
+        },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "002436.SZ"
       },
@@ -3599,9 +3740,9 @@
       "read_gap_count": 1,
       "unavailable_assets": 0,
       "with_saved_observations": 1,
-      "with_saved_watch": 5
+      "with_saved_watch": 7
     },
-    "generated_at": "2026-09-30T14:34:07.585125+00:00",
+    "generated_at": "2026-09-30T14:36:50.438971+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -3620,5 +3761,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "d273d30846f9f32160160d50dbe427a6690533147e794067cf3ca1a21caa4fdf"
+  "projection_hash": "d4181eeaf77886e4c5d07d734b4be92a7f6d3f2887950d9b1f478ef824a61d81"
 }

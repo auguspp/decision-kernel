@@ -58,79 +58,78 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-09-30T14:33:47.271546+00:00",
+    "finished_at": "2026-09-30T14:36:21.817585+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-10-01T14:33:47.271546+00:00",
-    "started_at": "2026-09-30T14:33:26.185897+00:00"
+    "recheck_after": "2026-10-01T14:36:21.817585+00:00",
+    "started_at": "2026-09-30T14:35:54.166332+00:00"
   },
   "code_commit": "8ff1d88b86506544ac4a05516695216de0a05fe2",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-09-30T14:33:47.271546+00:00",
+  "generated_at": "2026-09-30T14:36:21.817585+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-09-30T14:33:39.117853+00:00",
+      "checks_at": "2026-09-30T14:36:09.787868+00:00",
       "gaps": [
-        "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY",
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
-      "health": "IN_PROGRESS",
+      "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
         "archive": {
-          "artifact_id": 11084394945,
+          "artifact_id": 11104174632,
           "artifact_name": "decision-inbox",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36689087147/artifacts/11084394945",
-          "bytes": 7884,
-          "expires_at": "2026-10-14T08:20:57Z",
-          "git_blob": "5de85fbbdb36d537f63d58354c27f4ea3ca245fc",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36729975005/artifacts/11104174632",
+          "bytes": 10974,
+          "expires_at": "2026-10-14T14:33:54Z",
+          "git_blob": "0ba4eaae1dfcd70a75517948762173022a765e86",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-09-30T08:20:22Z",
+            "created_at": "2026-09-30T14:33:12Z",
             "event": "workflow_dispatch",
-            "head_sha": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36689087147",
-            "id": 36689087147,
+            "head_sha": "8ff1d88b86506544ac4a05516695216de0a05fe2",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36729975005",
+            "id": 36729975005,
             "operation": null,
             "path": ".github/workflows/decision-inbox.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-09-30T08:20:22Z",
+            "run_started_at": "2026-09-30T14:33:12Z",
             "status": "completed",
-            "updated_at": "2026-09-30T08:21:05Z"
+            "updated_at": "2026-09-30T14:33:59Z"
           },
-          "read_path": "sources/artifacts/097952c25a46e54109f58414995c4c1dfc6253551b0cfd4cbc69a3e8f065d5e1.zip",
+          "read_path": "sources/artifacts/4c445e79063b30751ba78241f745950624b4e59516ae9f8682a6a0e2f303fcba.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "097952c25a46e54109f58414995c4c1dfc6253551b0cfd4cbc69a3e8f065d5e1"
+          "sha256": "4c445e79063b30751ba78241f745950624b4e59516ae9f8682a6a0e2f303fcba"
         },
         "details": {
           "index.html": {
-            "bytes": 2526,
-            "git_blob": "0c42bd417985c1a6061937db193be681af198de8",
-            "read_path": "details/inbox/36689087147/index.html",
+            "bytes": 3879,
+            "git_blob": "cb44dbdaa49e497c1b1507fcd3a2279f78706c1e",
+            "read_path": "details/inbox/36729975005/index.html",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "16006dd7e8fe49f7b007677069994cea7c5cf519b01836aedf3e7b5cb5356759"
+            "sha256": "4902160bcdb2e48a4c35d4f4b198c26dac7380a8849c24729e94948fcdb12ff5"
           },
           "odds-watch/summary.md": {
-            "bytes": 1869,
-            "git_blob": "394371928c54d84b929bc30055ba945a94168d56",
-            "read_path": "details/inbox/36689087147/odds-watch/summary.md",
+            "bytes": 3188,
+            "git_blob": "1488eac98b52f05fb3b80cc146254afcd1ee085d",
+            "read_path": "details/inbox/36729975005/odds-watch/summary.md",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "bcbc4bba32eb0fd23a0e1571c9847f9aad5299974f79e21d0cb8fa7c4a6539a0"
+            "sha256": "4bf1aed350437b80ab0fd5299bfc2ab937124b16551707b1a4b5bd06e1a926d1"
           },
           "odds-watch/watch.json": {
-            "bytes": 11979,
-            "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
-            "read_path": "details/inbox/36689087147/odds-watch/watch.json",
+            "bytes": 16975,
+            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
+            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46"
+            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
           },
           "summary.md": {
-            "bytes": 2292,
-            "git_blob": "da0167743786963161aa6c190e0d9cbc727f78ea",
-            "read_path": "details/inbox/36689087147/summary.md",
+            "bytes": 3654,
+            "git_blob": "2a14f43c0a21b2a851184afa6e3da1a59bde369a",
+            "read_path": "details/inbox/36729975005/summary.md",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "2be3d33075645b1e16da4b1f34651078cd81153adf9b2c1d86465095d72792be"
+            "sha256": "da0d117b10686c0b4ac5bc61904a7ccf8cceb9ca26d4d9d5674d5372377cd758"
           }
         },
         "limitation": "Markdown/HTML retained as untrusted historical output; no inferred quiet or accepted probability",
@@ -139,32 +138,34 @@
         "odds_recomputed": false,
         "odds_watch": {
           "config_source": {
-            "bytes": 7305,
-            "git_blob": "e119dd5136e7e86a9aef16938c642470b9f83926",
+            "bytes": 11686,
+            "git_blob": "92dc6a6232c9b201c516cdcb279be3b13f767606",
             "path": "decision_inputs/odds-watch-v0.json",
-            "read_path": "sources/git/e119dd5136e7e86a9aef16938c642470b9f83926/odds-watch-v0.json",
+            "read_path": "sources/git/92dc6a6232c9b201c516cdcb279be3b13f767606/odds-watch-v0.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
+            "ref": "8ff1d88b86506544ac4a05516695216de0a05fe2",
             "repository": "auguspp/decision-kernel",
-            "sha256": "00e7fe5657cd29894fcb6bb38dc183949dbb7122edf779840960e79ccd5783f3"
+            "sha256": "0d183d4b16d4e777f5cd43ee6b24ff78cf5a11429cd8f9c7f1b4ea2bf4b2e112"
           },
           "meaning": "READ_ONLY_PRICE_CONDITION_ATTENTION_NOT_REVALIDATED_DECISION_SPINE_ODDS_OR_ACTION",
           "registry_source": {
-            "bytes": 52438,
-            "git_blob": "c365d49e19eecf615f53692ef8bee6e113a3c2b8",
+            "bytes": 61407,
+            "git_blob": "f3a5a7f6bb6277e88309a83fe9cec923e52a6cd0",
             "path": "current_state/registry.json",
-            "read_path": "sources/git/c365d49e19eecf615f53692ef8bee6e113a3c2b8/registry.json",
+            "read_path": "sources/git/f3a5a7f6bb6277e88309a83fe9cec923e52a6cd0/registry.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
+            "ref": "8ff1d88b86506544ac4a05516695216de0a05fe2",
             "repository": "auguspp/decision-kernel",
-            "sha256": "05bce3ef277e3267e57177ef636508d0810c4e1305bc093f9fc69c898e4c046e"
+            "sha256": "53e255c6c64b1b765e91510318ee1521916ae2e4a7723ea1cba1d6e0ca7c06ba"
           },
           "report": {
             "watch": {
-              "active_case_count": 5,
+              "active_case_count": 7,
               "active_cases": [
                 {
                   "action_authority": "NONE",
+                  "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+                  "boundary_source": null,
                   "company_name": "恒瑞医药",
                   "currency": "CNY",
                   "human_attention_authority": "NONE",
@@ -184,15 +185,17 @@
                     "signed_distance_to_upper_fraction_of_current": "0.16101694915254237288135593220338983050847457627118644067796610169491525423728814",
                     "upper_price": "39.6"
                   },
+                  "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
                   "prerequisite": "Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.",
                   "price": "47.2",
                   "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
                   "price_gap": null,
                   "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
                   "source": {
-                    "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
                     "registry_reference_id": "odds-hengrui-human",
                     "source_git_blob": "8673b08d3a36e8cabc33e1fb51627bc65d674e3a",
                     "source_path": "docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md",
@@ -202,10 +205,13 @@
                   "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "600276.SH",
                   "triggered_conditions": [],
-                  "watch_enabled": true
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
                 },
                 {
                   "action_authority": "NONE",
+                  "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+                  "boundary_source": null,
                   "company_name": "兴业科技",
                   "currency": "CNY",
                   "human_attention_authority": "NONE",
@@ -225,15 +231,17 @@
                     "signed_distance_to_upper_fraction_of_current": "0.14228052472250252270433905146316851664984863773965691220988900100908173562058527",
                     "upper_price": "17"
                   },
+                  "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
                   "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
                   "price": "19.82",
                   "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
                   "price_gap": null,
                   "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
                   "source": {
-                    "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
                     "registry_reference_id": "odds-xingye-human",
                     "source_git_blob": "f66451fce807058045f510016de1d60b68413c42",
                     "source_path": "docs/decisions/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
@@ -243,10 +251,13 @@
                   "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "002674.SZ",
                   "triggered_conditions": [],
-                  "watch_enabled": true
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
                 },
                 {
                   "action_authority": "NONE",
+                  "boundary_authority": "HUMAN_ACCEPTED_ODDS",
+                  "boundary_source": null,
                   "company_name": "北大荒",
                   "currency": "CNY",
                   "human_attention_authority": "NONE",
@@ -266,15 +277,17 @@
                     "signed_distance_to_upper_fraction_of_current": "0.10530482977038796516231195566112430720506730007917656373713380839271575613618369",
                     "upper_price": "11.3"
                   },
+                  "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
                   "prerequisite": "BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.",
                   "price": "12.63",
                   "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
                   "price_gap": null,
                   "recompute_route": "PRICE_ONLY_RECOMPUTE_ELIGIBLE_ONLY_IF_FROZEN_BELIEF_AND_METHOD_STILL_VALID",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
                   "source": {
-                    "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
                     "registry_reference_id": "odds-beidahuang-human",
                     "source_git_blob": "f25f25cadd7018563f0a6394cbe7958337428765",
                     "source_path": "docs/decisions/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
@@ -284,10 +297,13 @@
                   "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "600598.SH",
                   "triggered_conditions": [],
-                  "watch_enabled": true
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
                 },
                 {
                   "action_authority": "NONE",
+                  "boundary_authority": "HUMAN_DECISION",
+                  "boundary_source": null,
                   "company_name": "三花智控",
                   "currency": "CNY",
                   "human_attention_authority": "NONE",
@@ -307,15 +323,17 @@
                     "signed_distance_to_upper_fraction_of_current": "0.15989918790254830579669560347241669000280033604032483898067768132175861103332400",
                     "upper_price": "30"
                   },
+                  "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
                   "prerequisite": "Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.",
                   "price": "35.71",
                   "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
                   "price_gap": null,
                   "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
                   "source": {
-                    "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
                     "registry_reference_id": "sanhua-human",
                     "source_git_blob": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
                     "source_path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
@@ -325,10 +343,13 @@
                   "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "002050.SZ",
                   "triggered_conditions": [],
-                  "watch_enabled": true
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
                 },
                 {
                   "action_authority": "NONE",
+                  "boundary_authority": "HUMAN_DECISION",
+                  "boundary_source": null,
                   "company_name": "兆易创新",
                   "currency": "CNY",
                   "human_attention_authority": "NONE",
@@ -348,15 +369,17 @@
                     "signed_distance_to_upper_fraction_of_current": "0.011020062164453235377225204860129980220401243289064707544504097202599604408024866",
                     "upper_price": "350"
                   },
+                  "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
                   "prerequisite": "Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.",
                   "price": "353.9",
                   "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
                   "price_gap": null,
                   "recompute_route": "HUMAN_PRICE_CONDITION_REVIEW_NOT_NUMERICAL_ODDS_RECOMPUTE",
                   "research_authority": "NONE",
                   "signal_transition_authority": "NONE",
                   "source": {
-                    "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
                     "registry_reference_id": "gigadevice-human",
                     "source_git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
                     "source_path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
@@ -366,11 +389,110 @@
                   "status": "ACTIVE_ODDS_WATCH",
                   "ticker": "603986.SH",
                   "triggered_conditions": [],
-                  "watch_enabled": true
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
+                },
+                {
+                  "action_authority": "NONE",
+                  "boundary_authority": "NONE",
+                  "boundary_source": null,
+                  "company_name": "兴森科技",
+                  "currency": "CNY",
+                  "human_attention_authority": "NONE",
+                  "investment_authority": "NONE",
+                  "market_data_source": null,
+                  "market_timestamp": null,
+                  "next_unreached_condition": null,
+                  "odds_level": "L0_NO_ODDS",
+                  "prerequisite": "Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.",
+                  "price": null,
+                  "price_convention": null,
+                  "price_fetch_performed": false,
+                  "price_gap": null,
+                  "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+                  "research_authority": "NONE",
+                  "signal_transition_authority": "NONE",
+                  "source": {
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
+                    "registry_reference_id": "c-longitudinal-xingsen-20260930",
+                    "source_git_blob": "99ec2d30e60d2aa876ca9873c4751b5e097c0990",
+                    "source_path": "docs/readings/c-longitudinal-xingsen-2026-09-30/README.md",
+                    "source_ref": "83a40bfb408090015678d98bd192489db9226c3a",
+                    "use": "RETAINED_RESEARCH_DOCUMENT"
+                  },
+                  "status": "EVIDENCE_REOPEN_WATCH",
+                  "ticker": "002436.SZ",
+                  "triggered_conditions": [],
+                  "watch_enabled": true,
+                  "watch_mode": "EVIDENCE_REOPEN"
+                },
+                {
+                  "action_authority": "NONE",
+                  "boundary_authority": "ANALYST_DERIVED",
+                  "boundary_source": {
+                    "meaning": "EXACT_BOUNDARY_SOURCE_NOT_HUMAN_ACCEPTANCE_UNLESS_BOUNDARY_AUTHORITY_SAYS_SO",
+                    "source_path": "docs/readings/601155-xincheng-policy-full-20260930/odds.md",
+                    "source_ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67"
+                  },
+                  "company_name": "新城控股",
+                  "currency": "CNY",
+                  "human_attention_authority": "NONE",
+                  "investment_authority": "NONE",
+                  "market_data_source": "HiThink Financial-API raw daily close | 601155.SH",
+                  "market_timestamp": "2026-09-30T15:00:00+08:00",
+                  "next_unreached_condition": {
+                    "attention_triggered": false,
+                    "condition_state": "ABOVE_CONDITION",
+                    "id": "xincheng-bounded-repair-11_26",
+                    "kind": "ANALYST_BOUNDED_REPAIR_SENSITIVITY_REVIEW",
+                    "label": "CNY11.26 bounded-repair analyst sensitivity",
+                    "lower_price": null,
+                    "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+                    "shape": "POINT_AT_OR_BELOW",
+                    "signed_distance_to_upper_cny": "1.61",
+                    "signed_distance_to_upper_fraction_of_current": "0.12509712509712509712509712509712509712509712509712509712509712509712509712509713",
+                    "upper_price": "11.26"
+                  },
+                  "odds_level": "L2_PROVISIONAL_ORDINAL",
+                  "prerequisite": "Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.",
+                  "price": "12.87",
+                  "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+                  "price_fetch_performed": true,
+                  "price_gap": null,
+                  "recompute_route": "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES",
+                  "research_authority": "NONE",
+                  "signal_transition_authority": "NONE",
+                  "source": {
+                    "meaning": "RETAINED_REGISTERED_SOURCE_IDENTITY_NOT_AUTOMATIC_ACCEPTANCE_OR_SUPERSESSION",
+                    "registry_reference_id": "601155-xincheng-policy-full-20260930",
+                    "source_git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+                    "source_path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+                    "source_ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+                    "use": "RETAINED_RESEARCH_DOCUMENT"
+                  },
+                  "status": "NEEDS_REVIEW_NOW",
+                  "ticker": "601155.SH",
+                  "triggered_conditions": [
+                    {
+                      "attention_triggered": true,
+                      "condition_state": "AT_OR_BELOW_POINT",
+                      "id": "xincheng-strong-repair-14_77",
+                      "kind": "ANALYST_STRONG_REPAIR_SENSITIVITY_REVIEW",
+                      "label": "CNY14.77 strong-repair analyst sensitivity",
+                      "lower_price": null,
+                      "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+                      "shape": "POINT_AT_OR_BELOW",
+                      "signed_distance_to_upper_cny": "-1.90",
+                      "signed_distance_to_upper_fraction_of_current": "-0.14763014763014763014763014763014763014763014763014763014763014763014763014763015",
+                      "upper_price": "14.77"
+                    }
+                  ],
+                  "watch_enabled": true,
+                  "watch_mode": "PRICE_CONDITION"
                 }
               ],
               "approaching_policy": "NO_GLOBAL_PROXIMITY_THRESHOLD_REPORT_FACTUAL_DISTANCE_ONLY",
-              "attention_case_count": 0,
+              "attention_case_count": 1,
               "authority": {
                 "action_authority": "NONE",
                 "human_attention_authority": "NONE",
@@ -378,7 +500,8 @@
                 "research_authority": "NONE",
                 "signal_transition_authority": "NONE"
               },
-              "config_hash": "b1f2fbf306813d608c76c2125b01b430b87b5f5ef9d81d5c2930e7fbd0f99949",
+              "config_hash": "0ea72aeff93ad9cc728f98bce21fec98942bfe36cf32756b89baab7a69a9f718",
+              "evidence_only_case_count": 1,
               "inactive_cases": [
                 {
                   "action_authority": "NONE",
@@ -476,45 +599,48 @@
                 "PRICE_CHANGE_DOES_NOT_PROVE_BELIEF_UNCHANGED",
                 "NO_GLOBAL_APPROACHING_THRESHOLD",
                 "NO_POSITION_SIZE_OR_ORDER_AUTHORITY",
+                "WATCH_MEMBERSHIP_DOES_NOT_EQUAL_HUMAN_ACCEPTANCE",
+                "ODDS_LEVEL_AND_BOUNDARY_AUTHORITY_MUST_REMAIN_VISIBLE",
                 "NO_AUTOMATIC_ODDS_OR_RESEARCH_SUPERSESSION"
               ],
-              "observed_at": "2026-09-30T08:20:33.763018Z",
+              "observed_at": "2026-09-30T14:33:23.264900Z",
               "price_contract": "QUALIFIED_LATEST_COMPLETED_A_SHARE_RAW_CLOSE_VIA_EXISTING_HITHINK_RUNTIME",
+              "price_evaluated_case_count": 6,
               "price_gap_count": 0,
-              "registry_hash": "990b4dc73dd618a16f8e76eb4226df4e8025190a2084e4b7cabd909b92793c99",
+              "registry_hash": "edfa5ccfecb06db490a66d66ff96c96fb70c378c29784a8cfc697b2e1b6bc935",
               "semantics": "READ_ONLY_PRICE_CONDITION_ATTENTION_NOT_ODDS_STATE_OR_ACTION",
               "version": "odds-watch-v0"
             },
-            "watch_hash": "d1a60d7e708aaabb5dfb68dc539b0a561c28dfd02f48407a4a8aef9b43842905"
+            "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181"
           },
           "status": "TYPED_ODDS_WATCH_READ_OK"
         },
         "run": {
           "conclusion": "success",
-          "created_at": "2026-09-30T08:20:22Z",
+          "created_at": "2026-09-30T14:33:12Z",
           "event": "workflow_dispatch",
-          "head_sha": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36689087147",
-          "id": 36689087147,
+          "head_sha": "8ff1d88b86506544ac4a05516695216de0a05fe2",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36729975005",
+          "id": 36729975005,
           "operation": null,
           "path": ".github/workflows/decision-inbox.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-30T08:20:22Z",
+          "run_started_at": "2026-09-30T14:33:12Z",
           "status": "completed",
-          "updated_at": "2026-09-30T08:21:05Z"
+          "updated_at": "2026-09-30T14:33:59Z"
         },
         "run_metadata": {
-          "bytes": 15156,
-          "git_blob": "a738475a97c293e4fd442463e0344df29cd78d22",
-          "read_path": "details/inbox/36689087147/run.json",
+          "bytes": 13720,
+          "git_blob": "7078ef9f2a5eff947d2e867771a10edeed641e18",
+          "read_path": "details/inbox/36729975005/run.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "47787b5ae574e7473d4771e92ef8f6b73b8a0674ad7965b3b76788a97a39aef2"
+          "sha256": "7737b4fbf62439ee66f9beff87defa0adde41aac5ed7f720116e205c4c10a356"
         },
-        "source_checked_at": "2026-09-30T14:33:38.805132+00:00",
+        "source_checked_at": "2026-09-30T14:36:09.781503+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
-        "conclusion": null,
+        "conclusion": "success",
         "created_at": "2026-09-30T14:33:12Z",
         "event": "workflow_dispatch",
         "head_sha": "8ff1d88b86506544ac4a05516695216de0a05fe2",
@@ -524,8 +650,8 @@
         "path": ".github/workflows/decision-inbox.yml",
         "run_attempt": 1,
         "run_started_at": "2026-09-30T14:33:12Z",
-        "status": "in_progress",
-        "updated_at": "2026-09-30T14:33:16Z"
+        "status": "completed",
+        "updated_at": "2026-09-30T14:33:59Z"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
@@ -533,7 +659,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-09-30T14:33:28.966683+00:00",
+      "checks_at": "2026-09-30T14:35:57.983575+00:00",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
@@ -659,7 +785,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "0dd4e518d7d8b33a56ddcc2cf02bd879a72eca80183face136d4107e573b57b8"
         },
-        "source_checked_at": "2026-09-30T14:33:28.966658+00:00",
+        "source_checked_at": "2026-09-30T14:35:57.983548+00:00",
         "state_archive": {
           "artifact_id": 11090825914,
           "artifact_name": "sector-radar-state-bundle",
@@ -709,7 +835,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-09-30T14:33:37.377676+00:00",
+      "checks_at": "2026-09-30T14:36:08.059397+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -904,7 +1030,7 @@
           "sha256": "bbc5ebeab77ac3903574f5b5a5460a884f6c13444c9eb103b2c38f256c89b6eb"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-09-30T14:33:37.377656+00:00",
+        "source_checked_at": "2026-09-30T14:36:08.059374+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "300904.SZ",
@@ -935,13 +1061,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "028888a44723560c52596666b984c3f00add16d99ba3b85ebe95587d46c099b9",
+  "reading_hash": "32b71f0071c88ceeeb492ba7cdc754022c5020734c687804aaf4c412b187bc4c",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "36729979086",
-    "trigger_run_id": "36729975005",
+    "run_id": "36730088721",
+    "trigger_run_id": "36730079551",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -949,7 +1075,7 @@
     "calendar": {
       "as_of": "2026-09-28T05:06:04.658134+00:00",
       "calendar_hash": "dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978",
-      "checked_at": "2026-09-30T14:33:43.320112+00:00",
+      "checked_at": "2026-09-30T14:36:15.948460+00:00",
       "company_events": "NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE",
       "comparison": {
         "human_attention_authority": "NONE",
