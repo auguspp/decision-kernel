@@ -1,0 +1,134 @@
+{
+  "event_dates": "NOT_EXTRACTED_FROM_BODY",
+  "finished_at": "2026-09-30T05:58:00.826833+00:00",
+  "investment_authority": "NONE",
+  "outcome": {
+    "announcements": [
+      {
+        "announcement_id": "1225512314",
+        "announcement_type": null,
+        "org_id": "GD012027",
+        "source_announcement_time": "2026-08-27T00:00:00+08:00",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512314.PDF",
+        "stock_code": "601155",
+        "title": "新城控股2026年半年度报告摘要"
+      },
+      {
+        "announcement_id": "1225512308",
+        "announcement_type": null,
+        "org_id": "GD012027",
+        "source_announcement_time": "2026-08-27T00:00:00+08:00",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512308.PDF",
+        "stock_code": "601155",
+        "title": "新城控股2026年半年度报告"
+      },
+      {
+        "announcement_id": "1225512248",
+        "announcement_type": null,
+        "org_id": "GD012027",
+        "source_announcement_time": "2026-08-27T00:00:00+08:00",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512248.PDF",
+        "stock_code": "601155",
+        "title": "新城控股对外担保进展公告"
+      }
+    ],
+    "code": "601155.SH",
+    "page_shapes": [
+      {
+        "query": 2,
+        "reported_total": 3,
+        "returned_rows": 3,
+        "table_kind": "LIST"
+      }
+    ],
+    "receipt": "601155.SH/receipt.json",
+    "reference_id": "601155-xincheng-policy-full-20260930",
+    "registered_use": "RETAINED_RESEARCH_DOCUMENT",
+    "requests": [
+      {
+        "endpoint": "https://www.cninfo.com.cn/new/information/topSearch/query",
+        "form": {
+          "keyWord": "601155",
+          "maxNum": "10"
+        },
+        "invoked_at": "2026-09-30T05:57:56.089204+00:00",
+        "kind": "organization",
+        "method": "POST",
+        "response": {
+          "body": "query-1.body",
+          "body_complete": true,
+          "bytes": 146,
+          "error_type": null,
+          "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Date": "Wed, 30 Sep 2026 05:57:59 GMT"
+          },
+          "http_status": 200,
+          "received_at": "2026-09-30T05:57:59.516265+00:00",
+          "requested_at": "2026-09-30T05:57:56.089218+00:00",
+          "sha256": "38a1d6bd7c1bacfe1fd53b9857f5118c9432cb2dcbb58f01c024e5b2f50cac7f"
+        }
+      },
+      {
+        "endpoint": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+        "form": {
+          "category": "",
+          "column": "szse",
+          "isHLtitle": "true",
+          "pageNum": "1",
+          "pageSize": "30",
+          "plate": "",
+          "seDate": "2026-08-26~2026-08-27",
+          "searchkey": "",
+          "secid": "",
+          "sortName": "",
+          "sortType": "",
+          "stock": "601155,GD012027",
+          "tabName": "fulltext",
+          "trade": ""
+        },
+        "invoked_at": "2026-09-30T05:57:59.517773+00:00",
+        "kind": "announcements",
+        "method": "POST",
+        "response": {
+          "body": "query-2.body",
+          "body_complete": true,
+          "bytes": 2054,
+          "error_type": null,
+          "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Date": "Wed, 30 Sep 2026 05:58:00 GMT"
+          },
+          "http_status": 200,
+          "received_at": "2026-09-30T05:58:00.825221+00:00",
+          "requested_at": "2026-09-30T05:57:59.517783+00:00",
+          "sha256": "de603d047e823f97300c0418d5f16d30e292f3778c69b8c9ffc805e9f3263f5c"
+        }
+      }
+    ],
+    "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+  },
+  "pdf_status": "NOT_REQUESTED_LINKS_ONLY",
+  "publication_window": {
+    "end": "2026-08-27",
+    "start": "2026-08-26",
+    "timezone": "Asia/Shanghai"
+  },
+  "selection": {
+    "archive": {
+      "format": "RETAINED_FILES"
+    },
+    "archive_source": {
+      "bytes": 1504,
+      "git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+      "path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+      "ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+      "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
+    },
+    "case": "601155.SH",
+    "id": "601155-xincheng-policy-full-20260930",
+    "purpose_note": "Human-direct Full continuation around the 2026-09-29 property policy and Xincheng equity-value bridge. Corrects Wuyue/debt/development scope, retains sources/calculations/stop conditions and does not claim typed COMMITTED Research, Human acceptance, canonical Odds, Watch, Action or Investment Authority.",
+    "read_policy": "ON_DEMAND_ARCHIVE",
+    "use": "RETAINED_RESEARCH_DOCUMENT"
+  }
+}

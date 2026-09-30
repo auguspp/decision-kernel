@@ -1,0 +1,59 @@
+{
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36675839340",
+    "GITHUB_SHA": "b7119635ae62d75335c75a6820a478fbffe6a54f",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "max_pages_per_security": 3,
+  "max_requests": 4,
+  "page_size": 30,
+  "pdf_requests": 0,
+  "publication_window": {
+    "end": "2026-08-27",
+    "start": "2026-08-26",
+    "timezone": "Asia/Shanghai"
+  },
+  "redirects": false,
+  "retries": 0,
+  "scope_source": {
+    "bytes": 51777,
+    "git_blob": "c608d0ff49fc2eb7b7ecff10fbe37cac33db0272",
+    "meaning": "EXPLICIT_SOURCE_LOOKUP_NOT_FOLLOW_HOLDING_OR_AUTOMATIC_ADMISSION",
+    "path": "current_state/registry.json",
+    "ref": "b7119635ae62d75335c75a6820a478fbffe6a54f",
+    "selected_reference_ids": [
+      "601155-xincheng-policy-full-20260930"
+    ],
+    "sha256": "51c179c8fa6a3ee13b898110f3e466470384480d6e2a322fba3dcb24f13a8bfe"
+  },
+  "selections": [
+    {
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "archive_source": {
+        "bytes": 1504,
+        "git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+        "path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+        "ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+        "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
+      },
+      "case": "601155.SH",
+      "id": "601155-xincheng-policy-full-20260930",
+      "purpose_note": "Human-direct Full continuation around the 2026-09-29 property policy and Xincheng equity-value bridge. Corrects Wuyue/debt/development scope, retains sources/calculations/stop conditions and does not claim typed COMMITTED Research, Human acceptance, canonical Odds, Watch, Action or Investment Authority.",
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "use": "RETAINED_RESEARCH_DOCUMENT"
+    }
+  ],
+  "source_endpoints": {
+    "announcements": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+    "organization": "https://www.cninfo.com.cn/new/information/topSearch/query"
+  },
+  "source_kind": "announcements",
+  "started_at": "2026-09-30T05:57:56.087575+00:00"
+}

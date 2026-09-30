@@ -1,0 +1,36 @@
+{
+  "endpoint": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+  "form": {
+    "category": "",
+    "column": "szse",
+    "isHLtitle": "true",
+    "pageNum": "1",
+    "pageSize": "30",
+    "plate": "",
+    "seDate": "2026-08-26~2026-08-27",
+    "searchkey": "",
+    "secid": "",
+    "sortName": "",
+    "sortType": "",
+    "stock": "601155,GD012027",
+    "tabName": "fulltext",
+    "trade": ""
+  },
+  "invoked_at": "2026-09-30T05:57:59.517773+00:00",
+  "kind": "announcements",
+  "method": "POST",
+  "response": {
+    "body": "query-2.body",
+    "body_complete": true,
+    "bytes": 2054,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 05:58:00 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T05:58:00.825221+00:00",
+    "requested_at": "2026-09-30T05:57:59.517783+00:00",
+    "sha256": "de603d047e823f97300c0418d5f16d30e292f3778c69b8c9ffc805e9f3263f5c"
+  }
+}
