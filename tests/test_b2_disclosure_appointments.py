@@ -16,7 +16,8 @@ from decision_kernel.runtime import tushare_relay as relay
 ROOT = Path(__file__).resolve().parents[1]
 b2 = runpy.run_path(str(ROOT / '.github/scripts/b2-disclosure-appointments.py'))
 NOW = '2099-01-01T00:00:00+00:00'
-IDENTITY = {'GITHUB_SHA': 'a' * 40, 'test_only': 'SYNTHETIC_NOT_A_GITHUB_RUN'}
+IDENTITY = {'GITHUB_SHA': 'a' * 40, 'GITHUB_RUN_ID': '123456789', 'GITHUB_RUN_ATTEMPT': '1',
+            'test_only': 'SYNTHETIC_NOT_A_GITHUB_RUN'}
 PERIOD = '2099-12-31'
 CODES = ['600001.SH', '688001.SH', '300001.SZ', '920001.BJ']
 
@@ -274,3 +275,96 @@ def test_workflow_requires_selection_and_period_keeps_gates_and_uses_env_not_she
     assert 'secrets.' not in source and 'TUSHARE_PROXY_API_KEY' not in source
     assert 'continue-on-error' not in source and 'current-state-read-entry' not in source
     assert not {'COMPANIES', 'PERIOD', 'SCOPE'} & b2.keys()
+
+
+
+def test_per_security_reading_and_unbound_reference_preserve_original_batch(tmp_path):
+    request, calls = client()
+    result = run(tmp_path, request)
+    output = tmp_path / 'out'
+    before = deepcopy(result)
+    proposal = json.loads((output/'registration-proposal.json').read_bytes())
+    assert proposal['status'] == 'PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED'
+    assert proposal['directory'] == 'docs/readings/b2-appointments-123456789-1'
+    assert [r['case'] for r in proposal['references']] == CODES
+    assert len({r['id'] for r in proposal['references']}) == 4
+    for item, record in zip(result['outcomes'], proposal['references']):
+        target = output / item['code']
+        assert {p.name for p in target.iterdir()} == {'plan.json','summary.md','receipt.json','response.body'}
+        assert (target/'plan.json').read_bytes() == (output/'plan.json').read_bytes()
+        summary = (target/'summary.md').read_bytes()
+        assert 'receipt.json' in summary.decode() and item['code'] + '/receipt.json' not in summary.decode()
+        assert all(code not in summary.decode() for code in CODES if code != item['code'])
+        assert record['use'] == 'NAVIGATION_ONLY' and record['archive'] == {'format':'RETAINED_FILES'}
+        assert record['source']['ref'] is None  # Never default to the capture commit or moving main.
+        assert record['source']['path'] == proposal['directory'] + '/' + item['code'] + '/summary.md'
+        from hashlib import sha1
+        assert record['source']['git_blob'] == sha1(f'blob {len(summary)}\0'.encode()+summary).hexdigest()
+        assert item['reference_id'] in record['purpose_note'] and '不是研究' in record['purpose_note']
+    assert before == result and len(calls) == 4
+    assert not (output/'registry.json').exists()
+
+
+def test_source_failure_keeps_unqueried_readable_without_fabricating_a_response(tmp_path):
+    request, calls = client(http=403)
+    result = run(tmp_path, request)
+    assert result['status'] == 'STOPPED_WITH_GAPS' and len(calls) == 1
+    output = tmp_path/'out'
+    proposal = json.loads((output/'registration-proposal.json').read_bytes())
+    assert len(proposal['references']) == 4
+    for item in result['outcomes'][1:]:
+        target = output/item['code']
+        assert {p.name for p in target.iterdir()} == {'plan.json','summary.md'}
+        text = (target/'summary.md').read_text()
+        assert 'NOT_QUERIED_AFTER_STOP' in text and '不是空表或没有预约' in text
+        assert (target/'plan.json').read_bytes() == (output/'plan.json').read_bytes()
+    assert json.loads((output/'capture.json').read_bytes())['status'] == 'STOPPED_WITH_GAPS'
+
+
+def test_retention_run_identity_is_validated_before_source_or_output(tmp_path):
+    for run_id, attempt in [(None, '1'), ('../outside','1'), ('0','1'), ('1','2'), (1,'1')]:
+        request, calls = client()
+        with pytest.raises(ValueError, match='B2_RETENTION_IDENTITY'):
+            b2['capture'](tmp_path/'out', {**IDENTITY,'GITHUB_RUN_ID':run_id,'GITHUB_RUN_ATTEMPT':attempt},
+                reference_ids=['selected-0'], period=PERIOD,
+                registry_raw=json.dumps(registry()).encode(), request=request, clock=lambda:NOW)
+        assert calls == [] and not (tmp_path/'out').exists()
+
+
+@pytest.mark.parametrize('http', [200, 403])
+def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_path, monkeypatch, http):
+    # Native API transport fixture only; the real archive reader and validators run unchanged.
+    import socket
+    def no_network(*args, **kwargs): raise AssertionError('no live source in standard archive test')
+    monkeypatch.setattr(socket.socket, 'connect', no_network)
+    from decision_kernel.runtime import research_archive as archive
+    fixture = runpy.run_path(str(ROOT/'tests/test_research_archive.py'))
+    request, calls = client(lambda p: envelope(None) if p['stockCode']=='688001' else
+                            envelope([row(p['stockCode'],p['sectionTime'])]), http=http)
+    result = run(tmp_path, request)
+    output = tmp_path/'out'
+    proposal = json.loads((output/'registration-proposal.json').read_bytes())
+    for index, record in enumerate(proposal['references']):
+        files = {p.name:p.read_bytes() for p in (output/record['case']).iterdir()}
+        api = fixture['API'](files=files, entry='summary.md')
+        api.record = deepcopy(record)
+        api.registry['references'] = [api.record]
+        api.refresh()
+        with pytest.raises(ValueError):
+            archive.recover_archive(api, reading_commit=fixture['R'],
+                record_id=record['id'], output=tmp_path/f'unbound-{index}')
+        assert not any(call[0] == 'get' for call in api.calls)  # No Git object read before binding.
+        api.record['source']['ref'] = fixture['A']  # Simulated native custody, not a live Git commit.
+        prefix = str(Path(api.record['source']['path']).parent)
+        for row in api.tree['tree']:
+            row['path'] = prefix + '/' + Path(row['path']).name
+        api.refresh()
+        receipt = archive.recover_archive(api, reading_commit=fixture['R'],
+            record_id=record['id'], output=tmp_path/f'recovered-{index}')
+        assert receipt['case'] == record['case'] and receipt['original_use'] == 'NAVIGATION_ONLY'
+        assert receipt['qualification'] == 'RETAINED_FILES_NOT_REVALIDATED_RESEARCH'
+        assert receipt['continuation_status'] == 'NOT_EXECUTED' and receipt['remote_write'] is False
+        assert {p.name:p.read_bytes() for p in (tmp_path/f'recovered-{index}'/'bundle').iterdir()} == files
+        assert receipt['source_commit'] == fixture['A'] and receipt['reading_commit'] == fixture['R']
+    assert len(calls) == (1 if http == 403 else 4)
+    assert result['status'] == ('STOPPED_WITH_GAPS' if http == 403 else 'CAPTURED_WITH_GAPS')

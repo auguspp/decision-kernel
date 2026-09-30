@@ -182,12 +182,22 @@ def public_request(params, *, clock=relay.now, session_factory=requests.Session)
     return result
 
 
+def retention_directory(identity):
+    """Proposed native Git destination, not evidence that files have been saved there."""
+    run_id = identity.get("GITHUB_RUN_ID")
+    relay.require(isinstance(run_id, str) and re.fullmatch(r"[1-9][0-9]{0,19}", run_id)
+                  and identity.get("GITHUB_RUN_ATTEMPT") == "1", "B2_RETENTION_IDENTITY")
+    return f"docs/readings/b2-appointments-{run_id}-1"
+
+
 def readable_summary(result):
     """Source-only Markdown consumable by the existing saved-document reader."""
     def cell(value):
         return escape(json.dumps(value, ensure_ascii=False), quote=False).replace("|", "&#124;").replace("`", "&#96;")
     lines = ["# 已选证券财报预约 · 标准通道结果", "",
         f"报告期：{result['report_period']}。本次取得结束：{result['finished_at']}。",
+        f"整批取得状态：{result['status']}；来源运行：{cell(result['identity'].get('GITHUB_RUN_ID'))}；"
+        f"采集代码：{cell(result['identity'].get('GITHUB_SHA'))}。",
         "显式选择只用于本次取数，不是持仓、关注、监控、研究完成或投资接受；没有创建提醒。",
         "日期是来源字段，不推最终预约日；取消、改期或实际披露须有明确材料，不能从空值推断。", ""]
     for item in result["outcomes"]:
@@ -217,10 +227,46 @@ def readable_summary(result):
     return "\n".join(lines).encode("utf-8")
 
 
+def save_security_readings(output, result, plan_raw):
+    """Reuse flat RETAINED_FILES archives and explicit purpose references.
+
+    Only local create-only output. No registry edits, commit lookup, source request
+    or publication. The source ref stays invalid until native Git custody is read back.
+    """
+    directory = retention_directory(result["identity"])
+    references = []
+    for item in result["outcomes"]:
+        target = output / item["code"]
+        if item["receipt"] is None:
+            target.mkdir()  # Unqueried still gets a reading, never a fake response/receipt.
+        # Exact original batch plan, not a newly authored one-stock request/clock.
+        save(target / "plan.json", plan_raw)
+        view = {**result, "outcomes": [deepcopy(item)]}
+        if view["outcomes"][0]["receipt"] is not None:
+            view["outcomes"][0]["receipt"] = "receipt.json"
+        summary = readable_summary(view)
+        save(target / "summary.md", summary)
+        references.append({
+            "id": f"b2-appointments-{result['identity']['GITHUB_RUN_ID']}-1-{item['code'].replace('.', '-')}",
+            "case": item["code"], "use": "NAVIGATION_ONLY",
+            "purpose_note": f"财报预约来源资料（{result['report_period']}）；原资料引用{item['reference_id']}。"
+                            "仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+            "source": {"path": f"{directory}/{item['code']}/summary.md", "ref": None,
+                       "git_blob": sha1(f"blob {len(summary)}\0".encode() + summary).hexdigest()},
+            "archive": {"format": "RETAINED_FILES"}})
+    save(output / "registration-proposal.json", encoded({
+        "status": "PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED", "directory": directory,
+        "source_commit": "UNBOUND_REQUIRES_NATIVE_GIT_CUSTODY_READBACK",
+        "references": references,
+        "meaning": "BIND_ONE_VERIFIED_RETENTION_COMMIT_THEN_APPEND_EXPLICIT_REFERENCES; "
+                   "NEVER_REPLACE_ORIGINAL_RESEARCH_HUMAN_REFERENCES_OR_RESEARCH_AGENDA"}))
+
+
 def capture(output, identity, *, reference_ids, period, registry_raw=None,
             request=public_request, clock=relay.now):
     registry_raw = (ROOT / "current_state/registry.json").read_bytes() if registry_raw is None else registry_raw
     plan, scope = plan_requests(reference_ids, period, registry_raw, identity.get("GITHUB_SHA"))
+    retention_directory(identity)  # Reject unsafe/unknown run paths before source effects.
     output = Path(output)
     output.mkdir()  # Existing or partial captures are never overwritten.
     save(output / "plan.json", encoded({"identity": identity, "scope_source": scope,
@@ -279,6 +325,7 @@ def capture(output, identity, *, reference_ids, period, registry_raw=None,
         "investment_authority": "NONE"}
     save(output / "capture.json", encoded(result))
     save(output / "summary.md", readable_summary(result))
+    save_security_readings(output, result, (output / "plan.json").read_bytes())
     return result
 
 
