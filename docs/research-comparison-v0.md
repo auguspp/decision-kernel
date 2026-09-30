@@ -18,6 +18,8 @@ Basis checks prevent issuer/currency/scope/restatement mismatch, stock/flow mixi
 
 Missing supplied bytes produce dependent SOURCE_BYTES_UNAVAILABLE results while independent comparisons remain available. Wrong supplied bytes fail identity validation. Duplicate input is deterministic and creates no event/state. Reports repeat qualification and NONE authority; exclusive CLI output never overwrites a previous result.
 
+The opt-in [reviewed institutional forecast contract](reviewed-forecast-comparison-v0.md) adds `FORECAST_COMPARISON` / `forecast_difference` for explicitly source-bound forecast observations. Institution/report relation and numerical qualification are separate; legacy inputs and retained outputs keep their existing meaning. The [real forecast boundary cases](readings/c-reviewed-forecast-boundaries-2026-09-30/README.md) remain numerical refusals, not full broker-model revision acceptance.
+
 ## Consumption
 
 First recover the selected on-demand archive through the ordinary fixed-R entry and `research_archive` contract. Each real archive README provides the externally pinned input SHA256 and exact explicit local-source arguments. Run current qualified code's `python -m decision_kernel.runtime.research_comparison`, not any recovered script. An absent output directory receives comparison.json/md. No network, model, Market, Watch or remote-write call occurs. The standalone consumer does not pretend to have performed live archive retrieval.

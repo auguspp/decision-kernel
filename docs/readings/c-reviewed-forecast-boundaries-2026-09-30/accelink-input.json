@@ -1,0 +1,243 @@
+{
+  "version": "reviewed-research-comparison-v0",
+  "subject": "002281.SZ",
+  "question": "真实留存机构预期的关系识别与资格拒绝，不补造缺失模型字段",
+  "predecessor": "https://github.com/auguspp/decision-kernel/blob/2a264469fbd0017b46dffe52ceeb6e4b3587bf53/docs/readings/c-synopsis-comparison-002281-2026-09-30/evidence.json",
+  "analysis_cutoff": null,
+  "reviewed_at": "2026-09-30T14:01:38.940926+00:00",
+  "sources": [
+    {
+      "id": "s",
+      "subject": "002281.SZ",
+      "ref": "2a264469fbd0017b46dffe52ceeb6e4b3587bf53",
+      "path": "docs/readings/c-synopsis-comparison-002281-2026-09-30/evidence.json",
+      "git_blob": "0232edabcc2129a9787d5dda6acd7038a07cde8c",
+      "sha256": "2a3f42fe720621a179cdbcfed23dbc54db44488558c8f4cc298e10e04819784e",
+      "bytes": 2741,
+      "identity_basis": "Exact retained file and explicit issuer; original full broker model not recovered",
+      "qualification": "SYNOPSIS",
+      "acquired_at": null,
+      "published_at": null
+    }
+  ],
+  "observations": [
+    {
+      "id": "0",
+      "subject": "002281.SZ",
+      "source_id": "s",
+      "locator": {
+        "pointer": "/records/0/forecast_values/0"
+      },
+      "value": "14.71",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "metric": "ATTRIBUTED_2026_TOTAL_PARENT_PROFIT",
+      "scope": "ATTRIBUTED_PROVIDER_FORECAST_NOT_COMPLETE_MODEL",
+      "restatement": "NOT_ESTABLISHED",
+      "basis_note": "同一显示机构名，2026具名预测值，但不将亿元自动推定CNY，也未独立取得完整原模型/会计可比基础。股本分母对总归母利润不适用；不是EPS缺字段。",
+      "currency": "NONE",
+      "scale": "100000000",
+      "period": null,
+      "forecast": {
+        "contract": "reviewed-institutional-forecast-v0",
+        "value_kind": "FORECAST",
+        "value_kind_basis": "Reviewed provider forecast field, not reported actual; this taxonomy does not fill missing fiscal/unit facts",
+        "institution": {
+          "reviewed_key": "reviewed:长江证券股份有限公司",
+          "displayed_name": "长江证券股份有限公司",
+          "provider_code": null,
+          "identity_basis": "EXACT_DISPLAYED_NAME",
+          "mapping_note": "Exact displayed name only, no alias claim"
+        },
+        "report": {
+          "namespace": "SINA_SYNOPSIS",
+          "record_id": "sina-830894481499",
+          "original_report_id": null,
+          "label_date": "2026-04-30",
+          "date_qualification": "PROVIDER_DATE_ONLY",
+          "source_id": "s",
+          "record_locator": {
+            "pointer": "/records/0"
+          }
+        },
+        "target_period": null,
+        "metric_label": "归母净利润",
+        "metric_basis": {
+          "measure": "TOTAL_PARENT_PROFIT",
+          "attribution": "PARENT_ATTRIBUTABLE",
+          "adjustment": null,
+          "mapping_note": "Raw label/slot retained; finer original-model accounting basis not independently established"
+        },
+        "currency": null,
+        "scale_label": "亿元",
+        "share_basis": {
+          "application": "NOT_APPLICABLE"
+        },
+        "bindings": {
+          "institution_name": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/institution_as_displayed"
+            }
+          },
+          "record_id": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/id"
+            }
+          },
+          "report_date": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/source_label_date"
+            }
+          },
+          "metric_label": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/metric_as_displayed"
+            }
+          },
+          "scale_label": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/unit_as_displayed"
+            }
+          },
+          "value_kind": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/0/forecast_values/0"
+            },
+            "transform": "FORECAST_FIELD"
+          }
+        },
+        "limitations": "同一显示机构名，2026具名预测值，但不将亿元自动推定CNY，也未独立取得完整原模型/会计可比基础。股本分母对总归母利润不适用；不是EPS缺字段。"
+      }
+    },
+    {
+      "id": "1",
+      "subject": "002281.SZ",
+      "source_id": "s",
+      "locator": {
+        "pointer": "/records/1/forecast_values/0"
+      },
+      "value": "17.35",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "metric": "ATTRIBUTED_2026_TOTAL_PARENT_PROFIT",
+      "scope": "ATTRIBUTED_PROVIDER_FORECAST_NOT_COMPLETE_MODEL",
+      "restatement": "NOT_ESTABLISHED",
+      "basis_note": "同一显示机构名，2026具名预测值，但不将亿元自动推定CNY，也未独立取得完整原模型/会计可比基础。股本分母对总归母利润不适用；不是EPS缺字段。",
+      "currency": "NONE",
+      "scale": "100000000",
+      "period": null,
+      "forecast": {
+        "contract": "reviewed-institutional-forecast-v0",
+        "value_kind": "FORECAST",
+        "value_kind_basis": "Reviewed provider forecast field, not reported actual; this taxonomy does not fill missing fiscal/unit facts",
+        "institution": {
+          "reviewed_key": "reviewed:长江证券股份有限公司",
+          "displayed_name": "长江证券股份有限公司",
+          "provider_code": null,
+          "identity_basis": "EXACT_DISPLAYED_NAME",
+          "mapping_note": "Exact displayed name only, no alias claim"
+        },
+        "report": {
+          "namespace": "SINA_SYNOPSIS",
+          "record_id": "sina-842411263451",
+          "original_report_id": null,
+          "label_date": "2026-09-10",
+          "date_qualification": "PROVIDER_DATE_ONLY",
+          "source_id": "s",
+          "record_locator": {
+            "pointer": "/records/1"
+          }
+        },
+        "target_period": null,
+        "metric_label": "归母净利润",
+        "metric_basis": {
+          "measure": "TOTAL_PARENT_PROFIT",
+          "attribution": "PARENT_ATTRIBUTABLE",
+          "adjustment": null,
+          "mapping_note": "Raw label/slot retained; finer original-model accounting basis not independently established"
+        },
+        "currency": null,
+        "scale_label": "亿元",
+        "share_basis": {
+          "application": "NOT_APPLICABLE"
+        },
+        "bindings": {
+          "institution_name": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/institution_as_displayed"
+            }
+          },
+          "record_id": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/id"
+            }
+          },
+          "report_date": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/source_label_date"
+            }
+          },
+          "metric_label": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/metric_as_displayed"
+            }
+          },
+          "scale_label": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/unit_as_displayed"
+            }
+          },
+          "value_kind": {
+            "source_id": "s",
+            "locator": {
+              "pointer": "/records/1/forecast_values/0"
+            },
+            "transform": "FORECAST_FIELD"
+          }
+        },
+        "limitations": "同一显示机构名，2026具名预测值，但不将亿元自动推定CNY，也未独立取得完整原模型/会计可比基础。股本分母对总归母利润不适用；不是EPS缺字段。"
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "real-boundary",
+      "kind": "FORECAST_COMPARISON",
+      "operation": "forecast_difference",
+      "terms": [
+        {
+          "observation": "0",
+          "sign": -1
+        },
+        {
+          "observation": "1",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "Known institutional attribution is separate from missing numerical comparability",
+      "interpretation": "同机构显示名/不同机构provider代码可识别，但不因此签合格预测差值。原摘要名义算术若已留存仍是历史，不被本新资格路径重签。",
+      "challenge_disposition": "拒绝用currentYear、上市市场或审阅备注补造目标期、币种和EPS分母；保留UNKNOWN的具体原因。",
+      "limitations": "No fresh broker request, original model, forecast accuracy, Human acceptance or investment authority"
+    }
+  ],
+  "remaining_evidence": "Original broker identity, fiscal/accounting and currency/share qualifications remain bounded; no source call or full model obtained by this consumer.",
+  "authority": {
+    "investment_authority": "NONE",
+    "human_acceptance": "NOT_ESTABLISHED",
+    "network_requests": 0,
+    "model_calls": 0,
+    "research_committed": false,
+    "economic_adequacy": "NOT_CERTIFIED_BY_ARITHMETIC"
+  }
+}

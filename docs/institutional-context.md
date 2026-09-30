@@ -45,6 +45,12 @@ or investment signal is produced. Zero, missing and invalid source strings are
 preserved distinctly. Hosted Quick may interpret these observations and seek
 missing evidence; this source does not accept Research or generate Questions.
 
+Separately, the offline [reviewed forecast comparison](reviewed-forecast-comparison-v0.md)
+can consume explicitly source-bound reviewed inputs. Its institution/report
+relationship labels do not supply missing numeric qualifications. It leaves this
+raw projection unchanged; the [retained real boundary cases](readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)
+still refuse comparable forecast arithmetic.
+
 `context.json` is a deterministic projection, not a raw response. `capture.json`
 binds both planned source receipts to the exact main code/run/attempt and
 SHA256 of each raw body. `replay` validates that binding and recomputes the
