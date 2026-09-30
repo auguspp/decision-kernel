@@ -1,6 +1,6 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-09-29T15:01:23.695536+00:00；状态：WINDOWS&#95;CAPTURED
+原采集截止：2026-09-30T10:23:46.676073+00:00；状态：WINDOWS&#95;CAPTURED
 这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。
 
@@ -9,7 +9,7 @@
 | cls | OBSERVATIONS&#95;NORMALIZED | 30 |
 | wallstreetcn | OBSERVATIONS&#95;NORMALIZED | 30 |
 | fastbull | OBSERVATIONS&#95;NORMALIZED | 30 |
-| jin10 | OBSERVATIONS&#95;NORMALIZED | 26 |
+| jin10 | OBSERVATIONS&#95;NORMALIZED | 30 |
 | mktnews | OBSERVATIONS&#95;NORMALIZED | 30 |
 | gelonghui | OBSERVATIONS&#95;NORMALIZED | 15 |
 | thepaper | OBSERVATIONS&#95;NORMALIZED | 20 |
@@ -20,187 +20,191 @@
 
 ## 原窗口标题（不是新增事件清单）
 
-- [财联社9月29日电，美国30年期国债收益率升至5.595%，创下自2002年以来的最高水平。](https://www.cls.cn/detail/2495634) · cls
-- [财联社9月29日电，卡塔尔UCC油气公司上游主管埃里克·凯斯库拉（Erik Keskula）表示，该公司正在洽谈可能进入委内瑞拉的石油和天然气领域。](https://www.cls.cn/detail/2495633) · cls
-- [财联社9月29日电，ICE纽约可可期货跌幅达近5%，报5327美元/公吨。](https://www.cls.cn/detail/2495631) · cls
-- [财联社9月29日电，甲骨文股价上涨8%，报143.1美元/股，总市值报4337亿美元。](https://www.cls.cn/detail/2495630) · cls
-- [财联社9月29日电，特朗普表示，伊朗的情况非常糟糕，很快就会结束。油价将会大幅下跌。](https://www.cls.cn/detail/2495629) · cls
-- [特朗普：将通过行政令把“人工智能”更名为“超级智能”](https://www.cls.cn/detail/2495627) · cls
-- [港股IPO：柳道实业控股有限公司递表港交所](https://www.cls.cn/detail/2495625) · cls
-- [财联社9月29日电，达拉斯联储9月德克萨斯服务业收入指数为-0.9，8月为6.6。](https://www.cls.cn/detail/2495624) · cls
-- [财联社9月29日电，微软股价转涨0.5%，此前一度下跌1.3%。](https://www.cls.cn/detail/2495623) · cls
-- [美国8月份职位空缺降至五个月低位 裁员人数依然较少](https://www.cls.cn/detail/2495622) · cls
-- [财联社9月29日电，ANTHROPIC公司表示，正在调查影响Claude .ai（包括桌面和移动应用）、Claude Code及Claude Cowork的错误率升高问题。](https://www.cls.cn/detail/2495621) · cls
-- [【金牌纪要库】欧洲“海风”订单空窗期有望2026年四季度结束，2027年FID同比接近翻倍，这个环节欧洲本土产能缺口更为刚性](https://www.cls.cn/detail/2495171) · cls
-- [财联社9月29日电，甲骨文拉升涨至5%，报139.5美元。](https://www.cls.cn/detail/2495619) · cls
-- [财联社9月29日电，NetApp与甲骨文将推出原生OCI存储服务。](https://www.cls.cn/detail/2495618) · cls
-- [2026金融街论坛年会将于10月19日在京开幕](https://www.cls.cn/detail/2495614) · cls
-- [美国9月消费者信心跌至十二年以来最低 对经济和就业看法悲观](https://www.cls.cn/detail/2495616) · cls
-- [报道称OpenAI年化经常性收入接近700亿美元](https://www.cls.cn/detail/2495615) · cls
-- [千里科技：子公司拟3443.88万元购买极氪智能驾驶相关资产](https://www.cls.cn/detail/2495613) · cls
-- [财联社9月29日电，KKR已达成协议，将收购印度液体仓储物流公司Cisternina Logistics的多数股权。](https://www.cls.cn/detail/2495611) · cls
-- [【公告全知道】固态电池+锂电池+动力电池回收+储能！公司成功开发出多款高镍9系及单晶系列三元正极材料](https://www.cls.cn/detail/2495591) · cls
-- [财联社9月29日电，博通股价上涨3.1%，报360.38美元/股，总市值报1.72万亿美元。](https://www.cls.cn/detail/2495606) · cls
-- [财联社9月29日电，美国8月职位空缺707.9万，预期722.8万。](https://www.cls.cn/detail/2495605) · cls
-- [财联社9月29日电，美国9月消费者信心指数为81.9，预估为89.0。](https://www.cls.cn/detail/2495604) · cls
-- [费城半导体指数涨幅扩大至2% ARM股价上涨6%](https://www.cls.cn/detail/2495603) · cls
-- [【风口研报·洞察】罗氏宣布建设自主化AI实验室，自研AI工具有望在2026年底前参与80%的研发管线组合决策，AI4S新范式持续落地；节前赔率有所提升](https://www.cls.cn/detail/2495251) · cls
-- [财联社9月29日电，纳斯达克中国金龙指数跌幅扩大，现跌1.5%，最新报5649.72点。](https://www.cls.cn/detail/2495602) · cls
-- [财联社9月29日电，投资银行Piper Sandler据悉正在洽谈收购精品投行Perella Weinberg Partners（PWP）。](https://www.cls.cn/detail/2495601) · cls
-- [财联社9月29日电，Stellantis表示，由于长续航电池供应短缺，其部分工厂已暂停生产。](https://www.cls.cn/detail/2495600) · cls
-- [美国30年期国债收益率刷新二十四年来新高](https://www.cls.cn/detail/2495599) · cls
-- [财联社9月29日电，泽连斯基表示，乌克兰将在年底前从比利时获得3架F-16战机。](https://www.cls.cn/detail/2495598) · cls
-- [合成橡胶夜盘收涨约5%，橡胶涨3.3%，20号胶涨3.3%，PVC涨1.3%，PTA涨0.8%，铁矿石涨0.6%。](https://wallstreetcn.com/livenews/3172312) · wallstreetcn
-- [美国30年期国债收益率涨至5.595%，创2002年以来新高。](https://wallstreetcn.com/livenews/3172311) · wallstreetcn
-- [英首相：英国一直走在错误道路上](https://wallstreetcn.com/livenews/3172310) · wallstreetcn
-- [生态环境部部长黄润秋会见中国环境与发展国际合作委员会外方执行副主席、加拿大环境与气候变化部部长达布鲁辛](https://wallstreetcn.com/livenews/3172308) · wallstreetcn
-- [多家油企在意大利采取限价措施](https://wallstreetcn.com/livenews/3172307) · wallstreetcn
-- [白宫披露America.gov行政命令。](https://wallstreetcn.com/livenews/3172306) · wallstreetcn
-- [纳斯达克金龙中国指数跌幅扩大至2%，热门中概股里，蔚来、理想跌4.8%，小鹏跌4.1%，比亚迪ADR、小米ADR、新东方跌超3%，美团ADR、腾讯ADR跌超2%，拼多多跌1.4%，阿里跌0.3%，百度跌0.2%，网易涨0.3%。](https://wallstreetcn.com/livenews/3172305) · wallstreetcn
-- [美国总统特朗普：不会屈服于“科技会影响到美国”的担忧。  赞赏科技能在医疗能与发挥的作用。](https://wallstreetcn.com/livenews/3172304) · wallstreetcn
-- [2026工业母机产业链高质量发展大会召开，院士专家共探强链之路](https://wallstreetcn.com/livenews/3172303) · wallstreetcn
-- [美国总统特朗普：伊朗的情况非常糟糕，（战争）很快就会结束。  油价将大幅下跌。](https://wallstreetcn.com/livenews/3172302) · wallstreetcn
-- [东航国庆假期日均计划执行航班3120班 将加大航线运力投放](https://wallstreetcn.com/livenews/3172300) · wallstreetcn
-- [特朗普：将通过行政命令把“人工智能”更名为“超级智能”](https://wallstreetcn.com/livenews/3172299) · wallstreetcn
-- [中国工商银行发行中东北非地区首单自贸离岸债](https://wallstreetcn.com/livenews/3172298) · wallstreetcn
-- [涉“套路贷”、舆情敲诈等，公安部公布8起新型涉黑恶犯罪典型案例。（央视）](https://wallstreetcn.com/livenews/3172296) · wallstreetcn
-- [Claude.ai、Claude Code等服务出现故障，Anthropic正在调查](https://wallstreetcn.com/livenews/3172294) · wallstreetcn
-- [美国总统特朗普：感谢马斯克。](https://wallstreetcn.com/livenews/3172293) · wallstreetcn
-- [西班牙通胀意外升至5%，支持欧洲央行进一步加息](https://wallstreetcn.com/livenews/3172292) · wallstreetcn
-- [2026国庆档新片预售总票房破4000万](https://wallstreetcn.com/livenews/3172291) · wallstreetcn
-- [甲骨文一度上涨逾8%，报道称OpenAI年化营收接近700亿美元](https://wallstreetcn.com/livenews/3172290) · wallstreetcn
-- [2026金融街论坛年会将于10月19日在京开幕](https://wallstreetcn.com/livenews/3172289) · wallstreetcn
-- [美国职位空缺降至3月以来最低，裁员仍维持低位](https://wallstreetcn.com/livenews/3172288) · wallstreetcn
-- [OpenAI年化经常性收入接近700亿美元。（Axios）](https://wallstreetcn.com/livenews/3172287) · wallstreetcn
-- [派拉蒙债券供应临近，美债延续熊市趋陡](https://wallstreetcn.com/livenews/3172286) · wallstreetcn
-- [香港全球创新指数排名上升至第14位](https://wallstreetcn.com/livenews/3172285) · wallstreetcn
-- [世界大型企业联合会首席经济学家达娜·彼得森：美国消费者在9月填写的影响经济因素的意见大多偏向悲观。  提及物价、商品和服务的高成本，尤其是石油和天然气价格的意见，已升至新高。](https://wallstreetcn.com/livenews/3172284) · wallstreetcn
-- [美国消费者信心跌至2014年以来最低水平](https://wallstreetcn.com/livenews/3172283) · wallstreetcn
-- [民调：约七成受访者希望英国与欧盟走近](https://wallstreetcn.com/livenews/3172282) · wallstreetcn
-- [《中国外文局“十五五”发展规划》发布](https://wallstreetcn.com/livenews/3172281) · wallstreetcn
-- [提醒：英国首相伯纳姆结束在工党会议的讲话。](https://wallstreetcn.com/livenews/3172280) · wallstreetcn
-- [英国首相：英国将决定与欧盟的长期关系](https://wallstreetcn.com/livenews/3172279) · wallstreetcn
-- [美联储鲍曼强调人工智能对银行网络安全的风险和益处。](https://www.fastbull.com/cn/fastshort/4300717_212_1) · fastbull
-- [美联储理事鲍曼在银行研讨会的开场发言中未对经济或货币政策前景发表评论。](https://www.fastbull.com/cn/fastshort/4300715_1_1) · fastbull
-- [欧盟石油协调小组认为供应稳定，但价格令人担忧。](https://www.fastbull.com/cn/fastshort/4300714_212_1) · fastbull
-- [卡塔尔UCC石油天然气公司上游业务主管：正就潜在进入委内瑞拉石油和天然气领域进行谈判。](https://www.fastbull.com/cn/fastshort/4300712_1_1) · fastbull
-- [丁二烯橡胶连续主力合约日内涨5%，现报16165.00元。](https://www.fastbull.com/cn/fastshort/4300711_212_1) · fastbull
-- [伦敦可可期货下跌4.5%，至每吨3,990英镑。](https://www.fastbull.com/cn/fastshort/4300709_212_1) · fastbull
-- [美国消费者信心跌至12年多来最低水平。](https://www.fastbull.com/cn/fastshort/4300708_214_1) · fastbull
-- [纽约ICE可可期货下跌近5%，至每吨5327美元。](https://www.fastbull.com/cn/fastshort/4300706_212_1) · fastbull
-- [据以色列第12频道：以色列总理内塔尼亚胡即将举行安全问题讨论会。](https://www.fastbull.com/cn/fastshort/4300704_1_1) · fastbull
-- [美棉日内跌超4.00%，现报79.40美分/磅。](https://www.fastbull.com/cn/fastshort/4300702_1_1) · fastbull
-- [丁二烯橡胶连续主力合约日内涨4%，现报16020.00元。](https://www.fastbull.com/cn/fastshort/4300700_212_1) · fastbull
-- [美国总统特朗普：在未来的岁月里，当人们书写我们国家的历史时，会把针对伊朗的行动列为我们所做过的最重要的事情之一。](https://www.fastbull.com/cn/fastshort/4300697_1_1) · fastbull
-- [美国总统特朗普称赞科技在医疗领域的贡献。](https://www.fastbull.com/cn/fastshort/4300693_1_1) · fastbull
-- [特朗普：不要因为科技将给美国带来什么后果而屈服于恐惧。](https://www.fastbull.com/cn/fastshort/4300692_212_1) · fastbull
-- [美国总统特朗普：伊朗正严重溃败，很快就会结束。油价将大幅下跌。](https://www.fastbull.com/cn/fastshort/4300690_1_1) · fastbull
-- [特朗普：油价将暴跌。](https://www.fastbull.com/cn/fastshort/4300689_212_1) · fastbull
-- [美国总统特朗普将签署命令，要求各机构与america.gov网站整合。](https://www.fastbull.com/cn/fastshort/4300687_1_1) · fastbull
-- [特朗普谈人工智能：若被滥用，某些形式的政府管控是有效的。](https://www.fastbull.com/cn/fastshort/4300686_212_1) · fastbull
-- [美国总统特朗普：（谈人工智能）若被滥用，可能对政体运作产生影响。](https://www.fastbull.com/cn/fastshort/4300684_1_1) · fastbull
-- [美国总统特朗普：希望保持人工智能领先地位。](https://www.fastbull.com/cn/fastshort/4300682_1_1) · fastbull
-- [特朗普：绝不会扼杀人工智能的发展。](https://www.fastbull.com/cn/fastshort/4300678_212_1) · fastbull
-- [特朗普谈人工智能：不想把它搞得太复杂。](https://www.fastbull.com/cn/fastshort/4300677_212_1) · fastbull
-- [特朗普：行政令将人工智能更名为“超级智能”。](https://www.fastbull.com/cn/fastshort/4300676_212_1) · fastbull
-- [特朗普：将签署一项强有力的人工智能行政命令。](https://www.fastbull.com/cn/fastshort/4300674_212_1) · fastbull
-- [达拉斯联储德克萨斯州服务业收入指数9月为-0.9，8月为6.6。](https://www.fastbull.com/cn/fastshort/4300672_212_1) · fastbull
-- [美国总统特朗普：美国国务卿鲁比奥表现出色。](https://www.fastbull.com/cn/fastshort/4300668_1_1) · fastbull
-- [欧盟执委会发言人：迄今为止的贸易数据证明，修订后的DCFTA中设想的关税配额所涵盖的修订数量具有公平和平衡的性质。](https://www.fastbull.com/cn/fastshort/4300663_212_1) · fastbull
-- [特朗普感谢马斯克。](https://www.fastbull.com/cn/fastshort/4300660_212_1) · fastbull
-- [现货白银日内涨幅达1.00%，现报61.24美元/盎司。](https://www.fastbull.com/cn/fastshort/4300651_1_1) · fastbull
-- [荷兰逮捕行动后，FBI官员对ShinyHunters黑客表示“我们知道如何找到你们”。](https://www.fastbull.com/cn/fastshort/4300650_212_1) · fastbull
-- [美国30年期国债收益率升至5.595%，创2002年以来新高。](https://flash.jin10.com/detail/20260929230108338800) · jin10
-- [美联储理事鲍曼在银行研讨会的开场发言中未对经济或货币政策前景发表评论。](https://flash.jin10.com/detail/20260929230015263800) · jin10
-- [特朗普签署行政令，推出AI驱动政务网站](https://flash.jin10.com/detail/20260929225921121800) · jin10
-- [卡塔尔UCC石油天然气公司上游业务主管：正就潜在进入委内瑞拉石油和天然气领域进行谈判。](https://flash.jin10.com/detail/20260929225745847800) · jin10
-- [白宫发布美国政府网站（america.gov）行政令。](https://flash.jin10.com/detail/20260929225439062800) · jin10
-- [期货热点追踪](https://flash.jin10.com/detail/20260929225300016800) · jin10
-- [美国消费者信心跌至12年多来最低水平](https://flash.jin10.com/detail/20260929225144785800) · jin10
-- [据以色列第12频道：以色列总理内塔尼亚胡即将举行安全问题讨论会。](https://flash.jin10.com/detail/20260929224732256800) · jin10
-- [Anthropic IPO招股书曝光，分析师担忧暴露AI热潮问题？ &#124; Plus日报](https://flash.jin10.com/detail/20260929224706364800) · jin10
-- [美国总统特朗普：在未来的岁月里，当人们书写我们国家的历史时，会把针对伊朗的行动列为我们所做过的最重要的事情之一。](https://flash.jin10.com/detail/20260929224449036800) · jin10
-- [美国总统特朗普：不要因技术将对我们产生何种影响而屈服于恐惧。](https://flash.jin10.com/detail/20260929224234173800) · jin10
-- [美国总统特朗普称赞科技在医疗领域的贡献。](https://flash.jin10.com/detail/20260929224227080800) · jin10
-- [美国总统特朗普：伊朗正严重溃败，很快就会结束。油价将大幅下跌。](https://flash.jin10.com/detail/20260929224058317800) · jin10
-- [美国总统特朗普：别提什么“假新闻”了。现在我要管它们叫“人工新闻”（Artificial News）。我喜欢这个叫法。](https://flash.jin10.com/detail/20260929224029971800) · jin10
-- [美国总统特朗普将签署命令，要求各机构与america.gov网站整合。](https://flash.jin10.com/detail/20260929223950527800) · jin10
-- [美国总统特朗普：（谈人工智能）若被滥用，可能对政体运作产生影响。](https://flash.jin10.com/detail/20260929223901099800) · jin10
-- [美国总统特朗普：希望保持人工智能领先地位。](https://flash.jin10.com/detail/20260929223821232800) · jin10
-- [美国总统特朗普：绝不会抑制人工智能的增长。](https://flash.jin10.com/detail/20260929223758500800) · jin10
-- [美国总统特朗普：将签署关于人工智能的强有力行政令，将人工智能（AI）更名为“超级智能”（SI）。](https://flash.jin10.com/detail/20260929223527892800) · jin10
-- [美国总统特朗普：政府的运作失灵已长达数十年之久，甚至可以说是有数百年了，尽管我们的历史没那么长。而特朗普政府正在着手解决这一问题。](https://flash.jin10.com/detail/20260929223436883800) · jin10
-- [美国总统特朗普：美国国务卿鲁比奥表现出色。](https://flash.jin10.com/detail/20260929222953851800) · jin10
-- [欧盟委员会发言人：迄今为止的贸易数据证明，修订后的《深入而全面的自由贸易协定》（DCFTA）所设定的关税配额数量是公平且平衡的。](https://flash.jin10.com/detail/20260929222942658800) · jin10
-- [欧盟委员会发言人：目前无计划与乌克兰方面就重新谈判现行《深入而全面的自由贸易协定》（DCFTA）下的出口配额进行讨论。](https://flash.jin10.com/detail/20260929222915966800) · jin10
-- [据网络状况监测网站DownDetector：用户报告显示Spotify&#40;SPOT.N&#41;存在问题。](https://flash.jin10.com/detail/20260929222635610800) · jin10
-- [美国总统特朗普对特斯拉&#40;TSLA.O&#41;CEO马斯克表示感谢。](https://flash.jin10.com/detail/20260929222554337800) · jin10
-- [特朗普爱将炮轰拜登：美国经济至今还在为他的“天量印钞”还债！](https://flash.jin10.com/detail/20260929222440686800) · jin10
-- [US 30-year Treasury yield rose to 5.595%, the highest since 2002.](https://mktnews.net/flashDetail.html?id=01a0edaf-241f-7338-ab13-dd60d329bb72) · mktnews
-- [Fed Governor Bowman, in opening remarks at a banking seminar, made no comments on the economic or monetary policy outlook.](https://mktnews.net/flashDetail.html?id=01a0edae-53ed-7338-ab13-d55ee04671f7) · mktnews
-- [Trump signs executive order launching AI-driven government website](https://mktnews.net/flashDetail.html?id=01a0edad-8b15-7338-ab13-cea9a55bdb86) · mktnews
-- [Head of upstream at Qatar UCC Oil &amp; Gas said the company is in talks to potentially enter Venezuela&#x27;s oil and gas sector.](https://mktnews.net/flashDetail.html?id=01a0edac-0a9f-7338-ab13-c7cbfc5c9b11) · mktnews
-- [The White House issued an executive order, posted on the U.S. government website america.gov.](https://mktnews.net/flashDetail.html?id=01a0eda9-3065-7338-ab13-b8765416359b) · mktnews
-- [US consumer confidence falls to lowest in over 12 years](https://mktnews.net/flashDetail.html?id=01a0eda6-a69d-7338-ab13-b7eedb32c82d) · mktnews
-- [Israel&#x27;s Channel 12 reports Prime Minister Netanyahu is set to hold a security meeting shortly.](https://mktnews.net/flashDetail.html?id=01a0eda2-b961-7338-ab13-a816dbf95175) · mktnews
-- [President Trump said future histories will rank actions against Iran among the most important measures the United States has taken.](https://mktnews.net/flashDetail.html?id=01a0eda0-35bb-7338-ab13-a6cf2cfe5ab7) · mktnews
-- [President Trump said not to succumb to fear about technology&#x27;s potential impact on us.](https://mktnews.net/flashDetail.html?id=01a0ed9e-2a3c-7338-ab13-9f249c2e7c9d) · mktnews
-- [U.S. President Trump praised technology&#x27;s contribution to the healthcare sector.](https://mktnews.net/flashDetail.html?id=01a0ed9e-0865-7338-ab13-92dee8b73b71) · mktnews
-- [President Trump said Iran is collapsing rapidly and will soon be finished, and that oil prices will fall sharply.](https://mktnews.net/flashDetail.html?id=01a0ed9c-ab9a-7338-ab13-8fd0fcca7862) · mktnews
-- [U.S. President Trump will sign an executive order requiring federal agencies to integrate with the america.gov website.](https://mktnews.net/flashDetail.html?id=01a0ed9b-a4e1-7338-ab13-849bbb0573c2) · mktnews
-- [Trump said on artificial intelligence that, if abused, it could affect the functioning of the political system.](https://mktnews.net/flashDetail.html?id=01a0ed9a-f5df-7338-ab13-7ea5b4c9b6fb) · mktnews
-- [U.S. President Trump said he seeks to maintain U.S. leadership in artificial intelligence.](https://mktnews.net/flashDetail.html?id=01a0ed9a-4d04-7338-ab13-74c5d8dec7e8) · mktnews
-- [President Trump said he will not curb the growth of artificial intelligence.](https://mktnews.net/flashDetail.html?id=01a0ed99-f75a-7338-ab13-697f693f3adf) · mktnews
-- [US President Trump said he will sign a strong executive order on artificial intelligence.](https://mktnews.net/flashDetail.html?id=01a0ed97-a2cd-7338-ab13-67923dddf378) · mktnews
-- [U.S. President Trump said U.S. Secretary of State Rubio has performed well.](https://mktnews.net/flashDetail.html?id=01a0ed92-8fcc-7338-ab13-5de2ae0a3b4a) · mktnews
-- [European Commission spokesperson said trade data to date indicate the tariff-quota volumes set in the revised Deep and Comprehensive Free Trade Agreement &#40;DCFTA&#41; are fair and balanced.](https://mktnews.net/flashDetail.html?id=01a0ed92-69b5-7338-ab13-5683a2efdfd8) · mktnews
-- [A European Commission spokesperson said there are currently no plans to discuss renegotiating export quotas under the existing Deep and Comprehensive Free Trade Area &#40;DCFTA&#41; with Ukraine.](https://mktnews.net/flashDetail.html?id=01a0ed91-f5af-7338-ab13-4f3c2f353baf) · mktnews
-- [DownDetector shows users reporting service disruptions at Spotify &#40;SPOT.N&#41;.](https://mktnews.net/flashDetail.html?id=01a0ed8f-8150-7338-ab13-456c0e85f238) · mktnews
-- [U.S. President Trump thanked Tesla &#40;TSLA.O&#41; CEO Elon Musk.](https://mktnews.net/flashDetail.html?id=01a0ed8e-e026-7338-ab13-3bba7892e9cc) · mktnews
-- [Oracle &#40;ORCL.N&#41; shares rose as much as 5% intraday.](https://mktnews.net/flashDetail.html?id=01a0ed8c-9357-7338-ab13-358450db352d) · mktnews
-- [NetApp and Oracle &#40;ORCL&#41; will launch a native Oracle Cloud Infrastructure &#40;OCI&#41; storage service.](https://mktnews.net/flashDetail.html?id=01a0ed8b-15d1-7338-ab13-2aa20fecd99f) · mktnews
-- [OpenAI annual recurring revenue near $70 bln, sources say](https://mktnews.net/flashDetail.html?id=01a0ed8b-000b-7338-ab13-253eb96bdbf8) · mktnews
-- [2026 Financial Street Forum annual meeting to open Oct. 19 in Beijing](https://mktnews.net/flashDetail.html?id=01a0ed8a-55fb-7338-ab13-1bfd827f8e60) · mktnews
-- [Spot silver rose 1.00% intraday to $61.24/oz.](https://mktnews.net/flashDetail.html?id=01a0ed89-80f4-7338-ab13-1675bec9b277) · mktnews
-- [Axios reports OpenAI&#x27;s annual recurring revenue is approaching $70 billion.](https://mktnews.net/flashDetail.html?id=01a0ed86-e487-7338-ab13-0940a35fec61) · mktnews
-- [UK Prime Minister Burnham said the UK will determine its long-term relationship with the EU.](https://mktnews.net/flashDetail.html?id=01a0ed82-ce18-7338-ab13-02b7116de2cb) · mktnews
-- [Trump administration rolls out AI tool to streamline online government services](https://mktnews.net/flashDetail.html?id=01a0ed80-6685-7338-ab12-fd338b107019) · mktnews
-- [NTV reported the Turkish fund meeting chaired by President ERDOGAN has concluded.](https://mktnews.net/flashDetail.html?id=01a0ed80-2b52-7338-ab12-f295d628f3f9) · mktnews
-- [诺科达科技&#40;00519.HK&#41;2026财年亏损约4.82亿港元 同比由盈转亏](https://www.gelonghui.com/news/5319378) · gelonghui
-- [新华联合投资&#40;08159.HK&#41;：贺文拟退任独立非执行董事](https://www.gelonghui.com/news/5319377) · gelonghui
-- [马鞍山钢铁股份&#40;00323.HK&#41;选举郭斐为董事会职工董事](https://www.gelonghui.com/news/5319376) · gelonghui
-- [美股异动｜甲骨文大涨超8%，将推出原生OCI存储服务](https://www.gelonghui.com/news/5319375) · gelonghui
-- [家乡互动&#40;03798.HK&#41;9月29日耗资13.8万港元回购10.2万股](https://www.gelonghui.com/news/5319374) · gelonghui
-- [TBKS HLDGS&#40;01960.HK&#41;2026财年净亏损3300万令吉 同比扩大约16.3%](https://www.gelonghui.com/news/5319373) · gelonghui
-- [曹操出行&#40;02643.HK&#41;9月29日耗资199.6万港元回购17万股](https://www.gelonghui.com/news/5319372) · gelonghui
-- [大洋环球控股&#40;09876.HK&#41;拟1.5亿港元收购葵涌市物业](https://www.gelonghui.com/news/5319371) · gelonghui
-- [绿色能源科技集团&#40;00979.HK&#41;2026财年持续经营业务收入约1.52亿港元，同比增加约120%](https://www.gelonghui.com/news/5319370) · gelonghui
-- [FSM HOLDINGS&#40;01721.HK&#41;：委任广深香港为核数师](https://www.gelonghui.com/news/5319369) · gelonghui
-- [源宇宙教育&#40;01082.HK&#41;2026财年净亏损2327万港元 同比收窄约54.9%](https://www.gelonghui.com/news/5319368) · gelonghui
-- [嘉艺控股&#40;01025.HK&#41;：庄斌退任执行董事](https://www.gelonghui.com/news/5319367) · gelonghui
-- [中国同辐&#40;01763.HK&#41;：建议委任李鹏辉为执行董事](https://www.gelonghui.com/news/5319366) · gelonghui
-- [星凯控股&#40;01166.HK&#41;2026财年纯利8292.8万港元 同比扭亏为盈](https://www.gelonghui.com/news/5319365) · gelonghui
-- [极兔速递-W&#40;01519.HK&#41;9月29日耗资2746.2万港元回购319.1万股](https://www.gelonghui.com/news/5319364) · gelonghui
-- [解读丨事关稳楼市、促就业、提振内需等，国常会释放积极信号](https://www.thepaper.cn/newsDetail_forward_34166762) · thepaper
-- [马上评｜给舞台演出合理的宽容空间](https://www.thepaper.cn/newsDetail_forward_34171269) · thepaper
+- [良品铺子：控股股东所涉诉讼一审判决支付违约金500万元](https://www.cls.cn/detail/2496424) · cls
+- [汇创达：拟收购春草科技100%股权 交易尚处筹划阶段](https://www.cls.cn/detail/2496423) · cls
+- [财联社9月30日电，利比亚沙拉拉（Sharara）油田的产量已回升至接近34万桶/日。](https://www.cls.cn/detail/2496421) · cls
+- [ST豆神：全资孙公司签署《云计算服务协议》 合同总金额约1.19亿美元](https://www.cls.cn/detail/2496418) · cls
+- [水利部和中国气象局18时联合发布黄色山洪灾害气象预警](https://www.cls.cn/detail/2496417) · cls
+- [国泰海通：副总裁韩志达因工作调动辞职](https://www.cls.cn/detail/2496414) · cls
+- [药明康德：AI在创新药物研发领域处于探索和尝试阶段 未来有望大幅提升效率、降低门槛](https://www.cls.cn/detail/2496413) · cls
+- [海尔智家：已累计回购A股股份1.1亿股 金额达22.9亿元](https://www.cls.cn/detail/2496412) · cls
+- [财联社9月30日电，基础设施投资公司Antin Infrastructure Partners已达成协议，将旗下区域能源公司Vicinity Energy按29.2亿美元的企业价值出售。](https://www.cls.cn/detail/2496410) · cls
+- [财联社9月30日电，日本财务省数据显示，日本在8月27日至9月28日期间未进行外汇干预。](https://www.cls.cn/detail/2496409) · cls
+- [伊朗股市再度大涨 单日上涨171586点](https://www.cls.cn/detail/2496407) · cls
+- [【机构龙虎榜解读】创新药+次新，营业收入主要来源于BD交易，首个细分创新药处于CDE新药上市审批阶段，三款创新药处于III期或关键性临床研究阶段，这家次新标的获机构大额净买入](https://www.cls.cn/detail/2496397) · cls
+- [上交所：对全球芯片LOF等溢价较高的基金进行重点监控](https://www.cls.cn/detail/2496400) · cls
+- [全球供应紧张之际 俄罗斯延长柴油出口禁令](https://www.cls.cn/detail/2496399) · cls
+- [国联民生证券向香港子公司增资不超20亿元获监管批文](https://www.cls.cn/detail/2496396) · cls
+- [财联社9月30日电，Truist Securities将Expedia的目标价从每股309美元下调至288美元，同时将Booking的目标价从每股242美元下调至216美元。](https://www.cls.cn/detail/2496398) · cls
+- [财联社9月30日电，艾伯维宣布，其在研药物ABBV-295在1期临床试验中显示出最高9.8%的体重减轻效果，表现出“有意义的体重下降”。](https://www.cls.cn/detail/2496394) · cls
+- [财联社9月30日电，斯托克欧洲600指数回吐部分涨幅，交易价格基本持平。](https://www.cls.cn/detail/2496391) · cls
+- [南向资金今日净买入逾68亿港元 腾讯控股获买入居前](https://www.cls.cn/detail/2496388) · cls
+- [财联社9月30日电，腾讯9月30日回购价值1.003亿港元的股票。](https://www.cls.cn/detail/2496390) · cls
+- [中国大模型首次进入OpenAI企业付费结算体系](https://www.cls.cn/detail/2496389) · cls
+- [西部黄金：全资子公司新疆美盛临时停产](https://www.cls.cn/detail/2496384) · cls
+- [鄢东会见日本国际贸易促进协会访华团](https://www.cls.cn/detail/2496383) · cls
+- [小摩：中东石油出口已恢复至战前九成](https://www.cls.cn/detail/2496381) · cls
+- [存在内控机制不完善等问题 华安证券被安徽证监局出具警示函](https://www.cls.cn/detail/2496379) · cls
+- [国家防总、应急管理部针对重庆、贵州启动防汛四级应急响应](https://www.cls.cn/detail/2496376) · cls
+- [财联社9月30日电，英国央行行长贝利表示，在监管前，需要对AI模型进行部署前后的更多测试。](https://www.cls.cn/detail/2496375) · cls
+- [澜起科技：截至9月30日已累计回购208.8万股 金额约4.1亿元](https://www.cls.cn/detail/2496374) · cls
+- [伯恩斯坦给予多支美股光通信股“跑赢大盘”评级](https://www.cls.cn/detail/2496373) · cls
+- [湖北星辰3D先进封装量产通线 项目一期、二期合计投资超70亿元](https://www.cls.cn/detail/2496368) · cls
+- [英国海事机构：多艘船只在霍尔木兹海峡遭袭](https://wallstreetcn.com/livenews/3172871) · wallstreetcn
+- [40项核查维度！中国互金协会启动第三方平台金融营销自查](https://wallstreetcn.com/livenews/3172869) · wallstreetcn
+- [以媒称预警客机飞行员或意图坠机](https://wallstreetcn.com/livenews/3172868) · wallstreetcn
+- [日本财务省：日本9月未干预外汇市场](https://wallstreetcn.com/livenews/3172865) · wallstreetcn
+- [招商银行：石岱辞任非执行董事](https://wallstreetcn.com/livenews/3172864) · wallstreetcn
+- [华夏银行：唐一鸣辞任副行长](https://wallstreetcn.com/livenews/3172863) · wallstreetcn
+- [药明康德：AI在创新药物研发领域处于探索和尝试阶段，未来有望大幅提升效率、降低门槛](https://wallstreetcn.com/livenews/3172862) · wallstreetcn
+- [亚特兰大成为洛杉矶奥运会火炬传递美国首站](https://wallstreetcn.com/livenews/3172861) · wallstreetcn
+- [上交所：对全球芯片LOF等溢价较高的基金进行重点监控](https://wallstreetcn.com/livenews/3172860) · wallstreetcn
+- [北京：率先发展词元&#40;Token&#41;经济，以词元为基础，构建可量化、可定价的数据价值体系,鼓励建设词元工厂](https://wallstreetcn.com/livenews/3172856) · wallstreetcn
+- [北京：深化京津冀算力、公共数据共享开放以及数智产业链协同](https://wallstreetcn.com/livenews/3172853) · wallstreetcn
+- [日本内阁官房长官木原稔：与日本央行在多个层面保持密切沟通，认为经济和物价观点上没有重大分歧。](https://wallstreetcn.com/livenews/3172850) · wallstreetcn
+- [西部黄金：全资子公司新疆美盛临时停产预计45天左右](https://wallstreetcn.com/livenews/3172849) · wallstreetcn
+- [Kimi K3接入OpenAI Codex企业通道，中国大模型首次进入OpenAI企业付费结算体系](https://wallstreetcn.com/livenews/3172848) · wallstreetcn
+- [澜起科技：9月回购117.8万股，累计回购208.8万股](https://wallstreetcn.com/livenews/3172846) · wallstreetcn
+- [英国央行金融政策委员会：包括部分私募信贷在内的高风险信贷市场，仍易受融资条件收紧影响。  英国家庭和企业仍具韧性，银行体系资本充足。  逆周期资本缓冲维持在2%。](https://wallstreetcn.com/livenews/3172842) · wallstreetcn
+- [英国央行行长贝利：在监管前，需要对AI模型进行部署前后的更多测试。](https://wallstreetcn.com/livenews/3172841) · wallstreetcn
+- [英国央行金融政策委员会：自7月以来，金融风险同时爆发的可能性已上升。  油气价格上涨导致供应冲击持续时间更长。  前沿AI漏洞强化了金融机构准备风险并与英国当局接触的必要性。  英国央行将于2027年初提出银行杠杆率改革和国债回购改革方案。  计划中的国债回购市场化改革将缓解杠杆率变化带来的风险。  迄今为止，金融市场对能源价格和债券收益率上升表现出韧性。](https://wallstreetcn.com/livenews/3172840) · wallstreetcn
+- [日本首相高市早苗：政府将提振经济供给侧。  政府将为经济和财政政策管理设定更清晰的路径。](https://wallstreetcn.com/livenews/3172839) · wallstreetcn
+- [盛美上海：截至2026年9月29日在手订单170.73亿元](https://wallstreetcn.com/livenews/3172836) · wallstreetcn
+- [以媒：两名飞行员激烈肢体冲突致赴以客机迫降](https://wallstreetcn.com/livenews/3172835) · wallstreetcn
+- [国家新闻出版署公布2026年9月份国产网络游戏审批信息，共206款游戏获批。](https://wallstreetcn.com/livenews/3172834) · wallstreetcn
+- [报道：台积电正在评估在得克萨斯州的潜在投资](https://wallstreetcn.com/livenews/3172828) · wallstreetcn
+- [奥尼电子：奥尼智能签署18.21亿元采购合同](https://wallstreetcn.com/livenews/3172826) · wallstreetcn
+- [Meta将AI数据中心归类为实验性质以获取税收优惠，研究显示数据中心税收优惠帮助Meta节省约40亿美元。（纽约时报）](https://wallstreetcn.com/livenews/3172825) · wallstreetcn
+- [朱忠明当选上海市市长](https://wallstreetcn.com/livenews/3172823) · wallstreetcn
+- [国务院办公厅印发《关于发展体育赛事激发消费活力的意见》](https://wallstreetcn.com/livenews/3172821) · wallstreetcn
+- [“人造太阳”核心部件在四川交付](https://wallstreetcn.com/livenews/3172820) · wallstreetcn
+- [全球资金持续助推美国AI热潮，“隐性债务”风险引担忧](https://wallstreetcn.com/livenews/3172819) · wallstreetcn
+- [中国央行：10月8日将开展12000亿元买断式逆回购操作](https://wallstreetcn.com/livenews/3172818) · wallstreetcn
+- [Dangote称，肯尼亚与卢旺达同意入股拉穆（Lamu）炼油厂。](https://www.fastbull.com/cn/fastshort/4302299_212_1) · fastbull
+- [继迪拜航空FZ1073航班驾驶舱袭击事件数小时后，另一架飞往以色列特拉维夫的迪拜航空航班FZ1081（注册号A6-FKB）在沙特阿拉伯北部上空折返迪拜。目前尚未给出原因。](https://www.fastbull.com/cn/fastshort/4302296_212_1) · fastbull
+- [希腊呼吁欧盟提供财政灵活性，应对能源成本上涨。](https://www.fastbull.com/cn/fastshort/4302295_214_1) · fastbull
+- [斯洛伐克政府网站消息，斯政府已批准向国有斯洛伐克核电公司JAVYS拨款1.894亿欧元，用于收购捷克能源集团CEZ在合资核电企业JESS中持有的49%股权。](https://www.fastbull.com/cn/fastshort/4302292_212_1) · fastbull
+- [日本财务省周三公布的数据显示，在涵盖9月份大部分时间的最新月度期间，日本没有进行外汇交易。](https://www.fastbull.com/cn/fastshort/4302281_212_1) · fastbull
+- [西班牙首相桑切斯在蒙克洛亚宫迎接法国总统马克龙。](https://www.fastbull.com/cn/fastshort/4302279_1_1) · fastbull
+- [葡萄牙8月零售额同比增长1.7%。](https://www.fastbull.com/cn/fastshort/4302278_212_1) · fastbull
+- [印度卢比兑美元汇率报1美元兑95.82卢比，涨幅0.17%；前一交易日收报95.98。](https://www.fastbull.com/cn/fastshort/4302276_212_1) · fastbull
+- [塞尔维亚8月零售额同比增长6.3%。](https://www.fastbull.com/cn/fastshort/4302274_212_1) · fastbull
+- [爱尔兰9月份失业率为5.0%。](https://www.fastbull.com/cn/fastshort/4302273_212_1) · fastbull
+- [葡萄牙9月初步数据显示，消费者价格指数同比上涨3.6%。](https://www.fastbull.com/cn/fastshort/4302272_212_1) · fastbull
+- [克里姆林宫：将俄罗斯S-400系统从土耳其转移的问题目前已列入议程。相关工作正在进行中，双方也保持着相应的沟通。](https://www.fastbull.com/cn/fastshort/4302270_1_1) · fastbull
+- [国联民生证券向香港子公司增资不超20亿元获监管批文。](https://www.fastbull.com/cn/fastshort/4302268_204_1) · fastbull
+- [英国央行警告：AI估值可能出现“更剧烈回调”。](https://www.fastbull.com/cn/fastshort/4302263_214_1) · fastbull
+- [克里姆林宫：（就潜在的囚犯交换事宜）与美国确实有此类接触。](https://www.fastbull.com/cn/fastshort/4302262_1_1) · fastbull
+- [克里姆林宫：（就“释放政治囚犯以换取放宽制裁”的相关报道表态）俄罗斯不存在政治囚犯，此类说法毫无意义。](https://www.fastbull.com/cn/fastshort/4302258_212_1) · fastbull
+- [克里姆林宫：（就俄罗斯针对加里宁格勒问题向北约发出核警告一事表态）我国外交人员正努力提醒欧洲的激进分子，留意我国在这一问题上的基础性纲领文件。](https://www.fastbull.com/cn/fastshort/4302257_212_1) · fastbull
+- [日本经济大臣木原稔：我们与日本银行各层级保持密切沟通，认为双方在经济与物价观点上不存在重大分歧。](https://www.fastbull.com/cn/fastshort/4302251_212_1) · fastbull
+- [斯托克欧洲600指数回吐部分涨幅，交易价格基本持平。](https://www.fastbull.com/cn/fastshort/4302249_204_1) · fastbull
+- [日本首相高市早苗：将评估税收趋势，重新审视财政收入与支出。](https://www.fastbull.com/cn/fastshort/4302248_212_1) · fastbull
+- [市场消息：埃及总统塞西计划于10月9日访问马来西亚。](https://www.fastbull.com/cn/fastshort/4302245_212_1) · fastbull
+- [伊朗总统：我们认真履行维护区域水道安全和确保航行安全的责任。](https://www.fastbull.com/cn/fastshort/4302240_1_1) · fastbull
+- [印度信息部长：内阁已批准为可再生能源项目拨付1.86万亿卢比资金。](https://www.fastbull.com/cn/fastshort/4302237_212_1) · fastbull
+- [日本主要经济咨询小组的私营部门成员呼吁日本央行与政府密切协调，同时强调尊重央行独立性。](https://www.fastbull.com/cn/fastshort/4302224_1_1) · fastbull
+- [英国央行金融政策委员会：随着收益率上升，市场大幅调整的风险依然存在。](https://www.fastbull.com/cn/fastshort/4302218_1_1) · fastbull
+- [英国央行金融政策委员会：如果人工智能增长未能如预期提振，政府债券将面临新的威胁。](https://www.fastbull.com/cn/fastshort/4302215_1_1) · fastbull
+- [英国央行金融政策委员会：包括部分私人信贷在内的高风险信贷市场仍然容易受到融资条件收紧的影响。](https://www.fastbull.com/cn/fastshort/4302206_1_1) · fastbull
+- [欧盟委员会：已针对九家电子游戏企业启动欧盟层面的协同行动。](https://www.fastbull.com/cn/fastshort/4302205_212_1) · fastbull
+- [南非统计局公布，南非8月整体生产者通胀率环比下降0.4%。](https://www.fastbull.com/cn/fastshort/4302204_212_1) · fastbull
+- [英国央行金融政策委员会：英国家庭与企业仍保持韧性，银行体系资本充足水平符合要求。](https://www.fastbull.com/cn/fastshort/4302202_212_1) · fastbull
+- [良品铺子：控股股东宁波汉意一审支付违约金500万元](https://flash.jin10.com/detail/20260930182218756800) · jin10
+- [胜宏科技：2026年第一期员工持股计划尚未购买公司股份](https://flash.jin10.com/detail/20260930182201542800) · jin10
+- [据航班追踪网站Flightradar24，继迪拜航空FZ1073航班驾驶舱袭击事件数小时后，另一架飞往以色列特拉维夫的迪拜航空航班FZ1081（注册号A6-FKB）在沙特阿拉伯北部上空折返迪拜。目前尚未给出原因。](https://flash.jin10.com/detail/20260930182020558800) · jin10
+- [分析：胡塞武装新型导弹能力引发关注，红海航运安全面临更多不确定性](https://flash.jin10.com/detail/20260930181956497800) · jin10
+- [希腊呼吁欧盟提供财政灵活性，应对能源成本上涨](https://flash.jin10.com/detail/20260930181814497800) · jin10
+- [以媒更新称副驾驶试图劫持飞机 劫持意图不明](https://flash.jin10.com/detail/20260930181649550800) · jin10
+- [上交所向华建集团下发监管工作函](https://flash.jin10.com/detail/20260930181605525800) · jin10
+- [9月份俄罗斯海运进口车用燃料下降24%](https://flash.jin10.com/detail/20260930181526464800) · jin10
+- [中国互金协会启动第三方平台金融营销自查](https://flash.jin10.com/detail/20260930181517463800) · jin10
+- [汇创达：拟收购春草科技100%股权 已签收购框架协议](https://flash.jin10.com/detail/20260930181440392800) · jin10
+- [伊朗全国工会联合会主席表示，劳动者基本工资的提高是确定的，但如果通货膨胀得不到控制，涨薪将不会产生太大影响。问题不仅在于工资的增加，我认为还需要考虑控制通货膨胀的措施。](https://flash.jin10.com/detail/20260930181403365800) · jin10
+- [领英：AI安全岗位过去一年增长91%](https://flash.jin10.com/detail/20260930181310497800) · jin10
+- [德国卫生部长林内曼就长期护理改革召开临时新闻发布会。](https://flash.jin10.com/detail/20260930181301239800) · jin10
+- [苏大维格：拟挂牌转让华日升100%股权 或构成关联交易](https://flash.jin10.com/detail/20260930181238451800) · jin10
+- [美伊谈判进入新阶段，双方都希望保全面子](https://flash.jin10.com/detail/20260930181229821800) · jin10
+- [特锐德：获中国证监会备案拟发行不超1.35亿股H股](https://flash.jin10.com/detail/20260930181129525800) · jin10
+- [根据数据及路透社测算，9月份俄罗斯通过海运进口的车用燃料环比下降24%，至35万吨。](https://flash.jin10.com/detail/20260930181112894800) · jin10
+- [ST豆神：豆神香港签订60个月云计算服务协议](https://flash.jin10.com/detail/20260930181015182800) · jin10
+- [民生健康：三个募投项目延期 调整至2027年达产](https://flash.jin10.com/detail/20260930180922251800) · jin10
+- [金十数据整理：特朗普过去24小时都忙了什么？（2026-09-30）](https://flash.jin10.com/detail/20260930180732415800) · jin10
+- [分析：伊朗收到美国方案，但协议推进仍需多方协调，决策流程或十分漫长](https://flash.jin10.com/detail/20260930180709889800) · jin10
+- [华信新材：自建项目已进入试车、试生产阶段](https://flash.jin10.com/detail/20260930180652958800) · jin10
+- [上交所：对全球芯片LOF等溢价较高的基金进行重点监控](https://flash.jin10.com/detail/20260930180401725800) · jin10
+- [日本财务省数据显示，日本在8月27日至9月28日期间未进行外汇干预。](https://flash.jin10.com/detail/20260930180312327800) · jin10
+- [西班牙首相桑切斯在蒙克洛亚宫迎接法国总统马克龙。](https://flash.jin10.com/detail/20260930180213140800) · jin10
+- [伊朗部长：伊朗的海上运输通道在制裁下依然活跃](https://flash.jin10.com/detail/20260930180138344800) · jin10
+- [金十图示：2026年09月30日（周三）亚太市场股市指数](https://flash.jin10.com/detail/20260930180122965800) · jin10
+- [国庆节假期当周各地金融市场休市安排一览](https://flash.jin10.com/detail/20260930180050141800) · jin10
+- [克里姆林宫：将俄罗斯S-400系统从土耳其转移的问题目前已列入议程。相关工作正在进行中，双方也保持着相应的沟通。](https://flash.jin10.com/detail/20260930175855716800) · jin10
+- [大摩泄露逾百项投行业务项目，客户仍选择合作？](https://flash.jin10.com/detail/20260930175842623800) · jin10
+- [Greece urges EU to grant fiscal flexibility to offset rising energy costs](https://mktnews.net/flashDetail.html?id=01a0f1d2-93b1-7338-ab2e-3eb0fb8016e3) · mktnews
+- [Israeli media update: co-pilot attempted to seize aircraft; motive unclear](https://mktnews.net/flashDetail.html?id=01a0f1d1-59b6-7338-ab2e-34f0f75d0fc2) · mktnews
+- [Shanghai Stock Exchange issues regulatory work letter to Huajian Group](https://mktnews.net/flashDetail.html?id=01a0f1d0-966e-7338-ab2e-2e1232b51e70) · mktnews
+- [Russian seaborne motor fuel imports down about 24% MoM in September](https://mktnews.net/flashDetail.html?id=01a0f1d0-0372-7338-ab2e-21db71eb97e3) · mktnews
+- [LinkedIn: AI security jobs up 91% YoY](https://mktnews.net/flashDetail.html?id=01a0f1cd-e4f0-7338-ab2e-188c43a78429) · mktnews
+- [German health minister Linnemann held an unscheduled press briefing on long-term care reform.](https://mktnews.net/flashDetail.html?id=01a0f1cd-c2fa-7338-ab2e-1351b16367e6) · mktnews
+- [Data and Refinitiv calculations show Russia&#x27;s seaborne imports of motor fuel fell 24% month-on-month to 350,000 tonnes in September.](https://mktnews.net/flashDetail.html?id=01a0f1cc-109f-7338-ab2e-084da40645db) · mktnews
+- [Japan&#x27;s Ministry of Finance &#40;MOF&#41; said it did not conduct foreign-exchange intervention between Aug. 27 and Sept. 28.](https://mktnews.net/flashDetail.html?id=01a0f1c4-b71b-7338-ab2e-016f0bfa39b1) · mktnews
+- [Spanish Prime Minister Sanchez received French President Macron at the Moncloa Palace.](https://mktnews.net/flashDetail.html?id=01a0f1c3-d91c-7338-ab2d-fe17e27d0cf4) · mktnews
+- [Kremlin says transferring Russia&#x27;s S-400 air-defence system out of Turkey is now on the agenda; work is underway and both sides remain in communication.](https://mktnews.net/flashDetail.html?id=01a0f1c0-d42d-7338-ab2d-f42b33c5ae00) · mktnews
+- [UK Maritime Trade Operations said a tanker entering the Strait of Hormuz was struck by an unidentified projectile.](https://mktnews.net/flashDetail.html?id=01a0f1c0-7e71-7338-ab2d-ed9dd56e2598) · mktnews
+- [China&#x27;s first 3D advanced packaging mass-production line goes live in Optics Valley](https://mktnews.net/flashDetail.html?id=01a0f1be-69ec-7338-ab2d-e296ebf3b2f1) · mktnews
+- [Bank of England warns AI valuations could see &quot;sharper correction&quot;](https://mktnews.net/flashDetail.html?id=01a0f1bb-4641-7338-ab2d-d9473ccdcf3a) · mktnews
+- [Kremlin says it has had contacts with the United States regarding a potential prisoner swap.](https://mktnews.net/flashDetail.html?id=01a0f1bb-0580-7338-ab2d-d32a6212c019) · mktnews
+- [The Kremlin, responding to reports that sanctions might be eased in exchange for the release of political prisoners, said Russia has no political prisoners and called such claims meaningless.](https://mktnews.net/flashDetail.html?id=01a0f1ba-ab70-7338-ab2d-cc0df2793f45) · mktnews
+- [The Kremlin denied reports it was considering talks to lift sanctions in exchange for prisoner releases.](https://mktnews.net/flashDetail.html?id=01a0f1ba-676d-7338-ab2d-c4ab5db34958) · mktnews
+- [The Kremlin said its diplomats had tried to remind hot-headed Europeans to heed Moscow&#x27;s core documents on the issue, after Russia&#x27;s nuclear warning to NATO over Kaliningrad.](https://mktnews.net/flashDetail.html?id=01a0f1ba-11a3-7338-ab2d-ba7dbf3d981b) · mktnews
+- [Kremlin says President Putin will address the newly elected parliament later on Wednesday evening.](https://mktnews.net/flashDetail.html?id=01a0f1b9-2555-7338-ab2d-b24cb62797b0) · mktnews
+- [Japan&#x27;s Prime Minister Takaichi said she will assess tax-revenue trends and review government revenues and expenditures.](https://mktnews.net/flashDetail.html?id=01a0f1b8-d08d-7338-ab2d-ac711fa761e5) · mktnews
+- [China&#x27;s Ministry of Finance announced arrangements for Q4 2026 government bond issuance.](https://mktnews.net/flashDetail.html?id=01a0f1b8-c198-7338-ab2d-a207077540d3) · mktnews
+- [Finance Minister KIUCHI said he has been in close communication with the Bank of Japan at all levels and sees no major difference in views on the economy and prices.](https://mktnews.net/flashDetail.html?id=01a0f1b7-52eb-7338-ab2d-98941935f5d0) · mktnews
+- [NYT: Meta classified AI data centers as R&amp;D, cut nearly $4bn in taxes; IRS may challenge](https://mktnews.net/flashDetail.html?id=01a0f1b4-bd88-7338-ab2d-93810f4eb648) · mktnews
+- [Iran&#x27;s president said Tehran is earnestly fulfilling its responsibility to safeguard regional waterways and ensure safe navigation.](https://mktnews.net/flashDetail.html?id=01a0f1b3-02a1-7338-ab2d-886c9ac1311c) · mktnews
+- [Kimi K3 added to OpenAI Codex enterprise channel; first Chinese large open‑source model in OpenAI enterprise billing system](https://mktnews.net/flashDetail.html?id=01a0f1b2-f04b-7338-ab2d-8489d753bdbd) · mktnews
+- [September 29 — MOFCOM Vice Minister Yan Dong met with a visiting delegation from the Japan External Trade Organization &#40;JETRO&#41; led by Chairman Iwaya Takeshi.](https://mktnews.net/flashDetail.html?id=01a0f1b0-f6d2-7338-ab2d-79762ebc2a62) · mktnews
+- [National Flood Control HQ, Ministry of Emergency Management launch level-4 flood emergency for Chongqing, Guizhou](https://mktnews.net/flashDetail.html?id=01a0f1ad-986a-7338-ab2d-77ee8636ea8c) · mktnews
+- [Private-sector members of a major Japanese economic advisory panel urged the Bank of Japan to coordinate closely with the government while stressing respect for the central bank&#x27;s independence.](https://mktnews.net/flashDetail.html?id=01a0f1aa-f5e2-7338-ab2d-68ba5f3208c1) · mktnews
+- [European Commission said the Consumer Protection Cooperation &#40;CPC&#41; network’s action aims to protect gamers’ rights.](https://mktnews.net/flashDetail.html?id=01a0f1aa-cba4-7338-ab2d-6013fa400c10) · mktnews
+- [European Commission says it has launched EU-level coordinated action targeting nine video-game companies.](https://mktnews.net/flashDetail.html?id=01a0f1aa-8fc1-7338-ab2d-5bdc3342b7f4) · mktnews
+- [Bank of England&#x27;s FPC says the risk of a sharp market correction persists as yields rise.](https://mktnews.net/flashDetail.html?id=01a0f1a9-80e5-7338-ab2d-57c55cb1c4cb) · mktnews
+- [德琪医药-B&#40;06996.HK&#41;9月30日耗资30.45万港元回购8.8万股](https://www.gelonghui.com/news/5319875) · gelonghui
+- [富阳&#40;00352.HK&#41;接获额外复牌指引 继续停牌 ](https://www.gelonghui.com/news/5319874) · gelonghui
+- [中伟新材&#40;300919.SZ&#41;：部分高级管理人员辞职暨聘任高级管理人员](https://www.gelonghui.com/news/5319873) · gelonghui
+- [国泰海通&#40;601211.SH&#41;：副总裁韩志达辞职](https://www.gelonghui.com/news/5319872) · gelonghui
+- [九典制药&#40;300705.SZ&#41;：终止部分募投项目并将剩余募集资金永久补充流动资金](https://www.gelonghui.com/news/5319871) · gelonghui
+- [中威电子&#40;300270.SZ&#41;：石旭刚减持52.43万股](https://www.gelonghui.com/news/5319870) · gelonghui
+- [名创优品&#40;09896.HK&#41;9月30日耗资4182.7万港元回购227.14万股](https://www.gelonghui.com/news/5319869) · gelonghui
+- [凯因科技&#40;688687.SH&#41;：累计回购6万股公司股份](https://www.gelonghui.com/news/5319868) · gelonghui
+- [苏大维格&#40;300331.SZ&#41;：拟公开挂牌转让华日升100%股权](https://www.gelonghui.com/news/5319867) · gelonghui
+- [兰剑智能&#40;688557.SH&#41;：董事会秘书董新军离任](https://www.gelonghui.com/news/5319866) · gelonghui
+- [兰剑智能&#40;688557.SH&#41;：聘任温瑞旭为财务负责人](https://www.gelonghui.com/news/5319865) · gelonghui
+- [新铝时代&#40;301613.SZ&#41;：聘任陈旺为公司副总经理](https://www.gelonghui.com/news/5319864) · gelonghui
+- [金域医学&#40;603882.SH&#41;：累计回购756.2万股公司股份](https://www.gelonghui.com/news/5319863) · gelonghui
+- [百融智能&#40;06608.HK&#41;9月30日耗资34.2万港元回购6.95万股](https://www.gelonghui.com/news/5319862) · gelonghui
+- [绿城服务&#40;02869.HK&#41;9月30日耗资95.8万港元回购22.8万股](https://www.gelonghui.com/news/5319861) · gelonghui
 - [北理工：教师裴某严重违反职业道德规范和行为准则，解除聘用关系](https://www.thepaper.cn/newsDetail_forward_34172944) · thepaper
-- [成都文旅局通报那英即兴演唱《弯弯的月亮》：不属于变更节目重新报批情形](https://www.thepaper.cn/newsDetail_forward_34170993) · thepaper
-- [居民房贷贴息政策10月1日起实施](https://www.thepaper.cn/newsDetail_forward_34172659) · thepaper
-- [马上评｜大学需要提升对优秀教师的识别能力](https://www.thepaper.cn/newsDetail_forward_34170372) · thepaper
-- [马上评｜热议“副教授刘欢”是缅怀，更是对人才评价的多元思考](https://www.thepaper.cn/newsDetail_forward_34169351) · thepaper
-- [上海楼市再度上演“千人摇”：多个新盘开盘即售罄，中端改善项目去化热度持续走高](https://www.thepaper.cn/newsDetail_forward_34167343) · thepaper
-- [国企员工醉驾碾压拖行女教师5.9公里致死，5人涉嫌故意杀人被诉](https://www.thepaper.cn/newsDetail_forward_34171216) · thepaper
-- [ “女教师被拖行5.9公里致死”案将提级审理，死者妹妹发声](https://www.thepaper.cn/newsDetail_forward_34171579) · thepaper
-- [言短意长｜不要轻易用“职称”定义一位老师](https://www.thepaper.cn/newsDetail_forward_34170330) · thepaper
-- [贵州警方通报：19岁男子凌晨酒驾超载追尾半挂车致7人死亡](https://www.thepaper.cn/newsDetail_forward_34170052) · thepaper
-- [那英演唱会临时加唱《弯弯的月亮》，当地文旅局：调查核实中](https://www.thepaper.cn/newsDetail_forward_34169865) · thepaper
-- [王毅会见日本国际贸易促进协会会长岩屋毅](https://www.thepaper.cn/newsDetail_forward_34167342) · thepaper
-- [台湾花莲县海域发生4.7级地震，震源深度23千米](https://www.thepaper.cn/newsDetail_forward_34167834) · thepaper
-- [美“星舰”实现首次地球轨道飞行，但提前结束任务](https://www.thepaper.cn/newsDetail_forward_34167665) · thepaper
+- [解读｜购房贷款贴息政策精准为刚需家庭降月供，对楼市拉动效果如何？](https://www.thepaper.cn/newsDetail_forward_34173306) · thepaper
+- [黄仁勋、苏姿丰等担任清华大学经管学院顾问委员会委员](https://www.thepaper.cn/newsDetail_forward_34173177) · thepaper
+- [宋佳凭借《山花烂漫时》获金鹰奖最佳女主角奖](https://www.thepaper.cn/newsDetail_forward_34173811) · thepaper
+- [公安部公布8起新型涉黑恶犯罪典型案例，涉及舆情敲诈等](https://www.thepaper.cn/newsDetail_forward_34174102) · thepaper
+- [商务部就媒体报道欧盟相关成员国推动欧委会打造欧版“301”工具事答问](https://www.thepaper.cn/newsDetail_forward_34174305) · thepaper
+- [中央财政帮你还房贷利息：最高可省近5万元，哪些人可享受？](https://www.thepaper.cn/newsDetail_forward_34172817) · thepaper
+- [检察机关依法对易会满涉嫌受贿案提起公诉](https://www.thepaper.cn/newsDetail_forward_34177474) · thepaper
+- [东航通报“空姐下跪”事件](https://www.thepaper.cn/newsDetail_forward_34179291) · thepaper
+- [黑龙江一女职工被控殴打男同事致耳膜穿孔判刑八个月，最高法指令再审](https://www.thepaper.cn/newsDetail_forward_34177871) · thepaper
+- [从房贷贴息看住房支持政策新探索：从供给侧延伸到需求侧，财政金融协同发力](https://www.thepaper.cn/newsDetail_forward_34174172) · thepaper
+- [马上评｜“空姐下跪”热搜高挂，真相不该再迟到](https://www.thepaper.cn/newsDetail_forward_34178371) · thepaper
+- [专访｜施梓云：没想到《济公啊，济公》成了我献给游本昌的最后礼物！](https://www.thepaper.cn/newsDetail_forward_34172628) · thepaper
+- [澎湃漫评｜“一年举报1520次”就该及时叫停](https://www.thepaper.cn/newsDetail_forward_34171996) · thepaper
+- [好的监管，分得清故意和情不自禁](https://www.thepaper.cn/newsDetail_forward_34174328) · thepaper
+- [一小学用“实名接龙”统计“自愿捐款”，广东遂溪：已督促家委会退款](https://www.thepaper.cn/newsDetail_forward_34173181) · thepaper
+- [空姐推餐车磕碰乘客后下跪？涉事航空公司员工：已上报此事](https://www.thepaper.cn/newsDetail_forward_34177847) · thepaper
+- [游本昌遗体告别仪式，今天上午在八宝山举行](https://www.thepaper.cn/newsDetail_forward_34177292) · thepaper
 - [非法收受2.63亿余元，彭晓春一审被判死缓](https://www.thepaper.cn/newsDetail_forward_34172641) · thepaper
-- [普京签署总统令，俄军再次扩编](https://www.thepaper.cn/newsDetail_forward_34167693) · thepaper
-- [澎湃新闻即将推出2026国庆特别策划《奔赴“县”场》](https://www.thepaper.cn/newsDetail_forward_34171082) · thepaper
-- [湖北赤壁通报“连锁火锅串串店发现虫卵”：责令商家限期整改](https://www.thepaper.cn/newsDetail_forward_34166936) · thepaper
+- [比亚迪：选举王传福为第九届董事会董事长](https://www.thepaper.cn/newsDetail_forward_34173184) · thepaper
 
-[本批原始ZIP](../../sources/artifacts/3f086bc2307f5a71da6fc3f21a710c6d1012af6ce3a3769e3d745bfc44d9c632.zip)
+[本批原始ZIP](../../sources/artifacts/4ef5326815b6c6601cbc635be7f08f50fa7f813fc4e8938ab722d22b4c09c55c.zip)
 [结构化窗口与版本](news-daily.json)

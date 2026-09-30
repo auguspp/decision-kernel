@@ -358,7 +358,6 @@
 - [按需恢复：b2-announcements-36671452199-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6e8d82ddd59e6354311541e590aae17f7d9fe939/docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-announcements-36675839340-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/d13143a92b4c25bb38c9a46fc836309dba2af367/docs/readings/b2-announcements-36675839340-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-pdf-36685884532-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/e382453d09e54572ead47f23f553a5da87764d9f/docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-29；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 688337.SH
 

@@ -1,4 +1,6 @@
-本次读取状态：AVAILABLE
+本次读取状态：AWAITING_JOB_NOT_QUIET
+
+**以下为此前保存的观察，本次未取得新成果。**
 
 # 产业雷达｜需求、生产、库存与利润、价格、物流
 
@@ -32,6 +34,133 @@
 
 {&#x27;SAME_PERIOD_REVISION&#x27;: 1, &#x27;NEW_STATISTICAL_PERIOD&#x27;: 7}；未变序列 352
 初次看见旧统计资料不叫今日新事件；来源缺失不叫需求下降。
+
+## cpca
+
+状态：OBSERVATIONS_AVAILABLE
+来源：http://data.cpcadata.com/api/chartlist
+取得：2026-09-29T10:24:10.508445+00:00
+
+| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
+|---|---|---|---|---|
+| 狭义乘用车/产量 | 2026-08 / MONTHLY_CPCA | 234.8322 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-4.311153108462778760477775560&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;-1.489490927307629218813035590&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;222.2072&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 狭义乘用车/批发 | 2026-08 / MONTHLY_CPCA | 235.7542 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-4.982611019241333419851690880&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;0.364096549775091926800902800&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;225.1529&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 狭义乘用车/零售 | 2026-08 / MONTHLY_CPCA | 154.1478 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-23.63159135902532405636727908&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;-20.75714963726354329107058106&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;146.0941&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 狭义乘用车/出口 | 2026-08 / MONTHLY_CPCA | 88.8509 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;77.93632006985206502169859880&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;89.65912517607597394282126380&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;91.8265&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 广义乘用车/产量 | 2026-08 / MONTHLY_CPCA | 236.1357 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-5.240290504353632628688789710&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;-2.054375769148232656117930950&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;223.6461&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 广义乘用车/批发 | 2026-08 / MONTHLY_CPCA | 237.5427 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-5.482990593368605382641520240&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;-0.2172509212901497938935400000&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;226.5254&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 广义乘用车/零售 | 2026-08 / MONTHLY_CPCA | 155.4402 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-23.84802154043927446031322997&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;-21.12152082954338730216481717&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;147.4223&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 广义乘用车/出口 | 2026-08 / MONTHLY_CPCA | 89.5312 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;77.67158681838567692106192720&#x27;} | {&#x27;computed_yoy_pct&#x27;: &#x27;90.00769810264411300979346860&#x27;, &#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;92.3122&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+
+## logistics
+
+状态：OBSERVATIONS_AVAILABLE
+来源：https://datacenter-web.eastmoney.com/api/data/v1/get
+取得：2026-09-29T10:24:11.749729+00:00
+
+| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
+|---|---|---|---|---|
+| 物流业景气指数 | 2026-08 / MONTHLY_DIFFUSION_INDEX | 50.9 / 指数点 | 未提供 | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;50.4&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+
+## memory
+
+状态：OBSERVATIONS_AVAILABLE
+来源：https://www.dramexchange.com/
+取得：2026-09-29T10:24:13.436699+00:00
+
+| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
+|---|---|---|---|---|
+| DRAM/DDR516Gb(2Gx8)4800/5600 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 57.833 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR516Gb(2Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 25.900 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.78&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR416Gb(2Gx8)3200 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 83.660 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR416Gb(2Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 13.875 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.73&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR48Gb(1Gx8)3200 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 46.321 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.23&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR48Gb(1Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 5.900 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.51&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| DRAM/DDR34Gb512Mx81600/1866 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 13.720 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;-0.09&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| NAND/SLC2Gb256MBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 4.345 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.51&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/SLC1Gb128MBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 3.358 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/MLC64Gb8GBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 40.750 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;2.10&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/MLC32Gb4GBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 19.300 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;1.40&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+
+## nbs-energy
+
+状态：OBSERVATIONS_AVAILABLE
+来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260915_1965312.html
+取得：2026-09-29T10:24:02.884773+00:00
+原发布日期：2026-09-15T10:00:00+08:00
+
+| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
+|---|---|---|---|---|
+| 原煤产量 | 2026-08 / MONTHLY_OUTPUT | 3.6 / 亿吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-7.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 原煤产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 30.6 / 亿吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-3.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 原油产量 | 2026-08 / MONTHLY_OUTPUT | 1843 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 原油产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 14639 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 原油加工量 | 2026-08 / MONTHLY_OUTPUT | 5907 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-6.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 原油加工量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 45612 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-6.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 天然气产量 | 2026-08 / MONTHLY_OUTPUT | 214 / 亿立方米 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 天然气产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 1757 / 亿立方米 | {&#x27;reported_yoy_pct&#x27;: &#x27;1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 发电量 | 2026-08 / MONTHLY_OUTPUT | 9438 / 亿千瓦时 | {&#x27;reported_yoy_pct&#x27;: &#x27;-0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 发电量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 66476 / 亿千瓦时 | {&#x27;reported_yoy_pct&#x27;: &#x27;2.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+
+## nbs-goods
+
+状态：OBSERVATIONS_AVAILABLE
+来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260923_1965403.html
+取得：2026-09-29T10:24:08.511230+00:00
+原发布日期：2026-09-24T09:30:00+08:00
+
+| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
+|---|---|---|---|---|
+| 螺纹钢(Φ20mm,HRB400E) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3165.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-17.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 线材(Φ8—10mm,HPB300) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3353.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-13.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 普通中板(20mm,Q235) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3548.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-16.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 热轧普通板卷(4.75—11.5mm,Q235) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3308.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-42.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 无缝钢管(219*6,20#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4022.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-4.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 角钢(5#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3433.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-36.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 电解铜(1#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 108770.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-1722.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 铝锭(A00) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 24191.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-164.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 铅锭(1#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 15883.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-123.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 锌锭(0#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 26257.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-734.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 硫酸(98%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1777.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-58.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 烧碱(液碱,32%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 682.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 甲醇(优等品) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3695.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;316.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;9.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 纯苯(石油苯,工业级) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9653.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;588.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;6.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 乙醇(95.0%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 5419.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;63.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 聚乙烯(LLDPE,熔融指数2薄膜料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9589.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;350.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 聚丙烯(拉丝料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 10040.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;405.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;4.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 冰醋酸(99.5%及以上) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4150.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;613.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;17.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 顺丁胶(BR9000) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 15102.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-10.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 涤纶长丝(POY150D/48F) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9639.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;351.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 磷酸铁锂(普通动力型) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 51881.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-3919.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-7.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 液化天然气(LNG) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 6222.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;178.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 液化石油气(LPG) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7488.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;637.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;9.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 汽油(95#国VI) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 11021.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;571.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;5.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 柴油(0#国VI) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 8950.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;239.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 石蜡(58#半) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7618.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;95.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 无烟煤(洗中块) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1592.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-25.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 山西优混(5500大卡) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 982.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;36.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 焦煤(主焦煤) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2549.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-48.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 焦炭(准一级冶金焦) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2096.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;112.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;5.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 普通硅酸盐水泥(P.O42.5散装) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 258.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;8.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 浮法平板玻璃(5/6mm) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1101.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;26.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 多晶硅(致密料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 41.0 / 元/千克 | {&#x27;reported_change_absolute&#x27;: &#x27;0.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 稻米(粳稻米) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3981.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 小麦(国标三等) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2396.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 玉米(黄玉米二等) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2209.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-27.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 棉花(皮棉,白棉三级) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 17010.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-523.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 生猪(外三元) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 10.7 / 元/千克 | {&#x27;reported_change_absolute&#x27;: &#x27;-0.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 大豆(黄豆) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4696.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-10.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 豆粕(粗蛋白含量≥43%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3374.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;69.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 花生(油料花生米) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7433.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-83.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 白糖(国标一级白砂糖) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 5192.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-29.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 尿素(中小颗粒) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1792.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;20.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 磷肥(55%磷酸一铵) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4088.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-164.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 钾肥(港口62%白色氯化钾) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3077.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;3.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 复合肥(硫酸钾复合肥,氮磷钾含量45%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3610.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-8.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 农药(草甘膦,95%原药) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 27092.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;1617.9&#x27;, &#x27;reported_change_pct&#x27;: &#x27;6.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 天然橡胶(标准胶SCRWF) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 18252.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-247.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 纸浆(进口针叶浆) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4951.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-14.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 瓦楞纸(AA级120g) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3080.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-28.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 
 ## nbs-industry
 
@@ -145,26 +274,6 @@
 | 太阳能发电量(亿千瓦时) | 2026-08 / YEAR_TO_DATE_OUTPUT | 4811 / 亿千瓦时 | {&#x27;reported_yoy_pct&#x27;: &#x27;10.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 | 出口交货值(亿元) | 2026-08 / MONTHLY_OUTPUT | 14357 / 亿元 | {&#x27;reported_yoy_pct&#x27;: &#x27;11.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 | 出口交货值(亿元) | 2026-08 / YEAR_TO_DATE_OUTPUT | 110233 / 亿元 | {&#x27;reported_yoy_pct&#x27;: &#x27;10.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-
-## nbs-energy
-
-状态：OBSERVATIONS_AVAILABLE
-来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260915_1965312.html
-取得：2026-09-29T10:24:02.884773+00:00
-原发布日期：2026-09-15T10:00:00+08:00
-
-| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
-|---|---|---|---|---|
-| 原煤产量 | 2026-08 / MONTHLY_OUTPUT | 3.6 / 亿吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-7.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 原煤产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 30.6 / 亿吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-3.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 原油产量 | 2026-08 / MONTHLY_OUTPUT | 1843 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 原油产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 14639 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 原油加工量 | 2026-08 / MONTHLY_OUTPUT | 5907 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-6.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 原油加工量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 45612 / 万吨 | {&#x27;reported_yoy_pct&#x27;: &#x27;-6.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 天然气产量 | 2026-08 / MONTHLY_OUTPUT | 214 / 亿立方米 | {&#x27;reported_yoy_pct&#x27;: &#x27;0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 天然气产量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 1757 / 亿立方米 | {&#x27;reported_yoy_pct&#x27;: &#x27;1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 发电量 | 2026-08 / MONTHLY_OUTPUT | 9438 / 亿千瓦时 | {&#x27;reported_yoy_pct&#x27;: &#x27;-0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 发电量 | 2026-08 / YEAR_TO_DATE_OUTPUT | 66476 / 亿千瓦时 | {&#x27;reported_yoy_pct&#x27;: &#x27;2.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 
 ## nbs-pmi
 
@@ -361,83 +470,6 @@
 | 规上工业/产成品存货周转天数 | 2026-08 / REPORTED_TURNOVER_DAYS | 21.3 / 天 | {&#x27;reported_change_days&#x27;: &#x27;0.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 | 规上工业/应收账款平均回收期 | 2026-08 / REPORTED_TURNOVER_DAYS | 72.2 / 天 | {&#x27;reported_change_days&#x27;: &#x27;0.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 
-## nbs-goods
-
-状态：OBSERVATIONS_AVAILABLE
-来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260923_1965403.html
-取得：2026-09-29T10:24:08.511230+00:00
-原发布日期：2026-09-24T09:30:00+08:00
-
-| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
-|---|---|---|---|---|
-| 螺纹钢(Φ20mm,HRB400E) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3165.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-17.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 线材(Φ8—10mm,HPB300) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3353.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-13.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 普通中板(20mm,Q235) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3548.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-16.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 热轧普通板卷(4.75—11.5mm,Q235) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3308.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-42.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 无缝钢管(219*6,20#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4022.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-4.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 角钢(5#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3433.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-36.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 电解铜(1#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 108770.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-1722.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 铝锭(A00) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 24191.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-164.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 铅锭(1#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 15883.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-123.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 锌锭(0#) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 26257.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-734.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 硫酸(98%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1777.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-58.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 烧碱(液碱,32%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 682.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 甲醇(优等品) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3695.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;316.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;9.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 纯苯(石油苯,工业级) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9653.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;588.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;6.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 乙醇(95.0%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 5419.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;63.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 聚乙烯(LLDPE,熔融指数2薄膜料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9589.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;350.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 聚丙烯(拉丝料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 10040.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;405.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;4.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 冰醋酸(99.5%及以上) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4150.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;613.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;17.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 顺丁胶(BR9000) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 15102.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-10.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 涤纶长丝(POY150D/48F) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 9639.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;351.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 磷酸铁锂(普通动力型) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 51881.1 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-3919.7&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-7.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 液化天然气(LNG) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 6222.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;178.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 液化石油气(LPG) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7488.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;637.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;9.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 汽油(95#国VI) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 11021.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;571.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;5.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 柴油(0#国VI) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 8950.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;239.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 石蜡(58#半) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7618.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;95.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 无烟煤(洗中块) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1592.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-25.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 山西优混(5500大卡) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 982.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;36.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.8&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 焦煤(主焦煤) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2549.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-48.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 焦炭(准一级冶金焦) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2096.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;112.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;5.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 普通硅酸盐水泥(P.O42.5散装) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 258.8 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;8.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;3.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 浮法平板玻璃(5/6mm) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1101.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;26.5&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.5&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 多晶硅(致密料) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 41.0 / 元/千克 | {&#x27;reported_change_absolute&#x27;: &#x27;0.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 稻米(粳稻米) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3981.0 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 小麦(国标三等) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2396.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;0.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 玉米(黄玉米二等) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 2209.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-27.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 棉花(皮棉,白棉三级) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 17010.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-523.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.0&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 生猪(外三元) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 10.7 / 元/千克 | {&#x27;reported_change_absolute&#x27;: &#x27;-0.3&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-2.7&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 大豆(黄豆) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4696.7 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-10.2&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 豆粕(粗蛋白含量≥43%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3374.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;69.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;2.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 花生(油料花生米) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 7433.3 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-83.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 白糖(国标一级白砂糖) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 5192.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-29.0&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.6&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 尿素(中小颗粒) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 1792.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;20.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;1.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 磷肥(55%磷酸一铵) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4088.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-164.1&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-3.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 钾肥(港口62%白色氯化钾) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3077.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;3.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;0.1&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 复合肥(硫酸钾复合肥,氮磷钾含量45%) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3610.6 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-8.8&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.2&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 农药(草甘膦,95%原药) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 27092.9 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;1617.9&#x27;, &#x27;reported_change_pct&#x27;: &#x27;6.4&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 天然橡胶(标准胶SCRWF) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 18252.4 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-247.6&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-1.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 纸浆(进口针叶浆) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 4951.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-14.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.3&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 瓦楞纸(AA级120g) | 2026-09-20 / TEN_DAY_SURVEY_PRICE | 3080.5 / 元/吨 | {&#x27;reported_change_absolute&#x27;: &#x27;-28.4&#x27;, &#x27;reported_change_pct&#x27;: &#x27;-0.9&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-
-## cpca
-
-状态：OBSERVATIONS_AVAILABLE
-来源：http://data.cpcadata.com/api/chartlist
-取得：2026-09-29T10:24:10.508445+00:00
-
-| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
-|---|---|---|---|---|
-| 狭义乘用车/产量 | 2026-08 / MONTHLY_CPCA | 234.8322 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-4.311153108462778760477775560&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;222.2072&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;-1.489490927307629218813035590&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 狭义乘用车/批发 | 2026-08 / MONTHLY_CPCA | 235.7542 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-4.982611019241333419851690880&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;225.1529&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;0.364096549775091926800902800&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 狭义乘用车/零售 | 2026-08 / MONTHLY_CPCA | 154.1478 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-23.63159135902532405636727908&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;146.0941&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;-20.75714963726354329107058106&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 狭义乘用车/出口 | 2026-08 / MONTHLY_CPCA | 88.8509 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;77.93632006985206502169859880&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;91.8265&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;89.65912517607597394282126380&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 广义乘用车/产量 | 2026-08 / MONTHLY_CPCA | 236.1357 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-5.240290504353632628688789710&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;223.6461&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;-2.054375769148232656117930950&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 广义乘用车/批发 | 2026-08 / MONTHLY_CPCA | 237.5427 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-5.482990593368605382641520240&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;226.5254&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;-0.2172509212901497938935400000&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 广义乘用车/零售 | 2026-08 / MONTHLY_CPCA | 155.4402 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;-23.84802154043927446031322997&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;147.4223&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;-21.12152082954338730216481717&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| 广义乘用车/出口 | 2026-08 / MONTHLY_CPCA | 89.5312 / 万辆 | {&#x27;computed_yoy_pct&#x27;: &#x27;77.67158681838567692106192720&#x27;} | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;92.3122&#x27;, &#x27;computed_yoy_pct&#x27;: &#x27;90.00769810264411300979346860&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-
 ## ppi
 
 状态：OBSERVATIONS_AVAILABLE
@@ -448,16 +480,6 @@
 |---|---|---|---|---|
 | 工业生产者出厂价格同比 | 2026-08 / MONTHLY_REPORTED_YOY | 3.8 / % | 未提供 | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;3.5&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 
-## logistics
-
-状态：OBSERVATIONS_AVAILABLE
-来源：https://datacenter-web.eastmoney.com/api/data/v1/get
-取得：2026-09-29T10:24:11.749729+00:00
-
-| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
-|---|---|---|---|---|
-| 物流业景气指数 | 2026-08 / MONTHLY_DIFFUSION_INDEX | 50.9 / 指数点 | 未提供 | {&#x27;period&#x27;: &#x27;2026-07&#x27;, &#x27;value&#x27;: &#x27;50.4&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-
 ## tanker
 
 状态：OBSERVATIONS_AVAILABLE
@@ -467,26 +489,6 @@
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
 | 波罗的海原油运价指数BDTI | 2026-09-28 / SOURCE_DATED_FREIGHT_INDEX | 5432 / 指数点 | 未提供 | {&#x27;period&#x27;: &#x27;2026-09-25&#x27;, &#x27;value&#x27;: &#x27;5366&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-
-## memory
-
-状态：OBSERVATIONS_AVAILABLE
-来源：https://www.dramexchange.com/
-取得：2026-09-29T10:24:13.436699+00:00
-
-| 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
-|---|---|---|---|---|
-| DRAM/DDR516Gb(2Gx8)4800/5600 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 57.833 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR516Gb(2Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 25.900 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.78&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR416Gb(2Gx8)3200 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 83.660 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR416Gb(2Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 13.875 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.73&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR48Gb(1Gx8)3200 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 46.321 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.23&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR48Gb(1Gx8)eTT | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 5.900 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.51&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| DRAM/DDR34Gb512Mx81600/1866 | 2026-09-29T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 13.720 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;-0.09&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| NAND/SLC2Gb256MBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 4.345 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.51&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
-| NAND/SLC1Gb128MBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 3.358 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
-| NAND/MLC64Gb8GBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 40.750 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;2.10&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
-| NAND/MLC32Gb4GBx8 | 2026-09-21T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 19.300 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;1.40&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
 
 ## 尚未覆盖
 
