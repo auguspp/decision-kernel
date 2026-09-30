@@ -18,9 +18,10 @@ def inputs():
             odds_watch.load_json(ROOT / "current_state/registry.json"))
 
 
-def expanded(size):
+def expanded(size, *, price_entries=False):
     config, registry = inputs()
-    template = next(c for c in config["active_cases"] if c["ticker"] == "002436.SZ")
+    ticker = "601155.SH" if price_entries else "002436.SZ"
+    template = next(c for c in config["active_cases"] if c["ticker"] == ticker)
     source = next(r for r in registry["references"] if r["id"] == template["registry_reference_id"])
     for n in range(size - len(config["active_cases"])):
         ticker, ref_id = f"{800000 + n:06d}.SZ", f"synthetic-capacity-{n}"
@@ -54,23 +55,25 @@ def reseal(report):
     return report
 
 
-@pytest.mark.parametrize("size", [20, 24])
-def test_wider_mixed_watch_retains_every_case_and_separates_price_gap_from_evidence(size):
-    config, registry = expanded(size)
+@pytest.mark.parametrize("size,price_entries", [(20, False), (24, False), (20, True), (24, True)])
+def test_wider_mixed_watch_retains_every_case_and_separates_price_gap_from_evidence(size, price_entries):
+    config, registry = expanded(size, price_entries=price_entries)
     result, calls = build(config, registry, unavailable="600598.SH")
     odds_watch.validate_report(result)
     watch = result["watch"]
+    price_count = size - 1 if price_entries else 6
     assert len(watch["active_cases"]) == watch["active_case_count"] == size
-    assert len(calls) == 6
-    assert watch["price_evaluated_case_count"] == 5
+    assert len(calls) == price_count
+    assert watch["price_evaluated_case_count"] == price_count - 1
     assert watch["price_gap_count"] == 1
-    assert watch["evidence_only_case_count"] == size - 6
+    assert watch["evidence_only_case_count"] == size - price_count
     assert watch["attention_case_count"] == 0
     assert "002436.SZ" not in calls
-    assert all(not c.startswith("8") for c in calls)
+    if not price_entries:
+        assert all(not c.startswith("8") for c in calls)
     text = odds_watch.render_markdown(result)
     assert f"活跃观察：{size}" in text
-    assert "价格已判断：5" in text
+    assert f"价格已判断：{price_count - 1}" in text
     assert "未自动判断新证据是否满足" in text
 
 
