@@ -29,6 +29,7 @@ jobs:
               "order_by": "change_rate desc",
               "page_no": 1,
               "page_size": 100,
+              "filter": '(ex_id = "XSHE" OR ex_id = "XSHG" OR ex_id = "BJSE") AND (latest != null)',
           }
           url = base + "?" + urllib.parse.urlencode(params)
           requested = dt.datetime.now(dt.timezone.utc)
@@ -59,7 +60,15 @@ jobs:
                   "ts_millis": row.get("ts_millis"),
               }
 
-          ts = [x.get("ts_millis") for x in items if isinstance(x, dict) and isinstance(x.get("ts_millis"), int)]
+          def as_ms(v):
+              if isinstance(v, int):
+                  return v
+              if isinstance(v, str) and v.isdigit():
+                  return int(v)
+              return None
+
+          ts = [as_ms(x.get("ts_millis")) for x in items if isinstance(x, dict)]
+          ts = [x for x in ts if x is not None]
           out = {
               "http_status": status,
               "provider_code": obj.get("code"),
@@ -72,10 +81,11 @@ jobs:
               "total_items": data.get("total_items"),
               "total_pages": data.get("total_pages"),
               "items_len": len(items),
+              "non_null_latest_count": sum(1 for x in items if isinstance(x, dict) and x.get("latest") is not None),
               "item_keys": sorted(items[0].keys()) if items and isinstance(items[0], dict) else [],
               "max_ts_millis_page": max(ts) if ts else None,
               "min_ts_millis_page": min(ts) if ts else None,
-              "top5": [safe(x) for x in items[:5] if isinstance(x, dict)],
+              "top10": [safe(x) for x in items[:10] if isinstance(x, dict)],
               "targets_on_page": [safe(x) for x in items if isinstance(x, dict) and x.get("symbol") in {"600663.SH","601155.SH"}],
           }
           for k in ("max_ts_millis_page","min_ts_millis_page"):
