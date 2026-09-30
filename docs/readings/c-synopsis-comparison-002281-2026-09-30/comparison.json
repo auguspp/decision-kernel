@@ -1,0 +1,36 @@
+{
+  "calculation": "(later - earlier) / earlier; standard-library Decimal",
+  "quantity": "attributed total parent net profit, source unit 亿元",
+  "scope": "arithmetic of two public synopsis forecast sets only",
+  "rows": [
+    {
+      "target_year": 2026,
+      "earlier_attributed_parent_profit_yi": "14.71",
+      "later_attributed_parent_profit_yi": "17.35",
+      "difference_yi": "2.64",
+      "relative_change": "0.1794697484704282800815771583956",
+      "relative_change_percent": "17.946974847042828008157715839560"
+    },
+    {
+      "target_year": 2027,
+      "earlier_attributed_parent_profit_yi": "19.89",
+      "later_attributed_parent_profit_yi": "33.86",
+      "difference_yi": "13.97",
+      "relative_change": "0.7023629964806435394670688788336",
+      "relative_change_percent": "70.236299648064353946706887883360"
+    },
+    {
+      "target_year": 2028,
+      "earlier_attributed_parent_profit_yi": "27.03",
+      "later_attributed_parent_profit_yi": "45.41",
+      "difference_yi": "18.38",
+      "relative_change": "0.6799852016278209396966333703293",
+      "relative_change_percent": "67.998520162782093969663337032930"
+    }
+  ],
+  "currency_code": "NOT_EXPLICIT_IN_SELECTED_FORECAST_SENTENCE",
+  "per_share_comparison": "NOT_PERFORMED; share bases not recovered",
+  "full_model_comparability": "NOT_ESTABLISHED",
+  "historical_available_at": "NOT_ESTABLISHED_BY_CURRENT_RETRIEVAL",
+  "investment_authority": "NONE"
+}
