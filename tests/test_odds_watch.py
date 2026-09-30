@@ -165,7 +165,7 @@ def test_price_below_a_range_does_not_silently_lose_the_original_review_conditio
     config, registry = inputs()
     prices = {
         "600276.SH": "36.00", "002674.SZ": "18", "600598.SH": "12.33",
-        "002050.SZ": "31", "603986.SH": "360", "601155.SH": "20", "601155.SH": "20",
+        "002050.SZ": "31", "603986.SH": "360", "601155.SH": "20",
     }
     report = odds_watch.build_watch(
         config=config, registry=registry, observed_at=NOW,
@@ -181,7 +181,7 @@ def test_one_provider_gap_is_visible_not_quiet_and_inactive_cases_never_fetch_pr
     config, registry = inputs()
     prices = {
         "600276.SH": "42", "002674.SZ": "18", "600598.SH": "12.33",
-        "002050.SZ": "31", "603986.SH": "360",
+        "002050.SZ": "31", "603986.SH": "360", "601155.SH": "20",
     }
     calls: list[str] = []
     report = odds_watch.build_watch(
