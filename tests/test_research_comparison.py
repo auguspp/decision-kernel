@@ -235,3 +235,21 @@ def test_caller_decimal_rounding_and_traps_do_not_change_output():
         assert c.build(v,f)==expected
     assert 'ratio' in c.render(expected)
     v,f=sample();assert 'CNY' in c.render(c.build(v,f))
+
+
+def test_real_comparisons_use_existing_on_demand_owner_without_eager_growth():
+    from decision_kernel.runtime.research_archive_index import split, validate
+    root=Path(__file__).resolve().parents[1]
+    registry=json.loads((root/'current_state/registry.json').read_text())
+    eager,archives,gaps=split(registry)
+    assert not gaps and len(eager['references'])==50
+    for case in ['accelink','xingsen']:
+        row=next(x for x in archives if x['id']==f'c-longitudinal-{case}-20260930')
+        validate(row)
+        assert row['use']=='RETAINED_RESEARCH_DOCUMENT'
+        assert row['archive']=={'format':'RETAINED_FILES'}
+        assert row['body_materialized_in_reading'] is False
+        raw=(root/row['source']['path']).read_bytes()
+        assert state.sha256(raw)==row['source']['sha256']
+        assert state.blob_sha(raw)==row['source']['git_blob']
+        assert row['source']['ref']=='83a40bfb408090015678d98bd192489db9226c3a'
