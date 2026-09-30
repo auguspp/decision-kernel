@@ -92,7 +92,9 @@ def test_account_rejection_cannot_repeat_via_next_ticker(monkeypatch, tmp_path, 
     assert app.main(arguments(tmp_path), stdout=io.StringIO()) == 0
     assert calls == [h.HITHINK_CALENDAR_PATH, h.HITHINK_HISTORY_PATH]
     report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
-    assert report['watch']['price_gap_count'] == 5
+    assert report['watch']['active_case_count'] == 7
+    assert report['watch']['price_gap_count'] == 6
+    assert report['watch']['evidence_only_case_count'] == 1
     assert report['watch']['attention_case_count'] == 0
     assert '完成 0/2' in (tmp_path/'summary.md').read_text()
     assert SECRET not in (tmp_path/'summary.md').read_text()
@@ -120,10 +122,12 @@ def test_unexpected_programming_failure_is_not_renamed_a_price_gap(monkeypatch, 
     assert not (tmp_path/'inbox.html').exists()
 
 
-def test_coverage_does_not_claim_five_prices_checked_when_one_is_missing():
-    report = {'watch': {'active_case_count': 5, 'price_gap_count': 1, 'attention_case_count': 0}}
+def test_coverage_separates_price_checks_from_evidence_only_watch():
+    report = {'watch': {'active_case_count': 7, 'price_gap_count': 1, 'attention_case_count': 0,
+                        'price_evaluated_case_count': 5, 'evidence_only_case_count': 1}}
     text = app.coverage_text(4, 4, [], report)
-    assert '已完成判断 4' in text and '未触界 4，无法判断 1' in text
+    assert '已启用 7（价格条件 6，仅证据重开 1）' in text
+    assert '已完成价格判断 5' in text and '未触界 5，价格无法判断 1' in text
     assert '确认触界 0' in text and '部分可用交付' in text
 
 
@@ -144,8 +148,9 @@ def test_watch_only_production_never_executes_historical_odds(monkeypatch, tmp_p
     monkeypatch.setattr(h, 'urlopen', open_)
     assert app.main(arguments(tmp_path)[2:], stdout=io.StringIO()) == 0
     report = odds_watch.read_and_validate(tmp_path/'watch/watch.json')
-    assert report['watch']['price_gap_count'] == (5 if unavailable else 0)
-    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 5)
+    assert report['watch']['price_gap_count'] == (6 if unavailable else 0)
+    assert report['watch']['evidence_only_case_count'] == 1
+    assert calls.count(h.HITHINK_HISTORY_PATH) == (1 if unavailable else 6)
     text = (tmp_path/'summary.md').read_text()
     assert '旧研究包自动Odds试算未启用' in text
     assert 'Frozen scenarios' not in text and 'ACCEPTABLE_ODDS' not in text
