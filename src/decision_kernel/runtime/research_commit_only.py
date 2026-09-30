@@ -6,12 +6,14 @@ The optional original researcher receipt is retained verbatim, never certified.
 from __future__ import annotations
 
 import argparse
+import ctypes
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
 import os
 from pathlib import Path
 import sys
+import tempfile
 from typing import TextIO
 
 from ..identity import canonical_hash, canonical_json
@@ -71,6 +73,64 @@ def _write(path: Path, data: bytes) -> None:
         os.fsync(stream.fileno())
     if _read(path) != data:
         raise ValueError("retained bytes failed readback")
+
+
+def _rename_new_directory(source: Path, destination: Path) -> None:
+    """Publish a complete local directory without replacing even an empty one.
+
+    Plain POSIX rename can replace an existing empty directory. Linux's
+    RENAME_NOREPLACE makes the existence check part of the atomic rename.
+    Unsupported hosts fail closed; no check-then-rename fallback is used.
+    """
+    if sys.platform == 'win32':
+        os.rename(source, destination)  # Windows rename refuses existing dst.
+        return
+    if not sys.platform.startswith('linux'):
+        raise NotImplementedError('atomic no-replace directory publication is not qualified on this host')
+    libc = ctypes.CDLL(None, use_errno=True)
+    rename = getattr(libc, 'renameat2', None)
+    if rename is None:
+        raise NotImplementedError('renameat2 is required for atomic no-replace publication')
+    rename.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+    rename.restype = ctypes.c_int
+    if rename(-100, os.fsencode(source), -100, os.fsencode(destination), 1) != 0:
+        error = ctypes.get_errno()
+        raise OSError(error, os.strerror(error), str(destination))
+
+
+def _publish_report_files(output: Path, files: dict[str, bytes], *, write_file=None) -> None:
+    """Stage a bounded report pair, then publish it once, create-only.
+
+    Before rename, a caught write failure cleans only our private staging tree;
+    an abrupt kill may leave a private orphan but never a partial output path.
+    Retrying uses fresh staging. After rename the complete result is committed,
+    so the normal existing-output refusal applies. This is not a cross-machine
+    or power-loss transaction, nor a sweeper for other runs' staging directories.
+    """
+    output = Path(output).absolute()
+    _safe_path(output)
+    if output.exists():
+        raise FileExistsError(str(output))
+    if len(files) != 2 or any(not isinstance(name, str) or name in {'', '.', '..'}
+            or '/' in name or '\\' in name or '\x00' in name for name in files):
+        raise ValueError('exactly two plain report filenames required')
+    if any(not isinstance(raw, bytes) or len(raw) > MAX_BYTES for raw in files.values()):
+        raise ValueError('bounded report bytes required')
+    if not output.parent.is_dir():
+        raise FileNotFoundError(str(output.parent))
+    writer = write_file or _write
+    with tempfile.TemporaryDirectory(prefix='.kernel-report-', dir=output.parent) as temporary:
+        staging = Path(temporary) / 'result'
+        staging.mkdir()
+        for name, raw in files.items():
+            writer(staging / name, raw)
+        for name, raw in files.items():
+            if _read(staging / name) != raw:
+                raise ValueError('staged report bytes failed readback')
+        if set(p.name for p in staging.iterdir()) != set(files):
+            raise ValueError('staged report inventory differs')
+        _safe_path(output)
+        _rename_new_directory(staging, output)
 
 
 def _raw(value) -> bytes:

@@ -16,7 +16,7 @@ import re
 
 from ..identity import canonical_hash, canonical_json
 from . import current_state as state
-from .research_commit_only import _read, _write, _safe_path
+from .research_commit_only import _read, _write, _publish_report_files
 
 VERSION = 'reviewed-research-comparison-v0'
 AUTHORITY = {'investment_authority': 'NONE', 'human_acceptance': 'NOT_ESTABLISHED',
@@ -377,6 +377,14 @@ def _forecast_info(o, files):
             metric_ok = False; blockers.append('METRIC_BASIS_UNKNOWN')
     if metric_ok and not fact('metric_basis', {k:mb[k] for k in ('measure', 'attribution', 'adjustment')}):
         metric_ok = False
+    if metric_ok:
+        # The source-bound forecast basis is canonical for this opt-in path.
+        # Outer fields must project it exactly, not supply a second basis.
+        for outer, inner in (('metric', 'measure'), ('scope', 'attribution'), ('restatement', 'adjustment')):
+            if not _known_forecast_text(o[outer]):
+                blockers.append('OBSERVATION_BASIS_UNKNOWN:' + outer)
+            elif o[outer] != mb[inner]:
+                blockers.append('OBSERVATION_BASIS_DIFFERS:' + outer)
     currency_ok = fact('currency', f.get('currency'))
     if f.get('currency') not in {'CNY', 'USD'} or f.get('currency') != o['currency']:
         currency_ok = False; blockers.append('CURRENCY_UNQUALIFIED')
@@ -570,9 +578,10 @@ def main():
         require(sid not in files, 'duplicate source argument')
         files[sid] = _read(Path(path))
     report = read_comparison(a.input, expected_sha256=a.sha256, source_files=files)
-    out = Path(a.output); _safe_path(out); out.mkdir(parents=False, exist_ok=False)
-    _write(out / 'comparison.json', (canonical_json(report) + '\n').encode())
-    _write(out / 'comparison.md', render(report).encode())
+    _publish_report_files(Path(a.output), {
+        'comparison.json': (canonical_json(report) + '\n').encode(),
+        'comparison.md': render(report).encode(),
+    }, write_file=_write)
 
 
 if __name__ == '__main__':

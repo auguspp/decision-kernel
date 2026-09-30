@@ -99,6 +99,35 @@ The target explicitly contains `start`, `end` and `fiscal_basis`, and matches th
 observation's FLOW period. Currency is qualified CNY or USD; supported amount
 scales are normalized with Decimal, not binary floats.
 
+For this opt-in forecast path, the source-bound `forecast.metric_basis` is the
+canonical accounting basis. Before numerical qualification, the observation's
+outer fields must be its exact projection: `metric = measure`,
+`scope = attribution`, and `restatement = adjustment`. They are not independent
+free-text descriptions or an additional unbound accounting basis. Each
+observation must agree internally, and the two canonical bases must also agree
+with each other. Matching outer fields cannot override conflicting inner bases;
+matching inner bases cannot override conflicting or unknown outer fields.
+`OBSERVATION_BASIS_DIFFERS:<field>` and `OBSERVATION_BASIS_UNKNOWN:<field>` block
+arithmetic without changing the separately established institution/report
+relationship.
+
+`forecast.metric_label` retains the independently bound source display label;
+it is not an alias that replaces canonical `measure`. A provider's label does
+not by itself establish a normalized accounting basis. Different bound display
+labels or review notes may describe the same qualified canonical basis, but
+`mapping_note` and `basis_note` cannot authorize a conflicting outer field or
+replace the actual source binding. The synthetic positive fixtures therefore
+project `REPORTED_ESTIMATE` into outer `restatement`, rather than the earlier
+unbound `SYNTHETIC_UNCHANGED_BASIS` description.
+
+Projection validation runs only after the inner basis has passed its existing
+shape, known-value and source-binding checks. An unqualified inner basis already
+blocks arithmetic; the consumer does not infer a replacement basis from outer
+labels or append derivative projection claims to that refusal. This preserves
+the retained real negative reports and their hashes/Markdown. Non-forecast
+inputs keep their existing outer-basis contract and output bytes unchanged;
+historical inputs and archives are not rewritten.
+
 `TOTAL_PARENT_PROFIT` requires `share_basis={"application":"NOT_APPLICABLE"}`.
 It is a total amount, so a missing EPS denominator is not its blocker and a
 per-share unit is invalid. Output is in base currency.
