@@ -1,0 +1,790 @@
+{
+  "version": "reviewed-research-comparison-v0",
+  "input_hash": "aa7a9a9812b68f95e2222f9c3b0d3b35cf5c128804d5e7a38c7d2d41ecb8a78b",
+  "subject": "002281.SZ",
+  "question": "Did reported profit growth translate into cash, and what did the seasonality challenge change?",
+  "predecessor": "https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-accelink-2026-09-30/input.json",
+  "analysis_cutoff": null,
+  "reviewed_at": "2026-09-30T13:06:16.371182+00:00",
+  "sources": [
+    {
+      "id": "calc",
+      "subject": "002281.SZ",
+      "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+      "path": "docs/readings/002281-accelink-full-research-2026-09-17/accelink-calculations.json",
+      "git_blob": "dd7cceacb57af3b0d1927908eb7ca766d65a309b",
+      "sha256": "9f43c735a59a441cb3752bc3bf68b416ce1dded66b94d98cc3612fbc4951eab7",
+      "bytes": 26461,
+      "identity_basis": "Reviewed original archive issuer assignment; exact commit/path and paired report, not automatic content certification",
+      "qualification": "RETAINED_RESEARCH",
+      "published_at": null,
+      "acquired_at": "2026-09-30T11:16:27.093431+00:00"
+    },
+    {
+      "id": "facts",
+      "subject": "002281.SZ",
+      "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+      "path": "docs/readings/002281-accelink-full-research-2026-09-17/financial-evidence.md",
+      "git_blob": "9c57af9baeed861e6dbce80880374139be5f25b9",
+      "sha256": "7456a725b468f3c2b45ea3c4148a38a385fbd8571fb715c18431796ef463e567",
+      "bytes": 11144,
+      "identity_basis": "Reviewed original archive issuer assignment; exact commit/path and paired report, not automatic content certification",
+      "qualification": "RETAINED_RESEARCH",
+      "published_at": null,
+      "acquired_at": "2026-09-30T11:16:27.093431+00:00"
+    },
+    {
+      "id": "review",
+      "subject": "002281.SZ",
+      "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+      "path": "docs/readings/002281-accelink-full-research-2026-09-17/reconciliation.md",
+      "git_blob": "fb8a075386408597fad27451b7eccc54576fa654",
+      "sha256": "37270b10ffadf0c969999b3d3cabd4187edd3d4317e8663ac2e4b2ac4e3d24a3",
+      "bytes": 4641,
+      "identity_basis": "Reviewed original archive issuer assignment; exact commit/path and paired report, not automatic content certification",
+      "qualification": "RETAINED_RESEARCH",
+      "published_at": null,
+      "acquired_at": "2026-09-30T11:16:27.093431+00:00"
+    },
+    {
+      "id": "sources",
+      "subject": "002281.SZ",
+      "ref": "6b45ddeb6db51cb16933f2885a9daee7c3228541",
+      "path": "docs/readings/002281-accelink-full-research-2026-09-17/sources.md",
+      "git_blob": "c182ab527fc67dfe816e29b9379c93bd4e6e4fd9",
+      "sha256": "8a3bfba9fdbb7a1fa5bdd15e5a6a9ea0bd88539c79219279b946b97e34860c5d",
+      "bytes": 6652,
+      "identity_basis": "Reviewed original archive issuer assignment; exact commit/path and paired report, not automatic content certification",
+      "qualification": "RETAINED_RESEARCH",
+      "published_at": null,
+      "acquired_at": "2026-09-30T11:16:27.093431+00:00"
+    }
+  ],
+  "source_gaps": [],
+  "historical_knowledge": "NOT_ESTABLISHED_BY_RETRIEVAL_CLOCK",
+  "observations": [
+    {
+      "id": "profit2025",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12025_cny/parent_profit"
+      },
+      "value": "372368765.82",
+      "metric": "parent_profit",
+      "scope": "PARENT_ATTRIBUTABLE_PROFIT",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2025-01-01",
+        "end": "2025-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "cfo2025",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12025_cny/cfo"
+      },
+      "value": "-107323990.68",
+      "metric": "cfo",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2025-01-01",
+        "end": "2025-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "capex2025",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12025_cny/capex"
+      },
+      "value": "323238311.01",
+      "metric": "capex",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2025-01-01",
+        "end": "2025-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "profit2026",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12026_cny/parent_profit"
+      },
+      "value": "582178717.03",
+      "metric": "parent_profit",
+      "scope": "PARENT_ATTRIBUTABLE_PROFIT",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "cfo2026",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12026_cny/cfo"
+      },
+      "value": "-1236139694.41",
+      "metric": "cfo",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "capex2026",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h12026_cny/capex"
+      },
+      "value": "600397792.73",
+      "metric": "capex",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification"
+    },
+    {
+      "id": "order-coverage",
+      "subject": "002281.SZ",
+      "source_id": "facts",
+      "locator": {
+        "quote": "存货拆解（净额）：原材料8.5791→28.7377亿；在产品16.1849→23.0026亿；库存商品32.6957→38.9555亿。净存货增加33.2360亿，其中原材料增加20.1586亿，占60.65%。所以不能把90.70亿全部称为卖不掉的成品。库存账面原值96.9197亿，跌价准备6.2239亿（年初5.4339亿）；H1计提1.9355亿，转回或转销1.1348亿，其他减少0.0107亿。基于净库存期初期末均值、H1营业成本、181天，库存周转天数约272.4天。公司解释是市场需求备货增加；备货对应的不可撤销订单覆盖、按速率/客户拆分及库龄未得到充分公开核验，列UNKNOWN。"
+      },
+      "value": null,
+      "metric": "irrevocable_order_coverage",
+      "scope": "CONSOLIDATED",
+      "status": "NOT_CHECKED",
+      "type": "CLAIM",
+      "currency": "NONE",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "Declared reviewed metric/window/attribution; retained research extraction, not full primary-source certification",
+      "missing_reason": "Explicitly unverified in predecessor or retained follow-up question"
+    },
+    {
+      "id": "bridge-consolidated_net_profit",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/consolidated_net_profit"
+      },
+      "value": "573018775.66",
+      "metric": "consolidated_net_profit",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-impairment",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/impairment"
+      },
+      "value": "193472983.42",
+      "metric": "impairment",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-depreciation",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/depreciation"
+      },
+      "value": "201169912.73",
+      "metric": "depreciation",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-rou_depreciation",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/rou_depreciation"
+      },
+      "value": "4933746.04",
+      "metric": "rou_depreciation",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-amortization",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/amortization"
+      },
+      "value": "41671167.19",
+      "metric": "amortization",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-long_term_deferred_amort",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/long_term_deferred_amort"
+      },
+      "value": "6953087.14",
+      "metric": "long_term_deferred_amort",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-asset_disposal_gain",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/asset_disposal_gain"
+      },
+      "value": "-64851.29",
+      "metric": "asset_disposal_gain",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-asset_retirement_loss",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/asset_retirement_loss"
+      },
+      "value": "2062185.05",
+      "metric": "asset_retirement_loss",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-financial_adjustment",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/financial_adjustment"
+      },
+      "value": "14089327.6",
+      "metric": "financial_adjustment",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-investment_loss",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/investment_loss"
+      },
+      "value": "7029309.25",
+      "metric": "investment_loss",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-deferred_tax",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/deferred_tax"
+      },
+      "value": "-23786395.17",
+      "metric": "deferred_tax",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-inventory_movement",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/inventory_movement"
+      },
+      "value": "-3402600372.69",
+      "metric": "inventory_movement",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-operating_receivables_movement",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/operating_receivables_movement"
+      },
+      "value": "-1395700628.66",
+      "metric": "operating_receivables_movement",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-operating_payables_movement",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/operating_payables_movement"
+      },
+      "value": "2501221378.43",
+      "metric": "operating_payables_movement",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    },
+    {
+      "id": "bridge-other",
+      "subject": "002281.SZ",
+      "source_id": "calc",
+      "locator": {
+        "pointer": "/inputs/h126_cash_bridge_cny/other"
+      },
+      "value": "40390680.89",
+      "metric": "other",
+      "scope": "CONSOLIDATED",
+      "status": "KNOWN",
+      "type": "NUMBER",
+      "currency": "CNY",
+      "scale": "1",
+      "period": {
+        "kind": "FLOW",
+        "start": "2026-01-01",
+        "end": "2026-06-30"
+      },
+      "restatement": "RETAINED_AS_REPORTED_NOT_NEW_RESTATEMENT_AUDIT",
+      "basis_note": "原合并现金流补充表带符号条目，保留原提取值；不是资产负债表余额差额"
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "profit-change",
+      "kind": "PERIOD_CHANGE",
+      "operation": "difference",
+      "terms": [
+        {
+          "observation": "profit2025",
+          "sign": -1
+        },
+        {
+          "observation": "profit2026",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "Explicit same metric/scope and seasonal window or reviewed signed cash bridge; no annual/H1 mixing",
+      "interpretation": "归母利润改善保留；它与合并CFO的归属不同，不能直接构造精确利润现金转化率。传输贡献了约56%的新增收入，不能把全部改善归给800G/1.6T。",
+      "challenge_disposition": "继承报表增长事实；挑战后限制产品归因与归母/合并口径。并未撤销盈利改善，也未证明收入虚假。",
+      "limitations": "Only stated period and declared scope; no automatic owner earnings or economic adequacy acceptance",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "209809951.21",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    },
+    {
+      "id": "cfo-change",
+      "kind": "PERIOD_CHANGE",
+      "operation": "difference",
+      "terms": [
+        {
+          "observation": "cfo2025",
+          "sign": -1
+        },
+        {
+          "observation": "cfo2026",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "Explicit same metric/scope and seasonal window or reviewed signed cash bridge; no annual/H1 mixing",
+      "interpretation": "仅用季节性解释本期现金恶化已不充分：历史H1并非总为负，TTM和累计现金仍承压。下列同口径合并净利→CFO明细将营运资金吸收与其他调节分开。",
+      "challenge_disposition": "实际推进是补充历史、TTM、库存构成和融资解释；不把2025全年高CFO单点当可持续现金证明。",
+      "limitations": "Only stated period and declared scope; no automatic owner earnings or economic adequacy acceptance",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "-1128815703.73",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    },
+    {
+      "id": "capex-change",
+      "kind": "PERIOD_CHANGE",
+      "operation": "difference",
+      "terms": [
+        {
+          "observation": "capex2025",
+          "sign": -1
+        },
+        {
+          "observation": "capex2026",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "Explicit same metric/scope and seasonal window or reviewed signed cash bridge; no annual/H1 mixing",
+      "interpretation": "现金capex增长是真实现金诊断。维护/成长分拆与对应未来回报尚未充分建立，不能全扣作无价值建设，也不能全加回为股东现金。",
+      "challenge_disposition": "继承原金额；明确用途和资本回报仍需证据，而不是用机械capex差值签经济 adequacy。",
+      "limitations": "Only stated period and declared scope; no automatic owner earnings or economic adequacy acceptance",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "277159481.72",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    },
+    {
+      "id": "h1-cash-after-capex",
+      "kind": "CASH_DIAGNOSTIC",
+      "operation": "signed_sum",
+      "terms": [
+        {
+          "observation": "cfo2026",
+          "sign": 1
+        },
+        {
+          "observation": "capex2026",
+          "sign": -1
+        }
+      ],
+      "compatibility_note": "Explicit same metric/scope and seasonal window or reviewed signed cash bridge; no annual/H1 mixing",
+      "interpretation": "CFO已经包含营运资金变化，减现金capex后为-1836537487.14 CNY；不能再次减库存、应收或预付增量。期末现金上升有筹资净流入3360716492.95 CNY支持，不等于经营自筹。",
+      "challenge_disposition": "挑战后把增长利润、现金消耗和融资支持拆开；不把筹资现金与其对应项目收益重复计入股东价值。",
+      "limitations": "该值不是FCFE。订单覆盖、库龄、期后回款、维护/成长capex和逐期融资路径仍未闭合。",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "-1836537487.14",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    },
+    {
+      "id": "inventory-explanation-gap",
+      "kind": "NOT_CHECKED",
+      "operation": "claim",
+      "terms": [
+        {
+          "observation": "order-coverage",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "Explicit same metric/scope and seasonal window or reviewed signed cash bridge; no annual/H1 mixing",
+      "interpretation": "Inventory composition was examined; order coverage, aging and later collection remain unknown. This is not proof inventory is unsellable or that all stock is finished goods.",
+      "challenge_disposition": "库存增量主要来自原材料，排除“全部是卖不掉成品”的过度解释；但原材料备货也不能证明订单锁定、可交付或可收现。",
+      "limitations": "Only stated period and declared scope; no automatic owner earnings or economic adequacy acceptance",
+      "result": {
+        "status": "NOT_CHECKED",
+        "value": null
+      }
+    },
+    {
+      "id": "consolidated-net-profit-to-cfo",
+      "kind": "CASH_DIAGNOSTIC",
+      "operation": "signed_sum",
+      "terms": [
+        {
+          "observation": "bridge-consolidated_net_profit",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-impairment",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-depreciation",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-rou_depreciation",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-amortization",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-long_term_deferred_amort",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-asset_disposal_gain",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-asset_retirement_loss",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-financial_adjustment",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-investment_loss",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-deferred_tax",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-inventory_movement",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-operating_receivables_movement",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-operating_payables_movement",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-other",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "同一2026H1、CNY、合并口径，采用原补充表带符号调整，不以归母利润或余额差额替代",
+      "interpretation": "合并净利573018775.66 CNY加全部带符号调整，复算原CFO -1236139694.41 CNY；不把归母净利填入这条合并桥。",
+      "challenge_disposition": "复用原已留存明细，现由通用消费者重算并解释；不是新取得财报或新发生经营事件",
+      "limitations": "机械勾稽不证明现金持久性、订单或融资可行性；严禁从CFO出发再重复扣营运资金",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "-1236139694.41",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    },
+    {
+      "id": "net-working-capital-adjustment",
+      "kind": "CASH_DIAGNOSTIC",
+      "operation": "signed_sum",
+      "terms": [
+        {
+          "observation": "bridge-inventory_movement",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-operating_receivables_movement",
+          "sign": 1
+        },
+        {
+          "observation": "bridge-operating_payables_movement",
+          "sign": 1
+        }
+      ],
+      "compatibility_note": "同一2026H1、CNY、合并口径，采用原补充表带符号调整，不以归母利润或余额差额替代",
+      "interpretation": "三项营运资金现金调整合计-2297079622.92 CNY，是原合并净利→CFO桥内部构成，不是应在CFO之后再扣的负担。",
+      "challenge_disposition": "复用原已留存明细，现由通用消费者重算并解释；不是新取得财报或新发生经营事件",
+      "limitations": "机械勾稽不证明现金持久性、订单或融资可行性；严禁从CFO出发再重复扣营运资金",
+      "result": {
+        "status": "ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE",
+        "value": "-2297079622.92",
+        "unit": "CNY",
+        "precision": "DECIMAL_50_DIGITS"
+      }
+    }
+  ],
+  "remaining_evidence": "Original issuer PDF byte custody and full-note audit remain incomplete; current Sina mirrored filing corroboration is separate. No complete financing/owner-cash model, Human acceptance or proof of improved research quality.",
+  "authority": {
+    "investment_authority": "NONE",
+    "human_acceptance": "NOT_ESTABLISHED",
+    "network_requests": 0,
+    "model_calls": 0,
+    "research_committed": false,
+    "economic_adequacy": "NOT_CERTIFIED_BY_ARITHMETIC"
+  },
+  "qualification": "REVIEWED_DECLARATIONS_AND_BYTE_ARITHMETIC_NOT_INDEPENDENT_ECONOMIC_TRUTH",
+  "report_hash": "29477b7be9bbfe752cfabc86acb7fed66a93f03adc2e13c16e8b182ae26b70d6"
+}
