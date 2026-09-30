@@ -356,8 +356,8 @@ def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_pat
         assert not any(call[0] == 'get' for call in api.calls)  # No Git object read before binding.
         api.record['source']['ref'] = fixture['A']  # Simulated native custody, not a live Git commit.
         prefix = str(Path(api.record['source']['path']).parent)
-        for row in api.tree['tree']:
-            row['path'] = prefix + '/' + Path(row['path']).name
+        for tree_entry in api.tree['tree']:
+            tree_entry['path'] = prefix + '/' + Path(tree_entry['path']).name
         api.refresh()
         receipt = archive.recover_archive(api, reading_commit=fixture['R'],
             record_id=record['id'], output=tmp_path/f'recovered-{index}')
