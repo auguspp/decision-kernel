@@ -1,0 +1,81 @@
+{
+  "announcement_id": "1225512314",
+  "directory_requests": 0,
+  "finished_at": "2026-09-30T07:49:30.931963+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36685884532",
+    "GITHUB_SHA": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "outcomes": [
+    {
+      "announcement": {
+        "announcement_id": "1225512314",
+        "announcement_type": null,
+        "org_id": "GD012027",
+        "source_announcement_time": "2026-08-27T00:00:00+08:00",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512314.PDF",
+        "stock_code": "601155",
+        "title": "新城控股2026年半年度报告摘要"
+      },
+      "body_reading": "NOT_PERFORMED",
+      "code": "601155.SH",
+      "directory_source": {
+        "bytes": 4774,
+        "git_blob": "211039b2dbea27a754185787aeda6db2c0d97911",
+        "path": "docs/readings/b2-announcements-36675839340-1/601155.SH/receipt.json",
+        "ref": "d13143a92b4c25bb38c9a46fc836309dba2af367",
+        "sha256": "671247e0999d41e4539b66ba7d7d72184a8fbb6179c70dbb268361f10925fe51"
+      },
+      "event_dates": "NOT_EXTRACTED_FROM_BODY",
+      "extraction": {
+        "bytes": 6616,
+        "extracted_char_count": 2936,
+        "page_count": 5,
+        "path": "extraction.json",
+        "pdf_sha256": "f2b6c09bbcb341039461bfa0be9b59a798a37b8740472585f7cdaed10f25d9ec",
+        "representation": "ORIGINAL_PYPDF_NOT_TABLE_OR_EVENT_TRUTH",
+        "retained": true,
+        "sha256": "df51a58f25c4c92c2f46b901229ed2a53304708cdfcdffa796dd2e8b3df9fcf2",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512314.PDF",
+        "status": "EXTRACTED",
+        "text_sha256": "e21c7fbb4e19198fb2b2c78b1ed5f2f1425d3bef3d92bf9b1f02ea6461756566"
+      },
+      "failure": null,
+      "finished_at": "2026-09-30T07:49:30.931858+00:00",
+      "getter_return": {
+        "body_complete": true,
+        "bytes": 152231,
+        "http_status_basis": "EXISTING_GETTER_QUALIFICATION_NOT_RECORDED_HEADERS",
+        "sha256": "f2b6c09bbcb341039461bfa0be9b59a798a37b8740472585f7cdaed10f25d9ec"
+      },
+      "http_status": 200,
+      "pdf": {
+        "body_complete": true,
+        "bytes": 152231,
+        "capture_manifest_sha256": "9c2e48f364cb2a7520b0518d183cf55cd2f5669c5fa105eef99b8f7144411b8e",
+        "original_capture_path": "primary-bodies/objects/f2b6c09bbcb341039461bfa0be9b59a798a37b8740472585f7cdaed10f25d9ec.pdf",
+        "path": "source.pdf",
+        "sha256": "f2b6c09bbcb341039461bfa0be9b59a798a37b8740472585f7cdaed10f25d9ec",
+        "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512314.PDF"
+      },
+      "pdf_getter_invocations": 1,
+      "receipt": "601155.SH/receipt.json",
+      "received_at": "2026-09-30T07:49:30.568387+00:00",
+      "reference_id": "b2-announcements-36675839340-1-601155-SH",
+      "registered_use": "NAVIGATION_ONLY",
+      "requested_at": "2026-09-30T07:49:26.991904+00:00",
+      "source_status": "EXACT_SAVED_DIRECTORY_LOCATED",
+      "status": "PDF_RETAINED_TEXT_EXTRACTED"
+    }
+  ],
+  "reading_commit": "ae482e03f27c72dc1834f988f2e8097397830e27",
+  "research_executed": false,
+  "source_kind": "pdf",
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}
