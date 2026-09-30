@@ -15,7 +15,6 @@
 - `sources.md` — material source register and source-qualification limits.
 - `calculations.json` — deterministic inputs, worlds and breakpoints.
 - `odds.md` / `odds.json` — conditional return surface and hurdle breakpoints.
-- `predecessor-r2.md` — prior retained local draft preserved as predecessor evidence; superseded where the final report explicitly corrects it.
 - `manifest.json` — file hashes and archive metadata.
 
 ## Key version bridge
