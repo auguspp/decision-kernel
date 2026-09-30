@@ -51,16 +51,20 @@ def test_config_is_bounded_registry_backed_and_has_no_global_approaching_thresho
     config, registry = inputs()
     odds_watch.validate_config(config, registry)
     assert config["approaching_policy"] == odds_watch.NO_PROXIMITY_POLICY
-    assert len(config["active_cases"]) == 5 <= odds_watch.MAX_ACTIVE_CASES
+    assert odds_watch.MAX_ACTIVE_CASES == 24
+    assert len(config["active_cases"]) == 7 <= odds_watch.MAX_ACTIVE_CASES
     assert {row["ticker"] for row in config["active_cases"]} == {
-        "600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"
+        "600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "002436.SZ", "601155.SH"
     }
     assert {row["ticker"] for row in config["inactive_cases"]} == {
         "600184.SH", "600967.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"
     }
     assert config["authority"] == odds_watch.AUTHORITY
     text = CONFIG.read_text(encoding="utf-8")
-    assert "5%" not in text and "10%" not in text and "APPROACHING_REVIEW" not in text
+    assert "APPROACHING_REVIEW" not in text
+    assert {row["odds_level"] for row in config["active_cases"]} >= {
+        "L0_NO_ODDS", "L2_PROVISIONAL_ORDINAL", "L3_HUMAN_ACCEPTED_ODDS", "L4_HUMAN_DECISION_BOUNDARY"
+    }
 
 
 def test_active_boundaries_are_tied_to_exact_retained_human_wording_not_model_thresholds():
@@ -93,7 +97,7 @@ def test_above_all_boundaries_reports_factual_next_distance_without_waking_human
     config, registry = inputs()
     prices = {
         "600276.SH": "42.50", "002674.SZ": "18.00", "600598.SH": "12.33",
-        "002050.SZ": "31.00", "603986.SH": "360.00",
+        "002050.SZ": "31.00", "603986.SH": "360.00", "601155.SH": "20.00",
     }
     calls: list[str] = []
     report = odds_watch.build_watch(
@@ -104,11 +108,14 @@ def test_above_all_boundaries_reports_factual_next_distance_without_waking_human
     rows = by_ticker(report)
     assert report["watch"]["attention_case_count"] == 0
     assert report["watch"]["price_gap_count"] == 0
-    assert all(row["status"] == "ACTIVE_ODDS_WATCH" for row in rows.values())
+    assert rows["002436.SZ"]["status"] == "EVIDENCE_REOPEN_WATCH"
+    assert rows["002436.SZ"]["price_fetch_performed"] is False
+    assert all(rows[t]["status"] == "ACTIVE_ODDS_WATCH" for t in (
+        "600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "601155.SH"))
     assert rows["600276.SH"]["next_unreached_condition"]["upper_price"] == "39.6"
     assert rows["600276.SH"]["next_unreached_condition"]["signed_distance_to_upper_cny"] == "2.90"
     assert rows["603986.SH"]["next_unreached_condition"]["upper_price"] == "350"
-    assert calls == ["600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"]
+    assert calls == ["600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "601155.SH"]
     assert all(row["investment_authority"] == "NONE" and row["action_authority"] == "NONE" for row in rows.values())
 
 
@@ -116,7 +123,7 @@ def test_crossed_boundaries_wake_review_but_never_create_action_and_keep_next_de
     config, registry = inputs()
     prices = {
         "600276.SH": "39.00", "002674.SZ": "13.20", "600598.SH": "9.50",
-        "002050.SZ": "29.50", "603986.SH": "330.00",
+        "002050.SZ": "29.50", "603986.SH": "330.00", "601155.SH": "20.00",
     }
     report = odds_watch.build_watch(
         config=config, registry=registry, observed_at=NOW,
@@ -124,7 +131,10 @@ def test_crossed_boundaries_wake_review_but_never_create_action_and_keep_next_de
     )
     rows = by_ticker(report)
     assert report["watch"]["attention_case_count"] == 5
-    assert all(row["status"] == "NEEDS_REVIEW_NOW" for row in rows.values())
+    assert rows["002436.SZ"]["status"] == "EVIDENCE_REOPEN_WATCH"
+    assert rows["601155.SH"]["status"] == "ACTIVE_ODDS_WATCH"
+    assert all(rows[t]["status"] == "NEEDS_REVIEW_NOW" for t in (
+        "600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"))
 
     hengrui = rows["600276.SH"]
     assert [item["kind"] for item in hengrui["triggered_conditions"]] == ["RE_UNDERWRITE"]
@@ -155,7 +165,7 @@ def test_price_below_a_range_does_not_silently_lose_the_original_review_conditio
     config, registry = inputs()
     prices = {
         "600276.SH": "36.00", "002674.SZ": "18", "600598.SH": "12.33",
-        "002050.SZ": "31", "603986.SH": "360",
+        "002050.SZ": "31", "603986.SH": "360", "601155.SH": "20", "601155.SH": "20",
     }
     report = odds_watch.build_watch(
         config=config, registry=registry, observed_at=NOW,
@@ -183,14 +193,15 @@ def test_one_provider_gap_is_visible_not_quiet_and_inactive_cases_never_fetch_pr
     assert rows["600598.SH"]["price"] is None
     assert rows["600598.SH"]["triggered_conditions"] == []
     assert report["watch"]["price_gap_count"] == 1
-    assert set(calls) == {"600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"}
+    assert set(calls) == {"600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "601155.SH"}
+    assert "002436.SZ" not in calls
     assert not ({row["ticker"] for row in report["watch"]["inactive_cases"]} & set(calls))
     assert all(row["price_fetch_performed"] is False for row in report["watch"]["inactive_cases"])
 
 
 def test_watch_report_is_sealed_and_roundtrips_without_binary_float_or_authority(tmp_path):
     config, registry = inputs()
-    prices = {ticker: "100" for ticker in ("600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH")}
+    prices = {ticker: "100" for ticker in ("600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "601155.SH")}
     report = odds_watch.build_watch(
         config=config, registry=registry, observed_at=NOW,
         fetch_market=fetcher(prices, []),
@@ -211,3 +222,34 @@ def test_invalid_registry_use_cannot_activate_a_price_watch():
     target["use"] = "RETAINED_ODDS_DOCUMENT"
     with pytest.raises(ValueError, match="Human checkpoint"):
         odds_watch.validate_config(config, broken)
+
+
+def test_evidence_only_and_provisional_levels_are_visible_without_transferring_human_acceptance():
+    config, registry = inputs()
+    prices = {
+        "600276.SH": "100", "002674.SZ": "100", "600598.SH": "100",
+        "002050.SZ": "100", "603986.SH": "100", "601155.SH": "13.01",
+    }
+    calls: list[str] = []
+    report = odds_watch.build_watch(
+        config=config, registry=registry, observed_at=NOW,
+        fetch_market=fetcher(prices, calls),
+    )
+    rows = by_ticker(report)
+    xingsen = rows["002436.SZ"]
+    assert xingsen["odds_level"] == "L0_NO_ODDS"
+    assert xingsen["boundary_authority"] == "NONE"
+    assert xingsen["watch_mode"] == "EVIDENCE_REOPEN"
+    assert xingsen["status"] == "EVIDENCE_REOPEN_WATCH"
+    assert xingsen["price_fetch_performed"] is False
+    assert "002436.SZ" not in calls
+
+    xincheng = rows["601155.SH"]
+    assert xincheng["odds_level"] == "L2_PROVISIONAL_ORDINAL"
+    assert xincheng["boundary_authority"] == "ANALYST_DERIVED"
+    assert xincheng["watch_mode"] == "PRICE_CONDITION"
+    assert xincheng["status"] == "NEEDS_REVIEW_NOW"
+    assert [c["upper_price"] for c in xincheng["triggered_conditions"]] == ["14.77"]
+    assert xincheng["next_unreached_condition"]["upper_price"] == "11.26"
+    assert xincheng["investment_authority"] == "NONE"
+    assert report["watch"]["evidence_only_case_count"] == 1

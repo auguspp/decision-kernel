@@ -164,25 +164,31 @@ function watchCard() {
   const info = watchSummary(reading.payload);
   if (!info.available) return gap('价格复核', '没有可读的原 Watch 明细，不能判断是否触界。');
   const {counts} = info;
-  const node = card('已登记的价格复核', '以下为原观察结果，不是当前实时行情；触界仍须核对业务前提。');
-  node.append(el('p', `已启用 ${counts.enabled} · 已完成判断 ${counts.evaluated} · 原观察触界 ${counts.triggered} · 无法判断 ${counts.unknown}`, 'metric'));
+  const node = card('已登记的 Odds / Watch', 'Watch 是持续观察层，不等于 Human 接受名单；Odds层级和边界来源分别显示。');
+  node.append(el('p', `已启用 ${counts.enabled} · 价格已判断 ${counts.evaluated} · 仅证据重开 ${counts.evidenceOnly} · 原观察触界 ${counts.triggered} · 无法判断 ${counts.unknown}`, 'metric'));
   if (info.countMismatch) node.append(el('p', '原声明数量与可读明细不一致；覆盖待核对。', 'gap'));
-  const order = {TRIGGERED: 0, UNKNOWN: 1, NOT_TRIGGERED: 2, INACTIVE: 3};
-  const states = {TRIGGERED: '原观察已触界，待复核', UNKNOWN: '无法判断', NOT_TRIGGERED: '原观察未触界', INACTIVE: '未启用或不适用'};
+  const order = {TRIGGERED: 0, UNKNOWN: 1, EVIDENCE_ONLY: 2, NOT_TRIGGERED: 3, INACTIVE: 4};
+  const states = {TRIGGERED: '原观察已触界，待复核', UNKNOWN: '无法判断', EVIDENCE_ONLY: '仅证据／重开观察', NOT_TRIGGERED: '原观察未触界', INACTIVE: '未启用或不适用'};
   for (const {item, state} of [...info.rows].sort((a, b) => order[a.state] - order[b.state])) {
     const line = el('details'); line.open = state === 'TRIGGERED' || state === 'UNKNOWN';
     line.append(el('summary', `${item.company_name || item.ticker || '对象未知'} · ${states[state]}`));
-    line.append(el('p', `原价格：${displayDecimal(item.price)} ${item.currency || ''}；时点：${localTime(item.market_timestamp)}`));
-    if (item.price_gap) line.append(el('p', `价格缺口：${item.price_gap}`, 'gap'));
+    line.append(el('p', `Odds层级：${item.odds_level || 'LEGACY_UNSPECIFIED'}；边界权限：${item.boundary_authority || 'LEGACY_UNSPECIFIED'}`, 'small'));
+    if (state !== 'EVIDENCE_ONLY') line.append(el('p', `原价格：${displayDecimal(item.price)} ${item.currency || ''}；时点：${localTime(item.market_timestamp)}`));
+    else line.append(el('p', '当前没有可用价格边界，因此不做价格触界判断。'));
+    if (item.price_gap) line.append(el('p', `价格缺口：${typeof item.price_gap === 'string' ? item.price_gap : value(item.price_gap)}`, 'gap'));
     line.append(el('p', priceCondition(item)));
     if (item.ticker) line.append(button('查看这家公司的已有研究', () => goCompany(item.ticker)));
-    line.append(folded('原条件名称与时点', value({condition: item.next_unreached_condition, market_timestamp: item.market_timestamp})));
+    line.append(folded('原条件名称与时点', value({condition: item.next_unreached_condition, market_timestamp: item.market_timestamp,
+      odds_level: item.odds_level, boundary_authority: item.boundary_authority, watch_mode: item.watch_mode})));
     if (state === 'TRIGGERED') line.append(el('pre', value(item.triggered_conditions)));
     line.append(el('p', item.prerequisite || '业务前提未提供', 'small'));
     // Original Human checkpoint is an explicit source, not a page-created decision.
-    if (item.source?.source_ref && item.source?.source_path) {
-      try { line.append(link('查看原条件与回应', fileUrl(item.source.source_ref, item.source.source_path))); }
-      catch { line.append(el('p', '原条件定位不合格', 'gap')); }
+    if (item.boundary_source?.source_ref && item.boundary_source?.source_path) {
+      try { line.append(link('查看价格边界原件', fileUrl(item.boundary_source.source_ref, item.boundary_source.source_path))); }
+      catch { line.append(el('p', '价格边界原件定位不合格', 'gap')); }
+    } else if (item.source?.source_ref && item.source?.source_path) {
+      try { line.append(link('查看Watch依据', fileUrl(item.source.source_ref, item.source.source_path))); }
+      catch { line.append(el('p', 'Watch依据定位不合格', 'gap')); }
     }
     node.append(line);
   }
