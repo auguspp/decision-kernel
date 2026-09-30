@@ -273,7 +273,7 @@
 
 - 601155-unit-correction-notice-20260930：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：先看Odds Book中新城601155单位勘误摘要，再按精确链接恢复四文件后继；这份共用导航正文不是完整纠错档案已读取。金额/股数同时归一，不改每股结果和原接受边界。
-  - [原保存材料](../../sources/git/475f0efa2a7a37535d41170ef7c148884ff53508/ODDS-BOOK.md)
+  - [原保存材料](../../sources/git/98c1ccbf5ef070e3053bfdb7655aea20c1f9f1cc/ODDS-BOOK.md)
 - [按需恢复：601155-xincheng-policy-full-20260930](https://github.com/auguspp/decision-kernel/blob/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-appointments-36658570687-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6b9f1b4624cf0bab09cf3ea11b545d658da58e46/docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-announcements-36671452199-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6e8d82ddd59e6354311541e590aae17f7d9fe939/docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
