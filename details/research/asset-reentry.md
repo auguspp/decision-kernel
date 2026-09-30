@@ -257,6 +257,7 @@
 - [按需恢复：c-synopsis-comparison-002281-20260930](https://github.com/auguspp/decision-kernel/blob/2a264469fbd0017b46dffe52ceeb6e4b3587bf53/docs/readings/c-synopsis-comparison-002281-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-longitudinal-accelink-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-accelink-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-cash-bridge-semantic-002281-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-reviewed-forecast-002281-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 
 ## 300183.SZ
 
@@ -366,6 +367,7 @@
 - [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-longitudinal-xingsen-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-cash-bridge-semantic-002436-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 
 ## 688337.SH
 
