@@ -262,17 +262,19 @@ def test_workflow_requires_selection_and_period_keeps_gates_and_uses_env_not_she
     w = yaml.load(source, Loader=yaml.BaseLoader)
     assert set(w['on']) == {'workflow_dispatch'}
     inputs = w['on']['workflow_dispatch']['inputs']
-    assert set(inputs) == {'code-sha','reference-ids','report-period','source-kind','start-date','end-date'}
+    assert set(inputs) == {'code-sha','reference-ids','report-period','source-kind','start-date','end-date','announcement-id','reading-commit'}
     assert all(inputs[k]['required'] == 'true' and 'default' not in inputs[k] for k in ('code-sha','reference-ids'))
     assert inputs['source-kind']['default'] == 'appointments'
-    assert inputs['source-kind']['options'] == ['appointments','announcements']
-    assert all(inputs[k]['required'] == 'false' for k in ('report-period','start-date','end-date'))
+    assert inputs['source-kind']['options'] == ['appointments','announcements','pdf']
+    assert all(inputs[k]['required'] == 'false' for k in ('report-period','start-date','end-date','announcement-id','reading-commit'))
     capture = next(s for s in w['jobs']['capture']['steps'] if s.get('id') == 'capture')
-    assert capture['env'] == {'B2_REFERENCE_IDS':'${{ inputs.reference-ids }}', 'B2_REPORT_PERIOD':'${{ inputs.report-period }}',
+    assert capture['env'] == {'GH_TOKEN':"${{ inputs.source-kind == 'pdf' && github.token || '' }}",
+        'B2_ANNOUNCEMENT_ID':'${{ inputs.announcement-id }}','B2_READING_COMMIT':'${{ inputs.reading-commit }}','B2_REFERENCE_IDS':'${{ inputs.reference-ids }}', 'B2_REPORT_PERIOD':'${{ inputs.report-period }}',
         'B2_SOURCE_KIND':'${{ inputs.source-kind }}', 'B2_START_DATE':'${{ inputs.start-date }}', 'B2_END_DATE':'${{ inputs.end-date }}'}
     assert '${{' not in capture['run'] and '--reference-ids "$B2_REFERENCE_IDS"' in capture['run']
     for flag, variable in [('report-period','B2_REPORT_PERIOD'),('source-kind','B2_SOURCE_KIND'),
-                           ('start-date','B2_START_DATE'),('end-date','B2_END_DATE')]:
+                           ('start-date','B2_START_DATE'),('end-date','B2_END_DATE'),
+                           ('announcement-id','B2_ANNOUNCEMENT_ID'),('reading-commit','B2_READING_COMMIT')]:
         assert f'--{flag} "${variable}"' in capture['run']
     assert 'contents: write' not in source and 'actions: write' not in source
     assert "github.run_attempt == 1" in source and "github.actor == 'auguspp'" in source
@@ -482,9 +484,9 @@ def test_announcement_page_budget_preserves_partial_raw_and_does_not_infer_zero(
     request,calls=announcement_client(total=95)
     result=run_announcements(tmp_path,request,ids=['selected-0'])
     assert len(calls)==4 and [f['pageNum'] for k,f in calls if k=='announcements']==['1','2','3']
-    item=result['outcomes'][0]
-    assert item['status']=='DIRECTORY_PAGE_LIMIT_RAW_RETAINED' and item['announcements'] is None
     assert result['status']=='CAPTURED_WITH_GAPS'
+    assert result['outcomes'][0]['status']=='DIRECTORY_PAGE_LIMIT_RAW_RETAINED'
+    assert result['outcomes'][0]['announcements'] is None
     assert len(json.loads((tmp_path/'out/600001.SH/query-4.body').read_bytes())['announcements'])==30
     assert '公告数量未知，不记零' in (tmp_path/'out/600001.SH/summary.md').read_text()
 
@@ -580,3 +582,214 @@ def test_cli_source_modes_require_their_own_inputs_before_execution(tmp_path,mon
         monkeypatch.setattr(sys,'argv',base+suffix)
         with pytest.raises(SystemExit) as error:b2['main']()
         assert error.value.code==2 and not (tmp_path/'out').exists()
+
+
+# Single PDF mode: exact saved Git input, synthetic byte transport, original readers.
+def pdf_api(code='600001.SH', *, saved=None):
+    from decision_kernel.runtime import current_state as model, research_archive_index as index
+    fixture = runpy.run_path(str(ROOT/'tests/test_research_archive.py'))
+    base = f'docs/readings/b2-announcements-123-1/{code}'
+    row = {'announcement_id':'1234', 'stock_code':code[:6], 'org_id':'SYNTHETIC',
+           'title':'SYNTHETIC report summary', 'announcement_type':None,
+           'source_announcement_time':'2098-12-31T15:00:00+08:00',
+           'source_locator':'https://static.cninfo.com.cn/finalpage/2098-12-31/1234.PDF'}
+    prior = {'outcome':{'code':code, 'status':'CAPTURED_REQUIRES_SOURCE_REVIEW', 'announcements':[row]}}
+    files = {'summary.md':b'# SYNTHETIC saved directory\n', 'receipt.json':b2['encoded'](prior)}
+    record = {'id':'pdf-input', 'case':code, 'use':'NAVIGATION_ONLY', 'purpose_note':'SYNTHETIC source only',
+        'read_policy':'ON_DEMAND_ARCHIVE', 'archive':{'format':'RETAINED_FILES'},
+        'archive_source':{'path':base+'/summary.md', 'ref':fixture['A'],
+            'git_blob':model.blob_sha(files['summary.md']), 'bytes':len(files['summary.md']),
+            'sha256':model.sha256(files['summary.md'])}}
+    if saved is not None:
+        record, files = saved
+        base = record['archive_source']['path'].rsplit('/',1)[0]
+    class InputAPI(fixture['API']):
+        def file(self, path, ref):
+            if ref == fixture['A']:
+                self.calls.append(('file',path,ref))
+                assert path.startswith(base+'/')
+                return self.files[path[len(base)+1:]]
+            return super().file(path, ref)
+    api=InputAPI(files=files,entry='summary.md')
+    api.record=deepcopy(record)
+    api.registry={'schema_version':1,
+        'semantics':'EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE',
+        'references':[api.record]}
+    api.registry_raw=model.json_bytes(api.registry)
+    api.reg_source.update(bytes=len(api.registry_raw),sha256=model.sha256(api.registry_raw),
+        git_blob=model.blob_sha(api.registry_raw),
+        read_path='sources/git/'+model.blob_sha(api.registry_raw)+'/registry.json')
+    api.reading=model.assemble(code_commit=fixture['M'],checked_at='2026-09-15T00:01:00+00:00',
+        check_started_at='2026-09-15T00:00:00+00:00',lanes={},capabilities=[],refresh_identity={},
+        research={'registry':api.reg_source,'records':[],'on_demand_archives':[index.project(record)],
+                  'handoffs':{'active':[]},'gaps':[]})
+    api.tree['tree']=[{**r,'path':base+'/'+r['path'].rsplit('/',1)[-1]} for r in api.tree['tree']]
+    return api, fixture
+
+
+def synthetic_pdf(*, text=True):
+    from io import BytesIO
+    from pypdf import PdfWriter
+    from pypdf.generic import DictionaryObject, NameObject, DecodedStreamObject
+    writer=PdfWriter(); page=writer.add_blank_page(width=300,height=300)
+    if text:
+        font=DictionaryObject({NameObject('/Type'):NameObject('/Font'),NameObject('/Subtype'):NameObject('/Type1'),
+                               NameObject('/BaseFont'):NameObject('/Helvetica')})
+        page[NameObject('/Resources')]=DictionaryObject({NameObject('/Font'):DictionaryObject({NameObject('/F1'):font})})
+        stream=DecodedStreamObject();stream.set_data(b'BT /F1 12 Tf 10 100 Td (SYNTHETIC REPORT SUMMARY) Tj ET')
+        page[NameObject('/Contents')]=stream
+    out=BytesIO();writer.write(out);return out.getvalue()
+
+
+def run_pdf(tmp_path, api, fixture, fetch, **kwargs):
+    return b2['capture_pdf'](tmp_path/'pdf-out',{**IDENTITY,'GITHUB_SHA':fixture['M']},
+        reference_ids=['pdf-input'],announcement_id='1234',reading_commit=fixture['R'],api=api,
+        registry_raw=api.registry_raw,fetch_pdf=fetch,clock=lambda:NOW,**kwargs)
+
+
+@pytest.mark.parametrize('code',['600001.SH','300001.SZ'])
+def test_single_pdf_reuses_original_getter_retainer_extractor_and_archive_without_directory_http(tmp_path,monkeypatch,code):
+    import socket
+    from decision_kernel.runtime import cninfo_http as cninfo, research_archive as archive
+    from decision_kernel.adapters.pdf_text import extract_pdf_text
+    monkeypatch.setattr(socket.socket,'connect',lambda *a,**k:(_ for _ in ()).throw(AssertionError('no live HTTP')))
+    api,fixture=pdf_api(code); raw=synthetic_pdf(); calls=[]
+    def fetch(**kw):
+        calls.append(kw)
+        assert set(kw)=={'source_locator','max_bytes'} and kw['max_bytes']==524288
+        return cninfo.fetch_cninfo_pdf_bytes(**kw,get_bytes=lambda url:raw)
+    def extract(body,**kw):
+        assert body==raw and (tmp_path/'pdf-out'/code/'source.pdf').read_bytes()==raw
+        assert (tmp_path/'pdf-out/primary-bodies/objects'/f'{sha256(raw).hexdigest()}.pdf').read_bytes()==raw
+        assert (tmp_path/'pdf-out'/code/'capture-manifest.jsonl').read_bytes()==(tmp_path/'pdf-out/primary-bodies/manifest.jsonl').read_bytes()
+        assert kw=={'max_pdf_bytes':524288,'max_extracted_chars':524288}
+        return extract_pdf_text(body,**kw)
+    result=run_pdf(tmp_path,api,fixture,fetch,extract=extract)
+    assert len(calls)==1 and len(api.calls)==4 and result['directory_requests']==0
+    assert result['status']=='CAPTURED_REQUIRES_SOURCE_REVIEW'
+    item=result['outcomes'][0]
+    assert item['pdf_getter_invocations']==1 and item['body_reading']=='NOT_PERFORMED'
+    assert item['extraction']['status']=='EXTRACTED' and item['extraction']['retained'] is True
+    assert item['pdf']['sha256']==sha256(raw).hexdigest() and item['pdf']['body_complete'] is True
+    assert not (tmp_path/'pdf-out/primary-bodies/capture-summary.json').exists()
+    target=tmp_path/'pdf-out'/code
+    text=json.loads((target/'extraction.json').read_bytes())
+    assert 'SYNTHETIC REPORT SUMMARY' in text['pages'][0]['text']
+    proposal=json.loads((tmp_path/'pdf-out/registration-proposal.json').read_bytes())
+    record=proposal['references'][0]
+    assert record['archive_source']['ref'] is None and record['use']=='NAVIGATION_ONLY'
+    record['archive_source']['ref']=fixture['A']
+    files={p.name:p.read_bytes() for p in target.iterdir()}
+    assert len(files)==7 and all(len(v)<=archive.MAX_FILE_BYTES for v in files.values())
+    out_api,_=pdf_api(code,saved=(record,files))
+    restored=archive.recover_archive(out_api,reading_commit=fixture['R'],record_id=record['id'],output=tmp_path/'restored')
+    assert restored['qualification']=='RETAINED_FILES_NOT_REVALIDATED_RESEARCH'
+    assert {p.name:p.read_bytes() for p in (tmp_path/'restored/bundle').iterdir()}==files
+    with pytest.raises(FileExistsError):run_pdf(tmp_path,api,fixture,fetch)
+    assert len(calls)==1
+
+
+@pytest.mark.parametrize('failure',['http','transport','limit','container'])
+def test_single_pdf_source_failure_is_retained_without_retry_partial_pdf_or_extraction(tmp_path,failure):
+    from decision_kernel.runtime import cninfo_http as cninfo
+    api,fixture=pdf_api(); calls=[]
+    errors={'http':cninfo.CninfoPdfHttpError('sensitive-not-for-retention',http_status=403),
+            'transport':cninfo.CninfoPdfTransportError('sensitive-not-for-retention'),
+            'container':cninfo.CninfoPdfContainerError('sensitive-not-for-retention')}
+    def fetch(**kw):
+        calls.append(kw);assert kw['max_bytes']==524288
+        if failure=='limit':
+            return cninfo.fetch_cninfo_pdf_bytes(**kw,get_bytes=lambda u:b'%PDF-'+b'X'*524284)
+        raise errors[failure]
+    def no_extract(*a,**k):raise AssertionError('failed source must not be extracted')
+    result=run_pdf(tmp_path,api,fixture,fetch,extract=no_extract)
+    item=result['outcomes'][0]
+    assert len(calls)==1 and result['status']=='STOPPED_WITH_GAPS'
+    assert item['failure']['stage']=='PDF_GETTER' and item['getter_return'] is None and item['pdf'] is None
+    assert item['http_status']==(403 if failure=='http' else None)
+    assert not (tmp_path/'pdf-out/600001.SH/source.pdf').exists()
+    assert not (tmp_path/'pdf-out/600001.SH/extraction.json').exists()
+    assert (tmp_path/'pdf-out/primary-bodies/manifest.jsonl').read_bytes()==b''
+    assert all(b'sensitive-not-for-retention' not in p.read_bytes() for p in (tmp_path/'pdf-out').rglob('*') if p.is_file())
+
+
+def test_single_pdf_no_text_and_extraction_failure_preserve_exact_original_not_empty_or_read(tmp_path):
+    from decision_kernel.runtime import cninfo_http as cninfo
+    for name,raw in [('no-text',synthetic_pdf(text=False)),('broken',b'%PDF-1.4\nnot-a-parseable-pdf')]:
+        folder=tmp_path/name;folder.mkdir(); api,fixture=pdf_api()
+        result=run_pdf(folder,api,fixture,lambda **kw:cninfo.fetch_cninfo_pdf_bytes(**kw,get_bytes=lambda u:raw))
+        item=result['outcomes'][0]
+        assert (folder/'pdf-out/600001.SH/source.pdf').read_bytes()==raw and item['body_reading']=='NOT_PERFORMED'
+        if name=='no-text':
+            assert result['status']=='CAPTURED_WITH_GAPS' and item['status']=='PDF_RETAINED_NO_TEXT'
+            assert item['pdf']['bytes']>0 and item['extraction']['retained'] is True
+        else:
+            assert result['status']=='STOPPED_WITH_GAPS' and item['failure']['stage']=='PDF_EXTRACTION'
+            assert item['pdf']['sha256']==sha256(raw).hexdigest() and item['extraction'] is None
+
+
+def test_single_pdf_rejects_unbound_or_changed_input_before_source(tmp_path):
+    mutations=['registry','reading-code','summary','wrong-code','duplicate-id','missing-id','foreign-url','query-url','bad-date']
+    for kind in mutations:
+        folder=tmp_path/kind;folder.mkdir();api,fixture=pdf_api()
+        if kind=='registry':api.registry_raw+=b' '
+        elif kind=='reading-code':
+            api.reading['code_commit']='f'*40;api.reseal()
+        elif kind=='summary':api.files['summary.md']+=b'changed'
+        else:
+            value=json.loads(api.files['receipt.json']); row=value['outcome']['announcements'][0]
+            if kind=='wrong-code':row['stock_code']='600002'
+            elif kind=='duplicate-id':value['outcome']['announcements'].append(deepcopy(row))
+            elif kind=='missing-id':row['announcement_id']='9999'
+            elif kind=='foreign-url':row['source_locator']='https://static.cninfo.com.cn.evil.invalid/1234.PDF'
+            elif kind=='query-url':row['source_locator']+='?redirect=elsewhere'
+            else:row['source_locator']='https://static.cninfo.com.cn/finalpage/2098-02-30/1234.PDF'
+            api.files['receipt.json']=b2['encoded'](value)
+        def no_fetch(**kw):raise AssertionError('unqualified saved input cannot contact source')
+        result=run_pdf(folder,api,fixture,no_fetch)
+        item=result['outcomes'][0]
+        assert result['status']=='STOPPED_WITH_GAPS' and item['pdf_getter_invocations']==0
+        assert item['failure']['stage']=='SAVED_DIRECTORY_READ' and item['pdf'] is None
+        assert not (folder/'pdf-out/primary-bodies').exists()
+
+
+def test_single_pdf_retention_failure_never_starts_extraction_or_reacquires(tmp_path,monkeypatch):
+    api,fixture=pdf_api();raw=synthetic_pdf();calls=[]
+    original=b2['capture_pdf'].__globals__['save']
+    def save(path,body):
+        if path.name=='source.pdf':raise OSError('synthetic-retention-failure')
+        return original(path,body)
+    monkeypatch.setitem(b2['capture_pdf'].__globals__,'save',save)
+    def fetch(**kw):calls.append(kw);return raw
+    result=run_pdf(tmp_path,api,fixture,fetch,extract=lambda *a,**k:(_ for _ in ()).throw(AssertionError('not retained')))
+    item=result['outcomes'][0]
+    assert len(calls)==1 and item['failure']['stage']=='PDF_FLAT_RETENTION'
+    assert item['getter_return']['sha256']==sha256(raw).hexdigest() and item['pdf'] is None
+    assert (tmp_path/'pdf-out/primary-bodies/objects'/f'{sha256(raw).hexdigest()}.pdf').read_bytes()==raw
+
+
+def test_single_pdf_oversize_extraction_is_not_truncated_and_pdf_survives(tmp_path):
+    from dataclasses import replace
+    from decision_kernel.adapters.pdf_text import extract_pdf_text, PdfPageText
+    api,fixture=pdf_api();raw=synthetic_pdf()
+    def extract(body,**kw):
+        value=extract_pdf_text(body,**kw)
+        return replace(value,pages=(PdfPageText(1,'中'*200000),),extracted_char_count=200000)
+    result=run_pdf(tmp_path,api,fixture,lambda **kw:raw,extract=extract)
+    item=result['outcomes'][0]
+    assert result['status']=='STOPPED_WITH_GAPS' and item['failure']['stage']=='EXTRACTION_RETENTION'
+    assert item['extraction']['retained'] is False
+    assert not (tmp_path/'pdf-out/600001.SH/extraction.json').exists()
+    assert (tmp_path/'pdf-out/600001.SH/source.pdf').read_bytes()==raw
+
+
+def test_single_pdf_cli_rejects_mixed_inputs_before_execution(tmp_path,monkeypatch):
+    import sys
+    base=['b2','--output',str(tmp_path/'out'),'--reference-ids','pdf-input']
+    for suffix in [['--source-kind','pdf'],['--source-kind','pdf','--announcement-id','1234'],
+        ['--source-kind','pdf','--announcement-id','1234','--reading-commit','1'*40,'--report-period',PERIOD],
+        ['--report-period',PERIOD,'--announcement-id','1234'],
+        ['--source-kind','announcements','--start-date','2098-12-31','--end-date','2098-12-31','--reading-commit','1'*40]]:
+        monkeypatch.setattr(sys,'argv',base+suffix)
+        with pytest.raises(SystemExit) as caught:b2['main']()
+        assert caught.value.code==2 and not (tmp_path/'out').exists()
