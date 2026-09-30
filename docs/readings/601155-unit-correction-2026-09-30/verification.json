@@ -1,0 +1,56 @@
+{
+  "scope": "unit-only consistency check, not economic or source completeness qualification",
+  "predecessor_archive": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+  "corrected_inputs_cny_bn": {
+    "parent_equity": "62.47636",
+    "investment_property": "120.92",
+    "inventory": "64.79568",
+    "other_receivables": "24.95361",
+    "inventory_plus_other_receivables": "89.74929",
+    "shares_bn": "2.255622856"
+  },
+  "worlds": [
+    {
+      "world": "W1_STRESS",
+      "original_nominal_terminal_amount": "127.379665",
+      "correct_cny_bn": "12.7379665",
+      "per_share_cny_50_digit_check": "5.6472058110764240278650554691843395649649331271007",
+      "per_share_scale_invariance": "EXACT"
+    },
+    {
+      "world": "W2_SOFT_STABILIZATION",
+      "original_nominal_terminal_amount": "232.714310",
+      "correct_cny_bn": "23.271431",
+      "per_share_cny_50_digit_check": "10.317075364836611675121277455259125109698746553223",
+      "per_share_scale_invariance": "EXACT"
+    },
+    {
+      "world": "W3_BOUNDED_REPAIR",
+      "original_nominal_terminal_amount": "338.048955",
+      "correct_cny_bn": "33.8048955",
+      "per_share_cny_50_digit_check": "14.986944918596799322377499441333910654432559979344",
+      "per_share_scale_invariance": "EXACT"
+    },
+    {
+      "world": "W4_STRONG_REPAIR",
+      "original_nominal_terminal_amount": "443.3836",
+      "correct_cny_bn": "44.33836",
+      "per_share_cny_50_digit_check": "19.656814472356986969633721427408696199166373405466",
+      "per_share_scale_invariance": "EXACT"
+    }
+  ],
+  "stored_per_share_return_cagr_hurdle_fields": "UNCHANGED",
+  "all_eight_breakpoints": "UNCHANGED",
+  "primary_source_check": {
+    "pdf_sha256": "f2b6c09bbcb341039461bfa0be9b59a798a37b8740472585f7cdaed10f25d9ec",
+    "page": 2,
+    "source_unit": "人民币元",
+    "exact_parent_equity_cny": "62476358964",
+    "retained_rounded_parent_equity_cny": "62476360000.0000",
+    "rounding_difference_cny": "1036.0000",
+    "replace_rounded_input": false,
+    "other_input_source_reaudit": "NOT_ESTABLISHED_FROM_THIS_SUMMARY"
+  },
+  "new_probability_or_investment_judgment": false,
+  "investment_authority": "NONE"
+}
