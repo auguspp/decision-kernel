@@ -49,7 +49,7 @@ python -m decision_kernel.runtime.research_archive \
 
 连接使用已有 GitHubAPI / GH_TOKEN，只读 GitHub；不访问公司源站、行情、模型，也不写远端。交互工具可按同一精确绑定进行读取，但不得把手工 connector 读回或本地 fixture 重放声称为 CLI live HTTP 执行。
 
-读取顺序：R/current-state 原验证 → 同 R registry 副本的 blob/SHA256/大小 → 唯一注册记录与同 R 可见记录的一致性 → source commit 的 tree → 目录完整清单 → 各原 blob 字节 → 对应原 typed reader。缺少 opt-in、不在 R 可见、格式未知、来源错配或 tree 不完整均停止；无 latest/main/其他公司回退。
+读取顺序：R/current-state 原验证 → 同 R registry 副本的 blob/SHA256/大小 → 唯一注册记录与同 R 可见记录的一致性 → **登记所指 `source` 或 `archive_source` 的精确 commit** 的 tree → 目录完整清单 → 各原 blob 字节 → 对应原 typed reader。缺少 opt-in、不在 R 可见、格式未知、来源错配或 tree 不完整均停止；无 latest/main/其他公司回退。
 
 输出 `bundle/` 保存原档案各文件；旁边保留 reading.json、registry.json、git-commit.json、git-tree.json 和成功的 readback.json。Git API 元数据为重新序列化的响应，不是原始 HTTP 记录或签名。回执的 retrieved_at 只是本次取回时间，不替换研究 cutoff、原执行时间或来源发布时间。
 
