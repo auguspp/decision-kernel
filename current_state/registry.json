@@ -4,7 +4,7 @@
   "semantics": "EXPLICIT_READ_PURPOSES_AND_RESOLUTION_REFERENCES_NOT_CANONICAL_STATE",
   "registration_note": "生产 packages 与当前 handoff 路径从同一 code commit 的 decision-inbox.yml literal arrays 读取。本文件不改变生产资格。",
   "references": [
-    {"id":"research-agenda","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"有限近期事件与原研究复核条件；日期、来源缺口及明确关注分开，不是持仓、实时完整日历或执行请求。","source":{"path":"docs/readings/2026-09-29-research-agenda-r3.md","git_blob":"db18acced6010040233b1efb0c80e66672cb7e10"}},
+    {"id":"research-agenda","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"有限近期事件与原研究复核条件；日期、来源缺口及明确关注分开，不是持仓、实时完整日历或执行请求。","source":{"path":"docs/readings/2026-09-30-research-agenda-r4.md","git_blob":"251ac268c04de2a63da6db503b4c889a49a24e90"}},
     {"id":"odds-book","case":"navigation","use":"NAVIGATION_ONLY","purpose_note":"十一个证券的有范围历史找回、资格/接受/决定/复核条件；#349-C仅对五个已有精确Human边界case启用bounded typed Watch；不是全历史穷尽、持仓或交易自动化。","source":{"path":"docs/ODDS-BOOK.md"}},
     {"id":"odds-watch-v0","case":"navigation","use":"WATCH_CONFIGURATION","purpose_note":"#349-C bounded read-only Odds Watch配置；五个显式Human边界case启用qualified completed-close事实距离/条件跟踪；触界仅Human复核，不产生Research/Odds/Action/Investment Authority。","source":{"path":"decision_inputs/odds-watch-v0.json"}},
     {"id":"odds-hengrui-provisional","case":"600276.SH","use":"RETAINED_ODDS_DOCUMENT","purpose_note":"42.93元Human参考价的原provisional/ordinal结果，非canonical数值；原行情失败保留。","source":{"path":"docs/readings/hengrui-600276-research-odds-2026-09-11/provisional-odds.json","ref":"49b7fc999953977832afef67420fd693797e451d","git_blob":"8e3048b0b14d39fb2577f5b4427721407031e091"}},
