@@ -20,25 +20,27 @@ def inputs():
 
 def expanded(size, *, price_entries=False):
     config, registry = inputs()
-    if price_entries:
-        template = deepcopy(next(c for c in config["active_cases"] if c["ticker"] == "601155.SH"))
-        source = deepcopy(next(r for r in registry["references"] if r["id"] == template["registry_reference_id"]))
-    else:
-        source = deepcopy(next(r for r in registry["references"] if r["id"] == "c-longitudinal-xingsen-20260930"))
-        template = {
-            "ticker": "002436.SZ",
-            "company_name": "Synthetic evidence-only template",
-            "registry_reference_id": source["id"],
-            "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
-            "prerequisite": "Synthetic test reopen condition only.",
-            "conditions": [],
-            "odds_level": "L0_NO_ODDS",
-            "boundary_authority": "NONE",
-            "watch_mode": "EVIDENCE_REOPEN",
-            "boundary_source_path": None,
-            "boundary_source_ref": None,
-        }
-    for n in range(size - len(config["active_cases"])):
+    price_template = deepcopy(next(c for c in config["active_cases"] if c["ticker"] == "601155.SH"))
+    price_source = deepcopy(next(r for r in registry["references"] if r["id"] == price_template["registry_reference_id"]))
+    evidence_source = deepcopy(next(r for r in registry["references"] if r["id"] == "c-longitudinal-xingsen-20260930"))
+    evidence_template = {
+        "ticker": "899999.SZ",
+        "company_name": "Synthetic evidence-only template",
+        "registry_reference_id": evidence_source["id"],
+        "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+        "prerequisite": "Synthetic test reopen condition only.",
+        "conditions": [],
+        "odds_level": "L0_NO_ODDS",
+        "boundary_authority": "NONE",
+        "watch_mode": "EVIDENCE_REOPEN",
+        "boundary_source_path": None,
+        "boundary_source_ref": None,
+    }
+    additions = size - len(config["active_cases"])
+    for n in range(additions):
+        evidence_only = (n == 0) or not price_entries
+        template = evidence_template if evidence_only else price_template
+        source = evidence_source if evidence_only else price_source
         ticker, ref_id = f"{800000 + n:06d}.SZ", f"synthetic-capacity-{n}"
         row = deepcopy(template)
         row.update(ticker=ticker, company_name=f"Synthetic fixture {n}", registry_reference_id=ref_id)
@@ -75,7 +77,7 @@ def test_wider_mixed_watch_retains_every_case_and_separates_price_gap_from_evide
     result, calls = build(config, registry, unavailable="600598.SH")
     odds_watch.validate_report(result)
     watch = result["watch"]
-    price_count = size if price_entries else 7
+    price_count = size - 1 if price_entries else 7
     assert len(watch["active_cases"]) == watch["active_case_count"] == size
     assert len(calls) == price_count
     assert watch["price_evaluated_case_count"] == price_count - 1
@@ -139,7 +141,7 @@ def test_resealed_report_still_has_to_preserve_qualification_and_complete_covera
     elif kind == "invented_acceptance":
         rows["601155.SH"]["boundary_authority"] = "HUMAN_DECISION"
     elif kind == "wrong_count":
-        watch["price_evaluated_case_count"] = 7
+        watch["price_evaluated_case_count"] = 999
     else:
         evidence = next(c for c in watch["active_cases"] if c.get("watch_mode") == "EVIDENCE_REOPEN")
         evidence["price"] = "1"

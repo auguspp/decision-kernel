@@ -53,7 +53,7 @@ def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run
 def test_only_exact_boundary_cases_are_visible_as_bounded_watch_cases(code):
     table = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8").split("## 2.")[0]
     line = next(row for row in table.splitlines() if f"**{code}**" in row)
-    assert "#349-C" in line or "typed watch" in line
+    assert "#349-C" in line or "typed watch" in line.lower()
 
 
 @pytest.mark.parametrize("code,state", [
