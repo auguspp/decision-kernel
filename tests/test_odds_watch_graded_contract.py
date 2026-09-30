@@ -20,9 +20,24 @@ def inputs():
 
 def expanded(size, *, price_entries=False):
     config, registry = inputs()
-    ticker = "601155.SH" if price_entries else "002436.SZ"
-    template = next(c for c in config["active_cases"] if c["ticker"] == ticker)
-    source = next(r for r in registry["references"] if r["id"] == template["registry_reference_id"])
+    if price_entries:
+        template = deepcopy(next(c for c in config["active_cases"] if c["ticker"] == "601155.SH"))
+        source = deepcopy(next(r for r in registry["references"] if r["id"] == template["registry_reference_id"]))
+    else:
+        source = deepcopy(next(r for r in registry["references"] if r["id"] == "c-longitudinal-xingsen-20260930"))
+        template = {
+            "ticker": "002436.SZ",
+            "company_name": "Synthetic evidence-only template",
+            "registry_reference_id": source["id"],
+            "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+            "prerequisite": "Synthetic test reopen condition only.",
+            "conditions": [],
+            "odds_level": "L0_NO_ODDS",
+            "boundary_authority": "NONE",
+            "watch_mode": "EVIDENCE_REOPEN",
+            "boundary_source_path": None,
+            "boundary_source_ref": None,
+        }
     for n in range(size - len(config["active_cases"])):
         ticker, ref_id = f"{800000 + n:06d}.SZ", f"synthetic-capacity-{n}"
         row = deepcopy(template)
@@ -32,7 +47,6 @@ def expanded(size, *, price_entries=False):
         config["active_cases"].append(row)
         registry["references"].append(ref)
     return config, registry
-
 
 def build(config, registry, *, unavailable=None):
     calls = []
@@ -61,14 +75,13 @@ def test_wider_mixed_watch_retains_every_case_and_separates_price_gap_from_evide
     result, calls = build(config, registry, unavailable="600598.SH")
     odds_watch.validate_report(result)
     watch = result["watch"]
-    price_count = size - 1 if price_entries else 6
+    price_count = size if price_entries else 7
     assert len(watch["active_cases"]) == watch["active_case_count"] == size
     assert len(calls) == price_count
     assert watch["price_evaluated_case_count"] == price_count - 1
     assert watch["price_gap_count"] == 1
     assert watch["evidence_only_case_count"] == size - price_count
     assert watch["attention_case_count"] == 0
-    assert "002436.SZ" not in calls
     if not price_entries:
         assert all(not c.startswith("8") for c in calls)
     text = odds_watch.render_markdown(result)
@@ -117,7 +130,7 @@ def test_l1_is_supported_without_upgrading_the_underlying_result_or_human_accept
 
 @pytest.mark.parametrize("kind", ["missing_grade", "invented_acceptance", "wrong_count", "evidence_with_price"])
 def test_resealed_report_still_has_to_preserve_qualification_and_complete_coverage(kind):
-    config, registry = inputs()
+    config, registry = expanded(8, price_entries=False) if kind == "evidence_with_price" else inputs()
     report, _ = build(config, registry)
     watch = report["watch"]
     rows = {c["ticker"]: c for c in watch["active_cases"]}
@@ -128,7 +141,8 @@ def test_resealed_report_still_has_to_preserve_qualification_and_complete_covera
     elif kind == "wrong_count":
         watch["price_evaluated_case_count"] = 7
     else:
-        rows["002436.SZ"]["price"] = "1"
+        evidence = next(c for c in watch["active_cases"] if c.get("watch_mode") == "EVIDENCE_REOPEN")
+        evidence["price"] = "1"
     with pytest.raises(ValueError):
         odds_watch.validate_report(reseal(report))
 
@@ -138,12 +152,12 @@ def test_legacy_ungraded_price_report_remains_readable_without_fabricated_zero_c
     report, _ = build(config, registry)
     watch = report["watch"]
     watch["active_cases"] = [c for c in watch["active_cases"] if c["watch_mode"] == "PRICE_CONDITION"]
-    watch["active_case_count"] = 6
+    watch["active_case_count"] = 7
     del watch["price_evaluated_case_count"]
     del watch["evidence_only_case_count"]
     for row in watch["active_cases"]:
         for key in ("odds_level", "boundary_authority", "watch_mode", "boundary_source", "price_fetch_performed"):
             row.pop(key)
     odds_watch.validate_report(reseal(report))
-    assert "价格已判断：6" in odds_watch.render_markdown(report)
+    assert "价格已判断：7" in odds_watch.render_markdown(report)
     assert all("odds_level" not in row for row in watch["active_cases"])

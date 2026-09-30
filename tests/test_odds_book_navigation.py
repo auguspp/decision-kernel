@@ -26,7 +26,7 @@ def test_book_and_watch_are_explicit_purpose_records_not_production_packages():
     assert book["source"]["path"] == "docs/ODDS-BOOK.md"
     assert watch["use"] == "WATCH_CONFIGURATION"
     assert watch["source"]["path"] == "decision_inputs/odds-watch-v0.json"
-    assert "五个" in watch["purpose_note"] and "Investment Authority" in watch["purpose_note"]
+    assert "graded" in watch["purpose_note"] and "Investment Authority" in watch["purpose_note"]
     source = (ROOT / book["source"]["path"]).read_text(encoding="utf-8")
     assert "DECLARED_COVERAGE_BACKFILL" in source
     assert "BOUNDED_WATCH_V0" in source
@@ -41,7 +41,7 @@ def test_book_and_watch_are_explicit_purpose_records_not_production_packages():
 
 
 @pytest.mark.parametrize("code", ["600276.SH", "600967.SH", "002674.SZ", "600184.SH",
-    "600598.SH", "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH"])
+    "600598.SH", "002050.SZ", "603986.SH", "600519.SH", "601088.SH", "300750.SZ", "600036.SH", "002436.SZ"])
 def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run(code):
     text = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8")
     table = text.split("## 2.")[0]
@@ -49,7 +49,7 @@ def test_declared_real_case_has_visible_book_row_without_fabricating_an_odds_run
     assert "非本日价格" in table
 
 
-@pytest.mark.parametrize("code", ["600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH"])
+@pytest.mark.parametrize("code", ["600276.SH", "002674.SZ", "600598.SH", "002050.SZ", "603986.SH", "002436.SZ"])
 def test_only_exact_boundary_cases_are_visible_as_bounded_watch_cases(code):
     table = (ROOT / "docs/ODDS-BOOK.md").read_text(encoding="utf-8").split("## 2.")[0]
     line = next(row for row in table.splitlines() if f"**{code}**" in row)
