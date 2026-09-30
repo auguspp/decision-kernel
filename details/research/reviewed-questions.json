@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "7ba85c53da7ffe743fd8bc9fa125a51c04143a87",
+      "ref": "3ebb5d8456a8f6d544d329d0fcc9e0691b26bee7",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
