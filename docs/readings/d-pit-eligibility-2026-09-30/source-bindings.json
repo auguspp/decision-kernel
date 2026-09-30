@@ -1,0 +1,77 @@
+{
+  "purpose": "D bounded retained-record eligibility proof; not a new runtime contract",
+  "reading_commit": "5715ee373f07bb804800f5a36fc13cf26beb4960",
+  "code_commit": "37220e4f914efe844b5e3be1621ee0b1b425a58c",
+  "reading_hash": "8fad2fff189a761670c1d255af03448819909125e717eecfd61b190ac30e53a1",
+  "retrieval_date_utc": "2026-09-30",
+  "retained_document_bindings": [
+    {
+      "record_id": "gigadevice-human",
+      "case": "603986.SH",
+      "use": "HUMAN_DECISION_CHECKPOINT",
+      "source": {
+        "bytes": 10911,
+        "git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
+        "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
+        "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "ref": "37220e4f914efe844b5e3be1621ee0b1b425a58c",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
+      }
+    },
+    {
+      "record_id": "sanhua-horizon",
+      "case": "002050.SZ",
+      "use": "HUMAN_METHOD_SUPPLEMENT",
+      "source": {
+        "bytes": 4961,
+        "git_blob": "ccc66895c2aaf29b78630208b95e0ca11655362f",
+        "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
+        "read_path": "sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "ref": "37220e4f914efe844b5e3be1621ee0b1b425a58c",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "9ef5d905f8a9c61cd69a320db0270f0665ca827f7351b2f80743ab5b04a5c595"
+      }
+    },
+    {
+      "record_id": "micron-human",
+      "case": "MU",
+      "use": "HUMAN_DECISION_CHECKPOINT",
+      "source": {
+        "bytes": 9647,
+        "git_blob": "590453f3ad36e70cc11b8bae196aad377f082854",
+        "path": "docs/decisions/MU-micron-human-wait-validation-2026-09-03.md",
+        "read_path": "sources/git/590453f3ad36e70cc11b8bae196aad377f082854/MU-micron-human-wait-validation-2026-09-03.md",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "ref": "37220e4f914efe844b5e3be1621ee0b1b425a58c",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "db8982a84e83f6329c9f285e3a074b87828cee861989bdc2ada868e26905f09b"
+      }
+    },
+    {
+      "record_id": "odds-guangdian-challenge",
+      "case": "600184.SH",
+      "use": "METHOD_SUPPLEMENT",
+      "source": {
+        "bytes": 4227,
+        "git_blob": "174e02ecc48eb851324b830798f996c0f6705a02",
+        "path": "docs/readings/600184-research-method-review-2026-09-13.md",
+        "read_path": "sources/git/174e02ecc48eb851324b830798f996c0f6705a02/600184-research-method-review-2026-09-13.md",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "ref": "49b7fc999953977832afef67420fd693797e451d",
+        "repository": "auguspp/decision-kernel",
+        "sha256": "dbca28fbb0031adbe0b123f242b23ff664c8e0d10dfc66b33dec2b7165d21f61"
+      }
+    }
+  ],
+  "candidate_comment": {
+    "id": 5903604979,
+    "url": "https://github.com/auguspp/decision-kernel/issues/509#issuecomment-5903604979",
+    "body_sha256": "db19015ed44409710f2aff8347681435e8c16da0ba635b264ae6750c9fe39c85",
+    "representation": "issue comment read during this review; not a precise original morning market capture"
+  },
+  "qualification": "EXACT_RETAINED_RECORDS_NOT_NEW_HUMAN_ACCEPTANCE_OR_COMPLETE_OPPORTUNITY_REPLAY",
+  "investment_authority": "NONE"
+}
