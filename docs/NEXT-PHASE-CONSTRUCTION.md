@@ -1,4 +1,4 @@
-# 当前施工入口：A–D后端优先，B2原文闭环后转C真实可比证据
+# 当前施工入口：先修真实单位错误，再按原始C1/C2推进
 
 2026-09-29。Human最新指令是先完成B2后端与可读取内容，之后在原Site编辑对话直接提出界面要求并集中接入。原话与范围对账见[#297/5888866896](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5888866896)。**当前执行顺序以[#297](https://github.com/auguspp/decision-kernel/issues/297)与对应任务的最新有效回执为准。** 本页只作导航，不维护第二份进度表。
 
@@ -8,7 +8,11 @@
 
 **2026-09-30 Human纠偏：B2优先建立新入选个股的标准通道，不再逐家追挖当前六股的特殊情况。** 原话、KEEP/RETIRE/DEFER及最新实现接点见[#620/5901901617](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5901901617)。财报预约沿[原标准入口](b2-disclosure-appointments.md)使用显式资料引用和报告期输入，新增股票不改运行代码；空返回与缺字段作为对象级结果，真正来源/权限失败仍保留边界。旧R4及未补齐原件/改期缺口保留，但不作为通道工程的逐股收口任务。标准通道不等于自动启用新采集、监控或研究任务。
 
-**当前先接[#504 C的真实可比证据缺口](https://github.com/auguspp/decision-kernel/issues/504)**：原机构/研报来源、保管、按需索引和首次实际消费已交付，不重建provider。核已有旧/新原件与机构、目标期、货币/股本、版本时钟；异机构分歧不当同机构修订。按Reuse First依次读当前内部能力、官方合同、#508/#511已有成熟GitHub候选与反证，再核重叠候选的当前相关实现，只有真实未满足的消费者缺口才补最薄适配。不因旧摘要漏记而重做已交付工作，也不以候选名称/README代替代码与测试审阅。
+**2026-09-30 C完整性纠偏**：[#672](https://github.com/auguspp/decision-kernel/pull/672#issuecomment-5909103011)只完成同机构摘要名义算术与保管/发布/恢复的最小真实闭环，不等于原C完成。按[最新范围对账](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5909499946)，先处理已发现的[601155单位错误](readings/601155-unit-correction-2026-09-30/README.md)，随后回到原始C1/C2逐项推进；不再推进新D任务。已合并[#673](https://github.com/auguspp/decision-kernel/pull/673#issuecomment-5909529540)只保留有界资格核查与独立恢复，不补签完整D。
+
+C1包括纵向财报、IR/同业变化、机构活动与可比预期、Outside View、经营/竞争/现金资本桥及首版→挑战→修订→后续使用。下一实质切片是复用现有档案/进度/读取能力，验证可复用的纵向比较与真实现金资本桥消费，不以“Markdown能保存”代替能力验收。C2按原P2-1–6明确盲点审计、行业拐点、早期变化、独立个股发现、公司业务证据和多周期领先/扩散角色的已交付、缺口与退出条件；不要求六个新引擎，也不以单样本签整条线。
+
+[#504机构/研报](https://github.com/auguspp/decision-kernel/issues/504)原来源、保管、按需索引和首次实际消费保留，不重建provider；摘要比较缺原模型/货币/股本/PIT资格时仍不称完整模型修订。按Reuse First依次读内部能力、官方合同、#508/#511已有成熟GitHub候选和当前相关实现，只补真实消费者所需的薄适配。
 
 [#620 B2](https://github.com/auguspp/decision-kernel/issues/620)的标准预约、公告目录与单PDF链继续保留：#669/#670已完成单次有界原文取得、原件保管、登记、正式PR/独立main/正常发布和固定R八文件恢复，见[#670最终回执](https://github.com/auguspp/decision-kernel/pull/670#issuecomment-5908082240)。[后继独立消费者](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5908269191)从普通入口恢复原PDF并核清正文日期、来源时钟与UNKNOWN边界；现有合同可用，没有据此新增事件parser/schema。更多市场/真实多页/完整取消修订链和无人值守仍分别未验，不反复重抓已消费样本来补签完整B2，也不塞进当前agenda窗口之外的示例。优先原件、用途索引与发布链；后端先行不意味着新增数据库、provider、调度或日历框架。
 
