@@ -299,6 +299,7 @@
 - [按需恢复：c-cash-bridge-semantic-002436-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-reviewed-activity-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4f7c1f09d0785775084ab122fe0560c266f78609/docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-activity-positive-002436-20260930](https://github.com/auguspp/decision-kernel/blob/0ff4f1384c205f6ab7d9ca7f90774a7d55052d17/docs/readings/c1-activity-positive-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-30T15:42:51.758011Z
 - 原业务前提：Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.
 - [原价格条件记录](../inbox/36738804995/odds-watch/watch.json)；不是新的行情复核或买入指令。
