@@ -254,6 +254,7 @@
 - 002281-accelink-full-research-20260917-v1：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：User-requested, AI-drafted Full Research v3 as of 2026-09-17: business and financial evidence, frozen pre-expectation Builder, actual Challenger/reconciliation, and bounded profit/cash/price arithmetic. First-entry case NOT METHOD-READY; quoted price CONTEXT&#95;ONLY; no calibrated probability, canonical Odds, Kernel COMMITTED, Human acceptance, Action/watch, or Investment Authority. Full original-source custody remains PARTIAL.
   - [原保存材料](../../sources/git/50982ed0c0f1c5f06941ec8252dc1c5ffcb64d64/README.md)
+- [按需恢复：c-synopsis-comparison-002281-20260930](https://github.com/auguspp/decision-kernel/blob/2a264469fbd0017b46dffe52ceeb6e4b3587bf53/docs/readings/c-synopsis-comparison-002281-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 
 ## 300183.SZ
 
