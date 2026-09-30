@@ -82,6 +82,9 @@ def _rename_new_directory(source: Path, destination: Path) -> None:
     RENAME_NOREPLACE makes the existence check part of the atomic rename.
     Unsupported hosts fail closed; no check-then-rename fallback is used.
     """
+    source_bytes, destination_bytes = os.fsencode(source), os.fsencode(destination)
+    if b'\x00' in source_bytes or b'\x00' in destination_bytes:
+        raise ValueError('directory paths must not contain NUL bytes')
     if sys.platform == 'win32':
         os.rename(source, destination)  # Windows rename refuses existing dst.
         return
@@ -93,7 +96,7 @@ def _rename_new_directory(source: Path, destination: Path) -> None:
         raise NotImplementedError('renameat2 is required for atomic no-replace publication')
     rename.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
     rename.restype = ctypes.c_int
-    if rename(-100, os.fsencode(source), -100, os.fsencode(destination), 1) != 0:
+    if rename(-100, source_bytes, -100, destination_bytes, 1) != 0:
         error = ctypes.get_errno()
         raise OSError(error, os.strerror(error), str(destination))
 

@@ -424,3 +424,10 @@ def test_real_cli_killed_during_second_staging_write_leaves_no_target_and_retry_
         if process.poll() is None:
             process.kill()
         process.communicate(timeout=10)
+
+
+def test_embedded_nul_never_publishes_to_a_truncated_destination(tmp_path):
+    target = tmp_path / 'report\0suffix'
+    with pytest.raises(ValueError, match='NUL'):
+        retention._publish_report_files(target, PAIR)
+    assert list(tmp_path.iterdir()) == []
