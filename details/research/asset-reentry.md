@@ -353,6 +353,7 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：601155-xincheng-policy-full-20260930](https://github.com/auguspp/decision-kernel/blob/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：b2-appointments-36658570687-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6b9f1b4624cf0bab09cf3ea11b545d658da58e46/docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-29；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 688337.SH

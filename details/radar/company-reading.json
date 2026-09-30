@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "c4594812ac18a5b37553c141ec5b4cc81051a777c629440536290b231e840fae",
+    "base_reading_hash": "ae5235f01b8452259983bfa376740e480508e94f163e6a964939e2eee6486006",
     "companies": [
       {
         "automatic_admission": false,
@@ -2197,6 +2197,27 @@
                 "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
               },
               "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "601155.SH",
+              "id": "b2-appointments-36658570687-1-601155-SH",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "财报预约来源资料（2026-09-30）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 1811,
+                "git_blob": "37ca4c6ac143bcffc18351a0ccdfc66249ba3376",
+                "path": "docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md",
+                "ref": "6b9f1b4624cf0bab09cf3ea11b545d658da58e46",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "c4531e95398f422aed4bc9aaa48e9b98c0b1ba022b0484343bdea0a16da843b7"
+              },
+              "use": "NAVIGATION_ONLY"
             }
           ],
           "references": [],
@@ -5711,7 +5732,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-30T02:19:30.126731+00:00",
+    "generated_at": "2026-09-30T03:39:32.667329+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -5742,7 +5763,7 @@
           "updated_at": "2026-09-18T09:21:06Z"
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
-        "pending_blob_writes": 2,
+        "pending_blob_writes": 3,
         "retained_file_count": 118,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
@@ -5905,5 +5926,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "56a53bfca8de310228a0c0937301428d0451cfc9c41132a5cd6afe0edaed8377"
+  "projection_hash": "f397ba138e166d8b257e87763dbd9ff63f5bf890e8626050e833ceee11cf9a77"
 }
