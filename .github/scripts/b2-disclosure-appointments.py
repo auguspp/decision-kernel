@@ -21,6 +21,7 @@ from decision_kernel.runtime import tushare_relay as relay
 ROOT = Path(__file__).resolve().parents[2]
 URL = "https://www.cninfo.com.cn/new/information/getPrbookInfo"
 MAX_BODY = 256 * 1024
+MAX_PDF = 512 * 1024
 MAX_COMPANIES = 6
 MAX_ANNOUNCEMENT_PAGES = 3
 ANNOUNCEMENT_URLS = {
@@ -205,7 +206,7 @@ def retention_directory(identity, kind="appointments"):
     run_id = identity.get("GITHUB_RUN_ID")
     relay.require(isinstance(run_id, str) and re.fullmatch(r"[1-9][0-9]{0,19}", run_id)
                   and identity.get("GITHUB_RUN_ATTEMPT") == "1", "B2_RETENTION_IDENTITY")
-    relay.require(kind in {"appointments", "announcements"}, "B2_SOURCE_KIND")
+    relay.require(kind in {"appointments", "announcements", "pdf"}, "B2_SOURCE_KIND")
     return f"docs/readings/b2-{kind}-{run_id}-1"
 
 
@@ -253,7 +254,8 @@ def save_security_readings(output, result, plan_raw, *, kind="appointments", sum
     or publication. The source ref stays invalid until native Git custody is read back.
     """
     directory = retention_directory(result["identity"], kind)
-    purpose = (f"财报预约来源资料（{result['report_period']}）" if kind == "appointments" else
+    purpose = (f"公告原文来源资料（{result['announcement_id']}）" if kind == "pdf" else
+               f"财报预约来源资料（{result['report_period']}）" if kind == "appointments" else
                f"公告目录来源资料（{result['publication_window']['start']}至{result['publication_window']['end']}）")
     references = []
     for item in result["outcomes"]:
@@ -517,20 +519,189 @@ def capture_announcements(output, identity, *, reference_ids, start_date, end_da
     return result
 
 
+def pdf_summary(result):
+    """Source-only summary; extracted text is not a read or an event-date verdict."""
+    item = result["outcomes"][0]
+    details = {k: item[k] for k in ("announcement", "source_status", "pdf_getter_invocations",
+        "http_status", "getter_return", "pdf", "extraction", "failure")}
+    text = "\n".join(["# 已选证券公告原文 · 单PDF标准通道", "",
+        f"## {item['code']}｜{item['status']}", "",
+        f"选择依据：{item['reference_id']}；明确公告ID：{result['announcement_id']}。",
+        f"本次结束：{result['finished_at']}；原记录：receipt.json。",
+        "原件及提取结果（仅存在时）：source.pdf / extraction.json；精确定位与失败见下方。",
+        "```json", encoded(details).decode().rstrip(), "```", "",
+        "原始字节先经原DisclosurePdfCapture保留，再逐字节复制到本平坦目录；"
+        "capture-manifest.jsonl保持原清单，清单的objects路径属于原primary-bodies目录，不是本目录相对路径。",
+        "原件预算524288字节；不重查目录、不重试、重定向、换源或截断冒充完整PDF。",
+        "来源标题中的摘要仍是摘要，不是完整报告。source_announcement_time是公告目录时间，"
+        "不是正文事件实施时间；取得/保留时间也不是公告时间。",
+        "EXTRACTED仅表示原pypdf文本提取完成；NO_TEXT不是空PDF，也不表示正文已读懂。"
+        "人工/交互式正文阅读、表格语义与事件日期核对尚未执行，另行留存，不回写本捕获。",
+        "Git保管、用途登记、发布、固定R恢复及Human接受分别成立；"
+        "没有研究、关注、持仓、Watch、提醒或投资执行。Investment Authority=NONE。", ""])
+    raw = text.encode("utf-8")
+    relay.require(len(raw) <= MAX_PDF, "B2_PDF_SUMMARY_LIMIT")
+    return raw
+
+
+def capture_pdf(output, identity, *, reference_ids, announcement_id, reading_commit,
+                api, registry_raw=None, fetch_pdf=None, extract=None, clock=relay.now):
+    """One selected saved announcement -> original getter/retainer/extractor.
+
+    GitHub reads use their own existing client. Only the original credential-free
+    getter contacts CNINFO, once; no directory requests, mirror or source replay.
+    """
+    from decision_kernel.runtime import cninfo_http as cninfo, research_archive as archive
+    from decision_kernel.runtime.disclosure_pdf_capture import DisclosurePdfCapture
+    from decision_kernel.adapters.pdf_text import extract_pdf_text
+
+    registry_raw = (ROOT / "current_state/registry.json").read_bytes() if registry_raw is None else registry_raw
+    selected, scope = select_references(reference_ids, registry_raw, identity.get("GITHUB_SHA"))
+    relay.require(len(selected) == 1 and isinstance(announcement_id, str)
+                  and re.fullmatch(r"[0-9]{1,20}", announcement_id) is not None, "B2_SINGLE_PDF_SELECTION")
+    relay.require(isinstance(reading_commit, str) and re.fullmatch(r"[0-9a-f]{40}", reading_commit),
+                  "B2_PDF_READING_COMMIT")
+    retention_directory(identity, "pdf")
+    chosen = selected[0]
+    relay.require(chosen.get("archive") == {"format": "RETAINED_FILES"}
+                  and chosen.get("read_policy") == "ON_DEMAND_ARCHIVE"
+                  and chosen.get("use") == "NAVIGATION_ONLY", "B2_PDF_DIRECTORY_REFERENCE")
+    output = Path(output); output.mkdir()
+    target = output / chosen["case"]; target.mkdir()
+    input_dir = output / "input-reading"; input_dir.mkdir()
+    plan_raw = encoded({"identity": identity, "scope_source": scope, "selection": chosen,
+        "reading_commit": reading_commit, "announcement_id": announcement_id,
+        "source_kind": "pdf", "started_at": clock(), "max_pdf_requests": 1,
+        "max_pdf_bytes": MAX_PDF, "directory_requests": 0, "retries": 0, "redirects": False,
+        "investment_authority": "NONE"})
+    save(output / "plan.json", plan_raw)
+    item = {"code": chosen["case"], "reference_id": chosen["id"], "registered_use": chosen["use"],
+        "status": "PDF_NOT_REQUESTED", "receipt": chosen["case"] + "/receipt.json",
+        "announcement": None, "source_status": "NOT_RECOVERED", "pdf_getter_invocations": 0,
+        "http_status": None, "getter_return": None, "pdf": None, "extraction": None, "failure": None,
+        "body_reading": "NOT_PERFORMED", "event_dates": "NOT_EXTRACTED_FROM_BODY"}
+    stage = "SAVED_DIRECTORY_READ"
+    try:
+        record, source = archive._record(api, reading_commit, chosen["id"], input_dir)
+        relay.require(record == chosen and relay.decode((input_dir / "reading.json").read_bytes())["code_commit"]
+                      == identity["GITHUB_SHA"], "B2_PDF_READING_CODE_OR_SELECTION")
+        path = source["path"]
+        relay.require(re.fullmatch(r"docs/readings/b2-announcements-[1-9][0-9]{0,19}-1/"
+                      + re.escape(chosen["case"]) + r"/summary\.md", path) is not None,
+                      "B2_PDF_DIRECTORY_PATH")
+        summary_raw = api.file(path, source["ref"])
+        archive._bound(summary_raw, source)
+        receipt_path = path.rsplit("/", 1)[0] + "/receipt.json"
+        receipt_raw = api.file(receipt_path, source["ref"])
+        relay.require(len(receipt_raw) <= MAX_PDF, "B2_PDF_DIRECTORY_SIZE")
+        save(target / "directory-receipt.json", receipt_raw)
+        prior = relay.decode(receipt_raw)
+        outcome = prior["outcome"]
+        relay.require(outcome["code"] == chosen["case"] and outcome["status"] in
+                      {"CAPTURED_REQUIRES_SOURCE_REVIEW", "CAPTURED_WITH_FIELD_GAPS"}
+                      and isinstance(outcome["announcements"], list)
+                      and 1 <= len(outcome["announcements"]) <= 90, "B2_PDF_DIRECTORY_RESULT")
+        rows = [r for r in outcome["announcements"] if r["announcement_id"] == announcement_id]
+        relay.require(len(rows) == 1 and rows[0]["stock_code"] == chosen["case"][:6],
+                      "B2_PDF_ANNOUNCEMENT_IDENTITY")
+        row = rows[0]
+        locator = row["source_locator"]
+        match = re.fullmatch(r"https://static\.cninfo\.com\.cn/finalpage/([0-9]{4}-[0-9]{2}-[0-9]{2})/"
+                            + re.escape(announcement_id) + r"\.[Pp][Dd][Ff]", locator)
+        relay.require(match is not None and is_day(match[1]), "B2_PDF_LOCATOR")
+        item.update(announcement=deepcopy(row), source_status="EXACT_SAVED_DIRECTORY_LOCATED",
+            directory_source={"ref": source["ref"], "path": receipt_path,
+                "git_blob": sha1(f"blob {len(receipt_raw)}\0".encode() + receipt_raw).hexdigest(),
+                "bytes": len(receipt_raw), "sha256": sha256(receipt_raw).hexdigest()})
+
+        def bounded_fetch(*, source_locator):
+            nonlocal stage
+            stage = "PDF_GETTER"
+            item["pdf_getter_invocations"] += 1
+            item["requested_at"] = clock()
+            raw = (fetch_pdf or cninfo.fetch_cninfo_pdf_bytes)(
+                source_locator=source_locator, max_bytes=MAX_PDF)
+            # The unchanged getter qualifies HTTP 200/complete body. This is not raw header telemetry.
+            relay.require(isinstance(raw, bytes) and raw.startswith(b"%PDF-") and len(raw) <= MAX_PDF,
+                          "B2_PDF_GETTER_CONTRACT")
+            item.update(http_status=200, received_at=clock(), getter_return={"bytes": len(raw),
+                "sha256": sha256(raw).hexdigest(), "body_complete": True,
+                "http_status_basis": "EXISTING_GETTER_QUALIFICATION_NOT_RECORDED_HEADERS"})
+            stage = "PDF_PRIMARY_RETENTION"
+            return raw
+
+        capture = DisclosurePdfCapture(output / "primary-bodies", fetch_pdf=bounded_fetch)
+        raw = capture.fetch(source_locator=locator)
+        stage = "PDF_FLAT_RETENTION"
+        save(target / "source.pdf", raw)
+        manifest = (output / "primary-bodies/manifest.jsonl").read_bytes()
+        save(target / "capture-manifest.jsonl", manifest)
+        item["pdf"] = {"path": "source.pdf", "bytes": len(raw), "sha256": sha256(raw).hexdigest(),
+            "source_locator": locator, "body_complete": True,
+            "original_capture_path": "primary-bodies/objects/" + sha256(raw).hexdigest() + ".pdf",
+            "capture_manifest_sha256": sha256(manifest).hexdigest()}
+        # complete() belongs to assessment packets; this source-only call must not invoke it.
+        stage = "PDF_EXTRACTION"
+        parsed = (extract or extract_pdf_text)(raw, max_pdf_bytes=MAX_PDF, max_extracted_chars=MAX_PDF)
+        extraction = {"source_locator": locator, "pdf_sha256": parsed.pdf_sha256,
+            "text_sha256": parsed.text_sha256, "page_count": parsed.page_count,
+            "extracted_char_count": parsed.extracted_char_count, "status": parsed.status.value,
+            "pages": [{"page_number": p.page_number, "text": p.text} for p in parsed.pages],
+            "representation": "ORIGINAL_PYPDF_NOT_TABLE_OR_EVENT_TRUTH"}
+        item["extraction"] = {k: v for k, v in extraction.items() if k != "pages"}
+        item["extraction"]["retained"] = False
+        relay.require(parsed.pdf_sha256 == sha256(raw).hexdigest(), "B2_PDF_EXTRACTION_IDENTITY")
+        stage = "EXTRACTION_RETENTION"
+        text_raw = encoded(extraction)
+        relay.require(len(text_raw) <= MAX_PDF, "B2_PDF_EXTRACTION_FILE_LIMIT")
+        save(target / "extraction.json", text_raw)
+        item["extraction"].update(retained=True, path="extraction.json", bytes=len(text_raw),
+                                  sha256=sha256(text_raw).hexdigest())
+        item["status"] = "PDF_RETAINED_NO_TEXT" if parsed.status.value == "NO_TEXT" else "PDF_RETAINED_TEXT_EXTRACTED"
+    except (ValueError, RuntimeError, KeyError, TypeError, OSError) as exc:
+        diagnostic = cninfo.pdf_failure_diagnostic(exc)
+        local_codes = {"B2_PDF_READING_CODE_OR_SELECTION", "B2_PDF_DIRECTORY_PATH", "B2_PDF_DIRECTORY_SIZE",
+            "B2_PDF_DIRECTORY_RESULT", "B2_PDF_ANNOUNCEMENT_IDENTITY", "B2_PDF_LOCATOR",
+            "B2_PDF_GETTER_CONTRACT", "B2_PDF_EXTRACTION_IDENTITY", "B2_PDF_EXTRACTION_FILE_LIMIT"}
+        local_code = str(exc) if type(exc) is relay.RelayError and str(exc) in local_codes else None
+        item.update(status="PDF_STAGE_GAP", failure={"stage": stage, "error_type": type(exc).__name__,
+            "diagnostic": diagnostic, "local_code": local_code, "cause": "UNKNOWN"})
+        if diagnostic is not None and item["http_status"] is None:
+            item["http_status"] = diagnostic["http_status"]
+    item["finished_at"] = clock()
+    save(target / "receipt.json", encoded(item))
+    result = {"identity": identity, "source_kind": "pdf", "announcement_id": announcement_id,
+        "reading_commit": reading_commit, "outcomes": [item], "finished_at": clock(),
+        "directory_requests": 0, "research_executed": False, "investment_authority": "NONE",
+        "status": "STOPPED_WITH_GAPS" if item["failure"] else "CAPTURED_WITH_GAPS"
+                  if item["status"] == "PDF_RETAINED_NO_TEXT" else "CAPTURED_REQUIRES_SOURCE_REVIEW"}
+    save(output / "capture.json", encoded(result))
+    save(output / "summary.md", pdf_summary(result))
+    save_security_readings(output, result, plan_raw, kind="pdf", summary_builder=pdf_summary)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True)
     parser.add_argument("--reference-ids", required=True, help="Comma-separated explicit current registry IDs; max six securities")
-    parser.add_argument("--source-kind", choices=("appointments", "announcements"), default="appointments")
+    parser.add_argument("--source-kind", choices=("appointments", "announcements", "pdf"), default="appointments")
     parser.add_argument("--report-period", default="", help="Required for appointments: YYYY-MM-DD quarter end")
     parser.add_argument("--start-date", default="", help="Required for announcements: publication window start")
     parser.add_argument("--end-date", default="", help="Required for announcements: publication window end")
+    parser.add_argument("--announcement-id", default="", help="PDF only: one exact saved announcement ID")
+    parser.add_argument("--reading-commit", default="", help="PDF only: exact published R with current code")
     args = parser.parse_args()
+    if args.source_kind != "pdf" and (args.announcement_id or args.reading_commit):
+        parser.error("PDF inputs are exclusive to --source-kind pdf")
     if args.source_kind == "appointments":
         if not args.report_period or args.start_date or args.end_date:
             parser.error("appointments requires --report-period and no announcement dates")
-    elif not args.start_date or not args.end_date or args.report_period:
-        parser.error("announcements requires --start-date/--end-date and no report period")
+    elif args.source_kind == "announcements":
+        if not args.start_date or not args.end_date or args.report_period:
+            parser.error("announcements requires --start-date/--end-date and no report period")
+    elif not args.announcement_id or not args.reading_commit or args.report_period or args.start_date or args.end_date:
+        parser.error("pdf requires --announcement-id/--reading-commit and no report period or date window")
     expected = "auguspp/decision-kernel/" + WORKFLOW + "@refs/heads/main"
     relay.require(os.environ.get("GITHUB_WORKFLOW_REF") == expected
                   and os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
@@ -539,7 +710,16 @@ def main():
         ("GITHUB_REPOSITORY", "GITHUB_SHA", "GITHUB_REF", "GITHUB_RUN_ID",
          "GITHUB_RUN_ATTEMPT", "GITHUB_WORKFLOW_REF", "GITHUB_EVENT_NAME")}
     reference_ids = [v.strip() for v in args.reference_ids.split(",")]
-    result = (capture(args.output, identity, reference_ids=reference_ids, period=args.report_period)
+    if args.source_kind == "pdf":
+        from decision_kernel.runtime.current_state_delivery import GitHubAPI
+        api = GitHubAPI(os.environ["GH_TOKEN"], max_calls=4)
+        try:
+            result = capture_pdf(args.output, identity, reference_ids=reference_ids,
+                announcement_id=args.announcement_id, reading_commit=args.reading_commit, api=api)
+        finally:
+            api.session.close()
+    else:
+        result = (capture(args.output, identity, reference_ids=reference_ids, period=args.report_period)
               if args.source_kind == "appointments" else capture_announcements(args.output, identity,
                   reference_ids=reference_ids, start_date=args.start_date, end_date=args.end_date))
     print(result["status"])
