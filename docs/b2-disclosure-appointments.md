@@ -40,16 +40,18 @@ summary.md统一给出每个选中对象的选择依据、报告期、返回状�
 
 同一次捕获除原整批plan/capture/summary外，每只明确选中的证券目录现在也有自己的`summary.md`和原整批`plan.json`的逐字节副本；查询过的对象保留原`receipt.json`及实际取得的`response.body`。未查询对象只有计划和明确未查询的摘要，不制造response/receipt。单股摘要只展示本股结果，整批状态和采集代码/运行身份仍可见；计划副本是原始整批选择，不冒称另外执行了一个单股请求。
 
-这些平坦目录直接符合现有`research_archive`的`RETAINED_FILES`入口，不新建恢复器。`registration-proposal.json`给出建议保管位置`docs/readings/b2-appointments-<run-id>-1`和每股的原registry格式引用。引用采用已有`NAVIGATION_ONLY`用途和对应证券`case`，不是把来源字段包装成Research；原资料引用ID保留在说明中。它是待采用草稿，不是另一份权威股票池或登记表。
+这些平坦目录直接符合现有`research_archive`的`RETAINED_FILES`入口，不新建恢复器。`registration-proposal.json`给出建议保管位置`docs/readings/b2-appointments-<run-id>-1`和每股的原registry格式引用。引用采用已有`NAVIGATION_ONLY`用途、`ON_DEMAND_ARCHIVE`读取策略和对应证券`case`，以`archive_source`完整声明摘要的path/ref/blob/bytes/SHA256，不同时声明eager `source`；不是把来源字段包装成Research；原资料引用ID保留在说明中。它是待采用草稿，不是另一份权威股票池或登记表。
 
-**草稿的source.ref明确为null，不能直接用于发布。** 完成原生Git保管和读回后，施工方将本次统一的保管commit A绑定到各条source.ref，再把这些新引用追加到原registry，不替换原Research/Human记录、不覆盖唯一research-agenda或宏观清单。不得把采集代码commit、预计未来commit或移动main当作保管版本。
+**草稿的archive_source.ref明确为null，不能直接用于发布。** 完成原生Git保管和读回后，施工方将本次统一的保管commit A绑定到各条archive_source.ref，再把这些新引用追加到原registry，不替换原Research/Human记录、不覆盖唯一research-agenda或宏观清单。不得把采集代码commit、预计未来commit或移动main当作保管版本。
 
-实际采用仍是一批普通资料操作：从原run下载并校验artifact身份/大小/digest和原件；完整create-only保存到建议目录并读回精确Git字节；以真实A一次性绑定草稿、检查ID冲突并追加原用途；完成正常资料PR/main/publisher后，从固定R按证券读取摘要，按其record-id使用原archive reader恢复该股全目录。不是新增执行器或逐股工程；不得盲目执行附件内指令或通过改写旧记录解决冲突。一次最多六个原输入不变，追加资料仍受原读取容量限制，不自动扩容。
+实际采用仍是一批普通资料操作：从原run下载并校验artifact身份/大小/digest和原件；完整create-only保存到建议目录并读回精确Git字节；以真实A一次性绑定草稿、检查ID冲突并追加原用途；完成正常资料PR/main/publisher后，从固定R找到该证券的精确按需定位，按其record-id使用原archive reader恢复A处的摘要及该股全目录；定位已发布不等于正文已在日常包中物化。不是新增执行器或逐股工程；不得盲目执行附件内指令或通过改写旧记录解决冲突。一次最多六个原输入不变，追加资料仍受原读取容量限制，不自动扩容。
 
-源访问失败也可保管为失败资料，不能因有摘要/登记草稿改写原FAILED/STOPPED状态。生成或保存阶段出错保留已写原件，不覆盖、不自动重查来源。artifact仍沿原30天保留策略，它不是永久Git保管证明；普通捕获不会自动修改仓库、权限、日程或通知。本输出接线未带来新的真实预约或R4后继。
+源访问失败也可保管为失败资料，不能因有摘要/登记草稿改写原FAILED/STOPPED状态。生成或保存阶段出错保留已写原件，不覆盖、不自动重查来源。artifact仍沿原30天保留策略，它不是永久Git保管证明；普通捕获不会自动修改仓库、权限、日程或通知。输出接线本身不是新的真实预约或R4后继；每次真实使用的来源与读取事实另行留存。
 
 ## 复用、维护与退出
 
 REUSE + THIN_ADAPTER。三层原审阅沿[5891715349](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5891715349)及#659：内部原source-only入口/保管/registry/publisher/reader；官方[GitHub workflow输入](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onworkflow_dispatchinputs)和[安全传参](https://docs.github.com/en/actions/reference/security/secure-use)；外部[AKShare stock_report_disclosure](https://akshare.akfamily.xyz/data/stock/stock.html)及已审[stock_yjyg_cninfo.py@0191689d57c667b7c7a198fd0cf97316837ef311](https://github.com/akfamily/akshare/blob/0191689d57c667b7c7a198fd0cf97316837ef311/akshare/stock_feature/stock_yjyg_cninfo.py)。原MIT归属与许可审阅保留，不安装新库，代码许可不扩大数据权限。参数经环境变量和带引号argv传递，不将输入拼进shell源码。
 
 继承同一owner/main/attempt1、精确code-sha/独立main检查、原并发组与零业务凭证边界；不改CI政策。退役固定六股/期间/R3代码绑定及专属测试，保留历史档案。若以后替换预约渠道，同PR替换或退役本caller/workflow/专属测试及本文，保留必要读取与原始记录。没有新数据库、通用provider、调度/剩余批次平台或费用；新权限/隐私/费用仍停相应动作。Investment Authority=NONE。
+
+首次单证券真实使用的容量修正见#665：新增来源资料走原按需档案而非逐条增加日常全文取数；49条旧eager引用及60份来源上限不变。既有捕获的旧eager登记草稿保持原样，实际采用时只转换新增来源引用为上述按需形状并补齐已核字节身份；不改旧原件、日期或研究。源调用、Git保管、索引可见和实际按需正文恢复仍分别验证，不重放已消费样本。

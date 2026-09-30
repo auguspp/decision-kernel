@@ -296,10 +296,13 @@ def test_per_security_reading_and_unbound_reference_preserve_original_batch(tmp_
         assert 'receipt.json' in summary.decode() and item['code'] + '/receipt.json' not in summary.decode()
         assert all(code not in summary.decode() for code in CODES if code != item['code'])
         assert record['use'] == 'NAVIGATION_ONLY' and record['archive'] == {'format':'RETAINED_FILES'}
-        assert record['source']['ref'] is None  # Never default to the capture commit or moving main.
-        assert record['source']['path'] == proposal['directory'] + '/' + item['code'] + '/summary.md'
+        assert record['read_policy'] == 'ON_DEMAND_ARCHIVE' and 'source' not in record
+        assert record['archive_source']['bytes'] == len(summary)
+        assert record['archive_source']['sha256'] == sha256(summary).hexdigest()
+        assert record['archive_source']['ref'] is None  # Never default to the capture commit or moving main.
+        assert record['archive_source']['path'] == proposal['directory'] + '/' + item['code'] + '/summary.md'
         from hashlib import sha1
-        assert record['source']['git_blob'] == sha1(f'blob {len(summary)}\0'.encode()+summary).hexdigest()
+        assert record['archive_source']['git_blob'] == sha1(f'blob {len(summary)}\0'.encode()+summary).hexdigest()
         assert item['reference_id'] in record['purpose_note'] and '不是研究' in record['purpose_note']
     assert before == result and len(calls) == 4
     assert not (output/'registry.json').exists()
@@ -347,20 +350,29 @@ def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_pat
     for index, record in enumerate(proposal['references']):
         files = {p.name:p.read_bytes() for p in (output/record['case']).iterdir()}
         api = fixture['API'](files=files, entry='summary.md')
+        from decision_kernel.runtime import research_archive_index as archive_index
+        # The original index rejects the actual unbound proposal before any Git read.
+        with pytest.raises(ValueError): archive_index.project(record)
         api.record = deepcopy(record)
+        api.record['archive_source']['ref'] = fixture['A']  # Simulated custody only.
         api.registry['references'] = [api.record]
-        api.refresh()
+        index_fixture = runpy.run_path(str(ROOT/'tests/test_research_archive_index.py'))
+        index_fixture['reindex'](api)
+        prefix = str(Path(api.record['archive_source']['path']).parent)
+        for tree_entry in api.tree['tree']:
+            tree_entry['path'] = prefix + '/' + Path(tree_entry['path']).name
+        # An unbound shown locator cannot bypass the same-R registry/reader check.
+        api.reading['research']['on_demand_archives'][0]['source']['ref'] = None
+        api.reseal()
         with pytest.raises(ValueError):
             archive.recover_archive(api, reading_commit=fixture['R'],
                 record_id=record['id'], output=tmp_path/f'unbound-{index}')
-        assert not any(call[0] == 'get' for call in api.calls)  # No Git object read before binding.
-        api.record['source']['ref'] = fixture['A']  # Simulated native custody, not a live Git commit.
-        prefix = str(Path(api.record['source']['path']).parent)
-        for tree_entry in api.tree['tree']:
-            tree_entry['path'] = prefix + '/' + Path(tree_entry['path']).name
-        api.refresh()
+        assert not any(call[0] == 'get' for call in api.calls)
+        index_fixture['reindex'](api)
         receipt = archive.recover_archive(api, reading_commit=fixture['R'],
             record_id=record['id'], output=tmp_path/f'recovered-{index}')
+        assert receipt['source_materialization'] == 'RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY'
+        assert api.reading['research']['records'] == []
         assert receipt['case'] == record['case'] and receipt['original_use'] == 'NAVIGATION_ONLY'
         assert receipt['qualification'] == 'RETAINED_FILES_NOT_REVALIDATED_RESEARCH'
         assert receipt['continuation_status'] == 'NOT_EXECUTED' and receipt['remote_write'] is False
@@ -368,3 +380,17 @@ def test_standard_capture_uses_original_archive_reader_for_each_security(tmp_pat
         assert receipt['source_commit'] == fixture['A'] and receipt['reading_commit'] == fixture['R']
     assert len(calls) == (1 if http == 403 else 4)
     assert result['status'] == ('STOPPED_WITH_GAPS' if http == 403 else 'CAPTURED_WITH_GAPS')
+
+
+def test_source_archive_keeps_navigation_use_and_rejects_typed_progress(tmp_path):
+    from decision_kernel.runtime import research_archive_index as archive_index
+    request, calls = client()
+    run(tmp_path, request, ids=['selected-0'])
+    record = json.loads((tmp_path/'out/registration-proposal.json').read_bytes())['references'][0]
+    record['archive_source']['ref'] = 'b' * 40  # Synthetic retained commit, no Git effect.
+    entry = archive_index.project(record)
+    assert entry['use'] == 'NAVIGATION_ONLY' and entry['body_materialized_in_reading'] is False
+    assert 'read_path' not in entry['source'] and len(calls) == 1
+    record['archive'] = {'format':'RESEARCH_PROGRESS', 'expected_sha256':'c' * 64, 'question_id':'synthetic'}
+    with pytest.raises(ValueError, match='source navigation cannot become typed research'):
+        archive_index.project(record)
