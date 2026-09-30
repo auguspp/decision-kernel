@@ -274,7 +274,7 @@
 
 - 601155-unit-correction-notice-20260930：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：先看Odds Book中新城601155单位勘误摘要，再按精确链接恢复四文件后继；这份共用导航正文不是完整纠错档案已读取。金额/股数同时归一，不改每股结果和原接受边界。
-  - [原保存材料](../../sources/git/98c1ccbf5ef070e3053bfdb7655aea20c1f9f1cc/ODDS-BOOK.md)
+  - [原保存材料](../../sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md)
 - [按需恢复：601155-xincheng-policy-full-20260930](https://github.com/auguspp/decision-kernel/blob/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-appointments-36658570687-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6b9f1b4624cf0bab09cf3ea11b545d658da58e46/docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-announcements-36671452199-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6e8d82ddd59e6354311541e590aae17f7d9fe939/docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
@@ -283,6 +283,24 @@
 - [按需恢复：601155-unit-correction-20260930](https://github.com/auguspp/decision-kernel/blob/f54c017c3d06fd46cf2a5da4949c0e461e5789e0/docs/readings/601155-unit-correction-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：NEEDS&#95;REVIEW&#95;NOW；原观察时间：2026-09-30T14:33:23.264900Z
 - 原业务前提：Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.
+- [原价格条件记录](../inbox/36729975005/odds-watch/watch.json)；不是新的行情复核或买入指令。
+
+## 兴森科技 002436.SZ
+
+下一步：本读取没有关联观察；不等于已经核实无变化
+
+- odds-xingsen-provisional-20260930：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
+  - 原用途说明：2026-09-30 兴森 probability-free provisional Odds 的 registry-visible 导航；精确原件为 docs/readings/002436-xingsen-odds-2026-09-30/odds.md@d244c3427d112ad3c8623ab71aeb94408f202920（blob c49222d763654ed8f4e8978bb9ff1e9074f95af2）。40.93公共价格背景、3y/10%与30/35/40x均为 analyst sensitivity；35.73/26.80/20.16为 ANALYST&#95;DERIVED Watch复核层级，非Human接受、canonical Odds或Action。此记录复用共享 Odds Book 读取源，不新增独立 eager source request。
+  - [原保存材料](../../sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md)
+- [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-longitudinal-xingsen-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-cash-bridge-semantic-002436-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-reviewed-activity-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4f7c1f09d0785775084ab122fe0560c266f78609/docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- 原价格条件状态：EVIDENCE&#95;REOPEN&#95;WATCH；原观察时间：2026-09-30T14:33:23.264900Z
+- 原业务前提：Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.
 - [原价格条件记录](../inbox/36729975005/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 300638.SZ
@@ -360,21 +378,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
-
-## 兴森科技 002436.SZ
-
-下一步：先按明确定位恢复旧研究正文
-
-- [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：c-longitudinal-xingsen-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：c-cash-bridge-semantic-002436-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：c-reviewed-activity-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4f7c1f09d0785775084ab122fe0560c266f78609/docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- 原价格条件状态：EVIDENCE&#95;REOPEN&#95;WATCH；原观察时间：2026-09-30T14:33:23.264900Z
-- 原业务前提：Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.
-- [原价格条件记录](../inbox/36729975005/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 688337.SH
 
