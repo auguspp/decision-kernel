@@ -102,7 +102,9 @@ def navigation(entries: list[dict]) -> str:
         value = escape(str(value), quote=True).replace('\n', ' ').replace('\r', ' ')
         for char in '`[]()|*_!': value = value.replace(char, '&#' + str(ord(char)) + ';')
         return value
-    lines = ['', '## 按需恢复的已登记档案', '',
+    heading = ('按需恢复的已登记研究档案' if all(
+        row.get('use') == 'RETAINED_RESEARCH_DOCUMENT' for row in entries) else '按需恢复的已登记档案')
+    lines = ['', '## ' + heading, '',
              '下列仅有精确档案定位，正文未纳入本读取；不是已读研究、待判断请求或新Pre/Quick。',
              '从本次固定R使用既有research_archive与record-id恢复，仍须核验完整目录、字节和进度。', '']
     for row in entries:
