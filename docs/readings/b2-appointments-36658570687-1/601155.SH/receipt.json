@@ -1,0 +1,82 @@
+{
+  "date_qualification": "NOT_PERFORMED",
+  "finished_at": "2026-09-30T02:10:23.167420+00:00",
+  "inspection": {
+    "issues": [],
+    "revision_history_complete": false,
+    "row_count": 1,
+    "rows": [
+      {
+        "date_fields": {
+          "actual_disclosure": "",
+          "change_1": "",
+          "change_2": "",
+          "change_3": "",
+          "first_appointment": "2026-10-31"
+        },
+        "invalid_fields": [],
+        "missing_fields": [],
+        "source_identity_fields": {
+          "f001d_0102": "2026-09-30",
+          "latest_time": null,
+          "orgId": "GD012027",
+          "seccode": "601155",
+          "secname": "新城控股"
+        },
+        "source_row_index": 0
+      }
+    ],
+    "status": "CAPTURED_REQUIRES_SOURCE_REVIEW",
+    "table_kind": "LIST"
+  },
+  "invoked_at": "2026-09-30T02:10:20.946365+00:00",
+  "official_appointment_qualified": false,
+  "request": {
+    "code": "601155.SH",
+    "params": {
+      "firstTime": "",
+      "isDesc": "",
+      "lastTime": "",
+      "market": "sh",
+      "orderClos": "",
+      "pagenum": "1",
+      "pagesize": "100",
+      "sectionTime": "2026-09-30",
+      "stockCode": "601155"
+    },
+    "relationship": "NOT_INFERRED_FROM_SOURCE_SELECTION",
+    "report_period": "2026-09-30",
+    "selection": {
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "archive_source": {
+        "bytes": 1504,
+        "git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+        "path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+        "ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+        "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
+      },
+      "case": "601155.SH",
+      "id": "601155-xincheng-policy-full-20260930",
+      "purpose_note": "Human-direct Full continuation around the 2026-09-29 property policy and Xincheng equity-value bridge. Corrects Wuyue/debt/development scope, retains sources/calculations/stop conditions and does not claim typed COMMITTED Research, Human acceptance, canonical Odds, Watch, Action or Investment Authority.",
+      "read_policy": "ON_DEMAND_ARCHIVE",
+      "use": "RETAINED_RESEARCH_DOCUMENT"
+    }
+  },
+  "response": {
+    "body": "response.body",
+    "body_complete": true,
+    "bytes": 290,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 02:10:23 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T02:10:23.166558+00:00",
+    "requested_at": "2026-09-30T02:10:20.946372+00:00",
+    "sha256": "1f2b3692e35f9f59110b32f3b94abf1fb0e6679d701f7a7477c23574d5ff1a09"
+  },
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}

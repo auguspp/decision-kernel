@@ -1,0 +1,22 @@
+{
+  "directory": "docs/readings/b2-appointments-36658570687-1",
+  "meaning": "BIND_ONE_VERIFIED_RETENTION_COMMIT_THEN_APPEND_EXPLICIT_REFERENCES; NEVER_REPLACE_ORIGINAL_RESEARCH_HUMAN_REFERENCES_OR_RESEARCH_AGENDA",
+  "references": [
+    {
+      "archive": {
+        "format": "RETAINED_FILES"
+      },
+      "case": "601155.SH",
+      "id": "b2-appointments-36658570687-1-601155-SH",
+      "purpose_note": "财报预约来源资料（2026-09-30）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
+      "source": {
+        "git_blob": "37ca4c6ac143bcffc18351a0ccdfc66249ba3376",
+        "path": "docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md",
+        "ref": null
+      },
+      "use": "NAVIGATION_ONLY"
+    }
+  ],
+  "source_commit": "UNBOUND_REQUIRES_NATIVE_GIT_CUSTODY_READBACK",
+  "status": "PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED"
+}

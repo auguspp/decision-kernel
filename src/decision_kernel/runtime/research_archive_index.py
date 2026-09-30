@@ -23,8 +23,8 @@ def project(record: dict) -> dict:
     from . import research_archive as archive
 
     model.check(record.get('read_policy') == POLICY
-                and record.get('use') == 'RETAINED_RESEARCH_DOCUMENT',
-                'on-demand policy is limited to retained research documents')
+                and record.get('use') in {'RETAINED_RESEARCH_DOCUMENT', 'NAVIGATION_ONLY'},
+                'on-demand policy is limited to retained research or source navigation')
     for key in ('id', 'case', 'purpose_note'):
         model.check(isinstance(record.get(key), str) and bool(record[key]),
                     'archive index identity missing')
@@ -46,6 +46,8 @@ def project(record: dict) -> dict:
     config = record['archive']
     model.check(isinstance(config, dict) and config.get('format') in {'RETAINED_FILES', 'RESEARCH_PROGRESS'}
                 and set(config) == archive.FORMATS[config['format']], 'archive index format unsupported')
+    model.check(record['use'] != 'NAVIGATION_ONLY' or config['format'] == 'RETAINED_FILES',
+                'source navigation cannot become typed research')
     if config['format'] == 'RESEARCH_PROGRESS':
         model.check(isinstance(config['expected_sha256'], str)
                     and re.fullmatch(r'[0-9a-f]{64}', config['expected_sha256']) is not None,
@@ -100,7 +102,9 @@ def navigation(entries: list[dict]) -> str:
         value = escape(str(value), quote=True).replace('\n', ' ').replace('\r', ' ')
         for char in '`[]()|*_!': value = value.replace(char, '&#' + str(ord(char)) + ';')
         return value
-    lines = ['', '## 按需恢复的已登记研究档案', '',
+    heading = ('按需恢复的已登记研究档案' if all(
+        row.get('use') == 'RETAINED_RESEARCH_DOCUMENT' for row in entries) else '按需恢复的已登记档案')
+    lines = ['', '## ' + heading, '',
              '下列仅有精确档案定位，正文未纳入本读取；不是已读研究、待判断请求或新Pre/Quick。',
              '从本次固定R使用既有research_archive与record-id恢复，仍须核验完整目录、字节和进度。', '']
     for row in entries:

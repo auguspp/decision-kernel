@@ -1,0 +1,66 @@
+{
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36658570687",
+    "GITHUB_SHA": "3ebb5d8456a8f6d544d329d0fcc9e0691b26bee7",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "max_requests": 1,
+  "method": "POST",
+  "redirects": false,
+  "requests": [
+    {
+      "code": "601155.SH",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sh",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "601155"
+      },
+      "relationship": "NOT_INFERRED_FROM_SOURCE_SELECTION",
+      "report_period": "2026-09-30",
+      "selection": {
+        "archive": {
+          "format": "RETAINED_FILES"
+        },
+        "archive_source": {
+          "bytes": 1504,
+          "git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
+          "path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
+          "ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
+          "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
+        },
+        "case": "601155.SH",
+        "id": "601155-xincheng-policy-full-20260930",
+        "purpose_note": "Human-direct Full continuation around the 2026-09-29 property policy and Xincheng equity-value bridge. Corrects Wuyue/debt/development scope, retains sources/calculations/stop conditions and does not claim typed COMMITTED Research, Human acceptance, canonical Odds, Watch, Action or Investment Authority.",
+        "read_policy": "ON_DEMAND_ARCHIVE",
+        "use": "RETAINED_RESEARCH_DOCUMENT"
+      }
+    }
+  ],
+  "retries": 0,
+  "reuse": "AKShare stock_yjyg_cninfo.py@0191689d57c667b7c7a198fd0cf97316837ef311",
+  "scope_source": {
+    "bytes": 50470,
+    "git_blob": "2771f23db904684e7094775ed1877691f10e787c",
+    "meaning": "EXPLICIT_SOURCE_LOOKUP_NOT_FOLLOW_HOLDING_OR_AUTOMATIC_ADMISSION",
+    "path": "current_state/registry.json",
+    "ref": "3ebb5d8456a8f6d544d329d0fcc9e0691b26bee7",
+    "selected_reference_ids": [
+      "601155-xincheng-policy-full-20260930"
+    ],
+    "sha256": "9bffbff75c186b840fb26fe3526b81dece54bb6f220f38348c62341f05d6cce0"
+  },
+  "source": "https://www.cninfo.com.cn/new/information/getPrbookInfo",
+  "source_identity": "CNINFO_PUBLIC_ENDPOINT_NOT_RELAY",
+  "started_at": "2026-09-30T02:10:20.946103+00:00"
+}

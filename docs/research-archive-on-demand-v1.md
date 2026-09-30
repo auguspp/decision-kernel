@@ -1,4 +1,4 @@
-# Explicit on-demand Research archive navigation
+# Explicit on-demand archive navigation
 
 Radar-r3 continuation of #440's actual source-file capacity rejection.
 Reuse Decision: THIN_ADAPTER; #297 pre-implementation receipt5737711951.
@@ -10,7 +10,9 @@ reading. It is not another registry, storage service, research engine or schedul
 Existing references retain their original eager behavior. A new reference may
 explicitly use `read_policy: ON_DEMAND_ARCHIVE`, but only with
 `use: RETAINED_RESEARCH_DOCUMENT` and archive format `RETAINED_FILES` or
-`RESEARCH_PROGRESS`. No Action, Watch, numerical Odds or COMMITTED package is
+`RESEARCH_PROGRESS`, or `use: NAVIGATION_ONLY` with `RETAINED_FILES` only.
+Source/navigation archives keep that original use; they are not typed Research
+progress or accepted company analysis. No Action, Watch, numerical Odds or COMMITTED package is
 silently switched to deferred reading. Missing policy remains legacy eager;
 unknown or malformed policy is a visible rejection with no eager fallback.
 
@@ -81,3 +83,15 @@ reader already provide the required mechanism; no extra dependency is adopted.
 - https://docs.github.com/en/rest/git/blobs
 - https://docs.github.com/en/rest/git/trees
 - https://github.com/PyGithub/PyGithub/blob/main/github/GitBlob.py
+
+## Source-navigation reuse after the first B2 live sample
+
+The first B2 standard-channel sample (#665) exposed eager source exhaustion.
+New appointment archives use the same explicit on-demand declaration, preserving
+NAVIGATION_ONLY rather than relabelling source fields as Research. The old49
+eager references and all source/API/byte bounds remain unchanged. The caller
+proposes exact summary bytes/hash/blob but leaves archive_source.ref null until
+native custody establishes A. Historical raw output/proposals are not rewritten;
+the adopted registry record separately binds the actual retained source.
+The registry/publisher/reader path is unchanged; no provider, schedule or new
+archive service is introduced. Real use and recovery evidence remain in #620/#665.

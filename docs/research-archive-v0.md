@@ -12,7 +12,7 @@ Scope: #321-A；Reuse Decision: **THIN_ADAPTER**。
 
 1. 保存原始工作产物，按实际资格使用原有命令。底稿说明范围、资料、已做/未做、UNKNOWN、停止理由、下一步和前驱。源码链接不是正文留存。
 2. 用现有获准的原生 Git/GitHub 工具将精确文件追加到研究档案目录。新目录必须不存在；保留旧版，不 force、不将整个旧工作分支合进 main。逐文件比较本地字节与远端 blob/大小，记录确切 commit/path；未知写入先只读对账，不盲目重复提交。
-3. 在原 `current_state/registry.json` 的 `references` 追加有明确用途的入口：独立 `id/case/use/purpose_note`，并按实际读取策略使用现役登记形状。**legacy/eager 记录**沿用 `source`；显式 `read_policy: ON_DEMAND_ARCHIVE` 的研究档案必须按 [on-demand contract](research-archive-on-demand-v1.md) **只声明 `archive_source`，不得同时声明 eager `source`**。两者都再声明相应 `archive`。沿用普通 reviewed PR；不得把登记变成研究接受或生产 Odds 配置。原记录不静默替换成同公司新版。
+3. 在原 `current_state/registry.json` 的 `references` 追加有明确用途的入口：独立 `id/case/use/purpose_note`，并按实际读取策略使用现役登记形状。**legacy/eager 记录**沿用 `source`；显式 `read_policy: ON_DEMAND_ARCHIVE` 的档案必须按 [on-demand contract](research-archive-on-demand-v1.md) **只声明 `archive_source`，不得同时声明 eager `source`**。两者都再声明相应 `archive`。沿用普通 reviewed PR；不得把登记变成研究接受或生产 Odds 配置。原记录不静默替换成同公司新版。
 4. 正常 publisher 发布后固定 R，核对其 code/trigger/registry 和可见记录。归档已写而登记/发布失败，分别报告 REGISTRATION_INCOMPLETE/PUBLICATION_PENDING，不丢已存原件。
 5. 另一会话按下面的读取路径恢复同一档案，再决定剩余工作；不会再次执行前面的研究来“恢复”。
 
@@ -23,7 +23,7 @@ Scope: #321-A；Reuse Decision: **THIN_ADAPTER**。
 先区分**读取策略**与**档案资格**，不能把两个维度混成一种固定 JSON 形状：
 
 - legacy / eager reference 继续使用 `source`，并按原合同声明 `archive`；
-- 显式 `read_policy: ON_DEMAND_ARCHIVE` 只适用于 `RETAINED_RESEARCH_DOCUMENT` 的 `RETAINED_FILES / RESEARCH_PROGRESS`。它必须使用精确的 `archive_source {path, ref, git_blob, sha256, bytes}`，**不得同时声明 `source`**；现役 `research_archive_index.project()` 会对此 fail closed。完整合同见 [Explicit on-demand Research archive navigation](research-archive-on-demand-v1.md)。
+- 显式 `read_policy: ON_DEMAND_ARCHIVE` 适用于 `RETAINED_RESEARCH_DOCUMENT` 的 `RETAINED_FILES / RESEARCH_PROGRESS`，以及 `NAVIGATION_ONLY` 的 `RETAINED_FILES` 来源资料；后者不取得 typed Research 资格。它必须使用精确的 `archive_source {path, ref, git_blob, sha256, bytes}`，**不得同时声明 `source`**；现役 `research_archive_index.project()` 会对此 fail closed。完整合同见 [Explicit on-demand Research archive navigation](research-archive-on-demand-v1.md)。
 
 入口路径都必须指向该档案目录中的原件，`ref` 是精确 commit，不是分支。下面三种 `archive` format 只说明恢复后的资格，不会因为换成 on-demand 登记而升级：
 
@@ -79,7 +79,7 @@ v0 支持一个目录内最多16个普通100644文件，每文件不超过512 Ki
 
 ## 7. 显式按需档案索引（Radar-r3 / 2026-09-19）
 
-已读取正文与已登记档案定位必须分开。具体合同见[按需索引](research-archive-on-demand-v1.md)。在原references上opt-in `read_policy: ON_DEMAND_ARCHIVE`，只适用于RETAINED_RESEARCH_DOCUMENT的RETAINED_FILES/RESEARCH_PROGRESS；archive_source的commit/path/blob/SHA256/bytes及进度摘要必须精确提供。旧记录默认仍完整读取，不自动迁移。
+已读取正文与已登记档案定位必须分开。具体合同见[按需索引](research-archive-on-demand-v1.md)。在原references上opt-in `read_policy: ON_DEMAND_ARCHIVE`，适用于RETAINED_RESEARCH_DOCUMENT的RETAINED_FILES/RESEARCH_PROGRESS，以及NAVIGATION_ONLY的RETAINED_FILES来源资料；archive_source的commit/path/blob/SHA256/bytes及进度摘要必须精确提供。旧记录默认仍完整读取，不自动迁移。
 
 日常读取将这类声明投影为 `research.on_demand_archives`，状态REGISTERED_ARCHIVE_NOT_MATERIALIZED；不是正文读取或研究接受，不能据它创建Human待办。公司阅读单独显示和统计这些定位。上述第3节原命令仍使用同一固定R和record-id，验证registry与索引相符后恢复原精确目录、逐文件核验并调用原typed reader；没有main/latest或eager回退。成功回执才标明RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY。
 

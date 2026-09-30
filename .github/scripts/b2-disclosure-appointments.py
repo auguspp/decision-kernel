@@ -251,8 +251,10 @@ def save_security_readings(output, result, plan_raw):
             "case": item["code"], "use": "NAVIGATION_ONLY",
             "purpose_note": f"财报预约来源资料（{result['report_period']}）；原资料引用{item['reference_id']}。"
                             "仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
-            "source": {"path": f"{directory}/{item['code']}/summary.md", "ref": None,
-                       "git_blob": sha1(f"blob {len(summary)}\0".encode() + summary).hexdigest()},
+            "read_policy": "ON_DEMAND_ARCHIVE",
+            "archive_source": {"path": f"{directory}/{item['code']}/summary.md", "ref": None,
+                       "git_blob": sha1(f"blob {len(summary)}\0".encode() + summary).hexdigest(),
+                       "bytes": len(summary), "sha256": sha256(summary).hexdigest()},
             "archive": {"format": "RETAINED_FILES"}})
     save(output / "registration-proposal.json", encoded({
         "status": "PROPOSED_NOT_SAVED_REGISTERED_OR_PUBLISHED", "directory": directory,

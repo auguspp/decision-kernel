@@ -1,0 +1,57 @@
+{
+  "finished_at": "2026-09-30T02:10:23.167653+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36658570687",
+    "GITHUB_SHA": "3ebb5d8456a8f6d544d329d0fcc9e0691b26bee7",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "official_appointment_qualified": false,
+  "outcomes": [
+    {
+      "code": "601155.SH",
+      "inspection": {
+        "issues": [],
+        "revision_history_complete": false,
+        "row_count": 1,
+        "rows": [
+          {
+            "date_fields": {
+              "actual_disclosure": "",
+              "change_1": "",
+              "change_2": "",
+              "change_3": "",
+              "first_appointment": "2026-10-31"
+            },
+            "invalid_fields": [],
+            "missing_fields": [],
+            "source_identity_fields": {
+              "f001d_0102": "2026-09-30",
+              "latest_time": null,
+              "orgId": "GD012027",
+              "seccode": "601155",
+              "secname": "新城控股"
+            },
+            "source_row_index": 0
+          }
+        ],
+        "status": "CAPTURED_REQUIRES_SOURCE_REVIEW",
+        "table_kind": "LIST"
+      },
+      "receipt": "601155.SH/receipt.json",
+      "received_at": "2026-09-30T02:10:23.166558+00:00",
+      "reference_id": "601155-xincheng-policy-full-20260930",
+      "registered_use": "RETAINED_RESEARCH_DOCUMENT",
+      "requested_at": "2026-09-30T02:10:20.946372+00:00",
+      "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+    }
+  ],
+  "report_period": "2026-09-30",
+  "research_executed": false,
+  "source": "https://www.cninfo.com.cn/new/information/getPrbookInfo",
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}
