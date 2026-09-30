@@ -100,9 +100,9 @@ def validate_config(config: dict[str, Any], registry: dict[str, Any]) -> None:
     authority = config["registration_authority"]
     if not isinstance(authority, dict) or authority.get("issue") != 349:
         raise ValueError("Odds Watch registration authority must bind #349")
-    if authority.get("comment_id") != 5694193765:
+    if authority.get("comment_id") != 5913035975:
         raise ValueError("Odds Watch registration authority comment differs")
-    if authority.get("meaning") != "HUMAN_AUTHORIZED_PROJECT_WATCH_REGISTRATION_NOT_INVESTMENT_AUTHORITY":
+    if authority.get("meaning") != "HUMAN_AUTHORIZED_GRADED_WATCH_REGISTRATION_NOT_INVESTMENT_AUTHORITY":
         raise ValueError("Odds Watch registration authority meaning differs")
     if config["approaching_policy"] != NO_PROXIMITY_POLICY:
         raise ValueError("Odds Watch must not invent a global proximity threshold")
