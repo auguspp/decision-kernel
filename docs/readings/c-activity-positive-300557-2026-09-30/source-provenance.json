@@ -1,0 +1,34 @@
+{
+  "version": "retained-official-ir-source-v1",
+  "subject": "300557.SZ",
+  "event_record": "2024-002",
+  "source_url": "https://static.cninfo.com.cn/finalpage/2024-05-10/1220034966.PDF",
+  "pdf_pages": 3,
+  "acquisition_clock": "2026-09-30T15:51:00.467715606Z",
+  "acquisition_clock_basis": "LOCAL_DOWNLOAD_COMPLETION_MTIME_NOT_SERVER_PUBLICATION",
+  "historical_publication_clock": "NOT_ESTABLISHED",
+  "source_date_is_not_available_at": true,
+  "extraction": {
+    "program": "pdftotext",
+    "version": "25.03.0",
+    "arguments": [
+      "-layout"
+    ],
+    "scope": "ALL_THREE_PAGES",
+    "encoding": "UTF-8",
+    "original_pdf_unchanged": true,
+    "rendered_review": "All three pages inspected; roster on page1, concluding date/no attachments on page2, header-only page3"
+  },
+  "files": {
+    "source.pdf": {
+      "bytes": 266924,
+      "sha256": "4b7324b5d6543d683ff64dfcc0ed08e65e20adea0d94a5bfaddfce62e7de6c55"
+    },
+    "source.txt": {
+      "bytes": 4847,
+      "sha256": "4c61136669960ea6100c23ae544453268f908e8bbc6345dd1a4ab80b328aadc8"
+    }
+  },
+  "qualification": "OFFICIAL_PDF_BYTES_AND_REPRODUCIBLE_TEXT_EXTRACTION_NOT_AUTOMATIC_ENTITY_TRUTH",
+  "scope_note": "One selected disclosed event. Disclosed short institution names and event-local person identities only, no issuer-window census or cross-event identity claim."
+}
