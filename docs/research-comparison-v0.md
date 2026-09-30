@@ -24,6 +24,8 @@ The opt-in [reviewed institutional forecast contract](reviewed-forecast-comparis
 
 First recover the selected on-demand archive through the ordinary fixed-R entry and `research_archive` contract. Each real archive README provides the externally pinned input SHA256 and exact explicit local-source arguments. Run current qualified code's `python -m decision_kernel.runtime.research_comparison`, not any recovered script. An absent output directory receives comparison.json/md. No network, model, Market, Watch or remote-write call occurs. The standalone consumer does not pretend to have performed live archive retrieval.
 
+The two output files follow the shared [create-only report publication contract](report-output-publication-v0.md): finish both in private staging, then atomically publish without replacing an existing destination. Report values, hashes and Markdown are unchanged.
+
 Real retained cases:
 - [Accelink profit versus cash absorption](readings/c-longitudinal-accelink-2026-09-30/README.md): parent profit increases while consolidated CFO deteriorates, cash capex increases and the historical seasonality challenge remains limited by inventory/financing evidence
 - [Xingsen R1→R2 cash-capex recovery](readings/c-longitudinal-xingsen-2026-09-30/README.md): missing→known capex, derived Q2 CFO/capex/refunds, unchanged displayed-precision old arithmetic and explicitly unchecked historical notes

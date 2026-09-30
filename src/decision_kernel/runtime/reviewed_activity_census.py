@@ -18,7 +18,7 @@ from ..identity import canonical_hash, canonical_json
 from . import current_state as state
 from . import institutional_context as raw_context
 from .research_comparison import clock, require, selected, _forecast_member
-from .research_commit_only import _json, _read, _safe_path, _write
+from .research_commit_only import _json, _read, _write, _publish_report_files
 
 VERSION = 'reviewed-activity-census-v0'
 AUTHORITY = {'investment_authority': 'NONE', 'human_acceptance': 'NOT_ESTABLISHED',
@@ -384,9 +384,10 @@ def main():
     report = build(_json(raw), files)
     require(len((canonical_json(report) + '\n').encode()) <= 512 * 1024 and
             len(render(report).encode()) <= 512 * 1024, 'bounded output required')
-    out = Path(args.output); _safe_path(out); out.mkdir(parents=False, exist_ok=False)
-    _write(out / 'census.json', (canonical_json(report) + '\n').encode())
-    _write(out / 'census.md', render(report).encode())
+    _publish_report_files(Path(args.output), {
+        'census.json': (canonical_json(report) + '\n').encode(),
+        'census.md': render(report).encode(),
+    }, write_file=_write)
 
 
 if __name__ == '__main__':

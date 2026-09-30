@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+date: Wed, 30 Sep 2026 17:21:35 GMT
+
+HTTP/2 200 
+date: Wed, 30 Sep 2026 17:21:37 GMT
+content-type: application/pdf
+content-length: 117985
+server: openresty
+last-modified: Wed, 16 Feb 2022 06:56:58 GMT
+islatest: true
+x-ccdn-expires: 4481409
+via: LA-MEX-queretaro-EDGE3-CACHE3[5],LA-MEX-queretaro-EDGE3-CACHE5[0,TCP_HIT,4],LA-MEX-mexicocity-GLOBAL1-CACHE16[3],LA-MEX-mexicocity-GLOBAL1-CACHE18[0,TCP_HIT,2]
+x-hcs-proxy-type: 1
+x-ccdn-cachettl: 31104000
+x-ccdn-req-id-46b1: 061d05d13bd358424cee229201e3f3c4
+nginx-hit: 1
+age: 702591
+accept-ranges: bytes
+access-control-allow-origin: http://*.cninfo.com.cn,https://*.cninfo.com.cn,https://*.cs.com.cn
+

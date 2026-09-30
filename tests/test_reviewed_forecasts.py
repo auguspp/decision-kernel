@@ -45,7 +45,7 @@ def fixture(measure='TOTAL_PARENT_PROFIT', subject='999991.SZ'):
             'limitations':'SYNTHETIC_FIXTURE; not original market or broker data'}
         value['observations'].append({'id':str(i),'subject':subject,'source_id':'s',
             'locator':{'pointer':f'/records/{i}/value'},'value':rec['value'],'type':'NUMBER','status':'KNOWN',
-            'metric':measure,'scope':'PARENT_ATTRIBUTABLE','restatement':'SYNTHETIC_UNCHANGED_BASIS',
+            'metric':mb['measure'],'scope':mb['attribution'],'restatement':mb['adjustment'],
             'basis_note':'Explicit synthetic reviewed input','currency':'CNY','scale':'1',
             'period':{'kind':'FLOW','start':target['start'],'end':target['end']},'forecast':forecast})
     value['comparisons']=[{'id':'forecast','kind':'FORECAST_COMPARISON','operation':'forecast_difference',
@@ -77,6 +77,69 @@ def test_two_synthetic_issuers_and_correct_units(measure,subject,unit):
     assert out['relation']=='SAME_INSTITUTION_FORECAST_VINTAGE_CHANGE'
     assert out['source_qualifications']==['SYNTHETIC_FIXTURE']*2
     assert out['full_model_revision']=='NOT_CERTIFIED'
+
+
+@pytest.mark.parametrize('measure',['TOTAL_PARENT_PROFIT','EPS'])
+def test_canonical_basis_is_distinct_from_bound_source_label_and_review_notes(measure):
+    v,r=fixture(measure)
+    for i,o in enumerate(v['observations']):
+        f=o['forecast']
+        r[i]['metric_label']=f['metric_label']=f'Synthetic displayed metric label {i}'
+        f['metric_basis']['mapping_note']=f'Synthetic reviewed source mapping {i}'
+        o['basis_note']=f'Synthetic review note {i}'
+        assert (o['metric'],o['scope'],o['restatement'])==tuple(
+            f['metric_basis'][k] for k in ('measure','attribution','adjustment'))
+    out=result(v,r)
+    assert out['status']=='REVIEWED_FORECAST_ARITHMETIC_ONLY' and out['value']=='0.30'
+
+
+@pytest.mark.parametrize('indices',[(0,),(1,),(0,1)])
+@pytest.mark.parametrize('field,conflict',[
+    ('metric','EPS'),('scope','CONSOLIDATED'),('restatement','RESTATED_ESTIMATE')])
+def test_outer_basis_must_match_its_source_bound_forecast_basis(indices,field,conflict):
+    v,r=fixture()
+    for i in indices:v['observations'][i][field]=conflict
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert out['relation']=='SAME_INSTITUTION_FORECAST_VINTAGE_CHANGE'
+    assert out['blockers']==sorted(
+        ('old' if i==0 else 'new')+':OBSERVATION_BASIS_DIFFERS:'+field for i in indices)
+
+
+@pytest.mark.parametrize('field',['metric','scope','restatement'])
+@pytest.mark.parametrize('unknown',['UNKNOWN',' not_established ','UNVERIFIED','UNRESOLVED','NONE','N/A','   '])
+def test_outer_unknown_basis_does_not_inherit_qualified_inner_basis(field,unknown):
+    v,r=fixture()
+    for o in v['observations']:o[field]=unknown
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert out['blockers']==['new:OBSERVATION_BASIS_UNKNOWN:'+field,'old:OBSERVATION_BASIS_UNKNOWN:'+field]
+
+
+@pytest.mark.parametrize('outer,inner,changed',[
+    ('metric','measure','EPS'),('scope','attribution','GROUP_ATTRIBUTABLE'),
+    ('restatement','adjustment','ADJUSTED_ESTIMATE')])
+def test_individually_consistent_but_different_canonical_bases_cannot_be_compared(outer,inner,changed):
+    v,r=fixture();o=v['observations'][1];f=o['forecast']
+    o[outer]=r[1]['metric_basis'][inner]=f['metric_basis'][inner]=changed
+    if inner=='measure':
+        r[1]['metric_label']=f['metric_label']=changed
+        _,eps=fixture('EPS')
+        r[1]['share_basis']=deepcopy(eps[1]['share_basis'])
+        f['share_basis']=deepcopy(r[1]['share_basis'])
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert 'METRIC_BASIS_DIFFERS:'+inner in out['blockers']
+    assert not any('OBSERVATION_BASIS_' in b for b in out['blockers'])
+
+
+def test_agreeing_outer_and_inner_declarations_still_require_actual_source_binding():
+    v,r=fixture()
+    for o in v['observations']:
+        o['restatement']=o['forecast']['metric_basis']['adjustment']='ADJUSTED_ESTIMATE'
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert out['blockers']==['new:metric_basis:SOURCE_BINDING_INVALID','old:metric_basis:SOURCE_BINDING_INVALID']
 
 
 def test_currency_scale_conversion_and_total_denominator_not_applicable():
@@ -198,10 +261,15 @@ def test_bound_unit_label_must_match_measurement_dimension(measure,label,scale):
     out=result(v,r);assert out['status']=='NOT_COMPARABLE' and out['value'] is None
 
 
-@pytest.mark.parametrize('unknown',[' UNKNOWN ','   ',' not_established '])
-def test_whitespace_unknown_basis_cannot_be_qualified(unknown):
-    v,r=fixture();r[1]['metric_basis']['adjustment']=unknown;v['observations'][1]['forecast']['metric_basis']['adjustment']=unknown
-    assert result(v,r)['status']=='NOT_COMPARABLE'
+@pytest.mark.parametrize('outer,inner',[('scope','attribution'),('restatement','adjustment')])
+@pytest.mark.parametrize('unknown',[' UNKNOWN ','   ',' not_established ','UNVERIFIED','UNRESOLVED','NONE','N/A'])
+def test_matching_unknown_basis_cannot_be_qualified(outer,inner,unknown):
+    v,r=fixture()
+    for i,o in enumerate(v['observations']):
+        o[outer]=r[i]['metric_basis'][inner]=o['forecast']['metric_basis'][inner]=unknown
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert out['blockers']==['new:METRIC_BASIS_UNKNOWN','old:METRIC_BASIS_UNKNOWN']
 
 
 def test_tomorrow_label_without_qualified_clock_is_not_permitted_by_tolerance():

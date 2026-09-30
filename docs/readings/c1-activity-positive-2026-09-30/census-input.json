@@ -1,0 +1,790 @@
+{
+  "authority": {
+    "human_acceptance": "NOT_ESTABLISHED",
+    "investment_authority": "NONE",
+    "model_calls": 0,
+    "network_requests": 0,
+    "research_committed": false
+  },
+  "entities": [
+    {
+      "equivalence_note": "One explicitly named institution in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "institution-zhaoshang",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "INSTITUTION:招商证券:招商证券",
+      "kind": "INSTITUTION",
+      "names": [
+        "招商证券"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-zhaoshang-1",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:招商证券:鄢凡",
+      "kind": "PERSON",
+      "names": [
+        "鄢凡"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-zhaoshang-2",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:招商证券:程鑫",
+      "kind": "PERSON",
+      "names": [
+        "程鑫"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named institution in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "institution-xingzheng",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "INSTITUTION:兴证全球基金:兴证全球基金",
+      "kind": "INSTITUTION",
+      "names": [
+        "兴证全球基金"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-1",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:邹欣",
+      "kind": "PERSON",
+      "names": [
+        "邹欣"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-2",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:程剑",
+      "kind": "PERSON",
+      "names": [
+        "程剑"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-3",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:涂围",
+      "kind": "PERSON",
+      "names": [
+        "涂围"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-4",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:童兰",
+      "kind": "PERSON",
+      "names": [
+        "童兰"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-5",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:董理",
+      "kind": "PERSON",
+      "names": [
+        "董理"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "visitor-xingzheng-6",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:兴证全球基金:孙统",
+      "kind": "PERSON",
+      "names": [
+        "孙统"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "host-jiangwei",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:002436.SZ issuer host: 副总经理、董事会秘书：蒋威:蒋威",
+      "kind": "PERSON",
+      "names": [
+        "蒋威"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "host-chenxiaoman",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:002436.SZ issuer host: 证券投资部：陈小曼、肖晓月:陈小曼",
+      "kind": "PERSON",
+      "names": [
+        "陈小曼"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    },
+    {
+      "equivalence_note": "One explicitly named person with source-stated affiliation or job in this single event roster. Identity is scoped to this selected record. No global identity resolution, cross-event equivalence, legal-entity registry validation, employment-currentness, or attendance outside this record is claimed.",
+      "id": "host-xiaoxiaoyue",
+      "identity_basis": "REVIEWED_EQUIVALENCE",
+      "identity_qualification": "REVIEWED_RESOLVED",
+      "identity_value": "PERSON:002436.SZ issuer host: 证券投资部：陈小曼、肖晓月:肖晓月",
+      "kind": "PERSON",
+      "names": [
+        "肖晓月"
+      ],
+      "namespace": "002436.SZ:2022-02-001:selected-source-roster"
+    }
+  ],
+  "events": [
+    {
+      "attendance": [
+        {
+          "entity_id": "institution-zhaoshang",
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/institution-zhaoshang_name"
+              },
+              "value": "招商证券"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "The source table lists this institution and its named visitors under 参与单位名称及人员姓名; the issuer host roster is a separate table field."
+        },
+        {
+          "entity_id": "visitor-zhaoshang-1",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-zhaoshang_name"
+                },
+                "value": "招商证券"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-zhaoshang-1_affiliation_line"
+                },
+                "value": "招商证券：鄢凡、程鑫"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-zhaoshang-1_name"
+              },
+              "value": "鄢凡"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-zhaoshang-2",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-zhaoshang_name"
+                },
+                "value": "招商证券"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-zhaoshang-2_affiliation_line"
+                },
+                "value": "招商证券：鄢凡、程鑫"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-zhaoshang-2_name"
+              },
+              "value": "程鑫"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "institution-xingzheng",
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/institution-xingzheng_name"
+              },
+              "value": "兴证全球基金"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "The source table lists this institution and its named visitors under 参与单位名称及人员姓名; the issuer host roster is a separate table field."
+        },
+        {
+          "entity_id": "visitor-xingzheng-1",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-1_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-1_name"
+              },
+              "value": "邹欣"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-xingzheng-2",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-2_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-2_name"
+              },
+              "value": "程剑"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-xingzheng-3",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-3_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-3_name"
+              },
+              "value": "涂围"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-xingzheng-4",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-4_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-4_name"
+              },
+              "value": "童兰"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-xingzheng-5",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-5_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-5_name"
+              },
+              "value": "董理"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "visitor-xingzheng-6",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/institution-xingzheng_name"
+                },
+                "value": "兴证全球基金"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/visitor-xingzheng-6_affiliation_line"
+                },
+                "value": "兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor-xingzheng-6_name"
+              },
+              "value": "孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "VISITOR",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/visitor_roster_verbatim"
+              },
+              "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Named in the visitor field and grouped with the stated institution. This is an event-scoped reviewed person assignment, not global resolution from a repeated bare name."
+        },
+        {
+          "entity_id": "host-jiangwei",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/issuer_name"
+                },
+                "value": "深圳市兴森快捷电路科技股份有限公司"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/host-jiangwei_job_line"
+                },
+                "value": "副总经理、董事会秘书：蒋威"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host-jiangwei_name"
+              },
+              "value": "蒋威"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "HOST",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host_roster_verbatim"
+              },
+              "value": "上市公司接待\n人员姓名\n副总经理、董事会秘书：蒋威\n证券投资部：陈小曼、肖晓月"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Explicitly in the separately labeled 上市公司接待人员姓名 field. Excluded from visiting institution/person and participant-event totals."
+        },
+        {
+          "entity_id": "host-chenxiaoman",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/issuer_name"
+                },
+                "value": "深圳市兴森快捷电路科技股份有限公司"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/host-chenxiaoman_job_line"
+                },
+                "value": "证券投资部：陈小曼、肖晓月"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host-chenxiaoman_name"
+              },
+              "value": "陈小曼"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "HOST",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host_roster_verbatim"
+              },
+              "value": "上市公司接待\n人员姓名\n副总经理、董事会秘书：蒋威\n证券投资部：陈小曼、肖晓月"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Explicitly in the separately labeled 上市公司接待人员姓名 field. Excluded from visiting institution/person and participant-event totals."
+        },
+        {
+          "entity_id": "host-xiaoxiaoyue",
+          "identity_evidence": [
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/issuer_name"
+                },
+                "value": "深圳市兴森快捷电路科技股份有限公司"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            },
+            {
+              "binding": {
+                "locator": {
+                  "pointer": "/record/host-xiaoxiaoyue_job_line"
+                },
+                "value": "证券投资部：陈小曼、肖晓月"
+              },
+              "record_id": "r-xingsen-2022-02-001"
+            }
+          ],
+          "name": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host-xiaoxiaoyue_name"
+              },
+              "value": "肖晓月"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role": "HOST",
+          "role_evidence": {
+            "binding": {
+              "locator": {
+                "pointer": "/record/host_roster_verbatim"
+              },
+              "value": "上市公司接待\n人员姓名\n副总经理、董事会秘书：蒋威\n证券投资部：陈小曼、肖晓月"
+            },
+            "record_id": "r-xingsen-2022-02-001"
+          },
+          "role_note": "Explicitly in the separately labeled 上市公司接待人员姓名 field. Excluded from visiting institution/person and participant-event totals."
+        }
+      ],
+      "disclosure_date": null,
+      "equivalence_note": "Original issuer event number 2022-02-001 and exact title identify one selected event. Date alone is not the identity. No copies or mirrors are additional events.",
+      "event_date": {
+        "binding": {
+          "locator": {
+            "pointer": "/record/event_date_reviewed_iso"
+          },
+          "value": "2022-02-15"
+        },
+        "record_id": "r-xingsen-2022-02-001"
+      },
+      "id": "e-xingsen-2022-02-001",
+      "identity": {
+        "binding": {
+          "locator": {
+            "pointer": "/record/event_id"
+          },
+          "value": "2022-02-001"
+        },
+        "record_id": "r-xingsen-2022-02-001"
+      },
+      "identity_basis": "ORIGINAL_EVENT_ID",
+      "identity_namespace": "002436.SZ:official-investor-relations-record-number",
+      "records": [
+        "r-xingsen-2022-02-001"
+      ],
+      "roster": {
+        "INSTITUTION": "COMPLETE",
+        "PERSON": "COMPLETE"
+      },
+      "roster_evidence": {
+        "INSTITUTION": {
+          "binding": {
+            "locator": {
+              "pointer": "/record/visitor_roster_verbatim"
+            },
+            "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+          },
+          "record_id": "r-xingsen-2022-02-001"
+        },
+        "PERSON": {
+          "binding": {
+            "locator": {
+              "pointer": "/record/visitor_roster_verbatim"
+            },
+            "value": "参与单位名称\n及人员姓名\n招商证券：鄢凡、程鑫\n兴证全球基金：邹欣、程剑、涂围、童兰、董理、孙统"
+          },
+          "record_id": "r-xingsen-2022-02-001"
+        }
+      },
+      "roster_note": {
+        "INSTITUTION": "Reviewed complete for the selected document roster: the bounded visitor table names exactly 招商证券 and 兴证全球基金 and no ellipsis/等 or anonymous participants. This does not prove undisclosed attendance was absent.",
+        "PERSON": "Reviewed complete for the selected document roster: 2 names under 招商证券 and 6 names under 兴证全球基金. The separate issuer field contains 3 hosts, excluded from visitor counts. This completeness is a reviewed interpretation of the source field, not mechanically certified truth."
+      },
+      "selected_variant": "cninfo-1212383001-original",
+      "variant_note": "The single fetched CNINFO original is the only selected variant. No active competing variant is present in this selected set; this is not an exhaustive correction search.",
+      "variant_resolved": true
+    }
+  ],
+  "limitations": "This is one selected record, not a complete issuer/day/window census or a recent-activity conclusion. UTF-8 source is an explicitly reviewed derivative linked to retained official PDF and verbatim extraction; no hash/parser certifies semantics. Event-scoped names and affiliations do not establish identity globally or across other meetings. Retrieval in 2026 does not establish historical availability. No investment or Research acceptance. Source ref is pending actual immutable commit; this proposal is intentionally not runnable until root fills real custody.",
+  "question": "For the single selected official Xingsen 2022-02-001 disclosure record, how many reviewed events, visiting institutions, visiting participants and participant-event attendances are supported by its named roster?",
+  "records": [
+    {
+      "disposition": "SELECTED",
+      "event_assignment": "e-xingsen-2022-02-001",
+      "id": "r-xingsen-2022-02-001",
+      "kind": "RETAINED_REFERENCE",
+      "locator": {
+        "pointer": "/record"
+      },
+      "review_note": "Derived flat review record from retained CNINFO PDF page 1; original PDF, exact Poppler extraction and normalization provenance remain separate. All names/affiliation/role lines verified against extracted bytes and rendered page 1.",
+      "source_id": "reviewed-event",
+      "variant": "cninfo-1212383001-original"
+    }
+  ],
+  "reviewed_at": "2026-09-30T17:26:23Z",
+  "scope": {
+    "basis": "EVENT_DATE",
+    "begin": "2022-02-15",
+    "coverage": "SELECTED_EVIDENCE_ONLY",
+    "end": "2022-02-15",
+    "inventory_complete": true,
+    "selection_note": "Exactly the one named-roster record 2022-02-001 in the retained official three-page PDF. Complete refers only to this explicitly selected evidence inventory, never all issuer disclosures or events. This newly recovered 2-institution/8-visitor case is distinct from the previously lost 2/2 claim."
+  },
+  "sources": [
+    {
+      "acquired_at": "2026-09-30T17:26:23Z",
+      "bytes": 3368,
+      "git_blob": "59ef5ad5af1d781f9d02f8a486aca012bf4b1092",
+      "id": "reviewed-event",
+      "path": "docs/readings/c1-activity-positive-2026-09-30/reviewed-event.json",
+      "published_at": null,
+      "qualification": "RETAINED_RESEARCH",
+      "ref": "99449097b27de58207631f2b74ef1310112bb148",
+      "sha256": "8f93891f89d1c4ed4be56b3a8621b37b2305e929e5edde921633904b2d60c37e",
+      "subject": "002436.SZ"
+    }
+  ],
+  "subject": "002436.SZ",
+  "version": "reviewed-activity-census-v0"
+}

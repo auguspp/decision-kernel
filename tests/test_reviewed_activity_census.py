@@ -487,3 +487,31 @@ def test_unresolved_host_identity_does_not_block_visiting_population():
     expected = c.build(value, files)['counts']
     next(entity for entity in value['entities'] if entity['id'] == 'host')['identity_qualification'] = 'UNRESOLVED'
     assert c.build(value, files)['counts'] == expected
+
+
+def test_official_named_roster_positive_with_explicit_derivation_and_host_exclusion():
+    """Real selected disclosure, not a synthetic population or issuer-window census."""
+    root = Path(__file__).resolve().parents[1] / 'docs/readings/c1-activity-positive-2026-09-30'
+    mapping = json.loads((root / 'fact-mapping.json').read_bytes())
+    source = (root / 'reviewed-event.json').read_bytes()
+    original = (root / mapping['original_pdf_file']).read_bytes()
+    extracted = (root / 'xingsen-2022-02-15-raw.txt').read_bytes()
+    assert original.startswith(b'%PDF-')
+    assert state.sha256(original) == mapping['original_pdf_sha256']
+    assert state.sha256(extracted) == mapping['extracted_text_sha256']
+    assert state.sha256(source) == mapping['derived_source_sha256']
+    text = extracted.decode()
+    for field in mapping['fields']:
+        assert text[field['extraction_character_start_0based']:field['extraction_character_end_exclusive']] == field['raw_spelling']
+        assert c.selected(source, {'pointer': field['target_pointer']}) == field['reviewed_value']
+    value = json.loads((root / 'census-input.json').read_bytes())
+    assert value['sources'][0]['qualification'] == 'RETAINED_RESEARCH'
+    report = c.build(value, {'reviewed-event': source})
+    assert report == json.loads((root / 'census-report.json').read_bytes())
+    assert c.render(report).encode() == (root / 'census-report.md').read_bytes()
+    assert {k: x['selected_set_total'] for k, x in report['counts'].items()} == {
+        'events': 1, 'distinct_institutions': 2, 'distinct_participants': 8,
+        'participant_event_attendances': 8}
+    assert all(x['issuer_window_total'] is None for x in report['counts'].values())
+    assert sum(x['role'] == 'HOST' for x in value['events'][0]['attendance']) == 3
+    assert '童兰' in text

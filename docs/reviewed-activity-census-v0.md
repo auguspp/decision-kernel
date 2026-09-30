@@ -120,6 +120,16 @@ These are limited real boundary consumers. Positive multi-event/identity/roster
 examples are explicitly synthetic engineering tests. A qualified real positive
 institutional census and its later research use are still separate obligations.
 
+## Genuine selected-record positive successor
+
+The [official named-roster case](readings/c1-activity-positive-2026-09-30/README.md)
+retains the original Xingsen2022-02-001 PDF, unedited extraction, visual check and
+field mappings. The same consumer actually yields one event, two institutions,
+eight visiting people and eight attendances while excluding three issuer hosts.
+The input uses an explicitly reviewed derivative, not a renamed original source.
+This establishes the selected-record use, not issuer-window completeness, global
+person identity, current interest or full C. Earlier negative cases stay unchanged.
+
 ## Consumption and finite acceptance
 
 Use current qualified code, an externally pinned SHA256 of the selected input,
@@ -129,6 +139,9 @@ and explicit `--source ID=LOCAL_FILE` arguments:
 
 The CLI emits `census.json` and `census.md`, never overwrites an existing output,
 never executes retained source instructions and makes no network/model call.
+The [report-pair publication contract](report-output-publication-v0.md) stages
+both files before an atomic create-only publication; a failed pre-publication
+write no longer reserves the final output path or leaves a partial final report.
 Normal fixed-R archive recovery remains the existing `research_archive` route.
 The source capture's derived context/summary can separately be checked by its
 original replay; this census does not become the capture owner.
