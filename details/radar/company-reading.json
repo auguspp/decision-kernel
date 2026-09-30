@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "4769e1d3a94f8efc04e949c9519bf213654ed39e4092768403facf97727dfb49",
+    "base_reading_hash": "895e848ac6d9dd29aa22cfaf71fdfddb0ff9c0d057f3156292fc4a5a196a89aa",
     "companies": [
       {
         "automatic_admission": false,
@@ -6093,7 +6093,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-09-30T15:59:48.533040+00:00",
+    "generated_at": "2026-09-30T16:02:09.623889+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6106,7 +6106,7 @@
     "signal_transition_authority": "NONE",
     "source_status": {
       "concept": {
-        "api_calls_after_attempt": 97,
+        "api_calls_after_attempt": 95,
         "error_type": "ConceptSourceError",
         "failed_stage": "PAYLOAD_REPLAY",
         "latest_attempt": {
@@ -6125,7 +6125,7 @@
         },
         "meaning": "CONCEPT_READ_GAP_NOT_ZERO; OTHER_SOURCES_PRESERVED; NO_OLDER_SUCCESS_FALLBACK",
         "pending_blob_writes": 2,
-        "retained_file_count": 119,
+        "retained_file_count": 117,
         "status": "UNAVAILABLE_OR_REJECTED"
       },
       "concept_detail": {
@@ -6287,5 +6287,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "75a2cbcd4bc47375d2ec539d18ae8ea2b3d180613b82808ce24d157244cfb808"
+  "projection_hash": "9d24076c239cf0ad76dcbea739e19f6e8b67c585f3489f46ed56a245b8bb760c"
 }
