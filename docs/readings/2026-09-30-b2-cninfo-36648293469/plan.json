@@ -1,0 +1,124 @@
+{
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36648293469",
+    "GITHUB_SHA": "0d63bab1e2b95301b764b21bbbbfb2f60b88d0fd",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "max_requests": 6,
+  "method": "POST",
+  "redirects": false,
+  "requests": [
+    {
+      "code": "603986.SH",
+      "name": "兆易创新",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sh",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "603986"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "code": "688277.SH",
+      "name": "天智航",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "shkcp",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "688277"
+      },
+      "relationship": "FOLLOWED"
+    },
+    {
+      "code": "600276.SH",
+      "name": "恒瑞医药",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sh",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "600276"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "code": "002674.SZ",
+      "name": "兴业科技",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sz",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "002674"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "code": "600598.SH",
+      "name": "北大荒",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sh",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "600598"
+      },
+      "relationship": "ODDS_WATCH"
+    },
+    {
+      "code": "002050.SZ",
+      "name": "三花智控",
+      "params": {
+        "firstTime": "",
+        "isDesc": "",
+        "lastTime": "",
+        "market": "sz",
+        "orderClos": "",
+        "pagenum": "1",
+        "pagesize": "100",
+        "sectionTime": "2026-09-30",
+        "stockCode": "002050"
+      },
+      "relationship": "ODDS_WATCH"
+    }
+  ],
+  "retries": 0,
+  "reuse": "AKShare stock_yjyg_cninfo.py@0191689d57c667b7c7a198fd0cf97316837ef311",
+  "scope_source": {
+    "git_blob": "db18acced6010040233b1efb0c80e66672cb7e10",
+    "path": "docs/readings/2026-09-29-research-agenda-r3.md",
+    "ref": "ef200ed55061aeb019caefca534ba3729b6a467b",
+    "sha256": "67a949fb982466e6f8c5bb07d9f18b7fc7bff89d840c6326ab8db9084bc2e4e0"
+  },
+  "source": "https://www.cninfo.com.cn/new/information/getPrbookInfo",
+  "source_identity": "CNINFO_PUBLIC_ENDPOINT_NOT_RELAY",
+  "started_at": "2026-09-30T00:02:46.396071+00:00"
+}

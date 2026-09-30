@@ -1,0 +1,13 @@
+# B2 巨潮六对象预约原始核对
+
+报告期20260930；仅保管原响应，证券/报告期/首次/变更/实际字段另审。
+不是重跑旧Relay；空返回、失败、未查询分别保留，无自动官方日期认证。
+
+| 证券 | 本次取得状态 |
+|---|---|
+| 603986.SH | CAPTURED_REQUIRES_SOURCE_REVIEW |
+| 688277.SH | CAPTURED_REQUIRES_SOURCE_REVIEW |
+| 600276.SH | CAPTURED_REQUIRES_SOURCE_REVIEW |
+| 002674.SZ | RESPONSE_GAP_RAW_RETAINED |
+| 600598.SH | NOT_QUERIED_AFTER_STOP |
+| 002050.SZ | NOT_QUERIED_AFTER_STOP |

@@ -1,0 +1,38 @@
+{
+  "date_qualification": "NOT_PERFORMED",
+  "finished_at": "2026-09-30T00:02:50.569390+00:00",
+  "invoked_at": "2026-09-30T00:02:49.040285+00:00",
+  "official_appointment_qualified": false,
+  "request": {
+    "code": "688277.SH",
+    "name": "天智航",
+    "params": {
+      "firstTime": "",
+      "isDesc": "",
+      "lastTime": "",
+      "market": "shkcp",
+      "orderClos": "",
+      "pagenum": "1",
+      "pagesize": "100",
+      "sectionTime": "2026-09-30",
+      "stockCode": "688277"
+    },
+    "relationship": "FOLLOWED"
+  },
+  "response": {
+    "body": "response.body",
+    "body_complete": true,
+    "bytes": 290,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 00:02:50 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T00:02:50.568262+00:00",
+    "requested_at": "2026-09-30T00:02:49.040289+00:00",
+    "sha256": "abac69b5b08942d0f3523d221ee827c4233d848869b187c05983e498e246f5c4"
+  },
+  "row_count": 1,
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}

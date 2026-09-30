@@ -1,0 +1,49 @@
+{
+  "finished_at": "2026-09-30T00:02:52.662465+00:00",
+  "identity": {
+    "GITHUB_EVENT_NAME": "workflow_dispatch",
+    "GITHUB_REF": "refs/heads/main",
+    "GITHUB_REPOSITORY": "auguspp/decision-kernel",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "36648293469",
+    "GITHUB_SHA": "0d63bab1e2b95301b764b21bbbbfb2f60b88d0fd",
+    "GITHUB_WORKFLOW_REF": "auguspp/decision-kernel/.github/workflows/b2-disclosure-appointments.yml@refs/heads/main"
+  },
+  "investment_authority": "NONE",
+  "official_appointment_qualified": false,
+  "outcomes": [
+    {
+      "code": "603986.SH",
+      "receipt": "603986.SH/receipt.json",
+      "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+    },
+    {
+      "code": "688277.SH",
+      "receipt": "688277.SH/receipt.json",
+      "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+    },
+    {
+      "code": "600276.SH",
+      "receipt": "600276.SH/receipt.json",
+      "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+    },
+    {
+      "code": "002674.SZ",
+      "receipt": "002674.SZ/receipt.json",
+      "status": "RESPONSE_GAP_RAW_RETAINED"
+    },
+    {
+      "code": "600598.SH",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    },
+    {
+      "code": "002050.SZ",
+      "receipt": null,
+      "status": "NOT_QUERIED_AFTER_STOP"
+    }
+  ],
+  "research_executed": false,
+  "source": "https://www.cninfo.com.cn/new/information/getPrbookInfo",
+  "status": "STOPPED_WITH_GAPS"
+}

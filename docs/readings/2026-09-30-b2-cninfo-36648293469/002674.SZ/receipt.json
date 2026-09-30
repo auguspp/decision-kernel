@@ -1,0 +1,37 @@
+{
+  "date_qualification": "NOT_PERFORMED",
+  "finished_at": "2026-09-30T00:02:52.662349+00:00",
+  "invoked_at": "2026-09-30T00:02:51.681964+00:00",
+  "official_appointment_qualified": false,
+  "request": {
+    "code": "002674.SZ",
+    "name": "兴业科技",
+    "params": {
+      "firstTime": "",
+      "isDesc": "",
+      "lastTime": "",
+      "market": "sz",
+      "orderClos": "",
+      "pagenum": "1",
+      "pagesize": "100",
+      "sectionTime": "2026-09-30",
+      "stockCode": "002674"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "response": {
+    "body": "response.body",
+    "body_complete": true,
+    "bytes": 93,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 00:02:52 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T00:02:52.661260+00:00",
+    "requested_at": "2026-09-30T00:02:51.681968+00:00",
+    "sha256": "9df96d4a14dd4e841028b1ce9571742a85af950b573dca78339bafa4a017a32e"
+  },
+  "status": "RESPONSE_GAP_RAW_RETAINED"
+}
