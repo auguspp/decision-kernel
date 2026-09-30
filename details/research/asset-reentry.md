@@ -371,6 +371,7 @@
 - [按需恢复：c-longitudinal-xingsen-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-cash-bridge-semantic-002436-20260930](https://github.com/auguspp/decision-kernel/blob/eef5b196cfd62ea8e7db4aa45a1a2285e36fe543/docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-reviewed-activity-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4f7c1f09d0785775084ab122fe0560c266f78609/docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：EVIDENCE&#95;REOPEN&#95;WATCH；原观察时间：2026-09-30T14:33:23.264900Z
 - 原业务前提：Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.
 - [原价格条件记录](../inbox/36729975005/odds-watch/watch.json)；不是新的行情复核或买入指令。
