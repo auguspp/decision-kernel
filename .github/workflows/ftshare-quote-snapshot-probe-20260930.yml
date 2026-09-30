@@ -1,0 +1,87 @@
+name: ftshare-quote-snapshot-probe-20260930
+
+on:
+  push:
+    branches:
+      - probe/intraday-quote-20260930
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+    steps:
+      - name: Probe A-share quote-list freshness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import datetime as dt
+          import json, os, urllib.parse, urllib.request
+
+          key = os.environ["FTSHARE_API_KEY"]
+          base = "https://market.ft.tech/gateway/api/v1/market/data/daec/stocks"
+          params = {
+              "order_by": "change_rate desc",
+              "page_no": 1,
+              "page_size": 100,
+          }
+          url = base + "?" + urllib.parse.urlencode(params)
+          requested = dt.datetime.now(dt.timezone.utc)
+          req = urllib.request.Request(url, headers={
+              "FTSHARE_API_KEY": key,
+              "X-Client-Name": "ft-claw",
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "User-Agent": "decision-kernel-quote-probe/20260930",
+          }, method="GET")
+          with urllib.request.urlopen(req, timeout=30) as resp:
+              raw = resp.read()
+              received = dt.datetime.now(dt.timezone.utc)
+              status = resp.status
+              date_header = resp.headers.get("Date")
+          obj = json.loads(raw.decode("utf-8"))
+          data = obj.get("data") or {}
+          items = data.get("items") or []
+
+          def safe(row):
+              return {
+                  "name": row.get("name"),
+                  "symbol": row.get("symbol"),
+                  "latest": row.get("latest"),
+                  "change_rate": row.get("change_rate"),
+                  "prev_close": row.get("prev_close"),
+                  "status": row.get("status"),
+                  "ts_millis": row.get("ts_millis"),
+              }
+
+          ts = [x.get("ts_millis") for x in items if isinstance(x, dict) and isinstance(x.get("ts_millis"), int)]
+          out = {
+              "http_status": status,
+              "provider_code": obj.get("code"),
+              "message": obj.get("message") or obj.get("msg"),
+              "requested_at_utc": requested.isoformat(),
+              "received_at_utc": received.isoformat(),
+              "http_date": date_header,
+              "page": data.get("page"),
+              "page_size": data.get("page_size"),
+              "total_items": data.get("total_items"),
+              "total_pages": data.get("total_pages"),
+              "items_len": len(items),
+              "item_keys": sorted(items[0].keys()) if items and isinstance(items[0], dict) else [],
+              "max_ts_millis_page": max(ts) if ts else None,
+              "min_ts_millis_page": min(ts) if ts else None,
+              "top5": [safe(x) for x in items[:5] if isinstance(x, dict)],
+              "targets_on_page": [safe(x) for x in items if isinstance(x, dict) and x.get("symbol") in {"600663.SH","601155.SH"}],
+          }
+          for k in ("max_ts_millis_page","min_ts_millis_page"):
+              v = out[k]
+              if isinstance(v, int):
+                  out[k.replace("_millis_page","_utc")] = dt.datetime.fromtimestamp(v/1000, tz=dt.timezone.utc).isoformat()
+                  out[k.replace("_millis_page","_asia_shanghai")] = dt.datetime.fromtimestamp(v/1000, tz=dt.timezone(dt.timedelta(hours=8))).isoformat()
+          print(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True))
+          PY
