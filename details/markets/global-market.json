@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-09-30T05:29:44.690382+00:00",
+    "checked_at": "2026-09-30T05:34:09.114843+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -1298,80 +1298,24 @@
       },
       "indices": {
         "error_type": null,
-        "latest_archive": {
-          "artifact_id": 11045178957,
-          "artifact_name": "global-market-indices-36596022060-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36596022060/artifacts/11045178957",
-          "bytes": 7083,
-          "expires_at": "2026-10-29T16:13:51Z",
-          "git_blob": "fe71e12f811bee689a2edb7aadf0b162a5790369",
-          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
-          "origin_run": {
-            "conclusion": "success",
-            "created_at": "2026-09-29T16:12:31Z",
-            "event": "workflow_dispatch",
-            "head_sha": "7c806b4e9edfd2572e92ea60cebad57cfc522735",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36596022060",
-            "id": 36596022060,
-            "operation": null,
-            "path": ".github/workflows/radar-global-market.yml",
-            "run_attempt": 1,
-            "run_started_at": "2026-09-29T16:12:31Z",
-            "status": "completed",
-            "updated_at": "2026-09-29T16:13:56Z"
-          },
-          "read_path": "sources/artifacts/446bd4f0f0b189d4d9e334c8df5b8a4b300494f571a845c9299ac2e0e85ca010.zip",
-          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "446bd4f0f0b189d4d9e334c8df5b8a4b300494f571a845c9299ac2e0e85ca010"
-        },
+        "latest_archive": null,
         "latest_attempt": {
-          "conclusion": "success",
-          "created_at": "2026-09-29T16:12:31Z",
-          "event": "workflow_dispatch",
-          "head_sha": "7c806b4e9edfd2572e92ea60cebad57cfc522735",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36596022060",
-          "id": 36596022060,
+          "conclusion": null,
+          "created_at": "2026-09-30T05:31:48Z",
+          "event": "schedule",
+          "head_sha": "b7119635ae62d75335c75a6820a478fbffe6a54f",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36673828074",
+          "id": 36673828074,
           "operation": null,
           "path": ".github/workflows/radar-global-market.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-09-29T16:12:31Z",
-          "status": "completed",
-          "updated_at": "2026-09-29T16:13:56Z"
+          "run_started_at": "2026-09-30T05:31:48Z",
+          "status": "in_progress",
+          "updated_at": "2026-09-30T05:31:52Z"
         },
-        "latest_capture_status": "PARTIAL",
-        "latest_outcomes": [
-          {
-            "attempt_count": 1,
-            "id": "SPX",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "attempt_count": 1,
-            "id": "IXIC",
-            "status": "EMPTY_RESPONSE_NOT_NO_CHANGE"
-          },
-          {
-            "attempt_count": 1,
-            "id": "HSI",
-            "status": "EMPTY_RESPONSE_NOT_NO_CHANGE"
-          },
-          {
-            "attempt_count": 1,
-            "id": "HKTECH",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "attempt_count": 2,
-            "id": "N225",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "attempt_count": 1,
-            "id": "GDAXI",
-            "status": "ROWS_NORMALIZED"
-          }
-        ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_capture_status": null,
+        "latest_outcomes": [],
+        "latest_read_status": "CAPTURE_IN_PROGRESS",
         "snapshot": {
           "archive": {
             "artifact_id": 11045178957,
@@ -2601,14 +2545,14 @@
       "unattributed_run_ids": []
     },
     "query": {
-      "examined": 4,
+      "examined": 5,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 4,
+      "total_count": 5,
       "unattributed_run_ids": []
     },
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "bd4837ac30befe36129bd4eaf096573278a7f00d4bf7e04998a79e2c9a7741a1"
+  "projection_hash": "9ae700f6a50fef61343e7d3e494cd2dbfb65a0aae1a484ccb655c518a1f09530"
 }
