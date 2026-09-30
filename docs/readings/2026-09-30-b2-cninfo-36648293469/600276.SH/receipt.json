@@ -1,0 +1,38 @@
+{
+  "date_qualification": "NOT_PERFORMED",
+  "finished_at": "2026-09-30T00:02:51.681802+00:00",
+  "invoked_at": "2026-09-30T00:02:50.569565+00:00",
+  "official_appointment_qualified": false,
+  "request": {
+    "code": "600276.SH",
+    "name": "恒瑞医药",
+    "params": {
+      "firstTime": "",
+      "isDesc": "",
+      "lastTime": "",
+      "market": "sh",
+      "orderClos": "",
+      "pagenum": "1",
+      "pagesize": "100",
+      "sectionTime": "2026-09-30",
+      "stockCode": "600276"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "response": {
+    "body": "response.body",
+    "body_complete": true,
+    "bytes": 293,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 00:02:51 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T00:02:51.680705+00:00",
+    "requested_at": "2026-09-30T00:02:50.569569+00:00",
+    "sha256": "d812f2fac08dfc92b9c37005e57619771ef7afd31fd3682f51d6b3919855f44a"
+  },
+  "row_count": 1,
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}

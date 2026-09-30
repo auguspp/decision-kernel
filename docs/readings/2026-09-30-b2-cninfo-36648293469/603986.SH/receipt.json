@@ -1,0 +1,38 @@
+{
+  "date_qualification": "NOT_PERFORMED",
+  "finished_at": "2026-09-30T00:02:49.040113+00:00",
+  "invoked_at": "2026-09-30T00:02:46.396268+00:00",
+  "official_appointment_qualified": false,
+  "request": {
+    "code": "603986.SH",
+    "name": "兆易创新",
+    "params": {
+      "firstTime": "",
+      "isDesc": "",
+      "lastTime": "",
+      "market": "sh",
+      "orderClos": "",
+      "pagenum": "1",
+      "pagesize": "100",
+      "sectionTime": "2026-09-30",
+      "stockCode": "603986"
+    },
+    "relationship": "ODDS_WATCH"
+  },
+  "response": {
+    "body": "response.body",
+    "body_complete": true,
+    "bytes": 292,
+    "error_type": null,
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Date": "Wed, 30 Sep 2026 00:02:49 GMT"
+    },
+    "http_status": 200,
+    "received_at": "2026-09-30T00:02:49.039041+00:00",
+    "requested_at": "2026-09-30T00:02:46.396272+00:00",
+    "sha256": "eb23ae768a74caf7ff9e2a1ed026a3b1b5f0892af6538e920d0aef7ce816f290"
+  },
+  "row_count": 1,
+  "status": "CAPTURED_REQUIRES_SOURCE_REVIEW"
+}
