@@ -255,6 +255,7 @@
   - 原用途说明：User-requested, AI-drafted Full Research v3 as of 2026-09-17: business and financial evidence, frozen pre-expectation Builder, actual Challenger/reconciliation, and bounded profit/cash/price arithmetic. First-entry case NOT METHOD-READY; quoted price CONTEXT&#95;ONLY; no calibrated probability, canonical Odds, Kernel COMMITTED, Human acceptance, Action/watch, or Investment Authority. Full original-source custody remains PARTIAL.
   - [原保存材料](../../sources/git/50982ed0c0f1c5f06941ec8252dc1c5ffcb64d64/README.md)
 - [按需恢复：c-synopsis-comparison-002281-20260930](https://github.com/auguspp/decision-kernel/blob/2a264469fbd0017b46dffe52ceeb6e4b3587bf53/docs/readings/c-synopsis-comparison-002281-2026-09-30/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-longitudinal-accelink-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-accelink-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 
 ## 300183.SZ
 
@@ -362,6 +363,7 @@
 - [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c-longitudinal-xingsen-20260930](https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 
 ## 688337.SH
 
