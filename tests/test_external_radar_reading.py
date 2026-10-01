@@ -252,7 +252,8 @@ def test_workflow_only_enables_reader_not_capture_or_new_trigger():
     path = Path('.github/workflows/current-state-read-entry.yml')
     text = path.read_text()
     assert text.count('--include-external-radar') == 1
-    assert 'schedule:' not in text and 'HITHINK' not in text and 'DEEPSEEK' not in text
+    assert "cron: '50 23 * * *'" in text and "cron: '10 11 * * *'" in text
+    assert 'HITHINK' not in text and 'DEEPSEEK' not in text
     assert 'docker ' not in text and 'newsnow-selfhost' not in text
     assert 'persist-credentials: false' in text and 'cancel-in-progress: false' in text
 

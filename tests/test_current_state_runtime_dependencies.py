@@ -17,7 +17,8 @@ def test_publisher_installs_existing_runtime_extra_instead_of_dev_environment():
     workflow = Path(".github/workflows/current-state-read-entry.yml").read_text()
     assert "python -m pip install -e '.[feeds,documents,concept]'" in workflow
     assert ".[dev]" not in workflow
-    assert "schedule:" not in workflow and "workflow_dispatch:" not in workflow
+    assert "cron: '50 23 * * *'" in workflow and "cron: '10 11 * * *'" in workflow
+    assert "workflow_dispatch:" not in workflow
 
 
 def test_existing_requests_dependency_is_only_used_by_github_delivery_client():
