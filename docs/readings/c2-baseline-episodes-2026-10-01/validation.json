@@ -1,0 +1,15 @@
+{
+  "original_zip_sha256": "4a357ef5973439c3bf17e5842a17e879e3ebe5452070e7aea8d2cf2baaaf3fb1",
+  "source_study_hash": "bbe1500b75db1b73254fac2d074ba96a9de65e5ef9b69603eacc7bbf4afd62a6",
+  "report_hash": "95c3fba25cb900c5aa65ce4f89206d98b8cc5c077a8573b811d62e83581568fd",
+  "python_version": "3.13.5",
+  "pandas_version": "2.2.3",
+  "independent_groupby_shift_onsets": 449,
+  "onset_key_sets_equal": true,
+  "prefix_checks": 66,
+  "same_input_replay_bytes_equal": true,
+  "focused_tests_passed": 16,
+  "full_native_ci": "NOT_YET_RUN_AT_PREPARATION",
+  "new_source_requests": 0,
+  "method": "pandas GroupBy.shift independently checks onset identity; only onset identity is prefix-invariant, future timing/end/outcomes are post-hoc diagnostics."
+}
