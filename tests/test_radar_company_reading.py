@@ -256,7 +256,8 @@ def test_no_new_scheduler_or_secret_and_manual_source_keeps_original_boundary():
     producers=publisher.split('workflows: [',1)[1].split(']',1)[0].split(', ')
     assert {'radar-institutional-source','radar-newsnow-daily'} <= set(producers)
     assert len(producers)==len(set(producers)) and '--include-radar-discovery' in publisher
-    assert 'schedule:' not in publisher and 'workflow_dispatch:' not in publisher
+    assert "cron: '50 23 * * *'" in publisher and "cron: '10 11 * * *'" in publisher
+    assert 'workflow_dispatch:' not in publisher
     assert 'secrets.' not in publisher and 'ref: ${{ github.sha }}' in publisher
 
 

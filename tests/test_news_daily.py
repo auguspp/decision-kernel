@@ -32,9 +32,9 @@ def body(label, *, items=None):
          'url': 'https://' + host + '/detail/1'}] if items is None else items})
 
 
-def captured(tmp_path, request=None, *, clock=lambda: TIME, previous_history=None):
+def captured(tmp_path, request=None, *, clock=lambda: TIME, previous_history=None, identity=None):
     root = tmp_path / 'capture'
-    result = s.capture(root, deepcopy(IDENTITY), IMAGE,
+    result = s.capture(root, deepcopy(identity or IDENTITY), IMAGE,
                        request=request or (lambda label: (200, body(label))), clock=clock,
                        previous_history=previous_history)
     return root, {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}, result
@@ -116,8 +116,9 @@ def test_rolling_history_preserves_first_seen_and_adds_new_versions(tmp_path):
             })
         return 200, m.json_bytes(value)
 
+    second_identity = {**IDENTITY, 'run_id': 902}
     _, files2, _ = captured(tmp_path / 'two', request, clock=lambda: later,
-                            previous_history=files1[s.HISTORY_FILE])
+                            previous_history=files1[s.HISTORY_FILE], identity=second_identity)
     history = s.validate_history(json.loads(files2[s.HISTORY_FILE]))['projection']
     assert history['coverage']['capture_count'] == 2
     cls = [x for x in history['observations'] if x['observation']['source_id'] == 'cls']
