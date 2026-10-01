@@ -13,6 +13,7 @@ from ..identity import canonical_hash
 from . import current_state as m, current_state_delivery as delivery
 from . import smart_money_sources as s, smart_money_capture as capture, smart_money_view as view
 from . import smart_money_relay as relay_supplement
+from .ftshare_stock_history_comparison import is_comparison_run
 from .institutional_radar_reading import _reserve, ERRORS
 
 PREFIX='details/radar/smart-money/'
@@ -67,8 +68,15 @@ def native(c):
             'smart-money run query incomplete')
     m.check(len({r['id'] for r in runs})==len(runs),'smart-money duplicate runs')
     if not runs:return {'status':'NOT_RUN','observation':None}
+    excluded=[r['id'] for r in runs if is_comparison_run(r)]
+    runs=[r for r in runs if not is_comparison_run(r)]
+    if not runs:
+        return {'status':'ONLY_COMPARISON_RUNS_IN_BOUNDED_WINDOW','observation':None,
+                'excluded_comparison_runs':excluded}
     selected=max(runs,key=lambda r:(m.clock(r['created_at']),r['id']))
-    return read_run(c,selected,follow_control=True)
+    result=read_run(c,selected,follow_control=True)
+    if excluded:result['excluded_comparison_runs']=excluded
+    return result
 
 
 def reconcile_pending_attempt(c, run):

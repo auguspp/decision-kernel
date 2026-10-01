@@ -78,11 +78,18 @@ def validate_request(route, params):
 
 
 def request(route, params):
-    validate_request(route, params)
+    # The isolated history comparison supplies only its finite, reviewed contracts.
+    from . import ftshare_stock_history_comparison as history
+    if route in history.ROUTES:
+        history.validate_request(route, params)
+        endpoint = history.ROUTES[route]
+    else:
+        validate_request(route, params)
+        endpoint = BASE + ROUTES[route]
     key = os.environ.get('FTSHARE_API_KEY')
     require(isinstance(key, str) and key and key.isascii()
             and all(32 < ord(c) < 127 for c in key), 'AUTHENTICATION_UNAVAILABLE')
-    req = Request(BASE + ROUTES[route] + '?' + urlencode(params), headers={
+    req = Request(endpoint + '?' + urlencode(params), headers={
         'FTSHARE_API_KEY': key, 'Accept': 'application/json', 'Accept-Encoding': 'identity',
         'User-Agent': 'decision-kernel/' + VERSION})
     try:
