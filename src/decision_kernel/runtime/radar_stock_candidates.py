@@ -95,7 +95,7 @@ def plan_stock_discovery_batch(result: dict, *, pool_hash: str, offset: int = 0)
 The caller must supply the original pool hash on every page. An offset is not a
 cross-day cursor, progress receipt, retry permission, or automatic next dispatch.
     """
-    from .stock_radar_reading import MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS
+    from .stock_radar_reading import MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS, stock_request_budget
 
     pool = build_stock_discovery_pool(result)
     rows = pool["candidates"]
@@ -107,7 +107,7 @@ cross-day cursor, progress receipt, retry permission, or automatic next dispatch
     directions: set[str] = set()
     for row in rows[offset:]:
         prospective = directions | {origin["sector_thscode"] for origin in row["origins"]}
-        cost = 4 + len(prospective) + 3 * (len(selected) + 1)
+        cost = stock_request_budget(len(selected) + 1, len(prospective))
         if (len(selected) + 1 > MAX_ISSUERS or len(prospective) > MAX_MEMBERSHIPS or cost > MAX_REQUESTS):
             if not selected:
                 raise ValueError("one discovery candidate cannot fit the existing Stock budget")
@@ -122,7 +122,7 @@ cross-day cursor, progress receipt, retry permission, or automatic next dispatch
         "prior_page_codes": [row["thscode"] for row in rows[:offset]],
         "deferred_codes": [row["thscode"] for row in rows[end:]],
         "next_offset": end if end < len(rows) else None,
-        "maximum_request_count": 4 + len(directions) + 3 * len(selected) if selected else 0,
+        "maximum_request_count": stock_request_budget(len(selected), len(directions)),
         "limits": {"issuers": MAX_ISSUERS, "memberships": MAX_MEMBERSHIPS, "requests": MAX_REQUESTS},
         "execution": "NOT_EXECUTED", "prior_pages_execution": "NOT_ASSERTED",
         "routing_integration": "NOT_CONNECTED_TO_LIVE_STOCK_EXECUTOR",
