@@ -139,6 +139,27 @@ def test_same_day_cash_action_reconciles_snapshot_previous_reference():
     assert Decimal(meta['latest_quote_previous_reference']['expected_reference_price'])==previous-cash
 
 
+
+def test_forward_adjusted_fallback_uses_adjusted_previous_reference_without_inventing_events():
+    days,at,h,q,_=inputs()
+    adjusted=copy.deepcopy(h)
+    previous=adjusted['data']['item'][-2]
+    previous.update(open_price='68.4',high_price='68.6',low_price='68.3',close_price='68.5')
+    q['data']['item'][0]['prev_price']='68.5'
+    raw_bars,adjusted_bars,meta=own.qualify_forward_adjusted_fallback(
+        h,adjusted,q,code='002714.SZ',sessions=days,
+        raw_params=own.history_params('002714.SZ',days),
+        adjusted_params=own.history_params('002714.SZ',days,adjust='forward'),
+        observed_at=at,provider_business_code=3002)
+    assert raw_bars[days[-2]]['close_price']==Decimal('69')
+    assert adjusted_bars[days[-2]]['close_price']==Decimal('68.5')
+    assert meta['corporate_action_query_succeeded'] is False
+    assert meta['corporate_action_query']['provider_business_code']==3002
+    assert meta['adjusted_history_fallback']['adjustment_mode']=='forward'
+    assert meta['adjusted_history_fallback']['event_details_inferred'] is False
+    assert meta['latest_quote_previous_reference']['basis']=='PROVIDER_FORWARD_ADJUSTED_PREVIOUS_CLOSE'
+
+
 def test_business_failure_does_not_echo_provider_message():
     with pytest.raises(own.StockReadingInputError) as e:
         check(a={'code':429,'msg':'private response details','data':{}})
