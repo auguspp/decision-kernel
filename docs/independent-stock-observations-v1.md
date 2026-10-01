@@ -117,10 +117,28 @@ artifact `11091190335`, `stock-reading-36702153468-1`, produced at
 - Audit hash: `81a3eaeb66b18bf03679756c3d4cdacf339b6b05f7e2e9ba61e8069cba8958f7`
 - Stock capture hash: `2aa308ce96a5d020141b086f0b0d26379610bf85dc9afe1b3569d8d09477f446`
 - Source pages: `market-context/input-audit/responses/0015.json`–`0026.json`
-- Source custody expiry: **2026-12-29T10:23:49Z**. The original archive and combined
-  12-page set exceed the 512 KiB report bound. They remain external Actions-retained inputs;
-  this lossy derived inventory is not their permanent custody, a compressed copy,
-  or a split-file workaround. Hashes cannot recover expired missing bytes
+- The original Actions artifact separately expires on **2026-12-29T10:23:49Z**.
+  That expiry does not describe the independently verified Git copy below
+
+The identical original ZIP is already held by the existing read-model source
+archive at fixed reading `e2d5074e70acd65277e760ac9c825f51f003d8ec`:
+[Git-held original ZIP](https://github.com/auguspp/decision-kernel/blob/e2d5074e70acd65277e760ac9c825f51f003d8ec/sources/artifacts/47f4ea4d31f4d575ebb5d16c64269aaaafc280d6ed5e07dc4cce35e6c333fec8.zip).
+Its actual downloaded body is 3,449,794 bytes, Git blob
+`7d136bca447b65e9fe08afbadd682049e5214485`, with the same ZIP SHA-256 above.
+The Git and Actions bodies are byte-identical; ZIP CRC and the 42 Sector-audit
+and 43 Stock-capture inventory entries were independently checked. The reading
+binds this copy to run `36702153468` / artifact `11091190335` as
+`EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE`.
+
+At the recorded publisher code, normal publication preserves the previous tree,
+parents the new commit to the previous reading and advances the ref without
+force. This establishes fixed-reading Git recovery, not an unconditional permanent
+archive, main-branch ancestry or production-restore authority; repository/ref
+rewrites, deletion or loss of access remain risks. See [current-state custody
+boundaries](current-state.md). No new storage owner or archive-limit workaround
+is needed. The two-file derived report still does not contain the original ZIP
+or source pages; its external-input requirement remains explicit, and hashes
+alone cannot recover genuinely missing bytes.
 
 The original Sector audit binds 42 files and the Stock capture binds 43 files.
 Their request/response bytes are checked before consumption. The original
