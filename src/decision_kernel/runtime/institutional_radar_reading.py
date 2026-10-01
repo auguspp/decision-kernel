@@ -245,6 +245,30 @@ def saved_source_status(collector, reading):
     return deepcopy(full)
 
 
+
+def index_source_status(collector, parent):
+    """Close the Radar stage before later extensions consume the root budget.
+
+    Source bytes and the complete manifest already live in company-reading.json.
+    This is an explicit publisher composition step, not a guessed future budget.
+    Old and small direct-reader shapes remain accepted by saved_source_status.
+    """
+    model.validate_read_package(parent)
+    reading = parent['research'].get('radar_discovery', {})
+    if reading.get('status') not in {'READ_OK', 'READ_OK_WITH_SOURCE_GAPS'}:
+        return parent
+    full = saved_source_status(collector, reading)
+    model.check(_manifest_status(collector, reading) == full,
+                'Radar closing manifest differs from declared source status')
+    if reading.get('source_status_scope') == SOURCE_STATUS_SCOPE:
+        return parent
+    research = deepcopy(parent['research'])
+    research['radar_discovery']['source_status'] = _source_status_index(full)
+    research['radar_discovery']['source_status_scope'] = SOURCE_STATUS_SCOPE
+    return _assemble(collector, parent, research)
+
+
+
 def _assemble(collector, baseline, research):
     arguments = dict(code_commit=collector.code_commit, checked_at=collector.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
