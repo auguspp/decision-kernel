@@ -752,7 +752,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         if path['latest_volume'] <= 0 or path['latest_turnover'] <= 0:
             reasons.append('NO_POSITIVE_LATEST_REPORTED_TRADING_ACTIVITY')
         if path['returns']['5'] <= 0 or row['market_comparison']['5']['excess_return'] <= 0:
-            reasons.append('FIVE_DAY_RAW_PATH_OR_MARKET_EXCESS_NOT_POSITIVE')
+            reasons.append('FIVE_DAY_PRICE_PATH_OR_MARKET_EXCESS_NOT_POSITIVE')
         if row['market_comparison']['20']['excess_return'] <= 0:
             reasons.append('TWENTY_DAY_MARKET_EXCESS_NOT_POSITIVE')
         if not row['eligible_nodes']:
