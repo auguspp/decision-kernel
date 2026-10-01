@@ -25,6 +25,56 @@ WATCH_JSON_PATH = "odds-watch/watch.json"
 WATCH_SUMMARY_PATH = "odds-watch/summary.md"
 
 
+def skip_diagnostic_trigger(api, env) -> bool:
+    """Qualify the exact native attempt before collecting or writing Git objects.
+
+    workflow_run notifications need not carry the REST run's path/title. They
+    supply only the attempt locator here; never use a latest-run query or infer
+    a production purpose from absent notification fields.
+    """
+    if env.get("GITHUB_EVENT_NAME") != "workflow_run":
+        return False
+    event = json.loads(Path(env["GITHUB_EVENT_PATH"]).read_bytes())
+    model.check(event.get("action") in {"requested", "completed"},
+                "publication trigger action unknown")
+    trigger = event["workflow_run"]
+    run_id, attempt = trigger["id"], trigger["run_attempt"]
+    model.check(type(run_id) is int and run_id > 0 and
+                type(attempt) is int and attempt > 0 and
+                env.get("TRIGGER_RUN_ID") == str(run_id),
+                "publication trigger attempt locator differs")
+    run = api.get(f"actions/runs/{run_id}/attempts/{attempt}")
+    model.check(type(run.get("id")) is int and run["id"] == run_id and
+                type(run.get("run_attempt")) is int and run["run_attempt"] == attempt and
+                run.get("head_branch") == "main" and
+                model.SHA.fullmatch(run.get("head_sha", "")) is not None and
+                run["head_sha"] == trigger["head_sha"],
+                "publication native attempt identity differs")
+    for key in ("repository", "head_repository"):
+        model.check(run.get(key, {}).get("full_name") == model.REPOSITORY,
+                    "publication native attempt repository differs")
+    path = run.get("path")
+    model.check(isinstance(path, str) and path.startswith(".github/workflows/") and
+                path.endswith(".yml"), "publication native workflow path unavailable")
+    if path != ".github/workflows/radar-smart-money.yml":
+        return False
+
+    from .ftshare_stock_history_comparison import is_comparison_run
+    if is_comparison_run(run):
+        print("READ_ENTRY_PUBLICATION_SKIPPED: FTSHARE_DIAGNOSTIC")
+        summary = env.get("GITHUB_STEP_SUMMARY")
+        if summary:
+            with open(summary, "a") as out:
+                out.write("## Current-state publication skipped\n\n"
+                          f"FTShare diagnostic run `{run_id}` / attempt `{attempt}`; "
+                          "no reading collection or public Git writes performed.\n")
+        return True
+    model.check(run.get("event") in {"schedule", "workflow_dispatch"} and
+                run.get("display_title") == "radar-smart-money",
+                "publication Smart Money purpose unavailable")
+    return False
+
+
 class Collector(base.Collector):
     def research(self, registry: dict, *, include_work: bool = True) -> dict:
         from .research_archive_index import split
@@ -177,10 +227,13 @@ def main(argv=None) -> int:
         from .read_blob_reuse import GitHubReadReuseAPI
         api_class = GitHubReadReuseAPI
     api = api_class(os.environ["GH_TOKEN"], max_calls=base.MAX_API_CALLS + EXTRA_API_CALLS)
-    failure_stage = "PRIOR_READING"
+    failure_stage = "TRIGGER_QUALIFICATION"
     prior_commit = None
     previous = None
     try:
+        if args.publish and skip_diagnostic_trigger(api, os.environ):
+            return 0
+        failure_stage = "PRIOR_READING"
         refs = api.get("git/matching-refs/heads/" + model.READ_REF)
         exact = [row for row in refs if row['ref'] == 'refs/heads/' + model.READ_REF]
         model.check(len(exact) <= 1, "ambiguous reading ref")
