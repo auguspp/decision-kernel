@@ -860,9 +860,9 @@ def render_stock_reading(report: dict) -> str:
         def window_pct(value, n):
             if value is not None:
                 return f'{Decimal(value)*100:+.2f}%'
-            action_windows = checks.get('action_window_checks', {})
-            if n in action_windows and not action_windows[n]['usable_for_raw_comparison']:
-                return '不可比（跨公司行为）'
+            action_windows = checks.get('action_window_checks') or {}
+            if n in action_windows and not action_windows[n]['usable_for_price_reference_adjusted_comparison']:
+                return '不可比（公司行为参考不足）'
             history_windows = checks.get('history_window_checks', {})
             if n in history_windows and not history_windows[n]['usable_for_raw_comparison']:
                 return '不可比（历史bar缺口）'
@@ -870,15 +870,21 @@ def render_stock_reading(report: dict) -> str:
         parts += [f'<article><h2>{e(row["company_name"])} <small>{e(row["thscode"])}</small></h2>',
             '<p><strong>为什么值得进一步看：</strong>当前有关联的强势方向及留存业务依据；个股5日上涨并跑赢基准，20日跑赢基准及至少一个相关行业。只是固定试行观察条件，未证明投资价值。</p>',
             f'<p>原始收盘价 <strong>{e(path["last_close"])} CNY</strong>；当日原始价格变化 {pct(path["daily_raw_return"])}。</p>',
-            '<div class="scroll"><table><tr><th>窗口</th><th>个股原始价格变化</th><th>沪深300价格变化</th><th>变化率差</th></tr>']
+            '<div class="scroll"><table><tr><th>窗口</th><th>个股价格路径变化</th><th>沪深300价格变化</th><th>变化率差</th></tr>']
         for n in ('5', '20', '60'):
             values = row['market_comparison'][n]
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
                 n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
                 window_pct(values['excess_return'], n)))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股原始bar完整；更早缺口不填值、不推断停牌，只使受影响的60日背景不可用。当前成员不倒灌历史；缺失的价格bar不填值、不补成零交易，也不推断停牌。未复权原始价格变化，非含分红总回报；60日不参与门槛。</small></p>']
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌。无公司行为影响时使用原始收盘价；具名现金/送转事件可只为价格比较建立来源约束的参考价调整；公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
-            parts.append('<p class="notice">本版仅原始收盘价路径观察：最新价格与前收严格核对，但没有逐日历史前收核验；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功且5/20日筛选区间未跨已报告事件。更早事件或历史bar缺口保留，受影响的60日背景不提供比较值。缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
+            if checks.get('adjusted_history_fallback'):
+                parts.append('<p class="notice">公司行为端点本次返回数据未准备；原业务码仍保留，没有被改写成“无事件”。本对象使用同一供应商的 forward 复权历史作为一次有界价格路径兜底，并与原始最新OHLC、成交量/成交额及快照前收交叉核对。未推断公司行为明细，也不是总回报。</p>')
+            elif any(v.get('comparison_basis') == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
+                     for v in (checks.get('action_window_checks') or {}).values()):
+                parts.append('<p class="notice">本对象跨过已报告公司行为：原始bar和事件均保留，5/20等受影响窗口只使用已报告现金/送转字段形成参考价调整。快照前收按同一参考口径核对；不隐去事件、不推断未知事件，也不把结果称作总回报。</p>')
+            else:
+                parts.append('<p class="notice">本对象使用原始收盘价路径：最新价格与前收严格核对；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功，受用窗口没有已报告事件跨越。缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
             volume = checks['volume_reconciliation']
             amount = checks['turnover_reconciliation']
             parts.append(f'<p>成交量核对：历史 {e(volume["historical_shares"])} 股；快照 {e(volume["snapshot_shares"])} 股；差额 {e(volume["absolute_difference_shares"])} 股，允许上限 {e(volume["allowed_difference_shares"])} 股。计算仍使用历史原值；不是供应商精度保证。</p>')
@@ -890,7 +896,8 @@ def render_stock_reading(report: dict) -> str:
             parts += ['<details><summary>输入一致性与各价格窗口资格检查</summary><pre>',
                       e(canonical_json({'volume': volume, 'turnover': amount,
                                         'history_windows': checks['history_window_checks'],
-                                        'action_windows': checks['action_window_checks']})),
+                                        'action_windows': checks.get('action_window_checks'),
+                                        'adjusted_history_fallback': checks.get('adjusted_history_fallback')})),
                       '</pre></details>']
         for origin in row['current_origins']:
             c = origin['company']
