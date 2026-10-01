@@ -48,7 +48,7 @@ Repository: `auguspp/decision-kernel`。每次新研究或接续先解析 `main`
 
 | 对象 | 当前方法处置 | 必读 |
 | --- | --- | --- |
-| 光迅 002281 / 兴森 002436 | 现金桥数值保留；先分真实新增、继承并推进和未核验。兴森AT&S保理及BGA非全固定现金限制在R1已有，不冒称首次发现 | [两例现金桥语义后继](readings/c-cash-bridge-semantic-review-2026-09-30/semantic-review.md)与[可复算输入/输出](readings/c-cash-bridge-semantic-review-2026-09-30/README.md) |
+| 光迅 002281 / 兴森 002436 | 现金桥数值保留；先分真实新增、继承并推进和未核验。兴森AT&S保理及BGA非全固定现金限制在R1已有，不冒称首次发现 | [两例现金桥语义后继](readings/c-cash-bridge-semantic-review-2026-09-30/semantic-review.md)与[可复算输入/输出](readings/c-cash-bridge-semantic-review-2026-09-30/README.md) ；兴森另读[同业承诺补读及条件贡献压力](readings/c1-peer-commitment-2026-10-01/README.md)：9月22日材料是本次覆盖补充，不是R2之后的新事件，不移植同业客户或概率 |
 | 新城控股 601155 | 原条件估值金额/股数误标bn；统一除10后每股、回报与门槛不变。先读后继勘误，不覆盖原件或提升来源/投资资格 | [601155单位勘误与不变性验证](readings/601155-unit-correction-2026-09-30/README.md) |
 | 光电股份 600184 | 旧 first-entry 梯度为历史、不可直接作行动边界；经营/估值桥受挑战，未记录 Human 接受 | [600184 复核与单位勘误](readings/600184-research-method-review-2026-09-13.md) |
 | 恒瑞医药 600276 | 保留原 Human 接受记录，不擅自改价；条件收益可复算，未验证的经营假设和风险约束仍需显式保留 | [原 Human 记录](decisions/600276-hengrui-human-first-entry-2026-09-12.md) 与 [两例回放](dogfood/research-handoff-replay-2026-09-13.md) |
