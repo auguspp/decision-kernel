@@ -350,10 +350,18 @@ def _qualify_references(code, expected, bars, references, at):
 
 def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None,
                 quote_received_at=None):
-    expected = tuple(state.sessions[-61:])
+    """Keep the legacy state-facing contract; arithmetic only consumes sessions."""
+    return stock_path_for_sessions(state.sessions, code, response, at=at,
+        references=references, quote=quote, actions=actions,
+        quote_received_at=quote_received_at)
+
+
+def stock_path_for_sessions(sessions, code, response, *, at, references=None, quote=None, actions=None,
+                quote_received_at=None):
+    expected = tuple(sessions[-61:])
     if references is None:
         by_day, checks = own_stock.qualify(response, quote, actions, code=code,
-            sessions=state.sessions, params=_history_params(code,state.sessions), observed_at=at,
+            sessions=sessions, params=_history_params(code,sessions), observed_at=at,
             quote_received_at=quote_received_at, selection_mode=True)
         recent = tuple(by_day[d]['close_price'] for d in expected[-26:])
         amounts = tuple(Decimal(str(by_day[d]['turnover'])) for d in expected[-25:])
@@ -375,10 +383,10 @@ def _stock_path(state, code, response, *, at, references=None, quote=None, actio
         history_count = len(by_day)
     else:
         qualified = normalize_hithink_completed_price_history(
-            response, thscode=code, sessions=state.sessions, observed_at=at)
+            response, thscode=code, sessions=sessions, observed_at=at)
         if (tuple(p.as_of.astimezone(SHANGHAI_TZ).date() for p in qualified.points) != expected
-                or qualified.response_session != state.sessions[-1]
-                or qualified.expected_latest_session != state.sessions[-1]):
+                or qualified.response_session != sessions[-1]
+                or qualified.expected_latest_session != sessions[-1]):
             raise StockReadingInputError('DATA_INSUFFICIENT', 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', thscode=code)
         by_day = {}
         for row in response['data']['item']:
