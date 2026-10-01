@@ -91,12 +91,16 @@ class Collector(base.Collector):
     def collect(self, refresh: dict) -> dict:
         payload = super().collect(refresh)
         if getattr(self, "include_radar_discovery", False):
-            from .institutional_radar_reading import attach
+            from .institutional_radar_reading import attach, index_source_status
             payload = attach(self, payload)
+            if (getattr(self, "include_concept_discovery", False)
+                    and getattr(self, "include_concept_detail", False)):
+                from .concept_detail_reading import attach as attach_detail
+                payload = attach_detail(self, payload)
+            # Radar fits at this stage but later extensions may exceed the root
+            # bound. Finalize its existing manifest index before those stages.
+            payload = index_source_status(self, payload)
             if getattr(self, "include_concept_discovery", False):
-                if getattr(self, "include_concept_detail", False):
-                    from .concept_detail_reading import attach as attach_detail
-                    payload = attach_detail(self, payload)
                 from .concept_observation_map_delivery import attach as attach_map
                 payload = attach_map(self, payload)
             if getattr(self, "include_external_radar", False):
