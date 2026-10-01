@@ -884,7 +884,7 @@ def render_stock_reading(report: dict) -> str:
                      for v in (checks.get('action_window_checks') or {}).values()):
                 parts.append('<p class="notice">本对象跨过已报告公司行为：原始bar和事件均保留，5/20等受影响窗口只使用已报告现金/送转字段形成参考价调整。快照前收按同一参考口径核对；不隐去事件、不推断未知事件，也不把结果称作总回报。</p>')
             else:
-                parts.append('<p class="notice">本对象使用原始收盘价路径：最新价格与前收严格核对；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功，受用窗口没有已报告事件跨越。缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
+                parts.append('<p class="notice">本对象使用原始收盘价路径：最新价格与前收严格核对，但没有逐日历史前收核验；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功，受用窗口没有已报告事件跨越。未复权原始价格变化，非总回报；缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
             volume = checks['volume_reconciliation']
             amount = checks['turnover_reconciliation']
             parts.append(f'<p>成交量核对：历史 {e(volume["historical_shares"])} 股；快照 {e(volume["snapshot_shares"])} 股；差额 {e(volume["absolute_difference_shares"])} 股，允许上限 {e(volume["allowed_difference_shares"])} 股。计算仍使用历史原值；不是供应商精度保证。</p>')
