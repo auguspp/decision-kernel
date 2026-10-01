@@ -53,6 +53,12 @@ POST_DELIVERY_CONTINUITY_IMPLEMENTATION = MappingProxyType({
     'runtime/current_state.py': '887d63c472be6e2e47ac7b75589a5cd8f41d57271b036700fe161dc6a34a4248',
     'runtime/current_state_delivery.py': '906ec5c154c7be0353444fd07e3e3d4a2b56fe99034879c6ed15ea65db1de35e',
 })
+# Stock-only saved-v8 dispatch change; Concept replay's clock/archive helpers
+# remain byte-equivalent. Old maps stay immutable; see the #708 receipt.
+POST_STOCK_READING_IMPLEMENTATION = MappingProxyType({
+    **POST_DELIVERY_CONTINUITY_IMPLEMENTATION,
+    'runtime/current_state.py': 'e7d8478a1364c79db458068e929c22dc59e10e44962dc2e0dd4b01d21df63c81',
+})
 PRIOR_DELIVERY = 'REVIEWED_PRIOR_DELIVERY_IMPLEMENTATION'
 CURRENT = 'CURRENT_IMPLEMENTATION'
 HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
@@ -75,7 +81,9 @@ def verify(output: Path) -> tuple[dict, str]:
         historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION,
                        REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION)
         and installed in (REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION,
-                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION),
+                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION, POST_STOCK_READING_IMPLEMENTATION)
+        or historical == POST_DELIVERY_CONTINUITY_IMPLEMENTATION
+        and installed == POST_STOCK_READING_IMPLEMENTATION,
         'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED',
     )
     # Bind only this invocation's identity expectation, after validating BOTH

@@ -239,7 +239,7 @@ def _validate_stock_replay_completion(capture: dict, verification: dict, project
 
 def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     from . import stock_radar_reading as stock
-    from .stock_market_expression import render_market_expression_reading
+    from .stock_market_expression import READING_VERSIONS, render_market_expression_reading
     HITHINK_RAW = stock.HITHINK_RAW
 
     run_identity(run, "stock", success=True)
@@ -255,7 +255,7 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     check(capture["provenance"] == "LIVE_HITHINK", "synthetic capture is not live stock output")
     report = json.loads(files["reading/stock-reading.json"])
     p = report["projection"]
-    if p.get('version') in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}:
+    if p.get('version') in READING_VERSIONS:
         render_market_expression_reading(report)
     else:
         stock.render_stock_reading(report)
@@ -275,7 +275,7 @@ def validate_stock(run: dict, files: dict[str, bytes]) -> dict:
     check(binding["request_hash"] == canonical_hash(request)
           and str(binding["run_id"]) == str(request["market_run_id"]) == str(market_manifest["source_run_id"])
           and binding["commit"] == market_manifest["source_commit_sha"], "stock exact market request differs")
-    if p.get('version') in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}:
+    if p.get('version') in READING_VERSIONS:
         context_binding = json.loads(files["market-context-binding.json"])
         sector_raw = files["reading/inputs/sector-result.json"]
         check(files["market-context/result.json"] == sector_raw, "Stock Sector result copy differs from exact bound run artifact")

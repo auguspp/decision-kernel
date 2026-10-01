@@ -222,23 +222,49 @@ def prepare_market_expression_reading(source_root: Path, state, ledger, associat
     return stock._plain(body)
 
 
+# Read-only compatibility for the raw-price market-expression contract retained at
+# ce22fa79ac841dea11d31541c86e4c4faeb1378b (before action-reference recovery).
+# Pin the complete old policy, not an evolving copy of today's producer policy.
+# This is not a plan/executor version: observe_stock_reading still rejects it.
+LEGACY_RAW_READING_VERSION = "stock-market-expression-window-qualified-v8"
+LEGACY_RAW_POLICY_HASH = "861cff54da8268b381ebe713bbdf999f5a34ee363e634657905c9aad5c4feb11"
+READING_VERSIONS = frozenset({stock.MARKET_EXPRESSION_VERSION,
+                              stock.DISCOVERY_PAGE_VERSION, LEGACY_RAW_READING_VERSION})
+
+
 def render_market_expression_reading(report: dict) -> str:
-    """Render v7 without upgrading a market observation into a business claim."""
+    """Read an explicit saved contract; never replay old inputs under a new policy."""
     p = report["projection"]
     coverage = stock._coverage(p["all_stock_observations"])
     partial = stock._partial_status(coverage, p["surfaced_stocks"])
+    legacy_raw = p.get("version") == LEGACY_RAW_READING_VERSION
     expected_policy = (stock.DISCOVERY_PAGE_POLICY if p.get("version") == stock.DISCOVERY_PAGE_VERSION
                        else stock.MARKET_EXPRESSION_POLICY)
+    policy_matches = (isinstance(p.get("policy"), dict)
+                      and canonical_hash(p["policy"]) == LEGACY_RAW_POLICY_HASH
+                      if legacy_raw else p.get("policy") == expected_policy)
     if (report["projection_hash"] != canonical_hash(p)
-            or p["version"] not in {stock.MARKET_EXPRESSION_VERSION, stock.DISCOVERY_PAGE_VERSION}
+            or p["version"] not in READING_VERSIONS
             or p["semantics"] != stock.MARKET_EXPRESSION_SEMANTICS
-            or p["policy"] != expected_policy
+            or not policy_matches
             or any(p[k] != v for k, v in stock.LIMITS.items())
             or p["coverage"] != coverage or p["selection_scope_complete"] != coverage["scope_complete"]
             or len(p["surfaced_stocks"]) > 3
             or (partial is not None and p["status"] != partial)
             or p["status"] not in stock.STATUS_LABELS):
         raise ValueError("market-expression Stock reading identity or authority differs")
+    if legacy_raw:
+        for row in p["all_stock_observations"]:
+            path = row.get("stock_path")
+            if path is None:
+                continue
+            checks = path["input_checks"]
+            if (path["price_convention"] != "RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN"
+                    or path["corporate_action_adjustment"] != "NOT_PERFORMED"
+                    or "adjusted_history_fallback" in checks
+                    or any(w.get("comparison_basis") == "REPORTED_ACTION_REFERENCE_ADJUSTED"
+                           for w in checks.get("action_window_checks", {}).values())):
+                raise ValueError("legacy raw Stock reading cannot acquire adjusted-price qualification")
     if any(row["business_benefit_status"] != "NOT_ESTABLISHED" for row in p["all_stock_observations"]):
         raise ValueError("market expression cannot establish business benefit")
     from html import escape
@@ -283,6 +309,9 @@ def render_market_expression_reading(report: dict) -> str:
     })), '</pre><p>Human Attention / Research / Investment authority = NONE。</p></section>',
               '<footer>SHADOW OBSERVATION ONLY · Evidence changes Belief · Price changes Odds</footer></main></html>']
     text = "\n".join(parts) + "\n"
+    if legacy_raw:
+        text = text.replace("</header>", '<p class="notice">历史v8原始价格读取；仅核对旧保存结果，'
+                            '不按新版复权或补取规则重算，也不提升旧失败资格。</p></header>', 1)
     if p["version"] == stock.DISCOVERY_PAGE_VERSION:
         from .stock_discovery_page import reading_notice
         text = text.replace("候选来自 Sector 已 surfaced 的", "候选来自 Sector 全部合格变化的")
