@@ -79,7 +79,7 @@ POLICY = {
     'issuer_universe': 'ALL_REVIEWED_ISSUERS_IN_ACTIVE_LINKED_NODES_NOT_ALL_A_SHARES',
     'membership': 'EXACT_CURRENT_MEMBER_REQUIRED_NOT_HISTORICAL_EXPOSURE',
     'stock_gate': 'POSITIVE_5D_PRICE_PATH_AND_5D_MARKET_EXCESS_AND_20D_MARKET_EXCESS_AND_ONE_20D_SECTOR_EXCESS',
-    'sixty_day': 'CONTEXT_ONLY_NOT_A_GATE_NULL_IF_ACTION_OR_NONCRITICAL_HISTORY_GAP',
+    'sixty_day': 'CONTEXT_ONLY_NOT_A_GATE_NULL_IF_UNSUPPORTED_ACTION_OR_NONCRITICAL_HISTORY_GAP',
     'activity': 'POSITIVE_LATEST_VOLUME_AND_TURNOVER_NOT_EXECUTION_ELIGIBILITY',
     'name_guard': 'ST_DELISTING_AND_N_C_PREFIX_LABELS_ONLY_NOT_FULL_REGULATORY_STATUS',
     'presentation': 'NODE_ORDER_ROUND_ROBIN_THEN_20D_MARKET_EXCESS_5D_MARKET_EXCESS_CODE',
@@ -383,7 +383,7 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
         raise ValueError('adjusted fallback requires explicit Stock Radar action-reference opt-in')
     expected = tuple(sessions[-61:])
     price_by_day = None
-    comparison_basis = 'RAW_UNADJUSTED'
+    comparison_basis = 'RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN'
     if references is None:
         if adjusted_response is None:
             by_day, checks = own_stock.qualify(response, quote, actions, code=code,
@@ -403,7 +403,7 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
                 base = date.fromisoformat(w['base_session'])
                 end = date.fromisoformat(w['end_session'])
                 factor = Decimal(w['reference_adjustment_factor'])
-                with localcontext(Context(prec=64)):
+                with localcontext(Context(prec=28)):
                     return price_by_day[end]['close_price'] / (price_by_day[base]['close_price'] * factor) - 1
 
             returns = {name: window_return(name) for name in ('5','20','60')}
@@ -433,7 +433,7 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
                     return None
                 base = date.fromisoformat(h['base_session'])
                 end = date.fromisoformat(h['end_session'])
-                with localcontext(Context(prec=64)):
+                with localcontext(Context(prec=28)):
                     return price_by_day[end]['close_price'] / price_by_day[base]['close_price'] - 1
 
             returns = {name: adjusted_return(name) for name in ('5','20','60')}
@@ -821,6 +821,18 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     return _plain({'projection': payload, 'projection_hash': canonical_hash(payload)})
 
 
+def price_basis_notice(path):
+    """Explain the saved comparison convention; this helper performs no qualification."""
+    basis = path['price_convention']
+    if basis == 'PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN':
+        return '公司行为查询不可用（3002）；比较使用同源前复权历史兜底，不是无事件证明，也不是总回报。'
+    if basis == 'REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN':
+        return '受影响窗口使用已报告现金分红的参考价调整；原始价格和事件均保留，不是总回报。'
+    if basis == 'RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN':
+        return '比较使用未复权原始收盘价；不是含分红总回报。'
+    raise ValueError('unknown Stock price-comparison convention')
+
+
 def render_stock_reading(report: dict) -> str:
     p = report['projection']
     codes = [r['thscode'] for r in p['surfaced_stocks']]
@@ -885,10 +897,10 @@ def render_stock_reading(report: dict) -> str:
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
                 n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
                 window_pct(values['excess_return'], n)))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌、不倒灌历史。无公司行为影响时使用未复权原始收盘价；具名现金分红可只为价格比较建立来源约束的参考价调整；送转仍需单独复核。公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌、不倒灌历史。无公司行为影响时使用未复权原始收盘价；具名现金分红可只为价格比较建立来源约束的参考价调整；送转仍需单独复核。公司行为接口返回不可用业务码3002时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
             if checks.get('adjusted_history_fallback'):
-                parts.append('<p class="notice">公司行为端点本次返回数据未准备；原业务码仍保留，没有被改写成“无事件”。本对象使用同一供应商的 forward 复权历史作为一次有界价格路径兜底，并与原始最新OHLC、成交量/成交额及快照前收交叉核对。未推断公司行为明细，也不是总回报。</p>')
+                parts.append('<p class="notice">公司行为端点本次查询不可用（业务码3002）；原业务码仍保留，没有被改写成“无事件”。本对象使用同一供应商的 forward 复权历史作为一次有界价格路径兜底，并与原始最新OHLC、成交量/成交额及快照前收交叉核对。未推断公司行为明细，也不是总回报。</p>')
             elif any(v.get('comparison_basis') == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
                      for v in (checks.get('action_window_checks') or {}).values()):
                 parts.append('<p class="notice">本对象跨过已报告公司行为：原始bar和事件均保留，5/20等受影响窗口只使用已报告现金分红字段形成参考价调整；送转事件不会自动推导参考价。快照前收按同一参考口径核对；不隐去事件、不推断未知事件，也不把结果称作总回报。</p>')
@@ -901,7 +913,7 @@ def render_stock_reading(report: dict) -> str:
             if checks['history_market_session_gaps']:
                 parts.append(f'<p class="notice">历史市场交易日缺口：{e("、".join(checks["history_market_session_gaps"]))}；原因 UNKNOWN，不填值、不推断停牌、不倒灌历史。核心选择窗口仍须完整。</p>')
             for event in checks['reported_corporate_actions']:
-                parts.append(f'<p class="notice">已报告公司行为：{e(event["ex_date"])}，每股现金 {e(event["dividend_per_share"])}，每股送转 {e(event["per_share_bonus"])}。事件未隐去；未自动复权。</p>')
+                parts.append(f'<p class="notice">已报告公司行为：{e(event["ex_date"])}，每股现金 {e(event["dividend_per_share"])}，每股送转 {e(event["per_share_bonus"])}。事件及原始bar均保留；比较口径见上方说明。</p>')
             parts += ['<details><summary>输入一致性与各价格窗口资格检查</summary><pre>',
                       e(canonical_json({'volume': volume, 'turnover': amount,
                                         'history_windows': checks['history_window_checks'],
