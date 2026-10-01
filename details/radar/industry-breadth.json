@@ -1,9 +1,9 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "b9f0ccf61f510632a9b38c805383c4075af025437e30011955fe08d3929495bf",
+    "base_reading_hash": "4962e2621ed0270f0331e0a45b619ec3b4dfd01ba8eecc4df756c6772959cbd0",
     "economic_review": "NOT_PERFORMED",
-    "generated_at": "2026-10-01T09:07:35.820185+00:00",
+    "generated_at": "2026-10-01T09:28:29.377003+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -13529,5 +13529,5 @@
     "signal_transition_authority": "NONE",
     "version": "industry-breadth-snapshot-v1"
   },
-  "projection_hash": "f8d3be2dc6e9eaabe0aee7e2c54fc935b8a766ba823d5a00a9e01ebe7e256512"
+  "projection_hash": "2da64c0d533dfc5f2d23092c90917d2be07e9e0fbbe7c6d16f7c2c0e72d83597"
 }
