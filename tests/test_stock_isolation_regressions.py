@@ -54,7 +54,11 @@ def test_partial_page_cannot_be_relabelled_complete_even_with_rehashed_projectio
     bad=plan['issuers'][0]['thscode']
     def request(path,params):
         value=provider(path,params)
-        return {'code':3002,'data':None} if path==own.ACTIONS and params['thscode']==bad else value
+        if path==own.ACTIONS and params['thscode']==bad:
+            return {'code':3002,'data':None}
+        if path==own.HISTORY and params['thscode']==bad and params.get('adjust')=='forward':
+            return {'code':3002,'data':None}
+        return value
     report=stock.observe_stock_reading(plan,state,request_json=request,observed_at=NOW)
     report['projection']['status']=claimed
     report['projection_hash']=canonical_hash(report['projection'])
