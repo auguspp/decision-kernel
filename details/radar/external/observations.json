@@ -1,17 +1,17 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "be25df94bfe70473a1a8d04f48f9f03c329045fbf16ba7b80e6926267ded3674",
+    "base_reading_hash": "497fefd9de29bc1f6f7be907c41f7a44caffae100777c6875f0e0af38f4a952f",
     "company_context_status": "SAME_READING_SAVED_CONTEXT",
     "company_source": {
-      "bytes": 263097,
-      "git_blob": "02beba674ccef2d38f396bdab43b4d677362bd80",
+      "bytes": 275445,
+      "git_blob": "a553ef9debac599afb8a15d81f6bace73e1873b5",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "e3d6c296505840bcb40e083388c52b6a5fc3a9a269bc1a517e1560aa4c13f70c"
+      "sha256": "460aec437d8306e9a9234559c667e39dbfaf798b536a8d65735ef5eb73fa57f8"
     },
     "config_hash": "5c772ab9e8b67f0916bd2fa493231e676988a6a6d846c823c3188425bf9b6bf5",
-    "generated_at": "2026-10-01T07:51:57.915181+00:00",
+    "generated_at": "2026-10-01T07:54:07.063960+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -378,7 +378,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-10-01T07:51:57.915181+00:00",
+              "cutoff": "2026-10-01T07:54:07.063960+00:00",
               "field_gaps": [
                 {
                   "amount_reconciled": true,
@@ -1150,7 +1150,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "d1483badf94e42a93e355ba8cf6a039549681ff7002ef35404d765e2111ee0d2"
+            "projection_hash": "1d1d2c80001566dc744cddf6f9d7f91572a881eb96e8ed06ed9ee4869563d6f7"
           },
           {
             "projection": {
@@ -1480,7 +1480,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-10-01T07:51:57.915181+00:00",
+              "cutoff": "2026-10-01T07:54:07.063960+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -2239,7 +2239,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "8d135251f64834521f9a0b0b5cd3ca8678518c215cef8276857931e4cb962f33"
+            "projection_hash": "e6535f0ff18cfebb0d4160014600f48d87cfd8b74f6720393e6bc9be54f589fe"
           },
           {
             "projection": {
@@ -2569,7 +2569,7 @@
               "calendar_completeness": "NOT_ESTABLISHED",
               "company_materiality": "NOT_ESTABLISHED",
               "continuous_roll_composition": "UNKNOWN",
-              "cutoff": "2026-10-01T07:51:57.915181+00:00",
+              "cutoff": "2026-10-01T07:54:07.063960+00:00",
               "field_gaps": [],
               "historical_pit_availability": "NOT_ESTABLISHED",
               "historical_spot_binding": "UPSTREAM_DEFAULT_HISTORY_NOT_CONFIRMED",
@@ -3328,7 +3328,7 @@
               ],
               "warehouse_unit": "UNKNOWN"
             },
-            "projection_hash": "0590628631d75517d0a2e447773345f650df506a646e4c67a02feacb0e208180"
+            "projection_hash": "4f64dcb9c763964fd00bf4b6622c5a458efa4b0fda63c71038608d7513564ef2"
           }
         ],
         "status": "SAVED_SAMPLE_REBUILT"
@@ -3380,10 +3380,37 @@
         "result": {
           "projection": {
             "automatic_admission": false,
-            "companies": [],
+            "companies": [
+              {
+                "automatic_admission": false,
+                "business_linkage": "NOT_ESTABLISHED",
+                "matches": [
+                  {
+                    "matched_names": [
+                      "宇通客车"
+                    ],
+                    "observation_id": "48eae5ae3b618d1580004355a23251ef188013bca7907d6bbc4e56f915d8f70d"
+                  }
+                ],
+                "qualification": "CONTEXT_ONLY",
+                "question_status": "NOT_FORMED",
+                "research": {
+                  "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+                  "references": [],
+                  "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+                  "status": "UNKNOWN_WITHIN_READ_SCOPE",
+                  "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
+                  "stock_business_states": []
+                },
+                "source_names": [
+                  "宇通客车"
+                ],
+                "thscode": "600066.SH"
+              }
+            ],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "3bbfd750eda3ae5cf860b82c8f9ed1df5aaf295ce3b81e44572799094376fa95",
-            "cutoff": "2026-10-01T07:51:57.915181+00:00",
+            "company_reading_hash": "99af24dd8ad782e4797f9488bfee43e60ed91acb049d8f1c329e0521e38cde6d",
+            "cutoff": "2026-10-01T07:54:07.063960+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -13090,7 +13117,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "9612ea93cefd6e64425922d5e0ae72529b416dcda8493a0f6787fe7aef383974"
+          "projection_hash": "41159406b8a7dbc0226ff78dd9a8b0d024606f0dbbfbca3f8f0b1b4c6e2775eb"
         },
         "status": "SAVED_SAMPLE_REBUILT"
       }
@@ -13099,5 +13126,5 @@
     "signal_transition_authority": "NONE",
     "version": "saved-external-radar-reading-v1"
   },
-  "projection_hash": "9e8d2d316c3d9f1521fde4fb4213966d2948fe4a15fc3dbeba8c702ec6ec3f3a"
+  "projection_hash": "c7cce062cfd257a0cd00f0961b00391eaa1e317ac462f2acc8082cc9bc6a0f25"
 }
