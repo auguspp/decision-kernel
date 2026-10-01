@@ -224,7 +224,8 @@ def test_workflows_retain_hidden_source_file_and_publish_tdx_reading():
     publisher = Path(".github/workflows/current-state-read-entry.yml").read_text()
     assert "tdx-concept-snapshot" in publisher
     assert "--include-tdx-concept-context" in publisher
-    assert "schedule:" not in publisher
+    assert "cron: '50 23 * * *'" in publisher and "cron: '10 11 * * *'" in publisher
+    assert publisher.count('python -m decision_kernel.runtime.current_state_delivery_with_odds_watch') == 1
 
 
 def test_long_history_envelope_preserves_original_replay_and_fails_locally(tmp_path):
