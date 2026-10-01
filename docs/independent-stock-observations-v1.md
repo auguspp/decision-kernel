@@ -58,6 +58,13 @@ replaces `--output` to rebuild the JSON from the separately pinned inputs and
 verify the exact two-file inventory and rendered README bytes. A pin copied from
 an untrusted modified report is not an independent source identity.
 
+Every consumed context, session, page and stock-trace file is read once at its
+point of use; those exact bytes must match the length and SHA-256 in the already
+pinned audit/capture inventory before they are parsed. An earlier whole-tree
+validation does not authorize a later unchecked reread. If a source changes
+between inventory validation and consumption, the consumer fails without
+publishing a result. Parsing uses the checked buffer, not another filesystem read.
+
 The output pair is `observations.json` and `README.txt`, published through the
 existing atomic, create-only report helper. Failed source qualification publishes
 no successful empty result. Output cannot be inside an input tree. No network or

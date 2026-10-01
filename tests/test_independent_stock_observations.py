@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import datetime, time, timedelta
 import json
 from pathlib import Path
+import shutil
 import socket
 from types import SimpleNamespace
 
@@ -380,3 +381,119 @@ def test_unplanned_extra_page_and_missing_page_cli_have_no_published_output(tmp_
     with pytest.raises(ValueError, match='extra unconsumed'):
         independent.main(['--audit-root', str(case.root), '--audit-hash', audit_pin(case), '--output', str(out)])
     assert not out.exists()
+
+
+@pytest.mark.parametrize('name', ['inputs/context.json', 'responses/0000.json',
+    'responses/0001.json', 'responses/0002.json', 'responses/0003.json'])
+def test_audit_consumption_rechecks_pinned_bytes_after_inventory_validation(tmp_path, monkeypatch, name):
+    original = source(tmp_path / 'original')
+    before = digest_tree(original.root)
+    root = tmp_path / 'copy'
+    shutil.copytree(original.root, root)
+    pin = audit_pin(original)
+    validate = audit.validate_sector_radar_input_audit_integrity
+    mutations = []
+
+    def validate_then_replace(path):
+        manifest = validate(path)
+        target = path / name
+        raw = target.read_bytes()
+        # Page replacement is semantically different but the same byte length:
+        # a size check alone would still admit the changed quote under old SHA.
+        changed = (raw.replace(b'"last_price":"70"', b'"last_price":"99"', 1)
+                   if name == 'responses/0003.json' else raw + b'\n')
+        assert changed != raw
+        target.write_bytes(changed)
+        mutations.append(name)
+        return manifest
+
+    monkeypatch.setattr(audit, 'validate_sector_radar_input_audit_integrity', validate_then_replace)
+    output = tmp_path / 'result'
+    with pytest.raises(ValueError, match='consumed source bytes differ from pinned inventory'):
+        independent.main(['--audit-root', str(root), '--audit-hash', pin, '--output', str(output)])
+    assert mutations == [name] and not output.exists()
+    assert independent._load(root / 'manifest.json')['audit_hash'] == pin
+    assert digest_tree(original.root) == before
+
+
+@pytest.mark.parametrize('name', ['responses/01.json', 'responses/02.json', 'responses/03.json'])
+def test_stock_trace_consumption_rechecks_original_pin_after_capture_returns(tmp_path, monkeypatch, name):
+    case = source(tmp_path / 'original')
+    original, capture_pin = capture(case)
+    before = digest_tree(original)
+    root = tmp_path / 'copy'
+    shutil.copytree(original, root)
+    validate = independent._capture
+    mutations = []
+
+    def capture_then_replace(*args):
+        result = validate(*args)
+        target = root / name
+        raw = target.read_bytes()
+        changed = (raw.replace(b'"turnover":"6000"', b'"turnover":"9000"', 1)
+                   if name == 'responses/01.json' else raw + b'\n')
+        assert changed != raw
+        target.write_bytes(changed)
+        mutations.append(name)
+        return result
+
+    monkeypatch.setattr(independent, '_capture', capture_then_replace)
+    output = tmp_path / 'result'
+    with pytest.raises(ValueError, match='consumed source bytes differ from pinned inventory'):
+        independent.main(['--audit-root', str(case.root), '--audit-hash', audit_pin(case),
+                          '--stock-root', str(root), '--capture-hash', capture_pin,
+                          '--output', str(output)])
+    assert mutations == [name] and not output.exists()
+    assert independent._load(root / 'capture.json')['capture_hash'] == capture_pin
+    assert digest_tree(original) == before
+
+
+def test_stock_session_read_is_bound_after_inventory_read(tmp_path, monkeypatch):
+    case = source(tmp_path / 'original')
+    original, capture_pin = capture(case)
+    before = digest_tree(original)
+    root = tmp_path / 'copy'
+    shutil.copytree(original, root)
+    target = root / 'inputs/state/market-state.json'
+    read = independent._read
+    reads = []
+
+    def read_then_replace(path):
+        raw = read(path)
+        if path == target:
+            reads.append(raw)
+            if len(reads) == 1:
+                # Return original bytes to the inventory check, then replace the
+                # file before session qualification. Do not update either pin.
+                path.write_bytes(raw + b'\n')
+        return raw
+
+    monkeypatch.setattr(independent, '_read', read_then_replace)
+    output = tmp_path / 'result'
+    with pytest.raises(ValueError, match='consumed source bytes differ from pinned inventory'):
+        independent.main(['--audit-root', str(case.root), '--audit-hash', audit_pin(case),
+                          '--stock-root', str(root), '--capture-hash', capture_pin,
+                          '--output', str(output)])
+    assert len(reads) == 2 and reads[0] != reads[1] and not output.exists()
+    assert independent._load(root / 'capture.json')['capture_hash'] == capture_pin
+    assert digest_tree(original) == before
+
+
+def test_checked_reader_parses_the_checked_buffer_without_reopening(tmp_path, monkeypatch):
+    path = tmp_path / 'source.json'
+    raw = b'{"value":"original"}'
+    path.write_bytes(raw)
+    descriptor = {'bytes': len(raw), 'sha256': audit._sha(raw)}
+    read = independent._read
+    calls = []
+
+    def read_then_replace(target):
+        checked = read(target)
+        calls.append(target)
+        target.write_bytes(b'{"value":"modified"}')
+        return checked
+
+    monkeypatch.setattr(independent, '_read', read_then_replace)
+    assert independent._load_bound(tmp_path, path.name, {path.name: descriptor}) == {'value': 'original'}
+    assert calls == [path]
+    assert path.read_bytes() != raw

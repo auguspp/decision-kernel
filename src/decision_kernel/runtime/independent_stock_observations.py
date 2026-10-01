@@ -49,6 +49,19 @@ def _load(path):
     return _json(_read(path))
 
 
+def _load_bound(root, name, files):
+    """Parse exactly the bytes checked against the already pinned inventory.
+
+    The earlier whole-tree check cannot bind a later filesystem read. Do not
+    validate here and then reopen the path: qualification must use this buffer.
+    """
+    raw = _read(root / name)
+    descriptor = files[name]
+    _require(len(raw) == descriptor['bytes'] and audit._sha(raw) == descriptor['sha256'],
+             'consumed source bytes differ from pinned inventory: ' + name)
+    return _json(raw)
+
+
 def _pin(value, field, expected):
     _require(audit._hash_string(expected) and value.get(field) == expected
              and canonical_hash({k: v for k, v in value.items() if k != field}) == expected,
@@ -64,7 +77,7 @@ def _descriptor(root, record, manifest):
 def _source_context(root, manifest):
     """Replay the original calendar/index requests, without Sector state/gates."""
     records = manifest['requests']
-    started = audit._clock(_load(root / 'inputs/context.json')['observed_at'])
+    started = audit._clock(_load_bound(root, 'inputs/context.json', manifest['files'])['observed_at'])
     _require(bool(manifest['run_clocks']), 'source completion clock missing')
     finished = audit._clock(manifest['run_clocks'][-1])
     clocks = [audit._clock(r['captured_at']) for r in records]
@@ -82,7 +95,7 @@ def _source_context(root, manifest):
     history_record = one(indices.HITHINK_INDEX_HISTORY_PATH)
     _require(records.index(calendar_record) < records.index(snapshot_record)
              < records.index(history_record), 'context requests reordered')
-    calendar_raw = _load(root / calendar_record['response_file'])
+    calendar_raw = _load_bound(root, calendar_record['response_file'], manifest['files'])
     stock._current_calendar_source_date(calendar_raw,
         received_at=audit._clock(calendar_record['captured_at']))
     calendar = normalize_hithink_calendar(calendar_raw)
@@ -91,7 +104,7 @@ def _source_context(root, manifest):
         def request(path, params):
             _require((path, dict(params)) == (record['path'], record['params']),
                      'unrecorded context request; no network fallback')
-            return _load(root / record['response_file'])
+            return _load_bound(root, record['response_file'], manifest['files'])
         return request
 
     snapshot_at = audit._clock(snapshot_record['captured_at'])
@@ -133,7 +146,7 @@ def _snapshot(root, manifest, reference):
         record = records[position]
         _require((path, dict(params)) == (record['path'], record['params']),
                  'unrecorded all-market request or wrong offset')
-        envelope = _load(root / record['response_file'])
+        envelope = _load_bound(root, record['response_file'], manifest['files'])
         audit._check_safe_json(envelope)
         for row_position, row in enumerate(envelope.get('data', {}).get('item', [])):
             if isinstance(row, dict):
@@ -173,7 +186,7 @@ def _capture(root, expected, sessions, provenance, reference):
              'stock capture file inventory differs')
     # Read only the original dated context from this state copy, not any Sector
     # membership, trigger, leader, company-link, Research or old result payload.
-    saved_sessions = _load(root / 'inputs/state/market-state.json')['sessions'][-61:]
+    saved_sessions = _load_bound(root, 'inputs/state/market-state.json', report['files'])['sessions'][-61:]
     _require(saved_sessions == [d.isoformat() for d in sessions], 'stock capture session context differs')
     started, finished = (audit._clock(report[k]) for k in ('observed_at', 'finished_at'))
     _require(started <= finished <= started + timedelta(minutes=30), 'stock capture lifetime differs')
@@ -224,7 +237,7 @@ def _trace(root, report, records, code, sessions):
     try:
         for phase, record in zip(('HISTORY', 'QUOTE', 'CORPORATE_ACTIONS'), records):
             result['sources'].append({**record, **report['files'][record['response_file']]})
-            envelope = _load(root / record['response_file'])
+            envelope = _load_bound(root, record['response_file'], report['files'])
             audit._check_safe_json(envelope)
             _require(type(envelope.get('code')) is int, 'invalid retained provider envelope')
             if envelope['code'] != 0:
