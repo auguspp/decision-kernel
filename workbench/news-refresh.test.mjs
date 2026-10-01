@@ -87,7 +87,7 @@ function publication(state,{wrongRun=false,corrupt=false,partial=false}={}) {
 test('workflow fingerprint binds exact optional admission and leaves the source commands in place',async()=>{
   const {state}=await fixture();assert.equal(sha(state.workflow),WORKFLOW_SHA256);assert.match(state.workflow,/SITE_SLOT_CHANGED_NO_CAPTURE/);
   assert.match(state.workflow,/workflows: \[sector-radar-shadow\]/);assert.match(state.workflow,/github.run_attempt == 1/);
-  assert.match(state.workflow,/python -m decision_kernel.runtime.news_daily/);assert.ok(!state.workflow.includes('contents: write'));
+  assert.match(state.workflow,/python -m decision_kernel.runtime.news_daily/);assert.match(state.workflow,/python -m decision_kernel.runtime.news_live_publication/);assert.ok(state.workflow.includes('contents: write'));
 });
 test('routing/config/identity/CSRF reject before network and do not return static HTML',async()=>{
   const f=await fixture();

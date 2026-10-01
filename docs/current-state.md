@@ -76,3 +76,11 @@ gap 或最新权威原件缺失/过期时，转到 [原 scheduled-production 运
 - 下一批：外部 Pre/Quick 执行者、执行回执、预算和最小安全边界；本项未施工。
 
 READ-ONLY MARKET CONTEXT / SHADOW OBSERVATION ONLY。Human Attention、Research、Investment authority 均为 NONE。
+
+### 高频 News 与完整读取包分离（2026-10-01 Human 授权）
+
+`read-model/current-state` 仍是跨来源、研究与 Watch 的固定综合读取入口。
+News 的约十分钟采集另发布到 `read-model/news-live` 这一 latest-only 派生缓存，
+供 Workbench 新闻页按需读取；它不是第二个 canonical state，不改变本文件的
+读取协议、Research/Attention/Investment authority，也不证明上游完整覆盖。
+完整 current-state 的 07:50/19:10 及原事件发布保持独立。
