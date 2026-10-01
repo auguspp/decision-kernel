@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, time, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation, Context, localcontext
 from zoneinfo import ZoneInfo
 
@@ -24,7 +24,7 @@ ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
 # existing callers cannot accidentally reinterpret the acquisition bytes.
 CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
 SELECTION_CONTRACT = CONTRACT
-SELECTION_QUALIFICATION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
+SELECTION_QUALIFICATION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v6'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
 REQUIRED_RECENT_SESSIONS = 26  # Covers 20d gate, shifted 20d and turnover pulse.
 # Project reconciliation policies, not HiThink precision or supplier guarantees.
@@ -166,23 +166,6 @@ def reconcile_volume(historical, snapshot, *, code):
         return {**VOLUME_POLICY, 'historical_shares': str(a), 'snapshot_shares': str(b),
                 'absolute_difference_shares': str(delta), 'allowed_difference_shares': str(bound),
                 'status': 'EXACT' if a == b else 'WITHIN_EXPLICIT_TOLERANCE'}
-
-
-def action_window_checks(expected, dates):
-    """The ex-date affects an interval only after its base CLOSE: (base, end]."""
-    windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
-    windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
-    result = {}
-    for name,(base,end) in windows.items():
-        crossing = [d.date().isoformat() for d in dates if base < d.date() <= end]
-        result[name] = {'base_session': base.isoformat(), 'end_session': end.isoformat(),
-                        'boundary': 'BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE',
-                        'reported_event_dates': crossing,
-                        'status': ('REPORTED_ACTION_CROSSES_RAW_WINDOW' if crossing else
-                                   'NO_REPORTED_ACTION_CROSSES_RAW_WINDOW'),
-                        'usable_for_raw_comparison': not crossing,
-                        'is_selection_window': name in {'5','20'}}
-    return result
 
 
 def history_window_checks(expected, bars):
