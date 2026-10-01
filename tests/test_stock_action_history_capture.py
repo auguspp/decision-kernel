@@ -35,6 +35,9 @@ def scenario(tmp_path,monkeypatch,*,failure=3002,partial=False):
             body['data']['item']=[{'ticker':code[:6],'ex_date_ms':old_ms,
                                   'dividend_per_share':'0.2','per_share_bonus':0}]
             if code==bad and partial: body['data']['has_more']=True
+        if (path==own.HISTORY and params.get('thscode')==bad and params.get('adjust')=='forward'
+                and failure==3002 and not partial):
+            return {'code':3002,'data':None,'message':'Adjusted history unavailable for thscode='+bad}
         return body
     report=run(reference_inputs=None,transport=request)
     return mod,out,report,calls,pauses
