@@ -30,7 +30,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607.zip)
 
 ## 人民币同业利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：36824954549
 # 人民币同业利率 · Shibor
@@ -57,25 +57,25 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/9583ddc944114d61c134a8d0ea27b2d4bb60e475726cd39517fab41aa6d49279.zip)
 
 ## 美国国债期限利率
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：36677221048
+最后可读批次run：36826466588
 # 美国国债期限利率
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-09-29；抓取截止：2026-09-30T06:14:38.760587+00:00
+窗口截止：2026-09-30；抓取截止：2026-10-01T06:45:36.199538+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| 美国国债 1MONTH | 2026-09-29 | 4.04 | ANNUAL_PERCENT | 2026-09-28 | 0.00 bp |
-| 美国国债 3MONTH | 2026-09-29 | 4.25 | ANNUAL_PERCENT | 2026-09-28 | -3.00 bp |
-| 美国国债 6MONTH | 2026-09-29 | 4.36 | ANNUAL_PERCENT | 2026-09-28 | -5.00 bp |
-| 美国国债 1YEAR | 2026-09-29 | 4.58 | ANNUAL_PERCENT | 2026-09-28 | -1.00 bp |
-| 美国国债 2YEAR | 2026-09-29 | 4.89 | ANNUAL_PERCENT | 2026-09-28 | -3.00 bp |
-| 美国国债 5YEAR | 2026-09-29 | 5.06 | ANNUAL_PERCENT | 2026-09-28 | 0.00 bp |
-| 美国国债 10YEAR | 2026-09-29 | 5.26 | ANNUAL_PERCENT | 2026-09-28 | 2.00 bp |
-| 美国国债 30YEAR | 2026-09-29 | 5.59 | ANNUAL_PERCENT | 2026-09-28 | 3.00 bp |
+| 美国国债 1MONTH | 2026-09-30 | 4.02 | ANNUAL_PERCENT | 2026-09-29 | -2.00 bp |
+| 美国国债 3MONTH | 2026-09-30 | 4.20 | ANNUAL_PERCENT | 2026-09-29 | -5.00 bp |
+| 美国国债 6MONTH | 2026-09-30 | 4.33 | ANNUAL_PERCENT | 2026-09-29 | -3.00 bp |
+| 美国国债 1YEAR | 2026-09-30 | 4.54 | ANNUAL_PERCENT | 2026-09-29 | -4.00 bp |
+| 美国国债 2YEAR | 2026-09-30 | 4.88 | ANNUAL_PERCENT | 2026-09-29 | -1.00 bp |
+| 美国国债 5YEAR | 2026-09-30 | 5.09 | ANNUAL_PERCENT | 2026-09-29 | 3.00 bp |
+| 美国国债 10YEAR | 2026-09-30 | 5.29 | ANNUAL_PERCENT | 2026-09-29 | 3.00 bp |
+| 美国国债 30YEAR | 2026-09-30 | 5.64 | ANNUAL_PERCENT | 2026-09-29 | 5.00 bp |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -85,7 +85,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 ## 来源请求
 - 202609：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/4dc13bfb0b62b0d03e6931b6df6252a2724c91cce955ac008a4ac67031eb2b36.zip)
+[原始ZIP](../../sources/artifacts/fe219b3dc200d1854a35703921504b52d4411690dca54ea820e9dd38683d9022.zip)
 
 ## ECB 外汇参考价
 本次读取：REUSED_RETAINED_CAPTURE
