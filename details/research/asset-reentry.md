@@ -380,6 +380,12 @@
 
 - [按需恢复：stock-002792-financial-question-review-20260921](https://github.com/auguspp/decision-kernel/blob/a1f73741d4223c058364a6e1446dc8fda908b350/docs/readings/stock-financial-question-review-2026-09-21/workpaper.md)；只有定位，本页没有恢复正文。
 
+## 002916.SZ
+
+下一步：先按明确定位恢复旧研究正文
+
+- [按需恢复：c-shennan-transmission-20261001](https://github.com/auguspp/decision-kernel/blob/5b93bfd6a0b3f3594445afd3c889321f9929a05c/docs/readings/c-shennan-transmission-2026-10-01/README.md)；只有定位，本页没有恢复正文。
+
 ## 688337.SH
 
 下一步：本读取没有关联观察；不等于已经核实无变化
