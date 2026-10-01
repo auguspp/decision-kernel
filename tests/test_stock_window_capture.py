@@ -34,6 +34,8 @@ def scenario(tmp_path,monkeypatch,*,event_index=20):
                 return {'code':3002,'data':None,'message':'No adjustment events for thscode='+bad}
             body['data']['item'] = [{'ticker':code[:6],'ex_date_ms':ex_ms,
                                     'dividend_per_share':'0.2','per_share_bonus':0}]
+        if path == own.HISTORY and params['thscode'] == bad and params.get('adjust') == 'forward':
+            return {'code':3002,'data':None,'message':'Adjusted history unavailable for thscode='+bad}
         return body
     report = run(reference_inputs=None,transport=request)
     return mod,out,report,calls,pauses
@@ -50,21 +52,21 @@ def test_old_events_and_amount_tolerance_produce_exact_partial_capture_replay(tm
     assert len(p['surfaced_stocks']) == 2
     for row in p['surfaced_stocks']:
         path = row['stock_path']
-        assert path['returns']['60'] is None
-        assert row['market_comparison']['60']['excess_return'] is None
-        assert all(c['horizons']['60']['stock_excess_return'] is None for c in row['sector_comparisons'])
-        assert (path['twenty_day_return_five_sessions_ago'] is None) is (event_index == 40)
+        assert path['returns']['60'] is not None
+        assert row['market_comparison']['60']['excess_return'] is not None
+        assert all(c['horizons']['60']['stock_excess_return'] is not None for c in row['sector_comparisons'])
+        assert path['twenty_day_return_five_sessions_ago'] is not None
         assert path['input_checks']['reported_corporate_actions']
         assert path['input_checks']['turnover_reconciliation']['absolute_difference_cny'] == '0.005'
         assert path['input_checks']['turnover_reconciliation']['status'] == 'WITHIN_EXPLICIT_TOLERANCE'
-        assert path['corporate_action_adjustment'] == 'NOT_PERFORMED'
+        assert path['corporate_action_adjustment'] == 'REPORTED_ACTION_REFERENCE_PRICE_ONLY_NOT_TOTAL_RETURN'
     replay = mod['verify'](out)
     assert replay['status'] == 'STOCK_BATCH_WITH_DATA_GAPS_REBUILT'
     assert replay['requests_replayed'] == len(calls) and replay['network_calls'] == 0
     assert replay['coverage'] == report['coverage'] and replay['stock_count'] == 2
     assert pauses == [20]*(len(calls)-1)
     text = BeautifulSoup((out/'index.html').read_text(),'html.parser').get_text()
-    assert '不可比（跨公司行为）' in text and '允许上限' in text and '每股现金 0.2' in text
+    assert '允许上限' in text and '每股现金 0.2' in text and '参考价调整' in text
     assert '不是全计划排名或完整零匹配' in text
     assert p['price_path_is_not_total_return'] is True
     assert p['research_authority'] == p['investment_authority'] == p['human_attention_authority'] == 'NONE'

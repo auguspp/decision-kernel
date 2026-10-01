@@ -85,6 +85,40 @@ test('source identities retain all distinct sector routes without merging famili
   assert.deepEqual(parse(f).rows.get('600000.SH').directions.map(r=>r.family),['BROAD_881','GRANULAR_884']);
   origin.direction_sources.push({...origin.direction_sources[0],name:'OTHER'});assert.throws(()=>parse(f));
 });
+test('v9 accepts reported-action price-reference adjustment without weakening window checks',()=>{
+  const f=fixture(),row=f.report.projection.all_stock_observations[0];
+  f.report.projection.policy.version='stock-market-expression-window-qualified-v9';
+  row.stock_path.price_convention='REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN';
+  const a=row.stock_path.input_checks.action_window_checks['20'];
+  a.usable_for_raw_comparison=false;a.usable_for_price_reference_adjusted_comparison=true;
+  a.comparison_basis='REPORTED_ACTION_REFERENCE_ADJUSTED';
+  const parsed=parse(f).rows.get('600000.SH');
+  assert.equal(parsed.basis,'REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN');
+  a.usable_for_price_reference_adjusted_comparison=false;
+  assert.throws(()=>parse(f));
+});
+test('v9 accepts one bounded forward-adjusted fallback only with retained 3002 gap metadata',()=>{
+  const f=fixture(),row=f.report.projection.all_stock_observations[0],checks=row.stock_path.input_checks;
+  f.report.projection.policy.version='stock-market-expression-window-qualified-v9';
+  row.stock_path.price_convention='PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN';
+  checks.corporate_action_query_succeeded=false;
+  checks.corporate_action_query={provider_business_code:3002};
+  checks.adjusted_history_fallback={status:'USED',event_details_inferred:false,
+    history_window_checks:structuredClone(checks.history_window_checks)};
+  checks.action_window_checks=null;
+  const parsed=parse(f).rows.get('600000.SH');
+  assert.equal(parsed.basis,'PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN');
+  checks.adjusted_history_fallback.event_details_inferred=true;
+  assert.throws(()=>parse(f));
+});
+test('request failure remains unavailable rather than becoming conditions-not-met',()=>{
+  const f=fixture(),row=f.report.projection.all_stock_observations[2];
+  row.status='REQUEST_FAILED';f.saved.dispositions[2].status='REQUEST_FAILED';
+  row.input_failure.reason_code='PROVIDER_BUSINESS_REQUEST_FAILED';
+  const parsed=parse(f);
+  assert.equal(parsed.rows.get('600002.SH').status,'REQUEST_FAILED');
+  assert.equal(checkedMembers(f.membership,'222222',parsed).unavailable,1);
+});
 test('one lazy same-R read; old versions do not fetch, failure never reruns on another selection',async()=>{
   const f=fixture();let calls=0;
   const loader=makeStockComparisonLoader({payload:{lanes:{stock:{last_qualified_result:f.saved}}},readFile:async d=>{

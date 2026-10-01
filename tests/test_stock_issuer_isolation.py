@@ -43,7 +43,7 @@ def expanded_provider(monkeypatch, count=6):
         plan['issuers'] = issuers
         plan['evidence_scope_issuers'] = [
             {'thscode': r['thscode'], 'company_name': r['company_name']} for r in issuers]
-        plan['maximum_request_count'] = 4+len(plan['directions'])+3*count
+        plan['maximum_request_count'] = stock.stock_request_budget(count,len(plan['directions']))
         assert plan['maximum_request_count'] <= 26
         plan['plan_hash'] = canonical_hash({k:v for k,v in plan.items() if k != 'plan_hash'})
         return plan
@@ -58,7 +58,7 @@ def rehash_capture(mod, out, report):
     (out/'capture.json').write_bytes(mod['data'](report))
 
 
-def test_five_good_one_3002_preserves_all_six_identities_and_original_selector(monkeypatch):
+def test_one_3002_uses_single_bounded_forward_history_fallback_without_erasing_gap(monkeypatch):
     state, plan, provider, calls = expanded_provider(monkeypatch)
     bad = plan['issuers'][0]['thscode']
     raw = {'code':3002, 'data':None, 'message':f'No adjustment events for thscode={bad}',
@@ -68,24 +68,42 @@ def test_five_good_one_3002_preserves_all_six_identities_and_original_selector(m
         body = provider(path, params)
         return raw if path == own.ACTIONS and params['thscode'] == bad else body
     result = stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)
-    p = result['projection']; c = p['coverage']
-    assert c == {'planned_issuers':6, 'dispositioned_issuers':6, 'evaluated_issuers':5,
-                 'price_path_checked_issuers':5, 'qualified_issuers':5,
-                 'conditions_not_met_issuers':0, 'unavailable_issuers':1,
-                 'not_evaluated_issuers':0, 'scope_complete':False}
-    assert p['status'] == 'PARTIAL_STOCKS_FOR_SHADOW_READING'
-    assert len(p['surfaced_stocks']) == 3 and len(p['omitted_eligible_stock_codes']) == 2
-    assert bad not in {r['thscode'] for r in p['surfaced_stocks']}
-    assert p['surfaced_stocks'] == stock._select(p['all_stock_observations'], plan['node_order'])
-    r = p['all_stock_observations'][0]
-    assert r['input_failure']['provider_business_code'] == 3002
-    assert r['input_failure']['phase'] == 'CORPORATE_ACTIONS'
-    assert r['stock_path'] is None and not r['excluded_reasons']
+    p = result['projection']; coverage = p['coverage']
+    assert coverage['planned_issuers'] == coverage['evaluated_issuers'] == 6
+    assert coverage['unavailable_issuers'] == 0 and coverage['scope_complete']
+    row = next(r for r in p['all_stock_observations'] if r['thscode'] == bad)
+    assert row['input_failure'] is None and row['stock_path'] is not None
+    checks = row['stock_path']['input_checks']
+    assert checks['corporate_action_query_succeeded'] is False
+    assert checks['corporate_action_query']['provider_business_code'] == 3002
+    assert checks['adjusted_history_fallback']['status'] == 'USED'
+    assert checks['adjusted_history_fallback']['event_details_inferred'] is False
+    fallback = [(path,params) for path,params in calls
+                if path == own.HISTORY and params.get('thscode') == bad and params.get('adjust') == 'forward']
+    assert len(fallback) == 1
     assert len(calls) <= plan['maximum_request_count'] <= 26
     assert before == (raw, plan)
     assert p['events_created'] == p['market_state_writes'] == 0
-    text = BeautifulSoup(stock.render_stock_reading(result), 'html.parser').get_text()
-    assert '可用数据子集' in text and '数据不可用 1' in text and bad in text
+
+
+def test_persistent_3002_after_bounded_forward_fallback_remains_unavailable(monkeypatch):
+    state, plan, provider, calls = expanded_provider(monkeypatch, 3)
+    bad = plan['issuers'][0]['thscode']
+    def request(path, params):
+        body = provider(path, params)
+        if path == own.ACTIONS and params['thscode'] == bad:
+            return {'code':3002,'data':None}
+        if path == own.HISTORY and params['thscode'] == bad and params.get('adjust') == 'forward':
+            return {'code':3002,'data':None}
+        return body
+    p = stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)['projection']
+    row = p['all_stock_observations'][0]
+    assert row['input_failure']['provider_business_code'] == 3002
+    assert row['input_failure']['phase'] == 'ADJUSTED_HISTORY_FALLBACK'
+    assert row['stock_path'] is None
+    assert p['coverage']['unavailable_issuers'] == 1
+    assert len([1 for path,params in calls
+                if path == own.HISTORY and params.get('thscode') == bad and params.get('adjust') == 'forward']) == 1
 
 
 @pytest.mark.parametrize('failure',['short_history','missing_previous','turnover','action','schema'])
@@ -170,7 +188,11 @@ def test_all_unavailable_is_not_complete_zero_match(monkeypatch):
     state, plan, provider, _ = expanded_provider(monkeypatch, 3)
     def request(path, params):
         body = provider(path, params)
-        return {'code':3002,'data':None} if path == own.ACTIONS else body
+        if path == own.ACTIONS:
+            return {'code':3002,'data':None}
+        if path == own.HISTORY and params.get('adjust') == 'forward':
+            return {'code':3002,'data':None}
+        return body
     report = stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)
     p = report['projection']
     assert p['status'] == 'NO_USABLE_STOCK_DATA'
@@ -190,6 +212,8 @@ def test_failed_conditions_and_unavailable_have_separate_denominators(monkeypatc
                 if member['thscode'] != bad:
                     member['name'] = '*ST Synthetic'
         if path == own.ACTIONS and params['thscode'] == bad:
+            return {'code':3002,'data':None}
+        if path == own.HISTORY and params['thscode'] == bad and params.get('adjust') == 'forward':
             return {'code':3002,'data':None}
         return body
     p = stock.observe_stock_reading(plan, state, request_json=request, observed_at=NOW)['projection']
@@ -227,7 +251,7 @@ def test_shared_calendar_3002_cannot_be_isolated_as_one_stock(monkeypatch):
     assert len(calls) == 1 and calls[0][0] == stock.HITHINK_CALENDAR_PATH
 
 
-def test_partial_capture_rebuilds_same_rows_page_and_raw_3002_without_retry(tmp_path,monkeypatch):
+def test_partial_capture_rebuilds_same_rows_page_and_persistent_3002_fallback_failure(tmp_path,monkeypatch):
     _, plan, provider, calls = expanded_provider(monkeypatch, 3)
     mod, state_dir, out, _, pauses, run = setup(tmp_path)
     before = mod['inventory'](state_dir)
@@ -235,7 +259,11 @@ def test_partial_capture_rebuilds_same_rows_page_and_raw_3002_without_retry(tmp_
     raw = {'code':3002,'data':None,'message':f'No adjustment events for thscode={bad}'}
     def request(path,params):
         body = provider(path,params)
-        return raw if path == own.ACTIONS and params['thscode'] == bad else body
+        if path == own.ACTIONS and params['thscode'] == bad:
+            return raw
+        if path == own.HISTORY and params['thscode'] == bad and params.get('adjust') == 'forward':
+            return raw
+        return body
     report = run(reference_inputs=None, transport=request)
     assert report['status'] == mod['PARTIAL'] and report['failure_category'] is None
     assert report['coverage']['unavailable_issuers'] == 1

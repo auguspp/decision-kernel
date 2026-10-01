@@ -190,7 +190,7 @@ def test_three_surfaced_groups_are_bounded_without_raising_request_ceiling():
         ROOT, state, ledger, association, result, observed_at=NOW)
     assert len(plan["issuers"]) == 6
     assert len(plan["directions"]) == 3
-    assert plan["maximum_request_count"] == 25
+    assert plan["maximum_request_count"] == 26
     assert plan["maximum_request_count"] <= stock.MAX_REQUESTS == 26
     # Round-robin over the three surfaced groups, not ticker sorting.
     assert plan["candidate_routing"]["candidate_codes"] == [

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, time, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation, Context, localcontext
 from zoneinfo import ZoneInfo
 
@@ -24,7 +24,7 @@ ACTIONS = '/api/a-share/corporate-actions/adjustment-factors'
 # existing callers cannot accidentally reinterpret the acquisition bytes.
 CONTRACT = 'hithink-own-61-bars-history-actions-through-session-v4'
 SELECTION_CONTRACT = CONTRACT
-SELECTION_QUALIFICATION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v5'
+SELECTION_QUALIFICATION_CONTRACT = 'hithink-selection-window-qualified-history-actions-v6'
 MAX_ACTION_EVENTS = 256  # The existing event-row ceiling; do not page or truncate.
 REQUIRED_RECENT_SESSIONS = 26  # Covers 20d gate, shifted 20d and turnover pulse.
 # Project reconciliation policies, not HiThink precision or supplier guarantees.
@@ -117,13 +117,15 @@ def check_quote_receipt(quote, *, code, received_at):
         _bad(code, 'QUOTE_READY_AFTER_ACTUAL_RECEIPT')
 
 
-def history_params(code, sessions):
+def history_params(code, sessions, *, adjust='none'):
+    if adjust not in {'none', 'forward'}:
+        raise ValueError('stock history adjustment mode is outside the bounded contract')
     start = datetime.combine(sessions[-61], time(), TZ)
     # The observed endpoint can include a bar keyed exactly at `end`.
     # Stop INSIDE the cutoff day, not at the following day's midnight.
     # Never widen/retry after an issuer-local missing row.
     end = datetime.combine(sessions[-1] + timedelta(days=1), time(), TZ) - timedelta(milliseconds=1)
-    return {'thscode': code, 'interval': '1d', 'adjust': 'none',
+    return {'thscode': code, 'interval': '1d', 'adjust': adjust,
             'start': str(int(start.timestamp()*1000)), 'end': str(int(end.timestamp()*1000))}
 
 
@@ -166,23 +168,6 @@ def reconcile_volume(historical, snapshot, *, code):
                 'status': 'EXACT' if a == b else 'WITHIN_EXPLICIT_TOLERANCE'}
 
 
-def action_window_checks(expected, dates):
-    """The ex-date affects an interval only after its base CLOSE: (base, end]."""
-    windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
-    windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
-    result = {}
-    for name,(base,end) in windows.items():
-        crossing = [d.date().isoformat() for d in dates if base < d.date() <= end]
-        result[name] = {'base_session': base.isoformat(), 'end_session': end.isoformat(),
-                        'boundary': 'BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE',
-                        'reported_event_dates': crossing,
-                        'status': ('REPORTED_ACTION_CROSSES_RAW_WINDOW' if crossing else
-                                   'NO_REPORTED_ACTION_CROSSES_RAW_WINDOW'),
-                        'usable_for_raw_comparison': not crossing,
-                        'is_selection_window': name in {'5','20'}}
-    return result
-
-
 def history_window_checks(expected, bars):
     """Expose missing own bars without inventing a suspension/zero-trading reason."""
     windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
@@ -203,29 +188,22 @@ def history_window_checks(expected, bars):
     return result
 
 
-def qualify(history, quote, actions, *, code, sessions, params, observed_at,
-            quote_received_at=None, selection_mode=False):
-    """Qualify one raw stock input under the shared source contract.
-
-    Default is the pre-existing exact-61/exact-volume qualification used by shared
-    consumers. `selection_mode=True` is an additional Stock-only qualification on
-    the same v4 request/source bytes: the latest 26 market sessions are mandatory;
-    older missing own bars remain UNKNOWN and can only null affected context windows.
-    """
+def _qualify_history_payload(history, *, code, sessions, params, observed_at,
+                             selection_mode, adjust):
     if type(selection_mode) is not bool:
         _bad(code)
     if not isinstance(code, str) or not re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', code):
         _bad(code)
     expected = tuple(sessions[-61:])
     if (len(expected) != 61 or expected != tuple(sorted(set(expected)))
-            or params != history_params(code, sessions)):
+            or params != history_params(code, sessions, adjust=adjust)):
         _bad(code, 'EXACT_61_COMPLETED_STOCK_SESSIONS_REQUIRED', 'DATA_INSUFFICIENT')
     if (not isinstance(observed_at, datetime) or observed_at.tzinfo is None
             or observed_at.utcoffset() is None
             or observed_at < datetime.combine(expected[-1], time(15), TZ)):
         _bad(code)
     d = _data(history, code)
-    for key, value in (('thscode', code), ('interval', '1d'), ('adjust', 'none')):
+    for key, value in (('thscode', code), ('interval', '1d'), ('adjust', adjust)):
         if key in d and d[key] != value:
             _bad(code)
     if 'timestamp' not in d:
@@ -265,6 +243,11 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         history_checks = history_window_checks(expected, bars)
     else:
         history_checks = None
+    return expected, bars, missing, history_checks, ready
+
+
+def _qualify_quote(quote, *, code, expected, raw_bars, quote_received_at, observed_at,
+                   selection_mode, expected_previous_close):
     q = _data(quote, code)
     check_quote_receipt(quote, code=code, received_at=quote_received_at)
     if quote_received_at is not None:
@@ -276,7 +259,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     last_quote = q['item'][0]
     if not isinstance(last_quote, dict) or last_quote.get('thscode') != code or last_quote.get('ticker') != code[:6]:
         _bad(code)
-    last = bars[expected[-1]]
+    last = raw_bars[expected[-1]]
     exact_fields = [('last_price','close_price'),('open_price','open_price'),
                     ('high_price','high_price'),('low_price','low_price')]
     if not selection_mode:
@@ -287,8 +270,105 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     volume_check = (reconcile_volume(str(last['volume']), last_quote.get('volume'), code=code)
                     if selection_mode else None)
     turnover_check = reconcile_turnover(str(last['turnover']), last_quote.get('turnover'), code=code)
-    if _number(last_quote, 'prev_price', code, positive=True) != bars[expected[-2]]['close_price']:
+    actual_previous = _number(last_quote, 'prev_price', code, positive=True)
+    if actual_previous != expected_previous_close:
         _bad(code, 'PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW')
+    return q, last_quote, volume_check, turnover_check, actual_previous
+
+
+def _reported_action_adjustments(expected, bars, retained_events, *, code):
+    position = {day: i for i, day in enumerate(expected)}
+    result = {}
+    for event in retained_events:
+        day = date.fromisoformat(event['ex_date'])
+        if day <= expected[0]:
+            continue
+        i = position.get(day)
+        if i is None or i == 0 or expected[i-1] not in bars:
+            result[day] = {'status': 'REFERENCE_INPUT_UNAVAILABLE', 'factor': None}
+            continue
+        previous = bars[expected[i-1]]['close_price']
+        cash = Decimal(event['dividend_per_share'])
+        bonus = Decimal(event['per_share_bonus'])
+        if bonus != 0:
+            result[day] = {
+                'status': 'UNSUPPORTED_BONUS_REFERENCE_ROUNDING_NOT_ESTABLISHED',
+                'factor': None,
+            }
+            continue
+        if cash == 0:
+            result[day] = {'status': 'UNSUPPORTED_ZERO_EFFECT_EVENT', 'factor': None}
+            continue
+        with localcontext(Context(prec=64)):
+            reference = previous - cash
+            if reference <= 0:
+                result[day] = {'status': 'INVALID_REFERENCE_ARITHMETIC', 'factor': None}
+                continue
+            factor = reference / previous
+        result[day] = {
+            'status': 'SUPPORTED_CASH_DIVIDEND_REFERENCE',
+            'factor': str(factor),
+            'previous_raw_close': str(previous),
+            'dividend_per_share': str(cash),
+            'per_share_bonus': str(bonus),
+            'reference_price': str(reference),
+        }
+    return result
+
+
+def action_window_checks(expected, dates, adjustments=None):
+    """The ex-date affects an interval only after its base CLOSE: (base, end].
+
+    Raw close comparison remains separately identified. When the provider reports
+    a supported cash-dividend field, the same source row may establish a bounded
+    ex-rights reference factor for price comparison; this is not total return.
+    """
+    windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
+    windows['20_five_sessions_ago'] = (expected[-26], expected[-6])
+    adjustments = adjustments or {}
+    result = {}
+    for name,(base,end) in windows.items():
+        crossing_days = [d.date() for d in dates if base < d.date() <= end]
+        crossing = [d.isoformat() for d in crossing_days]
+        supported = all(adjustments.get(d, {}).get('factor') is not None for d in crossing_days)
+        factor = Decimal(1)
+        if supported:
+            with localcontext(Context(prec=64)):
+                for day in crossing_days:
+                    factor *= Decimal(adjustments[day]['factor'])
+        result[name] = {
+            'base_session': base.isoformat(), 'end_session': end.isoformat(),
+            'boundary': 'BASE_CLOSE_EXCLUSIVE_END_CLOSE_INCLUSIVE',
+            'reported_event_dates': crossing,
+            'status': ('REPORTED_ACTION_CROSSES_RAW_WINDOW' if crossing else
+                       'NO_REPORTED_ACTION_CROSSES_RAW_WINDOW'),
+            'usable_for_raw_comparison': not crossing,
+            'usable_for_price_reference_adjusted_comparison': (not crossing or supported),
+            'reference_adjustment_factor': str(factor) if (not crossing or supported) else None,
+            'comparison_basis': ('RAW_UNADJUSTED' if not crossing else
+                                 'REPORTED_ACTION_REFERENCE_ADJUSTED' if supported else
+                                 'UNAVAILABLE_UNSUPPORTED_REPORTED_ACTION'),
+            'is_selection_window': name in {'5','20'},
+        }
+    return result
+
+
+def qualify(history, quote, actions, *, code, sessions, params, observed_at,
+            quote_received_at=None, selection_mode=False, action_reference_adjustment=False):
+    """Qualify one raw stock input under the shared source contract.
+
+    Default is the pre-existing exact-61/exact-volume qualification used by shared
+    consumers. `selection_mode=True` only relaxes older history gaps. The bounded
+    cash-dividend reference adjustment is a separate explicit Stock-Radar opt-in;
+    shared consumers retain their prior raw-window semantics by default. It never
+    manufactures an event, total-return series or successful empty action response.
+    """
+    if type(action_reference_adjustment) is not bool or (action_reference_adjustment and not selection_mode):
+        _bad(code)
+    expected, bars, missing, history_checks, ready = _qualify_history_payload(
+        history, code=code, sessions=sessions, params=params, observed_at=observed_at,
+        selection_mode=selection_mode, adjust='none')
+
     event_data = _data(actions, code)
     if event_data.get('thscode') != code or event_data.get('ticker') != code[:6]:
         _bad(code)
@@ -323,25 +403,64 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
                                 'dividend_per_share': str(cash), 'per_share_bonus': str(bonus)})
     if dates != sorted(set(dates), reverse=True):
         _bad(code)
-    window_checks = action_window_checks(expected, dates)
-    if any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
+
+    adjustments = (_reported_action_adjustments(expected, bars, retained_events, code=code)
+                   if action_reference_adjustment else {})
+    window_checks = action_window_checks(expected, dates, adjustments)
+    if action_reference_adjustment:
+        if any(not window_checks[str(n)]['usable_for_price_reference_adjusted_comparison']
+               for n in SELECTION_WINDOWS):
+            _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
+    elif any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
+
+    latest_factor = Decimal(1)
+    if action_reference_adjustment and expected[-1] in adjustments:
+        item = adjustments[expected[-1]]
+        if item['factor'] is None:
+            _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
+        latest_factor = Decimal(item['factor'])
+    expected_previous = bars[expected[-2]]['close_price'] * latest_factor
+    uses_reference_adjustment = action_reference_adjustment and any(
+        value['comparison_basis'] == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
+        for value in window_checks.values())
+    q, last_quote, volume_check, turnover_check, actual_previous = _qualify_quote(
+        quote, code=code, expected=expected, raw_bars=bars,
+        quote_received_at=quote_received_at, observed_at=observed_at,
+        selection_mode=selection_mode, expected_previous_close=expected_previous)
+
     meta = {
         'contract': CONTRACT,
         'history_identity_basis': 'EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED',
         'history_request': dict(params), 'history_provider_ready_at': ready.isoformat(),
         'market_session_basis': ('LAST_26_REQUIRED_DATED_BARS_OLDER_GAPS_EXPLICIT_NOT_FILLED'
                                  if selection_mode else 'EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR'),
-        'latest_quote_check': ('EXACT_OHLC_PREVIOUS_CLOSE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
-                               if selection_mode else 'EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE'),
+        'latest_quote_check': ('EXACT_OHLC_ACTION_AWARE_PREVIOUS_REFERENCE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
+                               if action_reference_adjustment else
+                               'EXACT_OHLC_PREVIOUS_CLOSE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
+                               if selection_mode else
+                               'EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE'),
+        'latest_quote_previous_reference': {
+            'snapshot_prev_price': str(actual_previous),
+            'expected_reference_price': str(expected_previous),
+            'basis': ('REPORTED_ACTION_REFERENCE_ADJUSTED' if latest_factor != 1 else
+                      'RAW_PREVIOUS_CLOSE'),
+        },
         'turnover_reconciliation': turnover_check,
         'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
         'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
         'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
         'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
-        'corporate_actions': ('REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF'
-                              if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
-        'reported_corporate_actions': retained_events, 'action_window_checks': window_checks,
+        'corporate_actions': (
+            'REPORTED_ACTIONS_REFERENCE_QUALIFIED_FOR_PRICE_COMPARISON'
+            if uses_reference_adjustment else
+            'REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF'
+            if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
+        'reported_corporate_actions': retained_events,
+        'reported_action_reference_adjustments': {
+            d.isoformat(): value for d, value in sorted(adjustments.items())
+        },
+        'action_window_checks': window_checks,
         'corporate_action_query_succeeded': True,
         'corporate_action_query': {
             'scope': 'AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION',
@@ -352,8 +471,12 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             'older_event_session_qualification': 'NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR',
             'exhaustive_absence_proven': False,
         },
-        'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS',
-        'adjustment_or_total_return_qualification': 'NOT_ESTABLISHED',
+        'historical_daily_reference_check': (
+            'NOT_AVAILABLE_NOT_REQUIRED_FOR_REPORTED_ACTION_REFERENCE_PRICE_RATIOS'
+            if uses_reference_adjustment else 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS'),
+        'adjustment_or_total_return_qualification': (
+            'REPORTED_CASH_DIVIDEND_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+            if uses_reference_adjustment else 'NOT_ESTABLISHED'),
     }
     if selection_mode:
         meta.update(
@@ -365,6 +488,83 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             volume_reconciliation=volume_check,
         )
     return bars, meta
+
+
+def qualify_forward_adjusted_fallback(raw_history, adjusted_history, quote, *, code, sessions,
+                                      raw_params, adjusted_params, observed_at,
+                                      quote_received_at=None, provider_business_code=3002):
+    """Qualify a provider-native forward-adjusted price path when action rows are unavailable.
+
+    The original nonzero action response remains a source gap. This fallback does
+    not relabel it as an empty event history and does not infer any event details.
+    """
+    if provider_business_code != 3002:
+        _bad(code, 'PROVIDER_BUSINESS_REQUEST_FAILED', 'REQUEST_FAILED')
+    expected, raw_bars, raw_missing, raw_checks, raw_ready = _qualify_history_payload(
+        raw_history, code=code, sessions=sessions, params=raw_params, observed_at=observed_at,
+        selection_mode=True, adjust='none')
+    expected2, adjusted_bars, adjusted_missing, adjusted_checks, adjusted_ready = _qualify_history_payload(
+        adjusted_history, code=code, sessions=sessions, params=adjusted_params,
+        observed_at=observed_at, selection_mode=True, adjust='forward')
+    if expected2 != expected or set(adjusted_bars) != set(raw_bars):
+        _bad(code, 'REQUIRED_SELECTION_WINDOW_STOCK_SESSIONS_MISSING', 'DATA_INSUFFICIENT')
+    last_raw = raw_bars[expected[-1]]
+    last_adjusted = adjusted_bars[expected[-1]]
+    for field in ('open_price','high_price','low_price','close_price'):
+        if last_adjusted[field] != last_raw[field]:
+            _bad(code, 'CURRENT_QUOTE_HISTORY_MISMATCH')
+    q, last_quote, volume_check, turnover_check, actual_previous = _qualify_quote(
+        quote, code=code, expected=expected, raw_bars=raw_bars,
+        quote_received_at=quote_received_at, observed_at=observed_at, selection_mode=True,
+        expected_previous_close=adjusted_bars[expected[-2]]['close_price'])
+    meta = {
+        'contract': CONTRACT,
+        'selection_qualification_contract': SELECTION_QUALIFICATION_CONTRACT,
+        'history_identity_basis': 'EXPLICIT_SINGLE_STOCK_REQUEST_OPTIONAL_ECHO_CHECKED',
+        'history_request': dict(raw_params),
+        'history_provider_ready_at': raw_ready.isoformat(),
+        'history_bar_count': len(raw_bars),
+        'history_market_session_gaps': [d.isoformat() for d in raw_missing],
+        'history_gap_meaning': 'ABSENCE_REASON_UNKNOWN_NOT_INFERRED_AS_SUSPENSION_OR_ZERO_TRADING',
+        'history_window_checks': raw_checks,
+        'volume_reconciliation': volume_check,
+        'turnover_reconciliation': turnover_check,
+        'latest_quote_check': 'EXACT_RAW_OHLC_PROVIDER_FORWARD_PREVIOUS_REFERENCE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION',
+        'latest_quote_previous_reference': {
+            'snapshot_prev_price': str(actual_previous),
+            'expected_reference_price': str(adjusted_bars[expected[-2]]['close_price']),
+            'basis': 'PROVIDER_FORWARD_ADJUSTED_PREVIOUS_CLOSE',
+        },
+        'snapshot_individual_trade_date': 'NOT_SUPPLIED_NOT_INFERRED_FROM_READY_CLOCK',
+        'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
+        'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
+        'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
+        'corporate_actions': 'QUERY_UNAVAILABLE_PROVIDER_3002_NOT_INTERPRETED_AS_EMPTY',
+        'reported_corporate_actions': [],
+        'reported_action_reference_adjustments': {},
+        'action_window_checks': None,
+        'corporate_action_query_succeeded': False,
+        'corporate_action_query': {
+            'scope': 'AVAILABLE_HISTORY_THROUGH_COMPLETED_SESSION',
+            'expected_request': action_params(code, sessions),
+            'provider_business_code': provider_business_code,
+            'exhaustive_absence_proven': False,
+        },
+        'adjusted_history_fallback': {
+            'status': 'USED',
+            'provider_business_code_that_triggered_fallback': provider_business_code,
+            'request': dict(adjusted_params),
+            'provider_ready_at': adjusted_ready.isoformat(),
+            'history_bar_count': len(adjusted_bars),
+            'history_market_session_gaps': [d.isoformat() for d in adjusted_missing],
+            'history_window_checks': adjusted_checks,
+            'adjustment_mode': 'forward',
+            'event_details_inferred': False,
+        },
+        'historical_daily_reference_check': 'PROVIDER_FORWARD_ADJUSTED_HISTORY_USED_FOR_PRICE_COMPARISON',
+        'adjustment_or_total_return_qualification': 'PROVIDER_FORWARD_PRICE_ADJUSTMENT_NOT_TOTAL_RETURN',
+    }
+    return raw_bars, adjusted_bars, meta
 
 
 def request_json(path, params, *, api_key):

@@ -127,8 +127,8 @@ def test_proposed_scope_budget_preserves_existing_companies_and_all_linked_direc
                   for target in node['targets']}
     issuers = {(c['ticker'], c['exchange']) for node in spec['nodes'] for c in node['companies']}
     assert len(directions) == 3 and len(issuers) == 5
-    # Same reservation as prepare_stock_reading: 4 shared + directions + 3 per issuer.
-    one_addition = 4 + len(directions) + 3 * (len(issuers) + 1)
-    two_additions = 4 + len(directions) + 3 * (len(issuers) + 2)
-    assert one_addition == 25 <= stock.MAX_REQUESTS == 26
+    # Same reservation as prepare_stock_reading: base calls plus one bounded fallback when it fits.
+    one_addition = stock.stock_request_budget(len(issuers) + 1, len(directions))
+    two_additions = stock.stock_request_budget(len(issuers) + 2, len(directions))
+    assert one_addition == 26 <= stock.MAX_REQUESTS == 26
     assert two_additions == 28 > stock.MAX_REQUESTS

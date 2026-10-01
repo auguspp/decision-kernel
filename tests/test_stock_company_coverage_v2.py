@@ -73,6 +73,8 @@ def run_expanded(tmp_path, failed='002714.SZ'):
             value['data']['timestamp'] = int(AT.timestamp()*1000)
         if path == own.ACTIONS and params['thscode'] == failed:
             value = copy.deepcopy(raw_failure)
+        if path == own.HISTORY and params['thscode'] == failed and params.get('adjust') == 'forward':
+            value = copy.deepcopy(raw_failure)
         return value
     ticks = iter(AT+timedelta(seconds=i*21) for i in range(100))
     before = mod['inventory'](state)
@@ -118,7 +120,7 @@ def test_expanded_plan_uses_four_real_company_identities_not_a_top_three(tmp_pat
     _, _, plan = mod['load_inputs'](root, AT, company_manifest=V2)
     assert {r['thscode'] for r in plan['issuers']} == PLANNED
     assert set(plan['directions']) == {'881102.TI','884275.TI'}
-    assert plan['maximum_request_count'] == 18
+    assert plan['maximum_request_count'] == 19
     assert plan['company_manifest'] == V2
     assert {r['thscode'] for r in plan['evidence_scope_issuers']} == PLANNED|{'600233.SH'}
     assert all(r['origins'][0]['company']['basis'] for r in plan['issuers'])
@@ -133,8 +135,8 @@ def test_expanded_capture_isolates_one_and_rebuilds_the_other_three(tmp_path, fa
     assert report['coverage']['planned_issuers'] == 4
     assert report['coverage']['qualified_issuers'] == 3
     assert report['coverage']['unavailable_issuers'] == 1
-    assert len(calls) == plan['maximum_request_count'] == 18
-    assert pauses == [20]*17
+    assert len(calls) == plan['maximum_request_count'] == 19
+    assert pauses == [20]*18
     p = mod['read'](out/'stock-reading.json')['projection']
     assert {r['thscode'] for r in p['surfaced_stocks']} == PLANNED-{failed}
     assert p['status'] == 'PARTIAL_STOCKS_FOR_SHADOW_READING'
@@ -146,7 +148,7 @@ def test_expanded_capture_isolates_one_and_rebuilds_the_other_three(tmp_path, fa
     assert not (out/'inputs'/stock.COMPANY_MANIFEST).exists()
     rebuilt = mod['verify'](out)
     assert rebuilt['status'] == 'STOCK_BATCH_WITH_DATA_GAPS_REBUILT'
-    assert rebuilt['stock_count'] == 3 and rebuilt['requests_replayed'] == 18
+    assert rebuilt['stock_count'] == 3 and rebuilt['requests_replayed'] == 19
     assert rebuilt['network_calls'] == 0 and rebuilt['coverage'] == report['coverage']
     html = (out/'index.html').read_text()
     assert '合成验收样本' in html and '数据不可用 1' in html

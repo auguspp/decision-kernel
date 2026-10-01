@@ -99,8 +99,8 @@ def test_current_snapshot_must_match_own_history_exactly(kind):
     with pytest.raises(own.StockReadingInputError):check(q=q)
 
 
-@pytest.mark.parametrize('kind',['cash','bonus','unknown','wrong_code','wrong_ticker','missing_list','nonlist','after_query_end'])
-def test_selection_window_actions_are_never_converted_to_inferred_adjustments(kind):
+@pytest.mark.parametrize('kind',['unknown','wrong_code','wrong_ticker','missing_list','nonlist','after_query_end'])
+def test_unsupported_or_malformed_selection_window_actions_fail_closed(kind):
     _,_,h,_,a=inputs();d=a['data']
     if kind=='wrong_code':d['thscode']='000001.SZ'
     elif kind=='wrong_ticker':d['ticker']='000001'
@@ -108,10 +108,63 @@ def test_selection_window_actions_are_never_converted_to_inferred_adjustments(ki
     elif kind=='nonlist':d['item']=None
     else:
         d['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
-            'dividend_per_share':'0.1' if kind=='cash' else '0',
-            'per_share_bonus':'0.1' if kind=='bonus' else '0'}]
+            'dividend_per_share':'0','per_share_bonus':'0'}]
         if kind=='after_query_end':d['item'][0]['ex_date_ms']+=86400*1000*200
     with pytest.raises(own.StockReadingInputError):check(a=a)
+
+
+def test_reported_cash_dividend_can_establish_bounded_price_reference_adjustment():
+    days,_,h,q,a=inputs()
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
+        'dividend_per_share':'0.1','per_share_bonus':'0'}]
+    bars,meta=check(h,q,a,selection_mode=True,action_reference_adjustment=True)
+    w=meta['action_window_checks']['20']
+    assert len(bars)==61 and not w['usable_for_raw_comparison']
+    assert w['usable_for_price_reference_adjusted_comparison']
+    assert w['comparison_basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
+    assert Decimal(w['reference_adjustment_factor']) > 0
+    assert meta['adjustment_or_total_return_qualification']=='REPORTED_CASH_DIVIDEND_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+
+
+def test_reported_bonus_still_requires_separate_reference_review():
+    _,_,h,q,a=inputs()
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
+        'dividend_per_share':'0','per_share_bonus':'0.1'}]
+    with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
+        check(h,q,a,selection_mode=True,action_reference_adjustment=True)
+
+
+def test_same_day_cash_action_reconciles_snapshot_previous_reference():
+    days,_,h,q,a=inputs()
+    previous=Decimal(h['data']['item'][-2]['close_price'])
+    cash=Decimal('0.13')
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][-1]['date_ms'],
+        'dividend_per_share':str(cash),'per_share_bonus':'0'}]
+    q['data']['item'][0]['prev_price']=str(previous-cash)
+    _,meta=check(h,q,a,selection_mode=True,action_reference_adjustment=True)
+    assert meta['latest_quote_previous_reference']['basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
+    assert Decimal(meta['latest_quote_previous_reference']['expected_reference_price'])==previous-cash
+
+
+
+def test_forward_adjusted_fallback_uses_adjusted_previous_reference_without_inventing_events():
+    days,at,h,q,_=inputs()
+    adjusted=copy.deepcopy(h)
+    previous=adjusted['data']['item'][-2]
+    previous.update(open_price='68.4',high_price='68.6',low_price='68.3',close_price='68.5')
+    q['data']['item'][0]['prev_price']='68.5'
+    raw_bars,adjusted_bars,meta=own.qualify_forward_adjusted_fallback(
+        h,adjusted,q,code='002714.SZ',sessions=days,
+        raw_params=own.history_params('002714.SZ',days),
+        adjusted_params=own.history_params('002714.SZ',days,adjust='forward'),
+        observed_at=at,provider_business_code=3002)
+    assert raw_bars[days[-2]]['close_price']==Decimal('69')
+    assert adjusted_bars[days[-2]]['close_price']==Decimal('68.5')
+    assert meta['corporate_action_query_succeeded'] is False
+    assert meta['corporate_action_query']['provider_business_code']==3002
+    assert meta['adjusted_history_fallback']['adjustment_mode']=='forward'
+    assert meta['adjusted_history_fallback']['event_details_inferred'] is False
+    assert meta['latest_quote_previous_reference']['basis']=='PROVIDER_FORWARD_ADJUSTED_PREVIOUS_CLOSE'
 
 
 def test_business_failure_does_not_echo_provider_message():

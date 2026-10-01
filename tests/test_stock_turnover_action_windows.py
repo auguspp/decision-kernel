@@ -88,11 +88,24 @@ def test_events_on_or_before_twenty_day_base_close_do_not_block_selection(index)
 
 
 @pytest.mark.parametrize('index', [41,54,55,56,60])
-@pytest.mark.parametrize('cash,bonus', [('0.2','0'),('0','0.1'),('0','0')])
-def test_any_reported_event_after_selection_base_through_end_still_blocks(index,cash,bonus):
+def test_supported_cash_dividend_after_selection_base_uses_reference_adjustment(index):
+    _,_,h,q,a = action_at(index,cash='0.2',bonus='0')
+    if index == 60:
+        previous=Decimal(h['data']['item'][-2]['close_price'])
+        q['data']['item'][0]['prev_price']=str(previous-Decimal('0.2'))
+    _,meta=check(h,q,a,selection_mode=True,action_reference_adjustment=True)
+    affected=[w for w in meta['action_window_checks'].values() if w['reported_event_dates']]
+    assert affected
+    assert all(w['usable_for_price_reference_adjusted_comparison'] for w in affected)
+    assert any(w['comparison_basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED' for w in affected)
+
+
+@pytest.mark.parametrize('index', [41,54,55,56,60])
+@pytest.mark.parametrize('cash,bonus', [('0','0'),('0','0.1')])
+def test_unsupported_zero_or_bonus_event_after_selection_base_still_fails_closed(index,cash,bonus):
     _,_,h,q,a = action_at(index,cash=cash,bonus=bonus)
     with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
-        check(h,q,a)
+        check(h,q,a,selection_mode=True,action_reference_adjustment=True)
 
 
 def test_base_close_is_exclusive_and_shifted_context_is_checked_independently():

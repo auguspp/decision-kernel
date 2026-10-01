@@ -4,7 +4,9 @@ import {displayDecimal, localTime} from './product.mjs';
 const HASH=/^[a-f0-9]{64}$/, TICKER=/^[0-9]{6}\.(SH|SZ|BJ)$/;
 const DEC=v=>typeof v==='string' && v.length<=160 && /^-?\d+(?:\.\d+)?$/.test(v);
 const DAY=v=>typeof v==='string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && Number.isFinite(Date.parse(v)) && new Date(v).toISOString().slice(0,10)===v;
-const LABELS={CONTRACT_CHECKED_RAW_READING:'通过原价格观察',CONDITIONS_NOT_MET:'原条件未满足',DATA_QUALIFICATION_FAILED:'数据不可用，未作条件否决'};
+const LABELS={CONTRACT_CHECKED_RAW_READING:'通过价格观察',CONDITIONS_NOT_MET:'原条件未满足',DATA_QUALIFICATION_FAILED:'数据不可用，未作条件否决',REQUEST_FAILED:'数据请求未完成，未作条件否决'};
+const POLICY_VERSIONS=new Set(['stock-market-expression-window-qualified-v8','stock-market-expression-window-qualified-v9']);
+const PRICE_CONVENTIONS=new Set(['RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN','REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN','PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN']);
 function require(ok,reason){if(!ok)throw new Error(reason);}
 function compareDecimal(a,b){
   require(DEC(a)&&DEC(b),'STOCK_COMPARISON_DECIMAL');
@@ -39,13 +41,14 @@ export function stockComparisonView(text,saved){
     p.scope===saved.scope&&p.scope==='BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES' &&
     p.semantics==='BOUNDED_MARKET_EXPRESSION_NOT_BUSINESS_BENEFIT_OR_RECOMMENDATION' &&
     p.reference_input_provenance==='HITHINK_REQUEST_BOUND_RAW_OBSERVATION' &&
-    p.policy?.version==='stock-market-expression-window-qualified-v8' && p.price_path_is_not_total_return===true &&
+    POLICY_VERSIONS.has(p.policy?.version) && p.price_path_is_not_total_return===true &&
     ['research_authority','human_attention_authority','signal_transition_authority','investment_authority'].every(k=>p[k]==='NONE') &&
     p.automatic_research_routing===false&&p.creates_canonical_wake===false &&
     Array.isArray(p.all_stock_observations)&&p.all_stock_observations.length<=16&&
     Array.isArray(saved.dispositions)&&saved.dispositions.length===p.all_stock_observations.length,
     'STOCK_COMPARISON_SCOPE');
-  const declared=new Map(),rows=new Map(),counts={CONTRACT_CHECKED_RAW_READING:0,CONDITIONS_NOT_MET:0,DATA_QUALIFICATION_FAILED:0};
+  const declared=new Map(),rows=new Map(),counts={CONTRACT_CHECKED_RAW_READING:0,CONDITIONS_NOT_MET:0,DATA_QUALIFICATION_FAILED:0,REQUEST_FAILED:0};
+  let priceChecked=0;
   for(const d of saved.dispositions){
     require(TICKER.test(d?.thscode)&&Object.hasOwn(LABELS,d.status)&&!declared.has(d.thscode),'STOCK_COMPARISON_DISPOSITIONS');
     declared.set(d.thscode,d.status);
@@ -56,32 +59,45 @@ export function stockComparisonView(text,saved){
       Array.isArray(r.excluded_reasons)&&r.excluded_reasons.length<=32&&r.excluded_reasons.every(x=>typeof x==='string'&&x.length<=256),
       'STOCK_COMPARISON_ROW');
     const path=r.stock_path,windows={};
-    if(r.status==='DATA_QUALIFICATION_FAILED')require(path===null,'STOCK_COMPARISON_UNAVAILABLE_PRICE');
-    else {
-      require(path&&path.price_convention==='RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN'&&path.returns,
-        'STOCK_COMPARISON_PRICE_CONVENTION');
+    let basis=null;
+    if(path===null){
+      require(['DATA_QUALIFICATION_FAILED','REQUEST_FAILED','CONDITIONS_NOT_MET'].includes(r.status),
+        'STOCK_COMPARISON_UNAVAILABLE_PRICE');
+    }else{
+      require(PRICE_CONVENTIONS.has(path.price_convention)&&path.returns,'STOCK_COMPARISON_PRICE_CONVENTION');
+      basis=path.price_convention;priceChecked++;
+      const forward=basis==='PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN';
+      const reported=basis==='REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN';
+      if(forward)require(path.input_checks?.corporate_action_query_succeeded===false &&
+        path.input_checks?.corporate_action_query?.provider_business_code===3002 &&
+        path.input_checks?.adjusted_history_fallback?.status==='USED' &&
+        path.input_checks.adjusted_history_fallback.event_details_inferred===false,
+        'STOCK_COMPARISON_FORWARD_FALLBACK');
       for(const n of ['5','20','60']){
         const value=path.returns[n],h=r.market_comparison?.[n];
         require(value===null||DEC(value),'STOCK_COMPARISON_VALUE');
         if(value===null){windows[n]=null;continue;}
-        const w=path.input_checks?.history_window_checks?.[n],a=path.input_checks?.action_window_checks?.[n];
-        require(w&&a&&w.usable_for_raw_comparison===true&&a.usable_for_raw_comparison===true &&
+        const w=(forward?path.input_checks?.adjusted_history_fallback?.history_window_checks?.[n]:
+          path.input_checks?.history_window_checks?.[n]);
+        const a=path.input_checks?.action_window_checks?.[n];
+        const actionOK=forward || (a&&a.base_session===w?.base_session&&a.end_session===w?.end_session &&
+          (a.usable_for_raw_comparison===true || (reported&&a.usable_for_price_reference_adjusted_comparison===true)));
+        require(w&&w.usable_for_raw_comparison===true&&actionOK &&
           DAY(w.base_session)&&w.base_session<p.market_session&&w.end_session===p.market_session &&
-          a.base_session===w.base_session&&a.end_session===w.end_session &&
           h&&h.stock_return===value&&DEC(h.benchmark_return)&&DEC(h.excess_return),
           'STOCK_COMPARISON_WINDOW');
         windows[n]={base:w.base_session,end:w.end_session,value,benchmark:h.benchmark_return,excess:h.excess_return};
       }
     }
     counts[r.status]++;
-    rows.set(r.thscode,{ticker:r.thscode,name:r.company_name,status:r.status,windows,
+    rows.set(r.thscode,{ticker:r.thscode,name:r.company_name,status:r.status,windows,basis,
       directions:directions(r),reasons:r.excluded_reasons,
       gap:r.input_failure?.reason_code??null});
   }
   for(const [key,n] of Object.entries({planned_issuers:rows.size,dispositioned_issuers:rows.size,
-    price_path_checked_issuers:counts.CONTRACT_CHECKED_RAW_READING+counts.CONDITIONS_NOT_MET,
+    price_path_checked_issuers:priceChecked,
     qualified_issuers:counts.CONTRACT_CHECKED_RAW_READING,conditions_not_met_issuers:counts.CONDITIONS_NOT_MET,
-    unavailable_issuers:counts.DATA_QUALIFICATION_FAILED})){
+    unavailable_issuers:counts.DATA_QUALIFICATION_FAILED+counts.REQUEST_FAILED})){
     require(p.coverage?.[key]===n&&saved.coverage?.[key]===n,'STOCK_COMPARISON_COVERAGE');
   }
   return {rows,day:p.market_session,hash:report.projection_hash};
@@ -99,7 +115,7 @@ export function checkedMembers(membership,code,stock){
   return {rows,total:members.size,checked:rows.length,notChecked:members.size-rows.length,
     qualified:rows.filter(r=>r.status==='CONTRACT_CHECKED_RAW_READING').length,
     notMet:rows.filter(r=>r.status==='CONDITIONS_NOT_MET').length,
-    unavailable:rows.filter(r=>r.status==='DATA_QUALIFICATION_FAILED').length,
+    unavailable:rows.filter(r=>r.status==='DATA_QUALIFICATION_FAILED'||r.status==='REQUEST_FAILED').length,
     sameDay,ranked,day:stock.day,memberDay:membership.data.market_session};
 }
 /** One lazy read for this page/R. Rejected reads remain rejected, not retried by selection. */
@@ -131,7 +147,12 @@ export function mountStockComparison(target,ctx,membership,code,load){
       const card=el('div',undefined,'human-material ref'),h=r.windows['20'];
       card.append(button(`查看 ${r.name} ${r.ticker} 的已有研究`,()=>{if(active())onCompany(r.ticker);}),
         el('p',`${LABELS[r.status]}（${view.day}）`),el('p',h?`20日收盘收益 ${pct(h.value)}`:'20日价格不可比较；不是零收益'));
-      const evidence=[el('p','未复权收盘价格路径，不是总回报；原基准不是本概念指数，不能解释成跑赢该概念。')];
+      const basisText=r.basis==='PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN'?
+        '公司行动端点未准备时使用供应商 forward-adjusted 价格路径作有限价格比较；原3002缺口仍保留，不证明事件完整，也不是总回报。':
+        r.basis==='REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN'?
+        '已报告公司行动只用于价格参考调整；原始公司行动记录保留，不是总回报或经营受益证明。':
+        '未复权收盘价格路径，不是总回报。';
+      const evidence=[el('p',basisText+' 原基准不是本概念指数，不能解释成跑赢该概念。')];
       for(const n of ['5','20','60']){const w=r.windows[n];evidence.push(el('p',w?
         `${n}日 ${w.base}—${w.end}：个股 ${pct(w.value)} · 原市场基准 ${pct(w.benchmark)} · 超额 ${pct(w.excess)}`:
         `${n}日：未取得可比较价格，保持未知`));}
