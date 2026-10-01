@@ -74,7 +74,7 @@ def _descriptor(root, record, manifest):
             'params': record['params'], 'captured_at': record['captured_at']}
 
 
-def _source_context(root, manifest):
+def _source_context(root, manifest, *, closed_dates=(), closure_evidence=()):
     """Replay the original calendar/index requests, without Sector state/gates."""
     records = manifest['requests']
     started = audit._clock(_load_bound(root, 'inputs/context.json', manifest['files'])['observed_at'])
@@ -119,7 +119,8 @@ def _source_context(root, manifest):
         request_json=replay(history_record), trading_sessions=calendar)
     qualified = qualify_hithink_index_snapshot(snapshot, benchmark_history=benchmark,
         trading_sessions=calendar, observed_at=history_at)
-    reference = quotes.HithinkStockSnapshotReference(calendar, qualified, started)
+    reference = quotes.HithinkStockSnapshotReference(calendar, qualified, started,
+        closed_dates=closed_dates, closure_evidence=closure_evidence)
     reference.validate()
     sessions = tuple(day for day in calendar if day <= reference.market_session)[-61:]
     _require(len(sessions) == 61, '61 dated calendar sessions required, not 61 own-stock bars')
@@ -268,6 +269,24 @@ def _trace(root, report, records, code, sessions):
     return stock._plain(result)
 
 
+def _sample(batch, locations, sample_size, source_hash, *, source_key="source_audit_hash"):
+    """Pure frozen sample; no history availability, Sector or company input."""
+    with localcontext(Context(prec=28)):
+        priced = [p for p in batch.points if p.last_price is not None and p.prev_price is not None]
+        changes = {p.thscode: p.last_price / p.prev_price - 1 for p in priced}
+        selected = sorted(changes, key=lambda code: (-abs(changes[code]), code))[:sample_size]
+        selected_set = set(selected)
+        rows = [[p.thscode, *locations[p.thscode], p.last_price, p.prev_price,
+                 None if p.thscode not in changes else p.last_price - p.prev_price,
+                 'S' if p.thscode in selected_set else ('D' if p.thscode in changes else 'U')]
+                for p in batch.points]
+        frozen = stock._plain({'origin': ORIGIN, source_key: source_hash,
+            'rule': RULE, 'sample_size': sample_size, 'complete_denominator': batch.returned_unique_rows,
+            'selected': [{'thscode': code, 'signed_quote_change': changes[code]} for code in selected]})
+        frozen['selection_hash'] = canonical_hash(frozen)
+    return priced, selected, rows, frozen
+
+
 def build(audit_root: Path, *, expected_audit_hash: str, sample_size: int = 16,
           stock_root: Path | None = None, expected_capture_hash: str | None = None) -> dict:
     """Return a full derived denominator plus independently frozen bounded sample."""
@@ -280,24 +299,20 @@ def build(audit_root: Path, *, expected_audit_hash: str, sample_size: int = 16,
     _pin(manifest, 'audit_hash', expected_audit_hash)
     reference, sessions, context = _source_context(audit_root, manifest)
     batch, pages, locations = _snapshot(audit_root, manifest, reference)
+    priced, selected, rows, frozen = _sample(batch, locations, sample_size, expected_audit_hash)
     with localcontext(Context(prec=28)):
-        priced = [p for p in batch.points if p.last_price is not None and p.prev_price is not None]
-        changes = {p.thscode: p.last_price / p.prev_price - 1 for p in priced}
-        selected = sorted(changes, key=lambda code: (-abs(changes[code]), code))[:sample_size]
-        selected_set = set(selected)
-        rows = [[p.thscode, *locations[p.thscode], p.last_price, p.prev_price,
-                 None if p.thscode not in changes else p.last_price - p.prev_price,
-                 'S' if p.thscode in selected_set else ('D' if p.thscode in changes else 'U')]
-                for p in batch.points]
-        frozen = stock._plain({'origin': ORIGIN, 'source_audit_hash': expected_audit_hash,
-            'rule': RULE, 'sample_size': sample_size, 'complete_denominator': batch.returned_unique_rows,
-            'selected': [{'thscode': code, 'signed_quote_change': changes[code]} for code in selected]})
-        frozen['selection_hash'] = canonical_hash(frozen)
         # Freeze before inspecting any available-history list or old result.
         capture, traces = (None, {}) if stock_root is None else _capture(
             Path(stock_root), expected_capture_hash, sessions, manifest['provenance'], reference)
         results = {code: _trace(Path(stock_root) if stock_root else None, capture,
                               traces.get(code), code, sessions) for code in sorted(set(selected) | set(traces))}
+    return _report(manifest, expected_audit_hash, expected_capture_hash, context, batch,
+                   pages, priced, selected, rows, frozen, traces, results)
+
+
+def _report(manifest, expected_audit_hash, expected_capture_hash, context, batch,
+            pages, priced, selected, rows, frozen, traces, results):
+    """Shared deterministic assembly; capture callers supply truthful source mode."""
     table = stock._plain(rows)
     report = {'version': VERSION, 'origin': ORIGIN, 'status': 'OFFLINE_OBSERVATIONS_WITH_EXPLICIT_GAPS',
         'semantics': 'UNVALIDATED_REPLAY_SAMPLE_NOT_SURPRISE_RANKING_OR_PRODUCTION_GATE',

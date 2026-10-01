@@ -33,7 +33,9 @@ jobs:
       (github.event_name != 'workflow_run' ||
        (github.event.workflow_run.head_branch == 'main' &&
         github.event.workflow_run.head_repository.full_name == github.repository &&
-        github.event.workflow_run.run_attempt == 1))
+        github.event.workflow_run.run_attempt == 1 &&
+        (github.event.workflow_run.path != '.github/workflows/hithink-stock-dump-trial.yml' ||
+         !startsWith(github.event.workflow_run.display_title, 'stock-independent-observations |'))))
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
@@ -45,6 +47,10 @@ jobs:
       cancel-in-progress: false
     env:
       RECONCILE_MODE: ${{ inputs.mode || 'execute' }}
+      UPSTREAM_PATH: ${{ github.event.workflow_run.path }}
+      UPSTREAM_DISPLAY_TITLE: ${{ github.event.workflow_run.display_title }}
+      UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+      UPSTREAM_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
     steps:
       - uses: actions/checkout@v7
         with:

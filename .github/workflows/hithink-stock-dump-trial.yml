@@ -13,8 +13,13 @@ on:
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
-        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading]
+        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading, stock-independent-observations]
         default: stock-dump
+      independent-closure-date:
+        description: 'Independent K3 only: explicit reviewed Oct1 closure capture, anchored Sep30; never quiet active-day proof'
+        type: choice
+        options: ['none', '2026-10-01']
+        default: 'none'
       stock-discovery-page:
         description: 'Optional stock-reading page: exact pool_hash:offset. Empty preserves original route; no automatic next page.'
         type: string
@@ -149,6 +154,122 @@ jobs:
             printf '\n[隔离数据试验与原始文件](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
           fi
           echo '不是行业状态更新、历史成员宽度或投资信号。没有执行自动恢复或替代来源。' >> "$GITHUB_STEP_SUMMARY"
+  stock-independent-observations:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.event_name == 'workflow_dispatch' &&
+      inputs.trial-purpose == 'stock-independent-observations' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing Stock transport
+        run: python -m pip install -e '.[feeds]'
+      - name: Require explicit independent identity and exact-main CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
+          STOCK_MARKET_RUN_ID: ${{ inputs.stock-market-run-id }}
+          STOCK_DISCOVERY_PAGE: ${{ inputs.stock-discovery-page }}
+          RECOVERY_KEY: ${{ inputs.recovery-key }}
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          import os
+          from decision_kernel.runtime.hithink_independent_capture import intent
+          intent(os.environ)
+          PYCODE
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')" = "$GITHUB_SHA"
+          gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+            -f head_sha="$GITHUB_SHA" -f event=push -f per_page=10 > "$RUNNER_TEMP/independent-ci.json"
+          python - <<'PYCODE'
+          import json, os
+          runs = json.load(open(os.environ['RUNNER_TEMP']+'/independent-ci.json'))['workflow_runs']
+          assert runs
+          r = max(runs, key=lambda x: (x['created_at'], x['id']))
+          assert r['head_sha'] == os.environ['GITHUB_SHA'] and r['head_branch'] == 'main'
+          assert r['head_repository']['full_name'] == os.environ['GITHUB_REPOSITORY']
+          assert r['path'] == '.github/workflows/ci.yml' and r['event'] == 'push'
+          assert r['run_attempt'] == 1 and r['status'] == 'completed' and r['conclusion'] == 'success'
+          PYCODE
+      - name: Observe shared-Key peers once without source requests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PYCODE'
+          import os, runpy
+          m = runpy.run_path('.github/scripts/check-sector-scheduled-activity.py')
+          m['require_invocation'](os.environ)
+          peers = frozenset('.github/workflows/'+name+'.yml' for name in
+                            ('sector-radar-shadow', 'decision-inbox', 'live-dogfood'))
+          blockers = m['check_activity'](m['request_reader'](os.environ['GH_TOKEN']), peers=peers)
+          assert not blockers, 'BLOCKED_SHARED_KEY_ACTIVITY'
+          print('No visible peers; metadata observation is not an atomic lock or quota proof')
+          PYCODE
+      - name: Capture one complete denominator and frozen K3
+        id: independent-capture
+        env:
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
+          STOCK_MARKET_RUN_ID: ${{ inputs.stock-market-run-id }}
+          STOCK_DISCOVERY_PAGE: ${{ inputs.stock-discovery-page }}
+          RECOVERY_KEY: ${{ inputs.recovery-key }}
+          CLOSURE_DATE: ${{ inputs.independent-closure-date }}
+        run: |
+          args=()
+          if test "$CLOSURE_DATE" != none; then args+=(--closure-date "$CLOSURE_DATE"); fi
+          python -m decision_kernel.runtime.hithink_independent_capture capture \
+            --root "$RUNNER_TEMP/independent-stock-capture" "${args[@]}"
+      - name: Replay this attempt offline without credentials
+        id: independent-verify
+        if: always() && (steps.independent-capture.outcome == 'success' || steps.independent-capture.outcome == 'failure')
+        run: |
+          python - <<'PYCODE'
+          import os
+          from pathlib import Path
+          from decision_kernel.identity import canonical_json
+          from decision_kernel.runtime.hithink_independent_capture import verify
+          from decision_kernel.runtime.independent_stock_observations import _load
+          root = Path(os.environ['RUNNER_TEMP'])/'independent-stock-capture'
+          pin = _load(root/'capture.json')['capture_hash']
+          receipt = verify(root, expected_capture_hash=pin)
+          print(canonical_json(receipt))
+          (root.parent/'independent-stock-verification.json').write_text(canonical_json(receipt)+'\n')
+          PYCODE
+      - name: Retain independent attempt including failures
+        id: independent-evidence
+        if: always() && (steps.independent-capture.outcome == 'success' || steps.independent-capture.outcome == 'failure')
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: stock-independent-observations-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/independent-stock-capture/
+            ${{ runner.temp }}/independent-stock-verification.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Keep independent acceptance boundaries visible
+        if: always()
+        env:
+          CAPTURE_RESULT: ${{ steps.independent-capture.outcome }}
+          VERIFY_RESULT: ${{ steps.independent-verify.outcome }}
+          UPLOAD_RESULT: ${{ steps.independent-evidence.outcome }}
+        run: |
+          {
+            echo 'Independent Stock capture is manual-only, capped at 26 attempts including failures; no retry or next batch.'
+            printf 'Capture=%s; offline verification=%s; upload=%s.\n' "$CAPTURE_RESULT" "$VERIFY_RESULT" "$UPLOAD_RESULT"
+            echo 'Raw artifacts and observation sampling are separate from quiet-day evidence, Surprise value, Research, current-state Stock admission and investment authority.'
+          } >> "$GITHUB_STEP_SUMMARY"
   stock-reading:
     if: github.event_name == 'workflow_dispatch' && inputs.trial-purpose == 'stock-reading'
     runs-on: ubuntu-latest

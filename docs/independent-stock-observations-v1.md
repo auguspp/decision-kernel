@@ -8,8 +8,10 @@ link or previous Research admits a candidate.
 
 Authority remains the [original P2-4 scope](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5835074681)
 and [C completeness correction](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5909499946).
-AI Investment Authority = NONE. No production workflow, live Stock current-state admission,
-dispatch, schedule, source request, provider, dependency, Research or Watch change.
+AI Investment Authority = NONE. The retained-audit consumer itself makes no source
+requests or production admission. The later manual K3 capture described below is
+a distinct mode in the existing owner, without live Stock current-state admission,
+scheduling, new provider/dependency, automatic Research or Watch changes.
 A passive `NAVIGATION_ONLY / ON_DEMAND_ARCHIVE` locator for the derived report may
 use the existing archive index. It does not admit a live Stock reading, eagerly
 materialize a source, or claim custody of the original large archive.
@@ -188,3 +190,113 @@ consumer independence, **not quiet-day live acquisition**. New independently
 sampled histories, Surprise policy/value, false-positive and lead-time evidence,
 attention cost, natural consumption and the original remaining P2-1–6 scope stay
 open. No new live acquisition or Research permission is inferred from this replay.
+
+
+## Manual independent K3 acquisition successor
+
+The explicit `stock-independent-observations` purpose/job in the existing
+`hithink-stock-dump-trial.yml` owner captures its own calendar, CSI300 benchmark
+snapshot/history, all-market pages and selected own-stock traces. It accepts no
+Sector run, discovery page or recovery key, and downloads no Sector artifact.
+No Sector audit/run/state/membership/association is synthesized. Legacy
+`build(audit_root, ...)`, v7/v8 capture contracts and legacy Stock selection remain
+available with their existing semantics. The pure sample and report assembly
+are shared; code provenance hashes honestly change when implementation changes.
+
+**Reuse decision: REUSE + THIN_ADAPTER.** This uses the already-inspected
+PR #687 internal parsers, exact source-read binding, selection/assembly and raw
+price arithmetic; existing `HithinkStockSnapshotReference` from PR #579; the
+existing credential-isolated, no-redirect, bounded HTTPS transport and official
+HiThink endpoints; and GitHub manual jobs, artifacts and CI identity checks.
+The only transport extension admits exact `limit=500`, canonical offsets
+`0,500,...,6500` on the existing snapshot endpoint. Individual `thscodes` requests
+remain unchanged. Decimal JSON lexemes remain strings, without binary-float loss.
+The retained #508/#511 / PR #687 official and EasyStock prior-art assessment above
+covers this same source/pagination/assembly capability; no new external code or
+dependency is introduced and no new upstream-equivalence review is claimed.
+
+### Attempt cost and stop conditions
+
+- Fixed K=3, 500 rows per complete page, existing ceiling of 26 source attempts
+- Three context requests + P complete pages + at most nine own-stock requests;
+  P=12 therefore costs at most 24 attempts, not a K16 live batch
+- After the first page declares its total, require
+  `3 + ceil(total/500) + 3*3 <= 26`; totals above 7,000 reject at attempt four
+- No truncation, silent K reduction, available-history intersection, retry,
+  fallback provider or automatic next batch. Every failed transport/business
+  attempt counts. Known issuer-local gaps retain the frozen selection; shared
+  credential/rate-limit/clock failures stop the attempt
+- Existing 20-second spacing, bounded response/capture bytes and 30-minute source
+  lifetime; workflow has a 20-minute timeout. A process killed before sealing
+  is incomplete evidence, never a successful scan
+
+Selection remains the unvalidated absolute signed quote-move sampling rule,
+not Surprise, investment priority, company quality, liquidity or tradability.
+All source identities remain represented. Company name, name-based risk and
+per-security trade-date qualifications remain UNKNOWN where unavailable.
+
+The job requires exact main, successful independent main CI and first manual
+attempt. An existing bounded metadata check observes shared-Key peers once;
+this is not an atomic lock or provider-quota proof. There are no new credentials,
+billing settings, cron, source owner, framework or model calls. GitHub runner
+and existing HiThink quota use remain bounded costs of an explicitly dispatched
+attempt; monetary provider pricing is not inferred here.
+
+### Truthful capture and replay
+
+`hithink_independent_capture.capture` writes create-only `capture.json`, actual
+workflow identity and start/finish/request/receipt clocks, context, decoded safe
+provider response bodies, and `selection.json` before any own-history request.
+Its inventory binds the exact source bytes and producing implementation. The
+capture version is `hithink-independent-stock-capture-v1`, not a legacy Sector or
+Stock capture. Decoded envelopes are not original HTTP wire bytes.
+
+A complete capture additionally writes `observations.json` and `README.txt`.
+`verify --root <capture> --capture-hash <independently retained capture hash>`
+replays the same ordered source plan with no network, checks every consumed byte,
+rebuilds selection and qualified paths, and compares exact derived bytes. Failed
+attempts only receive an inventory/receipt verification: transport causes and
+unsafe discarded bodies are not re-proven offline. A failed shared input does
+not publish an empty successful observation file. Artifact custody lasts 90 days;
+upload, remote digest/run verification, permanent retention and fixed-R recovery
+are separate acceptance facts. No archive index or live Stock admission is added.
+
+The existing `current_state_delivery` selector sees only non-skipped
+`stock-reading`, so the distinct independent job cannot become a legacy product.
+The `stock-reading-after-sector` title guard excludes this purpose, with an exact
+upstream-attempt job check and pure-plan suppression as defense in depth. Failed
+independent runs cannot dispatch a missing Sector/Stock stage or overwrite daily
+health. Existing separately scheduled daily reconciliation is unchanged; it is
+not an independent-capture successor or an extension of this attempt's budget.
+
+### Optional exact October 1 closure
+
+The manual choice `independent-closure-date=2026-10-01` applies only to a real
+October 1 Shanghai capture anchored to September 30. The implementation retains
+reviewed notice facts from [SSE notice 上证公告〔2026〕22号](https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml):
+published September 17, October 1–7 closed, October 8 resumes. These bound facts
+are copied to the capture inventory as `inputs/closure-evidence.json`; a URL
+string alone is insufficient. This is a derived reviewed fact record, not a
+claim to original HTML custody or provider calendar completeness.
+
+`closed_dates` is exactly `[2026-10-01]`. The actual provider calendar must omit
+that date; CSI300 snapshot/history must qualify September 30. Ready clocks must
+be at least September 30 15:30 Shanghai and no later than their own receipts.
+Actual October 1 clocks are retained. The prior consumed September backfill pilot
+is not reused. Other dates/intervals require separately reviewed evidence; no
+holiday inference or generic calendar framework is introduced.
+
+An accepted closure capture demonstrates independent acquisition mechanics only.
+It does **not** establish a naturally quiet active-day sample, incremental useful
+discovery, Surprise quality/false-positive/attention cost, subsequent Research
+use, Human acceptance or completion of original C2/C.
+
+### Acceptance sequence
+
+Local deterministic tests and legacy regressions first; then normal exact-head
+formal CI, verified native artifacts, merge/main qualification and ordinary
+publication under the existing delivery process. A provider call is a separate
+explicitly bounded manual attempt after those prerequisites, not a side effect
+of merging or testing. Independently recover and replay its actual artifact,
+retaining request counts, failures, gaps and custody limits. Subsequent naturally
+quiet-day discovery value and actual research use remain original C2 gates.
