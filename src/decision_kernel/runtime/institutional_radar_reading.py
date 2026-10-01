@@ -205,10 +205,65 @@ def _compose(collector, baseline, research, report, reference, source_status,
     return _assemble(collector, baseline, research)
 
 
+
+SOURCE_STATUS_SCOPE = 'SUMMARY_ONLY_FULL_STATUS_IN_COMPANY_READING'
+
+
+def _source_status_index(statuses):
+    """A small navigation projection; the existing company file owns full detail."""
+    result = deepcopy(statuses)
+    for key in ('institutional', 'concept', 'concept_detail'):
+        state = result.get(key, {})
+        if (state.get('status') not in {'VERIFIED_SAVED_INSTITUTIONAL_SOURCE',
+                'VERIFIED_SAVED_CONCEPT_SOURCE', 'VERIFIED_SAVED_CONCEPT_DETAIL'}
+                or 'details' not in state):
+            continue  # Preserve failures and their exact diagnostic fields.
+        state['details'] = {name: ref for name, ref in state['details'].items()
+                            if name in {'observation.json', 'index.html'}}
+        for field in ('archive', 'replay', 'coverage'):
+            state.pop(field, None)
+    return result
+
+
+def _manifest_status(collector, reading):
+    from decision_kernel.identity import canonical_hash
+    value = json.loads(companies.retained_bytes(collector.files, reading['details']['company_reading']))
+    model.check(value['projection_hash'] == canonical_hash(value['projection']) == reading['projection_hash'],
+                'Radar source manifest projection differs')
+    return value['projection']['source_status']
+
+
+def saved_source_status(collector, reading):
+    """Recover full descriptors only from the bound existing company projection."""
+    scope = reading.get('source_status_scope')
+    if scope is None:
+        return deepcopy(reading['source_status'])  # Original saved reading shape.
+    model.check(scope == SOURCE_STATUS_SCOPE, 'Unknown Radar source-status scope')
+    full = _manifest_status(collector, reading)
+    model.check(_source_status_index(full) == reading['source_status'],
+                'Radar source summary differs from full manifest')
+    return deepcopy(full)
+
+
 def _assemble(collector, baseline, research):
-    payload = model.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
-        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
+    arguments = dict(code_commit=collector.code_commit, checked_at=collector.now(),
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
         capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+    try:
+        payload = model.assemble(research=research, **arguments)
+    except ValueError as exc:
+        if str(exc) != 'read package exceeds bounded index size':
+            raise
+        # Do not raise the bound, drop a source or change original retained bytes.
+        # The full manifest already exists in the original company-reading file.
+        research = deepcopy(research)
+        reading = research['radar_discovery']
+        model.check('source_status_scope' not in reading, 'Radar index remains over its bound')
+        full = _manifest_status(collector, reading)
+        model.check(full == reading['source_status'], 'Radar source manifest differs before compaction')
+        reading['source_status'] = _source_status_index(full)
+        reading['source_status_scope'] = SOURCE_STATUS_SCOPE
+        payload = model.assemble(research=research, **arguments)
     data = {'current-state.json': model.read_package_bytes(payload), 'README.md': (model.render_summary(payload) + '\n' + companies.navigation(research['radar_discovery'])).encode()}
     model.check(sum(len(v) for k, v in collector.files.items() if k not in data) + sum(map(len, data.values()))
                 <= delivery.MAX_RETAINED_OUTPUT, 'Radar reading exceeds existing byte bound')
