@@ -34,6 +34,8 @@ def scenario(tmp_path,monkeypatch,*,event_index=20):
                 return {'code':3002,'data':None,'message':'No adjustment events for thscode='+bad}
             body['data']['item'] = [{'ticker':code[:6],'ex_date_ms':ex_ms,
                                     'dividend_per_share':'0.2','per_share_bonus':0}]
+        if path == own.HISTORY and params['thscode'] == bad and params.get('adjust') == 'forward':
+            return {'code':3002,'data':None,'message':'Adjusted history unavailable for thscode='+bad}
         return body
     report = run(reference_inputs=None,transport=request)
     return mod,out,report,calls,pauses
