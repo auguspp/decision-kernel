@@ -300,7 +300,7 @@
 - [按需恢复：c-reviewed-forecast-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4255a42e26ecd71476c19ac99d93ea9298396471/docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-reviewed-activity-002436-20260930](https://github.com/auguspp/decision-kernel/blob/4f7c1f09d0785775084ab122fe0560c266f78609/docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c-activity-positive-002436-20260930](https://github.com/auguspp/decision-kernel/blob/0ff4f1384c205f6ab7d9ca7f90774a7d55052d17/docs/readings/c1-activity-positive-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- [按需恢复：c1-peer-commitment-002436-20261001](https://github.com/auguspp/decision-kernel/blob/37f43bd18f774c0a45bb9c42f94aff048a68af34/docs/readings/c1-peer-commitment-2026-10-01/README.md)；只有定位，本页没有恢复正文。
+- [按需恢复：c1-peer-commitment-002436-20261001](https://github.com/auguspp/decision-kernel/blob/382c68bc94f81e986c9237620524e2f761e9a4f0/docs/readings/c1-capital-realization-2026-10-01/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c1-incentive-capital-002436-20261001](https://github.com/auguspp/decision-kernel/blob/e1eb810e7b7d5bb7bbe072d140714094aa485294/docs/readings/c1-incentive-capital-2026-10-01/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-01T08:20:43.017728Z
 - 原业务前提：Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.
