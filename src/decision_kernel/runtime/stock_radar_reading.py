@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal, localcontext, Context, InvalidOperation
 from html import escape
 from pathlib import Path
@@ -35,10 +35,25 @@ from .sector_radar import _return_over, _average
 from .sector_radar_context import build_sector_radar_context
 from .sector_radar_state import serialize_sector_radar_market_state
 
-VERSION = 'stock-first-reviewed-scope-window-qualified-v7'
+VERSION = 'stock-first-reviewed-scope-window-qualified-v8'
 SEMANTICS = 'BOUNDED_STOCK_READING_NOT_RECOMMENDATION_OR_CANONICAL_ATTENTION'
 STOCK_HISTORY = '/api/a-share/prices/historical'
 MAX_ISSUERS, MAX_MEMBERSHIPS, MAX_REQUESTS = 16, 6, 26
+FALLBACK_REQUEST_RESERVE = 1
+
+
+def stock_request_budget(issuer_count, direction_count):
+    """Reserve at most one bounded recovery call without raising the 26-call ceiling."""
+    if type(issuer_count) is not int or type(direction_count) is not int or issuer_count < 0 or direction_count < 0:
+        raise ValueError('stock request-budget inputs are invalid')
+    if not issuer_count:
+        return 0
+    base = 4 + direction_count + 3 * issuer_count
+    if base > MAX_REQUESTS:
+        return base
+    return min(MAX_REQUESTS, base + FALLBACK_REQUEST_RESERVE)
+
+
 COMPANY_MANIFEST = 'radar_inputs/economic-company-links-livestock-v1.json'
 SYNTHETIC_REFERENCES = 'SYNTHETIC_TEST_ONLY'
 HITHINK_RAW = 'HITHINK_REQUEST_BOUND_RAW_OBSERVATION'
@@ -63,15 +78,15 @@ POLICY = {
     'direction': 'EXISTING_CURRENT_SECTOR_GATE_NOT_NEW_EVENT_REQUIRED',
     'issuer_universe': 'ALL_REVIEWED_ISSUERS_IN_ACTIVE_LINKED_NODES_NOT_ALL_A_SHARES',
     'membership': 'EXACT_CURRENT_MEMBER_REQUIRED_NOT_HISTORICAL_EXPOSURE',
-    'stock_gate': 'POSITIVE_5D_RAW_AND_5D_MARKET_EXCESS_AND_20D_MARKET_EXCESS_AND_ONE_20D_SECTOR_EXCESS',
+    'stock_gate': 'POSITIVE_5D_PRICE_PATH_AND_5D_MARKET_EXCESS_AND_20D_MARKET_EXCESS_AND_ONE_20D_SECTOR_EXCESS',
     'sixty_day': 'CONTEXT_ONLY_NOT_A_GATE_NULL_IF_ACTION_OR_NONCRITICAL_HISTORY_GAP',
     'activity': 'POSITIVE_LATEST_VOLUME_AND_TURNOVER_NOT_EXECUTION_ELIGIBILITY',
     'name_guard': 'ST_DELISTING_AND_N_C_PREFIX_LABELS_ONLY_NOT_FULL_REGULATORY_STATUS',
     'presentation': 'NODE_ORDER_ROUND_ROBIN_THEN_20D_MARKET_EXCESS_5D_MARKET_EXCESS_CODE',
-    'reference_requirement': 'HITHINK_LAST_26_MARKET_SESSION_BARS_REQUIRED_OLDER_GAPS_EXPLICIT_EXACT_PRICES_BOUNDED_VOLUME_TURNOVER_ACTIONS_BY_WINDOW',
+    'reference_requirement': 'HITHINK_LAST_26_MARKET_SESSION_BARS_REQUIRED_OLDER_GAPS_EXPLICIT_RAW_PRICES_BOUNDED_VOLUME_TURNOVER_ACTION_AWARE_REFERENCE_OR_ONE_FORWARD_FALLBACK',
     'volume_reconciliation': dict(own_stock.VOLUME_POLICY),
     'turnover_reconciliation': dict(own_stock.TURNOVER_POLICY),
-    'corporate_actions': 'SUCCESSFUL_QUERY_REQUIRED_NO_REPORTED_EVENT_CROSSING_5D_OR_20D',
+    'corporate_actions': 'SUCCESSFUL_QUERY_OR_ONE_BOUNDED_PROVIDER_FORWARD_FALLBACK; REPORTED_CASH_OR_BONUS_EVENTS_USE_SOURCE_BOUND_REFERENCE_PRICE_NOT_TOTAL_RETURN',
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
     'source_contract': own_stock.SELECTION_CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
@@ -81,7 +96,7 @@ POLICY = {
     'max_cards': 3, 'max_issuers': MAX_ISSUERS, 'max_memberships': MAX_MEMBERSHIPS,
     'no_composite_score': True,
 }
-MARKET_EXPRESSION_VERSION = 'stock-market-expression-window-qualified-v8'
+MARKET_EXPRESSION_VERSION = 'stock-market-expression-window-qualified-v9'
 MARKET_EXPRESSION_SEMANTICS = 'BOUNDED_MARKET_EXPRESSION_NOT_BUSINESS_BENEFIT_OR_RECOMMENDATION'
 MARKET_EXPRESSION_POLICY = {
     **POLICY,
@@ -90,7 +105,7 @@ MARKET_EXPRESSION_POLICY = {
     'business_evidence': 'ANNOTATION_ONLY_NOT_CANDIDATE_GATE',
     'presentation': 'SURFACED_GROUP_ROUND_ROBIN_CANDIDATES_THEN_EXISTING_STOCK_GATE',
 }
-DISCOVERY_PAGE_VERSION = 'stock-market-expression-discovery-page-v9'
+DISCOVERY_PAGE_VERSION = 'stock-market-expression-discovery-page-v10'
 DISCOVERY_PAGE_POLICY = {
     **MARKET_EXPRESSION_POLICY,
     'version': DISCOVERY_PAGE_VERSION,
@@ -271,7 +286,7 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
                 'node_relation_note': panel['relation_note'], 'review_question': panel['review_question'],
                 'economic_coverage': node['economic_coverage'],
             })
-    request_count = 4 + len(directions) + 3*len(issuers) if issuers else 0
+    request_count = stock_request_budget(len(issuers), len(directions))
     if len(issuers) > MAX_ISSUERS or len(directions) > MAX_MEMBERSHIPS or request_count > MAX_REQUESTS:
         raise ValueError('stock reading request budget exceeded; no partial top-three enrichment')
     active_codes = {code for code, r in all_rows.items() if r['currently_gate_active']}
@@ -295,7 +310,7 @@ def prepare_stock_reading(source_root: Path, state, ledger, association: dict, *
 
 
 def _history_params(code, sessions):
-    return own_stock.history_params(code, sessions)
+    return own_stock.history_params(code, sessions, adjust='none')
 
 
 def _reference_number(value):
@@ -349,39 +364,81 @@ def _qualify_references(code, expected, bars, references, at):
 
 
 def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None,
-                quote_received_at=None):
+                quote_received_at=None, adjusted_response=None, action_provider_code=None):
     """Keep the legacy state-facing contract; arithmetic only consumes sessions."""
     return stock_path_for_sessions(state.sessions, code, response, at=at,
         references=references, quote=quote, actions=actions,
-        quote_received_at=quote_received_at)
+        quote_received_at=quote_received_at, adjusted_response=adjusted_response,
+        action_provider_code=action_provider_code)
 
 
 def stock_path_for_sessions(sessions, code, response, *, at, references=None, quote=None, actions=None,
-                quote_received_at=None):
+                quote_received_at=None, adjusted_response=None, action_provider_code=None):
     expected = tuple(sessions[-61:])
+    price_by_day = None
+    comparison_basis = 'RAW_UNADJUSTED'
     if references is None:
-        by_day, checks = own_stock.qualify(response, quote, actions, code=code,
-            sessions=sessions, params=_history_params(code,sessions), observed_at=at,
-            quote_received_at=quote_received_at, selection_mode=True)
-        recent = tuple(by_day[d]['close_price'] for d in expected[-26:])
+        if adjusted_response is None:
+            by_day, checks = own_stock.qualify(response, quote, actions, code=code,
+                sessions=sessions, params=_history_params(code,sessions), observed_at=at,
+                quote_received_at=quote_received_at, selection_mode=True)
+            price_by_day = by_day
+            windows = checks['action_window_checks']
+            history_windows = checks['history_window_checks']
+
+            def window_return(name):
+                h = history_windows[name]
+                w = windows[name]
+                if (not h['usable_for_raw_comparison']
+                        or not w['usable_for_price_reference_adjusted_comparison']):
+                    return None
+                base = date.fromisoformat(w['base_session'])
+                end = date.fromisoformat(w['end_session'])
+                factor = Decimal(w['reference_adjustment_factor'])
+                with localcontext(Context(prec=64)):
+                    return price_by_day[end]['close_price'] / (price_by_day[base]['close_price'] * factor) - 1
+
+            returns = {name: window_return(name) for name in ('5','20','60')}
+            shifted = window_return('20_five_sessions_ago')
+            unavailable = sorted({name for name in windows
+                                  if not windows[name]['usable_for_price_reference_adjusted_comparison']
+                                  or not history_windows[name]['usable_for_raw_comparison']})
+            adjusted_windows = [name for name, value in windows.items()
+                                if value['comparison_basis'] == 'REPORTED_ACTION_REFERENCE_ADJUSTED']
+            if adjusted_windows:
+                comparison_basis = 'REPORTED_ACTION_REFERENCE_ADJUSTED_NOT_TOTAL_RETURN'
+            corporate_action_adjustment = (
+                'REPORTED_ACTION_REFERENCE_PRICE_ONLY_NOT_TOTAL_RETURN'
+                if adjusted_windows else 'NOT_PERFORMED')
+        else:
+            by_day, price_by_day, checks = own_stock.qualify_forward_adjusted_fallback(
+                response, adjusted_response, quote, code=code, sessions=sessions,
+                raw_params=_history_params(code,sessions),
+                adjusted_params=own_stock.history_params(code,sessions,adjust='forward'),
+                observed_at=at, quote_received_at=quote_received_at,
+                provider_business_code=action_provider_code)
+            history_windows = checks['adjusted_history_fallback']['history_window_checks']
+
+            def adjusted_return(name):
+                h = history_windows[name]
+                if not h['usable_for_raw_comparison']:
+                    return None
+                base = date.fromisoformat(h['base_session'])
+                end = date.fromisoformat(h['end_session'])
+                with localcontext(Context(prec=64)):
+                    return price_by_day[end]['close_price'] / price_by_day[base]['close_price'] - 1
+
+            returns = {name: adjusted_return(name) for name in ('5','20','60')}
+            shifted = adjusted_return('20_five_sessions_ago')
+            unavailable = sorted(name for name, h in history_windows.items()
+                                 if not h['usable_for_raw_comparison'])
+            comparison_basis = 'PROVIDER_FORWARD_ADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN'
+            corporate_action_adjustment = 'PROVIDER_FORWARD_HISTORY_FALLBACK_NOT_TOTAL_RETURN'
         amounts = tuple(Decimal(str(by_day[d]['turnover'])) for d in expected[-25:])
-        windows = checks['action_window_checks']
-        history_windows = checks['history_window_checks']
-        def comparable(name):
-            return windows[name]['usable_for_raw_comparison'] and history_windows[name]['usable_for_raw_comparison']
-        returns = {
-            '5': _return_over(recent, end_index=25, sessions=5) if comparable('5') else None,
-            '20': _return_over(recent, end_index=25, sessions=20) if comparable('20') else None,
-            '60': ((by_day[expected[-1]]['close_price'] / by_day[expected[0]]['close_price'] - 1)
-                   if comparable('60') else None),
-        }
-        shifted = (_return_over(recent, end_index=20, sessions=20)
-                   if comparable('20_five_sessions_ago') else None)
-        unavailable = sorted({name for name in windows
-                              if not windows[name]['usable_for_raw_comparison']
-                              or not history_windows[name]['usable_for_raw_comparison']})
         history_count = len(by_day)
     else:
+        if adjusted_response is not None or action_provider_code is not None:
+            raise ValueError('synthetic references cannot consume live adjusted fallback inputs')
         qualified = normalize_hithink_completed_price_history(
             response, thscode=code, sessions=sessions, observed_at=at)
         if (tuple(p.as_of.astimezone(SHANGHAI_TZ).date() for p in qualified.points) != expected
@@ -406,6 +463,8 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
         shifted = _return_over(closes, end_index=55, sessions=20)
         unavailable = []
         history_count = 61
+        corporate_action_adjustment = 'NOT_PERFORMED'
+
     prior = _average(amounts[-25:-5])
     return {
         'last_close': Decimal(str(by_day[expected[-1]]['close_price'])),
@@ -418,8 +477,9 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
         'unavailable_price_metrics': unavailable,
         'turnover_pulse_5_vs_prior_20': _average(amounts[-5:]) / prior if prior else None,
         'twenty_day_return_five_sessions_ago': shifted,
-        'price_convention': 'RAW_UNADJUSTED_PRICE_PATH_NOT_TOTAL_RETURN',
-        'corporate_action_adjustment': 'NOT_PERFORMED', 'tradability': 'NOT_CERTIFIED_BY_PRICE_AND_VOLUME',
+        'price_convention': comparison_basis,
+        'corporate_action_adjustment': corporate_action_adjustment,
+        'tradability': 'NOT_CERTIFIED_BY_PRICE_AND_VOLUME',
         'reference_continuity': checks['historical_daily_reference_check'],
         'input_checks': checks, 'history_session_count': history_count,
     }
@@ -497,7 +557,7 @@ def observe_stock_reading(plan: dict, state, *, request_json, observed_at: datet
 
 
 def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_inputs):
-    expected_requests = 4 + len(plan['directions']) + 3*len(plan['issuers']) if plan['issuers'] else 0
+    expected_requests = stock_request_budget(len(plan['issuers']), len(plan['directions']))
     if reference_inputs is not None:
         planned_codes = {r['thscode'] for r in plan['issuers']}
         if (set(reference_inputs['windows']) - planned_codes
@@ -533,7 +593,7 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
     at()
     rows, memberships = [], {}
     state_rows = _state_rows(state)
-    def get(path, params):
+    def get(path, params, *, allowed_business_codes=frozenset()):
         at()
         value = request_json(path, params)
         received = at()
@@ -543,6 +603,8 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
             code = None
             if path in {STOCK_HISTORY, own_stock.SNAPSHOT, own_stock.ACTIONS}:
                 code = params.get('thscode', params.get('thscodes'))
+            if value['code'] in allowed_business_codes and path == own_stock.ACTIONS:
+                return value
             raise StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED',
                                          thscode=code, provider_code=value['code'])
         if reference_inputs is None:
@@ -594,6 +656,9 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
                 raise ValueError('membership is not from this current observation date')
             memberships[code] = m
     benchmark = tuple(Decimal(v) for v in state_rows[state.benchmark_thscode]['closes'])
+    base_request_count = 4 + len(plan['directions']) + 3 * len(plan['issuers']) if plan['issuers'] else 0
+    fallback_budget = max(0, plan['maximum_request_count'] - base_request_count)
+    fallback_requests_used = 0
     bret = {str(n): _return_over(benchmark, end_index=len(benchmark)-1, sessions=n) for n in (5, 20, 60)}
     identities = {}
     for m in memberships.values():
@@ -630,16 +695,29 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
         phase = 'HISTORY'
         try:
             response = get(STOCK_HISTORY, _history_params(code, state.sessions))
-            quote = actions = quote_received_at = None
+            quote = actions = quote_received_at = adjusted_response = None
+            action_provider_code = None
             if reference_inputs is None:
                 phase = 'QUOTE'
                 quote = get(own_stock.SNAPSHOT, {'thscodes':code})
                 quote_received_at = last
                 phase = 'CORPORATE_ACTIONS'
-                actions = get(own_stock.ACTIONS, own_stock.action_params(code,state.sessions))
+                actions = get(own_stock.ACTIONS, own_stock.action_params(code,state.sessions),
+                              allowed_business_codes=frozenset({3002}))
+                if actions['code'] == 3002:
+                    action_provider_code = 3002
+                    if fallback_requests_used >= fallback_budget:
+                        raise StockReadingInputError('REQUEST_FAILED', 'PROVIDER_BUSINESS_REQUEST_FAILED',
+                                                     thscode=code, provider_code=3002)
+                    phase = 'ADJUSTED_HISTORY_FALLBACK'
+                    fallback_requests_used += 1
+                    adjusted_response = get(
+                        STOCK_HISTORY, own_stock.history_params(code,state.sessions,adjust='forward'))
             phase = 'INPUT_QUALIFICATION'
             path = _stock_path(state, code, response, at=at(), references=reference_inputs,
-                              quote=quote, actions=actions, quote_received_at=quote_received_at)
+                              quote=quote, actions=actions, quote_received_at=quote_received_at,
+                              adjusted_response=adjusted_response,
+                              action_provider_code=action_provider_code)
         except StockReadingInputError as exc:
             if reference_inputs is not None or not _isolatable_stock_error(exc, code):
                 raise
