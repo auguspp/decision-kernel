@@ -113,18 +113,25 @@ def test_unsupported_or_malformed_selection_window_actions_fail_closed(kind):
     with pytest.raises(own.StockReadingInputError):check(a=a)
 
 
-@pytest.mark.parametrize('cash,bonus',[('0.1','0'),('0','0.1')])
-def test_reported_cash_or_bonus_can_establish_bounded_price_reference_adjustment(cash,bonus):
+def test_reported_cash_dividend_can_establish_bounded_price_reference_adjustment():
     days,_,h,q,a=inputs()
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
-        'dividend_per_share':cash,'per_share_bonus':bonus}]
+        'dividend_per_share':'0.1','per_share_bonus':'0'}]
     bars,meta=check(h,q,a,selection_mode=True)
     w=meta['action_window_checks']['20']
     assert len(bars)==61 and not w['usable_for_raw_comparison']
     assert w['usable_for_price_reference_adjusted_comparison']
     assert w['comparison_basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
     assert Decimal(w['reference_adjustment_factor']) > 0
-    assert meta['adjustment_or_total_return_qualification']=='REPORTED_CASH_OR_BONUS_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+    assert meta['adjustment_or_total_return_qualification']=='REPORTED_CASH_DIVIDEND_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+
+
+def test_reported_bonus_still_requires_separate_reference_review():
+    _,_,h,q,a=inputs()
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
+        'dividend_per_share':'0','per_share_bonus':'0.1'}]
+    with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
+        check(h,q,a,selection_mode=True)
 
 
 def test_same_day_cash_action_reconciles_snapshot_previous_reference():
