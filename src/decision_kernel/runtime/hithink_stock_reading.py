@@ -414,6 +414,9 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
         latest_factor = Decimal(item['factor'])
     expected_previous = bars[expected[-2]]['close_price'] * latest_factor
+    uses_reference_adjustment = selection_mode and any(
+        value['comparison_basis'] == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
+        for value in window_checks.values())
     q, last_quote, volume_check, turnover_check, actual_previous = _qualify_quote(
         quote, code=code, expected=expected, raw_bars=bars,
         quote_received_at=quote_received_at, observed_at=observed_at,
@@ -438,8 +441,11 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         'quote_ready_time_check': 'NULL_OR_NOT_AFTER_EXACT_QUOTE_RECEIPT',
         'quote_provider_ready_at': None if q['timestamp'] is None else _instant(q['timestamp'], code).isoformat(),
         'quote_received_at': None if quote_received_at is None else quote_received_at.astimezone(timezone.utc).isoformat(),
-        'corporate_actions': ('REPORTED_ACTIONS_OUTSIDE_OR_INSIDE_SELECTION_WINDOWS_REFERENCE_QUALIFIED'
-                              if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
+        'corporate_actions': (
+            'REPORTED_ACTIONS_REFERENCE_QUALIFIED_FOR_PRICE_COMPARISON'
+            if uses_reference_adjustment else
+            'REPORTED_ACTIONS_OUTSIDE_SELECTION_WINDOWS_NOT_EXHAUSTIVE_ABSENCE_PROOF'
+            if events else 'NONE_REPORTED_IN_REQUESTED_WINDOW_NOT_EXHAUSTIVE_ABSENCE_PROOF'),
         'reported_corporate_actions': retained_events,
         'reported_action_reference_adjustments': {
             d.isoformat(): value for d, value in sorted(adjustments.items())
@@ -455,11 +461,12 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             'older_event_session_qualification': 'NOT_ASSERTED_OUTSIDE_RETAINED_CALENDAR',
             'exhaustive_absence_proven': False,
         },
-        'historical_daily_reference_check': 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_OR_REPORTED_ACTION_REFERENCE_PRICE_RATIOS',
+        'historical_daily_reference_check': (
+            'NOT_AVAILABLE_NOT_REQUIRED_FOR_REPORTED_ACTION_REFERENCE_PRICE_RATIOS'
+            if uses_reference_adjustment else 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS'),
         'adjustment_or_total_return_qualification': (
             'REPORTED_CASH_OR_BONUS_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
-            if any(value.get('factor') is not None for value in adjustments.values())
-            else 'NOT_ESTABLISHED'),
+            if uses_reference_adjustment else 'NOT_ESTABLISHED'),
     }
     if selection_mode:
         meta.update(
