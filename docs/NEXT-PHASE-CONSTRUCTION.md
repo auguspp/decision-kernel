@@ -60,7 +60,7 @@ GitHub 是 canonical 状态/证据/过程后端；Research 解释、Kernel 核�
 
 - [本次重排前B2入口](https://github.com/auguspp/decision-kernel/blob/d8fedb169eaeaf825b45afb3602fe0c4d4390aa4/docs/NEXT-PHASE-CONSTRUCTION.md)：原范围与失败保留；其中当时的Brief优先顺序已由本页上方后继指令取代。
 
-- [AI-native 支线导航](https://github.com/auguspp/decision-kernel/blob/1ef57be901243f6830cc15cedd3ed159fdd02e/docs/NEXT-PHASE-CONSTRUCTION.md)：保留原 AN1→AN-CI→AN2→AN3 顺序；收口以 #625 / #626 后继回执为准。
+- [AI-native 支线导航](https://github.com/auguspp/decision-kernel/blob/1ef57be901243f683cb0cc15cedd3ed159fdd02e/docs/NEXT-PHASE-CONSTRUCTION.md)：保留原 AN1→AN-CI→AN2→AN3 顺序；收口以 #625 / #626 后继回执为准。
 - [支线前 v4 完整计划](https://github.com/auguspp/decision-kernel/blob/3843e13ae20941c0a20241d509eb02bf9f293ea0/docs/NEXT-PHASE-CONSTRUCTION.md)：保留 B1 第一切片及其阶段限制；已交付项不得重新列为 NEXT。
 - [v3 人本工作台 / Quick Inbox / News](https://github.com/auguspp/decision-kernel/blob/86c1d2075d3679ef1b92788e49674f7eaf4f77b2/docs/NEXT-PHASE-CONSTRUCTION.md)
 - [v1 A3–A5 / B1–B2 原范围](https://github.com/auguspp/decision-kernel/blob/bceb4b55488a10ba800b22f5798515bc42731635/docs/NEXT-PHASE-CONSTRUCTION.md)
