@@ -118,7 +118,7 @@ def test_reported_cash_or_bonus_can_establish_bounded_price_reference_adjustment
     days,_,h,q,a=inputs()
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
         'dividend_per_share':cash,'per_share_bonus':bonus}]
-    bars,meta=check(h,q,a)
+    bars,meta=check(h,q,a,selection_mode=True)
     w=meta['action_window_checks']['20']
     assert len(bars)==61 and not w['usable_for_raw_comparison']
     assert w['usable_for_price_reference_adjusted_comparison']
@@ -134,7 +134,7 @@ def test_same_day_cash_action_reconciles_snapshot_previous_reference():
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][-1]['date_ms'],
         'dividend_per_share':str(cash),'per_share_bonus':'0'}]
     q['data']['item'][0]['prev_price']=str(previous-cash)
-    _,meta=check(h,q,a)
+    _,meta=check(h,q,a,selection_mode=True)
     assert meta['latest_quote_previous_reference']['basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
     assert Decimal(meta['latest_quote_previous_reference']['expected_reference_price'])==previous-cash
 
