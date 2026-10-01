@@ -4,6 +4,7 @@
  */
 export const REPO = 'auguspp/decision-kernel';
 export const READ_REF = 'read-model/current-state';
+export const NEWS_LIVE_REF = 'read-model/news-live';
 // Actual saved news (~534KB) and sector context (~815KB) exceed the old 512KiB cap.
 export const FILE_LIMIT = 1024 * 1024;
 const API = `https://api.github.com/repos/${REPO}`;
@@ -251,7 +252,7 @@ export async function readNewsExecution(fetcher = globalThis.fetch) {
       r.path === '.github/workflows/radar-newsnow-daily.yml' && r.head_branch === 'main' &&
       r.repository?.full_name === REPO && r.head_repository?.full_name === REPO &&
       SHA.test(r.head_sha || '') && Number.isSafeInteger(r.run_attempt) && r.run_attempt > 0 &&
-      ['workflow_dispatch', 'workflow_run'].includes(r.event) && validClock(r.created_at) &&
+      ['schedule', 'workflow_dispatch', 'workflow_run'].includes(r.event) && validClock(r.created_at) &&
       validClock(r.updated_at) && Date.parse(r.updated_at) >= Date.parse(r.created_at) &&
       Date.parse(r.updated_at) <= Date.parse(observedAt) && typeof r.status === 'string' &&
       (r.conclusion === null || typeof r.conclusion === 'string'), 'UNQUALIFIED_NEWS_RUN');
