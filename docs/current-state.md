@@ -2,6 +2,8 @@
 
 本接口属于 Harness。它只验证、引用和交付已保存结果与显式登记，不获取行情/公告，不运行 Odds 或 Web Research，不新增 Pre/Quick/Deep、Human wake、Belief 或 Action。
 
+> **2026-10-01 News 增量交付后继。** Human 已批准新闻每10分钟采集、滚动历史与低频发布，见 [PR #689](https://github.com/auguspp/decision-kernel/pull/689) 和 [新闻输入合同](news-daily-input-v1.md)。原 publisher 新增北京时间07:50、19:10两个只读发布时点，不跟随每次高频新闻采集发布；执行前仍核精确代码的独立main CI。此后不再沿用“publisher自身没有cron”的旧描述。调度机会、原件取得、固定R发布和晨晚报实际消费分别验收；不改变原晨晚报任务、通知或研究/投资权限。
+
 > **2026-09-15 trigger supersession.** Sector 当前生产 workflow 已在外部 Daily Trigger Reliability 实证后退役 native GitHub `schedule` 入口；当前 `sector-radar-shadow.yml` 仅接受 `workflow_dispatch`。Human 已配置但在本次 repo 退役门完成前保持 Inactive 的 cron-job.org 工作日北京时间 18:13 任务负责发起 `operation=produce`；GitHub 继续负责执行、状态、证据与恢复。历史 `event=schedule` run 仍是可验证来源，不因换钟被重写。下文及 registry 中的 `NATURAL_SCHEDULE_ACCEPTANCE_PENDING` / `NATURAL_PUBLICATION_ACCEPTANCE_PENDING` 是原 native-schedule 架构的 legacy 验收标记，不应解释为当前仍存在 GitHub 18:13 cron。当前外部触发、duplicate-day NOOP 与 result-bearing downstream acceptance 以 #297 的 2026-09-15 receipts 为准；最终启用外部任务仍是 Human UI 动作。
 
 ## 从一个固定入口开始
@@ -23,7 +25,7 @@ GitHub 连接需具备仓库读取权限。消费方不需要下载 ZIP 或搬�
 - Stock：选择实际有 stock-reading job 的运行，不将同 workflow 的其他 trial 当股票产物。复用原纯 `render_stock_reading` 校验；核对捕获库存、原 replay 记录、scope/coverage/plan 和运行绑定，不重算新 selector 或 Odds。
 - Inbox：旧 CLI 只保存 HTML/Markdown，没有 typed `DecisionSpineResult`。本接口留存并绑定这份历史交付，**不从文案反推今日 Odds、quiet 或 Human 已接受的概率**。这个限制显式出现在 JSON。
 - Research/Decision：同一代码 commit 的显式生产输入配置，以及 `current_state/registry.json` 中逐条指定的用途引用。原 `ResearchFunnelResult` 解析器决定 handoff 资格。独立行情/生产输入失败不阻断一个有效、仍登记的研究请求。
-- 更新：薄的 `current-state-read-entry` workflow 监听原生产的 `requested/completed`，以及 main 的完整 kernel-tests 成功事件。它自己没有 cron。Sector 当前时钟在 GitHub workflow 外部，但执行仍落入同一个 `workflow_dispatch` production lineage；requested 更新只能报告已观察到的进行状态，上游仍运行时不能认定新结果已发布。完整成功及实际 artifacts 验证后才采纳新的结果。历史 `schedule` run 仍可被同一只读校验路径读取。
+- 更新：薄的 `current-state-read-entry` workflow 保留原生产事件及main kernel-tests成功事件，并按上方2026-10-01后继新增两次低频只读发布；高频scheduled News不逐次触发发布。Sector 当前时钟在 GitHub workflow 外部，但执行仍落入同一个 `workflow_dispatch` production lineage；requested 更新只能报告已观察到的进行状态，上游仍运行时不能认定新结果已发布。完整成功及实际 artifacts 验证后才采纳新的结果。历史 `schedule` run 仍可被同一只读校验路径读取。
 
 执行的是可信 default-branch 代码，不是 artifact 中的文件，不 checkout 外部 PR/head 的代码。GitHub token 只用于仓库读取和派生 ref 的 Git 对象发布；没有供应商 Key 读取或写入。没有扩大连接授权、关闭保护、自动重试或市场调度。
 

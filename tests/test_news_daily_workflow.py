@@ -10,7 +10,7 @@ def test_source_uses_existing_completion_clock_and_pinned_upstream():
     text=(ROOT/s.WORKFLOW).read_text()
     assert 'workflow_dispatch:' in text and 'workflow_run:' in text
     assert 'workflows: [sector-radar-shadow]' in text and 'types: [completed]' in text
-    assert 'schedule:' not in text and '\n  push:' not in text
+    assert "cron: '3/10 * * * *'" in text and '\n  push:' not in text
     assert s.IMAGE in text and ':latest' not in text
     assert '-p 127.0.0.1:4444:4444' in text and '--privileged' not in text and '-v ' not in text
     assert 'github.event.workflow_run.conclusion' not in text

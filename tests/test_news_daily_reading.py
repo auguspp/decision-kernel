@@ -71,15 +71,61 @@ def test_native_bad_identity_rejects_without_erasing_other_lanes(tmp_path, monke
     assert result['research']['daily_news']['meaning'] == 'NEWS_READ_GAP_NOT_NO_NEWS'
 
 
-def test_latest_failed_attempt_does_not_fall_back_to_older_success(tmp_path, monkeypatch):
+def test_latest_failed_attempt_retains_bounded_prior_rolling_capture(tmp_path, monkeypatch):
     col, baseline, run, _, _ = ready(tmp_path, monkeypatch)
     failed = {**deepcopy(run), 'id': 902, 'conclusion': 'failure',
               'created_at':'2026-09-20T04:20:00Z', 'updated_at':'2026-09-20T04:25:00Z'}
     col.api.responses[QUERY] = {'total_count': 2, 'workflow_runs': [failed, run]}
-    col.api.responses['actions/runs/902'] = failed
     result = r.attach(col, baseline)
-    assert result['research']['daily_news']['status'] == 'LATEST_ATTEMPT_NOT_SUCCESSFUL'
-    assert ('archive', 991) not in col.api.reads and 'actions/runs/901' not in col.api.reads
+    state = result['research']['daily_news']
+    assert state['status'] == 'LATEST_ATTEMPT_NOT_SUCCESSFUL_PRIOR_CAPTURE_RETAINED'
+    assert state['latest_attempt']['id'] == 902 and state['selected_capture']['id'] == 901
+    assert ('archive', 991) in col.api.reads and 'actions/runs/901' in col.api.reads
+    assert 'actions/runs/902' not in col.api.reads
+
+
+def test_rolling_history_is_visible_in_read_package(tmp_path, monkeypatch):
+    col, baseline, _, _, _ = ready(tmp_path, monkeypatch)
+    result = r.attach(col, baseline)
+    state = result['research']['daily_news']
+    assert state['rolling_observation_count'] == 7
+    assert state['rolling_dropped_observation_count'] == 0
+    text = col.files[r.DETAIL].decode()
+    assert '滚动18小时新闻索引' in text and 'first_seen_at' in text
+    report = json.loads(col.files[r.REPORT])['projection']
+    assert report['history']['projection']['coverage']['capture_count'] == 1
+
+
+def test_old_single_window_artifact_without_history_remains_readable(tmp_path, monkeypatch):
+    col, baseline, _, artifact, files = ready(tmp_path, monkeypatch)
+    # Model the actual old contract, not a damaged v2 capture declaring absent history.
+    for name in (s.HISTORY_FILE, s.HISTORY_INPUT, s.RECOVERY_FILE):
+        files.pop(name, None)
+    plan = json.loads(files['plan.json']); plan.pop('rolling_history_version')
+    files['plan.json'] = m.json_bytes(plan)
+    manifest = json.loads(files['capture.json'])
+    manifest['files'] = {name: {'bytes': len(files[name]), 'sha256': m.sha256(files[name])}
+                         for name in manifest['files'] if name in files}
+    files['capture.json'] = m.json_bytes(manifest)
+    files['observations.json'] = m.json_bytes(s.rebuild(files, cutoff=TIME))
+    raw = pack(files)
+    col.api.archives[991] = raw
+    artifact.update(size_in_bytes=len(raw), digest='sha256:' + m.sha256(raw))
+    result = r.attach(col, baseline)
+    state = result['research']['daily_news']
+    assert state['status'] == 'WINDOWS_CAPTURED'
+    assert state['rolling_history_status'] == 'ROLLING_HISTORY_STARTED'
+    assert state['rolling_observation_count'] == 7
+
+
+def test_missing_declared_history_is_not_accepted_as_a_legacy_capture(tmp_path, monkeypatch):
+    col, baseline, _, artifact, files = ready(tmp_path, monkeypatch)
+    del files[s.HISTORY_FILE]
+    raw = pack(files); col.api.archives[991] = raw
+    artifact.update(size_in_bytes=len(raw), digest='sha256:' + m.sha256(raw))
+    result = r.attach(col, baseline)
+    assert result['research']['daily_news']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    assert result['lanes'] == baseline['lanes']
 
 
 def test_no_run_and_stale_window_are_not_quiet(tmp_path, monkeypatch):

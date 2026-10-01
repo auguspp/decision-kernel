@@ -18,6 +18,9 @@ from ..identity import canonical_hash
 from . import current_state as m
 from . import external_radar_observations as news
 from .ftshare_discovery import _NoRedirect
+from .news_rolling import (HISTORY_VERSION, HISTORY_FILE, HISTORY_INPUT, RECOVERY_FILE,
+                           HISTORY_HOURS, MAX_HISTORY_OBSERVATIONS, MAX_HISTORY_CAPTURES,
+                           MAX_HISTORY_BYTES, validate_history, rolling_history, build_history, replay_history)
 
 VERSION = 'native-newsnow-window-v1'
 WORKFLOW = '.github/workflows/radar-newsnow-daily.yml'
@@ -43,16 +46,29 @@ def workflow_identity(value):
         'repository', 'ref', 'event', 'code_commit', 'run_id', 'attempt', 'workflow', 'trigger_run_id'},
         'News workflow identity shape')
     m.check(value['repository'] == m.REPOSITORY and value['ref'] == 'refs/heads/main'
-            and value['workflow'] == WORKFLOW and value['event'] in {'workflow_run', 'workflow_dispatch'}
+            and value['workflow'] == WORKFLOW and value['event'] in {'workflow_run', 'workflow_dispatch', 'schedule'}
             and m.SHA.fullmatch(value['code_commit']) is not None
             and type(value['run_id']) is int and value['run_id'] > 0
             and type(value['attempt']) is int and value['attempt'] == 1,
             'News workflow identity differs')
     trigger = value['trigger_run_id']
-    m.check((trigger is None and value['event'] == 'workflow_dispatch') or
-            (type(trigger) is int and trigger > 0 and value['event'] == 'workflow_run'),
+    m.check((trigger is None and value['event'] in {'workflow_dispatch', 'schedule'}) or
+            (type(trigger) is int and trigger > 0 and trigger > 0 and value['event'] == 'workflow_run'),
             'News trigger identity differs')
     return value
+
+
+def saved_run_identity(run, cutoff):
+    m.check(run.get('repository', {}).get('full_name') == m.REPOSITORY
+            and run.get('head_repository', {}).get('full_name') == m.REPOSITORY
+            and run.get('path') == WORKFLOW and run.get('head_branch') == 'main'
+            and run.get('event') in {'workflow_run', 'workflow_dispatch', 'schedule'}
+            and type(run.get('run_attempt')) is int and run['run_attempt'] == 1
+            and type(run.get('id')) is int and run['id'] > 0
+            and m.SHA.fullmatch(run.get('head_sha', '')) is not None,
+            'Native news run identity differs')
+    m.check(m.clock(run['created_at']) <= m.clock(run['updated_at']) <= m.clock(cutoff),
+            'Native news run chronology differs')
 
 
 def image_identity(raw):
@@ -95,17 +111,38 @@ def _write(root, path, raw):
         out.write(raw)
 
 
-def capture(output, identity, image_raw, *, request=fetch, clock=now):
+def capture(output, identity, image_raw, *, request=fetch, clock=now, previous_history=None,
+            history_recovery=None):
     workflow_identity(identity)
     image_identity(image_raw)
+    started = clock()
+    try:
+        if previous_history is not None:
+            m.check(isinstance(previous_history, bytes) and 0 < len(previous_history) <= MAX_HISTORY_BYTES,
+                    'News predecessor byte budget')
+        if history_recovery is not None:
+            m.check(isinstance(history_recovery, dict)
+                    and len(m.json_bytes(history_recovery)) <= 64 * 1024, 'News recovery receipt budget')
+    except ERRORS as exc:
+        previous_history = None
+        history_recovery = _history_gap(identity, started, type(exc).__name__)
     output = Path(output)
     m.check(not output.exists() and not output.is_symlink()
             and not any(p.is_symlink() for p in output.parents), 'News output must be create-only')
     output.mkdir(parents=True, exist_ok=False)
     plan = {'version': VERSION, 'workflow': identity, 'source_ids': list(SOURCES),
-            'started_at': clock(), 'image': IMAGE, 'upstream_request_count': 'UNKNOWN',
-            'image_source_commit_equivalence': 'NOT_INDEPENDENTLY_ESTABLISHED', **AUTHORITY}
+            'started_at': started, 'image': IMAGE, 'upstream_request_count': 'UNKNOWN',
+            'image_source_commit_equivalence': 'NOT_INDEPENDENTLY_ESTABLISHED',
+            'rolling_history_version': HISTORY_VERSION, **AUTHORITY}
     files = {'plan.json': m.json_bytes(plan), 'image-identity.txt': image_raw}
+    if previous_history is not None:
+        files[HISTORY_INPUT] = previous_history
+        if history_recovery is None:
+            history_recovery = {'version': 'news-history-recovery-v1', 'status': 'RECOVERY_REJECTED',
+                                'current_run_id': identity['run_id'], 'checked_at': plan['started_at'],
+                                'history_sha256': None, 'newer_unusable_attempts': []}
+    if history_recovery is not None:
+        files[RECOVERY_FILE] = m.json_bytes(history_recovery)
     for name, raw in files.items():
         _write(output, name, raw)
     for label in SOURCES:
@@ -136,6 +173,9 @@ def capture(output, identity, image_raw, *, request=fetch, clock=now):
     files['observations.json'] = m.json_bytes(result)
     m.check(sum(map(len, files.values())) <= MAX_BUNDLE, 'News bundle exceeds source budget')
     _write(output, 'observations.json', files['observations.json'])
+    files[HISTORY_FILE] = m.json_bytes(build_history(result, previous_history, history_recovery))
+    m.check(sum(map(len, files.values())) <= MAX_BUNDLE, 'News bundle exceeds source budget')
+    _write(output, HISTORY_FILE, files[HISTORY_FILE])
     return result
 
 
@@ -151,10 +191,12 @@ def rebuild(files, *, cutoff, run=None, company_reading=None):
     entries = manifest['files']
     required = {'plan.json', 'image-identity.txt'} | {
         directory + '/' + label + '.json' for directory in ('requests', 'receipts') for label in SOURCES}
-    optional = {'raw/newsnow-' + label + '.json' for label in SOURCES}
+    optional = {'raw/newsnow-' + label + '.json' for label in SOURCES} | {HISTORY_INPUT, RECOVERY_FILE}
+    derived = {'capture.json', 'observations.json', HISTORY_FILE}
     m.check(isinstance(entries, dict) and required <= set(entries) <= required | optional
-            and set(files) in (set(entries) | {'capture.json'},
-                               set(entries) | {'capture.json', 'observations.json'}), 'News file inventory differs')
+            and set(entries) | {'capture.json'} <= set(files) <= set(entries) | derived,
+            'News file inventory differs')
+    m.check(HISTORY_INPUT not in files or RECOVERY_FILE in entries, 'News predecessor receipt missing')
     for name, meta in entries.items():
         m.safe_path(name)
         m.check(type(meta.get('bytes')) is int and meta == {'bytes': len(files[name]), 'sha256': m.sha256(files[name])}, 'News raw identity differs')
@@ -162,6 +204,7 @@ def rebuild(files, *, cutoff, run=None, company_reading=None):
     plan = news._decode(files['plan.json']); identity = workflow_identity(plan['workflow'])
     m.check(plan['version'] == VERSION and plan['source_ids'] == list(SOURCES) and plan['image'] == IMAGE
             and all(plan.get(k) == v for k, v in AUTHORITY.items()), 'News plan differs')
+    m.check(plan.get('rolling_history_version') in {None, HISTORY_VERSION}, 'Unknown News history contract')
     start, finish = m.clock(plan['started_at']), m.clock(manifest['finished_at'])
     m.check(start <= finish <= m.clock(cutoff), 'News capture clock differs')
     if run is not None:
@@ -217,10 +260,26 @@ def rebuild(files, *, cutoff, run=None, company_reading=None):
     return {'projection': value, 'projection_hash': canonical_hash(value)}
 
 
+def _history_gap(identity, when, error_type):
+    # A static error class, never exception text, paths or upstream response bodies.
+    return {'version': 'news-history-recovery-v1', 'status': 'RECOVERY_REJECTED',
+            'current_run_id': identity['run_id'], 'checked_at': when,
+            'history_sha256': None, 'newer_unusable_attempts': [], 'error_type': error_type}
+
+
+def _bounded_history_input(path, limit):
+    with path.open('rb') as handle:
+        raw = handle.read(limit + 1)
+    m.check(0 < len(raw) <= limit, 'News optional history file byte budget')
+    return raw
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--image-identity', type=Path, required=True)
+    parser.add_argument('--previous-history', type=Path)
+    parser.add_argument('--history-recovery', type=Path)
     args = parser.parse_args(argv)
     env = os.environ
     identity = {'repository': env['GITHUB_REPOSITORY'], 'ref': env['GITHUB_REF'],
@@ -228,7 +287,18 @@ def main(argv=None):
                 'run_id': int(env['GITHUB_RUN_ID']), 'attempt': int(env['GITHUB_RUN_ATTEMPT']),
                 'workflow': WORKFLOW,
                 'trigger_run_id': int(env['TRIGGER_RUN_ID']) if env.get('TRIGGER_RUN_ID') else None}
-    result = capture(args.output, identity, args.image_identity.read_bytes())
+    workflow_identity(identity)
+    previous, recovery = None, None
+    try:
+        if args.previous_history:
+            previous = _bounded_history_input(args.previous_history, MAX_HISTORY_BYTES)
+        if args.history_recovery:
+            recovery = news._decode(_bounded_history_input(args.history_recovery, 64 * 1024))
+    except ERRORS as exc:
+        previous = None
+        recovery = _history_gap(identity, now(), type(exc).__name__)
+    result = capture(args.output, identity, args.image_identity.read_bytes(),
+                     previous_history=previous, history_recovery=recovery)
     print('NEWS_CAPTURE_STATUS=' + result['projection']['status'])
     return 0  # Completed finite capture may honestly contain source gaps.
 

@@ -294,7 +294,9 @@ def test_existing_production_collector_opts_in_without_a_second_publisher(tmp_pa
     root = Path(__file__).parents[1]
     workflow = (root / '.github/workflows/current-state-read-entry.yml').read_text()
     assert '--include-reviewed-questions' in workflow
-    assert 'schedule:' not in workflow and 'DEEPSEEK_API_KEY' not in workflow
+    assert "cron: '50 23 * * *'" in workflow and "cron: '10 11 * * *'" in workflow
+    assert workflow.count('python -m decision_kernel.runtime.current_state_delivery_with_odds_watch') == 1
+    assert 'DEEPSEEK_API_KEY' not in workflow
 
 
 def test_near_full_original_index_keeps_rows_in_hash_bound_details(tmp_path, monkeypatch):

@@ -65,4 +65,4 @@ def test_partial_or_malformed_site_inputs_never_fall_back_to_native(tmp_path):
     text = WORKFLOW.read_text()
     assert text.index('SITE_SLOT_CHANGED_NO_CAPTURE') < text.index('docker pull')
     assert 'contents: write' not in text and 'actions: write' not in text
-    assert 'schedule:' not in text and '\n  push:' not in text
+    assert "cron: '3/10 * * * *'" in text and '\n  push:' not in text

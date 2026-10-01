@@ -56,5 +56,5 @@ def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_wa
     assert "--include-global-market" in value
     assert "--publish" in value
     assert "workflow_dispatch:" not in value
-    assert "schedule:" not in value and "cron:" not in value
+    assert "cron: '50 23 * * *'" in value and "cron: '10 11 * * *'" in value
     assert "secrets." not in value

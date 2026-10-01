@@ -271,7 +271,8 @@ def test_existing_publisher_is_only_new_listener_and_source_remains_manual():
     assert 'radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]' in pub
     assert '--include-concept-discovery' in pub and '--include-radar-discovery' in pub
     assert 'args.include_concept_discovery or args.include_radar_discovery' in entry
-    assert 'schedule:' not in pub and 'workflow_dispatch:' not in pub and 'secrets.' not in pub
+    assert "cron: '50 23 * * *'" in pub and "cron: '10 11 * * *'" in pub
+    assert 'workflow_dispatch:' not in pub and 'secrets.' not in pub
     assert 'workflow_dispatch:' in src and 'schedule:' not in src and 'workflow_run:' not in src
     assert 'ref: ${{ github.sha }}' in pub
 

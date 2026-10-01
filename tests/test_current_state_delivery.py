@@ -177,7 +177,8 @@ def test_source_text_cannot_publish_a_workflow_on_read_ref():
 def test_refresh_workflow_only_aggregates_saved_results_and_executes_trusted_main():
     raw = Path(".github/workflows/current-state-read-entry.yml").read_text()
     assert "workflow_run:" in raw and "types: [requested, completed]" in raw
-    assert "schedule:" not in raw and "workflow_dispatch:" not in raw
+    assert "cron: '50 23 * * *'" in raw and "cron: '10 11 * * *'" in raw
+    assert "workflow_dispatch:" not in raw
     assert "ref: ${{ github.sha }}" in raw and "persist-credentials: false" in raw
     assert "head_repository.full_name == github.repository" in raw
     assert "github.event.workflow_run.event == 'push'" in raw

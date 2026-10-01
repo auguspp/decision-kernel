@@ -32,10 +32,20 @@ def body(label, *, items=None):
          'url': 'https://' + host + '/detail/1'}] if items is None else items})
 
 
-def captured(tmp_path, request=None, *, clock=lambda: TIME):
+def captured(tmp_path, request=None, *, clock=lambda: TIME, previous_history=None, identity=None,
+             history_recovery=None):
     root = tmp_path / 'capture'
-    result = s.capture(root, deepcopy(IDENTITY), IMAGE,
-                       request=request or (lambda label: (200, body(label))), clock=clock)
+    identity = deepcopy(identity or IDENTITY)
+    if previous_history is not None and history_recovery is None:
+        # Synthetic fixture only. Native recovery is separately exercised with original ZIP verification.
+        tail = json.loads(previous_history)['projection']['captures'][-1]
+        history_recovery = {'version': 'news-history-recovery-v1', 'status': 'RESTORED',
+            'current_run_id': identity['run_id'], 'checked_at': clock(),
+            'history_sha256': m.sha256(previous_history), 'newer_unusable_attempts': [],
+            'selected_capture': {'id': tail['run_id'], 'head_sha': tail['code_commit']}}
+    result = s.capture(root, identity, IMAGE,
+                       request=request or (lambda label: (200, body(label))), clock=clock,
+                       previous_history=previous_history, history_recovery=history_recovery)
     return root, {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}, result
 
 
@@ -91,6 +101,63 @@ def test_repeated_capture_time_does_not_create_new_article_versions(tmp_path):
     assert ids(first) == ids(second)
     assert first['projection']['captured_through'] != second['projection']['captured_through']
 
+
+def test_schedule_identity_is_supported_without_trigger_run(tmp_path):
+    identity = {**IDENTITY, 'event': 'schedule', 'trigger_run_id': None}
+    root = tmp_path / 'scheduled'
+    result = s.capture(root, identity, IMAGE, request=lambda label: (200, body(label)), clock=lambda: TIME)
+    assert result['projection']['workflow']['event'] == 'schedule'
+    history = json.loads((root / s.HISTORY_FILE).read_bytes())
+    s.validate_history(history)
+    assert history['projection']['coverage']['capture_count'] == 1
+
+
+def test_rolling_history_preserves_first_seen_and_adds_new_versions(tmp_path):
+    _, files1, _ = captured(tmp_path / 'one')
+    later = '2026-09-20T04:10:00+00:00'
+
+    def request(label):
+        value = json.loads(body(label))
+        if label == 'cls':
+            value['items'].append({
+                'id': '2', 'title': '公司乙十分钟后新增事实',
+                'url': 'https://cls.cn/detail/2',
+            })
+        return 200, m.json_bytes(value)
+
+    second_identity = {**IDENTITY, 'run_id': 902}
+    _, files2, _ = captured(tmp_path / 'two', request, clock=lambda: later,
+                            previous_history=files1[s.HISTORY_FILE], identity=second_identity)
+    history = s.validate_history(json.loads(files2[s.HISTORY_FILE]))['projection']
+    assert history['coverage']['capture_count'] == 2
+    cls = [x for x in history['observations'] if x['observation']['source_id'] == 'cls']
+    old = next(x for x in cls if x['observation']['item_id'] == '1')
+    new = next(x for x in cls if x['observation']['item_id'] == '2')
+    assert old['first_seen_at'] == TIME and old['last_seen_at'] == later
+    assert old['seen_capture_count'] == 2
+    assert new['first_seen_at'] == new['last_seen_at'] == later
+    assert new['seen_capture_count'] == 1
+
+
+def test_previous_rolling_history_tamper_is_rejected(tmp_path):
+    _, files, report = captured(tmp_path)
+    value = json.loads(files[s.HISTORY_FILE])
+    value['projection']['observations'][0]['observation']['title'] = 'tampered'
+    bad = m.json_bytes(value)
+    with pytest.raises(ValueError, match='history hash|observation hash'):
+        s.rolling_history(report, bad)
+
+
+def test_high_frequency_and_low_frequency_publication_schedules_are_pinned():
+    root = Path(__file__).resolve().parents[1]
+    news_workflow = (root / '.github/workflows/radar-newsnow-daily.yml').read_text()
+    read_workflow = (root / '.github/workflows/current-state-read-entry.yml').read_text()
+    assert "cron: '3/10 * * * *'" in news_workflow
+    assert "github.event_name == 'schedule'" in news_workflow
+    assert "retention-days: " + "$" + "{{ github.event_name == 'schedule' && 3 || 30 }}" in news_workflow
+    assert "cron: '50 23 * * *'" in read_workflow
+    assert "cron: '10 11 * * *'" in read_workflow
+    assert "github.event.workflow_run.name != 'radar-newsnow-daily'" in read_workflow
 
 @pytest.mark.parametrize('field,value', [('repository', 'other/repo'), ('ref', 'refs/heads/other'),
     ('attempt', 2), ('attempt', True), ('event', 'push'), ('code_commit', 'x'*40),

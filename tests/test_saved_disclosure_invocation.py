@@ -197,7 +197,8 @@ def test_workflow_reuses_same_host_job_and_publishes_push_completion():
     assert "SUB2API" not in validation and "SOURCE_BASE: ${{ github.event.before }}" in validation
     assert '--expected-reading-commit "$EXPECTED_READING" --expected-work-commit "$EXPECTED_WORK"' in wf
     assert "run-output/invocation" in wf and "path: run-output/" in wf
-    assert "github.event.workflow_run.name == 'saved-disclosure-research' &&\n          github.event.workflow_run.event == 'push'" in pub
+    assert "github.event.workflow_run.name == 'saved-disclosure-research'" in pub
+    assert "github.event.workflow_run.event == 'push'" in pub
     assert "SUB2API" not in pub
 
 

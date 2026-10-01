@@ -175,5 +175,6 @@ def test_public_listener_is_only_saved_reading_no_source_or_new_schedule():
     from pathlib import Path
     workflow = Path('.github/workflows/current-state-read-entry.yml').read_text()
     assert 'radar-global-public' in workflow and '--include-global-market' in workflow
-    assert 'schedule:' not in workflow and 'workflow_dispatch:' not in workflow
+    assert "cron: '50 23 * * *'" in workflow and "cron: '10 11 * * *'" in workflow
+    assert 'workflow_dispatch:' not in workflow
     assert 'secrets.' not in workflow and 'global_public_context --family' not in workflow
