@@ -28,7 +28,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 concurrency:
@@ -132,6 +132,12 @@ jobs:
       - name: Stop local service
         if: always()
         run: docker rm -f newsnow >/dev/null 2>&1 || true
+      - name: Publish latest verified rolling News for read-only Sites consumption
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m decision_kernel.runtime.news_live_publication
+          --capture-dir "$RUNNER_TEMP/newsnow-daily"
       - name: Retain the original finite source attempt
         if: always()
         uses: actions/upload-artifact@v7.0.1

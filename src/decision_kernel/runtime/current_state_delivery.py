@@ -66,9 +66,14 @@ def research_work_diagnostic(exc: Exception, *, api_calls, source_count: int,
 
 class GitHubAPI:
     """Narrow repository API client. Errors never echo credentials or response text."""
-    def __init__(self, token: str, *, max_calls: int = MAX_API_CALLS):
+    def __init__(self, token: str, *, max_calls: int = MAX_API_CALLS,
+                 write_ref: str = model.READ_REF, allow_force: bool = False):
         model.check(type(max_calls) is int and 1 <= max_calls <= 1024, "invalid repository request bound")
-        self.max_calls = max_calls
+        model.check(write_ref in {model.READ_REF, "read-model/news-live"}, "unsupported publication ref")
+        model.check(type(allow_force) is bool
+                    and (not allow_force or write_ref == "read-model/news-live"),
+                    "force publication is limited to ephemeral News live ref")
+        self.max_calls, self.write_ref, self.allow_force = max_calls, write_ref, allow_force
         self.session = requests.Session()
         self.session.headers.update({"Authorization": "Bearer " + token,
             "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
@@ -80,9 +85,14 @@ class GitHubAPI:
         model.check(not endpoint.startswith("/") and ".." not in endpoint and "://" not in endpoint, "invalid API endpoint")
         if method != "GET":
             model.check((method == "POST" and endpoint in {"git/blobs", "git/trees", "git/commits", "git/refs"})
-                        or (method == "PATCH" and endpoint == "git/refs/heads/" + model.READ_REF), "write outside reading Git objects rejected")
+                        or (method == "PATCH" and endpoint == "git/refs/heads/" + self.write_ref),
+                        "write outside reading Git objects rejected")
             if endpoint == "git/refs":
-                model.check(body.get("ref") == "refs/heads/" + model.READ_REF, "wrong publication ref")
+                model.check(body.get("ref") == "refs/heads/" + self.write_ref, "wrong publication ref")
+            if method == "PATCH":
+                force = body.get("force", False)
+                model.check(type(force) is bool and (self.allow_force or force is False),
+                            "force update outside ephemeral News live ref rejected")
         self.calls += 1
         model.check(self.calls <= self.max_calls, "GitHub request budget exhausted")
         try:
@@ -96,10 +106,14 @@ class GitHubAPI:
 
     def get(self, endpoint: str):
         if endpoint not in self.memo:
-            response = self._call("GET", endpoint)
-            model.check(len(response.content) <= 8 * 1024 * 1024, "GitHub JSON response limit")
-            self.memo[endpoint] = response.json()
+            self.memo[endpoint] = self.fresh_get(endpoint)
         return copy.deepcopy(self.memo[endpoint])
+
+    def fresh_get(self, endpoint: str):
+        """Read a mutable pointer without memoizing it; never a retry or write."""
+        response = self._call("GET", endpoint)
+        model.check(len(response.content) <= 8 * 1024 * 1024, "GitHub JSON response limit")
+        return response.json()
 
     def write(self, endpoint: str, body: dict, method: str = "POST"):
         return self._call(method, endpoint, body).json()
