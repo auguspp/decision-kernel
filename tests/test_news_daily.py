@@ -152,7 +152,7 @@ def test_high_frequency_and_low_frequency_publication_schedules_are_pinned():
     root = Path(__file__).resolve().parents[1]
     news_workflow = (root / '.github/workflows/radar-newsnow-daily.yml').read_text()
     read_workflow = (root / '.github/workflows/current-state-read-entry.yml').read_text()
-    assert "cron: '3/10 * * * *'" in news_workflow
+    assert "cron: '3,13,23,33,43,53 * * * *'" in news_workflow
     assert "github.event_name == 'schedule'" in news_workflow
     assert "retention-days: " + "$" + "{{ github.event_name == 'schedule' && 3 || 30 }}" in news_workflow
     assert "cron: '50 23 * * *'" in read_workflow

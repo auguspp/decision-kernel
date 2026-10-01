@@ -10,7 +10,7 @@ def test_source_uses_existing_completion_clock_and_pinned_upstream():
     text=(ROOT/s.WORKFLOW).read_text()
     assert 'workflow_dispatch:' in text and 'workflow_run:' in text
     assert 'workflows: [sector-radar-shadow]' in text and 'types: [completed]' in text
-    assert "cron: '3/10 * * * *'" in text and '\n  push:' not in text
+    assert "cron: '3,13,23,33,43,53 * * * *'" in text and '\n  push:' not in text
     assert s.IMAGE in text and ':latest' not in text
     assert '-p 127.0.0.1:4444:4444' in text and '--privileged' not in text and '-v ' not in text
     assert 'github.event.workflow_run.conclusion' not in text
@@ -40,3 +40,26 @@ def test_original_entry_keeps_new_reading_opt_in():
     assert 'getattr(self, "include_daily_news", False)' in text
     assert 'from .news_daily_reading import attach as attach_daily_news' in text
     assert 'collector.include_daily_news = args.include_daily_news' in text
+
+def test_explicit_ten_minute_schedule_matches_actual_job_admission():
+    import yaml
+    from types import SimpleNamespace
+
+    workflow = yaml.load((ROOT / s.WORKFLOW).read_text(), Loader=yaml.BaseLoader)
+    schedules = workflow['on']['schedule']
+    assert len(schedules) == 1
+    cron = schedules[0]['cron']
+    minute, hour, dom, month, dow = cron.split()
+    slots = [int(value) for value in minute.split(',')]
+    assert slots == [3, 13, 23, 33, 43, 53]
+    assert (hour, dom, month, dow) == ('*', '*', '*', '*')
+    assert [b-a for a, b in zip(slots, slots[1:]+[slots[0]+60])] == [10]*6
+    guard = workflow['jobs']['capture']['if'].replace('&&', 'and').replace('||', 'or')
+    for candidate, expected in [(cron, True), ('3/10 * * * *', False), ('*/5 * * * *', False)]:
+        github = SimpleNamespace(repository='auguspp/decision-kernel',
+            ref='refs/heads/main', run_attempt=1, event_name='schedule',
+            event=SimpleNamespace(schedule=candidate))
+        assert eval(guard, {'__builtins__': {}}, {'github': github}) is expected
+    github.run_attempt = 2
+    github.event.schedule = cron
+    assert eval(guard, {'__builtins__': {}}, {'github': github}) is False

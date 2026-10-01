@@ -180,7 +180,7 @@ def _admit(condition, github):
     return bool(eval(expr, {'__builtins__': {}}, {'github': github}))
 
 
-@pytest.mark.parametrize('cron,expected', [('50 23 * * *', True), ('10 11 * * *', True), ('3/10 * * * *', False)])
+@pytest.mark.parametrize('cron,expected', [('50 23 * * *', True), ('10 11 * * *', True), ('3,13,23,33,43,53 * * * *', False)])
 def test_only_two_explicit_publication_clocks_are_admitted(cron, expected):
     workflow = _workflow('current-state-read-entry.yml')
     github = SimpleNamespace(repository=m.REPOSITORY, ref='refs/heads/main', run_attempt=1,

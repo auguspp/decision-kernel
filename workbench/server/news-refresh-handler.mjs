@@ -7,7 +7,7 @@ import {REPO} from '../reading.mjs';
 
 export const NEWS_REFRESH_PATH = '/api/actions/news-refresh';
 export const SITE_ORIGIN = 'https://decision-kernel-progress.a278038654.chatgpt.site';
-export const WORKFLOW_SHA256 = '3bd7c9ab2790b18185878d04c45200478c615ccc7c8bd6f83a532dea9d6023f2';
+export const WORKFLOW_SHA256 = '2d6e7b2b5f839e82f4a2311e5b7635364e6975591e4ce6e72d3cf8848d784760';
 const API = `https://api.github.com/repos/${REPO}`;
 const WORKFLOW = 'radar-newsnow-daily.yml';
 const WF_PATH = `.github/workflows/${WORKFLOW}`;

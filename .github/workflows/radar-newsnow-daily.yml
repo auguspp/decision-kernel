@@ -3,8 +3,9 @@ run-name: ${{ inputs.site_request_id && format('site-news-refresh/{0}', inputs.s
 
 on:
   schedule:
+    # Explicit ten-minute slots also refresh GitHub's schedule registration.
     # Best-effort native cadence, not a ten-minute delivery SLA.
-    - cron: '3/10 * * * *'
+    - cron: '3,13,23,33,43,53 * * * *'
   workflow_dispatch:
     inputs:
       site_request_id:
@@ -40,7 +41,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      ((github.event_name == 'schedule' && github.event.schedule == '3/10 * * * *') ||
+      ((github.event_name == 'schedule' && github.event.schedule == '3,13,23,33,43,53 * * * *') ||
        github.event_name == 'workflow_dispatch' ||
        (github.event_name == 'workflow_run' &&
         github.event.workflow_run.head_repository.full_name == github.repository &&
