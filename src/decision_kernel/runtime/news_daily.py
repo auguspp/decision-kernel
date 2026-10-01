@@ -6,6 +6,7 @@ The publisher reads the resulting bytes; it never executes a saved program.
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import json
 import os
