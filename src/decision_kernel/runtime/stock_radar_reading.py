@@ -86,7 +86,7 @@ POLICY = {
     'reference_requirement': 'HITHINK_LAST_26_MARKET_SESSION_BARS_REQUIRED_OLDER_GAPS_EXPLICIT_RAW_PRICES_BOUNDED_VOLUME_TURNOVER_ACTION_AWARE_REFERENCE_OR_ONE_FORWARD_FALLBACK',
     'volume_reconciliation': dict(own_stock.VOLUME_POLICY),
     'turnover_reconciliation': dict(own_stock.TURNOVER_POLICY),
-    'corporate_actions': 'SUCCESSFUL_QUERY_OR_ONE_BOUNDED_PROVIDER_FORWARD_FALLBACK; REPORTED_CASH_OR_BONUS_EVENTS_USE_SOURCE_BOUND_REFERENCE_PRICE_NOT_TOTAL_RETURN',
+    'corporate_actions': 'SUCCESSFUL_QUERY_OR_ONE_BOUNDED_PROVIDER_FORWARD_FALLBACK; REPORTED_CASH_DIVIDENDS_MAY_USE_SOURCE_BOUND_REFERENCE_PRICE; BONUS_EVENTS_REQUIRE_SEPARATE_REVIEW',
     'live_reference_source': 'HITHINK_EXISTING_GITHUB_SECRET_NO_SECOND_PROVIDER_REQUIRED',
     'source_contract': own_stock.SELECTION_CONTRACT,
     'session_freshness': 'FETCHED_CALENDAR_LATEST_COMPLETED_NOT_WEEKDAY_HEURISTIC',
@@ -876,13 +876,13 @@ def render_stock_reading(report: dict) -> str:
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
                 n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
                 window_pct(values['excess_return'], n)))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌。无公司行为影响时使用原始收盘价；具名现金/送转事件可只为价格比较建立来源约束的参考价调整；公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌。无公司行为影响时使用原始收盘价；具名现金分红可只为价格比较建立来源约束的参考价调整；送转仍需单独复核。公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
             if checks.get('adjusted_history_fallback'):
                 parts.append('<p class="notice">公司行为端点本次返回数据未准备；原业务码仍保留，没有被改写成“无事件”。本对象使用同一供应商的 forward 复权历史作为一次有界价格路径兜底，并与原始最新OHLC、成交量/成交额及快照前收交叉核对。未推断公司行为明细，也不是总回报。</p>')
             elif any(v.get('comparison_basis') == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
                      for v in (checks.get('action_window_checks') or {}).values()):
-                parts.append('<p class="notice">本对象跨过已报告公司行为：原始bar和事件均保留，5/20等受影响窗口只使用已报告现金/送转字段形成参考价调整。快照前收按同一参考口径核对；不隐去事件、不推断未知事件，也不把结果称作总回报。</p>')
+                parts.append('<p class="notice">本对象跨过已报告公司行为：原始bar和事件均保留，5/20等受影响窗口只使用已报告现金分红字段形成参考价调整；送转事件不会自动推导参考价。快照前收按同一参考口径核对；不隐去事件、不推断未知事件，也不把结果称作总回报。</p>')
             else:
                 parts.append('<p class="notice">本对象使用原始收盘价路径：最新价格与前收严格核对，但没有逐日历史前收核验；成交量和成交额只做明示的有界跨接口一致性核对，两侧原值均保留。公司行为查询成功，受用窗口没有已报告事件跨越。未复权原始价格变化，非总回报；缺bar原因保持 UNKNOWN，不自动解释为停牌，不倒灌历史。</p>')
             volume = checks['volume_reconciliation']
