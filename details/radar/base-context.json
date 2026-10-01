@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-10-01T10:13:42.617847+00:00",
+    "finished_at": "2026-10-01T10:16:06.746222+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-10-02T10:13:42.617847+00:00",
-    "started_at": "2026-10-01T10:13:20.737658+00:00"
+    "recheck_after": "2026-10-02T10:16:06.746222+00:00",
+    "started_at": "2026-10-01T10:15:42.549583+00:00"
   },
   "code_commit": "f1f2b760af9de045a9f09c930041bc548b6b5172",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-10-01T10:13:42.617847+00:00",
+  "generated_at": "2026-10-01T10:16:06.746222+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-10-01T10:13:33.671683+00:00",
+      "checks_at": "2026-10-01T10:15:57.498950+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -653,7 +653,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "eee92cc4f328fdc912177b5d21a0e3f7f5405f69920e2f07e5dbdf00c4c830cd"
         },
-        "source_checked_at": "2026-10-01T10:13:33.397979+00:00",
+        "source_checked_at": "2026-10-01T10:15:57.116288+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -676,11 +676,10 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-10-01T10:13:23.850869+00:00",
-      "gaps": [
-        "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"
-      ],
-      "health": "IN_PROGRESS",
+      "checks_at": "2026-10-01T10:15:47.337341+00:00",
+      "delivery_selection": "SAME_SESSION_RESULT_PRESERVED_NOT_NEW_EVENT",
+      "gaps": [],
+      "health": "LATEST_ATTEMPT_SUCCEEDED",
       "last_qualified_result": {
         "archive": {
           "artifact_id": 11090591162,
@@ -804,7 +803,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "0dd4e518d7d8b33a56ddcc2cf02bd879a72eca80183face136d4107e573b57b8"
         },
-        "source_checked_at": "2026-10-01T10:13:23.850845+00:00",
+        "source_checked_at": "2026-10-01T10:15:47.337308+00:00",
         "state_archive": {
           "artifact_id": 11090825914,
           "artifact_name": "sector-radar-state-bundle",
@@ -835,7 +834,7 @@
         "validation": "EXISTING_BUNDLE_AND_CONTEXT_VALIDATORS_PLUS_STORED_PUBLICATION_BINDING_NOT_NEW_PRODUCTION_REPLAY"
       },
       "latest_attempt": {
-        "conclusion": null,
+        "conclusion": "success",
         "created_at": "2026-10-01T10:13:06Z",
         "event": "workflow_dispatch",
         "head_sha": "f1f2b760af9de045a9f09c930041bc548b6b5172",
@@ -845,8 +844,143 @@
         "path": ".github/workflows/sector-radar-shadow.yml",
         "run_attempt": 1,
         "run_started_at": "2026-10-01T10:13:06Z",
-        "status": "in_progress",
-        "updated_at": "2026-10-01T10:13:11Z"
+        "status": "completed",
+        "updated_at": "2026-10-01T10:14:41Z"
+      },
+      "latest_state_validation": {
+        "archive": {
+          "artifact_id": 11154760208,
+          "artifact_name": "sector-radar-run-36847729858",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36847729858/artifacts/11154760208",
+          "bytes": 1750662,
+          "expires_at": "2026-12-30T10:13:08Z",
+          "git_blob": "464a7651d95561be4a508903f1d267f409bb277c",
+          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+          "origin_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-01T10:13:06Z",
+            "event": "workflow_dispatch",
+            "head_sha": "f1f2b760af9de045a9f09c930041bc548b6b5172",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36847729858",
+            "id": 36847729858,
+            "operation": null,
+            "path": ".github/workflows/sector-radar-shadow.yml",
+            "run_attempt": 1,
+            "run_started_at": "2026-10-01T10:13:06Z",
+            "status": "completed",
+            "updated_at": "2026-10-01T10:14:41Z"
+          },
+          "read_path": "sources/artifacts/f18bc82bdb5cc3c68ef1d63fb0126338af01fa663999c8f7849481ea67692847.zip",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "sha256": "f18bc82bdb5cc3c68ef1d63fb0126338af01fa663999c8f7849481ea67692847"
+        },
+        "cached_completed_session": "2026-09-30",
+        "candidate_count": 0,
+        "completed_session_requalified_by_reader": false,
+        "context_hash": "7a2318790c210486d9a466ac98a3f6ed62ee5337642224363b7e1d683f8f8682",
+        "coverage": [
+          {
+            "family": "BROAD_881",
+            "gate_exit": 3,
+            "nodes": 90,
+            "ongoing": 9,
+            "weakening": 46
+          },
+          {
+            "family": "GRANULAR_884",
+            "gate_exit": 4,
+            "nodes": 230,
+            "ongoing": 25,
+            "weakening": 111
+          }
+        ],
+        "details": {
+          "context/context.json": {
+            "bytes": 814320,
+            "git_blob": "f8bdfa6cbe119490c10de5da17067608713cfd07",
+            "read_path": "details/sector/36847729858/context/context.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "081a2d352fda6e6c6ccd571f197ef724f44d79c12210ab5e6dada3676948b655"
+          },
+          "context/index.html": {
+            "bytes": 710427,
+            "git_blob": "73e2b666cf7c3e79d208307b795e57e8f5591ac3",
+            "read_path": "details/sector/36847729858/context/index.html",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "42169798f4ca446600be1e8731dca91cf4e10baf2e95b56795397f68157db722"
+          },
+          "operations.json": {
+            "bytes": 1638,
+            "git_blob": "0413e4775862458def2a889dd00e77b877a19309",
+            "read_path": "details/sector/36847729858/operations.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "9987388e1bda0be0197f32c5b38ace1b59d7cacc1c66803c966674799dba3c90"
+          },
+          "publication-verification.json": {
+            "bytes": 2178,
+            "git_blob": "dc1d8ad470c4a086909cf911f7173715b896d605",
+            "read_path": "details/sector/36847729858/publication-verification.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "76d17ac87ddb43f5aadf461b31528371ca220f8446d6c35553d10d4f3ace285d"
+          }
+        },
+        "direct_next_session": null,
+        "event_ledger_hash": "d89a5e8c1ed2916c57af2b148fa7d051bcc56103e04af0f49522ea398189de30",
+        "groups": null,
+        "latest_qualified_completed_session": "2026-09-30",
+        "market_session": "2026-09-30",
+        "market_state_hash": "7e821b2fb6421df254c60c1be6e7f17787e65bb3db6975868514ca7b581807b6",
+        "produced_at": "2026-10-01T10:14:31.809168Z",
+        "run": {
+          "conclusion": "success",
+          "created_at": "2026-10-01T10:13:06Z",
+          "event": "workflow_dispatch",
+          "head_sha": "f1f2b760af9de045a9f09c930041bc548b6b5172",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36847729858",
+          "id": 36847729858,
+          "operation": null,
+          "path": ".github/workflows/sector-radar-shadow.yml",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-01T10:13:06Z",
+          "status": "completed",
+          "updated_at": "2026-10-01T10:14:41Z"
+        },
+        "run_metadata": {
+          "bytes": 14463,
+          "git_blob": "d748be292cd1314e6d01984faf5335033a45e107",
+          "read_path": "details/sector/36847729858/run.json",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "sha256": "30d250cbd56b06fc42ad9e74ed245594de8842f31e6b39ecf60c7cc64fb40f2e"
+        },
+        "source_checked_at": "2026-10-01T10:15:45.748752+00:00",
+        "state_archive": {
+          "artifact_id": 11154620755,
+          "artifact_name": "sector-radar-state-bundle",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36847729858/artifacts/11154620755",
+          "bytes": 488811,
+          "expires_at": "2026-12-30T10:13:08Z",
+          "git_blob": "c4cb93136f17a7cd9d87a00b2d0633c7199b6ec2",
+          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+          "origin_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-01T10:13:06Z",
+            "event": "workflow_dispatch",
+            "head_sha": "f1f2b760af9de045a9f09c930041bc548b6b5172",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36847729858",
+            "id": 36847729858,
+            "operation": null,
+            "path": ".github/workflows/sector-radar-shadow.yml",
+            "run_attempt": 1,
+            "run_started_at": "2026-10-01T10:13:06Z",
+            "status": "completed",
+            "updated_at": "2026-10-01T10:14:41Z"
+          },
+          "read_path": "sources/artifacts/a666aebb35abed8af04f208a8d7260446cb52a1edfeb579052d3cac2b4cc5c9d.zip",
+          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+          "sha256": "a666aebb35abed8af04f208a8d7260446cb52a1edfeb579052d3cac2b4cc5c9d"
+        },
+        "status": "VALIDATED_ALREADY_CURRENT_NO_PROSPECTIVE_EVENT",
+        "validation": "EXISTING_BUNDLE_AND_CONTEXT_VALIDATORS_PLUS_STORED_PUBLICATION_BINDING_NOT_NEW_PRODUCTION_REPLAY"
       },
       "market_freshness": "LATEST_COMPLETED_SESSION_NOT_REQUALIFIED_BY_THIS_READER",
       "query_scope": "newest 20 runs of exact workflow on main; not an all-history audit",
@@ -854,7 +988,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-10-01T10:13:32.318542+00:00",
+      "checks_at": "2026-10-01T10:15:55.753573+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -1049,7 +1183,7 @@
           "sha256": "bbc5ebeab77ac3903574f5b5a5460a884f6c13444c9eb103b2c38f256c89b6eb"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-10-01T10:13:32.318522+00:00",
+        "source_checked_at": "2026-10-01T10:15:55.753552+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "300904.SZ",
@@ -1080,13 +1214,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "4e89d68837a09905929c6f0ff1afc3fcc276f889db2ce114de2670ca46308f39",
+  "reading_hash": "c8c6a9bf1011f8eab81833d93205a67138c1d6ede2beffb1fb8bd33aab0521b0",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "36847734879",
-    "trigger_run_id": "36847729858",
+    "run_id": "36847993411",
+    "trigger_run_id": "36847905437",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -1094,7 +1228,7 @@
     "calendar": {
       "as_of": "2026-09-28T05:06:04.658134+00:00",
       "calendar_hash": "dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978",
-      "checked_at": "2026-10-01T10:13:38.289498+00:00",
+      "checked_at": "2026-10-01T10:16:01.988784+00:00",
       "company_events": "NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE",
       "comparison": {
         "human_attention_authority": "NONE",
