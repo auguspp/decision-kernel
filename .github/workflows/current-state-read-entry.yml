@@ -1,6 +1,11 @@
 name: current-state-read-entry
 
 on:
+  schedule:
+    # Low-frequency read-model publication consumes the latest rolling News capture.
+    # 23:50/11:10 UTC = 07:50/19:10 Asia/Shanghai.
+    - cron: '50 23 * * *'
+    - cron: '10 11 * * *'
   workflow_run:
     workflows: [radar-global-public, sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]
     types: [requested, completed]
@@ -19,39 +24,43 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      github.event.workflow_run.head_repository.full_name == github.repository &&
-      github.event.workflow_run.head_branch == 'main' &&
-      ((github.event.workflow_run.name == 'kernel-tests' &&
-        github.event.action == 'completed' &&
-        github.event.workflow_run.event == 'push' &&
-        github.event.workflow_run.conclusion == 'success') ||
-       ((github.event.workflow_run.name == 'saved-disclosure-research' ||
-         github.event.workflow_run.name == 'stock-business-research') &&
-        github.event.action == 'completed' &&
-        github.event.workflow_run.run_attempt == 1 &&
-        (github.event.workflow_run.event == 'workflow_run' ||
-         github.event.workflow_run.event == 'workflow_dispatch' ||
-         (github.event.workflow_run.name == 'stock-business-research' &&
-          github.event.workflow_run.path == '.github/workflows/stock-business-research.yml' &&
-          github.event.workflow_run.event == 'issues' &&
-          github.event.workflow_run.actor.login == 'auguspp') ||
-         (github.event.workflow_run.name == 'saved-disclosure-research' &&
-          github.event.workflow_run.event == 'push'))) ||
-       (github.event.workflow_run.name == 'radar-newsnow-daily' &&
-        github.event.workflow_run.path == '.github/workflows/radar-newsnow-daily.yml' &&
-        github.event.workflow_run.run_attempt == 1 &&
-        github.event.action == 'completed' &&
-        github.event.workflow_run.event == 'workflow_run') ||
-       (github.event.workflow_run.name == 'radar-industry-breadth' &&
-        github.event.workflow_run.path == '.github/workflows/radar-industry-breadth.yml' &&
-        github.event.workflow_run.run_attempt == 1 &&
-        github.event.action == 'completed' &&
-        github.event.workflow_run.event == 'workflow_run') ||
-       (github.event.workflow_run.name != 'kernel-tests' &&
-        github.event.workflow_run.name != 'saved-disclosure-research' &&
-        github.event.workflow_run.name != 'stock-business-research' &&
-        (github.event.workflow_run.event == 'schedule' ||
-         github.event.workflow_run.event == 'workflow_dispatch')))
+      (github.event_name == 'schedule' ||
+       (github.event_name == 'workflow_run' &&
+        github.event.workflow_run.head_repository.full_name == github.repository &&
+        github.event.workflow_run.head_branch == 'main' &&
+        ((github.event.workflow_run.name == 'kernel-tests' &&
+          github.event.action == 'completed' &&
+          github.event.workflow_run.event == 'push' &&
+          github.event.workflow_run.conclusion == 'success') ||
+         ((github.event.workflow_run.name == 'saved-disclosure-research' ||
+           github.event.workflow_run.name == 'stock-business-research') &&
+          github.event.action == 'completed' &&
+          github.event.workflow_run.run_attempt == 1 &&
+          (github.event.workflow_run.event == 'workflow_run' ||
+           github.event.workflow_run.event == 'workflow_dispatch' ||
+           (github.event.workflow_run.name == 'stock-business-research' &&
+            github.event.workflow_run.path == '.github/workflows/stock-business-research.yml' &&
+            github.event.workflow_run.event == 'issues' &&
+            github.event.workflow_run.actor.login == 'auguspp') ||
+           (github.event.workflow_run.name == 'saved-disclosure-research' &&
+            github.event.workflow_run.event == 'push'))) ||
+         (github.event.workflow_run.name == 'radar-newsnow-daily' &&
+          github.event.workflow_run.path == '.github/workflows/radar-newsnow-daily.yml' &&
+          github.event.workflow_run.run_attempt == 1 &&
+          github.event.action == 'completed' &&
+          (github.event.workflow_run.event == 'workflow_run' ||
+           github.event.workflow_run.event == 'workflow_dispatch')) ||
+         (github.event.workflow_run.name == 'radar-industry-breadth' &&
+          github.event.workflow_run.path == '.github/workflows/radar-industry-breadth.yml' &&
+          github.event.workflow_run.run_attempt == 1 &&
+          github.event.action == 'completed' &&
+          github.event.workflow_run.event == 'workflow_run') ||
+         (github.event.workflow_run.name != 'kernel-tests' &&
+          github.event.workflow_run.name != 'saved-disclosure-research' &&
+          github.event.workflow_run.name != 'stock-business-research' &&
+          github.event.workflow_run.name != 'radar-newsnow-daily' &&
+          (github.event.workflow_run.event == 'schedule' ||
+           github.event.workflow_run.event == 'workflow_dispatch')))))
     runs-on: ubuntu-latest
     timeout-minutes: 12
     permissions:
@@ -74,7 +83,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           READ_CODE_COMMIT: ${{ github.sha }}
-          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+          TRIGGER_RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || '' }}
         run: >-
           python -m decision_kernel.runtime.current_state_delivery_with_odds_watch
           --code-commit "$READ_CODE_COMMIT"
