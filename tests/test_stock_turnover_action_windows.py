@@ -84,16 +84,15 @@ def test_events_on_or_before_twenty_day_base_close_do_not_block_selection(index)
     assert meta['action_window_checks']['20']['usable_for_raw_comparison']
     assert meta['action_window_checks']['60']['usable_for_raw_comparison'] is (index == 0)
     assert 'NOT_EXHAUSTIVE_ABSENCE_PROOF' in meta['corporate_actions']
-    assert meta['adjustment_or_total_return_qualification'] in {'NOT_ESTABLISHED','REPORTED_CASH_OR_BONUS_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'}
+    assert meta['adjustment_or_total_return_qualification'] == 'NOT_ESTABLISHED'
 
 
 @pytest.mark.parametrize('index', [41,54,55,56,60])
-@pytest.mark.parametrize('cash,bonus', [('0.2','0'),('0','0.1')])
-def test_supported_reported_action_after_selection_base_uses_reference_adjustment(index,cash,bonus):
-    _,_,h,q,a = action_at(index,cash=cash,bonus=bonus)
+def test_supported_cash_dividend_after_selection_base_uses_reference_adjustment(index):
+    _,_,h,q,a = action_at(index,cash='0.2',bonus='0')
     if index == 60:
         previous=Decimal(h['data']['item'][-2]['close_price'])
-        q['data']['item'][0]['prev_price']=str((previous-Decimal(cash))/(Decimal(1)+Decimal(bonus)))
+        q['data']['item'][0]['prev_price']=str(previous-Decimal('0.2'))
     _,meta=check(h,q,a,selection_mode=True)
     affected=[w for w in meta['action_window_checks'].values() if w['reported_event_dates']]
     assert affected
@@ -102,8 +101,9 @@ def test_supported_reported_action_after_selection_base_uses_reference_adjustmen
 
 
 @pytest.mark.parametrize('index', [41,54,55,56,60])
-def test_zero_effect_reported_event_after_selection_base_still_fails_closed(index):
-    _,_,h,q,a = action_at(index,cash='0',bonus='0')
+@pytest.mark.parametrize('cash,bonus', [('0','0'),('0','0.1')])
+def test_unsupported_zero_or_bonus_event_after_selection_base_still_fails_closed(index,cash,bonus):
+    _,_,h,q,a = action_at(index,cash=cash,bonus=bonus)
     with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
         check(h,q,a,selection_mode=True)
 
