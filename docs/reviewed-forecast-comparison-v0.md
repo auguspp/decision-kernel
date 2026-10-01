@@ -99,6 +99,15 @@ The target explicitly contains `start`, `end` and `fiscal_basis`, and matches th
 observation's FLOW period. Currency is qualified CNY or USD; supported amount
 scales are normalized with Decimal, not binary floats.
 
+The explicit amount labels `1000000`, `百万元`, `百万人民币` and `人民币百万元` map to
+scale `1000000`, using the same Decimal arithmetic as the existing scales.
+The RMB-bearing labels additionally require the independently qualified currency
+to be CNY; a bound USD declaration yields `SCALE_CURRENCY_DIFFERS`. No label
+supplies a missing currency binding, fiscal/accounting basis or report vintage.
+Ambiguous `M`/`mn` labels and million-per-share units are not supported. This
+input compatibility does not qualify retained real forecasts or change their
+source pointers, values or numerical refusals.
+
 For this opt-in forecast path, the source-bound `forecast.metric_basis` is the
 canonical accounting basis. Before numerical qualification, the observation's
 outer fields must be its exact projection: `metric = measure`,

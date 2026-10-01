@@ -96,6 +96,21 @@ def test_scale_normalization_and_exact_lexemes():
         with pytest.raises(ValueError):c.parse(raw)
 
 
+@pytest.mark.parametrize('scale,current',[
+    ('1','1400000.00000002'),('10000','140.000000000002'),
+    ('100000000','0.0140000000000002')])
+def test_million_amount_matches_existing_scale_arithmetic(scale,current):
+    v,_=sample('999991.SZ');old,new=v['observations']
+    old.update(value='1.10000000000001',scale='1000000')
+    new.update(value=current,scale=scale)
+    raw=json.dumps({'prior':old['value'],'current':new['value']}).encode()
+    v['sources'][0].update(qualification='SYNTHETIC_FIXTURE',bytes=len(raw),
+        sha256=state.sha256(raw),git_blob=state.blob_sha(raw))
+    out=result(v,{'s':raw})
+    assert out['status']=='ARITHMETIC_VERIFIED_NOT_ECONOMIC_ACCEPTANCE'
+    assert c.Decimal(out['value'])==c.Decimal('300000.00000001') and out['unit']=='CNY'
+
+
 def test_quarter_checks_cumulative_boundaries():
     v,f=sample();old,new=v['observations'];old['period']={'kind':'FLOW','start':'2026-01-01','end':'2026-03-31'}
     v['comparisons'][0].update(operation='quarter',kind='DERIVED_QUARTER')
