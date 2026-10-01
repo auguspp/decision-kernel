@@ -157,7 +157,13 @@ def attach(collector, parent):
     if reading.get('status') not in {'READ_OK', 'READ_OK_WITH_SOURCE_GAPS'}:
         return parent
     before = dict(collector.files), dict(collector.sources), dict(collector.archive_cache)
-    statuses = deepcopy(reading['source_status'])
+    try:
+        statuses = shared.saved_source_status(collector, reading)
+    except shared.ERRORS as exc:
+        research = deepcopy(parent['research']); radar = research['radar_discovery']
+        radar['status'] = 'READ_OK_WITH_SOURCE_GAPS'
+        radar['source_status']['concept_detail'] = gap(collector, exc, 'SOURCE_STATUS_RECOVERY')
+        return shared._assemble(collector, parent, research)
     report = reference = None
     try:
         report, reference, statuses['concept_detail'] = read(collector, collector.now(), statuses.get('concept', {}))
