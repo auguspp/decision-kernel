@@ -66,4 +66,4 @@ def test_partial_or_malformed_site_inputs_never_fall_back_to_native(tmp_path):
     assert text.index('SITE_SLOT_CHANGED_NO_CAPTURE') < text.index('docker pull')
     assert 'contents: write' in text and 'actions: write' not in text
     assert text.index('docker rm -f newsnow') < text.index('decision_kernel.runtime.news_live_publication')
-    assert "cron: '3/10 * * * *'" in text and '\n  push:' not in text
+    assert "cron: '3,13,23,33,43,53 * * * *'" in text and '\n  push:' not in text

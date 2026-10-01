@@ -9,7 +9,7 @@ source/reading wiring, not verified economic events, Research or investment auth
 ## Cadence and existing owners
 
 `radar-newsnow-daily` retains its owned Sector-completion and native manual entries
-and adds `3/10 * * * *` (144 scheduled opportunities/day). News therefore no longer
+and adds `3,13,23,33,43,53 * * * *` (144 scheduled opportunities/day). News therefore no longer
 requires an A-share Sector run to get an overnight acquisition opportunity. The
 schedule is best effort, not a ten-minute delivery SLA; GitHub may delay or omit
 scheduled work. Native concurrency does not cancel an active capture; no retry,
@@ -192,3 +192,17 @@ surface is retired; do not leave an orphan writer or hidden polling path.
 Implementation/CI/browser proof establishes the contract only. Natural ten-minute
 capture, live-ref population, and actual hosted Sites adoption/readback remain separate
 runtime acceptance facts; a source bundle or isolated Chromium PASS is not deployment.
+
+## 2026-10-01 native schedule registration repair
+
+The workflow is active on main and manual capture/publication succeeded, but the
+native schedule query still returned zero runs several hours after #689. This
+locates the observed gap before job execution; it does not establish a GitHub
+scheduler root cause or a malformed cron. The documented step expression is valid.
+The equivalent explicit slots `3,13,23,33,43,53 * * * *` replace that expression
+and its admission comparison together, re-registering the existing native schedule.
+Frequency, UTC offset, seven sources, concurrency and CI/source bounds are unchanged.
+The Workbench manual-refresh fingerprint follows the exact new workflow bytes.
+One fresh main manual capture verifies acquisition and live publication separately;
+only a natural schedule run can establish automatic delivery. No rerun, retry loop,
+new scheduler, source, permission or fee scope is introduced.
