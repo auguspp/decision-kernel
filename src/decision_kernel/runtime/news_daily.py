@@ -115,15 +115,23 @@ def capture(output, identity, image_raw, *, request=fetch, clock=now, previous_h
             history_recovery=None):
     workflow_identity(identity)
     image_identity(image_raw)
-    if previous_history is not None:
-        m.check(isinstance(previous_history, bytes) and 0 < len(previous_history) <= MAX_HISTORY_BYTES,
-                'News predecessor byte budget')
+    started = clock()
+    try:
+        if previous_history is not None:
+            m.check(isinstance(previous_history, bytes) and 0 < len(previous_history) <= MAX_HISTORY_BYTES,
+                    'News predecessor byte budget')
+        if history_recovery is not None:
+            m.check(isinstance(history_recovery, dict)
+                    and len(m.json_bytes(history_recovery)) <= 64 * 1024, 'News recovery receipt budget')
+    except ERRORS as exc:
+        previous_history = None
+        history_recovery = _history_gap(identity, started, type(exc).__name__)
     output = Path(output)
     m.check(not output.exists() and not output.is_symlink()
             and not any(p.is_symlink() for p in output.parents), 'News output must be create-only')
     output.mkdir(parents=True, exist_ok=False)
     plan = {'version': VERSION, 'workflow': identity, 'source_ids': list(SOURCES),
-            'started_at': clock(), 'image': IMAGE, 'upstream_request_count': 'UNKNOWN',
+            'started_at': started, 'image': IMAGE, 'upstream_request_count': 'UNKNOWN',
             'image_source_commit_equivalence': 'NOT_INDEPENDENTLY_ESTABLISHED',
             'rolling_history_version': HISTORY_VERSION, **AUTHORITY}
     files = {'plan.json': m.json_bytes(plan), 'image-identity.txt': image_raw}
@@ -134,8 +142,6 @@ def capture(output, identity, image_raw, *, request=fetch, clock=now, previous_h
                                 'current_run_id': identity['run_id'], 'checked_at': plan['started_at'],
                                 'history_sha256': None, 'newer_unusable_attempts': []}
     if history_recovery is not None:
-        m.check(isinstance(history_recovery, dict)
-                and len(m.json_bytes(history_recovery)) <= 64 * 1024, 'News recovery receipt budget')
         files[RECOVERY_FILE] = m.json_bytes(history_recovery)
     for name, raw in files.items():
         _write(output, name, raw)
@@ -165,9 +171,10 @@ def capture(output, identity, image_raw, *, request=fetch, clock=now, previous_h
     files['capture.json'] = m.json_bytes(manifest); _write(output, 'capture.json', files['capture.json'])
     result = rebuild(files, cutoff=manifest['finished_at'])
     files['observations.json'] = m.json_bytes(result)
-    files[HISTORY_FILE] = m.json_bytes(build_history(result, previous_history, history_recovery))
     m.check(sum(map(len, files.values())) <= MAX_BUNDLE, 'News bundle exceeds source budget')
     _write(output, 'observations.json', files['observations.json'])
+    files[HISTORY_FILE] = m.json_bytes(build_history(result, previous_history, history_recovery))
+    m.check(sum(map(len, files.values())) <= MAX_BUNDLE, 'News bundle exceeds source budget')
     _write(output, HISTORY_FILE, files[HISTORY_FILE])
     return result
 
@@ -253,6 +260,20 @@ def rebuild(files, *, cutoff, run=None, company_reading=None):
     return {'projection': value, 'projection_hash': canonical_hash(value)}
 
 
+def _history_gap(identity, when, error_type):
+    # A static error class, never exception text, paths or upstream response bodies.
+    return {'version': 'news-history-recovery-v1', 'status': 'RECOVERY_REJECTED',
+            'current_run_id': identity['run_id'], 'checked_at': when,
+            'history_sha256': None, 'newer_unusable_attempts': [], 'error_type': error_type}
+
+
+def _bounded_history_input(path, limit):
+    with path.open('rb') as handle:
+        raw = handle.read(limit + 1)
+    m.check(0 < len(raw) <= limit, 'News optional history file byte budget')
+    return raw
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
@@ -266,8 +287,16 @@ def main(argv=None):
                 'run_id': int(env['GITHUB_RUN_ID']), 'attempt': int(env['GITHUB_RUN_ATTEMPT']),
                 'workflow': WORKFLOW,
                 'trigger_run_id': int(env['TRIGGER_RUN_ID']) if env.get('TRIGGER_RUN_ID') else None}
-    previous = args.previous_history.read_bytes() if args.previous_history else None
-    recovery = news._decode(args.history_recovery.read_bytes()) if args.history_recovery else None
+    workflow_identity(identity)
+    previous, recovery = None, None
+    try:
+        if args.previous_history:
+            previous = _bounded_history_input(args.previous_history, MAX_HISTORY_BYTES)
+        if args.history_recovery:
+            recovery = news._decode(_bounded_history_input(args.history_recovery, 64 * 1024))
+    except ERRORS as exc:
+        previous = None
+        recovery = _history_gap(identity, now(), type(exc).__name__)
     result = capture(args.output, identity, args.image_identity.read_bytes(),
                      previous_history=previous, history_recovery=recovery)
     print('NEWS_CAPTURE_STATUS=' + result['projection']['status'])
