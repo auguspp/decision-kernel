@@ -106,15 +106,26 @@ def test_live_rejects_history_or_host_identity_tamper(tmp_path):
         live.build(bad_files, published_at="2026-09-20T04:01:00+00:00")
 
 
-def test_delivery_api_force_scope_is_explicit_and_default_remains_current_state():
+def test_live_write_scope_is_explicit_without_changing_current_state_transport(monkeypatch):
     default = delivery.GitHubAPI("synthetic")
-    assert default.write_ref == m.READ_REF and default.allow_force is False
-    with pytest.raises(ValueError, match="unsupported publication ref"):
-        delivery.GitHubAPI("synthetic", write_ref="refs/heads/main")
-    with pytest.raises(ValueError, match="force publication"):
-        delivery.GitHubAPI("synthetic", allow_force=True)
-    live_api = delivery.GitHubAPI("synthetic", write_ref=live.REF, allow_force=True)
-    assert live_api.write_ref == live.REF and live_api.allow_force is True
+    assert not hasattr(default, "write_ref") and not hasattr(default, "allow_force")
+    api = live.NewsLiveGitHubAPI("synthetic", max_calls=10)
+
+    class Response:
+        status_code = 200
+        content = b'{}'
+        def json(self): return {}
+    calls = []
+    def request(method, url, json=None, **kwargs):
+        calls.append((method, url, json)); return Response()
+    monkeypatch.setattr(api.session, "request", request)
+
+    api.write("git/refs/heads/" + live.REF, {"sha": "c" * 40, "force": True}, "PATCH")
+    assert calls[-1][0] == "PATCH"
+    with pytest.raises(ValueError, match="outside News live"):
+        api.write("git/refs/heads/" + m.READ_REF, {"sha": "c" * 40, "force": True}, "PATCH")
+    with pytest.raises(ValueError, match="exact force"):
+        api.write("git/refs/heads/" + live.REF, {"sha": "c" * 40, "force": False}, "PATCH")
 
 
 def test_workflow_publishes_live_ref_without_fanning_out_full_current_state():

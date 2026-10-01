@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import copy
 
 import requests
 
@@ -32,6 +33,39 @@ MAX_FILES = 32
 
 def now():
     return datetime.now(timezone.utc).isoformat()
+
+
+class NewsLiveGitHubAPI(delivery.GitHubAPI):
+    """Existing transport with writes narrowed to the single ephemeral News ref."""
+
+    def _call(self, method: str, endpoint: str, body=None):
+        m.check(not endpoint.startswith("/") and ".." not in endpoint and "://" not in endpoint,
+                "invalid API endpoint")
+        if method != "GET":
+            m.check((method == "POST" and endpoint in {"git/blobs", "git/trees", "git/commits", "git/refs"})
+                    or (method == "PATCH" and endpoint == "git/refs/heads/" + REF),
+                    "write outside News live Git objects rejected")
+            if endpoint == "git/refs":
+                m.check(body.get("ref") == "refs/heads/" + REF, "wrong News live publication ref")
+            if method == "PATCH":
+                m.check(body == {"sha": body.get("sha"), "force": True}
+                        and m.SHA.fullmatch(body.get("sha", "")) is not None,
+                        "News live update must be one exact force pointer move")
+        self.calls += 1
+        m.check(self.calls <= self.max_calls, "GitHub request budget exhausted")
+        try:
+            response = self.session.request(method, self.root + endpoint, json=body,
+                                            timeout=45, allow_redirects=False)
+        except requests.RequestException as exc:
+            raise delivery.GitHubReadError("GitHub transport unavailable") from exc
+        if response.status_code not in {200, 201, 302}:
+            raise delivery.GitHubReadError("GitHub HTTP " + str(response.status_code))
+        return response
+
+    def fresh_get(self, endpoint: str):
+        response = self._call("GET", endpoint)
+        m.check(len(response.content) <= 8 * 1024 * 1024, "GitHub JSON response limit")
+        return response.json()
 
 
 def _load(root: Path) -> dict[str, bytes]:
@@ -209,8 +243,7 @@ def main(argv=None) -> int:
                 and int(os.environ["GITHUB_RUN_ATTEMPT"]) == run["attempt"]
                 and os.environ["GITHUB_EVENT_NAME"] == run["event"],
                 "News live host identity differs")
-        api = delivery.GitHubAPI(os.environ["GH_TOKEN"], max_calls=20,
-                                 write_ref=REF, allow_force=True)
+        api = NewsLiveGitHubAPI(os.environ["GH_TOKEN"], max_calls=20)
         commit = publish(api, report, history)
         print("NEWS_LIVE_COMMIT=" + commit)
         summary = os.environ.get("GITHUB_STEP_SUMMARY")

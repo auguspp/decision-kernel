@@ -236,11 +236,11 @@ test('lost submit response and later status refusal retain the permit and never 
 test('successful run offers the existing browser reader refresh without a second dispatch',async()=>{
   const f=await fixture(),ctx=context(),root=newsRefreshControl(ctx,async(u,o)=>handleNewsRefresh(request(JSON.parse(o.body)),env(),{fetcher:f.fetcher,now:()=>T}));
   await button(root,'刷新最新新闻').onclick();f.state.news[0].status='completed';f.state.news[0].conclusion='success';
-  await button(root,'检查本次更新').onclick();assert.match(root.textContent,/本次新闻采集成功/);assert.ok(button(root,'读取最新保存结果'));assert.equal(f.state.posts,1);
+  await button(root,'检查本次更新').onclick();assert.match(root.textContent,/本次新闻采集成功/);assert.ok(button(root,'重新读取页面数据'));assert.equal(f.state.posts,1);
 });
 test('human status wording keeps run success separate from browser publication verification',()=>{
   const r=refreshPresentation({kind:'run',run:{status:'completed',conclusion:'success'},publication:'browser_readback_required'});
-  assert.match(r.title,/采集成功/);assert.match(r.detail,/固定 R reader/);assert.match(r.detail,/不把运行成功本身当作页面已更新/);
+  assert.match(r.title,/采集成功/);assert.match(r.detail,/News live/);assert.match(r.detail,/不把运行成功本身当作页面已经显示新内容/);
 });
 
 
