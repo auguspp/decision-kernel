@@ -354,15 +354,17 @@ def action_window_checks(expected, dates, adjustments=None):
 
 
 def qualify(history, quote, actions, *, code, sessions, params, observed_at,
-            quote_received_at=None, selection_mode=False):
+            quote_received_at=None, selection_mode=False, action_reference_adjustment=False):
     """Qualify one raw stock input under the shared source contract.
 
     Default is the pre-existing exact-61/exact-volume qualification used by shared
-    consumers. `selection_mode=True` keeps raw source rows but can use a bounded
-    provider-reported cash/bonus ex-rights reference for an affected comparison.
-    It never manufactures an event, total-return series or successful empty action
-    response.
+    consumers. `selection_mode=True` only relaxes older history gaps. The bounded
+    cash-dividend reference adjustment is a separate explicit Stock-Radar opt-in;
+    shared consumers retain their prior raw-window semantics by default. It never
+    manufactures an event, total-return series or successful empty action response.
     """
+    if type(action_reference_adjustment) is not bool or (action_reference_adjustment and not selection_mode):
+        _bad(code)
     expected, bars, missing, history_checks, ready = _qualify_history_payload(
         history, code=code, sessions=sessions, params=params, observed_at=observed_at,
         selection_mode=selection_mode, adjust='none')
@@ -402,24 +404,24 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     if dates != sorted(set(dates), reverse=True):
         _bad(code)
 
-    adjustments = _reported_action_adjustments(expected, bars, retained_events, code=code)
+    adjustments = (_reported_action_adjustments(expected, bars, retained_events, code=code)
+                   if action_reference_adjustment else {})
     window_checks = action_window_checks(expected, dates, adjustments)
-    if selection_mode:
+    if action_reference_adjustment:
         if any(not window_checks[str(n)]['usable_for_price_reference_adjusted_comparison']
                for n in SELECTION_WINDOWS):
             _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
     elif any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
-        # Preserve the shared v4 acquisition contract outside Stock selection.
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
 
     latest_factor = Decimal(1)
-    if selection_mode and expected[-1] in adjustments:
+    if action_reference_adjustment and expected[-1] in adjustments:
         item = adjustments[expected[-1]]
         if item['factor'] is None:
             _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
         latest_factor = Decimal(item['factor'])
     expected_previous = bars[expected[-2]]['close_price'] * latest_factor
-    uses_reference_adjustment = selection_mode and any(
+    uses_reference_adjustment = action_reference_adjustment and any(
         value['comparison_basis'] == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
         for value in window_checks.values())
     q, last_quote, volume_check, turnover_check, actual_previous = _qualify_quote(
@@ -434,7 +436,10 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         'market_session_basis': ('LAST_26_REQUIRED_DATED_BARS_OLDER_GAPS_EXPLICIT_NOT_FILLED'
                                  if selection_mode else 'EXACT_61_COMPLETED_DATED_OWN_BARS_AND_QUALIFIED_CALENDAR'),
         'latest_quote_check': ('EXACT_OHLC_ACTION_AWARE_PREVIOUS_REFERENCE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
-                               if selection_mode else 'EXACT_OHLC_VOLUME_ACTION_AWARE_PREVIOUS_REFERENCE_WITH_BOUNDED_TURNOVER_TOLERANCE'),
+                               if action_reference_adjustment else
+                               'EXACT_OHLC_PREVIOUS_CLOSE_WITH_BOUNDED_VOLUME_AND_TURNOVER_RECONCILIATION'
+                               if selection_mode else
+                               'EXACT_OHLC_VOLUME_PREVIOUS_CLOSE_WITH_BOUNDED_TURNOVER_TOLERANCE'),
         'latest_quote_previous_reference': {
             'snapshot_prev_price': str(actual_previous),
             'expected_reference_price': str(expected_previous),
