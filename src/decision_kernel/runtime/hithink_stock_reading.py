@@ -399,12 +399,16 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
 
     adjustments = _reported_action_adjustments(expected, bars, retained_events, code=code)
     window_checks = action_window_checks(expected, dates, adjustments)
-    if any(not window_checks[str(n)]['usable_for_price_reference_adjusted_comparison']
-           for n in SELECTION_WINDOWS):
+    if selection_mode:
+        if any(not window_checks[str(n)]['usable_for_price_reference_adjusted_comparison']
+               for n in SELECTION_WINDOWS):
+            _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
+    elif any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
+        # Preserve the shared v4 acquisition contract outside Stock selection.
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
 
     latest_factor = Decimal(1)
-    if expected[-1] in adjustments:
+    if selection_mode and expected[-1] in adjustments:
         item = adjustments[expected[-1]]
         if item['factor'] is None:
             _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
