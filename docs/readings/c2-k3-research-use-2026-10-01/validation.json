@@ -1,0 +1,24 @@
+{
+  "report_hash": "d2f035fa8eae32ad02d51cd44d344aac1b6590eb8b363fc7ac6ee47d92413c91",
+  "pandas_version": "2.2.3",
+  "python_version": "3.13.5",
+  "six_complete_concept_panels": 6,
+  "matched_relations": 1719,
+  "unique_matched_securities": 1552,
+  "independent_members_signs_medians_ranks": "PASS",
+  "same_input_bytes_equal": true,
+  "controls": [
+    "right-key duplicate rejected",
+    "full-security exchange mismatch stays unmatched",
+    "unpriced is None not zero",
+    "flat is zero",
+    "int/string numeric equivalence not null-zero",
+    "root tamper rejected",
+    "membership tamper rejected",
+    "source bytes tamper rejected",
+    "existing output directory rejected"
+  ],
+  "native_full_ci": "NOT_YET_RUN_AT_PREPARATION",
+  "scope": "LOCAL_DERIVATIVE_VALIDATION_NOT_FRESH_PROVIDER_REQUALIFICATION",
+  "final_report_replayed_after_lossy_projection": true
+}
