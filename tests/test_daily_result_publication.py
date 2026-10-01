@@ -19,7 +19,7 @@ def namespace(value):
 
 
 def event():
-    return {'repository':'auguspp/decision-kernel','ref':'refs/heads/main','run_attempt':1,
+    return {'repository':'auguspp/decision-kernel','ref':'refs/heads/main','run_attempt':1,'event_name':'workflow_run',
       'event':{'action':'completed','workflow_run':{
       'name':'stock-business-research','path':'.github/workflows/stock-business-research.yml',
       'event':'issues','head_repository':{'full_name':'auguspp/decision-kernel'},
@@ -65,9 +65,15 @@ def test_previous_trigger_routes_keep_their_contract(name,trigger,conclusion,exp
     assert allows(data) is expected
 
 
+def test_direct_cutoff_schedule_enters_same_read_only_publisher():
+    data=event(); data['event_name']='schedule'
+    assert allows(data)
+
+
 def test_publisher_does_not_execute_research_or_workflow_run_code():
     raw=WORKFLOW.read_text()
     assert 'ref: ${{ github.sha }}' in raw
     assert 'persist-credentials: false' in raw and 'secrets.' not in raw
     assert 'stock_question_host' not in raw and '--include-reviewed-questions' in raw
-    assert 'schedule:' not in raw and 'workflow_dispatch:' not in raw
+    assert "cron: '50 23 * * *'" in raw and "cron: '10 11 * * *'" in raw
+    assert 'workflow_dispatch:' not in raw
