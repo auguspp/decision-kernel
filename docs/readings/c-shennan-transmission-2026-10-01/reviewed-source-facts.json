@@ -1,0 +1,218 @@
+{
+  "qualification": "RETAINED_RESEARCH_EXTRACTION_NOT_ISSUER_DISCLOSURE_BYTES",
+  "subject": "002916.SZ",
+  "original_source": {
+    "url": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225512708.PDF",
+    "bytes": 3542386,
+    "sha256": "2ac44e797a7c7f4e8f1a306a48a5760e078fc7b9086c182fa77d2c502f21c753",
+    "acquired_at": "2026-10-01T00:33:46.360291Z",
+    "period": "2026H1 and disclosed 2025H1 comparison",
+    "custody": "LOCAL_ORIGINAL_BYTES_ONLY",
+    "published_at": null,
+    "url_date": "2026-08-27",
+    "publication_clock_note": "URL date and August report cover do not establish an exact public-release timestamp. October retrieval does not establish historical knowledge."
+  },
+  "preparation_main": "a136c06afb8e9528d2e4fc217748eb631f023a42",
+  "original_pages_checked": [
+    12,
+    13,
+    16,
+    21,
+    22,
+    53,
+    127,
+    133
+  ],
+  "page_map": {
+    "group": "127",
+    "products_2026H1": "16; other_business exact cross-check 127",
+    "guangzhou_subsidiary": "21 (CNY 10,000 units); 22 (dividend and consolidated elimination)",
+    "cfo_bridge_signed_cny": "133, consolidated signed adjustments, CNY",
+    "cash_totals.cfo": "133",
+    "cash_totals.cash_capex": "53, consolidated cash payment for fixed/intangible/other long-lived assets",
+    "exposure": "12–13"
+  },
+  "period_order": [
+    "2026H1",
+    "2025H1"
+  ],
+  "group": {
+    "revenue": [
+      "15296361440.43",
+      "10453454733.49"
+    ],
+    "cost": [
+      "10552208603.63",
+      "7705828659.32"
+    ],
+    "gross_profit": [
+      "4744152836.80",
+      "2747626074.17"
+    ],
+    "gross_profit_delta": "1996526762.63"
+  },
+  "products_2026H1": {
+    "pcb": {
+      "revenue_cny": "8552259081.13",
+      "cost_cny": "5400395625.78",
+      "gross_profit_cny": "3151863455.35"
+    },
+    "assembly": {
+      "revenue_cny": "1976397283.22",
+      "cost_cny": "1634434091.78",
+      "gross_profit_cny": "341963191.44"
+    },
+    "substrate": {
+      "revenue_cny": "3666719085.63",
+      "cost_cny": "2517234093.97",
+      "gross_profit_cny": "1149484991.66"
+    },
+    "other_products": {
+      "revenue_cny": "436252563.00",
+      "cost_cny": "353444709.09",
+      "gross_profit_cny": "82807853.91"
+    },
+    "other_business": {
+      "revenue_cny": "664733427.45",
+      "cost_cny": "646700083.01",
+      "gross_profit_cny": "18033344.44"
+    }
+  },
+  "guangzhou_subsidiary": {
+    "revenue_cny": "1250319900",
+    "operating_profit_cny": "536941400",
+    "net_profit_cny": "526231400",
+    "intragroup_dividend_investment_income_cny": "390000000",
+    "net_profit_minus_stated_dividend_diagnostic_cny": "136231400"
+  },
+  "cfo_bridge_signed_cny": {
+    "net_profit": [
+      "2254422604.80",
+      "1361120341.92"
+    ],
+    "impairment": [
+      "363078704.01",
+      "202716966.72"
+    ],
+    "fixed_depreciation": [
+      "872507783.53",
+      "791387771.00"
+    ],
+    "rou_depreciation": [
+      "11399409.44",
+      "4018481.68"
+    ],
+    "intang_amortisation": [
+      "15555268.58",
+      "13340108.62"
+    ],
+    "long_deferred_amortisation": [
+      "50761463.98",
+      "23129210.26"
+    ],
+    "disposal_loss": [
+      "164822.68",
+      "3291743.68"
+    ],
+    "scrap_loss": [
+      "6373428.26",
+      "4893714.04"
+    ],
+    "fairvalue_loss": [
+      "2599962.80",
+      "-2209004.51"
+    ],
+    "finance_adjustment": [
+      "152716219.55",
+      "25543094.43"
+    ],
+    "investment_adjustment": [
+      "-583511.49",
+      "-3289656.94"
+    ],
+    "deferred_tax_asset": [
+      "-22103768.46",
+      "-39041958.56"
+    ],
+    "deferred_tax_liability": [
+      "58879029.98",
+      "4792126.19"
+    ],
+    "inventory_change": [
+      "-2883904023.78",
+      "-793082206.64"
+    ],
+    "operating_receivables": [
+      "-1886888253.17",
+      "-896269445.10"
+    ],
+    "operating_payables": [
+      "2409006955.02",
+      "794072219.58"
+    ],
+    "other": [
+      "97869792.43",
+      "1112837.54"
+    ]
+  },
+  "cash_totals": {
+    "cfo": [
+      "1501855888.16",
+      "1495526343.91"
+    ],
+    "cash_capex": [
+      "4678636816.28",
+      "1545929740.06"
+    ],
+    "working_capital_cash_adjustment": [
+      "-2361785321.93",
+      "-895279432.16"
+    ],
+    "non_working_capital_adjustment": [
+      "1609218605.29",
+      "1029685434.15"
+    ],
+    "cfo_less_cash_capex": [
+      "-3176780928.12",
+      "-50403396.15"
+    ],
+    "net_profit_delta": "893302262.88",
+    "working_capital_delta": "-1466505889.77",
+    "non_working_capital_delta": "579533171.14",
+    "cfo_delta": "6329544.25",
+    "cfo_less_capex_delta": "-3126377531.97"
+  },
+  "derivation_note": "Gross profit, subtotal adjustments, differences and CFO less cash capex are reviewed Decimal calculations from the displayed raw facts, not additional issuer-reported lines. Ratios are recomputed in comparison output. All raw signed cash-bridge amounts retain the source signs; no balance-sheet deltas or parent-attributable profit substituted.",
+  "subsidiary_original_wan_cny": {
+    "revenue": "125031.99",
+    "operating_profit": "53694.14",
+    "net_profit": "52623.14",
+    "intragroup_dividend_investment_income": "39000.00"
+  },
+  "exposure": {
+    "data_center_pcb_revenue_cny_lower_bound": "2000000000",
+    "relation": "STRICTLY_GREATER_THAN",
+    "qualification": "ISSUER_REPORTED_EXPOSURE_NOT_INDEPENDENT_CAUSALITY",
+    "exact_share": null,
+    "profit_contribution": null,
+    "industry_causal_weight": null
+  },
+  "scope_limits": {
+    "substrate": "MIXED_PACKAGING_SUBSTRATE_NOT_PURE_FC_BGA",
+    "guangzhou_profit": "LEGAL_ENTITY_SEPARATE_ACCOUNTS_NOT_FACTORY_OPERATIONS",
+    "dividend": "ALREADY_ELIMINATED_IN_CONSOLIDATION_DO_NOT_SUBTRACT_AGAIN_OR_ADD_WUXI",
+    "cash_diagnostic": "CFO_MINUS_TOTAL_CASH_CAPEX_NOT_FCFE_MAINTENANCE_CAPEX_OR_INVESTMENT_RETURN"
+  },
+  "unknowns": {
+    "pure_fc_bga_profit": null,
+    "normalized_guangzhou_plant_profit": null
+  },
+  "external_financing_cny": {
+    "net_inflow_2026H1": "4399391356.66",
+    "borrowing_proceeds_2026H1": "4987189414.78",
+    "investment_subscription_proceeds_2026H1": "1654927776.00",
+    "page": 53,
+    "qualification": "FINANCING_CASH_NOT_OPERATING_CASH_NOT_ALL_DEBT"
+  },
+  "copyright_note": "Selected factual values, own English paraphrases and independent arithmetic only. No report paragraphs, PDF, full extracted text or page images included."
+}
