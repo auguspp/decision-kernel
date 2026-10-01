@@ -99,8 +99,8 @@ def test_current_snapshot_must_match_own_history_exactly(kind):
     with pytest.raises(own.StockReadingInputError):check(q=q)
 
 
-@pytest.mark.parametrize('kind',['cash','bonus','unknown','wrong_code','wrong_ticker','missing_list','nonlist','after_query_end'])
-def test_selection_window_actions_are_never_converted_to_inferred_adjustments(kind):
+@pytest.mark.parametrize('kind',['unknown','wrong_code','wrong_ticker','missing_list','nonlist','after_query_end'])
+def test_unsupported_or_malformed_selection_window_actions_fail_closed(kind):
     _,_,h,_,a=inputs();d=a['data']
     if kind=='wrong_code':d['thscode']='000001.SZ'
     elif kind=='wrong_ticker':d['ticker']='000001'
@@ -108,10 +108,35 @@ def test_selection_window_actions_are_never_converted_to_inferred_adjustments(ki
     elif kind=='nonlist':d['item']=None
     else:
         d['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
-            'dividend_per_share':'0.1' if kind=='cash' else '0',
-            'per_share_bonus':'0.1' if kind=='bonus' else '0'}]
+            'dividend_per_share':'0','per_share_bonus':'0'}]
         if kind=='after_query_end':d['item'][0]['ex_date_ms']+=86400*1000*200
     with pytest.raises(own.StockReadingInputError):check(a=a)
+
+
+@pytest.mark.parametrize('cash,bonus',[('0.1','0'),('0','0.1')])
+def test_reported_cash_or_bonus_can_establish_bounded_price_reference_adjustment(cash,bonus):
+    days,_,h,q,a=inputs()
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
+        'dividend_per_share':cash,'per_share_bonus':bonus}]
+    bars,meta=check(h,q,a)
+    w=meta['action_window_checks']['20']
+    assert len(bars)==61 and not w['usable_for_raw_comparison']
+    assert w['usable_for_price_reference_adjusted_comparison']
+    assert w['comparison_basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
+    assert Decimal(w['reference_adjustment_factor']) > 0
+    assert meta['adjustment_or_total_return_qualification']=='REPORTED_CASH_OR_BONUS_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+
+
+def test_same_day_cash_action_reconciles_snapshot_previous_reference():
+    days,_,h,q,a=inputs()
+    previous=Decimal(h['data']['item'][-2]['close_price'])
+    cash=Decimal('0.13')
+    a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][-1]['date_ms'],
+        'dividend_per_share':str(cash),'per_share_bonus':'0'}]
+    q['data']['item'][0]['prev_price']=str(previous-cash)
+    _,meta=check(h,q,a)
+    assert meta['latest_quote_previous_reference']['basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
+    assert Decimal(meta['latest_quote_previous_reference']['expected_reference_price'])==previous-cash
 
 
 def test_business_failure_does_not_echo_provider_message():
