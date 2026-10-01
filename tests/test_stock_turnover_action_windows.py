@@ -94,7 +94,7 @@ def test_supported_reported_action_after_selection_base_uses_reference_adjustmen
     if index == 60:
         previous=Decimal(h['data']['item'][-2]['close_price'])
         q['data']['item'][0]['prev_price']=str((previous-Decimal(cash))/(Decimal(1)+Decimal(bonus)))
-    _,meta=check(h,q,a)
+    _,meta=check(h,q,a,selection_mode=True)
     affected=[w for w in meta['action_window_checks'].values() if w['reported_event_dates']]
     assert affected
     assert all(w['usable_for_price_reference_adjusted_comparison'] for w in affected)
@@ -105,7 +105,7 @@ def test_supported_reported_action_after_selection_base_uses_reference_adjustmen
 def test_zero_effect_reported_event_after_selection_base_still_fails_closed(index):
     _,_,h,q,a = action_at(index,cash='0',bonus='0')
     with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
-        check(h,q,a)
+        check(h,q,a,selection_mode=True)
 
 
 def test_base_close_is_exclusive_and_shifted_context_is_checked_independently():
