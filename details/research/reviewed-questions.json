@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "cc13a34762314b6095567406a32c04344d7141bd",
+      "ref": "0a4d816a548361a3b12734f2fb5471b4b71aecc5",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -1023,9 +1023,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "风电设备",
+            "thscode": "881280.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“风电设备”中，中船科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1046,9 +1054,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他生物制品",
+            "thscode": "884240.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“其他生物制品”中，泰诺麦博-U的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1076,9 +1092,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "水泥",
+            "thscode": "884060.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“水泥”中，福建水泥的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1099,9 +1123,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "风电设备",
+            "thscode": "881280.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“风电设备”中，威力传动的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1122,9 +1154,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他生物制品",
+            "thscode": "884240.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“其他生物制品”中，三元基因的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1145,9 +1185,17 @@
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
-        "observation_context_status": "NOT_MATCHED_IN_SAVED_STOCK_OBSERVATIONS",
-        "origin_directions": [],
-        "origin_question_prompts": [],
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "水泥",
+            "thscode": "884060.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“水泥”中，XD海螺水的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
@@ -1190,6 +1238,6 @@
     "signal_transition_authority": "NONE",
     "source_run_id": 36702153468,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "LATEST_SUCCESS_INPUT_REJECTED"
+    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
   }
 }
