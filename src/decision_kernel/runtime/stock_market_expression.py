@@ -176,7 +176,7 @@ def prepare_market_expression_reading(source_root: Path, state, ledger, associat
              if any(route["sector"] in o["sector_codes"] for item in selected for o in item["origins"])]
     evidence_scope = [{"thscode": item["thscode"], "company_name": item["company_name"]}
                       for item in selected if item["business_linkage_status"] == REVIEWED_BUSINESS_LINK]
-    request_count = 4 + len(directions) + 3 * len(selected) if selected else 0
+    request_count = stock.stock_request_budget(len(selected), len(directions))
     if (len(selected) > stock.MAX_ISSUERS or len(directions) > stock.MAX_MEMBERSHIPS
             or request_count > stock.MAX_REQUESTS):
         raise ValueError("market-expression Stock plan exceeds the existing request budget")
