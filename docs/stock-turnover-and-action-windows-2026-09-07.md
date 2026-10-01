@@ -4,6 +4,14 @@ This is the user's authorized compatibility change, not a new selector, provider
 price adjustment engine or investment authority. A few unavailable fields must
 not invalidate unrelated usable intervals. It does not promise a positive match.
 
+> **2026-10-01 successor:** the historical policy below remains the rationale for
+> keeping raw and adjusted semantics separate, but its “crossing event is
+> unavailable” selection rule is superseded for Stock selection by
+> [stock-action-reference-qualification-2026-10-01.md](stock-action-reference-qualification-2026-10-01.md).
+> The successor allows only source-bound cash/bonus reference adjustment or one
+> bounded provider-forward fallback; it does not reinterpret this document as
+> having authorized those behaviors on 2026-09-07.
+
 ## Primary implementations consulted
 
 - Python PEP 485: https://peps.python.org/pep-0485/ — use an explicit symmetric
