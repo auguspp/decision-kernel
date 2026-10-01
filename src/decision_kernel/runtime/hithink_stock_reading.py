@@ -380,7 +380,14 @@ def request_json(path, params, *, api_key):
     from .judgment_timeline import _unique_object
     own = {HISTORY: {'thscode','interval','adjust','start','end'},
            SNAPSHOT: {'thscodes'}, ACTIONS: {'thscode','to'}}
-    if path in own:
+    if path == SNAPSHOT and isinstance(params, dict) and set(params) == {'limit', 'offset'}:
+        # Existing full-market endpoint, narrowly bounded for independent K3 capture.
+        # 3 context + 14 pages + 9 own-stock requests is the existing ceiling of 26.
+        if (params['limit'] != '500' or not isinstance(params['offset'], str)
+                or not re.fullmatch(r'0|[1-9][0-9]*', params['offset'])
+                or int(params['offset']) % 500 or int(params['offset']) > 6500):
+            raise ValueError('stock full-market page request contract differs')
+    elif path in own:
         if not isinstance(params, dict) or set(params) != own[path] or any(type(v) is not str for v in params.values()):
             raise ValueError('stock request contract differs')
         code = params.get('thscode', params.get('thscodes'))

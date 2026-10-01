@@ -18,6 +18,8 @@ REPOSITORY = "auguspp/decision-kernel"
 WORKFLOW = "stock-reading-after-sector.yml"
 SECTOR = "sector-radar-shadow.yml"
 STOCK = "hithink-stock-dump-trial.yml"
+INDEPENDENT_STOCK = "stock-independent-observations"
+INDEPENDENT_NO_RECOVERY = "INDEPENDENT_STOCK_CAPTURE_NO_RECOVERY"
 ISSUE = 581
 MAX_SOURCE_ATTEMPTS = 3
 MAX_RECOVERY_RUNS = 40
@@ -61,6 +63,8 @@ def choose(snapshot, now):
            "status": "CHECK_INCOMPLETE", "action": None, "open_gap": True,
            "investment_authority": "NONE", "research_authority": "NONE",
            "max_source_attempts_per_cycle": MAX_SOURCE_ATTEMPTS}
+    if snapshot.get("independent_stock_capture"):
+        return dict(out, status=INDEPENDENT_NO_RECOVERY, open_gap=False)
     if snapshot.get("active"):
         return dict(out, status="WAITING_FOR_ACTIVE_WORK", active_run_ids=snapshot["active"])
     lane = snapshot["sector"]
@@ -145,13 +149,53 @@ def active_work(api):
     return activity["check_activity"](activity["request_reader"](os.environ.get("GH_TOKEN", "")), peers=paths)
 
 
+def independent_stock_upstream(api):
+    """An isolated Stock capture, including failure, never starts daily recovery."""
+    if os.environ.get("GITHUB_EVENT_NAME") != "workflow_run":
+        return False
+    path = os.environ.get("UPSTREAM_PATH", "")
+    check(bool(path), "UPSTREAM_WORKFLOW_PATH_REQUIRED")
+    if path != f".github/workflows/{STOCK}":
+        return False
+    if os.environ.get("UPSTREAM_DISPLAY_TITLE", "").startswith(INDEPENDENT_STOCK + " |"):
+        return True
+    run_id = os.environ.get("UPSTREAM_RUN_ID", "")
+    attempt = os.environ.get("UPSTREAM_RUN_ATTEMPT", "")
+    check(re.fullmatch(r"[1-9][0-9]{0,19}", run_id) is not None and attempt == "1",
+          "UPSTREAM_STOCK_RUN_IDENTITY_REQUIRED")
+    # Pin the attempt; incomplete metadata must not become permission to recover.
+    payload = api.get(f"actions/runs/{run_id}/attempts/{attempt}/jobs?per_page=100")
+    check(isinstance(payload, dict), "UPSTREAM_STOCK_JOBS_INCOMPLETE")
+    jobs, count = payload.get("jobs"), payload.get("total_count")
+    check(isinstance(jobs, list) and type(count) is int and 1 <= count <= 100
+          and len(jobs) == count, "UPSTREAM_STOCK_JOBS_INCOMPLETE")
+    names = set()
+    independent = False
+    for job in jobs:
+        check(isinstance(job, dict), "UPSTREAM_STOCK_JOB_INVALID")
+        name = job.get("name")
+        check(isinstance(name, str) and bool(name) and name not in names
+              and str(job.get("run_id")) == run_id and job.get("run_attempt") == 1
+              and job.get("status") == "completed"
+              and job.get("conclusion") in {
+                  "success", "failure", "cancelled", "skipped", "neutral", "timed_out",
+                  "action_required", "stale", "startup_failure"}, "UPSTREAM_STOCK_JOB_INVALID")
+        names.add(name)
+        if name == INDEPENDENT_STOCK and job["conclusion"] != "skipped":
+            independent = True
+    return independent
+
+
 def collect(api, root, now):
     from decision_kernel.runtime import current_state as model
     from decision_kernel.runtime.current_state_delivery import Collector
     code = os.environ["GITHUB_SHA"]
     check(SHA.fullmatch(code) is not None, "EXACT_CODE_REQUIRED")
+    result = {"code_sha": code, "run_id": os.environ["GITHUB_RUN_ID"]}
+    if independent_stock_upstream(api):
+        return dict(result, independent_stock_capture=True)
     check(api.get("git/ref/heads/main")["object"]["sha"] == code, "MAIN_MOVED")
-    result = {"code_sha": code, "run_id": os.environ["GITHUB_RUN_ID"], "active": active_work(api)}
+    result["active"] = active_work(api)
     if result["active"]:
         return result
     collector = Collector(api, code, root, now=lambda: now.isoformat())
@@ -327,7 +371,8 @@ def main():
             file = args.output / "report.json"
             if file.exists():
                 report = json.loads(file.read_text())
-            if os.environ.get("RECONCILE_MODE") != "audit":
+            if (os.environ.get("RECONCILE_MODE") != "audit"
+                    and report.get("status") != INDEPENDENT_NO_RECOVERY):
                 report = report_issue(report)
                 file.write_text(json.dumps(report, ensure_ascii=False, indent=2))
             return 0

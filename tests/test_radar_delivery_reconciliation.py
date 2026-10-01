@@ -176,3 +176,131 @@ def test_non_result_origins_never_dispatch_stock(status):
     result = module().choose(data, NOW)
     assert result["status"] == "RESULT_BEARING_SECTOR_DELIVERY_UNAVAILABLE"
     assert result["action"] is None
+
+
+def stock_upstream(monkeypatch, title='stock-reading | sector=10 | page=base | recovery=none'):
+    monkeypatch.setenv('GITHUB_EVENT_NAME', 'workflow_run')
+    monkeypatch.setenv('GITHUB_SHA', M)
+    monkeypatch.setenv('GITHUB_RUN_ID', '101')
+    monkeypatch.setenv('UPSTREAM_PATH', '.github/workflows/hithink-stock-dump-trial.yml')
+    monkeypatch.setenv('UPSTREAM_DISPLAY_TITLE', title)
+    monkeypatch.setenv('UPSTREAM_RUN_ID', '100')
+    monkeypatch.setenv('UPSTREAM_RUN_ATTEMPT', '1')
+
+
+def upstream_job(name, conclusion):
+    return dict(name=name, status='completed', conclusion=conclusion, run_id=100, run_attempt=1)
+
+
+@pytest.mark.parametrize('conclusion', ['success', 'failure', 'cancelled', 'timed_out'])
+def test_exact_independent_job_completion_never_reconciles_or_dispatches(monkeypatch, tmp_path, conclusion):
+    mod = module()
+    # Missing/misleading title cannot defeat the exact upstream-job check.
+    stock_upstream(monkeypatch)
+    calls = []
+    def get(path):
+        calls.append(path)
+        assert path == 'actions/runs/100/attempts/1/jobs?per_page=100'
+        return {'total_count': 2, 'jobs': [upstream_job('stock-reading', 'skipped'),
+            upstream_job('stock-independent-observations', conclusion)]}
+    api = SimpleNamespace(get=get)
+    monkeypatch.setattr(mod, 'active_work', lambda _: pytest.fail('no daily collection'))
+    data = mod.collect(api, tmp_path, NOW)
+    plan = mod.choose(data, NOW)
+    assert plan['status'] == mod.INDEPENDENT_NO_RECOVERY
+    assert plan['action'] is None and not plan['open_gap']
+    monkeypatch.setattr(mod.subprocess, 'run', lambda *a, **k: pytest.fail('no dispatch'))
+    with pytest.raises(ValueError, match='^DISPATCH_PLAN_REQUIRED$'):
+        mod.dispatch(plan, api)
+    assert len(calls) == 1
+
+
+def test_explicit_independent_purpose_is_suppressed_even_without_job_metadata(monkeypatch, tmp_path):
+    mod = module()
+    stock_upstream(monkeypatch, 'stock-independent-observations | sector=none | page=base | recovery=none')
+    api = SimpleNamespace(get=lambda _: pytest.fail('title already excludes daily recovery'))
+    data = mod.collect(api, tmp_path, NOW)
+    assert mod.choose(data, NOW)['status'] == mod.INDEPENDENT_NO_RECOVERY
+
+
+@pytest.mark.parametrize('jobs', [
+    [upstream_job('stock-reading', 'success')],
+    [upstream_job('stock-reading', 'failure'), upstream_job('stock-independent-observations', 'skipped')],
+])
+def test_original_stock_completion_still_uses_existing_recovery(monkeypatch, tmp_path, jobs):
+    mod = module()
+    stock_upstream(monkeypatch)
+    def get(path):
+        if path == 'actions/runs/100/attempts/1/jobs?per_page=100':
+            return {'total_count': len(jobs), 'jobs': jobs}
+        assert path == 'git/ref/heads/main'
+        return {'object': {'sha': M}}
+    api = SimpleNamespace(get=get)
+    monkeypatch.setattr(mod, 'active_work', lambda _: [20])
+    data = mod.collect(api, tmp_path, NOW)
+    assert 'independent_stock_capture' not in data
+    assert mod.choose(data, NOW)['status'] == 'WAITING_FOR_ACTIVE_WORK'
+    # Both unchanged missing-delivery routes remain eligible after activity ends.
+    legacy = snapshot()
+    legacy['independent_stock_capture'] = mod.independent_stock_upstream(api)
+    legacy['stock_parent'] = '8'
+    assert mod.choose(legacy, NOW)['action']['workflow'] == mod.STOCK
+    legacy['sector'].pop('latest_state_validation')
+    legacy['sector']['last_qualified_result']['run']['created_at'] = '2026-09-24T10:13:00Z'
+    legacy['sector_runs'] = [run(10, '2026-09-24T10:13:00Z')]
+    assert mod.choose(legacy, NOW)['action']['workflow'] == mod.SECTOR
+
+
+@pytest.mark.parametrize('payload', [
+    {}, {'total_count': 0, 'jobs': []}, {'total_count': 2, 'jobs': [upstream_job('stock-reading', 'success')]},
+    {'total_count': 1, 'jobs': [dict(upstream_job('stock-independent-observations', 'failure'), run_id=99)]},
+    {'total_count': 1, 'jobs': [dict(upstream_job('stock-independent-observations', 'failure'), run_attempt=2)]},
+    {'total_count': 1, 'jobs': [dict(upstream_job('stock-independent-observations', 'failure'), status='in_progress')]},
+    {'total_count': 1, 'jobs': [dict(upstream_job('stock-independent-observations', 'failure'), conclusion=None)]},
+    {'total_count': 2, 'jobs': [upstream_job('stock-independent-observations', 'skipped')] * 2},
+])
+def test_incomplete_or_ambiguous_upstream_jobs_fail_closed(monkeypatch, tmp_path, payload):
+    mod = module()
+    stock_upstream(monkeypatch)
+    api = SimpleNamespace(get=lambda _: payload)
+    monkeypatch.setattr(mod, 'active_work', lambda _: pytest.fail('no daily collection'))
+    with pytest.raises(ValueError, match='^UPSTREAM_STOCK_JOB'):
+        mod.collect(api, tmp_path, NOW)
+
+
+@pytest.mark.parametrize('event,path', [('schedule', ''), ('workflow_dispatch', ''),
+    ('workflow_run', '.github/workflows/sector-radar-shadow.yml'),
+    ('workflow_run', '.github/workflows/decision-inbox.yml')])
+def test_other_reconciliation_origins_do_not_read_stock_jobs(monkeypatch, event, path):
+    monkeypatch.setenv('GITHUB_EVENT_NAME', event)
+    monkeypatch.setenv('UPSTREAM_PATH', path)
+    api = SimpleNamespace(get=lambda _: pytest.fail('no new API query for other origins'))
+    assert module().independent_stock_upstream(api) is False
+
+
+def test_independent_completion_does_not_overwrite_daily_health(monkeypatch, tmp_path):
+    import sys
+    mod = module()
+    monkeypatch.setenv('GITHUB_REPOSITORY', mod.REPOSITORY)
+    monkeypatch.setenv('GITHUB_REF', 'refs/heads/main')
+    monkeypatch.setenv('GITHUB_RUN_ATTEMPT', '1')
+    monkeypatch.setenv('RECONCILE_MODE', 'execute')
+    report = {'status': mod.INDEPENDENT_NO_RECOVERY, 'action': None, 'open_gap': False}
+    (tmp_path / 'report.json').write_text(json.dumps(report))
+    monkeypatch.setattr(sys, 'argv', ['reconcile-radar-delivery.py', 'report', '--output', str(tmp_path)])
+    monkeypatch.setattr(mod, 'report_issue', lambda _: pytest.fail('no daily health mutation'))
+    assert mod.main() == 0
+    assert json.loads((tmp_path / 'report.json').read_text()) == report
+
+
+def test_workflow_guard_is_specific_to_independent_stock_purpose():
+    import yaml
+    root = Path(__file__).resolve().parents[1]
+    workflow = yaml.safe_load((root / '.github/workflows/stock-reading-after-sector.yml').read_text())
+    job = workflow['jobs']['reconcile-deliveries']
+    assert "github.event.workflow_run.path != '.github/workflows/hithink-stock-dump-trial.yml' ||" in job['if']
+    assert "!startsWith(github.event.workflow_run.display_title, 'stock-independent-observations |')" in job['if']
+    assert job['env']['UPSTREAM_PATH'] == '${{ github.event.workflow_run.path }}'
+    assert job['env']['UPSTREAM_RUN_ID'] == '${{ github.event.workflow_run.id }}'
+    assert job['env']['UPSTREAM_RUN_ATTEMPT'] == '${{ github.event.workflow_run.run_attempt }}'
+    assert job['env']['UPSTREAM_DISPLAY_TITLE'] == '${{ github.event.workflow_run.display_title }}'

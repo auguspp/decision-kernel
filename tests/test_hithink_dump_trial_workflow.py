@@ -10,8 +10,12 @@ def test_dump_trial_runs_only_reviewed_main_and_has_no_state_lane():
     assert "test \"$GITHUB_REF\" = \"refs/heads/main\"" in text
     assert "test \"$GITHUB_RUN_ATTEMPT\" = \"1\"" in text
     assert "schedule:" not in text and "pull_request" not in text
-    for forbidden in ("actions/cache", "decision-state/", "sector_radar_producer run", "decision-inbox", "contents: write", "continue-on-error", "gh workflow"):
+    for forbidden in ("actions/cache", "decision-state/", "sector_radar_producer run", "contents: write", "continue-on-error", "gh workflow"):
         assert forbidden not in text
+    # The only Inbox reference is the read-only shared-Key peer observation.
+    assert text.count('decision-inbox') == 1
+    assert "('sector-radar-shadow', 'decision-inbox', 'live-dogfood')" in text
+    assert "m['check_activity'](m['request_reader']" in text
     assert "persist-credentials: false" in text
     assert "cancel-in-progress: false" in text
     assert "timeout-minutes: 12" in text
@@ -20,7 +24,7 @@ def test_dump_trial_runs_only_reviewed_main_and_has_no_state_lane():
 
 def test_secret_is_only_in_acquisition_step_and_optional_libraries_are_installed():
     text = WORKFLOW.read_text(encoding="utf-8")
-    stock = text.split("  inspect:\n", 1)[1].split("  stock-reading:\n", 1)[0]
+    stock = text.split("  inspect:\n", 1)[1].split("  stock-independent-observations:\n", 1)[0]
     acquisition = stock.split("- name: Acquire one recent dump", 1)[1].split("- name: Repeat row inspection", 1)[0]
     assert "${{ secrets.HITHINK_FINANCE_API_KEY }}" in acquisition
     assert stock.count("${{ secrets.HITHINK_FINANCE_API_KEY }}") == 1
