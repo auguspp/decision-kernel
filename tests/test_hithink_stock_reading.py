@@ -117,7 +117,7 @@ def test_reported_cash_dividend_can_establish_bounded_price_reference_adjustment
     days,_,h,q,a=inputs()
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
         'dividend_per_share':'0.1','per_share_bonus':'0'}]
-    bars,meta=check(h,q,a,selection_mode=True)
+    bars,meta=check(h,q,a,selection_mode=True,action_reference_adjustment=True)
     w=meta['action_window_checks']['20']
     assert len(bars)==61 and not w['usable_for_raw_comparison']
     assert w['usable_for_price_reference_adjusted_comparison']
@@ -131,7 +131,7 @@ def test_reported_bonus_still_requires_separate_reference_review():
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][50]['date_ms'],
         'dividend_per_share':'0','per_share_bonus':'0.1'}]
     with pytest.raises(own.StockReadingInputError,match='REPORTED_CORPORATE_ACTION_IN_WINDOW'):
-        check(h,q,a,selection_mode=True)
+        check(h,q,a,selection_mode=True,action_reference_adjustment=True)
 
 
 def test_same_day_cash_action_reconciles_snapshot_previous_reference():
@@ -141,7 +141,7 @@ def test_same_day_cash_action_reconciles_snapshot_previous_reference():
     a['data']['item']=[{'ticker':'002714','ex_date_ms':h['data']['item'][-1]['date_ms'],
         'dividend_per_share':str(cash),'per_share_bonus':'0'}]
     q['data']['item'][0]['prev_price']=str(previous-cash)
-    _,meta=check(h,q,a,selection_mode=True)
+    _,meta=check(h,q,a,selection_mode=True,action_reference_adjustment=True)
     assert meta['latest_quote_previous_reference']['basis']=='REPORTED_ACTION_REFERENCE_ADJUSTED'
     assert Decimal(meta['latest_quote_previous_reference']['expected_reference_price'])==previous-cash
 
