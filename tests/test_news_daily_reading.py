@@ -98,7 +98,16 @@ def test_rolling_history_is_visible_in_read_package(tmp_path, monkeypatch):
 
 def test_old_single_window_artifact_without_history_remains_readable(tmp_path, monkeypatch):
     col, baseline, _, artifact, files = ready(tmp_path, monkeypatch)
-    files.pop(s.HISTORY_FILE, None)
+    # Model the actual old contract, not a damaged v2 capture declaring absent history.
+    for name in (s.HISTORY_FILE, s.HISTORY_INPUT, s.RECOVERY_FILE):
+        files.pop(name, None)
+    plan = json.loads(files['plan.json']); plan.pop('rolling_history_version')
+    files['plan.json'] = m.json_bytes(plan)
+    manifest = json.loads(files['capture.json'])
+    manifest['files'] = {name: {'bytes': len(files[name]), 'sha256': m.sha256(files[name])}
+                         for name in manifest['files'] if name in files}
+    files['capture.json'] = m.json_bytes(manifest)
+    files['observations.json'] = m.json_bytes(s.rebuild(files, cutoff=TIME))
     raw = pack(files)
     col.api.archives[991] = raw
     artifact.update(size_in_bytes=len(raw), digest='sha256:' + m.sha256(raw))
@@ -107,6 +116,17 @@ def test_old_single_window_artifact_without_history_remains_readable(tmp_path, m
     assert state['status'] == 'WINDOWS_CAPTURED'
     assert state['rolling_history_status'] == 'ROLLING_HISTORY_STARTED'
     assert state['rolling_observation_count'] == 7
+
+
+def test_missing_declared_history_is_not_accepted_as_a_legacy_capture(tmp_path, monkeypatch):
+    col, baseline, _, artifact, files = ready(tmp_path, monkeypatch)
+    del files[s.HISTORY_FILE]
+    raw = pack(files); col.api.archives[991] = raw
+    artifact.update(size_in_bytes=len(raw), digest='sha256:' + m.sha256(raw))
+    result = r.attach(col, baseline)
+    assert result['research']['daily_news']['status'] == 'UNAVAILABLE_OR_REJECTED'
+    assert result['lanes'] == baseline['lanes']
+
 
 def test_no_run_and_stale_window_are_not_quiet(tmp_path, monkeypatch):
     col, baseline, _, _, _ = ready(tmp_path, monkeypatch)

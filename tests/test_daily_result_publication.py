@@ -65,9 +65,11 @@ def test_previous_trigger_routes_keep_their_contract(name,trigger,conclusion,exp
     assert allows(data) is expected
 
 
-def test_direct_cutoff_schedule_enters_same_read_only_publisher():
-    data=event(); data['event_name']='schedule'
-    assert allows(data)
+@pytest.mark.parametrize('cron,expected', [
+    ('50 23 * * *', True), ('10 11 * * *', True), ('3/10 * * * *', False)])
+def test_direct_cutoff_schedule_enters_same_read_only_publisher(cron, expected):
+    data=event(); data['event_name']='schedule'; data['event']={'schedule':cron}
+    assert allows(data) is expected
 
 
 def test_publisher_does_not_execute_research_or_workflow_run_code():
