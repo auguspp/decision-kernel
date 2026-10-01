@@ -25,16 +25,19 @@ for the generic rule, not a ticker-specific exception.
 
 ## Generic qualification rule
 
-For a successful corporate-action response, retained cash and bonus fields are
-validated before the snapshot previous-reference comparison. For an event on
+For a successful corporate-action response, retained event fields are validated
+before the snapshot previous-reference comparison. This change qualifies only
+a cash dividend with zero bonus/share-transfer. For an event on
 `(base close, end close]`, the price-comparison reference factor is:
 
-`(previous_raw_close - cash_per_share) / (previous_raw_close * (1 + bonus_per_share))`
+`(previous_raw_close - cash_per_share) / previous_raw_close`
 
 The factor is used only when every crossing event has supported, positive,
-source-bound arithmetic. Raw bars and event rows stay unchanged and retained.
-A zero-effect/unsupported event, missing required bar, invalid arithmetic,
-identity mismatch, pagination/truncation, or malformed event still fails closed.
+source-bound cash arithmetic. Raw bars and event rows stay unchanged and retained.
+Bonus/share-transfer events remain separate-review because the required exchange
+rounding/reference-price convention has not been established here. A zero-effect
+or unsupported event, missing required bar, invalid arithmetic, identity mismatch,
+pagination/truncation, or malformed event still fails closed.
 
 This is a price-reference adjustment for comparison. It is not a total-return
 series, dividend reinvestment, economic return, valuation adjustment, or
