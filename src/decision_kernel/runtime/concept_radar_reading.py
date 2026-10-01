@@ -7,6 +7,7 @@ import re
 import tempfile
 
 from . import concept_radar_capture as capture
+from . import concept_detail_compat as compat
 from . import current_state as model
 from . import institutional_radar_reading as shared
 
@@ -69,7 +70,7 @@ def read(collector, cutoff):
         root = Path(directory)
         for name, raw in payload.items():
             (root / name).write_bytes(raw)
-        replay = capture.verify(root)
+        replay, replay_mode = compat.verify_primary(root)
     model.check(json.loads(files['verification.json']) == replay, 'Concept origin verification differs')
     report = json.loads(payload['observation.json'])
     collector.concept_read_stage = 'READ_RETENTION'
@@ -80,6 +81,6 @@ def read(collector, cutoff):
     status.update(status='VERIFIED_SAVED_CONCEPT_SOURCE', archive=archive, details=details,
                   capture_status=receipt['status'], market_session=report['projection']['market_session'],
                   source_observed_at=report['projection']['as_of'], projection_hash=report['projection_hash'],
-                  coverage=report['projection']['coverage'], replay=replay,
+                  coverage=report['projection']['coverage'], replay=replay, replay_mode=replay_mode,
                   meaning='ORIGINAL_BYTES_REBUILT; NOT_NEW_ACQUISITION_OR_COMPLETE_TRENDS_OR_RESEARCH')
     return report, details['observation.json'], status
