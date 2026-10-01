@@ -1,44 +1,40 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "22.44",
+  "capture_age_hours": "22.47",
   "capture_hash": "47089d48136c7505af4050f352b568a9b52785a1e6626691d943a6a8adfaee86",
   "current_reading": {
-    "control": {
-      "blockers": [],
-      "checked_at": "2026-09-30T17:58:44.340699+00:00",
-      "code_commit": "1e095bae9f9fa11dbc255a3df1a7246d89db3877",
-      "decision": "RUN_INITIAL_OR_DAILY",
-      "event": "schedule",
-      "hithink_activity": "NO_VISIBLE_PEER",
-      "investment_authority": "NONE",
-      "pending_delivery_count": 0,
-      "pending_source_run_id": null,
-      "prior_read_status": "EXACT_PRIOR_STATE_READ",
-      "prior_reading": "c0bb0a84af8f98d1f9f6373c3a4704e60844ddcf",
-      "run_id": 36755230971,
-      "skip_hithink": false,
-      "target_date": "2026-10-01",
-      "today_invocations": 1,
-      "version": "smart-money-observation-v1"
-    },
+    "control": null,
     "latest_attempt": {
-      "conclusion": "success",
-      "created_at": "2026-09-30T17:58:29Z",
+      "conclusion": null,
+      "created_at": "2026-10-01T16:32:14Z",
       "event": "schedule",
-      "head_sha": "1e095bae9f9fa11dbc255a3df1a7246d89db3877",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36755230971",
-      "id": 36755230971,
+      "head_sha": "0a4d816a548361a3b12734f2fb5471b4b71aecc5",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36892733482",
+      "id": 36892733482,
       "operation": null,
       "path": ".github/workflows/radar-smart-money.yml",
       "run_attempt": 1,
-      "run_started_at": "2026-09-30T17:58:29Z",
-      "status": "completed",
-      "updated_at": "2026-09-30T18:12:39Z"
+      "run_started_at": "2026-10-01T16:32:14Z",
+      "status": "in_progress",
+      "updated_at": "2026-10-01T16:32:19Z"
     },
-    "previous_status": "EXACT_PREVIOUS_5320a51f08fa359807255b5bfda2c208f0103729",
-    "run_metadata_reads": [],
-    "status": "PARTIAL_WITH_EXPLICIT_GAPS",
-    "uses_prior_observation": false
+    "previous_status": "EXACT_PREVIOUS_04368308cb97ec6ebd9d5d1b154acbda1f0ff689",
+    "run_metadata_reads": [
+      {
+        "attempt": 1,
+        "attempt_status": "in_progress",
+        "attempt_updated_at": "2026-10-01T16:32:19Z",
+        "checked_at": "2026-10-01T16:33:48.469269+00:00",
+        "endpoint": "actions/runs/36892733482/attempts/1",
+        "meaning": "SAME_IDENTITY_ATTEMPT_READ_NOT_STATUS_INFERENCE_OR_RETRY",
+        "reads": 1,
+        "run_id": 36892733482,
+        "run_status": "in_progress",
+        "run_updated_at": "2026-10-01T16:32:19Z"
+      }
+    ],
+    "status": "AWAITING_CURRENT_CAPTURE",
+    "uses_prior_observation": true
   },
   "cutoff": "2026-09-30T18:05:27.510808+00:00",
   "families": {
@@ -2308,7 +2304,7 @@
       },
       "capture_hash": "47089d48136c7505af4050f352b568a9b52785a1e6626691d943a6a8adfaee86",
       "cutoff": "2026-09-30T18:05:27.510808+00:00",
-      "reading_commit": null,
+      "reading_commit": "04368308cb97ec6ebd9d5d1b154acbda1f0ff689",
       "run": {
         "conclusion": "success",
         "created_at": "2026-09-30T17:58:29Z",
@@ -2462,12 +2458,12 @@
   },
   "reading_freshness": "RECENT_CAPTURE_NOT_EACH_SOURCE_FRESHNESS",
   "relay_reading": {
-    "current_status": "PARTIAL_WITH_EXPLICIT_GAPS",
+    "current_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
     "diagnostics": {},
-    "previous_status": "NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE"
+    "previous_status": "EXACT_PREVIOUS_SUPPLEMENT"
   },
   "relay_supplement": {
-    "current_run_status": "PARTIAL_WITH_EXPLICIT_GAPS",
+    "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
     "cutoff": "2026-09-30T18:12:33.892581+00:00",
     "family_coverage": {
       "hm_detail": {
@@ -2493,7 +2489,7 @@
     },
     "market_session": "2026-09-30",
     "meaning": "SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE",
-    "reading_relation": "CURRENT_SOURCE_RUN",
+    "reading_relation": "PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT",
     "relay_host": "https://pcd.mobcvb.cn/tushare/pro",
     "status": "PARTIAL_WITH_EXPLICIT_GAPS"
   },
