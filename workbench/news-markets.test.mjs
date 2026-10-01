@@ -117,6 +117,10 @@ test('actual app exposes News and preserves exact-R reading after refresh',async
       assert.equal(options.credentials,'same-origin');assert.equal(options.headers?.['X-Decision-Kernel-Intent'],'read-model-ref');
       data={ref:READ_REF,commit:ref};
     }
+    else if(url==='/api/read-model/news-live'){
+      assert.equal(options.credentials,'same-origin');assert.equal(options.headers?.['X-Decision-Kernel-Intent'],'news-live-ref');
+      return new Response(JSON.stringify({code:'TEST_ONLY_LIVE_UNAVAILABLE'}),{status:503,headers:{'Content-Type':'application/json'}});
+    }
     else if(url.includes('/git/ref/'))data={ref:'refs/heads/'+READ_REF,object:{type:'commit',sha:ref}};
     else if(url.endsWith('/current-state.json'))data={schema_version:1,entry_ref:READ_REF,code_commit:'c'.repeat(40),reading_hash:H,...auth,lanes:{},
       semantics:'READ_ONLY_SAVED_RESULTS_AND_EXPLICIT_REQUESTS_NOT_RESTORE_AUTHORITY',checks:{},research:{daily_news:{...f.saved,details:{json:descriptor(bodies.get(ref))}}}};
@@ -139,5 +143,6 @@ test('actual app exposes News and preserves exact-R reading after refresh',async
     for(let i=0;i<100 && !ids.content.textContent.includes('新闻-'+ref);i++)await tick(1);
     assert.match(ids.content.textContent,new RegExp('新闻-'+ref));assert.ok(!ids.content.textContent.includes('新闻-'+R));
     assert.equal(calls.filter(u=>u.endsWith('/details/radar/news-daily.json')).length,2);
+    assert.ok(calls.filter(u=>u==='/api/read-model/news-live').length>=2);
   }finally{for(const k of Object.keys(globals)){if(previous[k])Object.defineProperty(globalThis,k,previous[k]);else delete globalThis[k];}}
 });

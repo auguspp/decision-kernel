@@ -1,5 +1,6 @@
 import {quickInboxPage, transferButton} from './quick-inbox-ui.mjs';
 import {newsPage, marketsPage} from './news-markets.mjs';
+import {openLiveNews} from './news-live.mjs';
 import {FILE_LIMIT, REPO, openReading, readQuick, readHealth, loadModules, resumeText, fileUrl, references} from './reading.mjs';
 import {locations, referenceMatches, watchSummary, watchState, companyName, companyMatches} from './presentation.mjs';
 import {localTime, recordsView, outline, paragraphs, documentView, useLabel, companyStatus, priceCondition, marketEntries, attentionView, companyMaterials, watchOrigin, attentionResume, bookProfile, displayDecimal, humanValue, humanGap, researchReading, previewSource} from './product.mjs';
@@ -17,6 +18,7 @@ const enabled = new Set(Object.keys(labels));
 let companyQuery = '', selectedAttention = null, selectedCompany = null, bookPage = 0;
 let previews = new Map(), renderGeneration = 0;
 let selected = 'attention', results = {}, reading = null, assets = null, detailGeneration = 0;
+let liveNews = null, liveNewsRequest = 0;
 const $ = id => document.getElementById(id);
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -284,7 +286,15 @@ function render(keepDetail = false) {
     const originals = disclosure('全部 Odds 原件与定位');
     showRefs(originals, item => /odds/i.test(`${item.path} ${item.read_path}`)); target.append(originals);
   }
-  if (selected === 'news' || selected === 'markets') {
+  if (selected === 'news') {
+    if (!liveNews) startLiveNews();
+    const current=reading,generation=renderGeneration;
+    newsPage(target,{reading:current,liveNews,reloadLiveNews:()=>{startLiveNews(true);if(selected==='news')render(true);},
+      active:()=>generation===renderGeneration,
+      onRead:source=>current&&readDetail(source,current),onCompany:code=>goCompany(code),
+      ui:{el,card,button,link,notice,folded,disclosure,dataTable}});
+  }
+  if (selected === 'markets') {
     if (!reading) target.append(gap(labels[selected], results.reading?.reason));
     else {
       const current = reading, generation = renderGeneration;
@@ -292,16 +302,14 @@ function render(keepDetail = false) {
         active: () => current === reading && generation === renderGeneration,
         onRead: source => readDetail(source, current), onCompany: code => goCompany(code),
         ui: {el, card, button, link, notice, folded, disclosure, dataTable}};
-      (selected === 'news' ? newsPage : marketsPage)(target, context);
-      if (selected === 'markets') {
-        const summaries = card('概念与其他市场材料', '保留原观察日期与范围；未解释的原因仍是未知。');
-        for (const entry of marketEntries(current).filter(e => ['概念观察', '板块变化'].includes(e.label))) {
-          summaries.append(el('h4', entry.label));
-          if (entry.source) summaries.append(button('阅读已保存摘要', () => readDetail(entry.source, current, {title: entry.label})));
-          else summaries.append(el('p', entry.gap, 'small'));
-        }
-        target.append(summaries);
+      marketsPage(target, context);
+      const summaries = card('概念与其他市场材料', '保留原观察日期与范围；未解释的原因仍是未知。');
+      for (const entry of marketEntries(current).filter(e => ['概念观察', '板块变化'].includes(e.label))) {
+        summaries.append(el('h4', entry.label));
+        if (entry.source) summaries.append(button('阅读已保存摘要', () => readDetail(entry.source, current, {title: entry.label})));
+        else summaries.append(el('p', entry.gap, 'small'));
       }
+      target.append(summaries);
       const more = disclosure('其他已保存材料与原件定位');
       showRefs(more, item => locations(item).some(place => /^lanes\.(sector|stock)\./.test(place)) || /radar\//.test(item.read_path));
       target.append(more);
@@ -317,8 +325,18 @@ function render(keepDetail = false) {
     } else target.append(gap('独立健康', results.health?.reason));
   }
 }
+function startLiveNews(force=false){
+  if(liveNews?.status==='LOADING'&&!force)return;
+  const request=++liveNewsRequest;liveNews={status:'LOADING'};
+  openLiveNews(globalThis.fetch).then(value=>{
+    if(request!==liveNewsRequest)return;liveNews={status:'READ',value};if(selected==='news')render(true);
+  }).catch(error=>{
+    if(request!==liveNewsRequest)return;liveNews={status:'GAP',reason:String(error?.message||'NEWS_LIVE_READ_FAILED')};
+    if(selected==='news')render(true);
+  });
+}
 async function refresh() {
-  $('refresh').disabled = true; ++detailGeneration; ++renderGeneration; reading = null; assets = null; selectedAttention = null; selectedCompany = null; previews = new Map(); bookPage = 0; results = {};
+  $('refresh').disabled = true; ++detailGeneration; ++renderGeneration; ++liveNewsRequest; liveNews = null; reading = null; assets = null; selectedAttention = null; selectedCompany = null; previews = new Map(); bookPage = 0; results = {};
   $('detail').replaceChildren(); $('content').replaceChildren(card('正在读取', '只读取 GitHub 已保存结果，不启动采集、研究或任务。'));
   $('identity').textContent = '读取中…';
   try {

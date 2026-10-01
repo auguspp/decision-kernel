@@ -6,6 +6,7 @@ import {calendarPage} from './research-calendar.mjs';
  * Same-R registered bytes only. Source titles and dates remain claims, not facts.
  */
 import {fileUrl} from './reading.mjs';
+import {liveNewsView,liveNewsResume} from './news-live.mjs';
 import {newsUpdateControls, requestControl, sectorQuickRequest} from './on-demand.mjs';
 import {localTime, displayDecimal} from './product.mjs';
 const sources = {cls:'财联社', wallstreetcn:'华尔街见闻', fastbull:'FastBull', jin10:'金十数据', mktnews:'MKTNews', gelonghui:'格隆汇', thepaper:'澎湃新闻'};
@@ -96,11 +97,70 @@ function readSaved(reading, descriptor) {
   if (!entries.has(key)) entries.set(key,reading.readFile(descriptor));
   return entries.get(key);
 }
+function liveNewsPage(target,ctx) {
+  const {reading,liveNews,reloadLiveNews,ui,active}=ctx,{el,card,button,link,notice,folded}=ui;
+  const live=liveNews.value,view=liveNewsView(live),panel=card('新闻 · 滚动更新',
+    '优先读取最近一次已验证的 News rolling ref；约10分钟是采集调度目标，不是实时SLA。标题仍是来源表述，不自动成为 Evidence 或研究结论。');
+  target.append(panel);
+  const actions=el('div',undefined,'product-actions');
+  actions.append(button('重新读取最新滚动新闻',()=>reloadLiveNews()));
+  if(reading) newsUpdateControls(actions,ctx);
+  panel.append(actions,el('p',`News live R：${live.ref} · 采集截止：${localTime(view.captured)} · 本页读取：${localTime(live.checkedAt)}`,'small'));
+  if(view.stale) panel.append(notice('最新可读采集已超过30分钟；这表示数据陈旧，不代表期间没有新闻。'));
+  if(view.status==='ROLLING_HISTORY_STARTED') panel.append(notice('滚动历史仍在建立，实际接续链尚未覆盖完整18小时。'));
+  if(view.losses.length) panel.append(notice(`滚动窗口保留 ${view.losses.length} 项恢复/容量缺口；后续成功不会把这些缺口改写成完整覆盖。`));
+  if(view.coverage.maximum_capture_gap_seconds>1800) panel.append(notice(
+    `目标窗口内最大采集间隔 ${view.coverage.maximum_capture_gap_seconds} 秒；该间隔内不能视为完整新闻覆盖。`));
+  if(view.coverage.source_gap_capture_count>0) panel.append(notice(
+    `窗口内有 ${view.coverage.source_gap_capture_count} 个批次存在来源缺口；其他来源仍独立保留。`));
+  panel.append(el('p',`滚动目标：${localTime(view.windowStart)} 起；实际链开始：${localTime(view.retainedSince)}；保留 ${view.rows.length} 个文章版本。`),
+    el('p','first_seen / last_seen 是本保留链的抓取时钟，不是发布者时间；同一文章修订会保留为不同 version。','small'));
+  const toolbar=el('div',undefined,'product-actions'),input=el('input'),select=el('select'),list=el('div');let page=0;
+  input.type='search';input.placeholder='搜索滚动新闻标题';input.setAttribute('aria-label','搜索滚动新闻标题');
+  select.setAttribute('aria-label','滚动新闻来源');
+  const ids=[...new Set(view.rows.map(r=>r.source))];
+  for(const [id,label] of [['','全部来源'],...ids.map(id=>[id,sources[id]||id])]){const o=el('option',label);o.value=id;select.append(o);}
+  toolbar.append(input,select);panel.append(toolbar,list);
+  function draw(){
+    const rows=view.rows.filter(r=>(!select.value||r.source===select.value)&&r.title.toLowerCase().includes(input.value.trim().toLowerCase()));
+    page=Math.min(page,Math.max(0,Math.ceil(rows.length/20)-1));
+    list.replaceChildren(el('p',`筛选 ${rows.length} 条 · 第 ${page+1} / ${Math.max(1,Math.ceil(rows.length/20))} 页`,'small'));
+    if(!rows.length)list.append(el('p','当前筛选无匹配标题；不是市场没有新闻。'));
+    for(const row of rows.slice(page*20,page*20+20)){
+      const published=row.publishedClaims.length===1?localTime(row.publishedClaims[0]):
+        row.publishedClaims.length>1?'时间声明不一致':'发布时间未知';
+      const article=el('article',undefined,'human-research-row');
+      article.append(el('h4',row.title),el('p',`${sources[row.source]||row.source} · 原文时间声明：${published}`,'small'),
+        el('p',`本链首次抓取：${localTime(row.firstSeen)} · 最近抓取：${localTime(row.lastSeen)} · 经济联系尚未研究`,'small'));
+      const rowActions=el('div',undefined,'product-actions'),safe=articleURL(row.url);
+      if(safe)rowActions.append(link('查看原报道',safe));else rowActions.append(el('p','原报道链接不可安全打开。','small'));
+      const request=el('pre');request.hidden=true;
+      const copy=button('复制单条 Quick 请求（备用，不保存）',async()=>{
+        if(!active())return;request.textContent=liveNewsResume(live,row);
+        try{await navigator.clipboard.writeText(request.textContent);copy.textContent='已复制；需到 ChatGPT 提交，尚未启动';}
+        catch{request.hidden=false;copy.textContent='请复制下方请求；尚未启动';}
+      });
+      rowActions.append(copy);article.append(rowActions,request,folded('来源与抓取原值',JSON.stringify(row.original,null,2)));list.append(article);
+    }
+    pager(list,page,rows.length,20,n=>{page=n;draw();},ui);
+  }
+  input.oninput=()=>{page=0;draw();};select.onchange=()=>{page=0;draw();};draw();
+  if(reading?.payload?.research?.daily_news?.details?.json)panel.append(el('p','低频 current-state 新闻快照仍保留作审计与回退，不在此重复展开。','small'));
+}
+export function newsPage(target,ctx) {
+  if(ctx.liveNews?.status==='READ')return liveNewsPage(target,ctx);
+  const reason=ctx.liveNews?.status==='GAP'?
+    '滚动新闻本次未取得或核验失败，下面回退到低频保存快照；失败不能解释为没有新消息。':
+    ctx.liveNews?.status==='LOADING'?'正在核对最新滚动新闻；下面暂时显示低频保存快照。':null;
+  return savedNewsPage(target,ctx,reason);
+}
 /** Uses the existing app's native table/text/disclosure helpers. No HTML injection. */
-export function newsPage(target, ctx) {
+function savedNewsPage(target, ctx, liveGap=null) {
   const {reading, ui, active, onRead, onCompany}=ctx, {el,card,button,link,notice,folded,disclosure}=ui;
-  const saved=reading.payload.research?.daily_news, descriptor=saved?.details?.json;
-  const panel=card('新闻 · 已保存窗口','按来源与关键词阅读。标题是原报道表述；尚未合并为已核实事件，也未关联新的 Quick 解读。'); target.append(panel);
+  const saved=reading?.payload?.research?.daily_news, descriptor=saved?.details?.json;
+  const panel=card('新闻 · 低频保存快照','滚动 News live 不可用或仍在读取时的回退。标题是原报道表述；尚未合并为已核实事件。'); target.append(panel);
+  if(liveGap)panel.append(notice(liveGap));
+  if(!reading){panel.append(notice('完整 current-state 本次也不可读；不能据此判断没有新闻。'));return;}
   newsUpdateControls(panel,ctx);
   panel.append(notice('刷新只采集新闻；下方仍是当前保存版本。研究请加入待 Quick，页面不会自动开展研究。'));
   if (saved?.status === 'STALE_CAPTURE_NOT_TODAY_NEWS') panel.append(notice('这个保存窗口已陈旧，不代表今天的新消息。'));
