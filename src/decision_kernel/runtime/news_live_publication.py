@@ -67,6 +67,43 @@ class NewsLiveGitHubAPI(delivery.GitHubAPI):
         m.check(len(response.content) <= 8 * 1024 * 1024, "GitHub JSON response limit")
         return response.json()
 
+    def file(self, path: str, ref: str) -> bytes:
+        """Read only the two live files via commit -> tree -> bounded Git blob.
+
+        Contents JSON omits bodies above 1 MB; rolling history permits 2 MiB.
+        Reuse the existing authenticated, no-redirect, no-retry transport without
+        changing current-state's implementation or following a response URL.
+        """
+        m.check(path in {MANIFEST, HISTORY}, "News live read path outside scope")
+        m.check(isinstance(ref, str) and m.SHA.fullmatch(ref) is not None,
+                "News live file requires exact commit")
+        saved = self.get("git/commits/" + ref)
+        tree_sha = saved.get("tree", {}).get("sha", "")
+        m.check(saved.get("sha") == ref and m.SHA.fullmatch(tree_sha) is not None,
+                "News live commit identity differs")
+        tree = self.get("git/trees/" + tree_sha)
+        entries = tree.get("tree")
+        m.check(tree.get("sha") == tree_sha and tree.get("truncated") is False
+                and isinstance(entries, list) and len(entries) == 2
+                and {entry.get("path") for entry in entries} == {MANIFEST, HISTORY},
+                "News live tree inventory differs")
+        entry = next(row for row in entries if row["path"] == path)
+        size, sha = entry.get("size"), entry.get("sha", "")
+        limit = source.MAX_HISTORY_BYTES if path == HISTORY else 192 * 1024
+        m.check(entry.get("type") == "blob" and entry.get("mode") == "100644"
+                and m.SHA.fullmatch(sha) is not None
+                and type(size) is int and 0 < size <= limit,
+                "News live file descriptor differs")
+        blob = self.get("git/blobs/" + sha)
+        m.check(blob.get("sha") == sha and type(blob.get("size")) is int
+                and blob["size"] == size and blob.get("encoding") == "base64"
+                and isinstance(blob.get("content"), str), "News live blob descriptor differs")
+        encoded = "".join(blob["content"].split())
+        m.check(len(encoded) == 4 * ((size + 2) // 3), "News live blob encoding size differs")
+        raw = base64.b64decode(encoded, validate=True)
+        m.check(len(raw) == size and m.blob_sha(raw) == sha, "News live file blob differs")
+        return raw
+
 
 def _load(root: Path) -> dict[str, bytes]:
     m.check(root.is_dir() and not root.is_symlink(), "News live capture directory required")
