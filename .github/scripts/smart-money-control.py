@@ -117,6 +117,18 @@ def retained_relay_source(previous, reader):
             'capture_hash':previous['capture_hash']}
 
 
+def production_run_scope(page,today):
+    from decision_kernel.runtime.ftshare_stock_history_comparison import is_comparison_run
+    runs=page['workflow_runs']
+    if not isinstance(runs,list) or page['total_count']<len(runs):raise ValueError('RUN_QUERY_INCOMPLETE')
+    scanned_runs=runs
+    excluded_comparisons=[r['id'] for r in runs if is_comparison_run(r)]
+    runs=[r for r in runs if not is_comparison_run(r)]
+    today_runs=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00')).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat()==today]
+    if len(scanned_runs)==30 and all(datetime.fromisoformat(r['created_at'].replace('Z','+00:00')).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat()==today for r in scanned_runs):raise ValueError('DAILY_RUN_SCOPE_INCOMPLETE')
+    return runs,today_runs,excluded_comparisons
+
+
 def main():
     from decision_kernel.runtime import current_state as m
     from decision_kernel.runtime import smart_money_sources as s, smart_money_capture as capture
@@ -149,10 +161,7 @@ def main():
             read_status='EXACT_PRIOR_STATE_READ'
         else:read_status='NO_SMART_MONEY_STATE_IN_READING'
     page=get('actions/workflows/radar-smart-money.yml/runs',{'branch':'main','per_page':30})
-    runs=page['workflow_runs']
-    if not isinstance(runs,list) or page['total_count']<len(runs):raise ValueError('RUN_QUERY_INCOMPLETE')
-    today_runs=[r for r in runs if datetime.fromisoformat(r['created_at'].replace('Z','+00:00')).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat()==today]
-    if len(runs)==30 and len(today_runs)==30:raise ValueError('DAILY_RUN_SCOPE_INCOMPLETE')
+    runs,today_runs,excluded_comparisons=production_run_scope(page,today)
     decision=choose(previous,today,len(today_runs),env['GITHUB_EVENT_NAME'])
     repair=env.get('REPAIR_PENDING','false')=='true'
     if repair:
@@ -195,6 +204,9 @@ def main():
              'prior_reading':reading,'prior_read_status':read_status,'hithink_activity':activity_status,
              'pending_source_run_id':pending_source,'blockers':blockers,'skip_hithink':skip_ht,'pending_delivery_count':len((previous or {}).get('unresolved',[])),
              'investment_authority':'NONE'}
+    if excluded_comparisons:
+        control['excluded_comparison_runs']=excluded_comparisons
+        control['comparison_source_quota']='SEPARATE_EXPLICIT_TWELVE_CALL_CAP_NOT_FREE_OR_UNCOUNTED_BY_PROVIDER'
     if relay_only:
         control.update(relay_only=True,relay_source=relay_source,relay_jobs_started_today=relay_count)
     if reports_only:control['relay_reports_only']=True
