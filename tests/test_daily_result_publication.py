@@ -15,7 +15,11 @@ def expression():
 
 
 def namespace(value):
-    return SimpleNamespace(**{k:namespace(v) if isinstance(v,dict) else v for k,v in value.items()})
+    class Context(SimpleNamespace):
+        # GitHub expressions resolve a missing property to an empty string.
+        def __getattr__(self, name):
+            return ''
+    return Context(**{k:namespace(v) if isinstance(v,dict) else v for k,v in value.items()})
 
 
 def event():

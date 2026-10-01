@@ -31,6 +31,17 @@ ROUTES = {'history_candles': BASE + 'v1/market/data/stock-candlesticks',
 MAX_CALLS, MAX_BYTES = 12, 2 * 1024 * 1024
 STOP = {401: 'AUTHENTICATION_FAILED', 403: 'ENTITLEMENT_DENIED', 429: 'RATE_LIMITED'}
 require = original._require
+# Diagnostic names are constants, never arbitrary provider key text. The factor
+# names were observed in run 36821818724; naming them does not qualify semantics.
+STRUCTURAL_FIELDS = frozenset(('code', 'data', 'message', 'items', 'records',
+    'index_descriptions', 'pageNum', 'pageSize', 'total', 'pages', 'total_pages'))
+ROW_FIELDS = frozenset(('open', 'high', 'low', 'close', 'volume', 'turnover',
+    'turnover_rate', 'ts_millis', 'ts_millis_open', 'adj_factor', 'ex_adj_factor',
+    'symbol', 'trade_date', 'ann_date', 'reporting_period', 'cash_dividend_ratio',
+    'bonus_issue_ratio', 'bonus_issue_from_capital_reserves_ratio', 'ex_dividend_date',
+    'record_date', 'payout_date', 'share_listing_date', 'ann_url',
+    'total_cash_dividend_ratio', 'total_bonus_issue_ratio',
+    'total_bonus_issue_from_capital_reserves_ratio'))
 # Exact already-retained HiThink capture, not another source acquisition.
 REFERENCE_RUN, REFERENCE_ARTIFACT = 36815556951, 11141865519
 REFERENCE_HASH = '60c2a60017ba3f3aca53e9fe4467e3ea397d807c8484df8fa707789571e301ef'
@@ -104,6 +115,51 @@ def session(ts):
     return datetime.fromtimestamp(ts / 1000, ZONE).date().isoformat()
 
 
+def safe_field_names(keys, allowed):
+    return sorted({key for key in keys if isinstance(key, str) and key in allowed
+                   and re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]{0,63}', key)})[:64]
+
+
+def response_structure(obj):
+    """Bounded shape evidence only; no values, messages or arbitrary key names."""
+    out = {'response_top_type': type(obj).__name__}
+    rows = obj
+    if isinstance(obj, dict):
+        out['response_root_keys'] = safe_field_names(obj, STRUCTURAL_FIELDS)
+        out['response_root_other_key_count'] = min(len(obj) - len(out['response_root_keys']), 64)
+        if 'data' in obj:
+            rows = obj['data']
+            out['response_data_type'] = type(rows).__name__
+            if isinstance(rows, dict):
+                out['response_data_keys'] = safe_field_names(rows, STRUCTURAL_FIELDS)
+                out['response_data_other_key_count'] = min(len(rows) - len(out['response_data_keys']), 64)
+        code = obj.get('code')
+        if type(code) is int and -99999 <= code <= 99999:
+            out['provider_code'] = code
+    if isinstance(rows, list):
+        out['response_row_field_names'] = safe_field_names(
+            (key for row in rows[:86] if isinstance(row, dict) for key in row), ROW_FIELDS)
+    return out
+
+
+def candle_payload(obj):
+    """Endpoint bare array or the SDK's data-array envelope, strictly qualified.
+
+    Official SDK 23eb471c response.py documents data arrays and code 0/200.
+    This does not adopt its generic nested/items extraction or string codes.
+    """
+    if isinstance(obj, dict):
+        code = obj.get('code')
+        require(type(code) is int, 'CANDLE_SHAPE')
+        require(code in (0, 200), STOP.get(code, 'PROVIDER_REJECTED'))
+        require(set(obj) <= {'code', 'data', 'message'}
+                and ('message' not in obj or obj['message'] is None or isinstance(obj['message'], str)),
+                'CANDLE_SHAPE')
+        obj = obj.get('data')
+    require(isinstance(obj, list), 'CANDLE_SHAPE')
+    return obj
+
+
 def candle_rows(rows, *, hithink=False):
     require(isinstance(rows, list) and len(rows) <= 86, 'CANDLE_SHAPE')
     out = {}
@@ -126,7 +182,7 @@ def candle_rows(rows, *, hithink=False):
 def compare_candles(rows, prior, symbol):
     require(prior.get('code') == 0 and prior['data']['thscode'] == symbol
             and prior['data']['adjust'] == 'none' and prior['data']['interval'] == '1d', 'REFERENCE_IDENTITY')
-    current, old = candle_rows(rows), candle_rows(prior['data']['item'], hithink=True)
+    current, old = candle_rows(candle_payload(rows)), candle_rows(prior['data']['item'], hithink=True)
     common = sorted(current.keys() & old.keys())
     fields = ('open', 'high', 'low', 'close', 'volume', 'turnover')
     return {'status': 'PRODUCER_SIDE_RAW_BAR_COMPARISON', 'ftshare_rows': len(current),
@@ -245,16 +301,19 @@ def capture(output, prior, *, fetch=None, clock=original.now):
                     require(type(status) is int and isinstance(raw, bytes) and 0 < len(raw) <= MAX_BYTES, 'RESPONSE_INVALID')
                     (raw_dir / f'{len(result["calls"]):02}.json').write_bytes(raw)
                     event.update(http_status=status, bytes=len(raw), sha256=sha256(raw).hexdigest())
-                    require(status == 200, STOP.get(status, 'HTTP_REJECTED'))
+                    if status != 200:
+                        # Error-body diagnostics are best effort and can never
+                        # override an HTTP stop or qualify a rejection's cause.
+                        try:
+                            event.update(response_structure(decode(raw)))
+                        except (ValueError, TypeError, OverflowError, RecursionError):
+                            pass
+                        raise original.DiscoveryError(STOP.get(status, 'HTTP_REJECTED'))
                     obj = decode(raw)
-                    event['response_top_type'] = type(obj).__name__
-                    if isinstance(obj, dict) and type(obj.get('code')) is int:
-                        event['provider_code'] = obj['code']
-                    if isinstance(obj, dict) and obj.get('code') in STOP:
+                    event.update(response_structure(obj))
+                    if isinstance(obj, dict) and type(obj.get('code')) is int and obj['code'] in STOP:
                         raise original.DiscoveryError(STOP[obj['code']])
                     if route == 'history_candles':
-                        # The documented response is a bare array. An envelope is
-                        # not silently unwrapped, nor mistaken for zero bars.
                         item.update(compare_candles(obj, prior[symbol]['bars'], symbol))
                         event['status'] = 'RAW_CAPTURED'; break
                     got, total, pages = page_rows(obj, page, params['page_size'])
@@ -264,7 +323,7 @@ def capture(output, prior, *, fetch=None, clock=original.now):
                     event['status'] = 'RAW_CAPTURED'
                     item.update(returned_rows=len(rows), declared_total=total, declared_pages=pages,
                                 pagination_complete=page >= pages,
-                                returned_field_names=sorted({k for r in rows for k in r if isinstance(k,str) and re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]{0,63}',k)})[:64])
+                                returned_field_names=safe_field_names((k for r in rows for k in r), ROW_FIELDS))
                     if page >= pages:
                         break
                     if route != 'history_factors' or pages > 2:

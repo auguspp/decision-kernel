@@ -19,6 +19,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # This early title filter is only an optimization. The existing Python
+  # wrapper verifies the exact native upstream attempt before any Git write,
+  # including when workflow_run notification path/title fields are absent.
   publish-reading:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
