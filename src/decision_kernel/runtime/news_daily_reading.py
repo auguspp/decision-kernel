@@ -22,7 +22,7 @@ def _run(run, cutoff):
     m.check(run.get('repository', {}).get('full_name') == m.REPOSITORY
             and run.get('head_repository', {}).get('full_name') == m.REPOSITORY
             and run.get('path') == source.WORKFLOW and run.get('head_branch') == 'main'
-            and run.get('event') in {'workflow_run', 'workflow_dispatch'}
+            and run.get('event') in {'workflow_run', 'workflow_dispatch', 'schedule'}
             and type(run.get('run_attempt')) is int and run['run_attempt'] == 1
             and type(run.get('id')) is int and run['id'] > 0
             and m.SHA.fullmatch(run.get('head_sha', '')) is not None,
@@ -40,22 +40,45 @@ def read(collector, baseline):
             and len({r['id'] for r in runs}) == len(runs), 'Native news run query incomplete')
     if not runs:
         return {'status': 'NOT_RUN', 'meaning': 'NOT_NO_NEWS'}, None
-    selected = max(runs, key=lambda r: (m.clock(r['created_at']), r['id']))
-    _run(selected, collector.now())
+    latest = max(runs, key=lambda r: (m.clock(r['created_at']), r['id']))
+    _run(latest, collector.now())
+    latest_failed = latest['status'] != 'completed' or latest['conclusion'] != 'success'
+    selected = latest
+    if latest_failed:
+        successes = [r for r in runs if r['status'] == 'completed' and r['conclusion'] == 'success']
+        if not successes:
+            return {'status': 'LATEST_ATTEMPT_NOT_SUCCESSFUL',
+                    'latest_attempt': m.concise_run(latest),
+                    'meaning': 'NO_QUALIFIED_ROLLING_CAPTURE_IN_BOUNDED_RUN_WINDOW_NOT_QUIET'}, None
+        selected = max(successes, key=lambda r: (m.clock(r['created_at']), r['id']))
+        _run(selected, collector.now())
     run = collector.api.get('actions/runs/' + str(selected['id']))
     _run(run, collector.now())
     m.check(all(run[k] == selected[k] for k in ('id', 'head_sha', 'created_at', 'event', 'run_attempt')),
             'Native news selected identity changed')
-    state = {'status': 'LATEST_ATTEMPT_NOT_SUCCESSFUL', 'latest_attempt': m.concise_run(run),
-             'meaning': 'NO_OLDER_SUCCESS_FALLBACK_NOT_QUIET'}
-    if run['status'] != 'completed' or run['conclusion'] != 'success':
-        return state, None
+    m.check(run['status'] == 'completed' and run['conclusion'] == 'success',
+            'Native news selected prior capture is not qualified success')
+    state = {'status': 'LATEST_ATTEMPT_NOT_SUCCESSFUL_PRIOR_CAPTURE_RETAINED' if latest_failed
+                       else 'QUALIFIED_LATEST_CAPTURE',
+             'latest_attempt': m.concise_run(latest),
+             'selected_capture': m.concise_run(run),
+             'meaning': 'LATEST_FAILURE_VISIBLE_WITH_BOUNDED_PRIOR_ROLLING_CAPTURE' if latest_failed
+                        else 'LATEST_QUALIFIED_CAPTURE_SELECTED'}
     artifact = m.select_artifact(collector.artifacts(run), 'newsnow-daily-' + str(run['id']) + '-1')
     files, archive = collector.archive(artifact, run)
     captured = original._decode(files['observations.json'])
     finish = captured['projection']['captured_through']
     rebuilt = source.rebuild(files, cutoff=finish, run=run)
     m.check(captured == rebuilt, 'Native news saved projection differs from raw inputs')
+    if source.HISTORY_FILE in files:
+        history = source.validate_history(source.news._decode(files[source.HISTORY_FILE]))
+        hp = history['projection']
+        m.check(hp['generated_at'] == finish and hp['captures']
+                and hp['captures'][-1]['run_id'] == run['id']
+                and hp['captures'][-1]['code_commit'] == run['head_sha'],
+                'Native news rolling history does not end at selected capture')
+    else:
+        history = source.rolling_history(rebuilt)
     company = None
     context_status = 'NO_SAVED_COMPANY_CONTEXT_NOT_NO_RELATED_COMPANY'
     ref = baseline['research'].get('radar_discovery', {}).get('details', {}).get('company_reading')
@@ -72,11 +95,22 @@ def read(collector, baseline):
             context_status = 'COMPANY_READING_UNAVAILABLE_OR_REJECTED'
     associated = source.rebuild(files, cutoff=collector.now(), run=run, company_reading=company)
     stale = m.clock(collector.now()) - m.clock(finish) > MAX_AGE
-    state.update(status='STALE_CAPTURE_NOT_TODAY_NEWS' if stale else rebuilt['projection']['status'],
-                 captured_through=finish, archive=archive, capture_hash=rebuilt['projection']['capture_hash'],
+    capture_status = 'STALE_CAPTURE_NOT_TODAY_NEWS' if stale else rebuilt['projection']['status']
+    latest_failed = state['latest_attempt']['id'] != state['selected_capture']['id']
+    state.update(status=('STALE_PRIOR_CAPTURE_AFTER_LATEST_FAILURE' if stale and latest_failed
+                         else 'LATEST_ATTEMPT_NOT_SUCCESSFUL_PRIOR_CAPTURE_RETAINED' if latest_failed
+                         else capture_status),
+                 capture_status=capture_status, captured_through=finish, archive=archive,
+                 capture_hash=rebuilt['projection']['capture_hash'],
+                 rolling_history_status=history['projection']['status'],
+                 rolling_window_start=history['projection']['window_start'],
+                 rolling_observation_count=history['projection']['coverage']['observation_count'],
+                 rolling_dropped_observation_count=history['projection']['coverage']['dropped_observation_count'],
                  company_context_status=context_status, freshness_is_not_publication_proof=True,
-                 meaning='SAVED_WINDOWS_NOT_COMPLETE_DAILY_NEWS_OR_RESEARCH')
-    report = {'state': state, 'capture': associated, 'company_source': ref if company is not None else None,
+                 meaning=('LATEST_FAILURE_VISIBLE_WITH_PRIOR_ROLLING_CAPTURE_NOT_COMPLETE_NEWS'
+                          if latest_failed else 'SAVED_WINDOWS_AND_ROLLING_INDEX_NOT_COMPLETE_DAILY_NEWS_OR_RESEARCH'))
+    report = {'state': state, 'capture': associated, 'history': history,
+              'company_source': ref if company is not None else None,
               'association_as_of': collector.now(), 'base_reading_hash': baseline['reading_hash'],
               'semantic_review': 'NOT_PERFORMED', **source.AUTHORITY}
     return state, {'projection': report, 'projection_hash': canonical_hash(report)}
@@ -85,13 +119,30 @@ def read(collector, baseline):
 def render(report):
     from .reviewed_question_reading import _text
     p = report['projection']; m.check(report['projection_hash'] == canonical_hash(p), 'News reading hash differs')
-    value = p['capture']['projection']; state = p['state']
+    value = p['capture']['projection']; state = p['state']; history = p['history']['projection']
     lines = ['# 日常新闻输入：保存窗口与待核对线索', '',
              '原采集截止：' + _text(value['captured_through']) + '；状态：' + _text(state['status']),
-             '这里只保存来源窗口；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。',
-             '重读不生成新事件；缓存/服务时间不是原文发布时间；旧日期不能写成今日新变化。', '',
+             '滚动索引起点：' + _text(history['window_start']) + '；保留条目：'
+             + _text(history['coverage']['observation_count']) + '；历史状态：' + _text(history['status']),
+             '这里只保存来源窗口和按抓取首次出现时间去重的滚动索引；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。',
+             'first_seen_at 是本系统首次抓到该 version_id 的时间，不是发布时刻；缓存/服务时间也不是原文发布时间。', '',
              '| 来源 | 本批处置 | 窗口条数 |', '|---|---|---|']
     lines += ['| ' + _text(o['source_id']) + ' | ' + _text(o['status']) + ' | ' + _text(o.get('observations_in_window') if o.get('observations_in_window') is not None else 'UNKNOWN') + ' |' for o in value['source_outcomes']]
+    lines += ['', '## 滚动18小时新闻索引（按首次抓到时间倒序）', '',
+              '用于晨报/晚报做内容增量筛选；相同 version_id 重复抓取不会变成新新闻。']
+    if history['coverage']['dropped_observation_count']:
+        lines.append('滚动索引因既有字节/条目上限丢弃较老条目：'
+                     + _text(history['coverage']['dropped_observation_count']) + '；不能据此声称窗口完整。')
+    for entry in sorted(history['observations'],
+                        key=lambda x: (m.clock(x['first_seen_at']),
+                                       x['observation']['source_id'],
+                                       x['observation']['version_id']), reverse=True):
+        row = entry['observation']
+        lines.append('- ' + _text(entry['first_seen_at']) + ' · [' + _text(row['title']) + ']('
+                     + quote(row['url'], safe='/:?=&%#') + ') · ' + _text(row['source_id'])
+                     + ' · last_seen ' + _text(entry['last_seen_at']))
+    if not history['observations']:
+        lines.append('滚动索引当前无可用条目；这不是“没有新闻”的证明。')
     context = value['news']
     if context:
         n = context['projection']; by_id = {r['version_id']: r for r in n['observations']}
