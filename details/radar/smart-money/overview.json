@@ -1,6 +1,6 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "0.08",
+  "capture_age_hours": "0.72",
   "capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
   "current_reading": {
     "control": {
@@ -40,7 +40,7 @@
       "status": "completed",
       "updated_at": "2026-10-01T16:43:10Z"
     },
-    "previous_status": "EXACT_PREVIOUS_691c8ac8950301e2f44c2ef50a4c474c934cfda9",
+    "previous_status": "EXACT_PREVIOUS_e2a12b33a9b1baad3469c7d56d48fe55fbb2252c",
     "run_metadata_reads": [],
     "status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "uses_prior_observation": false
