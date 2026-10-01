@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from types import FunctionType, MappingProxyType
+from types import FunctionType, MappingProxyType, SimpleNamespace
 
 from . import concept_detail_capture as capture
 
@@ -65,6 +65,53 @@ HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
 PRE_SINGLE_QUICK = 'REVIEWED_HISTORICAL_EQUIVALENCE_530'
 
 
+# The primary verifier fingerprints exactly these 13 files. Derive only from
+# the frozen reviewed maps above, never an evolving installed implementation.
+PRIMARY_FILES = (
+    'identity.py', 'adapters/hithink.py', 'adapters/hithink_index.py',
+    'runtime/concept_radar.py', 'runtime/concept_radar_capture.py',
+    'runtime/theme_radar_probe.py', 'runtime/hithink_sector_breadth_http.py',
+    'runtime/sector_radar.py', 'runtime/sector_breadth.py',
+    'runtime/institutional_radar.py', 'runtime/institutional_radar_capture.py',
+    'runtime/hithink_dump_trial.py', 'runtime/sector_radar_audit.py',
+)
+PRIMARY_BEFORE_SECTOR = MappingProxyType({k: HISTORICAL_IMPLEMENTATION[k] for k in PRIMARY_FILES})
+PRIMARY_AFTER_SECTOR = MappingProxyType({k: POST_SECTOR_BACKFILL_IMPLEMENTATION[k] for k in PRIMARY_FILES})
+PRIMARY_SECTOR_EQUIVALENCE = 'REVIEWED_SECTOR_ONLY_EQUIVALENCE_579'
+
+
+def verify_primary(output: Path) -> tuple[dict, str]:
+    """Read the one reviewed primary pair; original producers remain strict."""
+    original = capture.original
+    receipt = json.loads(capture._read(output, 'capture.json'))
+    installed = original._implementation()
+    historical = receipt.get('implementation')
+    if historical == installed:
+        return original.verify(output), CURRENT
+    capture.require(historical == PRIMARY_BEFORE_SECTOR and installed == PRIMARY_AFTER_SECTOR,
+                    'CONCEPT_HISTORICAL_IMPLEMENTATION_REJECTED')
+    bindings = dict(original.verify.__globals__)
+    bindings['_implementation'] = lambda: dict(historical)
+    verifier = FunctionType(original.verify.__code__, bindings, original.verify.__name__,
+                            original.verify.__defaults__, original.verify.__closure__)
+    return verifier(output), PRIMARY_SECTOR_EQUIVALENCE
+
+
+def _saved_base_loader():
+    """Bind only nested verification, not the shared load_base/prepare/capture."""
+    original = capture.original
+    bindings = dict(capture.load_base.__globals__)
+    # Only these original attributes are used by the unchanged load_base code.
+    # The nested source still passes its own complete two-sided identity check.
+    bindings['original'] = SimpleNamespace(
+        workflow_identity=original.workflow_identity,
+        COMPLETE=original.COMPLETE, PARTIAL=original.PARTIAL,
+        verify=lambda output: verify_primary(output)[0],
+    )
+    return FunctionType(capture.load_base.__code__, bindings, capture.load_base.__name__,
+                        capture.load_base.__defaults__, capture.load_base.__closure__)
+
+
 def verify(output: Path) -> tuple[dict, str]:
     """Rebuild with the unchanged verifier after exact two-sided identity checks.
 
@@ -90,6 +137,7 @@ def verify(output: Path) -> tuple[dict, str]:
     # complete maps. Never assign to capture._implementation or rewrite a receipt.
     bindings = dict(capture.verify.__globals__)
     bindings['_implementation'] = lambda: dict(historical)
+    bindings['load_base'] = _saved_base_loader()
     verifier = FunctionType(capture.verify.__code__, bindings,
                             capture.verify.__name__, capture.verify.__defaults__,
                             capture.verify.__closure__)
