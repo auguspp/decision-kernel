@@ -30,7 +30,7 @@ def inventory(root):
 
 
 def test_reviewed_pair_is_complete_and_only_reviewed_non_replay_files_differ():
-    assert capture._implementation() == compat.POST_DELIVERY_CONTINUITY_IMPLEMENTATION
+    assert capture._implementation() == compat.POST_STOCK_READING_IMPLEMENTATION
     assert len(compat.HISTORICAL_IMPLEMENTATION) == len(compat.REPLAY_IMPLEMENTATION) == 17
     assert len(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION) == 17
     assert {k for k in compat.HISTORICAL_IMPLEMENTATION
@@ -39,6 +39,12 @@ def test_reviewed_pair_is_complete_and_only_reviewed_non_replay_files_differ():
     assert {k for k in compat.REPLAY_IMPLEMENTATION
             if compat.REPLAY_IMPLEMENTATION[k] != compat.POST_SECTOR_BACKFILL_IMPLEMENTATION[k]} == {
         'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}
+    assert len(compat.POST_STOCK_READING_IMPLEMENTATION) == 17
+    assert {k for k in compat.POST_DELIVERY_CONTINUITY_IMPLEMENTATION
+            if compat.POST_DELIVERY_CONTINUITY_IMPLEMENTATION[k] != compat.POST_STOCK_READING_IMPLEMENTATION[k]} == {
+        'runtime/current_state.py'}
+    with pytest.raises(TypeError):
+        compat.POST_STOCK_READING_IMPLEMENTATION['extra'] = '0' * 64
     with pytest.raises(TypeError):
         compat.HISTORICAL_IMPLEMENTATION['extra'] = '0' * 64
     with pytest.raises(TypeError):
@@ -154,3 +160,21 @@ def test_simultaneous_current_and_historical_replay_never_mutates_module(tmp_pat
     assert capture.verify(current) == expected_current
     with pytest.raises(ValueError, match='DETAIL_CAPTURE_IDENTITY_REJECTED'):
         capture.verify(old)
+
+
+def test_pre_stock_reading_capture_stays_exact_with_original_verifier_strict(tmp_path, monkeypatch):
+    root, receipt, *_ = execute(tmp_path)
+    expected = capture.verify(root)
+    receipt = deepcopy(receipt)
+    receipt['implementation'] = dict(compat.POST_DELIVERY_CONTINUITY_IMPLEMENTATION)
+    seal(root, receipt)
+    expected['capture_hash'] = receipt['capture_hash']
+    before = inventory(root)
+    with pytest.raises(ValueError, match='DETAIL_CAPTURE_IDENTITY_REJECTED'):
+        capture.verify(root)
+    assert compat.verify(root) == (expected, compat.PRIOR_DELIVERY)
+    assert inventory(root) == before
+    # New eligibility is forward-only; do not add unreviewed reverse pairs.
+    monkeypatch.setattr(capture, '_implementation', lambda: dict(compat.REPLAY_IMPLEMENTATION))
+    with pytest.raises(ValueError, match='DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED'):
+        compat.verify(root)
