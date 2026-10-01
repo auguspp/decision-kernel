@@ -32,11 +32,20 @@ def body(label, *, items=None):
          'url': 'https://' + host + '/detail/1'}] if items is None else items})
 
 
-def captured(tmp_path, request=None, *, clock=lambda: TIME, previous_history=None, identity=None):
+def captured(tmp_path, request=None, *, clock=lambda: TIME, previous_history=None, identity=None,
+             history_recovery=None):
     root = tmp_path / 'capture'
-    result = s.capture(root, deepcopy(identity or IDENTITY), IMAGE,
+    identity = deepcopy(identity or IDENTITY)
+    if previous_history is not None and history_recovery is None:
+        # Synthetic fixture only. Native recovery is separately exercised with original ZIP verification.
+        tail = json.loads(previous_history)['projection']['captures'][-1]
+        history_recovery = {'version': 'news-history-recovery-v1', 'status': 'RESTORED',
+            'current_run_id': identity['run_id'], 'checked_at': clock(),
+            'history_sha256': m.sha256(previous_history), 'newer_unusable_attempts': [],
+            'selected_capture': {'id': tail['run_id'], 'head_sha': tail['code_commit']}}
+    result = s.capture(root, identity, IMAGE,
                        request=request or (lambda label: (200, body(label))), clock=clock,
-                       previous_history=previous_history)
+                       previous_history=previous_history, history_recovery=history_recovery)
     return root, {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}, result
 
 
