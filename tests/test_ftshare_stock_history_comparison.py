@@ -198,10 +198,23 @@ def test_only_comparisons_in_bounded_history_is_not_never_run(tmp_path):
 
 
 def test_publisher_and_control_exclusion_is_exact_and_keeps_scanned_budget_guard():
+    from itertools import product
+    from test_daily_result_publication import allows, event
+
     root=Path(__file__).parents[1]
-    publisher=(root/'.github/workflows/current-state-read-entry.yml').read_text()
-    assert "github.event.workflow_run.display_title == '"+h.RUN_TITLE+"'" in publisher
-    assert "github.event.workflow_run.path == '.github/workflows/radar-smart-money.yml'" in publisher
+    # Execute the checked-in publisher condition, including both native actions;
+    # a text match alone cannot establish exact exclusion or expression validity.
+    for action, path, trigger, title in product(
+            ('requested', 'completed'),
+            ('.github/workflows/radar-smart-money.yml', '.github/workflows/other.yml'),
+            ('workflow_dispatch', 'schedule'),
+            (h.RUN_TITLE, 'radar-smart-money')):
+        data=event(); data['event']['action']=action
+        data['event']['workflow_run'].update(name='radar-smart-money', path=path,
+                                             event=trigger, display_title=title)
+        comparison=(path=='.github/workflows/radar-smart-money.yml' and
+                    trigger=='workflow_dispatch' and title==h.RUN_TITLE)
+        assert allows(data) is (not comparison)
     control=(root/'.github/scripts/smart-money-control.py').read_text()
     assert control.index('runs=[r for r in runs if not is_comparison_run(r)]') < control.index('today_runs=')
     assert 'len(scanned_runs)==30' in control and 'comparison_source_quota' in control
