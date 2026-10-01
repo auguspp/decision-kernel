@@ -192,7 +192,7 @@ def _qualify_history_payload(history, *, code, sessions, params, observed_at,
                              selection_mode, adjust):
     if type(selection_mode) is not bool:
         _bad(code)
-    if not isinstance(code, str) or not re.fullmatch(r'\\d{6}\\.(SH|SZ|BJ)', code):
+    if not isinstance(code, str) or not re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', code):
         _bad(code)
     expected = tuple(sessions[-61:])
     if (len(expected) != 61 or expected != tuple(sorted(set(expected)))
