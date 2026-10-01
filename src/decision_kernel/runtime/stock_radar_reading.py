@@ -364,16 +364,23 @@ def _qualify_references(code, expected, bars, references, at):
 
 
 def _stock_path(state, code, response, *, at, references=None, quote=None, actions=None,
-                quote_received_at=None, adjusted_response=None, action_provider_code=None):
+                quote_received_at=None, adjusted_response=None, action_provider_code=None,
+                action_reference_adjustment=False):
     """Keep the legacy state-facing contract; arithmetic only consumes sessions."""
     return stock_path_for_sessions(state.sessions, code, response, at=at,
         references=references, quote=quote, actions=actions,
         quote_received_at=quote_received_at, adjusted_response=adjusted_response,
-        action_provider_code=action_provider_code)
+        action_provider_code=action_provider_code,
+        action_reference_adjustment=action_reference_adjustment)
 
 
 def stock_path_for_sessions(sessions, code, response, *, at, references=None, quote=None, actions=None,
-                quote_received_at=None, adjusted_response=None, action_provider_code=None):
+                quote_received_at=None, adjusted_response=None, action_provider_code=None,
+                action_reference_adjustment=False):
+    if type(action_reference_adjustment) is not bool:
+        raise ValueError('action reference adjustment flag must be boolean')
+    if adjusted_response is not None and not action_reference_adjustment:
+        raise ValueError('adjusted fallback requires explicit Stock Radar action-reference opt-in')
     expected = tuple(sessions[-61:])
     price_by_day = None
     comparison_basis = 'RAW_UNADJUSTED'
@@ -382,7 +389,7 @@ def stock_path_for_sessions(sessions, code, response, *, at, references=None, qu
             by_day, checks = own_stock.qualify(response, quote, actions, code=code,
                 sessions=sessions, params=_history_params(code,sessions), observed_at=at,
                 quote_received_at=quote_received_at, selection_mode=True,
-                action_reference_adjustment=True)
+                action_reference_adjustment=action_reference_adjustment)
             price_by_day = by_day
             windows = checks['action_window_checks']
             history_windows = checks['history_window_checks']
@@ -718,7 +725,8 @@ def _observe(plan, state, *, request_json, observed_at, cutoff_clock, reference_
             path = _stock_path(state, code, response, at=at(), references=reference_inputs,
                               quote=quote, actions=actions, quote_received_at=quote_received_at,
                               adjusted_response=adjusted_response,
-                              action_provider_code=action_provider_code)
+                              action_provider_code=action_provider_code,
+                              action_reference_adjustment=(reference_inputs is None))
         except StockReadingInputError as exc:
             if reference_inputs is not None or not _isolatable_stock_error(exc, code):
                 raise
