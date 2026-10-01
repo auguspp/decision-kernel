@@ -149,6 +149,87 @@ def test_currency_scale_conversion_and_total_denominator_not_applicable():
     assert result(v,r)['status']=='NOT_COMPARABLE'
 
 
+@pytest.mark.parametrize('label',['1000000','百万元','百万人民币','人民币百万元'])
+@pytest.mark.parametrize('scale,other_label,current',[
+    ('1','1','1400000.00000002'),
+    ('10000','万元','140.000000000002'),
+    ('100000000','亿元','0.0140000000000002')])
+def test_explicit_million_amount_matches_existing_scales_exactly(label,scale,other_label,current):
+    v,r=fixture()
+    for i,(value,multiplier,unit) in enumerate([
+            ('1.10000000000001','1000000',label),(current,scale,other_label)]):
+        o=v['observations'][i]
+        o['value']=r[i]['value']=value
+        o['scale']=multiplier
+        o['forecast']['scale_label']=r[i]['scale_label']=unit
+    out=result(v,r)
+    assert out['status']=='REVIEWED_FORECAST_ARITHMETIC_ONLY'
+    assert c.Decimal(out['value'])==c.Decimal('300000.00000001')
+    assert out['unit']=='CNY' and out['source_qualifications']==['SYNTHETIC_FIXTURE']*2
+    assert out['full_model_revision']=='NOT_CERTIFIED'
+
+
+@pytest.mark.parametrize('key',[
+    'currency','metric_basis','target_period','report_date','record_id','scale_label','value_kind'])
+def test_million_label_does_not_replace_independent_source_bindings(key):
+    v,r=fixture();o=v['observations'][1];f=o['forecast']
+    o['scale']='1000000';f['scale_label']=r[1]['scale_label']='百万人民币'
+    f['bindings'].pop(key)
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert 'new:'+key+':SOURCE_BINDING_MISSING' in out['blockers']
+
+
+@pytest.mark.parametrize('label',['百万人民币','人民币百万元'])
+@pytest.mark.parametrize('currency',[None,'USD'])
+def test_rmb_million_label_does_not_supply_or_override_currency(label,currency):
+    v,r=fixture()
+    for i,o in enumerate(v['observations']):
+        o['scale']='1000000';o['currency']=currency or 'NONE'
+        o['forecast']['scale_label']=r[i]['scale_label']=label
+        o['forecast']['currency']=r[i]['currency']=currency
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    if currency is None:assert 'new:currency:UNKNOWN' in out['blockers']
+    else:assert 'new:SCALE_CURRENCY_DIFFERS' in out['blockers']
+
+
+@pytest.mark.parametrize('field,changed,blocker',[
+    ('currency','USD','CURRENCY_DIFFERS'),
+    ('attribution','GROUP_ATTRIBUTABLE','METRIC_BASIS_DIFFERS:attribution'),
+    ('adjustment','ADJUSTED_ESTIMATE','METRIC_BASIS_DIFFERS:adjustment')])
+def test_million_scale_does_not_relax_pair_basis(field,changed,blocker):
+    v,r=fixture()
+    for i,o in enumerate(v['observations']):
+        o['scale']='1000000';o['forecast']['scale_label']=r[i]['scale_label']='百万元'
+    o=v['observations'][1];f=o['forecast']
+    if field=='currency':o['currency']=f['currency']=r[1]['currency']=changed
+    else:
+        outer={'attribution':'scope','adjustment':'restatement'}[field]
+        o[outer]=f['metric_basis'][field]=r[1]['metric_basis'][field]=changed
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert blocker in out['blockers']
+
+
+@pytest.mark.parametrize('label',['M','mn','百万元/股','百万人民币/股'])
+def test_ambiguous_or_unrecognized_million_labels_remain_unqualified(label):
+    v,r=fixture();o=v['observations'][1]
+    o['scale']='1000000';o['forecast']['scale_label']=r[1]['scale_label']=label
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert 'new:SCALE_UNQUALIFIED' in out['blockers']
+
+
+@pytest.mark.parametrize('label',['1000000','百万元','百万人民币','人民币百万元'])
+def test_million_label_cannot_bind_a_different_declared_scale(label):
+    v,r=fixture();o=v['observations'][1]
+    o['scale']='10000';o['forecast']['scale_label']=r[1]['scale_label']=label
+    out=result(v,r)
+    assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    assert 'new:SCALE_UNQUALIFIED' in out['blockers']
+
+
 def test_duplicate_not_new_forecast_and_variant_not_new_report():
     v,r=fixture();r[1]=deepcopy(r[0]);f=v['observations'][1]['forecast']
     f['report'].update(record_id=r[1]['record_id'],original_report_id=r[1]['original_report_id'],label_date=r[1]['report_date'])
@@ -253,12 +334,16 @@ def test_mixed_report_and_fact_locator_modes_cannot_bypass_row_scope():
     assert 'new:REPORT_RECORD_BINDING_INVALID' in result(v,r)['blockers']
 
 
-@pytest.mark.parametrize('measure,label,scale',[('EPS','万元','10000'),('TOTAL_PARENT_PROFIT','元/股','1')])
+@pytest.mark.parametrize('measure,label,scale',[
+    ('EPS','万元','10000'),('EPS','1000000','1000000'),('EPS','百万元','1000000'),
+    ('EPS','百万人民币','1000000'),('EPS','人民币百万元','1000000'),
+    ('TOTAL_PARENT_PROFIT','元/股','1')])
 def test_bound_unit_label_must_match_measurement_dimension(measure,label,scale):
     v,r=fixture(measure)
     for i in range(2):
         r[i]['scale_label']=label;v['observations'][i]['scale']=scale;v['observations'][i]['forecast']['scale_label']=label
     out=result(v,r);assert out['status']=='NOT_COMPARABLE' and out['value'] is None
+    if measure=='EPS':assert 'new:PER_SHARE_UNIT_DIMENSION_UNQUALIFIED' in out['blockers']
 
 
 @pytest.mark.parametrize('outer,inner',[('scope','attribution'),('restatement','adjustment')])

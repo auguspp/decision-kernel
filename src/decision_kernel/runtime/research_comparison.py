@@ -26,7 +26,7 @@ KINDS = {'PERIOD_CHANGE', 'SOURCE_REVISION', 'RESEARCH_CORRECTION',
          'EVIDENCE_COVERAGE_CHANGE', 'CHECKED_UNCHANGED', 'NOT_CHECKED',
          'INCOMPARABLE', 'CASH_DIAGNOSTIC', 'DERIVED_QUARTER', 'FORECAST_COMPARISON'}
 OPS = {'difference', 'signed_sum', 'ratio', 'quarter', 'coverage', 'claim', 'forecast_difference'}
-SCALES = {'1', '10000', '100000000', '1000000000'}
+SCALES = {'1', '10000', '1000000', '100000000', '1000000000'}
 
 
 def require(ok, message):
@@ -389,10 +389,15 @@ def _forecast_info(o, files):
     if f.get('currency') not in {'CNY', 'USD'} or f.get('currency') != o['currency']:
         currency_ok = False; blockers.append('CURRENCY_UNQUALIFIED')
     scale_ok = fact('scale_label', f.get('scale_label'))
-    scales = {'1': '1', '10000': '10000', '100000000': '100000000', '1000000000': '1000000000',
-              '元': '1', '万元': '10000', '亿元': '100000000', '元/股': '1'}
+    scales = {'1': '1', '10000': '10000', '1000000': '1000000',
+              '100000000': '100000000', '1000000000': '1000000000',
+              '元': '1', '万元': '10000', '百万元': '1000000', '百万人民币': '1000000',
+              '人民币百万元': '1000000', '亿元': '100000000', '元/股': '1'}
     if scales.get(f.get('scale_label')) != o['scale']:
         scale_ok = False; blockers.append('SCALE_UNQUALIFIED')
+    # An explicit RMB unit cannot override the separately qualified currency.
+    if f.get('scale_label') in {'百万人民币', '人民币百万元'} and currency_ok and f['currency'] != 'CNY':
+        blockers.append('SCALE_CURRENCY_DIFFERS')
     share = f.get('share_basis')
     measure = mb.get('measure') if isinstance(mb, dict) else None
     if measure == 'TOTAL_PARENT_PROFIT':
