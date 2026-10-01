@@ -2,6 +2,9 @@ name: radar-newsnow-daily
 run-name: ${{ inputs.site_request_id && format('site-news-refresh/{0}', inputs.site_request_id) || 'radar-newsnow-daily' }}
 
 on:
+  schedule:
+    # GitHub scheduled workflows support a minimum five-minute interval.
+    - cron: '3/10 * * * *'
   workflow_dispatch:
     inputs:
       site_request_id:
@@ -37,7 +40,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
        (github.event.workflow_run.head_repository.full_name == github.repository &&
         github.event.workflow_run.head_branch == 'main' &&
         github.event.workflow_run.path == '.github/workflows/sector-radar-shadow.yml' &&
@@ -104,13 +107,50 @@ jobs:
             sleep 1
           done
           test "$ready" = 1
+      - name: Recover the immediately prior qualified rolling history when available
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/news-previous"
+          if gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/radar-newsnow-daily.yml/runs" \
+              -f branch=main -f status=success -f per_page=20 > "$RUNNER_TEMP/news-previous/runs.json"; then
+            previous="$(
+              python - <<'PY'
+import json, os
+runs=json.load(open(os.environ['RUNNER_TEMP']+'/news-previous/runs.json'))['workflow_runs']
+allowed={'schedule','workflow_dispatch','workflow_run'}
+rows=[r for r in runs if r.get('id') != int(os.environ['GITHUB_RUN_ID'])
+      and r.get('run_attempt') == 1 and r.get('conclusion') == 'success'
+      and r.get('path') == '.github/workflows/radar-newsnow-daily.yml'
+      and r.get('event') in allowed and r.get('head_branch') == 'main']
+print(max(rows,key=lambda r:(r['created_at'],r['id']))['id'] if rows else '')
+PY
+            )"
+            if test -n "$previous"; then
+              artifact="newsnow-daily-${previous}-1"
+              if gh run download "$previous" -R "$GITHUB_REPOSITORY" -n "$artifact" \
+                    -D "$RUNNER_TEMP/news-previous/download"; then
+                if test -f "$RUNNER_TEMP/news-previous/download/history.json"; then
+                  cp "$RUNNER_TEMP/news-previous/download/history.json" \
+                     "$RUNNER_TEMP/news-previous/history.json"
+                fi
+              fi
+            fi
+          fi
       - name: Capture seven original windows with explicit failures
         env:
           TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
-        run: >-
-          python -m decision_kernel.runtime.news_daily
-          --image-identity "$RUNNER_TEMP/news-image.txt"
-          --output "$RUNNER_TEMP/newsnow-daily"
+        run: |
+          set -euo pipefail
+          args=()
+          if test -f "$RUNNER_TEMP/news-previous/history.json"; then
+            args+=(--previous-history "$RUNNER_TEMP/news-previous/history.json")
+          fi
+          python -m decision_kernel.runtime.news_daily \
+            --image-identity "$RUNNER_TEMP/news-image.txt" \
+            --output "$RUNNER_TEMP/newsnow-daily" \
+            "${args[@]}"
       - name: Stop local service
         if: always()
         run: docker rm -f newsnow >/dev/null 2>&1 || true
@@ -121,4 +161,4 @@ jobs:
           name: newsnow-daily-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/newsnow-daily/
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: ${{ github.event_name == 'schedule' && 3 || 30 }}
