@@ -290,23 +290,28 @@ def _reported_action_adjustments(expected, bars, retained_events, *, code):
         previous = bars[expected[i-1]]['close_price']
         cash = Decimal(event['dividend_per_share'])
         bonus = Decimal(event['per_share_bonus'])
-        if cash == 0 and bonus == 0:
+        if bonus != 0:
+            result[day] = {
+                'status': 'UNSUPPORTED_BONUS_REFERENCE_ROUNDING_NOT_ESTABLISHED',
+                'factor': None,
+            }
+            continue
+        if cash == 0:
             result[day] = {'status': 'UNSUPPORTED_ZERO_EFFECT_EVENT', 'factor': None}
             continue
         with localcontext(Context(prec=64)):
-            numerator = previous - cash
-            denominator = previous * (Decimal(1) + bonus)
-            if numerator <= 0 or denominator <= 0:
+            reference = previous - cash
+            if reference <= 0:
                 result[day] = {'status': 'INVALID_REFERENCE_ARITHMETIC', 'factor': None}
                 continue
-            factor = numerator / denominator
+            factor = reference / previous
         result[day] = {
-            'status': 'SUPPORTED_CASH_OR_BONUS_REFERENCE',
+            'status': 'SUPPORTED_CASH_DIVIDEND_REFERENCE',
             'factor': str(factor),
             'previous_raw_close': str(previous),
             'dividend_per_share': str(cash),
             'per_share_bonus': str(bonus),
-            'reference_price': str(previous * factor),
+            'reference_price': str(reference),
         }
     return result
 
@@ -315,7 +320,7 @@ def action_window_checks(expected, dates, adjustments=None):
     """The ex-date affects an interval only after its base CLOSE: (base, end].
 
     Raw close comparison remains separately identified. When the provider reports
-    only supported cash/bonus fields, the same source rows may establish a bounded
+    a supported cash-dividend field, the same source row may establish a bounded
     ex-rights reference factor for price comparison; this is not total return.
     """
     windows = {str(n): (expected[-n-1], expected[-1]) for n in (1,5,20,60)}
@@ -465,7 +470,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
             'NOT_AVAILABLE_NOT_REQUIRED_FOR_REPORTED_ACTION_REFERENCE_PRICE_RATIOS'
             if uses_reference_adjustment else 'NOT_AVAILABLE_NOT_REQUIRED_FOR_RAW_CLOSE_RATIOS'),
         'adjustment_or_total_return_qualification': (
-            'REPORTED_CASH_OR_BONUS_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
+            'REPORTED_CASH_DIVIDEND_REFERENCE_ADJUSTMENT_NOT_TOTAL_RETURN'
             if uses_reference_adjustment else 'NOT_ESTABLISHED'),
     }
     if selection_mode:
