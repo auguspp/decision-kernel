@@ -4,6 +4,7 @@ from copy import deepcopy
 import pytest
 
 from decision_kernel.identity import canonical_hash
+from decision_kernel.runtime.stock_radar_reading import stock_request_budget
 from decision_kernel.runtime.radar_stock_candidates import (
     build_stock_discovery_pool, plan_stock_discovery_batch, render_stock_discovery_pool,
 )
@@ -72,7 +73,7 @@ def test_batch_pages_cover_entire_pool_with_original_cost_ceiling_and_no_executi
     while offset is not None:
         batch = plan_stock_discovery_batch(r, pool_hash=pool["pool_hash"], offset=offset)
         assert batch["maximum_request_count"] <= 26
-        assert batch["maximum_request_count"] == 4 + len(batch["direction_codes"]) + 3 * len(batch["selected_codes"])
+        assert batch["maximum_request_count"] == stock_request_budget(len(batch["selected_codes"]), len(batch["direction_codes"]))
         assert len(batch["direction_codes"]) <= 6
         assert batch["execution"] == "NOT_EXECUTED"
         assert batch["prior_pages_execution"] == "NOT_ASSERTED"
