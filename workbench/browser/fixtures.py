@@ -8,7 +8,7 @@ import hashlib
 import json
 
 REPO = 'auguspp/decision-kernel'
-R1, R2, M = 'a' * 40, 'b' * 40, 'c' * 40  # Synthetic identities, not Git commits.
+R1, R2, M, NL = 'a' * 40, 'b' * 40, 'c' * 40, 'd' * 40  # Synthetic identities, not Git commits.
 NOW = '2026-09-27T08:30:00Z'
 AUTHORITY = {key: 'NONE' for key in ('signal_transition_authority',
     'human_attention_authority', 'research_authority', 'investment_authority')}
@@ -179,6 +179,56 @@ def concept_trend_fixture(files, saved, ref):
     path='details/radar/tdx-concept/trend/trend.json';files[path]=raw(report)
     saved['trend']={'status':'VERIFIED_SAVED_LONG_HISTORY','projection_hash':report['projection_hash'],
                     'catalog_count':3,'coverage':coverage,'details':{'trend.json':descriptor(path,files[path])}}
+
+
+def news_live_fixture():
+    """TEST_ONLY verified-view shape; not a source acquisition or production News receipt."""
+    authority = {**AUTHORITY, 'automatic_admission': False, 'model_calls': 0,
+                 'market_requests': 0, 'new_attention_events': 0, 'research_executions': 0}
+    sources = ('cls','wallstreetcn','fastbull','jin10','mktnews','gelonghui','thepaper')
+    row = {'source_id':'cls','item_id':'1','url':'https://www.cls.cn/detail/1',
+           'title':'TEST_ONLY 滚动新闻 <script>window.fixtureInjected=true</script>',
+           'publication_claims':{
+               'pubDate':{'raw':'2026-09-27T08:20:00Z','status':'PARSED_CLAIM_NOT_PUBLISHER_VERIFIED',
+                          'parsed_at':'2026-09-27T08:20:00Z'},
+               'extra.date':{'raw':None,'status':'MISSING','parsed_at':None}},
+           'article_id':'8'*64,'version_id':'9'*64,'window_position':0,
+           'clock_origin':'SERVICE_PASSTHROUGH_NOT_VERIFIED_PUBLISHER_TIME',
+           'fetched_at':'2026-09-27T08:29:00Z','business_linkage':'NOT_ESTABLISHED',
+           'question_status':'NOT_FORMED','qualification':'CONTEXT_ONLY'}
+    outcomes=[{'source_id':name,'status':'OBSERVATIONS_NORMALIZED','observations_in_window':1} for name in sources]
+    capture={'run_id':9901,'code_commit':M,'event':'schedule','captured_from':'2026-09-27T08:28:30Z',
+             'captured_through':'2026-09-27T08:29:00Z','capture_hash':'7'*64,'status':'WINDOWS_CAPTURED',
+             'source_outcomes':outcomes}
+    coverage={'capture_count':1,'observation_count':1,'dropped_observation_count':0,'dropped_capture_count':0,
+              'loss_count_meaning':'RETAINED_DROP_OPERATIONS_NOT_DISTINCT_ARTICLES',
+              'maximum_capture_gap_seconds':0,'source_gap_capture_count':0,'complete_news_coverage':False}
+    history={'projection':{'version':'native-newsnow-rolling-v2','window_hours':18,
+             'generated_at':'2026-09-27T08:29:00Z','window_start':'2026-09-26T14:29:00Z',
+             'retained_since':'2026-09-27T08:28:30Z','captures':[capture],
+             'observations':[{'observation':row,'first_seen_at':'2026-09-27T08:29:00Z',
+                              'last_seen_at':'2026-09-27T08:29:00Z','first_seen_run_id':9901,
+                              'last_seen_run_id':9901,'seen_capture_count':1}],
+             'losses':[],'status':'ROLLING_HISTORY_STARTED','coverage':coverage,
+             'semantics':'CAPTURE_FIRST_SEEN_ROLLING_INDEX_NOT_PUBLISHER_TIME_OR_COMPLETE_NEWS',
+             **authority},'projection_hash':'6'*64}
+    history_raw=raw(history)
+    h=descriptor('history.json',history_raw)
+    manifest={'projection':{'version':'news-live-reading-v1','entry_ref':'read-model/news-live',
+              'published_at':'2026-09-27T08:29:10Z','code_commit':M,
+              'source_workflow':'.github/workflows/radar-newsnow-daily.yml',
+              'source_run':{'run_id':9901,'attempt':1,'event':'schedule','trigger_run_id':None},
+              'capture_hash':'7'*64,'captured_from':'2026-09-27T08:28:30Z',
+              'captured_through':'2026-09-27T08:29:00Z','capture_status':'WINDOWS_CAPTURED',
+              'source_outcomes':outcomes,'history':{'read_path':'history.json','bytes':h['bytes'],
+              'sha256':h['sha256'],'git_blob':h['git_blob']},
+              'rolling':{'status':'ROLLING_HISTORY_STARTED','window_start':'2026-09-26T14:29:00Z',
+                         'retained_since':'2026-09-27T08:28:30Z','coverage':coverage},
+              'complete_news_coverage':False,
+              'cache_meaning':'LATEST_ONLY_FORCE_UPDATED_DELIVERY_CACHE_NOT_SOURCE_ARCHIVE',
+              'semantics':'LATEST_VERIFIED_NEWS_CAPTURE_AND_ROLLING_INDEX_NOT_RESEARCH_OR_COMPLETE_NEWS',
+              **authority},'projection_hash':'5'*64}
+    return {'news-live.json':raw(manifest),'history.json':history_raw}
 
 def fixture(ref=R1):
     """Fresh, small bytes per scenario. Synthetic reading_hash is shape-only."""
