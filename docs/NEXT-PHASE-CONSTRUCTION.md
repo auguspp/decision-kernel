@@ -4,6 +4,8 @@
 
 **2026-09-30后继：Human要求持续推进A/B/C/D后端、Sites暂停，并在网页当前轮结束后由dot直接接手，禁止调用Codex。** [当前交接](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5908137326)与[后继顺序](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5908271683)覆盖上段历史施工点，不撤销原来源、权限、费用、Research/Human与投资边界。A=工作台/回应/连续性底座，B=世界观察与事件/研究日历，C=纵向证据与真实盲点驱动的发现质量，D=多期限机会与成熟结果校准；Learning Loop L贯穿。完整原范围和退出条件仍读下方保留的v1与#297，不将四条线缩成当前单个PDF任务。
 
+**2026-10-01 Reuse后继：Human批准接手计划，并要求先明确GitHub成熟开源轮子优先、按个人自用扩大候选范围。** 原授权与变更边界见[#508/5926750116](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-5926750116)。实际施工先执行同M的[现行Reuse First](../WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check)：恢复已有能力后，在决定自建方案/写代码之前主动查成熟GitHub轮子，结合官方合同验证；不只查已登记白名单，不以假想商业化限制排除自用适配方案。当前公开仓库发布、许可、安全、来源及费用边界仍按实际用途检查。此修订不重启已完成工作、不授权安装任意依赖，也不改变原C1/C2及Sites/D边界。
+
 ## 当前顺序与任务归属
 
 **2026-09-30 Human纠偏：B2优先建立新入选个股的标准通道，不再逐家追挖当前六股的特殊情况。** 原话、KEEP/RETIRE/DEFER及最新实现接点见[#620/5901901617](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5901901617)。财报预约沿[原标准入口](b2-disclosure-appointments.md)使用显式资料引用和报告期输入，新增股票不改运行代码；空返回与缺字段作为对象级结果，真正来源/权限失败仍保留边界。旧R4及未补齐原件/改期缺口保留，但不作为通道工程的逐股收口任务。标准通道不等于自动启用新采集、监控或研究任务。
@@ -16,7 +18,7 @@ C1包括纵向财报、IR/同业变化、机构活动与可比预期、Outside V
 
 **当前C1语义消费：** [后继范围](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5911984275)复用#675消费者完善具体经营→利润→现金资本解释，见[两例后继](readings/c-cash-bridge-semantic-review-2026-09-30/README.md)。原数值和源文件保留；不将R1已有的AT&S保理/BGA费用限制包装成R2首度发现。新增的是受支持的说明和既有明细复算，不新建框架、Full或投资权限。机构预期资格、IR/同业、参考案例、竞争/长期资本回报与自然使用仍逐项保留，不能由两例现金桥签全C。
 
-[#504机构/研报](https://github.com/auguspp/decision-kernel/issues/504)原来源、保管、按需索引和首次实际消费保留，不重建provider；摘要比较缺原模型/货币/股本/PIT资格时仍不称完整模型修订。按Reuse First依次读内部能力、官方合同、#508/#511已有成熟GitHub候选和当前相关实现，只补真实消费者所需的薄适配。
+[#504机构/研报](https://github.com/auguspp/decision-kernel/issues/504)原来源、保管、按需索引和首次实际消费保留，不重建provider；摘要比较缺原模型/货币/股本/PIT资格时仍不称完整模型修订。按现行Reuse First先恢复内部能力及#508/#511相关证据，在自建前主动查成熟GitHub轮子并同步核官方合同；已有候选不是封闭白名单，只补真实消费者所需的薄适配。
 
 [#620 B2](https://github.com/auguspp/decision-kernel/issues/620)的标准预约、公告目录与单PDF链继续保留：#669/#670已完成单次有界原文取得、原件保管、登记、正式PR/独立main/正常发布和固定R八文件恢复，见[#670最终回执](https://github.com/auguspp/decision-kernel/pull/670#issuecomment-5908082240)。[后继独立消费者](https://github.com/auguspp/decision-kernel/issues/620#issuecomment-5908269191)从普通入口恢复原PDF并核清正文日期、来源时钟与UNKNOWN边界；现有合同可用，没有据此新增事件parser/schema。更多市场/真实多页/完整取消修订链和无人值守仍分别未验，不反复重抓已消费样本来补签完整B2，也不塞进当前agenda窗口之外的示例。优先原件、用途索引与发布链；后端先行不意味着新增数据库、provider、调度或日历框架。
 
@@ -42,7 +44,7 @@ B2 日期必须有来源，计划/实际、时区、报告期与查询/发布时
 
 保留 0→A→B→C→D、P01–P10 与横向 Learning Loop L 的原 Issue/PR 归属。H1–H5 从 #297 的明确 accepted successors 恢复；不把旧 pending-choice 当新阻塞。
 
-规则或方法变化按 [治理生命周期](../AGENTS.md#governance-lifecycle)，前提变化按 [Reconcile](../AGENTS.md#reconcile-before-continuing--premise-change-impact-review) 同步受影响消费者。复用从 #508/#511 已留存候选与反证开始，不因改了导航而再次全量研究框架。
+规则或方法变化按 [治理生命周期](../AGENTS.md#governance-lifecycle)，前提变化按 [Reconcile](../AGENTS.md#reconcile-before-continuing--premise-change-impact-review) 同步受影响消费者。复用从 #508/#511 已留存候选与反证开始，按上方自用/GitHub优先后继补足实际候选范围；不因改了导航而再次全量研究框架。
 
 GitHub 是 canonical 状态/证据/过程后端；Research 解释、Kernel 核一致性不核经济真理；Evidence changes Belief，Price changes Odds；AI Investment Authority=NONE。保留原研究、失败、Human 原话与接受边界。文档/CI/保存/发布/实际使用分别验收。
 

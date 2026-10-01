@@ -1,7 +1,7 @@
 # Decision Kernel — repository working instructions
 
 This is the shared entry and task map, not the full manual or a live status report.
-The applicable rules remain in [WORKING-PROTOCOLS.md](WORKING-PROTOCOLS.md); read the relevant sections, not the whole history by default. That file is the lossless relocated protocol, not a second task database. Linked methods and actual Human authority still govern their own scope.
+The applicable rules remain in [WORKING-PROTOCOLS.md](WORKING-PROTOCOLS.md); read the relevant sections, not the whole history by default. That file retains the relocated protocol and its explicitly authorized amendments, not a second task database. Linked methods and actual Human authority still govern their own scope.
 
 ## Shared boundaries
 
@@ -67,4 +67,4 @@ For a rule/method/lesson change or demonstrated retrieval conflict, apply the [g
 
 ## Reuse First — required external prior-art check
 
-Before adding non-unique capability, apply [Reuse First](WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check): internal → official → external, beginning with retained #508/#511 evidence. Record actual fit/blockers and REUSE / THIN_ADAPTER / NEW_BUILD_JUSTIFIED. Unread is not no-match. Optimize for current real use, not hypothetical future scale; no new enforcement framework.
+Before committing to custom architecture or code for non-unique capability, apply [Reuse First](WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check): recover the internal need, actively search mature GitHub/open-source solutions first, and verify official contracts alongside candidate evaluation. #508/#511 are starting evidence, not a closed whitelist; reuse an exact still-applicable audit without repeating it. Evaluate broad personal-use candidates, including standalone/self-hosted tools and suitable copyleft projects, against actual licence, public-distribution, security and operating constraints, not hypothetical commercial requirements. Record actual fit/blockers and REUSE / THIN_ADAPTER / NEW_BUILD_JUSTIFIED. Unread is not no-match; no new enforcement framework.

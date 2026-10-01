@@ -25,7 +25,9 @@ It is **not** Decision OS v2 and it is **not** a new platform build.
 5. **Quiet stop is a product outcome.** A workflow may deepen, wait, drop, stop quietly, or wake the Human. It does not need to run every stage.
 6. **Human authority stays final.** Research, Odds, and Decision Rehearsal never become an autonomous investment decision, position size, portfolio action, execution instruction, or capital authority.
 7. **Extract proven core; do not wholesale-copy the old repository.** Existing Decision OS implementations and tests are source material. Transitional plumbing stays behind unless it proves it belongs in the kernel.
-8. **Reuse-first gate for new code.** Before adding non-unique infrastructure, check mature prior art first. A thin adapter is preferred to an owned subsystem.
+8. **GitHub/open-source reuse before custom construction.** Recover what already exists internally, then actively inspect mature GitHub solutions before committing to custom architecture or code; verify official contracts alongside them. Prefer direct use, configuration or a thin adapter to an owned subsystem. Existing reference projects are a starting point, not a closed whitelist.
+
+This is a personal-use project, not a speculative commercial platform. Evaluate standalone/self-hosted tools, CLI utilities, suitable copyleft projects and small proven implementations as well as libraries. Judge actual fitness, licence, public-repository distribution, security and maintenance constraints, not hypothetical future commercialization. The full [Reuse First rule](WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check) retains candidate-specific obligations, evidence and authority boundaries; broader evaluation does not authorize automatic adoption.
 
 ## Constitution vs Research Contract
 
