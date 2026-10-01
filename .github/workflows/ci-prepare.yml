@@ -12,7 +12,9 @@ permissions:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    # #696 main run 36831246787 was cancelled during a progressing cold install.
+    # Extra bounded headroom, not a retry, test waiver, or network-root-cause claim.
+    timeout-minutes: 15
     outputs:
       scope: ${{ steps.result.outputs.scope }}
     env:
