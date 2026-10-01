@@ -14,6 +14,8 @@
 
 **2026-10-01 C交付接续：** [#695正常固定入口、五文件与原29比较CLI字节复验](https://github.com/auguspp/decision-kernel/pull/695#issuecomment-5927802792)已完成，不再列为首次恢复待办；原PDF/Human接受未因此升级。[C2完整新起点对照](readings/c2-baseline-episodes-2026-10-01/README.md)把每日选中、连续段、期初/期末截断、同段等待和成熟/待成熟噪声分开，复用原21,120行而不调信号或复活旧executor。保存、登记、CI、发布与固定R消费按[本批范围回执](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5927815007)及其后继PR分别验收，不因本文链接存在就补签。随后补原C的真实研究使用、独立个股增量和历史成员/角色证据，不再扩大同一审计；已收口#697不重启为CI主线。
 
+**2026-10-01 C1同业材料实际应用：** [兴森同业承诺补读](readings/c1-peer-commitment-2026-10-01/README.md)使用AT&S两次披露及原R2/#678/#695，区分新增覆盖与新事件、具名合作与合同/到账，给出新增订单让价的有界贡献压力；不移植同业订单、毛利或概率，不重跑Full。来源读取限制、条件假设和未验项随原件保留；本批保存/登记/CI/发布/固定R消费沿[#297本批回执](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5928619297)的后继记录，不由导航预签。后续转原C其他实质缺口，不继续扩写同一案例。
+
 C1包括纵向财报、IR/同业变化、机构活动与可比预期、Outside View、经营/竞争/现金资本桥及首版→挑战→修订→后续使用。[纵向比较消费者#675](https://github.com/auguspp/decision-kernel/pull/675#issuecomment-5910727507)已实现并发布，从正常固定R恢复两家真实档案并实际运行CLI；原件/期间/单位/口径与算术机制验收，不签完整经济解释、Human接受或全C1。C2按原P2-1–6明确盲点审计、行业拐点、早期变化、独立个股发现、公司业务证据和多周期领先/扩散角色的已交付、缺口与退出条件；不要求六个新引擎，也不以单样本签整条线。
 
 **C2有界审计已收口：** 按[当时选择](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5910730861)对已保存21,120行作一次性完整分母/压力反例审计，见[有界派生审计](readings/c2-blindspot-audit-2026-09-30/README.md)及[发布/独立五文件恢复](https://github.com/auguspp/decision-kernel/pull/676#issuecomment-5911847344)。区分旧104日挑战与后继66日生产规则，区分覆盖、门槛和交付丢失；不改信号、不复活退役historical-study、不新建常驻runtime。原31MB文件仍Actions保管，到期与永久Git缺口明确；派生分析不冒充无损原件，不拆分绕过档案限额。已部署Brief fallback仍待自然消费，不能本地补签。
