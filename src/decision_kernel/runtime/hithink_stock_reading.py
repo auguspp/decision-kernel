@@ -414,13 +414,13 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
     elif any(not window_checks[str(n)]['usable_for_raw_comparison'] for n in SELECTION_WINDOWS):
         _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
 
-    latest_factor = Decimal(1)
-    if action_reference_adjustment and expected[-1] in adjustments:
-        item = adjustments[expected[-1]]
-        if item['factor'] is None:
+    latest_adjustment = adjustments.get(expected[-1])
+    expected_previous = bars[expected[-2]]['close_price']
+    if latest_adjustment is not None:
+        if latest_adjustment['factor'] is None:
             _bad(code, 'REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW')
-        latest_factor = Decimal(item['factor'])
-    expected_previous = bars[expected[-2]]['close_price'] * latest_factor
+        # A cash reference is exact subtraction, not a round-trip through a repeating ratio.
+        expected_previous = Decimal(latest_adjustment['reference_price'])
     uses_reference_adjustment = action_reference_adjustment and any(
         value['comparison_basis'] == 'REPORTED_ACTION_REFERENCE_ADJUSTED'
         for value in window_checks.values())
@@ -443,7 +443,7 @@ def qualify(history, quote, actions, *, code, sessions, params, observed_at,
         'latest_quote_previous_reference': {
             'snapshot_prev_price': str(actual_previous),
             'expected_reference_price': str(expected_previous),
-            'basis': ('REPORTED_ACTION_REFERENCE_ADJUSTED' if latest_factor != 1 else
+            'basis': ('REPORTED_ACTION_REFERENCE_ADJUSTED' if latest_adjustment is not None else
                       'RAW_PREVIOUS_CLOSE'),
         },
         'turnover_reconciliation': turnover_check,
@@ -498,7 +498,7 @@ def qualify_forward_adjusted_fallback(raw_history, adjusted_history, quote, *, c
     The original nonzero action response remains a source gap. This fallback does
     not relabel it as an empty event history and does not infer any event details.
     """
-    if provider_business_code != 3002:
+    if type(provider_business_code) is not int or provider_business_code != 3002:
         _bad(code, 'PROVIDER_BUSINESS_REQUEST_FAILED', 'REQUEST_FAILED')
     expected, raw_bars, raw_missing, raw_checks, raw_ready = _qualify_history_payload(
         raw_history, code=code, sessions=sessions, params=raw_params, observed_at=observed_at,
@@ -508,6 +508,10 @@ def qualify_forward_adjusted_fallback(raw_history, adjusted_history, quote, *, c
         observed_at=observed_at, selection_mode=True, adjust='forward')
     if expected2 != expected or set(adjusted_bars) != set(raw_bars):
         _bad(code, 'REQUIRED_SELECTION_WINDOW_STOCK_SESSIONS_MISSING', 'DATA_INSUFFICIENT')
+    for day in raw_bars:
+        if any(raw_bars[day][field] != adjusted_bars[day][field]
+               for field in ('volume', 'turnover')):
+            _bad(code, 'CURRENT_QUOTE_HISTORY_MISMATCH')
     last_raw = raw_bars[expected[-1]]
     last_adjusted = adjusted_bars[expected[-1]]
     for field in ('open_price','high_price','low_price','close_price'):
@@ -559,6 +563,7 @@ def qualify_forward_adjusted_fallback(raw_history, adjusted_history, quote, *, c
             'history_market_session_gaps': [d.isoformat() for d in adjusted_missing],
             'history_window_checks': adjusted_checks,
             'adjustment_mode': 'forward',
+            'raw_activity_unchanged': True,
             'event_details_inferred': False,
         },
         'historical_daily_reference_check': 'PROVIDER_FORWARD_ADJUSTED_HISTORY_USED_FOR_PRICE_COMPARISON',
@@ -593,8 +598,8 @@ def request_json(path, params, *, api_key):
         code = params.get('thscode', params.get('thscodes'))
         if not re.fullmatch(r'\d{6}\.(SH|SZ|BJ)', code):
             raise ValueError('stock requests require one explicit identity')
-        if path == HISTORY and (params['adjust'] != 'none' or params['interval'] != '1d'):
-            raise ValueError('stock reading is raw daily only')
+        if path == HISTORY and (params['adjust'] not in {'none', 'forward'} or params['interval'] != '1d'):
+            raise ValueError('stock reading permits raw daily or explicitly planned forward daily only')
     else:
         _check_request(path, params)
     def nonfinite(_):

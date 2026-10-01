@@ -266,6 +266,7 @@ def render_market_expression_reading(report: dict) -> str:
             '<p><strong>Market Expression = OBSERVED</strong>：它从已 surfaced Sector 的 breadth leader 有界进入，并通过既有 5/20 日相对价格条件；这仍不是买入结论。</p>',
             f'<p>5日相对沪深300：{pct(row["market_comparison"]["5"]["excess_return"])}；20日相对沪深300：{pct(row["market_comparison"]["20"]["excess_return"])}；最新原始收盘 {e(path["last_close"])} CNY。</p>',
         ]
+        parts.append(f'<p class="notice">{e(stock.price_basis_notice(path))}</p>')
         for origin in row["current_origins"]:
             parts.append(f'<h3>市场来源：{e(origin["node_label"])}</h3>')
             if origin.get("company") is None:
