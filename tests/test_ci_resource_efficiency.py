@@ -26,3 +26,15 @@ def test_installer_always_installs_and_does_not_reuse_an_environment_or_result()
     base = (ROOT / 'tests/test_external_research_minimal_install.py').read_text()
     assert '"--no-cache-dir", "--retries", "0"' in base
     assert '"--isolated", "install"' in base
+
+
+def test_prepare_cold_install_headroom_is_bounded():
+    workflow = (ROOT / '.github/workflows/ci-prepare.yml').read_text()
+    prepare = workflow.split('\n  prepare:\n', 1)[1].split('\n    steps:\n', 1)[0]
+    assert '\n    timeout-minutes: 15\n' in prepare
+    # The longer native deadline does not replace actual installation or qualification.
+    assert 'uses: ./.github/actions/ci-python' in workflow
+    assert 'extras: dev' in workflow
+    assert 'Record full test collection' in workflow
+    assert 'Verify exact PR full-suite reuse after real installation' in workflow
+    assert 'continue-on-error' not in workflow
