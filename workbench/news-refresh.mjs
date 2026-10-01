@@ -33,7 +33,7 @@ export function refreshPresentation(result) {
     };
     if (result.publication === 'browser_readback_required') return {
       title:'本次新闻采集成功',
-      detail:'运行已成功；发布与正文由页面现有固定 R reader 核验。请读取最新保存结果，不把运行成功本身当作页面已更新。'
+      detail:'运行已成功；高频 News live 发布仍由页面重新读取并校验。请回到新闻页读取最新滚动新闻，不把运行成功本身当作页面已经显示新内容。'
     };
     return {title:'采集任务成功，发布资料尚未确认', detail:'请读取最新保存结果确认发布；不自动再次采集。'};
   }
@@ -105,7 +105,7 @@ export function newsRefreshControl(ctx, fetcher = globalThis.fetch) {
     const view = refreshPresentation(state.result); status.append(el('p',view.title),el('p',view.detail));
     const r = state.result.run, id = r?.id || state.result.run_id, url = r?.html_url || state.result.run_url;
     if (safeRunURL(id,url)) status.append(link('查看本次运行',url));
-    if (['same_run_bytes_read','browser_readback_required'].includes(state.result.publication)) status.append(button('读取最新保存结果', () => {
+    if (['same_run_bytes_read','browser_readback_required'].includes(state.result.publication)) status.append(button('重新读取页面数据', () => {
       if (active()) document.getElementById('refresh')?.click(); // Existing immutable-reader refresh, not another dispatch.
     }));
     status.append(folded('本次更新的依据',JSON.stringify(state.result,null,2)));

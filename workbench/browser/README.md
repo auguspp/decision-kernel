@@ -49,34 +49,36 @@ Each scene uses a fresh context at 1360×900 and 390×844:
    the old response must not overwrite the new selection.
 5. Preserve six synthetic index rows and a stock panel alongside explicit
    unavailable source families; no zero quote or completeness inference.
-6. A declared HTTP 503 affects only the global-market panel, not the stock panel.
-7. Read three saved calendar appointments with original/local clocks, then read
+6. Read the independent `read-model/news-live` pointer, verify the exact pinned manifest/history bytes, and render the rolling News view without turning capture clocks into publisher time.
+7. A missing/rejected News live pointer falls back visibly to the low-frequency saved-news path and never becomes a quiet-news claim.
+8. A declared HTTP 503 affects only the global-market panel, not the stock panel.
+9. Read three saved calendar appointments with original/local clocks, then read
    their same-R excerpt; embedded source script remains inert text.
-8. Reject an equal-length calendar-body change via native SHA-256 while other
+10. Reject an equal-length calendar-body change via native SHA-256 while other
    market and stock panels remain readable.
-9. After refresh, a held old-R three-row calendar cannot replace the new-R
+11. After refresh, a held old-R three-row calendar cannot replace the new-R
    one-row window, even after its native digest completes.
-10. A legacy R without calendar registration is explicit absence, not no events;
+12. A legacy R without calendar registration is explicit absence, not no events;
     no calendar body is fetched and the stock panel remains available.
-11. Search the complete synthetic Concept catalog, open its members, distinguish
+13. Search the complete synthetic Concept catalog, open its members, distinguish
     qualified / conditions-not-met / unavailable / not-checked Stock states,
     inspect exact shared-member counts with both denominators, and read an
     existing same-R company document. Source markup stays literal text.
-12. Reject equal-length member-body tampering via actual Web Crypto while
+14. Reject equal-length member-body tampering via actual Web Crypto while
     preserving the original Concept quotes, calendar and independent Stock panel.
-13. Finish a held old-R membership response after refreshing and selecting a
+15. Finish a held old-R membership response after refreshing and selecting a
     new-R concept. The old members cannot replace the new reading or its detail.
-14. Reject equal-length long-history body tampering while source quotes and
+16. Reject equal-length long-history body tampering while source quotes and
     members remain readable; the digest failure cannot become a trend verdict.
-15. Complete an old-R long-history response after selecting a new-R reading;
+17. Complete an old-R long-history response after selecting a new-R reading;
     the old phase cannot replace the new one, including after native digest EOF.
-16. An older reading without long-history registration retains short quotes and
+18. An older reading without long-history registration retains short quotes and
     members, reports the gap and does not fetch or invent a long path.
-17. Read an explicitly registered authored agenda, its visible source gaps and
+19. Read an explicitly registered authored agenda, its visible source gaps and
     unknown review dates, then its same-R original; source script stays inert.
-18. Reject an equal-length altered agenda with native SHA while original BLS
+20. Reject an equal-length altered agenda with native SHA while original BLS
     appointments and the stock panel remain available.
-19. A held old-R agenda cannot overwrite the new one after its digest completes.
+21. A held old-R agenda cannot overwrite the new one after its digest completes.
 
 Concept scene11 also expands synthetic5/20/60 index/benchmark/excess values,
 positive-excess run length, strengthening/weakening and insufficient-history

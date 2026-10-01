@@ -16,10 +16,13 @@ def test_source_uses_existing_completion_clock_and_pinned_upstream():
     assert 'github.event.workflow_run.conclusion' not in text
     assert 'github.run_attempt == 1' in text and 'github.event.workflow_run.run_attempt == 1' in text
     assert "github.event.workflow_run.path == '.github/workflows/sector-radar-shadow.yml'" in text
-    assert 'contents: write' not in text and 'secrets.' not in text
+    assert 'contents: write' in text and 'secrets.' not in text
     assert 'persist-credentials: false' in text
     assert 'head_sha="$GITHUB_SHA"' in text and "r['conclusion']=='success'" in text
     assert 'python -m decision_kernel.runtime.news_daily' in text
+    assert 'python -m decision_kernel.runtime.news_live_publication' in text
+    docker = text.split('- name: Start the pinned upstream NewsNow image',1)[1].split('- name: Capture seven original windows',1)[0]
+    assert 'GH_TOKEN' not in docker and 'github.token' not in docker
 
 
 def test_publisher_adds_only_owned_completed_native_news_event():

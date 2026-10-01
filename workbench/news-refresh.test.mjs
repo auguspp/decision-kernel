@@ -87,7 +87,7 @@ function publication(state,{wrongRun=false,corrupt=false,partial=false}={}) {
 test('workflow fingerprint binds exact optional admission and leaves the source commands in place',async()=>{
   const {state}=await fixture();assert.equal(sha(state.workflow),WORKFLOW_SHA256);assert.match(state.workflow,/SITE_SLOT_CHANGED_NO_CAPTURE/);
   assert.match(state.workflow,/workflows: \[sector-radar-shadow\]/);assert.match(state.workflow,/github.run_attempt == 1/);
-  assert.match(state.workflow,/python -m decision_kernel.runtime.news_daily/);assert.ok(!state.workflow.includes('contents: write'));
+  assert.match(state.workflow,/python -m decision_kernel.runtime.news_daily/);assert.match(state.workflow,/python -m decision_kernel.runtime.news_live_publication/);assert.ok(state.workflow.includes('contents: write'));
 });
 test('routing/config/identity/CSRF reject before network and do not return static HTML',async()=>{
   const f=await fixture();
@@ -236,11 +236,11 @@ test('lost submit response and later status refusal retain the permit and never 
 test('successful run offers the existing browser reader refresh without a second dispatch',async()=>{
   const f=await fixture(),ctx=context(),root=newsRefreshControl(ctx,async(u,o)=>handleNewsRefresh(request(JSON.parse(o.body)),env(),{fetcher:f.fetcher,now:()=>T}));
   await button(root,'刷新最新新闻').onclick();f.state.news[0].status='completed';f.state.news[0].conclusion='success';
-  await button(root,'检查本次更新').onclick();assert.match(root.textContent,/本次新闻采集成功/);assert.ok(button(root,'读取最新保存结果'));assert.equal(f.state.posts,1);
+  await button(root,'检查本次更新').onclick();assert.match(root.textContent,/本次新闻采集成功/);assert.ok(button(root,'重新读取页面数据'));assert.equal(f.state.posts,1);
 });
 test('human status wording keeps run success separate from browser publication verification',()=>{
   const r=refreshPresentation({kind:'run',run:{status:'completed',conclusion:'success'},publication:'browser_readback_required'});
-  assert.match(r.title,/采集成功/);assert.match(r.detail,/固定 R reader/);assert.match(r.detail,/不把运行成功本身当作页面已更新/);
+  assert.match(r.title,/采集成功/);assert.match(r.detail,/News live/);assert.match(r.detail,/不把运行成功本身当作页面已经显示新内容/);
 });
 
 

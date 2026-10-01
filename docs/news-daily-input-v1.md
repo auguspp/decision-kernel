@@ -135,3 +135,60 @@ If this cadence is retired, remove the two new scheduling seams and their dedica
 contracts through a normal change, retaining historical source bytes and compatible
 readers. No force-push, erased failures, inferred Human acceptance, automatic Full,
 Odds recalculation, Watch activation or investment action is part of this change.
+
+
+## 2026-10-01 Sites live News read cache
+
+Human explicitly authorized the missing consumer seam after the ten-minute rolling
+capture change: opening the Workbench News surface should be able to read the
+newest qualified rolling News without forcing the whole `read-model/current-state`
+package to publish every ten minutes.
+
+Reuse classification: **REUSE + THIN_ADAPTER**. This reuses the existing NewsNow
+capture, rolling-v2 history, Git object/ref publisher pattern and original Workbench.
+No new crawler, provider, database, scheduler framework, Research executor or alert
+service is introduced. Retained #508 prior art for cadence separation and the living
+NewsNow supplier rule remain the relevant external reuse inputs.
+
+The producer now publishes only two verified derived files to the dedicated
+`read-model/news-live` ref after a successful News capture:
+- `news-live.json`: exact source-run/capture identity, source outcomes, rolling
+  coverage and a SHA-256/bytes descriptor for the retained history;
+- `history.json`: the already-validated rolling-v2 index.
+
+This ref is deliberately **latest-only ephemeral delivery cache**. Each new value is
+an orphan Git commit and the dedicated pointer is force-updated only after immutable
+candidate readback and a fresh pointer check. That force authority is not available
+to `read-model/current-state` or arbitrary refs. The cache is not a second canonical
+state/history store: native News artifacts retain source custody, and the low-frequency
+current-state package continues to retain the auditable reading snapshots. A failed
+or uncertain live publication fails the News run and does not auto-retry.
+
+The original News container still receives no repository token. The workflow obtains
+`contents:write` only for the trusted post-capture live-ref publication step; source
+requests remain inside the credential-free pinned NewsNow container. The source and
+bundle request limits are unchanged.
+
+The Workbench server exposes only two exact pointer-read routes:
+`/api/read-model/current-state` and `/api/read-model/news-live`. It is not a generic
+Git ref proxy. The News page lazily resolves the live pointer when opened, verifies
+the exact pinned manifest and `history.json` bytes with Web Crypto, and renders the
+rolling index first. It does not poll in the background. “重新读取最新滚动新闻” only
+re-resolves the read pointer; it does not trigger acquisition. If the live pointer
+or bytes are unavailable, the UI visibly falls back to the low-frequency saved-news
+path and must not convert that gap into “no news”.
+
+The UI preserves the source boundary: first/last-seen are capture clocks, not publisher
+times; publication claims remain claims; rolling truncation, bootstrap, source gaps
+and >30-minute capture age remain visible. A copied Quick request binds the exact live
+R/history hash/version id but does not auto-run Quick/Full, update Odds/Watch, accept
+Research, or trade.
+
+Owner/consumer: the existing `radar-newsnow-daily` owns live publication; the
+Workbench News page consumes it. Retrieval entry: `read-model/news-live/news-live.json`.
+Retirement: remove this ref publisher and Workbench consumer together if the live
+surface is retired; do not leave an orphan writer or hidden polling path.
+
+Implementation/CI/browser proof establishes the contract only. Natural ten-minute
+capture, live-ref population, and actual hosted Sites adoption/readback remain separate
+runtime acceptance facts; a source bundle or isolated Chromium PASS is not deployment.

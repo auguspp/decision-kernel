@@ -18,7 +18,7 @@ import time
 import traceback
 
 from playwright.sync_api import expect, sync_playwright
-from fixtures import MARKETS, NOW, R1, R2, M, REPO, descriptor, fixture, raw
+from fixtures import MARKETS, NOW, R1, R2, M, NL, REPO, descriptor, fixture, news_live_fixture, raw
 from concept_stock import scenes as concept_stock_scenes
 
 ORIGIN = 'http://127.0.0.1:4173'
@@ -35,6 +35,7 @@ class Inputs:
     def __init__(self):
         self.ref = R1
         self.files = {ref: fixture(ref) for ref in (R1, R2)}
+        self.files[NL] = news_live_fixture()
         self.overrides = {}
         self.hold = set()
         self.pending = {}
@@ -65,6 +66,10 @@ class Inputs:
                 if request.headers.get('x-decision-kernel-intent') != 'read-model-ref':
                     raise ValueError('missing ref-read intent')
                 self.fulfil(route, raw({'ref': 'read-model/current-state', 'commit': self.ref}))
+            elif url == ORIGIN + '/api/read-model/news-live':
+                if request.headers.get('x-decision-kernel-intent') != 'news-live-ref':
+                    raise ValueError('missing news-live ref intent')
+                self.fulfil(route, raw({'ref': 'read-model/news-live', 'commit': NL}))
             elif url.startswith(ORIGIN + '/workbench/'):
                 name = url.removeprefix(ORIGIN + '/workbench/')
                 allowed = {p.name: p for p in WORKBENCH.glob('*.mjs') if not p.name.endswith('.test.mjs')}
@@ -297,6 +302,27 @@ def scene_new_reading_discards_old_detail(page, data):
     expect(page.locator('#detail')).not_to_contain_text(R1)
     return {'cross_R': 'late R1 body cannot overwrite selected R2'}
 
+
+
+def scene_news_live(page, data):
+    tab(page, '新闻')
+    expect(page.get_by_role('heading', name='新闻 · 滚动更新', exact=True)).to_be_visible()
+    expect(page.locator('#content')).to_contain_text('TEST_ONLY 滚动新闻 <script>window.fixtureInjected=true</script>')
+    expect(page.locator('#content')).to_contain_text('News live R：' + NL)
+    expect(page.locator('#content')).to_contain_text('滚动历史仍在建立')
+    assert page.evaluate('window.fixtureInjected === undefined')
+    assert any(r['url'] == ORIGIN + '/api/read-model/news-live' for r in data.requests)
+    assert all(r['method'] == 'GET' for r in data.requests)
+    return {'news_live':'exact independent R', 'latest_capture':'visible', 'source_script':'inert text'}
+
+
+def scene_news_live_gap(page, data):
+    data.overrides[ORIGIN + '/api/read-model/news-live'] = (raw({'code':'TEST_ONLY_GAP'}), 503)
+    tab(page, '新闻')
+    expect(page.get_by_role('heading', name='新闻 · 低频保存快照', exact=True)).to_be_visible()
+    expect(page.locator('#content')).to_contain_text('滚动新闻本次未取得或核验失败')
+    expect(page.locator('#content')).to_contain_text('新闻窗口本次不可读，不代表没有新闻')
+    return {'live_gap':'explicit', 'fallback':'current-state snapshot path preserved, no quiet inference'}
 
 def scene_markets_local_gap(page, data):
     tab(page, '市场观察')
@@ -587,7 +613,8 @@ def scene_agenda_late_read(page, data):
 
 
 SCENES = [scene_read_and_copy, scene_search_and_late_preview, scene_bad_body,
-          scene_new_reading_discards_old_detail, scene_markets_local_gap, scene_markets_read_failure,
+          scene_new_reading_discards_old_detail, scene_news_live, scene_news_live_gap,
+          scene_markets_local_gap, scene_markets_read_failure,
           scene_calendar_read, scene_calendar_bad_body, scene_calendar_late_read, scene_calendar_legacy_reading,
           scene_concepts_read, scene_concepts_bad_members, scene_concepts_late_members,
           scene_concepts_bad_trend, scene_concepts_late_trend, scene_concepts_legacy_trend,
@@ -616,8 +643,10 @@ def main():
               'browser_executable_requested': str(args.chromium) if args.chromium else 'PLAYWRIGHT_MANAGED',
               'scope': 'TEST_ONLY_ISOLATED_WORKBENCH_NOT_SITES_OR_HUMAN_ACCEPTANCE',
               'playwright': version('playwright'), 'source_sha256': sources,
-              'fixture_sha256': {ref: hashlib.sha256(raw({k: hashlib.sha256(v).hexdigest()
+              'fixture_sha256': {**{ref: hashlib.sha256(raw({k: hashlib.sha256(v).hexdigest()
                   for k, v in fixture(ref).items()})).hexdigest() for ref in (R1, R2)},
+                  NL: hashlib.sha256(raw({k: hashlib.sha256(v).hexdigest()
+                      for k, v in news_live_fixture().items()})).hexdigest()},
               'attempts_per_scene': 1, 'scenes': []}
     try:
         with sync_playwright() as pw:
@@ -663,12 +692,12 @@ def main():
                             qualify_consumption(data, page.evaluate('window.__AN2_CONSUMED'),
                                                 page.evaluate('window.__AN2_FETCHES'), failed)
                             unexpected_console = [m for m in console if m['type'] == 'error' and
-                                not (scene is scene_markets_read_failure and '503' in m['text'])]
+                                not (scene in (scene_markets_read_failure, scene_news_live_gap) and '503' in m['text'])]
                             assert not unexpected_console, unexpected_console
                             # Responsive evidence is a viewport check, not physical-phone acceptance.
                             result['layout'] = page.evaluate('({scroll: document.documentElement.scrollWidth, viewport: innerWidth})')
                             assert result['layout']['scroll'] <= result['layout']['viewport'] + 1
-                            if scene in (scene_search_and_late_preview, scene_markets_local_gap, scene_calendar_read, scene_concepts_read, scene_agenda_read) or scene.__name__ in ('scene_concept_stock_dates', 'scene_concept_stock_late_selection'):
+                            if scene in (scene_search_and_late_preview, scene_news_live, scene_markets_local_gap, scene_calendar_read, scene_concepts_read, scene_agenda_read) or scene.__name__ in ('scene_concept_stock_dates', 'scene_concept_stock_late_selection'):
                                 page.screenshot(path=str(args.output / f'{name}.png'), full_page=True)
                             result['status'] = 'PASS'
                         except Exception:
