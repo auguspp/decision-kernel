@@ -885,7 +885,7 @@ def render_stock_reading(report: dict) -> str:
             parts.append('<tr>'+''.join(f'<td>{e(v)}</td>' for v in (
                 n+'日', window_pct(values['stock_return'], n), pct(values['benchmark_return']),
                 window_pct(values['excess_return'], n)))+'</tr>')
-        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌。无公司行为影响时使用未复权原始收盘价；具名现金分红可只为价格比较建立来源约束的参考价调整；送转仍需单独复核。公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
+        parts += ['</table></div><p><small>5/20日门槛及移位比较要求最近26个市场交易日的个股bar完整；更早缺口不填值、不推断停牌、不倒灌历史。无公司行为影响时使用未复权原始收盘价；具名现金分红可只为价格比较建立来源约束的参考价调整；送转仍需单独复核。公司行为接口返回数据未准备时，最多一次使用供应商forward复权历史兜底。两者都不是含分红总回报；60日不参与门槛。</small></p>']
         if p['reference_input_provenance'] == HITHINK_RAW:
             if checks.get('adjusted_history_fallback'):
                 parts.append('<p class="notice">公司行为端点本次返回数据未准备；原业务码仍保留，没有被改写成“无事件”。本对象使用同一供应商的 forward 复权历史作为一次有界价格路径兜底，并与原始最新OHLC、成交量/成交额及快照前收交叉核对。未推断公司行为明细，也不是总回报。</p>')
