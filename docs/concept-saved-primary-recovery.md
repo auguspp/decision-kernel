@@ -106,3 +106,41 @@ not prove Quick-to-Brief consumption. No retry or substitute archive of denied
 prospective usage and whole-C acceptance remain distinct. Sites paused; D not
 started. No new source/model/Quick/Full/Odds/Watch, workflow, schedule, dependency,
 registry, budget, notification or investment authority.
+
+## Actual publisher stage-order failure and bounded follow-through
+
+The initial #709 implementation above is retained as history. PR36916131440/1
+and independent main36917033443/1 passed, but normal publisher36917117229/1
+failed in COLLECTION with ValueError, UNCLASSIFIED,118 Git reads. The remote log
+did not expose a more specific module or stack. Its original failure remains;
+no rerun or source execution was requested. Read ref remained at the original R.
+See #709/5939424675 for the actual evidence and changed premise.
+
+The original same-R base-context.json (209964bytes,
+blob85f1a06e57c8d5c40890c79a81c9c41a897f97d2) exposed the missed ordering.
+The pre-Radar root was164957bytes; the restored early Radar root190993bytes,
+still below192KiB. Later extensions use original model.assemble and grow the
+root beyond that bound. The initial local control joined Radar to the final
+baseline, so its overflow-only wrapper ran; that did not cover actual order.
+This is a real demonstrated orchestration gap, not an invented remote traceback.
+
+The existing publisher now explicitly closes the Radar stage after its optional
+detail and BEFORE the observation map and subsequent modules. It invokes the
+same existing manifest/index checks once; no per-extension compression layer,
+new store, size heuristic, source retry or raised budget. Newly composed complete
+publisher roots carry the explicit summary marker even when their early stage
+fits. Old/small direct readers remain accepted; old source_status bytes and the
+full company manifest are unchanged. Already indexed roots are checked and kept,
+unavailable Radar states are not upgraded. Source/PIT/authority semantics stay.
+
+The stage-order control with the same retained bodies now produces171545bytes at
+Radar close,193800 after the original later sections and196031 with the existing
+map. These are still offline component controls, not a new source or full live
+publisher. Added regressions exercise the ACTUAL Collector.collect ordering with
+inert saved-module boundaries, the original late model.assemble bound, complete
+manifest equality, unchanged original files, idempotence and unavailable states.
+No existing test identity is removed or its source qualification relaxed.
+
+The follow-through requires its own exact native full CI, normal merge,
+independent main, ordinary publisher and fixed-new-R body readback. Those results
+belong in the successor PR/#297 receipts; #709's failed publication is not erased.

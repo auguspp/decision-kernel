@@ -70,7 +70,7 @@ def test_actual_size_overflow_uses_existing_manifest_without_dropping_bytes(tmp_
     assert shared.saved_source_status(col, status) == full
     assert all(col.files[path] == raw for path, raw in before_files.items())
     assert out['lanes'] == base['lanes'] and out['pending'] == base['pending']
-    assert all(out[k] == v for k,v in model.AUTHORITY.items())
+    assert all(out[k] == v for k, v in model.AUTHORITY.items())
     # Already compacted roots remain readable; the full descriptors are not
     # silently replaced by the summary in the existing company projection.
     assert shared._assemble(col, out, out['research'])['research'] == out['research']
@@ -101,3 +101,65 @@ def test_no_compaction_can_increase_the_bound_or_omit_unrelated_research(tmp_pat
     with pytest.raises(ValueError, match='bounded index size'):
         shared._assemble(col, base, research)
     assert research == before
+
+
+def test_real_collector_closes_radar_before_later_root_growth(tmp_path, monkeypatch):
+    """The actual orchestration order, with inert saved-module boundaries."""
+    import sys
+    from types import ModuleType
+    from decision_kernel.runtime import current_state_delivery_with_odds_watch as entry
+    col, early, full = sample(tmp_path)
+    original_files = dict(col.files)
+    extra = 'x' * (192*1024 - len(model.read_package_bytes(early)) + 1000)
+
+    def append_late(base):
+        research = deepcopy(base['research'])
+        research['synthetic_later_section'] = extra
+        return model.assemble(code_commit=col.code_commit, checked_at=AT,
+                              check_started_at=base['checks']['started_at'],
+                              lanes=base['lanes'], research=research,
+                              capabilities=base['capability_gaps'], refresh_identity=base['refresh'])
+
+    # This is the missed #709 case: Radar alone fits, later original assemble fails.
+    assert len(model.read_package_bytes(early)) < 192*1024
+    assert 'source_status_scope' not in early['research']['radar_discovery']
+    with pytest.raises(ValueError, match='bounded index size'):
+        append_late(early)
+
+    calls = []
+    late_module = ModuleType('decision_kernel.runtime.news_daily_reading')
+    def late_attach(collector, parent):
+        calls.append('later')
+        assert parent['research']['radar_discovery']['source_status_scope'] == shared.SOURCE_STATUS_SCOPE
+        assert shared.saved_source_status(collector, parent['research']['radar_discovery']) == full
+        return append_late(parent)  # The later module does not own Radar compaction.
+    late_module.attach = late_attach
+    monkeypatch.setitem(sys.modules, late_module.__name__, late_module)
+    monkeypatch.setattr(entry.base.Collector, 'collect', lambda self, refresh: early)
+    monkeypatch.setattr(shared, 'attach', lambda self, parent: parent)
+    current = entry.Collector(col.api, col.code_commit, tmp_path, now=lambda: AT)
+    current.files = col.files
+    current.include_radar_discovery = True
+    current.include_daily_news = True
+    final = current.collect({})
+    assert calls == ['later'] and len(model.read_package_bytes(final)) <= 192*1024
+    assert final['research']['synthetic_later_section'] == extra
+    assert all(current.files[path] == raw for path, raw in original_files.items())
+    assert 'source_status_scope' not in early['research']['radar_discovery']
+    assert final['lanes'] == early['lanes'] and final['pending'] == early['pending']
+    assert all(final[k] == v for k, v in model.AUTHORITY.items())
+    assert col.api.calls == 0
+
+
+def test_closing_index_is_exact_idempotent_and_preserves_unavailable(tmp_path):
+    col, base, full = sample(tmp_path)
+    result = shared.index_source_status(col, base)
+    assert shared.saved_source_status(col, result['research']['radar_discovery']) == full
+    before = dict(col.files)
+    assert shared.index_source_status(col, result) is result
+    assert col.files == before
+    failed = deepcopy(base)
+    failed['research']['radar_discovery'] = {'status': 'UNAVAILABLE_OR_REJECTED'}
+    failed['reading_hash'] = canonical_hash({k:v for k,v in failed.items() if k != 'reading_hash'})
+    assert shared.index_source_status(col, failed) is failed
+    assert col.files == before

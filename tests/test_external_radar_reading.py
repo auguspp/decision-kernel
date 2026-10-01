@@ -14,6 +14,7 @@ from decision_kernel.runtime import current_state_delivery as base
 from decision_kernel.runtime import current_state_delivery_with_odds_watch as entry
 from decision_kernel.runtime import external_radar_observations as obs
 from decision_kernel.runtime import external_radar_reading as reading
+from decision_kernel.runtime import radar_company_reading as companies
 from test_external_radar_observations import news_pair, industry_inputs, edit, hp, PERIOD
 from test_radar_company_reading import composed, compose, reseal
 
@@ -85,8 +86,11 @@ def setup(monkeypatch):
     company['projection']['companies'][0]['source_names'] = ['公司甲']
     company['projection_hash'] = canonical_hash(company['projection'])
     reference = col.retain('details/radar/company-reading.json', m.json_bytes(company))
+    index = col.retain('details/radar/index.html', companies.render(company).encode())
     baseline['research']['radar_discovery'] = {
-        'status': 'READ_OK', 'details': {'company_reading': reference},
+        'status': 'READ_OK', 'details': {'company_reading': reference, 'index': index},
+        'coverage': deepcopy(company['projection']['coverage']),
+        'source_status': deepcopy(company['projection']['source_status']),
         'projection_hash': company['projection_hash']}
     reseal(baseline)
     col.files['current-state.json'] = m.json_bytes(baseline)
@@ -237,7 +241,16 @@ def test_entry_requires_explicit_optin_and_uses_existing_collection(monkeypatch)
     extended.files = dict(col.files); extended.include_radar_discovery = True
     monkeypatch.setattr(base.Collector, 'collect', lambda self, refresh: b)
     monkeypatch.setattr(reading.radar, 'attach', lambda collector, baseline: baseline)
-    assert extended.collect({}) is b and col.api.calls == 0
+    before = deepcopy(b); originals = dict(extended.files)
+    value = extended.collect({})
+    assert 'external_radar' not in value['research'] and col.api.calls == 0
+    radar = value['research']['radar_discovery']
+    assert radar['source_status_scope'] == reading.radar.SOURCE_STATUS_SCOPE
+    assert reading.radar.saved_source_status(extended, radar) == b['research']['radar_discovery']['source_status']
+    assert b == before and value['lanes'] == b['lanes']
+    for path, raw in originals.items():
+        if path not in {'README.md', 'current-state.json'}:
+            assert extended.files[path] == raw
     extended.include_external_radar = True
     value = extended.collect({})
     assert value['research']['external_radar']['status'] == 'READ_OK_WITH_DECLARED_GAPS'

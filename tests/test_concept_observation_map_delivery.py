@@ -9,6 +9,7 @@ from decision_kernel.runtime import current_state_delivery as base
 from decision_kernel.runtime import current_state_delivery_with_odds_watch as entry
 from decision_kernel.runtime import concept_observation_map as view
 from decision_kernel.runtime import concept_observation_map_delivery as delivery
+from decision_kernel.runtime import radar_company_reading as companies
 from tests.test_concept_radar import Fixture, no_network
 from test_radar_company_reading import API, baseline, SHA
 
@@ -17,18 +18,27 @@ CUTOFF = '2026-09-18T09:00:00+00:00'
 
 def prepared(tmp_path):
     col = entry.Collector(API(), SHA, tmp_path, now=lambda: CUTOFF)
-    b, _, _ = baseline(col)
+    b, sector, sector_ref = baseline(col)
     report = Fixture().run()
     ref = col.retain('details/concept/123456/observation.json', model.json_bytes(report))
-    index = col.retain('details/radar/index.html', b'<p>Synthetic existing company reading</p>')
-    companies = col.retain('details/radar/company-reading.json', b'{"synthetic_unchanged":true}')
+    source_status = {'concept': {
+        'status': 'VERIFIED_SAVED_CONCEPT_SOURCE', 'details': {'observation.json': ref},
+        'projection_hash': report['projection_hash'],
+        'market_session': report['projection']['market_session'],
+        'source_observed_at': report['projection']['as_of']}}
+    # Use the existing complete manifest, not an opaque placeholder. The real
+    # publisher validates it when closing Radar, before attaching the map.
+    company = companies.build(b, sector_result=sector, sector_source=sector_ref,
+        institution_report=None, institution_source=None, source_status=source_status,
+        generated_at=CUTOFF, concept_report=report, concept_source=ref, include_concept=True)
+    index = col.retain('details/radar/index.html', companies.render(company).encode())
+    company_ref = col.retain('details/radar/company-reading.json', model.json_bytes(company))
     research = deepcopy(b['research'])
-    research['radar_discovery'] = {'status': 'READ_OK', 'coverage': {
-        'distinct_companies': 0, 'sector_companies': 0, 'institutional_companies': 0, 'overlap_companies': 0},
-        'details': {'index': index, 'company_reading': companies}, 'source_status': {'concept': {
-            'status': 'VERIFIED_SAVED_CONCEPT_SOURCE', 'details': {'observation.json': ref},
-            'projection_hash': report['projection_hash'], 'market_session': report['projection']['market_session'],
-            'source_observed_at': report['projection']['as_of']}}}
+    research['radar_discovery'] = {'status': 'READ_OK',
+        'coverage': deepcopy(company['projection']['coverage']),
+        'projection_hash': company['projection_hash'],
+        'details': {'index': index, 'company_reading': company_ref},
+        'source_status': source_status}
     b = model.assemble(code_commit=SHA, checked_at=CUTOFF, check_started_at=b['checks']['started_at'],
         lanes=b['lanes'], research=research, capabilities=[], refresh_identity={})
     col.files.update({'current-state.json': model.json_bytes(b), 'README.md': model.render_summary(b).encode()})
@@ -109,8 +119,16 @@ def test_unqualified_source_leaves_parent_unchanged_without_old_fallback(tmp_pat
 @pytest.mark.parametrize('enabled', [False, True])
 def test_existing_collector_only_attaches_map_when_concept_option_is_on(tmp_path, monkeypatch, enabled):
     col, b, _ = prepared(tmp_path)
+    before = deepcopy(b); originals = dict(col.files)
     monkeypatch.setattr(base.Collector, 'collect', lambda self, refresh: b)
     monkeypatch.setattr(delivery.radar_reading, 'attach', lambda self, baseline: baseline)
     col.include_radar_discovery = True; col.include_concept_discovery = enabled
     result = col.collect({})
     assert ('concept_observation_map' in result['research']['radar_discovery']) is enabled
+    radar = result['research']['radar_discovery']
+    assert radar['source_status_scope'] == delivery.radar_reading.SOURCE_STATUS_SCOPE
+    assert delivery.radar_reading.saved_source_status(col, radar) == b['research']['radar_discovery']['source_status']
+    assert b == before and result['lanes'] == b['lanes'] and col.api.calls == 0
+    for path, raw in originals.items():
+        if path not in {'README.md', 'current-state.json'}:
+            assert col.files[path] == raw
