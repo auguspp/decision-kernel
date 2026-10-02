@@ -1,0 +1,53 @@
+{
+  "member": {
+    "artifact": {
+      "digest": "sha256:6fd0699e5ffc7f53543bec91de9773609e2980e1ebf89243df18411fefde3b18",
+      "expired": false,
+      "expires_at": "2026-12-31T01:28:01Z",
+      "id": 11203384879,
+      "name": "tdx-member-check-36951061047-1",
+      "size_in_bytes": 452862,
+      "workflow_run": {
+        "head_sha": "2a5d08f782c2835285c0f5a3fa35c1bdbeb58f55",
+        "id": 36951061047
+      }
+    },
+    "run": {
+      "conclusion": "success",
+      "event": "workflow_dispatch",
+      "head_branch": "main",
+      "head_sha": "2a5d08f782c2835285c0f5a3fa35c1bdbeb58f55",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36951061047",
+      "id": 36951061047,
+      "path": ".github/workflows/tdx-member-source-check.yml",
+      "run_attempt": 1,
+      "status": "completed"
+    }
+  },
+  "price": {
+    "artifact": {
+      "digest": "sha256:f985274834e5ca99f995912148fe1af1ebf83f3e0ad7dee05ea8aeeb4807bfde",
+      "expired": false,
+      "expires_at": "2026-12-30T04:31:58Z",
+      "id": 11141865519,
+      "name": "stock-independent-observations-36815556951-1",
+      "size_in_bytes": 347205,
+      "workflow_run": {
+        "head_sha": "5aa1987bc5e9279b4129cd487f3594e5f9930ca9",
+        "id": 36815556951
+      }
+    },
+    "report_hash": "8ecf93277fa762859ce7f46371444129f7953bcf82518938c3f7733e804015f7",
+    "run": {
+      "conclusion": "success",
+      "event": "workflow_dispatch",
+      "head_branch": "main",
+      "head_sha": "5aa1987bc5e9279b4129cd487f3594e5f9930ca9",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36815556951",
+      "id": 36815556951,
+      "path": ".github/workflows/hithink-stock-dump-trial.yml",
+      "run_attempt": 1,
+      "status": "completed"
+    }
+  }
+}
