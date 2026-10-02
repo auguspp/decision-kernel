@@ -53,7 +53,22 @@ def plan():
 def qualify(raw, spec, received_at):
     """Qualify the requested page, never certify vintage or continuous membership."""
     require(spec in plan(), "TDX_REQUEST_SCOPE")
+    return qualify_page(raw, spec, received_at, boards=BOARDS)
+
+
+def qualify_page(raw, spec, received_at, *, boards):
+    """Shared dated-page checks; the caller must independently freeze its plan.
+
+    This pure parser grants no request permission. The original pilot wrapper
+    above still rejects any spec outside its original six-query plan.
+    """
     api, params = spec["api"], spec["params"]
+    require(api in FIELDS and isinstance(boards, dict) and boards, "TDX_REQUEST_SCOPE")
+    expected_keys = {"trade_date", "limit", "fields", "idx_type" if api == "tdx_index" else "ts_code"}
+    require(set(params) == expected_keys and params["fields"] == ",".join(FIELDS[api])
+            and params["limit"] == ("1000" if api == "tdx_index" else "3000")
+            and (params.get("idx_type") == "概念板块" if api == "tdx_index" else params["ts_code"] in boards),
+            "TDX_REQUEST_SCOPE")
     body = relay.decode(raw)
     require(type(body.get("code")) is int and body["code"] == 0
             and body.get("ok", True) is True and body.get("error") in (None, ""), "TDX_BUSINESS_STATUS")
@@ -93,7 +108,7 @@ def qualify(raw, spec, received_at):
         selected.append({key: row[key] for key in FIELDS[api]})
     if api == "tdx_index":
         catalog = {r["ts_code"]: r for r in selected}
-        require(all(b in catalog and catalog[b]["name"] == n for b, n in BOARDS.items()),
+        require(all(b in catalog and catalog[b]["name"] == n for b, n in boards.items()),
                 "TDX_TARGET_CATALOG_IDENTITY")
     # Preserve every other field in the bound raw body, not an invented normal form.
     claims = json.loads(raw.decode("utf-8-sig"), parse_float=str)
