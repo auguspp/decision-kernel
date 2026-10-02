@@ -29,7 +29,7 @@ jobs:
   probe:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
-      github.ref == 'refs/heads/main' && github.run_attempt == 1
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 && github.actor == 'auguspp'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
