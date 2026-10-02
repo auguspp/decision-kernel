@@ -1,21 +1,58 @@
-# C1：两份光迅长江研报的原件定位
+# C1固定取报入口已退役｜保留离线历史核验
 
-本次Human明确授权从成熟接口取得原件。只查002281.SZ、长江证券的2026-04-30和2026-09-10两份目标报告。原#680不可比输入及历史不改；下载地址不是PDF已取得，更不是完整预测模型合格。
+2026-10-02。Authority：[Human采纳个人投资者范围](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5948305322)。
+当前产品边界由[研究成果合同](research-outcome-contract-v1.md#c1个人投资者范围可用证据优先完整券商原件为可选增强2026-10-02)持有。
 
-Reuse：沿docs/data-source-orchestration-v1.md现有research_report按需职责，直接复用原tushare_relay客户端、固定HTTPS源、已有Actions secret和原临时队列一次30秒重试。不复制AKShare爬虫，也不采用响应级currentYear给历史模型定年。官方字段/限额依据为 https://tushare.pro/document/2?doc_id=415 。第三方Relay不冒称官方独立来源。
+## 当前处置
 
-`.github/workflows/c1-report-locators.yml`仅main、owner、attempt1，要求对应独立main CI成功；原单次authorization为c1-accelink-two-reports-20261002。原两笔逻辑查询最多四次HTTP；不分页、扩股、购权限。权限/限流/业务及目录资格失败停止。限额可能被上游忽略，故实核保存行数、count及每行日期/证券/机构，不凭请求参数认定过滤成功。
+#715/#716的固定光迅两日期取报及原生字段后继不再是施工队列或C必交样本。
+`.github/workflows/c1-report-locators.yml`已从当前树删除；脚本不再包含联网capture函数或capture命令。
+只保留`plan`、`identity`、`inspect`、`rebuild`与verify CLI，用于解释旧输入/原件，不执行计划。
+原生模式是旧manifest的历史标记，不是新的采集许可。旧authorization和剩余预算不复活。
 
-原响应、请求/取得时钟与摘要保存到本次Actions artifact，30天，不是永久Git原件。来源URL可能带临时参数，不打印到公开job日志；本程序不下载任何返回URL。目录完成后由原C1研究逐一核实际URL与目的地后取目标PDF，保留原作者、日期、版本、口径和来源限制，不自动翻译成forecast资格。
+共享`research_comparison`、`reviewed_forecasts`、Relay、Smart Money、#717发现层及相关历史不退役。
+“不再强制取得原报告”不等于允许比较不合格数字；光迅旧NOT_COMPARABLE/null继续，格力候选不替换它。
+不要求Human搬运固定PDF，也不为验收再换一组报告。缺可选原文时，独立研究可继续，相关模型结论保持未知。
+C2受阻源操作、Brief自然接续、Sites暂停及D边界与本次无关，未被解除或签收。
 
-`capture --root <新目录>`执行固定两查询；`verify --root <已有目录>`无凭据调用原响应验证并重建summary，逐字节核对。两者均由原GitHub运行身份绑定。进程中断可能只有部分原响应，不能冒称完整回放。本地/合成测试、正式PR/main、来源成功、PDF取得、模型资格和自然使用分别验收。
+## 必要历史与准确恢复定位
 
-## 原生字段接续：仅使用剩余一个查询槽
+最后含完整旧执行器的代码：`5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d`。
+[旧运行说明](https://github.com/auguspp/decision-kernel/blob/5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d/docs/c1-report-locators.md)、
+[首次来源回执](https://github.com/auguspp/decision-kernel/pull/715#issuecomment-5946188058)、
+[最终交付和平台拒绝](https://github.com/auguspp/decision-kernel/pull/716#issuecomment-5946361983)继续保留。
+恢复旧版本用于读取不授予重新执行权限。
 
-#715/5946188058记录首次真实run36968934918只执行一笔逻辑/两次HTTP：4月请求返回114行全空英文投影，因此停止9月请求。供应商promax.txt 0.5.61明确允许省略fields返回原生字段。原空投影/失败保留，不改写，不重跑原run。
+实际首run `36968934918` / attempt `1`，代码
+`c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f`，artifact `11210703148`，
+ZIP 2184 bytes，SHA256 `e2f951b99cdd529acd3feba3fb8d736259f2bf654d84dc1e1c88efbd3031d764`。
+仅4月目标一笔逻辑/两次HTTP：先504，再200但114行×10列全空；9月目标未执行。
+原生字段后继被平台安全拒绝，未观察到新run。目录成功退出不是目标报告已取得。
+该Actions原件原定于`2026-11-01T05:27:34Z`到期；Git保留此定位不延长附件寿命，也不证明当前仍可下载。
 
-在同一工作流中，后继`c1-accelink-native-schema-20261002`只查询同一4月日期、公司及券商一次，唯一参数差异为省略fields；最多两次HTTP，使前后累计最多两笔逻辑/四次HTTP。原9月请求不再自动执行。开跑前必须核唯一先驱run36968934918、精确artifact11210703148的身份/2184字节/SHA256及原1逻辑2HTTP/两项处置/114行全空；存在任何其他既往运行就拒绝。不通过换日期、标识或代码复位计数。
+取得并核对这份已保存ZIP身份、哈希、大小和CRC后，使用合格代码/既有依赖环境，离线读取其原文件：
 
-原生模式只保管原列与原行，状态为NATIVE_SCHEMA_RETAINED_NOT_REPORT_QUALIFIED；日期/券商过滤和目标报告身份尚未检查，需阅读原件逐条判定，不能把放开列名当成模型或日期资格通过。原模式的严格目标检查与原回放字节继续保留。没有自动URL访问、字段别名推定或新的来源fallback。
+```sh
+GITHUB_REPOSITORY=auguspp/decision-kernel \
+GITHUB_SHA=c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f \
+GITHUB_RUN_ID=36968934918 GITHUB_RUN_ATTEMPT=1 \
+GITHUB_REF=refs/heads/main GITHUB_EVENT_NAME=workflow_dispatch \
+PYTHONPATH=/path/to/qualified-checkout/src python \
+  /path/to/qualified-checkout/.github/scripts/c1-report-locators.py \
+  verify --root /path/to/retained-original-files
+```
 
-这是原C1一次性薄载体，不接生产时钟、不新增provider/registry/数据库/模型/Watch，不承担C2来源执行，也不解除#713的历史平台安全拒绝。取得结果后沿#680/#297收口；若由正式按需消费者接管，退役本专属载体并保留原件。Sites暂停，D未启动。
+上述环境是原件身份，不是假装当前执行发生在过去。verify不需要来源凭据，不联网、不写文件；
+重新生成的summary必须与原文件逐字节一致，拒绝篡改、额外文件及错误原执行身份。
+原件已过期或不在可恢复范围时如实说明，不用派生摘要再造原响应。
+
+## 重新接入与退出成本
+
+将来有成熟开源轮子或已获准服务的新能力，沿Reuse First审阅实际源码/合同与旧失败，
+在具体研究需要下有界验证跨日期/对象的取得、合法保存、后继读取与个人维护成本，再接可选增强。
+不设自动找轮子任务、不自建完整资料库，不因一次成功或新封装复位旧拒绝/预算。
+新费用或权限另行决定；没有这些变化时继续现有可用证据研究，不反复索要PDF。
+恢复工具不自动恢复“完整模型为必交”的旧承诺。
+
+本次退役同步收缩执行器专属测试，保留旧原件解释/回放和拒绝错误输入的检查。
+代码、CI、正常发布、真实使用和Human接受仍分别记录；不新增provider、数据库或采集流程。
