@@ -1,0 +1,108 @@
+name: tdx-member-source-check
+run-name: C2 TDX dated members / ${{ inputs.authorization }}
+on:
+  workflow_dispatch:
+    inputs:
+      code-sha:
+        description: 'Reviewed exact current main with successful independent main CI'
+        required: true
+        type: string
+      authorization:
+        description: 'Single Human-approved pilot: c2-tdx-members-20261002; never reuse'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: radar-global-market-relay
+  cancel-in-progress: false
+jobs:
+  capture:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && github.actor == 'auguspp'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Confirm exact main, independent CI, and unconsumed pilot before source access
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+          AUTHORIZATION: ${{ inputs.authorization }}
+        run: |
+          set -euo pipefail
+          test "$AUTHORIZATION" = c2-tdx-members-20261002
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+          test "$GITHUB_SHA" = "$EXPECTED_CODE"
+          test "$(gh api repos/auguspp/decision-kernel/git/ref/heads/main --jq '.object.sha')" = "$EXPECTED_CODE"
+          test "$(git hash-object src/decision_kernel/runtime/tushare_relay.py)" = 3f1f6eb33903de1fd77bbb9dae6e2c9470244b73
+          gh api "repos/auguspp/decision-kernel/actions/workflows/ci.yml/runs?branch=main&event=push&head_sha=$EXPECTED_CODE&per_page=10" > "$RUNNER_TEMP/tdx-ci.json"
+          gh api --paginate --slurp "repos/auguspp/decision-kernel/actions/workflows/tdx-member-source-check.yml/runs?event=workflow_dispatch&per_page=100" > "$RUNNER_TEMP/tdx-prior-runs.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          runs = json.loads((root/'tdx-ci.json').read_text())['workflow_runs']
+          assert runs, 'No independent main CI'
+          r = max(runs, key=lambda x: x['run_number'])
+          assert r['head_sha'] == os.environ['EXPECTED_CODE'] and r['head_branch'] == 'main'
+          assert r['repository']['full_name'] == r['head_repository']['full_name'] == 'auguspp/decision-kernel'
+          assert r['path'] == '.github/workflows/ci.yml' and r['event'] == 'push'
+          assert r['run_attempt'] == 1 and r['status'] == 'completed' and r['conclusion'] == 'success'
+          pages = json.loads((root/'tdx-prior-runs.json').read_text())
+          previous = [x for p in pages for x in p['workflow_runs'] if str(x['id']) != os.environ['GITHUB_RUN_ID']
+                      and x['display_title'] == 'C2 TDX dated members / c2-tdx-members-20261002']
+          assert not previous, 'Pilot already invoked; reconcile original result, no replay'
+          print('Exact independent main CI:', r['id'])
+          PY
+      - name: Install existing reader and feed dependencies
+        run: python -m pip install -e '.[feeds,concept]'
+      - name: Restore the two original pinned native reading pairs without business credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/tdx-native-inputs"
+          python - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from decision_kernel.runtime import tdx_member_source_check as m
+          root = Path(os.environ['RUNNER_TEMP'])/'tdx-native-inputs'
+          for day, (ref, _) in m.NATIVE.items():
+              for kind, path in [('reading', 'current-state.json'), ('members', 'details/radar/tdx-concept/membership.json')]:
+                  raw = subprocess.check_output(['gh', 'api', '-H', 'Accept: application/vnd.github.raw+json',
+                      f'repos/auguspp/decision-kernel/contents/{path}?ref={ref}'])
+                  with (root/f'native-{day}-{kind}.json').open('xb') as stream:
+                      stream.write(raw)
+          m.native_inputs(m.load_files(root))
+          print('Both native reading/member pairs validated; no market request in this step')
+          PY
+      - name: Run the one approved six-query check with the existing Relay client
+        id: capture
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+        run: >-
+          python -m decision_kernel.runtime.tdx_member_source_check capture
+          --root "$RUNNER_TEMP/tdx-member-check"
+          --native-inputs "$RUNNER_TEMP/tdx-native-inputs"
+          --code-commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
+      - name: Rebuild saved report without credentials or source calls
+        if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
+        run: >-
+          python -m decision_kernel.runtime.tdx_member_source_check verify
+          --root "$RUNNER_TEMP/tdx-member-check"
+          --code-commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
+      - name: Retain original responses and explicit partial failures
+        if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: tdx-member-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tdx-member-check/
+          retention-days: 90
+          if-no-files-found: error
