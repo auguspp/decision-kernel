@@ -1,5 +1,7 @@
 # C2：比较两次成员观察，不把当前名单回填为历史
 
+**2026-10-02范围后继：** [Human采纳](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5950122271)后，完整历史成员角色回放为可选增强，现时发现/合格多周期比较仍必交；[当前验收与固定补采退役](c2-five-session-inputs.md)持有准确边界。下方两端成员观察的事实、时间资格与UNKNOWN不改，已有比较器和#711/#712继续复用。当前名单可用于明确标注的历史价格回看，不再要求先补齐每日成员才开展该用途；但不能把子集/端点比较当全成员历史排名、真实生效日期或因果领先。旧成果不重新签收。
+
 2026-10-01。原 C2/P2-6 的只读消费者；[本批范围](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5930312673)。承接 #701 的历史成员缺口，不重复 K3、行业新起点或 Concept 长历史重算。AI Investment Authority = NONE。
 
 ## 能力与边界

@@ -1,4 +1,4 @@
-"""Synthetic source controls only; no service request or economic-role acceptance."""
+"""Offline synthetic retained-format controls; no source request or role acceptance."""
 from copy import deepcopy
 from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal
@@ -38,193 +38,200 @@ def base():
             {'source_pins':{'synthetic':True},'report_hash':'b'*64,'price_source':{'unavailable_samples':['001246.SZ','920202.BJ']}})
 
 
-def ticking():
-    value = START
-    def now():
-        nonlocal value
-        value += timedelta(seconds=31)
-        return value.isoformat()
-    return now
+def seal(root, manifest):
+    manifest['capture_hash'] = m.canonical_hash({k:v for k,v in manifest.items() if k != 'capture_hash'})
+    (root/'capture.json').write_bytes(m.encoded(manifest))
 
 
-def relay(api, params, key, clock):
-    rows = [[m.BOARD,params['trade_date'],'分散染料','概念板块',20]] if api=='tdx_index' else [
-        [m.BOARD,params['trade_date'],c,'synthetic'] for c in CODES]
-    raw=m.common.encoded({'code':0,'data':{'fields':list(m.member.FIELDS[api]),'items':rows},'count':len(rows)})
-    return {'api':api,'params':params,'attempts':[{'attempt':1,'classification':'SUCCESS','http_status':200,
-        'raw':raw,'requested_at':clock(),'received_at':clock(),'headers':{},'business_code':0,
-        'business_error':None,'business_msg':None}]}
+def replace_body(root, manifest, index, body):
+    attempt = manifest['records'][index]['attempts'][0]
+    raw = m.encoded(body)
+    (root/attempt['body']).write_bytes(raw)
+    attempt.update(bytes=len(raw), sha256=m.saved.sha256(raw))
+    seal(root, manifest)
 
 
-def stock(path, params, api_key):
-    return payload(params['thscode'], 'history' if path==m.own.HISTORY else 'actions')
+def stop_after(root, manifest, index):
+    for record in manifest['records'][index+1:]:
+        for attempt in record['attempts']:
+            if attempt['body']:
+                (root/attempt['body']).unlink()
+        record.update(status='NOT_ATTEMPTED_STOP', attempts=[])
+    seal(root, manifest)
 
 
 @pytest.fixture
-def setup(tmp_path, monkeypatch):
-    monkeypatch.setattr(m, 'inputs', lambda root:base())
-    monkeypatch.setenv(m.relay.SECRET_ENV, 'synthetic-relay-key')
-    monkeypatch.setenv('HITHINK_FINANCE_API_KEY','synthetic-hithink-key')
-    for n in ('input-pins.json','member-source.zip','price-source.zip'): (tmp_path/n).write_bytes(b'{}')
-    return tmp_path
+def retained(tmp_path, monkeypatch):
+    # Construct a known saved format, not the retired network writer or a mock service run.
+    monkeypatch.setattr(m, 'inputs', lambda root: base())
+    def forbidden(*args, **kwargs):
+        pytest.fail('offline reader attempted source access')
+    monkeypatch.setattr(m.relay, 'request', forbidden)
+    monkeypatch.setattr(m.own, 'request_json', forbidden)
+    for name in ('input-pins.json', 'member-source.zip', 'price-source.zip'):
+        (tmp_path/name).write_bytes(b'{}')
+    specs = m.plan(base())
+    records = []
+    for i, spec in enumerate(specs):
+        if spec['source'] == 'RELAY':
+            api, params = spec['api'], spec['params']
+            rows = [[m.BOARD, params['trade_date'], '分散染料', '概念板块', 20]] if api == 'tdx_index' else [
+                [m.BOARD, params['trade_date'], c, 'synthetic'] for c in CODES]
+            body = {'code':0, 'data':{'fields':list(m.member.FIELDS[api]), 'items':rows}, 'count':len(rows)}
+        else:
+            body = payload(spec['code'], spec['kind'])
+        raw = m.encoded(body); name = f'raw-{i:02d}-1.json'
+        (tmp_path/name).write_bytes(raw)
+        attempt = {'attempt':1, 'classification':'SUCCESS', 'http_status':200,
+            'body':name, 'bytes':len(raw), 'sha256':m.saved.sha256(raw),
+            'requested_at':(START+timedelta(seconds=60*i+1)).isoformat(),
+            'received_at':(START+timedelta(seconds=60*i+2)).isoformat(),
+            'headers':{}, 'business_code':0, 'business_error':None, 'business_msg':None}
+        records.append({'index':i, 'spec':spec, 'status':'SUCCESS', 'attempts':[attempt]})
+    manifest = {'pilot':m.PILOT, 'workflow':m.WORKFLOW, 'identity':ID,
+        'authority':m.joined.AUTHORITY, 'started_at':START.isoformat(),
+        'finished_at':(START+timedelta(hours=1)).isoformat(), 'complete':True,
+        'plan':specs, 'records':records}
+    seal(tmp_path, manifest)
+    return tmp_path, manifest
 
 
-def run(root, **kwargs):
-    return m.capture(root,ID,relay_request=kwargs.pop('relay_request',relay),
-                     stock_request=kwargs.pop('stock_request',stock),now=ticking(),pause=lambda n:None,**kwargs)
-
-
-def test_fixed_missing_days_and_request_budget():
-    p=m.plan(base())
-    assert len(p)==46 and sum(x['source']=='RELAY' for x in p)==8
+def test_historical_plan_is_not_new_authority():
+    p = m.plan(base())
+    assert len(p) == 46 and sum(x['source'] == 'RELAY' for x in p) == 8
     assert {x['params']['trade_date'] for x in p if x['source']=='RELAY'} == {'20260922','20260923','20260924','20260928'}
-    assert all(x.get('code')!='301190.SZ' for x in p)
-    assert all(x['path']!=m.own.SNAPSHOT for x in p if x['source']=='HITHINK')
+    assert all(x.get('code') != '301190.SZ' for x in p)
+    assert all(x['path'] != m.own.SNAPSHOT for x in p if x['source']=='HITHINK')
 
 
 def test_original_pilot_wrapper_still_rejects_new_date():
-    s=m.plan(base())[0]
-    with pytest.raises(ValueError,match='TDX_REQUEST_SCOPE'):
-        m.member.qualify(b'{}',{'api':s['api'],'params':s['params']},START.isoformat())
+    s = m.plan(base())[0]
+    with pytest.raises(ValueError, match='TDX_REQUEST_SCOPE'):
+        m.member.qualify(b'{}', {'api':s['api'], 'params':s['params']}, START.isoformat())
 
 
-def test_complete_control_replays_all_twenty_with_only_five_day_membership(setup):
-    r=run(setup)
-    assert r['status']=='FIVE_SESSION_COHORT_INPUTS_COMPLETE'
-    assert r['logical_queries']==r['http_attempts']==46
-    assert r==m.rebuild(setup,ID)
-    ws=r['groups'][0]['windows']
+def test_complete_synthetic_saved_format_is_not_historical_role_acceptance(retained):
+    root, _ = retained
+    r = m.rebuild(root, ID)
+    assert r == m.rebuild(root, ID)
+    assert r['status'] == 'FIVE_SESSION_COHORT_INPUTS_COMPLETE'
+    assert r['logical_queries'] == r['http_attempts'] == 46
+    ws = r['groups'][0]['windows']
     assert ws[0]['date_labeled_member_and_price_complete'] and ws[0]['price_counts']=={'RAW_COMPARABLE':20}
     assert not ws[1]['date_labeled_member_and_price_complete'] and not ws[2]['date_labeled_member_and_price_complete']
-    assert len(ws[1]['missing_member_observation_dates'])==15
-    assert len(ws[2]['missing_member_observation_dates'])==55
-    assert '没有新采集' not in m.render(r) and '只保留两日' not in m.render(r)
+    assert len(ws[1]['missing_member_observation_dates']) == 15
+    assert len(ws[2]['missing_member_observation_dates']) == 55
     assert r['rank_or_role_computed'] is False and r['historical_pit_knowledge']=='NOT_ESTABLISHED'
-    with pytest.raises(ValueError): run(setup)
+    assert r['production_admission'] is False and r['source_calls_during_replay'] == 0
 
 
-@pytest.mark.parametrize('http,classification,error',[(403,'AUTH_OR_ENTITLEMENT','forbidden'),(429,'RATE_LIMIT','rate_limited')])
-def test_service_refusal_stops_other_source_too(setup,http,classification,error):
-    def denied(api,params,key,clock):
-        x=relay(api,params,key,clock);a=x['attempts'][0]
-        a.update(http_status=http,classification=classification,raw=m.common.encoded({'code':1,'error':error}),business_code=1)
-        return x
-    r=run(setup,relay_request=denied,stock_request=lambda *a,**k:pytest.fail('source call'))
-    assert r['logical_queries']==1 and r['status']=='WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
+@pytest.mark.parametrize('http,classification,error', [(403,'AUTH_OR_ENTITLEMENT','forbidden'), (429,'RATE_LIMIT','rate_limited')])
+def test_saved_service_refusal_requires_stop(retained, http, classification, error):
+    root, manifest = retained
+    record = manifest['records'][0]; a = record['attempts'][0]
+    a.update(http_status=http, classification=classification, business_code=1, business_error=error)
+    record['status'] = classification
+    replace_body(root, manifest, 0, {'code':1, 'error':error})
+    with pytest.raises(ValueError, match='stop was ignored'):
+        m.rebuild(root, ID)
+    stop_after(root, manifest, 0)
+    r = m.rebuild(root, ID)
+    assert r['logical_queries'] == 1 and r['status'] == 'WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
 
 
-def test_bad_member_date_stops_before_stock(setup):
-    def wrong(api,params,key,clock):
-        x=relay(api,params,key,clock); b=json.loads(x['attempts'][0]['raw']); b['data']['items'][0][1]='20260930'
-        x['attempts'][0]['raw']=m.common.encoded(b);return x
-    r=run(setup,relay_request=wrong,stock_request=lambda *a,**k:pytest.fail('source'))
-    assert r['logical_queries']==1 and r['outcomes'][0]['status']=='SOURCE_INPUT_UNQUALIFIED'
+@pytest.mark.parametrize('case', ['date', 'count'])
+def test_bad_saved_members_do_not_complete_window(retained, case):
+    root, manifest = retained
+    body = json.loads((root/'raw-00-1.json').read_bytes())
+    body['data']['items'][0][1 if case=='date' else -1] = '20260930' if case=='date' else 21
+    replace_body(root, manifest, 0, body)
+    stop_after(root, manifest, 0 if case=='date' else 1)
+    r = m.rebuild(root, ID)
+    assert not r['groups'][0]['windows'][0]['date_labeled_member_and_price_complete']
+    assert r['outcomes'][0 if case=='date' else 1]['status'] == 'SOURCE_INPUT_UNQUALIFIED'
 
 
-def test_catalog_count_mismatch_keeps_missing_day(setup):
-    def wrong(api,params,key,clock):
-        x=relay(api,params,key,clock)
-        if api=='tdx_index':
-            b=json.loads(x['attempts'][0]['raw']);b['data']['items'][0][-1]=21;x['attempts'][0]['raw']=m.common.encoded(b)
-        return x
-    r=run(setup,relay_request=wrong)
-    assert r['logical_queries']==2 and not r['groups'][0]['windows'][0]['date_labeled_member_and_price_complete']
+def test_saved_price_gap_keeps_complete_denominator(retained):
+    root, manifest = retained
+    body = json.loads((root/'raw-08-1.json').read_bytes())
+    for k in ('open_price','high_price','low_price','close_price'):
+        body['data']['item'][-1][k] = '101'
+    replace_body(root, manifest, 8, body)
+    r = m.rebuild(root, ID); five = r['groups'][0]['windows'][0]
+    assert five['terminal_member_count'] == 20
+    assert five['price_counts'] == {'RAW_COMPARABLE':19,'RETAINED_INPUT_GAP':1}
+    assert r['status'] == 'WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
 
 
-def test_stock_price_gap_not_removed_and_other_planned_stocks_retained(setup):
-    def bad(path,params,api_key):
-        value=stock(path,params,api_key)
-        if params['thscode']==CODES[0] and path==m.own.HISTORY:
-            for k in ('open_price','high_price','low_price','close_price'):value['data']['item'][-1][k]='101'
-        return value
-    r=run(setup,stock_request=bad)
-    assert r['logical_queries']==46 and r['groups'][0]['windows'][0]['terminal_member_count']==20
-    assert r['groups'][0]['windows'][0]['price_counts']=={'RAW_COMPARABLE':19,'RETAINED_INPUT_GAP':1}
-    assert r['status']=='WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
+def test_saved_action_does_not_produce_zero_return(retained):
+    root, manifest = retained
+    body = json.loads((root/'raw-09-1.json').read_bytes())
+    body['data']['item'] = [{'ticker':CODES[0][:6], 'ex_date_ms':millis(m.DATES[-2]),
+                            'dividend_per_share':'0.1', 'per_share_bonus':'0'}]
+    replace_body(root, manifest, 9, body)
+    r = m.rebuild(root, ID)
+    row = next(x for x in r['groups'][0]['windows'][0]['rows'] if x['code']==CODES[0])
+    assert row['raw_return'] is None and row['price_status'] == 'RETAINED_INPUT_GAP'
 
 
-def test_action_exclusion_does_not_produce_zero_return(setup):
-    def action(path,params,api_key):
-        x=stock(path,params,api_key)
-        if path==m.own.ACTIONS and params['thscode']==CODES[0]:
-            x['data']['item']=[{'ticker':CODES[0][:6],'ex_date_ms':millis(m.DATES[-2]),'dividend_per_share':'0.1','per_share_bonus':'0'}]
-        return x
-    r=run(setup,stock_request=action)
-    row=next(x for x in r['groups'][0]['windows'][0]['rows'] if x['code']==CODES[0])
-    assert row['raw_return'] is None and row['price_status']=='RETAINED_INPUT_GAP'
-    assert r['logical_queries'] == 46
+def test_saved_receipt_uncertainty_not_zero_calls(retained):
+    root, manifest = retained
+    (root/'raw-08-1.json').unlink()
+    manifest['records'][8].update(status='REQUEST_RECEIPT_UNAVAILABLE', attempts=[])
+    stop_after(root, manifest, 8)
+    r = m.rebuild(root, ID)
+    assert r['logical_queries'] == 9 and r['logical_queries_with_receipts'] == 8
+    assert r['unknown_request_receipts'] == 1
 
 
-def test_own_transport_exception_retains_uncertainty_no_retry(setup):
-    r=run(setup,stock_request=lambda *a,**k:(_ for _ in ()).throw(RuntimeError('private')))
-    assert r['logical_queries']==9 and r['logical_queries_with_receipts']==8 and r['unknown_request_receipts']==1
-    assert r['outcomes'][8]['status']=='REQUEST_RECEIPT_UNAVAILABLE'
-    assert b'private' not in (setup/'capture.json').read_bytes()
-
-
-def test_no_credentials_no_source_access(setup,monkeypatch):
-    monkeypatch.delenv(m.relay.SECRET_ENV)
-    r=run(setup,relay_request=lambda *a,**k:pytest.fail('network'))
-    assert r['logical_queries']==0
-
-
-@pytest.mark.parametrize('case',['raw','identity','scope','extra'])
-def test_tamper_refused(setup,case):
-    run(setup)
-    if case=='raw':(setup/'raw-00-1.json').write_bytes(b'{}')
-    elif case=='extra':(setup/'unexpected.json').write_bytes(b'{}')
-    elif case=='scope':
-        c=json.loads((setup/'capture.json').read_bytes());c['plan'][0]['params']['trade_date']='20260101'
-        c['capture_hash']=m.canonical_hash({k:v for k,v in c.items() if k!='capture_hash'});(setup/'capture.json').write_bytes(m.encoded(c))
-    with pytest.raises(ValueError):m.rebuild(setup,{**ID,'GITHUB_RUN_ID':'124'} if case=='identity' else ID)
-
-
-def test_manual_carrier_keeps_ci_single_use_secrets_and_both_concurrency_groups():
-    text=(ROOT/'.github/workflows/c2-dated-window.yml').read_text()
-    assert 'workflow_dispatch:' in text and 'schedule:' not in text and '\n  push:' not in text
-    assert 'radar-global-market-relay' in text and 'hithink-stock-dump-qualification' in text
-    assert 'assert not prior' in text and 'github.run_attempt == 1' in text and 'head_sha=$EXPECTED_CODE' in text
-    assert 'contents: write' not in text and 'actions: write' not in text
-    assert text.count('secrets.TUSHARE_PROXY_API_KEY')==text.count('secrets.HITHINK_FINANCE_API_KEY')==1
-    assert 'secrets.' not in text.split('- name: Rebuild saved')[1]
+@pytest.mark.parametrize('case', ['raw','identity','scope','extra'])
+def test_tamper_refused(retained, case):
+    root, manifest = retained
+    if case == 'raw': (root/'raw-00-1.json').write_bytes(b'{}')
+    elif case == 'extra': (root/'unexpected.json').write_bytes(b'{}')
+    elif case == 'scope':
+        manifest['plan'][0]['params']['trade_date'] = '20260101'
+        seal(root, manifest)
+    with pytest.raises(ValueError):
+        m.rebuild(root, {**ID,'GITHUB_RUN_ID':'124'} if case=='identity' else ID)
 
 
 @pytest.mark.parametrize('business_code', [3002, None, False, '0'])
-def test_action_business_failure_stops_and_rejects_continued_receipts(setup, business_code):
-    # Reuse the complete control; reseal all affected digests so the stop rule,
-    # not stale content hashes, must reject requests after the failed action.
-    run(setup)
-    manifest = json.loads((setup/'capture.json').read_bytes())
-    record = manifest['records'][9]
-    assert record['spec']['source'] == 'HITHINK' and record['spec']['kind'] == 'actions'
-    attempt = record['attempts'][0]
-    path = setup/attempt['body']
-    body = json.loads(path.read_bytes())
-    body['code'] = business_code
-    raw = m.encoded(body)
-    path.write_bytes(raw)
-    attempt.update(bytes=len(raw), sha256=m.saved.sha256(raw), business_code=business_code)
-    manifest['capture_hash'] = m.canonical_hash({k:v for k,v in manifest.items() if k != 'capture_hash'})
-    (setup/'capture.json').write_bytes(m.encoded(manifest))
+def test_saved_action_failure_preserves_body_and_stops(retained, business_code):
+    root, manifest = retained
+    body = json.loads((root/'raw-09-1.json').read_bytes()); body['code'] = business_code
+    manifest['records'][9]['attempts'][0]['business_code'] = business_code
+    replace_body(root, manifest, 9, body)
     with pytest.raises(ValueError, match='stop was ignored'):
-        m.rebuild(setup, ID)
+        m.rebuild(root, ID)
+    stop_after(root, manifest, 9)
+    r = m.rebuild(root, ID)
+    assert r['outcomes'][9]['status'] == 'SOURCE_INPUT_UNQUALIFIED'
+    assert r['logical_queries'] == 10 and r['groups'][0]['windows'][0]['terminal_member_count'] == 20
+    assert json.loads((root/'raw-09-1.json').read_bytes())['code'] == business_code
 
 
-def test_honest_action_business_failure_retains_stop_and_original_body(setup):
-    calls = []
-    def failed(path, params, api_key):
-        calls.append((path, params['thscode']))
-        assert len(calls) <= 2, 'request after business failure'
-        body = stock(path, params, api_key)
-        if path == m.own.ACTIONS:
-            body['code'] = 3002
-        return body
-    result = run(setup, stock_request=failed)
-    assert len(calls) == 2 and result['logical_queries'] == 10
-    assert result['outcomes'][9]['status'] == 'SOURCE_INPUT_UNQUALIFIED'
-    assert all(x['status'] == 'NOT_ATTEMPTED_STOP' and x['attempts'] == 0
-               for x in result['outcomes'][10:])
-    assert json.loads((setup/'raw-09-1.json').read_bytes())['code'] == 3002
-    assert result['status'] == 'WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
-    assert result['groups'][0]['windows'][0]['terminal_member_count'] == 20
-    assert result == m.rebuild(setup, ID)
+def test_active_capture_and_workflow_are_retired():
+    assert not hasattr(m, 'capture') and not (ROOT/m.WORKFLOW).exists()
+    for mode in ('capture','prepare'):
+        with pytest.raises(SystemExit) as exc:
+            m.main([mode,'--root','unused','--run-id','123','--code-commit','a'*40])
+        assert exc.value.code == 2
+
+
+def test_verify_is_repeatably_read_only_without_credentials(retained, monkeypatch):
+    root, _ = retained
+    monkeypatch.delenv(m.relay.SECRET_ENV, raising=False)
+    monkeypatch.delenv('HITHINK_FINANCE_API_KEY', raising=False)
+    r = m.rebuild(root, ID); (root/'result').mkdir()
+    (root/'result/join.json').write_bytes(m.encoded(r))
+    (root/'result/join.md').write_bytes(m.render(r).encode())
+    def snapshot():
+        return {p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}
+    before = snapshot()
+    args = ['verify','--root',str(root),'--run-id','123','--code-commit','a'*40]
+    assert m.main(args) == m.main(args) == 0
+    assert snapshot() == before and not (root/'verification.json').exists()
+    (root/'result/join.md').write_text('changed')
+    with pytest.raises(ValueError, match='offline reconstruction differs'):
+        m.main(args)
