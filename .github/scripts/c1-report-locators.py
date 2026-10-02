@@ -16,6 +16,9 @@ from decision_kernel.runtime import tushare_relay as relay
 from decision_kernel.runtime.research_commit_only import _safe_path
 
 PILOT = 'c1-accelink-two-reports-20261002'
+NATIVE_PILOT = 'c1-accelink-native-schema-20261002'
+PREDECESSOR = {'run_id': 36968934918, 'artifact_id': 11210703148,
+               'sha256': 'e2f951b99cdd529acd3feba3fb8d736259f2bf654d84dc1e1c88efbd3031d764'}
 WORKFLOW = '.github/workflows/c1-report-locators.yml'
 TARGETS = {'20260430': '数通业务驱动高增 毛利率持续提升',
            '20260910': '传输与海外双轮驱动 Q2业绩延续高增'}
@@ -25,11 +28,15 @@ AUTHORITY = {'research_authority': 'NONE', 'investment_authority': 'NONE',
              'pdf_acquired': False, 'full_model_qualified': False}
 
 
-def plan():
-    return [{'api': 'research_report', 'params': {
+def plan(*, native=False):
+    specs = [{'api': 'research_report', 'params': {
         'trade_date': day, 'ts_code': '002281.SZ', 'inst_csname': '长江证券',
         'report_type': '个股研报', 'fields': ','.join(FIELDS), 'limit': '1000'}}
         for day in TARGETS]
+    if native:
+        specs = specs[:1]
+        del specs[0]['params']['fields']
+    return specs
 
 
 def identity(env):
@@ -52,12 +59,20 @@ def inspect(raw, spec):
                 'C1 business response not qualified')
     saved.check(body.get('api_name') in (None, 'research_report'), 'C1 response API differs')
     fields = body.get('data', {}).get('fields')
-    saved.check(isinstance(fields, list) and len(fields) == len(set(fields))
-                and set(FIELDS) <= set(fields), 'C1 directory fields incomplete')
+    saved.check(isinstance(fields, list) and fields
+                and all(isinstance(f, str) and f for f in fields)
+                and len(fields) == len(set(fields)), 'C1 directory fields incomplete')
+    native = 'fields' not in spec['params']
+    saved.check(native or set(FIELDS) <= set(fields), 'C1 directory fields incomplete')
     rows = relay.rows(body)
     saved.check(len(rows) < 1000 and (body.get('count') is None
                 or type(body['count']) is int and body['count'] == len(rows)),
                 'C1 directory may be truncated')
+    if native:
+        return {'trade_date': spec['params']['trade_date'], 'rows_received': len(rows),
+                'status': 'NATIVE_SCHEMA_RETAINED_NOT_REPORT_QUALIFIED',
+                'fields': fields, 'request_filter_qualification': 'NOT_CHECKED',
+                'original_report_identity': 'NOT_ESTABLISHED_BY_DIRECTORY'}
     targets = []
     expected_day = spec['params']['trade_date']
     normalize = lambda text: re.sub(r'[\s，,：:。()（）-]', '', text)
@@ -104,14 +119,17 @@ def rebuild(root, expected):
                 'C1 retained inventory differs')
     manifest = relay.decode((root/'capture.json').read_bytes())
     saved.check(manifest['capture_hash'] == common.digest(manifest), 'C1 capture hash differs')
-    saved.check(manifest['pilot'] == PILOT and manifest['workflow'] == WORKFLOW
-                and manifest['identity'] == identity(expected) and manifest['plan'] == plan()
-                and manifest['authority'] == AUTHORITY and len(manifest['records']) == 2,
-                'C1 capture binding differs')
+    native = manifest['pilot'] == NATIVE_PILOT
+    saved.check(manifest['pilot'] in (PILOT, NATIVE_PILOT) and manifest['workflow'] == WORKFLOW
+                and manifest['identity'] == identity(expected) and manifest['plan'] == plan(native=native)
+                and manifest['authority'] == AUTHORITY
+                and len(manifest['records']) == len(plan(native=native)), 'C1 capture binding differs')
+    saved.check(manifest.get('predecessor') == (PREDECESSOR if native else None),
+                'C1 predecessor differs')
     first, finish = map(saved.clock, (manifest['started_at'], manifest['finished_at']))
     saved.check(first <= finish, 'C1 capture clock reversed')
     seen = {'capture.json'}; previous = first; stopped = False; outcomes = []
-    for i, (spec, record) in enumerate(zip(plan(), manifest['records'], strict=True)):
+    for i, (spec, record) in enumerate(zip(plan(native=native), manifest['records'], strict=True)):
         saved.check(record['spec'] == spec and len(record['attempts']) <= 2, 'C1 plan differs')
         attempts = record['attempts']
         saved.check(not stopped or not attempts and record['status'] == 'NOT_ATTEMPTED_STOP', 'C1 stop ignored')
@@ -145,18 +163,18 @@ def rebuild(root, expected):
                 stopped = True
         outcomes.append(outcome)
     saved.check(set(files) <= seen | {'summary.json'}, 'C1 unexpected retained file')
-    return {'pilot': PILOT, 'identity': manifest['identity'], 'outcomes': outcomes,
+    return {'pilot': manifest['pilot'], 'identity': manifest['identity'], 'outcomes': outcomes,
             'logical_queries_attempted': sum(r['status'] not in ('NOT_ATTEMPTED_STOP', 'CREDENTIAL_UNAVAILABLE')
                                              for r in manifest['records']),
             'http_receipts': sum(len(r['attempts']) for r in manifest['records']),
             'source_capture_hash': manifest['capture_hash'], **AUTHORITY}
 
 
-def capture(root, env, *, request=relay.request, now=relay.now):
+def capture(root, env, *, request=relay.request, now=relay.now, native=False):
     who = identity(env); root = Path(root); _safe_path(root)
     root.mkdir(parents=False, exist_ok=False)
     start = now(); records = []; stopped = False
-    for i, spec in enumerate(plan()):
+    for i, spec in enumerate(plan(native=native)):
         record = {'spec': spec, 'status': 'NOT_ATTEMPTED_STOP', 'attempts': []}
         records.append(record)
         if stopped: continue
@@ -181,8 +199,11 @@ def capture(root, env, *, request=relay.request, now=relay.now):
                 inspect(raw, spec)
             except (ValueError, KeyError, TypeError):
                 stopped = True
-    manifest = {'pilot': PILOT, 'workflow': WORKFLOW, 'identity': who, 'plan': plan(),
+    manifest = {'pilot': NATIVE_PILOT if native else PILOT, 'workflow': WORKFLOW,
+                'identity': who, 'plan': plan(native=native),
                 'started_at': start, 'finished_at': now(), 'records': records, 'authority': AUTHORITY}
+    if native:
+        manifest['predecessor'] = PREDECESSOR
     manifest['capture_hash'] = common.digest(manifest)
     write(root/'capture.json', common.encoded(manifest))
     result = rebuild(root, who)
@@ -194,13 +215,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('mode', choices=('capture', 'verify'))
     parser.add_argument('--root', required=True)
+    parser.add_argument('--native-schema', action='store_true')
     args = parser.parse_args()
     root = Path(args.root)
     if args.mode == 'capture':
-        result = capture(root, os.environ)
+        result = capture(root, os.environ, native=args.native_schema)
     else:
         result = rebuild(root, os.environ)
         saved.check(common.encoded(result) == (root/'summary.json').read_bytes(), 'C1 replay differs')
     # Do not expose potentially signed download URLs in public job logs.
-    print(common.encoded({'pilot': PILOT, 'outcomes': [x['status'] for x in result['outcomes']],
+    print(common.encoded({'pilot': result['pilot'], 'outcomes': [x['status'] for x in result['outcomes']],
                           'http_receipts': result['http_receipts'], **AUTHORITY}).decode())
