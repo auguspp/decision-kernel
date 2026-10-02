@@ -4,7 +4,7 @@
 
 新取得、同期修订和已知未变分别保留；再次发布同一采集不算新事件。
 
-**本次新采集未取得，以下保留旧日期与旧来源。** CAPTURE_NOT_SAVED_NOT_QUIET
+**本次新采集未取得，以下保留旧日期与旧来源。** AWAITING_CURRENT_CAPTURE
 
 | 独立观察面 | 已保存记录/公司 | 当前覆盖 | 原统计/事件日期 |
 |---|---:|---|---|
@@ -92,7 +92,7 @@ Radar发现，Quick解释；无自动Full、Odds、买卖或仓位权限。
 
 ## Tushare Relay 补充读取
 
-当前读取：NOT_RUN_WITHOUT_PRIMARY_CAPTURE；历史补充：EXACT_PREVIOUS_SUPPLEMENT。主资料独立保留。
+当前读取：NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT；历史补充：EXACT_PREVIOUS_SUPPLEMENT。主资料独立保留。
 
 ## Tushare Relay 补充来源
 
