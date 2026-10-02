@@ -57,9 +57,10 @@ REFERENCE_FILES = {
 
 def is_comparison_run(run):
     """Only this exact explicit manual purpose is outside production attempts."""
+    from .ftshare_c2_pilot import TITLE
     return (run.get('event') == 'workflow_dispatch' and run.get('head_branch') == 'main'
             and run.get('path') == '.github/workflows/radar-smart-money.yml'
-            and run.get('display_title') == RUN_TITLE)
+            and run.get('display_title') in (RUN_TITLE, TITLE))
 
 
 def parameters(route, symbol, page=1):
