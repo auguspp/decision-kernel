@@ -1,0 +1,107 @@
+name: c2-dated-window
+run-name: C2 five-session window / ${{ inputs.authorization }}
+on:
+  workflow_dispatch:
+    inputs:
+      code-sha:
+        description: 'Exact reviewed main with successful independent main CI'
+        required: true
+        type: string
+      authorization:
+        description: 'Single use: c2-dye-five-session-20261002; never reuse the old pilot'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: radar-global-market-relay
+  cancel-in-progress: false
+jobs:
+  capture:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && github.actor == 'auguspp'
+    concurrency:
+      group: hithink-stock-dump-qualification
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify exact main, independent CI and unused bounded request before source access
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+          AUTHORIZATION: ${{ inputs.authorization }}
+        run: |
+          set -euo pipefail
+          test "$AUTHORIZATION" = c2-dye-five-session-20261002
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+          test "$GITHUB_SHA" = "$EXPECTED_CODE"
+          test "$(gh api repos/auguspp/decision-kernel/git/ref/heads/main --jq '.object.sha')" = "$EXPECTED_CODE"
+          gh api "repos/auguspp/decision-kernel/actions/workflows/ci.yml/runs?branch=main&event=push&head_sha=$EXPECTED_CODE&per_page=10" > "$RUNNER_TEMP/window-ci.json"
+          gh api --paginate --slurp "repos/auguspp/decision-kernel/actions/workflows/c2-dated-window.yml/runs?event=workflow_dispatch&per_page=100" > "$RUNNER_TEMP/window-prior-runs.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          runs = json.loads((root/'window-ci.json').read_bytes())['workflow_runs']
+          assert runs, 'No independent main CI'
+          r = max(runs, key=lambda x: x['run_number'])
+          assert r['head_sha'] == os.environ['EXPECTED_CODE'] and r['head_branch'] == 'main'
+          assert r['repository']['full_name'] == r['head_repository']['full_name'] == 'auguspp/decision-kernel'
+          assert r['path'] == '.github/workflows/ci.yml' and r['event'] == 'push'
+          assert r['run_attempt'] == 1 and r['status'] == 'completed' and r['conclusion'] == 'success'
+          pages = json.loads((root/'window-prior-runs.json').read_bytes())
+          prior = [x for page in pages for x in page['workflow_runs'] if str(x['id']) != os.environ['GITHUB_RUN_ID']]
+          assert not prior, 'Window already invoked; preserve original attempt, never replay'
+          PY
+      - name: Install existing source and reader extras
+        run: python -m pip install -e '.[feeds,concept,dump-study]'
+      - name: Restore original input archives and verify the frozen plan without business credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/c2-window"
+          cp docs/readings/c2-dated-member-price-join-2026-10-02/input-pins.json "$RUNNER_TEMP/c2-window/input-pins.json"
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])/'c2-window'
+          pins = json.loads((root/'input-pins.json').read_bytes())
+          for label in ('member', 'price'):
+              a = pins[label]['artifact']
+              meta = json.loads(subprocess.check_output(['gh', 'api', f"repos/auguspp/decision-kernel/actions/artifacts/{a['id']}"]))
+              assert meta['id'] == a['id'] and meta['digest'] == a['digest'] and not meta['expired']
+              assert meta['workflow_run']['id'] == pins[label]['run']['id']
+              assert meta['workflow_run']['head_sha'] == pins[label]['run']['head_sha']
+              raw = subprocess.check_output(['gh', 'api', f"repos/auguspp/decision-kernel/actions/artifacts/{a['id']}/zip"])
+              with (root/f'{label}-source.zip').open('xb') as stream:
+                  stream.write(raw)
+          PY
+          python .github/scripts/c2-dated-window.py prepare --root "$RUNNER_TEMP/c2-window"
+      - name: Complete the one bounded input window using existing source clients
+        id: capture
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+          HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
+        run: python .github/scripts/c2-dated-window.py capture --root "$RUNNER_TEMP/c2-window"
+      - name: Rebuild saved inputs and result without credentials or network calls
+        if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
+        run: >-
+          python .github/scripts/c2-dated-window.py verify --root "$RUNNER_TEMP/c2-window"
+          --run-id "$GITHUB_RUN_ID" --code-commit "$GITHUB_SHA"
+      - name: Retain complete inputs and explicit partial failures
+        if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: c2-dated-window-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/c2-window/
+          retention-days: 90
+          if-no-files-found: error
