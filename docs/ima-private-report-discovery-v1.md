@@ -32,3 +32,13 @@ Reuse Decision: **THIN_ADAPTER**。
 probe 成功只证明：当前 Secrets 有效、目标订阅库可通过 OpenAPI 定位、给定关键词可执行搜索。它不证明全部历史覆盖，也不把搜索结果送入模型。
 
 若后续要让 Hosted Quick/Full 消费 IMA 正文，需要单独裁定**私有内容如何在不公开泄漏的情况下进入 Research**；不得因为本 probe 成功就把标题/摘要/PDF 上传到公开 GitHub artifact。优先做按需、小批量、可撤销的私有消费，不做全库同步、批量下载器或数据库。
+
+## 文档搜索省略分页字段（2026-10-02）
+
+旧代码将文档搜索的 `is_end` 强制设为必填，导致[凭据修正后首个真实请求](https://github.com/auguspp/decision-kernel/pull/719#issuecomment-5949240932)在本地 `DOCUMENT_PAGINATION` 处失败。该次库搜索与文档搜索已通过 HTTP/业务码检查，但私有原响应未留存，不能恢复命中数，也不能证明本次具体缺失的是哪一个字段。
+
+补充复用依据是第三方作者的[实测说明](https://github.com/daymade/claude-code-skills/blob/b8585e12650227cd8c5d5f66dc87caaa8d3bd652/ima-copilot/references/search_best_practices.md)及[真实实现](https://github.com/daymade/claude-code-skills/blob/b8585e12650227cd8c5d5f66dc87caaa8d3bd652/ima-copilot/scripts/search_fanout.py)：`search_knowledge` 可能同时不返回 `is_end` 与 `next_cursor`，高频查询可能只给100条。这不是腾讯官方保证，也不证明本账号覆盖范围。
+
+薄适配只接受两个明确变体：两字段齐备时仍严格核布尔/字符串类型；两字段均缺失时输出 `pagination_reported=false`、`is_end=null`、`next_cursor_present=null`。只缺一个字段或提供错误类型仍拒绝，不以空字符串/true补全缺失值。两变体的 `coverage=UNKNOWN` 均不升级为整库或历史覆盖证明；摘要也明确缺分页时未知，不自动翻页、重试或全库扫描。
+
+知识库目录校验、行/身份检查、原HTTP/业务失败、认证、隐私、请求预算与workflow均不变。原成功格式继续可读，原失败不重写为成功。离线合成测试不是实际研报命中，也不是对未保管原响应的回放；修补后的真实源验收另行确认，不由本次代码提交自动再执行已消费的探测。

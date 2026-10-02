@@ -198,10 +198,23 @@ def document_rows(data: dict) -> list[dict]:
         if row.get("highlight_content") is not None:
             require(isinstance(row["highlight_content"], str) and len(row["highlight_content"]) <= 65536,
                     "HIGHLIGHT")
-    require(type(data.get("is_end")) is bool, "DOCUMENT_PAGINATION")
-    cursor = data.get("next_cursor", "")
-    require(isinstance(cursor, str) and len(cursor) <= 4096, "DOCUMENT_PAGINATION")
+    document_pagination(data)
     return rows
+
+
+def document_pagination(data: dict) -> dict:
+    # Observed by upstream IMA clients: search_knowledge may omit BOTH fields.
+    # Missing pagination is UNKNOWN, never proof that the library was exhausted.
+    reported = "is_end" in data or "next_cursor" in data
+    if not reported:
+        return {"pagination_reported": False, "is_end": None,
+                "next_cursor_present": None, "coverage": "UNKNOWN"}
+    require("is_end" in data and "next_cursor" in data, "DOCUMENT_PAGINATION")
+    require(type(data["is_end"]) is bool, "DOCUMENT_PAGINATION")
+    cursor = data["next_cursor"]
+    require(isinstance(cursor, str) and len(cursor) <= 4096, "DOCUMENT_PAGINATION")
+    return {"pagination_reported": True, "is_end": data["is_end"],
+            "next_cursor_present": bool(cursor), "coverage": "UNKNOWN"}
 
 
 def _clock(value: str) -> str:
@@ -239,8 +252,7 @@ def probe(base_query: str, document_query: str | None, *, send, clock) -> dict:
     if dq is not None:
         doc_data, doc_meta = _call(document_spec(selected["id"], dq), send, clock)
         docs = document_rows(doc_data)
-        doc_meta.update(match_count=len(docs), is_end=doc_data["is_end"],
-                        next_cursor_present=bool(doc_data.get("next_cursor")))
+        doc_meta.update(match_count=len(docs), **document_pagination(doc_data))
         documents = doc_meta
         calls += 1
     result = {
@@ -285,6 +297,8 @@ def render(result: dict) -> str:
             f"knowledge-base matches on first bounded response: {result['base']['match_count']}\n\n"
             + ("document matches on first bounded response: NOT_REQUESTED\n\n" if docs is None else
                f"document matches on first bounded response: {docs['match_count']}\n\n")
+            + ("document pagination not returned; coverage UNKNOWN.\n\n"
+               if docs is not None and docs.get("pagination_reported") is False else "")
             + "Counts are connectivity/search evidence only, not complete library coverage.\n\n"
               "No private IMA names, ids, titles, snippets, URLs, bodies or credentials were retained.\n")
 
