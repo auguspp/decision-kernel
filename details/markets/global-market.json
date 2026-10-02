@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-02T05:26:27.363834+00:00",
+    "checked_at": "2026-10-02T05:38:06.293382+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -1217,44 +1217,44 @@
       "indices": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11143673151,
-          "artifact_name": "global-market-indices-36821887901-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901/artifacts/11143673151",
-          "bytes": 7846,
-          "expires_at": "2026-10-31T05:53:49Z",
-          "git_blob": "75ea8afec9de62b8d3448ed9ea78e47ec667a676",
+          "artifact_id": 11211295522,
+          "artifact_name": "global-market-indices-36969695615-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615/artifacts/11211295522",
+          "bytes": 7529,
+          "expires_at": "2026-11-01T05:37:16Z",
+          "git_blob": "0648ff125cabc815ffb6fcde98f50176d8eb31ec",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-01T05:52:40Z",
+            "created_at": "2026-10-02T05:36:29Z",
             "event": "schedule",
-            "head_sha": "1d2e277572f20c57f1ca4d36e02136317043700e",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901",
-            "id": 36821887901,
+            "head_sha": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615",
+            "id": 36969695615,
             "operation": null,
             "path": ".github/workflows/radar-global-market.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-01T05:52:40Z",
+            "run_started_at": "2026-10-02T05:36:29Z",
             "status": "completed",
-            "updated_at": "2026-10-01T05:53:51Z"
+            "updated_at": "2026-10-02T05:37:20Z"
           },
-          "read_path": "sources/artifacts/da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607.zip",
+          "read_path": "sources/artifacts/5e8e7365167c2be26d4e68a7cfc0c1747d2c8f3a596a502e31ffb35b544212cb.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607"
+          "sha256": "5e8e7365167c2be26d4e68a7cfc0c1747d2c8f3a596a502e31ffb35b544212cb"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-01T05:52:40Z",
+          "created_at": "2026-10-02T05:36:29Z",
           "event": "schedule",
-          "head_sha": "1d2e277572f20c57f1ca4d36e02136317043700e",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901",
-          "id": 36821887901,
+          "head_sha": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615",
+          "id": 36969695615,
           "operation": null,
           "path": ".github/workflows/radar-global-market.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-01T05:52:40Z",
+          "run_started_at": "2026-10-02T05:36:29Z",
           "status": "completed",
-          "updated_at": "2026-10-01T05:53:51Z"
+          "updated_at": "2026-10-02T05:37:20Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -1274,7 +1274,7 @@
             "status": "ROWS_NORMALIZED"
           },
           {
-            "attempt_count": 2,
+            "attempt_count": 1,
             "id": "HKTECH",
             "status": "ROWS_NORMALIZED"
           },
@@ -1289,56 +1289,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11143673151,
-            "artifact_name": "global-market-indices-36821887901-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901/artifacts/11143673151",
-            "bytes": 7846,
-            "expires_at": "2026-10-31T05:53:49Z",
-            "git_blob": "75ea8afec9de62b8d3448ed9ea78e47ec667a676",
+            "artifact_id": 11211295522,
+            "artifact_name": "global-market-indices-36969695615-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615/artifacts/11211295522",
+            "bytes": 7529,
+            "expires_at": "2026-11-01T05:37:16Z",
+            "git_blob": "0648ff125cabc815ffb6fcde98f50176d8eb31ec",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-01T05:52:40Z",
+              "created_at": "2026-10-02T05:36:29Z",
               "event": "schedule",
-              "head_sha": "1d2e277572f20c57f1ca4d36e02136317043700e",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901",
-              "id": 36821887901,
+              "head_sha": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615",
+              "id": 36969695615,
               "operation": null,
               "path": ".github/workflows/radar-global-market.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-01T05:52:40Z",
+              "run_started_at": "2026-10-02T05:36:29Z",
               "status": "completed",
-              "updated_at": "2026-10-01T05:53:51Z"
+              "updated_at": "2026-10-02T05:37:20Z"
             },
-            "read_path": "sources/artifacts/da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607.zip",
+            "read_path": "sources/artifacts/5e8e7365167c2be26d4e68a7cfc0c1747d2c8f3a596a502e31ffb35b544212cb.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607"
+            "sha256": "5e8e7365167c2be26d4e68a7cfc0c1747d2c8f3a596a502e31ffb35b544212cb"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11143673151/zip",
-            "created_at": "2026-10-01T05:53:49Z",
-            "digest": "sha256:da8474c56914c85af96cb325462d3b02be8149c22f6af8b7ae7489caeb6c8607",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11211295522/zip",
+            "created_at": "2026-10-02T05:37:17Z",
+            "digest": "sha256:5e8e7365167c2be26d4e68a7cfc0c1747d2c8f3a596a502e31ffb35b544212cb",
             "expired": false,
-            "expires_at": "2026-10-31T05:53:49Z",
-            "id": 11143673151,
-            "name": "global-market-indices-36821887901-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTE0MzY3MzE1MQ==",
-            "size_in_bytes": 7846,
-            "updated_at": "2026-10-01T05:53:49Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11143673151",
+            "expires_at": "2026-11-01T05:37:16Z",
+            "id": 11211295522,
+            "name": "global-market-indices-36969695615-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTIxMTI5NTUyMg==",
+            "size_in_bytes": 7529,
+            "updated_at": "2026-10-02T05:37:17Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11211295522",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "1d2e277572f20c57f1ca4d36e02136317043700e",
-              "id": 36821887901,
+              "head_sha": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
+              "id": 36969695615,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-09-30",
+            "as_of_date": "2026-10-01",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -1350,18 +1350,18 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 6,
-            "capture_hash": "5c21450571d6ad97524d0a85485849947e20169e070dc670609e40128927e17f",
-            "captured_from": "2026-10-01T05:52:52.566693+00:00",
-            "captured_through": "2026-10-01T05:53:48.667050+00:00",
+            "capture_hash": "a02d92e3ee73a2406c7aa306df8a970fa75a14428ddfec5436ee724be55b848b",
+            "captured_from": "2026-10-02T05:36:44.543592+00:00",
+            "captured_through": "2026-10-02T05:37:16.639084+00:00",
             "coverage": "SELECTED_DAILY_SERIES_ONLY_NOT_COMPLETE_GLOBAL_MARKETS",
             "family": "indices",
             "identity": {
               "attempt": 1,
-              "code_commit": "1d2e277572f20c57f1ca4d36e02136317043700e",
+              "code_commit": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 36821887901,
+              "run_id": 36969695615,
               "workflow": ".github/workflows/radar-global-market.yml"
             },
             "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1375,20 +1375,20 @@
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "标普500",
-                    "observed_interval_change_pct": "-0.251602",
-                    "previous_observed_date": "2026-09-29",
-                    "previous_value": "7670.84",
+                    "observed_interval_change_pct": "0.194901",
+                    "previous_observed_date": "2026-09-30",
+                    "previous_value": "7651.5398",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
                     "row_count": 10,
-                    "source_daily_pct_change": "-0.2516",
-                    "source_date": "2026-09-30",
+                    "source_daily_pct_change": "0.1949",
+                    "source_date": "2026-10-01",
                     "symbol": "SPX",
                     "unit": "INDEX_POINTS",
-                    "value": "7651.54"
+                    "value": "7666.4527"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:52:53.931551+00:00",
+                "source_received_at": "2026-10-02T05:36:47.645915+00:00",
                 "status": "ROWS_NORMALIZED"
               },
               {
@@ -1400,20 +1400,20 @@
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "纳斯达克综合",
-                    "observed_interval_change_pct": "0.237037",
-                    "previous_observed_date": "2026-09-29",
-                    "previous_value": "26797.54",
+                    "observed_interval_change_pct": "0.039239",
+                    "previous_observed_date": "2026-09-30",
+                    "previous_value": "26861.06",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
                     "row_count": 10,
-                    "source_daily_pct_change": "0.237",
-                    "source_date": "2026-09-30",
+                    "source_daily_pct_change": "0.0392",
+                    "source_date": "2026-10-01",
                     "symbol": "IXIC",
                     "unit": "INDEX_POINTS",
-                    "value": "26861.06"
+                    "value": "26871.6"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:52:57.060566+00:00",
+                "source_received_at": "2026-10-02T05:36:52.092823+00:00",
                 "status": "ROWS_NORMALIZED"
               },
               {
@@ -1421,7 +1421,7 @@
                 "id": "HSI",
                 "observations": [
                   {
-                    "calendar_age_at_requested_end": 0,
+                    "calendar_age_at_requested_end": 1,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "恒生指数",
@@ -1430,7 +1430,7 @@
                     "previous_value": "24523.57",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 10,
+                    "row_count": 9,
                     "source_daily_pct_change": "0.3658",
                     "source_date": "2026-09-30",
                     "symbol": "HSI",
@@ -1438,15 +1438,15 @@
                     "value": "24613.27"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:52:59.771852+00:00",
+                "source_received_at": "2026-10-02T05:36:57.290400+00:00",
                 "status": "ROWS_NORMALIZED"
               },
               {
-                "attempt_count": 2,
+                "attempt_count": 1,
                 "id": "HKTECH",
                 "observations": [
                   {
-                    "calendar_age_at_requested_end": 0,
+                    "calendar_age_at_requested_end": 1,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "恒生科技",
@@ -1463,7 +1463,7 @@
                     "value": "4253.89"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:53:40.625916+00:00",
+                "source_received_at": "2026-10-02T05:37:06.185562+00:00",
                 "status": "ROWS_NORMALIZED"
               },
               {
@@ -1471,7 +1471,7 @@
                 "id": "N225",
                 "observations": [
                   {
-                    "calendar_age_at_requested_end": 2,
+                    "calendar_age_at_requested_end": 3,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "日经225",
@@ -1480,7 +1480,7 @@
                     "previous_value": "66364.2",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 5,
+                    "row_count": 4,
                     "source_daily_pct_change": "0.118166",
                     "source_date": "2026-09-28",
                     "symbol": "N225",
@@ -1488,7 +1488,7 @@
                     "value": "66442.62"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:53:45.704353+00:00",
+                "source_received_at": "2026-10-02T05:37:11.273864+00:00",
                 "status": "ROWS_NORMALIZED"
               },
               {
@@ -1496,7 +1496,7 @@
                 "id": "GDAXI",
                 "observations": [
                   {
-                    "calendar_age_at_requested_end": 5,
+                    "calendar_age_at_requested_end": 6,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "德国DAX",
@@ -1505,7 +1505,7 @@
                     "previous_value": "25266.53",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 7,
+                    "row_count": 6,
                     "source_daily_pct_change": "0.562444",
                     "source_date": "2026-09-25",
                     "symbol": "GDAXI",
@@ -1513,7 +1513,7 @@
                     "value": "25408.64"
                   }
                 ],
-                "source_received_at": "2026-10-01T05:53:48.665131+00:00",
+                "source_received_at": "2026-10-02T05:37:16.637217+00:00",
                 "status": "ROWS_NORMALIZED"
               }
             ],
@@ -1523,10 +1523,10 @@
             "status": "AVAILABLE",
             "version": "global-market-context-v1"
           },
-          "retained_at": "2026-10-01T05:53:52.206785+00:00",
+          "retained_at": "2026-10-02T05:38:04.395716+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-01T05:52:40Z",
+            "created_at": "2026-10-02T05:36:29Z",
             "display_title": "global-market / indices",
             "event": "schedule",
             "head_branch": "main",
@@ -1598,9 +1598,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "1d2e277572f20c57f1ca4d36e02136317043700e",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36821887901",
-            "id": 36821887901,
+            "head_sha": "c31a62bc08d543a2d5cd6e6c3a377e65f0b5b25f",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36969695615",
+            "id": 36969695615,
             "path": ".github/workflows/radar-global-market.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -1671,9 +1671,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-01T05:52:40Z",
+            "run_started_at": "2026-10-02T05:36:29Z",
             "status": "completed",
-            "updated_at": "2026-10-01T05:53:51Z"
+            "updated_at": "2026-10-02T05:37:20Z"
           }
         }
       },
@@ -2555,14 +2555,14 @@
       "unattributed_run_ids": []
     },
     "query": {
-      "examined": 8,
+      "examined": 9,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 8,
+      "total_count": 9,
       "unattributed_run_ids": []
     },
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "57fa57bdebe4898751a6a7528218d62467a912619d463c73a2279426b49ba7e3"
+  "projection_hash": "fa3ad57446ff70191e0c7cfe3a480c27b15d37f985a5b47a45d21c70a2b51719"
 }
