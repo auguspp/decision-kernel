@@ -216,6 +216,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_workflow_is_manual_only_and_uses_named_secrets():
     text=(ROOT/'.github/workflows/ima-private-probe.yml').read_text()
     assert 'workflow_dispatch:' in text and 'schedule:' not in text
+    assert "github.actor == 'auguspp'" in text
     assert 'IMA_OPENAPI_CLIENTID: ${{ secrets.IMA_OPENAPI_CLIENTID }}' in text
     assert 'IMA_OPENAPI_APIKEY: ${{ secrets.IMA_OPENAPI_APIKEY }}' in text
     assert "permissions:\n  contents: read\n  actions: read" in text
