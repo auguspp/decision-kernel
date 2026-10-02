@@ -15,7 +15,7 @@ Decision Kernel 仓库是公开仓库。IMA 订阅库可能包含来源权利不
 
 ## 凭据与执行
 
-凭据只从 GitHub Actions Secrets `IMA_OPENAPI_CLIENTID` / `IMA_OPENAPI_APIKEY` 注入。不要把值写进 workflow input、Issue、PR、代码、artifact 或聊天。固定服务为 `https://ima.qq.com/openapi/wiki/v1/`，只允许 IMA 官方搜索端点；POST JSON、禁重定向、禁代理凭据、显式 timeout、512KiB 单响应上限、无自动重试/备用主机。
+凭据从 GitHub Actions Secrets 注入：优先 `IMA_OPENAPI_CLIENTID` / `IMA_OPENAPI_APIKEY`，并兼容 IMA 社区实现常用的 `IMA_CLIENT_ID` / `IMA_API_KEY` 别名；同一语义只取首个非空值。不要把值写进 workflow input、Issue、PR、代码、artifact 或聊天。固定服务为 `https://ima.qq.com/openapi/wiki/v1/`，只允许 IMA 官方搜索端点；POST JSON、禁重定向、禁代理凭据、显式 timeout、512KiB 单响应上限、无自动重试/备用主机。
 
 `.github/workflows/ima-private-probe.yml` 仅 `workflow_dispatch`，要求精确 main SHA 和该 main 的独立 CI success。它不是 schedule，也不接 Research/Full/Odds/Watch。workflow inputs 本身属于公开仓库运行元数据，所以只放非敏感搜索词，不放账号、凭据、私密公司判断或原文。
 
