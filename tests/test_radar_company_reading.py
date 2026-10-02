@@ -241,6 +241,9 @@ def test_budget_refusal_does_not_spend_or_reset_api_counter(tmp_path):
 
 
 def test_unconfigured_wrapper_leaves_base_collector_unchanged(monkeypatch, tmp_path):
+    from decision_kernel.runtime import independent_stock_reading as independent
+    # Isolate the radar flag; the always-on saved-input hook has its own real integration test.
+    monkeypatch.setattr(independent, 'attach', lambda self, payload:payload)
     col = entry.Collector(API(), SHA, tmp_path, now=lambda: AT); b, _, _ = baseline(col)
     monkeypatch.setattr(d.Collector, 'collect', lambda self, refresh: b)
     assert col.collect({}) is b

@@ -147,7 +147,7 @@ def test_get_failure_retains_attempt_not_pdf_or_source_text():
     assert len(gets) == 1 and "secret signed" not in json.dumps(result)
 
 
-@pytest.mark.parametrize("body", [b"<html>login</html>", b"%PDF-" + b"x" * d.MAX_PDF])
+@pytest.mark.parametrize("body", [b"<html>login</html>", b"%PDF-" + b"x" * d.MAX_PDF], ids=["not-pdf", "oversize-pdf"])
 def test_non_pdf_or_oversize_never_reaches_parser(body):
     result, _, _ = run_check(downloader=lambda _:body, inspector=lambda _:pytest.fail("must not parse"))
     assert result["status"] == "CHECK_FAILED" and result["pdf_downloads"] == 0

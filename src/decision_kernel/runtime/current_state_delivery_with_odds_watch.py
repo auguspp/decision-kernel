@@ -145,6 +145,8 @@ class Collector(base.Collector):
             model.check(sum(map(len, self.files.values())) + len(note) <= base.MAX_RETAINED_OUTPUT,
                         "calendar navigation exceeds retained byte budget")
             self.files['README.md'] += note
+        from .independent_stock_reading import attach as attach_independent
+        payload = attach_independent(self, payload)
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:

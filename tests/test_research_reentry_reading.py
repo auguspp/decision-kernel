@@ -200,6 +200,9 @@ def test_publication_budget_failure_is_atomic(monkeypatch):
 
 def test_original_collector_calls_the_reentry_attachment(monkeypatch):
     from decision_kernel.runtime import current_state_delivery_with_odds_watch as c
+    from decision_kernel.runtime import independent_stock_reading as independent
+    # Isolate this reentry wiring test; the real new hook is tested in test_independent_stock_reading.
+    monkeypatch.setattr(independent, 'attach', lambda self, payload:payload)
     baseline = package(); seen=[]
     monkeypatch.setattr(c.base.Collector, 'collect', lambda self, refresh: deepcopy(baseline))
     from decision_kernel.runtime import reviewed_question_reading as q, stock_batch_disposition as b
