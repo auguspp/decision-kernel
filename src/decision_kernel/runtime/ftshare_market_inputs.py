@@ -80,7 +80,11 @@ def validate_request(route, params):
 def request(route, params):
     # The isolated history comparison supplies only its finite, reviewed contracts.
     from . import ftshare_stock_history_comparison as history
-    if route in history.ROUTES:
+    from . import ftshare_c2_pilot as pilot
+    if route == pilot.ROUTE:
+        pilot.validate_request(params)
+        endpoint = pilot.ENDPOINT
+    elif route in history.ROUTES:
         history.validate_request(route, params)
         endpoint = history.ROUTES[route]
     else:
@@ -92,6 +96,9 @@ def request(route, params):
     req = Request(endpoint + '?' + urlencode(params), headers={
         'FTSHARE_API_KEY': key, 'Accept': 'application/json', 'Accept-Encoding': 'identity',
         'User-Agent': 'decision-kernel/' + VERSION})
+    if route == pilot.ROUTE:
+        req.add_header('X-Client-Name', 'ft-claw')
+        req.add_header('Content-Type', 'application/json')
     try:
         response = build_opener(original._NoRedirect()).open(req, timeout=20)
     except HTTPError as exc:

@@ -1,5 +1,5 @@
 name: radar-smart-money
-run-name: ${{ inputs.ftshare-stock-history == 'three-stock-20260930' && 'FTShare three-stock comparison 20260930' || 'radar-smart-money' }}
+run-name: ${{ inputs.ftshare-stock-history == 'c2-pilot-20260930' && 'FTShare C2 bounded pilot 20260930' || inputs.ftshare-stock-history == 'three-stock-20260930' && 'FTShare three-stock comparison 20260930' || 'radar-smart-money' }}
 on:
   schedule:
     - cron: '20 9 * * 1-5'
@@ -10,7 +10,7 @@ on:
         description: Explicit isolated three-stock historical comparison; never normal collection
         required: false
         type: choice
-        options: [none, three-stock-20260930]
+        options: [none, three-stock-20260930, c2-pilot-20260930]
         default: none
       code-sha:
         description: 'Reviewed exact current main; leave empty only for normal scheduled code identity'
@@ -101,8 +101,87 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
+  pilot-ftshare-c2:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' &&
+      github.run_attempt == 1 && github.event_name == 'workflow_dispatch' &&
+      inputs.ftshare-stock-history == 'c2-pilot-20260930' &&
+      inputs.code-sha == github.sha && !inputs.relay-only &&
+      !inputs.relay-reports-only && !inputs.repair-pending
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Require successful exact main CI before any provider request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+          test "$(gh api repos/auguspp/decision-kernel/git/ref/heads/main --jq .object.sha)" = "$EXPECTED_CODE"
+          gh api --method GET repos/auguspp/decision-kernel/actions/workflows/ci.yml/runs \
+            -f head_sha="$EXPECTED_CODE" -f event=push -f per_page=10 > "$RUNNER_TEMP/ftshare-main-ci.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          rows=json.loads((Path(os.environ['RUNNER_TEMP'])/'ftshare-main-ci.json').read_text())['workflow_runs']
+          rows=[r for r in rows if r['head_sha']==os.environ['EXPECTED_CODE'] and r['head_branch']=='main' and r['path']=='.github/workflows/ci.yml' and r['event']=='push' and r['repository']['full_name']=='auguspp/decision-kernel' and r['head_repository']['full_name']=='auguspp/decision-kernel']
+          assert rows, 'MAIN_CI_MISSING'
+          latest=max(rows,key=lambda r:(r['created_at'],r['id']))
+          assert latest['run_attempt']==1 and latest['status']=='completed' and latest['conclusion']=='success', 'MAIN_CI_NOT_PASSED'
+          PY
+      - name: Install existing core only
+        run: python -m pip install -e .
+      - name: Require unused one-shot pilot authorization
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PYGUARD'
+          import os, runpy
+          from decision_kernel.runtime.ftshare_c2_pilot import one_shot_scope
+          get=runpy.run_path('.github/scripts/smart-money-control.py')['get']
+          runs=[]
+          for page in range(1,11):
+              data=get('actions/workflows/radar-smart-money.yml/runs',
+                       {'event':'workflow_dispatch','per_page':100,'page':page})
+              runs.extend(data['workflow_runs'])
+              if len(runs)>=data['total_count']: break
+          one_shot_scope(runs,data['total_count'],int(os.environ['GITHUB_RUN_ID']))
+          PYGUARD
+      - name: Read exact already-retained HiThink reference
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: '11141865519'
+          run-id: '36815556951'
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/ftshare-hithink-reference
+          digest-mismatch: error
+      - name: Capture full quote pages and at most three saved selected names; hard cap 100
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+          FTSHARE_COMPARISON: ${{ inputs.ftshare-stock-history }}
+        run: |
+          python -m decision_kernel.runtime.ftshare_c2_pilot \
+            --reference "$RUNNER_TEMP/ftshare-hithink-reference/independent-stock-capture" \
+            --output "$RUNNER_TEMP/ftshare-c2-pilot"
+      - name: Retain explicitly authorized pilot originals and partial receipts
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: ftshare-c2-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ftshare-c2-pilot/
+          retention-days: 30
+          if-no-files-found: warn
+
   capture-smart-money:
-    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && inputs.ftshare-stock-history != 'three-stock-20260930'
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1 && inputs.ftshare-stock-history != 'three-stock-20260930' && inputs.ftshare-stock-history != 'c2-pilot-20260930'
     runs-on: ubuntu-latest
     timeout-minutes: 28
     outputs:
