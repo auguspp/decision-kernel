@@ -1,6 +1,7 @@
-"""Two approved C1 report-directory queries, not PDF/model qualification.
+"""Offline reader for retired C1 report-locator captures.
 
-Reuse the existing Relay client and receipt validation. No URL is fetched here.
+No acquisition entry remains. Historical request plans and source limitations
+are retained for verification, not execution or PDF/model qualification.
 """
 from __future__ import annotations
 
@@ -104,13 +105,6 @@ def inspect(raw, spec):
             'targets': targets, 'original_report_identity': 'NOT_ESTABLISHED_BY_DIRECTORY'}
 
 
-def write(path, raw):
-    _safe_path(path)
-    with path.open('xb') as stream:
-        stream.write(raw)
-    saved.check(path.read_bytes() == raw, 'C1 saved bytes differ')
-
-
 def rebuild(root, expected):
     root = Path(root); _safe_path(root)
     files = {p.name: p for p in root.iterdir()}
@@ -170,59 +164,19 @@ def rebuild(root, expected):
             'source_capture_hash': manifest['capture_hash'], **AUTHORITY}
 
 
-def capture(root, env, *, request=relay.request, now=relay.now, native=False):
-    who = identity(env); root = Path(root); _safe_path(root)
-    root.mkdir(parents=False, exist_ok=False)
-    start = now(); records = []; stopped = False
-    for i, spec in enumerate(plan(native=native)):
-        record = {'spec': spec, 'status': 'NOT_ATTEMPTED_STOP', 'attempts': []}
-        records.append(record)
-        if stopped: continue
-        if not os.environ.get(relay.SECRET_ENV):
-            record['status'] = 'CREDENTIAL_UNAVAILABLE'; stopped = True; continue
-        record['status'] = 'REQUEST_RECEIPT_UNAVAILABLE'
-        try:
-            response = request(spec['api'], spec['params'], clock=now)
-        except Exception:
-            stopped = True; continue  # Never echo exceptions which may contain credentials.
-        for k, source in enumerate(response['attempts'], 1):
-            item = dict(source); raw = item.pop('raw')
-            name = None if raw is None else f'raw-{i}-{k}.json'
-            if name: write(root/name, raw)
-            item.update(body=name, bytes=None if raw is None else len(raw),
-                        sha256=None if raw is None else saved.sha256(raw))
-            record['attempts'].append(item)
-        record['status'] = response['status']
-        stopped = response['status'] != 'SUCCESS'
-        if not stopped:
-            try:
-                inspect(raw, spec)
-            except (ValueError, KeyError, TypeError):
-                stopped = True
-    manifest = {'pilot': NATIVE_PILOT if native else PILOT, 'workflow': WORKFLOW,
-                'identity': who, 'plan': plan(native=native),
-                'started_at': start, 'finished_at': now(), 'records': records, 'authority': AUTHORITY}
-    if native:
-        manifest['predecessor'] = PREDECESSOR
-    manifest['capture_hash'] = common.digest(manifest)
-    write(root/'capture.json', common.encoded(manifest))
-    result = rebuild(root, who)
-    write(root/'summary.json', common.encoded(result))
-    return result
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mode', choices=('verify',))
+    parser.add_argument('--root', required=True)
+    args = parser.parse_args(argv)
+    root = Path(args.root)
+    result = rebuild(root, os.environ)
+    saved.check(common.encoded(result) == (root/'summary.json').read_bytes(), 'C1 replay differs')
+    # Do not expose potentially signed historical URLs in public logs.
+    print(common.encoded({'pilot': result['pilot'], 'outcomes': [x['status'] for x in result['outcomes']],
+                         'http_receipts': result['http_receipts'], **AUTHORITY}).decode())
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('mode', choices=('capture', 'verify'))
-    parser.add_argument('--root', required=True)
-    parser.add_argument('--native-schema', action='store_true')
-    args = parser.parse_args()
-    root = Path(args.root)
-    if args.mode == 'capture':
-        result = capture(root, os.environ, native=args.native_schema)
-    else:
-        result = rebuild(root, os.environ)
-        saved.check(common.encoded(result) == (root/'summary.json').read_bytes(), 'C1 replay differs')
-    # Do not expose potentially signed download URLs in public job logs.
-    print(common.encoded({'pilot': result['pilot'], 'outcomes': [x['status'] for x in result['outcomes']],
-                          'http_receipts': result['http_receipts'], **AUTHORITY}).decode())
+    main()

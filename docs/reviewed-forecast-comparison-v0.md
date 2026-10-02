@@ -1,5 +1,7 @@
 # Reviewed institutional forecast comparison v0
 
+**2026-10-02 adopted scope:** [C1 personal-investor evidence policy](research-outcome-contract-v1.md#c1个人投资者范围可用证据优先完整券商原件为可选增强2026-10-02) makes complete broker-report/model recovery optional, not a fixed-sample C acceptance gate. This consumer and every numerical/source qualification below remain unchanged. No automatic upgrade of retained negative cases or new source execution is authorized.
+
 ## Scope and reuse
 
 This is an opt-in qualification path in the existing offline
@@ -198,8 +200,9 @@ Finite acceptance separates contract/counterexample tests, deterministic real
 negative cases, legacy compatibility, normal exact-head PR/main/publication,
 independent fixed-R recovery and actual explanation/use. Passing local tests or
 writing this contract does not establish later stages. Original broker-source
-qualification, full-model economic adequacy, later natural use and remaining
-original C1/C2 scope remain separate obligations. Every result keeps
+qualification and full-model economic adequacy remain required for those optional
+claims, not unconditional C completion gates. Later natural use and the remaining
+Human-adopted C1/C2 scope remain separate obligations. Every result keeps
 `full_model_revision=NOT_CERTIFIED`, historical knowledge unestablished by
 retrieval, Human acceptance unestablished and investment authority **NONE**.
 This document makes no shipped-state or full-C completion claim. Extension or
