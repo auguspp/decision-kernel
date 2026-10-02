@@ -1,7 +1,7 @@
-"""One bounded five-session input completion; reuse existing member/price readers.
+"""Offline reader for the retired fixed C2 historical-window capture format.
 
-No new selector, price convention, production lane or re-run of the old pilot.
-The fixed plan completes four missing member days and nineteen missing raw paths.
+No acquisition entry remains. Retain original input, plan, price qualification
+and failure semantics; this reader neither completes C2 nor restores authority.
 """
 from __future__ import annotations
 
@@ -10,10 +10,8 @@ from copy import deepcopy
 from datetime import date
 from decimal import Context, localcontext
 import json
-import os
 from pathlib import Path
 import re
-import time
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from decision_kernel.runtime import current_state as saved
@@ -22,7 +20,7 @@ from decision_kernel.runtime import hithink_stock_reading as own
 from decision_kernel.runtime import tdx_member_price_join as joined
 from decision_kernel.runtime import tdx_member_source_check as member
 from decision_kernel.runtime import tushare_relay as relay
-from decision_kernel.runtime.research_commit_only import _json, _publish_report_files, _safe_path
+from decision_kernel.runtime.research_commit_only import _json, _safe_path
 from decision_kernel.runtime.sector_radar import _return_over
 
 PILOT = 'c2-dye-five-session-20261002'
@@ -242,93 +240,23 @@ def render(report):
     return text + '\n本次状态：' + report['status'] + '；原始取得时间：' + report['acquired_through'] + '\n'
 
 
-def capture(root, expected, *, relay_request=relay.request, stock_request=own.request_json,
-            now=relay.now, pause=time.sleep):
-    root = Path(root); _safe_path(root); expected = identity(expected)
-    base = inputs(root); specs = plan(base)
-    saved.check(not (root/'capture.json').exists() and {p.name for p in root.iterdir()} ==
-                {'input-pins.json', 'member-source.zip', 'price-source.zip'}, 'capture already exists')
-    keys = {'RELAY': os.environ.get(relay.SECRET_ENV, ''), 'HITHINK': os.environ.get('HITHINK_FINANCE_API_KEY', '')}
-    def safe_write(path, raw):
-        saved.check(not any(k and k.encode() in raw for k in keys.values()), 'credential reflection')
-        saved.check(len(raw) <= relay.MAX_BODY and sum(p.stat().st_size for p in root.iterdir() if p.is_file()) + len(raw) <= MAX_TOTAL,
-                    'capture size bound')
-        with path.open('xb') as f: f.write(raw)
-    start = now()
-    m = {'pilot': PILOT, 'workflow': WORKFLOW, 'identity': expected, 'authority': joined.AUTHORITY,
-         'started_at': start, 'finished_at': start, 'complete': False, 'plan': specs,
-         'records': [{'index': i, 'spec': s, 'status': 'NOT_ATTEMPTED', 'attempts': []} for i, s in enumerate(specs)]}
-    def checkpoint():
-        m['finished_at'] = now(); m['capture_hash'] = canonical_hash({k:v for k,v in m.items() if k != 'capture_hash'})
-        raw = encoded(m); saved.check(not any(k and k.encode() in raw for k in keys.values()), 'credential reflection')
-        (root/'.capture.tmp').write_bytes(raw); (root/'.capture.tmp').replace(root/'capture.json')
-    checkpoint(); stopped = False; own_seen = False; tables = {}
-    for record in m['records']:
-        spec = record['spec']; key = keys[spec['source']]
-        if stopped or not key:
-            record['status'] = 'NOT_ATTEMPTED_STOP' if stopped else 'CREDENTIAL_UNAVAILABLE'; stopped = True; checkpoint(); continue
-        if spec['source'] == 'HITHINK' and own_seen: pause(PAUSE)
-        record['status'] = 'REQUEST_IN_PROGRESS'; checkpoint()
-        try:
-            if spec['source'] == 'RELAY':
-                result = relay_request(spec['api'], spec['params'], key=key, clock=now)
-                saved.check(result['api'] == spec['api'] and result['params'] == spec['params'], 'relay request differs')
-                attempts = result['attempts']
-            else:
-                own_seen = True; requested = now()
-                value = stock_request(spec['path'], spec['params'], api_key=key)
-                received = now(); raw = encoded(value)
-                # The existing request_json validates HTTP; this is decoded JSON, not wire bytes.
-                attempts = [{'attempt': 1, 'http_status': 200, 'raw': raw, 'requested_at': requested,
-                    'received_at': received, 'classification': 'SUCCESS', 'headers': {},
-                    'business_code': value.get('code'), 'business_error': None, 'business_msg': None}]
-            for a in attempts:
-                item = {k:v for k,v in a.items() if k != 'raw'}; raw = a['raw']
-                name = None if raw is None else f"raw-{record['index']:02d}-{a['attempt']}.json"
-                if name: safe_write(root/name, raw)
-                item.update(body=name, bytes=None if raw is None else len(raw), sha256=None if raw is None else saved.sha256(raw))
-                record['attempts'].append(item)
-            record['status'] = record['attempts'][-1]['classification']
-            if record['status'] != 'SUCCESS': stopped = True
-            elif spec['source'] == 'RELAY':
-                t = member.qualify_page(attempts[-1]['raw'], {'api':spec['api'],'params':spec['params']}, attempts[-1]['received_at'], boards=TARGETS)
-                day = spec['params']['trade_date']
-                if spec['api'] == 'tdx_index': tables[day] = next(r['idx_count'] for r in t['rows'] if r['ts_code'] == BOARD)
-                else: saved.check(len(t['rows']) == tables[day], 'catalog count differs')
-            elif type(value.get('code')) is not int or value['code'] != 0:
-                stopped = True
-            elif spec['kind'] == 'history':
-                own.check_history_receipt(value, code=spec['code'], received_at=saved.clock(received))
-        except Exception as exc:
-            # Preserve actual body if obtained. No error text or alternate request.
-            if not record['attempts']: record['status'] = 'REQUEST_RECEIPT_UNAVAILABLE'
-            stopped = True
-        checkpoint()
-    m['complete'] = True; checkpoint()
-    report = rebuild(root, expected)
-    _publish_report_files(root/'result', {'join.json': encoded(report), 'join.md': render(report).encode()})
-    return report
 
-
-def main():
+def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=['prepare', 'capture', 'verify']); p.add_argument('--root', required=True, type=Path)
-    p.add_argument('--run-id'); p.add_argument('--code-commit'); a=p.parse_args()
-    if a.mode == 'prepare':
-        specs=plan(inputs(a.root)); print('46 logical requests: 8 Relay + 38 HiThink; original quotes and 301190.SZ path reused'); return 0
-    expected = identity(os.environ) if a.mode == 'capture' else identity({
+    p.add_argument('mode', choices=['verify'])
+    p.add_argument('--root', required=True, type=Path)
+    p.add_argument('--run-id', required=True)
+    p.add_argument('--code-commit', required=True)
+    a = p.parse_args(argv)
+    expected = identity({
         'GITHUB_REPOSITORY': saved.REPOSITORY, 'GITHUB_SHA': a.code_commit, 'GITHUB_RUN_ID': a.run_id,
-        'GITHUB_RUN_ATTEMPT':'1','GITHUB_REF':'refs/heads/main','GITHUB_EVENT_NAME':'workflow_dispatch'})
-    if a.mode == 'capture':
-        r = capture(a.root, expected)
-        print(r['status'], r['report_hash'])
-        return 0 if r['status'] == 'FIVE_SESSION_COHORT_INPUTS_COMPLETE' else 2
-    r=rebuild(a.root, expected)
+        'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_REF': 'refs/heads/main', 'GITHUB_EVENT_NAME': 'workflow_dispatch'})
+    r = rebuild(a.root, expected)
     saved.check((a.root/'result/join.json').read_bytes() == encoded(r) and
-                (a.root/'result/join.md').read_text() == render(r), 'offline reconstruction differs')
-    with (a.root/'verification.json').open('xb') as f:
-        f.write(encoded({'status':'ORIGINAL_INPUTS_REPLAY_MATCHED','report_hash':r['report_hash'],'source_calls':0}))
-    print(r['status'],r['report_hash']); return 0
+                (a.root/'result/join.md').read_bytes() == render(r).encode(), 'offline reconstruction differs')
+    # Verification is read-only, including repeated reads. No credentials or writes.
+    print(r['status'], r['report_hash'])
+    return 0
 
 
 if __name__ == '__main__':

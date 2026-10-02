@@ -1,5 +1,11 @@
 # Quick / Full 成果与交接边界
 
+## C2个人投资者范围：现时发现必交，完整历史角色回放可选（2026-10-02）
+
+[Human明确采纳](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5950122271)及[当前C2验收](c2-five-session-inputs.md)向前取代旧完整历史成员回放的硬门槛。现时覆盖/独立个股、产业业务解释、合格5/20/60表现及真实Quick/Brief使用继续，不用新闻选题代替机械独立发现。当前成员回看与历史当时成员分开；每个窗口独立核价格、日历、公司行动和完整分母，缺失/失败不填0、不删除、不冒称因果leader或全市场有效性。
+
+无完整历史成员库不阻断其他有依据的研究；但当前价格覆盖不足仍限制相应比较，不能靠范围修订签现时全成员排名或长期收益。原#310/#701/#711/#712及失败保留，#713固定补采主动入口退役。四项有限验收及五日自然使用窗由上述C2原入口持有；文档、合成检查或发布不代替真实使用。以后成熟轮子有实际可靠能力再按需接入可选增强；本节不改来源/任务/权限、C1后继、Sites或D边界。
+
 ## C1个人投资者范围：可用证据优先，完整券商原件为可选增强（2026-10-02）
 
 [Human明确采纳](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5948305322)：个人投资者不以拥有完整资料库为使用前提；有成熟轮子能够可靠满足需要时再接入。本节覆盖旧C收口记录中“必须取得指定历史券商PDF并恢复完整模型修订”的要求，不撤销下面的经济分析、来源纪律、挑战修订和真实使用责任。
@@ -20,7 +26,7 @@
 
 **恢复增强的条件：** 有新的成熟开源轮子或已获准服务能解决当前真实需求时，先按Reuse First恢复旧尝试、审阅候选实际能力与来源合同，再在具体研究任务内有界验证跨日期/对象的获取、身份/口径、合法留存、后继读取、失败隔离和个人维护成本。优先直接复用或薄适配，不自建完整券商资料库。不设新的定时搜轮子/审计任务，不把一次成功或安装完成当可靠性；新费用/权限另经Human决定，既有安全拒绝、消耗预算不自动解除。接入为可选增强，不自动恢复旧必交承诺。
 
-本次只退出[固定C1取报主动入口](c1-report-locators.md)。通用比较器、Relay、#717研报发现和既有历史读取保留；C2历史成员/多期限角色、自然发现和Brief接续按原范围独立处理。本节不改生产时钟、任务通知、Full/Odds/Watch/投资权限，不启动Sites或D。
+本次只退出[固定C1取报主动入口](c1-report-locators.md)。通用比较器、Relay、#717研报发现和既有历史读取保留；C2按上方已采纳后继及其独立验收处理，现时多周期/自然发现/Brief接续责任保留。本节不改生产时钟、任务通知、Full/Odds/Watch/投资权限，不启动Sites或D。
 
 ## R5.1 Full：一次委托的自主推进与有依据的停止（2026-09-24）
 
@@ -102,7 +108,7 @@ GitHub 是 canonical 成果/证据/过程后端，不是唯一信息来源。实
 
 ## 以下为 R4 版本说明与历史合同（按上方 R5 适用边界解释）
 
-Version: research-outcome-contract-v1 · 2026-09-23 · R4-0。依据：[#508原则](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-5772427849)、[RM-r4](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5791943957)、[#526审阅](https://github.com/auguspp/decision-kernel/issues/526#issuecomment-5791950604)。
+Version: research-outcome-contract-v1 · 2026-09-23 · R4-0。依据：[#508原则](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-5772427849)、[RM-r4](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5791943957)、[#526审阅](https://github.com/auguspp/decision-kernel/pull/526#issuecomment-5791950604)。
 
 **固定成果和验收责任，不固定研究路径。** 本文向前解释现行研究入口；v3仍是可复用的基线策略，其A–F、角色、轮数和文件名不是强制算法。来源纪律、经济结构、实际反驳、重要问题去向和诚实留存不因此取消。旧成果仍按其原方法/合同读取，本文不重签旧结果，也不启用任何模型或生产任务。
 
