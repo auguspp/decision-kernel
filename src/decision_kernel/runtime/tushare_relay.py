@@ -27,6 +27,7 @@ ALLOWED = frozenset({
     "income", "balancesheet", "cashflow", "fina_indicator", "disclosure_date",
     "shibor", "index_classify", "index_member_all", "ths_index", "ths_daily",
     "index_global", "hk_daily", "us_daily", "fut_wsr",
+    "tdx_index", "tdx_member",
 })
 HEADER_ALLOWLIST = ("X-Request-ID", "X-Cache", "X-RateLimit-Remaining",
                     "X-RateLimit-IP-Remaining", "Retry-After")
