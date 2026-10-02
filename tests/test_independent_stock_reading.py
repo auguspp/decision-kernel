@@ -100,10 +100,21 @@ def test_rejected_source_is_explicit_not_empty_or_old_sample(tmp_path, damage):
     elif damage == 'cache_changed': c.archive_cache[1][0]['foreign.txt'] = b'changed'
     elif damage == 'archive_changed': c.files[ref['read_path']] += b'changed'
     else: ref['expires_at'] = '2000-01-01T00:00:00Z'
+    # Exercise source rejection with a valid outer envelope, not a stale root hash.
+    baseline['reading_hash'] = canonical_hash({k: v for k, v in baseline.items() if k != 'reading_hash'})
     report = detail(c, reading.attach(c, baseline))
     assert report['status'] == 'INPUT_UNAVAILABLE_NOT_QUIET' and report['observations'] is None
     assert report['gaps'][0]['phase'] == 'SOURCE_ARCHIVE'
     assert c.api.calls == 0
+
+
+def test_invalid_outer_reading_is_rejected_before_retained_files_change(tmp_path):
+    _, c, baseline = seeded(tmp_path)
+    before = deepcopy(c.files)
+    baseline['reading_hash'] = 'f' * 64
+    with pytest.raises(ValueError, match='reading_hash mismatch'):
+        reading.attach(c, baseline)
+    assert c.files == before and c.api.calls == 0
 
 
 def test_optional_stock_damage_keeps_independent_quote_sample(tmp_path):
@@ -160,7 +171,13 @@ def test_index_capacity_preserves_baseline_and_records_nonquiet_gap(tmp_path):
 def test_normal_publisher_calls_saved_consumer_without_new_flag(tmp_path, monkeypatch):
     from decision_kernel.runtime import current_state_delivery_with_odds_watch as publisher
     _, c, baseline = seeded(tmp_path, cls=publisher.Collector)
+    original = deepcopy(baseline)
     monkeypatch.setattr(delivery.Collector, 'collect', lambda self, refresh: baseline)
     out = c.collect({})
     assert detail(c, out)['observations']['coverage']['unique_identities'] == 503
-    assert c.api.calls == 0
+    assert c.api.calls == 0 and baseline == original
+    # The new descriptor and its root hash are the only changes to the old payload.
+    prior_fields = deepcopy(out)
+    del prior_fields['research'][reading.KEY]
+    prior_fields['reading_hash'] = canonical_hash({k: v for k, v in prior_fields.items() if k != 'reading_hash'})
+    assert prior_fields == original

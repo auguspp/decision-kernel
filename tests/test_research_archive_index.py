@@ -315,6 +315,9 @@ def test_company_render_and_counts_do_not_upgrade_registered_locator():
 
 
 def test_production_navigation_preserves_original_summary_and_byte_bound(tmp_path, monkeypatch):
+    from decision_kernel.runtime import independent_stock_reading as independent
+    # Keep this archive-navigation contract isolated; the new hook is exercised without mocks separately.
+    monkeypatch.setattr(independent, 'attach', lambda self, payload:payload)
     api = deferred(); c = production.Collector(api, M, tmp_path)
     original = b'# existing summary\n'
     c.files['README.md'] = original
