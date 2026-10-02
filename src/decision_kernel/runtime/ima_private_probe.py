@@ -35,10 +35,11 @@ AUTHORITY = {
 
 
 class ProbeError(ValueError):
-    def __init__(self, code: str, *, http_status: int | None = None):
+    def __init__(self, code: str, *, http_status: int | None = None, business_code: int | None = None):
         super().__init__(code)
         self.code = code
         self.http_status = http_status
+        self.business_code = business_code
 
 
 def require(ok: bool, code: str, *, http_status: int | None = None) -> None:
@@ -95,7 +96,7 @@ def _session():
 
 
 def request_raw(spec: dict, *, client_id: str, api_key: str) -> tuple[int, bytes]:
-    require(isinstance(spec, dict) and spec.get("endpoint") in {"search_knowledge_base", "search_knowledge"},
+    require(isinstance(spec, dict) and spec.get("endpoint") in {"search_knowledge_base", "search_knowledge", "get_media_info"},
             "REQUEST_SPEC")
     expected = BASE + spec["endpoint"]
     require(spec.get("url") == expected and isinstance(spec.get("body"), dict), "REQUEST_SPEC")
@@ -146,7 +147,8 @@ def decode(raw: bytes) -> dict:
 def payload(raw: bytes) -> dict:
     value = decode(raw)
     require(type(value.get("code")) is int, "BUSINESS_CODE_TYPE")
-    require(value["code"] == 0, "BUSINESS_REJECTED")
+    if value["code"] != 0:
+        raise ProbeError("BUSINESS_REJECTED", business_code=value["code"])
     data = value.get("data")
     require(isinstance(data, dict), "DATA_SHAPE")
     return data
@@ -240,12 +242,17 @@ def _call(spec: dict, send, clock) -> tuple[dict, dict]:
     return data, meta
 
 
-def probe(base_query: str, document_query: str | None, *, send, clock) -> dict:
+def probe(base_query: str, document_query: str | None, *, send, clock, report_title_terms: str | None = None) -> dict:
     bq = query(base_query)
     dq = None if document_query is None or not document_query.strip() else query(document_query)
+    if report_title_terms:
+        query(report_title_terms)
+        require(dq is not None, "DOCUMENT_QUERY_REQUIRED")
     base_data, base_meta = _call(base_spec(bq), send, clock)
     rows = base_rows(base_data)
     selected = select_base(rows, bq)
+    if report_title_terms:
+        require(bq.casefold() in selected["name"].casefold(), "BASE_NAME_MISMATCH")
     base_meta.update(match_count=len(rows), is_end=base_data["is_end"], next_cursor_present=bool(base_data.get("next_cursor")))
     documents = None
     calls = 1
@@ -268,6 +275,13 @@ def probe(base_query: str, document_query: str | None, *, send, clock) -> dict:
         "meaning": "PRIVATE_LIBRARY_CONNECTIVITY_AND_SEARCHABILITY_NOT_REPORT_RESEARCH_OR_SOURCE_RIGHTS",
         **AUTHORITY,
     }
+    if report_title_terms:
+        from .ima_document_check import check_one_document
+        check = check_one_document(docs, report_title_terms, send=send, clock=clock)
+        result["body_check"] = check
+        result["source_calls"] += check["api_call_attempts"] + check["file_get_attempts"]
+        result["source_count_basis"] = "REQUEST_ATTEMPTS_INCLUDING_BODY_CHECK"
+        result["pdf_downloads"] = check["pdf_downloads"]
     result["receipt_hash"] = canonical_hash(result)
     return result
 
@@ -278,6 +292,8 @@ def safe_failure(exc: Exception) -> dict:
     result = {"version": VERSION, "status": "PROBE_FAILED", "failure_code": code,
               "http_status": status, "private_source_retention": "NONE",
               "source_replay": "NOT_AVAILABLE", **AUTHORITY}
+    if isinstance(exc, ProbeError) and exc.business_code is not None:
+        result["business_code"] = exc.business_code
     result["receipt_hash"] = canonical_hash(result)
     return result
 
@@ -292,6 +308,7 @@ def render(result: dict) -> str:
                 f"status: {result['status']}\n\nfailure: {result['failure_code']}\n\n"
                 "No private IMA names, ids, titles, snippets, URLs, bodies or credentials were retained.\n")
     docs = result.get("documents")
+    body_check = result.get("body_check")
     return ("# IMA private report probe\n\n"
             f"status: {result['status']}\n\n"
             f"knowledge-base matches on first bounded response: {result['base']['match_count']}\n\n"
@@ -299,6 +316,8 @@ def render(result: dict) -> str:
                f"document matches on first bounded response: {docs['match_count']}\n\n")
             + ("document pagination not returned; coverage UNKNOWN.\n\n"
                if docs is not None and docs.get("pagination_reported") is False else "")
+            + ("single candidate check: " + body_check["status"] + ". Machine parsing is not semantic reading or Research delivery.\n\n"
+               if body_check is not None else "")
             + "Counts are connectivity/search evidence only, not complete library coverage.\n\n"
               "No private IMA names, ids, titles, snippets, URLs, bodies or credentials were retained.\n")
 
@@ -330,13 +349,17 @@ def main(argv=None) -> int:
         dq = os.environ.get(args.document_query_env, "")
         def send(spec):
             return request_raw(spec, client_id=client_id, api_key=api_key)
-        result = probe(bq, dq, send=send, clock=lambda: datetime.now(timezone.utc).isoformat())
+        terms = os.environ.get("IMA_REPORT_TITLE_TERMS", "")
+        result = probe(bq, dq, send=send, clock=lambda: datetime.now(timezone.utc).isoformat(),
+                       report_title_terms=terms or None)
     except (ProbeError, requests.RequestException, OSError, TypeError, KeyError, OverflowError) as exc:
         result = safe_failure(exc)
     write_result(args.output, result)
     print("IMA_PRIVATE_PROBE_STATUS=" + result["status"])
     print("IMA_PRIVATE_PROBE_HASH=" + result["receipt_hash"])
-    return 0 if result["status"].startswith("CONNECTED_") else 2
+    check_status = result.get("body_check", {}).get("status")
+    return 0 if result["status"].startswith("CONNECTED_") and check_status not in {
+        "CHECK_FAILED", "PDF_PARSE_FAILED", "PDF_PARSE_TIMEOUT"} else 2
 
 
 if __name__ == "__main__":
