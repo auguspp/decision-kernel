@@ -1,8 +1,9 @@
-"""Synthetic directory fixtures only; never request or certify broker reports."""
+"""Offline historical-reader fixtures; retired acquisition is not exercised."""
 from datetime import datetime, timedelta, timezone
 import importlib.util
 import json
 from pathlib import Path
+import socket
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,36 +20,49 @@ def payload(spec):
     return {'code':0, 'data':{'fields':list(m.FIELDS), 'items':[row]}, 'count':1}
 
 
-def clock():
-    value = datetime(2026, 10, 2, tzinfo=timezone.utc)
-    def now():
-        nonlocal value
-        value += timedelta(seconds=31)
-        return value.isoformat()
-    return now
+def retained_fixture(root, *, native=False, invalid_first=False):
+    """Construct explicit synthetic saved bytes, never invoke a capture/client."""
+    root.mkdir()
+    records = []
+    start = datetime(2026, 10, 2, tzinfo=timezone.utc)
+    for i, request in enumerate(m.plan(native=native)):
+        if invalid_first and i:
+            records.append({'spec':request, 'status':'NOT_ATTEMPTED_STOP', 'attempts':[]})
+            continue
+        body = payload(request)
+        if native:
+            body = {'code':0, 'data':{'fields':['日期','报告PDF链接'],
+                    'items':[['2026-04-30','https://example.invalid/report.pdf']]}, 'count':1}
+        elif invalid_first:
+            body['data']['items'] = [[''] * len(m.FIELDS)] * 114
+            body['count'] = 114
+        raw = m.common.encoded(body); name = f'raw-{i}-1.json'
+        (root/name).write_bytes(raw)
+        attempt = {'attempt':1, 'classification':'SUCCESS', 'http_status':200,
+                   'requested_at':(start+timedelta(seconds=i*2+1)).isoformat(),
+                   'received_at':(start+timedelta(seconds=i*2+2)).isoformat(),
+                   'headers':{}, 'business_code':0, 'business_error':None, 'business_msg':None,
+                   'body':name, 'bytes':len(raw), 'sha256':m.saved.sha256(raw)}
+        records.append({'spec':request, 'status':'SUCCESS', 'attempts':[attempt]})
+    manifest = {'pilot':m.NATIVE_PILOT if native else m.PILOT, 'workflow':m.WORKFLOW,
+                'identity':ENV, 'plan':m.plan(native=native), 'authority':m.AUTHORITY,
+                'started_at':start.isoformat(), 'finished_at':(start+timedelta(seconds=10)).isoformat(),
+                'records':records}
+    if native: manifest['predecessor'] = m.PREDECESSOR
+    manifest['capture_hash'] = m.common.digest(manifest)
+    (root/'capture.json').write_bytes(m.common.encoded(manifest))
+    result = m.rebuild(root, ENV)
+    (root/'summary.json').write_bytes(m.common.encoded(result))
+    return result
 
 
-def request(api, params, *, clock):
-    raw = m.common.encoded(payload({'params':params}))
-    return {'status':'SUCCESS', 'attempts':[{'attempt':1, 'classification':'SUCCESS',
-        'http_status':200, 'raw':raw, 'requested_at':clock(), 'received_at':clock(),
-        'headers':{}, 'business_code':0, 'business_error':None, 'business_msg':None}]}
-
-
-def test_plan_is_two_exact_queries_not_all_market():
+def test_historical_plan_is_not_an_execution_entry():
     p = m.plan()
     assert len(p) == 2 and {x['params']['trade_date'] for x in p} == {'20260430','20260910'}
     assert all(x['api']=='research_report' and x['params']['ts_code']=='002281.SZ' for x in p)
     assert all(x['params']['inst_csname']=='长江证券' for x in p)
-
-
-def test_source_and_replay_do_not_fetch_locators(tmp_path, monkeypatch):
-    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key')
-    root=tmp_path/'out'; r=m.capture(root,ENV,request=request,now=clock())
-    assert r==m.rebuild(root,ENV) and r['http_receipts']==2
-    assert all(x['status']=='LOCATOR_ONLY_NOT_FETCHED' for x in r['outcomes'])
-    assert r['pdf_acquired'] is False and r['full_model_qualified'] is False
-    with pytest.raises(FileExistsError):m.capture(root,ENV,request=request,now=clock())
+    assert not hasattr(m, 'capture') and not hasattr(m, 'write')
+    assert not (ROOT/m.WORKFLOW).exists()
 
 
 @pytest.mark.parametrize('field,value',[('trade_date','20260930'),('ts_code','600000.SH'),
@@ -64,30 +78,6 @@ def test_business_status_requires_integer_zero(bad):
     with pytest.raises(ValueError):m.inspect(m.common.encoded(b),spec)
 
 
-def test_failure_stops_second_query(tmp_path,monkeypatch):
-    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key'); calls=[]
-    def bad(api,params,clock):
-        calls.append(params)
-        r=request(api,params,clock=clock)
-        a=r['attempts'][0]
-        a.update(raw=m.common.encoded({'code':1,'error':'forbidden'}),http_status=403,
-                 classification='AUTH_OR_ENTITLEMENT',business_code=1,business_error='forbidden')
-        r['status']='AUTH_OR_ENTITLEMENT';return r
-    r=m.capture(tmp_path/'out',ENV,request=bad,now=clock())
-    assert len(calls)==1 and r['outcomes'][1]['status']=='NOT_ATTEMPTED_STOP'
-
-
-def test_invalid_directory_stops_and_retains_original(tmp_path,monkeypatch):
-    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key'); calls=[]
-    def bad(api,params,clock):
-        calls.append(params);r=request(api,params,clock=clock)
-        b=payload({'params':params});b['data']['items'][0][6]='600000.SH'
-        r['attempts'][0]['raw']=m.common.encoded(b);return r
-    r=m.capture(tmp_path/'out',ENV,request=bad,now=clock())
-    assert len(calls)==1 and r['outcomes'][0]['status']=='DIRECTORY_UNQUALIFIED'
-    assert b'600000.SH' in (tmp_path/'out/raw-0-1.json').read_bytes()
-
-
 def test_empty_or_ambiguous_is_not_a_model():
     spec=m.plan()[0];b=payload(spec);b['data']['items']=[];b['count']=0
     assert m.inspect(m.common.encoded(b),spec)['status']=='TARGET_NOT_IN_RETURNED_PAGE'
@@ -100,45 +90,33 @@ def test_url_credentials_never_qualify():
     assert m.inspect(m.common.encoded(b),spec)['status']=='URL_UNQUALIFIED'
 
 
-def test_tampered_raw_refused(tmp_path,monkeypatch):
-    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key');root=tmp_path/'out'
-    m.capture(root,ENV,request=request,now=clock())
+def test_legacy_empty_projection_remains_unqualified(tmp_path):
+    root=tmp_path/'saved';r=retained_fixture(root,invalid_first=True)
+    assert [o['status'] for o in r['outcomes']]==['DIRECTORY_UNQUALIFIED','NOT_ATTEMPTED_STOP']
+    assert r['logical_queries_attempted']==r['http_receipts']==1
+    assert not r['pdf_acquired'] and not r['full_model_qualified']
+    assert m.common.encoded(m.rebuild(root,ENV))==(root/'summary.json').read_bytes()
+
+
+def test_tampered_raw_refused(tmp_path):
+    root=tmp_path/'saved';retained_fixture(root)
     (root/'raw-0-1.json').write_bytes(b'{}')
     with pytest.raises(ValueError):m.rebuild(root,ENV)
 
 
-def test_missing_key_makes_no_request(tmp_path,monkeypatch):
-    monkeypatch.delenv(m.relay.SECRET_ENV,raising=False)
-    r=m.capture(tmp_path/'out',ENV,request=lambda *a,**k:pytest.fail('network'),now=clock())
-    assert r['http_receipts']==r['logical_queries_attempted']==0
-    assert r['outcomes'][0]['status']=='CREDENTIAL_UNAVAILABLE'
+def test_extra_file_and_wrong_identity_refused(tmp_path):
+    root=tmp_path/'saved';retained_fixture(root)
+    with pytest.raises(ValueError):m.rebuild(root,{**ENV,'GITHUB_RUN_ID':'124'})
+    (root/'extra.json').write_text('{}')
+    with pytest.raises(ValueError):m.rebuild(root,ENV)
 
 
-def test_manual_carrier_keeps_c2_and_other_sources_out():
-    text=(ROOT/m.WORKFLOW).read_text()
-    assert 'workflow_dispatch:' in text and 'schedule:' not in text
-    assert 'github.run_attempt == 1' in text and 'assert not prior' in text
-    assert text.count('secrets.TUSHARE_PROXY_API_KEY')==1
-    assert 'HITHINK' not in text and 'c2-dated-window' not in text
-    assert 'contents: write' not in text and 'actions: write' not in text
-
-
-
-def test_native_successor_spends_one_remaining_logical_query(tmp_path,monkeypatch):
-    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key');calls=[]
-    def native(api,params,clock):
-        calls.append(params); assert 'fields' not in params and params['trade_date']=='20260430'
-        r=request(api,params,clock=clock)
-        r['attempts'][0]['raw']=m.common.encoded({'code':0,'data':{'fields':['日期','报告PDF链接'],
-            'items':[['2026-04-30','https://example.invalid/report.pdf']]},'count':1})
-        return r
-    root=tmp_path/'out';r=m.capture(root,ENV,request=native,now=clock(),native=True)
-    assert len(calls)==r['logical_queries_attempted']==r['http_receipts']==1
+def test_native_history_keeps_unqualified_status_and_exact_predecessor(tmp_path):
+    root=tmp_path/'saved';r=retained_fixture(root,native=True)
     assert r['pilot']==m.NATIVE_PILOT and r['pdf_acquired'] is False
     assert r['outcomes'][0]['request_filter_qualification']=='NOT_CHECKED'
     assert r==m.rebuild(root,ENV)
     manifest=json.loads((root/'capture.json').read_bytes())
-    assert manifest['predecessor']==m.PREDECESSOR
     manifest['predecessor']['run_id']+=1;manifest['capture_hash']=m.common.digest(manifest)
     (root/'capture.json').write_bytes(m.common.encoded(manifest))
     with pytest.raises(ValueError,match='predecessor'):m.rebuild(root,ENV)
@@ -151,8 +129,20 @@ def test_native_mode_does_not_relax_original_directory_qualification():
     assert len(m.plan())==2 and len(m.plan(native=True))==1
 
 
-def test_native_carrier_binds_exact_prior_empty_projection_and_budget():
-    text=(ROOT/m.WORKFLOW).read_text()
-    assert 'len(prior) == 1' in text and '36968934918' in text and '11210703148' in text
-    assert m.PREDECESSOR['sha256'] in text and "summary['http_receipts'] == 2" in text
-    assert "all(v == '' for row" in text
+def test_verify_cli_never_requests_or_writes(tmp_path,monkeypatch,capsys):
+    root=tmp_path/'saved';retained_fixture(root)
+    before={p.name:p.read_bytes() for p in root.iterdir()}
+    for key,value in ENV.items():monkeypatch.setenv(key,value)
+    monkeypatch.delenv(m.relay.SECRET_ENV,raising=False)
+    monkeypatch.setattr(m.relay,'request',lambda *a,**k:pytest.fail('source request'))
+    monkeypatch.setattr(socket.socket,'connect',lambda *a,**k:pytest.fail('network'))
+    m.main(['verify','--root',str(root)])
+    assert before=={p.name:p.read_bytes() for p in root.iterdir()}
+    assert 'example.invalid' not in capsys.readouterr().out
+
+
+def test_capture_cli_is_rejected_before_read_or_write(tmp_path,monkeypatch):
+    root=tmp_path/'absent'
+    monkeypatch.setattr(m,'rebuild',lambda *a,**k:pytest.fail('reader called'))
+    with pytest.raises(SystemExit) as error:m.main(['capture','--root',str(root)])
+    assert error.value.code==2 and not root.exists()
