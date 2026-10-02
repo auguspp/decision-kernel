@@ -273,3 +273,16 @@ def test_source_numeric_and_string_versions_stay_distinct(tmp_path):
     _, result, _ = run(tmp_path, lambda _:(200,raw))
     assert result['unique_reports'] == 1 and result['versions'] == 2
     assert d.row_version(ROW) == d.row_version(dict(reversed(list(ROW.items()))))
+
+
+def test_resealed_final_cannot_end_before_stop_or_page_budget(tmp_path):
+    def fetch(req):
+        page = int(req['params']['pageNo'])
+        return 200, body([ROW]*50 if page == 1 else [ROW], page, 51)
+    root, _, _ = run(tmp_path, fetch)
+    meta = d.decode((root/'capture.json').read_bytes())
+    meta['records'] = meta['records'][:1]
+    with pytest.raises(ValueError, match='FINAL_BEFORE_STOP_OR_BUDGET'):
+        d.project(reseal(meta), {'page-1.body': (root/'page-1.body').read_bytes()})
+    meta['final'] = False
+    assert d.project(reseal(meta), {'page-1.body': (root/'page-1.body').read_bytes()})['coverage'] == 'INTERRUPTED_OR_IN_PROGRESS'

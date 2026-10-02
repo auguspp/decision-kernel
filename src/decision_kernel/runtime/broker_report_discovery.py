@@ -56,6 +56,7 @@ def decode(raw):
 
 
 def clock(value):
+    require(isinstance(value, str), 'CLOCK_TYPE')
     parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
     require(parsed.tzinfo is not None, 'CLOCK_ZONE')
     return parsed.astimezone(timezone.utc)
@@ -237,6 +238,7 @@ def project(meta, bodies):
     require(used == set(bodies), 'UNBOUND_BODY')
     if len(meta['records']) == selected['pages']:
         terminal = True
+    require(not meta['final'] or terminal, 'FINAL_BEFORE_STOP_OR_BUDGET')
     if not meta['final']:
         reason = 'INTERRUPTED_OR_IN_PROGRESS'
     records = sorted(unique.values(), key=lambda r: (r['publication_date'], r['report_key'], r['version']), reverse=True)
