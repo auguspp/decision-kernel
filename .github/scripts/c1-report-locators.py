@@ -146,7 +146,8 @@ def rebuild(root, expected):
         outcomes.append(outcome)
     saved.check(set(files) <= seen | {'summary.json'}, 'C1 unexpected retained file')
     return {'pilot': PILOT, 'identity': manifest['identity'], 'outcomes': outcomes,
-            'logical_queries_attempted': sum(r['status'] != 'NOT_ATTEMPTED_STOP' for r in manifest['records']),
+            'logical_queries_attempted': sum(r['status'] not in ('NOT_ATTEMPTED_STOP', 'CREDENTIAL_UNAVAILABLE')
+                                             for r in manifest['records']),
             'http_receipts': sum(len(r['attempts']) for r in manifest['records']),
             'source_capture_hash': manifest['capture_hash'], **AUTHORITY}
 
