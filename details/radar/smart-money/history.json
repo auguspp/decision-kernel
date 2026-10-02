@@ -1,163 +1,670 @@
 {
-  "capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
-  "change_examples": [],
+  "capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+  "change_examples": [
+    {
+      "actor_name": "周口城发智能科技有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "5ee3abbcea62e6af36070df231a989af240bd612a207b5387453f55dcddbbf4d",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "莲花健康水业(深圳)有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "94e7dab1585afe822782962dfec3d67e62afd35c001cbcb8cb9ec33fee16ca7f",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "戚良季",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "e525bbb1acd409a3f72dccce2f8f24c8d9e766ba5b2c7080eb307da1f5a18246",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "何彬",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "4c89e5e20cbdad783aeb5dfe932257c4e985397da4ad6123bb036f649e97db76",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "方勤华",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "de5028e44af18d2c25e17c467e33db86219901431fcf0e534268a3866c971939",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "吴小玲",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "eb44f919856a295e6c11f127cad569448f5322c58019168bde9b40937dab5765",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "何芳华",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "0fc6088e9aac3753c8935e090f52f5362b775e63aa1cb8b12fe4e20ab06db516",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "朱和平",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "640a9fc0c02f72b69ab9b52eec77c64051a01e6bb39d016c899b928e4a4be82d",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "金莉莉",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "61151a60e8c60111512599d3f37b4cd437abcf17eddeb4cc85430cccbd1a507f",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "蒋俊青",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "9813db1dc05b4e89f2e6a75a26e5a896c2b3e02074c30742cf732479a6017e92",
+      "ticker": "300096.SZ"
+    },
+    {
+      "actor_name": "安徽顺源芯科管理咨询合伙企业(有限合伙)",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "9af96a092e006034c256bab0ff69e53dbcdb29cb50754f6aa3c6d40faee8b50a",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "王振洪",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "c32d34bfa26501d2c0aa75a53c99498d931096c9dd364c588d66564060811c33",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "陈惜如",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "31d0756f3710dcc7f0f1a3aecb7064b8040f4ae1a024cd676b22912de1ea8f7b",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "王育贤",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "8dc7048d08b0816ef70b1543b725492e208245a98399d1f209729c1d50a503a4",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "吴健",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "20fca1757dde7fb65cfe84b150535551aeac41ac561cffc9da265c124f2fbc1d",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "严佳炫",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "f97f9d4481f8736a7c9d69aec69c90f39d5dd2a7ec3f8b62e5f97314fb91b7b1",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "马晓东",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "b6c662a246dabe1a433f9e7ed249e3588a01b7d6b1087db5c24fb2670089b29e",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "吁强",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "855732ce4fce16019add1bb67a74ddb794e2e22b0078a7a833c943a1bbc04216",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "李大军",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "b203ce5e0611f3db6638140261288973ea08c156acd8eca8fd6106ffa24437d3",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "福建天宝矿业投资集团股份有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "32de710bb41c51d9ff88984923efb93920dd43444aac674f9d721f29d1a22d9b",
+      "ticker": "300211.SZ"
+    },
+    {
+      "actor_name": "中国船舶重工集团有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "45ed4ce6cf6490febac8de6aaa9f76e4276f14ac63605adf0ee5d31bea7ee1b7",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "中国船舶重工集团武汉船舶工业有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "57846b2d0e86270cc96c21bf5b07d55551dc9e2279d27719ec1d2f2ddf52217e",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "西安精密机械研究所(中国船舶重工集团公司第七0五研究所)",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "ee69e9df6a97f55c6be9fff24dbab6b9218975c156dcbe834bcc253c75bb4f97",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "夏琼",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "094f9a5f8254108b7acf1b7d3caf2d357ce2abe4e4ccabb9e10fb0dfdd7c660e",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "黄海彬",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "5e89f5f787d83c3f19e02e1bbbcdc57bc06f3619b11b6dead31ba803c64b93a8",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "王喜栓",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "dfa2e192753df1263790b18d2072ff580060d6f643f4850d69ee4230b1169ef5",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "林永清",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "84c5798b3fc9b84f71533f2dd58991fd0302474f548f86dd74a8edbd88d0069a",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "王建",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "8cc38f0bb2c20309fa6a8666f38e1a2eed4fb09f742b5fab1b583375cd78e7d5",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "赵睿",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "4bd7127f1a31684b5ad34decffff1f77295437be58dd478cc947a207a1113fac",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "张文旭",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "268c32bb3d3bd39511febdd7fd79246f8eca17b8f13b7a61e60849ebe3afea5c",
+      "ticker": "300527.SZ"
+    },
+    {
+      "actor_name": "吴志锋",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "1790db0217cfc49c9e0fecf165e87100fad3a984951e00e14be436aa24f8d32d",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "燕鸿",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "0a4ecd838f5432425824ef632169616982763d168b9ea6aff68f389ec3d03f18",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "洪贤贵",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "a60ff301c92f049dc874c08bb038bc2076e61fa4decb2566c84bd18b6ae7914d",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "梅光辉",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "b02a5dd12d3e04a0b13b6ca8ee46e0af1b65601baefc0565284b638d7b232710",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "宋倩玮",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "6d748124bb18a1df4074e096eb067247e838cd761225001d04b108ff18e37f96",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "杨琴",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "d44bc145244947524e2820ce63328ac888e3402f658aae980384305c5fda2276",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "周海燕",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "0989691aa51f1c9e0cb2ef0e93c56a6cc3627176a7ea59519cb20590d5f5acf9",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "付卫东",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "c884c30006836f26358996e974e5bfc6b46cfd1f8ed32d8684ef588ac71d8e2f",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "谢声通",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "247ec0bb99bc2479ae1584cf8dc3cd42cdf63f9208c814fe59df1e9d4254c71b",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "郭一言",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "303c8def679edf1044a9b0fa4b67e4f592f54f6cfc531c90247a09a1699a65ce",
+      "ticker": "301139.SZ"
+    },
+    {
+      "actor_name": "江苏交通控股有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "ccf9c558243ca12ecb63a0184b08541bba0850bb79ebfa6afd55d42ff92f61c0",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "江苏高速公路联网营运管理有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "56a86c883e7de27b2dd81170f56ccd91d25cbf30e3ab5641eeb83c18db7d5268",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "南通交通建设投资集团有限责任公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "f6f229c6b11eee2fa95184aa9d9317255c076c4fb8107e545164561f4cbabf65",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "俞娥",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "05629a12f6700fbcf4564840ab406540f82f8efdbd6148defc86b0e4ebf953d8",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "香港中央结算有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "0f6ecac9e123d15968d7260e88cd50b1bedfa6a520efa6ea4fa4265c5efb427b",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "耿聪",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "6e2aa9885348ecc5c4638ced5c65f4ee2ac5922c1d1cec878bec99efc43cc38e",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "吴建新",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "4423757882f0fad004dadfca141def9d3f770c3713849886f2862e879ae73062",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "周泳",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "09a998962364a5dd77ba916bb7be27dde270060f146d705f34f65c9888174ff7",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "中信建投证券股份有限公司-景顺长城中证沪港深红利成长低波动指数型证券投资基金",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "ecbf5d3c51849a853cf5f51a04624c856fe1b93f1a4e825ae5e38681bbba9027",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "王玉明",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "0b8bb1daac1d376cd684b76ec77b7905b4eb8d7b07e0675eb2478ec029eff38f",
+      "ticker": "301339.SZ"
+    },
+    {
+      "actor_name": "江西省电子集团有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "5af234c3bc00162b0d3d29b7ac38fa116ed2f06b59b188d5dca22a6a6e686921",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "香港中央结算有限公司",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "928ce029b4a303809f8dca3dcdf7cfb3c28b7bac4efeed30f65107160ebe29cb",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "瑞众人寿保险有限责任公司-自有资金",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "46e648cc4ae48c0856deddbee1fef0fd4418ba4fea7c66be740a28782cd0738b",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "黄世霖",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "4c03de916245b2a587f86591486ae377ad41351984931942a01759e4e4c5dd2b",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "金洁儒",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "bef850ed9899a7e7abe2d614bcf787abb41328c52f149dbd79cf124c6cd67413",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "中国农业银行股份有限公司-交银施罗德成长混合型证券投资基金",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "015c4be6458e9cdc88d8de6e99f4847f48a5a66d1f2463af06243ab047c75f16",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "钱旭锋",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "e7e738e238916e56591f55a5dfb15dda39ebbcf4715610721fff0ad8ea306c31",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "曾智斌",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "4c43cd53a4adefaacea0890eaac09c4d4b335e7a86d30c7dbd333bde7564cf39",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "全国社保基金四一二组合",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "6f52982c70e421c153abf95b1a4097110317ef78f6d6e26cbe0b954479dcc4d6",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "杨亦军",
+      "change": "SOURCE_VERSION_CHANGED",
+      "date": "2026-06-30",
+      "family": "holdings",
+      "id": "18f41ff8e62b0f548c92c924cc80ad0a296139dbb24a4516012db847860491ee",
+      "ticker": "600363.SH"
+    },
+    {
+      "actor_name": "太平洋",
+      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
+      "date": "2026-10-02",
+      "family": "forecasts",
+      "id": "6c5e5adea88e4a7e888fa15ad4d4989fe94b649750cb25d324646a77c7023e67",
+      "ticker": "603162.SH"
+    },
+    {
+      "actor_name": "太平洋",
+      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
+      "date": "2026-10-02",
+      "family": "forecasts",
+      "id": "9c742f4b1982fea2d6d64f423bb7dba63bafe9e86d6211e04232907f0987d885",
+      "ticker": "601872.SH"
+    },
+    {
+      "actor_name": "东吴证券",
+      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
+      "date": "2026-10-01",
+      "family": "forecasts",
+      "id": "56ad9a9d761374c6c21ff1a46c707b6338459fdc510bafadf640c38475408a45",
+      "ticker": "002379.SZ"
+    }
+  ],
   "changes": {
-    "UNCHANGED": 25562
+    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 3,
+    "SOURCE_VERSION_CHANGED": 60,
+    "UNCHANGED": 81641
   },
   "chunks": [
     {
-      "bytes": 1003568,
+      "bytes": 1003630,
       "expanded_bytes": 8438645,
       "name": "data-activity-0000.json.gz",
       "reference": {
-        "bytes": 1003568,
-        "git_blob": "00becf3572056b1ec3e59743343691330d27ce9a",
+        "bytes": 1003630,
+        "git_blob": "1a5e9db5eebc7fe65979cb78aaf6eb281e61cbd5",
         "read_path": "details/radar/smart-money/data-activity-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "bb30d5b71eeceef28dcb307d4c6a8743fe5706203e1f0b0f9b9cc1c95b3592f0"
+        "sha256": "cbe97446b011061825d9eb12dea8778d6f909c627a82489080ae71febedcaf53"
       },
       "rows": 5832,
-      "sha256": "bb30d5b71eeceef28dcb307d4c6a8743fe5706203e1f0b0f9b9cc1c95b3592f0"
+      "sha256": "cbe97446b011061825d9eb12dea8778d6f909c627a82489080ae71febedcaf53"
     },
     {
-      "bytes": 494020,
+      "bytes": 494016,
       "expanded_bytes": 3227953,
       "name": "data-executives-0000.json.gz",
       "reference": {
-        "bytes": 494020,
-        "git_blob": "d5fb603d69ad02bee65dd9c66c77642b05e56eb2",
+        "bytes": 494016,
+        "git_blob": "caa865990a9e552157f4bc71b90cefb72d9c386d",
         "read_path": "details/radar/smart-money/data-executives-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "c32f80543d276803b6a74f4d66a7182e0d14d132c82f382207540d8902d9b475"
+        "sha256": "9160f9dac33c1f9a0a17cb7040d79ac7a2d496c8143ceea45afd1788fc23757e"
       },
       "rows": 3396,
-      "sha256": "c32f80543d276803b6a74f4d66a7182e0d14d132c82f382207540d8902d9b475"
+      "sha256": "9160f9dac33c1f9a0a17cb7040d79ac7a2d496c8143ceea45afd1788fc23757e"
     },
     {
-      "bytes": 547456,
-      "expanded_bytes": 3328318,
+      "bytes": 548036,
+      "expanded_bytes": 3331245,
       "name": "data-forecasts-0000.json.gz",
       "reference": {
-        "bytes": 547456,
-        "git_blob": "57553549e9080a9e30596615a870f40f6d7818a7",
+        "bytes": 548036,
+        "git_blob": "994a9dab0190b78223e97bf4a7dcb9f00afed928",
         "read_path": "details/radar/smart-money/data-forecasts-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "d83da251741bd753de9012bb7f89887e7797395999c469da0644bd4af3397057"
+        "sha256": "472949f116b88f1be1926c45f071119aaedd121f46d291b64492b9672aa81c65"
       },
-      "rows": 3325,
-      "sha256": "d83da251741bd753de9012bb7f89887e7797395999c469da0644bd4af3397057"
+      "rows": 3328,
+      "sha256": "472949f116b88f1be1926c45f071119aaedd121f46d291b64492b9672aa81c65"
     },
     {
-      "bytes": 213863,
+      "bytes": 213843,
       "expanded_bytes": 1335258,
       "name": "data-holder_changes-0000.json.gz",
       "reference": {
-        "bytes": 213863,
-        "git_blob": "854949ca936a7615fabd35152441488be05e45c0",
+        "bytes": 213843,
+        "git_blob": "4fea80b67d941239c4b7043e6ef5e29b83574d6f",
         "read_path": "details/radar/smart-money/data-holder_changes-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "08078a1f7dabd5f96e5b5ead544f08afc9ec28b628b1053b68b9f38fe43124ec"
+        "sha256": "480f76fa633d7d5ea33c572889681a4965d055c56227b655f9044a769acfc81b"
       },
       "rows": 1460,
-      "sha256": "08078a1f7dabd5f96e5b5ead544f08afc9ec28b628b1053b68b9f38fe43124ec"
+      "sha256": "480f76fa633d7d5ea33c572889681a4965d055c56227b655f9044a769acfc81b"
     },
     {
-      "bytes": 2786257,
+      "bytes": 2786468,
       "expanded_bytes": 15950512,
       "name": "data-holdings-2026-06-30-0000.json.gz",
       "reference": {
-        "bytes": 2786257,
-        "git_blob": "9e19ccd3d21831de8ffbab5fb324e66f97072070",
+        "bytes": 2786468,
+        "git_blob": "de92724fd1256b1f801da9c99709f7f07f4548fe",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "925d743decd0743935d6f7dfb04ae9d94afcd4cf3a864985228c4a15bc508665"
+        "sha256": "f39c6e09ba7fb63d333cbd355fa06b7ca5125e95b540c44967fff01bf04f60d4"
       },
       "rows": 15000,
-      "sha256": "925d743decd0743935d6f7dfb04ae9d94afcd4cf3a864985228c4a15bc508665"
+      "sha256": "f39c6e09ba7fb63d333cbd355fa06b7ca5125e95b540c44967fff01bf04f60d4"
     },
     {
-      "bytes": 2782788,
-      "expanded_bytes": 15945553,
+      "bytes": 2777680,
+      "expanded_bytes": 15947493,
       "name": "data-holdings-2026-06-30-0001.json.gz",
       "reference": {
-        "bytes": 2782788,
-        "git_blob": "9a313332b1b2fe5396a2e6cc6b2cc7c5ec877ad0",
+        "bytes": 2777680,
+        "git_blob": "e334b389ccc9fc97db87f8b5f24be0e3c77551d0",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0001.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "ae993a32f203d266bd74fe98696a0b149db0bdceb4002c486fc82808083e9324"
+        "sha256": "dbaf42ba02f1403c2ea4613483c038a30b0a70cd0d486024a3fbb88104176b44"
       },
       "rows": 15000,
-      "sha256": "ae993a32f203d266bd74fe98696a0b149db0bdceb4002c486fc82808083e9324"
+      "sha256": "dbaf42ba02f1403c2ea4613483c038a30b0a70cd0d486024a3fbb88104176b44"
     },
     {
-      "bytes": 2785043,
-      "expanded_bytes": 15988323,
+      "bytes": 2784102,
+      "expanded_bytes": 15988748,
       "name": "data-holdings-2026-06-30-0002.json.gz",
       "reference": {
-        "bytes": 2785043,
-        "git_blob": "871c02409e33224dfaa284d8dd30d3c21431ddc5",
+        "bytes": 2784102,
+        "git_blob": "e25d4d34da7ef911a54f47b24a2c80b430db6831",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0002.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "590ad404375f417aa688045f79c1e6d4050535a423569234a96d55d0e1c6aa09"
+        "sha256": "ff7283cbb32216139fbb717b026c4836d5a10ebdf3d287e16dd92265a1934f80"
       },
       "rows": 15000,
-      "sha256": "590ad404375f417aa688045f79c1e6d4050535a423569234a96d55d0e1c6aa09"
+      "sha256": "ff7283cbb32216139fbb717b026c4836d5a10ebdf3d287e16dd92265a1934f80"
     },
     {
-      "bytes": 2080853,
-      "expanded_bytes": 11887672,
+      "bytes": 2092434,
+      "expanded_bytes": 11951746,
       "name": "data-holdings-2026-06-30-0003.json.gz",
       "reference": {
-        "bytes": 2080853,
-        "git_blob": "e4b8241d40de2a921fa985d721144e4b0a6e7b00",
+        "bytes": 2092434,
+        "git_blob": "255a07287bb184b86dbc6d112011cfaa36ac2af7",
         "read_path": "details/radar/smart-money/data-holdings-2026-06-30-0003.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "bbe793a0bbc19310089cfeb9e91c9806d59e3abd88be6cd1179e96c3008b77dc"
+        "sha256": "3167a74398ed2b115ae8cfdb45d96da1566213779eefd1d772ec72dd369b586d"
       },
-      "rows": 11147,
-      "sha256": "bbe793a0bbc19310089cfeb9e91c9806d59e3abd88be6cd1179e96c3008b77dc"
+      "rows": 11207,
+      "sha256": "3167a74398ed2b115ae8cfdb45d96da1566213779eefd1d772ec72dd369b586d"
     },
     {
-      "bytes": 49793,
+      "bytes": 49791,
       "expanded_bytes": 306845,
       "name": "data-hot_money-0000.json.gz",
       "reference": {
-        "bytes": 49793,
-        "git_blob": "d56e5835e9be80509418cbb3d944d646e5388be0",
+        "bytes": 49791,
+        "git_blob": "afcf02279b5ba64fb54e9788aff6a6c382fdb4e5",
         "read_path": "details/radar/smart-money/data-hot_money-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "aea2ab82088927fdc17407f6a4d40e53af1d6fc150a4ad6038d08b1e16810ace"
+        "sha256": "50ff5995350ecc703d5ca1bb666c12d7677278c69993c209c7d7c83ad88e357c"
       },
       "rows": 390,
-      "sha256": "aea2ab82088927fdc17407f6a4d40e53af1d6fc150a4ad6038d08b1e16810ace"
+      "sha256": "50ff5995350ecc703d5ca1bb666c12d7677278c69993c209c7d7c83ad88e357c"
     },
     {
-      "bytes": 33079,
+      "bytes": 33078,
       "expanded_bytes": 218355,
       "name": "data-institutional-0000.json.gz",
       "reference": {
-        "bytes": 33079,
-        "git_blob": "b69518656834a4cb429c63faaa398d48dad77627",
+        "bytes": 33078,
+        "git_blob": "23a6e1e74428ba1c6ecef32824ad24fd145aae41",
         "read_path": "details/radar/smart-money/data-institutional-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "27186610369b6ac70feaee942c72fea0f0009d868ba3e0059f22871900447135"
+        "sha256": "b361cbfb86316d6859071110d574d497281910a4acc3b8d18f28be94e37082c5"
       },
       "rows": 290,
-      "sha256": "27186610369b6ac70feaee942c72fea0f0009d868ba3e0059f22871900447135"
+      "sha256": "b361cbfb86316d6859071110d574d497281910a4acc3b8d18f28be94e37082c5"
     },
     {
-      "bytes": 1066179,
+      "bytes": 1066223,
       "expanded_bytes": 8043046,
       "name": "data-north_holdings-0000.json.gz",
       "reference": {
-        "bytes": 1066179,
-        "git_blob": "47c4aa373a93b2109f797814e9f0dda6b9eea19f",
+        "bytes": 1066223,
+        "git_blob": "732195f96b4c0fb2c7294caa5059b9000cd6c085",
         "read_path": "details/radar/smart-money/data-north_holdings-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "47fd90b5e913a3bf7aab6688f5cdd7a9882b6dddc60204a39efe20a49d09a30f"
+        "sha256": "2640c89184739269852e7fca09aa86b504e9c0796072240aaff7536f0e28403c"
       },
       "rows": 8416,
-      "sha256": "47fd90b5e913a3bf7aab6688f5cdd7a9882b6dddc60204a39efe20a49d09a30f"
+      "sha256": "2640c89184739269852e7fca09aa86b504e9c0796072240aaff7536f0e28403c"
     },
     {
       "bytes": 1697,
@@ -165,85 +672,85 @@
       "name": "data-northbound-0000.json.gz",
       "reference": {
         "bytes": 1697,
-        "git_blob": "89d7073fdac187da5528e1bcf0c43519a2c60862",
+        "git_blob": "0fba914252f751f49b682231cbad71a6ea28d2e4",
         "read_path": "details/radar/smart-money/data-northbound-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "939d450df29acf727256d38500a1dd7dac63e8ab6c48429100f9a890635533da"
+        "sha256": "71b92856e059b91b9a544fd003b23b7c04cea0195fad2d10f3c8d20af8f27b7a"
       },
       "rows": 8,
-      "sha256": "939d450df29acf727256d38500a1dd7dac63e8ab6c48429100f9a890635533da"
+      "sha256": "71b92856e059b91b9a544fd003b23b7c04cea0195fad2d10f3c8d20af8f27b7a"
     },
     {
-      "bytes": 20467,
+      "bytes": 20468,
       "expanded_bytes": 117412,
       "name": "data-placements-0000.json.gz",
       "reference": {
-        "bytes": 20467,
-        "git_blob": "dbcda255f8c117dd72fdd9890d211d3db65e7637",
+        "bytes": 20468,
+        "git_blob": "3479f509c82c0818a7ae94b185b0d9b0a20b83ec",
         "read_path": "details/radar/smart-money/data-placements-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "2046013356f0a333c1278fa9968e9b92f9134e7f62934aaafa25a57222f831d7"
+        "sha256": "13de80b9035ec82927d621c014831a7977fd9ed53476d42c6058de56c217582f"
       },
       "rows": 54,
-      "sha256": "2046013356f0a333c1278fa9968e9b92f9134e7f62934aaafa25a57222f831d7"
+      "sha256": "13de80b9035ec82927d621c014831a7977fd9ed53476d42c6058de56c217582f"
     },
     {
-      "bytes": 160331,
+      "bytes": 160337,
       "expanded_bytes": 977590,
       "name": "data-repurchases-0000.json.gz",
       "reference": {
-        "bytes": 160331,
-        "git_blob": "e11dc316548f90f8854cefe53c4915852766ba0e",
+        "bytes": 160337,
+        "git_blob": "cd4b3cba5ab26d8456d70a144a022bcbb35a8ca7",
         "read_path": "details/radar/smart-money/data-repurchases-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "c7e40cccee5d192f451818d4b7b6b636c2135c96247262c8a360dba76cbcd77f"
+        "sha256": "9eb4918d375cc85a4825eb7f420fdc7ddad35b95ec2fb3739ede0b247c09ef86"
       },
       "rows": 630,
-      "sha256": "c7e40cccee5d192f451818d4b7b6b636c2135c96247262c8a360dba76cbcd77f"
+      "sha256": "9eb4918d375cc85a4825eb7f420fdc7ddad35b95ec2fb3739ede0b247c09ef86"
     },
     {
-      "bytes": 551889,
+      "bytes": 551900,
       "expanded_bytes": 4208175,
       "name": "data-seats-0000.json.gz",
       "reference": {
-        "bytes": 551889,
-        "git_blob": "02b806130a234f5e2c17aebf488730a0e90b1da9",
+        "bytes": 551900,
+        "git_blob": "989af731f1d5a718ab5dcc21093b3f7ca5194f8d",
         "read_path": "details/radar/smart-money/data-seats-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "bdc00f06cbc4fa0fc18e8a90182e7b36a68f30a25dc142bf87f09156f1e9591e"
+        "sha256": "6a6ccd678632956bfb9926f6a9f4a52fe136a723b4595356ac18bce6859b55e0"
       },
       "rows": 4508,
-      "sha256": "bdc00f06cbc4fa0fc18e8a90182e7b36a68f30a25dc142bf87f09156f1e9591e"
+      "sha256": "6a6ccd678632956bfb9926f6a9f4a52fe136a723b4595356ac18bce6859b55e0"
     }
   ],
   "coverage": {
     "activity|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "executives|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "forecasts|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "holder_changes|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "holdings|2026-03-31": {
       "begin": "2026-06-28",
@@ -253,18 +760,18 @@
       "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
     },
     "holdings|2026-06-30": {
-      "begin": "2026-06-28",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-09-26T03:07:20.373445+00:00",
-      "end": "2026-09-26",
-      "origin": "70fa34dba397ebefe2753d42379e0d2bbd0f70f7367f188bdd98e3ad665ef1cb"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "holdings|2026-09-30": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": false,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "hot_money|2026-09-18": {
       "begin": "2026-09-18",
@@ -290,37 +797,37 @@
     "hot_money|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-23",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "hot_money|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-24",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "hot_money|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-28",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "hot_money|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-29",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "hot_money|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-30",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "institutional|2026-09-18": {
       "begin": "2026-09-18",
@@ -346,44 +853,44 @@
     "institutional|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-23",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "institutional|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-24",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "institutional|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-28",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "institutional|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-29",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "institutional|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-30",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "north_holdings|SH": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "north_holdings|SH@2026-03-31": {
       "begin": "2026-07-02",
@@ -393,18 +900,18 @@
       "origin": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c"
     },
     "north_holdings|SH@2026-06-30": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "north_holdings|SZ": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "north_holdings|SZ@2026-03-31": {
       "begin": "2026-07-02",
@@ -414,11 +921,11 @@
       "origin": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c"
     },
     "north_holdings|SZ@2026-06-30": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "northbound|2026-09-18": {
       "begin": "2026-09-18",
@@ -444,51 +951,51 @@
     "northbound|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-23",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "northbound|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-24",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "northbound|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-28",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "northbound|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-29",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "northbound|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-30",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "placements|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "repurchases|disclosures": {
-      "begin": "2026-07-04",
+      "begin": "2026-07-05",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
-      "end": "2026-10-02",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "end": "2026-10-03",
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "seats|2026-09-18": {
       "begin": "2026-09-18",
@@ -514,40 +1021,40 @@
     "seats|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-23",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "seats|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-24",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "seats|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-28",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "seats|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-29",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "seats|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "cutoff": "2026-10-02T17:59:19.489679+00:00",
       "end": "2026-09-30",
-      "origin": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473"
+      "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     }
   },
-  "cutoff": "2026-10-01T16:40:00.720100+00:00",
+  "cutoff": "2026-10-02T17:59:19.489679+00:00",
   "display_retention": "100D_EVENTS_AND_TWO_ENDED_QUARTERS; OLDER_IMMUTABLE_GIT_HISTORY_UNCHANGED",
   "first_baseline": false,
   "forecast_document_recovery": "EXACT_RETAINED_ORIGIN_REPLAY_NOT_NEW_PDF_ACQUISITION",
@@ -1038,15 +1545,15 @@
         "2026-09-28"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
-      "origin_cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
       "pages_inspected": 3,
       "pdf_pages": 21,
       "pdf_sha256": "817bc0af7ec8f01ac3c274fb79950ad0804f50c3f37658ab77ddcaca1c9dda7a",
       "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609301830054708",
       "revisions": [],
-      "source_row": 92,
+      "source_row": 152,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
@@ -1054,22 +1561,22 @@
         "2026-08-24"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
-      "origin_cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
       "pages_inspected": 3,
       "pdf_pages": 4,
       "pdf_sha256": "b099a38dd8e3f94b95b91497f5158611894fb44dbf4b95e3387f68028034ce6b",
       "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
       "report_id": "AP202608241828366059",
       "revisions": [],
-      "source_row": 93,
+      "source_row": 153,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
-      "origin_capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
-      "origin_cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
       "report_id": "AP202609301830050708",
-      "source_row": 94,
+      "source_row": 154,
       "status": "PDF_SOURCE_UNAVAILABLE"
     },
     {
@@ -1078,15 +1585,15 @@
         "2026-09-30"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473",
-      "origin_cutoff": "2026-10-01T16:40:00.720100+00:00",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
       "pages_inspected": 3,
       "pdf_pages": 40,
       "pdf_sha256": "4e0a2c39c488cd61fc5b02401cded7ab33e040adf4324aa1b64612eaf2a35154",
       "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
       "report_id": "AP202609301830042562",
       "revisions": [],
-      "source_row": 95,
+      "source_row": 155,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
     },
     {
@@ -1153,10 +1660,59 @@
       "revisions": [],
       "source_row": 99,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-30"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 4,
+      "pdf_sha256": "14b8152bd2ed180dafe4e6b4737047efb29cbe74ecd9d070fb2499d03d4573e6",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610021830111911",
+      "revisions": [],
+      "source_row": 149,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 4,
+      "pdf_sha256": "b626047ca974b5f34d50aae81aee008f88ac0960bdb82ab386e79a36ab957d51",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610021830111842",
+      "revisions": [],
+      "source_row": 150,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-30",
+        "2026-09-30"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274",
+      "origin_cutoff": "2026-10-02T17:59:19.489679+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 22,
+      "pdf_sha256": "1fd566c658629d423abb47a775562610d39d59f925596c0c82077d4f3f24d56c",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610011830064704",
+      "revisions": [],
+      "source_row": 151,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
     }
   ],
   "projection_revision": "smart-money-projection-3",
-  "record_count": 84456,
+  "record_count": 84519,
   "reinterpretation": false,
   "removed_from_current_display_not_deleted_history": 0,
   "version": "smart-money-observation-v1"
