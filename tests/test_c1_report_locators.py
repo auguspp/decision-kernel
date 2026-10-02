@@ -121,3 +121,38 @@ def test_manual_carrier_keeps_c2_and_other_sources_out():
     assert text.count('secrets.TUSHARE_PROXY_API_KEY')==1
     assert 'HITHINK' not in text and 'c2-dated-window' not in text
     assert 'contents: write' not in text and 'actions: write' not in text
+
+
+
+def test_native_successor_spends_one_remaining_logical_query(tmp_path,monkeypatch):
+    monkeypatch.setenv(m.relay.SECRET_ENV,'synthetic-key');calls=[]
+    def native(api,params,clock):
+        calls.append(params); assert 'fields' not in params and params['trade_date']=='20260430'
+        r=request(api,params,clock=clock)
+        r['attempts'][0]['raw']=m.common.encoded({'code':0,'data':{'fields':['日期','报告PDF链接'],
+            'items':[['2026-04-30','https://example.invalid/report.pdf']]},'count':1})
+        return r
+    root=tmp_path/'out';r=m.capture(root,ENV,request=native,now=clock(),native=True)
+    assert len(calls)==r['logical_queries_attempted']==r['http_receipts']==1
+    assert r['pilot']==m.NATIVE_PILOT and r['pdf_acquired'] is False
+    assert r['outcomes'][0]['request_filter_qualification']=='NOT_CHECKED'
+    assert r==m.rebuild(root,ENV)
+    manifest=json.loads((root/'capture.json').read_bytes())
+    assert manifest['predecessor']==m.PREDECESSOR
+    manifest['predecessor']['run_id']+=1;manifest['capture_hash']=m.common.digest(manifest)
+    (root/'capture.json').write_bytes(m.common.encoded(manifest))
+    with pytest.raises(ValueError,match='predecessor'):m.rebuild(root,ENV)
+
+
+def test_native_mode_does_not_relax_original_directory_qualification():
+    b={'code':0,'data':{'fields':['日期','报告PDF链接'], 'items':[]}, 'count':0}
+    assert m.inspect(m.common.encoded(b),m.plan(native=True)[0])['status']=='NATIVE_SCHEMA_RETAINED_NOT_REPORT_QUALIFIED'
+    with pytest.raises(ValueError):m.inspect(m.common.encoded(b),m.plan()[0])
+    assert len(m.plan())==2 and len(m.plan(native=True))==1
+
+
+def test_native_carrier_binds_exact_prior_empty_projection_and_budget():
+    text=(ROOT/m.WORKFLOW).read_text()
+    assert 'len(prior) == 1' in text and '36968934918' in text and '11210703148' in text
+    assert m.PREDECESSOR['sha256'] in text and "summary['http_receipts'] == 2" in text
+    assert "all(v == '' for row" in text
