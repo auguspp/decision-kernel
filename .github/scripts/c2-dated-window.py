@@ -199,8 +199,12 @@ def rebuild(root, expected):
                         histories[spec['code']] = value
                     else:
                         code = spec['code']
+                        value = _json(bodies[-1])
+                        # Match capture's stop before issuer-local price qualification.
+                        saved.check(isinstance(value, dict) and type(value.get('code')) is int
+                                    and value['code'] == 0, 'stock business response requires stop')
                         try:
-                            prices[code] = raw_windows(histories[code], _json(bodies[-1]), quotes[code], sessions,
+                            prices[code] = raw_windows(histories[code], value, quotes[code], sessions,
                                                       attempts[-1]['received_at'])
                         except own.StockReadingInputError as exc:
                             prices[code] = {'status': 'RETAINED_INPUT_GAP', 'reason': exc.reason_code, 'windows': {}}

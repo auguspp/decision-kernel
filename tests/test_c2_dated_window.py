@@ -152,6 +152,7 @@ def test_action_exclusion_does_not_produce_zero_return(setup):
     r=run(setup,stock_request=action)
     row=next(x for x in r['groups'][0]['windows'][0]['rows'] if x['code']==CODES[0])
     assert row['raw_return'] is None and row['price_status']=='RETAINED_INPUT_GAP'
+    assert r['logical_queries'] == 46
 
 
 def test_own_transport_exception_retains_uncertainty_no_retry(setup):
@@ -186,3 +187,44 @@ def test_manual_carrier_keeps_ci_single_use_secrets_and_both_concurrency_groups(
     assert 'contents: write' not in text and 'actions: write' not in text
     assert text.count('secrets.TUSHARE_PROXY_API_KEY')==text.count('secrets.HITHINK_FINANCE_API_KEY')==1
     assert 'secrets.' not in text.split('- name: Rebuild saved')[1]
+
+
+@pytest.mark.parametrize('business_code', [3002, None, False, '0'])
+def test_action_business_failure_stops_and_rejects_continued_receipts(setup, business_code):
+    # Reuse the complete control; reseal all affected digests so the stop rule,
+    # not stale content hashes, must reject requests after the failed action.
+    run(setup)
+    manifest = json.loads((setup/'capture.json').read_bytes())
+    record = manifest['records'][9]
+    assert record['spec']['source'] == 'HITHINK' and record['spec']['kind'] == 'actions'
+    attempt = record['attempts'][0]
+    path = setup/attempt['body']
+    body = json.loads(path.read_bytes())
+    body['code'] = business_code
+    raw = m.encoded(body)
+    path.write_bytes(raw)
+    attempt.update(bytes=len(raw), sha256=m.saved.sha256(raw), business_code=business_code)
+    manifest['capture_hash'] = m.canonical_hash({k:v for k,v in manifest.items() if k != 'capture_hash'})
+    (setup/'capture.json').write_bytes(m.encoded(manifest))
+    with pytest.raises(ValueError, match='stop was ignored'):
+        m.rebuild(setup, ID)
+
+
+def test_honest_action_business_failure_retains_stop_and_original_body(setup):
+    calls = []
+    def failed(path, params, api_key):
+        calls.append((path, params['thscode']))
+        assert len(calls) <= 2, 'request after business failure'
+        body = stock(path, params, api_key)
+        if path == m.own.ACTIONS:
+            body['code'] = 3002
+        return body
+    result = run(setup, stock_request=failed)
+    assert len(calls) == 2 and result['logical_queries'] == 10
+    assert result['outcomes'][9]['status'] == 'SOURCE_INPUT_UNQUALIFIED'
+    assert all(x['status'] == 'NOT_ATTEMPTED_STOP' and x['attempts'] == 0
+               for x in result['outcomes'][10:])
+    assert json.loads((setup/'raw-09-1.json').read_bytes())['code'] == 3002
+    assert result['status'] == 'WINDOW_INPUTS_WITH_EXPLICIT_GAPS'
+    assert result['groups'][0]['windows'][0]['terminal_member_count'] == 20
+    assert result == m.rebuild(setup, ID)
