@@ -110,7 +110,8 @@ def test_tampered_raw_refused(tmp_path,monkeypatch):
 def test_missing_key_makes_no_request(tmp_path,monkeypatch):
     monkeypatch.delenv(m.relay.SECRET_ENV,raising=False)
     r=m.capture(tmp_path/'out',ENV,request=lambda *a,**k:pytest.fail('network'),now=clock())
-    assert r['http_receipts']==0 and r['outcomes'][0]['status']=='CREDENTIAL_UNAVAILABLE'
+    assert r['http_receipts']==r['logical_queries_attempted']==0
+    assert r['outcomes'][0]['status']=='CREDENTIAL_UNAVAILABLE'
 
 
 def test_manual_carrier_keeps_c2_and_other_sources_out():

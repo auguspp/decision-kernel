@@ -103,7 +103,7 @@ def rebuild(root, expected):
                 and sum(p.stat().st_size for p in files.values()) <= 20 * 1024 * 1024,
                 'C1 retained inventory differs')
     manifest = relay.decode((root/'capture.json').read_bytes())
-    saved.sealed(manifest, 'capture_hash')
+    saved.check(manifest['capture_hash'] == common.digest(manifest), 'C1 capture hash differs')
     saved.check(manifest['pilot'] == PILOT and manifest['workflow'] == WORKFLOW
                 and manifest['identity'] == identity(expected) and manifest['plan'] == plan()
                 and manifest['authority'] == AUTHORITY and len(manifest['records']) == 2,
