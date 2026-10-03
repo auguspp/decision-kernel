@@ -35,7 +35,8 @@ jobs:
         github.event.workflow_run.head_repository.full_name == github.repository &&
         github.event.workflow_run.run_attempt == 1 &&
         (github.event.workflow_run.path != '.github/workflows/hithink-stock-dump-trial.yml' ||
-         !startsWith(github.event.workflow_run.display_title, 'stock-independent-observations |'))))
+         (!startsWith(github.event.workflow_run.display_title, 'stock-independent-observations |') &&
+          !startsWith(github.event.workflow_run.display_title, 'tushare-c2-price-check |')))))
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
@@ -257,7 +258,7 @@ jobs:
           {
             echo '### TDX Concept daily successor handoff'
             echo
-            printf 'Eligible result-bearing Sector run %s with origin %s supplied completed market session %s.\n\n' "$SECTOR_RUN_ID" "$SECTOR_ORIGIN" "$MARKET_SESSION"
+            printf 'Eligible result-bearing Sector run %s with origin %s supplied completed market session %s.\n\n' "$SECTOR_RUN_ID" "$SECTOR_ORIGIN"
             printf 'One existing tdx-concept-snapshot workflow_dispatch was requested on current main %s.\n\n' "$CODE_SHA"
             echo 'The TDX workflow remains responsible for exact-main/main-CI admission, source-date equality, source capture, offline replay and artifact retention. The existing current-state publisher remains responsible for read-model publication.'
             echo
