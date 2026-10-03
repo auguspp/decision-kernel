@@ -258,7 +258,7 @@ jobs:
           {
             echo '### TDX Concept daily successor handoff'
             echo
-            printf 'Eligible result-bearing Sector run %s with origin %s supplied completed market session %s.\n\n' "$SECTOR_RUN_ID" "$SECTOR_ORIGIN"
+            printf 'Eligible result-bearing Sector run %s with origin %s supplied completed market session %s.\n\n' "$SECTOR_RUN_ID" "$SECTOR_ORIGIN" "$MARKET_SESSION"
             printf 'One existing tdx-concept-snapshot workflow_dispatch was requested on current main %s.\n\n' "$CODE_SHA"
             echo 'The TDX workflow remains responsible for exact-main/main-CI admission, source-date equality, source capture, offline replay and artifact retention. The existing current-state publisher remains responsible for read-model publication.'
             echo
