@@ -142,7 +142,7 @@ def test_real_requests_stream_timeout_uses_original_bounded_retry(monkeypatch):
     assert first["classification"]=="TEMPORARY_QUEUE"
     assert first["transport_error_type"]=="STREAM_READ_TIMEOUT"
     assert first["raw"] is None and first["requested_at"]<first["received_at"]
-    assert "sensitive" not in json.dumps(out)
+    assert "sensitive" not in json.dumps(out,default=lambda value:"<bytes>")
     assert all(s.closed and s.trust_env is False for s in sessions)
     assert all(c["timeout"]==(10,30) and c["allow_redirects"] is False for c in calls)
 
