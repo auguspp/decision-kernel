@@ -208,3 +208,36 @@ def test_timeout_diagnostic_survives_capture_and_rebuild(tmp_path):
     (root/"receipt.json").write_bytes(m.dumps(receipt))
     with pytest.raises(ValueError,match="TRANSPORT_ERROR_TYPE"):
         m.verify(root)
+
+
+def test_third_attempt_and_prior_failures_replay_with_declared_backoff(tmp_path):
+    end=NOW+timedelta(seconds=120);fetch=make_request()
+    def request(api,params):
+        result=fetch(api,params)
+        result["attempts"][0].update(requested_at=end.isoformat(),received_at=end.isoformat())
+        if api=="trade_cal":
+            final=result["attempts"][0]; final["attempt"]=3
+            result["attempts"]=[{"attempt":i,"http_status":503,"raw":b"",
+                "requested_at":at.isoformat(),"received_at":at.isoformat(),"classification":"TEMPORARY_QUEUE"}
+                for i,at in [(1,NOW),(2,NOW+timedelta(seconds=30))]]+[final]
+        return result
+    root=tmp_path/"capture";report=m.capture(root,observed_at=NOW,workflow={},request=request,clock=end.isoformat)
+    assert m.verify(root)==report and report["cohort_denominator"]==2
+    receipt=json.loads((root/"receipt.json").read_bytes());assert receipt["retry_waits"]==[30,90]
+    receipt["calls"][0]["attempts"][2]["requested_at"]=(NOW+timedelta(seconds=119)).isoformat()
+    (root/"receipt.json").write_bytes(m.dumps(receipt))
+    with pytest.raises(ValueError,match="RETRY_CONTRACT"):m.verify(root)
+
+
+def test_capture_budget_stop_retains_completed_windows_and_no_fake_response(tmp_path):
+    fetch=make_request();context=m.calendar(calendar_body(),NOW);calls=[]
+    def request(api,params):
+        calls.append((api,params))
+        if api=="daily" and params["trade_date"]==context["bases"]["60"]:
+            return {"api":api,"params":params,"status":"REQUEST_BUDGET_EXHAUSTED","attempts":[]}
+        return fetch(api,params)
+    root=tmp_path/"capture";report=m.capture(root,observed_at=NOW,workflow={},request=request,clock=NOW.isoformat)
+    assert report["qualified_windows"]=={"5":1,"20":1,"60":0}
+    assert len(calls)==8 and m.verify(root)==report
+    receipt=json.loads((root/"receipt.json").read_bytes())
+    assert receipt["calls"][-1]["attempts"]==[]

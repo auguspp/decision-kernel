@@ -160,3 +160,56 @@ def test_plain_connection_error_does_not_gain_timeout_retry():
     assert out["attempts"][0]["requested_at"]=="2026-10-03T12:00:00+00:00"
     assert out["attempts"][0]["received_at"]=="2026-10-03T12:00:07+00:00"
     assert "private" not in json.dumps(out)
+
+
+def test_daily_opt_in_backoff_is_three_attempts_and_preserves_all_failures():
+    calls=[]; sleeps=[]
+    def clock():return "2026-10-03T14:00:00+00:00"
+    def transport(api,params,key,clock):
+        calls.append(1)
+        return transport_result(503,body(code=1,error="upstream_pool_exhausted"),clock)
+    out=r.request("daily",{},key="abcdefgh",transport=transport,sleep=sleeps.append,
+                  clock=clock,retry_waits=(30,90))
+    assert len(calls)==3 and sleeps==[30,90] and out["status"]=="TEMPORARY_QUEUE"
+    assert len(out["attempts"])==3 and all(a["http_status"]==503 and a["raw"] for a in out["attempts"])
+    assert r.successful_body(out) is None
+
+
+def test_daily_backoff_can_recover_on_last_attempt_without_hiding_denial():
+    calls=[]; sleeps=[]
+    def clock():return "2026-10-03T14:00:00+00:00"
+    def transport(api,params,key,clock):
+        calls.append(1)
+        return transport_result(503,body(code=1,error="upstream_pool_exhausted"),clock) if len(calls)<3 else transport_result(200,body(),clock)
+    out=r.request("daily",{},key="abcdefgh",transport=transport,sleep=sleeps.append,
+                  clock=clock,retry_waits=(30,90))
+    assert out["status"]=="SUCCESS" and len(calls)==3 and sleeps==[30,90]
+    assert r.rows(r.successful_body(out))==[{"a":1}]
+
+
+@pytest.mark.parametrize("status,raw",[(403,body(code=1,error="forbidden")),
+    (429,body(code=1,error="rate_limited")),(503,body(code=1,error="data_source_unavailable")),
+    (200,b"not-json")])
+def test_daily_extra_retry_does_not_apply_to_permanent_or_malformed_outcome(status,raw):
+    calls=[]
+    def clock():return "2026-10-03T14:00:00+00:00"
+    def transport(api,params,key,clock):
+        calls.append(1)
+        return transport_result(status,raw,clock)
+    out=r.request("daily",{},key="abcdefgh",transport=transport,
+                  sleep=lambda _:pytest.fail("no retry"),clock=clock,retry_waits=(30,90))
+    assert len(calls)==1 and out["status"]!="SUCCESS"
+
+
+def test_shared_capture_deadline_refuses_late_retry_and_never_fakes_http():
+    calls=[]; sleeps=[]; moments=iter([0,150])
+    def clock():return "2026-10-03T14:00:00+00:00"
+    def transport(api,params,key,clock):
+        calls.append(1)
+        return transport_result(503,body(code=1,error="upstream_pool_exhausted"),clock)
+    out=r.request("daily",{},key="abcdefgh",transport=transport,sleep=sleeps.append,
+                  clock=clock,retry_waits=(30,90),deadline=200,monotonic=lambda:next(moments))
+    assert len(calls)==1 and sleeps==[] and out["status"]=="TEMPORARY_QUEUE"
+    empty=r.request("daily",{},key="abcdefgh",transport=lambda *a,**k:pytest.fail("no request"),
+                    retry_waits=(30,90),deadline=50,monotonic=lambda:0,clock=clock)
+    assert empty["status"]=="REQUEST_BUDGET_EXHAUSTED" and empty["attempts"]==[]
