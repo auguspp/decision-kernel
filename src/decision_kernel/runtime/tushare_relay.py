@@ -13,6 +13,7 @@ import time
 from typing import Any, Callable
 
 import requests
+from urllib3.exceptions import ReadTimeoutError
 
 BASE = "https://pcd.mobcvb.cn"
 PRO = BASE + "/tushare/pro"
@@ -111,10 +112,17 @@ def _http_get(api: str, params: dict[str, str], key: str, *, clock: Callable[[],
             require(length is None or length.isdigit() and int(length) <= MAX_BODY, "BODY_SIZE")
             chunks = []
             size = 0
-            for chunk in response.iter_content(65536):
-                size += len(chunk)
-                require(size <= MAX_BODY, "BODY_SIZE")
-                chunks.append(chunk)
+            try:
+                for chunk in response.iter_content(65536):
+                    size += len(chunk)
+                    require(size <= MAX_BODY, "BODY_SIZE")
+                    chunks.append(chunk)
+            except requests.ConnectionError as exc:
+                # Requests iter_content wraps urllib3 read timeouts as a
+                # ConnectionError. Restore only that known timeout contract.
+                if exc.args and isinstance(exc.args[0], ReadTimeoutError):
+                    raise requests.ReadTimeout("TRANSPORT_STREAM_READ_TIMEOUT") from exc
+                raise
             raw = b"".join(chunks)
             require(length is None or len(raw) == int(length), "BODY_LENGTH")
             require(key.encode() not in raw, "CREDENTIAL_REFLECTION")
@@ -140,6 +148,7 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
     for attempt_no in (1, 2):
         if attempt_no == 2:
             sleep(RETRY_WAIT_SECONDS)
+        started_at = clock()
         try:
             result = transport(api, p, credential, clock=clock)
             require(set(result) == {"http_status", "raw", "requested_at", "received_at", "headers"},
@@ -159,21 +168,27 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
                 attempts.append({**result, "attempt": attempt_no, "classification": classification,
                                  "business_code": None, "business_error": str(exc),
                                  "business_msg": None})
-        except requests.Timeout:
+        except requests.Timeout as exc:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
-                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "requested_at": started_at, "received_at": clock(), "headers": {},
                              "classification": "TEMPORARY_QUEUE", "business_code": None,
-                             "business_error": "TRANSPORT_TIMEOUT", "business_msg": None})
+                             "business_error": "TRANSPORT_TIMEOUT", "business_msg": None,
+                             "transport_error_type": ("STREAM_READ_TIMEOUT" if
+                                 isinstance(exc.__cause__, requests.ConnectionError) and
+                                 exc.__cause__.args and isinstance(exc.__cause__.args[0], ReadTimeoutError)
+                                 else "REQUEST_TIMEOUT")})
         except requests.ConnectionError:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
-                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "requested_at": started_at, "received_at": clock(), "headers": {},
                              "classification": "TRANSPORT_CONNECTION", "business_code": None,
-                             "business_error": "TRANSPORT_CONNECTION", "business_msg": None})
+                             "business_error": "TRANSPORT_CONNECTION", "business_msg": None,
+                             "transport_error_type": "CONNECTION_ERROR"})
         except requests.RequestException:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
-                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "requested_at": started_at, "received_at": clock(), "headers": {},
                              "classification": "TRANSPORT_ERROR", "business_code": None,
-                             "business_error": "TRANSPORT_ERROR", "business_msg": None})
+                             "business_error": "TRANSPORT_ERROR", "business_msg": None,
+                             "transport_error_type": "REQUEST_ERROR"})
         result = attempts[-1]
         if result["classification"] != "TEMPORARY_QUEUE" or attempt_no == 2:
             break

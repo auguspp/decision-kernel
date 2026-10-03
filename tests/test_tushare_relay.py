@@ -107,3 +107,56 @@ def test_empty_denial_or_invalid_success_never_retries_or_becomes_success(status
         sleep=lambda _:pytest.fail("no retry"),clock=clock)
     assert out["status"]==expected and len(out["attempts"])==1
     assert out["attempts"][0]["raw"]==b"" and r.successful_body(out) is None
+
+
+def test_real_requests_stream_timeout_uses_original_bounded_retry(monkeypatch):
+    from urllib3.exceptions import ReadTimeoutError
+    calls=[]; sleeps=[]; sessions=[]
+    times=iter([f"2026-10-03T12:00:{i:02}+00:00" for i in range(12)])
+    def clock(): return next(times)
+    class Raw:
+        def stream(self, *args, **kwargs):
+            raise ReadTimeoutError(None, "/redacted", "sensitive text must not be saved")
+            yield
+    class Session:
+        trust_env=True
+        def __init__(self): sessions.append(self); self.closed=False
+        def get(self, url, **kwargs):
+            calls.append(kwargs)
+            response=r.requests.Response()
+            response.status_code=200
+            response.url=r.requests.Request("GET",url,params=kwargs["params"]).prepare().url
+            if len(calls)==1:
+                response.raw=Raw()
+                response.close=lambda:None
+            else:
+                response._content=body()
+                response._content_consumed=True
+            response.headers={}
+            return response
+        def close(self): self.closed=True
+    monkeypatch.setattr(r.requests,"Session",Session)
+    out=r.request("daily",{"trade_date":"20260930"},key="abcdefgh",sleep=sleeps.append,clock=clock)
+    assert out["status"]=="SUCCESS" and len(calls)==2 and sleeps==[30]
+    first=out["attempts"][0]
+    assert first["classification"]=="TEMPORARY_QUEUE"
+    assert first["transport_error_type"]=="STREAM_READ_TIMEOUT"
+    assert first["raw"] is None and first["requested_at"]<first["received_at"]
+    assert "sensitive" not in json.dumps(out,default=lambda value:"<bytes>")
+    assert all(s.closed and s.trust_env is False for s in sessions)
+    assert all(c["timeout"]==(10,30) and c["allow_redirects"] is False for c in calls)
+
+
+def test_plain_connection_error_does_not_gain_timeout_retry():
+    calls=[]
+    times=iter(["2026-10-03T12:00:00+00:00","2026-10-03T12:00:07+00:00"])
+    def transport(*args,**kwargs):
+        calls.append(1)
+        raise r.requests.ConnectionError("private host information")
+    out=r.request("daily",{},key="abcdefgh",transport=transport,
+                  sleep=lambda _:pytest.fail("no retry"),clock=lambda:next(times))
+    assert len(calls)==1 and out["status"]=="TRANSPORT_CONNECTION"
+    assert out["attempts"][0]["transport_error_type"]=="CONNECTION_ERROR"
+    assert out["attempts"][0]["requested_at"]=="2026-10-03T12:00:00+00:00"
+    assert out["attempts"][0]["received_at"]=="2026-10-03T12:00:07+00:00"
+    assert "private" not in json.dumps(out)

@@ -188,3 +188,23 @@ def test_empty_failed_response_replays_but_cannot_be_relabelled_success(tmp_path
     (root/"receipt.json").write_bytes(m.dumps(receipt))
     with pytest.raises(ValueError,match="SUCCESS_BODY_REQUIRED"):
         m.verify(root)
+
+
+def test_timeout_diagnostic_survives_capture_and_rebuild(tmp_path):
+    fetch=make_request()
+    def request(api, params):
+        result=fetch(api,params)
+        if api=="daily":
+            result["status"]="TEMPORARY_QUEUE"
+            result["attempts"][0].update(classification="TEMPORARY_QUEUE",http_status=None,raw=None,
+                                         transport_error_type="STREAM_READ_TIMEOUT")
+        return result
+    root=tmp_path/"capture"
+    report=m.capture(root,observed_at=NOW,workflow={},request=request,clock=NOW.isoformat)
+    receipt=json.loads((root/"receipt.json").read_bytes())
+    assert receipt["calls"][1]["attempts"][0]["transport_error_type"]=="STREAM_READ_TIMEOUT"
+    assert m.verify(root)==report and report["rows"]==[]
+    receipt["calls"][1]["attempts"][0]["transport_error_type"]="arbitrary private error text"
+    (root/"receipt.json").write_bytes(m.dumps(receipt))
+    with pytest.raises(ValueError,match="TRANSPORT_ERROR_TYPE"):
+        m.verify(root)

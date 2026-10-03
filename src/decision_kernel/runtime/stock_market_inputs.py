@@ -265,6 +265,10 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
             for attempt in result['attempts']:
                 # Preserve native transport clocks and statuses; do not retain arbitrary error prose.
                 entry = {k: attempt.get(k) for k in ('attempt', 'http_status', 'requested_at', 'received_at', 'classification')}
+                if 'transport_error_type' in attempt:
+                    require(attempt['transport_error_type'] in ('STREAM_READ_TIMEOUT', 'REQUEST_TIMEOUT',
+                            'CONNECTION_ERROR', 'REQUEST_ERROR'), 'TRANSPORT_ERROR_TYPE')
+                    entry['transport_error_type'] = attempt['transport_error_type']
                 raw = attempt.get('raw'); entry['response_file'] = None
                 entry['headers'] = {k: v for k, v in attempt.get('headers', {}).items()
                     if k in ('X-Request-ID', 'X-Cache', 'X-RateLimit-Remaining', 'X-RateLimit-IP-Remaining', 'Retry-After')}
@@ -323,6 +327,9 @@ def verify(root, *, expected_workflow=None):
         require(len(call['attempts']) <= 2 and call['status'] != 'REQUEST_STARTED', 'INCOMPLETE_ATTEMPT')
         for i, attempt in enumerate(call['attempts'], 1):
             require(attempt['attempt'] == i, 'ATTEMPT_ORDER')
+            require('transport_error_type' not in attempt or attempt['transport_error_type'] in
+                    ('STREAM_READ_TIMEOUT', 'REQUEST_TIMEOUT', 'CONNECTION_ERROR', 'REQUEST_ERROR'),
+                    'TRANSPORT_ERROR_TYPE')
             asked, got = (datetime.fromisoformat(attempt[k]) for k in ('requested_at', 'received_at'))
             require(asked.tzinfo is not None and got.tzinfo is not None and last <= asked <= got <= finish, 'REQUEST_CLOCK')
             if i == 2:
