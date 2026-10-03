@@ -33,6 +33,18 @@ C2必交是现时发现、可追溯的合格多周期比较和真实日常使用
 
 到窗末有限裁定：已成立、明确缺陷、场景未覆盖或可选增强；不补跑、不修改门槛、不无限延长直到PASS。不新增审计定时任务、不修改原Quick/Brief/Watch通知时钟、不承诺后台执行。该窗尚未执行，提前读回文档或CI通过不算自然使用。
 
+## 安静交易日的个股报价输入：沿原生产链补足
+
+2026-10-03施工范围见[#297/5965541934](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5965541934)。原Sector日历、指数、状态与事件资格不变；普通`produce`显式设置`SECTOR_QUIET_STOCK_INPUTS=1`。仅已经追加一个合格新交易日、且行业没有新候选时，原审计录制器追加同一HiThink全市场快照。原有候选路径已经取得报价，不重复抓取；同交易日校验、休市、旧backfill及历史修复不由该开关启动补抓。
+
+复用原500行分页与完整分母校验，安静日最多新增16页、声明身份最多8000，仍受原128请求与审计字节上限约束。超限、不完整分页、重复身份、日期/字段不合格或传输失败立即停止，不返回部分分母或自动重试。不采逐股历史、复权因子、财报或模型，也不重跑已消费#726/#727。
+
+显式配置留在原`input-audit/inputs/quiet-stock-inputs.json`；实际补取处置在`quiet-stock-inputs.json`及原审计的expected输出中，原始请求/解析后的来源响应仍由原Recorder保管。`COMPLETE_QUIET_SESSION_QUOTE_INPUTS`仅表示完整报价输入；`INPUT_UNAVAILABLE_NOT_EMPTY_SCAN`保留来源失败，不等于空扫描。配置、全部请求、失败和结果都由原离线replay重建，不受当前环境开关影响；原文件与记录无标记时沿旧语义。完整性/凭据/审计限额错误仍拒绝发布，不降为可忽略的供应商缺口。
+
+正常独立读取已经从该Sector审计重建完整报价与原独立样本，无需第二个selector、数据库、工作流或时钟。Sector计算成功与个股报价失败可以同时成立；失败时依旧显示个股输入缺口，不修改行业状态或制造事件。该链仍依赖Sector自身成功，不能称完全独立调度；没有同日合格历史时，5/20/60比较仍为空，不继承旧9/30样本。
+
+代码/合成反例、正式CI/main、发布读回和首个自然安静交易日分别验收；没有真实输出前不签自然输入连续性。退出时关闭原环境开关，保留已产生的可恢复审计输入和对应reader。Reuse Decision：REUSE/THIN_ADAPTER，沿原HiThink fetcher/Recorder/publisher；官方SDK的自动重试、凭据缓存及其他上游库不在本次采用范围，不新增依赖、账号或费用。
+
 ## #713固定补采主动入口退役
 
 删除当前树`.github/workflows/c2-dated-window.yml`及脚本的联网`capture`/主动准备命令；保留`.github/scripts/c2-dated-window.py`的纯输入、历史计划、身份、价格检查、rebuild/render和只读verify。保留请求间隔等旧原件校验，不保留来源凭据访问或写入动作；重复verify不生成新verification文件。
@@ -57,4 +69,4 @@ Reuse Decision：**KEEP/REUSE**。本批复用#711/#712/#713已有成员/价格/
 
 以后遇到真实研究需要及成熟开源轮子/已获准服务的新能力，按Reuse First有界验证实际跨日期/对象取得、历史时点资格、可恢复留存、失败隔离和个人维护成本，再接可选增强。换库名不是换上游，安装/一次成功不等于可靠；不自建完整历史数据库，不自动扩大费用/权限或解除旧安全拒绝，也不自动恢复旧必交承诺。
 
-本次范围采用、退役工程、CI/main/正常发布、实际读取、自然使用和Human接受分别留证；Sites暂停，D不提前启动，Investment Authority=NONE。
+本次范围采用、退役工程、CI/main、正常发布、实际读取、自然使用和Human接受分别留证；Sites暂停，D不提前启动，Investment Authority=NONE。

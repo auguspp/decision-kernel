@@ -199,6 +199,8 @@ jobs:
         env:
           HITHINK_FINANCE_API_KEY: ${{ secrets.HITHINK_FINANCE_API_KEY }}
           OPERATION: ${{ inputs.operation }}
+          # Same owner/clock; only a new completed quiet session adds quote pages.
+          SECTOR_QUIET_STOCK_INPUTS: ${{ inputs.operation == 'produce' && '1' || '0' }}
           # Conservative per-process spacing, not a verified provider quota.
           HITHINK_SECTOR_REQUEST_PACING: "1"
         shell: bash

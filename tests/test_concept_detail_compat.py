@@ -30,7 +30,7 @@ def inventory(root):
 
 
 def test_reviewed_pair_is_complete_and_only_reviewed_non_replay_files_differ():
-    assert capture._implementation() == compat.POST_STOCK_READING_IMPLEMENTATION
+    assert capture._implementation() == compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION
     assert len(compat.HISTORICAL_IMPLEMENTATION) == len(compat.REPLAY_IMPLEMENTATION) == 17
     assert len(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION) == 17
     assert {k for k in compat.HISTORICAL_IMPLEMENTATION
