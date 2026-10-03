@@ -24,7 +24,11 @@ IDENTITY = {'GITHUB_REPOSITORY':'auguspp/decision-kernel', 'GITHUB_REF':'refs/he
 def fixtures(tmp_path, monkeypatch, *, live=True):
     root = tmp_path/'capture'
     # Simulated native client only: these tests never access a real source.
-    monkeypatch.setattr(relay, 'request', make_request())
+    fetch = make_request()
+    def native_request(api, params, *, retry_waits, deadline):
+        assert retry_waits == (30, 90) and isinstance(deadline, float)
+        return fetch(api, params)
+    monkeypatch.setattr(relay, 'request', native_request)
     report = inputs.capture(root, observed_at=NOW, workflow=IDENTITY,
         request=None if live else make_request(), clock=NOW.isoformat)
     files = {p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}

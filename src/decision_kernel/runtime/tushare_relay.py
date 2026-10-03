@@ -137,17 +137,27 @@ def _http_get(api: str, params: dict[str, str], key: str, *, clock: Callable[[],
 
 def request(api: str, params: dict[str, Any], *, key: str | None = None,
             transport: Callable[..., dict[str, Any]] = _http_get,
-            sleep: Callable[[float], None] = time.sleep, clock: Callable[[], str] = now) -> dict[str, Any]:
-    """At most two attempts. Temporary queue waits exactly 30 seconds once."""
+            sleep: Callable[[float], None] = time.sleep, clock: Callable[[], str] = now,
+            retry_waits: tuple[int, ...] = (30,), deadline: float | None = None,
+            monotonic: Callable[[], float] = time.monotonic) -> dict[str, Any]:
+    """Default two attempts; current daily inputs may opt into one later retry."""
+    require(retry_waits in ((30,), (30, 90)), "RETRY_POLICY")
+    require(deadline is None or isinstance(deadline, (int, float)) and not isinstance(deadline, bool),
+            "REQUEST_DEADLINE")
     p = _params(api, params)
     credential = key if key is not None else os.environ.get(SECRET_ENV, "")
     require(isinstance(credential, str) and len(credential) >= 8
             and credential.isascii() and all(32 < ord(c) < 127 for c in credential),
             "CREDENTIAL_UNAVAILABLE")
     attempts = []
-    for attempt_no in (1, 2):
-        if attempt_no == 2:
-            sleep(RETRY_WAIT_SECONDS)
+    for attempt_no in range(1, len(retry_waits) + 2):
+        wait = retry_waits[attempt_no - 2] if attempt_no > 1 else 0
+        # Leave a bounded request allowance; do not start a late retry that
+        # consumes the daily carrier's time reserved for saving and publishing.
+        if deadline is not None and monotonic() + wait + 60 >= deadline:
+            break
+        if wait:
+            sleep(wait)
         started_at = clock()
         try:
             result = transport(api, p, credential, clock=clock)
@@ -190,15 +200,15 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
                              "business_error": "TRANSPORT_ERROR", "business_msg": None,
                              "transport_error_type": "REQUEST_ERROR"})
         result = attempts[-1]
-        if result["classification"] != "TEMPORARY_QUEUE" or attempt_no == 2:
+        if result["classification"] != "TEMPORARY_QUEUE" or attempt_no == len(retry_waits) + 1:
             break
     return {"api": api, "params": p, "attempts": attempts,
-            "status": attempts[-1]["classification"]}
+            "status": attempts[-1]["classification"] if attempts else "REQUEST_BUDGET_EXHAUSTED"}
 
 def successful_body(result: dict[str, Any]) -> dict[str, Any] | None:
     require(isinstance(result, dict) and result.get("api") in ALLOWED, "RESULT_SCOPE")
     attempts = result.get("attempts")
-    require(isinstance(attempts, list) and 1 <= len(attempts) <= 2, "RESULT_ATTEMPTS")
+    require(isinstance(attempts, list) and 1 <= len(attempts) <= 3, "RESULT_ATTEMPTS")
     last = attempts[-1]
     if last.get("classification") != "SUCCESS":
         return None

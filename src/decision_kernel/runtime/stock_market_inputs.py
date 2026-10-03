@@ -7,6 +7,8 @@ second-provider equality gate, or requirement for unconsumed intermediate bars.
 from __future__ import annotations
 
 import argparse
+from functools import partial
+import time as elapsed_time
 from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal, InvalidOperation, localcontext
 from hashlib import sha256
@@ -244,11 +246,12 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
     if live:
         require(workflow == workflow_identity(workflow), 'WORKFLOW_IDENTITY')
         from .tushare_relay import request
+        request = partial(request, retry_waits=(30, 90), deadline=elapsed_time.monotonic() + 17*60)
     root = safe_root(root); require(not root.exists(), 'CREATE_ONLY_OUTPUT')
     root.mkdir(parents=True); (root/'raw').mkdir()
     receipt = {'version': VERSION, 'source': SOURCE, 'observed_at': observed_at.isoformat(),
                'workflow': workflow, 'provenance': 'LIVE_TUSHARE_RELAY' if live else 'SYNTHETIC_TEST_ONLY',
-               'calls': [], 'files': {}, 'finished_at': None}
+               'calls': [], 'files': {}, 'finished_at': None, 'retry_waits': [30, 90]}
     bodies = {}; total = 0
     def checkpoint():
         (root/'receipt.json').write_bytes(dumps(receipt))
@@ -260,7 +263,8 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
         try:
             result = request(item['api'], item['params'])
             require(result['api'] == item['api'] and result['params'] == item['params'], 'TRANSPORT_IDENTITY')
-            require(1 <= len(result['attempts']) <= 2, 'ATTEMPT_BUDGET')
+            require(0 <= len(result['attempts']) <= 3 and (result['attempts'] or
+                    result['status'] == 'REQUEST_BUDGET_EXHAUSTED'), 'ATTEMPT_BUDGET')
             saved['status'] = result['status']
             for attempt in result['attempts']:
                 # Preserve native transport clocks and statuses; do not retain arbitrary error prose.
@@ -295,7 +299,7 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
             context = None
         if context:
             for item in price_plan(context):
-                if one(item)['status'] in STOP:
+                if one(item)['status'] in STOP | {'REQUEST_BUDGET_EXHAUSTED'}:
                     break
     receipt['finished_at'] = clock(); checkpoint()
     report = build(receipt, bodies)
@@ -319,12 +323,14 @@ def verify(root, *, expected_workflow=None):
     require(1 <= len(receipt['calls']) <= MAX_CALLS, 'CALL_BUDGET')
     start, finish = (datetime.fromisoformat(receipt[k]) for k in ('observed_at', 'finished_at'))
     require(start.tzinfo is not None and finish.tzinfo is not None and start <= finish <= start+timedelta(minutes=20), 'CAPTURE_CLOCK')
+    waits = receipt.get('retry_waits', [30])
+    require(waits in ([30], [30, 90]), 'RETRY_POLICY')
     bodies = {}; names = set(); total = 0; last = start
     stopped = False
     for call in receipt['calls']:
         require(not stopped, 'REQUEST_AFTER_SOURCE_STOP')
-        stopped = call['status'] in STOP
-        require(len(call['attempts']) <= 2 and call['status'] != 'REQUEST_STARTED', 'INCOMPLETE_ATTEMPT')
+        stopped = call['status'] in STOP | {'REQUEST_BUDGET_EXHAUSTED'}
+        require(len(call['attempts']) <= len(waits) + 1 and call['status'] != 'REQUEST_STARTED', 'INCOMPLETE_ATTEMPT')
         for i, attempt in enumerate(call['attempts'], 1):
             require(attempt['attempt'] == i, 'ATTEMPT_ORDER')
             require('transport_error_type' not in attempt or attempt['transport_error_type'] in
@@ -332,14 +338,14 @@ def verify(root, *, expected_workflow=None):
                     'TRANSPORT_ERROR_TYPE')
             asked, got = (datetime.fromisoformat(attempt[k]) for k in ('requested_at', 'received_at'))
             require(asked.tzinfo is not None and got.tzinfo is not None and last <= asked <= got <= finish, 'REQUEST_CLOCK')
-            if i == 2:
-                require(call['attempts'][0]['classification'] == 'TEMPORARY_QUEUE'
-                        and asked >= last + timedelta(seconds=30), 'RETRY_CONTRACT')
+            if i > 1:
+                require(call['attempts'][i-2]['classification'] == 'TEMPORARY_QUEUE'
+                        and asked >= last + timedelta(seconds=waits[i-2]), 'RETRY_CONTRACT')
             last = got
             name = attempt['response_file']
             if name is None:
                 continue
-            require(re.fullmatch(r'raw/[0-9]{2}-[12]\.json', name) is not None and name not in names, 'RAW_PATH')
+            require(re.fullmatch(r'raw/[0-9]{2}-[123]\.json', name) is not None and name not in names, 'RAW_PATH')
             names.add(name); path = safe_root(root/name)
             require(path.stat().st_size <= MAX_BODY, 'RAW_FILE_SIZE')
             raw = path.read_bytes(); total += len(raw)
