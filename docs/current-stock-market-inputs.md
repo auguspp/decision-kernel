@@ -43,3 +43,9 @@
 已核内部 `tushare_relay.py`、`tushare_c2_price_check.py`、`independent_stock_reading.py`、`hithink_independent_capture.py`、FTShare历史比较与CNEquity桥接。同步检查CNEquity官方仓库/文档：其增量/Parquet/PIT功能可复用，但本用途不需要先部署整套lake。接口字段参照Tushare官方文档26（trade_cal）、27（daily）、28（adj_factor）；实际服务仍明确是第三方Relay，不用官方文档替代实际返回资格。
 
 退出时移除本日常job、publisher触发/环境开关和专属reader/测试；原行业/Stock/Inbox及原来源客户端不受影响。已保管的源包和研究引用保留。没有第二个常驻状态库或自动provider waterfall。
+
+## 流式读取超时的现役客户端修正
+
+后继真实run37119142775仍有末日daily和两个历史因子TRANSPORT_CONNECTION；原收据不足以判断这些旧失败的底层原因，不改写为超时或成功。检查现有Requests 2.34.2[官方源码](https://requests.readthedocs.io/en/latest/_modules/requests/models/)发现iter_content把urllib3 ReadTimeoutError包装成ConnectionError，原客户端漏掉了这个已知读取超时的有限重试。THIN_ADAPTER：在原_http_get流式读取处仅将已知包装还原为ReadTimeout，复用原最多两次/间隔30秒规则；普通连接、TLS、认证、限流或其他协议错误没有获得通用重试，超时参数和来源预算未改。
+
+异常收据从调用开始记录时间，并只保留STREAM_READ_TIMEOUT、REQUEST_TIMEOUT、CONNECTION_ERROR或REQUEST_ERROR四个诊断码，不保存异常消息、主机或凭证。失败分块不冒充完整响应；原字节上限、长度、日期与成功体检查不变。capture/verify保留该可选诊断，旧收据保持可重建。验证直接使用Requests真实Response.iter_content和urllib3异常，另核普通连接不重试、诊断保存重建及私有文字不泄露。正式CI和真实来源验收沿本PR/#297回执；修正本身不证明旧连接失败全是超时或当前源已稳定。
