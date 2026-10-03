@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-03T05:22:50.036595+00:00",
+    "checked_at": "2026-10-03T05:43:26.266771+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -1708,103 +1708,103 @@
       "shibor": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11211987859,
-          "artifact_name": "global-market-shibor-36971996646-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646/artifacts/11211987859",
-          "bytes": 3450,
-          "expires_at": "2026-11-01T06:07:02Z",
-          "git_blob": "60228583b7a1cd8cd3ae1d6fab43ac93b0756d86",
+          "artifact_id": 11265724482,
+          "artifact_name": "global-market-shibor-37100606092-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092/artifacts/11265724482",
+          "bytes": 3749,
+          "expires_at": "2026-11-02T05:41:49Z",
+          "git_blob": "6f425f288b75a0ab40c7a32405f6ab877dfd27c8",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-02T06:06:41Z",
+            "created_at": "2026-10-03T05:40:59Z",
             "event": "schedule",
-            "head_sha": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646",
-            "id": 36971996646,
+            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092",
+            "id": 37100606092,
             "operation": null,
             "path": ".github/workflows/radar-global-market.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-02T06:06:41Z",
+            "run_started_at": "2026-10-03T05:40:59Z",
             "status": "completed",
-            "updated_at": "2026-10-02T06:07:05Z"
+            "updated_at": "2026-10-03T05:41:53Z"
           },
-          "read_path": "sources/artifacts/d6ce97c439d2dce2c75557eaa7f94aa56214ef7f277926a5b351561672e89673.zip",
+          "read_path": "sources/artifacts/6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "d6ce97c439d2dce2c75557eaa7f94aa56214ef7f277926a5b351561672e89673"
+          "sha256": "6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-02T06:06:41Z",
+          "created_at": "2026-10-03T05:40:59Z",
           "event": "schedule",
-          "head_sha": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646",
-          "id": 36971996646,
+          "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092",
+          "id": 37100606092,
           "operation": null,
           "path": ".github/workflows/radar-global-market.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-02T06:06:41Z",
+          "run_started_at": "2026-10-03T05:40:59Z",
           "status": "completed",
-          "updated_at": "2026-10-02T06:07:05Z"
+          "updated_at": "2026-10-03T05:41:53Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
           {
-            "attempt_count": 1,
+            "attempt_count": 2,
             "id": "shibor",
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11211987859,
-            "artifact_name": "global-market-shibor-36971996646-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646/artifacts/11211987859",
-            "bytes": 3450,
-            "expires_at": "2026-11-01T06:07:02Z",
-            "git_blob": "60228583b7a1cd8cd3ae1d6fab43ac93b0756d86",
+            "artifact_id": 11265724482,
+            "artifact_name": "global-market-shibor-37100606092-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092/artifacts/11265724482",
+            "bytes": 3749,
+            "expires_at": "2026-11-02T05:41:49Z",
+            "git_blob": "6f425f288b75a0ab40c7a32405f6ab877dfd27c8",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-02T06:06:41Z",
+              "created_at": "2026-10-03T05:40:59Z",
               "event": "schedule",
-              "head_sha": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646",
-              "id": 36971996646,
+              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092",
+              "id": 37100606092,
               "operation": null,
               "path": ".github/workflows/radar-global-market.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-02T06:06:41Z",
+              "run_started_at": "2026-10-03T05:40:59Z",
               "status": "completed",
-              "updated_at": "2026-10-02T06:07:05Z"
+              "updated_at": "2026-10-03T05:41:53Z"
             },
-            "read_path": "sources/artifacts/d6ce97c439d2dce2c75557eaa7f94aa56214ef7f277926a5b351561672e89673.zip",
+            "read_path": "sources/artifacts/6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "d6ce97c439d2dce2c75557eaa7f94aa56214ef7f277926a5b351561672e89673"
+            "sha256": "6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11211987859/zip",
-            "created_at": "2026-10-02T06:07:03Z",
-            "digest": "sha256:d6ce97c439d2dce2c75557eaa7f94aa56214ef7f277926a5b351561672e89673",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265724482/zip",
+            "created_at": "2026-10-03T05:41:50Z",
+            "digest": "sha256:6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b",
             "expired": false,
-            "expires_at": "2026-11-01T06:07:02Z",
-            "id": 11211987859,
-            "name": "global-market-shibor-36971996646-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTIxMTk4Nzg1OQ==",
-            "size_in_bytes": 3450,
-            "updated_at": "2026-10-02T06:07:03Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11211987859",
+            "expires_at": "2026-11-02T05:41:49Z",
+            "id": 11265724482,
+            "name": "global-market-shibor-37100606092-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTI2NTcyNDQ4Mg==",
+            "size_in_bytes": 3749,
+            "updated_at": "2026-10-03T05:41:50Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265724482",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
-              "id": 36971996646,
+              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+              "id": 37100606092,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-01",
+            "as_of_date": "2026-10-02",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -1816,28 +1816,28 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 8,
-            "capture_hash": "5ae60e65ce8cda37ba0aa406f6e46c8a57ff4008be5035f09c4455a0c2b40259",
-            "captured_from": "2026-10-02T06:06:53.319185+00:00",
-            "captured_through": "2026-10-02T06:07:02.684661+00:00",
+            "capture_hash": "6bbf457b0fce0ed50edb8effb217e635e2daa05554e2ec8056ca4377bcbe6b6c",
+            "captured_from": "2026-10-03T05:41:14.743283+00:00",
+            "captured_through": "2026-10-03T05:41:48.942682+00:00",
             "coverage": "SELECTED_DAILY_SERIES_ONLY_NOT_COMPLETE_GLOBAL_MARKETS",
             "family": "shibor",
             "identity": {
               "attempt": 1,
-              "code_commit": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
+              "code_commit": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 36971996646,
+              "run_id": 37100606092,
               "workflow": ".github/workflows/radar-global-market.yml"
             },
             "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
             "outcomes": [
               {
-                "attempt_count": 1,
+                "attempt_count": 2,
                 "id": "shibor",
                 "observations": [
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1847,7 +1847,7 @@
                     "previous_value": "1.3451",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:on",
                     "tenor": "on",
@@ -1855,7 +1855,7 @@
                     "value": "1.362"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1865,7 +1865,7 @@
                     "previous_value": "1.383",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:1w",
                     "tenor": "1w",
@@ -1873,7 +1873,7 @@
                     "value": "1.371"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1883,7 +1883,7 @@
                     "previous_value": "1.3839",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:2w",
                     "tenor": "2w",
@@ -1891,7 +1891,7 @@
                     "value": "1.398"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1901,7 +1901,7 @@
                     "previous_value": "1.4237",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:1m",
                     "tenor": "1m",
@@ -1909,7 +1909,7 @@
                     "value": "1.421"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1919,7 +1919,7 @@
                     "previous_value": "1.43",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:3m",
                     "tenor": "3m",
@@ -1927,7 +1927,7 @@
                     "value": "1.43"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1937,7 +1937,7 @@
                     "previous_value": "1.45",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:6m",
                     "tenor": "6m",
@@ -1945,7 +1945,7 @@
                     "value": "1.45"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1955,7 +1955,7 @@
                     "previous_value": "1.47",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:9m",
                     "tenor": "9m",
@@ -1963,7 +1963,7 @@
                     "value": "1.47"
                   },
                   {
-                    "calendar_age_at_requested_end": 1,
+                    "calendar_age_at_requested_end": 2,
                     "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1973,7 +1973,7 @@
                     "previous_value": "1.48",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 9,
+                    "row_count": 8,
                     "source_date": "2026-09-30",
                     "symbol": "SHIBOR:1y",
                     "tenor": "1y",
@@ -1981,7 +1981,7 @@
                     "value": "1.48"
                   }
                 ],
-                "source_received_at": "2026-10-02T06:07:02.683081+00:00",
+                "source_received_at": "2026-10-03T05:41:48.940967+00:00",
                 "status": "ROWS_NORMALIZED"
               }
             ],
@@ -1991,10 +1991,10 @@
             "status": "AVAILABLE",
             "version": "global-market-context-v1"
           },
-          "retained_at": "2026-10-02T06:08:15.909351+00:00",
+          "retained_at": "2026-10-03T05:43:24.047805+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-02T06:06:41Z",
+            "created_at": "2026-10-03T05:40:59Z",
             "display_title": "global-market / shibor",
             "event": "schedule",
             "head_branch": "main",
@@ -2066,9 +2066,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "5cf2bf3f4558d7e41667ecf32111b36c42a4cd4d",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36971996646",
-            "id": 36971996646,
+            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37100606092",
+            "id": 37100606092,
             "path": ".github/workflows/radar-global-market.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -2139,9 +2139,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-02T06:06:41Z",
+            "run_started_at": "2026-10-03T05:40:59Z",
             "status": "completed",
-            "updated_at": "2026-10-02T06:07:05Z"
+            "updated_at": "2026-10-03T05:41:53Z"
           }
         }
       },
@@ -2599,14 +2599,14 @@
       "unattributed_run_ids": []
     },
     "query": {
-      "examined": 11,
+      "examined": 12,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 11,
+      "total_count": 12,
       "unattributed_run_ids": []
     },
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "25fb822fe18a99c94b1492cf5417c002dabda738eef74a8f4f7d578b94448079"
+  "projection_hash": "bba28d1be22072715cbb0e5bb86c6c2767dd9ee49749823fe71dc8bf0fd1ca7c"
 }
