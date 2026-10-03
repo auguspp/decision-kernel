@@ -13,7 +13,7 @@ on:
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
-        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading, stock-independent-observations, tushare-c2-price-check]
+        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading, stock-independent-observations, tushare-c2-price-check, tushare-c2-factor-gaps]
         default: stock-dump
       independent-closure-date:
         description: 'Independent K3 only: explicit reviewed Oct1 closure capture, anchored Sep30; never quiet active-day proof'
@@ -77,7 +77,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.event_name == 'workflow_dispatch' &&
-      inputs.trial-purpose == 'tushare-c2-price-check' &&
+      (inputs.trial-purpose == 'tushare-c2-price-check' || inputs.trial-purpose == 'tushare-c2-factor-gaps') &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -107,9 +107,10 @@ jobs:
           import base64, json, os, subprocess
           from pathlib import Path
           from decision_kernel.runtime.tushare_c2_price_check import (
-              workflow_identity, one_shot_scope, reference, READING, DETAIL)
+              workflow_identity, one_shot_scope, reference, READING, DETAIL, GAP_MODE,
+              BASE_RUN, BASE_COMMIT, BASE_ARTIFACT, BASE_BYTES, BASE_ZIP_SHA256, original_input)
           env=os.environ
-          workflow_identity(env)
+          workflow_identity(env, mode=env['TRIAL_PURPOSE'])
           assert not any(env[k] for k in ('STOCK_MARKET_RUN_ID','STOCK_DISCOVERY_PAGE','RECOVERY_KEY'))
           assert env['CLOSURE_DATE']=='none'
           repo=env['GITHUB_REPOSITORY']
@@ -130,12 +131,27 @@ jobs:
               data=get(f'actions/workflows/hithink-stock-dump-trial.yml/runs?per_page=100&page={page}')
               rows.extend(data['workflow_runs'])
               if len(rows)>=data['total_count']:break
-          one_shot_scope(rows,data['total_count'],int(env['GITHUB_RUN_ID']))
-          source=get(f'contents/{DETAIL}?ref={READING}')
-          assert source['encoding']=='base64'
-          raw=base64.b64decode(source['content'],validate=False)
-          reference(raw)
-          Path(env['RUNNER_TEMP'],'tushare-c2-reference.json').write_bytes(raw)
+          one_shot_scope(rows,data['total_count'],int(env['GITHUB_RUN_ID']),mode=env['TRIAL_PURPOSE'])
+          if env['TRIAL_PURPOSE'] == GAP_MODE:
+              from decision_kernel.runtime import current_state as saved
+              from decision_kernel.runtime.current_state_delivery import GitHubAPI
+              run=get(f'actions/runs/{BASE_RUN}')
+              saved.run_identity(run, 'stock', success=True)
+              assert run['id']==BASE_RUN and run['head_sha']==BASE_COMMIT
+              assert run['display_title']=='tushare-c2-price-check | sector=none | page=base | recovery=none'
+              artifact=get(f'actions/artifacts/{BASE_ARTIFACT}')
+              assert artifact['id']==BASE_ARTIFACT and artifact['expired'] is False
+              assert artifact['workflow_run']['id']==BASE_RUN and artifact['workflow_run']['head_sha']==BASE_COMMIT
+              assert artifact['size_in_bytes']==BASE_BYTES and artifact['digest']=='sha256:'+BASE_ZIP_SHA256
+              raw=GitHubAPI(env['GH_TOKEN']).archive(artifact)
+              original_input(raw)
+              Path(env['RUNNER_TEMP'],'tushare-c2-original.zip').write_bytes(raw)
+          else:
+              source=get(f'contents/{DETAIL}?ref={READING}')
+              assert source['encoding']=='base64'
+              raw=base64.b64decode(source['content'],validate=False)
+              reference(raw)
+              Path(env['RUNNER_TEMP'],'tushare-c2-reference.json').write_bytes(raw)
           PY
       - name: Check the retained cohort with the existing Relay client once
         id: relay-capture
@@ -143,28 +159,38 @@ jobs:
           TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
           TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
         run: |
-          python -m decision_kernel.runtime.tushare_c2_price_check capture \
-            --reference "$RUNNER_TEMP/tushare-c2-reference.json" \
-            --root "$RUNNER_TEMP/tushare-c2-price-check"
+          if test "$TRIAL_PURPOSE" = tushare-c2-factor-gaps; then
+            python -m decision_kernel.runtime.tushare_c2_price_check capture-gaps \
+              --original "$RUNNER_TEMP/tushare-c2-original.zip" \
+              --root "$RUNNER_TEMP/tushare-c2-price-check"
+          else
+            python -m decision_kernel.runtime.tushare_c2_price_check capture \
+              --reference "$RUNNER_TEMP/tushare-c2-reference.json" \
+              --root "$RUNNER_TEMP/tushare-c2-price-check"
+          fi
       - name: Replay actual responses without source credentials
         id: relay-verify
         if: always() && (steps.relay-capture.outcome == 'success' || steps.relay-capture.outcome == 'failure')
+        env:
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
         run: |
-          python -m decision_kernel.runtime.tushare_c2_price_check verify \
+          mode=verify
+          if test "$TRIAL_PURPOSE" = tushare-c2-factor-gaps; then mode=verify-gaps; fi
+          python -m decision_kernel.runtime.tushare_c2_price_check "$mode" \
             --root "$RUNNER_TEMP/tushare-c2-price-check"
       - name: Retain the actual source attempt including failure
         if: always() && (steps.relay-capture.outcome == 'success' || steps.relay-capture.outcome == 'failure')
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: tushare-c2-price-check-${{ github.run_id }}-${{ github.run_attempt }}
+          name: ${{ inputs.trial-purpose }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/tushare-c2-price-check/
           retention-days: 30
           if-no-files-found: error
       - name: Keep source availability distinct from engineering completion
         if: always()
         run: |
-          echo 'C2 Relay source check only: at most 33 logical calls / 66 HTTP attempts.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'No daily activation, full-market historical database, action-detail or total-return certification.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'C2 Relay: original scope 33/66; factor-gap scope 5/10 logical/HTTP maxima, separately consumed.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No recurring acquisition, historical database, action-detail or total-return certification. Saved comparison publication is separate.' >> "$GITHUB_STEP_SUMMARY"
           echo 'Inspect receipt/report for source failure and each of the 16 retained names; workflow success is not C2 acceptance.' >> "$GITHUB_STEP_SUMMARY"
 
   inspect:
