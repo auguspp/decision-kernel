@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-03T06:02:31.297603+00:00",
+    "checked_at": "2026-10-03T06:31:41.402724+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -933,44 +933,44 @@
       "fx": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11213234650,
-          "artifact_name": "global-public-fx-36976206288-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288/artifacts/11213234650",
-          "bytes": 11468,
-          "expires_at": "2026-11-01T06:59:24Z",
-          "git_blob": "62045e8d810949a484f9ea0634453f54fda16e44",
+          "artifact_id": 11265904424,
+          "artifact_name": "global-public-fx-37103215362-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362/artifacts/11265904424",
+          "bytes": 11582,
+          "expires_at": "2026-11-02T06:29:33Z",
+          "git_blob": "c2ac97a560de7c9d00c32be15c9a9c801b51ef07",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-02T06:59:09Z",
+            "created_at": "2026-10-03T06:29:17Z",
             "event": "schedule",
-            "head_sha": "59fc7741cae66819819585b61864cec568724624",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288",
-            "id": 36976206288,
+            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
+            "id": 37103215362,
             "operation": null,
             "path": ".github/workflows/radar-global-public.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-02T06:59:09Z",
+            "run_started_at": "2026-10-03T06:29:17Z",
             "status": "completed",
-            "updated_at": "2026-10-02T06:59:28Z"
+            "updated_at": "2026-10-03T06:29:36Z"
           },
-          "read_path": "sources/artifacts/4fd750e8c80dd72e0fb47370b1d30c8d4b723b4d680f21c376c02426ab0a0759.zip",
+          "read_path": "sources/artifacts/9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "4fd750e8c80dd72e0fb47370b1d30c8d4b723b4d680f21c376c02426ab0a0759"
+          "sha256": "9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-02T06:59:09Z",
+          "created_at": "2026-10-03T06:29:17Z",
           "event": "schedule",
-          "head_sha": "59fc7741cae66819819585b61864cec568724624",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288",
-          "id": 36976206288,
+          "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
+          "id": 37103215362,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-02T06:59:09Z",
+          "run_started_at": "2026-10-03T06:29:17Z",
           "status": "completed",
-          "updated_at": "2026-10-02T06:59:28Z"
+          "updated_at": "2026-10-03T06:29:36Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -981,56 +981,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11213234650,
-            "artifact_name": "global-public-fx-36976206288-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288/artifacts/11213234650",
-            "bytes": 11468,
-            "expires_at": "2026-11-01T06:59:24Z",
-            "git_blob": "62045e8d810949a484f9ea0634453f54fda16e44",
+            "artifact_id": 11265904424,
+            "artifact_name": "global-public-fx-37103215362-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362/artifacts/11265904424",
+            "bytes": 11582,
+            "expires_at": "2026-11-02T06:29:33Z",
+            "git_blob": "c2ac97a560de7c9d00c32be15c9a9c801b51ef07",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-02T06:59:09Z",
+              "created_at": "2026-10-03T06:29:17Z",
               "event": "schedule",
-              "head_sha": "59fc7741cae66819819585b61864cec568724624",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288",
-              "id": 36976206288,
+              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
+              "id": 37103215362,
               "operation": null,
               "path": ".github/workflows/radar-global-public.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-02T06:59:09Z",
+              "run_started_at": "2026-10-03T06:29:17Z",
               "status": "completed",
-              "updated_at": "2026-10-02T06:59:28Z"
+              "updated_at": "2026-10-03T06:29:36Z"
             },
-            "read_path": "sources/artifacts/4fd750e8c80dd72e0fb47370b1d30c8d4b723b4d680f21c376c02426ab0a0759.zip",
+            "read_path": "sources/artifacts/9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "4fd750e8c80dd72e0fb47370b1d30c8d4b723b4d680f21c376c02426ab0a0759"
+            "sha256": "9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11213234650/zip",
-            "created_at": "2026-10-02T06:59:25Z",
-            "digest": "sha256:4fd750e8c80dd72e0fb47370b1d30c8d4b723b4d680f21c376c02426ab0a0759",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265904424/zip",
+            "created_at": "2026-10-03T06:29:33Z",
+            "digest": "sha256:9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa",
             "expired": false,
-            "expires_at": "2026-11-01T06:59:24Z",
-            "id": 11213234650,
-            "name": "global-public-fx-36976206288-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTIxMzIzNDY1MA==",
-            "size_in_bytes": 11468,
-            "updated_at": "2026-10-02T06:59:25Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11213234650",
+            "expires_at": "2026-11-02T06:29:33Z",
+            "id": 11265904424,
+            "name": "global-public-fx-37103215362-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTI2NTkwNDQyNA==",
+            "size_in_bytes": 11582,
+            "updated_at": "2026-10-03T06:29:33Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265904424",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "59fc7741cae66819819585b61864cec568724624",
-              "id": 36976206288,
+              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+              "id": 37103215362,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-01",
+            "as_of_date": "2026-10-02",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -1042,84 +1042,84 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 4,
-            "capture_hash": "929d785354391ed4986248ff311c2280c1abf719890d837a8c6c2e641a283540",
-            "captured_from": "2026-10-02T06:59:23.629085+00:00",
-            "captured_through": "2026-10-02T06:59:24.726907+00:00",
+            "capture_hash": "74013d07951832894bcb0bea3879625a4d5bd7900b17526b2b8bb566e23e10c7",
+            "captured_from": "2026-10-03T06:29:31.207515+00:00",
+            "captured_through": "2026-10-03T06:29:32.684238+00:00",
             "coverage": "SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS",
             "family": "fx",
             "identity": {
               "attempt": 1,
-              "code_commit": "59fc7741cae66819819585b61864cec568724624",
+              "code_commit": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 36976206288,
+              "run_id": 37103215362,
               "workflow": ".github/workflows/radar-global-public.yml"
             },
             "observations": [
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-0.501982",
+                "change": "-0.646132",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "1欧元兑USD",
-                "previous_date": "2026-09-30",
-                "previous_value": "1.1355",
+                "previous_date": "2026-10-01",
+                "previous_value": "1.1298",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-01",
+                "source_date": "2026-10-02",
                 "symbol": "EUR/USD",
                 "unit": "USD_PER_EUR",
-                "value": "1.1298"
+                "value": "1.1225"
               },
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-0.501773",
+                "change": "-0.645562",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "1欧元兑CNY",
-                "previous_date": "2026-09-30",
-                "previous_value": "7.613",
+                "previous_date": "2026-10-01",
+                "previous_value": "7.5748",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-01",
+                "source_date": "2026-10-02",
                 "symbol": "EUR/CNY",
                 "unit": "CNY_PER_EUR",
-                "value": "7.5748"
+                "value": "7.5259"
               },
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "0.123408",
+                "change": "-0.840383",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "1欧元兑JPY",
-                "previous_date": "2026-09-30",
-                "previous_value": "178.27",
+                "previous_date": "2026-10-01",
+                "previous_value": "178.49",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-01",
+                "source_date": "2026-10-02",
                 "symbol": "EUR/JPY",
                 "unit": "JPY_PER_EUR",
-                "value": "178.49"
+                "value": "176.99"
               },
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-0.105309",
+                "change": "-0.398252",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "1欧元兑GBP",
-                "previous_date": "2026-09-30",
-                "previous_value": "0.85463",
+                "previous_date": "2026-10-01",
+                "previous_value": "0.85373",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-01",
+                "source_date": "2026-10-02",
                 "symbol": "EUR/GBP",
                 "unit": "GBP_PER_EUR",
-                "value": "0.85373"
+                "value": "0.85033"
               }
             ],
             "outcomes": [
@@ -1132,7 +1132,7 @@
                 },
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 10,
-                "source_rows": 64,
+                "source_rows": 65,
                 "source_url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml",
                 "status": "ROWS_NORMALIZED"
               }
@@ -1142,10 +1142,10 @@
             "version": "global-public-context-v1",
             "vintage": "CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE"
           },
-          "retained_at": "2026-10-02T07:00:50.652987+00:00",
+          "retained_at": "2026-10-03T06:31:40.947596+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-02T06:59:09Z",
+            "created_at": "2026-10-03T06:29:17Z",
             "display_title": "B1 public · fx · ",
             "event": "schedule",
             "head_branch": "main",
@@ -1217,9 +1217,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "59fc7741cae66819819585b61864cec568724624",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36976206288",
-            "id": 36976206288,
+            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
+            "id": 37103215362,
             "path": ".github/workflows/radar-global-public.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -1290,9 +1290,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-02T06:59:09Z",
+            "run_started_at": "2026-10-03T06:29:17Z",
             "status": "completed",
-            "updated_at": "2026-10-02T06:59:28Z"
+            "updated_at": "2026-10-03T06:29:36Z"
           }
         }
       },
@@ -2595,7 +2595,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 21,
+      "total_count": 22,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2608,5 +2608,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "58d5711c96ea8126d051a24e5985449b62d1284ec9c65d406eddca1d470c03d2"
+  "projection_hash": "e67751ec436ff0fa9975f9ca6dd3954b5188168cba8f771824a0b931290a83ec"
 }
