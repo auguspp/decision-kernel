@@ -1,5 +1,6 @@
 """Synthetic source responses, real capture/replay and existing reading composition."""
 from copy import deepcopy
+from datetime import timedelta
 from pathlib import Path
 from types import SimpleNamespace
 import json
@@ -21,23 +22,24 @@ IDENTITY = {'GITHUB_REPOSITORY':'auguspp/decision-kernel', 'GITHUB_REF':'refs/he
     'GITHUB_SHA':'a'*40, 'GITHUB_RUN_ID':'123'}
 
 
-def fixtures(tmp_path, monkeypatch, *, live=True):
-    root = tmp_path/'capture'
+def fixtures(tmp_path, monkeypatch, *, live=True, run_id=123, at=NOW, fail=None):
+    root = tmp_path/f'capture-{run_id}'
     # Simulated native client only: these tests never access a real source.
-    fetch = make_request()
+    fetch = make_request(at, fail=fail)
     def native_request(api, params, *, retry_waits, deadline):
         assert retry_waits == (30, 90) and isinstance(deadline, float)
         return fetch(api, params)
     monkeypatch.setattr(relay, 'request', native_request)
-    report = inputs.capture(root, observed_at=NOW, workflow=IDENTITY,
-        request=None if live else make_request(), clock=NOW.isoformat)
+    identity = {**IDENTITY, 'GITHUB_RUN_ID': str(run_id)}
+    report = inputs.capture(root, observed_at=at, workflow=identity,
+        request=None if live else fetch, clock=at.isoformat)
     files = {p.relative_to(root).as_posix():p.read_bytes() for p in root.rglob('*') if p.is_file()}
-    run = {'id':123, 'display_title':inputs.TITLE, 'path':inputs.WORKFLOW, 'head_branch':'main',
+    run = {'id':run_id, 'display_title':inputs.TITLE, 'path':inputs.WORKFLOW, 'head_branch':'main',
         'event':'workflow_dispatch','run_attempt':1,'head_sha':'a'*40,'status':'completed', 'conclusion':'success',
-        'created_at':NOW.isoformat(), 'updated_at':NOW.isoformat(), 'run_started_at':NOW.isoformat(),
-        'html_url':'https://github.com/auguspp/decision-kernel/actions/runs/123',
+        'created_at':at.isoformat(), 'updated_at':at.isoformat(), 'run_started_at':at.isoformat(),
+        'html_url':f'https://github.com/auguspp/decision-kernel/actions/runs/{run_id}',
         'repository':{'full_name':'auguspp/decision-kernel'}, 'head_repository':{'full_name':'auguspp/decision-kernel'}}
-    artifact = {'name':inputs.TITLE+'-123-1','expired':False,'expires_at':'2026-11-01T00:00:00Z'}
+    artifact = {'name':f'{inputs.TITLE}-{run_id}-1','expired':False,'expires_at':'2026-11-01T00:00:00Z'}
     api = SimpleNamespace(calls=0,max_calls=180)
     def get(path):
         assert path == 'actions/workflows/stock-reading-after-sector.yml/runs?branch=main&per_page=100'
@@ -144,3 +146,83 @@ def test_full_cross_section_fits_normal_detail_budget():
     assert report['cohort_denominator'] == 6000
     assert report['qualified_windows'] == {'5':6000,'20':6000,'60':6000}
     assert len(inputs.dumps(report)) < inputs.MAX_REPORT
+
+
+def two_runs(tmp_path, monkeypatch, *, latest_state='failed', saved_live=True):
+    old = fixtures(tmp_path, monkeypatch, live=saved_live)
+    end = inputs.calendar(calendar_body(), NOW)['end_date']
+    latest = fixtures(tmp_path, monkeypatch, run_id=124, at=NOW+timedelta(hours=1),
+                      fail=('daily', end) if latest_state == 'failed' else None)
+    collector, baseline, files, run, report = latest
+    if latest_state == 'failed':
+        run['conclusion'] = 'failure'
+    elif latest_state == 'pending':
+        run['status'] = 'in_progress'
+    elif latest_state == 'corrupt':
+        files['report.json'] = b'{}'
+    baseline['checks']['finished_at'] = (NOW+timedelta(hours=2)).isoformat()
+    def get(path):
+        collector.api.calls += 1
+        return {'workflow_runs':[run, old[3]], 'total_count':2}
+    collector.api.get = get
+    artifacts = {r[3]['id']:r[0].artifacts(r[3]) for r in (old, latest)}
+    archives = {r[3]['id']:r[2] for r in (old, latest)}
+    reads = []
+    collector.artifacts = lambda r:artifacts[r['id']]
+    def archive(a, r):
+        reads.append(r['id'])
+        collector.files[f'archive-{r["id"]}'] = b'original'
+        return archives[r['id']], {'artifact_id':r['id']}
+    collector.archive = archive
+    return collector, baseline, latest, old, artifacts, reads
+
+
+@pytest.mark.parametrize('state', ['failed', 'pending', 'corrupt'])
+def test_latest_gap_keeps_separate_verified_saved_input(tmp_path, monkeypatch, state):
+    collector, baseline, latest, old, artifacts, reads = two_runs(tmp_path, monkeypatch, latest_state=state)
+    monkeypatch.setenv('INCLUDE_CURRENT_STOCK_INPUTS','1')
+    result = independent.derive(collector, baseline)
+    current = result['daily_market_inputs']
+    saved = current['last_qualified_result']
+    assert current['latest_attempt']['id'] == 124 and result['status'] == current['status']
+    assert current['status'] != old[4]['status']
+    assert saved['origin_run']['id'] == 123 and saved['received_through'] == NOW.isoformat()
+    assert saved['market_session'] == '2026-09-30' and saved['cohort_denominator'] == 2
+    assert saved['qualified_windows'] == {'5':1,'20':1,'60':1}
+    assert saved['new_source_requests'] == 0 and saved['investment_authority'] == 'NONE'
+    assert json.loads(collector.files[reader.LAST_PATH]) == old[4]
+    assert saved['file']['sha256'] == model.sha256(collector.files[reader.LAST_PATH])
+    assert '最近已验证可用输入' in result['summary'] and reader.LAST_PATH in result['summary']
+    if state == 'failed':
+        assert json.loads(collector.files[reader.PATH]) == latest[4]
+        assert current['cohort_denominator'] == 0
+    else:
+        assert reader.PATH not in collector.files
+
+
+@pytest.mark.parametrize('fault', ['expired', 'corrupt', 'synthetic', 'wrong_identity'])
+def test_saved_candidate_rejected_without_erasing_latest_failure_or_searching_older(tmp_path, monkeypatch, fault):
+    collector, baseline, latest, old, artifacts, reads = two_runs(
+        tmp_path, monkeypatch, saved_live=fault != 'synthetic')
+    if fault == 'expired':
+        artifacts[123][0]['expires_at'] = '2026-10-02T00:00:00Z'
+    elif fault == 'corrupt':
+        old[2]['report.json'] = b'{}'
+    elif fault == 'wrong_identity':
+        old[3]['head_sha'] = 'b'*40
+    older = {**old[3], 'id':122, 'created_at':(NOW-timedelta(hours=1)).isoformat()}
+    collector.api.get = lambda path:{'workflow_runs':[latest[3],old[3],older], 'total_count':3}
+    result = reader.read_current(collector, baseline)
+    assert result['status'] == latest[4]['status']
+    assert result['last_qualified_reading_gap']['origin_run']['id'] == 123
+    assert 'last_qualified_result' not in result and reader.LAST_PATH not in collector.files
+    assert json.loads(collector.files[reader.PATH]) == latest[4]
+    assert 'archive-123' not in collector.files and 122 not in reads
+
+
+def test_usable_latest_never_replaced_to_improve_coverage(tmp_path, monkeypatch):
+    collector, baseline, latest, old, artifacts, reads = two_runs(tmp_path, monkeypatch, latest_state='success')
+    result = reader.read_current(collector, baseline)
+    assert result['qualified_windows'] == latest[4]['qualified_windows']
+    assert 'last_qualified_result' not in result and reader.LAST_PATH not in collector.files
+    assert reads == [124]
