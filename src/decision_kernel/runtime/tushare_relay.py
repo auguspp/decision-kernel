@@ -179,13 +179,13 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
                                  else "REQUEST_TIMEOUT")})
         except requests.ConnectionError:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
-                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "requested_at": started_at, "received_at": clock(), "headers": {},
                              "classification": "TRANSPORT_CONNECTION", "business_code": None,
                              "business_error": "TRANSPORT_CONNECTION", "business_msg": None,
                              "transport_error_type": "CONNECTION_ERROR"})
         except requests.RequestException:
             attempts.append({"attempt": attempt_no, "http_status": None, "raw": None,
-                             "requested_at": clock(), "received_at": clock(), "headers": {},
+                             "requested_at": started_at, "received_at": clock(), "headers": {},
                              "classification": "TRANSPORT_ERROR", "business_code": None,
                              "business_error": "TRANSPORT_ERROR", "business_msg": None,
                              "transport_error_type": "REQUEST_ERROR"})
