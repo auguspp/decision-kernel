@@ -219,6 +219,8 @@ def test_pre_quiet_nested_concept_receipts_remain_exact_without_reverse_pairs(tm
         primary.verify(roots[1])
     if damage:
         monkeypatch.setattr(primary, '_implementation', lambda: {**compat.PRIMARY_AFTER_QUIET_STOCK_INPUTS, 'extra': '0'*64})
+        # The outer fingerprint inherits the primary map: isolate the nested guard.
+        monkeypatch.setattr(detail, '_implementation', lambda: dict(compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION))
         with pytest.raises(ValueError, match='CONCEPT_HISTORICAL_IMPLEMENTATION_REJECTED'):
             compat.verify(root)
     else:
