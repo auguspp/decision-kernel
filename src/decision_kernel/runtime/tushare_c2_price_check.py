@@ -14,6 +14,7 @@ import json
 import os
 from pathlib import Path
 import re
+from tempfile import TemporaryDirectory
 
 from decision_kernel.identity import canonical_hash, canonical_json
 from . import tushare_relay as relay
@@ -27,6 +28,15 @@ MAX_LOGICAL, MAX_HTTP, MAX_BYTES = 33, 66, 16 * 1024 * 1024
 DAILY_FIELDS = 'ts_code,trade_date,open,high,low,close,pre_close,vol,amount,ah_vol,ah_amount'
 FACTOR_FIELDS = 'ts_code,trade_date,adj_factor'
 VERSION = 'c2-tushare-retained-cohort-price-check-v1'
+GAP_MODE = 'tushare-c2-factor-gaps'
+GAP_TITLE = GAP_MODE + ' | sector=none | page=base | recovery=none'
+GAP_VERSION = 'c2-tushare-factor-gap-supplement-v1'
+GAP_DATES = ('20260930', '20260707', '20260715', '20260818', '20260918')
+BASE_RUN = 37091291428
+BASE_COMMIT = '48cbce5bc22bdc919fa628ba4ce65daa2cb8a086'
+BASE_ARTIFACT = 11261749659
+BASE_BYTES = 310123
+BASE_ZIP_SHA256 = 'd603a6897df27f4afd17e7e935a486e08860e9b6d161b86d7d9d55351d8be409'
 require = relay.require
 
 
@@ -84,10 +94,12 @@ def is_source_check_run(run):
         and run.get('event') == 'workflow_dispatch' and run.get('display_title') == TITLE)
 
 
-def one_shot_scope(runs, total, current_id):
+def one_shot_scope(runs, total, current_id, *, mode=MODE):
+    require(mode in (MODE, GAP_MODE), 'MODE_SCOPE')
+    title = TITLE if mode == MODE else GAP_TITLE
     require(type(total) is int and total == len(runs) and len({r['id'] for r in runs}) == total,
             'RUN_SCOPE_INCOMPLETE')
-    selected = [r for r in runs if r.get('display_title') == TITLE]
+    selected = [r for r in runs if r.get('display_title') == title]
     require(len(selected) == 1 and selected[0]['id'] == current_id
         and selected[0]['run_attempt'] == 1 and selected[0]['event'] == 'workflow_dispatch'
         and selected[0]['head_branch'] == 'main', 'AUTHORIZATION_ALREADY_USED')
@@ -154,6 +166,10 @@ def evaluate(ref, plan, calls, bodies):
             dispositions.append('TABLE_CHECKED')
         except (ValueError, TypeError, KeyError, IndexError, OverflowError):
             dispositions.append('INPUT_SCHEMA_OR_SCOPE_REJECTED')
+    return _evaluate_tables(ref, data, dispositions)
+
+
+def _evaluate_tables(ref, data, dispositions):
     snapshot = {r['ts_code']: r for r in data.get(0, [])}
     output = []
     days = [d.replace('-', '') for d in ref['sessions']]
@@ -215,12 +231,13 @@ def evaluate(ref, plan, calls, bodies):
         'volume_basis': 'TUSHARE_CONTRACT_HANDS_AMOUNT_THOUSAND_CNY_AFTER_HOURS_SEPARATE_NOT_CROSS_PROVIDER_MATCHED'}
 
 
-def workflow_identity(env):
+def workflow_identity(env, *, mode=MODE):
+    require(mode in (MODE, GAP_MODE), 'MODE_SCOPE')
     require(env.get('GITHUB_REPOSITORY') == 'auguspp/decision-kernel'
         and env.get('GITHUB_REF') == 'refs/heads/main'
         and env.get('GITHUB_RUN_ATTEMPT') == '1'
         and env.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
-        and env.get('GITHUB_JOB') == MODE and env.get('TRIAL_PURPOSE') == MODE
+        and env.get('GITHUB_JOB') == MODE and env.get('TRIAL_PURPOSE') == mode
         and re.fullmatch('[0-9a-f]{40}', env.get('GITHUB_SHA', '')) is not None
         and re.fullmatch('[1-9][0-9]*', env.get('GITHUB_RUN_ID', '')) is not None,
         'EXECUTION_IDENTITY')
@@ -229,16 +246,27 @@ def workflow_identity(env):
 
 
 def capture(root, reference_raw, *, identity, request=None, now=relay.now):
+    return _capture(root, reference_raw, identity=identity, request=request, now=now)
+
+
+def _capture(root, reference_raw, *, identity, request, now, parent=None):
     root = Path(root)
     require(not root.exists() and not root.is_symlink() and not any(p.is_symlink() for p in root.parents), 'OUTPUT_EXISTS_OR_SYMLINK')
-    identity = workflow_identity(identity)
-    ref = reference(reference_raw); plan = request_plan(ref)
+    mode = GAP_MODE if parent is not None else MODE
+    identity = workflow_identity(identity, mode=mode)
+    ref = reference(reference_raw)
+    plan = gap_plan() if parent is not None else request_plan(ref)
+    logical, http = (5, 10) if parent is not None else (MAX_LOGICAL, MAX_HTTP)
     root.mkdir(parents=True); (root / 'raw').mkdir()
     (root / 'reference.json').write_bytes(reference_raw)
-    receipt = {'version': VERSION, 'reference': ref, 'plan': plan, 'plan_hash': canonical_hash(plan),
+    receipt = {'version': GAP_VERSION if parent is not None else VERSION, 'reference': ref, 'plan': plan, 'plan_hash': canonical_hash(plan),
         'source': 'THIRD_PARTY_TUSHARE_RELAY', 'host': relay.PRO, 'workflow': identity,
-        'max_logical_requests': MAX_LOGICAL, 'max_http_attempts': MAX_HTTP,
+        'max_logical_requests': logical, 'max_http_attempts': http,
         'started_at': now(), 'calls': [], 'stopped': None, 'http_attempts_known': True}
+    if parent is not None:
+        (root / 'original.zip').write_bytes(parent['zip'])
+        receipt['predecessor_zip_sha256'] = BASE_ZIP_SHA256
+        require(clock(receipt['started_at']) >= clock(parent['receipt']['finished_at']), 'PREDECESSOR_CLOCK')
     request = request or relay.request
     bodies, size, attempts = {}, 0, 0
     last_received = clock(receipt['started_at'])
@@ -252,7 +280,7 @@ def capture(root, reference_raw, *, identity, request=None, now=relay.now):
             require(result['api'] == item['api'] and result['params'] == item['params'], 'REQUEST_IDENTITY')
             for j, attempt in enumerate(result['attempts'], 1):
                 require(j <= 2, 'ATTEMPT_BUDGET')
-                attempts += 1; require(attempts <= MAX_HTTP, 'HTTP_BUDGET')
+                attempts += 1; require(attempts <= http, 'HTTP_BUDGET')
                 record = {k: attempt[k] for k in ('attempt', 'http_status', 'classification', 'requested_at', 'received_at', 'headers')}
                 raw = attempt['raw']; record['response_file'] = None
                 if raw is not None:
@@ -278,7 +306,7 @@ def capture(root, reference_raw, *, identity, request=None, now=relay.now):
         if call['status'] != 'SUCCESS':
             receipt['stopped'] = call['status']; break
         try:
-            table(bodies[call['attempts'][-1]['response_file']], item['api'], item['params'])
+            _checked_table(bodies[call['attempts'][-1]['response_file']], item, parent)
         except (ValueError, TypeError, KeyError, IndexError, OverflowError):
             receipt['stopped'] = 'INPUT_SCHEMA_OR_SCOPE_REJECTED'; break
     receipt['finished_at'] = now()
@@ -286,28 +314,41 @@ def capture(root, reference_raw, *, identity, request=None, now=relay.now):
     receipt['logical_requests_started'] = len(receipt['calls'])
     receipt['raw_bytes'] = size
     write(root, 'receipt.json', receipt)
-    report = evaluate(ref, plan, receipt['calls'], bodies)
+    report = evaluate_gaps(parent, plan, receipt['calls'], bodies) if parent is not None else evaluate(ref, plan, receipt['calls'], bodies)
     write(root, 'report.json', report)
     return receipt, report
 
 
 def verify(root, *, expected_identity=None):
+    return _verify(root, expected_identity=expected_identity)
+
+
+def _verify(root, *, expected_identity=None, parent=None):
     root = Path(root)
     require(not root.is_symlink() and not any(p.is_symlink() for p in root.parents), 'SOURCE_SYMLINK')
     require(all(not p.is_symlink() for p in root.rglob('*')), 'SOURCE_SYMLINK')
     receipt = raw_json((root / 'receipt.json').read_bytes())
-    identity = workflow_identity(receipt['workflow'])
-    require(expected_identity is None or identity == workflow_identity(expected_identity), 'EXTERNAL_EXECUTION_IDENTITY')
-    require(receipt['version'] == VERSION and receipt['source'] == 'THIRD_PARTY_TUSHARE_RELAY'
-        and receipt['max_logical_requests'] == MAX_LOGICAL and receipt['max_http_attempts'] == MAX_HTTP,
+    mode = GAP_MODE if parent is not None else MODE
+    identity = workflow_identity(receipt['workflow'], mode=mode)
+    require(expected_identity is None or identity == workflow_identity(expected_identity, mode=mode), 'EXTERNAL_EXECUTION_IDENTITY')
+    logical, http = (5, 10) if parent is not None else (MAX_LOGICAL, MAX_HTTP)
+    version = GAP_VERSION if parent is not None else VERSION
+    require(receipt['version'] == version and receipt['source'] == 'THIRD_PARTY_TUSHARE_RELAY'
+        and receipt['max_logical_requests'] == logical and receipt['max_http_attempts'] == http,
         'RECEIPT_IDENTITY')
-    ref = reference((root / 'reference.json').read_bytes()); plan = request_plan(ref)
+    ref = reference((root / 'reference.json').read_bytes())
+    plan = gap_plan() if parent is not None else request_plan(ref)
     require(receipt['reference'] == ref and receipt['plan'] == plan
             and receipt['plan_hash'] == canonical_hash(plan) and receipt['host'] == relay.PRO, 'PLAN_IDENTITY')
     calls = receipt['calls']; require(1 <= len(calls) <= len(plan), 'CALL_SCOPE')
     bodies, size, count = {}, 0, 0
     last, end = clock(receipt['started_at']), clock(receipt['finished_at'])
     require(last <= end, 'CAPTURE_CLOCK')
+    if parent is not None:
+        require(receipt.get('predecessor_zip_sha256') == BASE_ZIP_SHA256 and
+            (root / 'original.zip').read_bytes() == parent['zip'] and ref == parent['reference'] and
+            clock(parent['receipt']['finished_at']) <= last and (end-last).total_seconds() <= 1200,
+            'PREDECESSOR_BINDING')
     for i, call in enumerate(calls):
         require(all(call[k] == plan[i][k] for k in ('api', 'params')), 'CALL_IDENTITY')
         require(call['status'] != 'TRANSPORT_OR_CAPTURE_UNCERTAIN' and receipt['http_attempts_known'], 'UNRESOLVED_ATTEMPT')
@@ -337,15 +378,15 @@ def verify(root, *, expected_identity=None):
         require(call['status'] == call['attempts'][-1]['classification'], 'ATTEMPT_STATUS')
         if i < len(calls)-1:
             require(call['status'] == 'SUCCESS', 'REQUEST_AFTER_SOURCE_STOP')
-            table(bodies[call['attempts'][-1]['response_file']], call['api'], call['params'])
-    require(size == receipt['raw_bytes'] <= MAX_BYTES and count == receipt['recorded_http_attempts'] <= MAX_HTTP
+            _checked_table(bodies[call['attempts'][-1]['response_file']], call, parent)
+    require(size == receipt['raw_bytes'] <= MAX_BYTES and count == receipt['recorded_http_attempts'] <= http
             and len(calls) == receipt['logical_requests_started'], 'BUDGET_IDENTITY')
     terminal = calls[-1]
     if terminal['status'] != 'SUCCESS':
         require(receipt['stopped'] == terminal['status'], 'STOP_IDENTITY')
     else:
         try:
-            table(bodies[terminal['attempts'][-1]['response_file']], terminal['api'], terminal['params'])
+            _checked_table(bodies[terminal['attempts'][-1]['response_file']], terminal, parent)
         except (ValueError, TypeError, KeyError, IndexError, OverflowError):
             require(receipt['stopped'] == 'INPUT_SCHEMA_OR_SCOPE_REJECTED', 'STOP_IDENTITY')
         else:
@@ -355,20 +396,146 @@ def verify(root, *, expected_identity=None):
                 require(receipt['stopped'] == 'RAW_CUSTODY_BUDGET'
                     and size + relay.MAX_BODY*2 > MAX_BYTES, 'UNEXPLAINED_MISSING_CALLS')
     expected = {'reference.json', 'receipt.json', 'report.json'} | set(bodies)
+    if parent is not None:
+        expected.add('original.zip')
     require({p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()} == expected, 'FILE_INVENTORY')
-    report = evaluate(ref, plan, calls, bodies)
+    report = evaluate_gaps(parent, plan, calls, bodies) if parent is not None else evaluate(ref, plan, calls, bodies)
     require((root / 'report.json').read_bytes() == (canonical_json(report)+'\n').encode(), 'REPORT_REBUILD')
     return {'status': 'REBUILT_FROM_RETAINED_RELAY_RESPONSES', 'network_calls': 0,
             'logical_requests': len(calls), 'recorded_http_attempts': count,
             'report_sha256': sha256((root/'report.json').read_bytes()).hexdigest()}
 
 
+
+def gap_plan():
+    return [{'api': 'adj_factor', 'params': {'trade_date': day,
+        'fields': FACTOR_FIELDS, 'limit': '6000'}} for day in GAP_DATES]
+
+
+def original_input(raw):
+    """Recover the pinned original; never authenticate it by its own receipt."""
+    from . import current_state as saved
+    require(len(raw) == BASE_BYTES and sha256(raw).hexdigest() == BASE_ZIP_SHA256, 'ORIGINAL_ARCHIVE_PIN')
+    run = {'id': BASE_RUN, 'head_sha': BASE_COMMIT}
+    files = saved.unpack_archive(raw, {'expired': False, 'digest': 'sha256:'+BASE_ZIP_SHA256,
+        'size_in_bytes': BASE_BYTES, 'workflow_run': run}, run)
+    expected = {'GITHUB_REPOSITORY': saved.REPOSITORY, 'GITHUB_REF': 'refs/heads/main',
+        'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_EVENT_NAME': 'workflow_dispatch',
+        'GITHUB_JOB': MODE, 'TRIAL_PURPOSE': MODE, 'GITHUB_SHA': BASE_COMMIT, 'GITHUB_RUN_ID': str(BASE_RUN)}
+    with TemporaryDirectory() as directory:
+        root = Path(directory)
+        for name, body in files.items():
+            path = root / saved.safe_path(name); path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(body)
+        proof = verify(root, expected_identity=expected)
+    receipt = raw_json(files['receipt.json'])
+    require(receipt['stopped'] is None and receipt['logical_requests_started'] == 33, 'ORIGINAL_INCOMPLETE')
+    tables = {i: table(files[call['attempts'][-1]['response_file']], call['api'], call['params'])
+              for i, call in enumerate(receipt['calls'])}
+    return {'zip': raw, 'files': files, 'receipt': receipt, 'reference': receipt['reference'],
+            'tables': tables, 'proof': proof}
+
+
+def _checked_table(raw, item, parent=None):
+    rows = table(raw, item['api'], item['params'])
+    if parent is None:
+        return rows
+    # Different response shapes are not permission to swap source identity.
+    obj = raw_json(raw)
+    declarations = [{k: level[k] for k in ('provider', 'source') if k in level} for level in (obj, obj['data'])]
+    day = item['params']['trade_date']
+    found = {r['ts_code']: r for r in rows}
+    for row in rows:
+        number(row['adj_factor'])
+    for k, code in enumerate(parent['reference']['symbols']):
+        old = {r['trade_date']: r for r in parent['tables'][2+2*k]}
+        if day == GAP_DATES[0]:
+            require(code in found and day in old, 'FACTOR_ANCHOR_MISSING')
+        if code in found and day in old:
+            require(number(found[code]['adj_factor']) == number(old[day]['adj_factor']), 'FACTOR_VALUE_CONFLICT')
+        call = parent['receipt']['calls'][2+2*k]
+        old_obj = raw_json(parent['files'][call['attempts'][-1]['response_file']])
+        old_declarations = [{key: level[key] for key in ('provider', 'source') if key in level}
+                            for level in (old_obj, old_obj['data'])]
+        require(declarations == old_declarations, 'FACTOR_SOURCE_DECLARATION_CHANGED')
+    return rows
+
+
+def evaluate_gaps(parent, plan, calls, bodies):
+    from copy import deepcopy
+    tables = deepcopy(parent['tables'])
+    ref = parent['reference']; gaps = {}; filled = []; dispositions = []
+    for k, code in enumerate(ref['symbols']):
+        prices = {r['trade_date'] for r in tables[1+2*k]}
+        factors = {r['trade_date'] for r in tables[2+2*k]}
+        gaps[code] = sorted(prices-factors)
+    require(set(d for dates in gaps.values() for d in dates) <= set(GAP_DATES[1:]), 'GAP_SCOPE_CHANGED')
+    anchor = False
+    for i, item in enumerate(plan):
+        if i >= len(calls):
+            dispositions.append('NOT_REQUESTED_AFTER_SOURCE_STOP'); continue
+        call = calls[i]
+        if call['status'] != 'SUCCESS':
+            dispositions.append(call['status']); continue
+        try:
+            rows = _checked_table(bodies[call['attempts'][-1]['response_file']], item, parent)
+        except (ValueError, TypeError, KeyError, IndexError, OverflowError):
+            dispositions.append('INPUT_SCHEMA_OR_SCOPE_REJECTED'); continue
+        dispositions.append('TABLE_CHECKED')
+        if i == 0:
+            anchor = True; continue
+        require(anchor, 'FACTOR_ANCHOR_REQUIRED')
+        by_code = {r['ts_code']: (pos, r) for pos, r in enumerate(rows)}
+        day = item['params']['trade_date']
+        for k, code in enumerate(ref['symbols']):
+            if day in gaps[code] and code in by_code:
+                position, row = by_code[code]
+                tables[2+2*k].append(row)
+                filled.append({'symbol': code, 'trade_date': day,
+                    'response_file': call['attempts'][-1]['response_file'], 'row_position': position})
+    report = _evaluate_tables(ref, tables, ['TABLE_CHECKED']*33)
+    original = raw_json(parent['files']['report.json'])
+    report.update(version=GAP_VERSION, request_dispositions=dispositions,
+        factor_repair={'predecessor_run_id': BASE_RUN, 'predecessor_zip_sha256': BASE_ZIP_SHA256,
+            'predecessor_report_sha256': parent['proof']['report_sha256'],
+            'original_qualified_windows': original['qualified_windows'],
+            'missing_factor_keys': gaps, 'target_keys': sum(map(len, gaps.values())),
+            'filled_keys': filled, 'filled_key_count': len(filled), 'anchor_checked': anchor,
+            'scope': 'ONLY_ORIGINAL_PRICE_DATES_MISSING_FACTORS_NO_PRICE_BACKFILL',
+            'vintage_consistency': 'ENDPOINT_OVERLAP_CHECK_NOT_FULL_VINTAGE_CERTIFICATION',
+            'underlying_provider_identity': 'NOT_ESTABLISHED_BY_RELAY_ENDPOINT'})
+    return report
+
+
+def capture_gaps(root, original_raw, *, identity, request=None, now=relay.now):
+    parent = original_input(original_raw)
+    return _capture(root, parent['files']['reference.json'], identity=identity,
+                    request=request, now=now, parent=parent)
+
+
+def verify_gaps(root, *, expected_identity=None):
+    root = Path(root)
+    require(not root.is_symlink() and not any(p.is_symlink() for p in root.parents)
+            and not (root/'original.zip').is_symlink(), 'SOURCE_SYMLINK')
+    parent = original_input((root/'original.zip').read_bytes())
+    return _verify(root, expected_identity=expected_identity, parent=parent)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=('capture', 'verify'))
+    p.add_argument('mode', choices=('capture', 'verify', 'capture-gaps', 'verify-gaps'))
     p.add_argument('--root', type=Path, required=True)
     p.add_argument('--reference', type=Path)
+    p.add_argument('--original', type=Path)
     args = p.parse_args(argv)
+    if args.mode == 'verify-gaps':
+        print(canonical_json(verify_gaps(args.root))); return 0
+    if args.mode == 'capture-gaps':
+        require(args.original is not None, 'ORIGINAL_REQUIRED')
+        receipt, report = capture_gaps(args.root, args.original.read_bytes(), identity=os.environ)
+        print(canonical_json({'logical_requests': receipt['logical_requests_started'],
+            'stopped': receipt['stopped'], 'qualified_windows': report['qualified_windows']}))
+        return 0
     if args.mode == 'verify':
         print(canonical_json(verify(args.root))); return 0
     identity = workflow_identity(os.environ)
