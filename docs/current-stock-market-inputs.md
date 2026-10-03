@@ -59,3 +59,13 @@
 一次capture共享17分钟请求准入预算；开始新请求或延后重试前必须还留等待时间和60秒请求余量，预算不足停止，空尝试明确REQUEST_BUDGET_EXHAUSTED而不伪造HTTP错误。carrier硬20分钟仍保持。已完成输入继续保存/发布，未请求端点保持NOT_REQUESTED_AFTER_SOURCE_STOP；失败不报废其他期限。该准入预算不能中断已在执行的stream，原10/30秒socket超时、响应字节上限和20分钟job超时仍承担执行边界。
 
 新收据声明retry_waits=[30,90]，verify实际核每次前置TEMPORARY_QUEUE、间隔与最多三次，不只是允许第三个数组元素。没有该字段的旧收据仍按两次/30秒合同验证，旧失败不升级。无新增时钟、来源、数据库、provider waterfall、自动Research或投资权限。自然日常执行/消费仍单独验收；临时源故障可以发生，不能承诺以后每次成功。
+
+## 最新失败与已验证可用结果并列（2026-10-03 后继）
+
+真实run37128261519的末日daily三次超时，而此前run37125677265已取得相同市场日的合格输入。正常入口仅显示最新失败，使已保存的可用结果需要手动寻找旧R。现沿用current-state已有的latest_attempt/last_qualified_result分工：最新状态、原件和daily-market-inputs.json保持本次事实；本次没有任何可比期限、正在执行或读回失败时，在原有最近100条原生运行查询内，另选最近一个较早的completed/success日常run，只校验这一候选，不跨损坏/过期候选继续倒找。
+
+原Collector核artifact身份/字节/hash/过期，原producer verify从原响应重建，并要求LIVE_TUSHARE_RELAY和至少一个可比期限。通过后在daily_market_inputs.last_qualified_result保存原运行、市场日、采集完成时间、分母、各期限数、原件与独立文件details/stock/last-qualified-market-inputs.json。README和独立个股summary直接显示链接与旧日期；最新失败仍保持，旧结果不能用于声称更新交易日已有行情。一次读取仍固定一个R，不能混合两次采集的端点、名单或因子。最新已有可用期限时不以旧数据改善通过率。
+
+候选不合格时保留latest结果，记录last_qualified_reading_gap并回滚候选留存；有限查询完整性另记run_query_complete。保存副本是只读历史输入，不是生产恢复、自动Research或投资授权。自然后续运行/分析消费仍按C原责任验收；artifact过期后的历史阅读副本继续按原固定R读取，不升级当前来源资格。
+
+Reuse Decision: THIN_ADAPTER。内部复用current-state.md既有最近尝试/最后合格结果语义、Collector.archive/retain与stock_market_inputs.verify。施工前检索并读[requests-cache 1.3.3 stale_if_error实现](https://requests-cache.readthedocs.io/en/stable/_modules/requests_cache/session.html)和[过期合同](https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html)，并核[GitHub artifact API](https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28)。HTTP缓存可提供旧响应，但本处输入是已保存的run/artifact，并须同时展示最新失败与完整旧报告身份；给来源客户端引入持久缓存会新增存储且不能替代现有原件回放。故不安装/复制外部代码、不新增许可/运行成本，薄适配既有读取消费者即可；退出时同改该reader、正文链接及专属反例，旧报告/失败保留。
