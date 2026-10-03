@@ -268,7 +268,11 @@ def test_existing_publisher_is_only_new_listener_and_source_remains_manual():
     pub = Path('.github/workflows/current-state-read-entry.yml').read_text()
     src = Path('.github/workflows/radar-concept-source.yml').read_text()
     entry = Path('src/decision_kernel/runtime/current_state_delivery_with_odds_watch.py').read_text()
-    assert 'radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]' in pub
+    import yaml
+    parsed = yaml.safe_load(pub)
+    trigger = parsed.get('on', parsed.get(True))
+    assert {'radar-concept-source', 'radar-institutional-source',
+            'radar-newsnow-daily', 'radar-global-market'} <= set(trigger['workflow_run']['workflows'])
     assert '--include-concept-discovery' in pub and '--include-radar-discovery' in pub
     assert 'args.include_concept_discovery or args.include_radar_discovery' in entry
     assert "cron: '50 23 * * *'" in pub and "cron: '10 11 * * *'" in pub

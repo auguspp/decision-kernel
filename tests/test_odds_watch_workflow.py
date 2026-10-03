@@ -43,8 +43,17 @@ def test_watch_summary_is_human_attention_only_and_missing_watch_is_not_quiet():
 def test_fixed_reading_reuses_original_workflow_triggers_and_only_switches_to_watch_aware_reader():
     value = READ_WORKFLOW.read_text(encoding="utf-8")
     # Existing B1 Relay (#612) and public (#614) captures are now both consumed.
-    # Listener order has no priority meaning; no publisher clock/source secrets.
-    assert "workflows: [radar-global-public, sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]" in value
+    # Listener order has no priority meaning; retain existing clocks and no source secrets.
+    import yaml
+    parsed = yaml.safe_load(value)
+    trigger = parsed.get("on", parsed.get(True))
+    assert set(trigger["workflow_run"]["workflows"]) == {
+        "radar-global-public", "sector-radar-shadow", "hithink-stock-dump-trial",
+        "decision-inbox", "kernel-tests", "saved-disclosure-research", "stock-business-research",
+        "radar-smart-money", "radar-industry-breadth", "tdx-concept-snapshot",
+        "radar-concept-detail", "radar-concept-source", "radar-institutional-source",
+        "radar-newsnow-daily", "radar-global-market", "stock-reading-after-sector",
+    }
     assert value.count("    workflows:") == 1
     assert "types: [requested, completed]" in value
     assert "branches: [main]" in value
