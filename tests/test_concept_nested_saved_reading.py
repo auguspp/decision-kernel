@@ -45,7 +45,7 @@ def historical_pair(tmp_path, monkeypatch):
 
 def test_reviewed_primary_maps_are_exact_immutable_projections():
     assert len(compat.PRIMARY_FILES) == len(set(compat.PRIMARY_FILES)) == 13
-    assert primary._implementation() == compat.PRIMARY_AFTER_SECTOR
+    assert primary._implementation() == compat.PRIMARY_AFTER_QUIET_STOCK_INPUTS
     assert {k for k in compat.PRIMARY_FILES
             if compat.PRIMARY_BEFORE_SECTOR[k] != compat.PRIMARY_AFTER_SECTOR[k]} == {
                 'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}

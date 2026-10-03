@@ -4,7 +4,9 @@
 project_handoffs display function in current_state; detail replay never calls it.
 #579 changes only the stock-reference / Sector-audit surfaces whose hashes are
 inherited by the broad implementation fingerprint; concept-detail replay never
-calls those Sector paths. Historical maps remain immutable.
+calls those Sector paths. #728 adds quiet-session capture only; the imported
+_clock/_check_request/_check_safe_json and their dependencies are byte-identical.
+Historical maps remain immutable; only explicit forward pairs are admitted.
 See docs/concept-detail-replay-compatibility-v1.md for the evidence and limits.
 """
 from __future__ import annotations
@@ -59,6 +61,11 @@ POST_STOCK_READING_IMPLEMENTATION = MappingProxyType({
     **POST_DELIVERY_CONTINUITY_IMPLEMENTATION,
     'runtime/current_state.py': 'e7d8478a1364c79db458068e929c22dc59e10e44962dc2e0dd4b01d21df63c81',
 })
+# #728 does not change the three audit helpers used by Concept capture/replay.
+POST_QUIET_STOCK_INPUTS_IMPLEMENTATION = MappingProxyType({
+    **POST_STOCK_READING_IMPLEMENTATION,
+    'runtime/sector_radar_audit.py': '00813ef1d0ed817098c96d72b250c6c36b112a4df55d04bd201f6fa48890c8a6',
+})
 PRIOR_DELIVERY = 'REVIEWED_PRIOR_DELIVERY_IMPLEMENTATION'
 CURRENT = 'CURRENT_IMPLEMENTATION'
 HISTORICAL = 'REVIEWED_HISTORICAL_EQUIVALENCE_478'
@@ -77,24 +84,31 @@ PRIMARY_FILES = (
 )
 PRIMARY_BEFORE_SECTOR = MappingProxyType({k: HISTORICAL_IMPLEMENTATION[k] for k in PRIMARY_FILES})
 PRIMARY_AFTER_SECTOR = MappingProxyType({k: POST_SECTOR_BACKFILL_IMPLEMENTATION[k] for k in PRIMARY_FILES})
+PRIMARY_AFTER_QUIET_STOCK_INPUTS = MappingProxyType({
+    k: POST_QUIET_STOCK_INPUTS_IMPLEMENTATION[k] for k in PRIMARY_FILES})
+PRIMARY_QUIET_EQUIVALENCE = 'REVIEWED_SECTOR_ONLY_EQUIVALENCE_728'
 PRIMARY_SECTOR_EQUIVALENCE = 'REVIEWED_SECTOR_ONLY_EQUIVALENCE_579'
 
 
 def verify_primary(output: Path) -> tuple[dict, str]:
-    """Read the one reviewed primary pair; original producers remain strict."""
+    """Read exact reviewed primary pairs; original producers remain strict."""
     original = capture.original
     receipt = json.loads(capture._read(output, 'capture.json'))
     installed = original._implementation()
     historical = receipt.get('implementation')
     if historical == installed:
         return original.verify(output), CURRENT
-    capture.require(historical == PRIMARY_BEFORE_SECTOR and installed == PRIMARY_AFTER_SECTOR,
-                    'CONCEPT_HISTORICAL_IMPLEMENTATION_REJECTED')
+    capture.require(
+        historical == PRIMARY_BEFORE_SECTOR
+        and installed in (PRIMARY_AFTER_SECTOR, PRIMARY_AFTER_QUIET_STOCK_INPUTS)
+        or historical == PRIMARY_AFTER_SECTOR and installed == PRIMARY_AFTER_QUIET_STOCK_INPUTS,
+        'CONCEPT_HISTORICAL_IMPLEMENTATION_REJECTED')
     bindings = dict(original.verify.__globals__)
     bindings['_implementation'] = lambda: dict(historical)
     verifier = FunctionType(original.verify.__code__, bindings, original.verify.__name__,
                             original.verify.__defaults__, original.verify.__closure__)
-    return verifier(output), PRIMARY_SECTOR_EQUIVALENCE
+    return verifier(output), (PRIMARY_SECTOR_EQUIVALENCE
+                              if historical == PRIMARY_BEFORE_SECTOR else PRIMARY_QUIET_EQUIVALENCE)
 
 
 def _saved_base_loader():
@@ -128,9 +142,12 @@ def verify(output: Path) -> tuple[dict, str]:
         historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION,
                        REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION)
         and installed in (REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION,
-                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION, POST_STOCK_READING_IMPLEMENTATION)
+                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION, POST_STOCK_READING_IMPLEMENTATION,
+                          POST_QUIET_STOCK_INPUTS_IMPLEMENTATION)
         or historical == POST_DELIVERY_CONTINUITY_IMPLEMENTATION
-        and installed == POST_STOCK_READING_IMPLEMENTATION,
+        and installed in (POST_STOCK_READING_IMPLEMENTATION, POST_QUIET_STOCK_INPUTS_IMPLEMENTATION)
+        or historical == POST_STOCK_READING_IMPLEMENTATION
+        and installed == POST_QUIET_STOCK_INPUTS_IMPLEMENTATION,
         'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED',
     )
     # Bind only this invocation's identity expectation, after validating BOTH

@@ -166,3 +166,83 @@ def test_invalid_quiet_configuration_stops_before_any_source(tmp_path, monkeypat
     with pytest.raises(audit.SectorRadarAuditError, match="configuration"):
         original_execute(tmp_path, jump=False)
     assert not (tmp_path / "run").exists()
+
+
+@pytest.mark.parametrize("damage", [None, "unknown"])
+def test_pre_quiet_institutional_receipt_keeps_strict_forward_compatibility(tmp_path, monkeypatch, damage):
+    from test_institutional_radar import run_capture
+    from decision_kernel.runtime import institutional_radar_capture as capture
+    from decision_kernel.runtime import institutional_radar_compat as compat
+    with monkeypatch.context() as m:
+        m.setattr(capture, '_implementation', lambda: dict(compat.PRE_QUIET_STOCK_INPUTS))
+        root, *_ = run_capture(tmp_path)
+        expected = capture.verify(root)
+    before = {p.name: p.read_bytes() for p in root.iterdir()}
+    original = capture._implementation
+    prohibit_network(monkeypatch)
+    with pytest.raises(ValueError):
+        capture.verify(root)
+    if damage:
+        monkeypatch.setattr(capture, '_implementation', lambda: {**compat.INSTALLED, 'extra': '0'*64})
+        with pytest.raises(ValueError, match='UNREVIEWED_INSTITUTIONAL_COMPATIBILITY'):
+            compat.verify(root)
+    else:
+        assert compat.verify(root) == (expected, compat.QUIET_EQUIVALENCE)
+        assert capture._implementation is original
+        with pytest.raises(ValueError):
+            capture.verify(root)
+        monkeypatch.setattr(capture, '_implementation', lambda: dict(compat.HISTORICAL))
+        with pytest.raises(ValueError, match='UNREVIEWED_INSTITUTIONAL_COMPATIBILITY'):
+            compat.verify(root)
+    assert before == {p.name: p.read_bytes() for p in root.iterdir()}
+
+
+@pytest.mark.parametrize("damage", [None, "unknown"])
+def test_pre_quiet_nested_concept_receipts_remain_exact_without_reverse_pairs(tmp_path, monkeypatch, damage):
+    from test_concept_detail_supplement import execute
+    from decision_kernel.runtime import concept_detail_capture as detail
+    from decision_kernel.runtime import concept_radar_capture as primary
+    from decision_kernel.runtime import concept_detail_compat as compat
+    with monkeypatch.context() as m:
+        m.setattr(primary, '_implementation', lambda: dict(compat.PRIMARY_AFTER_SECTOR))
+        m.setattr(detail, '_implementation', lambda: dict(compat.POST_STOCK_READING_IMPLEMENTATION))
+        root, *_ = execute(tmp_path)
+        expected = detail.verify(root)
+        expected_primary = primary.verify(tmp_path / 'original')
+    roots = (root, tmp_path/'original')
+    before = [{p.name: p.read_bytes() for p in r.iterdir()} for r in roots]
+    functions = primary._implementation, detail._implementation, detail.load_base
+    prohibit_network(monkeypatch)
+    with pytest.raises(ValueError):
+        detail.verify(root)
+    with pytest.raises(ValueError):
+        primary.verify(roots[1])
+    if damage:
+        monkeypatch.setattr(primary, '_implementation', lambda: {**compat.PRIMARY_AFTER_QUIET_STOCK_INPUTS, 'extra': '0'*64})
+        with pytest.raises(ValueError, match='CONCEPT_HISTORICAL_IMPLEMENTATION_REJECTED'):
+            compat.verify(root)
+    else:
+        assert compat.verify_primary(roots[1]) == (expected_primary, compat.PRIMARY_QUIET_EQUIVALENCE)
+        assert compat.verify(root) == (expected, compat.PRIOR_DELIVERY)
+        assert functions == (primary._implementation, detail._implementation, detail.load_base)
+        with pytest.raises(ValueError):
+            detail.verify(root)
+        monkeypatch.setattr(detail, '_implementation', lambda: dict(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION))
+        with pytest.raises(ValueError, match='DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED'):
+            compat.verify(root)
+    assert before == [{p.name: p.read_bytes() for p in r.iterdir()} for r in roots]
+
+
+def test_quiet_compatibility_adds_only_exact_audit_hash_and_preserves_prior_maps():
+    from decision_kernel.runtime import concept_detail_compat as concept
+    from decision_kernel.runtime import institutional_radar_compat as institutional
+    pairs = ((concept.POST_STOCK_READING_IMPLEMENTATION, concept.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION),
+             (concept.PRIMARY_AFTER_SECTOR, concept.PRIMARY_AFTER_QUIET_STOCK_INPUTS),
+             (institutional.PRE_QUIET_STOCK_INPUTS, institutional.INSTALLED))
+    for before, after in pairs:
+        assert before.keys() == after.keys()
+        assert {k for k in before if before[k] != after[k]} == {'runtime/sector_radar_audit.py'}
+        assert before['runtime/sector_radar_audit.py'] == '1cdf284024b114b05d6fdfeeed99d4550d2b5d59b8b69676c1962660b5ac1e07'
+        assert after['runtime/sector_radar_audit.py'] == '00813ef1d0ed817098c96d72b250c6c36b112a4df55d04bd201f6fa48890c8a6'
+        with pytest.raises(TypeError):
+            after['extra'] = '0'*64

@@ -90,14 +90,14 @@ def test_additional_compatibility_changes_only_reviewed_non_replay_files():
     assert {k for k in compat.REPLAY_IMPLEMENTATION
             if compat.REPLAY_IMPLEMENTATION[k] != compat.POST_SECTOR_BACKFILL_IMPLEMENTATION[k]} == {
         'runtime/hithink_sector_breadth_http.py', 'runtime/sector_radar_audit.py'}
-    assert capture._implementation() == compat.POST_STOCK_READING_IMPLEMENTATION
+    assert capture._implementation() == compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION
 
 
 def test_legacy_handoff_projection_identity_and_lane_remain_exact():
     from test_tinavi_drg_dip3_attention_dogfood import HANDOFF_PATH
     raw = HANDOFF_PATH.read_bytes()
     h = brief.parse_research_attention_handoff(raw.decode())
-    source = {'path': 'saved/handoff.json', 'sha256': once.sha(raw)}
+    source = {'path': source['path'], 'sha256': once.sha(raw)}
     expected = canonical_hash({'path': source['path'], 'sha256': once.sha(raw),
                                'funnel': h.research_funnel.model_dump(mode='json')})
     result = reading.project_handoffs([{'source': source}], lambda _: (raw, source))
@@ -120,6 +120,7 @@ def test_valid_candidate_is_not_confirmed_delivery_with_unsettled_host_receipt(t
     from test_single_quick_host_delivery import setup_single
     from test_reviewed_question_reading import collector, report
     c = setup_single(tmp_path, monkeypatch)
+    p = c.prefix + 'host-receipt.json'
     assert host.run_question(**c.args)['status'] == 'VALIDATED_QUICK_RESULT'
     saved = c.api.files[c.api.heads[intake.WORK_REF]]
     name = c.prefix + 'host-receipt.json'
