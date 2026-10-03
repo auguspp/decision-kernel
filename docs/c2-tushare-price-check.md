@@ -25,3 +25,15 @@
 REUSE + THIN_ADAPTER：原Relay、canonical、官方日线/因子合同和固定现有观察。实际审查 `waditu/tushare@093856995af0811d3ebbe8c179b8febf4ae706f0` 的 `tushare/pro/client.py`（blob `d8803117d8182edc209071b20b568fe544bbf055`）：直接HTTP POST/token/DataFrame边界不匹配已购HTTPS GET/header Relay，因此不安装/复制SDK、不新增依赖。官方说明：[daily](https://tushare.pro/document/2?doc_id=27)、[adj_factor](https://tushare.pro/document/2?doc_id=28)。第三方Relay与官方直连身份分开，官方积分要求不替代本账号权限证明。
 
 本核验不新建排名器、数据库、provider router或自动研究。退出时去掉独立choice/job、caller及其专属测试/说明，历史来源原件和必要只读解释保持；不要为退出删除原共享Relay或日常来源。工程、正式CI/main、来源实际取得、日常采用、自然使用及Human接受分别以PR/#297回执为准。
+
+## 2026-10-03 后继：缺日差额与已保存比较接入
+
+范围与Human“继续”见[#297/5965083214](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5965083214)。#726原33次来源核验已消费，保留原题目/预算/输出；不重新执行它。复用同一模块、原Relay及同一个股票输入job，新增明确choice `tushare-c2-factor-gaps`。先固定原run37091291428/artifact11261749659的外部身份和ZIP摘要，原始replay通过后才补取。
+
+本差额只请求5张`adj_factor`日期表：9/30先核16名原终点因子完全一致，然后7/7、7/15、8/18、9/18；各limit6000、无分页，最多5逻辑/10HTTP。只将原来有daily而无factor的47个证券/日期键接入；没有价格的日期不补，不将表内其他股票纳入样本。数值/来源声明冲突、形状或权限等明确失败停止后续请求。缺行不前填，不生成假原始响应；原ZIP和新响应各自保留，原`evaluate`与差额共享同一价格资格/计算实现。只验证终点重叠一致性，不冒称完整历史版本、独立底层上游或公司行动明细已认证。没有新源主机、凭据、SDK、依赖、数据库或排名器。
+
+既有`independent_stock_reading`可在相同9/30日历、16名顺序/selection_hash与终点报价全部匹配时，附上`price_comparison`及可读摘要。沿现役Collector验证原生run/artifact/实际ZIP、原始响应及逐窗复算，不覆盖`observations`里的HiThink原覆盖或失败。没有后继成功差额时明确显示原比较及最新差额尝试；后继成功原件损坏时拒绝，绝不倒找更早成功。读取范围限原工作流最近20条及明确固定前驱，保留原API/根/详情字节上限，不够时显示缺口。
+
+这是**日常读取端采用已保存补充资料**，不是已启用日常Tushare采集。新交易日/不同样本不继承本批比较；无Sector活跃日的完整独立分母仍未由此建立。差额任务不触发日常自动补采；原普通publisher仅按已保存原件规则发布，源结果、发布/读回与自然Quick/Brief采用分开验收。原始试点的发布隔离保持。
+
+复用#726已经核对的官方接口及SDK差异：本次重新核doc28的单日因子查询合同，不新增通信层或其他轮子。退出本差额时删除其choice、捕获分支和当前读取接点，保留原两个格式的必要replay、源失败和历史原件。具体工程/来源/发布结果以本批PR与#297后继回执为准，不由本文预签。
