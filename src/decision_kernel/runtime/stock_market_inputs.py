@@ -201,6 +201,7 @@ def build(receipt, bodies):
         require(first['status'] == 'SUCCESS', 'CALENDAR_SOURCE_UNAVAILABLE')
         context = calendar(bodies[first['attempts'][-1]['response_file']], observed_at)
     except (ValueError, KeyError, TypeError, InvalidOperation) as exc:
+        require(len(calls) == 1, 'REQUEST_WITHOUT_CALENDAR')
         return {'version': VERSION, 'source': SOURCE, 'market_session': None,
                 'status': 'CALENDAR_INPUT_UNAVAILABLE_NOT_QUIET', 'error_type': type(exc).__name__,
                 'rows': [], 'columns': COLUMNS, 'cohort_denominator': 0,
@@ -232,12 +233,15 @@ def safe_root(root):
 
 
 def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime.now(timezone.utc).isoformat()):
-    if request is None:
+    live = request is None
+    if live:
+        require(workflow == workflow_identity(workflow), 'WORKFLOW_IDENTITY')
         from .tushare_relay import request
     root = safe_root(root); require(not root.exists(), 'CREATE_ONLY_OUTPUT')
     root.mkdir(parents=True); (root/'raw').mkdir()
     receipt = {'version': VERSION, 'source': SOURCE, 'observed_at': observed_at.isoformat(),
-               'workflow': workflow, 'calls': [], 'files': {}, 'finished_at': None}
+               'workflow': workflow, 'provenance': 'LIVE_TUSHARE_RELAY' if live else 'SYNTHETIC_TEST_ONLY',
+               'calls': [], 'files': {}, 'finished_at': None}
     bodies = {}; total = 0
     def checkpoint():
         (root/'receipt.json').write_bytes(dumps(receipt))
@@ -257,6 +261,8 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
                 raw = attempt.get('raw'); entry['response_file'] = None
                 entry['headers'] = {k: v for k, v in attempt.get('headers', {}).items()
                     if k in ('X-Request-ID', 'X-Cache', 'X-RateLimit-Remaining', 'X-RateLimit-IP-Remaining', 'Retry-After')}
+                credential = os.environ.get('TUSHARE_PROXY_API_KEY', '') if live else ''
+                require(not credential or all(credential not in str(v) for v in entry['headers'].values()), 'CREDENTIAL_REFLECTION')
                 if raw is not None:
                     require(isinstance(raw, bytes) and len(raw) <= MAX_BODY and total+len(raw) <= MAX_TOTAL, 'BYTE_BUDGET')
                     name = f'raw/{len(receipt["calls"]):02}-{len(saved["attempts"])+1}.json'
@@ -283,32 +289,46 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
     receipt['finished_at'] = clock(); checkpoint()
     report = build(receipt, bodies)
     report['observed_at'] = receipt['observed_at']; report['received_through'] = receipt['finished_at']
-    report['source_requests'] = len(receipt['calls'])
+    report['source_requests'] = len(receipt['calls']); report['provenance'] = receipt['provenance']
     raw = dumps(report); require(len(raw) <= MAX_REPORT, 'REPORT_BYTE_BUDGET')
     (root/'report.json').write_bytes(raw); (root/'summary.md').write_text(render(report), encoding='utf-8')
     return report
 
 
 def verify(root, *, expected_workflow=None):
-    root = safe_root(root); receipt = json.loads((root/'receipt.json').read_bytes())
+    root = safe_root(root)
+    for name, limit in (('receipt.json', 256*1024), ('report.json', MAX_REPORT), ('summary.md', 64*1024)):
+        require(safe_root(root/name).stat().st_size <= limit, 'SAVED_FILE_SIZE')
+    receipt = json.loads((root/'receipt.json').read_bytes(), object_pairs_hook=unique)
     require(receipt['version'] == VERSION and receipt['source'] == SOURCE, 'CAPTURE_VERSION')
     require(expected_workflow is None or receipt['workflow'] == expected_workflow, 'WORKFLOW_IDENTITY')
+    require(receipt['provenance'] in ('LIVE_TUSHARE_RELAY', 'SYNTHETIC_TEST_ONLY'), 'CAPTURE_PROVENANCE')
+    if receipt['provenance'] == 'LIVE_TUSHARE_RELAY':
+        require(receipt['workflow'] == workflow_identity(receipt['workflow']), 'WORKFLOW_IDENTITY')
     require(1 <= len(receipt['calls']) <= MAX_CALLS, 'CALL_BUDGET')
     start, finish = (datetime.fromisoformat(receipt[k]) for k in ('observed_at', 'finished_at'))
     require(start.tzinfo is not None and finish.tzinfo is not None and start <= finish <= start+timedelta(minutes=20), 'CAPTURE_CLOCK')
     bodies = {}; names = set(); total = 0; last = start
+    stopped = False
     for call in receipt['calls']:
+        require(not stopped, 'REQUEST_AFTER_SOURCE_STOP')
+        stopped = call['status'] in STOP
         require(len(call['attempts']) <= 2 and call['status'] != 'REQUEST_STARTED', 'INCOMPLETE_ATTEMPT')
         for i, attempt in enumerate(call['attempts'], 1):
             require(attempt['attempt'] == i, 'ATTEMPT_ORDER')
             asked, got = (datetime.fromisoformat(attempt[k]) for k in ('requested_at', 'received_at'))
             require(asked.tzinfo is not None and got.tzinfo is not None and last <= asked <= got <= finish, 'REQUEST_CLOCK')
+            if i == 2:
+                require(call['attempts'][0]['classification'] == 'TEMPORARY_QUEUE'
+                        and asked >= last + timedelta(seconds=30), 'RETRY_CONTRACT')
             last = got
             name = attempt['response_file']
             if name is None:
                 continue
             require(re.fullmatch(r'raw/[0-9]{2}-[12]\.json', name) is not None and name not in names, 'RAW_PATH')
-            names.add(name); path = safe_root(root/name); raw = path.read_bytes(); total += len(raw)
+            names.add(name); path = safe_root(root/name)
+            require(path.stat().st_size <= MAX_BODY, 'RAW_FILE_SIZE')
+            raw = path.read_bytes(); total += len(raw)
             require(0 < len(raw) <= MAX_BODY and total <= MAX_TOTAL and receipt['files'][name] ==
                     {'bytes': len(raw), 'sha256': sha256(raw).hexdigest()}, 'RAW_IDENTITY')
             bodies[name] = raw
@@ -318,7 +338,7 @@ def verify(root, *, expected_workflow=None):
                     'SUCCESS_BODY_REQUIRED')
     require(names == set(receipt['files']) == {p.relative_to(root).as_posix() for p in (root/'raw').iterdir()}, 'RAW_INVENTORY')
     report = build(receipt, bodies)
-    report.update(observed_at=receipt['observed_at'], received_through=receipt['finished_at'], source_requests=len(receipt['calls']))
+    report.update(observed_at=receipt['observed_at'], received_through=receipt['finished_at'], source_requests=len(receipt['calls']), provenance=receipt['provenance'])
     require((root/'report.json').read_bytes() == dumps(report) and
             (root/'summary.md').read_text(encoding='utf-8') == render(report), 'REPLAY_DIFFERS')
     return report
@@ -332,6 +352,11 @@ def render(report):
         f"5／20／60交易日区间可比：{counts['5']}／{counts['20']}／{counts['60']}（各分母 {total}）。",
         '来源：现有第三方 Tushare Relay。仅比较准确日期的两端价格与因子；中间逐日数据不作前提。',
         '缺历史或缺因子只影响对应期限；不补零、不推断停牌或上市日，不替代经营研究或投资决定。', '']
+    warnings = [key for key, info in report['source_row_coverage'].items()
+                if info['status'] != 'SOURCE_ROWS_READ' or info.get('possibly_truncated')
+                or info.get('rejected_row_positions') or info.get('duplicate_symbols')]
+    if warnings:
+        lines += ['来源覆盖缺口：' + '、'.join(warnings) + '。完整范围与行级处置见正文数据表。', '']
     for i, n in enumerate(WINDOWS):
         comparable = [r for r in report['rows'] if r[5+i] == 0]
         ordered = sorted(comparable, key=lambda r: (Decimal(r[2+i]), r[0]))

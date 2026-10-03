@@ -51,6 +51,7 @@ def read_current(collector, baseline):
                 path = root/model.safe_path(name); path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(raw)
             report = inputs.verify(root, expected_workflow=expected)
+        model.check(report['provenance'] == 'LIVE_TUSHARE_RELAY', 'synthetic data is not live stock input')
         raw = inputs.dumps(report)
         model.check(len(raw) <= inputs.MAX_REPORT, 'daily stock detail byte bound')
         model.check(sum(map(len, collector.files.values())) + len(raw) + 24*1024 <= delivery.MAX_RETAINED_OUTPUT,
@@ -63,7 +64,7 @@ def read_current(collector, baseline):
             acquisition='CURRENT_CALENDAR_DATED_CROSS_SECTIONS_WITHOUT_SECTOR_DEPENDENCY',
             publication_verification='REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
             investment_authority='NONE')
-    except (ValueError, KeyError, TypeError, AttributeError, OSError, RuntimeError, BadZipFile) as exc:
+    except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, BadZipFile) as exc:
         collector.files, collector.archive_cache = old_files, old_cache
         result.update(status='DAILY_INPUT_READING_GAP_NOT_QUIET', error_type=type(exc).__name__,
             summary='本次日常个股输入未能读回；不把旧结果或空白当成当前市场无变化。')
