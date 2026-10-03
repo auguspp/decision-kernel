@@ -151,7 +151,12 @@ def request(api: str, params: dict[str, Any], *, key: str | None = None,
                                  "business_code": body.get("code"), "business_error": body.get("error"),
                                  "business_msg": body.get("msg") or body.get("message")})
             except RelayError as exc:
-                attempts.append({**result, "attempt": attempt_no, "classification": "MALFORMED_RESPONSE",
+                # Gateway/denial status still applies when the server sends no
+                # JSON. Keep the exact body and parse error; never infer success.
+                status = result["http_status"]
+                classification = (classify(status, {}) if status in {400, 401, 403, 429, 502, 503, 504}
+                                  else "MALFORMED_RESPONSE")
+                attempts.append({**result, "attempt": attempt_no, "classification": classification,
                                  "business_code": None, "business_error": str(exc),
                                  "business_msg": None})
         except requests.Timeout:

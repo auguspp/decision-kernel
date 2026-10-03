@@ -32,6 +32,12 @@
 
 同一准确末日的证券若返回冲突报价，该证券仍计入分母，价格和依赖它的区间明确不可比；重复原行和来源处置保留。不从冲突报价中任选一个，也不通过删除证券使通过比例变好。这些是合成反例验证，不是新增真实行情或生产验收。
 
+## 实际网关故障后的合同修正
+
+2026-10-03真实运行37116525057的trade_cal返回HTTP502和零字节响应。原客户端先解JSON，误将已有临时网关状态归为格式错误；原capture保存了空响应，verify却以原件必须非空拒绝它。后继修正只让非JSON的502/503/504沿原HTTP状态执行原有最多两次、间隔30秒的有限重试；401/403/429仍不重试，HTTP200坏JSON/空体仍不合格，有效JSON内的来源禁用等业务状态保持原优先级。不会因无法解析响应就推断成功，也不改变连接错误的重试范围。
+
+失败原件允许精确零字节并核哈希/库存，SUCCESS仍必须有非空HTTP200成功响应且通过实际字段/日期检查。原502、尝试及历史失败继续保留；修正不伪造已拿到日历或价格。复用现有Requests客户端和HTTP状态合同，不引入新客户端/依赖；[Requests官方说明](https://requests.readthedocs.io/en/stable/user/quickstart/#json-response-content)明确JSON可解析性与HTTP成功是两件事。源运行、原件回放、正常发布与实际分析使用仍分别验收。
+
 ## 复用依据与退出
 
 已核内部 `tushare_relay.py`、`tushare_c2_price_check.py`、`independent_stock_reading.py`、`hithink_independent_capture.py`、FTShare历史比较与CNEquity桥接。同步检查CNEquity官方仓库/文档：其增量/Parquet/PIT功能可复用，但本用途不需要先部署整套lake。接口字段参照Tushare官方文档26（trade_cal）、27（daily）、28（adj_factor）；实际服务仍明确是第三方Relay，不用官方文档替代实际返回资格。

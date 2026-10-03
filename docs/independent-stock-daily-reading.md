@@ -1,6 +1,20 @@
-# 独立个股观察：原日常发布接入，不冒充无条件独立采集
+# 独立个股观察：当前日常价格输入与历史观察分开读取
 
 2026-10-02。范围与Human本轮授权见[#297/5953022959](https://github.com/auguspp/decision-kernel/issues/297#issuecomment-5953022959)，接续5952434025。当前C2四项验收和固定五日窗仍由[c2-five-session-inputs](c2-five-session-inputs.md)持有。本文件不自签实现、main、发布、自然使用或投资效果。
+
+## 2026-10-03 当前日常价格输入后继
+
+[#730](https://github.com/auguspp/decision-kernel/pull/730)已将现有Tushare Relay的日历和日期横截面接入原日常时钟、正常publisher及本独立读取入口。当前采集合同见[current-stock-market-inputs](current-stock-market-inputs.md)，实际来源成功/失败与固定R仍按#297最新回执核定。下文的Sector取得方式、16名样本及“无新flag/额外GitHub读取”是历史观察支路的说明，不再描述新增的当前价格支路；历史原件和用途不变。
+
+同一R先按根`research.independent_stock_observations`描述符核bytes/SHA256/git_blob取得独立详情。若`preferred_current_input=daily_market_inputs`，优先核`daily_market_inputs.status/latest_attempt/market_session`，沿其`file.read_path`在同R读取`details/stock/daily-market-inputs.json`并核描述符。缺file、pending或reading gap保持具体缺口，不能改读旧16名表冒充本次扫描。
+
+当前价格表的`columns/rows`定义证券、末日原始收盘价、5/20/60区间变化和各自状态码；`status_codes`解释不可比原因。只使用对应期限状态为COMPARABLE的值；变化为小数比例，展示百分比时乘100。分母来自`cohort_denominator`，各期限可比数来自`qualified_windows`，与完整rows自行对账；摘要上下端样本不是全部分母。缺历史证券仍保留，60日不可比不阻止合格5/20日使用；不以中间逐日OHLCV、另一供应商逐字段相等或CNEquity部署作前提。
+
+先核`source_row_coverage`中实际返回数、截断提示、重复身份、错日/拒绝行及来源失败。末日daily取得失败时，报告分母0表示身份集尚未建立，不能解释为市场证券数0或quiet。所有端点时钟、来源身份和缺因子保持原记录，不补零、不默认因子为1、不推断停牌或上市原因。即使有有效rows，来源覆盖仍不自动等于全部上市证券。
+
+这张表可直接用于按证券查询最近完成交易日价格、合格区间表现及本次返回证券中的横向比较。它不是完整逐日走势、最大回撤、总回报或因果领先证明，也不提供公司经营/估值结论。需要业务解释时继续消费现有HiThink/FTShare等合格公司/产业材料；价格缺口只限制依赖它的比较，不否定独立有效的公司证据，也不要求所有来源先统一完美。
+
+旧`observations/price_comparison`和`historical_sample_status/acquisition`按原市场日保留，作为历史观察使用；不能将其固定股票范围、日期或资格自动施加到当前全表。正常当前采集不依赖Sector成功。Quick/Brief消费按[原handoff入口](quick-brief-handoff-v2.md#新独立读取面)接续，不能把文档/配置同步冒充已发生的自然采用。
 
 ## 实际接点
 

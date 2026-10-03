@@ -83,3 +83,27 @@ def test_rows_preserve_relay_fields_without_inventing_source():
 def test_duplicate_json_keys_rejected():
     with pytest.raises(ValueError):
         r.decode(b'{"code":0,"code":1}')
+
+@pytest.mark.parametrize("status,raw", [(502,b""),(503,b"<html>gateway</html>"),(504,b"")])
+def test_non_json_gateway_keeps_http_failure_and_existing_bounded_retry(status, raw):
+    calls=[]; sleeps=[]
+    def clock(): return "2026-10-03T10:00:00+00:00"
+    def transport(api,params,key,clock):
+        calls.append(1)
+        return transport_result(status,raw,clock)
+    out=r.request("trade_cal",{"exchange":"SSE"},key="abcdefgh",
+                  transport=transport,sleep=sleeps.append,clock=clock)
+    assert out["status"]=="TEMPORARY_QUEUE" and len(calls)==2 and sleeps==[30]
+    assert all(a["raw"]==raw and a["http_status"]==status for a in out["attempts"])
+    assert r.successful_body(out) is None
+
+@pytest.mark.parametrize("status,expected", [(401,"AUTH_OR_ENTITLEMENT"),
+    (403,"AUTH_OR_ENTITLEMENT"),(429,"RATE_LIMIT"),(400,"INVALID_PARAMS"),
+    (200,"MALFORMED_RESPONSE")])
+def test_empty_denial_or_invalid_success_never_retries_or_becomes_success(status, expected):
+    def clock(): return "2026-10-03T10:00:00+00:00"
+    out=r.request("daily",{"trade_date":"20260930"},key="abcdefgh",
+        transport=lambda api,params,key,clock:transport_result(status,b"",clock),
+        sleep=lambda _:pytest.fail("no retry"),clock=clock)
+    assert out["status"]==expected and len(out["attempts"])==1
+    assert out["attempts"][0]["raw"]==b"" and r.successful_body(out) is None

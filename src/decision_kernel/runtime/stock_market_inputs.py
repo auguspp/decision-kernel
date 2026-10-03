@@ -336,12 +336,13 @@ def verify(root, *, expected_workflow=None):
             names.add(name); path = safe_root(root/name)
             require(path.stat().st_size <= MAX_BODY, 'RAW_FILE_SIZE')
             raw = path.read_bytes(); total += len(raw)
-            require(0 < len(raw) <= MAX_BODY and total <= MAX_TOTAL and receipt['files'][name] ==
+            require(len(raw) <= MAX_BODY and total <= MAX_TOTAL and receipt['files'][name] ==
                     {'bytes': len(raw), 'sha256': sha256(raw).hexdigest()}, 'RAW_IDENTITY')
             bodies[name] = raw
         if call['status'] == 'SUCCESS':
             require(call['attempts'] and call['attempts'][-1]['classification'] == 'SUCCESS'
-                    and call['attempts'][-1]['http_status'] == 200 and call['attempts'][-1]['response_file'] in bodies,
+                    and call['attempts'][-1]['http_status'] == 200 and call['attempts'][-1]['response_file'] in bodies
+                    and len(bodies[call['attempts'][-1]['response_file']]) > 0,
                     'SUCCESS_BODY_REQUIRED')
     require(names == set(receipt['files']) == {p.relative_to(root).as_posix() for p in (root/'raw').iterdir()}, 'RAW_INVENTORY')
     report = build(receipt, bodies)
