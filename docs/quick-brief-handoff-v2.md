@@ -28,7 +28,13 @@ KEEP：#575为canonical；固定两个Library目录为非canonical交接，真�
 
 ## 新独立读取面
 
-同R若有`research.independent_stock_observations`描述符，Quick/Brief沿其实际read_path、SHA256/bytes读取。先核status/summary/gaps、observations.coverage及selected_observations，再按价值读inventory。先入样后补历史，不用原Sector入选或已有研究作候选门槛；该面无历史不代表原价格条件被否决。它只增加已保存输入的实际消费，不授权Quick/Brief发起K3或补采。
+同R若有`research.independent_stock_observations`描述符，Quick/Brief沿其实际read_path核SHA256/bytes/git_blob取得正文。#730之后若`preferred_current_input=daily_market_inputs`，先核该对象的status、latest_attempt、market_session，再沿其file描述符在同R取得`details/stock/daily-market-inputs.json`。按columns解释完整rows，核cohort_denominator、qualified_windows、status_codes及source_row_coverage；不能只读摘要上下端样本，也不能继续把旧16名表当作本次全市场输入。
+
+分析按用途使用：查询证券的实际末日close；用各期限COMPARABLE值进行5/20/60区间与横向比较；保留短历史、错日、重复、截断和缺因子所影响的具体范围。缺60日不阻断合格5/20日；末日daily失败导致分母未建立时明确说明不可计算，不解释为零变化，不补0或假设因子1。不要求跨供应商逐字段一致或全部中间日完整才使用合格端点。来源口径、市场日与实际取得时钟保持，区间表现不升级成因果领先、完整走势、总回报或投资结论。
+
+现有`observations/price_comparison`继续按historical_sample_status和原日期读作历史观察；只有不存在当前支路时，才按旧入口核status/summary/gaps、observations.coverage、selected_observations并按价值读inventory，仍不冒充今天。当前输入失败不能通过旧样本替代掩盖。具体字段和来源职责见[独立读取说明](independent-stock-daily-reading.md)。
+
+价格结果为已有分析增加可核输入，业务解释仍用现有合格公司/产业材料；不用Sector入选、已有研究或某个其他来源部署作候选前提，也不因价格局部缺口整体否定有效公司证据。这里只消费保存结果，不授权Quick/Brief发起K3、补采、重复研究或扩大原Brief职责；自然任务实际采用仍须由其正文举证。
 
 ## 验收和退出
 
