@@ -13,7 +13,7 @@ on:
       trial-purpose:
         description: Explicit isolated study; never updates Sector state
         type: choice
-        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading, stock-independent-observations]
+        options: [stock-dump, theme-probe, theme-source, native-feed-acceptance, stock-reading, stock-independent-observations, tushare-c2-price-check]
         default: stock-dump
       independent-closure-date:
         description: 'Independent K3 only: explicit reviewed Oct1 closure capture, anchored Sep30; never quiet active-day proof'
@@ -73,6 +73,100 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  tushare-c2-price-check:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.event_name == 'workflow_dispatch' &&
+      inputs.trial-purpose == 'tushare-c2-price-check' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing Relay dependencies
+        run: python -m pip install -e '.[feeds]'
+      - name: Bind exact main CI, unused source check and retained cohort before credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
+          STOCK_MARKET_RUN_ID: ${{ inputs.stock-market-run-id }}
+          STOCK_DISCOVERY_PAGE: ${{ inputs.stock-discovery-page }}
+          RECOVERY_KEY: ${{ inputs.recovery-key }}
+          CLOSURE_DATE: ${{ inputs.independent-closure-date }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, subprocess
+          from pathlib import Path
+          from decision_kernel.runtime.tushare_c2_price_check import (
+              workflow_identity, one_shot_scope, reference, READING, DETAIL)
+          env=os.environ
+          workflow_identity(env)
+          assert not any(env[k] for k in ('STOCK_MARKET_RUN_ID','STOCK_DISCOVERY_PAGE','RECOVERY_KEY'))
+          assert env['CLOSURE_DATE']=='none'
+          repo=env['GITHUB_REPOSITORY']
+          def get(path):
+              return json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/{path}']))
+          sha=env['GITHUB_SHA']
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==sha
+          assert get('git/ref/heads/main')['object']['sha']==sha
+          runs=get(f'actions/workflows/ci.yml/runs?head_sha={sha}&event=push&per_page=20')['workflow_runs']
+          assert runs
+          ci=max(runs,key=lambda r:(r['created_at'],r['id']))
+          assert ci['head_sha']==sha and ci['head_branch']=='main' and ci['event']=='push'
+          assert ci['path']=='.github/workflows/ci.yml' and ci['run_attempt']==1
+          assert ci['status']=='completed' and ci['conclusion']=='success'
+          assert ci['repository']['full_name']==ci['head_repository']['full_name']==repo
+          rows=[]
+          for page in range(1,11):
+              data=get(f'actions/workflows/hithink-stock-dump-trial.yml/runs?per_page=100&page={page}')
+              rows.extend(data['workflow_runs'])
+              if len(rows)>=data['total_count']:break
+          one_shot_scope(rows,data['total_count'],int(env['GITHUB_RUN_ID']))
+          source=get(f'contents/{DETAIL}?ref={READING}')
+          assert source['encoding']=='base64'
+          raw=base64.b64decode(source['content'],validate=False)
+          reference(raw)
+          Path(env['RUNNER_TEMP'],'tushare-c2-reference.json').write_bytes(raw)
+          PY
+      - name: Check the retained cohort with the existing Relay client once
+        id: relay-capture
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+          TRIAL_PURPOSE: ${{ inputs.trial-purpose }}
+        run: |
+          python -m decision_kernel.runtime.tushare_c2_price_check capture \
+            --reference "$RUNNER_TEMP/tushare-c2-reference.json" \
+            --root "$RUNNER_TEMP/tushare-c2-price-check"
+      - name: Replay actual responses without source credentials
+        id: relay-verify
+        if: always() && (steps.relay-capture.outcome == 'success' || steps.relay-capture.outcome == 'failure')
+        run: |
+          python -m decision_kernel.runtime.tushare_c2_price_check verify \
+            --root "$RUNNER_TEMP/tushare-c2-price-check"
+      - name: Retain the actual source attempt including failure
+        if: always() && (steps.relay-capture.outcome == 'success' || steps.relay-capture.outcome == 'failure')
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: tushare-c2-price-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tushare-c2-price-check/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Keep source availability distinct from engineering completion
+        if: always()
+        run: |
+          echo 'C2 Relay source check only: at most 33 logical calls / 66 HTTP attempts.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No daily activation, full-market historical database, action-detail or total-return certification.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Inspect receipt/report for source failure and each of the 16 retained names; workflow success is not C2 acceptance.' >> "$GITHUB_STEP_SUMMARY"
+
   inspect:
     if: github.event_name == 'workflow_dispatch' && inputs.trial-purpose == 'stock-dump'
     runs-on: ubuntu-latest

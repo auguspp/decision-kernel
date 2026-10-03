@@ -19,6 +19,7 @@ WORKFLOW = "stock-reading-after-sector.yml"
 SECTOR = "sector-radar-shadow.yml"
 STOCK = "hithink-stock-dump-trial.yml"
 INDEPENDENT_STOCK = "stock-independent-observations"
+ISOLATED_STOCK = (INDEPENDENT_STOCK, "tushare-c2-price-check")
 INDEPENDENT_NO_RECOVERY = "INDEPENDENT_STOCK_CAPTURE_NO_RECOVERY"
 ISSUE = 581
 MAX_SOURCE_ATTEMPTS = 3
@@ -157,7 +158,7 @@ def independent_stock_upstream(api):
     check(bool(path), "UPSTREAM_WORKFLOW_PATH_REQUIRED")
     if path != f".github/workflows/{STOCK}":
         return False
-    if os.environ.get("UPSTREAM_DISPLAY_TITLE", "").startswith(INDEPENDENT_STOCK + " |"):
+    if os.environ.get("UPSTREAM_DISPLAY_TITLE", "").startswith(tuple(name + " |" for name in ISOLATED_STOCK)):
         return True
     run_id = os.environ.get("UPSTREAM_RUN_ID", "")
     attempt = os.environ.get("UPSTREAM_RUN_ATTEMPT", "")
@@ -181,7 +182,7 @@ def independent_stock_upstream(api):
                   "success", "failure", "cancelled", "skipped", "neutral", "timed_out",
                   "action_required", "stale", "startup_failure"}, "UPSTREAM_STOCK_JOB_INVALID")
         names.add(name)
-        if name == INDEPENDENT_STOCK and job["conclusion"] != "skipped":
+        if name in ISOLATED_STOCK and job["conclusion"] != "skipped":
             independent = True
     return independent
 

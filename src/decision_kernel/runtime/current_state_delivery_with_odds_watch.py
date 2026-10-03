@@ -56,6 +56,10 @@ def skip_diagnostic_trigger(api, env) -> bool:
     path = run.get("path")
     model.check(isinstance(path, str) and path.startswith(".github/workflows/") and
                 path.endswith(".yml"), "publication native workflow path unavailable")
+    from .tushare_c2_price_check import is_source_check_run
+    if is_source_check_run(run):
+        print("READ_ENTRY_PUBLICATION_SKIPPED: TUSHARE_C2_SOURCE_CHECK")
+        return True
     if path != ".github/workflows/radar-smart-money.yml":
         return False
 
