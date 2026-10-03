@@ -258,3 +258,241 @@ def test_isolated_purpose_and_existing_recovery_short_circuit(monkeypatch):
     assert 'one_shot_scope(rows' in job and 'steps.relay-capture.outcome' in job
     assert c.TITLE in (root/'.github/workflows/current-state-read-entry.yml').read_text()
     assert "tushare-c2-price-check |" in (root/'.github/workflows/stock-reading-after-sector.yml').read_text()
+
+
+@pytest.fixture
+def gap_original(tmp_path, monkeypatch):
+    """All prices/factors and clocks are synthetic; no provider or secret access."""
+    import io, zipfile
+    days = [(datetime(2026, 1, 1)+timedelta(days=i)).date().isoformat() for i in range(61)]
+    codes = [f'{i:06d}.SZ' for i in range(1, 17)]
+    value = {'observations': {'selected_observations': [{'thscode': x} for x in codes],
+        'inventory': {'columns': ['thscode', 'last_price'], 'rows': [[x, '20'] for x in codes]},
+        'selection': {'selection_hash': 'a'*64}, 'context': {'sessions': days}}}
+    raw = (canonical_json(value)+'\n').encode()
+    monkeypatch.setattr(c, 'DETAIL_SHA256', sha256(raw).hexdigest())
+    dates = tuple(days[i].replace('-', '') for i in (-1, 0, 6, 30, 50))
+    monkeypatch.setattr(c, 'GAP_DATES', dates)
+    ref = c.reference(raw); tick = Tick()
+    def request(api, params):
+        obj = payload(api, params, ref)
+        if api == 'adj_factor':
+            obj['data']['items'] = [r for r in obj['data']['items'] if r[1] not in dates[1:]]
+        body = json.dumps(obj).encode()
+        attempt = {'attempt': 1, 'http_status': 200, 'raw': body, 'classification': 'SUCCESS',
+                   'requested_at': tick(), 'received_at': tick(), 'headers': {}}
+        return {'api': api, 'params': params, 'attempts': [attempt], 'status': 'SUCCESS'}
+    original_identity = {**identity(), 'GITHUB_SHA': c.BASE_COMMIT, 'GITHUB_RUN_ID': str(c.BASE_RUN)}
+    original = tmp_path/'original'; c.capture(original, raw, identity=original_identity, request=request, now=tick)
+    out = io.BytesIO()
+    with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+        for f in original.rglob('*'):
+            if f.is_file(): z.writestr(f.relative_to(original).as_posix(), f.read_bytes())
+    archive = out.getvalue()
+    monkeypatch.setattr(c, 'BASE_BYTES', len(archive))
+    monkeypatch.setattr(c, 'BASE_ZIP_SHA256', sha256(archive).hexdigest())
+    return archive, ref, tick
+
+
+def gap_attempt(tmp_path, sample, *, mutate=None, fail=None, retry=False):
+    archive, ref, tick = sample; seen = []
+    def request(api, params):
+        i = len(seen); seen.append((api, params))
+        obj = payload(api, params, ref)
+        if mutate: mutate(i, obj)
+        http = 200
+        if i == fail:
+            obj = {'error': 'forbidden', 'code': 403}; http = 403
+        body = json.dumps(obj).encode()
+        attempts = []
+        if i == 0 and retry:
+            attempts.append({'attempt': 1, 'http_status': 503, 'raw': b'{"error":"upstream_pool_exhausted"}',
+                'classification': 'TEMPORARY_QUEUE', 'requested_at': tick(), 'received_at': tick(), 'headers': {}})
+            tick.value += timedelta(seconds=30)
+        status = c.relay.classify(http, obj)
+        attempts.append({'attempt': len(attempts)+1, 'http_status': http, 'raw': body,
+            'classification': status, 'requested_at': tick(), 'received_at': tick(), 'headers': {}})
+        return {'api': api, 'params': params, 'attempts': attempts, 'status': status}
+    env = {**identity(), 'TRIAL_PURPOSE': c.GAP_MODE}
+    root = tmp_path/'gaps'
+    receipt, report = c.capture_gaps(root, archive, identity=env, request=request, now=tick)
+    return root, receipt, report, seen, env
+
+
+def test_five_date_gap_requests_reuse_original_and_replay(tmp_path, gap_original):
+    root, receipt, report, calls, env = gap_attempt(tmp_path, gap_original)
+    assert len(calls) == 5 and all(api == 'adj_factor' and 'ts_code' not in p for api, p in calls)
+    assert receipt['max_logical_requests'] == 5 and receipt['max_http_attempts'] == 10
+    assert report['qualified_windows'] == {'5': 16, '20': 16, '60': 16}
+    assert report['factor_repair']['filled_key_count'] == report['factor_repair']['target_keys'] == 64
+    assert report['factor_repair']['original_qualified_windows'] == {'5': 16, '20': 0, '60': 0}
+    before = (root/'original.zip').read_bytes()
+    assert c.verify_gaps(root, expected_identity=env)['network_calls'] == 0
+    assert (root/'original.zip').read_bytes() == before == gap_original[0]
+    with pytest.raises(ValueError): c.verify(root)
+
+
+@pytest.mark.parametrize('bad', ['anchor-missing', 'factor-conflict', 'root-source', 'data-source',
+    'bad-date', 'bad-factor', 'duplicate', 'pagination'])
+def test_gap_conflict_stops_before_remaining_dates(tmp_path, gap_original, bad):
+    def change(i, obj):
+        if i != 0: return
+        if bad == 'anchor-missing': obj['data']['items'].pop()
+        if bad == 'factor-conflict': obj['data']['items'][0][-1] = '2'
+        if bad == 'root-source': obj['source'] = 'different'
+        if bad == 'data-source': obj['data']['source'] = 'different'
+        if bad == 'bad-date': obj['data']['items'][0][1] = '20270101'
+        if bad == 'bad-factor': obj['data']['items'][0][-1] = '0'
+        if bad == 'duplicate': obj['data']['items'].append(obj['data']['items'][0])
+        if bad == 'pagination': obj['data']['has_more'] = True
+    root, receipt, report, calls, env = gap_attempt(tmp_path, gap_original, mutate=change)
+    assert len(calls) == 1 and receipt['stopped'] == 'INPUT_SCHEMA_OR_SCOPE_REJECTED'
+    assert report['factor_repair']['filled_key_count'] == 0
+    assert report['qualified_windows'] == {'5': 16, '20': 0, '60': 0}
+    c.verify_gaps(root, expected_identity=env)
+
+
+def test_gap_denial_keeps_all_original_prices_and_full_denominator(tmp_path, gap_original):
+    root, receipt, report, calls, env = gap_attempt(tmp_path, gap_original, fail=1)
+    assert len(calls) == 2 and receipt['stopped'] == 'AUTH_OR_ENTITLEMENT'
+    assert report['cohort_denominator'] == 16 and report['factor_repair']['filled_key_count'] == 0
+    assert report['request_dispositions'][2:] == ['NOT_REQUESTED_AFTER_SOURCE_STOP']*3
+    c.verify_gaps(root, expected_identity=env)
+
+
+def test_missing_factor_row_is_not_forward_filled(tmp_path, gap_original):
+    def change(i, obj):
+        if i == 1: obj['data']['items'].pop()
+    root, _, report, _, _ = gap_attempt(tmp_path, gap_original, mutate=change)
+    assert report['qualified_windows'] == {'5': 16, '20': 16, '60': 15}
+    assert report['factor_repair']['filled_key_count'] == 63
+    c.verify_gaps(root)
+
+
+def test_gap_retry_keeps_original_queue_contract(tmp_path, gap_original):
+    root, receipt, _, _, _ = gap_attempt(tmp_path, gap_original, retry=True)
+    assert receipt['recorded_http_attempts'] == 6
+    c.verify_gaps(root)
+
+
+def test_gap_tampered_original_or_external_identity_rejected(tmp_path, gap_original):
+    root, _, _, _, env = gap_attempt(tmp_path, gap_original)
+    with pytest.raises(ValueError, match='EXTERNAL_EXECUTION_IDENTITY'):
+        c.verify_gaps(root, expected_identity={**env, 'GITHUB_RUN_ID': '2345'})
+    (root/'original.zip').write_bytes(gap_original[0]+b'x')
+    with pytest.raises(ValueError, match='ORIGINAL_ARCHIVE_PIN'): c.verify_gaps(root)
+
+
+def test_original_authorization_not_reopened_by_gap_mode():
+    original = {'id': 1, 'display_title': c.TITLE, 'run_attempt': 1, 'event': 'workflow_dispatch', 'head_branch': 'main'}
+    gap = {**original, 'id': 2, 'display_title': c.GAP_TITLE}
+    c.one_shot_scope([original, gap], 2, 2, mode=c.GAP_MODE)
+    with pytest.raises(ValueError): c.one_shot_scope([original, gap], 2, 2)
+    with pytest.raises(ValueError): c.one_shot_scope([original, gap, {**gap, 'id': 3}], 3, 3, mode=c.GAP_MODE)
+
+
+def saved_consumer_fixture(tmp_path, gap_original, *, gap=None, corrupt=False):
+    import io, zipfile
+    from types import SimpleNamespace
+    from decision_kernel.runtime import current_state as model
+    from decision_kernel.runtime import independent_stock_reading as reader
+    original, ref, _ = gap_original
+    values = {c.BASE_RUN: original}; fetched = []
+    def run(rid, mode, status='success'):
+        return {'id': rid, 'head_sha': c.BASE_COMMIT if rid == c.BASE_RUN else 'b'*40,
+            'head_branch': 'main', 'run_attempt': 1, 'event': 'workflow_dispatch',
+            'status': 'completed', 'conclusion': status,
+            'path': '.github/workflows/hithink-stock-dump-trial.yml',
+            'display_title': c.TITLE if mode == c.MODE else c.GAP_TITLE,
+            'created_at': '2026-10-03T01:00:00Z',
+            'repository': {'full_name': model.REPOSITORY}, 'head_repository': {'full_name': model.REPOSITORY}}
+    base = run(c.BASE_RUN, c.MODE); rows = [base]
+    if gap is not None:
+        directory, _, _, _, _ = gap
+        out = io.BytesIO()
+        with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+            for f in directory.rglob('*'):
+                if f.is_file():
+                    raw = f.read_bytes()
+                    if corrupt and f.name == 'report.json': raw += b' '
+                    z.writestr(f.relative_to(directory).as_posix(), raw)
+        values[1234] = out.getvalue(); rows.insert(0, run(1234, c.GAP_MODE))
+    class API:
+        calls = 0
+        max_calls = 1000
+        def get(self, path):
+            self.calls += 1
+            if path.startswith('actions/workflows/'):
+                return {'total_count': len(rows), 'workflow_runs': rows}
+            assert path == f'actions/runs/{c.BASE_RUN}'
+            return base
+    class Collector:
+        def __init__(self): self.api = API(); self.files = {}; self.archive_cache = {}
+        def artifacts(self, selected):
+            rid = selected['id']; b = values[rid]
+            return [{'id': c.BASE_ARTIFACT if rid == c.BASE_RUN else 4321,
+                'name': f"{c.MODE if rid == c.BASE_RUN else c.GAP_MODE}-{rid}-1",
+                'expired': False, 'expires_at': '2099-01-01T00:00:00Z',
+                'size_in_bytes': len(b), 'digest': 'sha256:'+sha256(b).hexdigest(),
+                'workflow_run': {'id': rid, 'head_sha': selected['head_sha']}}]
+        def archive(self, artifact, selected):
+            fetched.append(selected['id']); b = values[selected['id']]
+            return model.unpack_archive(b, artifact, selected), {'artifact_id': artifact['id'], 'sha256': sha256(b).hexdigest()}
+    observations = json.loads(c.original_input(original)['files']['reference.json'])['observations']
+    return reader, Collector(), observations, rows, fetched
+
+
+def test_daily_reader_attaches_verified_gap_not_relabelled_hithink(tmp_path, gap_original):
+    gap = gap_attempt(tmp_path, gap_original)
+    reader, col, obs, _, fetched = saved_consumer_fixture(tmp_path, gap_original, gap=gap)
+    before = deepcopy(obs)
+    out = reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+    assert out['qualified_windows'] == {'5': 16, '20': 16, '60': 16}
+    assert obs == before and fetched == [1234]
+    assert out['daily_acquisition'] == 'NOT_ESTABLISHED' and out['source'] == 'THIRD_PARTY_TUSHARE_RELAY'
+
+
+def test_daily_reader_original_stays_original_when_no_gap_run(tmp_path, gap_original):
+    reader, col, obs, _, fetched = saved_consumer_fixture(tmp_path, gap_original)
+    out = reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+    assert out['qualified_windows'] == {'5': 16, '20': 0, '60': 0}
+    assert out['factor_repair'] is None and fetched == [c.BASE_RUN]
+
+
+def test_daily_reader_does_not_hide_failed_latest_gap(tmp_path, gap_original):
+    gap = gap_attempt(tmp_path, gap_original)
+    reader, col, obs, rows, fetched = saved_consumer_fixture(tmp_path, gap_original, gap=gap)
+    rows.insert(0, {**rows[0], 'id': 5678, 'created_at': '2026-10-03T02:00:00Z', 'conclusion': 'failure'})
+    out = reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+    assert out['latest_gap_attempt']['id'] == 5678 and out['latest_gap_attempt']['conclusion'] == 'failure'
+    assert fetched == [c.BASE_RUN] and out['qualified_windows']['20'] == 0
+
+
+def test_daily_reader_rejects_tampered_latest_gap_without_old_fallback(tmp_path, gap_original):
+    gap = gap_attempt(tmp_path, gap_original)
+    reader, col, obs, _, fetched = saved_consumer_fixture(tmp_path, gap_original, gap=gap, corrupt=True)
+    with pytest.raises(ValueError, match='REPORT_REBUILD'):
+        reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+    assert fetched == [1234]
+
+
+def test_daily_reader_rejects_mixed_cohort_and_budget_before_reads(tmp_path, gap_original):
+    reader, col, obs, _, _ = saved_consumer_fixture(tmp_path, gap_original)
+    col.api.max_calls = 1
+    with pytest.raises(ValueError, match='publication reserve'):
+        reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+    assert col.api.calls == 0
+    col.api.max_calls = 1000; obs['selection']['selection_hash'] = 'f'*64
+    with pytest.raises(ValueError, match='cohort differs'):
+        reader.saved_tushare_comparison(col, obs, '2026-10-03T05:00:00Z')
+
+
+def test_gap_workflow_reuses_job_and_retains_original_isolation():
+    import runpy
+    flow = Path('.github/workflows/hithink-stock-dump-trial.yml').read_text()
+    assert 'tushare-c2-factor-gaps]' in flow and 'capture-gaps' in flow and 'verify-gaps' in flow
+    assert 'original_input(raw)' in flow and 'BASE_ZIP_SHA256' in flow
+    assert 'schedule:' not in flow and 'continue-on-error' not in flow
+    mod = runpy.run_path('.github/scripts/reconcile-radar-delivery.py')
+    assert c.GAP_MODE in mod['ISOLATED_STOCK']
+    assert "tushare-c2-factor-gaps |" in Path('.github/workflows/stock-reading-after-sector.yml').read_text()

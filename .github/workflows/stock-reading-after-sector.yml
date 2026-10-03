@@ -36,7 +36,8 @@ jobs:
         github.event.workflow_run.run_attempt == 1 &&
         (github.event.workflow_run.path != '.github/workflows/hithink-stock-dump-trial.yml' ||
          (!startsWith(github.event.workflow_run.display_title, 'stock-independent-observations |') &&
-          !startsWith(github.event.workflow_run.display_title, 'tushare-c2-price-check |')))))
+          !startsWith(github.event.workflow_run.display_title, 'tushare-c2-price-check |') &&
+           !startsWith(github.event.workflow_run.display_title, 'tushare-c2-factor-gaps |')))))
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
