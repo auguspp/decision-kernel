@@ -131,3 +131,43 @@ def test_tampered_raw_or_report_does_not_publish(tmp_path):
 def test_arbitrary_workflow_cannot_call_live_capture():
     with pytest.raises(ValueError, match='EXECUTION_IDENTITY'):
         m.workflow_identity({'GITHUB_REPOSITORY':'auguspp/decision-kernel'})
+
+
+def test_full_cross_section_with_padded_prices_captures_and_replays(tmp_path):
+    fetch = make_request(); context = m.calendar(calendar_body(), NOW)
+    def request(api, params):
+        result = fetch(api, params)
+        if api != 'trade_cal':
+            field = 'close' if api == 'daily' else 'adj_factor'
+            value = ('12.120000000000' if params['trade_date'] == context['end_date']
+                     else '15.150000000000') if api == 'daily' else '1.023000000000'
+            result['attempts'][0]['raw'] = body(api, ['ts_code','trade_date',field],
+                [[f'{i:06d}.SH', params['trade_date'], value] for i in range(6000)])
+        return result
+    root = tmp_path/'capture'
+    report = m.capture(root, observed_at=NOW, workflow={}, request=request, clock=NOW.isoformat)
+    assert report['cohort_denominator'] == 6000
+    assert report['qualified_windows'] == {'5':6000,'20':6000,'60':6000}
+    assert len((root/'report.json').read_bytes()) <= m.MAX_REPORT
+    assert report['rows'][0][1:5] == ['12.12', *['-0.200000000000']*3]
+    assert b'12.120000000000' in (root/'raw/02-1.json').read_bytes()
+    assert report['source_row_coverage']['daily:'+context['end_date']]['possibly_truncated']
+    assert m.verify(root) == report
+
+
+def test_conflicting_end_quotes_remain_in_complete_denominator(tmp_path):
+    fetch = make_request(); context = m.calendar(calendar_body(), NOW)
+    def request(api, params):
+        result = fetch(api, params)
+        if api == 'daily' and params['trade_date'] == context['end_date']:
+            raw = json.loads(result['attempts'][0]['raw'])
+            raw['data']['items'].append(['600000.SH', context['end_date'], '13'])
+            result['attempts'][0]['raw'] = m.dumps(raw)
+        return result
+    root = tmp_path/'capture'
+    report = m.capture(root, observed_at=NOW, workflow={}, request=request, clock=NOW.isoformat)
+    assert report['cohort_denominator'] == 2
+    assert report['rows'][1] == ['600000.SH', None, None, None, None, 4, 4, 4]
+    assert report['source_row_coverage']['daily:'+context['end_date']]['duplicate_symbols'] == ['600000.SH']
+    assert report['qualified_windows'] == {'5':0,'20':0,'60':0}
+    assert m.verify(root) == report

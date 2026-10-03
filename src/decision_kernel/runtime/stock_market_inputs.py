@@ -151,19 +151,26 @@ def keyed(raw, item):
 
 def evaluate(context, tables, coverage):
     end = context['end_date']; latest = tables.get(('daily', end), {})
+    # Conflicting end quotes invalidate that price, not the security's place in
+    # the denominator. The original duplicate rows stay in the source archive.
+    symbols = set(latest) | set(coverage.get('daily:' + end, {}).get('duplicate_symbols', []))
     output = []
     with localcontext() as ctx:
         ctx.prec = 40
-        for symbol in sorted(latest):
-            close = latest[symbol].get('close'); values, states = [], []
+        for symbol in sorted(symbols):
+            close = latest.get(symbol, {}).get('close'); values, states = [], []
             try:
-                close = str(number(close))
+                # Equal prices must not exhaust the table budget solely because
+                # a provider emits trailing zeros; exact lexemes remain in raw/.
+                close = format(number(close).normalize(), 'f')
             except (ValueError, InvalidOperation):
                 close = None
             for n in WINDOWS:
                 base = context['bases'][str(n)]; value, state = None, 0
                 if base is None:
                     state = 1
+                elif close is None:
+                    state = 4
                 elif symbol not in tables.get(('daily', base), {}):
                     state = 2
                 elif any(symbol not in tables.get(('adj_factor', d), {}) for d in (base, end)):
@@ -362,7 +369,7 @@ def render(report):
         ordered = sorted(comparable, key=lambda r: (Decimal(r[2+i]), r[0]))
         shown = list(dict.fromkeys(r[0] for r in (ordered[-5:][::-1] + ordered[:5])))
         lookup = {r[0]: r for r in comparable}
-        lines += [f'## {n}日区间两端变化（本次可比子集）', '', '| 证券 | 区间变化 |', '|---|---:|']
+        lines += [f'## {n}日区间两端变化（本次可比子集）', '', '| 证券 | 区间变化 |', '|---|---:|---:|']
         lines += [f'| {symbol} | {Decimal(lookup[symbol][2+i]):+.2%} |' for symbol in shown]
         if not shown:
             lines.append('| 暂无可比输入，不是没有变化 | — |')
