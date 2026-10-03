@@ -171,3 +171,20 @@ def test_conflicting_end_quotes_remain_in_complete_denominator(tmp_path):
     assert report['source_row_coverage']['daily:'+context['end_date']]['duplicate_symbols'] == ['600000.SH']
     assert report['qualified_windows'] == {'5':0,'20':0,'60':0}
     assert m.verify(root) == report
+
+def test_empty_failed_response_replays_but_cannot_be_relabelled_success(tmp_path):
+    def request(api, params):
+        return {"api":api,"params":params,"status":"MALFORMED_RESPONSE","attempts":[{
+            "attempt":1,"http_status":502,"raw":b"","requested_at":NOW.isoformat(),
+            "received_at":NOW.isoformat(),"classification":"MALFORMED_RESPONSE"}]}
+    root=tmp_path/"capture"
+    report=m.capture(root,observed_at=NOW,workflow={},request=request,clock=NOW.isoformat)
+    assert report["status"]=="CALENDAR_INPUT_UNAVAILABLE_NOT_QUIET"
+    assert (root/"raw/01-1.json").read_bytes()==b""
+    assert m.verify(root)==report
+    receipt=json.loads((root/"receipt.json").read_bytes())
+    call=receipt["calls"][0];call["status"]="SUCCESS"
+    call["attempts"][0].update(classification="SUCCESS",http_status=200)
+    (root/"receipt.json").write_bytes(m.dumps(receipt))
+    with pytest.raises(ValueError,match="SUCCESS_BODY_REQUIRED"):
+        m.verify(root)
