@@ -6,7 +6,7 @@ on:
     - cron: '50 23 * * *'
     - cron: '10 11 * * *'
   workflow_run:
-    workflows: [radar-global-public, sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market]
+    workflows: [radar-global-public, sector-radar-shadow, hithink-stock-dump-trial, decision-inbox, kernel-tests, saved-disclosure-research, stock-business-research, radar-smart-money, radar-industry-breadth, tdx-concept-snapshot, radar-concept-detail, radar-concept-source, radar-institutional-source, radar-newsnow-daily, radar-global-market, stock-reading-after-sector]
     types: [requested, completed]
     branches: [main]
 
@@ -31,6 +31,8 @@ jobs:
        (github.event_name == 'workflow_run' &&
         github.event.workflow_run.head_repository.full_name == github.repository &&
         github.event.workflow_run.head_branch == 'main' &&
+        (github.event.workflow_run.path != '.github/workflows/stock-reading-after-sector.yml' ||
+         (github.event.action == 'completed' && github.event.workflow_run.display_title == 'stock-market-inputs')) &&
         (github.event.workflow_run.path != '.github/workflows/hithink-stock-dump-trial.yml' ||
          github.event.workflow_run.display_title != 'tushare-c2-price-check | sector=none | page=base | recovery=none') &&
         (github.event.workflow_run.path != '.github/workflows/radar-smart-money.yml' ||
@@ -110,6 +112,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           READ_CODE_COMMIT: ${{ github.sha }}
+          INCLUDE_CURRENT_STOCK_INPUTS: '1'
           TRIGGER_RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || '' }}
         run: >-
           python -m decision_kernel.runtime.current_state_delivery_with_odds_watch

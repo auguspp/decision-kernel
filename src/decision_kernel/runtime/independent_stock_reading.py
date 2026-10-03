@@ -1,13 +1,14 @@
-"""Publish the existing independent sample from this collection's saved bytes.
+"""Publish saved independent inputs, preserving the historical sample contract.
 
-No source request, second selector, retry, unbounded historical scan or production admission.
-Acquisition is still Sector-owned; missing pages/history remain explicit gaps.
+The normal publisher additionally reads current dated stock inputs when enabled.
+Neither reader makes source requests; current inputs do not depend on Sector.
 """
 from __future__ import annotations
 
 from copy import deepcopy
 from decimal import Context, Decimal, InvalidOperation, localcontext
 import json
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from zipfile import BadZipFile
@@ -129,6 +130,18 @@ def derive(collector, baseline):
                 'error_type': type(exc).__name__, 'no_older_gap_success_fallback': True}
         after = getattr(collector.api, 'calls', before)
         result['new_read_requests'] = after-before
+    if os.environ.get('INCLUDE_CURRENT_STOCK_INPUTS') == '1':
+        from .stock_market_input_reading import read_current
+        before = getattr(collector.api, 'calls', 0)
+        current = read_current(collector, baseline)
+        result['daily_market_inputs'] = current
+        result['historical_sample_status'] = result['status']
+        result['historical_sample_acquisition'] = result['acquisition']
+        result['status'] = current['status']
+        result['acquisition'] = current.get('acquisition', 'DAILY_INPUT_ATTEMPT_NOT_AVAILABLE')
+        result['preferred_current_input'] = 'daily_market_inputs'
+        result['summary'] = current['summary'] + '\n\n## 历史独立样本（保留原日期）\n' + result['summary']
+        result['new_read_requests'] += getattr(collector.api, 'calls', before) - before
     result['report_hash'] = canonical_hash(result)
     return result
 
@@ -305,6 +318,9 @@ def attach(collector, baseline):
     intervals = result.get('price_comparison', {}).get('interval_performance')
     if intervals:
         note += ('\n' + render_intervals(intervals) + '\n').encode()
+    if result.get('daily_market_inputs'):
+        current = result['daily_market_inputs']
+        note = ('\n\n' + current['summary'] + '\n\n## 历史样本（保留原日期）\n').encode() + note
     descriptor = {'read_path': PATH, 'sha256': model.sha256(raw), 'git_blob': model.blob_sha(raw),
         'bytes': len(raw), 'read_ref_rule': 'USE_THE_SAME_PINNED_READING_COMMIT'}
     try:
