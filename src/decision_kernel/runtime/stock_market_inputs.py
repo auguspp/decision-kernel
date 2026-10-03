@@ -369,7 +369,7 @@ def render(report):
         ordered = sorted(comparable, key=lambda r: (Decimal(r[2+i]), r[0]))
         shown = list(dict.fromkeys(r[0] for r in (ordered[-5:][::-1] + ordered[:5])))
         lookup = {r[0]: r for r in comparable}
-        lines += [f'## {n}日区间两端变化（本次可比子集）', '', '| 证券 | 区间变化 |', '|---|---:|---:|']
+        lines += [f'## {n}日区间两端变化（本次可比子集）', '', '| 证券 | 区间变化 |', '|---|---:|']
         lines += [f'| {symbol} | {Decimal(lookup[symbol][2+i]):+.2%} |' for symbol in shown]
         if not shown:
             lines.append('| 暂无可比输入，不是没有变化 | — |')
