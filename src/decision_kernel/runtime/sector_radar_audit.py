@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import tempfile
 from collections.abc import Callable, Mapping
@@ -44,6 +45,13 @@ REPLAY_SEMANTICS = "OFFLINE_VERIFICATION_ONLY_NOT_A_PROSPECTIVE_EVENT_OR_RECOVER
 LIVE_PROVENANCE = "LIVE_HITHINK"
 SYNTHETIC_PROVENANCE = "SYNTHETIC_TEST_ONLY"
 MAX_REQUESTS = 128
+QUIET_STOCK_INPUTS_ENV = "SECTOR_QUIET_STOCK_INPUTS"
+QUIET_STOCK_INPUTS_POLICY = {
+    "version": "sector-quiet-session-stock-inputs-v1",
+    "when": "NEW_COMPLETED_QUIET_SESSION_ONLY",
+    "page_size": 500, "max_pages": 16, "max_declared_identities": 8000,
+    "source_failure": "RETAIN_SEPARATELY_NO_RETRY_NO_PARTIAL_SCAN",
+}
 MAX_FILE_BYTES = 8 * 1024 * 1024
 MAX_AUDIT_BYTES = 64 * 1024 * 1024
 AUTHORITY = {
@@ -66,11 +74,11 @@ _ROUTES = {
 _OUTPUT_FILES = (
     "operations.json", "operations.md", "same-session-validation.json",
     "observations.json", "preparation.json", "preparation.md", "stock-reference.json",
-    "result.json", "summary.md",
+    "result.json", "summary.md", "quiet-stock-inputs.json",
 )
 _STATE_FILES = ("market-state.json", "candidate-events.json", "manifest.json")
 _INPUT_FILES = ("market-state.json", "candidate-events.json", "parent-hints.json", "context.json", "resolution.json")
-_OPTIONAL_INPUT_FILES = ("stock-reference.json",)
+_OPTIONAL_INPUT_FILES = ("stock-reference.json", "quiet-stock-inputs.json")
 _SOURCE_FILES = (
     "identity.py", "adapters/hithink.py", "adapters/hithink_index.py",
     "runtime/hithink_http.py", "runtime/hithink_index_http.py",
@@ -392,6 +400,67 @@ def _publish_bundle(bundle: Any, directory: Path) -> None:
     )
 
 
+def _capture_quiet_stock_inputs(outcome, output_directory: Path, request: _Request,
+                                now: Callable[[], datetime]) -> None:
+    """Reuse the ordinary snapshot reader, never alter Sector state or results.
+
+    This runs after a valid new quiet session. Candidate runs already have the
+    same quote pages; same-session/closure validations must not fetch them again.
+    Source failure stops this last acquisition stage. Audit/integrity failures
+    still propagate rather than publishing a falsely complete source archive.
+    """
+    from .sector_radar_producer import PRODUCER_STATUS_APPENDED_QUIET
+
+    if outcome.status != PRODUCER_STATUS_APPENDED_QUIET:
+        return
+    policy = QUIET_STOCK_INPUTS_POLICY
+    calls = 0
+    result = {
+        "version": policy["version"],
+        "market_session": outcome.operations.latest_completed_session.isoformat(),
+        "status": "INPUT_UNAVAILABLE_NOT_EMPTY_SCAN",
+        "source": "LIVE_HITHINK_OR_EXPLICIT_SYNTHETIC_AUDIT_PROVENANCE",
+        "scope": "COMPLETE_RETURNED_SNAPSHOT_NOT_HISTORICAL_MEMBERSHIP",
+        "max_pages": policy["max_pages"], "page_size": policy["page_size"],
+        "returned_unique_rows": None, "priced_rows": None, "unpriced_rows": None,
+        "error_type": None, "retry_performed": False, **AUTHORITY,
+    }
+
+    def bounded_request(path, params):
+        nonlocal calls
+        expected = {"limit": str(policy["page_size"]),
+                    "offset": str(calls * policy["page_size"])}
+        if path != hithink_sector_breadth_http.HITHINK_A_SHARE_SNAPSHOT_PATH or dict(params) != expected:
+            raise SectorRadarAuditError("quiet snapshot request differs from existing pagination")
+        if calls >= policy["max_pages"]:
+            raise hithink_http.HithinkRuntimeError("quiet snapshot complete-page budget exhausted")
+        calls += 1
+        body = request(path, params)
+        data = body.get("data")
+        total = data.get("total") if isinstance(data, Mapping) else None
+        if type(total) is int and total > policy["max_declared_identities"]:
+            raise hithink_http.HithinkRuntimeError("quiet snapshot full denominator exceeds budget")
+        return body
+
+    try:
+        batch = hithink_sector_breadth_http.fetch_hithink_all_market_snapshot(
+            market_session=outcome.operations.latest_completed_session,
+            api_key="EXPLICIT_RECORDED_TRANSPORT", request_json=bounded_request,
+            page_size=policy["page_size"],
+        )
+        result.update(status="COMPLETE_QUIET_SESSION_QUOTE_INPUTS",
+                      returned_unique_rows=batch.returned_unique_rows,
+                      priced_rows=batch.priced_rows, unpriced_rows=batch.unpriced_rows)
+    except SectorRadarAuditError:
+        raise
+    except (OSError, ValueError, RuntimeError) as exc:
+        result["error_type"] = (exc.original_type if isinstance(exc, _RecordedRequestFailure)
+                                else type(exc).__name__)
+    result.update(requests_attempted=calls, finished_at=_clock(now()).isoformat())
+    result["report_hash"] = canonical_hash(result)
+    _atomic_bytes(output_directory / "quiet-stock-inputs.json", _domain_bytes(result))
+
+
 def run_audited_sector_radar_producer(
     *, resolution: SectorRadarPersistenceResolution, parent_hints: Any,
     parent_hints_json: str, context: Any, state_directory: Path,
@@ -402,9 +471,19 @@ def run_audited_sector_radar_producer(
     provenance: str = LIVE_PROVENANCE,
     now: Callable[[], datetime] | None = None,
     capture_now: Callable[[], datetime] | None = None,
+    quiet_stock_inputs: bool | None = None,
 ) -> Any:
     from .sector_radar_producer import run_sector_radar_producer
 
+    # Only the ordinary workflow's explicit environment enables live capture.
+    # Persist the choice; replay never consults this ambient configuration.
+    if quiet_stock_inputs is None:
+        configured = os.environ.get(QUIET_STOCK_INPUTS_ENV, "0")
+        if configured not in {"0", "1"}:
+            raise SectorRadarAuditError("quiet stock input configuration is invalid")
+        quiet_stock_inputs = configured == "1"
+    if type(quiet_stock_inputs) is not bool:
+        raise SectorRadarAuditError("quiet stock input choice must be boolean")
     if provenance not in {LIVE_PROVENANCE, SYNTHETIC_PROVENANCE}:
         raise SectorRadarAuditError("unsupported audit provenance")
     if request_json is not None and provenance != SYNTHETIC_PROVENANCE:
@@ -429,6 +508,8 @@ def run_audited_sector_radar_producer(
         )
     recorder = _Recorder(output_directory / "input-audit", provenance=provenance, credential=api_key, capture_now=capture_now)
     _save_inputs(recorder, resolution, parent_hints_json, context)
+    if quiet_stock_inputs:
+        recorder.add("inputs/quiet-stock-inputs.json", _domain_bytes(QUIET_STOCK_INPUTS_POLICY))
     if bool(stock_reference_closed_dates) != bool(stock_reference_evidence):
         raise SectorRadarAuditError("stock reference closure dates and evidence must be paired")
     if stock_reference_closed_dates:
@@ -445,6 +526,7 @@ def run_audited_sector_radar_producer(
         staged_state = Path(temporary) / "state"
         try:
             recorded_now = recorder.run_clock(now)
+            recorded_request = recorder.request(transport)
             outcome = run_sector_radar_producer(
                 resolution=resolution, parent_hints=parent_hints, context=context,
                 state_directory=staged_state, output_directory=output_directory,
@@ -452,8 +534,10 @@ def run_audited_sector_radar_producer(
                 stock_reference_closed_dates=stock_reference_closed_dates,
                 stock_reference_evidence=stock_reference_evidence,
                 membership_request_delay_seconds=0.25 if provenance == LIVE_PROVENANCE else 0.0,
-                **_fetchers(recorder.request(transport), qualification_clock=recorded_now),
+                **_fetchers(recorded_request, qualification_clock=recorded_now),
             )
+            if quiet_stock_inputs:
+                _capture_quiet_stock_inputs(outcome, output_directory, recorded_request, recorded_now)
         except (OSError, ValueError, RuntimeError) as exc:
             for name, data in _output_files(staged_state, output_directory).items():
                 recorder.add(name, data)
@@ -626,6 +710,10 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
 
     manifest = validate_sector_radar_input_audit(root)
     context, hints, resolution = _restore_audit_inputs(root)
+    quiet_path = root / "inputs" / "quiet-stock-inputs.json"
+    quiet_stock_inputs = quiet_path.is_file()
+    if quiet_stock_inputs and json.loads(quiet_path.read_bytes()) != QUIET_STOCK_INPUTS_POLICY:
+        raise SectorRadarAuditError("quiet stock input policy differs")
     reference_path = root / "inputs" / "stock-reference.json"
     stock_reference_closed_dates: tuple[date, ...] = ()
     stock_reference_evidence: tuple[str, ...] = ()
@@ -676,7 +764,7 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
         state_dir, output_dir = Path(temporary) / "state", Path(temporary) / "output"
         error_type = None
         try:
-            run_sector_radar_producer(
+            outcome = run_sector_radar_producer(
                 resolution=resolution, parent_hints=hints, context=context,
                 state_directory=state_dir, output_directory=output_dir,
                 api_key="OFFLINE_REPLAY_NO_CREDENTIAL", now=now,
@@ -685,6 +773,8 @@ def replay_sector_radar_input_audit(root: Path) -> dict[str, Any]:
                 membership_request_delay_seconds=0.0,
                 **_fetchers(request, qualification_clock=now),
             )
+            if quiet_stock_inputs:
+                _capture_quiet_stock_inputs(outcome, output_dir, request, now)
         except _RecordedRequestFailure as exc:
             error_type = exc.original_type
         except SectorRadarAuditError:
