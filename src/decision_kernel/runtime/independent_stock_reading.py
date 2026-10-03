@@ -6,6 +6,7 @@ Acquisition is still Sector-owned; missing pages/history remain explicit gaps.
 from __future__ import annotations
 
 from copy import deepcopy
+from decimal import Context, Decimal, InvalidOperation, localcontext
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -121,10 +122,7 @@ def derive(collector, baseline):
         try:
             comparison = saved_tushare_comparison(collector, result['observations'], result['checked_at'])
             result['price_comparison'] = comparison
-            n = comparison['qualified_windows']
-            result['summary'] += (f'\n\n同一保存16名的独立Tushare复权价格比较：5/20/60日'
-                f"分别{n['5']}/{n['20']}/{n['60']}名合格（各分母16）。"
-                '详见price_comparison；原HiThink覆盖/失败保持，不是新交易日或每日独立采集证明。')
+            result['summary'] += '\n\n' + render_intervals(comparison['interval_performance'])
         except ERRORS as exc:
             collector.files, collector.archive_cache = old_files, old_cache
             result['price_comparison'] = {'status': 'SAVED_PRICE_INPUT_REJECTED_NOT_QUIET',
@@ -190,10 +188,105 @@ def saved_tushare_comparison(collector, observation, checked_at):
         'source_stop': receipt['stopped'], 'latest_gap_attempt': model.concise_run(latest),
         'gap_reading': 'LATEST_COMPLETED_GAP_INPUT' if gap_ready else 'ORIGINAL_ONLY_NO_COMPLETED_SUCCESSFUL_GAP_INPUT',
         'source_archive': archive, 'verification': proof,
+        'interval_performance': _interval_performance(files, report, proof),
         'comparison_basis': 'PROVIDER_FACTOR_ADJUSTED_PRICE_NOT_TOTAL_RETURN',
         'corporate_action_details': 'NOT_OBTAINED', 'pit_knowledge': 'NOT_ESTABLISHED',
         'daily_acquisition': 'NOT_ESTABLISHED', 'subset_not_full_member_ranking': True,
         'investment_authority': 'NONE'}
+
+
+def _interval_performance(files, original, proof):
+    """A use-specific interpretation AFTER the caller verifies the original capture.
+
+    Acquisition, the legacy full-window verifier/report and source stops remain
+    unchanged. A close-to-close ratio uses only its two prices and two factors;
+    it does not certify daily OHLC/volume, drawdown, total return, PIT or roles.
+    """
+    from . import tushare_c2_price_check as price
+    receipt = price.raw_json(files['receipt.json'])
+    ref = original['reference']
+    if receipt['version'] == price.GAP_VERSION:
+        parent = price.original_input(files['original.zip'])
+        tables = parent['tables']
+        # Reuse the exact, already replay-verified repair's row locators, rather
+        # than implementing another factor merger or filling absent dates.
+        calls = {a['response_file']: call for call in receipt['calls']
+                 for a in call['attempts'] if a['response_file'] is not None}
+        parsed = {}
+        for item in original['factor_repair']['filled_keys']:
+            name = item['response_file']
+            if name not in parsed:
+                call = calls[name]
+                parsed[name] = price.table(files[name], call['api'], call['params'])
+            row = parsed[name][item['row_position']]
+            model.check(row['ts_code'] == item['symbol'] and row['trade_date'] == item['trade_date'],
+                        'saved interval repair row differs')
+            tables[2 + 2*ref['symbols'].index(item['symbol'])].append(row)
+    else:
+        tables = {i: price.table(files[call['attempts'][-1]['response_file']], call['api'], call['params'])
+                  for i, call in enumerate(receipt['calls']) if call['status'] == 'SUCCESS'}
+    snapshot = {r['ts_code']: r for r in tables.get(0, [])}
+    days = [d.replace('-', '') for d in ref['sessions']]
+    rows = []
+    for k, code in enumerate(ref['symbols']):
+        bars = {r['trade_date']: r for r in tables.get(1 + 2*k, [])}
+        factors = {r['trade_date']: r for r in tables.get(2 + 2*k, [])}
+        windows = {}
+        for n in (5, 20, 60):
+            endpoints = [days[-n-1], days[-1]]
+            value = {'base_session': ref['sessions'][-n-1], 'end_session': ref['sessions'][-1],
+                'status': 'ENDPOINT_INPUT_UNAVAILABLE', 'price_change': None,
+                'missing_price_dates': [d for d in endpoints if d not in bars],
+                'missing_factor_dates': [d for d in endpoints if d not in factors],
+                'legacy_full_window_status': original['observations'][k]['windows'][str(n)]['status']}
+            windows[str(n)] = value
+            if value['missing_price_dates'] or value['missing_factor_dates'] or code not in snapshot:
+                continue
+            try:
+                start, end = (price.number(bars[d]['close']) for d in endpoints)
+                start_factor, end_factor = (price.number(factors[d]['adj_factor']) for d in endpoints)
+                model.check(end == price.number(snapshot[code]['close']) == price.number(ref['end_closes'][code]),
+                            'saved interval end quote differs')
+                with localcontext(Context(prec=28)):
+                    change = end * end_factor / (start * start_factor) - 1
+                value.update(status='PROVIDER_ADJUSTED_INTERVAL_COMPARABLE', price_change=str(change),
+                    base_raw_close=str(start), end_raw_close=str(end),
+                    base_factor=str(start_factor), end_factor=str(end_factor))
+            except (ValueError, TypeError, KeyError, InvalidOperation):
+                value['status'] = 'ENDPOINT_VALUE_OR_REFERENCE_REJECTED'
+        rows.append({'symbol': code, 'windows': windows})
+    return {'version': 'c2-price-purpose-qualification-v2',
+        'source': 'THIRD_PARTY_TUSHARE_RELAY', 'market_session': ref['sessions'][-1],
+        'cohort_denominator': len(rows), 'observations': rows,
+        'qualified_windows': {str(n): sum(r['windows'][str(n)]['price_change'] is not None for r in rows)
+                              for n in (5, 20, 60)},
+        'legacy_full_window_qualified': original['qualified_windows'],
+        'source_report_sha256': proof['report_sha256'], 'source_stop': receipt['stopped'],
+        'received_through': receipt['finished_at'],
+        'formula': 'end_close * end_factor / (base_close * base_factor) - 1',
+        'use': 'INTERVAL_PRICE_PERFORMANCE_ONLY_NOT_CONTINUOUS_PATH',
+        'basis': 'PROVIDER_FACTOR_ADJUSTED_PRICE_NOT_TOTAL_RETURN',
+        'corporate_action_details': 'NOT_OBTAINED', 'pit_knowledge': 'NOT_ESTABLISHED',
+        'role_inference': 'NOT_GRANTED', 'new_source_requests': 0,
+        'investment_authority': 'NONE'}
+
+
+def render_intervals(result):
+    """Plain reading of each selected security, including the unavailable ones."""
+    counts, old, total = result['qualified_windows'], result['legacy_full_window_qualified'], result['cohort_denominator']
+    lines = [f"截至{result['market_session']}的供应商口径区间表现：5/20/60日分别"
+             f"{counts['5']}/{counts['20']}/{counts['60']}只可比（各分母{total}）。",
+             f"原完整逐日检查分别{old['5']}/{old['20']}/{old['60']}只通过；"
+             '缺中间数据不否定已核实的两端涨跌幅，但不能据此描述完整走势、回撤或领先角色。',
+             '', '| 证券 | 5日 | 20日 | 60日 |', '|---|---:|---:|---:|']
+    with localcontext(Context(prec=28)):
+        for row in result['observations']:
+            values = [row['windows'][str(n)]['price_change'] for n in (5, 20, 60)]
+            shown = ['不可比' if v is None else format(Decimal(v), '+.2%') for v in values]
+            lines.append('| ' + row['symbol'] + ' | ' + ' | '.join(shown) + ' |')
+    lines += ['', '不可比项保留在分母中，具体缺端点或数值问题见 interval_performance；'
+              '原逐日缺口和来源失败见原 price_comparison。不是总回报、当前行情或新增采集。']
+    return '\n'.join(lines)
 
 
 def attach(collector, baseline):
@@ -209,6 +302,9 @@ def attach(collector, baseline):
         '[完整分母、独立样本与输入缺口](details/stock/independent-observations.json)。'
         '先读 status、summary、coverage 和 selected_observations；输入仍有自己的市场日。'
         '样本选择不依赖行业入选，不代表已建立每日独立采集、全市场多周期或研究受益。\n').encode()
+    intervals = result.get('price_comparison', {}).get('interval_performance')
+    if intervals:
+        note += ('\n' + render_intervals(intervals) + '\n').encode()
     descriptor = {'read_path': PATH, 'sha256': model.sha256(raw), 'git_blob': model.blob_sha(raw),
         'bytes': len(raw), 'read_ref_rule': 'USE_THE_SAME_PINNED_READING_COMMIT'}
     try:
