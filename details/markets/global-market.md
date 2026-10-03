@@ -57,7 +57,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/6091bdf53d946b7bd1532e5734e4e71d623a5ba645a81c3b3ffcf7cf19fc5a0b.zip)
 
 ## 美国国债期限利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：37101499286
 # 美国国债期限利率
