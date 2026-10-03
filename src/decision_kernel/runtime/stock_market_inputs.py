@@ -345,7 +345,7 @@ def verify(root, *, expected_workflow=None):
             name = attempt['response_file']
             if name is None:
                 continue
-            require(re.fullmatch(r'raw/[0-9]{2}-[12]\.json', name) is not None and name not in names, 'RAW_PATH')
+            require(re.fullmatch(r'raw/[0-9]{2}-[123]\.json', name) is not None and name not in names, 'RAW_PATH')
             names.add(name); path = safe_root(root/name)
             require(path.stat().st_size <= MAX_BODY, 'RAW_FILE_SIZE')
             raw = path.read_bytes(); total += len(raw)
