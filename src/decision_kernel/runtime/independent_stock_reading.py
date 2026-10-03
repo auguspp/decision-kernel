@@ -1,6 +1,6 @@
 """Publish the existing independent sample from this collection's saved bytes.
 
-No source request, second selector, retry, historical scan or production admission.
+No source request, second selector, retry, unbounded historical scan or production admission.
 Acquisition is still Sector-owned; missing pages/history remain explicit gaps.
 """
 from __future__ import annotations
@@ -113,8 +113,87 @@ def derive(collector, baseline):
                               'meaning': 'MISSING_OR_REJECTED_INPUT_NOT_EMPTY_SCAN'})
     result['summary'] = (independent.render(result['observations']) if result['observations'] else
         '独立观察输入未取得或未通过原资格检查；不是空扫描，也不是市场无变化。')
+    # This fixed retained cohort is a saved-reading supplement, not a new daily
+    # producer. Never carry its September comparison into a different session.
+    if result['observations'] and result['observations']['context']['comparison_session'] == '2026-09-30':
+        before = getattr(collector.api, 'calls', 0)
+        old_files, old_cache = dict(collector.files), dict(collector.archive_cache)
+        try:
+            comparison = saved_tushare_comparison(collector, result['observations'], result['checked_at'])
+            result['price_comparison'] = comparison
+            n = comparison['qualified_windows']
+            result['summary'] += (f'\n\n同一保存16名的独立Tushare复权价格比较：5/20/60日'
+                f"分别{n['5']}/{n['20']}/{n['60']}名合格（各分母16）。"
+                '详见price_comparison；原HiThink覆盖/失败保持，不是新交易日或每日独立采集证明。')
+        except ERRORS as exc:
+            collector.files, collector.archive_cache = old_files, old_cache
+            result['price_comparison'] = {'status': 'SAVED_PRICE_INPUT_REJECTED_NOT_QUIET',
+                'error_type': type(exc).__name__, 'no_older_gap_success_fallback': True}
+        after = getattr(collector.api, 'calls', before)
+        result['new_read_requests'] = after-before
     result['report_hash'] = canonical_hash(result)
     return result
+
+
+
+def saved_tushare_comparison(collector, observation, checked_at):
+    """Use the existing Collector's native archive/readback, never its source key."""
+    from . import tushare_c2_price_check as price
+    api = collector.api
+    reserve = len(set(collector.files) | {'current-state.json', PATH, 'README.md'}) + 12
+    model.check(api.calls + reserve + 6 <= api.max_calls, 'saved price publication reserve')
+    data = api.get('actions/workflows/hithink-stock-dump-trial.yml/runs?branch=main&per_page=20')
+    rows = data['workflow_runs']
+    model.check(isinstance(rows, list) and len(rows) <= 20 and (rows or data['total_count'] == 0),
+                'saved price run query incomplete')
+    candidates = [r for r in rows if r.get('display_title') == price.GAP_TITLE]
+    latest = max(candidates, key=lambda r: (model.clock(r['created_at']), r['id']), default=None)
+    gap_ready = latest is not None and latest.get('status') == 'completed' and latest.get('conclusion') == 'success'
+    # Never discard a newer rejected gap result in search of an older success.
+    run = latest if gap_ready else api.get(f'actions/runs/{price.BASE_RUN}')
+    mode = price.GAP_MODE if gap_ready else price.MODE
+    model.run_identity(run, 'stock', success=True)
+    model.check(run['event'] == 'workflow_dispatch' and run['display_title'] ==
+                (price.GAP_TITLE if gap_ready else price.TITLE), 'saved price purpose differs')
+    if not gap_ready:
+        model.check(run['id'] == price.BASE_RUN and run['head_sha'] == price.BASE_COMMIT, 'saved base run differs')
+    artifact = model.select_artifact(collector.artifacts(run), f"{mode}-{run['id']}-1")
+    model.check(model.clock(artifact['expires_at']) > model.clock(checked_at), 'saved price artifact expired')
+    files, archive = collector.archive(artifact, run)
+    expected = {'GITHUB_REPOSITORY': model.REPOSITORY, 'GITHUB_REF': 'refs/heads/main',
+        'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_EVENT_NAME': 'workflow_dispatch',
+        'GITHUB_JOB': price.MODE, 'TRIAL_PURPOSE': mode, 'GITHUB_SHA': run['head_sha'], 'GITHUB_RUN_ID': str(run['id'])}
+    with TemporaryDirectory() as directory:
+        root = Path(directory)
+        for name, raw in files.items():
+            target = root/model.safe_path(name); target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(raw)
+        if gap_ready:
+            proof = price.verify_gaps(root, expected_identity=expected)
+        else:
+            model.check(artifact['id'] == price.BASE_ARTIFACT and artifact['digest'] == 'sha256:'+price.BASE_ZIP_SHA256
+                        and artifact['size_in_bytes'] == price.BASE_BYTES, 'saved base artifact differs')
+            proof = price.verify(root, expected_identity=expected)
+    report = price.raw_json(files['report.json']); ref = report['reference']
+    model.check(ref['sessions'] == observation['context']['sessions'] and
+        ref['symbols'] == [r['thscode'] for r in observation['selected_observations']] and
+        ref['selection_hash'] == observation['selection']['selection_hash'], 'saved price cohort differs')
+    inventory = observation['inventory']; columns = inventory['columns']
+    closes = {r[columns.index('thscode')]: r[columns.index('last_price')] for r in inventory['rows']}
+    model.check(all(price.number(ref['end_closes'][code]) == price.number(closes[code])
+                    for code in ref['symbols']), 'saved price end quotes differ')
+    receipt = price.raw_json(files['receipt.json'])
+    return {'status': 'VERIFIED_SAVED_COHORT_PRICE_COMPARISON', 'source': 'THIRD_PARTY_TUSHARE_RELAY',
+        'market_session': ref['sessions'][-1], 'received_through': receipt['finished_at'],
+        'cohort_denominator': report['cohort_denominator'], 'qualified_windows': report['qualified_windows'],
+        'observations': report['observations'], 'factor_repair': report.get('factor_repair'),
+        'source_stop': receipt['stopped'], 'latest_gap_attempt': model.concise_run(latest),
+        'gap_reading': 'LATEST_COMPLETED_GAP_INPUT' if gap_ready else 'ORIGINAL_ONLY_NO_COMPLETED_SUCCESSFUL_GAP_INPUT',
+        'source_archive': archive, 'verification': proof,
+        'comparison_basis': 'PROVIDER_FACTOR_ADJUSTED_PRICE_NOT_TOTAL_RETURN',
+        'corporate_action_details': 'NOT_OBTAINED', 'pit_knowledge': 'NOT_ESTABLISHED',
+        'daily_acquisition': 'NOT_ESTABLISHED', 'subset_not_full_member_ranking': True,
+        'investment_authority': 'NONE'}
 
 
 def attach(collector, baseline):
