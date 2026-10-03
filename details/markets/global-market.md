@@ -144,19 +144,19 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/21671ef29599a9504a37c02b1bcfbbfc0c6e38e69abaa6914723c216d3bdd5bc.zip)
 
 ## Coinbase BTC / ETH 日线
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：36979218058
+最后可读批次run：37105337872
 # Coinbase BTC / ETH 日线
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-01；抓取截止：2026-10-02T07:34:07.621832+00:00
+窗口截止：2026-10-02；抓取截止：2026-10-03T07:08:20.788438+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| BTC-USD | 2026-10-01 | 84848.73 | USD_PER_BTC | 2026-09-30 | 1.546972 % |
-| ETH-USD | 2026-10-01 | 2705.5 | USD_PER_ETH | 2026-09-30 | 0.803672 % |
+| BTC-USD | 2026-10-02 | 84504.88 | USD_PER_BTC | 2026-10-01 | -0.405251 % |
+| ETH-USD | 2026-10-02 | 2668.13 | USD_PER_ETH | 2026-10-01 | -1.381260 % |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -167,6 +167,6 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - BTC-USD：ROWS_NORMALIZED
 - ETH-USD：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/848d93a8c68b8f23843147030670fb0c201beaccf36095c870e87ffc3f3cced6.zip)
+[原始ZIP](../../sources/artifacts/bbde4e00369880844518d9ba6b020a7d527c3ac7c0873fb3cef95752d2c0ab36.zip)
 
 六族均为有限来源背景，不代表全市场覆盖、实时行情或公司获益；没有自动启动Quick或Odds。
