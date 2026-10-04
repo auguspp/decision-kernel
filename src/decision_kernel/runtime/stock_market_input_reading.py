@@ -82,6 +82,11 @@ def read_current(collector, baseline):
                 result['last_qualified_reading_gap'] = {'origin_run': model.concise_run(candidate),
                     'status': 'SAVED_INPUT_UNAVAILABLE', 'error_type': type(exc).__name__}
                 result['summary'] += '\n最近成功运行的保存输入未能校验；未继续倒找更旧成功。\n'
+    # D is a read-only derivation over these exact retained inputs. A missing
+    # membership/structure source cannot cancel any qualified price window.
+    from .d_market_expression import read_saved
+    result['market_expression'] = read_saved(collector, baseline, result)
+    result['summary'] += result['market_expression']['summary']
     return result
 
 
