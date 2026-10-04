@@ -4,6 +4,7 @@ Shared publication quota enforcement already has its own tests. Only that
 external reservation boundary is stubbed here; detail/root size checks are real.
 """
 from copy import deepcopy
+from datetime import datetime, timezone
 from io import BytesIO
 import json
 from types import SimpleNamespace
@@ -34,7 +35,8 @@ def seeded(monkeypatch, source=None):
     def forbidden(*args): raise AssertionError('unexpected external Git I/O')
     api.file = forbidden
     collector = SimpleNamespace(code_commit=M, previous=None, previous_commit=None, api=api,
-                                archive_cache={123: (files, ref)})
+                                archive_cache={123: (files, ref)},
+                                now=lambda: datetime.now(timezone.utc).isoformat())
     baseline = model.assemble(code_commit=M, checked_at=AT, check_started_at=AT,
         lanes={'sector': {'last_qualified_result': {'archive': ref}, 'latest_attempt': {}, 'gaps': []}},
         research={'handoffs': {'active': []}, 'records': [{'id': 'old-research'}]}, capabilities=[], refresh_identity={})
