@@ -135,4 +135,9 @@ def read_current(collector, baseline):
     auction = read_auction(collector, baseline, run_query=query)
     result['auction_probe'] = auction
     result['summary'] += auction['summary']
+    from .d_auction_follow_through import read_saved as read_follow_through
+    outcome = read_follow_through(collector, baseline, result, auction,
+                                  retained_limit=delivery.MAX_RETAINED_OUTPUT)
+    result['auction_follow_through'] = outcome
+    result['summary'] += outcome['summary']
     return result

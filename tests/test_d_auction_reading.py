@@ -146,3 +146,31 @@ def test_v1_publisher_adds_count_interpretation_without_source_io_or_history_rew
     assert files==original_files and c.api.calls==0 and result['new_source_requests']==0
     assert c.files['daily.json']==b'ORIGINAL_DAILY' and c.files['README.md']==b'ORIGINAL'
     assert '不是重新采集' in result['summary'] and '最高连板2' in result['summary']
+
+
+def test_daily_reader_publishes_same_day_outcome_after_real_saved_auction_reader(tmp_path, monkeypatch):
+    from decision_kernel.runtime import stock_market_input_reading as stock
+    from decision_kernel.runtime import d_auction_follow_through as outcome
+    c, b, _, _, _, _ = fixture(tmp_path, monkeypatch)
+    c.code_commit = 'a' * 40
+    clock = (AT + timedelta(hours=8)).isoformat()
+    b['checks']['finished_at'] = clock
+    price_report = {'version': probe.saved.VERSION, 'source': probe.saved.SOURCE,
+        'provenance': 'LIVE_TUSHARE_RELAY', 'market_session': TARGET,
+        'end_date': TARGET.replace('-', ''), 'columns': probe.saved.COLUMNS,
+        'rows': [['600001.SH', '11', None, None, None, 3, 3, 3]],
+        'cohort_denominator': 1, 'observed_at': clock, 'received_through': clock}
+    descriptor = c.retain('daily-close.json', probe.saved.dumps(price_report))
+    daily = {'status': 'PRICE_INPUTS_AVAILABLE_WITH_GAPS', 'summary': 'original price summary',
+        'market_session': TARGET, 'file': descriptor, 'source_archive': {'artifact_id': 987},
+        'cohort_denominator': 1, 'qualified_windows': {'5': 0, '20': 0, '60': 0},
+        'publication_verification': 'REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES'}
+    monkeypatch.setattr(stock, '_read_current_prices', lambda *_: deepcopy(daily))
+    result = stock.read_current(c, b)
+    follow = result['auction_follow_through']
+    assert follow['status'] == 'SAVED_SAME_SESSION_OUTCOMES' and follow['comparable'] == 1
+    assert follow['groups']['MATCHED']['above_auction'] == 1
+    assert result['auction_probe']['matched'] == 1 and c.api.calls == 1
+    assert result['summary'].startswith('original price summary') and '竞价到同日收盘' in result['summary']
+    assert json.loads(c.files[outcome.PATH])['auction_file'] == result['auction_probe']['file']
+    assert c.files['daily.json'] == b'ORIGINAL_DAILY' and c.files['README.md'] == b'ORIGINAL'
