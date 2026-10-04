@@ -132,7 +132,7 @@ def _tree_files(api, source: dict, output: Path) -> tuple[list[dict], str]:
                 "archive tree does not contain the exact shown entry")
     # These are API JSON representations, not raw HTTP telemetry or signatures.
     retained._write(output / "git-commit.json", model.json_bytes(commit))
-    retained._write(output / "git-tree.json", model.json_bytes(tree))
+    retained._write(output / "git-tree.json", retained._raw(tree))
     return sorted(rows, key=lambda r: r["path"]), tree_sha
 
 

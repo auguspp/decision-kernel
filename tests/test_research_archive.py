@@ -108,6 +108,51 @@ def test_raw_archive_recovers_all_original_bytes_without_promotion(runtime, tmp_
     assert not (tmp_path / 'out' / 'failure.json').exists()
 
 
+def _unrelated_tree_rows(count):
+    return [{'path': f'docs/unrelated/file-{n:04d}.txt', 'mode': '100644', 'type': 'blob',
+             'sha': 'a' * 40, 'size': 123,
+             'url': 'https://api.github.com/repos/auguspp/decision-kernel/git/blobs/' + 'a' * 40}
+            for n in range(count)]
+
+
+def test_large_tree_recovers_losslessly_with_compact_metadata(runtime, tmp_path):
+    api = API()
+    api.tree['tree'].extend(_unrelated_tree_rows(1800))
+    original = deepcopy(api.tree)
+    compact = retained._raw(original)
+    assert len(model.json_bytes(original)) > retained.MAX_BYTES
+    assert len(compact) <= retained.MAX_BYTES and len(original['tree']) < 5000
+
+    receipt = recover(runtime, api, tmp_path)
+    saved = (tmp_path / 'out' / 'git-tree.json').read_bytes()
+    assert saved == compact and retained._json(saved) == original
+    assert api.tree == original
+    assert receipt['source_tree'] == T
+    assert receipt['qualification'] == 'RETAINED_FILES_NOT_REVALIDATED_RESEARCH'
+    assert {p.name: p.read_bytes() for p in (tmp_path / 'out' / 'bundle').iterdir()} == api.files
+    assert len(api.calls) == 4 + len(api.files)
+    assert not (tmp_path / 'out' / 'failure.json').exists()
+
+
+def test_compact_tree_over_retention_bound_still_rejects(runtime, tmp_path):
+    api = API()
+    api.tree['tree'].extend(_unrelated_tree_rows(2200))
+    assert len(retained._raw(api.tree)) > retained.MAX_BYTES
+    assert len(api.tree['tree']) < 5000
+    with pytest.raises(ValueError, match='archive not verified'):
+        recover(runtime, api, tmp_path)
+    out = tmp_path / 'out'
+    assert (out / 'git-commit.json').exists()
+    assert not (out / 'git-tree.json').exists()
+    assert not (out / 'bundle').exists()
+    assert not (out / 'readback.json').exists()
+    assert retained._json((out / 'failure.json').read_bytes())['status'] == 'ARCHIVE_NOT_VERIFIED'
+    assert len(api.calls) == 4
+    with pytest.raises(FileExistsError):
+        recover(runtime, api, tmp_path)
+    assert len(api.calls) == 4
+
+
 @pytest.mark.parametrize('damage', ['reading-hash', 'registry-bytes', 'registry-origin', 'missing-record',
     'duplicate-record', 'not-visible', 'changed-purpose', 'foreign-source', 'wrong-entry-hash',
     'unknown-format', 'bad-format-fields', 'mutable-ref', 'broad-root'])
