@@ -154,6 +154,7 @@ def render(report):
     lines = ['\n\n## D：基准指数价格结构（保存输入、非交易信号）\n',
              f"市场日：{report['market_session']}；{report['subject']}；{report['bar_count']}根；CZSC 1.0.1／50／6。",
              f"来源采集：{report['source']['source_captured_at']}；本次计算：{report['computed_at']}。",
+             f"结构读取核查截止：{report['checked_at']}（包含本次结构计算／复用检查）。",
              f"本次输入状态：{report['reading_status']}；与上一读取：{report['observed_delta']['status']}。",
              f"{len(report['state']['bi_list'])}笔，{len(report['state']['finished_keys'])}笔在当次finished_bis；"
              f"{sum(z['is_valid'] for z in report['state']['zs_list'])}个native有效中枢。finished_bis可撤回。"]
@@ -181,6 +182,18 @@ def render(report):
               f'完整结构、撤回、原收盘基线和数值绑定见 [{PATH}]({PATH})；'
               f'来源日线见 [{INPUT_PATH}]({INPUT_PATH})。原行情失败与公司Research保持独立。\n']
     return '\n'.join(lines)
+
+
+def _close_reading(baseline, reading, checked_at):
+    """Reuse the normal root assembler after this optional stage has finished."""
+    model.check(model.clock(checked_at) >= model.clock(baseline['checks']['finished_at']),
+                'structure reading clock moved backwards')
+    research = deepcopy(baseline['research'])
+    research[KEY] = reading
+    return model.assemble(code_commit=baseline['code_commit'], checked_at=checked_at,
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
+        research=research, capabilities=baseline['capability_gaps'],
+        refresh_identity=baseline['refresh'])
 
 
 def attach(collector, baseline, *, retained_limit):
@@ -222,7 +235,11 @@ def attach(collector, baseline, *, retained_limit):
         report['source_selection'] = 'FAILED_SECTOR_AVAILABLE_INPUT' if failed else 'LAST_QUALIFIED_SECTOR_INPUT'
         report['latest_sector_attempt'] = deepcopy(attempt)
         report['source_lane_gaps'] = deepcopy(lane.get('gaps', []))
-        report['checked_at'] = baseline['checks']['finished_at']
+        phase = 'READING_CLOCK'
+        checked_at = collector.now()
+        model.check(model.clock(report['computed_at']) <= model.clock(checked_at),
+                    'structure computation follows completed reading check')
+        report['checked_at'] = checked_at
         report['code_commit'] = collector.code_commit
         input_raw = structure.encode(source)
         report['normalized_input_file'] = {'read_path': INPUT_PATH, 'bytes': len(input_raw),
@@ -235,8 +252,7 @@ def attach(collector, baseline, *, retained_limit):
                     'structure saved detail byte bound')
         descriptor = {'read_path': PATH, 'bytes': len(raw), 'sha256': model.sha256(raw),
                       'git_blob': model.blob_sha(raw), 'read_ref_rule': 'USE_THE_SAME_PINNED_READING_COMMIT'}
-        payload = deepcopy(baseline); payload['research'][KEY] = descriptor
-        payload['reading_hash'] = canonical_hash({k: v for k, v in payload.items() if k != 'reading_hash'})
+        payload = _close_reading(baseline, descriptor, checked_at)
         entry = model.read_package_bytes(payload)
         total = sum(len(v) for k, v in collector.files.items() if k != 'current-state.json')
         model.check(total + len(raw) + len(input_raw) + len(entry) + len(note) <= retained_limit,
@@ -251,20 +267,18 @@ def attach(collector, baseline, *, retained_limit):
         collector.files = before
         # Existing prices/Research remain usable. No older success is substituted
         # for this failure; previous Git versions remain independently readable.
-        payload = deepcopy(baseline)
-        payload['research'][KEY] = {'status': 'STRUCTURE_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
-                                    'phase': phase, 'error_type': type(exc).__name__,
-                                    'previous_reading_gap': prior_gap, 'new_source_requests': 0}
-        payload['reading_hash'] = canonical_hash({k: v for k, v in payload.items() if k != 'reading_hash'})
+        reading = {'status': 'STRUCTURE_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
+                   'phase': phase, 'error_type': type(exc).__name__,
+                   'previous_reading_gap': prior_gap, 'new_source_requests': 0}
         if previous:
-            payload['research'][KEY]['previous_saved_reading'] = {
+            reading['previous_saved_reading'] = {
                 'commit': collector.previous_commit, 'file': collector.previous['research'][KEY],
                 'market_session': previous['market_session'], 'meaning': 'PREVIOUS_READING_NOT_CURRENT_SUCCESS'}
-            payload['reading_hash'] = canonical_hash({k: v for k, v in payload.items() if k != 'reading_hash'})
         try:
+            payload = _close_reading(baseline, reading, collector.now())
             entry = model.read_package_bytes(payload)
         except ValueError:
-            print('D_STRUCTURE_UNAVAILABLE: existing root capacity preserved')
+            print('D_STRUCTURE_UNAVAILABLE: existing root clock and capacity preserved')
             return baseline
         note = b'\n\nD price structure unavailable; existing prices and Research preserved.\n'
         total = sum(len(v) for k, v in before.items() if k != 'current-state.json')

@@ -62,6 +62,16 @@ retrospective pass has consumed through this bar”. They are not historical pub
 availability timestamps. Daily datetime is a market-date label, not midnight
 knowledge. No final-state label is backfilled into a previously published file.
 
+The optional stage closes the root through the existing `current_state.assemble`
+after computation (or a recorded failure), rather than inheriting the earlier
+base stage's completed check. Root `generated_at` / `checks.finished_at` and the
+structure's `checked_at` share that completed-stage clock; the original check
+start, source capture, market dates, native `computed_at` and old Git readings
+are not backfilled. Same-input reuse advances the check, not the computation or
+first-observed clock. A future worker clock or reversed collector clock cannot
+publish a current structure. README's structure section states this stage's
+cutoff explicitly; earlier sections retain their own prior-stage context.
+
 Each pass retains prefix input/native/state hashes, counts, current public geometry
 and the complete stroke event/lifecycle list for that window. Full per-prefix
 geometry and FX/centre lifecycle diagnostics remain in the prior shadow study;
