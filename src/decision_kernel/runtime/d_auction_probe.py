@@ -337,9 +337,9 @@ def render(report):
         '历史/盘后补读不是开盘前发现；昨日池、缺口及筛掉项全部保留。不修改Research/Odds，不形成买卖或唤醒。']
     matches = [r for r in row_dicts(report) if r['matched_profile']]
     if matches:
-        lines += ['', '| 证券 | 昨日名称 | 昨日换手% | 竞价相对昨收% |', '|---|---|---:|---:|']
         if len(matches) > 20:
-            lines.append(f'首页按证券代码仅展示前20项，另{len(matches)-20}项及所有非匹配项见完整明细；不是强弱排名。')
+            lines += ['', f'首页按证券代码仅展示前20项，另{len(matches)-20}项及所有非匹配项见完整明细；不是强弱排名。']
+        lines += ['', '| 证券 | 昨日名称 | 昨日换手% | 竞价相对昨收% |', '|---|---|---:|---:|']
         for row in matches[:20]:
             name = escape(row['name']).replace('|', '／').replace('[', '［').replace(']', '］')
             lines.append(f"| {row['symbol']} | {name} | {row['prior_turnover_pct']} | {Decimal(row['gap_pct']):.2f} |")
