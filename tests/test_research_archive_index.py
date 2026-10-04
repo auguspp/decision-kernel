@@ -107,7 +107,8 @@ def test_full_eager_source_budget_does_not_hide_valid_archive_index(tmp_path):
     references = [{**api.record, 'id': f'synthetic-{n}'} for n in range(100)]
     result = c.research({'references': references, 'historical_handoffs': []}, include_work=False)
     assert c.sources == before and len(c.sources) == 60 and not api.calls and c.files == {}
-    assert result['records'] == [] and len(result['on_demand_archives']) == 100
+    assert result['records'] == [] and result[index.INDEX_KEY]['entry_count'] == 100
+    assert 'on_demand_archives' not in result
     assert result['gaps'] == [] and result['confirmed_actions'] == []
     assert result['handoffs']['active'] == []
     # Eager sources still fail under the same exhausted budget.
@@ -385,3 +386,103 @@ def test_registered_fibocom_progress2_keeps_distinct_original_and_same_question(
     assert original['qualification'] == second['qualification'] == index.QUALIFICATION
     index.validate(original)
     index.validate(second)
+
+
+def registry_backed(api=None):
+    api = deferred(api)
+    api.reg_source['read_ref_rule'] = 'USE_THE_SAME_PINNED_READING_COMMIT'
+    entries = api.reading['research'].pop('on_demand_archives')
+    api.reading['research'][index.INDEX_KEY] = index.registry_index(entries)
+    api.reseal()
+    return api
+
+
+def test_registry_backed_index_is_lossless_without_new_files_or_reads():
+    api = registry_backed(); before = deepcopy(api.reading)
+    files = {api.reg_source['read_path']: api.registry_raw}
+    actual = index.read_entries(api.reading['research'], files.__getitem__)
+    expected = [index.project(api.record)]
+    assert actual == expected and index.navigation(actual) == index.navigation(expected)
+    assert api.reading == before and api.calls == []
+    assert actual[0]['body_materialized_in_reading'] is False
+    legacy = deepcopy(api.reading)
+    legacy['research'].pop(index.INDEX_KEY)
+    legacy['research']['on_demand_archives'] = expected
+    legacy['reading_hash'] = canonical_hash({k:v for k,v in legacy.items() if k != 'reading_hash'})
+    model.validate_read_package(legacy)
+    assert len(model.read_package_bytes(api.reading)) < len(model.read_package_bytes(legacy))
+
+
+def test_registry_backed_archive_uses_original_recovery_without_extra_api(tmp_path):
+    api = registry_backed()
+    result = archive.recover_archive(api, reading_commit=R, record_id=RECORD, output=tmp_path/'out')
+    assert result['source_materialization'] == 'RECOVERED_ON_DEMAND_AFTER_REGISTERED_ONLY'
+    assert result['qualification'] == 'RETAINED_FILES_NOT_REVALIDATED_RESEARCH'
+    assert {p.name:p.read_bytes() for p in (tmp_path/'out/bundle').iterdir()} == api.files
+    assert len(api.calls) == 4 + len(api.files)
+    assert result['continuation_status'] == 'NOT_EXECUTED' and result['remote_write'] is False
+
+
+@pytest.mark.parametrize('damage', ['missing', 'bytes', 'count', 'policy', 'dual', 'wrong-ref-rule', 'hash', 'boolean-count'])
+def test_registry_backed_index_gap_never_becomes_empty(damage):
+    api = registry_backed(); research = api.reading['research']
+    files = {api.reg_source['read_path']: api.registry_raw}
+    if damage == 'missing': files.clear()
+    elif damage == 'bytes': files[api.reg_source['read_path']] += b' '
+    elif damage == 'count': research[index.INDEX_KEY]['entry_count'] += 1
+    elif damage == 'policy': research[index.INDEX_KEY]['read_policy'] = 'LATEST_MAIN'
+    elif damage == 'dual': research['on_demand_archives'] = []
+    elif damage == 'hash': research['registry']['sha256'] = 'f' * 64
+    elif damage == 'boolean-count': research[index.INDEX_KEY]['entry_count'] = True
+    else: research['registry']['read_ref_rule'] = 'LATEST_MAIN'
+    with pytest.raises((ValueError, KeyError)):
+        index.read_entries(research, files.__getitem__)
+    assert api.calls == []
+
+
+def test_company_and_reentry_builders_preserve_registry_backed_archive_context():
+    from test_radar_company_reading import composed, reseal, AT
+    from decision_kernel.runtime import research_reentry_reading as reentry
+    col, baseline, sector, ref, institution, iref = composed()
+    api = deferred(); api.record['case'] = '600000.SH'; reindex(api)
+    api.reg_source['read_ref_rule'] = 'USE_THE_SAME_PINNED_READING_COMMIT'
+    api.reg_source['ref'] = baseline['code_commit']
+    entries = api.reading['research']['on_demand_archives']
+    baseline['research'][index.INDEX_KEY] = index.registry_index(entries)
+    baseline['research']['registry'] = deepcopy(api.reg_source)
+    baseline['research'].pop('on_demand_archives', None); reseal(baseline)
+    col.files[api.reg_source['read_path']] = api.registry_raw
+    legacy = deepcopy(baseline); legacy['research'].pop(index.INDEX_KEY)
+    legacy['research']['on_demand_archives'] = entries; reseal(legacy)
+    kwargs = dict(sector_result=sector, sector_source=ref, institution_report=institution,
+                  institution_source=iref, source_status={}, generated_at=AT)
+    current = companies.build(baseline, retained_files=col.files, **kwargs)
+    prior = companies.build(legacy, **kwargs)
+    assert current['projection']['companies'] == prior['projection']['companies']
+    assert companies.render(current) == companies.render(prior)
+    assert current['projection']['coverage'] == prior['projection']['coverage']
+    assert current['projection']['companies'][0]['research']['on_demand_archives'] == entries
+    reopened = reentry.build(baseline, col.files)
+    old = reentry.build(legacy, col.files)
+    assert reopened['projection']['companies'] == old['projection']['companies']
+    assert reopened['projection']['coverage']['archive_locators'] == 1
+    assert reopened['projection']['companies'][0]['archives'][0]['status'] == 'REGISTERED_LOCATOR_NOT_BODY_RECOVERED'
+    assert col.api.calls == 0
+
+
+def test_registry_index_keeps_all_old_locator_fields_and_global_bounds():
+    api = deferred()
+    rows = [{**deepcopy(api.record), 'id': f'item-{n}', 'purpose_note': 'x' * 2048} for n in range(90)]
+    registry = {**api.registry, 'references': rows}
+    raw = model.json_bytes(registry); _, entries, gaps = index.split(registry)
+    source = {**api.reg_source, 'read_ref_rule':'USE_THE_SAME_PINNED_READING_COMMIT',
+              'git_blob':model.blob_sha(raw), 'sha256':model.sha256(raw),
+              'bytes':len(raw), 'read_path':'sources/git/'+model.blob_sha(raw)+'/registry.json'}
+    research = {'registry':source, index.INDEX_KEY:index.registry_index(entries), 'handoffs':{'active':[]}}
+    payload = model.assemble(code_commit=M, checked_at='2026-09-15T00:01:00Z',
+        check_started_at='2026-09-15T00:00:00Z', lanes={}, capabilities=[], refresh_identity={}, research=research)
+    assert not gaps and index.read_entries(payload['research'], registry_raw=raw) == entries
+    assert len(model.read_package_bytes(payload)) < 4096
+    assert len(raw) < archive.MAX_FILE_BYTES
+    assert (delivery.MAX_SOURCE_FILES, delivery.MAX_API_CALLS, delivery.MAX_RETAINED_OUTPUT) == (60,180,128*1024*1024)
+    assert (archive.MAX_FILES, archive.MAX_FILE_BYTES, archive.MAX_API_CALLS) == (16,512*1024,24)

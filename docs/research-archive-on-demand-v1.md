@@ -24,8 +24,14 @@ external progress descriptor digest and exact question identity. The initial
 registration must follow the existing actual archive/readback discipline; these
 fields are declarations, not new proof of the source body or its economic claims.
 
-The existing production Collector subclass projects these records into `research.on_demand_archives`.
-This is a derived field of the existing reading, not canonical stored Research.
+Current production describes these records with `research.on_demand_archive_index`
+(`PROJECT_FROM_SAME_READING_REGISTRY`). The complete declarations already live in
+the byte-bound `research.registry` copy at the SAME pinned R. Use
+`research_archive_index.read_entries(research, load)` with a same-R/local byte
+loader; it verifies that copy and applies the original `split/project` contract.
+Old readings with inline `research.on_demand_archives` remain readable. Both forms
+in one reading are rejected rather than silently choosing one. This is still a
+derived field of the existing reading, not canonical stored Research.
 Qualification is `REGISTERED_ARCHIVE_NOT_MATERIALIZED`; no `read_path` or
 same-reading-body assertion is invented. No source or archive API is requested
 for these bodies. Original eager source/accounting and retained byte limits stay
@@ -95,3 +101,24 @@ native custody establishes A. Historical raw output/proposals are not rewritten;
 the adopted registry record separately binds the actual retained source.
 The registry/publisher/reader path is unchanged; no provider, schedule or new
 archive service is introduced. Real use and recovery evidence remain in #620/#665.
+
+## 2026-10-04: reuse the retained registry instead of duplicating its index
+
+At R=00ce74ae3a856242dda2706d87d6e7c96d924fb6 the root was196435 of196608
+bytes; its46 inline archive declarations occupied51289 compact JSON bytes.
+The declarations were also fully present in the already retained registry.
+The new marker changes only navigation representation: no entry, source identity,
+purpose note, rejection, original failure or Human record is deleted.
+
+The normal company reading, re-entry, batch-disposition and README consumers
+resolve the same registry bytes. Original research_archive recovery reuses the
+registry bytes it already reads, so no extra API call, file, source fetch, service,
+parser framework, cache or permanent schedule is introduced. Missing, corrupt or
+mismatched registry bytes are a reading gap, not no archives. Existing total
+retention, root, source-file and archive recovery budgets remain unchanged.
+Legacy inline readers/history keep their original meaning.
+
+The archived D case is `d-mu-gigadevice-horizons-20261004`. It is a retained
+analysis with explicit prior freeze and source limitations, not an automatically
+executed opportunity engine. Full PR/main evidence, normal publication and
+actual fixed-R body recovery must be recorded separately from code or metadata.
