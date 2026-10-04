@@ -123,3 +123,26 @@ def test_existing_public_price_entry_consumes_query_without_leaking_it(tmp_path,
     result=stock.read_current(c,b)
     assert result['auction_probe']['matched']==1 and '_run_query' not in result
     assert result['summary'].startswith('original price summary')
+
+
+def test_v1_publisher_adds_count_interpretation_without_source_io_or_history_rewrite(tmp_path,monkeypatch):
+    from test_d_auction_streak import legacy_files
+    c,b,files,run,_,_=fixture(tmp_path,monkeypatch)
+    receipt=json.loads(files['receipt.json'])
+    name=receipt['calls'][1]['attempts'][-1]['response_file']
+    source=json.loads(files[name]); field=source['data']['fields'].index('limit_times')
+    source['data']['items'][0][field]=2.0  # Source JSON numeric 2.0, parsed as exact Decimal.
+    files[name]=probe.saved.dumps(source)
+    receipt['files'][name]={'bytes':len(files[name]),'sha256':model.sha256(files[name])}
+    files['receipt.json']=probe.saved.dumps(receipt)
+    old=legacy_files(files); original_files=deepcopy(files)
+    def no_new_request(*a,**k):raise AssertionError('existing archive is sufficient')
+    monkeypatch.setattr(relay,'request',no_new_request)
+    result=reading.read_saved(c,b,run_query={'total_count':1,'workflow_runs':[run]})
+    published=json.loads(c.files[probe.PATH]); projection=published.pop('prior_temperature_qualification')
+    assert result['status']=='SHADOW_AUCTION_READING' and published==old
+    assert projection['temperature']['maximum_consecutive']==2
+    assert projection['source_report_sha256']==model.sha256(files['report.json'])
+    assert files==original_files and c.api.calls==0 and result['new_source_requests']==0
+    assert c.files['daily.json']==b'ORIGINAL_DAILY' and c.files['README.md']==b'ORIGINAL'
+    assert '不是重新采集' in result['summary'] and '最高连板2' in result['summary']
