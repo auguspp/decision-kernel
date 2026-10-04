@@ -93,3 +93,33 @@ def test_failed_sibling_does_not_remove_replayable_source(tmp_path,monkeypatch):
     result=reading.read_saved(c,b)
     assert result['status']=='SHADOW_AUCTION_READING'
     assert result['latest_attempt']['conclusion']=='failure'
+
+
+def test_existing_native_query_reused_without_requiring_api_cache(tmp_path,monkeypatch):
+    c,b,_,run,_,_=fixture(tmp_path,monkeypatch)
+    def unexpected(path):raise AssertionError('a second native GET is not needed')
+    c.api.get=unexpected
+    result=reading.read_saved(c,b,run_query={'total_count':1,'workflow_runs':[run]})
+    assert result['matched']==1 and c.api.calls==0
+
+
+def test_failed_native_query_is_not_retried_by_independent_reader(tmp_path,monkeypatch):
+    c,b,_,_,_,_=fixture(tmp_path,monkeypatch)
+    before=deepcopy(c.files)
+    def unexpected(path):raise AssertionError('failed native GET cannot be retried by sibling')
+    c.api.get=unexpected
+    result=reading.read_saved(c,b,run_query={})
+    assert result['status']=='AUCTION_READING_GAP_NOT_QUIET'
+    assert c.files==before and c.api.calls==0
+
+
+def test_existing_public_price_entry_consumes_query_without_leaking_it(tmp_path,monkeypatch):
+    from decision_kernel.runtime import stock_market_input_reading as stock
+    c,b,_,run,_,_=fixture(tmp_path,monkeypatch)
+    def unexpected(path):raise AssertionError('shared query was already obtained')
+    c.api.get=unexpected
+    monkeypatch.setattr(stock,'_read_current_prices',lambda *a:{'status':'PRICE_READING',
+        'summary':'original price summary','_run_query':{'total_count':1,'workflow_runs':[run]}})
+    result=stock.read_current(c,b)
+    assert result['auction_probe']['matched']==1 and '_run_query' not in result
+    assert result['summary'].startswith('original price summary')

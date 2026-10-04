@@ -13,7 +13,7 @@ QUERY = 'actions/workflows/stock-reading-after-sector.yml/runs?branch=main&per_p
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, BadZipFile)
 
 
-def read_saved(collector, baseline):
+def read_saved(collector, baseline, *, run_query=None):
     """Use a native saved run; a local failure cannot remove daily stock inputs."""
     previous_files, previous_cache = dict(collector.files), dict(collector.archive_cache)
     result = {'status': 'NO_SAVED_AUCTION_RUN_IN_QUERY', 'latest_attempt': None,
@@ -21,8 +21,10 @@ def read_saved(collector, baseline):
     try:
         reserve = len(set(collector.files) | {probe.PATH, 'current-state.json', 'README.md'}) + 12
         model.check(collector.api.calls + reserve + 4 <= collector.api.max_calls, 'auction publication reserve')
-        # Same query as the daily reader: GitHubAPI memoization avoids a second GET.
-        query = collector.api.get(QUERY); runs = query['workflow_runs']
+        # Reuse the daily reader's actual query even for API implementations
+        # without memoization; no second GET or retry after a failed sibling GET.
+        query = collector.api.get(QUERY) if run_query is None else run_query
+        runs = query['workflow_runs']
         model.check(isinstance(runs, list) and len(runs) <= 100 and type(query['total_count']) is int
                     and query['total_count'] >= len(runs), 'auction run query')
         result['run_query_complete'] = query['total_count'] <= len(runs)
