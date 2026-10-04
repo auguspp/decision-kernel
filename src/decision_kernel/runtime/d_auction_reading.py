@@ -57,7 +57,7 @@ def read_saved(collector, baseline, *, run_query=None):
             for name, raw in files.items():
                 path = root/model.safe_path(name); path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(raw)
-            report = probe.verify(root, expected_workflow=expected)
+            report = probe.verify(root, expected_workflow=expected, qualify_temperature=True)
         model.check(report['provenance'] == 'LIVE_TUSHARE_RELAY' and
                     model.clock(run['run_started_at']) <= model.clock(report['observed_at']) <=
                     model.clock(report['received_through']) <= model.clock(run['updated_at']), 'auction provenance or clock')

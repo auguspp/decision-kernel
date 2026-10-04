@@ -18,7 +18,8 @@ import time as elapsed
 
 from . import stock_market_inputs as saved
 
-VERSION = 'd-opening-auction-shadow-v1'
+LEGACY_VERSION = 'd-opening-auction-shadow-v1'
+VERSION = 'd-opening-auction-shadow-v2'
 PROFILE = 'registered-317-prior-turnover10-30-auction-gap3-9-v1'
 TITLE = 'd-auction-inputs'
 JOB = 'auction-inputs'
@@ -144,7 +145,7 @@ def packed(result):
     return result
 
 
-def prior_pool(raw, prior):
+def prior_pool(raw, prior, *, legacy_streaks=False):
     source, truncated = table(raw, 'limit_list_d')
     groups, invalid = scoped(source, prior)
     # Valid securities on a wrong date stay in the U denominator, but cannot
@@ -212,7 +213,16 @@ def prior_pool(raw, prior):
         if any(r.get('limit') != 'U' or r.get('trade_date') != prior.strftime('%Y%m%d') for r in values):
             continue
         streaks = [r.get('limit_times') for r in values]
-        if any(type(n) is not int or n < 1 for n in streaks) or len(set(streaks)) != 1:
+        try:
+            if legacy_streaks:
+                # Preserve exact v1 replay, including its integral-Decimal gap.
+                require(all(type(n) is int and n >= 1 for n in streaks), 'STREAK_INTEGER')
+            else:
+                numbers = [number(n) for n in streaks]
+                require(all(n >= 1 and n == n.to_integral_value() for n in numbers), 'STREAK_INTEGER')
+                streaks = [int(n) for n in numbers]
+            require(len(set(streaks)) == 1, 'STREAK_CONFLICT')
+        except ERRORS:
             missing_streaks.append(symbol); continue
         ladder.append({'symbol': symbol, 'consecutive_limits': streaks[0]})
     return output, {'market_session': prior.isoformat(), 'source_pool': 'LIMIT_LIST_D_EXCLUDES_ST',
@@ -259,7 +269,8 @@ def response(call, bodies):
 def build(receipt, bodies):
     target = target_day(receipt['market_session']); at = stamp(receipt['observed_at'])
     calls = receipt['calls']
-    result = {'version': VERSION, 'profile': PROFILE, 'source': saved.SOURCE,
+    require(receipt['version'] in (LEGACY_VERSION, VERSION), 'CAPTURE_VERSION')
+    result = {'version': receipt['version'], 'profile': PROFILE, 'source': saved.SOURCE,
         'market_session': target.isoformat(), 'previous_session': None,
         'observed_at': at.isoformat(), 'received_through': receipt['finished_at'],
         'provenance': receipt['provenance'], 'status': 'CALENDAR_UNAVAILABLE',
@@ -291,7 +302,8 @@ def build(receipt, bodies):
     if len(calls) == 1:
         return packed(result)
     try:
-        rows, context = prior_pool(response(calls[1], bodies), prior)
+        rows, context = prior_pool(response(calls[1], bodies), prior,
+                                   legacy_streaks=receipt['version'] == LEGACY_VERSION)
     except ERRORS:
         require(len(calls) == 2, 'REQUEST_AFTER_INVALID_PRIOR')
         return packed(result)
@@ -335,6 +347,18 @@ def render(report):
         '来源截断或逐名缺口：' + ('有，已逐项保留。' if report.get('coverage_gaps', True) else '本次返回范围未发现；不是独立穷尽认证。'),
         '固定观察条件：昨日换手10–30%、沪深主板且昨日名称不含ST、竞价相对接口昨收高开3–9%。',
         '历史/盘后补读不是开盘前发现；昨日池、缺口及筛掉项全部保留。不修改Research/Odds，不形成买卖或唤醒。']
+    qualified = report.get('prior_temperature_qualification')
+    temperature = qualified['temperature'] if qualified else (
+        report['prior_temperature'] if report['version'] == VERSION else None)
+    if temperature is not None:
+        maximum = temperature['maximum_consecutive']
+        lines += [f"昨日来源池（{temperature['market_session']}）：涨停{temperature['limit_up']}、"
+            f"跌停{temperature['limit_down']}、炸板{temperature['opened_limit']}；"
+            f"已识别最高连板{maximum if maximum is not None else '未知'}，"
+            f"2板及以上{len(temperature['ladder_at_least_two'])}只；"
+            f"连板字段缺失或冲突{len(temperature['missing_streak_symbols'])}只。不是今日情绪或完整市场统计。"]
+        if qualified:
+            lines.append('连板数按同一已验证原响应重新解释；旧报告及其缺失记录保留，不是重新采集。')
     matches = [r for r in row_dicts(report) if r['matched_profile']]
     if matches:
         if len(matches) > 20:
@@ -417,8 +441,8 @@ def capture(root, *, market_session=None, observed_at=None, workflow=None, reque
     return verify(root, expected_workflow=identity if live else None)
 
 
-def verify(root, *, expected_workflow=None):
-    """Replay exact saved envelopes; no source/network call or silent correction."""
+def verify(root, *, expected_workflow=None, qualify_temperature=False):
+    """Replay exact envelopes; optionally append a labelled v1 count interpretation."""
     from . import tushare_relay as relay
     root = saved.safe_root(root)
     def read(name, limit):
@@ -426,7 +450,7 @@ def verify(root, *, expected_workflow=None):
         require(path.is_file() and path.stat().st_size <= limit, 'SAVED_BYTE_BOUND')
         return path.read_bytes()
     receipt = saved.loads(read('receipt.json', 256*1024))
-    require(receipt['version'] == VERSION and receipt['source'] == saved.SOURCE and
+    require(receipt['version'] in (LEGACY_VERSION, VERSION) and receipt['source'] == saved.SOURCE and
             receipt['provenance'] in ('LIVE_TUSHARE_RELAY', 'SYNTHETIC_TEST_ONLY'), 'CAPTURE_IDENTITY')
     if receipt['provenance'] == 'LIVE_TUSHARE_RELAY':
         require(receipt['workflow'] == workflow_identity(receipt['workflow']), 'WORKFLOW_IDENTITY')
@@ -476,6 +500,18 @@ def verify(root, *, expected_workflow=None):
     rebuilt = build(receipt, bodies)
     require(read('report.json', MAX_REPORT) == saved.dumps(rebuilt) and
             read('summary.md', 256*1024) == render(rebuilt).encode(), 'REPORT_REPLAY')
+    if qualify_temperature and receipt['version'] == LEGACY_VERSION and rebuilt['prior_temperature'] is not None:
+        call = receipt['calls'][1]
+        response_file = call['attempts'][-1]['response_file']
+        _, temperature = prior_pool(response(call, bodies), target_day(rebuilt['previous_session']))
+        rebuilt['prior_temperature_qualification'] = {
+            'version': 'positive-integral-streak-v1',
+            'source_report_version': LEGACY_VERSION,
+            'source_report_sha256': sha256(read('report.json', MAX_REPORT)).hexdigest(),
+            'source_response_file': response_file,
+            'source_response_sha256': receipt['files'][response_file]['sha256'],
+            'temperature': temperature,
+            'meaning': 'DERIVED_FROM_VERIFIED_ORIGINAL_NOT_NEW_CAPTURE_OR_REWRITTEN_HISTORY'}
     return rebuilt
 
 
