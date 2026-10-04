@@ -89,13 +89,13 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/3b8a0b70378fa4aef35cb087fdd71cd6b281b047fdda623964ee2bd7a4366681.zip)
 
 ## ECB 外汇参考价
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：37103215362
+最后可读批次run：37183900271
 # ECB 外汇参考价
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-02；抓取截止：2026-10-03T06:29:32.684238+00:00
+窗口截止：2026-10-03；抓取截止：2026-10-04T06:49:03.691946+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
@@ -113,7 +113,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 ## 来源请求
 - EUR：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa.zip)
+[原始ZIP](../../sources/artifacts/3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f.zip)
 
 ## 黄金与原油 · 供应商期货日线
 本次读取：REUSED_RETAINED_CAPTURE

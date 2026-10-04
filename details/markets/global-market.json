@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-04T06:40:38.383601+00:00",
+    "checked_at": "2026-10-04T06:49:41.967134+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -933,44 +933,44 @@
       "fx": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11265904424,
-          "artifact_name": "global-public-fx-37103215362-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362/artifacts/11265904424",
-          "bytes": 11582,
-          "expires_at": "2026-11-02T06:29:33Z",
-          "git_blob": "c2ac97a560de7c9d00c32be15c9a9c801b51ef07",
+          "artifact_id": 11296316457,
+          "artifact_name": "global-public-fx-37183900271-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271/artifacts/11296316457",
+          "bytes": 11581,
+          "expires_at": "2026-11-03T06:49:04Z",
+          "git_blob": "4591144d031e01d538942abf568675bb8eaedadf",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-03T06:29:17Z",
+            "created_at": "2026-10-04T06:48:50Z",
             "event": "schedule",
-            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
-            "id": 37103215362,
+            "head_sha": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271",
+            "id": 37183900271,
             "operation": null,
             "path": ".github/workflows/radar-global-public.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-03T06:29:17Z",
+            "run_started_at": "2026-10-04T06:48:50Z",
             "status": "completed",
-            "updated_at": "2026-10-03T06:29:36Z"
+            "updated_at": "2026-10-04T06:49:07Z"
           },
-          "read_path": "sources/artifacts/9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa.zip",
+          "read_path": "sources/artifacts/3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa"
+          "sha256": "3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-03T06:29:17Z",
+          "created_at": "2026-10-04T06:48:50Z",
           "event": "schedule",
-          "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
-          "id": 37103215362,
+          "head_sha": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271",
+          "id": 37183900271,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-03T06:29:17Z",
+          "run_started_at": "2026-10-04T06:48:50Z",
           "status": "completed",
-          "updated_at": "2026-10-03T06:29:36Z"
+          "updated_at": "2026-10-04T06:49:07Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -981,56 +981,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11265904424,
-            "artifact_name": "global-public-fx-37103215362-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362/artifacts/11265904424",
-            "bytes": 11582,
-            "expires_at": "2026-11-02T06:29:33Z",
-            "git_blob": "c2ac97a560de7c9d00c32be15c9a9c801b51ef07",
+            "artifact_id": 11296316457,
+            "artifact_name": "global-public-fx-37183900271-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271/artifacts/11296316457",
+            "bytes": 11581,
+            "expires_at": "2026-11-03T06:49:04Z",
+            "git_blob": "4591144d031e01d538942abf568675bb8eaedadf",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-03T06:29:17Z",
+              "created_at": "2026-10-04T06:48:50Z",
               "event": "schedule",
-              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
-              "id": 37103215362,
+              "head_sha": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271",
+              "id": 37183900271,
               "operation": null,
               "path": ".github/workflows/radar-global-public.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-03T06:29:17Z",
+              "run_started_at": "2026-10-04T06:48:50Z",
               "status": "completed",
-              "updated_at": "2026-10-03T06:29:36Z"
+              "updated_at": "2026-10-04T06:49:07Z"
             },
-            "read_path": "sources/artifacts/9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa.zip",
+            "read_path": "sources/artifacts/3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa"
+            "sha256": "3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265904424/zip",
-            "created_at": "2026-10-03T06:29:33Z",
-            "digest": "sha256:9ae4b7c5f0e93f0f1a79ead5c407780c1a0627caaf1adcb4c934c57904c3e3aa",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11296316457/zip",
+            "created_at": "2026-10-04T06:49:04Z",
+            "digest": "sha256:3315bba74f260c05475915aec5b896249d04770fb10595d0df94072cbbe3212f",
             "expired": false,
-            "expires_at": "2026-11-02T06:29:33Z",
-            "id": 11265904424,
-            "name": "global-public-fx-37103215362-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTI2NTkwNDQyNA==",
-            "size_in_bytes": 11582,
-            "updated_at": "2026-10-03T06:29:33Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11265904424",
+            "expires_at": "2026-11-03T06:49:04Z",
+            "id": 11296316457,
+            "name": "global-public-fx-37183900271-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTI5NjMxNjQ1Nw==",
+            "size_in_bytes": 11581,
+            "updated_at": "2026-10-04T06:49:04Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11296316457",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
-              "id": 37103215362,
+              "head_sha": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
+              "id": 37183900271,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-02",
+            "as_of_date": "2026-10-03",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -1042,23 +1042,23 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 4,
-            "capture_hash": "74013d07951832894bcb0bea3879625a4d5bd7900b17526b2b8bb566e23e10c7",
-            "captured_from": "2026-10-03T06:29:31.207515+00:00",
-            "captured_through": "2026-10-03T06:29:32.684238+00:00",
+            "capture_hash": "dfb987acec26f5ade692b525c3cb2203c6e6da873f96191ce6974d4ae8297413",
+            "captured_from": "2026-10-04T06:49:02.580770+00:00",
+            "captured_through": "2026-10-04T06:49:03.691946+00:00",
             "coverage": "SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS",
             "family": "fx",
             "identity": {
               "attempt": 1,
-              "code_commit": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
+              "code_commit": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 37103215362,
+              "run_id": 37183900271,
               "workflow": ".github/workflows/radar-global-public.yml"
             },
             "observations": [
               {
-                "calendar_age_at_requested_end": 0,
+                "calendar_age_at_requested_end": 1,
                 "change": "-0.646132",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
@@ -1074,7 +1074,7 @@
                 "value": "1.1225"
               },
               {
-                "calendar_age_at_requested_end": 0,
+                "calendar_age_at_requested_end": 1,
                 "change": "-0.645562",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
@@ -1090,7 +1090,7 @@
                 "value": "7.5259"
               },
               {
-                "calendar_age_at_requested_end": 0,
+                "calendar_age_at_requested_end": 1,
                 "change": "-0.840383",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
@@ -1106,7 +1106,7 @@
                 "value": "176.99"
               },
               {
-                "calendar_age_at_requested_end": 0,
+                "calendar_age_at_requested_end": 1,
                 "change": "-0.398252",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
@@ -1142,10 +1142,10 @@
             "version": "global-public-context-v1",
             "vintage": "CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE"
           },
-          "retained_at": "2026-10-03T06:31:40.947596+00:00",
+          "retained_at": "2026-10-04T06:49:41.550707+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-03T06:29:17Z",
+            "created_at": "2026-10-04T06:48:50Z",
             "display_title": "B1 public · fx · ",
             "event": "schedule",
             "head_branch": "main",
@@ -1217,9 +1217,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "2443704cb328bd8faf50bd7979caed5d6d3c419a",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37103215362",
-            "id": 37103215362,
+            "head_sha": "8d9ac47b4ef4857f589f9525dcad1029dc2f6bcd",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37183900271",
+            "id": 37183900271,
             "path": ".github/workflows/radar-global-public.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -1290,9 +1290,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-03T06:29:17Z",
+            "run_started_at": "2026-10-04T06:48:50Z",
             "status": "completed",
-            "updated_at": "2026-10-03T06:29:36Z"
+            "updated_at": "2026-10-04T06:49:07Z"
           }
         }
       },
@@ -2595,7 +2595,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 25,
+      "total_count": 26,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2608,5 +2608,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "9eaebe73fe7f57c498eee8bc9915e7a092e5f4b266f6af9db9a7b748d73a33d3"
+  "projection_hash": "fe9a7cecfca807ea1867e66a6e521dda69dc5dba5448cd0657a9ba610e275d01"
 }
