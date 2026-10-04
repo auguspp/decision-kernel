@@ -15,6 +15,15 @@ dependencies = [
 decision-kernel = "decision_kernel.cli:main"
 
 [project.optional-dependencies]
+price-structure = [
+  "czsc==1.0.1",
+  "wbt==0.2.1",
+  "pyarrow==25.0.1",
+  "polars==1.44.2",
+  "requests-toolbelt==1.0.0",
+  "dill==0.4.1",
+  "tenacity==9.1.4",
+]
 concept = [
   "eltdx==3.2.2",
 ]
@@ -45,6 +54,12 @@ dump-study = [
   "pyarrow==25.0.1",
 ]
 dev = [
+  "czsc==1.0.1",
+  "wbt==0.2.1",
+  "polars==1.44.2",
+  "requests-toolbelt==1.0.0",
+  "dill==0.4.1",
+  "tenacity==9.1.4",
   "eltdx==3.2.2",
   "cnequity==0.11.0",
   "openai==3.19.2",
