@@ -30,7 +30,7 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/40d92d1fcbca5e6faf0cf0c313422a6c84689e155063447e79c427a9db8ca7de.zip)
 
 ## 人民币同业利率
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：37182313841
 # 人民币同业利率 · Shibor
