@@ -1,0 +1,114 @@
+{
+  "attachment": {
+    "bytes": 780557,
+    "git_blob": "6d300e118b5656159e33a0c540072144baa97cd2",
+    "name": "czsc-reuse-seam-20261004.zip",
+    "sha256": "37cf321b1bcca1a32f16a436dacdc2c3416d846b8b269b245a6863c4683d11f4"
+  },
+  "code_reference": "b2c6dfa27be8000f89fe29301b67fd4b6bc5d488",
+  "full_recheck_attachment": {
+    "availability": "CONVERSATION_ATTACHMENT_NOT_COPIED_TO_THIS_GIT_DIRECTORY",
+    "bytes": 15866214,
+    "name": "czsc-shadow-recheck-20261004.zip",
+    "sha256": "0a88bf3949b1c6f5b8b0c77cd9f60e4d398b0da55f5764162dd84286217c1bc9"
+  },
+  "market_archive": {
+    "artifact_id": 11090591162,
+    "artifact_name": "sector-radar-run-36701050510",
+    "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/36701050510/artifacts/11090591162",
+    "bytes": 2300834,
+    "expires_at": "2026-12-29T10:13:08Z",
+    "git_blob": "349287b75a2a6b1a2ec5cc253d06a6775091c01c",
+    "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+    "origin_run": {
+      "conclusion": "success",
+      "created_at": "2026-09-30T10:13:06Z",
+      "event": "workflow_dispatch",
+      "head_sha": "ce22fa79ac841dea11d31541c86e4c4faeb1378b",
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36701050510",
+      "id": 36701050510,
+      "operation": null,
+      "path": ".github/workflows/sector-radar-shadow.yml",
+      "run_attempt": 1,
+      "run_started_at": "2026-09-30T10:13:06Z",
+      "status": "completed",
+      "updated_at": "2026-09-30T10:23:03Z"
+    },
+    "read_path": "sources/artifacts/eba910ddc05edc43e0618f80e051429efe5d95795da8b823dda2c241e5db9b03.zip",
+    "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+    "sha256": "eba910ddc05edc43e0618f80e051429efe5d95795da8b823dda2c241e5db9b03"
+  },
+  "market_response": {
+    "geometry": "PROVIDER_INDEX_OHLC_NO_EXTRA_ADJUSTMENT",
+    "historical_public_availability": "NOT_ESTABLISHED",
+    "interval": "1d",
+    "requested_adjust": "OMITTED",
+    "response_file": "input-audit/responses/0003.json",
+    "response_git_blob": "29e5e1f98cec961a55e423479b39a1eb3176e353",
+    "response_sha256": "8ba80aed91d2a796a3a5b5f02a12834c0995f7c3d87697e2cc0ef7e78a395a2d",
+    "source_adjust": null,
+    "source_captured_at": "2026-09-30T10:14:37.027798+00:00",
+    "subject": "000300.SH",
+    "subject_type": "BENCHMARK_INDEX_NOT_STOCK_COHORT"
+  },
+  "meaning": "SELECTED_HUMAN_READABLE_ARTIFACT_ARCHIVE_NOT_COMPLETE_SHADOW_REPLAY_PACKAGE",
+  "predecessor_comment": {
+    "comment": 5980091863,
+    "issue": 509
+  },
+  "prepared_at_utc": "2026-10-04T12:56:42.345349+00:00",
+  "prior_market_archive_reading_reference": "91fb90334cd7cb0f797d22c7924d2643d4925c78",
+  "production_publication": "NOT_PERFORMED",
+  "registration": "NOT_REGISTERED_IN_READ_MODEL",
+  "retention_limit": "The complete original JSON views, 480 snapshots, scripts, native bindings and execution logs remain in their previously hash-bound attachments; this directory does not claim to contain them all.",
+  "selected_prior_files": {
+    "inputs/baseline-prefixes.json": {
+      "bytes": 169909,
+      "git_blob": "5fc641d195304f5ffe90d495d7c2c1960389ea94",
+      "sha256": "817f4bfdc1773f46cea8bf176b7f80d46bce13c8af0af776ade6064e3ee5293a"
+    },
+    "inputs/normalized-benchmark.json": {
+      "bytes": 31539,
+      "git_blob": "ddd9a4378124bb1bfc8e2d4ced533c27eae7a667",
+      "sha256": "5c4c835bbdd75c12ec4d9e41a4f0a960aaa982fa7b683c4976d5d01f0f82c137"
+    },
+    "prior-evidence/verification-report.json": {
+      "bytes": 7680,
+      "git_blob": "dd0f5c08c40f16918f6fa6923d7168862f92273e",
+      "sha256": "b946c5839787f00012f74d9535d376818012335d213b9f1db490877831101a05"
+    },
+    "readings-v2/prefix-159.json": {
+      "bytes": 35575,
+      "git_blob": "8263b40d7ff11438ef2d59bcc8cbc13627041e9e",
+      "sha256": "4585504c23a2b93f6af186c8128f54616e13a9bbe7d0f1e311b39a75b9dd080c"
+    },
+    "readings-v2/prefix-159.md": {
+      "bytes": 2604,
+      "git_blob": "2447bf52da25202c94106b9c01b92402bc26fb10",
+      "sha256": "4415678d524292600558fca758b80cef874b49c76187541ce60e3e99bd5d9d56"
+    },
+    "readings-v2/prefix-160.json": {
+      "bytes": 36664,
+      "git_blob": "8a50aab7bf725a1fa4f61709093158e31d40e1e4",
+      "sha256": "b28e49288bab953a8b2b3e79ea9c4b6cb04d4fe4e02bc87ea9755e08da23ddde"
+    },
+    "readings-v2/prefix-160.md": {
+      "bytes": 2697,
+      "git_blob": "e1d7b95029e6a5f4549cfef4e4bfd8cd4733c3a5",
+      "sha256": "af7c0f13e2b5d5e2bc3c435671acf7d9916192840145dc470a4e352e9a52536e"
+    }
+  },
+  "this_run": {
+    "czsc_imported": false,
+    "czsc_installed_version": null,
+    "native_calls": 0,
+    "new_market_requests": 0,
+    "package_changes": 0,
+    "python": "3.13.5"
+  },
+  "upstream": {
+    "commit": "90372af035f01ed9f05070eadddd265b91c84d24",
+    "version": "1.0.1",
+    "wheel_sha256": "2c65d266bd58b51960be505678f2daae69892ca4031808eeeef2ccbc2848c036"
+  }
+}

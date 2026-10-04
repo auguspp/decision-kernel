@@ -1,0 +1,137 @@
+{
+  "added_strokes": [
+    {
+      "currently_in_finished_bis": false,
+      "first_entered_finished_in_prior_replay": null,
+      "first_visible_in_prior_replay": {
+        "actual_execution_observed_at_utc": "2026-10-04T12:19:51.175731+00:00",
+        "knowledge_semantics": "AFTER_THIS_PREFIX_IN_OFFLINE_REPLAY_NOT_HISTORICAL_PUBLIC_AVAILABILITY",
+        "prefix_count": 160,
+        "replay_prefix_end_session": "2026-09-30"
+      },
+      "geometry": {
+        "a": {
+          "hex": "0x1.1e76147ae147bp+12",
+          "repr": "4583.38"
+        },
+        "b": {
+          "hex": "0x1.0e391eb851eb8p+12",
+          "repr": "4323.57"
+        },
+        "direction": "Down",
+        "edt": "2026-09-28T00:00:00",
+        "high": {
+          "hex": "0x1.1e76147ae147bp+12",
+          "repr": "4583.38"
+        },
+        "key": "6ea628386f6a3d58fceae36080f5c83695052e362b181ea35f111458ea5c1d27",
+        "low": {
+          "hex": "0x1.0e391eb851eb8p+12",
+          "repr": "4323.57"
+        },
+        "sdt": "2026-09-22T00:00:00",
+        "symbol": "000300.SH"
+      },
+      "known_withdrawals": []
+    }
+  ],
+  "all_centres_exactly_equal": true,
+  "automatic_research_routing": false,
+  "baseline_last_turn_exactly_equal": true,
+  "baseline_ranges": {
+    "20": {
+      "lower": "4340.76",
+      "range_end": "2026-09-29",
+      "range_start": "2026-09-01",
+      "status": "WITHIN_PRECEDING_CLOSE_RANGE",
+      "upper": "4611.44"
+    },
+    "5": {
+      "lower": "4340.76",
+      "range_end": "2026-09-29",
+      "range_start": "2026-09-22",
+      "status": "WITHIN_PRECEDING_CLOSE_RANGE",
+      "upper": "4544.59"
+    },
+    "60": {
+      "lower": "4340.76",
+      "range_end": "2026-09-29",
+      "range_start": "2026-07-07",
+      "status": "WITHIN_PRECEDING_CLOSE_RANGE",
+      "upper": "4876.31"
+    }
+  },
+  "changed_existing_strokes": [],
+  "close_source_decimal": "4357.62",
+  "finished_counts": [
+    14,
+    14
+  ],
+  "from_session": "2026-09-29",
+  "investment_authority": "NONE",
+  "knowledge": "Market dates are consumed-prefix labels, not historical system knowledge timestamps.",
+  "last_baseline_turn": {
+    "close": "4340.76",
+    "confirmed_session": "2026-09-29",
+    "kind": "CLOSE_TROUGH",
+    "turn_session": "2026-09-28"
+  },
+  "last_retained_centre": {
+    "dd": {
+      "hex": "0x1.141999999999ap+12",
+      "repr": "4417.6"
+    },
+    "edir": "Up",
+    "edt": "2026-09-22T00:00:00",
+    "gg": {
+      "hex": "0x1.288028f5c28f6p+12",
+      "repr": "4744.01"
+    },
+    "is_valid": true,
+    "key": "21d34f457db0955d848051626342dd73719d4b6574282a5d1d2a9d087d7445d4",
+    "sdir": "Up",
+    "sdt": "2026-07-30T00:00:00",
+    "stroke_count": 5,
+    "stroke_keys": [
+      "e8ff5538a22994f9f3b61f1a31476bc5169c6835f4efcf440bbb366bb3b3674f",
+      "b9e974c30758bef33c51fc17428f4a02b507d9cbf4e8162ec6f9733d77461c23",
+      "8db5b10fa82eda89c44b7a334fb86370558bfc0669d39c52ecdc9d53cbe2f4c2",
+      "88a2f395cbdb0f3f4ec3f54b18ad3e1a6a563b71f613d32a1384e7b9ece417a3",
+      "a860e6ce3b2a4f13ca2793f1995b0ed05473f16a8c53e41be384762b7cca94ca"
+    ],
+    "zd": {
+      "hex": "0x1.1ab051eb851ecp+12",
+      "repr": "4523.02"
+    },
+    "zg": {
+      "hex": "0x1.223570a3d70a4p+12",
+      "repr": "4643.34"
+    },
+    "zz": {
+      "hex": "0x1.1e72e147ae148p+12",
+      "repr": "4583.18"
+    }
+  },
+  "meaning": "READ_ONLY_DIFFERENCE_BETWEEN_TWO_RETAINED_REPLAY_VIEWS_NOT_NEW_MARKET_CAPTURE",
+  "method_value": "Additional representation only; no OOS or incremental predictive value established.",
+  "new_stroke_count": 15,
+  "old_stroke_count": 14,
+  "parameters": {
+    "max_bi_num": 50,
+    "min_bi_len": 6
+  },
+  "removed_strokes": [],
+  "source_file_sha256": "5c4c835bbdd75c12ec4d9e41a4f0a960aaa982fa7b683c4976d5d01f0f82c137",
+  "subject": "000300.SH",
+  "to_session": "2026-09-30",
+  "unchanged_stroke_count": 14,
+  "valid_centre_counts": [
+    3,
+    3
+  ],
+  "withdrawal_totals": [
+    12,
+    12
+  ],
+  "withdrawals_exactly_equal": true
+}
