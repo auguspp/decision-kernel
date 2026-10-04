@@ -8,7 +8,7 @@
         "path": "docs/current-state.md",
         "read_path": "sources/git/6dc1e3a898c9e1a590235c859a29dedd6f1128ea/current-state.md",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+        "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
         "repository": "auguspp/decision-kernel",
         "sha256": "a5a07bb149d8d9b7559b16357857a24aab78e2c2032f87816194a81477432909"
       },
@@ -22,7 +22,7 @@
         "path": "docs/current-state.md",
         "read_path": "sources/git/6dc1e3a898c9e1a590235c859a29dedd6f1128ea/current-state.md",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+        "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
         "repository": "auguspp/decision-kernel",
         "sha256": "a5a07bb149d8d9b7559b16357857a24aab78e2c2032f87816194a81477432909"
       },
@@ -36,7 +36,7 @@
         "path": "docs/sector-radar-scheduled-production.md",
         "read_path": "sources/git/8cb2beb013fe9b2ae9fc292aad64399cc72e31f0/sector-radar-scheduled-production.md",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+        "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
         "repository": "auguspp/decision-kernel",
         "sha256": "d2c08771c6fb057a2e088f7128028901e12038643d7e1ad6d8daa5404d88eb56"
       },
@@ -50,7 +50,7 @@
         "path": "docs/readings/suken-api-2026-09-11.md",
         "read_path": "sources/git/b80885780fee7dae8ff4292397b8aeb499bb8e52/suken-api-2026-09-11.md",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+        "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
         "repository": "auguspp/decision-kernel",
         "sha256": "c1b85c741784c45b4cb890d80d41666bfa31b401f3b37862f8757f8cf07a6609"
       },
@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-10-04T00:39:17.580236+00:00",
+    "finished_at": "2026-10-04T02:25:14.376702+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-10-05T00:39:17.580236+00:00",
-    "started_at": "2026-10-04T00:38:48.470728+00:00"
+    "recheck_after": "2026-10-05T02:25:14.376702+00:00",
+    "started_at": "2026-10-04T02:24:49.765342+00:00"
   },
-  "code_commit": "0ff322cd1b937c6484acb039a872711521f0bd07",
+  "code_commit": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-10-04T00:39:17.580236+00:00",
+  "generated_at": "2026-10-04T02:25:14.376702+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-10-04T00:39:09.415186+00:00",
+      "checks_at": "2026-10-04T02:25:06.491026+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -653,7 +653,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "a6c02310351dc132490d37baf334af80f4854246e5507d94fc8295b49095b84b"
         },
-        "source_checked_at": "2026-10-04T00:39:09.106908+00:00",
+        "source_checked_at": "2026-10-04T02:25:06.186800+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -676,7 +676,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-10-04T00:38:58.579771+00:00",
+      "checks_at": "2026-10-04T02:24:55.759922+00:00",
       "delivery_selection": "SAME_SESSION_RESULT_PRESERVED_NOT_NEW_EVENT",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
@@ -803,7 +803,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "0dd4e518d7d8b33a56ddcc2cf02bd879a72eca80183face136d4107e573b57b8"
         },
-        "source_checked_at": "2026-10-04T00:38:58.579735+00:00",
+        "source_checked_at": "2026-10-04T02:24:55.759896+00:00",
         "state_archive": {
           "artifact_id": 11090825914,
           "artifact_name": "sector-radar-state-bundle",
@@ -952,7 +952,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "52217f1073f8fc6bac37e68525e5d633556befcc160de603108f5324c6ed6f10"
         },
-        "source_checked_at": "2026-10-04T00:38:52.986191+00:00",
+        "source_checked_at": "2026-10-04T02:24:52.427491+00:00",
         "state_archive": {
           "artifact_id": 11221265618,
           "artifact_name": "sector-radar-state-bundle",
@@ -988,7 +988,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-10-04T00:39:08.041866+00:00",
+      "checks_at": "2026-10-04T02:25:05.009850+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -1183,7 +1183,7 @@
           "sha256": "bbc5ebeab77ac3903574f5b5a5460a884f6c13444c9eb103b2c38f256c89b6eb"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-10-04T00:39:08.041847+00:00",
+        "source_checked_at": "2026-10-04T02:25:05.009833+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "300904.SZ",
@@ -1214,13 +1214,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "0ea267bde96e9d507f006ee1aebf07c10ff956e60c7623ef3cc93b791cc62c6f",
+  "reading_hash": "098fc3197d08c55242d5b4061a860fa5a6a42031db8fec1fc570861bcee02cec",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "37165567361",
-    "trigger_run_id": "37165535506",
+    "run_id": "37170964614",
+    "trigger_run_id": "37170930015",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -1228,7 +1228,7 @@
     "calendar": {
       "as_of": "2026-09-28T05:06:04.658134+00:00",
       "calendar_hash": "dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978",
-      "checked_at": "2026-10-04T00:39:13.434694+00:00",
+      "checked_at": "2026-10-04T02:25:10.639530+00:00",
       "company_events": "NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE",
       "comparison": {
         "human_attention_authority": "NONE",
@@ -1746,7 +1746,7 @@
           "path": "research_runs/execution-inputs.json",
           "read_path": "sources/git/4c4c458d6e076e6deaa69c66fe7516f51592e7e8/execution-inputs.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "91deb7b071113cc9c4d29b6f3fb98d1f328545f5bd398e9db81ac938de075445"
         },
@@ -1777,7 +1777,7 @@
             "path": "docs/decision-inbox.md",
             "read_path": "sources/git/8b0528376bb04fa78317f9d0d8c6073093490f76/decision-inbox.md",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+            "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
             "repository": "auguspp/decision-kernel",
             "sha256": "e357ac4aa9fa8dcd4706b2c53b5798ebc971e1ab64439336bef2e1efd9066947"
           },
@@ -1788,7 +1788,7 @@
             "path": "dogfood/688277-tinavi-drg-dip3-research-attention-2026-09-04.json",
             "read_path": "sources/git/b59b043505df5023f32c565186fb4fa1ac9a7359/688277-tinavi-drg-dip3-research-attention-2026-09-04.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+            "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
             "repository": "auguspp/decision-kernel",
             "sha256": "d6e0f66ebadd7118fb2845a66acd23f6c0ec97d2a3e3ffa5e0d89408b3233ca0"
           },
@@ -1798,993 +1798,19 @@
         }
       ]
     },
-    "on_demand_archives": [
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "600598.SH",
-        "id": "sector-600598-materiality-20260910",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Human许可后Sector来源的有限Pre/Quick，税后盈利问题待深化；最终H1仍有正文核验缺口，非全景研究/新Odds/自动Deep或Human决定。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 7269,
-          "git_blob": "fda17f439ddb03323de60b6a77dac1bd8974dd02",
-          "path": "research_runs/candidates/sector-origin/600598-materiality-20260910/README.md",
-          "ref": "822c5c725df2d1e5d66768b3b06bc9ddfef93a2e",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "241b0ffafbd0823155789014a8cff5e1548c25680dd21dcbbe0f847457b77146"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "72b98ca4fe4dea23d8cf46d1c462eaf8e690d90020a53e9686eb54d3ad0201a6",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "module-profit-cash-source-review"
-        },
-        "body_materialized_in_reading": false,
-        "case": "300638.SZ",
-        "id": "radar-300638-fibocom-progress-20260919",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "2026-09-19 bounded interactive question/source checkpoint: issuer business identity and a profit-to-cash question; 2026H1 primary financial PDF not acquired and conflicting secondary cash-flow units not adopted. Not completed Pre/Quick, business WAIT/DROP, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch. Body is explicitly ON_DEMAND_ARCHIVE: locator only in daily reading; use the existing same-R archive reader before claiming body recovery.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 6567,
-          "git_blob": "29db720caf59245b28a91b692d24c763d02caa07",
-          "path": "docs/readings/radar-question-review-2026-09-19/300638/workpaper.md",
-          "ref": "250efdc82567f9988d43cadae0a5b715e50d85da",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "02ffaee82bfc5b3b14f8e44d36465506f22f1e45eda328acf3718bf6b3b5fdd7"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "3ec903ba6e1008e1ef08e74596e1504b8d5a25c581cae2df2896d0a43f3abb73",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "module-profit-cash-source-review"
-        },
-        "body_materialized_in_reading": false,
-        "case": "300638.SZ",
-        "id": "radar-300638-fibocom-progress2-20260919",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Revision2 of module-profit-cash-source-review, linked to retained revision1. Bounded interactive analysis of historical June29 acquisition and March18 accounting announcements read through the official web viewer: control versus economic ownership, cash/capital allocation and conditional profit undertaking. Current closing/payment, 2026H1 financial body and binary source PDF retention remain unverified/not acquired. Not automatic Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Watch or investment authority. ON_DEMAND_ARCHIVE locator only; recover this explicit revision before reuse.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 8647,
-          "git_blob": "a67befbe62538bd5f4c7376a444206ffea6c641c",
-          "path": "docs/readings/radar-fibocom-profit-cash-progress-2-2026-09-19/workpaper.md",
-          "ref": "f75ed7c5c338aa8497b042380d2c53bd6df6f495",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "34b7a8047b03e86be4e75433a99615aa8b6dc0db070487a639d1c45804606ece"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "f8b6f9be5e1bcdfe6445bc634890400ec7d069b2ec4daedecef6f004bbae694e",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "module-profit-cash-source-review"
-        },
-        "body_materialized_in_reading": false,
-        "case": "300638.SZ",
-        "id": "radar-300638-fibocom-progress3-20260919",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Revision3 of the same retained profit-to-cash question, linked to revision2. Bounded interactive review of the official 2026Q1 financial key table and April23 temporary idle-proceeds announcement; distinguishes operating cash conversion, internal fund use and conditional acquisition capital allocation. Q1 does not substitute for unacquired H1; issuer explanation is not verified cause and the RMB500m limit is not actual drawdown. Raw source PDF custody, current closing/payment, Full Research, automatic Pre/Quick, COMMITTED, Human acceptance, Odds and Watch are not established. ON_DEMAND_ARCHIVE locator only; recover this exact revision before reuse.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 8560,
-          "git_blob": "321dd5545fa3250d9abc1b7c73279ffcd9828b86",
-          "path": "docs/readings/radar-fibocom-profit-cash-progress-3-2026-09-19/workpaper.md",
-          "ref": "04eb44d37680195caa0de4635f0df02415c975ca",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "614dcff38ec32a53699d7cd5a485a5c6fbdead820f9b7c4f369b70c8410e15a0"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "300183.SZ",
-        "id": "radar-300183-eastsoft-review2-20260919",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Same-question interactive continuation of the retained Eastsoft delivery-profit-cash review: new H1 fee-coverage sensitivity, contract-asset impairment/cash counterevidence and remaining-obligation recognition limits. Conditions are not forecasts; latest customer and complete disclosure updates remain unavailable. Not new Pre/Quick, Full Research, COMMITTED, Human acceptance, Odds, Action or Watch. RETAINED_FILES with exact predecessor in workpaper; body recovered on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11690,
-          "git_blob": "40c2a9aa4e7d53038f113883a8a589eb03dfdfd9",
-          "path": "docs/readings/radar-eastsoft-delivery-cash-review-2-2026-09-19/workpaper.md",
-          "ref": "41dc250b63ce87950d11560d304cc3f3a8fa14d3",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "5f2617522b211f40abac5a3d59e85fff3d065b5c4a16dd8776c06a4e046f6a53"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002460.SZ",
-        "id": "radar-002460-lc-spread-inventory-question-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Bounded interactive lithium case: 2025 issuer segment disclosures support a draft question about selling-price/input-cost/inventory mismatch after the saved LC observation. Current 2026H1 primary bodies and updates through2026-09-20 remain unacquired; no current materiality qualification, formal Question admission, Pre/Quick/Deep, COMMITTED, Human acceptance, Odds, Action or Watch. Raw PDF custody incomplete. Shared four-file comparative archive; on-demand locator only.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 10171,
-          "git_blob": "1574df575c88fdc78a42afc0025f53549c4f10a4",
-          "path": "docs/readings/lc-exposure-questions-2026-09-20/workpaper.md",
-          "ref": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "300014.SZ",
-        "id": "radar-300014-lc-cost-pass-through-question-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Same bounded lithium comparative archive: 2025 issuer disclosures support a draft question about cost savings retained versus passed to customers, inventory timing and cash conversion. All-material cost share is not lithium-specific exposure. Current 2026H1 primary bodies, relevant updates and PDF custody remain incomplete; no formal admission/Pre/Quick/Deep, current benefit acceptance, COMMITTED, Human acceptance, Odds, Action or Watch. On-demand locator only.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 10171,
-          "git_blob": "1574df575c88fdc78a42afc0025f53549c4f10a4",
-          "path": "docs/readings/lc-exposure-questions-2026-09-20/workpaper.md",
-          "ref": "51365aae52e13cdec153ecb0cb4ab79de7d96836",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "74d942258f83adb06ceda5d62859109c0feb5ef3109e38f2dcf5ebde5d2d353f"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-membrane-profit-cash-source-review-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "2026-09-20 bounded source/question review of the saved six-row Stock batch. Official historical 2025 revenue and July contract text narrow the membrane profit/cash question; necessary 2026H1 official body/raw PDF and current issuer-update coverage remain incomplete. DRAFT / NOT_ADMITTED / NOT_EXECUTED; not Pre/Quick, business WAIT/DROP, COMMITTED, Human acceptance, Odds, Action or Watch. Seven retained files include exact source status, inventory, scope and all six candidate dispositions. ON_DEMAND_ARCHIVE locator only; recover this exact archive before claiming its body was read.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 4996,
-          "git_blob": "1839c09e9b4a7d574e2e46186f04423c476964a5",
-          "path": "docs/readings/000920-question-review-2026-09-20/workpaper.md",
-          "ref": "062f9761224e3aecfa9e314222d5069e79a351be",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "071d8048df1b4f4c76729ffd927dd1d587f57af6a8c0e35a36eadfebfd686191"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-source-access-and-dedup-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Follow-up to the 2026-09-20 Woton source/question draft. Normal browser checks still acquired no official PDF or complete current disclosure inventory; issuer report directories were outdated. Bounded relation review of retained inputs, 529 local refs and visible GitHub discussions found no additional formal Woton question, while substantive overlap with the failed baseline remains. Continue the same draft; NEW_DISTINCT_QUESTION is not assigned. Seven files retain access observations, exact dedup scope and pending interface reuse. NOT_ADMITTED / NOT_EXECUTED; no Pre/Quick, business WAIT/DROP, Human acceptance or automatic supersession. Recover this exact archive before citing its body.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3911,
-          "git_blob": "07a090b69403e124fab36443bd3076ce215b2268",
-          "path": "docs/readings/000920-source-review-continuation-2026-09-20/README.md",
-          "ref": "02a8f8f2c1aadca8287c1f68ebbb6be2f7d8ac7e",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "d7fafc72d5612e23533e1d97e87c9682a857cd1ff920dd1196464e7a3fca5917"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "0124c5dac5d2bc9c9e20a6b9de9b7b7bcbe532e589e15fe27ee08884f14372c6",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-reports-only-profit-cash-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Human scope 5750493197 prioritizes financial reports and pauses other announcement acquisition. Bounded continuation of the original Woton root using the acquired 2026H1 Sina issuer-report PDF: p104 profit-to-operating-cash reconciliation and p16 membrane product/engineering facts; volume/price/mix and segment cash attribution remain unresolved. First typed progress checkpoint, not a new distinct question or formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance, Odds, Action or Watch. ON_DEMAND_ARCHIVE locator only; exact body recovery is separate. Source PDFs/service full text are not included in the two-file progress directory.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 7194,
-          "git_blob": "b61066823d813e543729002c031c452d14549787",
-          "path": "docs/readings/000920-reports-only-progress-2026-09-20/workpaper.md",
-          "ref": "7e992b3ce83993897930076f64da0eb9cf2035f6",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "838523e30028189484e3dbc7cd00efbe0202030e1cc94aa785d99e6893875b9a"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "f44b5d5609882c2003f6bee759ce0222eafac332ac6b3fc0572bc32d5409cbdc",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-reports-only-working-capital-20260920",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Second typed progress checkpoint on the original Woton question using the already-retained 2026H1 Sina PDF. Six inventory categories reconcile exactly to the operating-cash inventory adjustment; receivable/bill balances explain the direction difference but do not establish cash receipts. Endorsed-bill asset/liability changes are kept together; detailed operating-receivable cash reconciliation and segment attribution remain UNKNOWN. This is separate financial work, not a result of the concurrent CNINFO source probe, formal Pre/Quick, COMMITTED Research, Full Research, Human acceptance or Odds. Three-file archive contains the workpaper and current/predecessor progress descriptors, not source PDFs. Recover the exact body separately.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11510,
-          "git_blob": "0692a0df16345dafcab2b6690874a21f283cb90d",
-          "path": "docs/readings/000920-working-capital-progress-2026-09-20/workpaper.md",
-          "ref": "3ba635649edadafcd7715ab0e469e1a751dfe5cd",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c346523d2d3d6416aebd7bc12805d8676b234bd0657ef0d2155590e074df6cc4"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-h1-original-pdf-custody-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Retained source-preparation working note for the original Woton financial question: exact original Sina H1 PDF, source attempt35550930725 and preserved representation failure. This one-file on-demand note locates raw PDF/prepare/failure bytes; it does not materialize them in the daily reading or declare repair success, CNINFO byte equivalence, new Question, Pre/Quick, financial Research completion, Human acceptance or model-egress permission. Representation repair is a separate zero-source-GET operation; old question/r2/failures remain.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 6507,
-          "git_blob": "f1d709062517854e3eec300cd12541066a7cf2dc",
-          "path": "docs/readings/woton-original-source-custody-20260921/README.md",
-          "ref": "e9d116bd4f20f6f9a3ed6f2e299fe2a97f9c577b",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "48e3287c7c366f313933d720999b8f0e7defd589bbf41a894dd76ad2da8022ae"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "expected_sha256": "fbc34d8edd768a4fd499225dc76894bceca098062d9ae393bf1d350a775822f4",
-          "format": "RESEARCH_PROGRESS",
-          "question_id": "stock-business-66446c4257a92cd4576ee87ff1bd4ead51ca61a4292befc55cbde3d514b5542c"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-reports-only-profit-bridge-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Third same-question typed progress checkpoint using the retained 2026H1 issuer PDF: six-product gross profit and both H1 group gross-profit-to-parent-net-profit bridges reconcile exactly. Parent profit growth includes a minority-allocation effect; the tax-adjustment note has an unallocated551260.96-yuan discrepancy. Per-product expenses/tax/cash and prior receivable-cash attribution remain UNKNOWN. Interactive financial work, not new Pre/Quick, Full Research, COMMITTED, Human acceptance, model-egress permission or investment authority. Three-file progress archive only; raw PDF has separate native custody. Recover this exact revision on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 14279,
-          "git_blob": "771502c279982e6e6c3d7ff95ed0928a46cbbe73",
-          "path": "docs/readings/000920-profit-bridge-progress-2026-09-21/workpaper.md",
-          "ref": "69305a766eb2cc4b09a6b1a6d4008625e54b8a3d",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "cfc59e29f95245567bbedbccaed5987c6c54db9483e92a1dc352a5246aefdd39"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000920.SZ",
-        "id": "p0-000920-continuation-failure-review-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "One approved same-question Pre call returned text but failed APPLICATION_VALIDATION; original EXECUTION_GAP and raw output remain unchanged, no Quick or retry. Separate source-page review corrects blank engineering assets/liabilities and distinguishes over-time revenue disclosure from unallocated working capital; product and report-segment engineering costs differ by19735430.65CNY. Not validated Pre/WAIT, Full Research, COMMITTED, Human acceptance or investment authority. Eight-file on-demand archive; original PDF/context remain at precise prior Git refs.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 8771,
-          "git_blob": "10a6379da4c5d0a2949f9ee70377eeee0d715f88",
-          "path": "docs/readings/000920-continuation-review-2026-09-21/README.md",
-          "ref": "2a3c429aabca6f0b398b973df66fe94bb235de94",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "7cd20f5de72676d669d223cd163b8535be1fba8ced5930ca298e2484c023b074"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "603507.SH",
-        "id": "stock-603507-financial-question-review-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11153,
-          "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
-          "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
-          "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002285.SZ",
-        "id": "stock-002285-financial-question-review-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11153,
-          "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
-          "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
-          "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "000560.SZ",
-        "id": "stock-000560-financial-question-review-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11153,
-          "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
-          "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
-          "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002792.SZ",
-        "id": "stock-002792-financial-question-review-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "September21 six-row batch preliminary financial-question review. Shared four-file archive; original H1 PDFs were not acquired at this checkpoint. Historical conditional inputs and explicit source gaps remain; not formal Question admission, Pre/Quick, Human acceptance or Odds. Recover exact body on demand.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 11153,
-          "git_blob": "b444d3507ee74e1ed757a5a5c3a1056f0143a72a",
-          "path": "docs/readings/stock-financial-question-review-2026-09-21/workpaper.md",
-          "ref": "a1f73741d4223c058364a6e1446dc8fda908b350",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c3732cd7c3a4df742ddabc9c911dda92b31666cb1839b54aba9fee15a785fe22"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "603507.SH",
-        "id": "stock-603507-profit-hedging-cash-20260921",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Same-question primary-page continuation: FTShare discovery led to retained CNINFO 215-page H1 PDF. Two-period profit and cash bridges reconcile; hedge disclosure inconsistency and sustainability remain unresolved. Two-file workpaper/calculation archive; large original PDF has separate exact Git custody. Not Pre/Quick, formal admission, Human acceptance or Odds.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 9519,
-          "git_blob": "0e2ba1468bf70404039d8b1ee71de344cb7b93d0",
-          "path": "docs/readings/603507-profit-hedging-cash-2026-09-21/workpaper.md",
-          "ref": "6eacd1fe5963514948cbcf0a516a13098286fe14",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "6f802a12fb83bf19560b8ac4f7da4a8c0cb13b85ae1952f4cae4674a4e078e52"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "002436-xingsen-full-r2-20260924",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Human-direct兴森Full R2，精确前驱为#536/a4cb0c0b44970ef3b96f0f570107093e7a1eb7ae；本条登记#538/649f2820b3139cef9c1dd6fa08f2fe6ee079f187的六文件原档案，不合并研究草稿或重做Research。按需恢复README、report、reconciliation及原计算；同时读https://github.com/auguspp/decision-kernel/pull/538#pullrequestreview-5300822964：报告“同比扭亏”应按同比改善理解；名义面积×利用率的单位要求未证明合格可售率，暂不用于已实现单位盈利判断。经营/现金/资本研究有界推进与算术复验已留证，完整估值、最终合同覆盖、全部原文独立核验、Human接受仍未建立。原README/retention中的未审阅/未登记是保存时状态，由后继实际回执补充，不回写旧文件。ON_DEMAND_ARCHIVE只登记定位，不声明正文已被本次读取或全部PDF字节已保管；非typed COMMITTED、Odds、Watch、Action或Investment Authority。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3123,
-          "git_blob": "b76d35f5562f5a862c42b13caf71fb64cbfae221",
-          "path": "docs/readings/002436-xingsen-full-2026-09-24-r2/README.md",
-          "ref": "649f2820b3139cef9c1dd6fa08f2fe6ee079f187",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "2180ee1ce49221ba699998b964bcda2d16a40bdd9ea98373919c854265b3e5ea"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "002436-institutional-context-20260925-36089933785",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "#504 source-only context from fresh run36089933785/attempt1: 002436.SZ publication window2026-08-11..2026-09-24. Two actual report-list rows (two institutions) and exact raw forecast slots retained; not report PDFs or comparable forecast revisions. Activity source returned HTTP200/success=false/code9201; event/institution/person counts remain UNKNOWN, not zero. Six-file native archive preserves two raw bodies, capture identity, original derived context/summary and an explanatory README. Not completed Quick/Full, economic truth, Research acceptance, Odds, Watch or investment authority. ON_DEMAND_ARCHIVE locator only; recover the exact files before claiming body consumption.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3305,
-          "git_blob": "4acf119452e0b22d9f96277575949cb6df231f6b",
-          "path": "docs/readings/institutional-context-2026-09-25-36089933785/README.md",
-          "ref": "9330742c8b48f9c778d0518f11d397cbae0d49a3",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "1f36586a445fefdd64d838c26cb2d36bea309fb4a03189e0699aaebdc2db8dfa"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "002436-institutional-quick-consumption-20260925",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Bounded Hosted Quick consumption of retained #504 context. Reuses Xingsen R2 and review5300822964; both broker forecasts already existed in R1. Preserves provider/report date ambiguity, additional indexed-report leads outside the two saved rows, UNKNOWN activity counts and unverified comparable revisions. Conditional H2 profit burden is arithmetic on retained inputs, not a forecast, new Full, Odds or Human acceptance. Four-file archive; recover before claiming body consumption.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 7911,
-          "git_blob": "cedfe3f4e69c900a23343eae9fbca922e12a7220",
-          "path": "docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md",
-          "ref": "1671640800739650922805c6c62e178dcfc39f2e",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "164cdf54f4c185237f1d3f38ee5027e4a51b9ab5a80acca571a4fb9421fb08e5"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "NEWS-BATCH-20260927",
-        "id": "quick-inbox-news-batch-20260927",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Bounded Hosted Quick consumption of #601 requests 5853796032, 5853804680 and 5853810250 from fixed R 7894a95cb43e6cb6131cb4b5a7bb2111b0aff139. Separates one commercial-space WAIT_FOR_TRIGGER, one Zhejiang marine-clean-energy Full candidate recommendation and one Hutuo River STOP; preserves source limits/UNKNOWN and does not execute Full, recalculate Odds, transfer Human acceptance, create Watch/holdings or authorize trading. Two-file native archive; recover exact body before reuse.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 10659,
-          "git_blob": "17d16314acb04e1238cbdff8e5a9d34bb6ed5550",
-          "path": "docs/readings/quick-inbox-news-batch-2026-09-27/README.md",
-          "ref": "a15a124725f9bd728828786a19c7c0b410de8a52",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "7b0cf4f00bf854c8aa6a512956e6a141a14f28927a180bac1dd99b218e9ee4fb"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "601155-xincheng-policy-full-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Human-direct Full continuation around the 2026-09-29 property policy and Xincheng equity-value bridge. Corrects Wuyue/debt/development scope, retains sources/calculations/stop conditions and does not claim typed COMMITTED Research, Human acceptance, canonical Odds, Watch, Action or Investment Authority.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1504,
-          "git_blob": "e9c3a9e55bc82009979792bdcfbd00ab558a1c7a",
-          "path": "docs/readings/601155-xincheng-policy-full-20260930/README.md",
-          "ref": "fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "42fa081fd0d3453bea88b29f91b1b5818be38c74bbe92f04d346ca08fded419a"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "b2-appointments-36658570687-1-601155-SH",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "财报预约来源资料（2026-09-30）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1811,
-          "git_blob": "37ca4c6ac143bcffc18351a0ccdfc66249ba3376",
-          "path": "docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md",
-          "ref": "6b9f1b4624cf0bab09cf3ea11b545d658da58e46",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c4531e95398f422aed4bc9aaa48e9b98c0b1ba022b0484343bdea0a16da843b7"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "b2-announcements-36671452199-1-601155-SH",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "公告目录来源资料（2026-09-24至2026-09-30）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1321,
-          "git_blob": "25b4597eb15131b51ecbe81c60f1f8849b0b6b9e",
-          "path": "docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md",
-          "ref": "6e8d82ddd59e6354311541e590aae17f7d9fe939",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c9e74b09f03cdccbae7b5ac55086cc210ac5b484d63b089cf5ac5e99e57c8b03"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "b2-announcements-36675839340-1-601155-SH",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "公告目录来源资料（2026-08-26至2026-08-27）；原资料引用601155-xincheng-policy-full-20260930。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1806,
-          "git_blob": "c8213233bc311260102df7f7346c299db56d5c15",
-          "path": "docs/readings/b2-announcements-36675839340-1/601155.SH/summary.md",
-          "ref": "d13143a92b4c25bb38c9a46fc836309dba2af367",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "0de2710be919c78fec760efcec11f25d2b0930db5a95202235f865d62b1edb4a"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "b2-pdf-36685884532-1-601155-SH",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "公告原文来源资料（1225512314）；原资料引用b2-announcements-36675839340-1-601155-SH。仅作来源导航，不是研究、关注、持仓、Watch或投资接受。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3055,
-          "git_blob": "3cbf6bc05160a27d091497f0fbf49f4464e32178",
-          "path": "docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md",
-          "ref": "e382453d09e54572ead47f23f553a5da87764d9f",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "6b49ff344dca357a388a63c80754f86d0943794fc597708007750f7afe9763f8"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002281.SZ",
-        "id": "c-synopsis-comparison-002281-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Bounded C consumer proof using two public synopses attributed to Changjiang: same-year total-profit arithmetic, changing analyst combinations, missing explicit currency/share-model/PIT qualification. Not original broker PDFs, qualified complete-model revision, new Full, Human acceptance, Watch or investment action. Preserves the prior 20260917 archive.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3529,
-          "git_blob": "60557a19f7148f2e257df2ba93cb33dd8d563376",
-          "path": "docs/readings/c-synopsis-comparison-002281-2026-09-30/README.md",
-          "ref": "2a264469fbd0017b46dffe52ceeb6e4b3587bf53",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "9e54c589918711f9b0dc0025adb12e70d06a4c8bf9cf024e425a7332113e2312"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "navigation",
-        "id": "d-pit-eligibility-controls-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Bounded D retained-record and PIT eligibility proof: two candidates plus three horizon/mandate/correction controls. Preserves missing contemporaneous inputs, frozen Research horizons, unknown current execution and immature outcomes. Not five qualified opportunities, calibration success, Human acceptance, a new method or investment action.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 4955,
-          "git_blob": "5280599562e6db6f6ba8f785696bd082c75e4527",
-          "path": "docs/readings/d-pit-eligibility-2026-09-30/README.md",
-          "ref": "0378c878d40af7c2d14d4095e5eb8c4ae05c89b5",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "c4fec132de1341bfd3371607f43da4f6ea7648125bce14d5980115b10cc8105f"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "601155.SH",
-        "id": "601155-unit-correction-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "先读原601155条件估值的十倍单位标签勘误：统一归一金额与股数，保留每股/回报/门槛及原舍入精度；不是经济假设复核、完整来源证明、Human接受或投资行动。原档案不覆盖。",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3708,
-          "git_blob": "8cbfedc8bf9828615eba4d55f78a577f036867cf",
-          "path": "docs/readings/601155-unit-correction-2026-09-30/README.md",
-          "ref": "f54c017c3d06fd46cf2a5da4949c0e461e5789e0",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "86bf695600b8823f1dfc3d4352ca6adf952dc6d951f05b629ab00c04f26417b5"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002281.SZ",
-        "id": "c-longitudinal-accelink-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Reviewed longitudinal cash/capital comparison: exact retained sources, period/unit/scope checks, explicit economic interpretation and unknowns. Actual generic offline consumer output, not new Full, original issuer PDF custody, typed COMMITTED Research, Human acceptance or complete C.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1980,
-          "git_blob": "210cc730fd08153d1c910307cfb10d2f3e6eb741",
-          "path": "docs/readings/c-longitudinal-accelink-2026-09-30/README.md",
-          "ref": "83a40bfb408090015678d98bd192489db9226c3a",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "45231a380e9c25426a18662b28070aaf53aeee9dca4ba01b7e4c13cabb4297dc"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c-longitudinal-xingsen-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Reviewed longitudinal cash/capital comparison: exact retained sources, period/unit/scope checks, explicit economic interpretation and unknowns. Actual generic offline consumer output, not new Full, original issuer PDF custody, typed COMMITTED Research, Human acceptance or complete C.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 1943,
-          "git_blob": "99ec2d30e60d2aa876ca9873c4751b5e097c0990",
-          "path": "docs/readings/c-longitudinal-xingsen-2026-09-30/README.md",
-          "ref": "83a40bfb408090015678d98bd192489db9226c3a",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "823cc07633c62fa1897f9b83bcd0d6e5d382388dfc03969101eb9c895f0e89aa"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "navigation",
-        "id": "c2-blindspot-audit-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "One-time complete-denominator audit of retained #375 historical study: coverage/gate/delivery distinctions, all396census cells and7x66purposive pressure histories. Lossy derived report, original31MBstudy remains Actions artifact with expiry; not permanent original custody, new detector, threshold change, historical catalog proof or complete C2.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 7875,
-          "git_blob": "9aa023a401659915e2b44eb7ff23c1ed66f7dfdb",
-          "path": "docs/readings/c2-blindspot-audit-2026-09-30/README.md",
-          "ref": "79f7921811f905a0e58ba7690c957180d1ba7eca",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "d16b1c152f73a0027026ee3051b89b5525203754f297e9cc9aa54f1f2f42cf84"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002281.SZ",
-        "id": "c-cash-bridge-semantic-002281-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Two-case semantic successor to the retained C1 comparisons; select this issuer input after reading semantic-review.md. Original source bytes and all inherited result fields unchanged. Distinguishes genuine new evidence from inherited AT&S/BGA caveats; no new Full, original PDF custody, Human acceptance or complete C1.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 2548,
-          "git_blob": "9ab42716eb2d5f7a126be587e83a7eeca3b76c71",
-          "path": "docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md",
-          "ref": "eef5b196cfd62ea8e7db4aa45a1a2285e36fe543",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "fb2bca0cad04563c0026e191d27c98aefdc0855e04be4f3a8c9e37b7ef93d982"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c-cash-bridge-semantic-002436-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Two-case semantic successor to the retained C1 comparisons; select this issuer input after reading semantic-review.md. Original source bytes and all inherited result fields unchanged. Distinguishes genuine new evidence from inherited AT&S/BGA caveats; no new Full, original PDF custody, Human acceptance or complete C1.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 2548,
-          "git_blob": "9ab42716eb2d5f7a126be587e83a7eeca3b76c71",
-          "path": "docs/readings/c-cash-bridge-semantic-review-2026-09-30/README.md",
-          "ref": "eef5b196cfd62ea8e7db4aa45a1a2285e36fe543",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "fb2bca0cad04563c0026e191d27c98aefdc0855e04be4f3a8c9e37b7ef93d982"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002281.SZ",
-        "id": "c-reviewed-forecast-002281-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Reviewed forecast identity/basis boundary cases using exact retained source bytes. Select the issuer input after README. Real cases classify distinct provider records or cross-institution attribution but refuse numeric comparison for missing qualifications; synthetic positives are engineering tests only. No original broker model, historical availability, Human acceptance or full C completion.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 2129,
-          "git_blob": "be3301d70eb33b6466fda6c8a03600c6db6de908",
-          "path": "docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md",
-          "ref": "4255a42e26ecd71476c19ac99d93ea9298396471",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "353d5d197ad901bd4d2164ca77b72507cff114f6b289daec93d575f003c383a6"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c-reviewed-forecast-002436-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Reviewed forecast identity/basis boundary cases using exact retained source bytes. Select the issuer input after README. Real cases classify distinct provider records or cross-institution attribution but refuse numeric comparison for missing qualifications; synthetic positives are engineering tests only. No original broker model, historical availability, Human acceptance or full C completion.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 2129,
-          "git_blob": "be3301d70eb33b6466fda6c8a03600c6db6de908",
-          "path": "docs/readings/c-reviewed-forecast-boundaries-2026-09-30/README.md",
-          "ref": "4255a42e26ecd71476c19ac99d93ea9298396471",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "353d5d197ad901bd4d2164ca77b72507cff114f6b289daec93d575f003c383a6"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c-reviewed-activity-002436-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Reviewed activity census boundary archive: failed provider response remains UNKNOWN, and one retained corrected IR event has no roster or issuer-window total. Exact original capture/reconciliation bytes, two inputs and deterministic reports; synthetic positive populations are engineering tests only. No source/model call, original disclosure custody, Human acceptance or full C completion.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3082,
-          "git_blob": "a3ea8eae5126c62bfe30bb931d3e9ab59512aa00",
-          "path": "docs/readings/c-reviewed-activity-boundaries-2026-09-30/README.md",
-          "ref": "4f7c1f09d0785775084ab122fe0560c266f78609",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "9fc1e52901b07b2b2cb5c5d4da4ed46f1529f57ba84283dad137e9edc16d8c61"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c-activity-positive-002436-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Official historical named-roster selected-event positive use: one event, two visiting institutions, eight visitors/eight attendances, three issuer hosts excluded. Original PDF and extraction/review mapping retained separately; derived input is RETAINED_RESEARCH, not original issuer bytes or global identity proof. No issuer-window total, current signal, full C or Human acceptance.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 3961,
-          "git_blob": "415ea2eab12419efdcda7ed190c900f4dd326724",
-          "path": "docs/readings/c1-activity-positive-2026-09-30/README.md",
-          "ref": "0ff4f1384c205f6ab7d9ca7f90774a7d55052d17",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "6ed90dc0a3b0910fb33a2eef26e24f160aa58e571422c9755b922ee14702b4d6"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "navigation",
-        "id": "c2-independent-observations-20260930",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Lossy offline independent all-market observation replay:5578identities/12pages and an unvalidated bounded quote-change sample, selected before available-history intersection; explicit source failures and missing history. Original ZIP is separately body-verified in fixed read-model Git R=e2d5074e70acd65277e760ac9c825f51f003d8ec; its Actions copy has separate expiry. This two-file derived archive is not the original source bundle or a permanent-storage guarantee. No quiet-day live acquisition, Surprise, Research admission, economic value or full C2 acceptance.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 784,
-          "git_blob": "1390b95bf356e85e973e0c47dcc4382b8e9e1610",
-          "path": "docs/readings/c2-independent-stock-observations-2026-09-30/README.txt",
-          "ref": "096fddf5da1066a1f4793ae19a32f79000feae7d",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "39796bb405c8a0caa1327c1371dddb3535e053cdf4620c03cf9ec52d699e5992"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002916.SZ",
-        "id": "c-shennan-transmission-20261001",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Source-bound Shennan H1 industry/company/profit/cash-capital transmission case: reviewed extraction, exact comparison replay and explicit peer/consolidation limits. Not issuer PDF custody, typed COMMITTED Research, Human acceptance or full C.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 8324,
-          "git_blob": "b149575e39c509348aa81775314d3d44a1cb0e6d",
-          "path": "docs/readings/c-shennan-transmission-2026-10-01/README.md",
-          "ref": "5b93bfd6a0b3f3594445afd3c889321f9929a05c",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "d32193c745de94a7d1a23d55e9de5d2cdd9129c0eb828f22de02a97803c7a188"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "navigation",
-        "id": "c2-baseline-episodes-20261001",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Complete frozen-cohort baseline episodes: 21120 sector-session rows become 449 observed onsets plus 32 left-censored runs; same-run lead and mature/pending noise controls. Post-hoc diagnostics, not new detector, observed Human attention, historical catalog qualification, stock roles or full C acceptance. Original large source remains separately expiring Actions custody.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 9259,
-          "git_blob": "1a012d856ac9022335af65de58f77bab9090467d",
-          "path": "docs/readings/c2-baseline-episodes-2026-10-01/README.md",
-          "ref": "e5d061dbb6a089906f1a96035108b9ccfca580ce",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "aaafa96047d1f6b77f956edb4646bacbc2095a78905e783dfdd4c63cc01773de"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c1-peer-commitment-002436-20261001",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Explicit successor to PR700: all seven prior-funding destinations and two quantified benefit cases; reallocation, changed project scale and N/A retained. Funds exhausted and annual pre-tax benefit are not owner return. Original peer archive remains linked; no forecast, Full or Human acceptance.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 9224,
-          "git_blob": "30b77a9c1808dc2973529162815fdef1515ed8ac",
-          "path": "docs/readings/c1-capital-realization-2026-10-01/README.md",
-          "ref": "382c68bc94f81e986c9237620524e2f761e9a4f0",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "31fa8cfec0d424a38774fbf9a52baaaac7c5cc94122557db229e47fef88239e0"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "navigation",
-        "id": "c2-k3-research-use-20261001",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "K3 successor: original five-file route retained; Shanshui product/cash transmission and qualified industry context added. Not historical roles, causal inflection, new Full, Human acceptance or complete C.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 8476,
-          "git_blob": "c35f0189bd67b4030969ca2486ed09b3314c3ae5",
-          "path": "docs/readings/c2-shanshui-transmission-2026-10-01/README.md",
-          "ref": "991d2b5ec0c72acb7ff18983fef726597ebf6e7d",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "8a66c77e030305c2d7cdad970ddb0d07394bd16380b1816d8c3ac2fb4d60e700"
-        },
-        "use": "NAVIGATION_ONLY"
-      },
-      {
-        "archive": {
-          "format": "RETAINED_FILES"
-        },
-        "body_materialized_in_reading": false,
-        "case": "002436.SZ",
-        "id": "c1-incentive-capital-002436-20261001",
-        "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-        "purpose_note": "Incentive revenue conditions are not forecasts; cumulative alternatives, retained R2 H2 burden and hypothetical compensation/cash distinctions. Partial primary-text access, no actual grant/transfer, original broker-model qualification or Human acceptance.",
-        "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-        "read_policy": "ON_DEMAND_ARCHIVE",
-        "source": {
-          "bytes": 6937,
-          "git_blob": "3a646a3e7dfbaaa2736eb896522efb48b5888b44",
-          "path": "docs/readings/c1-incentive-capital-2026-10-01/README.md",
-          "ref": "e1eb810e7b7d5bb7bbe072d140714094aa485294",
-          "repository": "auguspp/decision-kernel",
-          "sha256": "394eb97310f580afd1fc3918029ac7b6908497338f2e80ea1fc536721133eb41"
-        },
-        "use": "RETAINED_RESEARCH_DOCUMENT"
-      }
-    ],
+    "on_demand_archive_index": {
+      "body_materialized_in_reading": false,
+      "entry_count": 47,
+      "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+      "read_policy": "PROJECT_FROM_SAME_READING_REGISTRY"
+    },
     "production_configuration": {
       "bytes": 11054,
       "git_blob": "d97ea5aa1a6b4c8d074119a809648c41d2df46d6",
       "path": ".github/workflows/decision-inbox.yml",
       "read_path": "sources/git/d97ea5aa1a6b4c8d074119a809648c41d2df46d6/decision-inbox.yml",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+      "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
       "repository": "auguspp/decision-kernel",
       "sha256": "390f7097c81e5901a8bf3ffaaa18e87e1cde69c80e96a23cee50dd0390a48b01"
     },
@@ -2801,7 +1827,7 @@
           "path": "docs/readings/2026-09-30-research-agenda-r4.md",
           "read_path": "sources/git/251ac268c04de2a63da6db503b4c889a49a24e90/2026-09-30-research-agenda-r4.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "c49fa693d8cfdfd673d892eb164bd2ad869b5f0b61291c2d22e031ed0b152ce4"
         },
@@ -2818,7 +1844,7 @@
           "path": "docs/ODDS-BOOK.md",
           "read_path": "sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "70ba0f0341421dd2d504b7431fbd76b0f25af6c86932416e785c9ba5a3a3adbd"
         },
@@ -2835,7 +1861,7 @@
           "path": "decision_inputs/odds-watch-v0.json",
           "read_path": "sources/git/c976973a46dd6678d522337033d9b1ae2f5eed9a/odds-watch-v0.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "3cd5259f78aa09257f3f575a4fa519e69c9e5b8f0afb950ec93dc3d288dc086d"
         },
@@ -3090,7 +2116,7 @@
           "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
           "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
         },
@@ -3107,7 +2133,7 @@
           "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
           "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
         },
@@ -3124,7 +2150,7 @@
           "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
           "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
         },
@@ -3141,7 +2167,7 @@
           "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
           "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
         },
@@ -3158,7 +2184,7 @@
           "path": "docs/readings/suken-api-2026-09-11.md",
           "read_path": "sources/git/b80885780fee7dae8ff4292397b8aeb499bb8e52/suken-api-2026-09-11.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "c1b85c741784c45b4cb890d80d41666bfa31b401f3b37862f8757f8cf07a6609"
         },
@@ -3175,7 +2201,7 @@
           "path": "docs/readings/sector-member-2026-09-09.md",
           "read_path": "sources/git/ca2b12061a5a28260e5a320e72feaa3e8436e798/sector-member-2026-09-09.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "c4288a3a2b770784ca34d95ea141ed40acacc3f429ed505b3b48dbc58b573a11"
         },
@@ -3260,7 +2286,7 @@
           "path": "docs/p0-delivery-checkpoint-2026-09-10.md",
           "read_path": "sources/git/43bb2265e4293a4bc08b2c2e533293e6e5db62eb/p0-delivery-checkpoint-2026-09-10.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "b2313a63ad47b5b26171404f1dc62906e96be3905656a2038f2f2a8484a411b0"
         },
@@ -3294,7 +2320,7 @@
           "path": "docs/live-decision-book.md",
           "read_path": "sources/git/63650d015913daf11e92bf27eb91db0a1e3c0205/live-decision-book.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "206fc075810aedc6955bae4a83845da245dbc24571cde2da17592fd0326eef6b"
         },
@@ -3311,7 +2337,7 @@
           "path": "research_cases/603986-gigadevice-deep-research-v2.json",
           "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
         },
@@ -3328,7 +2354,7 @@
           "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
           "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
         },
@@ -3345,7 +2371,7 @@
           "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
           "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
         },
@@ -3362,7 +2388,7 @@
           "path": "research_cases/002050-sanhua-deep-research-v1.json",
           "read_path": "sources/git/925f9875b6f8d814f95537af61214068188beb11/002050-sanhua-deep-research-v1.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "f809cb4aad763bbd719c5d6929306e5c810af0f869cee4f15a7420fa742ea58f"
         },
@@ -3379,7 +2405,7 @@
           "path": "docs/dogfood/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
           "read_path": "sources/git/41d6effe2c45fd1f17133f0ad38d844d82c134d9/sanhua-decision-hygiene-zero-schema-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "cc981439bb3c7f7c9ac3f81ad5e3580a4b195872940bd1eca4ac362c74a932ad"
         },
@@ -3396,7 +2422,7 @@
           "path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
           "read_path": "sources/git/0c7739cb5a376be9cc722e37f6acd168dca9704e/002050-sanhua-human-decision-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "f7d638b9913c3aa878249c939cee6c1b3db582f3664b391d5ab86498396d51bd"
         },
@@ -3413,7 +2439,7 @@
           "path": "docs/decisions/002050-sanhua-human-horizon-supplement-2026-09-03.md",
           "read_path": "sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "9ef5d905f8a9c61cd69a320db0270f0665ca827f7351b2f80743ab5b04a5c595"
         },
@@ -3430,7 +2456,7 @@
           "path": "docs/dogfood/catl-full-research-reunderwrite-2026-09-04.md",
           "read_path": "sources/git/597ca0310acbf5eee371aae2d3b9dc8b0f188e56/catl-full-research-reunderwrite-2026-09-04.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "720869e56f66402b3520ac55113687e49211bfb3075a4303fa83f954d07603da"
         },
@@ -3447,7 +2473,7 @@
           "path": "dogfood/300750-catl.json",
           "read_path": "sources/git/514fdb991504abdd23e814dc77fdcbd6f0e2e22c/300750-catl.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "98f96c22cd2e839a7ea67d48feffbb02643cc87fa1891d7470ace668503ba035"
         },
@@ -3481,7 +2507,7 @@
           "path": "research_cases/600233-yto-deep-research-v2.json",
           "read_path": "sources/git/ae9bfce4dd3cfbedddb4be84075238d867f58529/600233-yto-deep-research-v2.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "570ee45f07f9f2ea3d1bf3d0afbb086af59c7ac6333787c6619630b515fb5c60"
         },
@@ -3498,7 +2524,7 @@
           "path": "docs/dogfood/yto-decision-hygiene-zero-schema-2026-09-03.md",
           "read_path": "sources/git/2b58294ace63f3fe682c70f889a457f4b518c1a2/yto-decision-hygiene-zero-schema-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "423630c5310c2c1ac35f9f00e06031bccc808e192ef9b8691bb6bf1f57b537fb"
         },
@@ -3515,7 +2541,7 @@
           "path": "docs/decisions/MU-micron-human-wait-validation-2026-09-03.md",
           "read_path": "sources/git/590453f3ad36e70cc11b8bae196aad377f082854/MU-micron-human-wait-validation-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "db8982a84e83f6329c9f285e3a074b87828cee861989bdc2ada868e26905f09b"
         },
@@ -3532,7 +2558,7 @@
           "path": "docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md",
           "read_path": "sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "b8282b3dfcb9ac5580f5411cd1dc291d8683e18ade76937a8b3681bd35540f11"
         },
@@ -3549,7 +2575,7 @@
           "path": "docs/dogfood/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
           "read_path": "sources/git/d9acd593cf4a07c3a811282ec9b646a535b21840/xiamen-tungsten-research-error-negative-control-2026-09-03.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "dc01da848e763716153b0f9d5d0c89a6b4d457dfc46d72c779f6342bce6b86c9"
         },
@@ -3566,7 +2592,7 @@
           "path": "docs/dogfood/tinavi-full-research-zero-schema-2026-09-04.md",
           "read_path": "sources/git/9b7248d5b34a7a0eb89805abdff0e64da9a485ec/tinavi-full-research-zero-schema-2026-09-04.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "adbb5f66d979011b696dfc94ae04286e2062472041f6b1a7a985d33514661b03"
         },
@@ -3583,7 +2609,7 @@
           "path": "docs/decisions/688277-tinavi-human-watch-2026-09-04.md",
           "read_path": "sources/git/04655814a52d28b50d4d0e3dcbdac666c22b71df/688277-tinavi-human-watch-2026-09-04.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "5dd14a0b8efafc98dfa16933036bd00fe7b56458ea21b82f458fb0cf580a413c"
         },
@@ -3634,7 +2660,7 @@
           "path": "docs/ODDS-BOOK.md",
           "read_path": "sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "70ba0f0341421dd2d504b7431fbd76b0f25af6c86932416e785c9ba5a3a3adbd"
         },
@@ -3651,7 +2677,7 @@
           "path": "docs/ODDS-BOOK.md",
           "read_path": "sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+          "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
           "repository": "auguspp/decision-kernel",
           "sha256": "70ba0f0341421dd2d504b7431fbd76b0f25af6c86932416e785c9ba5a3a3adbd"
         },
@@ -3659,14 +2685,14 @@
       }
     ],
     "registry": {
-      "bytes": 68508,
-      "git_blob": "605ea28fd5ce371814ff5ada96ddb009b9095867",
+      "bytes": 69163,
+      "git_blob": "aa9affd5254bf514924988a2545b342254e4cede",
       "path": "current_state/registry.json",
-      "read_path": "sources/git/605ea28fd5ce371814ff5ada96ddb009b9095867/registry.json",
+      "read_path": "sources/git/aa9affd5254bf514924988a2545b342254e4cede/registry.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+      "ref": "68fb5dc3c85e326d0dafba7b37a4cd8dba55a3ee",
       "repository": "auguspp/decision-kernel",
-      "sha256": "87162c8d859ccc6368b282b68f5b8775620450f64e2f1bf4418fab038891f89a"
+      "sha256": "c08a6d721f5d1fd12a941726a3e676ee1b495ed6dbee5d3c34d5aceaf1cd7a92"
     },
     "scope": "EXPLICIT_CONFIG_REGISTERED_LINEAGE_AND_OPTED_IN_RETAINED_WORK_NOT_EXHAUSTIVE_RESEARCH_COVERAGE",
     "stock_business_work": {
