@@ -1,0 +1,68 @@
+{
+  "meaning": "EXACT_SAVED_INPUT_LOCATORS_AND_PREDECESSOR_NOT_NEW_SOURCE_CERTIFICATION",
+  "code_commit": "0ff322cd1b937c6484acb039a872711521f0bd07",
+  "reading_commit": "00ce74ae3a856242dda2706d87d6e7c96d924fb6",
+  "predecessor": {
+    "issue": 509,
+    "comment_id": 5975228575,
+    "created_at": "2026-10-04T01:03:53Z",
+    "url": "https://github.com/auguspp/decision-kernel/issues/509#issuecomment-5975228575",
+    "relationship": "NATIVE_ARCHIVE_OF_CASE_SUMMARY_NOT_VERBATIM_COMMENT_COPY_NOT_NEW_EVALUATION_START"
+  },
+  "prior_d_eligibility": {
+    "ref": "0378c878d40af7c2d14d4095e5eb8c4ae05c89b5",
+    "path": "docs/readings/d-pit-eligibility-2026-09-30/README.md",
+    "git_blob": "5280599562e6db6f6ba8f785696bd082c75e4527",
+    "sha256": "c4fec132de1341bfd3371607f43da4f6ea7648125bce14d5980115b10cc8105f",
+    "bytes": 4955,
+    "qualification": "TWO_CANDIDATES_THREE_CONTROLS_NOT_FIVE_QUALIFIED_OPPORTUNITIES"
+  },
+  "saved_research": [
+    {
+      "id": "gigadevice-method",
+      "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+      "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
+      "git_blob": "6210d53f74356c9baac3d8f8c5a44574326a83fc",
+      "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b",
+      "bytes": 37527
+    },
+    {
+      "id": "gigadevice-human",
+      "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+      "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
+      "git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
+      "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6",
+      "bytes": 10911
+    },
+    {
+      "id": "micron-human",
+      "ref": "0ff322cd1b937c6484acb039a872711521f0bd07",
+      "path": "docs/decisions/MU-micron-human-wait-validation-2026-09-03.md",
+      "git_blob": "590453f3ad36e70cc11b8bae196aad377f082854",
+      "sha256": "db8982a84e83f6329c9f285e3a074b87828cee861989bdc2ada868e26905f09b",
+      "bytes": 9647
+    }
+  ],
+  "price_context": {
+    "reading_commit": "00ce74ae3a856242dda2706d87d6e7c96d924fb6",
+    "read_path": "details/stock/last-qualified-market-inputs.json",
+    "git_blob": "3023606cd4c2f9bbf4976c7ca1c8cf55515bbddf",
+    "sha256": "201be22bf00959e52bd91ba7ac9f5290399c422cf7e0fc1b0183afcd323d8111",
+    "bytes": 449034,
+    "origin_run": 37125677265,
+    "market_session": "2026-09-30",
+    "received_through": "2026-10-03T13:18:26.649057+00:00",
+    "latest_failed_attempt": 37128261519,
+    "qualification": "BACKWARD_PROVIDER_ADJUSTED_PRICE_CONTEXT_NOT_FORWARD_OUTCOME"
+  },
+  "issuer_material": {
+    "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/",
+    "qualification": "PREDECESSOR_REPORTS_LIMITED_OFFICIAL_SEARCH_INDEX_TEXT_ONLY",
+    "original_html_or_pdf_custody": "NOT_ESTABLISHED",
+    "complete_transcript_review": "NOT_PERFORMED",
+    "refetched_by_this_archival_change": false
+  },
+  "investment_authority": "NONE",
+  "new_market_requests": 0,
+  "new_research_execution": false
+}
