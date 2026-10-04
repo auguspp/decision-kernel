@@ -57,13 +57,13 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/8e961b3b4d14b79479abc00e08f936225effb62226cb1a4c2f73c675b2164129.zip)
 
 ## 美国国债期限利率
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：37101499286
+最后可读批次run：37183264428
 # 美国国债期限利率
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-02；抓取截止：2026-10-03T05:57:57.764796+00:00
+窗口截止：2026-10-03；抓取截止：2026-10-04T06:36:01.816977+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
@@ -86,7 +86,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - 202609：ROWS_NORMALIZED
 - 202610：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/ff56652a40856558049f5c9770714c9134ba24a7dd7320cbc669789f649239a8.zip)
+[原始ZIP](../../sources/artifacts/3b8a0b70378fa4aef35cb087fdd71cd6b281b047fdda623964ee2bd7a4366681.zip)
 
 ## ECB 外汇参考价
 本次读取：REUSED_RETAINED_CAPTURE
