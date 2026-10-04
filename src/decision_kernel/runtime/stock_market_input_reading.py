@@ -14,7 +14,7 @@ LAST_PATH = 'details/stock/last-qualified-market-inputs.json'
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, BadZipFile)
 
 
-def read_current(collector, baseline):
+def _read_current_prices(collector, baseline):
     old_files, old_cache = dict(collector.files), dict(collector.archive_cache)
     result = {'status': 'DAILY_INPUT_NOT_AVAILABLE_NOT_QUIET', 'source': inputs.SOURCE,
               'market_session': None, 'latest_attempt': None, 'new_source_requests': 0,
@@ -121,3 +121,13 @@ def _read_run(collector, baseline, run, output_path):
                 'daily stock retained byte bound')
     descriptor = collector.retain(output_path, raw)
     return report, archive, descriptor
+
+
+def read_current(collector, baseline):
+    """Independent saved purposes share the existing run query, not data gates."""
+    result = _read_current_prices(collector, baseline)
+    from .d_auction_reading import read_saved as read_auction
+    auction = read_auction(collector, baseline)
+    result['auction_probe'] = auction
+    result['summary'] += auction['summary']
+    return result
