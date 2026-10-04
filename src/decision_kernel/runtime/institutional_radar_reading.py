@@ -185,7 +185,8 @@ def _compose(collector, baseline, research, report, reference, source_status,
                     and sector_result['event_ledger_update']['event_ledger_hash'] == product['event_ledger_hash'], 'Sector saved result binding differs')
         source_status['sector'].update(status='SAVED_SECTOR_RESULT', market_session=product['market_session'],
                                       source=sector_ref)
-    built = companies.build(baseline, sector_result=sector_result, sector_source=sector_ref,
+    built = companies.build(baseline, retained_files=collector.files,
+        sector_result=sector_result, sector_source=sector_ref,
         institution_report=report, institution_source=reference, source_status=source_status,
         generated_at=collector.now(), concept_report=concept_report,
         concept_source=concept_reference, include_concept=include_concept, include_detail=include_detail,

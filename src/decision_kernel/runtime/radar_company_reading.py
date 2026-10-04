@@ -106,8 +106,12 @@ def _questions(row):
 
 def build(baseline, *, sector_result, sector_source, institution_report, institution_source,
           source_status, generated_at, concept_report=None, concept_source=None, include_concept=False,
-          include_detail=False, detail_report=None, detail_source=None):
+          include_detail=False, detail_report=None, detail_source=None, retained_files=None):
     model.validate_read_package(baseline)
+    from .research_archive_index import read_entries
+    archives = read_entries(baseline['research'],
+                           retained_files.__getitem__ if retained_files is not None else None)
+    research = {**baseline['research'], 'on_demand_archives': archives}
     cutoff = model.clock(generated_at)
     model.check(cutoff >= model.clock(baseline['generated_at']), 'Radar reading clock reversed')
     model.check(type(include_concept) is bool and (include_concept or (concept_report is None and concept_source is None)),
@@ -200,7 +204,7 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
             'market_session': stock.get('market_session'), 'lane_health': stock_lane.get('health', 'UNKNOWN'),
             'dispositions': price, 'source': deepcopy(stock.get('details', {}).get('reading/stock-reading.json')),
             'meaning': 'HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION'}
-        row['research'] = _research_context(row['thscode'], baseline['research'])
+        row['research'] = _research_context(row['thscode'], research)
         if include_concept:
             from .stock_research_intake import supported
             row['stock_business_research_scope'] = ('SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED' if supported(row['thscode'])
@@ -237,7 +241,7 @@ def build(baseline, *, sector_result, sector_source, institution_report, institu
                                                              for r in companies.values()),
             full_concept_trend_radar=False)
         payload['ordering'] = 'SECTOR_THEN_INSTITUTION_THEN_CONCEPT_RETAINED_ORDER_NOT_PRIORITY_OR_SCORE'
-    if baseline['research'].get('on_demand_archives'):
+    if archives:
         payload['coverage']['with_registered_archive_locator'] = sum(
             bool(r['research'].get('on_demand_archives')) for r in companies.values())
         payload['coverage']['registered_archive_only_companies'] = sum(

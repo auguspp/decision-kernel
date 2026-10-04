@@ -109,8 +109,8 @@ def build(baseline: dict, files: dict[str, bytes]) -> dict:
         if not isinstance(code, str) or not SECURITY.fullmatch(code):
             continue  # Explicit non-security navigation is not a company asset.
         asset(code, {'kind': 'PURPOSE_REFERENCE', **record}, [record.get('source')])
-    from .research_archive_index import validate, entry_url
-    for record in research.get('on_demand_archives', []):
+    from .research_archive_index import validate, entry_url, read_entries
+    for record in read_entries(research, files.__getitem__):
         code = record.get('case')
         if not isinstance(code, str) or not SECURITY.fullmatch(code):
             continue

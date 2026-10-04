@@ -57,10 +57,11 @@ def _record(api, reading_commit: str, record_id: str, output: Path) -> tuple[dic
     records = [r for r in registry["references"] if r["id"] == record_id]
     model.check(len(records) == 1, "archive record absent or ambiguous")
     deferred = 'read_policy' in records[0]
-    visible_key = 'on_demand_archives' if deferred else 'records'
-    visible = [r for r in reading["research"].get(visible_key, []) if r["id"] == record_id]
-    other_key = 'records' if deferred else 'on_demand_archives'
-    other = [r for r in reading["research"].get(other_key, []) if r["id"] == record_id]
+    from .research_archive_index import read_entries
+    archives = read_entries(reading['research'], registry_raw=registry_raw)
+    eager = reading['research'].get('records', [])
+    visible = [r for r in (archives if deferred else eager) if r['id'] == record_id]
+    other = [r for r in (eager if deferred else archives) if r['id'] == record_id]
     model.check(len(visible) == 1 and not other, "archive record absent or ambiguous")
     record, shown = records[0], visible[0]
     model.check(all(record[k] == shown[k] for k in ("id", "case", "use", "purpose_note")),

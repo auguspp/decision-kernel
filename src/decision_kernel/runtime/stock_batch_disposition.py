@@ -144,8 +144,9 @@ def attach(collector, baseline: dict) -> dict:
     try:
         raw = delivery.git_file(collector.root, collector.code_commit, PATH)
         model.check(len(raw) <= MAX_BYTES, 'batch disposition source too large')
+        from .research_archive_index import read_entries
         value = project(identity._json(raw), report['stock_review_scope'],
-                        baseline['research'].get('on_demand_archives', []), collector.now())
+                        read_entries(baseline['research'], collector.files.__getitem__), collector.now())
         source_path = 'sources/git/' + model.blob_sha(raw) + '/stock-batch-disposition.json'
         shared = reader._legacy_sources(baseline)
         for item in report['question_work']['items']:

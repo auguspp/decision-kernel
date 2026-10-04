@@ -81,11 +81,11 @@ def skip_diagnostic_trigger(api, env) -> bool:
 
 class Collector(base.Collector):
     def research(self, registry: dict, *, include_work: bool = True) -> dict:
-        from .research_archive_index import split
+        from .research_archive_index import split, registry_index, INDEX_KEY
         eager, archive_index, gaps = split(registry)
         result = super().research(eager, include_work=include_work)
         if archive_index:
-            result["on_demand_archives"] = archive_index
+            result[INDEX_KEY] = registry_index(archive_index)
         result["gaps"].extend(gaps)
         if "research_calendar" in registry:
             from .research_calendar_reading import read_registered
@@ -137,9 +137,10 @@ class Collector(base.Collector):
         if getattr(self, "include_global_market", False):
             from .global_market_reading import attach as attach_global_market
             payload = attach_global_market(self, payload)
-        if payload['research'].get('on_demand_archives'):
-            from .research_archive_index import navigation
-            raw = self.files['README.md'] + navigation(payload['research']['on_demand_archives']).encode()
+        from .research_archive_index import navigation, read_entries
+        archive_entries = read_entries(payload['research'], self.files.__getitem__)
+        if archive_entries:
+            raw = self.files['README.md'] + navigation(archive_entries).encode()
             model.check(sum(map(len, self.files.values())) - len(self.files['README.md']) + len(raw)
                         <= base.MAX_RETAINED_OUTPUT, "archive navigation exceeds retained byte budget")
             self.files['README.md'] = raw

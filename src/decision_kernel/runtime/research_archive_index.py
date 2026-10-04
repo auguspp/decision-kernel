@@ -16,6 +16,8 @@ from . import current_state as model
 POLICY = 'ON_DEMAND_ARCHIVE'
 QUALIFICATION = 'REGISTERED_ARCHIVE_NOT_MATERIALIZED'
 SOURCE_KEYS = {'path', 'ref', 'git_blob', 'sha256', 'bytes'}
+INDEX_KEY = 'on_demand_archive_index'
+INDEX_POLICY = 'PROJECT_FROM_SAME_READING_REGISTRY'
 
 
 def project(record: dict) -> dict:
@@ -112,3 +114,46 @@ def navigation(entries: list[dict]) -> str:
         lines.append('- ' + text(row['case']) + ' / [' + text(row['id']) + '](' + url + ') — '
                      + text(row['purpose_note']) + '；状态：正文按需恢复，未在本包物化。')
     return '\n'.join(lines) + '\n'
+
+
+def registry_index(entries: list[dict]) -> dict:
+    """Describe the already retained registry, not a second copy of its entries."""
+    return {'read_policy': INDEX_POLICY, 'entry_count': len(entries),
+            'qualification': QUALIFICATION, 'body_materialized_in_reading': False}
+
+
+def read_entries(research: dict, load=None, *, registry_raw: bytes | None = None) -> list[dict]:
+    """Resolve the index from bound same-R registry bytes; keep legacy R readable.
+
+    No company/market/archive body is fetched. A missing or corrupt registry is a
+    reading failure, never an empty archive list. Callers supply their existing
+    local file map, or the bytes already read by the original archive command.
+    """
+    if INDEX_KEY not in research:
+        return research.get('on_demand_archives', [])
+    model.check('on_demand_archives' not in research, 'ambiguous archive index representations')
+    source = research['registry']
+    model.check(source.get('repository') == model.REPOSITORY
+                and source.get('path') == 'current_state/registry.json'
+                and isinstance(source.get('ref'), str)
+                and model.SHA.fullmatch(source['ref']) is not None
+                and source.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT',
+                'archive index registry identity differs')
+    path = model.safe_path(source['read_path'])
+    if registry_raw is None:
+        model.check(callable(load), 'archive index requires retained registry bytes')
+        registry_raw = load(path)
+    model.check(isinstance(registry_raw, bytes)
+                and type(source.get('bytes')) is int
+                and len(registry_raw) == source['bytes']
+                and model.sha256(registry_raw) == source['sha256']
+                and model.blob_sha(registry_raw) == source['git_blob'],
+                'archive index retained registry differs')
+    from .research_commit_only import _json
+    registry = _json(registry_raw)
+    model.check(registry.get('schema_version') == 1, 'archive index registry version differs')
+    _, entries, _ = split(registry)
+    model.check(type(research[INDEX_KEY].get('entry_count')) is int
+                and research[INDEX_KEY] == registry_index(entries),
+                'archive index declaration differs from retained registry')
+    return entries
