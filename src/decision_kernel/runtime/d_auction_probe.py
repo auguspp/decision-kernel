@@ -103,7 +103,7 @@ def table(raw, api):
 
 def calendar(raw, target):
     rows, incomplete = table(raw, 'trade_cal')
-    require(not incomplete, 'CALENDAR_TRUNCATED')
+    # Missing older dates do not invalidate the exact interval actually used.
     start = target - timedelta(days=31)
     values = {}
     for row in rows:
@@ -111,10 +111,14 @@ def calendar(raw, target):
         require(row['exchange'] == 'SSE' and start <= day <= target and day not in values
                 and type(row['is_open']) is int and row['is_open'] in (0, 1), 'CALENDAR_IDENTITY')
         values[day] = row['is_open']
-    require(set(values) == {start + timedelta(days=n) for n in range(32)}, 'CALENDAR_COVERAGE')
+    require(target in values, 'TARGET_CALENDAR_UNAVAILABLE')
     prior = max((d for d, open_ in values.items() if open_ and d < target), default=None)
+    if not values[target]:
+        return False, prior
     require(prior is not None, 'PREVIOUS_SESSION_UNAVAILABLE')
-    return bool(values[target]), prior
+    require(all(prior+timedelta(days=n) in values for n in range((target-prior).days+1)),
+            'PREVIOUS_TO_TARGET_CALENDAR_GAP')
+    return True, prior
 
 
 def scoped(rows, day):
@@ -273,7 +277,10 @@ def build(receipt, bodies):
     except ERRORS:
         require(len(calls) == 1, 'REQUEST_AFTER_INVALID_CALENDAR')
         return packed(result)
-    result['previous_session'] = prior.isoformat()
+    result['previous_session'] = prior.isoformat() if prior else None
+    calendar_rows, calendar_truncated = table(response(calls[0], bodies), 'trade_cal')
+    result['calendar_scope'] = {'returned_rows': len(calendar_rows), 'truncated': calendar_truncated,
+        'qualification': 'EXACT_PREVIOUS_TO_TARGET_INTERVAL_ONLY_NOT_WHOLE_QUERY_COMPLETENESS'}
     if not open_ or (target == at.astimezone(saved.ZONE).date() and at.astimezone(saved.ZONE).time() < time(9, 26)):
         require(len(calls) == 1, 'REQUEST_OUTSIDE_PLANNED_SESSION')
         result['status'] = 'TARGET_IS_CLOSED_SESSION' if not open_ else 'BEFORE_AUCTION_DATA_WINDOW'
