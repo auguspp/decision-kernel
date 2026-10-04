@@ -24,7 +24,7 @@ RETRY_WAIT_SECONDS = 30
 ALLOWED = frozenset({
     "hm_list", "hm_detail", "report_rc", "top_list", "top_inst",
     "stk_surv", "research_report",
-    "daily", "daily_basic", "adj_factor", "trade_cal",
+    "daily", "daily_basic", "adj_factor", "trade_cal", "stk_auction", "limit_list_d",
     "income", "balancesheet", "cashflow", "fina_indicator", "disclosure_date",
     "shibor", "index_classify", "index_member_all", "ths_index", "ths_daily",
     "index_global", "hk_daily", "us_daily", "fut_wsr",

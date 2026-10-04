@@ -108,7 +108,7 @@ def test_successor_reconciles_deliveries_without_a_second_source_clock():
     assert trigger["workflow_dispatch"]["inputs"]["mode"]["default"] == "audit"
     assert "push" not in trigger
     jobs = parsed["jobs"]
-    assert set(jobs) == {"reconcile-deliveries", "dispatch-tdx-concept", "daily-market-inputs"}
+    assert set(jobs) == {"reconcile-deliveries", "dispatch-tdx-concept", "daily-market-inputs", "auction-inputs"}
     assert "needs" not in jobs["daily-market-inputs"]
     assert "inputs.mode != 'market-inputs'" in jobs["reconcile-deliveries"]["if"]
     job = jobs["reconcile-deliveries"]

@@ -1,5 +1,5 @@
 name: stock-reading-after-sector
-run-name: ${{ ((github.event_name == 'schedule' && github.event.schedule == '35 10 * * 1-5') || (github.event_name == 'workflow_dispatch' && inputs.mode == 'market-inputs')) && 'stock-market-inputs' || 'stock-reading-after-sector' }}
+run-name: ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'auction-inputs') && 'd-auction-inputs' || ((github.event_name == 'schedule' && github.event.schedule == '35 10 * * 1-5') || (github.event_name == 'workflow_dispatch' && inputs.mode == 'market-inputs')) && 'stock-market-inputs' || 'stock-reading-after-sector' }}
 
 on:
   workflow_run:
@@ -15,8 +15,12 @@ on:
       mode:
         description: Read-only audit, bounded recovery, or current dated stock inputs
         type: choice
-        options: [audit, execute, market-inputs]
+        options: [audit, execute, market-inputs, auction-inputs]
         default: audit
+      auction-session:
+        description: 'Auction target YYYY-MM-DD; empty means today. Historical/late reads are not pre-open observations.'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -31,7 +35,7 @@ jobs:
     if: >-
       github.repository == 'auguspp/decision-kernel' &&
       github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
-      (github.event_name != 'workflow_dispatch' || inputs.mode != 'market-inputs') &&
+      (github.event_name != 'workflow_dispatch' || (inputs.mode != 'market-inputs' && inputs.mode != 'auction-inputs')) &&
       (github.event_name != 'workflow_run' ||
        (github.event.workflow_run.head_branch == 'main' &&
         github.event.workflow_run.head_repository.full_name == github.repository &&
@@ -324,5 +328,61 @@ jobs:
         with:
           name: stock-market-inputs-${{ github.run_id }}-1
           path: stock-market-inputs/
+          if-no-files-found: error
+          retention-days: 30
+
+  auction-inputs:
+    # Explicit manual source-only purpose; no new daily clock or Sector dependency.
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      github.event_name == 'workflow_dispatch' && inputs.mode == 'auction-inputs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    concurrency:
+      group: dated-auction-shadow-inputs
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Qualify current source code against independent main CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')" = "$GITHUB_SHA"
+          gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+            -f head_sha="$GITHUB_SHA" -f event=push -f per_page=10 > "$RUNNER_TEMP/auction-input-ci.json"
+          python - <<'PY'
+          import json, os
+          runs = json.load(open(os.environ['RUNNER_TEMP']+'/auction-input-ci.json'))['workflow_runs']
+          assert runs
+          r = max(runs, key=lambda x: (x['created_at'], x['id']))
+          assert r['head_sha'] == os.environ['GITHUB_SHA'] and r['head_branch'] == 'main'
+          assert r['path'] == '.github/workflows/ci.yml' and r['event'] == 'push'
+          assert r['run_attempt'] == 1 and r['status'] == 'completed' and r['conclusion'] == 'success'
+          PY
+      - name: Install existing source client
+        run: python -m pip install -e '.[feeds]'
+      - name: Capture dated auction profile inputs
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+          AUCTION_SESSION: ${{ inputs.auction-session }}
+        run: python -m decision_kernel.runtime.d_auction_probe --output d-auction-inputs --market-session "$AUCTION_SESSION"
+      - name: Replay exact saved auction responses without source requests
+        run: python -m decision_kernel.runtime.d_auction_probe --output d-auction-inputs --verify
+      - name: Retain auction inputs and original source outcomes
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: d-auction-inputs-${{ github.run_id }}-1
+          path: d-auction-inputs/
           if-no-files-found: error
           retention-days: 30
