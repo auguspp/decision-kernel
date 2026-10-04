@@ -210,6 +210,7 @@ def test_original_collector_calls_the_reentry_attachment(monkeypatch):
     monkeypatch.setattr(b, 'attach', lambda self, payload:payload)
     monkeypatch.setattr(r, 'attach', lambda self, payload:seen.append(payload) or payload)
     collector = object.__new__(c.Collector)
+    collector.files = {}
     collector.include_reviewed_questions = True
     assert collector.collect({}) == baseline and len(seen) == 1
 
