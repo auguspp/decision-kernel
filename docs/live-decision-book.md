@@ -1,7 +1,7 @@
 # Live Decision Book
 
 Status: **MUTABLE NAVIGATION LAYER / NOT AUTHORITATIVE STATE / NO NEW WAKE GATE / NO AUTOMATION**  
-Updated: **2026-09-04**
+Updated: **2026-10-05 — Micron review navigation only; other cards not refreshed**
 Repository: `auguspp/decision-kernel`
 
 ## Purpose
@@ -38,7 +38,7 @@ Investment Authority remains `NONE`.
 | **宁德时代 / 300750.SZ** | Global scaled electrochemical manufacturing franchise; share leadership and demand runway are established, but segment-margin duration, owner-cash quality and incremental ROIC on global / zero-carbon expansion remain mixed or unproven. | **NO HUMAN INVESTMENT DECISION**; the old generic `ACCEPTABLE_ODDS` wake is de-qualified. | **NONE** | Evidence-driven only: adjusted profit / OCF, EV and ESS gross margins, inventory / receivables / supplier finance, capex / utilisation / overseas ROIC, H-share proceeds, buyback cancellation and new-business owner economics. |
 | **三花智控 / 002050.SZ** | Qualified thermal-management franchise; core is relatively auditable; robot / liquid cooling remain upside until measurable economics exist. | **CONDITIONAL BUY** — first tranche around **CNY30**; intended evaluation window **~3–6 months after actual execution**. | **NOT YET EXECUTED** | Price may satisfy the condition only if core revenue / margin, cash conversion and capex / ROIC remain intact; optionality must not become necessary Base. |
 | **兆易创新 / 603986.SH** | Cycle-amplified fabless platform; thesis is **longer specialty-memory duration + materially higher post-cycle earnings floor**. Analysis-divergence dogfood retains only **partial / ordinal** probability knowledge; full cardinal probability remains unqualified. | **CONDITIONAL BUY** — around **CNY350** re-check assumptions; **CNY320–335** first-entry band only if thesis survives. | **NOT YET EXECUTED** | At ~350 re-underwrite duration, supply, storage GM, foundry / procurement economics, inventory / OCF, MCU / custom memory and 2030 earnings floor. |
-| **Micron / MU / NASDAQ** | Memory oligopoly potentially transitioning toward contracted strategic AI-memory economics; SCA trough cushioning supported, company-wide earnings rebase unproven. | **WAIT / DO NOT BUY FOR NOW** because Human is temporarily not buying U.S. equities; this is not bearish Micron Belief. | **NO_ACTION** | **2026-09-30 FY2026/FQ4 earnings**: SCA coverage / floor, HBM, FY27 GM, capex / depreciation, normalized FCF and incremental ROIC. |
+| **Micron / MU / NASDAQ** | Memory oligopoly potentially transitioning toward contracted strategic AI-memory economics; SCA trough cushioning supported, company-wide earnings rebase unproven. | **WAIT / DO NOT BUY FOR NOW** because Human is temporarily not buying U.S. equities; this is not bearish Micron Belief. | **NO_ACTION** | [Original 2026-09-30 window reviewed with source limits](https://github.com/auguspp/decision-kernel/blob/4d9c706d4662a30be7c72ef3b1194a29c94ef37a/docs/readings/d2-micron-fq4-validation-2026-10-05/README.md): quarterly delivery supported; through-cycle EPS/FCF floor, SCA downside performance and incremental ROIC unresolved. No new Human decision. |
 | **圆通速递 / 600233.SH** | Scaled franchised network with improving efficiency; durable low-reinvestment compounder transition possible but unproven; franchise economics load-bearing. | **NO HUMAN INVESTMENT DECISION** | **NONE** | **Evidence-driven only.** Price is `QUIET`; use frozen YTO `QUIET / REOPEN / FRAME CHANGE` trigger design. |
 | **美的集团 / 000333.SZ** | Mature high-ROE global consumer-industrial franchise. Analysis-divergence negative control found OBM / B2B narratives largely collapse into the same **incremental-ROIC → per-share owner-return** model; divergence is not a probability blocker here. | **NO HUMAN INVESTMENT DECISION** | **NONE** | Evidence-driven: Smart Home durability, overseas OBM economics, B2B incremental ROIC, normalized owner cash, and cancellation / incentive-adjusted diluted share count. No price trigger yet. |
 | **厦门钨业 / 600549.SH** | Negative control: integrated cyclical resource / industrial business; old mixed-regime framing rejected. | **NOT A CURRENT ACTION CANDIDATE** | **NONE** | Process guard only unless new evidence maps tungsten price + self-sufficiency + ownership / quota / capex into attributable through-cycle cash returns. |
@@ -126,6 +126,8 @@ Authoritative lineage:
 - `docs/decisions/603986-gigadevice-human-decision-2026-09-03.md`
 
 ### Micron
+
+**2026-10-05 later review:** [five-file retained workpaper](https://github.com/auguspp/decision-kernel/blob/4d9c706d4662a30be7c72ef3b1194a29c94ef37a/docs/readings/d2-micron-fq4-validation-2026-10-05/README.md) compares the pre-event company guidance with FQ4 actuals, including the adverse expense offset, EPS denominators and annual cash definition. This is an analyst review, not a new Human decision, numerical Odds or proof of a normalized earnings floor. Source custody is partial issuer-indexed tables and a limited third-party call excerpt. The original checkpoint below is preserved; it does not establish later executions or today's personal market mandate. This existing NAVIGATION_ONLY entry is not a new ON_DEMAND_ARCHIVE record or automatic horizon integration.
 
 ```text
 DECISION = WAIT / DO NOT BUY FOR NOW
@@ -274,7 +276,7 @@ No automation or scheduled price watcher is implied.
 ### Evidence / event-conditioned reviews
 
 - **CATL:** quarterly margin / owner-cash / working-capital and supplier-finance evidence; capex / utilisation / overseas ROIC; H-share-proceeds deployment; cancellation buyback; actual new-business revenue, margin and capital returns.
-- **Micron:** 2026-09-30 FY2026/FQ4 earnings validation window.
+- **Micron:** original 2026-09-30 FY2026/FQ4 [window now reviewed with source limits](https://github.com/auguspp/decision-kernel/blob/4d9c706d4662a30be7c72ef3b1194a29c94ef37a/docs/readings/d2-micron-fq4-validation-2026-10-05/README.md); remaining contract/normalized owner-cash questions are explicit, without extending the original window or scheduling a new task.
 - **YTO:** frozen evidence-trigger design; price remains QUIET.
 - **Midea:** incremental ROIC / owner-cash / true net-share-shrinkage evidence; no price trigger yet.
 - **Xiamen Tungsten:** only evidence strong enough to rebuild the corrected resource / owner-cash frame.

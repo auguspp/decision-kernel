@@ -1,0 +1,93 @@
+{
+  "recorded_at": "2026-10-05T13:46:08.024661+00:00",
+  "code_baseline": "715f1f5cae09066dee09564f504192fdbaebe17d",
+  "reading_commit": "d4961ec066a2da31a56dd4187b5d3fbd12f00512",
+  "retrieval_posture": "BOUNDED_LATER_PIT_REVIEW_WITH_PARTIAL_SOURCE_CUSTODY",
+  "originals": [
+    {
+      "id": "H1",
+      "repository": "auguspp/decision-kernel",
+      "ref": "d4961ec066a2da31a56dd4187b5d3fbd12f00512",
+      "path": "sources/git/590453f3ad36e70cc11b8bae196aad377f082854/MU-micron-human-wait-validation-2026-09-03.md",
+      "role": "FROZEN_HUMAN_WAIT_AND_ORIGINAL_VALIDATION_CONTRACT",
+      "bytes": 9647,
+      "sha256": "db8982a84e83f6329c9f285e3a074b87828cee861989bdc2ada868e26905f09b",
+      "git_blob": "590453f3ad36e70cc11b8bae196aad377f082854"
+    },
+    {
+      "id": "H2",
+      "repository": "auguspp/decision-kernel",
+      "ref": "36e5e27ed5b05be56ae48ac7907f40f22c17e983",
+      "path": "docs/dogfood/micron-sca-floor-economics-underwriting-2026-09-03.md",
+      "commit_time": "2026-09-03T04:16:15Z",
+      "role": "PRE_RESULT_RESEARCH_RETAINS_GUIDE_MIDPOINTS_AND_WITHHOLDS_NORMALIZED_FLOOR",
+      "bytes": 28371,
+      "sha256": "7d7013dfaf851d1619c9c43279b74f3c1b36c1609351ede3da3da8a3693ed3de",
+      "git_blob": "6bf28515f16ab8e176a7db62d89411909873359f"
+    }
+  ],
+  "public_sources": [
+    {
+      "id": "S1",
+      "url": "https://micron.gcs-web.com/index.php/news-releases/news-release-details/micron-technology-inc-reports-record-results-third-quarter",
+      "title": "Micron FY2026 Q3 results and FQ4 business outlook",
+      "published_at": "2026-06-24T20:01:00+00:00",
+      "actual_use": "INDEXED_ISSUER_BUSINESS_OUTLOOK_TABLE",
+      "scope": "June24 guide only; not asserted to be final pre-print guidance or consensus",
+      "historical_coverage": "H2 already retained 50bn/86%/31 midpoints. Guide bands and OpEx are reacquired historical coverage, not retroactive H2 additions."
+    },
+    {
+      "id": "S2",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/default.aspx",
+      "issuer_mirror": "https://micron.gcs-web.com/node/50991",
+      "title": "Micron FY2026 fourth-quarter and full-year results",
+      "published_at": "2026-09-30T20:01:00+00:00",
+      "published_at_Asia_Singapore": "2026-10-01T04:01:00+08:00",
+      "period_end": "2026-09-03",
+      "actual_use": "INDEXED_ISSUER_FINANCIAL_AND_RECONCILIATION_TABLES",
+      "qualification": "UNAUDITED_RELEASE_TABLES_NOT_AUDITED_10K",
+      "all_url_variants_same_work": true
+    },
+    {
+      "id": "S3",
+      "url": "https://longbridge.com/en/news/300624330",
+      "title": "Transcript: Micron Technology Q4 2026 Earnings Conference Call",
+      "publication_date": "2026-10-01",
+      "event_date_US": "2026-09-30",
+      "actual_use": "PARTIAL_INDEXED_THIRD_PARTY_TRANSCRIPT_MANAGEMENT_STATEMENT",
+      "management_claims": {
+        "signed_scas": 26,
+        "estimated_revenue_coverage_through_2030": "over 35%",
+        "defined_pricing_denominator": "three quarters of estimated SCA revenue, not corporate revenue",
+        "remaining_sca_pricing": "periodically negotiated based on market prices"
+      },
+      "not_proven": "contract enforceability, realized trough margin, exact protected corporate share, outcomes after supply normalization"
+    }
+  ],
+  "acquisition_limits": {
+    "raw_official_html_obtained": false,
+    "raw_official_pdf_obtained": false,
+    "audited_10k_obtained": false,
+    "complete_official_transcript_obtained": false,
+    "contract_appendices_obtained": false,
+    "web_open_result": "Official release opens returned Cache miss / Internal Error",
+    "container_http_result": "Issuer request failed with ConnectionError / NameResolutionError",
+    "meaning": "Source retrieval gap, not proof that undisclosed or unavailable publicly. Inputs preserve a manual indexed-table extraction, not a raw source archive."
+  },
+  "inheritance": {
+    "prior_bridge_ref": "ec95b9ca6156e3ee83f4157675bad7881279ccfd",
+    "prior_bridge_path": "docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md",
+    "already_known": "Q4 CFO/net capex/adjusted FCF and financing classification of customer deposits; not new discoveries here",
+    "new_use": "Old event contract and pre-event guidance versus actual, adverse OpEx offset, EPS denominators and FY cash reconciliation; no new MU-to-GigaDevice scenario"
+  },
+  "calibration_limits": {
+    "company_guidance_events": 1,
+    "independent_ai_forecasts_scored": 0,
+    "selection": "PURPOSIVE_EXISTING_MU_VALIDATION_WINDOW_NOT_REPRESENTATIVE_SAMPLE",
+    "future_data_not_backfilled": true,
+    "method_or_prompt_version_changed": false,
+    "internal_model_version": "UNKNOWN",
+    "no_automatic_research_continuation": true
+  },
+  "delivery": "RETAINED_FILES candidate; registration, PR checks, merge, publication and natural consumption require separate receipts."
+}
