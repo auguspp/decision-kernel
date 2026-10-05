@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-10-05T10:14:15.045843+00:00",
+    "finished_at": "2026-10-05T10:17:18.085692+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-10-06T10:14:15.045843+00:00",
-    "started_at": "2026-10-05T10:13:48.892013+00:00"
+    "recheck_after": "2026-10-06T10:17:18.085692+00:00",
+    "started_at": "2026-10-05T10:16:50.547417+00:00"
   },
   "code_commit": "cade499fce16bd69826ae4f97529399e7a64b859",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-10-05T10:14:15.045843+00:00",
+  "generated_at": "2026-10-05T10:17:18.085692+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-10-05T10:14:04.620602+00:00",
+      "checks_at": "2026-10-05T10:17:09.068051+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -653,7 +653,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "50fe28e04954a50d09ad43500d3a46287fec2dfaccb21192ac56d52b66097317"
         },
-        "source_checked_at": "2026-10-05T10:14:04.293076+00:00",
+        "source_checked_at": "2026-10-05T10:17:08.709582+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -676,7 +676,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-10-05T10:13:55.673142+00:00",
+      "checks_at": "2026-10-05T10:16:59.434136+00:00",
       "delivery_selection": "SAME_SESSION_RESULT_PRESERVED_NOT_NEW_EVENT",
       "gaps": [
         "LATEST_ATTEMPT_IS_NOT_A_NEW_QUALIFIED_DELIVERY"
@@ -805,7 +805,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "0dd4e518d7d8b33a56ddcc2cf02bd879a72eca80183face136d4107e573b57b8"
         },
-        "source_checked_at": "2026-10-05T10:13:55.673110+00:00",
+        "source_checked_at": "2026-10-05T10:16:59.434098+00:00",
         "state_archive": {
           "artifact_id": 11090825914,
           "artifact_name": "sector-radar-state-bundle",
@@ -987,7 +987,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "52217f1073f8fc6bac37e68525e5d633556befcc160de603108f5324c6ed6f10"
         },
-        "source_checked_at": "2026-10-05T10:13:52.158835+00:00",
+        "source_checked_at": "2026-10-05T10:16:55.091373+00:00",
         "state_archive": {
           "artifact_id": 11221265618,
           "artifact_name": "sector-radar-state-bundle",
@@ -1023,7 +1023,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-10-05T10:14:03.040273+00:00",
+      "checks_at": "2026-10-05T10:17:07.340269+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -1218,7 +1218,7 @@
           "sha256": "bbc5ebeab77ac3903574f5b5a5460a884f6c13444c9eb103b2c38f256c89b6eb"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-10-05T10:14:03.040256+00:00",
+        "source_checked_at": "2026-10-05T10:17:07.340248+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "300904.SZ",
@@ -1249,13 +1249,13 @@
     }
   },
   "pending": [],
-  "reading_hash": "711fdccfffe2acc960e92def40a4d61a0f25de4b496134371ce7cbe114e23a59",
+  "reading_hash": "627667fe7e28a292ed8e6058164520c333b1b6e0ab57843e9df72db2bd662945",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "37295155183",
-    "trigger_run_id": "37295151349",
+    "run_id": "37295329384",
+    "trigger_run_id": "37295196489",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
   "repository": "auguspp/decision-kernel",
@@ -1263,7 +1263,7 @@
     "calendar": {
       "as_of": "2026-09-28T05:06:04.658134+00:00",
       "calendar_hash": "dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978",
-      "checked_at": "2026-10-05T10:14:10.199017+00:00",
+      "checked_at": "2026-10-05T10:17:13.641272+00:00",
       "company_events": "NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE",
       "comparison": {
         "human_attention_authority": "NONE",
