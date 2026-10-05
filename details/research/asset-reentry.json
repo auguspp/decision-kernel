@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "ce52382f5c86c0db44e086007d858da3e64c8af66c73beac541b321df3cd4bf8",
+    "base_reading_hash": "b74c14652a73ffd2deb54a2d04410a432c4a8834ef900f7a9cd90230c80d01ce",
     "companies": [
       {
         "archives": [],
@@ -103,7 +103,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "8465876e6d21bfeefe61c69e38dc94d8b4706dad31505087725aa92b7f1941d1",
+        "association_id": "f7e252701827a2c4c28698425f08a6bcf99fe79b6ff9c0397dbbec2c41e67ef2",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -131,7 +131,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.16101694915254237288135593220338983050847457627118644067796610169491525423728814",
             "upper_price": "39.6"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.",
           "price": "47.2",
@@ -151,17 +151,17 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "600276.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -256,7 +256,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "34667ec193968615400df05482e6a57e4f19fb944a702bcfd43891ac2a73d807",
+        "association_id": "31601e9ee1e0f85b31c13043dca7e5e8181d061ee50d307aa8ef15aa4d28d610",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -290,13 +290,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -356,7 +356,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "0d281e2fcdb1c0f2e0d7afcf81e0f81d50b984ef046e93cd9fe871d7e4861ae7",
+        "association_id": "649075e10c33c28cfdad01cbb1990670f78a40c3c77ecf077ef78796454a04ab",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -384,7 +384,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.14228052472250252270433905146316851664984863773965691220988900100908173562058527",
             "upper_price": "17"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.",
           "price": "19.82",
@@ -404,17 +404,17 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "002674.SZ",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -594,7 +594,7 @@
             "use": "RETAINED_RESEARCH_PACKAGE"
           }
         ],
-        "association_id": "42a6cb7e34b582267e4eff36939c3dfa82c840fd38afd619c87a4d9b05a87437",
+        "association_id": "61d039c94ee38bc1ac735089c8d22432c9b4890cf2c21e6aa75d84d6b18b2190",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -622,7 +622,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.10530482977038796516231195566112430720506730007917656373713380839271575613618369",
             "upper_price": "11.3"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L3_HUMAN_ACCEPTED_ODDS",
           "prerequisite": "BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.",
           "price": "12.63",
@@ -642,17 +642,17 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "600598.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -1179,7 +1179,7 @@
             }
           }
         ],
-        "association_id": "6af1adadf40ba6ef0e67d65a623f0970fc86792db9c68a61f9b454fb96070e1f",
+        "association_id": "56bd9fb4f9afc986ea31b04bd54ad7e7205e3ccf65152242f6c8eb77ce144aae",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1213,13 +1213,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -1452,7 +1452,7 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           }
         ],
-        "association_id": "4b664f0eae7419e4ffefd69f6744be307bd5d7407f8ea8ed7c91a2da1e6e5e1b",
+        "association_id": "47dcb63bca2df1f7df18200e1f88ab504b5b0c78947fdf9a4e44f84600fb1210",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1486,13 +1486,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -1519,7 +1519,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.011020062164453235377225204860129980220401243289064707544504097202599604408024866",
             "upper_price": "350"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
           "prerequisite": "Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.",
           "price": "353.9",
@@ -1539,17 +1539,17 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "603986.SH",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -1655,7 +1655,7 @@
             "use": "HUMAN_METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "25f0e92823343363d35906e1450e4266eb61c03580073ebc54bd122986c7c6d9",
+        "association_id": "e2298a21ccd8e646f08cca7a109f2359ebeb13f135738d9035c3950d02552406",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1683,7 +1683,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.15989918790254830579669560347241669000280033604032483898067768132175861103332400",
             "upper_price": "30"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L4_HUMAN_DECISION_BOUNDARY",
           "prerequisite": "Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.",
           "price": "35.71",
@@ -1703,17 +1703,17 @@
             "use": "HUMAN_DECISION_CHECKPOINT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "ACTIVE_ODDS_WATCH",
           "ticker": "002050.SZ",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -1893,7 +1893,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "6dd7536ee4fd3518748621ad86e5d02b9b68fda05480289ccb8750be5879f8ec",
+        "association_id": "58e326a7200226fe15fb23def03bd6a2f49ae130261e2b0bfdc0f85865d235ce",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -1951,13 +1951,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -2255,7 +2255,7 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           }
         ],
-        "association_id": "7fac112e2edb34b6a7abae1b4eff4fab92c95bb2cb32fe01ec167fcd8f554e36",
+        "association_id": "0d71abc196d09778eda3afb7f994a0bb7966d59656e24313ca1750d4031fecd5",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "COMPARE_SAVED_OBSERVATION_WITH_EXISTING_RESEARCH",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2313,13 +2313,13 @@
                 "source_observed_at": "2026-09-18T14:18:09.149291Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -2506,7 +2506,7 @@
             "use": "METHOD_SUPPLEMENT"
           }
         ],
-        "association_id": "024ce030794ac58db085b9bfe5f5ec103f677c8ae27309605a438c5f363fc7ac",
+        "association_id": "55eb4a5741b7a272bc73f9c229370f88cff6ca449aec5182b31e12de86f7a592",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECONCILE_EXISTING_METHOD_REVIEW",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -2538,7 +2538,7 @@
             "signed_distance_to_upper_fraction_of_current": "0.12509712509712509712509712509712509712509712509712509712509712509712509712509713",
             "upper_price": "11.26"
           },
-          "observed_at": "2026-09-30T14:33:23.264900Z",
+          "observed_at": "2026-10-05T08:20:39.323605Z",
           "odds_level": "L2_PROVISIONAL_ORDINAL",
           "prerequisite": "Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.",
           "price": "12.87",
@@ -2558,11 +2558,11 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
           "status": "NEEDS_REVIEW_NOW",
           "ticker": "601155.SH",
@@ -2582,7 +2582,7 @@
             }
           ],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
           "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
@@ -2867,31 +2867,47 @@
             "use": "NAVIGATION_ONLY"
           }
         ],
-        "association_id": "1fc33a02ce1032a37bd5de81ff24fcd27150ac3710fb14d0308f9ab8db050c2a",
+        "association_id": "d1bde6a48d9f1878a833577dcf2d6fb3ba926c9148e312678d22a76531290030",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
-        "next_step": "NO_OBSERVATION_ASSOCIATION_IN_THIS_READING_NOT_NO_CHANGE",
+        "next_step": "WAITING_SAVED_PRICE_BOUNDARY_NOT_THESIS_NO_CHANGE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
         "saved_observations": [],
         "saved_watch": {
           "action_authority": "NONE",
-          "boundary_authority": "NONE",
-          "boundary_source": null,
+          "boundary_authority": "ANALYST_DERIVED",
+          "boundary_source": {
+            "meaning": "EXACT_BOUNDARY_SOURCE_NOT_HUMAN_ACCEPTANCE_UNLESS_BOUNDARY_AUTHORITY_SAYS_SO",
+            "source_path": "docs/readings/002436-xingsen-odds-2026-09-30/odds.md",
+            "source_ref": "d244c3427d112ad3c8623ab71aeb94408f202920"
+          },
           "company_name": "兴森科技",
           "currency": "CNY",
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
-          "market_data_source": null,
-          "market_timestamp": null,
-          "next_unreached_condition": null,
-          "observed_at": "2026-09-30T14:33:23.264900Z",
-          "odds_level": "L0_NO_ODDS",
-          "prerequisite": "Retained Xingsen Full/review state remains the working research context; reopen on final financing/transaction terms, customer unit economics, BGA/CSP operating evidence or other source-backed evidence that can close the owner-cash bridge.",
-          "price": null,
-          "price_convention": null,
-          "price_fetch_performed": false,
+          "market_data_source": "HiThink Financial-API raw daily close | 002436.SZ",
+          "market_timestamp": "2026-09-30T15:00:00+08:00",
+          "next_unreached_condition": {
+            "attention_triggered": false,
+            "condition_state": "ABOVE_CONDITION",
+            "id": "xingsen-high-estimate-40x-35_73",
+            "kind": "ANALYST_HIGH_ESTIMATE_HIGH_MULTIPLE_REVIEW",
+            "label": "CNY35.73 high-public-profit / 40x analyst sensitivity",
+            "lower_price": null,
+            "meaning": "PRICE_CONDITION_FOR_HUMAN_REVIEW_NOT_ACTION",
+            "shape": "POINT_AT_OR_BELOW",
+            "signed_distance_to_upper_cny": "5.21",
+            "signed_distance_to_upper_fraction_of_current": "0.12725940400586223742061553492916463116756228627259404005862237420615534929164631",
+            "upper_price": "35.73"
+          },
+          "observed_at": "2026-10-05T08:20:39.323605Z",
+          "odds_level": "L2_PROVISIONAL_ORDINAL",
+          "prerequisite": "Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.",
+          "price": "40.94",
+          "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+          "price_fetch_performed": true,
           "price_gap": null,
           "qualification": "SAVED_TYPED_WATCH_NOT_REQUALIFIED_CURRENT_MARKET",
-          "recompute_route": "EVIDENCE_REOPEN_RESEARCH_REVIEW_NOT_PRICE_TRIGGER",
+          "recompute_route": "PROVISIONAL_PRICE_REVIEW_REUNDERWRITE_IF_EVIDENCE_CHANGES",
           "research_authority": "NONE",
           "signal_transition_authority": "NONE",
           "source": {
@@ -2903,18 +2919,18 @@
             "use": "RETAINED_RESEARCH_DOCUMENT"
           },
           "source_report": {
-            "bytes": 16975,
-            "git_blob": "66bc57c2e457b2fbdd9bae8bfc487cda06cf6950",
-            "read_path": "details/inbox/36729975005/odds-watch/watch.json",
+            "bytes": 17932,
+            "git_blob": "b8fe3b0e129dbb84eae26c8800f5e00fff05e1e2",
+            "read_path": "details/inbox/37283010850/odds-watch/watch.json",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "879428af891a41901bea55266d3bd2c4f156b46f36ad9219ef0e7934ed793190"
+            "sha256": "0acc0e34c904a31c2ec2be9e7ecfe77f857090efc39d48b57a10530214a27201"
           },
-          "status": "EVIDENCE_REOPEN_WATCH",
+          "status": "ACTIVE_ODDS_WATCH",
           "ticker": "002436.SZ",
           "triggered_conditions": [],
           "watch_enabled": true,
-          "watch_hash": "b7bf8f9da0c5d6b4674335435036895ff652c3763926992bc6539d6ef5e71181",
-          "watch_mode": "EVIDENCE_REOPEN"
+          "watch_hash": "c4f8ab34c1423fe4c1056c534d888fbf1306475cb8922e9e14c6247d61640973",
+          "watch_mode": "PRICE_CONDITION"
         },
         "semantic_comparison": "NOT_PERFORMED_BY_READING",
         "thscode": "002436.SZ"
@@ -3004,7 +3020,7 @@
           }
         ],
         "assets": [],
-        "association_id": "863c49ea6652c59ef62976908f3e468d377716d74e314d9f6f787c1843090263",
+        "association_id": "cdef7142f9af779504c276fd9be1c01770c118b8e89fbecc9c57a7123c86d9a2",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -3086,13 +3102,13 @@
                 "source_observed_at": "2026-09-18T14:18:52.651149Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -3167,7 +3183,7 @@
           }
         ],
         "assets": [],
-        "association_id": "1aaec262754102314eafba9c33fda3c6e5b6fe1a551433f0ebcdd5952fe454c4",
+        "association_id": "d736a591b3d89d2838a4b679c5bea36f12c34e6281444f39564d305a9dca2efc",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -3201,13 +3217,13 @@
                 "source_observed_at": "2026-09-18T14:17:25.907438Z"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -3682,7 +3698,7 @@
           }
         ],
         "assets": [],
-        "association_id": "fc14888c0d9bee481e5160a11d7ae605e5c510d062ba6f23b1f9dd2aafd342f8",
+        "association_id": "f9f69c0a377efb4937b9ae0b3a62d0c446482010988c57ac865e63b88653cbd3",
         "human_acceptance": "REFER_TO_EXACT_ORIGINAL_RECORD_NOT_TRANSFERRED",
         "next_step": "RECOVER_REGISTERED_ARCHIVE",
         "numerical_odds_eligibility": "REQUALIFY_FROZEN_RESEARCH_AND_MARKET_AT_ORIGINAL_ENTRY",
@@ -3748,13 +3764,13 @@
                 "window_aggregation": "NONE_ONE_AND_THREE_DAY_WINDOWS_MAY_OVERLAP"
               }
             ],
-            "projection_hash": "1c771d469f4081688d21f65feb7b00f902a32ea83d123dc46ab8f02c6e3e0396",
+            "projection_hash": "163b2d01e2b4689a257342846ef7328a619084748654948b725a4b2d5d639523",
             "source": {
               "bytes": 3286335,
-              "git_blob": "52f9ffe0795fe323387a23283d5bb74d355b6042",
+              "git_blob": "8d84f3048466155dee984dd70bf97f0249778c5e",
               "read_path": "details/radar/company-reading.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "6d892d9c828c83556e9bf3223221f8aec9e01155b1787d8a7ffca89c0197aadb"
+              "sha256": "5f303151cb264cbbc8aa07aacba860fcc6d1fcd9ffb1a336daef79223b60ae3e"
             }
           }
         ],
@@ -4325,7 +4341,7 @@
       "with_saved_observations": 8,
       "with_saved_watch": 7
     },
-    "generated_at": "2026-10-05T18:36:51.293664+00:00",
+    "generated_at": "2026-10-05T18:51:27.033055+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "market_requests": 0,
@@ -4344,5 +4360,5 @@
     "signal_transition_authority": "NONE",
     "version": "research-asset-reentry-reading-v1"
   },
-  "projection_hash": "3e455138c0ed05490097c681600ade9c13111fe236a68639d0e90722b2025ea9"
+  "projection_hash": "6a202b709a4c1057f1ae9d352e3ca5a781c9b052c3ce54aeaa596111ed2be6e8"
 }

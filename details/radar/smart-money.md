@@ -1,27 +1,23 @@
 # 聪明钱观察：参与者公开行为与变化
 
-检查日 2026-10-03；取得截止 2026-10-02T17:59:19.489679+00:00；状态 PARTIAL_WITH_EXPLICIT_GAPS。
+检查日 2026-10-06；取得截止 2026-10-05T18:42:54.402476+00:00；状态 PARTIAL_WITH_EXPLICIT_GAPS。
 
 新取得、同期修订和已知未变分别保留；再次发布同一采集不算新事件。
 
-**本次新采集未取得，以下保留旧日期与旧来源。** AWAITING_CURRENT_CAPTURE
-
 | 独立观察面 | 已保存记录/公司 | 当前覆盖 | 原统计/事件日期 |
 |---|---:|---|---|
-| 机构调研活动 | 5830 / 3024 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-01-01—2026-09-30 |
-| 高管实际持股变动 | 3395 / 666 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-30 |
-| 研报与预期版本 | 3328 / 1577 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-28—2026-10-02 |
-| 股东披露增减持区间 | 1459 / 701 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-30 |
-| 具名个人与机构报告期持股 | 56147 / 5609 | PARTIAL_OR_UNAVAILABLE；1/2批 | 2026-06-30—2026-06-30 |
 | 游资标签公开轨迹 | 390 / 169 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-30 |
 | 龙虎榜机构席位 | 290 / 149 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-30 |
-| 北向季度持股 | 8416 / 4311 | COMPLETE_PROVIDER_SCOPES；4/4批 | 2026-03-31—2026-06-30 |
-| 北向成交（非净流入） | 8 / 0 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-30 |
-| 定增与战略资本发行 | 54 / 53 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-15 |
-| 公司回购计划与执行 | 577 / 559 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-04-30—2026-10-01 |
 | 原始营业部席位 | 4508 / 262 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-30 |
-
-来源表中另有 20 条NQ记录，已逐条保留范围外处置，不伪装成沪深北股票。
+| 北向成交（非净流入） | 8 / 0 | COMPLETE_PROVIDER_SCOPES；5/5批 | 2026-09-18—2026-09-30 |
+| 具名个人与机构报告期持股 | 56147 / 5609 | PARTIAL_OR_UNAVAILABLE；0/1批 | 2026-06-30—2026-06-30 |
+| 北向季度持股 | 8416 / 4311 | COMPLETE_PROVIDER_SCOPES；4/4批 | 2026-03-31—2026-06-30 |
+| 机构调研活动 | 5830 / 3024 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-01-01—2026-09-30 |
+| 研报与预期版本 | 3332 / 1578 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-28—2026-10-05 |
+| 高管实际持股变动 | 3395 / 666 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-30 |
+| 股东披露增减持区间 | 1459 / 701 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-30 |
+| 公司回购计划与执行 | 577 / 559 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-04-30—2026-10-01 |
+| 定增与战略资本发行 | 54 / 53 | COMPLETE_PROVIDER_SCOPES；1/1批 | 2026-06-29—2026-09-15 |
 
 ## 可直接继续研究的公开线索
 
@@ -85,6 +81,7 @@
 
 - 机构调研活动：2组披露日期有多个来源声明；0条有局部字段缺口。原记录仍可读，不认定唯一发布日期或已完成日。
 - 公司回购计划与执行：0组披露日期有多个来源声明；1条有局部字段缺口。原记录仍可读，不认定唯一发布日期或已完成日。
+- 未解决：holdings / 2026-09-30 / 2026-07-08—2026-10-06：PROVIDER_DATA_UNAVAILABLE。
 - 未解决：holdings / 2026-09-30 / 2026-07-05—2026-10-03：PROVIDER_DATA_UNAVAILABLE。
 - 未解决：holdings / 2026-09-30 / 2026-07-04—2026-10-02：PROVIDER_DATA_UNAVAILABLE。
 - 未解决：holdings / 2026-09-30 / 2026-07-03—2026-10-01：PROVIDER_DATA_UNAVAILABLE。
@@ -95,33 +92,33 @@ Radar发现，Quick解释；无自动Full、Odds、买卖或仓位权限。
 
 ## Tushare Relay 补充读取
 
-当前读取：NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT；历史补充：EXACT_PREVIOUS_SUPPLEMENT。主资料独立保留。
+当前读取：PARTIAL_WITH_EXPLICIT_GAPS；历史补充：NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE。主资料独立保留。
 
 ## Tushare Relay 补充来源
 
-状态 PARTIAL_WITH_EXPLICIT_GAPS；市场日 2026-09-30；取得截止 2026-10-02T18:06:28.747020+00:00。第三方中转，不是官方Tushare或聪明钱评分。
+状态 PARTIAL_WITH_EXPLICIT_GAPS；市场日 2026-09-30；取得截止 2026-10-05T18:49:44.078617+00:00。第三方中转，不是官方Tushare或聪明钱评分。
 
 | 接口 | 取得状态 | 解析行数 | 日期/身份合格行数 |
 |---|---|---:|---:|
 | hm_list | SUCCESS | 117 | 117 |
 | hm_detail | SUCCESS | 279 | 279 |
-| report_rc | PARTIAL_DAILY_PAGES | 483 | 482 |
+| report_rc | PARTIAL_DAILY_PAGES | 164 | 164 |
 | top_list | SUCCESS | 79 | 79 |
-| top_inst | SUCCESS | 40 | 40 |
+| top_inst | TEMPORARY_QUEUE | 0 | UNKNOWN |
 
 报告日分别取得；每行仍是报告的一个预测期，不是独立新事件。
 
 | 报告日 | 状态 | 保存行数 |
 |---|---|---:|
+| 20261006 | TEMPORARY_QUEUE | 0 |
+| 20261005 | TEMPORARY_QUEUE | 0 |
+| 20261004 | TEMPORARY_QUEUE | 0 |
 | 20261003 | TEMPORARY_QUEUE | 0 |
 | 20261002 | TEMPORARY_QUEUE | 0 |
-| 20261001 | SUCCESS | 3 |
-| 20260930 | SUCCESS | 87 |
-| 20260929 | SUCCESS | 70 |
-| 20260928 | SUCCESS | 265 |
-| 20260927 | SUCCESS | 58 |
+| 20261001 | SUCCESS | 0 |
+| 20260930 | SUCCESS | 164 |
 
-缺口：report_rc=TEMPORARY_QUEUE；report_rc=TEMPORARY_QUEUE；report_rc=SOURCE_INTERPRETATION_GAP；top_inst=SOURCE_INTERPRETATION_GAP
+缺口：report_rc=TEMPORARY_QUEUE；report_rc=TEMPORARY_QUEUE；report_rc=TEMPORARY_QUEUE；report_rc=TEMPORARY_QUEUE；report_rc=TEMPORARY_QUEUE；top_inst=TEMPORARY_QUEUE
 
 临时排队/业务 timeout 只等待30秒再试一次；仍失败留到下一自然运行。
 合格只指所收单页的日期/身份解释，不代表全市场、全部分页或经济正确；空结果不是没有行为。
