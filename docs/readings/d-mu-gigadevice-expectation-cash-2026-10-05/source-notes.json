@@ -1,0 +1,42 @@
+{
+  "archive_files": [
+    "README.md",
+    "inputs.json",
+    "calculate.py",
+    "results.json",
+    "source-notes.json"
+  ],
+  "code_commit": "cade499fce16bd69826ae4f97529399e7a64b859",
+  "current_forecast_revision_verified": false,
+  "inherited_contribution": "Supply/cash sensitivities from #509/5991680684 rechecked and consolidated, not relabelled as new research.",
+  "investment_authority": "NONE",
+  "new_company_facts": false,
+  "new_contribution": "Static separation of earnings quantity and valuation expression plus outcome interpretation; not a new short-horizon terminal model.",
+  "official_read_results": [
+    {
+      "original_body_retained": false,
+      "result": "Cache miss",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480384.PDF"
+    },
+    {
+      "original_body_retained": false,
+      "result": "not retrieved",
+      "url": "https://www.gigadevice.com.cn/investor"
+    }
+  ],
+  "prepared_at": "2026-10-05T10:33:01.043149+00:00",
+  "reading_commit": "440c03166d89debe08d3bb4a0b5e104c923009b2",
+  "reuse": "Existing native Git archive and registered odds-book navigation; no dependency, runtime, schema, provider, scheduler or new state store.",
+  "source_posture": "RETAINED_STRUCTURED_EXTRACTION_AND_SAVED_PRICE_CONTEXT_ONLY",
+  "unadopted": "Secondary search hits not used as revalidation of original filings or current forecasts.",
+  "validation_limits": [
+    "Decimal recomputation does not verify issuer truth",
+    "not full CI",
+    "not natural Quick/Brief consumption",
+    "no new ON_DEMAND_ARCHIVE id"
+  ],
+  "web_scope": [
+    "bounded issuer/interim report discovery",
+    "official exact H1 PDF and issuer investor entry read"
+  ]
+}

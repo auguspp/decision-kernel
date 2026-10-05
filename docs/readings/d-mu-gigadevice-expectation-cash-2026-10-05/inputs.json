@@ -1,0 +1,65 @@
+{
+  "assumptions": [
+    "PE values and 15.8bn earnings are selected old model assumptions, not present observations or adopted fair values.",
+    "A-share reference price times total historical shares is a comparison algebra amount, not observed combined A+H market capitalization.",
+    "Fixed old shares, no separate cash add-on, dividends, financing or dilution effects.",
+    "No return horizon, probability, annualization, hurdle, watch boundary or Human action is established.",
+    "Cash comparison uses group OCF and deducted parent profit; it is not a consolidated earnings-to-cash reconciliation or FCFE.",
+    "Extra inventory assumption is new cash use relative to old OCF scale, never deducting old end inventory twice."
+  ],
+  "deducted_parent_profit_cny": "4883033478.93",
+  "extra_inventory_fraction_assumption": "0.30",
+  "inherited_supply_assumptions": [
+    {
+      "price": "-0.10",
+      "unit_cost": "0",
+      "volume": "0.20"
+    },
+    {
+      "price": "-0.10",
+      "unit_cost": "0.10",
+      "volume": "0.20"
+    }
+  ],
+  "inventory_cny": "4184224748.31",
+  "ocf_cny": "6048341057.06",
+  "old_forecast_as_of": "2026-08-31",
+  "old_forecast_context_cny": [
+    "13977000000",
+    "16868000000",
+    "17872000000"
+  ],
+  "pe_assumptions": [
+    "15",
+    "17",
+    "19",
+    "21"
+  ],
+  "price_cny": "353.9",
+  "price_session": "2026-09-30",
+  "same_earnings_world_cny": "15800000000",
+  "scope": "RETAINED_BASELINES_AND_ANALYST_ASSUMPTIONS_NOT_CURRENT_MARKET_OR_NEW_COMPANY_FACTS",
+  "shares": "701749599",
+  "sources": {
+    "financial_and_old_forecast": {
+      "bytes": 33013,
+      "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+      "path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+      "qualification": "EXTRACTED_VALUES/PARTIAL; no original filing revalidation",
+      "reading_commit": "440c03166d89debe08d3bb4a0b5e104c923009b2",
+      "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
+    },
+    "price": {
+      "json_pointer": "/cases/0/historical_price_context/row/raw_close",
+      "path": "details/stock/horizon-follow-up.json",
+      "qualification": "saved Sep30 backward context; not S0, a new quote, or realized return",
+      "reading_commit": "440c03166d89debe08d3bb4a0b5e104c923009b2",
+      "sha256": "3421e7179dce79a748039708d925e6027afaf7de9f54eedcf0bd1e334f2366f4"
+    },
+    "supply_cash_predecessor": {
+      "classification": "inherited prior conditional analysis, not new event",
+      "url": "https://github.com/auguspp/decision-kernel/issues/509#issuecomment-5991680684"
+    }
+  },
+  "storage_gross_margin": "0.6757"
+}
