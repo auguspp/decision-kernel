@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "135fffb4d84082ffa8630aefe83c4e16a4e0f0a7bdead73b2e545c62fff87955",
+    "base_reading_hash": "6fcf2d03fc9baaa055cac10acbbf780a772d1d1eff068c4f0ee6dd6a4127e9d8",
     "companies": [
       {
         "automatic_admission": false,
@@ -18981,7 +18981,7 @@
                 "path": "docs/dogfood/midea-analysis-divergence-v0-2026-09-03.md",
                 "read_path": "sources/git/68e24d4db265517e2b4d75fdc24353621e566c59/midea-analysis-divergence-v0-2026-09-03.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "b8282b3dfcb9ac5580f5411cd1dc291d8683e18ade76937a8b3681bd35540f11"
               },
@@ -28095,7 +28095,7 @@
                 "path": "docs/readings/stock-successor-terminal-review-2026-09-14.md",
                 "read_path": "sources/git/0ae65c1103b45454d74f0ee9556c9f143c7f9ba4/stock-successor-terminal-review-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "88397b8656047428175b2730c48ca7b6c8b24f739f4c4c47b3c11dd07e3ed73d"
               },
@@ -28112,7 +28112,7 @@
                 "path": "docs/readings/stock-business-review-addendum-2026-09-14.md",
                 "read_path": "sources/git/ea2062655e659ba89b7cdf1c9f5f10ab381850e7/stock-business-review-addendum-2026-09-14.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "2c7f549e1f2c2be99b8faeb21e164ca71a15779130f59e2942dbef03c9b4e5f3"
               },
@@ -58302,6 +58302,27 @@
               },
               "body_materialized_in_reading": false,
               "case": "603986.SH",
+              "id": "d-mu-gigadevice-economic-bridge-20261005",
+              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
+              "purpose_note": "MU→兆易原冻结案例的有界经济接续：NOR容量分化、成本后毛利抵消量与现金分类；沿原2026-10-04T01:03:53Z期限，不改变长期Research/Human决定。不是新Full、数值Odds或已成立交易机会。",
+              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
+              "read_policy": "ON_DEMAND_ARCHIVE",
+              "source": {
+                "bytes": 10359,
+                "git_blob": "09e6f2fbda7f33b13dae4421a66bcbdb10161107",
+                "path": "docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md",
+                "ref": "ec95b9ca6156e3ee83f4157675bad7881279ccfd",
+                "repository": "auguspp/decision-kernel",
+                "sha256": "1a7755c6dc9217aaa6003a7cf600fa6d1d04c2cb23f5e0935aa191a69c44faa0"
+              },
+              "use": "RETAINED_RESEARCH_DOCUMENT"
+            },
+            {
+              "archive": {
+                "format": "RETAINED_FILES"
+              },
+              "body_materialized_in_reading": false,
+              "case": "603986.SH",
               "id": "d-mu-gigadevice-horizons-20261004",
               "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
               "purpose_note": "MU→兆易的产品／成本／现金传导、独立期限及反证；沿#509/5975228575原2026-10-04T01:03:53Z冻结。不是新行情、Full、数值Odds、成交或成熟结果。",
@@ -58347,7 +58368,7 @@
                 "path": "research_cases/603986-gigadevice-deep-research-v2.json",
                 "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
               },
@@ -58364,7 +58385,7 @@
                 "path": "docs/dogfood/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
                 "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
               },
@@ -58381,7 +58402,7 @@
                 "path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
                 "read_path": "sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md",
                 "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-                "ref": "8c249b373521f1093ae33a85f27140481741e4fc",
+                "ref": "c9f53abf78c1e0266bfb2f250e4c801a331dc516",
                 "repository": "auguspp/decision-kernel",
                 "sha256": "82ccbd7c22d16e07fe74616583267028321200cd3ad7fdb2d7ae2d70771f7bc6"
               },
@@ -65788,7 +65809,7 @@
       "with_saved_stock_disposition": 6
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-10-05T06:33:46.681702+00:00",
+    "generated_at": "2026-10-05T06:50:42.852560+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -66445,5 +66466,5 @@
     "stock_business_read_status": "UNAVAILABLE_OR_REJECTED",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "1e457ef66c0e3252993353a45e76f58dccd8d5814182be2d786240567eeade43"
+  "projection_hash": "9fd06b7f22e92278f08d042147632d6497bf675aa9e31349c3d84f3c4b1ea999"
 }
