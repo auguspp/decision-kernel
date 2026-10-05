@@ -140,4 +140,9 @@ def read_current(collector, baseline):
                                   retained_limit=delivery.MAX_RETAINED_OUTPUT)
     result['auction_follow_through'] = outcome
     result['summary'] += outcome['summary']
+    from .d_auction_minute_reading import read_saved as read_minutes
+    minutes = read_minutes(collector, baseline, run_query=query if query is not None else {},
+                           retained_limit=delivery.MAX_RETAINED_OUTPUT)
+    result['auction_minutes'] = minutes
+    result['summary'] += minutes['summary']
     return result
