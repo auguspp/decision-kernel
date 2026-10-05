@@ -1,0 +1,86 @@
+{
+  "method_reference": {
+    "commit": "8bfb4c23821a1893ae9ce7586a53d417899ef3f6",
+    "git_blob": "91efe833e0cd8cc3dd27fa3d493dc7cbc0e2c855",
+    "path": "docs/prospective-decision-outcome-capture-protocol-2026-09-03.md",
+    "sections": [
+      2,
+      5,
+      16,
+      17,
+      18
+    ]
+  },
+  "purpose": "D2_BOUNDED_VERSION_ATTRIBUTION_CASE_STUDY_NOT_PRODUCTION_SCHEMA",
+  "root": {
+    "bytes": 147346,
+    "code_commit": "8bfb4c23821a1893ae9ce7586a53d417899ef3f6",
+    "git_blob": "c270ebaca1c15ffacafc9f5a6c81527dc00b824a",
+    "path": "current-state.json",
+    "reading_commit": "0f9ce0fbb6f076f2740c187688521ee2d69c1a00",
+    "reading_hash": "efb996a06709cac01409c1f7aa22f17bd4219f1de990f8acb56ef5b23c6dd761",
+    "sha256": "97b1a9e1e5ad493240674d8b20a0df025d36e7ec70fa5425b48bafd9e88b2424"
+  },
+  "scope": {
+    "749_operations": "OWNED_BY_DOT_NOT_PERFORMED_HERE",
+    "historical_model_internal_version": "UNKNOWN",
+    "issuer_refetch": false,
+    "new_market_fetch": false,
+    "trade_history_complete": false
+  },
+  "selection": "Three previously indexed non-MU cases, selected for contrasting version/attribution mechanisms before any new outcome search. Purposive controls, not a representative or independent return cohort.",
+  "sources": [
+    {
+      "key": "BA1",
+      "local_name": "ba1.json",
+      "record_use": "RETAINED_ODDS_DOCUMENT",
+      "root_record_id": "odds-beidahuang-provisional"
+    },
+    {
+      "key": "BA2",
+      "local_name": "ba2.json",
+      "record_use": "RETAINED_ODDS_DOCUMENT",
+      "root_record_id": "odds-beidahuang-profit-led-revision"
+    },
+    {
+      "key": "BA3",
+      "local_name": "ba3.md",
+      "record_use": "HUMAN_DECISION_CHECKPOINT",
+      "root_record_id": "odds-beidahuang-human"
+    },
+    {
+      "key": "GD_JSON",
+      "local_name": "gd-original.json",
+      "record_use": "RETAINED_ODDS_DOCUMENT",
+      "root_record_id": "odds-guangdian-historical"
+    },
+    {
+      "key": "GD_REVIEW",
+      "local_name": "gd-review.md",
+      "record_use": "METHOD_SUPPLEMENT",
+      "root_record_id": "odds-guangdian-challenge"
+    },
+    {
+      "key": "MT_BEFORE",
+      "local_name": "mt-before.md",
+      "record_use": "HISTORICAL_CALCULATION_REPORT",
+      "root_record_id": "odds-history-20260903"
+    },
+    {
+      "key": "MT_AFTER",
+      "local_name": "mt-after.md",
+      "record_use": "HISTORICAL_CALCULATION_REPORT",
+      "root_record_id": "odds-inbox-history-20260911"
+    },
+    {
+      "bytes": 8703,
+      "fetch_commit": "9cd072a8e8b5ec1b5fd88e7bfcf9e1d6ae2cd21a",
+      "fetch_path": "docs/readings/600184-electro-optic-full-research-odds-2026-09-13.md",
+      "git_blob": "3fc4ecd5d0f5fd9664c9a6812865ca060a48da63",
+      "key": "GD_MARKDOWN",
+      "local_name": "gd-original.md",
+      "sha256": "75971852cfc63178fbe66d060cf04a74e99fd87bf87fefe8f5686e38ad56a98f",
+      "via": "GD_REVIEW"
+    }
+  ]
+}
