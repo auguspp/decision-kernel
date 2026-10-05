@@ -66,7 +66,7 @@ Actions cache
 = byte-identical acceleration copy only
 ```
 
-The discovery step inspects only the newest prior successful run. If that run's state artifact is absent or expired, the producer does not search an older successful run because doing so could bridge an unobserved state transition.
+The discovery step first qualifies a current native workflow-run frontier as described below, then inspects only the newest prior successful main run's state artifact. If that artifact is absent or expired, the producer does not inspect an older successful run's artifacts because doing so could bridge an unobserved state transition.
 
 ### Cache and artifact rules
 
@@ -257,3 +257,64 @@ manual workflow merged
 ```
 
 Merging the workflow does not itself establish a prospective corpus or production schedule.
+
+
+## 2026-10-05: qualify discovery before diagnosing a cache conflict
+
+A real failed invocation, `37295151349` / job `111714511964`, restored cache
+`sector-radar-state-36994240613-1` but discovery chose run `36554182248` and state
+artifact `11027680899`. The downloaded digest matched. The producer then refused
+`Sector Radar cache conflicts with the latest successful artifact` before market
+acquisition. Independent run metadata now shows workflow run #42 was the failed
+invocation, #41 (October 2) succeeded, and the selected #38 was September 29.
+This establishes a stale selection, not corruption of the newer cache. The old
+HTTP response bytes were not retained; their original ordering and the GitHub
+service/cache cause remain UNKNOWN. Do not delete caches or relax equality checks.
+
+The original discovery function now requests one unfiltered page of 20 workflow
+runs, using the existing authenticated GET client. It must see this invocation's
+exact run ID on main, validate the common workflow identity/path and unique native
+`run_number` values, then walk every run number immediately preceding it. Page
+ordering and larger cross-workflow run IDs do not select the parent. Later queued
+invocations are not predecessors. A completed main success stops selection;
+completed non-successes or explicitly other-branch runs do not become authorities.
+An unfinished main predecessor, unknown conclusion/branch, missing run number,
+missing current invocation, invalid/duplicate identities or exhausted page fails
+before artifact lookup. No prior success is established only by reaching run 1.
+Deleted history or a longer unqualified frontier requires reconciliation, not a
+bootstrap, pagination search, repeated request, or an older usable artifact.
+
+Only that selected success's state artifact is inspected. Existing missing,
+expired, duplicate-artifact and strict bundle/cache identity checks remain. This
+changes no persistence schema, source admission, provider route, cache contents,
+workflow trigger, task clock, Human record or economic method. The maximum normal
+GitHub call count stays two; run-list metadata grows from 2 to at most 20 entries.
+It is not a new service or an atomic snapshot/future availability guarantee. It
+cannot prove that a success status itself will never be corrected by the platform.
+
+Reuse Decision: KEEP the native Actions REST client, run/artifact identity and
+existing fail-closed persistence. The relevant public contract is GitHub's
+[workflow-run API](https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow)
+and [run_number definition](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts):
+the counter is unique per workflow, advances for each new run and not for reruns.
+The current workflow's fresh-run requirement stays in place. Native metadata and
+one bounded loop suffice; no cache manager, scheduler, external dependency or new
+Outcome/Research entity is justified.
+
+Local verification exercises the exact discovery definitions in a partial
+checkout: 28 focused tests, including the two original artifact tests with updated
+native-identity fixtures. Unrelated producer imports are excluded only in that
+local runner; the committed tests import the actual full module in normal CI.
+A separate replay uses a labelled reduction of actually retrieved current run
+metadata with synthetic API assembly: the old code selects the modeled stale #38,
+the correction rejects that page, and the current #42 frontier selects #41. The
+artifact response in that replay is deliberately synthetic/missing. Neither this
+nor the tests proves live provider acquisition, cache equality, formal full CI or
+D research value. The old failed run and all immutable sources remain unchanged.
+
+Delivery still requires normal exact-head full CI, independent main scope,
+ordinary publication and readback. Actual Sector continuation is separate; do not
+rerun the old failed invocation or perform a market request just to obtain green
+status. If the API page is still incomplete, retain the precise discovery failure.
+Rollback restores the prior discovery and associated fixtures through a normal PR;
+never rewrite historical cache, artifacts or original failures to make it pass.
