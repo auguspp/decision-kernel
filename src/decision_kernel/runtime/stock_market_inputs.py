@@ -129,11 +129,12 @@ def calendar(raw, observed_at):
             'session_basis': 'PROVIDER_DATED_CALENDAR_WITH_COMPLETION_CUTOFF_NOT_PIT'}
 
 
-def price_plan(context):
+def price_plan(context, *, daily_fields="close"):
+    require(daily_fields in ("close", "close,open"), "DAILY_FIELD_SCOPE")
     dates = list(dict.fromkeys([context['end_date']] + [context['bases'][str(n)] for n in WINDOWS
                                                        if context['bases'][str(n)] is not None]))
     return [{'api': api, 'params': {'trade_date': d, 'fields': 'ts_code,trade_date,' + field, 'limit': str(LIMIT)}}
-            for d in dates for api, field in (('daily', 'close'), ('adj_factor', 'adj_factor'))]
+            for d in dates for api, field in (('daily', daily_fields), ('adj_factor', 'adj_factor'))]
 
 
 def keyed(raw, item):
@@ -201,6 +202,7 @@ def evaluate(context, tables, coverage):
 
 
 def build(receipt, bodies):
+    require(receipt.get('daily_fields', 'close') in ('close', 'close,open'), 'DAILY_FIELD_SCOPE')
     observed_at = datetime.fromisoformat(receipt['observed_at'])
     calls = receipt['calls']; tables, coverage = {}, {}
     require(calls and calls[0]['api'] == 'trade_cal' and calls[0]['params'] == calendar_plan(observed_at)['params'], 'CALENDAR_REQUEST')
@@ -215,7 +217,7 @@ def build(receipt, bodies):
                 'status': 'CALENDAR_INPUT_UNAVAILABLE_NOT_QUIET', 'error_type': type(exc).__name__,
                 'rows': [], 'columns': COLUMNS, 'cohort_denominator': 0,
                 'qualified_windows': {str(n): 0 for n in WINDOWS}, 'investment_authority': 'NONE'}
-    plan = price_plan(context)
+    plan = price_plan(context, daily_fields=receipt.get("daily_fields", "close"))
     require(len(calls) <= len(plan)+1, 'UNPLANNED_REQUEST')
     for i, item in enumerate(plan, 1):
         name = item['api'] + ':' + item['params']['trade_date']
@@ -232,7 +234,10 @@ def build(receipt, bodies):
             coverage[name] = {'status': 'SOURCE_ROWS_READ', **info}
         except (ValueError, KeyError, TypeError, InvalidOperation) as exc:
             coverage[name] = {'status': 'SOURCE_SCHEMA_REJECTED', 'error_type': type(exc).__name__}
-    return evaluate(context, tables, coverage)
+    report = evaluate(context, tables, coverage)
+    if "daily_fields" in receipt:
+        report["daily_fields_requested"] = receipt["daily_fields"]
+    return report
 
 
 def safe_root(root):
@@ -241,7 +246,8 @@ def safe_root(root):
     return root
 
 
-def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime.now(timezone.utc).isoformat()):
+def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime.now(timezone.utc).isoformat(),
+            include_open=True):
     live = request is None
     if live:
         require(workflow == workflow_identity(workflow), 'WORKFLOW_IDENTITY')
@@ -252,6 +258,9 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
     receipt = {'version': VERSION, 'source': SOURCE, 'observed_at': observed_at.isoformat(),
                'workflow': workflow, 'provenance': 'LIVE_TUSHARE_RELAY' if live else 'SYNTHETIC_TEST_ONLY',
                'calls': [], 'files': {}, 'finished_at': None, 'retry_waits': [30, 90]}
+    require(type(include_open) is bool, "DAILY_FIELD_SCOPE")
+    if include_open:
+        receipt["daily_fields"] = "close,open"
     bodies = {}; total = 0
     def checkpoint():
         (root/'receipt.json').write_bytes(dumps(receipt))
@@ -298,7 +307,7 @@ def capture(root, *, observed_at, workflow, request=None, clock=lambda: datetime
         except (ValueError, KeyError, TypeError, InvalidOperation):
             context = None
         if context:
-            for item in price_plan(context):
+            for item in price_plan(context, daily_fields=receipt.get("daily_fields", "close")):
                 if one(item)['status'] in STOP | {'REQUEST_BUDGET_EXHAUSTED'}:
                     break
     receipt['finished_at'] = clock(); checkpoint()
