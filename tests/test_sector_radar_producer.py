@@ -432,8 +432,14 @@ def test_artifact_discovery_uses_only_latest_successful_run() -> None:
         if "/runs?" in url:
             return {
                 "workflow_runs": [
+                    {"id": 100, "run_number": 3, "workflow_id": 7,
+                     "path": ".github/workflows/sector-radar-shadow.yml",
+                     "head_branch": "main", "status": "in_progress"},
                     {
                         "id": 90,
+                        "run_number": 2, "workflow_id": 7,
+                        "path": ".github/workflows/sector-radar-shadow.yml",
+                        "status": "completed",
                         "run_attempt": 1,
                         "head_sha": "d" * 40,
                         "head_branch": "main",
@@ -441,6 +447,9 @@ def test_artifact_discovery_uses_only_latest_successful_run() -> None:
                     },
                     {
                         "id": 80,
+                        "run_number": 1, "workflow_id": 7,
+                        "path": ".github/workflows/sector-radar-shadow.yml",
+                        "status": "completed",
                         "run_attempt": 1,
                         "head_sha": "e" * 40,
                         "head_branch": "main",
@@ -480,8 +489,14 @@ def test_artifact_discovery_outputs_download_identity(tmp_path: Path) -> None:
         if "/runs?" in url:
             return {
                 "workflow_runs": [
+                    {"id": 100, "run_number": 3, "workflow_id": 7,
+                     "path": ".github/workflows/sector-radar-shadow.yml",
+                     "head_branch": "main", "status": "in_progress"},
                     {
                         "id": 90,
+                        "run_number": 2, "workflow_id": 7,
+                        "path": ".github/workflows/sector-radar-shadow.yml",
+                        "status": "completed",
                         "run_attempt": 2,
                         "head_sha": "d" * 40,
                         "head_branch": "main",

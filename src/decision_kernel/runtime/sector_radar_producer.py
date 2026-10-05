@@ -233,6 +233,64 @@ def _default_github_request_json(*, token: str, timeout_seconds: float) -> _Requ
     return request_json
 
 
+def _latest_prior_success_from_current_frontier(
+    raw_runs: Any, *, current_run_id: int,
+) -> Mapping[str, Any] | None:
+    """Qualify one bounded native run page, not a search for a usable artifact.
+
+    The current invocation must be visible. Every workflow run number between it
+    and the chosen predecessor must be present; a stale page cannot bootstrap or
+    silently select an older success. Deleted/missing runs require reconciliation.
+    """
+    if not isinstance(raw_runs, list) or not 1 <= len(raw_runs) <= 20:
+        raise SectorRadarProducerError("state discovery requires a nonempty bounded run page")
+    by_id: dict[int, Mapping[str, Any]] = {}
+    by_number: dict[int, Mapping[str, Any]] = {}
+    for raw in raw_runs:
+        if not isinstance(raw, Mapping):
+            raise SectorRadarProducerError("state discovery contains a malformed run")
+        run_id = _positive_int(raw.get("id"), field="workflow run id")
+        number = _positive_int(raw.get("run_number"), field="workflow run number")
+        _positive_int(raw.get("workflow_id"), field="workflow identity")
+        if run_id in by_id or number in by_number:
+            raise SectorRadarProducerError("state discovery contains duplicate run identities")
+        if raw.get("path") != SECTOR_RADAR_WORKFLOW_PATH:
+            raise SectorRadarProducerError("state discovery workflow path disagrees")
+        by_id[run_id], by_number[number] = raw, raw
+    current = by_id.get(current_run_id)
+    if current is None or current.get("head_branch") != "main":
+        raise SectorRadarProducerError("state discovery does not contain the current main run")
+    if any(raw["workflow_id"] != current["workflow_id"] for raw in raw_runs):
+        raise SectorRadarProducerError("state discovery mixes workflow identities")
+    # run_number, unlike list position or a cross-workflow run_id, is the native
+    # per-workflow sequence. Newer queued invocations never become our parent.
+    number = current["run_number"] - 1
+    while number:
+        prior = by_number.get(number)
+        if prior is None:
+            raise SectorRadarProducerError(
+                f"state discovery frontier is incomplete before current run {current_run_id}; "
+                f"missing workflow run number {number}"
+            )
+        branch = prior.get("head_branch")
+        if not isinstance(branch, str) or not branch:
+            raise SectorRadarProducerError("state discovery predecessor branch is unknown")
+        if branch == "main":
+            if prior.get("status") != "completed":
+                raise SectorRadarProducerError("state discovery has an unfinished prior main run")
+            conclusion = prior.get("conclusion")
+            if conclusion == "success":
+                return prior
+            if conclusion not in {
+                "failure", "cancelled", "timed_out", "skipped", "neutral",
+                "action_required", "startup_failure", "stale",
+            }:
+                raise SectorRadarProducerError("state discovery predecessor conclusion is unknown")
+        number -= 1
+    # Only a complete observed prefix back to run 1 establishes no prior success.
+    return None
+
+
 def discover_previous_sector_radar_artifact(
     *,
     repository: str,
@@ -243,10 +301,11 @@ def discover_previous_sector_radar_artifact(
     api_base_url: str = "https://api.github.com",
     timeout_seconds: float = 15.0,
 ) -> SectorRadarPreviousArtifactDiscovery:
-    """Inspect only the newest prior successful workflow run.
+    """Identify the newest prior successful main run from a current run frontier.
 
-    If its state artifact is missing or expired, callers must fail closed rather than
-    searching an older run and silently bridging a potentially missing state update.
+    One unfiltered page must contain this invocation and a contiguous predecessor
+    sequence. Only the chosen success's artifact is inspected; missing/expired
+    state never causes an older-artifact search, retry, or cache substitution.
     """
 
     if not _REPOSITORY.fullmatch(repository):
@@ -267,40 +326,19 @@ def discover_previous_sector_radar_artifact(
         )
 
     workflow_ref = quote(workflow_file, safe="")
-    # Both manual and scheduled successes maintain this one state lineage.
-    # An event filter would hide a newer scheduled state behind an older manual run.
-    query = urlencode(
-        {
-            "branch": "main",
-            "status": "success",
-            "per_page": "2",
-        }
-    )
+    # A success-only response can omit newer runs without revealing its age.
+    # Include this current invocation as the freshness anchor, with no event or
+    # branch filter that could create holes in the native workflow run sequence.
+    query = urlencode({"per_page": "20"})
     runs_url = (
         f"{api_base_url}/repos/{repository}/actions/workflows/"
         f"{workflow_ref}/runs?{query}"
     )
     runs_payload = request_json(runs_url)
-    raw_runs = runs_payload.get("workflow_runs")
-    if not isinstance(raw_runs, list):
-        raise SectorRadarProducerError(
-            "GitHub workflow-runs response has no workflow_runs array"
-        )
-    prior_runs = []
-    for raw in raw_runs:
-        if not isinstance(raw, Mapping):
-            raise SectorRadarProducerError(
-                "GitHub workflow-runs response contains a malformed run"
-            )
-        run_id = _positive_int(raw.get("id"), field="prior workflow run id")
-        if run_id == current_run_id:
-            continue
-        if raw.get("conclusion") != "success" or raw.get("head_branch") != "main":
-            raise SectorRadarProducerError(
-                "GitHub workflow-runs response violates successful-main filtering"
-            )
-        prior_runs.append(raw)
-    if not prior_runs:
+    prior = _latest_prior_success_from_current_frontier(
+        runs_payload.get("workflow_runs"), current_run_id=current_run_id,
+    )
+    if prior is None:
         return SectorRadarPreviousArtifactDiscovery(
             prior_success_found=False,
             artifact_available=False,
@@ -312,7 +350,6 @@ def discover_previous_sector_radar_artifact(
             artifact_name=SECTOR_RADAR_STATE_ARTIFACT_NAME,
         )
 
-    prior = prior_runs[0]
     prior_run_id = _positive_int(prior.get("id"), field="prior workflow run id")
     prior_run_attempt = _positive_int(
         prior.get("run_attempt"),
