@@ -127,3 +127,53 @@ Remaining D obligations include true intraday input/leadership, auction timing
 and T+1, company-economic transmission and multi-horizon cases, natural consumption,
 and point-in-time/out-of-sample incremental value. None is signed by this feature.
 Investment Authority = NONE; C and D remain IN_PROGRESS.
+
+## 2026-10-05: keep the explicit predecessor across unavailable readings
+
+A real publication sequence exposed a continuity defect, not a missing CZSC rule.
+R `440c03166d89debe08d3bb4a0b5e104c923009b2` retained a 160-bar, 15-stroke
+report (14 strokes then in `finished_bis`). First failed R
+`9176d5dfb098984e8fa69bfcb8efb479cd167c63` kept that exact report locator;
+next failed R `9eb3dc3e950b9a3f61b682791e1b7624d9f50178` discarded it because
+`_previous` read only direct descriptors. Its actual source artifact
+`11338901084`, SHA256 `ffee680bffd4824b391382bec31e8231fcdfb6d78c4c9f8cc7cec2e013e0e3ae`,
+contains only `operations.json` and `operations.md`, not benchmark geometry.
+The source failure remains real. Do not substitute an older successful archive.
+
+The correction follows at most one explicit `previous_saved_reading` locator.
+Commit/path/descriptor, bytes/blob/SHA256, report hash, market date and report
+clocks are checked using the original Git reader and shared reserve. Repeated
+failures carry the same locator and display its immutable history link; a file
+read failure is recorded separately and does not erase the recorded location.
+No parent walk, history search, retry, native reinstallation or budget increase.
+Malformed locators make no Git request and cannot block valid current inputs.
+An already-lost locator is not invented or retroactively repaired by this code.
+
+If a later independently eligible current input is identical, reuse retains the
+original computation and first-observed clocks. A recovered predecessor points
+to its real successful R, not the intervening failure R. The current reading
+explicitly marks the interruption: comparison of observed endpoints does not
+prove continuous visibility, absence of withdrawal, or absence of reappearance
+inside the gap. Changed sources/methods still follow the original comparison.
+This is no new probability, signal rule, Research, Human acceptance or trade.
+
+Reuse: KEEP the exact CZSC 1.0.1/50/6 audit and algorithm above; THIN_ADAPTER of
+the already-owned explicit Git predecessor/failure contract. No new generic
+capability or dependency is selected, so that exact upstream review remains
+applicable. Source selection, company/horizon/Human records and #749/#750 files
+are unchanged. Remove this resolver and its focused tests to revert the fix;
+all original reports and failures remain immutable.
+
+Local evidence: original code reproduced the second real R's missing locator;
+the corrected reader retained it across two offline failed passes using the
+original 1,364-byte failure ZIP and bound historical report. Collector Git I/O
+and quota are local substitutes, not a full publisher. Fifteen new synthetic
+continuity cases and 17 existing source-normalization cases passed; two decisive
+new regressions fail on the original code. CZSC is not installed locally, and no
+native-engine result or complete CI is claimed. The 2.3 MB successful source ZIP
+was not retrieved (`get_file_contents`: unsupported encoding `none`); normalized
+input/report identities were checked, not full original source re-normalization.
+Formal exact-head full CI, independent main, publication and fixed-R readback
+remain separate. This fixes reading continuity, not the upstream Sector cache
+conflict or the D economic/predictive goal. The historical report remains directly
+readable at [its original R](https://github.com/auguspp/decision-kernel/blob/440c03166d89debe08d3bb4a0b5e104c923009b2/details/stock/price-structure.json).
