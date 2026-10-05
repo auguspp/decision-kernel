@@ -55,7 +55,7 @@
   "source_record": {
     "bytes": 33013,
     "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
-    "id": "gigadevice-full-v2",
+    "id": "gigadevice-baseline",
     "path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
     "qualification": "HISTORICAL_EXTRACTED_VALUES_PARTIAL_NOT_FILING_REACQUISITION",
     "reading_commit": "d366f4570467d6d6758e6bfd0e315640c221dcb1",
