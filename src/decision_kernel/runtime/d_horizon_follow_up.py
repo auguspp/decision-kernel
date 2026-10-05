@@ -304,9 +304,20 @@ def _attach_continuations(collector, baseline, report, items, registry, *, retai
                 read_at = collector.now()
                 model.check(model.clock(case['frozen_at']) <= model.clock(item['research_cutoff'])
                             <= model.clock(read_at), 'continuation cutoff outside reading window')
-                phase = 'CONTINUATION_SOURCE'
+                phase = 'CONTINUATION_RESERVE'
                 _reserve(collector, calls=1, files=3)
-                raw, body_ref = collector.source({k: source[k] for k in ('path', 'ref', 'git_blob')})
+                # As in research_calendar_reading._read_snapshot, optional saved
+                # files have an explicit local cache scope, not the baseline's
+                # 60-source registry. Keep the same real API/byte/write budgets.
+                phase = 'CONTINUATION_SOURCE'
+                baseline_cache = collector.sources
+                key = (source['path'], source['ref'])
+                collector.sources = {key: baseline_cache[key]} if key in baseline_cache else {}
+                try:
+                    raw, body_ref = collector.source({k: source[k] for k in ('path', 'ref', 'git_blob')})
+                finally:
+                    collector.sources = baseline_cache
+                phase = 'CONTINUATION_BINDING'
                 _bound(raw, source)
                 _bound(raw, body_ref)
                 model.check(model.sha256(raw) == item['document_sha256'], 'continuation selected bytes differ')
@@ -323,8 +334,18 @@ def _attach_continuations(collector, baseline, report, items, registry, *, retai
                     original_contract_hash=case['contract_hash'], **model.AUTHORITY)
             except ERRORS as exc:
                 collector.files, collector.sources = saved_files, saved_sources
+                codes = {'source registry bound': 'SOURCE_FILE_BUDGET',
+                         'Radar reading cannot consume existing publication reserve': 'PUBLICATION_RESERVE',
+                         'registered frozen blob changed': 'SOURCE_BLOB_MISMATCH',
+                         'horizon retained bytes differ': 'SOURCE_BYTES_MISMATCH',
+                         'continuation selected bytes differ': 'SELECTED_DOCUMENT_MISMATCH',
+                         'continuation excerpt or predecessor not in source': 'EXCERPT_OR_PREDECESSOR_MISMATCH'}
+                message = exc.args[0] if type(exc) is ValueError and len(exc.args) == 1 else None
                 row.update(status='CONTINUATION_UNAVAILABLE_CORE_PRESERVED',
-                           phase=phase, error_type=type(exc).__name__)
+                           phase=phase, error_type=type(exc).__name__,
+                           diagnostic={'code': codes.get(message, 'UNCLASSIFIED_READ_REJECTION')
+                                       if isinstance(message, str) else 'UNCLASSIFIED_READ_REJECTION',
+                                       'baseline_source_count': len(saved_sources)})
             rows.append(row)
         phase = 'CONTINUATION_PUBLICATION'
         return _publish_continuations(collector, baseline, report, rows, retained_limit=retained_limit)

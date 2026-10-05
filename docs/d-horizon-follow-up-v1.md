@@ -5,6 +5,40 @@ change long-term Research, invent an established opportunity, or add trading.
 It turns the original case's declared dates and failure rules into a continuing
 read-only consumer, rather than another isolated comment or algorithm trial.
 
+## 2026-10-05: optional source-cache correction after #747
+
+The actual #747 publication at R `8d905f3901349f475d7e3530662315aa002c7376`
+kept the core but returned `CONTINUATION_SOURCE / ValueError`; six excerpts were
+not delivered. PR full CI and main merge-reuse succeeded and do not override that
+consumer failure. Exact source bytes, predecessor, dates and all selected excerpts
+were recovered and matched. The old output did not retain a safe reason code, so
+it alone cannot distinguish source-slot exhaustion from a publication reserve or
+binding error; no claim is made that a historic exception message was recovered.
+
+A real `Collector.source` regression demonstrates the integration defect omitted
+by the original source stub: the optional continuation consumes the baseline's
+60-slot cache and fails when it is full. This successor reuses the existing
+`research_calendar_reading._read_snapshot` scoped-cache pattern. One explicitly
+selected document temporarily exposes only its exact cached identity; `finally`
+restores all baseline entries. The eight-case/eight-excerpt limits, global API
+counter, byte limits and actual blob-write reserve remain unchanged. No scope,
+source entitlement, new allowance or retry is introduced. Validated bytes remain
+in the original reading inventory; corrupted bytes roll back locally. Small
+allowlisted diagnostic codes distinguish reserve/source/binding failures without
+publishing arbitrary exception bodies. Source records are not removed or evicted
+from the baseline in order to make room.
+
+Reuse Decision: REUSE / THIN_ADAPTER of the existing calendar/Collector pattern,
+shared publication reserve and the exact #747 retrieval contract. This is the
+same native-Git reading capability reviewed above, not a new storage/library
+choice; the prior external comparison remains applicable. Regression tests use
+real `Collector.source` with 0/59/60 occupied slots, cache hits and changed bytes.
+Network replies and the local fixture quota remain test substitutes; formal full
+CI and a successful new fixed-R excerpt readback are still independent gates.
+Removing this scope correction restores the #747 implementation; never rewrite
+the original failed R or its clocks. The economic source, frozen case and Human
+records are unchanged.
+
 ## 2026-10-05 successor: retained economics in the normal horizon reading
 
 The Human approved continuing D delivery after the #746 handoff. The concrete
