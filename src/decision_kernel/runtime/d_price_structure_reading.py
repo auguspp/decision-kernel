@@ -133,19 +133,54 @@ def _reserve(collector, **kwargs):
     return existing_reserve(collector, **kwargs)
 
 
-def _previous(collector):
-    previous = collector.previous or {}
-    descriptor = previous.get('research', {}).get(KEY)
-    if not descriptor or 'read_path' not in descriptor:
-        return None
-    model.check(descriptor['read_path'] == PATH and model.SHA.fullmatch(collector.previous_commit or ''),
+def _previous_reference(collector):
+    """Resolve one recorded locator, never scan history or choose an older success."""
+    descriptor = (collector.previous or {}).get('research', {}).get(KEY)
+    if not descriptor:
+        return None, False
+    interrupted = 'read_path' not in descriptor
+    if interrupted:
+        model.check(descriptor.get('status') == 'STRUCTURE_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
+                    'structure previous gap status')
+        reference = deepcopy(descriptor.get('previous_saved_reading'))
+        if reference is None:
+            return None, True  # An already lost locator cannot be reconstructed here.
+        model.check(isinstance(reference, dict) and
+                    reference.get('meaning') == 'PREVIOUS_READING_NOT_CURRENT_SUCCESS',
+                    'structure previous gap locator meaning')
+        model.check(reference.get('commit') != collector.previous_commit,
+                    'structure previous gap self reference')
+    else:
+        reference = {'commit': collector.previous_commit, 'file': deepcopy(descriptor),
+                     'market_session': None, 'meaning': 'PREVIOUS_READING_NOT_CURRENT_SUCCESS'}
+    item = reference['file']
+    model.check(model.SHA.fullmatch(collector.previous_commit or '') and
+                model.SHA.fullmatch(reference['commit']) and item['read_path'] == PATH and
+                item['read_ref_rule'] == 'USE_THE_SAME_PINNED_READING_COMMIT' and
+                type(item['bytes']) is int and 0 < item['bytes'] <= structure.MAX_BYTES and
+                model.SHA.fullmatch(item['git_blob']) and isinstance(item['sha256'], str) and
+                len(item['sha256']) == 64 and all(c in '0123456789abcdef' for c in item['sha256']),
                 'structure previous locator')
+    if reference.get('market_session') is not None:
+        datetime.strptime(reference['market_session'], '%Y-%m-%d')
+    return reference, interrupted
+
+
+def _previous(collector, reference):
+    if reference is None:
+        return None
     _reserve(collector, calls=1, files=2)
-    raw = collector.api.file(PATH, collector.previous_commit)
-    _bound(raw, descriptor)
+    raw = collector.api.file(PATH, reference['commit'])
+    _bound(raw, reference['file'])
     payload = json.loads(raw)
     model.check(payload['report_hash'] == canonical_hash({k: v for k, v in payload.items() if k != 'report_hash'}),
                 'structure previous report identity')
+    model.check(reference.get('market_session') in (None, payload['market_session']),
+                'structure previous market session differs')
+    model.check(model.clock(payload['computed_at']) <= model.clock(payload['checked_at']) <=
+                model.clock(collector.previous['checks']['finished_at']),
+                'structure previous report clock')
+    reference['market_session'] = payload['market_session']
     return payload
 
 
@@ -158,6 +193,8 @@ def render(report):
              f"本次输入状态：{report['reading_status']}；与上一读取：{report['observed_delta']['status']}。",
              f"{len(report['state']['bi_list'])}笔，{len(report['state']['finished_keys'])}笔在当次finished_bis；"
              f"{sum(z['is_valid'] for z in report['state']['zs_list'])}个native有效中枢。finished_bis可撤回。"]
+    if report.get('previous_reading_gap'):
+        lines.append('结构观察曾中断；与明确旧版作端点比较，不证明缺口期间连续可见或没有撤回／重现。')
     if tail:
         bi = tail[0]
         lines.append(f"末笔几何：{bi['sdt'][:10]}→{bi['edt'][:10]}，{bi['direction']}，"
@@ -202,9 +239,11 @@ def attach(collector, baseline, *, retained_limit):
     model.validate_read_package(baseline)
     model.check(collector.code_commit == baseline['code_commit'], 'structure reader code identity')
     before = dict(collector.files)
-    previous, prior_gap = None, None
+    previous, prior_gap, previous_reference = None, None, None
+    interrupted = False
     try:
-        previous = _previous(collector)
+        previous_reference, interrupted = _previous_reference(collector)
+        previous = _previous(collector, previous_reference)
     except ERRORS as exc:
         prior_gap = type(exc).__name__
     report, source = None, None
@@ -230,8 +269,8 @@ def attach(collector, baseline, *, retained_limit):
         report['reading_status'] = 'SAME_INPUT_REUSED' if same else 'SAVED_SOURCE_COMPUTED'
         report['observed_delta'] = structure.compare(previous, report)
         report['observed_strokes'] = structure.observed_strokes(report, previous)
-        report['previous_reading_commit'] = collector.previous_commit if previous else None
-        report['previous_reading_gap'] = prior_gap
+        report['previous_reading_commit'] = previous_reference['commit'] if previous else None
+        report['previous_reading_gap'] = prior_gap or ('STRUCTURE_OBSERVATION_INTERRUPTED' if interrupted else None)
         report['source_selection'] = 'FAILED_SECTOR_AVAILABLE_INPUT' if failed else 'LAST_QUALIFIED_SECTOR_INPUT'
         report['latest_sector_attempt'] = deepcopy(attempt)
         report['source_lane_gaps'] = deepcopy(lane.get('gaps', []))
@@ -270,17 +309,22 @@ def attach(collector, baseline, *, retained_limit):
         reading = {'status': 'STRUCTURE_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
                    'phase': phase, 'error_type': type(exc).__name__,
                    'previous_reading_gap': prior_gap, 'new_source_requests': 0}
-        if previous:
-            reading['previous_saved_reading'] = {
-                'commit': collector.previous_commit, 'file': collector.previous['research'][KEY],
-                'market_session': previous['market_session'], 'meaning': 'PREVIOUS_READING_NOT_CURRENT_SUCCESS'}
+        if previous_reference is not None:
+            # Carry the recorded locator even when its file cannot be read now.
+            # prior_gap describes that failure; no historical body replaces input.
+            reading['previous_saved_reading'] = deepcopy(previous_reference)
         try:
             payload = _close_reading(baseline, reading, collector.now())
             entry = model.read_package_bytes(payload)
         except ValueError:
             print('D_STRUCTURE_UNAVAILABLE: existing root clock and capacity preserved')
             return baseline
-        note = b'\n\nD price structure unavailable; existing prices and Research preserved.\n'
+        note = '\n\nD price structure unavailable; existing prices and Research preserved.\n'
+        if previous_reference is not None:
+            ref = previous_reference['commit']
+            note += (f'[明确保留的历史结构](https://github.com/{model.REPOSITORY}/blob/{ref}/{PATH})'
+                     '；不是本次来源成功，缺口期间的结构变化未观察。\n')
+        note = note.encode('utf-8')
         total = sum(len(v) for k, v in before.items() if k != 'current-state.json')
         if total + len(entry) + len(note) > retained_limit:
             return baseline
