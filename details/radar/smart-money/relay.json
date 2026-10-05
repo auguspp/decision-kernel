@@ -28,7 +28,7 @@
   "as_of_date": "2026-10-03",
   "automatic_full": false,
   "capture_hash": "2d7ceee9c58d992101a31c9608668e6f2905f1af5cecb3a4391ba254b3107f87",
-  "current_run_status": "PARTIAL_WITH_EXPLICIT_GAPS",
+  "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
   "cutoff": "2026-10-02T18:06:28.747020+00:00",
   "execution_complete": true,
   "families": {
@@ -21881,7 +21881,7 @@
   "market_session": "2026-09-30",
   "odds_recomputed": false,
   "plan_revision": 3,
-  "reading_relation": "CURRENT_SOURCE_RUN",
+  "reading_relation": "PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT",
   "relay_host": "https://pcd.mobcvb.cn/tushare/pro",
   "reports_only": false,
   "source_capture": {
