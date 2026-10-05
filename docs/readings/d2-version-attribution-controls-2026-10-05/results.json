@@ -1,0 +1,157 @@
+{
+  "authority": {
+    "human_decision_changes": 0,
+    "investment": "NONE",
+    "new_watch_or_notifications": 0,
+    "production_method_changes": 0
+  },
+  "beidahuang_acceptance_transition": {
+    "accepted_odds_blob": "d35934f5f4ef27a225c7d7928e5ee7634dab3878",
+    "historical_internal_model_version": null,
+    "scope": "BA2 decision preparation only; neither backfills BA1 acceptance nor creates an investment/Action outcome."
+  },
+  "beidahuang_method_transition": {
+    "attribution": "Declared valuation interpretation and selected assumptions, not price-only refresh or new realized operating evidence.",
+    "first_entry_review_after": "9.8-10.3",
+    "first_entry_review_before": "10.0-10.7",
+    "review_range_endpoint_change_cny": [
+      "-0.2",
+      "-0.4"
+    ],
+    "revision_declaration": {
+      "new_operating_evidence": false,
+      "previous_odds_blob": "3611fa961ce09596849c3054e0edf3630e013e54",
+      "previous_odds_path": "docs/readings/600598-beidahuang-odds-2026-09-16/provisional-odds.json",
+      "previous_odds_ref": "cc95a4fb42f332f8384dd2240647e61fa36fd49f",
+      "type": "VALUATION_INTERPRETATION_NOT_PRICE_ONLY"
+    },
+    "same_research_identity": true,
+    "same_retained_price_context": true,
+    "same_serialization_schema": true,
+    "same_three_year_working_frame": true,
+    "shared_reverse_underwriting_cny": {
+      "21x": "1287652277.39",
+      "24x": "1126695742.72"
+    }
+  },
+  "coverage": {
+    "comparable_realized_operating_pairs": 0,
+    "independent_investment_outcomes": 0,
+    "qualified_probability_outcome_pairs": 0,
+    "securities": 3,
+    "selection": "PURPOSIVE_NOT_STATISTICAL",
+    "source_documents": 8,
+    "version_transitions": 4
+  },
+  "guangdian_representation_control": {
+    "known_error": "Tenfold monetary-unit label conflict in original Markdown; JSON yuan-based per-share math remains rounding-compatible.",
+    "matched_per_share_endpoints": 10,
+    "separate_unresolved_judgment": "Valuation/operating bridge remains challenged; correcting units does not validate the worlds or restore an actionable ladder.",
+    "worlds": [
+      {
+        "markdown_to_json_profit_ratio": [
+          "1E+1",
+          "1E+1"
+        ],
+        "recomputed_per_share_cny": [
+          "3.7753",
+          "6.7270"
+        ],
+        "source_line": "| `STALLED_WEAK_RECOVERY` | 1.0–1.4bn CNY | 22–28x | CNY3.78–6.73 |",
+        "stored_per_share_cny": [
+          "3.78",
+          "6.73"
+        ],
+        "world": "STALLED_WEAK_RECOVERY"
+      },
+      {
+        "markdown_to_json_profit_ratio": [
+          "1E+1",
+          "1E+1"
+        ],
+        "recomputed_per_share_cny": [
+          "6.0062",
+          "9.7816"
+        ],
+        "source_line": "| `CONSERVATIVE_RECOVERY` | 1.4–1.9bn CNY | 25–30x | CNY6.01–9.78 |",
+        "stored_per_share_cny": [
+          "6.01",
+          "9.78"
+        ],
+        "world": "CONSERVATIVE_RECOVERY"
+      },
+      {
+        "markdown_to_json_profit_ratio": [
+          "1E+1",
+          "1E+1"
+        ],
+        "recomputed_per_share_cny": [
+          "11.0515",
+          "17.4181"
+        ],
+        "source_line": "| `CORE_RECOVERY` | 2.3–2.9bn CNY | 28–35x | CNY11.05–17.42 |",
+        "stored_per_share_cny": [
+          "11.05",
+          "17.42"
+        ],
+        "world": "CORE_RECOVERY"
+      },
+      {
+        "markdown_to_json_profit_ratio": [
+          "1E+1",
+          "1E+1"
+        ],
+        "recomputed_per_share_cny": [
+          "17.5725",
+          "27.4571"
+        ],
+        "source_line": "| `STRONG_EXECUTION` | 3.2–4.0bn CNY | 32–40x | CNY17.57–27.46 |",
+        "stored_per_share_cny": [
+          "17.57",
+          "27.46"
+        ],
+        "world": "STRONG_EXECUTION"
+      },
+      {
+        "markdown_to_json_profit_ratio": [
+          "1E+1",
+          "1E+1"
+        ],
+        "recomputed_per_share_cny": [
+          "30.8892",
+          "42.4727"
+        ],
+        "source_line": "| `RIGHT_TAIL` | 4.5–5.5bn CNY | 40–45x | CNY30.89–42.47 |",
+        "stored_per_share_cny": [
+          "30.89",
+          "42.47"
+        ],
+        "world": "RIGHT_TAIL"
+      }
+    ]
+  },
+  "limits": [
+    "Project-source identity and artifact arithmetic only; issuer truth not revalidated.",
+    "Git/code/schema versions do not reveal unrecorded internal model or prompt versions.",
+    "These linked transitions are not independent observations of forecast performance.",
+    "No current trading/position inference; no whole-history or new-market search."
+  ],
+  "maotai_incomplete_comparison": {
+    "attribution": "Unresolved from this source set; neither label change nor changing prices establishes price-only causality.",
+    "earlier_label": "INSUFFICIENT_ODDS",
+    "earlier_retained_context_price_cny": "1298.88",
+    "evidence_kind": "Earlier handoff account plus later saved Markdown; not two recovered typed numeric results.",
+    "later_label": "ACCEPTABLE_ODDS",
+    "later_retained_context_price_cny": "1275.16",
+    "matched_model_method_horizon_established": null,
+    "price_only_cause_established": null
+  },
+  "purpose": "D2_VERSION_ATTRIBUTION_WORKED_CONTROLS_NOT_MATURE_PERFORMANCE",
+  "statistics": {
+    "brier_score": null,
+    "forecast_error": null,
+    "method_improvement_estimate": null,
+    "reason": "No matched mature realized outcome pairs in this selected evidence. Null is not zero error or zero skill.",
+    "win_rate": null
+  }
+}
