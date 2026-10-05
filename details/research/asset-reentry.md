@@ -281,7 +281,7 @@
 
 - 601155-unit-correction-notice-20260930：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：先看Odds Book中新城601155单位勘误摘要，再按精确链接恢复四文件后继；这份共用导航正文不是完整纠错档案已读取。金额/股数同时归一，不改每股结果和原接受边界。
-  - [原保存材料](../../sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md)
+  - [原保存材料](../../sources/git/5c9bf28981b1c624f3d7dee1d6627630231288bc/ODDS-BOOK.md)
 - [按需恢复：601155-xincheng-policy-full-20260930](https://github.com/auguspp/decision-kernel/blob/fcf09133cc5f7b5ce90e8017d85be5ba3acd3c67/docs/readings/601155-xincheng-policy-full-20260930/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-appointments-36658570687-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6b9f1b4624cf0bab09cf3ea11b545d658da58e46/docs/readings/b2-appointments-36658570687-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-announcements-36671452199-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/6e8d82ddd59e6354311541e590aae17f7d9fe939/docs/readings/b2-announcements-36671452199-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
@@ -298,7 +298,7 @@
 
 - odds-xingsen-provisional-20260930：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：2026-09-30 兴森 probability-free provisional Odds 的 registry-visible 导航；精确原件为 docs/readings/002436-xingsen-odds-2026-09-30/odds.md@d244c3427d112ad3c8623ab71aeb94408f202920（blob c49222d763654ed8f4e8978bb9ff1e9074f95af2）。40.93公共价格背景、3y/10%与30/35/40x均为 analyst sensitivity；35.73/26.80/20.16为 ANALYST&#95;DERIVED Watch复核层级，非Human接受、canonical Odds或Action。此记录复用共享 Odds Book 读取源，不新增独立 eager source request。
-  - [原保存材料](../../sources/git/270a9f5143b9d278983e3211494afec22d702fea/ODDS-BOOK.md)
+  - [原保存材料](../../sources/git/5c9bf28981b1c624f3d7dee1d6627630231288bc/ODDS-BOOK.md)
 - [按需恢复：002436-xingsen-full-r2-20260924](https://github.com/auguspp/decision-kernel/blob/649f2820b3139cef9c1dd6fa08f2fe6ee079f187/docs/readings/002436-xingsen-full-2026-09-24-r2/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-context-20260925-36089933785](https://github.com/auguspp/decision-kernel/blob/9330742c8b48f9c778d0518f11d397cbae0d49a3/docs/readings/institutional-context-2026-09-25-36089933785/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：002436-institutional-quick-consumption-20260925](https://github.com/auguspp/decision-kernel/blob/1671640800739650922805c6c62e178dcfc39f2e/docs/readings/002436-institutional-quick-consumption-2026-09-25/README.md)；只有定位，本页没有恢复正文。
