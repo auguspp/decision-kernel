@@ -121,7 +121,7 @@ Watch不签署或撤回Human投资决定，不代表Kernel对研究真值作认�
 
 ## 原件索引（固定版本；同R用途索引另保留阅读副本）
 
-[HR-O]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/readings/hengrui-research-odds-2026-09-11/provisional-odds.json
+[HR-O]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/readings/hengrui-600276-research-odds-2026-09-11/provisional-odds.json
 [HR-H]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md
 [NM-H]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/decisions/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md
 [GD-O]: https://github.com/auguspp/decision-kernel/blob/9cd072a8e8b5ec1b5fd88e7bfcf9e1d6ae2cd21a/docs/readings/600184-electro-optic-provisional-odds-2026-09-13.json
