@@ -141,3 +141,15 @@ Watch不签署或撤回Human投资决定，不代表Kernel对研究真值作认�
 [XS-R]: https://github.com/auguspp/decision-kernel/blob/83a40bfb408090015678d98bd192489db9226c3a/docs/readings/c-longitudinal-xingsen-2026-09-30/r2-report.md
 [BOOK]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/live-decision-book.md
 [REPLAY]: https://github.com/auguspp/decision-kernel/blob/49b7fc999953977832afef67420fd693797e451d/docs/dogfood/research-handoff-replay-2026-09-13.md
+
+## 2026-10-05 D接续：经营兑现与市场表达分开，不修改Human价位
+
+**保留中期传导机制，尚未建立可交易预期差。** 供给恢复如何进入成本后毛利与现金，与盈利被市场给予什么倍数，是不同问题。此处复用既有`odds-book`的NAVIGATION_ONLY入口；不是新Odds状态、ON_DEMAND_ARCHIVE记录、Watch升级或投资决定。
+
+新增[五文件有界研究档案](https://github.com/auguspp/decision-kernel/tree/0fef10d56b8978979967b024f23d354fdbdb24fe/docs/readings/d-mu-gigadevice-expectation-cash-2026-10-05)：README、inputs.json、calculate.py、results.json、source-notes.json。正文Git blob=`c5506db16e423bc4bc04afe1b050685f7e5648c9`，SHA256=`59f0a8f075d176774a9c46f030c5073af86b1af23281ab73795c8206c272e267`，8698 bytes。完整输入与其原件定位随档案保留；上述链接不代表正文或脚本已自动读取/运行。
+
+新比较仅使用固定R `440c03166d89debe08d3bb4a0b5e104c923009b2`的9月30日背景价353.90元、旧H1股数与原模型假设。15/17/19/21倍分别对应165.57/146.09/130.71/118.26亿元条件年利润；同为158亿元年利润，15倍与19倍对应337.73元与427.79元，相对旧价是−4.57%与+20.88%的静态价差。**不是当前行情、目标价、几周回报、概率、折现估值或新入场梯度。** A股价乘旧总股数不冒充A+H合计市值；未单列加现金或解决股数变化/分红等缺口。
+
+供给、毛利与额外库存现金压力沿[#509前驱](https://github.com/auguspp/decision-kernel/issues/509#issuecomment-5991680684)继承并复算，不再当新发现。旧8月31日预测摘要不是今天一致预期；本次官方中报原文未重新取得，没有可比的新预测修订。经营改善/恶化与价格涨跌分别评价，资料不足不写零收益或无机会。
+
+原冻结2026-10-04T01:03:53Z、S0及5/20实际交易日、2027-09-02长期期限、2026-11-30复核日不变。**本书原兆易Human约350元复核、320–335元条件带及NON-DRIVING声明全部保留**；新337.73元等算术不能覆盖它们。#746六段经济解释仍按原期限入口显式读取，本件不替换原选择；两份接续按各自时间/范围并存。档案已保存与此导航候选，不等于正式CI、正常发布、自然Brief采用或Human接受；以实际后继回执为准。
