@@ -1,0 +1,65 @@
+{
+  "authority": {
+    "investment": "NONE",
+    "probabilities_changed": false,
+    "research_snapshot_changed": false,
+    "watch_changed": false
+  },
+  "basis_period": "2026-H1",
+  "currency": "CNY",
+  "facts": {
+    "deducted_net_profit_cny": "4883033478.93",
+    "mcu_gross_margin_pct": "38.49",
+    "mcu_revenue_cny": "1430000000",
+    "operating_cash_flow_cny": "6048341057.06",
+    "storage_gross_margin_pct": "67.57",
+    "storage_revenue_cny": "9827000000"
+  },
+  "meaning": "CONDITIONAL_GROSS_PROFIT_ARITHMETIC_NOT_FORECAST_OR_ODDS",
+  "micron": {
+    "currency": "USD",
+    "deposit_classification": "FINANCING_NOT_OPERATING",
+    "deposit_flow_period": "FY2026_NOT_Q4",
+    "fy2026_customer_deposit_financing_inflow": "12747",
+    "q4_cfo": "43973",
+    "q4_government_incentives": "327",
+    "q4_ppe_expenditure": "11110",
+    "q4_ppe_sales": "9",
+    "q4_reported_adjusted_fcf": "33199",
+    "q4_reported_net_capex": "10774",
+    "quarter_ended": "2026-09-03",
+    "source_id": "MU-FY26-Q4-20260930-INDEXED",
+    "unit": "million"
+  },
+  "scenario_assumptions": {
+    "fixed_revenue_margin_drop_pp": "10",
+    "price_cost_changes_pct": [
+      [
+        "10",
+        "20"
+      ],
+      [
+        "5",
+        "20"
+      ]
+    ],
+    "storage_margin_pct": [
+      "67.57",
+      "62.57",
+      "57.57",
+      "52.57",
+      "47.57",
+      "42.84"
+    ]
+  },
+  "source_record": {
+    "bytes": 33013,
+    "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+    "id": "gigadevice-full-v2",
+    "path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+    "qualification": "HISTORICAL_EXTRACTED_VALUES_PARTIAL_NOT_FILING_REACQUISITION",
+    "reading_commit": "d366f4570467d6d6758e6bfd0e315640c221dcb1",
+    "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
+  },
+  "version": "d-gigadevice-economic-bridge-case-v1"
+}

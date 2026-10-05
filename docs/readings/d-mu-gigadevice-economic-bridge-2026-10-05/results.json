@@ -1,0 +1,73 @@
+{
+  "h1_cfo_over_deducted_profit": "1.238644191804",
+  "incremental_mcu_revenue_pct_of_old_base": "178.540607223382",
+  "incremental_mcu_revenue_to_offset_loss_cny": "2553130683.294362171993",
+  "investment_authority": "NONE",
+  "loss_over_existing_mcu_gp": "1.785406072234",
+  "mcu_h1_gp_cny": "550407000.000000000000",
+  "meaning": "CONDITIONAL_GROSS_PROFIT_ARITHMETIC_NOT_FORECAST_OR_ODDS",
+  "micron_q4_usd_million": {
+    "adjusted_fcf": "33199.000000000000",
+    "cfo_less_gross_ppe": "32863.000000000000",
+    "fy_deposit_subtracted_from_q4_cfo": false,
+    "net_capex": "10774.000000000000"
+  },
+  "normalized_fixed_volume_cases": [
+    {
+      "fixed_volume_gp_change_pct": "5.200532780820",
+      "new_gross_margin_pct": "64.621818181818",
+      "price_change_pct": "10",
+      "unit_cost_change_pct": "20"
+    },
+    {
+      "fixed_volume_gp_change_pct": "-2.199200828770",
+      "new_gross_margin_pct": "62.937142857143",
+      "price_change_pct": "5",
+      "unit_cost_change_pct": "20"
+    }
+  ],
+  "probability": null,
+  "rounding_decimal_places": 12,
+  "storage_h1_gp_cny": "6640103900.000000000000",
+  "storage_margin_sensitivity": [
+    {
+      "fixed_revenue_gp_change_cny": "0.000000000000",
+      "fixed_revenue_gp_cny": "6640103900.000000000000",
+      "margin_pct": "67.57",
+      "required_revenue_growth_pct_for_unchanged_gp": "0.000000000000"
+    },
+    {
+      "fixed_revenue_gp_change_cny": "-491350000.000000000000",
+      "fixed_revenue_gp_cny": "6148753900.000000000000",
+      "margin_pct": "62.57",
+      "required_revenue_growth_pct_for_unchanged_gp": "7.991050023973"
+    },
+    {
+      "fixed_revenue_gp_change_cny": "-982700000.000000000000",
+      "fixed_revenue_gp_cny": "5657403900.000000000000",
+      "margin_pct": "57.57",
+      "required_revenue_growth_pct_for_unchanged_gp": "17.370158068438"
+    },
+    {
+      "fixed_revenue_gp_change_cny": "-1474050000.000000000000",
+      "fixed_revenue_gp_cny": "5166053900.000000000000",
+      "margin_pct": "52.57",
+      "required_revenue_growth_pct_for_unchanged_gp": "28.533384059349"
+    },
+    {
+      "fixed_revenue_gp_change_cny": "-1965400000.000000000000",
+      "fixed_revenue_gp_cny": "4674703900.000000000000",
+      "margin_pct": "47.57",
+      "required_revenue_growth_pct_for_unchanged_gp": "42.043304603742"
+    },
+    {
+      "fixed_revenue_gp_change_cny": "-2430217100.000000000000",
+      "fixed_revenue_gp_cny": "4209886800.000000000000",
+      "margin_pct": "42.84",
+      "required_revenue_growth_pct_for_unchanged_gp": "57.726423902894"
+    }
+  ],
+  "storage_one_percentage_point_gp_cny": "98270000.000000000000",
+  "target_price": null,
+  "ten_pp_loss_at_fixed_revenue_cny": "982700000.000000000000"
+}

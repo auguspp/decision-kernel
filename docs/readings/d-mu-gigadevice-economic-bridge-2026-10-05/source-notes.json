@@ -1,0 +1,112 @@
+{
+  "excluded_inputs": [
+    "Secondary call transcripts: no customer coverage, contract amount, pricing bands or refund terms adopted",
+    "Company test-subdomain cumulative optical MCU shipment count: not used as a financial driver",
+    "Any new quote, consensus revision, executed trade or presumed Human acceptance"
+  ],
+  "local_checks": {
+    "notes": "Exact root-declared descriptors checked; this is not full read-model/issuer audit.",
+    "root_native_validator_executed": false,
+    "source_bytes_matched": true,
+    "source_values_matched": true
+  },
+  "main": "8c249b373521f1093ae33a85f27140481741e4fc",
+  "meaning": "SELECTED_FACT_AND_LOCATOR_RECORD_NOT_RAW_WEB_RESPONSE",
+  "permissions": {
+    "new_market_quote_calls": 0,
+    "new_model_calls": 0,
+    "new_schedules": 0,
+    "private_brief_body_copied": false,
+    "restricted_ftshare_minute_calls": 0
+  },
+  "prior_case": {
+    "comment": "5975228575",
+    "frozen_at": "2026-10-04T01:03:53Z",
+    "issue": 509,
+    "path": "docs/readings/d-mu-gigadevice-horizons-2026-10-04/README.md",
+    "retained_commit": "9ec1a0a4f22d70d9fdf71cedf57a719aaa8cb830",
+    "sha256": "29f26cf24c0bc9923867f2be8f8538c967cf47893e664c689ad73d2d4944dd12"
+  },
+  "reading": "d366f4570467d6d6758e6bfd0e315640c221dcb1",
+  "research_cutoff": "2026-10-05T06:15:55Z",
+  "runtime_http_failures": [
+    {
+      "error": "ConnectionError",
+      "id": "micron-q4-release",
+      "message": "HTTPSConnectionPool(host='investors.micron.com', port=443): Max retries exceeded with url: /news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/ (Caused by NameResolutionError(\"HTTPSConnection(host='investors.micron.com', port=443): Failed to resolve 'investors.micron.com' ([Errno -3] Temporary failure in name resolution)\"))",
+      "requested_at": "2026-10-05T06:06:50.001268+00:00",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/"
+    },
+    {
+      "error": "ConnectionError",
+      "id": "gigadevice-h1",
+      "message": "HTTPSConnectionPool(host='static.cninfo.com.cn', port=443): Max retries exceeded with url: /finalpage/2026-08-19/1225480384.PDF (Caused by NameResolutionError(\"HTTPSConnection(host='static.cninfo.com.cn', port=443): Failed to resolve 'static.cninfo.com.cn' ([Errno -3] Temporary failure in name resolution)\"))",
+      "requested_at": "2026-10-05T06:06:50.004606+00:00",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480384.PDF"
+    }
+  ],
+  "sources": [
+    {
+      "bytes": 33013,
+      "file": "603986-gigadevice-deep-research-v2.json",
+      "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+      "id": "S1-FULL",
+      "issuer_pdf_reacquired": false,
+      "kind": "INHERITED_STRUCTURED_EXTRACTION",
+      "read_path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+      "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7"
+    },
+    {
+      "bytes": 37527,
+      "file": "gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
+      "git_blob": "6210d53f74356c9baac3d8f8c5a44574326a83fc",
+      "id": "S1-METHOD",
+      "kind": "INHERITED_METHOD_SUPPLEMENT",
+      "read_path": "sources/git/6210d53f74356c9baac3d8f8c5a44574326a83fc/gigadevice-decision-hygiene-zero-schema-2026-09-03.md",
+      "sha256": "73ae4e3d3f0973015c9c8abf63d77d3d9e051ed4371710c0f4eee5d2977d0d2b"
+    },
+    {
+      "acquisition": "PRIMARY_DOMAIN_INDEXED_TABLE_TEXT",
+      "financial_period_end": "2026-09-03",
+      "id": "S2",
+      "new_use": "FY deposit financing classification only; no transcript or contract terms audit",
+      "prior_use": "Q4 CFO/capex/FCF already read in original case",
+      "published_date": "2026-09-30",
+      "raw_html_sha256": null,
+      "tool_result_refs": [
+        "turn252402search5",
+        "turn321238search0"
+      ],
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/"
+    },
+    {
+      "acquisition": "PRIMARY_RESEARCH_DOMAIN_INDEXED_TEXT",
+      "authority": "Industry forecast and supplier context, not realized company ASP/profit",
+      "id": "S3",
+      "published_date": "2026-09-14",
+      "raw_html_sha256": null,
+      "time_relation": "OLDER_THAN_CASE_FREEZE_NEWLY_COVERED_THIS_TURN",
+      "tool_result_refs": [
+        "turn252402search0"
+      ],
+      "url": "https://www.trendforce.com/presscenter/news/20260914-13235.html"
+    },
+    {
+      "acquisition": "ISSUER_MAIN_SITE_INDEX_TITLE_DATE_AND_SUMMARY",
+      "article_date": "2026-09-09",
+      "id": "S4",
+      "raw_html_sha256": null,
+      "scope": "Optical module MCU/Flash/analog article only; no numerical shipment input adopted",
+      "tool_result_refs": [
+        "turn681715search1"
+      ],
+      "url": "https://www.gigadevice.com.cn/about/news-and-event/news"
+    }
+  ],
+  "web_open_failures": [
+    "Micron results page: Internal Error",
+    "CNINFO original H1 PDF: Internal Error",
+    "GigaDevice article: Internal Error",
+    "TrendForce article: Internal Error"
+  ]
+}
