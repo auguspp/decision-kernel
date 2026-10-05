@@ -1,0 +1,29 @@
+{
+  "kind": "ONE_SAVED_SESSION_BASELINE_COMPARISON_NOT_PRODUCTION_METHOD",
+  "code_commit": "ec881464f588af1b3e72ffb855b9108886fce0ea",
+  "predecessor_commit": "505a0a4f818daa427ee930ce70982e62f8b2faf5",
+  "predecessor_directory": "docs/readings/d2-sector-mature-cohort-2026-10-06",
+  "original_evaluation_hash": "33784df659b5434f0b3b007e80a7b9608b6695033987b69a9ad47c8239e052b3",
+  "baseline_origin": {
+    "path": "docs/sector-radar-historical-outcome-study-v0.md",
+    "ref": "ec881464f588af1b3e72ffb855b9108886fce0ea",
+    "blob": "6b5d0dce2398e2bd09706133a64d3ecc49026101",
+    "rule": "20d excess > 0 AND same-family 20d cross-sectional rating >= 90"
+  },
+  "selection": "INHERIT_ORIGINAL_LATEST_MATURE_DATE_2026_09_22_NOT_RETURN_SELECTION",
+  "signal_session": "2026-09-22",
+  "as_of_session": "2026-09-30",
+  "horizon_sessions": 5,
+  "population": "EVERY_ORIGINAL_SIGNAL_DAY_881_AND_884_IDENTITY_NO_SURFACED_CAP",
+  "groups": ["RADAR_ENTRY", "BASELINE_LEVEL", "BOTH", "RADAR_ONLY", "BASELINE_ONLY", "NEITHER"],
+  "aggregation": "SEPARATE_FAMILIES_UNWEIGHTED_DESCRIPTIVE_MEAN_MEDIAN_NOT_PORTFOLIO",
+  "known_before_comparison": "PREDECESSOR_12_RADAR_OUTCOMES_ALREADY_INSPECTED_NOT_HOLDOUT",
+  "not_authorized": ["threshold tuning", "new ledger events", "source requests", "investment action", "restoring retired historical runner"],
+  "predecessor_files": {
+    "README.md": "cef47b5a55759609a00467687ca01c15a12986b4",
+    "cohort.json": "c850ba926070fa230ba605982e56099746573f84",
+    "replay.py": "c62df23731087f31a7e18a795fdba37b60ed8088",
+    "source-index.json": "7413db5af26b38a674880f383fbc01a74b5d63e2",
+    "verification.json": "7535a5d630fe9659b504e1c86f46d10d93dfe5cb"
+  }
+}
