@@ -152,6 +152,9 @@ class Collector(base.Collector):
             self.files['README.md'] += note
         from .independent_stock_reading import attach as attach_independent
         payload = attach_independent(self, payload)
+        if os.environ.get('INCLUDE_CURRENT_STOCK_INPUTS') == '1':
+            from .d_horizon_follow_up import attach as attach_horizons
+            payload = attach_horizons(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
         if os.environ.get('INCLUDE_PRICE_STRUCTURE') == '1':
             from .d_price_structure_reading import attach as attach_structure
             payload = attach_structure(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)

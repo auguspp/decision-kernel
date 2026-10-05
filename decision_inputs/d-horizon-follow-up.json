@@ -1,0 +1,32 @@
+{
+  "version": "d-retained-horizon-follow-up-v1",
+  "cases": [
+    {
+      "id": "mu-gigadevice-20261004",
+      "record_id": "d-mu-gigadevice-horizons-20261004",
+      "symbol": "603986.SH",
+      "document_sha256": "29f26cf24c0bc9923867f2be8f8538c967cf47893e664c689ad73d2d4944dd12",
+      "frozen_at": "2026-10-04T01:03:53Z",
+      "long_research_deadline": "2027-09-02",
+      "analyst_review_by": "2026-11-30",
+      "checkpoints": [
+        5,
+        20
+      ],
+      "interpretation": {
+        "intermediate": "产品供给→价格／成本→公司毛利／现金为待验证链；目标价、概率、数值Odds未成立",
+        "invalidation": "相关产品供给缓解、成本吞掉售价收益或现金转换恶化，可削弱／停止。"
+      },
+      "source_assertions": [
+        "2026-10-04T01:03:53Z",
+        "Research期限2027-09-02保留",
+        "2026-11-30",
+        "S0保持为原评论冻结之后第一个实际完成的上交所交易日收盘",
+        "T+5和T+20分别是S0之后第五／第二十个实际交易日",
+        "S0采集失败不顺延到首个好看的成功日",
+        "产品供给→价格／成本→公司毛利／现金为待验证链；目标价、概率、数值Odds未成立",
+        "相关产品供给缓解、成本吞掉售价收益或现金转换恶化，可削弱／停止。"
+      ]
+    }
+  ]
+}
