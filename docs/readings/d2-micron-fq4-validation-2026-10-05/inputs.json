@@ -1,0 +1,74 @@
+{
+  "case": "MU_FQ4_2026_VALIDATION_ONLY",
+  "currency": "USD",
+  "amount_unit": "USD_million",
+  "shares_unit": "million_shares",
+  "eps_unit": "USD_per_diluted_share",
+  "comparison": "JUNE_24_COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+  "guide": {
+    "source_id": "S1",
+    "period": "FQ4_2026",
+    "published_at": "2026-06-24T20:01:00+00:00",
+    "basis": "NON_GAAP_EXCEPT_REVENUE",
+    "revenue_mid": "50000",
+    "revenue_half_width": "1000",
+    "gross_margin_fraction_approx": "0.86",
+    "operating_expenses_approx": "1650",
+    "eps_mid": "31.00",
+    "eps_half_width": "1.00"
+  },
+  "actual": {
+    "source_id": "S2",
+    "period": "FQ4_2026",
+    "period_end": "2026-09-03",
+    "published_at": "2026-09-30T20:01:00+00:00",
+    "basis": "NON_GAAP_EXCEPT_REVENUE",
+    "revenue": "54229",
+    "gross_profit": "47204",
+    "gross_margin_pct_reported": "87.0",
+    "operating_expenses": "2568",
+    "operating_income": "44636",
+    "net_income": "38398",
+    "diluted_shares": "1149",
+    "eps": "33.42",
+    "gaap_net_income": "37701",
+    "gaap_diluted_shares": "1147",
+    "gaap_eps": "32.87",
+    "net_income_adjustments": {
+      "stock_compensation": "364",
+      "patent_license_charges": "500",
+      "debt_prepayment_loss": "9",
+      "other": "22",
+      "tax_effects_and_other_tax_adjustments": "-198"
+    }
+  },
+  "cash": {
+    "source_id": "S2",
+    "cash_basis": "GAAP_CFO_TO_COMPANY_ADJUSTED_FCF_NOT_OWNER_EARNINGS",
+    "FQ4_2026": {
+      "cfo": "43973",
+      "gross_ppe": "11110",
+      "ppe_sale_proceeds": "9",
+      "government_incentives": "327",
+      "net_capex_reported": "10774",
+      "adjusted_fcf_reported": "33199"
+    },
+    "FY2026": {
+      "cfo": "89675",
+      "gross_ppe": "30712",
+      "ppe_sale_proceeds": "29",
+      "government_incentives": "3316",
+      "net_capex_reported": "27367",
+      "adjusted_fcf_reported": "62308"
+    }
+  },
+  "qualification": {
+    "source_custody": "ISSUER_DOMAIN_INDEXED_TABLE_EXTRACT_NOT_RAW_RELEASE",
+    "original_human_decision_modified": false,
+    "new_human_decision": false,
+    "market_requests": 0,
+    "cardinal_probability": null,
+    "normalized_eps_floor": null,
+    "investment_authority": "NONE"
+  }
+}

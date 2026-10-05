@@ -1,0 +1,61 @@
+{
+  "case": "MU_FQ4_2026_VALIDATION_ONLY",
+  "amount_unit": "USD_million",
+  "rounding": "fractions and derived amounts: six decimal places, not source precision",
+  "comparison_role": "JUNE_24_COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+  "guide_actual": {
+    "revenue": {
+      "actual_minus_midpoint": "4229.000000",
+      "fraction_of_midpoint": "0.084580",
+      "actual_minus_upper": "3229.000000",
+      "fraction_of_upper": "0.063314"
+    },
+    "eps": {
+      "actual_minus_midpoint": "2.420000",
+      "fraction_of_midpoint": "0.078065",
+      "actual_minus_upper": "1.420000",
+      "fraction_of_upper": "0.044375"
+    }
+  },
+  "gross_margin_delta_percentage_points_rounded": "1.000000",
+  "operating_bridge_USD_million": {
+    "guide_oi_proxy_not_explicit_company_guide": "41350.000000",
+    "revenue_change_at_guide_margin": "3636.940000",
+    "gross_profit_residual_not_causal_mix_attribution": "567.060000",
+    "extra_opex_subtracted": "918.000000",
+    "opex_fraction_increase": "0.556364",
+    "actual_oi_less_proxy": "3286.000000"
+  },
+  "eps_quality": {
+    "net_income_adjustment_USD_million": "697.000000",
+    "gaap_shares_million": "1147",
+    "non_gaap_shares_million": "1149",
+    "reported_eps_difference": "0.550000",
+    "adjusted_is_not_certified_recurring": true
+  },
+  "cash_bridge_USD_million": {
+    "FQ4_2026": {
+      "cfo_less_gross_ppe": "32863.000000",
+      "ppe_sale_and_incentives": "336.000000",
+      "net_capex": "10774.000000",
+      "company_adjusted_fcf": "33199.000000"
+    },
+    "FY2026": {
+      "cfo_less_gross_ppe": "58963.000000",
+      "ppe_sale_and_incentives": "3345.000000",
+      "net_capex": "27367.000000",
+      "company_adjusted_fcf": "62308.000000"
+    }
+  },
+  "company_guidance_events": 1,
+  "ai_forecast_error": null,
+  "brier_score": null,
+  "win_rate": null,
+  "price_return": null,
+  "execution_outcome": null,
+  "normalized_eps_floor": null,
+  "incremental_roic": null,
+  "method_effectiveness": null,
+  "investment_authority": "NONE",
+  "inputs_sha256": "90a37fb5bb8e1e6f9e1fae4baae829cb0d16040c06f7310a019898bf149c000e"
+}
