@@ -262,3 +262,79 @@ def test_integration_existing_attach_invokes_continuation_after_core(monkeypatch
     assert report['cases'][0]['checkpoints'][0]['change'] == '0.100000000000'
     assert report['economic_continuations'][0]['status'] == 'CONTINUATION_UNAVAILABLE_CORE_PRESERVED'
     assert output['lanes'] == root['lanes']
+
+
+@pytest.mark.parametrize('occupied', [0, 59, 60])
+def test_real_collector_source_uses_bounded_optional_scope(saved, tmp_path, occupied):
+    from decision_kernel.runtime import current_state_delivery as delivery
+    assert delivery.MAX_SOURCE_FILES == 60
+    calls = []
+    source = saved.record['source']
+    def read_file(path, ref):
+        calls.append((path, ref))
+        return saved.body
+    api = SimpleNamespace(calls=0, file=read_file)
+    collector = delivery.Collector(api, 'a' * 40, tmp_path, now=lambda: AT)
+    collector.files = dict(saved.collector.files)
+    collector.sources = {(f'docs/base-{i}.md', 'a' * 40): (b'baseline', {})
+                         for i in range(occupied)}
+    before = deepcopy(collector.sources)
+    saved.collector = collector
+    output = apply(saved)
+    assert_core_preserved(saved, output)
+    row = result(saved)['economic_continuations'][0]
+    assert row['status'] == 'RETAINED_CONTINUATION_READ_OK'
+    assert row['source']['ref'] == source['ref']
+    assert row['source']['path'] == source['path']
+    assert calls == [(source['path'], source['ref'])]
+    assert collector.sources == before
+    assert delivery.MAX_SOURCE_FILES == 60
+
+
+def test_real_collector_full_baseline_rejects_unscoped_source(saved, tmp_path):
+    from decision_kernel.runtime import current_state_delivery as delivery
+    api = SimpleNamespace(calls=0, file=lambda *a: pytest.fail('no read after full baseline'))
+    collector = delivery.Collector(api, 'a' * 40, tmp_path, now=lambda: AT)
+    collector.sources = {(f'docs/base-{i}.md', 'a' * 40): (b'baseline', {})
+                         for i in range(delivery.MAX_SOURCE_FILES)}
+    with pytest.raises(ValueError, match='source registry bound'):
+        collector.source(saved.record['source'])
+    assert len(collector.sources) == 60
+
+
+def test_real_source_binding_failure_restores_full_baseline(saved, tmp_path):
+    from decision_kernel.runtime import current_state_delivery as delivery
+    calls = []
+    def read_file(path, ref):
+        calls.append((path, ref))
+        return saved.body + b' changed'
+    collector = delivery.Collector(SimpleNamespace(calls=0, file=read_file), 'a'*40,
+                                   tmp_path, now=lambda: AT)
+    collector.files = dict(saved.collector.files)
+    collector.sources = {(f'docs/base-{i}.md', 'a'*40): (b'baseline', {}) for i in range(60)}
+    before_sources = deepcopy(collector.sources)
+    before_files = set(collector.files)
+    saved.collector = collector
+    output = apply(saved)
+    assert_core_preserved(saved, output)
+    row = result(saved)['economic_continuations'][0]
+    assert row['status'] == 'CONTINUATION_UNAVAILABLE_CORE_PRESERVED'
+    assert row['diagnostic'] == {'code': 'SOURCE_BLOB_MISMATCH', 'baseline_source_count': 60}
+    assert collector.sources == before_sources and set(collector.files) == before_files
+    assert len(calls) == 1
+
+
+def test_source_cache_hit_is_preserved_without_new_read(saved, tmp_path):
+    from decision_kernel.runtime import current_state_delivery as delivery
+    collector = delivery.Collector(SimpleNamespace(calls=0, file=lambda *a: pytest.fail('cache miss')),
+                                   'a'*40, tmp_path, now=lambda: AT)
+    collector.files = dict(saved.collector.files)
+    source = saved.record['source']
+    collector.files[source['read_path']] = saved.body
+    collector.sources = {(source['path'], source['ref']): (saved.body, source)}
+    before = deepcopy(collector.sources)
+    saved.collector = collector
+    output = apply(saved)
+    assert_core_preserved(saved, output)
+    assert result(saved)['economic_continuations'][0]['status'] == 'RETAINED_CONTINUATION_READ_OK'
+    assert collector.sources == before
