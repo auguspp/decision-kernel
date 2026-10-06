@@ -1,7 +1,7 @@
 # Live Decision Book
 
 Status: **MUTABLE NAVIGATION LAYER / NOT AUTHORITATIVE STATE / NO NEW WAKE GATE / NO AUTOMATION**  
-Updated: **2026-10-05 — Micron review navigation only; other cards not refreshed**
+Updated: **2026-10-06 — D1 mechanism-control navigation only; existing cards not refreshed**
 Repository: `auguspp/decision-kernel`
 
 ## Purpose
@@ -30,6 +30,10 @@ Investment Authority remains `NONE`.
 8. **Do not duplicate full research here.** Keep only the current state, decision/action boundary, next review gate and authoritative lineage.
 
 ---
+
+## D1 mechanism controls — navigation only
+
+**2026-10-06:** [北大荒补税基数 / 普源融资分母：两例有限期限判断](https://github.com/auguspp/decision-kernel/blob/1f83aa0ba182767b9a9fb6fea1f539e7c0a9e011/docs/readings/d1-tax-and-financing-controls-2026-10-06/README.md)。新用途分别检验报表恢复是否代表持续税后改善、融资后利润增长是否跨过每股分母与现金约束；原税制和现金结论不冒称新发现。两例尚未建立可用的期限特定Odds；11月30日只是分析者有限复核日，不是公司预约、任务或交易退出。来源/PDF/加权摊薄口径及PIT限制见原档案。此处仅复用既有NAVIGATION_ONLY，不新增horizon/Watch、按需登记、Human接受或投资决定；以下原卡片保持。
 
 ## Current book
 
