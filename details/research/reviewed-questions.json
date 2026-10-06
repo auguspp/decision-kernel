@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "95000ff4ae42f7d4c45e041a4244de426950cd66",
+      "ref": "8bceeebad01799995110df4611bad5a5061fc1d7",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -1022,7 +1022,13 @@
         "company_name": "中船科技",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": null,
+        "existing_research_relation": {
+          "execution_id": "stock-business-589fb3c3b4dc7374747a30f7626173e8d212a8cc16a44f6c6bfa0f40e8f97873",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1046,7 +1052,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "600072.SH"
       },
       {
@@ -1091,7 +1097,13 @@
         "company_name": "福建水泥",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": null,
+        "existing_research_relation": {
+          "execution_id": "stock-business-10f3f4f35886f46a1501fab74099485038f5f910739b83b07e5ea1fe32eb6266",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1115,14 +1127,20 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "600802.SH"
       },
       {
         "company_name": "威力传动",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": null,
+        "existing_research_relation": {
+          "execution_id": "stock-business-ed6fced7720334302487eeb49b492d619001a29501ace0b4444487d7d13d5741",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
@@ -1146,7 +1164,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "300904.SZ"
       },
       {
@@ -1177,7 +1195,7 @@
         },
         "research_execution_allowed": false,
         "research_scope_supported": false,
-        "review_status": "RESEARCH_CONTEXT_UNAVAILABLE_NOT_NEW_QUESTION",
+        "review_status": "QUESTION_REVIEW_REQUIRED",
         "thscode": "920344.BJ"
       },
       {
@@ -1232,7 +1250,7 @@
       "scope_complete": false,
       "unavailable_issuers": 2
     },
-    "question_review_required_count": 0,
+    "question_review_required_count": 4,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
