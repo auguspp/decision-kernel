@@ -1,99 +1,65 @@
 {
-  "capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-  "change_examples": [
-    {
-      "actor_name": "开源证券",
-      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
-      "date": "2026-10-05",
-      "family": "forecasts",
-      "id": "8e44389ebfc8c67b774fe266c824631ad5136387c4afa8867737aab0bf07fa6f",
-      "ticker": "600256.SH"
-    },
-    {
-      "actor_name": "华鑫证券",
-      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
-      "date": "2026-10-02",
-      "family": "forecasts",
-      "id": "4f1b2fdb6086b92a2b64f88a0a827ca59b41dfc00f2bbdc7d1fd91dd5059b826",
-      "ticker": "300843.SZ"
-    },
-    {
-      "actor_name": "太平洋",
-      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
-      "date": "2026-10-02",
-      "family": "forecasts",
-      "id": "2b9b503c3ed843bc927f93df3a92d5f48914a63d25c7317f1e0f1bef971bd12a",
-      "ticker": "000560.SZ"
-    },
-    {
-      "actor_name": "国信证券",
-      "change": "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED",
-      "date": "2026-10-02",
-      "family": "forecasts",
-      "id": "8bb1f3f0a3f99182aa6cee689c58d9002c7493df3735b9a932eec4b1d604d107",
-      "ticker": "601311.SH"
-    }
-  ],
+  "capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+  "change_examples": [],
   "changes": {
-    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 4,
-    "UNCHANGED": 25232
+    "UNCHANGED": 25099
   },
   "chunks": [
     {
-      "bytes": 1003748,
-      "expanded_bytes": 8438645,
+      "bytes": 1002716,
+      "expanded_bytes": 8428506,
       "name": "data-activity-0000.json.gz",
       "reference": {
-        "bytes": 1003748,
-        "git_blob": "71ca2e0fc40abb0403d00781a7d8a668dbfce30f",
+        "bytes": 1002716,
+        "git_blob": "e07020770cf725d15f660b19d693b91364dbae30",
         "read_path": "details/radar/smart-money/data-activity-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "a6f5aeb8f769a9c5c8c9c8786ea683e49839dedd5882292d21161b1178902f8d"
+        "sha256": "4d25e9061dfa469a00516452c74237cfe3cd482ba503efae7130292dea4c4edd"
       },
-      "rows": 5832,
-      "sha256": "a6f5aeb8f769a9c5c8c9c8786ea683e49839dedd5882292d21161b1178902f8d"
+      "rows": 5825,
+      "sha256": "4d25e9061dfa469a00516452c74237cfe3cd482ba503efae7130292dea4c4edd"
     },
     {
-      "bytes": 494016,
+      "bytes": 494047,
       "expanded_bytes": 3227953,
       "name": "data-executives-0000.json.gz",
       "reference": {
-        "bytes": 494016,
-        "git_blob": "4dd430de2382561c2c99425e43124e39ab3bc3c8",
+        "bytes": 494047,
+        "git_blob": "610c13fda4657dcccab1459979b56e4591f7f7c2",
         "read_path": "details/radar/smart-money/data-executives-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "4424585ea10e9493c332ec1e612dc3867aedc5bf112fc79e06939aec69305fc7"
+        "sha256": "de597dc4265665800700baff3b6c1b6798b017548a689f24d499c3e7bc678977"
       },
       "rows": 3396,
-      "sha256": "4424585ea10e9493c332ec1e612dc3867aedc5bf112fc79e06939aec69305fc7"
+      "sha256": "de597dc4265665800700baff3b6c1b6798b017548a689f24d499c3e7bc678977"
     },
     {
-      "bytes": 548798,
-      "expanded_bytes": 3335257,
+      "bytes": 546942,
+      "expanded_bytes": 3324235,
       "name": "data-forecasts-0000.json.gz",
       "reference": {
-        "bytes": 548798,
-        "git_blob": "e65e225cf53e1534bfe8a1f3671fe2462e7005d9",
+        "bytes": 546942,
+        "git_blob": "78af3292cff0a5b0ef95acc0ea10b9fabc4d37ee",
         "read_path": "details/radar/smart-money/data-forecasts-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "9e785b09302345cd2f222b1addea4c5b9e13bcab54693251aa421de3c931b0ee"
+        "sha256": "08d103b43ee2398b488ec1c6de2b00ab659095f82d979aa3e0679b9190f56b8d"
       },
-      "rows": 3332,
-      "sha256": "9e785b09302345cd2f222b1addea4c5b9e13bcab54693251aa421de3c931b0ee"
+      "rows": 3321,
+      "sha256": "08d103b43ee2398b488ec1c6de2b00ab659095f82d979aa3e0679b9190f56b8d"
     },
     {
-      "bytes": 213876,
+      "bytes": 213909,
       "expanded_bytes": 1335258,
       "name": "data-holder_changes-0000.json.gz",
       "reference": {
-        "bytes": 213876,
-        "git_blob": "bea9c509499940a54869daf6a60d60d1213ea2c7",
+        "bytes": 213909,
+        "git_blob": "5a55d5c5e33f78d4f71dc8544d6485a2b8346c6b",
         "read_path": "details/radar/smart-money/data-holder_changes-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "1e22a6235b7defd4d3bd19bcf67aa31ccc6934cac11aacb832d9d96c72f7241e"
+        "sha256": "2e07277ed1a0631362bdd6bb632a641efd11dac10ed3f9cd8e557d54d8ad82d6"
       },
       "rows": 1460,
-      "sha256": "1e22a6235b7defd4d3bd19bcf67aa31ccc6934cac11aacb832d9d96c72f7241e"
+      "sha256": "2e07277ed1a0631362bdd6bb632a641efd11dac10ed3f9cd8e557d54d8ad82d6"
     },
     {
       "bytes": 2786468,
@@ -152,46 +118,46 @@
       "sha256": "3167a74398ed2b115ae8cfdb45d96da1566213779eefd1d772ec72dd369b586d"
     },
     {
-      "bytes": 49787,
+      "bytes": 49798,
       "expanded_bytes": 306845,
       "name": "data-hot_money-0000.json.gz",
       "reference": {
-        "bytes": 49787,
-        "git_blob": "8a22bfd58376a75b89bcd9eb65cd797a4b473999",
+        "bytes": 49798,
+        "git_blob": "b93a44a4a11c4754a42b7d65021e2884dd9e154c",
         "read_path": "details/radar/smart-money/data-hot_money-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "0087524d59c75cc7b1a42928337215ca5fb7f5cb257dba81faaff4c21bc53a00"
+        "sha256": "a97d2933dec2aa38a7a9fd9d415bc30a574de65d6e911973cfd1af41660683cd"
       },
       "rows": 390,
-      "sha256": "0087524d59c75cc7b1a42928337215ca5fb7f5cb257dba81faaff4c21bc53a00"
+      "sha256": "a97d2933dec2aa38a7a9fd9d415bc30a574de65d6e911973cfd1af41660683cd"
     },
     {
-      "bytes": 33075,
+      "bytes": 33077,
       "expanded_bytes": 218355,
       "name": "data-institutional-0000.json.gz",
       "reference": {
-        "bytes": 33075,
-        "git_blob": "cfb00749e656d6602aa200a20a27228d2484ed72",
+        "bytes": 33077,
+        "git_blob": "2cca3dff60b73b0ee6dc5483ee68ec30e6022382",
         "read_path": "details/radar/smart-money/data-institutional-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "0b8cbe433eb724b1fb0b1fe8632799c9b8235d9c5926f334019d6638226fa2f1"
+        "sha256": "333b838488793c464ce359faed88ee64717d39cdf0fe76ae2f075b99069cfce4"
       },
       "rows": 290,
-      "sha256": "0b8cbe433eb724b1fb0b1fe8632799c9b8235d9c5926f334019d6638226fa2f1"
+      "sha256": "333b838488793c464ce359faed88ee64717d39cdf0fe76ae2f075b99069cfce4"
     },
     {
-      "bytes": 1066194,
+      "bytes": 1066198,
       "expanded_bytes": 8043046,
       "name": "data-north_holdings-0000.json.gz",
       "reference": {
-        "bytes": 1066194,
-        "git_blob": "70e4a0dd445c74b19c44ca8ed875bedd44c5d5b5",
+        "bytes": 1066198,
+        "git_blob": "5bf810594f54aef9e6b2ea2dd1fb03ef166adf9b",
         "read_path": "details/radar/smart-money/data-north_holdings-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "ecb18c9ee02c2772d5e5da69dd99646d69139a56d06ad67525c54bd65b8b5149"
+        "sha256": "51c2d5e0ef183fbcc10b480d19a514621e600c69b753cd60408fac23a30a05b1"
       },
       "rows": 8416,
-      "sha256": "ecb18c9ee02c2772d5e5da69dd99646d69139a56d06ad67525c54bd65b8b5149"
+      "sha256": "51c2d5e0ef183fbcc10b480d19a514621e600c69b753cd60408fac23a30a05b1"
     },
     {
       "bytes": 1698,
@@ -199,85 +165,85 @@
       "name": "data-northbound-0000.json.gz",
       "reference": {
         "bytes": 1698,
-        "git_blob": "d5ca642e98fba3251a6110e0c37482e4142fe9a3",
+        "git_blob": "542e0b1d7e8dee6b3cc88ee021492e0f735f16b9",
         "read_path": "details/radar/smart-money/data-northbound-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "4b55b2c1388801b5bd11b16c09f86a444f24dc9d11410612a2266bfa69add118"
+        "sha256": "868f71539bd4320bfbfb3f41f697ca12a610bad275e1c276486cc568a68fd9dd"
       },
       "rows": 8,
-      "sha256": "4b55b2c1388801b5bd11b16c09f86a444f24dc9d11410612a2266bfa69add118"
+      "sha256": "868f71539bd4320bfbfb3f41f697ca12a610bad275e1c276486cc568a68fd9dd"
     },
     {
-      "bytes": 20477,
+      "bytes": 20481,
       "expanded_bytes": 117412,
       "name": "data-placements-0000.json.gz",
       "reference": {
-        "bytes": 20477,
-        "git_blob": "8b28e921b250a1414b36b29fabf057266b74f126",
+        "bytes": 20481,
+        "git_blob": "587ef1055b0fcc724877e33c472229c4e695df0e",
         "read_path": "details/radar/smart-money/data-placements-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "3de25f803816c718fe19a7ce945abd8095713d53950dbd05c237d0d76efb1f31"
+        "sha256": "1361b270c9f03ee69507297ccc196870324e186ccde40f1cfa785fd74841a388"
       },
       "rows": 54,
-      "sha256": "3de25f803816c718fe19a7ce945abd8095713d53950dbd05c237d0d76efb1f31"
+      "sha256": "1361b270c9f03ee69507297ccc196870324e186ccde40f1cfa785fd74841a388"
     },
     {
-      "bytes": 160340,
+      "bytes": 160376,
       "expanded_bytes": 977590,
       "name": "data-repurchases-0000.json.gz",
       "reference": {
-        "bytes": 160340,
-        "git_blob": "44b8430d3e6566b8b38ac22a05530eb896986441",
+        "bytes": 160376,
+        "git_blob": "bb98a205fd33052584d48adafaa488d59242389d",
         "read_path": "details/radar/smart-money/data-repurchases-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "7f31e79bcfd909ba1764c88b8e7ca08010433237d1eff507129a012ea974a124"
+        "sha256": "2fffbeb5ca7259482fa8d9ab116cc9d9975efb76a365371b0b86f8cd82a93ccd"
       },
       "rows": 630,
-      "sha256": "7f31e79bcfd909ba1764c88b8e7ca08010433237d1eff507129a012ea974a124"
+      "sha256": "2fffbeb5ca7259482fa8d9ab116cc9d9975efb76a365371b0b86f8cd82a93ccd"
     },
     {
-      "bytes": 551892,
+      "bytes": 551890,
       "expanded_bytes": 4208175,
       "name": "data-seats-0000.json.gz",
       "reference": {
-        "bytes": 551892,
-        "git_blob": "b0f941054faf7b2504bb1dd415322724117f0f91",
+        "bytes": 551890,
+        "git_blob": "04ad7605114ab9a300124219eeb36a3b61eb73c8",
         "read_path": "details/radar/smart-money/data-seats-0000.json.gz",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "aafd75432ea5827e4b48032508978b1364d579de3ab4f8087021399b7eaafd98"
+        "sha256": "a64329066ea5753992854caf357585603e09aecef233ffa6c9e1af53927c7441"
       },
       "rows": 4508,
-      "sha256": "aafd75432ea5827e4b48032508978b1364d579de3ab4f8087021399b7eaafd98"
+      "sha256": "a64329066ea5753992854caf357585603e09aecef233ffa6c9e1af53927c7441"
     }
   ],
   "coverage": {
     "activity|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "executives|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "forecasts|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "holder_changes|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "holdings|2026-03-31": {
       "begin": "2026-06-28",
@@ -294,11 +260,11 @@
       "origin": "6668d0abf6559f6fb1519da2ba90be6731d40c356a23ab5e92c0ddd5ef052274"
     },
     "holdings|2026-09-30": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": false,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "hot_money|2026-09-18": {
       "begin": "2026-09-18",
@@ -324,37 +290,37 @@
     "hot_money|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-23",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "hot_money|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-24",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "hot_money|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-28",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "hot_money|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-29",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "hot_money|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-30",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "institutional|2026-09-18": {
       "begin": "2026-09-18",
@@ -380,44 +346,44 @@
     "institutional|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-23",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "institutional|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-24",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "institutional|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-28",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "institutional|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-29",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "institutional|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-30",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "north_holdings|SH": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "north_holdings|SH@2026-03-31": {
       "begin": "2026-07-02",
@@ -427,18 +393,18 @@
       "origin": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c"
     },
     "north_holdings|SH@2026-06-30": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "north_holdings|SZ": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "north_holdings|SZ@2026-03-31": {
       "begin": "2026-07-02",
@@ -448,11 +414,11 @@
       "origin": "5df9f7c9edcb59f529181375d80c6204bab1900f4577fc3f78c5007ec25c0a6c"
     },
     "north_holdings|SZ@2026-06-30": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "northbound|2026-09-18": {
       "begin": "2026-09-18",
@@ -478,51 +444,51 @@
     "northbound|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-23",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "northbound|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-24",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "northbound|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-28",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "northbound|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-29",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "northbound|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-30",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "placements|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "repurchases|disclosures": {
-      "begin": "2026-07-08",
+      "begin": "2026-07-09",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
-      "end": "2026-10-06",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
+      "end": "2026-10-07",
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "seats|2026-09-18": {
       "begin": "2026-09-18",
@@ -548,40 +514,40 @@
     "seats|2026-09-23": {
       "begin": "2026-09-23",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-23",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "seats|2026-09-24": {
       "begin": "2026-09-24",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-24",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "seats|2026-09-28": {
       "begin": "2026-09-28",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-28",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "seats|2026-09-29": {
       "begin": "2026-09-29",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-29",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     },
     "seats|2026-09-30": {
       "begin": "2026-09-30",
       "complete": true,
-      "cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "cutoff": "2026-10-06T16:10:25.050975+00:00",
       "end": "2026-09-30",
-      "origin": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e"
+      "origin": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59"
     }
   },
-  "cutoff": "2026-10-05T18:42:54.402476+00:00",
+  "cutoff": "2026-10-06T16:10:25.050975+00:00",
   "display_retention": "100D_EVENTS_AND_TWO_ENDED_QUARTERS; OLDER_IMMUTABLE_GIT_HISTORY_UNCHANGED",
   "first_baseline": false,
   "forecast_document_recovery": "EXACT_RETAINED_ORIGIN_REPLAY_NOT_NEW_PDF_ACQUISITION",
@@ -1193,8 +1159,8 @@
         "2026-09-30"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 4,
       "pdf_sha256": "14b8152bd2ed180dafe4e6b4737047efb29cbe74ecd9d070fb2499d03d4573e6",
@@ -1209,8 +1175,8 @@
         "2026-09-29"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 4,
       "pdf_sha256": "b626047ca974b5f34d50aae81aee008f88ac0960bdb82ab386e79a36ab957d51",
@@ -1243,8 +1209,8 @@
         "2026-09-30"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 25,
       "pdf_sha256": "4b44595c419517f9279983efe630a7e2986ab8f2219110eae88683f78414f001",
@@ -1259,8 +1225,8 @@
         "2026-09-30"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "7efe2489661749300db3195962f55426d8860587931ddc8da6641f0275ab4425",
@@ -1275,8 +1241,8 @@
         "2026-09-29"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 5,
       "pdf_sha256": "b40818d81e430bffa35eebdbd0234dcbc58c28f2b8182e86e12c12b905fe3d57",
@@ -1293,8 +1259,8 @@
         "2026-10-01"
       ],
       "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
-      "origin_capture_hash": "7cc8f4656407e910c5aafe3b5a6da290b773d43bb4534bc6a87172ac71c9ff8e",
-      "origin_cutoff": "2026-10-05T18:42:54.402476+00:00",
+      "origin_capture_hash": "cfcb8f8e3f71db0a7e8579641a0d78ef9c5da57394a54c3f81552ce26d69fe59",
+      "origin_cutoff": "2026-10-06T16:10:25.050975+00:00",
       "pages_inspected": 3,
       "pdf_pages": 7,
       "pdf_sha256": "7d1ffd0e515334804ddd1287f4b05a1efc8262591712ac723856ca638b0f84c6",
@@ -1306,8 +1272,8 @@
     }
   ],
   "projection_revision": "smart-money-projection-3",
-  "record_count": 84523,
+  "record_count": 84505,
   "reinterpretation": false,
-  "removed_from_current_display_not_deleted_history": 0,
+  "removed_from_current_display_not_deleted_history": 18,
   "version": "smart-money-observation-v1"
 }
