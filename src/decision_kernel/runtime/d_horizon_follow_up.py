@@ -2,6 +2,7 @@
 
 No signal classifier, forecast, backtest engine, source request or trade is made.
 The old case owns its hypothesis and clocks; this module only follows its dates.
+Interrupted-reading contract: docs/d-horizon-gap-continuity-v1.md.
 """
 from __future__ import annotations
 
@@ -175,6 +176,8 @@ def project(case, daily, calendar, tables, coverage, *, checked_at, source, prev
 def render(report):
     lines = ['\n\n## D：已冻结案例的多期限跟进（不是交易信号）\n',
              f"读取截止：{report['checked_at']}；最新价格尝试：{report['latest_price_status']}。"]
+    if report.get('previous_reading_gap'):
+        lines.append('期限观察曾中断或前驱读取未通过；历史定位与本次输入分别核验，不证明缺口期间连续可见。')
     for row, body_ref in zip(report['cases'], report['case_bodies'], strict=True):
         lines += [f"\n### {row['symbol']} / {row['id']}",
             f"原冻结：{row['frozen_at']}；S0：{row['anchor_session'] or '尚未由已完成交易日日历建立'}。",
@@ -207,17 +210,51 @@ def _bound(raw, descriptor):
                 and model.blob_sha(raw) == descriptor['git_blob'], 'horizon retained bytes differ')
 
 
-def _previous(collector):
+def _previous_reference(collector):
+    """Reuse the structure reader's one-locator protocol, never search history."""
     descriptor = (collector.previous or {}).get('research', {}).get(KEY)
-    if not descriptor or 'read_path' not in descriptor:
+    if not descriptor:
+        return None, False
+    model.check(isinstance(descriptor, dict), 'horizon previous descriptor')
+    interrupted = 'read_path' not in descriptor
+    if interrupted:
+        model.check(descriptor.get('status') == 'HORIZON_FOLLOW_UP_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
+                    'horizon previous gap status')
+        reference = deepcopy(descriptor.get('previous_saved_reading'))
+        if reference is None:
+            return None, True  # Legacy gaps with no locator are not reconstructed.
+        model.check(isinstance(reference, dict) and
+                    reference.get('meaning') == 'PREVIOUS_READING_NOT_CURRENT_SUCCESS',
+                    'horizon previous gap locator meaning')
+        model.check(reference.get('commit') != collector.previous_commit,
+                    'horizon previous gap self reference')
+    else:
+        reference = {'commit': collector.previous_commit, 'file': deepcopy(descriptor),
+                     'meaning': 'PREVIOUS_READING_NOT_CURRENT_SUCCESS'}
+    item = reference.get('file')
+    model.check(isinstance(item, dict) and isinstance(reference.get('commit'), str) and
+                model.SHA.fullmatch(collector.previous_commit or '') and
+                model.SHA.fullmatch(reference['commit']) and item.get('read_path') == PATH and
+                item.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT' and
+                type(item.get('bytes')) is int and 0 < item['bytes'] <= prices.MAX_REPORT and
+                isinstance(item.get('git_blob'), str) and model.SHA.fullmatch(item['git_blob']) and
+                isinstance(item.get('sha256'), str) and len(item['sha256']) == 64 and
+                all(c in '0123456789abcdef' for c in item['sha256']), 'horizon previous locator')
+    return reference, interrupted
+
+
+def _previous(collector, reference=None):
+    if reference is None:
+        reference, _ = _previous_reference(collector)
+    if reference is None:
         return None
-    model.check(descriptor['read_path'] == PATH and model.SHA.fullmatch(collector.previous_commit or ''),
-                'horizon previous reading identity')
-    raw = collector.api.file(PATH, collector.previous_commit)
-    _bound(raw, descriptor)
+    raw = collector.api.file(PATH, reference['commit'])
+    _bound(raw, reference['file'])
     value = prices.loads(raw)
     model.check(value['version'] == VERSION and value['report_hash'] ==
                 canonical_hash({k: v for k, v in value.items() if k != 'report_hash'}), 'horizon previous report')
+    model.check(model.clock(value['checked_at']) <= model.clock(collector.previous['checks']['finished_at']),
+                'horizon previous report clock')
     return value
 
 
@@ -368,25 +405,32 @@ def attach(collector, baseline, *, retained_limit):
     from .independent_stock_reading import _cached, KEY as STOCK_KEY
     from .d_auction_follow_through import _read
     before, sources = dict(collector.files), dict(collector.sources)
-    phase, prior = 'DECLARATION', None
+    phase, prior, reference = 'DECLARATION', None, None
     try:
         model.validate_read_package(baseline)
         model.check(collector.code_commit == baseline['code_commit'], 'horizon code identity')
+        # Resolve before declaration/input work so their failures cannot discard
+        # the prior locator. Reading a locator is not source recovery or success.
+        phase, prior_gap = 'PREVIOUS_READING', None
+        try:
+            reference, interrupted = _previous_reference(collector)
+            if reference is not None:
+                _reserve(collector, calls=1, files=2)
+                prior = _previous(collector, reference)
+            model.check(prior is None or model.clock(prior['checked_at']) <= model.clock(collector.now()),
+                        'horizon previous check is in the future')
+            if interrupted:
+                prior_gap = 'PREVIOUS_HORIZON_READING_INTERRUPTED'
+        except ERRORS as exc:
+            prior, prior_gap = None, type(exc).__name__
+        phase = 'DECLARATION'
         _reserve(collector, files=2)
         raw, config_ref = collector.source({'path': CONFIG})
         config = prices.loads(raw)
         model.check(config['version'] == VERSION and 0 < len(config['cases']) <= 8, 'horizon declaration')
         model.check(len({c['id'] for c in config['cases']}) == len(config['cases']), 'horizon duplicate case')
-        _reserve(collector, calls=len(config['cases']) + 1, files=len(config['cases']) + 2)
+        _reserve(collector, calls=len(config['cases']), files=len(config['cases']) + 2)
         registry = {r['id']: r for r in read_entries(baseline['research'], collector.files.__getitem__)}
-        phase = 'PREVIOUS_READING'
-        prior_gap = None
-        try:
-            prior = _previous(collector)
-            model.check(prior is None or model.clock(prior['checked_at']) <= model.clock(collector.now()),
-                        'horizon previous check is in the future')
-        except ERRORS as exc:
-            prior, prior_gap = None, type(exc).__name__
         prior_rows = {r['id']: r for r in (prior or {}).get('cases', [])}
         phase = 'EXISTING_PRICE_INPUT'
         ref = baseline['research'][STOCK_KEY]
@@ -424,7 +468,7 @@ def attach(collector, baseline, *, retained_limit):
             body_refs.append(body_ref)
             cases.append(project(case, daily, calendar, tables, coverage, checked_at=collector.now(),
                                  source=archive, previous=prior_rows.get(case['id']),
-                                 previous_reading_commit=collector.previous_commit,
+                                 previous_reading_commit=reference['commit'] if prior else None,
                                  calendar_market_session=calendar_report['market_session']))
         checked = collector.now()
         model.check(model.clock(checked) >= model.clock(baseline['checks']['finished_at']), 'horizon clock reversed')
@@ -433,7 +477,7 @@ def attach(collector, baseline, *, retained_limit):
             'price_file': selected['file'], 'calendar_source': calendar_source,
             'calendar_market_session': calendar_report['market_session'], 'latest_price_status': daily_state['status'],
             'using_prior_price_source': selected is not daily_state, 'cases': cases,
-            'previous_reading_commit': collector.previous_commit if prior else None,
+            'previous_reading_commit': reference['commit'] if prior else None,
             'previous_reading_gap': prior_gap,
             'new_source_requests': 0, 'automatic_research_routing': False, **model.AUTHORITY}
         report['report_hash'] = canonical_hash(report)
@@ -460,7 +504,9 @@ def attach(collector, baseline, *, retained_limit):
         # A bad new attachment cannot discard the earlier completed reading.
         reading = {'status': 'HORIZON_FOLLOW_UP_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
             'phase': phase, 'error_type': type(exc).__name__, 'new_source_requests': 0,
-            'previous_reading_commit': collector.previous_commit if prior else None}
+            'previous_reading_commit': reference['commit'] if prior else None}
+        if reference is not None:
+            reading['previous_saved_reading'] = deepcopy(reference)
         try:
             checked = collector.now()
             model.check(model.clock(checked) >= model.clock(baseline['checks']['finished_at']), 'horizon failure clock')
