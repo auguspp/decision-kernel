@@ -41,6 +41,8 @@ Investment Authority remains `NONE`.
 
 **同日条件定价：** [北大荒有限窗口的条件损益与反推要求](https://github.com/auguspp/decision-kernel/blob/f4225ef22775a0ee9e32b478952bf40b60209cf7/docs/readings/d1-beidahuang-window-pricing-2026-10-06/README.md)。核心低/高参数标价相对9月30日12.63元为−10.21%/+8.59%，压力损失另列；二点盈亏平衡不是上涨概率。原11月30日分析者复核、BA2长期/股息/Human接受均不变；未证明窗口内重新定价，不产生目标价、投资决定或新Watch。
 
+**同日成本续接：** [兆易—长鑫采购额度与DRAM投入成本](https://github.com/auguspp/decision-kernel/blob/7e3ab436233711f0c2d44130ca855c6e2be345a8/docs/readings/d-gigadevice-cxmt-procurement-2026-10-06/README.md)。公司将代工涨价列为上调额度的原因；拟增额度37.52%不等于销量或盈利增长，双方公告是同一交易。10月20日审批与11月30日研究复核分开；原MU→兆易冻结、S0/5/20、长期期限及Human决定保持，不新增任务。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
