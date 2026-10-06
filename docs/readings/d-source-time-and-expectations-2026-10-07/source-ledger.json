@@ -1,0 +1,491 @@
+{
+  "scope": "BOUNDED_MANUAL_RESEARCH_NO_PRODUCTION_ADAPTER",
+  "sources": {
+    "S1": {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-06/1225410345.PDF",
+      "pages": [
+        1,
+        2
+      ],
+      "bytes": 143360,
+      "sha256": "69ba70b3f17b51c2f71568216901568a960687b57b012ef4588ab4c650237029",
+      "acquisition_time": "2026-10-06; exact capture timestamp not retained in this package",
+      "full_source_retained_in_git": false
+    },
+    "S2": {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+      "pages": [
+        6,
+        7,
+        8,
+        28
+      ],
+      "bytes": 2243816,
+      "sha256": "270adcca370bf047b1af3e54d64e78a11496549d7c720c15dc8c7f2114e2ed5a",
+      "acquisition_time": "2026-10-06; exact capture timestamp not retained in this package",
+      "full_source_retained_in_git": false
+    },
+    "S3": {
+      "file": "rigol-hkex-results.pdf",
+      "pages": [
+        3,
+        22
+      ],
+      "fetch": [
+        {
+          "file": "rigol-hkex-results.pdf",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0825/2026082501757.pdf",
+          "requested_at": "2026-10-06T15:55:32.345744+00:00",
+          "status": 200,
+          "bytes": 275945,
+          "sha256": "25ad355ddfb53347a952775643a04470c451b09362a59591bdbd239d30809a99",
+          "received_at": "2026-10-06T15:55:42.130516+00:00"
+        }
+      ],
+      "bytes": 275945,
+      "sha256": "25ad355ddfb53347a952775643a04470c451b09362a59591bdbd239d30809a99",
+      "full_source_retained_in_git": false
+    },
+    "S4": {
+      "file": "rigol-hkex-list.html",
+      "selected_row": {
+        "displayed_time": "2026-08-25 20:55",
+        "pdf": "2026082501757.pdf",
+        "meaning": "SPECIFIC_FILE_RELEASE_NOT_EARLIEST_ANY_VENUE"
+      },
+      "fetch": [
+        {
+          "file": "rigol-hkex-list.html",
+          "url": "https://www1.hkexnews.hk/search/titlesearch.xhtml?category=0&lang=EN&market=SEHK&stockId=1000309083",
+          "requested_at": "2026-10-06T15:55:32.344193+00:00",
+          "status": 200,
+          "bytes": 86861,
+          "sha256": "aacd52e1da50d082baab4745fd2926e8c1075a8a7333109a71acade17e83c4de",
+          "received_at": "2026-10-06T15:55:42.079819+00:00"
+        }
+      ],
+      "bytes": 86861,
+      "sha256": "aacd52e1da50d082baab4745fd2926e8c1075a8a7333109a71acade17e83c4de",
+      "full_source_retained_in_git": false
+    },
+    "S5": {
+      "file": "yto-august-cninfo.pdf",
+      "pages": [
+        1
+      ],
+      "fetch": [
+        {
+          "file": "yto-august-cninfo.pdf",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-09-19/1225571165.PDF",
+          "payload": null,
+          "requested_at": "2026-10-06T15:53:47.311568+00:00",
+          "status": 200,
+          "bytes": 44589,
+          "sha256": "458b2442bc308db1a3c750f6451eeeb84d770cd65ddd18a3dd1dccc6a2b10529",
+          "received_at": "2026-10-06T15:53:58.502563+00:00"
+        }
+      ],
+      "bytes": 44589,
+      "sha256": "458b2442bc308db1a3c750f6451eeeb84d770cd65ddd18a3dd1dccc6a2b10529",
+      "full_source_retained_in_git": false
+    },
+    "S6": {
+      "file": "gigadevice-circular.pdf",
+      "pages": [
+        1,
+        6,
+        10,
+        11
+      ],
+      "fetch": [
+        {
+          "file": "gigadevice-circular.pdf",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0928/2026092801773.pdf",
+          "requested_at": "2026-10-06T15:51:55.629877+00:00",
+          "status": 200,
+          "bytes": 209857,
+          "sha256": "74de43688d1d8772269f57f318b9479007ea7961b40f7ebda2caa11d2c201910",
+          "content_type": "application/pdf",
+          "received_at": "2026-10-06T15:52:11.168509+00:00"
+        }
+      ],
+      "bytes": 209857,
+      "sha256": "74de43688d1d8772269f57f318b9479007ea7961b40f7ebda2caa11d2c201910",
+      "full_source_retained_in_git": false
+    },
+    "S7": {
+      "file": "hkex-list.html",
+      "selected_row": {
+        "displayed_time": "2026-09-28 20:24",
+        "pdf": "2026092801773.pdf",
+        "meaning": "SPECIFIC_FILE_RELEASE_NOT_EARLIEST_ANY_VENUE"
+      },
+      "fetch": [
+        {
+          "file": "hkex-list.html",
+          "url": "https://www1.hkexnews.hk/search/titlesearch.xhtml?category=0&lang=EN&market=SEHK&stockId=1000286269",
+          "requested_at": "2026-10-06T15:51:55.630336+00:00",
+          "status": 200,
+          "bytes": 128741,
+          "sha256": "4a9e6f43c531c818bbf08475261ed9b248a914c5bfcd8b14adf15fef23914738",
+          "content_type": "text/html;charset=UTF-8",
+          "received_at": "2026-10-06T15:52:11.168999+00:00"
+        }
+      ],
+      "bytes": 128741,
+      "sha256": "4a9e6f43c531c818bbf08475261ed9b248a914c5bfcd8b14adf15fef23914738",
+      "full_source_retained_in_git": false
+    },
+    "S8": {
+      "url": "https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/lastest/rptid/841068780273/index.phtml",
+      "custody": "INDEXED_NAMED_BROKER_SUMMARY_NOT_ORIGINAL_PDF",
+      "publication_date_conflict": "Sina 2026-08-26; 10jqka worth index 2026-08-25",
+      "alternate_index": "https://basic.10jqka.com.cn/688337/worth.html",
+      "prior_original_forecast_obtained": false,
+      "full_source_retained_in_git": false
+    },
+    "S9": {
+      "file": "giga-donghai.pdf",
+      "pages": [
+        1
+      ],
+      "report_date": "2026-09-10",
+      "publication_timestamp": "UNKNOWN",
+      "role": "NAMED_BROKER_NOT_CONSENSUS",
+      "fetch": [
+        {
+          "file": "giga-donghai.pdf",
+          "url": "https://pdf.dfcfw.com/pdf/H3_AP202609101829231470_1.pdf?1789062832000.pdf=",
+          "requested_at": "2026-10-06T16:02:21.248905+00:00",
+          "status": 200,
+          "bytes": 580429,
+          "sha256": "7290169c49d9497d035d3790d6088e83904aa2c474260733c405e4b377072777",
+          "received_at": "2026-10-06T16:02:30.061638+00:00"
+        }
+      ],
+      "bytes": 580429,
+      "sha256": "7290169c49d9497d035d3790d6088e83904aa2c474260733c405e4b377072777",
+      "full_source_retained_in_git": false
+    }
+  },
+  "public_requests": [
+    {
+      "file": "cninfo-stocks.json",
+      "url": "https://www.cninfo.com.cn/new/data/szse_stock.json",
+      "requested_at": "2026-10-06T15:51:55.628720+00:00",
+      "status": 200,
+      "bytes": 592485,
+      "sha256": "5682733958a171c9084706da8d74b8b7f96d63cfd99b932c7c7edc58f8b32b72",
+      "content_type": "application/json",
+      "received_at": "2026-10-06T15:52:10.710158+00:00"
+    },
+    {
+      "file": "yto-august.pdf",
+      "url": "https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-09-19/600233_20260919_Q90U.pdf",
+      "requested_at": "2026-10-06T15:51:55.629424+00:00",
+      "error": "HTTPError",
+      "message": "HTTP Error 502: Bad Gateway",
+      "received_at": "2026-10-06T15:52:10.702876+00:00"
+    },
+    {
+      "file": "gigadevice-circular.pdf",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0928/2026092801773.pdf",
+      "requested_at": "2026-10-06T15:51:55.629877+00:00",
+      "status": 200,
+      "bytes": 209857,
+      "sha256": "74de43688d1d8772269f57f318b9479007ea7961b40f7ebda2caa11d2c201910",
+      "content_type": "application/pdf",
+      "received_at": "2026-10-06T15:52:11.168509+00:00"
+    },
+    {
+      "file": "hkex-list.html",
+      "url": "https://www1.hkexnews.hk/search/titlesearch.xhtml?category=0&lang=EN&market=SEHK&stockId=1000286269",
+      "requested_at": "2026-10-06T15:51:55.630336+00:00",
+      "status": 200,
+      "bytes": 128741,
+      "sha256": "4a9e6f43c531c818bbf08475261ed9b248a914c5bfcd8b14adf15fef23914738",
+      "content_type": "text/html;charset=UTF-8",
+      "received_at": "2026-10-06T15:52:11.168999+00:00"
+    },
+    {
+      "symbol": "688337",
+      "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "payload": {
+        "pageNum": "1",
+        "pageSize": "30",
+        "column": "szse",
+        "tabName": "fulltext",
+        "plate": "",
+        "stock": "688337,9900046628",
+        "searchkey": "",
+        "secid": "",
+        "category": "",
+        "trade": "",
+        "seDate": "2026-07-01~2026-08-26",
+        "sortName": "",
+        "sortType": "",
+        "isHLtitle": "true"
+      },
+      "requested_at": "2026-10-06T15:52:52.134333+00:00",
+      "status": 200,
+      "bytes": 22619,
+      "sha256": "be154e4203e7d54b05148c69646721a19d3b206651a56c6807368ca92d935915",
+      "total": 36,
+      "pages": 1,
+      "hasMore": true,
+      "received_at": "2026-10-06T15:53:05.587320+00:00"
+    },
+    {
+      "symbol": "600233",
+      "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "payload": {
+        "pageNum": "1",
+        "pageSize": "30",
+        "column": "szse",
+        "tabName": "fulltext",
+        "plate": "",
+        "stock": "600233,gssh0600233",
+        "searchkey": "",
+        "secid": "",
+        "category": "",
+        "trade": "",
+        "seDate": "2026-09-01~2026-10-06",
+        "sortName": "",
+        "sortType": "",
+        "isHLtitle": "true"
+      },
+      "requested_at": "2026-10-06T15:52:52.135161+00:00",
+      "status": 200,
+      "bytes": 7107,
+      "sha256": "81cdda743220aac1eca354b8242d86efeeabac04afb3ef1a9ccce4294ec5199e",
+      "total": 9,
+      "pages": 0,
+      "hasMore": false,
+      "received_at": "2026-10-06T15:53:05.979446+00:00"
+    },
+    {
+      "symbol": "603986",
+      "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "payload": {
+        "pageNum": "1",
+        "pageSize": "30",
+        "column": "szse",
+        "tabName": "fulltext",
+        "plate": "",
+        "stock": "603986,9900026561",
+        "searchkey": "",
+        "secid": "",
+        "category": "",
+        "trade": "",
+        "seDate": "2026-09-01~2026-10-06",
+        "sortName": "",
+        "sortType": "",
+        "isHLtitle": "true"
+      },
+      "requested_at": "2026-10-06T15:52:52.135598+00:00",
+      "status": 200,
+      "bytes": 10389,
+      "sha256": "fa0e2db42dd83e5bb00911a63271d74dacf3e6b5b9d9f04b5cbbb33e2eeb4861",
+      "total": 15,
+      "pages": 0,
+      "hasMore": false,
+      "received_at": "2026-10-06T15:53:04.858842+00:00"
+    },
+    {
+      "file": "688337-announcements-p2.json",
+      "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "payload": {
+        "pageNum": "2",
+        "pageSize": "30",
+        "column": "szse",
+        "tabName": "fulltext",
+        "plate": "",
+        "stock": "688337,9900046628",
+        "searchkey": "",
+        "secid": "",
+        "category": "",
+        "trade": "",
+        "seDate": "2026-07-01~2026-08-26",
+        "sortName": "",
+        "sortType": "",
+        "isHLtitle": "true"
+      },
+      "requested_at": "2026-10-06T15:53:47.310157+00:00",
+      "status": 200,
+      "bytes": 4646,
+      "sha256": "5f4cc29912374e845dc1f8d070fd4d9a6527ea8e626c2a26aaf00111703ca3db",
+      "total": 36,
+      "hasMore": false,
+      "count": 6,
+      "received_at": "2026-10-06T15:53:53.943910+00:00"
+    },
+    {
+      "file": "688337-announcements-later.json",
+      "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "payload": {
+        "pageNum": "1",
+        "pageSize": "30",
+        "column": "szse",
+        "tabName": "fulltext",
+        "plate": "",
+        "stock": "688337,9900046628",
+        "searchkey": "",
+        "secid": "",
+        "category": "",
+        "trade": "",
+        "seDate": "2026-08-27~2026-10-06",
+        "sortName": "",
+        "sortType": "",
+        "isHLtitle": "true"
+      },
+      "requested_at": "2026-10-06T15:53:47.311029+00:00",
+      "status": 200,
+      "bytes": 4153,
+      "sha256": "c454ce9f517e0170b6174fb7f7535d4d27ba11185446e88d15069b9975b5b4ba",
+      "total": 5,
+      "hasMore": false,
+      "count": 5,
+      "received_at": "2026-10-06T15:53:53.938766+00:00"
+    },
+    {
+      "file": "yto-august-cninfo.pdf",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-19/1225571165.PDF",
+      "payload": null,
+      "requested_at": "2026-10-06T15:53:47.311568+00:00",
+      "status": 200,
+      "bytes": 44589,
+      "sha256": "458b2442bc308db1a3c750f6451eeeb84d770cd65ddd18a3dd1dccc6a2b10529",
+      "received_at": "2026-10-06T15:53:58.502563+00:00"
+    },
+    {
+      "file": "gigadevice-cninfo.pdf",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-29/1225584778.PDF",
+      "payload": null,
+      "requested_at": "2026-10-06T15:53:47.312559+00:00",
+      "status": 200,
+      "bytes": 220585,
+      "sha256": "e43b9c811af0576012b80eaa4704e9bd55b3cc61b0f5bad298aee953bd47d38e",
+      "received_at": "2026-10-06T15:53:58.682923+00:00"
+    },
+    {
+      "file": "rigol-guidance-detail.json",
+      "url": "https://www.cninfo.com.cn/new/announcement/bulletin_detail?announceId=1225410345&flag=false&announceTime=2026-07-06",
+      "method": "POST",
+      "requested_at": "2026-10-06T15:55:12.970378+00:00",
+      "status": 200,
+      "bytes": 790,
+      "sha256": "6407800da1079b1386f74f26d6e1d04f72536de28600df2febe23cde5ae12063",
+      "received_at": "2026-10-06T15:55:23.611448+00:00"
+    },
+    {
+      "file": "rigol-report-detail.json",
+      "url": "https://www.cninfo.com.cn/new/announcement/bulletin_detail?announceId=1225502922&flag=false&announceTime=2026-08-26",
+      "method": "POST",
+      "requested_at": "2026-10-06T15:55:12.971262+00:00",
+      "status": 200,
+      "bytes": 755,
+      "sha256": "7f6540a85e8fee57dada29efe23123d28ca28c956841e2117d6b410414b39e33",
+      "received_at": "2026-10-06T15:55:23.586855+00:00"
+    },
+    {
+      "file": "yto-detail.json",
+      "url": "https://www.cninfo.com.cn/new/announcement/bulletin_detail?announceId=1225571165&flag=false&announceTime=2026-09-19",
+      "method": "POST",
+      "requested_at": "2026-10-06T15:55:12.971776+00:00",
+      "status": 200,
+      "bytes": 773,
+      "sha256": "2e4baefd8b7d2e767aec6165b49fc6e61be07c12e8b318b31fa3a045cd7e0107",
+      "received_at": "2026-10-06T15:55:24.260233+00:00"
+    },
+    {
+      "file": "giga-detail.json",
+      "url": "https://www.cninfo.com.cn/new/announcement/bulletin_detail?announceId=1225584778&flag=false&announceTime=2026-09-29",
+      "method": "POST",
+      "requested_at": "2026-10-06T15:55:12.972214+00:00",
+      "status": 200,
+      "bytes": 815,
+      "sha256": "d2e3152c3bbf7f1b2701fba7774d866f2c9c3d0d5ae5720d57bbef0cba728a8a",
+      "received_at": "2026-10-06T15:55:23.685840+00:00"
+    },
+    {
+      "file": "rigol-hkex-list.html",
+      "url": "https://www1.hkexnews.hk/search/titlesearch.xhtml?category=0&lang=EN&market=SEHK&stockId=1000309083",
+      "requested_at": "2026-10-06T15:55:32.344193+00:00",
+      "status": 200,
+      "bytes": 86861,
+      "sha256": "aacd52e1da50d082baab4745fd2926e8c1075a8a7333109a71acade17e83c4de",
+      "received_at": "2026-10-06T15:55:42.079819+00:00"
+    },
+    {
+      "file": "rigol-hkex-results.pdf",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0825/2026082501757.pdf",
+      "requested_at": "2026-10-06T15:55:32.345744+00:00",
+      "status": 200,
+      "bytes": 275945,
+      "sha256": "25ad355ddfb53347a952775643a04470c451b09362a59591bdbd239d30809a99",
+      "received_at": "2026-10-06T15:55:42.130516+00:00"
+    },
+    {
+      "file": "giga-donghai.pdf",
+      "url": "https://pdf.dfcfw.com/pdf/H3_AP202609101829231470_1.pdf?1789062832000.pdf=",
+      "requested_at": "2026-10-06T16:02:21.248905+00:00",
+      "status": 200,
+      "bytes": 580429,
+      "sha256": "7290169c49d9497d035d3790d6088e83904aa2c474260733c405e4b377072777",
+      "received_at": "2026-10-06T16:02:30.061638+00:00"
+    }
+  ],
+  "retained_raw_files": [
+    {
+      "name": "688337-announcements-p1.json",
+      "bytes": 22619,
+      "sha256": "be154e4203e7d54b05148c69646721a19d3b206651a56c6807368ca92d935915"
+    },
+    {
+      "name": "688337-announcements-p2.json",
+      "bytes": 4646,
+      "sha256": "5f4cc29912374e845dc1f8d070fd4d9a6527ea8e626c2a26aaf00111703ca3db"
+    },
+    {
+      "name": "688337-announcements-later.json",
+      "bytes": 4153,
+      "sha256": "c454ce9f517e0170b6174fb7f7535d4d27ba11185446e88d15069b9975b5b4ba"
+    },
+    {
+      "name": "600233-announcements-p1.json",
+      "bytes": 7107,
+      "sha256": "81cdda743220aac1eca354b8242d86efeeabac04afb3ef1a9ccce4294ec5199e"
+    },
+    {
+      "name": "603986-announcements-p1.json",
+      "bytes": 10389,
+      "sha256": "fa0e2db42dd83e5bb00911a63271d74dacf3e6b5b9d9f04b5cbbb33e2eeb4861"
+    },
+    {
+      "name": "rigol-guidance-detail.json",
+      "bytes": 790,
+      "sha256": "6407800da1079b1386f74f26d6e1d04f72536de28600df2febe23cde5ae12063"
+    },
+    {
+      "name": "rigol-report-detail.json",
+      "bytes": 755,
+      "sha256": "7f6540a85e8fee57dada29efe23123d28ca28c956841e2117d6b410414b39e33"
+    },
+    {
+      "name": "yto-detail.json",
+      "bytes": 773,
+      "sha256": "2e4baefd8b7d2e767aec6165b49fc6e61be07c12e8b318b31fa3a045cd7e0107"
+    },
+    {
+      "name": "giga-detail.json",
+      "bytes": 815,
+      "sha256": "d2e3152c3bbf7f1b2701fba7774d866f2c9c3d0d5ae5720d57bbef0cba728a8a"
+    }
+  ],
+  "clock_rule": "announcementTime is a dated catalog field; storageTime is not established public availability; HKEX row binds only its specific file. No global earliest-time assertion.",
+  "api": {
+    "catalog": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+    "detail": "https://www.cninfo.com.cn/new/announcement/bulletin_detail",
+    "reuse_source": "https://github.com/akfamily/akshare/blob/fac1e50ebf9b907960d6aab4c3df658559689f39/akshare/stock_feature/stock_disclosure_cninfo.py"
+  }
+}

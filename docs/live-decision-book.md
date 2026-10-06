@@ -45,6 +45,8 @@ Investment Authority remains `NONE`.
 
 **同日圆通接续：** [圆通单票成本抵消条件与价格反推](https://github.com/auguspp/decision-kernel/blob/9a27c4ca47b088b17361c271c1621f94e53a576b/docs/readings/d1-yto-cost-pricing-2026-10-06/README.md)。8月媒体转述量价对应约9.4分/票的同口径成本抵消要求；实际成本仍未取得。旧2027预期样本与9月30日价格只作静态条件定价，不当当前共识或目标价；分红、因子、股数和联合下行限制保留。未生成机会概率、Human接受或新任务。
 
+**2026-10-07 原件与时间续接：** [D 模块三例来源、预期口径与整体核对](https://github.com/auguspp/decision-kernel/blob/ac4813bd2242a0bcbfc7db2fcf6682e5c25fc328/docs/readings/d-source-time-and-expectations-2026-10-07/README.md)。普源港股调整利润不等于A股扣非，毛利列报不能跨表拼接；圆通8月原公告确认量价但未给成本；兆易拟采购额度与较早成本预期分开。新增官方有限目录及具体文件时间，不回填事件前知识。固定R的D2、期限、价格结构与竞价限制一并核对，D仍IN_PROGRESS；旧卡片、Human条件与自动化状态不变。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |

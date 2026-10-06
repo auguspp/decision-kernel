@@ -1,0 +1,53 @@
+{
+  "method": "Decimal arithmetic; precision of source unchanged",
+  "rigol": {
+    "A_revenue_cny": [
+      "486842894.90",
+      "354968365.55"
+    ],
+    "A_cost_cny": [
+      "220805439.15",
+      "158352858.95"
+    ],
+    "HK_revenue_cny000": [
+      "486843",
+      "354968"
+    ],
+    "HK_cost_cny000": [
+      "231887",
+      "170651"
+    ],
+    "A_gross_margin_pct": [
+      "54.64544281880614542373184791",
+      "55.38958557486024968401582117"
+    ],
+    "A_gross_margin_delta_pp": "-0.74414275605410426028397326",
+    "HK_gross_margin_pct": [
+      "52.36924429436183738905560930",
+      "51.92496225011832052466701224"
+    ],
+    "HK_gross_margin_delta_pp": "0.44428204424351686438859706",
+    "current_cost_difference_cny": "11081560.85",
+    "cost_difference_cause": "UNKNOWN_NOT_AN_ECONOMIC_CHANGE_SERIES",
+    "HK_adjusted_net_cny000": "40904",
+    "A_ex_nonrecurring_net_cny": "23048069.32"
+  },
+  "yto": {
+    "reported_revenue_cny_100m": "58.19",
+    "volume_100m": "28.36",
+    "reported_asp_cny": "2.05",
+    "asp_yoy": "-0.0440",
+    "implied_prior_asp_approx": "2.144351464435146443514644351",
+    "constant_unit_gross_profit_cost_offset_approx": "0.094351464435146443514644351",
+    "actual_august_cost": null
+  },
+  "giga": {
+    "old_cap_cny_100m": "57.11",
+    "additional_cap_cny_100m": "21.43",
+    "new_cap_cny_100m": "78.54",
+    "cap_increase_pct": "37.52407634389774120119068464",
+    "jan_aug_actual_cny_100m": "35.96",
+    "next_jan_apr_cap_cny_100m": "44.11",
+    "actual_volume_or_margin_inferred": false
+  }
+}

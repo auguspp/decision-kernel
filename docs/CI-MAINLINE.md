@@ -58,6 +58,13 @@ prepare的真实包库存形成同run约束。每片核相同代码/run/attempt�
 
 只读contents/actions/pull-requests权限不变；GH_TOKEN只给范围/产物只读步骤，不给测试或来源文字。无业务secrets、持久checkout凭证或ZIP代码执行；诊断always保留30天。同PR过期head可由原生concurrency替代，独立main不互相取消。CI通过、发布、读回、研究接受和投资决定分别验收。
 
+
+### Python patch 固定（2026-10-07）
+
+D模块交付 #771 的实际run37493851030发现prepare为Python3.12.15、部分分片为3.12.14；包清单一致，但旧`python-version: '3.12'`可在不同托管镜像的本地缓存中命中不同patch，SHARD_ENVIRONMENT正确拒绝。原失败保留，不重跑换绿。
+
+复用既有ci-python composite与setup-python原生exact-version能力，将唯一安装入口固定为3.12.15；缺该patch时按原action下载，不增加自建安装器、缓存或runner。来源：[setup-python官方exact-version说明](https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md)。继续要求完整Python标识、包清单和所有非image_version字段一致；main复用仍严格。后续patch升级走正常变更/full验证，不放宽验证器来接受漂移。此处记录修复原因与配置，实际PR/main/发布结果以#771原回执为准。
+
 ## 工作台浏览器是独立证明，不是第五种full范围
 
 实际页面验证从[workbench/browser/README](../workbench/browser/README.md)恢复。#630已提供固定合成输入、桌面/窄屏真实浏览器、原生digest与失败证据；按该入口执行，不重新拼一套harness。适用改动需核其准确head的浏览器结果，普通full绿色不能替代它；无关PR不因此新增browser needs。
