@@ -797,7 +797,10 @@ class Collector:
             payload, entry_files = assembled()
         used = getattr(self.api, "calls", None)
         if type(used) is int:
-            model.check(used + len(set(self.files) | set(entry_files)) + 5 <= MAX_API_CALLS,
+            from .read_blob_reuse import pending_blob_writes
+            # Calendar and final publication must use the same proven-object budget.
+            # Final index/README bytes replace earlier versions before counting.
+            model.check(used + pending_blob_writes(self.api, {**self.files, **entry_files}) + 5 <= MAX_API_CALLS,
                         "collection leaves insufficient publication API budget")
         for path, raw in entry_files.items():
             self.retain(path, raw)
