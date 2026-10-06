@@ -1,0 +1,134 @@
+{
+  "kind": "D_RETAINED_INPUT_COST_AND_PROCUREMENT_BRIDGE_NOT_FORECAST",
+  "symbol": "603986.SH",
+  "counterparty_symbol": "688825.SH",
+  "code_commit": "4ae8bd76ae6c2542cd40b30ac99c9d7e540f6102",
+  "reading_commit": "988cdeddacb567e4ba96906c0e5734341f38ef97",
+  "predecessor": {
+    "ref": "ec95b9ca6156e3ee83f4157675bad7881279ccfd",
+    "path": "docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md",
+    "git_blob": "09e6f2fbda7f33b13dae4421a66bcbdb10161107",
+    "relationship": "LATER_COVERAGE_NOT_NEW_OCT6_MARKET_EVENT_OR_REWRITTEN_OCT4_KNOWLEDGE"
+  },
+  "inherited_case": {
+    "frozen_at": "2026-10-04T01:03:53Z",
+    "long_research_deadline": "2027-09-02",
+    "analyst_review_by": "2026-11-30",
+    "s0_5_20": "UNCHANGED_NOT_NEW_REGISTRATION"
+  },
+  "selected_buyer_figures": {
+    "unit": "CNY_100_MILLION",
+    "tax_basis": "EXCLUDING_TAX_AS_DECLARED_IN_BUYER_CIRCULAR",
+    "original_2026_ceiling": "57.11",
+    "proposed_increment": "21.43",
+    "proposed_2026_ceiling": "78.54",
+    "actual_2026_jan_aug": "35.96",
+    "expected_2027_jan_apr": "44.11"
+  },
+  "selected_supplier_figures": {
+    "original_2026_ceiling": "57.11",
+    "proposed_increment": "21.43",
+    "proposed_2026_ceiling": "78.54",
+    "actual_2026_jan_aug": "35.96",
+    "expected_2027_jan_apr": "44.11",
+    "relationship": "SAME_TRANSACTION_COUNTERPARTY_NOT_INDEPENDENT_DEMAND_SAMPLE",
+    "tax_basis": "NOT_SEPARATELY_ADJUDICATED"
+  },
+  "derived": {
+    "ceiling_fraction_increase": "0.375240763439",
+    "residual_under_old_ceiling": "21.15",
+    "residual_under_proposed_ceiling": "42.58",
+    "mechanical_threefold_2027_amount_not_forecast": "132.33"
+  },
+  "formula_roles": {
+    "ceiling_fraction_increase": "proposed_increment / original_2026_ceiling",
+    "residuals": "selected_ceiling - actual_2026_jan_aug; not committed orders or full-period execution",
+    "mechanical_threefold": "expected_2027_jan_apr * 3; deliberately NOT a forecast"
+  },
+  "issuer_stated_causes": {
+    "2026_increment": "DRAM foundry prices rising with the market",
+    "2027_jan_apr": "foundry price increases plus niche DRAM/custom-memory product introduction"
+  },
+  "approval": {
+    "board_date": "2026-09-28",
+    "notice_id": "2026-087",
+    "status_at_selected_notice": "SHAREHOLDER_APPROVAL_REQUIRED",
+    "meeting_notice_id": "2026-090",
+    "scheduled_local_date": "2026-10-20",
+    "scheduled_local_time": "14:30",
+    "timezone": "Asia/Shanghai",
+    "timezone_basis": "Meeting explicitly located in Beijing; not mirror timestamp",
+    "schedule_correction_inventory": "NOT_EXHAUSTIVELY_VERIFIED",
+    "outcome": null,
+    "actual_purchase_confirmation": null,
+    "calendar_or_task_created": false
+  },
+  "limits": {
+    "source_qualification": "ISSUER_TEXT_INDEXED_ON_REPUBLICATION_PAGES_NOT_RAW_HTML_OR_PDF",
+    "raw_original_documents_saved": false,
+    "visual_tables_verified": false,
+    "direct_open_result": "CACHE_MISS",
+    "official_first_publication_minute": null,
+    "full_revision_inventory": "NOT_ESTABLISHED",
+    "new_production_source_calls": 0,
+    "contract_payment_or_invoice_verification": false,
+    "forecast_quantity_growth": null,
+    "forecast_company_dram_margin": null,
+    "forecast_profit_or_cash": null,
+    "new_price_or_event_return": null,
+    "probabilities": null,
+    "historical_pit_success_count": null,
+    "natural_brief_use": "NOT_ESTABLISHED",
+    "human_acceptance": "NOT_INHERITED",
+    "investment_authority": "NONE"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://www.cfi.net.cn/p20260928001427.html",
+      "document": "GigaDevice 2026-087",
+      "mirror_timestamp_label": "2026-09-28 18:26:43",
+      "mirror_timezone": "NOT_SPECIFIED_NOT_OFFICIAL_RELEASE_CLOCK",
+      "scope": "issuer header, board date, increase, revised ceiling, next-period plan, approval and pricing rationale"
+    },
+    {
+      "id": "S2",
+      "url": "https://www.cfi.net.cn/p20260928003150.html",
+      "document": "GigaDevice fourth EGM circular",
+      "scope": "buyer table with57.11/21.43/78.54/35.96, next-period44.11 and excluding-tax notes"
+    },
+    {
+      "id": "S3",
+      "url": "https://www.cfi.net.cn/p20260928003387.html",
+      "document": "CXMT 2026-010",
+      "scope": "same counterparty figures, DRAM foundry/product transaction and price/product reasons"
+    },
+    {
+      "id": "S4",
+      "url": "https://www.cfi.net.cn/p20260928001422.html",
+      "document": "GigaDevice 2026-090",
+      "scope": "meeting date/time/location; not meeting outcome"
+    },
+    {
+      "id": "S5",
+      "url": "https://www.cfi.net.cn/p20260928003146.html",
+      "document": "GigaDevice H-share fourth EGM notice",
+      "scope": "same meeting and proposed resolution; not independent event"
+    },
+    {
+      "id": "S6",
+      "url": "https://paper.cnstock.com/html/2026-09/29/content_2273241.htm",
+      "publication_date": "2026-09-29",
+      "document": "issuer board resolutions and2026-087",
+      "scope": "indexed issuer announcement, Sep28 board and approval/pricing paragraphs; direct HTML not obtained"
+    }
+  ],
+  "validation": {
+    "arithmetic": "Decimal50 and Fraction independent identities",
+    "manual_transcription_authenticated": false,
+    "production_verifier_run": false,
+    "new_permanent_code_or_tests": false
+  },
+  "research_cutoff": "2026-10-06T11:31:48.079331+00:00",
+  "source_retrieval_date": "2026-10-06"
+}
