@@ -1,8 +1,8 @@
 {
   "projection": {
-    "association_as_of": "2026-10-06T07:36:42.145244+00:00",
+    "association_as_of": "2026-10-06T07:57:25.533549+00:00",
     "automatic_admission": false,
-    "base_reading_hash": "f68d049705658edeebff3f43a392a44d1c4d3b72878246609584a14c0a2644dc",
+    "base_reading_hash": "3802ad48d0b866413612a4afde9b3a48b35ae3f450793f8e06a5affe90f576e5",
     "capture": {
       "projection": {
         "automatic_admission": false,
@@ -27,8 +27,8 @@
             "automatic_admission": false,
             "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "8d7d4435fa15b437c07d9bb8cb28ca4379916517a0e2ec754a02489cbc2b2a23",
-            "cutoff": "2026-10-06T07:36:41.775127+00:00",
+            "company_reading_hash": "15c8b13127a79d77b225c3d979103bbd38b4fbc70c2f9abf38ed482c178275ad",
+            "cutoff": "2026-10-06T07:57:25.166395+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -9749,7 +9749,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "3c8b99f20b82fad100222d4fe10f125c0a17852a9641ee5561a8bbc3fc696cf6"
+          "projection_hash": "f392b27be469af72dad9ec9a751279315cf902b5130279ce867b37d80d3513d0"
         },
         "research_authority": "NONE",
         "research_executions": 0,
@@ -9883,14 +9883,515 @@
           "workflow": ".github/workflows/radar-newsnow-daily.yml"
         }
       },
-      "projection_hash": "fa398889ce69cbd7b7c236028cb33ae6e63b92d9c7b3bf308aed4f2688dd98ad"
+      "projection_hash": "8daf744f1d139c5e76a7b3680044ee35e2ed2453d990d5512131f24cf86603d6"
     },
     "company_source": {
       "bytes": 3274428,
-      "git_blob": "07c1f9076010c34052767c5a5378398967480455",
+      "git_blob": "a04c666aa49087ee4de4fa2f5b4bcf9459e01ce4",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "4775508abe6f633eeece873648baa1538fa9d5d657dc9cb1941d61c8fba21b94"
+      "sha256": "df5c2f583521a494ba613cbb82859ed29acc0f1b06519c7edca71084b87228b1"
+    },
+    "headline_repetition": {
+      "appearance_count_meaning": "SUM_OF_RETAINED_VERSION_CAPTURE_COUNTS_NOT_NEWS_OR_AUTHOR_COUNT",
+      "author_count": null,
+      "automatic_admission": false,
+      "capture_appearance_count": 723,
+      "captured_through": "2026-10-06T06:33:53.120070+00:00",
+      "community_post_coverage": "NOT_CAPTURED_BY_THE_SEVEN_NEWS_WINDOWS",
+      "company_exposure": "NOT_EVALUATED",
+      "coverage": {
+        "capture_count": 4,
+        "complete_news_coverage": false,
+        "dropped_capture_count": 0,
+        "dropped_observation_count": 0,
+        "loss_count_meaning": "RETAINED_DROP_OPERATIONS_NOT_DISTINCT_ARTICLES",
+        "maximum_capture_gap_seconds": 22420,
+        "observation_count": 470,
+        "source_gap_capture_count": 1
+      },
+      "cross_source_repeat_group_count": 26,
+      "crowding_score": null,
+      "distinct_title_count": 439,
+      "engagement": null,
+      "history_status": "ROLLING_HISTORY_READY",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "losses": [],
+      "market_requests": 0,
+      "meaning": "EXACT_NORMALIZED_TITLE_CONTEXT_NOT_COMMON_EVENT_OR_INDEPENDENT_CONSENSUS",
+      "model_calls": 0,
+      "multiple_version_articles": [
+        {
+          "article_id": "50faca2d87d2533409266cc249b8f6f52040077d508568a6a5e696b29904bce9",
+          "version_ids": [
+            "1103d34cef2d8c2b678f2b6a9dd4b9dafc652467795d83bcce71c54afad00ef8",
+            "16fadbafd1031d07745b2c267a73944e25977e4fdc8bba3564d0b6aa33241d7d",
+            "8556fce1c8451cb008d3e0df777b4f666c9da3845f5906e4af4074d811a9fe76"
+          ]
+        },
+        {
+          "article_id": "fa94fc094dda4d32df75fe13130645cce3027dd6bbc7b0840bd010c4bcf04e80",
+          "version_ids": [
+            "0a3295bdddd6513c7eb90b715290337e134e042318533a615ae25a17f89f0c7b",
+            "a12165dae4de26bc652ce5ba54b1c291e70667d33e791e51488d2a8ecffb6fe9"
+          ]
+        }
+      ],
+      "new_attention_events": 0,
+      "observed_article_count": 467,
+      "observed_version_count": 470,
+      "origin_independence": "NOT_ESTABLISHED",
+      "repeat_title_group_count": 27,
+      "repeat_title_groups": [
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:55.521825+00:00",
+          "representative_version_id": "347bd2a980ad47184695d611b33204418bf6bcfe09916faab2d7d46e86574218",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "0c4edb5bd1908de63263ade16decb691211d5d8c5c02ce8bf3c23c5ce8e53fe8",
+          "version_count": 2,
+          "version_ids": [
+            "347bd2a980ad47184695d611b33204418bf6bcfe09916faab2d7d46e86574218",
+            "82ee1825a075c2c6b6a39173676171676471f36a4c12a63b8976320f6dc4f7f4"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:55.521825+00:00",
+          "representative_version_id": "0e9afe7794c42d0b0cb75e4d97b9d98bffa8eb5bc61b112d45aca4ea0339010b",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "2a2fac5224e32be9e8ea263e07531d63f8fb6a806319b9c383ff9958ebc45b12",
+          "version_count": 2,
+          "version_ids": [
+            "0e9afe7794c42d0b0cb75e4d97b9d98bffa8eb5bc61b112d45aca4ea0339010b",
+            "6a67563646f6973b4c760bd335dd18ba4345baa730268094583db4ad04513346"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "530383265b70683e635f258009e89291748cc7d3615f6902360f0f7012fc7d46",
+          "source_ids": [
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "3782703972e84a967e032f13b5a36287bda495a24bfdd434389f4e30dd0e1769",
+          "version_count": 2,
+          "version_ids": [
+            "530383265b70683e635f258009e89291748cc7d3615f6902360f0f7012fc7d46",
+            "d6d0792c60293ec686ec558fb8c9bcc27dbd087c6289344a0db57ddcd7d584a6"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:42.473823+00:00",
+          "last_seen_at": "2026-10-06T06:33:43.465967+00:00",
+          "representative_version_id": "3b7a128b01d801c5f9d3481f9a83768bd71a49adfdcc4e6675e233ffa227d036",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "39808abadf09678be44c9531c46e4b69e870d3feac9aff826dc792638b71b280",
+          "version_count": 2,
+          "version_ids": [
+            "3b7a128b01d801c5f9d3481f9a83768bd71a49adfdcc4e6675e233ffa227d036",
+            "fd94831a767682d73512e59bc461b7f4f5a6404418e81f1bb7b4aca49493fd8a"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "12fd6a275c96fb6b34ba56d9e410e60a6c432a91101f1383dd2dc82a13c2da32",
+          "source_ids": [
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "54ca351b98c37245d8314b6ad97e161e853d45d2812a8f0c1ac4dab1be8c8a4e",
+          "version_count": 2,
+          "version_ids": [
+            "12fd6a275c96fb6b34ba56d9e410e60a6c432a91101f1383dd2dc82a13c2da32",
+            "7252c2745c8857596fa611f04c44b49860ada91235d8fd684c0b7e1428ec7e71"
+          ]
+        },
+        {
+          "article_count": 3,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:57.916804+00:00",
+          "representative_version_id": "1947d9b718e759c126f4f22e2e6a46daef76df6a3a8b5b80fc5ff5ba54ee9aee",
+          "source_ids": [
+            "cls",
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "638e1fd61225941dab6ab2cf1ecc9fbb4dbf588ac952c1bcf608b28a7000d87b",
+          "version_count": 3,
+          "version_ids": [
+            "1947d9b718e759c126f4f22e2e6a46daef76df6a3a8b5b80fc5ff5ba54ee9aee",
+            "458cfbf11fb77f591e325974b5d36d1345433616ba9c14ca9b50ce9fefeb852e",
+            "d4063ea5bc9b2ee95acdf94111cbc12d8684c62edd12dd93e3457c2d4b3d3626"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:44.621315+00:00",
+          "last_seen_at": "2026-10-06T06:33:47.477292+00:00",
+          "representative_version_id": "c4b72592e7b31890e2e22df723bf2caf79150981e4f220bca8861ae209769644",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "76f512a88377a3617fdc40babc3f98509e69b2ecc9c74e77c013855dd68805d0",
+          "version_count": 2,
+          "version_ids": [
+            "c4b72592e7b31890e2e22df723bf2caf79150981e4f220bca8861ae209769644",
+            "d4fe191bd4f7bc2b7ab891a3795f0180c6fc4b220834a4e15c063e99f6b6321a"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:54.585450+00:00",
+          "representative_version_id": "513d3aab087ee1e81fc155b4c26f50ac6c0b39183630a1fa93617d65665cf661",
+          "source_ids": [
+            "cls",
+            "jin10"
+          ],
+          "title_group_id": "78751d375d17dffbef1c9694dcb95687f4f6f51ff4025d9bb0f092ba9a09d473",
+          "version_count": 2,
+          "version_ids": [
+            "513d3aab087ee1e81fc155b4c26f50ac6c0b39183630a1fa93617d65665cf661",
+            "da76c7f7f45140671286957835ec420da699788384c4195c4a10176722bb6320"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:55.521825+00:00",
+          "representative_version_id": "8d65ed6cdcc946cf9fd8f64df4411f01262c437a0f1f56ebafe9a17313df872d",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "80b6c2bd80262d91b78c33d2e46870232d482559d508afade9805f192c3210fe",
+          "version_count": 2,
+          "version_ids": [
+            "8d65ed6cdcc946cf9fd8f64df4411f01262c437a0f1f56ebafe9a17313df872d",
+            "c60ea972ed8da3af44d3e9d34a0c59eb4c0f897fa5dc1d5adc43fdd4820abc51"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:44.621315+00:00",
+          "last_seen_at": "2026-10-06T06:33:47.477292+00:00",
+          "representative_version_id": "c64e805caae867c3c3fc2094fb26afce91aaad44d430fe55d0fbda3c23e0ef25",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "943d33bf5cc9ab066c7fd5ee969eab697f38112d2860f776e288a77d427ef502",
+          "version_count": 2,
+          "version_ids": [
+            "c64e805caae867c3c3fc2094fb26afce91aaad44d430fe55d0fbda3c23e0ef25",
+            "fb38dcf4fc339654eca3d92772f852e18cdefd00b6fba9957bacfc4f07bcba79"
+          ]
+        },
+        {
+          "article_count": 1,
+          "first_seen_at": "2026-10-06T00:09:56.225307+00:00",
+          "last_seen_at": "2026-10-06T06:33:49.116545+00:00",
+          "representative_version_id": "1103d34cef2d8c2b678f2b6a9dd4b9dafc652467795d83bcce71c54afad00ef8",
+          "source_ids": [
+            "gelonghui"
+          ],
+          "title_group_id": "98f49f49980d583c1156e3b52e913e17777960d9caf080aa1180569098e715ed",
+          "version_count": 3,
+          "version_ids": [
+            "1103d34cef2d8c2b678f2b6a9dd4b9dafc652467795d83bcce71c54afad00ef8",
+            "16fadbafd1031d07745b2c267a73944e25977e4fdc8bba3564d0b6aa33241d7d",
+            "8556fce1c8451cb008d3e0df777b4f666c9da3845f5906e4af4074d811a9fe76"
+          ]
+        },
+        {
+          "article_count": 3,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "7cc2fc406c56bede8fe183a006366a36bd05831066771239ab62e431b44ea66c",
+          "source_ids": [
+            "fastbull",
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "9a1d3440e94b60e42ae2b03fead1ba6bd6d3ffb159e522c273b899e4f8cd03d9",
+          "version_count": 3,
+          "version_ids": [
+            "7cc2fc406c56bede8fe183a006366a36bd05831066771239ab62e431b44ea66c",
+            "a74bebe9130485a79f80f29b1ead138404ee35060f1be44e07adc4b6de4ad54d",
+            "caaeb70bd30a69546c77619b972ba8afe0e9430c95f5b6d09c8bf79df99aca0f"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "06ea369cdaeb44c407d068ae66aaf2ef986e16ea5374fe0e3dca41aa82a76d40",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "9beca678a08eee75582e92272ee478434dbc1f57fc14a3a68bb126b6171ddf2e",
+          "version_count": 2,
+          "version_ids": [
+            "06ea369cdaeb44c407d068ae66aaf2ef986e16ea5374fe0e3dca41aa82a76d40",
+            "3645515a3a947d4e30f405f4031e78b44571390685bb2a46ad8b05c1cd89309e"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "representative_version_id": "bcc2b393c76af69e4051fbddeca5ad1e2abfa577d93e2540201639290a50d53a",
+          "source_ids": [
+            "fastbull",
+            "wallstreetcn"
+          ],
+          "title_group_id": "a22306cacbcc1cd4765e7d0e3bd943271a6894c61f27dbc2b4b8077bae470ca7",
+          "version_count": 2,
+          "version_ids": [
+            "bcc2b393c76af69e4051fbddeca5ad1e2abfa577d93e2540201639290a50d53a",
+            "dc9749904c29a84b3e929617817fcfc8c92b58aa5f7f19f514b36e9852ef6c9d"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T06:33:43.465967+00:00",
+          "representative_version_id": "bcacb4911bd6a4b284796d4a7b7f0641f7c65eb2e9bc1d3845e0af827f0220f8",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "a4667c04cd2b6507e33f64bacd29a5ed17648358aed18b9f9102c7f0fccadd6d",
+          "version_count": 2,
+          "version_ids": [
+            "bcacb4911bd6a4b284796d4a7b7f0641f7c65eb2e9bc1d3845e0af827f0220f8",
+            "c32396376a83a2997f0bf8921d1334973cef1394de5e9214712eebe88c66a8b1"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:53.517315+00:00",
+          "last_seen_at": "2026-10-06T00:19:56.722006+00:00",
+          "representative_version_id": "59cb0b27580dedc1b3cc1b518d998cea08817f2750ff883ba3889543adef25d2",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "a668fe19e87a3d0c37ed52b2c2b4354d2e8c4e3c2f628dd1fa2e2034b23ed4d4",
+          "version_count": 2,
+          "version_ids": [
+            "59cb0b27580dedc1b3cc1b518d998cea08817f2750ff883ba3889543adef25d2",
+            "de04c8e47631f907e3f5a00197bbd6467cdcc4ad9094fe3ef855e4e4f9edca90"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "194777ad2085207d1192e98c5e0a2aba3a5c06e66537ae5229086d4e8fcbeb5c",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "a942f34b7a8b373f7cbbfa2f35cf116b605f656530a026f720639ef7d5fe8317",
+          "version_count": 2,
+          "version_ids": [
+            "194777ad2085207d1192e98c5e0a2aba3a5c06e66537ae5229086d4e8fcbeb5c",
+            "4f6b3a41d7203e044f0d79cc4061a2d81759de4018d52a388aeaa2226c7fd066"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:42.473823+00:00",
+          "last_seen_at": "2026-10-06T06:33:43.465967+00:00",
+          "representative_version_id": "b37f82603438096fb8ba1957d21a8490c8d8f810ec5f97fa6fae1b3f84893bc5",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "bad15f45148429f1db5dfe88341c569df4e1f8b5395b758948bac442173558b2",
+          "version_count": 2,
+          "version_ids": [
+            "b37f82603438096fb8ba1957d21a8490c8d8f810ec5f97fa6fae1b3f84893bc5",
+            "b996c23353100acc0774c24a7771bdd152225defc1ed9b8761ec8694c069f9d7"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "representative_version_id": "a5edf3231e285d1191187b9d40ff1857a5e1736fbfea8ec9b52efac39b8e64e7",
+          "source_ids": [
+            "fastbull",
+            "wallstreetcn"
+          ],
+          "title_group_id": "bb91323ba502408ad59fd26294ed2c478442aa401a0abc25fe4b58e2912ed291",
+          "version_count": 2,
+          "version_ids": [
+            "a5edf3231e285d1191187b9d40ff1857a5e1736fbfea8ec9b52efac39b8e64e7",
+            "dd8ccaa23cd1237a5d24142b92c0a4d6518024d4a6f6e9d761c3ffdcd804d00d"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:51.398869+00:00",
+          "last_seen_at": "2026-10-06T00:19:55.521825+00:00",
+          "representative_version_id": "0810872f037110ae32533201f5832b42d5c14012ab162dabf3372ce31d7d4220",
+          "source_ids": [
+            "cls",
+            "wallstreetcn"
+          ],
+          "title_group_id": "c06be2e1850fbfe4b18ee4cc1d0317ba4ace548cbd4bb4220d245941dd7297aa",
+          "version_count": 2,
+          "version_ids": [
+            "0810872f037110ae32533201f5832b42d5c14012ab162dabf3372ce31d7d4220",
+            "e17ff2173860a543f6858486e2eca91504dbf3eb6eb3e65a99e73fcf0bfdd8e0"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:35.263365+00:00",
+          "last_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "representative_version_id": "5f8a5b4e7298b084730e362a16a83de4a810f3f0caf551cae0817142d9f29267",
+          "source_ids": [
+            "fastbull",
+            "wallstreetcn"
+          ],
+          "title_group_id": "c25691ca7b877797426a615206a79968a9fb0f995dfc320331177772f70616dd",
+          "version_count": 2,
+          "version_ids": [
+            "5f8a5b4e7298b084730e362a16a83de4a810f3f0caf551cae0817142d9f29267",
+            "f7adb67288afda5eb55d2741eeb0790372c897b99ed1371e2b595bd412859aac"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "319b62b4bab483f956bd522b89142b2cfdc409b81819d9c8e83eeb3b3d6a48d1",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "cf2e2141c50efd8d7219055be2d9f9f5a7c00c61f0769904cf748217fb6944e9",
+          "version_count": 2,
+          "version_ids": [
+            "319b62b4bab483f956bd522b89142b2cfdc409b81819d9c8e83eeb3b3d6a48d1",
+            "93795e25598d2dc737ff3478d6e32175a5cccf94719f0c47802d46addcd254ec"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:44.621315+00:00",
+          "last_seen_at": "2026-10-06T06:33:47.477292+00:00",
+          "representative_version_id": "30d4b8f0fb1b31dea911546aa5fbe5c4cc835d13c01af57784d7c570e5ec0d9d",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "d5b4b5b52073b809d859dd4bfee2a7a721e34f8a4834f99d7c16ec55d70314d9",
+          "version_count": 2,
+          "version_ids": [
+            "30d4b8f0fb1b31dea911546aa5fbe5c4cc835d13c01af57784d7c570e5ec0d9d",
+            "3de037478b5a41ed5228f9f0a5169a45201a87e2774e2478b71450522c105399"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T00:09:52.158030+00:00",
+          "last_seen_at": "2026-10-06T00:19:57.916804+00:00",
+          "representative_version_id": "3f712b295305221538bd2cc19cd61bd17e26837191e86ffe0f08cc186172c034",
+          "source_ids": [
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "d81ee34acf995f8abf5e65b42a5a8e198abf537bc8b616d16e0c52ff68a042cd",
+          "version_count": 2,
+          "version_ids": [
+            "3f712b295305221538bd2cc19cd61bd17e26837191e86ffe0f08cc186172c034",
+            "a5019f5de02237f76d1326b4dec3ea46352ec306fc1df5fdf4b6d9e246130ee1"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-05T18:35:38.388714+00:00",
+          "last_seen_at": "2026-10-05T18:35:39.976164+00:00",
+          "representative_version_id": "863f4a4e99602e2287a98102af5e9565a16d5292449f8cafba6dd00c4c5cfa50",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "df7fd33191e1123d1a1fd9fa61f088d9b3f834e2c3a86b8d19fca715c95848c1",
+          "version_count": 2,
+          "version_ids": [
+            "863f4a4e99602e2287a98102af5e9565a16d5292449f8cafba6dd00c4c5cfa50",
+            "a91218b40a4cc2c1e169ee34255cc756c34d7d5ede779e1ab39b5eaaeeb45699"
+          ]
+        },
+        {
+          "article_count": 2,
+          "first_seen_at": "2026-10-06T06:33:44.621315+00:00",
+          "last_seen_at": "2026-10-06T06:33:47.477292+00:00",
+          "representative_version_id": "89587a15c6ad50979f8d155a16abad8c7caa9cb08768a5a636ac251e785880a1",
+          "source_ids": [
+            "fastbull",
+            "jin10"
+          ],
+          "title_group_id": "e2fcc55fafeed30f59b98c6f6fd5553777534b0f4c40cd10c0f7d9be566fdbb9",
+          "version_count": 2,
+          "version_ids": [
+            "89587a15c6ad50979f8d155a16abad8c7caa9cb08768a5a636ac251e785880a1",
+            "bbfedd86f53fc6ed343b95f2c6ca2499cd2bca9fa2c3836e98020aa4d4d2cb05"
+          ]
+        },
+        {
+          "article_count": 3,
+          "first_seen_at": "2026-10-06T00:19:54.585450+00:00",
+          "last_seen_at": "2026-10-06T06:33:43.465967+00:00",
+          "representative_version_id": "3692278c88eba26d0e0c4a702800639641bfae4c2172cb3c30e45ee7ebed4e8d",
+          "source_ids": [
+            "cls",
+            "jin10",
+            "wallstreetcn"
+          ],
+          "title_group_id": "f83fcf3520767d879160311ac48c61ffa0cdc97da82db73df6c1ba950acaba18",
+          "version_count": 3,
+          "version_ids": [
+            "3692278c88eba26d0e0c4a702800639641bfae4c2172cb3c30e45ee7ebed4e8d",
+            "7083cbf3624dff993c3c5d3f54aef1272be9a8b2796a10c161f374abee17f835",
+            "7a8682274e27d93c88ca8af2c448febbe7de1f505be6e5a916a6081df3b8779e"
+          ]
+        }
+      ],
+      "research_authority": "NONE",
+      "research_executions": 0,
+      "retained_since": "2026-09-30T10:23:38.349578+00:00",
+      "semantic_disagreement": null,
+      "signal_transition_authority": "NONE",
+      "source_history_hash": "74bda95a5b3b2f738d3a0b0668d465a24c9a0f3e34ccbd85784363b7e26122f9",
+      "status": "REPEATED_HEADLINES_OBSERVED",
+      "version": "news-headline-repetition-v1",
+      "window_start": "2026-10-05T12:33:53.120070+00:00"
     },
     "history": {
       "projection": {
@@ -25706,7 +26207,7 @@
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
         "sha256": "bae6929f9a77abfda20f7bb17cdd01a1522e04c24395503b672c999d09b4b716"
       },
-      "capture_age_seconds": 3769,
+      "capture_age_seconds": 5012,
       "capture_hash": "919c5efc37dda9d5b0ab2e4d8bef690a32af855f7698bd8f6e59d63b4efc8b62",
       "capture_stale_after_seconds": 1800,
       "capture_status": "STALE_CAPTURE_NOT_TODAY_NEWS",
@@ -25752,5 +26253,5 @@
       "status": "STALE_CAPTURE_NOT_TODAY_NEWS"
     }
   },
-  "projection_hash": "f56610810845142cefb3c15ee3562eb0b4681b486d4b92ee4a5c61c76eeeeff9"
+  "projection_hash": "40167fb304bb2fd15d8f0d4b7a160cdb9dbf09eed619bb18120058bd5d191944"
 }
