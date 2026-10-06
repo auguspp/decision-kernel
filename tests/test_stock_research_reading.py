@@ -89,3 +89,39 @@ def test_partial_work_is_not_not_started_or_research_success(tmp_path,monkeypatc
         if path.startswith(prefix) and not path.endswith('/prepare.json'): del files[path]
     result=reader.attach(c,p)
     assert result['research']['stock_business_work']['items'][0]['status']=='RETAINED_NO_RESEARCH_RESULT'
+
+
+@pytest.mark.parametrize('failure', [None, 'pre', 'source'])
+def test_platform_push_failure_does_not_erase_retained_stock_work(tmp_path,monkeypatch,failure):
+    _,c,p=setup_reading(tmp_path,monkeypatch,fail=failure)
+    original=reader.attach(c,p)['research']['stock_business_work']
+    assert original['status']=='READ_OK'
+    original_get=c.api.get
+    seen=[]
+    def get(path):
+        seen.append(path)
+        value=original_get(path)
+        if path.startswith('actions/workflows/stock-business-research.yml/runs?'):
+            value=deepcopy(value)
+            value['workflow_runs'].insert(0,{'id':999999,'event':'push',
+                'path':'.github/workflows/stock-business-research.yml','head_branch':'main',
+                'head_repository':{'full_name':model.REPOSITORY},'head_sha':'a'*40,
+                'run_attempt':1,'status':'completed','conclusion':'failure',
+                'created_at':'2026-09-25T01:56:17Z'})
+            value['total_count']+=1
+        return value
+    monkeypatch.setattr(c.api,'get',get)
+    c.api.calls=10
+    files_before=dict(c.files);sources_before=dict(c.sources)
+    result=reader.attach(c,p)
+    work=result['research']['stock_business_work']
+    assert work['status']=='READ_OK' and work['items']==original['items']
+    assert work['latest_workflow_invocation']['id']==999999
+    assert work['latest_execution_attempt']==original['latest_execution_attempt']
+    assert work['unclassified_invocations'][0]['run']['id']==999999
+    assert not any('/999999/jobs' in path for path in seen)
+    assert result['lanes']==p['lanes'] and result['research']['candidate_work']==p['research']['candidate_work']
+    assert c.sources==sources_before
+    assert all(c.files[k]==v for k,v in files_before.items() if k not in {'current-state.json','README.md'})
+    assert result['investment_authority']=='NONE'
+    model.validate_read_package(result)

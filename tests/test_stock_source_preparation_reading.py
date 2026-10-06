@@ -67,7 +67,7 @@ def test_source_only_window_does_not_invent_a_research_run():
 
 
 @pytest.mark.parametrize('field,value',[('run_attempt',2),('run_attempt',True),('head_branch','feature'),
-    ('event','push'),('head_sha','bad'),('id',True),('head_repository',{'full_name':'foreign/repo'})])
+    ('event',None),('head_sha','bad'),('id',True),('head_repository',{'full_name':'foreign/repo'})])
 def test_wrong_run_identity_rejected(field,value):
     row=run(1);row[field]=value
     with pytest.raises(ValueError):reader.attempts(fixture([row],{1:[('research-stock-business','success')]}))
@@ -81,3 +81,37 @@ def test_publisher_call_reserve_unchanged():
     c=fixture([run(1)],{1:[('prepare-stock-sources','success')]});c.api.calls=240
     with pytest.raises(ValueError,match='reserve'):reader.attempts(c)
     assert c.api.calls==241  # no jobs fetch after the reserve rejection
+
+
+@pytest.mark.parametrize('event', ['push', 'schedule', 'unknown_native_event'])
+def test_unrecognized_event_preserved_without_hiding_saved_execution(event):
+    latest=run(2);latest.update(event=event,conclusion='failure')
+    # No jobs entry exists for 2: querying it, or treating it as Research, is wrong.
+    c=fixture([latest,run(1)],{1:[('research-stock-business','success')]})
+    value=reader.attempts(c)
+    assert value['latest_workflow_invocation']['id']==2
+    assert value['latest_workflow_invocation']['event']==event
+    assert value['latest_workflow_invocation']['conclusion']=='failure'
+    assert value['latest_execution_attempt']['id']==1
+    assert value['unclassified_invocations']==[{'run':read.concise_run(latest),
+        'error_type':'ValueError','meaning':'UNCLASSIFIED_INVOCATION_NOT_RESEARCH_OR_QUIET'}]
+    assert value['attempt_classification_status']=='PARTIAL_OR_UNAVAILABLE'
+    assert c.api.calls==2  # one page + known-purpose jobs only; no extra reads
+
+
+def test_only_push_failure_never_invents_execution_or_preparation():
+    latest=run(1);latest.update(event='push',conclusion='failure')
+    c=fixture([latest],{})
+    value=reader.attempts(c)
+    assert value['latest_workflow_invocation']['id']==1 and c.api.calls==1
+    for key in ('latest_execution_attempt','latest_source_preparation_attempt',
+                'latest_report_source_attempt','latest_compatibility_attempt'):
+        assert value[key] is None
+    assert len(value['unclassified_invocations'])==1
+
+
+@pytest.mark.parametrize('event', ['', True, {}, 'push\n', 'a'*65])
+def test_malformed_event_still_rejects_history(event):
+    row=run(1);row['event']=event
+    with pytest.raises(ValueError):
+        reader.attempts(fixture([row],{1:[('research-stock-business','success')]}))
