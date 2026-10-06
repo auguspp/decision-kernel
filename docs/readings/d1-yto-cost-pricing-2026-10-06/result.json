@@ -1,0 +1,106 @@
+{
+  "kind": "D1_YTO_COST_PROOF_AND_PRICE_IMPLIED_REQUIREMENTS",
+  "inputs_sha256": "5b5b49f6887b2c30058d2da4649267771e5f540901fc1522132c6568864a09dd",
+  "prepared_at": "2026-10-06T12:32:45.538268+00:00",
+  "remote_publication": "NOT_PERFORMED",
+  "unit_economics": {
+    "conditional_unit_cost_saving_for_flat_unit_gross_profit_cny": "0.094351464435",
+    "assumed_rounding_envelope_cny": [
+      "0.094009466032",
+      "0.094694021654"
+    ],
+    "envelope_is_confidence_interval": false,
+    "revenue_difference_at_current_volume_cny_not_actual_profit_loss": "267580753.138075313808",
+    "same_scope_unit_profit_decline_at_flat_total_profit": "0.114495705304",
+    "actual_august_unit_cost": null,
+    "actual_august_unit_profit": null
+  },
+  "static_equity_reference_cny_not_current_market_cap": "60932769841.020000000000",
+  "price_only_inverse_requirements": [
+    {
+      "retained_estimate_label": "low",
+      "conditional_FY2027_profit_cny": "7010000000",
+      "hypothetical_price_change": "-0.10",
+      "required_forward_multiple": "7.823037497421"
+    },
+    {
+      "retained_estimate_label": "low",
+      "conditional_FY2027_profit_cny": "7010000000",
+      "hypothetical_price_change": "0.00",
+      "required_forward_multiple": "8.692263886023"
+    },
+    {
+      "retained_estimate_label": "low",
+      "conditional_FY2027_profit_cny": "7010000000",
+      "hypothetical_price_change": "0.10",
+      "required_forward_multiple": "9.561490274625"
+    },
+    {
+      "retained_estimate_label": "sample_mean",
+      "conditional_FY2027_profit_cny": "7267000000",
+      "hypothetical_price_change": "-0.10",
+      "required_forward_multiple": "7.546373036593"
+    },
+    {
+      "retained_estimate_label": "sample_mean",
+      "conditional_FY2027_profit_cny": "7267000000",
+      "hypothetical_price_change": "0.00",
+      "required_forward_multiple": "8.384858929547"
+    },
+    {
+      "retained_estimate_label": "sample_mean",
+      "conditional_FY2027_profit_cny": "7267000000",
+      "hypothetical_price_change": "0.10",
+      "required_forward_multiple": "9.223344822502"
+    },
+    {
+      "retained_estimate_label": "high",
+      "conditional_FY2027_profit_cny": "7542000000",
+      "hypothetical_price_change": "-0.10",
+      "required_forward_multiple": "7.271213584847"
+    },
+    {
+      "retained_estimate_label": "high",
+      "conditional_FY2027_profit_cny": "7542000000",
+      "hypothetical_price_change": "0.00",
+      "required_forward_multiple": "8.079126205386"
+    },
+    {
+      "retained_estimate_label": "high",
+      "conditional_FY2027_profit_cny": "7542000000",
+      "hypothetical_price_change": "0.10",
+      "required_forward_multiple": "8.887038825924"
+    }
+  ],
+  "joint_stress_price_only_change": "-0.198019801980",
+  "future_dividend_or_total_return": null,
+  "historical_endpoint_context": [
+    {
+      "period": 5,
+      "start": "20260922",
+      "end": "20260930",
+      "change": "0.005652911249",
+      "status": "RETAINED_PROVIDER_ENDPOINT_CONTEXT"
+    },
+    {
+      "period": 20,
+      "start": "20260901",
+      "end": "20260930",
+      "change": "0.062593763242",
+      "status": "RETAINED_PROVIDER_ENDPOINT_CONTEXT"
+    },
+    {
+      "period": 60,
+      "start": "20260707",
+      "end": "20260930",
+      "change": null,
+      "status": "ENDPOINT_OR_FACTOR_MISSING_NOT_ZERO"
+    }
+  ],
+  "opportunity_probability": null,
+  "established_horizon_opportunity": null,
+  "historical_pit_qualified_case_count": null,
+  "model_score": null,
+  "new_human_acceptance": false,
+  "investment_authority": "NONE"
+}
