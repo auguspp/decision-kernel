@@ -170,3 +170,35 @@ response, unknown-installed-hash and reverse-pair controls. Formal CI, post-merg
 main, and fixed-reading Concept/calendar results remain separate acceptance;
 this paragraph alone certifies none of them. Exit by a normal guarded PR revert
 of this transition and its consumer changes, not by editing source receipts.
+
+
+## 2026-10-06 — #769 retained-work publication accounting
+
+The first formal run `37476154322/1` on head
+`c3a0c96a29828b14ac033b4c5090282b5ea932c0` failed thirteen existing Concept
+compatibility cases. The seven added work-budget regressions did not fail.
+Only `Collector._research_work` changed in the fingerprinted delivery module:
+both reserve checks now count proven blob reuse while preserving fresh-entry
+and unread-source reserves. The exact delivery file SHA256 is
+`e01a81bc8c884161204cb746d78d92be3d9294269d92950b3bc3ea6fa61bbd62`.
+
+The patch was independently reconstructed to its Git blob
+`a07183785aa2a97ed7d97425211e2eda0515fc40` before this equivalence review.
+An AST comparison against the exact original blob shows only that Collector
+method changed; the imported `GitHubAPI` and `GitHubReadError`, all other
+functions, and the other sixteen fingerprinted files are unchanged. Concept
+capture/replay calls neither this method nor the optional work consumer.
+
+`POST_WORK_BUDGET_IMPLEMENTATION` therefore adds only the eight explicit,
+complete predecessor maps to this exact installed map. Every historical map,
+including `POST_CALENDAR_BUDGET_IMPLEMENTATION`, retains its original bytes.
+No reverse, unknown, missing-entry or dynamic installed pair is admitted.
+Original producers, nested primary validation and complete result rebuilding
+remain strict and unchanged. Existing tests are retained; the two current-map
+assertions follow this explicit successor and three added cases check the prior
+calendar receipt, corrupt response, unreviewed installed hash and reverse pair.
+
+This reuses the #479/#757 mechanism, not a new compatibility framework or a
+source/Research retry. The original failed run remains failed. Formal CI,
+independent main and normal publication must separately confirm old Concept
+results and the restored work reading; this note does not pre-sign them.
