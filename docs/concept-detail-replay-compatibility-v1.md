@@ -143,3 +143,30 @@ mutate the module, receipt, archive, Research state, or source evidence.
 ## 2026-09-25 — Same-session delivery continuity
 
 The new installed map changes only current_state.py navigation text and current_state_delivery.py Sector result selection. Concept-detail replay does not call Collector.lane or this navigation. All historical maps remain immutable; exact prior REPLAY and POST_SECTOR_BACKFILL maps are also readable under the unchanged verifier. Unknown hashes still fail. This is saved-result reading, not new source qualification or production replay.
+
+
+## 2026-10-06 — #757 calendar publication accounting, not Concept replay
+
+Formal CI on `bb1537d93345f50a58d4e3aff48877722df0841b` exposed twelve
+historical/nested Concept replay regressions. Among the seventeen fingerprinted
+files, only `runtime/current_state_delivery.py` changed: its full SHA256 is now
+`68d3d826e4b0a2fc281d87591faa2166ca030b51712847882c1a88b91568968e`.
+The prior `906ec5c1...` value remains intact in every historical map.
+
+The reviewed diff changes only `Collector.collect` final publication accounting.
+Concept detail imports `GitHubAPI` and `GitHubReadError`; their code is unchanged.
+Its `verify` and `load_base` do not call `Collector.collect`. All sixteen other
+fingerprinted modules and the original replay verifier stay unchanged. The new
+`POST_CALENDAR_BUDGET_IMPLEMENTATION` permits only the seven already reviewed
+predecessor maps to this exact installed map. It adds no reverse or unknown pair,
+dynamic fingerprint acceptance, source retry or receipt rewriting. Original
+producer verification stays strict; the nested primary guard is unchanged.
+
+Reuse the original #479 FunctionType/immutable-map audit above: the same
+capability and constraints apply; no new library, code loader or general
+compatibility service is introduced. Tests retain every old fingerprint/control,
+update the two installed-map expectations, and add predecessor replay, corrupt
+response, unknown-installed-hash and reverse-pair controls. Formal CI, post-merge
+main, and fixed-reading Concept/calendar results remain separate acceptance;
+this paragraph alone certifies none of them. Exit by a normal guarded PR revert
+of this transition and its consumer changes, not by editing source receipts.

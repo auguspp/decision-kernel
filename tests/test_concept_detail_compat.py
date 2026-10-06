@@ -30,7 +30,13 @@ def inventory(root):
 
 
 def test_reviewed_pair_is_complete_and_only_reviewed_non_replay_files_differ():
-    assert capture._implementation() == compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION
+    assert capture._implementation() == compat.POST_CALENDAR_BUDGET_IMPLEMENTATION
+    assert len(compat.POST_CALENDAR_BUDGET_IMPLEMENTATION) == 17
+    assert {k for k in compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION
+            if compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION[k] != compat.POST_CALENDAR_BUDGET_IMPLEMENTATION[k]} == {
+        'runtime/current_state_delivery.py'}
+    with pytest.raises(TypeError):
+        compat.POST_CALENDAR_BUDGET_IMPLEMENTATION['extra'] = '0' * 64
     assert len(compat.HISTORICAL_IMPLEMENTATION) == len(compat.REPLAY_IMPLEMENTATION) == 17
     assert len(compat.POST_SECTOR_BACKFILL_IMPLEMENTATION) == 17
     assert {k for k in compat.HISTORICAL_IMPLEMENTATION
@@ -178,3 +184,36 @@ def test_pre_stock_reading_capture_stays_exact_with_original_verifier_strict(tmp
     monkeypatch.setattr(capture, '_implementation', lambda: dict(compat.REPLAY_IMPLEMENTATION))
     with pytest.raises(ValueError, match='DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED'):
         compat.verify(root)
+
+
+@pytest.mark.parametrize('damage', [None, 'installed', 'response'])
+def test_pre_calendar_capture_is_forward_only_and_full_replay_stays_strict(tmp_path, monkeypatch, damage):
+    root, receipt, *_ = execute(tmp_path)
+    current_receipt = deepcopy(receipt)
+    expected = capture.verify(root)
+    receipt = deepcopy(receipt)
+    receipt['implementation'] = dict(compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION)
+    seal(root, receipt)
+    expected['capture_hash'] = receipt['capture_hash']
+    if damage == 'installed':
+        unreviewed = dict(compat.POST_CALENDAR_BUDGET_IMPLEMENTATION)
+        unreviewed['runtime/current_state_delivery.py'] = '0' * 64
+        monkeypatch.setattr(capture, '_implementation', lambda: unreviewed)
+    elif damage == 'response':
+        path = root / 'response-1.json'
+        path.write_bytes(path.read_bytes() + b' ')
+    before = inventory(root)
+    with pytest.raises(ValueError, match='DETAIL_CAPTURE_IDENTITY_REJECTED'):
+        capture.verify(root)
+    if damage:
+        with pytest.raises(ValueError):
+            compat.verify(root)
+    else:
+        assert compat.verify(root) == (expected, compat.PRIOR_DELIVERY)
+    assert inventory(root) == before
+    if damage is None:
+        # Synthetic new receipt against old installed code is NOT a reviewed pair.
+        seal(root, current_receipt)
+        monkeypatch.setattr(capture, '_implementation', lambda: dict(compat.POST_QUIET_STOCK_INPUTS_IMPLEMENTATION))
+        with pytest.raises(ValueError, match='DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED'):
+            compat.verify(root)
