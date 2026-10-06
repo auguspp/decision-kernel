@@ -1,0 +1,106 @@
+{
+  "recorded_at": "2026-10-06T03:34:40.221129+00:00",
+  "code_baseline": "0256f30f1ee3fdaed08ffd656697b9f4bd62b724",
+  "reading_commit": "25637760399e2980b07fb7f0d2024fc940eecb3f",
+  "qualification": "RETAINED_FILES_BOUNDED_SAVED_ANALYSIS_NOT_FULL_OR_NEW_TYPED_CANDIDATE",
+  "originals": [
+    {
+      "role": "MODEL_CONTEXT_RETRIEVED_THIS_REVIEW",
+      "ref": "aecb004596d811a8d5a68bf17a271e744bddda33",
+      "path": "research_runs/normal-question-preparation/688337-20260924/context.json",
+      "git_blob": "62c24a0c3e5f76d09384439f0dcc6a8e459ed8b2",
+      "sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463",
+      "bytes": 435146
+    },
+    {
+      "role": "ORIGINAL_QUICK_READ_NOT_MODIFIED",
+      "ref": "25637760399e2980b07fb7f0d2024fc940eecb3f",
+      "path": "sources/git/3614d0636cf5ebf6371b89a425efaed6d41fb3c0/quick-model-output.txt",
+      "git_blob": "3614d0636cf5ebf6371b89a425efaed6d41fb3c0"
+    },
+    {
+      "role": "ORIGINAL_INPUT_READ_NOT_REEXECUTED",
+      "ref": "25637760399e2980b07fb7f0d2024fc940eecb3f",
+      "path": "sources/git/2fd42717c4329113554a489d9cd5f320e944cdff/input.json",
+      "git_blob": "2fd42717c4329113554a489d9cd5f320e944cdff"
+    },
+    {
+      "role": "HISTORICAL_PREFLIGHT_NOT_FRESH_APPROVAL",
+      "ref": "862f6278891ea66e906a34fb25307290e12a12fa",
+      "path": "research_runs/normal-question-preparation/688337-20260924/preflight.json",
+      "git_blob": "79fdc1a7857ccbf80ed9c99fe01dac6e991e2ac7"
+    }
+  ],
+  "original_source_declarations_not_new_observations": {
+    "announcement_id": "1225502922",
+    "original_text_sha256": "8ed3eb88691930a1650668b95284a673392fc3b06ecf39ac45396d746b3a88b9",
+    "page_count": 205,
+    "page_reading": null,
+    "pdf_sha256": "270adcca370bf047b1af3e54d64e78a11496549d7c720c15dc8c7f2114e2ed5a",
+    "published_at": "2026-08-26T00:00:00+08:00",
+    "reading_method": "ORIGINAL_PYPDF",
+    "retrieved_at": "2026-09-23T23:53:44.145209+00:00",
+    "source_locator": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+    "title": "普源精电科技股份有限公司2026年半年度报告"
+  },
+  "pdf_recovery": {
+    "path": "research_runs/normal-question-preparation/688337-20260924/document-0.pdf",
+    "ref": "c2a9c464dee68892a82aa562129536523412a24b",
+    "git_blob_metadata_only": "7b416fc3406abbc52890387c5464320f275a4943",
+    "bytes_obtained": false,
+    "visual_inspection": false,
+    "attempts": [
+      {
+        "tool": "GitHub_MCP_All.get_file_contents",
+        "return": "unsupported content encoding: none; file size may exceed 1 MB"
+      },
+      {
+        "tool": "GitHub.fetch",
+        "return": "INVALID_ARGUMENT / HTTP400: only accepts UTF-8 text"
+      },
+      {
+        "tool": "GitHub.fetch_file encoding=base64",
+        "return": "empty content, blob metadata only"
+      },
+      {
+        "tool": "web.open original CNINFO PDF",
+        "return": "Internal Error"
+      },
+      {
+        "tool": "container direct original URL",
+        "return": "DNS/NameResolutionError; no PDF"
+      },
+      {
+        "tool": "web.open raw GitHub PDF",
+        "return": "Cache miss"
+      }
+    ]
+  },
+  "source_limits": [
+    "Issuer PDF not reacquired or visually verified in this review; parsed context has exact custody, not newly authenticated website/PDF truth.",
+    "No fresh correction inventory or post-period announcement completeness. Prior preflight valid_until is not extended.",
+    "Unpaired blank cells are not zero; page174 single disposal amount is not assigned to a column or used.",
+    "Page130 total percentage token 0.02 conflicts with amount-derived 1.9336%; cause unknown without original image, no correction to source.",
+    "Trade aging is closing-only; no seasonally matched prior distribution or post-period collection evidence.",
+    "Source lookup found secondary coverage but it did not supply new authoritative inputs.",
+    "No current price, consensus, full underwriting, probability, investment recommendation or changed Human acceptance."
+  ],
+  "validation": {
+    "original_context_sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463",
+    "exact_result_replay": true,
+    "source_context_git_blob": "62c24a0c3e5f76d09384439f0dcc6a8e459ed8b2",
+    "wc_extra_outflow_CNY": "-41711157.28",
+    "cfo_delta_CNY": "-16885.19",
+    "simple_cash_change_CNY": "21647688.68",
+    "contract_component_total_CNY": "45929696.53",
+    "context_bytes_unchanged": true,
+    "cli_check_stdout": "RETAINED_RESULT_MATCH",
+    "negative_controls": {
+      "context_byte_change": "saved context SHA256 differs",
+      "changed_amount": "saved context SHA256 differs",
+      "existing_output_rejected": true,
+      "tampered_result_rejected": true
+    },
+    "scope": "Offline stdlib calculation over exact retained text; synthetic mutations are negative controls, not full CI or source truth."
+  }
+}

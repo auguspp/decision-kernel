@@ -1,0 +1,135 @@
+{
+  "kind": "BOUNDED_RETAINED_688337_ANALYSIS_NOT_FULL_OR_PRODUCTION_RESULT",
+  "periods": [
+    "2026H1",
+    "2025H1"
+  ],
+  "balance_dates": [
+    "2026-06-30",
+    "2025-12-31"
+  ],
+  "amount_unit": "CNY",
+  "source_context_sha256": "b27853cd4db25ad8f8830cb33c6e06dab958f2b82912c2d47a318501e85ae463",
+  "profit": {
+    "gross_profit": {
+      "current": "266037455.75",
+      "prior": "196615506.60",
+      "change": "69421949.15"
+    },
+    "commercial_surplus_before_finance_other_gains_and_tax": {
+      "current": "38560527.46",
+      "prior": "-25620259.45",
+      "change": "64180786.91"
+    },
+    "investment_plus_fair_value_income": {
+      "current": "15702058.50",
+      "prior": "27402313.01",
+      "change": "-11700254.51"
+    },
+    "pretax_excluding_financial_net_income_and_fx": {
+      "current": "37038515.42",
+      "prior": "-28212555.72",
+      "change": "65251071.14"
+    },
+    "reported_net_profit": {
+      "current": "37147734.08",
+      "prior": "16215794.21",
+      "change": "20931939.87"
+    },
+    "normalized_recurring_profit": null
+  },
+  "cash": {
+    "reported_cfo": {
+      "current": "-13693036.03",
+      "prior": "-13676150.84",
+      "change": "-16885.19"
+    },
+    "four_working_capital_adjustments": {
+      "current": "-93667531.20",
+      "prior": "-51956373.92",
+      "change": "-41711157.28"
+    },
+    "cfo_less_four_adjustments_mechanical_residual_not_operating_metric": {
+      "current": "79974495.17",
+      "prior": "38280223.08",
+      "change": "41694272.09"
+    },
+    "current_restricted_cash_release": "7044387.10",
+    "current_cfo_less_release_sensitivity_not_reported_cfo": "-20737423.13",
+    "reported_capex": {
+      "current": "10633920.19",
+      "prior": "32298494.06",
+      "change": "-21664573.87"
+    },
+    "cfo_less_capex_not_owner_fcf": {
+      "current": "-24326956.22",
+      "prior": "-45974644.90",
+      "change": "21647688.68"
+    },
+    "cash_balance_change_from_lower_capex": "21664573.87",
+    "current_cfo_less_release_less_capex": "-31371343.32"
+  },
+  "contract_liabilities": {
+    "total_change": "-10692962.01",
+    "rebate_change": "-4662057.56",
+    "customer_advance_change": "-6030904.45",
+    "rebate_fraction_of_total_decline": "0.435993",
+    "order_backlog": null
+  },
+  "inventory": {
+    "gross_change": "67506875.43",
+    "allowance_change": "2261494.68",
+    "net_change": "65245380.75",
+    "raw_material_net_change": "51320539.96",
+    "finished_goods_net_change": "16942680.97",
+    "other_net_change": "-3017840.18",
+    "cash_adjustment_magnitude_less_gross_change_unallocated": "3142425.27",
+    "cash_adjustment_magnitude_less_net_change_unallocated": "5403919.95",
+    "product_or_subsidiary_attribution": null
+  },
+  "trade_receivables": {
+    "gross": "209245387.79",
+    "overdue": "110006116.67",
+    "overdue_fraction": "0.525728",
+    "over_90_days": "23101599.95",
+    "over_90_days_fraction": "0.110404",
+    "allowance": "4045918.38",
+    "calculated_allowance_fraction": "0.019336",
+    "prior_aging_comparison": null,
+    "expected_loss_from_overdue_fraction": null
+  },
+  "parent_vs_consolidated": {
+    "parent_net_profit": {
+      "current": "14038650.60",
+      "prior": "18692031.19",
+      "change": "-4653380.59"
+    },
+    "consolidated_less_parent_profit_not_subsidiary_contribution": {
+      "current": "23109083.48",
+      "prior": "-2476236.98",
+      "change": "25585320.46"
+    },
+    "parent_cfo": {
+      "current": "44666857.64",
+      "prior": "-13460807.89",
+      "change": "58127665.53"
+    },
+    "consolidated_less_parent_cfo_not_subsidiary_cash": {
+      "current": "-58359893.67",
+      "prior": "-215342.95",
+      "change": "-58144550.72"
+    },
+    "elimination_and_business_attribution": null
+  },
+  "qualification": {
+    "new_company_fact": false,
+    "fresh_primary_document_recovered": false,
+    "original_pdf_visual_verified_this_review": false,
+    "original_quick_modified": false,
+    "historical_human_acceptance_inherited": false,
+    "formal_full_research": false,
+    "probability": null,
+    "target_price": null,
+    "investment_authority": "NONE"
+  }
+}
