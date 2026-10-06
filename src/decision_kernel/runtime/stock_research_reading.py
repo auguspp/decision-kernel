@@ -45,7 +45,7 @@ def attempts(collector):
         'preparation_result_semantics': 'INVOCATION_METADATA_ONLY_NOT_SOURCE_OR_RESEARCH_ACCEPTANCE'}
     seen = set()
     for run in runs['workflow_runs']:
-        model.check(run.get('event') in {'workflow_run', 'workflow_dispatch', 'issues'}
+        model.check(type(run.get('event')) is str and re.fullmatch(r'[a-z][a-z0-9_]{0,63}', run['event'])
             and run.get('path') == '.github/workflows/stock-business-research.yml'
             and run.get('head_branch') == 'main' and type(run.get('run_attempt')) is int
             and run['run_attempt'] == 1 and type(run['id']) is int and run['id'] > 0
@@ -59,6 +59,10 @@ def attempts(collector):
         model.check(api.calls + 1 + len(collector.files) + 5 <= call_limit(api),
                     'Stock purpose reads would consume publication reserve')
         try:
+            # Platform validation failures may be recorded on push. Preserve their
+            # invocation, but never promote an unrecognized trigger to Research.
+            model.check(run['event'] in {'workflow_run', 'workflow_dispatch', 'issues'},
+                        'Stock invocation event is not a classified Research purpose')
             jobs = api.get(f"actions/runs/{run['id']}/jobs?per_page=100")
             rows = jobs['jobs']
             model.check(isinstance(rows, list) and type(jobs['total_count']) is int
