@@ -39,6 +39,8 @@ Investment Authority remains `NONE`.
 
 **同日三例实核：** [美光发布时钟、三花预期分解、申通→圆通同业口径](https://github.com/auguspp/decision-kernel/blob/b2eb323a9947e303b6509731c0fb2138fdcd3979/docs/readings/d1-information-boundaries-2026-10-06/README.md)。结果稿晚于A股收盘、H股目标价降幅不等于盈利降幅、并表后同业单价不等于圆通利润；舍入反例保留，不能轻率判原公告错。三家保存价格与信息适用范围分开；不是三项已验证机会，不改原Human条件、期限、Watch或自动跟踪。
 
+**同日条件定价：** [北大荒有限窗口的条件损益与反推要求](https://github.com/auguspp/decision-kernel/blob/f4225ef22775a0ee9e32b478952bf40b60209cf7/docs/readings/d1-beidahuang-window-pricing-2026-10-06/README.md)。核心低/高参数标价相对9月30日12.63元为−10.21%/+8.59%，压力损失另列；二点盈亏平衡不是上涨概率。原11月30日分析者复核、BA2长期/股息/Human接受均不变；未证明窗口内重新定价，不产生目标价、投资决定或新Watch。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
