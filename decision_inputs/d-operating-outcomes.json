@@ -1,0 +1,47 @@
+{
+  "version": "reviewed-operating-outcomes-v1",
+  "cases": [
+    {
+      "id": "mu-fq4-2026-retained-guidance-review",
+      "event_id": "MU:FQ4_2026",
+      "subject": "MU",
+      "layout": "RETAINED_GUIDANCE_ACTUAL_V1",
+      "navigation_id": "decision-book",
+      "input_case": "MU_FQ4_2026_VALIDATION_ONLY",
+      "expected_period": "FQ4_2026",
+      "expected_currency": "USD",
+      "expected_basis": "NON_GAAP_EXCEPT_REVENUE",
+      "comparator_role": "COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "comparison": "JUNE_24_COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "source_custody": "ISSUER_DOMAIN_INDEXED_TABLE_EXTRACT_NOT_RAW_RELEASE",
+      "sources": {
+        "inputs": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/inputs.json",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "5df94d73471650942fefb1b5db4e251409060506",
+          "sha256": "90a37fb5bb8e1e6f9e1fae4baae829cb0d16040c06f7310a019898bf149c000e",
+          "bytes": 2207
+        },
+        "notes": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/source-notes.json",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "fb5183ba2ed64167a6d50b082b92703a85d5f32b",
+          "sha256": "7fee40487abdef1297c7e9357eb5ebfc9b76a7ff494d0a7da1d9fc519f4d06cc",
+          "bytes": 4969
+        },
+        "review": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/README.md",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "271e64a0cff6ff248ed83a72f2eddcd10386e261",
+          "sha256": "9cb52946346b00ba664a54e51d411addfa48f83cd785b77d91ceeb26d5f32134",
+          "bytes": 9092
+        }
+      },
+      "excerpts": [
+        "本次支持的是季度盈利与现金兑现；公司整体跨周期盈利底部、合同在下行期的兑现和增量资本回报仍未证明。",
+        "残差只作算术分解，不能从中识别价格、销量、HBM组合或SCA贡献各占多少。正向收入兑现与费用压力可以并存；不能只用EPS超指引判为全链条优于预期，也不能因费用上升就忽略实际盈利增量。",
+        "方法版本沿原零schema决定／结果协议和研究方法不变；H2是事件前研究commit，本件是较晚解释，不回填为当时已知。没有新模型、提示、生产规则或永久评分门槛。公司自己的指导误差不能记成AI预测误差；没有Human的新反馈，不能判定个人决定成功或失败。"
+      ]
+    }
+  ]
+}

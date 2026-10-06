@@ -203,6 +203,9 @@ def test_original_collector_calls_the_reentry_attachment(monkeypatch):
     from decision_kernel.runtime import independent_stock_reading as independent
     # Isolate this reentry wiring test; the real new hook is tested in test_independent_stock_reading.
     monkeypatch.setattr(independent, 'attach', lambda self, payload:payload)
+    # Keep this old test scoped to reentry; D2 uses its own native root/reserve tests.
+    from decision_kernel.runtime import operating_outcome_reading as outcomes
+    monkeypatch.setattr(outcomes, 'attach', lambda self, payload, **kwargs:payload)
     baseline = package(); seen=[]
     monkeypatch.setattr(c.base.Collector, 'collect', lambda self, refresh: deepcopy(baseline))
     from decision_kernel.runtime import reviewed_question_reading as q, stock_batch_disposition as b
