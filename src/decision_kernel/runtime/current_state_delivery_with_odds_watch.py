@@ -160,6 +160,9 @@ class Collector(base.Collector):
         if os.environ.get('INCLUDE_PRICE_STRUCTURE') == '1':
             from .d_price_structure_reading import attach as attach_structure
             payload = attach_structure(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
+        if getattr(self, "include_reviewed_questions", False):
+            from .operating_outcome_reading import attach as attach_outcomes
+            payload = attach_outcomes(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:
