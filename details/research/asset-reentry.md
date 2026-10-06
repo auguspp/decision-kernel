@@ -19,9 +19,9 @@
 - odds-hengrui-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：9/12接受条件分布用于决策准备，不是买入决定或成交；39.6复核与37–38首笔讨论分开，未启用监控。
   - [原保存材料](../../sources/git/8673b08d3a36e8cabc33e1fb51627bc65d674e3a/600276-hengrui-human-first-entry-2026-09-12.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 600184.SH
 
@@ -53,9 +53,9 @@
 - odds-xingye-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：接受修订Research及provisional first-entry review用于决策准备；无投资决定/Action/监控；原跨案例期限假设不扩大为公司专属授权。
   - [原保存材料](../../sources/git/f66451fce807058045f510016de1d60b68413c42/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 北大荒 600598.SH
 
@@ -80,9 +80,9 @@
   - 原用途说明：#321 real-company Research-only round-trip: mechanically freezes the retained 2026-09-16 tax-regime Belief with later-reacquired EXTRACTED&#95;VALUES/PARTIAL evidence custody. Model risk remains NOT&#95;ESTABLISHED; no valuation horizon, numerical Scenario or probability is created. COMMITTED Research does not establish current Market/Odds, Human acceptance, Action/watch or Investment Authority.
   - [原保存材料](../../sources/git/8e40fae835eb3f295238e050515e5bd1a52a5287/commit.json)
 - [按需恢复：sector-600598-materiality-20260910](https://github.com/auguspp/decision-kernel/blob/822c5c725df2d1e5d66768b3b06bc9ddfef93a2e/research_runs/candidates/sector-origin/600598-materiality-20260910/README.md)；只有定位，本页没有恢复正文。
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 603353.SH
 
@@ -176,9 +176,9 @@
 - [按需恢复：d-mu-gigadevice-economic-bridge-20261005](https://github.com/auguspp/decision-kernel/blob/ec95b9ca6156e3ee83f4157675bad7881279ccfd/docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：d-mu-gigadevice-horizons-20261004](https://github.com/auguspp/decision-kernel/blob/9ec1a0a4f22d70d9fdf71cedf57a719aaa8cb830/docs/readings/d-mu-gigadevice-horizons-2026-10-04/README.md)；只有定位，本页没有恢复正文。
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 三花智控 002050.SZ
 
@@ -196,9 +196,9 @@
 - sanhua-horizon：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：后续 Human 时间范围补充，不能回写此前 checkpoint 或冒充已执行 Action。
   - [原保存材料](../../sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 300750.SZ
 
@@ -288,9 +288,9 @@
 - [按需恢复：b2-announcements-36675839340-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/d13143a92b4c25bb38c9a46fc836309dba2af367/docs/readings/b2-announcements-36675839340-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-pdf-36685884532-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/e382453d09e54572ead47f23f553a5da87764d9f/docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：601155-unit-correction-20260930](https://github.com/auguspp/decision-kernel/blob/f54c017c3d06fd46cf2a5da4949c0e461e5789e0/docs/readings/601155-unit-correction-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- 原价格条件状态：NEEDS&#95;REVIEW&#95;NOW；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：NEEDS&#95;REVIEW&#95;NOW；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 兴森科技 002436.SZ
 
@@ -309,9 +309,9 @@
 - [按需恢复：c-activity-positive-002436-20260930](https://github.com/auguspp/decision-kernel/blob/0ff4f1384c205f6ab7d9ca7f90774a7d55052d17/docs/readings/c1-activity-positive-2026-09-30/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c1-peer-commitment-002436-20261001](https://github.com/auguspp/decision-kernel/blob/382c68bc94f81e986c9237620524e2f761e9a4f0/docs/readings/c1-capital-realization-2026-10-01/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：c1-incentive-capital-002436-20261001](https://github.com/auguspp/decision-kernel/blob/e1eb810e7b7d5bb7bbe072d140714094aa485294/docs/readings/c1-incentive-capital-2026-10-01/README.md)；只有定位，本页没有恢复正文。
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-05T08:20:39.323605Z
+- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.
-- [原价格条件记录](../inbox/37283010850/odds-watch/watch.json)；不是新的行情复核或买入指令。
+- [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 688337.SH
 
