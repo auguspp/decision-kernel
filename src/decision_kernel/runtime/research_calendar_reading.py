@@ -45,7 +45,21 @@ def _read_snapshot(collector, config, *, reserved_paths=()) -> dict:
         used = getattr(collector.api, "calls", None)
         model.check(type(used) is int and used >= 0, "calendar API accounting")
         paths = {"sources/git/" + blobs[name] + "/" + name for name in calendar.FILES}
-        pending = len(set(files_before) | paths | set(reserved_paths) | {"current-state.json", "README.md"})
+        from .read_blob_reuse import GitHubReadReuseAPI, pending_blob_writes
+        reserved = paths | set(reserved_paths) | {"current-state.json", "README.md"}
+        pending = len(set(files_before) | reserved)
+        if (used + len(calendar.FILES) + pending + 5 > delivery.MAX_API_CALLS
+                and isinstance(collector.api, GitHubReadReuseAPI)
+                and collector.previous_commit is not None):
+            # Reuse the existing complete, pinned-tree proof earlier when needed.
+            # This is not permission to use older calendar bytes or another budget.
+            stage = "PUBLICATION_REUSE"
+            model.check(used + 2 + 5 <= delivery.MAX_API_CALLS, "calendar publication reserve")
+            collector.api.prime_previous_reading(collector.previous_commit)
+            used = collector.api.calls
+            stage = "CAPACITY"
+        pending = pending_blob_writes(collector.api,
+            {path: raw for path, raw in files_before.items() if path not in reserved}) + len(reserved)
         model.check(used + len(calendar.FILES) + pending + 5 <= delivery.MAX_API_CALLS,
                     "calendar publication reserve")
         collector.files = dict(files_before)
