@@ -486,13 +486,17 @@ class Collector:
         model.check(type(config["max_items"]) is int and 1 <= config["max_items"] <= MAX_RESEARCH_WORK_ITEMS,
                     "research work read item bound invalid")
 
-        # publish() writes every retained blob, two entry files, then at most
-        # five Git operations (prior commit, tree, commit, readback, ref). Reject
-        # even metadata reads when they would steal the base publication budget.
+        # Use the publisher's proven-blob count, not the number of retained paths.
+        # The two entry files will change: reserve fresh writes even when their
+        # previous bytes exist. No prior proof means the original conservative count.
+        from .read_blob_reuse import pending_blob_writes
         entry_paths = {"current-state.json", "README.md"}
+        pending = pending_blob_writes(
+            self.api, {path: raw for path, raw in self.files.items() if path not in entry_paths})
+        base_publication_calls = pending + len(entry_paths) + 5
         used = getattr(self.api, "calls", None)
         model.check(type(used) is int and used >= 0, "research work API accounting unavailable")
-        model.check(used + 2 + len(set(self.files) | entry_paths) + 5 <= MAX_API_CALLS,
+        model.check(used + 2 + base_publication_calls <= MAX_API_CALLS,
                     "research work API reserve would consume base publication budget")
         ref = self.api.get("git/ref/heads/" + work.WORK_REF)["object"]
         model.check(ref.get("type") == "commit" and model.SHA.fullmatch(ref.get("sha", "")) is not None,
@@ -541,7 +545,10 @@ class Collector:
         # work_inventory's tree request is memoized by GitHubAPI; reserve one
         # extra request anyway. Include all source reads and all new blob writes.
         remaining_reads = len(needed) + 1
-        publication_calls = len(set(self.files) | set(new_files) | entry_paths) + 5
+        # Unread work bodies count as NEW writes, even if their declared hashes
+        # appear in a prior tree. Source validation below is never bypassed.
+        new_writes = len(set(new_files) - set(self.files) - entry_paths)
+        publication_calls = base_publication_calls + new_writes
         model.check(self.api.calls + remaining_reads + max(RESEARCH_WORK_API_RESERVE, publication_calls)
                     <= MAX_API_CALLS, "research work read would exhaust publication API reserve")
 
@@ -747,8 +754,16 @@ class Collector:
     def include_research_work(self, registry: dict, research: dict) -> None:
         work_config = registry.get("research_work_read")
         if work_config is not None:
+            # Reuse the optional calendar reader's local-cache convention. The
+            # same 60-source bound applies to this opted-in work; exact source
+            # descriptors/bytes are retained without filling the baseline cache.
+            shared_sources = self.sources
             try:
-                research["candidate_work"] = self.research_work(work_config)
+                try:
+                    self.sources = {}
+                    research["candidate_work"] = self.research_work(work_config)
+                finally:
+                    self.sources = shared_sources
             except (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError) as exc:
                 research["candidate_work"] = {"status": "UNAVAILABLE_OR_REJECTED",
                     "error_type": type(exc).__name__, "meaning": "RESEARCH_WORK_NOT_QUIET_AND_NOT_PROMOTED",
