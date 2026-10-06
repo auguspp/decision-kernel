@@ -43,6 +43,8 @@ Investment Authority remains `NONE`.
 
 **同日成本续接：** [兆易—长鑫采购额度与DRAM投入成本](https://github.com/auguspp/decision-kernel/blob/7e3ab436233711f0c2d44130ca855c6e2be345a8/docs/readings/d-gigadevice-cxmt-procurement-2026-10-06/README.md)。公司将代工涨价列为上调额度的原因；拟增额度37.52%不等于销量或盈利增长，双方公告是同一交易。10月20日审批与11月30日研究复核分开；原MU→兆易冻结、S0/5/20、长期期限及Human决定保持，不新增任务。
 
+**同日圆通接续：** [圆通单票成本抵消条件与价格反推](https://github.com/auguspp/decision-kernel/blob/9a27c4ca47b088b17361c271c1621f94e53a576b/docs/readings/d1-yto-cost-pricing-2026-10-06/README.md)。8月媒体转述量价对应约9.4分/票的同口径成本抵消要求；实际成本仍未取得。旧2027预期样本与9月30日价格只作静态条件定价，不当当前共识或目标价；分红、因子、股数和联合下行限制保留。未生成机会概率、Human接受或新任务。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
