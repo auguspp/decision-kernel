@@ -37,6 +37,8 @@ Investment Authority remains `NONE`.
 
 **同日接续：** [普源原预告、同口径实绩与保存价格](https://github.com/auguspp/decision-kernel/blob/b8840419cfc7accddbfb8a79fe0f3bb78b7727d7/docs/readings/d1-rigol-expectation-price-2026-10-06/README.md)：三项H1实绩处于选定公司预告内，不能只用同比大增认定新正向意外；9月30日47.80元和5/20交易日端点变化仅为原日期背景。保留总收入/主营收入反例、现金及股数约束；不据此推定市场预期、机会不存在或新Human接受。原PDF/修订清单与事件价格链缺口见两文件档案。
 
+**同日三例实核：** [美光发布时钟、三花预期分解、申通→圆通同业口径](https://github.com/auguspp/decision-kernel/blob/b2eb323a9947e303b6509731c0fb2138fdcd3979/docs/readings/d1-information-boundaries-2026-10-06/README.md)。结果稿晚于A股收盘、H股目标价降幅不等于盈利降幅、并表后同业单价不等于圆通利润；舍入反例保留，不能轻率判原公告错。三家保存价格与信息适用范围分开；不是三项已验证机会，不改原Human条件、期限、Watch或自动跟踪。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
