@@ -278,7 +278,7 @@ If the Human confirms an actual trade under a frozen decision:
 
 ### Price-conditioned reviews
 
-- **GigaDevice:** around CNY350 -> assumption review; CNY320–335 -> first-entry condition only if those assumptions survive.
+- **GigaDevice:** around CNY350 -> assumption review; CNY320–335 -> first-entry condition only if review survives.
 - **Sanhua:** around CNY30 -> first-entry condition only if core thesis remains intact.
 
 No automation or scheduled price watcher is implied.
