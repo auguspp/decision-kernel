@@ -1,9 +1,9 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "eb9d3f070e7085154b1866f4acba630091150ef7da2c1b23e943446c1fb9142d",
+    "base_reading_hash": "eda4eebac40f2b06e340e1f83cf7304a9e2ec4426e3fa1a89f36a59922649478",
     "economic_review": "NOT_PERFORMED",
-    "generated_at": "2026-10-06T10:14:20.497071+00:00",
+    "generated_at": "2026-10-06T10:16:47.384788+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6744,37 +6744,37 @@
       },
       "native": {
         "archive": {
-          "artifact_id": 11382090890,
-          "artifact_name": "industry-breadth-37392477005-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005/artifacts/11382090890",
-          "bytes": 10521,
-          "expires_at": "2026-11-05T00:09:36Z",
-          "git_blob": "7fd9784644db0a558df4bde935cac3c2c1c3672c",
+          "artifact_id": 11403509043,
+          "artifact_name": "industry-breadth-37448492835-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835/artifacts/11403509043",
+          "bytes": 10546,
+          "expires_at": "2026-11-05T10:15:05Z",
+          "git_blob": "46f8fa5198d53228833abc5c2cdab20657572530",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-06T00:09:21Z",
+            "created_at": "2026-10-06T10:14:48Z",
             "event": "workflow_run",
-            "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
-            "id": 37392477005,
+            "head_sha": "32aa32274cf190cbcf88588bbb12fe9f2a82eafa",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835",
+            "id": 37448492835,
             "operation": null,
             "path": ".github/workflows/radar-industry-breadth.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-06T00:09:21Z",
+            "run_started_at": "2026-10-06T10:14:48Z",
             "status": "completed",
-            "updated_at": "2026-10-06T00:10:04Z"
+            "updated_at": "2026-10-06T10:15:37Z"
           },
-          "read_path": "sources/artifacts/e9944c2fba27675d5fcaf0a398e4a8891a606c7b51ad3838243d31513a22c49d.zip",
+          "read_path": "sources/artifacts/40da9f6f300b227b1a2b832105aa2a9a29f31092a457c89f5181d4c139141f4f.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "e9944c2fba27675d5fcaf0a398e4a8891a606c7b51ad3838243d31513a22c49d"
+          "sha256": "40da9f6f300b227b1a2b832105aa2a9a29f31092a457c89f5181d4c139141f4f"
         },
         "capture": {
           "attempted_requests": 1,
           "automatic_admission": false,
-          "capture_hash": "586ea7b423bab2768b5750c603d2dd1b460ab1b499912d5b072c13eb09ace19a",
+          "capture_hash": "d92a5701d215480f12daf5238fa22e3ca97b46569c705b572e0ab619776ba41f",
           "error_type": null,
-          "finished_at": "2026-10-06T00:09:36.046824+00:00",
+          "finished_at": "2026-10-06T10:15:04.875541+00:00",
           "http_status": 200,
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
@@ -6784,11 +6784,11 @@
           "receipt": {
             "params": {},
             "path": "/api/futures/basis/main-continuous-latest",
-            "received_at": "2026-10-06T00:09:36.040432+00:00",
+            "received_at": "2026-10-06T10:15:04.869994+00:00",
             "representation": "RETAINED_HTTP_BODY",
-            "requested_at": "2026-10-06T00:09:34.263528+00:00",
-            "response_bytes": 67316,
-            "response_sha256": "9abc72765beb44df27f674661b08c0e238becf9ec25999a7bb5dd78d0a3d79b5",
+            "requested_at": "2026-10-06T10:15:00.913574+00:00",
+            "response_bytes": 67312,
+            "response_sha256": "5484ba77a7fc0d5c9ab9f4eb54529599bf979e16e528a624700169263c57087d",
             "status": "CAPTURED_HTTP_RESPONSE"
           },
           "research_authority": "NONE",
@@ -6797,12 +6797,12 @@
           "version": "industry-breadth-snapshot-v1",
           "workflow": {
             "attempt": 1,
-            "code_commit": "95000ff4ae42f7d4c45e041a4244de426950cd66",
+            "code_commit": "32aa32274cf190cbcf88588bbb12fe9f2a82eafa",
             "event": "workflow_run",
             "ref": "refs/heads/main",
             "repository": "auguspp/decision-kernel",
-            "run_id": 37392477005,
-            "trigger_run_id": 37392317813,
+            "run_id": 37448492835,
+            "trigger_run_id": 37448302422,
             "workflow": ".github/workflows/radar-industry-breadth.yml"
           }
         },
@@ -6810,17 +6810,17 @@
         "capture_age_status": "RECENT_CAPTURE",
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-06T00:09:21Z",
+          "created_at": "2026-10-06T10:14:48Z",
           "event": "workflow_run",
-          "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
-          "id": 37392477005,
+          "head_sha": "32aa32274cf190cbcf88588bbb12fe9f2a82eafa",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835",
+          "id": 37448492835,
           "operation": null,
           "path": ".github/workflows/radar-industry-breadth.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-06T00:09:21Z",
+          "run_started_at": "2026-10-06T10:14:48Z",
           "status": "completed",
-          "updated_at": "2026-10-06T00:10:04Z"
+          "updated_at": "2026-10-06T10:15:37Z"
         },
         "snapshot": {
           "projection": {
@@ -7920,30 +7920,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "103.50",
-                  "average_settle_basis": "107.89",
-                  "close_basis": 233,
-                  "close_basis_rate": "4.99",
+                  "average_close_basis": "105.46",
+                  "average_settle_basis": "110.10",
+                  "close_basis": 351,
+                  "close_basis_rate": "7.33",
                   "close_price": 4434,
-                  "converted_spot_price": 4667,
+                  "converted_spot_price": 4785,
                   "default_value": "Y",
                   "name": "燃油主连",
                   "reference_site": "新加坡",
-                  "settle_basis": 291,
-                  "settle_basis_rate": "6.24",
+                  "settle_basis": 409,
+                  "settle_basis_rate": "8.54",
                   "settle_price": 4376,
                   "spot_indicator_id": "9138369",
-                  "spot_price": 4667,
-                  "spot_publish_date": "2026-10-02",
+                  "spot_price": 4785,
+                  "spot_publish_date": "2026-10-05",
                   "thscode": "FUZL.SHF",
                   "ticker": "fu9999",
-                  "updated_at": "2026.10.03 07:04:52",
+                  "updated_at": "2026.10.06 07:04:53",
                   "variety_name": "燃油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 27,
-                "spot_age_days_at_capture": 4,
-                "version_id": "f7d9a730de4025434744690fab0ad753391bd2d912e183cdb287928e1ef5a9c0"
+                "spot_age_days_at_capture": 1,
+                "version_id": "37c36653f4e4f0ca3bdf74ccd49815bae3cd2aa79ebfada70669c7b9257ac1c1"
               },
               {
                 "identity": {
@@ -8427,8 +8427,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "96.89",
-                  "average_settle_basis": "101.38",
+                  "average_close_basis": "97.93",
+                  "average_settle_basis": "102.69",
                   "close_basis": 411,
                   "close_basis_rate": "4.72",
                   "close_price": 8280,
@@ -8441,16 +8441,16 @@
                   "settle_price": 8208,
                   "spot_indicator_id": "5402526",
                   "spot_price": 8691,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "PFZL.CZC",
                   "ticker": "PF9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "短纤"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 40,
-                "spot_age_days_at_capture": 1,
-                "version_id": "b663f1b1f5ac7897c669bdaace43df3bc86cf5bb03ddf4b7fe92554ebc063d29"
+                "spot_age_days_at_capture": 0,
+                "version_id": "37cc3016bc91a3c79ced856c5bc10c13faecef46f7675991ae30739f01ec38b8"
               },
               {
                 "identity": {
@@ -8507,28 +8507,28 @@
                 "raw": {
                   "average_close_basis": "32.02",
                   "average_settle_basis": "32.38",
-                  "close_basis": "18.2",
-                  "close_basis_rate": "2.50",
+                  "close_basis": "24.7",
+                  "close_basis_rate": "3.36",
                   "close_price": "711.0",
-                  "converted_spot_price": "729.2",
+                  "converted_spot_price": "735.7",
                   "default_value": "Y",
                   "name": "原油主连",
                   "reference_site": "迪拜",
-                  "settle_basis": "33.1",
-                  "settle_basis_rate": "4.54",
+                  "settle_basis": "39.6",
+                  "settle_basis_rate": "5.39",
                   "settle_price": "696.1",
                   "spot_indicator_id": "6462",
-                  "spot_price": "729.2",
-                  "spot_publish_date": "2026-10-02",
+                  "spot_price": "735.7",
+                  "spot_publish_date": "2026-10-05",
                   "thscode": "SCZL.INE",
                   "ticker": "sc9999",
-                  "updated_at": "2026.10.05 17:16:08",
+                  "updated_at": "2026.10.06 17:16:03",
                   "variety_name": "原油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 42,
-                "spot_age_days_at_capture": 4,
-                "version_id": "ccbaab1d458dff31813a94ea5a65da6bacc6e9e9001f7f4c0aab55fe797a5f5f"
+                "spot_age_days_at_capture": 1,
+                "version_id": "0375650d04656494bc33cb5eb3d94c27eac357eb5f4a86de5bb9ee397c6c9c6c"
               },
               {
                 "identity": {
@@ -8856,30 +8856,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "112.86",
-                  "average_settle_basis": "116.56",
-                  "close_basis": -46,
-                  "close_basis_rate": "-0.85",
+                  "average_close_basis": "113.61",
+                  "average_settle_basis": "117.39",
+                  "close_basis": 57,
+                  "close_basis_rate": "1.03",
                   "close_price": 5469,
-                  "converted_spot_price": 5423,
+                  "converted_spot_price": 5526,
                   "default_value": "Y",
                   "name": "低硫燃油主连",
                   "reference_site": "新加坡",
-                  "settle_basis": -35,
-                  "settle_basis_rate": "-0.65",
+                  "settle_basis": 68,
+                  "settle_basis_rate": "1.23",
                   "settle_price": 5458,
                   "spot_indicator_id": "9138373",
-                  "spot_price": 5423,
-                  "spot_publish_date": "2026-10-02",
+                  "spot_price": 5526,
+                  "spot_publish_date": "2026-10-05",
                   "thscode": "LUZL.INE",
                   "ticker": "lu9999",
-                  "updated_at": "2026.10.03 07:04:58",
+                  "updated_at": "2026.10.06 07:04:58",
                   "variety_name": "低硫燃油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 51,
-                "spot_age_days_at_capture": 4,
-                "version_id": "f4470df08a2ae9232019124cab77cd88bc8e55f7d21c4e057d158f233ad2ad1f"
+                "spot_age_days_at_capture": 1,
+                "version_id": "1e898a73893c81c3ba437153a61ef9dcc2d7d5e5304178e55db67bb7bf8b94c7"
               },
               {
                 "identity": {
@@ -9168,8 +9168,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "75.55",
-                  "average_settle_basis": "73.99",
+                  "average_close_basis": "75.98",
+                  "average_settle_basis": "74.30",
                   "close_basis": 179,
                   "close_basis_rate": "9.04",
                   "close_price": 1805,
@@ -9182,16 +9182,16 @@
                   "settle_price": 1818,
                   "spot_indicator_id": "5402459",
                   "spot_price": 635,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "SHZL.CZC",
                   "ticker": "SH9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "烧碱"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 59,
-                "spot_age_days_at_capture": 1,
-                "version_id": "b9876dadae53c3e3e6dcbf2fe6be16f75585a863c94e6b88cbab266671a2b81b"
+                "spot_age_days_at_capture": 0,
+                "version_id": "ea73d337f1736d2e59eb8c41a368e67eb85bf089f34f804f5d93befe310844e0"
               },
               {
                 "identity": {
@@ -9285,8 +9285,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "256.21",
-                  "average_settle_basis": "260.07",
+                  "average_close_basis": "257.99",
+                  "average_settle_basis": "261.88",
                   "close_basis": 694,
                   "close_basis_rate": "7.01",
                   "close_price": 9206,
@@ -9299,16 +9299,16 @@
                   "settle_price": 9194,
                   "spot_indicator_id": "5402481",
                   "spot_price": 9900,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "PXZL.CZC",
                   "ticker": "PX9999",
-                  "updated_at": "2026.10.05 16:46:07",
+                  "updated_at": "2026.10.06 16:51:51",
                   "variety_name": "对二甲苯"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 62,
-                "spot_age_days_at_capture": 1,
-                "version_id": "e051ef96681608ee237a683c96bdccbc93bf4da883e077a161c972469de5798a"
+                "spot_age_days_at_capture": 0,
+                "version_id": "7afa47afcaefebcdd5d1fa03057e3183a3ea40e724ff3b2dbf0b844e88871b80"
               },
               {
                 "identity": {
@@ -9363,8 +9363,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "315.83",
-                  "average_settle_basis": "322.00",
+                  "average_close_basis": "317.35",
+                  "average_settle_basis": "323.92",
                   "close_basis": 494,
                   "close_basis_rate": "5.65",
                   "close_price": 8256,
@@ -9377,16 +9377,16 @@
                   "settle_price": 8148,
                   "spot_indicator_id": "5402512",
                   "spot_price": 8750,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "PRZL.CZC",
                   "ticker": "PR9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "瓶片"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 64,
-                "spot_age_days_at_capture": 1,
-                "version_id": "d56f4d8f5a5ad69e8239671ac7be880a46fe03367b94f95c35518301b2626b10"
+                "spot_age_days_at_capture": 0,
+                "version_id": "cbbccac83c219156f207911cc1e59d940a24887b151f3e189483ba0aa4a19600"
               },
               {
                 "identity": {
@@ -9402,8 +9402,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "120.79",
-                  "average_settle_basis": "127.13",
+                  "average_close_basis": "126.18",
+                  "average_settle_basis": "132.62",
                   "close_basis": 1456,
                   "close_basis_rate": "14.34",
                   "close_price": 8695,
@@ -9416,16 +9416,16 @@
                   "settle_price": 8669,
                   "spot_indicator_id": "5402416",
                   "spot_price": 10151,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "BZZL.DCE",
                   "ticker": "bz9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:02",
                   "variety_name": "纯苯"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 65,
-                "spot_age_days_at_capture": 1,
-                "version_id": "9ccf11d5bbc4ce086d263b711bcf500546361f8b80ff81318cb3bd82222cf878"
+                "spot_age_days_at_capture": 0,
+                "version_id": "f8819dc548c2db6a1ef68b20f97499f94946af5e86504ca3da73111c06872886"
               },
               {
                 "identity": {
@@ -9558,8 +9558,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "246.97",
-                  "average_settle_basis": "246.50",
+                  "average_close_basis": "247.06",
+                  "average_settle_basis": "246.63",
                   "close_basis": 243,
                   "close_basis_rate": "9.55",
                   "close_price": 2306,
@@ -9572,16 +9572,16 @@
                   "settle_price": 2302,
                   "spot_indicator_id": "4242406",
                   "spot_price": 2446,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "RMZL.CZC",
                   "ticker": "RM9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:01",
                   "variety_name": "菜粕"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 69,
-                "spot_age_days_at_capture": 1,
-                "version_id": "2a3e48cdf11a35da61af764e06e10e8b8b9e498ddb69cf631b8b93db050540c5"
+                "spot_age_days_at_capture": 0,
+                "version_id": "8f03f007c95968b7471a7cf1b543b17a2da6f8584cf4357b53a2b7c8a2b1100a"
               },
               {
                 "identity": {
@@ -9675,8 +9675,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-100.48",
-                  "average_settle_basis": "-103.26",
+                  "average_close_basis": "-101.75",
+                  "average_settle_basis": "-104.71",
                   "close_basis": -314,
                   "close_basis_rate": "-3.38",
                   "close_price": 9581,
@@ -9689,16 +9689,16 @@
                   "settle_price": 9593,
                   "spot_indicator_id": "4242410",
                   "spot_price": 9250,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "PZL.DCE",
                   "ticker": "p9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "棕榈油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 72,
-                "spot_age_days_at_capture": 1,
-                "version_id": "06cda358a781d3f2214e69a92df9d0b1cdf9e2a91b1f8466dfe2a35b1b372cfa"
+                "spot_age_days_at_capture": 0,
+                "version_id": "fe8ffc02c3da5a19dd67007129f42e84dadc7e19823c0f2ace932e6bb3eb82a5"
               },
               {
                 "identity": {
@@ -9831,8 +9831,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "133.74",
-                  "average_settle_basis": "134.61",
+                  "average_close_basis": "133.62",
+                  "average_settle_basis": "134.51",
                   "close_basis": 48,
                   "close_basis_rate": "1.40",
                   "close_price": 3372,
@@ -9845,16 +9845,16 @@
                   "settle_price": 3369,
                   "spot_indicator_id": "4242412",
                   "spot_price": 3400,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "MZL.DCE",
                   "ticker": "m9999",
-                  "updated_at": "2026.10.05 16:47:20",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "豆粕"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 76,
-                "spot_age_days_at_capture": 1,
-                "version_id": "ced211d2675ba1d4bec4a31a72b95da511b0b9444c08d9826a9caa86988f7e5b"
+                "spot_age_days_at_capture": 0,
+                "version_id": "92f1c802a7384d0af988f1bdeb0ca8869b7d1eb942622f55c0c1cf48d5a20b53"
               },
               {
                 "identity": {
@@ -9870,8 +9870,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "36.86",
-                  "average_settle_basis": "35.81",
+                  "average_close_basis": "34.95",
+                  "average_settle_basis": "33.97",
                   "close_basis": -174,
                   "close_basis_rate": "-3.36",
                   "close_price": 5354,
@@ -9884,16 +9884,16 @@
                   "settle_price": 5336,
                   "spot_indicator_id": "4242401",
                   "spot_price": 5180,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "SRZL.CZC",
                   "ticker": "SR9999",
-                  "updated_at": "2026.10.05 16:47:20",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "白糖"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 77,
-                "spot_age_days_at_capture": 1,
-                "version_id": "6b1c1fc4ef9bb9faa9e820ee78112a2ebbd1b1970e1d5f868849665517be74b6"
+                "spot_age_days_at_capture": 0,
+                "version_id": "01a745142c689ca3440901ddc0def75d186a24453c6729fb60b14279f1dcb299"
               },
               {
                 "identity": {
@@ -10026,8 +10026,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "129.52",
-                  "average_settle_basis": "130.68",
+                  "average_close_basis": "129.32",
+                  "average_settle_basis": "130.52",
                   "close_basis": -26,
                   "close_basis_rate": "-0.29",
                   "close_price": 8972,
@@ -10040,16 +10040,16 @@
                   "settle_price": 8934,
                   "spot_indicator_id": "4242413",
                   "spot_price": 8996,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "YZL.DCE",
                   "ticker": "y9999",
-                  "updated_at": "2026.10.05 16:46:37",
+                  "updated_at": "2026.10.06 16:46:02",
                   "variety_name": "豆油"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 81,
-                "spot_age_days_at_capture": 1,
-                "version_id": "21505d0bee9430ba6628ca914a034aedaeb7c5d887b13c121135fd967d1b236c"
+                "spot_age_days_at_capture": 0,
+                "version_id": "3e94e461ce06a86fd8565b75ff3cbf38be982cc7dd7b3f7a0c91497d32780c3c"
               },
               {
                 "identity": {
@@ -10143,8 +10143,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "147.81",
-                  "average_settle_basis": "147.97",
+                  "average_close_basis": "147.96",
+                  "average_settle_basis": "148.10",
                   "close_basis": 253,
                   "close_basis_rate": "9.42",
                   "close_price": 2434,
@@ -10157,16 +10157,16 @@
                   "settle_price": 2440,
                   "spot_indicator_id": "4242416",
                   "spot_price": 2832,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "CSZL.DCE",
                   "ticker": "cs9999",
-                  "updated_at": "2026.10.05 16:47:20",
+                  "updated_at": "2026.10.06 16:46:45",
                   "variety_name": "玉米淀粉"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 84,
-                "spot_age_days_at_capture": 1,
-                "version_id": "99d7d03b4599fa2aef8348fc19c5580247250974b771da21ed736d04541378a9"
+                "spot_age_days_at_capture": 0,
+                "version_id": "5d6d9ca5b5fda0ff4612631f4352a93b0b558d90800f025336a5f97e13fdb165"
               },
               {
                 "identity": {
@@ -10182,30 +10182,30 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-315.25",
-                  "average_settle_basis": "-327.64",
-                  "close_basis": -520,
-                  "close_basis_rate": "-5.12",
+                  "average_close_basis": "-317.51",
+                  "average_settle_basis": "-329.75",
+                  "close_basis": -580,
+                  "close_basis_rate": "-5.74",
                   "close_price": 10680,
-                  "converted_spot_price": 10160,
+                  "converted_spot_price": 10100,
                   "default_value": "Y",
                   "name": "生猪主连",
                   "reference_site": "河南",
-                  "settle_basis": -520,
-                  "settle_basis_rate": "-5.12",
-                  "settle_price": 10680,
+                  "settle_basis": -490,
+                  "settle_basis_rate": "-4.85",
+                  "settle_price": 10590,
                   "spot_indicator_id": "4320937",
-                  "spot_price": 10160,
+                  "spot_price": 10100,
                   "spot_publish_date": "2026-10-06",
                   "thscode": "LHZL.DCE",
                   "ticker": "lh9999",
-                  "updated_at": "2026.10.06 00:11:24",
+                  "updated_at": "2026.10.06 09:53:53",
                   "variety_name": "生猪"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 85,
                 "spot_age_days_at_capture": 0,
-                "version_id": "dedf82989be59f13ddb8659a5fe708161279b16af9a921bccd90f736a687876f"
+                "version_id": "2e1b74fe165f8919fc36f0e961209c9bef05b8d2ee9307e7d85876d9ce943a79"
               },
               {
                 "identity": {
@@ -10221,8 +10221,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "-682.82",
-                  "average_settle_basis": "-694.58",
+                  "average_close_basis": "-685.67",
+                  "average_settle_basis": "-697.22",
                   "close_basis": -750,
                   "close_basis_rate": "-7.55",
                   "close_price": 10680,
@@ -10235,16 +10235,16 @@
                   "settle_price": 10590,
                   "spot_indicator_id": "5402574",
                   "spot_price": 10200,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "LHZL.DCE",
                   "ticker": "lh9999",
-                  "updated_at": "2026.10.05 16:46:07",
+                  "updated_at": "2026.10.06 16:46:02",
                   "variety_name": "生猪"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 86,
-                "spot_age_days_at_capture": 1,
-                "version_id": "dad67a2724a44cd01dd5247fd67e12308cf43fe59aebe3fb015522a81e295096"
+                "spot_age_days_at_capture": 0,
+                "version_id": "e10e57c1afe20484146512ff497e5b4833de53621dde066035caabf44bb4ae93"
               },
               {
                 "identity": {
@@ -10689,8 +10689,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "2726.80",
-                  "average_settle_basis": "2725.58",
+                  "average_close_basis": "2722.07",
+                  "average_settle_basis": "2721.14",
                   "close_basis": 2915,
                   "close_basis_rate": "11.73",
                   "close_price": 21935,
@@ -10703,16 +10703,16 @@
                   "settle_price": 21845,
                   "spot_indicator_id": "4724782",
                   "spot_price": 24850,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "CYZL.CZC",
                   "ticker": "CY9999",
-                  "updated_at": "2026.10.05 16:47:20",
+                  "updated_at": "2026.10.06 16:47:58",
                   "variety_name": "棉纱"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 98,
-                "spot_age_days_at_capture": 1,
-                "version_id": "2ea68d96433754937d739f667574c9f4521c35af28c71b2b4b43e80eabc58da9"
+                "spot_age_days_at_capture": 0,
+                "version_id": "d12e8df1d84cde988e1361962adf351b535608c084a4c2a289e65815977c28ab"
               },
               {
                 "identity": {
@@ -13508,20 +13508,20 @@
             ],
             "signal_transition_authority": "NONE",
             "source": {
-              "bytes": 67316,
+              "bytes": 67312,
               "params": {},
               "path": "/api/futures/basis/main-continuous-latest",
-              "provider_timestamp": 1791245375657,
-              "received_at": "2026-10-06T00:09:36.040432+00:00",
+              "provider_timestamp": 1791281704317,
+              "received_at": "2026-10-06T10:15:04.869994+00:00",
               "representation": "RETAINED_HTTP_BODY",
-              "requested_at": "2026-10-06T00:09:34.263528+00:00",
-              "sha256": "9abc72765beb44df27f674661b08c0e238becf9ec25999a7bb5dd78d0a3d79b5"
+              "requested_at": "2026-10-06T10:15:00.913574+00:00",
+              "sha256": "5484ba77a7fc0d5c9ab9f4eb54529599bf979e16e528a624700169263c57087d"
             },
             "status": "BREADTH_CONTEXT_RETAINED",
             "units_and_ratio_scale": "RAW_PROVIDER_FIELDS_NOT_UNIFORMLY_ESTABLISHED",
             "version": "industry-breadth-snapshot-v1"
           },
-          "projection_hash": "9d8737bc98e438e513715caa48226245e1c65a38fe05beea6a91fedda2d4011a"
+          "projection_hash": "ffeb521342a502264e3695ff4bb2e81844a98a5d5218143d3c115e9ac4c2123b"
         },
         "status": "SAVED_NATIVE_SNAPSHOT"
       }
@@ -13529,5 +13529,5 @@
     "signal_transition_authority": "NONE",
     "version": "industry-breadth-snapshot-v1"
   },
-  "projection_hash": "bf9aef97bfac56f72762ed0ab58bf8eed469f5f405c405ebd934a926bf137ef2"
+  "projection_hash": "efbc50840e0f7377e06ae89e9a1aa9a891364736c8e848a2676860eed10def49"
 }

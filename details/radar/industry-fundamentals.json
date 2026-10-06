@@ -1,73 +1,143 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "baseline_reading_hash": "98dfd42db943c2b25d89b7b6f3abd2ceef481c8c3c066837c226077b36ebbdc7",
+    "baseline_reading_hash": "c1b32b1447bb443968e2f180cce9ca0fe9f19f7de4b3803e96821a48403dabf4",
     "business_benefit_established": false,
     "comparison": {
       "changes": [
         {
-          "kind": "SAME_PERIOD_REVISION",
-          "period": "2026-10-05",
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06",
           "previous": {
             "period": "2026-10-05",
-            "value": "6586"
+            "value": "7185"
           },
           "series_id": "19b4a261c4265bc73ff360ba45cf0e13ecd5b51e6c251d1aad2fb3a90e8d1aa4"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.12",
+            "value": "58.067"
+          },
+          "series_id": "365d6c3ee05a7efc49ffa02cc8cd637ab4504da952271ed10c8e38e7ff9bb666"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.77",
+            "value": "26.300"
+          },
+          "series_id": "c50732e64a8bedaa10d60bac6a07aa5d5e5bee6e6b6524895888e70d1ddc7fdd"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.00",
+            "value": "83.588"
+          },
+          "series_id": "a9602108bd544aaad865e894940d556513eb0152172ab9cd6cca648cbb92d2ae"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.89",
+            "value": "14.125"
+          },
+          "series_id": "8d6b02e416b86367d863e3e14c0135077b21d7ea88e31cfa926de5f7990a7bcd"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.00",
+            "value": "46.321"
+          },
+          "series_id": "f54c43f0c39f3da2a8335eff1d3dffe4ce8e643fa90618d6627b50c63d4cdc3e"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.17",
+            "value": "5.950"
+          },
+          "series_id": "f74bcb607127b9729e3eccd5d84d88932b659a7aae1ff09e42122463865a23d7"
+        },
+        {
+          "kind": "NEW_STATISTICAL_PERIOD",
+          "period": "2026-10-06T18:10:00+08:00",
+          "previous": {
+            "period": "2026-10-05T18:10:00+08:00",
+            "reported_change_pct": "0.00",
+            "value": "13.720"
+          },
+          "series_id": "b0580a5c63723553bd1c7891cf70d39d3313ad8037da054c6482e63debe1a71b"
         }
       ],
       "comparison": "EXACT_PREVIOUS_SAVED_CAPTURE",
       "meaning": "SOURCE_INCREMENT_NOT_ECONOMIC_INFLECTION_OR_RESEARCH_DECISION",
       "missing_previous_series": [],
-      "unchanged_count": 359
+      "unchanged_count": 352
     },
-    "comparison_status": "SAME_CAPTURE_INCREMENT_PRESERVED",
+    "comparison_status": "NEW_CAPTURE_COMPARED",
     "current": {
       "archive": {
-        "artifact_id": 11381652154,
-        "artifact_name": "industry-fundamentals-37392477005-1",
-        "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005/artifacts/11381652154",
-        "bytes": 215144,
-        "expires_at": "2026-11-05T00:10:01Z",
-        "git_blob": "7445c9d00a730c25cde943222c4f90eacab544e4",
+        "artifact_id": 11403729618,
+        "artifact_name": "industry-fundamentals-37448492835-1",
+        "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835/artifacts/11403729618",
+        "bytes": 215088,
+        "expires_at": "2026-11-05T10:15:33Z",
+        "git_blob": "718eca2d625621dd737d2914210e34c325b73e94",
         "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
         "origin_run": {
           "conclusion": "success",
-          "created_at": "2026-10-06T00:09:21Z",
+          "created_at": "2026-10-06T10:14:48Z",
           "event": "workflow_run",
-          "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
-          "id": 37392477005,
+          "head_sha": "32aa32274cf190cbcf88588bbb12fe9f2a82eafa",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835",
+          "id": 37448492835,
           "operation": null,
           "path": ".github/workflows/radar-industry-breadth.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-06T00:09:21Z",
+          "run_started_at": "2026-10-06T10:14:48Z",
           "status": "completed",
-          "updated_at": "2026-10-06T00:10:04Z"
+          "updated_at": "2026-10-06T10:15:37Z"
         },
-        "read_path": "sources/artifacts/93a8adecf59e4f4aae88158efcbbb8da0057758f81de374ed59ae4a6393fb0c8.zip",
+        "read_path": "sources/artifacts/bf2ceb0056530d6ee61de3eaf1df42025f617f66161f576e13a4ce0c36074c3b.zip",
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-        "sha256": "93a8adecf59e4f4aae88158efcbbb8da0057758f81de374ed59ae4a6393fb0c8"
+        "sha256": "bf2ceb0056530d6ee61de3eaf1df42025f617f66161f576e13a4ce0c36074c3b"
       },
-      "capture_hash": "f05cf296b6cb225b13f74f440211a5d2f479a22e401153e4e28e8d9a4232d7bd",
+      "capture_hash": "ec21d3b639c56d15eb3fa49caf93da440354046fc9057b4ab7b5128e21c44ccf",
       "job": {
         "conclusion": "success",
-        "id": 112040554320,
+        "id": 112218992005,
         "status": "completed",
         "workflow_conclusion": "success"
       },
       "latest_attempt": {
         "conclusion": "success",
-        "created_at": "2026-10-06T00:09:21Z",
+        "created_at": "2026-10-06T10:14:48Z",
         "event": "workflow_run",
-        "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
-        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
-        "id": 37392477005,
+        "head_sha": "32aa32274cf190cbcf88588bbb12fe9f2a82eafa",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37448492835",
+        "id": 37448492835,
         "operation": null,
         "path": ".github/workflows/radar-industry-breadth.yml",
         "run_attempt": 1,
-        "run_started_at": "2026-10-06T00:09:21Z",
+        "run_started_at": "2026-10-06T10:14:48Z",
         "status": "completed",
-        "updated_at": "2026-10-06T00:10:04Z"
+        "updated_at": "2026-10-06T10:15:37Z"
       },
       "observation": {
         "automatic_research_routing": false,
@@ -77,7 +147,7 @@
           "expected_families": 10,
           "series_count": 360
         },
-        "cutoff": "2026-10-06T00:09:59.829244+00:00",
+        "cutoff": "2026-10-06T10:15:31.445134+00:00",
         "investment_authority": "NONE",
         "known_scope_gaps": [
           "Full industry coverage not established",
@@ -99,8 +169,8 @@
               "params": {
                 "charttype": "1"
               },
-              "received_at": "2026-10-06T00:09:56.031148+00:00",
-              "requested_at": "2026-10-06T00:09:54.118836+00:00",
+              "received_at": "2026-10-06T10:15:28.014217+00:00",
+              "requested_at": "2026-10-06T10:15:26.017325+00:00",
               "sha256": "00acdc6dc8850d3391b93252e4b5e6681b1598da28a894c215dcae47804aae38",
               "status": "CAPTURED",
               "title": null,
@@ -132,8 +202,8 @@
                 "sortTypes": "-1",
                 "source": "WEB"
               },
-              "received_at": "2026-10-06T00:09:57.519385+00:00",
-              "requested_at": "2026-10-06T00:09:56.986735+00:00",
+              "received_at": "2026-10-06T10:15:29.469371+00:00",
+              "requested_at": "2026-10-06T10:15:28.992970+00:00",
               "sha256": "bfe9b4c6f5ed9d7c5a5e2b3b34070c0299f266c7a4e766c874c050de2c2de5f7",
               "status": "CAPTURED",
               "title": null,
@@ -146,14 +216,14 @@
             "scope": "PUBLIC_VISIBLE_QUOTES_ONLY_NO_MEMBER_HISTORY_OR_PAYWALL_BYPASS",
             "series_count": 11,
             "source": {
-              "bytes": 183090,
+              "bytes": 183102,
               "file": "raw/memory.body",
               "http_status": 200,
               "id": "memory",
               "params": {},
-              "received_at": "2026-10-06T00:09:59.829200+00:00",
-              "requested_at": "2026-10-06T00:09:57.933673+00:00",
-              "sha256": "5bd11bda4708bdf8333570939c7364591e588a5e404767497730a08c4ef0f87d",
+              "received_at": "2026-10-06T10:15:31.445097+00:00",
+              "requested_at": "2026-10-06T10:15:29.915348+00:00",
+              "sha256": "582c73895ceb0037874636abad9e47c094116d3d5a91f635eb2b683186a5a077",
               "status": "CAPTURED",
               "title": null,
               "url": "https://www.dramexchange.com/"
@@ -172,8 +242,8 @@
               "http_status": 200,
               "id": "nbs-energy",
               "params": {},
-              "received_at": "2026-10-06T00:09:48.783359+00:00",
-              "requested_at": "2026-10-06T00:09:48.289975+00:00",
+              "received_at": "2026-10-06T10:15:20.214999+00:00",
+              "requested_at": "2026-10-06T10:15:19.386939+00:00",
               "sha256": "15bba444b5145667a7a70770f2dc1b5534ed3f252e5e7e9d2e0d3a7c17d50973",
               "status": "CAPTURED",
               "title": "2026年8月份能源生产情况",
@@ -192,8 +262,8 @@
               "http_status": 200,
               "id": "nbs-goods",
               "params": {},
-              "received_at": "2026-10-06T00:09:54.118763+00:00",
-              "requested_at": "2026-10-06T00:09:52.437129+00:00",
+              "received_at": "2026-10-06T10:15:26.017258+00:00",
+              "requested_at": "2026-10-06T10:15:24.591050+00:00",
               "sha256": "63282e245e9d232eb2f6498c7e604ec0c8d2f6487d306f0c9c0ce37132aeb189",
               "status": "CAPTURED",
               "title": "2026年9月中旬流通领域重要生产资料市场价格变动情况",
@@ -212,8 +282,8 @@
               "http_status": 200,
               "id": "nbs-industry",
               "params": {},
-              "received_at": "2026-10-06T00:09:48.289903+00:00",
-              "requested_at": "2026-10-06T00:09:44.424266+00:00",
+              "received_at": "2026-10-06T10:15:19.386864+00:00",
+              "requested_at": "2026-10-06T10:15:14.288073+00:00",
               "sha256": "ea8ea06141f0163ac0db50c50b2bf12c8ad602b18bcb1dbfaa96b59ff0950439",
               "status": "CAPTURED",
               "title": "2026年8月份规模以上工业增加值增长5.2%",
@@ -232,8 +302,8 @@
               "http_status": 200,
               "id": "nbs-pmi",
               "params": {},
-              "received_at": "2026-10-06T00:09:50.483573+00:00",
-              "requested_at": "2026-10-06T00:09:48.783435+00:00",
+              "received_at": "2026-10-06T10:15:22.935071+00:00",
+              "requested_at": "2026-10-06T10:15:20.215072+00:00",
               "sha256": "5793799202066c330332cce23b6c312f1ab2a24df40f6732cf6b3b71a16c2e1f",
               "status": "CAPTURED",
               "title": "2026年9月中国采购经理指数运行情况",
@@ -252,8 +322,8 @@
               "http_status": 200,
               "id": "nbs-profit",
               "params": {},
-              "received_at": "2026-10-06T00:09:52.437053+00:00",
-              "requested_at": "2026-10-06T00:09:50.483641+00:00",
+              "received_at": "2026-10-06T10:15:24.590982+00:00",
+              "requested_at": "2026-10-06T10:15:22.935140+00:00",
               "sha256": "7731d5e18d8f41630e495201dd02f3948751c8412598bddca9b4e5c06ffad06e",
               "status": "CAPTURED",
               "title": "2026年1—8月份全国规模以上工业企业利润增长15.7%",
@@ -281,8 +351,8 @@
                 "sortTypes": "-1",
                 "source": "WEB"
               },
-              "received_at": "2026-10-06T00:09:56.986694+00:00",
-              "requested_at": "2026-10-06T00:09:56.031198+00:00",
+              "received_at": "2026-10-06T10:15:28.992933+00:00",
+              "requested_at": "2026-10-06T10:15:28.014269+00:00",
               "sha256": "8179633acafc953c2d2692f2a36b38e2a2389afa4d46cd8f3cd9f892a4f34321",
               "status": "CAPTURED",
               "title": null,
@@ -296,7 +366,7 @@
             "scope": "PROVIDER_MIRROR_NOT_INDEPENDENT_NBS_OR_BALTIC_CONFIRMATION",
             "series_count": 1,
             "source": {
-              "bytes": 2718,
+              "bytes": 2708,
               "file": "raw/tanker.body",
               "http_status": 200,
               "id": "tanker",
@@ -311,9 +381,9 @@
                 "sortTypes": "-1",
                 "source": "WEB"
               },
-              "received_at": "2026-10-06T00:09:57.933619+00:00",
-              "requested_at": "2026-10-06T00:09:57.519420+00:00",
-              "sha256": "463f4e988e009e867c442ec425a185c667e07b6f2daf7190a0f0be3581c5d45f",
+              "received_at": "2026-10-06T10:15:29.915270+00:00",
+              "requested_at": "2026-10-06T10:15:29.469406+00:00",
+              "sha256": "b26dae5783a81c5813487e187911430f9056ebb38e609e46e53cfd4b82009713",
               "status": "CAPTURED",
               "title": null,
               "url": "https://datacenter-web.eastmoney.com/api/data/v1/get"
@@ -10441,15 +10511,11 @@
             "id": "19b4a261c4265bc73ff360ba45cf0e13ecd5b51e6c251d1aad2fb3a90e8d1aa4",
             "label": "波罗的海原油运价指数BDTI",
             "latest": {
-              "period": "2026-10-05",
+              "period": "2026-10-06",
               "value": "7185"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
-              {
-                "period": "2026-08-24",
-                "value": "2961"
-              },
               {
                 "period": "2026-08-25",
                 "value": "2886"
@@ -10565,6 +10631,10 @@
               {
                 "period": "2026-10-05",
                 "value": "7185"
+              },
+              {
+                "period": "2026-10-06",
+                "value": "7185"
               }
             ],
             "source_record_id": "tanker",
@@ -10577,16 +10647,16 @@
             "id": "365d6c3ee05a7efc49ffa02cc8cd637ab4504da952271ed10c8e38e7ff9bb666",
             "label": "DRAM/DDR516Gb(2Gx8)4800/5600",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.12",
-              "value": "58.067"
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.17",
+              "value": "58.167"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
-                "reported_change_pct": "0.12",
-                "value": "58.067"
+                "period": "2026-10-06T18:10:00+08:00",
+                "reported_change_pct": "0.17",
+                "value": "58.167"
               }
             ],
             "source_record_id": "memory",
@@ -10600,15 +10670,15 @@
             "id": "c50732e64a8bedaa10d60bac6a07aa5d5e5bee6e6b6524895888e70d1ddc7fdd",
             "label": "DRAM/DDR516Gb(2Gx8)eTT",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.77",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "26.300"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
-                "reported_change_pct": "0.77",
+                "period": "2026-10-06T18:10:00+08:00",
+                "reported_change_pct": "0.00",
                 "value": "26.300"
               }
             ],
@@ -10623,14 +10693,14 @@
             "id": "a9602108bd544aaad865e894940d556513eb0152172ab9cd6cca648cbb92d2ae",
             "label": "DRAM/DDR416Gb(2Gx8)3200",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "83.588"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
+                "period": "2026-10-06T18:10:00+08:00",
                 "reported_change_pct": "0.00",
                 "value": "83.588"
               }
@@ -10646,15 +10716,15 @@
             "id": "8d6b02e416b86367d863e3e14c0135077b21d7ea88e31cfa926de5f7990a7bcd",
             "label": "DRAM/DDR416Gb(2Gx8)eTT",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.89",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "14.125"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
-                "reported_change_pct": "0.89",
+                "period": "2026-10-06T18:10:00+08:00",
+                "reported_change_pct": "0.00",
                 "value": "14.125"
               }
             ],
@@ -10669,14 +10739,14 @@
             "id": "f54c43f0c39f3da2a8335eff1d3dffe4ce8e643fa90618d6627b50c63d4cdc3e",
             "label": "DRAM/DDR48Gb(1Gx8)3200",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "46.321"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
+                "period": "2026-10-06T18:10:00+08:00",
                 "reported_change_pct": "0.00",
                 "value": "46.321"
               }
@@ -10692,15 +10762,15 @@
             "id": "f74bcb607127b9729e3eccd5d84d88932b659a7aae1ff09e42122463865a23d7",
             "label": "DRAM/DDR48Gb(1Gx8)eTT",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.17",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "5.950"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
-                "reported_change_pct": "0.17",
+                "period": "2026-10-06T18:10:00+08:00",
+                "reported_change_pct": "0.00",
                 "value": "5.950"
               }
             ],
@@ -10715,14 +10785,14 @@
             "id": "b0580a5c63723553bd1c7891cf70d39d3313ad8037da054c6482e63debe1a71b",
             "label": "DRAM/DDR34Gb512Mx81600/1866",
             "latest": {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "13.720"
             },
-            "period_age_days": 1,
+            "period_age_days": 0,
             "points": [
               {
-                "period": "2026-10-05T18:10:00+08:00",
+                "period": "2026-10-06T18:10:00+08:00",
                 "reported_change_pct": "0.00",
                 "value": "13.720"
               }
@@ -10831,9 +10901,9 @@
       "status": "AVAILABLE",
       "validation": "EXACT_ORIGINAL_BYTES_AND_PURE_REBUILD_NOT_SOURCE_TRUTH"
     },
-    "generated_at": "2026-10-06T10:14:22.362769+00:00",
+    "generated_at": "2026-10-06T10:16:48.921625+00:00",
     "investment_authority": "NONE",
-    "last_capture_hash": "f05cf296b6cb225b13f74f440211a5d2f479a22e401153e4e28e8d9a4232d7bd",
+    "last_capture_hash": "ec21d3b639c56d15eb3fa49caf93da440354046fc9057b4ab7b5128e21c44ccf",
     "observation": {
       "automatic_research_routing": false,
       "business_benefit_established": false,
@@ -10842,7 +10912,7 @@
         "expected_families": 10,
         "series_count": 360
       },
-      "cutoff": "2026-10-06T00:09:59.829244+00:00",
+      "cutoff": "2026-10-06T10:15:31.445134+00:00",
       "investment_authority": "NONE",
       "known_scope_gaps": [
         "Full industry coverage not established",
@@ -10864,8 +10934,8 @@
             "params": {
               "charttype": "1"
             },
-            "received_at": "2026-10-06T00:09:56.031148+00:00",
-            "requested_at": "2026-10-06T00:09:54.118836+00:00",
+            "received_at": "2026-10-06T10:15:28.014217+00:00",
+            "requested_at": "2026-10-06T10:15:26.017325+00:00",
             "sha256": "00acdc6dc8850d3391b93252e4b5e6681b1598da28a894c215dcae47804aae38",
             "status": "CAPTURED",
             "title": null,
@@ -10897,8 +10967,8 @@
               "sortTypes": "-1",
               "source": "WEB"
             },
-            "received_at": "2026-10-06T00:09:57.519385+00:00",
-            "requested_at": "2026-10-06T00:09:56.986735+00:00",
+            "received_at": "2026-10-06T10:15:29.469371+00:00",
+            "requested_at": "2026-10-06T10:15:28.992970+00:00",
             "sha256": "bfe9b4c6f5ed9d7c5a5e2b3b34070c0299f266c7a4e766c874c050de2c2de5f7",
             "status": "CAPTURED",
             "title": null,
@@ -10911,14 +10981,14 @@
           "scope": "PUBLIC_VISIBLE_QUOTES_ONLY_NO_MEMBER_HISTORY_OR_PAYWALL_BYPASS",
           "series_count": 11,
           "source": {
-            "bytes": 183090,
+            "bytes": 183102,
             "file": "raw/memory.body",
             "http_status": 200,
             "id": "memory",
             "params": {},
-            "received_at": "2026-10-06T00:09:59.829200+00:00",
-            "requested_at": "2026-10-06T00:09:57.933673+00:00",
-            "sha256": "5bd11bda4708bdf8333570939c7364591e588a5e404767497730a08c4ef0f87d",
+            "received_at": "2026-10-06T10:15:31.445097+00:00",
+            "requested_at": "2026-10-06T10:15:29.915348+00:00",
+            "sha256": "582c73895ceb0037874636abad9e47c094116d3d5a91f635eb2b683186a5a077",
             "status": "CAPTURED",
             "title": null,
             "url": "https://www.dramexchange.com/"
@@ -10937,8 +11007,8 @@
             "http_status": 200,
             "id": "nbs-energy",
             "params": {},
-            "received_at": "2026-10-06T00:09:48.783359+00:00",
-            "requested_at": "2026-10-06T00:09:48.289975+00:00",
+            "received_at": "2026-10-06T10:15:20.214999+00:00",
+            "requested_at": "2026-10-06T10:15:19.386939+00:00",
             "sha256": "15bba444b5145667a7a70770f2dc1b5534ed3f252e5e7e9d2e0d3a7c17d50973",
             "status": "CAPTURED",
             "title": "2026年8月份能源生产情况",
@@ -10957,8 +11027,8 @@
             "http_status": 200,
             "id": "nbs-goods",
             "params": {},
-            "received_at": "2026-10-06T00:09:54.118763+00:00",
-            "requested_at": "2026-10-06T00:09:52.437129+00:00",
+            "received_at": "2026-10-06T10:15:26.017258+00:00",
+            "requested_at": "2026-10-06T10:15:24.591050+00:00",
             "sha256": "63282e245e9d232eb2f6498c7e604ec0c8d2f6487d306f0c9c0ce37132aeb189",
             "status": "CAPTURED",
             "title": "2026年9月中旬流通领域重要生产资料市场价格变动情况",
@@ -10977,8 +11047,8 @@
             "http_status": 200,
             "id": "nbs-industry",
             "params": {},
-            "received_at": "2026-10-06T00:09:48.289903+00:00",
-            "requested_at": "2026-10-06T00:09:44.424266+00:00",
+            "received_at": "2026-10-06T10:15:19.386864+00:00",
+            "requested_at": "2026-10-06T10:15:14.288073+00:00",
             "sha256": "ea8ea06141f0163ac0db50c50b2bf12c8ad602b18bcb1dbfaa96b59ff0950439",
             "status": "CAPTURED",
             "title": "2026年8月份规模以上工业增加值增长5.2%",
@@ -10997,8 +11067,8 @@
             "http_status": 200,
             "id": "nbs-pmi",
             "params": {},
-            "received_at": "2026-10-06T00:09:50.483573+00:00",
-            "requested_at": "2026-10-06T00:09:48.783435+00:00",
+            "received_at": "2026-10-06T10:15:22.935071+00:00",
+            "requested_at": "2026-10-06T10:15:20.215072+00:00",
             "sha256": "5793799202066c330332cce23b6c312f1ab2a24df40f6732cf6b3b71a16c2e1f",
             "status": "CAPTURED",
             "title": "2026年9月中国采购经理指数运行情况",
@@ -11017,8 +11087,8 @@
             "http_status": 200,
             "id": "nbs-profit",
             "params": {},
-            "received_at": "2026-10-06T00:09:52.437053+00:00",
-            "requested_at": "2026-10-06T00:09:50.483641+00:00",
+            "received_at": "2026-10-06T10:15:24.590982+00:00",
+            "requested_at": "2026-10-06T10:15:22.935140+00:00",
             "sha256": "7731d5e18d8f41630e495201dd02f3948751c8412598bddca9b4e5c06ffad06e",
             "status": "CAPTURED",
             "title": "2026年1—8月份全国规模以上工业企业利润增长15.7%",
@@ -11046,8 +11116,8 @@
               "sortTypes": "-1",
               "source": "WEB"
             },
-            "received_at": "2026-10-06T00:09:56.986694+00:00",
-            "requested_at": "2026-10-06T00:09:56.031198+00:00",
+            "received_at": "2026-10-06T10:15:28.992933+00:00",
+            "requested_at": "2026-10-06T10:15:28.014269+00:00",
             "sha256": "8179633acafc953c2d2692f2a36b38e2a2389afa4d46cd8f3cd9f892a4f34321",
             "status": "CAPTURED",
             "title": null,
@@ -11061,7 +11131,7 @@
           "scope": "PROVIDER_MIRROR_NOT_INDEPENDENT_NBS_OR_BALTIC_CONFIRMATION",
           "series_count": 1,
           "source": {
-            "bytes": 2718,
+            "bytes": 2708,
             "file": "raw/tanker.body",
             "http_status": 200,
             "id": "tanker",
@@ -11076,9 +11146,9 @@
               "sortTypes": "-1",
               "source": "WEB"
             },
-            "received_at": "2026-10-06T00:09:57.933619+00:00",
-            "requested_at": "2026-10-06T00:09:57.519420+00:00",
-            "sha256": "463f4e988e009e867c442ec425a185c667e07b6f2daf7190a0f0be3581c5d45f",
+            "received_at": "2026-10-06T10:15:29.915270+00:00",
+            "requested_at": "2026-10-06T10:15:29.469406+00:00",
+            "sha256": "b26dae5783a81c5813487e187911430f9056ebb38e609e46e53cfd4b82009713",
             "status": "CAPTURED",
             "title": null,
             "url": "https://datacenter-web.eastmoney.com/api/data/v1/get"
@@ -21206,15 +21276,11 @@
           "id": "19b4a261c4265bc73ff360ba45cf0e13ecd5b51e6c251d1aad2fb3a90e8d1aa4",
           "label": "波罗的海原油运价指数BDTI",
           "latest": {
-            "period": "2026-10-05",
+            "period": "2026-10-06",
             "value": "7185"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
-            {
-              "period": "2026-08-24",
-              "value": "2961"
-            },
             {
               "period": "2026-08-25",
               "value": "2886"
@@ -21330,6 +21396,10 @@
             {
               "period": "2026-10-05",
               "value": "7185"
+            },
+            {
+              "period": "2026-10-06",
+              "value": "7185"
             }
           ],
           "source_record_id": "tanker",
@@ -21342,16 +21412,16 @@
           "id": "365d6c3ee05a7efc49ffa02cc8cd637ab4504da952271ed10c8e38e7ff9bb666",
           "label": "DRAM/DDR516Gb(2Gx8)4800/5600",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
-            "reported_change_pct": "0.12",
-            "value": "58.067"
+            "period": "2026-10-06T18:10:00+08:00",
+            "reported_change_pct": "0.17",
+            "value": "58.167"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.12",
-              "value": "58.067"
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.17",
+              "value": "58.167"
             }
           ],
           "source_record_id": "memory",
@@ -21365,15 +21435,15 @@
           "id": "c50732e64a8bedaa10d60bac6a07aa5d5e5bee6e6b6524895888e70d1ddc7fdd",
           "label": "DRAM/DDR516Gb(2Gx8)eTT",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
-            "reported_change_pct": "0.77",
+            "period": "2026-10-06T18:10:00+08:00",
+            "reported_change_pct": "0.00",
             "value": "26.300"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.77",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "26.300"
             }
           ],
@@ -21388,14 +21458,14 @@
           "id": "a9602108bd544aaad865e894940d556513eb0152172ab9cd6cca648cbb92d2ae",
           "label": "DRAM/DDR416Gb(2Gx8)3200",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
+            "period": "2026-10-06T18:10:00+08:00",
             "reported_change_pct": "0.00",
             "value": "83.588"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "83.588"
             }
@@ -21411,15 +21481,15 @@
           "id": "8d6b02e416b86367d863e3e14c0135077b21d7ea88e31cfa926de5f7990a7bcd",
           "label": "DRAM/DDR416Gb(2Gx8)eTT",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
-            "reported_change_pct": "0.89",
+            "period": "2026-10-06T18:10:00+08:00",
+            "reported_change_pct": "0.00",
             "value": "14.125"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.89",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "14.125"
             }
           ],
@@ -21434,14 +21504,14 @@
           "id": "f54c43f0c39f3da2a8335eff1d3dffe4ce8e643fa90618d6627b50c63d4cdc3e",
           "label": "DRAM/DDR48Gb(1Gx8)3200",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
+            "period": "2026-10-06T18:10:00+08:00",
             "reported_change_pct": "0.00",
             "value": "46.321"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "46.321"
             }
@@ -21457,15 +21527,15 @@
           "id": "f74bcb607127b9729e3eccd5d84d88932b659a7aae1ff09e42122463865a23d7",
           "label": "DRAM/DDR48Gb(1Gx8)eTT",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
-            "reported_change_pct": "0.17",
+            "period": "2026-10-06T18:10:00+08:00",
+            "reported_change_pct": "0.00",
             "value": "5.950"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
-              "reported_change_pct": "0.17",
+              "period": "2026-10-06T18:10:00+08:00",
+              "reported_change_pct": "0.00",
               "value": "5.950"
             }
           ],
@@ -21480,14 +21550,14 @@
           "id": "b0580a5c63723553bd1c7891cf70d39d3313ad8037da054c6482e63debe1a71b",
           "label": "DRAM/DDR34Gb512Mx81600/1866",
           "latest": {
-            "period": "2026-10-05T18:10:00+08:00",
+            "period": "2026-10-06T18:10:00+08:00",
             "reported_change_pct": "0.00",
             "value": "13.720"
           },
-          "period_age_days": 1,
+          "period_age_days": 0,
           "points": [
             {
-              "period": "2026-10-05T18:10:00+08:00",
+              "period": "2026-10-06T18:10:00+08:00",
               "reported_change_pct": "0.00",
               "value": "13.720"
             }
@@ -21593,9 +21663,9 @@
       "version": "industry-fundamentals-v1"
     },
     "observation_is_prior": false,
-    "previous_status": "EXACT_PREVIOUS_READING_502f22957c7d0ec492ed03395b3c46f217dd7e7d",
+    "previous_status": "EXACT_PREVIOUS_READING_f0cbce6ec8c005b8cf93c800fcfa10dd6a1e1fd7",
     "research_authority": "NONE",
     "version": "industry-fundamentals-v1"
   },
-  "projection_hash": "b0020c383b380da06341348873ec06b17e03affdd3f20d7c354474da1cb6fb99"
+  "projection_hash": "e57358b004126224f60e68d580067ad467cba39f296f90ab64096d09c2cb1516"
 }
