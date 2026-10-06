@@ -35,6 +35,8 @@ Investment Authority remains `NONE`.
 
 **2026-10-06:** [北大荒补税基数 / 普源融资分母：两例有限期限判断](https://github.com/auguspp/decision-kernel/blob/1f83aa0ba182767b9a9fb6fea1f539e7c0a9e011/docs/readings/d1-tax-and-financing-controls-2026-10-06/README.md)。新用途分别检验报表恢复是否代表持续税后改善、融资后利润增长是否跨过每股分母与现金约束；原税制和现金结论不冒称新发现。两例尚未建立可用的期限特定Odds；11月30日只是分析者有限复核日，不是公司预约、任务或交易退出。来源/PDF/加权摊薄口径及PIT限制见原档案。此处仅复用既有NAVIGATION_ONLY，不新增horizon/Watch、按需登记、Human接受或投资决定；以下原卡片保持。
 
+**同日接续：** [普源原预告、同口径实绩与保存价格](https://github.com/auguspp/decision-kernel/blob/b8840419cfc7accddbfb8a79fe0f3bb78b7727d7/docs/readings/d1-rigol-expectation-price-2026-10-06/README.md)：三项H1实绩处于选定公司预告内，不能只用同比大增认定新正向意外；9月30日47.80元和5/20交易日端点变化仅为原日期背景。保留总收入/主营收入反例、现金及股数约束；不据此推定市场预期、机会不存在或新Human接受。原PDF/修订清单与事件价格链缺口见两文件档案。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
