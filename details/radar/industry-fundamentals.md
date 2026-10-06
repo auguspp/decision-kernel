@@ -24,20 +24,20 @@
 - 狭义乘用车/零售：2026-08，154.1478 万辆；前期 2026-07 146.0941；{&#x27;computed_yoy_pct&#x27;: &#x27;-23.63159135902532405636727908&#x27;}
 - 狭义乘用车/出口：2026-08，88.8509 万辆；前期 2026-07 91.8265；{&#x27;computed_yoy_pct&#x27;: &#x27;77.93632006985206502169859880&#x27;}
 - 物流业景气指数：2026-08，50.9 指数点；前期 2026-07 50.4
-- 波罗的海原油运价指数BDTI：2026-10-05，6586 指数点；前期 2026-10-02 6586
+- 波罗的海原油运价指数BDTI：2026-10-05，7185 指数点；前期 2026-10-02 6586
 
 全部序列在下面逐源列出；首页不是采集或研究准入范围。
 
 ## 相对上次保存
 
-{&#x27;NEW_STATISTICAL_PERIOD&#x27;: 12}；未变序列 348
+{&#x27;SAME_PERIOD_REVISION&#x27;: 1}；未变序列 359
 初次看见旧统计资料不叫今日新事件；来源缺失不叫需求下降。
 
 ## nbs-industry
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260915_1965308.html
-取得：2026-10-05T10:14:00.474757+00:00
+取得：2026-10-06T00:09:48.289903+00:00
 原发布日期：2026-09-15T10:00:00+08:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
@@ -150,7 +150,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260915_1965312.html
-取得：2026-10-05T10:14:00.852265+00:00
+取得：2026-10-06T00:09:48.783359+00:00
 原发布日期：2026-09-15T10:00:00+08:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
@@ -170,7 +170,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260930_1965449.html
-取得：2026-10-05T10:14:02.528744+00:00
+取得：2026-10-06T00:09:50.483573+00:00
 原发布日期：2026-09-30T09:30:00+08:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
@@ -204,7 +204,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260928_1965425.html
-取得：2026-10-05T10:14:04.003183+00:00
+取得：2026-10-06T00:09:52.437053+00:00
 原发布日期：2026-09-28T09:30:00+08:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
@@ -365,7 +365,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.stats.gov.cn/sj/zxfb/202609/t20260923_1965403.html
-取得：2026-10-05T10:14:06.051004+00:00
+取得：2026-10-06T00:09:54.118763+00:00
 原发布日期：2026-09-24T09:30:00+08:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
@@ -425,7 +425,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：http://data.cpcadata.com/api/chartlist
-取得：2026-10-05T10:14:07.980097+00:00
+取得：2026-10-06T00:09:56.031148+00:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
@@ -442,7 +442,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://datacenter-web.eastmoney.com/api/data/v1/get
-取得：2026-10-05T10:14:09.714872+00:00
+取得：2026-10-06T00:09:56.986694+00:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
@@ -452,7 +452,7 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://datacenter-web.eastmoney.com/api/data/v1/get
-取得：2026-10-05T10:14:09.994372+00:00
+取得：2026-10-06T00:09:57.519385+00:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
@@ -462,17 +462,17 @@
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://datacenter-web.eastmoney.com/api/data/v1/get
-取得：2026-10-05T10:14:10.448963+00:00
+取得：2026-10-06T00:09:57.933619+00:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
-| 波罗的海原油运价指数BDTI | 2026-10-05 / SOURCE_DATED_FREIGHT_INDEX | 6586 / 指数点 | 未提供 | {&#x27;period&#x27;: &#x27;2026-10-02&#x27;, &#x27;value&#x27;: &#x27;6586&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| 波罗的海原油运价指数BDTI | 2026-10-05 / SOURCE_DATED_FREIGHT_INDEX | 7185 / 指数点 | 未提供 | {&#x27;period&#x27;: &#x27;2026-10-02&#x27;, &#x27;value&#x27;: &#x27;6586&#x27;} / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 
 ## memory
 
 状态：OBSERVATIONS_AVAILABLE
 来源：https://www.dramexchange.com/
-取得：2026-10-05T10:14:11.924659+00:00
+取得：2026-10-06T00:09:59.829200+00:00
 
 | 指标 | 统计期 / 口径 | 原值 / 单位 | 同比或原披露变化 | 可比前期 / 来源新鲜度 |
 |---|---|---|---|---|
@@ -483,10 +483,10 @@
 | DRAM/DDR48Gb(1Gx8)3200 | 2026-10-05T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 46.321 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 | DRAM/DDR48Gb(1Gx8)eTT | 2026-10-05T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 5.950 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.17&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
 | DRAM/DDR34Gb512Mx81600/1866 | 2026-10-05T18:10:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 13.720 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.00&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| NAND/SLC2Gb256MBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 4.348 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.07&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| NAND/SLC1Gb128MBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 3.355 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;-0.09&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| NAND/MLC64Gb8GBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 41.587 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;2.05&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
-| NAND/MLC32Gb4GBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 19.533 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;1.21&#x27;} | 未保存独立前期值 / WITHIN_DISCLOSURE_WINDOW_NOT_NEW_TODAY |
+| NAND/SLC2Gb256MBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 4.348 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;0.07&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/SLC1Gb128MBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 3.355 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;-0.09&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/MLC64Gb8GBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 41.587 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;2.05&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
+| NAND/MLC32Gb4GBx8 | 2026-09-28T14:40:00+08:00 / PUBLIC_SPOT_SESSION_AVERAGE_NOT_CONTRACT_OR_EXECUTED_PRICE | 19.533 / UNKNOWN_SOURCE_CURRENCY | {&#x27;reported_change_pct&#x27;: &#x27;1.21&#x27;} | 未保存独立前期值 / STALE_OR_DELAYED_SOURCE_PERIOD |
 
 ## 尚未覆盖
 

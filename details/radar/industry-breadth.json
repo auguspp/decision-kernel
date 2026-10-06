@@ -1,9 +1,9 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "3a006804aa189a558122fad82efba69e7902259630fd22abb1762e564c5aaa89",
+    "base_reading_hash": "839995811672b0f698b5618ac19e99997f6a083e1c84780ad0fef14613c22911",
     "economic_review": "NOT_PERFORMED",
-    "generated_at": "2026-10-06T00:08:50.782660+00:00",
+    "generated_at": "2026-10-06T00:11:30.286751+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -6744,37 +6744,37 @@
       },
       "native": {
         "archive": {
-          "artifact_id": 11337613601,
-          "artifact_name": "industry-breadth-37295196489-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37295196489/artifacts/11337613601",
-          "bytes": 10513,
-          "expires_at": "2026-11-04T10:13:47Z",
-          "git_blob": "25e32e94efd19b7f76f5d86eb5cf033d7d29edbe",
+          "artifact_id": 11382090890,
+          "artifact_name": "industry-breadth-37392477005-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005/artifacts/11382090890",
+          "bytes": 10521,
+          "expires_at": "2026-11-05T00:09:36Z",
+          "git_blob": "7fd9784644db0a558df4bde935cac3c2c1c3672c",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-05T10:13:31Z",
+            "created_at": "2026-10-06T00:09:21Z",
             "event": "workflow_run",
-            "head_sha": "cade499fce16bd69826ae4f97529399e7a64b859",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37295196489",
-            "id": 37295196489,
+            "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
+            "id": 37392477005,
             "operation": null,
             "path": ".github/workflows/radar-industry-breadth.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-05T10:13:31Z",
+            "run_started_at": "2026-10-06T00:09:21Z",
             "status": "completed",
-            "updated_at": "2026-10-05T10:14:42Z"
+            "updated_at": "2026-10-06T00:10:04Z"
           },
-          "read_path": "sources/artifacts/51e3007228bfd8ebdfc32daa970686a191ee6dda7913b47b8323accb41eacaa5.zip",
+          "read_path": "sources/artifacts/e9944c2fba27675d5fcaf0a398e4a8891a606c7b51ad3838243d31513a22c49d.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "51e3007228bfd8ebdfc32daa970686a191ee6dda7913b47b8323accb41eacaa5"
+          "sha256": "e9944c2fba27675d5fcaf0a398e4a8891a606c7b51ad3838243d31513a22c49d"
         },
         "capture": {
           "attempted_requests": 1,
           "automatic_admission": false,
-          "capture_hash": "3a5ec7e239da293d891576b15b0c441ba131a427be79e4082908052d4d31d5d5",
+          "capture_hash": "586ea7b423bab2768b5750c603d2dd1b460ab1b499912d5b072c13eb09ace19a",
           "error_type": null,
-          "finished_at": "2026-10-05T10:13:46.998817+00:00",
+          "finished_at": "2026-10-06T00:09:36.046824+00:00",
           "http_status": 200,
           "human_attention_authority": "NONE",
           "investment_authority": "NONE",
@@ -6784,11 +6784,11 @@
           "receipt": {
             "params": {},
             "path": "/api/futures/basis/main-continuous-latest",
-            "received_at": "2026-10-05T10:13:46.993614+00:00",
+            "received_at": "2026-10-06T00:09:36.040432+00:00",
             "representation": "RETAINED_HTTP_BODY",
-            "requested_at": "2026-10-05T10:13:43.812630+00:00",
+            "requested_at": "2026-10-06T00:09:34.263528+00:00",
             "response_bytes": 67316,
-            "response_sha256": "98cc025ff1a09589e1972884e53d4694e60e388b46acce340aff48b13579933a",
+            "response_sha256": "9abc72765beb44df27f674661b08c0e238becf9ec25999a7bb5dd78d0a3d79b5",
             "status": "CAPTURED_HTTP_RESPONSE"
           },
           "research_authority": "NONE",
@@ -6797,12 +6797,12 @@
           "version": "industry-breadth-snapshot-v1",
           "workflow": {
             "attempt": 1,
-            "code_commit": "cade499fce16bd69826ae4f97529399e7a64b859",
+            "code_commit": "95000ff4ae42f7d4c45e041a4244de426950cd66",
             "event": "workflow_run",
             "ref": "refs/heads/main",
             "repository": "auguspp/decision-kernel",
-            "run_id": 37295196489,
-            "trigger_run_id": 37295151349,
+            "run_id": 37392477005,
+            "trigger_run_id": 37392317813,
             "workflow": ".github/workflows/radar-industry-breadth.yml"
           }
         },
@@ -6810,17 +6810,17 @@
         "capture_age_status": "RECENT_CAPTURE",
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-05T10:13:31Z",
+          "created_at": "2026-10-06T00:09:21Z",
           "event": "workflow_run",
-          "head_sha": "cade499fce16bd69826ae4f97529399e7a64b859",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37295196489",
-          "id": 37295196489,
+          "head_sha": "95000ff4ae42f7d4c45e041a4244de426950cd66",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37392477005",
+          "id": 37392477005,
           "operation": null,
           "path": ".github/workflows/radar-industry-breadth.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-05T10:13:31Z",
+          "run_started_at": "2026-10-06T00:09:21Z",
           "status": "completed",
-          "updated_at": "2026-10-05T10:14:42Z"
+          "updated_at": "2026-10-06T00:10:04Z"
         },
         "snapshot": {
           "projection": {
@@ -6882,7 +6882,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 0,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "fa717ef43b0a6b325236a16e03bdb70ae639d7bd4e9926deb59df0cf54f64c40"
               },
               {
@@ -6921,7 +6921,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 1,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c7afc54e800a0b1eb6e87507f60916637e7f53ff5a221108918724b6b90839b1"
               },
               {
@@ -6960,7 +6960,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 2,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "65eea5539be162564dc7615302644603c7897462348093414b8c79fcf7cb98b7"
               },
               {
@@ -6999,7 +6999,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 3,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d9dfc4d5928d48ed26c05d5f2021de0d5321db11c2599d58a3775b16cd9b3587"
               },
               {
@@ -7038,7 +7038,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 4,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "a14dd36c2d46cdba12ad06c9a27ab444446c55866997999eb4c3c66807332991"
               },
               {
@@ -7077,7 +7077,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 5,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "405a2c807b0b312b5a61588f8b1f0dd7bdc18b3f068d4016bcc4e0d57f95200c"
               },
               {
@@ -7116,7 +7116,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 6,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "4c8a694c6a38b48b91c49361a42329b75f8ec5b1922fdb5b5fdefbb933fae28a"
               },
               {
@@ -7162,7 +7162,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 7,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0e3997a9e175e7a1729a015a027d04620bd9e986b5adbfca50e4bb15671b5ad2"
               },
               {
@@ -7201,7 +7201,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 8,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "e7923a7eb171a88b3ea3a03776e7f6dacd7877f4adda75ae36aef77046a40c40"
               },
               {
@@ -7240,7 +7240,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 9,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "daa93dd7d73c475afa84f789d6d0f8a6c237fcc7e100d20542a54b77413218c2"
               },
               {
@@ -7279,7 +7279,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 10,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "bc5d157646b64160d9747d3d50983de8bf85b1ddc70993ee0592a886e5208c79"
               },
               {
@@ -7318,7 +7318,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 11,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "851c5e03161ef3012147bae661c551ad29f0aa77723713ca1b56a4edde2959a6"
               },
               {
@@ -7357,7 +7357,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 12,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1b24b8e7195d149e6e0988a65b05067c91e79e9e48493accbfca7640fa360a11"
               },
               {
@@ -7396,7 +7396,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 13,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c9d6830a38fee644b53da18b2f856ef9df82eb9fb33793ba6a4b84cd80935aa5"
               },
               {
@@ -7435,7 +7435,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 14,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "57151fe4421d3b19835560ab8888e036148a0cb67efa91211980863386d034ad"
               },
               {
@@ -7474,7 +7474,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 15,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9b6e3b06b2ee8eb8e3ec94bf85237e455112a2d6ceefb1bb5cabdc259b501720"
               },
               {
@@ -7513,7 +7513,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 16,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1b00f9e7b46a0dc91fe5f6ad2dc1f6bb3de8e31f28b4309878e2a345f4cd6221"
               },
               {
@@ -7552,7 +7552,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 17,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "2ee818526636157dfe524569dc9d182999e4a679221ac1267359f61efde252b1"
               },
               {
@@ -7591,7 +7591,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 18,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "463f155cc3cc4b9696b165bf54a395e3cd10301498ccd8141c7c173ed2daaea7"
               },
               {
@@ -7630,7 +7630,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 19,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d3739beef1fb2d721d474e004c51d6bd81f52eac574a11bffc22670b1703db4b"
               },
               {
@@ -7669,7 +7669,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 20,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d3dbb85232609853ec5392320dbcc3908f66544971a1050331a8c4db94924565"
               },
               {
@@ -7708,7 +7708,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 21,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "011c5da7efb58ca57445ac5aa395a4deedb11e90f5ee942d7f2cfcb0ef3233c3"
               },
               {
@@ -7747,7 +7747,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 22,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9d072893747773a3375fedef6e3544503aee4acb353ade4aa18892185808c3b0"
               },
               {
@@ -7786,7 +7786,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 23,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "297cf03e145881810b4b76f9b6b59f693ff55dfc9a36b029290683be3b144c48"
               },
               {
@@ -7825,7 +7825,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 24,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0ac5680497eae6c25cf7b678558a189a2660ceb7aba542da337f16fa0dabb640"
               },
               {
@@ -7864,7 +7864,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 25,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "f4c8f1263e78b28df0c0111617bc4e89ca5351a1c8e701e6aab60376f8396959"
               },
               {
@@ -7903,7 +7903,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 26,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1b3ce5d11414c605380e8a6c7859ccc44ebf167e0cd85f65d3229a270b2ace43"
               },
               {
@@ -7942,7 +7942,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 27,
-                "spot_age_days_at_capture": 3,
+                "spot_age_days_at_capture": 4,
                 "version_id": "f7d9a730de4025434744690fab0ad753391bd2d912e183cdb287928e1ef5a9c0"
               },
               {
@@ -7981,7 +7981,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 28,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9d2d333555ace675bf52d67e4c6a3430a605fb5921818106279853e51aaddf5e"
               },
               {
@@ -8020,7 +8020,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 29,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "6fec3db506186198167eb5c1f6139a0d43a30ff96e9f1f223d1fb21c5dd64feb"
               },
               {
@@ -8059,7 +8059,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 30,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "ee16a86b29f7d82a6a5512329911d9cd347c1e47309d0f7162b0023a3b155a75"
               },
               {
@@ -8098,7 +8098,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 31,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "ff40d4dd8fd4b6929c54d29d4405e1f153442be86b99ecd01f55c07cee6bb07a"
               },
               {
@@ -8137,7 +8137,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 32,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d74c880750dbdc6e37eeaa1d6c309d39cdb8c9327f1e1e1055f94088fe171b8a"
               },
               {
@@ -8176,7 +8176,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 33,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c28b3b2ad619cd3c54212e0cab0c7b1089abc8821747acd8b5ce891a1d0d65b9"
               },
               {
@@ -8215,7 +8215,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 34,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "b67722920ba2d74500348679fd81bfded16fb454a70dd44e91f1f512c7de3682"
               },
               {
@@ -8254,7 +8254,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 35,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "2a5e1f637856baead09f920136e530feafe4fbcbef4f553fa77894478a3b249e"
               },
               {
@@ -8293,7 +8293,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 36,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "746073af8591451e62300dc4a1c94ad221d2e0857408ca4087f76aae2b22fea4"
               },
               {
@@ -8332,7 +8332,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 37,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "5e0391ad9cb4e5ae18f6f136638663737dcac8c8b0f591edd47ea76e59a25eeb"
               },
               {
@@ -8371,7 +8371,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 38,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "f1f9ad682580f96787b317bb0201d4629aa4a1de516f2d3787ca22c818cf1e50"
               },
               {
@@ -8410,7 +8410,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 39,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "03cd187ace7202a939d5bc30c48980bfb0f8f64e0650ac86d32e1122dc091b8d"
               },
               {
@@ -8449,7 +8449,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 40,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b663f1b1f5ac7897c669bdaace43df3bc86cf5bb03ddf4b7fe92554ebc063d29"
               },
               {
@@ -8488,7 +8488,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 41,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1ed77716294cf6bdd90fbc70dd732e728ecdec7cca141f0d7a27d17782bd7eeb"
               },
               {
@@ -8505,8 +8505,8 @@
                 "qualification": "CONTEXT_ONLY",
                 "question_status": "NOT_FORMED",
                 "raw": {
-                  "average_close_basis": "31.88",
-                  "average_settle_basis": "32.06",
+                  "average_close_basis": "32.02",
+                  "average_settle_basis": "32.38",
                   "close_basis": "18.2",
                   "close_basis_rate": "2.50",
                   "close_price": "711.0",
@@ -8527,8 +8527,8 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 42,
-                "spot_age_days_at_capture": 3,
-                "version_id": "47d976cc65677eab2733c3bd6c0ff11ef72084ac23ead2a08ab52478b6b285cb"
+                "spot_age_days_at_capture": 4,
+                "version_id": "ccbaab1d458dff31813a94ea5a65da6bacc6e9e9001f7f4c0aab55fe797a5f5f"
               },
               {
                 "identity": {
@@ -8566,7 +8566,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 43,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1ac9efc647adc1113d70d3216736f0e2c5895aaead66364cf1726aef4a4947d5"
               },
               {
@@ -8605,7 +8605,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 44,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "38153d65d53a9e89bba7391068e5f202dc148159755458ec13d81eefadacca76"
               },
               {
@@ -8644,7 +8644,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 45,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c37decb6865c2f3c12a80fe3272495556f7a75ec12bad7eb3991ed2e62343a7d"
               },
               {
@@ -8683,7 +8683,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 46,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "44c91890b5012d9b464f2bbf832c0d60362b1a18fb44da9596be168f9982f265"
               },
               {
@@ -8722,7 +8722,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 47,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "5610300a248e6e1522dce19eccbc1b8895ba42a29a7dd2b3d7a982b854854fc7"
               },
               {
@@ -8761,7 +8761,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 48,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "02a4aaa31e8bf9eb100cd6904d0837aa6505dee100448667830d4a010fdb3e08"
               },
               {
@@ -8800,7 +8800,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 49,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "da683aed4f26e780a4b3cd05c7c9eceeefea26d92aba45875c8f9f8a1a226977"
               },
               {
@@ -8839,7 +8839,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 50,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "8b59cd6b0e8c5d34c8ae43f42ce9c63d0e0f6a51693d28a1425059c85c09281d"
               },
               {
@@ -8878,7 +8878,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 51,
-                "spot_age_days_at_capture": 3,
+                "spot_age_days_at_capture": 4,
                 "version_id": "f4470df08a2ae9232019124cab77cd88bc8e55f7d21c4e057d158f233ad2ad1f"
               },
               {
@@ -8917,7 +8917,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 52,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c98cda56782d0e9f0b1a2d55976fcf060b685487bbd74c4167d85f3c925b117a"
               },
               {
@@ -8956,7 +8956,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 53,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0940dca6a1a5e55146594be25781af96a1b81c466bf3cbc4cde2cd59b9f5271b"
               },
               {
@@ -8995,7 +8995,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 54,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "ab5261d00c4f20651ea49a8c79a110b0e4f71386c496812122d1a24621ead5b3"
               },
               {
@@ -9034,7 +9034,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 55,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "aa1dfcf7b9fea61102f381854dda45c5e62794c63c901b10e255af8d703f7d32"
               },
               {
@@ -9073,7 +9073,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 56,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0da9591369c64167325fbe8e472a0ec4157fa8edc92831b4d858b5b35008abcf"
               },
               {
@@ -9112,7 +9112,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 57,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "5d6ec380d509a6415f7ca17237b64546e7282c9fe16dcab535a0243d6295c4c5"
               },
               {
@@ -9151,7 +9151,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 58,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "30385a99b5426e56bda03c96186f204b7f60765d6bb07fbeefdb602dfd59ac76"
               },
               {
@@ -9190,7 +9190,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 59,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "b9876dadae53c3e3e6dcbf2fe6be16f75585a863c94e6b88cbab266671a2b81b"
               },
               {
@@ -9229,7 +9229,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 60,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "8218f19439cdb4cc5ec99d171a289c0ca2dd450e9d492b9cc29db9254504530e"
               },
               {
@@ -9268,7 +9268,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 61,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d9d0374cb9f7bd7dcdd6476c5d259f2d6efe99f45e0f55cf8fc4801868727ba0"
               },
               {
@@ -9307,7 +9307,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 62,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "e051ef96681608ee237a683c96bdccbc93bf4da883e077a161c972469de5798a"
               },
               {
@@ -9346,7 +9346,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 63,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "3ffc1ae14cd0c5ec18ecce11040d8d014c3ce21618f3e5336f0b6835fbaab584"
               },
               {
@@ -9385,7 +9385,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 64,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d56f4d8f5a5ad69e8239671ac7be880a46fe03367b94f95c35518301b2626b10"
               },
               {
@@ -9424,7 +9424,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 65,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "9ccf11d5bbc4ce086d263b711bcf500546361f8b80ff81318cb3bd82222cf878"
               },
               {
@@ -9463,7 +9463,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 66,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "737e3996d3107e70196ccb88291ed2d355086187aada3d331e28856a351f6b37"
               },
               {
@@ -9502,7 +9502,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 67,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "173a65f02f10b17dc3d6114a5dbfae1055c01c49fa8102cee0deb57ee1f57941"
               },
               {
@@ -9541,7 +9541,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 68,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "e14b2c12c0f6c71248ad0c951858b64954ec97c0c645e1363c46a5f731a9650c"
               },
               {
@@ -9580,7 +9580,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 69,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "2a3e48cdf11a35da61af764e06e10e8b8b9e498ddb69cf631b8b93db050540c5"
               },
               {
@@ -9619,7 +9619,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 70,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "cca2f54247374cd302c0385ca031bfbfd2cabb88c3e713106cd9fd8b3b152f25"
               },
               {
@@ -9658,7 +9658,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 71,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "d17f22ba74220fe30bdb98251f1ed0981c19ebfe4f6b402ede5cabfaabd8b813"
               },
               {
@@ -9697,7 +9697,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 72,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "06cda358a781d3f2214e69a92df9d0b1cdf9e2a91b1f8466dfe2a35b1b372cfa"
               },
               {
@@ -9736,7 +9736,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 73,
-                "spot_age_days_at_capture": 6,
+                "spot_age_days_at_capture": 7,
                 "version_id": "cab4ab3f3981a26394a0e54daa3245c6662356e154aa1a14195ff3b863c96351"
               },
               {
@@ -9775,7 +9775,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 74,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "8d2e089d3b2aa05fa2c8ea95a9b853fa4d50741e9726157e386f37663d752dc7"
               },
               {
@@ -9814,7 +9814,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 75,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "2f61f685f3a0cf0072948a4d54d202e4dcb24a8f11ffc1c44468dc49fb951187"
               },
               {
@@ -9853,7 +9853,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 76,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "ced211d2675ba1d4bec4a31a72b95da511b0b9444c08d9826a9caa86988f7e5b"
               },
               {
@@ -9892,7 +9892,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 77,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "6b1c1fc4ef9bb9faa9e820ee78112a2ebbd1b1970e1d5f868849665517be74b6"
               },
               {
@@ -9931,7 +9931,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 78,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "32ec2bc763d572619f8a3a72380a0442df4c8b0d92600332394ef4460aa3e010"
               },
               {
@@ -9970,7 +9970,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 79,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "cac246717815534a130917996d94879ede5ca0fb7d243244a60e2a31357a60f1"
               },
               {
@@ -10009,7 +10009,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 80,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1f3b7f55a1f4fe9afc5bbbd6d46ed2f422dc62bd3cc879cc13cd425bb09b2cdf"
               },
               {
@@ -10048,7 +10048,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 81,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "21505d0bee9430ba6628ca914a034aedaeb7c5d887b13c121135fd967d1b236c"
               },
               {
@@ -10087,7 +10087,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 82,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "6edab93b0bcb56668a5040cf6a3498a850a8b73b5c0efacac54baeeb0e3d2783"
               },
               {
@@ -10126,7 +10126,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 83,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c754f796c7adc17f30db89d1666fc539c3122ad7076b483340d43a5b79985eac"
               },
               {
@@ -10165,7 +10165,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 84,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "99d7d03b4599fa2aef8348fc19c5580247250974b771da21ed736d04541378a9"
               },
               {
@@ -10191,21 +10191,21 @@
                   "default_value": "Y",
                   "name": "生猪主连",
                   "reference_site": "河南",
-                  "settle_basis": -430,
-                  "settle_basis_rate": "-4.23",
-                  "settle_price": 10590,
+                  "settle_basis": -520,
+                  "settle_basis_rate": "-5.12",
+                  "settle_price": 10680,
                   "spot_indicator_id": "4320937",
                   "spot_price": 10160,
-                  "spot_publish_date": "2026-10-05",
+                  "spot_publish_date": "2026-10-06",
                   "thscode": "LHZL.DCE",
                   "ticker": "lh9999",
-                  "updated_at": "2026.10.05 10:53:20",
+                  "updated_at": "2026.10.06 00:11:24",
                   "variety_name": "生猪"
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 85,
                 "spot_age_days_at_capture": 0,
-                "version_id": "8838b0daec3f068d0c09a3a85beb6e98ba711b442d857ce65107cf3d20db0113"
+                "version_id": "dedf82989be59f13ddb8659a5fe708161279b16af9a921bccd90f736a687876f"
               },
               {
                 "identity": {
@@ -10243,7 +10243,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 86,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "dad67a2724a44cd01dd5247fd67e12308cf43fe59aebe3fb015522a81e295096"
               },
               {
@@ -10282,7 +10282,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 87,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "b370f35497a456acb63ca403693d9d80081b9e3a0a4a10a95080766c30970de8"
               },
               {
@@ -10321,7 +10321,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 88,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0a1ecd3addbf8dfc6202d1d16ec0f9c1326c23770cfd805267f76084d672a174"
               },
               {
@@ -10360,7 +10360,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 89,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "15465c0043651f481492168694be09e284fa15936a92ad1e9fd1e3600f468a3c"
               },
               {
@@ -10399,7 +10399,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 90,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "a0c19e0895ebc045bcfe80d28774e7760a87a0be8c85f698fa53346ee3f734c5"
               },
               {
@@ -10438,7 +10438,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 91,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "cb2aac6cff5766dcd92f1dc9298b0ea6b86ac34d43c30d208d65d5bcc49de015"
               },
               {
@@ -10477,7 +10477,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 92,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9edf57d41513807cd67ff7c3d4c6867d6e95201d9dacdc37baa7852972e27e00"
               },
               {
@@ -10516,7 +10516,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 93,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "b386d0401165064ab68e49b87f60d48d0a066c936f68523a7c40681ff987279f"
               },
               {
@@ -10555,7 +10555,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 94,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "50f36f394660a8b256e9a6e58fa4107ed437de85b45f5971e6aa234dc8cda694"
               },
               {
@@ -10594,7 +10594,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 95,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c8201e912104b4e2e64f83723e048cf65ad3f16812f94924b0c435afcc12df91"
               },
               {
@@ -10633,7 +10633,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 96,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "a4ab911f11949a2b9ec212fe3755f3a012ed03d366f14d410919659ce13c60e1"
               },
               {
@@ -10672,7 +10672,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 97,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "952e7af4ce6d3f25da90c191906b1fe774833ebdba43b92ce3f63b9dc2679274"
               },
               {
@@ -10711,7 +10711,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 98,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "2ea68d96433754937d739f667574c9f4521c35af28c71b2b4b43e80eabc58da9"
               },
               {
@@ -10750,7 +10750,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 99,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "79c974fe0afc361635e3a4bc1ef699eedb7239b813c09d365a4747cc1da83e57"
               },
               {
@@ -10796,7 +10796,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 100,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "06ecedbd5006642b5112242062f8d75e95d3d5ad2466b898081c4f16e9af00a4"
               },
               {
@@ -10842,7 +10842,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 101,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "fc293960f5bc8eb41d8db41ce1c60765636bdf403dc19eef097e58889862da74"
               },
               {
@@ -10888,7 +10888,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 102,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "2f91c68f295cf3d7ebf0b7b5bd69fa2b19910d1c13082fc01d4b89f2c58e402a"
               },
               {
@@ -10934,7 +10934,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 103,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "f1c0c8647af46ec4e1014ea1ad3ceb40ae89f70b4bc8e243365040551a453e31"
               },
               {
@@ -10980,7 +10980,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 104,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c5451446cdf5cc338f4b11d9fcdaf9d3fc2a47ce0ee32cfc88968d44ad4533cf"
               },
               {
@@ -11026,7 +11026,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 105,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "b8e3ab54261c9324e8ff2290cd215ea1d6c586ac5d2b46e96107b0d7bc1976d1"
               },
               {
@@ -11072,7 +11072,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 106,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "efdf7165ade98bf01e19abb088c3dc1bca501cb89198011c38042c818d278c99"
               },
               {
@@ -11118,7 +11118,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 107,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "43d747fc0f05d05e935484dae59731f12a3fa66d18da203eb92d685b57f7badf"
               },
               {
@@ -11157,7 +11157,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 108,
-                "spot_age_days_at_capture": 6,
+                "spot_age_days_at_capture": 7,
                 "version_id": "801d24bb96daa5a497fc32ac519a296ce3c7cc35799015b55f7c241fc8b4186c"
               },
               {
@@ -11196,7 +11196,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 109,
-                "spot_age_days_at_capture": 6,
+                "spot_age_days_at_capture": 7,
                 "version_id": "250ac6c634e6a086692fb8587a9550274102fe7a1eaebf21fa9bbb766a2649e7"
               },
               {
@@ -11235,7 +11235,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 110,
-                "spot_age_days_at_capture": 355,
+                "spot_age_days_at_capture": 356,
                 "version_id": "505577643919016491f0030fc5c47cc235e7e7cc20b3d6cccb17e73c64c10764"
               },
               {
@@ -11274,7 +11274,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 111,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "648b25f365dd3270cc1f8894ac548094cc375426ca9da7c24e3eb0388399399d"
               },
               {
@@ -11313,7 +11313,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 112,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0d93dd90900284b3b2fe415fdf93d182d97ef994387f1554d6429e256bc464c0"
               },
               {
@@ -11352,7 +11352,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 113,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0e9df54d401e3070dd91438b7fc57cd1ece504a29c95cc76c436b4e45717f98a"
               },
               {
@@ -11391,7 +11391,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 114,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "42be97823cb20fab4541337515e7bc8cf3b8c5fadb3170fdba9f5b9e64c0bf07"
               },
               {
@@ -11430,7 +11430,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 115,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "c816b21369728875b90817e6b1855b67bfcee835c4186b6239a6d05dc8a5a63e"
               },
               {
@@ -11469,7 +11469,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 116,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "dcc377a3e7a8af4823d5dfa003ca985e9a8989618b69237c37f75927c661d78a"
               },
               {
@@ -11508,7 +11508,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 117,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1b3c31e64aa7c468b94669df39a37f6363aa535dce906a99bfd7ba7f7869b4b7"
               },
               {
@@ -11547,7 +11547,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 118,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "49faa4fdac81a06d081a08c264ea7b99396f6e150518fa6cde24be97570518ef"
               },
               {
@@ -11586,7 +11586,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 119,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "adbb79990d8b1ce054f6aead9cde9c5aed686eb7e7f6588c09c3d4e7295524c2"
               },
               {
@@ -11625,7 +11625,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 120,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "17ca47cc47d40c198f27db6cebcf311d1290d9ca51228abca6929ecf6d85c3d3"
               },
               {
@@ -11664,7 +11664,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 121,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1cedf7175bc5c43830a8accfbe3b0dbc1a190f741f0a321c6be17285d6e4111b"
               },
               {
@@ -11703,7 +11703,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 122,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9af9541d51cc292fe689be5ffd07d474c848ccd5faea7b275b75a27513e0ced4"
               },
               {
@@ -11742,7 +11742,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 123,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "cc38238cffe2bd7ff984d957945965a738377366bfa1d3b67208af8905e4c699"
               },
               {
@@ -11781,7 +11781,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 124,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "e4b5110aaa2d10f3e7c7216a7400edecd774dc7b77fe60545a85bbf147d95ee9"
               },
               {
@@ -11820,7 +11820,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 125,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "0f8b7f46b10d593d2f8f5d79f52a40d3f403ffe9a562e8c520ef7d258368255f"
               },
               {
@@ -11859,7 +11859,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 126,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "cab8cf61a8864b84ca2650892d4c8f14867e9c42b17006b1a5c86ddf706364a8"
               },
               {
@@ -11898,7 +11898,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 127,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "e95e8bc481616ba1ce8ae927ebc09d49fcb008dbcb77e7114fbe94b94c18f6df"
               },
               {
@@ -11937,7 +11937,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 128,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "4696c184b17a189261fb7b7a1bfa4f6952576409ddfc6c6eef8701b55c6eb57b"
               },
               {
@@ -11976,7 +11976,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 129,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "b6ecf89c07251a8677df652924c5cbfda0dfb89620d18255485f2dc106941242"
               },
               {
@@ -12015,7 +12015,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 130,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "4d56b803ad522f20f215c2bfc7d301d65673e902763462d08e3f78160541c009"
               },
               {
@@ -12054,7 +12054,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 131,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "348678c27c29b093b680f7cd7b7f763a2bf3f324a341f21e834a97f9b65873a1"
               },
               {
@@ -12093,7 +12093,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 132,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "e951464fae2b3f6eef99ef5d97c011fc6e384091a7372cf5dd7fa95985d4da90"
               },
               {
@@ -12132,7 +12132,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 133,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "6228080d534e205fbb30c8d1e7ca5633cb012e783f47c2e387782e9c1b65c081"
               },
               {
@@ -12171,7 +12171,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 134,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "dc92ef13a98f13a6e9739880486af27eb59b11ce3ef9f54d928214b5670fd57e"
               },
               {
@@ -12210,7 +12210,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 135,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "4572ba53cc0b9d0f9f0204b251b8fa04d552e11154421810c3c93cd1399b9e6e"
               },
               {
@@ -12249,7 +12249,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 136,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "df36d9ad3484b0482b566f95dc87300985669f9f8c3143378c9c417fd2246e07"
               },
               {
@@ -12288,7 +12288,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 137,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "039954c7fbe17a334f74d93cd03b55b39cfa1909f47dc9b2e6b1e0b380c349bc"
               },
               {
@@ -12327,7 +12327,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 138,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "78b57adbd03d824811ff7de5ff5e7f5d66228ace9d33939f705de73cab7f2cbd"
               },
               {
@@ -12366,7 +12366,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 139,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "22f37fbeb7935aca3d9efbc15e6d1e6fbb87800bf8a7841118641e9f80fe8af3"
               },
               {
@@ -12405,7 +12405,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 140,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "2e78d99f6015e25c50c66e007d8305017a913b45068a29e03c14343af942ce09"
               },
               {
@@ -12444,7 +12444,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 141,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "9cd1965ddf4b2fbba703e39b1f306ad52cf71b3babbb6a71f13b8c9c413297e0"
               },
               {
@@ -12483,7 +12483,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 142,
-                "spot_age_days_at_capture": 5,
+                "spot_age_days_at_capture": 6,
                 "version_id": "1350d429b1d8ccb0fde61f4ebae05f4cf3b5c4fb6badbd74965333deaae89450"
               },
               {
@@ -12522,7 +12522,7 @@
                 },
                 "source_date_status": "DATED_SOURCE_CLAIM",
                 "source_row": 143,
-                "spot_age_days_at_capture": 0,
+                "spot_age_days_at_capture": 1,
                 "version_id": "d0188e34f045c7934ff57b5e26cc3b1e721358cbc1e58cf6a2650ce87e3ffaf7"
               }
             ],
@@ -13511,17 +13511,17 @@
               "bytes": 67316,
               "params": {},
               "path": "/api/futures/basis/main-continuous-latest",
-              "provider_timestamp": 1791195226349,
-              "received_at": "2026-10-05T10:13:46.993614+00:00",
+              "provider_timestamp": 1791245375657,
+              "received_at": "2026-10-06T00:09:36.040432+00:00",
               "representation": "RETAINED_HTTP_BODY",
-              "requested_at": "2026-10-05T10:13:43.812630+00:00",
-              "sha256": "98cc025ff1a09589e1972884e53d4694e60e388b46acce340aff48b13579933a"
+              "requested_at": "2026-10-06T00:09:34.263528+00:00",
+              "sha256": "9abc72765beb44df27f674661b08c0e238becf9ec25999a7bb5dd78d0a3d79b5"
             },
             "status": "BREADTH_CONTEXT_RETAINED",
             "units_and_ratio_scale": "RAW_PROVIDER_FIELDS_NOT_UNIFORMLY_ESTABLISHED",
             "version": "industry-breadth-snapshot-v1"
           },
-          "projection_hash": "1a2fea4928764aa5e4aaf728c9f7b23a2e3166c6ce73f24812d5014207cd112f"
+          "projection_hash": "9d8737bc98e438e513715caa48226245e1c65a38fe05beea6a91fedda2d4011a"
         },
         "status": "SAVED_NATIVE_SNAPSHOT"
       }
@@ -13529,5 +13529,5 @@
     "signal_transition_authority": "NONE",
     "version": "industry-breadth-snapshot-v1"
   },
-  "projection_hash": "b61e68590feb841d71f67a90b167875b54867b1d3fbd74a4ffbbf3d4105d1cbc"
+  "projection_hash": "a01700991ec86564244d3ab878db905b4815ef0a31834a5cd41fbcca3d980528"
 }
