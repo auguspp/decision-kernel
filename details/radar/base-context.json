@@ -58,19 +58,19 @@
     }
   ],
   "checks": {
-    "finished_at": "2026-10-06T08:12:11.817991+00:00",
+    "finished_at": "2026-10-06T08:15:17.428784+00:00",
     "meaning": "CHECKED_KNOWLEDGE_WINDOW_NOT_ATOMIC_UPSTREAM_SNAPSHOT_OR_TRADING_CALENDAR",
-    "recheck_after": "2026-10-07T08:12:11.817991+00:00",
-    "started_at": "2026-10-06T08:11:40.874911+00:00"
+    "recheck_after": "2026-10-07T08:15:17.428784+00:00",
+    "started_at": "2026-10-06T08:14:45.534902+00:00"
   },
   "code_commit": "9a4835f44ac1498de0b86e2a878fe57035997151",
   "entry_ref": "read-model/current-state",
-  "generated_at": "2026-10-06T08:12:11.817991+00:00",
+  "generated_at": "2026-10-06T08:15:17.428784+00:00",
   "human_attention_authority": "NONE",
   "investment_authority": "NONE",
   "lanes": {
     "inbox": {
-      "checks_at": "2026-10-06T08:12:03.842221+00:00",
+      "checks_at": "2026-10-06T08:15:09.116419+00:00",
       "gaps": [
         "INBOX_HAS_NO_TYPED_RESULT_NOT_REVALIDATED_ODDS"
       ],
@@ -653,7 +653,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "50fe28e04954a50d09ad43500d3a46287fec2dfaccb21192ac56d52b66097317"
         },
-        "source_checked_at": "2026-10-06T08:12:03.475066+00:00",
+        "source_checked_at": "2026-10-06T08:15:08.790736+00:00",
         "status": "SAVED_INBOX_DELIVERY_ONLY"
       },
       "latest_attempt": {
@@ -676,7 +676,7 @@
       "restore_authority": false
     },
     "sector": {
-      "checks_at": "2026-10-06T08:11:54.763646+00:00",
+      "checks_at": "2026-10-06T08:14:59.562945+00:00",
       "delivery_selection": "SAME_SESSION_RESULT_PRESERVED_NOT_NEW_EVENT",
       "gaps": [],
       "health": "LATEST_ATTEMPT_SUCCEEDED",
@@ -803,7 +803,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "0dd4e518d7d8b33a56ddcc2cf02bd879a72eca80183face136d4107e573b57b8"
         },
-        "source_checked_at": "2026-10-06T08:11:54.763602+00:00",
+        "source_checked_at": "2026-10-06T08:14:59.562900+00:00",
         "state_archive": {
           "artifact_id": 11090825914,
           "artifact_name": "sector-radar-state-bundle",
@@ -952,7 +952,7 @@
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
           "sha256": "87a3dcff3a392ff749b588401c883e86dd75b65a56d12611672ab7b571b0973a"
         },
-        "source_checked_at": "2026-10-06T08:11:45.503503+00:00",
+        "source_checked_at": "2026-10-06T08:14:50.131278+00:00",
         "state_archive": {
           "artifact_id": 11381493698,
           "artifact_name": "sector-radar-state-bundle",
@@ -988,7 +988,7 @@
       "restore_authority": false
     },
     "stock": {
-      "checks_at": "2026-10-06T08:12:02.192878+00:00",
+      "checks_at": "2026-10-06T08:15:07.498920+00:00",
       "gaps": [
         "PARTIAL_STOCK_COVERAGE_NOT_COMPLETE_OR_QUIET"
       ],
@@ -1183,7 +1183,7 @@
           "sha256": "bbc5ebeab77ac3903574f5b5a5460a884f6c13444c9eb103b2c38f256c89b6eb"
         },
         "scope": "BOUNDED_SURFACED_SECTOR_MARKET_EXPRESSION_NOT_ALL_A_SHARES",
-        "source_checked_at": "2026-10-06T08:12:02.192853+00:00",
+        "source_checked_at": "2026-10-06T08:15:07.498886+00:00",
         "status": "PARTIAL_STOCKS_FOR_SHADOW_READING",
         "surfaced_codes": [
           "300904.SZ",
@@ -1214,12 +1214,12 @@
     }
   },
   "pending": [],
-  "reading_hash": "1a58735c650c21256fb63ae5426e35577d25b527cf4157ab6875a2935df7cd33",
+  "reading_hash": "ffef7c78874f8700af5e7071a675063d93d03e15df32a4cc04fd147cae3f9668",
   "refresh": {
     "attempt": "1",
     "event": "workflow_run",
     "publication_status": "BLOB_READBACK_REQUIRED_NOT_UPSTREAM_PRODUCTION_ACCEPTANCE",
-    "run_id": "37434400505",
+    "run_id": "37434428492",
     "trigger_run_id": "37434397411",
     "workflow": ".github/workflows/current-state-read-entry.yml"
   },
@@ -1228,7 +1228,7 @@
     "calendar": {
       "as_of": "2026-09-28T05:06:04.658134+00:00",
       "calendar_hash": "dc6780a82575fdcca22d474747f0a8fd6442cf61992c8c009647907c550a7978",
-      "checked_at": "2026-10-06T08:12:08.350336+00:00",
+      "checked_at": "2026-10-06T08:15:13.992800+00:00",
       "company_events": "NOT_IMPLEMENTED_NO_FOLLOW_OR_HOLDING_INFERENCE",
       "comparison": {
         "human_attention_authority": "NONE",
