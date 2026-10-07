@@ -18,8 +18,8 @@ def fixture(indices=(0,), at=AT):
     config=json.loads((ROOT/r.CONFIG).read_bytes())
     config['cases']=[config['cases'][i] for i in indices]
     raw=(json.dumps(config,ensure_ascii=False)+'\n').encode()
-    nav=''.join(f"https://github.com/{model.REPOSITORY}/blob/{e['sources']['review']['ref']}/{e['sources']['review']['path']}\n"
-                for e in config['cases']).encode()
+    # Use the real navigation input; deriving links from config hid #779's omission.
+    nav=(ROOT/'docs/live-decision-book.md').read_bytes()
     def descriptor(path,raw,ref):
         return dict(path=path,ref=ref,read_path='sources/test/'+model.blob_sha(raw)+'/'+path.rsplit('/',1)[-1],
             bytes=len(raw),sha256=model.sha256(raw),git_blob=model.blob_sha(raw),
