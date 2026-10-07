@@ -149,3 +149,17 @@ def test_original_collector_preserves_prior_source_with_injected_parsed_field_ga
     assert kept['current_quote_attempt']['source']['read_path'] == 'sources/daily.zip'
     assert actual['new_source_requests'] == 0 and actual['investment_authority'] == 'NONE'
     assert '保留整份旧观察'.encode() in collector.files['README.md']
+
+
+def test_joint_summary_does_not_hide_retained_observation_gap():
+    from decision_kernel.runtime import d_delivery_reading as joint
+    old = observe(seed(), {'600001.SH': {'open': '11', 'close': '10'}})
+    kept = observe(old, {}, tag='d', at=LATER)
+    data = joint._projection('auction', {'cohorts': [kept], 'archived_cohorts': []})
+    assert data['cohorts'][0]['current_quote_gap'] == kept['current_quote_gap']
+    component = {'kind': 'auction', 'label': 'synthetic auction',
+        'status': 'VERIFIED_SAME_READING_COMPONENT', 'source': {'read_path': n.PATH},
+        'data': data}
+    text = joint.render({'components': [component]})
+    assert '保留整份旧观察' in text and '不是本次重新取得' in text and '未跨包拼接' in text
+    assert 'CURRENT' in text and 'UNAVAILABLE' in text
