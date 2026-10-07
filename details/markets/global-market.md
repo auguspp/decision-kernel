@@ -57,25 +57,25 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/86ee9c606665dfc567887fb425772d37bf199c9d98ee16a238b1d2f70db41eb8.zip)
 
 ## 美国国债期限利率
-本次读取：CAPTURE_IN_PROGRESS
+本次读取：CAPTURE_READ
 
-最后可读批次run：37427539564
+最后可读批次run：37583447099
 # 美国国债期限利率
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-05；抓取截止：2026-10-06T07:05:48.234550+00:00
+窗口截止：2026-10-06；抓取截止：2026-10-07T06:47:23.850768+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| 美国国债 1MONTH | 2026-10-05 | 4.05 | ANNUAL_PERCENT | 2026-10-02 | 1.00 bp |
-| 美国国债 3MONTH | 2026-10-05 | 4.22 | ANNUAL_PERCENT | 2026-10-02 | 3.00 bp |
-| 美国国债 6MONTH | 2026-10-05 | 4.30 | ANNUAL_PERCENT | 2026-10-02 | 3.00 bp |
-| 美国国债 1YEAR | 2026-10-05 | 4.47 | ANNUAL_PERCENT | 2026-10-02 | 1.00 bp |
-| 美国国债 2YEAR | 2026-10-05 | 4.84 | ANNUAL_PERCENT | 2026-10-02 | 1.00 bp |
-| 美国国债 5YEAR | 2026-10-05 | 5.06 | ANNUAL_PERCENT | 2026-10-02 | 0.00 bp |
-| 美国国债 10YEAR | 2026-10-05 | 5.31 | ANNUAL_PERCENT | 2026-10-02 | 3.00 bp |
-| 美国国债 30YEAR | 2026-10-05 | 5.66 | ANNUAL_PERCENT | 2026-10-02 | 3.00 bp |
+| 美国国债 1MONTH | 2026-10-06 | 4.06 | ANNUAL_PERCENT | 2026-10-05 | 1.00 bp |
+| 美国国债 3MONTH | 2026-10-06 | 4.21 | ANNUAL_PERCENT | 2026-10-05 | -1.00 bp |
+| 美国国债 6MONTH | 2026-10-06 | 4.28 | ANNUAL_PERCENT | 2026-10-05 | -2.00 bp |
+| 美国国债 1YEAR | 2026-10-06 | 4.46 | ANNUAL_PERCENT | 2026-10-05 | -1.00 bp |
+| 美国国债 2YEAR | 2026-10-06 | 4.79 | ANNUAL_PERCENT | 2026-10-05 | -5.00 bp |
+| 美国国债 5YEAR | 2026-10-06 | 5.03 | ANNUAL_PERCENT | 2026-10-05 | -3.00 bp |
+| 美国国债 10YEAR | 2026-10-06 | 5.27 | ANNUAL_PERCENT | 2026-10-05 | -4.00 bp |
+| 美国国债 30YEAR | 2026-10-06 | 5.64 | ANNUAL_PERCENT | 2026-10-05 | -2.00 bp |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -86,7 +86,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - 202609：ROWS_NORMALIZED
 - 202610：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/6f640aa835bd19541984beab4ea2aa9dd9fe69d2f3cfc50e21d012af66c2668e.zip)
+[原始ZIP](../../sources/artifacts/0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec.zip)
 
 ## ECB 外汇参考价
 本次读取：REUSED_RETAINED_CAPTURE
