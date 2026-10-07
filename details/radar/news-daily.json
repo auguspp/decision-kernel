@@ -1,8 +1,8 @@
 {
   "projection": {
-    "association_as_of": "2026-10-07T17:35:30.430720+00:00",
+    "association_as_of": "2026-10-07T17:50:00.572984+00:00",
     "automatic_admission": false,
-    "base_reading_hash": "564c3b118353afe2e730136cd664a0b45ca5b235d9733e92b6508f6d70649446",
+    "base_reading_hash": "aedb78a1571577495a2b28cd7a4a1d3dae00918e449926540faf0d2dc6055333",
     "capture": {
       "projection": {
         "automatic_admission": false,
@@ -27,8 +27,8 @@
             "automatic_admission": false,
             "companies": [],
             "company_mapping": "EXACT_SAVED_NAME_TEXT_ONLY_NOT_SECURITY_OR_EXPOSURE_ACCEPTANCE",
-            "company_reading_hash": "77cea147325b8861477a7e793d0f1bfc933749dbc8945294a807836ffe550aab",
-            "cutoff": "2026-10-07T17:35:30.092001+00:00",
+            "company_reading_hash": "0adb929e35dea3e7fb334b408a4404cdd7f292aa5c6a8baf1c421ccc461d620d",
+            "cutoff": "2026-10-07T17:50:00.350784+00:00",
             "human_attention_authority": "NONE",
             "investment_authority": "NONE",
             "kind": "NEWS_EVENT_CANDIDATE",
@@ -9621,7 +9621,7 @@
             ],
             "version": "retained-external-radar-observations-v1"
           },
-          "projection_hash": "c368c33f09fb77880f4d8007d5a42c09cb84f4795ed75c2c69651e2d908bea63"
+          "projection_hash": "544f12c7410da7d0920e9d2ac38849aa70cb1ff42f041bf02093bd252da6e947"
         },
         "research_authority": "NONE",
         "research_executions": 0,
@@ -9755,14 +9755,14 @@
           "workflow": ".github/workflows/radar-newsnow-daily.yml"
         }
       },
-      "projection_hash": "64bd1ecd4c914432f8436d7dbf2f1b9dfb7d6d8a13c2ff74f1d1afc3caf37dc2"
+      "projection_hash": "4246ddb68044b5a031874f84015902a8e5e93e69b183ca2ebdfa0320f6190aa3"
     },
     "company_source": {
       "bytes": 3274294,
-      "git_blob": "c362388d429720b29dff83282c2db5868ae38a4d",
+      "git_blob": "660e53329246cabab20b4b9779d1ee158432c9e7",
       "read_path": "details/radar/company-reading.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "sha256": "2a0d5ba6495678cbf78584b19c945338f4b13816b1875dba8b1f0cf35573edcb"
+      "sha256": "7a12c02fd0786497de53b254ca38ed5c77a2bf454267db2b486e2827ca1fab4e"
     },
     "headline_repetition": {
       "appearance_count_meaning": "SUM_OF_RETAINED_VERSION_CAPTURE_COUNTS_NOT_NEWS_OR_AUTHOR_COUNT",
@@ -37437,7 +37437,7 @@
         "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
         "sha256": "9f9ecd3104ef48ce4b5aca598bfcc5471ad9c1b7b5df2b4487291e25cb96280b"
       },
-      "capture_age_seconds": 6217,
+      "capture_age_seconds": 7087,
       "capture_hash": "2801c1540c240afd4a370682d6c294299b9903a3acf7d033d4d24b7ff8ca069a",
       "capture_stale_after_seconds": 1800,
       "capture_status": "STALE_CAPTURE_NOT_TODAY_NEWS",
@@ -37483,5 +37483,5 @@
       "status": "STALE_CAPTURE_NOT_TODAY_NEWS"
     }
   },
-  "projection_hash": "cdf13595b74b33e6f8c6bccc4be55a695f8cb9d668cbbaa18769c5ea312cad8e"
+  "projection_hash": "d752ac150c30ec9ce0c2c62ecfd562d88d4ae03f884af351fce6f94a4c9da028"
 }
