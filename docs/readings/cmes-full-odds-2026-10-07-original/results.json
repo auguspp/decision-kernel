@@ -1,0 +1,426 @@
+{
+  "asset_cross_check": {
+    "gross_50_ship_analogy_cny": "45900000000.0",
+    "market_above_h1_book_cny": "115864294364.75",
+    "meaning": "Not NAV, not liquidation equity, not a price floor; selected peer transaction.",
+    "required_uplift_usd_per_ship_if_all_other_net_assets_stay_book": "340777336.3669117647058823529411764705882"
+  },
+  "binary_B_D_discounted_break_even_weight_not_probability_estimate": "0.6645794147180975764173596151915935113769",
+  "canonical_odds": false,
+  "cosco_equivalent_ships_for_same_price_scaled_delta": "34.56873387872801320864962485691143132679",
+  "delta_profit_per_10000_usd_day": [
+    {
+      "delta_parent_profit_cny": "735075000.000",
+      "name": "lower_conversion"
+    },
+    {
+      "delta_parent_profit_cny": "1011500000.000",
+      "name": "central_sensitivity"
+    },
+    {
+      "delta_parent_profit_cny": "1118250000.000",
+      "name": "upper_conversion"
+    }
+  ],
+  "historical_checks": {
+    "2025_adjusted_profit_growth": "0.001795903087739800258932979783171952935",
+    "2025_cfo_less_cash_capex_cny": "1258048555.88",
+    "2025_dividend_ratio": "0.4297756066225540466010842362310011711687",
+    "2025_parent_profit_growth": "0.177123357321005475819362545614005723389",
+    "2026H1_cfo_less_rounded_capex_cny": "3376580091.03"
+  },
+  "investment_authority": "NONE",
+  "operating": [
+    {
+      "eps_cny": "0.4982328090953476018238447678901166257638",
+      "parent_profit_cny": "4023000000.000",
+      "tce_usd_per_day": "50000"
+    },
+    {
+      "eps_cny": "0.7487734436466496645853754577836552620850",
+      "parent_profit_cny": "6046000000.000",
+      "tce_usd_per_day": "70000"
+    },
+    {
+      "eps_cny": "1.124584395473602758727671492623963216567",
+      "parent_profit_cny": "9080500000.000",
+      "tce_usd_per_day": "100000"
+    },
+    {
+      "eps_cny": "1.750935981851857915631498217357809807370",
+      "parent_profit_cny": "14138000000.000",
+      "tce_usd_per_day": "150000"
+    },
+    {
+      "eps_cny": "2.126746933678811009773794252198117761851",
+      "parent_profit_cny": "17172500000.000",
+      "tce_usd_per_day": "180000"
+    },
+    {
+      "eps_cny": "2.377287568230113072535324942091656398173",
+      "parent_profit_cny": "19195500000.000",
+      "tce_usd_per_day": "200000"
+    },
+    {
+      "eps_cny": "2.627828202781415135296855631985195034494",
+      "parent_profit_cny": "21218500000.000",
+      "tce_usd_per_day": "220000"
+    },
+    {
+      "eps_cny": "3.003639154608368229439151666825502988976",
+      "parent_profit_cny": "24253000000.000",
+      "tce_usd_per_day": "250000"
+    }
+  ],
+  "peer": [
+    {
+      "a_price_times_total_shares_cny": "162701950815.30",
+      "a_price_to_h1_parent_book": "3.473742350603654972305259089563865390638",
+      "h1_book_value_per_share_cny": "5.800660488391835523877473486843248444021",
+      "h1_simple_annualized_pe": "11.68919750584922320425764387522289416717",
+      "name": "CMES",
+      "old_named_forecast_pe": "10.10445601883616941994783256738293379704"
+    },
+    {
+      "a_price_times_total_shares_cny": "112488008785.68",
+      "a_price_to_h1_parent_book": "2.338433576951604856145019125228671212373",
+      "h1_book_value_per_share_cny": "8.792210393592676456339292289568723040519",
+      "h1_simple_annualized_pe": "12.37492390378169583352951970495916609864",
+      "name": "COSCO",
+      "old_named_forecast_pe": "9.597134099964166879959047862810340414640"
+    }
+  ],
+  "probabilities": null,
+  "research_id": "CMES-FULL-CONDITIONAL-ODDS-20261007-v1",
+  "reverse": [
+    {
+      "implied_tce_central_usd_day": "201949.7856716646070192782995551161641127",
+      "reference_price_cny": "20.15",
+      "required_return": "0.10",
+      "required_third_year_profit_cny": "19392720820.688875"
+    },
+    {
+      "implied_tce_central_usd_day": "212973.5411565437834138180158941404616145",
+      "reference_price_cny": "20.15",
+      "required_return": "0.12",
+      "required_third_year_profit_cny": "20507773687.98440369230769230769230769231"
+    },
+    {
+      "implied_tce_central_usd_day": "230280.7420873601539031902353701661660139",
+      "reference_price_cny": "20.15",
+      "required_return": "0.15",
+      "required_third_year_profit_cny": "22258397062.13647956730769230769230769231"
+    },
+    {
+      "implied_tce_central_usd_day": "179984.5939302977299517091904635157230313",
+      "reference_price_cny": "18",
+      "required_return": "0.10",
+      "required_third_year_profit_cny": "17170941676.04961538461538461538461538462"
+    },
+    {
+      "implied_tce_central_usd_day": "189788.3323640455986919654739723943876193",
+      "reference_price_cny": "18",
+      "required_return": "0.12",
+      "required_third_year_profit_cny": "18162589818.62321230769230769230769230769"
+    },
+    {
+      "implied_tce_central_usd_day": "205182.0861973140613711547967603330925130",
+      "reference_price_cny": "18",
+      "required_return": "0.15",
+      "required_third_year_profit_cny": "19719668018.85831730769230769230769230769"
+    },
+    {
+      "implied_tce_central_usd_day": "159551.8574267006350051332750294688010951",
+      "reference_price_cny": "16",
+      "required_return": "0.10",
+      "required_third_year_profit_cny": "15104170378.71076923076923076923076923077"
+    },
+    {
+      "implied_tce_central_usd_day": "168220.6962780007756948933419521654815773",
+      "reference_price_cny": "16",
+      "required_return": "0.12",
+      "required_third_year_profit_cny": "15981023428.51977846153846153846153846154"
+    },
+    {
+      "implied_tce_central_usd_day": "181834.4993228525799460055515418837218145",
+      "reference_price_cny": "16",
+      "required_return": "0.15",
+      "required_third_year_profit_cny": "17358059606.50653846153846153846153846154"
+    },
+    {
+      "implied_tce_central_usd_day": "139119.1209231035400585573595954218791589",
+      "reference_price_cny": "14",
+      "required_return": "0.10",
+      "required_third_year_profit_cny": "13037399081.37192307692307692307692307692"
+    },
+    {
+      "implied_tce_central_usd_day": "146653.0601919559526978212099319365755351",
+      "reference_price_cny": "14",
+      "required_return": "0.12",
+      "required_third_year_profit_cny": "13799457038.41634461538461538461538461538"
+    },
+    {
+      "implied_tce_central_usd_day": "158486.9124483910985208563063234343511160",
+      "reference_price_cny": "14",
+      "required_return": "0.15",
+      "required_third_year_profit_cny": "14996451194.15475961538461538461538461538"
+    }
+  ],
+  "worlds": [
+    {
+      "annual_cashflow_irr": "-0.3071169445530929863026462125141128794376",
+      "annual_parent_profit_cny": [
+        "10000000000",
+        "6500000000",
+        "6000000000"
+      ],
+      "annualized_unreinvested_wealth_return": "-0.2950461308868739944832633713316954061635",
+      "capital_cash_stress_not_fcfe": [
+        {
+          "hypothetical_3y_capex_cny": "30000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "-5040780739.80"
+        },
+        {
+          "hypothetical_3y_capex_cny": "36000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "-11040780739.80"
+        },
+        {
+          "hypothetical_3y_capex_cny": "45000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "-20040780739.80"
+        }
+      ],
+      "cumulative_return": "-0.6496661551113996097629800881934256725005",
+      "dividends_per_share_cny": [
+        "0.4953843490880910781246281559931559788852",
+        "0.3219998269072592007810083013955513862754",
+        "0.2972306094528546468747768935958935873311"
+      ],
+      "exit_multiple_pv_at_central_hurdle": {
+        "10": "6.199638543332080058208294012172912550075",
+        "12": "7.257452927602500488560514530220433801452",
+        "7": "4.612916966926449412679963235101630673008",
+        "8": "5.141824159061659627856073494125391298697"
+      },
+      "exit_pe": "8",
+      "id": "A",
+      "implied_tce_central_usd_day": [
+        "109090.4597132970835392980721700444883836",
+        "74488.38358872960949085516559565002471577",
+        "69545.22985664854176964903608502224419179"
+      ],
+      "name": "运价快速回落",
+      "nominal_wealth_per_share_cny": "7.059226974505297863275951222902472699114",
+      "payout": "0.40",
+      "present_price_cny": {
+        "0.10": "5.406053847110836145574924091510586471305",
+        "0.12": "5.141824159061659627856073494125391298696",
+        "0.15": "4.778360089502619292241831214543994878110"
+      },
+      "terminal_share_price_cny": "5.944612189057092937495537871917871746622"
+    },
+    {
+      "annual_cashflow_irr": "-0.1119684030357775806820710027592602510242",
+      "annual_parent_profit_cny": [
+        "18000000000",
+        "12000000000",
+        "10000000000"
+      ],
+      "annualized_unreinvested_wealth_return": "-0.1066497916998938339414820820220466393309",
+      "capital_cash_stress_not_fcfe": [
+        {
+          "hypothetical_3y_capex_cny": "30000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "5459219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "36000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "-540780739.80"
+        },
+        {
+          "hypothetical_3y_capex_cny": "45000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "-9540780739.80"
+        }
+      ],
+      "cumulative_return": "-0.2870398946126728900439594777269715440357",
+      "dividends_per_share_cny": [
+        "0.8916918283585639406243306807876807619933",
+        "0.5944612189057092937495537871917871746622",
+        "0.4953843490880910781246281559931559788852"
+      ],
+      "exit_multiple_pv_at_central_hurdle": {
+        "10": "10.43777892600741464855066786586709342719",
+        "12": "12.20080289979144869913770206261296217949",
+        "7": "7.793242965331363572670116570748290298750",
+        "8": "8.674754952223380597963633669121224674898"
+      },
+      "exit_pe": "10",
+      "id": "B",
+      "implied_tce_central_usd_day": [
+        "188180.9194265941670785961443400889767672",
+        "128863.0746416213544241225902125556104795",
+        "109090.4597132970835392980721700444883836"
+      ],
+      "name": "一年暴利后回归",
+      "nominal_wealth_per_share_cny": "14.36614612355464126561421652380152338768",
+      "payout": "0.40",
+      "present_price_cny": {
+        "0.10": "10.97884863215665711684468921524125850125",
+        "0.12": "10.43777892600741464855066786586709342720",
+        "0.15": "9.693686805974280943882959636021578702798"
+      },
+      "terminal_share_price_cny": "12.38460872720227695311570389982889947213"
+    },
+    {
+      "annual_cashflow_irr": "0.0795987054900747230541222101887549929595",
+      "annual_parent_profit_cny": [
+        "20000000000",
+        "19000000000",
+        "18000000000"
+      ],
+      "annualized_unreinvested_wealth_return": "0.076196883718316578689433045623777189413",
+      "capital_cash_stress_not_fcfe": [
+        {
+          "hypothetical_3y_capex_cny": "30000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "15659219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "36000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "9659219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "45000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "659219260.20"
+        }
+      ],
+      "cumulative_return": "0.246450942866809809474870844111811817840",
+      "dividends_per_share_cny": [
+        "0.9907686981761821562492563119863119577704",
+        "0.9412302632673730484367934963869963598819",
+        "0.8916918283585639406243306807876807619933"
+      ],
+      "exit_multiple_pv_at_central_hurdle": {
+        "10": "18.13686230694692053064703211423558036762",
+        "12": "21.31030545975818182170369366837814412176",
+        "7": "13.37669757773002859406203978302173473642",
+        "8": "14.96341915413565923959037056009301661349"
+      },
+      "exit_pe": "10",
+      "id": "C",
+      "implied_tce_central_usd_day": [
+        "207953.5343549184379634206623826000988631",
+        "198067.2268907563025210084033613445378151",
+        "188180.9194265941670785961443400889767672"
+      ],
+      "name": "高盈利连续维持",
+      "nominal_wealth_per_share_cny": "25.11598649876621766091864750885300812947",
+      "payout": "0.40",
+      "present_price_cny": {
+        "0.10": "19.09704804786623081786226197145667413718",
+        "0.12": "18.13686230694692053064703211423558036762",
+        "0.15": "16.81709143974234724324783541969369158532"
+      },
+      "terminal_share_price_cny": "22.29229570896409851560826701969201904983"
+    },
+    {
+      "annual_cashflow_irr": "0.2085107874780648691888060924282449033386",
+      "annual_parent_profit_cny": [
+        "25000000000",
+        "26000000000",
+        "25000000000"
+      ],
+      "annualized_unreinvested_wealth_return": "0.198933466383019629511066955822159084041",
+      "capital_cash_stress_not_fcfe": [
+        {
+          "hypothetical_3y_capex_cny": "30000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "27059219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "36000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "21059219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "45000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "12059219260.20"
+        }
+      ],
+      "cumulative_return": "0.723396668539711393376497952115148095277",
+      "dividends_per_share_cny": [
+        "1.238460872720227695311570389982889947213",
+        "1.287999307629036803124033205582205545102",
+        "1.238460872720227695311570389982889947213"
+      ],
+      "exit_multiple_pv_at_central_hurdle": {
+        "10": "25.05186545788161024522152112208009662263",
+        "12": "29.45942539234169537168910661394476850337",
+        "7": "18.44052555619148255552014288428308880152",
+        "8": "20.64430552342152511875393563021542474189"
+      },
+      "exit_pe": "10",
+      "id": "D",
+      "implied_tce_central_usd_day": [
+        "257385.0716757291151754819574888779041028",
+        "267271.3791398912506178942165101334651508",
+        "257385.0716757291151754819574888779041028"
+      ],
+      "name": "极高盈利持续",
+      "nominal_wealth_per_share_cny": "34.72644287107518457653643373512023411984",
+      "payout": "0.40",
+      "present_price_cny": {
+        "0.10": "26.38265934268169502093483609134099291005",
+        "0.12": "25.05186545788161024522152112208009662262",
+        "0.15": "23.22284632114527066901817714587132207419"
+      },
+      "terminal_share_price_cny": "30.96152181800569238278925974957224868032"
+    },
+    {
+      "annual_cashflow_irr": "-0.0562795963210242088736956185806549827679",
+      "annual_parent_profit_cny": [
+        "20000000000",
+        "19000000000",
+        "18000000000"
+      ],
+      "annualized_unreinvested_wealth_return": "-0.0547834347890107820280979935595549249291",
+      "capital_cash_stress_not_fcfe": [
+        {
+          "hypothetical_3y_capex_cny": "30000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "27059219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "36000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "21059219260.20"
+        },
+        {
+          "hypothetical_3y_capex_cny": "45000000000",
+          "retained_profit_plus_constant_da_less_capex_cny": "12059219260.20"
+        }
+      ],
+      "cumulative_return": "-0.1555110475843211645865520020662576737117",
+      "dividends_per_share_cny": [
+        "0.4953843490880910781246281559931559788852",
+        "0.4706151316336865242183967481934981799409",
+        "0.4458459141792819703121653403938403809967"
+      ],
+      "exit_multiple_pv_at_central_hurdle": {
+        "10": "17.00203903550161349296516994247419956914",
+        "12": "20.17548218831287478402183149661676332328",
+        "7": "12.24187430628472155638017761126035393794",
+        "8": "13.82859588269035220190850838833163581501"
+      },
+      "exit_pe": "7",
+      "id": "E",
+      "implied_tce_central_usd_day": [
+        "207953.5343549184379634206623826000988631",
+        "198067.2268907563025210084033613445378151",
+        "188180.9194265941670785961443400889767672"
+      ],
+      "name": "盈利好但资本回报受压",
+      "nominal_wealth_per_share_cny": "17.01645239117592853358097715836490787471",
+      "payout": "0.20",
+      "present_price_cny": {
+        "0.10": "12.89823036637700699655070529372112730899",
+        "0.12": "12.24187430628472155638017761126035393794",
+        "0.15": "11.34005497723474373956369146110083038046"
+      },
+      "terminal_share_price_cny": "15.60460699627486896092578691378441333488"
+    }
+  ]
+}

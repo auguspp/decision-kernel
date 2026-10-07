@@ -1,0 +1,66 @@
+{
+  "research_id": "CMES-FULL-CONDITIONAL-ODDS-20261007-v1",
+  "analysis_date": "2026-10-07",
+  "method_main": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
+  "scope": "601872.SH primary; 600026.SH peer; public-source research, not live trading or canonical Odds",
+  "authority": "NONE",
+  "price_qualification": "DATED_PUBLIC_CONTEXT_ONLY; NOT_HUMAN_PRICE; NOT_OBSERVED_MARKET; NOT_EX_ANTE_BACKTEST",
+  "securities": {
+    "CMES": {
+      "ticker": "601872.SH", "reference_price_cny": "20.15", "price_date": "2026-09-30", "price_source": "S09",
+      "shares": "8074538502", "share_basis": "2025 year-end/H1 dividend disclosed shares; no complete Oct7 dilution audit", "shares_source": "S01,S05",
+      "h1_2026_parent_profit_cny": "6959500459.03", "h1_2026_parent_equity_cny": "46837656450.55", "financial_source": "S02",
+      "previous_named_forecast_2026_cny": "16102000000", "forecast_source": "S12", "forecast_status": "PREDECESSOR_NAMED_AUG31_SUMMARY; NOT_CURRENT_CONSENSUS_OR_ORIGINAL_MODEL"
+    },
+    "COSCO": {
+      "ticker": "600026.SH", "reference_price_cny": "20.56", "price_date": "2026-09-30", "price_source": "S10",
+      "shares": "5471206653", "share_basis": "H1 fixed shares; small subsequent change not rolled into this approximation", "shares_source": "S11",
+      "h1_2026_parent_profit_cny": "4544998000", "h1_2026_parent_equity_cny": "48104000000", "financial_source": "S11",
+      "previous_named_forecast_2026_cny": "11721000000", "forecast_source": "S12", "forecast_status": "PREDECESSOR_NAMED_AUG31_SUMMARY; NOT_CURRENT_CONSENSUS_OR_ORIGINAL_MODEL"
+    }
+  },
+  "historical_cmes": {
+    "source": "S01",
+    "2023": {"revenue_cny": "25881013078.04", "parent_profit_cny": "4836966617.91", "adjusted_parent_profit_cny": "4640441615.09", "cfo_cny": "8917304888.14"},
+    "2024": {"revenue_cny": "25799279395.20", "parent_profit_cny": "5107447941.27", "adjusted_parent_profit_cny": "5015004674.52", "cfo_cny": "8476220586.11", "cash_long_asset_capex_cny": "7550235457.35"},
+    "2025": {"revenue_cny": "28177211131.95", "parent_profit_cny": "6012096267.97", "adjusted_parent_profit_cny": "5024011136.90", "cfo_cny": "9054927611.30", "cash_long_asset_capex_cny": "7796879055.42", "disposal_cash_cny": "1778782008.93", "dividend_cny": "2583852320.64", "dividend_qualification": "FY2025 attributed distribution plan including annual distribution proposed in 2026; NOT calendar-2025 cash-flow-statement dividends paid", "depreciation_amortization_cny": "3819739753.40", "signed_capital_commitments_at_2025_end_cny": "35872387889.48"},
+    "2026H1": {"revenue_cny": "19651214045.35", "parent_profit_cny": "6959500459.03", "adjusted_parent_profit_cny": "6907325735.56", "cfo_cny": "8130580091.03", "cash_long_asset_capex_cny_rounded": "4754000000", "capex_qualification": "SECONDARY_TABLE_ROUNDED; ORIGINAL_H1_PDF_NOT_RECOVERED_THIS_TURN", "cash_cny": "7887837826.63", "source": "S02,S04"}
+  },
+  "operating_bridge": {
+    "qualification": "ANALYST_SENSITIVITY_NOT_A_COMPANY_FORECAST_OR_VERIFIED_FLEET_FIXTURE_SCHEDULE",
+    "equivalent_vlccs": "50", "operating_days_per_year": "350", "usd_cny_assumption": "6.8",
+    "all_in_pnl_cost_usd_per_day_assumption": "30000", "marginal_parent_conversion_assumption": "0.85",
+    "other_net_parent_profit_cny_assumption": "2000000000",
+    "explanation": "TCE is after voyage expenses. Cost includes vessel opex, depreciation and allocated normal financing cost; no second full fuel deduction. Other profit is net of unallocated/eliminations, not a sum of segment net profits. Tax/ownership conversion is a scenario assumption, not an estimated statutory tax. Future ship additions not free: fixed-fleet bridge only.",
+    "rates_usd_per_day": ["50000", "70000", "100000", "150000", "180000", "200000", "220000", "250000"],
+    "exposure_stress": [
+      {"name": "lower_conversion", "n": "45", "days": "330", "fx": "6.6", "conversion": "0.75"},
+      {"name": "central_sensitivity", "n": "50", "days": "350", "fx": "6.8", "conversion": "0.85"},
+      {"name": "upper_conversion", "n": "50", "days": "355", "fx": "7.0", "conversion": "0.90"}
+    ]
+  },
+  "valuation": {
+    "horizon_dates": ["2027-10-07", "2028-10-07", "2029-10-07"],
+    "periods": "Three successive 12-month analytical windows, not calendar fiscal-year forecasts",
+    "discount_rates": ["0.10", "0.12", "0.15"], "central_hurdle": "0.12",
+    "hurdle_authority": "ANALYST_ASSUMPTION_NOT_HUMAN_ACCEPTED_RETURN_TARGET",
+    "valuation_status": "CONDITIONAL_EXIT_MULTIPLE_AND_DIVIDEND_SENSITIVITY; FAIR_MULTIPLES_AND_PROBABILITIES_NOT_ESTABLISHED",
+    "cash_treatment": "Only hypothetical future dividends paid at each annual endpoint plus terminal equity. No past distributions, no separate full NAV/cash addition, no double-counting retained earnings. Retained earnings are assumed used in capital/replacement/deleveraging or included in terminal equity value; surplus cash is not independently quantified. Adequacy of retention/capex is separately stressed, not certified.",
+    "worlds": [
+      {"id": "A", "name": "运价快速回落", "annual_parent_profit_cny": ["10000000000", "6500000000", "6000000000"], "payout": "0.40", "exit_pe": "8"},
+      {"id": "B", "name": "一年暴利后回归", "annual_parent_profit_cny": ["18000000000", "12000000000", "10000000000"], "payout": "0.40", "exit_pe": "10"},
+      {"id": "C", "name": "高盈利连续维持", "annual_parent_profit_cny": ["20000000000", "19000000000", "18000000000"], "payout": "0.40", "exit_pe": "10"},
+      {"id": "D", "name": "极高盈利持续", "annual_parent_profit_cny": ["25000000000", "26000000000", "25000000000"], "payout": "0.40", "exit_pe": "10"},
+      {"id": "E", "name": "盈利好但资本回报受压", "annual_parent_profit_cny": ["20000000000", "19000000000", "18000000000"], "payout": "0.20", "exit_pe": "7"}
+    ],
+    "worlds_boundary": "Not exhaustive, not probabilistic, not calibrated. Negative earnings, default, dilution and severe impairment may produce losses beyond displayed A. No claimed maximum drawdown or hard NAV floor.",
+    "reverse_first_two_profit_cny": ["18000000000", "14000000000"], "reverse_payout": "0.40", "reverse_exit_pe": "10",
+    "reverse_prices_cny": ["20.15", "18", "16", "14"],
+    "exit_pe_sensitivity": ["7", "8", "10", "12"],
+    "capital_stress_total_capex_cny": ["30000000000", "36000000000", "45000000000"]
+  },
+  "asset_cross_check": {
+    "external_2017_vlcc_sale_price_usd_each": "135000000", "source": "S15", "qualification": "ONE_PEER_TRANSACTION_ONLY_NOT_A_FLEET_APPRAISAL_OR_CYCLE_TROUGH_VALUE"
+  },
+  "retention": {"git_archive": "NOT_SAVED_THIS_TURN", "on_demand_registry": "NOT_REGISTERED", "publisher": "NOT_RUN", "new_watch_or_task": false, "tools": "Fresh discovery exposed repository reads but no create/push/comment write action; no credential or workflow workaround attempted."}
+}
