@@ -1,0 +1,58 @@
+{
+  "case": "YTO_H1_2026_PREANNOUNCEMENT_REVIEW",
+  "subject": "600233.SH",
+  "currency": "CNY",
+  "amount_unit": "CNY_million",
+  "comparison": "POST_PERIOD_PREANNOUNCEMENT_NOT_MARKET_CONSENSUS",
+  "metric_ids": [
+    "parent_net_profit",
+    "parent_net_profit_ex_nonrecurring"
+  ],
+  "guide": {
+    "subject": "600233.SH",
+    "period": "2026H1",
+    "period_end": "2026-06-30",
+    "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+    "published_at": null,
+    "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+    "clock_timezone": "Asia/Shanghai",
+    "source_id": "G1",
+    "document_date": "2026-07-01",
+    "ranges": {
+      "parent_net_profit": {
+        "lower": "3100",
+        "upper": "3400"
+      },
+      "parent_net_profit_ex_nonrecurring": {
+        "lower": "3040",
+        "upper": "3340"
+      }
+    },
+    "parent_net_profit_mid": "3250",
+    "parent_net_profit_half_width": "150",
+    "parent_net_profit_ex_nonrecurring_mid": "3190",
+    "parent_net_profit_ex_nonrecurring_half_width": "150"
+  },
+  "actual": {
+    "subject": "600233.SH",
+    "period": "2026H1",
+    "period_end": "2026-06-30",
+    "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+    "published_at": null,
+    "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+    "clock_timezone": "Asia/Shanghai",
+    "source_id": "A1",
+    "document_date": "2026-08-20",
+    "parent_net_profit": "3175.03988344",
+    "parent_net_profit_ex_nonrecurring": null
+  },
+  "qualification": {
+    "source_custody": "ISSUER_PRESS_ANNOUNCEMENT_PARSED_AND_INDEXED_EXTRACTS_NOT_RAW_PDF",
+    "original_human_decision_modified": false,
+    "new_human_decision": false,
+    "market_requests": 0,
+    "cardinal_probability": null,
+    "normalized_eps_floor": null,
+    "investment_authority": "NONE"
+  }
+}
