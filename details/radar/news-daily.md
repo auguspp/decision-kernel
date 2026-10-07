@@ -1,55 +1,224 @@
 # 日常新闻输入：保存窗口与待核对线索
 
-原采集截止：2026-10-07T15:51:52.628781+00:00；状态：STALE&#95;CAPTURE&#95;NOT&#95;TODAY&#95;NEWS
-滚动目标起点：2026-10-06T21:51:52.628781+00:00；接续链实际开始：2026-09-30T10:23:38.349578+00:00；保留条目：802；历史状态：ROLLING&#95;HISTORY&#95;READY
+原采集截止：2026-10-07T20:51:43.183780+00:00；状态：STALE&#95;CAPTURE&#95;NOT&#95;TODAY&#95;NEWS
+滚动目标起点：2026-10-07T02:51:43.183780+00:00；接续链实际开始：2026-09-30T10:23:38.349578+00:00；保留条目：668；历史状态：ROLLING&#95;HISTORY&#95;READY
 这里只保存来源窗口与有界滚动索引；不是完整新闻覆盖、已核实经济事件、已审阅研究问题或投资建议。
 first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发布时刻或全历史首次；历史丢失/截断后不能保证首次身份。
 缓存/服务时间不是原文发布时间；相同版本复抓不构成新事件。原发布时间声明保留在JSON，不由first_seen代填。
 
-目标窗口内最大采集时间间隔为 23724 秒；不能将其间的新闻覆盖视为已建立。
+目标窗口内最大采集时间间隔为 21603 秒；不能将其间的新闻覆盖视为已建立。
 
 | 来源 | 本批处置 | 窗口条数 |
 |---|---|---|
 | cls | OBSERVATIONS&#95;NORMALIZED | 30 |
 | wallstreetcn | OBSERVATIONS&#95;NORMALIZED | 30 |
 | fastbull | OBSERVATIONS&#95;NORMALIZED | 30 |
-| jin10 | OBSERVATIONS&#95;NORMALIZED | 23 |
+| jin10 | OBSERVATIONS&#95;NORMALIZED | 28 |
 | mktnews | OBSERVATIONS&#95;NORMALIZED | 30 |
 | gelonghui | OBSERVATIONS&#95;NORMALIZED | 15 |
 | thepaper | OBSERVATIONS&#95;NORMALIZED | 20 |
 
 ## 同标题复现：先区分重复曝光与独立观点
 
-保存版本 802；来源文章 801；不同标题 749；同标题多版本组 50；跨渠道同标题组 47。
+保存版本 668；来源文章 652；不同标题 608；同标题多版本组 57；跨渠道同标题组 41。
 这是原7个新闻窗口的字符串对照，不是社区作者样本、共同经济事件或独立多源共识。相同标题可能转载，也可能是同一来源的时间声明变化；不同标题也可能讲同一件事。
 重复抓取只增加保存版本的出现次数，不增加作者数；首次/末次出现均是抓取时钟，不能填成原始发布时间、发现提前量或观点持续时长。
 下列最多显示按末次抓取排序的10组；完整组及版本定位保留在同版本JSON，原新闻没有删除。
-- 法国外交部发言人：法国召见了伊朗大使，因其针对学校学生抗议活动的虚假信息宣传。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 欧盟外交官：欧盟特使已批准约1650项新的俄罗斯制裁名单。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 世界卫生组织总干事谭德塞：世卫组织尚未掌握俄罗斯不明肺炎风险的“完整情况”。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 惠誉评级：美国卡车设备资产支持证券仍面临成本压力的脆弱性。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 据华尔街日报：特朗普的住房和城市发展部向富国银行首席执行官发出信函，表示将调查该银行是否违反了公平贷款法。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 法国外交部发言人：10月6日在德黑兰召见法国大使的行为毫无根据，类似挑衅必须停止。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 日本东证股指成分股将大幅减少 · cls/jin10/wallstreetcn · 3版本/3来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 保加利亚总统伊奥托娃：在无人机袭击发生后，保加利亚将邀请罗马尼亚和土耳其进行磋商，以确保商船安全。 · fastbull/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:49.909404+00:00
-- 美国财政部拍卖四个月期国债，得标利率4.105%，投标倍数3.10。 · fastbull/wallstreetcn · 2版本/2来源文章 · 末次抓取 2026-10-07T15:51:48.458387+00:00
-- 2026年诺贝尔化学奖揭晓 · cls/jin10 · 2版本/2来源文章 · 末次抓取 2026-10-07T10:15:05.786624+00:00
+- 绿城中国&#40;03900.HK&#41;前9个月总合同销售额1421亿元 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- HASHKEY HLDGS&#40;03887.HK&#41;10月7日耗资96.65万港元回购42万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 天域半导体&#40;02658.HK&#41;10月7日耗资199.9万港元回购3.86万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 顺丰同城&#40;09699.HK&#41;10月7日耗资80.35万港元回购9.66万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 极兔速递-W&#40;01519.HK&#41;10月7日耗资1581.7万港元回购175万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 乐动机器人&#40;01236.HK&#41;附属拟不超过600万欧元收购德国园林器械制造商SABO-Maschinenfabrik全部股权 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 新秀丽&#40;01910.HK&#41;授出44.15万份受限制股份单位 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 美因基因&#40;06667.HK&#41;10月7日耗资116.94万港元回购16.14万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 思考乐教育&#40;01769.HK&#41;：受托人根据股份奖励计划购买25.2万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
+- 晶泰控股&#40;02228.HK&#41;获董事会主席温书豪增持130万股 · gelonghui · 2版本/1来源文章 · 末次抓取 2026-10-07T20:51:40.987382+00:00
 作者、互动、观点方向、分歧、拥挤度和公司经济暴露均未据此判定；缺口、陈旧与覆盖仍以上方原新闻状态和滚动历史为准。
 
 ## 滚动18小时新闻索引（按所保留最早抓取时间倒序）
 
 按实际晚报正文/截止做内容去重；较早事件后到只算补充，不包装成隔夜新事件。
-- 2026-10-07T15:51:52.628398+00:00 · [1.77亿港元成交，虞世南《积时帖》湮没81年后现身](https://www.thepaper.cn/newsDetail_forward_34208947) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [中国乒协回应极端球迷越界行为：已协助报案，将推动建立赛场禁入名单制度](https://www.thepaper.cn/newsDetail_forward_34209230) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [郑钦文2比1战胜本届中网“最大黑马”，顺利挺进女单八强](https://www.thepaper.cn/newsDetail_forward_34209228) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [破解“同手性如何自发产生”百年化学谜题！官方详解今年化学诺奖为何颁给这两位科学家](https://www.thepaper.cn/newsDetail_forward_34209081) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [中秋国庆假期收官：8天以上长线行程占比接近翻倍，小城景区霸榜](https://www.thepaper.cn/newsDetail_forward_34209162) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [视频丨纪录片《缅北电诈覆灭纪实》第三集《共筑天网》](https://www.thepaper.cn/newsDetail_forward_34209407) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [年内累计已达46.17亿元！藏格矿业再收巨龙铜业现金分红](https://www.thepaper.cn/newsDetail_forward_34209401) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:43.183403+00:00 · [安踏集团15亿欧元收购彪马29.06%股权交易完成，正式成为第一大股东](https://www.thepaper.cn/newsDetail_forward_34209242) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [顺丰同城&#40;09699.HK&#41;10月7日耗资80.35万港元回购9.66万股](https://www.gelonghui.com/news/5320860) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [晶泰控股&#40;02228.HK&#41;获董事会主席温书豪增持130万股](https://www.gelonghui.com/news/5320867) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [途虎－Ｗ&#40;09690.HK&#41;10月7日耗资149.3万港元回购12.62万股](https://www.gelonghui.com/news/5320868) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [遇见小面&#40;02408.HK&#41;10月7日耗资40.75万港元回购9.85万股](https://www.gelonghui.com/news/5320863) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [极兔速递-W&#40;01519.HK&#41;10月7日耗资1581.7万港元回购175万股](https://www.gelonghui.com/news/5320862) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [康圣环球&#40;09960.HK&#41;10月7日耗资1870港元回购2000股](https://www.gelonghui.com/news/5320857) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [乐动机器人&#40;01236.HK&#41;附属拟不超过600万欧元收购德国园林器械制造商SABO-Maschinenfabrik全部股权](https://www.gelonghui.com/news/5320869) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [草姬集团&#40;02593.HK&#41;：曾庆煊辞任公司秘书](https://www.gelonghui.com/news/5320855) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [绿城中国&#40;03900.HK&#41;前9个月总合同销售额1421亿元](https://www.gelonghui.com/news/5320861) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [至源控股&#40;00990.HK&#41;：马来西亚槟城AI数据中心项目规划IT容量67兆瓦 订立十年期托管服务协议](https://www.gelonghui.com/news/5320866) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [天域半导体&#40;02658.HK&#41;10月7日耗资199.9万港元回购3.86万股](https://www.gelonghui.com/news/5320856) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [HASHKEY HLDGS&#40;03887.HK&#41;10月7日耗资96.65万港元回购42万股](https://www.gelonghui.com/news/5320858) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [美因基因&#40;06667.HK&#41;10月7日耗资116.94万港元回购16.14万股](https://www.gelonghui.com/news/5320864) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [思考乐教育&#40;01769.HK&#41;：受托人根据股份奖励计划购买25.2万股](https://www.gelonghui.com/news/5320859) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:40.987382+00:00 · [新秀丽&#40;01910.HK&#41;授出44.15万份受限制股份单位](https://www.gelonghui.com/news/5320865) · gelonghui · last_seen 2026-10-07T20:51:40.987382+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Axios reports the Trump administration in principle would not oppose Syria sending forces to confront the Houthis.](https://mktnews.net/flashDetail.html?id=01a117e7-bcc6-7ee0-a7e1-6cd9e795e094) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [According to CNBC, U.S. Director of National Intelligence and AI chief Clayton said the U.S. is in talks with 20-25 AI firms.](https://mktnews.net/flashDetail.html?id=01a117d8-4e12-7ee0-a7e1-336e13d3a084) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Trump to award National Medals of Science and Technology to Musk, Brin, Huang, Lisa Su; Dell, Nadella to receive technology medal](https://mktnews.net/flashDetail.html?id=01a117cf-63a9-7ee0-a7e1-272d9c99f569) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Trump says he restrained from harming Clinton, Biden and Obama; hints he could still act amid impeachment talk](https://mktnews.net/flashDetail.html?id=01a117d4-7c1c-7ee0-a7e1-2bb185cbdcda) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [A U.S. Securities and Exchange Commission filing shows electric-vehicle maker Rivian &#40;RIVN.O&#41; secured a $1.0 billion, 10-year term loan from Volkswagen Group on Oct. 7, 2026.](https://mktnews.net/flashDetail.html?id=01a11809-6961-7ee0-a7e1-c38e74406e87) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [U.S. Bureau of Ocean Energy Management &#40;BOEM&#41; said about 25.08% of oil production and 16.37% of natural gas production in the Gulf of Mexico are currently shut in.](https://mktnews.net/flashDetail.html?id=01a117e0-9ed2-7ee0-a7e1-4736c9453db6) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Fox News reports President Trump will present Elon Musk with the United States&#x27; highest science and technology award on Thursday.](https://mktnews.net/flashDetail.html?id=01a117cc-0118-7ee0-a7e1-1f9afaffc269) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Saudi-led coalition says it destroyed ballistic missile launch platform in Sanaa, Yemen](https://mktnews.net/flashDetail.html?id=01a1181d-e623-7ee0-a7e1-ded00b118475) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Attacks on ABHA and Riyadh airports kill 3, injure 36](https://mktnews.net/flashDetail.html?id=01a117c5-45a6-7ee0-a7e1-046fd8657a62) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [U.S. equities closed lower on Wednesday, Oct. 7: Dow Jones Industrial Average fell 341.41 points &#40;-0.66%&#41; to 51,179.87; S&amp;P 500 dropped 17.20 points &#40;-0.22%&#41; to 7,801.73; Nasdaq Composite declined 61.20 points &#40;-0.22%&#41; to 27,538.69.](https://mktnews.net/flashDetail.html?id=01a117f9-bbee-7ee0-a7e1-939789ed7ef9) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Trump to attend AI science conference; White House to announce &gt;$1 bln industry commitments, Southeast compute hubs](https://mktnews.net/flashDetail.html?id=01a117c8-67f2-7ee0-a7e1-143a3de618f8) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [ChatGPT free tier to be upgraded to GPT-6](https://mktnews.net/flashDetail.html?id=01a117fc-6a06-7ee0-a7e1-9a881658abc6) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [CNN, citing people familiar with the matter, reports New York prosecutors are expected to file new charges against former Venezuelan president Nicolas Maduro and his wife over alleged torture of U.S. citizens detained by the Venezuelan government.](https://mktnews.net/flashDetail.html?id=01a117fd-7245-7ee0-a7e1-a544d9dab9a4) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Duke Energy reached a settlement to bolster regulatory protections shielding North Carolina customers from data-center–related costs.](https://mktnews.net/flashDetail.html?id=01a117f5-1dfb-7ee0-a7e1-84de42a24789) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [US close: Dow prelim -0.66%, S&amp;P 500 &amp; Nasdaq -0.22%; Micron +4%](https://mktnews.net/flashDetail.html?id=01a117f5-90e8-7ee0-a7e1-8d84a807cd08) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Documents show the Trump administration proposes increasing public-transit funding for areas with higher marriage and birth rates.](https://mktnews.net/flashDetail.html?id=01a11802-6ef8-7ee0-a7e1-b41b85698ac8) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [U.S. officials: Trump administration not opposed to Syrian troop deployment to Yemen; could reduce U.S. direct military involvement](https://mktnews.net/flashDetail.html?id=01a117e9-82ae-7ee0-a7e1-70872099c780) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Oil falls: NYMEX Nov down 1.3%, ICE Brent Dec down 0.38%](https://mktnews.net/flashDetail.html?id=01a117e3-7079-7ee0-a7e1-5f94c6075af3) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Axios reports President Trump will attend an AI conference on Thursday local time.](https://mktnews.net/flashDetail.html?id=01a117c0-eb07-7ee0-a7e0-f6ef6fa6b69a) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Pakistan military conducting multi-domain defence cooperation in Saudi Arabia](https://mktnews.net/flashDetail.html?id=01a117df-39d2-7ee0-a7e1-3b80a2e2a2ac) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Vance&#x27;s anti-fraud task force, the U.S. Department of Labor and the Justice Department will hold a press conference on Thursday to announce new findings of abuse in work-visa programs, including H-1B and J-1.](https://mktnews.net/flashDetail.html?id=01a11802-5d44-7ee0-a7e1-a90fa2ae583a) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Iran foreign ministry spokesperson BAGHAEI said he held productive talks with Pakistan Ambassador Imran Ahmed Siddiqui and described Iran-Pakistan relations as rooted in deep historical ties and enduring friendship.](https://mktnews.net/flashDetail.html?id=01a117f3-a28f-7ee0-a7e1-7c380ace9ed0) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [U.S. consumer credit growth slows in August as revolving debt contracts](https://mktnews.net/flashDetail.html?id=01a1180f-af6d-7ee0-a7e1-cc363cf78855) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [UK Maritime Trade Operations &#40;UKMTO&#41; said it received a report of an incident 51 nm north of Madinat ash Shamal, Qatar. A tanker reported multiple shell strikes and casualties were reported.](https://mktnews.net/flashDetail.html?id=01a117e3-3cf6-7ee0-a7e1-522c1fd5645b) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Wolfspeed &#40;WOLF.N&#41; shares rose 27% in after-hours trading after the company said it had secured a $1.5 bln loan commitment.](https://mktnews.net/flashDetail.html?id=01a11805-5b81-7ee0-a7e1-bb6a6bb9dcd8) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [USS Abraham Lincoln ends record 10-plus-month Middle East deployment, receives Presidential Unit Citation](https://mktnews.net/flashDetail.html?id=01a11818-fd0e-7ee0-a7e1-d5dc1c708efe) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [The Atlantic reports the White House is seeking to develop strike plans against Iran ahead of the US midterm elections.](https://mktnews.net/flashDetail.html?id=01a117c4-5f89-7ee0-a7e0-fa24344d98f7) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Petrobras won eight exploration blocks in the Campos Basin at an auction held by Brazil&#x27;s oil regulator.](https://mktnews.net/flashDetail.html?id=01a117e0-d6a6-7ee0-a7e1-4d0152b83ef6) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Indonesia considers pausing new semi-finished nickel processing capacity](https://mktnews.net/flashDetail.html?id=01a117c5-970d-7ee0-a7e1-0a4eb50a1b75) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.640585+00:00 · [Dollar index up 0.4% to 102.242 on 7th](https://mktnews.net/flashDetail.html?id=01a117e4-c62d-7ee0-a7e1-62545e511e4d) · mktnews · last_seen 2026-10-07T20:51:39.640585+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [金十图示：2026年10月07日（周三）美股热门股票行情一览（美股收盘）](https://flash.jin10.com/detail/20261008040637832800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [金十图示：2026年10月07日（周三）热门中概股行情一览（美股收盘）](https://flash.jin10.com/detail/20261008040635439800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [据CNBC：美国情报总监兼人工智能事务主管克莱顿：美国正与20至25家人工智能公司展开对话。](https://flash.jin10.com/detail/20261008033007320800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美官员：特朗普政府不反对叙军赴也门 可减少美军直接介入](https://flash.jin10.com/detail/20261008034852714800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://flash.jin10.com/detail/20261008044603932800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [据Axios：特朗普政府原则上不反对叙利亚派兵对抗胡塞武装。](https://flash.jin10.com/detail/20261008034659729800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [金十图示：2026年10月07日（周三）华尔街恐惧与贪婪指数（美盘后）](https://flash.jin10.com/detail/20261008042124659800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [巴西国家石油公司（Petrobras）在巴西石油监管机构举行的拍卖中获得坎波斯盆地8个区块。](https://flash.jin10.com/detail/20261008033922930800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [国际油价7日下跌](https://flash.jin10.com/detail/20261008034217686800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美“林肯”号航母结束超10个月中东部署 获嘉奖最高荣誉](https://flash.jin10.com/detail/20261008044039343800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [伊朗外交部：与阿曼关于海峡航道的磋商进展顺利](https://flash.jin10.com/detail/20261008042128598800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [金十图示：2026年10月07日（周三）全球股市指数-美洲市场（收盘）](https://flash.jin10.com/detail/20261008040642178800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美元指数7日上涨](https://flash.jin10.com/detail/20261008034343401800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美国半导体公司Wolfspeed&#40;WOLF.N&#41;股价盘后上涨27%，此前宣布获得15亿美元贷款承诺。](https://flash.jin10.com/detail/20261008041921505800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [伊朗外交部发言人巴加埃：今天与巴基斯坦大使伊姆兰·艾哈迈德·西迪基进行了富有成果的会谈。伊朗与巴基斯坦的关系建立在深厚的历史共同点和持久的友好纽带之上。](https://flash.jin10.com/detail/20261008035958235800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [道琼斯指数10月7日（周三）收盘下跌341.41点，跌幅0.66%，报51179.87点；&lt;br/&gt;标普500指数10月7日（周三）收盘下跌17.20点，跌幅0.22%，报7801.73点；&lt;br/&gt;纳斯达克综合指数10月7日（周三）收盘下跌61.20点，跌幅0.22%，报27538.69点。](https://flash.jin10.com/detail/20261008040639586800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [巴基斯坦军队已在沙特开展多领域防务合作](https://flash.jin10.com/detail/20261008033735244800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [ChatGPT免费版将升级为GPT-6模型](https://flash.jin10.com/detail/20261008040926369800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [杜克能源达成一项和解协议，以加强监管保护，使美国北卡罗来纳州客户免受与数据中心相关成本的影响。](https://flash.jin10.com/detail/20261008040138084800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美国海洋能源管理局（MMA）：墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://flash.jin10.com/detail/20261008033910683800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美国消费者借贷增速放缓 循环信贷规模下降](https://flash.jin10.com/detail/20261008043034744800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美股收盘：三大股指收跌 美光涨4%](https://flash.jin10.com/detail/20261008040203569800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [美国证券交易委员会文件显示，电动车公司Rivian&#40;RIVN.O&#41;于2026年10月7日从大众汽车集团获得10亿美元、10年期定期贷款融资。](https://flash.jin10.com/detail/20261008042344940800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [据CNN：万斯的反欺诈工作组、美国劳工部和司法部将于周四举行新闻发布会，公布工作签证项目遭滥用的新发现，包括H-1B和J-1签证。](https://flash.jin10.com/detail/20261008041602653800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [特朗普回应未来或遭弹劾：以前对民主党人“留一线”了](https://flash.jin10.com/detail/20261008032554864800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [英国海上贸易行动办公室：已收到关于卡塔尔马迪纳特阿什沙马尔以北51海里的事件报告。一艘油轮报告称遭到多枚炮弹袭击；已报告伤亡情况。](https://flash.jin10.com/detail/20261008034205091800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [据相关文件显示，特朗普政府提议增加对结婚率和出生率较高地区的公共交通资金支持。](https://flash.jin10.com/detail/20261008041611106800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:39.289527+00:00 · [据CNN：据知情人士透露，纽约检方预计将对委内瑞拉前总统尼古拉斯·马杜罗及其妻子提出新的指控，涉及近年来被委内瑞拉政府拘押的美国人据称遭受酷刑一事。](https://flash.jin10.com/detail/20261008041037763800) · jin10 · last_seen 2026-10-07T20:51:39.289527+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [伊朗外交部发言人巴加埃：今天与巴基斯坦大使伊姆兰·艾哈迈德·西迪基进行了富有成果的会谈。伊朗与巴基斯坦的关系建立在深厚的历史共同点和持久的友好纽带之上。](https://www.fastbull.com/cn/fastshort/4311757_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普将向马斯克、黄仁勋等科技领袖颁发国家科学奖章。](https://www.fastbull.com/cn/fastshort/4311728_214_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国总统特朗普：（关于伊朗）他们整个国家都将被彻底摧毁。这件事很快就会结束，到那时油价将会暴跌。](https://www.fastbull.com/cn/fastshort/4311707_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国副总统万斯欺诈特别工作组、美国劳工部与美国司法部将于周四召开新闻发布会，公布工作签证项目（含H1B及J1签证）滥用问题的最新调查结果。](https://www.fastbull.com/cn/fastshort/4311774_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [伊朗外交部发言人巴加埃：伊朗与阿曼已就霍尔木兹海峡安全过境航线的地理坐标，以及该协议的国际对外公布方式达成共识。](https://www.fastbull.com/cn/fastshort/4311790_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [Wolfspeed将从五角大楼获得15亿美元的有条件贷款。](https://www.fastbull.com/cn/fastshort/4311766_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国民主党就动用纳税人资金投放电视广告一事起诉特朗普。](https://www.fastbull.com/cn/fastshort/4311779_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美联储官员提及AI生产率方面的担忧。](https://www.fastbull.com/cn/fastshort/4311693_214_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [伊朗外交部发言人巴加埃：伊朗对美方提议的答复将通过中间人传递。](https://www.fastbull.com/cn/fastshort/4311789_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国总统特朗普：我爱波兰人民。我支持他们的总统。](https://www.fastbull.com/cn/fastshort/4311705_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [英国海上贸易行动办公室：已收到关于卡塔尔马迪纳特阿什沙马尔以北51海里的事件报告。一艘油轮报告称遭到多枚炮弹袭击；已报告伤亡情况。](https://www.fastbull.com/cn/fastshort/4311748_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [布伦特原油期货结算价为每桶100.20美元，下跌38美分，跌幅0.38%。](https://www.fastbull.com/cn/fastshort/4311701_214_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [据Axios：特朗普政府原则上不反对叙利亚派兵对抗胡塞武装。](https://www.fastbull.com/cn/fastshort/4311752_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [文件显示：特朗普政府提议向婚姻率和生育率较高的地区增加交通资金投入。](https://www.fastbull.com/cn/fastshort/4311773_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普将于周四出席人工智能峰会。](https://www.fastbull.com/cn/fastshort/4311716_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普将于周四向马斯克颁发科学成就奖。](https://www.fastbull.com/cn/fastshort/4311723_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美元指数7日上涨。](https://www.fastbull.com/cn/fastshort/4311747_204_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普：已与以色列总理内塔尼亚胡通话。](https://www.fastbull.com/cn/fastshort/4311689_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美股三大指数集体收跌。](https://www.fastbull.com/cn/fastshort/4311760_204_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普回应未来或遭弹劾：以前对民主党人“留一线”了。](https://www.fastbull.com/cn/fastshort/4311732_214_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [据CNN：据知情人士透露，纽约检方预计将对委内瑞拉前总统尼古拉斯·马杜罗及其妻子提出新的指控，涉及近年来被委内瑞拉政府拘押的美国人据称遭受酷刑一事。](https://www.fastbull.com/cn/fastshort/4311771_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普：我打算通过竞选集会助力共和党。](https://www.fastbull.com/cn/fastshort/4311691_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [市场资讯：白宫寻求在中期选举前打击伊朗的方案。](https://www.fastbull.com/cn/fastshort/4311720_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国财政部公布，在最近半个报告期内，外国投资者买入了价值40.90亿美元、2033年9月30日到期的7年期国债，上月该买入规模为67.86亿美元。](https://www.fastbull.com/cn/fastshort/4311718_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [突尼斯央行：基准利率维持在8%不变。](https://www.fastbull.com/cn/fastshort/4311698_1_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [巴基斯坦军队已在沙特开展多领域防务合作。](https://www.fastbull.com/cn/fastshort/4311740_214_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [市场资讯：美国（对伊朗）潜在打击的规模和目标尚未确定。](https://www.fastbull.com/cn/fastshort/4311722_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普谈及频繁赴得州的原因：要确保帕克斯顿胜选。](https://www.fastbull.com/cn/fastshort/4311692_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [美国8月消费者信贷环比增长82.81亿美元，此前预期增长150亿美元。](https://www.fastbull.com/cn/fastshort/4311717_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:38.045586+00:00 · [特朗普谈及伊朗：他们整个国家将会被彻底摧毁。](https://www.fastbull.com/cn/fastshort/4311704_212_1) · fastbull · last_seen 2026-10-07T20:51:38.045586+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [杜克能源与美国北卡罗来纳州达成协议，协议包含针对大负荷客户的独立电价，保护普通用户免于承担数据中心相关成本。  数据中心需预先支付电网接入费用。](https://wallstreetcn.com/livenews/3174983) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [法国总理承诺控制能源价格，并出台措施平息抗议](https://wallstreetcn.com/livenews/3174996) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [黄金ETF收跌将近1.7%，与地产ETF、新兴市场ETF、小盘股指ETF等领跌美股大类资产类ETF](https://wallstreetcn.com/livenews/3174991) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美元指数涨0.4%，一度逼近10月5日顶部102.535](https://wallstreetcn.com/livenews/3174979) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://wallstreetcn.com/livenews/3174999) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [叙利亚计划一年内将石油产量翻倍，投资者正回归](https://wallstreetcn.com/livenews/3174994) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [OpenAI：GPT-6 在面对越狱攻击时表现出更强的抵御能力](https://wallstreetcn.com/livenews/3174974) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美国联邦贸易委员会（FTC）和美国农业部（USDA）就市场行为启动调查，其中包括潜在的反竞争行为，迪尔公司及其他农用设备制造商股价应声大跌。  约翰迪尔/迪尔农机收跌3.8%，卡特彼勒跌5.75%，爱科集团（AGCO）跌6.06%，凯斯纽（CNH）跌6.1%。](https://wallstreetcn.com/livenews/3174997) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [“特斯拉劲敌”Rivian从德国大众汽车集团获得10亿美元定期贷款，将于2036年10月7日到期。  这笔贷款与现存合资公司协议有关。](https://wallstreetcn.com/livenews/3174995) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [伊朗外交部发言人：伊朗与阿曼已就霍尔木兹海峡安全过境航线的地理坐标，以及该协议的国际对外公布方式达成共识。](https://wallstreetcn.com/livenews/3174998) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [Levi Strauss三季度净营收16.1亿美元，分析师预期16.2亿美元。  三季度调整后每股收益（EPS）为0.48美元，分析师预期0.36美元。  三季度调整后EBIT为2.49亿美元，分析师预期1.94亿美元。  预计全年调整后EPS将为1.54-1.56美元，公司原本预计1.46-1.52美元。](https://wallstreetcn.com/livenews/3174990) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美债价格周三呈现出V形走势](https://wallstreetcn.com/livenews/3174978) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [纳斯达克金龙中国指数收涨0.12%，报5638.07点，整体低开高走。  热门中概股里，万国数据初步收涨2.2%，蔚来、京东、理想至少涨1%，携程跌0.4%，禾赛跌1.3%，百度跌1.9%。  ETF中，中国科技指数ETF（CQQQ）收跌1.31%，中概互联网指数ETF（KWEB）收跌0.86%。MSCI新兴市场ex中国ETF（EMXC）收跌1.38%，德银嘉实沪深300指数ETF（ASHR）收跌0.61%，XtrackersHarvest中证50（ASHS）收跌0.59%。](https://wallstreetcn.com/livenews/3174984) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [Wolfspeed股票盘后交易中上涨12%，该公司将从五角大楼获得15亿美元的有条件贷款。](https://wallstreetcn.com/livenews/3174988) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [周三（10月7日）纽约尾盘，欧元兑美元跌0.55%，报1.1196，亚太盘初以来持续扩大跌幅、北京时间20:27刷新10月5日以来低点涨1.1161。  英镑兑美元跌0.48%，美元兑瑞郎涨0.22%。  商品货币对中，澳元兑美元跌0.28%，纽元兑美元跌0.41%，美元兑加元涨0.36%。](https://wallstreetcn.com/livenews/3174982) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [周三（10月7日）纽约尾盘，美元兑日元跌0.04%，报158.04日元，日内交投区间为158.51-157.85日元，北京时间16:00前后出现一波V形反转行情。  欧元兑日元跌0.58%，英镑兑日元跌0.51%，日元兑离岸人民币涨0.05%](https://wallstreetcn.com/livenews/3174981) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [印尼官员：印尼考虑暂停新建生产镍半成品的加工设施](https://wallstreetcn.com/livenews/3174970) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [加纳宣布将正式申请加入金砖国家合作机制](https://wallstreetcn.com/livenews/3174980) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [周三（10月7日），美股行业ETF几乎全线溃败，工业指数ETF收跌2.18%，区域银行ETF、银行业ETF、全球航空业ETF、半导体ETF跌1.68%-1.18%，生物科技指数ETF则涨0.12%，医疗业ETF涨1.03%。](https://wallstreetcn.com/livenews/3174993) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [巴基斯坦军队已在沙特开展多领域防务合作](https://wallstreetcn.com/livenews/3174976) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [标普、纳指脱离收盘历史最高位，半导体、银行、小盘股指数跌超1%](https://wallstreetcn.com/livenews/3174985) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [标普500指数的11个板块多数收跌，工业板块跌2.14%——成分股卡特彼勒、埃姆科集团、安朗杰、联合租赁、美国舒适系统等领跌，原材料、房地产板块至多跌1.53%，能源板块跌0.46%，信息技术/科技、电信板块至多跌0.1%，保健板块则涨1.06%。](https://wallstreetcn.com/livenews/3174989) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [日本千叶县东北部发生4.8级地震](https://wallstreetcn.com/livenews/3174975) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美国海洋能源管理局（MMA）：墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://wallstreetcn.com/livenews/3174977) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [白宫要求美国五角大楼提供打击伊朗的选项。（大西洋月刊）](https://wallstreetcn.com/livenews/3174971) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [开市客/好市多9月同店销售总额增长11.4%，分析师预期增长9.9%。  9月美国同店销售剔除汽油、外汇因素后增长8%，分析师预期增长7.2%。](https://wallstreetcn.com/livenews/3174992) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [周三（10月7日），彭博电动汽车价格回报指数跌1.14%，报3170.73点，亚太盘初以来持续下挫。  成分股中，伦敦上市的ITM能源收跌6.47%，H股奇瑞汽车收跌5.39%，与Lucid Group、MP材料、美洲立业等领跌，H股雅迪集团控股涨1.62%、蔚来集团涨1.88%、理想汽车涨2.11%、小鹏集团涨2.15%，沃尔沃汽车集团收涨3.49%。](https://wallstreetcn.com/livenews/3174987) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [谷歌正在扩大其SynthID Detector的使用范围](https://wallstreetcn.com/livenews/3174972) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美国情报主管、AI主管Jay Clayton：美国正与20-25家AI公司对话。（CNBC）](https://wallstreetcn.com/livenews/3174973) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:36.363864+00:00 · [美国国家飓风中心（NHC）：飓风“以赛亚”（Isaias）正在快速增强，预计将于周四早晨增强为飓风。](https://wallstreetcn.com/livenews/3175001) · wallstreetcn · last_seen 2026-10-07T20:51:36.363864+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [美股三大指数集体收跌 热门科技股涨跌不一](https://www.cls.cn/detail/2498849) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [日本千叶县东北部发生4.8级地震](https://www.cls.cn/detail/2498844) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，谷歌扩大用于检测人工智能使用的工具访问权限，谷歌称能够检测来自谷歌及其合作伙伴的 AI 的工具。](https://www.cls.cn/detail/2498828) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，Anthropic发布最新AI模型Claude Haiku 5.5，用于执行那些对成本敏感的任务。这款模型“到手价”将明显低于4.5版。](https://www.cls.cn/detail/2498831) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，突尼斯央行维持关键利率在8%不变。](https://www.cls.cn/detail/2498835) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，WTI原油期货结算价为88.28美元/桶，下跌1.16美元，跌幅1.30%。](https://www.cls.cn/detail/2498834) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [巴基斯坦军队已在沙特开展多领域防务合作](https://www.cls.cn/detail/2498846) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [法国雷诺阿博物馆遭窃近一月后多人被捕](https://www.cls.cn/detail/2498826) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，美国8月消费信贷82.8亿美元，预期150亿美元，前值由180.62亿美元修正为177.4亿美元。](https://www.cls.cn/detail/2498838) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，好市多9月同店销售总额增长11.4%，分析师预期增长9.9%。](https://www.cls.cn/detail/2498852) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [美联储纪要显示9月升息获一致支持 多数与会者倾向年内再加一次](https://www.cls.cn/detail/2498829) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，戴尔推出搭载英伟达RTX SPARK的XPS 16创作者版笔记本电脑。](https://www.cls.cn/detail/2498830) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，Rivian从大众集团获得的10亿美元贷款到期日为2036年10月7日。](https://www.cls.cn/detail/2498853) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [利弗莫尔中概股龙头指数收跌0.96%](https://www.cls.cn/detail/2498850) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，微软高管表示，搭载英伟达芯片的RTX Spark设备将于下周开始发货。](https://www.cls.cn/detail/2498827) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [FOMC会议纪要显示 官员们敦促为市场压力制定预案](https://www.cls.cn/detail/2498836) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，美国海洋能源管理局（MMA）称，墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://www.cls.cn/detail/2498847) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，贝森特谈债券高债券收益率，这是全球现象，核心通胀率接近美联储目标。](https://www.cls.cn/detail/2498824) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [OpenAI面向全球所有ChatGPT用户全面上线GPT-6](https://www.cls.cn/detail/2498843) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，恒指期货夜盘收跌0.64%，报23962点，低水169点。](https://www.cls.cn/detail/2498839) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，杜克能源与北卡罗来纳州达成协议，协议包含针对大负荷客户的独立电价，保护普通用户免于承担数据中心相关成本。数据中心需预先支付电网接入费用。](https://www.cls.cn/detail/2498848) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [美元指数7日上涨](https://www.cls.cn/detail/2498845) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，SpaceX大规模举债引发市场担忧，信用风险飙升。](https://www.cls.cn/detail/2498832) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [美“龙”飞船载4名宇航员脱离空间站 启程返回地球](https://www.cls.cn/detail/2498833) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [沙特两座机场遭袭致3死36伤](https://www.cls.cn/detail/2498841) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，微软新款高端笔记本电脑起售价为2,599美元。](https://www.cls.cn/detail/2498825) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [也门胡塞武装称过去24小时向联军目标发射11枚导弹](https://www.cls.cn/detail/2498842) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [英伟达与微软携手以RTX Spark及AI智能体开启Windows PC全新纪元](https://www.cls.cn/detail/2498837) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [财联社10月8日电，美国半导体公司Wolfspeed股价盘后上涨28%，此前宣布获得15亿美元贷款承诺。](https://www.cls.cn/detail/2498851) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T20:51:35.481333+00:00 · [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://www.cls.cn/detail/2498854) · cls · last_seen 2026-10-07T20:51:35.481333+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [1.77亿港元成交，虞世南《积时帖》湮没81年后现身](https://www.thepaper.cn/newsDetail_forward_34208947) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [中国乒协回应极端球迷越界行为：已协助报案，将推动建立赛场禁入名单制度](https://www.thepaper.cn/newsDetail_forward_34209230) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T15:51:52.628398+00:00 · [国庆档电影票房破11亿！多部影片官宣海外上映计划](https://www.thepaper.cn/newsDetail_forward_34208135) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [奔赴“县”场｜在他们“出发”与“留下”的地方，看见回归的浙商](https://www.thepaper.cn/newsDetail_forward_34207949) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [特写｜中网冠军发布会，藏着德约的坚韧、奉献和永不言败](https://www.thepaper.cn/newsDetail_forward_34207739) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [奔赴“县”场｜在他们“出发”与“留下”的地方，看见回归的浙商](https://www.thepaper.cn/newsDetail_forward_34207949) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [特写｜中网冠军发布会，藏着德约的坚韧、奉献和永不言败](https://www.thepaper.cn/newsDetail_forward_34207739) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T15:51:52.628398+00:00 · [IceCube博士后田玮谈新晋物理诺奖得主哈尔岑：82岁仍在写论文、开会，常来上海交流分享](https://www.thepaper.cn/newsDetail_forward_34207061) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [缅北电诈覆灭纪录片披露演员王星案详情：短短4天遭转卖3次](https://www.thepaper.cn/newsDetail_forward_34208282) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [孙颖莎不敌泰国选手帕拉南，止步WTT中国大满贯女单32强](https://www.thepaper.cn/newsDetail_forward_34209231) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [缅北电诈覆灭纪录片披露演员王星案详情：短短4天遭转卖3次](https://www.thepaper.cn/newsDetail_forward_34208282) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [孙颖莎不敌泰国选手帕拉南，止步WTT中国大满贯女单32强](https://www.thepaper.cn/newsDetail_forward_34209231) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T15:51:52.628398+00:00 · [奔赴“县”场｜像江苏又像浙江，费孝通一辈子放不下的地方](https://www.thepaper.cn/newsDetail_forward_34202564) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
 - 2026-10-07T15:51:52.628398+00:00 · [对话系外地球（ET）巡天卫星首席科学家葛健：哈尔岑的创新路径对我国建设大型科学装置有启示意义](https://www.thepaper.cn/newsDetail_forward_34208153) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T15:51:52.628398+00:00 · [游客称山东潍坊一饭店现阴阳菜单，老板：当下食材不同，涉及的菜都免单了](https://www.thepaper.cn/newsDetail_forward_34208085) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T15:51:52.628398+00:00 · [游客称山东潍坊一饭店现阴阳菜单，老板：当下食材不同，涉及的菜都免单了](https://www.thepaper.cn/newsDetail_forward_34208085) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T15:51:52.628398+00:00 · [当AI浪潮遭遇“减速”之问，回看30年前那场浪潮走向](https://www.thepaper.cn/newsDetail_forward_34141698) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
 - 2026-10-07T15:51:51.482515+00:00 · [绿城中国&#40;03900.HK&#41;前9个月总合同销售额1421亿元](https://www.gelonghui.com/news/5320861) · gelonghui · last_seen 2026-10-07T15:51:51.482515+00:00
 - 2026-10-07T15:51:51.482515+00:00 · [至源控股&#40;00990.HK&#41;：马来西亚槟城AI数据中心项目规划IT容量67兆瓦 订立十年期托管服务协议](https://www.gelonghui.com/news/5320866) · gelonghui · last_seen 2026-10-07T15:51:51.482515+00:00
@@ -209,11 +378,11 @@ first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发
 - 2026-10-07T15:51:46.434923+00:00 · [【风口研报·洞察】三星电机进入下一代大尺寸玻璃基板封装级验证，与多家全球大型企业展开合作，目标在2027年底前实现生产线投产，玻璃基板产业化进入决策前夜；国庆间海外市场的交易逻辑](https://www.cls.cn/detail/2498560) · cls · last_seen 2026-10-07T15:51:46.434923+00:00
 - 2026-10-07T15:51:46.434923+00:00 · [【公告全知道】芯片+算力+光纤+AIDC+华为+CPO！公司光通信产品预计获客户斥资5亿美元采购](https://www.cls.cn/detail/2498723) · cls · last_seen 2026-10-07T15:51:46.434923+00:00
 - 2026-10-07T15:51:46.434923+00:00 · [财联社10月7日电，谷歌宣布，其SynthID检测器（SynthID Detector）现已在全球范围内以英语提供。该工具用于识别由AI生成的内容。](https://www.cls.cn/detail/2498768) · cls · last_seen 2026-10-07T15:51:46.434923+00:00
-- 2026-10-07T10:15:08.616084+00:00 · [旁白｜叫停之后争论未止：活体投喂为何总有人叫好？](https://www.thepaper.cn/newsDetail_forward_34207565) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T10:15:08.616084+00:00 · [视频丨缅北电诈团伙一度气焰嚣张，窝点距我口岸仅200米](https://www.thepaper.cn/newsDetail_forward_34207520) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T10:15:08.616084+00:00 · [“非洲手机之王”传音控股拟全球发售8664.83万股H股，预计10月15日在港交所挂牌上市](https://www.thepaper.cn/newsDetail_forward_34207660) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T10:15:08.616084+00:00 · [旁白｜叫停之后争论未止：活体投喂为何总有人叫好？](https://www.thepaper.cn/newsDetail_forward_34207565) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T10:15:08.616084+00:00 · [视频丨缅北电诈团伙一度气焰嚣张，窝点距我口岸仅200米](https://www.thepaper.cn/newsDetail_forward_34207520) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
+- 2026-10-07T10:15:08.616084+00:00 · [“非洲手机之王”传音控股拟全球发售8664.83万股H股，预计10月15日在港交所挂牌上市](https://www.thepaper.cn/newsDetail_forward_34207660) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T10:15:08.616084+00:00 · [又一家锂电企业距离“A+H”更进一步！全球电解液龙头通过港交所聆讯](https://www.thepaper.cn/newsDetail_forward_34206104) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-07T10:15:08.616084+00:00 · [马上评｜气得王皓报警，治理体育饭圈该动真格了](https://www.thepaper.cn/newsDetail_forward_34208488) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T10:15:08.616084+00:00 · [马上评｜气得王皓报警，治理体育饭圈该动真格了](https://www.thepaper.cn/newsDetail_forward_34208488) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T10:15:07.480875+00:00 · [和誉-B&#40;02256.HK&#41;10月7日耗资26万港元回购3万股](https://www.gelonghui.com/news/5320820) · gelonghui · last_seen 2026-10-07T10:15:07.480875+00:00
 - 2026-10-07T10:15:07.480875+00:00 · [百融智能－Ｗ&#40;06608.HK&#41;10月7日耗资144.5万港元回购27.4万股](https://www.gelonghui.com/news/5320815) · gelonghui · last_seen 2026-10-07T10:15:07.480875+00:00
 - 2026-10-07T10:15:07.480875+00:00 · [高伟电子&#40;01415.HK&#41;10月7日耗资128.5万港元回购5.5万股](https://www.gelonghui.com/news/5320816) · gelonghui · last_seen 2026-10-07T10:15:07.480875+00:00
@@ -358,7 +527,7 @@ first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发
 - 2026-10-07T10:15:01.999537+00:00 · [近岸蛋白：赋能AI的高通量湿实验与数据包服务尚处于市场拓展初期](https://www.cls.cn/detail/2498658) · cls · last_seen 2026-10-07T10:15:01.999537+00:00
 - 2026-10-07T10:15:01.999537+00:00 · [【财联社早知道】77.75亿美元！刷新纪录！艾博生物与全球顶尖药企诺华签署授权协议，机构持续看好创新药及其产业链的长期发展空间，这家公司已累计为全球超过700家客户赋能了数千个创新药研发项目](https://www.cls.cn/detail/2498530) · cls · last_seen 2026-10-07T10:15:01.999537+00:00
 - 2026-10-07T10:15:01.999537+00:00 · [恒生科技指数将把成分股由30只扩充至50只](https://www.cls.cn/detail/2498624) · cls · last_seen 2026-10-07T10:15:01.999537+00:00
-- 2026-10-07T08:51:54.721317+00:00 · [《欢迎来龙餐馆》将角逐第99届奥斯卡最佳国际影片](https://www.thepaper.cn/newsDetail_forward_34207584) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T08:51:54.721317+00:00 · [《欢迎来龙餐馆》将角逐第99届奥斯卡最佳国际影片](https://www.thepaper.cn/newsDetail_forward_34207584) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T08:51:54.721317+00:00 · [媒体：6个账号已被锁定，“开盒”陈楚生于法不容](https://www.thepaper.cn/newsDetail_forward_34205132) · thepaper · last_seen 2026-10-07T08:51:54.721317+00:00
 - 2026-10-07T08:51:54.721317+00:00 · [当井柏然成为巴西最受欢迎的中国男人，传播学者追起《早春晴朗》](https://www.thepaper.cn/newsDetail_forward_34204688) · thepaper · last_seen 2026-10-07T08:51:54.721317+00:00
 - 2026-10-07T08:51:54.721317+00:00 · [2026年诺贝尔物理学奖揭晓，现代高能中微子天文学奠基人弗朗西斯·哈尔岑获奖](https://www.thepaper.cn/newsDetail_forward_34205262) · thepaper · last_seen 2026-10-07T08:51:54.721317+00:00
@@ -522,325 +691,22 @@ first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发
 - 2026-10-07T08:51:48.677468+00:00 · [恒生科技指数将把成分股扩充至50只](https://www.cls.cn/detail/2498624) · cls · last_seen 2026-10-07T08:51:48.677468+00:00
 - 2026-10-07T08:51:48.677468+00:00 · [中科海讯：被禁止参加海军物资工程服务采购活动1年](https://www.cls.cn/detail/2498610) · cls · last_seen 2026-10-07T08:51:48.677468+00:00
 - 2026-10-07T08:51:48.677468+00:00 · [全国铁路迎来国庆假期返程客流最高峰](https://www.cls.cn/detail/2498593) · cls · last_seen 2026-10-07T08:51:48.677468+00:00
-- 2026-10-07T02:16:22.708873+00:00 · [马上评｜让游客住学生宿舍，情理法如何平衡](https://www.thepaper.cn/newsDetail_forward_34207074) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T02:16:22.708873+00:00 · [马上评｜让游客住学生宿舍，情理法如何平衡](https://www.thepaper.cn/newsDetail_forward_34207074) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T02:16:22.708873+00:00 · [邵佳一向球迷道歉：必须在接下来的工作中更加努力](https://www.thepaper.cn/newsDetail_forward_34206260) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
-- 2026-10-07T02:16:22.708873+00:00 · [深陷信任危机的邵佳一：只发现问题还不够，解决问题是关键](https://www.thepaper.cn/newsDetail_forward_34206356) · thepaper · last_seen 2026-10-07T15:51:52.628398+00:00
+- 2026-10-07T02:16:22.708873+00:00 · [深陷信任危机的邵佳一：只发现问题还不够，解决问题是关键](https://www.thepaper.cn/newsDetail_forward_34206356) · thepaper · last_seen 2026-10-07T20:51:43.183403+00:00
 - 2026-10-07T02:16:22.708873+00:00 · [对话徐东莲，谈新科物理学诺奖得主哈尔岑：他永远把科学放在第一位，支持中国深海中微子望远镜 ](https://www.thepaper.cn/newsDetail_forward_34205985) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-07T02:16:22.062268+00:00 · [传音控股&#40;02636.HK&#41;拟全球发售8664.83万股H股 预计10月15日上市](https://www.gelonghui.com/news/5320728) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-07T02:16:22.062268+00:00 · [传音控股&#40;02636.HK&#41;10月7日起招股 发售价不高于每股38.80港元](https://www.gelonghui.com/news/5320727) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-07T02:16:22.062268+00:00 · [靛蓝星&#40;08373.HK&#41;与红日订立和解契据](https://www.gelonghui.com/news/5320729) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-07T02:16:22.062268+00:00 · [国产粉末钢崛起丨天工国际粉末钢入选未来潜力榜单国产材料首位](https://www.gelonghui.com/news/5320730) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Al Jazeera said Yemeni forces launched an offensive to retake the al-Waziyah area in Taiz province from Houthi fighters.](https://mktnews.net/flashDetail.html?id=01a11417-a26c-7ee0-a7c8-1c8e4db009d6) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Foreign Exchange Reserves &#40;Sep&#41;](https://mktnews.net/flashDetail.html?id=01a1141b-a719-7ee0-a7c8-379c8857084d) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Analyst: Risk balance currently favors oil holding near $100/bbl](https://mktnews.net/flashDetail.html?id=01a11425-5bcd-7ee0-a7c8-4a2961d32dc7) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [PBOC raises gold reserves for 23rd consecutive month](https://mktnews.net/flashDetail.html?id=01a11419-f99c-7ee0-a7c8-2bc4e016cbee) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [China&#x27;s railways expect 24.15 million passengers today](https://mktnews.net/flashDetail.html?id=01a113e7-8a7d-7ee0-a7c7-8f205aa17956) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Japan&#x27;s 30-year government bond yield fell 3.0 basis points to 4.205%.](https://mktnews.net/flashDetail.html?id=01a113e1-1150-7ee0-a7c7-73825638a7e9) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Taiwan&#x27;s TAIEX opened down 165.37 points, or 0.33%, at 49,657.18 on Wednesday, Oct. 7.](https://mktnews.net/flashDetail.html?id=01a113e0-f5f3-7ee0-a7c7-6a20e80fcbbe) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Hong Kong stocks opened lower: HSI down 0.45%, Hang Seng Tech Index down 0.33%.](https://mktnews.net/flashDetail.html?id=01a113f3-7cd3-7ee0-a7c7-98ffeadc227b) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Nanya notifies customers of DRAM contract price rise up to 20%](https://mktnews.net/flashDetail.html?id=01a11401-24f4-7ee0-a7c7-d111c2bd016a) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [FTSE China A50 index futures opened 0.22% higher.](https://mktnews.net/flashDetail.html?id=01a113e0-5c12-7ee0-a7c7-66395423e58d) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Bank of Japan will buy ¥85 billion of 10-25 year JGBs, down from ¥100 billion in the prior operation. It will buy ¥330 billion of 1-3 year JGBs, down from ¥355 billion previously.](https://mktnews.net/flashDetail.html?id=01a113eb-4195-7ee0-a7c7-914ae91bb3bc) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [A$70 billion Australian coal sector faces new climate-law risk after High Court ruling](https://mktnews.net/flashDetail.html?id=01a113f5-0672-7ee0-a7c7-ac58393fd691) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Spot gold fell below $4,150/oz, down 0.33% intraday.](https://mktnews.net/flashDetail.html?id=01a113f5-4cc5-7ee0-a7c7-b30ccfad0a3c) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Trump says government to take 40% stake in next-generation submarine shipyard](https://mktnews.net/flashDetail.html?id=01a11413-5140-7ee0-a7c8-00e0e0db5616) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Hang Seng Biotechnology Index fell more than 3%, as GenScript Biotech &#40;01548.HK&#41; slid over 14%, 02228.HK dropped about 13%, 03696.HK fell over 10% and Ascentage Pharma &#40;06855.HK&#41; declined nearly 8%.](https://mktnews.net/flashDetail.html?id=01a11420-18d4-7ee0-a7c8-415ea44d1c98) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Samsung to invest nearly $5bn in semiconductor substrate expansion in South Korea and Vietnam](https://mktnews.net/flashDetail.html?id=01a113fb-ecae-7ee0-a7c7-c88076210352) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [US dollar index &#40;DXY&#41; touched 102, up 0.16% on the day.](https://mktnews.net/flashDetail.html?id=01a1140e-b9c0-7ee0-a7c7-f5e55a87e129) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Wall Street Journal, citing current and former Treasury officials, reported U.S. Treasury Secretary Bessent&#x27;s management style has been a factor—sometimes the primary factor—in the departures of several key officials. Officials say since Bessent took office in early 2025 he has frequently rebuked both senior advisers and junior staff over matters large and small.](https://mktnews.net/flashDetail.html?id=01a113e5-b1a5-7ee0-a7c7-7e422973d8e0) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Malaysia&#x27;s FTSE KLCI gave back gains, now down 1.1% at 1,616.08 points.](https://mktnews.net/flashDetail.html?id=01a11415-4714-7ee0-a7c8-140114e35306) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Hong Kong equities opened lower on October 7 &#40;Wednesday&#41;. The Hang Seng Index opened down 108.27 points &#40;-0.45%&#41; at 24,172.29. The Hang Seng TECH Index opened down 13.94 points &#40;-0.33%&#41; at 4,209.14. The Hang Seng China Enterprises Index opened down 33.89 points &#40;-0.42%&#41; at 8,095.08. The Hang Seng Red Chip Index opened up 10.60 points &#40;+0.27%&#41; at 4,009.24.](https://mktnews.net/flashDetail.html?id=01a113f3-8e14-7ee0-a7c7-a2e4df59a9e0) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Chinese team publishes first global 3D spatiotemporal single‑cell atlas of entire rice lifecycle](https://mktnews.net/flashDetail.html?id=01a113f9-e121-7ee0-a7c7-c0318110e7e4) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [YONHAP: The number of South Korea&#x27;s population-decline areas rose to 92 from 89.](https://mktnews.net/flashDetail.html?id=01a11403-f0dd-7ee0-a7c7-de9e16984fd3) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [China&#x27;s foreign exchange reserves in September were $3.40025 tln, down from $3.43833 tln previously, a decline of about $38.08 bln.](https://mktnews.net/flashDetail.html?id=01a1141b-d8da-7ee0-a7c8-38a0cef18726) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Kyodo reports sources say Japan may mention nuclear-powered submarines in its year-end revision of a key security document, designating them for further study and consideration. Some ruling-coalition lawmakers favor exploring acquisition, but the issue remains sensitive; sources say wording will likely stop short of implying a decision to procure.](https://mktnews.net/flashDetail.html?id=01a11414-9cc5-7ee0-a7c8-0d26bb6be591) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Hong Kong-listed biopharma names pulled back in early trade; WuXi Biologics &#40;02269.HK&#41; opened down 3.11%, BeiGene &#40;06160.HK&#41; down 2.45% and Innovent Biologics &#40;01801.HK&#41; down 2.37%.](https://mktnews.net/flashDetail.html?id=01a113f5-6126-7ee0-a7c7-b999defbf6e3) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [CENC automatic determination: at 10:00 on Oct 7 an earthquake of about magnitude 3.5 occurred near Gao County, Yibin, Sichuan &#40;28.55°N, 104.66°E&#41;. Final determination pending official rapid bulletin.](https://mktnews.net/flashDetail.html?id=01a11418-e885-7ee0-a7c8-27b5d26e8b5f) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Finland orders pause on construction of two Google data centres](https://mktnews.net/flashDetail.html?id=01a1140b-bcf0-7ee0-a7c7-ef963e841b22) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Hong Kong open: tech/internet names slipped; Alibaba &#40;09988.HK&#41; and Baidu &#40;09888.HK&#41; down more than 2%.](https://mktnews.net/flashDetail.html?id=01a11409-e58e-7ee0-a7c7-e75c321f0648) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Wall Street Journal reports Trump is increasingly relying on Treasury Secretary Bessent and has tasked him with tackling high borrowing costs, oil-driven stubborn inflation and rapidly accumulating government debt. A senior official who worked with Bessent said the burden of the president’s entire economic-policy agenda rests on the secretary.](https://mktnews.net/flashDetail.html?id=01a113e6-c3e3-7ee0-a7c7-868469c6182d) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.837246+00:00 · [Spot silver fell below $61/oz, down 0.56% intraday.](https://mktnews.net/flashDetail.html?id=01a11410-9fbb-7ee0-a7c7-fa982c62f615) · mktnews · last_seen 2026-10-07T02:16:20.837246+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [三星斥资近50亿美元在韩越扩产半导体基板](https://flash.jin10.com/detail/20261007093025247800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [据半岛电视台：也门部队发起攻势，旨在从胡塞武装手中收复塔伊兹省的瓦齐亚（al-Waziiya）地区。](https://flash.jin10.com/detail/20261007100049284800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [港股开盘科网股走低，阿里巴巴&#40;09988.HK&#41;、百度&#40;09888.HK&#41;均跌超2%。](https://flash.jin10.com/detail/20261007094545371800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [现货价格](https://flash.jin10.com/detail/20261007092929507800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [金十数据整理：每日期货市场要闻速递（2026-10-07）](https://flash.jin10.com/detail/20261007100957667800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [中国团队全球首次构建水稻全生命周期三维时空细胞图谱](https://flash.jin10.com/detail/20261007092814877800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [法国预算谈不拢就绕过表决？财长亮出备用方案，法债风险再升温](https://flash.jin10.com/detail/20261007092853434800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [中国央行连续第23个月增持黄金](https://flash.jin10.com/detail/20261007100319829800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [金十图示：2026年10月07日（周三）中国9月末官方储备资产变化一览](https://flash.jin10.com/detail/20261007101127927800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [黄金多头默默布局静待“东风”，高盛的看涨观点并不适用于...](https://flash.jin10.com/detail/20261007100357349800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [密集补充资本！一个月内，多家险企宣布增资](https://flash.jin10.com/detail/20261007094951421800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [中越边境河口口岸今年出入境流量已突破500万人次](https://flash.jin10.com/detail/20261007100122257800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [马来西亚富时KLCI指数回吐涨幅，现跌1.1%，报1616.08点。](https://flash.jin10.com/detail/20261007095816790800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [恒生生物科技指数下跌超3%，金斯瑞生物科技&#40;01548.HK&#41;跌超14%，晶泰控股&#40;02228.HK&#41;跌超13%，英矽智能&#40;03696.HK&#41;跌超10%，亚盛医药&#40;06855.HK&#41;跌近8%](https://flash.jin10.com/detail/20261007100954251800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [日本可能在关键安全文件中提及核潜艇](https://flash.jin10.com/detail/20261007095729812800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [中国地震台网自动测定：10月07日10时00分在四川宜宾市高县附近（北纬28.55度，东经104.66度）发生3.5级左右地震，最终结果以正式速报为准。](https://flash.jin10.com/detail/20261007100152345800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [分析师：目前风险平衡更有利于油价维持在100美元左右](https://flash.jin10.com/detail/20261007101544862800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [施耐德230亿美元收购PTC，押注工业AI“软硬一体”](https://flash.jin10.com/detail/20261007100130140800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [现货白银跌破61美元/盎司，日内跌0.56%。](https://flash.jin10.com/detail/20261007095311636800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [据沙特媒体哈达斯：沙特主导的联盟拦截并摧毁了一枚由胡塞武装发射的弹道导弹，地点位于利雅得北部。](https://flash.jin10.com/detail/20261007095910625800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [芬兰下令停止两座谷歌数据中心的建设工作](https://flash.jin10.com/detail/20261007094745406800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [传DRAM大厂计划再度涨价，涨幅最高达20%](https://flash.jin10.com/detail/20261007093611307800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [中国9月外汇储备 34002.51亿美元，前值34383.3亿美元。](https://flash.jin10.com/detail/20261007100520861800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [特朗普：政府将大量投资“下一代”潜艇造船厂](https://flash.jin10.com/detail/20261007095558801800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [现货价格](https://flash.jin10.com/detail/20261007093216625800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [美元指数DXY向上触及102，日内涨0.16%。](https://flash.jin10.com/detail/20261007095106912800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [据韩联社：韩国“人口下降区”从89个扩大至92个。](https://flash.jin10.com/detail/20261007093918130800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:20.549823+00:00 · [美国总统特朗普周三日程一览](https://flash.jin10.com/detail/20261007093104478800) · jin10 · last_seen 2026-10-07T02:16:20.549823+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [乌克兰首都基辅传出爆炸声。](https://www.fastbull.com/cn/fastshort/4309994_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [日本防相：对这起骇人听闻的罪行深感愤慨。](https://www.fastbull.com/cn/fastshort/4310032_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [比特币跌破84000美元，日内跌1.82%。](https://www.fastbull.com/cn/fastshort/4310073_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [Lambda拟在IPO前最后一轮融资中筹集最高40亿美元。](https://www.fastbull.com/cn/fastshort/4310048_204_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [华侨银行与蚂蚁国际推出代币化存款解决方案，用于新加坡和马来西亚之间的资金管理。](https://www.fastbull.com/cn/fastshort/4310089_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [美元指数突破102关口，日内涨0.16%。](https://www.fastbull.com/cn/fastshort/4310058_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [日本央行将购买850亿日元10年至2日本5年期国债，上一轮操作为1000亿日元。日本央行将购买3300亿日元1年至3年期日本国债，上一轮操作为3550亿日元。](https://www.fastbull.com/cn/fastshort/4310024_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [中越边境河口口岸今年出入境流量已突破500万人次。](https://www.fastbull.com/cn/fastshort/4310060_204_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [特朗普：政府将大量投资“下一代”潜艇造船厂。](https://www.fastbull.com/cn/fastshort/4310065_214_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [美国国务卿鲁比奥将于希腊当地时间周三晚上7点会见希腊总理。](https://www.fastbull.com/cn/fastshort/4310004_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [胡塞武装发射的两枚导弹袭击了也门亚丁国际机场。](https://www.fastbull.com/cn/fastshort/4309998_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [据半岛电视台：也门部队发起攻势，旨在从胡塞武装手中收复塔伊兹省的瓦齐亚（al-Waziiya）地区。](https://www.fastbull.com/cn/fastshort/4310070_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [沙特领导的联盟称，其在利雅得以北拦截并摧毁了一枚胡塞武装发射的弹道导弹。](https://www.fastbull.com/cn/fastshort/4310069_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [日本30年期国债收益率下跌3.0个基点，至4.205%。](https://www.fastbull.com/cn/fastshort/4310012_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [据华尔街日报：美国总统特朗普不仅更加倚重贝森特，还赋予他解决棘手经济问题的重任，这些问题包括高昂的借贷成本、由油价推高的顽固通胀，以及迅速累积的政府债务。一位曾与美国财长贝森特共事的高级政府官员表示，总统整个经济政策议程的重担都压在这位财长肩上。](https://www.fastbull.com/cn/fastshort/4310021_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [欧元兑美元下跌0.21%，报1.1236美元。](https://www.fastbull.com/cn/fastshort/4310079_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [北部湾港成功开辟重庆铝土矿进口直达通道。](https://www.fastbull.com/cn/fastshort/4309988_204_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [纽约期金失守4170美元/盎司，日内跌0.42%。](https://www.fastbull.com/cn/fastshort/4310080_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [布伦特原油日内涨1%，现报101.59美元/桶。](https://www.fastbull.com/cn/fastshort/4309997_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [珀斯铸币厂9月份白银销量增至605,408盎司。](https://www.fastbull.com/cn/fastshort/4310016_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [现货白银跌破61美元/盎司，日内跌0.56%。](https://www.fastbull.com/cn/fastshort/4310062_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [据日本共同社：知情人士透露，日本可能会在年底修订的关键安全文件中提及核动力潜艇，并将其列为进一步研究和探讨的课题。执政联盟内的一些议员希望日本考虑引进核潜艇，但这一问题依然敏感。消息人士称，相关文件中若提及此类潜艇，措辞很可能不会暗示日本已决定引进。](https://www.fastbull.com/cn/fastshort/4310067_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [纽约期金失守4180美元/盎司，日内跌0.17%。](https://www.fastbull.com/cn/fastshort/4310018_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [芬兰下令停止两座谷歌数据中心的建设工作。](https://www.fastbull.com/cn/fastshort/4310055_214_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [菲律宾8月失业率为5.3%。](https://www.fastbull.com/cn/fastshort/4310017_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [据华尔街日报：知情人士透露，美国财长贝森特的行事作风是导致多位关键官员离职的一个因素——有时甚至是主要因素。据十几位现任和前任财政部官员称，自2025年初出任财长以来，无论针对资深顾问还是初级职员，贝森特都会因各种大小事务而严厉训斥他们。](https://www.fastbull.com/cn/fastshort/4310019_1_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [日本将于10月14日发行2.50万亿日元的5年期国债。](https://www.fastbull.com/cn/fastshort/4310040_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [中国央行连续第23个月增持黄金。](https://www.fastbull.com/cn/fastshort/4310077_214_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [中国央行数据显示，9月末外汇储备报34002.51亿美元。](https://www.fastbull.com/cn/fastshort/4310081_204_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:19.341122+00:00 · [美国总统特朗普将于美国东部时间周三下午1点发表声明。](https://www.fastbull.com/cn/fastshort/4310000_212_1) · fastbull · last_seen 2026-10-07T02:16:19.341122+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [香港恒生指数开盘跌0.45%，恒生科技指数跌0.33%](https://wallstreetcn.com/livenews/3174684) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [也门亚丁国际机场遭袭](https://wallstreetcn.com/livenews/3174681) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [全国铁路今天预计发送旅客2415万人次](https://wallstreetcn.com/livenews/3174683) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [中国团队全球首次构建水稻全生命周期三维时空细胞图谱](https://wallstreetcn.com/livenews/3174685) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [日本8月劳工现金收入同比 3.8%，预期 3.7%，前值 4.7%。](https://wallstreetcn.com/livenews/3174677) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [华尔街见闻早餐 &#124; 2026年10月7日](https://wallstreetcn.com/livenews/3174676) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [中国央行连续23个月扩大黄金储备](https://wallstreetcn.com/livenews/3174688) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [日本东证指数升破历史最高收盘水平](https://wallstreetcn.com/livenews/3174680) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [巴彦油田日产原油首次突破5000吨，创历史新高](https://wallstreetcn.com/livenews/3174678) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [中国9月外汇储备 34002.5亿美元，前值 34383.3亿美元。](https://wallstreetcn.com/livenews/3174687) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [报道称DRAM大厂计划涨价，涨幅最高达20%](https://wallstreetcn.com/livenews/3174686) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.794033+00:00 · [日经225指数低开0.14%。韩国首尔综指低开1.1%。](https://wallstreetcn.com/livenews/3174679) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [四川宜宾市高县发生3.6级地震 震源深度5千米](https://www.cls.cn/detail/2498470) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [预计发送旅客415万人次 长三角铁路今日迎来返程客流最高峰](https://www.cls.cn/detail/2498436) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，WTI原油期货涨幅扩大至1%，报90.33美元/桶。](https://www.cls.cn/detail/2498437) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [中越边境河口口岸今年出入境流量已突破500万人次](https://www.cls.cn/detail/2498455) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [也门亚丁国际机场遭袭](https://www.cls.cn/detail/2498432) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，日本30年期国债收益率下跌3.0个基点，至4.205%。](https://www.cls.cn/detail/2498435) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，三星表示，三星钱包现已支持部分通用汽车车型的数字钥匙功能，首批支持车型为部分2026和2027款凯迪拉克电动汽车。](https://www.cls.cn/detail/2498429) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [水利部：确保全年完成水利建设投资1万亿元目标](https://www.cls.cn/detail/2498471) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [10月解禁规模超2900亿元 11股解禁比例超50%](https://www.cls.cn/detail/2498427) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [三星电机计划斥资近50亿美元在韩国和越南扩产半导体基板](https://www.cls.cn/detail/2498442) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，LG电子第三季度销售额为23.83万亿韩元，预期为24.13万亿韩元。营业利润7818亿韩元，预期利润为9955亿韩元。](https://www.cls.cn/detail/2498469) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [港股开盘：恒生指数下跌0.45% 恒生科技指数跌0.33%](https://www.cls.cn/detail/2498439) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [全国铁路今天预计发送旅客2415万人次](https://www.cls.cn/detail/2498438) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，美元指数突破102关口，日内涨0.16%。](https://www.cls.cn/detail/2498456) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [港股医药股多数走弱 金斯瑞生物科技跌近14%](https://www.cls.cn/detail/2498448) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [基辅传出多次爆炸声](https://www.cls.cn/detail/2498431) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [中国央行连续第23个月增持黄金](https://www.cls.cn/detail/2498467) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [DRAM迎超级成长周期 传南亚科计划涨价 涨幅最高达20%](https://www.cls.cn/detail/2498446) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [恒生科技指数下跌1%](https://www.cls.cn/detail/2498447) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，央行数据显示，9月末外汇储备报34002.51亿美元。](https://www.cls.cn/detail/2498468) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，富时中国A50指数期货在上一交易日夜盘收涨0.12%的基础上低开，现涨0.09%。](https://www.cls.cn/detail/2498434) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [日本东证指数升破历史最高收盘水平](https://www.cls.cn/detail/2498426) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，现货白银向下跌破61美元/盎司，日内下跌0.55%。](https://www.cls.cn/detail/2498458) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [媒体：越南考虑股市午间不休市、扩大涨跌幅区间](https://www.cls.cn/detail/2498433) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，比特币跌破84000美元，日内跌逾2%。](https://www.cls.cn/detail/2498466) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，布伦特原油期货涨幅扩大至1%，报101.581美元/桶。](https://www.cls.cn/detail/2498428) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [中国团队全球首次构建水稻全生命周期三维时空细胞图谱](https://www.cls.cn/detail/2498441) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [财联社10月7日电，菲律宾股指上涨1%，报5735.01点。](https://www.cls.cn/detail/2498463) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [北部湾港成功开辟重庆铝土矿进口直达通道](https://www.cls.cn/detail/2498425) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
-- 2026-10-07T02:16:17.127491+00:00 · [Lambda拟在IPO前最后一轮融资中筹集最高40亿美元](https://www.cls.cn/detail/2498445) · cls · last_seen 2026-10-07T02:16:17.127491+00:00
 - 2026-10-06T23:02:34.287416+00:00 · [法国试射一枚未装载核弹头的潜射洲际导弹](https://www.thepaper.cn/newsDetail_forward_34205812) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
 - 2026-10-06T23:02:34.287416+00:00 · [视频丨纪录片《缅北电诈覆灭纪实》第二集《犁庭扫穴》](https://www.thepaper.cn/newsDetail_forward_34205692) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
 - 2026-10-06T23:02:34.287416+00:00 · [在南极千米冰层之下捕捉“宇宙幽灵粒子”！官方详解为何今年物理学诺奖颁给哈尔岑](https://www.thepaper.cn/newsDetail_forward_34205804) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
 - 2026-10-06T23:02:34.287416+00:00 · [奔赴“县”场｜浑源不止悬空寺，小城把“厚道”也变成了风景](https://www.thepaper.cn/newsDetail_forward_34205381) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Reuters-Tankan Manufacturing Index &#40;Oct&#41;](https://mktnews.net/flashDetail.html?id=01a11371-ff50-7ee0-a7c6-aa2700aade45) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Australia AIG/PwC Manufacturing Performance Index improved to -8.7 in September from -16.6 previously.](https://mktnews.net/flashDetail.html?id=01a1133c-d8c4-7ee0-a7c6-26c0df4951c3) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Apple &#40;AAPL.O&#41; will report fiscal fourth-quarter results on Nov. 3 Beijing time; earnings conference call scheduled for 06:00 Beijing time.](https://mktnews.net/flashDetail.html?id=01a11332-aeb6-7ee0-a7c5-ef464d9eef2b) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Yomiuri reports Japan is considering an extra budget focused on disaster-relief spending.](https://mktnews.net/flashDetail.html?id=01a11372-ab30-7ee0-a7c6-c73cf2bd1ac6) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Australia September AIG Construction Performance Index fell to -34.5 from -6.9 previously.](https://mktnews.net/flashDetail.html?id=01a1133d-070f-7ee0-a7c6-34e953105e62) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Saudi-led coalition says Houthi missile threat originates in Sanaa and the Saada and Amran provinces under Houthi control.](https://mktnews.net/flashDetail.html?id=01a1132a-c524-7ee0-a7c5-e69c8597a3e1) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Financial Times reports SpaceX &#40;SPCX.O&#41; plans to raise $40 bln in an Apollo-led financing to purchase NVIDIA &#40;NVDA.O&#41; chips.](https://mktnews.net/flashDetail.html?id=01a11358-60d4-7ee0-a7c6-5e4b442e5a9c) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Chevron &#40;CVX.N&#41; said it does not expect the approaching storm to affect its offshore operations in the US Gulf of Mexico.](https://mktnews.net/flashDetail.html?id=01a11346-d9c5-7ee0-a7c6-4209c9573d8d) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Kim Jong Un sends birthday message to Putin](https://mktnews.net/flashDetail.html?id=01a11366-f92c-7ee0-a7c6-83c7887f0a25) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Reuters-Tankan Non-manufacturing Index &#40;Oct&#41;](https://mktnews.net/flashDetail.html?id=01a11371-ff4a-7ee0-a7c6-a6fdb13cabd2) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Ai Group Australian PMI &#40;manufacturing&#41; &#40;Sep&#41;](https://mktnews.net/flashDetail.html?id=01a1133c-b76e-7ee0-a7c6-1816eec3db1b) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [SATO: supports staged Bank of Japan rate rises, opposes preset pace](https://mktnews.net/flashDetail.html?id=01a11352-2034-7ee0-a7c6-57f19ae0f8d3) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Bank of Japan policy board member Sato said the Bank of Japan must independently set monetary policy in a manner consistent with the government’s proactive fiscal policy.](https://mktnews.net/flashDetail.html?id=01a1133b-4b67-7ee0-a7c6-171cf62d438b) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Nikkei reports Japan plans to open detailed banking data to external researchers as early as this fiscal year, allowing analysis of major banks to uncover previously unidentified risks and improve financial regulation and supervision.](https://mktnews.net/flashDetail.html?id=01a11339-1b59-7ee0-a7c5-fb05139fdeb7) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [U.S. Vice President Vance said Iran must cut its nuclear enrichment capacity to end the war.](https://mktnews.net/flashDetail.html?id=01a1135c-deee-7ee0-a7c6-62ca6b0b486e) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [KYODO: Bank of Japan policy board member Sato said he agrees interest rates need to be adjusted gradually.](https://mktnews.net/flashDetail.html?id=01a1133a-6734-7ee0-a7c6-05a884a3bfae) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [VANCE: Iran must &#x27;substantially&#x27; cut nuclear enrichment capacity; US open to deal](https://mktnews.net/flashDetail.html?id=01a1136c-f431-7ee0-a7c6-93c3c5d1a8f8) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [U.S. Vice President Vance said it is unclear how Iran makes decisions.](https://mktnews.net/flashDetail.html?id=01a1135d-20d0-7ee0-a7c6-6c8183ffdfa7) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [U.S. Vice President Vance has not yet decided whether he will run for president.](https://mktnews.net/flashDetail.html?id=01a1135d-5eb3-7ee0-a7c6-75d9df73014a) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Japan Oct Refinitiv Tankan manufacturing business conditions diffusion index 22, previous 21.](https://mktnews.net/flashDetail.html?id=01a11372-1a40-7ee0-a7c6-b797869c61f8) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [SpaceX seeks $40 bln financing to buy NVIDIA chips](https://mktnews.net/flashDetail.html?id=01a11364-3f05-7ee0-a7c6-7bce6e1485d6) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [BANK OF JAPAN policy board member Sato said he does not believe a preset pace for rate increases should be established.](https://mktnews.net/flashDetail.html?id=01a1133a-ed3a-7ee0-a7c6-0c62bec1ebbd) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Vance: Unclear who is in charge in Iran; unknown how much authority President Pezeshkian and FM Araghchi hold](https://mktnews.net/flashDetail.html?id=01a11371-33a3-7ee0-a7c6-9fbf3e090cb5) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Saudi-led coalition said it intercepted and destroyed a ballistic missile launched by Yemen&#x27;s Houthi movement toward Khamis Mushait.](https://mktnews.net/flashDetail.html?id=01a11329-604a-7ee0-a7c5-dc1f3f67900f) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Shenzhen Transsion Holdings Co., Ltd. is offering 86.6 mln H-shares on HKEX at up to HK$38.8 per share, with listing expected on Oct. 15.](https://mktnews.net/flashDetail.html?id=01a1134f-a3c2-7ee0-a7c6-4e191fbcbfb4) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Venezuela&#x27;s second-largest refinery halts after fire](https://mktnews.net/flashDetail.html?id=01a11333-7c73-7ee0-a7c5-f00533398862) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Japan Oct Refinitiv short-term survey non-manufacturing business sentiment index 23, prior 29.](https://mktnews.net/flashDetail.html?id=01a11372-1fba-7ee0-a7c6-bfed8d5aa37a) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Ai Group Australian PCI &#40;construction&#41; &#40;Sep&#41;](https://mktnews.net/flashDetail.html?id=01a1133c-ebab-7ee0-a7c6-298b4125c959) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [Bank of Japan policy board member Sato said oil price increases driven by the Middle East conflict have slightly skewed the inflation outlook to the upside.](https://mktnews.net/flashDetail.html?id=01a1133d-9bf4-7ee0-a7c6-3f4b111369db) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.723277+00:00 · [2026 FOMC voting member and Dallas Fed President Logan to speak in 10 minutes.](https://mktnews.net/flashDetail.html?id=01a11368-ea50-7ee0-a7c6-8ece80322732) · mktnews · last_seen 2026-10-06T23:02:32.723277+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [霍尔木兹海峡“危险溢价”飙升：船长月薪飙至10万美元，船员被当成“雇佣兵”](https://flash.jin10.com/detail/20261007064710158800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [美国副总统万斯：尚未决定是否竞选总统。](https://flash.jin10.com/detail/20261007063723658800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [澳大利亚9月AIG建筑业表现指数 -34.5，前值-6.9。](https://flash.jin10.com/detail/20261007060203902800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [日本央行审议委员佐藤：由于中东冲突导致油价上涨，价格前景的风险略微偏向上行。](https://flash.jin10.com/detail/20261007060241096800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [日本央行佐藤绫野：同意利率需要逐步调整 不应预设加息步伐](https://flash.jin10.com/detail/20261007062502516800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [万斯：伊朗必须“实质性”地削减核能力，对达成协议持开放态度](https://flash.jin10.com/detail/20261007065420952800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [全球最大黄金ETF--SPDR Gold Trust持仓较上日增加3.707吨，当前持仓量为1059.973吨。](https://flash.jin10.com/detail/20261007064354483800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [SpaceX计划筹集400亿美元资金以购买英伟达芯片](https://flash.jin10.com/detail/20261007064451688800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [万斯：不确定伊朗谁是“话事人”，不清楚伊总统和外长掌握多少实权](https://flash.jin10.com/detail/20261007065850841800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [日本10月路透短观制造业景气判断指数 22，前值21。](https://flash.jin10.com/detail/20261007070002326800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [澳大利亚9月AIG/PWC制造业表现指数 -8.7，前值-16.6。](https://flash.jin10.com/detail/20261007060150533800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [雪佛龙&#40;CVX.N&#41;：预计即将到来的风暴不会对美国墨西哥湾近海地区造成影响。](https://flash.jin10.com/detail/20261007061247746800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [据英国金融时报：SpaceX&#40;SPCX.O&#41;计划通过阿波罗主导的融资筹集400亿美元，以采购英伟达&#40;NVDA.O&#41;芯片。](https://flash.jin10.com/detail/20261007063155202800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [金正恩向普京致生日贺电](https://flash.jin10.com/detail/20261007064748702800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [金十数据全球财经早餐 &#124; 2026年10月7日](https://flash.jin10.com/detail/20261007065944466800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [日本10月路透短观非制造业景气判断指数 23，前值29。](https://flash.jin10.com/detail/20261007070002325800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [金十数据整理：俄乌冲突最新24小时局势跟踪（10月7日）](https://flash.jin10.com/detail/20261007060837737800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [金十数据整理：昨日今晨重要新闻汇总（2026-10-07）](https://flash.jin10.com/detail/20261007063001698800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [今日重点关注的财经数据与事件：2026年10月7日 周三](https://flash.jin10.com/detail/20261007064500000800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [深圳传音控股有限公司在港交所发售0.866亿股H股股份，最高发售价不超过38.8港元，预计10月15日上市交易。](https://flash.jin10.com/detail/20261007062219560800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [美国副总统万斯：伊朗必须削减核浓缩能力以结束战争。](https://flash.jin10.com/detail/20261007063650022800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [美国副总统万斯：尚不清楚伊朗如何做出决策。](https://flash.jin10.com/detail/20261007063705876800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [2026年FOMC票委、达拉斯联储主席洛根将于十分钟后发表讲话。](https://flash.jin10.com/detail/20261007065000000800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [据日本读卖新闻：日本政府正在考虑编制一项额外预算，重点用于灾后救助支出。](https://flash.jin10.com/detail/20261007070040087800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [金十图示：2026年10月07日（周三）各大货币对表现](https://flash.jin10.com/detail/20261007060202943800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:32.425937+00:00 · [美联储10月维持利率不变的概率为79.5%](https://flash.jin10.com/detail/20261007060540535800) · jin10 · last_seen 2026-10-06T23:02:32.425937+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [市场消息：日本考虑引进核潜艇。](https://www.fastbull.com/cn/fastshort/4309946_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [明晟公司MSCI新兴市场股票指数涨0.2%，发展中国家外汇指数大致持平%。](https://www.fastbull.com/cn/fastshort/4309894_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [特朗普谈及伊朗：霍尔木兹海峡属于美国。](https://www.fastbull.com/cn/fastshort/4309891_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：美国重启军事打击的决定权在总统手中。我们的核心目标是阻止伊朗获取核武器，进而防止中东地区核扩散。](https://www.fastbull.com/cn/fastshort/4309958_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [日本央行审议委员佐藤：不认为应设定利率上调的预设步伐。](https://www.fastbull.com/cn/fastshort/4309928_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美联储10月维持利率不变的概率为79.5%。](https://www.fastbull.com/cn/fastshort/4309936_204_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [据日本共同社：日本央行新任审议委员佐藤（Sato）表示，同意利率需要逐步调整。](https://www.fastbull.com/cn/fastshort/4309926_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：尚不清楚伊朗如何做出决策。](https://www.fastbull.com/cn/fastshort/4309950_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [本田推迟下一代CR-V混合动力车型在美国和加拿大的上市时间。](https://www.fastbull.com/cn/fastshort/4309893_204_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [日本央行审议委员佐藤：日本央行必须以与政府积极的财政政策相一致的方式独立决定货币政策。](https://www.fastbull.com/cn/fastshort/4309930_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：伊朗国内有愿意达成协议的人，我们愿意与其对话；但同时也有势力在破坏谈判，这对伊朗自身而言非常不明智。当然，最终选择权在伊朗手中。](https://www.fastbull.com/cn/fastshort/4309960_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [特朗普：预计明日可以通报相关磋商情况。](https://www.fastbull.com/cn/fastshort/4309910_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [万斯：伊朗必须“实质性”地削减核能力，对达成协议持开放态度。](https://www.fastbull.com/cn/fastshort/4309956_214_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [COMEX黄金期货收涨0.86%，报4192.7美元/盎司；COMEX白银期货涨0.65%，报61.7美元/盎司。](https://www.fastbull.com/cn/fastshort/4309904_204_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：伊朗的核设施、浓缩设施已经被摧毁，我们会确保伊朗无法重建这些设施、恢复核能力。这才是根本目标。伊朗袭扰航运、美方采取反制，这些都只是次要事件，核心就是阻止伊朗获得核武器。](https://www.fastbull.com/cn/fastshort/4309959_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [周二（10月6日）纽约尾盘，现货黄金脏0.58%，报4163.20美元/盎司。现货白银涨0.44%，报61.3410美元/盎司。COMEX铜期货涨0.24%，报6.6570美元/磅。](https://www.fastbull.com/cn/fastshort/4309899_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [特朗普：已安排与普京通话。](https://www.fastbull.com/cn/fastshort/4309906_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [周二（10月6日）纽约尾盘（周三北京时间04:59），离岸人民币（CNH）兑美元报6.7015元，较周一纽约尾盘涨22点，日内整体交投于6.7058-6.695元区间，连续三个交易日上扬。](https://www.fastbull.com/cn/fastshort/4309905_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：伊朗必须削减核浓缩产能，冲突方能结束。](https://www.fastbull.com/cn/fastshort/4309947_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [据日经新闻：日本计划最早于本财年向外部研究人员开放详细的银行业数据，允许其分析主要银行的信息，以发现尚未识别的风险，并改善金融监管和监督。](https://www.fastbull.com/cn/fastshort/4309924_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国财长贝森特：自8月25日以来，伊朗没有向任何船只装载一桶原油。](https://www.fastbull.com/cn/fastshort/4309895_1_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [特朗普谈及俄罗斯疑似鼠疫事件：双方正在进行深度磋商。](https://www.fastbull.com/cn/fastshort/4309911_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [沙特主导联军称，已拦截并摧毁也门胡塞武装射向海米斯穆谢特的弹道导弹。](https://www.fastbull.com/cn/fastshort/4309916_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [富时罗素称将持续监控韩国市场的结算资金要求，将持续关注韩国卖空、结算及市场预警机制相关进展。](https://www.fastbull.com/cn/fastshort/4309902_204_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：（被问及有关伊朗正在策划袭击英国费尔福德皇家空军基地的新闻）我不会谈论涉密情报。目前袭击尚未发生。我们很清楚伊朗试图在全球范围内打击美国资产。美军和情报部门能力强大，现阶段暂无袭击事件发生。我们会持续做好防范，尽力阻止袭击落地。](https://www.fastbull.com/cn/fastshort/4309962_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [沙特主导联军：胡塞武装的导弹威胁源自其控制的萨那、萨达省与阿姆兰省。](https://www.fastbull.com/cn/fastshort/4309918_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [也门首都萨那传出爆炸声。](https://www.fastbull.com/cn/fastshort/4309897_214_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [美国副总统万斯：美国正与伊朗总统佩泽希齐扬、外长阿拉格齐开展谈判。](https://www.fastbull.com/cn/fastshort/4309957_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [日本央行新任审议委员佐藤（Sato）：受中东冲突推高油价影响，物价前景风险略微偏向于上行。](https://www.fastbull.com/cn/fastshort/4309932_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:31.290353+00:00 · [市场消息：日本政府、日本央行将向研究员们发布贷款数据。](https://www.fastbull.com/cn/fastshort/4309920_212_1) · fastbull · last_seen 2026-10-06T23:02:31.290353+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [行业周报：美国上周API原油库存减少210万桶](https://wallstreetcn.com/livenews/3174639) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [周二（10月6日）纽约尾盘，标普500股指期货最终涨0.68%，道指期货涨0.56%，纳斯达克100股指期货涨0.56%。  罗素2000股指期货跌0.54%。](https://wallstreetcn.com/livenews/3174645) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [OpenAI通过前沿模型发布新的数学成果](https://wallstreetcn.com/livenews/3174665) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [阿波罗考虑在政府借贷中扮演更大角色，因债务规模攀升](https://wallstreetcn.com/livenews/3174661) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [沙特主导联军：胡塞武装的导弹威胁源自其控制的萨那、萨达省与阿姆兰省。](https://wallstreetcn.com/livenews/3174653) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [周二（10月6日）纽约尾盘，现货黄金脏0.58%，报4163.20美元/盎司。  现货白银涨0.44%，报61.3410美元/盎司。  COMEX铜期货涨0.24%，报6.6570美元/磅。](https://wallstreetcn.com/livenews/3174641) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [富时罗素：将持续监控韩国市场的结算资金要求。  将持续关注韩国卖空、结算及市场预警机制相关进展。  将持续监控韩国交易所市场预警系统的运行情况。](https://wallstreetcn.com/livenews/3174642) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [提醒：日内请重点关注（以下均为北京时间）](https://wallstreetcn.com/livenews/3174662) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [港交所批准江苏瘦西湖文旅的IPO申请。](https://wallstreetcn.com/livenews/3174674) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [美国副总统万斯：还没怎么考虑参加2028年的大选。](https://wallstreetcn.com/livenews/3174675) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [周三亚太盘初，WTI原油期货高开0.6%，投资者关注霍尔木兹海峡石油输送数据和中东局势。](https://wallstreetcn.com/livenews/3174658) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [加拿大8月对美出口在新关税前激增](https://wallstreetcn.com/livenews/3174670) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [报道：日本考虑编制第二份补充预算](https://wallstreetcn.com/livenews/3174669) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [报道：SpaceX考虑融资400亿美元，用于购买英伟达芯片](https://wallstreetcn.com/livenews/3174667) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [巴西9月石油出口创历史新高，受产量上升与需求强劲推动](https://wallstreetcn.com/livenews/3174651) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [传音控股拟通过香港IPO募资逾33亿港元](https://wallstreetcn.com/livenews/3174663) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [苹果将推出与LG联合开发的门铃、门锁和恒温器](https://wallstreetcn.com/livenews/3174647) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [日本央行新任审议委员佐藤（Sato）：同意利率需要逐步调整。  不应预设固定的加息节奏。  央行必须独立制定货币政策，且要与政府积极的财政政策保持协调。  受中东冲突推高油价影响，物价前景风险略微偏向于上行。](https://wallstreetcn.com/livenews/3174659) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [金正恩向普京致生日贺电](https://wallstreetcn.com/livenews/3174671) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [巴彦油田日产原油首次突破5000吨，创历史新高](https://wallstreetcn.com/livenews/3174672) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [委内瑞拉一炼油厂发生火灾后停产](https://wallstreetcn.com/livenews/3174643) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [美国总统特朗普：已安排与俄罗斯总统普京通话。](https://wallstreetcn.com/livenews/3174648) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [美国财长贝森特：自8月25日起，伊朗未向任何船只装载一桶原油。](https://wallstreetcn.com/livenews/3174638) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [半导体制造设备供应商Towa Corp.将在日本京都府建设新的工厂。（日经新闻）](https://wallstreetcn.com/livenews/3174664) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [周二（10月6日）纽约尾盘（周三北京时间04:59），离岸人民币（CNH）兑美元报6.7015元，较周一纽约尾盘涨22点，日内整体交投于6.7058-6.695元区间，连续三个交易日上扬。](https://wallstreetcn.com/livenews/3174644) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [日本政府、日本央行将向研究员们发布贷款数据。（日经新闻）](https://wallstreetcn.com/livenews/3174655) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [也门首都萨那传出爆炸声](https://wallstreetcn.com/livenews/3174640) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [机构警告：贝森特若取消20年期美国国债，可能推高收益率](https://wallstreetcn.com/livenews/3174637) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [富时A50期指连续夜盘收涨0.12%，报13872点。](https://wallstreetcn.com/livenews/3174649) · wallstreetcn · last_seen 2026-10-06T23:02:29.931858+00:00
-- 2026-10-06T23:02:29.931858+00:00 · [美国副总统万斯：伊朗必须通过砍掉铀浓缩（项目）来结束战争。  如果伊朗在核问题上做出让步，美方对达成协议持开放态度。  美国与伊朗总统、外长对话。（路透）](https://wallstreetcn.com/livenews/3174673) · wallstreetcn · last_seen 2026-10-07T02:16:17.794033+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，美国总统特朗普表示，俄乌冲突正越来越接近结束。](https://www.cls.cn/detail/2498391) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [美国阿拉斯加州发生5.5级地震 震源深度80公里](https://www.cls.cn/detail/2498379) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，捷蓝航空获得美国联邦航空管理局批准，将接管精神航空原有的22个拉瓜迪亚机场起降时刻。](https://www.cls.cn/detail/2498392) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，美国至10月2日当周API原油库存减少210万桶，前值增加101.9万桶。](https://www.cls.cn/detail/2498397) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，富时罗素称将持续监控韩国市场的结算资金要求，将持续关注韩国卖空、结算及市场预警机制相关进展。](https://www.cls.cn/detail/2498398) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [俄国防部：俄军9月接收超1万件各型装备](https://www.cls.cn/detail/2498385) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [也门首都萨那传出爆炸声](https://www.cls.cn/detail/2498396) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [委内瑞拉一炼油厂发生火灾后停产](https://www.cls.cn/detail/2498399) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，COMEX黄金期货收涨0.86%，报4192.7美元/盎司；COMEX白银期货涨0.65%，报61.7美元/盎司。](https://www.cls.cn/detail/2498400) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，由阿波罗全球管理牵头的融资将助力SpaceX采购英伟达芯片。](https://www.cls.cn/detail/2498411) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [美联储10月维持利率不变的概率为79.5%](https://www.cls.cn/detail/2498407) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [苹果将推出与LG联合研发的智能门铃、智能门锁与智能温控器‌](https://www.cls.cn/detail/2498403) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，花旗称，美国奢侈信用卡支出在九月份同比下降6%，连续第三个月下滑。](https://www.cls.cn/detail/2498381) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [利弗莫尔中概股龙头指数收涨0.01% 热门中概股涨跌不一](https://www.cls.cn/detail/2498388) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [美股三大指数集体收涨 纳指、标普500指数创收盘新高](https://www.cls.cn/detail/2498387) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，苹果将于北京时间11月3日公布第四财季财报，财报电话会将于11月3日上午6时举行。](https://www.cls.cn/detail/2498405) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [OpenAI发布前沿大模型的全新数学能力测试成果‌](https://www.cls.cn/detail/2498410) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，本田推迟下一代CR-V混合动力车型在美国和加拿大的上市时间。](https://www.cls.cn/detail/2498394) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [Anthropic扩大先进AI模型访问权限 允许特定机构开展网络安全测试](https://www.cls.cn/detail/2498395) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，富时指数将阿曼纳入观察名单，评估是否晋升为次级新兴市场。](https://www.cls.cn/detail/2498393) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，超威半导体（纳斯达克代码：AMD）今日宣布，将于2026年11月3日（周二）美股收盘后，正式公布2026财年第三季度财务业绩。](https://www.cls.cn/detail/2498390) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，雪佛龙将出售所持赫斯中游、DJ盆地中游资产的权益，预计因赫斯中游资产交易产生约30亿至40亿美元亏损。](https://www.cls.cn/detail/2498404) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [周三（10月7日）重点关注财经事件和经济数据](https://www.cls.cn/detail/2498414) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [美元指数6日下跌](https://www.cls.cn/detail/2498386) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，日本半导体设备制造商TOWA计划建设芯片制造设备工厂，以强化日本半导体供应链。](https://www.cls.cn/detail/2498389) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，富时A50期指连续夜盘收涨0.12%，报13872点。](https://www.cls.cn/detail/2498402) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，美国总统特朗普表示，战争结束后，油价将会下跌。](https://www.cls.cn/detail/2498382) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [周三你需要知道的隔夜全球要闻：纳指、标普500指数创收盘新高；胡塞武装称挫败沙特多次进攻；派拉蒙天舞完成以1100亿美元收购华纳兄弟探索的交易](https://www.cls.cn/detail/2498409) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T23:02:29.222284+00:00 · [财联社10月7日电，深圳传音控股有限公司在港交所发售0.866亿股H股股份，最高发售价不超过38.8港元，预计10月15日上市交易。](https://www.cls.cn/detail/2498408) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [奔赴“县”场｜在河北兴隆，一颗山楂有百种模样](https://www.thepaper.cn/newsDetail_forward_34200917) · thepaper · last_seen 2026-10-07T08:51:54.721317+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [钧正平：在“台独”这个大是大非问题上，不存在任何模糊空间](https://www.thepaper.cn/newsDetail_forward_34205694) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-06T19:03:57.231338+00:00 · [重庆酉阳盗矿案致7死：疑盗采废弃汞矿，事发当日当地乡镇有大暴雨](https://www.thepaper.cn/newsDetail_forward_34204510) · thepaper · last_seen 2026-10-07T02:16:22.708873+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [韦世豪红牌！十人国足0比1不敌塔吉克斯坦，热身赛遭三连败](https://www.thepaper.cn/newsDetail_forward_34204197) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [外交部：美方应慎重处理台湾问题](https://www.thepaper.cn/newsDetail_forward_34205627) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-06T19:03:57.231338+00:00 · [人物｜从山地游击战到扰乱全球市场，胡塞武装的神秘领导人是谁？](https://www.thepaper.cn/newsDetail_forward_34200933) · thepaper · last_seen 2026-10-06T23:02:34.287416+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [时隔11年再夺中网冠军！39岁德约留下中网34连胜传奇](https://www.thepaper.cn/newsDetail_forward_34204198) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
 - 2026-10-06T19:03:57.231338+00:00 · [法德要求欧盟强化贸易防御等保护主义工具，商务部回应](https://www.thepaper.cn/newsDetail_forward_34205805) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [思考乐教育&#40;01769.HK&#41;：受托人根据股份奖励计划购买20万股](https://www.gelonghui.com/news/5320711) · gelonghui · last_seen 2026-10-06T23:02:33.823573+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [凌雄科技&#40;02436.HK&#41;10月6日耗资409.5万港元回购24万股](https://www.gelonghui.com/news/5320712) · gelonghui · last_seen 2026-10-06T23:02:33.823573+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [曹操出行&#40;02643.HK&#41;10月6日耗资45.5万港元回购3.65万股](https://www.gelonghui.com/news/5320724) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [锦欣生殖&#40;01951.HK&#41;10月6日耗资503.3万港元回购226.7万股](https://www.gelonghui.com/news/5320714) · gelonghui · last_seen 2026-10-06T23:02:33.823573+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [太美医疗科技&#40;02576.HK&#41;10月6日耗资7.3万港元回购1.52万股](https://www.gelonghui.com/news/5320723) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [途虎－Ｗ&#40;09690.HK&#41;10月6日耗资161.3万港元回购13.91万股](https://www.gelonghui.com/news/5320715) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [敏华控股&#40;01999.HK&#41;拟11月16日举行董事会会议以审批半年度业绩](https://www.gelonghui.com/news/5320717) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [水发兴业能源&#40;00750.HK&#41;拟委任安永为新核数师](https://www.gelonghui.com/news/5320718) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [中信建投：节后情绪有望出现回升](https://www.gelonghui.com/news/5320725) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [毛戈平&#40;01318.HK&#41;10月6日耗资131.2万港元回购3万股](https://www.gelonghui.com/news/5320713) · gelonghui · last_seen 2026-10-06T23:02:33.823573+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [美因基因&#40;06667.HK&#41;10月6日耗资113.8万港元回购15.68万股](https://www.gelonghui.com/news/5320721) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [SpaceX股价持续发力，创6月下旬以来新高](https://www.gelonghui.com/news/5320720) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [周大福&#40;01929.HK&#41;获执行董事兼主席郑家纯增持18.1万股](https://www.gelonghui.com/news/5320719) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [康圣环球&#40;09960.HK&#41;10月6日耗资1.9万港元回购2.1万股](https://www.gelonghui.com/news/5320716) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:55.998555+00:00 · [新华通讯频媒&#40;00309.HK&#41;延长配售最多583万股最后截止日期](https://www.gelonghui.com/news/5320722) · gelonghui · last_seen 2026-10-07T02:16:22.062268+00:00
-- 2026-10-06T19:03:50.585217+00:00 · [财联社10月7日电，恒指期货夜盘收涨0.07%，报24272点，低水9点。](https://www.cls.cn/detail/2498380) · cls · last_seen 2026-10-06T23:02:29.222284+00:00
-- 2026-10-06T13:37:28.752177+00:00 · [澎湃回声｜福建福清回应“永鸿动物园活体投喂”争议，称已全面下架涉事项目](https://www.thepaper.cn/newsDetail_forward_34204789) · thepaper · last_seen 2026-10-07T02:16:22.708873+00:00
-- 2026-10-06T13:37:28.752177+00:00 · [视频丨中国人在缅北被杀害，专案组：获取证据办成铁案，血债血还！](https://www.thepaper.cn/newsDetail_forward_34204537) · thepaper · last_seen 2026-10-07T02:16:22.708873+00:00
 - 2026-10-06T13:37:28.752177+00:00 · [弗朗西斯·哈尔岑获2026年诺贝尔物理学奖](https://www.thepaper.cn/newsDetail_forward_34205378) · thepaper · last_seen 2026-10-07T08:51:54.721317+00:00
 - 2026-10-06T13:37:28.752177+00:00 · [交通运输部：预计10月7日全国高速公路有37个路段易发拥堵、58个服务区充电特别繁忙](https://www.thepaper.cn/newsDetail_forward_34205616) · thepaper · last_seen 2026-10-07T10:15:08.616084+00:00
-- 2026-10-06T10:15:20.261189+00:00 · [时间经过他的手：80岁钟表师傅和一间歇业小店](https://www.thepaper.cn/newsDetail_forward_34148977) · thepaper · last_seen 2026-10-06T23:02:34.287416+00:00
-- 2026-10-06T06:33:53.119692+00:00 · [奔赴“县”场｜一篇未能抵达现场的报道：长海县与网红海豹“娜娜”](https://www.thepaper.cn/newsDetail_forward_34201346) · thepaper · last_seen 2026-10-06T23:02:34.287416+00:00
-- 2026-10-06T06:33:53.119692+00:00 · [福建福清一动物园活体投喂引争议：60元卖活鸡让猛兽撕咬，有未成年人围观](https://www.thepaper.cn/newsDetail_forward_34202304) · thepaper · last_seen 2026-10-06T23:02:34.287416+00:00
-- 2026-10-06T06:33:53.119692+00:00 · [实探｜国庆假期上海楼市热度不减：新房售楼处“9点不到就有客户来了”，二手房议价空间持续收窄](https://www.thepaper.cn/newsDetail_forward_34204288) · thepaper · last_seen 2026-10-07T02:16:22.708873+00:00
 
 ## 本批公司名称命中（不代表全滚动历史映射）
 
@@ -848,149 +714,154 @@ first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发
 
 ## 本批原窗口标题（不等于新增事件）
 
-- [欧股主要指数收盘普跌](https://www.cls.cn/detail/2498791) · cls
-- [财联社10月7日电，美国财政部拍卖四个月期国债，得标利率4.105%，投标倍数3.10。](https://www.cls.cn/detail/2498790) · cls
-- [财联社10月7日电，据阿波罗全球管理公司基础设施业务负责人透露，该公司正推进相关工作，保障其出资的AI基础设施交易不会因地方反对而被迫中止。](https://www.cls.cn/detail/2498789) · cls
-- [日本东证股指成分股将大幅减少](https://www.cls.cn/detail/2498787) · cls
-- [量子精密测量实现新突破 我国科研团队研制出“核光钟”](https://www.cls.cn/detail/2498786) · cls
-- [科研人员发现特定细菌具有调节胆固醇代谢的功能](https://www.cls.cn/detail/2498785) · cls
-- [财联社10月7日电，美国财政部周四将回购至多60亿美元的长期债券。](https://www.cls.cn/detail/2498784) · cls
-- [财联社10月7日电，美国9月纽约联储1年通胀预期报3.9%，预期3.64%，前值3.58%。](https://www.cls.cn/detail/2498783) · cls
-- [我国科学家研发出新型高效碳捕集膜](https://www.cls.cn/detail/2498782) · cls
-- [财联社10月7日电，据美国能源信息署，美国原油产量上周再度升至历史新高，为连续第二周创纪录。](https://www.cls.cn/detail/2498781) · cls
-- [金饰克价已暴跌约150元 金价大跌水贝掀买金热潮](https://www.cls.cn/detail/2498780) · cls
-- [财联社10月7日电，芝加哥期权交易所欧洲清算公司将证券融资交易清算服务拓展至美国股票领域。](https://www.cls.cn/detail/2498779) · cls
-- [财联社10月7日电，国际能源署（IEA）表示，若完全释放3月以来已承诺但尚未投放的所有库存，将向市场提供约1亿桶原油。](https://www.cls.cn/detail/2498776) · cls
-- [财联社10月7日电，美国上周EIA原油库存下降319万桶。](https://www.cls.cn/detail/2498775) · cls
-- [财联社10月7日电，美股存储芯片板块拉升，闪迪涨超2%，美光科技涨1%，SK海力士跌幅收窄至1%。](https://www.cls.cn/detail/2498773) · cls
-- [财联社10月7日电，迈威尔科技CEO表示，数据中心业务收入到2028年有望突破300亿美元。](https://www.cls.cn/detail/2498772) · cls
-- [SpaceX信用风险指标创新高](https://www.cls.cn/detail/2498771) · cls
-- [财联社10月7日电，卡特彼勒股价下跌超过5%，为道琼斯指数中表现最差的成分股。](https://www.cls.cn/detail/2498770) · cls
-- [财联社10月7日电，高通与OKSI达成合作，部署Omniscience自主软件组合。](https://www.cls.cn/detail/2498769) · cls
-- [财联社10月7日电，谷歌宣布，其SynthID检测器（SynthID Detector）现已在全球范围内以英语提供。该工具用于识别由AI生成的内容。](https://www.cls.cn/detail/2498768) · cls
-- [本周（10月8日-11日）资本市场大事提醒：A股明起开市；应用材料、三星电子将公布财报](https://www.cls.cn/detail/2498762) · cls
-- [【公告全知道】芯片+算力+光纤+AIDC+华为+CPO！公司光通信产品预计获客户斥资5亿美元采购](https://www.cls.cn/detail/2498723) · cls
-- [财联社10月7日电，道琼斯指数、罗素2000指数跌幅扩大至1%。](https://www.cls.cn/detail/2498766) · cls
-- [财联社10月7日电，波兰央行将主要利率维持在3.75%，预期为3.75%。](https://www.cls.cn/detail/2498765) · cls
-- [财联社10月7日电，美股医疗保健板块盘初逆势上涨，礼来涨超2%，诺和诺德涨近1%，联合健康涨0.6%。](https://www.cls.cn/detail/2498764) · cls
-- [【风口研报·洞察】三星电机进入下一代大尺寸玻璃基板封装级验证，与多家全球大型企业展开合作，目标在2027年底前实现生产线投产，玻璃基板产业化进入决策前夜；国庆间海外市场的交易逻辑](https://www.cls.cn/detail/2498560) · cls
-- [财联社10月7日电，布伦特原油期货涨幅扩大至2%，报102.59美元/桶。](https://www.cls.cn/detail/2498763) · cls
-- [财联社10月7日电，Webull股价大跌21%，创2025年4月以来最大日内跌幅。](https://www.cls.cn/detail/2498761) · cls
-- [财联社10月7日电，纳斯达克100指数触及盘中低点，下跌1%。  ](https://www.cls.cn/detail/2498760) · cls
-- [小崧股份：股东会审议通过罢免董事徐驰职务](https://www.cls.cn/detail/2498759) · cls
-- [法国外交部发言人：10月6日在德黑兰召见法国大使一事毫无依据，此类挑衅行为必须停止。  法国召见伊朗大使，原因是伊朗发起针对学生抗议活动的虚假信息宣传行动。](https://wallstreetcn.com/livenews/3174895) · wallstreetcn
-- [报道：沙特就迪拜航空事件启动航空安全调查](https://wallstreetcn.com/livenews/3174892) · wallstreetcn
-- [据媒体报道：日本将依据10月8日签署的协议，协助菲律宾强化石油储备。](https://wallstreetcn.com/livenews/3174891) · wallstreetcn
-- [明晟公司MSCI北欧国家指数跌0.5%，报387.74点。  在十个板块中，北欧工业板块跌幅最大。  面向工程、电信、汽车、电子行业的高科技工业部件与系统供应商AddTech AB跌7.6%，在一众北欧个股里表现最差。](https://wallstreetcn.com/livenews/3174890) · wallstreetcn
-- [当20%的业绩报酬不够用时，并购基金寻求“超级业绩报酬”](https://wallstreetcn.com/livenews/3174889) · wallstreetcn
-- [阿波罗全球管理公司基础设施业务负责人透露，该公司正推进相关工作，保障其出资的AI基础设施交易不会因地方反对而被迫中止。](https://wallstreetcn.com/livenews/3174886) · wallstreetcn
-- [也门胡塞武装领导人表示，多次袭击也门所使用的飞机与武器均为美方装备，其使用与部署取决于美国。（伊朗法尔斯通讯社）](https://wallstreetcn.com/livenews/3174885) · wallstreetcn
-- [美国财政部拍卖四个月期国债，得标利率4.105%，投标倍数3.10。](https://wallstreetcn.com/livenews/3174884) · wallstreetcn
-- [意大利银行板块重挫超3%](https://wallstreetcn.com/livenews/3174883) · wallstreetcn
-- [欧洲STOXX 600指数初步收跌1.04%，报630.02点。  欧元区STOXX 50指数初步收跌1.47%，报6179.14点。  富时泛欧绩优300指数初步收跌0.95%，报2518.56点。](https://wallstreetcn.com/livenews/3174882) · wallstreetcn
-- [报道：欧盟国家预计石油释放将仅落实既有承诺](https://wallstreetcn.com/livenews/3174881) · wallstreetcn
-- [我国科学家研制成功核光钟](https://wallstreetcn.com/livenews/3174880) · wallstreetcn
-- [博姿以89亿美元易主，加拿大韦斯顿家族重返英国](https://wallstreetcn.com/livenews/3174879) · wallstreetcn
-- [日本东证股指成分股将大幅减少](https://wallstreetcn.com/livenews/3174878) · wallstreetcn
-- [美股建筑商股下跌，数据显示美国抵押贷款利率攀升至2023年以来最高](https://wallstreetcn.com/livenews/3174877) · wallstreetcn
-- [报道：法国考虑转向发行短期债务，应对债券抛售潮](https://wallstreetcn.com/livenews/3174876) · wallstreetcn
-- [印度寻求达成黑海协议，商船面临新一轮袭击](https://wallstreetcn.com/livenews/3174875) · wallstreetcn
-- [美国10年期国债收益率短线持稳于5.3%上方，纽约联储发布美国消费者通胀预期报告之前，曾在北京时间21:27刷新日高至5.3624%，16:00以来呈现出冲高回落走势。  两年期美债收益率保持微幅下跌状态，暂时持稳于（通胀预期月报披露前刷新的）日低4.7766%附近，21:27也曾涨至4.8352%。  2/10年期美债收益率利差维持大约3.8个基点的涨幅，持稳于+52个基点附近，日内迄今持续上扬的势头出现反转。  道指维持大约550点、或约1.1%的跌幅，标普目前跌0.6%，纳指跌0.7%，半导体指数跌1.9%，银行指数跌1.8%。](https://wallstreetcn.com/livenews/3174874) · wallstreetcn
-- [美联储：美国一年期消费者通胀预期创2023年5月以来新高](https://wallstreetcn.com/livenews/3174873) · wallstreetcn
-- [量子精密测量实现新突破，我国科研团队研制出“核光钟”](https://wallstreetcn.com/livenews/3174872) · wallstreetcn
-- [美国能源信息署（EIA）：美国西海岸原油进口增幅创2021年以来（单周）最大。](https://wallstreetcn.com/livenews/3174871) · wallstreetcn
-- [据美国纽约联储数据，上个交易日（10月6日）担保隔夜融资利率（SOFR）报3.90%，之前一天报3.89%。  上个交易日有效的联邦基金利率报3.88%，之前一天报3.88%。](https://wallstreetcn.com/livenews/3174870) · wallstreetcn
-- [金饰克价已暴跌约150元](https://wallstreetcn.com/livenews/3174869) · wallstreetcn
-- [美联储9月会议纪要关注点](https://wallstreetcn.com/livenews/3174868) · wallstreetcn
-- [消息人士：IEA与欧盟就拟议的石油和柴油储备释放计划进行了讨论。（路透）](https://wallstreetcn.com/livenews/3174867) · wallstreetcn
-- [美国10月2日当周EIA库欣地区原油库存变动 44.4万桶，前值 55.3万桶。](https://wallstreetcn.com/livenews/3174866) · wallstreetcn
-- [美国10月2日当周EIA汽油库存变动 38.2万桶，前值 -168.4万桶。](https://wallstreetcn.com/livenews/3174865) · wallstreetcn
-- [美国10月2日当周EIA精炼厂设备利用率变化 0.2%，前值 -1.5%。](https://wallstreetcn.com/livenews/3174863) · wallstreetcn
-- [美国10月2日当周EIA精炼油库存变动 -4.2万桶，前值 -225.1万桶。](https://wallstreetcn.com/livenews/3174864) · wallstreetcn
-- [美国10月2日当周EIA原油库存变动 -318.6万桶，前值 92.2万桶。](https://wallstreetcn.com/livenews/3174862) · wallstreetcn
-- [惠誉评西班牙：未来政府移民立场若发生变动，或将影响经济增长。](https://www.fastbull.com/cn/fastshort/4311487_212_1) · fastbull
-- [惠誉：西班牙提前大选结果或无法消除财政整顿方面的不确定性。](https://www.fastbull.com/cn/fastshort/4311484_212_1) · fastbull
-- [中东局势升温推高避险需求，美元指数逼近年内新高。](https://www.fastbull.com/cn/fastshort/4311483_214_1) · fastbull
-- [据华尔街日报：特朗普的住房和城市发展部向富国银行首席执行官发出信函，表示将调查该银行是否违反了公平贷款法。](https://www.fastbull.com/cn/fastshort/4311480_1_1) · fastbull
-- [法国外交部发言人：法国召见了伊朗大使，因其针对学校学生抗议活动的虚假信息宣传。](https://www.fastbull.com/cn/fastshort/4311479_1_1) · fastbull
-- [法国外交部发言人：10月6日在德黑兰召见法国大使的行为毫无根据，类似挑衅必须停止。](https://www.fastbull.com/cn/fastshort/4311477_1_1) · fastbull
-- [惠誉评级：美国卡车设备资产支持证券仍面临成本压力的脆弱性。](https://www.fastbull.com/cn/fastshort/4311474_1_1) · fastbull
-- [法国外交部发言人：法国已告知伊朗特使，伊朗外交部官方账号传播的虚假内容是不可接受的。](https://www.fastbull.com/cn/fastshort/4311471_212_1) · fastbull
-- [欧盟外交官：欧盟特使已批准约1650项新的俄罗斯制裁名单。](https://www.fastbull.com/cn/fastshort/4311465_1_1) · fastbull
-- [欧股主要指数收盘普跌。](https://www.fastbull.com/cn/fastshort/4311464_204_1) · fastbull
-- [美国财政部拍卖四个月期国债，得标利率4.105%，投标倍数3.10。](https://www.fastbull.com/cn/fastshort/4311463_204_1) · fastbull
-- [据伊朗法尔斯通讯社：胡塞武装领导人表示，多次袭击也门所使用的飞机与武器均为美方装备，其使用与部署取决于美国。](https://www.fastbull.com/cn/fastshort/4311459_212_1) · fastbull
-- [国际货币基金组织：也门经济前景依然严峻。](https://www.fastbull.com/cn/fastshort/4311458_212_1) · fastbull
-- [俄任命官员：乌克兰无人机袭击乌克兰赫尔松州俄方控制区域，造成两人死亡。](https://www.fastbull.com/cn/fastshort/4311454_212_1) · fastbull
-- [世界卫生组织总干事谭德塞：世卫组织尚未掌握俄罗斯不明肺炎风险的“完整情况”。](https://www.fastbull.com/cn/fastshort/4311452_1_1) · fastbull
-- [保加利亚总统伊奥托娃：在无人机袭击发生后，保加利亚将邀请罗马尼亚和土耳其进行磋商，以确保商船安全。](https://www.fastbull.com/cn/fastshort/4311448_1_1) · fastbull
-- [消息人士：以色列首席事故调查员表示，以色列愿意参与沙特的安全调查，但尚未收到邀请。](https://www.fastbull.com/cn/fastshort/4311446_1_1) · fastbull
-- [消息人士：沙特就迪拜航空事件启动与安全相关的航空事故调查。沙特的安全调查与阿联酋的刑事调查是分开进行的。](https://www.fastbull.com/cn/fastshort/4311444_1_1) · fastbull
-- [纽约联储：美国一年期通胀预期升至3.9%，创逾三年新高。](https://www.fastbull.com/cn/fastshort/4311436_214_1) · fastbull
-- [西班牙工会呼吁在11月11日举行总罢工，届时距离提前大选仅剩数周。](https://www.fastbull.com/cn/fastshort/4311434_1_1) · fastbull
-- [乌克兰能源公司：乌克兰将于周四继续实施限电措施。](https://www.fastbull.com/cn/fastshort/4311430_1_1) · fastbull
-- [消息人士：哥斯达黎加的格林斯潘在联合国下一任秘书长角逐中处于领先。](https://www.fastbull.com/cn/fastshort/4311429_212_1) · fastbull
-- [纽约联储：美国9月纽约联储3年通胀预期为3.3%，8月份为3.2%；5年期通胀预期维持在3.9%不变。](https://www.fastbull.com/cn/fastshort/4311427_1_1) · fastbull
-- [美国财政部周四将回购至多60亿美元的长期债券。](https://www.fastbull.com/cn/fastshort/4311425_1_1) · fastbull
-- [纽约联储：一年期通胀预期为2023年5月以来最高水平。](https://www.fastbull.com/cn/fastshort/4311424_212_1) · fastbull
-- [纽约联储：九月份对多种商品价格的预期上升。](https://www.fastbull.com/cn/fastshort/4311422_1_1) · fastbull
-- [纽约联储：九月份劳动市场预期大多持积极态度。](https://www.fastbull.com/cn/fastshort/4311419_1_1) · fastbull
-- [据伊朗学生通讯社：伊斯兰革命卫队副政治主任称，近期事态表明，伊朗和抵抗阵线已成为地区内的决定性力量，而波斯湾依靠地区国家的能力，正在成为新的地区乃至全球秩序的起点。](https://www.fastbull.com/cn/fastshort/4311413_1_1) · fastbull
-- [美国天然气期货涨超4.00%，现报3.239美元/百万英热。](https://www.fastbull.com/cn/fastshort/4311412_212_1) · fastbull
-- [民主党联邦通信委员会委员戈麦斯敦促该机构，不要允许保守派政治团体&quot;增长俱乐部&quot;使用人工智能生成的自动拨号政治电话。](https://www.fastbull.com/cn/fastshort/4311410_212_1) · fastbull
-- [泛欧交易所9月股票衍生品交易量环比增长84.2%，同比增长31%。](https://flash.jin10.com/detail/20261007235133486800) · jin10
-- [泛欧交易所9月现金市场交易总额环比增长17%，同比增长16%。](https://flash.jin10.com/detail/20261007235109461800) · jin10
-- [法国或考虑增加短期国债发行，应对全球债市抛售与融资成本飙升](https://flash.jin10.com/detail/20261007235031205800) · jin10
-- [中东局势升温推高避险需求，美元指数逼近年内新高](https://flash.jin10.com/detail/20261007234902831800) · jin10
-- [据华尔街日报：特朗普的住房和城市发展部向富国银行首席执行官发出信函，表示将调查该银行是否违反了公平贷款法。](https://flash.jin10.com/detail/20261007234757174800) · jin10
-- [法国外交部发言人：法国召见了伊朗大使，因其针对学校学生抗议活动的虚假信息宣传。](https://flash.jin10.com/detail/20261007234703483800) · jin10
-- [法国外交部发言人：10月6日在德黑兰召见法国大使的行为毫无根据，类似挑衅必须停止。](https://flash.jin10.com/detail/20261007234601369800) · jin10
-- [法国外交部发言人：法国已通知伊朗驻法大使，伊朗外交部官方账号传播的虚假内容性质不可接受。](https://flash.jin10.com/detail/20261007234542406800) · jin10
-- [惠誉评级：美国卡车设备资产支持证券仍面临成本压力的脆弱性。](https://flash.jin10.com/detail/20261007234530805800) · jin10
-- [美国总统特朗普：我将批准1790万美元用于应对威斯康星州遭遇的严重风暴和龙卷风。](https://flash.jin10.com/detail/20261007234522941800) · jin10
-- [据伊朗媒体Fars News：也门胡塞武装领导人表示，多次袭击也门所使用的飞机与武器均为美方装备，其使用与部署取决于美国。](https://flash.jin10.com/detail/20261007234148310800) · jin10
-- [金十图示：2026年10月07日（周三）全球股市指数-欧洲市场](https://flash.jin10.com/detail/20261007234134579800) · jin10
-- [消息人士：IEA与欧盟就拟议的石油和柴油储备释放计划进行了讨论](https://flash.jin10.com/detail/20261007234059812800) · jin10
-- [德国DAX30指数10月7日（周三）收盘下跌320.08点，跌幅1.26%，报25129.11点；&lt;br/&gt;英国富时100指数10月7日（周三）收盘下跌77.51点，跌幅0.74%，报10464.18点；&lt;br/&gt;法国CAC40指数10月7日（周三）收盘下跌95.86点，跌幅1.22%，报7769.21点；&lt;br/&gt;欧洲斯托克50指数10月7日（周三）收盘下跌87.08点，跌幅1.39%，报6185.15点；&lt;br/&gt;西班牙IBEX35指数10月7日（周三）收盘下跌316.66点，跌幅1.63%，报19127.54点；&lt;br/&gt;意大利富时MIB指数10月7日（周三）收盘下跌1249.90点，跌幅2.44%，报50011.50点。](https://flash.jin10.com/detail/20261007233941777800) · jin10
-- [欧盟外交官：欧盟特使已批准约1650项新的俄罗斯制裁名单。](https://flash.jin10.com/detail/20261007233833069800) · jin10
-- [美国至10月7日4个月国债竞拍-得标利率配置百分比 43.02%，前值59.3%。](https://flash.jin10.com/detail/20261007233240061800) · jin10
-- [美国至10月7日4个月国债竞拍-投标倍数 3.1，前值2.89。](https://flash.jin10.com/detail/20261007233233374800) · jin10
-- [美国至10月7日4个月国债竞拍-得标利率 4.105%，前值4.12%。](https://flash.jin10.com/detail/20261007233227695800) · jin10
-- [国际货币基金组织管理层批准与也门的员工监测计划。](https://flash.jin10.com/detail/20261007232758647800) · jin10
-- [俄罗斯任命的官员称，乌克兰无人机袭击乌克兰赫尔松地区俄控部分，造成两人死亡。](https://flash.jin10.com/detail/20261007232537235800) · jin10
-- [世界卫生组织总干事谭德塞：世卫组织尚未掌握俄罗斯不明肺炎风险的“完整情况”。](https://flash.jin10.com/detail/20261007232448182800) · jin10
-- [日本东证股指成分股将大幅减少](https://flash.jin10.com/detail/20261007232009104800) · jin10
-- [保加利亚总统伊奥托娃：在无人机袭击发生后，保加利亚将邀请罗马尼亚和土耳其进行磋商，以确保商船安全。](https://flash.jin10.com/detail/20261007231953992800) · jin10
-- [Euronext September equity-derivatives trading volume rose 84.2% month-on-month and 31% year-on-year.](https://mktnews.net/flashDetail.html?id=01a11710-3540-7ee0-a7dc-dda1a2361b35) · mktnews
-- [Euronext cash market turnover rose 17% MoM in September and 16% YoY.](https://mktnews.net/flashDetail.html?id=01a1170f-cb43-7ee0-a7dc-d56679ad1c51) · mktnews
-- [France may consider boosting short-term government bond issuance to counter global sell-off and rising financing costs](https://mktnews.net/flashDetail.html?id=01a1170f-4cbc-7ee0-a7dc-ccc283108139) · mktnews
-- [Middle East tensions lift safe‑haven demand; dollar index nears YTD high](https://mktnews.net/flashDetail.html?id=01a1170d-fa8c-7ee0-a7dc-c6b3eb55cc12) · mktnews
-- [The Wall Street Journal reports Trump&#x27;s Department of Housing and Urban Development sent a letter to Wells Fargo&#x27;s CEO saying it will investigate whether the bank violated the Fair Housing Act.](https://mktnews.net/flashDetail.html?id=01a1170c-e686-7ee0-a7dc-bdb0161b9864) · mktnews
-- [French Foreign Ministry spokesman said France summoned the Iranian ambassador over the ambassador&#x27;s dissemination of false information about student protests at schools.](https://mktnews.net/flashDetail.html?id=01a1170c-1a77-7ee0-a7dc-b7cbc7e0ac2c) · mktnews
-- [French Foreign Ministry spokesman said the Oct. 6 summoning of France&#x27;s ambassador in Tehran was unfounded and urged such provocations to cease.](https://mktnews.net/flashDetail.html?id=01a1170b-1fdb-7ee0-a7dc-a8dd8990fa3d) · mktnews
-- [France&#x27;s foreign ministry spokesman said the ministry has informed Iran&#x27;s ambassador to France that false content disseminated via the Iranian foreign ministry&#x27;s official account is unacceptable.](https://mktnews.net/flashDetail.html?id=01a1170a-d291-7ee0-a7dc-a77daf01eda5) · mktnews
-- [Fitch: US truck-equipment asset-backed securities remain vulnerable to cost pressures.](https://mktnews.net/flashDetail.html?id=01a1170a-a011-7ee0-a7dc-99cdc9e6bd8f) · mktnews
-- [President Trump said he will approve $17.9 million to respond to severe storms and tornadoes in Wisconsin.](https://mktnews.net/flashDetail.html?id=01a1170a-91d3-7ee0-a7dc-90206ebacde3) · mktnews
-- [Iran&#x27;s Fars News reports the Houthi leader said aircraft and weapons used in multiple attacks on Yemen are U.S.-supplied, and their use and deployment depend on the United States.](https://mktnews.net/flashDetail.html?id=01a11707-508a-7ee0-a7dc-8deef5db1750) · mktnews
-- [Sources: IEA and EU discussed proposed crude and diesel stock releases](https://mktnews.net/flashDetail.html?id=01a11706-a4af-7ee0-a7dc-8338b4639e07) · mktnews
-- [European equities closed lower on Oct 7 &#40;Wed&#41;: Germany&#x27;s DAX fell 320.08 pts &#40;-1.26%&#41; to 25,129.11; UK’s FTSE 100 fell 77.51 pts &#40;-0.74%&#41; to 10,464.18; France&#x27;s CAC 40 fell 95.86 pts &#40;-1.22%&#41; to 7,769.21; Euro STOXX 50 fell 87.08 pts &#40;-1.39%&#41; to 6,185.15; Spain&#x27;s IBEX 35 fell 316.66 pts &#40;-1.63%&#41; to 19,127.54; Italy&#x27;s FTSE MIB fell 1,249.90 pts &#40;-2.44%&#41; to 50,011.50.](https://mktnews.net/flashDetail.html?id=01a11705-6ff7-7ee0-a7dc-7c6058920261) · mktnews
-- [An EU diplomat said the EU special envoy has approved about 1,650 new entries to the Russian sanctions list.](https://mktnews.net/flashDetail.html?id=01a11704-4e59-7ee0-a7dc-7174f9a6944d) · mktnews
-- [US four-month Treasury bill auction through Oct. 7: share allocated at the stop-out yield 43.02%, prior 59.3%.](https://mktnews.net/flashDetail.html?id=01a116fe-ed6c-7ee0-a7dc-6ba30c04bf81) · mktnews
-- [US 4-month Treasury bill auction on Oct. 7: bid-cover ratio 3.10, prior 2.89.](https://mktnews.net/flashDetail.html?id=01a116fe-cf9f-7ee0-a7dc-6612d8874f35) · mktnews
-- [U.S. 4-month Treasury auction on Oct. 7: stop-out yield 4.105% &#40;prev. 4.12%, down 1.5 bps&#41;.](https://mktnews.net/flashDetail.html?id=01a116fe-bb09-7ee0-a7dc-5d19b6c2b511) · mktnews
-- [4-Month Bill Auction  Bid/Cover Ratio &#40;Oct.7&#41;](https://mktnews.net/flashDetail.html?id=01a116fe-ac8b-7ee0-a7dc-536282bbc0d8) · mktnews
-- [4-Month Bill Auction  High Yield Rate &#40;Oct.7&#41;](https://mktnews.net/flashDetail.html?id=01a116fe-965f-7ee0-a7dc-4ed62b2d8895) · mktnews
-- [IMF management approved a staff-monitored program with Yemen.](https://mktnews.net/flashDetail.html?id=01a116fa-9148-7ee0-a7dc-44d36ae59ede) · mktnews
-- [A Russian-appointed official said a Ukrainian drone strike on the Russian-controlled part of Ukraine&#x27;s Kherson region killed two people.](https://mktnews.net/flashDetail.html?id=01a116f8-6cdd-7ee0-a7dc-3fb12b20fd3a) · mktnews
-- [WHO Director-General Tedros said the WHO does not yet have the &quot;complete picture&quot; of the risk posed by unexplained pneumonia cases in Russia.](https://mktnews.net/flashDetail.html?id=01a116f7-b7e2-7ee0-a7dc-3748efa7d3b2) · mktnews
-- [TOPIX components to be cut by about 40%](https://mktnews.net/flashDetail.html?id=01a116f3-a879-7ee0-a7dc-2e73e40f274e) · mktnews
-- [Bulgaria&#x27;s President Iotova said she will invite Romania and Turkey to consultations to secure merchant shipping after a drone attack.](https://mktnews.net/flashDetail.html?id=01a116f3-45ce-7ee0-a7dc-26b7752dd191) · mktnews
-- [Sources: Israel&#x27;s chief accident investigator said Israel is willing to participate in Saudi Arabia&#x27;s security investigation but has not yet received an invitation.](https://mktnews.net/flashDetail.html?id=01a116f0-2752-7ee0-a7dc-1a1598289494) · mktnews
-- [Sources said Saudi Arabia has opened an aviation safety investigation into an incident involving a Dubai airline. The Saudi safety probe is being conducted separately from the UAE&#x27;s criminal investigation.](https://mktnews.net/flashDetail.html?id=01a116ef-eaa4-7ee0-a7dc-15b1495a2919) · mktnews
-- [French finance minister says France is considering issuing more short-term government debt, the Wall Street Journal reports.](https://mktnews.net/flashDetail.html?id=01a116ef-5ace-7ee0-a7dc-0833510856c4) · mktnews
-- [Florida attorney general seeks temporary injunction against Meta Platforms &#40;META.O&#41;.](https://mktnews.net/flashDetail.html?id=01a116ef-1461-7ee0-a7dc-0467c926a41d) · mktnews
-- [Spanish unions call for a general strike on Nov 11, weeks ahead of Spain&#x27;s early general election.](https://mktnews.net/flashDetail.html?id=01a116e8-58f5-7ee0-a7db-fc3ceb0a3b95) · mktnews
-- [New York Fed: U.S. one-year inflation expectations rise to 3.9%, highest in over three years](https://mktnews.net/flashDetail.html?id=01a116e8-4d09-7ee0-a7db-f695a301b776) · mktnews
+- [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://www.cls.cn/detail/2498854) · cls
+- [财联社10月8日电，Rivian从大众集团获得的10亿美元贷款到期日为2036年10月7日。](https://www.cls.cn/detail/2498853) · cls
+- [财联社10月8日电，好市多9月同店销售总额增长11.4%，分析师预期增长9.9%。](https://www.cls.cn/detail/2498852) · cls
+- [财联社10月8日电，美国半导体公司Wolfspeed股价盘后上涨28%，此前宣布获得15亿美元贷款承诺。](https://www.cls.cn/detail/2498851) · cls
+- [利弗莫尔中概股龙头指数收跌0.96%](https://www.cls.cn/detail/2498850) · cls
+- [美股三大指数集体收跌 热门科技股涨跌不一](https://www.cls.cn/detail/2498849) · cls
+- [财联社10月8日电，杜克能源与北卡罗来纳州达成协议，协议包含针对大负荷客户的独立电价，保护普通用户免于承担数据中心相关成本。数据中心需预先支付电网接入费用。](https://www.cls.cn/detail/2498848) · cls
+- [财联社10月8日电，美国海洋能源管理局（MMA）称，墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://www.cls.cn/detail/2498847) · cls
+- [巴基斯坦军队已在沙特开展多领域防务合作](https://www.cls.cn/detail/2498846) · cls
+- [美元指数7日上涨](https://www.cls.cn/detail/2498845) · cls
+- [日本千叶县东北部发生4.8级地震](https://www.cls.cn/detail/2498844) · cls
+- [OpenAI面向全球所有ChatGPT用户全面上线GPT-6](https://www.cls.cn/detail/2498843) · cls
+- [也门胡塞武装称过去24小时向联军目标发射11枚导弹](https://www.cls.cn/detail/2498842) · cls
+- [沙特两座机场遭袭致3死36伤](https://www.cls.cn/detail/2498841) · cls
+- [财联社10月8日电，恒指期货夜盘收跌0.64%，报23962点，低水169点。](https://www.cls.cn/detail/2498839) · cls
+- [财联社10月8日电，美国8月消费信贷82.8亿美元，预期150亿美元，前值由180.62亿美元修正为177.4亿美元。](https://www.cls.cn/detail/2498838) · cls
+- [英伟达与微软携手以RTX Spark及AI智能体开启Windows PC全新纪元](https://www.cls.cn/detail/2498837) · cls
+- [FOMC会议纪要显示 官员们敦促为市场压力制定预案](https://www.cls.cn/detail/2498836) · cls
+- [财联社10月8日电，突尼斯央行维持关键利率在8%不变。](https://www.cls.cn/detail/2498835) · cls
+- [财联社10月8日电，WTI原油期货结算价为88.28美元/桶，下跌1.16美元，跌幅1.30%。](https://www.cls.cn/detail/2498834) · cls
+- [美“龙”飞船载4名宇航员脱离空间站 启程返回地球](https://www.cls.cn/detail/2498833) · cls
+- [财联社10月8日电，SpaceX大规模举债引发市场担忧，信用风险飙升。](https://www.cls.cn/detail/2498832) · cls
+- [财联社10月8日电，Anthropic发布最新AI模型Claude Haiku 5.5，用于执行那些对成本敏感的任务。这款模型“到手价”将明显低于4.5版。](https://www.cls.cn/detail/2498831) · cls
+- [财联社10月8日电，戴尔推出搭载英伟达RTX SPARK的XPS 16创作者版笔记本电脑。](https://www.cls.cn/detail/2498830) · cls
+- [美联储纪要显示9月升息获一致支持 多数与会者倾向年内再加一次](https://www.cls.cn/detail/2498829) · cls
+- [财联社10月8日电，谷歌扩大用于检测人工智能使用的工具访问权限，谷歌称能够检测来自谷歌及其合作伙伴的 AI 的工具。](https://www.cls.cn/detail/2498828) · cls
+- [财联社10月8日电，微软高管表示，搭载英伟达芯片的RTX Spark设备将于下周开始发货。](https://www.cls.cn/detail/2498827) · cls
+- [法国雷诺阿博物馆遭窃近一月后多人被捕](https://www.cls.cn/detail/2498826) · cls
+- [财联社10月8日电，微软新款高端笔记本电脑起售价为2,599美元。](https://www.cls.cn/detail/2498825) · cls
+- [财联社10月8日电，贝森特谈债券高债券收益率，这是全球现象，核心通胀率接近美联储目标。](https://www.cls.cn/detail/2498824) · cls
+- [美国国家飓风中心（NHC）：飓风“以赛亚”（Isaias）正在快速增强，预计将于周四早晨增强为飓风。](https://wallstreetcn.com/livenews/3175001) · wallstreetcn
+- [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://wallstreetcn.com/livenews/3174999) · wallstreetcn
+- [伊朗外交部发言人：伊朗与阿曼已就霍尔木兹海峡安全过境航线的地理坐标，以及该协议的国际对外公布方式达成共识。](https://wallstreetcn.com/livenews/3174998) · wallstreetcn
+- [美国联邦贸易委员会（FTC）和美国农业部（USDA）就市场行为启动调查，其中包括潜在的反竞争行为，迪尔公司及其他农用设备制造商股价应声大跌。  约翰迪尔/迪尔农机收跌3.8%，卡特彼勒跌5.75%，爱科集团（AGCO）跌6.06%，凯斯纽（CNH）跌6.1%。](https://wallstreetcn.com/livenews/3174997) · wallstreetcn
+- [法国总理承诺控制能源价格，并出台措施平息抗议](https://wallstreetcn.com/livenews/3174996) · wallstreetcn
+- [“特斯拉劲敌”Rivian从德国大众汽车集团获得10亿美元定期贷款，将于2036年10月7日到期。  这笔贷款与现存合资公司协议有关。](https://wallstreetcn.com/livenews/3174995) · wallstreetcn
+- [叙利亚计划一年内将石油产量翻倍，投资者正回归](https://wallstreetcn.com/livenews/3174994) · wallstreetcn
+- [周三（10月7日），美股行业ETF几乎全线溃败，工业指数ETF收跌2.18%，区域银行ETF、银行业ETF、全球航空业ETF、半导体ETF跌1.68%-1.18%，生物科技指数ETF则涨0.12%，医疗业ETF涨1.03%。](https://wallstreetcn.com/livenews/3174993) · wallstreetcn
+- [开市客/好市多9月同店销售总额增长11.4%，分析师预期增长9.9%。  9月美国同店销售剔除汽油、外汇因素后增长8%，分析师预期增长7.2%。](https://wallstreetcn.com/livenews/3174992) · wallstreetcn
+- [黄金ETF收跌将近1.7%，与地产ETF、新兴市场ETF、小盘股指ETF等领跌美股大类资产类ETF](https://wallstreetcn.com/livenews/3174991) · wallstreetcn
+- [Levi Strauss三季度净营收16.1亿美元，分析师预期16.2亿美元。  三季度调整后每股收益（EPS）为0.48美元，分析师预期0.36美元。  三季度调整后EBIT为2.49亿美元，分析师预期1.94亿美元。  预计全年调整后EPS将为1.54-1.56美元，公司原本预计1.46-1.52美元。](https://wallstreetcn.com/livenews/3174990) · wallstreetcn
+- [标普500指数的11个板块多数收跌，工业板块跌2.14%——成分股卡特彼勒、埃姆科集团、安朗杰、联合租赁、美国舒适系统等领跌，原材料、房地产板块至多跌1.53%，能源板块跌0.46%，信息技术/科技、电信板块至多跌0.1%，保健板块则涨1.06%。](https://wallstreetcn.com/livenews/3174989) · wallstreetcn
+- [Wolfspeed股票盘后交易中上涨12%，该公司将从五角大楼获得15亿美元的有条件贷款。](https://wallstreetcn.com/livenews/3174988) · wallstreetcn
+- [周三（10月7日），彭博电动汽车价格回报指数跌1.14%，报3170.73点，亚太盘初以来持续下挫。  成分股中，伦敦上市的ITM能源收跌6.47%，H股奇瑞汽车收跌5.39%，与Lucid Group、MP材料、美洲立业等领跌，H股雅迪集团控股涨1.62%、蔚来集团涨1.88%、理想汽车涨2.11%、小鹏集团涨2.15%，沃尔沃汽车集团收涨3.49%。](https://wallstreetcn.com/livenews/3174987) · wallstreetcn
+- [标普、纳指脱离收盘历史最高位，半导体、银行、小盘股指数跌超1%](https://wallstreetcn.com/livenews/3174985) · wallstreetcn
+- [纳斯达克金龙中国指数收涨0.12%，报5638.07点，整体低开高走。  热门中概股里，万国数据初步收涨2.2%，蔚来、京东、理想至少涨1%，携程跌0.4%，禾赛跌1.3%，百度跌1.9%。  ETF中，中国科技指数ETF（CQQQ）收跌1.31%，中概互联网指数ETF（KWEB）收跌0.86%。MSCI新兴市场ex中国ETF（EMXC）收跌1.38%，德银嘉实沪深300指数ETF（ASHR）收跌0.61%，XtrackersHarvest中证50（ASHS）收跌0.59%。](https://wallstreetcn.com/livenews/3174984) · wallstreetcn
+- [杜克能源与美国北卡罗来纳州达成协议，协议包含针对大负荷客户的独立电价，保护普通用户免于承担数据中心相关成本。  数据中心需预先支付电网接入费用。](https://wallstreetcn.com/livenews/3174983) · wallstreetcn
+- [周三（10月7日）纽约尾盘，欧元兑美元跌0.55%，报1.1196，亚太盘初以来持续扩大跌幅、北京时间20:27刷新10月5日以来低点涨1.1161。  英镑兑美元跌0.48%，美元兑瑞郎涨0.22%。  商品货币对中，澳元兑美元跌0.28%，纽元兑美元跌0.41%，美元兑加元涨0.36%。](https://wallstreetcn.com/livenews/3174982) · wallstreetcn
+- [周三（10月7日）纽约尾盘，美元兑日元跌0.04%，报158.04日元，日内交投区间为158.51-157.85日元，北京时间16:00前后出现一波V形反转行情。  欧元兑日元跌0.58%，英镑兑日元跌0.51%，日元兑离岸人民币涨0.05%](https://wallstreetcn.com/livenews/3174981) · wallstreetcn
+- [加纳宣布将正式申请加入金砖国家合作机制](https://wallstreetcn.com/livenews/3174980) · wallstreetcn
+- [美元指数涨0.4%，一度逼近10月5日顶部102.535](https://wallstreetcn.com/livenews/3174979) · wallstreetcn
+- [美债价格周三呈现出V形走势](https://wallstreetcn.com/livenews/3174978) · wallstreetcn
+- [美国海洋能源管理局（MMA）：墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://wallstreetcn.com/livenews/3174977) · wallstreetcn
+- [巴基斯坦军队已在沙特开展多领域防务合作](https://wallstreetcn.com/livenews/3174976) · wallstreetcn
+- [日本千叶县东北部发生4.8级地震](https://wallstreetcn.com/livenews/3174975) · wallstreetcn
+- [OpenAI：GPT-6 在面对越狱攻击时表现出更强的抵御能力](https://wallstreetcn.com/livenews/3174974) · wallstreetcn
+- [美国情报主管、AI主管Jay Clayton：美国正与20-25家AI公司对话。（CNBC）](https://wallstreetcn.com/livenews/3174973) · wallstreetcn
+- [谷歌正在扩大其SynthID Detector的使用范围](https://wallstreetcn.com/livenews/3174972) · wallstreetcn
+- [白宫要求美国五角大楼提供打击伊朗的选项。（大西洋月刊）](https://wallstreetcn.com/livenews/3174971) · wallstreetcn
+- [印尼官员：印尼考虑暂停新建生产镍半成品的加工设施](https://wallstreetcn.com/livenews/3174970) · wallstreetcn
+- [伊朗外交部发言人巴加埃：伊朗与阿曼已就霍尔木兹海峡安全过境航线的地理坐标，以及该协议的国际对外公布方式达成共识。](https://www.fastbull.com/cn/fastshort/4311790_212_1) · fastbull
+- [伊朗外交部发言人巴加埃：伊朗对美方提议的答复将通过中间人传递。](https://www.fastbull.com/cn/fastshort/4311789_212_1) · fastbull
+- [美国民主党就动用纳税人资金投放电视广告一事起诉特朗普。](https://www.fastbull.com/cn/fastshort/4311779_212_1) · fastbull
+- [美国副总统万斯欺诈特别工作组、美国劳工部与美国司法部将于周四召开新闻发布会，公布工作签证项目（含H1B及J1签证）滥用问题的最新调查结果。](https://www.fastbull.com/cn/fastshort/4311774_212_1) · fastbull
+- [文件显示：特朗普政府提议向婚姻率和生育率较高的地区增加交通资金投入。](https://www.fastbull.com/cn/fastshort/4311773_212_1) · fastbull
+- [据CNN：据知情人士透露，纽约检方预计将对委内瑞拉前总统尼古拉斯·马杜罗及其妻子提出新的指控，涉及近年来被委内瑞拉政府拘押的美国人据称遭受酷刑一事。](https://www.fastbull.com/cn/fastshort/4311771_1_1) · fastbull
+- [Wolfspeed将从五角大楼获得15亿美元的有条件贷款。](https://www.fastbull.com/cn/fastshort/4311766_212_1) · fastbull
+- [美股三大指数集体收跌。](https://www.fastbull.com/cn/fastshort/4311760_204_1) · fastbull
+- [伊朗外交部发言人巴加埃：今天与巴基斯坦大使伊姆兰·艾哈迈德·西迪基进行了富有成果的会谈。伊朗与巴基斯坦的关系建立在深厚的历史共同点和持久的友好纽带之上。](https://www.fastbull.com/cn/fastshort/4311757_1_1) · fastbull
+- [据Axios：特朗普政府原则上不反对叙利亚派兵对抗胡塞武装。](https://www.fastbull.com/cn/fastshort/4311752_1_1) · fastbull
+- [英国海上贸易行动办公室：已收到关于卡塔尔马迪纳特阿什沙马尔以北51海里的事件报告。一艘油轮报告称遭到多枚炮弹袭击；已报告伤亡情况。](https://www.fastbull.com/cn/fastshort/4311748_1_1) · fastbull
+- [美元指数7日上涨。](https://www.fastbull.com/cn/fastshort/4311747_204_1) · fastbull
+- [巴基斯坦军队已在沙特开展多领域防务合作。](https://www.fastbull.com/cn/fastshort/4311740_214_1) · fastbull
+- [特朗普回应未来或遭弹劾：以前对民主党人“留一线”了。](https://www.fastbull.com/cn/fastshort/4311732_214_1) · fastbull
+- [特朗普将向马斯克、黄仁勋等科技领袖颁发国家科学奖章。](https://www.fastbull.com/cn/fastshort/4311728_214_1) · fastbull
+- [特朗普将于周四向马斯克颁发科学成就奖。](https://www.fastbull.com/cn/fastshort/4311723_212_1) · fastbull
+- [市场资讯：美国（对伊朗）潜在打击的规模和目标尚未确定。](https://www.fastbull.com/cn/fastshort/4311722_212_1) · fastbull
+- [市场资讯：白宫寻求在中期选举前打击伊朗的方案。](https://www.fastbull.com/cn/fastshort/4311720_212_1) · fastbull
+- [美国财政部公布，在最近半个报告期内，外国投资者买入了价值40.90亿美元、2033年9月30日到期的7年期国债，上月该买入规模为67.86亿美元。](https://www.fastbull.com/cn/fastshort/4311718_212_1) · fastbull
+- [美国8月消费者信贷环比增长82.81亿美元，此前预期增长150亿美元。](https://www.fastbull.com/cn/fastshort/4311717_212_1) · fastbull
+- [特朗普将于周四出席人工智能峰会。](https://www.fastbull.com/cn/fastshort/4311716_212_1) · fastbull
+- [美国总统特朗普：（关于伊朗）他们整个国家都将被彻底摧毁。这件事很快就会结束，到那时油价将会暴跌。](https://www.fastbull.com/cn/fastshort/4311707_1_1) · fastbull
+- [美国总统特朗普：我爱波兰人民。我支持他们的总统。](https://www.fastbull.com/cn/fastshort/4311705_1_1) · fastbull
+- [特朗普谈及伊朗：他们整个国家将会被彻底摧毁。](https://www.fastbull.com/cn/fastshort/4311704_212_1) · fastbull
+- [布伦特原油期货结算价为每桶100.20美元，下跌38美分，跌幅0.38%。](https://www.fastbull.com/cn/fastshort/4311701_214_1) · fastbull
+- [突尼斯央行：基准利率维持在8%不变。](https://www.fastbull.com/cn/fastshort/4311698_1_1) · fastbull
+- [美联储官员提及AI生产率方面的担忧。](https://www.fastbull.com/cn/fastshort/4311693_214_1) · fastbull
+- [特朗普谈及频繁赴得州的原因：要确保帕克斯顿胜选。](https://www.fastbull.com/cn/fastshort/4311692_212_1) · fastbull
+- [特朗普：我打算通过竞选集会助力共和党。](https://www.fastbull.com/cn/fastshort/4311691_212_1) · fastbull
+- [特朗普：已与以色列总理内塔尼亚胡通话。](https://www.fastbull.com/cn/fastshort/4311689_212_1) · fastbull
+- [沙特主导联军称在也门萨那摧毁一处弹道导弹发射平台](https://flash.jin10.com/detail/20261008044603932800) · jin10
+- [美“林肯”号航母结束超10个月中东部署 获嘉奖最高荣誉](https://flash.jin10.com/detail/20261008044039343800) · jin10
+- [美国消费者借贷增速放缓 循环信贷规模下降](https://flash.jin10.com/detail/20261008043034744800) · jin10
+- [美国证券交易委员会文件显示，电动车公司Rivian&#40;RIVN.O&#41;于2026年10月7日从大众汽车集团获得10亿美元、10年期定期贷款融资。](https://flash.jin10.com/detail/20261008042344940800) · jin10
+- [伊朗外交部：与阿曼关于海峡航道的磋商进展顺利](https://flash.jin10.com/detail/20261008042128598800) · jin10
+- [金十图示：2026年10月07日（周三）华尔街恐惧与贪婪指数（美盘后）](https://flash.jin10.com/detail/20261008042124659800) · jin10
+- [美国半导体公司Wolfspeed&#40;WOLF.N&#41;股价盘后上涨27%，此前宣布获得15亿美元贷款承诺。](https://flash.jin10.com/detail/20261008041921505800) · jin10
+- [据相关文件显示，特朗普政府提议增加对结婚率和出生率较高地区的公共交通资金支持。](https://flash.jin10.com/detail/20261008041611106800) · jin10
+- [据CNN：万斯的反欺诈工作组、美国劳工部和司法部将于周四举行新闻发布会，公布工作签证项目遭滥用的新发现，包括H-1B和J-1签证。](https://flash.jin10.com/detail/20261008041602653800) · jin10
+- [据CNN：据知情人士透露，纽约检方预计将对委内瑞拉前总统尼古拉斯·马杜罗及其妻子提出新的指控，涉及近年来被委内瑞拉政府拘押的美国人据称遭受酷刑一事。](https://flash.jin10.com/detail/20261008041037763800) · jin10
+- [ChatGPT免费版将升级为GPT-6模型](https://flash.jin10.com/detail/20261008040926369800) · jin10
+- [金十图示：2026年10月07日（周三）全球股市指数-美洲市场（收盘）](https://flash.jin10.com/detail/20261008040642178800) · jin10
+- [道琼斯指数10月7日（周三）收盘下跌341.41点，跌幅0.66%，报51179.87点；&lt;br/&gt;标普500指数10月7日（周三）收盘下跌17.20点，跌幅0.22%，报7801.73点；&lt;br/&gt;纳斯达克综合指数10月7日（周三）收盘下跌61.20点，跌幅0.22%，报27538.69点。](https://flash.jin10.com/detail/20261008040639586800) · jin10
+- [金十图示：2026年10月07日（周三）美股热门股票行情一览（美股收盘）](https://flash.jin10.com/detail/20261008040637832800) · jin10
+- [金十图示：2026年10月07日（周三）热门中概股行情一览（美股收盘）](https://flash.jin10.com/detail/20261008040635439800) · jin10
+- [美股收盘：三大股指收跌 美光涨4%](https://flash.jin10.com/detail/20261008040203569800) · jin10
+- [杜克能源达成一项和解协议，以加强监管保护，使美国北卡罗来纳州客户免受与数据中心相关成本的影响。](https://flash.jin10.com/detail/20261008040138084800) · jin10
+- [伊朗外交部发言人巴加埃：今天与巴基斯坦大使伊姆兰·艾哈迈德·西迪基进行了富有成果的会谈。伊朗与巴基斯坦的关系建立在深厚的历史共同点和持久的友好纽带之上。](https://flash.jin10.com/detail/20261008035958235800) · jin10
+- [美官员：特朗普政府不反对叙军赴也门 可减少美军直接介入](https://flash.jin10.com/detail/20261008034852714800) · jin10
+- [据Axios：特朗普政府原则上不反对叙利亚派兵对抗胡塞武装。](https://flash.jin10.com/detail/20261008034659729800) · jin10
+- [美元指数7日上涨](https://flash.jin10.com/detail/20261008034343401800) · jin10
+- [国际油价7日下跌](https://flash.jin10.com/detail/20261008034217686800) · jin10
+- [英国海上贸易行动办公室：已收到关于卡塔尔马迪纳特阿什沙马尔以北51海里的事件报告。一艘油轮报告称遭到多枚炮弹袭击；已报告伤亡情况。](https://flash.jin10.com/detail/20261008034205091800) · jin10
+- [巴西国家石油公司（Petrobras）在巴西石油监管机构举行的拍卖中获得坎波斯盆地8个区块。](https://flash.jin10.com/detail/20261008033922930800) · jin10
+- [美国海洋能源管理局（MMA）：墨西哥湾目前约25.08%的石油产量和16.37%的天然气产量已停产。](https://flash.jin10.com/detail/20261008033910683800) · jin10
+- [巴基斯坦军队已在沙特开展多领域防务合作](https://flash.jin10.com/detail/20261008033735244800) · jin10
+- [据CNBC：美国情报总监兼人工智能事务主管克莱顿：美国正与20至25家人工智能公司展开对话。](https://flash.jin10.com/detail/20261008033007320800) · jin10
+- [特朗普回应未来或遭弹劾：以前对民主党人“留一线”了](https://flash.jin10.com/detail/20261008032554864800) · jin10
+- [Saudi-led coalition says it destroyed ballistic missile launch platform in Sanaa, Yemen](https://mktnews.net/flashDetail.html?id=01a1181d-e623-7ee0-a7e1-ded00b118475) · mktnews
+- [USS Abraham Lincoln ends record 10-plus-month Middle East deployment, receives Presidential Unit Citation](https://mktnews.net/flashDetail.html?id=01a11818-fd0e-7ee0-a7e1-d5dc1c708efe) · mktnews
+- [U.S. consumer credit growth slows in August as revolving debt contracts](https://mktnews.net/flashDetail.html?id=01a1180f-af6d-7ee0-a7e1-cc363cf78855) · mktnews
+- [A U.S. Securities and Exchange Commission filing shows electric-vehicle maker Rivian &#40;RIVN.O&#41; secured a $1.0 billion, 10-year term loan from Volkswagen Group on Oct. 7, 2026.](https://mktnews.net/flashDetail.html?id=01a11809-6961-7ee0-a7e1-c38e74406e87) · mktnews
+- [Wolfspeed &#40;WOLF.N&#41; shares rose 27% in after-hours trading after the company said it had secured a $1.5 bln loan commitment.](https://mktnews.net/flashDetail.html?id=01a11805-5b81-7ee0-a7e1-bb6a6bb9dcd8) · mktnews
+- [Documents show the Trump administration proposes increasing public-transit funding for areas with higher marriage and birth rates.](https://mktnews.net/flashDetail.html?id=01a11802-6ef8-7ee0-a7e1-b41b85698ac8) · mktnews
+- [Vance&#x27;s anti-fraud task force, the U.S. Department of Labor and the Justice Department will hold a press conference on Thursday to announce new findings of abuse in work-visa programs, including H-1B and J-1.](https://mktnews.net/flashDetail.html?id=01a11802-5d44-7ee0-a7e1-a90fa2ae583a) · mktnews
+- [CNN, citing people familiar with the matter, reports New York prosecutors are expected to file new charges against former Venezuelan president Nicolas Maduro and his wife over alleged torture of U.S. citizens detained by the Venezuelan government.](https://mktnews.net/flashDetail.html?id=01a117fd-7245-7ee0-a7e1-a544d9dab9a4) · mktnews
+- [ChatGPT free tier to be upgraded to GPT-6](https://mktnews.net/flashDetail.html?id=01a117fc-6a06-7ee0-a7e1-9a881658abc6) · mktnews
+- [U.S. equities closed lower on Wednesday, Oct. 7: Dow Jones Industrial Average fell 341.41 points &#40;-0.66%&#41; to 51,179.87; S&amp;P 500 dropped 17.20 points &#40;-0.22%&#41; to 7,801.73; Nasdaq Composite declined 61.20 points &#40;-0.22%&#41; to 27,538.69.](https://mktnews.net/flashDetail.html?id=01a117f9-bbee-7ee0-a7e1-939789ed7ef9) · mktnews
+- [US close: Dow prelim -0.66%, S&amp;P 500 &amp; Nasdaq -0.22%; Micron +4%](https://mktnews.net/flashDetail.html?id=01a117f5-90e8-7ee0-a7e1-8d84a807cd08) · mktnews
+- [Duke Energy reached a settlement to bolster regulatory protections shielding North Carolina customers from data-center–related costs.](https://mktnews.net/flashDetail.html?id=01a117f5-1dfb-7ee0-a7e1-84de42a24789) · mktnews
+- [Iran foreign ministry spokesperson BAGHAEI said he held productive talks with Pakistan Ambassador Imran Ahmed Siddiqui and described Iran-Pakistan relations as rooted in deep historical ties and enduring friendship.](https://mktnews.net/flashDetail.html?id=01a117f3-a28f-7ee0-a7e1-7c380ace9ed0) · mktnews
+- [U.S. officials: Trump administration not opposed to Syrian troop deployment to Yemen; could reduce U.S. direct military involvement](https://mktnews.net/flashDetail.html?id=01a117e9-82ae-7ee0-a7e1-70872099c780) · mktnews
+- [Axios reports the Trump administration in principle would not oppose Syria sending forces to confront the Houthis.](https://mktnews.net/flashDetail.html?id=01a117e7-bcc6-7ee0-a7e1-6cd9e795e094) · mktnews
+- [Dollar index up 0.4% to 102.242 on 7th](https://mktnews.net/flashDetail.html?id=01a117e4-c62d-7ee0-a7e1-62545e511e4d) · mktnews
+- [Oil falls: NYMEX Nov down 1.3%, ICE Brent Dec down 0.38%](https://mktnews.net/flashDetail.html?id=01a117e3-7079-7ee0-a7e1-5f94c6075af3) · mktnews
+- [UK Maritime Trade Operations &#40;UKMTO&#41; said it received a report of an incident 51 nm north of Madinat ash Shamal, Qatar. A tanker reported multiple shell strikes and casualties were reported.](https://mktnews.net/flashDetail.html?id=01a117e3-3cf6-7ee0-a7e1-522c1fd5645b) · mktnews
+- [Petrobras won eight exploration blocks in the Campos Basin at an auction held by Brazil&#x27;s oil regulator.](https://mktnews.net/flashDetail.html?id=01a117e0-d6a6-7ee0-a7e1-4d0152b83ef6) · mktnews
+- [U.S. Bureau of Ocean Energy Management &#40;BOEM&#41; said about 25.08% of oil production and 16.37% of natural gas production in the Gulf of Mexico are currently shut in.](https://mktnews.net/flashDetail.html?id=01a117e0-9ed2-7ee0-a7e1-4736c9453db6) · mktnews
+- [Pakistan military conducting multi-domain defence cooperation in Saudi Arabia](https://mktnews.net/flashDetail.html?id=01a117df-39d2-7ee0-a7e1-3b80a2e2a2ac) · mktnews
+- [According to CNBC, U.S. Director of National Intelligence and AI chief Clayton said the U.S. is in talks with 20-25 AI firms.](https://mktnews.net/flashDetail.html?id=01a117d8-4e12-7ee0-a7e1-336e13d3a084) · mktnews
+- [Trump says he restrained from harming Clinton, Biden and Obama; hints he could still act amid impeachment talk](https://mktnews.net/flashDetail.html?id=01a117d4-7c1c-7ee0-a7e1-2bb185cbdcda) · mktnews
+- [Trump to award National Medals of Science and Technology to Musk, Brin, Huang, Lisa Su; Dell, Nadella to receive technology medal](https://mktnews.net/flashDetail.html?id=01a117cf-63a9-7ee0-a7e1-272d9c99f569) · mktnews
+- [Fox News reports President Trump will present Elon Musk with the United States&#x27; highest science and technology award on Thursday.](https://mktnews.net/flashDetail.html?id=01a117cc-0118-7ee0-a7e1-1f9afaffc269) · mktnews
+- [Trump to attend AI science conference; White House to announce &gt;$1 bln industry commitments, Southeast compute hubs](https://mktnews.net/flashDetail.html?id=01a117c8-67f2-7ee0-a7e1-143a3de618f8) · mktnews
+- [Indonesia considers pausing new semi-finished nickel processing capacity](https://mktnews.net/flashDetail.html?id=01a117c5-970d-7ee0-a7e1-0a4eb50a1b75) · mktnews
+- [Attacks on ABHA and Riyadh airports kill 3, injure 36](https://mktnews.net/flashDetail.html?id=01a117c5-45a6-7ee0-a7e1-046fd8657a62) · mktnews
+- [The Atlantic reports the White House is seeking to develop strike plans against Iran ahead of the US midterm elections.](https://mktnews.net/flashDetail.html?id=01a117c4-5f89-7ee0-a7e0-fa24344d98f7) · mktnews
+- [Axios reports President Trump will attend an AI conference on Thursday local time.](https://mktnews.net/flashDetail.html?id=01a117c0-eb07-7ee0-a7e0-f6ef6fa6b69a) · mktnews
 - [乐动机器人&#40;01236.HK&#41;附属拟不超过600万欧元收购德国园林器械制造商SABO-Maschinenfabrik全部股权](https://www.gelonghui.com/news/5320869) · gelonghui
 - [途虎－Ｗ&#40;09690.HK&#41;10月7日耗资149.3万港元回购12.62万股](https://www.gelonghui.com/news/5320868) · gelonghui
 - [晶泰控股&#40;02228.HK&#41;获董事会主席温书豪增持130万股](https://www.gelonghui.com/news/5320867) · gelonghui
@@ -1006,27 +877,27 @@ first_seen_at 是所保留接续链中该版本的最早抓取时间，不是发
 - [康圣环球&#40;09960.HK&#41;10月7日耗资1870港元回购2000股](https://www.gelonghui.com/news/5320857) · gelonghui
 - [天域半导体&#40;02658.HK&#41;10月7日耗资199.9万港元回购3.86万股](https://www.gelonghui.com/news/5320856) · gelonghui
 - [草姬集团&#40;02593.HK&#41;：曾庆煊辞任公司秘书](https://www.gelonghui.com/news/5320855) · gelonghui
+- [中国乒协回应极端球迷越界行为：已协助报案，将推动建立赛场禁入名单制度](https://www.thepaper.cn/newsDetail_forward_34209230) · thepaper
 - [马上评｜让游客住学生宿舍，情理法如何平衡](https://www.thepaper.cn/newsDetail_forward_34207074) · thepaper
 - [《欢迎来龙餐馆》将角逐第99届奥斯卡最佳国际影片](https://www.thepaper.cn/newsDetail_forward_34207584) · thepaper
 - [旁白｜叫停之后争论未止：活体投喂为何总有人叫好？](https://www.thepaper.cn/newsDetail_forward_34207565) · thepaper
-- [邵佳一向球迷道歉：必须在接下来的工作中更加努力](https://www.thepaper.cn/newsDetail_forward_34206260) · thepaper
-- [深陷信任危机的邵佳一：只发现问题还不够，解决问题是关键](https://www.thepaper.cn/newsDetail_forward_34206356) · thepaper
 - [马上评｜气得王皓报警，治理体育饭圈该动真格了](https://www.thepaper.cn/newsDetail_forward_34208488) · thepaper
-- [中国乒协回应极端球迷越界行为：已协助报案，将推动建立赛场禁入名单制度](https://www.thepaper.cn/newsDetail_forward_34209230) · thepaper
+- [深陷信任危机的邵佳一：只发现问题还不够，解决问题是关键](https://www.thepaper.cn/newsDetail_forward_34206356) · thepaper
 - [奔赴“县”场｜在他们“出发”与“留下”的地方，看见回归的浙商](https://www.thepaper.cn/newsDetail_forward_34207949) · thepaper
 - [游客称山东潍坊一饭店现阴阳菜单，老板：当下食材不同，涉及的菜都免单了](https://www.thepaper.cn/newsDetail_forward_34208085) · thepaper
 - [孙颖莎不敌泰国选手帕拉南，止步WTT中国大满贯女单32强](https://www.thepaper.cn/newsDetail_forward_34209231) · thepaper
+- [1.77亿港元成交，虞世南《积时帖》湮没81年后现身](https://www.thepaper.cn/newsDetail_forward_34208947) · thepaper
+- [破解“同手性如何自发产生”百年化学谜题！官方详解今年化学诺奖为何颁给这两位科学家](https://www.thepaper.cn/newsDetail_forward_34209081) · thepaper
+- [中秋国庆假期收官：8天以上长线行程占比接近翻倍，小城景区霸榜](https://www.thepaper.cn/newsDetail_forward_34209162) · thepaper
+- [安踏集团15亿欧元收购彪马29.06%股权交易完成，正式成为第一大股东](https://www.thepaper.cn/newsDetail_forward_34209242) · thepaper
 - [缅北电诈覆灭纪录片披露演员王星案详情：短短4天遭转卖3次](https://www.thepaper.cn/newsDetail_forward_34208282) · thepaper
 - [视频丨缅北电诈团伙一度气焰嚣张，窝点距我口岸仅200米](https://www.thepaper.cn/newsDetail_forward_34207520) · thepaper
 - [“非洲手机之王”传音控股拟全球发售8664.83万股H股，预计10月15日在港交所挂牌上市](https://www.thepaper.cn/newsDetail_forward_34207660) · thepaper
+- [郑钦文2比1战胜本届中网“最大黑马”，顺利挺进女单八强](https://www.thepaper.cn/newsDetail_forward_34209228) · thepaper
+- [年内累计已达46.17亿元！藏格矿业再收巨龙铜业现金分红](https://www.thepaper.cn/newsDetail_forward_34209401) · thepaper
 - [特写｜中网冠军发布会，藏着德约的坚韧、奉献和永不言败](https://www.thepaper.cn/newsDetail_forward_34207739) · thepaper
-- [1.77亿港元成交，虞世南《积时帖》湮没81年后现身](https://www.thepaper.cn/newsDetail_forward_34208947) · thepaper
-- [IceCube博士后田玮谈新晋物理诺奖得主哈尔岑：82岁仍在写论文、开会，常来上海交流分享](https://www.thepaper.cn/newsDetail_forward_34207061) · thepaper
-- [当AI浪潮遭遇“减速”之问，回看30年前那场浪潮走向](https://www.thepaper.cn/newsDetail_forward_34141698) · thepaper
-- [对话系外地球（ET）巡天卫星首席科学家葛健：哈尔岑的创新路径对我国建设大型科学装置有启示意义](https://www.thepaper.cn/newsDetail_forward_34208153) · thepaper
-- [奔赴“县”场｜像江苏又像浙江，费孝通一辈子放不下的地方](https://www.thepaper.cn/newsDetail_forward_34202564) · thepaper
-- [国庆档电影票房破11亿！多部影片官宣海外上映计划](https://www.thepaper.cn/newsDetail_forward_34208135) · thepaper
+- [视频丨纪录片《缅北电诈覆灭纪实》第三集《共筑天网》](https://www.thepaper.cn/newsDetail_forward_34209407) · thepaper
 
 本次复核当前原始HTTP与最后一次历史合并；较早条目沿原生历史索引接续，不宣称重读全部旧HTTP。
-[本批原始ZIP及接续输入](../../sources/artifacts/9f9ecd3104ef48ce4b5aca598bfcc5471ad9c1b7b5df2b4487291e25cb96280b.zip)
+[本批原始ZIP及接续输入](../../sources/artifacts/4aa5f4953a54b6babded483c965f5ad743f241bf195c8ca01cc35356335d0ceb.zip)
 [结构化窗口、版本与恢复回执](news-daily.json)
