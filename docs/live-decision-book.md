@@ -67,6 +67,8 @@ Investment Authority remains `NONE`.
 
 **同日三家公司同期补证：** [恒瑞临床/回购时点、兴业投入义务与三花派息口径](https://github.com/auguspp/decision-kernel/blob/cc6d7830ba9b6e7c535b7554580a89517413446b/docs/readings/d1-three-case-pit-sources-2026-10-07/README.md)。原五名分母及9月17日截点保持；晚于截点的首次回购/实施日不倒灌。三花0.12元持有人毛红利不等于0.1195545参考调整，条件现金端点对照不冒充实际总回报；兴业定金只抵一次且额外清偿不抵对价，旧付款/交接状态不回退。公开解读内部矛盾与未核分类疑点分开，不认证社区共识或三个完整PIT机会。
 
+**同日具名预期核对：** [恒瑞、三花、兆易的日期／机构／盈利与倍数区分](https://github.com/auguspp/decision-kernel/blob/64c74ce4e71a535401941b17932a3616f2f75ba6/docs/readings/d1-dated-expectation-controls-2026-10-07/README.md)。恒瑞7月旧下修不按8月转载计新事件；三花盈利下修与盈利维持但PE下修分开，目标降幅不当利润降幅；兆易跨机构且跨日期的61与140.69不作同一模型上修。部分索引／原口径缺口保留，名义算术不冒充正式预测比较通过或三项PIT机会；原Human条件与冻结不改。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
@@ -226,7 +228,7 @@ Authoritative lineage:
 RESEARCH = complete enough to stop first public-diligence loop
 REFERENCE FRAME = mature high-ROE global consumer-industrial franchise
 PRIMARY TOOL = per-share owner-return decomposition
-ANALYSIS DIVERGENCE = WEAK / PARTIALLY COLLAPSED
+ANALYSIS DIVERGENCE = WEAK / PARTIALLY_COLLAPSED
 PROBABILITY QUALIFICATION = PARTIAL / ORDINAL_ONLY
 CARDINAL PROBABILITY = not established / not currently required
 NUMERICAL ODDS = WITHHELD
