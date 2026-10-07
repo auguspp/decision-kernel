@@ -52,6 +52,22 @@ def test_rigol_has_three_within_range_results_not_new_positive_surprises():
 
 def test_yto_keeps_missing_actual_metric_without_zero_or_partial_success_promotion():
     e, files = retained('600233.SH'); report = o.review(e, files, checked_at=AT)
+    assert report['status'] == 'RETAINED_REVIEW_COMPARED'
+    assert report['metric_count'] == report['comparable_metrics'] == 2
+    assert report['event_id'] == '600233.SH:2026H1' and report['company_guidance_events'] == 1
+    assert report['rows'][1]['actual']['value'] == '3122.5831'
+    assert Decimal(report['rows'][1]['comparison']['difference']) == Decimal('-67.4169')
+    assert all(row['comparison']['range_position'] == 'WITHIN' for row in report['rows'])
+    assert report['publication_timing_qualification'] == 'NOT_ESTABLISHED_BY_DOCUMENT_DATES'
+    assert report['ai_forecast_error'] is report['brier_score'] is None
+    # The actual historical null stays on disk; a new observation does not backfill it.
+    legacy = ROOT / 'docs/readings/d2-yto-preannouncement-2026-10-07/inputs.json'
+    assert o.model.blob_sha(legacy.read_bytes()) == '7f536ad0cc6cad3e9bdbeead3f901391df02f12f'
+    assert o.loads(legacy.read_bytes())['actual']['parent_net_profit_ex_nonrecurring'] is None
+    # Explicit synthetic missing-value control still exercises the unchanged reader.
+    e, files = changed(e, files, 'inputs',
+                       lambda p: p['actual'].update(parent_net_profit_ex_nonrecurring=None))
+    report = o.review(e, files, checked_at=AT)
     assert report['status'] == 'RETAINED_REVIEW_WITH_COMPARISON_GAPS'
     assert report['metric_count'] == 2 and report['comparable_metrics'] == 1
     first, missing = report['rows']
@@ -156,9 +172,9 @@ def test_new_cases_use_existing_reader_and_local_gaps_do_not_remove_other_events
     c, base, values = fixture(indices=(1, 2), at=AT)
     before = deepcopy(base); result = r.attach(c, base, retained_limit=LIMIT)
     report = o.loads(c.files[r.PATH])
-    assert report['selected_events'] == 2 and report['compared_events'] == 1
-    assert report['source_or_comparison_gap_events'] == 1
-    assert report['items'][1]['rows'][1]['comparison']['status'] == 'VALUE_NOT_RETAINED'
+    assert report['selected_events'] == 2 and report['compared_events'] == 2
+    assert report['source_or_comparison_gap_events'] == 0
+    assert report['items'][1]['rows'][1]['comparison']['status'] == 'COMPARABLE_RETAINED_VALUES'
     assert base == before and result['lanes'] == base['lanes'] and c.sources == {}
     assert len(c.reads) == 7 and report['ai_forecast_score'] is None
     for item in report['items']:
@@ -176,9 +192,9 @@ def test_new_cases_use_existing_reader_and_local_gaps_do_not_remove_other_events
 def test_production_selection_preserves_mu_and_delivers_all_three_event_dispositions():
     c, base, _ = fixture(indices=(0, 1, 2), at=AT)
     r.attach(c, base, retained_limit=LIMIT); report = o.loads(c.files[r.PATH])
-    assert report['selected_events'] == 3 and report['compared_events'] == 2
-    assert report['source_or_comparison_gap_events'] == 1
-    assert [i['comparable_metrics'] for i in report['items']] == [4, 3, 1]
+    assert report['selected_events'] == 3 and report['compared_events'] == 3
+    assert report['source_or_comparison_gap_events'] == 0
+    assert [i['comparable_metrics'] for i in report['items']] == [4, 3, 2]
     assert sum(i['metric_count'] for i in report['items']) == 9
     assert [Decimal(row['comparison']['difference']) for row in report['items'][0]['rows']] == [
         Decimal('4229'), Decimal('1'), Decimal('918'), Decimal('2.42')]
