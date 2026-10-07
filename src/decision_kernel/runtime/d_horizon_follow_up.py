@@ -3,6 +3,7 @@
 No signal classifier, forecast, backtest engine, source request or trade is made.
 The old case owns its hypothesis and clocks; this module only follows its dates.
 Interrupted-reading contract: docs/d-horizon-gap-continuity-v1.md.
+Declared research-only dates: docs/d-horizon-declared-mechanisms-v1.md.
 """
 from __future__ import annotations
 
@@ -21,6 +22,26 @@ KEY = 'd_horizon_follow_up'
 PATH = 'details/stock/horizon-follow-up.json'
 VERSION = 'd-retained-horizon-follow-up-v1'
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, ArithmeticError)
+
+
+def _long_deadline_assertion(value):
+    """An explicit absent date is not a fabricated long-term valuation horizon."""
+    if value is None:
+        return 'LONG_RESEARCH_DEADLINE_NOT_DECLARED'
+    model.check(type(value) is str and date.fromisoformat(value).isoformat() == value,
+                'horizon long deadline must be an ISO date or explicit null')
+    return value
+
+
+def _scoped_source(collector, source):
+    """Reuse the optional-continuation cache scope without increasing any budget."""
+    baseline_cache = collector.sources
+    key = (source['path'], source['ref'])
+    collector.sources = {key: baseline_cache[key]} if key in baseline_cache else {}
+    try:
+        return collector.source({k: source[k] for k in ('path', 'ref', 'git_blob')})
+    finally:
+        collector.sources = baseline_cache
 
 
 def read_price_parts(files, expected_report):
@@ -104,6 +125,7 @@ def exact_interval(symbol, anchor, target, period, tables, coverage):
 def project(case, daily, calendar, tables, coverage, *, checked_at, source, previous=None, previous_reading_commit=None,
             calendar_market_session=None):
     """Case-owned deadlines are displayed, not turned into automatic judgments."""
+    _long_deadline_assertion(case['long_research_deadline'])
     frozen = model.clock(case['frozen_at'])
     model.check(model.clock(daily['observed_at']) <= model.clock(daily['received_through'])
                 <= model.clock(checked_at), 'horizon price clock')
@@ -181,7 +203,9 @@ def render(report):
     for row, body_ref in zip(report['cases'], report['case_bodies'], strict=True):
         lines += [f"\n### {row['symbol']} / {row['id']}",
             f"原冻结：{row['frozen_at']}；S0：{row['anchor_session'] or '尚未由已完成交易日日历建立'}。",
-            f"长期Research期限：{row['long_research_deadline']}（不缩短、不重算原长期模型）。",
+            (f"长期Research期限：{row['long_research_deadline']}（不缩短、不重算原长期模型）。"
+             if row['long_research_deadline'] is not None else
+             "长期Research期限未在本声明单独设定；不新造估值日、不覆盖原长期研究。"),
             '中期：' + row['retained_interpretation']['intermediate'],
             '反证／停止：' + row['retained_interpretation']['invalidation'],
             f"原分析者有限裁定日：{row['analyst_review_by']}；{row['review_clock']}（日期到达不等于兑现）。",
@@ -347,13 +371,7 @@ def _attach_continuations(collector, baseline, report, items, registry, *, retai
                 # files have an explicit local cache scope, not the baseline's
                 # 60-source registry. Keep the same real API/byte/write budgets.
                 phase = 'CONTINUATION_SOURCE'
-                baseline_cache = collector.sources
-                key = (source['path'], source['ref'])
-                collector.sources = {key: baseline_cache[key]} if key in baseline_cache else {}
-                try:
-                    raw, body_ref = collector.source({k: source[k] for k in ('path', 'ref', 'git_blob')})
-                finally:
-                    collector.sources = baseline_cache
+                raw, body_ref = _scoped_source(collector, source)
                 phase = 'CONTINUATION_BINDING'
                 _bound(raw, source)
                 _bound(raw, body_ref)
@@ -362,7 +380,7 @@ def _attach_continuations(collector, baseline, report, items, registry, *, retai
                 predecessor = registry[case['record_id']]['source']
                 predecessor_link = f"/blob/{predecessor['ref']}/{predecessor['path']}"
                 model.check(all(value in text for value in [predecessor_link, case['frozen_at'],
-                            case['long_research_deadline'], case['analyst_review_by'],
+                            _long_deadline_assertion(case['long_research_deadline']), case['analyst_review_by'],
                             item['research_cutoff'], *excerpts]), 'continuation excerpt or predecessor not in source')
                 finished = collector.now()
                 model.check(model.clock(finished) >= model.clock(read_at), 'continuation read clock reversed')
@@ -459,11 +477,11 @@ def attach(collector, baseline, *, retained_limit):
             model.check(record['case'] == case['symbol'] and record['use'] == 'RETAINED_RESEARCH_DOCUMENT'
                         and record['archive']['format'] == 'RETAINED_FILES', 'horizon case use differs')
             document = record['source']
-            raw, body_ref = collector.source({k: document[k] for k in ('path', 'ref', 'git_blob')})
+            raw, body_ref = _scoped_source(collector, document)
             _bound(raw, document)
             model.check(model.sha256(raw) == case['document_sha256'] and
                         all(text in raw.decode('utf-8') for text in [*case['source_assertions'], case['frozen_at'],
-                            case['long_research_deadline'], case['analyst_review_by'],
+                            _long_deadline_assertion(case['long_research_deadline']), case['analyst_review_by'],
                             *case['interpretation'].values()]), 'horizon declaration not in body')
             body_refs.append(body_ref)
             cases.append(project(case, daily, calendar, tables, coverage, checked_at=collector.now(),
