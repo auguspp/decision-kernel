@@ -63,6 +63,8 @@ Investment Authority remains `NONE`.
 
 **同日兆易预告区分：** [近似预告、归母／扣非差额与盈利质量](https://github.com/auguspp/decision-kernel/blob/50e9c22fe020de6d485b1afe30048f16a26d1276/docs/readings/d-gigadevice-approx-guidance-2026-10-07/README.md)。7月已披露的高增长不自动成为8月新意外；归母与扣非名义差额异号，净非经常损益残差另列。“左右”不填零宽区间，继承实绩抽取不冒称新原表核验；不改D2事件、原Human条件或四案例冻结。
 
+**同日北大荒披露与预期资格：** [六月税务事件、七月近似预亏与旧预测页面](https://github.com/auguspp/decision-kernel/blob/a4a1263d7fbb6c1c5eaeb03744c30fad211af01d/docs/readings/d1-beidahuang-disclosure-expectation-2026-10-07/README.md)。半年亏损在中报前已有名义预告，继承实绩仅差约2.09万元，不把“左右”改成硬点。动态汇总截至日不等于具名报告日期，3月旧摘要及搜索/正文差异不建立补税后共识；条件H2残差只作期间校验。原税后能力、BA2/Human条件、四案例冻结和价格资格保持，未新增D2事件或机会认定。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
