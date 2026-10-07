@@ -1,0 +1,162 @@
+{
+  "captured_at": "2026-09-23T08:20:55.645386+00:00",
+  "human_attention_authority": "NONE",
+  "investment_authority": "NONE",
+  "market_contract": {
+    "expected_latest_session": "2026-09-23",
+    "price_convention": "RAW_UNADJUSTED_COMPLETED_A_SHARE_CLOSE",
+    "response_session": "2026-09-23",
+    "source": "HiThink Financial-API raw daily close"
+  },
+  "package_path": "research_cases/603986-gigadevice-deep-research-v2.json",
+  "points": [
+    {
+      "as_of": "2026-08-10T15:00:00+08:00",
+      "close": "403.03"
+    },
+    {
+      "as_of": "2026-08-11T15:00:00+08:00",
+      "close": "402.29"
+    },
+    {
+      "as_of": "2026-08-12T15:00:00+08:00",
+      "close": "413.17"
+    },
+    {
+      "as_of": "2026-08-13T15:00:00+08:00",
+      "close": "404.5"
+    },
+    {
+      "as_of": "2026-08-14T15:00:00+08:00",
+      "close": "417.48"
+    },
+    {
+      "as_of": "2026-08-17T15:00:00+08:00",
+      "close": "444.0"
+    },
+    {
+      "as_of": "2026-08-18T15:00:00+08:00",
+      "close": "436.74"
+    },
+    {
+      "as_of": "2026-08-19T15:00:00+08:00",
+      "close": "403.71"
+    },
+    {
+      "as_of": "2026-08-20T15:00:00+08:00",
+      "close": "403.5"
+    },
+    {
+      "as_of": "2026-08-21T15:00:00+08:00",
+      "close": "409.06"
+    },
+    {
+      "as_of": "2026-08-24T15:00:00+08:00",
+      "close": "381.66"
+    },
+    {
+      "as_of": "2026-08-25T15:00:00+08:00",
+      "close": "395.51"
+    },
+    {
+      "as_of": "2026-08-26T15:00:00+08:00",
+      "close": "392.5"
+    },
+    {
+      "as_of": "2026-08-27T15:00:00+08:00",
+      "close": "411.2"
+    },
+    {
+      "as_of": "2026-08-28T15:00:00+08:00",
+      "close": "396.82"
+    },
+    {
+      "as_of": "2026-08-31T15:00:00+08:00",
+      "close": "406.0"
+    },
+    {
+      "as_of": "2026-09-01T15:00:00+08:00",
+      "close": "393.0"
+    },
+    {
+      "as_of": "2026-09-02T15:00:00+08:00",
+      "close": "388.86"
+    },
+    {
+      "as_of": "2026-09-03T15:00:00+08:00",
+      "close": "383.2"
+    },
+    {
+      "as_of": "2026-09-04T15:00:00+08:00",
+      "close": "371.88"
+    },
+    {
+      "as_of": "2026-09-07T15:00:00+08:00",
+      "close": "385.44"
+    },
+    {
+      "as_of": "2026-09-08T15:00:00+08:00",
+      "close": "385.96"
+    },
+    {
+      "as_of": "2026-09-09T15:00:00+08:00",
+      "close": "381.87"
+    },
+    {
+      "as_of": "2026-09-10T15:00:00+08:00",
+      "close": "380.64"
+    },
+    {
+      "as_of": "2026-09-11T15:00:00+08:00",
+      "close": "371.32"
+    },
+    {
+      "as_of": "2026-09-14T15:00:00+08:00",
+      "close": "356.88"
+    },
+    {
+      "as_of": "2026-09-15T15:00:00+08:00",
+      "close": "363.11"
+    },
+    {
+      "as_of": "2026-09-16T15:00:00+08:00",
+      "close": "373.14"
+    },
+    {
+      "as_of": "2026-09-17T15:00:00+08:00",
+      "close": "369.88"
+    },
+    {
+      "as_of": "2026-09-18T15:00:00+08:00",
+      "close": "388.18"
+    },
+    {
+      "as_of": "2026-09-21T15:00:00+08:00",
+      "close": "391.71"
+    },
+    {
+      "as_of": "2026-09-22T15:00:00+08:00",
+      "close": "402.1"
+    },
+    {
+      "as_of": "2026-09-23T15:00:00+08:00",
+      "close": "398.72"
+    }
+  ],
+  "purpose": "Surprise Radar shadow price-path input only; no Research route, Human wake, fundamental-state migration, or investment authority.",
+  "radar_semantics": "SHADOW_OBSERVATION_ONLY",
+  "research_identity": {
+    "research_as_of": "2026-09-02T01:00:00+00:00",
+    "research_created_at": "2026-09-02T09:18:00+00:00",
+    "research_information_bundle_hash": "fefaf2f3088f83aaec75f469d615646c5c25313c1453af57bacfc49f5a6a6a5e",
+    "research_snapshot_id": "7d304818-9368-513d-bbe8-c393532e5e75"
+  },
+  "schema_version": 1,
+  "security": {
+    "company_name": "兆易创新",
+    "exchange": "SSE",
+    "thscode": "603986.SH",
+    "ticker": "603986"
+  },
+  "storage_classification": "ACTIONS_SHORT_LIVED_HARNESS_OBSERVATION"
+}
