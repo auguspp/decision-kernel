@@ -1,0 +1,138 @@
+{
+  "kind": "RETAINED_RESEARCH_ARITHMETIC_NOT_CANONICAL_ODDS",
+  "retrieved_on": "2026-10-07",
+  "code_baseline": "89ad6cc1b2f62266aca0a441ffe5ff709d6db830",
+  "sources": [
+    {
+      "id": "G",
+      "url": "https://www.cfi.net.cn/p20260928002833.html",
+      "role": "ISSUER_ANNOUNCEMENT_TRANSCRIPTION_SEARCH_INDEX",
+      "document_date": "2026-09-28",
+      "observed_mirror_clock": "2026-09-28 21:42:47",
+      "official_first_publication_time": null,
+      "full_bytes_retained": false
+    },
+    {
+      "id": "CAP",
+      "url": "https://www.cfi.net.cn/p20260928001421.html",
+      "role": "ISSUER_CAPITAL_CHANGE_TRANSCRIPTION_SEARCH_INDEX",
+      "document_date": "2026-09-29",
+      "official_first_publication_time": null,
+      "full_bytes_retained": false
+    },
+    {
+      "id": "IFRS",
+      "url": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-2-share-based-payment/",
+      "role": "OFFICIAL_GENERAL_ACCOUNTING_EXPLANATION_NOT_ISSUER_CLASSIFICATION",
+      "read_method": "WEB_OPEN_BODY",
+      "full_bytes_retained": false
+    }
+  ],
+  "input_source_map": {
+    "grant_terms_and_plan_capacity": "G",
+    "A_H_class_split": "CAP"
+  },
+  "inputs": {
+    "granted": 1487900,
+    "employees": 1474800,
+    "service_providers": 13100,
+    "total_shares_at_adoption": 703971427,
+    "a_shares_capital_notice": 670718327,
+    "h_shares_capital_notice": 33253100,
+    "scheme_limit": 70397142,
+    "scheme_remaining": 68909242,
+    "service_limit": 7039714,
+    "service_remaining": 7026614,
+    "purchase_price": {
+      "value": "1.00",
+      "currency": "CNY"
+    },
+    "grant_day_h_close": {
+      "value": "448.20",
+      "currency": "HKD"
+    },
+    "grant_date": "2026-09-28",
+    "vesting_months": [
+      12,
+      24,
+      36,
+      48
+    ],
+    "fraction_each": "0.25"
+  },
+  "ratios": {
+    "grant_to_total": {
+      "numerator": 1487900,
+      "denominator": 703971427,
+      "exact_fraction": "1487900/703971427",
+      "ratio_decimal": "0.00211358010131283353919419800542558100159937315183106146153287",
+      "display_percent": "0.211358010131"
+    },
+    "all_new_fixed_profit_dilution": {
+      "numerator": 1487900,
+      "denominator": 705459327,
+      "exact_fraction": "1487900/705459327",
+      "ratio_decimal": "0.00210912230238328112713435001476704552805494341419345923538977",
+      "display_percent": "0.210912230238"
+    },
+    "grant_to_H_class": {
+      "numerator": 1487900,
+      "denominator": 33253100,
+      "exact_fraction": "14879/332531",
+      "ratio_decimal": "0.0447447004940892728798217309062914435045153684919601480764199",
+      "display_percent": "4.474470049409"
+    },
+    "grant_to_scheme_limit": {
+      "numerator": 1487900,
+      "denominator": 70397142,
+      "exact_fraction": "743950/35198571",
+      "ratio_decimal": "0.0211358012232939797470755275832078523869619593363605585010823",
+      "display_percent": "2.113580122329"
+    }
+  },
+  "marks": {
+    "hypothetical_all_paid_CNY": "1487900.00",
+    "gross_close_mark_HKD_NOT_EXPENSE": "666876780.00",
+    "each_conditional_tranche": 371975
+  },
+  "assumptions": [
+    "ALL_NEW_SHARE_DILUTION_IS_CONDITIONAL_NOT_ACTUAL_SUPPLY",
+    "FIXED_AGGREGATE_PROFIT_EXCLUDES_AWARD_COST_FOR_THIS_GEOMETRY_ONLY",
+    "NO_OTHER_SHARE_COUNT_CHANGE_FOR_THIS_GEOMETRY_ONLY",
+    "CAP_TABLE_IS_SELECTED_DATED_REFERENCE_NOT_CURRENT_DILUTED_EPS_DENOMINATOR",
+    "HKD_CLOSE_MARK_IS_NOT_ACCOUNTING_FAIR_VALUE_OR_EXPENSE",
+    "CNY_PURCHASE_CONSIDERATION_IS_NOT_COMPENSATION_COST",
+    "VESTING_DATES_ARE_CONDITIONAL_NOT_EXPENSE_DATES"
+  ],
+  "unknown": {
+    "actual_accepted_awards": null,
+    "actual_vested_shares": null,
+    "chosen_share_supply": null,
+    "new_shares_issued_for_this_grant": null,
+    "accounting_classification": null,
+    "recognized_compensation_cost": null,
+    "expense_by_period": null,
+    "fair_value_of_awards": null,
+    "tax_effect": null,
+    "cash_outflow": null,
+    "fx_conversion": null,
+    "diluted_weighted_average_shares": null,
+    "actual_eps_dilution": null,
+    "opportunity_probability": null,
+    "opportunity_established": null
+  },
+  "validation": {
+    "arithmetic": "DECIMAL_60_AND_EXACT_FRACTION",
+    "ratios_checked": 4,
+    "controls": [
+      "DENOMINATORS_DISTINCT",
+      "G_OVER_S_NOT_G_OVER_S_PLUS_G",
+      "CURRENCY_NOT_SPLICED",
+      "FIRST_STATED_ANNIVERSARY_AFTER_REVIEW",
+      "UNKNOWNS_NOT_ZERO"
+    ],
+    "source_truth": "NOT_CERTIFIED",
+    "formal_ci": "SEPARATE_PR_RECEIPT"
+  },
+  "investment_authority": "NONE"
+}
