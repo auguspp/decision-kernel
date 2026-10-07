@@ -22,8 +22,8 @@ Investment Authority remains `NONE`.
 
 1. **Evidence changes Belief; price changes Odds.**
 2. **A lower price cannot repair a broken thesis.**
-3. **Human Decision and Action remain separate.**
-4. **A price condition is never an automatic order.**
+3. **A price condition is never an automatic order.**
+4. **Human Decision and Action remain separate.**
 5. **Research complete != Probability established != Odds ready.**
 6. **This page is navigation only; frozen lineage is authoritative.**
 7. **No stale live-price theater.** A-share production market observations remain HiThink-only; U.S.-equity public prices are MARKET_CONTEXT until a production U.S. boundary exists.
@@ -228,7 +228,7 @@ Authoritative lineage:
 RESEARCH = complete enough to stop first public-diligence loop
 REFERENCE FRAME = mature high-ROE global consumer-industrial franchise
 PRIMARY TOOL = per-share owner-return decomposition
-ANALYSIS DIVERGENCE = WEAK / PARTIALLY COLLAPSED
+ANALYSIS DIVERGENCE = WEAK / PARTIALLY_COLLAPSED
 PROBABILITY QUALIFICATION = PARTIAL / ORDINAL_ONLY
 CARDINAL PROBABILITY = not established / not currently required
 NUMERICAL ODDS = WITHHELD
