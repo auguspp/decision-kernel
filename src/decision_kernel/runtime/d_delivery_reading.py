@@ -40,7 +40,8 @@ def _projection(kind, report):
         model.check(isinstance(report['cases'], list), 'joint horizon cases')
         for case in report['cases']:
             for key in ('symbol', 'frozen_at', 'long_research_deadline', 'analyst_review_by'):
-                model.check(isinstance(case[key], str), 'joint horizon field')
+                model.check(isinstance(case[key], str) or
+                            key == 'long_research_deadline' and case[key] is None, 'joint horizon field')
             model.check(isinstance(case.get('retained_interpretation', {}), dict), 'joint interpretation')
             model.check(isinstance(case.get('checkpoints', []), list), 'joint checkpoints')
             for checkpoint in case.get('checkpoints', []):
@@ -158,7 +159,8 @@ def render(report):
         if item['kind'] == 'horizons':
             for case in data.get('cases', []):
                 lines += ['', f"**{_text(case['symbol'])}：原假设与独立期限**",
-                    f"原冻结：{_text(case['frozen_at'])}；长期研究截止：{_text(case['long_research_deadline'])}；"
+                    f"原冻结：{_text(case['frozen_at'])}；长期研究截止："
+                    f"{_text(case['long_research_deadline']) if case['long_research_deadline'] is not None else '本声明未单设（不覆盖原长期研究）'}；"
                     f"分析者复核日：{_text(case['analyst_review_by'])}。",
                     f"原解释：{_text(case.get('retained_interpretation', {}).get('intermediate'))}",
                     f"原失效条件：{_text(case.get('retained_interpretation', {}).get('invalidation'))}"]

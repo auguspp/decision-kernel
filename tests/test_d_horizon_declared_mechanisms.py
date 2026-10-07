@@ -13,6 +13,7 @@ from decision_kernel.identity import canonical_hash
 from decision_kernel.runtime import current_state as model
 from decision_kernel.runtime import current_state_delivery as delivery
 from decision_kernel.runtime import d_horizon_follow_up as h
+from decision_kernel.runtime import d_delivery_reading as joint
 from decision_kernel.runtime import research_archive_index as index
 from decision_kernel.runtime import stock_market_inputs as p
 from test_d_horizon_follow_up import AT, SOURCE, case, parts, seeded
@@ -102,6 +103,28 @@ def test_four_distinct_cases_fit_without_evicting_baseline_or_inventing_prices(m
     assert all(point['change'] is None for r in report['cases'][1:] for point in r['checkpoints'])
     assert output['lanes'] == root['lanes'] and output['research']['records'] == root['research']['records']
     assert collector.sources == before and len(calls) == 4 and delivery.MAX_SOURCE_FILES == 60
+    # The real downstream projection must consume exactly what the producer sealed.
+    joined = joint.build(output, collector.files, checked_at=AT)
+    component = joined['components'][0]
+    assert component['status'] == 'VERIFIED_SAME_READING_COMPONENT'
+    assert component['data']['cases'] == report['cases']
+    text = joint.render(joined)
+    assert '本声明未单设（不覆盖原长期研究）' in text and '2027-09-02' in text
+    assert all(c['symbol'] in text for c in declared)
+    assert joined['pooled_score'] is None and joined['new_source_requests'] == 0
+    # A correctly sealed but structurally invalid producer still cannot pass.
+    for key, value in (('symbol', None), ('frozen_at', None), ('analyst_review_by', None),
+                       ('long_research_deadline', False), ('long_research_deadline', 0),
+                       ('long_research_deadline', [])):
+        invalid = deepcopy(report); invalid['cases'][1][key] = value
+        invalid['report_hash'] = canonical_hash({k: v for k, v in invalid.items() if k != 'report_hash'})
+        raw = p.dumps(invalid)
+        descriptor = {'read_path': h.PATH, 'bytes': len(raw), 'sha256': model.sha256(raw),
+                      'git_blob': model.blob_sha(raw),
+                      'read_ref_rule': 'USE_THE_SAME_PINNED_READING_COMMIT'}
+        rejected = joint.component({h.KEY: descriptor}, {h.PATH: raw}, joint.COMPONENTS[0],
+                                   code_commit=collector.code_commit, checked_at=AT)
+        assert rejected['status'] == 'COMPONENT_READ_GAP'
 
 
 @pytest.mark.parametrize('damage', ['undeclared_null', 'changed_source'])
