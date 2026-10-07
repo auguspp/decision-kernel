@@ -79,6 +79,7 @@
 - 600598-research-commit-20260917：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：#321 real-company Research-only round-trip: mechanically freezes the retained 2026-09-16 tax-regime Belief with later-reacquired EXTRACTED&#95;VALUES/PARTIAL evidence custody. Model risk remains NOT&#95;ESTABLISHED; no valuation horizon, numerical Scenario or probability is created. COMMITTED Research does not establish current Market/Odds, Human acceptance, Action/watch or Investment Authority.
   - [原保存材料](../../sources/git/8e40fae835eb3f295238e050515e5bd1a52a5287/commit.json)
+- [按需恢复：d1-forward-beidahuang-20261007](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-beidahuang-2026-10-07/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：sector-600598-materiality-20260910](https://github.com/auguspp/decision-kernel/blob/822c5c725df2d1e5d66768b3b06bc9ddfef93a2e/research_runs/candidates/sector-origin/600598-materiality-20260910/README.md)；只有定位，本页没有恢复正文。
 - 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.
@@ -224,6 +225,7 @@
 - yto-method：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：现有方法补充；不自动取得新 Odds 或投资权限。
   - [原保存材料](../../sources/git/2b58294ace63f3fe682c70f889a457f4b518c1a2/yto-decision-hygiene-zero-schema-2026-09-03.md)
+- [按需恢复：d1-forward-yto-20261007](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-yto-2026-10-07/README.md)；只有定位，本页没有恢复正文。
 
 ## 000333.SZ
 
@@ -341,6 +343,7 @@
   - [原保存材料](../../sources/git/901278687c33f3a9a4fd6bfaa26bb4dd1d534f6a/research-attention.json)
   - [原保存材料](../../sources/git/e4ee65a72a3d16827dedb7c98f2c98d43d84a2a2/validation.json)
   - [原保存材料](../../sources/git/4d9e87eddbd62dfea817606bd4b68f63834d5fea/question.json)
+- [按需恢复：d1-forward-rigol-20261007](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-rigol-2026-10-07/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：d-688337-cash-conversion-20261006](https://github.com/auguspp/decision-kernel/blob/8fe7ee8b7f50f2555881c747d3ac4497ae92561c/docs/readings/d-688337-cash-conversion-2026-10-06/README.md)；只有定位，本页没有恢复正文。
 
 ## 300638.SZ
