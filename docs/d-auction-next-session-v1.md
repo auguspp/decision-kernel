@@ -92,3 +92,31 @@ real future open-field capture, actual next-session observation and natural use.
 Auction timeliness, 09:40, true intraday leadership, economic opportunity judgments
 and mature outcome calibration remain their own D obligations. No trading,
 probabilities, Human wake policy or new source permissions. C/D IN_PROGRESS.
+
+
+## 2026-10-07: preserve observations across partial successor tables
+
+The original whole-table-absent guard did not cover a present daily table that
+loses a previously observed security or field. The correction in the existing
+`project` consumer also retains the **whole prior dated result** when an open or
+close previously observed becomes absent or invalid. It does not combine old
+good cells with new rows, silently change the target session, or erase exclusions.
+
+The original result hash, first-observed clock, quote source and acquisition
+clock remain intact. `current_quote_attempt` separately identifies the current
+source, receipt clock, row coverage and each lost field/status; the summary says
+that these are retained observations, not newly acquired quotes. A complete
+compatible successor may still revise the full observation. A first partial
+source still supplies its usable fields. Source/clock/previous-member identity
+failures are not hidden by retention, and stale attempt diagnostics are cleared
+or replaced on the next projection.
+
+This is a repair of the existing history-preservation contract, not a new source,
+return calculator, schema version, schedule or authority. The new tests include
+synthetic missing-row/field, invalid-number, no-splicing and complete-revision
+cases plus the original Collector fixture with an explicitly injected parsed
+field gap. They do not establish actual future T+1 prices or natural adoption.
+The initiating failure, actual CI/publication and live read-back scope are retained
+in [the original D task](https://github.com/auguspp/decision-kernel/issues/509#issuecomment-6041186823)
+and its linked PR; the initial-delivery pending paragraph above remains historical,
+not an instruction to repeat completed work.

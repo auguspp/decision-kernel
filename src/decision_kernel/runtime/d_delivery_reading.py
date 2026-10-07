@@ -182,6 +182,9 @@ def render(report):
             for cohort in data.get('cohorts', []):
                 lines += ['', f"竞价原市场日 {_text(cohort.get('market_session'))}：{_text(cohort.get('status'))}；"
                     f"取得及时性 {_text(cohort.get('auction_timeliness'))}。历史/延迟材料不证明盘前发现，后续价格不是成交收益。"]
+                if cohort.get('observation') == 'PREVIOUS_DATED_OBSERVATIONS_RETAINED':
+                    lines.append(f"本次报价缺口 {_text(cohort.get('current_quote_gap'))}；"
+                        '保留整份旧观察，不是本次重新取得，也未跨包拼接。具体缺项和来源见同版本正文。')
         else:
             lines += ['', f"指数 {_text(data.get('subject'))}：{_text(data.get('reading_status'))}。"
                 '形态是原方法的价格表示，不是公司经营证据或已成立机会。']

@@ -89,7 +89,8 @@ def project(cohort, calendar, completed_session, sources, *, checked_at):
     # Keep the WHOLE previous result, not a splice of old/new quote rows.
     if source is None and cohort.get('quote_source') and target == cohort.get('target_session'):
         out.update(observation='PREVIOUS_DATED_OBSERVATIONS_RETAINED',
-                   current_quote_gap='TARGET_QUOTE_NOT_IN_CURRENT_SAVED_SOURCES')
+                   current_quote_gap='TARGET_QUOTE_NOT_IN_CURRENT_SAVED_SOURCES',
+                   current_quote_attempt=None)
         return out
     quotes = source['tables']['daily', target.replace('-', '')] if source else {}
     if source:
@@ -118,6 +119,27 @@ def project(cohort, calendar, completed_session, sources, *, checked_at):
                         state = 'QUOTE_VALUE_INVALID'
             values.append(value); states.append(state)
         rows.append([symbol, member['group'], *values, *states])
+    # A present table can still lose a previously observed row/field. Keep the
+    # WHOLE prior observation, not old good cells merged into the new table.
+    if source and cohort.get('quote_source') and target == cohort.get('target_session'):
+        previous_rows = cohort['rows']
+        model.check(cohort.get('columns') == list(COLUMNS) and len(previous_rows) == len(rows)
+                    and all(len(old) == len(COLUMNS) and old[:2] == new[:2]
+                            for old, new in zip(previous_rows, rows)),
+                    'next-session previous observation identity')
+        lost = [{'symbol': old[0], 'field': field, 'status': new[index+2]}
+                for old, new in zip(previous_rows, rows)
+                for index, field in ((2, 'open'), (3, 'close'))
+                if old[index] is not None and new[index] is None]
+        if lost:
+            out.update(observation='PREVIOUS_DATED_OBSERVATIONS_RETAINED',
+                current_quote_gap='CURRENT_DATED_FIELDS_UNAVAILABLE_PRIOR_RESULT_RETAINED',
+                current_quote_attempt={'source': deepcopy(source['archive']),
+                    'received_through': source['received_through'],
+                    'row_coverage': deepcopy(source['coverage'].get('daily:' + target.replace('-', ''), {})),
+                    'unavailable_previously_observed_fields': lost})
+            return out
+    out.pop('current_quote_attempt', None)
     groups = {g: {'denominator': 0, 'open_observed': 0, 'close_observed': 0} for g in GROUPS}
     for row in rows:
         group = groups[row[1]]; group['denominator'] += 1
@@ -150,8 +172,11 @@ def render(report):
              'T+1按实际来源交易日历固定；停牌／缺价不顺延到另一日。原名单、未匹配与排除项均保留。']
     for cohort in report['cohorts']:
         lines += [f"\n### 原竞价 {cohort['market_session']} → {cohort['target_session'] or '下一完成交易日未建立'}",
-                  f"原时点：{cohort['auction_timeliness']}；本次：{cohort['status']}。",
-                  '| 原分组 | 全部分母 | T+1开盘可读 | T+1收盘可读 |', '|---|---:|---:|---:|']
+                  f"原时点：{cohort['auction_timeliness']}；本次：{cohort['status']}。"]
+        if cohort.get('observation') == 'PREVIOUS_DATED_OBSERVATIONS_RETAINED':
+            lines.append(f"本次报价缺口：{cohort['current_quote_gap']}；以下保留整份旧观察，"
+                         '不是本次重新取得，也未跨包拼接。具体缺项与本次来源见完整结果。')
+        lines += ['| 原分组 | 全部分母 | T+1开盘可读 | T+1收盘可读 |', '|---|---:|---:|---:|']
         for key, title in GROUPS.items():
             row = cohort['groups'][key]
             lines.append(f"| {title} | {row['denominator']} | {row['open_observed']} | {row['close_observed']} |")
