@@ -13,20 +13,33 @@ REPORT = 'details/radar/industry-fundamentals.json'
 QUERY = 'actions/workflows/radar-industry-breadth.yml/runs?branch=main&per_page=20'
 
 
+def _previous_reference(c):
+    state = (c.previous or {}).get('research', {}).get('industry_fundamentals', {})
+    ref = state.get('details', {}).get('json')
+    location = ({'commit': c.previous_commit, 'file': ref} if ref else state.get('previous_saved_reading'))
+    if location is not None:
+        m.check(isinstance(location, dict) and m.SHA.fullmatch(location.get('commit') or '')
+                and location['file']['read_path'] == REPORT
+                and location['file'].get('read_ref_rule', 'USE_THE_SAME_PINNED_READING_COMMIT')
+                == 'USE_THE_SAME_PINNED_READING_COMMIT',
+                'previous industrial reading location differs')
+    return deepcopy(location)
+
+
 def previous(c):
-    ref = (c.previous or {}).get('research', {}).get('industry_fundamentals', {}).get('details', {}).get('json')
-    if not ref:
-        return None, 'NO_PREVIOUS_CAPTURE'
     try:
-        m.check(c.previous_commit is not None, 'previous industrial reading commit missing')
-        raw = c.api.file(m.safe_path(ref['read_path']), c.previous_commit)
+        location = _previous_reference(c)
+        if location is None:
+            return None, 'NO_PREVIOUS_CAPTURE'
+        ref, commit = location['file'], location['commit']
+        raw = c.api.file(m.safe_path(ref['read_path']), commit)
         m.check(len(raw) == ref['bytes'] and m.sha256(raw) == ref['sha256'] and m.blob_sha(raw) == ref['git_blob'],
                 'previous industrial reading bytes differ')
         report = source.decode(raw)
         m.check(report['projection_hash'] == canonical_hash(report['projection']), 'previous industry hash differs')
         value = report['projection']
         m.check(value['observation']['version'] == source.VERSION, 'previous industrial version differs')
-        return value, 'EXACT_PREVIOUS_READING_' + c.previous_commit
+        return value, 'EXACT_PREVIOUS_READING_' + commit
     except ERRORS:
         return None, 'PREVIOUS_CAPTURE_UNAVAILABLE_NOT_NO_CHANGE'
 
@@ -93,8 +106,7 @@ def select_display(current, old=None):
             'comparison_status': 'SAME_CAPTURE_INCREMENT_PRESERVED' if same_capture else 'NEW_CAPTURE_COMPARED'}
 
 
-def attach(c, baseline):
-    m.validate_read_package(baseline)
+def _attach(c, baseline):
     old, previous_status = previous(c)
     before = dict(c.files), dict(c.archive_cache)
     try:
@@ -133,3 +145,46 @@ def attach(c, baseline):
             + sum(map(len, replacements.values())) <= delivery.MAX_RETAINED_OUTPUT, 'industrial reading byte budget')
     _reserve(c, replacements=replacements); c.files.update(replacements)
     return payload
+
+
+def attach(c, baseline):
+    """Rollback the whole optional addition, not only source acquisition.
+
+    An unpublishable gap preserves the core byte-for-byte. Actual read calls are
+    never refunded; a retained locator is not current source success.
+    """
+    m.validate_read_package(baseline)
+    m.check(c.code_commit == baseline['code_commit'], 'industrial code identity')
+    before = dict(c.files), dict(c.archive_cache)
+    try:
+        return _attach(c, baseline)
+    except ERRORS as exc:
+        c.files, c.archive_cache = before
+        failure = {'status': 'INDUSTRIAL_ATTACHMENT_GAP_NOT_QUIET',
+                   'error_type': type(exc).__name__,
+                   'meaning': 'OPTIONAL_READING_FAILED_OTHER_MODULES_PRESERVED', **source.AUTHORITY}
+        try:
+            location = _previous_reference(c)
+            if location is not None:
+                failure['previous_saved_reading'] = location
+        except ERRORS:
+            failure['previous_reading_gap'] = 'PREVIOUS_LOCATION_UNAVAILABLE'
+        try:
+            research = deepcopy(baseline['research']); research['industry_fundamentals'] = failure
+            payload = m.assemble(code_commit=c.code_commit, checked_at=c.now(),
+                check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
+                research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+            original = m.render_summary(baseline).encode(); root = c.files['README.md']
+            m.check(root.startswith(original), 'industrial gap preserves root summary')
+            replacements = {'current-state.json': m.read_package_bytes(payload),
+                'README.md': m.render_summary(payload).encode() + root[len(original):]
+                    + '\n产业读取未完成；其他模块保留。这不是无产业变化，也不是新来源成功。\n'.encode()}
+            m.check(sum(len(v) for k, v in c.files.items() if k not in replacements)
+                    + sum(map(len, replacements.values())) <= delivery.MAX_RETAINED_OUTPUT,
+                    'industrial gap byte budget')
+            _reserve(c, replacements=replacements)
+            c.files.update(replacements)
+            return payload
+        except ERRORS:
+            c.files, c.archive_cache = before
+            return baseline

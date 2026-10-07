@@ -113,8 +113,7 @@ def render(report):
     return '\n'.join(lines)
 
 
-def attach(collector, baseline):
-    m.validate_read_package(baseline)
+def _attach(collector, baseline):
     sections = {}
     for kind, operation in (('historical', lambda: history(collector, baseline)), ('native', lambda: native(collector))):
         before = dict(collector.files), dict(collector.archive_cache)
@@ -147,3 +146,39 @@ def attach(collector, baseline):
     _reserve(collector, replacements=replacements)
     collector.files.update(replacements)
     return payload
+
+
+def attach(collector, baseline):
+    """Keep a failed optional breadth projection from blocking later readers."""
+    m.validate_read_package(baseline)
+    m.check(collector.code_commit == baseline['code_commit'], 'breadth code identity')
+    before = dict(collector.files), dict(collector.archive_cache)
+    try:
+        return _attach(collector, baseline)
+    except ERRORS as exc:
+        collector.files, collector.archive_cache = before
+        try:
+            research = deepcopy(baseline['research'])
+            research['industry_breadth'] = {
+                'status': 'INDUSTRY_BREADTH_ATTACHMENT_GAP_NOT_QUIET',
+                'native_status': 'ATTACHMENT_NOT_COMPLETED',
+                'historical_status': 'ATTACHMENT_NOT_COMPLETED',
+                'error_type': type(exc).__name__,
+                'meaning': 'OPTIONAL_READING_FAILED_OTHER_MODULES_PRESERVED', **source.AUTHORITY}
+            payload = m.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
+                check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'],
+                research=research, capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+            original = m.render_summary(baseline).encode(); root = collector.files['README.md']
+            m.check(root.startswith(original), 'breadth gap preserves root summary')
+            replacements = {'current-state.json': m.read_package_bytes(payload),
+                'README.md': m.render_summary(payload).encode() + root[len(original):]
+                    + '\n行业广泛观察读取未完成；其他模块保留，不等于没有行业变化。\n'.encode()}
+            m.check(sum(len(v) for k, v in collector.files.items() if k not in replacements)
+                    + sum(map(len, replacements.values())) <= delivery.MAX_RETAINED_OUTPUT,
+                    'breadth gap byte budget')
+            _reserve(collector, replacements=replacements)
+            collector.files.update(replacements)
+            return payload
+        except ERRORS:
+            collector.files, collector.archive_cache = before
+            return baseline
