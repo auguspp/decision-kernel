@@ -1,0 +1,62 @@
+{
+  "recorded_at": "2026-10-07T01:08:56.186538+00:00",
+  "code_baseline": "ec7e6a322e8408148a9dbc874a581a7bfd9980bf",
+  "scope": "BOUNDED_EXISTING_RESEARCH_CONTINUATION_NOT_FULL_OR_EX_ANTE_MARKET_OPPORTUNITY",
+  "public_sources": [
+    {
+      "subject": "600233.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "G1",
+      "document_date": "2026-07-01",
+      "url": "https://epaper.cs.com.cn/zgzqb/html/2026-07/01/nw.D110000zgzqb_20260701_6-B020.htm",
+      "observed_representation": "ISSUER_ANNOUNCEMENT_DIRECT_PARSED_HTML_BODY"
+    },
+    {
+      "subject": "600233.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "A1",
+      "document_date": "2026-08-20",
+      "url": "https://epaper.cs.com.cn/zgzqb/html/2026-08/20/nw.D110000zgzqb_20260820_1-B079.htm",
+      "observed_representation": "ISSUER_DIVIDEND_ANNOUNCEMENT_INDEXED_BODY_REFERENCING_UNAUDITED_INTERIM_REPORT"
+    }
+  ],
+  "acquisition_limits": {
+    "raw_official_html_obtained": false,
+    "raw_pdf_obtained": false,
+    "pdf_visual_inspection": false,
+    "official_first_publication_timestamp": null,
+    "revision_inventory_complete": false,
+    "contemporaneous_system_capture": false,
+    "market_consensus_obtained": false,
+    "event_return_path_obtained": false,
+    "direct_actual_page_attempt": "Internal Error; indexed primary announcement text obtained",
+    "guide_document_number": "2026-042",
+    "actual_document_number": "2026-056",
+    "missing_actual_metrics": [
+      "parent_net_profit_ex_nonrecurring"
+    ],
+    "normalization": "Guide CNY ten-thousands divided by100; actual CNY divided by1000000",
+    "corroboration_same_announcement_not_independent_sample": "https://stock.stockstar.com/notice/SN2026081900035946.shtml"
+  },
+  "calibration_limits": {
+    "company_guidance_events": 1,
+    "independent_ai_forecasts_scored": 0,
+    "method_or_prompt_version_changed": false
+  },
+  "numeric_convention": {
+    "amount_unit": "CNY_million",
+    "exact_decimal_strings": true,
+    "midpoint_role": "ARITHMETIC_RANGE_CENTER_NOT_EXPECTED_VALUE",
+    "missing_actual_is_not_zero": true
+  }
+}

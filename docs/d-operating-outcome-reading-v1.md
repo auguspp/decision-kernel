@@ -5,7 +5,58 @@
 这是原 D2 的读取与计算交付，不是另一份 MU 研究、不启动 Full 或新模型，
 也不修改公司的原判断、Human 记录、原期限或生产研究方法。
 
-## 本批实际用途
+## 2026-10-07 后继：期后预告的明确布局，不放宽旧PIT资格
+
+本批归 #509/6028574401。真实输入是[普源三指标][PRE-RIGOL]和
+[圆通归母/扣非两指标][PRE-YTO]；原MU条目与四指标数据不变。
+前者继承已保存对照和现金限制，不冒称新事实；后者增加公司自己的预告—实绩对照，
+归母落在原范围内，扣非实绩本轮未取得合格原表，仍保留指标及null。
+目标是把范围兑现、逆向约束及资料缺口一起交付，不把三个比较事件称为三个机会或独立AI样本。
+
+原比较器要求指引日期不晚于期末，适用于既有MU期内指引，但会拒绝真实的7月期后预告。
+新增 `RETAINED_PREANNOUNCEMENT_ACTUAL_V1` 只支持总收入、归母利润、扣非归母利润
+三个明确指标的选择，不是任意财务表或通用公式系统。输入CNY/USD百万元，金额尺度的
+人工规范化和原文角色见各底稿；原母/合并、主营/总收入、A/H扣非、EPS分母不能混用。
+新布局的event_id固定为所选证券与报告期拼接，禁止把同一档案换名字扩成多事件。
+
+新布局只作有范围的期后对账，`clock_basis=DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS`：
+文档日期必须规范、期末早于预告文档、预告文档早于正式报告文档，且实际文档日期不晚于
+留存时点的声明时区日期。时间戳仍须有时区；调用时点早于记录则没有可比较成果。
+输入与source-notes的证券/期间/口径/文档日期/时区逐项相符，published_at必须为null。
+不把日期补成00:00，不用文档日期认证公众首发、事件窗口或当时系统收到资料。
+**旧RETAINED_GUIDANCE_ACTUAL_V1仍用原精确发布时间合同；旧输入和历史结果不迁移。**
+
+原始上下沿与准备中点、半宽按Decimal勾稽，再复用原compare_pair，不另写盈利评分。
+中点只是范围中心，实际减中点不等于市场预期差；范围端点含等号。缺实际值保留VALUE_NOT_RETAINED，
+事件层为RETAINED_REVIEW_WITH_COMPARISON_GAPS，不能因其他指标成功签整项成功。
+选择、完整可比、部分缺口和指标分母分别呈现；独立样本量、Brier、胜率、机会概率继续null。
+
+仍复用原三文件读取、Decision Book NAVIGATION_ONLY、hash/blob精确绑定、局部回滚及总预算。
+无新collector、源请求、运行工作流、依赖、权限、日程、通知或Watch；D联合读取自动保留现有items。
+新正文显示文档时间限制、原范围、结果位置和现金/月份反例；全部材料不读取时不能代签研究采用。
+
+Reuse：施工前重读原D2内部实现与下方已保存外部审阅，并主动检查
+[Nixtla/utilsforecast的losses.py](https://github.com/Nixtla/utilsforecast/blob/main/utilsforecast/losses.py)
+的cutoff/id分组、区间coverage与MAPE。此次是其当次主分支可见实现检查，不冒称固定新运行依赖或完整上游审计。
+本用途不需要跨事件均值、DataFrame或预测评分，因此沿已有原子比较器加薄布局；未复制外部代码。
+文档日期与精确时刻分离使用Python标准库[date/datetime](https://docs.python.org/3.12/library/datetime.html)
+与[ZoneInfo](https://docs.python.org/3.12/library/zoneinfo.html)，未新增时区库。
+
+检查包含真实保存输入、后置预告、假首发时间、乱序/不规范日期、声明时区边界、跨证券/指标/期间、
+错误单位/角色/来源、虚构中点与半宽、缺值和两项局部失败，以及三事件同一原reader的装配。
+旧单事件测试fixture显式选择原MU，不把生产新增条目静默变成老fixture的隐式输入。
+本地局部导入对shared root/预算等依赖有明确替身，不能代替完整仓库集成；正式full/main和正常发布后
+必须核同R新三文件与实际行。真实自然Quick/Brief、成熟前向期限与整条D验收仍独立。
+
+退出通过正常PR移除两项选择及本新增布局和专属反例；原MU、共享比较器、旧来源、历史失败与底稿保留。
+下面是#760原布局的依据，除本节明确扩展的选择外继续生效，不据原“仅四指标”描述重复退回新布局。
+
+[PRE-RIGOL]: https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-rigol-preannouncement-2026-10-07/README.md
+[PRE-YTO]: https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-yto-preannouncement-2026-10-07/README.md
+
+---
+
+## 原#760布局的实际用途
 
 已有美光 FQ4 2026 事件审阅已在 Decision Book 的 NAVIGATION_ONLY 入口保留，
 但正常读取只给链接，经营指引、实绩、误差和限制没有共同进入可恢复正文。
@@ -24,7 +75,7 @@ inputs / source-notes / README 三文件，再用原比较原语核验数值与�
 `operating_outcomes.compare_pair` 仅对明确的公司指引与已报告实绩计算。
 证券/事件/指标/期间/会计口径/币种/单位/每股口径逐项一致才比较；
 不把公司指引当券商一致预期或 AI 预测，不把收入与费用仅因单位相同相减。
-当前适配仅支持现有 RETAINED_GUIDANCE_ACTUAL_V1 四指标布局，
+原#760适配仅支持现有 RETAINED_GUIDANCE_ACTUAL_V1 四指标布局，
 不是任意报表解析器或所有股票/行业的通用财务模型。
 
 披露时间必须有时区，指引早于实绩，目标报告期结束不晚于实际披露，

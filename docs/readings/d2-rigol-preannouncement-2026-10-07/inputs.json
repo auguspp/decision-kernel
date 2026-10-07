@@ -1,0 +1,66 @@
+{
+  "case": "RIGOL_H1_2026_PREANNOUNCEMENT_REVIEW",
+  "subject": "688337.SH",
+  "currency": "CNY",
+  "amount_unit": "CNY_million",
+  "comparison": "POST_PERIOD_PREANNOUNCEMENT_NOT_MARKET_CONSENSUS",
+  "metric_ids": [
+    "revenue",
+    "parent_net_profit",
+    "parent_net_profit_ex_nonrecurring"
+  ],
+  "guide": {
+    "subject": "688337.SH",
+    "period": "2026H1",
+    "period_end": "2026-06-30",
+    "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+    "published_at": null,
+    "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+    "clock_timezone": "Asia/Shanghai",
+    "source_id": "G1",
+    "document_date": "2026-07-06",
+    "ranges": {
+      "revenue": {
+        "lower": "477.2173",
+        "upper": "501.5652"
+      },
+      "parent_net_profit": {
+        "lower": "34.5839",
+        "upper": "42.6223"
+      },
+      "parent_net_profit_ex_nonrecurring": {
+        "lower": "21.4738",
+        "upper": "26.4650"
+      }
+    },
+    "revenue_mid": "489.39125",
+    "revenue_half_width": "12.17395",
+    "parent_net_profit_mid": "38.6031",
+    "parent_net_profit_half_width": "4.0192",
+    "parent_net_profit_ex_nonrecurring_mid": "23.9694",
+    "parent_net_profit_ex_nonrecurring_half_width": "2.4956"
+  },
+  "actual": {
+    "subject": "688337.SH",
+    "period": "2026H1",
+    "period_end": "2026-06-30",
+    "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+    "published_at": null,
+    "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+    "clock_timezone": "Asia/Shanghai",
+    "source_id": "A1",
+    "document_date": "2026-08-26",
+    "revenue": "486.84289490",
+    "parent_net_profit": "37.14773408",
+    "parent_net_profit_ex_nonrecurring": "23.04806932"
+  },
+  "qualification": {
+    "source_custody": "INHERITED_SOURCE_BOUND_RESEARCH_VALUES_NOT_NEW_ISSUER_CAPTURE",
+    "original_human_decision_modified": false,
+    "new_human_decision": false,
+    "market_requests": 0,
+    "cardinal_probability": null,
+    "normalized_eps_floor": null,
+    "investment_authority": "NONE"
+  }
+}

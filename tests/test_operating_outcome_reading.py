@@ -14,22 +14,24 @@ AT='2026-10-06T05:45:00+00:00'
 LIMIT=20*1024*1024
 
 
-def fixture():
-    raw=(ROOT/r.CONFIG).read_bytes();config=json.loads(raw);entry=config['cases'][0]
-    original=entry['sources']['review']
-    nav=(f"https://github.com/{model.REPOSITORY}/blob/{original['ref']}/{original['path']}\n").encode()
+def fixture(indices=(0,), at=AT):
+    config=json.loads((ROOT/r.CONFIG).read_bytes())
+    config['cases']=[config['cases'][i] for i in indices]
+    raw=(json.dumps(config,ensure_ascii=False)+'\n').encode()
+    nav=''.join(f"https://github.com/{model.REPOSITORY}/blob/{e['sources']['review']['ref']}/{e['sources']['review']['path']}\n"
+                for e in config['cases']).encode()
     def descriptor(path,raw,ref):
         return dict(path=path,ref=ref,read_path='sources/test/'+model.blob_sha(raw)+'/'+path.rsplit('/',1)[-1],
             bytes=len(raw),sha256=model.sha256(raw),git_blob=model.blob_sha(raw),
             read_ref_rule='USE_THE_SAME_PINNED_READING_COMMIT')
     nav_ref=descriptor('docs/live-decision-book.md',nav,'a'*40)
-    base=model.assemble(code_commit='a'*40,checked_at=AT,check_started_at=AT,
+    base=model.assemble(code_commit='a'*40,checked_at=at,check_started_at=at,
         research={'handoffs':{'active':[]},'records':[{'id':'decision-book','use':'NAVIGATION_ONLY','source':nav_ref},
                                                   {'id':'keep-human-record'}]},
         lanes={'stock':{'gaps':['original source failure']}},capabilities=[],refresh_identity={})
-    c=SimpleNamespace(code_commit='a'*40,now=lambda:AT,sources={},api=SimpleNamespace(calls=0,max_calls=180),
+    c=SimpleNamespace(code_commit='a'*40,now=lambda:at,sources={},api=SimpleNamespace(calls=0,max_calls=180),
         files={'current-state.json':model.read_package_bytes(base),'README.md':b'Original reading\n',nav_ref['read_path']:nav})
-    values={r.CONFIG:raw,**{v['path']:(ROOT/v['path']).read_bytes() for v in entry['sources'].values()}}
+    values={r.CONFIG:raw,**{v['path']:(ROOT/v['path']).read_bytes() for e in config['cases'] for v in e['sources'].values()}}
     c.reads=[]
     def source(spec):
         c.reads.append((spec['path'],spec.get('ref')));c.api.calls+=1
