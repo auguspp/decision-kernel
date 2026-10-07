@@ -290,7 +290,6 @@
 - [按需恢复：b2-announcements-36675839340-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/d13143a92b4c25bb38c9a46fc836309dba2af367/docs/readings/b2-announcements-36675839340-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：b2-pdf-36685884532-1-601155-SH](https://github.com/auguspp/decision-kernel/blob/e382453d09e54572ead47f23f553a5da87764d9f/docs/readings/b2-pdf-36685884532-1/601155.SH/summary.md)；只有定位，本页没有恢复正文。
 - [按需恢复：601155-unit-correction-20260930](https://github.com/auguspp/decision-kernel/blob/f54c017c3d06fd46cf2a5da4949c0e461e5789e0/docs/readings/601155-unit-correction-2026-09-30/README.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-29；[原观察](../radar/company-reading.json)。不是新事件。
 - 原价格条件状态：NEEDS&#95;REVIEW&#95;NOW；原观察时间：2026-10-06T08:20:33.919894Z
 - 原业务前提：Retained Xincheng research plus the 2026-09-30 unit correction must remain applicable; the 3-year/10% hurdle is analyst sensitivity, not a Human-accepted company mandate, and new property/debt/REIT evidence can stale these boundaries.
 - [原价格条件记录](../inbox/37435442889/odds-watch/watch.json)；不是新的行情复核或买入指令。
