@@ -61,6 +61,8 @@ Investment Authority remains `NONE`.
 
 **同日圆通后继补证：** [扣非原表与同机构预期配对](https://github.com/auguspp/decision-kernel/blob/dd6ef79d5d139f3f8eed054c5c635aa51dd0c0db/docs/readings/d2-yto-paired-actual-2026-10-07/README.md)。原扣非缺值保留在历史目录，本后继按中报选页补3122.5831百万元；同机构三年度显示值不变不代表全市场共识。合并与分部单票利润不可互换，原PDF未持久归档、首发时钟及事件价格链限制继续保留。此链接供原D2选择核验，不新增事件、Human接受、Watch或前向冻结。
 
+**同日兆易预告区分：** [近似预告、归母／扣非差额与盈利质量](https://github.com/auguspp/decision-kernel/blob/50e9c22fe020de6d485b1afe30048f16a26d1276/docs/readings/d-gigadevice-approx-guidance-2026-10-07/README.md)。7月已披露的高增长不自动成为8月新意外；归母与扣非名义差额异号，净非经常损益残差另列。“左右”不填零宽区间，继承实绩抽取不冒称新原表核验；不改D2事件、原Human条件或四案例冻结。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
