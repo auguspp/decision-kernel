@@ -295,7 +295,7 @@ def dispatch(plan, api):
 
 
 def retain_unresolved(previous, report):
-    """A newer successful day does not erase an older missing Stock delivery."""
+    """Resolve the exact delivery identity, never an unrelated newer successful day."""
     pending = {}
     for row in previous.get("unresolved_deliveries", []):
         check(isinstance(row, dict) and row.get("lane") in {"sector", "stock"}
@@ -311,7 +311,9 @@ def retain_unresolved(previous, report):
             del pending[key]
         elif lane == "sector" and report.get("sector_checked_at"):
             checked = clock(report["sector_checked_at"]).astimezone(TZ)
-            if ((report.get("market_session") or "") >= target
+            # A later market session is not evidence that this delivery arrived.
+            # Exact market-date recovery and same-day holiday validation remain valid.
+            if ((report.get("market_session") or "") == target
                     or (checked.date().isoformat() == target and checked.time() >= time(15, 30))):
                 del pending[key]
     check(len(pending) <= 32, "UNRESOLVED_DELIVERY_BOUND_REQUIRES_ENGINEERING")
