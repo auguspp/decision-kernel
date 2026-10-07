@@ -3,9 +3,9 @@
 仅关联同一读取包内的已有材料与保存观察；不启动研究、不判断thesis是否改变、不继承Human接受。
 按各原件日期阅读；保存的价格触界不是今天的新提醒，未关联变化不等于已检查且无变化。
 
-## 恒瑞医药 600276.SH
+## 600276.SH
 
-下一步：原价格条件尚未触及；不代表已检查全部经营变化
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - odds-hengrui-provisional：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：42.93元Human参考价的原provisional/ordinal结果，非canonical数值；原行情失败保留。
@@ -19,9 +19,6 @@
 - odds-hengrui-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：9/12接受条件分布用于决策准备，不是买入决定或成交；39.6复核与37–38首笔讨论分开，未启用监控。
   - [原保存材料](../../sources/git/8673b08d3a36e8cabc33e1fb51627bc65d674e3a/600276-hengrui-human-first-entry-2026-09-12.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-29T08:20:36.146941Z
-- 原业务前提：Frozen Hengrui Belief must remain intact; new company-specific Evidence can stale the retained distribution before any first-entry decision.
-- [原价格条件记录](../inbox/36542090156/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 600184.SH
 
@@ -43,9 +40,9 @@
   - [原保存材料](../../sources/git/a978904caa4fc3ba66ce33f0bcfce471a48d8f56/600967-neimengyiji-human-research-odds-acceptance-2026-09-13.md)
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
 
-## 兴业科技 002674.SZ
+## 002674.SZ
 
-下一步：原价格条件尚未触及；不代表已检查全部经营变化
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - odds-xingye-revision：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：9/14修订Research/临时条件分析；旧业务与新业务分轴，方法改变不是单纯价格重算。
@@ -53,13 +50,10 @@
 - odds-xingye-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：接受修订Research及provisional first-entry review用于决策准备；无投资决定/Action/监控；原跨案例期限假设不扩大为公司专属授权。
   - [原保存材料](../../sources/git/f66451fce807058045f510016de1d60b68413c42/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-29T08:20:36.146941Z
-- 原业务前提：Accepted transition Research must survive; price alone cannot repair weaker InP scale-up, legacy owner-cash, financing, governance or investigation Evidence.
-- [原价格条件记录](../inbox/36542090156/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
-## 北大荒 600598.SH
+## 600598.SH
 
-下一步：原价格条件尚未触及；不代表已检查全部经营变化
+下一步：本读取没有关联观察；不等于已经核实无变化
 
 - odds-beidahuang-provisional：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：12.33元（2026-09-15完成交易日）public context的provisional/ordinal reverse-underwriting；复用税制续作Research不重开Belief。3年10%仅工作敏感性，10.0–10.7为条件首笔复核区；cardinal/canonical Odds、Human接受、仓位、watch均未建立。
@@ -81,9 +75,6 @@
   - [原保存材料](../../sources/git/8e40fae835eb3f295238e050515e5bd1a52a5287/commit.json)
 - [按需恢复：d1-forward-beidahuang-20261007](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-beidahuang-2026-10-07/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：sector-600598-materiality-20260910](https://github.com/auguspp/decision-kernel/blob/822c5c725df2d1e5d66768b3b06bc9ddfef93a2e/research_runs/candidates/sector-origin/600598-materiality-20260910/README.md)；只有定位，本页没有恢复正文。
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-29T08:20:36.146941Z
-- 原业务前提：BA2 frozen tax/profit/cash Belief and 21–23x core valuation interpretation must remain valid; a lower price caused by new negative Evidence requires re-underwriting.
-- [原价格条件记录](../inbox/36542090156/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 603353.SH
 
@@ -158,7 +149,7 @@
   - 原用途说明：限定保存公告的实际Pre WAIT；非当前公司全景、非新Odds或Human判断。Disclosure origin不替代Sector origin。
   - [原保存材料](../../sources/git/f1ae027f2c0f4c0f35e03bf7d5665ebb269bcb1c/README.md)
 
-## 兆易创新 603986.SH
+## 603986.SH
 
 下一步：先读原方法复核及其适用版本，不直接沿用旧结论
 
@@ -177,11 +168,8 @@
 - [按需恢复：d-mu-gigadevice-economic-bridge-20261005](https://github.com/auguspp/decision-kernel/blob/ec95b9ca6156e3ee83f4157675bad7881279ccfd/docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：d-mu-gigadevice-horizons-20261004](https://github.com/auguspp/decision-kernel/blob/9ec1a0a4f22d70d9fdf71cedf57a719aaa8cb830/docs/readings/d-mu-gigadevice-horizons-2026-10-04/README.md)；只有定位，本页没有恢复正文。
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-29T08:20:36.146941Z
-- 原业务前提：Specialty-memory duration, margin capture, owner-cash conversion and post-cycle normalized earnings floor must survive explicit assumption review before any first tranche.
-- [原价格条件记录](../inbox/36542090156/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
-## 三花智控 002050.SZ
+## 002050.SZ
 
 下一步：先读原方法复核及其适用版本，不直接沿用旧结论
 
@@ -197,9 +185,6 @@
 - sanhua-horizon：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：后续 Human 时间范围补充，不能回写此前 checkpoint 或冒充已执行 Action。
   - [原保存材料](../../sources/git/ccc66895c2aaf29b78630208b95e0ca11655362f/002050-sanhua-human-horizon-supplement-2026-09-03.md)
-- 原价格条件状态：ACTIVE&#95;ODDS&#95;WATCH；原观察时间：2026-09-29T08:20:36.146941Z
-- 原业务前提：Core refrigeration/automotive economics, margins, cash conversion and capital allocation must remain intact; unproven optionality cannot be promoted to defend entry.
-- [原价格条件记录](../inbox/36542090156/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
 ## 300750.SZ
 
@@ -445,3 +430,7 @@
   - [原保存材料](../../sources/git/e397675421ec7e6352708a20cd57538fd1c51628/receipt.json)
   - [原保存材料](../../sources/git/5553f0360db7a527b47b7f153714f95ab71cecab/validation.json)
   - [原保存材料](../../sources/git/d7ad7ef93b2cd3aecc85dee920567cb099dba85d/question.json)
+
+## 读取范围缺口
+
+部分来源未提供或未能核验；不能据此宣称全部thesis无需复核。
