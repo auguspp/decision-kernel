@@ -22,8 +22,8 @@ Investment Authority remains `NONE`.
 
 1. **Evidence changes Belief; price changes Odds.**
 2. **A lower price cannot repair a broken thesis.**
-3. **A price condition is never an automatic order.**
-4. **Human Decision and Action remain separate.**
+3. **Human Decision and Action remain separate.**
+4. **A price condition is never an automatic order.**
 5. **Research complete != Probability established != Odds ready.**
 6. **This page is navigation only; frozen lineage is authoritative.**
 7. **No stale live-price theater.** A-share production market observations remain HiThink-only; U.S.-equity public prices are MARKET_CONTEXT until a production U.S. boundary exists.
@@ -66,6 +66,8 @@ Investment Authority remains `NONE`.
 **同日北大荒披露与预期资格：** [六月税务事件、七月近似预亏与旧预测页面](https://github.com/auguspp/decision-kernel/blob/a4a1263d7fbb6c1c5eaeb03744c30fad211af01d/docs/readings/d1-beidahuang-disclosure-expectation-2026-10-07/README.md)。半年亏损在中报前已有名义预告，继承实绩仅差约2.09万元，不把“左右”改成硬点。动态汇总截至日不等于具名报告日期，3月旧摘要及搜索/正文差异不建立补税后共识；条件H2残差只作期间校验。原税后能力、BA2/Human条件、四案例冻结和价格资格保持，未新增D2事件或机会认定。
 
 **同日三家公司同期补证：** [恒瑞临床/回购时点、兴业投入义务与三花派息口径](https://github.com/auguspp/decision-kernel/blob/cc6d7830ba9b6e7c535b7554580a89517413446b/docs/readings/d1-three-case-pit-sources-2026-10-07/README.md)。原五名分母及9月17日截点保持；晚于截点的首次回购/实施日不倒灌。三花0.12元持有人毛红利不等于0.1195545参考调整，条件现金端点对照不冒充实际总回报；兴业定金只抵一次且额外清偿不抵对价，旧付款/交接状态不回退。公开解读内部矛盾与未核分类疑点分开，不认证社区共识或三个完整PIT机会。
+
+**同日具名预期核对：** [恒瑞、三花、兆易的日期／机构／盈利与倍数区分](https://github.com/auguspp/decision-kernel/blob/64c74ce4e71a535401941b17932a3616f2f75ba6/docs/readings/d1-dated-expectation-controls-2026-10-07/README.md)。恒瑞7月旧下修不按8月转载计新事件；三花盈利下修与盈利维持但PE下修分开，目标降幅不当利润降幅；兆易跨机构且跨日期的61与140.69不作同一模型上修。部分索引／原口径缺口保留，名义算术不冒充正式预测比较通过或三项PIT机会；原Human条件与冻结不改。
 
 ## Current book
 
