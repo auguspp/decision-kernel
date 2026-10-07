@@ -1,7 +1,7 @@
 # Live Decision Book
 
 Status: **MUTABLE NAVIGATION LAYER / NOT AUTHORITATIVE STATE / NO NEW WAKE GATE / NO AUTOMATION**  
-Updated: **2026-10-06 — D1 mechanism-control navigation only; existing cards not refreshed**
+Updated: **2026-10-07 — D1 cost-presentation bridge navigation only; existing cards not refreshed**
 Repository: `auguspp/decision-kernel`
 
 ## Purpose
@@ -46,6 +46,8 @@ Investment Authority remains `NONE`.
 **同日圆通接续：** [圆通单票成本抵消条件与价格反推](https://github.com/auguspp/decision-kernel/blob/9a27c4ca47b088b17361c271c1621f94e53a576b/docs/readings/d1-yto-cost-pricing-2026-10-06/README.md)。8月媒体转述量价对应约9.4分/票的同口径成本抵消要求；实际成本仍未取得。旧2027预期样本与9月30日价格只作静态条件定价，不当当前共识或目标价；分红、因子、股数和联合下行限制保留。未生成机会概率、Human接受或新任务。
 
 **2026-10-07 原件与时间续接：** [D 模块三例来源、预期口径与整体核对](https://github.com/auguspp/decision-kernel/blob/ac4813bd2242a0bcbfc7db2fcf6682e5c25fc328/docs/readings/d-source-time-and-expectations-2026-10-07/README.md)。普源港股调整利润不等于A股扣非，毛利列报不能跨表拼接；圆通8月原公告确认量价但未给成本；兆易拟采购额度与较早成本预期分开。新增官方有限目录及具体文件时间，不回填事件前知识。固定R的D2、期限、价格结构与竞价限制一并核对，D仍IN_PROGRESS；旧卡片、Human条件与自动化状态不变。
+
+**同日成本口径对账：** [普源两期成本数值桥与D接续处置](https://github.com/auguspp/decision-kernel/blob/875d21c10691d348c1247fe058e5f0bd4861ca91/docs/readings/d-rigol-cost-presentation-bridge-2026-10-07/README.md)。A股营业成本加税金及附加、存货/合同成本减值，两期均匹配前驱H股千元成本；这是有双期约束的数值解释，不是已认证官方重分类。保留原PDF未重取、文本符号异常、现金/融资分母及事件前预期缺口；不选有利毛利口径制造机会。圆通/兆易已完成算术不重做，未来经营与S0/5/20不补签；本导航不新增Human接受、Watch或任务。
 
 ## Current book
 
