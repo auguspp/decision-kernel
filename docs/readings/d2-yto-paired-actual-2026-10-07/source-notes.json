@@ -1,0 +1,165 @@
+{
+  "recorded_at": "2026-10-07T06:20:54.123421+00:00",
+  "code_baseline": "d8d96e27e96ddccd9e1e588103e8c2782552c28a",
+  "scope": "BOUNDED_YTO_EXPECTATION_PAIR_AND_ACTUAL_SUCCESSOR_NOT_FULL_OR_STRATEGY",
+  "predecessor": {
+    "ref": "e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d",
+    "directory": "docs/readings/d2-yto-preannouncement-2026-10-07",
+    "missing_actual_preserved_in_predecessor": true,
+    "same_event_id": "600233.SH:2026H1"
+  },
+  "public_sources": [
+    {
+      "subject": "600233.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "G1",
+      "document_date": "2026-07-01",
+      "url": "https://epaper.cs.com.cn/zgzqb/html/2026-07/01/nw.D110000zgzqb_20260701_6-B020.htm",
+      "observed_representation": "INHERITED_PARSED_ISSUER_PREANNOUNCEMENT_FROM_EXACT_PREDECESSOR"
+    },
+    {
+      "subject": "600233.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "A2",
+      "document_date": "2026-08-20",
+      "url": "https://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESH_STOCK/2026/2026-8/2026-08-20/12505978.PDF",
+      "landing_url": "https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12505978&stockid=600233",
+      "observed_representation": "ISSUER_REPORT_MIRROR_PDF_PARSED_AND_SELECTED_PAGE_IMAGES_CHECKED",
+      "displayed_pages_checked": [
+        6,
+        7,
+        52,
+        53
+      ],
+      "document_date_meaning": "LANDING_DISCLOSURE_DAY_NOT_EARLIEST_PUBLICATION_MINUTE",
+      "board_approval_date": "2026-08-19"
+    }
+  ],
+  "acquisition_limits": {
+    "raw_official_html_obtained": false,
+    "raw_pdf_bytes_retained": false,
+    "pdf_representation_accessed": true,
+    "pdf_visual_inspection": true,
+    "visual_scope_displayed_pages": [
+      6,
+      7,
+      52,
+      53
+    ],
+    "entire_pdf_economically_audited": false,
+    "official_first_publication_timestamp": null,
+    "revision_inventory_complete": false,
+    "contemporaneous_system_capture": false,
+    "market_consensus_obtained": false,
+    "event_return_path_obtained": false,
+    "missing_actual_metrics": [],
+    "normalization": "Parent CNY /1000000; adjusted reported CNY ten-thousands /100. Use reported rounded adjusted value, not derived precision.",
+    "source_failure_history": "Previous actual table absent remains at original three-file commit; current PDF access is a later acquisition."
+  },
+  "reported_value_controls": {
+    "parent_net_profit_cny": "3175039883.44",
+    "adjusted_parent_net_profit_cny_ten_thousands": "312258.31",
+    "nonrecurring_signed_components_cny": [
+      "-30021032.59",
+      "54738344.00",
+      "30041408.64",
+      "5745904.34",
+      "8521366.76",
+      "-14763329.68",
+      "-1805869.11"
+    ],
+    "nonrecurring_total_cny": "52456792.36",
+    "basic_eps": "0.9276",
+    "diluted_eps": "0.9264",
+    "adjusted_basic_eps": "0.9123",
+    "eps_used_as_normalized_floor": false
+  },
+  "paired_expectations": {
+    "scope": "SAME_BROKER_SAME_ANNUAL_METRIC_DISPLAYED_VALUES_NOT_ALL_STREET_OR_COMPLETE_MODEL",
+    "broker": "HUACHUANG",
+    "subject": "600233.SH",
+    "unit": "CNY_100_million",
+    "metric": "PARENT_NET_PROFIT",
+    "years": [
+      "2026",
+      "2027",
+      "2028"
+    ],
+    "before": {
+      "document_date": "2026-07-01",
+      "displayed_timestamp": "2026-07-01 11:36",
+      "url": "https://finance.sina.com.cn/wm/2026-07-01/doc-inifhmhw1073024.shtml",
+      "values": [
+        "65.3",
+        "75.0",
+        "83.1"
+      ],
+      "q2_consolidated_parent_profit_per_parcel_estimate": "0.216"
+    },
+    "after": {
+      "document_date": "2026-08-21",
+      "url": "https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/840643283059/index.phtml",
+      "values": [
+        "65.3",
+        "75.0",
+        "83.1"
+      ],
+      "q2_consolidated_parent_np_100_million": "17.97",
+      "q2_express_parent_np_100_million": "19.13",
+      "q2_parcels_100_million": "86.4"
+    },
+    "paired_nominal_revisions": [
+      "0.0",
+      "0.0",
+      "0.0"
+    ],
+    "historical_publication_minute_verified": false,
+    "raw_broker_reports_retained": false,
+    "not_blind_replay": true,
+    "source_qualification": "BROKER_AUTHORED_PUBLIC_EXCERPTS_REACQUIRED_TODAY_NOT_FULL_LICENSED_MODELS"
+  },
+  "arithmetic_controls": {
+    "reported_adjusted_cny_million": "3122.5831",
+    "nonrecurring_component_sum_cny": "52456792.36",
+    "derived_adjusted_not_reported_cny": "3122583091.08",
+    "reported_minus_derived_cny": "8.92",
+    "parent_net_profit": {
+      "actual_minus_midpoint_million": "-74.96011656",
+      "relative_to_midpoint": "-0.0230646512492307692307692307692307692307692307692307692307692",
+      "range_position": "WITHIN"
+    },
+    "parent_net_profit_ex_nonrecurring": {
+      "actual_minus_midpoint_million": "-67.4169",
+      "relative_to_midpoint": "-0.0211338244514106583072100313479623824451410658307210031347962",
+      "range_position": "WITHIN"
+    },
+    "q2_rounded_broker_control": {
+      "consolidated_parent_per_parcel": "0.207986111111111111111111111111111111111111111111111111111111",
+      "express_parent_per_parcel": "0.221412037037037037037037037037037037037037037037037037037037",
+      "prior_consolidated_estimate": "0.216",
+      "consolidated_relative_gap": "-0.037101337448559670781893004115226337448559670781893004115227",
+      "invalid_mixed_scope_relative_gap": "0.02505572702331961591220850480109739368998628257887517146776"
+    }
+  },
+  "calibration_limits": {
+    "company_guidance_events": 1,
+    "independent_ai_forecasts_scored": 0,
+    "method_or_prompt_version_changed": false
+  },
+  "numeric_convention": {
+    "amount_unit": "CNY_million",
+    "exact_decimal_strings": true,
+    "midpoint_role": "ARITHMETIC_RANGE_CENTER_NOT_EXPECTED_VALUE",
+    "missing_actual_is_not_zero": true
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "code_commit": "ec881464f588af1b3e72ffb855b9108886fce0ea",
+  "evaluation_hash": "33784df659b5434f0b3b007e80a7b9608b6695033987b69a9ad47c8239e052b3",
+  "checks": {
+    "native_bundle_validation": 6,
+    "audit_inventory_files_verified": 15,
+    "all_cohort_event_hashes_match_original_signal_day_ledger": 12,
+    "original_Sep30_equals_later_validation_bytes": true,
+    "exact_replay": true,
+    "independent_endpoint_recalculations": 12,
+    "later_generation_keeps_evaluation_hash": true,
+    "identical_duplicate_does_not_inflate": true,
+    "missing_Sep24_does_not_use_later_window": true,
+    "corrupt_state_hash_rejected": true,
+    "input_bytes_unchanged": true,
+    "original_cli_exit": 2,
+    "original_cli_full_result_hash_matches": true,
+    "original_cli_existing_output_rejected_without_mutation": true
+  },
+  "environment": {
+    "python": "3.13.5",
+    "pydantic": "2.13.4"
+  },
+  "limits": [
+    "Whole selected source modules unchanged; local empty package markers; not complete checkout or full CI",
+    "Native case replay and original CLI, not a producer/source call",
+    "CLI exit2 correctly preserves incomplete whole-ledger outcome, not failure of 12 mature windows",
+    "Initial local diagnostic printer KeyError(rows) occurred after evaluator wrote full output; original log retained",
+    "First local CLI output path was inside the calendar parent directory and correctly rejected before output; corrected to an independent sibling directory",
+    "No browser rendering acceptance claimed"
+  ]
+}

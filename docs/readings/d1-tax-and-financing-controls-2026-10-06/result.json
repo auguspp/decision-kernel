@@ -1,0 +1,37 @@
+{
+  "kind": "D1_BOUNDED_MECHANISM_CONTROLS_NOT_FULL_OR_PIT_PERFORMANCE",
+  "input_sha256": "aea42162509f7c95a25870ccdd52cd15435b507ce95e2a3c28efe9f5e9f8ef93",
+  "analysis_frozen_at": "2026-10-06T08:30:24.146851+00:00",
+  "beidahuang": {
+    "analyst_h1_excluding_retained_settlement": "873389568.78",
+    "difference_from_prior_h1": "-111044950.86",
+    "fraction_change_from_prior_h1": "-0.112800748698",
+    "meaning": "INHERITED_PROFIT_BRIDGE_NOT_COMPANY_ADJUSTED_PROFIT_OR_FUTURE_TAX_FORECAST",
+    "next_quarter_profit_prediction": null,
+    "new_short_horizon_payoff": null
+  },
+  "rigol": {
+    "declared_static_count_after_issuance": "218676617",
+    "profit_growth_for_unchanged_static_per_share_value": "0.127929204811",
+    "unchanged_profit_static_per_share_change": "-0.113419534014",
+    "hypothetical_controls": [
+      {
+        "hypothetical_total_profit_growth": "0.10",
+        "constant_count_per_share_change": "-0.024761487416"
+      },
+      {
+        "hypothetical_total_profit_growth": "0.15",
+        "constant_count_per_share_change": "0.019567535883"
+      }
+    ],
+    "meaning": "STATIC_DECLARED_COUNTS_ONLY_NOT_WEIGHTED_BASIC_OR_FULLY_DILUTED_EPS",
+    "reported_basic_eps_restatement": null,
+    "actual_weighted_diluted_share_count": null,
+    "net_issuance_cash": null,
+    "new_short_horizon_payoff": null
+  },
+  "qualified_historical_pit_case_count": null,
+  "pooled_score": null,
+  "opportunity_probability": null,
+  "investment_authority": "NONE"
+}

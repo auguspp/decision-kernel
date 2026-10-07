@@ -1,0 +1,78 @@
+{
+  "a_price_times_old_total_shares_cny": "248349183086.1",
+  "annualized_return": null,
+  "inherited_cash_sensitivity_rechecked": {
+    "assumed_extra_cash_financed_inventory_cny": "1255267424.4930",
+    "basis": "ILLUSTRATIVE_EXTRA_USE_NOT_A_RECONCILIATION_OF_HISTORICAL_OCF",
+    "historical_group_ocf_less_deducted_parent_profit_cny": "1165307578.13",
+    "hypothetical_ocf_after_extra_use_cny": "4793073632.5670",
+    "hypothetical_ratio_to_old_deducted_parent_profit": "0.9815770572224885607845684400344288097809"
+  },
+  "inherited_supply_sensitivity_rechecked": [
+    {
+      "break_even_volume_growth_fraction": "0.173701580684384227896473857912107000174",
+      "gross_profit_change_fraction": "0.022406393369838685807310936806274974101",
+      "price": "-0.10",
+      "unit_cost": "0",
+      "volume": "0.20"
+    },
+    {
+      "break_even_volume_growth_fraction": "0.243764610598781453052809836729434719384",
+      "gross_profit_change_fraction": "-0.0351872132603226283853781263874500517981",
+      "price": "-0.10",
+      "unit_cost": "0.10",
+      "volume": "0.20"
+    }
+  ],
+  "investment_authority": "NONE",
+  "not_combined_a_h_market_cap": true,
+  "old_forecast_context": [
+    {
+      "annual_profit_cny": "13977000000",
+      "price_equivalent_pe_x": "17.76841833627387851470272590684696286757"
+    },
+    {
+      "annual_profit_cny": "16868000000",
+      "price_equivalent_pe_x": "14.72309598565923642399810291676547308513"
+    },
+    {
+      "annual_profit_cny": "17872000000",
+      "price_equivalent_pe_x": "13.89599278682296329453894359892569382274"
+    }
+  ],
+  "price_session": "2026-09-30",
+  "probabilities": null,
+  "profit_equivalents": [
+    {
+      "annual_profit_cny": "16556612205.74",
+      "pe_x": "15"
+    },
+    {
+      "annual_profit_cny": "14608775475.65294117647058823529411764706",
+      "pe_x": "17"
+    },
+    {
+      "annual_profit_cny": "13071009636.11052631578947368421052631579",
+      "pe_x": "19"
+    },
+    {
+      "annual_profit_cny": "11826151575.52857142857142857142857142857",
+      "pe_x": "21"
+    }
+  ],
+  "purpose": "STATIC_CONDITIONAL_COMPARISON_NOT_HORIZON_ODDS_OR_FORECAST",
+  "same_earnings_different_multiple": [
+    {
+      "annual_profit_cny": "15800000000",
+      "conditional_price_cny": "337.7273037814731975358065006888589614997",
+      "pe_x": "15",
+      "static_price_difference_fraction": "-0.0456984917166623409556188169289094052001"
+    },
+    {
+      "annual_profit_cny": "15800000000",
+      "conditional_price_cny": "427.7879181231993835453549008725546845663",
+      "pe_x": "19",
+      "static_price_difference_fraction": "0.208781910492227701456216165223381420080"
+    }
+  ]
+}

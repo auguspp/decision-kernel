@@ -6,6 +6,8 @@ project_handoffs display function in current_state; detail replay never calls it
 inherited by the broad implementation fingerprint; concept-detail replay never
 calls those Sector paths. #728 adds quiet-session capture only; the imported
 _clock/_check_request/_check_safe_json and their dependencies are byte-identical.
+#757 changes only Collector.collect publication accounting; #769 changes only
+Collector._research_work accounting. Detail replay calls neither method.
 Historical maps remain immutable; only explicit forward pairs are admitted.
 See docs/concept-detail-replay-compatibility-v1.md for the evidence and limits.
 """
@@ -65,6 +67,16 @@ POST_STOCK_READING_IMPLEMENTATION = MappingProxyType({
 POST_QUIET_STOCK_INPUTS_IMPLEMENTATION = MappingProxyType({
     **POST_STOCK_READING_IMPLEMENTATION,
     'runtime/sector_radar_audit.py': '00813ef1d0ed817098c96d72b250c6c36b112a4df55d04bd201f6fa48890c8a6',
+})
+# #757 changes only Collector.collect, not the imported API or replay helpers.
+POST_CALENDAR_BUDGET_IMPLEMENTATION = MappingProxyType({
+    **POST_QUIET_STOCK_INPUTS_IMPLEMENTATION,
+    'runtime/current_state_delivery.py': '68d3d826e4b0a2fc281d87591faa2166ca030b51712847882c1a88b91568968e',
+})
+# #769 changes only Collector._research_work, not Concept's imported API.
+POST_WORK_BUDGET_IMPLEMENTATION = MappingProxyType({
+    **POST_CALENDAR_BUDGET_IMPLEMENTATION,
+    'runtime/current_state_delivery.py': 'e01a81bc8c884161204cb746d78d92be3d9294269d92950b3bc3ea6fa61bbd62',
 })
 PRIOR_DELIVERY = 'REVIEWED_PRIOR_DELIVERY_IMPLEMENTATION'
 CURRENT = 'CURRENT_IMPLEMENTATION'
@@ -147,7 +159,17 @@ def verify(output: Path) -> tuple[dict, str]:
         or historical == POST_DELIVERY_CONTINUITY_IMPLEMENTATION
         and installed in (POST_STOCK_READING_IMPLEMENTATION, POST_QUIET_STOCK_INPUTS_IMPLEMENTATION)
         or historical == POST_STOCK_READING_IMPLEMENTATION
-        and installed == POST_QUIET_STOCK_INPUTS_IMPLEMENTATION,
+        and installed == POST_QUIET_STOCK_INPUTS_IMPLEMENTATION
+        or historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION,
+                          REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION,
+                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION, POST_STOCK_READING_IMPLEMENTATION,
+                          POST_QUIET_STOCK_INPUTS_IMPLEMENTATION)
+        and installed == POST_CALENDAR_BUDGET_IMPLEMENTATION
+        or historical in (HISTORICAL_IMPLEMENTATION, PRE_SINGLE_QUICK_IMPLEMENTATION,
+                          REPLAY_IMPLEMENTATION, POST_SECTOR_BACKFILL_IMPLEMENTATION,
+                          POST_DELIVERY_CONTINUITY_IMPLEMENTATION, POST_STOCK_READING_IMPLEMENTATION,
+                          POST_QUIET_STOCK_INPUTS_IMPLEMENTATION, POST_CALENDAR_BUDGET_IMPLEMENTATION)
+        and installed == POST_WORK_BUDGET_IMPLEMENTATION,
         'DETAIL_HISTORICAL_IMPLEMENTATION_REJECTED',
     )
     # Bind only this invocation's identity expectation, after validating BOTH

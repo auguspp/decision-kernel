@@ -17,12 +17,16 @@ class GitHubReadReuseAPI(base.GitHubAPI):
         self.proven_read_blobs = frozenset()
         self.blob_reuse_hits = 0
         self.blob_reuse_origin = None
+        self.blob_reuse_attempt = None
 
     def prime_previous_reading(self, commit):
         model.check(model.SHA.fullmatch(commit) is not None, 'exact prior reading commit required')
         if self.blob_reuse_origin is not None:
             model.check(self.blob_reuse_origin['commit'] == commit, 'prior reading reuse identity changed')
             return
+        # A failed early calendar proof must not be retried by a later reader.
+        model.check(self.blob_reuse_attempt is None, 'prior reading reuse proof already failed')
+        self.blob_reuse_attempt = commit
         origin = self.get('git/commits/' + commit)
         model.check(origin.get('sha') == commit, 'prior reading commit identity differs')
         tree_sha = origin['tree']['sha']

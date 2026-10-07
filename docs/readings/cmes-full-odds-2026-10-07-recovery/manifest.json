@@ -1,0 +1,61 @@
+{
+  "research_id": "CMES-FULL-CONDITIONAL-ODDS-20261007-v1",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 525,
+      "sha256": "87c9eac9be6997f5c9ac05c6460a0aa53d802efde50913d933f5baa1ff9cc57e"
+    },
+    {
+      "path": "build_report.py",
+      "bytes": 18830,
+      "sha256": "47e4d434da5f09f54b2945f7d0ade3f4f1943f0c587297f6a8ed590f9e9f9f94"
+    },
+    {
+      "path": "calculate.py",
+      "bytes": 10539,
+      "sha256": "493ad45d96b66f691846e5abf0dfc086ad48cba99c7c81bc072786b50affe37e"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 6858,
+      "sha256": "940945287b96a16fed8de2f95337b9140c0b4e3b48b6215289ce448628863646"
+    },
+    {
+      "path": "results.json",
+      "bytes": 16776,
+      "sha256": "3898b72ee76b4812a000083126bc3c834f8ca23f582b353dad4ab5c5e443510a"
+    },
+    {
+      "path": "source_ledger.json",
+      "bytes": 9590,
+      "sha256": "7f917c745d1ce700178b34cb31ed53c15f2d9e46b9392df56b8d89800292bdb0"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1524,
+      "sha256": "493bae591de572b7c4b0f837fa3f0681eb6c1894545ed45e0ba4eb1d6df5cce3"
+    },
+    {
+      "path": "交付回执.md",
+      "bytes": 1385,
+      "sha256": "8069469c82ec4824d3f3017e3e57a53682f81c0745057825a2c69c25f38c98f9"
+    },
+    {
+      "path": "价格反推表.csv",
+      "bytes": 932,
+      "sha256": "ddf0b395e284d991b40a66a11f2be351aa8775dac9cafdce4058bdcbb0b0ce4d"
+    },
+    {
+      "path": "条件Odds表.csv",
+      "bytes": 1231,
+      "sha256": "25edf7358dad2e753b2c19f95762d3c0856850a8982c41738794a3dd1c4a379c"
+    },
+    {
+      "path": "研究报告.md",
+      "bytes": 21220,
+      "sha256": "3c8f52ee96e3397b8f53ea04ce9a57b603c2ac08d1b0ede7f9185951c3be2ea4"
+    }
+  ],
+  "excludes": "manifest itself; no raw issuer PDFs in package"
+}

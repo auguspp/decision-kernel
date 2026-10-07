@@ -486,13 +486,16 @@ class Collector:
         model.check(type(config["max_items"]) is int and 1 <= config["max_items"] <= MAX_RESEARCH_WORK_ITEMS,
                     "research work read item bound invalid")
 
-        # publish() writes every retained blob, two entry files, then at most
-        # five Git operations (prior commit, tree, commit, readback, ref). Reject
-        # even metadata reads when they would steal the base publication budget.
+        # Use the same proven-object budget as collect()/publish(). Only exact
+        # retained bytes may reuse a qualified previous-reading blob. The two
+        # final entries are not assembled yet, so reserve fresh writes for both.
+        from .read_blob_reuse import pending_blob_writes
         entry_paths = {"current-state.json", "README.md"}
         used = getattr(self.api, "calls", None)
         model.check(type(used) is int and used >= 0, "research work API accounting unavailable")
-        model.check(used + 2 + len(set(self.files) | entry_paths) + 5 <= MAX_API_CALLS,
+        existing_bytes = {path: raw for path, raw in self.files.items() if path not in entry_paths}
+        base_publication_calls = pending_blob_writes(self.api, existing_bytes) + len(entry_paths) + 5
+        model.check(used + 2 + base_publication_calls <= MAX_API_CALLS,
                     "research work API reserve would consume base publication budget")
         ref = self.api.get("git/ref/heads/" + work.WORK_REF)["object"]
         model.check(ref.get("type") == "commit" and model.SHA.fullmatch(ref.get("sha", "")) is not None,
@@ -541,7 +544,9 @@ class Collector:
         # work_inventory's tree request is memoized by GitHubAPI; reserve one
         # extra request anyway. Include all source reads and all new blob writes.
         remaining_reads = len(needed) + 1
-        publication_calls = len(set(self.files) | set(new_files) | entry_paths) + 5
+        # A work-tree hash is not a read/validated source. Reserve every new
+        # path here; only already retained bytes received the reuse credit above.
+        publication_calls = base_publication_calls + len(set(new_files) - set(self.files))
         model.check(self.api.calls + remaining_reads + max(RESEARCH_WORK_API_RESERVE, publication_calls)
                     <= MAX_API_CALLS, "research work read would exhaust publication API reserve")
 
@@ -797,7 +802,10 @@ class Collector:
             payload, entry_files = assembled()
         used = getattr(self.api, "calls", None)
         if type(used) is int:
-            model.check(used + len(set(self.files) | set(entry_files)) + 5 <= MAX_API_CALLS,
+            from .read_blob_reuse import pending_blob_writes
+            # Calendar and final publication must use the same proven-object budget.
+            # Final index/README bytes replace earlier versions before counting.
+            model.check(used + pending_blob_writes(self.api, {**self.files, **entry_files}) + 5 <= MAX_API_CALLS,
                         "collection leaves insufficient publication API budget")
         for path, raw in entry_files.items():
             self.retain(path, raw)

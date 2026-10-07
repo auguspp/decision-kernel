@@ -2,6 +2,8 @@
 
 No signal classifier, forecast, backtest engine, source request or trade is made.
 The old case owns its hypothesis and clocks; this module only follows its dates.
+Interrupted-reading contract: docs/d-horizon-gap-continuity-v1.md.
+Declared research-only dates: docs/d-horizon-declared-mechanisms-v1.md.
 """
 from __future__ import annotations
 
@@ -20,6 +22,26 @@ KEY = 'd_horizon_follow_up'
 PATH = 'details/stock/horizon-follow-up.json'
 VERSION = 'd-retained-horizon-follow-up-v1'
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, ArithmeticError)
+
+
+def _long_deadline_assertion(value):
+    """An explicit absent date is not a fabricated long-term valuation horizon."""
+    if value is None:
+        return 'LONG_RESEARCH_DEADLINE_NOT_DECLARED'
+    model.check(type(value) is str and date.fromisoformat(value).isoformat() == value,
+                'horizon long deadline must be an ISO date or explicit null')
+    return value
+
+
+def _scoped_source(collector, source):
+    """Reuse the optional-continuation cache scope without increasing any budget."""
+    baseline_cache = collector.sources
+    key = (source['path'], source['ref'])
+    collector.sources = {key: baseline_cache[key]} if key in baseline_cache else {}
+    try:
+        return collector.source({k: source[k] for k in ('path', 'ref', 'git_blob')})
+    finally:
+        collector.sources = baseline_cache
 
 
 def read_price_parts(files, expected_report):
@@ -103,6 +125,7 @@ def exact_interval(symbol, anchor, target, period, tables, coverage):
 def project(case, daily, calendar, tables, coverage, *, checked_at, source, previous=None, previous_reading_commit=None,
             calendar_market_session=None):
     """Case-owned deadlines are displayed, not turned into automatic judgments."""
+    _long_deadline_assertion(case['long_research_deadline'])
     frozen = model.clock(case['frozen_at'])
     model.check(model.clock(daily['observed_at']) <= model.clock(daily['received_through'])
                 <= model.clock(checked_at), 'horizon price clock')
@@ -175,10 +198,14 @@ def project(case, daily, calendar, tables, coverage, *, checked_at, source, prev
 def render(report):
     lines = ['\n\n## D：已冻结案例的多期限跟进（不是交易信号）\n',
              f"读取截止：{report['checked_at']}；最新价格尝试：{report['latest_price_status']}。"]
+    if report.get('previous_reading_gap'):
+        lines.append('期限观察曾中断或前驱读取未通过；历史定位与本次输入分别核验，不证明缺口期间连续可见。')
     for row, body_ref in zip(report['cases'], report['case_bodies'], strict=True):
         lines += [f"\n### {row['symbol']} / {row['id']}",
             f"原冻结：{row['frozen_at']}；S0：{row['anchor_session'] or '尚未由已完成交易日日历建立'}。",
-            f"长期Research期限：{row['long_research_deadline']}（不缩短、不重算原长期模型）。",
+            (f"长期Research期限：{row['long_research_deadline']}（不缩短、不重算原长期模型）。"
+             if row['long_research_deadline'] is not None else
+             "长期Research期限未在本声明单独设定；不新造估值日、不覆盖原长期研究。"),
             '中期：' + row['retained_interpretation']['intermediate'],
             '反证／停止：' + row['retained_interpretation']['invalidation'],
             f"原分析者有限裁定日：{row['analyst_review_by']}；{row['review_clock']}（日期到达不等于兑现）。",
@@ -207,18 +234,186 @@ def _bound(raw, descriptor):
                 and model.blob_sha(raw) == descriptor['git_blob'], 'horizon retained bytes differ')
 
 
-def _previous(collector):
+def _previous_reference(collector):
+    """Reuse the structure reader's one-locator protocol, never search history."""
     descriptor = (collector.previous or {}).get('research', {}).get(KEY)
-    if not descriptor or 'read_path' not in descriptor:
+    if not descriptor:
+        return None, False
+    model.check(isinstance(descriptor, dict), 'horizon previous descriptor')
+    interrupted = 'read_path' not in descriptor
+    if interrupted:
+        model.check(descriptor.get('status') == 'HORIZON_FOLLOW_UP_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
+                    'horizon previous gap status')
+        reference = deepcopy(descriptor.get('previous_saved_reading'))
+        if reference is None:
+            return None, True  # Legacy gaps with no locator are not reconstructed.
+        model.check(isinstance(reference, dict) and
+                    reference.get('meaning') == 'PREVIOUS_READING_NOT_CURRENT_SUCCESS',
+                    'horizon previous gap locator meaning')
+        model.check(reference.get('commit') != collector.previous_commit,
+                    'horizon previous gap self reference')
+    else:
+        reference = {'commit': collector.previous_commit, 'file': deepcopy(descriptor),
+                     'meaning': 'PREVIOUS_READING_NOT_CURRENT_SUCCESS'}
+    item = reference.get('file')
+    model.check(isinstance(item, dict) and isinstance(reference.get('commit'), str) and
+                model.SHA.fullmatch(collector.previous_commit or '') and
+                model.SHA.fullmatch(reference['commit']) and item.get('read_path') == PATH and
+                item.get('read_ref_rule') == 'USE_THE_SAME_PINNED_READING_COMMIT' and
+                type(item.get('bytes')) is int and 0 < item['bytes'] <= prices.MAX_REPORT and
+                isinstance(item.get('git_blob'), str) and model.SHA.fullmatch(item['git_blob']) and
+                isinstance(item.get('sha256'), str) and len(item['sha256']) == 64 and
+                all(c in '0123456789abcdef' for c in item['sha256']), 'horizon previous locator')
+    return reference, interrupted
+
+
+def _previous(collector, reference=None):
+    if reference is None:
+        reference, _ = _previous_reference(collector)
+    if reference is None:
         return None
-    model.check(descriptor['read_path'] == PATH and model.SHA.fullmatch(collector.previous_commit or ''),
-                'horizon previous reading identity')
-    raw = collector.api.file(PATH, collector.previous_commit)
-    _bound(raw, descriptor)
+    raw = collector.api.file(PATH, reference['commit'])
+    _bound(raw, reference['file'])
     value = prices.loads(raw)
     model.check(value['version'] == VERSION and value['report_hash'] ==
                 canonical_hash({k: v for k, v in value.items() if k != 'report_hash'}), 'horizon previous report')
+    model.check(model.clock(value['checked_at']) <= model.clock(collector.previous['checks']['finished_at']),
+                'horizon previous report clock')
     return value
+
+
+def _continuation_lines(rows):
+    lines = ['\n\n## D：原期限下的后继经济解释\n',
+             '以下仅引用已登记研究接续；不是本轮新研究、原冻结时已知事实或新的Human接受。']
+    for row in rows:
+        lines.append('\n### ' + str(row.get('case_id') or '接续读取'))
+        if row['status'] != 'RETAINED_CONTINUATION_READ_OK':
+            lines.append('后继解释读取缺口；原冻结案例、期限、价格与历史结果仍保留。')
+            continue
+        lines.append(f"该研究自报截止：{row['research_cutoff']}；本次读取：{row['read_at']}。")
+        for excerpt in row['excerpts']:
+            lines.append('\n'.join('> ' + line for line in excerpt.splitlines()))
+            lines.append('')
+        lines.append(f"[本次选定接续原文]({row['source']['read_path']})；只读取该README，不代表完整档案或原公司来源已复核。")
+    return '\n'.join(lines) + '\n'
+
+
+def _publish_continuations(collector, baseline, report, rows, *, retained_limit):
+    """Replace only this publication's derived files, never the frozen cases."""
+    from .institutional_radar_reading import _reserve
+    checked = collector.now()
+    model.check(model.clock(checked) >= model.clock(baseline['checks']['finished_at']),
+                'continuation publication clock reversed')
+    updated = {**report, 'checked_at': checked, 'economic_continuations': rows}
+    updated['report_hash'] = canonical_hash({k: v for k, v in updated.items() if k != 'report_hash'})
+    raw = prices.dumps(updated)
+    model.check(len(raw) <= prices.MAX_REPORT, 'continuation detail capacity')
+    research = deepcopy(baseline['research'])
+    research[KEY] = {'read_path': PATH, 'bytes': len(raw), 'sha256': model.sha256(raw),
+        'git_blob': model.blob_sha(raw), 'read_ref_rule': 'USE_THE_SAME_PINNED_READING_COMMIT'}
+    payload = model.assemble(code_commit=baseline['code_commit'], checked_at=checked,
+        check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
+        capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
+    updates = {PATH: raw, 'current-state.json': model.read_package_bytes(payload),
+               'README.md': collector.files['README.md'] + _continuation_lines(rows).encode()}
+    model.check(sum(map(len, {**collector.files, **updates}.values())) <= retained_limit,
+                'continuation total capacity')
+    _reserve(collector, replacements=updates)
+    collector.files.update(updates)
+    return payload
+
+
+def _attach_continuations(collector, baseline, report, items, registry, *, retained_limit):
+    """Optional exact-source excerpts; a local failure cannot erase the core reading.
+
+    This is not a second research store or an economic classifier. Selection is
+    explicit in the existing config, outside the immutable cases/contract hashes.
+    """
+    if items == []:
+        return baseline
+    from .institutional_radar_reading import _reserve
+    before, sources = dict(collector.files), dict(collector.sources)
+    phase = 'CONTINUATION_DECLARATION'
+    try:
+        model.check(isinstance(items, list) and 0 < len(items) <= 8,
+                    'continuation selection must be a bounded list')
+        model.check(all(isinstance(item, dict) and isinstance(item.get('case_id'), str) for item in items)
+                    and len({item['case_id'] for item in items}) == len(items),
+                    'select one exact continuation per case, not an inferred latest version')
+        cases = {case['id']: case for case in report['cases']}
+        rows = []
+        for item in items:
+            saved_files, saved_sources = dict(collector.files), dict(collector.sources)
+            phase = 'CONTINUATION_IDENTITY'
+            row = {'case_id': item['case_id'], 'record_id': item.get('record_id'),
+                   'meaning': 'RETAINED_INTERPRETATION_NOT_ORIGINAL_KNOWLEDGE_OR_ACCEPTANCE'}
+            try:
+                case = cases[item['case_id']]
+                record = registry[item['record_id']]
+                model.check(record['case'] == case['symbol']
+                            and record['use'] == 'RETAINED_RESEARCH_DOCUMENT'
+                            and record['archive']['format'] == 'RETAINED_FILES'
+                            and record['id'] != case['record_id'], 'continuation research identity differs')
+                source = record['source']
+                model.check(model.SHA.fullmatch(source['ref']) and model.SHA.fullmatch(source['git_blob']),
+                            'continuation source must pin commit and blob')
+                excerpts = item['excerpts']
+                model.check(isinstance(excerpts, list) and 0 < len(excerpts) <= 8
+                            and all(isinstance(t, str) and 0 < len(t.strip()) <= 4096 for t in excerpts),
+                            'continuation excerpts must be bounded nonempty text')
+                phase = 'CONTINUATION_CLOCK'
+                read_at = collector.now()
+                model.check(model.clock(case['frozen_at']) <= model.clock(item['research_cutoff'])
+                            <= model.clock(read_at), 'continuation cutoff outside reading window')
+                phase = 'CONTINUATION_RESERVE'
+                _reserve(collector, calls=1, files=3)
+                # As in research_calendar_reading._read_snapshot, optional saved
+                # files have an explicit local cache scope, not the baseline's
+                # 60-source registry. Keep the same real API/byte/write budgets.
+                phase = 'CONTINUATION_SOURCE'
+                raw, body_ref = _scoped_source(collector, source)
+                phase = 'CONTINUATION_BINDING'
+                _bound(raw, source)
+                _bound(raw, body_ref)
+                model.check(model.sha256(raw) == item['document_sha256'], 'continuation selected bytes differ')
+                text = raw.decode('utf-8')
+                predecessor = registry[case['record_id']]['source']
+                predecessor_link = f"/blob/{predecessor['ref']}/{predecessor['path']}"
+                model.check(all(value in text for value in [predecessor_link, case['frozen_at'],
+                            _long_deadline_assertion(case['long_research_deadline']), case['analyst_review_by'],
+                            item['research_cutoff'], *excerpts]), 'continuation excerpt or predecessor not in source')
+                finished = collector.now()
+                model.check(model.clock(finished) >= model.clock(read_at), 'continuation read clock reversed')
+                row.update(status='RETAINED_CONTINUATION_READ_OK', source=body_ref,
+                    research_cutoff=item['research_cutoff'], read_at=finished, excerpts=deepcopy(excerpts),
+                    original_contract_hash=case['contract_hash'], **model.AUTHORITY)
+            except ERRORS as exc:
+                collector.files, collector.sources = saved_files, saved_sources
+                codes = {'source registry bound': 'SOURCE_FILE_BUDGET',
+                         'Radar reading cannot consume existing publication reserve': 'PUBLICATION_RESERVE',
+                         'registered frozen blob changed': 'SOURCE_BLOB_MISMATCH',
+                         'horizon retained bytes differ': 'SOURCE_BYTES_MISMATCH',
+                         'continuation selected bytes differ': 'SELECTED_DOCUMENT_MISMATCH',
+                         'continuation excerpt or predecessor not in source': 'EXCERPT_OR_PREDECESSOR_MISMATCH'}
+                message = exc.args[0] if type(exc) is ValueError and len(exc.args) == 1 else None
+                row.update(status='CONTINUATION_UNAVAILABLE_CORE_PRESERVED',
+                           phase=phase, error_type=type(exc).__name__,
+                           diagnostic={'code': codes.get(message, 'UNCLASSIFIED_READ_REJECTION')
+                                       if isinstance(message, str) else 'UNCLASSIFIED_READ_REJECTION',
+                                       'baseline_source_count': len(saved_sources)})
+            rows.append(row)
+        phase = 'CONTINUATION_PUBLICATION'
+        return _publish_continuations(collector, baseline, report, rows, retained_limit=retained_limit)
+    except ERRORS as exc:
+        collector.files, collector.sources = before, sources
+        gap = [{'status': 'CONTINUATION_UNAVAILABLE_CORE_PRESERVED',
+                'phase': phase, 'error_type': type(exc).__name__}]
+        try:
+            return _publish_continuations(collector, baseline, report, gap, retained_limit=retained_limit)
+        except ERRORS:
+            # No room even for the gap: keep the already verified core untouched.
+            collector.files, collector.sources = before, sources
+            return baseline
 
 
 def attach(collector, baseline, *, retained_limit):
@@ -228,25 +423,32 @@ def attach(collector, baseline, *, retained_limit):
     from .independent_stock_reading import _cached, KEY as STOCK_KEY
     from .d_auction_follow_through import _read
     before, sources = dict(collector.files), dict(collector.sources)
-    phase, prior = 'DECLARATION', None
+    phase, prior, reference = 'DECLARATION', None, None
     try:
         model.validate_read_package(baseline)
         model.check(collector.code_commit == baseline['code_commit'], 'horizon code identity')
+        # Resolve before declaration/input work so their failures cannot discard
+        # the prior locator. Reading a locator is not source recovery or success.
+        phase, prior_gap = 'PREVIOUS_READING', None
+        try:
+            reference, interrupted = _previous_reference(collector)
+            if reference is not None:
+                _reserve(collector, calls=1, files=2)
+                prior = _previous(collector, reference)
+            model.check(prior is None or model.clock(prior['checked_at']) <= model.clock(collector.now()),
+                        'horizon previous check is in the future')
+            if interrupted:
+                prior_gap = 'PREVIOUS_HORIZON_READING_INTERRUPTED'
+        except ERRORS as exc:
+            prior, prior_gap = None, type(exc).__name__
+        phase = 'DECLARATION'
         _reserve(collector, files=2)
         raw, config_ref = collector.source({'path': CONFIG})
         config = prices.loads(raw)
         model.check(config['version'] == VERSION and 0 < len(config['cases']) <= 8, 'horizon declaration')
         model.check(len({c['id'] for c in config['cases']}) == len(config['cases']), 'horizon duplicate case')
-        _reserve(collector, calls=len(config['cases']) + 1, files=len(config['cases']) + 2)
+        _reserve(collector, calls=len(config['cases']), files=len(config['cases']) + 2)
         registry = {r['id']: r for r in read_entries(baseline['research'], collector.files.__getitem__)}
-        phase = 'PREVIOUS_READING'
-        prior_gap = None
-        try:
-            prior = _previous(collector)
-            model.check(prior is None or model.clock(prior['checked_at']) <= model.clock(collector.now()),
-                        'horizon previous check is in the future')
-        except ERRORS as exc:
-            prior, prior_gap = None, type(exc).__name__
         prior_rows = {r['id']: r for r in (prior or {}).get('cases', [])}
         phase = 'EXISTING_PRICE_INPUT'
         ref = baseline['research'][STOCK_KEY]
@@ -275,16 +477,16 @@ def attach(collector, baseline, *, retained_limit):
             model.check(record['case'] == case['symbol'] and record['use'] == 'RETAINED_RESEARCH_DOCUMENT'
                         and record['archive']['format'] == 'RETAINED_FILES', 'horizon case use differs')
             document = record['source']
-            raw, body_ref = collector.source({k: document[k] for k in ('path', 'ref', 'git_blob')})
+            raw, body_ref = _scoped_source(collector, document)
             _bound(raw, document)
             model.check(model.sha256(raw) == case['document_sha256'] and
                         all(text in raw.decode('utf-8') for text in [*case['source_assertions'], case['frozen_at'],
-                            case['long_research_deadline'], case['analyst_review_by'],
+                            _long_deadline_assertion(case['long_research_deadline']), case['analyst_review_by'],
                             *case['interpretation'].values()]), 'horizon declaration not in body')
             body_refs.append(body_ref)
             cases.append(project(case, daily, calendar, tables, coverage, checked_at=collector.now(),
                                  source=archive, previous=prior_rows.get(case['id']),
-                                 previous_reading_commit=collector.previous_commit,
+                                 previous_reading_commit=reference['commit'] if prior else None,
                                  calendar_market_session=calendar_report['market_session']))
         checked = collector.now()
         model.check(model.clock(checked) >= model.clock(baseline['checks']['finished_at']), 'horizon clock reversed')
@@ -293,7 +495,7 @@ def attach(collector, baseline, *, retained_limit):
             'price_file': selected['file'], 'calendar_source': calendar_source,
             'calendar_market_session': calendar_report['market_session'], 'latest_price_status': daily_state['status'],
             'using_prior_price_source': selected is not daily_state, 'cases': cases,
-            'previous_reading_commit': collector.previous_commit if prior else None,
+            'previous_reading_commit': reference['commit'] if prior else None,
             'previous_reading_gap': prior_gap,
             'new_source_requests': 0, 'automatic_research_routing': False, **model.AUTHORITY}
         report['report_hash'] = canonical_hash(report)
@@ -313,13 +515,16 @@ def attach(collector, baseline, *, retained_limit):
         collector.retain(PATH, raw)
         collector.files['current-state.json'] = entry
         collector.files['README.md'] += note
-        return payload
+        return _attach_continuations(collector, payload, report, config.get('continuations', []),
+                                     registry, retained_limit=retained_limit)
     except ERRORS as exc:
         collector.files, collector.sources = before, sources
         # A bad new attachment cannot discard the earlier completed reading.
         reading = {'status': 'HORIZON_FOLLOW_UP_UNAVAILABLE_OTHER_INPUTS_PRESERVED',
             'phase': phase, 'error_type': type(exc).__name__, 'new_source_requests': 0,
-            'previous_reading_commit': collector.previous_commit if prior else None}
+            'previous_reading_commit': reference['commit'] if prior else None}
+        if reference is not None:
+            reading['previous_saved_reading'] = deepcopy(reference)
         try:
             checked = collector.now()
             model.check(model.clock(checked) >= model.clock(baseline['checks']['finished_at']), 'horizon failure clock')

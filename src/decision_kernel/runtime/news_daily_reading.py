@@ -19,6 +19,85 @@ MAX_AGE = timedelta(minutes=30)  # Capture age, not upstream publication freshne
 _run = source.saved_run_identity
 
 
+def _headline_repetition(history):
+    """Project the already replayed native index; title equality is not event identity.
+
+    Called only after source.replay_history. Keep all original rows and their
+    version IDs. Polling frequency and publication-claim edits are not new authors.
+    """
+    p = history['projection']
+    groups, articles = {}, {}
+    appearances = 0
+    for entry in p['observations']:
+        row = entry['observation']
+        # Only collapse whitespace, never punctuation, numbers, polarity or case.
+        title = ' '.join(row['title'].split())
+        groups.setdefault(title, []).append(entry)
+        articles.setdefault(row['article_id'], []).append(row['version_id'])
+        appearances += entry['seen_capture_count']
+    repeated = []
+    for title, entries in groups.items():
+        if len(entries) < 2:
+            continue
+        sources = sorted({e['observation']['source_id'] for e in entries})
+        versions = sorted(e['observation']['version_id'] for e in entries)
+        repeated.append({'title_group_id': canonical_hash(title),
+            'representative_version_id': versions[0], 'version_ids': versions,
+            'article_count': len({e['observation']['article_id'] for e in entries}),
+            'source_ids': sources, 'version_count': len(versions),
+            'first_seen_at': min((e['first_seen_at'] for e in entries), key=m.clock),
+            'last_seen_at': max((e['last_seen_at'] for e in entries), key=m.clock)})
+    repeated.sort(key=lambda g: g['title_group_id'])
+    return {'version': 'news-headline-repetition-v1',
+        'meaning': 'EXACT_NORMALIZED_TITLE_CONTEXT_NOT_COMMON_EVENT_OR_INDEPENDENT_CONSENSUS',
+        'source_history_hash': history['projection_hash'],
+        'history_status': p['status'], 'window_start': p['window_start'],
+        'retained_since': p['retained_since'], 'captured_through': p['generated_at'],
+        'coverage': deepcopy(p['coverage']), 'losses': deepcopy(p['losses']),
+        'observed_version_count': len(p['observations']),
+        'observed_article_count': len(articles), 'distinct_title_count': len(groups),
+        'capture_appearance_count': appearances,
+        'appearance_count_meaning': 'SUM_OF_RETAINED_VERSION_CAPTURE_COUNTS_NOT_NEWS_OR_AUTHOR_COUNT',
+        'repeat_title_group_count': len(repeated),
+        'cross_source_repeat_group_count': sum(len(g['source_ids']) > 1 for g in repeated),
+        'repeat_title_groups': repeated,
+        'multiple_version_articles': [{'article_id': a, 'version_ids': sorted(v)}
+                                      for a, v in sorted(articles.items()) if len(v) > 1],
+        'status': 'REPEATED_HEADLINES_OBSERVED' if repeated else 'NO_EXACT_REPETITION_IN_RETAINED_WINDOW',
+        'origin_independence': 'NOT_ESTABLISHED',
+        'community_post_coverage': 'NOT_CAPTURED_BY_THE_SEVEN_NEWS_WINDOWS',
+        'author_count': None, 'engagement': None, 'semantic_disagreement': None,
+        'crowding_score': None, 'company_exposure': 'NOT_EVALUATED',
+        'new_attention_events': 0, **source.AUTHORITY}
+
+
+def _render_repetition(context, history):
+    from .reviewed_question_reading import _text
+    rows = {e['observation']['version_id']: e['observation']
+            for e in history['projection']['observations']}
+    lines = ['', '## 同标题复现：先区分重复曝光与独立观点', '',
+        f"保存版本 {context['observed_version_count']}；来源文章 {context['observed_article_count']}；"
+        f"不同标题 {context['distinct_title_count']}；同标题多版本组 {context['repeat_title_group_count']}；"
+        f"跨渠道同标题组 {context['cross_source_repeat_group_count']}。",
+        '这是原7个新闻窗口的字符串对照，不是社区作者样本、共同经济事件或独立多源共识。'
+        '相同标题可能转载，也可能是同一来源的时间声明变化；不同标题也可能讲同一件事。',
+        '重复抓取只增加保存版本的出现次数，不增加作者数；首次/末次出现均是抓取时钟，'
+        '不能填成原始发布时间、发现提前量或观点持续时长。',
+        '下列最多显示按末次抓取排序的10组；完整组及版本定位保留在同版本JSON，原新闻没有删除。']
+    shown = sorted(context['repeat_title_groups'],
+                   key=lambda g: (m.clock(g['last_seen_at']), g['title_group_id']), reverse=True)[:10]
+    for group in shown:
+        title = rows[group['representative_version_id']]['title']
+        lines.append('- ' + _text(title) + ' · ' + _text('/'.join(group['source_ids']))
+            + f" · {group['version_count']}版本/{group['article_count']}来源文章"
+            + ' · 末次抓取 ' + _text(group['last_seen_at']))
+    if not shown:
+        lines.append('保留窗口未观察到完全同标题复现；不代表没有重复事件、市场分歧或新闻。')
+    lines.append('作者、互动、观点方向、分歧、拥挤度和公司经济暴露均未据此判定；'
+                 '缺口、陈旧与覆盖仍以上方原新闻状态和滚动历史为准。')
+    return lines
+
+
 def read(collector, baseline):
     _reserve(collector, calls=4, files=4)
     result = collector.api.get('actions/workflows/radar-newsnow-daily.yml/runs?branch=main&per_page=20')
@@ -95,6 +174,7 @@ def read(collector, baseline):
               'company_source': ref if company is not None else None,
               'association_as_of': collector.now(), 'base_reading_hash': baseline['reading_hash'],
               'semantic_review': 'NOT_PERFORMED', **source.AUTHORITY}
+    report['headline_repetition'] = _headline_repetition(history)
     return state, {'projection': report, 'projection_hash': canonical_hash(report)}
 
 
@@ -123,6 +203,10 @@ def render(report):
                      + ' 秒；不能将其间的新闻覆盖视为已建立。')
     lines += ['', '| 来源 | 本批处置 | 窗口条数 |', '|---|---|---|']
     lines += ['| ' + _text(o['source_id']) + ' | ' + _text(o['status']) + ' | ' + _text(o.get('observations_in_window') if o.get('observations_in_window') is not None else 'UNKNOWN') + ' |' for o in value['source_outcomes']]
+    if 'headline_repetition' in p:
+        m.check(p['headline_repetition'] == _headline_repetition(p['history']),
+                'News headline context differs from retained history')
+        lines += _render_repetition(p['headline_repetition'], p['history'])
     lines += ['', '## 滚动18小时新闻索引（按所保留最早抓取时间倒序）', '',
               '按实际晚报正文/截止做内容去重；较早事件后到只算补充，不包装成隔夜新事件。']
     for entry in sorted(history['observations'],
@@ -179,7 +263,7 @@ def attach(collector, baseline):
     payload = m.assemble(code_commit=collector.code_commit, checked_at=collector.now(),
         check_started_at=baseline['checks']['started_at'], lanes=baseline['lanes'], research=research,
         capabilities=baseline['capability_gaps'], refresh_identity=baseline['refresh'])
-    note = ('\n[新闻：原日期、滚动索引与接续缺口](' + DETAIL + ')；不是新Research或自动提醒。\n'
+    note = ('\n[新闻：原日期、同标题复现与接续缺口](' + DETAIL + ')；不是新Research或自动提醒。\n'
             if 'details' in research['daily_news'] else '\n日常新闻输入尚无可读批次或读取受阻；不代表没有新闻。\n')
     replacements = {'current-state.json': m.read_package_bytes(payload),
                     'README.md': collector.files['README.md'] + note.encode()}

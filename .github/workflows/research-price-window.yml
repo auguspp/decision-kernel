@@ -1,0 +1,100 @@
+name: research-price-window
+run-name: research-price-window | ${{ inputs.codes }} | ${{ inputs.start }}..${{ inputs.end }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      codes:
+        description: 'One to five explicit SH/SZ securities, comma separated; not a watch list'
+        type: string
+        required: true
+      start:
+        description: 'Inclusive historical start YYYYMMDD; maximum 31 calendar days'
+        type: string
+        required: true
+      end:
+        description: 'Inclusive end YYYYMMDD, strictly before today in China'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: research-price-window
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    if: >-
+      github.repository == 'auguspp/decision-kernel' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12.15'
+      - name: Install existing source client
+        run: python -m pip install -e '.[feeds]'
+      - name: Bind reviewed main CI and the finite plan before source credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WINDOW_CODES: ${{ inputs.codes }}
+          WINDOW_START: ${{ inputs.start }}
+          WINDOW_END: ${{ inputs.end }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from datetime import datetime, timezone
+          from decision_kernel.runtime.research_price_window import plan, workflow_identity
+          env = os.environ
+          workflow_identity(env)
+          queries = plan(env['WINDOW_CODES'].split(','), env['WINDOW_START'], env['WINDOW_END'], datetime.now(timezone.utc))
+          repo, sha = env['GITHUB_REPOSITORY'], env['GITHUB_SHA']
+          def get(path):
+              return json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/{path}']))
+          assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == sha
+          assert get('git/ref/heads/main')['object']['sha'] == sha
+          runs = get(f'actions/workflows/ci.yml/runs?head_sha={sha}&event=push&per_page=20')['workflow_runs']
+          assert runs
+          ci = max(runs, key=lambda r: (r['created_at'], r['id']))
+          assert ci['head_sha'] == sha and ci['head_branch'] == 'main' and ci['event'] == 'push'
+          assert ci['path'] == '.github/workflows/ci.yml' and ci['run_attempt'] == 1
+          assert ci['status'] == 'completed' and ci['conclusion'] == 'success'
+          assert ci['repository']['full_name'] == ci['head_repository']['full_name'] == repo
+          print(json.dumps({'code_commit': sha, 'main_ci_run': ci['id'], 'plan': queries}, sort_keys=True))
+          PY
+      - name: Capture the explicit research window
+        env:
+          TUSHARE_PROXY_API_KEY: ${{ secrets.TUSHARE_PROXY_API_KEY }}
+          WINDOW_CODES: ${{ inputs.codes }}
+          WINDOW_START: ${{ inputs.start }}
+          WINDOW_END: ${{ inputs.end }}
+        run: >-
+          python -m decision_kernel.runtime.research_price_window
+          --codes "$WINDOW_CODES" --start "$WINDOW_START" --end "$WINDOW_END"
+          --output research-price-window
+      - name: Verify saved replies without source credentials
+        if: always()
+        run: |
+          if [ -f research-price-window/report.json ]; then
+            python -m decision_kernel.runtime.research_price_window --verify --output research-price-window
+          else
+            echo '::error::No completed receipt/report; inspect the retained failure, not a quiet result'
+            exit 1
+          fi
+      - name: Retain source bytes and failures
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: research-price-window-${{ github.run_id }}-${{ github.run_attempt }}
+          path: research-price-window/
+          if-no-files-found: error
+          retention-days: 90

@@ -155,9 +155,16 @@ class Collector(base.Collector):
         if os.environ.get('INCLUDE_CURRENT_STOCK_INPUTS') == '1':
             from .d_horizon_follow_up import attach as attach_horizons
             payload = attach_horizons(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
+            from .d_auction_next_session import attach as attach_auction_next
+            payload = attach_auction_next(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
         if os.environ.get('INCLUDE_PRICE_STRUCTURE') == '1':
             from .d_price_structure_reading import attach as attach_structure
             payload = attach_structure(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
+        if getattr(self, "include_reviewed_questions", False):
+            from .operating_outcome_reading import attach as attach_outcomes
+            payload = attach_outcomes(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
+        from .d_delivery_reading import attach as attach_joint
+        payload = attach_joint(self, payload, retained_limit=base.MAX_RETAINED_OUTPUT)
         return payload
 
     def saved_product(self, lane: str, run: dict) -> dict:

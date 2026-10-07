@@ -1,0 +1,49 @@
+{
+  "checked_at": "2026-10-05T11:24:13.641119+00:00",
+  "create_only_duplicate_output_rejected": true,
+  "economic_accuracy_or_method_improvement": "NOT_MEASURED",
+  "files": {
+    "README.md": {
+      "bytes": 9114,
+      "sha256": "571e2b95d8b70e6532566dfd36d9b9527c8ea0050162602b760844f6515dd04a"
+    },
+    "audit.py": {
+      "bytes": 14358,
+      "sha256": "c1592b47128b0dd16906ea5abc46eb5d4f43cb215821e67818f1c8ea100cf1e1"
+    },
+    "results.json": {
+      "bytes": 5443,
+      "sha256": "14b9c9f27d7498ba25ae9046fbd08d5c90f6f8b92606f9fc24dc8b200c6a067c"
+    },
+    "source-index.json": {
+      "bytes": 2892,
+      "sha256": "ad560cbcd38596021e1a4468a0feb0d734d627db914bf05e54bf532531ccb06c"
+    }
+  },
+  "formal_ci": "NOT_RUN_FOR_THIS_NEW_ARCHIVE",
+  "independent_reviewer": false,
+  "inputs_unchanged": true,
+  "kind": "LOCAL_OFFLINE_CASE_REPLAY_NOT_FORMAL_CI",
+  "negative_controls": {
+    "count": 10,
+    "meaning": "Local evidence-contract tests, not independent review or economic validation.",
+    "synthetic_negative_controls_rejected": [
+      "BA_CHANGED_PRICE",
+      "BA_CHANGED_HORIZON",
+      "BA_WRONG_PREDECESSOR",
+      "BA_FALSE_PRICE_ONLY",
+      "BA_FAKE_ZERO_PROBABILITY",
+      "BA_ACCEPTANCE_BORROWED",
+      "GD_MISSING_UNIT_EVIDENCE",
+      "GD_CHANGED_PER_SHARE",
+      "MT_MISSING_LATER_SECTION",
+      "RAW_BYTE_TAMPERING"
+    ]
+  },
+  "normal_publication": "NOT_ESTABLISHED_BY_THIS_REPLAY",
+  "python": "3.13.5",
+  "result_byte_replay": "EXACT_D2_CASE_REPLAY_MATCHED; not formal CI or economic validation",
+  "root_canonical_hash_recomputed": true,
+  "root_validator_scope": "bytes/blob/SHA256/canonical hash and selected source binding; not full current-state schema validator",
+  "source_files_verified": 8
+}

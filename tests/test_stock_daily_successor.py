@@ -108,7 +108,23 @@ def test_successor_reconciles_deliveries_without_a_second_source_clock():
     assert trigger["workflow_dispatch"]["inputs"]["mode"]["default"] == "audit"
     assert "push" not in trigger
     jobs = parsed["jobs"]
-    assert set(jobs) == {"reconcile-deliveries", "dispatch-tdx-concept", "daily-market-inputs", "auction-inputs"}
+    assert set(jobs) == {
+        "reconcile-deliveries", "dispatch-tdx-concept", "daily-market-inputs",
+        "auction-inputs", "auction-minutes",
+    }
+    assert "auction-minutes" in trigger["workflow_dispatch"]["inputs"]["mode"]["options"]
+    minute_job = jobs["auction-minutes"]
+    assert " ".join(minute_job["if"].split()) == (
+        "github.repository == 'auguspp/decision-kernel' && "
+        "github.ref == 'refs/heads/main' && github.run_attempt == 1 && "
+        "github.event_name == 'workflow_dispatch' && inputs.mode == 'auction-minutes'"
+    )
+    assert "needs" not in minute_job
+    assert (
+        "(github.event_name != 'workflow_dispatch' || "
+        "(inputs.mode != 'market-inputs' && inputs.mode != 'auction-inputs' && "
+        "inputs.mode != 'auction-minutes'))"
+    ) in " ".join(jobs["reconcile-deliveries"]["if"].split())
     assert "needs" not in jobs["daily-market-inputs"]
     assert "inputs.mode != 'market-inputs'" in jobs["reconcile-deliveries"]["if"]
     job = jobs["reconcile-deliveries"]

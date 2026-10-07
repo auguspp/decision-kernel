@@ -1,0 +1,144 @@
+{
+  "recorded_at": "2026-10-07T02:04:19.590955+00:00",
+  "base_commit": "dfb0d2984c44868cf2fc8df08212fa24fbbede56",
+  "task_comment_id": 6029302696,
+  "files": [
+    {
+      "file": "watch-20260923.json",
+      "bytes": 11983,
+      "sha256": "16451fc043bbb816ebf115979d6a27759b8ca1f520cc0081da7ddd55c8e893a0",
+      "git_blob": "13a8db4298aec936d0929af44dcec446ded3235b",
+      "archive_artifact_id": 10739870546,
+      "archive_bytes": 4578,
+      "archive_sha256": "47de2cc0a92bd91daa72e0b6ccd7a6dcfce960a71e3e59b8142de90c818baea6",
+      "archive_created_at": "2026-09-23T08:21:06Z",
+      "archive_member": "watch.json",
+      "run_id": 35836556981,
+      "run_attempt": 1,
+      "code_commit": "bc9882efb415912d46da28c21f53753903b23d9d"
+    },
+    {
+      "file": "watch-20260930.json",
+      "bytes": 11979,
+      "sha256": "6f56142cb7a171ccbcd478539b5a17d955703bed071cacd2ef6cd4db6e07fd46",
+      "git_blob": "7057c977bace664ee90638c93f9b91d1cf8f73e7",
+      "archive_artifact_id": 11084604574,
+      "archive_bytes": 4655,
+      "archive_sha256": "5b22981535c317265161a452712749542fc70ff1490136fe2544b4c9778913c2",
+      "archive_created_at": "2026-09-30T08:20:59Z",
+      "archive_member": "watch.json",
+      "run_id": 36689087147,
+      "run_attempt": 1,
+      "code_commit": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb"
+    },
+    {
+      "file": "002050-history-20260923.json",
+      "bytes": 3813,
+      "sha256": "5b37603f21ee5205accbd26925b06aba7ebe4e4d487142ede2fdf153c24ec14b",
+      "git_blob": "54ce2b54e945a65dae4648f3345521cb2b293571",
+      "archive_artifact_id": 10739622325,
+      "archive_bytes": 7293,
+      "archive_sha256": "da6d5db22f7444c61a53b6474c0969e462c43d7093c1eecb8896d44f3f4d5ad7",
+      "archive_created_at": "2026-09-23T08:21:07Z",
+      "archive_member": "market-history-shadow/002050-2026-09-23.json",
+      "run_id": 35836556981,
+      "run_attempt": 1,
+      "code_commit": "bc9882efb415912d46da28c21f53753903b23d9d"
+    },
+    {
+      "file": "603986-history-20260923.json",
+      "bytes": 3849,
+      "sha256": "cbd351b3452250b5765f669357ef57adefeb376e2b70e6b2aa2253f4b09d7733",
+      "git_blob": "2b178578b8a2c4a2ca0602f3715aa8409f21c290",
+      "archive_artifact_id": 10739622325,
+      "archive_bytes": 7293,
+      "archive_sha256": "da6d5db22f7444c61a53b6474c0969e462c43d7093c1eecb8896d44f3f4d5ad7",
+      "archive_created_at": "2026-09-23T08:21:07Z",
+      "archive_member": "market-history-shadow/603986-2026-09-23.json",
+      "run_id": 35836556981,
+      "run_attempt": 1,
+      "code_commit": "bc9882efb415912d46da28c21f53753903b23d9d"
+    },
+    {
+      "file": "002050-history-20260930.json",
+      "bytes": 3735,
+      "sha256": "37582ac6266426f68c8f2a4ea2500c5e73775c810616100b3b5930da6a1cf8e1",
+      "git_blob": "97f906597b2afec73ec796fc6946342c628ee987",
+      "archive_artifact_id": 11084464642,
+      "archive_bytes": 7263,
+      "archive_sha256": "c1201eb628b434d9b7797161e5c9475010ffc74ea5949a94eaceb178555702ad",
+      "archive_created_at": "2026-09-30T08:21:01Z",
+      "archive_member": "market-history-shadow/002050-2026-09-30.json",
+      "run_id": 36689087147,
+      "run_attempt": 1,
+      "code_commit": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb"
+    },
+    {
+      "file": "603986-history-20260930.json",
+      "bytes": 3768,
+      "sha256": "7e37048f785b318e8e025169408a4380b7a3f1ff4c1b62aa5d6327debf902215",
+      "git_blob": "b872288d529a06882f1fedc974b8ae8caba0bdd5",
+      "archive_artifact_id": 11084464642,
+      "archive_bytes": 7263,
+      "archive_sha256": "c1201eb628b434d9b7797161e5c9475010ffc74ea5949a94eaceb178555702ad",
+      "archive_created_at": "2026-09-30T08:21:01Z",
+      "archive_member": "market-history-shadow/603986-2026-09-30.json",
+      "run_id": 36689087147,
+      "run_attempt": 1,
+      "code_commit": "e16f43d04023c4053b28ca5788ba39fa6f9b6bfb"
+    }
+  ],
+  "checks": {
+    "four_original_archive_sizes_sha256_crc": true,
+    "two_watch_payload_hashes": true,
+    "ten_price_distances_and_ratios": true,
+    "all_five_identity_and_human_source_bindings_unchanged": true,
+    "original_config_hash_unchanged": true,
+    "whole_registry_hashes_equal": false,
+    "two_history_overlap_checks": true
+  },
+  "custody": {
+    "original_selected_six_json_bytes_retained": true,
+    "original_zip_archives_retained_in_git": false,
+    "raw_provider_http_responses_retained_in_this_archive": false,
+    "full_human_sources_copied": false,
+    "originals_are_project_outputs_not_exchange_signed_data": true
+  },
+  "calendar_sources": [
+    {
+      "url": "https://www.sse.com.cn/disclosure/announcement/general/c/c_20260915_10832273.shtml",
+      "document_date": "2026-09-17",
+      "representation": "SEARCH_INDEX_OF_OFFICIAL_NOTICE; DIRECT_OPEN_INTERNAL_ERROR"
+    },
+    {
+      "url": "https://investor.szse.cn/disclosure/notice/general/t20260917_622911.html",
+      "document_date": "2026-09-17",
+      "representation": "SEARCH_INDEX_OF_OFFICIAL_NOTICE"
+    }
+  ],
+  "lookup_gaps": [
+    {
+      "run_id": 35079697716,
+      "returned_artifacts": [],
+      "meaning": "CURRENT_LIST_EMPTY_NOT_PROOF_NO_ORIGINAL_OUTPUT_OR_SOURCE_WAS_EVER_AVAILABLE"
+    },
+    {
+      "blob": "8539a43a885d011266eb4831142b36d04ece9122",
+      "kind": "ORIGINAL_WATCH_ZIP_GIT_LOOKUP_404",
+      "meaning": "MEMBER_JSON_FOUND_AND_REUSED; NO_ZIP_GIT_CUSTODY_CLAIM"
+    },
+    {
+      "blob": "54ce2b54e945a65dae4648f3345521cb2b293571",
+      "kind": "SHADOW_MEMBER_GIT_LOOKUP_404",
+      "meaning": "BYTES_OBTAINED_FROM_ORIGINAL_DOWNLOADED_ARCHIVE"
+    }
+  ],
+  "limitations": [
+    "Oct7 selection is retrospective and Sep30 prices were previously seen.",
+    "Baseline captured Sep23 after the close cannot authorize a fill at that close.",
+    "Earlier bars in Sep23 shadow are history known by Sep23, not proved captured on their original dates.",
+    "No adjustment factors or complete corporate-action audit; raw-price ratios are not total returns or executable strategy returns.",
+    "No historical signal reconstruction or accepted short-horizon contract is fabricated.",
+    "No independent issuer source truth, full Watch host/source preflight rerun, model training leakage isolation or whole-market/news completeness is claimed."
+  ]
+}

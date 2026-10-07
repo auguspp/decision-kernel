@@ -5,6 +5,108 @@ change long-term Research, invent an established opportunity, or add trading.
 It turns the original case's declared dates and failure rules into a continuing
 read-only consumer, rather than another isolated comment or algorithm trial.
 
+## 2026-10-05: optional source-cache correction after #747
+
+The actual #747 publication at R `8d905f3901349f475d7e3530662315aa002c7376`
+kept the core but returned `CONTINUATION_SOURCE / ValueError`; six excerpts were
+not delivered. PR full CI and main merge-reuse succeeded and do not override that
+consumer failure. Exact source bytes, predecessor, dates and all selected excerpts
+were recovered and matched. The old output did not retain a safe reason code, so
+it alone cannot distinguish source-slot exhaustion from a publication reserve or
+binding error; no claim is made that a historic exception message was recovered.
+
+A real `Collector.source` regression demonstrates the integration defect omitted
+by the original source stub: the optional continuation consumes the baseline's
+60-slot cache and fails when it is full. This successor reuses the existing
+`research_calendar_reading._read_snapshot` scoped-cache pattern. One explicitly
+selected document temporarily exposes only its exact cached identity; `finally`
+restores all baseline entries. The eight-case/eight-excerpt limits, global API
+counter, byte limits and actual blob-write reserve remain unchanged. No scope,
+source entitlement, new allowance or retry is introduced. Validated bytes remain
+in the original reading inventory; corrupted bytes roll back locally. Small
+allowlisted diagnostic codes distinguish reserve/source/binding failures without
+publishing arbitrary exception bodies. Source records are not removed or evicted
+from the baseline in order to make room.
+
+Reuse Decision: REUSE / THIN_ADAPTER of the existing calendar/Collector pattern,
+shared publication reserve and the exact #747 retrieval contract. This is the
+same native-Git reading capability reviewed above, not a new storage/library
+choice; the prior external comparison remains applicable. Regression tests use
+real `Collector.source` with 0/59/60 occupied slots, cache hits and changed bytes.
+Network replies and the local fixture quota remain test substitutes; formal full
+CI and a successful new fixed-R excerpt readback are still independent gates.
+Removing this scope correction restores the #747 implementation; never rewrite
+the original failed R or its clocks. The economic source, frozen case and Human
+records are unchanged.
+
+## 2026-10-05 successor: retained economics in the normal horizon reading
+
+The Human approved continuing D delivery after the #746 handoff. The concrete
+consumer gap is that #746 registered a later economic continuation, while the
+existing horizon reader only displayed the original Oct4 interpretation. This
+change makes selected later reasoning recoverable alongside its unchanged
+forward windows. It is not a new company investigation or an opportunity signal.
+
+`decision_inputs/d-horizon-follow-up.json` adds optional top-level `continuations`.
+The existing `cases` objects are unchanged, so the original `contract_hash`,
+freeze, S0, 5/20 checkpoints, long Research deadline and analyst review date retain
+their identity. No old report, source, Research or Human decision is rewritten.
+An old configuration without continuations produces the original output with no
+additional reads. Selection is explicit; the reader never chooses the newest
+research or inherits Human acceptance from another version.
+
+For the selected #746 document, normal publication uses the existing same-reading
+registry, exact commit/path/blob, Collector source custody and byte/SHA256 checks.
+It checks the declared predecessor link and dates, and verifies that each selected
+excerpt actually appears in those bytes. Text is quoted, not executed or judged by
+Kernel. Only the declared README is materialized, not its whole archive or linked
+company sources. `research_cutoff` is the retained author's declared cutoff;
+`read_at` is this retrieval's completed clock. Neither is an invented publication
+time or proof that the Oct4 case already knew the later interpretation.
+
+The normal README and the existing `details/stock/horizon-follow-up.json` include
+the retained verdict, its coverage-not-new-event caveat, the lower-margin/higher-
+gross-profit counterexample, and support/counterevidence/information-gap paths.
+These excerpts are the selected work product, not a mandatory research template.
+The original economic judgment, probability, execution, latest price failure and
+historical context fields remain untouched. Quotes explicitly retain the limit
+that no new earnings magnitude or tradable opportunity has been established.
+
+This optional layer is applied **after** the core horizon reading is assembled.
+A bad identity, missing/modified source, invalid clock, unavailable permission or
+source budget produces a local continuation gap; it does not undo the core.
+Per-document temporary custody is rolled back on failure. Publication checks the
+existing total-byte and API reserve with the actual replacement files. If the
+optional source and output cannot fit, they are rolled back and a compact gap is
+attempted without another source request. If even that gap cannot fit, the verified
+core is kept byte-for-byte; no continuation success is reported. No endpoint retry,
+older-success search, alternative credential or quota increase is introduced.
+
+Reuse Decision: **REUSE / THIN_ADAPTER** over the already delivered #742 native-Git
+reader and #746 archive. The predecessor's source/identity/PIT review below still
+applies: no new calculation, provider, storage or research framework is being
+chosen. As a bounded additional alternative check, DVC's official
+[read API](https://dvc.org/doc/api-reference/read) supports file reads pinned by
+`rev`; its [implementation page](https://github.com/iterative/dvc/blob/main/dvc/api/data.py)
+was not retrievable in this session, so this is not a completed code-level DVC
+adoption audit or evidence that DVC cannot fit. We do not add DVC or another read
+client because the existing Collector already supplies this exact primitive. The
+[GitHub contents contract](https://docs.github.com/en/rest/repos/contents#get-repository-content)
+was checked alongside it. No external code or new dependency is copied.
+
+Focused tests cover exact excerpts, unchanged core/authority, optional absence,
+wrong case/use/version/digest/predecessor/deadlines, fabricated text, timezone and
+future-clock errors, explicit read failure without retries, bounded selection,
+source/publication capacity and rollback, plus the actual `attach` call site.
+Synthetic Git/quota fixtures are labelled; these tests do not certify source truth,
+full CI, normal publication or natural Quick/Brief consumption. Exact-head CI,
+main and fixed-R consumer readback remain separate delivery steps.
+
+Rollback removes the top-level selection and optional attachment helpers/tests;
+the original cases, existing reading, archived #746 document and historical reports
+remain independently usable. The #745 minute-route stop, C natural windows, Sites
+pause, existing clocks/notifications and no-investment-authority boundary remain.
+
 ## Original declaration, not new investment policy
 
 The source is `d-mu-gigadevice-horizons-20261004`, retained at

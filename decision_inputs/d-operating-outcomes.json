@@ -1,0 +1,140 @@
+{
+  "version": "reviewed-operating-outcomes-v1",
+  "cases": [
+    {
+      "id": "mu-fq4-2026-retained-guidance-review",
+      "event_id": "MU:FQ4_2026",
+      "subject": "MU",
+      "layout": "RETAINED_GUIDANCE_ACTUAL_V1",
+      "navigation_id": "decision-book",
+      "input_case": "MU_FQ4_2026_VALIDATION_ONLY",
+      "expected_period": "FQ4_2026",
+      "expected_currency": "USD",
+      "expected_basis": "NON_GAAP_EXCEPT_REVENUE",
+      "comparator_role": "COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "comparison": "JUNE_24_COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "source_custody": "ISSUER_DOMAIN_INDEXED_TABLE_EXTRACT_NOT_RAW_RELEASE",
+      "sources": {
+        "inputs": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/inputs.json",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "5df94d73471650942fefb1b5db4e251409060506",
+          "sha256": "90a37fb5bb8e1e6f9e1fae4baae829cb0d16040c06f7310a019898bf149c000e",
+          "bytes": 2207
+        },
+        "notes": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/source-notes.json",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "fb5183ba2ed64167a6d50b082b92703a85d5f32b",
+          "sha256": "7fee40487abdef1297c7e9357eb5ebfc9b76a7ff494d0a7da1d9fc519f4d06cc",
+          "bytes": 4969
+        },
+        "review": {
+          "path": "docs/readings/d2-micron-fq4-validation-2026-10-05/README.md",
+          "ref": "4d9c706d4662a30be7c72ef3b1194a29c94ef37a",
+          "git_blob": "271e64a0cff6ff248ed83a72f2eddcd10386e261",
+          "sha256": "9cb52946346b00ba664a54e51d411addfa48f83cd785b77d91ceeb26d5f32134",
+          "bytes": 9092
+        }
+      },
+      "excerpts": [
+        "本次支持的是季度盈利与现金兑现；公司整体跨周期盈利底部、合同在下行期的兑现和增量资本回报仍未证明。",
+        "残差只作算术分解，不能从中识别价格、销量、HBM组合或SCA贡献各占多少。正向收入兑现与费用压力可以并存；不能只用EPS超指引判为全链条优于预期，也不能因费用上升就忽略实际盈利增量。",
+        "方法版本沿原零schema决定／结果协议和研究方法不变；H2是事件前研究commit，本件是较晚解释，不回填为当时已知。没有新模型、提示、生产规则或永久评分门槛。公司自己的指导误差不能记成AI预测误差；没有Human的新反馈，不能判定个人决定成功或失败。"
+      ]
+    },
+    {
+      "id": "rigol-h1-2026-retained-preannouncement-review",
+      "event_id": "688337.SH:2026H1",
+      "subject": "688337.SH",
+      "layout": "RETAINED_PREANNOUNCEMENT_ACTUAL_V1",
+      "navigation_id": "decision-book",
+      "input_case": "RIGOL_H1_2026_PREANNOUNCEMENT_REVIEW",
+      "expected_period": "2026H1",
+      "expected_currency": "CNY",
+      "expected_basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "comparator_role": "COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "comparison": "POST_PERIOD_PREANNOUNCEMENT_NOT_MARKET_CONSENSUS",
+      "source_custody": "INHERITED_SOURCE_BOUND_RESEARCH_VALUES_NOT_NEW_ISSUER_CAPTURE",
+      "metric_ids": [
+        "revenue",
+        "parent_net_profit",
+        "parent_net_profit_ex_nonrecurring"
+      ],
+      "sources": {
+        "inputs": {
+          "path": "docs/readings/d2-rigol-preannouncement-2026-10-07/inputs.json",
+          "bytes": 2048,
+          "sha256": "cb3f2b8be30a533440a7119c0a9653fbe3b55984207312616ad26b539bf6ab20",
+          "git_blob": "54e439cb0d8ba466274b25dcba1758df3c3aa4f4",
+          "ref": "e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d"
+        },
+        "notes": {
+          "path": "docs/readings/d2-rigol-preannouncement-2026-10-07/source-notes.json",
+          "bytes": 2398,
+          "sha256": "7efaa9a35d3f0d77ed3e3fb93deaa80bf0411780beb2ab9dc577848a8f5e14d1",
+          "git_blob": "ae548a9f5f74d4c69ed882b21b46fa165ba7d46e",
+          "ref": "e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d"
+        },
+        "review": {
+          "path": "docs/readings/d2-rigol-preannouncement-2026-10-07/README.md",
+          "bytes": 4760,
+          "sha256": "aec510945fa09900a4965f8518890e4900fa72353d60a49514959787924e8eaa",
+          "git_blob": "4a0e8426d05a9f5eea9cc4d34a859bd04f1d0fc5",
+          "ref": "e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d"
+        }
+      },
+      "excerpts": [
+        "普源三项半年实绩均处于选定公司预告内；同比改善不等于对该预告的新增正向意外，更不等于超过市场一致预期。",
+        "经营改善与营运资本占用可以并存；已保存现金分析显示，简化经营现金减资本开支的改善主要来自投入减少，不能据此认证现金转换提高。",
+        "三指标是一家公司同一期间的一个比较事件；不生成AI预测成绩、胜率、Brier、机会概率或新Human决定。"
+      ]
+    },
+    {
+      "id": "yto-h1-2026-retained-preannouncement-review",
+      "event_id": "600233.SH:2026H1",
+      "subject": "600233.SH",
+      "layout": "RETAINED_PREANNOUNCEMENT_ACTUAL_V1",
+      "navigation_id": "decision-book",
+      "input_case": "YTO_H1_2026_PREANNOUNCEMENT_REVIEW",
+      "expected_period": "2026H1",
+      "expected_currency": "CNY",
+      "expected_basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "comparator_role": "COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST",
+      "comparison": "POST_PERIOD_PREANNOUNCEMENT_NOT_MARKET_CONSENSUS",
+      "source_custody": "ISSUER_MIRROR_PDF_SELECTED_PAGES_VISUALLY_CHECKED_NOT_RAW_BYTE_ARCHIVE",
+      "metric_ids": [
+        "parent_net_profit",
+        "parent_net_profit_ex_nonrecurring"
+      ],
+      "sources": {
+        "inputs": {
+          "path": "docs/readings/d2-yto-paired-actual-2026-10-07/inputs.json",
+          "bytes": 1830,
+          "sha256": "78b00dce7f61486713ac72c2bd27bb1bd30255d46753b9c978bcd9b6cd5b6d50",
+          "git_blob": "a1429e55aa3170470a2cd752a82418555c646ea3",
+          "ref": "dd6ef79d5d139f3f8eed054c5c635aa51dd0c0db"
+        },
+        "notes": {
+          "path": "docs/readings/d2-yto-paired-actual-2026-10-07/source-notes.json",
+          "bytes": 6237,
+          "sha256": "4af799eb89ac0d8c4fa01fc7963637eaec0076b8ab415b611204a94f5c5b8320",
+          "git_blob": "7f36e3f0588741d31c5ac2452a87541181bb2ae0",
+          "ref": "dd6ef79d5d139f3f8eed054c5c635aa51dd0c0db"
+        },
+        "review": {
+          "path": "docs/readings/d2-yto-paired-actual-2026-10-07/README.md",
+          "bytes": 8163,
+          "sha256": "04fec391be02498ced388dbc5e61ed57ec3f210d1e72b355e1ee7a748c85d5c7",
+          "git_blob": "3a507d0567edbab3fc6aff5727ffa5ea4418dcdf",
+          "ref": "dd6ef79d5d139f3f8eed054c5c635aa51dd0c0db"
+        }
+      },
+      "excerpts": [
+        "圆通H1归母与扣非实绩均在原公司预告范围内；同比改善和范围兑现不等于超出市场预期。旧版扣非null保留为当时读取缺口，新值来自原表，不借归母填充。",
+        "华创7月1日与8月21日的2026–2028年归母预测逐年同口径配对后，显示值均未变；这只证明所选机构的两次公开预测，不代表全市场一致预期没有变化。",
+        "单票合并归母低于原估算与快递分部单票利润高于该数字可以同时出现；后者换了利润口径，不能冒充同口径超预期。当前仍未建立新的期限特定机会，原11月30日复核、前向冻结和Human条件不改。"
+      ]
+    }
+  ]
+}

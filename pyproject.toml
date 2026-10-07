@@ -42,11 +42,11 @@ documents = [
 ]
 # Keep the qualified discovery/replay parser; 4.15.0 needs separate requalification (#623).
 discovery = [
-  "beautifulsoup4==4.15.0",
+  "beautifulsoup4==4.14.3",
 ]
 feeds = [
   "feedparser==6.0.14",
-  "beautifulsoup4==4.15.0",
+  "beautifulsoup4==4.14.3",
   "requests==2.34.2",
 ]
 dump-study = [
@@ -68,7 +68,7 @@ dev = [
   "pytest-split==0.11.0",
   "pypdf==6.19.0",
   "pypdfium2==5.13.0",
-  "beautifulsoup4==4.15.0",
+  "beautifulsoup4==4.14.3",
   "feedparser==6.0.14",
   "requests==2.34.2",
   "pyarrow==25.0.1",

@@ -1,0 +1,109 @@
+{
+  "schema": "RETAINED_RESEARCH_WORKPAPER_NOT_RUNTIME_INPUT",
+  "recorded_at": "2026-10-07T07:36:11.597046+00:00",
+  "subject": "603986.SH",
+  "period": "2026H1",
+  "unit": "CNY",
+  "code_base": "868142fc38c08996480c42f4e3788468856ae38d",
+  "sources": [
+    {
+      "id": "G",
+      "url": "https://paper.cnstock.com/html/2026-07/10/content_2242432.htm",
+      "document_date": "2026-07-10",
+      "announcement_id": "2026-054",
+      "representation": "DIRECTLY_READ_PARSED_HTML_OF_ISSUER_ANNOUNCEMENT_IN_DESIGNATED_NEWSPAPER",
+      "published_at": null,
+      "target_period_end": "2026-06-30",
+      "source_phrase": "左右",
+      "guide_values_wan_cny": {
+        "parent_net_profit": "690000",
+        "parent_net_profit_ex_nonrecurring": "485000"
+      },
+      "approximate": true,
+      "half_width": null,
+      "original_page_bytes_retained": false,
+      "fact_scope": "Approximate parent and adjusted profit; preliminary unaudited estimate; cyclicality and investment fair-value risk. No complete page copy."
+    },
+    {
+      "id": "A1",
+      "ref": "440c03166d89debe08d3bb4a0b5e104c923009b2",
+      "path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+      "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+      "bytes": 33013,
+      "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7",
+      "claim_pointer": "/deep_research/material_claims/0/statement",
+      "net_nonrecurring_parent_cny": "1973752934.75",
+      "gross_financial_asset_gain_cny": "2231404413.90",
+      "qualification": "INHERITED_EXTRACTED_VALUES_PARTIAL_NOT_FILING_REVALIDATION",
+      "original_filing_url": "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480384.PDF"
+    },
+    {
+      "id": "A2",
+      "ref": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
+      "path": "docs/readings/d-mu-gigadevice-expectation-cash-2026-10-05/inputs.json",
+      "git_blob": "5c918ebdcdc38be7196c619ec1a100b4a7719f92",
+      "pointer": "/deducted_parent_profit_cny",
+      "value": "4883033478.93",
+      "qualification": "INHERITED_VALUE_FROM_SAME_A1_LINEAGE_NOT_SECOND_INDEPENDENT_SOURCE"
+    }
+  ],
+  "formulas": {
+    "parent": "retained adjusted parent + retained net nonrecurring parent difference",
+    "guide_residual": "approximate parent nominal - approximate adjusted nominal; not separately issued guidance",
+    "difference": "retained_or_derived - guide_nominal",
+    "percent": "difference / guide_nominal * 100; nominal comparison not consensus error",
+    "earnings_quality_identity": "parent difference = adjusted difference + net nonrecurring residual difference"
+  },
+  "rows": [
+    {
+      "metric": "parent_net_profit",
+      "guide_nominal_cny": "6900000000",
+      "retained_or_derived_cny": "6856786413.68",
+      "difference_cny": "-43213586.32",
+      "difference_cny_million": "-43.21358632",
+      "relative_nominal_percent_display": "-0.62628386",
+      "hard_beat_or_miss": null,
+      "range_position": null
+    },
+    {
+      "metric": "parent_net_profit_ex_nonrecurring",
+      "guide_nominal_cny": "4850000000",
+      "retained_or_derived_cny": "4883033478.93",
+      "difference_cny": "33033478.93",
+      "difference_cny_million": "33.03347893",
+      "relative_nominal_percent_display": "0.68110266",
+      "hard_beat_or_miss": null,
+      "range_position": null
+    },
+    {
+      "metric": "net_nonrecurring_residual",
+      "guide_nominal_cny": "2050000000",
+      "retained_or_derived_cny": "1973752934.75",
+      "difference_cny": "-76247065.25",
+      "difference_cny_million": "-76.24706525",
+      "relative_nominal_percent_display": "-3.71936904",
+      "hard_beat_or_miss": null,
+      "range_position": null
+    }
+  ],
+  "limits": {
+    "actual_source_pdf_reacquired": false,
+    "pdf_images_inspected_this_review": false,
+    "all_revisions_checked": false,
+    "earliest_publication_timestamp": null,
+    "contemporaneous_system_capture_established": false,
+    "market_consensus_obtained": false,
+    "event_price_qualification": null,
+    "opportunity_established": null,
+    "probability": null,
+    "forecast_score": null,
+    "investment_authority": "NONE",
+    "source_failure": "Original CNINFO PDF and tried Eastmoney mirrors not obtained; selected issuer summary table remained an image placeholder or unavailable. No new company actual precision asserted."
+  },
+  "validation": {
+    "arithmetic": "Decimal precision 60 and exact Fraction cross-check",
+    "counterexamples": 6,
+    "scope": "LOCAL_NOTE_CHECKS_NOT_FULL_PYTEST_OR_MARKET_PREDICTIONS",
+    "runtime_added": false
+  }
+}

@@ -81,7 +81,11 @@ def request(route, params):
     # The isolated history comparison supplies only its finite, reviewed contracts.
     from . import ftshare_stock_history_comparison as history
     from . import ftshare_c2_pilot as pilot
-    if route == pilot.ROUTE:
+    if route == 'auction_minutes':
+        from . import d_auction_minutes as minutes
+        minutes.validate_parameters(params)
+        endpoint = minutes.ENDPOINT
+    elif route == pilot.ROUTE:
         pilot.validate_request(params)
         endpoint = pilot.ENDPOINT
     elif route in history.ROUTES:
@@ -93,7 +97,7 @@ def request(route, params):
     key = os.environ.get('FTSHARE_API_KEY')
     require(isinstance(key, str) and key and key.isascii()
             and all(32 < ord(c) < 127 for c in key), 'AUTHENTICATION_UNAVAILABLE')
-    req = Request(endpoint + '?' + urlencode(params), headers={
+    req = Request(endpoint + '?' + urlencode(params, doseq=route == 'auction_minutes'), headers={
         'FTSHARE_API_KEY': key, 'Accept': 'application/json', 'Accept-Encoding': 'identity',
         'User-Agent': 'decision-kernel/' + VERSION})
     if route == pilot.ROUTE:
