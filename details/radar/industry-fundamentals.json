@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "baseline_reading_hash": "7dafec487ccf0aeb7f785789fa64d4c26dddac37c20919fb56ac0e2e56ed98aa",
+    "baseline_reading_hash": "3b5257b860bb69e468117df2eb79bf14d85f5d979320258c753d8b1e06bdf0ff",
     "business_benefit_established": false,
     "comparison": {
       "changes": [
@@ -10901,7 +10901,7 @@
       "status": "AVAILABLE",
       "validation": "EXACT_ORIGINAL_BYTES_AND_PURE_REBUILD_NOT_SOURCE_TRUTH"
     },
-    "generated_at": "2026-10-07T04:57:51.676703+00:00",
+    "generated_at": "2026-10-07T05:13:57.022708+00:00",
     "investment_authority": "NONE",
     "last_capture_hash": "ec21d3b639c56d15eb3fa49caf93da440354046fc9057b4ab7b5128e21c44ccf",
     "observation": {
@@ -21663,9 +21663,9 @@
       "version": "industry-fundamentals-v1"
     },
     "observation_is_prior": false,
-    "previous_status": "EXACT_PREVIOUS_READING_53589f305bccea0cddb2bd53255d68129ab48360",
+    "previous_status": "EXACT_PREVIOUS_READING_c95a59c35e88c0916c04eef5078bfeec23718e08",
     "research_authority": "NONE",
     "version": "industry-fundamentals-v1"
   },
-  "projection_hash": "7cfcc5eb623e867665e4d0b01e605da506dc31d767a31b84d824e7e2173a05ee"
+  "projection_hash": "137f1b39feff614a4fedbc6aeac407658cdd2ae457ce2f374e055fdcdbb89881"
 }
