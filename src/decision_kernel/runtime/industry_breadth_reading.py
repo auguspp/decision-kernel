@@ -96,7 +96,7 @@ def render(report):
             + ' 个主连，其中金融市场序列 ' + str(coverage['financial_series']) + ' 个。',
             '无法识别行数：' + str(coverage['unidentified_rows']) + '；完整行业分母未建立。', '',
             '| 品种 / 原代码 | 现货口径 / 默认标记 | 现货日期 | 现货原值 | 期货收盘原值 | 基差原值 | 比率原值 |',
-            '|---|---|---|---|---|---|---|---|']
+            '|---|---|---|---|---|---|---|']
         for record in value['observations']:
             row = record['raw']
             values = [str(row.get('variety_name')) + ' / ' + row['thscode'],
