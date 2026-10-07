@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-07T07:43:05.926813+00:00",
+    "checked_at": "2026-10-07T07:45:39.757326+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -76,7 +76,7 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "CAPTURE_READ",
+        "latest_read_status": "REUSED_RETAINED_CAPTURE",
         "snapshot": {
           "archive": {
             "artifact_id": 11467622657,
@@ -576,44 +576,44 @@
       "crypto": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11397579387,
-          "artifact_name": "global-public-crypto-37434397411-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411/artifacts/11397579387",
-          "bytes": 4220,
-          "expires_at": "2026-11-05T08:11:06Z",
-          "git_blob": "ea5f5769dd1b0ae6b9363f7e13d7b8dfd4a73d0b",
+          "artifact_id": 11468046445,
+          "artifact_name": "global-public-crypto-37589192868-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868/artifacts/11468046445",
+          "bytes": 4216,
+          "expires_at": "2026-11-06T07:44:37Z",
+          "git_blob": "c9994e4ba8c7332395beb2ba763c15ae1584ebab",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-06T08:10:54Z",
+            "created_at": "2026-10-07T07:44:24Z",
             "event": "schedule",
-            "head_sha": "9a4835f44ac1498de0b86e2a878fe57035997151",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411",
-            "id": 37434397411,
+            "head_sha": "868142fc38c08996480c42f4e3788468856ae38d",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868",
+            "id": 37589192868,
             "operation": null,
             "path": ".github/workflows/radar-global-public.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-06T08:10:54Z",
+            "run_started_at": "2026-10-07T07:44:24Z",
             "status": "completed",
-            "updated_at": "2026-10-06T08:11:09Z"
+            "updated_at": "2026-10-07T07:44:40Z"
           },
-          "read_path": "sources/artifacts/02c58c3e1d741b29dee1e2dbdd5e3919663fcf6758ad6fa6c10e85fd67a949fa.zip",
+          "read_path": "sources/artifacts/bc1bd837b56fa87c6aede18f14fdd87458e118ea54b1c98dc78600e353aa2793.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "02c58c3e1d741b29dee1e2dbdd5e3919663fcf6758ad6fa6c10e85fd67a949fa"
+          "sha256": "bc1bd837b56fa87c6aede18f14fdd87458e118ea54b1c98dc78600e353aa2793"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-06T08:10:54Z",
+          "created_at": "2026-10-07T07:44:24Z",
           "event": "schedule",
-          "head_sha": "9a4835f44ac1498de0b86e2a878fe57035997151",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411",
-          "id": 37434397411,
+          "head_sha": "868142fc38c08996480c42f4e3788468856ae38d",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868",
+          "id": 37589192868,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-06T08:10:54Z",
+          "run_started_at": "2026-10-07T07:44:24Z",
           "status": "completed",
-          "updated_at": "2026-10-06T08:11:09Z"
+          "updated_at": "2026-10-07T07:44:40Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -630,56 +630,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11397579387,
-            "artifact_name": "global-public-crypto-37434397411-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411/artifacts/11397579387",
-            "bytes": 4220,
-            "expires_at": "2026-11-05T08:11:06Z",
-            "git_blob": "ea5f5769dd1b0ae6b9363f7e13d7b8dfd4a73d0b",
+            "artifact_id": 11468046445,
+            "artifact_name": "global-public-crypto-37589192868-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868/artifacts/11468046445",
+            "bytes": 4216,
+            "expires_at": "2026-11-06T07:44:37Z",
+            "git_blob": "c9994e4ba8c7332395beb2ba763c15ae1584ebab",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-06T08:10:54Z",
+              "created_at": "2026-10-07T07:44:24Z",
               "event": "schedule",
-              "head_sha": "9a4835f44ac1498de0b86e2a878fe57035997151",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411",
-              "id": 37434397411,
+              "head_sha": "868142fc38c08996480c42f4e3788468856ae38d",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868",
+              "id": 37589192868,
               "operation": null,
               "path": ".github/workflows/radar-global-public.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-06T08:10:54Z",
+              "run_started_at": "2026-10-07T07:44:24Z",
               "status": "completed",
-              "updated_at": "2026-10-06T08:11:09Z"
+              "updated_at": "2026-10-07T07:44:40Z"
             },
-            "read_path": "sources/artifacts/02c58c3e1d741b29dee1e2dbdd5e3919663fcf6758ad6fa6c10e85fd67a949fa.zip",
+            "read_path": "sources/artifacts/bc1bd837b56fa87c6aede18f14fdd87458e118ea54b1c98dc78600e353aa2793.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "02c58c3e1d741b29dee1e2dbdd5e3919663fcf6758ad6fa6c10e85fd67a949fa"
+            "sha256": "bc1bd837b56fa87c6aede18f14fdd87458e118ea54b1c98dc78600e353aa2793"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11397579387/zip",
-            "created_at": "2026-10-06T08:11:06Z",
-            "digest": "sha256:02c58c3e1d741b29dee1e2dbdd5e3919663fcf6758ad6fa6c10e85fd67a949fa",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11468046445/zip",
+            "created_at": "2026-10-07T07:44:38Z",
+            "digest": "sha256:bc1bd837b56fa87c6aede18f14fdd87458e118ea54b1c98dc78600e353aa2793",
             "expired": false,
-            "expires_at": "2026-11-05T08:11:06Z",
-            "id": 11397579387,
-            "name": "global-public-crypto-37434397411-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTM5NzU3OTM4Nw==",
-            "size_in_bytes": 4220,
-            "updated_at": "2026-10-06T08:11:06Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11397579387",
+            "expires_at": "2026-11-06T07:44:37Z",
+            "id": 11468046445,
+            "name": "global-public-crypto-37589192868-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTQ2ODA0NjQ0NQ==",
+            "size_in_bytes": 4216,
+            "updated_at": "2026-10-07T07:44:38Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11468046445",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "9a4835f44ac1498de0b86e2a878fe57035997151",
-              "id": 37434397411,
+              "head_sha": "868142fc38c08996480c42f4e3788468856ae38d",
+              "id": 37589192868,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-05",
+            "as_of_date": "2026-10-06",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -691,52 +691,52 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 2,
-            "capture_hash": "43b29df802fa7b2dfc70d98f60ff34814412d9c6f34e1969947c7f83289ca494",
-            "captured_from": "2026-10-06T08:11:05.709238+00:00",
-            "captured_through": "2026-10-06T08:11:05.839063+00:00",
+            "capture_hash": "f4c6ba66ab2ea3497834b6a015ec7fd34e3aa40e8acaf4a7f583dcb8569df774",
+            "captured_from": "2026-10-07T07:44:37.397193+00:00",
+            "captured_through": "2026-10-07T07:44:37.564467+00:00",
             "coverage": "SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS",
             "family": "crypto",
             "identity": {
               "attempt": 1,
-              "code_commit": "9a4835f44ac1498de0b86e2a878fe57035997151",
+              "code_commit": "868142fc38c08996480c42f4e3788468856ae38d",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 37434397411,
+              "run_id": 37589192868,
               "workflow": ".github/workflows/radar-global-public.yml"
             },
             "observations": [
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-0.876402",
+                "change": "-0.243956",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "BTC-USD",
-                "previous_date": "2026-10-04",
-                "previous_value": "86507.11",
+                "previous_date": "2026-10-05",
+                "previous_value": "85748.96",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-05",
+                "source_date": "2026-10-06",
                 "symbol": "BTC-USD",
                 "unit": "USD_PER_BTC",
-                "value": "85748.96"
+                "value": "85539.77"
               },
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-0.625674",
+                "change": "-0.454680",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "%",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "ETH-USD",
-                "previous_date": "2026-10-04",
-                "previous_value": "2726.66",
+                "previous_date": "2026-10-05",
+                "previous_value": "2709.6",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-05",
+                "source_date": "2026-10-06",
                 "symbol": "ETH-USD",
                 "unit": "USD_PER_ETH",
-                "value": "2709.6"
+                "value": "2697.28"
               }
             ],
             "outcomes": [
@@ -752,7 +752,7 @@
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 14,
                 "source_rows": 15,
-                "source_url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2026-09-22T00%3A00%3A00Z&end=2026-10-06T00%3A00%3A00Z",
+                "source_url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2026-09-23T00%3A00%3A00Z&end=2026-10-07T00%3A00%3A00Z",
                 "status": "ROWS_NORMALIZED"
               },
               {
@@ -767,7 +767,7 @@
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 14,
                 "source_rows": 15,
-                "source_url": "https://api.exchange.coinbase.com/products/ETH-USD/candles?granularity=86400&start=2026-09-22T00%3A00%3A00Z&end=2026-10-06T00%3A00%3A00Z",
+                "source_url": "https://api.exchange.coinbase.com/products/ETH-USD/candles?granularity=86400&start=2026-09-23T00%3A00%3A00Z&end=2026-10-07T00%3A00%3A00Z",
                 "status": "ROWS_NORMALIZED"
               }
             ],
@@ -776,10 +776,10 @@
             "version": "global-public-context-v1",
             "vintage": "CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE"
           },
-          "retained_at": "2026-10-06T08:13:22.382016+00:00",
+          "retained_at": "2026-10-07T07:45:39.757308+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-06T08:10:54Z",
+            "created_at": "2026-10-07T07:44:24Z",
             "display_title": "B1 public · crypto · ",
             "event": "schedule",
             "head_branch": "main",
@@ -851,9 +851,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "9a4835f44ac1498de0b86e2a878fe57035997151",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37434397411",
-            "id": 37434397411,
+            "head_sha": "868142fc38c08996480c42f4e3788468856ae38d",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37589192868",
+            "id": 37589192868,
             "path": ".github/workflows/radar-global-public.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -924,9 +924,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-06T08:10:54Z",
+            "run_started_at": "2026-10-07T07:44:24Z",
             "status": "completed",
-            "updated_at": "2026-10-06T08:11:09Z"
+            "updated_at": "2026-10-07T07:44:40Z"
           }
         }
       },
@@ -2595,7 +2595,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 39,
+      "total_count": 40,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2608,5 +2608,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "191f1a4da28e333a55960a2e9f18888bf1b97543b4dc945b20c0548c38c67a5e"
+  "projection_hash": "48a90dad93d76f4b8fbefe5c9a070e5a9b39c7a185b7f567c7329fa3d9642888"
 }
