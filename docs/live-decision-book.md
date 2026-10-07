@@ -1,7 +1,7 @@
 # Live Decision Book
 
 Status: **MUTABLE NAVIGATION LAYER / NOT AUTHORITATIVE STATE / NO NEW WAKE GATE / NO AUTOMATION**  
-Updated: **2026-10-07 — D1/D2 retained preannouncement navigation; existing cards not refreshed**
+Updated: **2026-10-07 — D1 historical custody and forward-case navigation; existing cards not refreshed**
 Repository: `auguspp/decision-kernel`
 
 ## Purpose
@@ -52,6 +52,10 @@ Investment Authority remains `NONE`.
 **同日期后预告与实绩：** [普源三指标、现金与口径限制](https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-rigol-preannouncement-2026-10-07/README.md)；[圆通归母在区间内、扣非实绩保留缺口](https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-yto-preannouncement-2026-10-07/README.md)。期后预告不是期内前瞻预测，文档日期不冒充首发时钟，中点不是市场共识；原现金/融资分母、8月成本、事件价格和Human限制保持。两份三文件档案供原D2消费者明确选择，非新Full、机会认定或自然使用验收。
 
 **同日历史截点与反例：** [9月23日真实五名Watch、两项反弹背景及9月30日对账](https://github.com/auguspp/decision-kernel/blob/6d5b4c0546ec5132ecc91a94cae99a2e882f881a/docs/readings/d1-captured-watch-controls-2026-10-07/README.md)。取回当日原件，保留全部五名及六项inactive；原始收盘比不是总回报，跨周不是五个后继交易日。不同经济变量、原Human条件和后见选窗限制分别保留；不是五个合格机会、策略胜率或新增Watch。
+
+**同日前向声明：** [圆通单位经济](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-yto-2026-10-07/README.md)、[北大荒持续税后能力](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-beidahuang-2026-10-07/README.md)、[普源现金与融资分母](https://github.com/auguspp/decision-kernel/blob/d3fc5aa8bdfc088cc23cc7186554623ca5c56d8e/docs/readings/d1-forward-rigol-2026-10-07/README.md)分别于10月7日形成当前前向冻结，不回填为历史预测。沿原11月30日分析者复核及独立S0/5/20观察；未单设长期估值日不覆盖底层长期研究。原MU→兆易10月4日冻结和Human条件不动；正文、正常读取、自然采用和成熟效果分别验收，不是三项已成立机会。
+
+**同日更早保管补证：** [9月16日五股同期Watch原件、完整分母与后续价格](https://github.com/auguspp/decision-kernel/blob/8a8e9df672ff6e9a0ce27247029cbcc1e1b8027c/docs/readings/d1-contemporaneous-watch-2026-10-07/README.md)。从当期Git恢复原ZIP及一致正文，保守已知截止为9月17日盘前；16日收盘不是可执行入场价。原任务failure与可用子产物分开，旧配置/条件不等于Belief已重新核实；后来上涨或下跌不补成事前预测、交易回报或完整D验收。后继[五例经济、期限与两种基线的有限审查](https://github.com/auguspp/decision-kernel/blob/80fc78d49888e00ea7174ead387d4d2acd53f0b2/docs/readings/d1-five-case-economic-review-2026-10-07/README.md)已读取同R六份原件，分清研究接受与附条件决定、长期未触界与短期尚未建立；保留六项语义反例和未覆盖资料，不计成五次预测成功。
 
 ## Current book
 
