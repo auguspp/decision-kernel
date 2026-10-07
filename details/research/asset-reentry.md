@@ -315,6 +315,12 @@
 - 原业务前提：Retained Xingsen R2 Full must remain applicable; 3-year/10% and terminal P/E are analyst sensitivities, public broker summaries are not full models, and new FC-BGA orders/unit economics, financing attribution, dilution or owner-cash evidence can stale these boundaries.
 - [原价格条件记录](../inbox/37593104763/odds-watch/watch.json)；不是新的行情复核或买入指令。
 
+## 601872.SH
+
+下一步：先按明确定位恢复旧研究正文
+
+- [按需恢复：601872-cmes-full-conditional-odds-original-20261007](https://github.com/auguspp/decision-kernel/blob/d1177a0f76d2680157df4a27e741a048454f356b/docs/readings/cmes-full-odds-2026-10-07-recovery/README.md)；只有定位，本页没有恢复正文。
+
 ## 688337.SH
 
 下一步：本读取没有关联观察；不等于已经核实无变化
