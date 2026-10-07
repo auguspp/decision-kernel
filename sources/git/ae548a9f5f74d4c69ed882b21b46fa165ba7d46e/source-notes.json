@@ -1,0 +1,58 @@
+{
+  "recorded_at": "2026-10-07T01:08:56.186538+00:00",
+  "code_baseline": "ec7e6a322e8408148a9dbc874a581a7bfd9980bf",
+  "scope": "BOUNDED_EXISTING_RESEARCH_CONTINUATION_NOT_FULL_OR_EX_ANTE_MARKET_OPPORTUNITY",
+  "public_sources": [
+    {
+      "subject": "688337.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "G1",
+      "document_date": "2026-07-06",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-06/1225410345.PDF",
+      "observed_representation": "PRIOR_REVIEW_OF_COMPANY_PREANNOUNCEMENT_NOT_REACQUIRED_THIS_REVIEW"
+    },
+    {
+      "subject": "688337.SH",
+      "period": "2026H1",
+      "period_end": "2026-06-30",
+      "basis": "CHINA_ASBE_ISSUER_REPORTED_METRIC_SPECIFIC",
+      "published_at": null,
+      "clock_basis": "DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS",
+      "clock_timezone": "Asia/Shanghai",
+      "id": "A1",
+      "document_date": "2026-08-26",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502922.PDF",
+      "observed_representation": "PRIOR_REVIEW_OF_RETAINED_ISSUER_CONTEXT_NOT_REACQUIRED_THIS_REVIEW"
+    }
+  ],
+  "acquisition_limits": {
+    "raw_official_html_obtained": false,
+    "raw_pdf_obtained": false,
+    "pdf_visual_inspection": false,
+    "official_first_publication_timestamp": null,
+    "revision_inventory_complete": false,
+    "contemporaneous_system_capture": false,
+    "market_consensus_obtained": false,
+    "event_return_path_obtained": false,
+    "predecessor": "https://github.com/auguspp/decision-kernel/blob/b8840419cfc7accddbfb8a79fe0f3bb78b7727d7/docs/readings/d1-rigol-expectation-price-2026-10-06/evidence.json",
+    "predecessor_blob": "a4f584ce64bd53c076294d2574c3d85f228fcd4f",
+    "normalization": "CNY divided by 1000000; no new precision",
+    "full_prior_context_reverified": false
+  },
+  "calibration_limits": {
+    "company_guidance_events": 1,
+    "independent_ai_forecasts_scored": 0,
+    "method_or_prompt_version_changed": false
+  },
+  "numeric_convention": {
+    "amount_unit": "CNY_million",
+    "exact_decimal_strings": true,
+    "midpoint_role": "ARITHMETIC_RANGE_CENTER_NOT_EXPECTED_VALUE",
+    "missing_actual_is_not_zero": true
+  }
+}
