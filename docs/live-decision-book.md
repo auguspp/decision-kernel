@@ -51,6 +51,8 @@ Investment Authority remains `NONE`.
 
 **同日期后预告与实绩：** [普源三指标、现金与口径限制](https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-rigol-preannouncement-2026-10-07/README.md)；[圆通归母在区间内、扣非实绩保留缺口](https://github.com/auguspp/decision-kernel/blob/e1a124f10d77b6e20a0cba550ad9d4bdd11fa20d/docs/readings/d2-yto-preannouncement-2026-10-07/README.md)。期后预告不是期内前瞻预测，文档日期不冒充首发时钟，中点不是市场共识；原现金/融资分母、8月成本、事件价格和Human限制保持。两份三文件档案供原D2消费者明确选择，非新Full、机会认定或自然使用验收。
 
+**同日历史截点与反例：** [9月23日真实五名Watch、两项反弹背景及9月30日对账](https://github.com/auguspp/decision-kernel/blob/6d5b4c0546ec5132ecc91a94cae99a2e882f881a/docs/readings/d1-captured-watch-controls-2026-10-07/README.md)。取回当日原件，保留全部五名及六项inactive；原始收盘比不是总回报，跨周不是五个后继交易日。不同经济变量、原Human条件和后见选窗限制分别保留；不是五个合格机会、策略胜率或新增Watch。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |

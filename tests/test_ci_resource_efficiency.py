@@ -38,3 +38,14 @@ def test_prepare_cold_install_headroom_is_bounded():
     assert 'Record full test collection' in workflow
     assert 'Verify exact PR full-suite reuse after real installation' in workflow
     assert 'continue-on-error' not in workflow
+    # #774: each shard also cold-installs; keep separate finite native limits.
+    full = (ROOT / '.github/workflows/ci-full-v2.yml').read_text()
+    shard = full.split('\n  shard:\n', 1)[1].split('\n    steps:\n', 1)[0]
+    assert '\n    timeout-minutes: 15\n' in shard
+    install = full.split('      - uses: ./.github/actions/ci-python\n', 1)[1].split('      - name:', 1)[0]
+    tests = full.split('      - name: Test\n', 1)[1].split('      - name:', 1)[0]
+    assert 'timeout-minutes: 10' in install and 'extras: dev' in install
+    assert 'constraints:' in install
+    assert 'timeout-minutes: 5' in tests and '--max-worker-restart=0' in tests
+    assert 'faulthandler_timeout=60' in tests and 'set -euo pipefail' in tests
+    assert 'continue-on-error' not in full and 'if: always()' in full

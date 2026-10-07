@@ -1,0 +1,181 @@
+{
+  "scope": "FIVE_ORIGINAL_WATCH_MEMBERS_AND_TWO_RETAINED_SHADOW_CONTROLS_NOT_FIVE_QUALIFIED_OPPORTUNITIES",
+  "baseline_market_date": "2026-09-23",
+  "baseline_recorded_at": "2026-09-23T08:20:35.760687Z",
+  "baseline_artifact_created_before_outcome": true,
+  "outcome_market_date": "2026-09-30",
+  "outcome_recorded_at": "2026-09-30T08:20:33.763018Z",
+  "interval": "DATED_CLOSE_PAIR_NOT_FIVE_SESSION_RETURN",
+  "selection": "RETROSPECTIVE_COMPLETE_ORIGINAL_MEMBERSHIP_NOT_BLIND_OR_UNBIASED",
+  "rows": [
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医药",
+      "start_price": "45.58",
+      "end_price": "47.2",
+      "raw_close_change_pct": "3.554190",
+      "condition_id": "hengrui-reunderwrite-39_6",
+      "source": {
+        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "registry_reference_id": "odds-hengrui-human",
+        "source_git_blob": "8673b08d3a36e8cabc33e1fb51627bc65d674e3a",
+        "source_path": "docs/decisions/600276-hengrui-human-first-entry-2026-09-12.md",
+        "source_ref": "49b7fc999953977832afef67420fd693797e451d",
+        "use": "HUMAN_DECISION_CHECKPOINT"
+      },
+      "start_and_end_triggered": false,
+      "intermediate_triggers": "NOT_EVALUATED_FOR_ALL_FIVE",
+      "total_return": null,
+      "execution_return": null,
+      "opportunity_probability": null
+    },
+    {
+      "ticker": "002674.SZ",
+      "company": "兴业科技",
+      "start_price": "20.25",
+      "end_price": "19.82",
+      "raw_close_change_pct": "-2.123457",
+      "condition_id": "xingye-reunderwrite-15_17",
+      "source": {
+        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "registry_reference_id": "odds-xingye-human",
+        "source_git_blob": "f66451fce807058045f510016de1d60b68413c42",
+        "source_path": "docs/decisions/002674-xingye-human-research-first-entry-acceptance-2026-09-14.md",
+        "source_ref": "8e045ef755ade568aaad33d50a5a36aae04b19ed",
+        "use": "HUMAN_DECISION_CHECKPOINT"
+      },
+      "start_and_end_triggered": false,
+      "intermediate_triggers": "NOT_EVALUATED_FOR_ALL_FIVE",
+      "total_return": null,
+      "execution_return": null,
+      "opportunity_probability": null
+    },
+    {
+      "ticker": "600598.SH",
+      "company": "北大荒",
+      "start_price": "12.76",
+      "end_price": "12.63",
+      "raw_close_change_pct": "-1.018809",
+      "condition_id": "beidahuang-reunderwrite-11_0_11_3",
+      "source": {
+        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "registry_reference_id": "odds-beidahuang-human",
+        "source_git_blob": "f25f25cadd7018563f0a6394cbe7958337428765",
+        "source_path": "docs/decisions/600598-beidahuang-human-odds-acceptance-2026-09-16.md",
+        "source_ref": "e8f51d75111a29bbe62dc7eb160725e722542145",
+        "use": "HUMAN_DECISION_CHECKPOINT"
+      },
+      "start_and_end_triggered": false,
+      "intermediate_triggers": "NOT_EVALUATED_FOR_ALL_FIVE",
+      "total_return": null,
+      "execution_return": null,
+      "opportunity_probability": null
+    },
+    {
+      "ticker": "002050.SZ",
+      "company": "三花智控",
+      "start_price": "35.99",
+      "end_price": "35.71",
+      "raw_close_change_pct": "-0.777994",
+      "condition_id": "sanhua-first-entry-around-30",
+      "source": {
+        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "registry_reference_id": "sanhua-human",
+        "source_git_blob": "0c7739cb5a376be9cc722e37f6acd168dca9704e",
+        "source_path": "docs/decisions/002050-sanhua-human-decision-2026-09-03.md",
+        "source_ref": null,
+        "use": "HUMAN_DECISION_CHECKPOINT"
+      },
+      "start_and_end_triggered": false,
+      "intermediate_triggers": "NOT_EVALUATED_FOR_ALL_FIVE",
+      "total_return": null,
+      "execution_return": null,
+      "opportunity_probability": null
+    },
+    {
+      "ticker": "603986.SH",
+      "company": "兆易创新",
+      "start_price": "398.72",
+      "end_price": "353.9",
+      "raw_close_change_pct": "-11.240971",
+      "condition_id": "gigadevice-assumption-recheck-350",
+      "source": {
+        "meaning": "RETAINED_HUMAN_CHECKPOINT_IDENTITY_NOT_AUTOMATIC_SUPERSESSION",
+        "registry_reference_id": "gigadevice-human",
+        "source_git_blob": "f803dc551dba69f0f39291b98353bc4e406a7710",
+        "source_path": "docs/decisions/603986-gigadevice-human-decision-2026-09-03.md",
+        "source_ref": null,
+        "use": "HUMAN_DECISION_CHECKPOINT"
+      },
+      "start_and_end_triggered": false,
+      "intermediate_triggers": "NOT_EVALUATED_FOR_ALL_FIVE",
+      "total_return": null,
+      "execution_return": null,
+      "opportunity_probability": null
+    }
+  ],
+  "price_context_controls": [
+    {
+      "ticker": "002050.SZ",
+      "prior_start": "2026-09-16",
+      "prior_end": "2026-09-23",
+      "prior_raw_close_change_pct": "6.700267",
+      "prior_history_captured_at": "2026-09-23T08:20:55.645386+00:00",
+      "following_retained_rows": [
+        {
+          "as_of": "2026-09-24T15:00:00+08:00",
+          "close": "36.08"
+        },
+        {
+          "as_of": "2026-09-28T15:00:00+08:00",
+          "close": "35.44"
+        },
+        {
+          "as_of": "2026-09-29T15:00:00+08:00",
+          "close": "35.65"
+        },
+        {
+          "as_of": "2026-09-30T15:00:00+08:00",
+          "close": "35.71"
+        }
+      ],
+      "following_row_count": 4,
+      "calendar_basis": "SOURCE_CALENDAR_NOTICE_CORROBORATES_NOT_NEW_EXCHANGE_FEED",
+      "intraday_mae_mfe": null,
+      "total_return": null
+    },
+    {
+      "ticker": "603986.SH",
+      "prior_start": "2026-09-16",
+      "prior_end": "2026-09-23",
+      "prior_raw_close_change_pct": "6.855336",
+      "prior_history_captured_at": "2026-09-23T08:20:55.645386+00:00",
+      "following_retained_rows": [
+        {
+          "as_of": "2026-09-24T15:00:00+08:00",
+          "close": "383.77"
+        },
+        {
+          "as_of": "2026-09-28T15:00:00+08:00",
+          "close": "358.51"
+        },
+        {
+          "as_of": "2026-09-29T15:00:00+08:00",
+          "close": "367.57"
+        },
+        {
+          "as_of": "2026-09-30T15:00:00+08:00",
+          "close": "353.9"
+        }
+      ],
+      "following_row_count": 4,
+      "calendar_basis": "SOURCE_CALENDAR_NOTICE_CORROBORATES_NOT_NEW_EXCHANGE_FEED",
+      "intraday_mae_mfe": null,
+      "total_return": null
+    }
+  ],
+  "independent_opportunity_sample_count": null,
+  "win_rate": null,
+  "method_score": null,
+  "investment_authority": "NONE"
+}
