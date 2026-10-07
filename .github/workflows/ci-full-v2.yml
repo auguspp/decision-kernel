@@ -8,7 +8,9 @@ permissions:
 jobs:
   shard:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # #774: a successful 571s cold install exhausted the old whole-job deadline.
+    # Match prepare's bounded headroom; installation and tests still have limits.
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +30,7 @@ jobs:
           printf 'CI_REPORT_DIR=%s\n' "$RUNNER_TEMP/kernel-ci-shard" >> "$GITHUB_ENV"
           python3 .github/scripts/ci-matrix.py restore --report-dir "$RUNNER_TEMP/kernel-ci-shard"
       - uses: ./.github/actions/ci-python
+        timeout-minutes: 10
         with:
           extras: dev
           constraints: ${{ runner.temp }}/kernel-ci-shard/constraints.txt
@@ -51,6 +54,7 @@ jobs:
             --splits 4 --group "$CI_SHARD" --splitting-algorithm duration_based_chunks \
             --durations-path "$CI_REPORT_DIR/durations-hint.json" > "$CI_REPORT_DIR/selected-collection.txt"
       - name: Test
+        timeout-minutes: 5
         shell: bash
         run: |
           set -euo pipefail
