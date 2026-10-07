@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import date
+from zoneinfo import ZoneInfo
 from decimal import Context, Decimal, ROUND_HALF_EVEN, localcontext
 from html import escape
 import json
@@ -20,6 +21,8 @@ VERSION = 'reviewed-operating-outcomes-v1'
 ROLE = 'COMPANY_GUIDANCE_NOT_CONSENSUS_OR_AI_FORECAST'
 MAX_BYTES = 512 * 1024
 COMMON = ('subject', 'event_id', 'metric', 'period', 'basis', 'currency', 'unit', 'share_basis')
+PREANNOUNCEMENT = 'RETAINED_PREANNOUNCEMENT_ACTUAL_V1'
+DOCUMENT_CLOCK = 'DECLARED_DOCUMENT_DATES_NOT_PUBLICATION_TIMESTAMPS'
 
 
 def loads(raw):
@@ -57,11 +60,34 @@ def compare_pair(forecast, actual, *, checked_at):
                 'outcome roles differ')
     target = date.fromisoformat(actual['period_end'])
     model.check(target.isoformat() == actual['period_end'], 'outcome period end format')
-    fp, ap = model.clock(forecast['published_at']), model.clock(actual['published_at'])
     recorded = model.clock(actual['retained_review_at'])
-    model.check(fp < ap <= recorded and fp.date() <= target <= ap.date(), 'outcome temporal identity')
-    if now.date() < target or now < ap:
-        return {**result, 'status': 'RESULT_NOT_YET_MATURE_OR_PUBLISHED'}
+    mode = forecast.get('clock_basis', 'PUBLISHED_AT')
+    model.check(mode == actual.get('clock_basis', 'PUBLISHED_AT') and
+                mode in ('PUBLISHED_AT', DOCUMENT_CLOCK), 'outcome clock basis differs')
+    if mode == DOCUMENT_CLOCK:
+        # Document order permits a retrospective comparison, NOT market-time eligibility.
+        model.check(forecast.get('published_at') is None and actual.get('published_at') is None,
+                    'outcome document date is not a publication timestamp')
+        zone = forecast['clock_timezone']
+        model.check(isinstance(zone, str) and 0 < len(zone) <= 64 and
+                    zone == actual['clock_timezone'], 'outcome document timezone differs')
+        tz = ZoneInfo(zone)
+        fd, ad = date.fromisoformat(forecast['document_date']), date.fromisoformat(actual['document_date'])
+        model.check(fd.isoformat() == forecast['document_date'] and
+                    ad.isoformat() == actual['document_date'] and target < fd < ad and
+                    ad <= recorded.astimezone(tz).date(), 'outcome document temporal identity')
+        result.update(clock_basis=DOCUMENT_CLOCK, forecast_kind='POST_PERIOD_END_PREANNOUNCEMENT',
+                      publication_timing_qualification='NOT_ESTABLISHED_BY_DOCUMENT_DATES')
+        if now.astimezone(tz).date() < ad:
+            return {**result, 'status': 'RESULT_NOT_YET_MATURE_OR_PUBLISHED'}
+    else:
+        # Preserve the original exact-clock layout and all its historical outputs.
+        model.check('document_date' not in forecast and 'document_date' not in actual,
+                    'outcome document clock requires explicit layout')
+        fp, ap = model.clock(forecast['published_at']), model.clock(actual['published_at'])
+        model.check(fp < ap <= recorded and fp.date() <= target <= ap.date(), 'outcome temporal identity')
+        if now.date() < target or now < ap:
+            return {**result, 'status': 'RESULT_NOT_YET_MATURE_OR_PUBLISHED'}
     if now < recorded:
         return {**result, 'status': 'REVIEW_NOT_YET_RETAINED_AT_CUTOFF'}
     if forecast.get('value') is None or actual.get('value') is None:
@@ -100,9 +126,20 @@ METRICS = (
 )
 
 
+# A bounded additional financial layout, not arbitrary user-defined metrics or code.
+PREANNOUNCEMENT_METRICS = (
+    METRICS[0],
+    ('parent_net_profit', '归母净利润', 'parent_net_profit_mid', 'parent_net_profit',
+     'parent_net_profit_half_width', 'amount_unit', '1', False),
+    ('parent_net_profit_ex_nonrecurring', '扣非归母净利润', 'parent_net_profit_ex_nonrecurring_mid',
+     'parent_net_profit_ex_nonrecurring', 'parent_net_profit_ex_nonrecurring_half_width', 'amount_unit', '1', False),
+)
+
+
 def review(entry, source_files, *, checked_at):
     """Read an explicitly selected retained review; do not execute archived code."""
-    model.check(entry['layout'] == 'RETAINED_GUIDANCE_ACTUAL_V1' and
+    post = entry['layout'] == PREANNOUNCEMENT
+    model.check(entry['layout'] in ('RETAINED_GUIDANCE_ACTUAL_V1', PREANNOUNCEMENT) and
                 entry['comparator_role'] == ROLE, 'outcome selected layout or role')
     model.check(re.fullmatch(r'[A-Z0-9.:-]{1,40}', entry['subject']) is not None,
                 'outcome subject identity')
@@ -135,12 +172,39 @@ def review(entry, source_files, *, checked_at):
     model.check(g['source_id'] != a['source_id'], 'outcome forecast and actual source roles')
     for record in (g, a):
         declared = by_id[record['source_id']]
-        model.check(record['published_at'] == declared['published_at'], 'outcome published clock binding')
+        if post:
+            model.check(record['clock_basis'] == declared['clock_basis'] == DOCUMENT_CLOCK and
+                        record['document_date'] == declared['document_date'] and
+                        record['clock_timezone'] == declared['clock_timezone'] and
+                        record['published_at'] is None and declared['published_at'] is None,
+                        'outcome document clock binding')
+            model.check(record['subject'] == declared['subject'] == entry['subject'] and
+                        record['period'] == declared['period'] == entry['expected_period'] and
+                        record['basis'] == declared['basis'] == entry['expected_basis'],
+                        'outcome document identity binding')
+        else:
+            model.check(record['published_at'] == declared['published_at'], 'outcome published clock binding')
     model.check(a['period_end'] == by_id[a['source_id']]['period_end'], 'outcome fiscal end binding')
     model.check(source['currency'] in ('USD', 'CNY') and
-                source['amount_unit'] == source['currency'] + '_million' and
-                source['eps_unit'] == source['currency'] + '_per_diluted_share' and
-                source['shares_unit'] == 'million_shares', 'outcome reviewed unit convention')
+                source['amount_unit'] == source['currency'] + '_million', 'outcome reviewed unit convention')
+    metrics = METRICS
+    if post:
+        ids = source['metric_ids']
+        known = {m[0]: m for m in PREANNOUNCEMENT_METRICS}
+        model.check(isinstance(ids, list) and 1 <= len(ids) <= len(known) and
+                    all(isinstance(i, str) and i in known for i in ids) and
+                    len(set(ids)) == len(ids) and ids == entry['metric_ids'], 'outcome selected financial metrics')
+        model.check(source['subject'] == entry['subject'] and
+                    entry['event_id'] == source['subject'] + ':' + g['period'] and
+                    g['period_end'] == a['period_end'] == by_id[g['source_id']]['period_end'],
+                    'outcome preannouncement period or subject')
+        metrics = tuple(known[i] for i in ids)
+        # Missing metrics remain rows with null values; never silently drop a failed pair.
+        for _, _, fk, ak, wk, _, _, _ in metrics:
+            model.check(fk in g and wk in g and ak in a, 'outcome selected value not declared')
+    else:
+        model.check(source['eps_unit'] == source['currency'] + '_per_diluted_share' and
+                    source['shares_unit'] == 'million_shares', 'outcome reviewed unit convention')
     calibration = notes['calibration_limits']
     model.check(type(calibration['company_guidance_events']) is int and calibration['company_guidance_events'] == 1 and
                 type(calibration['independent_ai_forecasts_scored']) is int and calibration['independent_ai_forecasts_scored'] == 0 and
@@ -151,10 +215,13 @@ def review(entry, source_files, *, checked_at):
                 all(isinstance(t, str) and 0 < len(t) <= 3000 for t in excerpts), 'outcome selected excerpts')
     for quote in excerpts:
         selected(source_files['review'], {'quote': quote})
-    model.check(model.clock(a['published_at']) <= model.clock(notes['recorded_at'])
-                <= model.clock(checked_at), 'outcome review before result or after cutoff')
+    model.check(model.clock(notes['recorded_at']) <= model.clock(checked_at),
+                'outcome review before result or after cutoff')
+    if not post:
+        model.check(model.clock(a['published_at']) <= model.clock(notes['recorded_at']),
+                    'outcome review before result or after cutoff')
     rows = []
-    for metric, label, fk, ak, wk, unit_key, multiplier, approximate in METRICS:
+    for metric, label, fk, ak, wk, unit_key, multiplier, approximate in metrics:
         unit = source[unit_key] if unit_key in ('amount_unit', 'eps_unit') else unit_key
         shared = {'subject': entry['subject'], 'event_id': entry['event_id'], 'metric': metric, 'period': g['period'],
                   'basis': g['basis'], 'currency': source['currency'], 'unit': unit,
@@ -171,6 +238,19 @@ def review(entry, source_files, *, checked_at):
                   'published_at': a['published_at'], 'period_end': a['period_end'],
                   'retained_review_at': notes['recorded_at'], 'value': a.get(ak),
                   'source_id': a['source_id'], 'value_pointer': '/actual/' + ak}
+        if post:
+            for normalized, original in ((forecast, g), (actual, a)):
+                normalized.update({k: original[k] for k in ('clock_basis', 'clock_timezone', 'document_date')})
+            with localcontext(Context(prec=50, rounding=ROUND_HALF_EVEN)):
+                # Keep explicit original endpoints: a prepared midpoint is not a market expectation.
+                limits = g['ranges'][metric]
+                model.check(isinstance(limits, dict) and set(limits) == {'lower', 'upper'},
+                            'outcome declared range shape')
+                lower, upper = limits['lower'], limits['upper']
+                if value is not None:
+                    low, high = number(lower), number(upper)
+                    model.check(low <= high and number(value) == (low+high)/2 and
+                                number(g[wk]) == (high-low)/2, 'outcome midpoint differs from retained range')
         compared = compare_pair(forecast, actual, checked_at=checked_at)
         rows.append({'metric': metric, 'label': label, 'forecast': forecast, 'actual': actual, 'comparison': compared})
     eligible = sum(r['comparison']['status'] == 'COMPARABLE_RETAINED_VALUES' for r in rows)
@@ -191,6 +271,9 @@ def review(entry, source_files, *, checked_at):
               'new_source_requests': 0, 'model_calls': 0, 'new_research_execution': False,
               'original_human_decision_modified': False, 'automatic_method_change': False,
               **model.AUTHORITY}
+    if post:
+        report.update(clock_basis=DOCUMENT_CLOCK, forecast_kind='POST_PERIOD_END_PREANNOUNCEMENT',
+                      publication_timing_qualification='NOT_ESTABLISHED_BY_DOCUMENT_DATES')
     report['report_hash'] = canonical_hash(report)
     return report
 
@@ -217,6 +300,14 @@ def render(report):
                       row['actual']['value'] if okay else '未可比', result['difference'],
                       row['forecast']['unit'], result['status']]
             lines.append('| ' + ' | '.join(escape(str(v)) if v is not None else '未建立' for v in values) + ' |')
+        if item.get('clock_basis') == DOCUMENT_CLOCK:
+            lines.append('时间仅为所选文档日期，未认证精确首发或事前捕获；期后预告不是期内前瞻预测。')
+            for row in item['rows']:
+                compared = row['comparison']
+                if compared['status'] == 'COMPARABLE_RETAINED_VALUES':
+                    lines.append(f"{escape(row['label'])}：预告范围 {compared.get('forecast_lower')}–"
+                                 f"{compared.get('forecast_upper')} {escape(row['forecast']['unit'])}；"
+                                 f"实绩位置 {compared['range_position']}。中点只是范围算术，不是市场共识。")
         for quote in item['excerpts']:
             lines.append('\n'.join('> ' + escape(line) for line in quote.splitlines()))
         source = item.get('retained_files', {}).get('review')
