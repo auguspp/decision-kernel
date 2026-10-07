@@ -167,3 +167,19 @@ def test_breadth_failure_isolated_before_next_industrial_reader(tmp_path,monkeyp
     assert final['research']['industry_breadth']==out['research']['industry_breadth']
     assert b'PRIVATE_SOURCE_BODY' not in b''.join(c.files.values())
     m.validate_read_package(final)
+
+
+@pytest.mark.parametrize('module_name', ['industry_fundamentals_reading', 'industry_breadth_reading'])
+def test_already_exhausted_core_budget_still_rejects_before_optional_work(tmp_path, monkeypatch, module_name):
+    from importlib import import_module
+    module = import_module('decision_kernel.runtime.' + module_name)
+    c, b = fixture(tmp_path, monkeypatch)
+    c.api.calls = c.api.max_calls
+    files, cache = dict(c.files), deepcopy(c.archive_cache)
+    def unexpected(*args, **kwargs):
+        raise AssertionError('exhausted core budget reached optional work')
+    monkeypatch.setattr(module, '_attach', unexpected)
+    with pytest.raises(ValueError, match='publication reserve'):
+        module.attach(c, b)
+    assert c.api.calls == c.api.max_calls
+    assert c.files == files and c.archive_cache == cache

@@ -155,6 +155,8 @@ def attach(c, baseline):
     """
     m.validate_read_package(baseline)
     m.check(c.code_commit == baseline['code_commit'], 'industrial code identity')
+    # An already exhausted core publication budget is not an optional source gap.
+    _reserve(c)
     before = dict(c.files), dict(c.archive_cache)
     try:
         return _attach(c, baseline)

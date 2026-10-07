@@ -96,7 +96,7 @@ def render(report):
             + ' 个主连，其中金融市场序列 ' + str(coverage['financial_series']) + ' 个。',
             '无法识别行数：' + str(coverage['unidentified_rows']) + '；完整行业分母未建立。', '',
             '| 品种 / 原代码 | 现货口径 / 默认标记 | 现货日期 | 现货原值 | 期货收盘原值 | 基差原值 | 比率原值 |',
-            '|---|---|---|---|---|---|---|']
+            '|---|---|---|---|---|---|---|---|']
         for record in value['observations']:
             row = record['raw']
             values = [str(row.get('variety_name')) + ' / ' + row['thscode'],
@@ -152,6 +152,8 @@ def attach(collector, baseline):
     """Keep a failed optional breadth projection from blocking later readers."""
     m.validate_read_package(baseline)
     m.check(collector.code_commit == baseline['code_commit'], 'breadth code identity')
+    # An already exhausted core publication budget is not an optional source gap.
+    _reserve(collector)
     before = dict(collector.files), dict(collector.archive_cache)
     try:
         return _attach(collector, baseline)
