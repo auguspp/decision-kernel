@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-07T06:29:19.710708+00:00",
+    "checked_at": "2026-10-07T06:47:17.110401+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -2147,62 +2147,24 @@
       },
       "treasury": {
         "error_type": null,
-        "latest_archive": {
-          "artifact_id": 11395700856,
-          "artifact_name": "global-public-treasury-37427539564-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37427539564/artifacts/11395700856",
-          "bytes": 6300,
-          "expires_at": "2026-11-05T07:05:48Z",
-          "git_blob": "f1a534222780de5905b98480973767633459f935",
-          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
-          "origin_run": {
-            "conclusion": "success",
-            "created_at": "2026-10-06T07:05:37Z",
-            "event": "schedule",
-            "head_sha": "206e657b96ae104ae777c4a49604cc1beb6bc5d7",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37427539564",
-            "id": 37427539564,
-            "operation": null,
-            "path": ".github/workflows/radar-global-public.yml",
-            "run_attempt": 1,
-            "run_started_at": "2026-10-06T07:05:37Z",
-            "status": "completed",
-            "updated_at": "2026-10-06T07:05:51Z"
-          },
-          "read_path": "sources/artifacts/6f640aa835bd19541984beab4ea2aa9dd9fe69d2f3cfc50e21d012af66c2668e.zip",
-          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "6f640aa835bd19541984beab4ea2aa9dd9fe69d2f3cfc50e21d012af66c2668e"
-        },
+        "latest_archive": null,
         "latest_attempt": {
-          "conclusion": "success",
-          "created_at": "2026-10-06T07:05:37Z",
+          "conclusion": null,
+          "created_at": "2026-10-07T06:47:10Z",
           "event": "schedule",
-          "head_sha": "206e657b96ae104ae777c4a49604cc1beb6bc5d7",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37427539564",
-          "id": 37427539564,
+          "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099",
+          "id": 37583447099,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-06T07:05:37Z",
-          "status": "completed",
-          "updated_at": "2026-10-06T07:05:51Z"
+          "run_started_at": "2026-10-07T06:47:10Z",
+          "status": "in_progress",
+          "updated_at": "2026-10-07T06:47:13Z"
         },
-        "latest_capture_status": "AVAILABLE",
-        "latest_outcomes": [
-          {
-            "http_status": 200,
-            "id": "202609",
-            "request_state": "HTTP_RESPONSE",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "http_status": 200,
-            "id": "202610",
-            "request_state": "HTTP_RESPONSE",
-            "status": "ROWS_NORMALIZED"
-          }
-        ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_capture_status": null,
+        "latest_outcomes": [],
+        "latest_read_status": "CAPTURE_IN_PROGRESS",
         "snapshot": {
           "archive": {
             "artifact_id": 11395700856,
@@ -2595,7 +2557,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 36,
+      "total_count": 37,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2608,5 +2570,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "a117785371452f6cb94b69ff236f80a3eb5bbe764035fba93920bb67e52b408b"
+  "projection_hash": "7f55ed920274a6c41ae0fa3af7fe171bf8f883b6abaa0dc310aa7f9872f49a5f"
 }
