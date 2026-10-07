@@ -1003,7 +1003,7 @@
       "path": "research_runs/stock-batch-disposition.json",
       "read_path": "sources/git/9ce598f42f43377c43828053b672493906ad2bf6/stock-batch-disposition.json",
       "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-      "ref": "9f539cb6b07cf3e6d29511f813f03874feb66ec9",
+      "ref": "30f77ae76f167518f41899ffab183907429db53a",
       "repository": "auguspp/decision-kernel",
       "sha256": "5489a3bdf22e25e6777a18cac7d549144feacc87a16a0905ea2e397fe90ba3ce"
     },
@@ -1012,247 +1012,250 @@
   "signal_transition_authority": "NONE",
   "stock_review_scope": {
     "automatic_research_execution": false,
-    "batch_id": "02d778b2a2a9aa63444d97c212807364f88b3565d17d20ebee1c1438a3c5d73f",
-    "data_unavailable_count": 1,
+    "batch_id": "46889e8eb623e636383c6bfda4a7fe6e631979d8b9831cdef4db396f736d579f",
+    "data_unavailable_count": 2,
     "existing_baseline_gap_count": 0,
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "items": [
       {
-        "company_name": "皓宸医疗",
+        "company_name": "中船科技",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
-        "existing_research_relation": null,
+        "existing_research_relation": {
+          "execution_id": "stock-business-589fb3c3b4dc7374747a30f7626173e8d212a8cc16a44f6c6bfa0f40e8f97873",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
             "family": "BROAD_881",
-            "name": "医疗服务",
-            "thscode": "881175.TI"
+            "name": "风电设备",
+            "thscode": "881280.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“医疗服务”中，皓宸医疗的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“风电设备”中，中船科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "皓宸医疗",
-          "excluded_reasons": [
-            "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
-          ],
+          "company_name": "中船科技",
+          "excluded_reasons": [],
           "input_failure": null,
-          "market_expression_status": "NOT_ESTABLISHED",
-          "status": "CONDITIONS_NOT_MET",
-          "thscode": "002622.SZ"
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "600072.SH"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
-        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "thscode": "002622.SZ"
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "600072.SH"
       },
       {
-        "company_name": "N百瑞吉",
+        "company_name": "泰诺麦博-U",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
-            "family": "BROAD_881",
-            "name": "医疗器械",
-            "thscode": "881144.TI"
+            "family": "GRANULAR_884",
+            "name": "其他生物制品",
+            "thscode": "884240.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“医疗器械”中，N百瑞吉的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“其他生物制品”中，泰诺麦博-U的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "N百瑞吉",
-          "excluded_reasons": [
-            "RISK_OR_NEW_LISTING_NAME_LABEL"
-          ],
-          "input_failure": null,
+          "company_name": "泰诺麦博-U",
+          "excluded_reasons": [],
+          "input_failure": {
+            "category": "REQUEST_FAILED",
+            "phase": "CORPORATE_ACTIONS",
+            "provider_business_code": 3002,
+            "reason_code": "PROVIDER_BUSINESS_REQUEST_FAILED",
+            "scope": "ISSUER_LOCAL",
+            "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
+          },
           "market_expression_status": "NOT_ESTABLISHED",
-          "status": "CONDITIONS_NOT_MET",
-          "thscode": "920201.BJ"
+          "status": "REQUEST_FAILED",
+          "thscode": "688806.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "DATA_UNAVAILABLE_NOT_PRICE_REJECTED",
+        "thscode": "688806.SH"
+      },
+      {
+        "company_name": "福建水泥",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-10f3f4f35886f46a1501fab74099485038f5f910739b83b07e5ea1fe32eb6266",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "水泥",
+            "thscode": "884060.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“水泥”中，福建水泥的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "福建水泥",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "600802.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "600802.SH"
+      },
+      {
+        "company_name": "威力传动",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-ed6fced7720334302487eeb49b492d619001a29501ace0b4444487d7d13d5741",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "BROAD_881",
+            "name": "风电设备",
+            "thscode": "881280.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“风电设备”中，威力传动的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "威力传动",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "300904.SZ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "300904.SZ"
+      },
+      {
+        "company_name": "三元基因",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他生物制品",
+            "thscode": "884240.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“其他生物制品”中，三元基因的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "三元基因",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "920344.BJ"
         },
         "research_execution_allowed": false,
         "research_scope_supported": false,
-        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "thscode": "920201.BJ"
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "920344.BJ"
       },
       {
-        "company_name": "龙竹科技",
+        "company_name": "XD海螺水",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
-            "family": "BROAD_881",
-            "name": "家居用品",
-            "thscode": "881139.TI"
+            "family": "GRANULAR_884",
+            "name": "水泥",
+            "thscode": "884060.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“家居用品”中，龙竹科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“水泥”中，XD海螺水的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "龙竹科技",
+          "company_name": "XD海螺水",
           "excluded_reasons": [],
           "input_failure": {
             "category": "DATA_QUALIFICATION_FAILED",
             "phase": "INPUT_QUALIFICATION",
             "provider_business_code": null,
-            "reason_code": "REPORTED_CORPORATE_ACTION_IN_WINDOW_REQUIRES_REVIEW",
+            "reason_code": "PRICE_REFERENCE_DISCONTINUITY_REQUIRES_SEPARATE_REVIEW",
             "scope": "ISSUER_LOCAL",
             "selection_claim": "NONE_DATA_UNAVAILABLE_NOT_CONDITIONS_NOT_MET"
           },
           "market_expression_status": "NOT_ESTABLISHED",
           "status": "DATA_QUALIFICATION_FAILED",
-          "thscode": "920445.BJ"
+          "thscode": "600585.SH"
         },
         "research_execution_allowed": false,
-        "research_scope_supported": false,
+        "research_scope_supported": true,
         "review_status": "DATA_UNAVAILABLE_NOT_PRICE_REJECTED",
-        "thscode": "920445.BJ"
-      },
-      {
-        "company_name": "贝瑞基因",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-ae0a81b53730d2fbde6a17a5783d2c49de7831cafb5057846992871ef12bc22e",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "BROAD_881",
-            "name": "医疗服务",
-            "thscode": "881175.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“医疗服务”中，贝瑞基因的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "贝瑞基因",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "000710.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "000710.SZ"
-      },
-      {
-        "company_name": "采纳股份",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-60c246a6aaf0d3f045c0f7d6a1f37c5e17edb593b823e2b914d96b2eed3d5a88",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "BROAD_881",
-            "name": "医疗器械",
-            "thscode": "881144.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“医疗器械”中，采纳股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "采纳股份",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "301122.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "301122.SZ"
-      },
-      {
-        "company_name": "天振股份",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-627c6b5dc3bd932c2ae110c492d590f859e1417a8263c20842e3e5190f4db7a1",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "BROAD_881",
-            "name": "家居用品",
-            "thscode": "881139.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“家居用品”中，天振股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "天振股份",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "301356.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "301356.SZ"
+        "thscode": "600585.SH"
       }
     ],
-    "market_session": "2026-09-24",
+    "market_session": "2026-09-30",
     "meaning": "OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION",
     "original_coverage": {
-      "conditions_not_met_issuers": 2,
+      "conditions_not_met_issuers": 0,
       "dispositioned_issuers": 6,
-      "evaluated_issuers": 5,
+      "evaluated_issuers": 4,
       "not_evaluated_issuers": 0,
       "planned_issuers": 6,
       "price_path_checked_issuers": 4,
-      "qualified_issuers": 3,
+      "qualified_issuers": 4,
       "scope_complete": false,
-      "unavailable_issuers": 1
+      "unavailable_issuers": 2
     },
-    "question_review_required_count": 3,
+    "question_review_required_count": 4,
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
-    "source_run_id": 36127712583,
+    "source_run_id": 36702153468,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "LATEST_ATTEMPT_FAILED"
+    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
   }
 }
