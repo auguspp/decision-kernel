@@ -57,6 +57,8 @@ Investment Authority remains `NONE`.
 
 **同日更早保管补证：** [9月16日五股同期Watch原件、完整分母与后续价格](https://github.com/auguspp/decision-kernel/blob/8a8e9df672ff6e9a0ce27247029cbcc1e1b8027c/docs/readings/d1-contemporaneous-watch-2026-10-07/README.md)。从当期Git恢复原ZIP及一致正文，保守已知截止为9月17日盘前；16日收盘不是可执行入场价。原任务failure与可用子产物分开，旧配置/条件不等于Belief已重新核实；后来上涨或下跌不补成事前预测、交易回报或完整D验收。后继[五例经济、期限与两种基线的有限审查](https://github.com/auguspp/decision-kernel/blob/80fc78d49888e00ea7174ead387d4d2acd53f0b2/docs/readings/d1-five-case-economic-review-2026-10-07/README.md)已读取同R六份原件，分清研究接受与附条件决定、长期未触界与短期尚未建立；保留六项语义反例和未覆盖资料，不计成五次预测成功。
 
+**同日兆易授奖条款接续：** [从审批WAIT到具体份数、分母与费用边界](https://github.com/auguspp/decision-kernel/blob/fce89877e2a0fa3c5db93300ec2bdb831eaad461/docs/readings/d-gigadevice-award-terms-2026-10-07/README.md)。9月28日授予数量与归属安排已有公开转录索引，原仅审批定位不再代表当前资料；总股本、H股类别和计划容量分别比较，约0.21%数量尺度不等于实际EPS摊薄或成本不重大。原PDF、实际股份供给及会计费用仍缺，不据此改主营Belief、Human价格条件或MU前向时钟；不是新Full、机会接受或新增Watch。
+
 ## Current book
 
 | Security | Current frame / Belief | Human decision | Action | Next review gate |
