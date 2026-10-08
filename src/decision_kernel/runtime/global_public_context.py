@@ -25,7 +25,8 @@ from .economic_source_capture import (
     PublicResponse, _NoRedirect, _safe_headers, _body_integrity, MAX_BODY_BYTES,
 )
 
-VERSION = 'global-public-context-v1'
+LEGACY_VERSION = 'global-public-context-v1'
+VERSION = 'global-public-context-v2'
 REPOSITORY = 'auguspp/decision-kernel'
 WORKFLOW = '.github/workflows/radar-global-public.yml'
 FAMILIES = {'treasury': '美国国债期限利率', 'fx': 'ECB 外汇参考价',
@@ -49,6 +50,43 @@ GEST = '{http://www.gesmes.org/xml/2002-08-01}'
 def day(value):
     require(isinstance(value, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', value), 'GP_DATE')
     return date.fromisoformat(value)
+
+
+def date_policy(family, started):
+    """A request-date ceiling, not proof of publication or a trading calendar.
+
+    Treasury usually publishes by 18:00 Eastern; ECB usually around 16:00 CET.
+    The ECB 17:00 local gate is our conservative buffer, not a source timestamp.
+    Completed UTC candles and unqualified futures never inherit reference rules.
+    """
+    require(family in FAMILIES, 'GP_FAMILY')
+    instant = clock(started)
+    references = {'treasury': ('America/New_York', 18), 'fx': ('Europe/Berlin', 17)}
+    if family in references:
+        zone, hour = references[family]
+        local = instant.astimezone(ZoneInfo(zone))
+        ceiling = local.date() - timedelta(days=int(local.hour < hour))
+        rule = 'DATED_REFERENCE_RELEASE_OPPORTUNITY_V1'
+        not_before = f'{hour:02d}:00'
+    else:
+        zone, not_before = 'UTC', None
+        ceiling = instant.date() - timedelta(days=1)
+        rule = ('COMPLETED_UTC_DAY_ONLY' if family == 'crypto'
+                else 'PRIOR_UTC_DATE_ONLY_FUTURES_FINALITY_UNKNOWN')
+    return {'rule': rule, 'timezone': zone, 'not_before_local': not_before,
+            'max_as_of_date': ceiling.isoformat(),
+            'meaning': 'REQUEST_CEILING_NOT_ACTUAL_PUBLICATION_OR_SESSION_PROOF'}
+
+
+def _qualify_date(version, family, as_of, started, policy=None):
+    first, end = clock(started), day(as_of)
+    require(first.date() - timedelta(days=31) <= end, 'GP_RECENT_DATE')
+    if version == LEGACY_VERSION:
+        require(policy is None and end < first.date(), 'GP_RECENT_DATE')
+    else:
+        require(version == VERSION, 'GP_CAPTURE_VERSION')
+        require(policy == date_policy(family, started), 'GP_DATE_POLICY')
+        require(end <= day(policy['max_as_of_date']), 'GP_RECENT_DATE')
 
 
 def number(value, *, positive=False):
@@ -262,11 +300,12 @@ def replay(files, expected_identity, cutoff):
     validate_identity(expected_identity)
     require(len(files) <= 6 and sum(map(len, files.values())) <= 7 * MAX_BODY_BYTES, 'GP_ARCHIVE_BOUND')
     cap = decode(files['capture.json'])
-    require(cap['version'] == VERSION and cap['identity'] == expected_identity
+    require(cap['version'] in {LEGACY_VERSION, VERSION} and cap['identity'] == expected_identity
             and cap['authority'] == AUTHORITY and cap['capture_hash'] == seal(cap), 'GP_CAPTURE_IDENTITY')
     first, finish = clock(cap['started_at']), clock(cap['finished_at'])
     require(first <= finish <= clock(cutoff), 'GP_CAPTURE_TIME')
-    require(first.date() - timedelta(days=31) <= day(cap['as_of_date']) < first.date(), 'GP_RECENT_DATE')
+    require(cap['version'] != LEGACY_VERSION or 'date_policy' not in cap, 'GP_LEGACY_DATE_POLICY')
+    _qualify_date(cap['version'], cap['family'], cap['as_of_date'], cap['started_at'], cap.get('date_policy'))
     specs = plan(cap['family'], cap['as_of_date'])
     require(type(cap['execution_complete']) is bool and len(cap['records']) == len(specs), 'GP_PLAN')
     used = {'capture.json'}; tables = []; outcomes = []; stopped = False
@@ -319,13 +358,15 @@ def replay(files, expected_identity, cutoff):
     values = summarize(tables, cap['family'], cap['as_of_date'])
     available = sum(v['value'] is not None for v in values)
     complete = cap['execution_complete'] and available == len(values) and all(o['status'] == 'ROWS_NORMALIZED' for o in outcomes)
-    report = {'version': VERSION, 'identity': deepcopy(expected_identity), 'family': cap['family'],
+    report = {'version': cap['version'], 'identity': deepcopy(expected_identity), 'family': cap['family'],
               'as_of_date': cap['as_of_date'], 'captured_from': cap['started_at'], 'captured_through': cap['finished_at'],
               'capture_hash': cap['capture_hash'], 'outcomes': outcomes, 'observations': values,
               'available_values': available, 'status': 'AVAILABLE' if complete else 'PARTIAL' if available else 'UNAVAILABLE',
               'source_calls_during_replay': 0, 'authority': deepcopy(AUTHORITY),
               'coverage': 'SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS',
               'vintage': 'CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE'}
+    if cap['version'] == VERSION:
+        report['date_policy'] = deepcopy(cap['date_policy'])
     if 'summary.json' in files: require(files['summary.json'] == encoded(report), 'GP_SAVED_SUMMARY_DIFFERS')
     if 'summary.md' in files: require(files['summary.md'] == render(report).encode(), 'GP_SAVED_RENDER_DIFFERS')
     return report
@@ -346,16 +387,28 @@ def render(report):
               'Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性未建立，不计算跨日收益。',
               '原件为本次取得版本，不冒充历史当时可知；市场开闭状态和原发布时间保持UNKNOWN。', '', '## 来源请求']
     lines += ['- ' + o['id'] + '：' + o['status'] for o in report['outcomes']]
+    if report['version'] == VERSION:
+        policy = report['date_policy']
+        lines += ['', '## 日期资格（不是实际发布时间）',
+                  '规则：' + policy['rule'] + '；时区：' + policy['timezone'],
+                  '原采集开始时可请求日期上限：' + policy['max_as_of_date'],
+                  '参考值机会门槛（来源当地）：' + (policy['not_before_local'] or '不适用'),
+                  '到达机会时钟不证明资料已发布；只展示实际返回日期，未返回不补值。',
+                  '参考利率/汇率不是全天价格线；期货终局性未知，UTC日桶未结束不得提前使用。']
     return '\n'.join(lines) + '\n'
 
 
-def capture(output, run_identity, family, as_of, *, request=fetch, time=now):
-    validate_identity(run_identity); specs = plan(family, as_of); started = time()
-    require(clock(started).date() - timedelta(days=31) <= day(as_of) < clock(started).date(), 'GP_RECENT_DATE')
+def capture(output, run_identity, family, as_of=None, *, request=fetch, time=now):
+    validate_identity(run_identity); started = time()
+    policy = date_policy(family, started)
+    as_of = policy['max_as_of_date'] if as_of is None else as_of
+    _qualify_date(VERSION, family, as_of, started, policy)
+    specs = plan(family, as_of)
     output = Path(output)
     require(not output.exists() and not any(p.is_symlink() for p in (output, *output.parents)), 'GP_OUTPUT')
     output.mkdir(parents=True)
     cap = {'version': VERSION, 'identity': deepcopy(run_identity), 'family': family, 'as_of_date': as_of,
+           'date_policy': policy,
            'started_at': started, 'finished_at': started, 'execution_complete': False, 'authority': deepcopy(AUTHORITY),
            'records': [{'index': i, 'spec': spec, 'state': 'NOT_ATTEMPTED', 'http_status': None,
                         'requested_at': None, 'received_at': None, 'headers': {}, 'body': None,
@@ -394,8 +447,8 @@ def main():
     parser.add_argument('--as-of', default=None)
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
-    as_of = args.as_of or (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
-    result = capture(args.output, identity(os.environ), args.family, as_of)
+    # Select once at the actual capture start, not at an earlier CLI wall clock.
+    result = capture(args.output, identity(os.environ), args.family, args.as_of)
     print(encoded({k: result[k] for k in ('family', 'status', 'available_values', 'capture_hash')}).decode())
     return 0 if result['available_values'] else 2
 
