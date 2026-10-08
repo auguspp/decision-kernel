@@ -1,0 +1,106 @@
+name: yinquan-ftshare-56-study
+run-name: YinQuan FTShare 56-call one-shot 20261008
+
+on:
+  workflow_dispatch:
+    inputs:
+      code-sha:
+        description: Exact current-main code SHA (required)
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: yinquan-ftshare-56-one-shot-20261008
+  cancel-in-progress: false
+
+jobs:
+  one-shot:
+    if: github.repository == 'auguspp/decision-kernel' && github.ref == 'refs/heads/main' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12.15'
+      - name: Install existing Relay dependencies
+        run: python -m pip install -e .
+      - name: Bind exact main CI and unique one-shot before any source key
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          set -euo pipefail
+          test "${{ github.sha }}" = "$EXPECTED_CODE"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_CODE"
+          test "$(gh api repos/$GITHUB_REPOSITORY/git/ref/heads/main --jq .object.sha)" = "$EXPECTED_CODE"
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+            -f head_sha="$EXPECTED_CODE" -f event=push -f per_page=20 > "$RUNNER_TEMP/yinquan-ci.json"
+          python - <<'PY'
+          import json, os
+          runs=json.load(open(os.environ['RUNNER_TEMP']+'/yinquan-ci.json'))['workflow_runs']
+          eligible=[r for r in runs if r['head_sha']==os.environ['EXPECTED_CODE']
+            and r['head_branch']=='main' and r['event']=='push'
+            and r['path']=='.github/workflows/ci.yml' and r['run_attempt']==1
+            and r['head_repository']['full_name']==r['repository']['full_name']==os.environ['GITHUB_REPOSITORY']]
+          assert eligible, 'MAIN_CI_MISSING'
+          recent=max(eligible,key=lambda x:(x['created_at'],x['id']))
+          assert recent['status']=='completed' and recent['conclusion']=='success', 'MAIN_CI_NOT_SUCCESS'
+          PY
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/yinquan-ftshare-56.yml/runs" \
+            -f per_page=100 -f page=1 > "$RUNNER_TEMP/yinquan-runs.json"
+          python - <<'PY'
+          import json, os
+          r=json.load(open(os.environ['RUNNER_TEMP']+'/yinquan-runs.json'))
+          assert r['total_count']==1 and len(r['workflow_runs'])==1, 'ONESHOT_ALREADY_CONSUMED'
+          run=r['workflow_runs'][0]
+          assert run['id']==int(os.environ['GITHUB_RUN_ID']) and run['run_attempt']==1
+          assert run['event']=='workflow_dispatch' and run['head_branch']=='main'
+          assert run['head_sha']==os.environ['EXPECTED_CODE'], 'ONESHOT_IDENTITY'
+          PY
+      - name: Capture at most 56 immutable source responses
+        id: capture
+        env:
+          FTSHARE_API_KEY: ${{ secrets.FTSHARE_API_KEY }}
+          EXPECTED_CODE: ${{ inputs.code-sha }}
+        run: |
+          python -m decision_kernel.runtime.yinquan_ftshare_56 capture \
+            --output "$RUNNER_TEMP/yinquan-ftshare-56"
+      - name: Replay exact responses without source credential
+        id: replay
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        env:
+          FTSHARE_API_KEY: ''
+        run: |
+          python -m decision_kernel.runtime.yinquan_ftshare_56 verify \
+            --output "$RUNNER_TEMP/yinquan-ftshare-56"
+      - name: Retain source, results and exact failure if any
+        id: archive
+        if: always() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure')
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: yinquan-ftshare-56-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/yinquan-ftshare-56/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Preserve separate status
+        if: always()
+        env:
+          CAPTURE: ${{ steps.capture.outcome }}
+          REPLAY: ${{ steps.replay.outcome }}
+          ARCHIVE: ${{ steps.archive.outcome }}
+          ARTIFACT_URL: ${{ steps.archive.outputs.artifact-url }}
+        run: |
+          {
+            echo 'YinQuan one-shot, 14 fixed symbols, one vendor, max 56 requests, no retry.'
+            echo "Capture=$CAPTURE; offline replay=$REPLAY; archive=$ARCHIVE."
+            echo 'Historical source capture is not PIT, backtest validation or investment authority.'
+            if test -n "$ARTIFACT_URL"; then echo "Original source artifact: $ARTIFACT_URL"; fi
+          } >> "$GITHUB_STEP_SUMMARY"
