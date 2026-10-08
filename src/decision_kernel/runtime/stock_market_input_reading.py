@@ -14,6 +14,24 @@ LAST_PATH = 'details/stock/last-qualified-market-inputs.json'
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, BadZipFile)
 
 
+
+def _factor_coverage_attention(report):
+    """Read-only row-count contrast, not a diagnosis of the upstream cause."""
+    coverage = report.get('source_row_coverage') or {}
+    gaps = []
+    for window, base in (report.get('bases') or {}).items():
+        if base is None:
+            continue
+        prices = coverage.get('daily:' + base) or {}
+        factors = coverage.get('adj_factor:' + base) or {}
+        p, f = prices.get('returned_rows'), factors.get('returned_rows')
+        if (prices.get('status') == factors.get('status') == 'SOURCE_ROWS_READ'
+                and type(p) is int and type(f) is int and f < p):
+            gaps.append({'window': window, 'base_date': base, 'price_rows': p, 'factor_rows': f,
+                         'status': 'FACTOR_ROWS_FEWER_THAN_DATE_PRICE_ROWS'})
+    return gaps
+
+
 def _read_current_prices(collector, baseline):
     old_files, old_cache = dict(collector.files), dict(collector.archive_cache)
     result = {'status': 'DAILY_INPUT_NOT_AVAILABLE_NOT_QUIET', 'source': inputs.SOURCE,
@@ -49,13 +67,23 @@ def _read_current_prices(collector, baseline):
                 acquisition='CURRENT_CALENDAR_DATED_CROSS_SECTIONS_WITHOUT_SECTOR_DEPENDENCY',
                 publication_verification='REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
                 investment_authority='NONE')
+            attention = _factor_coverage_attention(report)
+            if attention:
+                result['source_coverage_attention'] = attention
+                for gap in attention:
+                    result['summary'] += (
+                        f"\n来源覆盖注意：{gap['base_date']}日{gap['window']}日基期复权因子返回"
+                        f"{gap['factor_rows']}条，同日价格返回{gap['price_rows']}条；"
+                        "尚未证明是供应商截断、停牌或条件不满足。\n")
     except ERRORS as exc:
         collector.files, collector.archive_cache = old_files, old_cache
         result.update(status='DAILY_INPUT_READING_GAP_NOT_QUIET', error_type=type(exc).__name__,
             summary='本次日常个股输入未能读回；不把旧结果或空白当成当前市场无变化。')
-    # Keep the latest failure/pending state intact. Read one prior successful
-    # artifact separately; no endpoint mixing or search past a damaged candidate.
-    if not any(result.get('qualified_windows', {}).values()) and matches and run is not None:
+    # Keep the latest status and every usable window. One previous successful
+    # archive may separately document a factor-coverage regression at the SAME
+    # market session; never splice its price rows into the latest report.
+    if matches and run is not None and (not any(result.get('qualified_windows', {}).values())
+                                        or result.get('source_coverage_attention')):
         candidates = [r for r in matches if r['id'] != run['id']
                       and r.get('status') == 'completed' and r.get('conclusion') == 'success'
                       and (model.clock(r['created_at']), r['id']) < (model.clock(run['created_at']), run['id'])]
@@ -68,19 +96,36 @@ def _read_current_prices(collector, baseline):
                             'saved daily stock publication reserve')
                 report, archive, descriptor = _read_run(collector, baseline, candidate, LAST_PATH)
                 model.check(any(report['qualified_windows'].values()), 'saved daily stock has no usable window')
-                saved = {'status': 'VERIFIED_SAVED_INPUT_NOT_LATEST_ATTEMPT',
-                    'origin_run': model.concise_run(candidate), 'file': descriptor, 'source_archive': archive,
-                    'market_session': report['market_session'], 'received_through': report['received_through'],
-                    'cohort_denominator': report['cohort_denominator'], 'qualified_windows': report['qualified_windows'],
-                    'publication_verification': 'REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
-                    'new_source_requests': 0, 'investment_authority': 'NONE'}
-                result['last_qualified_result'] = saved
-                note = ('\n\n## 最近已验证可用输入（保留原日期）\n\n'
-                    f"最新尝试状态：{result['status']}。以下来自较早采集，不表示最新尝试成功。\n"
-                    f"原采集完成：{report['received_through']}；"
-                    f"[原运行]({candidate['html_url']})。按原市场日使用，不能当作更新交易日的行情。\n\n")
-                result['summary'] += note + inputs.render(report).replace('# 日常个股输入', '### 已保存的日常个股输入', 1)
-                result['summary'] += '\n[最近可用完整证券表及缺口](details/stock/last-qualified-market-inputs.json)。\n'
+                latest_usable = any(result.get('qualified_windows', {}).values())
+                affected_windows = {gap['window'] for gap in result.get('source_coverage_attention', [])}
+                eligible = (not latest_usable or (
+                    result.get('market_session') == report['market_session']
+                    and any(report['qualified_windows'][window] > result['qualified_windows'][window]
+                            for window in affected_windows)))
+                if eligible:
+                    saved = {'status': 'VERIFIED_SAVED_INPUT_NOT_LATEST_ATTEMPT',
+                        'origin_run': model.concise_run(candidate), 'file': descriptor, 'source_archive': archive,
+                        'market_session': report['market_session'], 'received_through': report['received_through'],
+                        'cohort_denominator': report['cohort_denominator'], 'qualified_windows': report['qualified_windows'],
+                        'publication_verification': 'REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
+                        'new_source_requests': 0, 'investment_authority': 'NONE'}
+                    result['last_qualified_result'] = saved
+                    note = ('\n\n## 最近已验证可用输入（保留原日期）\n\n'
+                        f"最新尝试状态：{result['status']}。以下来自较早采集，不表示最新尝试成功。\n"
+                        f"原采集完成：{report['received_through']}；"
+                        f"[原运行]({candidate['html_url']})。按原市场日使用，不能当作更新交易日的行情。\n\n")
+                    result['summary'] += note + inputs.render(report).replace('# 日常个股输入', '### 已保存的日常个股输入', 1)
+                    result['summary'] += '\n[最近可用完整证券表及缺口](details/stock/last-qualified-market-inputs.json)。\n'
+                    saved['selection_reason'] = ('SAME_SESSION_WINDOW_COVERAGE_IMPROVEMENT' if latest_usable
+                                                else 'LATEST_INPUT_HAS_NO_USABLE_WINDOW')
+                    if latest_usable:
+                        result['summary'] += ('旧批只是同一市场日较完整期限的独立参照；'
+                                              '最新批其余合格期限仍有效，两批证券/因子不拼接。\n')
+                else:
+                    # Verified but not better for the affected window; do not
+                    # expose it as a fallback, and roll back its retained copy.
+                    collector.files, collector.archive_cache = saved_files, saved_cache
+                    result['last_qualified_comparison'] = 'NO_IMPROVING_SAME_SESSION_WINDOW_IN_ONE_SAVED_CANDIDATE'
             except ERRORS as exc:
                 collector.files, collector.archive_cache = saved_files, saved_cache
                 result['last_qualified_reading_gap'] = {'origin_run': model.concise_run(candidate),
