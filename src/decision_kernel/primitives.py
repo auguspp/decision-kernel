@@ -50,7 +50,10 @@ def _aware(value: datetime) -> datetime:
 
 
 def _currency(value: str) -> str:
-    normalized = value.strip().upper()
+    stripped = value.strip()
+    if not stripped.isascii():
+        raise ValueError("currency must be a three-letter ASCII code")
+    normalized = stripped.upper()
     if len(normalized) != 3 or not normalized.isalpha():
         raise ValueError("currency must be a three-letter code")
     return normalized

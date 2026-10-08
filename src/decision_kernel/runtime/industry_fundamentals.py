@@ -143,6 +143,31 @@ def energy_fields(content, period):
     return output
 
 
+def _pmi_grid(table_, width):
+    """Expand only this bounded source table; ambiguous geometry fails closed."""
+    trs = table_.find_all('tr')
+    m.check(2 <= len(trs) <= 32 and not table_.find('table'), 'PMI table geometry changed')
+    grid = [{} for _ in trs]
+    for i, tr in enumerate(trs):
+        column = 0
+        for cell in tr.find_all(['td', 'th'], recursive=False):
+            while column in grid[i]:
+                column += 1
+            spans = [cell.get(key, '1') for key in ('rowspan', 'colspan')]
+            m.check(all(isinstance(v, str) and re.fullmatch(r'[1-9][0-9]?', v) for v in spans),
+                    'PMI table span changed')
+            down, across = map(int, spans)
+            m.check(i + down <= len(trs) and column + across <= width, 'PMI table span exceeds bounds')
+            value = text(cell.get_text(' ', strip=True))
+            for row in grid[i:i + down]:
+                for j in range(column, column + across):
+                    m.check(j not in row, 'PMI table spans overlap')
+                    row[j] = value
+            column += across
+        m.check(set(grid[i]) == set(range(width)), 'PMI table row width changed')
+    return [[row[j] for j in range(width)] for row in grid]
+
+
 def pmi_tables(article):
     specs = (
         ('制造业', ('PMI','生产','新订单','原材料库存','从业人员','供应商配送时间')),
@@ -155,20 +180,36 @@ def pmi_tables(article):
     m.check(len(tables) == 4, 'PMI table inventory changed')
     output = []
     for table_, (scope, labels) in zip(tables, specs):
-        header = text(table_.get_text())
-        m.check(all(label in header for label in labels), 'PMI table headings changed')
+        grid = _pmi_grid(table_, len(labels) + 1)
+        headings = [[] for _ in range(len(labels) + 1)]
+        columns = None
         buckets = {label: [] for label in labels}
-        for row in rows(table_):
-            match = re.fullmatch(r'(20\d{2})年(\d{1,2})月', row[0]) if row else None
-            if not match: continue
-            m.check(len(row) == len(labels)+1, 'PMI table row width changed')
-            period = date(int(match[1]),int(match[2]),1).strftime('%Y-%m')
-            for label, cell in zip(labels,row[1:]):
-                m.check(number(cell) is not None, 'PMI numeric observation missing')
-                buckets[label].append({'period': period,'value': number(cell)})
-        m.check(all(2 <= len(v) <= 24 for v in buckets.values()), 'PMI monthly history bound')
-        output += [series('nbs-pmi',scope+'/'+label,'指数点','MONTHLY_DIFFUSION_INDEX',points)
-                   for label,points in buckets.items()]
+        for row in grid:
+            match = re.fullmatch(r'(20[0-9]{2})年([0-9]{1,2})月', row[0])
+            if match is None:
+                m.check(columns is None, 'PMI non-month row after observations')
+                if any(value.startswith('单位:') for value in row):
+                    m.check(set(row) == {'单位:%'}, 'PMI table unit changed')
+                    continue
+                for parts, value in zip(headings, row):
+                    if value and (not parts or value != parts[-1]):
+                        parts.append(value)
+                continue
+            if columns is None:
+                header = [''.join(parts) for parts in headings]
+                m.check(header[0] in {'', '时间', '月份', '年月'}
+                        and len(set(header[1:])) == len(labels)
+                        and set(header[1:]) == set(labels), 'PMI table headings changed')
+                columns = {label: header.index(label) for label in labels}
+            period = date(int(match[1]), int(match[2]), 1).strftime('%Y-%m')
+            for label, column in columns.items():
+                value = number(row[column])
+                m.check(value is not None, 'PMI numeric observation missing')
+                buckets[label].append({'period': period, 'value': value})
+        m.check(columns is not None and all(2 <= len(v) <= 24 for v in buckets.values()),
+                'PMI monthly history bound')
+        output += [series('nbs-pmi', scope+'/'+label, '指数点', 'MONTHLY_DIFFUSION_INDEX', points)
+                   for label, points in buckets.items()]
     return output
 
 
