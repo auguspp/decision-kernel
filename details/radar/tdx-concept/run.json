@@ -20,13 +20,13 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246/artifacts",
-  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246/cancel",
-  "check_suite_id": 99396047258,
-  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAXJHdRmg",
-  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/99396047258",
+  "artifacts_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610/artifacts",
+  "cancel_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610/cancel",
+  "check_suite_id": 102305762259,
+  "check_suite_node_id": "CS_kwDOUK1L0c8AAAAX0eYL0w",
+  "check_suite_url": "https://api.github.com/repos/auguspp/decision-kernel/check-suites/102305762259",
   "conclusion": "success",
-  "created_at": "2026-09-30T10:23:18Z",
+  "created_at": "2026-10-08T10:23:37Z",
   "display_title": "tdx-concept-snapshot",
   "event": "workflow_dispatch",
   "head_branch": "main",
@@ -39,10 +39,10 @@
       "email": "noreply@github.com",
       "name": "GitHub"
     },
-    "id": "ce22fa79ac841dea11d31541c86e4c4faeb1378b",
-    "message": "Merge pull request #672 from auguspp/data/c-synopsis-comparison\n\nRetain a bounded C synopsis-comparison consumer proof",
-    "timestamp": "2026-09-30T09:56:51Z",
-    "tree_id": "068535cda9155c70adf77e3cd801dd2120d0a68c"
+    "id": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
+    "message": "Merge PR #796: preserve historical contracts while enabling morning reference dates\n\nAuthorized batch2 repair under #297/6050939177. Recovered original interrupted branch, reconciled current base including #794/#795, and updated existing source documentation. Treasury/ECB daily opportunities move to 07:07/07:27 UTC+08 with source-local dated-reference ceilings, not fabricated publication proof. Crypto/futures incomplete-day boundaries and times remain; v1 source bytes/render replay preserved alongside explicit v2 policies.\n\nReady full37725656088/1 passed8509 including38 new regressions; original aggregate11528255082 and plan11528180074 downloaded and checked by unchanged native verified_archive/full_evidence(fresh_execution=True), exact identity/environment and complete collection/JUnit. Four real old-family archives replayed identically. Implementer COMMENT5451171518 and verification6052020876 are retained, not independent Research acceptance.\n\nNo new frequency/source/credential/notification or morning H4/Library/investment-authority changes. Independent main validation, normal publisher and pinned readback remain separate; natural morning delivery not pre-signed.",
+    "timestamp": "2026-10-08T04:10:29Z",
+    "tree_id": "51cf8f8cb98d2fb30c7e67f6893b3bad0ac86a5f"
   },
   "head_repository": {
     "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -112,13 +112,13 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "head_sha": "ce22fa79ac841dea11d31541c86e4c4faeb1378b",
-  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/36702106246",
-  "id": 36702106246,
-  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246/jobs",
-  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246/logs",
+  "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
+  "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37763165610",
+  "id": 37763165610,
+  "jobs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610/jobs",
+  "logs_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610/logs",
   "name": "tdx-concept-snapshot",
-  "node_id": "WFR_kwLOUK1L0c8AAAAIi52yhg",
+  "node_id": "WFR_kwLOUK1L0c8AAAAIytwtqg",
   "path": ".github/workflows/tdx-concept-snapshot.yml",
   "previous_attempt_url": null,
   "pull_requests": [],
@@ -191,10 +191,10 @@
     "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
     "url": "https://api.github.com/repos/auguspp/decision-kernel"
   },
-  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246/rerun",
+  "rerun_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610/rerun",
   "run_attempt": 1,
-  "run_number": 6,
-  "run_started_at": "2026-09-30T10:23:18Z",
+  "run_number": 7,
+  "run_started_at": "2026-10-08T10:23:37Z",
   "status": "completed",
   "triggering_actor": {
     "avatar_url": "https://avatars.githubusercontent.com/u/83357964?v=4",
@@ -217,8 +217,8 @@
     "url": "https://api.github.com/users/auguspp",
     "user_view_type": "public"
   },
-  "updated_at": "2026-09-30T10:25:02Z",
-  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/36702106246",
+  "updated_at": "2026-10-08T10:24:57Z",
+  "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/runs/37763165610",
   "workflow_id": 366667291,
   "workflow_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/workflows/366667291"
 }
