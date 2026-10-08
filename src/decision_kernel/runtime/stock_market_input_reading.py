@@ -79,16 +79,22 @@ def _read_current_prices(collector, baseline):
         collector.files, collector.archive_cache = old_files, old_cache
         result.update(status='DAILY_INPUT_READING_GAP_NOT_QUIET', error_type=type(exc).__name__,
             summary='本次日常个股输入未能读回；不把旧结果或空白当成当前市场无变化。')
-    # Keep the latest status and every usable window. One previous successful
-    # archive may separately document a factor-coverage regression at the SAME
-    # market session; never splice its price rows into the latest report.
+    # Keep latest status and usable windows; read-only archive recovery is
+    # bounded by source qualification, never a cross-run price/factor splice.
     if matches and run is not None and (not any(result.get('qualified_windows', {}).values())
                                         or result.get('source_coverage_attention')):
         candidates = [r for r in matches if r['id'] != run['id']
                       and r.get('status') == 'completed' and r.get('conclusion') == 'success'
                       and (model.clock(r['created_at']), r['id']) < (model.clock(run['created_at']), run['id'])]
-        if candidates:
-            candidate = max(candidates, key=lambda r: (model.clock(r['created_at']), r['id']))
+        ordered = sorted(candidates, key=lambda r: (model.clock(r['created_at']), r['id']), reverse=True)
+        # Keep the original single-candidate guard for fully unavailable inputs.
+        # When some windows survive but a dated factor cross-section shrinks,
+        # examine at most three valid-but-inferior older artifacts of the same
+        # market session. Never skip an invalid, expired, or damaged candidate.
+        limit = 3 if result.get('source_coverage_attention') and any(
+            result.get('qualified_windows', {}).values()) else 1
+        checks = []
+        for candidate in ordered[:limit]:
             saved_files, saved_cache = dict(collector.files), dict(collector.archive_cache)
             try:
                 reserve = len(set(collector.files) | {LAST_PATH, 'current-state.json', 'README.md'}) + 12
@@ -98,39 +104,53 @@ def _read_current_prices(collector, baseline):
                 model.check(any(report['qualified_windows'].values()), 'saved daily stock has no usable window')
                 latest_usable = any(result.get('qualified_windows', {}).values())
                 affected_windows = {gap['window'] for gap in result.get('source_coverage_attention', [])}
-                eligible = (not latest_usable or (
-                    result.get('market_session') == report['market_session']
-                    and any(report['qualified_windows'][window] > result['qualified_windows'][window]
-                            for window in affected_windows)))
-                if eligible:
-                    saved = {'status': 'VERIFIED_SAVED_INPUT_NOT_LATEST_ATTEMPT',
-                        'origin_run': model.concise_run(candidate), 'file': descriptor, 'source_archive': archive,
-                        'market_session': report['market_session'], 'received_through': report['received_through'],
-                        'cohort_denominator': report['cohort_denominator'], 'qualified_windows': report['qualified_windows'],
-                        'publication_verification': 'REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
-                        'new_source_requests': 0, 'investment_authority': 'NONE'}
-                    result['last_qualified_result'] = saved
-                    note = ('\n\n## 最近已验证可用输入（保留原日期）\n\n'
-                        f"最新尝试状态：{result['status']}。以下来自较早采集，不表示最新尝试成功。\n"
-                        f"原采集完成：{report['received_through']}；"
-                        f"[原运行]({candidate['html_url']})。按原市场日使用，不能当作更新交易日的行情。\n\n")
-                    result['summary'] += note + inputs.render(report).replace('# 日常个股输入', '### 已保存的日常个股输入', 1)
-                    result['summary'] += '\n[最近可用完整证券表及缺口](details/stock/last-qualified-market-inputs.json)。\n'
-                    saved['selection_reason'] = ('SAME_SESSION_WINDOW_COVERAGE_IMPROVEMENT' if latest_usable
-                                                else 'LATEST_INPUT_HAS_NO_USABLE_WINDOW')
-                    if latest_usable:
-                        result['summary'] += ('旧批只是同一市场日较完整期限的独立参照；'
-                                              '最新批其余合格期限仍有效，两批证券/因子不拼接。\n')
-                else:
-                    # Verified but not better for the affected window; do not
-                    # expose it as a fallback, and roll back its retained copy.
+                if latest_usable and result.get('market_session') != report['market_session']:
                     collector.files, collector.archive_cache = saved_files, saved_cache
-                    result['last_qualified_comparison'] = 'NO_IMPROVING_SAME_SESSION_WINDOW_IN_ONE_SAVED_CANDIDATE'
+                    checks.append({'run_id': candidate['id'], 'status': 'DIFFERENT_MARKET_SESSION_STOP'})
+                    break
+                eligible = (not latest_usable or
+                    any(report['qualified_windows'][window] > result['qualified_windows'][window]
+                        for window in affected_windows))
+                if not eligible:
+                    collector.files, collector.archive_cache = saved_files, saved_cache
+                    checks.append({'run_id': candidate['id'], 'status': 'VALID_BUT_NOT_BETTER',
+                                   'qualified_windows': report['qualified_windows']})
+                    continue
+                saved = {'status': 'VERIFIED_SAVED_INPUT_NOT_LATEST_ATTEMPT',
+                    'origin_run': model.concise_run(candidate), 'file': descriptor, 'source_archive': archive,
+                    'market_session': report['market_session'], 'received_through': report['received_through'],
+                    'cohort_denominator': report['cohort_denominator'], 'qualified_windows': report['qualified_windows'],
+                    'publication_verification': 'REBUILT_FROM_EXACT_RETAINED_RESPONSE_BYTES',
+                    'new_source_requests': 0, 'investment_authority': 'NONE'}
+                saved['selection_reason'] = ('SAME_SESSION_WINDOW_COVERAGE_IMPROVEMENT' if latest_usable
+                                             else 'LATEST_INPUT_HAS_NO_USABLE_WINDOW')
+                result['last_qualified_result'] = saved
+                note = ('\n\n## 最近已验证可用输入（保留原日期）\n\n'
+                    f"最新尝试状态：{result['status']}。以下来自较早采集，不表示最新尝试成功。\n"
+                    f"原采集完成：{report['received_through']}；"
+                    f"[原运行]({candidate['html_url']})。按原市场日使用，不能当作更新交易日的行情。\n\n")
+                result['summary'] += note + inputs.render(report).replace(
+                    '# 日常个股输入', '### 已保存的日常个股输入', 1)
+                result['summary'] += '\n[最近可用完整证券表及缺口](details/stock/last-qualified-market-inputs.json)。\n'
+                if latest_usable:
+                    result['summary'] += ('旧批只是同一市场日较完整期限的独立参照；'
+                                          '最新批其余合格期限仍有效，两批证券/因子不拼接。\n')
+                checks.append({'run_id': candidate['id'], 'status': 'QUALIFIED_REFERENCE_SELECTED',
+                               'qualified_windows': report['qualified_windows']})
+                break
             except ERRORS as exc:
                 collector.files, collector.archive_cache = saved_files, saved_cache
+                checks.append({'run_id': candidate['id'], 'status': 'SAVED_INPUT_UNAVAILABLE_STOP',
+                               'error_type': type(exc).__name__})
                 result['last_qualified_reading_gap'] = {'origin_run': model.concise_run(candidate),
                     'status': 'SAVED_INPUT_UNAVAILABLE', 'error_type': type(exc).__name__}
-                result['summary'] += '\n最近成功运行的保存输入未能校验；未继续倒找更旧成功。\n'
+                result['summary'] += '\n较早保存输入未能校验，已停止；不越过受损候选继续搜索。\n'
+                break
+        if checks:
+            result['last_qualified_checks'] = checks
+            if not result.get('last_qualified_result') and not result.get('last_qualified_reading_gap'):
+                result['last_qualified_comparison'] = (
+                    'NO_IMPROVING_SAME_SESSION_WINDOW_WITHIN_BOUNDED_VERIFIED_CANDIDATES')
     # D is a read-only derivation over these exact retained inputs. A missing
     # membership/structure source cannot cancel any qualified price window.
     from .d_market_expression import read_saved

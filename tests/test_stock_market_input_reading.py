@@ -265,3 +265,56 @@ def test_partial_factor_bad_saved_candidate_is_not_masked(tmp_path, monkeypatch)
     assert result['last_qualified_reading_gap']['status'] == 'SAVED_INPUT_UNAVAILABLE'
     assert json.loads(collector.files[reader.PATH]) == latest[4]
     assert reader.LAST_PATH not in collector.files
+
+
+
+def _factor_history_runs(tmp_path, monkeypatch, *, bad_middle=False):
+    """Three eligible archived runs, and a new partial one, on one market day."""
+    older = fixtures(tmp_path, monkeypatch, run_id=121, at=NOW)
+    middle = fixtures(tmp_path, monkeypatch, run_id=122, at=NOW+timedelta(minutes=10),
+                      sparse_60_factor=True)
+    near = fixtures(tmp_path, monkeypatch, run_id=123, at=NOW+timedelta(minutes=20),
+                    sparse_60_factor=True)
+    latest = fixtures(tmp_path, monkeypatch, run_id=124, at=NOW+timedelta(minutes=30),
+                      sparse_60_factor=True)
+    collector, baseline, _, _, _ = latest
+    baseline['checks']['finished_at'] = (NOW+timedelta(hours=1)).isoformat()
+    group = [latest, near, middle, older]
+    if bad_middle:
+        middle[2]['report.json'] = b'{}'
+    collector.api.get = lambda path: {
+        'workflow_runs': [item[3] for item in group], 'total_count': len(group)}
+    archives = {item[3]['id']:item[2] for item in group}
+    artifacts = {item[3]['id']:item[0].artifacts(item[3]) for item in group}
+    collector.artifacts = lambda run:artifacts[run['id']]
+    reads = []
+    def archive(artifact, run):
+        reads.append(run['id'])
+        return archives[run['id']], {'artifact_id':run['id']}
+    collector.archive = archive
+    return collector, group, reads
+
+
+def test_bounded_previous_verified_factor_coverage_recovers_third_older_good(tmp_path, monkeypatch):
+    collector, group, reads = _factor_history_runs(tmp_path, monkeypatch)
+    result = reader.read_current(collector, {'checks':{'finished_at':
+        (NOW+timedelta(hours=1)).isoformat()}})
+    assert reads == [124, 123, 122, 121]
+    assert result['qualified_windows'] == {'5':1, '20':1, '60':0}
+    assert result['last_qualified_result']['qualified_windows'] == {'5':1, '20':1, '60':1}
+    assert result['last_qualified_result']['origin_run']['id'] == 121
+    assert [x['status'] for x in result['last_qualified_checks']] == [
+        'VALID_BUT_NOT_BETTER', 'VALID_BUT_NOT_BETTER', 'QUALIFIED_REFERENCE_SELECTED']
+    assert json.loads(collector.files[reader.PATH]) == group[0][4]
+    assert json.loads(collector.files[reader.LAST_PATH]) == group[3][4]
+
+
+def test_bounded_recovery_does_not_jump_past_corrupt_candidate(tmp_path, monkeypatch):
+    collector, group, reads = _factor_history_runs(tmp_path, monkeypatch, bad_middle=True)
+    result = reader.read_current(collector, {'checks':{'finished_at':
+        (NOW+timedelta(hours=1)).isoformat()}})
+    assert reads == [124, 123, 122]
+    assert result['last_qualified_checks'][0]['status'] == 'VALID_BUT_NOT_BETTER'
+    assert result['last_qualified_checks'][1]['status'] == 'SAVED_INPUT_UNAVAILABLE_STOP'
+    assert 'last_qualified_result' not in result
+    assert reader.LAST_PATH not in collector.files
